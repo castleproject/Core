@@ -28,29 +28,49 @@ namespace Castle.MonoRail.Framework.Internal
 		private IList skipFilters = new ArrayList();
 		private IList cacheConfigurers = new ArrayList();
 		private TransformFilterDescriptor[] transformFilters = new TransformFilterDescriptor[] {};
-		
+
+		/// <summary>
+		/// Gets or sets the skip rescue associated with this action.
+		/// </summary>
+		/// <value>The skip rescue.</value>
 		public SkipRescueAttribute SkipRescue
 		{
 			get { return skipRescue; }
 			set { skipRescue = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the accessible through definition associated with this action.
+		/// </summary>
+		/// <value>The accessible through.</value>
 		public AccessibleThroughAttribute AccessibleThrough
 		{
 			get { return accessibleThrough; }
 			set { accessibleThrough = value; }
 		}
 
+		/// <summary>
+		/// Gets the skip filters associated with this action.
+		/// </summary>
+		/// <value>The skip filters.</value>
 		public IList SkipFilters
 		{
 			get { return skipFilters; }
 		}
 
+		/// <summary>
+		/// Gets the cache configurers associated with this action.
+		/// </summary>
+		/// <value>The cache configurers.</value>
 		public IList CacheConfigurers
 		{
 			get { return cacheConfigurers; }
 		}
 
+		/// <summary>
+		/// Gets or sets the transform filters associated with this action.
+		/// </summary>
+		/// <value>The transform filters.</value>
 		public TransformFilterDescriptor[] TransformFilters
 		{
 			get { return transformFilters; }

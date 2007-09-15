@@ -24,22 +24,23 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class TextHelper : AbstractHelper
 	{
-		public const string DefaultConnector = "and";
+		const string DefaultConnector = "and";
 
 		/// <summary>
-		/// 
+		/// Converts a camelized text to words. For instance:
+		/// <c>FileWriter</c> is converted to <c>File Writer</c>
 		/// </summary>
-		/// <param name="camelizedText"></param>
+		/// <param name="pascalText">Content in pascal case</param>
 		/// <returns></returns>
-		public static string PascalCaseToWord(string camelizedText)
+		public static string PascalCaseToWord(string pascalText)
 		{
-			if (camelizedText == null) throw new ArgumentNullException("camelizedText");
+			if (pascalText == null) throw new ArgumentNullException("pascalText");
 
-			if (camelizedText == string.Empty) return string.Empty;
+			if (pascalText == string.Empty) return string.Empty;
 
-			StringBuilder sbText = new StringBuilder(camelizedText.Length + 4);
+			StringBuilder sbText = new StringBuilder(pascalText.Length + 4);
 
-			char[] chars = camelizedText.ToCharArray();
+			char[] chars = pascalText.ToCharArray();
 
 			sbText.Append(chars[0]);
 
@@ -131,7 +132,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			if (elements == null)
 			{
-				throw new ArgumentNullException("strings");
+				throw new ArgumentNullException("elements");
 			}
 
 			return ToSentence(elements, DefaultConnector, true);

@@ -16,18 +16,30 @@
 
 namespace Castle.MonoRail.Framework.Views.Aspx
 {
-	using System;
 	using System.Collections;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public abstract class AbstractBindingScope : IBindingScope
 	{
 		#region IBindingScope
 
+		/// <summary>
+		/// Resolves the symbol.
+		/// </summary>
+		/// <param name="symbol">The symbol.</param>
+		/// <returns></returns>
 		object IBindingScope.ResolveSymbol(string symbol)
 		{
 			return ResolveSymbol(symbol);
 		}
 
+		/// <summary>
+		/// Adds the action arguments.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="resolvedActionArgs">The resolved action args.</param>
 		void IBindingScope.AddActionArguments(BindingContext context,
 		                                      IDictionary resolvedActionArgs)
 		{
@@ -36,11 +48,21 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		#endregion
 
+		/// <summary>
+		/// Resolves the symbol.
+		/// </summary>
+		/// <param name="symbol">The symbol.</param>
+		/// <returns></returns>
 		protected virtual object ResolveSymbol(string symbol)
 		{
 			return null;
 		}
 
+		/// <summary>
+		/// Adds the action arguments.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="resolvedActionArgs">The resolved action args.</param>
 		protected virtual void AddActionArguments(BindingContext context,
 		                                          IDictionary resolvedActionArgs)
 		{

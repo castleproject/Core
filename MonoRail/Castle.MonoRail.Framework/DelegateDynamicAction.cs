@@ -14,6 +14,10 @@
 
 namespace Castle.MonoRail.Framework
 {
+	/// <summary>
+	/// Delegate to create dynamic actions without the need for a separated class.
+	/// </summary>
+	/// <param name="controller">Controller instance</param>
 	public delegate void ActionDelegate(Controller controller);
 
 	/// <summary>
@@ -24,11 +28,20 @@ namespace Castle.MonoRail.Framework
 	{
 		private readonly ActionDelegate actionDelegate;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DelegateDynamicAction"/> class.
+		/// </summary>
+		/// <param name="actionDelegate">The action delegate.</param>
 		public DelegateDynamicAction(ActionDelegate actionDelegate)
 		{
 			this.actionDelegate = actionDelegate;
 		}
 
+		/// <summary>
+		/// Implementors should perform the action
+		/// upon this invocation
+		/// </summary>
+		/// <param name="controller"></param>
 		public void Execute(Controller controller)
 		{
 			actionDelegate(controller);

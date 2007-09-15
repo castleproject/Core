@@ -17,12 +17,20 @@ namespace Castle.MonoRail.Framework.Services
 	using System;
 	using System.Collections;
 
+	/// <summary>
+	/// Centralizes the registration and lookup of ViewComponents
+	/// </summary>
 	public class DefaultViewComponentRegistry : IViewComponentRegistry
 	{
 		private readonly Hashtable name2Type = new Hashtable();
 
 		#region IViewComponentRegistry
 
+		/// <summary>
+		/// Adds the view component.
+		/// </summary>
+		/// <param name="name">The name that can be used from the view template.</param>
+		/// <param name="type">The type.</param>
 		public void AddViewComponent(string name, Type type)
 		{
 			ViewComponentDetailsAttribute details = GetDetails(type);
@@ -49,6 +57,11 @@ namespace Castle.MonoRail.Framework.Services
 			name2Type[name] = type;
 		}
 
+		/// <summary>
+		/// Gets the view component.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		public Type GetViewComponent(string name)
 		{
 			name = NormalizeName(name);
@@ -66,6 +79,11 @@ namespace Castle.MonoRail.Framework.Services
 
 		#endregion
 
+		/// <summary>
+		/// Normalizes the name.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		private string NormalizeName(string name)
 		{
 			if (!name.EndsWith("Component"))
@@ -75,6 +93,11 @@ namespace Castle.MonoRail.Framework.Services
 			return name;
 		}
 
+		/// <summary>
+		/// Gets the details.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		private static ViewComponentDetailsAttribute GetDetails(Type type)
 		{
 			// TODO: Add cache here, GetCustomAttributes is a lengthy call.

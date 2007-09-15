@@ -28,6 +28,13 @@ namespace Castle.MonoRail.Framework.Internal
 		private IFilter filterInstance;
 		private FilterAttribute attribute;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FilterDescriptor"/> class.
+		/// </summary>
+		/// <param name="filterType">Type of the filter.</param>
+		/// <param name="when">The flag that defines when it should run.</param>
+		/// <param name="executionOrder">The execution order.</param>
+		/// <param name="attribute">The attribute.</param>
 		public FilterDescriptor(Type filterType, ExecuteEnum when, int executionOrder, FilterAttribute attribute)
 		{
 			this.filterType = filterType;
@@ -36,33 +43,59 @@ namespace Castle.MonoRail.Framework.Internal
 			this.attribute = attribute;
 		}
 
+		/// <summary>
+		/// Gets the type of the filter.
+		/// </summary>
+		/// <value>The type of the filter.</value>
 		public Type FilterType
 		{
 			get { return filterType; }
 		}
 
+		/// <summary>
+		/// Gets the flag that defines when it should run.
+		/// </summary>
+		/// <value>The when.</value>
 		public ExecuteEnum When
 		{
 			get { return when; }
 		}
 
+		/// <summary>
+		/// Gets the execution order.
+		/// </summary>
+		/// <value>The execution order.</value>
 		public int ExecutionOrder
 		{
 			get { return executionOrder; }
 		}
 
+		/// <summary>
+		/// Gets or sets the filter instance.
+		/// </summary>
+		/// <value>The filter instance.</value>
 		public IFilter FilterInstance
 		{
 			get { return filterInstance; }
 			set { filterInstance = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the attribute.
+		/// </summary>
+		/// <value>The attribute.</value>
 		public FilterAttribute Attribute
 		{
 			get { return attribute; }
 			set { attribute = value; }
 		}
 
+		/// <summary>
+		/// Creates a new object that is a copy of the current instance.
+		/// </summary>
+		/// <returns>
+		/// A new object that is a copy of this instance.
+		/// </returns>
 		public object Clone()
 		{
 			return new FilterDescriptor(filterType, when, executionOrder, attribute);

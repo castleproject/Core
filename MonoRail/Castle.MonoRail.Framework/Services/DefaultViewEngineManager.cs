@@ -23,7 +23,9 @@ namespace Castle.MonoRail.Framework.Services
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
-	/// Pendent
+	/// The view engine manager sits between MonoRail and all the registered 
+	/// view engines. It is used to identify the view engine that should handle a 
+	/// render request and delegates such requests properly. 
 	/// </summary>
 	public class DefaultViewEngineManager : IViewEngineManager, IServiceEnabledComponent, IInitializable
 	{
@@ -44,6 +46,9 @@ namespace Castle.MonoRail.Framework.Services
 
 		#region IInitializable
 
+		/// <summary>
+		/// Implementors should perform any initialization logic.
+		/// </summary>
 		public void Initialize()
 		{
 			foreach(ViewEngineInfo info in config.ViewEngineConfig.ViewEngines)
@@ -87,6 +92,10 @@ namespace Castle.MonoRail.Framework.Services
 
 		#region IServiceEnabledComponent
 
+		/// <summary>
+		/// Services the specified service provider.
+		/// </summary>
+		/// <param name="serviceProvider">The service provider.</param>
 		public void Service(IServiceProvider serviceProvider)
 		{
 			provider = serviceProvider;
@@ -109,6 +118,14 @@ namespace Castle.MonoRail.Framework.Services
 			return FindExistingTemplate(templateName) != null;
 		}
 
+		/// <summary>
+		/// Processes the view - using the templateName
+		/// to obtain the correct template,
+		/// and using the context to output the result.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="controller"></param>
+		/// <param name="templateName"></param>
 		public void Process(IRailsEngineContext context, Controller controller, string templateName)
 		{
 			String resolvedTemplateName = FindExistingTemplate(templateName);
@@ -129,6 +146,18 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Processes the view - using the templateName
+		/// to obtain the correct template
+		/// and writes the results to the System.TextWriter.
+		/// <para>
+		/// Please note that no layout is applied
+		/// </para>
+		/// </summary>
+		/// <param name="output"></param>
+		/// <param name="context"></param>
+		/// <param name="controller"></param>
+		/// <param name="templateName"></param>
 		public void Process(TextWriter output, IRailsEngineContext context, Controller controller, string templateName)
 		{
 			String resolvedTemplateName = FindExistingTemplate(templateName);
@@ -149,6 +178,15 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Processes a partial view = using the partialName
+		/// to obtain the correct template and writes the
+		/// results to the System.TextWriter.
+		/// </summary>
+		/// <param name="output">The output.</param>
+		/// <param name="context">The context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="partialName">The partial name.</param>
 		public void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller, string partialName)
 		{
 			String resolvedTemplateName = FindExistingTemplate(partialName);
@@ -183,6 +221,11 @@ namespace Castle.MonoRail.Framework.Services
 
 		#endregion
 
+		/// <summary>
+		/// Finds the existing template.
+		/// </summary>
+		/// <param name="templateName">Name of the template.</param>
+		/// <returns></returns>
 		private String FindExistingTemplate(string templateName)
 		{
 			if (Path.HasExtension(templateName))
@@ -205,6 +248,10 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Contextualizes the view engine.
+		/// </summary>
+		/// <param name="engine">The engine.</param>
 		private void ContextualizeViewEngine(IViewEngine engine)
 		{
 			MonoRailHttpHandler.CurrentContext.AddService(typeof(IViewEngine), engine);
@@ -282,6 +329,11 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Asserts the template exists.
+		/// </summary>
+		/// <param name="resolvedTemplateName">Name of the resolved template.</param>
+		/// <param name="templateName">Name of the template.</param>
 		private void AssertTemplateExists(string resolvedTemplateName, string templateName)
 		{
 			if (resolvedTemplateName == null)

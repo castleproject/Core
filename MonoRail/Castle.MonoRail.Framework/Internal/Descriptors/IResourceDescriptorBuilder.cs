@@ -14,10 +14,15 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
-	using System;
-
+	/// <summary>
+	/// Contract for <see cref="ResourceDescriptor"/> builders
+	/// </summary>
 	public interface IResourceDescriptorBuilder
 	{
+		/// <summary>
+		/// Builds the resource descriptors.
+		/// </summary>
+		/// <returns></returns>
 		ResourceDescriptor[] BuildResourceDescriptors();
 	}
 }

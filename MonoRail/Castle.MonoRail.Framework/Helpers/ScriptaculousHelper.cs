@@ -40,6 +40,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			return RenderScriptBlockToSource("/MonoRail/Files/Effects2");
 		}
 
+		/// <summary>
+		/// Gets the javascript functions.
+		/// </summary>
+		/// <returns></returns>
 		[Obsolete("Please use the preferred InstallScripts function.")]
 		public String GetJavascriptFunctions()
 		{

@@ -50,6 +50,11 @@ namespace Castle.MonoRail.Framework.Internal
 
 		#endregion
 
+		/// <summary>
+		/// Collects the resources.
+		/// </summary>
+		/// <param name="memberInfo">The member info.</param>
+		/// <returns></returns>
 		public ResourceDescriptor[] CollectResources(MemberInfo memberInfo)
 		{
 			if (logger.IsDebugEnabled)

@@ -18,20 +18,24 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	using Castle.Components.Validator;
 
 	/// <summary>
-	/// Pendent
+	/// Abstracts the approach to create javascript
+	/// validation for forms.
 	/// </summary>
 	public interface IBrowserValidatorProvider
 	{
 		/// <summary>
-		/// Pendent
+		/// Implementors should attempt to read their specific configuration 
+		/// from the <paramref name="parameters"/>, configure and return 
+		/// a class that extends from <see cref="BrowserValidationConfiguration"/>
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>An instance that extends from <see cref="BrowserValidationConfiguration"/></returns>
 		BrowserValidationConfiguration CreateConfiguration(IDictionary parameters);
 
 		/// <summary>
-		/// Pendent
+		/// Implementors should return their generator instance. 
 		/// </summary>
-		/// <returns></returns>
-		IBrowserValidationGenerator CreateGenerator(BrowserValidationConfiguration config, InputElementType inputType, IDictionary attributes);
+		/// <returns>A generator instance</returns>
+		IBrowserValidationGenerator CreateGenerator(BrowserValidationConfiguration config,
+		                                            InputElementType inputType, IDictionary attributes);
 	}
 }

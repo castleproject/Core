@@ -27,12 +27,19 @@ namespace Castle.MonoRail.Framework.Services
 	{
 		private SmtpSender sender;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MonoRailSmtpSender"/> class.
+		/// </summary>
 		public MonoRailSmtpSender()
 		{
 		}
 
 		#region IServiceEnabledComponent implementation
 
+		/// <summary>
+		/// Services the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
 		public void Service(IServiceProvider provider)
 		{
 			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
@@ -52,16 +59,31 @@ namespace Castle.MonoRail.Framework.Services
 
 		#endregion
 
+		/// <summary>
+		/// Sends a message.
+		/// </summary>
+		/// <param name="from">From field</param>
+		/// <param name="to">To field</param>
+		/// <param name="subject">e-mail's subject</param>
+		/// <param name="messageText">message's body</param>
 		public void Send(string from, string to, string subject, string messageText)
 		{
 			sender.Send(from, to, subject, messageText);
 		}
 
+		/// <summary>
+		/// Sends a message.
+		/// </summary>
+		/// <param name="message">Message instance</param>
 		public void Send(Message message)
 		{
 			sender.Send(message);
 		}
 
+		/// <summary>
+		/// Sends multiple messages.
+		/// </summary>
+		/// <param name="messages">Array of messages</param>
 		public void Send(Message[] messages)
 		{
 			sender.Send(messages);

@@ -38,7 +38,10 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	public class ChildContentComponent : ViewComponent
 	{
 		private readonly String EntryKey = "componentChildContent";
-		
+
+		/// <summary>
+		/// Obtains the content of the child.
+		/// </summary>
 		protected virtual void ObtainChildContent()
 		{
 			StringWriter writer = new StringWriter();
@@ -48,6 +51,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			Context.ContextVars[EntryKey] = writer.ToString();
 		}
 
+		/// <summary>
+		/// Populates the context.
+		/// </summary>
 		protected void PopulateContext()
 		{
 			foreach(DictionaryEntry value in ComponentParams)
@@ -56,12 +62,20 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 		}
 
+		/// <summary>
+		/// Called by the framework so the component can
+		/// render its content
+		/// </summary>
 		public override void Render()
 		{
 			RenderView("default");
 		}
 
-		public new void RenderView(string name)
+		/// <summary>
+		/// Specifies the view to be processed after the component has finished its processing.
+		/// </summary>
+		/// <param name="name"></param>
+		protected new void RenderView(string name)
 		{
 			PopulateContext();
 			ObtainChildContent();
@@ -69,7 +83,12 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			base.RenderView(name);
 		}
 
-		public new void RenderView(string component, string name)
+		/// <summary>
+		/// Specifies the view to be processed after the component has finished its processing.
+		/// </summary>
+		/// <param name="component"></param>
+		/// <param name="name"></param>
+		protected new void RenderView(string component, string name)
 		{
 			PopulateContext();
 			ObtainChildContent();

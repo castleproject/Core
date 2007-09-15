@@ -16,7 +16,7 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
-    using System.Collections.Specialized;
+	using System.Collections.Specialized;
 
 	/// <summary>
 	/// Helper that provides client-side validation.
@@ -46,20 +46,26 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String InstallScripts()
 		{
-            return InstallScripts(string.Empty);
+			return InstallScripts(string.Empty);
 		}
-        public string InstallScripts(string locale)
-        {
-            string queryString = null;
-            if (!string.IsNullOrEmpty(locale))
-            {
-                queryString = string.Format("Locale={0}", this.UrlEncode(locale));
-            }
-            return RenderScriptBlockToSource("/MonoRail/Files/ValidateConfig") + Environment.NewLine +
-               RenderScriptBlockToSource("/MonoRail/Files/ValidateCore") + Environment.NewLine +
-               RenderScriptBlockToSource("/MonoRail/Files/ValidateValidators") + Environment.NewLine +
-               RenderScriptBlockToSource("/MonoRail/Files/ValidateLang" ,queryString) + Environment.NewLine;
-        }
+
+		/// <summary>
+		/// Installs the scripts.
+		/// </summary>
+		/// <param name="locale">The locale.</param>
+		/// <returns></returns>
+		public string InstallScripts(string locale)
+		{
+			string queryString = null;
+			if (!string.IsNullOrEmpty(locale))
+			{
+				queryString = string.Format("Locale={0}", UrlEncode(locale));
+			}
+			return RenderScriptBlockToSource("/MonoRail/Files/ValidateConfig") + Environment.NewLine +
+			       RenderScriptBlockToSource("/MonoRail/Files/ValidateCore") + Environment.NewLine +
+			       RenderScriptBlockToSource("/MonoRail/Files/ValidateValidators") + Environment.NewLine +
+			       RenderScriptBlockToSource("/MonoRail/Files/ValidateLang", queryString) + Environment.NewLine;
+		}
 
 		/// <summary>
 		/// Configure the submit and validation options.
@@ -134,12 +140,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			return String.Format("return validateForm( {0}, {1}, {2}, {3}, {4}, {5} );",
-				formElement,
-				options["confirm"].ToString().ToLower(),
-				options["disable"].ToString().ToLower(),
-				options["disable"].ToString().ToLower(),
-				options["groupError"].ToString().ToLower(),
-				options["errorMode"]);
+			                     formElement,
+			                     options["confirm"].ToString().ToLower(),
+			                     options["disable"].ToString().ToLower(),
+			                     options["disable"].ToString().ToLower(),
+			                     options["groupError"].ToString().ToLower(),
+			                     options["errorMode"]);
 		}
 	}
 }

@@ -17,14 +17,33 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.IO;
 
+	/// <summary>
+	/// Represents a view template source
+	/// </summary>
 	public interface IViewSource
 	{
+		/// <summary>
+		/// Opens the view stream.
+		/// </summary>
+		/// <returns></returns>
 		Stream OpenViewStream();
 
+		/// <summary>
+		/// Gets or sets the last updated.
+		/// </summary>
+		/// <value>The last updated.</value>
 		long LastUpdated { get; set; }
 
+		/// <summary>
+		/// Gets the last modified.
+		/// </summary>
+		/// <value>The last modified.</value>
 		long LastModified { get; }
 
+		/// <summary>
+		/// Gets a value indicating whether cache is enabled for it.
+		/// </summary>
+		/// <value><c>true</c> if cache is enabled for it; otherwise, <c>false</c>.</value>
 		bool EnableCache { get; }
 	}
 }

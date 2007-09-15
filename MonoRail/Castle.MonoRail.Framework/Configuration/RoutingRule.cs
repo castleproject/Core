@@ -18,13 +18,18 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System.Text.RegularExpressions;
 
 	/// <summary>
-	/// Pendent
+	/// Represents a url routing rule. 
 	/// </summary>
 	public class RoutingRule
 	{
 		private String pattern, replace;
 		private Regex rule;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RoutingRule"/> class.
+		/// </summary>
+		/// <param name="pattern">The regular expression pattern.</param>
+		/// <param name="replace">The replace.</param>
 		public RoutingRule(string pattern, string replace)
 		{
 			this.pattern = pattern;
@@ -33,16 +38,28 @@ namespace Castle.MonoRail.Framework.Configuration
 			rule = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 		}
 
+		/// <summary>
+		/// Gets the pattern.
+		/// </summary>
+		/// <value>The pattern.</value>
 		public String Pattern
 		{
 			get { return pattern; }
 		}
 
+		/// <summary>
+		/// Gets the replace.
+		/// </summary>
+		/// <value>The replace.</value>
 		public String Replace
 		{
 			get { return replace; }
 		}
 
+		/// <summary>
+		/// Gets the compiled rule.
+		/// </summary>
+		/// <value>The compiled rule.</value>
 		public Regex CompiledRule
 		{
 			get { return rule; }

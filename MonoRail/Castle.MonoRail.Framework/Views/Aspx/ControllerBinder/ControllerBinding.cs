@@ -20,6 +20,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.ComponentModel;
 	using System.Web.UI;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	[Serializable]
 	[DefaultProperty("ActionBindings")]
 	[ParseChildren(true, "ActionBindings"), PersistChildren(false)]
@@ -31,16 +34,27 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private ControllerBinder binder;
 		private ActionBindingCollection actionBindings;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerBinding"/> class.
+		/// </summary>
 		public ControllerBinding()
 		{
 			actionBindings = new ActionBindingCollection(this);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerBinding"/> class.
+		/// </summary>
+		/// <param name="binder">The binder.</param>
 		public ControllerBinding(ControllerBinder binder) : this()
 		{
 			Binder = binder;
 		}
 
+		/// <summary>
+		/// Gets or sets the binder.
+		/// </summary>
+		/// <value>The binder.</value>
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ControllerBinder Binder
 		{
@@ -48,6 +62,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			set { binder = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the control ID.
+		/// </summary>
+		/// <value>The control ID.</value>
 		[Browsable(true)]
 		[NotifyParentProperty(true)]
 		[Description("The ID of the control to that is bound."), DefaultValue("")]
@@ -67,6 +85,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the control instance.
+		/// </summary>
+		/// <value>The control instance.</value>
 		[Browsable(false)]
 		[NotifyParentProperty(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -87,6 +109,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Gets the action bindings.
+		/// </summary>
+		/// <value>The action bindings.</value>
 		[Category("Behavior")]
 		[PersistenceMode(PersistenceMode.InnerDefaultProperty)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
@@ -95,6 +121,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			get { return actionBindings; }
 		}
 
+		/// <summary>
+		/// Validates this instance.
+		/// </summary>
 		protected override void Validate()
 		{
 			if (string.IsNullOrEmpty(controlID))
@@ -103,6 +132,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </returns>
 		public override string ToString()
 		{
 			int actionCount = ActionBindings.Count;

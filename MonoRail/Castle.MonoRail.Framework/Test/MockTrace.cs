@@ -16,36 +16,63 @@ namespace Castle.MonoRail.Framework.Test
 {
 	using System;
 
+	/// <summary>
+	/// Represents a mock implementation of <see cref="ITrace"/> for unit test purposes.
+	/// </summary>
 	public class MockTrace : ITrace
 	{
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="message">The message.</param>
 		public virtual void Warn(string message)
 		{
-			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
 		public virtual void Warn(string category, string message)
 		{
-			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
+		/// <param name="errorInfo">The error info.</param>
 		public virtual void Warn(string category, string message, Exception errorInfo)
 		{
-			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="message">The message.</param>
 		public virtual void Write(string message)
 		{
-			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
 		public virtual void Write(string category, string message)
 		{
-			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
+		/// <param name="errorInfo">The error info.</param>
 		public virtual void Write(string category, string message, Exception errorInfo)
 		{
-			throw new NotImplementedException();
 		}
 	}
 }

@@ -18,9 +18,15 @@ namespace Castle.MonoRail.Framework
 	using System.Runtime.Serialization;
 	using System.Collections;
 
+	/// <summary>
+	/// Keeps data across a single request using the session
+	/// </summary>
 	[Serializable]
 	public class Flash : Hashtable
 	{
+		/// <summary>
+		/// Flash key
+		/// </summary>
 		public static readonly String FlashKey = "flash";
 
 		[NonSerialized] 
@@ -32,10 +38,17 @@ namespace Castle.MonoRail.Framework
 		[NonSerialized] 
 		private bool hasSwept;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Flash"/> class.
+		/// </summary>
 		public Flash()
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Flash"/> class.
+		/// </summary>
+		/// <param name="copy">The copy.</param>
 		public Flash(Flash copy)
 		{
 			if (copy == null) return;
@@ -153,17 +166,35 @@ namespace Castle.MonoRail.Framework
 			base[key] = value;
 		}
 
+		/// <summary>
+		/// Adds an element with the specified key and value into the <see cref="T:System.Collections.Hashtable"></see>.
+		/// </summary>
+		/// <param name="key">The key of the element to add.</param>
+		/// <param name="value">The value of the element to add. The value can be null.</param>
+		/// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Hashtable"></see> is read-only.-or- The <see cref="T:System.Collections.Hashtable"></see> has a fixed size. </exception>
+		/// <exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Hashtable"></see>. </exception>
+		/// <exception cref="T:System.ArgumentNullException">key is null. </exception>
 		public override void Add(object key, object value)
 		{
 			InternalAdd(key, value);
 		}
 
+		/// <summary>
+		/// Gets or sets the <see cref="System.Object"/> with the specified key.
+		/// </summary>
+		/// <value></value>
 		public override object this[object key]
 		{
 			get { return base[key]; }
 			set { InternalAdd(key, value); }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this instance has items to keep.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance has items to keep; otherwise, <c>false</c>.
+		/// </value>
 		internal bool HasItemsToKeep
 		{
 			get { return hasItemsToKeep; }

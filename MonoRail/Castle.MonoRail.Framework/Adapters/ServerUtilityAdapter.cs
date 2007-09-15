@@ -18,6 +18,9 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.Web;
 	using Castle.MonoRail.Framework;
 
+	/// <summary>
+	/// Adapts the ASP.Net HttpServerUtility to MonoRail's interface for the same service.
+	/// </summary>
 	public class ServerUtilityAdapter : IServerUtility
 	{
 		private readonly HttpServerUtility server;

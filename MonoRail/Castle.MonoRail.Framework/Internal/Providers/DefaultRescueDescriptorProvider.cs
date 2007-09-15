@@ -50,6 +50,11 @@ namespace Castle.MonoRail.Framework.Internal
 
 		#endregion
 
+		/// <summary>
+		/// Collects the rescues.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		public RescueDescriptor[] CollectRescues(Type type)
 		{
 			if (logger.IsDebugEnabled)
@@ -85,6 +90,15 @@ namespace Castle.MonoRail.Framework.Internal
 			return (RescueDescriptor[]) descriptors.ToArray(typeof(RescueDescriptor));
 		}
 
+		/// <summary>
+		/// Implementors should collect the rescue information
+		/// and return descriptors instances, or an empty array if none
+		/// was found.
+		/// </summary>
+		/// <param name="memberInfo">The action (MethodInfo)</param>
+		/// <returns>
+		/// An array of <see cref="RescueDescriptor"/>
+		/// </returns>
 		public RescueDescriptor[] CollectRescues(MethodInfo memberInfo)
 		{
 			if (logger.IsDebugEnabled)

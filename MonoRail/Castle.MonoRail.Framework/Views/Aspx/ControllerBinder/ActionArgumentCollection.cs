@@ -20,9 +20,18 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.ComponentModel;
 	using System.Drawing.Design;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	[Editor(typeof(Design.ActionArgumentEditor), typeof(UITypeEditor))]
 	public class ActionArgumentCollection : TypedCollection<ActionArgument>
 	{
+		/// <summary>
+		/// Adds the specified name.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		public ActionArgument Add(string name, object value)
 		{
 			ActionArgument actionArg = new ActionArgument();
@@ -32,6 +41,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return actionArg;
 		}
 
+		/// <summary>
+		/// Removes the specified name.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		public bool Remove(string name)
 		{
 			if (name == null)
@@ -51,6 +65,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return false;
 		}
 
+		/// <summary>
+		/// Performs additional custom processes before inserting a new element into the <see cref="T:System.Collections.CollectionBase"></see> instance.
+		/// </summary>
+		/// <param name="index">The zero-based index at which to insert value.</param>
+		/// <param name="value">The new value of the element at index.</param>
 		protected override void OnInsert(int index, object value)
 		{
 			ActionArgument newActionArg = (ActionArgument) value;

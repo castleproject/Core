@@ -28,6 +28,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private object[] _args;
 		private object _arg;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InvokeHelper"/> class.
+		/// </summary>
 		public InvokeHelper()
 		{
 		}
@@ -72,12 +75,18 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			set { _arg = value; }
 		}
 
-
+		/// <summary>
+		/// Gets the controller.
+		/// </summary>
+		/// <value>The controller.</value>
 		protected Controller Controller
 		{
 			get { return (Controller) Context.Items[Constants.ControllerContextKey]; }
 		}
 
+		/// <summary>
+		/// Binds a data source to the invoked server control and all its child controls.
+		/// </summary>
 		public override void DataBind()
 		{
 			base.DataBind();
@@ -92,6 +101,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Sends server control content to a provided <see cref="T:System.Web.UI.HtmlTextWriter"></see> object, which writes the content to be rendered on the client.
+		/// </summary>
+		/// <param name="writer">The <see cref="T:System.Web.UI.HtmlTextWriter"></see> object that receives the server control content.</param>
 		protected override void Render(HtmlTextWriter writer)
 		{
 			DataBind();

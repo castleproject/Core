@@ -16,6 +16,9 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 
+	/// <summary>
+	/// Represents a resource configuration associated with a controller.
+	/// </summary>
 	public class ResourceDescriptor
 	{
 		private readonly Type resourceType;
@@ -24,6 +27,14 @@ namespace Castle.MonoRail.Framework.Internal
 		private readonly string cultureName;
 		private readonly string assemblyName;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ResourceDescriptor"/> class.
+		/// </summary>
+		/// <param name="resourceType">Type that has the resource.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="resourceName">Name of the resource.</param>
+		/// <param name="cultureName">Name of the culture.</param>
+		/// <param name="assemblyName">Name of the assembly.</param>
 		public ResourceDescriptor(Type resourceType, string name, string resourceName, 
 		                          string cultureName, string assemblyName)
 		{
@@ -34,26 +45,46 @@ namespace Castle.MonoRail.Framework.Internal
 			this.assemblyName = assemblyName;
 		}
 
+		/// <summary>
+		/// Gets the type that has the resource.
+		/// </summary>
+		/// <value>The type that has the resource.</value>
 		public Type ResourceType
 		{
 			get { return resourceType; }
 		}
 
+		/// <summary>
+		/// Gets the name.
+		/// </summary>
+		/// <value>The name.</value>
 		public string Name
 		{
 			get { return name; }
 		}
 
+		/// <summary>
+		/// Gets the name of the resource.
+		/// </summary>
+		/// <value>The name of the resource.</value>
 		public string ResourceName
 		{
 			get { return resourceName; }
 		}
 
+		/// <summary>
+		/// Gets the name of the culture.
+		/// </summary>
+		/// <value>The name of the culture.</value>
 		public string CultureName
 		{
 			get { return cultureName; }
 		}
 
+		/// <summary>
+		/// Gets the name of the assembly.
+		/// </summary>
+		/// <value>The name of the assembly.</value>
 		public string AssemblyName
 		{
 			get { return assemblyName; }

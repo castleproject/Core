@@ -19,6 +19,9 @@ namespace Castle.MonoRail.Framework.Services
 	using System.Collections.Specialized;
 	using System.ComponentModel.Design;
 
+	/// <summary>
+	/// Basic implementation of <see cref="IServiceContainer"/>
+	/// </summary>
 	public abstract class AbstractServiceContainer : MarshalByRefObject, IServiceContainer
 	{
 		private IServiceContainer parent;
@@ -164,6 +167,11 @@ namespace Castle.MonoRail.Framework.Services
 
 		#endregion
 
+		/// <summary>
+		/// Gets the service.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
 		public T GetService<T>()
 		{
 			return (T) GetService(typeof(T));
@@ -179,6 +187,10 @@ namespace Castle.MonoRail.Framework.Services
 			set { parent = value; }
 		}
 
+		/// <summary>
+		/// Gets the parent container.
+		/// </summary>
+		/// <value>The parent container.</value>
 		private IServiceContainer ParentContainer
 		{
 			get

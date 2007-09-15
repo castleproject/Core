@@ -18,21 +18,32 @@ namespace Castle.MonoRail.Framework.Internal.Test
 
 	/// <summary>
 	/// Helper class to store the context to be used 
-	/// for the test cases
+	/// for the test cases (that use the ASP.Net Runtime)
 	/// </summary>
 	public abstract class TestContextHolder
 	{
 		private static HttpContext _context;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TestContextHolder"/> class.
+		/// </summary>
 		private TestContextHolder()
 		{
 		}
 
+		/// <summary>
+		/// Sets the context.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public static void SetContext(HttpContext context)
 		{
 			_context = context;
 		}
 
+		/// <summary>
+		/// Gets the context.
+		/// </summary>
+		/// <value>The context.</value>
 		public static HttpContext Context
 		{
 			get { return _context; }

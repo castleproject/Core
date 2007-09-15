@@ -16,19 +16,51 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
-
+	/// <summary>
+	/// Represents the trace that ASP.Net exposes
+	/// </summary>
 	public interface ITrace
 	{
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="message">The message.</param>
 		void Warn(String message);
 
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
 		void Warn(String category, String message);
 
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
+		/// <param name="errorInfo">The error info.</param>
 		void Warn(String category, String message, Exception errorInfo);
 
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="message">The message.</param>
 		void Write(String message);
 
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
 		void Write(String category, String message);
 
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
+		/// <param name="errorInfo">The error info.</param>
 		void Write(String category, String message, Exception errorInfo);
 	}
 }

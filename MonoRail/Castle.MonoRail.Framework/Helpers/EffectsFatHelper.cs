@@ -19,13 +19,24 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <summary>
 	/// Just apply the CSS class "fade" to any element and it will fade from yellow
 	/// to its background color or white if none is specified.
+	/// <para>
+	/// Key Features <br/>
 	/// 
-	/// Key Features
-	/// * Fade an infinite number of elements.
-	/// * No inline JavaScript. Simply give an element a class of "fade", the script does the rest "automagically".
-	/// * Background color aware. FAT will do better than simply fade to white if the element (or it's parents) have a CSS background color, it will fade to that background color instead.
-	/// * Fade from any color. For example, if you wanted a list of error messages to fade out from red you would simply give the list a class of "fade-FF0000".
-	/// * Super smooth fading. By default, elements will fade at 30 frames per second (the same rate as a television) over 3 seconds. You can adjust this to any framerate and any duration. You could easily fade elements at 60 frames per second over 4, 5, 10 seconds!
+	/// * Fade an infinite number of elements. <br/>
+	/// 
+	/// * No inline JavaScript. Simply give an element a class of "fade", the script does the rest "automagically". <br/>
+	/// 
+	/// * Background color aware. FAT will do better than simply fade to white if the element (or it's parents) have a 
+	/// CSS background color, it will fade to that background color instead. <br/>
+	/// 
+	/// * Fade from any color. For example, if you wanted a list of error messages 
+	/// to fade out from red you would simply give the list a class of "fade-FF0000". <br/>
+	/// 
+	/// * Super smooth fading. By default, elements will fade at 30 frames per second 
+	/// (the same rate as a television) over 3 seconds. You can adjust this to any 
+	/// framerate and any duration. You could easily fade elements at 60 frames 
+	/// per second over 4, 5, 10 seconds! <br/>
+	/// </para>
 	/// </summary>
 	/// <remarks>
 	/// NOTE: All elements to be faded must have an id tag!
@@ -45,6 +56,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			return RenderScriptBlockToSource("/MonoRail/Files/EffectsFatScripts");
 		}
 
+		/// <summary>
+		/// Renders a Javascript library inside a single script tag.
+		/// </summary>
+		/// <returns></returns>
 		[Obsolete("Please use the preferred InstallScripts function.")]
 		public String GetJavascriptFunctions()
 		{

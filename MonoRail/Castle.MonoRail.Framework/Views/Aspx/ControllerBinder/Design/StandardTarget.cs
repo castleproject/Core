@@ -19,12 +19,19 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 	using System;
 	using System.ComponentModel;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class StandardTarget : ITarget
 	{
 		private readonly Type type;
 		private readonly string name;
 		private string[] propertyNames;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StandardTarget"/> class.
+		/// </summary>
+		/// <param name="name">The name.</param>
 		public StandardTarget(string name)
 		{
 			if (name == null)
@@ -35,8 +42,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 			this.name = name;
 		}
 
-		public StandardTarget(Type type, string name)
-			: this(name)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StandardTarget"/> class.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="name">The name.</param>
+		public StandardTarget(Type type, string name) : this(name)
 		{
 			if (type == null)
 			{
@@ -46,8 +57,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 			this.type = type;
 		}
 
-		public StandardTarget(object instance, string name)
-			: this(name)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StandardTarget"/> class.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		/// <param name="name">The name.</param>
+		public StandardTarget(object instance, string name) : this(name)
 		{
 			if (instance == null)
 			{
@@ -57,6 +72,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 			type = instance.GetType();
 		}
 
+		/// <summary>
+		/// Gets the property names.
+		/// </summary>
+		/// <value>The property names.</value>
 		public string[] PropertyNames
 		{
 			get
@@ -70,11 +89,22 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 			}
 		}
 
+		/// <summary>
+		/// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </returns>
 		public override string ToString()
 		{
 			return name;	
 		}
 
+		/// <summary>
+		/// Collects the property names.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		protected virtual string[] CollectPropertyNames(Type type)
 		{
 			if (type == null) return new string[0];

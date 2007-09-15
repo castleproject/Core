@@ -20,6 +20,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.ComponentModel;
 	using System.Text.RegularExpressions;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	[Serializable]
 	[TypeConverter(typeof(ExpandableObjectConverter))]	
 	public class ActionArgument : AbstractBindingComponent, ICloneable
@@ -31,6 +34,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private static readonly Regex nameRegexRule =
 			new Regex("^[A-za-z]([A-za-z0-9]*)$");
 
+		/// <summary>
+		/// Gets or sets the name.
+		/// </summary>
+		/// <value>The name.</value>
 		[Category("Data"), DefaultValue("")]
 		[Description("The name of the argument to pass to the controller action.")]
 		public string Name
@@ -39,6 +46,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			set { name = Trim(value); }
 		}
 
+		/// <summary>
+		/// Gets or sets the expression.
+		/// </summary>
+		/// <value>The expression.</value>
 		[DisplayName("Value")]
 		[Category("Data"), DefaultValue((string) null)]
 		[Description("The expression for the argument to pass to the controller action.")]
@@ -48,6 +59,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			set{ expression = Trim(value); }
 		}
 
+		/// <summary>
+		/// Gets or sets the value.
+		/// </summary>
+		/// <value>The value.</value>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public object Value
@@ -56,6 +71,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			set { this.value = value; }
 		}
 
+		/// <summary>
+		/// Validates this instance.
+		/// </summary>
 		protected override void Validate()
 		{
 			if (string.IsNullOrEmpty(name))
@@ -73,6 +91,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Creates a new object that is a copy of the current instance.
+		/// </summary>
+		/// <returns>
+		/// A new object that is a copy of this instance.
+		/// </returns>
 		public object Clone()
 		{
 			ActionArgument actionArg = new ActionArgument();
@@ -82,6 +106,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return actionArg;
 		}
 
+		/// <summary>
+		/// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </returns>
 		public override string ToString()
 		{
 			if (string.IsNullOrEmpty(name))

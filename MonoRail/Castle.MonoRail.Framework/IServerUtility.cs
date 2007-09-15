@@ -15,8 +15,10 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Collections.Specialized;
 
+	/// <summary>
+	/// Represents utility methods that web servers provide
+	/// </summary>
 	public interface IServerUtility
 	{
 		/// <summary>

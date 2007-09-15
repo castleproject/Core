@@ -18,8 +18,17 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 {
 	using System.Web;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public static class DesignUtil
 	{
+		/// <summary>
+		/// Gets a value indicating whether this instance is in design mode.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is in design mode; otherwise, <c>false</c>.
+		/// </value>
 		public static bool IsInDesignMode
 		{
 			get { return HttpContext.Current == null; }

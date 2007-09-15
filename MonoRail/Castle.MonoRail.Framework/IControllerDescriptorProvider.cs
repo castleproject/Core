@@ -25,8 +25,18 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface IControllerDescriptorProvider : IProvider
 	{
+		/// <summary>
+		/// Builds the descriptor.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <returns></returns>
 		ControllerMetaDescriptor BuildDescriptor(Controller controller);
-		
+
+		/// <summary>
+		/// Builds the descriptor.
+		/// </summary>
+		/// <param name="controllerType">Type of the controller.</param>
+		/// <returns></returns>
 		ControllerMetaDescriptor BuildDescriptor(Type controllerType);
 	}
 }

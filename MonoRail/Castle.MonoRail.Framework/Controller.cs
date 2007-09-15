@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Web;
 	using System.Reflection;
@@ -102,7 +103,7 @@ namespace Castle.MonoRail.Framework
 		/// Reference to the <see cref="IResourceFactory"/> instance
 		/// </summary>
 		// internal IResourceFactory resourceFactory;
-		internal IDictionary _dynamicActions = new HybridDictionary(true);
+		internal IDictionary<string, IDynamicAction> _dynamicActions = new Dictionary<string, IDynamicAction>(StringComparer.InvariantCultureIgnoreCase);
 
 		internal bool directRenderInvoked;
 
@@ -360,13 +361,14 @@ namespace Castle.MonoRail.Framework
 			get { return Request.QueryString; }
 		}
 
-		public IDictionary DynamicActions
-		{
-			get { return _dynamicActions; }
-		}
-
-		[Obsolete("Use the DynamicActions property instead")]
-		public IDictionary CustomActions
+		/// <summary>
+		/// Gets the dynamic actions dictionary. 
+		/// <para>
+		/// Can be used to insert dynamic actions on the controller instance.
+		/// </para>
+		/// </summary>
+		/// <value>The dynamic actions dictionary.</value>
+		public IDictionary<string, IDynamicAction> DynamicActions
 		{
 			get { return _dynamicActions; }
 		}
@@ -832,11 +834,21 @@ namespace Castle.MonoRail.Framework
 			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, area, controller, action, parameters));
 		}
 
+		/// <summary>
+		/// Creates a querystring string representation of the namevalue collection.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
 		protected string ToQueryString(NameValueCollection parameters)
 		{
 			return CommonUtils.BuildQueryString(Context.Server, parameters, false);
 		}
 
+		/// <summary>
+		/// Creates a querystring string representation of the entries in the dictionary.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
 		protected string ToQueryString(IDictionary parameters)
 		{
 			return CommonUtils.BuildQueryString(Context.Server, parameters, false);
@@ -846,6 +858,11 @@ namespace Castle.MonoRail.Framework
 
 		#region Core members
 
+		/// <summary>
+		/// Extracts the services the controller uses from the context -- which ultimately 
+		/// is a service provider.
+		/// </summary>
+		/// <param name="context">The context/service provider.</param>
 		public void InitializeFieldsFromServiceProvider(IRailsEngineContext context)
 		{
 			serviceProvider = context;

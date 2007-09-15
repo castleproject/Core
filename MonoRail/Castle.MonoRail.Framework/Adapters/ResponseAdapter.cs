@@ -70,38 +70,67 @@ namespace Castle.MonoRail.Framework.Adapters
 			set { response.Charset = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the status code.
+		/// </summary>
+		/// <value>The status code.</value>
 		public int StatusCode
 		{
 			get { return response.StatusCode; }
 			set { response.StatusCode = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the content type.
+		/// </summary>
+		/// <value>The type of the content.</value>
 		public String ContentType
 		{
 			get { return response.ContentType; }
 			set { response.ContentType = value; }
 		}
 
+		/// <summary>
+		/// Appends the header.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="headerValue">The header value.</param>
 		public void AppendHeader(String name, String headerValue)
 		{
 			response.AppendHeader(name, headerValue);
 		}
 
+		/// <summary>
+		/// Gets the output.
+		/// </summary>
+		/// <value>The output.</value>
 		public TextWriter Output
 		{
 			get { return response.Output; }
 		}
 
+		/// <summary>
+		/// Gets the output stream.
+		/// </summary>
+		/// <value>The output stream.</value>
 		public Stream OutputStream
 		{
 			get { return response.OutputStream; }
 		}
 
+		/// <summary>
+		/// Writes the buffer to the browser
+		/// </summary>
+		/// <param name="buffer">The buffer.</param>
 		public void BinaryWrite(byte[] buffer)
 		{
 			response.BinaryWrite(buffer);
 		}
 
+		/// <summary>
+		/// Writes the stream to the browser
+		/// </summary>
+		/// <param name="stream">The stream.</param>
 		public void BinaryWrite(Stream stream)
 		{
 			byte[] buffer = new byte[stream.Length];
@@ -111,41 +140,73 @@ namespace Castle.MonoRail.Framework.Adapters
 			BinaryWrite(buffer);
 		}
 
+		/// <summary>
+		/// Clears the response (only works if buffered)
+		/// </summary>
 		public void Clear()
 		{
 			response.Clear();
 		}
 
+		/// <summary>
+		/// Clears the response content (only works if buffered).
+		/// </summary>
 		public void ClearContent()
 		{
 			response.ClearContent();
 		}
 
+		/// <summary>
+		/// Writes the specified string.
+		/// </summary>
+		/// <param name="s">The string.</param>
 		public void Write(String s)
 		{
 			response.Write(s);
 		}
 
+		/// <summary>
+		/// Writes the specified obj.
+		/// </summary>
+		/// <param name="obj">The obj.</param>
 		public void Write(object obj)
 		{
 			response.Write(obj);
 		}
 
+		/// <summary>
+		/// Writes the specified char.
+		/// </summary>
+		/// <param name="ch">The char.</param>
 		public void Write(char ch)
 		{
 			response.Write(ch);
 		}
 
+		/// <summary>
+		/// Writes the specified buffer.
+		/// </summary>
+		/// <param name="buffer">The buffer.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="count">The count.</param>
 		public void Write(char[] buffer, int index, int count)
 		{
 			response.Write(buffer, index, count);
 		}
 
+		/// <summary>
+		/// Writes the file.
+		/// </summary>
+		/// <param name="fileName">Name of the file.</param>
 		public void WriteFile(String fileName)
 		{
 			response.WriteFile(fileName);
 		}
 
+		/// <summary>
+		/// Redirects the specified URL.
+		/// </summary>
+		/// <param name="url">The URL.</param>
 		public void Redirect(String url)
 		{
 			redirected = true;
@@ -153,6 +214,11 @@ namespace Castle.MonoRail.Framework.Adapters
 			response.Redirect(url, false);
 		}
 
+		/// <summary>
+		/// Redirects the specified URL.
+		/// </summary>
+		/// <param name="url">The URL.</param>
+		/// <param name="endProcess">if set to <c>true</c> [end process].</param>
 		public void Redirect(String url, bool endProcess)
 		{
 			redirected = true;
@@ -160,6 +226,11 @@ namespace Castle.MonoRail.Framework.Adapters
 			response.Redirect(url, endProcess);
 		}
 
+		/// <summary>
+		/// Redirects the specified controller.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="action">The action.</param>
 		public void Redirect(String controller, String action)
 		{
 			redirected = true;
@@ -169,6 +240,12 @@ namespace Castle.MonoRail.Framework.Adapters
 			response.Redirect(builder.BuildUrl(context.UrlInfo, controller, action), false);
 		}
 
+		/// <summary>
+		/// Redirects the specified area.
+		/// </summary>
+		/// <param name="area">The area.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="action">The action.</param>
 		public void Redirect(String area, String controller, String action)
 		{
 			if (area == null || area.Length == 0)
@@ -185,11 +262,21 @@ namespace Castle.MonoRail.Framework.Adapters
 			}
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this instance is client connected.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is client connected; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsClientConnected
 		{
 			get { return response.IsClientConnected; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether the response sent a redirect.
+		/// </summary>
+		/// <value><c>true</c> if was redirected; otherwise, <c>false</c>.</value>
 		public bool WasRedirected
 		{
 			get { return redirected; }

@@ -20,6 +20,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.ComponentModel;
 	using System.Web.UI;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	[Serializable]
 	[TypeConverter(typeof(ExpandableObjectConverter))]	
 	public class CommandBinding : AbstractBindingComponent
@@ -28,6 +31,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private string commandName = "";
 		private ActionArgumentCollection actionArguments;
 
+		/// <summary>
+		/// Gets or sets the name of the action.
+		/// </summary>
+		/// <value>The name of the action.</value>
 		[Category("Behavior"), DefaultValue("")]
 		[Description("The name of the controller action to call for the command.")]
 		[TypeConverter(typeof(ActionListConverter))]
@@ -37,6 +44,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			set { actionName = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the name of the command.
+		/// </summary>
+		/// <value>The name of the command.</value>
 		[Category("Behavior"), DefaultValue("")]
 		[Description("The name command to that will trigger the controller action.")]
 		public string CommandName
@@ -45,6 +56,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			set { commandName = value; }
 		}
 
+		/// <summary>
+		/// Gets the action arguments.
+		/// </summary>
+		/// <value>The action arguments.</value>
 		[Category("Behavior")]
 		[PersistenceMode(PersistenceMode.InnerProperty)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -62,6 +77,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Validates this instance.
+		/// </summary>
 		protected override void Validate()
 		{
 			if (string.IsNullOrEmpty(commandName))
@@ -70,6 +88,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </returns>
 		public override string ToString()
 		{
 			if (string.IsNullOrEmpty(commandName))

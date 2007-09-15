@@ -23,6 +23,10 @@ namespace Castle.MonoRail.Framework
 	{
 		private static IServiceContainer container;
 
+		/// <summary>
+		/// Gets or sets the service container.
+		/// </summary>
+		/// <value>The service container.</value>
 		public static IServiceContainer ServiceContainer
 		{
 			get { return container; }

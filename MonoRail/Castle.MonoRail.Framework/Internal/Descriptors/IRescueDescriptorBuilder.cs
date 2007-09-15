@@ -14,10 +14,15 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
-	using System;
-
+	/// <summary>
+	/// Contract for <see cref="RescueDescriptor"/> builders
+	/// </summary>
 	public interface IRescueDescriptorBuilder
 	{
+		/// <summary>
+		/// Builds the rescue descriptors.
+		/// </summary>
+		/// <returns></returns>
 		RescueDescriptor[] BuildRescueDescriptors();
 	}
 }

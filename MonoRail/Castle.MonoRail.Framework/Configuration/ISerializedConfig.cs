@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Configuration
 {
-	using System;
 	using System.Xml;
 
 	/// <summary>
@@ -22,6 +21,10 @@ namespace Castle.MonoRail.Framework.Configuration
 	/// </summary>
 	public interface ISerializedConfig
 	{
+		/// <summary>
+		/// Deserializes the specified section.
+		/// </summary>
+		/// <param name="section">The section.</param>
 		void Deserialize(XmlNode section);
 	}
 }

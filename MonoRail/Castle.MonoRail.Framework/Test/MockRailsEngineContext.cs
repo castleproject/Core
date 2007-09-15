@@ -25,6 +25,9 @@ namespace Castle.MonoRail.Framework.Test
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Services;
 
+	/// <summary>
+	/// Represents a mock implementation of <see cref="IRailsEngineContext"/> for unit test purposes.
+	/// </summary>
 	public class MockRailsEngineContext : AbstractServiceContainer, IRailsEngineContext
 	{
 		private readonly string physicalPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -45,11 +48,21 @@ namespace Castle.MonoRail.Framework.Test
 		private Exception lastException;
 		private Controller currentController;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockRailsEngineContext"/> class.
+		/// </summary>
 		protected MockRailsEngineContext()
 		{
 			RegisterServices();
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockRailsEngineContext"/> class.
+		/// </summary>
+		/// <param name="request">The request.</param>
+		/// <param name="response">The response.</param>
+		/// <param name="trace">The trace.</param>
+		/// <param name="urlInfo">The URL info.</param>
 		public MockRailsEngineContext(IRequest request, IResponse response, ITrace trace, UrlInfo urlInfo) : this()
 		{
 			this.request = request;
@@ -69,17 +82,29 @@ namespace Castle.MonoRail.Framework.Test
 			get { return request.HttpMethod; }
 		}
 
+		/// <summary>
+		/// Gets the request URL.
+		/// </summary>
+		/// <value></value>
 		public virtual string Url
 		{
 			get { throw new NotImplementedException(); }
 		}
 
+		/// <summary>
+		/// Gets the referring URL.
+		/// </summary>
+		/// <value></value>
 		public string UrlReferrer
 		{
 			get { return urlReferrer; }
 			set { urlReferrer = value; }
 		}
 
+		/// <summary>
+		/// Gets the underlying context of the API being used.
+		/// </summary>
+		/// <value></value>
 		public virtual HttpContext UnderlyingContext
 		{
 			get 
@@ -90,52 +115,95 @@ namespace Castle.MonoRail.Framework.Test
 			}
 		}
 
+		/// <summary>
+		/// Access the params (Query, Post, headers and Cookies)
+		/// </summary>
+		/// <value></value>
 		public virtual NameValueCollection Params
 		{
 			get { return request.Params; }
 		}
 
+		/// <summary>
+		/// Access the session objects.
+		/// </summary>
+		/// <value></value>
 		public virtual IDictionary Session
 		{
 			get { return session; }
 		}
 
+		/// <summary>
+		/// Gets the request object.
+		/// </summary>
+		/// <value></value>
 		public virtual IRequest Request
 		{
 			get { return request; }
 		}
 
+		/// <summary>
+		/// Gets the response object.
+		/// </summary>
+		/// <value></value>
 		public virtual IResponse Response
 		{
 			get { return response; }
 		}
 
+		/// <summary>
+		/// Gets the trace object.
+		/// </summary>
+		/// <value></value>
 		public virtual ITrace Trace
 		{
 			get { return trace; }
 		}
 
+		/// <summary>
+		/// Access the Cache associated with this
+		/// web execution context.
+		/// </summary>
+		/// <value></value>
 		public virtual ICacheProvider Cache
 		{
 			get { return cacheProvider; }
 		}
 
+		/// <summary>
+		/// Access a dictionary of volative items.
+		/// </summary>
+		/// <value></value>
 		public virtual Flash Flash
 		{
 			get { return flash; }
 		}
 
+		/// <summary>
+		/// Transfer the execution to another resource.
+		/// </summary>
+		/// <param name="path"></param>
+		/// <param name="preserveForm"></param>
 		public virtual void Transfer(string path, bool preserveForm)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Gets or sets the current user.
+		/// </summary>
+		/// <value></value>
 		public IPrincipal CurrentUser
 		{
 			get { return currentUser; }
 			set { currentUser = value; }
 		}
 
+		/// <summary>
+		/// Gets the last exception raised during
+		/// the execution of an action.
+		/// </summary>
+		/// <value></value>
 		public Exception LastException
 		{
 			get { return lastException; }
@@ -143,40 +211,65 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
-		/// I'm not sure about this one
-		/// TODO: Review it
+		/// Returns the application path.
 		/// </summary>
+		/// <value></value>
 		public virtual string ApplicationPath
 		{
 			get { return urlInfo.AppVirtualDir; }
 		}
 
+		/// <summary>
+		/// Returns the physical application path.
+		/// </summary>
+		/// <value></value>
 		public virtual string ApplicationPhysicalPath
 		{
 			get { return physicalPath; }
 		}
 
+		/// <summary>
+		/// Returns the <see cref="UrlInfo"/> of the the current request.
+		/// </summary>
+		/// <value></value>
 		public virtual UrlInfo UrlInfo
 		{
 			get { return urlInfo; }
 		}
 
+		/// <summary>
+		/// Returns an <see cref="IServerUtility"/>.
+		/// </summary>
+		/// <value></value>
 		public virtual IServerUtility Server
 		{
 			get { return serverUtility; }
 		}
 
+		/// <summary>
+		/// Returns the Items collection from the current HttpContext.
+		/// </summary>
+		/// <value></value>
 		public virtual IDictionary Items
 		{
 			get { return contextItems; }
 		}
 
+		/// <summary>
+		/// Gets or sets the current controller.
+		/// </summary>
+		/// <value>The current controller.</value>
 		public virtual Controller CurrentController
 		{
 			get { return currentController; }
 			set { currentController = value; }
 		}
 
+		/// <summary>
+		/// If a container is available for the app, this
+		/// property exposes its instance.
+		/// </summary>
+		/// <value></value>
 		public IServiceProvider Container
 		{
 			get { return container; }
@@ -184,21 +277,36 @@ namespace Castle.MonoRail.Framework.Test
 
 		#endregion
 
+		/// <summary>
+		/// Sets the container.
+		/// </summary>
+		/// <param name="serviceProvider">The service provider.</param>
 		public void SetContainer(IServiceProvider serviceProvider)
 		{
 			container = serviceProvider;
 		}
 
+		/// <summary>
+		/// Gets the rendered email templates.
+		/// </summary>
+		/// <value>The rendered email templates.</value>
 		public virtual List<RenderedEmailTemplate> RenderedEmailTemplates
 		{
 			get { return renderedEmailTemplates; }
 		}
 
+		/// <summary>
+		/// Gets the messages sent.
+		/// </summary>
+		/// <value>The messages sent.</value>
 		public virtual List<Message> MessagesSent
 		{
 			get { return messagesSent; }
 		}
 
+		/// <summary>
+		/// Registers the services.
+		/// </summary>
 		private void RegisterServices()
 		{
 			DefaultUrlBuilder urlBuilder = new DefaultUrlBuilder();
@@ -235,22 +343,38 @@ namespace Castle.MonoRail.Framework.Test
 			messagesSent.Add(message);
 		}
 
+		/// <summary>
+		/// Represents an email template for unit test purposes
+		/// </summary>
 		public class RenderedEmailTemplate
 		{
 			private readonly string name;
 			private readonly IDictionary parameters;
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="RenderedEmailTemplate"/> class.
+			/// </summary>
+			/// <param name="name">The name.</param>
+			/// <param name="parameters">The parameters.</param>
 			public RenderedEmailTemplate(string name, IDictionary parameters)
 			{
 				this.name = name;
 				this.parameters = parameters;
 			}
 
+			/// <summary>
+			/// Gets the name.
+			/// </summary>
+			/// <value>The name.</value>
 			public string Name
 			{
 				get { return name; }
 			}
 
+			/// <summary>
+			/// Gets the parameters.
+			/// </summary>
+			/// <value>The parameters.</value>
 			public IDictionary Parameters
 			{
 				get { return parameters; }

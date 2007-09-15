@@ -17,36 +17,75 @@ namespace Castle.MonoRail.Framework.Test
 	using System;
 	using System.IO;
 
+	/// <summary>
+	/// Represents a mock implementation of <see cref="IServerUtility"/> for unit test purposes.
+	/// </summary>
 	public class MockServerUtility : IServerUtility
 	{
+		/// <summary>
+		/// Returns the physical path for the
+		/// specified virtual path.
+		/// </summary>
+		/// <param name="virtualPath">The virtual path.</param>
+		/// <returns>The mapped path</returns>
 		public virtual string MapPath(string virtualPath)
 		{
 			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, virtualPath);
 		}
 
+		/// <summary>
+		/// HTML encodes a string and returns the encoded string.
+		/// </summary>
+		/// <param name="content">The text string to HTML encode.</param>
+		/// <returns>The HTML encoded text.</returns>
 		public virtual string HtmlEncode(string content)
 		{
 			return content;
 		}
 
+		/// <summary>
+		/// URL encodes a string and returns the encoded string.
+		/// </summary>
+		/// <param name="content">The text to URL encode.</param>
+		/// <returns>The URL encoded text.</returns>
 		public virtual string UrlEncode(string content)
 		{
 			return content.Replace("&", "&amp;");
 		}
 
+		/// <summary>
+		/// URL decodes a string and returns the decoded string.
+		/// </summary>
+		/// <param name="content">The text to URL decode.</param>
+		/// <returns>The URL decoded text.</returns>
 		public virtual string UrlDecode(string content)
 		{
 			return content.Replace("&amp", "&");
 		}
 
+		/// <summary>
+		/// URL encodes the path portion of a URL string and returns the encoded string.
+		/// </summary>
+		/// <param name="content">The text to URL encode.</param>
+		/// <returns>The URL encoded text.</returns>
 		public virtual string UrlPathEncode(string content)
 		{
-			throw new NotImplementedException();
+			return content;
 		}
 
+		/// <summary>
+		/// Escapes JavaScript with Url encoding and returns the encoded string.
+		/// </summary>
+		/// <param name="content">The text to URL encode and escape JavaScript within.</param>
+		/// <returns>
+		/// The URL encoded and JavaScript escaped text.
+		/// </returns>
+		/// <remarks>
+		/// Converts quotes, single quotes and CR/LFs to their representation as an escape character.
+		/// </remarks>
 		public virtual string JavaScriptEscape(string content)
 		{
-			throw new NotImplementedException();
+			return content;
 		}
 	}
 }

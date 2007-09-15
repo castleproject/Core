@@ -18,12 +18,21 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	using System.Collections;
 	using Castle.Components.Validator;
 
+	/// <summary>
+	/// Implementation of a browser validator that uses the <c>fValidate</c>
+	/// javascript library.
+	/// </summary>
 	public class FValidateWebValidator : IBrowserValidatorProvider
 	{
 		/// <summary>
-		/// Pendent
+		/// Implementors should attempt to read their specific configuration
+		/// from the <paramref name="parameters"/>, configure and return
+		/// a class that extends from <see cref="BrowserValidationConfiguration"/>
 		/// </summary>
-		/// <returns></returns>
+		/// <param name="parameters"></param>
+		/// <returns>
+		/// An instance that extends from <see cref="BrowserValidationConfiguration"/>
+		/// </returns>
 		public BrowserValidationConfiguration CreateConfiguration(IDictionary parameters)
 		{
 			FValidateConfiguration config = new FValidateConfiguration();
@@ -32,9 +41,12 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		}
 
 		/// <summary>
-		/// Pendent
+		/// Implementors should return their generator instance.
 		/// </summary>
-		/// <returns></returns>
+		/// <param name="config"></param>
+		/// <param name="inputType"></param>
+		/// <param name="attributes"></param>
+		/// <returns>A generator instance</returns>
 		public IBrowserValidationGenerator CreateGenerator(BrowserValidationConfiguration config, InputElementType inputType, IDictionary attributes)
 		{
 			return new FValidateGenerator(inputType, attributes);
@@ -42,8 +54,15 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 		#region Configuration
 
+		/// <summary>
+		/// Supported configuration for fValidate.
+		/// </summary>
 		public class FValidateConfiguration : BrowserValidationConfiguration
 		{
+			/// <summary>
+			/// Configures the JS library based on the supplied parameters.
+			/// </summary>
+			/// <param name="parameters">The parameters.</param>
 			public override void Configure(IDictionary parameters)
 			{
 				// ( f, bConfirm, bDisable, bDisableR, groupError, errorMode )
@@ -86,6 +105,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 		#region Generator
 
+		/// <summary>
+		/// Generator for fValidate validation.
+		/// </summary>
 		public class FValidateGenerator : IBrowserValidationGenerator
 		{
 			private readonly InputElementType inputType;
@@ -102,79 +124,149 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				this.attributes = attributes;
 			}
 
+			/// <summary>
+			/// Sets that a field is required.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsRequired(string target, string violationMessage)
 			{
 				AddValidator(target, "blank");
 				AddErrorMessage(violationMessage);
 			}
 
+			/// <summary>
+			/// Sets that a field value must match the specified regular expression.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="regExp">The reg exp.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetRegExp(string target, string regExp, string violationMessage)
 			{
 				throw new NotImplementedException();
 			}
 
+			/// <summary>
+			/// Sets that a field value must be a valid email address.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetEmail(string target, string violationMessage)
 			{
 				AddValidator(target, "email|1");
 				AddErrorMessage(violationMessage);
 			}
 
+			/// <summary>
+			/// Set that a field should only accept digits.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetDigitsOnly(string target, string violationMessage)
 			{
-				// TODO
 			}
 
+			/// <summary>
+			/// Set that a field should only accept numbers.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetNumberOnly(string target, string violationMessage)
 			{
-				// TODO
 			}
 
+			/// <summary>
+			/// Sets that field must have an exact lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="length">The length.</param>
 			public void SetExactLength(string target, int length)
 			{
 				// Not supported
 			}
 
+			/// <summary>
+			/// Sets that field must have an exact lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="length">The length.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetExactLength(string target, int length, string violationMessage)
 			{
 				// Not supported
 			}
 
+			/// <summary>
+			/// Sets that field must have an minimum lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minLength">The minimum length.</param>
 			public void SetMinLength(string target, int minLength)
 			{
 				SetMinLength(target, minLength, null);
 			}
 
+			/// <summary>
+			/// Sets that field must have an minimum lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minLength">The minimum length.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetMinLength(string target, int minLength, string violationMessage)
 			{
 				AddValidator(target, "length|" + minLength);
 			}
 
+			/// <summary>
+			/// Sets that field must have an maximum lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="maxLength">The maximum length.</param>
 			public void SetMaxLength(string target, int maxLength)
 			{
 				SetMaxLength(target, maxLength, null);
 			}
 
+			/// <summary>
+			/// Sets that field must have an maximum lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="maxLength">The maximum length.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetMaxLength(string target, int maxLength, string violationMessage)
 			{
 				// Not supported
 			}
 
+			/// <summary>
+			/// Sets that field must be between a length range.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minLength">The minimum length.</param>
+			/// <param name="maxLength">The maximum length.</param>
 			public void SetLengthRange(string target, int minLength, int maxLength)
 			{
 				AddValidator(target, "length|" + minLength + "|" + maxLength);
 			}
 
+			/// <summary>
+			/// Sets that field must be between a length range.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minLength">The minimum length.</param>
+			/// <param name="maxLength">The maximum length.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetLengthRange(string target, int minLength, int maxLength, string violationMessage)
 			{
 				AddValidator(target, "length|" + minLength + "|" + maxLength);
 			}
 
 			/// <summary>
-			/// Sets the value range.
+			/// Sets that field must be between a value range.
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
-			/// <param name="minValue">Value of the min.</param>
-			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="minValue">Minimum value.</param>
+			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, int minValue, int maxValue, string violationMessage)
 			{
@@ -182,11 +274,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			}
 
 			/// <summary>
-			/// Sets the value range.
+			/// Sets that field must be between a value range.
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
-			/// <param name="minValue">Value of the min.</param>
-			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="minValue">Minimum value.</param>
+			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, decimal minValue, decimal maxValue, string violationMessage)
 			{
@@ -194,11 +286,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			}
 
 			/// <summary>
-			/// Sets the value range.
+			/// Sets that field must be between a value range.
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
-			/// <param name="minValue">Value of the min.</param>
-			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="minValue">Minimum value.</param>
+			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, DateTime minValue, DateTime maxValue, string violationMessage)
 			{
@@ -206,32 +298,51 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			}
 
 			/// <summary>
-			/// Sets the value range.
+			/// Sets that field must be between a value range.
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
-			/// <param name="minValue">Value of the min.</param>
-			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="minValue">Minimum value.</param>
+			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, string minValue, string maxValue, string violationMessage)
 			{
 
 			}
 
+			/// <summary>
+			/// Set that a field value must be the same as another field's value.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
-				throw new NotImplementedException();
 			}
 
+			/// <summary>
+			/// Set that a field value must _not_ be the same as another field's value.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsNotSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
-				throw new NotImplementedException();
-			}
-			
-			public void SetDate(string target, string violationMessage)
-			{
-				throw new NotImplementedException();
 			}
 
+			/// <summary>
+			/// Set that a field value must be a valid date.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="violationMessage">The violation message.</param>
+			public void SetDate(string target, string violationMessage)
+			{
+			}
+
+			/// <summary>
+			/// Adds the validator.
+			/// </summary>
+			/// <param name="target">The target.</param>
+			/// <param name="validator">The validator.</param>
 			private void AddValidator(string target, string validator)
 			{
 				string existingValidators = (string) attributes["validators"];

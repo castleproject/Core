@@ -32,27 +32,50 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private static readonly BindingFlags PropertyBindingFlags = BindingFlags.Public |
 			BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.IgnoreCase;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WebFormsViewEngine"/> class.
+		/// </summary>
 		public WebFormsViewEngine()
 		{
 		}
 
 		#region ViewEngineBase overrides
 
+		/// <summary>
+		/// Gets a value indicating whether the view engine
+		/// support the generation of JS.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if JS generation is supported; otherwise, <c>false</c>.
+		/// </value>
 		public override bool SupportsJSGeneration
 		{
 			get { return false; }
 		}
 
+		/// <summary>
+		/// Gets the view file extension.
+		/// </summary>
+		/// <value>The view file extension.</value>
 		public override string ViewFileExtension
 		{
 			get { return ".aspx"; }
 		}
 
+		/// <summary>
+		/// Gets the JS generator file extension.
+		/// </summary>
+		/// <value>The JS generator file extension.</value>
 		public override string JSGeneratorFileExtension
 		{
 			get { throw new NotImplementedException(); }
 		}
 
+		/// <summary>
+		/// Evaluates whether the specified template exists.
+		/// </summary>
+		/// <param name="templateName"></param>
+		/// <returns><c>true</c> if it exists</returns>
 		public override bool HasTemplate(String templateName)
 		{
 			return ViewSourceLoader.HasTemplate(templateName + ".aspx");
@@ -92,29 +115,64 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			ProcessInlineView(controller, viewName, httpContext);	
 		}
 
+		/// <summary>
+		/// Processes the view - using the templateName
+		/// to obtain the correct template
+		/// and writes the results to the System.IO.TextWriter.
+		/// </summary>
+		/// <param name="output"></param>
+		/// <param name="context"></param>
+		/// <param name="controller"></param>
+		/// <param name="templateName"></param>
 		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller,
 		                             string templateName)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Processes the partial.
+		/// </summary>
+		/// <param name="output">The output.</param>
+		/// <param name="context">The context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="partialName">The partial name.</param>
 		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller,
 		                                    string partialName)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Creates the JS generator.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
 		public override object CreateJSGenerator(IRailsEngineContext context)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Generates the JS.
+		/// </summary>
+		/// <param name="output">The output.</param>
+		/// <param name="context">The context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="templateName">Name of the template.</param>
 		public override void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller,
 		                                string templateName)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Wraps the specified content in the layout using the
+		/// context to output the result.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="controller"></param>
+		/// <param name="contents"></param>
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
 			AdjustContentType(context);
@@ -426,7 +484,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			private Page page;
 			private string viewName;
 			private WebFormsViewEngine engine;
-		
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="ExecutePageProvider"/> class.
+			/// </summary>
+			/// <param name="engine">The engine.</param>
+			/// <param name="viewName">Name of the view.</param>
 			public ExecutePageProvider(WebFormsViewEngine engine, string viewName)
 			{
 				this.page = null;
@@ -434,6 +497,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 				this.viewName = viewName;
 			}
 
+			/// <summary>
+			/// Executes the page.
+			/// </summary>
+			/// <param name="context">The context.</param>
+			/// <returns></returns>
 			public Page ExecutePage(IRailsEngineContext context)
 			{
 				HttpContext httpContext = context.UnderlyingContext;
@@ -443,6 +511,14 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 				return page;
 			}
 
+			/// <summary>
+			/// Implementors should perform their logic to
+			/// return a instance of <see cref="IHttpHandler"/>.
+			/// If the <see cref="IHttpHandler"/> can not be created,
+			/// it should return <c>null</c>.
+			/// </summary>
+			/// <param name="context"></param>
+			/// <returns></returns>
 			public IHttpHandler ObtainMonoRailHttpHandler(IRailsEngineContext context)
 			{
 				HttpContext httpContext = context.UnderlyingContext;
@@ -465,6 +541,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 				return page;
 			}
 
+			/// <summary>
+			/// Implementors should perform their logic
+			/// to release the <see cref="IHttpHandler"/> instance
+			/// and its resources.
+			/// </summary>
+			/// <param name="handler"></param>
 			public void ReleaseHandler(IHttpHandler handler)
 			{
 
@@ -478,11 +560,19 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	{
 		public Stream _original;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DelegateMemoryStream"/> class.
+		/// </summary>
+		/// <param name="original">The original.</param>
 		public DelegateMemoryStream(Stream original)
 		{
 			_original = original;
 		}
 
+		/// <summary>
+		/// Gets the original stream.
+		/// </summary>
+		/// <value>The original stream.</value>
 		public Stream OriginalStream
 		{
 			get { return _original; }

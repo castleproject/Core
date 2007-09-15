@@ -16,13 +16,29 @@ namespace Castle.MonoRail.Framework.Filters
 {
 	using System.Web;
 	
+	/// <summary>
+	/// Forces ASP.Net to perform a more complete request validation
+	/// </summary>
 	public class RequestValidatorFilter : IFilter
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RequestValidatorFilter"/> class.
+		/// </summary>
 		public RequestValidatorFilter()
 		{
 		}
 
-		public bool Perform(Castle.MonoRail.Framework.ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="exec">When this filter is being invoked</param>
+		/// <param name="context">Current context</param>
+		/// <param name="controller">The controller instance</param>
+		/// <returns>
+		/// 	<c>true</c> if the action
+		/// should be invoked, otherwise <c>false</c>
+		/// </returns>
+		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
 			try
 			{
@@ -32,7 +48,7 @@ namespace Castle.MonoRail.Framework.Filters
 				object dummy = context.Request.Form;
 				dummy = context.Request.QueryString;
 			}
-			catch (HttpRequestValidationException e)
+			catch(HttpRequestValidationException e)
 			{
 				context.Flash["validationError"] = context.Server.HtmlEncode(e.Message);
 			}

@@ -152,6 +152,10 @@ namespace Castle.MonoRail.Framework
 			return context.UrlInfo;
 		}
 
+		/// <summary>
+		/// Gets the current context.
+		/// </summary>
+		/// <value>The current context.</value>
 		public static IRailsEngineContext CurrentContext
 		{
 			get

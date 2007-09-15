@@ -24,12 +24,33 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface ICacheProvider : IProvider
 	{
+		/// <summary>
+		/// Determines whether the specified key is on the cache.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns>
+		/// 	<c>true</c> if the cache has the key; otherwise, <c>false</c>.
+		/// </returns>
 		bool HasKey(String key);
 
+		/// <summary>
+		/// Gets the cache item by the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns></returns>
 		object Get(String key);
 
+		/// <summary>
+		/// Stores the cache item by the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <param name="data">The data.</param>
 		void Store(String key, object data);
 
+		/// <summary>
+		/// Deletes the cache item by the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
 		void Delete(String key);
 	}
 }

@@ -51,12 +51,20 @@ namespace Castle.MonoRail.Framework
 						
 			this.transformFilterType = transformFilterType;
 		}
-		
+
+		/// <summary>
+		/// Gets the type of the transform filter.
+		/// </summary>
+		/// <value>The type of the transform filter.</value>
 		public Type TransformFilterType
 		{
 			get { return transformFilterType; }
 		}
 
+		/// <summary>
+		/// Gets or sets the execution order.
+		/// </summary>
+		/// <value>The execution order.</value>
 		public int ExecutionOrder
 		{
 			get { return executionOrder; }

@@ -22,6 +22,11 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface IViewComponentFactory
 	{
+		/// <summary>
+		/// Creates the specified name.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		ViewComponent Create(String name);
 	}
 }

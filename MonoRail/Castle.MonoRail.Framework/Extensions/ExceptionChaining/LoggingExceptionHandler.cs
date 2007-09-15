@@ -17,10 +17,16 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
     using Castle.Core.Logging;
 
     /// <summary>
-    /// 
+    /// Handles that logs the exception using the the logger factory.
     /// </summary>
     public class LoggingExceptionHandler : AbstractExceptionHandler
     {
+		/// <summary>
+		/// Implementors should perform the action
+		/// on the exception. Note that the exception
+		/// is available in <see cref="IRailsEngineContext.LastException"/>
+		/// </summary>
+		/// <param name="context"></param>
         public override void Process(IRailsEngineContext context)
         {
             ILoggerFactory factory = (ILoggerFactory) context.GetService(typeof (ILoggerFactory));

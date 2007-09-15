@@ -23,13 +23,26 @@ namespace Castle.MonoRail.Framework.Internal
 	/// </summary>
 	public abstract class JSGeneratorBase
 	{
+		/// <summary>
+		/// The generator instance
+		/// </summary>
 		protected readonly IJSGenerator generator;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JSGeneratorBase"/> class.
+		/// </summary>
+		/// <param name="generator">The generator.</param>
 		protected JSGeneratorBase(IJSGenerator generator)
 		{
 			this.generator = generator;
 		}
 
+		/// <summary>
+		/// Executes an operation (totally late bound)
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <param name="args">The args.</param>
+		/// <returns></returns>
 		protected object InternalInvoke(string method, params object[] args)
 		{
 			if (method == "el")
@@ -76,10 +89,24 @@ namespace Castle.MonoRail.Framework.Internal
 			return CreateNullGenerator();
 		}
 
+		/// <summary>
+		/// Creates a null generator.
+		/// </summary>
+		/// <returns></returns>
 		protected abstract object CreateNullGenerator();
 
+		/// <summary>
+		/// Creates a JS collection generator.
+		/// </summary>
+		/// <param name="collectionGenerator">The collection generator.</param>
+		/// <returns></returns>
 		protected abstract object CreateJSCollectionGenerator(IJSCollectionGenerator collectionGenerator);
 
+		/// <summary>
+		/// Creates a JS element generator.
+		/// </summary>
+		/// <param name="elementGenerator">The element generator.</param>
+		/// <returns></returns>
 		protected abstract object CreateJSElementGenerator(IJSElementGenerator elementGenerator);
 
 		/// <summary>

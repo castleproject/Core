@@ -22,8 +22,14 @@ namespace Castle.MonoRail.Framework.Helpers
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Services.AjaxProxyGenerator;
 
+	/// <summary>
+	/// XmlHttpRequest supported events.
+	/// </summary>
 	public enum CallbackEnum
 	{
+		/// <summary>
+		/// Not initialized
+		/// </summary>
 		Uninitialized,
 		/// <summary>
 		/// Called when the remote document is being 
@@ -82,7 +88,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="provider">The service proviver</param>
 		public void Service(IServiceProvider provider)
 		{
-			this.ajaxProxyGenerator = (IAjaxProxyGenerator) provider.GetService(typeof(IAjaxProxyGenerator));
+			ajaxProxyGenerator = (IAjaxProxyGenerator) provider.GetService(typeof(IAjaxProxyGenerator));
 		}
 
 		#endregion
@@ -880,6 +886,46 @@ namespace Castle.MonoRail.Framework.Helpers
 			return "'" + url + "'";
 		}
 
+		/// <summary>
+		/// Populates the <paramref name="jsOptions"/> by analyzing the
+		/// options set on the helper <paramref name="options"/>
+		/// </summary>
+		/// 
+		/// <remarks>
+		/// The following options are analyzed
+		/// 
+		/// <list type="bullet">
+		/// <item>
+		///		<term>type</term>
+		///		<description>boolean - sets the <c>asynchronous</c> </description>
+		/// </item>
+		/// <item>
+		///		<term>method</term>
+		///		<description>string - sets the <c>method</c>. Possible values are post/get </description>
+		/// </item>
+		/// <item>
+		///		<term>evalScripts</term>
+		///		<description>boolean</description>
+		/// </item>
+		/// <item>
+		///		<term>position</term>
+		///		<description>string - sets the place where content is inserted (Top, Bottom, After, Before)</description>
+		/// </item>
+		/// <item>
+		///		<term>form</term>
+		///		<description>if present, set the parameters request to send the current form serialized</description>
+		/// </item>
+		/// <item>
+		///		<term>with</term>
+		///		<description>if present, set its content as the parameters for the ajax request</description>
+		/// </item>
+		/// </list>
+		/// 
+		/// </remarks>
+		/// 
+		/// <param name="jsOptions">Options that will be used on the js side</param>
+		/// <param name="options">Options passed to the helper method</param>
+		/// <returns></returns>
 		protected String BuildAjaxOptions(IDictionary jsOptions, IDictionary options)
 		{
 			BuildCallbacks(jsOptions, options);
@@ -949,6 +995,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Builds the callback function.
+		/// </summary>
+		/// <param name="callback">The callback.</param>
+		/// <param name="code">The code.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		protected String BuildCallbackFunction(CallbackEnum callback, String code, out String name)
 		{
 			name = String.Empty;
@@ -971,6 +1024,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("function(request) {{ {0} }} ", code);
 		}
 
+		/// <summary>
+		/// Builds the observer.
+		/// </summary>
+		/// <param name="clazz">The clazz.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="options">The options.</param>
+		/// <returns></returns>
 		protected String BuildObserver(String clazz, String name, IDictionary options)
 		{
 			if (options.Contains("update") && !options.Contains("with"))
@@ -989,7 +1049,13 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return js.ToString();
 		}
-		
+
+		/// <summary>
+		/// Gets the options.
+		/// </summary>
+		/// <param name="url">The URL.</param>
+		/// <param name="options">The options.</param>
+		/// <returns></returns>
 		public IDictionary GetOptions(String url, IDictionary options)
 		{
 			if (options == null)
@@ -1003,6 +1069,17 @@ namespace Castle.MonoRail.Framework.Helpers
 			return options;
 		}
 
+		/// <summary>
+		/// Gets the options.
+		/// </summary>
+		/// <param name="url">The URL.</param>
+		/// <param name="idOfElementToBeUpdated">The id of element to be updated.</param>
+		/// <param name="with">The with.</param>
+		/// <param name="loading">The loading.</param>
+		/// <param name="loaded">The loaded.</param>
+		/// <param name="complete">The complete.</param>
+		/// <param name="interactive">The interactive.</param>
+		/// <returns></returns>
 		public IDictionary GetOptions(String url, String idOfElementToBeUpdated, 
 		                              object with, String loading, String loaded, String complete, String interactive)
 		{

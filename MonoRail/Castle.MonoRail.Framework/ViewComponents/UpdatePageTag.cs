@@ -17,8 +17,26 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	using Castle.MonoRail.Framework.Helpers;
 
 	/// <summary>
-	/// 
+	/// Renders a javascript tag block with an inline javascript 
+	/// that changes the page 
+	/// elements using a special dsl-like language.
 	/// </summary>
+	/// 
+	/// <seealso cref="PrototypeHelper"/>
+	/// 
+	/// <example>
+	/// The following illustrates its use.
+	/// <code>
+	/// #blockcomponent(UpdatePageTag)
+	///   $page.ReplaceHtml('myotherdiv', 'new content')
+	///   $page.Highlight('mydivid')
+	/// #end
+	/// </code>
+	/// </example>
+	/// <remarks>
+	/// The current implementation is dependent on 
+	/// prototype.js and scriptaculous.js
+	/// </remarks>
 	public class UpdatePageTag : UpdatePage
 	{
 		/// <summary>

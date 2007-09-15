@@ -14,8 +14,15 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
+	/// <summary>
+	/// Contract for <see cref="TransformFilterDescriptor"/> builders
+	/// </summary>
 	public interface ITransformFilterDescriptorBuilder
 	{
+		/// <summary>
+		/// Builds the transform filter descriptors.
+		/// </summary>
+		/// <returns></returns>
 		TransformFilterDescriptor[] BuildTransformFilterDescriptors();
 	}
 }

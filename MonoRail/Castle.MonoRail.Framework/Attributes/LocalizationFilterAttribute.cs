@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using Castle.MonoRail.Framework.Filters;
+	using Filters;
 
 	/// <summary>
 	/// This is an special filter attribute. It is used
@@ -39,7 +39,9 @@ namespace Castle.MonoRail.Framework
 		/// "locale", but if that fails it falls back
 		/// to the client's browser locale.
 		/// </summary>
-		public LocalizationFilterAttribute() : base(ExecuteEnum.BeforeAction, typeof(LocalizationFilter)) {}
+		public LocalizationFilterAttribute() : base(ExecuteEnum.BeforeAction, typeof(LocalizationFilter))
+		{
+		}
 
 		/// <summary>
 		/// Defines a new LocalizationFilter.
@@ -91,6 +93,6 @@ namespace Castle.MonoRail.Framework
 			set { useBrowser = value; }
 		}
 
-		#endregion		
+		#endregion
 	}
 }

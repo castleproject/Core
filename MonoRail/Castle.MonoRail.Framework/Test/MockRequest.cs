@@ -17,7 +17,11 @@ namespace Castle.MonoRail.Framework.Test
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Web;
 
+	/// <summary>
+	/// Represents a mock implementation of <see cref="IRequest"/> for unit test purposes.
+	/// </summary>
 	public class MockRequest : IRequest
 	{
 		private NameValueCollection form = new NameValueCollection();
@@ -36,86 +40,155 @@ namespace Castle.MonoRail.Framework.Test
 		private string[] userLanguages = new string[] { "en-ES", "pt-BR" };
 		private string userHostAddress = "127.0.0.1";
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockRequest"/> class.
+		/// </summary>
+		/// <param name="cookies">The cookies.</param>
 		public MockRequest(IDictionary cookies)
 		{
 			this.cookies = cookies;
 		}
 
+		/// <summary>
+		/// Reads the request data as a byte array.
+		/// </summary>
+		/// <param name="count">How many bytes.</param>
+		/// <returns></returns>
 		public virtual byte[] BinaryRead(int count)
 		{
 			throw new NotImplementedException();
 		}
-		
+
+		/// <summary>
+		/// Reads the cookie.
+		/// </summary>
+		/// <param name="name">The cookie name.</param>
+		/// <returns></returns>
 		public virtual string ReadCookie(string name)
 		{
 			return (string) cookies[name];
 		}
 
+		/// <summary>
+		/// Validates the input.
+		/// </summary>
 		public virtual void ValidateInput()
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Gets the Http headers.
+		/// </summary>
+		/// <value>The Http headers.</value>
 		public virtual NameValueCollection Headers
 		{
 			get { return headers; }
 		}
 
+		/// <summary>
+		/// Gets the <see cref="HttpPostedFile"/> per key.
+		/// </summary>
+		/// <value></value>
 		public virtual IDictionary Files
 		{
 			get { return files; }
 		}
 
+		/// <summary>
+		/// Gets the params which accumulates headers, post, querystring and cookies.
+		/// </summary>
+		/// <value>The params.</value>
 		public virtual NameValueCollection Params
 		{
 			get { return @params; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this requeest is from a local address.
+		/// </summary>
+		/// <value><c>true</c> if this instance is local; otherwise, <c>false</c>.</value>
 		public virtual bool IsLocal
 		{
 			get { return isLocal; }
 		}
 
+		/// <summary>
+		/// Gets the raw URL.
+		/// </summary>
+		/// <value>The raw URL.</value>
 		public virtual string RawUrl
 		{
 			get { return rawUrl; }
 		}
 
+		/// <summary>
+		/// Gets the URI.
+		/// </summary>
+		/// <value>The URI.</value>
 		public virtual Uri Uri
 		{
 			get { return uri; }
 		}
 
+		/// <summary>
+		/// Gets the HTTP method.
+		/// </summary>
+		/// <value>The HTTP method.</value>
 		public virtual string HttpMethod
 		{
 			get { return httpMethod; }
 		}
 
+		/// <summary>
+		/// Gets the file path.
+		/// </summary>
+		/// <value>The file path.</value>
 		public virtual string FilePath
 		{
 			get { return filePath; }
 		}
 
+		/// <summary>
+		/// Gets the param with the specified key.
+		/// </summary>
+		/// <value></value>
 		public virtual string this[string key]
 		{
 			get { throw new NotImplementedException(); }
 		}
 
+		/// <summary>
+		/// Gets the query string.
+		/// </summary>
+		/// <value>The query string.</value>
 		public virtual NameValueCollection QueryString
 		{
 			get { return queryString; }
 		}
 
+		/// <summary>
+		/// Gets the form.
+		/// </summary>
+		/// <value>The form.</value>
 		public virtual NameValueCollection Form
 		{
 			get { return form; }
 		}
 
+		/// <summary>
+		/// Gets the user languages.
+		/// </summary>
+		/// <value>The user languages.</value>
 		public virtual string[] UserLanguages
 		{
 			get { return userLanguages; }
 		}
 
+		/// <summary>
+		/// Gets the IP host address of the remote client.
+		/// </summary>
+		/// <value>The IP address of the remote client.</value>
 		public virtual string UserHostAddress
 		{
 			get { return userHostAddress; }

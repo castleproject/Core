@@ -19,6 +19,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.Web.UI;
 	using System.Reflection;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public static class WebFormUtils
 	{
 		private static readonly BindingFlags BindingFlagsGet

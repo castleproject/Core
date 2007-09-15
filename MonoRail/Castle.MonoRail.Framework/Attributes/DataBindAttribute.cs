@@ -166,11 +166,20 @@ namespace Castle.MonoRail.Framework
 			return instance;
 		}
 
+		/// <summary>
+		/// Creates the binder.
+		/// </summary>
+		/// <returns></returns>
 		protected virtual IDataBinder CreateBinder()
 		{
 			return new DataBinder();
 		}
 
+		/// <summary>
+		/// Configures the validator.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="binder">The binder.</param>
 		protected void ConfigureValidator(SmartDispatcherController controller, IDataBinder binder)
 		{
 			if (validate)
@@ -183,6 +192,12 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		/// <summary>
+		/// Populates the validator error summary.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="binder">The binder.</param>
+		/// <param name="instance">The instance.</param>
 		protected void PopulateValidatorErrorSummary(SmartDispatcherController controller, IDataBinder binder, object instance)
 		{
 			if (validate)
@@ -191,6 +206,12 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		/// <summary>
+		/// Binds the instance errors.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="binder">The binder.</param>
+		/// <param name="instance">The instance.</param>
 		protected void BindInstanceErrors(SmartDispatcherController controller, IDataBinder binder, object instance)
 		{
 			if (instance != null)

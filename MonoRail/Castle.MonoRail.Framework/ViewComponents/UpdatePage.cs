@@ -15,10 +15,28 @@
 namespace Castle.MonoRail.Framework.ViewComponents
 {
 	using System.IO;
+	using Helpers;
 
 	/// <summary>
-	/// 
+	/// Renders a javascript content that changes the page 
+	/// elements using a special dsl-like language.
 	/// </summary>
+	/// 
+	/// <seealso cref="PrototypeHelper"/>
+	/// 
+	/// <example>
+	/// The following illustrates its use.
+	/// <code>
+	/// #blockcomponent(UpdatePage)
+	///   $page.ReplaceHtml('myotherdiv', 'new content')
+	///   $page.Highlight('mydivid')
+	/// #end
+	/// </code>
+	/// </example>
+	/// <remarks>
+	/// The current implementation is dependent on 
+	/// prototype.js and scriptaculous.js
+	/// </remarks>
 	public class UpdatePage : ViewComponent
 	{
 		/// <summary>
@@ -30,6 +48,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			Context.Writer.WriteLine(GenerateJS());
 		}
 
+		/// <summary>
+		/// Evaluates the component's body providing a <c>page</c>
+		/// instance which is a <see cref="PrototypeHelper"/>
+		/// </summary>
+		/// <returns></returns>
 		protected string GenerateJS()
 		{
 			object generator = Context.ViewEngine.CreateJSGenerator(RailsContext);

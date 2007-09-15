@@ -39,6 +39,10 @@ namespace Castle.MonoRail.Framework
 		private TreeBuilder treeBuilder = new TreeBuilder();
 		private CompositeNode paramsNode, formNode, queryStringNode;
 		private IDictionary<object, ErrorSummary> validationSummaryPerInstance = new Dictionary<object, ErrorSummary>();
+
+		/// <summary>
+		/// Represents the errors associated with an instance bound.
+		/// </summary>
 		protected IDictionary<object, ErrorList> boundInstances = new Dictionary<object, ErrorList>();
 
 		/// <summary>
@@ -57,11 +61,19 @@ namespace Castle.MonoRail.Framework
 			this.binder = binder;
 		}
 
+		/// <summary>
+		/// Gets the binder.
+		/// </summary>
+		/// <value>The binder.</value>
 		public IDataBinder Binder
 		{
 			get { return binder; }
 		}
 
+		/// <summary>
+		/// Gets or sets the bound instance errors.
+		/// </summary>
+		/// <value>The bound instance errors.</value>
 		public IDictionary<object, ErrorList> BoundInstanceErrors
 		{
 			get { return boundInstances; }
@@ -77,6 +89,11 @@ namespace Castle.MonoRail.Framework
 			get { return validationSummaryPerInstance; }
 		}
 
+		/// <summary>
+		/// Populates the validator error summary.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		/// <param name="binderUsedForBinding">The binder used for binding.</param>
 		protected internal void PopulateValidatorErrorSummary(object instance, IDataBinder binderUsedForBinding)
 		{
 			ValidationSummaryPerInstance[instance] = binderUsedForBinding.GetValidationSummary(instance);
@@ -124,6 +141,12 @@ namespace Castle.MonoRail.Framework
 			return boundInstances[instance];
 		}
 
+		/// <summary>
+		/// Constructs the parameters for the action and invokes it.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <param name="request">The request.</param>
+		/// <param name="actionArgs">The action args.</param>
 		protected internal override void InvokeMethod(MethodInfo method, IRequest request, IDictionary actionArgs)
 		{
 			ParameterInfo[] parameters = method.GetParameters();
@@ -133,6 +156,15 @@ namespace Castle.MonoRail.Framework
 			method.Invoke(this, methodArgs);
 		}
 
+		/// <summary>
+		/// Uses a simple heuristic to select the best method -- especially in the 
+		/// case of method overloads. 
+		/// </summary>
+		/// <param name="action">The action name</param>
+		/// <param name="actions">The avaliable actions</param>
+		/// <param name="request">The request instance</param>
+		/// <param name="actionArgs">The custom arguments for the action</param>
+		/// <returns></returns>
 		protected internal override MethodInfo SelectMethod(String action, IDictionary actions,
 		                                                    IRequest request, IDictionary actionArgs)
 		{
@@ -149,6 +181,14 @@ namespace Castle.MonoRail.Framework
 			                           request.Params, actionArgs);
 		}
 
+		/// <summary>
+		/// Selects the best method given the set of entries 
+		/// avaliable on <paramref name="webParams"/> and <paramref name="actionArgs"/>
+		/// </summary>
+		/// <param name="candidates">The candidates.</param>
+		/// <param name="webParams">The web params.</param>
+		/// <param name="actionArgs">The custom action args.</param>
+		/// <returns></returns>
 		protected virtual MethodInfo SelectBestCandidate(MethodInfo[] candidates,
 		                                                 NameValueCollection webParams,
 		                                                 IDictionary actionArgs)
@@ -176,6 +216,11 @@ namespace Castle.MonoRail.Framework
 			return bestCandidate;
 		}
 
+		/// <summary>
+		/// Gets the name of the request parameter.
+		/// </summary>
+		/// <param name="param">The param.</param>
+		/// <returns></returns>
 		protected virtual String GetRequestParameterName(ParameterInfo param)
 		{
 			return param.Name;
@@ -357,16 +402,40 @@ namespace Castle.MonoRail.Framework
 			return args;
 		}
 
+		/// <summary>
+		/// Binds the object of the specified type using the given prefix.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="prefix">The prefix.</param>
+		/// <returns></returns>
 		protected object BindObject(Type targetType, String prefix)
 		{
 			return BindObject(ParamStore.Params, targetType, prefix);
 		}
-		
+
+		/// <summary>
+		/// Binds the object of the specified type using the given prefix.
+		/// but only using the entries from the collection specified on the <paramref name="from"/>
+		/// </summary>
+		/// <param name="from">Restricts the data source of entries.</param>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="prefix">The prefix.</param>
+		/// <returns></returns>
 		protected object BindObject(ParamStore from, Type targetType, String prefix)
 		{
 			return BindObject(from, targetType, prefix, null, null);
 		}
 
+		/// <summary>
+		/// Binds the object of the specified type using the given prefix.
+		/// but only using the entries from the collection specified on the <paramref name="from"/>
+		/// </summary>
+		/// <param name="from">From.</param>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="prefix">The prefix.</param>
+		/// <param name="excludedProperties">The excluded properties, comma separated list.</param>
+		/// <param name="allowedProperties">The allowed properties, comma separated list.</param>
+		/// <returns></returns>
 		protected object BindObject(ParamStore from, Type targetType, String prefix, String excludedProperties, String allowedProperties)
 		{
 			CompositeNode node = ObtainParamsNode(from);
@@ -378,12 +447,24 @@ namespace Castle.MonoRail.Framework
 
 			return instance;
 		}
-		
+
+		/// <summary>
+		/// Binds the object instance using the specified prefix.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		/// <param name="prefix">The prefix.</param>
 		protected void BindObjectInstance(object instance, String prefix)
 		{
 			BindObjectInstance(instance, ParamStore.Params, prefix);
 		}
 
+		/// <summary>
+		/// Binds the object instance using the given prefix.
+		/// but only using the entries from the collection specified on the <paramref name="from"/>
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		/// <param name="from">From.</param>
+		/// <param name="prefix">The prefix.</param>
 		protected void BindObjectInstance(object instance, ParamStore from, String prefix)
 		{
 			CompositeNode node = ObtainParamsNode(from);
@@ -394,16 +475,40 @@ namespace Castle.MonoRail.Framework
 			PopulateValidatorErrorSummary(instance, binder);
 		}
 
+		/// <summary>
+		/// Binds the object of the specified type using the given prefix.
+		/// </summary>
+		/// <typeparam name="T">Target type</typeparam>
+		/// <param name="prefix">The prefix.</param>
+		/// <returns></returns>
 		protected T BindObject<T>(String prefix)
 		{
 			return (T) BindObject(typeof(T), prefix);
 		}
-		
+
+		/// <summary>
+		/// Binds the object of the specified type using the given prefix.
+		/// but only using the entries from the collection specified on the <paramref name="from"/>
+		/// </summary>
+		/// <typeparam name="T">Target type</typeparam>
+		/// <param name="from">From.</param>
+		/// <param name="prefix">The prefix.</param>
+		/// <returns></returns>
 		protected T BindObject<T>(ParamStore from, String prefix)
 		{
 			return (T) BindObject(from, typeof(T), prefix);
 		}
-		
+
+		/// <summary>
+		/// Binds the object of the specified type using the given prefix.
+		/// but only using the entries from the collection specified on the <paramref name="from"/>
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="from">From.</param>
+		/// <param name="prefix">The prefix.</param>
+		/// <param name="excludedProperties">The excluded properties.</param>
+		/// <param name="allowedProperties">The allowed properties.</param>
+		/// <returns></returns>
 		protected T BindObject<T>(ParamStore from, String prefix, String excludedProperties, String allowedProperties)
 		{
 			return (T) BindObject(from, typeof(T), prefix, excludedProperties, allowedProperties);

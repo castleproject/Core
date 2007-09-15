@@ -16,9 +16,18 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using Castle.MonoRail.Framework.Helpers;
 
+	/// <summary>
+	/// Operations related to an element
+	/// </summary>
 	public abstract class JSElementGeneratorBase
 	{
+		/// <summary>
+		/// Element generator instance
+		/// </summary>
 		protected readonly IJSElementGenerator generator;
+		/// <summary>
+		/// Parent Generator instance
+		/// </summary>
 		protected readonly IJSGenerator parentGenerator;
 
 		/// <summary>
@@ -31,12 +40,22 @@ namespace Castle.MonoRail.Framework.Internal
 			parentGenerator = generator.ParentGenerator;
 		}
 
+		/// <summary>
+		/// Generates a get statement
+		/// </summary>
+		/// <param name="propName">Name of the prop.</param>
 		protected void InternalGet(string propName)
 		{
 			PrototypeHelper.JSGenerator.ReplaceTailByPeriod(parentGenerator);
 			PrototypeHelper.JSGenerator.Record(parentGenerator, propName);
 		}
 
+		/// <summary>
+		/// Dispatches the invocation (late bound)
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <param name="args">The args.</param>
+		/// <returns></returns>
 		protected object InternalInvoke(string method, object[] args)
 		{
 			if (method == "set")

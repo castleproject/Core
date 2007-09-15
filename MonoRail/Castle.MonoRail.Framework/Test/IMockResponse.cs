@@ -15,11 +15,24 @@
 namespace Castle.MonoRail.Framework.Test
 {
 	using System.Collections.Specialized;
+	using Framework;
 
+	/// <summary>
+	/// Exposes methods on top of <see cref="IResponse"/>
+	/// that are used by unit tests
+	/// </summary>
 	public interface IMockResponse : IResponse
 	{
+		/// <summary>
+		/// Gets the urls the request was redirected to.
+		/// </summary>
+		/// <value>The redirected to.</value>
 		string RedirectedTo { get; }
 
+		/// <summary>
+		/// Gets the http headers.
+		/// </summary>
+		/// <value>The headers.</value>
 		NameValueCollection Headers { get; }
 	}
 }

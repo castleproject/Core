@@ -25,6 +25,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	/// </summary>
 	public class Contents : Control
 	{
+		/// <summary>
+		/// Sends server control content to a provided <see cref="T:System.Web.UI.HtmlTextWriter"></see> object, which writes the content to be rendered on the client.
+		/// </summary>
+		/// <param name="writer">The <see cref="T:System.Web.UI.HtmlTextWriter"></see> object that receives the server control content.</param>
 		protected override void Render(HtmlTextWriter writer)
 		{
 			byte[] contentsArray = (byte[]) HttpContext.Current.Items["rails.contents"];

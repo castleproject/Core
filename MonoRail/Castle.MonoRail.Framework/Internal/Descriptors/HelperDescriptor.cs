@@ -25,21 +25,38 @@ namespace Castle.MonoRail.Framework.Internal
 		private readonly String name;
 		private readonly Type helperType;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HelperDescriptor"/> class.
+		/// </summary>
+		/// <param name="helperType">Type of the helper.</param>
 		public HelperDescriptor(Type helperType)
 		{
 			this.helperType = helperType;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HelperDescriptor"/> class.
+		/// </summary>
+		/// <param name="helperType">Type of the helper.</param>
+		/// <param name="name">A custom name to use to access the helper from the view.</param>
 		public HelperDescriptor(Type helperType, String name) : this(helperType)
 		{
 			this.name = name;
 		}
 
+		/// <summary>
+		/// Gets the helper name.
+		/// </summary>
+		/// <value>The name.</value>
 		public string Name
 		{
 			get { return name; }
 		}
 
+		/// <summary>
+		/// Gets the type of the helper.
+		/// </summary>
+		/// <value>The type of the helper.</value>
 		public Type HelperType
 		{
 			get { return helperType; }

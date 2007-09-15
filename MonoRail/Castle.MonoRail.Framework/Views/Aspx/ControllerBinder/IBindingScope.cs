@@ -18,10 +18,23 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 {
 	using System.Collections;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public interface IBindingScope
 	{
+		/// <summary>
+		/// Resolves the symbol.
+		/// </summary>
+		/// <param name="symbol">The symbol.</param>
+		/// <returns></returns>
 		object ResolveSymbol(string symbol);
 
+		/// <summary>
+		/// Adds the action arguments.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="actionArgs">The action args.</param>
 		void AddActionArguments(BindingContext context, IDictionary actionArgs);
 	}
 }

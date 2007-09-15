@@ -14,6 +14,12 @@
 
 namespace Castle.MonoRail.Framework.Helpers
 {
+	/// <summary>
+	/// Operations to act on a collection/array of DOM elements. 
+	/// </summary>
+	/// <remarks>
+	/// Not really implemented
+	/// </remarks>
 	public interface IJSCollectionGenerator
 	{
 		/// <summary>

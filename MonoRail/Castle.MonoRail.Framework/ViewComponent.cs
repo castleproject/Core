@@ -24,17 +24,27 @@ namespace Castle.MonoRail.Framework
 
 	/// <summary>
 	/// Base class for reusable UI Components. 
-	/// <para>
+	/// </summary>
+	/// <remarks>
 	/// Implementors should override <see cref="ViewComponent.Initialize"/>
 	/// for implement proper initialization (if necessary). 
 	/// Also implement <see cref="ViewComponent.Render"/> as by default it 
 	/// will render a <c>default</c> view on <c>[ViewFolderRoot]/components/[componentname]</c>.
-	/// </para>
 	/// <para>
 	/// You can also override <see cref="ViewComponent.SupportsSection"/> if your component supports 
 	/// neste sections (ie templates provided on the view that uses the view component.
 	/// </para>
-	/// </summary>
+	/// <para>
+	/// Another way is to use the <see cref="ViewComponentDetailsAttribute"/> to specify a custom name
+	/// and the sections supported. 
+	/// </para>
+	/// <para>
+	/// Notice that view components can render strings or views on their folder. You can 
+	/// create sophisticate components with that mixture. Sections allow the users of your component
+	/// to give it a block of content, usually customizing or definiting the content to be especially
+	/// rendered by your component. 
+	/// </para>
+	/// 
 	/// <example>
 	/// A very simplist view component that renders the time.
 	/// <code>
@@ -57,6 +67,7 @@ namespace Castle.MonoRail.Framework
 	/// #component(ShowTime)
 	/// </code>
 	/// </example>
+	/// </remarks>
 	public abstract class ViewComponent
 	{
 		/// <summary>
@@ -334,6 +345,10 @@ namespace Castle.MonoRail.Framework
 			context.ViewToRender = null;
 		}
 
+		/// <summary>
+		/// Renders the specified content back to the browser
+		/// </summary>
+		/// <param name="content">The content to render.</param>
 		protected void RenderText(String content)
 		{
 			context.Writer.Write(content);

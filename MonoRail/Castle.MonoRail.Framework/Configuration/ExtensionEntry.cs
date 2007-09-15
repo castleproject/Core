@@ -18,6 +18,9 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System.Configuration;
 	using System.Xml;
 
+	/// <summary>
+	/// Represents a MonoRail extension configuration entry
+	/// </summary>
 	public class ExtensionEntry : ISerializedConfig
 	{
 		private Type extensionType;
@@ -25,6 +28,10 @@ namespace Castle.MonoRail.Framework.Configuration
 		
 		#region ISerializedConfig implementation
 
+		/// <summary>
+		/// Deserializes the specified section.
+		/// </summary>
+		/// <param name="section">The section.</param>
 		public void Deserialize(XmlNode section)
 		{
 			XmlAttribute typeAtt = section.Attributes["type"];
@@ -43,12 +50,20 @@ namespace Castle.MonoRail.Framework.Configuration
 		
 		#endregion
 
+		/// <summary>
+		/// Gets or sets the type of the extension.
+		/// </summary>
+		/// <value>The type of the extension.</value>
 		public Type ExtensionType
 		{
 			get { return extensionType; }
 			set { extensionType = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the extension node.
+		/// </summary>
+		/// <value>The extension node.</value>
 		public XmlNode ExtensionNode
 		{
 			get { return extensionNode; }

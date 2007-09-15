@@ -85,6 +85,11 @@ namespace Castle.MonoRail.Framework.Services
 			resource.Dispose();
 		}
 
+		/// <summary>
+		/// Resolves the culture by name.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		private CultureInfo ResolveCulture(String name)
 		{
 			if (logger.IsDebugEnabled)
@@ -104,6 +109,12 @@ namespace Castle.MonoRail.Framework.Services
 			return CultureInfo.CurrentCulture;
 		}
 
+		/// <summary>
+		/// Resolves the assembly.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="assembly">The assembly.</param>
+		/// <returns></returns>
 		private Assembly ResolveAssembly(String name, Assembly assembly)
 		{
 			if (name == null) return assembly;

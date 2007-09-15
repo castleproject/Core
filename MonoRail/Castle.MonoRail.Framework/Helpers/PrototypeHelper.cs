@@ -95,14 +95,21 @@ namespace Castle.MonoRail.Framework.Helpers
 			#region Dispatchable operations
 
 			/// <summary>
-			/// TODO: Implement and document this one
-			/// <para>
+			/// Inserts a content snippet relative to the element specified by the <paramref name="id"/>
+			/// 	<para>
+			/// The supported positions are
 			/// Top, After, Before, Bottom
 			/// </para>
 			/// </summary>
-			/// <param name="position"></param>
-			/// <param name="id"></param>
-			/// <param name="renderOptions"></param>
+			/// <param name="position">The position to insert the content relative to the element id</param>
+			/// <param name="id">The target element id</param>
+			/// <param name="renderOptions">Defines what to render</param>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.InsertHtml('Bottom', 'messagestable', "%{partial='shared/newmessage.vm'}")
+			/// </code>
+			/// </example>
 			public void InsertHtml(string position, string id, object renderOptions)
 			{
 				position = Enum.Parse(typeof(Position), position, true).ToString();
@@ -111,74 +118,143 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Replaces the content of the specified target element.
 			/// </summary>
-			/// <param name="id"></param>
-			/// <param name="renderOptions"></param>
+			/// <param name="id">The target element id</param>
+			/// <param name="renderOptions">Defines what to render</param>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.ReplaceHtml('messagediv', "%{partial='shared/newmessage.vm'}")
+			/// </code>
+			/// </example>
 			public void ReplaceHtml(String id, object renderOptions)
 			{
 				Call("Element.update", Quote(id), Render(renderOptions));
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Replaces the entire target element -- and not only its innerHTML --
+			/// by the content evaluated.
 			/// </summary>
-			/// <param name="id"></param>
-			/// <param name="renderOptions"></param>
+			/// <param name="id">The target element id</param>
+			/// <param name="renderOptions">Defines what to render</param>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.Replace('messagediv', "%{partial='shared/newmessage.vm'}")
+			/// </code>
+			/// </example>
 			public void Replace(String id, object renderOptions)
 			{
 				Call("Element.replace", Quote(id), Render(renderOptions));
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Shows the specified elements.
 			/// </summary>
-			/// <param name="ids"></param>
+			/// <param name="ids">The elements ids.</param>
+			/// <remarks>
+			/// The elements must exist.
+			/// </remarks>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.Show('div1', 'div2')
+			/// </code>
+			/// </example>
 			public void Show(params string[] ids)
 			{
 				Call("Element.show", Quote(ids));
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Hides the specified elements.
 			/// </summary>
-			/// <param name="ids"></param>
+			/// <param name="ids">The elements ids.</param>
+			/// <remarks>
+			/// The elements must exist.
+			/// </remarks>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.Hide('div1', 'div2')
+			/// </code>
+			/// </example>
 			public void Hide(params string[] ids)
 			{
 				Call("Element.hide", Quote(ids));
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Toggles the display status of the specified elements.
 			/// </summary>
-			/// <param name="ids"></param>
+			/// <param name="ids">The elements ids.</param>
+			/// <remarks>
+			/// The elements must exist.
+			/// </remarks>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.Toggle('div1', 'div2')
+			/// </code>
+			/// </example>
 			public void Toggle(params string[] ids)
 			{
 				Call("Element.toggle", Quote(ids));
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Remove the specified elements from the DOM.
 			/// </summary>
-			/// <param name="ids"></param>
+			/// <param name="ids">The elements ids.</param>
+			/// <remarks>
+			/// The elements must exist.
+			/// </remarks>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.Remove('div1', 'div2')
+			/// </code>
+			/// </example>
 			public void Remove(params string[] ids)
 			{
 				Record(this, "[" + BuildJSArguments(Quote(ids)) + "].each(Element.remove)");
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Shows a JS alert
 			/// </summary>
-			/// <param name="message"></param>
+			/// <param name="message">The message to display.</param>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.Alert('You won a Mercedez')
+			/// </code>
+			/// </example>
 			public void Alert(object message)
 			{
 				Call("alert", Quote(message));
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Redirects to an url using the <c>location.href</c>.
+			/// This is required as most ajax libs don't care for the redirect status
+			/// in the http reply.
 			/// </summary>
-			/// <param name="url"></param>
+			/// <param name="url">The URL.</param>
+			/// <example>
+			/// The following redirects to a static page
+			/// <code>
+			/// $page.RedirectTo('about.aspx')
+			/// </code>
+			/// 	<para>
+			/// The following redirects using the <see cref="UrlHelper"/>
+			/// 	</para>
+			/// 	<code>
+			/// $page.RedirectTo("%{controller='Home',action='index'}")
+			/// </code>
+			/// </example>
 			public void RedirectTo(object url)
 			{
 				string target;
@@ -198,17 +274,35 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <summary>
 			/// Re-apply Behaviour css' rules.
 			/// </summary>
+			/// <remarks>
+			/// Only makes sense if you are using the Behaviour javascript library.
+			/// </remarks>
 			public void ReApply()
 			{
 				Call("Behaviour.apply");
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Generates a call to a scriptaculous' visual effect.
 			/// </summary>
-			/// <param name="name">The name.</param>
-			/// <param name="element">The element.</param>
-			/// <param name="options">The options.</param>
+			/// <param name="name">The effect name.</param>
+			/// <param name="element">The target element.</param>
+			/// <param name="options">The optional options.</param>
+			/// <seealso cref="ScriptaculousHelper"/>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.VisualEffect('ToggleSlide', 'myelement')
+			/// </code>
+			/// 	<para>
+			/// This is especially useful to show which elements
+			/// where updated in an ajax call.
+			/// </para>
+			/// 	<code>
+			/// $page.ReplaceHtml('mydiv', "Hey, I've changed")
+			/// $page.VisualEffect('Highlight', 'mydiv')
+			/// </code>
+			/// </example>
 			public void VisualEffect(String name, String element, IDictionary options)
 			{
 				Write(new ScriptaculousHelper().VisualEffect(name, element, options));
@@ -216,10 +310,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Generates a call to a scriptaculous' drop out visual effect.
 			/// </summary>
-			/// <param name="element">The element.</param>
-			/// <param name="options">The options.</param>
+			/// <param name="element">The target element.</param>
+			/// <param name="options">The optional options.</param>
+			/// <seealso cref="ScriptaculousHelper"/>
 			public void VisualEffectDropOut(String element, IDictionary options)
 			{
 				Write(new ScriptaculousHelper().VisualEffectDropOut(element, options));
@@ -227,34 +322,67 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			/// <summary>
-			/// TODO: Implement and document this one
+			/// Assigns a javascript variable with the expression.
 			/// </summary>
-			/// <param name="variable"></param>
-			/// <param name="expression"></param>
+			/// <param name="variable">The target variable</param>
+			/// <param name="expression">The right side expression</param>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.Assign('myvariable', '10')
+			/// </code>
+			/// 	<para>
+			/// Which outputs:
+			/// </para>
+			/// 	<code>
+			/// myvariable = 10;
+			/// </code>
+			/// 	<para>
+			/// With strings you can escape strings:
+			/// </para>
+			/// 	<code>
+			/// $page.Assign('myvariable', '\'Hello world\'')
+			/// </code>
+			/// 	<para>
+			/// Which outputs:
+			/// </para>
+			/// 	<code>
+			/// myvariable = 'Hello world';
+			/// </code>
+			/// </example>
 			public void Assign(String variable, String expression)
 			{
 				Record(this, variable + " = " + expression);
 			}
 
-			#region IJSGenerator Members
-
 			/// <summary>
 			/// Declares the specified variable as null.
 			/// </summary>
 			/// <param name="variable">The variable name.</param>
+			/// <seealso cref="Assign"/>
 			public void Declare(string variable)
 			{
 				Record(this, string.Format("var {0} = null", variable));
 				Record(this, Environment.NewLine);
 			}
 
-			#endregion
-
 			/// <summary>
-			/// 
+			/// Calls the specified function with the optional arguments.
 			/// </summary>
-			/// <param name="function"></param>
-			/// <param name="args"></param>
+			/// <param name="function">The function name.</param>
+			/// <param name="args">The arguments.</param>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.call('myJsFunctionAlreadyDeclared', '10', "'message'", $somethingfrompropertybag, $anothermessage.to_squote)
+			/// </code>
+			/// 	<para>
+			/// Which outputs:
+			/// </para>
+			/// 	<code>
+			/// myJsFunctionAlreadyDeclared(10, 'message', 1001, 'who let the dogs out?')
+			/// </code>
+			/// </example>
 			public void Call(object function, params object[] args)
 			{
 				if (String.IsNullOrEmpty(function.ToString()))
@@ -264,17 +392,29 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			/// <summary>
-			/// Renders the specified render options.
+			/// Outputs the content using the renderOptions approach.
 			/// <para>
 			/// If the renderOptions is a string, the content is escaped and quoted.
 			/// </para>
-			/// <para>
+			/// 	<para>
 			/// If the renderOptions is a dictionary, we extract the key <c>partial</c>
 			/// and evaluate the template it points to. The content is escaped and quoted.
 			/// </para>
 			/// </summary>
 			/// <param name="renderOptions">The render options.</param>
 			/// <returns></returns>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.Call('myJsFunction', $page.render("%{partial='shared/newmessage.vm'}") )
+			/// </code>
+			/// 	<para>
+			/// Which outputs:
+			/// </para>
+			/// 	<code>
+			/// myJsFunction('the content from the newmessage partial view template')
+			/// </code>
+			/// </example>
 			public object Render(object renderOptions)
 			{
 				if (renderOptions == null)
@@ -319,6 +459,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// Writes the content specified to the generator instance
 			/// </summary>
 			/// <param name="content">The content.</param>
+			/// <remarks>
+			/// This is for advanced scenarios and for the infrastructure. Usually not useful.
+			/// </remarks>
 			public void Write(String content)
 			{
 				lines.Append(content);
@@ -328,6 +471,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// Writes the content specified to the generator instance
 			/// </summary>
 			/// <param name="content">The content.</param>
+			/// <remarks>
+			/// This is for advanced scenarios and for the infrastructure. Usually not useful.
+			/// </remarks>
 			public void AppendLine(String content)
 			{
 				Record(this, content);
@@ -337,6 +483,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			#region Result generation (ToString)
 
+			/// <summary>
+			/// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+			/// </summary>
+			/// <returns>
+			/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+			/// </returns>
 			public override string ToString()
 			{
 				return @"try " +
@@ -350,16 +502,30 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			#endregion
 
+			/// <summary>
+			/// Gets the js lines.
+			/// </summary>
+			/// <value>The js lines.</value>
 			public StringBuilder Lines
 			{
 				get { return lines; }
 			}
 
+			/// <summary>
+			/// Creates a generator for a collection.
+			/// </summary>
+			/// <param name="root">The root expression.</param>
+			/// <returns></returns>
 			public IJSCollectionGenerator CreateCollectionGenerator(string root)
 			{
 				return new PrototypeHelper.JSCollectionGenerator(this, root);
 			}
 
+			/// <summary>
+			/// Creates a generator for an element.
+			/// </summary>
+			/// <param name="root">The root expression.</param>
+			/// <returns></returns>
 			public IJSElementGenerator CreateElementGenerator(string root)
 			{
 				return new PrototypeHelper.JSElementGenerator(this, root);
@@ -367,11 +533,21 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			#region Static members
 
+			/// <summary>
+			/// Records the specified line on the generator.
+			/// </summary>
+			/// <param name="gen">The gen.</param>
+			/// <param name="line">The line.</param>
 			public static void Record(IJSGenerator gen, string line)
 			{
 				gen.Lines.AppendFormat("{0};\r\n", line);
 			}
 
+			/// <summary>
+			/// Builds the JS arguments.
+			/// </summary>
+			/// <param name="args">The args.</param>
+			/// <returns></returns>
 			public static string BuildJSArguments(object[] args)
 			{
 				if (args == null || args.Length == 0) return String.Empty;
@@ -392,6 +568,10 @@ namespace Castle.MonoRail.Framework.Helpers
 				return tempBuffer.ToString();
 			}
 
+			/// <summary>
+			/// Replaces the tail by period.
+			/// </summary>
+			/// <param name="generator">The generator.</param>
 			public static void ReplaceTailByPeriod(IJSGenerator generator)
 			{
 				int len = generator.Lines.Length;
@@ -403,6 +583,10 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 			}
 
+			/// <summary>
+			/// Removes the tail.
+			/// </summary>
+			/// <param name="generator">The generator.</param>
 			public static void RemoveTail(IJSGenerator generator)
 			{
 				int len = generator.Lines.Length;
@@ -438,6 +622,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			#endregion
 		}
 
+		/// <summary>
+		/// Implementation of <see cref="IJSCollectionGenerator"/>
+		/// </summary>
 		public class JSCollectionGenerator : DynamicDispatchSupport, IJSCollectionGenerator
 		{
 			private static readonly IDictionary DispMethods;
@@ -501,6 +688,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			#endregion
 		}
 
+		/// <summary>
+		/// Implementation for the <see cref="IJSElementGenerator"/>
+		/// </summary>
 		public class JSElementGenerator : DynamicDispatchSupport, IJSElementGenerator
 		{
 			private static readonly IDictionary DispMethods;
@@ -566,18 +756,31 @@ namespace Castle.MonoRail.Framework.Helpers
 			#region Dispatchable operations
 
 			/// <summary>
-			/// TODO: Document this
+			/// Replaces the content of the element.
 			/// </summary>
-			/// <param name="renderOptions">The render options.</param>
+			/// <param name="renderOptions">Defines what to render</param>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.el('elementid').ReplaceHtml("%{partial='shared/newmessage.vm'}")
+			/// </code>
+			/// </example>
 			public void ReplaceHtml(object renderOptions)
 			{
 				generator.Call("update", generator.Render(renderOptions));
 			}
 
 			/// <summary>
-			/// TODO: Document this
+			/// Replaces the entire element's content -- and not only its innerHTML --
+			/// by the content evaluated.
 			/// </summary>
-			/// <param name="renderOptions">The render options.</param>
+			/// <param name="renderOptions">Defines what to render</param>
+			/// <example>
+			/// The following example uses nvelocity syntax:
+			/// <code>
+			/// $page.el('messagediv').Replace("%{partial='shared/newmessage.vm'}")
+			/// </code>
+			/// </example>
 			public void Replace(object renderOptions)
 			{
 				generator.Call("replace", generator.Render(renderOptions));
@@ -587,8 +790,19 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 	}
 
+	/// <summary>
+	/// DynamicDispatch support is an infrastructure 
+	/// that mimics a dynamic language/environment. 
+	/// It is not finished but the idea is to allow 
+	/// plugins to add operations to the generators.
+	/// </summary>
 	public abstract class DynamicDispatchSupport
 	{
+		/// <summary>
+		/// Populates the available methods.
+		/// </summary>
+		/// <param name="generatorMethods">The generator methods.</param>
+		/// <param name="methods">The methods.</param>
 		protected static void PopulateAvailableMethods(IDictionary generatorMethods, MethodInfo[] methods)
 		{
 			foreach(MethodInfo method in methods)
@@ -597,13 +811,30 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Gets the generator methods.
+		/// </summary>
+		/// <value>The generator methods.</value>
 		protected abstract IDictionary GeneratorMethods { get; }
 
+		/// <summary>
+		/// Determines whether [is generator method] [the specified method].
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns>
+		/// 	<c>true</c> if [is generator method] [the specified method]; otherwise, <c>false</c>.
+		/// </returns>
 		public bool IsGeneratorMethod(string method)
 		{
 			return GeneratorMethods.Contains(method);
 		}
 
+		/// <summary>
+		/// Dispatches the specified method.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <param name="args">The args.</param>
+		/// <returns></returns>
 		public object Dispatch(string method, params object[] args)
 		{
 			MethodInfo methodInfo = (MethodInfo) GeneratorMethods[method];

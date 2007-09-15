@@ -20,6 +20,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.ComponentModel;
 	using System.Web.UI;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	[Serializable]
 	[DefaultProperty("EventName")]
 	[ParseChildren(true), PersistChildren(false)]
@@ -32,11 +35,18 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private ActionArgumentCollection actionArguments;
 		private CommandBindingCollection commandBindings;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ActionBinding"/> class.
+		/// </summary>
 		public ActionBinding()
 		{
 			ResetCommandDefaults(false);
 		}
 
+		/// <summary>
+		/// Gets or sets the name of the action.
+		/// </summary>
+		/// <value>The name of the action.</value>
 		[Category("Behavior"), DefaultValue("")]
 		[Description("The name of the controller action to call.")]
 		[TypeConverter(typeof(ActionListConverter))]
@@ -46,6 +56,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			set { actionName = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the name of the event.
+		/// </summary>
+		/// <value>The name of the event.</value>
 		[Category("Behavior"), DefaultValue("")]
 		[Description("The name of the control event to track.")]
 		[TypeConverter(typeof(EventListConverter))]
@@ -56,6 +70,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			set { eventName = value; }
 		}
 
+		/// <summary>
+		/// Gets the command bindings.
+		/// </summary>
+		/// <value>The command bindings.</value>
 		[Category("Behavior")]
 		[PersistenceMode(PersistenceMode.InnerProperty)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -73,6 +91,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Gets the action arguments.
+		/// </summary>
+		/// <value>The action arguments.</value>
 		[Category("Behavior")]
 		[PersistenceMode(PersistenceMode.InnerProperty)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -90,6 +112,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Validates this instance.
+		/// </summary>
 		protected override void Validate()
 		{
 			if (string.IsNullOrEmpty(eventName))
@@ -98,12 +123,20 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the parent.
+		/// </summary>
+		/// <value>The parent.</value>
 		internal ControllerBinding Parent
 		{
 			get { return parent; }
 			set { parent = value; }
 		}
 
+		/// <summary>
+		/// Gets the control instance.
+		/// </summary>
+		/// <value>The control instance.</value>
 		internal Control ControlInstance
 		{
 			get { return (parent != null) ? parent.ControlInstance : null; }
@@ -111,8 +144,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		/// <summary>
 		/// Reset the command defaults so they don't get serialized in the html markup.
-		/// <param name="isCommandEvent"></param>
 		/// </summary>
+		/// <param name="isCommandEvent">if set to <c>true</c> [is command event].</param>
 		internal void ResetCommandDefaults(bool isCommandEvent)
 		{
 			if (!isCommandEvent)
@@ -124,6 +157,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </returns>
 		public override string ToString()
 		{
 			if (string.IsNullOrEmpty(eventName))

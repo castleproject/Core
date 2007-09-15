@@ -18,10 +18,81 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	using System.Collections;
 
 	/// <summary>
-	/// Renders a table where each (repeated) item
-	/// is rendered to a column. 
-	/// TODO: Document it properly!
+	/// Renders a table where each nested content is rendered on a cell. 
+	/// <para>
+	/// For example, suppose you have a dynamic list of items and what to display
+	/// them side by side, in four columns. As the number of elements in unknown 
+	/// in development time, you can use the ColumnRenderer to 
+	/// create the table and cells.
+	/// </para>
 	/// </summary>
+	/// 
+	/// <example>
+	/// The following example uses nvelocity view engine syntax.
+	/// <code>
+	/// <![CDATA[
+	/// #blockcomponent(ColumnRenderer with "items=$interests")
+	/// 
+	/// #firstelement
+	///   Custom first element
+	/// #end
+	/// 
+	/// #item
+	///   Content is $item
+	/// #end
+	/// 
+	/// #end
+	/// ]]>
+	/// </code>
+	/// <para>
+	/// Which should render something like:
+	/// </para>
+	/// <code>
+	/// <![CDATA[
+	/// <table> 
+	///   <tr>
+	///     <td>
+	///       Custom first element
+	///     </td>
+	///     <td>
+	///       Content is Tennis
+	///     </td>
+	///     <td>
+	///       Content is Soccer
+	///     </td>
+	///   </tr>
+	///   <tr>
+	///     <td>
+	///       Content is Voleyball
+	///     </td>
+	///   </tr>
+	/// </table>
+	/// ]]>
+	/// </code>
+	/// </example>
+	/// 
+	/// <remarks>
+	/// The following sections are supported. Only the <c>item</c> section must be always provided. <br/>
+	/// 
+	/// <para>
+	/// <c>start</c>: override it in order to create the table yourself <br/>
+	/// <c>endblock</c>: override it in order to end the table <br/>
+	/// 
+	/// <c>startrow</c>: override it in order to start the column <br/>
+	/// <c>endrow</c>: override it in order to end the column <br/>
+	/// 
+	/// <c>startcolumn</c>: override it in order to start the cell <br/>
+	/// <c>endcolumn</c>: override it in order to end the cell <br/>
+	/// 
+	/// <c>item</c>: must be overriden in order to display the item content (unless it's something trivial like a primitive) <br/>
+	/// <c>empty</c>: section used when the <see cref="Items"/> is empty  <br/>
+	/// <c>firstelement</c>: if provided, will be rendered before any cells  <br/>
+	/// </para>
+	/// 
+	/// <para>
+	/// The number of columns defaults to three. 
+	/// </para>
+	/// </remarks>
 	public class ColumnRenderer : ViewComponent
 	{
 		private int cols = 3;
@@ -29,25 +100,51 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private bool dontRenderUneededTableForEmptyLists = false;
 
 		/// <summary>
+		/// Gets or sets the number of columns to display.
+		/// </summary>
+		/// <value>The cols.</value>
+		[ViewComponentParam]
+		public int Cols
+		{
+			get { return cols; }
+			set { cols = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the items to show.
+		/// </summary>
+		/// <value>The items.</value>
+		[ViewComponentParam(Required = true)]
+		public IEnumerable Items
+		{
+			get { return enumerable; }
+			set { enumerable = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the component should render a table
+		/// even if there are no elements on the <see cref="Items"/>.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if it should not render; otherwise, <c>false</c>.
+		/// </value>
+		[ViewComponentParam("emptyness")]
+		public bool DontRenderUneededTableForEmptyLists
+		{
+			get { return dontRenderUneededTableForEmptyLists; }
+			set { dontRenderUneededTableForEmptyLists = value; }
+		}
+
+		/// <summary>
 		/// Called by the framework once the component instance
 		/// is initialized
 		/// </summary>
 		public override void Initialize()
 		{
-			if (ComponentParams.Contains("cols"))
+			if (cols <= 0)
 			{
-				cols = Convert.ToInt32(ComponentParams["cols"]);
-
-				if (cols <= 0)
-				{
-					throw new ViewComponentException("ColumnRenderer: 'cols' parameter must be greater than zero");
-				}
+				throw new ViewComponentException("ColumnRenderer: 'cols' parameter must be greater than zero");
 			}
-			if (ComponentParams.Contains("emptyness")) {
-				dontRenderUneededTableForEmptyLists = Convert.ToBoolean(ComponentParams["emptyness"]);
-			}
-
-			enumerable = (IEnumerable) ComponentParams["items"];
 		}
 
 		/// <summary>
@@ -128,19 +225,6 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			EndTable();
 		}
 
-
-		private bool IsEmptyAndShouldNotRenderBrokenTableTags()
-		{
-			if (dontRenderUneededTableForEmptyLists)
-			{
-				if (enumerable == null || !enumerable.GetEnumerator().MoveNext())
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
 		/// <summary>
 		/// Implementor should return true only if the 
 		/// <c>name</c> is a known section the view component
@@ -155,6 +239,18 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			       name == "startrow" || name == "endrow" ||
 			       name == "item" || name == "firstelement" || 
 				   name == "empty";
+		}
+
+		private bool IsEmptyAndShouldNotRenderBrokenTableTags()
+		{
+			if (dontRenderUneededTableForEmptyLists)
+			{
+				if (enumerable == null || !enumerable.GetEnumerator().MoveNext())
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private void WriteElement(object item)

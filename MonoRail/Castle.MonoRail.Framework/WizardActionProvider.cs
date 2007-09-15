@@ -23,12 +23,12 @@ namespace Castle.MonoRail.Framework
 	/// <summary>
 	/// Provide easy to use Wizard-like support.
 	/// </summary>
+	/// <seealso cref="IWizardController"/>
 	/// <remarks>
-	/// We use the DynamicAction infrastructure to provide 
-	/// wizard support as we dont force 
+	/// MonoRail uses the DynamicAction infrastructure to provide 
+	/// wizard support so we dont force 
 	/// the programmer to inherit from a specific Controller 
-	/// which can be quite undesirable in common business projects
-	/// situations. 
+	/// which can be quite undesirable in real world projects. 
 	/// <para>
 	/// Nevertheless we do require that the programmer 
 	/// implements <see cref="IWizardController"/> on the wizard controller.
@@ -231,11 +231,22 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		/// <summary>
+		/// Represents an empty (no-op) action.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
 		protected void EmptyAction(Controller controller)
 		{
 			controller.CancelView();
 		}
 
+		/// <summary>
+		/// Determines whether all wizard specific information is on the user session.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <returns>
+		/// 	<c>true</c> if has session data; otherwise, <c>false</c>.
+		/// </returns>
 		protected bool HasRequiredSessionData(Controller controller)
 		{
 			String wizardName = WizardUtils.ConstructWizardNamespace(controller);
@@ -246,6 +257,14 @@ namespace Castle.MonoRail.Framework
 			        context.Session.Contains(wizardName + "currentstep"));
 		}
 
+		/// <summary>
+		/// Starts the wizard by adding the required information to the 
+		/// session and invoking <see cref="IWizardController.OnWizardStart"/>
+		/// and detecting the first step.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="redirect">if set to <c>true</c>, a redirect 
+		/// will be issued to the first step.</param>
 		protected void StartWizard(Controller controller, bool redirect)
 		{
 			ResetSteps(controller);
@@ -271,6 +290,11 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		/// <summary>
+		/// Resets the steps by invoking <see cref="WizardStepPage.Reset"/>
+		/// on all steps instances.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
 		protected void ResetSteps(Controller controller)
 		{
 			IWizardController wizardController = controller as IWizardController;

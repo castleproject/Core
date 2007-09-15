@@ -16,8 +16,16 @@ namespace Castle.MonoRail.Framework.Test
 {
 	using System.Collections.Generic;
 
+	/// <summary>
+	/// Exposes methods on top of <see cref="IViewComponentContext"/>
+	/// that are used by unit tests
+	/// </summary>
 	public interface IMockViewComponentContext : IViewComponentContext
 	{
+		/// <summary>
+		/// Gets or sets the section render dictionary.
+		/// </summary>
+		/// <value>The section render.</value>
 		IDictionary<string, TestSectionRender> SectionRender { get; set; }
 	}
 }

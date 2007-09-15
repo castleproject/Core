@@ -14,8 +14,15 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
+	/// <summary>
+	/// Contract for <see cref="LayoutDescriptor"/> builders
+	/// </summary>
 	public interface ILayoutDescriptorBuilder
 	{
+		/// <summary>
+		/// Builds the layout descriptor.
+		/// </summary>
+		/// <returns></returns>
 		LayoutDescriptor BuildLayoutDescriptor();
 	}
 }

@@ -56,6 +56,10 @@ namespace Castle.MonoRail.Framework.Filters
 
 		#region IFilterAttributeAware Members
 
+		/// <summary>
+		/// Sets the filter.
+		/// </summary>
+		/// <value>The filter.</value>
 		public FilterAttribute Filter
 		{
 			set
@@ -74,6 +78,15 @@ namespace Castle.MonoRail.Framework.Filters
 
 		#region IFilter Members
 
+		/// <summary>
+		/// Executes a sequence of steps to determine the browser location/culture.
+		/// </summary>
+		/// <param name="exec">When this filter is being invoked</param>
+		/// <param name="context">Current context</param>
+		/// <param name="controller">The controller instance</param>
+		/// <returns>
+		/// 	<c>true</c> if the action should be invoked, otherwise <c>false</c>
+		/// </returns>
 		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
 			try
@@ -103,6 +116,11 @@ namespace Castle.MonoRail.Framework.Filters
 
 		#region Get locale id from the store
 
+		/// <summary>
+		/// Gets the user language.
+		/// </summary>
+		/// <param name="request">The request.</param>
+		/// <returns></returns>
 		private String GetUserLanguage(IRequest request)
 		{
 			if (request.UserLanguages != null && request.UserLanguages.Length > 0)
@@ -111,6 +129,11 @@ namespace Castle.MonoRail.Framework.Filters
 			return null;
 		}
 
+		/// <summary>
+		/// Gets the locale id.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
 		private String GetLocaleId(IRailsEngineContext context)
 		{
 			switch(setup.Store)

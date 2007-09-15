@@ -16,22 +16,38 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 
+	/// <summary>
+	/// Represents a rescue configuration
+	/// </summary>
 	public class RescueDescriptor
 	{
 		private readonly string viewName;
 		private readonly Type exceptionType;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RescueDescriptor"/> class.
+		/// </summary>
+		/// <param name="viewName">Name of the rescue view.</param>
+		/// <param name="exceptionType">Type of the exception it is associated with.</param>
 		public RescueDescriptor(string viewName, Type exceptionType)
 		{
 			this.viewName = viewName;
 			this.exceptionType = exceptionType;
 		}
 
+		/// <summary>
+		/// Gets the name of the rescue view.
+		/// </summary>
+		/// <value>The name of the view.</value>
 		public string ViewName
 		{
 			get { return viewName; }
 		}
 
+		/// <summary>
+		/// Gets the type of the exception this rescue is associated with.
+		/// </summary>
+		/// <value>The type of the exception.</value>
 		public Type ExceptionType
 		{
 			get { return exceptionType; }

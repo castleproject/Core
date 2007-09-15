@@ -49,6 +49,15 @@ namespace Castle.MonoRail.Framework.Internal
 
 		#endregion
 
+		/// <summary>
+		/// Implementors should collect the filter information
+		/// and return descriptors instances, or an empty array if none
+		/// was found.
+		/// </summary>
+		/// <param name="controllerType">The controller type</param>
+		/// <returns>
+		/// An array of <see cref="FilterDescriptor"/>
+		/// </returns>
 		public FilterDescriptor[] CollectFilters(Type controllerType)
 		{
 			if (logger.IsDebugEnabled)

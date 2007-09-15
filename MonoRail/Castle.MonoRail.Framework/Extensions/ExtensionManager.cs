@@ -18,8 +18,16 @@ namespace Castle.MonoRail.Framework
 	using System.ComponentModel;
 	using System.ComponentModel.Design;
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="context"></param>
 	public delegate void ExtensionHandler(IRailsEngineContext context);
 
+	/// <summary>
+	/// MonoRail's extension manager. 
+	/// It fires events related to MonoRail that can be used to add additional behaviour.
+	/// </summary>
 	public class ExtensionManager : MarshalByRefObject
 	{
 		private static readonly object ContextCreatedEvent = new object();
@@ -39,83 +47,127 @@ namespace Castle.MonoRail.Framework
 
 		private IServiceContainer serviceContainer;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ExtensionManager"/> class.
+		/// </summary>
+		/// <param name="serviceContainer">The service container.</param>
 		public ExtensionManager(IServiceContainer serviceContainer)
 		{
 			events = new EventHandlerList();
 			this.serviceContainer = serviceContainer;
 		}
 
+		/// <summary>
+		/// Gets the service container.
+		/// </summary>
+		/// <value>The service container.</value>
 		public IServiceContainer ServiceContainer
 		{
 			get { return serviceContainer; }
 		}
 
+		/// <summary>
+		/// Occurs when a context is created.
+		/// </summary>
 		public event ExtensionHandler ContextCreated
 		{
 			add { events.AddHandler(ContextCreatedEvent, value); }
 			remove { events.RemoveHandler(ContextCreatedEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs when a context is disposed.
+		/// </summary>
 		public event ExtensionHandler ContextDisposed		
 		{
 			add { events.AddHandler(ContextDisposedEvent, value); }
 			remove { events.RemoveHandler(ContextDisposedEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs when an action throws an exception.
+		/// </summary>
 		public event ExtensionHandler ActionException		
 		{
 			add { events.AddHandler(ActionExceptionEvent, value); }
 			remove { events.RemoveHandler(ActionExceptionEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs when an unhandled exception is thrown.
+		/// </summary>
 		public event ExtensionHandler UnhandledException
 		{
 			add { events.AddHandler(UnhandledExceptionEvent, value); }
 			remove { events.RemoveHandler(UnhandledExceptionEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs when a session is adquired.
+		/// </summary>
 		public event ExtensionHandler AcquireSessionState
 		{
 			add { events.AddHandler(AcquireSessionStateEvent, value); }
 			remove { events.RemoveHandler(AcquireSessionStateEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs when a session is released.
+		/// </summary>
 		public event ExtensionHandler ReleaseSessionState
 		{
 			add { events.AddHandler(ReleaseSessionStateEvent, value); }
 			remove { events.RemoveHandler(ReleaseSessionStateEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs before pre process a handler.
+		/// </summary>
 		public event ExtensionHandler PreProcess
 		{
 			add { events.AddHandler(PreProcessEvent, value); }
 			remove { events.RemoveHandler(PreProcessEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs after process a handler.
+		/// </summary>
 		public event ExtensionHandler PostProcess
 		{
 			add { events.AddHandler(PostProcessEvent, value); }
 			remove { events.RemoveHandler(PostProcessEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs when a request needs to authenticate.
+		/// </summary>
 		public event ExtensionHandler AuthenticateRequest
 		{
 			add { events.AddHandler(AuthenticateRequestEvent, value); }
 			remove { events.RemoveHandler(AuthenticateRequestEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs when a request needs to be authorized.
+		/// </summary>
 		public event ExtensionHandler AuthorizeRequest
 		{
 			add { events.AddHandler(AuthorizeRequestEvent, value); }
 			remove { events.RemoveHandler(AuthorizeRequestEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs upon request cache resolval.
+		/// </summary>
 		public event ExtensionHandler ResolveRequestCache
 		{
 			add { events.AddHandler(ResolveRequestCacheEvent, value); }
 			remove { events.RemoveHandler(ResolveRequestCacheEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs when a cache need to be updated.
+		/// </summary>
 		public event ExtensionHandler UpdateRequestCache
 		{
 			add { events.AddHandler(UpdateRequestCacheEvent, value); }

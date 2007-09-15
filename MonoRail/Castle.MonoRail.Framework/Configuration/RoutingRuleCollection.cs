@@ -19,10 +19,17 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System.Configuration;
 	using System.Xml;
 
+	/// <summary>
+	/// Represents a set of url routing rules.
+	/// </summary>
 	public class RoutingRuleCollection : CollectionBase, ISerializedConfig
 	{
 		#region ISerializedConfig implementation
-		
+
+		/// <summary>
+		/// Deserializes the specified section.
+		/// </summary>
+		/// <param name="section">The section.</param>
 		public void Deserialize(XmlNode section)
 		{
 			XmlNodeList services = section.SelectNodes("routing/rule");
@@ -55,7 +62,11 @@ namespace Castle.MonoRail.Framework.Configuration
 		}
 		
 		#endregion
-		
+
+		/// <summary>
+		/// Gets the <see cref="Castle.MonoRail.Framework.Configuration.RoutingRule"/> at the specified index.
+		/// </summary>
+		/// <value></value>
 		public RoutingRule this[int index]
 		{
 			get { return InnerList[index] as RoutingRule; }

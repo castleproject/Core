@@ -17,45 +17,80 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System;
 	using System.Web;
 
-	using Castle.MonoRail.Framework;
-	
+	/// <summary>
+	/// Delegates to ASP.Net TraceContext.
+	/// </summary>
 	public class TraceAdapter : ITrace
 	{
-		private TraceContext _trace;
+		private TraceContext trace;
 
-		public TraceAdapter( TraceContext traceContext )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TraceAdapter"/> class.
+		/// </summary>
+		/// <param name="traceContext">The trace context.</param>
+		public TraceAdapter(TraceContext traceContext)
 		{
-			_trace = traceContext;
+			trace = traceContext;
 		}
 
-		public void Warn( String message )
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="message">The message.</param>
+		public void Warn(String message)
 		{
-			_trace.Warn( message );
+			trace.Warn(message);
 		}
 
-		public void Warn( String category, String message )
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
+		public void Warn(String category, String message)
 		{
-			_trace.Warn( category, message );
+			trace.Warn(category, message);
 		}
 
-		public void Warn( String category, String message, Exception errorInfo )
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
+		/// <param name="errorInfo">The error info.</param>
+		public void Warn(String category, String message, Exception errorInfo)
 		{
-			_trace.Warn( category, message, errorInfo );
+			trace.Warn(category, message, errorInfo);
 		}
 
-		public void Write( String message )
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="message">The message.</param>
+		public void Write(String message)
 		{
-			_trace.Write( message );
+			trace.Write(message);
 		}
 
-		public void Write( String category, String message )
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
+		public void Write(String category, String message)
 		{
-			_trace.Write( category, message );
+			trace.Write(category, message);
 		}
 
-		public void Write( String category, String message, Exception errorInfo )
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
+		/// <param name="errorInfo">The error info.</param>
+		public void Write(String category, String message, Exception errorInfo)
 		{
-			_trace.Write( category, message, errorInfo );
+			trace.Write(category, message, errorInfo);
 		}
 	}
 }

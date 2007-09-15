@@ -17,7 +17,10 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Text.RegularExpressions;
 
-	public abstract class Constants
+	/// <summary>
+	/// MonoRail constants
+	/// </summary>
+	static class Constants
 	{
 		#region Controller Constants
 

@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System.Xml;
 
 	/// <summary>
-	/// Pendent
+	/// Represents the MonoRail external configuration
 	/// </summary>
 	public class MonoRailConfiguration : ISerializedConfig
 	{
@@ -70,6 +70,10 @@ namespace Castle.MonoRail.Framework.Configuration
 			configurationSection = section;
 		}
 
+		/// <summary>
+		/// Gets the config.
+		/// </summary>
+		/// <returns></returns>
 		public static MonoRailConfiguration GetConfig()
 		{
 			MonoRailConfiguration config =
@@ -92,6 +96,10 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		#region ISerializedConfig implementation
 
+		/// <summary>
+		/// Deserializes the specified node.
+		/// </summary>
+		/// <param name="node">The node.</param>
 		public void Deserialize(XmlNode node)
 		{
 			viewEngineConfig.Deserialize(node);
@@ -131,76 +139,143 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		#endregion
 
+		/// <summary>
+		/// Gets the SMTP config.
+		/// </summary>
+		/// <value>The SMTP config.</value>
 		public SmtpConfig SmtpConfig
 		{
 			get { return smtpConfig; }
 		}
 
+		/// <summary>
+		/// Gets the view engine config.
+		/// </summary>
+		/// <value>The view engine config.</value>
 		public ViewEngineConfig ViewEngineConfig
 		{
 			get { return viewEngineConfig; }
 		}
 
+		/// <summary>
+		/// Gets the controllers config.
+		/// </summary>
+		/// <value>The controllers config.</value>
 		public ControllersConfig ControllersConfig
 		{
 			get { return controllersConfig; }
 		}
 
+		/// <summary>
+		/// Gets the view components config.
+		/// </summary>
+		/// <value>The view components config.</value>
 		public ViewComponentsConfig ViewComponentsConfig
 		{
 			get { return viewComponentsConfig; }
 		}
 
+		/// <summary>
+		/// Gets the routing rules.
+		/// </summary>
+		/// <value>The routing rules.</value>
 		public RoutingRuleCollection RoutingRules
 		{
 			get { return routingRules; }
 		}
 
+		/// <summary>
+		/// Gets the extension entries.
+		/// </summary>
+		/// <value>The extension entries.</value>
 		public ExtensionEntryCollection ExtensionEntries
 		{
 			get { return extensions; }
 		}
 
+		/// <summary>
+		/// Gets the service entries.
+		/// </summary>
+		/// <value>The service entries.</value>
 		public ServiceEntryCollection ServiceEntries
 		{
 			get { return services; }
 		}
 
+		/// <summary>
+		/// Gets the custom filter factory.
+		/// </summary>
+		/// <value>The custom filter factory.</value>
 		public Type CustomFilterFactory
 		{
 			get { return customFilterFactory; }
 		}
 
+		/// <summary>
+		/// Gets the scaffold config.
+		/// </summary>
+		/// <value>The scaffold config.</value>
 		public ScaffoldConfig ScaffoldConfig
 		{
 			get { return scaffoldConfig; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether MR should check for client connection.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if it should check client is connected; otherwise, <c>false</c>.
+		/// </value>
 		public bool CheckClientIsConnected
 		{
 			get { return checkClientIsConnected; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether to use windsor integration.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if it should use windsor integration; otherwise, <c>false</c>.
+		/// </value>
 		public bool UseWindsorIntegration
 		{
 			get { return useWindsorIntegration; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether match host name and path should be used on 
+		/// MonoRail routing.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if it should match host name and path; otherwise, <c>false</c>.
+		/// </value>
 		public bool MatchHostNameAndPath
 		{
 			get { return matchHostNameAndPath; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether routing should exclude app path.
+		/// </summary>
+		/// <value><c>true</c> if exclude app path; otherwise, <c>false</c>.</value>
 		public bool ExcludeAppPath
 		{
 			get { return excludeAppPath; }
 		}
 
+		/// <summary>
+		/// Gets the configuration section.
+		/// </summary>
+		/// <value>The configuration section.</value>
 		public XmlNode ConfigurationSection
 		{
 			get { return configurationSection; }
 		}
 
+		/// <summary>
+		/// Gets the default urls.
+		/// </summary>
+		/// <value>The default urls.</value>
 		public DefaultUrlCollection DefaultUrls
 		{
 			get { return defaultUrls; }

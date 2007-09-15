@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
-	using System;
 	using System.Reflection;
 	using Castle.MonoRail.Framework;
 

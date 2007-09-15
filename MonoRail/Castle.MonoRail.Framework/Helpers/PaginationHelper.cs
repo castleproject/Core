@@ -27,10 +27,47 @@ namespace Castle.MonoRail.Framework.Helpers
 
 	/// <summary>
 	/// This helper allows you to easily paginate through a data source 
-	/// (anything that implements <see cref="IList"/>)
+	/// -- anything that implements <see cref="IList"/>.
 	/// </summary>
+	/// 
+	/// <remarks>
+	/// With the pagination you expose a <see cref="Page"/> instance to your view, 
+	/// that can be used to created a very detailed page navigator.
+	/// 
+	/// <para>
+	/// You can use up to three approaches to pagination:
+	/// </para>
+	/// 
+	/// <list type="bullet">
+	/// <item>
+	///		<term>CreatePagination</term>
+	///		<description>Uses a whole data set and creates a <see cref="Page"/> with a slice of it. </description>
+	/// </item>
+	/// <item>
+	///		<term>CreateCachedPagination</term>
+	///		<description>Caches the dataset and creates a <see cref="Page"/> with a slice. 
+	///		As the cache is shared, you must be very careful on creating a cache key that uniquely represents the 
+	///		cached dataset.
+	/// </description>
+	/// </item>
+	/// <item>
+	///		<term>CreateCustomPage</term>
+	///		<description>
+	///		In this case, you are handling the slicing. The <see cref="Page"/> is created with your 
+	///		actual dataset and information about total. It calculates the other information based on that.
+	///		</description>
+	/// </item>
+	/// </list>
+	/// 
+	/// <para>
+	/// Performance wise, the best choice is the <see cref="CreateCustomPage(IList,int,int,int)"/>
+	/// </para>
+	/// </remarks>
 	public class PaginationHelper : AbstractHelper
 	{
+		/// <summary>
+		/// The parameter key that the helper looks for on the request
+		/// </summary>
 		public const string PageParameterName = "page";
 
 		#region CreatePageLink
@@ -374,6 +411,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		private readonly int sliceStart, sliceEnd;
 		private readonly ICollection<T> sourceList;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GenericPage&lt;T&gt;"/> class.
+		/// </summary>
+		/// <param name="list">The list.</param>
+		/// <param name="curPage">The cur page.</param>
+		/// <param name="pageSize">Size of the page.</param>
 		public GenericPage(ICollection<T> list, int curPage, int pageSize)
 		{
 			// Calculate slice indexes
@@ -385,6 +428,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			CalculatePaginationInfo(startIndex, endIndex, list.Count, pageSize, curPage);
 		}
 
+		/// <summary>
+		/// Returns a enumerator for the contents
+		/// of this page only (not the whole set)
+		/// </summary>
+		/// <returns>Enumerator instance</returns>
 		public override IEnumerator GetEnumerator()
 		{
 			if (sourceList is IList<T>)
@@ -429,6 +477,13 @@ namespace Castle.MonoRail.Framework.Helpers
 	{
 		private readonly IList<T> sourceList;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GenericCustomPage&lt;T&gt;"/> class.
+		/// </summary>
+		/// <param name="list">The list.</param>
+		/// <param name="curPage">The cur page.</param>
+		/// <param name="pageSize">Size of the page.</param>
+		/// <param name="total">The total.</param>
 		public GenericCustomPage(IList<T> list, int curPage, int pageSize, int total)
 		{
 			int startIndex = 0;
@@ -439,6 +494,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			CalculatePaginationInfo(startIndex, endIndex, total, pageSize, curPage);
 		}
 
+		/// <summary>
+		/// Returns a enumerator for the contents
+		/// of this page only (not the whole set)
+		/// </summary>
+		/// <returns>Enumerator instance</returns>
 		public override IEnumerator GetEnumerator()
 		{
 			for(int i = 0; i < sourceList.Count; i++)
@@ -447,6 +507,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
+		/// </returns>
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
 			for(int i = 0; i < sourceList.Count; i++)

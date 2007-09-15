@@ -31,6 +31,12 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
     {
         private ArrayList excludedTypes = new ArrayList();
 
+		/// <summary>
+		/// Implementors should check for known attributes and child nodes
+		/// within the <c>exceptionHandlerNode</c>
+		/// </summary>
+		/// <param name="exceptionHandlerNode">The Xml node
+		/// that represents this handler on the configuration file</param>
         public void Configure(XmlNode exceptionHandlerNode)
         {
             XmlNodeList excludeNodes = exceptionHandlerNode.SelectNodes("exclude");
@@ -41,6 +47,12 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
             }
         }
 
+		/// <summary>
+		/// Implementors should perform the action
+		/// on the exception. Note that the exception
+		/// is available in <see cref="IRailsEngineContext.LastException"/>
+		/// </summary>
+		/// <param name="context"></param>
         public override void Process(IRailsEngineContext context)
         {
             Exception ex = context.LastException is TargetInvocationException

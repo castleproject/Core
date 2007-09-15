@@ -16,9 +16,21 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using Castle.MonoRail.Framework.Helpers;
 
+	/// <summary>
+	/// Collection related generator
+	/// </summary>
+	/// <remarks>
+	/// Not really implemented.
+	/// </remarks>
 	public abstract class JSCollectionGeneratorBase
 	{
+		/// <summary>
+		/// Collection generator instance
+		/// </summary>
 		protected readonly IJSCollectionGenerator generator;
+		/// <summary>
+		/// Parent generator instance
+		/// </summary>
 		protected readonly IJSGenerator parentGenerator;
 
 		/// <summary>
@@ -41,7 +53,6 @@ namespace Castle.MonoRail.Framework.Internal
 			PrototypeHelper.JSGenerator.ReplaceTailByPeriod(parentGenerator);
 			PrototypeHelper.JSGenerator.Record(parentGenerator, propName);
 		}
-
 
 		/// <summary>
 		/// Invokes the specified method.

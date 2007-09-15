@@ -24,11 +24,19 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	{
 		private ActionArgumentCollection actionArgs;
 
-		public CommandEventHandlerDelegate(BindingContext context)
-			: base(context)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CommandEventHandlerDelegate&lt;EventArgType&gt;"/> class.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public CommandEventHandlerDelegate(BindingContext context) : base(context)
 		{
 		}
 
+		/// <summary>
+		/// Handles the event.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The e.</param>
 		public void HandleEvent(object sender, EventArgType e)
 		{
 			string actionName = ObtainCommandActionName(e);
@@ -45,6 +53,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Adds the action arguments.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="resolvedActionArgs">The resolved action args.</param>
 		protected override void AddActionArguments(BindingContext context,
 												   IDictionary resolvedActionArgs)
 		{
@@ -54,6 +67,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Obtains the name of the command action.
+		/// </summary>
+		/// <param name="e">The <see cref="System.Web.UI.WebControls.CommandEventArgs"/> instance containing the event data.</param>
+		/// <returns></returns>
 		private string ObtainCommandActionName(CommandEventArgs e)
 		{
 			string actionName = null;

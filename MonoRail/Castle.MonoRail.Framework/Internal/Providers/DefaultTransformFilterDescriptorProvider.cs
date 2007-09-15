@@ -49,6 +49,15 @@ namespace Castle.MonoRail.Framework.Internal
 
 		#endregion
 
+		/// <summary>
+		/// Implementors should collect the transformfilter information
+		/// and return descriptors instances, or an empty array if none
+		/// was found.
+		/// </summary>
+		/// <param name="memberInfo">The action (MethodInfo)</param>
+		/// <returns>
+		/// An array of <see cref="TransformFilterDescriptor"/>
+		/// </returns>
 		public TransformFilterDescriptor[] CollectFilters(MemberInfo memberInfo)
 		{
 			if (logger.IsDebugEnabled)

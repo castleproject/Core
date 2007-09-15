@@ -23,7 +23,8 @@ namespace Castle.MonoRail.Framework
 	using Castle.MonoRail.Framework.Views;
 
 	/// <summary>
-	/// Pendent
+	/// Default <see cref="IViewSourceLoader"/> implementation
+	/// that uses the file system and assembly source as source of view templates
 	/// </summary>
 	public class FileAssemblyViewSourceLoader : IViewSourceLoader, IServiceEnabledComponent
 	{
@@ -34,6 +35,10 @@ namespace Castle.MonoRail.Framework
 
 		#region IServiceEnabledComponent implementation
 
+		/// <summary>
+		/// Services the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
 		public void Service(IServiceProvider provider)
 		{
 			MonoRailConfiguration config = (MonoRailConfiguration)provider.GetService(typeof(MonoRailConfiguration));
@@ -54,6 +59,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Evaluates whether the specified template exists.
 		/// </summary>
+		/// <param name="templateName">The template name</param>
 		/// <returns><c>true</c> if it exists</returns>
 		public bool HasTemplate(String templateName)
 		{
@@ -65,6 +71,11 @@ namespace Castle.MonoRail.Framework
 			return HasTemplateOnAssemblies(templateName);
 		}
 
+		/// <summary>
+		/// Builds and returns a representation of a view template
+		/// </summary>
+		/// <param name="templateName">The template name</param>
+		/// <returns></returns>
 		public IViewSource GetViewSource(String templateName)
 		{
 			FileInfo fileInfo = CreateFileInfo(templateName);
@@ -80,9 +91,9 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// 
+		/// Gets a list of views on the specified directory
 		/// </summary>
-		/// <param name="dirName"></param>
+		/// <param name="dirName">Directory name</param>
 		/// <returns></returns>
 		public String[] ListViews(String dirName)
 		{
@@ -105,14 +116,19 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// 
+		/// Gets or sets whether the instance should use cache
 		/// </summary>
+		/// <value></value>
 		public bool EnableCache
 		{
 			get { return enableCache; }
 			set { enableCache = value; }
 		}
 
+		/// <summary>
+		/// Gets a list of assembly sources
+		/// </summary>
+		/// <value></value>
 		public IList AssemblySources
 		{
 			get { return additionalSources; }

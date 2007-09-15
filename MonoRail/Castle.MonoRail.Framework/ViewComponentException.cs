@@ -17,6 +17,9 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Runtime.Serialization;
 
+	/// <summary>
+	/// Exception for ViewComponent related errors.
+	/// </summary>
 	[Serializable]
 	public class ViewComponentException : Exception
 	{

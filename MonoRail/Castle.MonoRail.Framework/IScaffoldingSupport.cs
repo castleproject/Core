@@ -15,12 +15,17 @@
 namespace Castle.MonoRail.Framework
 {
 	/// <summary>
-	/// Pendent
+	/// Abstracts the implementation of scaffolding support for MonoRail.
+	/// <para>
+	/// Implementors should use information from the controller instance
+	/// and add dynamic actions to it exposing operations to manipulate an entity.
+	/// </para>
 	/// </summary>
 	public interface IScaffoldingSupport
 	{
 		/// <summary>
-		/// Pendent
+		/// Implementors should use this method to read information 
+		/// from the controller instance and add dynamic actions to the controller.
 		/// </summary>
 		/// <param name="controller"></param>
 		void Process(Controller controller);

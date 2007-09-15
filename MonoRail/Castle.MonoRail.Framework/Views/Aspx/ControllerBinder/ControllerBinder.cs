@@ -23,6 +23,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.Web.UI;
 	using System.Web.UI.Design;
 
+
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	[ProvideProperty("ControllerBinding", typeof(Control))]
 	[NonVisualControl, Designer(typeof(Design.ControllerActionBinderDesigner))]
 	[ParseChildren(true, "ControllerBindings"), PersistChildren(false)]
@@ -45,6 +49,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		#region Constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerBinder"/> class.
+		/// </summary>
 		public ControllerBinder()
 		{
 			eventHandlerFactory = new EventHandlerFactory();
@@ -55,6 +62,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		#region Properties
 
+		/// <summary>
+		/// Gets a value indicating whether a control is being used on a design surface.
+		/// </summary>
+		/// <value></value>
+		/// <returns>true if the control is being used in a designer; otherwise, false.</returns>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public new bool DesignMode
@@ -62,6 +74,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			get { return Design.DesignUtil.IsInDesignMode; }
 		}
 
+		/// <summary>
+		/// Gets the controller bindings.
+		/// </summary>
+		/// <value>The controller bindings.</value>
 		[Category("Behavior")]
 		[PersistenceMode(PersistenceMode.InnerProperty)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -70,6 +86,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			get { return bindings; }
 		}
 
+		/// <summary>
+		/// Gets the action arguments.
+		/// </summary>
+		/// <value>The action arguments.</value>
 		[Category("Behavior")]
 		[PersistenceMode(PersistenceMode.InnerProperty)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -91,6 +111,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		#region Events
 
+		/// <summary>
+		/// Occurs when [before action].
+		/// </summary>
 		[Description("Fired before the Controller action is executed.")]
 		public event ActionBindingDelegate BeforeAction
 		{
@@ -98,6 +121,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			remove { Events.RemoveHandler(BeforeActionEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs when [after action].
+		/// </summary>
 		[Description("Fired after the Controller action is executed.")]
 		public event ActionBindingDelegate AfterAction
 		{
@@ -105,6 +131,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			remove { Events.RemoveHandler(AfterActionEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs when [action error].
+		/// </summary>
 		[Description("Fired if the Controller action raised an exception.")]
 		public event ActionBindingDelegate ActionError
 		{
@@ -112,6 +141,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			remove { Events.RemoveHandler(ActionErrorEvent, value); }
 		}
 
+		/// <summary>
+		/// Called when [before action].
+		/// </summary>
+		/// <param name="action">The action.</param>
+		/// <param name="actionArgs">The action args.</param>
+		/// <returns></returns>
 		protected virtual bool OnBeforeAction(ActionBinding action, IDictionary actionArgs)
 		{
 			ActionBindingDelegate eventDelegate =
@@ -119,6 +154,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return (eventDelegate != null) ? eventDelegate(action, actionArgs) : true;
 		}
 
+		/// <summary>
+		/// Called when [after action].
+		/// </summary>
+		/// <param name="action">The action.</param>
+		/// <param name="actionArgs">The action args.</param>
 		protected virtual void OnAfterAction(ActionBinding action, IDictionary actionArgs)
 		{
 			ActionBindingDelegate eventDelegate =
@@ -126,6 +166,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			if (eventDelegate != null) eventDelegate(action, actionArgs);
 		}
 
+		/// <summary>
+		/// Called when [action error].
+		/// </summary>
+		/// <param name="action">The action.</param>
+		/// <param name="ex">The ex.</param>
+		/// <returns></returns>
 		protected virtual bool OnActionError(ActionBinding action, Exception ex)
 		{
 			ActionBindingErrorDelegate eventDelegate =
@@ -137,11 +183,23 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		#region IExtenderProvider
 
+		/// <summary>
+		/// Specifies whether this object can provide its extender properties to the specified object.
+		/// </summary>
+		/// <param name="extendee">The <see cref="T:System.Object"></see> to receive the extender properties.</param>
+		/// <returns>
+		/// true if this object can provide extender properties to the specified object; otherwise, false.
+		/// </returns>
 		bool IExtenderProvider.CanExtend(object extendee)
 		{
 			return IsBindableControl(extendee as Control);
 		}
 
+		/// <summary>
+		/// Gets the controller binding.
+		/// </summary>
+		/// <param name="control">The control.</param>
+		/// <returns></returns>
 		public ControllerBindingProperty GetControllerBinding(Control control)
 		{
 			ControllerBinding binding = null;
@@ -179,6 +237,13 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		#region IControllerBinder
 
+		/// <summary>
+		/// Determines whether [is bindable control] [the specified control].
+		/// </summary>
+		/// <param name="control">The control.</param>
+		/// <returns>
+		/// 	<c>true</c> if [is bindable control] [the specified control]; otherwise, <c>false</c>.
+		/// </returns>
 		public bool IsBindableControl(Control control)
 		{
 			if (control is ControllerBinder) return false;
@@ -187,6 +252,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			        (!DesignMode || EventUtil.HasCompatibleEvents(control)));
 		}
 
+		/// <summary>
+		/// Adds the binding.
+		/// </summary>
+		/// <param name="control">The control.</param>
+		/// <returns></returns>
 		public ControllerBinding AddBinding(Control control)
 		{
 			ControllerBinding newBinding = new ControllerBinding(this);
@@ -196,6 +266,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return newBinding;
 		}
 
+		/// <summary>
+		/// Finds the control with ID.
+		/// </summary>
+		/// <param name="controlID">The control ID.</param>
+		/// <returns></returns>
 		public Control FindControlWithID(string controlID)
 		{
 			if (DesignMode)
@@ -208,11 +283,22 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Gets the controller actions.
+		/// </summary>
+		/// <returns></returns>
 		public string[] GetControllerActions()
 		{
 			return new string[0];
 		}
 
+		/// <summary>
+		/// Determines whether [is visual control] [the specified control].
+		/// </summary>
+		/// <param name="control">The control.</param>
+		/// <returns>
+		/// 	<c>true</c> if [is visual control] [the specified control]; otherwise, <c>false</c>.
+		/// </returns>
 		private bool IsVisualControl(Control control)
 		{
 			if (!(control is IDataSource))
@@ -223,6 +309,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return false;
 		}
 
+		/// <summary>
+		/// Finds the control at design time.
+		/// </summary>
+		/// <param name="controlID">The control ID.</param>
+		/// <returns></returns>
 		private Control FindControlAtDesignTime(string controlID)
 		{
 			IContainer container = GetContainer();
@@ -243,6 +334,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return null;
 		}
 
+		/// <summary>
+		/// Finds the control at run time.
+		/// </summary>
+		/// <param name="controlID">The control ID.</param>
+		/// <returns></returns>
 		private Control FindControlAtRunTime(string controlID)
 		{
 			return WebFormUtils.FindControlRecursive(Page, controlID);
@@ -428,6 +524,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		#region Control Runtime
 
+		/// <summary>
+		/// Raises the <see cref="E:System.Web.UI.Control.Load"></see> event.
+		/// </summary>
+		/// <param name="e">The <see cref="T:System.EventArgs"></see> object that contains the event data.</param>
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
@@ -514,6 +614,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Continues the action.
+		/// </summary>
+		/// <param name="actionName">Name of the action.</param>
+		/// <param name="actionArgs">The action args.</param>
 		public void ContinueAction(string actionName, IDictionary actionArgs)
 		{
 			if (actionDispatched)
@@ -569,22 +674,39 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 	#region ControllerBindingProperty
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class ControllerBindingProperty
 	{
 		private ControllerBinding binding;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerBindingProperty"/> class.
+		/// </summary>
+		/// <param name="binding">The binding.</param>
 		internal ControllerBindingProperty(ControllerBinding binding)
 		{
 			this.binding = binding;
 		}
 
+		/// <summary>
+		/// Gets the action bindings.
+		/// </summary>
+		/// <value>The action bindings.</value>
 		[Category("Behavior")]
 		public ActionBindingCollection ActionBindings
 		{
 			get { return binding.ActionBindings; }
 		}
 
+		/// <summary>
+		/// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </returns>
 		public override string ToString()
 		{
 			return binding.ToString();
@@ -595,8 +717,14 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 	#region Event Delegates
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public delegate bool ActionBindingDelegate(ActionBinding action, IDictionary actionArgs);
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public delegate bool ActionBindingErrorDelegate(ActionBinding action, Exception ex);
 
 	#endregion

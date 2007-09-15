@@ -23,19 +23,26 @@ namespace Castle.MonoRail.Framework
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
-	/// Represents a wizard step. 
+	/// Represents a wizard step. In essence it is a controller, but with some subtle differences. 
+	/// See the remarks for more information.
 	/// </summary>
+	/// 
+	/// <seealso cref="WizardActionProvider"/>
+	/// <seealso cref="IWizardController"/>
+	/// 
 	/// <remarks>
 	/// Implementors can optionally override <see cref="WizardStepPage.ActionName"/>
 	/// to customize the accessible action name and 
 	/// <see cref="WizardStepPage.RenderWizardView"/> in order to define which view 
 	/// should be used (defaults to the step name)
+	/// 
 	/// <para>
 	/// Please note that an step might have actions as well, but it follows a different 
 	/// convention to be accessed. You must use the wizard controller name, slash, the
 	/// step name, hifen, the action name. For example <c>/MyWizard/AddressInformation-GetCountries.rails</c>
 	/// Which would access the following action
 	/// </para>
+	/// 
 	/// <code>
 	/// public class AddressInformation : WizardStepPage
 	/// {
@@ -45,8 +52,11 @@ namespace Castle.MonoRail.Framework
 	///		}
 	/// }
 	/// </code>
-	/// <para>Note that the RedirectToAction will always send to an internal action, so you should
-	/// omit the controller name for that.</para>
+	/// <para>
+	/// Note that the RedirectToAction will always send to an internal action, so you should
+	/// omit the controller name for that.
+	/// </para>
+	/// 
 	/// <para>
 	/// You can use a family of redirect methods to go back and forward on the wizard's 
 	/// steps.
@@ -62,10 +72,17 @@ namespace Castle.MonoRail.Framework
 
 		#region Constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WizardStepPage"/> class.
+		/// </summary>
 		public WizardStepPage()
 		{			
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WizardStepPage"/> class.
+		/// </summary>
+		/// <param name="binder">The binder.</param>
 		public WizardStepPage(IDataBinder binder) : base(binder)
 		{			
 		}
@@ -74,6 +91,10 @@ namespace Castle.MonoRail.Framework
 
 		#region Useful Properties
 
+		/// <summary>
+		/// Gets the wizard controller.
+		/// </summary>
+		/// <value>The wizard controller.</value>
 		public Controller WizardController
 		{
 			get { return _wizardcontroller; }
@@ -148,6 +169,15 @@ namespace Castle.MonoRail.Framework
 			return true;
 		}
 
+		/// <summary>
+		/// Uses a simple heuristic to select the best method -- especially in the
+		/// case of method overloads.
+		/// </summary>
+		/// <param name="action">The action name</param>
+		/// <param name="actions">The avaliable actions</param>
+		/// <param name="request">The request instance</param>
+		/// <param name="actionArgs">The custom arguments for the action</param>
+		/// <returns></returns>
 		protected internal override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, IDictionary actionArgs)
 		{
 			if (action == "RenderWizardView")

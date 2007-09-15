@@ -23,11 +23,20 @@ namespace Castle.MonoRail.Framework.Internal
 	[Serializable]
 	public class UrlTokenizerException : RailsException
 	{
-		public UrlTokenizerException( String message ) : base( message )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UrlTokenizerException"/> class.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		public UrlTokenizerException(String message) : base(message)
 		{
 		}
 
-		public UrlTokenizerException( SerializationInfo info, StreamingContext context ) : base( info, context )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UrlTokenizerException"/> class.
+		/// </summary>
+		/// <param name="info">The object that holds the serialized object data.</param>
+		/// <param name="context">The contextual information about the source or destination.</param>
+		public UrlTokenizerException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

@@ -16,15 +16,26 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 
+	/// <summary>
+	/// Represents a layout configuration
+	/// </summary>
 	public class LayoutDescriptor
 	{
 		private readonly String layoutName;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LayoutDescriptor"/> class.
+		/// </summary>
+		/// <param name="layoutName">Name of the layout.</param>
 		public LayoutDescriptor(String layoutName)
 		{
 			this.layoutName = layoutName;
 		}
 
+		/// <summary>
+		/// Gets the name of the layout.
+		/// </summary>
+		/// <value>The name of the layout.</value>
 		public String LayoutName
 		{
 			get { return layoutName; }

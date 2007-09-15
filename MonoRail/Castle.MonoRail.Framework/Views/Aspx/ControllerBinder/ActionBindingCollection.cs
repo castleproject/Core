@@ -18,10 +18,17 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 {
 	using System;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class ActionBindingCollection : TypedCollection<ActionBinding>
 	{
 		private readonly ControllerBinding parent;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ActionBindingCollection"/> class.
+		/// </summary>
+		/// <param name="parent">The parent.</param>
 		public ActionBindingCollection(ControllerBinding parent)
 		{
 			if (parent == null)
@@ -29,7 +36,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			
 			this.parent = parent;
 		}
-		
+
+		/// <summary>
+		/// Gets the <see cref="Castle.MonoRail.Framework.Views.Aspx.ActionBinding"/> with the specified event name.
+		/// </summary>
+		/// <value></value>
 		public ActionBinding this[string eventName]
 		{
 			get
@@ -45,7 +56,13 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 				return null;
 			}
 		}
-			
+
+		/// <summary>
+		/// Performs additional custom processes after setting a value in the <see cref="T:System.Collections.CollectionBase"></see> instance.
+		/// </summary>
+		/// <param name="index">The zero-based index at which oldValue can be found.</param>
+		/// <param name="oldValue">The value to replace with newValue.</param>
+		/// <param name="newValue">The new value of the element at index.</param>
 		protected override void OnSetComplete(int index, object oldValue, object newValue)
 		{
 			ActionBinding oldBinding = (ActionBinding) oldValue;
@@ -56,7 +73,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			base.OnSetComplete(index, oldValue, newValue);
 		}
-		
+
+		/// <summary>
+		/// Performs additional custom processes after inserting a new element into the <see cref="T:System.Collections.CollectionBase"></see> instance.
+		/// </summary>
+		/// <param name="index">The zero-based index at which to insert value.</param>
+		/// <param name="value">The new value of the element at index.</param>
 		protected override void OnInsertComplete(int index, object value)
 		{
 			ActionBinding binding = (ActionBinding) value;

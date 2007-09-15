@@ -22,7 +22,6 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Configuration;
 
-
 	/// <summary>
 	/// This extension allow one to provide a custom 
 	/// implementation of the session available on <see cref="IRailsEngineContext"/>
@@ -47,7 +46,12 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		private ICustomSessionFactory customSession;
 		
 		#region IMonoRailExtension implementation
-		
+
+		/// <summary>
+		/// Gives to the extension implementor a chance to read
+		/// attributes and child nodes of the extension node
+		/// </summary>
+		/// <param name="node">The node that defines the MonoRail extension</param>
 		public void SetExtensionConfigNode(XmlNode node)
 		{
 			// Ignored
@@ -57,6 +61,10 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		
 		#region IServiceEnabledComponent implementation
 
+		/// <summary>
+		/// Services the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
 		public void Service(IServiceProvider provider)
 		{
 			ExtensionManager manager = (ExtensionManager) provider.GetService(typeof(ExtensionManager));
@@ -81,8 +89,8 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// <param name="configuration">The configuration</param>
 		private void Init(ExtensionManager manager, MonoRailConfiguration configuration)
 		{
-			manager.AcquireSessionState += new ExtensionHandler(OnAdquireSessionState);
-			manager.ReleaseSessionState += new ExtensionHandler(OnReleaseSessionState);
+			manager.AcquireSessionState += OnAdquireSessionState;
+			manager.ReleaseSessionState += OnReleaseSessionState;
 
 			XmlAttribute customSessionAtt = 
 				configuration.ConfigurationSection.Attributes["customSession"];
@@ -119,7 +127,8 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// <summary>
 		/// Overrides the ISession instance on <see cref="IRailsEngineContext"/>.
 		/// </summary>
-		/// <remarks>Note that the session available through IHttpContext is left untouched</remarks>
+		/// <remarks>
+		/// Note that the session available through IHttpContext is left untouched</remarks>
 		/// <param name="context"></param>
 		private void OnAdquireSessionState(IRailsEngineContext context)
 		{

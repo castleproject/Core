@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Services.Utils
 	/// Utilities methods to inspect the controller Type
 	/// and gathers its name and area.
 	/// </summary>
-	public abstract class ControllerInspectionUtil
+	public static class ControllerInspectionUtil
 	{
 		/// <summary>
 		/// Creates a <see cref="ControllerDescriptor"/> based on the conventions
@@ -54,6 +54,12 @@ namespace Castle.MonoRail.Framework.Services.Utils
 			return descriptor;
 		}
 
+		/// <summary>
+		/// Obtains the name of the controller.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="controller">The controller.</param>
+		/// <returns></returns>
 		private static String ObtainControllerName(String name, Type controller)
 		{
 			if (name == null || name.Length == 0)
@@ -63,6 +69,11 @@ namespace Castle.MonoRail.Framework.Services.Utils
 			return name;
 		}
 
+		/// <summary>
+		/// Strips the specified name.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		private static String Strip(String name)
 		{
 			if (name.EndsWith("Controller"))

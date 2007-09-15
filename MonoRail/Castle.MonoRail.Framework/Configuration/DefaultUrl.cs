@@ -4,6 +4,9 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System.Configuration;
 	using System.Xml;
 
+	/// <summary>
+	/// Represents a url mapping
+	/// </summary>
 	public class DefaultUrl : ISerializedConfig
 	{
 		private string url, controller, action, area;
@@ -32,6 +35,10 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		#region ISerializedConfig implementation
 
+		/// <summary>
+		/// Deserializes the specified section.
+		/// </summary>
+		/// <param name="section">The section.</param>
 		public void Deserialize(XmlNode section)
 		{
 			XmlAttribute urlAtt = section.Attributes["url"];

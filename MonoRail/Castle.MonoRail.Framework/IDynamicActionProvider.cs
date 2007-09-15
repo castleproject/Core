@@ -18,6 +18,13 @@ namespace Castle.MonoRail.Framework
 	/// Defines that the implementor wants to add
 	/// dynamic actions to controllers.
 	/// </summary>
+	/// 
+	/// <seealso cref="DynamicActionProviderAttribute"/>
+	/// 
+	/// <remarks>
+	/// You can associate a dynamic action provider with a controller using the
+	/// <see cref="DynamicActionProviderAttribute"/>
+	/// </remarks>
 	public interface IDynamicActionProvider
 	{
 		/// <summary>

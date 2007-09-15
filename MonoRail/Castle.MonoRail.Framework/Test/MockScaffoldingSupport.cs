@@ -14,8 +14,18 @@
 
 namespace Castle.MonoRail.Framework.Test
 {
+	using Framework;
+
+	/// <summary>
+	/// Represents a mock implementation of <see cref="IScaffoldingSupport"/> for unit test purposes.
+	/// </summary>
 	public class MockScaffoldingSupport : IScaffoldingSupport
 	{
+		/// <summary>
+		/// Implementors should use this method to read information
+		/// from the controller instance and add dynamic actions to the controller.
+		/// </summary>
+		/// <param name="controller"></param>
 		public void Process(Controller controller)
 		{
 			// Don't need to do anything

@@ -37,6 +37,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			return Create(args);
 		}
 
+		/// <summary>
+		/// Creates a dictionary from specified arguments.
+		/// </summary>
+		/// <param name="args">The arguments.</param>
+		/// <returns></returns>
 		public static IDictionary Create(params String[] args)
 		{
 			IDictionary dict = new HybridDictionary(true);
@@ -62,6 +67,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			return dict;
 		}
 
+		/// <summary>
+		/// Creates a dictionary fros a name value collection.
+		/// </summary>
+		/// <param name="collection">The collection.</param>
+		/// <returns></returns>
 		public IDictionary FromNameValueCollection(NameValueCollection collection)
 		{
 			IDictionary dict = new HybridDictionary(true);

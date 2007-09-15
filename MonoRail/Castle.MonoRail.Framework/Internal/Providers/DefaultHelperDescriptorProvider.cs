@@ -49,6 +49,15 @@ namespace Castle.MonoRail.Framework.Internal
 
 		#endregion
 
+		/// <summary>
+		/// Implementors should collect the helper information
+		/// and return descriptors instances, or an empty array if none
+		/// was found.
+		/// </summary>
+		/// <param name="controllerType">The controller type</param>
+		/// <returns>
+		/// An array of <see cref="HelperDescriptor"/>
+		/// </returns>
 		public HelperDescriptor[] CollectHelpers(Type controllerType)
 		{
 			if (logger.IsDebugEnabled)

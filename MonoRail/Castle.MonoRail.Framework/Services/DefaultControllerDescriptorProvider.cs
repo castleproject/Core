@@ -48,6 +48,10 @@ namespace Castle.MonoRail.Framework.Services
 
 		#region IServiceEnabledComponent implementation
 
+		/// <summary>
+		/// Services the specified service provider.
+		/// </summary>
+		/// <param name="serviceProvider">The service provider.</param>
 		public void Service(IServiceProvider serviceProvider)
 		{
 			ILoggerFactory loggerFactory = (ILoggerFactory) serviceProvider.GetService(typeof(ILoggerFactory));
@@ -136,7 +140,12 @@ namespace Castle.MonoRail.Framework.Services
 
 			return desc;
 		}
-		
+
+		/// <summary>
+		/// Builds the <see cref="ControllerMetaDescriptor"/> for the specified controller type
+		/// </summary>
+		/// <param name="controllerType">Type of the controller.</param>
+		/// <returns></returns>
 		private ControllerMetaDescriptor InternalBuildDescriptor(Type controllerType)
 		{
 			if (logger.IsDebugEnabled)
@@ -156,7 +165,12 @@ namespace Castle.MonoRail.Framework.Services
 		}
 
 		#region Action data
-		
+
+		/// <summary>
+		/// Collects the actions.
+		/// </summary>
+		/// <param name="controllerType">Type of the controller.</param>
+		/// <param name="desc">The desc.</param>
 		private void CollectActions(Type controllerType, ControllerMetaDescriptor desc)
 		{
 			// HACK: GetRealControllerType is a workaround for DYNPROXY-14 bug
@@ -197,6 +211,10 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Collects the action level attributes.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
 		private void CollectActionLevelAttributes(ControllerMetaDescriptor descriptor)
 		{
 			foreach(object action in descriptor.Actions.Values)
@@ -215,6 +233,11 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Collects the action attributes.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <param name="descriptor">The descriptor.</param>
 		private void CollectActionAttributes(MethodInfo method, ControllerMetaDescriptor descriptor)
 		{
 			if (logger.IsDebugEnabled)
@@ -239,6 +262,11 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Collects the skip rescue.
+		/// </summary>
+		/// <param name="actionDescriptor">The action descriptor.</param>
+		/// <param name="method">The method.</param>
 		private void CollectSkipRescue(ActionMetaDescriptor actionDescriptor, MethodInfo method)
 		{
 			object[] attributes = method.GetCustomAttributes(typeof(SkipRescueAttribute), true);
@@ -249,6 +277,11 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Collects the accessible through.
+		/// </summary>
+		/// <param name="actionDescriptor">The action descriptor.</param>
+		/// <param name="method">The method.</param>
 		private void CollectAccessibleThrough(ActionMetaDescriptor actionDescriptor, MethodInfo method)
 		{
 			object[] attributes = method.GetCustomAttributes(typeof(AccessibleThroughAttribute), true);
@@ -259,6 +292,11 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Collects the skip filter.
+		/// </summary>
+		/// <param name="actionDescriptor">The action descriptor.</param>
+		/// <param name="method">The method.</param>
 		private void CollectSkipFilter(ActionMetaDescriptor actionDescriptor, MethodInfo method)
 		{
 			object[] attributes = method.GetCustomAttributes(typeof(SkipFilterAttribute), true);
@@ -269,11 +307,21 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Collects the resources.
+		/// </summary>
+		/// <param name="desc">The desc.</param>
+		/// <param name="memberInfo">The member info.</param>
 		private void CollectResources(BaseMetaDescriptor desc, MemberInfo memberInfo)
 		{
 			desc.Resources = resourceDescriptorProvider.CollectResources(memberInfo);
 		}
 
+		/// <summary>
+		/// Collects the transform filter.
+		/// </summary>
+		/// <param name="actionDescriptor">The action descriptor.</param>
+		/// <param name="method">The method.</param>
 		private void CollectTransformFilter(ActionMetaDescriptor actionDescriptor, MethodInfo method)
 		{
 			actionDescriptor.TransformFilters = transformFilterDescriptorProvider.CollectFilters((method));
@@ -312,6 +360,11 @@ namespace Castle.MonoRail.Framework.Services
 
 		#region Controller data
 
+		/// <summary>
+		/// Collects the class level attributes.
+		/// </summary>
+		/// <param name="controllerType">Type of the controller.</param>
+		/// <param name="descriptor">The descriptor.</param>
 		private void CollectClassLevelAttributes(Type controllerType, ControllerMetaDescriptor descriptor)
 		{
 			CollectHelpers(descriptor, controllerType);
@@ -324,6 +377,11 @@ namespace Castle.MonoRail.Framework.Services
 			CollectDynamicAction(descriptor, controllerType);
 		}
 
+		/// <summary>
+		/// Collects the default action.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
+		/// <param name="controllerType">Type of the controller.</param>
 		private void CollectDefaultAction(ControllerMetaDescriptor descriptor, Type controllerType)
 		{
 			object[] attributes = controllerType.GetCustomAttributes(typeof(DefaultActionAttribute), true);
@@ -334,6 +392,11 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Collects the scaffolding.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
+		/// <param name="controllerType">Type of the controller.</param>
 		private void CollectScaffolding(ControllerMetaDescriptor descriptor, Type controllerType)
 		{
 			object[] attributes = controllerType.GetCustomAttributes(typeof(ScaffoldingAttribute), false);
@@ -347,6 +410,11 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Collects the dynamic action.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
+		/// <param name="controllerType">Type of the controller.</param>
 		private void CollectDynamicAction(ControllerMetaDescriptor descriptor, Type controllerType)
 		{
 			object[] attributes = controllerType.GetCustomAttributes(typeof(DynamicActionProviderAttribute), true);
@@ -360,11 +428,21 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Collects the helpers.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
+		/// <param name="controllerType">Type of the controller.</param>
 		private void CollectHelpers(ControllerMetaDescriptor descriptor, Type controllerType)
 		{
 			descriptor.Helpers = helperDescriptorProvider.CollectHelpers(controllerType);
 		}
 
+		/// <summary>
+		/// Collects the filters.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
+		/// <param name="controllerType">Type of the controller.</param>
 		private void CollectFilters(ControllerMetaDescriptor descriptor, Type controllerType)
 		{
 			descriptor.Filters = filterDescriptorProvider.CollectFilters(controllerType);
@@ -372,21 +450,41 @@ namespace Castle.MonoRail.Framework.Services
 			Array.Sort(descriptor.Filters, FilterDescriptorComparer.Instance);
 		}
 
+		/// <summary>
+		/// Collects the layout.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
+		/// <param name="memberInfo">The member info.</param>
 		private void CollectLayout(BaseMetaDescriptor descriptor, MemberInfo memberInfo)
 		{
 			descriptor.Layout = layoutDescriptorProvider.CollectLayout(memberInfo);
 		}
 
+		/// <summary>
+		/// Collects the rescues.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
+		/// <param name="memberInfo">The member info.</param>
 		private void CollectRescues(BaseMetaDescriptor descriptor, MethodInfo memberInfo)
 		{
 			descriptor.Rescues = rescueDescriptorProvider.CollectRescues(memberInfo);
 		}
 
+		/// <summary>
+		/// Collects the rescues.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
+		/// <param name="type">The type.</param>
 		private void CollectRescues(BaseMetaDescriptor descriptor, Type type)
 		{
 			descriptor.Rescues = rescueDescriptorProvider.CollectRescues(type);
 		}
 
+		/// <summary>
+		/// Collects the cache configures.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
+		/// <param name="memberInfo">The member info.</param>
 		private void CollectCacheConfigures(ActionMetaDescriptor descriptor, MemberInfo memberInfo)
 		{
 			object[] configurers = memberInfo.GetCustomAttributes(typeof(ICachePolicyConfigurer), true);
@@ -410,15 +508,28 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			private static readonly FilterDescriptorComparer instance = new FilterDescriptorComparer();
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="FilterDescriptorComparer"/> class.
+			/// </summary>
 			private FilterDescriptorComparer()
 			{
 			}
 
+			/// <summary>
+			/// Gets the instance.
+			/// </summary>
+			/// <value>The instance.</value>
 			public static FilterDescriptorComparer Instance
 			{
 				get { return instance; }
 			}
 
+			/// <summary>
+			/// Compares the specified left.
+			/// </summary>
+			/// <param name="left">The left.</param>
+			/// <param name="right">The right.</param>
+			/// <returns></returns>
 			public int Compare(object left, object right)
 			{
 				return ((FilterDescriptor) left).ExecutionOrder - ((FilterDescriptor) right).ExecutionOrder;
@@ -433,15 +544,28 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			private static readonly TransformFilterDescriptorComparer instance = new TransformFilterDescriptorComparer();
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="TransformFilterDescriptorComparer"/> class.
+			/// </summary>
 			private TransformFilterDescriptorComparer()
 			{
 			}
 
+			/// <summary>
+			/// Gets the instance.
+			/// </summary>
+			/// <value>The instance.</value>
 			public static TransformFilterDescriptorComparer Instance
 			{
 				get { return instance; }
 			}
 
+			/// <summary>
+			/// Compares the specified left.
+			/// </summary>
+			/// <param name="left">The left.</param>
+			/// <param name="right">The right.</param>
+			/// <returns></returns>
 			public int Compare(object left, object right)
 			{
 				return ((TransformFilterDescriptor)right).ExecutionOrder - ((TransformFilterDescriptor)left).ExecutionOrder;

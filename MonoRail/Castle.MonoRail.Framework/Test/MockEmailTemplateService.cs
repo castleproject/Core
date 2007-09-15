@@ -26,11 +26,25 @@ namespace Castle.MonoRail.Framework.Test
 	{
 		private readonly MockRailsEngineContext context;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockEmailTemplateService"/> class.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public MockEmailTemplateService(MockRailsEngineContext context)
 		{
 			this.context = context;
 		}
 
+		/// <summary>
+		/// Creates an instance of <see cref="Message"/>
+		/// using the specified template for the body
+		/// </summary>
+		/// <param name="templateName">Name of the template to load.
+		/// Will look in <c>Views/mail</c> for that template file.</param>
+		/// <param name="parameters">Dictionary with parameters
+		/// that you can use on the email template</param>
+		/// <param name="doNotApplyLayout">If <c>true</c>, it will skip the layout</param>
+		/// <returns>An instance of <see cref="Message"/></returns>
 		public Message RenderMailMessage(string templateName, IDictionary parameters, bool doNotApplyLayout)
 		{
 			context.AddMailTemplateRendered(templateName, parameters);
@@ -38,6 +52,14 @@ namespace Castle.MonoRail.Framework.Test
 			return new Message("from", "to", "subject", "body");
 		}
 
+		/// <summary>
+		/// Renders the mail message.
+		/// </summary>
+		/// <param name="templateName">Name of the template.</param>
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="doNotApplyLayout">if set to <c>true</c> [do not apply layout].</param>
+		/// <returns></returns>
 		public Message RenderMailMessage(string templateName, IRailsEngineContext engineContext, Controller controller,
 		                                 bool doNotApplyLayout)
 		{

@@ -24,8 +24,22 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface IParameterBinder
 	{
+		/// <summary>
+		/// Calculates the param points. Implementors should return value equals or greater than
+		/// zero indicating whether the parameter can be bound successfully. The greater the value (points)
+		/// the more successful the implementation indicates to the framework
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="parameterInfo">The parameter info.</param>
+		/// <returns></returns>
 		int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo);
 
+		/// <summary>
+		/// Binds the specified parameters for the action.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="parameterInfo">The parameter info.</param>
+		/// <returns></returns>
 		object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo);
 	}
 }

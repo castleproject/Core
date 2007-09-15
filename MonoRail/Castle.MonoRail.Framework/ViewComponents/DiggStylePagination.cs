@@ -21,7 +21,14 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 	/// <summary>
 	/// Creates a digg style pagination.
+	/// <para>
+	/// Based on Alex Henderson work. See 
+	/// (Monorail Pagination with Base4.Net)
+	/// http://blog.bittercoder.com/PermaLink,guid,579711a8-0b16-481b-b52b-ebdfa1a7e225.aspx
+	/// </para>
+	/// </summary>
 	/// 
+	/// <remarks>
 	/// <para>
 	/// Parameters: <br/>
 	/// <c>adjacents</c>: number of links to show around the current page <br/>
@@ -38,15 +45,10 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// <c>endblock</c>: invoked with <c>page</c> <br/>
 	/// <c>link</c>: invoked with <c>pageIndex</c>, <c>url</c> and <c>text</c>
 	/// so you can build a custom link <br/>
-	/// <c>prev</c>: text displayed instead of "&lt;%lt;prev"
-	/// <c>next</c>: text displayed instead of "next&gt;%gt;"
+	/// <c>prev</c>: text displayed instead of "&lt;%lt;prev"  <br/>
+	/// <c>next</c>: text displayed instead of "next&gt;%gt;"  <br/>
 	/// </para>
-	/// </summary>
 	/// 
-	/// <remarks>
-	/// Based on Alex Henderson work. See 
-	/// (Monorail Pagination with Base4.Net)
-	/// http://blog.bittercoder.com/PermaLink,guid,579711a8-0b16-481b-b52b-ebdfa1a7e225.aspx
 	/// </remarks>
 	public class DiggStylePagination : ViewComponent
 	{
@@ -63,6 +65,10 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private string paginatefunction;
 		private IPaginatedPage page;
 
+		/// <summary>
+		/// Gets or sets the paginated page instance.
+		/// </summary>
+		/// <value>The page.</value>
 		[ViewComponentParam(Required = true)]
 		public IPaginatedPage Page
 		{
@@ -70,6 +76,14 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			set { page = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the paginate function name.
+		/// <para>
+		/// A paginate function is a javascript fuction 
+		/// that receives the page index as the only argument. 
+		/// </para>
+		/// </summary>
+		/// <value>The paginate function.</value>
 		[ViewComponentParam]
 		public string PaginateFunction
 		{
@@ -77,6 +91,10 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			set { paginatefunction = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the adjacents (number of links to show).
+		/// </summary>
+		/// <value>The adjacents.</value>
 		[ViewComponentParam]
 		public int Adjacents
 		{
@@ -84,6 +102,10 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			set { adjacents = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the component should output inline styles.
+		/// </summary>
+		/// <value><c>true</c> if it should use inline styles; otherwise, <c>false</c>.</value>
 		[ViewComponentParam]
 		public bool UseInlineStyle
 		{
@@ -91,6 +113,12 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			set { useInlineStyle = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the component should render links even if there is only one page.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if it should render; otherwise, <c>false</c>.
+		/// </value>
 		[ViewComponentParam]
 		public bool RenderIfOnlyOnePage
 		{
@@ -98,6 +126,10 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			set { renderIfOnlyOnePage = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the URL to be used when generating links
+		/// </summary>
+		/// <value>The URL.</value>
 		[ViewComponentParam]
 		public string Url
 		{
@@ -126,6 +158,15 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			PropertyBag["page"] = page;
 		}
 
+		/// <summary>
+		/// Implementor should return true only if the
+		/// <c>name</c> is a known section the view component
+		/// supports.
+		/// </summary>
+		/// <param name="name">section being added</param>
+		/// <returns>
+		/// 	<see langword="true"/> if section is supported
+		/// </returns>
 		public override bool SupportsSection(string name)
 		{
 			return name == StartSection || name == EndSection || name == LinkSection || name == PrevSection || name == NextSection;
@@ -286,6 +327,13 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 		}
 
+		/// <summary>
+		/// Writes the page link.
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		/// <param name="pageIndex">Index of the page.</param>
+		/// <param name="text">The text.</param>
+		/// <param name="htmlAttributes">The HTML attributes.</param>
 		protected void WritePageLink(TextWriter writer, int pageIndex, String text, IDictionary htmlAttributes)
 		{
 			if (Context.HasSection(LinkSection))

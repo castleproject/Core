@@ -21,6 +21,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class BindingContext : AbstractBindingScope
 	{
 		private readonly ActionBinding action;
@@ -28,6 +31,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private Stack<IBindingScope> scopes;
 		private static readonly IExpressionEvaluator evaluator = new DataBindingEvaluator();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BindingContext"/> class.
+		/// </summary>
+		/// <param name="binder">The binder.</param>
+		/// <param name="action">The action.</param>
 		internal BindingContext(ControllerBinder binder, ActionBinding action)
 		{
 			if (binder == null)
@@ -46,26 +54,45 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			RegisterDefaultScopes();
 		}
 
+		/// <summary>
+		/// Gets the action.
+		/// </summary>
+		/// <value>The action.</value>
 		public ActionBinding Action
 		{
 			get { return action; }
 		}
 
+		/// <summary>
+		/// Pushes the scope.
+		/// </summary>
+		/// <param name="scope">The scope.</param>
 		public void PushScope(IBindingScope scope)
 		{
 			scopes.Push(scope);
 		}
 
+		/// <summary>
+		/// Dispatches the action.
+		/// </summary>
 		public void DispatchAction()
 		{
 			DispatchAction(action.ActionName);
 		}
 
+		/// <summary>
+		/// Dispatches the action.
+		/// </summary>
+		/// <param name="actionName">Name of the action.</param>
 		public void DispatchAction(string actionName)
 		{
 			binder.DispatchAction(actionName, this);
 		}
 
+		/// <summary>
+		/// Resolves the action arguments.
+		/// </summary>
+		/// <returns></returns>
 		public IDictionary ResolveActionArguments()
 		{
 			HybridDictionary actionArgs = new HybridDictionary(true);
@@ -78,6 +105,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return actionArgs;
 		}
 
+		/// <summary>
+		/// Resolves the action arguments.
+		/// </summary>
+		/// <param name="actionArgs">The action args.</param>
+		/// <param name="resolvedActionArgs">The resolved action args.</param>
 		public void ResolveActionArguments(ActionArgumentCollection actionArgs,
 		                                   IDictionary resolvedActionArgs)
 		{
@@ -106,6 +138,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Resolves the symbol.
+		/// </summary>
+		/// <param name="symbolName">Name of the symbol.</param>
+		/// <param name="throwIfNotFound">if set to <c>true</c> [throw if not found].</param>
+		/// <returns></returns>
 		public object ResolveSymbol(string symbolName, bool throwIfNotFound)
 		{
 			object value = null;
@@ -124,12 +162,22 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return value;
 		}
 
+		/// <summary>
+		/// Adds the action arguments.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="resolvedActionArgs">The resolved action args.</param>
 		protected override void AddActionArguments(BindingContext context,
 		                                           IDictionary resolvedActionArgs)
 		{
 			context.ResolveActionArguments(action.ActionArguments, resolvedActionArgs);
 		}
 
+		/// <summary>
+		/// Resolves the action argument.
+		/// </summary>
+		/// <param name="actionArg">The action arg.</param>
+		/// <returns></returns>
 		private object ResolveActionArgument(ActionArgument actionArg)
 		{
 			object value = actionArg.Value;
@@ -147,6 +195,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return value;
 		}
 
+		/// <summary>
+		/// Registers the default scopes.
+		/// </summary>
 		private void RegisterDefaultScopes()
 		{
 			scopes = new Stack<IBindingScope>();

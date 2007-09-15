@@ -26,10 +26,16 @@ namespace Castle.MonoRail.Framework
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
-	/// 
+	/// Default implementation of <see cref="IControllerLifecycleExecutor"/>
+	/// <para>
+	/// Handles the whole controller lifecycle in a request.
+	/// </para>
 	/// </summary>
 	public class ControllerLifecycleExecutor : IControllerLifecycleExecutor, IServiceEnabledComponent, IDisposable
 	{
+		/// <summary>
+		/// Key for the executor instance on <c>Context.Items</c>
+		/// </summary>
 		public const String ExecutorEntry = "mr.executor";
 
 		private readonly Controller controller;
@@ -111,6 +117,9 @@ namespace Castle.MonoRail.Framework
 
 		#region IDisposable
 
+		/// <summary>
+		/// Disposes the filters and resources associated with a controller.
+		/// </summary>
 		public void Dispose()
 		{
 			DisposeFilters();
@@ -355,7 +364,11 @@ namespace Castle.MonoRail.Framework
 		{
 			PrepareTransformFilter(actionMethod);
 		}
-		
+
+		/// <summary>
+		/// Prepares the transform filter.
+		/// </summary>
+		/// <param name="method">The method.</param>
 		protected void PrepareTransformFilter(MethodInfo method)
 		{
 			if (method == null) return;
@@ -480,6 +493,9 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		/// <summary>
+		/// Creates the and initialize helpers associated with a controller.
+		/// </summary>
 		protected void CreateAndInitializeHelpers()
 		{
 			HybridDictionary helpers = new HybridDictionary();
@@ -682,7 +698,11 @@ namespace Castle.MonoRail.Framework
 		{
 			CreateResources(actionMethod);
 		}
-		
+
+		/// <summary>
+		/// Creates the resources associated with a controller
+		/// </summary>
+		/// <param name="method">The method.</param>
 		protected void CreateResources(MethodInfo method)
 		{
 			controller.resources = new ResourceDictionary();
@@ -704,6 +724,9 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		/// <summary>
+		/// Releases the resources.
+		/// </summary>
 		protected void ReleaseResources()
 		{
 			if (controller.resources == null) return;
@@ -718,6 +741,11 @@ namespace Castle.MonoRail.Framework
 
 		#region Filters
 
+		/// <summary>
+		/// Identifies if no filter should run for the given action.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns></returns>
 		protected internal bool ShouldSkip(MethodInfo method)
 		{
 			if (method == null)
@@ -841,6 +869,10 @@ namespace Castle.MonoRail.Framework
 
 		#region Views and Layout
 
+		/// <summary>
+		/// Obtains the name of the default layout.
+		/// </summary>
+		/// <returns></returns>
 		protected String ObtainDefaultLayoutName()
 		{
 			if (metaDescriptor.Layout != null)
@@ -923,6 +955,12 @@ namespace Castle.MonoRail.Framework
 			return false;
 		}
 
+		/// <summary>
+		/// Gets the rescue for the specified exception type.
+		/// </summary>
+		/// <param name="rescues">The rescues.</param>
+		/// <param name="exceptionType">Type of the exception.</param>
+		/// <returns></returns>
 		protected RescueDescriptor GetRescueFor(IList rescues, Type exceptionType)
 		{
 			if (rescues == null || rescues.Count == 0) return null;
@@ -949,6 +987,9 @@ namespace Castle.MonoRail.Framework
 
 		#region Extension
 
+		/// <summary>
+		/// Raises the on action exception on extension.
+		/// </summary>
 		protected void RaiseOnActionExceptionOnExtension()
 		{
 			ExtensionManager manager =

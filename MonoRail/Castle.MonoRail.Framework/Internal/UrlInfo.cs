@@ -68,46 +68,82 @@ namespace Castle.MonoRail.Framework
 			this.protocol = protocol;
 		}
 
+		/// <summary>
+		/// Gets the app virtual dir.
+		/// </summary>
+		/// <value>The app virtual dir.</value>
 		public string AppVirtualDir
 		{
 			get { return appVirtualDir; }
 		}
 
+		/// <summary>
+		/// Gets the port.
+		/// </summary>
+		/// <value>The port.</value>
 		public int Port
 		{
 			get { return port; }
 		}
 
+		/// <summary>
+		/// Gets the domain.
+		/// </summary>
+		/// <value>The domain.</value>
 		public string Domain
 		{
 			get { return domain; }
 		}
 
+		/// <summary>
+		/// Gets the subdomain.
+		/// </summary>
+		/// <value>The subdomain.</value>
 		public string Subdomain
 		{
 			get { return subdomain; }
 		}
 
+		/// <summary>
+		/// Gets the URL raw.
+		/// </summary>
+		/// <value>The URL raw.</value>
 		public string UrlRaw
 		{
 			get { return urlRaw; }
 		}
 
+		/// <summary>
+		/// Gets the area.
+		/// </summary>
+		/// <value>The area.</value>
 		public string Area
 		{
 			get { return area; }
 		}
 
+		/// <summary>
+		/// Gets the controller.
+		/// </summary>
+		/// <value>The controller.</value>
 		public string Controller
 		{
 			get { return controller; }
 		}
 
+		/// <summary>
+		/// Gets the action.
+		/// </summary>
+		/// <value>The action.</value>
 		public string Action
 		{
 			get { return action; }
 		}
 
+		/// <summary>
+		/// Gets the protocol.
+		/// </summary>
+		/// <value>The protocol.</value>
 		public string Protocol
 		{
 			get { return protocol; }

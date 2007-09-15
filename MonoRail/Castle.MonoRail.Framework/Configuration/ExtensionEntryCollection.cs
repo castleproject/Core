@@ -17,10 +17,17 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System.Collections;
 	using System.Xml;
 
+	/// <summary>
+	/// Represents a set of MonoRail extensions
+	/// </summary>
 	public class ExtensionEntryCollection : CollectionBase, ISerializedConfig
 	{
 		#region ISerializedConfig implementation
-		
+
+		/// <summary>
+		/// Deserializes the specified section.
+		/// </summary>
+		/// <param name="section">The section.</param>
 		public void Deserialize(XmlNode section)
 		{
 			XmlNodeList services = section.SelectNodes("extensions/extension");
@@ -36,7 +43,11 @@ namespace Castle.MonoRail.Framework.Configuration
 		}
 		
 		#endregion
-		
+
+		/// <summary>
+		/// Gets the <see cref="Castle.MonoRail.Framework.Configuration.ExtensionEntry"/> at the specified index.
+		/// </summary>
+		/// <value></value>
 		public ExtensionEntry this[int index]
 		{
 			get { return InnerList[index] as ExtensionEntry; }

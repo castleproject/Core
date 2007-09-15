@@ -16,8 +16,18 @@
 
 namespace Castle.MonoRail.Framework.Views.Aspx
 {
+
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public interface IExpressionEvaluator
 	{
+		/// <summary>
+		/// Evaluates the specified expression.
+		/// </summary>
+		/// <param name="expression">The expression.</param>
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
 		object Evaluate(string expression, BindingContext context);
 	}
 }

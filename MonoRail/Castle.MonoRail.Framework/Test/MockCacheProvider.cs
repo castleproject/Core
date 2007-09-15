@@ -18,29 +18,57 @@ namespace Castle.MonoRail.Framework.Test
 	using System.Collections;
 	using System.Collections.Specialized;
 
+	/// <summary>
+	/// Represents a mock implementation of <see cref="ICacheProvider"/> for unit test purposes.
+	/// </summary>
 	public class MockCacheProvider : ICacheProvider
 	{
 		private IDictionary dictionary = new HybridDictionary(true);
 
+		/// <summary>
+		/// Services the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
 		public void Service(IServiceProvider provider)
 		{	
 		}
 
+		/// <summary>
+		/// Determines whether the specified key is on the cache.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns>
+		/// 	<c>true</c> if the cache has the key; otherwise, <c>false</c>.
+		/// </returns>
 		public bool HasKey(string key)
 		{
 			return dictionary.Contains(key);
 		}
 
+		/// <summary>
+		/// Gets the cache item by the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns></returns>
 		public object Get(string key)
 		{
 			return dictionary[key];
 		}
 
+		/// <summary>
+		/// Stores the cache item by the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <param name="data">The data.</param>
 		public void Store(string key, object data)
 		{
 			dictionary[key] = data;
 		}
 
+		/// <summary>
+		/// Deletes the cache item by the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
 		public void Delete(string key)
 		{
 			dictionary.Remove(key);

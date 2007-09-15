@@ -16,8 +16,15 @@
 
 namespace Castle.MonoRail.Framework.Views.Aspx.Design
 {
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public interface ITarget
 	{
+		/// <summary>
+		/// Gets the property names.
+		/// </summary>
+		/// <value>The property names.</value>
 		string[] PropertyNames { get; }
 	}
 }

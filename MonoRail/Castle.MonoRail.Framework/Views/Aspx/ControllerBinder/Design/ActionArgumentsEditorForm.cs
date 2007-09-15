@@ -23,11 +23,19 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 	using System.Windows.Forms;
 	using WebControl=System.Web.UI.Control;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public partial class ActionArgumentsEditorForm : Form
 	{
 		private readonly ActionArgumentCollection actionArgs;
 		private readonly ITypeDescriptorContext context;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ActionArgumentsEditorForm"/> class.
+		/// </summary>
+		/// <param name="actionArgs">The action args.</param>
+		/// <param name="context">The context.</param>
 		public ActionArgumentsEditorForm(ActionArgumentCollection actionArgs,
 		                                 ITypeDescriptorContext context)
 		{

@@ -22,34 +22,210 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
+	using HtmlTextWriter = System.Web.UI.HtmlTextWriter;
+
 	using Castle.Core;
 	using Castle.Core.Logging;
+	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers.ValidationStrategy;
 	using Castle.MonoRail.Framework.Internal;
-	using HtmlTextWriter = System.Web.UI.HtmlTextWriter;
 	using Castle.Components.Binder;
 	using Castle.Components.Validator;
 
+	/// <summary>
+	/// Represents all scopes that the <see cref="FormHelper"/>
+	/// uses to search for root values
+	/// </summary>
 	public enum RequestContext
 	{
+		/// <summary>
+		/// All scopes should be searched
+		/// </summary>
 		All,
+		/// <summary>
+		/// Only PropertyBag should be searched
+		/// </summary>
 		PropertyBag,
+		/// <summary>
+		/// Only Flash should be searched
+		/// </summary>
 		Flash,
+		/// <summary>
+		/// Only Session should be searched
+		/// </summary>
 		Session,
-		Request, 
+		/// <summary>
+		/// Only Request should be searched
+		/// </summary>
+		Request,
+		/// <summary>
+		/// Only Params should be searched
+		/// </summary>
 		Params
 	}
 
 	/// <summary>
-	/// The FormHelper allows you to output Html Input elements using the 
-	/// conventions necessary to use the DataBinder on the server side. 
+	/// The FormHelper allows you to output html input elements using the 
+	/// conventions necessary to use the DataBinder on the server side. Ultimately it
+	/// allows you do to a bi-directional binding -- if used properly.
+	/// </summary>
+	/// 
+	/// <seealso cref="DataBindAttribute"/>
+	/// <seealso cref="Castle.Components.Common"/>
+	/// 
+	/// <example>
+	/// Using simple values:
+	/// <para>On the controller:</para>
+	/// 
+	/// <code>
+	/// public void MyAction()
+	/// {
+	///		PropertyBag["name"] = "John Doe";
+	/// }
+	/// </code>
+	/// 
+	/// <para>On the view (using NVelocity syntax)</para>
+	/// 
+	/// <code>
+	/// $Form.TextField('name') // Renders an input text with value "John Doe"
+	/// </code>
+	/// 
 	/// <para>
-	/// It also query the objects available on the context to show property 
-	/// values correctly, saving you the burden of filling text inputs, selects, 
-	/// checkboxes and radios.
+	/// Using complex objects:
 	/// </para>
+	/// 
+	/// <code>
+	/// public void MyAction()
+	/// {
+	///		PropertyBag["user"] = new User("John Doe");
+	/// }
+	/// </code>
+	/// 
+	/// <para>On the view (using NVelocity syntax)</para>
+	/// 
+	/// <code>
+	/// $Form.TextField('user.name') // Renders an input text with value "John Doe"
+	/// </code>
+	/// </example>
+	/// 
+	/// <remarks>
+	/// <b>Elements generation</b> <br/>
 	/// <para>
-	/// <b>Mask support</b>. 
+	/// <list type="table">
+	/// <item>
+	///		<term>Buttons</term>
+	///		<description>
+	///		<see cref="Submit(string)"/>
+	///		<see cref="Button(string)" />
+	///		<see cref="ButtonElement(string)" />
+	///		</description>
+	/// </item>
+	/// 
+	/// <item>
+	///		<term>Select</term>
+	///		<description>
+	///		<see cref="Select(string,IEnumerable)" />
+	///		</description>
+	/// </item>
+	/// 
+	/// <item>
+	///		<term>Text area</term>
+	///		<description>
+	///		<see cref="TextArea(string)" />
+	///		</description>
+	/// </item>
+	/// 
+	/// <item>
+	///		<term>Hidden field</term>
+	///		<description>
+	///		<see cref="HiddenField(string)" /> 
+	///		</description>
+	/// </item>
+	/// 
+	/// <item>
+	///		<term>Checkbox field</term>
+	///		<description>
+	///		<see cref="CheckboxField(string)" /> 
+	///		<see cref="CreateCheckboxList(string,IEnumerable)" /> 
+	///		</description>
+	/// </item>
+	/// 
+	/// <item>
+	///		<term>Radio field</term>
+	///		<description>
+	///		<see cref="RadioField(string,object)" /> 
+	///		</description>
+	/// </item>
+	/// 
+	/// <item>
+	///		<term>File upload</term>
+	///		<description>
+	///		<see cref="FileField(string)" /> 
+	///		</description>
+	/// </item>
+	/// 
+	/// <item>
+	///		<term>Text field</term>
+	///		<description>
+	///		<see cref="TextField(string)" />
+	///		<see cref="TextFieldValue(string, object)"/>
+	///		<see cref="NumberField(string)" />
+	///		<see cref="NumberFieldValue(string, object)"/>
+	///		</description>
+	/// </item>
+	/// 
+	/// <item>
+	///		<term>Password field</term>
+	///		<description>
+	///		<see cref="PasswordField(string)" />
+	///		<see cref="PasswordNumberField(string)" />
+	///		</description>
+	/// </item>
+	/// 
+	/// <item>
+	///		<term>Labels</term>
+	///		<description>
+	///		<see cref="LabelFor(string,string)" />
+	///		<see cref="LabelFor(string,string,IDictionary)"/>
+	///		</description>
+	/// </item>
+	/// 
+	/// </list>
+	/// </para>
+	/// 
+	/// <para>
+	/// <b>FormValidation</b> <br/>
+	/// The following operations are related to the Form Validation support:
+	/// </para>
+	/// <list type="table">
+	/// <item>
+	///		<term><see cref="FormTag(IDictionary)"/> and <see cref="EndFormTag"/> </term>
+	///		<description>Opens/close the form tag. They are required to use the form validation</description>
+	/// </item>
+	/// <item>
+	///		<term><see cref="DisableValidation"/> </term>
+	///		<description>Disables validation altogether</description>
+	/// </item>
+	/// <item>
+	///		<term><see cref="UseWebValidatorProvider"/> </term>
+	///		<description>Sets a custom Browser validator provider</description>
+	/// </item>
+	/// <item>
+	///		<term><see cref="UsePrototypeValidation"/> </term>
+	///		<description>Configures the helper to use the prototype easy field validation. Must be invoked before FormTag</description>
+	/// </item>
+	/// <item>
+	///		<term><see cref="UsefValidate"/> </term>
+	///		<description>Configures the helper to use the fValidate. Deprecated.</description>
+	/// </item>
+	/// <item>
+	///		<term><see cref="UseZebdaValidation"/> </term>
+	///		<description>Configures the helper to use the Zebda. Must be invoked before FormTag</description>
+	/// </item>
+	/// </list>
+	/// 
+	/// <para>
+	/// <b>Mask support</b>. <br/>
 	/// For most elements, you can use 
 	/// the entries <c>mask</c> and optionally <c>mask_separator</c> to define a 
 	/// mask for your inputs. Kudos to mordechai Sandhaus - 52action.com
@@ -57,11 +233,20 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <para>
 	/// For example: mask='2,5',mask_separator='/' will mask the content to '12/34/1234'
 	/// </para>
-	/// </summary>
+	/// </remarks>
 	public class FormHelper : AbstractHelper, IServiceEnabledComponent
 	{
+		/// <summary>
+		/// Common property flags for reflection
+		/// </summary>
 		protected static readonly BindingFlags PropertyFlags = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
+		/// <summary>
+		/// Common property flags for reflection (with declared only)
+		/// </summary>
 		protected static readonly BindingFlags PropertyFlags2 = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase|BindingFlags.DeclaredOnly;
+		/// <summary>
+		/// Common field flags for reflection
+		/// </summary>
 		protected static readonly BindingFlags FieldFlags = BindingFlags.GetField|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
 
 		private int formCount;
@@ -71,6 +256,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		private IBrowserValidatorProvider validatorProvider = new PrototypeWebValidator();
 		private BrowserValidationConfiguration validationConfig;
 
+		/// <summary>
+		/// Logger instance
+		/// </summary>
 		protected ILogger logger = NullLogger.Instance;
 
 		#region IServiceEnabledComponent implementation
@@ -259,11 +447,20 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region Object scope related (TODO: Document)
 
+		/// <summary>
+		/// Pushes the specified target. Experimental.
+		/// </summary>
+		/// <param name="target">The target.</param>
 		public void Push(string target)
 		{
 			Push(target, null);
 		}
 
+		/// <summary>
+		/// Pushes the specified target. Experimental.
+		/// </summary>
+		/// <param name="target">The target.</param>
+		/// <param name="parameters">The parameters.</param>
 		public void Push(string target, IDictionary parameters)
 		{
 			string disableValidation = CommonUtils.ObtainEntryAndRemove(parameters, "disablevalidation", "false");
@@ -288,6 +485,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Pops this instance. Experimental.
+		/// </summary>
 		public void Pop()
 		{
 			objectStack.Pop();
@@ -558,7 +758,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			attributes = attributes != null ? attributes : new Hashtable();
+			attributes = attributes ?? new Hashtable();
 
 			ApplyNumberOnlyOptions(attributes);
 			ApplyValidation(InputElementType.Text, target, ref attributes);
@@ -715,59 +915,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			ApplyValidation(InputElementType.Text, target, ref attributes);
 
 			return CreateInputElement("password", target, value, attributes);
-		}
-
-		#endregion
-
-		#region TextFieldFormat
-
-		/// <summary>
-		/// Generates an input text element and formats the value
-		/// with the specified format
-		/// <para>
-		/// The value is extracted from the target (if available)
-		/// </para>
-		/// </summary>
-		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
-		/// <param name="formatString">The format string</param>
-		/// <returns>The generated form element</returns>
-		[Obsolete("Use the attribute 'textformat' instead")]
-		public string TextFieldFormat(string target, string formatString)
-		{
-			return TextFieldFormat(target, formatString, null);
-		}
-
-		/// <summary>
-		/// Generates an input text element and formats the value
-		/// with the specified format
-		/// <para>
-		/// The value is extracted from the target (if available)
-		/// </para>
-		/// </summary>
-		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
-		/// <param name="formatString">The format string</param>
-		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
-		/// <returns>The generated form element</returns>
-		[Obsolete("Use the attribute 'textformat' instead")]
-		public string TextFieldFormat(string target, string formatString, IDictionary attributes)
-		{
-			target = RewriteTargetIfWithinObjectScope(target);
-
-			object value = ObtainValue(target);
-
-			if (value != null)
-			{
-				IFormattable formattable = value as IFormattable;
-
-				if (formattable != null)
-				{
-					value = formattable.ToString(formatString, null);
-				}
-			}
-
-			ApplyValidation(InputElementType.Text, target, ref attributes);
-
-			return CreateInputElement("text", target, value, attributes);
 		}
 
 		#endregion
@@ -980,7 +1127,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			// I need a test case to justify this case
 //			string hiddenElementId = elementId + "H";
 //			string hiddenElementValue = CommonUtils.ObtainEntryAndRemove(attributes, "falseValue", "false");
-//
 //			result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
 
 			return result;
@@ -1059,11 +1205,24 @@ namespace Castle.MonoRail.Framework.Helpers
 				return helper.CheckboxItem(index, target, operationState.TargetSuffix, CurrentSetItem, attributes);
 			}
 
+			/// <summary>
+			/// Returns an enumerator that iterates through a collection.
+			/// </summary>
+			/// <returns>
+			/// An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+			/// </returns>
 			public IEnumerator GetEnumerator()
 			{
 				return this;
 			}
 
+			/// <summary>
+			/// Advances the enumerator to the next element of the collection.
+			/// </summary>
+			/// <returns>
+			/// true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.
+			/// </returns>
+			/// <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created. </exception>
 			public bool MoveNext()
 			{
 				hasMovedNext = true;
@@ -1074,17 +1233,31 @@ namespace Castle.MonoRail.Framework.Helpers
 				return hasItem;
 			}
 
+			/// <summary>
+			/// Sets the enumerator to its initial position, which is before the first element in the collection.
+			/// </summary>
+			/// <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created. </exception>
 			public void Reset()
 			{
 				index = -1;
 				enumerator.Reset();
 			}
 
+			/// <summary>
+			/// Gets the current element in the collection.
+			/// </summary>
+			/// <value></value>
+			/// <returns>The current element in the collection.</returns>
+			/// <exception cref="T:System.InvalidOperationException">The enumerator is positioned before the first element of the collection or after the last element. </exception>
 			public object Current
 			{
 				get { return CurrentSetItem.Item; }
 			}
-			
+
+			/// <summary>
+			/// Gets the current set item.
+			/// </summary>
+			/// <value>The current set item.</value>
 			public SetItem CurrentSetItem
 			{
 				get { return enumerator.Current as SetItem; }
@@ -1352,6 +1525,14 @@ namespace Castle.MonoRail.Framework.Helpers
 			return GenerateSelect(target, selectedValue, dataSource, attributes);
 		}
 
+		/// <summary>
+		/// Generates the select.
+		/// </summary>
+		/// <param name="target">The target.</param>
+		/// <param name="selectedValue">The selected value.</param>
+		/// <param name="dataSource">The data source.</param>
+		/// <param name="attributes">The attributes.</param>
+		/// <returns></returns>
 		protected virtual string GenerateSelect(string target, object selectedValue, IEnumerable dataSource, IDictionary attributes)
 		{
 			string id = CreateHtmlId(target);
@@ -1430,9 +1611,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		#region Enum 
 
 		/// <summary>
-		/// 
+		/// Creates a list of pairs for the type enum. 
 		/// </summary>
-		/// <param name="enumType"></param>
+		/// <param name="enumType">enum type.</param>
 		/// <returns></returns>
 		public static Pair<int, string>[] EnumToPairs(Type enumType)
 		{
@@ -1502,6 +1683,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			isValidationDisabled = true;
 		}
 
+		/// <summary>
+		/// Applies the validation.
+		/// </summary>
+		/// <param name="inputType">Type of the input.</param>
+		/// <param name="target">The target.</param>
+		/// <param name="attributes">The attributes.</param>
 		protected virtual void ApplyValidation(InputElementType inputType, string target, ref IDictionary attributes)
 		{
 			bool disableValidation = CommonUtils.ObtainEntryAndRemove(attributes, "disablevalidation", "false") == "true";
@@ -1562,6 +1749,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region protected members
 
+		/// <summary>
+		/// Rewrites the target if within object scope.
+		/// </summary>
+		/// <param name="target">The target.</param>
+		/// <returns></returns>
 		protected string RewriteTargetIfWithinObjectScope(string target)
 		{
 			if (objectStack.Count == 0)
@@ -1631,13 +1823,26 @@ namespace Castle.MonoRail.Framework.Helpers
 								 type, id, target, value, GetAttributes(attributes));
 		}
 
+		/// <summary>
+		/// Creates the input element.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="attributes">The attributes.</param>
+		/// <returns></returns>
 		protected virtual string CreateInputElement(string type, string value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"{0}\" value=\"{1}\" {2}/>",
 								 type, FormatIfNecessary(value, attributes), GetAttributes(attributes));
 		}
 
-		protected string FormatIfNecessary(object value, IDictionary attributes)
+		/// <summary>
+		/// Formats if necessary.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="attributes">The attributes.</param>
+		/// <returns></returns>
+		protected static string FormatIfNecessary(object value, IDictionary attributes)
 		{
 			string formatString = CommonUtils.ObtainEntryAndRemove(attributes, "textformat");
 
@@ -1658,6 +1863,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			return value.ToString();
 		}
 
+		/// <summary>
+		/// Obtains the target property.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="target">The target.</param>
+		/// <param name="action">The action.</param>
+		/// <returns></returns>
 		protected PropertyInfo ObtainTargetProperty(RequestContext context, string target, Action<PropertyInfo> action)
 		{
 			string[] pieces;
@@ -1703,9 +1915,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// 
+		/// Obtains the root instance.
 		/// </summary>
-		/// <param name="context"></param>
+		/// <param name="context">The context.</param>
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <returns>The generated form element</returns>
 		protected object ObtainRootInstance(RequestContext context, string target)
@@ -1736,6 +1948,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			return rootInstance;
 		}
 
+		/// <summary>
+		/// Obtains the root instance.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="target">The target.</param>
+		/// <param name="pieces">The pieces.</param>
+		/// <returns></returns>
 		protected object ObtainRootInstance(RequestContext context, string target, out string[] pieces)
 		{
 			pieces = target.Split(new char[] {'.'});
@@ -1770,6 +1989,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			return rootInstance;
 		}
 
+		/// <summary>
+		/// Obtains the type of the root.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="target">The target.</param>
+		/// <param name="pieces">The pieces.</param>
+		/// <returns></returns>
 		private Type ObtainRootType(RequestContext context, string target, out string[] pieces)
 		{
 			pieces = target.Split(new char[] { '.' });
@@ -1998,7 +2224,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
-		private object GetArrayElement(object instance, int index)
+		private static object GetArrayElement(object instance, int index)
 		{
 			IList list = instance as IList;
 
@@ -2192,27 +2418,56 @@ namespace Castle.MonoRail.Framework.Helpers
 			return sb.ToString();
 		}
 
+		/// <summary>
+		/// Abstracts the approach to access values on objects. 
+		/// </summary>
 		public abstract class ValueGetter
 		{
+			/// <summary>
+			/// Gets the name.
+			/// </summary>
+			/// <value>The name.</value>
 			public abstract string Name { get; }
 
+			/// <summary>
+			/// Gets the value.
+			/// </summary>
+			/// <param name="instance">The instance.</param>
+			/// <returns></returns>
 			public abstract object GetValue(object instance);
 		}
 
+		/// <summary>
+		/// Implementation of <see cref="ValueGetter"/>
+		/// that uses reflection to access values
+		/// </summary>
 		public class ReflectionValueGetter : ValueGetter
 		{
 			private PropertyInfo propInfo;
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="ReflectionValueGetter"/> class.
+			/// </summary>
+			/// <param name="propInfo">The prop info.</param>
 			public ReflectionValueGetter(PropertyInfo propInfo)
 			{
 				this.propInfo = propInfo;
 			}
 
+			/// <summary>
+			/// Gets the name.
+			/// </summary>
+			/// <value>The name.</value>
 			public override string Name
 			{
 				get { return propInfo.Name; }
 			}
 
+			/// <summary>
+			/// Gets the value.
+			/// </summary>
+			/// <param name="instance">The instance.</param>
+			/// <returns></returns>
 			public override object GetValue(object instance)
 			{
 				try
@@ -2233,20 +2488,37 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Implementation of <see cref="ValueGetter"/>
+		/// to access DataRow's value
+		/// </summary>
 		public class DataRowValueGetter : ValueGetter
 		{
 			private readonly string columnName;
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="DataRowValueGetter"/> class.
+			/// </summary>
+			/// <param name="columnName">Name of the column.</param>
 			public DataRowValueGetter(string columnName)
 			{
 				this.columnName = columnName;
 			}
 
+			/// <summary>
+			/// Gets the name.
+			/// </summary>
+			/// <value>The name.</value>
 			public override string Name
 			{
 				get { return columnName; }
 			}
 
+			/// <summary>
+			/// Gets the value.
+			/// </summary>
+			/// <param name="instance">The instance.</param>
+			/// <returns></returns>
 			public override object GetValue(object instance)
 			{
 				DataRow row = (DataRow) instance;
@@ -2255,20 +2527,37 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Implementation of <see cref="ValueGetter"/>
+		/// to access DataRowView's value
+		/// </summary>
 		public class DataRowViewValueGetter : ValueGetter
 		{
 			private readonly string columnName;
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="DataRowViewValueGetter"/> class.
+			/// </summary>
+			/// <param name="columnName">Name of the column.</param>
 			public DataRowViewValueGetter(string columnName)
 			{
 				this.columnName = columnName;
 			}
 
+			/// <summary>
+			/// Gets the name.
+			/// </summary>
+			/// <value>The name.</value>
 			public override string Name
 			{
 				get { return columnName; }
 			}
 
+			/// <summary>
+			/// Gets the value.
+			/// </summary>
+			/// <param name="instance">The instance.</param>
+			/// <returns></returns>
 			public override object GetValue(object instance)
 			{
 				DataRowView row = (DataRowView)instance;
@@ -2277,41 +2566,79 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Empty implementation of a <see cref="ValueGetter"/>
+		/// </summary>
 		public class NoActionGetter : ValueGetter
 		{
+			/// <summary>
+			/// Gets the name.
+			/// </summary>
+			/// <value>The name.</value>
 			public override string Name
 			{
 				get { return string.Empty; }
 			}
 
+			/// <summary>
+			/// Gets the value.
+			/// </summary>
+			/// <param name="instance">The instance.</param>
+			/// <returns></returns>
 			public override object GetValue(object instance)
 			{
 				return null;
 			}
 		}
 
+		/// <summary>
+		/// Implementation of <see cref="ValueGetter"/>
+		/// to access enum fields
+		/// </summary>
 		public class EnumValueGetter : ValueGetter
 		{
-			private Type enumType;
+			private readonly Type enumType;
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="EnumValueGetter"/> class.
+			/// </summary>
+			/// <param name="enumType">Type of the enum.</param>
 			public EnumValueGetter(Type enumType)
 			{
 				this.enumType = enumType;
 			}
 
+			/// <summary>
+			/// Gets the name.
+			/// </summary>
+			/// <value>The name.</value>
 			public override string Name
 			{
 				get { return string.Empty; }
 			}
 
+			/// <summary>
+			/// Gets the value.
+			/// </summary>
+			/// <param name="instance">The instance.</param>
+			/// <returns></returns>
 			public override object GetValue(object instance)
 			{
 				return Enum.Format(enumType, Enum.Parse(enumType, Convert.ToString(instance)), "d");
 			}
 		}
 
+		/// <summary>
+		/// Abstract factory for <see cref="ValueGetter"/> implementations
+		/// </summary>
 		public class ValueGetterAbstractFactory
 		{
+			/// <summary>
+			/// Creates the specified target type.
+			/// </summary>
+			/// <param name="targetType">Type of the target.</param>
+			/// <param name="keyName">Name of the key.</param>
+			/// <returns></returns>
 			public static ValueGetter Create(Type targetType, string keyName)
 			{
 				if (targetType == null)
@@ -2353,17 +2680,32 @@ namespace Castle.MonoRail.Framework.Helpers
 			private readonly string target;
 			private readonly bool isValidationEnabled;
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="FormScopeInfo"/> class.
+			/// </summary>
+			/// <param name="target">The target.</param>
+			/// <param name="isValidationEnabled">if set to <c>true</c> [is validation enabled].</param>
 			public FormScopeInfo(string target, bool isValidationEnabled)
 			{
 				this.target = target;
 				this.isValidationEnabled = isValidationEnabled;
 			}
 
+			/// <summary>
+			/// Gets the root target.
+			/// </summary>
+			/// <value>The root target.</value>
 			public string RootTarget
 			{
 				get { return target; }
 			}
 
+			/// <summary>
+			/// Gets a value indicating whether this instance is validation enabled.
+			/// </summary>
+			/// <value>
+			/// 	<c>true</c> if this instance is validation enabled; otherwise, <c>false</c>.
+			/// </value>
 			public bool IsValidationEnabled
 			{
 				get { return isValidationEnabled; }

@@ -18,7 +18,7 @@ namespace Castle.MonoRail.Framework.Services
 	using Castle.Core;
 
 	/// <summary>
-	/// 
+	/// Default implementation of <see cref="IControllerLifecycleExecutorFactory"/>
 	/// </summary>
 	public class DefaultControllerLifecycleExecutorFactory : IControllerLifecycleExecutorFactory, IServiceEnabledComponent
 	{
@@ -41,6 +41,10 @@ namespace Castle.MonoRail.Framework.Services
 			return executor;
 		}
 
+		/// <summary>
+		/// Services the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
 		public void Service(IServiceProvider provider)
 		{
 			serviceProvider = provider;

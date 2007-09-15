@@ -20,9 +20,24 @@ namespace Castle.MonoRail.Framework.Test
 	using System.Collections.Generic;
 	using System.IO;
 
+	/// <summary>
+	/// Used to hook a viewcomponent call to render a nested section
+	/// </summary>
+	/// <param name="context">The content available to the section</param>
+	/// <param name="writer">The writer</param>
 	public delegate void TestSectionRender(IDictionary context, TextWriter writer);
+	
+	/// <summary>
+	/// Used to hook a viewcomponent call to render a view template
+	/// </summary>
+	/// <param name="name">view name</param>
+	/// <param name="context">The content available to the view</param>
+	/// <param name="writer">The writer</param>
 	public delegate void TestViewRender(string name, IDictionary context, TextWriter writer);
 
+	/// <summary>
+	/// Represents a mock implementation of <see cref="IMockViewComponentContext"/> for unit test purposes.
+	/// </summary>
 	public class MockViewComponentContext : IMockViewComponentContext
 	{
 		private string viewToRender;
@@ -33,14 +48,30 @@ namespace Castle.MonoRail.Framework.Test
 		private IViewEngine viewEngine;
 		private IDictionary<string,  TestSectionRender> section2delegate;
 
+		/// <summary>
+		/// Event that is raised when a section is rendered by the viewcomponent.
+		/// </summary>
 		public TestSectionRender OnBodyRender;
+		
+		/// <summary>
+		/// Event that is raised when a view is rendered by the viewcomponent.
+		/// </summary>
 		public TestViewRender OnViewRender;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockViewComponentContext"/> class.
+		/// </summary>
 		protected MockViewComponentContext()
 		{
 			section2delegate = new Dictionary<string, TestSectionRender>(StringComparer.InvariantCultureIgnoreCase);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockViewComponentContext"/> class.
+		/// </summary>
+		/// <param name="componentName">Name of the component.</param>
+		/// <param name="writer">The writer.</param>
+		/// <param name="viewEngine">The view engine.</param>
 		public MockViewComponentContext(string componentName, TextWriter writer, IViewEngine viewEngine) : this()
 		{
 			this.writer = writer;
@@ -48,6 +79,10 @@ namespace Castle.MonoRail.Framework.Test
 			this.viewEngine = viewEngine;
 		}
 
+		/// <summary>
+		/// Gets or sets the section render dictionary.
+		/// </summary>
+		/// <value>The section render.</value>
 		public IDictionary<string, TestSectionRender> SectionRender
 		{
 			get { return section2delegate; }
@@ -56,16 +91,33 @@ namespace Castle.MonoRail.Framework.Test
 
 		#region IViewComponentContext
 
+		/// <summary>
+		/// Gets the name of the component.
+		/// </summary>
+		/// <value>The name of the component.</value>
 		public virtual string ComponentName
 		{
 			get { return componentName; }
 		}
 
+		/// <summary>
+		/// Determines whether the current component declaration on the view
+		/// has the specified section.
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified section exists; otherwise, <c>false</c>.
+		/// </returns>
 		public bool HasSection(string sectionName)
 		{
 			return section2delegate.ContainsKey(sectionName);
 		}
 
+		/// <summary>
+		/// Renders the view specified to the writer.
+		/// </summary>
+		/// <param name="name">The view template name</param>
+		/// <param name="writer">A writer to output</param>
 		public void RenderView(string name, TextWriter writer)
 		{
 			if (OnViewRender != null)
@@ -74,11 +126,18 @@ namespace Castle.MonoRail.Framework.Test
 			}
 		}
 
+		/// <summary>
+		/// Renders the component body.
+		/// </summary>
 		public void RenderBody()
 		{
 			RenderBody(writer);
 		}
 
+		/// <summary>
+		/// Renders the body into the specified <see cref="TextWriter"/>
+		/// </summary>
+		/// <param name="writer">The writer.</param>
 		public void RenderBody(TextWriter writer)
 		{
 			if (OnBodyRender != null)
@@ -87,11 +146,22 @@ namespace Castle.MonoRail.Framework.Test
 			}
 		}
 
+		/// <summary>
+		/// Renders the the specified section.
+		/// No exception will the throw if the section cannot be found.
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
 		public void RenderSection(string sectionName)
 		{
 			RenderSection(sectionName, writer);
 		}
 
+		/// <summary>
+		/// Renders the the specified section.
+		/// No exception will the throw if the section cannot be found.
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
+		/// <param name="writer">The writer to output the section content.</param>
 		public void RenderSection(string sectionName, TextWriter writer)
 		{
 			if (section2delegate.ContainsKey(sectionName))
@@ -100,27 +170,49 @@ namespace Castle.MonoRail.Framework.Test
 			}
 		}
 
+		/// <summary>
+		/// Gets the writer used to render the view component
+		/// </summary>
+		/// <value>The writer.</value>
 		public virtual TextWriter Writer
 		{
 			get { return writer; }
 		}
 
+		/// <summary>
+		/// Gets the dictionary that holds variables for the
+		/// view and for the view component
+		/// </summary>
+		/// <value>The context vars.</value>
 		public virtual IDictionary ContextVars
 		{
 			get { return contextVars; }
 		}
 
+		/// <summary>
+		/// Gets the component parameters that the view has passed
+		/// to the component
+		/// </summary>
+		/// <value>The component parameters.</value>
 		public virtual IDictionary ComponentParameters
 		{
 			get { return componentParameters; }
 		}
 
+		/// <summary>
+		/// Gets or sets the view to render.
+		/// </summary>
+		/// <value>The view to render.</value>
 		public string ViewToRender
 		{
 			get { return viewToRender; }
 			set { viewToRender = value; }
 		}
 
+		/// <summary>
+		/// Gets the view engine instance.
+		/// </summary>
+		/// <value>The view engine.</value>
 		public virtual IViewEngine ViewEngine
 		{
 			get { return viewEngine; }

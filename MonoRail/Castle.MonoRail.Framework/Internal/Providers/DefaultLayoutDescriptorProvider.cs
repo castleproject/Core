@@ -48,7 +48,16 @@ namespace Castle.MonoRail.Framework.Internal
 		}
 
 		#endregion
-		
+
+		/// <summary>
+		/// Implementors should collect the layout information
+		/// and return a descriptor instance, or null if none
+		/// was found.
+		/// </summary>
+		/// <param name="memberInfo">The controller type or action (MethodInfo)</param>
+		/// <returns>
+		/// An <see cref="LayoutDescriptor"/> instance
+		/// </returns>
 		public LayoutDescriptor CollectLayout(MemberInfo memberInfo)
 		{
 			if (logger.IsDebugEnabled)

@@ -22,8 +22,17 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface IFilterFactory
 	{
+		/// <summary>
+		/// Creates the specified filter type.
+		/// </summary>
+		/// <param name="filterType">Type of the filter.</param>
+		/// <returns></returns>
 		IFilter Create( Type filterType );
 
+		/// <summary>
+		/// Releases the specified filter.
+		/// </summary>
+		/// <param name="filter">The filter.</param>
 		void Release( IFilter filter );
 	}
 }

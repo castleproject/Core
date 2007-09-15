@@ -19,15 +19,26 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System;
 	using System.Web.UI;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class ControllerBindingCollection : TypedCollection<ControllerBinding>
 	{
 		private readonly ControllerBinder binder;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerBindingCollection"/> class.
+		/// </summary>
+		/// <param name="binder">The binder.</param>
 		public ControllerBindingCollection(ControllerBinder binder)
 		{
 			this.binder = binder;
 		}
 
+		/// <summary>
+		/// Gets the <see cref="Castle.MonoRail.Framework.Views.Aspx.ControllerBinding"/> with the specified control.
+		/// </summary>
+		/// <value></value>
 		public ControllerBinding this[Control control]
 		{
 			get
@@ -40,6 +51,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Gets the <see cref="Castle.MonoRail.Framework.Views.Aspx.ControllerBinding"/> with the specified control id.
+		/// </summary>
+		/// <value></value>
 		public ControllerBinding this[string controlId]
 		{
 			get
@@ -61,6 +76,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Removes the specified control.
+		/// </summary>
+		/// <param name="control">The control.</param>
+		/// <returns></returns>
 		public bool Remove(Control control)
 		{
 			if (control == null)
@@ -71,6 +91,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return Remove(control.ID);
 		}
 
+		/// <summary>
+		/// Removes the specified control id.
+		/// </summary>
+		/// <param name="controlId">The control id.</param>
+		/// <returns></returns>
 		public bool Remove(string controlId)
 		{
 			if (controlId == null)
@@ -90,6 +115,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return false;
 		}
 
+		/// <summary>
+		/// Performs additional custom processes after setting a value in the <see cref="T:System.Collections.CollectionBase"></see> instance.
+		/// </summary>
+		/// <param name="index">The zero-based index at which oldValue can be found.</param>
+		/// <param name="oldValue">The value to replace with newValue.</param>
+		/// <param name="newValue">The new value of the element at index.</param>
 		protected override void OnSetComplete(int index, object oldValue, object newValue)
 		{
 			ControllerBinding oldBinding = (ControllerBinding) oldValue;
@@ -120,6 +151,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			base.OnInsertComplete(index, value);
 		}
 
+		/// <summary>
+		/// Performs additional custom processes after removing an element from the <see cref="T:System.Collections.CollectionBase"></see> instance.
+		/// </summary>
+		/// <param name="index">The zero-based index at which value can be found.</param>
+		/// <param name="value">The value of the element to remove from index.</param>
 		protected override void OnRemoveComplete(int index, object value)
 		{
 			ControllerBinding binding = (ControllerBinding) value;

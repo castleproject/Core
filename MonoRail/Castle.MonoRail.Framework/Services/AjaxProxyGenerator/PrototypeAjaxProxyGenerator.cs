@@ -50,6 +50,9 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 		/// </summary>
 		private ILogger logger = NullLogger.Instance;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PrototypeAjaxProxyGenerator"/> class.
+		/// </summary>
 		public PrototypeAjaxProxyGenerator()
 		{
 		}
@@ -190,14 +193,19 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 			       "var " + proxyName + " =" + nl + result + "</script>";
 		}
 
-		private string GetParameterName(ParameterInfo pi)
+		/// <summary>
+		/// Gets the name of the parameter.
+		/// </summary>
+		/// <param name="paramInfo">The parameterInfo.</param>
+		/// <returns></returns>
+		private string GetParameterName(ParameterInfo paramInfo)
 		{
 			String paramName = null;
 
 			object parameterAttribute;
 
 			// change the parameter name, if using [DataBind]
-			parameterAttribute = GetSingleAttribute(pi, typeof(DataBindAttribute), true);
+			parameterAttribute = GetSingleAttribute(paramInfo, typeof(DataBindAttribute), true);
 			if (parameterAttribute != null)
 			{
 				paramName = ((DataBindAttribute) parameterAttribute).Prefix;
@@ -206,7 +214,7 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 			if (ARFetchAttType != null)
 			{
 				// change the parameter name, if using [ARFetch]
-				parameterAttribute = GetSingleAttribute(pi, ARFetchAttType, true);
+				parameterAttribute = GetSingleAttribute(paramInfo, ARFetchAttType, true);
 				if (parameterAttribute != null)
 				{
 					paramName = Convert.ToString(GetPropertyValue(parameterAttribute, "RequestParameterName"));
@@ -218,7 +226,7 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 			// use the default parameter name, if none of the parameter binders define a new name
 			if (paramName == null || paramName.Length == 0)
 			{
-				paramName = pi.Name;
+				paramName = paramInfo.Name;
 			}
 
 			return ToCamelCase(paramName);
@@ -226,6 +234,12 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 
 		#region Utility Methods
 
+		/// <summary>
+		/// Gets the property value.
+		/// </summary>
+		/// <param name="obj">The obj.</param>
+		/// <param name="propName">Name of the prop.</param>
+		/// <returns></returns>
 		private object GetPropertyValue(object obj, string propName)
 		{
 			if (obj == null)
@@ -235,16 +249,27 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 			return propertyInfo.GetValue(obj, null);
 		}
 
+		/// <summary>
+		/// Gets the single attribute.
+		/// </summary>
+		/// <param name="obj">The obj.</param>
+		/// <param name="attributeType">Type of the attribute.</param>
+		/// <param name="inherit">if set to <c>true</c> [inherit].</param>
+		/// <returns></returns>
 		private object GetSingleAttribute(ICustomAttributeProvider obj, Type attributeType, bool inherit)
 		{
 			object[] attributes = obj.GetCustomAttributes(attributeType, inherit);
 			return (attributes.Length > 0 ? attributes[0] : null);
 		}
 
+		/// <summary>
+		/// Toes the camel case.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		private string ToCamelCase(string value)
 		{
-			if (value == null || value.Length == 0)
-				return value;
+			if (value == null || value.Length == 0) return value;
 
 			return Char.ToLower(value[0], CultureInfo.InvariantCulture)
 			       + (value.Length > 0 ? value.Substring(1) : null);

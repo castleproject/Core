@@ -16,6 +16,9 @@
 
 namespace Castle.MonoRail.Framework.Views.Aspx
 {
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class CommandBindingCollection : TypedCollection<CommandBinding>
 	{
 	}

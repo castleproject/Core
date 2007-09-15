@@ -16,6 +16,10 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 
+	/// <summary>
+	/// Common meta descriptor that represents configuration share by 
+	/// controllers and actions.
+	/// </summary>
 	[Serializable]
 	public abstract class BaseMetaDescriptor
 	{
@@ -23,18 +27,30 @@ namespace Castle.MonoRail.Framework.Internal
 		private RescueDescriptor[] rescues = new RescueDescriptor[0];
 		private ResourceDescriptor[] resources = new ResourceDescriptor[0];
 
+		/// <summary>
+		/// Gets or sets the layout descriptor.
+		/// </summary>
+		/// <value>The layout.</value>
 		public LayoutDescriptor Layout
 		{
 			get { return layout; }
 			set { layout = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the rescues descriptors.
+		/// </summary>
+		/// <value>The rescues.</value>
 		public RescueDescriptor[] Rescues
 		{
 			get { return rescues; }
 			set { rescues = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the resources descriptors.
+		/// </summary>
+		/// <value>The resources.</value>
 		public ResourceDescriptor[] Resources
 		{
 			get { return resources; }

@@ -19,6 +19,9 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System.Configuration;
 	using System.Xml;
 
+	/// <summary>
+	/// Represents the controller node configuration
+	/// </summary>
 	public class ControllersConfig : ISerializedConfig
 	{
 		private String[] assemblies;
@@ -26,6 +29,10 @@ namespace Castle.MonoRail.Framework.Configuration
 		
 		#region ISerializedConfig implementation
 
+		/// <summary>
+		/// Deserializes the specified section.
+		/// </summary>
+		/// <param name="section">The section.</param>
 		public void Deserialize(XmlNode section)
 		{
 			XmlNode customFactoryNode = section.SelectSingleNode("customControllerFactory");
@@ -60,12 +67,20 @@ namespace Castle.MonoRail.Framework.Configuration
 		
 		#endregion
 
+		/// <summary>
+		/// Gets or sets the assemblies.
+		/// </summary>
+		/// <value>The assemblies.</value>
 		public string[] Assemblies
 		{
 			get { return assemblies; }
 			set { assemblies = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the custom controller factory.
+		/// </summary>
+		/// <value>The custom controller factory.</value>
 		public Type CustomControllerFactory
 		{
 			get { return customControllerFactory; }

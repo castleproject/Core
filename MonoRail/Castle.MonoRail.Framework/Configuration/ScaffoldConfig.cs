@@ -17,13 +17,23 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System;
 	using System.Configuration;
 	using System.Xml;
+	using Framework;
 
+	/// <summary>
+	/// Represents the Scaffolding support configuration.
+	/// <seealso cref="IScaffoldingSupport"/>
+	/// </summary>
 	public class ScaffoldConfig : ISerializedConfig
 	{
 		private Type scaffoldImplType;
 		
 		#region ISerializedConfig implementation
-		
+
+		/// <summary>
+		/// Deserializes the configuration section looking 
+		/// for a 'scaffold' element with a 'type' attribute
+		/// </summary>
+		/// <param name="section">The section.</param>
 		public void Deserialize(XmlNode section)
 		{
 			section = section.SelectSingleNode("scaffold");
@@ -43,6 +53,11 @@ namespace Castle.MonoRail.Framework.Configuration
 		
 		#endregion
 
+		/// <summary>
+		/// Gets the scaffolding support implementation type.
+		/// <seealso cref="IScaffoldingSupport"/>
+		/// </summary>
+		/// <value>The type of the scaffold impl.</value>
 		public Type ScaffoldImplType
 		{
 			get { return scaffoldImplType; }

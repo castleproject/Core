@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework.Internal
 	using System;
 
 	/// <summary>
-	/// Represents the information about a <see cref="Controller"/>.
+	/// Represents the configuration associated with a <see cref="Controller"/>.
 	/// </summary>
 	public class ControllerDescriptor
 	{
@@ -25,6 +25,12 @@ namespace Castle.MonoRail.Framework.Internal
 		private String name;
 		private String area;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerDescriptor"/> class.
+		/// </summary>
+		/// <param name="controllerType">Type of the controller.</param>
+		/// <param name="name">The name of the controller.</param>
+		/// <param name="area">The area associated with the controller.</param>
 		public ControllerDescriptor(Type controllerType, String name, String area)
 		{
 			this.controllerType = controllerType;
@@ -32,16 +38,28 @@ namespace Castle.MonoRail.Framework.Internal
 			this.area = area;
 		}
 
+		/// <summary>
+		/// Gets the type of the controller.
+		/// </summary>
+		/// <value>The type of the controller.</value>
 		public Type ControllerType
 		{
 			get { return controllerType; }
 		}
 
+		/// <summary>
+		/// Gets the controller's name.
+		/// </summary>
+		/// <value>The name.</value>
 		public String Name
 		{
 			get { return name; }
 		}
 
+		/// <summary>
+		/// Gets the controller's area.
+		/// </summary>
+		/// <value>The area.</value>
 		public String Area
 		{
 			get { return area; }

@@ -87,6 +87,11 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Resolves the type.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		protected Type ResolveType(string name)
 		{
 			if (logger.IsDebugEnabled)
@@ -151,6 +156,10 @@ namespace Castle.MonoRail.Framework.Services
 			GetViewComponentRegistry().AddViewComponent(name, type);
 		}
 
+		/// <summary>
+		/// Gets the view component registry.
+		/// </summary>
+		/// <returns></returns>
 		protected virtual IViewComponentRegistry GetViewComponentRegistry()
 		{
 			throw new NotImplementedException();

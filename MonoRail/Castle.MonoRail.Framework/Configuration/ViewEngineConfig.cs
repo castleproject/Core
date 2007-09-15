@@ -32,6 +32,10 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		#region ISerializedConfig implementation
 
+		/// <summary>
+		/// Deserializes the specified section.
+		/// </summary>
+		/// <param name="section">The section.</param>
 		public void Deserialize(XmlNode section)
 		{
 			XmlElement engines = (XmlElement) section.SelectSingleNode("viewEngines");

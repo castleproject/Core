@@ -14,23 +14,56 @@
 
 namespace Castle.MonoRail.Framework.Helpers
 {
-    public interface IJSElementGenerator {
+	/// <summary>
+	/// Depicts the operations supported by the element Js generator.
+	/// </summary>
+	/// 
+	/// <remarks>
+	/// In practice you can access this generator by using the element accessor. 
+	/// For example (using nvelocity syntax):
+	/// 
+	/// <code>
+	///   $page.el('element id') -> IJSElementGenerator instance
+	/// </code>
+	/// 
+	/// </remarks>
+    public interface IJSElementGenerator 
+	{
         /// <summary>
         /// Gets the parent generator.
         /// </summary>
         /// <value>The parent generator.</value>
         IJSGenerator ParentGenerator { get; }
 
-        /// <summary>
-        /// TODO: Document this
-        /// </summary>
-        /// <param name="renderOptions">The render options.</param>
-        void ReplaceHtml(object renderOptions);
+		/// <summary>
+		/// Replaces the content of the element.
+		/// </summary>
+		/// 
+		/// <example>
+		/// The following example uses nvelocity syntax:
+		/// 
+		/// <code>
+		///   $page.el('elementid').ReplaceHtml("%{partial='shared/newmessage.vm'}")
+		/// </code>
+		/// </example>
+		/// 
+		/// <param name="renderOptions">Defines what to render</param>
+		void ReplaceHtml(object renderOptions);
 
-        /// <summary>
-        /// TODO: Document this
-        /// </summary>
-        /// <param name="renderOptions">The render options.</param>
-        void Replace(object renderOptions);
+		/// <summary>
+		/// Replaces the entire element's content -- and not only its innerHTML --
+		/// by the content evaluated.
+		/// </summary>
+		/// 
+		/// <example>
+		/// The following example uses nvelocity syntax:
+		/// 
+		/// <code>
+		///   $page.el('messagediv').Replace("%{partial='shared/newmessage.vm'}")
+		/// </code>
+		/// </example>
+		/// 
+		/// <param name="renderOptions">Defines what to render</param>
+		void Replace(object renderOptions);
     }
 }

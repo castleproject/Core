@@ -28,10 +28,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	public class PrototypeWebValidator : IBrowserValidatorProvider
 	{
 		/// <summary>
-		/// Pendent
+		/// Implementors should attempt to read their specific configuration
+		/// from the <paramref name="parameters"/>, configure and return
+		/// a class that extends from <see cref="BrowserValidationConfiguration"/>
 		/// </summary>
 		/// <param name="parameters"></param>
-		/// <returns></returns>
+		/// <returns>
+		/// An instance that extends from <see cref="BrowserValidationConfiguration"/>
+		/// </returns>
 		public BrowserValidationConfiguration CreateConfiguration(IDictionary parameters)
 		{
 			PrototypeValidationConfiguration config = new PrototypeValidationConfiguration();
@@ -42,12 +46,12 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		}
 
 		/// <summary>
-		/// Pendent
+		/// Implementors should return their generator instance.
 		/// </summary>
 		/// <param name="config"></param>
 		/// <param name="inputType"></param>
 		/// <param name="attributes"></param>
-		/// <returns></returns>
+		/// <returns>A generator instance</returns>
 		public IBrowserValidationGenerator CreateGenerator(BrowserValidationConfiguration config, InputElementType inputType, IDictionary attributes)
 		{
 			return new PrototypeValidationGenerator((PrototypeValidationConfiguration) config, inputType, attributes);
@@ -56,13 +60,19 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		#region Configuration
 
 		/// <summary>
-		/// 
+		/// Configuration for the Prototype Field Validation
 		/// </summary>
 		public class PrototypeValidationConfiguration : BrowserValidationConfiguration
 		{
 			private IDictionary jsOptions = new Hashtable();
 			private Dictionary<String, CustomRule> rules = new Dictionary<String, CustomRule>();
 
+			/// <summary>
+			/// Implementors should return any tag/js content
+			/// to be rendered after the form tag is closed.
+			/// </summary>
+			/// <param name="formId">The form id.</param>
+			/// <returns></returns>
 			public override string CreateBeforeFormClosed(string formId)
 			{
 				StringBuilder sb = new StringBuilder();
@@ -98,6 +108,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				return AbstractHelper.ScriptBlock(sb.ToString());
 			}
 
+			/// <summary>
+			/// Configures the JS library based on the supplied parameters.
+			/// </summary>
+			/// <param name="parameters">The parameters.</param>
 			public override void Configure(IDictionary parameters)
 			{
 				string onSubmit = CommonUtils.ObtainEntryAndRemove(parameters, "on_submit", "true");
@@ -129,6 +143,12 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				}
 			}
 
+			/// <summary>
+			/// Adds a custom rule.
+			/// </summary>
+			/// <param name="className">Name of the class.</param>
+			/// <param name="violationMessage">The violation message.</param>
+			/// <param name="rule">The rule.</param>
 			public void AddCustomRule(string className, string violationMessage, string rule)
 			{
 				rules[className] = new CustomRule(className, rule, violationMessage);
@@ -151,6 +171,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 		#region Validation Generator
 
+		/// <summary>
+		/// Generator for prototype field validation 
+		/// </summary>
 		public class PrototypeValidationGenerator : IBrowserValidationGenerator
 		{
 			private readonly PrototypeValidationConfiguration config;
@@ -170,6 +193,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				this.attributes = attributes;
 			}
 
+			/// <summary>
+			/// Sets that a field is required.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsRequired(string target, string violationMessage)
 			{
 				if (inputType == InputElementType.Text)
@@ -187,24 +215,45 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddTitle(violationMessage);
 			}
 
+			/// <summary>
+			/// Set that a field should only accept digits.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetDigitsOnly(string target, string violationMessage)
 			{
 				AddClass("validate-digits");
 				AddTitle(violationMessage);
 			}
 
+			/// <summary>
+			/// Set that a field should only accept numbers.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetNumberOnly(string target, string violationMessage)
 			{
 				AddClass("validate-number");
 				AddTitle(violationMessage);
 			}
 
+			/// <summary>
+			/// Sets that a field value must be a valid email address.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetEmail(string target, string violationMessage)
 			{
 				AddClass("validate-email");
 				AddTitle(violationMessage);
 			}
 
+			/// <summary>
+			/// Sets that a field value must match the specified regular expression.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="regExp">The reg exp.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetRegExp(string target, string regExp, string violationMessage)
 			{
 				string rule = "validate-regex" + regExp.GetHashCode();
@@ -213,11 +262,22 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddTitle(violationMessage);
 			}
 
+			/// <summary>
+			/// Sets that field must have an exact lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="length">The length.</param>
 			public void SetExactLength(string target, int length)
 			{
 				SetExactLength(target, length, null);
 			}
 
+			/// <summary>
+			/// Sets that field must have an exact lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="length">The length.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetExactLength(string target, int length, string violationMessage)
 			{
 				string rule = "validate-exact-length-" + length;
@@ -226,11 +286,22 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddTitle(violationMessage);
 			}
 
+			/// <summary>
+			/// Sets that field must have an minimum lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minLength">The minimum length.</param>
 			public void SetMinLength(string target, int minLength)
 			{
 				SetMinLength(target, minLength, null);
 			}
 
+			/// <summary>
+			/// Sets that field must have an minimum lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minLength">The minimum length.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetMinLength(string target, int minLength, string violationMessage)
 			{
 				string rule = "validate-min-length-" + minLength;
@@ -239,11 +310,22 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddTitle(violationMessage);
 			}
 
+			/// <summary>
+			/// Sets that field must have an maximum lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="maxLength">The maximum length.</param>
 			public void SetMaxLength(string target, int maxLength)
 			{
 				SetMaxLength(target, maxLength, null);
 			}
 
+			/// <summary>
+			/// Sets that field must have an maximum lenght.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="maxLength">The maximum length.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetMaxLength(string target, int maxLength, string violationMessage)
 			{
 				if (inputType == InputElementType.Text)
@@ -257,36 +339,49 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddTitle(violationMessage);
 			}
 
+			/// <summary>
+			/// Sets that field must be between a length range.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minLength">The minimum length.</param>
+			/// <param name="maxLength">The maximum length.</param>
 			public void SetLengthRange(string target, int minLength, int maxLength)
 			{
 				SetMinLength(target, minLength);
 				SetMaxLength(target, maxLength);
 			}
 
+			/// <summary>
+			/// Sets that field must be between a length range.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minLength">The minimum length.</param>
+			/// <param name="maxLength">The maximum length.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetLengthRange(string target, int minLength, int maxLength, string violationMessage)
 			{
 				SetMinLength(target, minLength, null);
 				SetMaxLength(target, maxLength, null);
 				AddTitle(violationMessage);
 			}
-			
+
 			/// <summary>
-			/// Sets the value range.
+			/// Sets that field must be between a value range.
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
-			/// <param name="minValue">Value of the min.</param>
-			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="minValue">Minimum value.</param>
+			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, int minValue, int maxValue, string violationMessage)
 			{
 			}
 
 			/// <summary>
-			/// Sets the value range.
+			/// Sets that field must be between a value range.
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
-			/// <param name="minValue">Value of the min.</param>
-			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="minValue">Minimum value.</param>
+			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, decimal minValue, decimal maxValue, string violationMessage)
 			{
@@ -294,27 +389,33 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			}
 
 			/// <summary>
-			/// Sets the value range.
+			/// Sets that field must be between a value range.
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
-			/// <param name="minValue">Value of the min.</param>
-			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="minValue">Minimum value.</param>
+			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, DateTime minValue, DateTime maxValue, string violationMessage)
 			{
 			}
 
 			/// <summary>
-			/// Sets the value range.
+			/// Sets that field must be between a value range.
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
-			/// <param name="minValue">Value of the min.</param>
-			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="minValue">Minimum value.</param>
+			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, string minValue, string maxValue, string violationMessage)
 			{
 			}
 
+			/// <summary>
+			/// Set that a field value must be the same as another field's value.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
 				string rule = "validate-same-as-" + comparisonFieldName.ToLowerInvariant();
@@ -323,6 +424,12 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddTitle(violationMessage);
 			}
 
+			/// <summary>
+			/// Set that a field value must _not_ be the same as another field's value.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsNotSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
 				string rule = "validate-not-same-as-" + comparisonFieldName.ToLowerInvariant();
@@ -331,6 +438,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddTitle(violationMessage);
 			}
 
+			/// <summary>
+			/// Set that a field value must be a valid date.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="violationMessage">The violation message.</param>
 			public void SetDate(string target, string violationMessage)
 			{
 				AddClass("validate-date");

@@ -16,8 +16,22 @@ namespace Castle.MonoRail.Framework.Filters
 {
 	using System.Diagnostics;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class AntiGoogleWebAcceleratorFilter : IFilter
 	{
+		/// <summary>
+		/// Implementors should perform they filter logic and
+		/// return <c>true</c> if the action should be processed.
+		/// </summary>
+		/// <param name="exec">When this filter is being invoked</param>
+		/// <param name="context">Current context</param>
+		/// <param name="controller">The controller instance</param>
+		/// <returns>
+		/// 	<c>true</c> if the action
+		/// should be invoked, otherwise <c>false</c>
+		/// </returns>
 		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
 			if (context.Request.Headers["HTTP_X_MOZ"].Equals("prefetch"))

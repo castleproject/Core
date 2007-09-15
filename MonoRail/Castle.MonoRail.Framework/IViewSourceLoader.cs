@@ -19,27 +19,28 @@ namespace Castle.MonoRail.Framework
 	using System.IO;
 
 	/// <summary>
-	/// Pendent
+	/// Defines a contract that abstracts view template locations. 
 	/// </summary>
 	public interface IViewSourceLoader
 	{
 		/// <summary>
 		/// Evaluates whether the specified template exists.
 		/// </summary>
+		/// <param name="templateName">The template name</param>
 		/// <returns><c>true</c> if it exists</returns>
 		bool HasTemplate(String templateName);
 
 		/// <summary>
-		/// 
+		/// Builds and returns a representation of a view template
 		/// </summary>
-		/// <param name="templateName"></param>
+		/// <param name="templateName">The template name</param>
 		/// <returns></returns>
 		IViewSource GetViewSource(String templateName);
 
 		/// <summary>
-		/// 
+		/// Gets a list of views on the specified directory
 		/// </summary>
-		/// <param name="dirName"></param>
+		/// <param name="dirName">Directory name</param>
 		/// <returns></returns>
 		String[] ListViews(String dirName);
 
@@ -49,12 +50,12 @@ namespace Castle.MonoRail.Framework
 		String ViewRootDir { get; set; }
 
 		/// <summary>
-		/// 
+		/// Gets or sets whether the instance should use cache
 		/// </summary>
 		bool EnableCache { get; set; }
 
 		/// <summary>
-		/// 
+		/// Gets a list of assembly sources
 		/// </summary>
 		IList AssemblySources { get; }
 

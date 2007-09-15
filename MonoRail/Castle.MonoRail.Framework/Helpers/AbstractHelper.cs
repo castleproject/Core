@@ -73,6 +73,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			set { serverUtility = value; }
 		}
 
+		/// <summary>
+		/// Gets the URL helper instance.
+		/// </summary>
+		/// <value>The URL helper.</value>
 		protected UrlHelper UrlHelper
 		{
 			get { return (UrlHelper) controller.Helpers["UrlHelper"]; }
@@ -93,7 +97,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			CommonUtils.MergeOptions(userOptions, defaultOptions);
 		}
-		
+
+		/// <summary>
+		/// Gets the current context.
+		/// </summary>
+		/// <value>The current context.</value>
 		protected IRailsEngineContext CurrentContext
 		{
 			get { return controller.Context; }

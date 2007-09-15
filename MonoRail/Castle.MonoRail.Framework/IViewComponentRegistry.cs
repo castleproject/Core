@@ -16,10 +16,23 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
+	/// <summary>
+	/// Depicts a contract for viewcomponent registry implementations
+	/// </summary>
 	public interface IViewComponentRegistry
 	{
+		/// <summary>
+		/// Adds the view component.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="type">The type.</param>
 		void AddViewComponent(string name, Type type);
-		
+
+		/// <summary>
+		/// Gets the view component.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		Type GetViewComponent(string name);
 	}
 }

@@ -21,11 +21,20 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.ComponentModel;
 	using System.Text;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	[Serializable]
 	public abstract class AbstractBindingComponent : IDataErrorInfo
 	{
 		private IDictionary<string, string> propertyErrors;
 
+		/// <summary>
+		/// Determines whether this instance is valid.
+		/// </summary>
+		/// <returns>
+		/// 	<c>true</c> if this instance is valid; otherwise, <c>false</c>.
+		/// </returns>
 		public bool IsValid()
 		{
 			propertyErrors = null;
@@ -33,10 +42,18 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return propertyErrors == null || propertyErrors.Count == 0;
 		}
 
+		/// <summary>
+		/// Validates this instance.
+		/// </summary>
 		protected abstract void Validate();
 
 		#region IDataErrorInfo
 
+		/// <summary>
+		/// Gets an error message indicating what is wrong with this object.
+		/// </summary>
+		/// <value></value>
+		/// <returns>An error message indicating what is wrong with this object. The default is an empty string ("").</returns>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public string Error
@@ -60,6 +77,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the <see cref="System.String"/> with the specified property name.
+		/// </summary>
+		/// <value></value>
 		public string this[string propertyName]
 		{
 			get
@@ -86,7 +107,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		#endregion
 
-		protected string Trim(string value)
+		/// <summary>
+		/// Trims the specified value.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		protected static string Trim(string value)
 		{
 			return (value != null) ? value.Trim() : "";
 		}

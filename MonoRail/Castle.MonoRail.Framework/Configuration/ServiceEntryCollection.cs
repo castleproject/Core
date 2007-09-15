@@ -23,23 +23,36 @@ namespace Castle.MonoRail.Framework.Configuration
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Services.AjaxProxyGenerator;
 
-
+	/// <summary>
+	/// Represents a set of MonoRail services entries
+	/// </summary>
 	public class ServiceEntryCollection : ISerializedConfig
 	{
 		private Hashtable service2Impl = new Hashtable();
 		private IList customServices = new ArrayList();
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ServiceEntryCollection"/> class.
+		/// </summary>
 		public ServiceEntryCollection()
 		{
 		}
 
+		/// <summary>
+		/// Gets the custom services.
+		/// </summary>
+		/// <value>The custom services.</value>
 		public ICollection CustomServices
 		{
 			get { return customServices; }
 		}
 
 		#region ISerializedConfig implementation
-		
+
+		/// <summary>
+		/// Deserializes the specified section.
+		/// </summary>
+		/// <param name="section">The section.</param>
 		public void Deserialize(XmlNode section)
 		{
 			XmlNodeList services = section.SelectNodes("services/service");
@@ -70,26 +83,52 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		#endregion
 
+		/// <summary>
+		/// Registers the service.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <param name="service">The service.</param>
 		public void RegisterService(ServiceIdentification id, Type service)
 		{
 			RegisterService(ToInterface(id), service);
 		}
-		
+
+		/// <summary>
+		/// Registers the service.
+		/// </summary>
+		/// <param name="inter">The inter.</param>
+		/// <param name="service">The service.</param>
 		public void RegisterService(Type inter, Type service)
 		{
 			service2Impl[inter] = service;
 		}
-		
+
+		/// <summary>
+		/// Gets the service.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <returns></returns>
 		public Type GetService(ServiceIdentification id)
 		{
 			return (Type) service2Impl[ToInterface(id)];
 		}
-		
+
+		/// <summary>
+		/// Determines whether it has service.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified id has service; otherwise, <c>false</c>.
+		/// </returns>
 		public bool HasService(ServiceIdentification id)
 		{
 			return service2Impl.Contains(ToInterface(id));
 		}
-		
+
+		/// <summary>
+		/// Gets the service impl map.
+		/// </summary>
+		/// <value>The service impl map.</value>
 		public IDictionary ServiceImplMap
 		{
 			get { return service2Impl; }

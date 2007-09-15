@@ -14,8 +14,15 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
+	/// <summary>
+	/// Contract for <see cref="FilterDescriptor"/> builders.
+	/// </summary>
 	public interface IFilterDescriptorBuilder
 	{
+		/// <summary>
+		/// Builds the filter descriptors.
+		/// </summary>
+		/// <returns></returns>
 		FilterDescriptor[] BuildFilterDescriptors();
 	}
 }

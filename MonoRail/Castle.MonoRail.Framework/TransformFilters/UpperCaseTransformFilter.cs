@@ -23,11 +23,26 @@ namespace Castle.MonoRail.Framework.TransformFilters
 	/// </summary>
 	public class UpperCaseTransformFilter : TransformFilter
 	{
-		public UpperCaseTransformFilter(Stream baseStream)
-			: base(baseStream)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UpperCaseTransformFilter"/> class.
+		/// </summary>
+		/// <param name="baseStream">The stream to write to after filtering.</param>
+		public UpperCaseTransformFilter(Stream baseStream) : base(baseStream)
 		{
 		}
-		
+
+		/// <summary>
+		/// When overridden in a derived class, writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+		/// </summary>
+		/// <param name="buffer">An array of bytes. This method copies count bytes from buffer to the current stream.</param>
+		/// <param name="offset">The zero-based byte offset in buffer at which to begin copying bytes to the current stream.</param>
+		/// <param name="count">The number of bytes to be written to the current stream.</param>
+		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+		/// <exception cref="T:System.NotSupportedException">The stream does not support writing. </exception>
+		/// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
+		/// <exception cref="T:System.ArgumentNullException">buffer is null. </exception>
+		/// <exception cref="T:System.ArgumentException">The sum of offset and count is greater than the buffer length. </exception>
+		/// <exception cref="T:System.ArgumentOutOfRangeException">offset or count is negative. </exception>
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			if (Closed) throw new ObjectDisposedException("UpperCaseTransformFilter");

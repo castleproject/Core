@@ -21,13 +21,19 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	using Castle.Components.Common.EmailSender;
 
 	/// <summary>
-	/// 
+	/// A handle that sends the exception by email
 	/// </summary>
 	public class EmailHandler : AbstractExceptionHandler, IConfigurableHandler
 	{
 		private String mailTo;
 		private String mailFrom = "donotreply@castleproject.org";
 
+		/// <summary>
+		/// Implementors should check for known attributes and child nodes
+		/// within the <c>exceptionHandlerNode</c>
+		/// </summary>
+		/// <param name="exceptionHandlerNode">The Xml node
+		/// that represents this handler on the configuration file</param>
 		public void Configure(XmlNode exceptionHandlerNode)
 		{
 			XmlAttribute mailToAtt = exceptionHandlerNode.Attributes["mailTo"];
@@ -49,6 +55,12 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			}
 		}
 
+		/// <summary>
+		/// Implementors should perform the action
+		/// on the exception. Note that the exception
+		/// is available in <see cref="IRailsEngineContext.LastException"/>
+		/// </summary>
+		/// <param name="context"></param>
 		public override void Process(IRailsEngineContext context)
 		{
 			IEmailSender emailSender = (IEmailSender) context.GetService( typeof(IEmailSender) );

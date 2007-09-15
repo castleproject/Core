@@ -19,11 +19,20 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System;
 	using System.Web.UI;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class DataBindingEvaluator : IExpressionEvaluator
 	{
 		private static readonly char[] indexExprStartChars = { '[', '(' };
 		private static readonly char[] indexExprEndChars = { ']', ')' };
 
+		/// <summary>
+		/// Evaluates the specified expression.
+		/// </summary>
+		/// <param name="expression">The expression.</param>
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
 		public object Evaluate(string expression, BindingContext context)
 		{
 			bool ignoreErrors;

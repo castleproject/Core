@@ -27,13 +27,24 @@ namespace Castle.MonoRail.Framework.Services
 	/// Breaks the url into smaller pieces to find out
 	/// the requested controller, action and optionally the area.
 	/// <para>
-	/// It alsos checks for default urls.
+	/// It alsos checks for default urls which map a single resource to an area/controller/action
 	/// </para>
 	/// </summary>
 	public class DefaultUrlTokenizer : IUrlTokenizer, IServiceEnabledComponent
 	{
 		private IDictionary defaultUrl2CustomUrlInfo = new HybridDictionary(true);
 
+		/// <summary>
+		/// Adds the default rule mapping.
+		/// </summary>
+		/// <remarks>
+		/// A defautl rule can associate something like a 'default.castle' 
+		/// to a controller/action like 'Home/index.castle'
+		/// </remarks>
+		/// <param name="url">The URL.</param>
+		/// <param name="area">The area.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="action">The action.</param>
 		public void AddDefaultRule(string url, string area, string controller, string action)
 		{
 			if (area == null)
@@ -46,6 +57,10 @@ namespace Castle.MonoRail.Framework.Services
 
 		#region IServiceEnabledComponent
 
+		/// <summary>
+		/// Services the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
 		public void Service(IServiceProvider provider)
 		{
 			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
@@ -60,6 +75,14 @@ namespace Castle.MonoRail.Framework.Services
 
 		#region IUrlTokenizer
 
+		/// <summary>
+		/// Tokenizes the URL.
+		/// </summary>
+		/// <param name="rawUrl">The raw URL.</param>
+		/// <param name="uri">The URI.</param>
+		/// <param name="isLocal">if set to <c>true</c> [is local].</param>
+		/// <param name="appVirtualDir">Virtual directory</param>
+		/// <returns></returns>
 		public UrlInfo TokenizeUrl(string rawUrl, Uri uri, bool isLocal, string appVirtualDir)
 		{
 			if (rawUrl == null || rawUrl.Length == 0)
@@ -118,6 +141,13 @@ namespace Castle.MonoRail.Framework.Services
 
 		#endregion
 
+		/// <summary>
+		/// Extracts the area controller action.
+		/// </summary>
+		/// <param name="rawUrl">The raw URL.</param>
+		/// <param name="area">The area.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="action">The action.</param>
 		private void ExtractAreaControllerAction(string rawUrl, out string area, out string controller, out string action)
 		{
 			string[] parts = rawUrl.Split('/');

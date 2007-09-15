@@ -26,18 +26,37 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	{
 		private IExceptionHandler nextHandler;
 
+		/// <summary>
+		/// Implementors should perform any required
+		/// initialization
+		/// </summary>
 		public virtual void Initialize()
 		{
 		}
 
+		/// <summary>
+		/// Implementors should perform the action
+		/// on the exception. Note that the exception
+		/// is available in <see cref="IRailsEngineContext.LastException"/>
+		/// </summary>
+		/// <param name="context"></param>
 		public abstract void Process(IRailsEngineContext context);
 
+		/// <summary>
+		/// The next exception in the sink
+		/// or null if none exists.
+		/// </summary>
+		/// <value></value>
 		public IExceptionHandler Next
 		{
 			get { return nextHandler; }
 			set { nextHandler = value; }
 		}
 
+		/// <summary>
+		/// Invokes the next handler.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		protected void InvokeNext(IRailsEngineContext context)
 		{
 			if (nextHandler != null)
@@ -46,6 +65,11 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			}
 		}
 
+		/// <summary>
+		/// Builds the standard message.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
 		protected string BuildStandardMessage(IRailsEngineContext context)
 		{
 			StringBuilder sbMessage = new StringBuilder();

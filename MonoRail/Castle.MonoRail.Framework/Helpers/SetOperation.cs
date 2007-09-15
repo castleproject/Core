@@ -19,10 +19,61 @@ namespace Castle.MonoRail.Framework.Helpers
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
-	/// 
+	/// The SetOperation exposes an <see cref="IterateOnDataSource"/> that 
+	/// extracts information from the attributes and creates a proper configured
+	/// Iterator.
+	/// <para>
+	/// It is shared by a handful of MonoRail operations related to sets. 
+	/// </para>
 	/// </summary>
-	public class SetOperation
+	public static class SetOperation
 	{
+		/// <summary>
+		/// Combines a group of well thought rules to create 
+		/// an <see cref="OperationState"/> instance.
+		/// </summary>
+		/// 
+		/// <remarks>
+		/// The parameters read from the <paramref name="attributes"/> are
+		/// 
+		/// <list type="bullet">
+		/// <item>
+		///		<term>value</term>
+		///		<description>The property name used to extract the value</description>
+		/// </item>
+		/// <item>
+		///		<term>text</term>
+		///		<description>The property name used to extract the display text</description>
+		/// </item>
+		/// <item>
+		///		<term>textformat</term>
+		///		<description>A format rule to apply to the text</description>
+		/// </item>
+		/// <item>
+		///		<term>valueformat</term>
+		///		<description>A format rule to apply to the value</description>
+		/// </item>
+		/// <item>
+		///		<term>suffix</term>
+		///		<description>If the types on both sets are different, 
+		///		the suffix specifies a different target property</description>
+		/// </item>
+		/// <item>
+		///		<term>sourceProperty</term>
+		///		<description>
+		///		If the types on both sets are different, 
+		///		the sourceProperty identifies a different source property to extract the value from.
+		///		</description>
+		/// </item>
+		/// 
+		/// </list>
+		/// 
+		/// </remarks>
+		/// 
+		/// <param name="initialSelection">The initial selection.</param>
+		/// <param name="dataSource">The data source.</param>
+		/// <param name="attributes">The attributes.</param>
+		/// <returns></returns>
 		public static OperationState IterateOnDataSource(object initialSelection, 
 		                                                 IEnumerable dataSource, IDictionary attributes)
 		{
@@ -133,6 +184,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 	}
 
+	/// <summary>
+	/// Represents a set element
+	/// </summary>
 	public class SetItem
 	{
 		private readonly string value;
@@ -140,6 +194,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		private readonly string text;
 		private readonly bool isSelected;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SetItem"/> class.
+		/// </summary>
+		/// <param name="item">The item.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="text">The text.</param>
+		/// <param name="isSelected">if set to <c>true</c> [is selected].</param>
 		public SetItem(object item, String value, String text, bool isSelected)
 		{
 			this.item = item;
@@ -148,35 +209,87 @@ namespace Castle.MonoRail.Framework.Helpers
 			this.isSelected = isSelected;
 		}
 
+		/// <summary>
+		/// Gets the item.
+		/// </summary>
+		/// <value>The item.</value>
 		public object Item
 		{
 			get { return item; }
 		}
 
+		/// <summary>
+		/// Gets the value.
+		/// </summary>
+		/// <value>The value.</value>
 		public string Value
 		{
 			get { return value; }
 		}
 
+		/// <summary>
+		/// Gets the text.
+		/// </summary>
+		/// <value>The text.</value>
 		public string Text
 		{
 			get { return text; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this instance is selected.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is selected; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsSelected
 		{
 			get { return isSelected; }
 		}
 	}
 
+	/// <summary>
+	/// Base class for set iterators
+	/// </summary>
 	public abstract class OperationState : IEnumerable, IEnumerator
 	{
+		/// <summary>
+		/// source type
+		/// </summary>
 		protected readonly Type type;
+		/// <summary>
+		/// Value getter for value
+		/// </summary>
 		protected readonly FormHelper.ValueGetter valuePropInfo;
+		/// <summary>
+		/// Value getter for text
+		/// </summary>
 		protected readonly FormHelper.ValueGetter textPropInfo;
-		protected readonly String textFormat, valueFormat;
+
+		/// <summary>
+		/// Format rule for text
+		/// </summary>
+		protected readonly String textFormat;
+		/// <summary>
+		/// Format rule for value
+		/// </summary>
+		protected readonly String valueFormat;
+		
+		/// <summary>
+		/// Source enumerator
+		/// </summary>
 		protected IEnumerator enumerator;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="OperationState"/> class.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="dataSource">The data source.</param>
+		/// <param name="emptyValueCase">if set to <c>true</c> [empty value case].</param>
+		/// <param name="valueProperty">The value property.</param>
+		/// <param name="textProperty">The text property.</param>
+		/// <param name="textFormat">The text format.</param>
+		/// <param name="valueFormat">The value format.</param>
 		protected OperationState(Type type, IEnumerable dataSource, 
 			bool emptyValueCase,String valueProperty, String textProperty, String textFormat, String valueFormat)
 		{
@@ -200,6 +313,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Gets the target suffix.
+		/// </summary>
+		/// <value>The target suffix.</value>
 		public abstract String TargetSuffix { get; }
 
 		/// <summary>
@@ -220,10 +337,22 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Creates the item representation.
+		/// </summary>
+		/// <param name="current">The current.</param>
+		/// <returns></returns>
 		protected abstract SetItem CreateItemRepresentation(object current);
 
 		#region IEnumerator implementation
 
+		/// <summary>
+		/// Advances the enumerator to the next element of the collection.
+		/// </summary>
+		/// <returns>
+		/// true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.
+		/// </returns>
+		/// <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created. </exception>
 		public bool MoveNext()
 		{
 			if (enumerator == null)
@@ -233,6 +362,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			return enumerator.MoveNext();
 		}
 
+		/// <summary>
+		/// Sets the enumerator to its initial position, which is before the first element in the collection.
+		/// </summary>
+		/// <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created. </exception>
 		public void Reset()
 		{
 			if (enumerator != null)
@@ -241,6 +374,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Gets the current element in the collection.
+		/// </summary>
+		/// <value></value>
+		/// <returns>The current element in the collection.</returns>
+		/// <exception cref="T:System.InvalidOperationException">The enumerator is positioned before the first element of the collection or after the last element. </exception>
 		public object Current
 		{
 			get { return CreateItemRepresentation(enumerator.Current); }
@@ -250,6 +389,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region IEnumerable implementation
 
+		/// <summary>
+		/// Returns an enumerator that iterates through a collection.
+		/// </summary>
+		/// <returns>
+		/// An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+		/// </returns>
 		public IEnumerator GetEnumerator()
 		{
 			return this;
@@ -263,27 +408,52 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class NoIterationState : OperationState
 	{
+		/// <summary>
+		/// Single instance for the iterator.
+		/// </summary>
 		public static readonly NoIterationState Instance = new NoIterationState();
 
 		private NoIterationState() : base(null, null, false, null, null, null, null)
 		{
 		}
 
+		/// <summary>
+		/// Gets the target suffix.
+		/// </summary>
+		/// <value>The target suffix.</value>
 		public override string TargetSuffix
 		{
 			get { return null; }
 		}
 
+		/// <summary>
+		/// Creates the item representation.
+		/// </summary>
+		/// <param name="current">The current.</param>
+		/// <returns></returns>
 		protected override SetItem CreateItemRepresentation(object current)
 		{
 			throw new NotImplementedException();
 		}
 	}
 
+	/// <summary>
+	/// Simple iterator
+	/// </summary>
 	public class ListDataSourceState : OperationState
 	{
 		private readonly string customSuffix;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ListDataSourceState"/> class.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="dataSource">The data source.</param>
+		/// <param name="valueProperty">The value property.</param>
+		/// <param name="textProperty">The text property.</param>
+		/// <param name="textFormat">The text format.</param>
+		/// <param name="valueFormat">The value format.</param>
+		/// <param name="customSuffix">The custom suffix.</param>
 		public ListDataSourceState(Type type, IEnumerable dataSource, String valueProperty,
 			String textProperty, String textFormat, String valueFormat, String customSuffix)
 			: base(type, dataSource, false, valueProperty, textProperty, textFormat, valueFormat)
@@ -291,11 +461,20 @@ namespace Castle.MonoRail.Framework.Helpers
 			this.customSuffix = customSuffix;
 		}
 
+		/// <summary>
+		/// Gets the target suffix.
+		/// </summary>
+		/// <value>The target suffix.</value>
 		public override string TargetSuffix
 		{
 			get { return customSuffix; }
 		}
 
+		/// <summary>
+		/// Creates the item representation.
+		/// </summary>
+		/// <param name="current">The current.</param>
+		/// <returns></returns>
 		protected override SetItem CreateItemRepresentation(object current)
 		{
 			object value = current;
@@ -318,11 +497,26 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 	}
 
+	/// <summary>
+	/// Iterator for sets type same type
+	/// </summary>
 	public class SameTypeOperationState : OperationState
 	{
 		private readonly object initialSelection;
 		private readonly bool isInitialSelectionASet;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SameTypeOperationState"/> class.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="initialSelection">The initial selection.</param>
+		/// <param name="dataSource">The data source.</param>
+		/// <param name="emptyValueCase">if set to <c>true</c> [empty value case].</param>
+		/// <param name="valueProperty">The value property.</param>
+		/// <param name="textProperty">The text property.</param>
+		/// <param name="textFormat">The text format.</param>
+		/// <param name="valueFormat">The value format.</param>
+		/// <param name="isInitialSelectionASet">if set to <c>true</c> [is initial selection A set].</param>
 		public SameTypeOperationState(Type type, object initialSelection, IEnumerable dataSource, 
 			bool emptyValueCase,String valueProperty, String textProperty, String textFormat, String valueFormat, bool isInitialSelectionASet)
 			: base(type, dataSource, emptyValueCase, valueProperty, textProperty, textFormat, valueFormat)
@@ -331,11 +525,20 @@ namespace Castle.MonoRail.Framework.Helpers
 			this.isInitialSelectionASet = isInitialSelectionASet;
 		}
 
+		/// <summary>
+		/// Gets the target suffix.
+		/// </summary>
+		/// <value>The target suffix.</value>
 		public override string TargetSuffix
 		{
 			get { return valuePropInfo == null ? "" : valuePropInfo.Name; }
 		}
 
+		/// <summary>
+		/// Creates the item representation.
+		/// </summary>
+		/// <param name="current">The current.</param>
+		/// <returns></returns>
 		protected override SetItem CreateItemRepresentation(object current)
 		{
 			object value = current;
@@ -360,12 +563,28 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 	}
 
+	/// <summary>
+	/// Iterator for different types on the set
+	/// </summary>
 	public class DifferentTypeOperationState : OperationState
 	{
 		private readonly object initialSelection;
 		private readonly bool isInitialSelectionASet;
 		private readonly FormHelper.ValueGetter sourcePropInfo;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DifferentTypeOperationState"/> class.
+		/// </summary>
+		/// <param name="initialSelectionType">Initial type of the selection.</param>
+		/// <param name="dataSourceType">Type of the data source.</param>
+		/// <param name="initialSelection">The initial selection.</param>
+		/// <param name="dataSource">The data source.</param>
+		/// <param name="sourceProperty">The source property.</param>
+		/// <param name="valueProperty">The value property.</param>
+		/// <param name="textProperty">The text property.</param>
+		/// <param name="textFormat">The text format.</param>
+		/// <param name="valueFormat">The value format.</param>
+		/// <param name="isInitialSelectionASet">if set to <c>true</c> [is initial selection A set].</param>
 		public DifferentTypeOperationState(Type initialSelectionType, Type dataSourceType, 
 			object initialSelection, IEnumerable dataSource, 
 			String sourceProperty, String valueProperty,
@@ -385,11 +604,20 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Gets the target suffix.
+		/// </summary>
+		/// <value>The target suffix.</value>
 		public override string TargetSuffix
 		{
 			get { return sourcePropInfo == null ? "" : sourcePropInfo.Name; }
 		}
 
+		/// <summary>
+		/// Creates the item representation.
+		/// </summary>
+		/// <param name="current">The current.</param>
+		/// <returns></returns>
 		protected override SetItem CreateItemRepresentation(object current)
 		{
 			object value = current;

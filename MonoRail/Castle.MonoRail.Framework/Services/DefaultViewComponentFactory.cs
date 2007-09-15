@@ -76,11 +76,20 @@ namespace Castle.MonoRail.Framework.Services
 		
 		#endregion
 
+		/// <summary>
+		/// Gets the view component registry.
+		/// </summary>
+		/// <returns></returns>
 		protected override IViewComponentRegistry GetViewComponentRegistry()
 		{
 			return registry;
 		}
 
+		/// <summary>
+		/// Invoked by the framework in order to give a chance to
+		/// obtain other services
+		/// </summary>
+		/// <param name="provider">The service proviver</param>
 		public override void Service(IServiceProvider provider)
 		{
 			base.Service(provider);
@@ -144,6 +153,11 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Implementors should return a reference to
+		/// the current view engine.
+		/// </summary>
+		/// <value></value>
 		public override IViewEngine ViewEngine
 		{
 			get { return viewEngine; }

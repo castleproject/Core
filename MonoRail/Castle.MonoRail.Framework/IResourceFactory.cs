@@ -24,8 +24,18 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface IResourceFactory
 	{
+		/// <summary>
+		/// Creates the specified descriptor.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
+		/// <param name="appAssembly">The app assembly.</param>
+		/// <returns></returns>
 		IResource Create(ResourceDescriptor descriptor, Assembly appAssembly);
 
+		/// <summary>
+		/// Releases the specified resource.
+		/// </summary>
+		/// <param name="resource">The resource.</param>
 		void Release(IResource resource);
 	}
 }

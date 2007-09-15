@@ -17,8 +17,16 @@ namespace Castle.MonoRail.Framework.Internal
 	using System;
 	using System.Collections;
 
-	public abstract class WizardUtils
+	/// <summary>
+	/// Utility class for wizard related queries and operations
+	/// </summary>
+	public static class WizardUtils
 	{
+		/// <summary>
+		/// Constructs the wizard namespace.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <returns></returns>
 		public static String ConstructWizardNamespace(Controller controller)
 		{
 			if (controller is WizardStepPage)
@@ -29,6 +37,13 @@ namespace Castle.MonoRail.Framework.Internal
 			return String.Format("wizard.{0}", controller.Name);
 		}
 
+		/// <summary>
+		/// Determines whether the current wizard has a previous step.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <returns>
+		/// 	<c>true</c> if has previous step; otherwise, <c>false</c>.
+		/// </returns>
 		public static bool HasPreviousStep(Controller controller)
 		{
 			IRailsEngineContext context = controller.Context;
@@ -40,6 +55,13 @@ namespace Castle.MonoRail.Framework.Internal
 			return currentIndex > 0;
 		}
 
+		/// <summary>
+		/// Determines whether the current wizard has a next step.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <returns>
+		/// 	<c>true</c> if has next step; otherwise, <c>false</c>.
+		/// </returns>
 		public static bool HasNextStep(Controller controller)
 		{
 			IRailsEngineContext context = controller.Context;
@@ -53,6 +75,11 @@ namespace Castle.MonoRail.Framework.Internal
 			return (currentIndex + 1) < stepList.Count;
 		}
 
+		/// <summary>
+		/// Gets the name of the previous step.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <returns></returns>
 		public static String GetPreviousStepName(Controller controller)
 		{
 			IRailsEngineContext context = controller.Context;
@@ -71,6 +98,11 @@ namespace Castle.MonoRail.Framework.Internal
 			return null;
 		}
 
+		/// <summary>
+		/// Gets the name of the next step.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <returns></returns>
 		public static String GetNextStepName(Controller controller)
 		{
 			IRailsEngineContext context = controller.Context;
@@ -89,6 +121,11 @@ namespace Castle.MonoRail.Framework.Internal
 			return null;
 		}
 
+		/// <summary>
+		/// Registers the current step info/state.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="actionName">Name of the action.</param>
 		public static void RegisterCurrentStepInfo(Controller controller, String actionName)
 		{
 			IRailsEngineContext context = controller.Context;
@@ -108,6 +145,12 @@ namespace Castle.MonoRail.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Registers the current step info/state.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="stepIndex">Index of the step.</param>
+		/// <param name="stepName">Name of the step.</param>
 		public static void RegisterCurrentStepInfo(Controller controller, int stepIndex, String stepName)
 		{
 			IRailsEngineContext context = controller.Context;

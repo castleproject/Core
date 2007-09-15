@@ -19,12 +19,16 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.Web.UI;
 
 	/// <summary>
-	/// Summary description for MasterPageBase.
+	/// Pendent
 	/// </summary>
 	public class MasterPageBase : Page
 	{
 		private const String ViewStateKey = "__MASTERVIEWSTATE";
 
+		/// <summary>
+		/// Loads any saved view-state information to the <see cref="T:System.Web.UI.Page"></see> object.
+		/// </summary>
+		/// <returns>The saved view state.</returns>
 		protected override object LoadPageStateFromPersistenceMedium()
 		{
 			String viewState =  Request.Params[ViewStateKey];
@@ -40,6 +44,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		/// <summary>
+		/// Saves the page state to persistence medium.
+		/// </summary>
+		/// <param name="viewState">State of the view.</param>
 		protected override void SavePageStateToPersistenceMedium(object viewState)
 		{
 			using(StringWriter writer = new StringWriter())

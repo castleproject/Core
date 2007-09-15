@@ -90,6 +90,10 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface IFilterAttributeAware
 	{
+		/// <summary>
+		/// Sets the filter.
+		/// </summary>
+		/// <value>The filter.</value>
 		FilterAttribute Filter { set; }
 	}
 }

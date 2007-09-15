@@ -18,6 +18,13 @@ namespace Castle.MonoRail.Framework
 	/// An action that is not a method
 	/// on the controller.
 	/// </summary>
+	/// 
+	/// <seealso cref="IDynamicActionProvider"/>
+	/// 
+	/// <remarks>
+	/// To attach a dynamic action to a controller use 
+	/// the <see cref="Controller.DynamicActions"/> dictionary.
+	/// </remarks>
 	public interface IDynamicAction
 	{
 		/// <summary>

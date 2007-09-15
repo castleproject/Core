@@ -14,8 +14,15 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
+	/// <summary>
+	/// Contract for <see cref="HelperDescriptor"/> builders
+	/// </summary>
 	public interface IHelperDescriptorBuilder
 	{
+		/// <summary>
+		/// Builds the helper descriptors.
+		/// </summary>
+		/// <returns></returns>
 		HelperDescriptor[] BuildHelperDescriptors();
 	}
 }

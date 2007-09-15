@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Framework.Services
 {
 	using System;
-	using System.Configuration;
 	using System.Reflection;
 	
 	using Castle.Core;
@@ -136,6 +135,10 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Registers the controller.
+		/// </summary>
+		/// <param name="descriptor">The descriptor.</param>
 		private void RegisterController(ControllerDescriptor descriptor)
 		{
 			if (logger.IsDebugEnabled)

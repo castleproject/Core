@@ -21,11 +21,19 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	internal class EventHandlerDelegate<EventArgType> : AbstractEventScope
 		where EventArgType : EventArgs
 	{
-		public EventHandlerDelegate(BindingContext context)
-			: base(context)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EventHandlerDelegate&lt;EventArgType&gt;"/> class.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public EventHandlerDelegate(BindingContext context) : base(context)
 		{
 		}
 
+		/// <summary>
+		/// Handles the event.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The e.</param>
 		public void HandleEvent(object sender, EventArgType e)
 		{
 			DispatchAction(sender, e);

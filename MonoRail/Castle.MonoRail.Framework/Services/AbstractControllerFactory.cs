@@ -80,14 +80,28 @@ namespace Castle.MonoRail.Framework.Services
 		
 		#endregion
 
+		/// <summary>
+		/// Implementors should perform their logic to
+		/// return a instance of <see cref="Controller"/>.
+		/// If the <see cref="Controller"/> can not be found,
+		/// it should return <c>null</c>.
+		/// </summary>
+		/// <param name="urlInfo"></param>
+		/// <returns></returns>
 		public virtual Controller CreateController(UrlInfo urlInfo)
 		{
-			String area = urlInfo.Area == null ? String.Empty : urlInfo.Area;
+			String area = urlInfo.Area ?? String.Empty;
 			String name = urlInfo.Controller;
 			
 			return CreateControllerInstance(area, name);
 		}
 
+		/// <summary>
+		/// Implementors should perform their logic
+		/// to release the <see cref="Controller"/> instance
+		/// and its resources.
+		/// </summary>
+		/// <param name="controller"></param>
 		public virtual void Release(Controller controller)
 		{
 			if (logger.IsDebugEnabled)
@@ -96,6 +110,10 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Gets the tree.
+		/// </summary>
+		/// <value>The tree.</value>
 		public IControllerTree Tree
 		{
 			get { return tree; }
@@ -114,6 +132,12 @@ namespace Castle.MonoRail.Framework.Services
 			Tree.AddController("MonoRail", "Files", typeof(FilesController));
 		}
 
+		/// <summary>
+		/// Creates the controller instance.
+		/// </summary>
+		/// <param name="area">The area.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		protected virtual Controller CreateControllerInstance(String area, String name)
 		{
 			if (logger.IsDebugEnabled)

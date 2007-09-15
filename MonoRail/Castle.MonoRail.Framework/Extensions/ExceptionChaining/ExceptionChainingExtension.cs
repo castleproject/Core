@@ -23,13 +23,16 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	/// <summary>
 	/// This extension allow one to perform one or more steps
 	/// in response to an exception threw by an action. 
+	/// 
 	/// <seealso cref="IExceptionHandler"/>
+	/// 
 	/// </summary>
+	/// 
 	/// <remarks>
 	/// To successfully install this extension you must register 
 	/// it on the <c>extensions</c> node and the handlers within the <c>exception</c> node:
 	/// <code>
-	///   &lt;monoRail&gt;
+	///   &lt;monorail&gt;
 	///   	&lt;extensions&gt;
 	///   	  &lt;extension type="Castle.MonoRail.Framework.Extensions.ExceptionChaining.ExceptionChainingExtension, Castle.MonoRail.Framework" /&gt;
 	///   	&lt;/extensions&gt;
@@ -38,7 +41,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	///   	  &lt;exceptionHandler type="Type name that implements IExceptionHandler" /&gt;
 	///   	  &lt;exceptionHandler type="Type name that implements IExceptionHandler" /&gt;
 	///   	&lt;/exception&gt;
-	///   &lt;/monoRail&gt;
+	///   &lt;/monorail&gt;
 	/// </code>
 	/// <para>
 	/// Controllers can request IExceptionProcessor through IServiceProvider
@@ -68,7 +71,12 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		private IExceptionHandler firstHandler;
 
 		#region IMonoRailExtension implementation
-		
+
+		/// <summary>
+		/// Gives to the extension implementor a chance to read
+		/// attributes and child nodes of the extension node
+		/// </summary>
+		/// <param name="node">The node that defines the MonoRail extension</param>
 		public void SetExtensionConfigNode(XmlNode node)
 		{
 			// Ignored
@@ -78,6 +86,10 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		
 		#region IServiceEnabledComponent implementation
 
+		/// <summary>
+		/// Services the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
 		public void Service(IServiceProvider provider)
 		{
 			ExtensionManager manager = (ExtensionManager) 
@@ -109,7 +121,11 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		#endregion
 
 		#region IExceptionProcessor implementation
-		
+
+		/// <summary>
+		/// Initiates the ExceptionChainingExtension manualy
+		/// </summary>
+		/// <param name="exception">The exception to process</param>
 		public void ProcessException(Exception exception)
 		{
 			if (exception == null) return;
@@ -122,6 +138,10 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		
 		#endregion
 
+		/// <summary>
+		/// Called when an exception happens.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		private void OnException(IRailsEngineContext context)
 		{
 			const String mrExceptionKey = "MonoRail.ExceptionHandled";
@@ -139,6 +159,11 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			}
 		}
 
+		/// <summary>
+		/// Installs the exception handler.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <param name="typeName">Name of the type.</param>
 		private void InstallExceptionHandler(XmlNode node, String typeName)
 		{
 			IExceptionHandler handler;

@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework.Views
 	using System.IO;
 
 	/// <summary>
-	/// Pendent
+	/// Represents a view template source on the file system.
 	/// </summary>
 	public class FileViewSource : IViewSource
 	{
@@ -25,6 +25,11 @@ namespace Castle.MonoRail.Framework.Views
 		private readonly bool enableCache;
 		private long lastUpdated;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FileViewSource"/> class.
+		/// </summary>
+		/// <param name="fileInfo">The file info.</param>
+		/// <param name="enableCache">if set to <c>true</c> [enable cache].</param>
 		public FileViewSource(FileInfo fileInfo, bool enableCache)
 		{
 			this.fileInfo = fileInfo;
@@ -33,6 +38,10 @@ namespace Castle.MonoRail.Framework.Views
 			lastUpdated = LastModified;
 		}
 
+		/// <summary>
+		/// Opens the view stream.
+		/// </summary>
+		/// <returns></returns>
 		public Stream OpenViewStream()
 		{
 			lastUpdated = LastModified;
@@ -40,21 +49,32 @@ namespace Castle.MonoRail.Framework.Views
 			return fileInfo.OpenRead();
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether cache is enabled for it.
+		/// </summary>
+		/// <value><c>true</c> if cache is enabled for it; otherwise, <c>false</c>.</value>
 		public bool EnableCache
 		{
 			get { return enableCache; }
 		}
 
+		/// <summary>
+		/// Gets or sets the last updated.
+		/// </summary>
+		/// <value>The last updated.</value>
 		public long LastUpdated
 		{
 			get { return lastUpdated; }
 			set { lastUpdated = value; }
 		}
 
+		/// <summary>
+		/// Gets the last modified.
+		/// </summary>
+		/// <value>The last modified.</value>
 		public long LastModified
 		{
 			get { return File.GetLastWriteTime(fileInfo.FullName).Ticks; }
 		}
-
 	}
 }

@@ -17,17 +17,34 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Runtime.Serialization;
 
+	/// <summary>
+	/// Exception to be used by scaffolding implementations
+	/// </summary>
 	[Serializable]
 	public class ScaffoldException : RailsException
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScaffoldException"/> class.
+		/// </summary>
+		/// <param name="message">The message.</param>
 		public ScaffoldException(String message) : base(message)
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScaffoldException"/> class.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		/// <param name="innerException">The inner exception.</param>
 		public ScaffoldException(String message, Exception innerException) : base(message, innerException)
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScaffoldException"/> class.
+		/// </summary>
+		/// <param name="info">The object that holds the serialized object data.</param>
+		/// <param name="context">The contextual information about the source or destination.</param>
 		public ScaffoldException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}

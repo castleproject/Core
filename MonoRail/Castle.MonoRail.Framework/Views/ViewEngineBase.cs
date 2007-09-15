@@ -29,6 +29,10 @@ namespace Castle.MonoRail.Framework
 		private bool xhtmlRendering;
 		private IViewSourceLoader viewSourceLoader;
 		private ILogger logger = NullLogger.Instance;
+
+		/// <summary>
+		/// The service provider instance
+		/// </summary>
 		protected IServiceProvider serviceProvider;
 
 		#region IServiceEnabledComponent implementation
@@ -112,15 +116,45 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public abstract void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName);
 
+		/// <summary>
+		/// Should process the specified partial. The partial name must contains
+		/// the path relative to the views folder.
+		/// </summary>
+		/// <param name="output">The output.</param>
+		/// <param name="context">The request context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="partialName">The partial name.</param>
 		public abstract void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller, string partialName);
 
+		/// <summary>
+		/// Implementors should return a generator instance if
+		/// the view engine supports JS generation.
+		/// </summary>
+		/// <param name="context">The request context.</param>
+		/// <returns>A JS generator instance</returns>
 		public abstract object CreateJSGenerator(IRailsEngineContext context);
 
+		/// <summary>
+		/// Processes the js generation view template - using the templateName
+		/// to obtain the correct template, and using the context to output the result.
+		/// </summary>
+		/// <param name="context">The request context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="templateName">Name of the template.</param>
 		public virtual void GenerateJS(IRailsEngineContext context, Controller controller, string templateName)
 		{
             GenerateJS(context.Response.Output, context, controller, templateName);
 		}
 
+		/// <summary>
+		/// Processes the js generation view template - using the templateName
+		/// to obtain the correct template, and using the specified <see cref="TextWriter"/>
+		/// to output the result.
+		/// </summary>
+		/// <param name="output">The output.</param>
+		/// <param name="context">The request context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="templateName">Name of the template.</param>
 		public abstract void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller, string templateName);
 
 		/// <summary>
@@ -133,11 +167,21 @@ namespace Castle.MonoRail.Framework
 
 		#region Pre/Post send view
 
+		/// <summary>
+		/// Invokes the <see cref="Controller.PreSendView"/>
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="view">The view argument.</param>
 		protected virtual void PreSendView(Controller controller, object view)
 		{
 			controller.PreSendView(view);
 		}
 
+		/// <summary>
+		/// Invokes the <see cref="Controller.PostSendView"/>
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="view">The view argument.</param>
 		protected virtual void PostSendView(Controller controller, object view)
 		{
 			controller.PostSendView(view);
@@ -147,12 +191,20 @@ namespace Castle.MonoRail.Framework
 
 		#region Useful properties
 
+		/// <summary>
+		/// Gets or sets the view source loader.
+		/// </summary>
+		/// <value>The view source loader.</value>
 		protected IViewSourceLoader ViewSourceLoader
 		{
 			get { return viewSourceLoader; }
 			set { viewSourceLoader = value; }
 		}
 
+		/// <summary>
+		/// Gets the logger.
+		/// </summary>
+		/// <value>The logger.</value>
 		protected ILogger Logger
 		{
 			get { return logger; }
