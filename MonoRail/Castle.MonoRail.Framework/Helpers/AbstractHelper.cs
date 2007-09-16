@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// Optional base class for helpers. 
 	/// Extend from this class only if your helpers needs
 	/// a reference to the controller which is using it or
-	/// if you need to use one of the protected methods.
+	/// if you need to use one of the protected utility methods.
 	/// </summary>
 	public abstract class AbstractHelper : IControllerAware
 	{

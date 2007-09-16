@@ -197,7 +197,10 @@ namespace Castle.MonoRail.Framework
 
 				if (actionMethod == null)
 				{
-					dynAction = controller.DynamicActions[actionName] as IDynamicAction;
+					if (controller.DynamicActions.ContainsKey(actionName))
+					{
+						dynAction = controller.DynamicActions[actionName];
+					}
 
 					if (dynAction == null)
 					{

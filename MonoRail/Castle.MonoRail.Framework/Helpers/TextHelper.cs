@@ -24,7 +24,10 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class TextHelper : AbstractHelper
 	{
-		const string DefaultConnector = "and";
+		/// <summary>
+		/// Default word connector
+		/// </summary>
+		public const string DefaultConnector = "and";
 
 		/// <summary>
 		/// Converts a camelized text to words. For instance:

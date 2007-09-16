@@ -16,16 +16,14 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System;
 	using System.Collections;
-
 	using Castle.MonoRail.Framework.Helpers;
-	
 	using NUnit.Framework;
 
 
 	[TestFixture]
 	public class TextHelperTestCase
 	{
-        private TextHelper helper = new TextHelper();
+		private TextHelper helper = new TextHelper();
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
@@ -40,82 +38,82 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.AreEqual("Sequence Info", TextHelper.PascalCaseToWord("SequenceInfo"));
 		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ToSentenceWithNull()
-        {
-            string sentence = helper.ToSentence(null);
-            Assert.AreEqual("", sentence);
-        }
-
-        [Test]
-        public void ToSentenceWithStringArrayNoElements()
-        {
-            string sentence = helper.ToSentence(new string[0]);
-            Assert.AreEqual("", sentence);
-        }
+		[Test]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void ToSentenceWithNull()
+		{
+			string sentence = helper.ToSentence(null);
+			Assert.AreEqual("", sentence);
+		}
 
 		[Test]
-        public void ToSentenceWithStringArrayOneElement()
+		public void ToSentenceWithStringArrayNoElements()
 		{
-            string sentence = helper.ToSentence(new string[] { "apple" });
-            Assert.AreEqual("apple", sentence);
-        }
+			string sentence = helper.ToSentence(new string[0]);
+			Assert.AreEqual("", sentence);
+		}
 
-        [Test]
-        public void ToSentenceWithStringArrayTwoElements()
-        {
-            string sentence = helper.ToSentence(new string[] { "apple", "banana" });
-            Assert.AreEqual("apple and banana", sentence);
-        }
+		[Test]
+		public void ToSentenceWithStringArrayOneElement()
+		{
+			string sentence = helper.ToSentence(new string[] {"apple"});
+			Assert.AreEqual("apple", sentence);
+		}
 
-        [Test]
-        public void ToSentenceWithStringArrayThreeElements()
-        {
-            string sentence = helper.ToSentence(new string[] { "apple", "banana", "mango" });
-            Assert.AreEqual("apple, banana and mango", sentence);
-        }
+		[Test]
+		public void ToSentenceWithStringArrayTwoElements()
+		{
+			string sentence = helper.ToSentence(new string[] {"apple", "banana"});
+			Assert.AreEqual("apple and banana", sentence);
+		}
 
-        [Test]
-        public void ToSentenceWithSpecifiedConnector()
-        {
-            string sentence = helper.ToSentence(new string[] { "apple", "banana", "mango" }, "y");
-            Assert.AreEqual("apple, banana y mango", sentence);
-        }
+		[Test]
+		public void ToSentenceWithStringArrayThreeElements()
+		{
+			string sentence = helper.ToSentence(new string[] {"apple", "banana", "mango"});
+			Assert.AreEqual("apple, banana and mango", sentence);
+		}
+
+		[Test]
+		public void ToSentenceWithSpecifiedConnector()
+		{
+			string sentence = helper.ToSentence(new string[] {"apple", "banana", "mango"}, "y");
+			Assert.AreEqual("apple, banana y mango", sentence);
+		}
 
 		[Test]
 		public void ToSentenceWithCommaBeforeConnectorSpecified()
 		{
-            string sentence = helper.ToSentence(new string[] { "apple", "banana", "mango" }, TextHelper.DefaultConnector, false);
-            Assert.AreEqual("apple, banana, and mango", sentence);
-        }
+			string sentence = helper.ToSentence(new string[] {"apple", "banana", "mango"}, TextHelper.DefaultConnector, false);
+			Assert.AreEqual("apple, banana, and mango", sentence);
+		}
 
-        private class Person
-        {
-            private readonly string _firstName;
-            private readonly string _lastName;
+		private class Person
+		{
+			private readonly string _firstName;
+			private readonly string _lastName;
 
-            public Person(string firstName, string lastName)
-            {
-                _firstName = firstName;
-                _lastName = lastName;
-            }
+			public Person(string firstName, string lastName)
+			{
+				_firstName = firstName;
+				_lastName = lastName;
+			}
 
-            public override string ToString()
-            {
-                return _firstName + " " + _lastName;
-            }
-        }
+			public override string ToString()
+			{
+				return _firstName + " " + _lastName;
+			}
+		}
 
-	    [Test]
-	    public void ToSentenceWithArrayListOfPeople()
-	    {
-            ArrayList people = new ArrayList();
-            people.Add(new Person("Clark", "Kent"));
-            people.Add(new Person("Lois", "Lane"));
-            people.Add(new Person("Lex", "Luther"));
-            string sentence = helper.ToSentence(people);
-            Assert.AreEqual("Clark Kent, Lois Lane and Lex Luther", sentence);
-        }
+		[Test]
+		public void ToSentenceWithArrayListOfPeople()
+		{
+			ArrayList people = new ArrayList();
+			people.Add(new Person("Clark", "Kent"));
+			people.Add(new Person("Lois", "Lane"));
+			people.Add(new Person("Lex", "Luther"));
+			string sentence = helper.ToSentence(people);
+			Assert.AreEqual("Clark Kent, Lois Lane and Lex Luther", sentence);
+		}
 	}
 }
