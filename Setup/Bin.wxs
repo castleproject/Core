@@ -7,126 +7,6 @@
 
 <DirectoryRef Id="BinDir">
 
-	<Component Id="ProductComponentGac1" DiskId="1" Guid="49ABA8A2-D8C0-456A-8E80-6AEAD79DF1B7">
-		<File Id="file22A" 
-			Name="Castle.MonoRail.TestSupport.dll" 
-			KeyPath="yes" Assembly=".net" AssemblyManifest="file22A"
-			Source="$(var.BuildNet11Dir)\Castle.MonoRail.TestSupport.dll" />
-	</Component>
-
-	<Component Id="ProductComponentGac2" DiskId="1" Guid="A4F709E3-0343-41B0-AA18-270012EE4DCC">
-		<File Id="file90A" 
-			Name="Cassini.dll" 
-			KeyPath="yes" Assembly=".net" AssemblyManifest="file90A"
-			Source="$(var.BuildNet11Dir)\Cassini.dll" />
-	</Component>
-	
-	<Directory Id="net11dir" Name="net-1.1">
-		<Component Id="ProductComponent11" DiskId="1" Guid="9809B08F-5717-44F2-A07F-B16C8ADADC39">
-			
-<File Id="anrControls.Markdown.NET.dll" Name="anrControls.Markdown.NET.dll" Source="$(var.BuildNet11Dir)\anrControls.Markdown.NET.dll" />
-<File Id="antlr.runtime.dll" Name="antlr.runtime.dll" Source="$(var.BuildNet11Dir)\antlr.runtime.dll" />
-<File Id="AopAlliance.dll" Name="AopAlliance.dll" Source="$(var.BuildNet11Dir)\AopAlliance.dll" />
-<File Id="AspectSharp.dll" Name="AspectSharp.dll" Source="$(var.BuildNet11Dir)\AspectSharp.dll" />
-<File Id="AspectSharp.Lang.dll" Name="AspectSharp.Lang.dll" Source="$(var.BuildNet11Dir)\AspectSharp.Lang.dll" />
-<File Id="Bamboo.Prevalence.Collections.dll" Name="Bamboo.Prevalence.Collections.dll" Source="$(var.BuildNet11Dir)\Bamboo.Prevalence.Collections.dll" />
-<File Id="Bamboo.Prevalence.dll" Name="Bamboo.Prevalence.dll" Source="$(var.BuildNet11Dir)\Bamboo.Prevalence.dll" />
-<File Id="Bamboo.Prevalence.Indexing.dll" Name="Bamboo.Prevalence.Indexing.dll" Source="$(var.BuildNet11Dir)\Bamboo.Prevalence.Indexing.dll" />
-<File Id="Bamboo.Prevalence.Util.dll" Name="Bamboo.Prevalence.Util.dll" Source="$(var.BuildNet11Dir)\Bamboo.Prevalence.Util.dll" />
-<File Id="Bamboo.Prevalence.XPath.dll" Name="Bamboo.Prevalence.XPath.dll" Source="$(var.BuildNet11Dir)\Bamboo.Prevalence.XPath.dll" />
-<File Id="Boo.Lang.CodeDom.dll" Name="Boo.Lang.CodeDom.dll" Source="$(var.BuildNet11Dir)\Boo.Lang.CodeDom.dll" />
-<File Id="Boo.Lang.Compiler.dll" Name="Boo.Lang.Compiler.dll" Source="$(var.BuildNet11Dir)\Boo.Lang.Compiler.dll" />
-<File Id="Boo.Lang.dll" Name="Boo.Lang.dll" Source="$(var.BuildNet11Dir)\Boo.Lang.dll" />
-<File Id="Boo.Lang.Interpreter.dll" Name="Boo.Lang.Interpreter.dll" Source="$(var.BuildNet11Dir)\Boo.Lang.Interpreter.dll" />
-<File Id="Boo.Lang.Parser.dll" Name="Boo.Lang.Parser.dll" Source="$(var.BuildNet11Dir)\Boo.Lang.Parser.dll" />
-<File Id="Boo.Lang.Useful.dll" Name="Boo.Lang.Useful.dll" Source="$(var.BuildNet11Dir)\Boo.Lang.Useful.dll" />
-<File Id="Boo.NAnt.Tasks.dll" Name="Boo.NAnt.Tasks.dll" Source="$(var.BuildNet11Dir)\Boo.NAnt.Tasks.dll" />
-<File Id="Castle.ActiveRecord.dll" Name="Castle.ActiveRecord.dll" Source="$(var.BuildNet11Dir)\Castle.ActiveRecord.dll" />
-<File Id="Castle.Components.Binder.dll" Name="Castle.Components.Binder.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Binder.dll" />
-<File Id="Castle.Components.Common.EmailSender.dll" Name="Castle.Components.Common.EmailSender.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.EmailSender.dll" />
-<File Id="Castle.Components.Common.TemplateEngine.dll" Name="Castle.Components.Common.TemplateEngine.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.TemplateEngine.dll" />
-<File Id="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" Name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
-<File Id="Castle.Components.Winforms.AssemblyResolver.dll" Name="Castle.Components.Winforms.AssemblyResolver.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Winforms.AssemblyResolver.dll" />
-<File Id="Castle.Core.dll" Name="Castle.Core.dll" Source="$(var.BuildNet11Dir)\Castle.Core.dll" />
-<File Id="Castle.DynamicProxy.dll" Name="Castle.DynamicProxy.dll" Source="$(var.BuildNet11Dir)\Castle.DynamicProxy.dll" />
-
-<File Id="Castle.Facilities.ActiveRecordIntegration.dll" Name="Castle.Facilities.ActiveRecordIntegration.dll" Source="$(var.BuildNet11Dir)\Castle.Facilities.ActiveRecordIntegration.dll" />
-<File Id="Castle.Facilities.AspectSharp.dll" Name="Castle.Facilities.AspectSharp.dll" Source="$(var.BuildNet11Dir)\Castle.Facilities.AspectSharp.dll" />
-<File Id="Castle.Facilities.AutomaticTransactionManagement.dll" Name="Castle.Facilities.AutomaticTransactionManagement.dll" Source="$(var.BuildNet11Dir)\Castle.Facilities.AutomaticTransactionManagement.dll" />
-<File Id="Castle.Facilities.BatchRegistration.dll" Name="Castle.Facilities.BatchRegistration.dll" Source="$(var.BuildNet11Dir)\Castle.Facilities.BatchRegistration.dll" />
-<File Id="Castle.Facilities.Cache.dll" Name="Castle.Facilities.Cache.dll" Source="$(var.BuildNet11Dir)\Castle.Facilities.Cache.dll" />
-<File Id="Castle.Facilities.IBatisNetIntegration.dll" Name="Castle.Facilities.IBatisNetIntegration.dll" Source="$(var.BuildNet11Dir)\Castle.Facilities.IBatisNetIntegration.dll" />
-<File Id="Castle.Facilities.Logging.dll" Name="Castle.Facilities.Logging.dll" Source="$(var.BuildNet11Dir)\Castle.Facilities.Logging.dll" />
-<File Id="Castle.Facilities.NHibernateIntegration.dll" Name="Castle.Facilities.NHibernateIntegration.dll" Source="$(var.BuildNet11Dir)\Castle.Facilities.NHibernateIntegration.dll" />
-<File Id="Castle.Facilities.Prevalence.dll" Name="Castle.Facilities.Prevalence.dll" Source="$(var.BuildNet11Dir)\Castle.Facilities.Prevalence.dll" />
-
-<File Id="Castle.MicroKernel.dll" Name="Castle.MicroKernel.dll" Source="$(var.BuildNet11Dir)\Castle.MicroKernel.dll" />
-<File Id="Castle.Windsor.dll" Name="Castle.Windsor.dll" Source="$(var.BuildNet11Dir)\Castle.Windsor.dll" />
-
-<File Id="Castle.MonoRail.ActiveRecordScaffold.dll" Name="Castle.MonoRail.ActiveRecordScaffold.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.ActiveRecordScaffold.dll" />
-<File Id="Castle.MonoRail.ActiveRecordSupport.dll" Name="Castle.MonoRail.ActiveRecordSupport.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.ActiveRecordSupport.dll" />
-<File Id="Castle.MonoRail.Framework.dll" Name="Castle.MonoRail.Framework.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.Framework.dll" />
-<File Id="Castle.MonoRail.Framework.Views.CompositeView.dll" Name="Castle.MonoRail.Framework.Views.CompositeView.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.Framework.Views.CompositeView.dll" />
-<File Id="Castle.MonoRail.Framework.Views.NVelocity.dll" Name="Castle.MonoRail.Framework.Views.NVelocity.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.Framework.Views.NVelocity.dll" />
-<File Id="Castle.MonoRail.Generator.exe" Name="Castle.MonoRail.Generator.exe" Source="$(var.BuildNet11Dir)\Castle.MonoRail.Generator.exe" />
-<File Id="Castle.MonoRail.TestSupport.dll" Name="Castle.MonoRail.TestSupport.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.TestSupport.dll" />
-<File Id="Castle.MonoRail.Views.Brail.dll" Name="Castle.MonoRail.Views.Brail.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.Views.Brail.dll" />
-<File Id="Castle.MonoRail.WindsorExtension.dll" Name="Castle.MonoRail.WindsorExtension.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.WindsorExtension.dll" />
-<File Id="Castle.Services.Logging.Log4netIntegration.dll" Name="Castle.Services.Logging.Log4netIntegration.dll" Source="$(var.BuildNet11Dir)\Castle.Services.Logging.Log4netIntegration.dll" />
-<File Id="Castle.Services.Logging.NLogIntegration.dll" Name="Castle.Services.Logging.NLogIntegration.dll" Source="$(var.BuildNet11Dir)\Castle.Services.Logging.NLogIntegration.dll" />
-<File Id="Castle.Services.Transaction.dll" Name="Castle.Services.Transaction.dll" Source="$(var.BuildNet11Dir)\Castle.Services.Transaction.dll" />
-<File Id="IBatisNet.Common.dll" Name="IBatisNet.Common.dll" Source="$(var.BuildNet11Dir)\IBatisNet.Common.dll" />
-<File Id="IBatisNet.DataMapper.dll" Name="IBatisNet.DataMapper.dll" Source="$(var.BuildNet11Dir)\IBatisNet.DataMapper.dll" />
-<File Id="Iesi.Collections.dll" Name="Iesi.Collections.dll" Source="$(var.BuildNet11Dir)\Iesi.Collections.dll" />
-<File Id="Iesi.Collections.license.txt" Name="Iesi.Collections.license.txt" Source="$(var.BuildNet11Dir)\Iesi.Collections.license.txt" />
-<File Id="log4net.dll" Name="log4net.dll" Source="$(var.BuildNet11Dir)\log4net.dll" />
-<File Id="log4net.license.txt" Name="log4net.license.txt" Source="$(var.BuildNet11Dir)\log4net.license.txt" />
-<File Id="NHibernate.dll" Name="NHibernate.dll" Source="$(var.BuildNet11Dir)\NHibernate.dll" />
-<File Id="NHibernate.license.txt" Name="NHibernate.license.txt" Source="$(var.BuildNet11Dir)\NHibernate.license.txt" />
-<File Id="NLog.dll" Name="NLog.dll" Source="$(var.BuildNet11Dir)\NLog.dll" />
-<File Id="NLog.license.txt" Name="NLog.license.txt" Source="$(var.BuildNet11Dir)\NLog.license.txt" />
-<File Id="Nullables.dll" Name="Nullables.dll" Source="$(var.BuildNet11Dir)\Nullables.dll" />
-<File Id="Nullables.NHibernate.dll" Name="Nullables.NHibernate.dll" Source="$(var.BuildNet11Dir)\Nullables.NHibernate.dll" />
-<File Id="NVelocity.dll" Name="NVelocity.dll" Source="$(var.BuildNet11Dir)\NVelocity.dll" />
-<File Id="nunit.framework.dll" Name="nunit.framework.dll" Source="$(var.BuildNet11Dir)\nunit.framework.dll" />
-
-			<File 
-				Id="file90" 
-				Name="Cassini.dll"
-				Source="$(var.SharedLibs)\net\Cassini.dll" />
-
-			<File 
-				Id="file91" 
-				Name="CassiniWebServer.exe"
-				Source="$(var.SharedLibs)\net\CassiniWebServer.exe" />
-
-			<RegistryKey 
-				Action="createAndRemoveOnUninstall" 
-				Root="HKLM" 
-				Key="SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\castle">
-				<RegistryValue Action="write" Type="string" Value="[net11dir]" />
-			</RegistryKey>
-
-			<RegistryKey 
-				Action="createAndRemoveOnUninstall" 
-				Root="HKLM" 
-				Key="SOFTWARE\Castle">
-				
-				<RegistryValue 
-					Action="write" 
-					Name="cassinilocation" 
-					Type="string" Value="[net11dir]CassiniWebServer.exe" />
-			</RegistryKey>
-			
-			<!--
-			<Shortcut Id="ShortcutWebSite" Directory="shortcutrootfolder" Name="Castle Project WebSite" Target="http://www.castleproject.org" Description="Source of up to date information" Hotkey="0" Show="normal" />
-			<Shortcut Id="ShortcutForum"   Directory="shortcutrootfolder" Name="Forum" Target="http://forum.castleproject.org" Description="Source of up to date information" Hotkey="0" Show="normal" />
-			<Shortcut Id="ShortcutIssue"   Directory="shortcutrootfolder" Name="Issue tracker" Target="http://support.castleproject.org/jira/" Description="Source of up to date information" Hotkey="0" Show="normal" />
-			-->
-
-		</Component>
-	</Directory>
-
 	<Directory Id="net20dir" Name="net-2.0">
 		<Component Id="ProductComponent20" DiskId="1" Guid="394DE961-2B37-4BC9-A65E-C1F5A5F3B0F7">
 			
@@ -165,9 +45,6 @@
 			
 <File Id="N20anrControls.Markdown.NET.dll" Name="anrControls.Markdown.NET.dll" Source="$(var.BuildNet20Dir)\anrControls.Markdown.NET.dll" />
 <File Id="N20antlr.runtime.dll" Name="antlr.runtime.dll" Source="$(var.BuildNet20Dir)\antlr.runtime.dll" />
-<File Id="N20AopAlliance.dll" Name="AopAlliance.dll" Source="$(var.BuildNet20Dir)\AopAlliance.dll" />
-<File Id="N20AspectSharp.dll" Name="AspectSharp.dll" Source="$(var.BuildNet20Dir)\AspectSharp.dll" />
-<File Id="N20AspectSharp.Lang.dll" Name="AspectSharp.Lang.dll" Source="$(var.BuildNet20Dir)\AspectSharp.Lang.dll" />
 <File Id="N20Bamboo.Prevalence.Collections.dll" Name="Bamboo.Prevalence.Collections.dll" Source="$(var.BuildNet20Dir)\Bamboo.Prevalence.Collections.dll" />
 <File Id="N20Bamboo.Prevalence.dll" Name="Bamboo.Prevalence.dll" Source="$(var.BuildNet20Dir)\Bamboo.Prevalence.dll" />
 <File Id="N20Bamboo.Prevalence.Indexing.dll" Name="Bamboo.Prevalence.Indexing.dll" Source="$(var.BuildNet20Dir)\Bamboo.Prevalence.Indexing.dll" />
@@ -186,27 +63,23 @@
 <File Id="N20Castle.Components.Common.EmailSender.dll" Name="Castle.Components.Common.EmailSender.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.EmailSender.dll" />
 <File Id="N20Castle.Components.Common.TemplateEngine.dll" Name="Castle.Components.Common.TemplateEngine.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.TemplateEngine.dll" />
 <File Id="N20Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" Name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
-<File Id="N20Castle.Components.Winforms.AssemblyResolver.dll" Name="Castle.Components.Winforms.AssemblyResolver.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Winforms.AssemblyResolver.dll" />
 <File Id="N20Castle.Core.dll" Name="Castle.Core.dll" Source="$(var.BuildNet20Dir)\Castle.Core.dll" />
 <File Id="N20Castle.DynamicProxy.dll" Name="Castle.DynamicProxy.dll" Source="$(var.BuildNet20Dir)\Castle.DynamicProxy.dll" />
 <File Id="N20Castle.DynamicProxy2.dll" Name="Castle.DynamicProxy2.dll" Source="$(var.BuildNet20Dir)\Castle.DynamicProxy2.dll" />
 <File Id="N20Castle.Facilities.ActiveRecordIntegration.dll" Name="Castle.Facilities.ActiveRecordIntegration.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.ActiveRecordIntegration.dll" />
-<File Id="N20Castle.Facilities.AspectSharp.dll" Name="Castle.Facilities.AspectSharp.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.AspectSharp.dll" />
 <File Id="N20Castle.Facilities.AutomaticTransactionManagement.dll" Name="Castle.Facilities.AutomaticTransactionManagement.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.AutomaticTransactionManagement.dll" />
 <File Id="N20Castle.Facilities.BatchRegistration.dll" Name="Castle.Facilities.BatchRegistration.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.BatchRegistration.dll" />
-<File Id="N20Castle.Facilities.Cache.dll" Name="Castle.Facilities.Cache.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.Cache.dll" />
-<File Id="N20Castle.Facilities.DynamicLoader.dll" Name="Castle.Facilities.DynamicLoader.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.DynamicLoader.dll" />
-<File Id="N20Castle.Facilities.IBatisNetIntegration.dll" Name="Castle.Facilities.IBatisNetIntegration.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.IBatisNetIntegration.dll" />
+<!-- (Stalled) <File Id="N20Castle.Facilities.Cache.dll" Name="Castle.Facilities.Cache.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.Cache.dll" /> -->
+<!-- (No docs) <File Id="N20Castle.Facilities.DynamicLoader.dll" Name="Castle.Facilities.DynamicLoader.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.DynamicLoader.dll" /> -->
+<!-- (Stalled) <File Id="N20Castle.Facilities.IBatisNetIntegration.dll" Name="Castle.Facilities.IBatisNetIntegration.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.IBatisNetIntegration.dll" /> -->
 <File Id="N20Castle.Facilities.Logging.dll" Name="Castle.Facilities.Logging.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.Logging.dll" />
 <File Id="N20Castle.Facilities.NHibernateIntegration.dll" Name="Castle.Facilities.NHibernateIntegration.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.NHibernateIntegration.dll" />
-<File Id="N20Castle.Facilities.Prevalence.dll" Name="Castle.Facilities.Prevalence.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.Prevalence.dll" />
+<!-- (Stalled) <File Id="N20Castle.Facilities.Prevalence.dll" Name="Castle.Facilities.Prevalence.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.Prevalence.dll" /> -->
 <File Id="N20Castle.MicroKernel.dll" Name="Castle.MicroKernel.dll" Source="$(var.BuildNet20Dir)\Castle.MicroKernel.dll" />
 <File Id="N20Castle.MonoRail.ActiveRecordScaffold.dll" Name="Castle.MonoRail.ActiveRecordScaffold.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.ActiveRecordScaffold.dll" />
 <File Id="N20Castle.MonoRail.ActiveRecordSupport.dll" Name="Castle.MonoRail.ActiveRecordSupport.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.ActiveRecordSupport.dll" />
 <File Id="N20Castle.MonoRail.Framework.dll" Name="Castle.MonoRail.Framework.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.Framework.dll" />
-<File Id="N20Castle.MonoRail.Framework.Views.CompositeView.dll" Name="Castle.MonoRail.Framework.Views.CompositeView.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.Framework.Views.CompositeView.dll" />
 <File Id="N20Castle.MonoRail.Framework.Views.NVelocity.dll" Name="Castle.MonoRail.Framework.Views.NVelocity.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.Framework.Views.NVelocity.dll" />
-<File Id="N20Castle.MonoRail.Generator.exe" Name="Castle.MonoRail.Generator.exe" Source="$(var.BuildNet20Dir)\Castle.MonoRail.Generator.exe" />
 <File Id="N20Castle.MonoRail.TestSupport.dll" Name="Castle.MonoRail.TestSupport.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.TestSupport.dll" />
 <File Id="N20Castle.MonoRail.Views.Brail.dll" Name="Castle.MonoRail.Views.Brail.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.Views.Brail.dll" />
 <File Id="N20Castle.MonoRail.WindsorExtension.dll" Name="Castle.MonoRail.WindsorExtension.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.WindsorExtension.dll" />

@@ -15,20 +15,11 @@
 		Manufacturer="$(var.PackageManufacturer)">
 		
 		<Package 
-			Id="00489AF3-C92D-465C-82F2-7F6042D75E2B" 
 			Description="All Castle Binaries, documentation, samples and source code" 
 			Comments="All Castle Binaries, documentation, samples and source code" 
 			InstallerVersion="200" Compressed="yes" />
 
 		<Condition Message="An administrator must approve or install [ProductName].">Privileged</Condition>
-
-		<Property Id="VS2003_SCHEMAS_DIR">
-			<?undef VsVersion?>
-			<?define VsVersion = "7.1"?>
-			<RegistrySearch Id="SearchForCommonDirPath2003" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\$(var.VsVersion)\Setup\VC#" Name="ProductDir" Type="raw">
-				<DirectorySearch Id="SearchForProjectsPath2003" Path="CSharpProjects" Depth="1" />
-			</RegistrySearch>
-		</Property>
 
 		<Property Id="VS2005_SCHEMAS_DIR">
 			<?undef VsVersion?>
@@ -36,11 +27,6 @@
 			<RegistrySearch Id="SearchForCommonDirPath2005" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\$(var.VsVersion)\Setup\VC#" Name="ProductDir" Type="raw">
 				<DirectorySearch Id="SearchForProjectsPath2005" Path="CSharpProjects" Depth="1" />
 			</RegistrySearch>
-		</Property>
-
-		<Property Id='FRAMEWORK11'>
-			<RegistrySearch Id='Framework11Registry' Type='raw'
-				Root='HKLM' Key='Software\Microsoft\.NETFramework\Policy\v1.1' Name='4322' />
 		</Property>
 
 		<Property Id='FRAMEWORK20'>
@@ -98,10 +84,7 @@
 				<ComponentRef Id="ReleaseNotesFacilities" />
 				<ComponentRef Id="ReleaseNotesServices" />
 				
-				<ComponentRef Id="ProductComponent11" />
 				<ComponentRef Id="ProductComponent20" />
-				<ComponentRef Id="ProductComponentGac1" />
-				<ComponentRef Id="ProductComponentGac2" />
 			</Feature>
 
 			<Feature 
@@ -126,24 +109,6 @@
 			</Feature>
 
 			<Feature 
-				Id='VSWizards2003' Title='Visual Studio 2003 Wizards' 
-				Description='Wizards for VS.Net 2003 that helps in creating new projects' Level='1'>
-
-				<ComponentRef Id='vs2003addin' />
-				<ComponentRef Id='vs7comp' />
-				<ComponentRef Id='componentvs2003_ARProject' />
-				<ComponentRef Id='componentvs2003_ARProjectTest' />
-				<ComponentRef Id='componentvs2003_MRProject' />
-				<ComponentRef Id='componentvs2003_MRProject1' />
-				<ComponentRef Id='componentvs2003_MRProject2' />
-				<ComponentRef Id='componentvs2003_MRProject3' />
-				<ComponentRef Id='componentvs2003_MRProject4' />
-				<ComponentRef Id='componentvs2003_MRProject5' />
-				<ComponentRef Id='componentvs2003_MRProject6' />
-				<ComponentRef Id='componentvs2003_MRProjectTest' />
-			</Feature>
-
-			<Feature 
 				Id='VSWizards2005' Title='Visual Studio 2005 Wizards' 
 				Description='Wizards for VS.Net 2005 that helps in creating new projects' Level='1'>
 				
@@ -152,7 +117,9 @@
 				<ComponentRef Id='componentvs2005_ARProject' />
 				<ComponentRef Id='componentvs2005_ARProjectTest' />
 				<ComponentRef Id='componentvs2005_MRProject' />
+				<ComponentRef Id='componentvs2005_MRProject_Config' />
 				<ComponentRef Id='componentvs2005_MRProject1' />
+				<ComponentRef Id='MRProject.Models' />
 				<ComponentRef Id='componentvs2005_MRProject2' />
 				<ComponentRef Id='componentvs2005_MRProject3' />
 				<ComponentRef Id='componentvs2005_MRProject4' />
@@ -160,13 +127,16 @@
 				<ComponentRef Id='componentvs2005_MRProject6' />
 				<ComponentRef Id='componentvs2005_MRProject7' />
 				<ComponentRef Id='componentvs2005_MRProjectTest' />
+				<ComponentRef Id='componentvs2005_MRProjectTest_Controllers' />
+				<ComponentRef Id='componentMRProject.ViewsPlaceHolder' />
+				<ComponentRef Id='componentMRProject.ViewsPlaceHolder.contact' />
+				<ComponentRef Id='componentMRProject.ViewsPlaceHolder.home' />
+				<ComponentRef Id='componentMRProject.ViewsPlaceHolder.login' />
 			</Feature>
 
 		</Feature>
 		
-		<!-- <UIRef Id="FragmentUI" /> -->
-
-	    <FragmentRef Id='FragmentUI' /> 
+		<UIRef Id="FragmentUI" />
 
 		<AdminExecuteSequence />
 

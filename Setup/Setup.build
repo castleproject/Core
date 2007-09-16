@@ -46,10 +46,10 @@
 			<exec 
 				program="${wix.dir}/candle.exe"
 				workingdir="${build.setup.dir}"
-				commandline="-nologo Castle.wxs UI.wxs Bin.wxs Docs.wxs ReleaseNotes.wxs Samples.wxs Sources.wxs WizardVs2003.wxs WizardVs2005.wxs " />
+				commandline="-nologo Castle.wxs UI.wxs Bin.wxs Docs.wxs ReleaseNotes.wxs Samples.wxs Sources.wxs WizardVs2005.wxs " />
 			<exec program="${wix.dir}/light.exe"
 				workingdir="${build.setup.dir}" verbose="true"
-				commandline='-wx -out ${build.msi.fullpath} Castle.wixobj UI.wixobj Bin.wixobj Docs.wixobj ReleaseNotes.wixobj Samples.wixobj Sources.wixobj WizardVs2003.wixobj WizardVs2005.wixobj" '>
+				commandline='-wx -out ${build.msi.fullpath} Castle.wixobj UI.wixobj Bin.wixobj Docs.wixobj ReleaseNotes.wixobj Samples.wixobj Sources.wixobj WizardVs2005.wixobj" '>
 			</exec>
 		</if>
 	</target>

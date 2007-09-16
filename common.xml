@@ -108,7 +108,7 @@
 		<property name="testrunner" value="NUnit" />
 
 		<!-- Where is WiX? -->
-		<property name="wix.dir" value="%ProgramFiles%\wix" overwrite="false" />
+		<property name="wix.dir" value="${environment::get-folder-path('ProgramFiles')}\Windows Installer XML v3\bin" overwrite="false" />
 	</target>
 
 	<target name="set-net-2.0-framework-configuration">
@@ -185,7 +185,7 @@
 			failonerror="false"/>
 		<xmlpeek
 			file="_revision.xml"
-			xpath="/info/entry/commit/@revision"
+			xpath="/info/entry/@revision"
 			property="svn.revision"
 			failonerror="false"/>
 		<delete file="_revision.xml" failonerror="false" />

@@ -14,22 +14,18 @@
 			Source="$(var.ReleaseNotesDir)\ActiveRecord Release Notes.txt" />
 		<File 
 			Id="relnote2" 
-			Name="AspectSharp Release Notes.txt" 
-			Source="$(var.ReleaseNotesDir)\AspectSharp Release Notes.txt" />
-		<File 
-			Id="relnote3" 
 			Name="Core Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Core Release Notes.txt" />
 		<File 
-			Id="relnote4" 
+			Id="relnote3" 
 			Name="DynamicProxy Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\DynamicProxy Release Notes.txt" />
 		<File 
-			Id="relnote5" 
+			Id="relnote4" 
 			Name="MonoRail Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\MonoRail Release Notes.txt" />
 		<File 
-			Id="relnote6" 
+			Id="relnote5" 
 			Name="InversionOfControl Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\InversionOfControl Release Notes.txt" />
 
@@ -40,12 +36,12 @@
 	
 		<File 
 			Id="relnotecomps1" 
-			Name="AssemblyResolverDialog Release Notes.txt" 
-			Source="$(var.ReleaseNotesDir)\Components\AssemblyResolverDialog Release Notes.txt" />
-		<File 
-			Id="relnotecomps2" 
 			Name="Binder Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Components\Binder Release Notes.txt" />
+		<File 
+			Id="relnotecomps2" 
+			Name="DictionaryAdapter Release Notes.txt" 
+			Source="$(var.ReleaseNotesDir)\Components\DictionaryAdapter Release Notes.txt" />
 		<File 
 			Id="relnotecomps3" 
 			Name="EmailSender Release Notes.txt" 
@@ -54,6 +50,10 @@
 			Id="relnotecomps4" 
 			Name="TemplateEngine Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Components\TemplateEngine Release Notes.txt" />
+		<File 
+			Id="relnotecomps5" 
+			Name="Validator Release Notes.txt" 
+			Source="$(var.ReleaseNotesDir)\Components\Validator Release Notes.txt" />
 
 	</Component>
 	</Directory>
@@ -61,55 +61,65 @@
 	<Directory Id="FacilitiesDir" Name="Facilities">
 	<Component Id="ReleaseNotesFacilities" DiskId="1" Guid="EBB8ECB9-E281-4973-AAF5-F686F98EBD32">
 	
-
 		<File 
 			Id="relnotefac1" 
 			Name="ActiveRecordIntegration Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Facilities\ActiveRecordIntegration Release Notes.txt" />
 		<File 
 			Id="relnotefac2" 
-			Name="AspectSharp Release Notes.txt" 
-			Source="$(var.ReleaseNotesDir)\Facilities\AspectSharp Release Notes.txt" />
-		<File 
-			Id="relnotefac3" 
 			Name="AutomaticTransactionManagement Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Facilities\AutomaticTransactionManagement Release Notes.txt" />
+		<File 
+			Id="relnotefac3" 
+			Name="EventWiring Release Notes.txt" 
+			Source="$(var.ReleaseNotesDir)\Facilities\EventWiring Release Notes.txt" />
 		<File 
 			Id="relnotefac4" 
 			Name="BatchRegistration Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Facilities\BatchRegistration Release Notes.txt" />
 		<File 
 			Id="relnotefac5" 
+			Name="FactorySupport Release Notes.txt" 
+			Source="$(var.ReleaseNotesDir)\Facilities\FactorySupport Release Notes.txt" />
+		<File 
+			Id="relnotefac6" 
+			Name="Logging Release Notes.txt" 
+			Source="$(var.ReleaseNotesDir)\Facilities\Logging Release Notes.txt" />
+		<File 
+			Id="relnotefac7" 
+			Name="NHibernateIntegration Release Notes.txt" 
+			Source="$(var.ReleaseNotesDir)\Facilities\NHibernateIntegration Release Notes.txt" />
+		<File 
+			Id="relnotefac8" 
+			Name="Remoting Release Notes.txt" 
+			Source="$(var.ReleaseNotesDir)\Facilities\Remoting Release Notes.txt" />
+		<File 
+			Id="relnotefac9" 
+			Name="TypedFactory Release Notes.txt" 
+			Source="$(var.ReleaseNotesDir)\Facilities\TypedFactory Release Notes.txt" />
+
+		<!--
+		<File 
+			Id="relnotefac5" 
 			Name="Cache Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Facilities\Cache Release Notes.txt" />
-		<!--
 		<File 
 			Id="relnotefac6" 
 			Name="Db4o Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Facilities\Db4o Release Notes.txt" />
-		-->
 		<File 
 			Id="relnotefac7" 
 			Name="IBatisNet Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Facilities\IBatisNet Release Notes.txt" />
 		<File 
-			Id="relnotefac8" 
-			Name="Logging Release Notes.txt" 
-			Source="$(var.ReleaseNotesDir)\Facilities\Logging Release Notes.txt" />
-		<!--
-		<File 
 			Id="relnotefac9" 
 			Name="ManagementExtensions Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Facilities\ManagementExtensions Release Notes.txt" />
-		-->
-		<File 
-			Id="relnotefac10" 
-			Name="NHibernateIntegration Release Notes.txt" 
-			Source="$(var.ReleaseNotesDir)\Facilities\NHibernateIntegration Release Notes.txt" />
 		<File 
 			Id="relnotefac11" 
 			Name="Prevalence Release Notes.txt" 
 			Source="$(var.ReleaseNotesDir)\Facilities\Prevalence Release Notes.txt" />
+		-->
 	
 	</Component>
 	</Directory>
@@ -123,8 +133,8 @@
 			Source="$(var.ReleaseNotesDir)\Services\Logging Release Notes.txt" />
 		<File 
 			Id="relnoteserv2" 
-			Name="TransactionMangement Release Notes.txt" 
-			Source="$(var.ReleaseNotesDir)\Services\TransactionMangement Release Notes.txt" />
+			Name="Transaction Release Notes.txt" 
+			Source="$(var.ReleaseNotesDir)\Services\Transaction Release Notes.txt" />
 
 	</Component>
 	</Directory>
