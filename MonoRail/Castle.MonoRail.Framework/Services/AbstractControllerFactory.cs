@@ -108,6 +108,8 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				logger.Debug("Controller released: " + controller.GetType());
 			}
+
+			controller.Dispose();
 		}
 
 		/// <summary>

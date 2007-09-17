@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework
 	/// Implements the core functionality and exposes the
 	/// common methods for concrete controllers.
 	/// </summary>
-	public abstract class Controller
+	public abstract class Controller : IDisposable
 	{
 		#region Fields
 
@@ -1076,6 +1076,14 @@ namespace Castle.MonoRail.Framework
 				(IValidatorRegistry) serviceProvider.GetService(typeof(IValidatorRegistry));
 
 			validator = CreateValidatorRunner(validatorRegistry);
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated 
+		/// with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public virtual void Dispose()
+		{
 		}
 
 		/// <summary>

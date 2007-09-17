@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework
 	/// Handles the whole controller lifecycle in a request.
 	/// </para>
 	/// </summary>
-	public class ControllerLifecycleExecutor : IControllerLifecycleExecutor, IServiceEnabledComponent, IDisposable
+	public class ControllerLifecycleExecutor : IControllerLifecycleExecutor, IServiceEnabledComponent
 	{
 		/// <summary>
 		/// Key for the executor instance on <c>Context.Items</c>

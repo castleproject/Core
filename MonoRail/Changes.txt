@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Added IDisposable/Dispose back to the controller
+
 - Applied Lee Henson's patch adding generic overloads to ReflectionHelper
 
 - Added a few more RenderView overloads that take a mimeType to configure the Response.ContentType
