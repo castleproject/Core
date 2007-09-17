@@ -114,25 +114,27 @@
 				
 				<ComponentRef Id='vs2005addin' />
 				<ComponentRef Id='vs8comp' />
-				<ComponentRef Id='componentvs2005_ARProject' />
-				<ComponentRef Id='componentvs2005_ARProjectTest' />
-				<ComponentRef Id='componentvs2005_MRProject' />
-				<ComponentRef Id='componentvs2005_MRProject_Config' />
-				<ComponentRef Id='componentvs2005_MRProject1' />
-				<ComponentRef Id='MRProject.Models' />
-				<ComponentRef Id='componentvs2005_MRProject2' />
-				<ComponentRef Id='componentvs2005_MRProject3' />
-				<ComponentRef Id='componentvs2005_MRProject4' />
-				<ComponentRef Id='componentMRProject.Content.js' />
-				<ComponentRef Id='componentvs2005_MRProject5' />
-				<ComponentRef Id='componentvs2005_MRProject6' />
-				<ComponentRef Id='componentvs2005_MRProject7' />
-				<ComponentRef Id='componentvs2005_MRProjectTest' />
-				<ComponentRef Id='componentvs2005_MRProjectTest_Controllers' />
-				<ComponentRef Id='componentMRProject.ViewsPlaceHolder' />
-				<ComponentRef Id='componentMRProject.ViewsPlaceHolder.contact' />
-				<ComponentRef Id='componentMRProject.ViewsPlaceHolder.home' />
-				<ComponentRef Id='componentMRProject.ViewsPlaceHolder.login' />
+				<ComponentRef Id='ARProject' />
+				<ComponentRef Id='ARProjectTest' />
+				<ComponentRef Id='MRProject' />
+				<ComponentRef Id='MRProject_Config' />
+				<ComponentRef Id='MRProject_Content_css' />
+				<ComponentRef Id='MRProject_Content_images' />
+				<ComponentRef Id='MRProject_Content_js' />
+				<ComponentRef Id='MRProject_Controllers' />
+				<ComponentRef Id='MRProject_Models' />
+				<ComponentRef Id='MRProject_Properties' />
+				<ComponentRef Id='MRProject_Views_contact' />
+				<ComponentRef Id='MRProject_Views_Home' />
+				<ComponentRef Id='MRProject_Views_layouts' />
+				<ComponentRef Id='MRProject_Views_login' />
+				<ComponentRef Id='MRProject_Views_rescues' />
+				<ComponentRef Id='MRProject_ViewsPlaceHolder' />
+				<ComponentRef Id='MRProject_ViewsPlaceHolder_contact' />
+				<ComponentRef Id='MRProject_ViewsPlaceHolder_home' />
+				<ComponentRef Id='MRProject_ViewsPlaceHolder_login' />
+				<ComponentRef Id='MRProjectTest' />
+				<ComponentRef Id='MRProjectTest_Controllers' />
 			</Feature>
 
 		</Feature>
