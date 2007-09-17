@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed IOC-93
+  "GenericListConverter does not handle service overrides properly" 
+
 - Fixed IOC-91
   "ContextBoundObject's context is not bound when object is created by MicroKernel"
 

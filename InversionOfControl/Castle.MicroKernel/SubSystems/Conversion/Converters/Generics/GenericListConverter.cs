@@ -87,7 +87,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 				foreach(IConfiguration itemConfig in configuration.Children)
 				{
-					T item = (T) parent.Context.Composition.PerformConversion(itemConfig.Value, typeof(T));
+					T item = (T) parent.Context.Composition.PerformConversion(itemConfig, typeof(T));
 					list.Add(item);
 				}
 
