@@ -85,6 +85,7 @@
 				<ComponentRef Id="ReleaseNotesServices" />
 				
 				<ComponentRef Id="ProductComponent20" />
+				<ComponentGroupRef Id="ProductComponent20Resources"/>
 			</Feature>
 
 			<Feature 

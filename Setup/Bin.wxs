@@ -111,10 +111,65 @@
 					<File Id="N20nunit.framework.dll" Name="nunit.framework.dll" Source="$(var.BuildNet20Dir)\nunit.framework.dll" />
 
 				</Component>
+				<Directory Id="dirResources_es" Name="es">
+					<Component Id="Resources_es" DiskId="1" Guid="FF0B3A0B-24FA-4585-90D8-EB9F94FF341F">
+						<File Id="Resources_es_Castle.Components.Validator.resources.dll" Name="Castle.Components.Validator.resources.dll" Source="$(var.BuildNet20Dir)\es\Castle.Components.Validator.resources.dll" />
+					</Component>
+				</Directory>
+				<Directory Id="dirResources_fr" Name="fr">
+					<Component Id="Resources_fr" DiskId="1" Guid="EB4AC3E0-A321-4fbc-AF18-1A2D6FA2A7A6">
+						<File Id="Resources_fr_Castle.Components.Validator.resources.dll" Name="Castle.Components.Validator.resources.dll" Source="$(var.BuildNet20Dir)\fr\Castle.Components.Validator.resources.dll" />
+					</Component>
+				</Directory>
+				<Directory Id="dirResources_it" Name="it">
+					<Component Id="Resources_it" DiskId="1" Guid="DF2E2CD7-1D2B-457a-A084-5516F4751E80">
+						<File Id="Resources_it_Castle.Components.Validator.resources.dll" Name="Castle.Components.Validator.resources.dll" Source="$(var.BuildNet20Dir)\it\Castle.Components.Validator.resources.dll" />
+					</Component>
+				</Directory>
+				<Directory Id="dirResources_lt" Name="lt">
+					<Component Id="Resources_lt" DiskId="1" Guid="EA900EA3-36DA-4b68-BC14-73A8B6B87E66">
+						<File Id="Resources_lt_Castle.Components.Validator.resources.dll" Name="Castle.Components.Validator.resources.dll" Source="$(var.BuildNet20Dir)\lt\Castle.Components.Validator.resources.dll" />
+					</Component>
+				</Directory>
+				<Directory Id="dirResources_lv" Name="lv">
+					<Component Id="Resources_lv" DiskId="1" Guid="7A3AA82E-B77A-4d6c-950D-EFD1534070AA">
+						<File Id="Resources_lv_Castle.Components.Validator.resources.dll" Name="Castle.Components.Validator.resources.dll" Source="$(var.BuildNet20Dir)\lv\Castle.Components.Validator.resources.dll" />
+					</Component>
+				</Directory>
+				<Directory Id="dirResources_nl" Name="nl">
+					<Component Id="Resources_nl" DiskId="1" Guid="72EA267E-01A7-4813-806C-AED15D69BB7D">
+						<File Id="Resources_nl_Castle.Components.Validator.resources.dll" Name="Castle.Components.Validator.resources.dll" Source="$(var.BuildNet20Dir)\nl\Castle.Components.Validator.resources.dll" />
+					</Component>
+				</Directory>
+				<Directory Id="dirResources_pt" Name="pt">
+					<Component Id="Resources_pt" DiskId="1" Guid="1B911953-379D-44d0-870A-50CF684100CE">
+						<File Id="Resources_pt_Castle.Components.Validator.resources.dll" Name="Castle.Components.Validator.resources.dll" Source="$(var.BuildNet20Dir)\pt\Castle.Components.Validator.resources.dll" />
+					</Component>
+				</Directory>
+				<Directory Id="dirResources_pt_BR" Name="pt_BR">
+					<Component Id="Resources_pt_BR" DiskId="1" Guid="{51C2D16F-43C2-40d2-AB7F-21950D4AF4AE}">
+						<File Id="Resources_pt_BR_Castle.MonoRail.Framework.resources.dll" Name="Castle.MonoRail.Framework.resources.dll" Source="$(var.BuildNet20Dir)\pt-BR\Castle.MonoRail.Framework.resources.dll" />
+					</Component>
+				</Directory>
+				<Directory Id="dirResources_zh_TW" Name="zh_TW">
+					<Component Id="Resources_zh_TW" DiskId="1" Guid="E35B3231-B317-4478-8BD2-E0792712C145">
+						<File Id="Resources_zh_TW_Castle.MonoRail.Framework.resources.dll" Name="Castle.MonoRail.Framework.resources.dll" Source="$(var.BuildNet20Dir)\zh-TW\Castle.MonoRail.Framework.resources.dll" />
+					</Component>
+				</Directory>
 			</Directory>
 
 		</DirectoryRef>
 
-
+		<ComponentGroup Id="ProductComponent20Resources">
+			<ComponentRef Id="Resources_es"/>
+			<ComponentRef Id="Resources_fr"/>
+			<ComponentRef Id="Resources_it"/>
+			<ComponentRef Id="Resources_lt"/>
+			<ComponentRef Id="Resources_lv"/>
+			<ComponentRef Id="Resources_nl"/>
+			<ComponentRef Id="Resources_pt"/>
+			<ComponentRef Id="Resources_pt_BR"/>
+			<ComponentRef Id="Resources_zh_TW"/>
+		</ComponentGroup>
 	</Fragment>
 </Wix>
