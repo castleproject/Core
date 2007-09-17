@@ -210,6 +210,14 @@
 								<File Id="windsor.jpg" Name="windsor.jpg" Source="$(var.VSTemplates80)\CSharp\MRProject\Content\images\windsor.jpg" />
 							</Component>
 						</Directory>
+						<Directory Id="MRProject.Content.js" Name="js">
+							<Component Id="componentMRProject.Content.js" DiskId="1" Guid="72F9BB91-EEED-466b-AFE2-EF0BBBBE0628">
+								<File Id="behaviour.js" Name="behaviour.js" Source="$(var.VSTemplates80)\CSharp\MRProject\Content\js\behaviour.js" />
+								<File Id="formhelper.js" Name="formhelper.js" Source="$(var.VSTemplates80)\CSharp\MRProject\Content\js\formhelper.js" />
+								<File Id="prototype.js" Name="prototype.js" Source="$(var.VSTemplates80)\CSharp\MRProject\Content\js\prototype.js" />
+								<File Id="scriptaculous.js" Name="scriptaculous.js" Source="$(var.VSTemplates80)\CSharp\MRProject\Content\js\scriptaculous.js" />
+							</Component>
+						</Directory>
 					</Directory>
 					<Directory Id="MRProject.ViewsPlaceHolder" Name="ViewsPlaceHolder">
 						<Component Id="componentMRProject.ViewsPlaceHolder" DiskId="1" Guid="4FC1C962-3875-4cc3-A9E6-90A05C1D43B5">

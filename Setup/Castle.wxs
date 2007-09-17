@@ -123,6 +123,7 @@
 				<ComponentRef Id='componentvs2005_MRProject2' />
 				<ComponentRef Id='componentvs2005_MRProject3' />
 				<ComponentRef Id='componentvs2005_MRProject4' />
+				<ComponentRef Id='componentMRProject.Content.js' />
 				<ComponentRef Id='componentvs2005_MRProject5' />
 				<ComponentRef Id='componentvs2005_MRProject6' />
 				<ComponentRef Id='componentvs2005_MRProject7' />
