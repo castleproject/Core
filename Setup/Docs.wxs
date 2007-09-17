@@ -22,40 +22,18 @@
 				Directory="CastleShortCutDIR" 
 				On="uninstall" />
 
-			<File Id="docs0" Name="ActiveRecord.chm" Source="$(var.BuildBaseDir)\Help\ActiveRecord.chm">
+			<File Id="docs0" Name="Castle.chm" Source="$(var.DocsDir)\Castle.chm">
 			
 				<Shortcut 
 					Id="ShortcutDoc0" 
 					Directory="CastleShortCutDIR" 
-					Name="ActiveRecord API Documentation" 
-					Description="ActiveRecord API Documentation" 
+					Name="API Documentation" 
+					Description="API Documentation" 
 					Hotkey="0" Show="normal" Advertise="yes"
 					IconIndex="0" />
 
 			</File>
 			
-			<File Id="docs1" Name="MicroKernel-Windsor-Facilities.chm" Source="$(var.BuildBaseDir)\Help\MicroKernel-Windsor-Facilities.chm">
-
-				<Shortcut 
-					Id="ShortcutDoc1" 
-					Directory="CastleShortCutDIR" 
-					Name="MicroKernel, Windsor and Facilities API Documentation" 
-					Description="IoC related API Documentation" 
-					Hotkey="0" Show="normal" Advertise="yes" IconIndex="0"  />
-			
-			</File>
-			
-			<File Id="docs2" Name="MonoRail.chm" Source="$(var.BuildBaseDir)\Help\MonoRail.chm">
-
-				<Shortcut 
-					Id="ShortcutDoc2" 
-					Directory="CastleShortCutDIR" 
-					Name="MonoRail API Documentation" 
-					Description="MonoRail API Documentation" 
-					Hotkey="0" Show="normal" Advertise="yes" IconIndex="0"  />
-			
-			</File>
-
 			<!--
 			<CreateFolder Directory="SHORTCUTDIR" />
 			<CreateFolder Directory="CastleShortCutDIR" />

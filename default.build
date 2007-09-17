@@ -39,7 +39,7 @@
 		depends="init recreate-build-directory build"
 		description="Rebuilds Castle in the current configuration" />
 
-	<target name="installer" depends="init createreleasenotes zip-source zip-samples">
+	<target name="installer" depends="init releaseDocs createreleasenotes zip-source zip-samples">
 		<nant buildfile="Setup/Setup.build" />
 	</target>
 
@@ -1013,19 +1013,11 @@
 		</zip>
 	</target>
 	
-	<description>Documentation generation.</description><property name="root.dir" value="." />
-	<property name="doc.dir" value="${root.dir}/docs" />
-	<property name="tempBin.dir" value="${doc.dir}/bin"/>
+	<description>Documentation generation.</description>
 	<property name="outputDocs.file" value="Castle"/>
 	
-	<description>Docs generation properties.</description>
-	<property name="ShowMissing" value="false"/>
-	<property name="ShowPrivate" value="false"/>
-	<property name="OutputTarget" value="HTMLHelp"/>
-
 	<description>Generates documentation with default properties.</description>
 	<target name="releaseDocs" depends="init,cleanup">
-		<call target="copyFilesToDocument"/>
 		<call target="generateReleaseDocs"/>
 	</target>
 	
@@ -1034,115 +1026,27 @@
 		<property name="ShowMissing" value="true"/>
 		<property name="ShowPrivate" value="true"/>
 		<property name="outputDocs.file" value="CastleDev"/>
-		<call target="copyFilesToDocument"/>
 		<call target="generateReleaseDocs"/>
 	</target>
 	
 	<description>Generates documentation for release.</description>
 	<target name="generateReleaseDocs">
-		<ndoc failonerror="true">
-			<assemblies basedir="${tempBin.dir}">
-				<include name="Castle.*.dll"/>
-			</assemblies>
-			<referencepaths>
-				<include name="ActiveRecord/lib"/>
-				<include name="AspectSharp/bin"/>
-				<include name="Monorail/lib"/>
-				<include name="Tools/DynamicProxy/bin"/>
-				<include name="Tools/NVelocity/bin"/>
-				
-				<!-- Components -->
-				<include name="SharedLibs/Prevalence"/>
-				<include name="SharedLibs/Db4o/net-1.1"/>
-				<include name="SharedLibs/IBatis"/>
-				<include name="SharedLibs/NHibernate"/>
-				<include name="SharedLibs/boo"/>
-				<include name="SharedLibs/cassini"/>
-				<include name="SharedLibs/log4net"/>
-				<include name="SharedLibs/netron"/>
-				<include name="SharedLibs/Nlog"/>
-				<include name="SharedLibs/log4net"/>
-				<include name="SharedLibs/Nvelocity"/>
-				<include name="SharedLibs/stringtemplate/net-1.1"/> 
-			</referencepaths>
-			<documenters>
-				<documenter name="MSDN">
-					<property name="OutputTarget" value="${OutputTarget}" />
-					<property name="Preliminary" value="true" />
-					<property name="BinaryTOC" value="true" />
-					<property name="CleanIntermediates" value="true" />
-					<property name="SdkLinksOnWeb" value="true" />
-					
-					<property name="OutputDirectory" value="${doc.dir}" />
-					<property name="HtmlHelpName" value="${outputDocs.file}" />
-					<property name="IncludeFavorites" value="True" />
-					<property name="SplitTOCs" value="False" />
-					
-					<property name="Title" value="Castle API documentation" />	
-					<property name="DefaulTOC" value="Castle.MicroKernel" />
-					
-					<property name="ShowVisualBasic" value="True" />
-					<property name="ShowMissingSummaries" value="${ShowMissing}" />
-					<property name="ShowMissingRemarks" value="${ShowMissing}" />
-					<property name="ShowMissingParams" value="${ShowMissing}" />
-					<property name="ShowMissingReturns" value="${ShowMissing}" />
-					<property name="ShowMissingValues" value="${ShowMissing}" />
-					<property name="DocumentEmptyNamespaces" value="${ShowMissing}" />
-					
-					<property name="AutoPropertyBackerSummaries" value="true" />
-					<property name="AutoDocumentConstructors" value="true" />
-					<property name="DocumentProtected" value="True" />
-					<property name="DocumentInternals" value="${ShowPrivate}" />
-					<property name="DocumentPrivates" value="${ShowPrivate}" />
-					
-					<property name="IncludeAssemblyVersion" value="True" />
-					<property name="CopyrightText" value="Copyright 2004-2007 - Castle Project (original author or authors)" />
-					<property name="CopyrightHref" value="http://www.castleproject.org" />
-				</documenter>
-			</documenters>
-		</ndoc>
-	</target>
-	
-	<description>Copies all files to be documented to a single location to speed up the documentation process.</description>
-	<target name="copyFilesToDocument">
-		<foreach item="Folder" property="foldername">
-			<in>
-				<!-- Hardcode projects folders to speed up assemblies search -->
-				<items>
-					<include name="${build.dir}"/>
-				</items>
-			</in>
-			<do>
-			   <echo message="${foldername}" />
-
-				<foreach item="File" property="file">
-					<in>
-						<items>
-							<include name="${foldername}/Castle.*.dll"/>
-							<include name="${foldername}/AspectSharp*.dll"/>
-							<include name="${foldername}/NVelocity.dll"/>
-							<exclude name="Castle.*.Tests.dll"/>
-						</items>
-					</in>
-					<do>
-						<property name="xml.file" value="${path::change-extension( file, 'xml' )}"/>
-						<copy todir="${tempBin.dir}" if="${file::exists( xml.file )}" flatten="true">
-							<fileset>
-								<include name="${file}"/>
-								<include name="${xml.file}"/>
-							</fileset>
-						</copy>
-					</do>
-				</foreach>
-			</do>
-		</foreach>
+		<property name="root.dir" value="." />
+		<exec program="SandcastleBuilderConsole" basedir="${shfb.dir}" commandline='sandcastle_docs.shfb'>
+			<arg value="-FrameworkVersion=${framework::get-clr-version(framework::get-target-framework())}" />
+			<arg value="-SandcastlePath=${sandcastle.dir}" />
+			<arg value="-HtmlHelp1xCompilerPath=${HtmlHelp1x.dir}" />
+			<arg value="-OutputPath=${docs.dir}" />
+			<arg value="-HtmlHelpName=${outputDocs.file}" />
+			<arg value="-HelpFileFormat=HtmlHelp1x" />
+		</exec>
 	</target>
 	
 	<description>Cleans up prior to documentation generation.</description>
 	<target name="cleanup">
 		<delete>
 			<fileset>
-				<include name="${doc.dir}/**"/>
+				<include name="${docs.dir}/**"/>
 				<exclude name="**/*.chm"/>
 			</fileset>
 		</delete>

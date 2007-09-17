@@ -80,11 +80,12 @@
 		<call target="set-${project.config}-project-configuration" />
 
 		<property name="src.dir" 			value="${path::get-full-path(project::get-base-directory())}" />
-		<property name="build.base.dir"	value="${root.dir}/build" />
+		<property name="build.base.dir"		value="${path::get-full-path(root.dir)}/build" />
 		<property name="build.family.dir"	value="${build.base.dir}/${nant.settings.currentframework}" />
-		<property name="build.dir" 		value="${path::get-full-path(path::combine(build.family.dir,project.config))}" dynamic="true" />
+		<property name="build.dir" 			value="${path::get-full-path(path::combine(build.family.dir,project.config))}" dynamic="true" />
 		<property name="testresults.dir" 	value="${build.dir}/test-results" />
 		<property name="releasenotes.dir"	value="${build.dir}/ReleaseNotes" />
+		<property name="docs.dir" 			value="${build.base.dir}/docs" />
 		<property name="build.rebuild"		value="false" overwrite="false" />
 	</target>
 
@@ -109,6 +110,16 @@
 
 		<!-- Where is WiX? -->
 		<property name="wix.dir" value="${environment::get-folder-path('ProgramFiles')}\Windows Installer XML v3\bin" overwrite="false" />
+
+		<!-- Where is Sandcastle Help File Builder (SHFB)? -->
+		<property name="shfb.dir" value="${environment::get-folder-path('ProgramFiles')}\EWSoftware\Sandcastle Help File Builder" overwrite="false" />
+		
+		<!-- Where is Sandcastle? (Defaults to empty so SHFB attemps to autodetect it) -->
+		<property name="sandcastle.dir" value="${environment::get-folder-path('ProgramFiles')}\Sandcastle" overwrite="false" />
+
+		<!-- Where is HTML Help 1.0? (Defaults to empty so SHFB attemps to autodetect it) -->
+		<property name="HtmlHelp1x.dir" value="${environment::get-folder-path('ProgramFiles')}\HTML Help Workshop" overwrite="false" />
+		
 	</target>
 
 	<target name="set-net-2.0-framework-configuration">

@@ -74,6 +74,14 @@ Allowing partial trust
   > nant -D:assembly.allow-partially-trusted-callers=true
 
 
+Building the Castle MSI installer
+----------------------
+
+  > nant installer
+  
+You need to have installed Sandcastle, Sandcastle Help File Builder, HTML Help 1.x compiler, and WiX v3 for running task.
+
+
 More questions? 
 ===============
 

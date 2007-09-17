@@ -42,8 +42,8 @@
     <VisibleItems>Attributes, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
     <HtmlHelp1xCompilerPath path="" />
     <HtmlHelp2xCompilerPath path="" />
-    <OutputPath>C:\dev\castle\svn\trunk\docs\output\</OutputPath>
-    <SandcastlePath path="..\..\..\..\Program Files\Sandcastle\" />
+    <OutputPath>docs\output\</OutputPath>
+    <SandcastlePath path="" />
     <WorkingPath path="" />
     <CleanIntermediates>True</CleanIntermediates>
     <HelpFileFormat>Website</HelpFileFormat>
