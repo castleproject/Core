@@ -9,10 +9,10 @@
 
 		<!-- We have added the common js files to the project. You can either bring them as static files: -->
 
-		<script type="text/javascript" src="$siteroot/Content/js/prototype.js"></script>
-		<script type="text/javascript" src="$siteroot/Content/js/scriptaculous.js"></script>
-		<script type="text/javascript" src="$siteroot/Content/js/behaviour.js"></script>
-		<script type="text/javascript" src="$siteroot/Content/js/formhelper.js"></script>
+		<script type="text/javascript" src="${siteroot}/Content/js/prototype.js"></script>
+		<script type="text/javascript" src="${siteroot}/Content/js/scriptaculous.js"></script>
+		<script type="text/javascript" src="${siteroot}/Content/js/behaviour.js"></script>
+		<script type="text/javascript" src="${siteroot}/Content/js/formhelper.js"></script>
 
 		<!-- or use the files bundled with MonoRail. We recommend the former, though -->
 
