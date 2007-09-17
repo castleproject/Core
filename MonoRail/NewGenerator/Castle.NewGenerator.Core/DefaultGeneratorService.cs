@@ -90,7 +90,7 @@ namespace Castle.NewGenerator.Core
 		{
 			VSSolution solution = new VSSolution(name, solutionFolder, Path.Combine(solutionFolder, name + ".sln"));
 
-			foreach(VSProject project in projects)
+			foreach (VSProject project in projects)
 			{
 				solution.Add(project);
 			}

@@ -21,9 +21,10 @@
 		startable="true"
 		service="Castle.Facilities.Remoting.TestComponents.ICalcService, Castle.Facilities.Remoting.TestComponents"
 		type="Castle.Facilities.Remoting.TestComponents.CalcServiceImpl, Castle.Facilities.Remoting.TestComponents"
-		remoteserver="recoverableComponent"
-		uri="calc.service.persistent.rem" />
-  
+		remoteserver="recoverableComponent" />
+		<!-- If uri is specified here, client uri should be a full uri (baseUri + uri) 
+			server:  uri="test" 
+			client:  uri="#{baseuri}/test"-->
   </components>
 
 </configuration>

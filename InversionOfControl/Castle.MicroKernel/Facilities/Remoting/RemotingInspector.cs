@@ -215,7 +215,7 @@ namespace Castle.Facilities.Remoting
 				{
 					CheckHasBaseURI();
 						
-					String remoteUri = BuildUri(uri);
+					String remoteUri = SetUriExtensionIfNeeded(uri);
 						
 					model.ExtendedProperties.Add("remoting.uri", remoteUri);
 					model.ExtendedProperties.Add("remoting.remoteregistry", remoteRegistry);
