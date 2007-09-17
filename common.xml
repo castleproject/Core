@@ -233,10 +233,10 @@
 		<!-- Where is Sandcastle Help File Builder (SHFB)? -->
 		<property name="shfb.dir" value="${environment::get-folder-path('ProgramFiles')}\EWSoftware\Sandcastle Help File Builder" overwrite="false" />
 		
-		<!-- Where is Sandcastle? (Defaults to empty so SHFB attemps to autodetect it) -->
+		<!-- Where is Sandcastle? -->
 		<property name="sandcastle.dir" value="${environment::get-folder-path('ProgramFiles')}\Sandcastle" overwrite="false" />
 
-		<!-- Where is HTML Help 1.0? (Defaults to empty so SHFB attemps to autodetect it) -->
+		<!-- Where is HTML Help 1.0? -->
 		<property name="htmlhelp1x.dir" value="${environment::get-folder-path('ProgramFiles')}\HTML Help Workshop" overwrite="false" />		
 	</target>
 

@@ -1018,13 +1018,15 @@
 	
 	<description>Generates documentation with default properties.</description>
 	<target name="releaseDocs" depends="init,cleanup">
+		<property name="sanddoc.visibleitems" value="Attributes, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected" />
+		<property name="sanddoc.missingtags" value="Summary, Parameter, AutoDocumentCtors, Namespace" />
 		<call target="generateReleaseDocs"/>
 	</target>
 	
 	<description>Generates documentation for developers, with all missing information indicated and private members visible.</description>
-	<target name="devDocs" depends="cleanup">
-		<property name="ShowMissing" value="true"/>
-		<property name="ShowPrivate" value="true"/>
+	<target name="devDocs" depends="init,cleanup">
+		<property name="sanddoc.visibleitems" value="Attributes, InheritedMembers, InheritedFrameworkMembers, Privates, Protected, SealedProtected" />
+		<property name="sanddoc.missingtags" value="Summary, Parameter, Returns, Value, AutoDocumentCtors, Namespace" />
 		<property name="outputDocs.file" value="CastleDev"/>
 		<call target="generateReleaseDocs"/>
 	</target>
@@ -1039,6 +1041,8 @@
 			<arg value="-OutputPath=${docs.dir}" />
 			<arg value="-HtmlHelpName=${outputDocs.file}" />
 			<arg value="-HelpFileFormat=HtmlHelp1x" />
+			<arg value="-VisibleItems=${sanddoc.visibleitems}" />
+			<arg value="-MissingTags=${sanddoc.missingtags}" />
 		</exec>
 	</target>
 	
