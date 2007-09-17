@@ -13,22 +13,9 @@
 		<include name="DynamicProxy/DynamicProxy.build" />
 		<include name="Castle.DynamicProxy2/Castle.DynamicProxy2.build" />
 		<include name="NVelocity/nvelocity.build" />
+		<include name="VSNetWizards/VsNetIntegration.build" />
 	</fileset>
 
 	<target name="build" depends="common.build" />
-	
-	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
-	
-	<target name="dynamicproxy2">
-		<nant buildfile="Castle.DynamicProxy2/Castle.DynamicProxy2.build" target="build" />
-	</target>
-
-	<target name="nvelocity">
-		<nant buildfile="NVelocity/nvelocity.build" target="build" />
-	</target>
-
-	<target name="vsintegration">
-		<nant buildfile="VSNetWizards/VsNetIntegration.build" target="build" />
-	</target>
 	
 </project>
