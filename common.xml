@@ -99,27 +99,6 @@
 
 		<property name="build.msbuild" 	value="false" overwrite="false" />
 
-		<!-- Where is MbUnit.Cons.exe ? -->
-		<property name="mbunit-console" value="MbUnit.Cons.exe" overwrite="false" />
-
-		<!-- Where is nunit-console executable(win/mono) ? -->
-		<property name="nunit-console2" value="nunit-console2" overwrite="false" />
-		<property name="nunit-console" value="nunit-console" overwrite="false" />
-
-		<property name="testrunner" value="NUnit" />
-
-		<!-- Where is WiX? -->
-		<property name="wix.dir" value="${environment::get-folder-path('ProgramFiles')}\Windows Installer XML v3\bin" overwrite="false" />
-
-		<!-- Where is Sandcastle Help File Builder (SHFB)? -->
-		<property name="shfb.dir" value="${environment::get-folder-path('ProgramFiles')}\EWSoftware\Sandcastle Help File Builder" overwrite="false" />
-		
-		<!-- Where is Sandcastle? (Defaults to empty so SHFB attemps to autodetect it) -->
-		<property name="sandcastle.dir" value="${environment::get-folder-path('ProgramFiles')}\Sandcastle" overwrite="false" />
-
-		<!-- Where is HTML Help 1.0? (Defaults to empty so SHFB attemps to autodetect it) -->
-		<property name="HtmlHelp1x.dir" value="${environment::get-folder-path('ProgramFiles')}\HTML Help Workshop" overwrite="false" />
-		
 	</target>
 
 	<target name="set-net-2.0-framework-configuration">
@@ -176,7 +155,7 @@
 	</target>
 
 	<target name="common.init"
-		depends="set-framework-configuration set-project-configuration common.check-nant-version"
+		depends="common.check-nant-version common.find-tools set-framework-configuration set-project-configuration"
 		description="Initializes build properties">
 
 		<fileset id="project.sources" failonempty="true">
@@ -236,6 +215,29 @@
 
 	<target name="common.check-nant-version">
 		<fail if="${current.nant-version&lt;required.nant-version}" message="Not using minimum required Nant version: ${required.nant-version} (current version: ${current.nant-version}). Please upgrade your copy of nant." />
+	</target>
+
+	<target name="common.find-tools">
+		<!-- Where is MbUnit.Cons.exe ? -->
+		<property name="mbunit-console" value="MbUnit.Cons.exe" overwrite="false" />
+
+		<!-- Where is nunit-console executable(win/mono) ? -->
+		<property name="nunit-console2" value="nunit-console2" overwrite="false" />
+		<property name="nunit-console" value="nunit-console" overwrite="false" />
+
+		<property name="testrunner" value="NUnit" />
+
+		<!-- Where is WiX? -->
+		<property name="wix.dir" value="${environment::get-folder-path('ProgramFiles')}\Windows Installer XML v3\bin" overwrite="false" />
+
+		<!-- Where is Sandcastle Help File Builder (SHFB)? -->
+		<property name="shfb.dir" value="${environment::get-folder-path('ProgramFiles')}\EWSoftware\Sandcastle Help File Builder" overwrite="false" />
+		
+		<!-- Where is Sandcastle? (Defaults to empty so SHFB attemps to autodetect it) -->
+		<property name="sandcastle.dir" value="${environment::get-folder-path('ProgramFiles')}\Sandcastle" overwrite="false" />
+
+		<!-- Where is HTML Help 1.0? (Defaults to empty so SHFB attemps to autodetect it) -->
+		<property name="htmlhelp1x.dir" value="${environment::get-folder-path('ProgramFiles')}\HTML Help Workshop" overwrite="false" />		
 	</target>
 
 </project>

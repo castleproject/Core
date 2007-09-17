@@ -1035,7 +1035,7 @@
 		<exec program="SandcastleBuilderConsole" basedir="${shfb.dir}" commandline='sandcastle_docs.shfb'>
 			<arg value="-FrameworkVersion=${framework::get-clr-version(framework::get-target-framework())}" />
 			<arg value="-SandcastlePath=${sandcastle.dir}" />
-			<arg value="-HtmlHelp1xCompilerPath=${HtmlHelp1x.dir}" />
+			<arg value="-HtmlHelp1xCompilerPath=${htmlhelp1x.dir}" />
 			<arg value="-OutputPath=${docs.dir}" />
 			<arg value="-HtmlHelpName=${outputDocs.file}" />
 			<arg value="-HelpFileFormat=HtmlHelp1x" />
