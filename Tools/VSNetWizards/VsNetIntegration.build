@@ -4,10 +4,13 @@
 	default="build"
 	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
 >
-	<target name="build" depends="vsnetwizard" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<target name="build" depends="common.init vsnetwizard" />
 
 	<target name="vsnetwizard" >
-		<if test="${platform::is-win32()}">
+		<if test="${platform::is-win32() and property::exists('dev.env.dir') and directory::exists(dev.env.dir)}">
 			<nant buildfile="Castle.VSNetIntegration.CastleWizards/wizards.build" />
 		</if>
 	</target>
