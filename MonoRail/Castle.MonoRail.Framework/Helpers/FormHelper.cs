@@ -22,6 +22,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
+	using Services;
 	using HtmlTextWriter = System.Web.UI.HtmlTextWriter;
 
 	using Castle.Core;
@@ -86,7 +87,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// 
 	/// <para>On the view (using NVelocity syntax)</para>
 	/// 
-	/// <code>
+	/// <code lang="none">
 	/// $Form.TextField('name') // Renders an input text with value "John Doe"
 	/// </code>
 	/// 
@@ -103,7 +104,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// 
 	/// <para>On the view (using NVelocity syntax)</para>
 	/// 
-	/// <code>
+	/// <code lang="none">
 	/// $Form.TextField('user.name') // Renders an input text with value "John Doe"
 	/// </code>
 	/// </example>
@@ -115,8 +116,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <item>
 	///		<term>Buttons</term>
 	///		<description>
-	///		<see cref="Submit(string)"/>
-	///		<see cref="Button(string)" />
+	///		<see cref="Submit(string)"/> <br/>
+	///		<see cref="Button(string)" /> <br/>
 	///		<see cref="ButtonElement(string)" />
 	///		</description>
 	/// </item>
@@ -145,7 +146,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <item>
 	///		<term>Checkbox field</term>
 	///		<description>
-	///		<see cref="CheckboxField(string)" /> 
+	///		<see cref="CheckboxField(string)" />  <br/>
 	///		<see cref="CreateCheckboxList(string,IEnumerable)" /> 
 	///		</description>
 	/// </item>
@@ -167,9 +168,9 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <item>
 	///		<term>Text field</term>
 	///		<description>
-	///		<see cref="TextField(string)" />
-	///		<see cref="TextFieldValue(string, object)"/>
-	///		<see cref="NumberField(string)" />
+	///		<see cref="TextField(string)" /> <br/>
+	///		<see cref="TextFieldValue(string, object)"/> <br/>
+	///		<see cref="NumberField(string)" /> <br/>
 	///		<see cref="NumberFieldValue(string, object)"/>
 	///		</description>
 	/// </item>
@@ -177,7 +178,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <item>
 	///		<term>Password field</term>
 	///		<description>
-	///		<see cref="PasswordField(string)" />
+	///		<see cref="PasswordField(string)" /> <br/>
 	///		<see cref="PasswordNumberField(string)" />
 	///		</description>
 	/// </item>
@@ -185,7 +186,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <item>
 	///		<term>Labels</term>
 	///		<description>
-	///		<see cref="LabelFor(string,string)" />
+	///		<see cref="LabelFor(string,string)" /> <br/>
 	///		<see cref="LabelFor(string,string,IDictionary)"/>
 	///		</description>
 	/// </item>
@@ -230,6 +231,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// the entries <c>mask</c> and optionally <c>mask_separator</c> to define a 
 	/// mask for your inputs. Kudos to mordechai Sandhaus - 52action.com
 	/// </para>
+	/// 
 	/// <para>
 	/// For example: mask='2,5',mask_separator='/' will mask the content to '12/34/1234'
 	/// </para>
@@ -310,6 +312,47 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// The action attribute generation will use <see cref="UrlHelper"/>
 		/// </para>
 		/// </summary>
+		/// 
+		/// <seealso cref="DefaultUrlBuilder.BuildUrl(UrlInfo,IDictionary)"/>
+		/// 
+		/// <example>
+		/// 
+		/// <code lang="none">
+		/// $Form.FormTag("%{action='Save',id='productform'}")
+		/// </code>
+		/// 
+		/// Outputs:
+		/// 
+		/// <code lang="xml">
+		/// &lt;form method='post' action='/[appdir]/[controller]/Save.[extension]' id='productform'&gt;
+		/// </code>
+		///
+		/// </example>
+		/// 
+		/// <remarks>
+		/// The parameters are used to build a url and also to form the tag. For notes on the url 
+		/// see <see cref="DefaultUrlBuilder.BuildUrl(UrlInfo,IDictionary)"/>. The other parameters supported 
+		/// follows
+		/// 
+		/// <list type="table">
+		/// <term>
+		///		<term>noaction</term>
+		///		<description>boolean. Disables the generation of an action</description>
+		/// </term>
+		/// <term>
+		///		<term>method</term>
+		///		<description>string. The http method to use. Defaults to <c>post</c></description>
+		/// </term>
+		/// <term>
+		///		<term>id</term>
+		///		<description>string. The form id.</description>
+		/// </term>
+		/// </list>
+		/// 
+		/// More parameters can be accepted depending on the form validation strategy you are using (if any).
+		/// 
+		/// </remarks>
+		/// 
 		/// <param name="parameters">The parameters for the tag or for action and form validation generation.</param>
 		/// <returns></returns>
 		public string FormTag(IDictionary parameters)
@@ -336,6 +379,39 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// The action attribute generation will use <see cref="UrlHelper"/>
 		/// </para>
 		/// </summary>
+		/// 
+		/// <example>
+		/// 
+		/// <code lang="none">
+		/// $Form.FormTag('mytarget.castle', "%{id='productform'}")
+		/// </code>
+		/// 
+		/// Outputs:
+		/// 
+		/// <code lang="xml">
+		/// &lt;form method='post' action='mytarget.castle' id='productform'&gt;
+		/// </code>
+		///
+		/// </example>
+		/// 
+		/// <remarks>
+		/// The following parameters are accepted.
+		/// 
+		/// <list type="table">
+		/// <term>
+		///		<term>method</term>
+		///		<description>string. The http method to use. Defaults to <c>post</c></description>
+		/// </term>
+		/// <term>
+		///		<term>id</term>
+		///		<description>string. The form id.</description>
+		/// </term>
+		/// </list>
+		/// 
+		/// More parameters can be accepted depending on the form validation strategy you are using (if any).
+		/// 
+		/// </remarks>
+		/// 
 		/// <param name="url">The hardcoded url.</param>
 		/// <param name="parameters">The parameters for the tag or for action and form validation generation.</param>
 		/// <returns></returns>
@@ -366,7 +442,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Generate Ajax form tag for ajax based form submission
+		/// Generate Ajax form tag for ajax based form submission. Experimental.
 		/// </summary>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
@@ -428,6 +504,10 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Renders an end form element.
 		/// </summary>
+		/// <remarks>
+		/// Should be used if you are using form validation. Some validation approaches
+		/// uses the end form before or after appending a javascript snippet.
+		/// </remarks>
 		/// <returns></returns>
 		public string EndFormTag()
 		{
@@ -445,7 +525,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
-		#region Object scope related (TODO: Document)
+		#region Object scope related
 
 		/// <summary>
 		/// Pushes the specified target. Experimental.
@@ -500,7 +580,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Generates an input submit element.
 		/// </summary>
-		/// <param name="value">The value.</param>
+		/// <param name="value">The value/caption for the button.</param>
 		/// <returns>The element tag</returns>
 		public string Submit(string value)
 		{
@@ -510,7 +590,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Generates an input submit element.
 		/// </summary>
-		/// <param name="value">The value.</param>
+		/// <param name="value">The value/caption for the button.</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The element tag</returns>
 		public string Submit(string value, IDictionary attributes)
@@ -580,7 +660,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Generates an input text form element
 		/// with the supplied value
 		/// </summary>
-		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="target">The string to be used to create the element name.</param>
 		/// <param name="value">Value to supply to the element (instead of querying the target)</param>
 		/// <returns>The generated form element</returns>
 		public string TextFieldValue(string target, object value)
@@ -592,7 +672,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Generates an input text form element
 		/// with the supplied value
 		/// </summary>
-		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="target">The string to be used to create the element name.</param>
 		/// <param name="value">Value to supply to the element (instead of querying the target)</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
@@ -611,6 +691,33 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// The value is extracted from the target (if available)
 		/// </para>
 		/// </summary>
+		/// 
+		/// <example>
+		/// The following example assumes that an entry <c>username</c> exists on the
+		/// <see cref="Controller.PropertyBag"/> or <see cref="Controller.Flash"/> or <see cref="Controller.Session"/>
+		/// 
+		/// <code lang="none">
+		/// $Form.TextField('username')
+		/// </code>
+		/// Outputs:
+		/// <code lang="xml">
+		/// &lt;input type='text' name='username' id='username' value='John Doe' /&gt;
+		/// </code>
+		/// 
+		/// <para>
+		/// The following example assumes that an entry <c>user</c> exists on the
+		/// <see cref="Controller.PropertyBag"/> or <see cref="Controller.Flash"/> or <see cref="Controller.Session"/>
+		/// </para>
+		/// 
+		/// <code lang="none">
+		/// $Form.TextField('user.name')
+		/// </code>
+		/// Outputs:
+		/// <code lang="xml">
+		/// &lt;input type='text' name='user.name' id='user_name' value='John Doe' /&gt;
+		/// </code>
+		/// </example>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <returns>The generated form element</returns>
 		public string TextField(string target)
@@ -624,6 +731,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// The value is extracted from the target (if available)
 		/// </para>
 		/// </summary>
+		/// 
+		/// <seealso cref="TextField(string)"/>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
@@ -649,11 +759,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// The value is extracted from the target (if available)
 		/// </para>
 		/// </summary>
+		/// 
+		/// <seealso cref="InstallScripts"/>
+		/// <seealso cref="NumberField(string,IDictionary)"/>
+		/// 
+		/// <remarks>
+		/// You must include the formhelper javascript functions to use the NumberField. 
+		/// See <see cref="InstallScripts"/>
+		/// </remarks>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <returns>The generated form element</returns>
-		/// <remarks>
-		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
-		/// </remarks>
 		public string NumberField(string target)
 		{
 			return NumberField(target, null);
@@ -665,6 +781,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <para>
 		/// The value is extracted from the target (if available)
 		/// </para>
+		/// </summary>
+		/// 
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
+		/// 
+		/// <remarks>
+		/// You must include the formhelper javascript functions to use the NumberField. 
+		/// See <see cref="InstallScripts"/>
 		/// <para>
 		/// You can optionally pass an <c>exceptions</c> value through the dictionary.
 		/// It must be a comma separated list of chars that can be accepted on the field. 
@@ -683,12 +808,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// FormHelper.NumberField("product.price", {forbid='46'})
 		/// </code>
 		/// In this case the key code 46 (period) will not be accepted on the field.
-		/// </summary>
-		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
-		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
-		/// <returns>The generated form element</returns>
-		/// <remarks>
-		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
 		/// </remarks>
 		public string NumberField(string target, IDictionary attributes)
 		{
@@ -713,11 +832,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// chars other than numbers from being entered. The value is not gathered 
 		/// from the context, instead you specify it on the second argument
 		/// </summary>
+		/// 
+		/// <seealso cref="InstallScripts"/>
+		/// <seealso cref="NumberField(string,IDictionary)"/>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="value">The current value to output.</param>
 		/// <returns>The generated form element</returns>
+		/// 
 		/// <remarks>
-		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
+		/// You must include the formhelper javascript functions to use the NumberField. 
+		/// See <see cref="InstallScripts"/>
 		/// </remarks>
 		public string NumberFieldValue(string target, object value)
 		{
@@ -728,31 +853,19 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Generates an input text element with a javascript that prevents
 		/// chars other than numbers from being entered. The value is not gathered 
 		/// from the context, instead you specify it on the second argument
-		/// <para>
-		/// You can optionally pass an <c>exceptions</c> value through the dictionary.
-		/// It must be a comma separated list of chars that can be accepted on the field. 
-		/// For example:
-		/// </para>
-		/// <code>
-		/// FormHelper.NumberField("product.price", {exceptions='13,10,11'})
-		/// </code>
-		/// In this case the key codes 13, 10 and 11 will be accepted on the field.
-		/// <para>
-		/// You can aslo optionally pass an <c>forbid</c> value through the dictionary.
-		/// It must be a comma separated list of chars that cannot be accepted on the field. 
-		/// For example:
-		/// </para>
-		/// <code>
-		/// FormHelper.NumberField("product.price", {forbid='46'})
-		/// </code>
-		/// In this case the key code 46 (period) will not be accepted on the field.
 		/// </summary>
+		/// 
+		/// <seealso cref="InstallScripts"/>
+		/// <seealso cref="NumberField(string,IDictionary)"/>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="value">The current value to output.</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
+		/// 
 		/// <remarks>
-		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
+		/// You must include the formhelper javascript functions to use the NumberField. 
+		/// See <see cref="InstallScripts"/>
 		/// </remarks>
 		public string NumberFieldValue(string target, object value, IDictionary attributes)
 		{
@@ -1051,6 +1164,57 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// the <c>attributes</c> as it would not be inferred.
 		/// </para>
 		/// </summary>
+		/// 
+		/// <example>
+		/// Consider the following action code:
+		/// <code>
+		/// public void Index()
+		/// {
+		///     // data source
+		///     PropertyBag["primenumbers"] = new int[] { 2, 3, 5, 7, 11, 13, 17, 19, 23 };
+		///     
+		///     // initial selection
+		///     PropertyBag["selectedPrimes"] = new int[] { 11, 19 };
+		/// }
+		/// </code>
+		/// 
+		/// And the respective view code
+		/// 
+		/// <code lang="none">
+		/// #set($items = $FormHelper.CreateCheckboxList("selectedPrimes", $primenumbers))
+		/// 
+		/// #foreach($elem in $items)
+		///   $items.Item()  $elem 
+		/// #end
+		/// </code>
+		/// 
+		/// That will generates the following html:
+		/// 
+		/// <code lang="none">
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;selectedPrimes_0_&quot; name=&quot;selectedPrimes[0]&quot; value=&quot;2&quot; /&gt;  2   
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;selectedPrimes_1_&quot; name=&quot;selectedPrimes[1]&quot; value=&quot;3&quot; /&gt;  3   
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;selectedPrimes_2_&quot; name=&quot;selectedPrimes[2]&quot; value=&quot;5&quot; /&gt;  5   
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;selectedPrimes_3_&quot; name=&quot;selectedPrimes[3]&quot; value=&quot;7&quot; /&gt;  7   
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;selectedPrimes_4_&quot; name=&quot;selectedPrimes[4]&quot; value=&quot;11&quot; checked=&quot;checked&quot; /&gt;  11  
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;selectedPrimes_5_&quot; name=&quot;selectedPrimes[5]&quot; value=&quot;13&quot; /&gt;  13   
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;selectedPrimes_6_&quot; name=&quot;selectedPrimes[6]&quot; value=&quot;17&quot; /&gt;  17   
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;selectedPrimes_7_&quot; name=&quot;selectedPrimes[7]&quot; value=&quot;19&quot; checked=&quot;checked&quot; /&gt;  19  
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;selectedPrimes_8_&quot; name=&quot;selectedPrimes[8]&quot; value=&quot;23&quot; /&gt;  23   
+		/// </code>
+		/// 
+		/// <para>
+		/// To customize the id, you can call the <see cref="CheckboxList.Item(string)"/> overload:
+		/// </para>
+		/// 
+		/// <code lang="none">
+		/// #set($items = $FormHelper.CreateCheckboxList("selectedPrimes", $primenumbers))
+		/// 
+		/// #foreach($elem in $items)
+		///   $items.Item("myId${velocityCount}") $Form.LabelFor("myId${velocityCount}", $elem.ToString()) <br/>
+		/// #end
+		/// </code>
+		/// </example>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="dataSource">The set of available elements</param>
 		/// <returns>The generated form element</returns>
@@ -1078,6 +1242,43 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// the <c>attributes</c> as it would not be inferred.
 		/// </para>
 		/// </summary>
+		/// 
+		/// <seealso cref="CreateCheckboxList(string,IEnumerable)"/>
+		///
+		/// <example>
+		/// Consider the following action code:
+		/// <code>
+		/// public void Index()
+		/// {
+		///		Category[] categories = new Category[] { new Category(1, "Music"), new Category(2, "Humor"), new Category(3, "Politics")  };
+		///		PropertyBag["categories"] = categories; // datasource
+		/// 
+		///     Blog blog = new Blog();
+		///     blog.Categories = new Category[] { new Category(2, "Humor") }; // initial selection
+		///		PropertyBag["blog"] = blog;
+		/// }
+		/// </code>
+		/// 
+		/// And the respective view code
+		/// 
+		/// <code lang="none">
+		/// #set($items = $Form.CreateCheckboxList("blog.categories", $categories, "%{value='Id'}"))
+		/// 
+		/// #foreach($elem in $items)
+		///   $items.Item()  $elem  
+		/// #end
+		/// </code>
+		/// 
+		/// That will generates the following html:
+		/// 
+		/// <code lang="none">
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;blog_categories_0_&quot; name=&quot;blog.categories[0].Id&quot; value=&quot;1&quot; /&gt;  Music   
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;blog_categories_1_&quot; name=&quot;blog.categories[1].Id&quot; value=&quot;2&quot; checked=&quot;checked&quot; /&gt;  Humor  
+		///   &lt;input type=&quot;checkbox&quot; id=&quot;blog_categories_2_&quot; name=&quot;blog.categories[2].Id&quot; value=&quot;3&quot; /&gt;  Politics  
+		/// </code>
+		/// 
+		/// </example>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="dataSource">The set of available elements</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
@@ -1092,7 +1293,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 		
 		/// <summary>
-		/// 
+		/// Outputs a checkbox element (for internal use)
 		/// </summary>
 		/// <param name="index"></param>
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
@@ -1122,18 +1323,13 @@ namespace Castle.MonoRail.Framework.Helpers
 				computedTarget += "." + suffix;
 			}
 
-			string result = CreateInputElement("checkbox", elementId, computedTarget, item.Value, attributes);
-
-			// I need a test case to justify this case
-//			string hiddenElementId = elementId + "H";
-//			string hiddenElementValue = CommonUtils.ObtainEntryAndRemove(attributes, "falseValue", "false");
-//			result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
-
-			return result;
+			return CreateInputElement("checkbox", elementId, computedTarget, item.Value, attributes);
 		}
 
 		/// <summary>
-		/// 
+		/// This class is an enumerable list of checkboxes. 
+		/// It uses the <see cref="OperationState"/> to manage the sets
+		/// and to control the check/uncheck state.
 		/// </summary>
 		public sealed class CheckboxList : IEnumerable, IEnumerator
 		{
@@ -1146,11 +1342,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			private int index = -1;
 
 			/// <summary>
-			/// 
+			/// Initializes a new instance of the <see cref="CheckboxList"/> class.
 			/// </summary>
-			/// <param name="helper"></param>
+			/// <param name="helper">The helper.</param>
 			/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
-			/// <param name="initialSelectionSet"></param>
+			/// <param name="initialSelectionSet">The initial selection set.</param>
 			/// <param name="dataSource">The set of available elements</param>
 			/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 			public CheckboxList(FormHelper helper, string target,
@@ -1160,7 +1356,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				this.helper = helper;
 				this.target = target;
-				this.attributes = attributes == null ? new HybridDictionary(true) : attributes;
+				this.attributes = attributes ?? new HybridDictionary(true);
 				
 				operationState = SetOperation.IterateOnDataSource(initialSelectionSet, dataSource, attributes);
 				enumerator = operationState.GetEnumerator();
@@ -1274,6 +1470,23 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// This allow the process the be aware of the unchecked value
 		/// and act accordingly.
 		/// </summary>
+		/// 
+		/// <example>
+		/// Consider the following view code:
+		/// 
+		/// <code lang="none">
+		/// $Form.CheckboxField('user.disabled')
+		/// </code>
+		/// 
+		/// That is going to output:
+		/// 
+		/// <code lang="none">
+		///  &lt;input type=&quot;checkbox&quot; id=&quot;user_disabled&quot; name=&quot;user.disabled&quot; value=&quot;true&quot; /&gt;
+		///  &lt;input type=&quot;hidden&quot; id=&quot;user_disabledH&quot; name=&quot;user.disabled&quot; value=&quot;false&quot; /&gt; 
+		/// </code>
+		/// 
+		/// </example>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <returns>The generated form element</returns>
 		public string CheckboxField(string target)
@@ -1286,12 +1499,18 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// way to send a value if the primary checkbox is not checked.
 		/// This allow the process the be aware of the unchecked value
 		/// and act accordingly.
+		/// 
 		/// <para>
 		/// The checked and unchecked values sent to the server defaults
 		/// to true and false. You can override them using the 
-		/// parameters <c>trueValue</c> and <c>falseValue</c>.
+		/// parameters <c>trueValue</c> and <c>falseValue</c>, but the DataBinder is prepared only
+		/// to treat boolean arrays. 
 		/// </para>
+		/// 
 		/// </summary>
+		/// 
+		/// <seealso cref="CheckboxField(string)"/>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
@@ -1348,6 +1567,41 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// It will automatically check the radio if the target 
 		/// evaluated value is equal to the specified <c>valueToSend</c>.
 		/// </summary>
+		/// 
+		/// <example>
+		///	Consider the following action code:
+		/// 
+		/// <code>
+		/// public void Index()
+		/// {
+		///		PropertyBag["mode"] = FileMode.Truncate;
+		/// }
+		/// </code>
+		/// 
+		/// And the following view code:
+		/// 
+		/// <code lang="none">
+		///   $Form.RadioField("mode", "Append") FileMode.Append 
+		///   $Form.RadioField("mode", "Create") FileMode.Create 
+		///   $Form.RadioField("mode", "CreateNew") FileMode.CreateNew 
+		///   $Form.RadioField("mode", "Open") FileMode.Open 
+		///   $Form.RadioField("mode", "OpenOrCreate", "%{id='customhtmlid'}") FileMode.OpenOrCreate 
+		///   $Form.RadioField("mode", "Truncate") FileMode.Truncate 
+		/// </code>
+		/// 
+		/// That is going to output:
+		/// 
+		/// <code lang="none">
+		///  &lt;input type=&quot;radio&quot; id=&quot;mode&quot; name=&quot;mode&quot; value=&quot;Append&quot; /&gt; FileMode.Append 
+		///  &lt;input type=&quot;radio&quot; id=&quot;mode&quot; name=&quot;mode&quot; value=&quot;Create&quot; /&gt; FileMode.Create 
+		///  &lt;input type=&quot;radio&quot; id=&quot;mode&quot; name=&quot;mode&quot; value=&quot;CreateNew&quot; /&gt; FileMode.CreateNew  
+		///  &lt;input type=&quot;radio&quot; id=&quot;mode&quot; name=&quot;mode&quot; value=&quot;Open&quot; /&gt; FileMode.Open 
+		///  &lt;input type=&quot;radio&quot; id=&quot;customhtmlid&quot; name=&quot;mode&quot; value=&quot;OpenOrCreate&quot; /&gt; FileMode.OpenOrCreate  
+		///  &lt;input type=&quot;radio&quot; id=&quot;mode&quot; name=&quot;mode&quot; value=&quot;Truncate&quot; checked=&quot;checked&quot; /&gt; FileMode.Truncate 
+		/// </code>
+		/// 
+		/// </example>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="valueToSend"></param>
 		/// <returns>The generated form element</returns>
@@ -1362,6 +1616,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// It will automatically check the radio if the target 
 		/// evaluated value is equal to the specified <c>valueToSend</c>.
 		/// </summary>
+		/// 
+		/// <seealso cref="RadioField(string,object)"/>
+		/// 
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="valueToSend"></param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
@@ -1608,10 +1865,10 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
-		#region Enum 
+		#region Enum
 
 		/// <summary>
-		/// Creates a list of pairs for the type enum. 
+		/// Creates a list of pairs for the enum type. 
 		/// </summary>
 		/// <param name="enumType">enum type.</param>
 		/// <returns></returns>

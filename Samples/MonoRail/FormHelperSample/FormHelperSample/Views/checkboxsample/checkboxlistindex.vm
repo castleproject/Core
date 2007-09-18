@@ -9,7 +9,7 @@ $Form.FormTag("%{action='ProcessCheckboxList'}")
 #set($items = $Form.CreateCheckboxList("selectedPrimes", $primenumbers))
 
 #foreach($elem in $items)
-  $items.Item()  $elem   <br/>
+   $items.Item("myId${velocityCount}") $Form.LabelFor("myId${velocityCount}", $elem.ToString())  <br/>
 #end
 </p>
 
