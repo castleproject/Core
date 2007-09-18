@@ -72,6 +72,7 @@ namespace Castle.ActiveRecord
 		private bool insert = true;
 		private bool notnull;
 		private bool unique;
+		private String propertyRef;
 		private FetchEnum fetchMethod = FetchEnum.Unspecified;
 		private CascadeEnum cascade = CascadeEnum.None;
 		private NotFoundBehaviour notFoundBehaviour = NotFoundBehaviour.Default;
@@ -180,6 +181,18 @@ namespace Castle.ActiveRecord
 		{
 			get { return fetchMethod; }
 			set { fetchMethod = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate docs: The name of a property of the 
+		/// associated class that is joined to the primary key 
+		/// of this class. If not specified, the primary key of 
+		/// the associated class is used.
+		/// </summary>
+		public string PropertyRef
+		{
+			get { return propertyRef; }
+			set { propertyRef = value; }
 		}
 
 		/// <summary>

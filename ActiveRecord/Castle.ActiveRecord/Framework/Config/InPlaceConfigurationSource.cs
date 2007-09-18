@@ -372,13 +372,13 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// <param name="config">The configuration</param>
 		private static void ProcessConfiguration(IConfiguration config)
 		{
-			const string ConnectionStringKey = "hibernate.connection.connection_string";
+			const string ConnectionStringKey = "connection.connection_string";
 
 			for(int i = 0; i < config.Children.Count; ++i)
 			{
 				IConfiguration property = config.Children[i];
 
-				if (property.Name == ConnectionStringKey)
+				if (property.Name.IndexOf(ConnectionStringKey) >= 0)
 				{
 					String value = property.Value;
 					Regex connectionStringRegex = new Regex(@"ConnectionString\s*=\s*\$\{(?<ConnectionStringName>[^}]+)\}");

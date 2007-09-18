@@ -1,6 +1,8 @@
 Release Candidate 2
 ===================
 
+- Added support for property-ref to BelongsTo (many-to-one)
+
 - Added support for CompositeUserType properties in nested classes
 
 - Added ActiveRecordBase.Asc/Desc(params string[] propertyNames) methods to allow convenient specification of sort order.
