@@ -16,12 +16,24 @@ namespace Castle.MonoRail.TestSupport
 {
 	using Castle.MonoRail.Framework;
 
+	/// <summary>
+	/// Base test for wizard steps.
+	/// </summary>
+	/// <typeparam name="W">The wizard step page type</typeparam>
+	/// <typeparam name="C">The wizard controller -- the one that implements <see cref="IWizardController"/></typeparam>
 	public class GenericBaseWizardStepTest<W, C> : GenericBaseControllerTest<C> 
 		where W : WizardStepPage 
 		where C : Controller
 	{
+		/// <summary>
+		/// The step typed field
+		/// </summary>
 		protected W wizardStep;
 
+		/// <summary>
+		/// Runs the page pre-condition
+		/// </summary>
+		/// <returns></returns>
 		protected bool RunIsPreConditionSatisfied()
 		{
 			object[] args = new object[] { Context };
@@ -29,6 +41,9 @@ namespace Castle.MonoRail.TestSupport
 				wizardStep, "IsPreConditionSatisfied", ref args);
 		}
 
+		/// <summary>
+		/// Runs the step render method.
+		/// </summary>
 		protected void RunRenderWizardView()
 		{
 			ReflectionHelper.RunInstanceMethod(typeof(WizardStepPage), wizardStep, "RenderWizardView");

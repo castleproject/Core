@@ -29,8 +29,9 @@ namespace Castle.MonoRail.TestSupport
 
 	/// <summary>
 	/// Base class for tests cases using the ASP.Net Runtime 
-	/// to run the web project
+	/// to run the web project. Deprecated.
 	/// </summary>
+	[Obsolete("Prefer the BaseControllerTest")]
 	public abstract class AbstractMRTestCase
 	{
 		private static readonly String PhysicalWebDirConfigKey = "web.physical.dir";

@@ -16,8 +16,15 @@ namespace Castle.MonoRail.TestSupport
 {
 	using Castle.MonoRail.Framework;
 
+	/// <summary>
+	/// Base controller test that uses the controller as a generic parameter.
+	/// </summary>
+	/// <typeparam name="C">Controller type</typeparam>
 	public class GenericBaseControllerTest<C> : BaseControllerTest where C : Controller
 	{
+		/// <summary>
+		/// The typed controller instance
+		/// </summary>
 		protected C controller;
 	}
 }

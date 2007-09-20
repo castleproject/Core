@@ -21,6 +21,9 @@ namespace Castle.MonoRail.TestSupport
 	using System.Collections;
 	using System.Globalization;
 
+	/// <summary>
+	/// Used to integrate with the ASP.Net Runtime
+	/// </summary>
 	public class MonoRailTestWorkerRequest : SimpleWorkerRequest
 	{
 		private TextWriter output;
