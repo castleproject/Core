@@ -191,7 +191,9 @@
 		<copy file="ActiveRecord/License.txt" tofile="${releasenotes.dir}/License.txt" />
 		<copy file="MonoRail/Changes.txt" tofile="${releasenotes.dir}/MonoRail Release Notes.txt" />
 		<copy file="InversionOfControl/Changes.txt" tofile="${releasenotes.dir}/InversionOfControl Release Notes.txt" />
+		<!--
 		<copy file="AspectSharp/Changes.txt" tofile="${releasenotes.dir}/AspectSharp Release Notes.txt" />
+		-->
 		<copy file="Tools/DynamicProxy/Changes.txt" tofile="${releasenotes.dir}/DynamicProxy Release Notes.txt" />
 		<copy file="Core/Changes.txt" tofile="${releasenotes.dir}/Core Release Notes.txt" />
 
@@ -270,7 +272,9 @@
 		<zip zipfile="${build.zip.fullpath}">
 			<fileset basedir="${build.dir}" prefix="bin" >
 				<include name="**/Castle*.*" />
+				<!--
 				<include name="AspectSharp*.*" />
+				-->
 				<include name="external-dependencies.zip" />
 				<exclude name="*Tests.*" />
 				<exclude name="test-results/**" />
@@ -583,33 +587,6 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-
-		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.GettingStartedSampleVS2003.zip">
-			<fileset basedir="${root.dir}/Samples/MonoRail/GettingStartedSampleVS2003">
-				<include name="**/*.build" />
-				<include name="**/*.sln" />
-				<include name="**/*.cs" />
-				<include name="**/*.ico" />
-				<include name="**/*.csproj" />
-				<include name="**/*.xml" />
-				<include name="**/*.config" />
-				<include name="**/*.lang" />
-				<include name="**/*.txt" />
-				<include name="**/*.inc" />
-				<include name="**/*.vm" />
-				<include name="**/*.resx" />
-				<include name="**/*.aspx" />
-				<include name="**/*.asax" />
-				<include name="*.snk" />
-				<exclude name="**/bin/*" />
-				<exclude name="**/bin/Debug/*" />
-				<exclude name="**/bin/Release/*" />
-				<exclude name="**/obj/*" />
-				<exclude name="**.user" />
-				<exclude name="**/_Resharper.*/*" />
-			</fileset>
-		</zip>
-
 		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.GettingStartedSampleVS2005.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/GettingStartedSampleVS2005">
 				<include name="**/*.build" />
@@ -663,6 +640,28 @@
 		</zip>
 		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.DiggStylePagination.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/DiggPaginationSample">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.JSGenExample.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/JSGenExample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
 				<include name="**/*.cs" />
@@ -984,10 +983,13 @@
 				<include name="**/*.txt" />
 				<include name="**/*.inc" />
 				<include name="**/*.vm" />
+				<include name="**/*.njs" />
 				<include name="**/*.gif" />
 				<include name="**/*.resx" />
 				<include name="**/*.boo" />
 				<include name="**/*.booproj" />
+				<include name="**/*.brail" />
+				<include name="**/*.brailjs" />
 				<include name="**/*.prjx" />
 				<include name="**/*.cmbx" />
 				<exclude name="**/obj/" />
@@ -1003,12 +1005,12 @@
 				<exclude name="Experiments/**/*.*" />
 				<exclude name="build/**/*.*" />
 				<exclude name="Rook/**/*.*" />
+				<exclude name="docs/**/*.*" />
 				<exclude name="setup/*.*" />
 				<exclude name="Tools/VSNetWizards/**/*.*" />
+				<exclude name="MonoRail2/**/*.*" />
 				<exclude name="Tools/SubversionHooks/**/*.*" />
 				<exclude name="Tools/ManagedExtensions/**/*.*" />
-				<exclude name="Tools/Castle.DynamicProxy2/**/*.*" />
-				<exclude name="Tools/DynamicProxy2/**/*.*" />
 			</fileset>
 		</zip>
 	</target>

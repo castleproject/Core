@@ -16,7 +16,6 @@
         <assembly assemblyPath=".\build\net-2.0\debug\Castle.Facilities.IBatisNetIntegration.dll" xmlCommentsPath=".\build\net-2.0\debug\Castle.Facilities.IBatisNetIntegration.xml" commentsOnly="False" />
         <assembly assemblyPath=".\build\net-2.0\debug\Castle.Facilities.NHibernateIntegration.dll" xmlCommentsPath=".\build\net-2.0\debug\Castle.Facilities.NHibernateIntegration.xml" commentsOnly="False" />
         <assembly assemblyPath=".\build\net-2.0\debug\Castle.Facilities.Synchronize.dll" xmlCommentsPath=".\build\net-2.0\debug\Castle.Facilities.Synchronize.xml" commentsOnly="False" />
-        <assembly assemblyPath=".\build\net-2.0\debug\Castle.Facilities.WcfIntegration.dll" xmlCommentsPath=".\build\net-2.0\debug\Castle.Facilities.WcfIntegration.xml" commentsOnly="False" />
         <assembly assemblyPath=".\build\net-2.0\debug\Castle.MicroKernel.dll" xmlCommentsPath=".\build\net-2.0\debug\Castle.MicroKernel.xml" commentsOnly="False" />
         <assembly assemblyPath=".\build\net-2.0\debug\Castle.MonoRail.ActiveRecordSupport.dll" xmlCommentsPath=".\build\net-2.0\debug\Castle.MonoRail.ActiveRecordSupport.xml" commentsOnly="False" />
         <assembly assemblyPath=".\build\net-2.0\debug\Castle.MonoRail.Framework.dll" xmlCommentsPath=".\build\net-2.0\debug\Castle.MonoRail.Framework.xml" commentsOnly="False" />
@@ -34,6 +33,11 @@
     <namespaceSummaries>
         <namespaceSummaryItem name="" isDocumented="False" />
     </namespaceSummaries>
+    <additionalContent>
+        <contentItem sourcePath=".\docs\*.*" destPath="" excludeItems="False" />
+        <contentItem sourcePath=".\docs\.svn\*.*" destPath="" excludeItems="True" />
+        <contentItem sourcePath=".\docs\styles\.svn\*.*" destPath="" excludeItems="True" />
+    </additionalContent>
     <dependencies>
         <dependencyItem depPath=".\build\net-2.0\debug\*.*" />
     </dependencies>
@@ -42,7 +46,7 @@
     <VisibleItems>Attributes, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
     <HtmlHelp1xCompilerPath path="" />
     <HtmlHelp2xCompilerPath path="" />
-    <OutputPath>docs\output\</OutputPath>
+    <OutputPath>C:\dev\castledocs\</OutputPath>
     <SandcastlePath path="" />
     <WorkingPath path="" />
     <CleanIntermediates>True</CleanIntermediates>
@@ -58,11 +62,11 @@
     <HelpTitle>Castle Project</HelpTitle>
     <HtmlHelpName>API Documentation</HtmlHelpName>
     <Language>en-US</Language>
-    <CopyrightHref />
+    <CopyrightHref>http://www.castleproject.org/</CopyrightHref>
     <CopyrightText>Castle Project (c) 2004-2007</CopyrightText>
-    <FeedbackEMailAddress />
+    <FeedbackEMailAddress>castle-project-devel@googlegroups.com</FeedbackEMailAddress>
     <HeaderText />
-    <FooterText />
+    <FooterText>Castle Project welcomes contributions. Help make Castle better, get involved.</FooterText>
     <ProjectLinkType>Local</ProjectLinkType>
     <SdkLinkType>Msdn</SdkLinkType>
     <PresentationStyle>vs2005</PresentationStyle>
