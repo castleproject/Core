@@ -8,22 +8,6 @@
 	-->
 
 	<fail if="${not property::exists('CCNetLabel')}">This build file is for use with CruiseControl.NET</fail>
-
-	<target name="package-net-1.1">
-		<!--
-			clean is first target executed so we can get rid of
-			any old assemblies
-		-->
-		<nant buildfile="default.build" target="clean package">
-			<properties> 
-				<property name="build.rebuild" value="true" />
-				<property name="nant.settings.currentframework" value="net-1.1" />
-				<property name="project.config" value="debug" />
-				<property name="build.zip.file" value="castleproject-${project.major}.${project.minor}-build_${CCNetLabel}-${framework::get-target-framework()}-${project.config}.zip" dynamic="true" />
-				<property name="build.msi.file" value="castleproject-${project.major}.${project.minor}-build_${CCNetLabel}-${framework::get-target-framework()}-${project.config}.msi" dynamic="true" />
-			</properties>
-		</nant>
-	</target>
 	
 	<target name="package-net-2.0">
 		<!--

@@ -7,9 +7,8 @@
 
 		<DirectoryRef Id="BinDir">
 
-			<Directory Id="net20dir" Name="net-2.0">
-				<Component Id="ProductComponent20" DiskId="1" Guid="394DE961-2B37-4BC9-A65E-C1F5A5F3B0F7">
-
+			<Directory Id="net20dirdependencies" Name="Dependencies">
+				<Component Id="ProductComponentDeps" DiskId="1" Guid="11A7195C-EB84-44D0-8807-BB614597E5C9">
 					<File
 						Id="n2file90"
 						Name="Cassini.dll"
@@ -28,8 +27,8 @@
 					<RegistryKey
 						Action="createAndRemoveOnUninstall"
 						Root="HKLM"
-						Key="SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\castle">
-						<RegistryValue Action="write" Type="string" Value="[net20dir]" />
+						Key="SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\castledeps">
+						<RegistryValue Action="write" Type="string" Value="[net20dirdependencies]" />
 					</RegistryKey>
 
 					<RegistryKey
@@ -40,7 +39,7 @@
 						<RegistryValue
 							Action="write"
 							Name="cassini2location"
-							Type="string" Value="[net20dir]CassiniWebServer2.exe" />
+							Type="string" Value="[net20dirdependencies]CassiniWebServer2.exe" />
 					</RegistryKey>
 
 					<File Id="N20anrControls.Markdown.NET.dll" Name="anrControls.Markdown.NET.dll" Source="$(var.BuildNet20Dir)\anrControls.Markdown.NET.dll" />
@@ -60,6 +59,41 @@
 					<File Id="N20Boo.Lang.Useful.dll" Name="Boo.Lang.Useful.dll" Source="$(var.BuildNet20Dir)\Boo.Lang.Useful.dll" />
 					<File Id="N20Boo.Microsoft.Build.Tasks.dll" Name="Boo.Microsoft.Build.Tasks.dll" Source="$(var.BuildNet20Dir)\Boo.Microsoft.Build.Tasks.dll" />
 					<File Id="N20Boo.NAnt.Tasks.dll" Name="Boo.NAnt.Tasks.dll" Source="$(var.BuildNet20Dir)\Boo.NAnt.Tasks.dll" />
+					<!-- (Stalled) 
+					<File Id="N20IBatisNet.Common.dll" Name="IBatisNet.Common.dll" Source="$(var.BuildNet20Dir)\IBatisNet.Common.dll" />
+					<File Id="N20IBatisNet.DataMapper.dll" Name="IBatisNet.DataMapper.dll" Source="$(var.BuildNet20Dir)\IBatisNet.DataMapper.dll" />
+					-->
+					<File Id="N20Iesi.Collections.dll" Name="Iesi.Collections.dll" Source="$(var.BuildNet20Dir)\Iesi.Collections.dll" />
+					<File Id="N20Iesi.Collections.xml" Name="Iesi.Collections.xml" Source="$(var.BuildNet20Dir)\Iesi.Collections.xml" />
+					<File Id="N20Iesi.Collections.license.txt" Name="Iesi.Collections.license.txt" Source="$(var.BuildNet20Dir)\Iesi.Collections.license.txt" />
+					<File Id="N20log4net.dll" Name="log4net.dll" Source="$(var.BuildNet20Dir)\log4net.dll" />
+					<File Id="N20log4net.xml" Name="log4net.xml" Source="$(var.BuildNet20Dir)\log4net.xml" />
+					<File Id="N20log4net.license.txt" Name="log4net.license.txt" Source="$(var.BuildNet20Dir)\log4net.license.txt" />
+					<File Id="N20NHibernate.dll" Name="NHibernate.dll" Source="$(var.BuildNet20Dir)\NHibernate.dll" />
+					<File Id="N20NHibernate.xml" Name="NHibernate.xml" Source="$(var.BuildNet20Dir)\NHibernate.xml" />
+					<File Id="N20NHibernate.license.txt" Name="NHibernate.license.txt" Source="$(var.BuildNet20Dir)\NHibernate.license.txt" />
+					<File Id="N20NLog.dll" Name="NLog.dll" Source="$(var.BuildNet20Dir)\NLog.dll" />
+					<File Id="N20NLog.xml" Name="NLog.xml" Source="$(var.BuildNet20Dir)\NLog.xml" />
+					<File Id="N20NLog.license.txt" Name="NLog.license.txt" Source="$(var.BuildNet20Dir)\NLog.license.txt" />
+					<File Id="N20Nullables.dll" Name="Nullables.dll" Source="$(var.BuildNet20Dir)\Nullables.dll" />
+					<File Id="N20Nullables.xml" Name="Nullables.xml" Source="$(var.BuildNet20Dir)\Nullables.xml" />
+					<File Id="N20Nullables.NHibernate.dll" Name="Nullables.NHibernate.dll" Source="$(var.BuildNet20Dir)\Nullables.NHibernate.dll" />
+					<File Id="N20Nullables.NHibernate.xml" Name="Nullables.NHibernate.xml" Source="$(var.BuildNet20Dir)\Nullables.NHibernate.xml" />
+					<File Id="N20nunit.framework.dll" Name="nunit.framework.dll" Source="$(var.BuildNet20Dir)\nunit.framework.dll" />
+
+				</Component>
+			</Directory>
+			
+			<Directory Id="net20dir" Name="net-2.0">
+				<Component Id="ProductComponent20" DiskId="1" Guid="394DE961-2B37-4BC9-A65E-C1F5A5F3B0F7">
+
+					<RegistryKey
+						Action="createAndRemoveOnUninstall"
+						Root="HKLM"
+						Key="SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\castle">
+						<RegistryValue Action="write" Type="string" Value="[net20dir]" />
+					</RegistryKey>
+
 					<File Id="N20Castle.ActiveRecord.dll" Name="Castle.ActiveRecord.dll" Source="$(var.BuildNet20Dir)\Castle.ActiveRecord.dll" />
 					<File Id="N20Castle.ActiveRecord.xml" Name="Castle.ActiveRecord.xml" Source="$(var.BuildNet20Dir)\Castle.ActiveRecord.xml" />
 					<File Id="N20Castle.Components.Binder.dll" Name="Castle.Components.Binder.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Binder.dll" />
@@ -122,29 +156,8 @@
 					<File Id="N20Castle.Services.Transaction.xml" Name="Castle.Services.Transaction.xml" Source="$(var.BuildNet20Dir)\Castle.Services.Transaction.xml" />
 					<File Id="N20Castle.Windsor.dll" Name="Castle.Windsor.dll" Source="$(var.BuildNet20Dir)\Castle.Windsor.dll" />
 					<File Id="N20Castle.Windsor.xml" Name="Castle.Windsor.xml" Source="$(var.BuildNet20Dir)\Castle.Windsor.xml" />
-					<!-- (Stalled) 
-					<File Id="N20IBatisNet.Common.dll" Name="IBatisNet.Common.dll" Source="$(var.BuildNet20Dir)\IBatisNet.Common.dll" />
-					<File Id="N20IBatisNet.DataMapper.dll" Name="IBatisNet.DataMapper.dll" Source="$(var.BuildNet20Dir)\IBatisNet.DataMapper.dll" />
-					-->
-					<File Id="N20Iesi.Collections.dll" Name="Iesi.Collections.dll" Source="$(var.BuildNet20Dir)\Iesi.Collections.dll" />
-					<File Id="N20Iesi.Collections.xml" Name="Iesi.Collections.xml" Source="$(var.BuildNet20Dir)\Iesi.Collections.xml" />
-					<File Id="N20Iesi.Collections.license.txt" Name="Iesi.Collections.license.txt" Source="$(var.BuildNet20Dir)\Iesi.Collections.license.txt" />
-					<File Id="N20log4net.dll" Name="log4net.dll" Source="$(var.BuildNet20Dir)\log4net.dll" />
-					<File Id="N20log4net.xml" Name="log4net.xml" Source="$(var.BuildNet20Dir)\log4net.xml" />
-					<File Id="N20log4net.license.txt" Name="log4net.license.txt" Source="$(var.BuildNet20Dir)\log4net.license.txt" />
-					<File Id="N20NHibernate.dll" Name="NHibernate.dll" Source="$(var.BuildNet20Dir)\NHibernate.dll" />
-					<File Id="N20NHibernate.xml" Name="NHibernate.xml" Source="$(var.BuildNet20Dir)\NHibernate.xml" />
-					<File Id="N20NHibernate.license.txt" Name="NHibernate.license.txt" Source="$(var.BuildNet20Dir)\NHibernate.license.txt" />
-					<File Id="N20NLog.dll" Name="NLog.dll" Source="$(var.BuildNet20Dir)\NLog.dll" />
-					<File Id="N20NLog.xml" Name="NLog.xml" Source="$(var.BuildNet20Dir)\NLog.xml" />
-					<File Id="N20NLog.license.txt" Name="NLog.license.txt" Source="$(var.BuildNet20Dir)\NLog.license.txt" />
-					<File Id="N20Nullables.dll" Name="Nullables.dll" Source="$(var.BuildNet20Dir)\Nullables.dll" />
-					<File Id="N20Nullables.xml" Name="Nullables.xml" Source="$(var.BuildNet20Dir)\Nullables.xml" />
-					<File Id="N20Nullables.NHibernate.dll" Name="Nullables.NHibernate.dll" Source="$(var.BuildNet20Dir)\Nullables.NHibernate.dll" />
-					<File Id="N20Nullables.NHibernate.xml" Name="Nullables.NHibernate.xml" Source="$(var.BuildNet20Dir)\Nullables.NHibernate.xml" />
 					<File Id="N20NVelocity.dll" Name="NVelocity.dll" Source="$(var.BuildNet20Dir)\NVelocity.dll" />
 					<File Id="N20NVelocity.xml" Name="NVelocity.xml" Source="$(var.BuildNet20Dir)\NVelocity.xml" />
-					<File Id="N20nunit.framework.dll" Name="nunit.framework.dll" Source="$(var.BuildNet20Dir)\nunit.framework.dll" />
 
 				</Component>
 				<Directory Id="dirResources_es" Name="es">

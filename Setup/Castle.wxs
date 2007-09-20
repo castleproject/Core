@@ -63,7 +63,7 @@
 
 			<Directory Id="ProgramMenuFolder" Name="Programs">
 				<Directory Id="SHORTCUTDIR" Name="Castle Project">
-					<Directory Id="CastleShortCutDIR" Name="Release Candidate 2">
+					<Directory Id="CastleShortCutDIR" Name="Release Candidate 3">
 					</Directory>
 				</Directory>
 			</Directory>
@@ -85,12 +85,13 @@
 				<ComponentRef Id="ReleaseNotesServices" />
 
 				<ComponentRef Id="ProductComponent20" />
+				<ComponentRef Id="ProductComponentDeps" />
 				<ComponentGroupRef Id="ProductComponent20Resources"/>
 			</Feature>
 
 			<Feature 
 				Id='Documentation' Title='Documentation' 
-				Description='Castle documentation' Level='1'>
+				Description='Castle documentation in chm format' Level='1'>
 
 				<ComponentRef Id='DocsComp' />
 			</Feature>

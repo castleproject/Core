@@ -975,6 +975,7 @@
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
 				<include name="**/*.cs" />
+				<include name="**/*.snk" />
 				<include name="**/*.ico" />
 				<include name="**/*.csproj" />
 				<include name="**/*.xml" />
