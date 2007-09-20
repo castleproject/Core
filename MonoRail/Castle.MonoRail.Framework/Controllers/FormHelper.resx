@@ -137,6 +137,13 @@ function monorail_formhelper_numberonly(e, exceptions, forbidalso)
 	return true; 
 }
 
+function monorail_formhelper_inputfilter(e, forbid)
+{
+	var code = e.charCode;	
+	if (!code) code = e.keyCode;	
+	for(var i=0; i < forbid.length; i++) if (forbid[i] == code) return false;
+}
+
 /* 
  The scripts on this page was produced by mordechai Sandhaus - 52action.com,
  and is copyrighted . If you like this script, we encourage you to use it,

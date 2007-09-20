@@ -750,6 +750,46 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region FilteredTextField
+
+		/// <summary>
+		/// Generates an input text element with a javascript that prevents the 
+		/// chars listed in the forbid attribute from being entered.
+		/// </summary>
+		/// <para>
+		/// You must pass an <c>forbid</c> value through the dictionary.
+		/// It must be a comma separated list of chars that cannot be accepted on the field. 
+		/// For example:
+		/// </para>
+		/// <code>
+		/// FormHelper.FilteredTextField("product.price", {forbid='46'})
+		/// </code>
+		/// In this case the key code 46 (period) will not be accepted on the field.
+		/// <para>
+		/// The value is extracted from the target (if available).
+		/// </para>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element.</returns>
+		/// <remarks>
+		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it.
+		/// </remarks>
+		public string FilteredTextField(string target, IDictionary attributes)
+		{
+			target = RewriteTargetIfWithinObjectScope(target);
+
+			object value = ObtainValue(target);
+
+			attributes = attributes != null ? attributes : new Hashtable();
+
+			ApplyFilterOptions(attributes);
+			ApplyValidation(InputElementType.Text, target, ref attributes);
+
+			return CreateInputElement("text", target, value, attributes);
+		}
+
+		#endregion
+
 		#region NumberField
 
 		/// <summary>
@@ -2447,6 +2487,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			string forbid = CommonUtils.ObtainEntryAndRemove(attributes, "forbid", String.Empty);
 
 			attributes["onKeyPress"] = "return monorail_formhelper_numberonly(event, [" + list + "], [" + forbid + "]);";
+		}
+
+		private static void ApplyFilterOptions(IDictionary attributes)
+		{
+			string forbid = CommonUtils.ObtainEntryAndRemove(attributes, "forbid", String.Empty);
+
+			attributes["onKeyPress"] = "return monorail_formhelper_inputfilter(event, [" + forbid + "]);";
 		}
 
 		private void AssertIsValidArray(object instance, string property, int index)

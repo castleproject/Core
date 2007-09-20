@@ -20,9 +20,50 @@ namespace Castle.Monorail.JSONSupport
 	using Newtonsoft.Json;
 
 	/// <summary>
-	/// Extends <see cref="DataBindAttribute"/> with 
-	/// the <see cref="JavaScriptConvert"/> functionality.
+	/// Extends <see cref="DataBindAttribute"/> with  the <see cref="JavaScriptConvert"/> functionality. 
+	/// In other words, enable biding of JSON formatted values on POCO objects.
 	/// </summary>
+	/// <example>
+	/// <para>
+	/// The following demonstrates how to bind a JSON querystring value representing a Car object instance 
+	/// to a POCO Car object instance:
+	/// </para>
+	/// The querystring:
+	/// <code>
+	/// car={Wheels=4,Year=2007,Model='Cheap'}
+	/// </code>
+	/// And you want to bind those values to a instance of yours Car class, which looks like this:
+	/// <code>
+	/// public class Car
+	///	{
+	///		private int wheels, year;
+	///		private string model;
+	///
+	///		public int Wheels
+	///		{
+	///			get { return wheels; }
+	///			set { wheels = value; }
+	///		}
+	///
+	///		public int Year
+	///		{
+	///			get { return year; }
+	///			set { year = value; }
+	///		}
+	///
+	///		public string Model
+	///		{
+	///			get { return model; }
+	///			set { model = value; }
+	///		}
+	///	}
+	/// </code>
+	/// <para>Using the <see cref="JSONBinderAttribute"/> and the <see cref="SmartDispatcherController"/>, all you have to 
+	/// do is to mark the method parameter with the attribute, like the following example:</para>
+	/// <code>
+	/// public void MyAction([JSONBinder("car")] Car car)
+	/// </code>
+	/// </example>
 	[AttributeUsage(AttributeTargets.Parameter)]
 	public class JSONBinderAttribute : Attribute, IParameterBinder
 	{
@@ -42,16 +83,37 @@ namespace Castle.Monorail.JSONSupport
 			this.entryKey = entryKey;
 		}
 
+		/// <summary>
+		/// Gets the entry key.
+		/// </summary>
+		/// <remarks>
+		/// The entry key, which is the form or  querystring key that identifies the JSON persisted content.
+		/// </remarks>
+		/// <value>The entry key.</value>
 		public string EntryKey
 		{
 			get { return this.entryKey; }
 		}
-		
+
+		/// <summary>
+		/// Calculates the param points. Implementors should return value equals or greater than
+		/// zero indicating whether the parameter can be bound successfully. The greater the value (points)
+		/// the more successful the implementation indicates to the framework
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="parameterInfo">The parameter info.</param>
+		/// <returns></returns>
 		public int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			return controller.Params[entryKey] != null ? 1 : 0; 
 		}
 
+		/// <summary>
+		/// Binds the specified parameter for the action.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="parameterInfo">The parameter info.</param>
+		/// <returns>A instance based on the JSON values present in the <see cref="EntryKey"/>.</returns>
 		public object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			string entryValue = controller.Params[entryKey];
@@ -59,6 +121,12 @@ namespace Castle.Monorail.JSONSupport
 			return Bind(entryValue, parameterInfo.ParameterType);
 		}
 
+		/// <summary>
+		/// Binds the specified entry value to a instance of a given Type(<paramref name="parameterType"/>).
+		/// </summary>
+		/// <param name="entryValue">The entry value containing the JSON formatted content.</param>
+		/// <param name="parameterType">Type of the binded object.</param>
+		/// <returns>A instance based on the JSON values present in the <paramref name="entryValue"/>.</returns>
 		public static object Bind(string entryValue, Type parameterType)
 		{
 			return JavaScriptConvert.DeserializeObject(entryValue, parameterType);
