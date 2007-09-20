@@ -12,7 +12,7 @@
 		<property name="enabletest" value="ALLOWTEST" unless="${property::exists('enabletest')}" />
 		<property name="current.build.defines" value="${current.build.defines},${enabletest}" />
 
-		<property name="assembly.version" value="1.0.0.0" />
+		<property name="assembly.version" value="1.0.3.0" />
 		<property name="assembly.description" value="Castle MonoRail is a MVC Web framework for .NET" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">

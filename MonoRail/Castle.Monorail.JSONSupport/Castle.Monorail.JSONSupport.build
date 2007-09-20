@@ -10,7 +10,7 @@
 
 	<target name="init" depends="common.init">
 		<property overwrite="false" name="assembly.is-cls-compliant" value="false" />
-		<property name="assembly.version" value="1.0.0.0" />
+		<property name="assembly.version" value="1.0.3.0" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.MonoRail.Framework.dll" />

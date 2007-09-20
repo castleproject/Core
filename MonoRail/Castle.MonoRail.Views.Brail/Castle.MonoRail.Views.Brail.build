@@ -8,7 +8,7 @@
 	<property name="root.dir" value="../.." />
 	<include buildfile="${root.dir}/common-project.xml" />
 	<target name="init" depends="common.init">
-		<property name="assembly.version" value="1.0.0.0" />
+		<property name="assembly.version" value="1.0.3.0" />
 		<property name="assembly.description" value="Castle.MonoRail.Views.Brail: View Engine for MonoRail using Boo" />
 		<property overwrite="false" name="assembly.is-cls-compliant" value="false" />
 		

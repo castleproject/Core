@@ -975,6 +975,7 @@
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
 				<include name="**/*.cs" />
+				<include name="**/*.cd" />
 				<include name="**/*.snk" />
 				<include name="**/*.ico" />
 				<include name="**/*.csproj" />
@@ -993,6 +994,15 @@
 				<include name="**/*.brailjs" />
 				<include name="**/*.prjx" />
 				<include name="**/*.cmbx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="**/*.svc" />
+				<include name="**/*.htm" />
+				<include name="**/*.html" />
+				<include name="**/*.rb" />
+				<include name="**/*.g" />
+				<include name="**/*.resharper" />
+				<include name="**/*.shfb" />
 				<exclude name="**/obj/" />
 				<exclude name="**/obj/**/*.*" />
 				<exclude name="**/bin*/**/*.*" />
