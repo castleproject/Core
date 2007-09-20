@@ -114,7 +114,7 @@ namespace Castle.Services.Transaction
 				return null;
 			}
 
-			StandardTransaction transaction = null;
+			AbstractTransaction transaction = null;
 
 			if (CurrentTransaction != null)
 			{
@@ -130,9 +130,7 @@ namespace Castle.Services.Transaction
 
 			if (transaction == null)
 			{
-				transaction = new StandardTransaction(
-					new TransactionDelegate(RaiseTransactionCommitted),
-					new TransactionDelegate(RaiseTransactionRolledback), transactionMode, isolationMode, distributedTransaction);
+				transaction = InstantiateTransaction(transactionMode, isolationMode, distributedTransaction);
 
 				if (distributedTransaction)
 				{
@@ -153,6 +151,20 @@ namespace Castle.Services.Transaction
 			activityManager.CurrentActivity.Push(transaction);
 
 			return transaction;
+		}
+
+		/// <summary>
+		/// Factory method for creating a transaction.
+		/// </summary>
+		/// <param name="transactionMode">The transaction mode.</param>
+		/// <param name="isolationMode">The isolation mode.</param>
+		/// <param name="distributedTransaction">if set to <c>true</c>, the TM will create a distributed transaction.</param>
+		/// <returns>A transaction</returns>
+		protected virtual AbstractTransaction InstantiateTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction)
+		{
+			return new StandardTransaction(
+				new TransactionDelegate(RaiseTransactionCommitted),
+				new TransactionDelegate(RaiseTransactionRolledback), transactionMode, isolationMode, distributedTransaction);
 		}
 
 		public virtual ITransaction CurrentTransaction
