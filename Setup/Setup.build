@@ -19,7 +19,7 @@
 		<fail message="ERROR: WiX not found, unable to create MSI" unless="${wix.found}"/>
 		<echo message="INFO: Found WiX at ${wix.dir}" if="${wix.found}"/>
 	</target>
-	
+
 	<target name="build" description="Build ${project::get-name()}" depends="init">
 		<if test="${wix.found}">
 			<property name="build.setup.dir" value="${path::get-full-path(build.base.dir)}/setup" overwrite="false" />
@@ -53,32 +53,32 @@
 			</exec>
 		</if>
 	</target>
-	
-	<target name="wix-location-gen-include">
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="false">&lt;?xml version="1.0" encoding="utf-8"?&gt;</echo>
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;Include Id="LocationInclude"&gt;</echo>
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildBaseDir="${path::get-full-path(build.base.dir)}"?&gt;</echo>
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildNet11Dir="${path::get-full-path(build.base.dir)}\net-1.1\${project.config}"?&gt;</echo>
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildNet20Dir="${path::get-full-path(build.base.dir)}\net-2.0\${project.config}"?&gt;</echo>
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define ReleaseNotesDir="${releasenotes.dir}"?&gt;</echo>
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define DocsDir="${docs.dir}"?&gt;</echo>
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define SharedLibs="${path::get-full-path('${root.dir}\..\..\SharedLibs')}"?&gt;</echo>
 
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define WizardDir="${path::get-full-path(root.dir)}\Tools\VSNetWizards"?&gt;</echo>
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define VSTemplates70="${path::get-full-path(root.dir)}\Tools\VSNetWizards\CastleTemplates\VS7"?&gt;</echo>
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define VSTemplates80="${path::get-full-path(root.dir)}\Tools\VSNetWizards\CastleTemplates\VS8"?&gt;</echo>
-		
-		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;/Include&gt;</echo>
-	</target>
+<target name="wix-location-gen-include">
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="false">&lt;?xml version="1.0" encoding="utf-8"?&gt;</echo>
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;Include Id="LocationInclude"&gt;</echo>
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildBaseDir="${path::get-full-path(build.base.dir)}"?&gt;</echo>
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildNet11Dir="${path::get-full-path(build.base.dir)}\net-1.1\${project.config}"?&gt;</echo>
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildNet20Dir="${path::get-full-path(build.base.dir)}\net-2.0\${project.config}"?&gt;</echo>
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define ReleaseNotesDir="${releasenotes.dir}"?&gt;</echo>
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define DocsDir="${docs.dir}"?&gt;</echo>
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define SharedLibs="${path::get-full-path('${root.dir}\..\..\SharedLibs')}"?&gt;</echo>
 	
-	<target name="wix-version-gen-include">
-		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="false">&lt;?xml version="1.0" encoding="utf-8"?&gt;</echo>
-		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;Include Id="VersionNumberInclude"&gt;</echo>
-		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define MajorVersion="${project.major}"?&gt;</echo>
-		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define MinorVersion="${project.minor}"?&gt;</echo>
-		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define MicroVersion="${project.build}"?&gt;</echo>
-		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define BuildVersion="${project.revision}"?&gt;</echo>
-		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;/Include&gt;</echo>
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define WizardDir="${path::get-full-path(root.dir)}\Tools\VSNetWizards"?&gt;</echo>
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define VSTemplates70="${path::get-full-path(root.dir)}\Tools\VSNetWizards\CastleTemplates\VS7"?&gt;</echo>
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define VSTemplates80="${path::get-full-path(root.dir)}\Tools\VSNetWizards\CastleTemplates\VS8"?&gt;</echo>
+	
+	<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;/Include&gt;</echo>
+	</target>
+
+<target name="wix-version-gen-include">
+	<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="false">&lt;?xml version="1.0" encoding="utf-8"?&gt;</echo>
+	<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;Include Id="VersionNumberInclude"&gt;</echo>
+	<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define MajorVersion="${project.major}"?&gt;</echo>
+	<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define MinorVersion="${project.minor}"?&gt;</echo>
+	<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define MicroVersion="${project.build}"?&gt;</echo>
+	<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define BuildVersion="${project.revision}"?&gt;</echo>
+	<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;/Include&gt;</echo>
 	</target>
 
 </project>

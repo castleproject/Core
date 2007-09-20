@@ -3,7 +3,7 @@
 <?define VsVersion = "dummy"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	
+
 	<?include Includes.wxi?>
 
 	<Product 
@@ -13,7 +13,7 @@
 		Language="1033"
 		Version="$(var.VersionNumber)"
 		Manufacturer="$(var.PackageManufacturer)">
-		
+
 		<Package 
 			Description="All Castle Binaries, documentation, samples and source code" 
 			Comments="All Castle Binaries, documentation, samples and source code" 
@@ -33,19 +33,19 @@
 			<RegistrySearch Id='Framework20Registry' Type='raw'
 				Root='HKLM' Key='Software\Microsoft\.NETFramework\Policy\v2.0' Name='50727' />
 		</Property>
-	
+
 		<Media Id="1" Cabinet="Content.cab" EmbedCab="yes" CompressionLevel="high" />
 
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="INSTALLLOCATION" Name="CastleProject">
-					
+
 					<Directory Id="ReleaseNotesDir" Name="ReleaseNotes"/>
-					
+
 					<Directory Id="BinDir" Name="Bin" />
-					
+
 					<Directory Id="DocsDir" Name="Docs" />
-					
+
 					<Directory Id="SourceCodeDir" Name="Source Code" />
 
 					<Directory Id="SamplesDir" Name="Samples" />
@@ -53,14 +53,14 @@
 					<Directory Id="WizardTemplatesDir" Name="Wizard Templates">
 						<Directory Id="TemplatesVs7Dir" Name="VS7">
 						</Directory>
-						
+
 						<Directory Id="TemplatesVs8Dir" Name="VS8">
 						</Directory>
 					</Directory>
-					
+
 				</Directory>
 			</Directory>
-			
+
 			<Directory Id="ProgramMenuFolder" Name="Programs">
 				<Directory Id="SHORTCUTDIR" Name="Castle Project">
 					<Directory Id="CastleShortCutDIR" Name="Release Candidate 2">
@@ -69,21 +69,21 @@
 			</Directory>
 
 		</Directory>
-		
+
 		<!-- Features -->
 		<Feature Id="Complete" Title="Castle" 
 			Display="expand" Level="1" Description="Castle Project" 
 			ConfigurableDirectory="INSTALLLOCATION">
-			
+
 			<Feature 
 				Id='MainProgram' Title='Binaries' 
 				Description='Castle assemblies and dependencies' Level='1'>
-				
+
 				<ComponentRef Id="ReleaseNotesRoot" />
 				<ComponentRef Id="ReleaseNotesComps" />
 				<ComponentRef Id="ReleaseNotesFacilities" />
 				<ComponentRef Id="ReleaseNotesServices" />
-				
+
 				<ComponentRef Id="ProductComponent20" />
 				<ComponentGroupRef Id="ProductComponent20Resources"/>
 			</Feature>
@@ -91,28 +91,28 @@
 			<Feature 
 				Id='Documentation' Title='Documentation' 
 				Description='Castle documentation' Level='1'>
-				
+
 				<ComponentRef Id='DocsComp' />
 			</Feature>
 
 			<Feature 
 				Id='SourceCode' Title='Source Code' 
 				Description='A zip file with the source code' Level='1'>
-				
+
 				<ComponentRef Id='SourceComp' />
 			</Feature>
-			
+
 			<Feature 
 				Id='Samples' Title='Samples' 
 				Description='Zip files with sample applications' Level='1'>
-				
+
 				<ComponentRef Id='samplescomp' />
 			</Feature>
 
 			<Feature 
 				Id='VSWizards2005' Title='Visual Studio 2005 Wizards' 
 				Description='Wizards for VS.Net 2005 that helps in creating new projects' Level='1'>
-				
+
 				<ComponentRef Id='vs2005addin' />
 				<ComponentRef Id='vs8comp' />
 				<ComponentRef Id='ARProject' />
@@ -139,7 +139,7 @@
 			</Feature>
 
 		</Feature>
-		
+
 		<UIRef Id="FragmentUI" />
 
 		<AdminExecuteSequence />
@@ -147,6 +147,6 @@
 		<InstallExecuteSequence>
 			<!-- <RemoveExistingProducts After='InstallFinalize' /> -->
 		</InstallExecuteSequence>
-		
+
 	</Product>
 </Wix>

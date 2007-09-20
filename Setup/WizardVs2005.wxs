@@ -130,7 +130,7 @@
 					</Component>
 				</Directory>
 				<Directory Id="dirARProjectTest" Name="ARProjectTest">
-						<Component Id="ARProjectTest" DiskId="1" Guid="007A3EA6-D596-4777-BF6F-EA2E5B96E2CD">
+					<Component Id="ARProjectTest" DiskId="1" Guid="007A3EA6-D596-4777-BF6F-EA2E5B96E2CD">
 						<File Id="ARProjectTest_AbstractModelTestCase.cs" Name="AbstractModelTestCase.cs" Source="$(var.VSTemplates80)\CSharp\ARProjectTest\AbstractModelTestCase.cs" />
 						<File Id="ARProjectTest_App.config" Name="App.config" Source="$(var.VSTemplates80)\CSharp\ARProjectTest\App.config" />
 						<File Id="ARProjectTest_ARProjectTest.csproj" Name="ARProjectTest.csproj" Source="$(var.VSTemplates80)\CSharp\ARProjectTest\ARProjectTest.csproj" />
