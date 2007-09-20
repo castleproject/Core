@@ -10,7 +10,7 @@ Windsor Container Integration
 
 If you are using the Windsor container integration 
 you must remember to register all new controllers on 
-the controller.config file
+the Config/controllers.config file
 
 ViewComponents must be registered as well. Filters 
 can be optionally registered on the container.

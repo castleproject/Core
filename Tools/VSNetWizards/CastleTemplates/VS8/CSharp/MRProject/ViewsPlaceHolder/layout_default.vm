@@ -38,10 +38,10 @@
 	<div>
 		<h2>Further Reference</h2>
 		<ul>
-		<li><a href="#">MonoRail Documentation</a> <p>Dive on MonoRail's official documentation</p> </li>
-		<li><a href="#">MonoRail on using.castleproject</a> <p>Check the latest user contributed samples and discussions</p> </li>
-		<li><a href="#">API Documentation</a> <p>Surf through the public API</p> </li>
-		<li><a href="#">Forum</a> <p>Ask a question</p> </li>
+		<li><a href="http://www.castleproject.org/monorail/documentation/">MonoRail Documentation</a> <p>Dive on MonoRail's official documentation</p> </li>
+		<li><a href="http://using.castleproject.org/">MonoRail on using.castleproject</a> <p>Check the latest user contributed samples and discussions</p> </li>
+		<li><a href="http://api.castleproject.org/">API Documentation</a> <p>Surf through the public API</p> </li>
+		<li><a href="http://forum.castleproject.org">Forum</a> <p>Ask a question</p> </li>
 		</ul>
 	</div>
 	</div>
