@@ -258,6 +258,7 @@
 								<File Id="MRProject_ViewsPlaceHolder_login_index.vm" Name="index.vm" Source="$(var.VSTemplates80)\CSharp\MRProject\ViewsPlaceHolder\login\index.vm" />
 								<File Id="MRProject_ViewsPlaceHolder_login_Authenticate.aspx" Name="Authenticate.aspx" Source="$(var.VSTemplates80)\CSharp\MRProject\ViewsPlaceHolder\login\Authenticate.aspx" />
 								<File Id="MRProject_ViewsPlaceHolder_login_Authenticate.brail" Name="Authenticate.brail" Source="$(var.VSTemplates80)\CSharp\MRProject\ViewsPlaceHolder\login\Authenticate.brail" />
+								<File Id="MRProject_ViewsPlaceHolder_login_Authenticate.vm" Name="Authenticate.vm" Source="$(var.VSTemplates80)\CSharp\MRProject\ViewsPlaceHolder\login\Authenticate.vm" />
 							</Component>
 						</Directory>
 					</Directory>
