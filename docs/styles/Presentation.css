@@ -523,6 +523,17 @@ h1.heading
 	color: #003399;
 	font-size:	130%;
 }
+h1
+{
+	color: #003399;
+	font-size:	130%;
+}}
+h2
+{
+	color: #003399;
+	font-size:	120%;
+}}
+
 
 /* Applies to table titles and subsection titles. */
 .subHeading
