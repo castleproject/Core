@@ -10,7 +10,7 @@
 
 	<target name="init" depends="common.init">
 		<property name="build.warnaserrors" value="false" />
-		<property name="assembly.version" value="1.0.3.10" />
+		<property name="assembly.version" value="1.0.6.10" />
 		<property name="assembly.description" value="Castle Project Visual Studio Wizards" />
 		<property name="assembly.copyright" value="Copyright (c) 2004-2007 Castle Project - http://www.castleproject.org" />
 		<property name="assembly.allow-partially-trusted-callers" value="true" />
