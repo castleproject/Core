@@ -31,12 +31,12 @@
 						<RegistryValue Value="mscoree.dll" Type="string" />
 						<RegistryValue Name="ThreadingModel" Value="Both" Type="string"  />
 						<RegistryValue Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
-						<RegistryValue Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.6.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+						<RegistryValue Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.6.10, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
 						<RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
 						<RegistryValue Name="CodeBase" Value="file://[TemplatesVs8Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
-						<RegistryKey Key="1.0.6.0">
+						<RegistryKey Key="1.0.6.10">
 							<RegistryValue Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
-							<RegistryValue Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.6.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+							<RegistryValue Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.6.10, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
 							<RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
 							<RegistryValue Name="CodeBase" Value="file://[TemplatesVs8Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
 						</RegistryKey>
@@ -59,12 +59,12 @@
 						<RegistryValue Value="mscoree.dll" Type="string" />
 						<RegistryValue Name="ThreadingModel" Value="Both" Type="string" />
 						<RegistryValue Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
-						<RegistryValue Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.6.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+						<RegistryValue Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.6.10, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
 						<RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
 						<RegistryValue Name="CodeBase" Value="file://[TemplatesVs8Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
-						<RegistryKey Key="1.0.6.0">
+						<RegistryKey Key="1.0.6.10">
 							<RegistryValue Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
-							<RegistryValue Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.6.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+							<RegistryValue Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.6.10, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
 							<RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
 							<RegistryValue Name="CodeBase" Value="file://[TemplatesVs8Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
 						</RegistryKey>
