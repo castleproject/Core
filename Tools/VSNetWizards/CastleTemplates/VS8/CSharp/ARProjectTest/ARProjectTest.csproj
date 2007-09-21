@@ -78,7 +78,7 @@
       <Name>Castle.ActiveRecord</Name>
       <HintPath>..\..\..\..\..\..\..\castleall\trunk\ActiveRecord\bin\Castle.ActiveRecord.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="Castle.Core, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Castle.DynamicProxy">
       <Name>Castle.DynamicProxy</Name>
       <HintPath>..\..\..\..\..\..\..\castleall\trunk\ActiveRecord\bin\Castle.DynamicProxy.dll</HintPath>
