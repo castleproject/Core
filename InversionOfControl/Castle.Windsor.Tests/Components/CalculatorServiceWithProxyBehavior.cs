@@ -64,4 +64,20 @@ namespace Castle.Windsor.Tests.Components
 		{
 		}
 	}
+
+	/// <summary>
+	/// Summary description for CalculatorServiceWithAttributes.
+	/// </summary>
+	[Interceptor(typeof(StandardInterceptor))]
+	[ComponentProxyBehavior(UseMarshalByRefProxy = true)]
+	public class CalculatorServiceWithMarshalByRefProxyBehavior : CalculatorService, IDisposable
+	{
+		public CalculatorServiceWithMarshalByRefProxyBehavior()
+		{
+		}
+
+		public void Dispose()
+		{
+		}
+	}
 }

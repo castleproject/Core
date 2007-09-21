@@ -124,6 +124,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 			ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
 
 			options.UseSingleInterfaceProxy = behavior.UseSingleInterfaceProxy;
+			options.UseMarshalByRefAsBaseClass = behavior.UseMarshalByRefProxy;
 			options.AddAdditionalInterfaces(behavior.AdditionalInterfaces);
 		}
 

@@ -94,5 +94,20 @@ namespace Castle.Windsor.Tests
 			Assert.IsNotNull(calcService);
 			Assert.IsTrue(calcService is IDisposable, "Service proxy should expose the IDisposable interface");
 		}
+
+		[Test]
+		public void RequestMarshalByRefProxyWithAttribute()
+		{
+			IWindsorContainer container = new WindsorContainer();
+
+			container.AddComponent("standard.interceptor", typeof(StandardInterceptor));
+			container.AddComponent("useMarshal", typeof(ICalcService), typeof(CalculatorServiceWithMarshalByRefProxyBehavior));
+
+			ICalcService calcService = (ICalcService)container["useMarshal"];
+			Assert.IsNotNull(calcService);
+			Assert.IsFalse(calcService is CalculatorServiceWithMarshalByRefProxyBehavior, "Service proxy should not expose CalculatorServiceWithMarshalByRefProxyBehavior");
+			Assert.IsTrue(calcService is MarshalByRefObject, "Service proxy should expose MarshalByRefObject");
+			Assert.IsTrue(calcService is IDisposable, "Service proxy should expose the IDisposable interface");
+		}
 	}
 }
