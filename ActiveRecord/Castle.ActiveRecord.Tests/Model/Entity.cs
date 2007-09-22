@@ -112,6 +112,16 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { person_id = value; }
 		}
 
+		private IManager manager;
+
+		[Any(IdType = typeof(int), MetaType = typeof(string), IdColumn = "ManagerId", TypeColumn = "ManagerType")]
+		[Any.MetaValueAttribute("Manager", typeof(ManagerEntity))]
+		public virtual IManager Manager
+		{
+			get { return manager; }
+			set { manager = value; }
+		}
+
 		public new static void DeleteAll()
 		{
 			ActiveRecordBase.DeleteAll( typeof(PersonEntity) );
@@ -126,5 +136,48 @@ namespace Castle.ActiveRecord.Tests.Model
 		{
 			return (PersonEntity) ActiveRecordBase.FindByPrimaryKey( typeof(PersonEntity), id );
 		}
+	}
+
+	[ActiveRecord("entitymanager")]
+	public class ManagerEntity : ActiveRecordBase, IManager
+	{
+		private int id;
+
+		[PrimaryKey]
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
+		private string name;
+
+		[Property]
+		public virtual string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public static void DeleteAll()
+		{
+			DeleteAll(typeof(ManagerEntity));
+		}
+
+		public static ManagerEntity[] FindAll()
+		{
+			return (ManagerEntity[])FindAll(typeof(ManagerEntity));
+		}
+
+		public static ManagerEntity Find(int id)
+		{
+			return (ManagerEntity)FindByPrimaryKey(typeof(ManagerEntity), id);
+		}
+	}
+
+	public interface IManager
+	{
+		int Id { get; set; }
+		string Name { get; set; }
 	}
 }

@@ -101,6 +101,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNodes(model.Fields);
 				VisitNodes(model.Properties);
 				VisitNodes(model.BelongsTo);
+				VisitNodes(model.Anys);
 				VisitNodes(model.HasMany);
 				VisitNodes(model.HasManyToAny);
 				VisitNodes(model.HasAndBelongsToMany);

@@ -54,5 +54,31 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual( ce.Name, ces[0].Name );
 			Assert.AreEqual( ce.Id, ces[0].Id );
 		}
+
+		[Test]
+		public void JoinedSubClass_WithAnyProperty()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(),
+				typeof(Entity), typeof(CompanyEntity), typeof(PersonEntity), typeof(ManagerEntity));
+			Recreate();
+
+			Entity.DeleteAll();
+			CompanyEntity.DeleteAll();
+			PersonEntity.DeleteAll();
+			ManagerEntity.DeleteAll();
+
+			ManagerEntity manager = new ManagerEntity();
+			manager.Name = "pointy haired";
+			manager.Save();
+
+			PersonEntity person = new PersonEntity();
+			person.Name = "dilbert";
+			person.Manager = manager;
+			person.Save();
+
+			PersonEntity[] people = PersonEntity.FindAll();
+			Assert.AreEqual(1, people.Length);
+			Assert.IsNotNull(people[0].Manager);
+		}
 	}
 }
