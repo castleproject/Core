@@ -14,7 +14,9 @@
 
 namespace Castle.MicroKernel.Proxy
 {
+	using System.Runtime.Remoting;
 	using Castle.Core;
+	using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// Helper support for proxy configuration.
@@ -38,6 +40,21 @@ namespace Castle.MicroKernel.Proxy
 			}
 
 			return options;
+		}
+
+		public static object GetUnproxiedInstance(object instance)
+		{
+			if (!RemotingServices.IsTransparentProxy(instance))
+			{
+				IProxyTargetAccessor accessor = instance as IProxyTargetAccessor;
+
+				if (accessor != null)
+				{
+					instance = accessor.DynProxyGetTarget();
+				}
+			}
+
+			return instance;
 		}
 	}
 }

@@ -221,6 +221,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PropertiesInspectionBehaviorTestCase.cs" />
+    <Compile Include="Proxy\FactorySupportTestCase.cs" />
     <Compile Include="Proxy\TypedFactoryFacilityTestCase.cs" />
     <Compile Include="Proxy\ProxyBehaviorInvalidTestCase.cs" />
     <Compile Include="Proxy\ProxyBehaviorTestCase.cs" />
