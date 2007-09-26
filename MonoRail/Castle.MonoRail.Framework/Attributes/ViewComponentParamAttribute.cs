@@ -20,12 +20,34 @@ namespace Castle.MonoRail.Framework
 	/// Decorates a public property in a <see cref="ViewComponent"/>
 	/// to have the framework automatically bind the value using 
 	/// the <see cref="ViewComponent.ComponentParams"/> dictionary. 
-	/// By default The property name is going to be used as a key to query the params. 
+    /// </summary>
+    /// <remarks>
+	/// By default the property name is going to be used as a key to query the params. 
 	/// <para>
 	/// You can also use the <see cref="ViewComponentParamAttribute.Required"/>
-	/// property to define that a property is non-optional. 
+	/// property to define that a parameter is non-optional. 
 	/// </para>
-	/// </summary>
+    /// </remarks>
+    /// <example>
+    /// <para>In the code below, the <c>Text</c> parameter will automatically be bound to the <c>header</c> property.
+    /// If there is no <c>Text</c> parameter, a <see cref="ViewComponentException"/> will be thrown.</para>
+    /// Simailrly, the optional <c>CssClass</c> parameter will be bound to the <c>CssClass</c> property.  No error
+    /// occurs if there is no <c>CssClass</c> parameter.
+    /// <code><![CDATA[
+    /// public class HeaderViewComponent : ViewComponent
+    /// {
+    ///      [ViewComponentParam("Text", Required= true)]
+    ///      public string header {get; set;}
+    ///      
+    ///      [ViewComponentParam]
+    ///      public string CssClass {get; set;}
+    ///      // :
+    ///      // :
+    /// }
+    /// ]]></code></example>
+    /// <seealso cref="ViewComponent"/>
+    /// <seealso cref="ViewComponentDetailsAttribute"/>
+
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true), Serializable]
 	public class ViewComponentParamAttribute : Attribute
 	{

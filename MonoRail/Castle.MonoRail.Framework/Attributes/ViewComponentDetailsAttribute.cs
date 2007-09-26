@@ -18,11 +18,30 @@ namespace Castle.MonoRail.Framework
 
 	/// <summary>
 	/// Decorates a <see cref="ViewComponent"/> to associate a custom name with it.
-	/// <para>
-	/// Optionally you can associate the section names supported by the 
-	/// <see cref="ViewComponent"/>.
-	/// </para>
 	/// </summary>
+    /// <remarks>
+    /// Decorates a <see cref="ViewComponent"/> to associate a custom name with it.
+    /// <para>
+    /// Optionally you can associate the section names supported by the 
+    /// <see cref="ViewComponent"/>.
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// In the code below, the class MyHeaderViewConponent will be referenced as just <c>Header</c>,
+    /// and it will support the subsections <c>header</c> and <c>footer</c>.
+    /// <code><![CDATA[
+    /// [ViewComponentDetails("Header", Sections="header,footer")
+    /// public class MyHeaderViewComponent : ViewComponent
+    /// {
+    ///    // :
+    ///    // :
+    /// }
+    /// ]]>
+    /// </code>
+    /// </example>
+    /// <seealso cref="ViewComponent"/>
+    /// <seealso cref="ViewComponentParamAttribute"/>
+
 	[AttributeUsage(AttributeTargets.Class), Serializable]
 	public class ViewComponentDetailsAttribute : Attribute
 	{
