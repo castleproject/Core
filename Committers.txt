@@ -26,6 +26,8 @@ Committers
 - Ernst Naezer
 - Marc-Andre Cournoyer
 - Fabian Schmied
+- Dave Godfrey
+- Markus Zywitza
 
 Managers 
 ========
@@ -53,6 +55,7 @@ PMC Members
 - Chad Humphries
 - Ayende Rahien
 - Fabio David Batista
+- Josh Robb
 
 Emeritus 
 ========
