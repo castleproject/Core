@@ -913,16 +913,16 @@ namespace Castle.MicroKernel
 			{
 				IHandler[] genericResult = NamingSubSystem.GetHandlers(service.GetGenericTypeDefinition());
 
-				if (result.Length == 0)
-				{
-					result = genericResult;
-				}
-				else
+				if (result.Length > 0)
 				{
 					IHandler[] mergedResult = new IHandler[result.Length + genericResult.Length];
 					result.CopyTo(mergedResult, 0);
 					genericResult.CopyTo(mergedResult, result.Length);
 					result = mergedResult;
+				}
+				else
+				{
+					result = genericResult;
 				}
 			}
 
@@ -931,13 +931,11 @@ namespace Castle.MicroKernel
 			{
 				IHandler[] parentResult = Parent.GetHandlers(service);
 
-				if (parentResult.Length != 0)
+				if (parentResult.Length > 0)
 				{
 					IHandler[] newResult = new IHandler[result.Length + parentResult.Length];
-
-					Array.Copy(result, newResult, result.Length);
-					Array.Copy(parentResult, 0, newResult, result.Length, parentResult.Length);
-
+					result.CopyTo(newResult, 0);
+					parentResult.CopyTo(newResult, result.Length);
 					result = newResult;
 				}
 			}

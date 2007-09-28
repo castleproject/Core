@@ -406,6 +406,12 @@ namespace Castle.MicroKernel.Handlers
 				{
 					AddDependency(dependency);
 				}
+				else if (dependency.DependencyType == DependencyType.Parameter &&
+				         !ComponentModel.Constructors.HasAmbiguousFewerArgumentsCandidate &&
+				         !ComponentModel.Parameters.Contains(dependency.DependencyKey))
+				{
+					AddDependency(dependency);
+				}
 			}
 
 			if (state == HandlerState.Valid)
@@ -460,7 +466,7 @@ namespace Castle.MicroKernel.Handlers
 
 				DependenciesByService.Add(dependency.TargetType, dependency);
 			}
-			else
+			else if (!DependenciesByKey.Contains(dependency.DependencyKey))
 			{
 				DependenciesByKey.Add(dependency.DependencyKey, dependency);
 			}

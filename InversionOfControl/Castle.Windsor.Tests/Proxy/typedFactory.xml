@@ -7,7 +7,7 @@
 
       <factories>
         <factory id="calculator.factory"
-            interface="Castle.Windsor.Tests.ICalculatorFactory, Castle.Windsor.Tests"
+            interface="Castle.Windsor.Tests.Proxy.ICalculatorFactory, Castle.Windsor.Tests"
             creation="Create" destruction="Release" />
 
       </factories>

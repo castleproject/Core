@@ -109,11 +109,11 @@ namespace Castle.MicroKernel.ModelBuilder
 		{
 			AddContributor(new GenericInspector());
 			AddContributor(new ConfigurationModelInspector());
+			AddContributor(new ConfigurationParametersInspector());
 			AddContributor(new LifestyleModelInspector());
 			AddContributor(new ConstructorDependenciesModelInspector());
 			AddContributor(new PropertiesDependenciesModelInspector());
 			AddContributor(new LifecycleModelInspector());
-			AddContributor(new ConfigurationParametersInspector());
 			AddContributor(new InterceptorInspector());
 			AddContributor(new ComponentActivatorInspector());
 			AddContributor(new ComponentProxyInspector());

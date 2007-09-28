@@ -18,6 +18,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using System.Reflection;
 	using Castle.Core;
 	using Castle.MicroKernel.SubSystems.Conversion;
+	using Castle.MicroKernel.Util;
 
 	/// <summary>
 	/// This implementation of <see cref="IContributeComponentModelConstruction"/>
@@ -53,12 +54,11 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				// We register each public constructor
 				// and let the ComponentFactory select an 
 				// eligible amongst the candidates later
-
-				model.Constructors.Add(CreateConstructorCandidate(constructor));
+				model.Constructors.Add(CreateConstructorCandidate(model, constructor));
 			}
 		}
 
-		protected virtual ConstructorCandidate CreateConstructorCandidate(ConstructorInfo constructor)
+		protected virtual ConstructorCandidate CreateConstructorCandidate(ComponentModel model, ConstructorInfo constructor)
 		{
 			ParameterInfo[] parameters = constructor.GetParameters();
 
@@ -77,10 +77,22 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 					dependencies[i] = new DependencyModel(
 						DependencyType.Parameter, parameter.Name, paramType, false);
 				}
-				else
+				else 
 				{
-					dependencies[i] = new DependencyModel(
-						DependencyType.Service, parameter.Name, paramType, false);
+					ParameterModel modelParameter = model.Parameters[parameter.Name];
+
+					if (modelParameter != null && ReferenceExpressionUtil.IsReference(modelParameter.Value))
+					{
+						String key = ReferenceExpressionUtil.ExtractComponentKey(modelParameter.Value);
+
+						dependencies[i] = new DependencyModel(
+							DependencyType.ServiceOverride, key, paramType, false);					
+					}
+					else
+					{
+						dependencies[i] = new DependencyModel(
+							DependencyType.Service, parameter.Name, paramType, false);
+					}
 				}
 			}
 

@@ -23,6 +23,7 @@ namespace Castle.Core
 	[Serializable]
 	public class ConstructorCandidateCollection : ReadOnlyCollectionBase
 	{
+		private bool hasAmbiguousFewerArgumentsCandidate;
 		private ConstructorCandidate fewerArgumentsCandidate;
 
 		/// <summary>
@@ -34,13 +35,20 @@ namespace Castle.Core
 			if (fewerArgumentsCandidate == null)
 			{
 				fewerArgumentsCandidate = candidate;
+				hasAmbiguousFewerArgumentsCandidate = false;
 			}
 			else
 			{
-				if (candidate.Constructor.GetParameters().Length <
-				    fewerArgumentsCandidate.Constructor.GetParameters().Length)
+				int constructorParamCount = candidate.Constructor.GetParameters().Length;
+				int fewerArgumentsCount = fewerArgumentsCandidate.Constructor.GetParameters().Length;
+
+				if (constructorParamCount < fewerArgumentsCount)
 				{
 					fewerArgumentsCandidate = candidate;
+				}
+				else if (constructorParamCount == fewerArgumentsCount)
+				{
+					hasAmbiguousFewerArgumentsCandidate = true;
 				}
 			}
 
@@ -54,6 +62,11 @@ namespace Castle.Core
 		public ConstructorCandidate FewerArgumentsCandidate
 		{
 			get { return fewerArgumentsCandidate; }
+		}
+
+		public bool HasAmbiguousFewerArgumentsCandidate
+		{
+			get { return hasAmbiguousFewerArgumentsCandidate; }
 		}
 
 		/// <summary>

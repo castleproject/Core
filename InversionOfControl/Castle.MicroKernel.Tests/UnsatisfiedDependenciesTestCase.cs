@@ -46,9 +46,10 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(DependencyResolverException),
-			"Could not resolve non-optional dependency for 'key' (Castle.MicroKernel.Tests.ClassComponents.CustomerImpl2). Parameter 'name' type 'System.String'"
-			)]
+		[ExpectedException(typeof(HandlerException),
+		   "Can't create component 'key' as it has dependencies to be satisfied. \r\nkey is waiting for the following dependencies: \r\n\r\n" +
+		   "Keys (components with specific keys)\r\n- name which was not registered. \r\n- address which was not registered. \r\n" +
+		   "- age which was not registered. \r\n")]
 		public void UnsatisfiedConfigValues()
 		{
 			MutableConfiguration config = new MutableConfiguration("component");
@@ -61,6 +62,7 @@ namespace Castle.MicroKernel.Tests
 			kernel.ConfigurationStore.AddComponentConfiguration("customer", config);
 
 			kernel.AddComponent("key", typeof(CustomerImpl2));
+
 			object instance = kernel["key"];
 		}
 

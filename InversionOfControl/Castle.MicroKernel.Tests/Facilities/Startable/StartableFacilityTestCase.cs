@@ -83,7 +83,7 @@ namespace Castle.Facilities.Startable.Tests
 			Assert.IsTrue(component.Stopped);
 		}
 
-		[Test, Ignore("Pending resolution")]
+		[Test]
 		public void TestStartableWithCustomDependencies()
 		{
 			IKernel kernel = new DefaultKernel();

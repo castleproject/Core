@@ -16,62 +16,71 @@ namespace Castle.Facilities.Startable
 {
 	using System;
 	using System.Collections;
-
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.SubSystems.Conversion;
-	
 	using Castle.Core;
 
-
-    public class StartableFacility : AbstractFacility
+	public class StartableFacility : AbstractFacility
 	{
 		private ArrayList waitList = new ArrayList();
-        private ITypeConverter converter;
-		
+		private ITypeConverter converter;
+
 		protected override void Init()
 		{
 			converter = (ITypeConverter) Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 
-			Kernel.ComponentModelCreated += 
+			Kernel.ComponentModelCreated +=
 				new ComponentModelDelegate(OnComponentModelCreated);
-			Kernel.ComponentRegistered += 
+			Kernel.ComponentRegistered +=
 				new ComponentDataDelegate(OnComponentRegistered);
 		}
 
 		private void OnComponentModelCreated(ComponentModel model)
 		{
-			bool startable = 
+			bool startable =
 				CheckIfComponentImplementsIStartable(model) || HasStartableAttributeSet(model);
 
 			model.ExtendedProperties["startable"] = startable;
 
 			if (startable)
 			{
-				model.LifecycleSteps.Add( 
-					LifecycleStepType.Commission, StartConcern.Instance );
-				model.LifecycleSteps.Add( 
-					LifecycleStepType.Decommission, StopConcern.Instance );
+				model.LifecycleSteps.Add(
+					LifecycleStepType.Commission, StartConcern.Instance);
+				model.LifecycleSteps.Add(
+					LifecycleStepType.Decommission, StopConcern.Instance);
 			}
 		}
 
-    	private void OnComponentRegistered(String key, IHandler handler)
+		private void OnComponentRegistered(String key, IHandler handler)
 		{
 			bool startable = (bool) handler.ComponentModel.ExtendedProperties["startable"];
-			
+
 			if (startable)
 			{
 				if (handler.CurrentState == HandlerState.WaitingDependency)
 				{
-					waitList.Add( handler );
+					AddHandlerToWaitingList(handler);
 				}
 				else
 				{
-					Start( key );
+					Start(key);
 				}
 			}
 
 			CheckWaitingList();
+		}
+
+		private void OnHandlerStateChanged(object source, EventArgs args)
+		{
+			CheckWaitingList();
+		}
+
+		private void AddHandlerToWaitingList(IHandler handler)
+		{
+			waitList.Add(handler);
+
+			handler.OnHandlerStateChanged += new HandlerStateDelegate(OnHandlerStateChanged);
 		}
 
 		/// <summary>
@@ -81,7 +90,7 @@ namespace Castle.Facilities.Startable
 		/// </summary>
 		private void CheckWaitingList()
 		{
-			IHandler[] handlers = (IHandler[]) waitList.ToArray( typeof(IHandler) );
+			IHandler[] handlers = (IHandler[]) waitList.ToArray(typeof(IHandler));
 
 			IList validList = new ArrayList();
 
@@ -91,12 +100,14 @@ namespace Castle.Facilities.Startable
 				{
 					validList.Add(handler);
 					waitList.Remove(handler);
+
+					handler.OnHandlerStateChanged -= new HandlerStateDelegate(OnHandlerStateChanged);
 				}
 			}
 
 			foreach(IHandler handler in validList)
 			{
-				Start( handler.ComponentModel.Name );
+				Start(handler.ComponentModel.Name);
 			}
 		}
 
@@ -109,26 +120,26 @@ namespace Castle.Facilities.Startable
 			object instance = Kernel[key];
 		}
 
-        private bool CheckIfComponentImplementsIStartable(ComponentModel model)
-        {
-            return typeof(IStartable).IsAssignableFrom(model.Implementation);
-        }
-        
+		private bool CheckIfComponentImplementsIStartable(ComponentModel model)
+		{
+			return typeof(IStartable).IsAssignableFrom(model.Implementation);
+		}
+
 		private bool HasStartableAttributeSet(ComponentModel model)
-        {
-            bool result = false;
-           
-            if (model.Configuration != null)
-            {
-                String startable = model.Configuration.Attributes["startable"];
-                
+		{
+			bool result = false;
+
+			if (model.Configuration != null)
+			{
+				String startable = model.Configuration.Attributes["startable"];
+
 				if (startable != null)
 				{
 					result = (bool) converter.PerformConversion(startable, typeof(bool));
 				}
-            }
-            
-            return result;
-        }
+			}
+
+			return result;
+		}
 	}
 }
