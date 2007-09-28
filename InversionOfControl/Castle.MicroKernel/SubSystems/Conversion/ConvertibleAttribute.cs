@@ -19,7 +19,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	/// <summary>
 	/// Declares a type as being convertible by a <see cref="ITypeConverter"/> and optionally defines the converter to be used
 	/// </summary>
-	[System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false, AllowMultiple = false)]
+	[System.AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct, Inherited = false, AllowMultiple = false)]
 	public class ConvertibleAttribute : Attribute
 	{
 		private readonly Type converterType;

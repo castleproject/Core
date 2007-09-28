@@ -55,6 +55,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		/// <returns></returns>
 		private object CreateInstance(Type type, IConfiguration configuration)
 		{
+			type = ObtainImplementation(type, configuration);	
+
 			ConstructorInfo constructor = ChooseConstructor(type);
 
 			object[] args = null;
@@ -65,6 +67,33 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 			object instance = Activator.CreateInstance(type, args);
 			return instance;
+		}
+
+		private Type ObtainImplementation(Type type, IConfiguration configuration)
+		{
+			String typeNode = configuration.Attributes["type"];
+	
+			if (String.IsNullOrEmpty(typeNode))
+			{
+				if (type.IsInterface)
+				{
+					throw new ConverterException("A type attribute must be specified for interfaces");
+				}
+
+				return type;
+			}
+
+			Type implType = (Type) Context.Composition.PerformConversion(typeNode, typeof(Type));
+
+			if (!type.IsAssignableFrom(implType))
+			{
+				String message = String.Format("Type {0} is not assignable to {1}",
+				                               implType.FullName, type.FullName);
+
+				throw new ConverterException(message);
+			}
+
+			return implType;
 		}
 
 		/// <summary>
