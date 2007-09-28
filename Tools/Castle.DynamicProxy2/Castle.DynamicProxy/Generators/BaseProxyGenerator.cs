@@ -1071,7 +1071,7 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach(ConstructorInfo constructor in constructors)
 			{
-				if (constructor.IsPublic || constructor.IsFamily
+        if (constructor.IsPublic || constructor.IsFamily || constructor.IsFamilyOrAssembly
 				    || (constructor.IsAssembly && InternalsHelper.IsInternalToDynamicProxy(constructor.DeclaringType.Assembly)))
 					GenerateConstructor(emitter, constructor, fields);
 			}

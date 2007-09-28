@@ -21,16 +21,8 @@ namespace Castle.DynamicProxy.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class OutRefParams
+	public class OutRefParams : BasePEVerifyTestCase
 	{
-		private ProxyGenerator generator;
-
-		[SetUp]
-		public void Init()
-		{
-			generator = new ProxyGenerator();
-		}
-
 		[Test]
 		public void CanCreateProxyOfInterfaceWithOutParameter()
 		{

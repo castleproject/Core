@@ -14,42 +14,20 @@
 
 namespace Castle.DynamicProxy.Tests.Classes
 {
-	using System;
-
-	public class ClassWithConstructors
+	public class ProtectedInternalConstructorClass
 	{
-		private readonly string name;
-		private readonly int x;
-
-		public ClassWithConstructors(String name)
+		//Added internal keyword
+		protected internal ProtectedInternalConstructorClass()
 		{
-			this.name = name;
 		}
 
-		public ClassWithConstructors(String name, int x)
+		public virtual void DoSomething()
 		{
-			this.name = name;
-			this.x = x;
 		}
 
-    protected ClassWithConstructors (double name)
-        : this (name.ToString ())
-    {
-    }
-
-    protected internal ClassWithConstructors (double name, double x)
-      : this (name.ToString (), (int) x)
-    {
-    }
-
-	  public string Name
+		public static ProtectedInternalConstructorClass Create()
 		{
-			get { return name; }
-		}
-
-		public int X
-		{
-			get { return x; }
+			return new ProtectedInternalConstructorClass();
 		}
 	}
 }

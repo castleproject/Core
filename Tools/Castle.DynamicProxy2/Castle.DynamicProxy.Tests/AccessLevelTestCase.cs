@@ -27,8 +27,6 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProtectedConstructor()
 		{
-			ProxyGenerator generator = new ProxyGenerator();
-
 			NonPublicConstructorClass proxy =
 				generator.CreateClassProxy(
 					typeof(NonPublicConstructorClass), new StandardInterceptor())
@@ -40,10 +38,21 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void ProtectedInternalConstructor ()
+		{
+			ProtectedInternalConstructorClass proxy =
+				generator.CreateClassProxy (
+					typeof (ProtectedInternalConstructorClass), new StandardInterceptor())
+				as ProtectedInternalConstructorClass;
+
+			Assert.IsNotNull (proxy);
+
+			proxy.DoSomething();
+		}
+
+		[Test]
 		public void ProtectedMethods()
 		{
-			ProxyGenerator generator = new ProxyGenerator();
-
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 
 			NonPublicMethodsClass proxy = (NonPublicMethodsClass)

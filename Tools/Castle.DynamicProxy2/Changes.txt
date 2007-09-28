@@ -1,5 +1,9 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Made BasePEVerifyTestCase only check those assemblies that were actually generated in the test case, see DYNPROXY-68
+- Fixed bug with protected internal constructors, see DYNPROXY-66/DYNPROXY-67
+- Fixed test cases not using the ProxyGenerator supplied by BasePEVerifyTestCase, see DYNPROXY-69
+
 - Added StrongNameUtil, which provides methods for checking whether an assembly is signed/a type comes from a signed assembly
 - Added an additional constructor overload to ClassEmitter, allowing to force it to use an unsigned assembly
 

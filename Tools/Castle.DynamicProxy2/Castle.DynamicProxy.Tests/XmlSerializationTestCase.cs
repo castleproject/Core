@@ -26,10 +26,8 @@ namespace Castle.DynamicProxy.Tests
 		[Test, Ignore("Could not come up with a solution for this")]
 		public void ProxyIsXmlSerializable()
 		{
-			ProxyGenerator gen = new ProxyGenerator();
-
 			ClassToSerialize proxy = (ClassToSerialize)
-			                         gen.CreateClassProxy(typeof(ClassToSerialize), new StandardInterceptor());
+			                         generator.CreateClassProxy(typeof(ClassToSerialize), new StandardInterceptor());
 
 			XmlSerializer serializer = new XmlSerializer(proxy.GetType());
 

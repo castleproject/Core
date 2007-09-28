@@ -26,10 +26,8 @@ namespace Castle.DynamicProxy.Tests
 		[ExpectedException(typeof(ArgumentException), "No default value for argument")]
 		public void ParametersAreCopiedToProxiedObject()
 		{
-			ProxyGenerator pg = new ProxyGenerator();
-
 			ClassWithAttributesOnMethodParameters requiredObj = (ClassWithAttributesOnMethodParameters)
-			                                                    pg.CreateClassProxy(
+			                                                    generator.CreateClassProxy(
 			                                                    	typeof(ClassWithAttributesOnMethodParameters),
 			                                                    	new RequiredParamInterceptor());
 
@@ -39,10 +37,8 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void CanGetParameterAttributeFromProxiedObject()
 		{
-			ProxyGenerator pg = new ProxyGenerator();
-
 			ClassWithAttributesOnMethodParameters requiredObj = (ClassWithAttributesOnMethodParameters)
-			                                                    pg.CreateClassProxy(
+			                                                    generator.CreateClassProxy(
 			                                                    	typeof(ClassWithAttributesOnMethodParameters),
 			                                                    	new RequiredParamInterceptor());
 

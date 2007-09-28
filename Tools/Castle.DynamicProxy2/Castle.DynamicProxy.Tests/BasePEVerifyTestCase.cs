@@ -35,10 +35,13 @@ namespace Castle.DynamicProxy.Tests
 		[TearDown]
 		public virtual void TearDown ()
 		{
-			RunPEVerifyOnGeneratedAssembly ();
+			if (generator.ProxyBuilder.ModuleScope.StrongNamedModule != null)
+				RunPEVerifyOnGeneratedAssembly (generator.ProxyBuilder.ModuleScope.StrongNamedModule.FullyQualifiedName);
+			if (generator.ProxyBuilder.ModuleScope.WeakNamedModule != null)
+				RunPEVerifyOnGeneratedAssembly (generator.ProxyBuilder.ModuleScope.WeakNamedModule.FullyQualifiedName);
 		}
 
-		public void RunPEVerifyOnGeneratedAssembly()
+		public void RunPEVerifyOnGeneratedAssembly(string assemblyPath)
 		{
 			Process process = new Process();
 
@@ -59,14 +62,14 @@ namespace Castle.DynamicProxy.Tests
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			process.StartInfo.Arguments = ModuleScope.DEFAULT_FILE_NAME + " /VERBOSE";
+			process.StartInfo.Arguments = assemblyPath + " /VERBOSE";
 			process.Start();
 			string processOutput = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();
 
 			string result = process.ExitCode + " code ";
 
-			Console.WriteLine(result);
+			Console.WriteLine(GetType().FullName + ": " + result);
 
 			if (process.ExitCode != 0)
 			{

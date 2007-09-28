@@ -23,16 +23,8 @@ namespace Castle.DynamicProxy.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class GenerationHookTestCase
+	public class GenerationHookTestCase : BasePEVerifyTestCase
 	{
-		private ProxyGenerator generator;
-
-		[SetUp]
-		public void Init()
-		{
-			generator = new ProxyGenerator();
-		}
-
 		[Test]
 		public void HookIsUsedForConcreteClassProxy()
 		{
