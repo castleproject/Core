@@ -356,6 +356,7 @@
     <Compile Include="SubSystems\Conversion\Converters\ComponentConverter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\ComponentModelConverter.cs" />
     <Compile Include="SubSystems\Conversion\Converters\DefaultComplexConverter.cs" />
     <Compile Include="SubSystems\Conversion\Converters\DictionaryConverter.cs">
       <SubType>Code</SubType>
