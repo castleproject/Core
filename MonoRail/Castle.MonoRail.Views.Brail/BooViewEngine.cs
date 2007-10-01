@@ -110,7 +110,7 @@ namespace Castle.MonoRail.Views.Brail
 									 string templateName)
 		{
 			Log("Starting to process request for {0}", templateName);
-			string file = templateName.ToUpper() + ViewFileExtension;
+			string file = templateName + ViewFileExtension;
 			BrailBase view;
 			// Output may be the layout's child output if a layout exists
 			// or the context.Response.Output if the layout is null
@@ -385,7 +385,8 @@ namespace Castle.MonoRail.Views.Brail
 			Type type;
 			foreach (ICompilerInput input in inputs2FileName.Keys)
 			{
-				string typeName = Path.GetFileNameWithoutExtension(input.Name) + "_BrailView";
+				string viewName = Path.GetFileNameWithoutExtension(input.Name);
+				string typeName = TransformToBrailStep.GetViewTypeName(viewName);
 				type = result.Context.GeneratedAssembly.GetType(typeName);
 				Log("Adding {0} to the cache", type.FullName);
 				compilations[ inputs2FileName[input] ] = type;

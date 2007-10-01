@@ -50,7 +50,7 @@ namespace Castle.MonoRail.Views.Brail
 				}
 
 				ClassDefinition macro = new ClassDefinition();
-				macro.Name = module.FullName + "_BrailView";
+				macro.Name = GetViewTypeName(module.FullName);
 				macro.BaseTypes.Add(new SimpleTypeReference("Castle.MonoRail.Views.Brail.BrailBase"));
 
 				AddConstructor(macro);
@@ -65,6 +65,11 @@ namespace Castle.MonoRail.Views.Brail
 				module.Members.Clear();
 				module.Members.Add(macro);
 			}
+		}
+
+		public static string GetViewTypeName(string name)
+		{
+			return "BrailView_"+ name;
 		}
 
 		// get the directory name where this script reside and create a property
