@@ -273,11 +273,11 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			if (Path.HasExtension(templateName))
 			{
-				return templateName.ToUpper();
+				return templateName;
 			}
 			else
 			{
-				return templateName.ToUpper() + extention;
+				return templateName + extention;
 			}
 		}
 
