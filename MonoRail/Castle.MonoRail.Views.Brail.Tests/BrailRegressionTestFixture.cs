@@ -35,6 +35,15 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		}
 
 		[Test]
+		public void CanCompareToNullableParameter()
+		{
+			Hashtable args = new Hashtable();
+			args["myVariable"] = "Hello";
+			string view = ProcessView(args, "regressions/CanCompareToNullableParameter");
+			Assert.AreEqual("Eq", view);
+		}
+
+		[Test]
 		public void HtmlEncodingStringInterpolation()
 		{
 			Hashtable args = new Hashtable();

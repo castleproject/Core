@@ -14,10 +14,9 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
+	using System;
 	using System.Collections.Generic;
-	using System.Reflection;
 	using Boo.Lang;
-	using Castle.MonoRail.Framework;
 
 	public class IgnoreNull : IQuackFu
 	{
@@ -76,6 +75,17 @@ namespace Castle.MonoRail.Views.Brail
 			if(target == null)
 				return string.Empty;
 			return target.ToString();
+		}
+
+		public static bool AreEqual(object left, object right)
+		{
+			IgnoreNull temp = left as IgnoreNull;
+			if (temp != null)
+				left = temp.target;
+			temp = right as IgnoreNull;
+			if (temp != null)
+				right = temp.target;
+			return Equals(left, right);
 		}
 	}
 }

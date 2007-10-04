@@ -497,7 +497,7 @@ namespace Castle.MonoRail.Views.Brail
 				new ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods());
 			compiler.Parameters.Pipeline.Replace(typeof (InitializeTypeSystemServices),
 				new InitializeCustomTypeSystem());
-			compiler.Parameters.Pipeline.InsertAfter(typeof (ReplaceUknownWithParameters),
+			compiler.Parameters.Pipeline.InsertBefore(typeof (ReplaceUknownWithParameters),
 				new FixTryGetParameterConditionalChecks());
 			compiler.Parameters.Pipeline.RemoveAt(compiler.Parameters.Pipeline.Find(typeof (IntroduceGlobalNamespaces)));
 
