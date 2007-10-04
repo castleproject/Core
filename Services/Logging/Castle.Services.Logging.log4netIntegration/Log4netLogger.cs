@@ -42,7 +42,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			Factory = factory;
 		}
 
-		public Logger CreateChildLogger(String name)
+		public virtual Logger CreateChildLogger(String name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
 		}

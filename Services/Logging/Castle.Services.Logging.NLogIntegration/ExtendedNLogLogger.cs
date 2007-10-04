@@ -14,6 +14,7 @@
 
 namespace Castle.Services.Logging.NLogIntegration
 {
+	using System;
 	using Castle.Core.Logging;
 	using Castle.Services.Logging.NLogtIntegration;
 	using NLog;
@@ -33,7 +34,12 @@ namespace Castle.Services.Logging.NLogIntegration
 			Factory = factory;
 		}
 
-		public ExtendedLogger CreateExtendedChildLogger(string name)
+		public override ILogger CreateChildLogger(String name)
+		{
+			return CreateExtendedChildLogger(name);
+		}
+
+		public ExtendedLogger CreateExtendedChildLogger(String name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
 		}

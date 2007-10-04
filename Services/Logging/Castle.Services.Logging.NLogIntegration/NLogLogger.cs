@@ -33,7 +33,7 @@ namespace Castle.Services.Logging.NLogIntegration
 			Factory = factory;
 		}
 
-		public ILogger CreateChildLogger(String name)
+		public virtual ILogger CreateChildLogger(String name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
 		}

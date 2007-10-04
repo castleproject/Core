@@ -15,10 +15,10 @@
 namespace Castle.Services.Logging.Log4netIntegration
 {
 	using System;
-	using System.Collections;
 	using Castle.Core.Logging;
 	using log4net;
 	using ILogger=log4net.Core.ILogger;
+	using Logger = Castle.Core.Logging.ILogger;
 	using ExtendedLogger = Castle.Core.Logging.IExtendedLogger;
 
 	public class ExtendedLog4netLogger : Log4netLogger, ExtendedLogger
@@ -37,6 +37,11 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			Logger = logger;
 			Factory = factory;
+		}
+
+		public override Logger CreateChildLogger(String name)
+		{
+			return CreateExtendedChildLogger(name);
 		}
 
 		public ExtendedLogger CreateExtendedChildLogger(string name)

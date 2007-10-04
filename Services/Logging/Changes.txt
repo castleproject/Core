@@ -1,6 +1,8 @@
 Change history
 --------------
 
+- Fixed Services-10 Extended loggers don't handle CreateChildLogger properly
+
 Beta 2
 ======
 - Updated External Config File support to use IsPathRooted to decide how to load config file.
