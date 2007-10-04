@@ -69,9 +69,9 @@ namespace Castle.MonoRail.Views.Brail
 			InternalLocal viewComponentFactoryLocal = CodeBuilder.DeclareLocal(method, "viewComponentFactory",
 			                                                                   TypeSystemServices.Map(
 			                                                                   	typeof(IViewComponentFactory)));
-		    // viewComponentFactory = MonoRailHttpHandler.CurrentContext.GetService(IViewComponentFactory)
+		    // viewComponentFactory = context.GetService(IViewComponentFactory)
 			MethodInvocationExpression callService = new MethodInvocationExpression(
-				AstUtil.CreateReferenceExpression("MonoRailHttpHandler.CurrentContext.GetService"));
+				AstUtil.CreateReferenceExpression("context.GetService"));
 			callService.Arguments.Add(CodeBuilder.CreateTypeofExpression(typeof(IViewComponentFactory)));
 
 			block.Add(new BinaryExpression(BinaryOperatorType.Assign,
