@@ -777,7 +777,7 @@ namespace Castle.ActiveRecord
 		/// <param name="originalFileName"></param>
 		/// <param name="fileCount"></param>
 		/// <returns></returns>
-		public static string CreateAnotherFile(string originalFileName, int fileCount)
+		private static string CreateAnotherFile(string originalFileName, int fileCount)
 		{
 			string path = Path.GetDirectoryName(originalFileName);
 			string fileName = Path.GetFileNameWithoutExtension(originalFileName);
