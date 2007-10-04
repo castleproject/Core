@@ -211,6 +211,7 @@
     <None Include="Views\bugs\InlineSubView.brail" />
     <None Include="Views\dsl\testXml.brail" />
     <None Include="Views\dsl\testSubViewWithComponents.brail" />
+    <None Include="Views\home\CanUseUrlHelperWithoutPrefix.brail" />
     <None Include="Views\home\NullPropagation.brail" />
     <None Include="Views\home\WithNullableDynamicProxyObject.brail" />
     <None Include="Views\resourced\iterating.brail" />

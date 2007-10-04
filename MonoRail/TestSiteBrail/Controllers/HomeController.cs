@@ -24,6 +24,11 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
     [Serializable]
     public class HomeController : Controller
     {
+		public void CanUseUrlHelperWithoutPrefix()
+		{
+
+		}
+
         public void Bag()
         {
             this.PropertyBag.Add("CustomerName", "hammett");

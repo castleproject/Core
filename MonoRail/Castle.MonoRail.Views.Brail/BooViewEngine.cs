@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// This field holds all the cache of all the 
 		/// compiled types (not instances) of all the views that Brail nows of.
 		/// </summary>
-		private Hashtable compilations = Hashtable.Synchronized(
+		private readonly Hashtable compilations = Hashtable.Synchronized(
 			new Hashtable(StringComparer.InvariantCultureIgnoreCase));
 
 		/// <summary>
@@ -243,7 +243,7 @@ namespace Castle.MonoRail.Views.Brail
 			}
 			Log("Detected a change in {0}, removing from complied cache", e.Name);
 			// Will cause a recompilation
-			compilations[e.Name] = null;
+			compilations[e.FullPath] = null;
 		}
 
 		private static void WaitForFileToBecomeAvailableForReading(FileSystemEventArgs e)

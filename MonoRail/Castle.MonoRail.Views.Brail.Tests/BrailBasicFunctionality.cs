@@ -30,6 +30,13 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		}
 
 		[Test]
+		public void CanUseUrlHelperWithoutPrefix()
+		{
+			DoGet("home/CanUseUrlHelperWithoutPrefix.rails");
+			AssertReplyEqualTo("Castle.MonoRail.Framework.Helpers.UrlHelper");
+		}
+
+		[Test]
 		public void WithNullableDynamicProxyObject()
 		{
 			DoGet("home/WithNullableDynamicProxyObject.rails");
