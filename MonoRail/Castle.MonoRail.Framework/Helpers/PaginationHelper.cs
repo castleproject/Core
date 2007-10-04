@@ -495,8 +495,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="total">The total.</param>
 		public GenericCustomPage(IList<T> list, int curPage, int pageSize, int total)
 		{
-			int startIndex = 0;
-			int endIndex = Math.Min(startIndex + pageSize, list.Count);
+			int startIndex = (pageSize * curPage) - pageSize;
+			int endIndex = Math.Min(startIndex + pageSize, total);
 
 			sourceList = list;
 

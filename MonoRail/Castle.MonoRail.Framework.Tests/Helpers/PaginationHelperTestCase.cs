@@ -231,5 +231,130 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.IsFalse(page.HasNext);
 			Assert.IsTrue(page.HasPrevious);
 		}
+
+
+		[Test]
+		public void CustomPaginationForObjectCollection()
+		{
+			IList items = new ArrayList();
+
+			/* First page */
+			items.Add("1");
+			items.Add("2");
+			items.Add("3");
+
+			IPaginatedPage page = PaginationHelper.CreateCustomPage(items, 3, 1, 8);
+
+			Assert.IsNotNull(page);
+
+			Assert.AreEqual(1, page.FirstItem);
+			Assert.AreEqual(3, page.LastItem);
+			Assert.AreEqual(8, page.TotalItems);
+
+			Assert.IsFalse(page.HasFirst);
+			Assert.IsTrue(page.HasLast);
+			Assert.IsTrue(page.HasNext);
+			Assert.IsFalse(page.HasPrevious);
+
+			/* Second page */
+			items.Clear();
+			items.Add("4");
+			items.Add("5");
+			items.Add("6");
+
+			page = PaginationHelper.CreateCustomPage(items, 3, 2, 8);
+
+			Assert.IsNotNull(page);
+
+			Assert.AreEqual(4, page.FirstItem);
+			Assert.AreEqual(6, page.LastItem);
+			Assert.AreEqual(8, page.TotalItems);
+
+			Assert.IsTrue(page.HasFirst);
+			Assert.IsTrue(page.HasLast);
+			Assert.IsTrue(page.HasNext);
+			Assert.IsTrue(page.HasPrevious);
+
+			/* Third page, partial */
+			items.Clear();
+			items.Add("7");
+			items.Add("8");
+
+			page = PaginationHelper.CreateCustomPage(items, 3, 3, 8);
+
+			Assert.IsNotNull(page);
+
+			Assert.AreEqual(7, page.FirstItem);
+			Assert.AreEqual(8, page.LastItem);
+			Assert.AreEqual(8, page.TotalItems);
+
+			Assert.IsTrue(page.HasFirst);
+			Assert.IsFalse(page.HasLast);
+			Assert.IsFalse(page.HasNext);
+			Assert.IsTrue(page.HasPrevious);
+		}
+
+		[Test]
+		public void CustomPaginationForGenericCollection()
+		{
+			IList<string> items = new List<string>();
+
+			/* First page */
+			items.Add("1");
+			items.Add("2");
+			items.Add("3");
+
+			IPaginatedPage page = PaginationHelper.CreateCustomPage(items, 3, 1, 8);
+
+			Assert.IsNotNull(page);
+
+			Assert.AreEqual(1, page.FirstItem);
+			Assert.AreEqual(3, page.LastItem);
+			Assert.AreEqual(8, page.TotalItems);
+
+			Assert.IsFalse(page.HasFirst);
+			Assert.IsTrue(page.HasLast);
+			Assert.IsTrue(page.HasNext);
+			Assert.IsFalse(page.HasPrevious);
+
+			/* Second page */
+			items.Clear();
+			items.Add("4");
+			items.Add("5");
+			items.Add("6");
+
+			page = PaginationHelper.CreateCustomPage(items, 3, 2, 8);
+
+			Assert.IsNotNull(page);
+
+			Assert.AreEqual(4, page.FirstItem);
+			Assert.AreEqual(6, page.LastItem);
+			Assert.AreEqual(8, page.TotalItems);
+
+			Assert.IsTrue(page.HasFirst);
+			Assert.IsTrue(page.HasLast);
+			Assert.IsTrue(page.HasNext);
+			Assert.IsTrue(page.HasPrevious);
+
+			/* Third page, partial */
+			items.Clear();
+			items.Add("7");
+			items.Add("8");
+
+			page = PaginationHelper.CreateCustomPage(items, 3, 3, 8);
+
+			Assert.IsNotNull(page);
+
+			Assert.AreEqual(7, page.FirstItem);
+			Assert.AreEqual(8, page.LastItem);
+			Assert.AreEqual(8, page.TotalItems);
+
+			Assert.IsTrue(page.HasFirst);
+			Assert.IsFalse(page.HasLast);
+			Assert.IsFalse(page.HasNext);
+			Assert.IsTrue(page.HasPrevious);
+		}
+
+
 	}
 }
