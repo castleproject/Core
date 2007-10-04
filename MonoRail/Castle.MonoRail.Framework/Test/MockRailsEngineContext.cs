@@ -88,7 +88,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <value></value>
 		public virtual string Url
 		{
-			get { throw new NotImplementedException(); }
+			get { return urlInfo.UrlRaw; }
 		}
 
 		/// <summary>
