@@ -14,35 +14,17 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using System;
 	using System.Collections;
-	using System.Configuration;
-	using System.IO;
-	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.TestSupport;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class JustViewFixture : BaseControllerTest
+	public class JustViewFixture : BaseViewOnlyTestFixture
 	{
-		protected string ProcessView(string templatePath)
+		[Test]
+		public void CanRenderViewWithoutUsingFullMonoRailPipeline()
 		{
-			return ProcessView(new Hashtable(), templatePath);
-		}
-
-		protected string ProcessView(IDictionary dictionary, string templatePath)
-		{
-			BooViewEngine bve = new BooViewEngine();
-			string viewPath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Views");
-			bve.Service(new ViewSourceLoaderServiceProvider(viewPath));
-			bve.Initialize();
-			StringWriter sw = new StringWriter();
-			DummyController controller = new DummyController();
-
-			controller.PropertyBag = dictionary;
-			PrepareController(controller, "", "home", "index");
-			bve.Process(sw, Context, controller, templatePath);
-			return sw.ToString();
+			string outpot = ProcessView("home/index");
+			Assert.AreEqual("Brail is wonderful", outpot);
 		}
 
 		[Test]
@@ -54,28 +36,14 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
 			string actual = ProcessView(dictionary, templatePath);
 			Assert.AreEqual("No Data", actual);
-
 		}
 
-		[Test]
-		public void CanRenderViewWithoutUsingFullMonoRailPipeline()
-		{
-			BooViewEngine bve = new BooViewEngine();
-			string viewPath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Views");
-			bve.Service(new ViewSourceLoaderServiceProvider(viewPath));
-			bve.Initialize();
-			StringWriter sw = new StringWriter();
-			DummyController controller = new DummyController();
-			PrepareController(controller, "", "home", "index");
-			bve.Process(sw, Context, controller, "home/index");
-			Assert.AreEqual("Brail is wonderful", sw.ToString());
-		}
 
 		[Test]
 		public void WithParameters()
 		{
 			IDictionary dictionary = new Hashtable();
-			dictionary["list"] = new int[] { 2, 5, 7, 8 };
+			dictionary["list"] = new int[] {2, 5, 7, 8};
 			dictionary["name"] = "test";
 			string templatePath = "home/bag";
 
@@ -87,10 +55,6 @@ namespace Castle.MonoRail.Views.Brail.Tests
  8
 ";
 			Assert.AreEqual(expected, actual);
-		}
-
-		private class DummyController : Controller
-		{
 		}
 	}
 }

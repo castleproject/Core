@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using System;
 	using System.IO;
 	using System.Threading;
 	using Castle.MonoRail.Framework.Tests;

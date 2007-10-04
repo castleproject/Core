@@ -73,6 +73,7 @@
     <Compile Include="DslWrapper.cs" />
     <Compile Include="ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.cs">
     </Compile>
+    <Compile Include="FixTryGetParameterConditionalChecks.cs" />
     <Compile Include="HtmlExtension.cs" />
     <Compile Include="IDslLanguageExtension.cs" />
     <Compile Include="Macros\CodeBuilderHelper.cs" />

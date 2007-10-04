@@ -18,9 +18,11 @@ namespace Castle.MonoRail.Views.Brail
 	using Boo.Lang.Compiler.Ast;
 	using Boo.Lang.Compiler.Steps;
 	using Boo.Lang.Compiler.TypeSystem;
-	// Replace any uknown identifier with a call to GetParameter('unknown')
-	// this mean that unknonw identifier in scripts will only fail in run time if they
-	// were not defined by the controller.
+	///<summary>
+	/// Replace any uknown identifier with a call to GetParameter('unknown')
+	/// this mean that unknonw identifier in scripts will only fail in run time if they
+	/// were not defined by the controller.
+	/// </summary>
 	public class ReplaceUknownWithParameters : ProcessMethodBodiesWithDuckTyping
 	{
 		private IMethod _getParam;

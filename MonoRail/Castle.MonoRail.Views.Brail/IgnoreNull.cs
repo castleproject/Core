@@ -20,7 +20,7 @@ namespace Castle.MonoRail.Views.Brail
 
 	public class IgnoreNull : IQuackFu
 	{
-		private object target;
+		private readonly object target;
 
 		public IgnoreNull(object target)
 		{
