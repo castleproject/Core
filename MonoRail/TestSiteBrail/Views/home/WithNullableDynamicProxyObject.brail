@@ -1,0 +1,12 @@
+<% output ?src.Text %>
+<%
+?src.Text = "foo"
+output ?src.Text
+%>
+<%
+output ?src.Say()
+%>
+<%
+?src["hi"] = "there"
+output ?src["hi"]
+%>

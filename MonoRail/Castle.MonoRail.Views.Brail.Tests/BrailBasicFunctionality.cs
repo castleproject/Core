@@ -30,6 +30,17 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		}
 
 		[Test]
+		public void WithNullableDynamicProxyObject()
+		{
+			DoGet("home/WithNullableDynamicProxyObject.rails");
+			string expected = @"BarBaz
+foo
+what?
+there";
+			AssertReplyEqualTo(expected);
+		}
+
+		[Test]
 		public void AppPathChangeOnTheFly()
 		{
 			string script = Path.Combine(GetPhysicalDir(), @"Views\AppPath\Index.brail");

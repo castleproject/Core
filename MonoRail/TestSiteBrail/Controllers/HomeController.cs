@@ -82,12 +82,33 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 			PropertyBag["src"] = o;
 		}
 
+		public void WithNullableDynamicProxyObject()
+		{
+			ProxyGenerator generator = new ProxyGenerator();
+			SimpleProxy proxy = (SimpleProxy)generator.CreateClassProxy(typeof(SimpleProxy), new StandardInterceptor());
+			PropertyBag["src"] = proxy;
+		}
+
 		public class SimpleProxy
 		{
+			private string text = "BarBaz";
+			readonly Hashtable items = new Hashtable();
+
+			public virtual object this[string key]
+			{
+				get { return items[key]; }
+				set{ items[key] = value; }
+			}
+
 			public virtual string Text
 			{
-				get { return "BarBaz"; }
-				set { }
+				get { return text; }
+				set { text = value;}
+			}
+
+			public virtual string Say()
+			{
+				return "what?";
 			}
 		}
 

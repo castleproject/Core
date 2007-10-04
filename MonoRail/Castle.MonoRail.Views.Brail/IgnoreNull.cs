@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
+	using System.Collections.Generic;
 	using System.Reflection;
 	using Boo.Lang;
 	using Castle.MonoRail.Framework;
@@ -31,31 +32,43 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			if (target == null)
 				return this;
-			PropertyInfo property = target.GetType().GetProperty(name);
-			if (property == null)
-				throw new RailsException("Could not find property " + name + " on " + target.GetType().FullName);
-            return new IgnoreNull(property.GetValue(target, parameters));
+			object value;
+			if (IsNullOrEmpty(parameters))
+				value = ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.GetProperty(target, name);
+			else
+				value = ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.GetSlice(target, name, parameters);
+			return new IgnoreNull(value);
+		}
+
+		private static bool IsNullOrEmpty(object[] parameters)
+		{
+			return parameters == null || parameters.Length == 0;
 		}
 
 		public object QuackSet(string name, object[] parameters, object obj)
 		{
 			if (target == null)
 				return this;
-			PropertyInfo property = target.GetType().GetProperty(name);
-			if (property == null)
-				throw new RailsException("Could not find property " + name + " on " + target.GetType().FullName);
-			property.SetValue(target, obj, parameters);
+			if (IsNullOrEmpty(parameters))
+				ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.SetProperty(target, name, obj);
+			else
+				ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.SetSlice(target, name, GetParameterArray(parameters, obj));
 			return this;
+		}
+
+		private static object[] GetParameterArray(object[] parameters, object obj)
+		{
+			List<object> args = new List<object>(parameters); 
+			args.Add(obj);
+			return args.ToArray();
 		}
 
 		public object QuackInvoke(string name, object[] args)
 		{
 			if (target == null)
 				return this;
-			MethodInfo method = target.GetType().GetMethod(name);
-			if (method == null)
-				throw new RailsException("Could not find method " + name + " on " + target.GetType().FullName);
-			return new IgnoreNull(method.Invoke(target, args));
+			object value = ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.Invoke(target, name, args);
+			return new IgnoreNull(value);
 		}
 		
 		public override string ToString()
