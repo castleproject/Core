@@ -20,6 +20,7 @@ namespace Castle.MonoRail.Views.Brail
 	using System;
 	using System.Collections;
 	using System.IO;
+	using System.Web;
 	using Castle.MonoRail.Framework;
 	/// <summary>
 	///Base class for all the view scripts, this is the class that is responsible for
@@ -279,6 +280,18 @@ namespace Castle.MonoRail.Views.Brail
 			ReturnOutputStreamToInitialWriter disposable = new ReturnOutputStreamToInitialWriter(OutputStream, this);
 			outputStream = newOutputStream;
 			return disposable;
+		}
+
+		/// <summary>
+		/// Will output the given value as escaped HTML
+		/// </summary>
+		/// <param name="toOutput"></param>
+		public void OutputEscaped(object toOutput)
+		{
+			if(toOutput==null)
+				return;
+			string str= toOutput.ToString();
+			OutputStream.Write(HttpUtility.HtmlEncode(str));
 		}
 
 		/// <summary>

@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
+	using System.Collections;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -31,6 +32,24 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		{
 			string view = ProcessView("regressions/questionMarkOp_unless");
 			Assert.AreEqual("\r\nError does not exist\r\n", view);
+		}
+
+		[Test]
+		public void HtmlEncodingStringInterpolation()
+		{
+			Hashtable args = new Hashtable();
+			args["htmlCode"] = "<script>alert('a');</script>";
+			string view = ProcessView(args, "regressions/HtmlEncodingStringInterpolation");
+			Assert.AreEqual("&lt;script&gt;alert('a');&lt;/script&gt;", view);
+		}
+
+		[Test]
+		public void StringInterpolationInCodeBlockWillNotBeEscaped()
+		{
+			Hashtable args = new Hashtable();
+			args["htmlCode"] = "<script>alert('a');</script>";
+			string view = ProcessView(args, "regressions/StringInterpolationInCodeBlockWillNotBeEscaped");
+			Assert.AreEqual("Code <script>alert('a');</script>", view);
 		}
 	}
 }

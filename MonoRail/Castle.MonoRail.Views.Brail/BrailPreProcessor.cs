@@ -150,7 +150,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		private static void OutputExpression(StringWriter buffer, string code)
 		{
-			buffer.Write("output ");
+			buffer.Write("OutputEscaped ");
 			buffer.WriteLine(code);
 		}
 

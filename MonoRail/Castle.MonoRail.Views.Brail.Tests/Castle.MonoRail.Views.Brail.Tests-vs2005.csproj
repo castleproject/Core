@@ -95,7 +95,9 @@
     <None Include="Views\layout\save.brail" />
     <None Include="Views\layout\update.brail" />
     <None Include="App.config" />
+    <None Include="Views\regressions\HtmlEncodingStringInterpolation.brail" />
     <None Include="Views\regressions\questionMarkOp_unless.brail" />
+    <None Include="Views\regressions\StringInterpolationInCodeBlockWillNotBeEscaped.brail" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.MonoRail.Framework.Tests\Castle.MonoRail.Framework.Tests-vs2005.csproj">
