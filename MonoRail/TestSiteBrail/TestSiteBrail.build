@@ -30,7 +30,7 @@
 			<include name="log4net.dll"/>
 		</assemblyfileset>
 		
-		<resourcefileset id="project.resources" basedir="${src.dir}">
+		<resourcefileset id="project.resources" basedir="${src.dir}" dynamicprefix="True" prefix="TestSiteBrail">
 			<include name="**.resources"/>
 			<exclude name="obj/**"/>
 		</resourcefileset>
