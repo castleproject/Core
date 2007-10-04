@@ -14,7 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests.Controllers
 {
-	using Castle.MonoRail.Framework;
+	using Framework;
 
 	public class HomeController : SmartDispatcherController
 	{

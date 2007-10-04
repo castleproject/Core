@@ -1,4 +1,5 @@
-${UrlHelper.Link(title,
+<%
+output UrlHelper.Link(title,
 	{
 		@controller: "customers",
 		@action: "list",
@@ -7,4 +8,5 @@ ${UrlHelper.Link(title,
 	{
 		@onclick: "alert(${pageIndex})"
 	}
-)}
+)
+%>

@@ -23,8 +23,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void HtmlAttribute()
 		{
-			string expected = @"
-Some text that will be &lt;html&gt; encoded";
+			string expected = @"Some text that will be &lt;html&gt; encoded";
 			DoGet("OutputMethods/HtmlOutputAttribute.rails");
 			AssertReplyEqualTo(expected);
 		}
@@ -32,8 +31,7 @@ Some text that will be &lt;html&gt; encoded";
 		[Test]
 		public void RawAttribute()
 		{
-			string expected = @"
-1<2 && 3>4";
+			string expected = @"1<2 && 3>4";
 			DoGet("OutputMethods/RawOutputAttribute.rails");
 			AssertReplyEqualTo(expected);
 		}
@@ -41,7 +39,7 @@ Some text that will be &lt;html&gt; encoded";
 		[Test]
 		public void MarkDownAttribute()
 		{
-			string expected = "\r\n<p><a href=\"http://www.ayende.com/\">Ayende Rahien</a>, <strong>Rahien</strong>.</p>\n";
+			string expected = "<p><a href=\"http://www.ayende.com/\">Ayende Rahien</a>, <strong>Rahien</strong>.</p>\n";
 
 			DoGet("OutputMethods/MarkDownOutputAttribute.rails");
 			AssertReplyEqualTo(expected);

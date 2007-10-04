@@ -14,10 +14,8 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using Boo.Lang.Compiler;
 	using Castle.MonoRail.Framework.Tests;
 	using NUnit.Framework;
-	using Boo.Lang.Compiler.IO;
 
 	[TestFixture]
 	public class BrailBugsTestCase : AbstractTestCase
@@ -31,13 +29,13 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		}
 
 
-        [Test]
-        public void MR_262_DynamicComponents()
-        {
-            DoGet("usingcomponents/DynamicComponents.rails");
-            AssertSuccess();
-            AssertReplyEqualTo("default component view picked up automaticallyThis is a view used by a component");
-        }
+		[Test]
+		public void MR_262_DynamicComponents()
+		{
+			DoGet("usingcomponents/DynamicComponents.rails");
+			AssertSuccess();
+			AssertReplyEqualTo("default component view picked up automaticallyThis is a view used by a component");
+		}
 
 		[Test]
 		public void MR_285_ViewName_Is_Reserved_CompilerKeyword()
@@ -47,12 +45,11 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			AssertReplyContains("Success");
 		}
 
-        [Test]
-        public void MR_299_Inline_SubView()
-        {
-            DoGet("bugs/inlineSubView.rails");
-            AssertReplyContains("Success");
-	
-        }
+		[Test]
+		public void MR_299_Inline_SubView()
+		{
+			DoGet("bugs/inlineSubView.rails");
+			AssertReplyContains("Success");
+		}
 	}
 }

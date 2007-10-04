@@ -25,20 +25,20 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	public class BrailHelperTestCase : AbstractTestCase
 	{
 		[Test]
-		public void InheritedHelpers()
-		{
-			Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-us");
-			DoGet("helper/inheritedhelpers.rails");
-			string expected = "Date formatted " + new DateTime(1979, 7, 16).ToShortDateString();
-			AssertReplyEqualTo(expected);
-		}
-
-		[Test]
 		public void DictHelperUsage()
 		{
 			DoGet("helper/DictHelperUsage.rails");
 			string expected =
 				"<input type=\"text\" name=\"name\" id=\"name\" value=\"value\" size=\"30\" maxlength=\"20\" style=\"something\" eol=\"true\" />";
+			AssertReplyEqualTo(expected);
+		}
+
+		[Test]
+		public void InheritedHelpers()
+		{
+			Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-us");
+			DoGet("helper/inheritedhelpers.rails");
+			string expected = "Date formatted " + new DateTime(1979, 7, 16).ToShortDateString();
 			AssertReplyEqualTo(expected);
 		}
 	}

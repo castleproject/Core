@@ -21,26 +21,26 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	public class LanguageFeatures : AbstractTestCase
 	{
 		[Test]
-		public void NullableProperties()
-		{
-			string expected = "<?xml version=\"1.0\" ?>\r\n" +
-@"<html>
-<h1>BarBaz</h1>
-</html>";
-			// should not raise null exception
-			DoGet("Home/nullableProperties.rails");
-			AssertReplyEqualTo(expected);
-		}
-
-		[Test]
 		public void CanHandleDynamicProxyObjects()
 		{
 			string expected = "<?xml version=\"1.0\" ?>\r\n" +
-@"<html>
+			                  @"<html>
 <h1>BarBaz</h1>
 </html>";
 			// should not raise ambigious match exception
 			DoGet("Home/withDynamicProxyObject.rails");
+			AssertReplyEqualTo(expected);
+		}
+
+		[Test]
+		public void NullableProperties()
+		{
+			string expected = "<?xml version=\"1.0\" ?>\r\n" +
+			                  @"<html>
+<h1>BarBaz</h1>
+</html>";
+			// should not raise null exception
+			DoGet("Home/nullableProperties.rails");
 			AssertReplyEqualTo(expected);
 		}
 	}

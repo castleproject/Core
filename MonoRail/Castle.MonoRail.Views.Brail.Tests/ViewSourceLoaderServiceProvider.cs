@@ -1,7 +1,7 @@
 namespace Castle.MonoRail.Views.Brail.Tests
 {
 	using System;
-	using Castle.MonoRail.Framework;
+	using Framework;
 
 	internal class ViewSourceLoaderServiceProvider : IServiceProvider
 	{
@@ -16,7 +16,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
 		public object GetService(Type serviceType)
 		{
-			if (typeof(IViewSourceLoader) == serviceType)
+			if (typeof (IViewSourceLoader) == serviceType)
 			{
 				FileAssemblyViewSourceLoader loader = new FileAssemblyViewSourceLoader();
 				loader.ViewRootDir = viewRootDir;

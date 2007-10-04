@@ -30,7 +30,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 </script>";
 			string expected = "output \"\"\"<script type='text/javascript'>\r\n" +
 			                  "    Event.observe(window, 'load', function() { \"\"\"\r\n" +
-			                  "output controlIdToFocus\r\n" +
+							  "OutputEscaped controlIdToFocus\r\n" +
 			                  "output \"\"\".focus(); });\r\n" +
 			                  "</script>\"\"\"\r\n" ;
 			string s = RunThroughPreProcessor(code);

@@ -14,162 +14,150 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-    using Castle.MonoRail.Framework.Tests;
-    using NUnit.Framework;
+	using Castle.MonoRail.Framework.Tests;
+	using NUnit.Framework;
 
-    [TestFixture]
-    public class JSGenerationTestCase : AbstractTestCase
-    {
-        #region Stock operations
+	[TestFixture]
+	public class JSGenerationTestCase : AbstractTestCase
+	{
+		[Test]
+		public void AccessingElementAttribute()
+		{
+			DoGet("jsgeneration/elementattribute.rails");
+			AssertSuccess();
+			AssertReplyContains("$('aa').className = \"newclass\";");
+		}
 
-        [Test]
-        public void ReplaceHtml()
-        {
-            DoGet("jsgeneration/replacehtml.rails");
-            AssertSuccess();
-            AssertReplyContains("Element.update(\"aa\",\"new content\");");
-        }
+		[Test]
+		public void AccessingElementAttributeDepth()
+		{
+			DoGet("jsgeneration/elementattributedepth.rails");
+			AssertSuccess();
+			AssertReplyContains("$('aa').style.display = \"none\";");
+		}
 
-        [Test]
-        public void ReplaceHtmlUsingPartial()
-        {
-            DoGet("jsgeneration/replacehtmlwithpartial.rails");
-            AssertSuccess();
-            AssertReplyContains("Element.update(\"aa\",\"You\'re hammett <br> [ a ][ b ]\")");
-        }
+		[Test]
+		public void AccessingElementMethod()
+		{
+			DoGet("jsgeneration/elementmethod.rails");
+			AssertSuccess();
+			AssertReplyContains("$('aa').hide();");
+		}
 
-        [Test]
-        public void Replace()
-        {
-            DoGet("jsgeneration/replace.rails");
-            AssertSuccess();
-            AssertReplyContains("Element.replace(\"aa\",\"new content\")");
-        }
+		[Test]
+		public void AccessingElementMethodDepth()
+		{
+			DoGet("jsgeneration/elementmethoddepth.rails");
+			AssertSuccess();
+			AssertReplyContains("$('aa').read().test();");
+		}
 
-        [Test]
-        public void InsertHtml()
-        {
-            DoGet("jsgeneration/InsertHtml.rails");
-            AssertSuccess();
-            AssertReplyContains("new Insertion.Top(\"aa\",\"new content\");");
-            AssertReplyContains("new Insertion.Bottom(\"aa\",\"new content\");");
-            AssertReplyContains("new Insertion.After(\"aa\",\"new content\");");
-            AssertReplyContains("new Insertion.Before(\"aa\",\"new content\");");
-        }
+		[Test]
+		public void AccessingElementStockOperationReplace()
+		{
+			DoGet("jsgeneration/elementreplace.rails");
+			AssertSuccess();
+			AssertReplyContains("$('aa').replace(\"new content\")");
+		}
 
-        [Test]
-        public void VisualEffect()
-        {
-            DoGet("jsgeneration/visualeffect.rails");
-            AssertSuccess();
-            AssertReplyContains("Effect.Highlight('element1', {});");
-            AssertReplyContains("Effect.Highlight('element1', {duration:4});");
-        }
+		[Test]
+		public void AccessingElementStockOperationReplaceHtml()
+		{
+			DoGet("jsgeneration/elementreplacehtml.rails");
+			AssertSuccess();
+			AssertReplyContains("$('aa').update(\"new content\")");
+		}
 
-        [Test]
-        public void ShowHideToggleRemove()
-        {
-            DoGet("jsgeneration/multipleactions.rails");
-            AssertSuccess();
-            AssertReplyContains("Element.show(\"a\");");
-            AssertReplyContains("Element.show(\"a\",\"b\",\"c\");");
-            AssertReplyContains("Element.hide(\"a\");");
-            AssertReplyContains("Element.hide(\"a\",\"b\",\"c\");");
-            AssertReplyContains("Element.toggle(\"a\");");
-            AssertReplyContains("Element.toggle(\"a\",\"b\",\"c\");");
-            AssertReplyContains("[\"a\",\"b\",\"c\"].each(Element.remove);");
-        }
+		[Test]
+		public void CollectionFirstLast()
+		{
+			DoGet("jsgeneration/collectionfirstlast.rails");
+			AssertSuccess();
+			AssertReplyContains("$$('p.welcome b').first().hide();");
+			AssertReplyContains("$$('p.welcome b').last().show();");
+		}
 
-        [Test]
-        public void MR_264()
-        {
-            DoGet("jsgeneration/mr264.rails");
-            AssertReplyContains(
-                "Element.update(\"holder\",\"test\");\r\n"+
-                "new Effect.Highlight('holder', {});");
-        }
+		[Test]
+		public void InsertHtml()
+		{
+			DoGet("jsgeneration/InsertHtml.rails");
+			AssertSuccess();
+			AssertReplyContains("new Insertion.Top(\"aa\",\"new content\");");
+			AssertReplyContains("new Insertion.Bottom(\"aa\",\"new content\");");
+			AssertReplyContains("new Insertion.After(\"aa\",\"new content\");");
+			AssertReplyContains("new Insertion.Before(\"aa\",\"new content\");");
+		}
 
-        #endregion
+		[Test]
+		public void MR_264()
+		{
+			DoGet("jsgeneration/mr264.rails");
+			AssertReplyContains(
+				"Element.update(\"holder\",\"test\");\r\n" +
+				"new Effect.Highlight('holder', {});");
+		}
 
-        #region Element related
+		[Test]
+		public void Replace()
+		{
+			DoGet("jsgeneration/replace.rails");
+			AssertSuccess();
+			AssertReplyContains("Element.replace(\"aa\",\"new content\")");
+		}
 
-        [Test]
-        public void SimpleElementAccess()
-        {
-            DoGet("jsgeneration/elementaccess.rails");
-            AssertSuccess();
-            AssertReplyContains("$('aa');");
-        }
+		[Test]
+		public void ReplaceHtml()
+		{
+			DoGet("jsgeneration/replacehtml.rails");
+			AssertSuccess();
+			AssertReplyContains("Element.update(\"aa\",\"new content\");");
+		}
 
-        [Test]
-        public void AccessingElementAttribute()
-        {
-            DoGet("jsgeneration/elementattribute.rails");
-            AssertSuccess();
-            AssertReplyContains("$('aa').className = \"newclass\";");
-        }
+		[Test]
+		public void ReplaceHtmlUsingPartial()
+		{
+			DoGet("jsgeneration/replacehtmlwithpartial.rails");
+			AssertSuccess();
+			AssertReplyContains("Element.update(\"aa\",\"You\'re hammett <br> [ a ][ b ]\")");
+		}
 
-        [Test]
-        public void AccessingElementAttributeDepth()
-        {
-            DoGet("jsgeneration/elementattributedepth.rails");
-            AssertSuccess();
-            AssertReplyContains("$('aa').style.display = \"none\";");
-        }
+		[Test]
+		public void ShowHideToggleRemove()
+		{
+			DoGet("jsgeneration/multipleactions.rails");
+			AssertSuccess();
+			AssertReplyContains("Element.show(\"a\");");
+			AssertReplyContains("Element.show(\"a\",\"b\",\"c\");");
+			AssertReplyContains("Element.hide(\"a\");");
+			AssertReplyContains("Element.hide(\"a\",\"b\",\"c\");");
+			AssertReplyContains("Element.toggle(\"a\");");
+			AssertReplyContains("Element.toggle(\"a\",\"b\",\"c\");");
+			AssertReplyContains("[\"a\",\"b\",\"c\"].each(Element.remove);");
+		}
 
-        [Test]
-        public void AccessingElementMethod()
-        {
-            DoGet("jsgeneration/elementmethod.rails");
-            AssertSuccess();
-            AssertReplyContains("$('aa').hide();");
-        }
+		[Test]
+		public void SimpleCollectionAccess()
+		{
+			DoGet("jsgeneration/collectionaccess.rails");
+			AssertSuccess();
+			AssertReplyContains("$$('aa');");
+		}
 
-        [Test]
-        public void AccessingElementMethodDepth()
-        {
-            DoGet("jsgeneration/elementmethoddepth.rails");
-            AssertSuccess();
-            AssertReplyContains("$('aa').read().test();");
-        }
+		[Test]
+		public void SimpleElementAccess()
+		{
+			DoGet("jsgeneration/elementaccess.rails");
+			AssertSuccess();
+			AssertReplyContains("$('aa');");
+		}
 
-        [Test]
-        public void AccessingElementStockOperationReplaceHtml()
-        {
-            DoGet("jsgeneration/elementreplacehtml.rails");
-            AssertSuccess();
-            AssertReplyContains("$('aa').update(\"new content\")");
-        }
-
-        [Test]
-        public void AccessingElementStockOperationReplace()
-        {
-            DoGet("jsgeneration/elementreplace.rails");
-            AssertSuccess();
-            AssertReplyContains("$('aa').replace(\"new content\")");
-        }
-
-        #endregion
-
-        #region Select related
-
-        [Test]
-        public void SimpleCollectionAccess()
-        {
-            DoGet("jsgeneration/collectionaccess.rails");
-            AssertSuccess();
-            AssertReplyContains("$$('aa');");
-        }
-
-        [Test]
-        public void CollectionFirstLast()
-        {
-            DoGet("jsgeneration/collectionfirstlast.rails");
-            AssertSuccess();
-            AssertReplyContains("$$('p.welcome b').first().hide();");
-            AssertReplyContains("$$('p.welcome b').last().show();");
-        }
-
-        #endregion
-    }
+		[Test]
+		public void VisualEffect()
+		{
+			DoGet("jsgeneration/visualeffect.rails");
+			AssertSuccess();
+			AssertReplyContains("Effect.Highlight('element1', {});");
+			AssertReplyContains("Effect.Highlight('element1', {duration:4});");
+		}
+	}
 }

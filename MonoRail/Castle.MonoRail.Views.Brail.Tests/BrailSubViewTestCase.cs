@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		{
 			DoGet("subview/useLotsOfSubViews.rails");
 			StringBuilder sb = new StringBuilder();
-			for(int i = 0; i < 50; i++)
+			for (int i = 0; i < 50; i++)
 			{
 				sb.Append("real");
 			}
@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			// Here we tell the controller to replace the subview with a dummy implementation
 			// if brail doesn't cache it, it will use the real implementation, and the test will fail.
 			sb = new StringBuilder();
-			for(int i = 0; i < 50; i++)
+			for (int i = 0; i < 50; i++)
 			{
 				sb.Append("dummy");
 			}

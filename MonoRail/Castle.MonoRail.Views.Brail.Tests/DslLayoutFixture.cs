@@ -14,36 +14,37 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-    using Castle.MonoRail.Framework.Tests;
-    using NUnit.Framework;
+	using Castle.MonoRail.Framework.Tests;
+	using NUnit.Framework;
 
-    [TestFixture]
-    public class DslLayoutFixture : AbstractTestCase
-    {
-        [Test]
-        public void LayoutAndChildOuputUsingDsl()
-        {
-            string expected = "<html><p>Hello, Harris</p></html>";
-            DoGet("dsl/testSubViewOutput.rails");
-            AssertReplyEqualTo(expected);
-        }
+	[TestFixture]
+	public class DslLayoutFixture : AbstractTestCase
+	{
+		[Test]
+		public void ComponentOuputUsingDsl()
+		{
+			string expected =
+				"<html><body><table><tr><th>Names</th></tr><tr><td>Ayende</td></tr><tr><td>Rahien</td></tr></table></body></html>";
+			DoGet("dsl/testSubViewWithComponents.rails");
+			AssertReplyEqualTo(expected);
+		}
 
-        [Test]
-        public void ComponentOuputUsingDsl()
-        {
-            string expected =
-                "<html><body><table><tr><th>Names</th></tr><tr><td>Ayende</td></tr><tr><td>Rahien</td></tr></table></body></html>";
-            DoGet("dsl/testSubViewWithComponents.rails");
-            AssertReplyEqualTo(expected);
-        }
+		[Test]
+		public void LayoutAndChildOuputUsingDsl()
+		{
+			string expected = "<html><p>Hello, Harris</p></html>";
+			DoGet("dsl/testSubViewOutput.rails");
+			AssertReplyEqualTo(expected);
+		}
 
-        [Test]
-        //[Ignore("We have issue with parameters references")]
-        public void XmlDsl()
-        {
-            string expected = "<html><?xml version=\"1.0\" encoding=\"utf-16\"?><rss><channel><title>RSS DSL</title><item><title>Title: Ayende</title><description>Description: Ayende</description></item><item><title>Title: Rahien</title><description>Description: Rahien</description></item></channel></rss></html>";
-            DoGet("dsl/testXml.rails");
-            AssertReplyEqualTo(expected);
-        }
-    }
+		[Test]
+		//[Ignore("We have issue with parameters references")]
+		public void XmlDsl()
+		{
+			string expected =
+				"<html><?xml version=\"1.0\" encoding=\"utf-16\"?><rss><channel><title>RSS DSL</title><item><title>Title: Ayende</title><description>Description: Ayende</description></item><item><title>Title: Rahien</title><description>Description: Rahien</description></item></channel></rss></html>";
+			DoGet("dsl/testXml.rails");
+			AssertReplyEqualTo(expected);
+		}
+	}
 }

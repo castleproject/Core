@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
+	using System.Globalization;
 	using System.Threading;
 	using Castle.MonoRail.Framework.Tests;
 	using NUnit.Framework;
@@ -22,30 +23,30 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	public class ResourceTestCase : AbstractTestCase
 	{
 		[Test]
-		public void GetResources()
-		{
-			Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-			Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
-			string expected = "testValue";
-			DoGet("resourced/getresources.rails");
-			AssertReplyEqualTo(expected);
-		}
-
-		[Test]
 		public void GetIndexedResources()
 		{
-			Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-			Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
+			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+			Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 			string expected = "testValue";
 			DoGet("resourced/indexingResources.rails");
 			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
+		public void GetResources()
+		{
+			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+			Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+			string expected = "testValue";
+			DoGet("resourced/getresources.rails");
+			AssertReplyEqualTo(expected);
+		}
+
+		[Test]
 		public void IterateOnResources()
 		{
-			Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-			Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
+			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+			Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 			string expected = "testKey: testValue";
 			DoGet("resourced/iterating.rails");
 			AssertReplyEqualTo(expected);

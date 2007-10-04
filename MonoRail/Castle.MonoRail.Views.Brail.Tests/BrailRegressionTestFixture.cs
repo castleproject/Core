@@ -21,6 +21,15 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	public class BrailRegressionTestFixture : BaseViewOnlyTestFixture
 	{
 		[Test]
+		public void CanCompareToNullableParameter()
+		{
+			Hashtable args = new Hashtable();
+			args["myVariable"] = "Hello";
+			string view = ProcessView(args, "regressions/CanCompareToNullableParameter");
+			Assert.AreEqual("Eq", view);
+		}
+
+		[Test]
 		public void CanUseQuestionMarkOperatorInIfStatementToValidatePresenceOfParameter()
 		{
 			string view = ProcessView("regressions/questionMarkOp_if");
@@ -32,15 +41,6 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		{
 			string view = ProcessView("regressions/questionMarkOp_unless");
 			Assert.AreEqual("\r\nError does not exist\r\n", view);
-		}
-
-		[Test]
-		public void CanCompareToNullableParameter()
-		{
-			Hashtable args = new Hashtable();
-			args["myVariable"] = "Hello";
-			string view = ProcessView(args, "regressions/CanCompareToNullableParameter");
-			Assert.AreEqual("Eq", view);
 		}
 
 		[Test]

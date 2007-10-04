@@ -21,10 +21,20 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	public class BrailAjaxTestCase : AbstractTestCase
 	{
 		[Test]
+		public void BuildFormRemoteTag()
+		{
+			DoGet("ajax/BuildFormRemoteTag.rails");
+			string expected =
+				"<form  onsubmit=\"new Ajax.Request('url', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;\" enctype=\"multipart/form-data\" action=\"url\" method=\"post\" >";
+			AssertSuccess();
+			AssertReplyEqualTo(expected);
+		}
+
+		[Test]
 		public void JsFunctions()
 		{
 			DoGet("ajax/JsFunctions.rails");
-            string expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/AjaxScripts.rails?RC3_0006\"></script>";
+			string expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/AjaxScripts.rails?RC3_0006\"></script>";
 			AssertSuccess();
 			AssertReplyEqualTo(expected);
 		}
@@ -45,16 +55,6 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			DoGet("ajax/LinkToRemote.rails");
 			string expected =
 				"<a href=\"javascript:void(0);\"  onclick=\"new Ajax.Request('/controller/action.rails', {asynchronous:true, evalScripts:true}); return false;\" ><img src='myimg.gid'></a>";
-			AssertSuccess();
-			AssertReplyEqualTo(expected);
-		}
-
-		[Test]
-		public void BuildFormRemoteTag()
-		{
-			DoGet("ajax/BuildFormRemoteTag.rails");
-			string expected =
-				"<form  onsubmit=\"new Ajax.Request('url', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;\" enctype=\"multipart/form-data\" action=\"url\" method=\"post\" >";
 			AssertSuccess();
 			AssertReplyEqualTo(expected);
 		}

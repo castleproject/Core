@@ -13,24 +13,22 @@
 // limitations under the License.
 namespace Castle.MonoRail.Views.Brail.Tests.Controllers
 {
-	using Castle.MonoRail.Framework;
+	using Framework;
 
 	[Layout("general")]
 	public class LayoutController : SmartDispatcherController
 	{
 		public void Index()
 		{
-			
 		}
-		
+
 		public void Save()
 		{
 			LayoutName = "printable";
 		}
-		
+
 		public void Update()
 		{
-			
 		}
 	}
 }
