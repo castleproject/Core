@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Services
 	/// </summary>
 	public class DefaultViewComponentRegistry : IViewComponentRegistry
 	{
-		private readonly Hashtable name2Type = new Hashtable();
+		private readonly Hashtable name2Type = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 
 		#region IViewComponentRegistry
 
@@ -86,7 +86,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		private string NormalizeName(string name)
 		{
-			if (!name.EndsWith("Component"))
+			if (!name.EndsWith("Component",StringComparison.InvariantCultureIgnoreCase))
 			{
 				return name + "Component";
 			}
