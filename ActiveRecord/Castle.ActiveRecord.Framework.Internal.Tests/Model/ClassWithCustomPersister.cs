@@ -195,6 +195,11 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			throw new NotImplementedException();
 		}
 
+		public object[] GetDatabaseSnapshot(object id, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
 		public object[] GetDatabaseSnapshot(object id, object version, ISessionImplementor session)
 		{
 			throw new NotImplementedException();
@@ -212,6 +217,11 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public object GetCurrentVersion(object id, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object ForceVersionIncrement(object id, object currentVersion, ISessionImplementor session)
 		{
 			throw new NotImplementedException();
 		}
@@ -252,6 +262,16 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public string ClassName
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public string RootEntityName
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public string EntityName
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -400,6 +420,11 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
+		public bool IsLazyPropertiesCacheable
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 		public bool HasCache
 		{
 			get { throw new NotImplementedException(); }
@@ -448,6 +473,11 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public bool HasUpdateGeneratedProperties
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool IsSelectBeforeUpdateRequired
 		{
 			get { throw new NotImplementedException(); }
 		}
