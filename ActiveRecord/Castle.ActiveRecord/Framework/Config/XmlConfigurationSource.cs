@@ -94,11 +94,11 @@ namespace Castle.ActiveRecord.Framework.Config
 
 			SetUpNamingStrategyType(namingStrategyTypeAtt != null ? namingStrategyTypeAtt.Value : String.Empty);
 
-			SetDebugFlag(isDebug != null && "true" == isDebug.Value);
+			SetDebugFlag(ConvertBool(isDebug));
 
-			SetIsLazyByDefault(lazyByDefault != null && lazyByDefault.Value == "true");
+			SetIsLazyByDefault(ConvertBool(lazyByDefault));
 
-			SetPluralizeTableNames(pluralize != null && pluralize.Value == "true");
+			SetPluralizeTableNames(ConvertBool(pluralize));
 
 			SetVerifyModelsAgainstDBSchema(verifyModelsAgainstDBSchemaAtt != null && verifyModelsAgainstDBSchemaAtt.Value == "true");
 
@@ -177,6 +177,11 @@ namespace Castle.ActiveRecord.Framework.Config
 			}
 
 			return dict;
+		}
+
+		private static bool ConvertBool(XmlNode boolAttrib)
+		{
+			return boolAttrib != null && "true".Equals(boolAttrib.Value, StringComparison.OrdinalIgnoreCase);
 		}
 	}
 }

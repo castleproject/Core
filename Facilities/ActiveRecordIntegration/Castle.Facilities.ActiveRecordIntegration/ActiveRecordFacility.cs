@@ -207,10 +207,10 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			string sessionfactoryholdertype = facilityConfig.Attributes["sessionfactoryholdertype"];
 			string isLazyByDefault = facilityConfig.Attributes["default-lazy"];
 
-			SetUpThreadInfoType("true" == isWeb, threadinfotype);
-			SetDebugFlag("true" == isDebug);
+			SetUpThreadInfoType(ConvertBool(isWeb), threadinfotype);
+			SetDebugFlag(ConvertBool(isDebug));
 			SetUpSessionFactoryHolderType(sessionfactoryholdertype);
-			SetIsLazyByDefault("true" == isLazyByDefault);
+			SetIsLazyByDefault(ConvertBool(isLazyByDefault));
 
 			foreach(IConfiguration config in facilityConfig.Children)
 			{
@@ -256,6 +256,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			}
 
 			return type;
+		}
+
+		private static bool ConvertBool(string boolString)
+		{
+			return "true".Equals(boolString, StringComparison.OrdinalIgnoreCase);
 		}
 	}
 }
