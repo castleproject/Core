@@ -14,6 +14,7 @@
 
 namespace Castle.ActiveRecord
 {
+	using System;
 	using System.Collections.Generic;
 	using Castle.ActiveRecord.Framework.Scopes;
 	using NHibernate;
@@ -55,9 +56,10 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Disposes the specified discard changes.
+		/// Deprecated! Disposes the specified discard changes. Please use new SessionScope(FlushAction.Never)
 		/// </summary>
 		/// <param name="discardChanges">if set to <c>true</c> [discard changes].</param>
+		[Obsolete("This useage is deprecated - please use new SessionScope(FlushAction.Never)")]
 		public void Dispose(bool discardChanges)
 		{
 			ThreadScopeAccessor.Instance.UnRegisterScope(this);

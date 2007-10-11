@@ -1,6 +1,8 @@
 Release Candidate 2
 ===================
 
+- Mark SessionScope.Dispose(true) overload as deprecated. FlushMode.Never is the new black. 
+
 - Added support for property-ref to BelongsTo (many-to-one)
 
 - Added support for CompositeUserType properties in nested classes
