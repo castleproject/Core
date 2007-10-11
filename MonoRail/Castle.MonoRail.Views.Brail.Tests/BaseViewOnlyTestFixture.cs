@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
+	using System;
 	using System.Collections;
 	using System.Configuration;
 	using System.IO;
@@ -30,6 +31,10 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		protected string ProcessView(IDictionary dictionary, string templatePath)
 		{
 			BooViewEngine bve = new BooViewEngine();
+			bve.Options = new BooViewEngineOptions();
+			bve.Options.SaveDirectory = Environment.CurrentDirectory;
+			bve.Options.SaveToDisk = true;
+			bve.Options.Debug = true;
 			string viewPath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Views");
 			bve.Service(new ViewSourceLoaderServiceProvider(viewPath));
 			bve.Initialize();

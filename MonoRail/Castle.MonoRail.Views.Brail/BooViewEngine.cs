@@ -542,7 +542,7 @@ namespace Castle.MonoRail.Views.Brail
 		}
 
 		// common setup for the compiler
-		private BooCompiler SetupCompiler(ICompilerInput[] files)
+		private static BooCompiler SetupCompiler(ICompilerInput[] files)
 		{
 			BooCompiler compiler = new BooCompiler();
 			compiler.Parameters.Ducky = true;

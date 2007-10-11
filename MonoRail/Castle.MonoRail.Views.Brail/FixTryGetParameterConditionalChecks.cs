@@ -20,11 +20,11 @@ namespace Castle.MonoRail.Views.Brail
 
 		public override void OnBinaryExpression(BinaryExpression node)
 		{
-			if(node.Operator!=BinaryOperatorType.Equality)
+			if (node.Operator != BinaryOperatorType.Equality)
 				return;
 
-			if(IsTryGetParameterInvocation(node.Left) ==false && 
-				IsTryGetParameterInvocation(node.Right)  == false )
+			if (IsTryGetParameterInvocation(node.Left) == false &&
+			    IsTryGetParameterInvocation(node.Right) == false)
 				return;
 
 			MethodInvocationExpression mie = new MethodInvocationExpression();
@@ -54,14 +54,16 @@ namespace Castle.MonoRail.Views.Brail
 			if (IsTryGetParameterInvocation(condition) == false)
 				return condition;
 
+			string name = ((ReferenceExpression) condition).Name.Substring(1);
+			condition = new MethodInvocationExpression(
+				new MemberReferenceExpression(new SuperLiteralExpression(), "TryGetParameter"),
+				new StringLiteralExpression(name)
+				);
 
-			TypeofExpression typeofExpression = new TypeofExpression();
-			typeofExpression.Type = CodeBuilder.CreateTypeReference(typeof(IgnoreNull));
+			MemberReferenceExpression isNull =
+                new MemberReferenceExpression(condition, "_IsIgnoreNullReferencingNotNullObject_");
 
-			BinaryExpression be = new BinaryExpression(BinaryOperatorType.TypeTest, condition,
-													   typeofExpression);
-
-			return new UnaryExpression(UnaryOperatorType.LogicalNot, be);
+			return isNull;
 		}
 
 		private static bool IsTryGetParameterInvocation(Expression condition)

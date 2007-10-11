@@ -70,7 +70,7 @@
     <Compile Include="OutputMethodTestCase.cs" />
     <Compile Include="ResourceTestCase.cs" />
     <Compile Include="ViewSourceLoaderServiceProvider.cs" />
-    <None Include="Views\regressions\questionMarkOp_if.brail" />
+    <None Include="Views\regressions\questionMarkOp_if_whenPassed.brail" />
     <Compile Include="XmlTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +96,7 @@
     <None Include="Views\layout\update.brail" />
     <None Include="App.config" />
     <None Include="Views\regressions\CanCompareToNullableParameter.brail" />
+    <None Include="Views\regressions\questionMarkOp_unless_whenPassed.brail" />
     <None Include="Views\regressions\HtmlEncodingStringInterpolation.brail" />
     <None Include="Views\regressions\questionMarkOp_unless.brail" />
     <None Include="Views\regressions\StringInterpolationInCodeBlockWillNotBeEscaped.brail" />

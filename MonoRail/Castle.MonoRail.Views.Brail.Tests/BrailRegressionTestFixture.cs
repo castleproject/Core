@@ -37,11 +37,30 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		}
 
 		[Test]
+		public void CanUseQuestionMarkOperatorInIfStatementToValidatePresenceOfParameter_WhenPassed()
+		{
+			Hashtable args = new Hashtable();
+			args["errorMsg"] = "Hello"; 
+			string view = ProcessView(args, "regressions/questionMarkOp_if_whenPassed");
+			Assert.AreEqual("Hello", view);
+		}
+
+		[Test]
 		public void CanUseQuestionMarkOperatorInUnlessStatementToValidatePresenceOfParameter()
 		{
 			string view = ProcessView("regressions/questionMarkOp_unless");
 			Assert.AreEqual("\r\nError does not exist\r\n", view);
 		}
+
+        [Test]
+        public void CanUseQuestionMarkOperatorInUnlessStatementToValidatePresenceOfParameter_whenPassed()
+        {
+            Hashtable args = new Hashtable();
+            args["errorMsg"] = "Hello";
+            string view = ProcessView(args, "regressions/questionMarkOp_unless_whenPassed");
+            Assert.AreEqual("", view);
+        }
+
 
 		[Test]
 		public void HtmlEncodingStringInterpolation()

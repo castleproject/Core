@@ -29,6 +29,9 @@ namespace Castle.MonoRail.Views.Brail
 
 		public object QuackGet(string name, object[] parameters)
 		{
+			if (name == "_IsIgnoreNullReferencingNotNullObject_")
+				return target != null;
+
 			if (target == null)
 				return this;
 			object value;
