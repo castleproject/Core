@@ -1005,7 +1005,7 @@
 				<include name="**/*.shfb" />
 				<exclude name="**/obj/" />
 				<exclude name="**/obj/**/*.*" />
-				<exclude name="**/bin*/**/*.*" />
+				<exclude name="**/bin/**/*.*" />
 				<exclude name="**/temp/**/*.*" />
 				<exclude name="**/*.user" />
 				<exclude name="**/_ReSharper.*" />
