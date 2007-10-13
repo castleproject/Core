@@ -50,7 +50,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		public void ValidDate()
 		{
 			Assert.IsTrue(validator.IsValid(target, "01/12/2004"));
-			Assert.IsTrue(validator.IsValid(target, "07/16/79"));
+			Assert.IsTrue(validator.IsValid(target, "07/16/1979"));
 			Assert.IsTrue(validator.IsValid(target, null));
 			Assert.IsTrue(validator.IsValid(target, ""));
 		}
