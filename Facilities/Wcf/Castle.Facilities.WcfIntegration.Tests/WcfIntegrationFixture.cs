@@ -41,7 +41,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 
 			IHandler handler = windsorContainer.Kernel.GetHandler("operations");
 			handler.ComponentModel.Interceptors.Add(new InterceptorReference("logging"));
-			handler.ComponentModel.Parameters.Add("number", "42");
+			handler.AddCustomDependencyValue("number", 42);
 
 			Uri uri = new Uri("net.tcp://localhost/WCF.Facility");
 			host = new WindsorServiceHost(windsorContainer.Kernel, typeof (Operations),
