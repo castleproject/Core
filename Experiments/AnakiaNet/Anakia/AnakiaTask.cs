@@ -587,7 +587,14 @@ namespace Anakia
 					elem.RemoveAttribute("relative");
 				}
 
-				elem.SetAttribute("src", Relativize(level, relative));
+				if (elem.Name.ToLower() == "a")
+				{
+					elem.SetAttribute("href", Relativize(level, relative));
+				}
+				else
+				{
+					elem.SetAttribute("src", Relativize(level, relative));
+				}
 			}
 		}
 
