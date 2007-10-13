@@ -200,7 +200,7 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="contextInitializer">The context initializer.</param>
 		protected void PrepareController(Controller controller, ContextInitializer contextInitializer)
 		{
-			PrepareController(controller, "", "Controller", "Action");
+			PrepareController(controller, "", "Controller", "Action", contextInitializer);
 		}
 
 		/// <summary>
@@ -225,6 +225,20 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="actionName">Name of the action.</param>
 		protected void PrepareController(Controller controller, string areaName, string controllerName, string actionName)
 		{
+			PrepareController(controller, areaName, controllerName, actionName, InitializeRailsEngineContext);
+		}
+
+		/// <summary>
+		/// Prepares the controller giving it mock implementations
+		/// of the service it requires to function normally.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="areaName">Name of the area (cannot be null).</param>
+		/// <param name="controllerName">Name of the controller.</param>
+		/// <param name="actionName">Name of the action.</param>
+		/// <param name="contextInitializer">The context initializer.</param>
+		protected void PrepareController(Controller controller, string areaName, string controllerName, string actionName, ContextInitializer contextInitializer)
+		{
 			if (controller == null)
 			{
 				throw new ArgumentNullException("controller", "'controller' cannot be null");
@@ -241,10 +255,13 @@ namespace Castle.MonoRail.TestSupport
 			{
 				throw new ArgumentNullException("actionName");
 			}
+			if( contextInitializer == null) {
+				throw new ArgumentNullException("contextInitializer");
+			}
 
 			cookies = new HybridDictionary(true);
 
-			BuildRailsContext(areaName, controllerName, actionName);
+			BuildRailsContext(areaName, controllerName, actionName, contextInitializer);
 			controller.InitializeFieldsFromServiceProvider(context);
 			controller.InitializeControllerState(areaName, controllerName, actionName);
 			ControllerLifecycleExecutor executor = new ControllerLifecycleExecutor(controller, context);
@@ -260,11 +277,24 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="actionName">Name of the action.</param>
 		protected void BuildRailsContext(string areaName, string controllerName, string actionName)
 		{
+			BuildRailsContext(areaName, controllerName, actionName, InitializeRailsEngineContext);
+		}
+
+		/// <summary>
+		/// Constructs a mock context.
+		/// </summary>
+		/// <param name="areaName">Name of the area.</param>
+		/// <param name="controllerName">Name of the controller.</param>
+		/// <param name="actionName">Name of the action.</param>
+		/// <param name="contextInitializer">The context initializer.</param>
+		protected void BuildRailsContext(string areaName, string controllerName, string actionName, ContextInitializer contextInitializer)
+		{
 			UrlInfo info = BuildUrlInfo(areaName, controllerName, actionName);
 			request = BuildRequest();
 			response = BuildResponse();
 			trace = BuildTrace();
 			context = BuildRailsEngineContext(request, response, trace, info);
+			contextInitializer(context);
 		}
 
 		/// <summary>
@@ -322,6 +352,13 @@ namespace Castle.MonoRail.TestSupport
 			                   Path.Combine(Path.Combine(areaName, controllerName), actionName),
 			                   areaName, controllerName, actionName, "rails");
 		}
+
+		/// <summary>
+		/// Allows modifying of the engine context created by <see cref="BuildRailsEngineContext"/>
+		/// </summary>
+		/// <param name="mockRailsEngineContext">The engine context to modify</param>
+		protected virtual void InitializeRailsEngineContext(MockRailsEngineContext mockRailsEngineContext)
+		{}
 
 		/// <summary>
 		/// Determines whether a specified template was rendered -- to send an email.
