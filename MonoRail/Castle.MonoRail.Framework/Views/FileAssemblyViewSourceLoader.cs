@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class FileAssemblyViewSourceLoader : IViewSourceLoader, IServiceEnabledComponent
 	{
-		private IList additionalSources = ArrayList.Synchronized(new ArrayList());
+		private readonly IList additionalSources = ArrayList.Synchronized(new ArrayList());
 		private String viewRootDir;
 		private bool enableCache = true;
 		private FileSystemWatcher viewFolderWatcher;
@@ -179,7 +179,7 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		private event FileSystemEventHandler ViewChangedImpl;
+		private event FileSystemEventHandler ViewChangedImpl = delegate { };
 
 		private void DisposeViewFolderWatch()
 		{
@@ -199,19 +199,19 @@ namespace Castle.MonoRail.Framework
 				viewFolderWatcher.Changed += new FileSystemEventHandler(viewFolderWatcher_Changed);
 				viewFolderWatcher.Created += new FileSystemEventHandler(viewFolderWatcher_Changed);
 				viewFolderWatcher.Deleted += new FileSystemEventHandler(viewFolderWatcher_Changed);
+				viewFolderWatcher.Renamed += new RenamedEventHandler(viewFolderWatcher_Renamed);
 				viewFolderWatcher.EnableRaisingEvents = true;
 			}
 		}
 
+		private void viewFolderWatcher_Renamed(object sender, RenamedEventArgs e)
+		{
+			ViewChangedImpl(this, e);
+		}
+
 		private void viewFolderWatcher_Changed(object sender, FileSystemEventArgs e)
 		{
-			//shouldn't ever happen, because we make sure that the watcher is only 
-			//active when there are subscribers, but checking will prevent possible concrureny issues with it.
-
-			if (ViewChangedImpl != null)
-			{
-				ViewChangedImpl(this, e);
-			}
+			ViewChangedImpl(this, e);
 		}
 
 		#endregion

@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
+	using System;
 	using System.IO;
 	using System.Threading;
 	using Castle.MonoRail.Framework.Tests;
@@ -57,12 +58,13 @@ there";
 			{
 				old = read.ReadToEnd();
 			}
+            DoGet("apppath/index.rails");//init brail engine
 			using (TextWriter write = File.CreateText(script))
 			{
 				write.Write(newContent);
+				write.Flush();
 			}
-			// Wait half a sec so Brail could pick up that a change in the file occured.
-			Thread.Sleep(500);
+			Thread.Sleep(1000);
 			try
 			{
 				DoGet("apppath/index.rails");

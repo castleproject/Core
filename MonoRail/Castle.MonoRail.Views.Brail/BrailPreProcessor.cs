@@ -133,7 +133,7 @@ namespace Castle.MonoRail.Views.Brail
 				string text = code.Substring(start, position.Start - start);
 				OutputText(buffer, text);
 				string expression = code.Substring(position.Start + 2, position.End - (position.Start + 2));
-				OutputExpression(buffer, expression);
+				OutputExpression(buffer, expression, position.ShouldEscape);
 				start = position.End + 1;
 			}
 			string remainingText = code.Substring(start, code.Length - start);
@@ -148,9 +148,12 @@ namespace Castle.MonoRail.Views.Brail
 			buffer.WriteLine("\"\"\"");
 		}
 
-		private static void OutputExpression(StringWriter buffer, string code)
+		private static void OutputExpression(TextWriter buffer, string code, bool shouldEscape)
 		{
-			buffer.Write("OutputEscaped ");
+            if(shouldEscape)
+                buffer.Write("OutputEscaped ");
+            else 
+			    buffer.Write("output ");
 			buffer.WriteLine(code);
 		}
 
@@ -171,11 +174,12 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			List<ExpressionPosition> bracesPositions = new List<ExpressionPosition>();
 			bool prevCharWasDollar = false;
+		    bool prevCharWasBang = false;
 			for (int index = 0; index < code.Length; index++)
 			{
 				if (code[index] == '{')
 				{
-					bracesPositions.Add(new ExpressionPosition(index - 1, -1, prevCharWasDollar));
+                    bracesPositions.Add(new ExpressionPosition(index - 1, -1, prevCharWasDollar || prevCharWasBang, prevCharWasBang));
 				}
 				if (code[index] == '}' && bracesPositions.Count > 0)
 				{
@@ -191,10 +195,11 @@ namespace Castle.MonoRail.Views.Brail
 				}
 				//handles escaping expressions with $$ as well
 				prevCharWasDollar = code[index] == '$' && !prevCharWasDollar;
+			    prevCharWasBang = code[index] == '!' && !prevCharWasBang;
 			}
 			bracesPositions.RemoveAll(delegate(ExpressionPosition obj)
 			{
-				return !obj.PrevCharWasDollar;
+				return !obj.PrevCharWasDollarOrBang;
 			});
 			return bracesPositions;
 		}
@@ -205,17 +210,19 @@ namespace Castle.MonoRail.Views.Brail
 			if (index - 2 < 0)
 				return false;
 			ExpressionPosition parentExpression = bracesPositions[index - 2];
-			if (parentExpression.PrevCharWasDollar == false)
+			if (parentExpression.PrevCharWasDollarOrBang == false)
 				return ParentExpressionIsNotValid(bracesPositions, index - 1);
 			return parentExpression.End == -1;
 		}
 
 		private class ExpressionPosition
 		{
-			private int start, end;
-			private readonly bool prevCharWasDollar;
+			private readonly int start;
+		    private int end;
+		    private readonly bool prevCharWasDollarOrBang;
+		    private readonly bool shouldEscape;
 
-			public int Start
+		    public int Start
 			{
 				get { return start; }
 			}
@@ -226,16 +233,22 @@ namespace Castle.MonoRail.Views.Brail
 				set { end = value; }
 			}
 
-			public bool PrevCharWasDollar
+			public bool PrevCharWasDollarOrBang
 			{
-				get { return prevCharWasDollar; }
+				get { return prevCharWasDollarOrBang; }
 			}
 
-			public ExpressionPosition(int start, int end, bool prevCharWasDollar)
+		    public bool ShouldEscape
+		    {
+		        get { return shouldEscape; }
+		    }
+
+		    public ExpressionPosition(int start, int end, bool prevCharWasDollarOrBang, bool shouldEscape)
 			{
 				this.start = start;
 				this.end = end;
-				this.prevCharWasDollar = prevCharWasDollar;
+                this.prevCharWasDollarOrBang = prevCharWasDollarOrBang;
+                this.shouldEscape = shouldEscape;
 			}
 		}
 

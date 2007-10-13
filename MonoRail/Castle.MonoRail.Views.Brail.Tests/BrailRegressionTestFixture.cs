@@ -77,7 +77,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			Hashtable args = new Hashtable();
 			args["htmlCode"] = "<script>alert('a');</script>";
 			string view = ProcessView(args, "regressions/StringInterpolationInCodeBlockWillNotBeEscaped");
-			Assert.AreEqual("Code <script>alert('a');</script>", view);
+			Assert.AreEqual("<script>alert('a');</script>", view);
 		}
 	}
 }
