@@ -1,6 +1,8 @@
 Change history
 --------------
 
+- Applied Robert Ream's patch which allows [DefaultAction] to be applied to Actions. This means that no strings are required. 
+
 - BaseControllerTest supports the ContextInitializer delegate, which makes it easier to modify the MockRailsEngineContext
 
 Release Candidate 3

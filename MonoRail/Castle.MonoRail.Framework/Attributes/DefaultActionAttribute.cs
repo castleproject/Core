@@ -20,7 +20,7 @@ namespace Castle.MonoRail.Framework
 	/// Declares that the Controller should enable a DefaultAction method 
 	/// for request processing if no action can be found with the supplied name
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false), Serializable]
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=false), Serializable]
 	public class DefaultActionAttribute : Attribute
 	{
 		private static readonly String DEFAULT_ACTION = "DefaultAction";

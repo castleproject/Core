@@ -260,6 +260,15 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				descriptor.AjaxActions.Add(method);
 			}
+
+			if (method.IsDefined(typeof(DefaultActionAttribute), true))
+			{
+				if (descriptor.DefaultAction != null)
+				{
+					throw new RailsException("Cannot resolve a default action for {0}, DefaultActionAttribute was declared more than once.", method.DeclaringType.FullName);
+				}
+				descriptor.DefaultAction = new DefaultActionAttribute(method.Name);
+			}
 		}
 
 		/// <summary>
