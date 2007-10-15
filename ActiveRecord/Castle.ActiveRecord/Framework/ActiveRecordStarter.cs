@@ -446,12 +446,21 @@ namespace Castle.ActiveRecord
 						throw new ActiveRecordException(
 							String.Format("Type `{0}` is registered already", type.FullName));
 					}
-				}
-				else if (TypeDefinesADatabaseBoundary(type))
+				} 
+				else if (IsConfiguredAsRootType(type))
 				{
-					SetUpConfiguration(source, type, holder);
-
-					continue;
+					if (TypeDefinesADatabaseBoundary(type)) 
+					{
+						SetUpConfiguration(source, type, holder);
+						continue;
+					} 
+					else 
+					{
+						throw new ActiveRecordException(
+							string.Format(
+								"Type `{0}` is not a valid root type.  Make sure it is abstract and inherits from ActiveRecordBase.",
+								type.FullName));
+					}
 				}
 				else if (!IsActiveRecordType(type))
 				{
@@ -478,6 +487,11 @@ namespace Castle.ActiveRecord
 			}
 
 			return models;
+		}
+
+		private static bool IsConfiguredAsRootType(Type type)
+		{
+			return configSource.GetConfiguration(type) != null;
 		}
 
 		private static bool TypeDefinesADatabaseBoundary(Type type)

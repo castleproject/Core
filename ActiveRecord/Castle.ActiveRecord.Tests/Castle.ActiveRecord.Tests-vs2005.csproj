@@ -302,6 +302,7 @@
   <ItemGroup>
     <Compile Include="AnyRelationTestCase.cs" />
     <Compile Include="CompositeUserTypeTestCase.cs" />
+    <Compile Include="InvalidRootTypeTestCase.cs" />
     <Compile Include="Model\ClassWithBrokenField.cs" />
     <Compile Include="Model\Ship.cs" />
     <Compile Include="VerifyModelsAgainstDBSchemaTestCase.cs" />

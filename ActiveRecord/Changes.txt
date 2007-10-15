@@ -1,3 +1,6 @@
+- Applied patch from Steven Radack which catches invalid configuration of multiple database types. (They must be abstract). 
+  Now AR throws an exception rather than silently using the same database.  
+
 Release Candidate 2
 ===================
 
