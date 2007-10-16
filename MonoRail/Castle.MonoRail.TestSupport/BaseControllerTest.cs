@@ -189,7 +189,7 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="controller">The controller.</param>
 		protected void PrepareController(Controller controller)
 		{
-			PrepareController(controller, null);
+			PrepareController(controller, InitializeRailsEngineContext);
 		}
 
 		/// <summary>
