@@ -1,3 +1,8 @@
+1.0
+===
+
+- Applied Colin Ramsay's patch fixing exception when routing is enabled on MR wizard
+
 RC 3
 ====
 

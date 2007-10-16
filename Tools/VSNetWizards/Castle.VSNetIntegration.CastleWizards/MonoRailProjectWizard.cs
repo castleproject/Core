@@ -237,7 +237,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			addRoutingElem.SetAttribute("name", "routing");
 			addRoutingElem.SetAttribute("type", "Castle.MonoRail.Framework.RoutingModule, Castle.MonoRail.Framework");
 			
-			httpModules.InsertBefore(httpModules.FirstChild, addRoutingElem);
+			httpModules.InsertBefore(addRoutingElem, httpModules.FirstChild);
 		}
 
 		private void AddViewEngineConfiguration(XmlDocument webConfigDoc, XmlElement mrNode)
