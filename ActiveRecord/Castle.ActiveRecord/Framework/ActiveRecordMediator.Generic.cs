@@ -32,7 +32,7 @@ namespace Castle.ActiveRecord
 		/// <returns>Whatever is returned by the delegate invocation</returns>
 		public static object Execute(NHibernateDelegate call, T instance)
 		{
-			return ActiveRecordMediator.Execute(typeof(T), call, instance);
+			return Execute(typeof(T), call, instance);
 		}
 
 		/// <summary>
@@ -96,7 +96,7 @@ namespace Castle.ActiveRecord
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
 		public static T FindFirst(DetachedCriteria criteria)
 		{
-			return (T)FindFirst(typeof(T),criteria);
+			return (T) FindFirst(typeof(T),criteria);
 		}
 
 		/// <summary>
@@ -117,7 +117,7 @@ namespace Castle.ActiveRecord
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
 		public static T FindOne(DetachedCriteria criteria)
 		{
-			return (T)FindOne(typeof(T), criteria);
+			return (T) FindOne(typeof(T), criteria);
 		}
 
 		/// <summary>
@@ -138,7 +138,7 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		public static T[] FindAll(Order[] orders, params ICriterion[] criterias)
 		{
-			return (T[])FindAll(typeof(T), orders, criterias);
+			return (T[]) FindAll(typeof(T), orders, criterias);
 		}
 
 		/// <summary>
@@ -149,7 +149,7 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		public static T[] FindAll(params ICriterion[] criterias)
 		{
-			return (T[])FindAll(typeof(T), criterias);
+			return (T[]) FindAll(typeof(T), criterias);
 		}
 
 		/// <summary>
@@ -157,7 +157,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static T[] FindAll(DetachedCriteria detachedCriteria, params Order[] orders)
 		{
-			return (T[])FindAll(typeof(T), detachedCriteria, orders);
+			return (T[]) FindAll(typeof(T), detachedCriteria, orders);
 		}
 
 		/// <summary>
@@ -179,10 +179,9 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
-		public static T[] SlicedFindAll(int firstResult, int maxResults,
-													  DetachedCriteria criteria)
+		public static T[] SlicedFindAll(int firstResult, int maxResults, DetachedCriteria criteria, params Order[] orders)
 		{
-			return (T[])SlicedFindAll(typeof(T), firstResult, maxResults, criteria);
+			return (T[]) SlicedFindAll(typeof(T), firstResult, maxResults, orders, criteria);
 		}
 
 		/// <summary>
