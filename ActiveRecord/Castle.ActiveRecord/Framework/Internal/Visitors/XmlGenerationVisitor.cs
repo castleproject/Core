@@ -1032,7 +1032,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				return MakeAtt(attName, type.FullName  + ", " + type.Assembly.GetName().Name);
+				string assemblyName = new AssemblyName(type.Assembly.FullName).Name;
+				return MakeAtt(attName, type.FullName + ", " + assemblyName);
 			}
 		}
 
@@ -1183,7 +1184,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			if (type == null) return null;
 
-			return String.Format("{0}, {1}", type.FullName, type.Assembly.GetName().Name);
+			string assemblyName = new AssemblyName(type.Assembly.FullName).Name;
+			return String.Format("{0}, {1}", type.FullName, assemblyName);
 		}
 
 		#endregion
