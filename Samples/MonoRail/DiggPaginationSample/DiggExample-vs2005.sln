@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiggExample", "DiggExample\DiggExample.csproj", "{ABD04890-D8CA-43B6-9237-5BEF0A347D63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiggExample-vs2005", "DiggExample\DiggExample-vs2005.csproj", "{ABD04890-D8CA-43B6-9237-5BEF0A347D63}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
