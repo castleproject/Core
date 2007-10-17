@@ -75,10 +75,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Age = 37;
 			person.DOB = new DateTime(1970, 7, 19);
 			person.Friends = new List<IPerson>();
-			Assert.AreEqual("Craig", dictionary["Person_Name"]);
-			Assert.AreEqual(37, dictionary["Person_Age"]);
-			Assert.AreEqual(new DateTime(1970, 7, 19), dictionary["Person_DOB"]);
-			Assert.AreEqual(0, ((IList<IPerson>) dictionary["Person_Friends"]).Count);
+			Assert.AreEqual("Craig", dictionary["Name"]);
+			Assert.AreEqual(37, dictionary["Age"]);
+			Assert.AreEqual(new DateTime(1970, 7, 19), dictionary["DOB"]);
+			Assert.AreEqual(0, ((IList<IPerson>) dictionary["Friends"]).Count);
 		}
 
 		[Test]
@@ -117,7 +117,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			IPerson person = factory.GetAdapter<IPersonWithPrefixOverride>(dictionary);
 			person.Name = "Craig";
 
-			Assert.AreEqual("Craig", dictionary["Person2_Name"]);
+			Assert.AreEqual("Craig", dictionary["Name"]);
 		}
 
 		[Test]
@@ -141,6 +141,43 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(default(DateTime), person.DOB);
 			Assert.AreEqual(default(IList<IPerson>), person.Friends);
 		}
+
+		[Test]
+		public void UpdateAdapterAndRead_WithSeveralDifferentOverridesWithDifferentPrefixes_DictionaryKeysHaveCorrectPrefixes()
+		{
+			IPersonWithDeniedInheritancePrefix person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
+
+			string name = "Ming The Merciless";
+			int numberOfFeet = 2;
+			string hairColour = "Muddy Golden Labrador";
+			string eyeColour = "The Colour Of Broken Dreams";
+			int numberOfHeads = 1;
+			int numberOfFingers = 3;
+
+			person.Name = name;
+			person.NumberOfFeet = numberOfFeet;
+			person.HairColour = hairColour;
+			person.EyeColour = eyeColour;
+			person.NumberOfHeads = numberOfHeads;
+			person.NumberOfFingers = numberOfFingers;
+
+			string[] keys = new string[dictionary.Keys.Count];
+			dictionary.Keys.CopyTo(keys, 0);
+
+			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Name"; }));
+			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "NumberOfFeet"; }));
+			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Person_HairColour"; }));
+			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Person2_EyeColour"; }));
+			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Person2_NumberOfHeads"; }));
+			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "NumberOfFingers"; }));
+
+			Assert.AreEqual(name, person.Name);
+			Assert.AreEqual(numberOfFeet, person.NumberOfFeet);
+			Assert.AreEqual(hairColour, person.HairColour);
+			Assert.AreEqual(eyeColour, person.EyeColour);
+			Assert.AreEqual(numberOfHeads, person.NumberOfHeads);
+			Assert.AreEqual(numberOfFingers, person.NumberOfFingers);
+		}
 	}
 
 	public interface IPerson
@@ -154,14 +191,32 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		IList<IPerson> Friends { get; set; }
 	}
 
-	[DictionaryAdapterKeyPrefix("Person_")]
-	public interface IPersonWithPrefix : IPerson
+	public interface IPersonWithoutPrefix : IPerson
 	{
+		int NumberOfFeet { get; set; }
+	}
+
+	[DictionaryAdapterKeyPrefix("Person_")]
+	public interface IPersonWithPrefix : IPersonWithoutPrefix
+	{
+		string HairColour { get; set; }
 	}
 
 	[DictionaryAdapterKeyPrefix("Person2_")]
 	public interface IPersonWithPrefixOverride : IPersonWithPrefix
 	{
+		string EyeColour { get; set; }
+	}
+
+	public interface IPersonWithPrefixOverrideFurtherOverride : IPersonWithPrefixOverride
+	{
+		int NumberOfHeads { get; set; }
+	}
+
+	[DictionaryAdapterKeyPrefix("")]
+	public interface IPersonWithDeniedInheritancePrefix : IPersonWithPrefixOverrideFurtherOverride
+	{
+		int NumberOfFingers { get; set; }
 	}
 
 	public interface IPersonWithMethod : IPerson

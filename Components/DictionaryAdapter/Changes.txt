@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Applied patch from Lee Henson allowing Types to inherit or override prefixes using [DictionaryAdapterKeyPrefix()].
+
 - Return default(T) for value type properties not in the dictionary
 
 - Moved for CastleContrib/Castle.Tools.CodeGenerator

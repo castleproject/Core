@@ -65,12 +65,13 @@ namespace Castle.Components.DictionaryAdapter
 			FieldBuilder dictionaryField = CreateAdapterDictionaryField(typeBuilder);
 			CreateAdapterConstructor(typeBuilder, dictionaryField);
 
-			String prefix = GetPropertyPrefix<T>();
-
 			List<PropertyInfo> properties = new List<PropertyInfo>();
 			RecursivelyDiscoverProperties(properties, typeof(T));
-			properties.ForEach(
-				delegate(PropertyInfo propertyInfo) { CreateAdapterProperty(typeBuilder, dictionaryField, propertyInfo, prefix); });
+			properties.ForEach(delegate(PropertyInfo propertyInfo)
+			{
+				String prefix = GetPropertyPrefix(propertyInfo);
+				CreateAdapterProperty(typeBuilder, dictionaryField, propertyInfo, prefix);
+			});
 
 			typeBuilder.CreateType();
 
@@ -230,10 +231,20 @@ namespace Castle.Components.DictionaryAdapter
 			return null;
 		}
 
-		private static String GetPropertyPrefix<T>()
+		private static String GetPropertyPrefix(PropertyInfo propertyInfo)
 		{
-			DictionaryAdapterKeyPrefixAttribute prefix = GetDictionaryAdapterAttribute(typeof(T));
-			return (prefix != null) ? prefix.KeyPrefix : String.Empty;
+			List<Type> interfaces = new List<Type>();
+			RecursivelyDiscoverInterfaces(interfaces, propertyInfo.ReflectedType);
+
+			foreach (Type type in interfaces)
+			{
+				DictionaryAdapterKeyPrefixAttribute prefix = GetDictionaryAdapterAttribute(type);
+
+				if (prefix != null)
+					return prefix.KeyPrefix;
+			}
+			
+			return String.Empty;
 		}
 
 		private static String GetAdapterAssemblyName<T>()
@@ -271,15 +282,20 @@ namespace Castle.Components.DictionaryAdapter
 			                  });
 		}
 
+		private static void RecursivelyDiscoverInterfaces(List<Type> interfaces, Type currentType)
+		{
+			interfaces.Add(currentType);
+
+			Array.ForEach(currentType.GetInterfaces(), 
+				delegate(Type parentInterface) { RecursivelyDiscoverInterfaces(interfaces, parentInterface); });
+		}
+
 		private static void RecursivelyDiscoverProperties(List<PropertyInfo> properties, Type currentType)
 		{
 			properties.AddRange(currentType.GetProperties(BindingFlags.Public | BindingFlags.Instance));
 
-			Array.ForEach(currentType.GetInterfaces(),
-			              delegate(Type parentInterface)
-			              {
-			              	 RecursivelyDiscoverProperties(properties, parentInterface);
-			              });
+			Array.ForEach(currentType.GetInterfaces(), 
+				delegate(Type parentInterface) { RecursivelyDiscoverProperties(properties, parentInterface); });
 		}
 	}
 }
