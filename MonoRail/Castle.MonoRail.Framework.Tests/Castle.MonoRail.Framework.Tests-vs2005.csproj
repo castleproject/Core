@@ -45,7 +45,7 @@
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
@@ -75,7 +75,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Components.Validator, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="Castle.Components.Validator, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
       <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
@@ -197,6 +197,7 @@
     <Compile Include="RescueTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Routing\RoutingEngineTestCase.cs" />
     <Compile Include="ServerUtilityTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

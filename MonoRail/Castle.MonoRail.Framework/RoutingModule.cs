@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">An <see cref="T:System.Web.HttpApplication"></see> that provides access to the methods, properties, and events common to all application objects within an ASP.NET application</param>
 		public void Init(HttpApplication context)
 		{
-			context.BeginRequest += new EventHandler(OnBeginRequest);
+			context.BeginRequest += OnBeginRequest;
 
 			routingRules = MonoRailConfiguration.GetConfig().RoutingRules;
 		}

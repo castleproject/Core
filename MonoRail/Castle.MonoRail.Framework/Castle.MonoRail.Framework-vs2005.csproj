@@ -161,6 +161,7 @@
     <Compile Include="Attributes\ViewComponentParamAttribute.cs" />
     <Compile Include="Configuration\DefaultUrl.cs" />
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
+    <Compile Include="RoutingEngine.cs" />
     <Compile Include="ServiceProviderLocator.cs" />
     <Compile Include="Extensions\ExceptionChaining\FilteredExceptionHandler.cs" />
     <Compile Include="Extensions\ExceptionChaining\LoggingExceptionHandler.cs" />
