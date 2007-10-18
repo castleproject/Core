@@ -1,6 +1,21 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace Castle.MonoRail.Framework.Tests.Routing
 {
 	using System;
+	using Castle.MonoRail.Framework.Routing;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -74,6 +89,16 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.AreEqual("apple", match.Parameters["brand"]);
 			Assert.AreEqual("macbook", match.Parameters["type"]);
 			Assert.AreEqual("pro", match.Parameters["name"]);
+		}
+
+		[Test]
+		public void NumberPatternShouldMatchOnlyNumbers()
+		{
+			engine.Add(PatternRule.Build("ProductById", "product/<id:number>", typeof(ProductController), "View"));
+
+			RouteMatch match = engine.FindMatch("/product/iPod");
+
+			Assert.IsNull(match);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentException), "token has invalid value 'int'. Expected 'int' or 'string'")]
