@@ -36,7 +36,7 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="path">The path.</param>
 		/// <param name="controllerType">Type of the controller.</param>
 		/// <param name="action">The action.</param>
-		private PatternRule(string ruleName, string path, Type controllerType, string action)
+		protected PatternRule(string ruleName, string path, Type controllerType, string action)
 		{
 			this.ruleName = ruleName;
 			this.path = path;

@@ -197,6 +197,8 @@
     <Compile Include="RescueTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Routing\PatternRuleTestCase.cs" />
+    <Compile Include="Routing\RegexRuleTestCase.cs" />
     <Compile Include="Routing\RoutingEngineTestCase.cs" />
     <Compile Include="ServerUtilityTestCase.cs">
       <SubType>Code</SubType>

@@ -163,6 +163,7 @@
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
     <Compile Include="Routing\IRoutingRule.cs" />
     <Compile Include="Routing\PatternRule.cs" />
+    <Compile Include="Routing\RegexRule.cs" />
     <Compile Include="Routing\RouteMatch.cs" />
     <Compile Include="Routing\RoutingEngine.cs" />
     <Compile Include="ServiceProviderLocator.cs" />

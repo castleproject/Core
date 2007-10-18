@@ -91,50 +91,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.AreEqual("pro", match.Parameters["name"]);
 		}
 
-		[Test]
-		public void NumberPatternShouldMatchOnlyNumbers()
-		{
-			engine.Add(PatternRule.Build("ProductById", "product/<id:number>", typeof(ProductController), "View"));
-
-			RouteMatch match = engine.FindMatch("/product/iPod");
-
-			Assert.IsNull(match);
-		}
-
-		[Test, ExpectedException(typeof(ArgumentException), "token has invalid value 'int'. Expected 'int' or 'string'")]
-		public void InvalidPatternType()
-		{
-			PatternRule.Build("ProductById", "product/<id:int>", typeof(ProductController), "View");
-		}
-
-		[Test, ExpectedException(typeof(ArgumentException), "token has invalid value 'num'. Expected 'int' or 'string'")]
-		public void InvalidPatternType2()
-		{
-			PatternRule.Build("ProductById", "product/<id:num>", typeof(ProductController), "View");
-		}
-
-		[Test, ExpectedException(typeof(ArgumentException), "Spaces are not allowed on a pattern token. Please check the pattern '<id : number>'")]
-		public void SpacesAreNotAllowedOnPattern()
-		{
-			PatternRule.Build("ProductById", "product/<id : number>", typeof(ProductController), "View");
-		}
-
-		[Test, ExpectedException(typeof(ArgumentException), "Token is not wellformed. It should end with '>' or ']'")]
-		public void PatternMustBeWellFormed()
-		{
-			PatternRule.Build("ProductById", "product/<id:number", typeof(ProductController), "View");
-		}
-
-		[Test, ExpectedException(typeof(ArgumentException), "Token is not wellformed. It should end with '>' or ']'")]
-		public void PatternMustBeWellFormed2()
-		{
-			PatternRule.Build("ProductById", "product/[id:number", typeof(ProductController), "View");
-		}
-
 		public class ProductController : Controller
-		{}
-
-		public class LoginController : Controller
 		{}
 	}
 }
