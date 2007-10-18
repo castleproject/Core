@@ -1,5 +1,7 @@
-Change history
---------------
+1.0
+===
+
+- Added LocalExceptionFilterHandler
 
 - Applied Robert Ream's patch which allows [DefaultAction] to be applied to Actions. This means that no strings are required. 
 

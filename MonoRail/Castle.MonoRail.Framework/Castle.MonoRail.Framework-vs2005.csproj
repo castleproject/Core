@@ -161,6 +161,7 @@
     <Compile Include="Attributes\ViewComponentParamAttribute.cs" />
     <Compile Include="Configuration\DefaultUrl.cs" />
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
+    <Compile Include="Extensions\ExceptionChaining\LocalExceptionFilterHandler.cs" />
     <Compile Include="Routing\IRoutingRule.cs" />
     <Compile Include="Routing\PatternRule.cs" />
     <Compile Include="Routing\RegexRule.cs" />

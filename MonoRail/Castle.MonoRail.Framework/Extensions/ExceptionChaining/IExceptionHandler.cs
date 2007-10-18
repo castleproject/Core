@@ -14,8 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 {
-	using System;
-
 	/// <summary>
 	/// Represents a processor of an exception.
 	/// The processor might choose to register the exception

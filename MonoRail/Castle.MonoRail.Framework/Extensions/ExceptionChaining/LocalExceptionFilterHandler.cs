@@ -14,25 +14,29 @@
 
 namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 {
-	using Castle.Core.Logging;
-
 	/// <summary>
-	/// Handles that logs the exception using the the logger factory.
+	/// Exception handler that prevents further processment if the 
+	/// request is local. This is useful if the next handler do something more 
+	/// serious like sending an e-mail to admins/developers/cto/ceo.
 	/// </summary>
-	public class LoggingExceptionHandler : AbstractExceptionHandler
+	/// 
+	/// <remarks>
+	/// Inspired by
+	/// http://sradack.blogspot.com/2007/07/monorail-exception-chaining.html
+	/// </remarks>
+	public class LocalExceptionFilterHandler : AbstractExceptionHandler
 	{
 		/// <summary>
-		/// Implementors should perform the action
-		/// on the exception. Note that the exception
-		/// is available in <see cref="IRailsEngineContext.LastException"/>
+		/// Prevents next handler from invoked if the request is local.
 		/// </summary>
 		/// <param name="context"></param>
 		public override void Process(IRailsEngineContext context)
 		{
-			ILoggerFactory factory = (ILoggerFactory) context.GetService(typeof (ILoggerFactory));
-			ILogger logger = factory.Create(context.CurrentController.GetType());
+			if (context.Request.IsLocal)
+			{
+				return;
+			}
 
-			logger.Error(BuildStandardMessage(context));
 			InvokeNext(context);
 		}
 	}

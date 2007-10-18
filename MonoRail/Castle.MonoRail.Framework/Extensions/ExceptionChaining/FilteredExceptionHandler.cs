@@ -14,22 +14,22 @@
 
 namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 {
-    using System;
-    using System.Collections;
-    using System.Reflection;
-    using System.Xml;
+	using System;
+	using System.Collections;
+	using System.Reflection;
+	using System.Xml;
 
-    /// <summary>
-    /// This class expects to be configured with exclude types that detail the types of 
-    /// exceptions to be ignored.
-    /// 
-    /// <code>
-    ///     <exclude type="System.Security.SecurityException, mscrolib" />
-    /// </code>
-    /// </summary>
-    public class FilteredExceptionHandler : AbstractExceptionHandler, IConfigurableHandler
-    {
-        private ArrayList excludedTypes = new ArrayList();
+	/// <summary>
+	/// This class expects to be configured with exclude types that detail the types of 
+	/// exceptions to be ignored.
+	/// 
+	/// <code>
+	///     <exclude type="System.Security.SecurityException, mscrolib" />
+	/// </code>
+	/// </summary>
+	public class FilteredExceptionHandler : AbstractExceptionHandler, IConfigurableHandler
+	{
+		private ArrayList excludedTypes = new ArrayList();
 
 		/// <summary>
 		/// Implementors should check for known attributes and child nodes
@@ -37,15 +37,15 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// </summary>
 		/// <param name="exceptionHandlerNode">The Xml node
 		/// that represents this handler on the configuration file</param>
-        public void Configure(XmlNode exceptionHandlerNode)
-        {
-            XmlNodeList excludeNodes = exceptionHandlerNode.SelectNodes("exclude");
-            foreach (XmlNode excludeNode in excludeNodes)
-            {
-                string excludedType = excludeNode.Attributes["type"].Value;
-                excludedTypes.Add(Type.GetType(excludedType, true));
-            }
-        }
+		public void Configure(XmlNode exceptionHandlerNode)
+		{
+			XmlNodeList excludeNodes = exceptionHandlerNode.SelectNodes("exclude");
+			foreach (XmlNode excludeNode in excludeNodes)
+			{
+				string excludedType = excludeNode.Attributes["type"].Value;
+				excludedTypes.Add(Type.GetType(excludedType, true));
+			}
+		}
 
 		/// <summary>
 		/// Implementors should perform the action
@@ -53,15 +53,15 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// is available in <see cref="IRailsEngineContext.LastException"/>
 		/// </summary>
 		/// <param name="context"></param>
-        public override void Process(IRailsEngineContext context)
-        {
-            Exception ex = context.LastException is TargetInvocationException
-                               ? context.LastException.InnerException
-                               : context.LastException;
-            if (!excludedTypes.Contains(ex.GetType()))
-            {
-                InvokeNext(context);
-            }
-        }
-    }
+		public override void Process(IRailsEngineContext context)
+		{
+			Exception ex = context.LastException is TargetInvocationException
+			               	? context.LastException.InnerException
+			               	: context.LastException;
+			if (!excludedTypes.Contains(ex.GetType()))
+			{
+				InvokeNext(context);
+			}
+		}
+	}
 }
