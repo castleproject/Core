@@ -936,6 +936,8 @@
 				<include name="**/*.txt" />
 				<include name="**/*.inc" />
 				<include name="**/*.vm" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
 				<include name="*.snk" />
 				<exclude name="**/bin/*" />
 				<exclude name="**/bin/Debug/*" />
@@ -958,6 +960,8 @@
 				<include name="**/*.txt" />
 				<include name="**/*.inc" />
 				<include name="**/*.vm" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
 				<include name="*.snk" />
 				<exclude name="**/bin/*" />
 				<exclude name="**/bin/Debug/*" />
