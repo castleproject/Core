@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Represents a mock implementation of <see cref="IRequest"/> for unit test purposes.
 	/// </summary>
-	public class MockRequest : IRequest
+	public class MockRequest : IMockRequest
 	{
 		private NameValueCollection form = new NameValueCollection();
 		private NameValueCollection headers = new NameValueCollection();
@@ -39,6 +39,7 @@ namespace Castle.MonoRail.Framework.Test
 
 		private string[] userLanguages = new string[] { "en-ES", "pt-BR" };
 		private string userHostAddress = "127.0.0.1";
+		private string pathInfo;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockRequest"/> class.
@@ -74,7 +75,6 @@ namespace Castle.MonoRail.Framework.Test
 		/// </summary>
 		public virtual void ValidateInput()
 		{
-			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -111,6 +111,18 @@ namespace Castle.MonoRail.Framework.Test
 		public virtual bool IsLocal
 		{
 			get { return isLocal; }
+			set { isLocal = value; }
+		}
+
+		/// <summary>
+		/// Gets additional path information for
+		/// a resource with a URL extension.
+		/// </summary>
+		/// <value>The path info.</value>
+		public virtual string PathInfo
+		{
+			get { return pathInfo; }
+			set { pathInfo = value; }
 		}
 
 		/// <summary>
@@ -120,6 +132,7 @@ namespace Castle.MonoRail.Framework.Test
 		public virtual string RawUrl
 		{
 			get { return rawUrl; }
+			set { rawUrl = value; }
 		}
 
 		/// <summary>
@@ -129,6 +142,7 @@ namespace Castle.MonoRail.Framework.Test
 		public virtual Uri Uri
 		{
 			get { return uri; }
+			set { uri = value; }
 		}
 
 		/// <summary>
@@ -138,6 +152,7 @@ namespace Castle.MonoRail.Framework.Test
 		public virtual string HttpMethod
 		{
 			get { return httpMethod; }
+			set { httpMethod = value; }
 		}
 
 		/// <summary>
@@ -147,6 +162,7 @@ namespace Castle.MonoRail.Framework.Test
 		public virtual string FilePath
 		{
 			get { return filePath; }
+			set { filePath = value; }
 		}
 
 		/// <summary>
@@ -155,7 +171,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <value></value>
 		public virtual string this[string key]
 		{
-			get { throw new NotImplementedException(); }
+			get { return @params[key]; }
 		}
 
 		/// <summary>

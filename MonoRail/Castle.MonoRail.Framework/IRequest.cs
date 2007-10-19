@@ -48,6 +48,13 @@ namespace Castle.MonoRail.Framework
 		bool IsLocal { get; }
 
 		/// <summary>
+		/// Gets additional path information for 
+		/// a resource with a URL extension.
+		/// </summary>
+		/// <value>The path info.</value>
+		String PathInfo { get; }
+
+		/// <summary>
 		/// Gets the raw URL.
 		/// </summary>
 		/// <value>The raw URL.</value>

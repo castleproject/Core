@@ -19,8 +19,8 @@ namespace Castle.MonoRail.TestSupport
 	using System.Collections.Specialized;
 	using System.IO;
 	using Castle.Components.Common.EmailSender;
+	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Test;
-	using Framework;
 
 	public delegate void ContextInitializer(MockRailsEngineContext context);
 
@@ -104,7 +104,7 @@ namespace Castle.MonoRail.TestSupport
 		private readonly int port;
 		protected string virtualDir = "";
 		private MockRailsEngineContext context;
-		private IRequest request;
+		private IMockRequest request;
 		private IMockResponse response;
 		private ITrace trace;
 		private IDictionary cookies;
@@ -134,7 +134,6 @@ namespace Castle.MonoRail.TestSupport
 		/// </summary>
 		protected virtual void OnSetUp()
 		{
-			
 		}
 
 		/// <summary>
@@ -159,7 +158,7 @@ namespace Castle.MonoRail.TestSupport
 		/// Gets the request.
 		/// </summary>
 		/// <value>The request.</value>
-		public IRequest Request
+		public IMockRequest Request
 		{
 			get { return request; }
 		}
@@ -301,7 +300,7 @@ namespace Castle.MonoRail.TestSupport
 		/// Builds the request.
 		/// </summary>
 		/// <returns></returns>
-		protected virtual IRequest BuildRequest()
+		protected virtual IMockRequest BuildRequest()
 		{
 			return new MockRequest(cookies);
 		}

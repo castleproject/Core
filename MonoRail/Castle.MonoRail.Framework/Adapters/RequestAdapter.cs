@@ -73,6 +73,16 @@ namespace Castle.MonoRail.Framework.Adapters
 		}
 
 		/// <summary>
+		/// Gets additional path information for 
+		/// a resource with a URL extension.
+		/// </summary>
+		/// <value>The path info.</value>
+		public String PathInfo
+		{
+			get { return request.PathInfo; }
+		}
+
+		/// <summary>
 		/// Gets the raw URL.
 		/// </summary>
 		/// <value>The raw URL.</value>

@@ -23,7 +23,6 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.Collections.Specialized;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Services;
-	using Castle.Core;
 
 	/// <summary>
 	/// Adapter to expose a valid <see cref="IRailsEngineContext"/> 
