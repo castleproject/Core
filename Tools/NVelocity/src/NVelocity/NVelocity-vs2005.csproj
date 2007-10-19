@@ -35,7 +35,8 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>VISUALSTUDIO7</DefineConstants>
-    <DocumentationFile>..\bin\debug\NVelocity.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -111,6 +112,7 @@
     <Compile Include="App\VelocityEngine.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Commons\Collections\CollectionsUtil.cs">
       <SubType>Code</SubType>
     </Compile>

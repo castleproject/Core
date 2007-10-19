@@ -159,10 +159,6 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <param name="context">NVelocity runtime context</param>
 		private HybridDictionary InterpolateDictionaryString(string str, IInternalContextAdapter context)
 		{
-			HybridDictionary hash = new HybridDictionary(true);
-
-			// key=val, key='val', key=$val, key=${val}, key='id$id'
-
 			char[] contents = str.ToCharArray();
 			int lastIndex;
 
@@ -172,6 +168,8 @@ namespace NVelocity.Runtime.Parser.Node
 		private HybridDictionary RecursiveBuildDictionary(char[] contents, int fromIndex, IInternalContextAdapter context,
 		                                                  out int lastIndex)
 		{
+			// key=val, key='val', key=$val, key=${val}, key='id$id'
+
 			lastIndex = 0;
 
 			HybridDictionary hash = new HybridDictionary(true);
@@ -267,7 +265,6 @@ namespace NVelocity.Runtime.Parser.Node
 								continue;
 						}
 					}
-
 
 					if ((c == '\'' && expectSingleCommaAtEnd) ||
 					    (!expectSingleCommaAtEnd && c == ',') ||

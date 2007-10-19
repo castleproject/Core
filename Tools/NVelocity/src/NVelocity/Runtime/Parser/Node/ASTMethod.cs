@@ -33,9 +33,8 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public class ASTMethod : SimpleNode
 	{
-		private String methodName = "";
-		private int paramCount = 0;
-		private Object[] parameters;
+		private string methodName;
+		private int paramCount;
 		private int paramArrayIndex = -1;
 
 		public ASTMethod(int id) : base(id)
@@ -62,13 +61,8 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			base.Init(context, data);
 
-			/*
-	    *  this is about all we can do
-	    */
-
 			methodName = FirstToken.Image;
 			paramCount = ChildrenCount - 1;
-			parameters = new Object[paramCount];
 
 			return data;
 		}
@@ -82,16 +76,13 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			IDuck duck = o as IDuck;
 
-			Object[] methodArguments = parameters;
+			object[] parameters = new object[paramCount];
 
 			if (duck != null)
 			{
-				for(int j = 0; j < paramCount; j++)
-				{
-					parameters[j] = GetChild(j + 1).Value(context);
-				}
+				EvalParameters(parameters, context);
 
-				return duck.Invoke(methodName, methodArguments);
+				return duck.Invoke(methodName, parameters);
 			}
 
 			/*
@@ -104,6 +95,7 @@ namespace NVelocity.Runtime.Parser.Node
 			MethodInfo method = null;
 			PropertyInfo property = null;
 			bool preparedAlready = false;
+			object[] methodArguments = new object[paramCount];
 
 			try
 			{
@@ -120,18 +112,10 @@ namespace NVelocity.Runtime.Parser.Node
 				*  safe.
 				*/
 
+				EvalParameters(parameters, context);
+
 				if (icd != null && icd.ContextData == c)
 				{
-					/*
-					* sadly, we do need recalc the values of the args, as this can 
-					* change from visit to visit
-					*/
-
-					for(int j = 0; j < paramCount; j++)
-					{
-						parameters[j] = GetChild(j + 1).Value(context);
-					}
-
 					preparedAlready = true;
 
 					/*
@@ -141,7 +125,7 @@ namespace NVelocity.Runtime.Parser.Node
 					{
 						method = (MethodInfo) icd.Thingy;
 
-						methodArguments = BuildMethodArgs(method, paramArrayIndex);
+						methodArguments = BuildMethodArgs(method, parameters, paramArrayIndex);
 					}
 					if (icd.Thingy is PropertyInfo)
 					{
@@ -155,7 +139,7 @@ namespace NVelocity.Runtime.Parser.Node
 					*  cache it
 					*/
 
-					Object obj = doIntrospection(context, c);
+					Object obj = PerformIntrospection(context, c, parameters);
 
 					if (obj is MethodInfo)
 					{
@@ -212,7 +196,7 @@ namespace NVelocity.Runtime.Parser.Node
 				{
 					if (!preparedAlready)
 					{
-						methodArguments = BuildMethodArgs(method);
+						methodArguments = BuildMethodArgs(method, parameters);
 					}
 
 					obj = method.Invoke(o, methodArguments);
@@ -277,27 +261,23 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 		}
 
+		private void EvalParameters(object[] parameters, IInternalContextAdapter context)
+		{
+			for(int j = 0; j < paramCount; j++)
+			{
+				parameters[j] = GetChild(j + 1).Value(context);
+			}
+		}
+
 		/// <summary>
 		/// does the instrospection of the class for the method needed.
-		/// Note, as this calls value() on the args if any, this must
-		/// only be called at execute() / render() time.
 		///
 		/// NOTE: this will try to flip the case of the first character for
 		/// convience (compatability with Java version).  If there are no arguments,
 		/// it will also try to find a property with the same name (also flipping first character).
 		/// </summary>
-		private Object doIntrospection(IInternalContextAdapter context, Type data)
+		private Object PerformIntrospection(IInternalContextAdapter context, Type data, object[] parameters)
 		{
-			/*
-			 *  Now the parameters have to be processed, there
-			 *  may be references contained within that need
-			 *  to be introspected.
-			 */
-			for(int j = 0; j < paramCount; j++)
-			{
-				parameters[j] = GetChild(j + 1).Value(context);
-			}
-
 			String methodNameUsed = methodName;
 
 			MethodInfo m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
@@ -306,11 +286,11 @@ namespace NVelocity.Runtime.Parser.Node
 
 			if (m == null)
 			{
-				methodNameUsed = methodName.Substring(0, 1).ToUpper() + methodName.Substring(1);
+				// methodNameUsed = methodName.Substring(0, 1).ToUpper() + methodName.Substring(1);
 				m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
 				if (m == null)
 				{
-					methodNameUsed = methodName.Substring(0, 1).ToLower() + methodName.Substring(1);
+					// methodNameUsed = methodName.Substring(0, 1).ToLower() + methodName.Substring(1);
 					m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
 
 					// if there are no arguments, look for a property
@@ -343,13 +323,17 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 		}
 
-		private object[] BuildMethodArgs(MethodInfo method, int paramArrayIndex)
+		private static object[] BuildMethodArgs(MethodInfo method, object[] parameters, int paramArrayIndex)
 		{
+			if (method == null) throw new ArgumentNullException("method");
+			if (parameters == null) throw new ArgumentNullException("parameters");
+
 			object[] methodArguments = parameters;
-			ParameterInfo[] methodArgs = method.GetParameters();
 
 			if (paramArrayIndex != -1)
 			{
+				ParameterInfo[] methodArgs = method.GetParameters();
+
 				Type arrayParamType = methodArgs[paramArrayIndex].ParameterType;
 
 				object[] newParams = new object[methodArgs.Length];
@@ -376,8 +360,11 @@ namespace NVelocity.Runtime.Parser.Node
 			return methodArguments;
 		}
 
-		private object[] BuildMethodArgs(MethodInfo method)
+		private object[] BuildMethodArgs(MethodInfo method, object[] parameters)
 		{
+			if (method == null) throw new ArgumentNullException("method");
+			if (parameters == null) throw new ArgumentNullException("parameters");
+
 			ParameterInfo[] methodArgs = method.GetParameters();
 
 			int indexOfParamArray = -1;
@@ -395,7 +382,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 			paramArrayIndex = indexOfParamArray;
 
-			return BuildMethodArgs(method, indexOfParamArray);
+			return BuildMethodArgs(method, parameters, indexOfParamArray);
 		}
 	}
 }

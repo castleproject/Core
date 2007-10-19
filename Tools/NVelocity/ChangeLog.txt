@@ -1,3 +1,6 @@
+- Fixed NVELOCITY-15
+  "Fix thread safety issue in ASTMethod.Execute()"
+
 - Added escape support for the dictionary strings
 
   For example: #{onclick='alert(\'hello\')'}

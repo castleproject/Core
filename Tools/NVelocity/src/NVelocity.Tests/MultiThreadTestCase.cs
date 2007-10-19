@@ -14,13 +14,14 @@
 
 namespace NVelocity
 {
+	using System;
 	using System.Collections;
 	using System.IO;
 	using System.Text.RegularExpressions;
 	using System.Threading;
+	using App;
 	using NUnit.Framework;
-	using NVelocity.App;
-	using NVelocity.Test;
+	using Test;
 
 	[TestFixture, Explicit]
 	public class MultiThreadTestCase
@@ -45,21 +46,41 @@ namespace NVelocity
 		}
 
 		[Test]
+		public void Multithreaded_ASTExecuteDoesNotShareParams()
+		{
+			const int threadCount = 1;
+
+			Thread[] threads = new Thread[threadCount];
+
+			for (int i = 0; i < threadCount; i++)
+			{
+				threads[i] = new Thread(ExecuteMethodUntilSignal3);
+				threads[i].Start();
+			}
+
+			startEvent.Set();
+
+			Thread.CurrentThread.Join(3*5000);
+
+			stopEvent.Set();
+		}
+
+		[Test]
 		public void Multithreaded1()
 		{
 			const int threadCount = 30;
 
 			Thread[] threads = new Thread[threadCount];
 
-			for(int i = 0; i < threadCount; i++)
+			for (int i = 0; i < threadCount; i++)
 			{
-				threads[i] = new Thread(new ThreadStart(ExecuteMethodUntilSignal1));
+				threads[i] = new Thread(ExecuteMethodUntilSignal1);
 				threads[i].Start();
 			}
 
 			startEvent.Set();
 
-			Thread.CurrentThread.Join(1 * 5000);
+			Thread.CurrentThread.Join(1*5000);
 
 			stopEvent.Set();
 		}
@@ -71,15 +92,15 @@ namespace NVelocity
 
 			Thread[] threads = new Thread[threadCount];
 
-			for(int i = 0; i < threadCount; i++)
+			for (int i = 0; i < threadCount; i++)
 			{
-				threads[i] = new Thread(new ThreadStart(ExecuteMethodUntilSignal2));
+				threads[i] = new Thread(ExecuteMethodUntilSignal2);
 				threads[i].Start();
 			}
 
 			startEvent.Set();
 
-			Thread.CurrentThread.Join(1 * 5000);
+			Thread.CurrentThread.Join(1*5000);
 
 			stopEvent.Set();
 		}
@@ -91,7 +112,7 @@ namespace NVelocity
 		{
 			startEvent.WaitOne(int.MaxValue, false);
 
-			while(!stopEvent.WaitOne(0, false))
+			while (!stopEvent.WaitOne(0, false))
 			{
 				VelocityEngine ve = new VelocityEngine();
 				ve.Init();
@@ -122,7 +143,7 @@ namespace NVelocity
 		{
 			startEvent.WaitOne(int.MaxValue, false);
 
-			while(!stopEvent.WaitOne(0, false))
+			while (!stopEvent.WaitOne(0, false))
 			{
 				StringWriter sw = new StringWriter();
 
@@ -132,7 +153,7 @@ namespace NVelocity
 
 				bool ok = ve.Evaluate(c, sw,
 				                      "ContextTest.CaseInsensitive",
-									  @"
+				                      @"
 					#foreach($item in $items)
 						$item,
 					#end
@@ -145,9 +166,63 @@ namespace NVelocity
 			}
 		}
 
+		public void ExecuteMethodUntilSignal3()
+		{
+			startEvent.WaitOne(int.MaxValue, false);
+
+			try
+			{
+				while (!stopEvent.WaitOne(0, false))
+				{
+					StringWriter sw = new StringWriter();
+
+					VelocityContext c = new VelocityContext();
+					c.Put("x", new Urlhelper());
+
+					bool ok = ve.Evaluate(c, sw, "",
+					                      "#foreach($i in [1..3000]) \r\n" +
+					                      "#set($temp = $x.For(\"%{controller='Test',id=$i}\")) \r\n" +
+					                      "#end \r\n");
+
+					Assert.IsTrue(ok, "Evalutation returned failure");
+				}
+			}
+			catch(System.Exception ex)
+			{
+				Console.WriteLine(ex.ToString());
+			}
+		}
+
 		private string Normalize(StringWriter sw)
 		{
 			return Regex.Replace(sw.ToString(), "\\s+", "");
+		}
+
+		private class Urlhelper
+		{
+			public string For(IDictionary parameters)
+			{
+				if (parameters == null)
+				{
+					throw new ArgumentNullException("parameters", "parameters cannot be null");
+				}
+
+				try
+				{
+					string controller = (string) parameters["controller"];
+					int id = (int) parameters["id"];
+
+					parameters.Remove("controller");
+					parameters.Remove("id");
+
+					return controller + " " + id;
+				}
+				catch (System.Exception ex)
+				{
+					Console.WriteLine(ex.ToString());
+					throw;
+				}
+			}
 		}
 	}
 }
