@@ -22,13 +22,23 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 	public class PatternRuleTestCase
 	{
 		[Test]
+		public void ShouldMatchAsPath()
+		{
+			PatternRule rule = PatternRule.Build("ProductById", "product", typeof(ProductController), "View");
+
+			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
+
+			Assert.IsTrue(rule.Matches("localhost", "", "product", match));
+		}
+
+		[Test]
 		public void ShouldMatchRulesWithCorrectUrls()
 		{
 			PatternRule rule = PatternRule.Build("ProductById", "product/<id:number>", typeof(ProductController), "View");
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
-			Assert.IsTrue(rule.Matches("product/1", match));
+			Assert.IsTrue(rule.Matches("localhost", "", "product/1", match));
 
 			Assert.IsNotNull(match);
 			Assert.AreEqual(1, match.Literals.Count);
@@ -44,7 +54,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
-			Assert.IsTrue(rule.Matches("product/iPod", match));
+			Assert.IsTrue(rule.Matches("localhost", "", "product/iPod", match));
 
 			Assert.IsNotNull(match);
 			Assert.AreEqual(1, match.Literals.Count);
@@ -54,13 +64,50 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		}
 
 		[Test]
+		public void ShouldMatchChoice()
+		{
+			PatternRule rule = PatternRule.Build("ProductById", "product/<brand:apple|ms|cisco>", typeof(ProductController), "View");
+
+			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
+
+			Assert.IsTrue(rule.Matches("localhost", "", "product/apple", match));
+			Assert.IsTrue(rule.Matches("localhost", "", "product/ms", match));
+			Assert.IsTrue(rule.Matches("localhost", "", "product/cisco", match));
+			
+			Assert.IsFalse(rule.Matches("localhost", "", "product/novell", match));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/appletalk", match));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/mapple", match));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/mcs", match));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/mss", match));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/sms", match));
+		}
+
+		[Test]
+		public void ChoiceThatMatchedShouldBeAvailableOnRouteMatch()
+		{
+			PatternRule rule = PatternRule.Build("ProductById", "product/<brand:apple|ms|cisco>", typeof(ProductController), "View");
+
+			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
+			Assert.IsTrue(rule.Matches("localhost", "", "product/apple", match));
+
+			Assert.IsTrue(match.Parameters.ContainsKey("brand"));
+			Assert.AreEqual("apple", match.Parameters["brand"]);
+
+			match = new RouteMatch(typeof(ProductController), "foo", "bar");
+			Assert.IsTrue(rule.Matches("localhost", "", "product/ms", match));
+
+			Assert.IsTrue(match.Parameters.ContainsKey("brand"));
+			Assert.AreEqual("ms", match.Parameters["brand"]);
+		}
+
+		[Test]
 		public void NumberPatternShouldMatchOnlyNumbers()
 		{
 			PatternRule rule = PatternRule.Build("ProductById", "product/<id:number>", typeof(ProductController), "View");
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
-			Assert.IsFalse(rule.Matches("product/iPod", match));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/iPod", match));
 		}
 
 		[Test, ExpectedException(typeof(ArgumentException), "token has invalid value 'int'. Expected 'int' or 'string'")]

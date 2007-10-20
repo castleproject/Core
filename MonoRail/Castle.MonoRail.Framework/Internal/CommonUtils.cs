@@ -52,7 +52,7 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			string value = ObtainEntry(attributes, key);
 
-			return value != null ? value : defaultValue;
+			return value ?? defaultValue;
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			string value = ObtainEntryAndRemove(attributes, key);
 
-			return value != null ? value : defaultValue;
+			return value ?? defaultValue;
 		}
 
 		/// <summary>

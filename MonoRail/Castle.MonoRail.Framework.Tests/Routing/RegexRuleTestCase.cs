@@ -27,9 +27,9 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "name", "view");
 
-			Assert.IsFalse(rule.Matches("product/", new RouteMatch(typeof(ProductController), "name", "view")));
-			Assert.IsFalse(rule.Matches("product/iPod", new RouteMatch(typeof(ProductController), "name", "view")));
-			Assert.IsTrue(rule.Matches("product/1", match));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/", new RouteMatch(typeof(ProductController), "name", "view")));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/iPod", new RouteMatch(typeof(ProductController), "name", "view")));
+			Assert.IsTrue(rule.Matches("localhost", "", "product/1", match));
 
 			Assert.AreEqual(0, match.Literals.Count);
 			Assert.AreEqual(2, match.Parameters.Count);
@@ -43,10 +43,10 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "name", "view");
 
-			Assert.IsFalse(rule.Matches("product/", new RouteMatch(typeof(ProductController), "name", "view")));
-			Assert.IsFalse(rule.Matches("product/iPod", new RouteMatch(typeof(ProductController), "name", "view")));
-			Assert.IsFalse(rule.Matches("product/1", new RouteMatch(typeof(ProductController), "name", "view")));
-			Assert.IsTrue(rule.Matches("product/12/10", match));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/", new RouteMatch(typeof(ProductController), "name", "view")));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/iPod", new RouteMatch(typeof(ProductController), "name", "view")));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/1", new RouteMatch(typeof(ProductController), "name", "view")));
+			Assert.IsTrue(rule.Matches("localhost", "", "product/12/10", match));
 
 			Assert.AreEqual(0, match.Literals.Count);
 			Assert.AreEqual(3, match.Parameters.Count);

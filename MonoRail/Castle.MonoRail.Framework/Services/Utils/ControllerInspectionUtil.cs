@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework.Services.Utils
 				object[] attrs = controllerType.GetCustomAttributes(
 					typeof(ControllerDetailsAttribute), true);
 
-				ControllerDetailsAttribute details = attrs[0] as ControllerDetailsAttribute;
+				ControllerDetailsAttribute details = (ControllerDetailsAttribute) attrs[0];
 
 				descriptor = new ControllerDescriptor(controllerType,
 				                                      ObtainControllerName(details.Name, controllerType),

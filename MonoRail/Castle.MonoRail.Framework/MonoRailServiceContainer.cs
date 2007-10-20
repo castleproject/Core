@@ -33,6 +33,9 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class MonoRailServiceContainer : AbstractServiceContainer
 	{
+		/// <summary></summary>
+		private static string mrExtension = ".castle";
+
 		/// <summary>The only one Extension Manager</summary>
 		protected internal ExtensionManager extensionManager;
 
@@ -42,15 +45,12 @@ namespace Castle.MonoRail.Framework
 		/// <summary>Keeps only one copy of the config</summary>
 		private MonoRailConfiguration config;
 
-		/// <summary></summary>
-		private IDictionary extension2handler;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MonoRailServiceContainer"/> class.
 		/// </summary>
 		public MonoRailServiceContainer()
 		{
-			extension2handler = new HybridDictionary(true);
 		}
 
 		/// <summary>
@@ -99,10 +99,16 @@ namespace Castle.MonoRail.Framework
 		{
 			String extension = Path.GetExtension(url);
 
-			return extension2handler.Contains(extension);
+			return string.Compare(mrExtension, extension, StringComparison.InvariantCultureIgnoreCase) == 0;
 		}
 
-		private void DiscoverHttpHandlerExtensions()
+		/// <summary></summary>
+		public static string MonoRailExtension
+		{
+			get { return mrExtension; }
+		}
+
+		private static void DiscoverHttpHandlerExtensions()
 		{
 			XmlDocument webConfig = new XmlDocument();
 			webConfig.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "web.config"));
@@ -134,8 +140,7 @@ namespace Castle.MonoRail.Framework
 
 				if (type.StartsWith("Castle.MonoRail.Framework.MonoRailHttpHandlerFactory"))
 				{
-					String extension = addElem.GetAttribute("path").Substring(1);
-					extension2handler.Add(extension, String.Empty);
+					mrExtension = addElem.GetAttribute("path").Substring(1);
 					found = true;
 				}
 			}

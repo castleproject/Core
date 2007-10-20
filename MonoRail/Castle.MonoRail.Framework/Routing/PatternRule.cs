@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Text;
 	using System.Text.RegularExpressions;
 
 	/// <summary>
@@ -74,10 +75,12 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <summary>
 		/// Matcheses the specified URL.
 		/// </summary>
+		/// <param name="hostname"></param>
+		/// <param name="virtualPath"></param>
 		/// <param name="url">The URL.</param>
 		/// <param name="match">The match.</param>
 		/// <returns></returns>
-		public bool Matches(string url, RouteMatch match)
+		public bool Matches(string hostname, string virtualPath, string url, RouteMatch match)
 		{
 			string[] pieces = url.Split('/');
 
@@ -143,6 +146,11 @@ namespace Castle.MonoRail.Framework.Routing
 
 			foreach(string part in path.Split('/'))
 			{
+				if (string.IsNullOrEmpty(part))
+				{
+					break;
+				}
+
 				tempTokens.Add(UrlPathNodeFactory.Create(part));
 			}
 
@@ -161,7 +169,11 @@ namespace Castle.MonoRail.Framework.Routing
 			/// <summary>
 			/// Pendent
 			/// </summary>
-			String
+			String,
+			/// <summary>
+			/// Pendent
+			/// </summary>
+			Choice
 		}
 
 		/// <summary>
@@ -205,6 +217,58 @@ namespace Castle.MonoRail.Framework.Routing
 				if (string.Compare(piece, token, StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					match.Add(token);
+					return true;
+				}
+
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		public class RequiredChoiceNode : UrlPathNode
+		{
+			private readonly string nodeName;
+			private readonly Regex choicePattern;
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="RequiredChoiceNode"/> class.
+			/// </summary>
+			/// <param name="nodeName">Name of the node.</param>
+			/// <param name="choices">The choices.</param>
+			public RequiredChoiceNode(string nodeName, string choices)
+			{
+				this.nodeName = nodeName;
+
+				StringBuilder sb = new StringBuilder();
+				foreach(string choice in choices.Split('|'))
+				{
+					if (sb.Length != 0) sb.Append('|');
+					sb.Append("^(" + choice + ")$");
+				}
+
+				RegexOptions options = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase;
+
+				choicePattern = new Regex(sb.ToString(), options);
+			}
+
+			/// <summary>
+			/// Matches the specified piece.
+			/// </summary>
+			/// <param name="piece">The piece.</param>
+			/// <param name="match">The match.</param>
+			/// <returns></returns>
+			public override bool Matches(string piece, RouteMatch match)
+			{
+				Match regExMatch = choicePattern.Match(piece);
+
+				foreach(Group group in regExMatch.Groups)
+				{
+					if (!group.Success) continue;
+
+					match.AddNamed(nodeName, group.Value);
+
 					return true;
 				}
 
@@ -309,22 +373,31 @@ namespace Castle.MonoRail.Framework.Routing
 
 				int index = token.IndexOf(':');
 
+				string paramArg = null;
+
 				if (index != -1)
 				{
 					// Yeah, so let's check it
 
-					string typeLiteral = token.Substring(index + 1);
+					paramArg = token.Substring(index + 1);
 
-					switch(typeLiteral)
+					if (paramArg.IndexOf('|') != -1)
 					{
-						case "number":
-							type = UrlNodeType.Number;
-							break;
-						case "string":
-							type = UrlNodeType.String;
-							break;
-						default:
-							throw new ArgumentException("token has invalid value '" + typeLiteral + "'. Expected 'int' or 'string'");
+						type = UrlNodeType.Choice;
+					}
+					else
+					{
+						switch(paramArg)
+						{
+							case "number":
+								type = UrlNodeType.Number;
+								break;
+							case "string":
+								type = UrlNodeType.String;
+								break;
+							default:
+								throw new ArgumentException("token has invalid value '" + paramArg + "'. Expected 'int' or 'string'");
+						}
 					}
 				}
 
@@ -333,6 +406,10 @@ namespace Castle.MonoRail.Framework.Routing
 				if (isOptional)
 				{
 					throw new NotImplementedException("Support for optional nodes not implemented yet");
+				}
+				else if (type == UrlNodeType.Choice)
+				{
+					return new RequiredChoiceNode(token.Substring(1, index - 1), paramArg);
 				}
 				else
 				{

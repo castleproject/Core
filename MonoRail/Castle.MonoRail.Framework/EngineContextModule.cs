@@ -54,8 +54,8 @@ namespace Castle.MonoRail.Framework
 				CreateAndStartContainer(context);
 			}
 
-			context.BeginRequest += new EventHandler(OnStartMonoRailRequest);
-			context.AuthorizeRequest += new EventHandler(CreateControllerAndRunStartRequestFilters);
+			context.BeginRequest += OnStartMonoRailRequest;
+			context.AuthorizeRequest += CreateControllerAndRunStartRequestFilters;
 
 			SubscribeToApplicationHooks(context);
 		}
@@ -200,12 +200,12 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		private void MarkRequestAsMonoRailRequest(HttpContext context)
+		private static void MarkRequestAsMonoRailRequest(HttpContext context)
 		{
 			context.Items["is.mr.request"] = true;
 		}
 
-		private bool IsMonoRailRequest(HttpContext context)
+		private static bool IsMonoRailRequest(HttpContext context)
 		{
 			return context.Items.Contains("is.mr.request");
 		}
@@ -354,10 +354,13 @@ namespace Castle.MonoRail.Framework
 			HttpApplication app = (HttpApplication)sender;
 			if (!IsMonoRailRequest(app.Context)) return;
 			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
+			
+			if (mrContext != null)
+			{
+				mrContext.LastException = mrContext.UnderlyingContext.Server.GetLastError();
 
-			mrContext.LastException = mrContext.UnderlyingContext.Server.GetLastError();
-
-			container.extensionManager.RaiseUnhandledError(mrContext);
+				container.extensionManager.RaiseUnhandledError(mrContext);
+			}
 		}
 
 		private void OnResolveRequestCache(object sender, EventArgs e)

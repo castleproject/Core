@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Tests.Routing
 {
-	using System;
 	using Castle.MonoRail.Framework.Routing;
 	using NUnit.Framework;
 
@@ -32,7 +31,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void ShouldNotMatchRulesIfItIsEmpty()
 		{
-			RouteMatch match = engine.FindMatch("/product/1");
+			RouteMatch match = engine.FindMatch("localhost", "", "/product/1");
 			Assert.IsNull(match);
 		}
 
@@ -41,7 +40,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			engine.Add( PatternRule.Build("ProductById", "product/<id:number>", typeof(ProductController), "View") );
 
-			RouteMatch match = engine.FindMatch("/product/1");
+			RouteMatch match = engine.FindMatch("localhost", "", "/product/1");
 
 			Assert.IsNotNull(match);
 			Assert.AreSame(typeof(ProductController), match.ControllerType);
@@ -58,7 +57,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			engine.Add(PatternRule.Build("ProductByName", "product/<name>", typeof(ProductController), "View"));
 
-			RouteMatch match = engine.FindMatch("/product/iPod");
+			RouteMatch match = engine.FindMatch("localhost", "", "/product/iPod");
 
 			Assert.IsNotNull(match);
 			Assert.AreSame(typeof(ProductController), match.ControllerType);
@@ -77,7 +76,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			engine.Add(PatternRule.Build("ProductByBrandType", "product/<brand>/<type>", typeof(ProductController), "View"));
 			engine.Add(PatternRule.Build("Product", "product/<brand>/<type>/<name>", typeof(ProductController), "View"));
 
-			RouteMatch match = engine.FindMatch("/product/apple/macbook/pro");
+			RouteMatch match = engine.FindMatch("localhost", "", "/product/apple/macbook/pro");
 
 			Assert.IsNotNull(match);
 			Assert.AreSame(typeof(ProductController), match.ControllerType);
@@ -91,7 +90,24 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.AreEqual("pro", match.Parameters["name"]);
 		}
 
-		public class ProductController : Controller
-		{}
+		[Test]
+		public void ShouldAcceptRoutesAsPath()
+		{
+			engine.Add(PatternRule.Build("ProductById", "product/", typeof(ProductController), "View"));
+		}
+
+		[Test]
+		public void ShouldMatchAsPathAndAsFile()
+		{
+			engine.Add(PatternRule.Build("ProductById", "product", typeof(ProductController), "View"));
+
+			RouteMatch match = engine.FindMatch("localhost", "", "/product");
+			Assert.IsNotNull(match);
+
+			match = engine.FindMatch("localhost", "", "/product/");
+			Assert.IsNotNull(match);
+		}
+
+		public class ProductController : Controller {}
 	}
 }

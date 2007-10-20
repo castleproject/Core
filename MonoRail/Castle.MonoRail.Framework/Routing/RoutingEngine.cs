@@ -27,13 +27,20 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <summary>
 		/// Finds the match.
 		/// </summary>
+		/// <param name="hostname"></param>
+		/// <param name="virtualPath"></param>
 		/// <param name="url">The URL.</param>
 		/// <returns></returns>
-		public RouteMatch FindMatch(string url)
+		public RouteMatch FindMatch(string hostname, string virtualPath, string url)
 		{
 			if (string.IsNullOrEmpty(url))
 			{
 				throw new ArgumentNullException("url", "url cannot be empty nor null");
+			}
+
+			if (url[url.Length - 1] == '/')
+			{
+				url = url.Substring(0, url.Length - 1);
 			}
 
 			if (url[0] == '/')
@@ -41,11 +48,11 @@ namespace Castle.MonoRail.Framework.Routing
 				url = url.Substring(1);
 			}
 
-			foreach (IRoutingRule rule in rules)
+			foreach(IRoutingRule rule in rules)
 			{
 				RouteMatch match = new RouteMatch(rule.ControllerType, rule.RuleName, rule.Action);
 
-				if (rule.Matches(url, match))
+				if (rule.Matches(hostname, virtualPath, url, match))
 				{
 					return match;
 				}

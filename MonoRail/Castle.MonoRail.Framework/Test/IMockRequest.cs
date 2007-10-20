@@ -14,6 +14,8 @@
 
 namespace Castle.MonoRail.Framework.Test
 {
+	using System;
+
 	/// <summary>
 	/// Exposes methods on top of <see cref="IRequest"/>
 	/// that can be useful to write unit tests
@@ -25,5 +27,48 @@ namespace Castle.MonoRail.Framework.Test
 		/// </summary>
 		/// <value>The path info.</value>
 		new string PathInfo { set; }
+
+		/// <summary>
+		/// Sets a value indicating whether this 
+		/// requeest is from a local address.
+		/// </summary>
+		/// <value><c>true</c> if this instance is local; otherwise, <c>false</c>.</value>
+		new bool IsLocal { set; }
+
+		/// <summary>
+		/// Sets the raw URL.
+		/// </summary>
+		/// <value>The raw URL.</value>
+		new string RawUrl { set; }
+
+		/// <summary>
+		/// Sets the URI.
+		/// </summary>
+		/// <value>The URI.</value>
+		new Uri Uri { set; }
+
+		/// <summary>
+		/// Sets the HTTP method.
+		/// </summary>
+		/// <value>The HTTP method.</value>
+		new String HttpMethod { set; }
+
+		/// <summary>
+		/// Sets the file path.
+		/// </summary>
+		/// <value>The file path.</value>
+		new String FilePath { set; }
+
+		/// <summary>
+		/// Sets the user languages.
+		/// </summary>
+		/// <value>The user languages.</value>
+		new String[] UserLanguages { set; }
+
+		/// <summary>
+		/// Sets the IP host address of the remote client. 
+		/// </summary>
+		/// <value>The IP address of the remote client.</value>
+		new string UserHostAddress { set; }
 	}
 }

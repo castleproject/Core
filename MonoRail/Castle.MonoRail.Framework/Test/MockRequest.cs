@@ -199,6 +199,7 @@ namespace Castle.MonoRail.Framework.Test
 		public virtual string[] UserLanguages
 		{
 			get { return userLanguages; }
+			set { userLanguages = value; }
 		}
 
 		/// <summary>
@@ -208,6 +209,7 @@ namespace Castle.MonoRail.Framework.Test
 		public virtual string UserHostAddress
 		{
 			get { return userHostAddress; }
+			set { userHostAddress = value; }
 		}
 	}
 }
