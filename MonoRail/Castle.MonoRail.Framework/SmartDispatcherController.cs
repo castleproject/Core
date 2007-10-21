@@ -518,7 +518,7 @@ namespace Castle.MonoRail.Framework
 		/// Lazy initialized property with a hierarchical 
 		/// representation of the flat data on <see cref="Controller.Params"/>
 		/// </summary>
-		protected internal CompositeNode ParamsNode
+		protected virtual internal CompositeNode ParamsNode
 		{
 			get
 			{
@@ -536,7 +536,7 @@ namespace Castle.MonoRail.Framework
 		/// Lazy initialized property with a hierarchical 
 		/// representation of the flat data on <see cref="IRequest.Form"/>
 		/// </summary>
-		protected internal CompositeNode FormNode
+		protected virtual internal CompositeNode FormNode
 		{
 			get
 			{
@@ -554,7 +554,7 @@ namespace Castle.MonoRail.Framework
 		/// Lazy initialized property with a hierarchical 
 		/// representation of the flat data on <see cref="IRequest.QueryString"/>
 		/// </summary>
-		protected internal CompositeNode QueryStringNode
+		protected virtual internal CompositeNode QueryStringNode
 		{
 			get
 			{

@@ -49,6 +49,11 @@ namespace Castle.MonoRail.Framework.Services
 		private DefaultControllerTree right;
 
 		/// <summary>
+		/// Occurs when a controller is added to the controller tree.
+		/// </summary>
+		public event EventHandler<ControllerAddedEventArgs> ControllerAdded;
+
+		/// <summary>
 		/// Constructs a <c>ControllerTree</c> with an empty area
 		/// </summary>
 		public DefaultControllerTree() : this(String.Empty)
@@ -64,6 +69,14 @@ namespace Castle.MonoRail.Framework.Services
 
 			area = areaName;
 			controllers = new HybridDictionary(true);
+		}
+
+		private void OnControllerAdded(String area, String controllerName, Type controller) 
+		{
+			if(ControllerAdded != null) {
+				ControllerAddedEventArgs args = new ControllerAddedEventArgs(area, controllerName, controller);
+				ControllerAdded(this, args);
+			}
 		}
 
 		/// <summary>
@@ -118,6 +131,7 @@ namespace Castle.MonoRail.Framework.Services
 				}
 
 				node.AddController(areaName, controllerName, controller);
+				OnControllerAdded(areaName, controllerName, controller);
 			}
 		}
 
@@ -158,6 +172,57 @@ namespace Castle.MonoRail.Framework.Services
 			}
 
 			return null;
+		}
+	}
+
+	/// <summary>
+	/// Event class that represents details of the controller added
+	/// to the controller tree
+	/// </summary>
+	public sealed class ControllerAddedEventArgs : System.EventArgs
+	{
+		private readonly String area;
+		private readonly String controllerName;
+		private readonly Type controllerType;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerAddedEventArgs"/> class.
+		/// </summary>
+		/// <param name="area">The area.</param>
+		/// <param name="controllerName">Name of the controller.</param>
+		/// <param name="controllerType">Type of the controller.</param>
+		public ControllerAddedEventArgs(string area, string controllerName, Type controllerType)
+		{
+			this.area = area;
+			this.controllerName = controllerName;
+			this.controllerType = controllerType;
+		}
+
+		/// <summary>
+		/// Gets the area.
+		/// </summary>
+		/// <value>The area.</value>
+		public string Area
+		{
+			get { return area; }
+		}
+
+		/// <summary>
+		/// Gets the name of the controller.
+		/// </summary>
+		/// <value>The name of the controller.</value>
+		public string ControllerName
+		{
+			get { return controllerName; }
+		}
+
+		/// <summary>
+		/// Gets the type of the controller.
+		/// </summary>
+		/// <value>The type of the controller.</value>
+		public Type ControllerType
+		{
+			get { return controllerType; }
 		}
 	}
 }

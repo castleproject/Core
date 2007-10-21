@@ -1,6 +1,8 @@
 1.0
 ===
 
+- Applied Chris Ortman's patch with changes for the REST support (MR-333)
+
 - Applied Nick Hemsley's patch adding support for rescue controllers (MR-332)
   "add RescueController to RescueAttribute"
 

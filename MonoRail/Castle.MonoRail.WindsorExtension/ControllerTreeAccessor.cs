@@ -16,6 +16,7 @@ namespace Castle.MonoRail.WindsorExtension
 {
 	using System;
 	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Services;
 
 	/// <summary>
 	/// Bridge between the windsor controlled controller tree and
@@ -63,6 +64,16 @@ namespace Castle.MonoRail.WindsorExtension
 		public Type GetController(string areaName, string controllerName)
 		{
 			return tree.GetController(areaName, controllerName);
+		}
+
+
+		public event EventHandler<ControllerAddedEventArgs> ControllerAdded {
+			add {
+				tree.ControllerAdded += value;
+			}
+			remove {
+				tree.ControllerAdded -= value;
+			}
 		}
 
 		#endregion

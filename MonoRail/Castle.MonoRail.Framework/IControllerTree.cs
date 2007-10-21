@@ -16,6 +16,8 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
+	using Services;
+
 	/// <summary>
 	/// Represents an binary tree of registered controllers.
 	/// <para>
@@ -49,5 +51,10 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controllerName">The controller name</param>
 		/// <returns>The controller representation or null</returns>
 		Type GetController(String areaName, String controllerName);
+
+		/// <summary>
+		/// Occurs when a controller is added to the controller tree.
+		/// </summary>
+		event EventHandler<ControllerAddedEventArgs> ControllerAdded;
 	}
 }

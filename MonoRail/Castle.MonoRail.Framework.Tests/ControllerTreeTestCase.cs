@@ -67,5 +67,15 @@ namespace Castle.MonoRail.Framework.Tests
 
 			Assert.AreEqual( typeof(ListController), tree.GetController("lists", "home") );
 		}
+
+		[Test]
+		public void AddingController_RaisesNotifcationEvent() 
+		{
+			DefaultControllerTree tree = new DefaultControllerTree();
+			bool eventRaised = false;
+			tree.ControllerAdded += delegate { eventRaised = true; };
+			tree.AddController("clients","home",typeof(ClientHomeController));
+			Assert.IsTrue(eventRaised);
+		}
 	}
 }

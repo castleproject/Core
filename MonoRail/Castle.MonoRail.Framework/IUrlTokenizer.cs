@@ -30,5 +30,14 @@ namespace Castle.MonoRail.Framework
 		/// <param name="appVirtualDir">Virtual directory</param>
 		/// <returns></returns>
 		UrlInfo TokenizeUrl(string rawUrl, Uri uri, bool isLocal, string appVirtualDir);
+
+		/// <summary>
+		/// Adds a default url rule. 
+		/// </summary>
+		/// <param name="url">The simple url (like index.castle).</param>
+		/// <param name="area">The area.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="action">The action.</param>
+		void AddDefaultRule(string url, string area, string controller, string action);
 	}
 }
