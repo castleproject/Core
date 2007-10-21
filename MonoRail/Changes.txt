@@ -1,6 +1,10 @@
 1.0
 ===
 
+- Applied minor patch by Ken Egozi fixing MR-328
+  "In PrototypeWebValidation, SameAsValidator and NotSameAsValidator 
+   are forcing a locase id for text fields"
+
 - Applied minor patch by Nick Hemsley fixing MR-325
   "DictHelper.FromNameValueCollection: persist arrays correctly"
 

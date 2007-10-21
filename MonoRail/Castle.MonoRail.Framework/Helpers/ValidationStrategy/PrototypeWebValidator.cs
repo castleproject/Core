@@ -418,9 +418,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
-				string rule = "validate-same-as-" + comparisonFieldName.ToLowerInvariant();
+				string rule = "validate-same-as-" + comparisonFieldName;
 				AddClass(rule);
-				config.AddCustomRule(rule, violationMessage, "equalToField : '" + GetPrefixedFieldld(target, comparisonFieldName.ToLowerInvariant()) + "'");
+				config.AddCustomRule(rule, violationMessage, "equalToField : '" + GetPrefixedFieldld(target, comparisonFieldName) + "'");
 				AddTitle(violationMessage);
 			}
 
@@ -432,9 +432,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsNotSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
-				string rule = "validate-not-same-as-" + comparisonFieldName.ToLowerInvariant();
+				string rule = "validate-not-same-as-" + comparisonFieldName;
 				AddClass(rule);
-				config.AddCustomRule(rule, violationMessage, "notEqualToField : '" + GetPrefixedFieldld(target, comparisonFieldName.ToLowerInvariant()) + "'");
+				config.AddCustomRule(rule, violationMessage, "notEqualToField : '" + GetPrefixedFieldld(target, comparisonFieldName) + "'");
 				AddTitle(violationMessage);
 			}
 
