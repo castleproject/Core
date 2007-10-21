@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Reflection;
 
 	using Castle.MonoRail.Framework.Internal;
 
@@ -31,6 +32,8 @@ namespace Castle.MonoRail.Framework
 	{
 		private readonly String viewName;
 		private readonly Type exceptionType;
+		private readonly Type rescueController;
+		private readonly MethodInfo rescueMethod;
 		
 		/// <summary>
 		/// Constructs a RescueAttribute with the template name.
@@ -62,6 +65,59 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Use a controller to perform any actions on rescue. The view defaults to the rescues views.
+		/// </summary>
+		/// <param name="rescueController">The controller to use to perform the rescue</param>
+		public RescueAttribute(Type rescueController) : this(rescueController, typeof(Exception))
+		{
+		}
+
+		/// <summary>
+		/// Use a controller to perform any actions on rescue. The view defaults to the rescues views.
+		/// </summary>
+		/// <param name="rescueController">The controller to use to perform the rescue</param>
+		/// <param name="exceptionType">The exception to rescue for</param>
+		public RescueAttribute(Type rescueController, Type exceptionType) : this(rescueController, null, exceptionType)
+		{
+		}
+
+		/// <summary>
+		/// Use a controller to perform any actions on rescue. The view defaults to the rescues views.
+		/// </summary>
+		/// <param name="rescueController">The controller to use to perform the rescue</param>
+		/// <param name="rescueMethod">The method on the controller to use</param>
+		public RescueAttribute(Type rescueController, string rescueMethod)
+			: this(rescueController, rescueMethod, typeof(Exception))
+		{
+		}
+
+		/// <summary>
+		/// Use a controller to perform any actions on rescue. The view defaults to the rescues views.
+		/// </summary>
+		/// <param name="rescueController">The controller to use to perform the rescue</param>
+		/// <param name="exceptionType">The exception to rescue for</param>
+		/// <param name="rescueMethod">The method on the controller to use</param>
+		public RescueAttribute(Type rescueController, string rescueMethod, Type exceptionType)
+		{
+			if (!typeof(IRescueController).IsAssignableFrom(rescueController) && rescueMethod == null)
+			{
+				throw new ArgumentException(string.Format("{0} does not implement {1}, and there is no rescueMethod defined. " + 
+					"You can either inform a method to use through the 'rescueMethod' parameter or make the " + 
+					"controller implement the IRescueController interface" , rescueController.Name, typeof(IRescueController).Name));
+			}
+
+			if (!typeof(Controller).IsAssignableFrom(rescueController))
+			{
+				throw new ArgumentException(string.Format("{0} does not inherit from the Controller class", rescueController.Name));
+			}
+
+
+			this.rescueController = rescueController;
+			this.exceptionType = exceptionType;
+			this.rescueMethod = (rescueMethod != null ? rescueController.GetMethod(rescueMethod) : null);
+		}
+
+		/// <summary>
 		/// Gets the view name to use
 		/// </summary>
 		public String ViewName
@@ -78,12 +134,34 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// The controller to use for rescue
+		/// </summary>
+		public Type RescueController
+		{
+			get { return rescueController; }
+		}
+
+		/// <summary>
+		/// The method on the rescue controller to use
+		/// </summary>
+		public MethodInfo RescueMethod
+		{
+			get { return rescueMethod; }
+		}
+
+		/// <summary>
 		/// <see cref="IRescueDescriptorBuilder"/> implementation. 
 		/// Builds the rescue descriptors.
 		/// </summary>
 		/// <returns></returns>
 		public RescueDescriptor[] BuildRescueDescriptors()
 		{
+			if (rescueController != null)
+			{
+				MethodInfo method = (rescueMethod ?? typeof(IRescueController).GetMethod("Rescue"));
+				return new RescueDescriptor[] { new RescueDescriptor(rescueController, method, ExceptionType) };
+			}
+
 			return new RescueDescriptor[] { new RescueDescriptor(viewName, exceptionType) };
 		}
 	}

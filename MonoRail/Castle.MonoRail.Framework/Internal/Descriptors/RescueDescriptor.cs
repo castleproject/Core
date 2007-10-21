@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
+using System.Reflection;
 
 	/// <summary>
 	/// Represents a rescue configuration
@@ -23,6 +24,8 @@ namespace Castle.MonoRail.Framework.Internal
 	{
 		private readonly string viewName;
 		private readonly Type exceptionType;
+		private readonly Type rescueController;
+		private readonly MethodInfo rescueMethod;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RescueDescriptor"/> class.
@@ -32,6 +35,18 @@ namespace Castle.MonoRail.Framework.Internal
 		public RescueDescriptor(string viewName, Type exceptionType)
 		{
 			this.viewName = viewName;
+			this.exceptionType = exceptionType;
+		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RescueDescriptor"/> class.
+		/// </summary>
+		/// <param name="rescueController">Controller to handle the rescue</param>
+		/// <param name="rescueMethod">Method to handle the rescue</param>
+		/// <param name="exceptionType">Type of the exception it is associated with.</param>
+		public RescueDescriptor(Type rescueController, MethodInfo rescueMethod, Type exceptionType)
+		{
+			this.rescueController = rescueController;
+			this.rescueMethod = rescueMethod;
 			this.exceptionType = exceptionType;
 		}
 
@@ -51,6 +66,22 @@ namespace Castle.MonoRail.Framework.Internal
 		public Type ExceptionType
 		{
 			get { return exceptionType; }
+		}
+
+		/// <summary>
+		/// The controller to use for rescue
+		/// </summary>
+		public Type RescueController
+		{
+			get { return rescueController; }
+		}
+
+		/// <summary>
+		/// The method on the rescue controller to use
+		/// </summary>
+		public MethodInfo RescueMethod
+		{
+			get { return rescueMethod; }
 		}
 	}
 }
