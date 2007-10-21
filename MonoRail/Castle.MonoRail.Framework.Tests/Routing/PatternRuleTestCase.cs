@@ -32,6 +32,19 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		}
 
 		[Test]
+		public void StartShouldAllowAMatchAll()
+		{
+			PatternRule rule = PatternRule.Build("Product", "product/*", typeof(ProductController), "View");
+
+			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
+
+			Assert.IsTrue(rule.Matches("localhost", "", "product/", match));
+			Assert.IsTrue(rule.Matches("localhost", "", "product", match));
+			Assert.IsTrue(rule.Matches("localhost", "", "product/iPod", match));
+			Assert.IsTrue(rule.Matches("localhost", "", "product/iPod/Nano", match));
+		}
+
+		[Test]
 		public void ShouldMatchRulesWithCorrectUrls()
 		{
 			PatternRule rule = PatternRule.Build("ProductById", "product/<id:number>", typeof(ProductController), "View");
@@ -80,6 +93,18 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.IsFalse(rule.Matches("localhost", "", "product/mcs", match));
 			Assert.IsFalse(rule.Matches("localhost", "", "product/mss", match));
 			Assert.IsFalse(rule.Matches("localhost", "", "product/sms", match));
+		}
+
+		[Test]
+		public void ShouldNotMatchGreedly()
+		{
+			PatternRule rule = PatternRule.Build("ProductById", "product/<brand:apple|ms|cisco>", typeof(ProductController), "View");
+
+			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
+
+			Assert.IsFalse(rule.Matches("localhost", "", "product/apple/ipod", match));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/ms/zune", match));
+			Assert.IsFalse(rule.Matches("localhost", "", "product/cisco/some", match));
 		}
 
 		[Test]

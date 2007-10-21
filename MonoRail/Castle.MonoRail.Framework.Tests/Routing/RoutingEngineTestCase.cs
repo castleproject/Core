@@ -72,9 +72,9 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void ShouldMatchRulesWithCorrectUrls3()
 		{
-			engine.Add(PatternRule.Build("ProductByBrand", "product/<brand>", typeof(ProductController), "View"));
-			engine.Add(PatternRule.Build("ProductByBrandType", "product/<brand>/<type>", typeof(ProductController), "View"));
 			engine.Add(PatternRule.Build("Product", "product/<brand>/<type>/<name>", typeof(ProductController), "View"));
+			engine.Add(PatternRule.Build("ProductByBrandType", "product/<brand>/<type>", typeof(ProductController), "View"));
+			engine.Add(PatternRule.Build("ProductByBrand", "product/<brand>", typeof(ProductController), "View"));
 
 			RouteMatch match = engine.FindMatch("localhost", "", "/product/apple/macbook/pro");
 

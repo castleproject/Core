@@ -29,6 +29,7 @@ namespace Castle.MonoRail.Framework.Routing
 		private readonly Type controllerType;
 		private readonly string action;
 		private UrlPathNode[] nodes;
+		private bool hasGreedyNode;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PatternRule"/> class.
@@ -84,19 +85,30 @@ namespace Castle.MonoRail.Framework.Routing
 		{
 			string[] pieces = url.Split('/');
 
-			if (pieces.Length != nodes.Length) // This breaks the optional nodes
+			if (!hasGreedyNode)
 			{
-				return false;
+				if (pieces.Length != nodes.Length)
+				{
+					return false;
+				}
 			}
 
 			int curPiece = 0;
 
 			foreach(UrlPathNode node in nodes)
 			{
+				if (curPiece == pieces.Length) // no left pieces, but still there are nodes to match
+				{
+					// if the node allows match empties, ok, 
+					// otherwise it wont match this rule
+					return node.MatchesEmpty; 
+				}
+
 				if (!node.Matches(pieces[curPiece], match))
 				{
 					return false;
 				}
+
 				curPiece++;
 			}
 
@@ -140,8 +152,6 @@ namespace Castle.MonoRail.Framework.Routing
 		/// </summary>
 		private void Prepare()
 		{
-			// TODO: Optional rules must be always at the end. Add check for those
-
 			List<UrlPathNode> tempTokens = new List<UrlPathNode>();
 
 			foreach(string part in path.Split('/'))
@@ -151,7 +161,14 @@ namespace Castle.MonoRail.Framework.Routing
 					break;
 				}
 
-				tempTokens.Add(UrlPathNodeFactory.Create(part));
+				UrlPathNode node = UrlPathNodeFactory.Create(part);
+
+				tempTokens.Add(node);
+
+				if (node.MatchesEmpty)
+				{
+					hasGreedyNode = true;
+				}
 			}
 
 			nodes = tempTokens.ToArray();
@@ -188,6 +205,12 @@ namespace Castle.MonoRail.Framework.Routing
 			/// <param name="match">The match.</param>
 			/// <returns></returns>
 			public abstract bool Matches(string piece, RouteMatch match);
+
+			/// <summary>
+			/// Gets a value indicating whether this node matches even empty pieces
+			/// </summary>
+			/// <value><c>true</c> if allows empty as match; otherwise, <c>false</c>.</value>
+			public abstract bool MatchesEmpty { get; }
 		}
 
 		/// <summary>
@@ -221,6 +244,41 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 
 				return false;
+			}
+
+			/// <summary>
+			/// Gets a value indicating whether this node matches even empty pieces
+			/// </summary>
+			/// <value><c>true</c> if allows empty as match; otherwise, <c>false</c>.</value>
+			public override bool MatchesEmpty
+			{
+				get { return false; }
+			}
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		public class MatchAllNode : UrlPathNode
+		{
+			/// <summary>
+			/// Matches the specified piece.
+			/// </summary>
+			/// <param name="piece">The piece.</param>
+			/// <param name="match">The match.</param>
+			/// <returns></returns>
+			public override bool Matches(string piece, RouteMatch match)
+			{
+				return true;
+			}
+
+			/// <summary>
+			/// Gets a value indicating whether this node matches even empty pieces
+			/// </summary>
+			/// <value><c>true</c> if allows empty as match; otherwise, <c>false</c>.</value>
+			public override bool MatchesEmpty
+			{
+				get { return true; }
 			}
 		}
 
@@ -274,6 +332,15 @@ namespace Castle.MonoRail.Framework.Routing
 
 				return false;
 			}
+
+			/// <summary>
+			/// Gets a value indicating whether this node matches even empty pieces
+			/// </summary>
+			/// <value><c>true</c> if allows empty as match; otherwise, <c>false</c>.</value>
+			public override bool MatchesEmpty
+			{
+				get { return false; }
+			}
 		}
 
 		/// <summary>
@@ -320,6 +387,15 @@ namespace Castle.MonoRail.Framework.Routing
 
 				return false;
 			}
+
+			/// <summary>
+			/// Gets a value indicating whether this node matches even empty pieces
+			/// </summary>
+			/// <value><c>true</c> if allows empty as match; otherwise, <c>false</c>.</value>
+			public override bool MatchesEmpty
+			{
+				get { return false; }
+			}
 		}
 
 		/// <summary>
@@ -342,6 +418,10 @@ namespace Castle.MonoRail.Framework.Routing
 				if (token[0] == '<' || token[0] == '[')
 				{
 					return ProcessPattern(token);
+				}
+				else if (token == "*")
+				{
+					return new MatchAllNode();
 				}
 				else
 				{
