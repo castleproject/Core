@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied suggestion by Daniel D to fix MR-329
+  "Impossible to Context.Response.Redirect to any controller in empty Area from controller placed in some Area."
+
 - Applied minor patch by Ken Egozi fixing MR-328
   "In PrototypeWebValidation, SameAsValidator and NotSameAsValidator 
    are forcing a locase id for text fields"

@@ -27,7 +27,6 @@ namespace Castle.MonoRail.Framework.Adapters
 	{
 		private readonly IRailsEngineContext context;
 		private readonly HttpResponse response;
-		private readonly String appPath;
 		private bool redirected;
 
 		/// <summary>
@@ -35,11 +34,9 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="response">The response.</param>
 		/// <param name="context">The parent context.</param>
-		/// <param name="appPath">The app path.</param>
-		public ResponseAdapter(HttpResponse response, IRailsEngineContext context, String appPath)
+		public ResponseAdapter(HttpResponse response, IRailsEngineContext context)
 		{
 			this.response = response;
-			this.appPath = appPath;
 			this.context = context;
 		}
 
@@ -248,18 +245,11 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <param name="action">The action.</param>
 		public void Redirect(String area, String controller, String action)
 		{
-			if (area == null || area.Length == 0)
-			{
-				Redirect(controller, action);
-			}
-			else
-			{
-				redirected = true;
+			redirected = true;
 
-				IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
+			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
 
-				response.Redirect(builder.BuildUrl(context.UrlInfo, area, controller, action), false);
-			}
+			response.Redirect(builder.BuildUrl(context.UrlInfo, area, controller, action), false);
 		}
 
 		/// <summary>

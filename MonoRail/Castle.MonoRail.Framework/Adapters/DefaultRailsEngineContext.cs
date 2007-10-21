@@ -61,7 +61,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			_request = new RequestAdapter(context.Request);
 			_trace = new TraceAdapter(context.Trace);
 			_server = new ServerUtilityAdapter(context.Server);
-			_response = new ResponseAdapter(context.Response, this, ApplicationPath);
+			_response = new ResponseAdapter(context.Response, this);
 			_url = _context.Request.RawUrl;
 			_cache = parent.GetService(typeof(ICacheProvider)) as ICacheProvider;
 			this.container = container;
