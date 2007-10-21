@@ -79,8 +79,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			foreach(string key in collection.AllKeys)
 			{
 				if (key == null) continue;
-				
-				dict[key] = collection[key];
+				dict[key] = collection.GetValues(key);
 			}
 			
 			return dict;
