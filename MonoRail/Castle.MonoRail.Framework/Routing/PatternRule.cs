@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Text;
 	using System.Text.RegularExpressions;
@@ -24,7 +25,7 @@ namespace Castle.MonoRail.Framework.Routing
 	/// </summary>
 	public class PatternRule : IRoutingRule
 	{
-		private readonly string ruleName;
+		private readonly string routeName;
 		private readonly string path;
 		private readonly Type controllerType;
 		private readonly string action;
@@ -34,25 +35,25 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PatternRule"/> class.
 		/// </summary>
-		/// <param name="ruleName">Name of the rule.</param>
+		/// <param name="routeName">Name of the rule.</param>
 		/// <param name="path">The path.</param>
 		/// <param name="controllerType">Type of the controller.</param>
 		/// <param name="action">The action.</param>
-		protected PatternRule(string ruleName, string path, Type controllerType, string action)
+		protected PatternRule(string routeName, string path, Type controllerType, string action)
 		{
-			this.ruleName = ruleName;
+			this.routeName = routeName;
 			this.path = path;
 			this.controllerType = controllerType;
 			this.action = action;
 		}
 
 		/// <summary>
-		/// Gets the name of the rule.
+		/// Gets the name of the route.
 		/// </summary>
-		/// <value>The name of the rule.</value>
-		public string RuleName
+		/// <value>The name of the route.</value>
+		public string RouteName
 		{
-			get { return ruleName; }
+			get { return routeName; }
 		}
 
 		/// <summary>
@@ -113,6 +114,30 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 
 			return true;
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="hostname">The hostname.</param>
+		/// <param name="virtualPath">The virtual path.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
+		{
+			StringBuilder sb = new StringBuilder(virtualPath);
+
+			foreach(UrlPathNode node in nodes)
+			{
+				if (sb.Length == 0 || sb[sb.Length - 1] != '/')
+				{
+					sb.Append('/');
+				}
+
+				sb.Append(node.CreateUrlPiece(parameters));
+			}
+
+			return sb.ToString();
 		}
 
 		/// <summary>
@@ -211,6 +236,13 @@ namespace Castle.MonoRail.Framework.Routing
 			/// </summary>
 			/// <value><c>true</c> if allows empty as match; otherwise, <c>false</c>.</value>
 			public abstract bool MatchesEmpty { get; }
+
+			/// <summary>
+			/// Creates the URL piece.
+			/// </summary>
+			/// <param name="parameters">The parameters.</param>
+			/// <returns></returns>
+			public abstract string CreateUrlPiece(IDictionary parameters);
 		}
 
 		/// <summary>
@@ -254,6 +286,16 @@ namespace Castle.MonoRail.Framework.Routing
 			{
 				get { return false; }
 			}
+
+			/// <summary>
+			/// Creates the URL piece.
+			/// </summary>
+			/// <param name="parameters">The parameters.</param>
+			/// <returns></returns>
+			public override string CreateUrlPiece(IDictionary parameters)
+			{
+				return token;
+			}
 		}
 
 		/// <summary>
@@ -279,6 +321,16 @@ namespace Castle.MonoRail.Framework.Routing
 			public override bool MatchesEmpty
 			{
 				get { return true; }
+			}
+
+			/// <summary>
+			/// Creates the URL piece.
+			/// </summary>
+			/// <param name="parameters">The parameters.</param>
+			/// <returns></returns>
+			public override string CreateUrlPiece(IDictionary parameters)
+			{
+				return string.Empty;
 			}
 		}
 
@@ -341,6 +393,23 @@ namespace Castle.MonoRail.Framework.Routing
 			{
 				get { return false; }
 			}
+
+			/// <summary>
+			/// Creates the URL piece.
+			/// </summary>
+			/// <param name="parameters">The parameters.</param>
+			/// <returns></returns>
+			public override string CreateUrlPiece(IDictionary parameters)
+			{
+				object val = parameters[nodeName];
+
+				if (val == null)
+				{
+					throw new ArgumentException("Missing parameter '" + nodeName + "' used to build url from routing rule");
+				}
+
+				return val.ToString();
+			}
 		}
 
 		/// <summary>
@@ -395,6 +464,23 @@ namespace Castle.MonoRail.Framework.Routing
 			public override bool MatchesEmpty
 			{
 				get { return false; }
+			}
+
+			/// <summary>
+			/// Creates the URL piece.
+			/// </summary>
+			/// <param name="parameters">The parameters.</param>
+			/// <returns></returns>
+			public override string CreateUrlPiece(IDictionary parameters)
+			{
+				object val = parameters[nodeName];
+
+				if (val == null)
+				{
+					throw new ArgumentException("Missing parameter '" + nodeName + "' used to build url from routing rule");
+				}
+
+				return val.ToString();
 			}
 		}
 

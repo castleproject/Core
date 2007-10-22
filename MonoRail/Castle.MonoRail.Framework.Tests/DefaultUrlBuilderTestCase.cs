@@ -15,7 +15,9 @@
 namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
+	using System.Collections.Specialized;
 	using Castle.MonoRail.Framework.Helpers;
+	using Castle.MonoRail.Framework.Routing;
 	using Castle.MonoRail.Framework.Services;
 	using Castle.MonoRail.Framework.Test;
 	using NUnit.Framework;
@@ -23,8 +25,8 @@ namespace Castle.MonoRail.Framework.Tests
 	[TestFixture]
 	public class DefaultUrlBuilderTestCase
 	{
+		private readonly UrlInfo noAreaUrl, areaUrl, withSubDomain, diffPort;
 		private DefaultUrlBuilder urlBuilder;
-		private UrlInfo noAreaUrl, areaUrl, withSubDomain, diffPort;
 
 		public DefaultUrlBuilderTestCase()
 		{
@@ -41,6 +43,30 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			urlBuilder = new DefaultUrlBuilder();
 			urlBuilder.ServerUtil = new MockServerUtility();
+			urlBuilder.RoutingEngine = new RoutingEngine();
+		}
+
+		[Test]
+		public void ShouldUseRoutingEngineForNamedRoutes()
+		{
+			urlBuilder.RoutingEngine.Add(PatternRule.Build("link", "products", typeof(HomeController), "View"));
+
+			HybridDictionary dict = new HybridDictionary(true);
+			dict["named"] = "link";
+
+			Assert.AreEqual("/products", urlBuilder.BuildUrl(noAreaUrl, dict));
+		}
+
+		[Test]
+		public void ShouldUseTheParamsEntryForRoutesWithParams()
+		{
+			urlBuilder.RoutingEngine.Add(PatternRule.Build("link", "products/<id:number>", typeof(HomeController), "View"));
+
+			HybridDictionary dict = new HybridDictionary(true);
+			dict["named"] = "link";
+			dict["params"] = DictHelper.Create("id=1");
+
+			Assert.AreEqual("/products/1", urlBuilder.BuildUrl(noAreaUrl, dict));
 		}
 
 		[Test]
@@ -122,6 +148,10 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			Assert.AreEqual("http://localhost/theArea/home/index.rails?key=value", urlBuilder.BuildUrl(areaUrl,
 				DictHelper.Create("basepath=http://localhost/theArea", "area=theArea", "controller=home", "action=index", "querystring=key=value")));
+		}
+
+		public class HomeController : Controller
+		{
 		}
 	}
 }

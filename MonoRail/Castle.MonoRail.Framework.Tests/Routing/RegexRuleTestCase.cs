@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Tests.Routing
 {
+	using System.Collections;
 	using Castle.MonoRail.Framework.Routing;
 	using NUnit.Framework;
 

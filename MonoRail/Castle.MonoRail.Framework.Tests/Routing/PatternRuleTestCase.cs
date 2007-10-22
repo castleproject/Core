@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Tests.Routing
 {
 	using System;
+	using System.Collections;
 	using Castle.MonoRail.Framework.Routing;
 	using NUnit.Framework;
 
@@ -133,6 +134,61 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
 			Assert.IsFalse(rule.Matches("localhost", "", "product/iPod", match));
+		}
+
+		[Test]
+		public void SimplePatternGeneratesUrl()
+		{
+			PatternRule rule = PatternRule.Build("ProductHome", "product", typeof(ProductController), "View");
+
+			Assert.AreEqual("/product", rule.CreateUrl("localhost", "/", new Hashtable()));
+		}
+
+		[Test]
+		public void RuleShouldUseParamsForUrlGeneration()
+		{
+			PatternRule rule = PatternRule.Build("ProductById", "product/<id:number>", typeof(ProductController), "View");
+
+			Hashtable dict = new Hashtable();
+
+			dict["id"] = 1;
+
+			Assert.AreEqual("/product/1", rule.CreateUrl("localhost", "/", dict));
+		}
+
+		[Test]
+		public void MoreComplexUrlsShouldGenerateCorrectUrl()
+		{
+			PatternRule rule = PatternRule.Build("ProductById", "product/<brand:apple|ms>/<name>/<id:number>", typeof(ProductController), "View");
+
+			Hashtable dict = new Hashtable();
+
+			dict["brand"] = "ms";
+			dict["name"] = "zune";
+			dict["id"] = 1;
+
+			Assert.AreEqual("/product/ms/zune/1", rule.CreateUrl("localhost", "/", dict));
+		}
+
+		[Test, ExpectedException(typeof(ArgumentException), "Missing parameter 'id' used to build url from routing rule")]
+		public void CreateUrlShouldDemandThatAllParametersAreSpecified()
+		{
+			PatternRule rule = PatternRule.Build("ProductById", "product/<id:number>", typeof(ProductController), "View");
+
+			Hashtable dict = new Hashtable();
+
+			rule.CreateUrl("localhost", "/", dict);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentException), "Missing parameter 'id' used to build url from routing rule")]
+		public void CreateUrlShouldDemandThatAllParametersAreSpecified2()
+		{
+			PatternRule rule = PatternRule.Build("ProductById", "product/<id:number>", typeof(ProductController), "View");
+
+			Hashtable dict = new Hashtable();
+			dict["id"] = null;
+
+			rule.CreateUrl("localhost", "/", dict);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentException), "token has invalid value 'int'. Expected 'int' or 'string'")]

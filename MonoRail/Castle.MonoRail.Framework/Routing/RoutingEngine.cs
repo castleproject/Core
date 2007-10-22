@@ -16,13 +16,47 @@ namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public class RoutingEngine
+	public class RoutingEngine : IRoutingEngine
 	{
 		private readonly IList rules = ArrayList.Synchronized(new ArrayList());
+		private readonly Dictionary<string,IRoutingRule> name2Rule = new Dictionary<string,IRoutingRule>();
+
+		/// <summary>
+		/// Adds the specified rule.
+		/// </summary>
+		/// <param name="rule">The rule.</param>
+		public void Add(IRoutingRule rule)
+		{
+			rules.Add(rule);
+
+			// For really fast access
+			name2Rule[rule.RouteName] = rule;
+		}
+
+		/// <summary>
+		/// Creates the URL.
+		/// </summary>
+		/// <param name="routeName">Name of the route.</param>
+		/// <param name="hostname">The hostname.</param>
+		/// <param name="virtualPath">The virtual path.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public string CreateUrl(string routeName, string hostname, string virtualPath, IDictionary parameters)
+		{
+			IRoutingRule rule;
+
+			if (!name2Rule.TryGetValue(routeName, out rule))
+			{
+				throw new RailsException("Could not find named route: " + routeName);
+			}
+
+			return rule.CreateUrl(hostname, virtualPath, parameters);
+		}
 
 		/// <summary>
 		/// Finds the match.
@@ -50,7 +84,7 @@ namespace Castle.MonoRail.Framework.Routing
 
 			foreach(IRoutingRule rule in rules)
 			{
-				RouteMatch match = new RouteMatch(rule.ControllerType, rule.RuleName, rule.Action);
+				RouteMatch match = new RouteMatch(rule.ControllerType, rule.RouteName, rule.Action);
 
 				if (rule.Matches(hostname, virtualPath, url, match))
 				{
@@ -59,15 +93,6 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 
 			return null;
-		}
-
-		/// <summary>
-		/// Adds the specified rule.
-		/// </summary>
-		/// <param name="rule">The rule.</param>
-		public void Add(IRoutingRule rule)
-		{
-			rules.Add(rule);
 		}
 	}
 }

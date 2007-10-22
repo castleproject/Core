@@ -39,6 +39,7 @@ namespace Castle.MonoRail.Framework.Services
 	{
 		private bool useExtensions = true;
 		private IServerUtility serverUtil;
+		private IRoutingEngine routingEng;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultUrlBuilder"/> class.
@@ -69,6 +70,16 @@ namespace Castle.MonoRail.Framework.Services
 			set { serverUtil = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the routing engine.
+		/// </summary>
+		/// <value>The routing engine.</value>
+		public IRoutingEngine RoutingEngine
+		{
+			get { return routingEng; }
+			set { routingEng = value; }
+		}
+
 		#endregion
 
 		#region IServiceEnabledComponent
@@ -80,6 +91,7 @@ namespace Castle.MonoRail.Framework.Services
 		public void Service(IServiceProvider provider)
 		{
 			serverUtil = (IServerUtility) provider.GetService(typeof(IServerUtility));
+			routingEng = (IRoutingEngine) provider.GetService(typeof(IRoutingEngine));
 		}
 
 		#endregion
@@ -139,66 +151,78 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public virtual string BuildUrl(UrlInfo current, IDictionary parameters)
 		{
-			bool applySubdomain = false;
-			bool createAbsolutePath = CommonUtils.ObtainEntryAndRemove(parameters, "absolute", "false") == "true";
+			string routeName = CommonUtils.ObtainEntryAndRemove(parameters, "named");
 			bool encode = CommonUtils.ObtainEntryAndRemove(parameters, "encode", "false") == "true";
 
-			string area;
-
-			if (parameters.Contains("area"))
+			if (routeName != null)
 			{
-				area = CommonUtils.ObtainEntryAndRemove(parameters, "area");
-				
-				if (area == null) area = string.Empty;
+				object routeParams = parameters["params"];
+				parameters.Remove("params");
+
+				return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, routeParams, encode);
 			}
 			else
 			{
-				area = current.Area;
-			}
+				bool applySubdomain = false;
+				bool createAbsolutePath = CommonUtils.ObtainEntryAndRemove(parameters, "absolute", "false") == "true";
 
-			string controller = CommonUtils.ObtainEntryAndRemove(parameters, "controller", current.Controller);
-			string action = CommonUtils.ObtainEntryAndRemove(parameters, "action", current.Action);
-			
-			string domain = CommonUtils.ObtainEntryAndRemove(parameters, "domain", current.Domain);
-			string subdomain = CommonUtils.ObtainEntryAndRemove(parameters, "subdomain", current.Subdomain);
-			string protocol = CommonUtils.ObtainEntryAndRemove(parameters, "protocol", current.Protocol);
-			string port = CommonUtils.ObtainEntryAndRemove(parameters, "port", current.Port.ToString());
-			string suffix = null;
+				string area;
 
-			object queryString = CommonUtils.ObtainObjectEntryAndRemove(parameters, "querystring");
-
-			string basePath = null;
-
-			if (parameters.Contains("basepath"))
-			{
-				basePath = CommonUtils.ObtainEntryAndRemove(parameters, "basepath");
-			}
-
-			if (queryString != null)
-			{
-				if (queryString is IDictionary)
+				if (parameters.Contains("area"))
 				{
-					IDictionary qsDictionary = (IDictionary) queryString;
+					area = CommonUtils.ObtainEntryAndRemove(parameters, "area");
 					
-					suffix = CommonUtils.BuildQueryString(serverUtil, qsDictionary, encode);
+					if (area == null) area = string.Empty;
 				}
-				else if (queryString is NameValueCollection)
+				else
 				{
-					suffix = CommonUtils.BuildQueryString(serverUtil, (NameValueCollection) queryString, encode);	
+					area = current.Area;
 				}
-				else if (queryString is string)
+
+				string controller = CommonUtils.ObtainEntryAndRemove(parameters, "controller", current.Controller);
+				string action = CommonUtils.ObtainEntryAndRemove(parameters, "action", current.Action);
+				
+				string domain = CommonUtils.ObtainEntryAndRemove(parameters, "domain", current.Domain);
+				string subdomain = CommonUtils.ObtainEntryAndRemove(parameters, "subdomain", current.Subdomain);
+				string protocol = CommonUtils.ObtainEntryAndRemove(parameters, "protocol", current.Protocol);
+				string port = CommonUtils.ObtainEntryAndRemove(parameters, "port", current.Port.ToString());
+				string suffix = null;
+
+				object queryString = CommonUtils.ObtainObjectEntryAndRemove(parameters, "querystring");
+
+				string basePath = null;
+
+				if (parameters.Contains("basepath"))
 				{
-					suffix = queryString.ToString();
+					basePath = CommonUtils.ObtainEntryAndRemove(parameters, "basepath");
 				}
-			}
 
-			if (subdomain.ToLower() != current.Subdomain.ToLower())
-			{
-				applySubdomain = true;
-			}
+				if (queryString != null)
+				{
+					if (queryString is IDictionary)
+					{
+						IDictionary qsDictionary = (IDictionary) queryString;
+						
+						suffix = CommonUtils.BuildQueryString(serverUtil, qsDictionary, encode);
+					}
+					else if (queryString is NameValueCollection)
+					{
+						suffix = CommonUtils.BuildQueryString(serverUtil, (NameValueCollection) queryString, encode);	
+					}
+					else if (queryString is string)
+					{
+						suffix = queryString.ToString();
+					}
+				}
 
-			return InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain,
-				current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix, basePath);
+				if (subdomain.ToLower() != current.Subdomain.ToLower())
+				{
+					applySubdomain = true;
+				}
+
+				return InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain,
+					current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix, basePath);
+			}
 		}
 
 		/// <summary>
@@ -381,6 +405,43 @@ namespace Castle.MonoRail.Framework.Services
 			}
 
 			return path;
+		}
+
+		/// <summary>
+		/// Internals the build route URL.
+		/// </summary>
+		/// <param name="hostname">The hostname.</param>
+		/// <param name="virtualDir">The virtual dir.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="routeParams">The route params.</param>
+		/// <param name="encode">if set to <c>true</c> [encode].</param>
+		/// <returns></returns>
+		protected virtual string InternalBuildRouteUrl(string hostname, string virtualDir,
+		                                               string name, object routeParams, bool encode)
+		{
+			IDictionary parameters;
+
+			if (routeParams != null)
+			{
+				if (typeof(IDictionary).IsAssignableFrom(routeParams.GetType()))
+				{
+					parameters = (IDictionary) routeParams;
+				}
+				else
+				{
+					parameters = new ReflectionBasedDictionaryAdapter(routeParams);
+				}
+			}
+			else
+			{
+				parameters = new Hashtable();
+			}
+
+			String url = routingEng.CreateUrl(name, hostname, virtualDir, parameters);
+
+			// TODO: should encode?
+
+			return url;
 		}
 
 		/// <summary>

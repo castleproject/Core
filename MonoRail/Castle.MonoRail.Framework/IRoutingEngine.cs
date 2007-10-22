@@ -12,55 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Routing
+namespace Castle.MonoRail.Framework
 {
-	using System;
 	using System.Collections;
+	using Routing;
 
 	/// <summary>
-	/// Depicts an url routing rule contract.
+	/// Pendent
 	/// </summary>
-	/// <remarks>
-	/// Implementors can use this interface to implement custom rules. 
-	/// </remarks>
-	public interface IRoutingRule
+	public interface IRoutingEngine
 	{
 		/// <summary>
-		/// Gets the name of the route.
+		/// Pendent
 		/// </summary>
-		/// <value>The name of the route.</value>
-		string RouteName { get; }
+		/// <param name="rule">The rule.</param>
+		void Add(IRoutingRule rule);
 
 		/// <summary>
-		/// Gets the type of the controller.
+		/// Pendent
 		/// </summary>
-		/// <value>The type of the controller.</value>
-		Type ControllerType { get; }
-
-		/// <summary>
-		/// Gets the action.
-		/// </summary>
-		/// <value>The action.</value>
-		string Action { get; }
+		/// <param name="routeName">Name of the route.</param>
+		/// <param name="hostname">The hostname.</param>
+		/// <param name="virtualPath">The virtual path.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		string CreateUrl(string routeName, string hostname, string virtualPath, IDictionary parameters);
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
 		/// <param name="hostname">The hostname.</param>
 		/// <param name="virtualPath">The virtual path.</param>
-		/// <param name="parameters">The parameters.</param>
-		/// <returns></returns>
-		string CreateUrl(string hostname, string virtualPath, IDictionary parameters);
-
-		/// <summary>
-		/// Determines if the specified URL matches the 
-		/// routing rule. 
-		/// </summary>
-		/// <param name="hostname">Host name</param>
-		/// <param name="virtualPath">Virtual path (if any)</param>
 		/// <param name="url">The URL.</param>
-		/// <param name="match">The match.</param>
 		/// <returns></returns>
-		bool Matches(string hostname, string virtualPath, string url, RouteMatch match);
+		RouteMatch FindMatch(string hostname, string virtualPath, string url);
 	}
 }

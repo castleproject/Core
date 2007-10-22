@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
+	using System.Collections;
 	using System.Text.RegularExpressions;
 
 	/// <summary>
@@ -22,7 +23,7 @@ namespace Castle.MonoRail.Framework.Routing
 	/// </summary>
 	public class RegexRule : IRoutingRule
 	{
-		private readonly string ruleName;
+		private readonly string routeName;
 		private readonly string action;
 		private readonly Type controllerType;
 		private readonly Regex regExp;
@@ -30,13 +31,13 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RegexRule"/> class.
 		/// </summary>
-		/// <param name="ruleName">Name of the rule.</param>
+		/// <param name="routeName">Name of the rule.</param>
 		/// <param name="regExp">The reg exp.</param>
 		/// <param name="controllerType">Type of the controller.</param>
 		/// <param name="action">The action.</param>
-		private RegexRule(string ruleName, Regex regExp, Type controllerType, string action)
+		private RegexRule(string routeName, Regex regExp, Type controllerType, string action)
 		{
-			this.ruleName = ruleName;
+			this.routeName = routeName;
 			this.regExp = regExp;
 			this.controllerType = controllerType;
 			this.action = action;
@@ -46,9 +47,9 @@ namespace Castle.MonoRail.Framework.Routing
 		/// Gets the name of the rule.
 		/// </summary>
 		/// <value>The name of the rule.</value>
-		public string RuleName
+		public string RouteName
 		{
-			get { return ruleName; }
+			get { return routeName; }
 		}
 
 		/// <summary>
@@ -97,6 +98,18 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 
 			return regExpMatch.Success;
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="hostname">The hostname.</param>
+		/// <param name="virtualPath">The virtual path.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
+		{
+			throw new NotImplementedException("CreateUrl not implemented for regexp routes");
 		}
 
 		/// <summary>
