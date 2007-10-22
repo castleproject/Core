@@ -627,6 +627,19 @@ namespace Castle.MonoRail.Framework
 			return viewEngineManager.HasTemplate(templateName);
 		}
 
+		#region RedirectToRoute
+
+		/// <summary>
+		/// Pendent.
+		/// </summary>
+		/// <param name="routeName">Name of the route.</param>
+		public void RedirectToRoute(string routeName)
+		{
+			Redirect(UrlBuilder.BuildRouteUrl(Context.UrlInfo, routeName));
+		}
+
+		#endregion
+
 		#region RedirectToAction
 
 		/// <summary> 

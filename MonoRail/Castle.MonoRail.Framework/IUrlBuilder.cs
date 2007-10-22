@@ -95,5 +95,13 @@ namespace Castle.MonoRail.Framework
 		/// <param name="queryStringParams">The query string params.</param>
 		/// <returns></returns>
 		string BuildUrl(UrlInfo current, string area, string controller, string action, NameValueCollection queryStringParams);
+
+		/// <summary>
+		/// Pendent.
+		/// </summary>
+		/// <param name="current">The current.</param>
+		/// <param name="routeName">Name of the route.</param>
+		/// <returns></returns>
+		string BuildRouteUrl(UrlInfo current, string routeName);
 	}
 }

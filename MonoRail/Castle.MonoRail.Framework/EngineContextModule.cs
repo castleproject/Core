@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Extensions.ExceptionChaining;
+	using Routing;
 
 	/// <summary>
 	/// Provides the services used and shared by the framework. Also 
@@ -78,6 +79,7 @@ namespace Castle.MonoRail.Framework
 			{
 				container = new MonoRailServiceContainer();
 				container.RegisterBaseService(typeof(IServerUtility), new ServerUtilityAdapter(context.Server));
+				container.RegisterBaseService(typeof(IRoutingEngine), RoutingModuleEx.Engine);
 				container.Start();
 
 				ILoggerFactory loggerFactory = (ILoggerFactory) container.GetService(typeof(ILoggerFactory));
