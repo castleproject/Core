@@ -237,6 +237,30 @@ namespace Castle.MonoRail.Framework.Services
 		}
 
 		/// <summary>
+		/// Pendent.
+		/// </summary>
+		/// <param name="current">The current.</param>
+		/// <param name="routeName">Name of the route.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public string BuildRouteUrl(UrlInfo current, string routeName, IDictionary parameters)
+		{
+			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, parameters, false);
+		}
+
+		/// <summary>
+		/// Pendent.
+		/// </summary>
+		/// <param name="current">The current.</param>
+		/// <param name="routeName">Name of the route.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public string BuildRouteUrl(UrlInfo current, string routeName, object parameters)
+		{
+			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, parameters, false);
+		}
+
+		/// <summary>
 		/// Builds an URL using the controller name and action name.
 		/// </summary>
 		/// <param name="current">The current Url information.</param>

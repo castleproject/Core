@@ -638,6 +638,26 @@ namespace Castle.MonoRail.Framework
 			Redirect(UrlBuilder.BuildRouteUrl(Context.UrlInfo, routeName));
 		}
 
+		/// <summary>
+		/// Pendent.
+		/// </summary>
+		/// <param name="routeName">Name of the route.</param>
+		/// <param name="parameters">The parameters.</param>
+		public void RedirectToRoute(string routeName, IDictionary parameters)
+		{
+			Redirect(UrlBuilder.BuildRouteUrl(Context.UrlInfo, routeName, parameters));
+		}
+
+		/// <summary>
+		/// Pendent.
+		/// </summary>
+		/// <param name="routeName">Name of the route.</param>
+		/// <param name="parameters">The parameters.</param>
+		public void RedirectToRoute(string routeName, object parameters)
+		{
+			Redirect(UrlBuilder.BuildRouteUrl(Context.UrlInfo, routeName, parameters));
+		}
+
 		#endregion
 
 		#region RedirectToAction
