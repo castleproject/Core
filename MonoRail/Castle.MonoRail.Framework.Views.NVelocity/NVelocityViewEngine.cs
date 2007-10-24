@@ -138,7 +138,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// <param name="context">The context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="viewName">Name of the view.</param>
-		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
+		public override void Process(IRailsEngineContext context, IController controller, String viewName)
 		{
 			IContext ctx = CreateContext(context, controller);
 
@@ -193,7 +193,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// Processes the view - using the templateName to obtain the correct template
 		/// and writes the results to the System.TextWriter. No layout is applied!
 		/// </summary>
-		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller, String viewName)
+		public override void Process(TextWriter output, IRailsEngineContext context, IController controller, String viewName)
 		{
 			IContext ctx = CreateContext(context, controller);
 
@@ -219,8 +219,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 		}
 
-		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, 
-		                                    Controller controller, string partialName)
+		public override void ProcessPartial(TextWriter output, IRailsEngineContext context,
+											IController controller, string partialName)
 		{
 			IContext ctx = CreateContext(context, controller);
 			String view = ResolveTemplateName(partialName);
@@ -246,7 +246,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			return new JSGeneratorDuck(new PrototypeHelper.JSGenerator(context));
 		}
 
-		public override void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller,
+		public override void GenerateJS(TextWriter output, IRailsEngineContext context, IController controller,
 		                                string templateName)
 		{
 			IContext ctx = CreateContext(context, controller);
@@ -280,7 +280,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 		}
 
-		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
+		public override void ProcessContents(IRailsEngineContext context, IController controller, String contents)
 		{
 			IContext ctx = CreateContext(context, controller);
 			AdjustContentType(context);
@@ -365,7 +365,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		{
 		}
 
-		private void ProcessLayout(String contents, Controller controller, IContext ctx, IRailsEngineContext context)
+		private void ProcessLayout(String contents, IController controller, IContext ctx, IRailsEngineContext context)
 		{
 			String layout = ResolveLayoutTemplateName(controller.LayoutName);
 
@@ -374,8 +374,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			RenderLayout(layout, contents, ctx, context, context.Response.Output);
 		}
 
-		protected virtual void BeforeApplyingLayout(string layout, ref string contents, 
-			Controller controller, IContext ctx, IRailsEngineContext context)
+		protected virtual void BeforeApplyingLayout(string layout, ref string contents,
+			IController controller, IContext ctx, IRailsEngineContext context)
 		{
 		}
 
@@ -404,7 +404,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 		}
 
-		private IContext CreateContext(IRailsEngineContext context, Controller controller)
+		private IContext CreateContext(IRailsEngineContext context, IController controller)
 		{
 			Hashtable innerContext = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 

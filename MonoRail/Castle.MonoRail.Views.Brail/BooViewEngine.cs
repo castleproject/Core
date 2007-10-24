@@ -118,12 +118,12 @@ namespace Castle.MonoRail.Views.Brail
 		// Process a template name and output the results to the user
 		// This may throw if an error occured and the user is not local (which would 
 		// cause the yellow screen of death)
-		public override void Process(IRailsEngineContext context, Controller controller, string templateName)
+		public override void Process(IRailsEngineContext context, IController controller, string templateName)
 		{
 			Process(context.Response.Output, context, controller, templateName);
 		}
 
-		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller,
+		public override void Process(TextWriter output, IRailsEngineContext context, IController controller,
 									 string templateName)
 		{
 			Log("Starting to process request for {0}", templateName);
@@ -146,7 +146,7 @@ namespace Castle.MonoRail.Views.Brail
 			controller.PostSendView(view);
 		}
 
-		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller,
+		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, IController controller,
 											string partialName)
 		{
 			Log("Generating partial for {0}", partialName);
@@ -175,7 +175,7 @@ namespace Castle.MonoRail.Views.Brail
 			return new BrailJSGenerator(new PrototypeHelper.JSGenerator(context));
 		}
 
-		public override void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller,
+		public override void GenerateJS(TextWriter output, IRailsEngineContext context, IController controller,
 										string templateName)
 		{
 			Log("Generating JS for {0}", templateName);
@@ -208,7 +208,7 @@ namespace Castle.MonoRail.Views.Brail
 		}
 
 		// Send the contents text directly to the user, only adding the layout if neccecary
-		public override void ProcessContents(IRailsEngineContext context, Controller controller, string contents)
+		public override void ProcessContents(IRailsEngineContext context, IController controller, string contents)
 		{
 			LayoutViewOutput layoutViewOutput = GetOutput(controller.Response.Output, context, controller);
 			layoutViewOutput.Output.Write(contents);
@@ -310,7 +310,7 @@ namespace Castle.MonoRail.Views.Brail
 		// Check if a layout has been defined. If it was, then the layout would be created
 		// and will take over the output, otherwise, the context.Reposne.Output is used, 
 		// and layout is null
-		private LayoutViewOutput GetOutput(TextWriter output, IRailsEngineContext context, Controller controller)
+		private LayoutViewOutput GetOutput(TextWriter output, IRailsEngineContext context, IController controller)
 		{
 			BrailBase layout = null;
 			if (controller.LayoutName != null)
@@ -334,7 +334,7 @@ namespace Castle.MonoRail.Views.Brail
 		public BrailBase GetCompiledScriptInstance(string file,
 												   TextWriter output,
 												   IRailsEngineContext context,
-												   Controller controller)
+												   IController controller)
 		{
 			bool batch = options.BatchCompile;
 			// normalize filename - replace / or \ to the system path seperator
@@ -365,7 +365,7 @@ namespace Castle.MonoRail.Views.Brail
 			return CreateBrailBase(context, controller, output, type);
 		}
 
-		private BrailBase CreateBrailBase(IRailsEngineContext context, Controller controller, TextWriter output, Type type)
+		private BrailBase CreateBrailBase(IRailsEngineContext context, IController controller, TextWriter output, Type type)
 		{
 			ConstructorInfo constructor = (ConstructorInfo)constructors[type];
 			BrailBase self = (BrailBase)FormatterServices.GetUninitializedObject(type);

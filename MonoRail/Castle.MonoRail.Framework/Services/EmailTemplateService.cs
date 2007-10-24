@@ -92,7 +92,7 @@ namespace Castle.MonoRail.Framework
 
 			IRailsEngineContext context = EngineContextModule.ObtainRailsEngineContext(HttpContext.Current);
 
-			Controller controller = context.CurrentController;
+			IController controller = context.CurrentController;
 
 			if (controller == null)
 			{
@@ -136,7 +136,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="doNotApplyLayout">If <c>true</c>, it will skip the layout</param>
 		/// <returns>An instance of <see cref="Message"/></returns>
 		public Message RenderMailMessage(String templateName, IRailsEngineContext context,
-		                                 Controller controller, bool doNotApplyLayout)
+										 IController controller, bool doNotApplyLayout)
 		{
 			// create a message object
 			Message message = new Message();

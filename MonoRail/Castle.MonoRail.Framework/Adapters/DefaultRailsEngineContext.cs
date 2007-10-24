@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		private UrlInfo _urlInfo;
 		private String _url;
 		private ICacheProvider _cache;
-		private Controller currentController;
+		private IController currentController;
 		private IServiceProvider container;
 		private bool customSessionSet;
 
@@ -336,7 +336,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Gets or sets the current controller.
 		/// </summary>
 		/// <value>The current controller.</value>
-		public Controller CurrentController
+		public IController CurrentController
 		{
 			get { return currentController; }
 			set { currentController = value; }

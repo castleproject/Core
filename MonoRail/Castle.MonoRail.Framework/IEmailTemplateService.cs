@@ -54,6 +54,6 @@ namespace Castle.MonoRail.Framework
 		/// <param name="doNotApplyLayout">If <c>true</c>, it will skip the layout</param>
 		/// <returns>An instance of <see cref="Message"/></returns>
 		Message RenderMailMessage(String templateName, IRailsEngineContext context,
-		                          Controller controller, bool doNotApplyLayout);
+		                          IController controller, bool doNotApplyLayout);
 	}
 }

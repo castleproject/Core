@@ -60,7 +60,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="controller">The controller.</param>
 		/// <param name="doNotApplyLayout">if set to <c>true</c> [do not apply layout].</param>
 		/// <returns></returns>
-		public Message RenderMailMessage(string templateName, IRailsEngineContext engineContext, Controller controller,
+		public Message RenderMailMessage(string templateName, IRailsEngineContext engineContext, IController controller,
 		                                 bool doNotApplyLayout)
 		{
 			context.AddMailTemplateRendered(templateName, controller.PropertyBag);

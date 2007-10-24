@@ -62,7 +62,7 @@ namespace Castle.MonoRail.Framework
 		/// to obtain the correct template,
 		/// and using the context to output the result.
 		/// </summary>
-		void Process(IRailsEngineContext context, Controller controller, String templateName);
+		void Process(IRailsEngineContext context, IController controller, String templateName);
 
 		///<summary>
 		/// Processes the view - using the templateName 
@@ -70,7 +70,7 @@ namespace Castle.MonoRail.Framework
 		/// and writes the results to the <see cref="TextWriter"/>. 
 		/// No layout is applied!
 		/// </summary>
-		void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName);
+		void Process(TextWriter output, IRailsEngineContext context, IController controller, String templateName);
 
 		/// <summary>
 		/// Implementors should return a generator instance if
@@ -87,7 +87,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="templateName">Name of the template.</param>
-		void GenerateJS(IRailsEngineContext context, Controller controller, String templateName);
+		void GenerateJS(IRailsEngineContext context, IController controller, String templateName);
 
 		/// <summary>
 		/// Processes the js generation view template - using the templateName 
@@ -98,7 +98,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="templateName">Name of the template.</param>
-		void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller, String templateName);
+		void GenerateJS(TextWriter output, IRailsEngineContext context, IController controller, String templateName);
 
 		/// <summary>
 		/// Should process the specified partial. The partial name must contains
@@ -108,7 +108,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="partialName">The partial name.</param>
-		void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller, String partialName);
+		void ProcessPartial(TextWriter output, IRailsEngineContext context, IController controller, String partialName);
 
 		/// <summary>
 		/// Wraps the specified content in the layout using 
@@ -117,6 +117,6 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="contents">Content to output</param>
-		void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
+		void ProcessContents(IRailsEngineContext context, IController controller, String contents);
 	}
 }

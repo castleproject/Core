@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework
 		/// to obtain the correct template,
 		/// and using the context to output the result.
 		/// </summary>
-		void Process(IRailsEngineContext context, Controller controller, String templateName);
+		void Process(IRailsEngineContext context, IController controller, String templateName);
 
 		///<summary>
 		/// Processes the view - using the templateName 
@@ -44,7 +44,7 @@ namespace Castle.MonoRail.Framework
 		/// Please note that no layout is applied
 		/// </para>
 		/// </summary>
-		void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName);
+		void Process(TextWriter output, IRailsEngineContext context, IController controller, String templateName);
 
 		/// <summary>
 		/// Processes a partial view = using the partialName
@@ -55,12 +55,12 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="partialName">The partial name.</param>
-		void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller, String partialName);
+		void ProcessPartial(TextWriter output, IRailsEngineContext context, IController controller, String partialName);
 
 		/// <summary>
 		/// Wraps the specified content in the layout using 
 		/// the context to output the result.
 		/// </summary>
-		void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
+		void ProcessContents(IRailsEngineContext context, IController controller, String contents);
 	}
 }

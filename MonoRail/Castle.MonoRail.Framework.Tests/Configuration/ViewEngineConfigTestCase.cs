@@ -142,18 +142,18 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 			throw new NotImplementedException();
 		}
 
-		public override void Process(IRailsEngineContext context, Controller controller, string templateName)
+		public override void Process(IRailsEngineContext context, IController controller, string templateName)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller,
+		public override void Process(TextWriter output, IRailsEngineContext context, IController controller,
 									 string templateName)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller,
+		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, IController controller,
 											string partialName)
 		{
 			throw new NotImplementedException();
@@ -164,13 +164,13 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 			throw new NotImplementedException();
 		}
 
-		public override void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller,
+		public override void GenerateJS(TextWriter output, IRailsEngineContext context, IController controller,
 										string templateName)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void ProcessContents(IRailsEngineContext context, Controller controller, string contents)
+		public override void ProcessContents(IRailsEngineContext context, IController controller, string contents)
 		{
 			throw new NotImplementedException();
 		}

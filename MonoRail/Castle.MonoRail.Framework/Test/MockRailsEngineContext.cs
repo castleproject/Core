@@ -46,7 +46,7 @@ namespace Castle.MonoRail.Framework.Test
 		private IServiceProvider container;
 		private IPrincipal currentUser = new GenericPrincipal(new GenericIdentity("user", "test"), new string[0]);
 		private Exception lastException;
-		private Controller currentController;
+		private IController currentController;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockRailsEngineContext"/> class.
@@ -259,7 +259,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// Gets or sets the current controller.
 		/// </summary>
 		/// <value>The current controller.</value>
-		public virtual Controller CurrentController
+		public virtual IController CurrentController
 		{
 			get { return currentController; }
 			set { currentController = value; }

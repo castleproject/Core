@@ -33,7 +33,7 @@ namespace Castle.MonoRail.Framework
 	/// Implements the core functionality and exposes the
 	/// common methods for concrete controllers.
 	/// </summary>
-	public abstract class Controller : IDisposable
+	public abstract class Controller : IController
 	{
 		#region Fields
 

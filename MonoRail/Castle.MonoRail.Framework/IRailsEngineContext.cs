@@ -130,7 +130,7 @@ namespace Castle.MonoRail.Framework
 		/// Gets or sets the current controller.
 		/// </summary>
 		/// <value>The current controller.</value>
-		Controller CurrentController { get; set; }
+		IController CurrentController { get; set; }
 
 		/// <summary>
 		/// If a container is available for the app, this 

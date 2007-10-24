@@ -103,7 +103,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="context"></param>
 		/// <param name="controller"></param>
 		/// <param name="templateName"></param>
-		public virtual void Process(IRailsEngineContext context, Controller controller, string templateName)
+		public virtual void Process(IRailsEngineContext context, IController controller, string templateName)
 		{
 			throw new NotImplementedException();
 		}
@@ -118,7 +118,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="context"></param>
 		/// <param name="controller"></param>
 		/// <param name="templateName"></param>
-		public virtual void Process(TextWriter output, IRailsEngineContext context, Controller controller, string templateName)
+		public virtual void Process(TextWriter output, IRailsEngineContext context, IController controller, string templateName)
 		{
 			throw new NotImplementedException();
 		}
@@ -141,7 +141,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="templateName">Name of the template.</param>
-		public virtual void GenerateJS(IRailsEngineContext context, Controller controller, string templateName)
+		public virtual void GenerateJS(IRailsEngineContext context, IController controller, string templateName)
 		{
 			throw new NotImplementedException();
 		}
@@ -155,7 +155,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="templateName">Name of the template.</param>
-		public virtual void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller, string templateName)
+		public virtual void GenerateJS(TextWriter output, IRailsEngineContext context, IController controller, string templateName)
 		{
 			throw new NotImplementedException();
 		}
@@ -168,7 +168,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="partialName">The partial name.</param>
-		public virtual void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller, string partialName)
+		public virtual void ProcessPartial(TextWriter output, IRailsEngineContext context, IController controller, string partialName)
 		{
 			throw new NotImplementedException();
 		}
@@ -180,7 +180,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="contents">Content to output</param>
-		public virtual void ProcessContents(IRailsEngineContext context, Controller controller, string contents)
+		public virtual void ProcessContents(IRailsEngineContext context, IController controller, string contents)
 		{
 			throw new NotImplementedException();
 		}

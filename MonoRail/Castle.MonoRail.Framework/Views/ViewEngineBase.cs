@@ -107,14 +107,14 @@ namespace Castle.MonoRail.Framework
 		/// to obtain the correct template,
 		/// and using the context to output the result.
 		/// </summary>
-		public abstract void Process(IRailsEngineContext context, Controller controller, String templateName);
+		public abstract void Process(IRailsEngineContext context, IController controller, String templateName);
 
 		///<summary>
 		/// Processes the view - using the templateName 
 		/// to obtain the correct template
 		/// and writes the results to the System.IO.TextWriter.
 		/// </summary>
-		public abstract void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName);
+		public abstract void Process(TextWriter output, IRailsEngineContext context, IController controller, String templateName);
 
 		/// <summary>
 		/// Should process the specified partial. The partial name must contains
@@ -124,7 +124,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="partialName">The partial name.</param>
-		public abstract void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller, string partialName);
+		public abstract void ProcessPartial(TextWriter output, IRailsEngineContext context, IController controller, string partialName);
 
 		/// <summary>
 		/// Implementors should return a generator instance if
@@ -141,7 +141,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="templateName">Name of the template.</param>
-		public virtual void GenerateJS(IRailsEngineContext context, Controller controller, string templateName)
+		public virtual void GenerateJS(IRailsEngineContext context, IController controller, string templateName)
 		{
             GenerateJS(context.Response.Output, context, controller, templateName);
 		}
@@ -155,13 +155,13 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The request context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="templateName">Name of the template.</param>
-		public abstract void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller, string templateName);
+		public abstract void GenerateJS(TextWriter output, IRailsEngineContext context, IController controller, string templateName);
 
 		/// <summary>
 		/// Wraps the specified content in the layout using the 
 		/// context to output the result.
 		/// </summary>
-		public abstract void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
+		public abstract void ProcessContents(IRailsEngineContext context, IController controller, String contents);
 
 		#endregion
 
@@ -172,7 +172,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="controller">The controller.</param>
 		/// <param name="view">The view argument.</param>
-		protected virtual void PreSendView(Controller controller, object view)
+		protected virtual void PreSendView(IController controller, object view)
 		{
 			controller.PreSendView(view);
 		}
@@ -182,7 +182,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="controller">The controller.</param>
 		/// <param name="view">The view argument.</param>
-		protected virtual void PostSendView(Controller controller, object view)
+		protected virtual void PostSendView(IController controller, object view)
 		{
 			controller.PostSendView(view);
 		}
