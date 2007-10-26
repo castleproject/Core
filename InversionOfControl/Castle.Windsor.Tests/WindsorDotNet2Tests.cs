@@ -12,391 +12,432 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-
 #if !MONO
 
 namespace Castle.Windsor.Tests
 {
-    using System;
-    using System.IO;
-    using Castle.Core.Interceptor;
-    using Castle.MicroKernel.Resolvers;
-    using Castle.Windsor.Configuration.Interpreters;
-    using Castle.Windsor.Tests.Components;
-    using NUnit.Framework;
+	using System;
+	using System.IO;
+	using Castle.Core.Interceptor;
+	using Castle.Windsor.Configuration.Interpreters;
+	using Components;
+	using Core;
+	using NUnit.Framework;
 
-    [TestFixture]
-    public class WindsorDotNet2Tests
-    {
-        [Test]
-        public void UsingResolveGenericMethodOverload()
-        {
-            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
-            ICalcService svr = container.Resolve<ICalcService>();
-            Assert.IsTrue(typeof (CalculatorService).IsInstanceOfType(svr));
-        }
+	[TestFixture]
+	public class WindsorDotNet2Tests
+	{
+		[Test]
+		public void UsingResolveGenericMethodOverload()
+		{
+			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
+			ICalcService svr = container.Resolve<ICalcService>();
+			Assert.IsTrue(typeof (CalculatorService).IsInstanceOfType(svr));
+		}
 
-        [Test]
-        public void ResolveGenericWithId()
-        {
-            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
-            ICalcService svr = container.Resolve<ICalcService>("calc");
-            Assert.IsTrue(typeof (CalculatorService).IsInstanceOfType(svr));
-        }
+		[Test]
+		public void ResolveGenericWithId()
+		{
+			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
+			ICalcService svr = container.Resolve<ICalcService>("calc");
+			Assert.IsTrue(typeof (CalculatorService).IsInstanceOfType(svr));
+		}
 
-        [Test]
-        public void GetGenericService()
-        {
-            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
-            IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos.generic");
-            Assert.IsNotNull(repos);
-            Assert.IsTrue(typeof (DemoRepository<int>).IsInstanceOfType(repos));
-        }
+		[Test]
+		public void GetGenericService()
+		{
+			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
+			IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos.generic");
+			Assert.IsNotNull(repos);
+			Assert.IsTrue(typeof (DemoRepository<int>).IsInstanceOfType(repos));
+		}
 
-        [Test]
-        public void GetGenericServiceWithDecorator()
-        {
-            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
-            IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos");
-            Assert.IsNotNull(repos);
-            Assert.IsTrue(typeof (LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
-            Assert.IsTrue(typeof (DemoRepository<int>).IsInstanceOfType(((LoggingRepositoryDecorator<int>) repos).inner));
-        }
+		[Test]
+		public void GetGenericServiceWithDecorator()
+		{
+			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
+			IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos");
+			Assert.IsNotNull(repos);
+			Assert.IsTrue(typeof (LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
+			Assert.IsTrue(typeof (DemoRepository<int>).IsInstanceOfType(((LoggingRepositoryDecorator<int>) repos).inner));
+		}
 
-        [Test]
-        public void WillUseDefaultCtorOnGenericComponentIfTryingToResolveOnSameComponent()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
-            LoggingRepositoryDecorator<int> resolve =
-                (LoggingRepositoryDecorator<int>) container.Resolve<IRepository<int>>();
-            Assert.IsNull(resolve.Inner);
-        }
+		[Test]
+		public void WillUseDefaultCtorOnGenericComponentIfTryingToResolveOnSameComponent()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
+			LoggingRepositoryDecorator<int> resolve =
+				(LoggingRepositoryDecorator<int>) container.Resolve<IRepository<int>>();
+			Assert.IsNull(resolve.Inner);
+		}
 
-        [Test]
-        public void GetGenericServiceWithDecorator_GenericDecoratorOnTop()
-        {
-            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("DecoratorConfig.xml")));
-            IRepository<int> repos = container.Resolve<IRepository<int>>();
-            Assert.IsTrue(typeof (LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
+		[Test]
+		public void GetGenericServiceWithDecorator_GenericDecoratorOnTop()
+		{
+			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("DecoratorConfig.xml")));
+			IRepository<int> repos = container.Resolve<IRepository<int>>();
+			Assert.IsTrue(typeof (LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
 
-            Assert.IsTrue(typeof (LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
-            Assert.IsTrue(typeof (DemoRepository<int>).IsInstanceOfType(((LoggingRepositoryDecorator<int>) repos).inner));
+			Assert.IsTrue(typeof (LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
+			Assert.IsTrue(typeof (DemoRepository<int>).IsInstanceOfType(((LoggingRepositoryDecorator<int>) repos).inner));
 
-            DemoRepository<int> inner = ((LoggingRepositoryDecorator<int>) repos).inner as DemoRepository<int>;
+			DemoRepository<int> inner = ((LoggingRepositoryDecorator<int>) repos).inner as DemoRepository<int>;
 
-            Assert.AreEqual("second", inner.Name);
-        }
+			Assert.AreEqual("second", inner.Name);
+		}
 
-        [Test]
-        public void InferGenericArgumentForComponentFromPassedType()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
+		[Test]
+		public void InferGenericArgumentForComponentFromPassedType()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
 
-            IRepository<string> repos = container.Resolve<IRepository<string>>();
-            Assert.IsTrue(typeof (LoggingRepositoryDecorator<string>).IsInstanceOfType(repos));
+			IRepository<string> repos = container.Resolve<IRepository<string>>();
+			Assert.IsTrue(typeof (LoggingRepositoryDecorator<string>).IsInstanceOfType(repos));
 
-            DemoRepository<string> inner = ((LoggingRepositoryDecorator<string>) repos).inner as DemoRepository<string>;
+			DemoRepository<string> inner = ((LoggingRepositoryDecorator<string>) repos).inner as DemoRepository<string>;
 
-            Assert.AreEqual("second", inner.Name);
-        }
+			Assert.AreEqual("second", inner.Name);
+		}
 
-        [Test]
-        public void GetSameInstanceFromGenericType()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
+		[Test]
+		public void GetSameInstanceFromGenericType()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
 
-            IRepository<string> repos1 = container.Resolve<IRepository<string>>();
-            IRepository<string> repos2 = container.Resolve<IRepository<string>>();
+			IRepository<string> repos1 = container.Resolve<IRepository<string>>();
+			IRepository<string> repos2 = container.Resolve<IRepository<string>>();
 
-            Assert.AreSame(repos1, repos2);
-        }
+			Assert.AreSame(repos1, repos2);
+		}
 
-        [Test]
-        public void GetSameInstanceOfGenericFromTwoDifferentGenericTypes()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
+		[Test]
+		public void GetSameInstanceOfGenericFromTwoDifferentGenericTypes()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
 
-            IRepository<string> repos1 = container.Resolve<IRepository<string>>();
-            IRepository<string> repos2 = container.Resolve<IRepository<string>>();
+			IRepository<string> repos1 = container.Resolve<IRepository<string>>();
+			IRepository<string> repos2 = container.Resolve<IRepository<string>>();
 
-            Assert.AreSame(repos1, repos2);
+			Assert.AreSame(repos1, repos2);
 
-            IRepository<int> repos3 = container.Resolve<IRepository<int>>();
-            IRepository<int> repos4 = container.Resolve<IRepository<int>>();
+			IRepository<int> repos3 = container.Resolve<IRepository<int>>();
+			IRepository<int> repos4 = container.Resolve<IRepository<int>>();
 
-            Assert.AreSame(repos3, repos4);
-        }
+			Assert.AreSame(repos3, repos4);
+		}
 
-        [Test]
-        public void ComplexGenericConfiguration_GetGenericRepostiory()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
-            IRepository<IEmployee> empRepost = container[typeof (IRepository<IEmployee>)] as IRepository<IEmployee>;
-            Assert.IsNotNull(empRepost);
-            Assert.IsTrue(typeof (LoggingRepositoryDecorator<IEmployee>).IsInstanceOfType(empRepost));
-            LoggingRepositoryDecorator<IEmployee> log = empRepost as LoggingRepositoryDecorator<IEmployee>;
-            IRepository<IEmployee> inner = log.inner;
-            Assert.IsNotNull(inner);
-            Assert.IsTrue(typeof (DemoRepository<IEmployee>).IsInstanceOfType(inner));
-            DemoRepository<IEmployee> demoEmpRepost = inner as DemoRepository<IEmployee>;
-            Assert.AreEqual("Generic Repostiory", demoEmpRepost.Name);
-            Assert.IsNotNull(demoEmpRepost.Cache);
-            Assert.IsTrue(typeof (HashTableCache<IEmployee>).IsInstanceOfType(demoEmpRepost.Cache));
-        }
+		[Test]
+		public void ComplexGenericConfiguration_GetGenericRepostiory()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
+			IRepository<IEmployee> empRepost = container[typeof (IRepository<IEmployee>)] as IRepository<IEmployee>;
+			Assert.IsNotNull(empRepost);
+			Assert.IsTrue(typeof (LoggingRepositoryDecorator<IEmployee>).IsInstanceOfType(empRepost));
+			LoggingRepositoryDecorator<IEmployee> log = empRepost as LoggingRepositoryDecorator<IEmployee>;
+			IRepository<IEmployee> inner = log.inner;
+			Assert.IsNotNull(inner);
+			Assert.IsTrue(typeof (DemoRepository<IEmployee>).IsInstanceOfType(inner));
+			DemoRepository<IEmployee> demoEmpRepost = inner as DemoRepository<IEmployee>;
+			Assert.AreEqual("Generic Repostiory", demoEmpRepost.Name);
+			Assert.IsNotNull(demoEmpRepost.Cache);
+			Assert.IsTrue(typeof (HashTableCache<IEmployee>).IsInstanceOfType(demoEmpRepost.Cache));
+		}
 
-        [Test]
-        public void ComplexGenericConfiguration_GetReviewRepository_BoundAtConfiguration()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
-            IRepository<IReviewer> rev = container.Resolve<IRepository<IReviewer>>();
+		[Test]
+		public void ComplexGenericConfiguration_GetReviewRepository_BoundAtConfiguration()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
+			IRepository<IReviewer> rev = container.Resolve<IRepository<IReviewer>>();
 
-            Assert.IsTrue(typeof (ReviewerRepository).IsInstanceOfType(rev));
-            ReviewerRepository repos = rev as ReviewerRepository;
-            Assert.AreEqual("Reviewer Repository", repos.Name);
-            Assert.IsNotNull(repos.Cache);
-            Assert.IsTrue(typeof (HashTableCache<IReviewer>).IsInstanceOfType(repos.Cache));
-        }
+			Assert.IsTrue(typeof (ReviewerRepository).IsInstanceOfType(rev));
+			ReviewerRepository repos = rev as ReviewerRepository;
+			Assert.AreEqual("Reviewer Repository", repos.Name);
+			Assert.IsNotNull(repos.Cache);
+			Assert.IsTrue(typeof (HashTableCache<IReviewer>).IsInstanceOfType(repos.Cache));
+		}
 
-        [Test]
-        public void
-            ComplexGenericConfiguration_GetReviewableRepostiory_ShouldResolveToDemoRepostiroyInsideLoggingRepositoryWithNoCaching
-            ()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
-            IRepository<IReviewableEmployee> empRepost = container.Resolve<IRepository<IReviewableEmployee>>();
-            Assert.IsNotNull(empRepost);
-            Assert.IsTrue(typeof (LoggingRepositoryDecorator<IReviewableEmployee>).IsInstanceOfType(empRepost));
-            LoggingRepositoryDecorator<IReviewableEmployee> log =
-                empRepost as LoggingRepositoryDecorator<IReviewableEmployee>;
-            IRepository<IReviewableEmployee> inner = log.inner;
-            Assert.IsNotNull(inner);
-            Assert.IsTrue(typeof (DemoRepository<IReviewableEmployee>).IsInstanceOfType(inner));
-            DemoRepository<IReviewableEmployee> demoEmpRepost = inner as DemoRepository<IReviewableEmployee>;
-            Assert.AreEqual("Generic Repostiory With No Cache", demoEmpRepost.Name);
-            Assert.IsNotNull(demoEmpRepost.Cache);
-            Assert.IsTrue(typeof (NullCache<IReviewableEmployee>).IsInstanceOfType(demoEmpRepost.Cache));
-        }
+		[Test]
+		public void
+			ComplexGenericConfiguration_GetReviewableRepostiory_ShouldResolveToDemoRepostiroyInsideLoggingRepositoryWithNoCaching
+			()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
+			IRepository<IReviewableEmployee> empRepost = container.Resolve<IRepository<IReviewableEmployee>>();
+			Assert.IsNotNull(empRepost);
+			Assert.IsTrue(typeof (LoggingRepositoryDecorator<IReviewableEmployee>).IsInstanceOfType(empRepost));
+			LoggingRepositoryDecorator<IReviewableEmployee> log =
+				empRepost as LoggingRepositoryDecorator<IReviewableEmployee>;
+			IRepository<IReviewableEmployee> inner = log.inner;
+			Assert.IsNotNull(inner);
+			Assert.IsTrue(typeof (DemoRepository<IReviewableEmployee>).IsInstanceOfType(inner));
+			DemoRepository<IReviewableEmployee> demoEmpRepost = inner as DemoRepository<IReviewableEmployee>;
+			Assert.AreEqual("Generic Repostiory With No Cache", demoEmpRepost.Name);
+			Assert.IsNotNull(demoEmpRepost.Cache);
+			Assert.IsTrue(typeof (NullCache<IReviewableEmployee>).IsInstanceOfType(demoEmpRepost.Cache));
+		}
 
-        [Test]
-        public void TestGenericSpecialization()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
-            IRepository<IReviewer> repository = container.Resolve<IRepository<IReviewer>>();
-            Assert.IsTrue(typeof (ReviewerRepository).IsInstanceOfType(repository), "Not ReviewerRepository!");
-        }
+		[Test]
+		public void TestGenericSpecialization()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
+			IRepository<IReviewer> repository = container.Resolve<IRepository<IReviewer>>();
+			Assert.IsTrue(typeof (ReviewerRepository).IsInstanceOfType(repository), "Not ReviewerRepository!");
+		}
 
-        [Test]
-        public void ComplexGenericConfiguration_GetRepositoryByIdAndType()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
-            IRepository<IReviewer> repository = container.Resolve<IRepository<IReviewer>>("generic.repository");
-            Assert.IsTrue(typeof (DemoRepository<IReviewer>).IsInstanceOfType(repository), "Not DemoRepository!");
-        }
+		[Test]
+		public void ComplexGenericConfiguration_GetRepositoryByIdAndType()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
+			IRepository<IReviewer> repository = container.Resolve<IRepository<IReviewer>>("generic.repository");
+			Assert.IsTrue(typeof (DemoRepository<IReviewer>).IsInstanceOfType(repository), "Not DemoRepository!");
+		}
 
-        [Test]
-        public void TestComponentLifestylePerGenericType()
-        {
-            IWindsorContainer container = new WindsorContainer();
+		[Test]
+		public void TestComponentLifestylePerGenericType()
+		{
+			IWindsorContainer container = new WindsorContainer();
 
-            container.AddComponent("comp", typeof (IRepository<>), typeof (TransientRepository<>));
+			container.AddComponent("comp", typeof (IRepository<>), typeof (TransientRepository<>));
 
-            object o1 = container.Resolve<IRepository<Employee>>();
-            object o2 = container.Resolve<IRepository<Employee>>();
-            object o3 = container.Resolve<IRepository<Reviewer>>();
-            object o4 = container.Resolve<IRepository<Reviewer>>();
+			object o1 = container.Resolve<IRepository<Employee>>();
+			object o2 = container.Resolve<IRepository<Employee>>();
+			object o3 = container.Resolve<IRepository<Reviewer>>();
+			object o4 = container.Resolve<IRepository<Reviewer>>();
 
-            Assert.IsFalse(Object.ReferenceEquals(o1, o2));
-            Assert.IsFalse(Object.ReferenceEquals(o1, o3));
-            Assert.IsFalse(Object.ReferenceEquals(o1, o4));
-        }
+			Assert.IsFalse(ReferenceEquals(o1, o2));
+			Assert.IsFalse(ReferenceEquals(o1, o3));
+			Assert.IsFalse(ReferenceEquals(o1, o4));
+		}
 
-        [Test]
-        public void CanCreateANormalTypeWithCtorDependencyOnGenericType()
-        {
-            IWindsorContainer container = new WindsorContainer();
+		[Test]
+		public void CanCreateANormalTypeWithCtorDependencyOnGenericType()
+		{
+			IWindsorContainer container = new WindsorContainer();
 
-            container.AddComponent("comp", typeof (NeedsGenericType));
-            container.AddComponent("cache", typeof (ICache<>), typeof (NullCache<>));
+			container.AddComponent("comp", typeof (NeedsGenericType));
+			container.AddComponent("cache", typeof (ICache<>), typeof (NullCache<>));
 
-            NeedsGenericType needsGenericType = container.Resolve<NeedsGenericType>();
+			NeedsGenericType needsGenericType = container.Resolve<NeedsGenericType>();
 
-            Assert.IsNotNull(needsGenericType);
-        }
+			Assert.IsNotNull(needsGenericType);
+		}
 
-        [Test]
-        public void InterceptGeneric1()
-        {
-            WindsorContainer container = new WindsorContainer();
+		[Test]
+		public void InterceptGeneric1()
+		{
+			WindsorContainer container = new WindsorContainer();
 
-            container.AddFacility("interceptor-facility", new MyInterceptorGreedyFacility());
-            container.AddComponent("interceptor", typeof (StandardInterceptor));
-            container.AddComponent("key", typeof (IRepository<Employee>), typeof (DemoRepository<Employee>));
+			container.AddFacility("interceptor-facility", new MyInterceptorGreedyFacility());
+			container.AddComponent("interceptor", typeof (StandardInterceptor));
+			container.AddComponent("key", typeof (IRepository<Employee>), typeof (DemoRepository<Employee>));
 
-            IRepository<Employee> store = container.Resolve<IRepository<Employee>>();
+			IRepository<Employee> store = container.Resolve<IRepository<Employee>>();
 
-            Assert.IsFalse(typeof (DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
-        }
+			Assert.IsFalse(typeof (DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
+		}
 
-        [Test]
-        public void InterceptGeneric2()
-        {
-            WindsorContainer container = new WindsorContainer();
+		[Test]
+		public void InterceptGeneric2()
+		{
+			WindsorContainer container = new WindsorContainer();
 
-            container.AddFacility("interceptor-facility", new MyInterceptorGreedyFacility2());
-            container.AddComponent("interceptor", typeof (StandardInterceptor));
-            container.AddComponent("key", typeof (IRepository<>), typeof (DemoRepository<>));
+			container.AddFacility("interceptor-facility", new MyInterceptorGreedyFacility2());
+			container.AddComponent("interceptor", typeof (StandardInterceptor));
+			container.AddComponent("key", typeof (IRepository<>), typeof (DemoRepository<>));
 
-            IRepository<Employee> store = container.Resolve<IRepository<Employee>>();
+			IRepository<Employee> store = container.Resolve<IRepository<Employee>>();
 
-            Assert.IsFalse(typeof (DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
-        }
+			Assert.IsFalse(typeof (DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
+		}
 
-        [Test]
-        public void ChainOfResponsability()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("chainOfRespnsability.config")));
-            IResultFinder<int> resolve = container.Resolve<IResultFinder<int>>();
-            Assert.IsTrue(resolve.Finder is DatabaseResultFinder<int>);
-            Assert.IsTrue(resolve.Finder.Finder is WebServiceResultFinder<int>);
-            Assert.IsTrue(resolve.Finder.Finder.Finder is FailedResultFinder<int>);
-            Assert.IsTrue(resolve.Finder.Finder.Finder.Finder == null);
-        }
+		[Test]
+		public void ChainOfResponsability()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("chainOfRespnsability.config")));
+			IResultFinder<int> resolve = container.Resolve<IResultFinder<int>>();
+			Assert.IsTrue(resolve.Finder is DatabaseResultFinder<int>);
+			Assert.IsTrue(resolve.Finder.Finder is WebServiceResultFinder<int>);
+			Assert.IsTrue(resolve.Finder.Finder.Finder is FailedResultFinder<int>);
+			Assert.IsTrue(resolve.Finder.Finder.Finder.Finder == null);
+		}
 
-        [Test]
-        public void ChainOfResponsability_Smart()
-        {
-            IWindsorContainer container =
-                new WindsorContainer(new XmlInterpreter(GetFilePath("chainOfRespnsability_smart.config")));
-            IResultFinder<int> resolve = container.Resolve<IResultFinder<int>>();
-            Assert.IsTrue(resolve is CacheResultFinder<int>);
-            Assert.IsTrue(resolve.Finder is DatabaseResultFinder<int>);
-            Assert.IsTrue(resolve.Finder.Finder is WebServiceResultFinder<int>);
-            Assert.IsNull(resolve.Finder.Finder.Finder);
+		[Test]
+		public void ChainOfResponsability_Smart()
+		{
+			IWindsorContainer container =
+				new WindsorContainer(new XmlInterpreter(GetFilePath("chainOfRespnsability_smart.config")));
+			IResultFinder<int> resolve = container.Resolve<IResultFinder<int>>();
+			Assert.IsTrue(resolve is CacheResultFinder<int>);
+			Assert.IsTrue(resolve.Finder is DatabaseResultFinder<int>);
+			Assert.IsTrue(resolve.Finder.Finder is WebServiceResultFinder<int>);
+			Assert.IsNull(resolve.Finder.Finder.Finder);
 
 			IResultFinder<String> resolve2 = container.Resolve<IResultFinder<String>>();
 			Assert.IsTrue(resolve2 is ResultFinderStringDecorator);
 			Assert.IsNotNull(resolve2.Finder);
-        }
+		}
 
-        public string GetFilePath(string fileName)
-        {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                ConfigHelper.ResolveConfigPath("DotNet2Config/" + fileName));
-        }
-    }
+		[Test]
+		public void LifestyleIsInheritsFromGenericType()
+		{
+			WindsorContainer container = new WindsorContainer();
 
-    public interface IResultFinder<T>
-    {
-        T Process(ISpecification specification);
-        IResultFinder<T> Finder { get; }
-    }
+			container.AddFacility("interceptor-facility", new MyInterceptorGreedyFacility2());
+			container.AddComponent("interceptor", typeof (StandardInterceptor));
+			container.AddComponentWithLifestyle("key", typeof (IRepository<>), typeof (DemoRepository<>), LifestyleType.Transient);
 
-    public class CacheResultFinder<T> : IResultFinder<T>
-    {
-        private IResultFinder<T> finder;
+			IRepository<Employee> store = container.Resolve<IRepository<Employee>>();
+			IRepository<Employee> anotherStore = container.Resolve<IRepository<Employee>>();
 
-        public IResultFinder<T> Finder
-        {
-            get { return finder; }
-        }
+			Assert.IsFalse(typeof (DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
+			Assert.AreNotSame(store, anotherStore, "This should be two different instances");
+		}
 
-        public CacheResultFinder()
-        {
-        }
+		[Test]
+		public void InterceptorInheritFromGenericType()
+		{
+			WindsorContainer container = new WindsorContainer();
 
-        public CacheResultFinder(IResultFinder<T> finder)
-        {
-            this.finder = finder;
-        }
+			container.AddComponent("interceptor", typeof (MyInterceptor));
+			container.AddComponent("key", typeof (IRepository<>), typeof (DemoRepository<>));
+			container.Kernel.GetHandler(typeof (IRepository<>)).ComponentModel.Interceptors.Add(
+				new InterceptorReference(typeof (MyInterceptor)));
 
-        public T Process(ISpecification specification)
-        {
-            return default(T);
-        }
-    }
+			IRepository<object> demoRepository = container.Resolve<IRepository<object>>();
+			demoRepository.Get(12);
 
-    public class DatabaseResultFinder<T> : IResultFinder<T>
-    {
-        private IResultFinder<T> finder;
+			Assert.IsTrue(MyInterceptor.InterceptedId == 12, "invocation should have been intercepted by MyInterceptor");
+		}
 
-        public IResultFinder<T> Finder
-        {
-            get { return finder; }
-        }
+		public string GetFilePath(string fileName)
+		{
+			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+								ConfigHelper.ResolveConfigPath("DotNet2Config/" + fileName));
+		}
+	}
 
-        public DatabaseResultFinder()
-        {
-        }
-
-        public DatabaseResultFinder(IResultFinder<T> finder)
-        {
-            this.finder = finder;
-        }
-
-        public T Process(ISpecification specification)
-        {
-            return default(T);
-        }
-    }
-
-    public class WebServiceResultFinder<T> : IResultFinder<T>
-    {
-        private IResultFinder<T> finder;
-
-        public IResultFinder<T> Finder
-        {
-            get { return finder; }
-        }
-
-        public WebServiceResultFinder()
-        {
-        }
-
-        public WebServiceResultFinder(IResultFinder<T> finder)
-        {
-            this.finder = finder;
-        }
-
-        public T Process(ISpecification specification)
-        {
-            return default(T);
-        }
-    }
-
-    public class FailedResultFinder<T> : IResultFinder<T>
-    {
-        public IResultFinder<T> Finder
-        {
-            get { return null; }
-        }
-
-        public T Process(ISpecification specification)
-        {
-            return default(T);
-        }
-    }
-
-	public class ResultFinderStringDecorator : IResultFinder<String>
+	public class MyInterceptor : IInterceptor
 	{
-		private IResultFinder<String> finder;
+		public static int InterceptedId = 0;
 
-		public ResultFinderStringDecorator(IResultFinder<String> finder)
+		public void Intercept(IInvocation invocation)
+		{
+			invocation.Proceed();
+			InterceptedId = (int) invocation.Arguments[0];
+		}
+	}
+
+	public interface IResultFinder<T>
+	{
+		T Process(ISpecification specification);
+		IResultFinder<T> Finder { get; }
+	}
+
+	public class CacheResultFinder<T> : IResultFinder<T>
+	{
+		private IResultFinder<T> finder;
+
+		public IResultFinder<T> Finder
+		{
+			get { return finder; }
+		}
+
+		public CacheResultFinder()
+		{
+		}
+
+		public CacheResultFinder(IResultFinder<T> finder)
 		{
 			this.finder = finder;
 		}
 
-		public IResultFinder<String> Finder
+		public T Process(ISpecification specification)
+		{
+			return default(T);
+		}
+	}
+
+	public class DatabaseResultFinder<T> : IResultFinder<T>
+	{
+		private IResultFinder<T> finder;
+
+		public IResultFinder<T> Finder
+		{
+			get { return finder; }
+		}
+
+		public DatabaseResultFinder()
+		{
+		}
+
+		public DatabaseResultFinder(IResultFinder<T> finder)
+		{
+			this.finder = finder;
+		}
+
+		public T Process(ISpecification specification)
+		{
+			return default(T);
+		}
+	}
+
+	public class WebServiceResultFinder<T> : IResultFinder<T>
+	{
+		private IResultFinder<T> finder;
+
+		public IResultFinder<T> Finder
+		{
+			get { return finder; }
+		}
+
+		public WebServiceResultFinder()
+		{
+		}
+
+		public WebServiceResultFinder(IResultFinder<T> finder)
+		{
+			this.finder = finder;
+		}
+
+		public T Process(ISpecification specification)
+		{
+			return default(T);
+		}
+	}
+
+	public class FailedResultFinder<T> : IResultFinder<T>
+	{
+		public IResultFinder<T> Finder
+		{
+			get { return null; }
+		}
+
+		public T Process(ISpecification specification)
+		{
+			return default(T);
+		}
+	}
+
+	public class ResultFinderStringDecorator : IResultFinder<string>
+	{
+		private IResultFinder<string> finder;
+
+		public ResultFinderStringDecorator(IResultFinder<string> finder)
+		{
+			this.finder = finder;
+		}
+
+		public IResultFinder<string> Finder
 		{
 			get { return finder; }
 		}
@@ -407,9 +448,9 @@ namespace Castle.Windsor.Tests
 		}
 	}
 
-    public interface ISpecification
-    {
-    }
+	public interface ISpecification
+	{
+	}
 }
 
 #endif
