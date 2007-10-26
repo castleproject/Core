@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Handlers
 {
 	using System;
 	using System.Collections.Generic;
-	using Core;
+	using Castle.Core;
 
 	/// <summary>
 	/// Summary description for DefaultGenericHandler.
@@ -47,7 +47,7 @@ namespace Castle.MicroKernel.Handlers
 			IHandler handler = GetSubHandler(context, implType);
 
 			//so the generic version wouldn't be considered as well
-			using (context.ResolvingHandler(this))
+			using(context.ResolvingHandler(this))
 			{
 				return handler.Resolve(context);
 			}
@@ -62,7 +62,7 @@ namespace Castle.MicroKernel.Handlers
 
 		protected IHandler GetSubHandler(CreationContext context, Type genericType)
 		{
-			lock (type2SubHandler)
+			lock(type2SubHandler)
 			{
 				IHandler handler;
 
@@ -79,8 +79,6 @@ namespace Castle.MicroKernel.Handlers
 
 					newModel.ExtendedProperties[ComponentModel.SkipRegistration] = true;
 
-					CloneParentProperties(context, newModel);
-
 					Kernel.AddCustomComponent(newModel);
 
 					handler = Kernel.HandlerFactory.Create(newModel);
@@ -89,35 +87,6 @@ namespace Castle.MicroKernel.Handlers
 				}
 
 				return handler;
-			}
-		}
-
-		/// <summary>
-		/// Clone some of the parent componentmodel properties to the generic subhandler.
-		/// </summary>
-		/// <remarks>
-		/// The following properties are copied:
-		/// <list type="bullet">
-		/// <item>
-		///		<description>The <see cref="LifestyleType"/></description>
-		/// </item>
-		/// <item>
-		///		<description>The <see cref="ComponentModel.Interceptors"/></description>
-		/// </item>
-		/// </list>
-		/// </remarks>
-		/// <param name="context">The parent context</param>
-		/// <param name="newModel">the subhandler</param>
-		private static void CloneParentProperties(CreationContext context, ComponentModel newModel)
-		{
-			// Inherits from LifeStyle's context.
-			if (newModel.LifestyleType == LifestyleType.Undefined)
-				newModel.LifestyleType = context.Handler.ComponentModel.LifestyleType;
-
-			// Inherit context interceptors
-			foreach (InterceptorReference interceptor in context.Handler.ComponentModel.Interceptors)
-			{
-				newModel.Interceptors.Add(interceptor);
 			}
 		}
 	}

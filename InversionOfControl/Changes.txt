@@ -1,11 +1,6 @@
 RC 4
 ====
 
-- Applied Philippe Tremblay's patch fixing IOC-94 
-  "Copy LifeStyle from generic interface"
-
-- Added support for copying interceptors defined on the geneirc interface handler.
-
 - Fixed IOC-80
   "StartableFacility erroneously tries to start a component before
   RegisterCustomDependency can be called"
