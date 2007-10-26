@@ -96,6 +96,14 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
+		/// Evaluates whether the specified template can be used to generate js.
+		/// </summary>
+		/// <returns><c>true</c> if it exists</returns>
+		public virtual bool IsTemplateForJSGeneration(String templateName)
+		{
+			throw new NotImplementedException();
+		}
+		/// <summary>
 		/// Processes the view - using the templateName
 		/// to obtain the correct template,
 		/// and using the context to output the result.

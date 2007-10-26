@@ -1,4 +1,4 @@
- // Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			if (ViewSourceLoader.HasTemplate("nvelocity.properties"))
 			{
-				using(Stream stream = ViewSourceLoader.GetViewSource("nvelocity.properties").OpenViewStream())
+				using (Stream stream = ViewSourceLoader.GetViewSource("nvelocity.properties").OpenViewStream())
 				{
 					props.Load(stream);
 				}
@@ -68,7 +68,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			// Set up a custom directive manager
 			props.SetProperty("directive.manager",
-			                  "Castle.MonoRail.Framework.Views.NVelocity.CustomDirectiveManager; Castle.MonoRail.Framework.Views.NVelocity");
+							  "Castle.MonoRail.Framework.Views.NVelocity.CustomDirectiveManager; Castle.MonoRail.Framework.Views.NVelocity");
 
 			InitializeVelocityProperties(props);
 
@@ -123,16 +123,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		}
 
 		/// <summary>
-		/// Evaluates whether the specified template exists.
-		/// </summary>
-		/// <param name="templateName"></param>
-		/// <returns><c>true</c> if it exists</returns>
-		public override bool HasTemplate(String templateName)
-		{
-			return ViewSourceLoader.HasTemplate(ResolveTemplateName(templateName));
-		}
-
-		/// <summary>
 		/// Processes the specified context.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -178,7 +168,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 					ProcessLayout(contents, controller, ctx, context);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				if (Logger.IsErrorEnabled)
 				{
@@ -208,7 +198,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				BeforeMerge(velocity, template, ctx);
 				template.Merge(ctx, output);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				if (Logger.IsErrorEnabled)
 				{
@@ -230,7 +220,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				Template template = velocity.GetTemplate(view);
 				template.Merge(ctx, output);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				if (Logger.IsErrorEnabled)
 				{
@@ -247,7 +237,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		}
 
 		public override void GenerateJS(TextWriter output, IRailsEngineContext context, IController controller,
-		                                string templateName)
+										string templateName)
 		{
 			IContext ctx = CreateContext(context, controller);
 
@@ -265,11 +255,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				StringWriter writer = new StringWriter();
 
-				template.Merge(ctx, writer); 
+				template.Merge(ctx, writer);
 
 				output.WriteLine(generator);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				if (Logger.IsErrorEnabled)
 				{
@@ -307,39 +297,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		protected virtual void InitializeVelocityProperties(ExtendedProperties props)
 		{
 			velocity.SetApplicationAttribute(RuntimeConstants.RESOURCE_MANAGER_CLASS,
-			                                 new CustomResourceManager(ViewSourceLoader));
+											 new CustomResourceManager(ViewSourceLoader));
 
 			LoadMacros(props);
-		}
-
-		/// <summary>
-		/// Resolves the template name into a velocity template file name.
-		/// </summary>
-		protected string ResolveTemplateName(string templateName)
-		{
-			if (Path.HasExtension(templateName))
-			{
-				return templateName;
-			}
-			else
-			{
-				return templateName + TemplateExtension;
-			}
-		}
-
-		/// <summary>
-		/// Resolves the template name into a velocity JS template file name.
-		/// </summary>
-		protected string ResolveJSTemplateName(string templateName)
-		{
-			if (Path.HasExtension(templateName))
-			{
-				return templateName;
-			}
-			else
-			{
-				return templateName + JsTemplateExtension;
-			}
 		}
 
 		/// <summary>
@@ -391,7 +351,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				template.Merge(ctx, output);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				if (context.Request.IsLocal)
 				{
@@ -416,13 +376,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			if (controller.Resources != null)
 			{
-				foreach(String key in controller.Resources.Keys)
+				foreach (String key in controller.Resources.Keys)
 				{
 					innerContext[key] = controller.Resources[key];
 				}
 			}
 
-			foreach(String key in context.Params.AllKeys)
+			foreach (String key in context.Params.AllKeys)
 			{
 				if (key == null) continue; // Nasty bug?
 				object value = context.Params[key];
@@ -452,7 +412,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 						new StaticAccessorHelper<DateTime>()
 					};
 
-			foreach(object helper in builtInHelpers)
+			foreach (object helper in builtInHelpers)
 			{
 				innerContext[helper.GetType().GetGenericArguments()[0].Name] = helper;
 			}
@@ -471,7 +431,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				innerContext[Flash.FlashKey] = context.Flash;
 
-				foreach(DictionaryEntry entry in context.Flash)
+				foreach (DictionaryEntry entry in context.Flash)
 				{
 					if (entry.Value == null) continue;
 					innerContext[entry.Key] = entry.Value;
@@ -480,7 +440,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			if (controller.PropertyBag != null)
 			{
-				foreach(DictionaryEntry entry in controller.PropertyBag)
+				foreach (DictionaryEntry entry in controller.PropertyBag)
 				{
 					if (entry.Value == null) continue;
 					innerContext[entry.Key] = entry.Value;
@@ -511,7 +471,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				if (libPropValue is ICollection)
 				{
-					macroList.AddRange((ICollection) libPropValue);
+					macroList.AddRange((ICollection)libPropValue);
 				}
 				else if (libPropValue is string)
 				{

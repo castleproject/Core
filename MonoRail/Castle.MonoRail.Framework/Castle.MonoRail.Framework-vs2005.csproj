@@ -71,13 +71,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Components.Common.EmailSender, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
-    <Reference Include="Castle.Components.Binder, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Castle.Components.Common.EmailSender">
       <Name>Castle.Components.Common.EmailSender</Name>
       <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.EmailSender.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Components.Validator, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
       <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
@@ -165,7 +162,6 @@
     <Compile Include="Configuration\DefaultUrl.cs" />
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
     <Compile Include="IController.cs" />
-    <Compile Include="RoutingEngine.cs" />
     <Compile Include="Extensions\ExceptionChaining\LocalExceptionFilterHandler.cs" />
     <Compile Include="Internal\ReflectionBasedDictionaryAdapter.cs" />
     <Compile Include="IRescueController.cs" />
@@ -605,6 +601,16 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
+      <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
+      <Name>Castle.Components.Binder-vs2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Components\Validator\Castle.Components.Validator\Castle.Components.Validator.csproj">
+      <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
+      <Name>Castle.Components.Validator</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Internal\Graph\" />

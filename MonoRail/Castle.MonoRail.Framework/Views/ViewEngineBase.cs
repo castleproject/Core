@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Configuration;
 	using System.IO;
-	
+
 	using Castle.Core;
 	using Castle.Core.Logging;
 
@@ -44,23 +44,23 @@ namespace Castle.MonoRail.Framework
 		public virtual void Service(IServiceProvider provider)
 		{
 			serviceProvider = provider;
-			
-			viewSourceLoader = (IViewSourceLoader) provider.GetService(typeof(IViewSourceLoader));
-			
+
+			viewSourceLoader = (IViewSourceLoader)provider.GetService(typeof(IViewSourceLoader));
+
 			if (viewSourceLoader == null)
 			{
 				string message = "Could not obtain IViewSourceLoader";
 				throw new ConfigurationErrorsException(message);
 			}
 
-			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			ILoggerFactory loggerFactory = (ILoggerFactory)provider.GetService(typeof(ILoggerFactory));
 
 			if (loggerFactory != null)
 			{
 				logger = loggerFactory.Create(GetType());
 			}
 		}
-		
+
 		#endregion
 
 		#region IViewEngine implementation
@@ -100,7 +100,21 @@ namespace Castle.MonoRail.Framework
 		/// Evaluates whether the specified template exists.
 		/// </summary>
 		/// <returns><c>true</c> if it exists</returns>
-		public abstract bool HasTemplate(String templateName);
+		public virtual bool HasTemplate(String templateName)
+		{
+			return
+				ViewSourceLoader.HasTemplate(ResolveTemplateName(templateName)) ||
+				ViewSourceLoader.HasTemplate(ResolveJSTemplateName(templateName));
+		}
+
+		/// <summary>
+		/// Evaluates whether the specified template can be used to generate js.
+		/// </summary>
+		/// <returns><c>true</c> if it exists</returns>
+		public virtual bool IsTemplateForJSGeneration(String templateName)
+		{
+			return HasTemplate(ResolveJSTemplateName(templateName));
+		}
 
 		/// <summary>
 		/// Processes the view - using the templateName 
@@ -143,7 +157,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="templateName">Name of the template.</param>
 		public virtual void GenerateJS(IRailsEngineContext context, IController controller, string templateName)
 		{
-            GenerateJS(context.Response.Output, context, controller, templateName);
+			GenerateJS(context.Response.Output, context, controller, templateName);
 		}
 
 		/// <summary>
@@ -163,6 +177,35 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public abstract void ProcessContents(IRailsEngineContext context, IController controller, String contents);
 
+		/// <summary>
+		/// Resolves the template name into a file name with the proper file extension
+		/// </summary>
+		protected virtual string ResolveTemplateName(string templateName)
+		{
+			if (Path.HasExtension(templateName))
+			{
+				return templateName;
+			}
+			else
+			{
+				return templateName + ViewFileExtension;
+			}
+		}
+
+		/// <summary>
+		/// Resolves the template name into a JS generation file name with the proper file extension
+		/// </summary>
+		protected virtual string ResolveJSTemplateName(string templateName)
+		{
+			if (Path.HasExtension(templateName))
+			{
+				return templateName;
+			}
+			else
+			{
+				return templateName + JSGeneratorFileExtension;
+			}
+		}
 		#endregion
 
 		#region Pre/Post send view

@@ -232,11 +232,6 @@ namespace Castle.MonoRail.Views.IronView
 			return compiledCode;
 		}
 
-		protected string ResolveTemplateName(string templateName)
-		{
-			return templateName + TemplateExtension;
-		}
-
 		protected string ResolveTemplateName(string area, string templateName)
 		{
 			return String.Format("{0}{1}{2}", area,

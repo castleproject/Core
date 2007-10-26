@@ -58,6 +58,12 @@ namespace Castle.MonoRail.Framework
 		bool HasTemplate(String templateName);
 
 		/// <summary>
+		/// Evaluates whether the specified template can be used to generate js.
+		/// </summary>
+		/// <returns><c>true</c> if it exists</returns>
+		bool IsTemplateForJSGeneration(String templateName);
+
+		/// <summary>
 		/// Processes the view - using the templateName 
 		/// to obtain the correct template,
 		/// and using the context to output the result.

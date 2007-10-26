@@ -108,13 +108,6 @@ namespace Castle.MonoRail.Views.Brail
 
 		#endregion
 
-		public override bool HasTemplate(string templateName)
-		{
-			if (Path.HasExtension(templateName))
-				return ViewSourceLoader.HasTemplate(templateName);
-			return ViewSourceLoader.HasTemplate(templateName + ViewFileExtension);
-		}
-
 		// Process a template name and output the results to the user
 		// This may throw if an error occured and the user is not local (which would 
 		// cause the yellow screen of death)
@@ -153,7 +146,7 @@ namespace Castle.MonoRail.Views.Brail
 
 			try
 			{
-				string file = ResolveTemplateName(partialName, ViewFileExtension);
+				string file = ResolveTemplateName(partialName);
 				BrailBase view = GetCompiledScriptInstance(file, output, context, controller);
 				Log("Executing partial view {0}", partialName);
 				view.Run();
@@ -184,7 +177,7 @@ namespace Castle.MonoRail.Views.Brail
 			{
 				object generator = CreateJSGenerator(context);
 				AdjustJavascriptContentType(context);
-				string file = ResolveTemplateName(templateName, JSGeneratorFileExtension);
+				string file = ResolveJSTemplateName(templateName);
 				BrailBase view = GetCompiledScriptInstance(file,
 					//we use the script just to build the generator, not to output to the user
 														   new StringWriter(),
@@ -290,21 +283,6 @@ namespace Castle.MonoRail.Views.Brail
 			ILoggerFactory loggerFactory = serviceProvider.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
 			if (loggerFactory != null)
 				logger = loggerFactory.Create(GetType().Name);
-		}
-
-		/// <summary>
-		/// Resolves the template name into a  file name.
-		/// </summary>
-		protected static string ResolveTemplateName(string templateName, string extention)
-		{
-			if (Path.HasExtension(templateName))
-			{
-				return templateName;
-			}
-			else
-			{
-				return templateName + extention;
-			}
 		}
 
 		// Check if a layout has been defined. If it was, then the layout would be created
