@@ -6,11 +6,16 @@ Anyway, the following are some useful tips if things go wrong for some reason.
 Where to start the build?
 =========================
 
-Use the default.build in the root directory. It compiles everything in the right order, copies dependencies and so on. 
+Use the default.build in the root directory. It compiles everything in the right order, copies dependencies and so on.
 
 Simply type
 
   > nant
+
+Use the following to build the trunk before attempting to load any solutions in your IDE for the first time, otherwise you may have reference problems:
+
+  > nant rebuild
+
 
 Database tests
 ==============
