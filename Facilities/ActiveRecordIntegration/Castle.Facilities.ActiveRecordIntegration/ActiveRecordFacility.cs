@@ -206,11 +206,15 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			string isDebug = facilityConfig.Attributes["isDebug"];
 			string sessionfactoryholdertype = facilityConfig.Attributes["sessionfactoryholdertype"];
 			string isLazyByDefault = facilityConfig.Attributes["default-lazy"];
+			string pluralize = facilityConfig.Attributes["pluralizeTableNames"];
+			string verifyModelsAgainstDBSchema = facilityConfig.Attributes["verifyModelsAgainstDBSchema"];
 
 			SetUpThreadInfoType(ConvertBool(isWeb), threadinfotype);
 			SetDebugFlag(ConvertBool(isDebug));
 			SetUpSessionFactoryHolderType(sessionfactoryholdertype);
 			SetIsLazyByDefault(ConvertBool(isLazyByDefault));
+			PluralizeTableNames = ConvertBool(pluralize);
+			VerifyModelsAgainstDBSchema = ConvertBool(verifyModelsAgainstDBSchema);
 
 			foreach(IConfiguration config in facilityConfig.Children)
 			{
