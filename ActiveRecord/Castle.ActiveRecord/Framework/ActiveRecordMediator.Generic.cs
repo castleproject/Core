@@ -14,6 +14,7 @@
 
 namespace Castle.ActiveRecord
 {
+	using System;
 	using Framework;
 	using NHibernate.Expression;
 
@@ -118,6 +119,29 @@ namespace Castle.ActiveRecord
 		public static T FindOne(DetachedCriteria criteria)
 		{
 			return (T) FindOne(typeof(T), criteria);
+		}
+
+		/// <summary>
+		/// Finds records based on a property value - automatically converts null values to IS NULL style queries. 
+		/// </summary>
+		/// <param name="property">A property name (not a column name)</param>
+		/// <param name="value">The value to be equals to</param>
+		/// <returns></returns>
+		public static Array FindAllByProperty(String property, object value)
+		{
+			return ActiveRecordBase<T>.FindAllByProperty(property, value);
+		}
+
+		/// <summary>
+		/// Finds records based on a property value - automatically converts null values to IS NULL style queries. 
+		/// </summary>
+		/// <param name="orderByColumn">The column name to be ordered ASC</param>
+		/// <param name="property">A property name (not a column name)</param>
+		/// <param name="value">The value to be equals to</param>
+		/// <returns></returns>
+		public static T[] FindAllByProperty(String orderByColumn, String property, object value)
+		{
+			return ActiveRecordBase<T>.FindAllByProperty(orderByColumn, property, value);
 		}
 
 		/// <summary>
