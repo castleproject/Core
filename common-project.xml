@@ -58,7 +58,6 @@
 	<target name="common.compile-tests"
 		description="Compile NUnit tests and copy App.config file to the output directory, if it exists.">
 
-		<property name="istestsproject" value="true" />
 		<call target="common.compile-dll" />
 
 		<!-- Check if there is a framework specific config file and use that -->
@@ -104,8 +103,6 @@
  	<target name="common.compile-dll"
 		description="Compile sources into a DLL">
 
-		<property name="istestsproject" value="false" overwrite="false" />
-
 		<if test="${build.msbuild}">
 			<property name="msbuildlogger" value="" overwrite="false" unless="${property::exists('CCNetLabel')}" />
 			<property name="msbuildlogger" value="/logger:ThoughtWorks.CruiseControl.MsBuild.XmlLogger" overwrite="false" if="${property::exists('CCNetLabel')}" />
@@ -115,10 +112,10 @@
 				<arg file="${src.dir}/${project.vsproj}" />
 				<arg value="/p:Configuration=${project.config}" />
 				<arg value="/p:OutputPath=${build.dir}" />
-				<arg value="/p:TreatWarningsAsErrors=${build.warnaserrors}" unless="${istestsproject}" />
+				<arg value="/p:TreatWarningsAsErrors=${build.warnaserrors}" />
 				<arg value='/p:DefineConstants="${msbuild.defines}"' />
 				<arg value='/t:Rebuild' if="${build.rebuild}" />
-				<arg value="/p:DocumentationFile=${build.dir}/${project::get-name()}.xml" unless="${istestsproject}" />
+				<arg value="/p:DocumentationFile=${build.dir}/${project::get-name()}.xml" />
 				<arg value="/p:NoWarn=1591" unless="${build.warnmissingdocs}" />
 				<arg line="/p:SignAssembly=${assembly.sign} /p:AssemblyOriginatorKeyFile=${key.file}" />
 				<arg value="${msbuildlogger}" />
@@ -126,8 +123,7 @@
 		</if>
 		
 		<if test="${not build.msbuild}">
-			<property name="warnaserror" value="false" if="${istestsproject}" />
-			<property name="warnaserror" value="${build.warnaserrors}" if="${not istestsproject}" />
+			<property name="warnaserror" value="${build.warnaserrors}" />
 			<csc
 				target="library" 
 				define="${current.build.defines}" 
@@ -277,19 +273,7 @@
 				workingdir="${build.dir}" 
 				commandline="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo"
 				failonerror="${common.testrunner.failonerror}"
-				 />
-
-			<nunit2 unless="${nunit.found}" if="${string::to-lower(testrunner)=='nunit'}" failonerror="${common.testrunner.failonerror}">
-				<formatter 
-					type="Xml" 
-					usefile="true" 
-					extension=".xml" 
-					outputdir="${testresults.dir}"
-				/>
-				<test
-					assemblyname="${build.dir}/${project::get-name()}.dll"
-					appconfig="${build.dir}/${project::get-name()}.dll.config" />
-			</nunit2>
+			/>
 		</if>
 		<if test="${not common.testrunner.enabled}">
 			<echo message="Tests are disabled for '${project::get-name()}'" />

@@ -69,7 +69,7 @@ namespace Castle.Windsor.Tests
 				new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
 			LoggingRepositoryDecorator<int> resolve =
 				(LoggingRepositoryDecorator<int>) container.Resolve<IRepository<int>>();
-			Assert.IsNull(resolve.Inner);
+			Assert.IsNull(resolve.inner);
 		}
 
 		[Test]

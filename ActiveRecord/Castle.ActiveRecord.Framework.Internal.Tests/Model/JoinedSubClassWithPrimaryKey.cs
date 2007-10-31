@@ -20,7 +20,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	public class JoinedSubClassWithPrimaryKey : BaseJoinedClass
 	{
 		[PrimaryKey]
-		public int Id
+		public int PkId
 		{
 			get { return 0; }
 			set { }

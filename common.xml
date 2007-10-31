@@ -206,10 +206,11 @@
 				failonerror="false" />
 
 			<property name="nunit.found" value="${nunit.found == '0'}" readonly="true" />
+			
+			<fail message="ERROR: NUnit or MBUnit not found, cannot continue." unless="${nunit.found or mbunit.found}"/>
 
 			<echo message="INFO: Using MBUnit for running unit tests" if="${mbunit.found}"/>
 			<echo message="INFO: Using NUnit for running unit tests" if="${nunit.found}"/>
-			<echo message="WARNING: MBUnit or NUnit not found, using less predictable NAnt &lt;nunit2&gt; task" unless="${nunit.found or mbunit.found}"/>
 		</if>
 	</target>
 

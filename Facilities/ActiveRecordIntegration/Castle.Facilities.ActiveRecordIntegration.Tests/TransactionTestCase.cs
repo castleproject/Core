@@ -44,7 +44,7 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 			Post.DeleteAll();
 			Blog.DeleteAll();
 
-			SessionScope scope = new SessionScope();
+			SessionScope scope = new SessionScope(FlushAction.Never);
 			
 			Blog.FindAll(); // side effects only
 
@@ -55,7 +55,7 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 
 			blog.Name = "joe developer";
 
-			scope.Dispose(true);
+			scope.Dispose();
 
 			Assert.AreEqual( "name", Blog.FindAll()[0].Name );
 		}
@@ -66,7 +66,7 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 			Post.DeleteAll();
 			Blog.DeleteAll();
 
-			SessionScope scope = new SessionScope();
+			SessionScope scope = new SessionScope(FlushAction.Never);
 			
 			Blog.FindAll(); // side effects only
 
@@ -79,7 +79,7 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 
 			Assert.AreEqual( 1, Blog.FindAll().Length );
 
-			scope.Dispose(true);
+			scope.Dispose();
 
 			Assert.AreEqual( "name", Blog.FindAll()[0].Name );
 		}

@@ -18,7 +18,9 @@ namespace Castle.MonoRail.Framework.Tests
 	using System.IO;
 	using Castle.MonoRail.TestSupport;
 
+#pragma warning disable 618 // AbstractMRTestCase is marked obsolete but we need it here.
 	public abstract class AbstractTestCase : AbstractMRTestCase
+#pragma warning restore 618
 	{
 		protected override string GetPhysicalDir()
 		{
