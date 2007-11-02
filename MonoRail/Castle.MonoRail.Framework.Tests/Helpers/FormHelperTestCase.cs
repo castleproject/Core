@@ -754,5 +754,44 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		#endregion
 	}
 
+	public class Key
+	{
+		private int id;
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
+		public Key(int id)
+		{
+			this.id = id;
+		}
+	}
+
+	public class ClassWithCompositKey
+	{
+		private string name;
+		private Key key;
+
+		public ClassWithCompositKey(int id, string name)
+		{
+			this.name = name;
+			key = new Key(id);
+		}
+
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public Key Key
+		{
+			get { return key; }
+			set { key = value; }
+		}
+	}
+
 	#endregion
 }

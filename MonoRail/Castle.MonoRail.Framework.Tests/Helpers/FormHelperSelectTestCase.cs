@@ -287,5 +287,17 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				"<option value=\"1\">Jan</option>" + Environment.NewLine + "<option value=\"2\">Feb</option>" + Environment.NewLine + "</select>",
 				helper.Select("contact.dobmonth.id", list, DictHelper.Create("value=id", "text=name")));
 		}
+
+		[Test]
+		public void SelectWithCompositKey()
+		{
+			ArrayList list = new ArrayList();
+			list.Add(new ClassWithCompositKey(1, "cat1"));
+			list.Add(new ClassWithCompositKey(2, "cat2"));
+
+			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >" + Environment.NewLine +
+				"<option value=\"1\">cat1</option>" + Environment.NewLine + "<option value=\"2\">cat2</option>" + Environment.NewLine + "</select>",
+				helper.Select("product.category.id", list, DictHelper.Create("value=Key.Id", "text=name")));
+		}
 	}
 }

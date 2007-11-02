@@ -254,14 +254,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		private int formCount;
 		private string currentFormId;
 		private bool isValidationDisabled;
-		private Stack objectStack = new Stack();
+		private readonly Stack objectStack = new Stack();
 		private IBrowserValidatorProvider validatorProvider = new PrototypeWebValidator();
 		private BrowserValidationConfiguration validationConfig;
 
 		/// <summary>
 		/// Logger instance
 		/// </summary>
-		protected ILogger logger = NullLogger.Instance;
+		protected static ILogger logger = NullLogger.Instance;
 
 		#region IServiceEnabledComponent implementation
 
@@ -2312,7 +2312,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			return foundType;
 		}
 
-		private PropertyInfo QueryPropertyInfoRecursive(Type type, string[] propertyPath, int piece, Action<PropertyInfo> action)
+		private static PropertyInfo QueryPropertyInfoRecursive(Type type, string[] propertyPath)
+		{
+			return QueryPropertyInfoRecursive(type, propertyPath, 0, null);
+		}
+
+		private static PropertyInfo QueryPropertyInfoRecursive(Type type, string[] propertyPath, int piece, Action<PropertyInfo> action)
 		{
 			string property = propertyPath[piece]; int index;
 
@@ -2379,13 +2384,24 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// 
+		/// Query property paths agains the rootInstance type
 		/// </summary>
-		/// <param name="rootInstance"></param>
-		/// <param name="propertyPath"></param>
-		/// <param name="piece"></param>
+		/// <param name="rootInstance">the object to query</param>
+		/// <param name="propertyPath">property path</param>
 		/// <returns>The generated form element</returns>
-		protected object QueryPropertyRecursive(object rootInstance, string[] propertyPath, int piece)
+		protected static object QueryPropertyRecursive(object rootInstance, string[] propertyPath)
+		{
+			return QueryPropertyRecursive(rootInstance, propertyPath, 0);
+		}
+
+		/// <summary>
+		/// Query property paths agains the rootInstance type
+		/// </summary>
+		/// <param name="rootInstance">the object to query</param>
+		/// <param name="propertyPath">property path</param>
+		/// <param name="piece">start index</param>
+		/// <returns>The generated form element</returns>
+		protected static object QueryPropertyRecursive(object rootInstance, string[] propertyPath, int piece)
 		{
 			string property = propertyPath[piece]; int index;
 
@@ -2496,7 +2512,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			attributes["onKeyPress"] = "return monorail_formhelper_inputfilter(event, [" + forbid + "]);";
 		}
 
-		private void AssertIsValidArray(object instance, string property, int index)
+		private static void AssertIsValidArray(object instance, string property, int index)
 		{
 			Type instanceType = instance.GetType();
 
@@ -2794,6 +2810,60 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Implementation of <see cref="ValueGetter"/>
+		/// that uses reflection and recusion to access values
+		/// </summary>
+		public class RecursiveReflectionValueGetter : ValueGetter
+		{
+			private readonly string[] keyName;
+			private readonly string name = string.Empty;
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="RecursiveReflectionValueGetter"/> class.
+			/// </summary>
+			/// <param name="targetType">The target type to query</param>
+			/// <param name="keyName">the property path</param>
+			public RecursiveReflectionValueGetter(Type targetType, string keyName)
+			{
+				this.keyName = keyName.Split('.');
+				name = QueryPropertyInfoRecursive(targetType, this.keyName).Name;
+			}
+
+			/// <summary>
+			/// Gets the name.
+			/// </summary>
+			/// <value>The name.</value>
+			public override string Name
+			{
+				get { return name; }
+			}
+
+			/// <summary>
+			/// Gets the value.
+			/// </summary>
+			/// <param name="instance">The instance.</param>
+			/// <returns></returns>
+			public override object GetValue(object instance)
+			{
+				try
+				{
+					return QueryPropertyRecursive(instance, keyName);
+				}
+				catch (TargetException)
+				{
+					PropertyInfo tempProp = instance.GetType().GetProperty(Name);
+
+					if (tempProp == null)
+					{
+						throw;
+					}
+
+					return tempProp.GetValue(instance, null);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Implementation of <see cref="ValueGetter"/>
 		/// to access DataRow's value
 		/// </summary>
 		public class DataRowValueGetter : ValueGetter
@@ -2963,11 +3033,25 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 				else
 				{
-					PropertyInfo info = targetType.GetProperty(keyName, ResolveFlagsToUse(targetType));
-					
-					if (info != null)
+					PropertyInfo info;
+
+					// check for recusion
+					if(keyName.Contains("."))
 					{
-						return new ReflectionValueGetter(info);
+						info = QueryPropertyInfoRecursive(targetType, keyName.Split('.'));
+						
+						if (info != null)
+						{
+							return new RecursiveReflectionValueGetter(targetType, keyName);
+						}
+					}
+					else
+					{
+						info = targetType.GetProperty(keyName, ResolveFlagsToUse(targetType));
+						if (info != null)
+						{
+							return new ReflectionValueGetter(info);
+						}
 					}
 
 					return null;
