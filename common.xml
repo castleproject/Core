@@ -202,7 +202,9 @@
 
 			<exec unless="${mbunit.found or nunit.found == '0'}"
 				program="${nunit-console}" 
+				commandline="/help"
 				resultproperty="nunit.found"
+				output='_nunit.txt'
 				failonerror="false" />
 
 			<property name="nunit.found" value="${nunit.found == '0'}" readonly="true" />
@@ -210,7 +212,21 @@
 			<fail message="ERROR: NUnit or MBUnit not found, cannot continue." unless="${nunit.found or mbunit.found}"/>
 
 			<echo message="INFO: Using MBUnit for running unit tests" if="${mbunit.found}"/>
-			<echo message="INFO: Using NUnit for running unit tests" if="${nunit.found}"/>
+			
+			<if test="${nunit.found}"> <!-- Determine if we can use this version of NUnit -->
+				<loadfile file="_nunit.txt" property="nunit_txt" />
+				<delete file="_nunit.txt" failonerror="false" />
+				<property name="nunit_findtxt" value="NUnit version " />
+				<property name="nunit_version" value="" />
+				<if test="${string::index-of( nunit_txt, nunit_findtxt) >= 0}">
+					<property name="nunit_version" value="${string::trim(string::substring(nunit_txt, string::index-of( nunit_txt, nunit_findtxt) + string::get-length(nunit_findtxt),6 ))}" />
+					<if test="${not string::starts-with(nunit_version, '2.2')}">
+						<fail message="ERROR: Version ${nunit_version} of NUnit is not supported, please use a 2.2.x version, preferably 2.2.10. Use -D:nunit-console=&lt;path to nunit-console.exe&gt; if it is not on the path."/>
+					</if>
+				</if>
+				<echo if="${string::get-length(nunit_version) == 0}">WARNING: Unable to determine NUnit version, unit tests may fail unpredictably with your version of NUnit</echo>
+				<echo if="${string::get-length(nunit_version) > 0}">INFO: Found NUnit ${nunit_version}</echo>
+			</if>
 		</if>
 	</target>
 

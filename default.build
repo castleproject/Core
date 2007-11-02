@@ -48,7 +48,7 @@
 		<mkdir dir="${testresults.dir}" />
 		
 		<call target="common.find-svninfo" />
-		<call target="common.find-nunit" />
+		<call target="common.find-nunit" if="${common.testrunner.enabled}" />
 	</target>
 	
 	<target name="clean" description="Deletes current build artifacts" depends="common.init">
