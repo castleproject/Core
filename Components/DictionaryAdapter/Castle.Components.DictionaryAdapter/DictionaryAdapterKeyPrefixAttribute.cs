@@ -15,12 +15,13 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
+	using System.Reflection;
 
 	/// <summary>
 	/// Assigns a prefix to the keyed properties of an interface.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
-	public class DictionaryAdapterKeyPrefixAttribute : Attribute
+	public class DictionaryAdapterKeyPrefixAttribute : Attribute, IDictionaryKeyBuilder
 	{
 		private String keyPrefix;
 
@@ -47,6 +48,17 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			get { return keyPrefix; }
 			set { keyPrefix = value; }
+		}
+
+		/// <summary>
+		/// Apply the prefix to the key.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <param name="property">The source property.</param>
+		/// <returns>The prefixed key.</returns>
+		String IDictionaryKeyBuilder.Apply(String key, PropertyInfo property)
+		{
+			return keyPrefix + key;
 		}
 	}
 }

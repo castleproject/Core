@@ -178,6 +178,22 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(numberOfHeads, person.NumberOfHeads);
 			Assert.AreEqual(numberOfFingers, person.NumberOfFingers);
 		}
+
+		[Test]
+		public void CreateAdapter_WithSubstitionOnProperty_WorksFine()
+		{
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			person.First_Name = "Craig";
+			Assert.AreEqual("Craig", dictionary["First Name"]);
+		}
+
+		[Test]
+		public void CreateAdapter_WithSubstitionOnInterface_WorksFine()
+		{
+			IPersonWithDeniedInheritancePrefix person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
+			person.Max_Width = 22;
+			Assert.AreEqual(22, dictionary["Max Width"]);
+		}
 	}
 
 	public interface IPerson
@@ -189,6 +205,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		DateTime DOB { get; set; }
 
 		IList<IPerson> Friends { get; set; }
+
+		[DictionaryAdapterKeySubstitution("_", " ")]
+		string First_Name { get; set; }
 	}
 
 	public interface IPersonWithoutPrefix : IPerson
@@ -214,9 +233,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	}
 
 	[DictionaryAdapterKeyPrefix("")]
+	[DictionaryAdapterKeySubstitution("_", " ")]
 	public interface IPersonWithDeniedInheritancePrefix : IPersonWithPrefixOverrideFurtherOverride
 	{
 		int NumberOfFingers { get; set; }
+
+		int Max_Width { get; set; }
 	}
 
 	public interface IPersonWithMethod : IPerson

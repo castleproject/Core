@@ -35,6 +35,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="DictionaryKeySubstitutionAttribute.cs" />
+    <Compile Include="IDictionaryKeyBuilder.cs" />
     <Compile Include="DictionaryAdapterFactory.cs" />
     <Compile Include="DictionaryAdapterKeyPrefixAttribute.cs" />
     <Compile Include="IDictionaryAdapterFactory.cs" />
