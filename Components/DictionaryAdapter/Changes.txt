@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Refactored to support general-purpose key modifications
+
 - Applied patch from Lee Henson allowing Types to inherit or override prefixes using [DictionaryAdapterKeyPrefix()].
 
 - Return default(T) for value type properties not in the dictionary

@@ -167,7 +167,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Name"; }));
 			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "NumberOfFeet"; }));
 			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Person_HairColour"; }));
-			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Person2_EyeColour"; }));
+			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Person2_Eye__Colour"; }));
 			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Person2_NumberOfHeads"; }));
 			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "NumberOfFingers"; }));
 
@@ -224,6 +224,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	[DictionaryAdapterKeyPrefix("Person2_")]
 	public interface IPersonWithPrefixOverride : IPersonWithPrefix
 	{
+		[DictionaryAdapterKey("Eye__Colour")]
 		string EyeColour { get; set; }
 	}
 
