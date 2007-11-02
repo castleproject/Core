@@ -9,14 +9,14 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<if test="${not property::exists('nhibernate.test')}">
-		<property name="nhibernate.test" value="${common.run-tests}" />
+		<property name="nhibernate.test" value="${common.testrunner.enabled}" />
 	</if>
 	<property name="common.testrunner.enabled" value="${nhibernate.test}" />
 
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
 		<include name="Castle.Facilities.NHibernateIntegration/Castle.Facilities.NHibernateIntegration.build" />
-		<include name="Castle.Facilities.NHibernateIntegration.Tests/Castle.Facilities.NHibernateIntegration.Tests.build" />
+		<include name="Castle.Facilities.NHibernateIntegration.Tests/Castle.Facilities.NHibernateIntegration.Tests.build" if="${common.testrunner.enabled}"/>
 	</fileset>
 
 	<target name="build" depends="common.build" />

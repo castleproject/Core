@@ -11,7 +11,7 @@
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
 		<include name="Castle.Facilities.Remoting.TestsComponents/Castle.Facilities.Remoting.TestsComponents.build" />
-		<include name="Castle.Facilities.Remoting.Tests/Castle.Facilities.Remoting.Tests.build" />
+		<include name="Castle.Facilities.Remoting.Tests/Castle.Facilities.Remoting.Tests.build" if="${common.testrunner.enabled}"/>
 	</fileset>
 
 	<target name="build" depends="common.build" />

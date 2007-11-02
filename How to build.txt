@@ -11,10 +11,12 @@ Use the default.build in the root directory. It compiles everything in the right
 Simply type
 
   > nant
+This will create a Debug build of the project
 
 Use the following to build the trunk before attempting to load any solutions in your IDE for the first time, otherwise you may have reference problems:
 
-  > nant rebuild
+  > nant rebuild, or
+  > nant quick rebuild
 
 
 Database tests
@@ -45,6 +47,17 @@ The basic NHibernate settings can be set as NAnt arguments:
 Build options
 =============
 
+Build option selectors
+------------------------
+
+Selectors are pseudo-targets, used to configure some part of the build.
+They need to be put before real build targets.
+
+debug:		"nant debug build" will build the project in debug configuration"
+release:	"nant release rebuild" will rebuild the entire project in release configuration
+quick: 		"nant quick build" will run the build without tests and generally will try to skip as much as possible to speed up the build.
+
+
 Disabling all tests
 -------------------
 
@@ -60,12 +73,10 @@ MbUnit:
   > nant -D:testrunner=MbUnit
 
 N.B.
-MbUnit or NUnit needs to be on the path, otherwise NAnt's built-in nunit2 task will be used.
+MbUnit or NUnit needs to be on the path, alternatively you can specify the test runner console location by
+setting the properties -D:mbunit-console=<path to MBUnit.Cons.exe> or 
+-D:nunit-console=<path to nunit-console.exe> respectively.
 
-Compiling a Debug version
--------------------------
-
-  > nant -D:project.config=debug
 
 Compiling a version not strongly signed
 ---------------------------------------
@@ -84,7 +95,18 @@ Building the Castle MSI installer
 
   > nant installer
   
-You need to have installed Sandcastle, Sandcastle Help File Builder, HTML Help 1.x compiler, and WiX v3 for running task.
+You need to have installed the tools following for running this task:
+- Sandcastle
+  http://www.microsoft.com/downloads/details.aspx?FamilyId=E82EA71D-DA89-42EE-A715-696E3A4873B2&displaylang=en
+
+- Sandcastle Help File Builder
+  http://www.codeplex.com/SHFB
+
+- HTML Help 1.x compiler
+  http://www.microsoft.com/downloads/details.aspx?familyid=00535334-c8a6-452f-9aa0-d597d16580cc&displaylang=en
+
+- WiX v3.
+  http://wix.sourceforge.net/downloadv3.html
 
 
 More questions? 

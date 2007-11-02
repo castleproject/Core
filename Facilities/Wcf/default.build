@@ -12,7 +12,7 @@
 		<!-- Files have to be in dependency order -->
 		<include name="Castle.Facilities.WcfIntegration/default.build" />
 		<include name="Castle.Facilities.WcfIntegration.Demo/default.build" />
-		<include name="Castle.Facilities.WcfIntegration.Tests/default.build" />
+		<include name="Castle.Facilities.WcfIntegration.Tests/default.build" if="${common.testrunner.enabled}"/>
 	</fileset>
 
 	<target name="build" depends="common.build" />

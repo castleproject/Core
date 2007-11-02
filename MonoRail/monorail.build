@@ -9,7 +9,7 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<if test="${not property::exists('monorail.test')}">
-		<property name="monorail.test" value="${common.run-tests}" />
+		<property name="monorail.test" value="${common.testrunner.enabled}" />
 	</if>
 	<property name="common.testrunner.enabled" value="${monorail.test}" />
 
@@ -26,20 +26,20 @@
 		<include name="Castle.MonoRail.TestSupport/Castle.MonoRail.TestSupport.build" />
 		<include name="Castle.Monorail.JSONSupport/Castle.Monorail.JSONSupport.build" />
 		
-		<include name="TestSite/TestSite.build" />
-		<include name="TestSiteWindsor/TestSiteWindsor.build" />
-		<include name="TestSiteNVelocity/TestSiteNVelocity.build" />
-		<include name="TestSiteBrail/TestSiteBrail.build" />
-		<include name="TestSiteARSupport/TestSiteARSupport.build" />
+		<include name="TestSite/TestSite.build" if="${common.testrunner.enabled}"/>
+		<include name="TestSiteWindsor/TestSiteWindsor.build" if="${common.testrunner.enabled}"/>
+		<include name="TestSiteNVelocity/TestSiteNVelocity.build" if="${common.testrunner.enabled}"/>
+		<include name="TestSiteBrail/TestSiteBrail.build" if="${common.testrunner.enabled}"/>
+		<include name="TestSiteARSupport/TestSiteARSupport.build" if="${common.testrunner.enabled}"/>
 		
-		<include name="Castle.MonoRail.Framework.Tests/Castle.MonoRail.Framework.Tests.build" />
-		<include name="Castle.MonoRail.ActiveRecordSupport.Tests.build" />
-		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" />
-		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" />
-		<include name="Castle.MonoRail.TestSupport.Tests/Castle.MonoRail.TestSupport.Tests.build" />
-		<include name="Castle.Monorail.JSONSupport.Tests/Castle.Monorail.JSONSupport.Tests.build" />
+		<include name="Castle.MonoRail.Framework.Tests/Castle.MonoRail.Framework.Tests.build" if="${common.testrunner.enabled}"/>
+		<include name="Castle.MonoRail.ActiveRecordSupport.Tests.build" if="${common.testrunner.enabled}"/>
+		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" if="${common.testrunner.enabled}"/>
+		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" if="${common.testrunner.enabled}"/>
+		<include name="Castle.MonoRail.TestSupport.Tests/Castle.MonoRail.TestSupport.Tests.build" if="${common.testrunner.enabled}"/>
+		<include name="Castle.Monorail.JSONSupport.Tests/Castle.Monorail.JSONSupport.Tests.build" if="${common.testrunner.enabled}"/>
 		<!--
-		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" />
+		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" if="${common.testrunner.enabled}"/>
 		-->
 	</fileset>
 

@@ -257,7 +257,7 @@
 		description="Run NUnit tests">
 
 		<if test="${common.testrunner.enabled}">
-			<call target="common.find-nunit" />
+			<call target="common.find-nunit" unless="${property::exists('nunit.found')}" />
 
 			<echo message="Running tests in '${project::get-name()}'" />
 
