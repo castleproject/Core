@@ -458,7 +458,7 @@ namespace Castle.ActiveRecord
 					{
 						throw new ActiveRecordException(
 							string.Format(
-								"Type `{0}` is not a valid root type.  Make sure it is abstract and inherits from ActiveRecordBase. It also must not define a table itself.",
+								"Type `{0}` is not a valid root type.  Make sure it is abstract and does not define a table itself.",
 								type.FullName));
 					}
 				}
