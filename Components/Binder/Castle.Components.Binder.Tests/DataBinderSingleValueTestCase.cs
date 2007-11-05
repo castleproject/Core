@@ -70,7 +70,7 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(null, binder.BindParameter(typeof(int), "name", node));
 		}
 
-		[Test, ExpectedException(typeof(BindingException), "Exception converting param 'name' to System.Int32. Check inner exception for details")]
+		[Test, ExpectedException(typeof(BindingException), ExpectedMessage = "Exception converting param 'name' to System.Int32. Check inner exception for details")]
 		public void SimpleBinding_Int_Invalid()
 		{
 			CompositeNode node = new CompositeNode("unnamed");
