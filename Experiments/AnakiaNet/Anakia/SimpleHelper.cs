@@ -17,6 +17,7 @@ namespace Anakia
 	using System;
 	using System.Collections;
 	using System.IO;
+	using System.Globalization;
 
 	public class SimpleHelper
 	{
@@ -26,7 +27,7 @@ namespace Anakia
 			
 			if (info.Exists)
 			{
-				return String.Format("{0:#.##}", info.Length / 1024f).ToString();
+				return String.Format(CultureInfo.InvariantCulture,"{0:#.##}", info.Length / 1024f).ToString();
 			}
 			
 			throw new Exception("File " + info.FullName + " was not found");
