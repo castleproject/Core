@@ -146,8 +146,11 @@ namespace Castle.Windsor.Configuration.Interpreters
 			}
 			else
 			{
-				string message = String.Format("DeserializeElement cannot process element {0}", node.Name);
-
+				string message = string.Format(
+					"Configuration parser encountered <{0}>, but it was expecting to find " +
+					"<{1}>, <{2}>, <{3}> or <{4}>. There might be either a typo on <{0}> or " +
+					"you might have forgotten to nest it properly.",
+					node.Name, ContainersNodeName, FacilitiesNodeName, ComponentsNodeName, BootstrapNodeName);
 				throw new ConfigurationErrorsException(message);
 			}
 		}
