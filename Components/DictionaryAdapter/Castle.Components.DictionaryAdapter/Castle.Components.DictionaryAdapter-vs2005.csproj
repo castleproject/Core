@@ -40,6 +40,11 @@
     <Compile Include="IDictionaryKeyBuilder.cs" />
     <Compile Include="DictionaryAdapterFactory.cs" />
     <Compile Include="DictionaryAdapterKeyPrefixAttribute.cs" />
+    <Compile Include="DictionaryAdapterPropertyBinder.cs" />
+    <Compile Include="DictionaryAdapterPropertyBinderAttribute.cs" />
+    <Compile Include="DictionaryAdapterPropertyBindingException.cs" />
+    <Compile Include="DictionaryAdapterStringToNullableGuidBinder.cs" />
+    <Compile Include="DictionaryAdapterStringToNullableIntBinder.cs" />
     <Compile Include="IDictionaryAdapterFactory.cs" />
   </ItemGroup>
   <ItemGroup>

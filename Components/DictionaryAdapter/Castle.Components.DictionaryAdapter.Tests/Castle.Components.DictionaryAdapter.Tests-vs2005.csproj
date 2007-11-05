@@ -37,8 +37,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdaptingNameValueCollectionsTestCase.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DictionaryAdapterFactoryTestCase.cs" />
+    <Compile Include="PropertyBinderTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

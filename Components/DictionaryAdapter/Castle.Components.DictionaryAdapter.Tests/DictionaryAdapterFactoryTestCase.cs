@@ -12,23 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using NUnit.Framework;
+	using System.Collections.Specialized;
 
 	[TestFixture]
 	public class DictionaryAdapterFactoryTestCase
 	{
 		private IDictionary dictionary;
+		private NameValueCollection nameValueCollection;
 		private DictionaryAdapterFactory factory;
 
 		[SetUp]
 		public void SetUp()
 		{
 			dictionary = new Hashtable();
+			nameValueCollection = new NameValueCollection();
 			factory = new DictionaryAdapterFactory();
 		}
 
@@ -89,7 +93,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Age = 37;
 			person.DOB = new DateTime(1970, 7, 19);
 			person.Friends = new List<IPerson>();
-
+			
 			Assert.AreEqual("Craig", person.Name);
 			Assert.AreEqual(37, person.Age);
 			Assert.AreEqual(new DateTime(1970, 7, 19), person.DOB);

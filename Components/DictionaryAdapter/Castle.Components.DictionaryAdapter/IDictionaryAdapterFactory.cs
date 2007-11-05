@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.Components.DictionaryAdapter
 {
 	using System.Collections;
+	using System.Collections.Specialized;
 
 	/// <summary>
 	/// Defines the contract for building typed dictionary adapters.
@@ -31,5 +33,16 @@ namespace Castle.Components.DictionaryAdapter
 		/// The type represented by the T must be an interface with properties.
 		/// </remarks>
 		T GetAdapter<T>(IDictionary dictionary);
+
+		/// <summary>
+		/// Gets a typed adapter bound to the dictionary.
+		/// </summary>
+		/// <typeparam name="T">The typed interface.</typeparam>
+		/// <param name="dictionary">The underlying source of properties.</param>
+		/// <returns>An implementation of the typed interface bound to the dictionary.</returns>
+		/// <remarks>
+		/// The type represented by the T must be an interface with properties.
+		/// </remarks>
+		T GetAdapter<T>(NameValueCollection dictionary);
 	}
 }

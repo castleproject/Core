@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
@@ -20,6 +21,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Threading;
+	using System.Collections.Specialized;
 
 	/// <summary>
 	/// Uses Reflection.Emit to expose the properties of a dictionary
@@ -38,6 +40,22 @@ namespace Castle.Components.DictionaryAdapter
 		/// </remarks>
 		public T GetAdapter<T>(IDictionary dictionary)
 		{
+			return InternalGetAdapter<T>(dictionary, 
+				CreateIDictionaryField, 
+				CreateIDictionaryBasedPropertyGetMethod, 
+				CreateIDictionaryBasedPropertySetMethod);
+		}
+
+		public T GetAdapter<T>(NameValueCollection dictionary)
+		{
+			return InternalGetAdapter<T>(dictionary, 
+				CreateNameValueCollectionField, 
+				CreateNameValueCollectionBasedPropertyGetMethod, 
+				CreateNameValueCollectionBasedPropertySetMethod);
+		}
+		
+		private static T InternalGetAdapter<T>(object dictionary, DictionaryFieldCreationDelegate CreateDictionaryField, PropertyCreationDelegate CreatePropertyGet, PropertyCreationDelegate CreatePropertySet)
+		{
 			if (!typeof(T).IsInterface)
 			{
 				throw new ArgumentException("Only interfaces can be adapted");
@@ -49,37 +67,52 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (adapterAssembly == null)
 			{
-				adapterAssembly = CreateAdapterAssembly<T>(appDomain, adapterAssemblyName);
+				TypeBuilder typeBuilder = CreateTypeBuilder<T>(appDomain, adapterAssemblyName);
+				adapterAssembly = CreateAdapterAssembly<T>(typeBuilder, dictionary.GetType(), CreateDictionaryField, CreatePropertyGet, CreatePropertySet);
 			}
 
 			return GetExistingAdapter<T>(adapterAssembly, dictionary);
 		}
 
-		private static Assembly CreateAdapterAssembly<T>(AppDomain appDomain, String adapterAssemblyName)
+		private static TypeBuilder CreateTypeBuilder<T>(AppDomain appDomain, String adapterAssemblyName)
 		{
 			AssemblyName assemblyName = new AssemblyName(adapterAssemblyName);
 			AssemblyBuilder assemblyBuilder = appDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 			ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(adapterAssemblyName);
 
-			TypeBuilder typeBuilder = CreateAdapterType<T>(moduleBuilder);
-			FieldBuilder dictionaryField = CreateAdapterDictionaryField(typeBuilder);
-			CreateAdapterConstructor(typeBuilder, dictionaryField);
+			return CreateAdapterType<T>(moduleBuilder);
+		}
+
+		private static TypeBuilder CreateAdapterType<T>(ModuleBuilder moduleBuilder)
+		{
+			TypeBuilder typeBuilder =
+				moduleBuilder.DefineType(GetAdapterFullTypeName<T>(),
+										 TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.BeforeFieldInit);
+			typeBuilder.AddInterfaceImplementation(typeof(T));
+
+			return typeBuilder;
+		}
+
+		private static Assembly CreateAdapterAssembly<T>(TypeBuilder typeBuilder, Type dictionaryType, DictionaryFieldCreationDelegate CreateDictionaryField, PropertyCreationDelegate CreatePropertyGet, PropertyCreationDelegate CreatePropertySet)
+		{
+			FieldBuilder dictionaryField = CreateDictionaryField(typeBuilder);
+			CreateAdapterConstructor(typeBuilder, dictionaryField, dictionaryType);
 
 			foreach (KeyValuePair<PropertyInfo, String> property in GetDictionaryKeyMap<T>())
 			{
-				CreateAdapterProperty(typeBuilder, dictionaryField, property.Key, property.Value);
+				CreateAdapterProperty(typeBuilder, dictionaryField, property.Key, property.Value, CreatePropertyGet, CreatePropertySet);
 			}
 
 			typeBuilder.CreateType();
 
-			return assemblyBuilder;
+			return typeBuilder.Assembly;
 		}
 
-		private static void CreateAdapterConstructor(TypeBuilder typeBuilder, FieldInfo dictionaryField)
+		private static void CreateAdapterConstructor(TypeBuilder typeBuilder, FieldInfo dictionaryField, Type dictionaryType)
 		{
 			ConstructorBuilder constructorBuilder = typeBuilder.DefineConstructor(
 				MethodAttributes.Public | MethodAttributes.HideBySig, CallingConventions.Standard,
-				new Type[] { typeof(IDictionary) });
+				new Type[] { dictionaryType });
 			constructorBuilder.DefineParameter(1, ParameterAttributes.None, "dictionary");
 
 			ILGenerator ilGenerator = constructorBuilder.GetILGenerator();
@@ -98,13 +131,12 @@ namespace Castle.Components.DictionaryAdapter
 			ilGenerator.Emit(OpCodes.Ret);
 		}
 
-		private static FieldBuilder CreateAdapterDictionaryField(TypeBuilder typeBuilder)
-		{
-			return typeBuilder.DefineField("dictionary", typeof(IDictionary), FieldAttributes.Private);
-		}
-
+		delegate FieldBuilder DictionaryFieldCreationDelegate(TypeBuilder typeBuilder);
+		delegate void PropertyCreationDelegate(TypeBuilder typeBuilder, FieldInfo dictionaryField,
+														   PropertyBuilder propertyBuilder, PropertyInfo property,
+														   String key, MethodAttributes propertyMethodAttributes);
 		private static void CreateAdapterProperty(TypeBuilder typeBuilder, FieldInfo dictionaryField,
-												  PropertyInfo property, String key)
+												  PropertyInfo property, String key, PropertyCreationDelegate CreatePropertyGet, PropertyCreationDelegate CreatePropertySet)
 		{
 			PropertyBuilder propertyBuilder =
 				typeBuilder.DefineProperty(property.Name, property.Attributes, property.PropertyType, null);
@@ -113,30 +145,44 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (property.CanRead)
 			{
-				CreateAdapterPropertyGetMethod(typeBuilder, dictionaryField, propertyBuilder, property, key,
-											   propertyMethodAttributes);
+				CreatePropertyGet(typeBuilder, dictionaryField, propertyBuilder, property, key,
+								   propertyMethodAttributes);
 			}
 
 			if (property.CanWrite)
 			{
-				CreateAdapterPropertySetMethod(typeBuilder, dictionaryField, propertyBuilder, property, key,
-											   propertyMethodAttributes);
+				CreatePropertySet(typeBuilder, dictionaryField, propertyBuilder, property, key,
+								   propertyMethodAttributes);
 			}
 		}
 
-		private static void CreateAdapterPropertyGetMethod(TypeBuilder typeBuilder, FieldInfo dictionaryField,
+		#region IDictionary
+		private static FieldBuilder CreateIDictionaryField(TypeBuilder typeBuilder)
+		{
+			return typeBuilder.DefineField("dictionary", typeof(IDictionary), FieldAttributes.Private);
+		}
+
+
+		private static void CreateIDictionaryBasedPropertyGetMethod(TypeBuilder typeBuilder, FieldInfo dictionaryField,
 														   PropertyBuilder propertyBuilder, PropertyInfo property,
 														   String key, MethodAttributes propertyMethodAttributes)
 		{
 			MethodBuilder getMethodBuilder =
 				typeBuilder.DefineMethod("get_" + property.Name, propertyMethodAttributes, property.PropertyType, null);
 
-			ILGenerator getILGenerator = getMethodBuilder.GetILGenerator();
-			Label labelUnbox = getILGenerator.DefineLabel();
-			Label labelLoadResult = getILGenerator.DefineLabel();
+			object[] attributes = property.GetCustomAttributes(typeof(DictionaryAdapterPropertyBinderAttribute), false);
+			DictionaryAdapterPropertyBinderAttribute binderAttribute = (attributes.Length > 0) ? (DictionaryAdapterPropertyBinderAttribute)attributes[0] : null;
 
-			getILGenerator.DeclareLocal(typeof(object));
+			ILGenerator getILGenerator = getMethodBuilder.GetILGenerator();
+			Label returnDefault = getILGenerator.DefineLabel();
+			Label storeResult = getILGenerator.DefineLabel();
+			Label loadResult = getILGenerator.DefineLabel();
+
+			getILGenerator.DeclareLocal(typeof (object));
 			getILGenerator.DeclareLocal(property.PropertyType);
+			LocalBuilder local2 = (binderAttribute != null) ? getILGenerator.DeclareLocal(property.PropertyType) : null;
+
+			getILGenerator.Emit(OpCodes.Nop);
 			getILGenerator.Emit(OpCodes.Ldarg_0);
 			getILGenerator.Emit(OpCodes.Ldfld, dictionaryField);
 			getILGenerator.Emit(OpCodes.Ldstr, key);
@@ -144,28 +190,46 @@ namespace Castle.Components.DictionaryAdapter
 
 			getILGenerator.Emit(OpCodes.Stloc_0);
 			getILGenerator.Emit(OpCodes.Ldloc_0);
-			getILGenerator.Emit(OpCodes.Ldnull);
-			getILGenerator.Emit(OpCodes.Ceq);
-			getILGenerator.Emit(OpCodes.Ldc_I4_0);
-			getILGenerator.Emit(OpCodes.Ceq);
-			getILGenerator.Emit(OpCodes.Brtrue_S, labelUnbox);
-			getILGenerator.Emit(OpCodes.Ldloca_S, 1);
-			getILGenerator.Emit(OpCodes.Initobj, property.PropertyType);
-			getILGenerator.Emit(OpCodes.Br_S, labelLoadResult);
+			getILGenerator.Emit(OpCodes.Brfalse_S, returnDefault);
 
-			getILGenerator.MarkLabel(labelUnbox);
-			getILGenerator.Emit(OpCodes.Ldloc_0);
-			getILGenerator.Emit(OpCodes.Unbox_Any, property.PropertyType);
+			if (binderAttribute != null)
+			{
+				getILGenerator.Emit(OpCodes.Newobj, binderAttribute.Binder.GetConstructor(new Type[] { }));
+				getILGenerator.Emit(OpCodes.Ldloc_0);
+				getILGenerator.Emit(OpCodes.Call, binderAttribute.Binder.GetMethod("ConvertFromDictionary", new Type[] { typeof(Object) }));
+				getILGenerator.Emit(OpCodes.Unbox_Any, property.PropertyType);
+				getILGenerator.Emit(OpCodes.Br_S, storeResult);
+
+				getILGenerator.MarkLabel(returnDefault);
+				getILGenerator.Emit(OpCodes.Ldloca_S, local2);
+				getILGenerator.Emit(OpCodes.Initobj, property.PropertyType);
+				getILGenerator.Emit(OpCodes.Ldloc_2);
+			}
+			else
+			{				
+				getILGenerator.Emit(OpCodes.Ldloc_0);
+				getILGenerator.Emit(OpCodes.Unbox_Any, property.PropertyType);
+				getILGenerator.Emit(OpCodes.Br_S, storeResult);
+
+				getILGenerator.MarkLabel(returnDefault);
+				getILGenerator.Emit(OpCodes.Ldloca_S, 1);
+				getILGenerator.Emit(OpCodes.Initobj, property.PropertyType);
+				getILGenerator.Emit(OpCodes.Br_S, loadResult);
+			}
+
+			getILGenerator.MarkLabel(storeResult);
 			getILGenerator.Emit(OpCodes.Stloc_1);
+			getILGenerator.Emit(OpCodes.Br_S, loadResult);
 
-			getILGenerator.MarkLabel(labelLoadResult);
+			getILGenerator.MarkLabel(loadResult);
 			getILGenerator.Emit(OpCodes.Ldloc_1);
+			
 			getILGenerator.Emit(OpCodes.Ret);
 
 			propertyBuilder.SetGetMethod(getMethodBuilder);
 		}
 
-		private static void CreateAdapterPropertySetMethod(TypeBuilder typeBuilder, FieldInfo dictionaryField,
+		private static void CreateIDictionaryBasedPropertySetMethod(TypeBuilder typeBuilder, FieldInfo dictionaryField,
 														   PropertyBuilder propertyBuilder, PropertyInfo property,
 														   String key, MethodAttributes propertyMethodAttributes)
 		{
@@ -173,12 +237,22 @@ namespace Castle.Components.DictionaryAdapter
 				typeBuilder.DefineMethod("set_" + property.Name, propertyMethodAttributes, null,
 										 new Type[] { property.PropertyType });
 
+			
+			object[] attributes = property.GetCustomAttributes(typeof (DictionaryAdapterPropertyBinderAttribute), false);
+			DictionaryAdapterPropertyBinderAttribute binderAttribute = (attributes.Length > 0) ? (DictionaryAdapterPropertyBinderAttribute) attributes[0] : null;
+
 			ILGenerator setILGenerator = setMethodBuilder.GetILGenerator();
 
 			setILGenerator.Emit(OpCodes.Nop);
 			setILGenerator.Emit(OpCodes.Ldarg_0);
 			setILGenerator.Emit(OpCodes.Ldfld, dictionaryField);
 			setILGenerator.Emit(OpCodes.Ldstr, key);
+
+			if (binderAttribute != null)
+			{
+				setILGenerator.Emit(OpCodes.Newobj, binderAttribute.Binder.GetConstructor(new Type[] {}));
+			}
+
 			setILGenerator.Emit(OpCodes.Ldarg_1);
 
 			if (property.PropertyType.IsValueType)
@@ -186,23 +260,135 @@ namespace Castle.Components.DictionaryAdapter
 				setILGenerator.Emit(OpCodes.Box, property.PropertyType);
 			}
 
-			setILGenerator.Emit(OpCodes.Callvirt,
-								typeof(IDictionary).GetMethod("set_Item", new Type[] { typeof(Object), typeof(Object) }));
+			if (binderAttribute != null)
+			{
+				setILGenerator.Emit(OpCodes.Callvirt, binderAttribute.Binder.GetMethod("ConvertFromInterface", new Type[] { typeof(Object) }));
+			}
+
+			setILGenerator.Emit(OpCodes.Callvirt, typeof(IDictionary).GetMethod("set_Item", new Type[] {typeof(Object), typeof(Object)}));
 			setILGenerator.Emit(OpCodes.Nop);
 			setILGenerator.Emit(OpCodes.Ret);
 
 			propertyBuilder.SetSetMethod(setMethodBuilder);
 		}
+		#endregion
 
-		private static TypeBuilder CreateAdapterType<T>(ModuleBuilder moduleBuilder)
+		#region NameValueCollection
+		private static FieldBuilder CreateNameValueCollectionField(TypeBuilder typeBuilder)
 		{
-			TypeBuilder typeBuilder =
-				moduleBuilder.DefineType(GetAdapterFullTypeName<T>(),
-										 TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.BeforeFieldInit);
-			typeBuilder.AddInterfaceImplementation(typeof(T));
-
-			return typeBuilder;
+			return typeBuilder.DefineField("dictionary", typeof(NameValueCollection), FieldAttributes.Private);
 		}
+
+
+		private static void CreateNameValueCollectionBasedPropertyGetMethod(TypeBuilder typeBuilder, FieldInfo dictionaryField,
+														   PropertyBuilder propertyBuilder, PropertyInfo property,
+														   String key, MethodAttributes propertyMethodAttributes)
+		{
+			MethodBuilder getMethodBuilder =
+				typeBuilder.DefineMethod("get_" + property.Name, propertyMethodAttributes, property.PropertyType, null);
+
+			object[] attributes = property.GetCustomAttributes(typeof(DictionaryAdapterPropertyBinderAttribute), false);
+			DictionaryAdapterPropertyBinderAttribute binderAttribute = (attributes.Length > 0) ? (DictionaryAdapterPropertyBinderAttribute)attributes[0] : null;
+
+			ILGenerator getILGenerator = getMethodBuilder.GetILGenerator();
+			Label returnDefault = getILGenerator.DefineLabel();
+			Label storeResult = getILGenerator.DefineLabel();
+			Label loadResult = getILGenerator.DefineLabel();
+
+			getILGenerator.DeclareLocal(typeof (object));
+			getILGenerator.DeclareLocal(property.PropertyType);
+			LocalBuilder local2 = (binderAttribute != null) ? getILGenerator.DeclareLocal(property.PropertyType) : null;
+
+			getILGenerator.Emit(OpCodes.Nop);
+			getILGenerator.Emit(OpCodes.Ldarg_0);
+			getILGenerator.Emit(OpCodes.Ldfld, dictionaryField);
+			getILGenerator.Emit(OpCodes.Ldstr, key);
+			getILGenerator.Emit(OpCodes.Callvirt, typeof(NameValueCollection).GetMethod("get_Item", new Type[] { typeof(string) }));
+
+			getILGenerator.Emit(OpCodes.Stloc_0);
+			getILGenerator.Emit(OpCodes.Ldloc_0);
+			getILGenerator.Emit(OpCodes.Brfalse_S, returnDefault);
+
+			if (binderAttribute != null)
+			{
+				getILGenerator.Emit(OpCodes.Newobj, binderAttribute.Binder.GetConstructor(new Type[] { }));
+				getILGenerator.Emit(OpCodes.Ldloc_0);
+				getILGenerator.Emit(OpCodes.Call, binderAttribute.Binder.GetMethod("ConvertFromDictionary", new Type[] { typeof(Object) }));
+				getILGenerator.Emit(OpCodes.Unbox_Any, property.PropertyType);
+				getILGenerator.Emit(OpCodes.Br_S, storeResult);
+
+				getILGenerator.MarkLabel(returnDefault);
+				getILGenerator.Emit(OpCodes.Ldloca_S, local2);
+				getILGenerator.Emit(OpCodes.Initobj, property.PropertyType);
+				getILGenerator.Emit(OpCodes.Ldloc_2);
+			}
+			else
+			{				
+				getILGenerator.Emit(OpCodes.Ldloc_0);
+				getILGenerator.Emit(OpCodes.Unbox_Any, property.PropertyType);
+				getILGenerator.Emit(OpCodes.Br_S, storeResult);
+
+				getILGenerator.MarkLabel(returnDefault);
+				getILGenerator.Emit(OpCodes.Ldloca_S, 1);
+				getILGenerator.Emit(OpCodes.Initobj, property.PropertyType);
+				getILGenerator.Emit(OpCodes.Br_S, loadResult);
+			}
+
+			getILGenerator.MarkLabel(storeResult);
+			getILGenerator.Emit(OpCodes.Stloc_1);
+			getILGenerator.Emit(OpCodes.Br_S, loadResult);
+
+			getILGenerator.MarkLabel(loadResult);
+			getILGenerator.Emit(OpCodes.Ldloc_1);
+			
+			getILGenerator.Emit(OpCodes.Ret);
+
+			propertyBuilder.SetGetMethod(getMethodBuilder);
+		}
+
+		private static void CreateNameValueCollectionBasedPropertySetMethod(TypeBuilder typeBuilder, FieldInfo dictionaryField,
+														   PropertyBuilder propertyBuilder, PropertyInfo property,
+														   String key, MethodAttributes propertyMethodAttributes)
+		{
+			MethodBuilder setMethodBuilder =
+				typeBuilder.DefineMethod("set_" + property.Name, propertyMethodAttributes, null,
+										 new Type[] { property.PropertyType });
+
+			
+			object[] attributes = property.GetCustomAttributes(typeof (DictionaryAdapterPropertyBinderAttribute), false);
+			DictionaryAdapterPropertyBinderAttribute binderAttribute = (attributes.Length > 0) ? (DictionaryAdapterPropertyBinderAttribute) attributes[0] : null;
+
+			ILGenerator setILGenerator = setMethodBuilder.GetILGenerator();
+
+			setILGenerator.Emit(OpCodes.Nop);
+			setILGenerator.Emit(OpCodes.Ldarg_0);
+			setILGenerator.Emit(OpCodes.Ldfld, dictionaryField);
+			setILGenerator.Emit(OpCodes.Ldstr, key);
+
+			if (binderAttribute != null)
+			{
+				setILGenerator.Emit(OpCodes.Newobj, binderAttribute.Binder.GetConstructor(new Type[] {}));
+			}
+
+			setILGenerator.Emit(OpCodes.Ldarg_1);
+
+			if (property.PropertyType.IsValueType)
+			{
+				setILGenerator.Emit(OpCodes.Box, property.PropertyType);
+			}
+
+			if (binderAttribute != null)
+			{
+				setILGenerator.Emit(OpCodes.Callvirt, binderAttribute.Binder.GetMethod("ConvertFromInterface", new Type[] { typeof(Object) }));
+			}
+
+			setILGenerator.Emit(OpCodes.Callvirt, typeof(NameValueCollection).GetMethod("set_Item", new Type[] { typeof(string), typeof(string) }));
+			setILGenerator.Emit(OpCodes.Nop);
+			setILGenerator.Emit(OpCodes.Ret);
+
+			propertyBuilder.SetSetMethod(setMethodBuilder);
+		}
+		#endregion
 
 		private static Dictionary<PropertyInfo, String> GetDictionaryKeyMap<T>()
 		{
@@ -290,7 +476,7 @@ namespace Castle.Components.DictionaryAdapter
 			return typeof(T).Name.Substring(1) + "DictionaryAdapter";
 		}
 
-		private static T GetExistingAdapter<T>(Assembly assembly, IDictionary dictionary)
+		private static T GetExistingAdapter<T>(Assembly assembly, object dictionary)
 		{
 			String adapterFullTypeName = GetAdapterFullTypeName<T>();
 			return (T)Activator.CreateInstance(assembly.GetType(adapterFullTypeName, true), dictionary);
