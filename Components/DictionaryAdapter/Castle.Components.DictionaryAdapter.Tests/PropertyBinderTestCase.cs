@@ -62,10 +62,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				stringBinder.ConvertFromDictionary(true);
 				Assert.Fail();
 			}
-			catch(DictionaryAdapterPropertyBindingException e)
+			catch(DictionaryAdapterPropertyBindingException)
 			{
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				Assert.Fail();
 			}
