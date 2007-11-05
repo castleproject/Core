@@ -20,7 +20,7 @@ namespace TestSite.Controllers
 
 	public class FilterA : IFilter
 	{
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, IController controller)
 		{
 			context.Response.Write("A");
 

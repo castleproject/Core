@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">The controller instance</param>
 		/// <returns><c>true</c> if the action 
 		/// should be invoked, otherwise <c>false</c></returns>
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, IController controller)
 		{
 			if (exec == ExecuteEnum.AfterAction)
 			{
@@ -57,7 +57,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="context">The MonoRail request context</param>
 		/// <param name="controller">The controller instance</param>
-		protected virtual void OnAfterAction(IRailsEngineContext context, Controller controller)
+		protected virtual void OnAfterAction(IRailsEngineContext context, IController controller)
 		{
 		}
 
@@ -67,7 +67,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="context">The MonoRail request context</param>
 		/// <param name="controller">The controller instance</param>
-		protected virtual void OnAfterRendering(IRailsEngineContext context, Controller controller)
+		protected virtual void OnAfterRendering(IRailsEngineContext context, IController controller)
 		{
 		}
 
@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The MonoRail request context</param>
 		/// <param name="controller">The controller instance</param>
 		/// <returns><c>true</c> if the request should proceed, otherwise <c>false</c></returns>
-		protected virtual bool OnBeforeAction(IRailsEngineContext context, Controller controller)
+		protected virtual bool OnBeforeAction(IRailsEngineContext context, IController controller)
 		{
 			return true;
 		}
@@ -90,7 +90,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The MonoRail request context</param>
 		/// <param name="controller">The controller instance</param>
 		/// <returns><c>true</c> if the request should proceed, otherwise <c>false</c></returns>
-		protected virtual bool OnStartRequest(IRailsEngineContext context, Controller controller)
+		protected virtual bool OnStartRequest(IRailsEngineContext context, IController controller)
 		{
 			return true;
 		}

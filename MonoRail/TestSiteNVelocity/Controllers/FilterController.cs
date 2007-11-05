@@ -28,7 +28,7 @@ namespace TestSiteNVelocity.Controllers
 	{
 		#region IFilter Members
 
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, IController controller)
 		{
 			if (context.Request.Headers["mybadheader"] != null)
 			{

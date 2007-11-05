@@ -45,7 +45,7 @@ namespace TestSite.Controllers
 
 	public class MyFilter : IFilter
 	{
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, IController controller)
 		{
 			if (exec == ExecuteEnum.BeforeAction)
 			{
