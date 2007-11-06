@@ -37,6 +37,11 @@ namespace Castle.MonoRail.Framework
 		string Name { get; }
 
 		/// <summary>
+		/// Gets the controller's area name.
+		/// </summary>
+		string AreaName { get; }
+
+		/// <summary>
 		/// Gets or set the layout being used.
 		/// </summary>
 		string LayoutName { get; set; }
@@ -45,6 +50,11 @@ namespace Castle.MonoRail.Framework
 		/// Gets the name of the action being processed.
 		/// </summary>
 		string Action { get; }
+
+		/// <summary>
+		/// Gets or sets the view which will be rendered by this action.
+		/// </summary>
+		string SelectedViewName { get; set; }
 
 		/// <summary>
 		/// Gets the property bag, which is used
