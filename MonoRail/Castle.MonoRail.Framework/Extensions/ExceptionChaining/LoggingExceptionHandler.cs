@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// <param name="context"></param>
 		public override void Process(IRailsEngineContext context)
 		{
-			ILoggerFactory factory = (ILoggerFactory) context.GetService(typeof (ILoggerFactory));
+			ILoggerFactory factory = (ILoggerFactory) context.GetService(typeof(ILoggerFactory));
 			ILogger logger = factory.Create(context.CurrentController.GetType());
 
 			logger.Error(BuildStandardMessage(context));
