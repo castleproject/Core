@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Core.Logging;
+
 namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
@@ -87,7 +89,7 @@ namespace Castle.MonoRail.Framework.Routing
 				{
 					context.RewritePath(mrPath);
 				}
-			}
+			}			
 		}
 
 		private static string ConvertToQueryString(Dictionary<string, string> parameters, HttpServerUtility serverUtil)
@@ -106,7 +108,7 @@ namespace Castle.MonoRail.Framework.Routing
 		{
 			ControllerDescriptor desc = ControllerInspectionUtil.Inspect(match.ControllerType);
 
-			return desc.Area + "/" + desc.Name + "/" + match.Action + MonoRailServiceContainer.MonoRailExtension;
+			return "~/" + (string.IsNullOrEmpty(desc.Area) ? null : desc.Area + "/") + desc.Name + "/" + match.Action + MonoRailServiceContainer.MonoRailExtension;
 		}
 
 		/// <summary>
