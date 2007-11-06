@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework.Test
 	using System.Collections.Specialized;
 	using System.IO;
 	using System.Web;
+	using Internal;
 
 	/// <summary>
 	/// Represents a mock implementation of <see cref="IMockResponse"/> for unit test purposes.
@@ -186,6 +187,52 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(string controller, string action, NameValueCollection parameters)
+		{
+			Redirect(BuildMockUrl(controller, action, parameters));
+		}
+
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="area">Area name</param>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(string area, string controller, string action, NameValueCollection parameters)
+		{
+			Redirect(BuildMockUrl(area, controller, action, parameters));
+		}
+
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(string controller, string action, IDictionary parameters)
+		{
+			Redirect(BuildMockUrl(controller, action, parameters));
+		}
+
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="area">Area name</param>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(string area, string controller, string action, IDictionary parameters)
+		{
+			Redirect(BuildMockUrl(area, controller, action, parameters));
+		}
+
+		/// <summary>
 		/// Redirects the specified URL.
 		/// </summary>
 		/// <param name="url">The URL.</param>
@@ -334,7 +381,7 @@ namespace Castle.MonoRail.Framework.Test
 
 		#endregion
 
-		private static string BuildMockUrl(string area, string controller, string action)
+		private static string BuildMockUrl(string area, string controller, string action, string querystring)
 		{
 			string mockUrl = "/";
 
@@ -345,7 +392,57 @@ namespace Castle.MonoRail.Framework.Test
 
 			mockUrl += controller + "/" + action + ".rails";
 
+			if (querystring != null)
+			{
+				mockUrl += "?" + querystring;
+			}
+
 			return mockUrl;
+		}
+
+		private static string BuildMockUrl(string area, string controller, string action)
+		{
+			return BuildMockUrl(area, controller, action, (string) null);
+		}
+
+		private static string BuildMockUrl(string area, string controller, string action, IDictionary parameters)
+		{
+			return BuildMockUrl(area, controller, action, ToQueryString(parameters));
+		}
+
+		private static string BuildMockUrl(string controller, string action, IDictionary parameters)
+		{
+			return BuildMockUrl(controller, action, ToQueryString(parameters));
+		}
+
+		private static string BuildMockUrl(string area, string controller, string action, NameValueCollection parameters)
+		{
+			return BuildMockUrl(area, controller, action, ToQueryString(parameters));
+		}
+
+		private static string BuildMockUrl(string controller, string action, NameValueCollection parameters)
+		{
+			return BuildMockUrl(controller, action, ToQueryString(parameters));
+		}
+
+		/// <summary>
+		/// Creates a querystring string representation of the namevalue collection.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		private static string ToQueryString(NameValueCollection parameters)
+		{
+			return CommonUtils.BuildQueryString(new MockServerUtility(), parameters, false);
+		}
+
+		/// <summary>
+		/// Creates a querystring string representation of the entries in the dictionary.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		private static string ToQueryString(IDictionary parameters)
+		{
+			return CommonUtils.BuildQueryString(new MockServerUtility(), parameters, false);
 		}
 	}
 }

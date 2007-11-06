@@ -44,7 +44,7 @@ namespace Castle.MonoRail.Framework.Test
 		private readonly List<Message> messagesSent = new List<Message>();
 		private string urlReferrer;
 		private IServiceProvider container;
-		private IPrincipal currentUser = new GenericPrincipal(new GenericIdentity("user", "test"), new string[0]);
+		private IPrincipal currentUser;
 		private Exception lastException;
 		private IController currentController;
 

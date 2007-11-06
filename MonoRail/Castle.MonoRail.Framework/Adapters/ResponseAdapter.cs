@@ -15,6 +15,8 @@
 namespace Castle.MonoRail.Framework.Adapters
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
 	using System.IO;
 	using System.Web;
 	using Castle.MonoRail.Framework;
@@ -250,6 +252,68 @@ namespace Castle.MonoRail.Framework.Adapters
 			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
 
 			response.Redirect(builder.BuildUrl(context.UrlInfo, area, controller, action), false);
+		}
+
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(string controller, string action, NameValueCollection parameters)
+		{
+			redirected = true;
+
+			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
+
+			response.Redirect(builder.BuildUrl(context.UrlInfo, controller, action, parameters), false);
+		}
+
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="area">Area name</param>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(string area, string controller, string action, NameValueCollection parameters)
+		{
+			redirected = true;
+
+			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
+
+			response.Redirect(builder.BuildUrl(context.UrlInfo, area, controller, action, parameters), false);
+		}
+
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(string controller, string action, IDictionary parameters)
+		{
+			redirected = true;
+
+			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
+
+			response.Redirect(builder.BuildUrl(context.UrlInfo, controller, action, parameters), false);
+		}
+
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="area">Area name</param>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(string area, string controller, string action, IDictionary parameters)
+		{
+			redirected = true;
+
+			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
+
+			response.Redirect(builder.BuildUrl(context.UrlInfo, area, controller, action, parameters), false);
 		}
 
 		/// <summary>
