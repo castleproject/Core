@@ -1,7 +1,11 @@
 1.0
 ===
 
-- Added support for Composit Key in Formhelper select
+- Applied Rafael Teixeira's patch fixing MR-357
+  "ViewEngineBase.IsTemplateForJSGeneration(String templateName) returns 
+   true for a templateName with an incorrect extension"
+
+- Added support for Composite Key in Formhelper select
 
 - Applied Chris Ortman's patch with changes for the REST support (MR-333)
 

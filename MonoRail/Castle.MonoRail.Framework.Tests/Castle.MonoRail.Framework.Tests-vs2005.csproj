@@ -214,6 +214,7 @@
     <Compile Include="TransformFilterTestCase.cs" />
     <Compile Include="ViewComponents\AuthenticatedContentTestCase.cs" />
     <Compile Include="ViewComponents\DiggStylePaginationTestCase.cs" />
+    <Compile Include="ViewEngineBaseTestCase.cs" />
     <Compile Include="WikiFormatterTestCase.cs" />
   </ItemGroup>
   <ItemGroup>

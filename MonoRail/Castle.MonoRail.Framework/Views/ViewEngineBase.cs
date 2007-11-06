@@ -110,10 +110,13 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Evaluates whether the specified template can be used to generate js.
 		/// </summary>
-		/// <returns><c>true</c> if it exists</returns>
+		/// <returns><c>true</c> if it exists and has the correct file extension</returns>
 		public virtual bool IsTemplateForJSGeneration(String templateName)
 		{
-			return HasTemplate(ResolveJSTemplateName(templateName));
+			string resolvedTemplateName = ResolveJSTemplateName(templateName);
+			return 
+				resolvedTemplateName.ToLowerInvariant().EndsWith(JSGeneratorFileExtension.ToLowerInvariant()) &&
+				HasTemplate(resolvedTemplateName);
 		}
 
 		/// <summary>
