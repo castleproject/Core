@@ -1,5 +1,9 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Fixed issues with CacheKey.Equals and ProxyGenerationOptions.Equals/GetHashCode
+- Added a way to set and retrieve the ModuleScope used by ProxyObjectReference for proxy deserialization; proxies can now be deserialized with
+  the same ModuleScope used by the application (DYNPROXY-71)
+
 - Made BasePEVerifyTestCase only check those assemblies that were actually generated in the test case, see DYNPROXY-68
 - Fixed bug with protected internal constructors, see DYNPROXY-66/DYNPROXY-67
 - Fixed test cases not using the ProxyGenerator supplied by BasePEVerifyTestCase, see DYNPROXY-69

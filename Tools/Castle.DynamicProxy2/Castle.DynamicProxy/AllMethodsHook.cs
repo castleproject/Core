@@ -34,5 +34,15 @@ namespace Castle.DynamicProxy
 		public void MethodsInspected()
 		{
 		}
+
+		public override bool Equals (object obj)
+		{
+			return obj != null && obj.GetType () == typeof (AllMethodsHook);
+		}
+
+		public override int GetHashCode ()
+		{
+			return GetType ().GetHashCode ();
+		}
 	}
 }

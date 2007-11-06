@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy
 		{
 		}
 
-		protected DefaultProxyBuilder(ModuleScope scope)
+		public DefaultProxyBuilder(ModuleScope scope)
 		{
 			this.scope = scope;
 		}

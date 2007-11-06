@@ -126,27 +126,60 @@ namespace Castle.DynamicProxy
 
 		public override bool Equals(object obj)
 		{
-			if (this == obj) return true;
+			if (ReferenceEquals (this, obj)) return true;
 			ProxyGenerationOptions proxyGenerationOptions = obj as ProxyGenerationOptions;
-			if (proxyGenerationOptions == null) return false;
-			if (!Equals(hook.GetType(), proxyGenerationOptions.hook.GetType())) return false;
+			if (ReferenceEquals (proxyGenerationOptions, null)) return false;
+			
+			if (!Equals(hook, proxyGenerationOptions.hook)) return false;
 			if (!Equals(selector, proxyGenerationOptions.selector)) return false;
-			if (!Equals(mixins, proxyGenerationOptions.mixins)) return false;
+			if (!ListEquals(mixins, proxyGenerationOptions.mixins)) return false;
 			if (!Equals(baseTypeForInterfaceProxy, proxyGenerationOptions.baseTypeForInterfaceProxy)) return false;
-			if (!Equals(useSelector, proxyGenerationOptions.useSelector)) return false;
 			if (!Equals(useSingleInterfaceProxy, proxyGenerationOptions.useSingleInterfaceProxy)) return false;
+			if (!Equals (useSelector, proxyGenerationOptions.useSelector))
+				return false;
 			return true;
 		}
 
-		public override int GetHashCode()
+		public override int GetHashCode ()
 		{
 			int result = hook != null ? hook.GetType().GetHashCode() : 0;
 			result = 29 * result + (selector != null ? selector.GetHashCode() : 0);
-			result = 29 * result + (mixins != null ? mixins.GetHashCode() : 0);
+			result = 29 * result + (mixins != null ? GetListHashCode (mixins) : 0);
 			result = 29 * result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
-			result = 29 * result + useSelector.GetHashCode();
 			result = 29 * result + useSingleInterfaceProxy.GetHashCode();
+			result = 29 * result + useSelector.GetHashCode ();
 			return result;
+		}
+
+		private static bool ListEquals (IList one, IList two)
+		{
+			if (one == two)
+				return true;
+			if (one == null || two == null)
+				return false;
+
+			if (one.Count != two.Count)
+				return false;
+
+			for (int i = 0; i < one.Count; ++i)
+			{
+				if (!object.Equals (one[i], two[i]))
+					return false;
+			}
+
+			return true;
+		}
+
+		private static int GetListHashCode (IList list)
+		{
+			if (list == null)
+				return 0;
+
+			int hashCode = 0;
+			foreach (object o in list)
+				hashCode = 29 * hashCode + (o != null ? o.GetHashCode () : 0);
+
+			return hashCode;
 		}
 	}
 }

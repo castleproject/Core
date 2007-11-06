@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy.Generators
 		public CacheKey(Type targetType, Type[] interfaces, ProxyGenerationOptions options)
 		{
 			this.targetType = targetType;
-			this.interfaces = interfaces;
+			this.interfaces = interfaces ?? Type.EmptyTypes;
 			this.options = options;
 		}
 
@@ -61,19 +61,16 @@ namespace Castle.DynamicProxy.Generators
 		public override bool Equals(object obj)
 		{
 			if (this == obj) return true;
+
 			CacheKey cacheKey = obj as CacheKey;
 			if (cacheKey == null) return false;
-			if (proxyForType != null && !Equals(proxyForType, cacheKey.proxyForType)) return false;
+
+			if (!Equals(proxyForType, cacheKey.proxyForType)) return false;
 			if (!Equals(targetType, cacheKey.targetType)) return false;
-			if (interfaces != null && cacheKey.interfaces == null) return false;
-			if (interfaces == null && cacheKey.interfaces != null) return false;
-			if (interfaces != null && interfaces.Length != cacheKey.interfaces.Length) return false;
-			if (interfaces != null)
+			if (interfaces.Length != cacheKey.interfaces.Length) return false;
+			for(int i = 0; i < interfaces.Length; i++)
 			{
-				for(int i = 0; i < interfaces.Length; i++)
-				{
-					if (!Equals(interfaces[i], cacheKey.interfaces[i])) return false;
-				}
+				if (!Equals(interfaces[i], cacheKey.interfaces[i])) return false;
 			}
 			if (!Equals(options, cacheKey.options)) return false;
 			return true;
