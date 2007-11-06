@@ -139,6 +139,13 @@ namespace Castle.MonoRail.Framework.Services
 		/// The <c>absolute</c> parameter forces the builder to output a full url like
 		/// <c>http://hostname/virtualdir/area/controller/name.extension</c>
 		/// </para>
+		///
+		/// <para>
+		/// The <c>pathinfo</c> parameter can be used to add information between the resource identifier and the 
+		/// query string (optional)
+		/// <c>http://hostname/virtualdir/area/controller/name.extension/path/info/here</c> or
+		/// <c>http://hostname/virtualdir/area/controller/name.extension/path/info/here?key=value</c>
+		/// </para>
 		/// 
 		/// <para>
 		/// The <c>encode</c> parameter forces the builder to encode the querystring
@@ -186,6 +193,7 @@ namespace Castle.MonoRail.Framework.Services
 				string subdomain = CommonUtils.ObtainEntryAndRemove(parameters, "subdomain", current.Subdomain);
 				string protocol = CommonUtils.ObtainEntryAndRemove(parameters, "protocol", current.Protocol);
 				string port = CommonUtils.ObtainEntryAndRemove(parameters, "port", current.Port.ToString());
+				string pathInfo = CommonUtils.ObtainEntryAndRemove(parameters, "pathinfo");
 				string suffix = null;
 
 				object queryString = CommonUtils.ObtainObjectEntryAndRemove(parameters, "querystring");
@@ -221,7 +229,7 @@ namespace Castle.MonoRail.Framework.Services
 				}
 
 				return InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain,
-					current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix, basePath);
+					current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix, basePath, pathInfo);
 			}
 		}
 
@@ -389,7 +397,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			return
 				InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain, appVirtualDir, extension, absolutePath,
-				                 applySubdomain, suffix, null);
+				                 applySubdomain, suffix, null, null);
 		}
 
 		/// <summary>
@@ -408,10 +416,11 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="applySubdomain">if set to <c>true</c> [apply subdomain].</param>
 		/// <param name="suffix">The suffix.</param>
 		/// <param name="basePath">The base path.</param>
+		/// <param name="pathInfo">Path info</param>
 		/// <returns></returns>
 		protected virtual string InternalBuildUrl(string area, string controller, string action, string protocol,
 		                                string port, string domain, string subdomain, string appVirtualDir, string extension,
-										bool absolutePath, bool applySubdomain, string suffix, string basePath)
+		                                bool absolutePath, bool applySubdomain, string suffix, string basePath, string pathInfo)
 		{
 			if (area == null) throw new ArgumentNullException("area");
 			if (controller == null) throw new ArgumentNullException("controller");
@@ -432,6 +441,18 @@ namespace Castle.MonoRail.Framework.Services
 			if (useExtensions)
 			{
 				path += "." + extension;
+			}
+
+			if (pathInfo != null)
+			{
+				if (!pathInfo.StartsWith("/"))
+				{
+					path += "/" + pathInfo;
+				}
+				else
+				{
+					path += pathInfo;
+				}
 			}
 
 			if (suffix != null && suffix != String.Empty)
@@ -493,7 +514,10 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="protocol">The protocol.</param>
 		/// <param name="subdomain">The subdomain.</param>
 		/// <returns></returns>
-		private static string InternalBuildUsingAppVirtualDir(bool absolutePath, string action, bool applySubdomain, string appVirtualDir, string area, string controller, string domain, string port, string protocol, string subdomain)
+		protected static string InternalBuildUsingAppVirtualDir(bool absolutePath, string action, 
+			bool applySubdomain, string appVirtualDir, 
+			string area, string controller,
+			string domain, string port, string protocol, string subdomain)
 		{
 			string path;
 
@@ -543,7 +567,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="basePath">The base path.</param>
 		/// <param name="controller">The controller.</param>
 		/// <returns></returns>
-		private static string InternalBuildUrlUsingBasePath(string action, string area, string basePath, string controller)
+		protected static string InternalBuildUrlUsingBasePath(string action, string area, string basePath, string controller)
 		{
 			string path;
 

@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Framework.Services
 	/// </summary>
 	public class DefaultUrlTokenizer : IUrlTokenizer, IServiceEnabledComponent
 	{
-		private IDictionary defaultUrl2CustomUrlInfo = new HybridDictionary(true);
+		private readonly IDictionary defaultUrl2CustomUrlInfo = new HybridDictionary(true);
 
 		/// <summary>
 		/// Adds the default rule mapping.
@@ -79,11 +79,12 @@ namespace Castle.MonoRail.Framework.Services
 		/// Tokenizes the URL.
 		/// </summary>
 		/// <param name="rawUrl">The raw URL.</param>
+		/// <param name="pathInfo">The path info.</param>
 		/// <param name="uri">The URI.</param>
-		/// <param name="isLocal">if set to <c>true</c> [is local].</param>
+		/// <param name="isLocal">if set to <c>true</c> request is local.</param>
 		/// <param name="appVirtualDir">Virtual directory</param>
 		/// <returns></returns>
-		public UrlInfo TokenizeUrl(string rawUrl, Uri uri, bool isLocal, string appVirtualDir)
+		public UrlInfo TokenizeUrl(string rawUrl, string pathInfo, Uri uri, bool isLocal, string appVirtualDir)
 		{
 			if (rawUrl == null || rawUrl.Length == 0)
 			{
@@ -136,7 +137,7 @@ namespace Castle.MonoRail.Framework.Services
 
 			string extension = GetExtension(rawUrl);
 
-			return new UrlInfo(domain, subdomain, appVirtualDir, uri.Scheme, uri.Port, rawUrl, area, controller, action, extension);
+			return new UrlInfo(domain, subdomain, appVirtualDir, uri.Scheme, uri.Port, rawUrl, area, controller, action, extension, pathInfo);
 		}
 
 		#endregion

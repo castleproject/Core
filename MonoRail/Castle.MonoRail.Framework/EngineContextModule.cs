@@ -366,7 +366,7 @@ namespace Castle.MonoRail.Framework
 
 				HttpRequest req = context.Request;
 
-				UrlInfo urlInfo = urlTokenizer.TokenizeUrl(req.FilePath, req.Url, req.IsLocal, req.ApplicationPath);
+				UrlInfo urlInfo = urlTokenizer.TokenizeUrl(req.FilePath, req.PathInfo, req.Url, req.IsLocal, req.ApplicationPath);
 
 				IServiceProvider userServiceProvider = ServiceProviderLocator.Instance.LocateProvider();
 

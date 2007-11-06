@@ -355,8 +355,8 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				else
 				{
 					string separator = "?";
-					if (url.IndexOf('?') > 0)
-						separator = "&";
+
+					if (url.IndexOf('?') > 0) separator = "&";
 
 					href = url + separator + "page=" + pageIndex;
 				}

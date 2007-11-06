@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void EmptyArea()
 		{
-			Controller controller = factory.CreateController(new UrlInfo("domain", "sub", "", "http://", 80, "", "", "home", "", extension));
+			Controller controller = factory.CreateController(new UrlInfo("domain", "sub", "", "http://", 80, "", "", "home", "", extension, null));
 
 			Assert.IsNotNull(controller);
 			Assert.AreEqual("Castle.MonoRail.Framework.Tests.Controllers.HomeController",
@@ -49,27 +49,27 @@ namespace Castle.MonoRail.Framework.Tests
 		public void OneLevelArea()
 		{
 			Controller controller =
-				factory.CreateController(new UrlInfo("domain", "sub", "", "http://", 80, "", "clients", "home", "", extension));
+				factory.CreateController(new UrlInfo("domain", "sub", "", "http://", 80, "", "clients", "home", "", extension, null));
 
 			Assert.IsNotNull(controller);
 			Assert.AreEqual("Castle.MonoRail.Framework.Tests.Controllers.Clients.ClientHomeController",
 			                controller.GetType().FullName);
 
-			controller = factory.CreateController(new UrlInfo("domain", "sub", "", "http://", 80, "", "clients", "hire-us", "", extension));
+			controller = factory.CreateController(new UrlInfo("domain", "sub", "", "http://", 80, "", "clients", "hire-us", "", extension, null));
 
 			Assert.IsNotNull(controller);
 			Assert.AreEqual("Castle.MonoRail.Framework.Tests.Controllers.Clients.OtherController",
 			                controller.GetType().FullName);
 
 			controller =
-				factory.CreateController(new UrlInfo("domain", "sub", "", "http://", 80, "", "ourproducts", "shoppingcart", "", extension));
+				factory.CreateController(new UrlInfo("domain", "sub", "", "http://", 80, "", "ourproducts", "shoppingcart", "", extension, null));
 
 			Assert.IsNotNull(controller);
 			Assert.AreEqual("Castle.MonoRail.Framework.Tests.Controllers.Products.CartController",
 			                controller.GetType().FullName);
 
 			controller =
-				factory.CreateController(new UrlInfo("domain", "sub", "", "http://", 80, "", "ourproducts", "lista", "", extension));
+				factory.CreateController(new UrlInfo("domain", "sub", "", "http://", 80, "", "ourproducts", "lista", "", extension, null));
 
 			Assert.IsNotNull(controller);
 			Assert.AreEqual("Castle.MonoRail.Framework.Tests.Controllers.Products.ListController",

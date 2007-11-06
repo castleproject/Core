@@ -26,6 +26,7 @@ namespace Castle.MonoRail.Framework
 		private readonly string domain, subdomain, appVirtualDir, protocol;
 		private readonly string urlRaw;
 		private readonly string area, controller, action, extension;
+		private readonly string pathInfo;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UrlInfo"/> class.
@@ -45,6 +46,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="domain">The domain (host).</param>
 		/// <param name="subdomain">The subdomain (first token on the domain).</param>
+		/// <param name="appVirtualDir">The application virtual dir.</param>
 		/// <param name="protocol">Protocol (http/https)</param>
 		/// <param name="port">The port.</param>
 		/// <param name="urlRaw">The raw URL.</param>
@@ -52,9 +54,9 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">The controller name.</param>
 		/// <param name="action">The action name.</param>
 		/// <param name="extension">The file extension.</param>
-		/// <param name="appVirtualDir">The application virtual dir.</param>
+		/// <param name="pathInfo">The path info.</param>
 		public UrlInfo(string domain, string subdomain, string appVirtualDir, string protocol, int port, string urlRaw,
-		               string area, string controller, string action, string extension)
+					   string area, string controller, string action, string extension, string pathInfo)
 		{
 			this.port = port;
 			this.domain = domain;
@@ -64,6 +66,7 @@ namespace Castle.MonoRail.Framework
 			this.controller = controller;
 			this.action = action;
 			this.extension = extension;
+			this.pathInfo = pathInfo;
 			this.appVirtualDir = appVirtualDir;
 			this.protocol = protocol;
 		}
@@ -155,6 +158,15 @@ namespace Castle.MonoRail.Framework
 		public string Extension
 		{
 			get { return extension; }
+		}
+
+		/// <summary>
+		/// Gets the path info.
+		/// </summary>
+		/// <value>The path info.</value>
+		public string PathInfo
+		{
+			get { return pathInfo; }
 		}
 	}
 }

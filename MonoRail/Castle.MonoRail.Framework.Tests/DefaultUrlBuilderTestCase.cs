@@ -25,17 +25,18 @@ namespace Castle.MonoRail.Framework.Tests
 	[TestFixture]
 	public class DefaultUrlBuilderTestCase
 	{
-		private readonly UrlInfo noAreaUrl, areaUrl, withSubDomain, diffPort;
+		private readonly UrlInfo noAreaUrl, areaUrl, withSubDomain, diffPort, withPathInfo;
 		private DefaultUrlBuilder urlBuilder;
 
 		public DefaultUrlBuilderTestCase()
 		{
 			DefaultUrlTokenizer tokenizer = new DefaultUrlTokenizer();
 
-			noAreaUrl = tokenizer.TokenizeUrl("/home/index.rails", new Uri("http://localhost/home/index.rails"), true, "/");
-			areaUrl = tokenizer.TokenizeUrl("/area/home/index.rails", new Uri("http://localhost/area/home/index.rails"), true, "/");
-			withSubDomain = tokenizer.TokenizeUrl("/app/home/index.rails", new Uri("http://sub.domain.com/app/home/index.rails"), false, "/app");
-			diffPort = tokenizer.TokenizeUrl("/app/home/index.rails", new Uri("http://localhost:81/app/home/index.rails"), false, "/app");
+			noAreaUrl = tokenizer.TokenizeUrl("/home/index.rails", null, new Uri("http://localhost/home/index.rails"), true, "/");
+			areaUrl = tokenizer.TokenizeUrl("/area/home/index.rails", null, new Uri("http://localhost/area/home/index.rails"), true, "/");
+			withSubDomain = tokenizer.TokenizeUrl("/app/home/index.rails", null, new Uri("http://sub.domain.com/app/home/index.rails"), false, "/app");
+			diffPort = tokenizer.TokenizeUrl("/app/home/index.rails", null, new Uri("http://localhost:81/app/home/index.rails"), false, "/app");
+			withPathInfo = tokenizer.TokenizeUrl("/home/index.rails", "/state/fl", new Uri("http://localhost:81/home/index.rails"), false, "/");
 		}
 
 		[SetUp]
@@ -80,10 +81,21 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void OperationsWithArea()
 		{
-			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(areaUrl, null, "product", "list"));
-			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(areaUrl, "", "product", "list"));
-			Assert.AreEqual("/test/product/list.rails", urlBuilder.BuildUrl(areaUrl, "test", "product", "list"));
-			Assert.AreEqual("/area/product/list.rails", urlBuilder.BuildUrl(areaUrl, "product", "list"));
+			Assert.AreEqual("/product/list.rails/state/FL?key=value", 
+				urlBuilder.BuildUrl(withPathInfo, 
+					DictHelper.Create("controller=product", "action=list", "pathinfo=/state/FL", "querystring=key=value")));
+
+			Assert.AreEqual("/product/list.rails/state/FL?key=value",
+				urlBuilder.BuildUrl(withPathInfo,
+					DictHelper.Create("controller=product", "action=list", "pathinfo=state/FL", "querystring=key=value")));
+		}
+
+		[Test]
+		public void OperationsWithPathInfo()
+		{
+			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(noAreaUrl, "product", "list"));
+			Assert.AreEqual("/home/list.rails", urlBuilder.BuildUrl(noAreaUrl, DictHelper.Create("action=list")));
+			Assert.AreEqual("/product/list.rails?id=1&name=hammett&", urlBuilder.BuildUrl(noAreaUrl, "product", "list", DictHelper.Create("id=1", "name=hammett")));
 		}
 
 		[Test]

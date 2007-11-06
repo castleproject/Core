@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			tokenizer.AddDefaultRule("index.rails", "", "client", "list");
 
-			UrlInfo info = tokenizer.TokenizeUrl("/index.rails", new Uri("http://localhost"), true, null);
+			UrlInfo info = tokenizer.TokenizeUrl("/index.rails", null, new Uri("http://localhost"), true, null);
 			Assert.IsNotNull(info);
 			Assert.AreEqual("client", info.Controller);
 			Assert.AreEqual("list", info.Action);
@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Framework.Tests
 			tokenizer.AddDefaultRule("index.rails", "", "client", "list");
 			tokenizer.AddDefaultRule("list.rails", "", "product", "list");
 
-			UrlInfo info = tokenizer.TokenizeUrl("/list.rails", new Uri("http://localhost"), true, null);
+			UrlInfo info = tokenizer.TokenizeUrl("/list.rails", null, new Uri("http://localhost"), true, null);
 			Assert.IsNotNull(info);
 			Assert.AreEqual("product", info.Controller);
 			Assert.AreEqual("list", info.Action);
@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Framework.Tests
 			tokenizer.AddDefaultRule("index.rails", "public", "client", "list");
 			tokenizer.AddDefaultRule("list.rails", "public", "product", "list");
 
-			UrlInfo info = tokenizer.TokenizeUrl("/list.rails", new Uri("http://localhost"), true, null);
+			UrlInfo info = tokenizer.TokenizeUrl("/list.rails", null, new Uri("http://localhost"), true, null);
 			Assert.IsNotNull(info);
 			Assert.AreEqual("product", info.Controller);
 			Assert.AreEqual("list", info.Action);
@@ -77,7 +77,7 @@ namespace Castle.MonoRail.Framework.Tests
 			tokenizer.AddDefaultRule("index.rails", "public", "client", "list");
 			tokenizer.AddDefaultRule("list.rails", "public/simple", "product", "list");
 
-			UrlInfo info = tokenizer.TokenizeUrl("/list.rails", new Uri("http://localhost"), true, null);
+			UrlInfo info = tokenizer.TokenizeUrl("/list.rails", null, new Uri("http://localhost"), true, null);
 			Assert.IsNotNull(info);
 			Assert.AreEqual("product", info.Controller);
 			Assert.AreEqual("list", info.Action);
@@ -88,7 +88,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void SimpleUsage()
 		{
-			UrlInfo info = tokenizer.TokenizeUrl("/home/index.rails", new Uri("http://localhost"), true, null);
+			UrlInfo info = tokenizer.TokenizeUrl("/home/index.rails", null, new Uri("http://localhost"), true, null);
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
@@ -99,7 +99,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void ExtensionIgnored()
 		{
-			UrlInfo info = tokenizer.TokenizeUrl("/home/index.something", new Uri("http://localhost"), true, null);
+			UrlInfo info = tokenizer.TokenizeUrl("/home/index.something", null, new Uri("http://localhost"), true, null);
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
@@ -110,7 +110,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void Area()
 		{
-			UrlInfo info = tokenizer.TokenizeUrl("/myvirdirectory/home/index.rails", new Uri("http://localhost"), true, null);
+			UrlInfo info = tokenizer.TokenizeUrl("/myvirdirectory/home/index.rails", null, new Uri("http://localhost"), true, null);
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
@@ -120,7 +120,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void Area2()
 		{
-			UrlInfo info = tokenizer.TokenizeUrl("/myvirdirectory/clients/home/index.rails", new Uri("http://localhost"), true, "/myvirdirectory");
+			UrlInfo info = tokenizer.TokenizeUrl("/myvirdirectory/clients/home/index.rails", null, new Uri("http://localhost"), true, "/myvirdirectory");
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
@@ -130,7 +130,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void Area3()
 		{
-			UrlInfo info = tokenizer.TokenizeUrl("/myvirdirectory/mysite/clients/home/index.rails", new Uri("http://localhost"), true, "/myvirdirectory");
+			UrlInfo info = tokenizer.TokenizeUrl("/myvirdirectory/mysite/clients/home/index.rails", null, new Uri("http://localhost"), true, "/myvirdirectory");
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
@@ -140,7 +140,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void VirDir()
 		{
-			UrlInfo info = tokenizer.TokenizeUrl("/myvirdirectory/home/index.rails", new Uri("http://localhost"), true, "/myvirdirectory");
+			UrlInfo info = tokenizer.TokenizeUrl("/myvirdirectory/home/index.rails", null, new Uri("http://localhost"), true, "/myvirdirectory");
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
@@ -150,7 +150,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void VirDirNonLowerCase()
 		{
-			UrlInfo info = tokenizer.TokenizeUrl("/MyVirDirectory/home/index.rails", new Uri("http://localhost"), true, "/myvirdirectory");
+			UrlInfo info = tokenizer.TokenizeUrl("/MyVirDirectory/home/index.rails", null, new Uri("http://localhost"), true, "/myvirdirectory");
 			Assert.IsNotNull(info);
 			Assert.AreEqual("home", info.Controller);
 			Assert.AreEqual("index", info.Action);
@@ -160,7 +160,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void EmptyVirDir()
 		{
-			UrlInfo info = tokenizer.TokenizeUrl("/home/index.rails", new Uri("http://localhost"), true, "");
+			UrlInfo info = tokenizer.TokenizeUrl("/home/index.rails", null, new Uri("http://localhost"), true, "");
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
@@ -170,7 +170,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test, ExpectedException(typeof(UrlTokenizerException), "Url smaller than 2 tokens")]
 	    public void BadUrl()
 	    {
-			tokenizer.TokenizeUrl("/index.rails", new Uri("http://localhost"), true, null);
+			tokenizer.TokenizeUrl("/index.rails", null, new Uri("http://localhost"), true, null);
 	    }
 	}
 }
