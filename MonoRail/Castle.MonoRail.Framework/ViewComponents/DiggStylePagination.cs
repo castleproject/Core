@@ -155,11 +155,13 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 			else
 			{
-				if (url is IDictionary)
+				IDictionary urlParams = url as IDictionary;
+
+				if (urlParams != null)
 				{
 					IUrlBuilder urlBuilder = RailsContext.GetService<IUrlBuilder>();
-
-					url = urlBuilder.BuildUrl(RailsContext.UrlInfo, (IDictionary) url);
+					urlParams["encode"] = "true";
+					url = urlBuilder.BuildUrl(RailsContext.UrlInfo, urlParams);
 				}
 			}
 
@@ -369,9 +371,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 					{
 						separator = string.Empty;
 
-						if (!url.ToString().EndsWith("&"))
+						if (!url.ToString().EndsWith("&amp;"))
 						{
-							separator = "&";
+							separator = "&amp;";
 						}
 					}
 
