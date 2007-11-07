@@ -42,12 +42,32 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			string queryString = helper.BuildQueryString(parameters);
 
-			Assert.AreEqual("single=1&amp;multiple=2&amp;multiple=4&amp;multiple=99&amp;string=test&amp;", queryString);
+			Assert.AreEqual("single=1&amp;multiple=2&amp;multiple=4&amp;multiple=99&amp;string=test", queryString);
+		}
+
+		[Test]
+		public void BuildQueryStringUsingNameValueCollection()
+		{
+			NameValueCollection parameters = new NameValueCollection();
+			parameters.Add("single", "1");
+			parameters.Add("multiple", "2");
+			parameters.Add("multiple", "4");
+			parameters.Add("multiple", "99");
+			parameters.Add("string", "test");
+
+			string queryString = helper.BuildQueryString(parameters);
+
+			Assert.AreEqual("single=1&amp;multiple=2&amp;multiple=4&amp;multiple=99&amp;string=test", queryString);
 		}
 
 		internal class DummyHelper : AbstractHelper
 		{
 			public new string BuildQueryString(IDictionary parameters)
+			{
+				return base.BuildQueryString(parameters);
+			}
+
+			public new string BuildQueryString(NameValueCollection parameters)
 			{
 				return base.BuildQueryString(parameters);
 			}

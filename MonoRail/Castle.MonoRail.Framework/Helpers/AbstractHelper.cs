@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
+	using System.Collections.Specialized;
 	using System.Text;
 	using System.Collections;
 	using Castle.MonoRail.Framework.Internal;
@@ -214,12 +215,25 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// dict.Add("id", 5);
 		/// dict.Add("selectedItem", new int[] { 2, 4, 99 });
 		/// string querystring = BuildQueryString(dict);
-		/// // should result in: "id=5&amp;selectedItem=2&amp;selectedItem=4&amp;selectedItem=99&amp;"
+		/// // should result in: "id=5&amp;selectedItem=2&amp;selectedItem=4&amp;selectedItem=99"
 		/// </code>
 		/// </example>
 		/// </remarks>
 		/// <param name="parameters">The parameters</param>
 		public string BuildQueryString(IDictionary parameters)
+		{
+			return CommonUtils.BuildQueryString(serverUtility, parameters, true);
+		}
+
+		/// <summary>
+		/// Builds a query string encoded.
+		/// </summary>
+		/// <remarks>
+		/// Supports multi-value query strings, using any
+		/// <see cref="IEnumerable"/> as a value.
+		/// </remarks>
+		/// <param name="parameters">The parameters</param>
+		public string BuildQueryString(NameValueCollection parameters)
 		{
 			return CommonUtils.BuildQueryString(serverUtility, parameters, true);
 		}

@@ -75,7 +75,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(noAreaUrl, "product", "list"));
 			Assert.AreEqual("/home/list.rails", urlBuilder.BuildUrl(noAreaUrl, DictHelper.Create("action=list")));
-			Assert.AreEqual("/product/list.rails?id=1&name=hammett&", urlBuilder.BuildUrl(noAreaUrl, "product", "list", DictHelper.Create("id=1", "name=hammett")));
+			Assert.AreEqual("/product/list.rails?id=1&name=hammett", urlBuilder.BuildUrl(noAreaUrl, "product", "list", DictHelper.Create("id=1", "name=hammett")));
 		}
 
 		[Test]
@@ -95,7 +95,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(noAreaUrl, "product", "list"));
 			Assert.AreEqual("/home/list.rails", urlBuilder.BuildUrl(noAreaUrl, DictHelper.Create("action=list")));
-			Assert.AreEqual("/product/list.rails?id=1&name=hammett&", urlBuilder.BuildUrl(noAreaUrl, "product", "list", DictHelper.Create("id=1", "name=hammett")));
+			Assert.AreEqual("/product/list.rails?id=1&name=hammett", urlBuilder.BuildUrl(noAreaUrl, "product", "list", DictHelper.Create("id=1", "name=hammett")));
 		}
 
 		[Test]
@@ -105,7 +105,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			Assert.AreEqual("/product/list", urlBuilder.BuildUrl(noAreaUrl, "product", "list"));
 			Assert.AreEqual("/home/list", urlBuilder.BuildUrl(noAreaUrl, DictHelper.Create("action=list")));
-			Assert.AreEqual("/product/list?id=1&name=hammett&", urlBuilder.BuildUrl(noAreaUrl, "product", "list", DictHelper.Create("id=1", "name=hammett")));
+			Assert.AreEqual("/product/list?id=1&name=hammett", urlBuilder.BuildUrl(noAreaUrl, "product", "list", DictHelper.Create("id=1", "name=hammett")));
 			Assert.AreEqual("/area/home/list", urlBuilder.BuildUrl(areaUrl, DictHelper.Create("action=list")));
 			Assert.AreEqual("/app/home/list", urlBuilder.BuildUrl(withSubDomain, DictHelper.Create("action=list")));
 		}

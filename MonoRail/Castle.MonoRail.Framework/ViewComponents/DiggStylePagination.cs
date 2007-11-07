@@ -61,8 +61,8 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private int adjacents = 2;
 		private bool useInlineStyle = true;
 		private bool renderIfOnlyOnePage = true;
-		private string url;
 		private string paginatefunction;
+		private object url;
 		private IPaginatedPage page;
 
 		/// <summary>
@@ -131,7 +131,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		/// <value>The URL.</value>
 		[ViewComponentParam]
-		public string Url
+		public object Url
 		{
 			get { return url; }
 			set { url = value; }
@@ -152,6 +152,15 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			if (url == null)
 			{
 				url = RailsContext.Request.FilePath;
+			}
+			else
+			{
+				if (url is IDictionary)
+				{
+					IUrlBuilder urlBuilder = RailsContext.GetService<IUrlBuilder>();
+
+					url = urlBuilder.BuildUrl(RailsContext.UrlInfo, (IDictionary) url);
+				}
 			}
 
 			// So when we render the blocks, the user might access the page
@@ -340,7 +349,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			{
 				PropertyBag["pageIndex"] = pageIndex;
 				PropertyBag["text"] = text;
-				PropertyBag["url"] = url;
+				PropertyBag["url"] = url.ToString();
 
 				Context.RenderSection(LinkSection, writer);
 			}
@@ -356,7 +365,15 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				{
 					string separator = "?";
 
-					if (url.IndexOf('?') > 0) separator = "&";
+					if (url.ToString().IndexOf('?') > 0)
+					{
+						separator = string.Empty;
+
+						if (!url.ToString().EndsWith("&"))
+						{
+							separator = "&";
+						}
+					}
 
 					href = url + separator + "page=" + pageIndex;
 				}
