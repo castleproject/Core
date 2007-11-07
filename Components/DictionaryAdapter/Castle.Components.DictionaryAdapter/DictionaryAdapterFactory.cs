@@ -68,7 +68,8 @@ namespace Castle.Components.DictionaryAdapter
 			if (adapterAssembly == null)
 			{
 				TypeBuilder typeBuilder = CreateTypeBuilder<T>(appDomain, adapterAssemblyName);
-				adapterAssembly = CreateAdapterAssembly<T>(typeBuilder, dictionary.GetType(), CreateDictionaryField, CreatePropertyGet, CreatePropertySet);
+				Type dictionaryType = dictionary is IDictionary ? typeof (IDictionary) : typeof (NameValueCollection);
+				adapterAssembly = CreateAdapterAssembly<T>(typeBuilder, dictionaryType, CreateDictionaryField, CreatePropertyGet, CreatePropertySet);
 			}
 
 			return GetExistingAdapter<T>(adapterAssembly, dictionary);
