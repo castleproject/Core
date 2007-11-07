@@ -70,6 +70,9 @@ namespace NVelocity.Test
 
 			Assert.AreEqual("3:action=<index> controller=<area> params=<2:id=<'1'> lastpage=<2>>",
 							Eval("%{params={id=$survey.to_squote, lastpage=$id}, controller='area', action='index'}"));
+
+			Assert.AreEqual("1:url=<3:action=<viewpage> pathinfo=<> querystring=<1:id=<1>>>",
+							Eval("%{url={action='viewpage',pathinfo=$context.info,querystring={id=1}}}"));
 		}
 
 		[Test]

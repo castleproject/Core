@@ -235,6 +235,7 @@ namespace NVelocity.Runtime.Parser.Node
 							inKey = false;
 							valueStarted = false;
 							inTransition = true;
+							expectSingleCommaAtEnd = false;
 							continue;
 						}
 					}
@@ -275,6 +276,7 @@ namespace NVelocity.Runtime.Parser.Node
 						inKey = false;
 						valueStarted = false;
 						inTransition = true;
+						expectSingleCommaAtEnd = false;
 
 						if (!inEvaluationContext && c == '}')
 						{
@@ -311,6 +313,7 @@ namespace NVelocity.Runtime.Parser.Node
 					inKey = false;
 					valueStarted = false;
 					inTransition = true;
+					expectSingleCommaAtEnd = false;
 				}
 			}
 
