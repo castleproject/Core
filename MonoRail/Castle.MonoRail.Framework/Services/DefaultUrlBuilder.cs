@@ -100,63 +100,14 @@ namespace Castle.MonoRail.Framework.Services
 
 		/// <summary>
 		/// Builds the URL using the current url as contextual information and a parameter dictionary.
-		/// 
+		/// <para>
+		/// Common parameters includes area, controller and action. 
+		/// </para>
 		/// </summary>
-		/// 
-		/// <remarks>
-		/// <para>
-		/// Common parameters includes <c>area</c>, <c>controller</c> and <c>action</c>, which outputs
-		/// <c>/area/controller/name.extension</c>
-		/// </para>
-		/// 
-		/// <para>
-		/// Please note that if you dont specify an area or controller name, they will be inferred from the 
-		/// context. If you want to use an empty area, you must specify <c>area=''</c>. 
-		/// This is commonly a source of confusion, so understand the following cases:
-		/// </para>
-		/// 
-		/// <example>
-		/// <code>
-		/// UrlInfo current = ... // Assume that the current is area Admin, controller Products and action List
-		/// 
-		/// BuildUrl(current, {action: 'view'})
-		/// // returns /Admin/Products/view.castle
-		/// 
-		/// BuildUrl(current, {controller: 'Home', action: 'index'})
-		/// // returns /Admin/Home/index.castle
-		///  
-		/// BuildUrl(current, {area:'', controller: 'Home', action: 'index'})
-		/// // returns /Home/index.castle
-		/// </code>
-		/// </example>
-		/// 
-		/// <para>
-		/// The <c>querystring</c> parameter can be a string or a dictionary. It appends a query string to the url:
-		/// <c>/area/controller/name.extension?id=1</c>
-		/// </para>
-		/// 
-		/// <para>
-		/// The <c>absolute</c> parameter forces the builder to output a full url like
-		/// <c>http://hostname/virtualdir/area/controller/name.extension</c>
-		/// </para>
-		///
-		/// <para>
-		/// The <c>pathinfo</c> parameter can be used to add information between the resource identifier and the 
-		/// query string (optional)
-		/// <c>http://hostname/virtualdir/area/controller/name.extension/path/info/here</c> or
-		/// <c>http://hostname/virtualdir/area/controller/name.extension/path/info/here?key=value</c>
-		/// </para>
-		/// 
-		/// <para>
-		/// The <c>encode</c> parameter forces the builder to encode the querystring
-		/// <c>/controller/name.extension?id=1&amp;name=John</c> which is required to output full xhtml compliant content.
-		/// </para>
-		/// 
-		/// </remarks>
 		/// <param name="current">The current Url information.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public virtual string BuildUrl(UrlInfo current, IDictionary parameters)
+		public UrlPartsBuilder CreateUrlPartsBuilder(UrlInfo current, IDictionary parameters)
 		{
 			string routeName = CommonUtils.ObtainEntryAndRemove(parameters, "named");
 			bool encode = CommonUtils.ObtainEntryAndRemove(parameters, "encode", "false") == "true";
@@ -229,8 +180,72 @@ namespace Castle.MonoRail.Framework.Services
 				}
 
 				return InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain,
-					current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix, basePath, pathInfo);
+				                        current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix,
+				                        basePath, pathInfo);
 			}
+		}
+
+		/// <summary>
+		/// Builds the URL using the current url as contextual information and a parameter dictionary.
+		/// 
+		/// </summary>
+		/// 
+		/// <remarks>
+		/// <para>
+		/// Common parameters includes <c>area</c>, <c>controller</c> and <c>action</c>, which outputs
+		/// <c>/area/controller/name.extension</c>
+		/// </para>
+		/// 
+		/// <para>
+		/// Please note that if you dont specify an area or controller name, they will be inferred from the 
+		/// context. If you want to use an empty area, you must specify <c>area=''</c>. 
+		/// This is commonly a source of confusion, so understand the following cases:
+		/// </para>
+		/// 
+		/// <example>
+		/// <code>
+		/// UrlInfo current = ... // Assume that the current is area Admin, controller Products and action List
+		/// 
+		/// BuildUrl(current, {action: 'view'})
+		/// // returns /Admin/Products/view.castle
+		/// 
+		/// BuildUrl(current, {controller: 'Home', action: 'index'})
+		/// // returns /Admin/Home/index.castle
+		///  
+		/// BuildUrl(current, {area:'', controller: 'Home', action: 'index'})
+		/// // returns /Home/index.castle
+		/// </code>
+		/// </example>
+		/// 
+		/// <para>
+		/// The <c>querystring</c> parameter can be a string or a dictionary. It appends a query string to the url:
+		/// <c>/area/controller/name.extension?id=1</c>
+		/// </para>
+		/// 
+		/// <para>
+		/// The <c>absolute</c> parameter forces the builder to output a full url like
+		/// <c>http://hostname/virtualdir/area/controller/name.extension</c>
+		/// </para>
+		///
+		/// <para>
+		/// The <c>pathinfo</c> parameter can be used to add information between the resource identifier and the 
+		/// query string (optional)
+		/// <c>http://hostname/virtualdir/area/controller/name.extension/path/info/here</c> or
+		/// <c>http://hostname/virtualdir/area/controller/name.extension/path/info/here?key=value</c>
+		/// </para>
+		/// 
+		/// <para>
+		/// The <c>encode</c> parameter forces the builder to encode the querystring
+		/// <c>/controller/name.extension?id=1&amp;name=John</c> which is required to output full xhtml compliant content.
+		/// </para>
+		/// 
+		/// </remarks>
+		/// <param name="current">The current Url information.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public virtual string BuildUrl(UrlInfo current, IDictionary parameters)
+		{
+			return CreateUrlPartsBuilder(current, parameters).BuildPath();
 		}
 
 		/// <summary>
@@ -241,7 +256,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public string BuildRouteUrl(UrlInfo current, string routeName)
 		{
-			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, null, false);
+			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, null, false).BuildPath();
 		}
 
 		/// <summary>
@@ -253,7 +268,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public string BuildRouteUrl(UrlInfo current, string routeName, IDictionary parameters)
 		{
-			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, parameters, false);
+			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, parameters, false).BuildPath();
 		}
 
 		/// <summary>
@@ -265,7 +280,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public string BuildRouteUrl(UrlInfo current, string routeName, object parameters)
 		{
-			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, parameters, false);
+			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, parameters, false).BuildPath();
 		}
 
 		/// <summary>
@@ -363,7 +378,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="queryStringParams">The query string params.</param>
 		/// <returns></returns>
 		public virtual string BuildUrl(UrlInfo current, string area, string controller, string action,
-		                       NameValueCollection queryStringParams)
+		                               NameValueCollection queryStringParams)
 		{
 			Hashtable parameters = new Hashtable();
 			parameters["area"] = area;
@@ -392,12 +407,13 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="suffix">The suffix.</param>
 		/// <returns></returns>
 		protected virtual string InternalBuildUrl(string area, string controller, string action, string protocol,
-		                                string port, string domain, string subdomain, string appVirtualDir, string extension, 
-		                                bool absolutePath, bool applySubdomain, string suffix)
+		                                          string port, string domain, string subdomain, string appVirtualDir,
+		                                          string extension,
+		                                          bool absolutePath, bool applySubdomain, string suffix)
 		{
 			return
 				InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain, appVirtualDir, extension, absolutePath,
-				                 applySubdomain, suffix, null, null);
+				                 applySubdomain, suffix, null, null).BuildPath();
 		}
 
 		/// <summary>
@@ -418,9 +434,12 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="basePath">The base path.</param>
 		/// <param name="pathInfo">Path info</param>
 		/// <returns></returns>
-		protected virtual string InternalBuildUrl(string area, string controller, string action, string protocol,
-		                                string port, string domain, string subdomain, string appVirtualDir, string extension,
-		                                bool absolutePath, bool applySubdomain, string suffix, string basePath, string pathInfo)
+		protected virtual UrlPartsBuilder InternalBuildUrl(string area, string controller, string action, string protocol,
+		                                                   string port, string domain, string subdomain, string appVirtualDir,
+		                                                   string extension,
+		                                                   bool absolutePath, bool applySubdomain, string suffix,
+		                                                   string basePath,
+		                                                   string pathInfo)
 		{
 			if (area == null) throw new ArgumentNullException("area");
 			if (controller == null) throw new ArgumentNullException("controller");
@@ -443,24 +462,16 @@ namespace Castle.MonoRail.Framework.Services
 				path += "." + extension;
 			}
 
-			if (pathInfo != null)
+			UrlPartsBuilder urlBuilder = new UrlPartsBuilder(path);
+
+			urlBuilder.PathInfoDict.Parse(pathInfo);
+
+			if (!string.IsNullOrEmpty(suffix))
 			{
-				if (!pathInfo.StartsWith("/"))
-				{
-					path += "/" + pathInfo;
-				}
-				else
-				{
-					path += pathInfo;
-				}
+				urlBuilder.SetQueryString(suffix);
 			}
 
-			if (suffix != null && suffix != String.Empty)
-			{
-				path += "?" + suffix;
-			}
-
-			return path;
+			return urlBuilder;
 		}
 
 		/// <summary>
@@ -472,8 +483,8 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="routeParams">The route params.</param>
 		/// <param name="encode">if set to <c>true</c> [encode].</param>
 		/// <returns></returns>
-		protected virtual string InternalBuildRouteUrl(string hostname, string virtualDir,
-		                                               string name, object routeParams, bool encode)
+		protected virtual UrlPartsBuilder InternalBuildRouteUrl(string hostname, string virtualDir,
+		                                                        string name, object routeParams, bool encode)
 		{
 			IDictionary parameters;
 
@@ -497,7 +508,7 @@ namespace Castle.MonoRail.Framework.Services
 
 			// TODO: should encode?
 
-			return url;
+			return new UrlPartsBuilder(url);
 		}
 
 		/// <summary>
@@ -514,10 +525,10 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="protocol">The protocol.</param>
 		/// <param name="subdomain">The subdomain.</param>
 		/// <returns></returns>
-		protected static string InternalBuildUsingAppVirtualDir(bool absolutePath, string action, 
-			bool applySubdomain, string appVirtualDir, 
-			string area, string controller,
-			string domain, string port, string protocol, string subdomain)
+		protected static string InternalBuildUsingAppVirtualDir(bool absolutePath, string action,
+		                                                        bool applySubdomain, string appVirtualDir,
+		                                                        string area, string controller,
+		                                                        string domain, string port, string protocol, string subdomain)
 		{
 			string path;
 

@@ -35,6 +35,8 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 
 			singlePage = new Page(new string[] {"a", "b", "c"}, 1, 4, 1);
 			secondPageOfThree = new Page(new string[] {"a", "b", "c", "d"}, 2, 4, 10);
+
+			BuildRailsContext("area", "controller", "action");
 		}
 
 		[TearDown]
@@ -62,9 +64,8 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 			SectionRender["link"] = delegate(IDictionary context, TextWriter writer) { actions.Add("link"); };
 
 			diggComponent.Page = singlePage;
-			PrepareViewComponent(diggComponent);
 			Request.FilePath = "/something";
-			diggComponent.Initialize();
+			PrepareViewComponent(diggComponent);
 			diggComponent.Render();
 
 			Assert.AreEqual(2, actions.Count);
@@ -82,9 +83,8 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 			SectionRender["link"] = delegate(IDictionary context, TextWriter writer) { actions.Add("link"); };
 
 			diggComponent.Page = secondPageOfThree;
-			PrepareViewComponent(diggComponent);
 			Request.FilePath = "/something";
-			diggComponent.Initialize();
+			PrepareViewComponent(diggComponent);
 			diggComponent.Render();
 
 			Assert.AreEqual(6, actions.Count);
@@ -104,9 +104,8 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 
 			diggComponent.UseInlineStyle = false;
 			diggComponent.Page = singlePage;
-			PrepareViewComponent(diggComponent);
 			Request.FilePath = "/something";
-			diggComponent.Initialize();
+			PrepareViewComponent(diggComponent);
 			diggComponent.Render();
 
 			Assert.AreEqual("started<span class=\"disabled\">&laquo; prev</span>\r\n" + 
@@ -124,9 +123,8 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 
 			diggComponent.UseInlineStyle = false;
 			diggComponent.Page = singlePage;
-			PrepareViewComponent(diggComponent);
 			Request.FilePath = "/something";
-			diggComponent.Initialize();
+			PrepareViewComponent(diggComponent);
 			diggComponent.Render();
 
 			Assert.AreEqual("started<span class=\"disabled\">customprev</span>\r\n" +
@@ -146,14 +144,13 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 
 			diggComponent.UseInlineStyle = false;
 			diggComponent.Page = secondPageOfThree;
-			PrepareViewComponent(diggComponent);
 			Request.FilePath = "/something";
-			diggComponent.Initialize();
+			PrepareViewComponent(diggComponent);
 			diggComponent.Render();
 
-			Assert.AreEqual("started <1 /something &laquo; prev>  " + 
-				"<1 /something 1> \r\n<span class=\"current\">2</span>\r\n " +
-				"<3 /something 3>  <3 /something next &raquo;> ended", Output);
+			Assert.AreEqual("started <1 /something?page=1 &laquo; prev>  " +
+				"<1 /something?page=1 1> \r\n<span class=\"current\">2</span>\r\n " +
+				"<3 /something?page=3 3>  <3 /something?page=3 next &raquo;> ended", Output);
 		}
 
 		[Test]

@@ -33,6 +33,17 @@ namespace Castle.MonoRail.Framework
 		/// <param name="current">The current Url information.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
+		UrlPartsBuilder CreateUrlPartsBuilder(UrlInfo current, IDictionary parameters);
+
+		/// <summary>
+		/// Builds the URL using the current url as contextual information and a parameter dictionary.
+		/// <para>
+		/// Common parameters includes area, controller and action. 
+		/// </para>
+		/// </summary>
+		/// <param name="current">The current Url information.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
 		string BuildUrl(UrlInfo current, IDictionary parameters);
 
 		/// <summary>

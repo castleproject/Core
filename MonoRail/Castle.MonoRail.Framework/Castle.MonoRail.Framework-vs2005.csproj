@@ -481,10 +481,12 @@
     <Compile Include="TransformFilters\LowerCaseTransformFilter.cs" />
     <Compile Include="TransformFilters\UpperCaseTransformFilter.cs" />
     <Compile Include="TransformFilters\WikiTransformFilter.cs" />
+    <Compile Include="UrlPartsBuilder.cs" />
     <Compile Include="ViewComponent.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewComponentException.cs" />
+    <Compile Include="ViewComponents\AbstractPaginationViewComponent.cs" />
     <Compile Include="ViewComponents\AuthenticatedContent.cs" />
     <Compile Include="ViewComponents\CaptureFor.cs" />
     <Compile Include="ViewComponents\ChildContentComponent.cs" />

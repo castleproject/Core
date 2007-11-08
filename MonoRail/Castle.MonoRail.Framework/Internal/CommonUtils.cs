@@ -187,6 +187,46 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <remarks>
 		/// Supports multi-value query strings, using any
 		/// <see cref="IEnumerable"/> as a value.
+		/// </remarks>
+		/// <param name="parameters">The parameters</param>
+		public static string BuildQueryString(NameValueCollection parameters)
+		{
+			if (parameters == null || parameters.Count == 0) return string.Empty;
+
+			StringBuilder sb = new StringBuilder();
+
+			bool useSeparator = false;
+
+			foreach(string key in parameters.Keys)
+			{
+				if (key == null) continue;
+
+				foreach(string value in parameters.GetValues(key))
+				{
+					if (useSeparator)
+					{
+						sb.Append("&");
+					}
+					else
+					{
+						useSeparator = true;
+					}
+
+					sb.Append(key)
+						.Append('=')
+						.Append(value);
+				}
+			}
+
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Builds a query string.
+		/// </summary>
+		/// <remarks>
+		/// Supports multi-value query strings, using any
+		/// <see cref="IEnumerable"/> as a value.
 		/// <example>
 		///	<code>
 		/// IDictionary dict = new Hashtable();
