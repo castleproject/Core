@@ -28,20 +28,14 @@ namespace Castle.MonoRail.Views.Brail
 	using Boo.Lang.Compiler.Pipelines;
 	using Boo.Lang.Compiler.Steps;
 	using Boo.Lang.Parser;
-	using Castle.Core.Logging;
-	using Castle.MonoRail.Framework.Helpers;
+	using Core.Logging;
+	using Framework.Helpers;
 	using Core;
 	using Framework;
 
 	public class BooViewEngine : ViewEngineBase, IInitializable
 	{
 		private static BooViewEngineOptions options;
-		private string baseSavePath;
-
-		/// <summary>
-		/// This is used to add a reference to the common scripts for each compiled scripts
-		/// </summary>
-		private Assembly common;
 
 		/// <summary>
 		/// This field holds all the cache of all the 
@@ -50,11 +44,18 @@ namespace Castle.MonoRail.Views.Brail
 		private readonly Hashtable compilations = Hashtable.Synchronized(
 			new Hashtable(StringComparer.InvariantCultureIgnoreCase));
 
+		private string baseSavePath;
+
+		/// <summary>
+		/// This is used to add a reference to the common scripts for each compiled scripts
+		/// </summary>
+		private Assembly common;
+
 		/// <summary>
 		/// used to hold the constructors of types, so we can avoid using
 		/// Activator (which takes a long time
 		/// </summary>
-		private Hashtable constructors = new Hashtable();
+		private readonly Hashtable constructors = new Hashtable();
 
 		private ILogger logger;
 
@@ -116,8 +117,9 @@ namespace Castle.MonoRail.Views.Brail
 			Process(context.Response.Output, context, controller, templateName);
 		}
 
-		public override void Process(TextWriter output, IRailsEngineContext context, IController controller,
-									 string templateName)
+		public override void Process(
+			TextWriter output, IRailsEngineContext context, IController controller,
+			string templateName)
 		{
 			Log("Starting to process request for {0}", templateName);
 			string file = templateName + ViewFileExtension;
@@ -128,19 +130,48 @@ namespace Castle.MonoRail.Views.Brail
 			// Will compile on first time, then save the assembly on the cache.
 			view = GetCompiledScriptInstance(file, layoutViewOutput.Output, context, controller);
 			controller.PreSendView(view);
+			
 			Log("Executing view {0}", templateName);
-			view.Run();
+			
+			try
+			{
+				view.Run();
+			}
+			catch (Exception e)
+			{
+				HandleException(templateName, view, e);
+			}
+
 			if (layoutViewOutput.Layout != null)
 			{
 				layoutViewOutput.Layout.SetParent(view);
-				layoutViewOutput.Layout.Run();
+				try
+				{
+					layoutViewOutput.Layout.Run();
+				}
+				catch (Exception e)
+				{
+					HandleException(controller.LayoutName, layoutViewOutput.Layout, e);
+				}
 			}
 			Log("Finished executing view {0}", templateName);
 			controller.PostSendView(view);
 		}
 
-		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, IController controller,
-											string partialName)
+		private void HandleException(string templateName, BrailBase view, Exception e)
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append("Exception on process view: ").AppendLine(templateName);
+			sb.Append("Last accessed variable: ").Append(view.LastVariableAccessed);
+			string msg = sb.ToString();
+			sb.Append("Exception: ").AppendLine(e.ToString());
+			Log(msg);
+			throw new RailsException(msg, e);
+		}
+
+		public override void ProcessPartial(
+			TextWriter output, IRailsEngineContext context, IController controller,
+			string partialName)
 		{
 			Log("Generating partial for {0}", partialName);
 
@@ -168,8 +199,9 @@ namespace Castle.MonoRail.Views.Brail
 			return new BrailJSGenerator(new PrototypeHelper.JSGenerator(context));
 		}
 
-		public override void GenerateJS(TextWriter output, IRailsEngineContext context, IController controller,
-										string templateName)
+		public override void GenerateJS(
+			TextWriter output, IRailsEngineContext context, IController controller,
+			string templateName)
 		{
 			Log("Generating JS for {0}", templateName);
 
@@ -179,9 +211,9 @@ namespace Castle.MonoRail.Views.Brail
 				AdjustJavascriptContentType(context);
 				string file = ResolveJSTemplateName(templateName);
 				BrailBase view = GetCompiledScriptInstance(file,
-					//we use the script just to build the generator, not to output to the user
-														   new StringWriter(),
-														   context, controller);
+				                                           //we use the script just to build the generator, not to output to the user
+				                                           new StringWriter(),
+				                                           context, controller);
 				Log("Executing JS view {0}", templateName);
 				view.AddProperty("page", generator);
 				view.Run();
@@ -213,8 +245,8 @@ namespace Castle.MonoRail.Views.Brail
 		private void OnViewChanged(object sender, FileSystemEventArgs e)
 		{
 			string path = e.FullPath.Substring(ViewRootDir.Length);
-			if(path.Length>0 && (path[0] == Path.DirectorySeparatorChar || 
-				path[0] == Path.AltDirectorySeparatorChar))
+			if (path.Length > 0 && (path[0] == Path.DirectorySeparatorChar ||
+			                        path[0] == Path.AltDirectorySeparatorChar))
 			{
 				path = path.Substring(1);
 			}
@@ -238,7 +270,6 @@ namespace Castle.MonoRail.Views.Brail
 					// successfully compiled the commons scripts directory.
 					Log("Failed to recompile the commons scripts directory! {0}", ex);
 				}
-
 			}
 			else
 			{
@@ -280,7 +311,7 @@ namespace Castle.MonoRail.Views.Brail
 		public override void Service(IServiceProvider serviceProvider)
 		{
 			base.Service(serviceProvider);
-			ILoggerFactory loggerFactory = serviceProvider.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
+			ILoggerFactory loggerFactory = serviceProvider.GetService(typeof (ILoggerFactory)) as ILoggerFactory;
 			if (loggerFactory != null)
 				logger = loggerFactory.Create(GetType().Name);
 		}
@@ -296,7 +327,7 @@ namespace Castle.MonoRail.Views.Brail
 				string layoutTemplate = "layouts\\" + controller.LayoutName;
 				string layoutFilename = layoutTemplate + ViewFileExtension;
 				layout = GetCompiledScriptInstance(layoutFilename, output,
-												   context, controller);
+				                                   context, controller);
 				output = layout.ChildOutput = new StringWriter();
 			}
 			return new LayoutViewOutput(output, layout);
@@ -309,10 +340,11 @@ namespace Castle.MonoRail.Views.Brail
 		// If the file has not been compiled, or the version on disk is newer than the one in memory, a new
 		// version is compiled.
 		// Finally, an instance is created and returned	
-		public BrailBase GetCompiledScriptInstance(string file,
-												   TextWriter output,
-												   IRailsEngineContext context,
-												   IController controller)
+		public BrailBase GetCompiledScriptInstance(
+			string file,
+			TextWriter output,
+			IRailsEngineContext context,
+			IController controller)
 		{
 			bool batch = options.BatchCompile;
 			// normalize filename - replace / or \ to the system path seperator
@@ -322,7 +354,7 @@ namespace Castle.MonoRail.Views.Brail
 			Type type;
 			if (compilations.ContainsKey(filename))
 			{
-				type = (Type)compilations[filename];
+				type = (Type) compilations[filename];
 				if (type != null)
 				{
 					Log("Got compiled instance of {0} from cache", filename);
@@ -345,9 +377,9 @@ namespace Castle.MonoRail.Views.Brail
 
 		private BrailBase CreateBrailBase(IRailsEngineContext context, IController controller, TextWriter output, Type type)
 		{
-			ConstructorInfo constructor = (ConstructorInfo)constructors[type];
-			BrailBase self = (BrailBase)FormatterServices.GetUninitializedObject(type);
-			constructor.Invoke(self, new object[] { this, output, context, controller });
+			ConstructorInfo constructor = (ConstructorInfo) constructors[type];
+			BrailBase self = (BrailBase) FormatterServices.GetUninitializedObject(type);
+			constructor.Invoke(self, new object[] {this, output, context, controller});
 			return self;
 		}
 
@@ -402,7 +434,7 @@ namespace Castle.MonoRail.Views.Brail
 				                                         		typeof (Controller)
 				                                         	});
 			}
-			type = (Type)compilations[filename];
+			type = (Type) compilations[filename];
 			return type;
 		}
 
@@ -463,7 +495,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// <param name="files"></param>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		private CompilationResult DoCompile(ICollection<ICompilerInput> files, string name)
+		private CompilationResult DoCompile(IEnumerable<ICompilerInput> files, string name)
 		{
 			ICompilerInput[] filesAsArray = new List<ICompilerInput>(files).ToArray();
 			BooCompiler compiler = SetupCompiler(filesAsArray);
@@ -478,15 +510,15 @@ namespace Castle.MonoRail.Views.Brail
 			compiler.Parameters.Pipeline.Insert(0, processor);
 			// inserting the add class step after the parser
 			compiler.Parameters.Pipeline.Insert(2, new TransformToBrailStep(options));
-			compiler.Parameters.Pipeline.Replace(typeof(ProcessMethodBodiesWithDuckTyping),
-				new ReplaceUknownWithParameters());
-			compiler.Parameters.Pipeline.Replace(typeof(ExpandDuckTypedExpressions),
-				new ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods());
-			compiler.Parameters.Pipeline.Replace(typeof(InitializeTypeSystemServices),
-				new InitializeCustomTypeSystem());
-			compiler.Parameters.Pipeline.InsertBefore(typeof(ReplaceUknownWithParameters),
-				new FixTryGetParameterConditionalChecks());
-			compiler.Parameters.Pipeline.RemoveAt(compiler.Parameters.Pipeline.Find(typeof(IntroduceGlobalNamespaces)));
+			compiler.Parameters.Pipeline.Replace(typeof (ProcessMethodBodiesWithDuckTyping),
+			                                     new ReplaceUknownWithParameters());
+			compiler.Parameters.Pipeline.Replace(typeof (ExpandDuckTypedExpressions),
+			                                     new ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods());
+			compiler.Parameters.Pipeline.Replace(typeof (InitializeTypeSystemServices),
+			                                     new InitializeCustomTypeSystem());
+			compiler.Parameters.Pipeline.InsertBefore(typeof (ReplaceUknownWithParameters),
+			                                          new FixTryGetParameterConditionalChecks());
+			compiler.Parameters.Pipeline.RemoveAt(compiler.Parameters.Pipeline.Find(typeof (IntroduceGlobalNamespaces)));
 
 			return new CompilationResult(compiler.Run(), processor);
 		}
@@ -529,7 +561,7 @@ namespace Castle.MonoRail.Views.Brail
 		}
 
 		// common setup for the compiler
-		private static BooCompiler SetupCompiler(ICompilerInput[] files)
+		private static BooCompiler SetupCompiler(IEnumerable<ICompilerInput> files)
 		{
 			BooCompiler compiler = new BooCompiler();
 			compiler.Parameters.Ducky = true;
@@ -592,8 +624,8 @@ namespace Castle.MonoRail.Views.Brail
 
 		private class CompilationResult
 		{
-			private CompilerContext context;
-			private BrailPreProcessor processor;
+			private readonly CompilerContext context;
+			private readonly BrailPreProcessor processor;
 
 			public CompilationResult(CompilerContext context, BrailPreProcessor processor)
 			{
@@ -618,8 +650,8 @@ namespace Castle.MonoRail.Views.Brail
 
 		private class LayoutViewOutput
 		{
-			private BrailBase layout;
-			private TextWriter output;
+			private readonly BrailBase layout;
+			private readonly TextWriter output;
 
 			public LayoutViewOutput(TextWriter output, BrailBase layout)
 			{

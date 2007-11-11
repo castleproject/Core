@@ -55,6 +55,7 @@ namespace Castle.MonoRail.Views.Brail
 		private IList viewComponentsParameters;
 
 		protected BooViewEngine viewEngine;
+		public string LastVariableAccessed;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BrailBase"/> class.
@@ -253,6 +254,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// <returns></returns>
 		private ParameterSearch GetParameterInternal(string name)
 		{
+			LastVariableAccessed = name;
 			//temporary syntax to turn @variable to varaible, imitating :symbol in ruby
 			if (name.StartsWith("@"))
 				return new ParameterSearch(name.Substring(1), true);
