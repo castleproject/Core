@@ -23,36 +23,28 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
 	public class BaseViewOnlyTestFixture : BaseControllerTest
 	{
-		protected string ProcessView(string templatePath)
+		protected static string ProcessView(string templatePath)
 		{
 			return ProcessView(new Hashtable(), templatePath);
 		}
 
-		protected string ProcessView(IDictionary dictionary, string templatePath)
+		protected static string ProcessView(IDictionary dictionary, string templatePath)
 		{
-			BooViewEngine bve = new BooViewEngine();
-			bve.Options = new BooViewEngineOptions();
-			bve.Options.SaveDirectory = Environment.CurrentDirectory;
-			bve.Options.SaveToDisk = true;
-			bve.Options.Debug = true;
+			BooViewEngineOptions options = new BooViewEngineOptions();
+			options.SaveDirectory = Environment.CurrentDirectory;
+			options.SaveToDisk = true;
+			options.Debug = true;
 			string viewPath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Views");
-			bve.Service(new ViewSourceLoaderServiceProvider(viewPath));
-			bve.Initialize();
-			StringWriter sw = new StringWriter();
-			DummyController controller = new DummyController();
 
-			controller.PropertyBag = dictionary;
-			PrepareController(controller, "", "home", "index");
-			bve.Process((TextWriter) sw, Context, (Controller) controller, templatePath);
+			IndependentBooViewEngine engine = new IndependentBooViewEngine(
+				new FileAssemblyViewSourceLoader(viewPath),
+				options);
+
+			StringWriter sw = new StringWriter();
+
+			engine.Process(templatePath, sw, dictionary);
+
 			return sw.ToString();
 		}
-
-		#region Nested type: DummyController
-
-		private class DummyController : Controller
-		{
-		}
-
-		#endregion
 	}
 }

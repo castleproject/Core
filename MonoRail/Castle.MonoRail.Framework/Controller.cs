@@ -1144,7 +1144,7 @@ namespace Castle.MonoRail.Framework
 				(view as IControllerAware).SetController(this);
 			}
 
-			if (context.Items != null)
+			if (context != null && context.Items != null)
 			{
 				context.Items[Constants.ControllerContextKey] = this;
 			}

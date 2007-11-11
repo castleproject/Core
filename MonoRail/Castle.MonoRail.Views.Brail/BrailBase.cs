@@ -378,15 +378,18 @@ namespace Castle.MonoRail.Views.Brail
 		/// </summary>
 		/// <param name="myContext"></param>
 		/// <param name="myController"></param>
-		private void InitProperties(IRailsEngineContext myContext, Controller myController)
+		private void InitProperties(IRailsEngineContext myContext, IController myController)
 		{
 			properties = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 			//properties.Add("dsl", new DslWrapper(this));
 			properties.Add("Controller", myController);
 			properties.Add("Context", myContext);
-			properties.Add("request", myContext.Request);
-			properties.Add("response", myContext.Response);
-			properties.Add("session", myContext.Session);
+			if (myContext != null)
+			{
+				properties.Add("request", myContext.Request);
+				properties.Add("response", myContext.Response);
+				properties.Add("session", myContext.Session);
+			}
 
 			if (myController.Resources != null)
 			{
@@ -396,7 +399,7 @@ namespace Castle.MonoRail.Views.Brail
 				}
 			}
 
-			if (myController.Params != null)
+			if (myContext != null && myController.Params != null)
 			{
 				foreach (string key in myController.Params.AllKeys)
 				{
@@ -405,7 +408,7 @@ namespace Castle.MonoRail.Views.Brail
 					properties[key] = myContext.Params[key];
 				}
 			}
-			if (myContext.Flash != null)
+			if (myContext != null && myContext.Flash != null)
 			{
 				foreach (DictionaryEntry entry in myContext.Flash)
 				{
@@ -429,7 +432,10 @@ namespace Castle.MonoRail.Views.Brail
 				}
 			}
 
-			properties["siteRoot"] = myContext.ApplicationPath;
+			if(myContext != null )
+			{
+				properties["siteRoot"] = myContext.ApplicationPath;
+			}
 		}
 
 		#region Nested type: ParameterSearch

@@ -33,6 +33,22 @@ namespace Castle.MonoRail.Framework
 		private bool enableCache = true;
 		private FileSystemWatcher viewFolderWatcher;
 
+		/// <summary>
+		/// Creates a new instance
+		/// </summary>
+		public FileAssemblyViewSourceLoader()
+		{
+		}
+
+
+		///<summary>
+		/// Creates a new instance with the viewRootDir 
+		///</summary>
+		public FileAssemblyViewSourceLoader(string viewRootDir)
+		{
+			this.viewRootDir = viewRootDir;
+		}
+
 		#region IServiceEnabledComponent implementation
 
 		/// <summary>
