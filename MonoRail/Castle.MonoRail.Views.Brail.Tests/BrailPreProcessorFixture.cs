@@ -37,6 +37,24 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			Assert.AreEqual(expected, s);
 		}
 
+		[Test]
+		public void TrimWhitespaceAroundMinusBlocks()
+		{
+			string code =
+				@"Foo
+  <% Hi -%>
+Bar
+  <% Yadda %>
+Blah";
+			string expected = "output \"\"\"Foo\r\n  \"\"\"\r\n" +
+			                  " Hi \r\n" +
+			                  "output \"\"\"Bar\r\n  \"\"\"\r\n" +
+			                  " Yadda \r\n" +
+			                  "output \"\"\"\r\nBlah\"\"\"\r\n";
+			string s = RunThroughPreProcessor(code);
+			Assert.AreEqual(expected, s);
+		}
+
 		private static string RunThroughPreProcessor(string code)
 		{
 			BrailPreProcessor ppc = new BrailPreProcessor(new BooViewEngine());

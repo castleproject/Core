@@ -109,11 +109,27 @@ namespace Castle.MonoRail.Views.Brail
 				lastIndex = code.IndexOf(end, startReading);
 				if (lastIndex == -1)
 					throw new RailsException("expected " + end);
+				int lastIndexOffset = end.Length;
+				if (code[lastIndex - 1] == '-')
+				{
+					--lastIndex;
+
+					if (EndTagEndsWithNewline(code, lastIndex + lastIndexOffset))
+					{
+						lastIndexOffset += 2;
+					}
+					++lastIndexOffset;
+				}
 				buffer.WriteLine(code.Substring(startReading, lastIndex - startReading));
-				lastIndex += end.Length;
+				lastIndex += lastIndexOffset;
 			}
 			Output(buffer, code.Substring(lastIndex));
 			return buffer.ToString();
+		}
+
+		private static bool EndTagEndsWithNewline(string code, int endIndex)
+		{
+			return code.Length > endIndex + 2 && code.Substring(endIndex + 1, 2) == "\r\n";
 		}
 
 		private static void Output(StringWriter buffer, string code)
