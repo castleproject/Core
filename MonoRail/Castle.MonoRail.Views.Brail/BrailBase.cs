@@ -394,26 +394,37 @@ namespace Castle.MonoRail.Views.Brail
 				}
 			}
 
-			foreach (string key in myController.Params.AllKeys)
+			if (myController.Params != null)
 			{
-				if (key == null)
-					continue;
-				properties[key] = myContext.Params[key];
+				foreach (string key in myController.Params.AllKeys)
+				{
+					if (key == null)
+						continue;
+					properties[key] = myContext.Params[key];
+				}
+			}
+			if (myContext.Flash != null)
+			{
+				foreach (DictionaryEntry entry in myContext.Flash)
+				{
+					properties[entry.Key] = entry.Value;
+				}
 			}
 
-			foreach (DictionaryEntry entry in myContext.Flash)
+			if (myController.PropertyBag != null)
 			{
-				properties[entry.Key] = entry.Value;
+				foreach (DictionaryEntry entry in myController.PropertyBag)
+				{
+					properties[entry.Key] = entry.Value;
+				}
 			}
 
-			foreach (DictionaryEntry entry in myController.PropertyBag)
+			if (myController.Helpers != null)
 			{
-				properties[entry.Key] = entry.Value;
-			}
-
-			foreach (DictionaryEntry entry in myController.Helpers)
-			{
-				properties[entry.Key] = entry.Value;
+				foreach (DictionaryEntry entry in myController.Helpers)
+				{
+					properties[entry.Key] = entry.Value;
+				}
 			}
 
 			properties["siteRoot"] = myContext.ApplicationPath;
