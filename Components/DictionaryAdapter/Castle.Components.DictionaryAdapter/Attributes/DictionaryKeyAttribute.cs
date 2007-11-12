@@ -15,37 +15,37 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
+	using System.Collections;
 	using System.Reflection;
 
 	/// <summary>
-	/// Substitutes part of key with another string.
+	/// Assignes a specific dictionary key.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
-	public class DictionaryAdapterKeySubstitutionAttribute : Attribute, IDictionaryKeyBuilder
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+	public class DictionaryAdapterKeyAttribute : Attribute, IDictionaryKeyBuilder
 	{
-		private readonly String oldValue;
-		private readonly String newValue;
+		private readonly String key;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DictionaryAdapterKeySubstitutionAttribute"/> class.
+		/// Initializes a new instance of the <see cref="DictionaryAdapterKeyAttribute"/> class.
 		/// </summary>
-		/// <param name="oldValue">The old value.</param>
-		/// <param name="newValue">The new value.</param>
-		public DictionaryAdapterKeySubstitutionAttribute(String oldValue, String newValue)
+		/// <param name="key">The key.</param>
+		public DictionaryAdapterKeyAttribute(String key)
 		{
-			this.oldValue = oldValue;
-			this.newValue = newValue;
+			this.key = key;
 		}
 
 		/// <summary>
 		/// Apply the replacement to the key.
 		/// </summary>
+		/// <param name="dictionary">The dictionary.</param>
 		/// <param name="key">The key.</param>
 		/// <param name="property">The source property.</param>
 		/// <returns>The updated key.</returns>
-		String IDictionaryKeyBuilder.Apply(String key, PropertyInfo property)
+		String IDictionaryKeyBuilder.Apply(
+			IDictionary dictionary, String key, PropertyInfo property)
 		{
-			return key.Replace(oldValue, newValue);
+			return this.key;
 		}
 	}
 }

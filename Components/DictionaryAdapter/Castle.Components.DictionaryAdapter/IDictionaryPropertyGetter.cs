@@ -14,35 +14,24 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
+	using System.Collections;
 	using System.Reflection;
 
 	/// <summary>
-	/// Assignes a specific dictionary key.
+	/// Defines the contract for retrieving dictionary values.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryAdapterKeyAttribute : Attribute, IDictionaryKeyBuilder
+	public interface IDictionaryPropertyGetter
 	{
-		private readonly String key;
-
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DictionaryAdapterKeyAttribute"/> class.
+		/// Gets the effective dictionary value.
 		/// </summary>
+		/// <param name="factory">The dictionary factory.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		/// <param name="key">The key.</param>
-		public DictionaryAdapterKeyAttribute(String key)
-		{
-			this.key = key;
-		}
-
-		/// <summary>
-		/// Apply the replacement to the key.
-		/// </summary>
-		/// <param name="key">The key.</param>
-		/// <param name="property">The source property.</param>
-		/// <returns>The updated key.</returns>
-		String IDictionaryKeyBuilder.Apply(String key, PropertyInfo property)
-		{
-			return this.key;
-		}
+		/// <param name="storedValue">The stored value.</param>
+		/// <param name="property">The property info.</param>
+		/// <returns>The effective property value.</returns>
+		object GetPropertyValue(IDictionaryAdapterFactory factory, IDictionary dictionary,
+		                        string key, object storedValue, PropertyInfo property);
 	}
 }

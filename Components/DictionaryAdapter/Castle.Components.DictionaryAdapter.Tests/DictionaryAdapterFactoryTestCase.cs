@@ -19,20 +19,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.Collections;
 	using System.Collections.Generic;
 	using NUnit.Framework;
-	using System.Collections.Specialized;
 
 	[TestFixture]
 	public class DictionaryAdapterFactoryTestCase
 	{
 		private IDictionary dictionary;
-		private NameValueCollection nameValueCollection;
 		private DictionaryAdapterFactory factory;
 
 		[SetUp]
 		public void SetUp()
 		{
 			dictionary = new Hashtable();
-			nameValueCollection = new NameValueCollection();
 			factory = new DictionaryAdapterFactory();
 		}
 
@@ -93,7 +90,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Age = 37;
 			person.DOB = new DateTime(1970, 7, 19);
 			person.Friends = new List<IPerson>();
-			
+
 			Assert.AreEqual("Craig", person.Name);
 			Assert.AreEqual(37, person.Age);
 			Assert.AreEqual(new DateTime(1970, 7, 19), person.DOB);
@@ -198,6 +195,424 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Max_Width = 22;
 			Assert.AreEqual(22, dictionary["Max Width"]);
 		}
+
+		[Test]
+		public void CreateAdapter_WithComponent_WorksFine()
+		{
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IAddress mailing = person.HomeAddress;
+			Assert.IsNotNull(mailing);
+		}
+
+		[Test]
+		public void ReadAdapter_WithComponent_WorksFine()
+		{
+			dictionary["HomeAddress_Line1"] = "77 Lynwood Dr";
+			dictionary["HomeAddress_City"] = "Massapequa";
+			dictionary["HomeAddress_State"] = "NY";
+			dictionary["HomeAddress_ZipCode"] = "11288";
+
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IAddress home = person.HomeAddress;
+
+			Assert.AreEqual(dictionary["HomeAddress_Line1"], home.Line1);
+			Assert.AreEqual(dictionary["HomeAddress_City"], home.City);
+			Assert.AreEqual(dictionary["HomeAddress_State"], home.State);
+			Assert.AreEqual(dictionary["HomeAddress_ZipCode"], home.ZipCode);
+		}
+
+		[Test]
+		public void UpdateAdapter_WithComponent_WorksFine()
+		{
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IAddress home = person.HomeAddress;
+			home.Line1 = "77 Lynwood Dr";
+			home.City = "Massapequa";
+			home.State = "NY";
+			home.ZipCode = "11288";
+
+			Assert.AreEqual("77 Lynwood Dr", home.Line1);
+			Assert.AreEqual("Massapequa", home.City);
+			Assert.AreEqual("NY", home.State);
+			Assert.AreEqual("11288", home.ZipCode);
+		}
+
+		[Test]
+		public void ReadAdapter_WithComponentOverrideNoPrefix_WorksFine()
+		{
+			dictionary["Line1"] = "139 Dartbrook";
+			dictionary["City"] = "Plano";
+			dictionary["State"] = "TX";
+			dictionary["ZipCode"] = "75062";
+
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IAddress work = person.WorkAddress;
+
+			Assert.AreEqual(dictionary["Line1"], work.Line1);
+			Assert.AreEqual(dictionary["City"], work.City);
+			Assert.AreEqual(dictionary["State"], work.State);
+			Assert.AreEqual(dictionary["ZipCode"], work.ZipCode);
+		}
+
+		[Test]
+		public void UpdateAdapter_WithComponentOverrideNoPrefix_WorksFine()
+		{
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IAddress work = person.WorkAddress;
+			work.Line1 = "139 Dartbrook";
+			work.City = "Plano";
+			work.State = "TX";
+			work.ZipCode = "75062";
+
+			Assert.AreEqual("139 Dartbrook", work.Line1);
+			Assert.AreEqual("Plano", work.City);
+			Assert.AreEqual("TX", work.State);
+			Assert.AreEqual("75062", work.ZipCode);
+		}
+
+		[Test]
+		public void ReadAdapter_WithComponentOverridePrefix_WorksFine()
+		{
+			dictionary["Billing_Line1"] = "64 Country Rd";
+			dictionary["Billing_City"] = "Miami";
+			dictionary["Billing_State"] = "FL";
+			dictionary["Billing_ZipCode"] = "33101";
+
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IAddress billing = person.BillingAddress;
+
+			Assert.AreEqual(dictionary["Billing_Line1"], billing.Line1);
+			Assert.AreEqual(dictionary["Billing_City"], billing.City);
+			Assert.AreEqual(dictionary["Billing_State"], billing.State);
+			Assert.AreEqual(dictionary["Billing_ZipCode"], billing.ZipCode);
+		}
+
+		[Test]
+		public void UpdateAdapter_WithComponentOverridePrefix_WorksFine()
+		{
+			dictionary["Billing_Line1"] = "64 Country Rd";
+			dictionary["Billing_City"] = "Miami";
+			dictionary["Billing_State"] = "FL";
+			dictionary["Billing_ZipCode"] = "33101";
+
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IAddress billing = person.BillingAddress;
+			billing.Line1 = "64 Country Rd";
+			billing.City = "Miami";
+			billing.State = "FL";
+			billing.ZipCode = "33101";
+		}
+
+		[Test]
+		public void CreateAdapter_WithNestedComponent_WorksFine()
+		{
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IAddress mailing = person.HomeAddress;
+			Assert.IsNotNull(mailing.Phone);
+		}
+
+		[Test]
+		public void ReadAdapter_WithNestedComponent_WorksFine()
+		{
+			dictionary["HomeAddress_Phone_Number"] = "212-353-1244";
+			dictionary["HomeAddress_Phone_Extension"] = "245";
+
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IPhone phone = person.HomeAddress.Phone;
+
+			Assert.AreEqual(dictionary["HomeAddress_Phone_Number"], phone.Number);
+			Assert.AreEqual(dictionary["HomeAddress_Phone_Extension"], phone.Extension);
+		}
+
+		[Test]
+		public void UpdateAdapter_WithNestedComponent_WorksFine()
+		{
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IPhone phone = person.HomeAddress.Phone;
+			phone.Number = "212-353-1244";
+			phone.Extension = "245";
+
+			Assert.AreEqual("212-353-1244", phone.Number);
+			Assert.AreEqual("245", phone.Extension);
+		}
+
+		[Test]
+		public void ReadAdapter_WithNestedComponentOverrideNoPrefix_WorksFine()
+		{
+			dictionary["Number"] = "972-324-9821";
+			dictionary["Extension"] = "300";
+
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IPhone phone = person.WorkAddress.Mobile;
+
+			Assert.AreEqual(dictionary["Number"], phone.Number);
+			Assert.AreEqual(dictionary["Extension"], phone.Extension);
+		}
+
+		[Test]
+		public void UpdateAdapter_WithNestedComponentOverrideNoPrefix_WorksFine()
+		{
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IPhone phone = person.HomeAddress.Mobile;
+			phone.Number = "972-324-9821";
+			phone.Extension = "300";
+
+			Assert.AreEqual("972-324-9821", phone.Number);
+			Assert.AreEqual("300", phone.Extension);
+		}
+
+		[Test]
+		public void ReadAdapter_WithNestedComponentOverridePrefix_WorksFine()
+		{
+			dictionary["HomeAddress_Emr_Number"] = "911";
+
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			IPhone phone = person.HomeAddress.Emergency;
+
+			Assert.AreEqual(dictionary["HomeAddress_Emr_Number"], phone.Number);
+			Assert.IsNull(dictionary["HomeAddress_Emr_Extension"]);
+		}
+
+		[Test]
+		public void ReadAdapter_WithDefaultConversions_WorksFine()
+		{
+			DateTime now = DateTime.Now;
+			Guid guid = Guid.NewGuid();
+
+			dictionary["Int"] = "22";
+			dictionary["Float"] = "98.6";
+			dictionary["Double"] = "3.14";
+			dictionary["Decimal"] = "100";
+			dictionary["String"] = "Hello World";
+			dictionary["DateTime"] = now.ToShortDateString();
+			dictionary["Guid"] = guid.ToString();
+
+			IConversions conversions = factory.GetAdapter<IConversions>(dictionary);
+			Assert.AreEqual(22, conversions.Int);
+			Assert.AreEqual(98.6, conversions.Float);
+			Assert.AreEqual(3.14, conversions.Double);
+			Assert.AreEqual(100, conversions.Decimal);
+			Assert.AreEqual("Hello World", conversions.String);
+			Assert.AreEqual(now.Date, conversions.DateTime.Date);
+			Assert.AreEqual(guid, conversions.Guid);
+		}
+
+		[Test]
+		public void UpdateAdapter_WithDefaultConversions_WorksFine()
+		{
+			DateTime today = DateTime.Today;
+			Guid guid = Guid.NewGuid();
+
+			IConversions conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+			conversions.Int = 22;
+			conversions.Float = 98.6F;
+			conversions.Double = 3.14;
+			conversions.Decimal = 100;
+			conversions.DateTime = today;
+			conversions.Guid = guid;
+
+			Assert.AreEqual("22", dictionary["Int"]);
+			Assert.AreEqual("98.6", dictionary["Float"]);
+			Assert.AreEqual("3.14", dictionary["Double"]);
+			Assert.AreEqual("100", dictionary["Decimal"]);
+			Assert.AreEqual(today.ToString(), dictionary["DateTime"]);
+			Assert.AreEqual(guid.ToString(), dictionary["Guid"]);
+		}
+
+		[Test]
+		public void ReadAdapter_WithDefaultNullableConversions_WorksFine()
+		{
+			DateTime? now = DateTime.Now;
+			Guid? guid = Guid.NewGuid();
+
+			dictionary["NullInt"] = "22";
+			dictionary["NullFloat"] = "98.6";
+			dictionary["NullDouble"] = "3.14";
+			dictionary["NullDecimal"] = "100";
+			dictionary["NullDateTime"] = now.Value.ToShortDateString();
+			dictionary["NullGuid"] = guid.ToString();
+
+			IConversions conversions = factory.GetAdapter<IConversions>(dictionary);
+			Assert.AreEqual(22, conversions.NullInt);
+			Assert.AreEqual(98.6, conversions.NullFloat);
+			Assert.AreEqual(3.14, conversions.NullDouble);
+			Assert.AreEqual(100, conversions.NullDecimal);
+			Assert.AreEqual(now.Value.Date, conversions.NullDateTime.Value.Date);
+			Assert.AreEqual(guid, conversions.NullGuid);
+		}
+
+		[Test]
+		public void UpdateAdapter_WithDefaultNullableConversions_WorksFine()
+		{
+			DateTime? today = DateTime.Today;
+			Guid? guid = Guid.NewGuid();
+
+			IConversions conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+			conversions.NullInt = 22;
+			conversions.NullFloat = 98.6F;
+			conversions.NullDouble = 3.14;
+			conversions.NullDecimal = 100;
+			conversions.NullDateTime = today;
+			conversions.NullGuid = guid;
+
+			Assert.AreEqual("22", dictionary["NullInt"]);
+			Assert.AreEqual("98.6", dictionary["NullFloat"]);
+			Assert.AreEqual("3.14", dictionary["NullDouble"]);
+			Assert.AreEqual("100", dictionary["NullDecimal"]);
+			Assert.AreEqual(today.ToString(), dictionary["NullDateTime"]);
+			Assert.AreEqual(guid.ToString(), dictionary["NullGuid"]);
+		}
+
+		[Test]
+		public void ReadAdapter_WithDefaultNullConversions_WorksFine()
+		{
+			IConversions conversions = factory.GetAdapter<IConversions>(dictionary);
+			Assert.IsNull(conversions.NullInt);
+			Assert.IsNull(conversions.NullFloat);
+			Assert.IsNull(conversions.NullDouble);
+			Assert.IsNull(conversions.NullDecimal);
+			Assert.IsNull(conversions.NullDateTime);
+			Assert.IsNull(conversions.NullGuid);
+		}
+
+		[Test]
+		public void UpdateAdapter_WithDefaultNullConversions_WorksFine()
+		{
+			IConversions conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+			conversions.NullInt = null;
+			conversions.NullFloat = null;
+			conversions.NullDecimal = null;
+			conversions.NullDateTime = null;
+			conversions.NullGuid = null;
+
+			Assert.IsNull(dictionary["NullInt"]);
+			Assert.IsNull(dictionary["NullFloat"]);
+			Assert.IsNull(dictionary["NullDouble"]);
+			Assert.IsNull(dictionary["NullDecimal"]);
+			Assert.IsNull(dictionary["NullDateTime"]);
+			Assert.IsNull(dictionary["NullGuid"]);
+		}
+	}
+
+	public interface IPhone
+	{
+		string Number { get; set; }
+		string Extension { get; set; }
+	}
+
+	public class Phone : IPhone
+	{
+		private string number;
+		private string extension;
+
+		public string Extension
+		{
+			get { return extension; }
+			set { extension = value; }
+		}
+
+		public string Number
+		{
+			get { return number; }
+			set { number = value; }
+		}
+	}
+
+	public interface IAddress
+	{
+		string Line1 { get; set; }
+		string Line2 { get; set; }
+		string City { get; set; }
+		string State { get; set; }
+		string ZipCode { get; set; }
+
+		[DictionaryComponent]
+		IPhone Phone { get; }
+
+		[DictionaryComponent(NoPrefix = true)]
+		IPhone Mobile { get; }
+
+		[DictionaryComponent(Prefix = "Emr_")]
+		IPhone Emergency { get; }
+	}
+
+	public class Address : IAddress
+	{
+		private string line1;
+		private string line2;
+		private string city;
+		private string state;
+		private string zipCode;
+		private IPhone phone;
+		private IPhone mobile;
+		private IPhone emergency;
+
+		public string Line1
+		{
+			get { return line1; }
+			set { line1 = value; }
+		}
+
+		public string Line2
+		{
+			get { return line2; }
+			set { line2 = value; }
+		}
+
+		public string City
+		{
+			get { return city; }
+			set { city = value; }
+		}
+
+		public string State
+		{
+			get { return state; }
+			set { state = value; }
+		}
+
+		public string ZipCode
+		{
+			get { return zipCode; }
+			set { zipCode = value; }
+		}
+
+		public IPhone Phone
+		{
+			get
+			{
+				if (phone == null)
+				{
+					phone = new Phone();
+				}
+				return phone;
+			}
+		}
+
+		public IPhone Mobile
+		{
+			get
+			{
+				if (mobile == null)
+				{
+					mobile = new Phone();
+				}
+				return mobile;
+			}
+		}
+
+
+		public IPhone Emergency
+		{
+			get
+			{
+				if (emergency == null)
+				{
+					emergency = new Phone();
+				}
+				return emergency;
+			}
+		}
 	}
 
 	public interface IPerson
@@ -212,6 +627,15 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		[DictionaryAdapterKeySubstitution("_", " ")]
 		string First_Name { get; set; }
+
+		[DictionaryComponent]
+		IAddress HomeAddress { get; set; }
+
+		[DictionaryComponent(NoPrefix = true)]
+		IAddress WorkAddress { get; set; }
+
+		[DictionaryComponent(Prefix = "Billing_")]
+		IAddress BillingAddress { get; set; }
 	}
 
 	public interface IPersonWithoutPrefix : IPerson
@@ -249,5 +673,27 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	public interface IPersonWithMethod : IPerson
 	{
 		void Run();
+	}
+
+	public interface IConversions
+	{
+		int Int { get; set; }
+		float Float { get; set; }
+		double Double { get; set; }
+		decimal Decimal { get; set; }
+		String String { get; set; }
+		DateTime DateTime { get; set; }
+		Guid Guid { get; set; }
+		int? NullInt { get; set; }
+		float? NullFloat { get; set; }
+		double? NullDouble { get; set; }
+		DateTime? NullDateTime { get; set; }
+		Guid? NullGuid { get; set; }
+		decimal? NullDecimal { get; set; }
+	}
+
+	[DictionaryStringValues]
+	public interface IConversionsToString : IConversions
+	{
 	}
 }

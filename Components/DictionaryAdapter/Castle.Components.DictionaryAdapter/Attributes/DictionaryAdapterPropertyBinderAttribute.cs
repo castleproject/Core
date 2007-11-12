@@ -16,33 +16,51 @@ using System;
 
 namespace Castle.Components.DictionaryAdapter
 {
+	using System.Collections;
+	using System.Reflection;
+
 	/// <summary>
 	/// Allows the user to convert the values in the dictionary into a different type on access.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryAdapterPropertyBinderAttribute : Attribute
+	public class DictionaryAdapterPropertyBinderAttribute : 
+		Attribute, IDictionaryPropertyGetter, IDictionaryPropertySetter
 	{
-		private readonly Type binder;
+		private readonly DictionaryAdapterPropertyBinder binder;
 
 		/// <summary>
 		/// Specifies a binder to perform conversion between the type currently stored in the 
 		/// adapted dictionary, and the type the client code wishes to use via the interface.
 		/// </summary>
-		/// <param name="binder"></param>
-		public DictionaryAdapterPropertyBinderAttribute(Type binder)
+		/// <param name="binderType"></param>
+		public DictionaryAdapterPropertyBinderAttribute(Type binderType)
 		{
-			if (!typeof(DictionaryAdapterPropertyBinder).IsAssignableFrom(binder))
+			if (!typeof(DictionaryAdapterPropertyBinder).IsAssignableFrom(binderType))
 				throw new ArgumentException("You may only supply DictionaryAdapterPropertyBinder types to the DictionaryAdapterPropertyBinderAttribute.");
 
-			this.binder = binder;
+			binder = (DictionaryAdapterPropertyBinder) Activator.CreateInstance(binderType);
 		}
 
-		/// <summary>
-		/// The binder performing the conversion.
-		/// </summary>
-		public Type Binder
+		#region IDictionaryPropertyGetter
+
+		object IDictionaryPropertyGetter.GetPropertyValue(
+			IDictionaryAdapterFactory factory, IDictionary dictionary,
+			string key, object storedValue, PropertyInfo property)
 		{
-			get { return binder; }
+			return binder.ConvertFromDictionary(storedValue);
 		}
+
+		#endregion
+
+		#region IDictionaryPropertySetter
+
+		object IDictionaryPropertySetter.SetPropertyValue(
+			IDictionaryAdapterFactory factory, IDictionary dictionary,
+			string key, object value, PropertyInfo property)
+		{
+			return binder.ConvertFromInterface(value);
+		}
+
+		#endregion
 	}
 }

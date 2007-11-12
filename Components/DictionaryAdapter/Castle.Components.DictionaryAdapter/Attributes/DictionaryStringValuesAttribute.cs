@@ -19,17 +19,25 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Reflection;
 
 	/// <summary>
-	/// Defines the contract for building typed dictionary keys.
+	/// Converts all properties to strings.
 	/// </summary>
-	public interface IDictionaryKeyBuilder
+	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property,
+		AllowMultiple = false, Inherited = true)]
+	public class DictionaryStringValuesAttribute : Attribute, IDictionaryPropertySetter
 	{
-		/// <summary>
-		/// Builds the specified key.
-		/// </summary>
-		/// <param name="dictionary">The dictionary.</param>
-		/// <param name="key">The current key.</param>
-		/// <param name="property">The property.</param>
-		/// <returns>The updated key</returns>
-		String Apply(IDictionary dictionary, String key, PropertyInfo property);
+		#region IDictionaryPropertySetter Members
+
+		object IDictionaryPropertySetter.SetPropertyValue(
+			IDictionaryAdapterFactory factory, IDictionary dictionary,
+			string key, object value, PropertyInfo property)
+		{
+			if (value != null)
+			{
+				return value.ToString();
+			}
+			return value;
+		}
+
+		#endregion
 	}
 }

@@ -14,22 +14,24 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
 	using System.Collections;
 	using System.Reflection;
 
 	/// <summary>
-	/// Defines the contract for building typed dictionary keys.
+	/// Defines the contract for updating dictionary values.
 	/// </summary>
-	public interface IDictionaryKeyBuilder
+	public interface IDictionaryPropertySetter
 	{
 		/// <summary>
-		/// Builds the specified key.
+		/// Sets the stored dictionary value.
 		/// </summary>
+		/// <param name="factory">The dictionary factory.</param>
 		/// <param name="dictionary">The dictionary.</param>
-		/// <param name="key">The current key.</param>
-		/// <param name="property">The property.</param>
-		/// <returns>The updated key</returns>
-		String Apply(IDictionary dictionary, String key, PropertyInfo property);
+		/// <param name="key">The key.</param>
+		/// <param name="value">The stored value.</param>
+		/// <param name="property">The property info.</param>
+		/// <returns>The stored property value.</returns>
+		object SetPropertyValue(IDictionaryAdapterFactory factory, IDictionary dictionary,
+		                        string key, object value, PropertyInfo property);
 	}
 }

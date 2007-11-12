@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.Components.DictionaryAdapter
 {
+	using System;
+	using System.Collections;
+	using System.Reflection;
+
 	/// <summary>
 	/// Base class for property binders which defines the bidirectional conversion methods.
 	/// </summary>
@@ -33,7 +35,18 @@ namespace Castle.Components.DictionaryAdapter
 			return PerformConversionFromDictionary(value);
 		}
 
+
+		/// <summary>
+		/// Gets the type of the dictionary.
+		/// </summary>
+		/// <value>The type of the dictionary.</value>
 		protected abstract Type DictionaryType { get; }
+
+		/// <summary>
+		/// Performs the conversion from dictionary.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		protected abstract object PerformConversionFromDictionary(object value);
 
 		/// <summary>

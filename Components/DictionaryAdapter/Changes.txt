@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Refactored to generalize property getting and setting
+
 - Refactored to support general-purpose key modifications
 
 - Applied patch from Lee Henson allowing Types to inherit or override prefixes using [DictionaryAdapterKeyPrefix()].
