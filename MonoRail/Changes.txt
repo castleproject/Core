@@ -1,6 +1,8 @@
 1.0
 ===
 
+- Applied Michael Sanford's patch which adds image button support to FormHelper.
+
 - Applied Rafael Teixeira's patch fixing MR-357
   "ViewEngineBase.IsTemplateForJSGeneration(String templateName) returns 
    true for a templateName with an incorrect extension"

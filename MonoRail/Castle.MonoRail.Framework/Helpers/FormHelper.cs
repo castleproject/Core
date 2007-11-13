@@ -599,6 +599,32 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Generates an graphical submit element.
+		/// </summary>
+		/// <param name="imgsrc">The path the image file.</param>
+		/// <param name="alttext">The alt text displayed by screenreaders, or when images are not enabled.</param>
+		/// <returns>The element tag</returns>
+		public string ImageSubmit(string imgsrc, string alttext)
+		{
+			return ImageSubmit(imgsrc, alttext, null);
+		}
+
+		/// <summary>
+		/// Generates an input submit element.
+		/// </summary>
+		/// <param name="imgsrc">The path the image file.</param>
+		/// <param name="alttext">The alt text displayed by screenreaders, or when images are not enabled.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The element tag</returns>
+		public string ImageSubmit(string imgsrc, string alttext, IDictionary attributes)
+		{
+			attributes = attributes != null ? attributes : new Hashtable();
+			attributes["src"] = imgsrc;
+			attributes["alt"] = alttext;
+			return CreateInputElement("image", alttext, attributes);
+		}
+		
+		/// <summary>
 		/// Generates an input button element.
 		/// </summary>
 		/// <param name="value">The value.</param>
