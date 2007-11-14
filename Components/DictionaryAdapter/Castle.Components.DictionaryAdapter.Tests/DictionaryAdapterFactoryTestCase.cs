@@ -379,10 +379,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			DateTime now = DateTime.Now;
 			Guid guid = Guid.NewGuid();
 
-			dictionary["Int"] = "22";
-			dictionary["Float"] = "98.6";
-			dictionary["Double"] = "3.14";
-			dictionary["Decimal"] = "100";
+			dictionary["Int"] = string.Format("{0}",22);
+			dictionary["Float"] = string.Format("{0}", 98.6);
+			dictionary["Double"] = string.Format("{0}", 3.14D);
+			dictionary["Decimal"] = string.Format("{0}", 100M);
 			dictionary["String"] = "Hello World";
 			dictionary["DateTime"] = now.ToShortDateString();
 			dictionary["Guid"] = guid.ToString();
@@ -411,10 +411,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			conversions.DateTime = today;
 			conversions.Guid = guid;
 
-			Assert.AreEqual("22", dictionary["Int"]);
-			Assert.AreEqual("98.6", dictionary["Float"]);
-			Assert.AreEqual("3.14", dictionary["Double"]);
-			Assert.AreEqual("100", dictionary["Decimal"]);
+			Assert.AreEqual(string.Format("{0}",22), dictionary["Int"]);
+			Assert.AreEqual(string.Format("{0}", 98.6), dictionary["Float"]);
+			Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["Double"]);
+			Assert.AreEqual(string.Format("{0}", 100M), dictionary["Decimal"]);
 			Assert.AreEqual(today.ToString(), dictionary["DateTime"]);
 			Assert.AreEqual(guid.ToString(), dictionary["Guid"]);
 		}
@@ -425,10 +425,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			DateTime? now = DateTime.Now;
 			Guid? guid = Guid.NewGuid();
 
-			dictionary["NullInt"] = "22";
-			dictionary["NullFloat"] = "98.6";
-			dictionary["NullDouble"] = "3.14";
-			dictionary["NullDecimal"] = "100";
+			dictionary["NullInt"] = string.Format("{0}", 22);
+			dictionary["NullFloat"] = string.Format("{0}", 98.6);
+			dictionary["NullDouble"] = string.Format("{0}", 3.14D);
+			dictionary["NullDecimal"] = string.Format("{0}", 100M);
 			dictionary["NullDateTime"] = now.Value.ToShortDateString();
 			dictionary["NullGuid"] = guid.ToString();
 
@@ -455,10 +455,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			conversions.NullDateTime = today;
 			conversions.NullGuid = guid;
 
-			Assert.AreEqual("22", dictionary["NullInt"]);
-			Assert.AreEqual("98.6", dictionary["NullFloat"]);
-			Assert.AreEqual("3.14", dictionary["NullDouble"]);
-			Assert.AreEqual("100", dictionary["NullDecimal"]);
+			Assert.AreEqual(string.Format("{0}", 22), dictionary["NullInt"]);
+			Assert.AreEqual(string.Format("{0}", 98.6), dictionary["NullFloat"]);
+			Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["NullDouble"]);
+			Assert.AreEqual(string.Format("{0}", 100M), dictionary["NullDecimal"]);
 			Assert.AreEqual(today.ToString(), dictionary["NullDateTime"]);
 			Assert.AreEqual(guid.ToString(), dictionary["NullGuid"]);
 		}
