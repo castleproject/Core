@@ -26,6 +26,7 @@ namespace Castle.Services.Transaction
 		private static readonly object TransactionCreatedEvent = new object();
 		private static readonly object TransactionCommittedEvent = new object();
 		private static readonly object TransactionRolledbackEvent = new object();
+		private static readonly object TransactionFailedEvent = new object();
 		private static readonly object TransactionDisposedEvent = new object();
 		private static readonly object ChildTransactionCreatedEvent = new object();
 
@@ -164,7 +165,9 @@ namespace Castle.Services.Transaction
 		{
 			return new StandardTransaction(
 				new TransactionDelegate(RaiseTransactionCommitted),
-				new TransactionDelegate(RaiseTransactionRolledback), transactionMode, isolationMode, distributedTransaction);
+				new TransactionDelegate(RaiseTransactionRolledback),
+				new TransactionErrorDelegate(RaiseTransactionFailed), 
+				transactionMode, isolationMode, distributedTransaction);
 		}
 
 		public virtual ITransaction CurrentTransaction
@@ -198,6 +201,12 @@ namespace Castle.Services.Transaction
 			remove { events.RemoveHandler(TransactionRolledbackEvent, value); }
 		}
 
+		public event TransactionErrorDelegate TransactionFailed
+		{
+			add { events.AddHandler(TransactionFailedEvent, value); }
+			remove { events.RemoveHandler(TransactionFailedEvent, value); }
+		}
+
 		public event TransactionDelegate TransactionDisposed
 		{
 			add { events.AddHandler(TransactionDisposedEvent, value); }
@@ -224,6 +233,16 @@ namespace Castle.Services.Transaction
 			if (eventDelegate != null)
 			{
 				eventDelegate(transaction, transactionMode, isolationMode, distributedTransaction);
+			}
+		}
+
+		protected void RaiseTransactionFailed(ITransaction transaction, TransactionException exception)
+		{
+			TransactionErrorDelegate eventDelegate = (TransactionErrorDelegate)events[TransactionFailedEvent];
+			
+			if (eventDelegate != null)
+			{
+				eventDelegate(transaction, exception);
 			}
 		}
 

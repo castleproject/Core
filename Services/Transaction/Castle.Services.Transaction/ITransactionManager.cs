@@ -17,6 +17,8 @@ namespace Castle.Services.Transaction
 	public delegate void TransactionCreationInfoDelegate(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction);
 
 	public delegate void TransactionDelegate(ITransaction transaction);
+	
+	public delegate void TransactionErrorDelegate(ITransaction transaction, TransactionException transactionError);
 
 	/// <summary>
 	/// Manages the creation and disposal of <see cref="ITransaction"/> instances.
@@ -47,6 +49,11 @@ namespace Castle.Services.Transaction
 		/// Raised when the transaction was disposed
 		/// </summary>
 		event TransactionDelegate TransactionDisposed;
+		
+		/// <summary>
+		/// Raised when the transaction has failed on commit/rollback
+		/// </summary>
+		event TransactionErrorDelegate TransactionFailed;
 
 		/// <summary>
 		/// Creates a transaction.

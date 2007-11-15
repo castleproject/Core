@@ -27,7 +27,7 @@ namespace Castle.Services.Transaction.Tests
 			this.throwOnRollback = throwOnRollback;
 		}
 
-		public new void Rollback()
+		public override void Rollback()
 		{
 			if (throwOnRollback)
 			{
@@ -37,7 +37,7 @@ namespace Castle.Services.Transaction.Tests
 			base.Rollback();
 		}
 
-		public new void Commit()
+		public override void Commit()
 		{
 			if (throwOnCommit)
 			{

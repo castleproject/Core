@@ -14,6 +14,7 @@
 
 namespace Castle.Services.Transaction
 {
+	using System;
 	using System.Collections;
 
 	/// <summary>
@@ -23,6 +24,7 @@ namespace Castle.Services.Transaction
 	{
 		private readonly TransactionDelegate onTransactionCommitted;
 		private readonly TransactionDelegate onTransactionRolledback;
+		private readonly TransactionErrorDelegate onTransactionFailed;
 
 		private IList children = ArrayList.Synchronized( new ArrayList() );
 		private bool rollbackOnly;
@@ -32,11 +34,12 @@ namespace Castle.Services.Transaction
 		}
 
 		public StandardTransaction(TransactionDelegate onTransactionCommitted, TransactionDelegate onTransactionRolledback,
-			TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction) : 
+			TransactionErrorDelegate onTransactionFailed, TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction) : 
 			this(transactionMode, isolationMode, distributedTransaction)
 		{
 			this.onTransactionCommitted = onTransactionCommitted;
 			this.onTransactionRolledback = onTransactionRolledback;
+			this.onTransactionFailed = onTransactionFailed;
 		}
 
 		public StandardTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction) : 
@@ -65,14 +68,52 @@ namespace Castle.Services.Transaction
 				throw new TransactionException("Can't commit as transaction was marked as 'rollback only'");
 			}
 
-			base.Commit();
+			try
+			{
+				base.Commit();
+			}
+			catch (TransactionException transactionError)
+			{
+				if (onTransactionFailed != null)
+				{
+					try
+					{
+						onTransactionFailed(this, transactionError);
+					}
+					catch (Exception e)
+					{
+						// Log exception & swallow it
+						Logger.Warn("An error occured while notifying caller about transaction commit failure.", e);
+					}
+				}
+				throw;
+			}
 
 			if (onTransactionCommitted != null) onTransactionCommitted(this);
 		}
 
 		public override void Rollback()
 		{
-			base.Rollback();
+			try
+			{
+				base.Rollback();
+			}
+			catch (TransactionException transactionError)
+			{
+				if (onTransactionFailed != null)
+				{
+					try
+					{
+						onTransactionFailed(this, transactionError);
+					}
+					catch (Exception e)
+					{
+						// Log exception & swallow it
+						Logger.Warn("An error occured while notifying caller about transaction rollback failure.", e);
+					}
+				}
+				throw;
+			}
 
 			if (onTransactionRolledback != null) onTransactionRolledback(this);
 		}

@@ -44,21 +44,21 @@ namespace Castle.Services.Transaction.Tests
 
 		#region IResource Members
 
-		public void Start()
+		public virtual void Start()
 		{
 			if (_started) throw new ApplicationException("Start called before");
 
 			_started = true;
 		}
 
-		public void Rollback()
+		public virtual void Rollback()
 		{
 			if (_rolledback) throw new ApplicationException("Rollback called before");
 
 			_rolledback = true;
 		}
 
-		public void Commit()
+		public virtual void Commit()
 		{
 			if (_committed) throw new ApplicationException("Commit called before");
 
