@@ -262,12 +262,12 @@ namespace Castle.Components.DictionaryAdapter
 			descriptorLocal = propILGenerator.DeclareLocal(typeof(PropertyDescriptor));
 
 			// key = propertyInfo.Name
-			propILGenerator.Emit(OpCodes.Ldstr, descriptor.Property.Name);
+			propILGenerator.Emit(OpCodes.Ldstr, descriptor.PropertyName);
 			propILGenerator.Emit(OpCodes.Stloc_0);
 			
 			// descriptor = propertyMap[key]
 			propILGenerator.Emit(OpCodes.Ldsfld, propertyMapField);
-			propILGenerator.Emit(OpCodes.Ldstr, descriptor.Property.Name);
+			propILGenerator.Emit(OpCodes.Ldstr, descriptor.PropertyName);
 			propILGenerator.Emit(OpCodes.Callvirt, PropertyMapGetItem);
 			propILGenerator.Emit(OpCodes.Stloc_S, descriptorLocal);
 
@@ -293,8 +293,8 @@ namespace Castle.Components.DictionaryAdapter
 			PropertyDescriptor descriptor, MethodAttributes propAttribs)
 		{
 			MethodBuilder getMethodBuilder = typeBuilder.DefineMethod(
-				"get_" + descriptor.Property.Name, propAttribs,
-				descriptor.Property.PropertyType, null);
+				"get_" + descriptor.PropertyName, propAttribs,
+				descriptor.PropertyType, null);
 
 			ILGenerator getILGenerator = getMethodBuilder.GetILGenerator();
 
@@ -307,7 +307,7 @@ namespace Castle.Components.DictionaryAdapter
 				descriptor, dictionaryField, propertyMapField,
 				descriptorField, getILGenerator, out descriptorLocal);
 			LocalBuilder result = getILGenerator.DeclareLocal(
-				descriptor.Property.PropertyType);
+				descriptor.PropertyType);
 
 			// value = dictionary[key]
 			getILGenerator.Emit(OpCodes.Ldarg_0);
@@ -335,12 +335,12 @@ namespace Castle.Components.DictionaryAdapter
 
 			// return (propertyInfo.PropertyType) value
 			getILGenerator.Emit(OpCodes.Ldloc_1);
-			getILGenerator.Emit(OpCodes.Unbox_Any, descriptor.Property.PropertyType);
+			getILGenerator.Emit(OpCodes.Unbox_Any, descriptor.PropertyType);
 			getILGenerator.Emit(OpCodes.Br_S, storeResult);
 
 			getILGenerator.MarkLabel(returnDefault);
 			getILGenerator.Emit(OpCodes.Ldloca_S, result);
-			getILGenerator.Emit(OpCodes.Initobj, descriptor.Property.PropertyType);
+			getILGenerator.Emit(OpCodes.Initobj, descriptor.PropertyType);
 			getILGenerator.Emit(OpCodes.Br_S, loadResult);
 			
 			getILGenerator.MarkLabel(storeResult);
@@ -366,8 +366,8 @@ namespace Castle.Components.DictionaryAdapter
 			PropertyDescriptor descriptor, MethodAttributes propAttribs)
 		{
 			MethodBuilder setMethodBuilder = typeBuilder.DefineMethod(
-				"set_" + descriptor.Property.Name, propAttribs, null,
-				new Type[] {descriptor.Property.PropertyType});
+				"set_" + descriptor.PropertyName, propAttribs, null,
+				new Type[] {descriptor.PropertyType});
 
 			ILGenerator setILGenerator = setMethodBuilder.GetILGenerator();
 			LocalBuilder descriptorLocal;
@@ -377,9 +377,9 @@ namespace Castle.Components.DictionaryAdapter
 				descriptorField, setILGenerator, out descriptorLocal);
 
 			setILGenerator.Emit(OpCodes.Ldarg_1);
-			if (descriptor.Property.PropertyType.IsValueType)
+			if (descriptor.PropertyType.IsValueType)
 			{
-				setILGenerator.Emit(OpCodes.Box, descriptor.Property.PropertyType);
+				setILGenerator.Emit(OpCodes.Box, descriptor.PropertyType);
 			}
 			setILGenerator.Emit(OpCodes.Stloc_1);
 
@@ -418,7 +418,7 @@ namespace Castle.Components.DictionaryAdapter
 				AttributesUtil.GetTypeAttribute<IDictionaryPropertyGetter>(type);
 			IDictionaryPropertySetter typeSetter = 
 				AttributesUtil.GetTypeAttribute<IDictionaryPropertySetter>(type);
-			Dictionary<String, PropertyDescriptor> prop2key = 
+			Dictionary<String, PropertyDescriptor> propertyMap = 
 				new Dictionary<String, PropertyDescriptor>();
 
 			RecursivelyDiscoverProperties(
@@ -438,10 +438,10 @@ namespace Castle.Components.DictionaryAdapter
 				      	descriptor.AddKeyBuilders(
 				      		AttributesUtil.GetTypeAttributes<IDictionaryKeyBuilder>(property.ReflectedType));
 
-				      	prop2key.Add(property.Name, descriptor);
+				      	propertyMap.Add(property.Name, descriptor);
 				      });
 
-			return prop2key;
+			return propertyMap;
 		}
 
 		private static void RecursivelyDiscoverProperties(

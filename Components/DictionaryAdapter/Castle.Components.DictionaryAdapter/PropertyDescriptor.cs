@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
@@ -37,6 +38,22 @@ namespace Castle.Components.DictionaryAdapter
 		public PropertyDescriptor(PropertyInfo property)
 		{
 			this.property = property;
+		}
+
+		/// <summary>
+		/// Gets the property name.
+		/// </summary>
+		public string PropertyName
+		{
+			get { return Property.Name; }
+		}
+
+		/// <summary>
+		/// Gets the property type.
+		/// </summary>
+		public Type PropertyType
+		{
+			get { return Property.PropertyType; }	
 		}
 
 		/// <summary>
