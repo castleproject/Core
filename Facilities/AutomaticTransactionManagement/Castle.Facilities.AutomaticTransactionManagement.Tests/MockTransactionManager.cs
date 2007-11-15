@@ -62,6 +62,12 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 			remove { throw new NotImplementedException(); }
 		}
 
+		event TransactionErrorDelegate ITransactionManager.TransactionFailed 
+		{
+			add { throw new NotImplementedException(); }
+			remove { throw new NotImplementedException(); }
+		}
+
 		public ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode,
 		                                      bool distributedTransaction)
 		{
