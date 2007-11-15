@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Created PropertyDescriptor to simplify IL generation
+
 - Refactored to generalize property getting and setting
 
 - Refactored to support general-purpose key modifications

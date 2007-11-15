@@ -16,7 +16,6 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections;
-	using System.Reflection;
 
 	/// <summary>
 	/// Converts all properties to strings.
@@ -25,14 +24,30 @@ namespace Castle.Components.DictionaryAdapter
 		AllowMultiple = false, Inherited = true)]
 	public class DictionaryStringValuesAttribute : Attribute, IDictionaryPropertySetter
 	{
+		private string format;
+
+		/// <summary>
+		/// Gets or sets the format.
+		/// </summary>
+		/// <value>The format.</value>
+		public string Format
+		{
+			get { return format; }
+			set { format = value; }
+		}
+
 		#region IDictionaryPropertySetter Members
 
 		object IDictionaryPropertySetter.SetPropertyValue(
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
-			string key, object value, PropertyInfo property)
+			string key, object value, PropertyDescriptor property)
 		{
 			if (value != null)
 			{
+				if (!string.IsNullOrEmpty(format))
+				{
+					return String.Format(format, value);	
+				}
 				return value.ToString();
 			}
 			return value;

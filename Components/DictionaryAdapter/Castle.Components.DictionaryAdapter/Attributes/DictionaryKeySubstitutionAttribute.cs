@@ -16,7 +16,6 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections;
-	using System.Reflection;
 
 	/// <summary>
 	/// Substitutes part of key with another string.
@@ -38,15 +37,8 @@ namespace Castle.Components.DictionaryAdapter
 			this.newValue = newValue;
 		}
 
-		/// <summary>
-		/// Apply the replacement to the key.
-		/// </summary>
-		/// <param name="dictionary">The dictionary.</param>
-		/// <param name="key">The key.</param>
-		/// <param name="property">The source property.</param>
-		/// <returns>The updated key.</returns>
-		String IDictionaryKeyBuilder.Apply(
-			IDictionary dictionary, String key, PropertyInfo property)
+		String IDictionaryKeyBuilder.GetKey(IDictionary dictionary, String key,
+		                                   PropertyDescriptor property)
 		{
 			return key.Replace(oldValue, newValue);
 		}

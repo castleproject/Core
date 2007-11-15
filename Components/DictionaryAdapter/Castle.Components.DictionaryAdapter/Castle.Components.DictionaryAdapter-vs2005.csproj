@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AbstractDictionaryAdapter.cs" />
+    <Compile Include="Attributes\AttributesUtil.cs" />
     <Compile Include="Attributes\DictionaryComponentAttribute.cs" />
     <Compile Include="Attributes\DictionaryStringValuesAttribute.cs" />
     <Compile Include="DefaultPropertyGetter.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="IDictionaryAdapterFactory.cs" />
     <Compile Include="IDictionaryPropertyGetter.cs" />
     <Compile Include="NameValueCollectionAdapter.cs" />
+    <Compile Include="PropertyDescriptor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

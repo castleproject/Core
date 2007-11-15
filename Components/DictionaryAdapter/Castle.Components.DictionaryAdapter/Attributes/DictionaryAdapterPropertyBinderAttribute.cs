@@ -17,7 +17,6 @@ using System;
 namespace Castle.Components.DictionaryAdapter
 {
 	using System.Collections;
-	using System.Reflection;
 
 	/// <summary>
 	/// Allows the user to convert the values in the dictionary into a different type on access.
@@ -45,7 +44,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		object IDictionaryPropertyGetter.GetPropertyValue(
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
-			string key, object storedValue, PropertyInfo property)
+			string key, object storedValue, PropertyDescriptor property)
 		{
 			return binder.ConvertFromDictionary(storedValue);
 		}
@@ -56,7 +55,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		object IDictionaryPropertySetter.SetPropertyValue(
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
-			string key, object value, PropertyInfo property)
+			string key, object value, PropertyDescriptor property)
 		{
 			return binder.ConvertFromInterface(value);
 		}

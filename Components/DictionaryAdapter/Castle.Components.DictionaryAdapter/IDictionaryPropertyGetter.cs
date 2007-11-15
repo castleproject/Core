@@ -15,7 +15,6 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System.Collections;
-	using System.Reflection;
 
 	/// <summary>
 	/// Defines the contract for retrieving dictionary values.
@@ -29,9 +28,9 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="dictionary">The dictionary.</param>
 		/// <param name="key">The key.</param>
 		/// <param name="storedValue">The stored value.</param>
-		/// <param name="property">The property info.</param>
+		/// <param name="property">The property.</param>
 		/// <returns>The effective property value.</returns>
 		object GetPropertyValue(IDictionaryAdapterFactory factory, IDictionary dictionary,
-		                        string key, object storedValue, PropertyInfo property);
+		                        string key, object storedValue, PropertyDescriptor property);
 	}
 }

@@ -16,7 +16,6 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections;
-	using System.Reflection;
 
 	/// <summary>
 	/// Defines the contract for building typed dictionary keys.
@@ -30,6 +29,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="key">The current key.</param>
 		/// <param name="property">The property.</param>
 		/// <returns>The updated key</returns>
-		String Apply(IDictionary dictionary, String key, PropertyInfo property);
+		String GetKey(IDictionary dictionary, String key, PropertyDescriptor property);
 	}
 }

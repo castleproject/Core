@@ -14,9 +14,9 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+	using System;
 	using System.Collections;
 	using System.ComponentModel;
-	using System.Reflection;
 
 	/// <summary>
 	/// Manages conversion between property values.
@@ -40,21 +40,23 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="dictionary">The dictionary.</param>
 		/// <param name="key">The key.</param>
 		/// <param name="storedValue">The stored value.</param>
-		/// <param name="property">The property info.</param>
+		/// <param name="property">The property.</param>
 		/// <returns>The effective property value.</returns>
 		public object GetPropertyValue(IDictionaryAdapterFactory factory,
 		                               IDictionary dictionary, string key,
-		                               object storedValue, PropertyInfo property)
+		                               object storedValue, PropertyDescriptor property)
 		{
-			if (storedValue != null && 
-				!property.PropertyType.IsInstanceOfType(storedValue))
+			Type propertyType = property.Property.PropertyType;
+
+			if (storedValue != null && !propertyType.IsInstanceOfType(storedValue))
 			{
-				TypeConverter converter = TypeDescriptor.GetConverter(property.PropertyType);
+				TypeConverter converter = TypeDescriptor.GetConverter(propertyType);
 				if (converter != null && converter.CanConvertFrom(storedValue.GetType()))
 				{
 					return converter.ConvertFrom(storedValue);
 				}
 			}
+
 			return storedValue;
 		}
 	}

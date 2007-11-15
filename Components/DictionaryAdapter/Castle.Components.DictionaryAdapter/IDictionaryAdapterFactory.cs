@@ -51,12 +51,12 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		/// <param name="type">The typed interface.</param>
 		/// <param name="dictionary">The underlying source of properties.</param>
-		/// <param name="keyBuilder">The dictionary key builder.</param>
+		/// <param name="descriptor">The property descriptor.</param>
 		/// <returns>An implementation of the typed interface bound to the dictionary.</returns>
 		/// <remarks>
 		/// The type represented by T must be an interface with properties.
 		/// </remarks>
-		object GetAdapter(Type type, IDictionary dictionary, IDictionaryKeyBuilder keyBuilder);
+		object GetAdapter(Type type, IDictionary dictionary, PropertyDescriptor descriptor);
 
 		/// <summary>
 		/// Gets a typed adapter bound to the <see cref="NameValueCollection"/>.
