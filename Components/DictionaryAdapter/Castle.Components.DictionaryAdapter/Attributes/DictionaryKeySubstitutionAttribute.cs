@@ -21,17 +21,17 @@ namespace Castle.Components.DictionaryAdapter
 	/// Substitutes part of key with another string.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
-	public class DictionaryAdapterKeySubstitutionAttribute : Attribute, IDictionaryKeyBuilder
+	public class DictionaryKeySubstitutionAttribute : Attribute, IDictionaryKeyBuilder
 	{
 		private readonly String oldValue;
 		private readonly String newValue;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DictionaryAdapterKeySubstitutionAttribute"/> class.
+		/// Initializes a new instance of the <see cref="DictionaryKeySubstitutionAttribute"/> class.
 		/// </summary>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		public DictionaryAdapterKeySubstitutionAttribute(String oldValue, String newValue)
+		public DictionaryKeySubstitutionAttribute(String oldValue, String newValue)
 		{
 			this.oldValue = oldValue;
 			this.newValue = newValue;

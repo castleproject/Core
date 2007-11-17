@@ -21,15 +21,15 @@ namespace Castle.Components.DictionaryAdapter
 	/// Assignes a specific dictionary key.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryAdapterKeyAttribute : Attribute, IDictionaryKeyBuilder
+	public class DictionaryKeyAttribute : Attribute, IDictionaryKeyBuilder
 	{
 		private readonly String key;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DictionaryAdapterKeyAttribute"/> class.
+		/// Initializes a new instance of the <see cref="DictionaryKeyAttribute"/> class.
 		/// </summary>
 		/// <param name="key">The key.</param>
-		public DictionaryAdapterKeyAttribute(String key)
+		public DictionaryKeyAttribute(String key)
 		{
 			this.key = key;
 		}

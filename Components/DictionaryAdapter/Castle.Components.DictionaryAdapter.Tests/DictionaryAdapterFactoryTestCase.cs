@@ -625,7 +625,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		IList<IPerson> Friends { get; set; }
 
-		[DictionaryAdapterKeySubstitution("_", " ")]
+		[DictionaryKeySubstitution("_", " ")]
 		string First_Name { get; set; }
 
 		[DictionaryComponent]
@@ -643,16 +643,16 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		int NumberOfFeet { get; set; }
 	}
 
-	[DictionaryAdapterKeyPrefix("Person_")]
+	[DictionaryKeyPrefix("Person_")]
 	public interface IPersonWithPrefix : IPersonWithoutPrefix
 	{
 		string HairColour { get; set; }
 	}
 
-	[DictionaryAdapterKeyPrefix("Person2_")]
+	[DictionaryKeyPrefix("Person2_")]
 	public interface IPersonWithPrefixOverride : IPersonWithPrefix
 	{
-		[DictionaryAdapterKey("Eye__Colour")]
+		[DictionaryKey("Eye__Colour")]
 		string EyeColour { get; set; }
 	}
 
@@ -661,8 +661,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		int NumberOfHeads { get; set; }
 	}
 
-	[DictionaryAdapterKeyPrefix("")]
-	[DictionaryAdapterKeySubstitution("_", " ")]
+	[DictionaryKeyPrefix("")]
+	[DictionaryKeySubstitution("_", " ")]
 	public interface IPersonWithDeniedInheritancePrefix : IPersonWithPrefixOverrideFurtherOverride
 	{
 		int NumberOfFingers { get; set; }

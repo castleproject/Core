@@ -45,7 +45,7 @@
     <Compile Include="Attributes\DictionaryKeySubstitutionAttribute.cs" />
     <Compile Include="IDictionaryKeyBuilder.cs" />
     <Compile Include="DictionaryAdapterFactory.cs" />
-    <Compile Include="Attributes\DictionaryAdapterKeyPrefixAttribute.cs" />
+    <Compile Include="Attributes\DictionaryKeyPrefixAttribute.cs" />
     <Compile Include="Attributes\DictionaryAdapterPropertyBinder.cs" />
     <Compile Include="Attributes\DictionaryAdapterPropertyBinderAttribute.cs" />
     <Compile Include="Attributes\DictionaryAdapterPropertyBindingException.cs" />

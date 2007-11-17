@@ -21,22 +21,22 @@ namespace Castle.Components.DictionaryAdapter
 	/// Assigns a prefix to the keyed properties of an interface.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
-	public class DictionaryAdapterKeyPrefixAttribute : Attribute, IDictionaryKeyBuilder
+	public class DictionaryKeyPrefixAttribute : Attribute, IDictionaryKeyBuilder
 	{
 		private String keyPrefix;
 
 		/// <summary>
-		/// Initializes a default instance of the <see cref="DictionaryAdapterKeyPrefixAttribute"/> class.
+		/// Initializes a default instance of the <see cref="DictionaryKeyPrefixAttribute"/> class.
 		/// </summary>
-		public DictionaryAdapterKeyPrefixAttribute()
+		public DictionaryKeyPrefixAttribute()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DictionaryAdapterKeyPrefixAttribute"/> class.
+		/// Initializes a new instance of the <see cref="DictionaryKeyPrefixAttribute"/> class.
 		/// </summary>
 		/// <param name="keyPrefix">The prefix for the keyed properties of the interface.</param>
-		public DictionaryAdapterKeyPrefixAttribute(String keyPrefix)
+		public DictionaryKeyPrefixAttribute(String keyPrefix)
 		{
 			this.keyPrefix = keyPrefix;
 		}
