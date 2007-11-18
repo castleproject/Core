@@ -22,7 +22,7 @@
 		</assemblyfileset>
 	</target>
 
-	<target name="gac-install">
+	<target name="gac-install" if="${sign}">
 		<!-- find out where gacutil is -->
 		<property name="gacutil.framework.file" value="${framework::get-framework-directory( framework::get-target-framework() )}/gacutil.exe"/>
 		<property name="gacutil.sdk.file" value="${framework::get-sdk-directory( framework::get-target-framework() )}/gacutil.exe"/>
