@@ -144,12 +144,9 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (keyBuilders == null)
 			{
-				keyBuilders = new IDictionaryKeyBuilder[] {builder};
+				keyBuilders = new List<IDictionaryKeyBuilder>();
 			}
-			else
-			{
-				keyBuilders.Add(builder);
-			}
+			keyBuilders.Add(builder);
 		}
 
 		/// <summary>
@@ -214,12 +211,9 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (getters == null)
 			{
-				getters = new IDictionaryPropertyGetter[] { getter };
+				getters = new List<IDictionaryPropertyGetter>();
 			}
-			else
-			{
-				getters.Add(getter);
-			}
+			getters.Add(getter);
 		}
 
 		/// <summary>
@@ -284,12 +278,9 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (setters == null)
 			{
-				setters = new IDictionaryPropertySetter[] { setter };
+				setters = new List<IDictionaryPropertySetter>();
 			}
-			else
-			{
-				setters.Add(setter);
-			}
+			setters.Add(setter);
 		}
 
 		/// <summary>
