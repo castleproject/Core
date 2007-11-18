@@ -27,8 +27,8 @@ namespace Castle.Components.DictionaryAdapter
 	                                  IDictionaryPropertySetter
 	{
 		private readonly PropertyInfo property;
-		private IDictionaryPropertyGetter getter;
-		private IDictionaryPropertySetter setter;
+		private ICollection<IDictionaryPropertyGetter> getters;
+		private ICollection<IDictionaryPropertySetter> setters;
 		private ICollection<IDictionaryKeyBuilder> keyBuilders;
 
 		/// <summary>
@@ -38,6 +38,19 @@ namespace Castle.Components.DictionaryAdapter
 		public PropertyDescriptor(PropertyInfo property)
 		{
 			this.property = property;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PropertyDescriptor"/> class
+		/// with an existing property descriptor.
+		/// </summary>
+		/// <param name="other">The other descriptor.</param>
+		public PropertyDescriptor(PropertyDescriptor other)
+		{
+			property = other.property;
+			AddKeyBuilders(other.keyBuilders);
+			AddGetters(other.getters);
+			AddSetters(other.setters);
 		}
 
 		/// <summary>
@@ -53,7 +66,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		public Type PropertyType
 		{
-			get { return Property.PropertyType; }	
+			get { return Property.PropertyType; }
 		}
 
 		/// <summary>
@@ -79,20 +92,20 @@ namespace Castle.Components.DictionaryAdapter
 		/// Gets or sets the setter.
 		/// </summary>
 		/// <value>The setter.</value>
-		public IDictionaryPropertySetter Setter
+		public ICollection<IDictionaryPropertySetter> Setters
 		{
-			get { return setter; }
-			set { setter = value; }
+			get { return setters; }
+			set { setters = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the getter.
 		/// </summary>
 		/// <value>The getter.</value>
-		public IDictionaryPropertyGetter Getter
+		public ICollection<IDictionaryPropertyGetter> Getters
 		{
-			get { return getter; }
-			set { getter = value; }
+			get { return getters; }
+			set { getters = value; }
 		}
 
 		#region IDictionaryKeyBuilder Members
@@ -131,7 +144,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (keyBuilders == null)
 			{
-				keyBuilders = new IDictionaryKeyBuilder[] { builder };
+				keyBuilders = new IDictionaryKeyBuilder[] {builder};
 			}
 			else
 			{
@@ -151,7 +164,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			else if (builders != null)
 			{
-				foreach (IDictionaryKeyBuilder builder in builders)
+				foreach(IDictionaryKeyBuilder builder in builders)
 				{
 					keyBuilders.Add(builder);
 				}
@@ -175,10 +188,13 @@ namespace Castle.Components.DictionaryAdapter
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
 			string key, object storedValue, PropertyDescriptor descriptor)
 		{
-			if (getter != null)
+			if (getters != null)
 			{
-				storedValue = getter.GetPropertyValue(
-					factory, dictionary, key, storedValue, this);
+				foreach(IDictionaryPropertyGetter getter in getters)
+				{
+					storedValue = getter.GetPropertyValue(
+						factory, dictionary, key, storedValue, this);
+				}
 			}
 
 			if (descriptor != null)
@@ -188,6 +204,41 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			return storedValue;
+		}
+
+		/// <summary>
+		/// Adds the dictionary getter.
+		/// </summary>
+		/// <param name="getter">The getter.</param>
+		public void AddGetter(IDictionaryPropertyGetter getter)
+		{
+			if (getters == null)
+			{
+				getters = new IDictionaryPropertyGetter[] { getter };
+			}
+			else
+			{
+				getters.Add(getter);
+			}
+		}
+
+		/// <summary>
+		/// Adds the dictionary getters.
+		/// </summary>
+		/// <param name="gets">The getters.</param>
+		public void AddGetters(ICollection<IDictionaryPropertyGetter> gets)
+		{
+			if (getters == null)
+			{
+				getters = gets;
+			}
+			else if (gets != null)
+			{
+				foreach (IDictionaryPropertyGetter getter in gets)
+				{
+					getters.Add(getter);
+				}
+			}
 		}
 
 		#endregion
@@ -207,12 +258,15 @@ namespace Castle.Components.DictionaryAdapter
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
 			string key, object value, PropertyDescriptor descriptor)
 		{
-			if (setter != null)
+			if (setters != null)
 			{
-				value = setter.SetPropertyValue(
-					factory, dictionary, key, value, this);
+				foreach(IDictionaryPropertySetter setter in setters)
+				{
+					value = setter.SetPropertyValue(
+						factory, dictionary, key, value, this);
+				}
 			}
-
+		
 			if (descriptor != null)
 			{
 				value = descriptor.SetPropertyValue(
@@ -220,6 +274,41 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			return value;
+		}
+
+		/// <summary>
+		/// Adds the dictionary setter.
+		/// </summary>
+		/// <param name="setter">The setter.</param>
+		public void AddSetter(IDictionaryPropertySetter setter)
+		{
+			if (setters == null)
+			{
+				setters = new IDictionaryPropertySetter[] { setter };
+			}
+			else
+			{
+				setters.Add(setter);
+			}
+		}
+
+		/// <summary>
+		/// Adds the dictionary setters.
+		/// </summary>
+		/// <param name="sets">The setters.</param>
+		public void AddSetters(ICollection<IDictionaryPropertySetter> sets)
+		{
+			if (setters == null)
+			{
+				setters = sets;
+			}
+			else if (sets != null)
+			{
+				foreach (IDictionaryPropertySetter setter in sets)
+				{
+					setters.Add(setter);
+				}
+			}
 		}
 
 		#endregion

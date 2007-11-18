@@ -492,6 +492,56 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsNull(dictionary["NullDateTime"]);
 			Assert.IsNull(dictionary["NullGuid"]);
 		}
+
+		[Test]
+		public void ReadAdapter_WithStringLists_WorksFine()
+		{
+			dictionary["Names"] = "Craig,Brenda,Kaitlyn,Lauren,Matthew";
+			dictionary["Ages"] = "37,36,5,3,1";
+
+			IStringLists lists = factory.GetAdapter<IStringLists>(dictionary);
+
+			IList<string> names = lists.Names;
+			Assert.IsNotNull(names);
+			Assert.AreEqual(5, names.Count);
+			Assert.AreEqual("Craig", names[0]);
+			Assert.AreEqual("Brenda", names[1]);
+			Assert.AreEqual("Kaitlyn", names[2]);
+			Assert.AreEqual("Lauren", names[3]);
+			Assert.AreEqual("Matthew", names[4]);
+
+			IList<int> ages = lists.Ages;
+			Assert.AreEqual(5, ages.Count);
+			Assert.AreEqual(37, ages[0]);
+			Assert.AreEqual(36, ages[1]);
+			Assert.AreEqual(5, ages[2]);
+			Assert.AreEqual(3, ages[3]);
+			Assert.AreEqual(1, ages[4]);
+		}
+
+		[Test]
+		public void UpdateAdapter_WithStringLists_WorksFine()
+		{
+			IStringLists lists = factory.GetAdapter<IStringLists>(dictionary);
+
+			IList<string> names = lists.Names;
+			names.Add("Craig");
+			names.Add("Brenda");
+			names.Add("Kaitlyn");
+			names.Add("Lauren");
+			names.Add("Matthew");
+
+			Assert.AreEqual("Craig,Brenda,Kaitlyn,Lauren,Matthew", dictionary["Names"]);
+
+			IList<int> ages = lists.Ages;
+			ages.Add(37);
+			ages.Add(36);
+			ages.Add(5);
+			ages.Add(3);
+			ages.Add(1);
+
+			Assert.AreEqual("37,36,5,3,1", dictionary["Ages"]);
+		}
 	}
 
 	public interface IPhone
@@ -695,5 +745,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	[DictionaryStringValues]
 	public interface IConversionsToString : IConversions
 	{
+	}
+
+	public interface IStringLists
+	{
+		[DictionaryStringList]
+		IList<string> Names { get; }
+
+		[DictionaryStringList]
+		IList<int> Ages { get; }
 	}
 }

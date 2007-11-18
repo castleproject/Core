@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Added DictionaryStringListAttribute to support delimited string conversion
+
 - Created PropertyDescriptor to simplify IL generation
 
 - Refactored to generalize property getting and setting

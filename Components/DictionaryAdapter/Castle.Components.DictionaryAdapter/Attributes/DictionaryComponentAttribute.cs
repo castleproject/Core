@@ -71,6 +71,8 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				PropertyDescriptor descriptor = 
 					new PropertyDescriptor(property.Property);
+				descriptor.AddGetters(property.Getters);
+				descriptor.AddSetters(property.Setters);
 				descriptor.AddKeyBuilder(new DictionaryKeyPrefixAttribute(key));
 
 				return factory.GetAdapter(
