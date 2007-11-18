@@ -64,8 +64,16 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				{
 					// Unbox conversion
 					// Assumes fromType is a boxed value
-					gen.Emit(OpCodes.Unbox, target);
-					OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, target);
+					// if we can, we emit a box and ldind, otherwise, we will use unbox.any
+					if (LdindOpCodesDictionary.Instance[target] != LdindOpCodesDictionary.EmptyOpCode)
+					{
+						gen.Emit(OpCodes.Unbox, target);
+						OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, target);
+					}
+					else
+					{
+						gen.Emit(OpCodes.Unbox_Any, target);
+					}
 				}
 			}
 			else

@@ -86,7 +86,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				OpCode opCode = LdindOpCodesDictionary.Instance[type];
 
-				if (ReferenceEquals(opCode, LdindOpCodesDictionary.EmptyOpCode))
+				if (opCode == LdindOpCodesDictionary.EmptyOpCode)
 				{
 					throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
 				}
