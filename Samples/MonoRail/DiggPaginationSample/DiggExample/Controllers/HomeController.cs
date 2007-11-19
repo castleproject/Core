@@ -29,68 +29,60 @@ namespace DiggExample.Controllers
 		{
 		}
 
+		public void IndexSelect1()
+		{
+			CreatePageWith10();
+		}
+
+		public void IndexSelect2()
+		{
+			CreatePageWith10();
+		}
+
+		public void IndexSelect3()
+		{
+			CreatePageWith10();
+		}
+
+		public void IndexSelect4()
+		{
+			CreatePageWith10();
+		}
+
 		public void Index1()
 		{
-			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
-				this,
-				MyEntity.FindAll(new Order("Index", true)),
-				10
-			);
+			CreatePageWith10();
 		}
+
 		public void Index2()
 		{
-			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
-				this,
-				MyEntity.FindAll(new Order("Index", true)),
-				10
-			);
+			CreatePageWith10();
 		}
+
 		public void Index3()
 		{
-			List<MyEntity> el = new List<MyEntity>(MyEntity.FindAll(new Order("Index", true)));
-
-			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
-				this,
-				el.GetRange(0,5),
-				10
-			);
+			CreateRangedPage();
 		}
+
 		public void Index4()
 		{
-			List<MyEntity> el = new List<MyEntity>(MyEntity.FindAll(new Order("Index", true)));
-
-			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
-				this,
-				el.GetRange(0, 5),
-				10
-			);
+			CreateRangedPage();
 		}
+
 		public void Index5()
 		{
-			List<MyEntity> el = new List<MyEntity>(MyEntity.FindAll(new Order("Index", true)));
-
-			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
-				this,
-				el.GetRange(0, 5),
-				10
-			);
+			CreateRangedPage();
 		}
+
 		public void Index6()
 		{
-			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
-				this,
-				MyEntity.FindAll(new Order("Index", true)),
-				10
-			);
+			CreatePageWith10();
 		}
 		public void Index7()
 		{
-			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
-				this,
-				MyEntity.FindAll(new Order("Index", true)),
-				10
-			);
+			CreatePageWith10();
 		}
+
 		public void Index8(bool desc)
 		{
 			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
@@ -103,11 +95,27 @@ namespace DiggExample.Controllers
 
 		public void Index9()
 		{
+			CreatePageWith10();
+		}
+
+		private void CreatePageWith10()
+		{
 			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
 				this,
 				MyEntity.FindAll(new Order("Index", true)),
 				10
-			);
+				);
+		}
+
+		private void CreateRangedPage()
+		{
+			List<MyEntity> el = new List<MyEntity>(MyEntity.FindAll(new Order("Index", true)));
+
+			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
+				this,
+				el.GetRange(0, 5),
+				10
+				);
 		}
 	}
 }

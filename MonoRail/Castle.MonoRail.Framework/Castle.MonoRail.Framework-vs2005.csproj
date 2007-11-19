@@ -493,6 +493,7 @@
     <Compile Include="ViewComponents\ColumnRenderer.cs" />
     <Compile Include="ViewComponents\DiggStylePagination.cs" />
     <Compile Include="ViewComponents\SecurityComponent.cs" />
+    <Compile Include="ViewComponents\SelectStylePagination.cs" />
     <Compile Include="ViewComponents\UpdatePage.cs" />
     <Compile Include="ViewComponents\UpdatePageTag.cs" />
     <Compile Include="Views\Aspx\Contents.cs">

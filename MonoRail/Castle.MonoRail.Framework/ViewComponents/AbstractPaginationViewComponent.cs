@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.ViewComponents
 {
 	using System.Collections;
+	using System.IO;
 	using Helpers;
 
 	/// <summary>
@@ -22,11 +23,15 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// </summary>
 	public abstract class AbstractPaginationViewComponent : ViewComponent
 	{
+		private const string StartSection = "startblock";
+		private const string EndSection = "endblock";
+
 		private string paginatefunction;
 		private object urlParam;
 		private IPaginatedPage page;
 		private UrlPartsBuilder urlPartsBuilder;
 		private bool usePathInfo;
+		private bool useInlineStyle = true;
 		private string pageParamName = "page";
 
 		/// <summary>
@@ -44,10 +49,22 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// Pendent
 		/// </summary>
 		/// <value>The name of the page param.</value>
+		[ViewComponentParam(Required = true)]
 		public string PageParamName
 		{
 			get { return pageParamName; }
 			set { pageParamName = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the component should output inline styles.
+		/// </summary>
+		/// <value><c>true</c> if it should use inline styles; otherwise, <c>false</c>.</value>
+		[ViewComponentParam]
+		public bool UseInlineStyle
+		{
+			get { return useInlineStyle; }
+			set { useInlineStyle = value; }
 		}
 
 		/// <summary>
@@ -104,28 +121,44 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			CreateUrlPartBuilder();
 		}
 
-		private void CreateUrlPartBuilder()
-		{			
-			IDictionary urlParams = urlParam as IDictionary;
-			
-			if (urlParams != null)
-			{				
-				urlParams["encode"] = "true";
-
-				IUrlBuilder urlBuilder = RailsContext.GetService<IUrlBuilder>();
-				urlPartsBuilder = urlBuilder.CreateUrlPartsBuilder(RailsContext.UrlInfo, urlParams);
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		protected virtual void StartBlock(StringWriter writer)
+		{
+			if (Context.HasSection(StartSection))
+			{
+				Context.RenderSection(StartSection, writer);
 			}
 			else
 			{
-				if (urlParam != null)
+				if (useInlineStyle)
 				{
-					urlPartsBuilder = UrlPartsBuilder.Parse(urlParam.ToString());
+					writer.Write("<div style=\"padding: 3px; margin: 3px; text-align: right; \">\r\n");
 				}
 				else
 				{
-					urlPartsBuilder = new UrlPartsBuilder(RailsContext.Request.FilePath);
+					writer.Write("<div class=\"pagination\">\r\n");
 				}
 			}
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		protected virtual void EndBlock(StringWriter writer)
+		{
+			if (Context.HasSection(EndSection))
+			{
+				Context.RenderSection(EndSection, writer);
+			}
+			else
+			{
+				writer.Write("\r\n</div>\r\n");
+			}
+
 		}
 
 		/// <summary>
@@ -145,7 +178,31 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				urlPartsBuilder.QueryString[pageParamName] = pageIndex.ToString();
 			}
 
-			return urlPartsBuilder.BuildPath();
+			return urlPartsBuilder.BuildPathForLink(RailsContext.Server);
+		}
+
+		private void CreateUrlPartBuilder()
+		{
+			IDictionary urlParams = urlParam as IDictionary;
+
+			if (urlParams != null)
+			{
+				urlParams["encode"] = "true";
+
+				IUrlBuilder urlBuilder = RailsContext.GetService<IUrlBuilder>();
+				urlPartsBuilder = urlBuilder.CreateUrlPartsBuilder(RailsContext.UrlInfo, urlParams);
+			}
+			else
+			{
+				if (urlParam != null)
+				{
+					urlPartsBuilder = UrlPartsBuilder.Parse(urlParam.ToString());
+				}
+				else
+				{
+					urlPartsBuilder = new UrlPartsBuilder(RailsContext.Request.FilePath);
+				}
+			}
 		}
 	}
 }

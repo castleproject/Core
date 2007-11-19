@@ -215,6 +215,7 @@
     <Compile Include="UrlPartsBuilderTestCase.cs" />
     <Compile Include="ViewComponents\AuthenticatedContentTestCase.cs" />
     <Compile Include="ViewComponents\DiggStylePaginationTestCase.cs" />
+    <Compile Include="ViewComponents\SelectStylePaginationTestCase.cs" />
     <Compile Include="ViewEngineBaseTestCase.cs" />
     <Compile Include="WikiFormatterTestCase.cs" />
   </ItemGroup>

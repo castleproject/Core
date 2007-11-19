@@ -50,16 +50,14 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// </para>
 	/// 
 	/// </remarks>
+	[ViewComponentDetails("DiggStylePagination", Sections = "startblock,endblock,next,prev,link")]
 	public class DiggStylePagination : AbstractPaginationViewComponent
 	{
-		private const string StartSection = "startblock";
-		private const string EndSection = "endblock";
 		private const string LinkSection = "link";
 		private const string NextSection = "next";
 		private const string PrevSection = "prev";
 
 		private int adjacents = 2;
-		private bool useInlineStyle = true;
 		private bool renderIfOnlyOnePage = true;
 
 		/// <summary>
@@ -74,17 +72,6 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the component should output inline styles.
-		/// </summary>
-		/// <value><c>true</c> if it should use inline styles; otherwise, <c>false</c>.</value>
-		[ViewComponentParam]
-		public bool UseInlineStyle
-		{
-			get { return useInlineStyle; }
-			set { useInlineStyle = value; }
-		}
-
-		/// <summary>
 		/// Gets or sets a value indicating whether the component should render links even if there is only one page.
 		/// </summary>
 		/// <value>
@@ -95,20 +82,6 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			get { return renderIfOnlyOnePage; }
 			set { renderIfOnlyOnePage = value; }
-		}
-
-		/// <summary>
-		/// Implementor should return true only if the
-		/// <c>name</c> is a known section the view component
-		/// supports.
-		/// </summary>
-		/// <param name="name">section being added</param>
-		/// <returns>
-		/// 	<see langword="true"/> if section is supported
-		/// </returns>
-		public override bool SupportsSection(string name)
-		{
-			return name == StartSection || name == EndSection || name == LinkSection || name == PrevSection || name == NextSection;
 		}
 
 		/// <summary>
@@ -183,38 +156,6 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			WriteLink(writer, Page.NextIndex, caption, !Page.HasNext);
 		}
 
-		private void StartBlock(StringWriter writer)
-		{
-			if (Context.HasSection(StartSection))
-			{
-				Context.RenderSection(StartSection, writer);
-			}
-			else
-			{
-				if (useInlineStyle)
-				{
-					writer.Write("<div style=\"padding: 3px; margin: 3px; text-align: right; \">\r\n");
-				}
-				else
-				{
-					writer.Write("<div class=\"pagination\">\r\n");
-				}
-			}
-		}
-
-		private void EndBlock(StringWriter writer)
-		{
-			if (Context.HasSection(EndSection))
-			{
-				Context.RenderSection(EndSection, writer);
-			}
-			else
-			{
-				writer.Write("\r\n</div>\r\n");
-			}
-
-		}
-
 		private void WriteElipsis(TextWriter writer)
 		{
 			writer.Write("&#8230;");
@@ -232,7 +173,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			if (disabled)
 			{
-				if (useInlineStyle)
+				if (UseInlineStyle)
 				{
 					writer.Write(String.Format("<span style=\"color: #DDD; padding: 2px 5px 2px 5px; margin: 2px; border: 1px solid #EEE;\">{0}</span>", text));
 				}
@@ -251,7 +192,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			if (index == Page.CurrentIndex)
 			{
-				if (useInlineStyle)
+				if (UseInlineStyle)
 				{
 					writer.Write(String.Format("\r\n<span class=\"font-weight: bold; background-color: #000099; color: #FFF; padding: 2px 5px 2px 5px; margin: 2px; border: 1px solid #000099;\">{0}</span>\r\n", index));
 				}
@@ -298,7 +239,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 					href = url;
 				}
 
-				if (useInlineStyle)
+				if (UseInlineStyle)
 				{
 					writer.Write(String.Format("<a style=\"color: #000099;text-decoration: none;padding: 2px 5px 2px 5px;margin: 2px;border: 1px solid #AAAFEE;\" href=\"{0}\">{1}</a>\r\n", href, text));
 				}
