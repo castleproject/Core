@@ -122,7 +122,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns><c>true</c> if it exists</returns>
 		public bool HasTemplate(String templateName)
 		{
-			IViewEngine engine = ResolveEngine(templateName);
+			IViewEngine engine = ResolveEngine(templateName, false);
 			if (engine == null)
 				return false;
 			return engine.HasTemplate(templateName);
@@ -226,13 +226,27 @@ namespace Castle.MonoRail.Framework.Services
 
 		/// <summary>
 		/// The view can be informed with an extension. If so, we use it
-		/// to discover the extension. Otherwise, we use the view source
-		/// to find out the file that exists there, and hence the view 
-		/// engine instance
+		/// to discover the extension. Otherwise, we ask the configured 
+		/// view engines to find out which (if any) can handle the requested
+		/// view. If no suitable view engine is found, an exception would be thrown
 		/// </summary>
 		/// <param name="templateName">View name</param>
 		/// <returns>A view engine instance</returns>
 		private IViewEngine ResolveEngine(String templateName)
+		{
+			return ResolveEngine(templateName, true);
+		}
+
+		/// <summary>
+		/// The view can be informed with an extension. If so, we use it
+		/// to discover the extension. Otherwise, we ask the configured 
+		/// view engines to find out which (if any) can handle the requested
+		/// view.
+		/// </summary>
+		/// <param name="throwIfNotFound">If true and no suitable view engine is found, an exception would be thrown</param>
+		/// <param name="templateName">View name</param>
+		/// <returns>A view engine instance</returns>
+		private IViewEngine ResolveEngine(String templateName, bool throwIfNotFound)
 		{
 			if (Path.HasExtension(templateName))
 			{
@@ -240,12 +254,16 @@ namespace Castle.MonoRail.Framework.Services
 				IViewEngine engine = ext2ViewEngine[extension] as IViewEngine;
 				return engine;
 			}
-			else
-			{
-				foreach (IViewEngine engine in viewEnginesFastLookup.Keys)
-					if (engine.HasTemplate(templateName))
-						return engine;
-			}
+
+			foreach (IViewEngine engine in viewEnginesFastLookup.Keys)
+				if (engine.HasTemplate(templateName))
+					return engine;
+					
+			if (throwIfNotFound)
+				throw new RailsException(string.Format(
+@"MonoRail could not have resolved a view engine instance for the template '{0}'
+There are two possible explanations: that the template does not exist, or that the relevant view engine has not been configured correctly in web.config.", templateName));
+			
 			return null;
 		}
 
