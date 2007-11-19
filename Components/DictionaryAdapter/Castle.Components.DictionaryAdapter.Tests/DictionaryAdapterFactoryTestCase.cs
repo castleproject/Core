@@ -533,12 +533,13 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			Assert.AreEqual("Craig,Brenda,Kaitlyn,Lauren,Matthew", dictionary["Names"]);
 
-			IList<int> ages = lists.Ages;
+			IList<int> ages = new List<int>();
 			ages.Add(37);
 			ages.Add(36);
 			ages.Add(5);
 			ages.Add(3);
 			ages.Add(1);
+			lists.Ages = ages;
 
 			Assert.AreEqual("37,36,5,3,1", dictionary["Ages"]);
 		}
@@ -753,6 +754,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		IList<string> Names { get; }
 
 		[DictionaryStringList]
-		IList<int> Ages { get; }
+		IList<int> Ages { get; set; }
 	}
 }

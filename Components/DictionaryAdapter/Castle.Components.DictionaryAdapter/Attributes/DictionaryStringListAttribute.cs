@@ -25,7 +25,9 @@ namespace Castle.Components.DictionaryAdapter
 	/// delimited string value.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryStringListAttribute : Attribute, IDictionaryPropertyGetter
+	public class DictionaryStringListAttribute : Attribute,
+	                                             IDictionaryPropertyGetter,
+	                                             IDictionaryPropertySetter
 	{
 		private char separator = ',';
 
@@ -64,7 +66,7 @@ namespace Castle.Components.DictionaryAdapter
 						if (converter != null && converter.CanConvertFrom(typeof(string)))
 						{
 							Type genericList = typeof(StringListWrapper<>).MakeGenericType(
-								new Type[] { paramType });
+								new Type[] {paramType});
 							return Activator.CreateInstance(genericList, key, storedValue,
 							                                separator, dictionary);
 						}
@@ -76,6 +78,44 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		#endregion
+
+		#region IDictionaryPropertySetter Members
+
+		object IDictionaryPropertySetter.SetPropertyValue(
+			IDictionaryAdapterFactory factory, IDictionary dictionary,
+			string key, object value, PropertyDescriptor property)
+		{
+			IEnumerable enumerable = value as IEnumerable;
+			if (enumerable != null)
+			{
+				value = BuildString(enumerable, separator);
+			}
+			return value;
+		}
+
+		#endregion
+
+		internal static string BuildString(IEnumerable enumerable, char separator)
+		{
+			bool first = true;
+			StringBuilder builder = new StringBuilder();
+
+			foreach(object item in enumerable)
+			{
+				if (first)
+				{
+					first = false;
+				}
+				else
+				{
+					builder.Append(separator);
+				}
+
+				builder.Append(item.ToString());
+			}
+
+			return builder.ToString();
+		}
 	}
 
 	#region StringList
@@ -208,24 +248,8 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void SynchronizeDictionary()
 		{
-			bool first = true;
-			StringBuilder builder = new StringBuilder();
-
-			foreach(T item in inner)
-			{
-				if (first)
-				{
-					first = false;
-				}
-				else
-				{
-					builder.Append(separator);
-				}
-
-				builder.Append(item.ToString());
-			}
-
-			dictionary[key] = builder.ToString();
+			dictionary[key] = DictionaryStringListAttribute.
+				BuildString(inner, separator);
 		}
 	}
 
