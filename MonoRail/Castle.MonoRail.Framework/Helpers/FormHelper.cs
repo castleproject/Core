@@ -198,10 +198,11 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <b>FormValidation</b> <br/>
 	/// The following operations are related to the Form Validation support:
 	/// </para>
+	/// 
 	/// <list type="table">
 	/// <item>
 	///		<term><see cref="FormTag(IDictionary)"/> and <see cref="EndFormTag"/> </term>
-	///		<description>Opens/close the form tag. They are required to use the form validation</description>
+	///		<description>Opens/close the form tag. They are required to use the automatic form validation</description>
 	/// </item>
 	/// <item>
 	///		<term><see cref="DisableValidation"/> </term>

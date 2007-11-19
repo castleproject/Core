@@ -168,7 +168,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 					ProcessLayout(contents, controller, ctx, context);
 				}
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				if (Logger.IsErrorEnabled)
 				{
