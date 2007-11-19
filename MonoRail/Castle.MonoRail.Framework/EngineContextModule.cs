@@ -56,7 +56,7 @@ namespace Castle.MonoRail.Framework
 			}
 
 			context.BeginRequest += OnStartMonoRailRequest;
-			context.AuthorizeRequest += CreateControllerAndRunStartRequestFilters;
+			context.AuthenticateRequest += CreateControllerAndRunStartRequestFilters;
 
 			SubscribeToApplicationHooks(context);
 		}
