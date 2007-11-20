@@ -48,6 +48,17 @@ namespace Castle.MonoRail.Framework.Services
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultUrlBuilder"/> class.
+		/// </summary>
+		/// <param name="serverUtil">The server util.</param>
+		/// <param name="routingEng">The routing eng.</param>
+		public DefaultUrlBuilder(IServerUtility serverUtil, IRoutingEngine routingEng)
+		{
+			this.serverUtil = serverUtil;
+			this.routingEng = routingEng;
+		}
+
 		#region Properties
 
 		/// <summary>

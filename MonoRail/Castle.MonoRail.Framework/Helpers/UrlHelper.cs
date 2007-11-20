@@ -15,8 +15,8 @@
 namespace Castle.MonoRail.Framework.Helpers
 {
 	using System.Collections;
-	using Framework;
-	using Services;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Services;
 
 	/// <summary>
 	/// Helper that allows the creation of urls using a dictionary.
@@ -34,6 +34,41 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <seealso cref="DefaultUrlBuilder.BuildUrl(UrlInfo,IDictionary)"/>
 	public class UrlHelper : AbstractHelper
 	{
+		private IUrlBuilder urlBuilder;
+		private UrlInfo	currentUrl;
+
+		/// <summary>
+		/// Gets or sets the URL builder.
+		/// </summary>
+		/// <value>The URL builder.</value>
+		public IUrlBuilder UrlBuilder
+		{
+			get { return urlBuilder; }
+			set { urlBuilder = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the current URL.
+		/// </summary>
+		/// <value>The current URL.</value>
+		public UrlInfo CurrentUrl
+		{
+			get { return currentUrl; }
+			set { currentUrl = value; }
+		}
+
+		/// <summary>
+		/// Sets the controller.
+		/// </summary>
+		/// <param name="controller">Current view's <see cref="AbstractHelper.Controller"/>.</param>
+		public override void SetController(Controller controller)
+		{
+			base.SetController(controller);
+
+			urlBuilder = controller.Context.GetService<IUrlBuilder>();
+			currentUrl = controller.Context.UrlInfo;
+		}
+
 		/// <summary>
 		/// Outputs a path constructed using the specified parameters.
 		/// </summary>
@@ -65,7 +100,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public string For(IDictionary parameters)
 		{
 			SetEncodeDefault(parameters);
-			return Controller.UrlBuilder.BuildUrl(Controller.Context.UrlInfo, parameters);
+			return urlBuilder.BuildUrl(currentUrl, parameters);
 		}
 
 		/// <summary>
