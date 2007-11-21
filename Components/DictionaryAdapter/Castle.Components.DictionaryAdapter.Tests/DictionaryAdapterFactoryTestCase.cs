@@ -418,7 +418,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(string.Format("{0}", 98.6), dictionary["Float"]);
 			Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["Double"]);
 			Assert.AreEqual(string.Format("{0}", 100M), dictionary["Decimal"]);
-			Assert.AreEqual(today.ToString(), dictionary["DateTime"]);
+			Assert.AreEqual(today.ToShortDateString(), dictionary["DateTime"]);
 			Assert.AreEqual(guid.ToString(), dictionary["Guid"]);
 			Assert.AreEqual("2124751012,22", dictionary["Phone"]);
 		}
@@ -463,7 +463,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(string.Format("{0}", 98.6), dictionary["NullFloat"]);
 			Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["NullDouble"]);
 			Assert.AreEqual(string.Format("{0}", 100M), dictionary["NullDecimal"]);
-			Assert.AreEqual(today.ToString(), dictionary["NullDateTime"]);
+			Assert.AreEqual(today.Value.ToShortDateString(), dictionary["NullDateTime"]);
 			Assert.AreEqual(guid.ToString(), dictionary["NullGuid"]);
 		}
 

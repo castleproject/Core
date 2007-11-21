@@ -17,6 +17,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Reflection;
 
 	/// <summary>
@@ -30,6 +31,7 @@ namespace Castle.Components.DictionaryAdapter
 		private ICollection<IDictionaryPropertyGetter> getters;
 		private ICollection<IDictionaryPropertySetter> setters;
 		private ICollection<IDictionaryKeyBuilder> keyBuilders;
+		private TypeConverter typeConverter;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PropertyDescriptor"/> class.
@@ -76,6 +78,32 @@ namespace Castle.Components.DictionaryAdapter
 		public PropertyInfo Property
 		{
 			get { return property; }
+		}
+
+		/// <summary>
+		/// Gets the type converter.
+		/// </summary>
+		/// <value>The type converter.</value>
+		public TypeConverter TypeConverter
+		{
+			get
+			{
+				if (typeConverter == null)
+				{
+					Type converterType = AttributesUtil.GetTypeConverter(property);
+
+					if (converterType != null)
+					{
+						typeConverter = (TypeConverter) Activator.CreateInstance(converterType);
+					}
+					else
+					{
+						typeConverter = TypeDescriptor.GetConverter(PropertyType);
+					}
+				}
+
+				return typeConverter;
+			}
 		}
 
 		/// <summary>
@@ -228,7 +256,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			else if (gets != null)
 			{
-				foreach (IDictionaryPropertyGetter getter in gets)
+				foreach(IDictionaryPropertyGetter getter in gets)
 				{
 					getters.Add(getter);
 				}
@@ -260,7 +288,7 @@ namespace Castle.Components.DictionaryAdapter
 						factory, dictionary, key, value, this);
 				}
 			}
-		
+
 			if (descriptor != null)
 			{
 				value = descriptor.SetPropertyValue(
@@ -295,7 +323,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			else if (sets != null)
 			{
-				foreach (IDictionaryPropertySetter setter in sets)
+				foreach(IDictionaryPropertySetter setter in sets)
 				{
 					setters.Add(setter);
 				}

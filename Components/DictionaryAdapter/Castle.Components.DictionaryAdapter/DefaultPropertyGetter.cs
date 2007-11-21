@@ -26,19 +26,6 @@ namespace Castle.Components.DictionaryAdapter
 		private readonly TypeConverter converter;
 
 		/// <summary>
-		/// Singleton instance of <see cref="DefaultPropertyGetter"/>
-		/// </summary>
-		public static readonly DefaultPropertyGetter
-			Instance = new DefaultPropertyGetter();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DefaultPropertyGetter"/> class.
-		/// </summary>
-		public DefaultPropertyGetter()
-		{
-		}
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultPropertyGetter"/> class.
 		/// </summary>
 		/// <param name="converter">The converter.</param>
@@ -64,10 +51,9 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (storedValue != null && !propertyType.IsInstanceOfType(storedValue))
 			{
-				TypeConverter conv = converter ?? TypeDescriptor.GetConverter(propertyType);
-				if (conv != null && conv.CanConvertFrom(storedValue.GetType()))
+				if (converter.CanConvertFrom(storedValue.GetType()))
 				{
-					return conv.ConvertFrom(storedValue);
+					return converter.ConvertFrom(storedValue);
 				}
 			}
 

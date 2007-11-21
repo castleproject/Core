@@ -18,7 +18,6 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
-	using System.ComponentModel;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Threading;
@@ -435,7 +434,7 @@ namespace Castle.Components.DictionaryAdapter
 				      	descriptor.AddGetters(
 				      		AttributesUtil.GetAttributes<IDictionaryPropertyGetter>(property));
 				      	descriptor.AddGetters(typeGetters);
-						descriptor.AddGetter(GetDefaultGetter(property));
+				      	AddDefaultGetter(descriptor);
 
 				      	descriptor.AddSetters(
 				      		AttributesUtil.GetAttributes<IDictionaryPropertySetter>(property));
@@ -464,15 +463,13 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private static IDictionaryPropertyGetter GetDefaultGetter(PropertyInfo property)
+		private static void AddDefaultGetter(PropertyDescriptor descriptor)
 		{
-			Type converterType = AttributesUtil.GetTypeConverter(property);
-			if (converterType != null)
+			if (descriptor.TypeConverter != null)
 			{
-				TypeConverter converter = (TypeConverter) Activator.CreateInstance(converterType);
-				return new DefaultPropertyGetter(converter);
+				descriptor.AddGetter(
+					new DefaultPropertyGetter(descriptor.TypeConverter));
 			}
-			return DefaultPropertyGetter.Instance;
 		}
 
 		#endregion
