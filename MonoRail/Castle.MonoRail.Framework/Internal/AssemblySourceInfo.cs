@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework
 		private readonly String assemblyName;
 		private readonly String _namespace;
 		private readonly IDictionary entries = new HybridDictionary(true);
-		private Assembly loadedAssembly;
+		private readonly Assembly loadedAssembly;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AssemblySourceInfo"/> class.
