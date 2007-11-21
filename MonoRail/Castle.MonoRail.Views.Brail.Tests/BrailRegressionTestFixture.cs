@@ -97,5 +97,12 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			string view = ProcessView(args, "regressions/StringInterpolationInCodeBlockWillNotBeEscaped");
 			Assert.AreEqual("<script>alert('a');</script>", view);
 		}
+
+		[Test]
+		public void CanUseViewFromResource()
+		{
+			string view = ProcessView("login/welcome");
+			Assert.AreEqual("Hi there, anonymous user!", view);
+		}
 	}
 }

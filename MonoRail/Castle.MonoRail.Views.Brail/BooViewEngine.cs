@@ -405,22 +405,7 @@ namespace Castle.MonoRail.Views.Brail
 			{
 				if (batch == false)
 				{
-					string errors = result.Context.Errors.ToString(true);
-					Log("Failed to compile {0} because {1}", filename, errors);
-					StringBuilder msg = new StringBuilder();
-					msg.Append("Error during compile:")
-						.Append(Environment.NewLine)
-						.Append(errors)
-						.Append(Environment.NewLine);
-
-					foreach (ICompilerInput input in inputs2FileName.Keys)
-					{
-						msg.Append("Input (").Append(input.Name).Append(")")
-							.Append(Environment.NewLine);
-						msg.Append(result.Processor.GetInputCode(input))
-							.Append(Environment.NewLine);
-					}
-					throw new RailsException(msg.ToString());
+					RaiseCompilationException(filename, inputs2FileName, result);
 				}
 				//error compiling a batch, let's try a single file
 				return CompileScript(filename, false);
@@ -443,6 +428,26 @@ namespace Castle.MonoRail.Views.Brail
 			}
 			type = (Type)compilations[filename];
 			return type;
+		}
+
+		private void RaiseCompilationException(string filename, IDictionary<ICompilerInput, string> inputs2FileName, CompilationResult result)
+		{
+			string errors = result.Context.Errors.ToString(true);
+			Log("Failed to compile {0} because {1}", filename, errors);
+			StringBuilder msg = new StringBuilder();
+			msg.Append("Error during compile:")
+				.Append(Environment.NewLine)
+				.Append(errors)
+				.Append(Environment.NewLine);
+
+			foreach (ICompilerInput input in inputs2FileName.Keys)
+			{
+				msg.Append("Input (").Append(input.Name).Append(")")
+					.Append(Environment.NewLine);
+				msg.Append(result.Processor.GetInputCode(input))
+					.Append(Environment.NewLine);
+			}
+			throw new RailsException(msg.ToString());
 		}
 
 		// If batch compilation is set to true, this would return all the view scripts

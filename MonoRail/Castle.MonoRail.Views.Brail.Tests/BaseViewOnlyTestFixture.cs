@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	using System.Collections;
 	using System.Configuration;
 	using System.IO;
+	using System.Reflection;
 	using Framework;
 	using TestSupport;
 
@@ -36,8 +37,10 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			options.Debug = true;
 			string viewPath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Views");
 
+			FileAssemblyViewSourceLoader loader = new FileAssemblyViewSourceLoader(viewPath);
+			loader.AddAssemblySource(new AssemblySourceInfo(Assembly.GetExecutingAssembly().FullName,"Castle.MonoRail.Views.Brail.Tests.ResourcedViews"));
 			IndependentBooViewEngine engine = new IndependentBooViewEngine(
-				new FileAssemblyViewSourceLoader(viewPath),
+				loader,
 				options);
 
 			StringWriter sw = new StringWriter();

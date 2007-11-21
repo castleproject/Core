@@ -21,6 +21,12 @@
 			<include name="Castle.MonoRail.Views.Brail.dll" />
 			<include name="Castle.MonoRail.Framework.Tests.dll" />
 		</assemblyfileset>
+		
+		<resourcefileset id="project.resources" basedir="${src.dir}" prefix="${project::get-name()}" dynamicprefix="true">
+			<include name="**/*.resx" />
+			<include name="ResourcedViews/**/*.brail" />
+			<exclude name="obj/**" />
+		</resourcefileset>
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />

@@ -78,6 +78,7 @@
     <EmbeddedResource Include="Resources\Language.resources" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ResourcedViews\Login\Welcome.brail" />
     <None Include="Views\CommonScripts\extentions.brail" />
     <None Include="Views\components\SimpleInlineViewComponent2\mycompview1.brail" />
     <None Include="Views\components\SimpleInlineViewComponent3\default.brail" />
