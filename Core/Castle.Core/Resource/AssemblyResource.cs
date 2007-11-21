@@ -20,29 +20,32 @@ namespace Castle.Core.Resource
 
 	public class AssemblyResource : AbstractStreamResource
 	{
-		private readonly Stream stream;
 		private string assemblyName;
 		private string resourcePath;
 		private String basePath;
 
 		public AssemblyResource(CustomUri resource)
 		{
-			stream = CreateResourceFromUri(resource, null);
+			CreateStream = delegate
+			{
+				return CreateResourceFromUri(resource, null);
+			};
 		}
 
 		public AssemblyResource(CustomUri resource, String basePath)
 		{
-			stream = CreateResourceFromUri(resource, basePath);
+			CreateStream = delegate
+			{
+				return CreateResourceFromUri(resource, basePath);
+			};
 		}
 
 		public AssemblyResource(String resource)
 		{
-			stream = CreateResourceFromPath(resource, basePath);
-		}
-
-		protected override Stream Stream
-		{
-			get { return stream; }
+			CreateStream = delegate
+			{
+				return CreateResourceFromPath(resource, basePath);
+			};
 		}
 
 		public override IResource CreateRelative(String resourceName)

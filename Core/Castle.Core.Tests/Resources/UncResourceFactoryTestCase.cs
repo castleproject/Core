@@ -63,7 +63,8 @@ namespace Castle.Core.Tests.Resources
 		[ExpectedException(typeof(ResourceException))]
 		public void NonExistingResource()
 		{
-			resFactory.Create( new CustomUri(@"\\hammettz\C$\file1.txt") );
+			resFactory.Create( new CustomUri(@"\\hammettz\C$\file1.txt") )
+				.GetStreamReader();
 		}
 	}
 }

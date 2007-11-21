@@ -22,28 +22,39 @@ namespace Castle.Core.Resource
 	/// </summary>
 	public class FileResource : AbstractStreamResource
 	{
-		private readonly Stream stream;
 		private string filePath;
 		private String basePath;
 
 		public FileResource(CustomUri resource)
 		{
-			stream = CreateStreamFromUri(resource, DefaultBasePath);
+			CreateStream = delegate
+			{
+				return CreateStreamFromUri(resource, DefaultBasePath);
+			};
 		}
 
 		public FileResource(CustomUri resource, String basePath)
 		{
-			stream = CreateStreamFromUri(resource, basePath);
+			CreateStream = delegate
+			{
+				return CreateStreamFromUri(resource, basePath);
+			};
 		}
 
 		public FileResource(String resourceName)
 		{
-			stream = CreateStreamFromPath(resourceName, DefaultBasePath);
+			CreateStream = delegate
+			{
+				return CreateStreamFromPath(resourceName, DefaultBasePath);
+			};
 		}
 
 		public FileResource(String resourceName, String basePath)
 		{
-			stream = CreateStreamFromPath(resourceName, basePath);
+			CreateStream = delegate
+			{
+				return CreateStreamFromPath(resourceName, basePath);
+			};
 		}
 
 		public override string ToString()
@@ -59,11 +70,6 @@ namespace Castle.Core.Resource
 		public override IResource CreateRelative(String resourceName)
 		{
 			return new FileResource(resourceName, basePath);
-		}
-
-		protected override Stream Stream
-		{
-			get { return stream; }
 		}
 
 		private Stream CreateStreamFromUri(CustomUri resource, String basePath)
@@ -100,7 +106,7 @@ namespace Castle.Core.Resource
 			return File.OpenRead(filePath);
 		}
 
-		private void CheckFileExists(String path)
+		private static void CheckFileExists(String path)
 		{
 			if (!File.Exists(path))
 			{

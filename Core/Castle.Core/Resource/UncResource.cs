@@ -22,18 +22,23 @@ namespace Castle.Core.Resource
 	/// </summary>
 	public class UncResource : AbstractStreamResource
 	{
-		private readonly Stream stream;
 		private String basePath;
 		private string filePath;
 
 		public UncResource(CustomUri resource)
 		{
-			stream = CreateStreamFromUri(resource, DefaultBasePath);
+			CreateStream = delegate
+			{
+				return CreateStreamFromUri(resource, DefaultBasePath);
+			};
 		}
 
 		public UncResource(CustomUri resource, String basePath)
 		{
-			stream = CreateStreamFromUri(resource, basePath);
+			CreateStream = delegate
+			{
+				return CreateStreamFromUri(resource, basePath);
+			};
 		}
 
 		public UncResource(String resourceName) : this(new CustomUri(resourceName))
@@ -57,11 +62,6 @@ namespace Castle.Core.Resource
 		public override string ToString()
 		{
 			return String.Format("UncResource: [{0}] [{1}]", filePath, basePath);
-		}
-
-		protected override Stream Stream
-		{
-			get { return stream; }
 		}
 
 		private Stream CreateStreamFromUri(CustomUri resource, String basePath)
