@@ -304,7 +304,10 @@
     <Compile Include="CompositeUserTypeTestCase.cs" />
     <Compile Include="InvalidRootTypeTestCase.cs" />
     <Compile Include="Model\ClassWithBrokenField.cs" />
+    <Compile Include="Model\CompositeNested\CompositeNestedParent.cs" />
     <Compile Include="Model\Ship.cs" />
+    <Compile Include="NestedModelValidation.cs" />
+    <Compile Include="Model\NestedValidation\UserWithNestedAddress.cs" />
     <Compile Include="VerifyModelsAgainstDBSchemaTestCase.cs" />
     <Compile Include="LazyTestCase.cs" />
     <Compile Include="Model\AnyModel\Models.cs" />

@@ -16,7 +16,8 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
-	
+	using System.Collections.Generic;
+	using System.Reflection;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Validator;
 
@@ -87,6 +88,20 @@ namespace Castle.ActiveRecord
 
 			bool returnValue = __runner.IsValid(this, runWhen);
 
+			foreach (PropertyInfo propinfo in ActiveRecordValidationBase.GetNestedPropertiesToValidate(this))
+			{
+				object propval = propinfo.GetValue(this, null);
+
+				if (propval != null)
+				{
+					bool tmp = __runner.IsValid(propval, runWhen);
+					if (!tmp)
+						__failedProperties.Add(propinfo,
+						                       new ArrayList(__runner.GetErrorSummary(propval).GetErrorsForProperty(propinfo.Name)));
+					returnValue &= tmp;
+				}
+			}
+		
 			if (!returnValue)
 			{
 				Type type = GetType();
@@ -118,7 +133,11 @@ namespace Castle.ActiveRecord
 					IsValid();
 				}
 
-				return __runner.GetErrorSummary(this).ErrorMessages;
+				List<string> errorMessages = new List<string>(__runner.GetErrorSummary(this).ErrorMessages);
+
+				ActiveRecordValidationBase.AddNestedPropertyValidationErrorMessages(errorMessages, this, __runner);
+
+				return errorMessages.ToArray();
 			}
 		}
 
