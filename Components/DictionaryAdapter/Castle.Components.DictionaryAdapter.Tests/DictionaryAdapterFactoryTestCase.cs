@@ -18,6 +18,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Globalization;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -379,7 +381,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			DateTime now = DateTime.Now;
 			Guid guid = Guid.NewGuid();
 
-			dictionary["Int"] = string.Format("{0}",22);
+			dictionary["Int"] = string.Format("{0}", 22);
 			dictionary["Float"] = string.Format("{0}", 98.6);
 			dictionary["Double"] = string.Format("{0}", 3.14D);
 			dictionary["Decimal"] = string.Format("{0}", 100M);
@@ -403,20 +405,22 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			DateTime today = DateTime.Today;
 			Guid guid = Guid.NewGuid();
 
-			IConversions conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+			IConversionsToString conversions = factory.GetAdapter<IConversionsToString>(dictionary);
 			conversions.Int = 22;
 			conversions.Float = 98.6F;
 			conversions.Double = 3.14;
 			conversions.Decimal = 100;
 			conversions.DateTime = today;
 			conversions.Guid = guid;
+			conversions.Phone = new Phone("2124751012", "22");
 
-			Assert.AreEqual(string.Format("{0}",22), dictionary["Int"]);
+			Assert.AreEqual(string.Format("{0}", 22), dictionary["Int"]);
 			Assert.AreEqual(string.Format("{0}", 98.6), dictionary["Float"]);
 			Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["Double"]);
 			Assert.AreEqual(string.Format("{0}", 100M), dictionary["Decimal"]);
 			Assert.AreEqual(today.ToString(), dictionary["DateTime"]);
 			Assert.AreEqual(guid.ToString(), dictionary["Guid"]);
+			Assert.AreEqual("2124751012,22", dictionary["Phone"]);
 		}
 
 		[Test]
@@ -447,7 +451,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			DateTime? today = DateTime.Today;
 			Guid? guid = Guid.NewGuid();
 
-			IConversions conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+			IConversionsToString conversions = factory.GetAdapter<IConversionsToString>(dictionary);
 			conversions.NullInt = 22;
 			conversions.NullFloat = 98.6F;
 			conversions.NullDouble = 3.14;
@@ -478,7 +482,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_WithDefaultNullConversions_WorksFine()
 		{
-			IConversions conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+			IConversionsToString conversions = factory.GetAdapter<IConversionsToString>(dictionary);
 			conversions.NullInt = null;
 			conversions.NullFloat = null;
 			conversions.NullDecimal = null;
@@ -555,6 +559,16 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	{
 		private string number;
 		private string extension;
+
+		public Phone()
+		{	
+		}
+
+		public Phone(string number, string extension)
+		{
+			this.number = number;
+			this.extension = extension;
+		}
 
 		public string Extension
 		{
@@ -746,6 +760,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	[DictionaryStringValues]
 	public interface IConversionsToString : IConversions
 	{
+		[TypeConverter(typeof(PhoneConverter))]
+		Phone Phone { get; set; }
 	}
 
 	public interface IStringLists
@@ -755,5 +771,39 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		[DictionaryStringList]
 		IList<int> Ages { get; set; }
+	}
+
+	public class PhoneConverter : TypeConverter
+	{
+		public override bool CanConvertFrom(ITypeDescriptorContext context,
+		                                    Type sourceType)
+		{
+			if (sourceType == typeof(string))
+			{
+				return true;
+			}
+			return base.CanConvertFrom(context, sourceType);
+		}
+
+		public override object ConvertFrom(ITypeDescriptorContext context,
+		                                   CultureInfo culture, object value)
+		{
+			if (value is string)
+			{
+				string[] fields = ((string) value).Split(new char[] {','});
+				return new Phone(fields[0], fields[1]);
+			}
+			return base.ConvertFrom(context, culture, value);
+		}
+
+		public override object ConvertTo(ITypeDescriptorContext context,
+		                                 CultureInfo culture, object value, Type destinationType)
+		{
+			if (destinationType == typeof(string))
+			{
+				return ((Phone) value).Number + "," + ((Phone) value).Extension;
+			}
+			return base.ConvertTo(context, culture, value, destinationType);
+		}
 	}
 }

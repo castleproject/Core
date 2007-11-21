@@ -16,6 +16,7 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Reflection;
 
 	/// <summary>
@@ -106,6 +107,24 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			return attributes;
+		}
+
+		/// <summary>
+		/// Gets the type converter.
+		/// </summary>
+		/// <param name="member">The member.</param>
+		/// <returns></returns>
+		public static Type GetTypeConverter(MemberInfo member)
+		{
+			TypeConverterAttribute attrib =
+				GetAttribute<TypeConverterAttribute>(member);
+
+			if (attrib != null)
+			{
+				return Type.GetType(attrib.ConverterTypeName);
+			}
+
+			return null;
 		}
 	}
 }

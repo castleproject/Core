@@ -23,14 +23,28 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public class DefaultPropertyGetter : IDictionaryPropertyGetter
 	{
+		private readonly TypeConverter converter;
+
 		/// <summary>
 		/// Singleton instance of <see cref="DefaultPropertyGetter"/>
 		/// </summary>
 		public static readonly DefaultPropertyGetter
 			Instance = new DefaultPropertyGetter();
 
-		private DefaultPropertyGetter()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultPropertyGetter"/> class.
+		/// </summary>
+		public DefaultPropertyGetter()
 		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultPropertyGetter"/> class.
+		/// </summary>
+		/// <param name="converter">The converter.</param>
+		public DefaultPropertyGetter(TypeConverter converter)
+		{
+			this.converter = converter;
 		}
 
 		/// <summary>
@@ -46,14 +60,14 @@ namespace Castle.Components.DictionaryAdapter
 		                               IDictionary dictionary, string key,
 		                               object storedValue, PropertyDescriptor property)
 		{
-			Type propertyType = property.Property.PropertyType;
+			Type propertyType = property.PropertyType;
 
 			if (storedValue != null && !propertyType.IsInstanceOfType(storedValue))
 			{
-				TypeConverter converter = TypeDescriptor.GetConverter(propertyType);
-				if (converter != null && converter.CanConvertFrom(storedValue.GetType()))
+				TypeConverter conv = converter ?? TypeDescriptor.GetConverter(propertyType);
+				if (conv != null && conv.CanConvertFrom(storedValue.GetType()))
 				{
-					return converter.ConvertFrom(storedValue);
+					return conv.ConvertFrom(storedValue);
 				}
 			}
 
