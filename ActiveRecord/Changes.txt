@@ -1,3 +1,5 @@
+- Applied patch from Patrick Steele adding support for DiscriminatorLength in mappings. 
+
 - Added support for validating nested properties. 
 
 - Applied patch from Roger Chapman allowing ActiveRecord to be used signed in Medium trust.

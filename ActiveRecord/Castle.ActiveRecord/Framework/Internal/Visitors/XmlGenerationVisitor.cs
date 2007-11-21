@@ -1106,9 +1106,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			if (model.IsDiscriminatorBase)
 			{
-				AppendF("<discriminator{0}{1} />",
-				        MakeAtt("column", model.ActiveRecordAtt.DiscriminatorColumn),
-				        WriteIfNonNull("type", model.ActiveRecordAtt.DiscriminatorType));
+				AppendF("<discriminator{0}{1}{2} />",
+						MakeAtt("column", model.ActiveRecordAtt.DiscriminatorColumn),
+						WriteIfNonNull("type", model.ActiveRecordAtt.DiscriminatorType),
+						WriteIfNonNull("length", model.ActiveRecordAtt.DiscriminatorLength)
+						);
 			}
 		}
 

@@ -145,6 +145,7 @@
     <Compile Include="Model\BaseJoinedClass.cs" />
     <Compile Include="Model\BelongsToWithFetch.cs" />
     <Compile Include="Model\CacheClass.cs" />
+    <Compile Include="Model\ClassDiscriminatorLengthParent.cs" />
     <Compile Include="Model\ClassKeyAssigned.cs" />
     <Compile Include="Model\ClassWithBadCompositeKey.cs" />
     <Compile Include="Model\ClassWithBadMapping.cs" />

@@ -41,6 +41,7 @@ namespace Castle.ActiveRecord
 		private String discriminatorType;
 		private String discriminatorValue;
 		private String discriminatorColumn;
+		private String discriminatorLength;
 		private String where;
 		private Type proxy;
 		private Type persister;
@@ -133,6 +134,16 @@ namespace Castle.ActiveRecord
 		{
 			get { return discriminatorValue; }
 			set { discriminatorValue = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the length of the discriminator
+		/// column (valid for string type only)
+		/// </summary>
+		public String DiscriminatorLength
+		{
+			get { return discriminatorLength; }
+			set { discriminatorLength = value; }
 		}
 
 		/// <summary>
