@@ -38,9 +38,9 @@
 		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.TestSupport.Tests/Castle.MonoRail.TestSupport.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.Monorail.JSONSupport.Tests/Castle.Monorail.JSONSupport.Tests.build" if="${common.testrunner.enabled}"/>
-		<!--
+		
 		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" if="${common.testrunner.enabled}"/>
-		-->
+		
 	</fileset>
 
 	<target name="build" depends="common.build" />
