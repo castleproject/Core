@@ -19,6 +19,7 @@ namespace Castle.Windsor.Tests
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.SubSystems.Configuration;
 	using Castle.Windsor.Configuration.Interpreters;
+	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -121,10 +122,12 @@ namespace Castle.Windsor.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ResourceException))]
+		[ExpectedException(typeof(ConfigurationProcessingException))]
 		public void MissingManifestResourceConfiguration()
 		{
-			new XmlInterpreter(new AssemblyResource("assembly://Castle.Windsor.Tests/missing_config.xml"));
+			DefaultConfigurationStore store = new DefaultConfigurationStore();
+			AssemblyResource source = new AssemblyResource("assembly://Castle.Windsor.Tests/missing_config.xml");
+			new XmlInterpreter(source).ProcessResource(source, store);
 		}
 	}
 
