@@ -97,19 +97,24 @@ namespace Castle.MicroKernel.ComponentActivator
 			{
 				try
 				{
-					if (implType.IsContextful)
+					// Hammett's comment:
+					// We could check all parameters for one that RemotingService.IsTransparentProxy returns true
+					// but that looks a little costy. For now, I'm going to default to A.CreateInstance
+					// until the transparent proxy issue comes up to the surface again.
+
+//					if (implType.IsContextful)
 					{
 						instance = Activator.CreateInstance(implType, arguments);
 					}
-					else
-					{
-						ConstructorInfo cinfo = implType.GetConstructor(
-							BindingFlags.Public | BindingFlags.Instance, null, signature, null);
-
-						instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
-
-						cinfo.Invoke(instance, arguments);
-					}
+//					else
+//					{
+//						ConstructorInfo cinfo = implType.GetConstructor(
+//							BindingFlags.Public | BindingFlags.Instance, null, signature, null);
+//
+//						instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
+//
+//						cinfo.Invoke(instance, arguments);
+//					}
 				}
 				catch(Exception ex)
 				{
