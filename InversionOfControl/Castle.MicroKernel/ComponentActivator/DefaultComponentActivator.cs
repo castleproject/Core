@@ -17,6 +17,8 @@ namespace Castle.MicroKernel.ComponentActivator
 	using System;
 	using System.Reflection;
 	using System.Runtime.Remoting;
+	using System.Security;
+	using System.Security.Permissions;
 	using Castle.Core;
 	using Castle.Core.Interceptor;
 	using Castle.MicroKernel.LifecycleConcerns;
@@ -35,6 +37,8 @@ namespace Castle.MicroKernel.ComponentActivator
 	[Serializable]
 	public class DefaultComponentActivator : AbstractComponentActivator
 	{
+		private readonly bool useFastCreateInstance;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultComponentActivator"/> class.
 		/// </summary>
@@ -47,6 +51,7 @@ namespace Castle.MicroKernel.ComponentActivator
 										 ComponentInstanceDelegate onDestruction)
 			: base(model, kernel, onCreation, onDestruction)
 		{
+			useFastCreateInstance = !model.Implementation.IsContextful && SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.SerializationFormatter));
 		}
 
 		#region AbstractComponentActivator Members
@@ -97,24 +102,14 @@ namespace Castle.MicroKernel.ComponentActivator
 			{
 				try
 				{
-					// Hammett's comment:
-					// We could check all parameters for one that RemotingService.IsTransparentProxy returns true
-					// but that looks a little costy. For now, I'm going to default to A.CreateInstance
-					// until the transparent proxy issue comes up to the surface again.
-
-//					if (implType.IsContextful)
+					if (useFastCreateInstance)
+					{
+						instance = FastCreateInstance(implType, arguments, signature);
+					}
+					else
 					{
 						instance = Activator.CreateInstance(implType, arguments);
 					}
-//					else
-//					{
-//						ConstructorInfo cinfo = implType.GetConstructor(
-//							BindingFlags.Public | BindingFlags.Instance, null, signature, null);
-//
-//						instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
-//
-//						cinfo.Invoke(instance, arguments);
-//					}
 				}
 				catch(Exception ex)
 				{
@@ -135,6 +130,17 @@ namespace Castle.MicroKernel.ComponentActivator
 				}
 			}
 
+			return instance;
+		}
+
+		private static object FastCreateInstance(Type implType, object[] arguments, Type[] signature)
+		{
+			ConstructorInfo cinfo = implType.GetConstructor(
+				BindingFlags.Public | BindingFlags.Instance, null, signature, null);
+
+			object instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
+
+			cinfo.Invoke(instance, arguments);
 			return instance;
 		}
 
