@@ -125,6 +125,10 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
 		{
+			if( virtualPath != null && !virtualPath.StartsWith("/"))
+			{
+				virtualPath = "/" + virtualPath;
+			}
 			StringBuilder sb = new StringBuilder(virtualPath);
 
 			foreach(UrlPathNode node in nodes)

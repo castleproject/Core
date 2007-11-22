@@ -221,6 +221,14 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			PatternRule.Build("ProductById", "product/[id:number", typeof(ProductController), "View");
 		}
 
+		[Test]
+		public void BugFix_IncorrectUrlIfVirtualPathDoesNotStartWithSlash()
+		{
+			PatternRule rule = PatternRule.Build("ProductHome", "product", typeof(ProductController), "View");
+
+			Assert.AreEqual("/vdir/product", rule.CreateUrl("localhost", "vdir", new Hashtable()));
+		}
+
 		public class ProductController : Controller { }
 	}
 }
