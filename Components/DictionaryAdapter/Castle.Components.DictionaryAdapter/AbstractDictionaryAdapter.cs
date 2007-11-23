@@ -53,10 +53,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// true if the <see cref="T:System.Collections.IDictionary"></see> contains an element with the key; otherwise, false.
 		/// </returns>
 		/// <exception cref="T:System.ArgumentNullException">key is null. </exception>
-		public bool Contains(object key)
-		{
-			throw new NotSupportedException();
-		}
+		public abstract bool Contains(object key);
 
 		/// <summary>
 		/// Returns an <see cref="T:System.Collections.IDictionaryEnumerator"></see> object for the <see cref="T:System.Collections.IDictionary"></see> object.

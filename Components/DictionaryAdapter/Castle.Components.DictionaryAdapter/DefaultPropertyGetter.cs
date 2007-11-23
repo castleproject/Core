@@ -51,7 +51,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (storedValue != null && !propertyType.IsInstanceOfType(storedValue))
 			{
-				if (converter.CanConvertFrom(storedValue.GetType()))
+				if (converter != null && converter.CanConvertFrom(storedValue.GetType()))
 				{
 					return converter.ConvertFrom(storedValue);
 				}

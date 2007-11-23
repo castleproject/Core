@@ -31,6 +31,11 @@ namespace Castle.Components.DictionaryAdapter
 			get { return false; }
 		}
 
+		public override bool Contains(object key)
+		{
+			return Array.IndexOf(nameValues.AllKeys, key) >= 0;
+		}
+
 		public override object this[object key]
 		{
 			get

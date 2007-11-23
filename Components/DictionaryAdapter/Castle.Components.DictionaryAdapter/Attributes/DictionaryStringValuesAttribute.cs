@@ -61,12 +61,10 @@ namespace Castle.Components.DictionaryAdapter
 
 			TypeConverter converter = property.TypeConverter;
 
-			if (converter != null)
+
+			if (converter != null && converter.CanConvertTo(typeof(string)))
 			{
-				if (converter.CanConvertTo(typeof(string)))
-				{
-					return (string) converter.ConvertTo(value, typeof(string));
-				}
+				return (string) converter.ConvertTo(value, typeof(string));
 			}
 
 			return value.ToString();
