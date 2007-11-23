@@ -339,21 +339,21 @@ namespace Castle.DynamicProxy
 		/// <para>
 		/// If this <see cref="ModuleScope"/> was created without indicating that the assembly should be saved, this method does nothing.
 		/// </para></remarks>
-		/// <exception cref="InvalidOperationException">Both a strong-named and a weak-named assembly have been generated or no assembly has been
-		/// generated.</exception>
-		public void SaveAssembly ()
+		/// <exception cref="InvalidOperationException">Both a strong-named and a weak-named assembly have been generated.</exception>
+		/// <returns>The path of the generated assembly file, or null if no file has been generated.</returns>
+		public string SaveAssembly ()
 		{
 			if (!savePhysicalAssembly)
-				return;
+				return null;
 
 			if (StrongNamedModule != null && WeakNamedModule != null)
 					throw new InvalidOperationException ("Both a strong-named and a weak-named assembly have been generated.");
 			else if (StrongNamedModule != null)
-				SaveAssembly (true);
+				return SaveAssembly (true);
 			else if (WeakNamedModule != null)
-				SaveAssembly (false);
+				return SaveAssembly (false);
 			else
-				throw new InvalidOperationException ("No assembly has been generated.");
+				return null;
 		}
 
 		/// <summary>
@@ -373,14 +373,15 @@ namespace Castle.DynamicProxy
 		/// </remarks>
 		/// <exception cref="InvalidOperationException">No assembly has been generated that matches the <paramref name="strongNamed"/> parameter.
 		/// </exception>
-		public void SaveAssembly (bool strongNamed)
+		/// <returns>The path of the generated assembly file, or null if no file has been generated.</returns>
+		public string SaveAssembly (bool strongNamed)
 		{
 			if (!savePhysicalAssembly)
-				return;
+				return null;
 
 			AssemblyBuilder assemblyBuilder;
 			string assemblyFileName;
-      string assemblyFilePath;
+			string assemblyFilePath;
 
 			if (strongNamed)
 			{
@@ -390,7 +391,7 @@ namespace Castle.DynamicProxy
 				{
 					assemblyBuilder = (AssemblyBuilder) StrongNamedModule.Assembly;
 					assemblyFileName = StrongNamedModuleName;
-          assemblyFilePath = StrongNamedModule.FullyQualifiedName;
+					assemblyFilePath = StrongNamedModule.FullyQualifiedName;
 				}
 			}
 			else
@@ -401,16 +402,15 @@ namespace Castle.DynamicProxy
 				{
 					assemblyBuilder = (AssemblyBuilder) WeakNamedModule.Assembly;
 					assemblyFileName = WeakNamedModuleName;
-          assemblyFilePath = WeakNamedModule.FullyQualifiedName;
+					assemblyFilePath = WeakNamedModule.FullyQualifiedName;
 				}
 			}
 
 			if (File.Exists (assemblyFilePath))
-			{
-        File.Delete (assemblyFilePath);
-			}
+				File.Delete (assemblyFilePath);
 
 			assemblyBuilder.Save (assemblyFileName);
+			return assemblyFilePath;
 		}
 	}
 }

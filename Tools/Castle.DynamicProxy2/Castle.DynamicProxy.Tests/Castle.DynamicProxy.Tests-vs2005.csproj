@@ -100,9 +100,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="BaseTestCaseTestCase.cs" />
     <Compile Include="BasicInterfaceProxyWithoutTargetTestCase.cs" />
     <Compile Include="BugsReportedTestCase.cs" />
     <Compile Include="BugsReported\Camera.cs" />
+    <Compile Include="BugsReported\ConstraintViolationInDebuggerTestCase.cs" />
     <Compile Include="BugsReported\DynProxy46.cs" />
     <Compile Include="CacheKeyTestCase.cs" />
     <Compile Include="ClassEmitterTestCase.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="MethodFinderTestCase.cs" />
     <Compile Include="ModuleScopeTestCase.cs" />
     <Compile Include="OutRefParams.cs" />
+    <Compile Include="PersistentProxyBuilderTestCase.cs" />
     <Compile Include="ProxyGenerationOptionsTestCase.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
     <Compile Include="SerializableClassTestCase.cs" />

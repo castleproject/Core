@@ -25,12 +25,6 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class ClassEmitterTestCase : BasePEVerifyTestCase
 	{
-		public override void TearDown ()
-		{
-			generator.ProxyBuilder.ModuleScope.SaveAssembly ();
-			base.TearDown ();
-		}
-
 		[Test]
 		public void AutomaticDefaultConstructorGeneration ()
 		{

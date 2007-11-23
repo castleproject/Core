@@ -23,11 +23,31 @@ namespace Castle.DynamicProxy.Tests
 	public abstract class BasePEVerifyTestCase
 	{
 		protected ProxyGenerator generator;
+		protected PersistentProxyBuilder builder;
+
+		private bool verificationDisabled;
 
 		[SetUp]
 		public virtual void Init()
 		{
-			generator = new ProxyGenerator(new PersistentProxyBuilder());
+			ResetGeneratorAndBuilder();
+			verificationDisabled = false;
+		}
+
+		public void ResetGeneratorAndBuilder ()
+		{
+			builder = new PersistentProxyBuilder();
+			generator = new ProxyGenerator(builder);
+		}
+
+		public void DisableVerification ()
+		{
+			verificationDisabled = true;
+		}
+
+		public bool IsVerificationDisabled
+		{
+			get { return verificationDisabled; }
 		}
 
 #if !MONO // mono doesn't have PEVerify
@@ -35,10 +55,13 @@ namespace Castle.DynamicProxy.Tests
 		[TearDown]
 		public virtual void TearDown ()
 		{
-			if (generator.ProxyBuilder.ModuleScope.StrongNamedModule != null)
-				RunPEVerifyOnGeneratedAssembly (generator.ProxyBuilder.ModuleScope.StrongNamedModule.FullyQualifiedName);
-			if (generator.ProxyBuilder.ModuleScope.WeakNamedModule != null)
-				RunPEVerifyOnGeneratedAssembly (generator.ProxyBuilder.ModuleScope.WeakNamedModule.FullyQualifiedName);
+			if (!IsVerificationDisabled)
+			{
+				// Note: only supports one generated assembly at the moment
+				string path = builder.SaveAssembly();
+				if (path != null)
+					RunPEVerifyOnGeneratedAssembly (path);
+			}
 		}
 
 		public void RunPEVerifyOnGeneratedAssembly(string assemblyPath)
@@ -62,8 +85,9 @@ namespace Castle.DynamicProxy.Tests
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			process.StartInfo.Arguments = assemblyPath + " /VERBOSE";
-			process.Start();
+			process.StartInfo.Arguments = "\"" + assemblyPath + "\" /VERBOSE";
+			process.StartInfo.CreateNoWindow = true;
+			process.Start ();
 			string processOutput = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();
 

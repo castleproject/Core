@@ -117,8 +117,9 @@ namespace Castle.DynamicProxy.Tests
 			)]
 		public void ProxyWithGenExplicitImplementation()
 		{
-			generator.CreateInterfaceProxyWithTarget<InterfaceWithExplicitImpl<int>>(
-				new GenExplicitImplementation<int>(), logger);
+			DisableVerification();
+			generator.CreateInterfaceProxyWithTarget<InterfaceWithExplicitImpl<int>> (
+					new GenExplicitImplementation<int>(), logger);
 		}
 
 		[Test]

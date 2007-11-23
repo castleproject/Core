@@ -344,8 +344,6 @@ namespace Castle.DynamicProxy.Generators
 				rwlock.ReleaseWriterLock();
 			}
 
-			Scope.SaveAssembly();
-
 			return generatedType;
 		}
 

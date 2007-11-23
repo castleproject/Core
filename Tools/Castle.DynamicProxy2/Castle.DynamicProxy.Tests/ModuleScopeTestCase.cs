@@ -129,7 +129,9 @@ namespace Castle.DynamicProxy.Tests
 				File.Delete (path);
 
 			Assert.IsFalse (File.Exists (path));
-			scope.SaveAssembly ();
+			string savedPath = scope.SaveAssembly ();
+
+			Assert.AreEqual (savedPath, Path.GetFullPath (path));
 
 			CheckSignedSavedAssembly(path);
 			File.Delete (path);
@@ -146,7 +148,9 @@ namespace Castle.DynamicProxy.Tests
 				File.Delete (path);
 
 			Assert.IsFalse (File.Exists (path));
-			scope.SaveAssembly ();
+			string savedPath = scope.SaveAssembly ();
+
+			Assert.AreEqual (savedPath, Path.GetFullPath (path));
 
 			CheckUnsignedSavedAssembly(path);
 			File.Delete (path);
@@ -190,11 +194,10 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException (typeof (InvalidOperationException))]
-		public void SaveThrowsWhenNoModuleObtained ()
+		public void SaveReturnsNullWhenNoModuleObtained ()
 		{
 			ModuleScope scope = new ModuleScope (true);
-			scope.SaveAssembly ();
+			Assert.IsNull (scope.SaveAssembly ());
 		}
 
 		[Test]

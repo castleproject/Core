@@ -1,5 +1,10 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Fixed test issue - PEVerify is now called with a quoted assembly path (to allow for spaces in the path)
+- Fixed test annoyance - PEVerify is now not called in a separate window
+- Changed PersistentProxyBuilder behavior - SaveAssembly is not called by the class generators any more, instead PersistentProxyBuilder.SaveAssemblies
+  must be used. This allows the proxy builder to save multiple proxies at the same time. Test cases have been adapted.
+
 - Fixed issues with CacheKey.Equals and ProxyGenerationOptions.Equals/GetHashCode
 - Added a way to set and retrieve the ModuleScope used by ProxyObjectReference for proxy deserialization; proxies can now be deserialized with
   the same ModuleScope used by the application (DYNPROXY-71)
