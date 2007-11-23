@@ -94,7 +94,6 @@ namespace Castle.MonoRail.Framework
 		/// <param name="views">The views.</param>
 		public void CollectViews(string dirName, ArrayList views)
 		{
-			int toStripLength = _namespace.Length;
 
 			dirName = NormalizeTemplateName(dirName);
 
@@ -104,23 +103,32 @@ namespace Castle.MonoRail.Framework
 			{
 				String name = names[i].ToLower(System.Globalization.CultureInfo.InvariantCulture);
 
-				if (name.StartsWith(_namespace.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
-				{
-					if (name[toStripLength] == '.')
-					{
-						name = name.Substring(toStripLength + 1);
-					}
-					else
-					{
-						name = name.Substring(toStripLength);
-					}
-				}
+				name = RemovePrefix(_namespace, name);
 
 				if (name.StartsWith(dirName.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
 				{
-					views.Add(name);
+					views.Add(
+						Path.Combine(dirName, RemovePrefix(dirName, name))
+						);
 				}
 			}
+		}
+
+		private string RemovePrefix(string prefix, string name)
+		{
+			int toStripLength = prefix.Length;
+			if (name.StartsWith(prefix.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+			{
+				if (name[toStripLength] == '.')
+				{
+					return name.Substring(toStripLength + 1);
+				}
+				else
+				{
+					return name.Substring(toStripLength);
+				}
+			}
+			return name;
 		}
 
 		/// <summary>

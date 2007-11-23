@@ -35,6 +35,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			options.SaveDirectory = Environment.CurrentDirectory;
 			options.SaveToDisk = true;
 			options.Debug = true;
+			options.BatchCompile = true;
 			string viewPath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Views");
 
 			FileAssemblyViewSourceLoader loader = new FileAssemblyViewSourceLoader(viewPath);

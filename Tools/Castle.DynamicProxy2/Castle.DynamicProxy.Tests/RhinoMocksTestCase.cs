@@ -137,9 +137,10 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void CanGetCorrectValuesFromIntPtr()
 		{
-			IHaveMethodThatReturnsIntPtr o = (IHaveMethodThatReturnsIntPtr)generator
-				.CreateInterfaceProxyWithoutTarget(typeof(IHaveMethodThatReturnsIntPtr), new IntPtrInterceptor());
-			Assert.AreEqual(IntPtr.Zero, o.Foo());
+			IFooWithIntPtr o = (IFooWithIntPtr)generator
+				.CreateInterfaceProxyWithoutTarget(typeof(IFooWithIntPtr), new IntPtrInterceptor());
+			IntPtr buffer = o.Buffer(15);
+			Assert.AreEqual(IntPtr.Zero, buffer);
 		}
 
 		[Test]
@@ -270,9 +271,9 @@ namespace Castle.DynamicProxy.Tests
 		T Create<T>() where T : List<T>;
 	}
 
-	public interface IHaveMethodThatReturnsIntPtr
+	public interface IFooWithIntPtr
 	{
-		IntPtr Foo();
+		IntPtr Buffer(UInt32 index);
 	}
 
 	public abstract class

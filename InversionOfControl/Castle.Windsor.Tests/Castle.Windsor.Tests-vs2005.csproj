@@ -127,6 +127,7 @@
     <Compile Include="Bugs\IoC-73\IoC73.cs" />
     <Compile Include="Bugs\IoC-73\Proxy.cs" />
     <Compile Include="Bugs\IoC-78\IoC-78.cs" />
+    <Compile Include="Bugs\UnregisteringWithFactorySupport\UnregisteringWithFactorySupportFixture.cs" />
     <Compile Include="ChildContainerSupportTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

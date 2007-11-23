@@ -67,7 +67,7 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.AreEqual(3, views.Length);
 			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
 			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "notinassembly.vm", views[1]);
-			Assert.AreEqual(@"content.contentinassembly.vm", views[2]);
+			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[2]);
 
 			foreach(string view in views)
 			{
@@ -124,7 +124,7 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.AreEqual(1, views.Length);
 			//Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
 			//Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "notinassembly.vm", views[1]);
-			Assert.AreEqual(@"content.contentinassembly.vm", views[0]);
+			Assert.AreEqual(@"Content"+ Path.DirectorySeparatorChar +"contentinassembly.vm", views[0]);
 
 			foreach (string view in views)
 			{
