@@ -276,26 +276,32 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="value">The value.</param>
 		/// <param name="descriptor">The descriptor.</param>
 		/// <returns></returns>
-		public object SetPropertyValue(
+		public bool SetPropertyValue(
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
-			string key, object value, PropertyDescriptor descriptor)
+			string key, ref object value, PropertyDescriptor descriptor)
 		{
 			if (setters != null)
 			{
 				foreach(IDictionaryPropertySetter setter in setters)
 				{
-					value = setter.SetPropertyValue(
-						factory, dictionary, key, value, this);
+					if (!setter.SetPropertyValue(
+						factory, dictionary, key, ref value, this))
+					{
+						return false;
+					}
 				}
 			}
 
 			if (descriptor != null)
 			{
-				value = descriptor.SetPropertyValue(
-					factory, dictionary, key, value, null);
+				if (!descriptor.SetPropertyValue(
+					factory, dictionary, key, ref value, null))
+				{
+					return false;
+				}
 			}
 
-			return value;
+			return true;
 		}
 
 		/// <summary>

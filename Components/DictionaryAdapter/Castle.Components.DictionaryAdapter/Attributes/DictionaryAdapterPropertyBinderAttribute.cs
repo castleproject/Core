@@ -53,11 +53,12 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region IDictionaryPropertySetter
 
-		object IDictionaryPropertySetter.SetPropertyValue(
+		bool IDictionaryPropertySetter.SetPropertyValue(
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
-			string key, object value, PropertyDescriptor property)
+			string key, ref object value, PropertyDescriptor property)
 		{
-			return binder.ConvertFromInterface(value);
+			value = binder.ConvertFromInterface(value);
+			return true;
 		}
 
 		#endregion

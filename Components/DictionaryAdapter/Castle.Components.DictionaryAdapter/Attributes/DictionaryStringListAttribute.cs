@@ -81,16 +81,16 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region IDictionaryPropertySetter Members
 
-		object IDictionaryPropertySetter.SetPropertyValue(
+		bool IDictionaryPropertySetter.SetPropertyValue(
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
-			string key, object value, PropertyDescriptor property)
+			string key, ref object value, PropertyDescriptor property)
 		{
 			IEnumerable enumerable = value as IEnumerable;
 			if (enumerable != null)
 			{
 				value = BuildString(enumerable, separator);
 			}
-			return value;
+			return true;
 		}
 
 		#endregion

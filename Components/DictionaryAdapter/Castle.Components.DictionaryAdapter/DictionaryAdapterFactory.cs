@@ -370,6 +370,7 @@ namespace Castle.Components.DictionaryAdapter
 				new Type[] {descriptor.PropertyType});
 
 			ILGenerator setILGenerator = setMethodBuilder.GetILGenerator();
+			Label skipSetter = setILGenerator.DefineLabel();
 			LocalBuilder descriptorLocal;
 
 			PreparePropertyMethod(
@@ -390,11 +391,11 @@ namespace Castle.Components.DictionaryAdapter
 			setILGenerator.Emit(OpCodes.Ldarg_0);
 			setILGenerator.Emit(OpCodes.Ldfld, dictionaryField);
 			setILGenerator.Emit(OpCodes.Ldloc_0);
-			setILGenerator.Emit(OpCodes.Ldloc_1);
+			setILGenerator.Emit(OpCodes.Ldloca_S, 1);
 			setILGenerator.Emit(OpCodes.Ldarg_0);
 			setILGenerator.Emit(OpCodes.Ldfld, descriptorField);
 			setILGenerator.Emit(OpCodes.Callvirt, DescriptorSetValue);
-			setILGenerator.Emit(OpCodes.Stloc_1);
+			setILGenerator.Emit(OpCodes.Brfalse_S, skipSetter);
 
 			// dictionary[key] = value
 			setILGenerator.Emit(OpCodes.Ldarg_0);
@@ -403,6 +404,7 @@ namespace Castle.Components.DictionaryAdapter
 			setILGenerator.Emit(OpCodes.Ldloc_1);
 			setILGenerator.Emit(OpCodes.Callvirt, DictionarySetItem);
 
+			setILGenerator.MarkLabel(skipSetter);
 			setILGenerator.Emit(OpCodes.Ret);
 
 			propertyBuilder.SetSetMethod(setMethodBuilder);
@@ -520,30 +522,13 @@ namespace Castle.Components.DictionaryAdapter
 			typeof(Dictionary<String, object[]>).GetMethod("get_Item", new Type[] {typeof(String)});
 
 		private static readonly MethodInfo DescriptorGetKey =
-			typeof(PropertyDescriptor).GetMethod(
-				"GetKey", new Type[]
-				          	{
-				          		typeof(IDictionary), typeof(String),
-				          		typeof(PropertyDescriptor)
-				          	});
+			typeof(PropertyDescriptor).GetMethod("GetKey");
 
 		private static readonly MethodInfo DescriptorGetValue =
-			typeof(PropertyDescriptor).GetMethod(
-				"GetPropertyValue", new Type[]
-				                    	{
-				                    		typeof(DictionaryAdapterFactory),
-				                    		typeof(IDictionary), typeof(String), typeof(object),
-				                    		typeof(PropertyDescriptor)
-				                    	});
+			typeof(PropertyDescriptor).GetMethod("GetPropertyValue");
 
 		private static readonly MethodInfo DescriptorSetValue =
-			typeof(PropertyDescriptor).GetMethod(
-				"SetPropertyValue", new Type[]
-				                    	{
-				                    		typeof(DictionaryAdapterFactory),
-				                    		typeof(IDictionary), typeof(String), typeof(object),
-				                    		typeof(PropertyDescriptor)
-				                    	});
+			typeof(PropertyDescriptor).GetMethod("SetPropertyValue");
 
 		#endregion
 	}

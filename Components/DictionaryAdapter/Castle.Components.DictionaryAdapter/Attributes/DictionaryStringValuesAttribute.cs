@@ -39,15 +39,15 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region IDictionaryPropertySetter Members
 
-		object IDictionaryPropertySetter.SetPropertyValue(
+		bool IDictionaryPropertySetter.SetPropertyValue(
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
-			string key, object value, PropertyDescriptor property)
+			string key, ref object value, PropertyDescriptor property)
 		{
 			if (value != null)
 			{
-				return GetPropertyAsString(property, value);
+				value = GetPropertyAsString(property, value);
 			}
-			return value;
+			return true;
 		}
 
 		#endregion

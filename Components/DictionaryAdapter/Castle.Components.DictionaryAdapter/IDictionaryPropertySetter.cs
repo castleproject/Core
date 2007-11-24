@@ -29,8 +29,8 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="key">The key.</param>
 		/// <param name="value">The stored value.</param>
 		/// <param name="property">The property.</param>
-		/// <returns>The stored property value.</returns>
-		object SetPropertyValue(IDictionaryAdapterFactory factory, IDictionary dictionary,
-		                        string key, object value, PropertyDescriptor property);
+		/// <returns>true if the property should be stored.</returns>
+		bool SetPropertyValue(IDictionaryAdapterFactory factory, IDictionary dictionary,
+		                      string key, ref object value, PropertyDescriptor property);
 	}
 }
