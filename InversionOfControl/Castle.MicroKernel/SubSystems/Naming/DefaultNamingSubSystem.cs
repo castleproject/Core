@@ -16,12 +16,14 @@ namespace Castle.MicroKernel.SubSystems.Naming
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.Threading;
 
 	/// <summary>
 	/// Default <see cref="INamingSubSystem"/> implementation.
-	/// Keeps services and key maps as simple hash tables. Does not
-	/// support a query string.
+	/// Keeps services map as a simple hash table.
+	/// Keeps key map as a list dictionary to maintain order.
+	/// Does not support a query string.
 	/// </summary>
 	[Serializable]
 	public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
@@ -45,7 +47,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		/// </summary>
 		public DefaultNamingSubSystem()
 		{
-			key2Handler = new Hashtable();
+			key2Handler = new ListDictionary();
 			service2Handler = new Hashtable();
 		}
 
