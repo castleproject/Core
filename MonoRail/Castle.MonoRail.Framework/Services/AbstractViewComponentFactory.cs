@@ -141,6 +141,8 @@ namespace Castle.MonoRail.Framework.Services
 			RegisterComponent("DiggStylePagination", typeof(DiggStylePagination));
 			RegisterComponent("SelectStylePagination", typeof(SelectStylePagination));
 			RegisterComponent("ColumnRenderer", typeof(ColumnRenderer));
+			RegisterComponent("SiteMapComponent", typeof(SiteMapComponent));
+			RegisterComponent("TreeMakerComponent", typeof(TreeMakerComponent));
 		}
 
 		/// <summary>
