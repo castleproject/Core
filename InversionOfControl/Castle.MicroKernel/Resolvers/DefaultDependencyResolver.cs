@@ -336,14 +336,11 @@ namespace Castle.MicroKernel.Resolvers
 				}
 				else
 				{
-					IHandler[] handlers = kernel.GetHandlers(dependency.TargetType);
-					foreach (IHandler maybeCorrectHandler in handlers)
+					IHandler maybeCorrectHandler = kernel.GetHandler(dependency.TargetType);
+					
+					if (context.HandlerIsCurrentlyBeingResolved(maybeCorrectHandler) == false)
 					{
-						if (context.HandlerIsCurrentlyBeingResolved(maybeCorrectHandler) == false)
-						{
-							handler = maybeCorrectHandler;
-							break;
-						}
+						handler = maybeCorrectHandler;					
 					}
 
 					if (handler == null)
