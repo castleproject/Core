@@ -1,3 +1,6 @@
+- Applied patch by Simon Cropp fixing NVELOCITY-16
+  "Exception handling in character parsing is not optimal"
+
 - Fixed NVELOCITY-15
   "Fix thread safety issue in ASTMethod.Execute()"
 

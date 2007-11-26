@@ -18,10 +18,10 @@ namespace NVelocity.Runtime.Parser
 	public sealed class VelocityCharStream : ICharStream
 	{
 		public const bool staticFlag = false;
-		internal int bufsize;
+		internal int bufferSize;
 		internal int available;
 		internal int tokenBegin;
-		public int bufpos = -1;
+		public int bufferPosition = -1;
 		private int[] bufline;
 		private int[] bufcolumn;
 
@@ -36,15 +36,17 @@ namespace NVelocity.Runtime.Parser
 		private char[] buffer;
 		private int maxNextCharInd = 0;
 		private int inBuf = 0;
+		private char currentCharacter;
+		private bool currentCharacterAvailable = false;
 
 		public VelocityCharStream(TextReader dstream,
-		                          int startline, int startcolumn, int buffersize)
+								  int startline, int startcolumn, int buffersize)
 		{
 			inputStream = dstream;
 			line = startline;
 			column = startcolumn - 1;
 
-			available = bufsize = buffersize;
+			available = bufferSize = buffersize;
 			buffer = new char[buffersize];
 			bufline = new int[buffersize];
 			bufcolumn = new int[buffersize];
@@ -63,14 +65,14 @@ namespace NVelocity.Runtime.Parser
 
 			if (buffer == null || buffersize != buffer.Length)
 			{
-				available = bufsize = buffersize;
+				available = bufferSize = buffersize;
 				buffer = new char[buffersize];
 				bufline = new int[buffersize];
 				bufcolumn = new int[buffersize];
 			}
 			prevCharIsLF = prevCharIsCR = false;
 			tokenBegin = inBuf = maxNextCharInd = 0;
-			bufpos = -1;
+			bufferPosition = -1;
 		}
 
 		public void ReInit(TextReader dstream, int startline, int startcolumn)
@@ -80,15 +82,15 @@ namespace NVelocity.Runtime.Parser
 
 		public String GetImage()
 		{
-			if (bufpos >= tokenBegin)
+			if (bufferPosition >= tokenBegin)
 			{
-				Int32 len = (bufpos - tokenBegin + 1) > buffer.Length ? buffer.Length : (bufpos - tokenBegin + 1);
-				//return new String(buffer, tokenBegin, bufpos - tokenBegin + 1);
+				Int32 len = (bufferPosition - tokenBegin + 1) > buffer.Length ? buffer.Length : (bufferPosition - tokenBegin + 1);
+				//return new String(buffer, tokenBegin, bufferPosition - tokenBegin + 1);
 				return new String(buffer, tokenBegin, len);
 			}
 			else
 			{
-				return new String(buffer, tokenBegin, bufsize - tokenBegin) + new String(buffer, 0, bufpos + 1);
+				return new String(buffer, tokenBegin, bufferSize - tokenBegin) + new String(buffer, 0, bufferPosition + 1);
 			}
 		}
 
@@ -96,12 +98,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			char[] ret = new char[len];
 
-			if ((bufpos + 1) >= len)
-				Array.Copy(buffer, bufpos - len + 1, ret, 0, len);
+			if ((bufferPosition + 1) >= len)
+				Array.Copy(buffer, bufferPosition - len + 1, ret, 0, len);
 			else
 			{
-				Array.Copy(buffer, bufsize - (len - bufpos - 1), ret, 0, len - bufpos - 1);
-				Array.Copy(buffer, 0, ret, len - bufpos - 1, bufpos + 1);
+				Array.Copy(buffer, bufferSize - (len - bufferPosition - 1), ret, 0, len - bufferPosition - 1);
+				Array.Copy(buffer, 0, ret, len - bufferPosition - 1, bufferPosition + 1);
 			}
 
 			return ret;
@@ -121,19 +123,19 @@ namespace NVelocity.Runtime.Parser
 			int start = tokenBegin;
 			int len;
 
-			if (bufpos >= tokenBegin)
+			if (bufferPosition >= tokenBegin)
 			{
-				len = bufpos - tokenBegin + inBuf + 1;
+				len = bufferPosition - tokenBegin + inBuf + 1;
 			}
 			else
 			{
-				len = bufsize - tokenBegin + bufpos + 1 + inBuf;
+				len = bufferSize - tokenBegin + bufferPosition + 1 + inBuf;
 			}
 
 			int i = 0, j = 0, k = 0;
 			int nextColDiff = 0, columnDiff = 0;
 
-			while(i < len && bufline[j = start % bufsize] == bufline[k = ++start % bufsize])
+			while (i < len && bufline[j = start % bufferSize] == bufline[k = ++start % bufferSize])
 			{
 				bufline[j] = newLine;
 				nextColDiff = columnDiff + bufcolumn[k] - bufcolumn[j];
@@ -147,9 +149,9 @@ namespace NVelocity.Runtime.Parser
 				bufline[j] = newLine++;
 				bufcolumn[j] = newCol + columnDiff;
 
-				while(i++ < len)
+				while (i++ < len)
 				{
-					if (bufline[j = start % bufsize] != bufline[++start % bufsize])
+					if (bufline[j = start % bufferSize] != bufline[++start % bufferSize])
 						bufline[j] = newLine++;
 					else
 						bufline[j] = newLine;
@@ -162,22 +164,22 @@ namespace NVelocity.Runtime.Parser
 
 		public int Column
 		{
-			get { return bufcolumn[bufpos]; }
+			get { return bufcolumn[bufferPosition]; }
 		}
 
 		public int Line
 		{
-			get { return bufline[bufpos]; }
+			get { return bufline[bufferPosition]; }
 		}
 
 		public int EndColumn
 		{
-			get { return bufcolumn[bufpos]; }
+			get { return bufcolumn[bufferPosition]; }
 		}
 
 		public int EndLine
 		{
-			get { return bufline[bufpos]; }
+			get { return bufline[bufferPosition]; }
 		}
 
 		public int BeginColumn
@@ -190,119 +192,156 @@ namespace NVelocity.Runtime.Parser
 			get { return bufline[tokenBegin]; }
 		}
 
+		public char CurrentCharacter
+		{
+			get
+			{
+				if (!currentCharacterAvailable)
+				{
+					throw new InvalidOperationException("CurrentCharacter not available");
+				}
+				return currentCharacter;
+			}
+		}
+
+		public bool CurrentCharacterAvailable
+		{
+			get
+			{
+				return currentCharacterAvailable;
+			}
+		}
+
+
 		private void ExpandBuff(bool wrapAround)
 		{
-			char[] newbuffer = new char[bufsize + 2048];
-			int[] newbufline = new int[bufsize + 2048];
-			int[] newbufcolumn = new int[bufsize + 2048];
+			char[] newbuffer = new char[bufferSize + 2048];
+			int[] newbufline = new int[bufferSize + 2048];
+			int[] newbufcolumn = new int[bufferSize + 2048];
 
 			try
 			{
 				if (wrapAround)
 				{
-					Array.Copy(buffer, tokenBegin, newbuffer, 0, bufsize - tokenBegin);
-					Array.Copy(buffer, 0, newbuffer, bufsize - tokenBegin, bufpos);
+					Array.Copy(buffer, tokenBegin, newbuffer, 0, bufferSize - tokenBegin);
+					Array.Copy(buffer, 0, newbuffer, bufferSize - tokenBegin, bufferPosition);
 					buffer = newbuffer;
 
-					Array.Copy(bufline, tokenBegin, newbufline, 0, bufsize - tokenBegin);
-					Array.Copy(bufline, 0, newbufline, bufsize - tokenBegin, bufpos);
+					Array.Copy(bufline, tokenBegin, newbufline, 0, bufferSize - tokenBegin);
+					Array.Copy(bufline, 0, newbufline, bufferSize - tokenBegin, bufferPosition);
 					bufline = newbufline;
 
-					Array.Copy(bufcolumn, tokenBegin, newbufcolumn, 0, bufsize - tokenBegin);
-					Array.Copy(bufcolumn, 0, newbufcolumn, bufsize - tokenBegin, bufpos);
+					Array.Copy(bufcolumn, tokenBegin, newbufcolumn, 0, bufferSize - tokenBegin);
+					Array.Copy(bufcolumn, 0, newbufcolumn, bufferSize - tokenBegin, bufferPosition);
 					bufcolumn = newbufcolumn;
 
-					maxNextCharInd = (bufpos += (bufsize - tokenBegin));
+					maxNextCharInd = (bufferPosition += (bufferSize - tokenBegin));
 				}
 				else
 				{
-					Array.Copy(buffer, tokenBegin, newbuffer, 0, bufsize - tokenBegin);
+					Array.Copy(buffer, tokenBegin, newbuffer, 0, bufferSize - tokenBegin);
 					buffer = newbuffer;
 
-					Array.Copy(bufline, tokenBegin, newbufline, 0, bufsize - tokenBegin);
+					Array.Copy(bufline, tokenBegin, newbufline, 0, bufferSize - tokenBegin);
 					bufline = newbufline;
 
-					Array.Copy(bufcolumn, tokenBegin, newbufcolumn, 0, bufsize - tokenBegin);
+					Array.Copy(bufcolumn, tokenBegin, newbufcolumn, 0, bufferSize - tokenBegin);
 					bufcolumn = newbufcolumn;
 
-					maxNextCharInd = (bufpos -= tokenBegin);
+					maxNextCharInd = (bufferPosition -= tokenBegin);
 				}
 			}
-			catch(Exception t)
+			catch (Exception t)
 			{
 				throw new ApplicationException(t.Message);
 			}
 
-			bufsize += 2048;
-			available = bufsize;
+			bufferSize += 2048;
+			available = bufferSize;
 			tokenBegin = 0;
 		}
 
-		private void FillBuff()
+		private bool FillBuff()
 		{
 			if (maxNextCharInd == available)
 			{
-				if (available == bufsize)
+				if (available == bufferSize)
 				{
 					if (tokenBegin > 2048)
 					{
-						bufpos = maxNextCharInd = 0;
+						bufferPosition = maxNextCharInd = 0;
 						available = tokenBegin;
 					}
 					else if (tokenBegin < 0)
-						bufpos = maxNextCharInd = 0;
+					{
+						bufferPosition = maxNextCharInd = 0;
+					}
 					else
+					{
 						ExpandBuff(false);
+					}
 				}
 				else if (available > tokenBegin)
-					available = bufsize;
+				{
+					available = bufferSize;
+				}
 				else if ((tokenBegin - available) < 2048)
+				{
 					ExpandBuff(true);
+				}
 				else
+				{
 					available = tokenBegin;
+				}
 			}
-
-			int i;
 
 			try
 			{
-				try
-				{
-					i = inputStream.Read(buffer, maxNextCharInd, available - maxNextCharInd);
-				}
-				catch(Exception ex)
-				{
-					throw new IOException("exception reading from inputStream", ex);
-				}
-				if (i <= 0)
+				int canRead = inputStream.Read(buffer, maxNextCharInd, available - maxNextCharInd);
+
+				if (canRead <= 0)
 				{
 					inputStream.Close();
-					throw new IOException();
+					return EndRead();
 				}
 				else
-					maxNextCharInd += i;
-				return;
+				{
+					maxNextCharInd += canRead;
+					return true;
+				}
 			}
-			catch(IOException e)
+			catch (Exception)
 			{
-				--bufpos;
-				Backup(0);
-				if (tokenBegin == - 1)
-					tokenBegin = bufpos;
-				throw e;
+				return EndRead();
 			}
 		}
 
-		public char BeginToken()
-		{
-			tokenBegin = - 1;
-			char c = ReadChar();
-			tokenBegin = bufpos;
 
-			return c;
+		private bool EndRead()
+		{
+			--bufferPosition;
+			Backup(0);
+			if (tokenBegin == -1)
+			{
+				tokenBegin = bufferPosition;
+			}
+			return false;
 		}
 
-		private void UpdateLineColumn(char c)
+
+		public bool BeginToken()
+		{
+			tokenBegin = -1;
+			bool success = ReadChar();
+			if (success)
+			{
+				tokenBegin = bufferPosition;
+			}
+
+			return success;
+		}
+
+		private void UpdateLineColumn()
 		{
 			column++;
 
@@ -314,7 +353,7 @@ namespace NVelocity.Runtime.Parser
 			else if (prevCharIsCR)
 			{
 				prevCharIsCR = false;
-				if (c == '\n')
+				if (currentCharacter == '\n')
 				{
 					prevCharIsLF = true;
 				}
@@ -322,7 +361,7 @@ namespace NVelocity.Runtime.Parser
 					line += (column = 1);
 			}
 
-			switch(c)
+			switch (currentCharacter)
 			{
 				case '\r':
 					prevCharIsCR = true;
@@ -341,39 +380,52 @@ namespace NVelocity.Runtime.Parser
 					break;
 			}
 
-			bufline[bufpos] = line;
-			bufcolumn[bufpos] = column;
+			bufline[bufferPosition] = line;
+			bufcolumn[bufferPosition] = column;
 		}
 
-		public char ReadChar()
+
+		public bool ReadChar()
 		{
 			if (inBuf > 0)
 			{
 				--inBuf;
 
 				/*
-				*  was : return (char)((char)0xff & buffer[(bufpos == bufsize - 1) ? (bufpos = 0) : ++bufpos]);
+				*  was : return (char)((char)0xff & buffer[(bufferPosition == bufferSize - 1) ? (bufferPosition = 0) : ++bufferPosition]);
 				*/
-				return buffer[(bufpos == bufsize - 1) ? (bufpos = 0) : ++bufpos];
+				currentCharacterAvailable = true;
+				currentCharacter = buffer[(bufferPosition == bufferSize - 1) ? (bufferPosition = 0) : ++bufferPosition];
+				return true;
 			}
 
-			if (++bufpos >= maxNextCharInd)
-				FillBuff();
+			if (++bufferPosition >= maxNextCharInd)
+			{
+				if (!FillBuff())
+				{
+					currentCharacterAvailable = false;
+					currentCharacter = default(Char);
+					return false;
+				}
+			}
 
 			/*
-			*  was : char c = (char)((char)0xff & buffer[bufpos]);
+			*  was : char c = (char)((char)0xff & buffer[bufferPosition]);
 			*/
-			char c = buffer[bufpos];
+			currentCharacterAvailable = true;
+			currentCharacter = buffer[bufferPosition];
 
-			UpdateLineColumn(c);
-			return (c);
+			UpdateLineColumn();
+			return true;
 		}
 
 		public void Backup(int amount)
 		{
 			inBuf += amount;
-			if ((bufpos -= amount) < 0)
-				bufpos += bufsize;
+			if ((bufferPosition -= amount) < 0)
+			{
+				bufferPosition += bufferSize;
+			}
 		}
 	}
 }

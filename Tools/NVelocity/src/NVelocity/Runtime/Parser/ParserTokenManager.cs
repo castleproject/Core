@@ -230,11 +230,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jjmatchedKind = kind;
 			jjmatchedPos = pos;
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				return pos + 1;
 			}
@@ -243,7 +239,7 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa0_0()
 		{
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 33:
 					jjmatchedKind = 41;
@@ -295,16 +291,12 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa1_0(long active0)
 		{
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_0(0, active0);
 				return 1;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					if ((active0 & 0x1000L) != 0L)
@@ -350,16 +342,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_0(0, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_0(1, active0);
 				return 2;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 108:
 					return jjMoveStringLiteralDfa3_0(active0, 0x4000000L);
@@ -375,16 +363,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_0(1, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_0(2, active0);
 				return 3;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 101:
 					if ((active0 & 0x2000000L) != 0L)
@@ -402,16 +386,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_0(2, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_0(3, active0);
 				return 4;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 101:
 					if ((active0 & 0x4000000L) != 0L)
@@ -454,11 +434,12 @@ namespace NVelocity.Runtime.Parser
 			} while(start++ != end);
 		}
 
-		private void jjCheckNAddStates(int start)
-		{
-			jjCheckNAdd(jjnextStates[start]);
-			jjCheckNAdd(jjnextStates[start + 1]);
-		}
+		//Not used
+		//private void jjCheckNAddStates(int start)
+		//{
+		//  jjCheckNAdd(jjnextStates[start]);
+		//  jjCheckNAdd(jjnextStates[start + 1]);
+		//}
 
 		private static ulong[] jjbitVec0 = {
 		                                   	0xfffffffffffffffeL, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
@@ -479,9 +460,10 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (++jjround == 0x7fffffff)
 					ReInitRounds();
-				if (curChar < 64)
+				char character = input_stream.CurrentCharacter;
+				if (character < 64)
 				{
-					long l = 1L << curChar;
+					long l = 1L << character;
 					do
 					{
 						switch(jjstateSet[--i])
@@ -504,27 +486,27 @@ namespace NVelocity.Runtime.Parser
 										kind = 23;
 									jjCheckNAdd(9);
 								}
-								else if (curChar == 36)
+								else if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 									jjCheckNAddTwoStates(39, 40);
 								}
-								else if (curChar == 45)
+								else if (character == 45)
 									jjCheckNAdd(31);
-								else if (curChar == 39)
+								else if (character == 39)
 									jjCheckNAddStates(0, 2);
-								else if (curChar == 34)
+								else if (character == 34)
 									jjCheckNAddStates(3, 5);
-								else if (curChar == 35)
+								else if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 7;
-								else if (curChar == 41)
+								else if (character == 41)
 								{
 									if (kind > 6)
 										kind = 6;
 									jjCheckNAddStates(6, 8);
 								}
-								if (curChar == 13)
+								if (character == 13)
 									jjstateSet[jjnewStateCnt++] = 28;
 								break;
 							case 1:
@@ -536,15 +518,15 @@ namespace NVelocity.Runtime.Parser
 									kind = 6;
 								break;
 							case 3:
-								if (curChar == 10 && kind > 6)
+								if (character == 10 && kind > 6)
 									kind = 6;
 								break;
 							case 4:
-								if (curChar == 13)
+								if (character == 13)
 									jjstateSet[jjnewStateCnt++] = 3;
 								break;
 							case 5:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 6;
 								break;
 							case 6:
@@ -552,11 +534,11 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 7:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 5;
 								break;
 							case 8:
-								if (curChar == 35)
+								if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 7;
 								break;
 							case 9:
@@ -567,7 +549,7 @@ namespace NVelocity.Runtime.Parser
 								jjCheckNAdd(9);
 								break;
 							case 10:
-								if (curChar == 34)
+								if (character == 34)
 									jjCheckNAddStates(3, 5);
 								break;
 							case 11:
@@ -575,7 +557,7 @@ namespace NVelocity.Runtime.Parser
 									jjCheckNAddStates(3, 5);
 								break;
 							case 12:
-								if (curChar == 34 && kind > 24)
+								if (character == 34 && kind > 24)
 									kind = 24;
 								break;
 							case 14:
@@ -599,15 +581,15 @@ namespace NVelocity.Runtime.Parser
 									jjCheckNAdd(16);
 								break;
 							case 19:
-								if (curChar == 32)
+								if (character == 32)
 									jjAddStates(13, 14);
 								break;
 							case 20:
-								if (curChar == 10)
+								if (character == 10)
 									jjCheckNAddStates(3, 5);
 								break;
 							case 21:
-								if (curChar == 39)
+								if (character == 39)
 									jjCheckNAddStates(0, 2);
 								break;
 							case 22:
@@ -615,15 +597,15 @@ namespace NVelocity.Runtime.Parser
 									jjCheckNAddStates(0, 2);
 								break;
 							case 24:
-								if (curChar == 32)
+								if (character == 32)
 									jjAddStates(15, 16);
 								break;
 							case 25:
-								if (curChar == 10)
+								if (character == 10)
 									jjCheckNAddStates(0, 2);
 								break;
 							case 26:
-								if (curChar == 39 && kind > 24)
+								if (character == 39 && kind > 24)
 									kind = 24;
 								break;
 							case 27:
@@ -631,15 +613,15 @@ namespace NVelocity.Runtime.Parser
 									kind = 27;
 								break;
 							case 28:
-								if (curChar == 10 && kind > 27)
+								if (character == 10 && kind > 27)
 									kind = 27;
 								break;
 							case 29:
-								if (curChar == 13)
+								if (character == 13)
 									jjstateSet[jjnewStateCnt++] = 28;
 								break;
 							case 30:
-								if (curChar == 45)
+								if (character == 45)
 									jjCheckNAdd(31);
 								break;
 							case 31:
@@ -657,19 +639,19 @@ namespace NVelocity.Runtime.Parser
 								jjstateSet[jjnewStateCnt++] = 33;
 								break;
 							case 36:
-								if (curChar == 36 && kind > 10)
+								if (character == 36 && kind > 10)
 									kind = 10;
 								break;
 							case 38:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(39, 40);
 								break;
 							case 40:
-								if (curChar == 33 && kind > 11)
+								if (character == 33 && kind > 11)
 									kind = 11;
 								break;
 							case 41:
-								if (curChar != 36)
+								if (character != 36)
 									break;
 								if (kind > 10)
 									kind = 10;
@@ -680,9 +662,9 @@ namespace NVelocity.Runtime.Parser
 						}
 					} while(i != startsAt);
 				}
-				else if (curChar < 128)
+				else if (character < 128)
 				{
-					long l = 1L << (curChar & 63);
+					long l = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -694,7 +676,7 @@ namespace NVelocity.Runtime.Parser
 										kind = 52;
 									jjCheckNAdd(33);
 								}
-								else if (curChar == 92)
+								else if (character == 92)
 									jjCheckNAddStates(17, 20);
 								break;
 							case 6:
@@ -706,7 +688,7 @@ namespace NVelocity.Runtime.Parser
 									jjCheckNAddStates(3, 5);
 								break;
 							case 13:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(21, 25);
 								break;
 							case 14:
@@ -717,7 +699,7 @@ namespace NVelocity.Runtime.Parser
 								jjAddStates(0, 2);
 								break;
 							case 23:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(15, 16);
 								break;
 							case 32:
@@ -729,19 +711,19 @@ namespace NVelocity.Runtime.Parser
 								jjCheckNAdd(33);
 								break;
 							case 34:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddStates(17, 20);
 								break;
 							case 35:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(35, 36);
 								break;
 							case 37:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(37, 38);
 								break;
 							case 39:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(26, 27);
 								break;
 							default:
@@ -751,14 +733,14 @@ namespace NVelocity.Runtime.Parser
 				}
 				else
 				{
-					int hiByte = (int) (curChar >> 8);
+					int hiByte = character >> 8;
 					int i1 = hiByte >> 6;
 					long l1 = 1L << (hiByte & 63);
-					int i2 = (curChar & 0xff) >> 6;
-					long l2 = 1L << (curChar & 63);
+					int i2 = (character & 0xff) >> 6;
+					long l2 = 1L << (character & 63);
 					do
 					{
-						switch(jjstateSet[--i])
+						switch (jjstateSet[--i])
 						{
 							case 6:
 								if (jjCanMove_0(hiByte, i1, i2, l1, l2) && kind > 13)
@@ -786,11 +768,7 @@ namespace NVelocity.Runtime.Parser
 				++curPos;
 				if ((i = jjnewStateCnt) == (startsAt = 42 - (jjnewStateCnt = startsAt)))
 					return curPos;
-				try
-				{
-					curChar = input_stream.ReadChar();
-				}
-				catch(IOException)
+				if (!input_stream.ReadChar())
 				{
 					return curPos;
 				}
@@ -819,11 +797,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jjmatchedKind = kind;
 			jjmatchedPos = pos;
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				return pos + 1;
 			}
@@ -832,7 +806,7 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa0_6()
 		{
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					jjmatchedKind = 15;
@@ -846,16 +820,12 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa1_6(long active0)
 		{
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_6(0, active0);
 				return 1;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					if ((active0 & 0x1000L) != 0L)
@@ -884,49 +854,50 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (++jjround == 0x7fffffff)
 					ReInitRounds();
-				if (curChar < 64)
+				char character = input_stream.CurrentCharacter;
+				if (character < 64)
 				{
-					long l = 1L << curChar;
+					long l = 1L << character;
 					do
 					{
-						switch(jjstateSet[--i])
+						switch (jjstateSet[--i])
 						{
 							case 3:
-								if (curChar == 36)
+								if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 									jjCheckNAddTwoStates(9, 10);
 								}
-								else if (curChar == 35)
+								else if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 2;
 								break;
 							case 0:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 1;
 								break;
 							case 1:
-								if ((0xfffffff7ffffffffUL & (ulong) l) != 0L && kind > 13)
+								if ((0xfffffff7ffffffffUL & (ulong)l) != 0L && kind > 13)
 									kind = 13;
 								break;
 							case 2:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 0;
 								break;
 							case 6:
-								if (curChar == 36 && kind > 10)
+								if (character == 36 && kind > 10)
 									kind = 10;
 								break;
 							case 8:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(9, 10);
 								break;
 							case 10:
-								if (curChar == 33 && kind > 11)
+								if (character == 33 && kind > 11)
 									kind = 11;
 								break;
 							case 11:
-								if (curChar != 36)
+								if (character != 36)
 									break;
 								if (kind > 10)
 									kind = 10;
@@ -937,15 +908,15 @@ namespace NVelocity.Runtime.Parser
 						}
 					} while(i != startsAt);
 				}
-				else if (curChar < 128)
+				else if (character < 128)
 				{
-					long l = 1L << (curChar & 63);
+					long l = 1L << (character & 63);
 					do
 					{
-						switch(jjstateSet[--i])
+						switch (jjstateSet[--i])
 						{
 							case 3:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddStates(28, 31);
 								break;
 							case 1:
@@ -953,15 +924,15 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 5:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(5, 6);
 								break;
 							case 7:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(7, 8);
 								break;
 							case 9:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(32, 33);
 								break;
 							default:
@@ -971,11 +942,11 @@ namespace NVelocity.Runtime.Parser
 				}
 				else
 				{
-					int hiByte = (int) (curChar >> 8);
+					int hiByte = (character >> 8);
 					int i1 = hiByte >> 6;
 					long l1 = 1L << (hiByte & 63);
-					int i2 = (curChar & 0xff) >> 6;
-					long l2 = 1L << (curChar & 63);
+					int i2 = (character & 0xff) >> 6;
+					long l2 = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -998,11 +969,7 @@ namespace NVelocity.Runtime.Parser
 				++curPos;
 				if ((i = jjnewStateCnt) == (startsAt = 12 - (jjnewStateCnt = startsAt)))
 					return curPos;
-				try
-				{
-					curChar = input_stream.ReadChar();
-				}
-				catch(IOException)
+				if (!input_stream.ReadChar())
 				{
 					return curPos;
 				}
@@ -1091,11 +1058,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jjmatchedKind = kind;
 			jjmatchedPos = pos;
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				return pos + 1;
 			}
@@ -1104,7 +1067,7 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa0_4()
 		{
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					jjmatchedKind = 15;
@@ -1122,16 +1085,12 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa1_4(long active0)
 		{
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_4(0, active0);
 				return 1;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					if ((active0 & 0x1000L) != 0L)
@@ -1159,16 +1118,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_4(0, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_4(1, active0);
 				return 2;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 111:
 					return jjMoveStringLiteralDfa3_4(active0, 0x800000000000L);
@@ -1184,16 +1139,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_4(1, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_4(2, active0);
 				return 3;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 101:
 					return jjMoveStringLiteralDfa4_4(active0, 0x200000000000L);
@@ -1211,16 +1162,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_4(2, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_4(3, active0);
 				return 4;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 105:
 					return jjMoveStringLiteralDfa5_4(active0, 0x200000000000L);
@@ -1234,16 +1181,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_4(3, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_4(4, active0);
 				return 5;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 102:
 					if ((active0 & 0x200000000000L) != 0L)
@@ -1266,9 +1209,10 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (++jjround == 0x7fffffff)
 					ReInitRounds();
-				if (curChar < 64)
+				char character = input_stream.CurrentCharacter;
+				if (character < 64)
 				{
-					long l = 1L << curChar;
+					long l = 1L << character;
 					do
 					{
 						switch(jjstateSet[--i])
@@ -1280,15 +1224,15 @@ namespace NVelocity.Runtime.Parser
 										kind = 49;
 									jjCheckNAdd(5);
 								}
-								else if (curChar == 36)
+								else if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 									jjCheckNAddTwoStates(13, 14);
 								}
-								else if (curChar == 45)
+								else if (character == 45)
 									jjCheckNAdd(5);
-								else if (curChar == 35)
+								else if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 2;
 								break;
 							case 30:
@@ -1305,7 +1249,7 @@ namespace NVelocity.Runtime.Parser
 								}
 								else if ((0x100000200L & l) != 0L)
 									jjCheckNAddStates(34, 36);
-								if (curChar == 13)
+								if (character == 13)
 									jjstateSet[jjnewStateCnt++] = 26;
 								break;
 							case 22:
@@ -1331,7 +1275,7 @@ namespace NVelocity.Runtime.Parser
 								jjCheckNAdd(7);
 								break;
 							case 0:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 1;
 								break;
 							case 1:
@@ -1339,11 +1283,11 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 2:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 0;
 								break;
 							case 4:
-								if (curChar == 45)
+								if (character == 45)
 									jjCheckNAdd(5);
 								break;
 							case 5:
@@ -1354,19 +1298,19 @@ namespace NVelocity.Runtime.Parser
 								jjCheckNAdd(5);
 								break;
 							case 10:
-								if (curChar == 36 && kind > 10)
+								if (character == 36 && kind > 10)
 									kind = 10;
 								break;
 							case 12:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(13, 14);
 								break;
 							case 14:
-								if (curChar == 33 && kind > 11)
+								if (character == 33 && kind > 11)
 									kind = 11;
 								break;
 							case 15:
-								if (curChar != 36)
+								if (character != 36)
 									break;
 								if (kind > 10)
 									kind = 10;
@@ -1381,11 +1325,11 @@ namespace NVelocity.Runtime.Parser
 									kind = 43;
 								break;
 							case 20:
-								if (curChar == 10 && kind > 43)
+								if (character == 10 && kind > 43)
 									kind = 43;
 								break;
 							case 21:
-								if (curChar == 13)
+								if (character == 13)
 									jjstateSet[jjnewStateCnt++] = 20;
 								break;
 							case 24:
@@ -1397,11 +1341,11 @@ namespace NVelocity.Runtime.Parser
 									kind = 46;
 								break;
 							case 26:
-								if (curChar == 10 && kind > 46)
+								if (character == 10 && kind > 46)
 									kind = 46;
 								break;
 							case 27:
-								if (curChar == 13)
+								if (character == 13)
 									jjstateSet[jjnewStateCnt++] = 26;
 								break;
 							default:
@@ -1409,9 +1353,9 @@ namespace NVelocity.Runtime.Parser
 						}
 					} while(i != startsAt);
 				}
-				else if (curChar < 128)
+				else if (character < 128)
 				{
-					long l = 1L << (curChar & 63);
+					long l = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -1423,9 +1367,9 @@ namespace NVelocity.Runtime.Parser
 										kind = 52;
 									jjCheckNAdd(7);
 								}
-								else if (curChar == 92)
+								else if (character == 92)
 									jjCheckNAddStates(40, 43);
-								if (curChar == 101)
+								if (character == 101)
 									jjAddStates(44, 45);
 								break;
 							case 30:
@@ -1443,9 +1387,9 @@ namespace NVelocity.Runtime.Parser
 										kind = 52;
 									jjCheckNAdd(7);
 								}
-								if (curChar == 108)
+								if (character == 108)
 									jjstateSet[jjnewStateCnt++] = 28;
-								else if (curChar == 110)
+								else if (character == 110)
 									jjstateSet[jjnewStateCnt++] = 17;
 								break;
 							case 28:
@@ -1455,7 +1399,7 @@ namespace NVelocity.Runtime.Parser
 										kind = 52;
 									jjCheckNAdd(7);
 								}
-								if (curChar == 115)
+								if (character == 115)
 									jjstateSet[jjnewStateCnt++] = 23;
 								break;
 							case 23:
@@ -1465,7 +1409,7 @@ namespace NVelocity.Runtime.Parser
 										kind = 52;
 									jjCheckNAdd(7);
 								}
-								if (curChar == 101)
+								if (character == 101)
 								{
 									if (kind > 46)
 										kind = 46;
@@ -1484,48 +1428,48 @@ namespace NVelocity.Runtime.Parser
 								jjCheckNAdd(7);
 								break;
 							case 8:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddStates(40, 43);
 								break;
 							case 9:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(9, 10);
 								break;
 							case 11:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(11, 12);
 								break;
 							case 13:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(46, 47);
 								break;
 							case 16:
-								if (curChar == 101)
+								if (character == 101)
 									jjAddStates(44, 45);
 								break;
 							case 17:
-								if (curChar != 100)
+								if (character != 100)
 									break;
 								if (kind > 43)
 									kind = 43;
 								jjAddStates(37, 39);
 								break;
 							case 29:
-								if (curChar == 108)
+								if (character == 108)
 									jjstateSet[jjnewStateCnt++] = 28;
 								break;
 							default:
 								break;
 						}
-					} while(i != startsAt);
+					} while (i != startsAt);
 				}
 				else
 				{
-					int hiByte = (int) (curChar >> 8);
+					int hiByte = (character >> 8);
 					int i1 = hiByte >> 6;
 					long l1 = 1L << (hiByte & 63);
-					int i2 = (curChar & 0xff) >> 6;
-					long l2 = 1L << (curChar & 63);
+					int i2 = (character & 0xff) >> 6;
+					long l2 = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -1548,11 +1492,7 @@ namespace NVelocity.Runtime.Parser
 				++curPos;
 				if ((i = jjnewStateCnt) == (startsAt = 30 - (jjnewStateCnt = startsAt)))
 					return curPos;
-				try
-				{
-					curChar = input_stream.ReadChar();
-				}
-				catch(IOException)
+				if (!input_stream.ReadChar())
 				{
 					return curPos;
 				}
@@ -1583,11 +1523,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jjmatchedKind = kind;
 			jjmatchedPos = pos;
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				return pos + 1;
 			}
@@ -1596,7 +1532,7 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa0_3()
 		{
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					jjmatchedKind = 15;
@@ -1611,16 +1547,12 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa1_3(long active0)
 		{
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_3(0, active0);
 				return 1;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					if ((active0 & 0x1000L) != 0L)
@@ -1651,35 +1583,36 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (++jjround == 0x7fffffff)
 					ReInitRounds();
-				if (curChar < 64)
+				char character = input_stream.CurrentCharacter;
+				if (character < 64)
 				{
-					long l = 1L << curChar;
+					long l = 1L << character;
 					do
 					{
 						switch(jjstateSet[--i])
 						{
 							case 23:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(20, 21);
-								if (curChar == 36)
+								if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 								}
 								break;
 							case 7:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(20, 21);
-								else if (curChar == 35)
+								else if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 9;
-								if (curChar == 36)
+								if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 								}
 								break;
 							case 14:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 12;
 								break;
 							case 11:
@@ -1689,13 +1622,13 @@ namespace NVelocity.Runtime.Parser
 										kind = 18;
 									jjCheckNAdd(5);
 								}
-								else if (curChar == 36)
+								else if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 									jjCheckNAddTwoStates(20, 21);
 								}
-								else if (curChar == 35)
+								else if (character == 35)
 									jjCheckNAddTwoStates(3, 14);
 								if ((0x100000200L & l) != 0L)
 									jjCheckNAddTwoStates(0, 4);
@@ -1705,7 +1638,7 @@ namespace NVelocity.Runtime.Parser
 									jjCheckNAddTwoStates(0, 4);
 								break;
 							case 4:
-								if (curChar == 35)
+								if (character == 35)
 									jjCheckNAdd(3);
 								break;
 							case 5:
@@ -1716,7 +1649,7 @@ namespace NVelocity.Runtime.Parser
 								jjCheckNAdd(5);
 								break;
 							case 8:
-								if (curChar == 35)
+								if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 9;
 								break;
 							case 10:
@@ -1727,7 +1660,7 @@ namespace NVelocity.Runtime.Parser
 								jjstateSet[jjnewStateCnt++] = 10;
 								break;
 							case 12:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 13;
 								break;
 							case 13:
@@ -1735,19 +1668,19 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 17:
-								if (curChar == 36 && kind > 10)
+								if (character == 36 && kind > 10)
 									kind = 10;
 								break;
 							case 19:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(20, 21);
 								break;
 							case 21:
-								if (curChar == 33 && kind > 11)
+								if (character == 33 && kind > 11)
 									kind = 11;
 								break;
 							case 22:
-								if (curChar != 36)
+								if (character != 36)
 									break;
 								if (kind > 10)
 									kind = 10;
@@ -1758,32 +1691,32 @@ namespace NVelocity.Runtime.Parser
 						}
 					} while(i != startsAt);
 				}
-				else if (curChar < 128)
+				else if (character < 128)
 				{
-					long l = 1L << (curChar & 63);
+					long l = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
 						{
 							case 23:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(48, 49);
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(18, 19);
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(16, 17);
 								break;
 							case 7:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(18, 19);
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(16, 17);
-								if (curChar == 92)
+								if (character == 92)
 									jjstateSet[jjnewStateCnt++] = 6;
 								break;
 							case 14:
 							case 3:
-								if (curChar == 115)
+								if (character == 115)
 									jjstateSet[jjnewStateCnt++] = 2;
 								break;
 							case 11:
@@ -1793,17 +1726,17 @@ namespace NVelocity.Runtime.Parser
 										kind = 18;
 									jjCheckNAdd(5);
 								}
-								else if (curChar == 92)
+								else if (character == 92)
 									jjCheckNAddStates(50, 53);
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(48, 49);
 								break;
 							case 1:
-								if (curChar == 116 && kind > 9)
+								if (character == 116 && kind > 9)
 									kind = 9;
 								break;
 							case 2:
-								if (curChar == 101)
+								if (character == 101)
 									jjstateSet[jjnewStateCnt++] = 1;
 								break;
 							case 5:
@@ -1814,7 +1747,7 @@ namespace NVelocity.Runtime.Parser
 								jjCheckNAdd(5);
 								break;
 							case 6:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(48, 49);
 								break;
 							case 9:
@@ -1830,33 +1763,33 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 15:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddStates(50, 53);
 								break;
 							case 16:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(16, 17);
 								break;
 							case 18:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(18, 19);
 								break;
 							case 20:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(54, 55);
 								break;
 							default:
 								break;
 						}
-					} while(i != startsAt);
+					} while (i != startsAt);
 				}
 				else
 				{
-					int hiByte = (int) (curChar >> 8);
+					int hiByte = (character >> 8);
 					int i1 = hiByte >> 6;
 					long l1 = 1L << (hiByte & 63);
-					int i2 = (curChar & 0xff) >> 6;
-					long l2 = 1L << (curChar & 63);
+					int i2 = (character & 0xff) >> 6;
+					long l2 = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -1888,11 +1821,7 @@ namespace NVelocity.Runtime.Parser
 				if ((i = jjnewStateCnt) == (startsAt = 23 - (jjnewStateCnt = startsAt)))
 					return curPos;
 
-				try
-				{
-					curChar = input_stream.ReadChar();
-				}
-				catch(IOException)
+				if (!input_stream.ReadChar())
 				{
 					return curPos;
 					// TODO:  added because this is what will happen when you read past the end of the buffer
@@ -1924,11 +1853,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jjmatchedKind = kind;
 			jjmatchedPos = pos;
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				return pos + 1;
 			}
@@ -1937,7 +1862,7 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa0_7()
 		{
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					jjmatchedKind = 15;
@@ -1951,16 +1876,12 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa1_7(long active0)
 		{
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_7(0, active0);
 				return 1;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					if ((active0 & 0x1000L) != 0L)
@@ -1989,25 +1910,26 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (++jjround == 0x7fffffff)
 					ReInitRounds();
-				if (curChar < 64)
+				char character = input_stream.CurrentCharacter;
+				if (character < 64)
 				{
-					long l = 1L << curChar;
+					long l = 1L << character;
 					do
 					{
-						switch(jjstateSet[--i])
+						switch (jjstateSet[--i])
 						{
 							case 3:
-								if (curChar == 36)
+								if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 									jjCheckNAddTwoStates(9, 10);
 								}
-								else if (curChar == 35)
+								else if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 2;
 								break;
 							case 0:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 1;
 								break;
 							case 1:
@@ -2015,23 +1937,23 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 2:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 0;
 								break;
 							case 6:
-								if (curChar == 36 && kind > 10)
+								if (character == 36 && kind > 10)
 									kind = 10;
 								break;
 							case 8:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(9, 10);
 								break;
 							case 10:
-								if (curChar == 33 && kind > 11)
+								if (character == 33 && kind > 11)
 									kind = 11;
 								break;
 							case 11:
-								if (curChar != 36)
+								if (character != 36)
 									break;
 								if (kind > 10)
 									kind = 10;
@@ -2042,15 +1964,15 @@ namespace NVelocity.Runtime.Parser
 						}
 					} while(i != startsAt);
 				}
-				else if (curChar < 128)
+				else if (character < 128)
 				{
-					long l = 1L << (curChar & 63);
+					long l = 1L << (character & 63);
 					do
 					{
-						switch(jjstateSet[--i])
+						switch (jjstateSet[--i])
 						{
 							case 3:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddStates(28, 31);
 								break;
 							case 1:
@@ -2058,15 +1980,15 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 5:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(5, 6);
 								break;
 							case 7:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(7, 8);
 								break;
 							case 9:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(32, 33);
 								break;
 							default:
@@ -2076,11 +1998,11 @@ namespace NVelocity.Runtime.Parser
 				}
 				else
 				{
-					int hiByte = (int) (curChar >> 8);
+					int hiByte = (character >> 8);
 					int i1 = hiByte >> 6;
 					long l1 = 1L << (hiByte & 63);
-					int i2 = (curChar & 0xff) >> 6;
-					long l2 = 1L << (curChar & 63);
+					int i2 = (character & 0xff) >> 6;
+					long l2 = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -2103,11 +2025,7 @@ namespace NVelocity.Runtime.Parser
 				++curPos;
 				if ((i = jjnewStateCnt) == (startsAt = 12 - (jjnewStateCnt = startsAt)))
 					return curPos;
-				try
-				{
-					curChar = input_stream.ReadChar();
-				}
-				catch(IOException)
+				if (!input_stream.ReadChar())
 				{
 					return curPos;
 				}
@@ -2136,11 +2054,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jjmatchedKind = kind;
 			jjmatchedPos = pos;
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				return pos + 1;
 			}
@@ -2149,9 +2063,9 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa0_8()
 		{
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
-				case (char) 35:
+				case (char)35:
 					jjmatchedKind = 15;
 					return jjMoveStringLiteralDfa1_8(0x5000L);
 				default:
@@ -2161,16 +2075,12 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa1_8(long active0)
 		{
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_8(0, active0);
 				return 1;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					if ((active0 & 0x1000L) != 0L)
@@ -2197,9 +2107,10 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (++jjround == 0x7fffffff)
 					ReInitRounds();
-				if (curChar < 64)
+				char character = input_stream.CurrentCharacter;
+				if (character < 64)
 				{
-					long l = 1L << curChar;
+					long l = 1L << character;
 					do
 					{
 						switch(jjstateSet[--i])
@@ -2210,19 +2121,19 @@ namespace NVelocity.Runtime.Parser
 									if (kind > 19)
 										kind = 19;
 								}
-								else if (curChar == 36)
+								else if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 									jjCheckNAddTwoStates(12, 13);
 								}
-								else if (curChar == 35)
+								else if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 2;
-								if (curChar == 13)
+								if (character == 13)
 									jjstateSet[jjnewStateCnt++] = 5;
 								break;
 							case 0:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 1;
 								break;
 							case 1:
@@ -2230,7 +2141,7 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 2:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 0;
 								break;
 							case 4:
@@ -2238,27 +2149,27 @@ namespace NVelocity.Runtime.Parser
 									kind = 19;
 								break;
 							case 5:
-								if (curChar == 10 && kind > 19)
+								if (character == 10 && kind > 19)
 									kind = 19;
 								break;
 							case 6:
-								if (curChar == 13)
+								if (character == 13)
 									jjstateSet[jjnewStateCnt++] = 5;
 								break;
 							case 9:
-								if (curChar == 36 && kind > 10)
+								if (character == 36 && kind > 10)
 									kind = 10;
 								break;
 							case 11:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(12, 13);
 								break;
 							case 13:
-								if (curChar == 33 && kind > 11)
+								if (character == 33 && kind > 11)
 									kind = 11;
 								break;
 							case 14:
-								if (curChar != 36)
+								if (character != 36)
 									break;
 								if (kind > 10)
 									kind = 10;
@@ -2269,15 +2180,15 @@ namespace NVelocity.Runtime.Parser
 						}
 					} while(i != startsAt);
 				}
-				else if (curChar < 128)
+				else if (character < 128)
 				{
-					long l = 1L << (curChar & 63);
+					long l = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
 						{
 							case 3:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddStates(56, 59);
 								break;
 							case 1:
@@ -2285,15 +2196,15 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 8:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(8, 9);
 								break;
 							case 10:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(10, 11);
 								break;
 							case 12:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(60, 61);
 								break;
 							default:
@@ -2303,11 +2214,11 @@ namespace NVelocity.Runtime.Parser
 				}
 				else
 				{
-					int hiByte = (int) (curChar >> 8);
+					int hiByte = (character >> 8);
 					int i1 = hiByte >> 6;
 					long l1 = 1L << (hiByte & 63);
-					int i2 = (curChar & 0xff) >> 6;
-					long l2 = 1L << (curChar & 63);
+					int i2 = (character & 0xff) >> 6;
+					long l2 = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -2330,11 +2241,7 @@ namespace NVelocity.Runtime.Parser
 				++curPos;
 				if ((i = jjnewStateCnt) == (startsAt = 15 - (jjnewStateCnt = startsAt)))
 					return curPos;
-				try
-				{
-					curChar = input_stream.ReadChar();
-				}
-				catch(IOException)
+				if (!input_stream.ReadChar())
 				{
 					return curPos;
 				}
@@ -2396,11 +2303,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jjmatchedKind = kind;
 			jjmatchedPos = pos;
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				return pos + 1;
 			}
@@ -2409,7 +2312,7 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa0_5()
 		{
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					jjmatchedKind = 15;
@@ -2429,16 +2332,12 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa1_5(long active0)
 		{
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_5(0, active0);
 				return 1;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					if ((active0 & 0x1000L) != 0L)
@@ -2462,16 +2361,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_5(0, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_5(1, active0);
 				return 2;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 108:
 					return jjMoveStringLiteralDfa3_5(active0, 0x4000000L);
@@ -2487,16 +2382,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_5(1, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_5(2, active0);
 				return 3;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 101:
 					if ((active0 & 0x2000000L) != 0L)
@@ -2514,16 +2405,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_5(2, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_5(3, active0);
 				return 4;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 101:
 					if ((active0 & 0x4000000L) != 0L)
@@ -2546,27 +2433,28 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (++jjround == 0x7fffffff)
 					ReInitRounds();
-				if (curChar < 64)
+				char character = input_stream.CurrentCharacter;
+				if (character < 64)
 				{
-					long l = 1L << curChar;
+					long l = 1L << character;
 					do
 					{
-						switch(jjstateSet[--i])
+						switch (jjstateSet[--i])
 						{
 							case 3:
-								if (curChar == 36)
+								if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 									jjCheckNAddTwoStates(13, 14);
 								}
-								else if (curChar == 46)
+								else if (character == 46)
 									jjstateSet[jjnewStateCnt++] = 7;
-								else if (curChar == 35)
+								else if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 2;
 								break;
 							case 0:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 1;
 								break;
 							case 1:
@@ -2574,7 +2462,7 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 2:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 0;
 								break;
 							case 5:
@@ -2585,23 +2473,23 @@ namespace NVelocity.Runtime.Parser
 								jjstateSet[jjnewStateCnt++] = 5;
 								break;
 							case 6:
-								if (curChar == 46)
+								if (character == 46)
 									jjstateSet[jjnewStateCnt++] = 7;
 								break;
 							case 10:
-								if (curChar == 36 && kind > 10)
+								if (character == 36 && kind > 10)
 									kind = 10;
 								break;
 							case 12:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(13, 14);
 								break;
 							case 14:
-								if (curChar == 33 && kind > 11)
+								if (character == 33 && kind > 11)
 									kind = 11;
 								break;
 							case 15:
-								if (curChar != 36)
+								if (character != 36)
 									break;
 								if (kind > 10)
 									kind = 10;
@@ -2612,9 +2500,9 @@ namespace NVelocity.Runtime.Parser
 						}
 					} while(i != startsAt);
 				}
-				else if (curChar < 128)
+				else if (character < 128)
 				{
-					long l = 1L << (curChar & 63);
+					long l = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -2626,7 +2514,7 @@ namespace NVelocity.Runtime.Parser
 										kind = 56;
 									jjCheckNAdd(5);
 								}
-								else if (curChar == 92)
+								else if (character == 92)
 									jjCheckNAddStates(40, 43);
 								break;
 							case 1:
@@ -2646,19 +2534,19 @@ namespace NVelocity.Runtime.Parser
 									kind = 57;
 								break;
 							case 8:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddStates(40, 43);
 								break;
 							case 9:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(9, 10);
 								break;
 							case 11:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(11, 12);
 								break;
 							case 13:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(46, 47);
 								break;
 							default:
@@ -2668,11 +2556,11 @@ namespace NVelocity.Runtime.Parser
 				}
 				else
 				{
-					int hiByte = (int) (curChar >> 8);
+					int hiByte = (character >> 8);
 					int i1 = hiByte >> 6;
 					long l1 = 1L << (hiByte & 63);
-					int i2 = (curChar & 0xff) >> 6;
-					long l2 = 1L << (curChar & 63);
+					int i2 = (character & 0xff) >> 6;
+					long l2 = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -2695,11 +2583,7 @@ namespace NVelocity.Runtime.Parser
 				++curPos;
 				if ((i = jjnewStateCnt) == (startsAt = 16 - (jjnewStateCnt = startsAt)))
 					return curPos;
-				try
-				{
-					curChar = input_stream.ReadChar();
-				}
-				catch(IOException)
+				if (!input_stream.ReadChar())
 				{
 					return curPos;
 				}
@@ -2763,11 +2647,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jjmatchedKind = kind;
 			jjmatchedPos = pos;
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				return pos + 1;
 			}
@@ -2776,7 +2656,7 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa0_1()
 		{
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					jjmatchedKind = 15;
@@ -2806,16 +2686,12 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa1_1(long active0)
 		{
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_1(0, active0);
 				return 1;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					if ((active0 & 0x1000L) != 0L)
@@ -2843,16 +2719,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_1(0, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_1(1, active0);
 				return 2;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 108:
 					return jjMoveStringLiteralDfa3_1(active0, 0x4000000L);
@@ -2868,16 +2740,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_1(1, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_1(2, active0);
 				return 3;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 101:
 					if ((active0 & 0x2000000L) != 0L)
@@ -2895,16 +2763,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_1(2, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_1(3, active0);
 				return 4;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 101:
 					if ((active0 & 0x4000000L) != 0L)
@@ -2927,9 +2791,10 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (++jjround == 0x7fffffff)
 					ReInitRounds();
-				if (curChar < 64)
+				char character = input_stream.CurrentCharacter;
+				if (character < 64)
 				{
-					long l = 1L << curChar;
+					long l = 1L << character;
 					do
 					{
 						switch(jjstateSet[--i])
@@ -2947,25 +2812,25 @@ namespace NVelocity.Runtime.Parser
 										kind = 23;
 									jjCheckNAdd(4);
 								}
-								else if (curChar == 36)
+								else if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 									jjCheckNAddTwoStates(33, 34);
 								}
-								else if (curChar == 46)
+								else if (character == 46)
 									jjstateSet[jjnewStateCnt++] = 27;
-								else if (curChar == 45)
+								else if (character == 45)
 									jjCheckNAdd(23);
-								else if (curChar == 39)
+								else if (character == 39)
 									jjCheckNAddStates(62, 64);
-								else if (curChar == 34)
+								else if (character == 34)
 									jjCheckNAddStates(65, 67);
-								else if (curChar == 35)
+								else if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 2;
 								break;
 							case 0:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 1;
 								break;
 							case 1:
@@ -2973,7 +2838,7 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 2:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 0;
 								break;
 							case 4:
@@ -2984,7 +2849,7 @@ namespace NVelocity.Runtime.Parser
 								jjCheckNAdd(4);
 								break;
 							case 5:
-								if (curChar == 34)
+								if (character == 34)
 									jjCheckNAddStates(65, 67);
 								break;
 							case 6:
@@ -2992,7 +2857,7 @@ namespace NVelocity.Runtime.Parser
 									jjCheckNAddStates(65, 67);
 								break;
 							case 7:
-								if (curChar == 34 && kind > 24)
+								if (character == 34 && kind > 24)
 									kind = 24;
 								break;
 							case 9:
@@ -3016,15 +2881,15 @@ namespace NVelocity.Runtime.Parser
 									jjCheckNAdd(11);
 								break;
 							case 14:
-								if (curChar == 32)
+								if (character == 32)
 									jjAddStates(72, 73);
 								break;
 							case 15:
-								if (curChar == 10)
+								if (character == 10)
 									jjCheckNAddStates(65, 67);
 								break;
 							case 16:
-								if (curChar == 39)
+								if (character == 39)
 									jjCheckNAddStates(62, 64);
 								break;
 							case 17:
@@ -3032,19 +2897,19 @@ namespace NVelocity.Runtime.Parser
 									jjCheckNAddStates(62, 64);
 								break;
 							case 19:
-								if (curChar == 32)
+								if (character == 32)
 									jjAddStates(13, 14);
 								break;
 							case 20:
-								if (curChar == 10)
+								if (character == 10)
 									jjCheckNAddStates(62, 64);
 								break;
 							case 21:
-								if (curChar == 39 && kind > 24)
+								if (character == 39 && kind > 24)
 									kind = 24;
 								break;
 							case 22:
-								if (curChar == 45)
+								if (character == 45)
 									jjCheckNAdd(23);
 								break;
 							case 23:
@@ -3062,23 +2927,23 @@ namespace NVelocity.Runtime.Parser
 								jjstateSet[jjnewStateCnt++] = 25;
 								break;
 							case 26:
-								if (curChar == 46)
+								if (character == 46)
 									jjstateSet[jjnewStateCnt++] = 27;
 								break;
 							case 30:
-								if (curChar == 36 && kind > 10)
+								if (character == 36 && kind > 10)
 									kind = 10;
 								break;
 							case 32:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(33, 34);
 								break;
 							case 34:
-								if (curChar == 33 && kind > 11)
+								if (character == 33 && kind > 11)
 									kind = 11;
 								break;
 							case 35:
-								if (curChar != 36)
+								if (character != 36)
 									break;
 								if (kind > 10)
 									kind = 10;
@@ -3089,9 +2954,9 @@ namespace NVelocity.Runtime.Parser
 						}
 					} while(i != startsAt);
 				}
-				else if (curChar < 128)
+				else if (character < 128)
 				{
-					long l = 1L << (curChar & 63);
+					long l = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -3103,7 +2968,7 @@ namespace NVelocity.Runtime.Parser
 										kind = 56;
 									jjCheckNAdd(25);
 								}
-								else if (curChar == 92)
+								else if (character == 92)
 									jjCheckNAddStates(74, 77);
 								break;
 							case 1:
@@ -3115,7 +2980,7 @@ namespace NVelocity.Runtime.Parser
 									jjCheckNAddStates(65, 67);
 								break;
 							case 8:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(78, 82);
 								break;
 							case 9:
@@ -3126,7 +2991,7 @@ namespace NVelocity.Runtime.Parser
 								jjAddStates(62, 64);
 								break;
 							case 18:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(13, 14);
 								break;
 							case 24:
@@ -3142,19 +3007,19 @@ namespace NVelocity.Runtime.Parser
 									kind = 57;
 								break;
 							case 28:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddStates(74, 77);
 								break;
 							case 29:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(29, 30);
 								break;
 							case 31:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(31, 32);
 								break;
 							case 33:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(83, 84);
 								break;
 							default:
@@ -3164,11 +3029,11 @@ namespace NVelocity.Runtime.Parser
 				}
 				else
 				{
-					int hiByte = (int) (curChar >> 8);
+					int hiByte = (character >> 8);
 					int i1 = hiByte >> 6;
 					long l1 = 1L << (hiByte & 63);
-					int i2 = (curChar & 0xff) >> 6;
-					long l2 = 1L << (curChar & 63);
+					int i2 = (character & 0xff) >> 6;
+					long l2 = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -3199,11 +3064,7 @@ namespace NVelocity.Runtime.Parser
 				++curPos;
 				if ((i = jjnewStateCnt) == (startsAt = 36 - (jjnewStateCnt = startsAt)))
 					return curPos;
-				try
-				{
-					curChar = input_stream.ReadChar();
-				}
-				catch(IOException)
+				if (!input_stream.ReadChar())
 				{
 					return curPos;
 				}
@@ -3265,11 +3126,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jjmatchedKind = kind;
 			jjmatchedPos = pos;
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				return pos + 1;
 			}
@@ -3278,7 +3135,7 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa0_2()
 		{
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					jjmatchedKind = 15;
@@ -3300,16 +3157,12 @@ namespace NVelocity.Runtime.Parser
 
 		private int jjMoveStringLiteralDfa1_2(long active0)
 		{
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_2(0, active0);
 				return 1;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 35:
 					if ((active0 & 0x1000L) != 0L)
@@ -3333,16 +3186,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_2(0, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_2(1, active0);
 				return 2;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 108:
 					return jjMoveStringLiteralDfa3_2(active0, 0x4000000L);
@@ -3358,16 +3207,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_2(1, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_2(2, active0);
 				return 3;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 101:
 					if ((active0 & 0x2000000L) != 0L)
@@ -3385,16 +3230,12 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (((active0 &= old0)) == 0L)
 				return jjStartNfa_2(2, old0);
-			try
-			{
-				curChar = input_stream.ReadChar();
-			}
-			catch(IOException)
+			if (!input_stream.ReadChar())
 			{
 				jjStopStringLiteralDfa_2(3, active0);
 				return 4;
 			}
-			switch(curChar)
+			switch (input_stream.CurrentCharacter)
 			{
 				case (char) 101:
 					if ((active0 & 0x4000000L) != 0L)
@@ -3417,27 +3258,28 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (++jjround == 0x7fffffff)
 					ReInitRounds();
-				if (curChar < 64)
+				char character = input_stream.CurrentCharacter;
+				if (character < 64)
 				{
-					long l = 1L << curChar;
+					long l = 1L << character;
 					do
 					{
 						switch(jjstateSet[--i])
 						{
 							case 3:
-								if (curChar == 36)
+								if (character == 36)
 								{
 									if (kind > 10)
 										kind = 10;
 									jjCheckNAddTwoStates(13, 14);
 								}
-								else if (curChar == 46)
+								else if (character == 46)
 									jjstateSet[jjnewStateCnt++] = 7;
-								else if (curChar == 35)
+								else if (character == 35)
 									jjstateSet[jjnewStateCnt++] = 2;
 								break;
 							case 0:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 1;
 								break;
 							case 1:
@@ -3445,7 +3287,7 @@ namespace NVelocity.Runtime.Parser
 									kind = 13;
 								break;
 							case 2:
-								if (curChar == 42)
+								if (character == 42)
 									jjstateSet[jjnewStateCnt++] = 0;
 								break;
 							case 5:
@@ -3456,23 +3298,23 @@ namespace NVelocity.Runtime.Parser
 								jjstateSet[jjnewStateCnt++] = 5;
 								break;
 							case 6:
-								if (curChar == 46)
+								if (character == 46)
 									jjstateSet[jjnewStateCnt++] = 7;
 								break;
 							case 10:
-								if (curChar == 36 && kind > 10)
+								if (character == 36 && kind > 10)
 									kind = 10;
 								break;
 							case 12:
-								if (curChar == 36)
+								if (character == 36)
 									jjCheckNAddTwoStates(13, 14);
 								break;
 							case 14:
-								if (curChar == 33 && kind > 11)
+								if (character == 33 && kind > 11)
 									kind = 11;
 								break;
 							case 15:
-								if (curChar != 36)
+								if (character != 36)
 									break;
 								if (kind > 10)
 									kind = 10;
@@ -3483,9 +3325,9 @@ namespace NVelocity.Runtime.Parser
 						}
 					} while(i != startsAt);
 				}
-				else if (curChar < 128)
+				else if (character < 128)
 				{
-					long l = 1L << (curChar & 63);
+					long l = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -3497,7 +3339,7 @@ namespace NVelocity.Runtime.Parser
 										kind = 56;
 									jjCheckNAdd(5);
 								}
-								else if (curChar == 92)
+								else if (character == 92)
 									jjCheckNAddStates(40, 43);
 								break;
 							case 1:
@@ -3517,19 +3359,19 @@ namespace NVelocity.Runtime.Parser
 									kind = 57;
 								break;
 							case 8:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddStates(40, 43);
 								break;
 							case 9:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(9, 10);
 								break;
 							case 11:
-								if (curChar == 92)
+								if (character == 92)
 									jjCheckNAddTwoStates(11, 12);
 								break;
 							case 13:
-								if (curChar == 92)
+								if (character == 92)
 									jjAddStates(46, 47);
 								break;
 							default:
@@ -3539,11 +3381,11 @@ namespace NVelocity.Runtime.Parser
 				}
 				else
 				{
-					int hiByte = (int) (curChar >> 8);
+					int hiByte = character >> 8;
 					int i1 = hiByte >> 6;
 					long l1 = 1L << (hiByte & 63);
-					int i2 = (curChar & 0xff) >> 6;
-					long l2 = 1L << (curChar & 63);
+					int i2 = (character & 0xff) >> 6;
+					long l2 = 1L << (character & 63);
 					do
 					{
 						switch(jjstateSet[--i])
@@ -3566,11 +3408,7 @@ namespace NVelocity.Runtime.Parser
 				++curPos;
 				if ((i = jjnewStateCnt) == (startsAt = 16 - (jjnewStateCnt = startsAt)))
 					return curPos;
-				try
-				{
-					curChar = input_stream.ReadChar();
-				}
-				catch(IOException)
+				if (!input_stream.ReadChar())
 				{
 					return curPos;
 				}
@@ -3653,7 +3491,6 @@ namespace NVelocity.Runtime.Parser
 		private StringBuilder image;
 		private int jjimageLen;
 		private int lengthOfMatch;
-		protected char curChar;
 
 		public ParserTokenManager(ICharStream stream)
 		{
@@ -3724,13 +3561,9 @@ namespace NVelocity.Runtime.Parser
 				Token matchedToken;
 				int curPos = 0;
 
-				for(;;)
+				for (; ; )
 				{
-					try
-					{
-						curChar = input_stream.BeginToken();
-					}
-					catch(IOException)
+					if (!input_stream.BeginToken())
 					{
 						jjmatchedKind = 0;
 						matchedToken = jjFillToken();
@@ -3856,29 +3689,26 @@ namespace NVelocity.Runtime.Parser
 								curLexState = jjnewLexState[jjmatchedKind];
 							curPos = 0;
 							jjmatchedKind = 0x7fffffff;
-							try
+
+							if (input_stream.ReadChar())
 							{
-								curChar = input_stream.ReadChar();
 								continue;
-							}
-							catch(IOException)
-							{
 							}
 						}
 						int error_line = input_stream.EndLine;
 						int error_column = input_stream.EndColumn;
 						String error_after = null;
 						bool EOFSeen = false;
-						try
+						if (input_stream.ReadChar())
 						{
-							input_stream.ReadChar();
 							input_stream.Backup(1);
 						}
-						catch(IOException)
+						else
 						{
 							EOFSeen = true;
 							error_after = curPos <= 1 ? "" : input_stream.GetImage();
-							if (curChar == '\n' || curChar == '\r')
+							char character = input_stream.CurrentCharacter;
+							if (character == '\n' || character == '\r')
 							{
 								error_line++;
 								error_column = 0;
@@ -3891,7 +3721,7 @@ namespace NVelocity.Runtime.Parser
 							input_stream.Backup(1);
 							error_after = curPos <= 1 ? "" : input_stream.GetImage();
 						}
-						throw new TokenMgrError(EOFSeen, curLexState, error_line, error_column, error_after, curChar,
+						throw new TokenMgrError(EOFSeen, curLexState, error_line, error_column, error_after, input_stream.CurrentCharacter,
 						                        TokenMgrError.LEXICAL_ERROR);
 					}
 					EOFLoop_GOTO :

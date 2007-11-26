@@ -18,11 +18,20 @@ namespace NVelocity.Runtime.Parser
 	/// </summary>
 	public interface ICharStream
 	{
+
+		/// <summary>
+		/// The currenct character.
+		/// </summary>
+		char CurrentCharacter
+		{
+			get;
+		}
+
 		/// <summary> Returns the next character from the selected input.  The method
 		/// of selecting the input is the responsibility of the class
 		/// implementing this interface.  Can throw any java.io.IOException.
 		/// </summary>
-		char ReadChar();
+		bool ReadChar();
 
 		/// <summary> Backs up the input stream by amount steps. Lexer calls this method if it
 		/// had already read some characters, but could not use them to match a
@@ -35,7 +44,7 @@ namespace NVelocity.Runtime.Parser
 		/// All characters must remain in the buffer between two successive calls
 		/// to this method to implement backup correctly.
 		/// </summary>
-		char BeginToken();
+		bool BeginToken();
 
 		/// <summary> Returns a string made up of characters from the marked token beginning
 		/// to the current buffer position. Implementations have the choice of returning

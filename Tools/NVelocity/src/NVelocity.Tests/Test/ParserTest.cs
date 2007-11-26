@@ -21,11 +21,11 @@ namespace NVelocity.Test
 	using System.IO;
 	using System.Text;
 	using NUnit.Framework;
-	using NVelocity.App;
-	using NVelocity.Exception;
-	using NVelocity.Runtime;
-	using NVelocity.Runtime.Parser;
-	using NVelocity.Runtime.Parser.Node;
+	using App;
+	using Exception;
+	using Runtime;
+	using Runtime.Parser;
+	using Runtime.Parser.Node;
 
 	/// <summary>
 	/// Test Velocity Introspector
@@ -33,26 +33,40 @@ namespace NVelocity.Test
 	[TestFixture]
 	public class ParserTest
 	{
+    //[Test]
+    //public void Test_VelocityCharStream()
+    //{
+    //  String s1 = "this is a test";
+    //  VelocityCharStream vcs = new VelocityCharStream(new StringReader(s1), 1, 1);
+
+    //  String s2 = String.Empty;
+    //  try
+    //  {
+    //    Char c = vcs.ReadChar();
+    //    while (true)
+    //    {
+    //      s2 += c;
+    //      c = vcs.ReadChar();
+    //    }
+    //  }
+    //  catch (IOException)
+    //  {
+    //    // this is expected to happen when the stream has been read
+    //  }
+    //  Assert.IsTrue(s1.Equals(s2), "read stream did not match source string");
+    //}
 		[Test]
-		public void Test_VelocityCharStream()
+		public void Test_VelocityTryCharStream()
 		{
 			String s1 = "this is a test";
 			VelocityCharStream vcs = new VelocityCharStream(new StringReader(s1), 1, 1);
 
 			String s2 = String.Empty;
-			try
-			{
-				Char c = vcs.ReadChar();
-				while (true)
+			
+				while (vcs.ReadChar())
 				{
-					s2 += c;
-					c = vcs.ReadChar();
+          s2 += vcs.CurrentCharacter;
 				}
-			}
-			catch (IOException)
-			{
-				// this is expected to happen when the stream has been read
-			}
 			Assert.IsTrue(s1.Equals(s2), "read stream did not match source string");
 		}
 
@@ -74,7 +88,7 @@ namespace NVelocity.Test
 				while (t != root.LastToken)
 				{
 					t = t.Next;
-					nodes += "," + t.Kind.ToString();
+					nodes += "," + t.Kind;
 				}
 			}
 
