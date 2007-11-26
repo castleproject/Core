@@ -100,9 +100,9 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\Components\Validator\Castle.Components.Validator\Castle.Components.Validator.csproj">
+    <ProjectReference Include="..\..\Components\Validator\Castle.Components.Validator\Castle.Components.Validator-vs2005.csproj">
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
-      <Name>Castle.Components.Validator</Name>
+      <Name>Castle.Components.Validator-vs2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
       <Name>Castle.MonoRail.Framework-vs2005</Name>

@@ -123,9 +123,9 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Validator\Castle.Components.Validator\Castle.Components.Validator.csproj">
+    <ProjectReference Include="..\..\Validator\Castle.Components.Validator\Castle.Components.Validator-vs2005.csproj">
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
-      <Name>Castle.Components.Validator</Name>
+      <Name>Castle.Components.Validator-vs2005</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

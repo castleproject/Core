@@ -22,7 +22,7 @@
 			<exclude name="obj/**" />
 		</resourcefileset>
 		<property name="build.msbuild" value="true" if="${framework::get-target-framework()=='net-2.0'}" />
-		<property name="project.vsproj" value="Castle.Components.Validator.csproj" />
+		<property name="project.vsproj" value="Castle.Components.Validator-vs2005.csproj" />
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
