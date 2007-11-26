@@ -122,5 +122,41 @@ namespace Castle.MicroKernel.Tests
 			Assert.IsNotNull(spamservice.MailSender);
 			Assert.IsNotNull(spamservice.TemplateEngine);
 		}
+
+		[Test]
+		public void DependencyChain()
+		{
+			kernel.AddComponent("Customer9", typeof(ICustomer), typeof(CustomerChain9));
+			kernel.AddComponent("Customer8", typeof(ICustomer), typeof(CustomerChain8));
+			kernel.AddComponent("Customer7", typeof(ICustomer), typeof(CustomerChain7));
+			kernel.AddComponent("Customer6", typeof(ICustomer), typeof(CustomerChain6));
+			kernel.AddComponent("Customer5", typeof(ICustomer), typeof(CustomerChain5));
+			kernel.AddComponent("Customer4", typeof(ICustomer), typeof(CustomerChain4));
+			kernel.AddComponent("Customer3", typeof(ICustomer), typeof(CustomerChain3));
+			kernel.AddComponent("Customer2", typeof(ICustomer), typeof(CustomerChain2));
+			kernel.AddComponent("Customer1", typeof(ICustomer), typeof(CustomerChain1));
+			kernel.AddComponent("Customer", typeof(ICustomer), typeof(CustomerImpl));
+
+			CustomerChain1 customer = (CustomerChain1) kernel[typeof(ICustomer)];
+			Assert.IsInstanceOfType(typeof(CustomerChain9), customer);
+			customer = (CustomerChain1)customer.CustomerBase;
+			Assert.IsInstanceOfType(typeof(CustomerChain8), customer);
+			customer = (CustomerChain1)customer.CustomerBase;
+			Assert.IsInstanceOfType(typeof(CustomerChain7), customer);
+			customer = (CustomerChain1)customer.CustomerBase;
+			Assert.IsInstanceOfType(typeof(CustomerChain6), customer);
+			customer = (CustomerChain1)customer.CustomerBase;
+			Assert.IsInstanceOfType(typeof(CustomerChain5), customer);
+			customer = (CustomerChain1)customer.CustomerBase;
+			Assert.IsInstanceOfType(typeof(CustomerChain4), customer);
+			customer = (CustomerChain1)customer.CustomerBase;
+			Assert.IsInstanceOfType(typeof(CustomerChain3), customer);
+			customer = (CustomerChain1)customer.CustomerBase;
+			Assert.IsInstanceOfType(typeof(CustomerChain2), customer);
+			customer = (CustomerChain1)customer.CustomerBase;
+			Assert.IsInstanceOfType(typeof(CustomerChain1), customer);
+			ICustomer lastCustomer = customer.CustomerBase;
+			Assert.IsInstanceOfType(typeof(CustomerImpl), lastCustomer);
+		}
 	}
 }
