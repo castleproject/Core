@@ -597,7 +597,7 @@ namespace Castle.MicroKernel.Handlers
 
 			String[] keys = new String[DependenciesByKey.Count];
 
-			DependenciesByKey.Keys.CopyTo(services, 0);
+			DependenciesByKey.Keys.CopyTo(keys, 0);
 
 			foreach (String key in keys)
 			{
