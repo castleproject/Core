@@ -35,11 +35,11 @@ namespace Castle.VSNetIntegration.CastleWizards
 		public static Pair[] GetGeneralSettings()
 		{
 			return new Pair[] {
-				new Pair("hibernate.connection.provider", "NHibernate.Connection.DriverConnectionProvider"),
-				new Pair("hibernate.command_timeout", "5000"),
-				new Pair("hibernate.cache.use_query_cache", "false"), 
-				new Pair("hibernate.connection.isolation", "ReadCommitted"),
-				new Pair("hibernate.show_sql", "false"),
+				new Pair("connection.provider", "NHibernate.Connection.DriverConnectionProvider"),
+				new Pair("command_timeout", "5000"),
+				new Pair("cache.use_query_cache", "false"), 
+				new Pair("connection.isolation", "ReadCommitted"),
+				new Pair("show_sql", "false"),
 			};
 		}
 
@@ -48,45 +48,45 @@ namespace Castle.VSNetIntegration.CastleWizards
 			if (database == "Oracle")
 			{
 				return new Pair[] {
-					new Pair("hibernate.dialect", "NHibernate.Dialect.OracleDialect"), 
-					new Pair("hibernate.connection.driver_class", "NHibernate.Driver.OracleClientDriver")
+					new Pair("dialect", "NHibernate.Dialect.OracleDialect"), 
+					new Pair("connection.driver_class", "NHibernate.Driver.OracleClientDriver")
 				};
 			}
 			else if (database == "MS SQLServer")
 			{
 				return new Pair[] {
-					new Pair("hibernate.dialect", "NHibernate.Dialect.MsSql2000Dialect"), 
-					new Pair("hibernate.connection.driver_class", "NHibernate.Driver.SqlClientDriver")
+					new Pair("dialect", "NHibernate.Dialect.MsSql2000Dialect"), 
+					new Pair("connection.driver_class", "NHibernate.Driver.SqlClientDriver")
 				};
 			}
 			else if (database == "MySql")
 			{
 				return new Pair[] {
-					new Pair("hibernate.dialect", "NHibernate.Dialect.MySQLDialect"), 
-					new Pair("hibernate.connection.driver_class", "NHibernate.Driver.MySqlDataDriver")
+					new Pair("dialect", "NHibernate.Dialect.MySQLDialect"), 
+					new Pair("connection.driver_class", "NHibernate.Driver.MySqlDataDriver")
 				};
 			}
 			else if (database == "Firebird")
 			{
 				return new Pair[] {
-					new Pair("hibernate.dialect", "NHibernate.Dialect.FirebirdDialect"), 
-					new Pair("hibernate.connection.driver_class", "NHibernate.Driver.FirebirdDriver"),
-					new Pair("hibernate.query.substitutions", "true 1, false 0")
+					new Pair("dialect", "NHibernate.Dialect.FirebirdDialect"), 
+					new Pair("connection.driver_class", "NHibernate.Driver.FirebirdDriver"),
+					new Pair("query.substitutions", "true 1, false 0")
 				};
 			}
 			else if (database == "PostgreSQL")
 			{
 				return new Pair[] {
-					new Pair("hibernate.dialect", "NHibernate.Dialect.PostgreSQLDialect"), 
-					new Pair("hibernate.connection.driver_class", "NHibernate.Driver.NpgsqlDriver"),
+					new Pair("dialect", "NHibernate.Dialect.PostgreSQLDialect"), 
+					new Pair("connection.driver_class", "NHibernate.Driver.NpgsqlDriver"),
 				};
 			}
 			else if (database == "SQLite")
 			{
 				return new Pair[] {
-					new Pair("hibernate.dialect", "NHibernate.Dialect.SQLiteDialect"), 
-					new Pair("hibernate.connection.driver_class", "NHibernate.Driver.SQLiteDriver"),
-					new Pair("hibernate.query.substitutions", "true=1;false=0")
+					new Pair("dialect", "NHibernate.Dialect.SQLiteDialect"), 
+					new Pair("connection.driver_class", "NHibernate.Driver.SQLiteDriver"),
+					new Pair("query.substitutions", "true=1;false=0")
 				};
 			}
 

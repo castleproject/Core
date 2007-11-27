@@ -25,10 +25,10 @@ namespace MoreComplexSample
 			// Old way
 //			Hashtable properties = new Hashtable();
 //
-//			properties.Add("hibernate.connection.driver_class", "NHibernate.Driver.SqlClientDriver");
-//			properties.Add("hibernate.dialect", "NHibernate.Dialect.MsSql2000Dialect");
-//			properties.Add("hibernate.connection.provider", "NHibernate.Connection.DriverConnectionProvider");
-//			properties.Add("hibernate.connection.connection_string",
+//			properties.Add("connection.driver_class", "NHibernate.Driver.SqlClientDriver");
+//			properties.Add("dialect", "NHibernate.Dialect.MsSql2000Dialect");
+//			properties.Add("connection.provider", "NHibernate.Connection.DriverConnectionProvider");
+//			properties.Add("connection.connection_string",
 //			               "Data Source=.;Initial Catalog=bookdb;Integrated Security=SSPI");
 //
 //			InPlaceConfigurationSource source = new InPlaceConfigurationSource();
