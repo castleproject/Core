@@ -110,18 +110,12 @@ namespace Castle.MonoRail.Framework
 
 		private static bool ShouldUseHostAndPath
 		{
-			get
-			{
-				return MonoRailConfiguration.GetConfig().MatchHostNameAndPath;
-			}
+			get { return MonoRailConfiguration.GetConfig().MatchHostNameAndPath; }
 		}
 
 		private static bool ExcludeAppPath
 		{
-			get
-			{
-				return MonoRailConfiguration.GetConfig().ExcludeAppPath;
-			}
+			get { return MonoRailConfiguration.GetConfig().ExcludeAppPath; }
 		}
 
 		private static string GetHostNameAndPath()
