@@ -61,6 +61,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private string collectionPropertyName;
 		private object rootNode;
 		private bool useInlineStyle = true;
+		private string inlineStyleImagesDir = null;
 		private PropertyInfo collProperty;
 
 		/// <summary>
@@ -97,12 +98,25 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		}
 
 		/// <summary>
+		/// Gets or sets the inline style images dir.
+		/// </summary>
+		/// <value>The inline style images dir.</value>
+		[ViewComponentParam]
+		public string InlineStyleImagesDir
+		{
+			get { return inlineStyleImagesDir; }
+			set { inlineStyleImagesDir = value; }
+		}
+
+		/// <summary>
 		/// Called by the framework once the component instance
 		/// is initialized
 		/// </summary>
 		public override void Initialize()
 		{
 			collProperty = rootNode.GetType().GetProperty(collectionPropertyName, BindingFlags.Public | BindingFlags.Instance);
+
+			inlineStyleImagesDir = inlineStyleImagesDir ?? string.Format("{0}/content/images", RailsContext.ApplicationPath);
 
 			base.Initialize();
 		}
@@ -209,8 +223,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			if (useInlineStyle)
 			{
-				sb.AppendLine(
-					"<div style=\"float: left; width: 19px; height: 20px; background: transparent url(/Content/images/i.gif)\"></div>");
+				sb.AppendFormat(
+					"<div style=\"float: left; width: 19px; height: 20px; background: transparent url({0}/i.gif)\"></div>", inlineStyleImagesDir);
+				sb.AppendLine();
 			}
 			else
 			{
@@ -226,8 +241,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			if (useInlineStyle)
 			{
-				sb.AppendLine(
-					"<div style=\"float: left; width: 19px; height: 20px; background: transparent url(/Content/images/noexpand.gif)\"></div>");
+				sb.AppendFormat(
+					"<div style=\"float: left; width: 19px; height: 20px; background: transparent url({0}/noexpand.gif)\"></div>", inlineStyleImagesDir);
+				sb.AppendLine();
 			}
 			else
 			{
@@ -243,8 +259,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			if (useInlineStyle)
 			{
-				sb.AppendLine(
-					"<div style=\"float: left; width: 19px; height: 20px; background: transparent url(/Content/images/l.gif)\"></div>");
+				sb.AppendFormat(
+					"<div style=\"float: left; width: 19px; height: 20px; background: transparent url({0}/l.gif)\"></div>", inlineStyleImagesDir);
+				sb.AppendLine();
 			}
 			else
 			{
@@ -260,8 +277,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			if (useInlineStyle)
 			{
-				sb.AppendLine(
-					"<div style=\"float: left; width: 19px; height: 20px; background: transparent url(/Content/images/t.gif)\"></div>");
+				sb.AppendFormat(
+					"<div style=\"float: left; width: 19px; height: 20px; background: transparent url({0}/t.gif)\"></div>", inlineStyleImagesDir);
+				sb.AppendLine();
 			}
 			else
 			{
