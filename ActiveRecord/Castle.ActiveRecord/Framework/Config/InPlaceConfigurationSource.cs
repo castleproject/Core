@@ -193,13 +193,13 @@ namespace Castle.ActiveRecord.Framework.Config
 			InPlaceConfigurationSource config = new InPlaceConfigurationSource();
 
 			Hashtable parameters = new Hashtable();
-			parameters["hibernate.connection.provider"] = "NHibernate.Connection.DriverConnectionProvider";
+			parameters["connection.provider"] = "NHibernate.Connection.DriverConnectionProvider";
 
 			if (database == DatabaseType.MSSQLServer)
 			{
-				parameters["hibernate.connection.driver_class"] = "NHibernate.Driver.SqlClientDriver";
-				parameters["hibernate.dialect"] = "NHibernate.Dialect.MsSql2000Dialect";
-				parameters["hibernate.connection.connection_string"] = connectionString;
+				parameters["connection.driver_class"] = "NHibernate.Driver.SqlClientDriver";
+				parameters["dialect"] = "NHibernate.Dialect.MsSql2000Dialect";
+				parameters["connection.connection_string"] = connectionString;
 			}
 
 			config.Add(typeof(ActiveRecordBase), parameters);

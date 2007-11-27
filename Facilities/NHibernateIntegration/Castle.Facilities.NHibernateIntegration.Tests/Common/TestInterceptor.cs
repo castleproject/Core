@@ -59,7 +59,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Common
 			return false;
 		}
 
-		public override object IsUnsaved(object entity)
+		public override bool? IsUnsaved(object entity)
 		{
 			return null;
 		}

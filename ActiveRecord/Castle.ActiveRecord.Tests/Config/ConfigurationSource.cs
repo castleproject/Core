@@ -158,10 +158,10 @@ namespace Castle.ActiveRecord.Tests.Config
 		private static string GetDefaultHibernateConfigAndCloseActiveRecordSection()
 		{
 			return @"	<config>
-							<add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
-							<add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
-							<add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
-							<add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
+							<add key=""connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
+							<add key=""dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
+							<add key=""connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
+							<add key=""connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
 						</config>
 					</activerecord>";
 		}

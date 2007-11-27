@@ -131,19 +131,10 @@ namespace Castle.ActiveRecord
 					session.Flush();
 				}
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				holder.FailSession(session);
-
-				// NHibernate catches our ValidationException, and as such it is the innerexception here
-				if (ex.InnerException is ValidationException)
-				{
-					throw ex.InnerException;
-				}
-				else
-				{
-					throw new ActiveRecordException("Could not perform Create for " + instance.GetType().Name, ex);
-				}
+				throw;
 			}
 			finally
 			{
@@ -240,19 +231,10 @@ namespace Castle.ActiveRecord
 			{
 				session.Replicate(instance, replicationMode);
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				holder.FailSession(session);
-
-				// NHibernate catches our ValidationException, and as such it is the innerexception here
-				if (ex.InnerException is ValidationException)
-				{
-					throw ex.InnerException;
-				}
-				else
-				{
-					throw new ActiveRecordException("Could not perform Replicate for " + instance.GetType().Name, ex);
-				}
+				throw;
 			}
 			finally
 			{
@@ -280,19 +262,10 @@ namespace Castle.ActiveRecord
 			{
 				session.Refresh(instance);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				holder.FailSession(session);
-
-				// NHibernate catches our ValidationException, and as such it is the innerexception here
-				if (ex.InnerException is ValidationException)
-				{
-					throw ex.InnerException;
-				}
-				else
-				{
-					throw new ActiveRecordException("Could not perform Refresh for " + instance.GetType().Name, ex);
-				}
+				throw;
 			}
 			finally
 			{

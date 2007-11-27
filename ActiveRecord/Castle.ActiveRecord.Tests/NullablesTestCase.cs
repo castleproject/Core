@@ -42,9 +42,9 @@ namespace Castle.ActiveRecord.Tests
 
 			model = NullableModel.FindAll()[0];
 
-			Assert.AreEqual(Nullables.NullableInt32.Default, model.Age);
-			Assert.AreEqual(Nullables.NullableDateTime.Default, model.Completion);
-			Assert.AreEqual(Nullables.NullableBoolean.Default, model.Accepted);
+			Assert.AreEqual(null, model.Age);
+			Assert.AreEqual(null, model.Completion);
+			Assert.AreEqual(null, model.Accepted);
 		}
 	}
 }

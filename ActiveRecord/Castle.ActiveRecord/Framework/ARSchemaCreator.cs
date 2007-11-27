@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Data;
 	using System.IO;
@@ -168,7 +169,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			IDictionary props = new HybridDictionary();
 
-			foreach(DictionaryEntry entry in dialect.DefaultProperties)
+			foreach(KeyValuePair<string, string> entry in dialect.DefaultProperties)
 			{
 				props[entry.Key] = entry.Value;
 			}

@@ -18,8 +18,7 @@ namespace Castle.Components.Binder.Tests
 	using System.Collections;
 	using System.Data;
 	
-	using Nullables;
-	
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -356,7 +355,7 @@ namespace Castle.Components.Binder.Tests
 	{
 		private int age;
 		private String name, address;
-		private NullableDateTime dob;
+		private DateTime? dob;
 
 		public int Age
 		{
@@ -376,7 +375,7 @@ namespace Castle.Components.Binder.Tests
 			set { address = value; }
 		}
 
-		public NullableDateTime DOB
+		public DateTime? DOB
 		{
 			get { return dob; }
 			set { dob = value; }

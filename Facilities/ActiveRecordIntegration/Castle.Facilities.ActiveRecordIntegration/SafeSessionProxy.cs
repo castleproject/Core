@@ -19,6 +19,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	using System.Data;
 
 	using NHibernate;
+	using NHibernate.Stat;
 	using NHibernate.Type;
 
 	using Castle.ActiveRecord.Framework;
@@ -31,7 +32,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	/// </summary>
 	public class SafeSessionProxy : ISession, IDisposable
 	{
-		private readonly ISession innerSession;
+		private readonly ISession inner;
 		private readonly ISessionFactoryHolder holder;
 		
 		private bool wasClosed;
@@ -40,59 +41,70 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 			if (innerSession == null) throw new ArgumentNullException("innerSession");
 
-			this.innerSession = innerSession;
+			this.inner = innerSession;
 			this.holder = holder;
 		}
 
 		public FlushMode FlushMode
 		{
-			get { return innerSession.FlushMode; }
-			set { innerSession.FlushMode = value; }
+			get { return inner.FlushMode; }
+			set { inner.FlushMode = value; }
+		}
+
+		public CacheMode CacheMode
+		{
+			get { return inner.CacheMode; }
+			set { inner.CacheMode = value; }
 		}
 
 		public ISessionFactory SessionFactory
 		{
-			get { return innerSession.SessionFactory; }
+			get { return inner.SessionFactory; }
 		}
 
 		public IDbConnection Connection
 		{
-			get { return innerSession.Connection; }
+			get { return inner.Connection; }
 		}
 
 		public bool IsOpen
 		{
-			get { return innerSession.IsOpen; }
+			get { return inner.IsOpen; }
 		}
 
 		public bool IsConnected
 		{
-			get { return innerSession.IsConnected; }
+			get { return inner.IsConnected; }
 		}
 
 		public ITransaction Transaction
 		{
-			get { return innerSession.Transaction; }
+			get { return inner.Transaction; }
+		}
+
+		public ISessionStatistics Statistics
+		{
+			get { return inner.Statistics; }
 		}
 
 		public void Flush()
 		{
-			innerSession.Flush();
+			inner.Flush();
 		}
 
 		public IDbConnection Disconnect()
 		{
-			return innerSession.Disconnect();
+			return inner.Disconnect();
 		}
 
 		public void Reconnect()
 		{
-			innerSession.Reconnect();
+			inner.Reconnect();
 		}
 
 		public void Reconnect(IDbConnection connection)
 		{
-			innerSession.Reconnect(connection);
+			inner.Reconnect(connection);
 		}
 
 		public IDbConnection Close()
@@ -100,7 +112,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			if (!wasClosed)
 			{
 				wasClosed = true;
-				holder.ReleaseSession( innerSession );
+				holder.ReleaseSession( inner );
 				return null;
 			}
 			else
@@ -111,287 +123,297 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		public void CancelQuery()
 		{
-			innerSession.CancelQuery();
+			inner.CancelQuery();
 		}
 
 		public bool IsDirty()
 		{
-			return innerSession.IsDirty();
+			return inner.IsDirty();
 		}
 
 		public object GetIdentifier(object obj)
 		{
-			return innerSession.GetIdentifier(obj);
+			return inner.GetIdentifier(obj);
 		}
 
 		public bool Contains(object obj)
 		{
-			return innerSession.Contains(obj);
+			return inner.Contains(obj);
 		}
 
 		public void Evict(object obj)
 		{
-			innerSession.Evict(obj);
+			inner.Evict(obj);
 		}
 
 		public object Load(Type theType, object id, LockMode lockMode)
 		{
-			return innerSession.Load(theType, id, lockMode);
+			return inner.Load(theType, id, lockMode);
 		}
 
 		public object Load(Type theType, object id)
 		{
-			return innerSession.Load(theType, id);
+			return inner.Load(theType, id);
 		}
 
 		public T Load<T>(object id, LockMode lockMode)
 		{
-			return innerSession.Load<T>(id, lockMode);
+			return inner.Load<T>(id, lockMode);
 		}
 
 		public T Load<T>(object id)
 		{
-			return innerSession.Load<T>(id);
+			return inner.Load<T>(id);
 		}
 
 		public void Load(object obj, object id)
 		{
-			innerSession.Load(obj, id);
+			inner.Load(obj, id);
 		}
 
 		public object Get(Type clazz, object id)
 		{
-			return innerSession.Get(clazz, id);
+			return inner.Get(clazz, id);
 		}
 
 		public object Get(Type clazz, object id, LockMode lockMode)
 		{
-			return innerSession.Get(clazz, id, lockMode);
+			return inner.Get(clazz, id, lockMode);
 		}
 
 		public T Get<T>(object id)
 		{
-			return innerSession.Get<T>(id);
+			return inner.Get<T>(id);
 		}
 
 		public T Get<T>(object id, LockMode lockMode)
 		{
-			return innerSession.Get<T>(id, lockMode);
+			return inner.Get<T>(id, lockMode);
+		}
+
+		public string GetEntityName(object obj)
+		{
+			return inner.GetEntityName(obj);
 		}
 
 		public IFilter EnableFilter(string filterName)
 		{
-			return innerSession.EnableFilter(filterName);
+			return inner.EnableFilter(filterName);
 		}
 
 		public IFilter GetEnabledFilter(string filterName)
 		{
-			return innerSession.GetEnabledFilter(filterName);
+			return inner.GetEnabledFilter(filterName);
 		}
 
 		public void DisableFilter(string filterName)
 		{
-			innerSession.DisableFilter(filterName);
+			inner.DisableFilter(filterName);
 		}
 
 		public IMultiQuery CreateMultiQuery()
 		{
-			return innerSession.CreateMultiQuery();
+			return inner.CreateMultiQuery();
+		}
+
+		public ISession SetBatchSize(int batchSize)
+		{
+			return inner.SetBatchSize(batchSize);
 		}
 
 		public void Replicate(object obj, ReplicationMode replicationMode)
 		{
-			innerSession.Replicate(obj, replicationMode);
+			inner.Replicate(obj, replicationMode);
 		}
 
 		public object Save(object obj)
 		{
-			return innerSession.Save(obj);
+			return inner.Save(obj);
 		}
 
 		public void Save(object obj, object id)
 		{
-			innerSession.Save(obj, id);
+			inner.Save(obj, id);
 		}
 
 		public void SaveOrUpdate(object obj)
 		{
-			innerSession.SaveOrUpdate(obj);
+			inner.SaveOrUpdate(obj);
 		}
 
 		public void Update(object obj)
 		{
-			innerSession.Update(obj);
+			inner.Update(obj);
 		}
 
 		public void Update(object obj, object id)
 		{
-			innerSession.Update(obj, id);
+			inner.Update(obj, id);
 		}
 
 		public object SaveOrUpdateCopy(object obj)
 		{
-			return innerSession.SaveOrUpdateCopy(obj);
+			return inner.SaveOrUpdateCopy(obj);
 		}
 
 		public object SaveOrUpdateCopy(object obj, object id)
 		{
-			return innerSession.SaveOrUpdateCopy(obj, id);
+			return inner.SaveOrUpdateCopy(obj, id);
 		}
 
 		public void Delete(object obj)
 		{
-			innerSession.Delete(obj);
+			inner.Delete(obj);
 		}
 
 		public IList Find(String query)
 		{
-			return innerSession.CreateQuery(query).List();
+			return inner.CreateQuery(query).List();
 		}
 
 		public IList Find(String query, object value, IType type)
 		{
 			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
-			return innerSession.Find(query, value, type);
+			return inner.Find(query, value, type);
 		}
 
 		public IList Find(String query, object[] values, IType[] types)
 		{
 			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
-			return innerSession.Find(query, values, types);
+			return inner.Find(query, values, types);
 		}
 
 		public IEnumerable Enumerable(String query)
 		{
 			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
-			return innerSession.Enumerable(query);
+			return inner.Enumerable(query);
 		}
 
 		public IEnumerable Enumerable(String query, object value, IType type)
 		{
 			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
-			return innerSession.Enumerable(query, value, type);
+			return inner.Enumerable(query, value, type);
 		}
 
 		public IEnumerable Enumerable(String query, object[] values, IType[] types)
 		{
 			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
-			return innerSession.Enumerable(query, values, types);
+			return inner.Enumerable(query, values, types);
 		}
 
 		public ICollection Filter(object collection, String filter)
 		{
 			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
-			return innerSession.Filter(collection, filter);
+			return inner.Filter(collection, filter);
 		}
 
 		public ICollection Filter(object collection, String filter, object value, IType type)
 		{
 			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
-			return innerSession.Filter(collection, filter, value, type);
+			return inner.Filter(collection, filter, value, type);
 		}
 
 		public ICollection Filter(object collection, String filter, object[] values, IType[] types)
 		{
 			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
-			return innerSession.Filter(collection, filter, values, types);
+			return inner.Filter(collection, filter, values, types);
 		}
 
 		public int Delete(String query)
 		{
-			return innerSession.Delete(query);
+			return inner.Delete(query);
 		}
 
 		public int Delete(String query, object value, IType type)
 		{
-			return innerSession.Delete(query, value, type);
+			return inner.Delete(query, value, type);
 		}
 
 		public int Delete(String query, object[] values, IType[] types)
 		{
-			return innerSession.Delete(query, values, types);
+			return inner.Delete(query, values, types);
 		}
 
 		public void Lock(object obj, LockMode lockMode)
 		{
-			innerSession.Lock(obj, lockMode);
+			inner.Lock(obj, lockMode);
 		}
 
 		public void Refresh(object obj)
 		{
-			innerSession.Refresh(obj);
+			inner.Refresh(obj);
 		}
 
 		public void Refresh(object obj, LockMode lockMode)
 		{
-			innerSession.Refresh(obj,lockMode);
+			inner.Refresh(obj,lockMode);
 		}
 
 		public LockMode GetCurrentLockMode(object obj)
 		{
-			return innerSession.GetCurrentLockMode(obj);
+			return inner.GetCurrentLockMode(obj);
 		}
 
 		public ITransaction BeginTransaction()
 		{
-			return innerSession.BeginTransaction();
+			return inner.BeginTransaction();
 		}
 
 		public ITransaction BeginTransaction(IsolationLevel isolationLevel)
 		{
-			return innerSession.BeginTransaction(isolationLevel);
+			return inner.BeginTransaction(isolationLevel);
 		}
 
 		public ICriteria CreateCriteria(Type persistentClass)
 		{
-			return innerSession.CreateCriteria(persistentClass);
+			return inner.CreateCriteria(persistentClass);
 		}
 
 		public ICriteria CreateCriteria(Type persistentClass, string alias)
 		{
-			return innerSession.CreateCriteria(persistentClass, alias);
+			return inner.CreateCriteria(persistentClass, alias);
 		}
 
 		public IQuery CreateQuery(String queryString)
 		{
-			return innerSession.CreateQuery(queryString);
+			return inner.CreateQuery(queryString);
 		}
 
 		public IQuery CreateFilter(object collection, String queryString)
 		{
-			return innerSession.CreateFilter(collection, queryString);
+			return inner.CreateFilter(collection, queryString);
 		}
 
 		public IQuery GetNamedQuery(String queryName)
 		{
-			return innerSession.GetNamedQuery(queryName);
+			return inner.GetNamedQuery(queryName);
 		}
 
 		public ISQLQuery CreateSQLQuery(string queryString)
 		{
-			return innerSession.CreateSQLQuery(queryString);
+			return inner.CreateSQLQuery(queryString);
 		}
 
 		public IQuery CreateSQLQuery(String sql, String returnAlias, Type returnClass)
 		{
-			return innerSession.CreateSQLQuery(sql, returnAlias, returnClass);
+			return inner.CreateSQLQuery(sql, returnAlias, returnClass);
 		}
 
 		public IQuery CreateSQLQuery(String sql, String[] returnAliases, Type[] returnClasses)
 		{
-			return innerSession.CreateSQLQuery(sql, returnAliases, returnClasses);
+			return inner.CreateSQLQuery(sql, returnAliases, returnClasses);
 		}
 
 		public void Clear()
 		{
-			innerSession.Clear();
+			inner.Clear();
 		}
 
 		public void Dispose()
 		{
 			if (!wasClosed)
 			{
-				holder.ReleaseSession( innerSession );
+				holder.ReleaseSession( inner );
 			}
 			else
 			{
@@ -401,7 +423,12 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		
 		public NHibernate.Engine.ISessionImplementor GetSessionImplementation()
 		{
-			return innerSession.GetSessionImplementation();
+			return inner.GetSessionImplementation();
+		}
+
+		public IMultiCriteria CreateMultiCriteria()
+		{
+			return inner.CreateMultiCriteria();
 		}
 	}
 }

@@ -16,19 +16,13 @@ namespace Castle.ActiveRecord.Tests.Model
 {
 	using System;
 
-	using Nullables;
-
 	[ActiveRecord]
 	public class NullableModel : ActiveRecordBase
 	{
 		private int id;
-		private NullableInt32 age;
-		private NullableDateTime completion;
-		private NullableBoolean accepted;
-
-		public NullableModel()
-		{
-		}
+		private int? age;
+		private DateTime? completion;
+		private bool? accepted;
 
 		[PrimaryKey]
 		public int Id
@@ -38,21 +32,21 @@ namespace Castle.ActiveRecord.Tests.Model
 		}
 
 		[Property]
-		public NullableInt32 Age
+		public int? Age
 		{
 			get { return age; }
 			set { age = value; }
 		}
 
 		[Property]
-		public NullableDateTime Completion
+		public DateTime? Completion
 		{
 			get { return completion; }
 			set { completion = value; }
 		}
 
 		[Property]
-		public NullableBoolean Accepted
+		public bool? Accepted
 		{
 			get { return accepted; }
 			set { accepted = value; }
