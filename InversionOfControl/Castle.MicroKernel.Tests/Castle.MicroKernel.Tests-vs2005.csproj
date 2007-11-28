@@ -128,6 +128,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassComponents\CommonImplWithDependancy.cs" />
+    <Compile Include="ClassComponents\CustomerChain.cs" />
     <Compile Include="ClassComponents\CustomerImpl.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -169,7 +170,6 @@
     <Compile Include="Configuration\ConfigurationTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CustomerChain.cs" />
     <Compile Include="Facilities\FactorySupport\FactorySupportProgrammaticTestCase.cs" />
     <Compile Include="Facilities\FactorySupport\FactorySupportTestCase.cs" />
     <Compile Include="Facilities\Startable\Components\StartableComponentWithCustomDependencies.cs" />
