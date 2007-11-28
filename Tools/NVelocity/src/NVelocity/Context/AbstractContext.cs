@@ -37,6 +37,39 @@ namespace NVelocity.Context
 	[Serializable]
 	public abstract class AbstractContext : InternalContextBase, IContext
 	{
+		/// <summary>  the chained Context if any
+		/// </summary>
+		private IContext innerContext = null;
+
+		/// <summary>  default CTOR
+		/// </summary>
+		public AbstractContext()
+		{
+		}
+
+		/// <summary>  Chaining constructor accepts a Context argument.
+		/// It will relay get() operations into this Context
+		/// in the even the 'local' get() returns null.
+		///
+		/// </summary>
+		/// <param name="inner">context to be chained
+		///
+		/// </param>
+		public AbstractContext(IContext inner)
+		{
+			innerContext = inner;
+
+			/*
+			 *  now, do a 'forward pull' of event cartridge so
+			 *  it's accessable, bringing to the top level.
+			 */
+
+			if (innerContext is IInternalEventContext)
+			{
+				AttachEventCartridge(((IInternalEventContext)innerContext).EventCartridge);
+			}
+		}
+
 		public Object[] Keys
 		{
 			get { return InternalGetKeys(); }
@@ -46,10 +79,6 @@ namespace NVelocity.Context
 		{
 			get { return innerContext; }
 		}
-
-		/// <summary>  the chained Context if any
-		/// </summary>
-		private IContext innerContext = null;
 
 		///
 		/// <summary>  Implement to return a value from the context storage.
@@ -123,35 +152,6 @@ namespace NVelocity.Context
 		///
 		/// </returns>
 		public abstract Object InternalRemove(Object key);
-
-		/// <summary>  default CTOR
-		/// </summary>
-		public AbstractContext()
-		{
-		}
-
-		/// <summary>  Chaining constructor accepts a Context argument.
-		/// It will relay get() operations into this Context
-		/// in the even the 'local' get() returns null.
-		///
-		/// </summary>
-		/// <param name="inner">context to be chained
-		///
-		/// </param>
-		public AbstractContext(IContext inner)
-		{
-			innerContext = inner;
-
-			/*
-	    *  now, do a 'forward pull' of event cartridge so
-	    *  it's accessable, bringing to the top level.
-	    */
-
-			if (innerContext is IInternalEventContext)
-			{
-				AttachEventCartridge(((IInternalEventContext) innerContext).EventCartridge);
-			}
-		}
 
 		/// <summary> Adds a name/value pair to the context.
 		///

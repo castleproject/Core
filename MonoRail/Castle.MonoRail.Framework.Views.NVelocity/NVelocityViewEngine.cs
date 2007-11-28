@@ -382,7 +382,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				}
 			}
 
-			foreach (String key in context.Params.AllKeys)
+			foreach(String key in context.Request.QueryString.AllKeys)
+			{
+				if (key == null) continue; // Nasty bug?
+				object value = context.Params[key];
+				if (value == null) continue;
+				innerContext[key] = value;
+			}
+			foreach(String key in context.Request.Form.AllKeys)
 			{
 				if (key == null) continue; // Nasty bug?
 				object value = context.Params[key];
@@ -412,7 +419,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 						new StaticAccessorHelper<DateTime>()
 					};
 
-			foreach (object helper in builtInHelpers)
+			foreach(object helper in builtInHelpers)
 			{
 				innerContext[helper.GetType().GetGenericArguments()[0].Name] = helper;
 			}

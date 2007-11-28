@@ -41,9 +41,56 @@ namespace NVelocity.Context
 	/// <version> $Id: InternalContextAdapterImpl.cs,v 1.4 2003/10/27 13:54:08 corts Exp $
 	///
 	/// </version>
-	//TODO: class was sealed
 	public class InternalContextAdapterImpl : IInternalContextAdapter
 	{
+		///
+		/// <summary>  the user data Context that we are wrapping
+		/// </summary>
+		internal IContext context = null;
+
+		///
+		/// <summary>  the ICB we are wrapping.  We may need to make one
+		/// if the user data context implementation doesn't
+		/// support one.  The default AbstractContext-derived
+		/// VelocityContext does, and it's recommended that
+		/// people derive new contexts from AbstractContext
+		/// rather than piecing things together
+		/// </summary>
+		internal IInternalHousekeepingContext icb = null;
+
+		/// <summary>  The InternalEventContext that we are wrapping.  If
+		/// the context passed to us doesn't support it, no
+		/// biggie.  We don't make it for them - since its a
+		/// user context thing, nothing gained by making one
+		/// for them now
+		/// </summary>
+		internal IInternalEventContext iec = null;
+
+		/// <summary>  CTOR takes a Context and wraps it, delegating all 'data' calls
+		/// to it.
+		///
+		/// For support of internal contexts, it will create an InternalContextBase
+		/// if need be.
+		/// </summary>
+		public InternalContextAdapterImpl(IContext c)
+		{
+			context = c;
+
+			if (!(c is IInternalHousekeepingContext))
+			{
+				icb = new InternalContextBase();
+			}
+			else
+			{
+				icb = (IInternalHousekeepingContext)context;
+			}
+
+			if (c is IInternalEventContext)
+			{
+				iec = (IInternalEventContext)context;
+			}
+		}
+
 		public String CurrentTemplateName
 		{
 			get { return icb.CurrentTemplateName; }
@@ -126,54 +173,6 @@ namespace NVelocity.Context
 			}
 		}
 
-		///
-		/// <summary>  the user data Context that we are wrapping
-		/// </summary>
-		internal IContext context = null;
-
-		///
-		/// <summary>  the ICB we are wrapping.  We may need to make one
-		/// if the user data context implementation doesn't
-		/// support one.  The default AbstractContext-derived
-		/// VelocityContext does, and it's recommended that
-		/// people derive new contexts from AbstractContext
-		/// rather than piecing things together
-		/// </summary>
-		internal IInternalHousekeepingContext icb = null;
-
-		/// <summary>  The InternalEventContext that we are wrapping.  If
-		/// the context passed to us doesn't support it, no
-		/// biggie.  We don't make it for them - since its a
-		/// user context thing, nothing gained by making one
-		/// for them now
-		/// </summary>
-		internal IInternalEventContext iec = null;
-
-		/// <summary>  CTOR takes a Context and wraps it, delegating all 'data' calls
-		/// to it.
-		///
-		/// For support of internal contexts, it will create an InternalContextBase
-		/// if need be.
-		/// </summary>
-		public InternalContextAdapterImpl(IContext c)
-		{
-			context = c;
-
-			if (!(c is IInternalHousekeepingContext))
-			{
-				icb = new InternalContextBase();
-			}
-			else
-			{
-				icb = (IInternalHousekeepingContext) context;
-			}
-
-			if (c is IInternalEventContext)
-			{
-				iec = (IInternalEventContext) context;
-			}
-		}
-
 		/* --- InternalHousekeepingContext interface methods --- */
 
 		public void PushCurrentTemplateName(String s)
@@ -185,7 +184,6 @@ namespace NVelocity.Context
 		{
 			icb.PopCurrentTemplateName();
 		}
-
 
 		public IntrospectionCacheData ICacheGet(Object key)
 		{

@@ -137,11 +137,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 		public bool RenderComponentView(IInternalContextAdapter context, String viewToRender, TextWriter writer, NVelocityViewContextAdapter contextAdapter)
 		{
-			foreach(DictionaryEntry entry in contextAdapter.ContextVars)
-			{
-				context.Put(entry.Key.ToString(), entry.Value);
-			}
-
 			viewToRender = viewToRender + NVelocityViewEngine.TemplateExtension;
 
 			CheckTemplateStack(context);
