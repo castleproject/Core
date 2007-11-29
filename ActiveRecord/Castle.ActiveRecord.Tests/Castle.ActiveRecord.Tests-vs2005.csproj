@@ -99,6 +99,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="Nullables, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Nullables.dll</HintPath>
+    </Reference>
+    <Reference Include="Nullables.NHibernate, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Nullables.NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
       <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
@@ -194,9 +202,6 @@
     <Compile Include="Model\LineItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\NullableModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Model\Order.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -250,9 +255,6 @@
     <Compile Include="MultipleDatabasesTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NullablesTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ActiveRecordGenericsTestCase.cs" />
     <Compile Include="SessionScopeTestCase.cs">
       <SubType>Code</SubType>
@@ -293,7 +295,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnyRelationTestCase.cs" />
+    <Compile Include="CompositeNestedClassTestCase.cs" />
     <Compile Include="CompositeUserTypeTestCase.cs" />
+    <Compile Include="CountQueryTestCase.cs" />
     <Compile Include="InvalidRootTypeTestCase.cs" />
     <Compile Include="Model\ClassWithBrokenField.cs" />
     <Compile Include="Model\CompositeNested\CompositeNestedParent.cs" />

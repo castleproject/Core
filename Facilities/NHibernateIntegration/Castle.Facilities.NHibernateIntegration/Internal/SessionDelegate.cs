@@ -19,7 +19,6 @@ namespace Castle.Facilities.NHibernateIntegration
 	using System.Collections;
 
 	using NHibernate;
-	using NHibernate.Stat;
 	using NHibernate.Type;
 
 	/// <summary>
@@ -63,13 +62,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			get { return inner.FlushMode; }
 			set { inner.FlushMode = value; }
 		}
-
-		public CacheMode CacheMode
-		{
-			get { return inner.CacheMode; }
-			set { inner.CacheMode = value; }
-		}
-
+		
 		public ISessionFactory SessionFactory
 		{
 			get { return inner.SessionFactory; }
@@ -94,12 +87,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			get { return inner.Transaction; }
 		}
-
-		public ISessionStatistics Statistics
-		{
-			get { return inner.Statistics; }
-		}
-
+		
 		public void CancelQuery()
 		{
 			inner.CancelQuery();
@@ -110,6 +98,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			return inner.IsDirty();
 		}
 		
+
 		public void Flush()
 		{
 			inner.Flush();
@@ -184,12 +173,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			return inner.GetSessionImplementation();
 		}
-
-		public IMultiCriteria CreateMultiCriteria()
-		{
-			return inner.CreateMultiCriteria();
-		}
-
+		
 		public T Get<T>(object id)
 		{
 			return inner.Get<T>(id);
@@ -198,11 +182,6 @@ namespace Castle.Facilities.NHibernateIntegration
 		public T Get<T>(object id, LockMode lockMode)
 		{
 			return inner.Get<T>(id, lockMode);
-		}
-
-		public string GetEntityName(object obj)
-		{
-			return inner.GetEntityName(obj);
 		}
 
 		public IFilter EnableFilter(string filterName)
@@ -223,11 +202,6 @@ namespace Castle.Facilities.NHibernateIntegration
 		public IMultiQuery CreateMultiQuery()
 		{
 			return inner.CreateMultiQuery();
-		}
-
-		public ISession SetBatchSize(int batchSize)
-		{
-			return inner.SetBatchSize(batchSize);
 		}
 
 		public void Replicate(object obj, ReplicationMode replicationMode)

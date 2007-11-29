@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nullables.NHibernate</name>
+    </assembly>
+    <members>
+        <member name="T:Nullables.NHibernate.EmptyAnsiStringType">
+            <summary>
+            An <see cref="T:NHibernate.UserTypes.IUserType"/> that reads a <see langword="null"/> value from an <c>ansi string</c>
+            column in the database as a <see cref="F:System.String.Empty">String.Empty</see>
+            and writes a <see cref="F:System.String.Empty">String.Empty</see> to the database
+            as <see langword="null"/>.
+            </summary>
+            <remarks>
+            This is intended to help with Windows Forms DataBinding and the problems associated
+            with binding a null value.  See <a href="http://jira.nhibernate.org/browse/NH-279">
+            NH-279</a> for the origin of this code.
+            </remarks>
+        </member>
+        <member name="T:Nullables.NHibernate.EmptyStringType">
+            <summary>
+            An <see cref="T:NHibernate.UserTypes.IUserType"/> that reads a <see langword="null"/> value from an <c>string</c>
+            column in the database as a <see cref="F:System.String.Empty">String.Empty</see>
+            and writes a <see cref="F:System.String.Empty">String.Empty</see> to the database
+            as <see langword="null"/>.
+            </summary>
+            <remarks>
+            This is intended to help with Windows Forms DataBinding and the problems associated
+            with binding a null value.  See <a href="http://jira.nhibernate.org/browse/NH-279">
+            NH-279</a> for the origin of this code.
+            </remarks>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableBooleanType">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableBoolean"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableTypesType">
+            <summary>
+            Abstract type used for implementing NHibernate <see cref="T:NHibernate.Type.IType"/>s for 
+            the Nullables library.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableByteType">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableByte"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableCharType">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableChar"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableDateTimeType">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableDateTime"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableDecimalType">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableDecimal"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableDoubleType">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableDouble"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableGuidType">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableGuid"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableInt16Type">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableInt16"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableInt32Type">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableInt32"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableInt64Type">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableInt64"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableSByteType">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableSByte"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullableSingleType">
+            <summary>
+            A NHibernate <see cref="T:NHibernate.Type.IType"/> for a <see cref="T:Nullables.NullableSingle"/>.
+            </summary>
+        </member>
+        <member name="T:Nullables.NHibernate.NullablesTypes">
+            <summary>
+            Summary description for NullablesTypes.
+            </summary>
+        </member>
+        <member name="F:Nullables.NHibernate.NullablesTypes.NullableBoolean">
+            <summary>
+            Nullables.NHibernate.NullableBoolean type
+            </summary>
+        </member>
+        <member name="F:Nullables.NHibernate.NullablesTypes.NullableByte">
+            <summary>
+            Nullables.NHibernate.NullableByte type
+            </summary>
+        </member>
+        <member name="F:Nullables.NHibernate.NullablesTypes.NullableDouble">
+            <summary>
+            Nullables.NHibernate.NullableDouble type
+            </summary>
+        </member>
+        <member name="F:Nullables.NHibernate.NullablesTypes.NullableInt16">
+            <summary>
+            Nullables.NHibernate.NullableInt16 type
+            </summary>
+        </member>
+        <member name="F:Nullables.NHibernate.NullablesTypes.NullableInt32">
+            <summary>
+            Nullables.NHibernate.NullableInt32 type
+            </summary>
+        </member>
+        <member name="F:Nullables.NHibernate.NullablesTypes.NullableInt64">
+            <summary>
+            Nullables.NHibernate.NullableInt64 type
+            </summary>
+        </member>
+        <member name="F:Nullables.NHibernate.NullablesTypes.NullableDecimal">
+            <summary>
+            Nullables.NHibernate.NullableDecimal type
+            </summary>
+        </member>
+        <member name="F:Nullables.NHibernate.NullablesTypes.NullableDateTime">
+            <summary>
+            Nullables.NHibernate.NullableDateTime type
+            </summary>
+        </member>
+        <member name="F:Nullables.NHibernate.NullablesTypes.NullableSingle">
+            <summary>
+            Nullables.NHibernate.NullableSingle type
+            </summary>
+        </member>
+        <member name="F:Nullables.NHibernate.NullablesTypes.NullableGuid">
+            <summary>
+            Nullables.NHibernate.NullableGuid type
+            </summary>
+        </member>
+    </members>
+</doc>

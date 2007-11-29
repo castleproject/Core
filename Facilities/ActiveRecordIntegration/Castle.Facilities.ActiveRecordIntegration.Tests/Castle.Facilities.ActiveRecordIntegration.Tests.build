@@ -31,17 +31,17 @@
 		
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='arfacility']/config/add[@key='dialect']/@value"
+			xpath="/configuration/castle/facilities/facility[@id='arfacility']/config/add[@key='hibernate.dialect']/@value"
 			value="${ar.dialect}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='arfacility']/config/add[@key='connection.driver_class']/@value"
+			xpath="/configuration/castle/facilities/facility[@id='arfacility']/config/add[@key='hibernate.connection.driver_class']/@value"
 			value="${ar.connection.driver_class}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='arfacility']/config/add[@key='connection.connection_string']/@value"
+			xpath="/configuration/castle/facilities/facility[@id='arfacility']/config/add[@key='hibernate.connection.connection_string']/@value"
 			value="${ar.connection.connection_string.1}" 
 		/>
 	</target>

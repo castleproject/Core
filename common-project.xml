@@ -296,17 +296,17 @@
 		-->
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/nhibernate/add[@key='dialect']/@value"
+			xpath="/configuration/nhibernate/add[@key='hibernate.dialect']/@value"
 			value="${nhibernate.dialect}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/nhibernate/add[@key='connection.driver_class']/@value"
+			xpath="/configuration/nhibernate/add[@key='hibernate.connection.driver_class']/@value"
 			value="${nhibernate.connection.driver_class}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/nhibernate/add[@key='connection.connection_string']/@value"
+			xpath="/configuration/nhibernate/add[@key='hibernate.connection.connection_string']/@value"
 			value="${nhibernate.connection.connection_string}" 
 		/>
 	</target>
@@ -316,7 +316,7 @@
 
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/nhibernate/add[@key='connection.connection_string']/@value"
+			xpath="/configuration/nhibernate/add[@key='hibernate.connection.connection_string']/@value"
 			value="conn string here" 
 		/>
 	</target>
