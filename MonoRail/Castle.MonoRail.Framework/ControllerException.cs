@@ -21,7 +21,7 @@ namespace Castle.MonoRail.Framework
 	/// Represents and Exception during the controller processing.
 	/// </summary>
 	[Serializable]
-	public class ControllerException : RailsException
+	public class ControllerException : MonoRailException
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ControllerException"/> class.
