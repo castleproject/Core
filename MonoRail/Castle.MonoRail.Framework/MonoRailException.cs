@@ -21,40 +21,40 @@ namespace Castle.MonoRail.Framework
 	/// Base exception for monorail exceptions
 	/// </summary>
 	[Serializable]
-	public class RailsException : ApplicationException
+	public class MonoRailException : ApplicationException
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RailsException"/> class.
+		/// Initializes a new instance of the <see cref="MonoRailException"/> class.
 		/// </summary>
 		/// <param name="message">The message.</param>
-		public RailsException(String message) : base(message)
+		public MonoRailException(String message) : base(message)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RailsException"/> class.
+		/// Initializes a new instance of the <see cref="MonoRailException"/> class.
 		/// </summary>
 		/// <param name="message">The message.</param>
 		/// <param name="args">The args.</param>
-		public RailsException(String message, params object[] args) : this(String.Format(message, args))
+		public MonoRailException(String message, params object[] args) : this(String.Format(message, args))
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RailsException"/> class.
+		/// Initializes a new instance of the <see cref="MonoRailException"/> class.
 		/// </summary>
 		/// <param name="message">The message.</param>
 		/// <param name="innerException">The inner exception.</param>
-		public RailsException(String message, Exception innerException) : base(message, innerException)
+		public MonoRailException(String message, Exception innerException) : base(message, innerException)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RailsException"/> class.
+		/// Initializes a new instance of the <see cref="MonoRailException"/> class.
 		/// </summary>
 		/// <param name="info">The object that holds the serialized object data.</param>
 		/// <param name="context">The contextual information about the source or destination.</param>
-		public RailsException(SerializationInfo info, StreamingContext context) : base(info, context)
+		public MonoRailException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}
