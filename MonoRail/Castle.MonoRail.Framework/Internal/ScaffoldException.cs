@@ -21,7 +21,7 @@ namespace Castle.MonoRail.Framework
 	/// Exception to be used by scaffolding implementations
 	/// </summary>
 	[Serializable]
-	public class ScaffoldException : RailsException
+	public class ScaffoldException : MonoRailException
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ScaffoldException"/> class.

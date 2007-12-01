@@ -18,18 +18,21 @@ using NVelocity.Runtime.Directive;
 using NVelocity.Runtime;
 using NVelocity.Exception;
 using NVelocity.Runtime.Parser;
-using IInternalContextAdapter = NVelocity.Context.IInternalContextAdapter;
 using Template = NVelocity.Template;
 
 namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.IO;
 	using System.Text;
-	using System.Collections;
-
 	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
+	using global::NVelocity.App.Events;
+	using global::NVelocity.Context;
+	using global::NVelocity.Util.Introspection;
 
 	/// <summary>
 	/// Pendent
@@ -70,6 +73,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
+			IRailsEngineContext railsContext = MonoRailHttpHandler.CurrentContext;
+			IViewComponentRegistry registry = railsContext.GetService<IViewComponentFactory>().Registry;
+			IViewComponentDescriptorProvider viewDescProvider = railsContext.GetService<IViewComponentDescriptorProvider>();
+			ICacheProvider cacheProvider = railsContext.GetService<ICacheProvider>();
+
 			componentName = compNameNode.FirstToken.Image;
 
 			if (componentName == null)
@@ -87,36 +95,88 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				componentName = (String) Evaluate(inlineNode, context);
 			}
 
+			IDictionary componentParams = CreateParameters(context, node);
+
+			Type viewComptype = registry.GetViewComponent(componentName);
+
+			ViewComponentDescriptor descriptor = null;
+			CacheKey key = null;
+
+			if (viewComptype != null)
+			{
+				descriptor = viewDescProvider.Collect(viewComptype);
+			}
+
+			bool isOutputtingToCache = false;
+			ViewComponentCacheBag bag = null;
+
+			if (descriptor != null && descriptor.IsCacheable)
+			{
+				key = descriptor.CacheKeyGenerator.Create(componentName, componentParams, railsContext);
+
+				if (key == null)
+				{
+					throw new MonoRailException("CacheKeyGenerator returned a null CacheKey implementation (Not good at all). " + 
+						"Please investigate the implementation: " + descriptor.CacheKeyGenerator.GetType().FullName);
+				}
+
+				ViewComponentCacheBag cachedContent = (ViewComponentCacheBag) cacheProvider.Get(key.ToString());
+
+				if (cachedContent != null)
+				{
+					// Restore entries
+
+					foreach(KeyValuePair<string, object> pair in cachedContent.ContextEntries)
+					{
+						context[pair.Key] = pair.Value;
+					}
+
+					// Render from cache
+
+					writer.Write(cachedContent.Content);
+
+					return true;
+				}
+
+				isOutputtingToCache = true;
+				bag = new ViewComponentCacheBag();
+			}
+
 			component = viewComponentFactory.Create(componentName);
+
+			if (component == null)
+			{
+				throw new MonoRailException("ViewComponentFactory returned a null ViewComponent for " + componentName + ". " +
+					"Please investigate the implementation: " + viewComponentFactory.GetType().FullName);
+			}
 
 			ASTDirective directiveNode = (ASTDirective) node;
 			IViewRenderer renderer = (IViewRenderer) directiveNode.Directive;
 
 			contextAdapter = new NVelocityViewContextAdapter(componentName, node, viewEngine, renderer);
-			contextAdapter.Context = context;
+			contextAdapter.Context = isOutputtingToCache ? new CacheAwareContext(context, bag) : context;
 
 			ProcessSubSections();
 
 			INode bodyNode = null;
-
-			IDictionary componentParams = CreateParameters(context, node);
 
 			if (node.ChildrenCount > 0)
 			{
 				bodyNode = node.GetChild(node.ChildrenCount - 1);
 			}
 
+
+			TextWriter output = isOutputtingToCache ? bag.CacheWriter : writer;
+
 			contextAdapter.BodyNode = bodyNode;
 			contextAdapter.ComponentParams = componentParams;
-			contextAdapter.TextWriter = writer;
-
-			IRailsEngineContext railsContext = MonoRailHttpHandler.CurrentContext;
+			contextAdapter.TextWriter = output;
 
 			const string ViewComponentContextKey = "viewcomponent";
 
 			try
 			{
-				contextAdapter.ContextVars[ViewComponentContextKey] = component;
+				context[ViewComponentContextKey] = component;
 
 				component.Init(railsContext, contextAdapter);
 
@@ -124,12 +184,23 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 				if (contextAdapter.ViewToRender != null)
 				{
-					return RenderComponentView(context, contextAdapter.ViewToRender, writer, contextAdapter);
+					RenderComponentView(context, contextAdapter.ViewToRender, output, contextAdapter);
+				}
+
+				if (isOutputtingToCache)
+				{
+					// Save output
+
+					cacheProvider.Store(key.ToString(), bag);
+
+					// Output to correct writer
+
+					writer.Write(bag.Content);
 				}
 			}
 			finally
 			{
-				contextAdapter.ContextVars.Remove(ViewComponentContextKey);
+				context.Remove(ViewComponentContextKey);
 			}
 
 			return true;
@@ -141,7 +212,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 			CheckTemplateStack(context);
 
-			String encoding = SetUpEncoding(context);
+			String encoding = ExtractEncoding(context);
 
 			Template template = GetTemplate(viewToRender, encoding);
 
@@ -295,7 +366,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 					if (childrenCount > 2)
 					{
 						String message = String.Format("A #{0} directive with a dictionary " + 
-							"string param cannot have extra params - component {0}", componentName, Name);
+							"string parameter cannot have extra params - component {0}", componentName);
 						throw new ViewComponentException(message);
 					}
 					return dict;
@@ -303,7 +374,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				else
 				{
 					String message = String.Format("A #{0} directive with parameters must use " + 
-							"the keyword 'with' - component {0}", componentName, Name);
+							"the keyword 'with' - component {0}", componentName);
 					throw new ViewComponentException(message);
 				}
 			}
@@ -338,17 +409,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 		private Template GetTemplate(String viewToRender, String encoding)
 		{
-			try
-			{
-				return rsvc.GetTemplate(viewToRender, encoding);
-			}
-			catch(Exception)
-			{
-				throw;
-			}
+			return rsvc.GetTemplate(viewToRender, encoding);
 		}
 
-		private String SetUpEncoding(IInternalContextAdapter context)
+		private String ExtractEncoding(IInternalContextAdapter context)
 		{
 			Resource current = context.CurrentResource;
 
@@ -362,6 +426,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			{
 				encoding = (String) rsvc.GetProperty(RuntimeConstants.INPUT_ENCODING);
 			}
+
 			return encoding;
 		}
 
@@ -380,6 +445,201 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 				throw new Exception("Max recursion depth reached (" + templateStack.Length + ")" + " File stack:" + path);
 			}
+		}
+	}
+
+	public class CacheAwareContext : IInternalContextAdapter
+	{
+		private readonly IInternalContextAdapter context;
+		private readonly ViewComponentCacheBag bag;
+
+		public CacheAwareContext(IInternalContextAdapter context, ViewComponentCacheBag bag)
+		{
+			this.context = context;
+			this.bag = bag;
+		}
+
+		object IInternalContextAdapter.Remove(object key)
+		{
+			if (bag.ContextEntries.ContainsKey(key.ToString()))
+			{
+				bag.ContextEntries.Remove(key.ToString());
+			}
+			return context.Remove(key);
+		}
+
+		public void PushCurrentTemplateName(string s)
+		{
+			context.PushCurrentTemplateName(s);
+		}
+
+		public void PopCurrentTemplateName()
+		{
+			context.PopCurrentTemplateName();
+		}
+
+		public IntrospectionCacheData ICacheGet(object key)
+		{
+			return context.ICacheGet(key);
+		}
+
+		public void ICachePut(object key, IntrospectionCacheData o)
+		{
+			context.ICachePut(key, o);
+		}
+
+		public string CurrentTemplateName
+		{
+			get { return context.CurrentTemplateName; }
+		}
+
+		public object[] TemplateNameStack
+		{
+			get { return context.TemplateNameStack; }
+		}
+
+		public Resource CurrentResource
+		{
+			get { return context.CurrentResource; }
+			set { context.CurrentResource = value; }
+		}
+
+		public object Put(string key, object value)
+		{
+			bag.ContextEntries[key] = value;
+
+			return context.Put(key, value);
+		}
+
+		public object Get(string key)
+		{
+			return context.Get(key);
+		}
+
+		public bool ContainsKey(object key)
+		{
+			return context.ContainsKey(key);
+		}
+
+		object IContext.Remove(object key)
+		{
+			if (bag.ContextEntries.ContainsKey(key.ToString()))
+			{
+				bag.ContextEntries.Remove(key.ToString());
+			}
+
+			return context.Remove(key);
+		}
+
+		public IContext InternalUserContext
+		{
+			get { return context.InternalUserContext; }
+		}
+
+		public IInternalContextAdapter BaseContext
+		{
+			get { return context.BaseContext; }
+		}
+
+		public EventCartridge AttachEventCartridge(EventCartridge ec)
+		{
+			return context.AttachEventCartridge(ec);
+		}
+
+		public EventCartridge EventCartridge
+		{
+			get { return context.EventCartridge; }
+		}
+
+		public bool Contains(object key)
+		{
+			return context.Contains(key);
+		}
+
+		public void Add(object key, object value)
+		{
+			bag.ContextEntries[key.ToString()] = value;
+			context.Add(key, value);
+		}
+
+		public void Clear()
+		{
+			context.Clear();
+		}
+
+		IDictionaryEnumerator IDictionary.GetEnumerator()
+		{
+			return context.GetEnumerator();
+		}
+
+		public void Remove(object key)
+		{
+			if (bag.ContextEntries.ContainsKey(key.ToString()))
+			{
+				bag.ContextEntries.Remove(key.ToString());
+			}
+
+			((IDictionary) context).Remove(key);
+		}
+
+		public object this[object key]
+		{
+			get { return context[key]; }
+			set
+			{
+				bag.ContextEntries[key.ToString()] = value;
+				context[key] = value;
+			}
+		}
+
+		public ICollection Keys
+		{
+			get { return ((IDictionary) context).Keys; }
+		}
+
+		object[] IContext.Keys
+		{
+			get { return ((IContext)context).Keys; }
+		}
+
+		public ICollection Values
+		{
+			get { return context.Values; }
+		}
+
+		public bool IsReadOnly
+		{
+			get { return context.IsReadOnly; }
+		}
+
+		public bool IsFixedSize
+		{
+			get { return context.IsFixedSize; }
+		}
+
+		public void CopyTo(Array array, int index)
+		{
+			context.CopyTo(array, index);
+		}
+
+		public int Count
+		{
+			get { return ((ICollection) context).Count; }
+		}
+
+		public object SyncRoot
+		{
+			get { return context.SyncRoot; }
+		}
+
+		public bool IsSynchronized
+		{
+			get { return context.IsSynchronized; }
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return ((IEnumerable) context).GetEnumerator();
 		}
 	}
 }

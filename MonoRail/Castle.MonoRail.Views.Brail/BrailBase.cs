@@ -229,7 +229,7 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			ParameterSearch search = GetParameterInternal(name);
 			if (search.Found == false)
-				throw new RailsException("Parameter '" + name + "' was not found!");
+				throw new MonoRailException("Parameter '" + name + "' was not found!");
 			return search.Value;
 		}
 

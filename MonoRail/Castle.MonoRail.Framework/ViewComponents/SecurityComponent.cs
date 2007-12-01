@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 			if (role == null && roles == null)
 			{
-				throw new RailsException("SecurityComponent: you must supply a role (or roles) parameter");
+				throw new MonoRailException("SecurityComponent: you must supply a role (or roles) parameter");
 			}
 
 			shouldRender = false;

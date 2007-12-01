@@ -75,6 +75,7 @@ namespace Castle.MonoRail.Framework.Services
 		public virtual ViewComponent Create(String name)
 		{
 			Type viewCompType = ResolveType(name);
+
 			try
 			{
 				return (ViewComponent) Activator.CreateInstance(viewCompType);
@@ -85,6 +86,15 @@ namespace Castle.MonoRail.Framework.Services
 
 				throw;
 			}
+		}
+
+		/// <summary>
+		/// Gets the registry.
+		/// </summary>
+		/// <value>The registry.</value>
+		public IViewComponentRegistry Registry
+		{
+			get { return GetViewComponentRegistry(); }
 		}
 
 		/// <summary>

@@ -288,7 +288,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to the next wizard step (if it exists)
 		/// </summary>
-		/// <exception cref="RailsException">if no further step exists</exception>
+		/// <exception cref="MonoRailException">if no further step exists</exception>
 		protected void RedirectToNextStep()
 		{
 			RedirectToNextStep((IDictionary) null);
@@ -297,7 +297,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to the next wizard step (if it exists)
 		/// </summary>
-		/// <exception cref="RailsException">if no further step exists</exception>
+		/// <exception cref="MonoRailException">if no further step exists</exception>
 		protected void RedirectToNextStep(params String[] queryStringParameters)
 		{
 			RedirectToNextStep(DictHelper.Create(queryStringParameters));
@@ -306,7 +306,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to the next wizard step (if it exists)
 		/// </summary>
-		/// <exception cref="RailsException">if no further step exists</exception>
+		/// <exception cref="MonoRailException">if no further step exists</exception>
 		protected void RedirectToNextStep(IDictionary queryStringParameters)
 		{
 			String wizardName = WizardUtils.ConstructWizardNamespace(_wizardcontroller);
@@ -327,14 +327,14 @@ namespace Castle.MonoRail.Framework
 			}
 			else
 			{
-				throw new RailsException("There is no next step available");
+				throw new MonoRailException("There is no next step available");
 			}
 		}
 
 		/// <summary>
 		/// Sends a redirect to the previous wizard step
 		/// </summary>
-		/// <exception cref="RailsException">
+		/// <exception cref="MonoRailException">
 		/// if no previous step exists (ie. already in the first one)</exception>
 		protected void RedirectToPreviousStep()
 		{
@@ -344,7 +344,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to the previous wizard step
 		/// </summary>
-		/// <exception cref="RailsException">
+		/// <exception cref="MonoRailException">
 		/// if no previous step exists (ie. already in the first one)</exception>
 		protected void RedirectToPreviousStep(params String[] queryStringParameters)
 		{
@@ -354,7 +354,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to the previous wizard step
 		/// </summary>
-		/// <exception cref="RailsException">
+		/// <exception cref="MonoRailException">
 		/// if no previous step exists (ie. already in the first one)</exception>
 		protected void RedirectToPreviousStep(IDictionary queryStringParameters)
 		{
@@ -374,7 +374,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else
 			{
-				throw new RailsException("There is no previous step available");
+				throw new MonoRailException("There is no previous step available");
 			}
 		}
 

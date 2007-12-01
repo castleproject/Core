@@ -82,7 +82,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (HttpContext.Current == null)
 			{
-				throw new RailsException("No http context available");
+				throw new MonoRailException("No http context available");
 			}
 			
 			if (logger.IsDebugEnabled)
@@ -96,7 +96,7 @@ namespace Castle.MonoRail.Framework
 
 			if (controller == null)
 			{
-				throw new RailsException("No controller found on the executing activity");
+				throw new MonoRailException("No controller found on the executing activity");
 			}
 
 			if (parameters != null && parameters.Count != 0)

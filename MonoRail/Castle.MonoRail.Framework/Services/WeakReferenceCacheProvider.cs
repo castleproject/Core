@@ -70,23 +70,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public object Get(String key)
 		{
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("Getting entry {0}", key);
-			}
-			
-			WeakReference reference = (WeakReference) entries[key];
-
-			if (reference == null) return null;
-
-			if (reference.IsAlive)
-			{
-				return reference.Target;
-			}
-
-			Delete(key);
-
-			return null;
+			return InternalGet(key);
 		}
 
 		/// <summary>
@@ -96,12 +80,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="data">The data.</param>
 		public void Store(String key, object data)
 		{
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("Storing entry {0} with value {1}", key, data);
-			}
-
-			entries[key] = new WeakReference(data);
+			InternalStore(key, data);
 		}
 
 		/// <summary>
@@ -110,11 +89,54 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="key">The key.</param>
 		public void Delete(String key)
 		{
+			InternalDelete(key);
+		}
+
+		private void InternalStore(object key, object data)
+		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (data == null) throw new ArgumentNullException("data");
+
+			if (logger.IsDebugEnabled)
+			{
+				logger.DebugFormat("Storing entry {0} with value {1}", key, data);
+			}
+
+			entries[key] = new WeakReference(data);
+		}
+
+		private object InternalGet(object key)
+		{
+			if (key == null) throw new ArgumentNullException("key");
+
+			if (logger.IsDebugEnabled)
+			{
+				logger.DebugFormat("Getting entry {0}", key);
+			}
+
+			WeakReference reference = (WeakReference)entries[key];
+
+			if (reference == null) return null;
+
+			if (reference.IsAlive)
+			{
+				return reference.Target;
+			}
+
+			InternalDelete(key);
+
+			return null;
+		}
+
+		private void InternalDelete(object key)
+		{
+			if (key == null) throw new ArgumentNullException("key");
+
 			if (logger.IsDebugEnabled)
 			{
 				logger.DebugFormat("Deleting entry {0}", key);
 			}
-			
+
 			entries.Remove(key);
 		}
 	}

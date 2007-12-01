@@ -40,7 +40,7 @@ namespace Castle.MonoRail.WindsorExtension
 			}
 			catch(ComponentNotFoundException)
 			{
-				throw new RailsException("ControllerTree not found. Check whether RailsFacility is properly configured/registered");
+				throw new MonoRailException("ControllerTree not found. Check whether RailsFacility is properly configured/registered");
 			}
 
 			Type implType = tree.GetController(urlInfo.Area, urlInfo.Controller);

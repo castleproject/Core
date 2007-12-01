@@ -16,7 +16,6 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 	using System.ComponentModel;
 	using System.Configuration;
 	using System.IO;
@@ -147,7 +146,7 @@ namespace Castle.MonoRail.Framework
 
 			if (!found)
 			{
-				throw new RailsException("We inspected the web.config httpHandlers section and " +
+				throw new MonoRailException("We inspected the web.config httpHandlers section and " +
 				                         "couldn't find an extension that mapped to MonoRailHttpHandlerFactory. " +
 				                         "Is your configuration right to use MonoRail?");
 			}
@@ -275,7 +274,7 @@ namespace Castle.MonoRail.Framework
 		/// default implementation.
 		/// </summary>
 		/// <param name="config">The configuration object</param>
-		private void RegisterMissingServices(MonoRailConfiguration config)
+		private static void RegisterMissingServices(MonoRailConfiguration config)
 		{
 			ServiceEntryCollection services = config.ServiceEntries;
 
@@ -287,6 +286,11 @@ namespace Castle.MonoRail.Framework
 			{
 				services.RegisterService(ServiceIdentification.ViewSourceLoader,
 				                         typeof(FileAssemblyViewSourceLoader));
+			}
+			if (!services.HasService(ServiceIdentification.ViewComponentDescriptorProvider))
+			{
+				services.RegisterService(ServiceIdentification.ViewComponentDescriptorProvider,
+										 typeof(DefaultViewComponentDescriptorProvider));
 			}
 			if (!services.HasService(ServiceIdentification.ScaffoldingSupport))
 			{
@@ -417,7 +421,7 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		private object ActivateService(Type type)
+		private static object ActivateService(Type type)
 		{
 			try
 			{
@@ -431,7 +435,7 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		private void InvokeInitialize(object instance)
+		private static void InvokeInitialize(object instance)
 		{
 			IInitializable initializable = instance as IInitializable;
 
@@ -469,7 +473,7 @@ namespace Castle.MonoRail.Framework
 			return config;
 		}
 
-		private void AssertImplementsService(Type service, Type impl)
+		private static void AssertImplementsService(Type service, Type impl)
 		{
 			if (!service.IsAssignableFrom(impl))
 			{

@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Views.Brail
         public override Statement Expand(MacroStatement macro)
         {
             if (macro.Arguments.Count == 0)
-                throw new RailsException("Section must be called with a name");
+                throw new MonoRailException("Section must be called with a name");
 
             MacroStatement component = GetParentComponent(macro);
 
@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Views.Brail
             if(parentComponent == null ||
                parentComponent.Name.ToLowerInvariant() != "component" )
             {
-                throw new RailsException("A section must be contained in a component");
+                throw new MonoRailException("A section must be contained in a component");
             }
             return parentComponent;
         }

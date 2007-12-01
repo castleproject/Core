@@ -205,7 +205,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 					Logger.Error("Could not render view", ex);
 				}
 
-				throw new RailsException("Could not render view: " + view, ex);
+				throw new MonoRailException("Could not render view: " + view, ex);
 			}
 		}
 
@@ -227,7 +227,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 					Logger.Error("Could not render partial", ex);
 				}
 
-				throw new RailsException("Could not render partial " + view, ex);
+				throw new MonoRailException("Could not render partial " + view, ex);
 			}
 		}
 
@@ -266,7 +266,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 					Logger.Error("Could not generate JS", ex);
 				}
 
-				throw new RailsException("Error generating JS. Template " + templateName, ex);
+				throw new MonoRailException("Error generating JS. Template " + templateName, ex);
 			}
 		}
 
@@ -359,7 +359,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				}
 				else
 				{
-					throw new RailsException("Error processing layout. Maybe the layout file does not exists? File: " + layoutName, ex);
+					throw new MonoRailException("Error processing layout. Maybe the layout file does not exists? File: " + layoutName, ex);
 				}
 			}
 		}

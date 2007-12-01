@@ -101,7 +101,7 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 				if (controllerType == null)
 				{
 					logger.Fatal("Controller not found for the area and controller specified");
-					throw new RailsException("Controller not found with Area: '{0}', Name: '{1}'", area, controller);
+					throw new MonoRailException("Controller not found with Area: '{0}', Name: '{1}'", area, controller);
 				}
 
 				String baseUrl = context.ApplicationPath + "/";

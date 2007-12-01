@@ -46,7 +46,7 @@ namespace Castle.MonoRail.Views.Brail
 			normalizer.Visit(stmt);
 			//empty return, so error
 			if (stmt.Expression == null)
-				throw new RailsException("An empty return statement on a method with output attribute");
+				throw new MonoRailException("An empty return statement on a method with output attribute");
 			found = true;
 			Block block = (Block) stmt.ParentNode;
 			int index = 0;

@@ -73,7 +73,7 @@ namespace Castle.MonoRail.Framework.Internal
 				DynamicDispatchSupport dispInterface = generator as DynamicDispatchSupport;
 				if (dispInterface == null)
 				{
-					throw new MonoRail.Framework.RailsException("JS Generators must inherit DynamicDispatchSupport");
+					throw new MonoRail.Framework.MonoRailException("JS Generators must inherit DynamicDispatchSupport");
 				}
 				if (dispInterface.IsGeneratorMethod(method))
 				{

@@ -43,7 +43,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 			if (id == null || id.Trim().Length == 0)
 			{
-				throw new RailsException("CaptureFor requires an id attribute use #blockcomponent(CaptureFor with \"id=someid\")...#end");
+				throw new MonoRailException("CaptureFor requires an id attribute use #blockcomponent(CaptureFor with \"id=someid\")...#end");
 			}
 
 			StringWriter buffer = new StringWriter();
@@ -56,7 +56,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 			if (appendAtt != null)
 			{				
-				if(appendAtt == "before")
+				if (appendAtt == "before")
 				{
 					sb.Append(currentContent);
 				}

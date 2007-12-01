@@ -177,7 +177,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		{
 			if (bodyNode == null)
 			{
-				throw new RailsException("This component does not have a body content to be rendered");
+				throw new MonoRailException("This component does not have a body content to be rendered");
 			}
 
 			bodyNode.Render(context, writer);

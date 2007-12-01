@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 using NVelocity.Runtime.Directive;
 using NVelocity.Context;
 using NVelocity.Runtime.Parser.Node;
@@ -43,11 +42,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 			if (node.ChildrenCount != 2)
 			{
-				throw new RailsException("#capturefor directive expects an id attribute and a template block");
+				throw new MonoRailException("#capturefor directive expects an id attribute and a template block");
 			}
 
-			ASTWord idNode = node.GetChild(0) as ASTWord;
-			ASTBlock bodyNode = node.GetChild(1) as ASTBlock;
+			ASTWord idNode = (ASTWord) node.GetChild(0);
+			ASTBlock bodyNode = (ASTBlock) node.GetChild(1);
 
 			string id = idNode.Literal;
 

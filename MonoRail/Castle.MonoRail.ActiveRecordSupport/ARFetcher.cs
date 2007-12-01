@@ -49,13 +49,13 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			if (model == null)
 			{
-				throw new RailsException(String.Format("'{0}' is not an ActiveRecord " +
+				throw new MonoRailException(String.Format("'{0}' is not an ActiveRecord " +
 					"class. It could not be bound to an [ARFetch] attribute.", type.Name));
 			}
 
 			if (model.CompositeKey != null)
 			{
-				throw new RailsException("ARFetch only supports single-attribute primary keys");
+				throw new MonoRailException("ARFetch only supports single-attribute primary keys");
 			}
 
 			String webParamName = attr.RequestParameterName != null ? attr.RequestParameterName : param.Name;
@@ -97,7 +97,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				
 				if (!conversionSucceeded)
 				{
-					throw new RailsException("ARFetcher could not convert PK {0} to type {1}", pk, pkType);
+					throw new MonoRailException("ARFetcher could not convert PK {0} to type {1}", pk, pkType);
 				}
 
 				if (attr.Eager == null || attr.Eager.Length == 0)

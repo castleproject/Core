@@ -108,7 +108,7 @@ namespace Castle.MonoRail.Views.Brail
 				int startReading = index + start.Length;
 				lastIndex = code.IndexOf(end, startReading);
 				if (lastIndex == -1)
-					throw new RailsException("expected " + end);
+					throw new MonoRailException("expected " + end);
 				int lastIndexOffset = end.Length;
 				if (code[lastIndex - 1] == '-')
 				{
@@ -280,7 +280,7 @@ namespace Castle.MonoRail.Views.Brail
 					// handle long seperator
 					if (start != null && entry.Key.ToString().IndexOf(start as string) == -1)
 					{
-						throw new RailsException("Can't mix seperators in one file. Found both " + start + " and " + entry.Key);
+						throw new MonoRailException("Can't mix seperators in one file. Found both " + start + " and " + entry.Key);
 					}
 					start = entry.Key.ToString();
 					end = entry.Value.ToString();

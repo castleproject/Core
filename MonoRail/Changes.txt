@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Implemented support for view component caching. Just use the attribute 
+  ViewComponentDetails and its properties (cache, cachekeygenerator)
+
 - Applied Michael Sanford's patch which adds image button support to FormHelper.
 
 - Applied Rafael Teixeira's patch fixing MR-357

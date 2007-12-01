@@ -28,8 +28,8 @@ namespace Castle.MonoRail.Framework.Configuration
 	/// </summary>
 	public class ServiceEntryCollection : ISerializedConfig
 	{
-		private Hashtable service2Impl = new Hashtable();
-		private IList customServices = new ArrayList();
+		private readonly Hashtable service2Impl = new Hashtable();
+		private readonly IList customServices = new ArrayList();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ServiceEntryCollection"/> class.
@@ -134,7 +134,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			get { return service2Impl; }
 		}
 
-		private Type ToInterface(ServiceIdentification id)
+		private static Type ToInterface(ServiceIdentification id)
 		{
 			switch(id)
 			{
@@ -188,6 +188,8 @@ namespace Castle.MonoRail.Framework.Configuration
 					return typeof(IValidatorRegistry);
 				case ServiceIdentification.AjaxProxyGenerator:
 					return typeof(IAjaxProxyGenerator);
+				case ServiceIdentification.ViewComponentDescriptorProvider:
+					return typeof(IViewComponentDescriptorProvider);
 				default:
 					throw new NotSupportedException("Id not supported " + id);
 			}

@@ -20,8 +20,8 @@ namespace Castle.MonoRail.Framework.Configuration
 	using Castle.Components.Common.EmailSender;
 	using Castle.Components.Validator;
 	using Castle.MonoRail.Framework.Services.AjaxProxyGenerator;
-	using Framework;
-	using Internal;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Enum for all known MonoRail services.
@@ -60,6 +60,10 @@ namespace Castle.MonoRail.Framework.Configuration
 		/// The <see cref="IResourceDescriptorProvider"/> service
 		/// </summary>
 		ResourceDescriptorProvider,
+		/// <summary>
+		/// The <see cref="IViewComponentDescriptorProvider"/> service
+		/// </summary>
+		ViewComponentDescriptorProvider,
 		/// <summary>
 		/// The <see cref="IRescueDescriptorProvider"/> service
 		/// </summary>

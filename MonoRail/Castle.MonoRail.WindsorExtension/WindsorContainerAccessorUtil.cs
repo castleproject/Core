@@ -27,7 +27,7 @@ namespace Castle.MonoRail.WindsorExtension
 
 			if (containerAccessor == null)
 			{
-				throw new RailsException("You must extend the HttpApplication in your web project " +
+				throw new MonoRailException("You must extend the HttpApplication in your web project " +
 					"and implement the IContainerAccessor to properly expose your container instance");
 			}
 
@@ -35,7 +35,7 @@ namespace Castle.MonoRail.WindsorExtension
 
 			if (container == null)
 			{
-				throw new RailsException("The container seems to be unavailable in " +
+				throw new MonoRailException("The container seems to be unavailable in " +
 					"your HttpApplication subclass");
 			}
 

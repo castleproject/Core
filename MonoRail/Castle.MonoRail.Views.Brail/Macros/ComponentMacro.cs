@@ -27,7 +27,7 @@ namespace Castle.MonoRail.Views.Brail
 		public override Statement Expand(MacroStatement macro)
 		{
 			if (macro.Arguments.Count == 0)
-				throw new RailsException("Component must be called with a name");
+				throw new MonoRailException("Component must be called with a name");
 
             Block block = new Block();
 

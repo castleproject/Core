@@ -36,7 +36,7 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(RailsException))]
+		[ExpectedException(typeof(MonoRailException))]
 		public void AddViewComponent_DuplicateComponent_ThrowsException()
 		{
 			registry.AddViewComponent("MyViewComponent", typeof(ViewComponent));
@@ -44,14 +44,14 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(RailsException))]
+		[ExpectedException(typeof(MonoRailException))]
 		public void AddViewComponent_NonViewComponent_ThrowsException()
 		{
 			registry.AddViewComponent("MyViewComponent", typeof(DefaultViewComponentRegistry));
 		}
 
 		[Test]
-		[ExpectedException(typeof(RailsException))]
+		[ExpectedException(typeof(MonoRailException))]
 		public void GetViewComponent_MissingComponent_ThrowsException()
 		{
 			registry.GetViewComponent("MissingComponent");

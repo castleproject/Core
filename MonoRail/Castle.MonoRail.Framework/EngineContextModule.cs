@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Extensions.ExceptionChaining;
-	using Routing;
+	using Castle.MonoRail.Framework.Routing;
 
 	/// <summary>
 	/// Provides the services used and shared by the framework. Also 

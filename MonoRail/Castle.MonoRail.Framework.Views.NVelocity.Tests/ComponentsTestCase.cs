@@ -223,6 +223,42 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 				"AutoParameterBinding but was not passed or had a null value");
 		}
 
+		[Test]
+		public void SimpleComponentCaching()
+		{
+			DoGet("ViewCompCache/index1.rails");
+			AssertReplyContains("Cache content ");
+
+			String cachedContent = Output;
+			DoGet("ViewCompCache/index1.rails");
+
+			Assert.AreEqual(cachedContent, Output);
+		}
+
+		[Test]
+		public void ComponentCachingWithCaptureFor()
+		{
+			DoGet("ViewCompCache/index2.rails");
+			AssertReplyContains("hello from body\r\n\r\nSomething");
+
+			String cachedContent = Output;
+			DoGet("ViewCompCache/index2.rails");
+
+			Assert.AreEqual(cachedContent, Output);
+		}
+
+		[Test]
+		public void ComponentCachingWithTwoCaptureForConfiguredToAppendContent()
+		{
+			DoGet("ViewCompCache/index3.rails");
+			AssertReplyContains("hello from body\r\nSomething\r\nSomething else");
+
+			String cachedContent = Output;
+			DoGet("ViewCompCache/index3.rails");
+
+			Assert.AreEqual(cachedContent, Output);
+		}
+
 		private void AssertOutput(String expected, object output)
 		{
 			Assert.AreEqual(NormalizeWhitespace(expected), NormalizeWhitespace(output.ToString()));

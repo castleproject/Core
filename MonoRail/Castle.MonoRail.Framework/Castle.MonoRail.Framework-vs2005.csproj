@@ -163,9 +163,14 @@
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
     <Compile Include="IController.cs" />
     <Compile Include="Extensions\ExceptionChaining\LocalExceptionFilterHandler.cs" />
+    <Compile Include="Internal\Descriptors\ViewComponentDescriptor.cs" />
+    <Compile Include="Internal\Providers\DefaultViewComponentDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\IViewComponentDescriptorProvider.cs" />
     <Compile Include="Internal\ReflectionBasedDictionaryAdapter.cs" />
+    <Compile Include="Internal\ViewComponentCacheBag.cs" />
     <Compile Include="IRescueController.cs" />
     <Compile Include="IRoutingEngine.cs" />
+    <Compile Include="CacheKey.cs" />
     <Compile Include="Routing\IRoutingRule.cs" />
     <Compile Include="Routing\PatternRule.cs" />
     <Compile Include="Routing\RegexRule.cs" />
@@ -433,7 +438,7 @@
     <Compile Include="ProcessEngine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RailsException.cs">
+    <Compile Include="MonoRailException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RoutingModule.cs">
@@ -487,11 +492,13 @@
     </Compile>
     <Compile Include="ViewComponentException.cs" />
     <Compile Include="ViewComponents\AbstractPaginationViewComponent.cs" />
+    <Compile Include="ViewComponents\AlwaysCacheKeyGenerator.cs" />
     <Compile Include="ViewComponents\AuthenticatedContent.cs" />
     <Compile Include="ViewComponents\CaptureFor.cs" />
     <Compile Include="ViewComponents\ChildContentComponent.cs" />
     <Compile Include="ViewComponents\ColumnRenderer.cs" />
     <Compile Include="ViewComponents\DiggStylePagination.cs" />
+    <Compile Include="ViewComponents\IViewComponentCacheKeyGenerator.cs" />
     <Compile Include="ViewComponents\SecurityComponent.cs" />
     <Compile Include="ViewComponents\SelectStylePagination.cs" />
     <Compile Include="ViewComponents\SiteMapComponent.cs" />
@@ -616,9 +623,6 @@
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
       <Name>Castle.Components.Validator-vs2005</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Internal\Graph\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

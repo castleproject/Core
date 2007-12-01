@@ -69,7 +69,7 @@ namespace Castle.MonoRail.Framework
 
 			if (wizardController == null)
 			{
-				throw new RailsException("The controller {0} must implement the interface " + 
+				throw new MonoRailException("The controller {0} must implement the interface " + 
 					"IWizardController to be used as a wizard", controller.Name);
 			}
 			
@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Framework
 
 			if (steps == null || steps.Length == 0)
 			{
-				throw new RailsException("The controller {0} returned no WizardStepPage", controller.Name);
+				throw new MonoRailException("The controller {0} returned no WizardStepPage", controller.Name);
 			}
 
 			IList stepList = new ArrayList();

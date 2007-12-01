@@ -1214,7 +1214,7 @@ namespace Castle.MonoRail.Framework
 					logger.Error("Error sending e-mail", ex);
 				}
 				
-				throw new RailsException("Error sending e-mail", ex);
+				throw new MonoRailException("Error sending e-mail", ex);
 			}
 		}
 

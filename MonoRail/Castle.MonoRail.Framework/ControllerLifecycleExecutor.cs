@@ -692,7 +692,7 @@ namespace Castle.MonoRail.Framework
 					                 "configuration file, or, to use the standard ActiveRecord support " +
 					                 "copy the necessary assemblies to the bin folder.";
 
-					throw new RailsException(message);
+					throw new MonoRailException(message);
 				}
 
 				scaffoldSupport.Process(controller);

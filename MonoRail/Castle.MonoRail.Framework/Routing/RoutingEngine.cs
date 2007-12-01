@@ -52,7 +52,7 @@ namespace Castle.MonoRail.Framework.Routing
 
 			if (!name2Rule.TryGetValue(routeName, out rule))
 			{
-				throw new RailsException("Could not find named route: " + routeName);
+				throw new MonoRailException("Could not find named route: " + routeName);
 			}
 
 			return rule.CreateUrl(hostname, virtualPath, parameters);

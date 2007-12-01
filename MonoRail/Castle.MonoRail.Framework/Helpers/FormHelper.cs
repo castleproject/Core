@@ -2559,14 +2559,14 @@ namespace Castle.MonoRail.Framework.Helpers
 			
 			if (!validList && list == null)
 			{
-				throw new RailsException("The property {0} is being accessed as " + 
+				throw new MonoRailException("The property {0} is being accessed as " + 
 					"an indexed property but does not seem to implement IList. " + 
 					"In fact the type is {1}", property, instanceType.FullName);
 			}
 
 			if (index < 0)
 			{
-				throw new RailsException("The specified index '{0}' is outside the bounds " + 
+				throw new MonoRailException("The specified index '{0}' is outside the bounds " + 
 					"of the array. Property {1}", index, property);
 			}
 		}
@@ -2627,7 +2627,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 				catch(Exception)
 				{
-					throw new RailsException("Could not convert (param {0}) index to Int32. Value is {1}", 
+					throw new MonoRailException("Could not convert (param {0}) index to Int32. Value is {1}", 
 						property, indexStr);
 				}
 

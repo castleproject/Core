@@ -90,7 +90,7 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			if (body == null)
 			{
-				throw new RailsException("This component does not have a body content to be rendered");
+				throw new MonoRailException("This component does not have a body content to be rendered");
 			}
 			using (parent.SetOutputStream(writer))
 			{

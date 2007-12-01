@@ -44,7 +44,7 @@ namespace Castle.MonoRail.Views.Brail
 			object val = resource.GetObject(name);
 			if(val==null)
 			{
-				throw new RailsException("Resource "+name+" does not exists");
+				throw new MonoRailException("Resource "+name+" does not exists");
 			}
 			return val;
 		}
@@ -56,12 +56,12 @@ namespace Castle.MonoRail.Views.Brail
 
 		public object QuackSet(string name, object[] parameters, object value)
 		{
-			throw new RailsException("You cannnot set resource "+name);
+			throw new MonoRailException("You cannnot set resource "+name);
 		}
 
 		public object QuackInvoke(string name, params object[] args)
 		{
-			throw new RailsException("You cannnot invoke resource "+name);
+			throw new MonoRailException("You cannnot invoke resource "+name);
 		}
 
 		public IEnumerator GetEnumerator()

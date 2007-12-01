@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Views.Brail
 		public override Statement Expand(MacroStatement macro)
 		{
 			if (macro.Arguments.Count == 0)
-				throw new RailsException("output must be called with arguemnts");
+				throw new MonoRailException("output must be called with arguemnts");
 			UnescapeInitialAndClosingDoubleQuotes(macro);
 			return Expand(macro, output, output);
 		}

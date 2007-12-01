@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (!EngineContextModule.Initialized)
 			{
-				throw new RailsException("Looks like you forgot to register the http module " +
+				throw new MonoRailException("Looks like you forgot to register the http module " +
 					typeof(EngineContextModule).FullName + "\r\nAdd '<add name=\"monorail\" type=\"Castle.MonoRail.Framework.EngineContextModule, Castle.MonoRail.Framework\" />' " +
 					"to the <httpModules> section on your web.config");
 			}
@@ -60,7 +60,7 @@ namespace Castle.MonoRail.Framework
 
 			if (mrContext == null)
 			{
-				throw new RailsException("IRailsEngineContext is null. Looks like the " + 
+				throw new MonoRailException("IRailsEngineContext is null. Looks like the " + 
 					"EngineContextModule has not run for this request.");
 			}
 

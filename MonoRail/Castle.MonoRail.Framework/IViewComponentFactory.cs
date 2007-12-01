@@ -28,5 +28,16 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
 		ViewComponent Create(String name);
+
+		/// <summary>
+		/// Gets the registry.
+		/// </summary>
+		/// <remarks>
+		/// Exposing it here is a hack, and I really don't like the 
+		/// design of the viewcomponent factory and its relation with the registry. 
+		/// However, I can't refactor it now.
+		/// </remarks>
+		/// <value>The registry.</value>
+		IViewComponentRegistry Registry { get; }
 	}
 }

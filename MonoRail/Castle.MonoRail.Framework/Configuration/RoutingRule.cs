@@ -22,8 +22,8 @@ namespace Castle.MonoRail.Framework.Configuration
 	/// </summary>
 	public class RoutingRule
 	{
-		private String pattern, replace;
-		private Regex rule;
+		private readonly String pattern, replace;
+		private readonly Regex rule;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RoutingRule"/> class.

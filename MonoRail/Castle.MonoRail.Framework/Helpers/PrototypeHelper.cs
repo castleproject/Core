@@ -448,7 +448,7 @@ namespace Castle.MonoRail.Framework.Helpers
 					}
 					catch(Exception ex)
 					{
-						throw new RailsException("Could not process partial " + partialName, ex);
+						throw new MonoRailException("Could not process partial " + partialName, ex);
 					}
 				}
 
@@ -857,13 +857,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				return methodInfo.Invoke(this, BuildMethodArgs(methodInfo, args, paramArrayIndex));
 			}
-			catch(RailsException)
+			catch(MonoRailException)
 			{
 				throw;
 			}
 			catch(Exception ex)
 			{
-				throw new RailsException("Error invoking method on generator. " +
+				throw new MonoRailException("Error invoking method on generator. " +
 				                         "Method invoked [" + method + "] with " + args.Length + " argument(s)", ex);
 			}
 		}

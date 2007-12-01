@@ -124,7 +124,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			if (helper == null)
 			{
-				throw new RailsException("Helper not found. Helper name: " + Name);
+				throw new MonoRailException("Helper not found. Helper name: " + Name);
 			}
 
 			return helper;
@@ -147,7 +147,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			if (method == null)
 			{
-				throw new RailsException( String.Format("Helper's method not found. Method: {0}.{1}", Name, Method) );
+				throw new MonoRailException( String.Format("Helper's method not found. Method: {0}.{1}", Name, Method) );
 			}
 
 			return method;

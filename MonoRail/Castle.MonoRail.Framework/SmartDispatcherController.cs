@@ -388,13 +388,13 @@ namespace Castle.MonoRail.Framework
 			}
 			catch(FormatException ex)
 			{
-				throw new RailsException(
+				throw new MonoRailException(
 					String.Format("Could not convert {0} to request type. " +
 						"Argument value is '{1}'", paramName, Params.Get(paramName)), ex);
 			}
 			catch(Exception ex)
 			{
-				throw new RailsException(
+				throw new MonoRailException(
 					String.Format("Error building method arguments. " +
 						"Last param analyzed was {0} with value '{1}'", paramName, value), ex);
 			}

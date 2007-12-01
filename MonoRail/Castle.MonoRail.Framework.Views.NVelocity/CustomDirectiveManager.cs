@@ -75,7 +75,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		{
 			if (!typeof(Directive).IsAssignableFrom(type))
 			{
-				throw new RailsException("{0} is not a subclass of directive", type.FullName);
+				throw new MonoRailException("{0} is not a subclass of directive", type.FullName);
 			}
 
 			String name = type.Name.ToLower(System.Globalization.CultureInfo.InvariantCulture);
@@ -95,7 +95,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			if (compFactory == null)
 			{
-				throw new RailsException("NVelocityViewEngine: Could not obtain ViewComponentFactory instance");
+				throw new MonoRailException("NVelocityViewEngine: Could not obtain ViewComponentFactory instance");
 			}
 
 			return compFactory;
@@ -108,7 +108,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			if (viewEngine == null)
 			{
-				throw new RailsException("NVelocityViewEngine: could not obtain ViewEngine instance");
+				throw new MonoRailException("NVelocityViewEngine: could not obtain ViewEngine instance");
 			}
 
 			return viewEngine;

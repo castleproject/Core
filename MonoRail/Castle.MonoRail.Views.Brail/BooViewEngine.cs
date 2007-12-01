@@ -166,7 +166,7 @@ namespace Castle.MonoRail.Views.Brail
 			string msg = sb.ToString();
 			sb.Append("Exception: ").AppendLine(e.ToString());
 			Log(msg);
-			throw new RailsException(msg, e);
+			throw new MonoRailException(msg, e);
 		}
 
 		public override void ProcessPartial(
@@ -190,7 +190,7 @@ namespace Castle.MonoRail.Views.Brail
 					Logger.Error("Could not generate JS", ex);
 				}
 
-				throw new RailsException("Error generating partial: " + partialName, ex);
+				throw new MonoRailException("Error generating partial: " + partialName, ex);
 			}
 		}
 
@@ -228,7 +228,7 @@ namespace Castle.MonoRail.Views.Brail
 					Logger.Error("Could not generate JS", ex);
 				}
 
-				throw new RailsException("Error generating JS. Template: " + templateName, ex);
+				throw new MonoRailException("Error generating JS. Template: " + templateName, ex);
 			}
 		}
 
@@ -377,7 +377,7 @@ namespace Castle.MonoRail.Views.Brail
 			type = CompileScript(filename, batch);
 			if (type == null)
 			{
-				throw new RailsException("Could not find a view with path " + filename);
+				throw new MonoRailException("Could not find a view with path " + filename);
 			}
 			return CreateBrailBase(context, controller, output, type);
 		}
@@ -447,7 +447,7 @@ namespace Castle.MonoRail.Views.Brail
 				msg.Append(result.Processor.GetInputCode(input))
 					.Append(Environment.NewLine);
 			}
-			throw new RailsException(msg.ToString());
+			throw new MonoRailException(msg.ToString());
 		}
 
 		// If batch compilation is set to true, this would return all the view scripts
@@ -478,7 +478,7 @@ namespace Castle.MonoRail.Views.Brail
 			IViewSource viewSrc = ViewSourceLoader.GetViewSource(name);
 			if (viewSrc == null)
 			{
-				throw new RailsException("{0} is not a valid view", name);
+				throw new MonoRailException("{0} is not a valid view", name);
 			}
 			// I need to do it this way because I can't tell 
 			// when to dispose of the stream. 
@@ -566,7 +566,7 @@ namespace Castle.MonoRail.Views.Brail
 			compiler.Parameters.OutputAssembly = outputFile;
 			CompilerContext result = compiler.Run();
 			if (result.Errors.Count > 0)
-				throw new RailsException(result.Errors.ToString(true));
+				throw new MonoRailException(result.Errors.ToString(true));
 			common = result.GeneratedAssembly;
 			compilations.Clear();
 			return true;

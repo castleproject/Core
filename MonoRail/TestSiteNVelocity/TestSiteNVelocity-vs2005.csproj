@@ -124,6 +124,7 @@
     <Compile Include="Components\BlockViewComponent2.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\CachedComponent1.cs" />
     <Compile Include="Components\ComponentAndParams.cs" />
     <Compile Include="Components\GridComponent.cs" />
     <Compile Include="Components\InlineComponentWithParam1.cs">
@@ -216,9 +217,11 @@
     <Compile Include="Controllers\ValidatedController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\ViewCompCacheController.cs" />
     <None Include="log4net.config" />
     <None Include="views\ajax\periodinvocation.vm" />
     <None Include="views\apppath\index.vm" />
+    <None Include="views\components\CachedComponent1\default.vm" />
     <None Include="views\components\SimpleInlineViewComponent2\mycompview1.vm" />
     <None Include="views\components\SimpleInlineViewComponent3\default.vm" />
     <None Include="views\components\TemplatedInlineViewComponent\templatedview.vm" />
@@ -298,6 +301,9 @@
     <None Include="views\UsingComponent\index8.vm" />
     <None Include="views\UsingComponent\index9.vm" />
     <None Include="views\validated\default.vm" />
+    <None Include="views\ViewCompCache\index3.vm" />
+    <None Include="views\ViewCompCache\index2.vm" />
+    <None Include="views\ViewCompCache\index1.vm" />
     <None Include="views\wizard\testwizardwitharea\InnerAction2.vm" />
     <None Include="views\wizard\testwizardwitharea\page1.vm" />
     <None Include="views\wizard\testwizardwitharea\page3.vm" />

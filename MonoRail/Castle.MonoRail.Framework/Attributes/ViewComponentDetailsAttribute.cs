@@ -17,6 +17,25 @@ namespace Castle.MonoRail.Framework
 	using System;
 
 	/// <summary>
+	/// Identifies the cache strategy associated with a view component
+	/// </summary>
+	public enum ViewComponentCache
+	{
+		/// <summary>
+		/// No cache 
+		/// </summary>
+		Disabled,
+		/// <summary>
+		/// Always cache the view component output, no varying.
+		/// </summary>
+		Always,
+		/// <summary>
+		/// Uses a custom key generator that should implement the vary algorithm. 
+		/// </summary>
+		UseCustomCacheKeyGenerator
+	}
+
+	/// <summary>
 	/// Decorates a <see cref="ViewComponent"/> to associate a custom name with it.
 	/// </summary>
     /// <remarks>
@@ -41,12 +60,13 @@ namespace Castle.MonoRail.Framework
     /// </example>
     /// <seealso cref="ViewComponent"/>
     /// <seealso cref="ViewComponentParamAttribute"/>
-
 	[AttributeUsage(AttributeTargets.Class), Serializable]
 	public class ViewComponentDetailsAttribute : Attribute
 	{
 		private readonly string name;
 		private string sections;
+		private ViewComponentCache cache = ViewComponentCache.Disabled;
+		private Type cacheKeyFactory;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ViewComponentDetailsAttribute"/> class.
@@ -73,6 +93,33 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return sections; }
 			set { sections = value; }
+		}
+
+		/// <summary>
+		/// Sets the cache strategy.
+		/// </summary>
+		/// <value>The cache.</value>
+		public ViewComponentCache Cache
+		{
+			get { return cache; }
+			set { cache = value; }
+		}
+
+		/// <summary>
+		/// Sets the cache key factory.
+		/// </summary>
+		/// <value>The cache key factory.</value>
+		public Type CacheKeyFactory
+		{
+			get { return cacheKeyFactory; }
+			set
+			{
+				if (value != null)
+				{
+					cache = ViewComponentCache.UseCustomCacheKeyGenerator;
+				}
+				cacheKeyFactory = value;
+			}
 		}
 	}
 }

@@ -18,6 +18,9 @@ namespace TestSiteNVelocity.Controllers
 
 	using Castle.MonoRail.Framework;
 	
+	using Nullables;
+
+	
 	public class SmartController : SmartDispatcherController
 	{
 		public SmartController()
@@ -78,7 +81,7 @@ namespace TestSiteNVelocity.Controllers
 			RenderText(String.Format("incoming {0} {1} {2}", clazz.Name, clazz.Date1.ToShortDateString(), clazz.Date2.ToShortDateString()));
 		}
 
-		public void NullableConversion(double? amount)
+		public void NullableConversion(Nullables.NullableDouble amount)
 		{
 			RenderText(String.Format("incoming {0} {1}", amount.HasValue, amount.ToString()));
 		}
@@ -228,8 +231,7 @@ namespace TestSiteNVelocity.Controllers
 
 	public class Movement
 	{
-		String name; 
-		double? amount;
+		String name; Nullables.NullableDouble amount;
 
 		public string Name
 		{
@@ -237,7 +239,7 @@ namespace TestSiteNVelocity.Controllers
 			set { name = value; }
 		}
 
-		public double? Amount
+		public NullableDouble Amount
 		{
 			get { return amount; }
 			set { amount = value; }

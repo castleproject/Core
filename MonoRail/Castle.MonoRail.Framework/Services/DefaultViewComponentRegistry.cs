@@ -44,13 +44,13 @@ namespace Castle.MonoRail.Framework.Services
 
 			if (name2Type.Contains(name))
 			{
-				throw new RailsException(String.Format("ViewComponent '{0}' seems to be registered already. " + 
+				throw new MonoRailException(String.Format("ViewComponent '{0}' seems to be registered already. " + 
 					"This is due to it being registered more than once or a name clash", name));
 			}
 			
 			if (!typeof(ViewComponent).IsAssignableFrom(type))
 			{
-				throw new RailsException(String.Format("You tried to register '{0}' as a view component but it " + 
+				throw new MonoRailException(String.Format("You tried to register '{0}' as a view component but it " + 
 					"doesn't seem the extend the ViewComponent abstract class: {1}", name, type.FullName));
 			}
 
@@ -68,7 +68,7 @@ namespace Castle.MonoRail.Framework.Services
 
 			if (!name2Type.Contains(name))
 			{
-				throw new RailsException(String.Format("ViewComponent '{0}' could not be found. Was it registered? " + 
+				throw new MonoRailException(String.Format("ViewComponent '{0}' could not be found. Was it registered? " + 
 					"If you have enabled Windsor Integration, then it's likely that you have forgot to register the " + 
 					"view component as a Windsor component. If you are sure you did it, then make sure the name used " + 
 					"is the component id or the key passed to ViewComponentDetailsAttribute", name));
@@ -84,9 +84,9 @@ namespace Castle.MonoRail.Framework.Services
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		private string NormalizeName(string name)
+		private static string NormalizeName(string name)
 		{
-			if (!name.EndsWith("Component",StringComparison.InvariantCultureIgnoreCase))
+			if (!name.EndsWith("Component", StringComparison.InvariantCultureIgnoreCase))
 			{
 				return name + "Component";
 			}

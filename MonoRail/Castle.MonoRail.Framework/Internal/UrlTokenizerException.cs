@@ -21,7 +21,7 @@ namespace Castle.MonoRail.Framework.Internal
 	/// Represents a problem during the Url information extraction.
 	/// </summary>
 	[Serializable]
-	public class UrlTokenizerException : RailsException
+	public class UrlTokenizerException : MonoRailException
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UrlTokenizerException"/> class.

@@ -80,11 +80,11 @@ namespace Castle.MonoRail.Framework.Services
 				}
 				catch (InvalidCastException)
 				{
-					throw new RailsException("Type " + info.Engine.FullName + " does not implement IViewEngine");
+					throw new MonoRailException("Type " + info.Engine.FullName + " does not implement IViewEngine");
 				}
 				catch (Exception ex)
 				{
-					throw new RailsException("Could not create view engine instance: " + info.Engine, ex);
+					throw new MonoRailException("Could not create view engine instance: " + info.Engine, ex);
 				}
 			}
 
@@ -203,7 +203,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (controller.LayoutName == null)
 			{
-				throw new RailsException("ProcessContents can only work with a layout");
+				throw new MonoRailException("ProcessContents can only work with a layout");
 			}
 
 			String templateName = Path.Combine("layouts", controller.LayoutName);
@@ -255,15 +255,19 @@ namespace Castle.MonoRail.Framework.Services
 				return engine;
 			}
 
-			foreach (IViewEngine engine in viewEnginesFastLookup.Keys)
-				if (engine.HasTemplate(templateName))
-					return engine;
+			foreach(IViewEngine engine in viewEnginesFastLookup.Keys)
+			{
+				if (engine.HasTemplate(templateName)) return engine;
+			}
 					
 			if (throwIfNotFound)
-				throw new RailsException(string.Format(
-@"MonoRail could not have resolved a view engine instance for the template '{0}'
-There are two possible explanations: that the template does not exist, or that the relevant view engine has not been configured correctly in web.config.", templateName));
-			
+			{
+				throw new MonoRailException(string.Format(
+@"MonoRail could not resolve a view engine instance for the template '{0}'
+There are two possible reasons: either the template does not exist, or the view engine " + 
+"that handles an specific file extension has not been configured correctly web.config (section monorail, node viewEngines).", templateName));
+			}
+
 			return null;
 		}
 
@@ -277,7 +281,7 @@ There are two possible explanations: that the template does not exist, or that t
 			{
 				IViewEngine existing = (IViewEngine)ext2ViewEngine[engine.ViewFileExtension];
 
-				throw new RailsException(
+				throw new MonoRailException(
 					"At least two view engines are handling the same file extension. " +
 					"This isn't going to work. Extension: " + engine.ViewFileExtension +
 					" View Engine 1: " + existing.GetType() +
@@ -294,7 +298,7 @@ There are two possible explanations: that the template does not exist, or that t
 			{
 				IViewEngine existing = (IViewEngine)ext2ViewEngine[engine.JSGeneratorFileExtension];
 
-				throw new RailsException(
+				throw new MonoRailException(
 					"At least two view engines are handling the same file extension. " +
 					"This isn't going to work. Extension: " + engine.JSGeneratorFileExtension +
 					" View Engine 1: " + existing.GetType() +

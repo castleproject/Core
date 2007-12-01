@@ -76,7 +76,7 @@ namespace Castle.MonoRail.Views.Brail
         {
             if (!languages.Contains(language))
             {
-                throw new RailsException(string.Format("Language '{0}' is not implemented", language));
+                throw new MonoRailException(string.Format("Language '{0}' is not implemented", language));
             }
 
             Type languageExtension = (Type)languages[language];
