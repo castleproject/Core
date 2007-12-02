@@ -1,4 +1,4 @@
-<h2>New ${model.Type.Name}</h2>
+<h2>New $Form.TextHelper.PascalCaseToWord( $model.Type.Name )</h2>
 
 #if($flash.errors)
 <ul id="errors">
@@ -19,7 +19,7 @@ $Form.FormTag("%{action='create', id='scaffoldingform'}")
 #foreach($curmodel in $Form.GetModelHierarchy($model, $instance))
 
 #if($curmodel.IsNestedType)
-  $Form.FieldSet("${curmodel.Type.Name}:")
+	$Form.FieldSet( $Form.TextHelper.PascalCaseToWord($curmodel.ParentNested.Property.Name ))
 #end
 
 #foreach($field in $curmodel.Fields)

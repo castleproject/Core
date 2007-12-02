@@ -155,14 +155,19 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				shouldLoad = StackDepth != 0;
 			}
 
+			ActiveRecordModel model = ActiveRecordModel.GetModel(instanceType);
+
+			if (shouldLoad && model == null) // Nested type or unregistered type
+			{
+				shouldLoad = false;
+			}
+
 			if (shouldLoad)
 			{
 				if (instanceType.IsArray)
 				{
 					throw new BindingException("ARDataBinder AutoLoad does not support arrays");
 				}
-
-				ActiveRecordModel model = ActiveRecordModel.GetModel(instanceType);
 
 				PrimaryKeyModel pkModel;
 

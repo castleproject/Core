@@ -46,8 +46,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			{
 				AssertIsPost(controller);
 
-				instance = binder.BindObject(Model.Type, Model.Type.Name, 
-				                                    builder.BuildSourceNode(controller.Form));
+				instance = binder.BindObject(Model.Type, Model.Type.Name, builder.BuildSourceNode(controller.Form));
 
 				CommonOperationUtils.SaveInstance(instance, controller, errors, ref prop2Validation, true);
 

@@ -21,7 +21,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 	using System.Reflection;
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
-	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 
 	public class ARFormHelper : FormHelper
@@ -35,6 +34,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 		                                       11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
 		                                       21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 };
 		private static readonly int[] Years;
+		private TextHelper textHelper = new TextHelper();
 
 		static ARFormHelper()
 		{
@@ -47,7 +47,12 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				Years[year - 1950] = year;
 			}
 		}
-		
+
+		public TextHelper TextHelper
+		{
+			get { return textHelper; }
+		}
+
 		public ICollection GetModelHierarchy(ActiveRecordModel model, object instance)
 		{
 			ArrayList list = new ArrayList();
@@ -192,11 +197,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			if (fieldInfo.FieldType == typeof(DateTime))
 			{
-				stringBuilder.Append(LabelFor(propName + "day", fieldInfo.Name + ": &nbsp;"));
+				stringBuilder.Append(LabelFor(propName + "day", TextHelper.PascalCaseToWord(fieldInfo.Name) + ": &nbsp;"));
 			}
 			else
 			{
-				stringBuilder.Append(LabelFor(propName, fieldInfo.Name + ": &nbsp;"));
+				stringBuilder.Append(LabelFor(propName, TextHelper.PascalCaseToWord(fieldInfo.Name) + ": &nbsp;"));
 			}
 
 			FieldAttribute propAtt = fieldModel.FieldAtt;
@@ -224,11 +229,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			if (prop.PropertyType == typeof(DateTime))
 			{
-				stringBuilder.Append(LabelFor(propName + "day", prop.Name + ": &nbsp;"));
+				stringBuilder.Append(LabelFor(propName + "day", TextHelper.PascalCaseToWord(prop.Name) + ": &nbsp;"));
 			}
 			else
 			{
-				stringBuilder.Append(LabelFor(propName, prop.Name + ": &nbsp;"));
+				stringBuilder.Append(LabelFor(propName, TextHelper.PascalCaseToWord(prop.Name) + ": &nbsp;"));
 			}
 
 			PropertyAttribute propAtt = propertyModel.PropertyAtt;
@@ -254,11 +259,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			if (prop.PropertyType == typeof(DateTime))
 			{
-				stringBuilder.Append(LabelFor(propName + "day", prop.Name + ": &nbsp;"));
+				stringBuilder.Append(LabelFor(propName + "day", TextHelper.PascalCaseToWord(prop.Name) + ": &nbsp;"));
 			}
 			else
 			{
-				stringBuilder.Append(LabelFor(propName, prop.Name + ": &nbsp;"));
+				stringBuilder.Append(LabelFor(propName, TextHelper.PascalCaseToWord(prop.Name) + ": &nbsp;"));
 			}
 
 			RenderAppropriateControl(model, prop.PropertyType,
@@ -289,7 +294,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			String propName = CreatePropName(model, prefix, keyModel.Property.Name);
 
-			stringBuilder.Append(LabelFor(propName, prop.Name + ": &nbsp;"));
+			stringBuilder.Append(LabelFor(propName, TextHelper.PascalCaseToWord(prop.Name) + ": &nbsp;"));
 			
 			IDictionary attrs = new HybridDictionary(true);
 			
@@ -441,7 +446,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				foreach(String name in names)
 				{
 					options.Add(String.Format("{0} {1}\r\n",
-					                          RadioField(propName, name), LabelFor(name, name)));
+					                          RadioField(propName, name), LabelFor(name, TextHelper.PascalCaseToWord(name))));
 				}
 			}
 		}
@@ -452,7 +457,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			if (model.IsNestedType)
 			{
-				propName = String.Format("{0}.{1}.{2}", prefix, model.Type.Name, name);
+				propName = String.Format("{0}.{1}.{2}", prefix, model.ParentNested.Property.Name, name);
 			}
 			else
 			{

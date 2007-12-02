@@ -1,6 +1,6 @@
 
 <p>
-$PresentationHelper.LinkToNew( $model, $useModelName, "Create a new $model.Type.Name", $DictHelper.CreateDict() )
+$PresentationHelper.LinkToNew( $model, $useModelName, "Create a new $Form.TextHelper.PascalCaseToWord($model.Type.Name)", "%{}" )
 </p>
 
 #set($cols = $properties.Count + 2)
@@ -9,7 +9,7 @@ $PresentationHelper.LinkToNew( $model, $useModelName, "Create a new $model.Type.
   <tr>
     <th>&nbsp;</th>
   #foreach($prop in $properties)
-    <th>$prop.Name</th>
+    <th>$Form.TextHelper.PascalCaseToWord( $prop.Name )</th>
   #end
     <th>&nbsp;</th>
   </tr>

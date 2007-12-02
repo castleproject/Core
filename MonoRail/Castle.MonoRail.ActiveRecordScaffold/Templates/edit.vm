@@ -1,4 +1,4 @@
-<h2>Edit ${model.Type.Name}</h2>
+<h2>Edit $Form.TextHelper.PascalCaseToWord($model.Type.Name)</h2>
 
 #if($flash.errors)
 <ul id="errors">
@@ -21,7 +21,7 @@ $Form.HiddenField("${prefix}.${keyprop.Name}")
 #foreach($model in $Form.GetModelHierarchy($model, $instance))
 
 #if($model.IsNestedType)
-  $Form.FieldSet("${model.Type.Name}:")
+	$Form.FieldSet($Form.TextHelper.PascalCaseToWord($model.ParentNested.Property.Name))
 #end
 
 #foreach($field in $model.Fields)

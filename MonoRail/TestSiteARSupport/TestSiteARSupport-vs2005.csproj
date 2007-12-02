@@ -54,7 +54,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\net\2.0\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NVelocity, Version=0.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
@@ -69,7 +68,9 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPermissionController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\MR296.cs" />
+    <Compile Include="Model\Customer.cs" />
     <Compile Include="Scaffolds\AccountPermissionScaffoldController.cs" />
     <Compile Include="Scaffolds\AccountScaffoldController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />

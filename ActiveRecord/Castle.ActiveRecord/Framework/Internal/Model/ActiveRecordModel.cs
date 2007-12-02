@@ -59,6 +59,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private KeyModel key;
 		private TimestampModel timestamp;
 		private VersionModel version;
+		private NestedModel parentNested;
 
 		private readonly IList imports = new ArrayList();
 		private readonly IList hasManyToAny = new ArrayList();
@@ -165,6 +166,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			get { return isNestedType; }
 			set { isNestedType = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the parent nested.
+		/// </summary>
+		/// <value>The parent nested.</value>
+		public NestedModel ParentNested
+		{
+			get { return parentNested; }
+			set { parentNested = value; }
 		}
 
 		/// <summary>

@@ -1932,6 +1932,29 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region Field set
+
+		/// <summary>
+		/// Creates a field set element with a legend using the specified name.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public string FieldSet(string name)
+		{
+			return "<fieldset><legend>" + name + "</legend>";
+		}
+
+		/// <summary>
+		/// Creates an element to close a fieldset element.
+		/// </summary>
+		/// <returns></returns>
+		public string EndFieldSet()
+		{
+			return "</fieldset>";
+		}
+
+		#endregion
+
 		#region Enum
 
 		/// <summary>

@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Fixed MR-84
+  "Nested classes are mapped wrongly to form fields"
+
 - Applied Kode Khan's patch changing logger creation to use type instead of controller's name
 
 - Implemented support for view component caching. Just use the attribute 

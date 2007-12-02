@@ -1,5 +1,5 @@
 #if($exception)
-  <h2>${model.Type.Name} could not be removed</h2>
+  <h2>$Form.TextHelper.PascalCaseToWord( $model.Type.Name ) could not be removed</h2>
   <p>
   Error message:
   </p>
@@ -7,7 +7,7 @@
   $exception.Message
   </pre>
 #else
-  <h2>${model.Type.Name} removed</h2>
+  <h2>$Form.TextHelper.PascalCaseToWord( $model.Type.Name ) removed</h2>
 #end
 
 <p>

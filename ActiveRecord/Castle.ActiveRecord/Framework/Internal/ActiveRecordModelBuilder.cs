@@ -257,12 +257,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						nestedModel.IsNestedType = true;
 
-						Type nestedType = propAtt.MapType != null ? propAtt.MapType : prop.PropertyType;
+						Type nestedType = propAtt.MapType ?? prop.PropertyType;
 						nestedModel.IsNestedCompositeType = model.IsNestedCompositeType;
 						ProcessProperties(nestedType, nestedModel);
 						ProcessFields(nestedType, nestedModel);
 
-						model.Components.Add(new NestedModel(prop, propAtt, nestedModel));
+						NestedModel nested = new NestedModel(prop, propAtt, nestedModel);
+						nestedModel.ParentNested = nested;
+
+						model.Components.Add(nested);
 					}
 					else if (attribute is NestedParentReferenceAttribute)
 					{
