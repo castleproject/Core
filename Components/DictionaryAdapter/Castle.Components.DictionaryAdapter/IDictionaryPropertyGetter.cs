@@ -19,7 +19,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// <summary>
 	/// Defines the contract for retrieving dictionary values.
 	/// </summary>
-	public interface IDictionaryPropertyGetter
+	public interface IDictionaryPropertyGetter : IDictionaryBehavior
 	{
 		/// <summary>
 		/// Gets the effective dictionary value.

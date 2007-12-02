@@ -20,7 +20,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// <summary>
 	/// Defines the contract for building typed dictionary keys.
 	/// </summary>
-	public interface IDictionaryKeyBuilder
+	public interface IDictionaryKeyBuilder : IDictionaryBehavior
 	{
 		/// <summary>
 		/// Builds the specified key.

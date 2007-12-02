@@ -14,30 +14,14 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
-	using System.Collections;
-
 	/// <summary>
-	/// Assignes a specific dictionary key.
+	/// Defines the contract for customizing dictionary access.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryKeyAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder
+	public interface IDictionaryBehavior
 	{
-		private readonly String key;
-
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DictionaryKeyAttribute"/> class.
+		/// Determines relative order to apply related behaviors.
 		/// </summary>
-		/// <param name="key">The key.</param>
-		public DictionaryKeyAttribute(String key)
-		{
-			this.key = key;
-		}
-
-		String IDictionaryKeyBuilder.GetKey(IDictionary dictionary, String key,
-		                                   PropertyDescriptor property)
-		{
-			return this.key;
-		}
+		int ExecutionOrder { get; }
 	}
 }

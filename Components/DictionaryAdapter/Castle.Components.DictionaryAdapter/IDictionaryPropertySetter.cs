@@ -19,7 +19,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// <summary>
 	/// Defines the contract for updating dictionary values.
 	/// </summary>
-	public interface IDictionaryPropertySetter
+	public interface IDictionaryPropertySetter : IDictionaryBehavior
 	{
 		/// <summary>
 		/// Sets the stored dictionary value.

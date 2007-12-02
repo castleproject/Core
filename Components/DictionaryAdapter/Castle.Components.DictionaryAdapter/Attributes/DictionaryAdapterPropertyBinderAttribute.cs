@@ -22,8 +22,8 @@ namespace Castle.Components.DictionaryAdapter
 	/// Allows the user to convert the values in the dictionary into a different type on access.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryAdapterPropertyBinderAttribute : 
-		Attribute, IDictionaryPropertyGetter, IDictionaryPropertySetter
+	public class DictionaryAdapterPropertyBinderAttribute :
+		DictionaryBehaviorAttribute, IDictionaryPropertyGetter, IDictionaryPropertySetter
 	{
 		private readonly DictionaryAdapterPropertyBinder binder;
 

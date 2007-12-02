@@ -14,30 +14,33 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
-	/// Assignes a specific dictionary key.
+	/// Comparer for ordering the execution of <see cref="IDictionaryBehavior"/>
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryKeyAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder
+	public class DictionaryBehaviorComparer<T> : IComparer<T>
+		where T : IDictionaryBehavior
 	{
-		private readonly String key;
-
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DictionaryKeyAttribute"/> class.
+		/// Singleton instance of <see cref="DictionaryBehaviorComparer{T}"/>
 		/// </summary>
-		/// <param name="key">The key.</param>
-		public DictionaryKeyAttribute(String key)
-		{
-			this.key = key;
+		public static readonly DictionaryBehaviorComparer<T> 
+			Instance = new DictionaryBehaviorComparer<T>();
+ 
+		private DictionaryBehaviorComparer()
+		{	
 		}
 
-		String IDictionaryKeyBuilder.GetKey(IDictionary dictionary, String key,
-		                                   PropertyDescriptor property)
+		/// <summary>
+		/// Determines the relative ordering of the behaviors.
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
+		public int Compare(T x, T y)
 		{
-			return this.key;
+			return x.ExecutionOrder - y.ExecutionOrder;
 		}
 	}
 }

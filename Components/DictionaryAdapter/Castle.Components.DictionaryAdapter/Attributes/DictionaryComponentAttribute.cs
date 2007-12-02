@@ -22,7 +22,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 	public class DictionaryComponentAttribute :
-		Attribute, IDictionaryKeyBuilder, IDictionaryPropertyGetter
+		DictionaryBehaviorAttribute, IDictionaryKeyBuilder, IDictionaryPropertyGetter
 	{
 		private String prefix;
 

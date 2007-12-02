@@ -21,7 +21,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// Assigns a prefix to the keyed properties of an interface.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
-	public class DictionaryKeyPrefixAttribute : Attribute, IDictionaryKeyBuilder
+	public class DictionaryKeyPrefixAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder
 	{
 		private String keyPrefix;
 

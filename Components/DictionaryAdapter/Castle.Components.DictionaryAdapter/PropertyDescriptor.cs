@@ -28,9 +28,9 @@ namespace Castle.Components.DictionaryAdapter
 	                                  IDictionaryPropertySetter
 	{
 		private readonly PropertyInfo property;
-		private ICollection<IDictionaryPropertyGetter> getters;
-		private ICollection<IDictionaryPropertySetter> setters;
-		private ICollection<IDictionaryKeyBuilder> keyBuilders;
+		private List<IDictionaryPropertyGetter> getters;
+		private List<IDictionaryPropertySetter> setters;
+		private List<IDictionaryKeyBuilder> keyBuilders;
 		private TypeConverter typeConverter;
 
 		/// <summary>
@@ -53,6 +53,14 @@ namespace Castle.Components.DictionaryAdapter
 			AddKeyBuilders(other.keyBuilders);
 			AddGetters(other.getters);
 			AddSetters(other.setters);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int ExecutionOrder
+		{
+			get { return 0; }
 		}
 
 		/// <summary>
@@ -113,7 +121,6 @@ namespace Castle.Components.DictionaryAdapter
 		public ICollection<IDictionaryKeyBuilder> KeyBuilders
 		{
 			get { return keyBuilders; }
-			set { keyBuilders = value; }
 		}
 
 		/// <summary>
@@ -123,7 +130,6 @@ namespace Castle.Components.DictionaryAdapter
 		public ICollection<IDictionaryPropertySetter> Setters
 		{
 			get { return setters; }
-			set { setters = value; }
 		}
 
 		/// <summary>
@@ -133,7 +139,6 @@ namespace Castle.Components.DictionaryAdapter
 		public ICollection<IDictionaryPropertyGetter> Getters
 		{
 			get { return getters; }
-			set { getters = value; }
 		}
 
 		#region IDictionaryKeyBuilder Members
@@ -183,15 +188,15 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="builders">The builders.</param>
 		public void AddKeyBuilders(ICollection<IDictionaryKeyBuilder> builders)
 		{
-			if (keyBuilders == null)
+			if (builders != null)
 			{
-				keyBuilders = builders;
-			}
-			else if (builders != null)
-			{
-				foreach(IDictionaryKeyBuilder builder in builders)
+				if (keyBuilders == null)
 				{
-					keyBuilders.Add(builder);
+					keyBuilders = new List<IDictionaryKeyBuilder>(builders);
+				}
+				else
+				{
+					keyBuilders.AddRange(builders);
 				}
 			}
 		}
@@ -250,15 +255,15 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="gets">The getters.</param>
 		public void AddGetters(ICollection<IDictionaryPropertyGetter> gets)
 		{
-			if (getters == null)
+			if (gets != null)
 			{
-				getters = gets;
-			}
-			else if (gets != null)
-			{
-				foreach(IDictionaryPropertyGetter getter in gets)
+				if (getters == null)
 				{
-					getters.Add(getter);
+					getters = new List<IDictionaryPropertyGetter>(gets);
+				}
+				else
+				{
+					getters.AddRange(gets);
 				}
 			}
 		}
@@ -280,6 +285,8 @@ namespace Castle.Components.DictionaryAdapter
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
 			string key, ref object value, PropertyDescriptor descriptor)
 		{
+			bool consumed = false;
+
 			if (setters != null)
 			{
 				foreach(IDictionaryPropertySetter setter in setters)
@@ -287,7 +294,7 @@ namespace Castle.Components.DictionaryAdapter
 					if (!setter.SetPropertyValue(
 						factory, dictionary, key, ref value, this))
 					{
-						return false;
+						consumed = true;
 					}
 				}
 			}
@@ -297,11 +304,11 @@ namespace Castle.Components.DictionaryAdapter
 				if (!descriptor.SetPropertyValue(
 					factory, dictionary, key, ref value, null))
 				{
-					return false;
+					consumed = true;
 				}
 			}
 
-			return true;
+			return !consumed;
 		}
 
 		/// <summary>
@@ -323,15 +330,15 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="sets">The setters.</param>
 		public void AddSetters(ICollection<IDictionaryPropertySetter> sets)
 		{
-			if (setters == null)
+			if (sets != null)
 			{
-				setters = sets;
-			}
-			else if (sets != null)
-			{
-				foreach(IDictionaryPropertySetter setter in sets)
+				if (setters == null)
 				{
-					setters.Add(setter);
+					setters = new List<IDictionaryPropertySetter>(sets);
+				}
+				else
+				{
+					setters.AddRange(sets);
 				}
 			}
 		}

@@ -25,7 +25,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// delimited string value.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryStringListAttribute : Attribute,
+	public class DictionaryStringListAttribute : DictionaryBehaviorAttribute,
 	                                             IDictionaryPropertyGetter,
 	                                             IDictionaryPropertySetter
 	{

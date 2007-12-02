@@ -21,7 +21,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// Substitutes part of key with another string.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
-	public class DictionaryKeySubstitutionAttribute : Attribute, IDictionaryKeyBuilder
+	public class DictionaryKeySubstitutionAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder
 	{
 		private readonly String oldValue;
 		private readonly String newValue;

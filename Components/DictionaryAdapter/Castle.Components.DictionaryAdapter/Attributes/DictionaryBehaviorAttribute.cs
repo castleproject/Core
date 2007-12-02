@@ -15,29 +15,21 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
-	using System.Collections;
 
 	/// <summary>
 	/// Assignes a specific dictionary key.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryKeyAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder
+	public abstract class DictionaryBehaviorAttribute : Attribute, IDictionaryBehavior
 	{
-		private readonly String key;
+		private int executionOrder = int.MaxValue;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DictionaryKeyAttribute"/> class.
+		/// Determines relative order to apply related behaviors.
 		/// </summary>
-		/// <param name="key">The key.</param>
-		public DictionaryKeyAttribute(String key)
+		public int ExecutionOrder
 		{
-			this.key = key;
-		}
-
-		String IDictionaryKeyBuilder.GetKey(IDictionary dictionary, String key,
-		                                   PropertyDescriptor property)
-		{
-			return this.key;
+			get { return executionOrder; }
+			set { executionOrder = value; }
 		}
 	}
 }

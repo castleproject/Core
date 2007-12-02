@@ -23,7 +23,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property,
 		AllowMultiple = false, Inherited = true)]
-	public class DictionaryStringValuesAttribute : Attribute, IDictionaryPropertySetter
+	public class DictionaryStringValuesAttribute : DictionaryBehaviorAttribute, IDictionaryPropertySetter
 	{
 		private string format;
 

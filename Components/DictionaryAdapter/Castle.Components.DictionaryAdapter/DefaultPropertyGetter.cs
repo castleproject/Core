@@ -35,6 +35,14 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public int ExecutionOrder
+		{
+			get { return int.MaxValue; }
+		}
+
+		/// <summary>
 		/// Gets the effective dictionary value.
 		/// </summary>
 		/// <param name="factory">The dictionary factory.</param>

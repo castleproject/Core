@@ -418,34 +418,50 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			Dictionary<String, PropertyDescriptor> propertyMap =
 				new Dictionary<String, PropertyDescriptor>();
-			ICollection<IDictionaryPropertyGetter> typeGetters =
-				AttributesUtil.GetTypeAttributes<IDictionaryPropertyGetter>(type);
+			ICollection<IDictionaryPropertyGetter> typeGetters = 
+				GetOrderedBehaviors<IDictionaryPropertyGetter>(type);
 			ICollection<IDictionaryPropertySetter> typeSetters =
-				AttributesUtil.GetTypeAttributes<IDictionaryPropertySetter>(type);
+				GetOrderedBehaviors<IDictionaryPropertySetter>(type);
 
 			RecursivelyDiscoverProperties(
 				type, delegate(PropertyInfo property)
 				      {
 				      	PropertyDescriptor descriptor = new PropertyDescriptor(property);
 
-				      	descriptor.AddKeyBuilders(
-				      		AttributesUtil.GetAttributes<IDictionaryKeyBuilder>(property));
-				      	descriptor.AddKeyBuilders(
-				      		AttributesUtil.GetTypeAttributes<IDictionaryKeyBuilder>(property.ReflectedType));
+				      	descriptor.AddKeyBuilders(GetOrderedBehaviors<IDictionaryKeyBuilder>(property));
+				      	descriptor.AddKeyBuilders(GetOrderedBehaviors<IDictionaryKeyBuilder>(property.ReflectedType));
 
-				      	descriptor.AddGetters(
-				      		AttributesUtil.GetAttributes<IDictionaryPropertyGetter>(property));
+						descriptor.AddGetters(GetOrderedBehaviors<IDictionaryPropertyGetter>(property));
 				      	descriptor.AddGetters(typeGetters);
-				      	AddDefaultGetter(descriptor);
+						AddDefaultGetter(descriptor);
 
-				      	descriptor.AddSetters(
-				      		AttributesUtil.GetAttributes<IDictionaryPropertySetter>(property));
+				      	descriptor.AddSetters(GetOrderedBehaviors<IDictionaryPropertySetter>(property));
 				      	descriptor.AddSetters(typeSetters);
 
 				      	propertyMap.Add(property.Name, descriptor);
 				      });
 
 			return propertyMap;
+		}
+
+		private static List<T> GetOrderedBehaviors<T>(Type type) where T : IDictionaryBehavior
+		{
+			List<T> behaviors = AttributesUtil.GetTypeAttributes<T>(type);
+			if (behaviors != null)
+			{
+				behaviors.Sort(DictionaryBehaviorComparer<T>.Instance);
+			}
+			return behaviors;
+		}
+
+		private static List<T> GetOrderedBehaviors<T>(MemberInfo member) where T : IDictionaryBehavior
+		{
+			List<T> behaviors = AttributesUtil.GetAttributes<T>(member);
+			if (behaviors != null)
+			{
+				behaviors.Sort(DictionaryBehaviorComparer<T>.Instance);
+			}
+			return behaviors;
 		}
 
 		private static void RecursivelyDiscoverProperties(
