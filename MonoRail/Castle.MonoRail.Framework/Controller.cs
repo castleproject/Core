@@ -910,7 +910,7 @@ namespace Castle.MonoRail.Framework
 			
 			if (loggerFactory != null)
 			{
-				logger = loggerFactory.Create(GetType().Name);
+				logger = loggerFactory.Create(GetType());
 			}
 			
 			this.context = context;

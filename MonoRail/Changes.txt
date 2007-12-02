@@ -1,6 +1,8 @@
 1.0
 ===
 
+- Applied Kode Khan's patch changing logger creation to use type instead of controller's name
+
 - Implemented support for view component caching. Just use the attribute 
   ViewComponentDetails and its properties (cache, cachekeygenerator)
 

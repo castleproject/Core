@@ -490,14 +490,7 @@ namespace Castle.MonoRail.Framework
 
 			metaDescriptor = controller.metaDescriptor;
 
-			controller.viewEngineManager = viewEngineManager;
-
-			ILoggerFactory loggerFactory = (ILoggerFactory) context.GetService(typeof(ILoggerFactory));
-
-			if (loggerFactory != null)
-			{
-				controller.logger = loggerFactory.Create(controller.GetType().Name);
-			}
+			controller.viewEngineManager = viewEngineManager;			
 		}
 
 		/// <summary>

@@ -318,7 +318,7 @@ namespace Castle.MonoRail.Views.Brail
 			base.Service(serviceProvider);
 			ILoggerFactory loggerFactory = serviceProvider.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
 			if (loggerFactory != null)
-				logger = loggerFactory.Create(GetType().Name);
+				logger = loggerFactory.Create(GetType());
 		}
 
 		// Check if a layout has been defined. If it was, then the layout would be created
