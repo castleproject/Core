@@ -315,7 +315,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected void RenderView(String name)
 		{
-			context.ViewToRender = Path.Combine(GetBaseViewPath(), name);
+			context.ViewToRender = Path.Combine(GetBaseViewPath(name), name);
 		}
 
 		/// <summary>
@@ -323,7 +323,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected void RenderView(String component, String name)
 		{
-			context.ViewToRender = Path.Combine(GetBaseViewPath(component), name);
+			context.ViewToRender = Path.Combine(GetBaseViewPath(component, name), name);
 		}
 
 		/// <summary>
@@ -407,14 +407,19 @@ namespace Castle.MonoRail.Framework
 
 		#region private helper methods
 
-		private String GetBaseViewPath()
+		private String GetBaseViewPath(string name)
 		{
-			return GetBaseViewPath(context.ComponentName);
+			return GetBaseViewPath(context.ComponentName, name);
 		}
 
-		private String GetBaseViewPath(String componentName)
+		private String GetBaseViewPath(String componentName, string name)
 		{
-			return String.Format("components/{0}", componentName);
+			string viewPath = Path.Combine("components", componentName);
+			if(Context.ViewEngine.HasTemplate(Path.Combine(viewPath, name))==false)
+			{
+				viewPath = Path.Combine("components", componentName+"Component");	
+			}
+			return viewPath;
 		}
 
 		#endregion

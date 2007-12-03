@@ -28,6 +28,12 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			AssertReplyEqualTo("<body id=\"123\">");
 		}
 
+		[Test]
+		public void MR_371_OutputComponentInSectionTooManyTimes()
+		{
+			DoGet("bugs/mr_371.rails");
+			AssertReplyEqualTo("123ayende 0<br/>123ayende 1<br/>123ayende 2<br/>");
+		}
 
 		[Test]
 		public void MR_262_DynamicComponents()

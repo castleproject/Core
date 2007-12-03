@@ -1,0 +1,9 @@
+﻿<% 
+component Repeater, {@one: true}:
+	section node:
+		component Template
+		output item
+		output "<br/>"
+	end
+end
+%>

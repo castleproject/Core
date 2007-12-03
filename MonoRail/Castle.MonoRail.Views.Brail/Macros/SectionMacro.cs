@@ -19,22 +19,33 @@ namespace Castle.MonoRail.Views.Brail
     using Boo.Lang.Compiler;
     using Boo.Lang.Compiler.Ast;
     using Castle.MonoRail.Framework;
+    using Macros;
 
-    public class SectionMacro : AbstractAstMacro
+	public class SectionMacro : AbstractAstMacro
     {
+		private string componentContextName;
+		private string componentFactoryName;
+		private string componentVariableName;
+
         public override Statement Expand(MacroStatement macro)
         {
+
             if (macro.Arguments.Count == 0)
                 throw new MonoRailException("Section must be called with a name");
 
             MacroStatement component = GetParentComponent(macro);
+
+			componentContextName = ComponentNaming.GetComponentContextName(component);
+			componentFactoryName = ComponentNaming.GetComponentFactoryName(component);
+			componentVariableName = ComponentNaming.GetComponentNameFor(component);
+
 
             string sectionName = macro.Arguments[0].ToString();
             Block block = new Block();
             //if (!Component.SupportsSection(section.Name))
             //   throw new ViewComponentException( String.Format("The section '{0}' is not supported by the ViewComponent '{1}'", section.Name, ComponentName));
             MethodInvocationExpression supportsSection = new MethodInvocationExpression(
-                AstUtil.CreateReferenceExpression("component.SupportsSection"),
+                AstUtil.CreateReferenceExpression(componentVariableName+".SupportsSection"),
                  new StringLiteralExpression(sectionName));
             //create the new exception
             RaiseStatement raiseSectionNotSupportted = new RaiseStatement(
@@ -53,7 +64,7 @@ namespace Castle.MonoRail.Views.Brail
             block.Add(ifSectionNotSupported);
             //componentContext.RegisterSection(sectionName);
             MethodInvocationExpression mie = new MethodInvocationExpression(
-                new MemberReferenceExpression(AstUtil.CreateReferenceExpression("componentContext"), "RegisterSection"),
+                new MemberReferenceExpression(new ReferenceExpression(componentContextName), "RegisterSection"),
                 new StringLiteralExpression(sectionName),
                 CodeBuilderHelper.CreateCallableFromMacroBody(CodeBuilder, macro));
             block.Add(mie);
@@ -67,7 +78,7 @@ namespace Castle.MonoRail.Views.Brail
             return null;
         }
 
-        private MacroStatement GetParentComponent(MacroStatement macro)
+        private static MacroStatement GetParentComponent(Node macro)
         {
             Node parent = macro.ParentNode;
             while( !(parent is MacroStatement) )

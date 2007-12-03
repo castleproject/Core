@@ -81,6 +81,7 @@
     <Compile Include="Macros\ComponentMacro.cs" />
     <Compile Include="CustomTypeSystem.cs" />
     <Compile Include="IgnoreNull.cs" />
+    <Compile Include="Macros\ComponentNaming.cs" />
     <Compile Include="Macros\OutputMacro.cs" />
     <Compile Include="Attributes\OutputMethodAttribute.cs" />
     <Compile Include="Macros\SectionMacro.cs" />
