@@ -14,36 +14,33 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
-	using System.Collections.Specialized;
+	using System.Collections;
 
-	internal class NameValueCollectionAdapter : AbstractDictionaryAdapter
+	internal class CascadingAdapter : AbstractDictionaryAdapter
 	{
-		private readonly NameValueCollection nameValues;
+		private readonly IDictionary primary;
+		private readonly IDictionary secondary;
 
-		public NameValueCollectionAdapter(NameValueCollection nameValues)
+		public CascadingAdapter(IDictionary primary, IDictionary secondary)
 		{
-			this.nameValues = nameValues;
+			this.primary = primary;
+			this.secondary = secondary;
 		}
 
 		public override bool IsReadOnly
 		{
-			get { return false; }
+			get { return primary.IsReadOnly; }
 		}
 
 		public override bool Contains(object key)
 		{
-			return Array.IndexOf(nameValues.AllKeys, key) >= 0;
+			return primary.Contains(key) || secondary.Contains(key);
 		}
 
 		public override object this[object key]
 		{
-			get { return nameValues[key.ToString()]; }
-			set
-			{
-				String val = (value != null) ? value.ToString() : null;
-				nameValues[key.ToString()] = val;
-			}
+			get { return primary[key] ?? secondary[key]; }
+			set { primary[key] = value; }
 		}
 	}
 }
