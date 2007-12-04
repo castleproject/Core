@@ -87,10 +87,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				throw new MonoRailException("contextAdapter.ContextVars is null");
 			}
 
-			foreach(DictionaryEntry entry in contextAdapter.ContextVars)
-			{
-				context.Put(entry.Key.ToString(), entry.Value);
-			}
+//			foreach(DictionaryEntry entry in contextAdapter.ContextVars)
+//			{
+//				context.Put(entry.Key.ToString(), entry.Value);
+//			}
 
 			for(int i=0; i < savedNode.ChildrenCount; i++)
 			{
