@@ -172,7 +172,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				                         model.ActiveRecordAtt.Locking != OptimisticLocking.Version),
 				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy, model.ActiveRecordAtt.LazySpecified));
 				Ident();
-				WriteCache(model.ActiveRecordAtt.Cache);
+				WriteCache(model.ActiveRecordAtt.Cache, model.ActiveRecordAtt.CacheRegion);
 				VisitNode(model.PrimaryKey);
 				VisitNode(model.CompositeKey);
 				WriteDiscriminator(model);
@@ -443,7 +443,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                model.HasManyToAnyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, null, null, null, null, model.Configuration, att.Index,
 			                att.IndexType,
-			                att.Cache, att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
+							att.Cache, att.CacheRegion, att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
 		}
 
 		/// <summary>
@@ -599,7 +599,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                model.HasManyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, att.Element, null, null,
 			                model.DependentObjectModel, att.Index, att.IndexType,
-							att.Cache, att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
+							att.Cache, att.CacheRegion, att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
 		}
 
 		/// <summary>
@@ -614,7 +614,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			WriteCollection(att.Cascade, mapType, att.RelationType, model.Property.Name,
 			                att.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, null, att.ColumnRef,
-			                att.CompositeKeyColumnRefs, model.CollectionID, att.Index, att.IndexType, att.Cache,
+							att.CompositeKeyColumnRefs, model.CollectionID, att.Index, att.IndexType, att.Cache, att.CacheRegion, 
 							att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
 		}
 
@@ -730,7 +730,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		                             bool inverse, string orderBy, string where, string sort,
 		                             string columnKey, string[] compositeKeyColumnKeys, string element,
 		                             string columnRef, string[] compositeKeyColumnRefs,
-		                             IVisitable extraModel, string index, string indexType, CacheEnum cache,
+		                             IVisitable extraModel, string index, string indexType, CacheEnum cache, string cacheregion,
 		                             NotFoundBehaviour notFoundBehaviour, FetchEnum fetch, int batchSize, Type collectionType)
 		{
 			String cascade = TranslateCascadeEnum(cascadeEnum);
@@ -837,7 +837,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			Ident();
 
-			WriteJcsCache(cache);
+			WriteCache(cache, cacheregion);
+
 			if (columnKey == null)
 			{
 				Append("<key>");
@@ -1086,19 +1087,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 			AppendF("<index{0}{1} />", MakeAtt("column", column), WriteIfNonNull("type", type));
 		}
 
-		private void WriteCache(CacheEnum cacheEnum)
+		private void WriteCache(CacheEnum cacheEnum, string cacheregion)
 		{
 			if (cacheEnum != CacheEnum.Undefined)
 			{
-				AppendF("<cache usage=\"{0}\" />", TranslateCacheEnum(cacheEnum));
-			}
-		}
-
-		private void WriteJcsCache(CacheEnum cacheEnum)
-		{
-			if (cacheEnum != CacheEnum.Undefined)
-			{
-				AppendF("<jcs-cache usage=\"{0}\" />", TranslateCacheEnum(cacheEnum));
+				AppendF("<cache{1} usage=\"{0}\" />", TranslateCacheEnum(cacheEnum), WriteIfNonNull("region", cacheregion));
 			}
 		}
 

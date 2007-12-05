@@ -24,6 +24,7 @@ namespace Castle.ActiveRecord
 	public abstract class BaseAttribute : WithAccessAttribute
 	{
 		private CacheEnum cache = CacheEnum.Undefined;
+		private string cacheRegion;
 
 		/// <summary>
 		/// Gets or sets the cache strategy to use for this property
@@ -32,6 +33,16 @@ namespace Castle.ActiveRecord
 		{
 			get { return cache; }
 			set { cache = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the a name for a cache region.
+		/// </summary>
+		/// <value>The cache region name.</value>
+		public string CacheRegion
+		{
+			get { return cacheRegion; }
+			set { cacheRegion = value; }
 		}
 	}
 }

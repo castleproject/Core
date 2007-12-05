@@ -1067,7 +1067,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
 				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CacheClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"CacheClass\" lazy=\"false\">\r\n" +
-				"    <cache usage=\"read-write\" />\r\n" +
+				"    <cache region=\"Region1\" usage=\"read-write\" />\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
@@ -1077,7 +1077,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"    </property>\r\n" +
 				"    <many-to-one name=\"Parent\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CacheClass, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"parent_id\" />\r\n" +
 				"    <bag name=\"SubClasses\" access=\"property\" table=\"CacheClass\" lazy=\"false\">\r\n" +
-				"      <jcs-cache usage=\"read-write\" />\r\n" +
+				"      <cache usage=\"read-write\" />\r\n" +
 				"      <key column=\"parent_id\" />\r\n" +
 				"      <one-to-many class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CacheClass, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
 				"    </bag>\r\n" +

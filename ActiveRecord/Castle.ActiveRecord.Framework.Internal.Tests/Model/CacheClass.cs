@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	using System.Collections;
 
-	[ActiveRecord(Lazy=false, Cache=CacheEnum.ReadWrite)]
+	[ActiveRecord(Lazy=false, Cache=CacheEnum.ReadWrite, CacheRegion = "Region1")]
 	public class CacheClass : ActiveRecordBase
 	{
 		private int id;
