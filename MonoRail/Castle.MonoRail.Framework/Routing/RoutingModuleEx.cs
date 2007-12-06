@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Core.Logging;
-
 namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Text;
 	using System.Web;
+	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Services.Utils;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -57,7 +56,9 @@ namespace Castle.MonoRail.Framework.Routing
 			HttpContext context = HttpContext.Current;
 			HttpRequest request = context.Request;
 
-			RouteMatch match = engine.FindMatch(request.Headers["host"], request.ApplicationPath, request.RawUrl);
+			RouteMatch match =
+				engine.FindMatch(
+					new RouteContext(new RequestAdapter(request), request.ApplicationPath, RouteContext.StripUrl(request.RawUrl)));
 
 			if (match != null)
 			{

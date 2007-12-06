@@ -14,35 +14,27 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using System.Collections;
 	using Castle.MonoRail.Framework.Routing;
 
 	/// <summary>
-	/// Pendent
+	/// Context used for matching routes.
 	/// </summary>
-	public interface IRoutingEngine
+	public interface IRouteContext
 	{
 		/// <summary>
-		/// Pendent
+		/// The ApplicationPath
 		/// </summary>
-		/// <param name="rule">The rule.</param>
-		void Add(IRoutingRule rule);
+		string ApplicationPath { get; }
 
 		/// <summary>
-		/// Pendent
+		/// The raw url with leading and trailing slashes stripped.
 		/// </summary>
-		/// <param name="routeName">Name of the route.</param>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
-		/// <param name="parameters">The parameters.</param>
-		/// <returns></returns>
-		string CreateUrl(string routeName, string hostname, string virtualPath, IDictionary parameters);
+		/// <seealso cref="RouteContext.StripUrl(string)"/>
+		string Url { get; }
 
 		/// <summary>
-		/// Pendent
+		/// The Http Request
 		/// </summary>
-		/// <param name="context">The routing context.</param>
-		/// <returns></returns>
-		RouteMatch FindMatch(IRouteContext context);
+		IRequest Request { get; }
 	}
 }

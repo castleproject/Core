@@ -14,11 +14,11 @@
 
 namespace Castle.MonoRail.Framework.Tests.Routing
 {
-	using Castle.MonoRail.Framework.Routing;
+	using Framework.Routing;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class RoutingEngineTestCase
+	public class RoutingEngineTestCase : BaseRuleTestFixture
 	{
 		private RoutingEngine engine;
 
@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void ShouldNotMatchRulesIfItIsEmpty()
 		{
-			RouteMatch match = engine.FindMatch("localhost", "", "/product/1");
+			RouteMatch match = engine.FindMatch(CreateGetContext("", "product/1"));
 			Assert.IsNull(match);
 		}
 
@@ -40,7 +40,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			engine.Add( PatternRule.Build("ProductById", "product/<id:number>", typeof(ProductController), "View") );
 
-			RouteMatch match = engine.FindMatch("localhost", "", "/product/1");
+			RouteMatch match = engine.FindMatch(CreateGetContext("", "product/1"));
 
 			Assert.IsNotNull(match);
 			Assert.AreSame(typeof(ProductController), match.ControllerType);
@@ -57,7 +57,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			engine.Add(PatternRule.Build("ProductByName", "product/<name>", typeof(ProductController), "View"));
 
-			RouteMatch match = engine.FindMatch("localhost", "", "/product/iPod");
+			RouteMatch match = engine.FindMatch(CreateGetContext("", "product/iPod"));
 
 			Assert.IsNotNull(match);
 			Assert.AreSame(typeof(ProductController), match.ControllerType);
@@ -76,7 +76,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			engine.Add(PatternRule.Build("ProductByBrandType", "product/<brand>/<type>", typeof(ProductController), "View"));
 			engine.Add(PatternRule.Build("ProductByBrand", "product/<brand>", typeof(ProductController), "View"));
 
-			RouteMatch match = engine.FindMatch("localhost", "", "/product/apple/macbook/pro");
+			RouteMatch match = engine.FindMatch(CreateGetContext("", "/product/apple/macbook/pro"));
 
 			Assert.IsNotNull(match);
 			Assert.AreSame(typeof(ProductController), match.ControllerType);
@@ -101,10 +101,10 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			engine.Add(PatternRule.Build("ProductById", "product", typeof(ProductController), "View"));
 
-			RouteMatch match = engine.FindMatch("localhost", "", "/product");
+			RouteMatch match = engine.FindMatch(CreateGetContext("", "/product"));
 			Assert.IsNotNull(match);
 
-			match = engine.FindMatch("localhost", "", "/product/");
+			match = engine.FindMatch(CreateGetContext("", "/product/"));
 			Assert.IsNotNull(match);
 		}
 

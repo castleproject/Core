@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework.Routing
 	using System.Collections.Generic;
 	using System.Text;
 	using System.Text.RegularExpressions;
+	using Castle.MonoRail.Framework;
 
 	/// <summary>
 	/// Pendent
@@ -27,6 +28,7 @@ namespace Castle.MonoRail.Framework.Routing
 	{
 		private readonly string routeName;
 		private readonly string path;
+		private readonly Verb httpMethods;
 		private readonly Type controllerType;
 		private readonly string action;
 		private UrlPathNode[] nodes;
@@ -39,10 +41,24 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="path">The path.</param>
 		/// <param name="controllerType">Type of the controller.</param>
 		/// <param name="action">The action.</param>
-		protected PatternRule(string routeName, string path, Type controllerType, string action)
+		protected PatternRule(string routeName, string path, Type controllerType, string action) 
+			: this(routeName, path, Verb.Get | Verb.Post, controllerType, action)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PatternRule"/> class.
+		/// </summary>
+		/// <param name="routeName">Name of the rule.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="httpMethods">The httpMethods to match.</param>
+		/// <param name="controllerType">Type of the controller.</param>
+		/// <param name="action">The action.</param>
+		protected PatternRule(string routeName, string path, Verb httpMethods, Type controllerType, string action)
 		{
 			this.routeName = routeName;
 			this.path = path;
+			this.httpMethods = httpMethods;
 			this.controllerType = controllerType;
 			this.action = action;
 		}
@@ -77,14 +93,17 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <summary>
 		/// Matcheses the specified URL.
 		/// </summary>
-		/// <param name="hostname"></param>
-		/// <param name="virtualPath"></param>
-		/// <param name="url">The URL.</param>
+		/// <param name="context"></param>
 		/// <param name="match">The match.</param>
 		/// <returns></returns>
-		public bool Matches(string hostname, string virtualPath, string url, RouteMatch match)
+		public bool Matches(IRouteContext context, RouteMatch match)
 		{
-			string[] pieces = url.Split('/');
+			if(!MatchesHttpMethods(httpMethods, ToVerb(context.Request.HttpMethod)))
+			{
+				return false;
+			}
+
+			string[] pieces = context.Url.Split('/');
 
 			if (!hasGreedyNode)
 			{
@@ -154,6 +173,20 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		public static PatternRule Build(string ruleName, string path, Type controllerType, string action)
 		{
+			return Build(ruleName, path, Verb.Get | Verb.Post, controllerType, action);
+		}
+
+		/// <summary>
+		/// Builds the specified rule name.
+		/// </summary>
+		/// <param name="ruleName">Name of the rule.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="httpMethods">The http request method types to match for.</param>
+		/// <param name="controllerType">Type of the controller.</param>
+		/// <param name="action">The action.</param>
+		/// <returns></returns>
+		public static PatternRule Build(string ruleName, string path, Verb httpMethods, Type controllerType, string action)
+		{
 			if (string.IsNullOrEmpty(ruleName))
 			{
 				throw new ArgumentNullException("ruleName");
@@ -171,9 +204,27 @@ namespace Castle.MonoRail.Framework.Routing
 				throw new ArgumentException("The specified type does not inherit from the Controller class", "controllerType");
 			}
 
-			PatternRule rule = new PatternRule(ruleName, path, controllerType, action);
+			PatternRule rule = new PatternRule(ruleName, path, httpMethods, controllerType, action);
 			rule.Prepare();
 			return rule;
+		}
+
+		/// <summary>Converts a string Http Method into a <see cref="Verb"/></summary>
+		/// <param name="httpMethod"></param>
+		/// <returns></returns>
+		protected static Verb ToVerb(string httpMethod)
+		{
+			return AccessibleThroughAttribute.HttpMethodToVerb(httpMethod);
+		}
+
+		/// <summary>Determines if the <paramref name="methodToMatch"/> is one of the <paramref name="allowedMethods"/>.</summary>
+		/// <param name="allowedMethods">The allowed http methods.</param>
+		/// <param name="methodToMatch">The http method to match.</param>
+		/// <returns><c>true</c> if the <paramref name="methodToMatch"/> is one of the <paramref name="allowedMethods"/></returns>
+		/// <seealso cref="AccessibleThroughAttribute.ForHttpMethod(Verb, Verb)"/>
+		protected static bool MatchesHttpMethods(Verb allowedMethods, Verb methodToMatch)
+		{
+			return AccessibleThroughAttribute.ForHttpMethod(allowedMethods, methodToMatch);
 		}
 
 		/// <summary>

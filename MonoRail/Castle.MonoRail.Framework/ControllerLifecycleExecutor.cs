@@ -99,7 +99,7 @@ namespace Castle.MonoRail.Framework
 		/// Invoked by the framework in order to give a chance to
 		/// obtain other services
 		/// </summary>
-		/// <param name="provider">The service proviver</param>
+		/// <param name="provider">The service provider</param>
 		public void Service(IServiceProvider provider)
 		{
 			this.provider = provider;
@@ -229,14 +229,11 @@ namespace Castle.MonoRail.Framework
 
 					if (actionDesc.AccessibleThrough != null)
 					{
-						string verbName = actionDesc.AccessibleThrough.Verb.ToString();
-						string requestType = context.RequestType;
-
-						if (String.Compare(verbName, requestType, true) != 0)
+						if (!actionDesc.AccessibleThrough.ForHttpMethod(context.RequestType))
 						{
 							exceptionToThrow = new ControllerException(string.Format("Access to the action [{0}] " +
 							                                            "on controller [{1}] is not allowed by the http verb [{2}].",
-							                                            actionName, controllerName, requestType));
+																													actionName, controllerName, context.RequestType));
 
 							hasError = true;
 

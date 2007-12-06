@@ -74,14 +74,12 @@ namespace Castle.MonoRail.Framework.Routing
 		/// Determines if the specified URL matches the
 		/// routing rule.
 		/// </summary>
-		/// <param name="hostname"></param>
-		/// <param name="virtualPath"></param>
-		/// <param name="url">The URL.</param>
+		/// <param name="context"></param>
 		/// <param name="match">The match.</param>
 		/// <returns></returns>
-		public bool Matches(string hostname, string virtualPath, string url, RouteMatch match)
+		public bool Matches(IRouteContext context, RouteMatch match)
 		{
-			Match regExpMatch = regExp.Match(url);
+			Match regExpMatch = regExp.Match(context.Url);
 
 			int index = 0;
 

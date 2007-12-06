@@ -16,12 +16,13 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 {
 	using System;
 	using System.Collections;
-	using Castle.MonoRail.Framework.Routing;
+	using Framework.Routing;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class PatternRuleTestCase
+	public class PatternRuleTestCase : BaseRuleTestFixture
 	{
+
 		[Test]
 		public void ShouldMatchAsPath()
 		{
@@ -29,7 +30,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
-			Assert.IsTrue(rule.Matches("localhost", "", "product", match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product"), match));
 		}
 
 		[Test]
@@ -39,10 +40,10 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
-			Assert.IsTrue(rule.Matches("localhost", "", "product/", match));
-			Assert.IsTrue(rule.Matches("localhost", "", "product", match));
-			Assert.IsTrue(rule.Matches("localhost", "", "product/iPod", match));
-			Assert.IsTrue(rule.Matches("localhost", "", "product/iPod/Nano", match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product/"), match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product"), match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product/ipod"), match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product/ipod/Nano"), match));
 		}
 
 		[Test]
@@ -52,7 +53,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
-			Assert.IsTrue(rule.Matches("localhost", "", "product/1", match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product/1"), match));
 
 			Assert.IsNotNull(match);
 			Assert.AreEqual(1, match.Literals.Count);
@@ -68,7 +69,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
-			Assert.IsTrue(rule.Matches("localhost", "", "product/iPod", match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product/iPod"), match));
 
 			Assert.IsNotNull(match);
 			Assert.AreEqual(1, match.Literals.Count);
@@ -84,16 +85,16 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
-			Assert.IsTrue(rule.Matches("localhost", "", "product/apple", match));
-			Assert.IsTrue(rule.Matches("localhost", "", "product/ms", match));
-			Assert.IsTrue(rule.Matches("localhost", "", "product/cisco", match));
-			
-			Assert.IsFalse(rule.Matches("localhost", "", "product/novell", match));
-			Assert.IsFalse(rule.Matches("localhost", "", "product/appletalk", match));
-			Assert.IsFalse(rule.Matches("localhost", "", "product/mapple", match));
-			Assert.IsFalse(rule.Matches("localhost", "", "product/mcs", match));
-			Assert.IsFalse(rule.Matches("localhost", "", "product/mss", match));
-			Assert.IsFalse(rule.Matches("localhost", "", "product/sms", match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product/apple"), match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product/ms"), match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product/cisco"), match));
+
+			Assert.IsFalse(rule.Matches(CreateGetContext("", "product/novell"), match));
+			Assert.IsFalse(rule.Matches(CreateGetContext("", "product/appletalk"), match));
+			Assert.IsFalse(rule.Matches(CreateGetContext("", "product/mapple"), match));
+			Assert.IsFalse(rule.Matches(CreateGetContext("", "product/mcs"), match));
+			Assert.IsFalse(rule.Matches(CreateGetContext("", "product/mss"), match));
+			Assert.IsFalse(rule.Matches(CreateGetContext("", "product/sms"), match));
 		}
 
 		[Test]
@@ -103,9 +104,9 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
-			Assert.IsFalse(rule.Matches("localhost", "", "product/apple/ipod", match));
-			Assert.IsFalse(rule.Matches("localhost", "", "product/ms/zune", match));
-			Assert.IsFalse(rule.Matches("localhost", "", "product/cisco/some", match));
+			Assert.IsFalse(rule.Matches(CreateGetContext("", "product/apple/iPod"), match));
+			Assert.IsFalse(rule.Matches(CreateGetContext("", "product/ms/zune"), match));
+			Assert.IsFalse(rule.Matches(CreateGetContext("", "product/cisco/some"), match));
 		}
 
 		[Test]
@@ -114,13 +115,13 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			PatternRule rule = PatternRule.Build("ProductById", "product/<brand:apple|ms|cisco>", typeof(ProductController), "View");
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
-			Assert.IsTrue(rule.Matches("localhost", "", "product/apple", match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product/apple"), match));
 
 			Assert.IsTrue(match.Parameters.ContainsKey("brand"));
 			Assert.AreEqual("apple", match.Parameters["brand"]);
 
 			match = new RouteMatch(typeof(ProductController), "foo", "bar");
-			Assert.IsTrue(rule.Matches("localhost", "", "product/ms", match));
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "product/ms"), match));
 
 			Assert.IsTrue(match.Parameters.ContainsKey("brand"));
 			Assert.AreEqual("ms", match.Parameters["brand"]);
@@ -133,7 +134,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
 
-			Assert.IsFalse(rule.Matches("localhost", "", "product/iPod", match));
+			Assert.IsFalse(rule.Matches(CreateGetContext("", "product/iPod"), match));
 		}
 
 		[Test]
@@ -229,6 +230,22 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.AreEqual("/vdir/product", rule.CreateUrl("localhost", "vdir", new Hashtable()));
 		}
 
+		[Test]
+		public void CanMatchUsingDifferentHttpMethods()
+		{
+			string url = "product";
+			string action = "view";
+			Type controller = typeof(ProductController);
+			IRouteContext routeContext = CreateGetContext("", url);
+
+			PatternRule rulePost = PatternRule.Build("ProductByIdPost", url, Verb.Post, controller, action);
+			PatternRule ruleGet = PatternRule.Build("ProductByIdGet", url, Verb.Get, controller, action);
+
+			RouteMatch match = new RouteMatch(controller, "foo", "bar");
+
+			Assert.IsFalse(rulePost.Matches(routeContext, match));
+			Assert.IsTrue(ruleGet.Matches(routeContext, match));
+		}
 		public class ProductController : Controller { }
 	}
 }
