@@ -89,9 +89,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			 if (componentName.StartsWith("$")) 
 			 {
 				String nodeContent = compNameNode.Literal.Trim('"', '\'');
-				SimpleNode inlineNode = rsvc.Parse(new StringReader(nodeContent), context.CurrentTemplateName, false);
+				SimpleNode inlineNode = runtimeServices.Parse(new StringReader(nodeContent), context.CurrentTemplateName, false);
 
-				inlineNode.Init(context, rsvc);
+				inlineNode.Init(context, runtimeServices);
 				componentName = (String) Evaluate(inlineNode, context);
 			}
 
@@ -283,9 +283,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 				if (parts.Length == 2 && parts[1].IndexOf("$") != -1)
 				{
-					SimpleNode inlineNode = rsvc.Parse(new StringReader(parts[1]), context.CurrentTemplateName, false);
+					SimpleNode inlineNode = runtimeServices.Parse(new StringReader(parts[1]), context.CurrentTemplateName, false);
 
-					inlineNode.Init(context, rsvc);
+					inlineNode.Init(context, runtimeServices);
 
 					entries[parts[0]] = Evaluate(inlineNode, context);
 				}
@@ -409,7 +409,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 		private Template GetTemplate(String viewToRender, String encoding)
 		{
-			return rsvc.GetTemplate(viewToRender, encoding);
+			return runtimeServices.GetTemplate(viewToRender, encoding);
 		}
 
 		private String ExtractEncoding(IInternalContextAdapter context)
@@ -424,7 +424,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			}
 			else
 			{
-				encoding = (String) rsvc.GetProperty(RuntimeConstants.INPUT_ENCODING);
+				encoding = (String) runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
 			}
 
 			return encoding;
@@ -434,7 +434,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 			Object[] templateStack = context.TemplateNameStack;
 
-			if (templateStack.Length >= rsvc.GetInt(RuntimeConstants.PARSE_DIRECTIVE_MAXDEPTH, 20))
+			if (templateStack.Length >= runtimeServices.GetInt(RuntimeConstants.PARSE_DIRECTIVE_MAXDEPTH, 20))
 			{
 				StringBuilder path = new StringBuilder();
 
