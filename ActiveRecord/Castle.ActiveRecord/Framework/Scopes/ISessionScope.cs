@@ -77,6 +77,12 @@ namespace Castle.ActiveRecord
 		void Flush();
 
 		/// <summary>
+		/// Evicts the specified instance from the session cache. 
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		void Evict(object instance);
+
+		/// <summary>
 		/// This method is invoked when no session was available
 		/// at and the <see cref="Castle.ActiveRecord.Framework.ISessionFactoryHolder"/>
 		/// just created one. So it registers the session created 

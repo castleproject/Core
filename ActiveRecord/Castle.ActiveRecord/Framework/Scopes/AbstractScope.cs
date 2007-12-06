@@ -78,6 +78,23 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		}
 
 		/// <summary>
+		/// Evicts the specified instance from the session cache.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		public void Evict(object instance)
+		{
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			foreach(ISession session in GetSessions())
+			{
+				if (session.Contains(instance))
+				{
+					session.Evict(instance);
+				}
+			}
+		}
+
+		/// <summary>
 		/// This method is invoked when the
 		/// <see cref="Castle.ActiveRecord.Framework.ISessionFactoryHolder"/>
 		/// instance needs a session instance. Instead of creating one it interrogates
