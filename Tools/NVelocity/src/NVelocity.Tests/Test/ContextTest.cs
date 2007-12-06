@@ -36,43 +36,43 @@ namespace NVelocity.Test
 			
 			StringWriter sw = new StringWriter();
 
-			VelocityEngine ve = new VelocityEngine();
-			ve.Init();
+			VelocityEngine velocityEngine = new VelocityEngine();
+			velocityEngine.Init();
 
 			Boolean ok = false;
 
-			ok = ve.Evaluate(c, sw, 
+			ok = velocityEngine.Evaluate(c, sw, 
 				"ContextTest.CaseInsensitive", 
 				"$x.Print( \"aaa\" )");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("aaa", sw.ToString());
 
 			sw = new StringWriter();
 
-			ok = ve.Evaluate(c, sw, 
+			ok = velocityEngine.Evaluate(c, sw, 
 				"ContextTest.CaseInsensitive", 
 				"$x.Contents()");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("", sw.ToString());
 
 			sw = new StringWriter();
 
-			ok = ve.Evaluate(c, sw, 
+			ok = velocityEngine.Evaluate(c, sw, 
 				"ContextTest.CaseInsensitive", 
 				"$x.Contents( \"x\" )");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("x", sw.ToString());
 
 			sw = new StringWriter();
 
-			ok = ve.Evaluate(c, sw, 
+			ok = velocityEngine.Evaluate(c, sw, 
 				"ContextTest.CaseInsensitive", 
 				"$x.Contents( \"x\", \"y\" )");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("x,y", sw.ToString());
 		}
 
@@ -84,34 +84,34 @@ namespace NVelocity.Test
 			
 			StringWriter sw = new StringWriter();
 
-			VelocityEngine ve = new VelocityEngine();
-			ve.Init();
+			VelocityEngine velocityEngine = new VelocityEngine();
+			velocityEngine.Init();
 
 			Boolean ok = false;
 
-			ok = ve.Evaluate(c, sw, 
+			ok = velocityEngine.Evaluate(c, sw, 
 				"ContextTest.CaseInsensitive", 
 				"$x.Contents( \"hammett\", 1 )");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("hammett1", sw.ToString());
 
 			sw = new StringWriter();
 
-			ok = ve.Evaluate(c, sw, 
+			ok = velocityEngine.Evaluate(c, sw, 
 				"ContextTest.CaseInsensitive", 
 				"$x.Contents( \"hammett\", 1, \"x\" )");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("hammett1x", sw.ToString());
 
 			sw = new StringWriter();
 
-			ok = ve.Evaluate(c, sw, 
+			ok = velocityEngine.Evaluate(c, sw, 
 				"ContextTest.CaseInsensitive", 
 				"$x.Contents( \"hammett\", 1, \"x\", \"y\" )");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("hammett1x,y", sw.ToString());
 		}
 
@@ -132,7 +132,7 @@ namespace NVelocity.Test
 				"ContextTest.CaseInsensitive", 
 				"$x.Contents( \"x\", \"y\" )\r\n$x.Contents( \"w\", \"z\" )\r\n$x.Contents( \"j\", \"f\", \"a\" )");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("x,y\r\nw,z\r\nj,f,a", sw.ToString());			
 
 			sw = new StringWriter();
@@ -141,7 +141,7 @@ namespace NVelocity.Test
 				"ContextTest.CaseInsensitive", 
 				"$x.Contents( \"x\", \"y\" )\r\n$x.Contents( \"w\", \"z\" )\r\n$x.Contents( \"j\", \"f\", \"a\" )");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("x,y\r\nw,z\r\nj,f,a", sw.ToString());			
 		}
 
@@ -170,7 +170,7 @@ namespace NVelocity.Test
 				"ContextTest.CaseInsensitive", 
 				"#foreach( $item in $items )\r\n$x.Contents( \"x\", \"y\" )\r\n#end\r\n");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("x,y\r\nx,y\r\nx,y\r\nx,y\r\n", sw.ToString());
 		}
 
@@ -189,12 +189,12 @@ namespace NVelocity.Test
 			
 			StringWriter sw = new StringWriter();
 
-			VelocityEngine ve = new VelocityEngine();
-			ve.Init();
+			VelocityEngine velocityEngine = new VelocityEngine();
+			velocityEngine.Init();
 
 			Boolean ok = false;
 
-			ok = ve.Evaluate(c, sw, 
+			ok = velocityEngine.Evaluate(c, sw, 
 				"ContextTest.CaseInsensitive", 
 				"#foreach( $item in $items )\r\n" + 
 				"#if($item == \"a\")\r\n $x.Contents( \"x\", \"y\" )#end\r\n" + 
@@ -202,7 +202,7 @@ namespace NVelocity.Test
 				"#if($item == \"c\")\r\n $x.Contents( \"c\", \"d\", \"e\" )#end\r\n" + 
 				"#end\r\n");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(" x,y x c,d,e", sw.ToString());			
 		}
 
@@ -237,7 +237,7 @@ namespace NVelocity.Test
 				"#if($item == \"c\")\r\n $x.FormatDate( $d3 )#end\r\n" + 
 				"#end\r\n");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(" 16 17 18", sw.ToString());			
 		}
 
@@ -262,7 +262,7 @@ namespace NVelocity.Test
 				"ContextTest.CaseInsensitive", 
 				"$x.get_Item( \"item\" )");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("value1", sw.ToString());
 		}
 
@@ -281,7 +281,7 @@ namespace NVelocity.Test
 			ve.Init();
 
 			Boolean ok = ve.Evaluate(c, sw, "ContextTest.CaseInsensitive", "Hello $firstName $lastName");
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("Hello Cort $lastName", sw.ToString());
 
 			// create a context based on a case insensitive hashtable
@@ -293,7 +293,7 @@ namespace NVelocity.Test
 			// verify the output, $lastName should be resolved
 			sw = new StringWriter();
 			ok = ve.Evaluate(c, sw, "ContextTest.CaseInsensitive", "Hello $firstName $lastName");
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("Hello Cort Schaefer", sw.ToString());
 
 			// create a context based on a case insensitive hashtable, verify that stuff added to the context after it is created if found case insensitive
@@ -305,7 +305,7 @@ namespace NVelocity.Test
 			// verify the output, $lastName should be resolved
 			sw = new StringWriter();
 			ok = ve.Evaluate(c, sw, "ContextTest.CaseInsensitive", "Hello $firstName $lastName");
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("Hello Cort Schaefer", sw.ToString());
 		}
 
@@ -323,19 +323,19 @@ namespace NVelocity.Test
 			StringWriter sw = new StringWriter();
 
 			bool ok = ve.Evaluate(c, sw, "", "Hello $something.firstName");
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("Hello hammett", sw.ToString());
 
 			sw.GetStringBuilder().Length = 0;
 
 			ok = ve.Evaluate(c, sw, "", "Hello $something.Firstname");
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("Hello hammett", sw.ToString());
 
 			sw.GetStringBuilder().Length = 0;
 
 			ok = ve.Evaluate(c, sw, "", "Hello $something.firstname");
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("Hello hammett", sw.ToString());
 		}
 	}

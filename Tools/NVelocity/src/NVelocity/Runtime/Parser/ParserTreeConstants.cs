@@ -8,7 +8,7 @@ namespace NVelocity.Runtime.Parser
 	{
 		/// <summary>
 		/// private constructor as class is meant to hold constants only.
-		/// Class was orginally an interface in Java, but as C# does not support Fields in an interface and
+		/// Class was originally an interface in Java, but as C# does not support Fields in an interface and
 		/// the jjtNodeName field, I converted it to a class with no constructor.
 		/// </summary>
 		private ParserTreeConstants()

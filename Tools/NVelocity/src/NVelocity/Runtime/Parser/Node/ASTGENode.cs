@@ -44,9 +44,7 @@ namespace NVelocity.Runtime.Parser.Node
 			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.Error((left == null ? "Left" : "Right") + " side (" + GetChild((left == null ? 0 : 1)).Literal +
-				           ") of '>=' operation has null value." + " Operation not possible. " + context.CurrentTemplateName +
-				           " [line " + Line + ", column " + Column + "]");
+				runtimeServices.Error(string.Format("{0} side ({1}) of '>=' operation has null value. Operation not possible. {2} [line {3}, column {4}]", (left == null ? "Left" : "Right"), GetChild((left == null ? 0 : 1)).Literal, context.CurrentTemplateName, Line, Column));
 				return false;
 			}
 
@@ -56,7 +54,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 			catch(ArgumentException ae)
 			{
-				rsvc.Error(ae.Message);
+				runtimeServices.Error(ae.Message);
 
 				return false;
 			}

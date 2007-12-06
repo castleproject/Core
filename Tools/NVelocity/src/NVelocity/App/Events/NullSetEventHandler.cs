@@ -19,7 +19,7 @@ namespace NVelocity.App.Events
 		}
 
 		/// <summary>
-		/// reference literal of left-hand-side of set statement
+		/// Reference literal of left-hand-side of set statement
 		/// </summary>
 		public String LHS
 		{

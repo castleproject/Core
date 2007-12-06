@@ -37,14 +37,14 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			base.Init(context, data);
 
-			if (directive == null && rsvc.IsVelocimacro(directiveName, context.CurrentTemplateName))
+			if (directive == null && runtimeServices.IsVelocimacro(directiveName, context.CurrentTemplateName))
 			{
-				directive = rsvc.GetVelocimacro(directiveName, context.CurrentTemplateName);
+				directive = runtimeServices.GetVelocimacro(directiveName, context.CurrentTemplateName);
 			}
 
 			if (directive != null)
 			{
-				directive.Init(rsvc, context, this);
+				directive.Init(runtimeServices, context, this);
 				directive.SetLocation(Line, Column);
 			}
 

@@ -52,7 +52,7 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public override String ToString()
 		{
-			return TemplateName + " [line " + Line + ", column " + Column + ']';
+			return string.Format("{0} [line {1}, column {2}{3}", TemplateName, Line, Column, ']');
 		}
 	}
 }

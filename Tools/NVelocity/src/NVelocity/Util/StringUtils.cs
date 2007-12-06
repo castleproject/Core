@@ -138,7 +138,7 @@ namespace NVelocity.Util
 			{
 				int index = normalized.IndexOf("%20");
 				if (index < 0) break;
-				normalized = normalized.Substring(0, (index) - (0)) + " " + normalized.Substring(index + 3);
+				normalized = string.Format("{0} {1}", normalized.Substring(0, (index) - (0)), normalized.Substring(index + 3));
 			}
 
 			// Resolve occurrences of "/./" in the normalized path

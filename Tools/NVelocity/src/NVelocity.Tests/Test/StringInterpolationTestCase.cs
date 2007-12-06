@@ -108,8 +108,8 @@ namespace NVelocity.Test
 
 			StringWriter sw = new StringWriter();
 
-			VelocityEngine ve = new VelocityEngine();
-			ve.Init();
+			VelocityEngine velocityEngine = new VelocityEngine();
+			velocityEngine.Init();
 
 			string templatePrefix = "$Helper.Dump(";
 			string templateSuffix = ")";
@@ -117,9 +117,9 @@ namespace NVelocity.Test
 
 			string template = templatePrefix + templateContent + templateSuffix;
 
-			bool ok = ve.Evaluate(c, sw, "ContextTest.CaseInsensitive", template);
+			bool ok = velocityEngine.Evaluate(c, sw, "ContextTest.CaseInsensitive", template);
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 
 			string result = sw.ToString();
 
@@ -133,33 +133,33 @@ namespace NVelocity.Test
 		{
 			if (options == null) throw new ArgumentNullException("options");
 
-			StringBuilder sb = new StringBuilder("");
+			StringBuilder stringBuilder = new StringBuilder();
 			
 			Array keysSorted = (new ArrayList(options.Keys)).ToArray(typeof(string)) as string[] ;
 
 			Array.Sort( keysSorted );
 
-			sb.Append(options.Count).Append(':');
+			stringBuilder.Append(options.Count).Append(':');
 
 			foreach(string key in keysSorted)
 			{
 				object val = options[key];
 
-				IDictionary dict = val as IDictionary;
+				IDictionary dictionary = val as IDictionary;
 
-				if (dict != null)
+				if (dictionary != null)
 				{
-					sb.Append(key).Append("=<").Append(Dump(dict)).Append("> ");
+					stringBuilder.Append(key).Append("=<").Append(Dump(dictionary)).Append("> ");
 				}
 				else
 				{
-					sb.Append(key).Append("=<").Append(val).Append("> ");
+					stringBuilder.Append(key).Append("=<").Append(val).Append("> ");
 				}
 			}
 
-			if (sb.Length > 0) sb.Length--;
+			if (stringBuilder.Length > 0) stringBuilder.Length--;
 
-			return sb.ToString();
+			return stringBuilder.ToString();
 		}
 	}
 }

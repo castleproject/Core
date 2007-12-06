@@ -51,8 +51,7 @@ namespace NVelocity.Runtime.Parser.Node
 			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.Error((left == null ? "Left" : "Right") + " side of '&&' operation is null." + " Operation not possible. " +
-				           context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				runtimeServices.Error(string.Format("{0} side of '&&' operation is null. Operation not possible. {1} [line {2}, column {3}]", (left == null ? "Left" : "Right"), context.CurrentTemplateName, Line, Column));
 				return false;
 			}
 

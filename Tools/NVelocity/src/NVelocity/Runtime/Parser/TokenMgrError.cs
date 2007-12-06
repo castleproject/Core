@@ -16,11 +16,11 @@ namespace NVelocity.Runtime.Parser
 	* Ordinals for various reasons why an Error of this type can be thrown.
 	*/
 
-		/// <summary> Lexical error occured.
+		/// <summary> Lexical error occurred.
 		/// </summary>
 		internal const int LEXICAL_ERROR = 0;
 
-		/// <summary> An attempt wass made to create a second instance of a static token manager.
+		/// <summary> An attempt was made to create a second instance of a static token manager.
 		/// </summary>
 		internal const int STATIC_LEXER_ERROR = 1;
 
@@ -86,8 +86,8 @@ namespace NVelocity.Runtime.Parser
 					default:
 						if ((ch = str[i]) < 0x20 || ch > 0x7e)
 						{
-							String s = "0000" + Convert.ToString(ch, 16);
-							retval.Append("\\u" + s.Substring(s.Length - 4, (s.Length) - (s.Length - 4)));
+							String s = string.Format("0000{0}", Convert.ToString(ch, 16));
+							retval.AppendFormat("\\u{0}", s.Substring(s.Length - 4, (s.Length) - (s.Length - 4)));
 						}
 						else
 						{
@@ -103,10 +103,10 @@ namespace NVelocity.Runtime.Parser
 		/// token manager to indicate a lexical error.
 		/// Parameters :
 		/// EOFSeen     : indicates if EOF caused the lexicl error
-		/// curLexState : lexical state in which this error occured
-		/// errorLine   : line number when the error occured
-		/// errorColumn : column number when the error occured
-		/// errorAfter  : prefix that was seen before this error occured
+		/// curLexState : lexical state in which this error occurred
+		/// errorLine   : line number when the error occurred
+		/// errorColumn : column number when the error occurred
+		/// errorAfter  : prefix that was seen before this error occurred
 		/// curchar     : the offending character
 		/// Note: You can customize the lexical error message by modifying this method.
 		/// </summary>
@@ -114,9 +114,7 @@ namespace NVelocity.Runtime.Parser
 		                                   char curChar)
 		{
 			return
-				("Lexical error at line " + errorLine + ", column " + errorColumn + ".  Encountered: " +
-				 (EOFSeen ? "<EOF> " : ("\"" + AddEscapes(curChar.ToString()) + "\"") + " (" + (int) curChar + "), ") + "after : \"" +
-				 AddEscapes(errorAfter) + "\"");
+				(string.Format("Lexical error at line {0}, column {1}.  Encountered: {2}after : \"{3}\"", errorLine, errorColumn, (EOFSeen ? "<EOF> " : string.Format("{0} ({1}), ", (string.Format("\"{0}\"", AddEscapes(curChar.ToString()))), (int) curChar)), AddEscapes(errorAfter)));
 		}
 
 		/// <summary> You can also modify the body of this method to customize your error messages.

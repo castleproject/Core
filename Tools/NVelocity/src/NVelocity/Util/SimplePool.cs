@@ -16,7 +16,7 @@ namespace NVelocity.Util
 		/// <summary>  max amount of objects to be managed
 		/// set via CTOR
 		/// </summary>
-		private int max;
+		private int maximum;
 
 		/// <summary>  index of previous to next
 		/// free slot
@@ -25,7 +25,7 @@ namespace NVelocity.Util
 
 		public SimplePool(int max)
 		{
-			this.max = max;
+			this.maximum = max;
 			pool = new T[max];
 		}
 
@@ -38,7 +38,7 @@ namespace NVelocity.Util
 
 			lock(this)
 			{
-				if (current < max - 1)
+				if (current < maximum - 1)
 				{
 					idx = ++current;
 				}
@@ -73,9 +73,9 @@ namespace NVelocity.Util
 		/// <summary>
 		/// Return the size of the pool
 		/// </summary>
-		public int Max
+		public int Maximum
 		{
-			get { return max; }
+			get { return maximum; }
 		}
 
 		/// <summary>

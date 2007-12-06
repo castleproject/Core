@@ -27,7 +27,7 @@ namespace NVelocity.Util.Introspection
 
 		/// <summary>
 		/// invocation method - called when the 'get action' should be
-		/// preformed and a value returned
+		/// performed and a value returned
 		/// </summary>
 		Object Invoke(Object o);
 	}

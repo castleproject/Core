@@ -60,7 +60,7 @@ namespace NVelocity.App.Events
 		/// <param name="method">method called that causes the exception</param>
 		/// <param name="e">Exception thrown by the method</param>
 		/// <returns>Object to return as method result</returns>
-		/// <exception cref="Exception">exception to be wrapped and propogated to app</exception>
+		/// <exception cref="Exception">exception to be wrapped and propagated to app</exception>
 		internal Object HandleMethodException(Type claz, String method, Exception e)
 		{
 			// if we don't have a handler, just throw what we were handed
@@ -85,8 +85,8 @@ namespace NVelocity.App.Events
 		{
 			if (context is IInternalEventContext)
 			{
-				IInternalEventContext iec = (IInternalEventContext) context;
-				iec.AttachEventCartridge(this);
+				IInternalEventContext internalEventContext = (IInternalEventContext) context;
+				internalEventContext.AttachEventCartridge(this);
 				return true;
 			}
 			else

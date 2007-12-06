@@ -19,7 +19,7 @@ namespace NVelocity.Runtime.Directive
 	/// <version> $Id: Directive.cs,v 1.3 2003/10/27 13:54:10 corts Exp $ </version>
 	public abstract class Directive
 	{
-		protected internal IRuntimeServices rsvc = null;
+		protected internal IRuntimeServices runtimeServices = null;
 
 		private int line = 0;
 		private int column = 0;
@@ -29,7 +29,7 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		public virtual void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
 		{
-			rsvc = rs;
+			runtimeServices = rs;
 
 //			int i, k = node.jjtGetNumChildren();
 //			for (i = 0; i < k; i++)

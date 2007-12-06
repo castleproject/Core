@@ -19,9 +19,9 @@ namespace NVelocity.Context
 	                                           IInternalEventContext, IDictionary
 	{
 		/// <summary>
-		/// Need to define this method here otherwise since both IDicationary and IContext
+		/// Need to define this method here otherwise since both <see cref="IDictionary"/> and <see cref="IContext"/> 
 		/// contains a Remove(Object key) method we will need to cast the object to either interface
-		/// before calling this method, for backward compabillity we make the IContext.Remove the default
+		/// before calling this method, for backward compatibility we make the IContext.Remove the default
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>

@@ -22,7 +22,7 @@ namespace NVelocity.Runtime.Exception
 	public class NodeException : Exception
 	{
 		public NodeException(String exceptionMessage, INode node)
-			: base(exceptionMessage + ": " + node.Literal + " [line " + node.Line + ",column " + node.Column + "]")
+			: base(string.Format("{0}: {1} [line {2},column {3}]", exceptionMessage, node.Literal, node.Line, node.Column))
 		{
 		}
 

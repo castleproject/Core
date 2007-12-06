@@ -121,16 +121,16 @@ namespace NVelocity.Runtime.Parser
 			}
 			catch(ParseException pe)
 			{
-//				rsvc.Error("Parser Exception: " + templateName + " : " + StringUtils.StackTrace(pe));
+//				runtimeServices.Error("Parser Exception: " + templateName + " : " + StringUtils.StackTrace(pe));
 				throw (pe.currentToken == null) ? pe : new ParseException(pe.currentToken, pe.expectedTokenSequences, pe.tokenImage);
 			}
 			catch(TokenMgrError tme)
 			{
-				throw new ParseException("Lexical error: " + tme);
+				throw new ParseException(string.Format("Lexical error: {0}", tme));
 			}
 			catch(Exception)
 			{
-//				rsvc.Error("Parser Error: " + templateName + " : " + StringUtils.StackTrace(e));
+//				runtimeServices.Error("Parser Error: " + templateName + " : " + StringUtils.StackTrace(e));
 			}
 
 			currentTemplateName = "";
@@ -701,7 +701,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					// if null, then not a real directive, but maybe a Velocimacro
 
-					//d  =  (Directive) rsvc.getVelocimacro( directiveName, currentTemplateName );
+					//d  =  (Directive) runtimeServices.getVelocimacro( directiveName, currentTemplateName );
 
 					// TODO: adding a null check since RuntimeServices is not finished
 					// since the parser can be created without RuntimeServices - this may actually be needed here and in the orgiginal source as well.

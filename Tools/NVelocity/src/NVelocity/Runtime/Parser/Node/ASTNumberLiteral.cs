@@ -5,7 +5,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 	public class ASTNumberLiteral : SimpleNode
 	{
-		private Int32 value__Field;
+		private Int32 valueField;
 
 		public ASTNumberLiteral(int id) : base(id)
 		{
@@ -33,14 +33,14 @@ namespace NVelocity.Runtime.Parser.Node
 
 			base.Init(context, data);
 
-			value__Field = Int32.Parse(FirstToken.Image);
+			valueField = Int32.Parse(FirstToken.Image);
 
 			return data;
 		}
 
 		public override Object Value(IInternalContextAdapter context)
 		{
-			return value__Field;
+			return valueField;
 		}
 	}
 }

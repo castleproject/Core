@@ -18,12 +18,12 @@ namespace NVelocity.Runtime
 	{
 		/// <summary>  runtime services for this instance
 		/// </summary>
-		private IRuntimeServices rsvc = null;
+		private IRuntimeServices runtimeServices = null;
 
 		/// <summary>  VMManager : deal with namespace management
 		/// and actually keeps all the VM definitions
 		/// </summary>
-		private VelocimacroManager vmManager = null;
+		private VelocimacroManager velocimacroManager = null;
 
 		/// <summary>  determines if replacement of global VMs are allowed
 		/// controlled by  VM_PERM_ALLOW_INLINE_REPLACE_GLOBAL
@@ -33,7 +33,7 @@ namespace NVelocity.Runtime
 		/// <summary>  controls if new VMs can be added.  Set by
 		/// VM_PERM_ALLOW_INLINE  Note the assumption that only
 		/// through inline defs can this happen.
-		/// additions through autoloaded VMs is allowed
+		/// additions through auto-loaded VMs is allowed
 		/// </summary>
 		private bool addNewAllowed = true;
 
@@ -64,14 +64,14 @@ namespace NVelocity.Runtime
 		/// </summary>
 		public VelocimacroFactory(IRuntimeServices rs)
 		{
-			rsvc = rs;
+			runtimeServices = rs;
 
 			/*
 		*  we always access in a synchronized(), so we 
 		*  can use an unsynchronized hashmap
 		*/
 			libModMap = new Hashtable();
-			vmManager = new VelocimacroManager(rsvc);
+			velocimacroManager = new VelocimacroManager(runtimeServices);
 		}
 
 		private bool TemplateLocalInline
@@ -139,25 +139,25 @@ namespace NVelocity.Runtime
 		*  add all library macros to the global namespace
 		*/
 
-				vmManager.NamespaceUsage = false;
+				velocimacroManager.NamespaceUsage = false;
 
 				/*
 		*  now, if there is a global or local libraries specified, use them.
 		*  All we have to do is get the template. The template will be parsed;
 		*  VM's  are added during the parse phase
 		*/
-				Object libfiles = rsvc.GetProperty(RuntimeConstants.VM_LIBRARY);
+				Object libraryFiles = runtimeServices.GetProperty(RuntimeConstants.VM_LIBRARY);
 
-				if (libfiles != null)
+				if (libraryFiles != null)
 				{
-					if (libfiles is ArrayList)
+					if (libraryFiles is ArrayList)
 					{
-						macroLibVec = (ArrayList) libfiles;
+						macroLibVec = (ArrayList) libraryFiles;
 					}
-					else if (libfiles is String)
+					else if (libraryFiles is String)
 					{
 						macroLibVec = new ArrayList();
-						macroLibVec.Add(libfiles);
+						macroLibVec.Add(libraryFiles);
 					}
 
 					for(int i = 0; i < macroLibVec.Count; i++)
@@ -173,13 +173,13 @@ namespace NVelocity.Runtime
 			    *  let the VMManager know that the following is coming
 			    *  from libraries - need to know for auto-load
 			    */
-							vmManager.RegisterFromLib = true;
+							velocimacroManager.RegisterFromLib = true;
 
-							LogVMMessageInfo("Velocimacro : adding VMs from " + "VM library template : " + lib);
+							LogVMMessageInfo(string.Format("Velocimacro : adding VMs from VM library template : {0}", lib));
 
 							try
 							{
-								Template template = rsvc.GetTemplate(lib);
+								Template template = runtimeServices.GetTemplate(lib);
 
 								/*
 				*  save the template.  This depends on the assumption
@@ -193,12 +193,12 @@ namespace NVelocity.Runtime
 							}
 							catch(System.Exception e)
 							{
-								LogVMMessageInfo("Velocimacro : error using  VM " + "library template " + lib + " : " + e);
+								LogVMMessageInfo(string.Format("Velocimacro : error using  VM library template {0} : {1}", lib, e));
 							}
 
-							LogVMMessageInfo("Velocimacro :  VM library template " + "macro registration complete.");
+							LogVMMessageInfo("Velocimacro :  VM library template macro registration complete.");
 
-							vmManager.RegisterFromLib = false;
+							velocimacroManager.RegisterFromLib = false;
 						}
 					}
 				}
@@ -215,15 +215,15 @@ namespace NVelocity.Runtime
 		*/
 				AddMacroPermission = true;
 
-				if (!rsvc.GetBoolean(RuntimeConstants.VM_PERM_ALLOW_INLINE, true))
+				if (!runtimeServices.GetBoolean(RuntimeConstants.VM_PERM_ALLOW_INLINE, true))
 				{
 					AddMacroPermission = false;
 
-					LogVMMessageInfo("Velocimacro : allowInline = false : VMs can not " + "be defined inline in templates");
+					LogVMMessageInfo("Velocimacro : allowInline = false : VMs can not be defined inline in templates");
 				}
 				else
 				{
-					LogVMMessageInfo("Velocimacro : allowInline = true : VMs can be " + "defined inline in templates");
+					LogVMMessageInfo("Velocimacro : allowInline = true : VMs can be defined inline in templates");
 				}
 
 				/*
@@ -234,51 +234,47 @@ namespace NVelocity.Runtime
 		*/
 				ReplacementPermission = false;
 
-				if (rsvc.GetBoolean(RuntimeConstants.VM_PERM_ALLOW_INLINE_REPLACE_GLOBAL, false))
+				if (runtimeServices.GetBoolean(RuntimeConstants.VM_PERM_ALLOW_INLINE_REPLACE_GLOBAL, false))
 				{
 					ReplacementPermission = true;
 
-					LogVMMessageInfo("Velocimacro : allowInlineToOverride = true : VMs " +
-					                 "defined inline may replace previous VM definitions");
+					LogVMMessageInfo("Velocimacro : allowInlineToOverride = true : VMs defined inline may replace previous VM definitions");
 				}
 				else
 				{
-					LogVMMessageInfo("Velocimacro : allowInlineToOverride = false : VMs " +
-					                 "defined inline may NOT replace previous VM definitions");
+					LogVMMessageInfo("Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions");
 				}
 
 				/*
 		* now turn on namespace handling as far as permissions allow in the 
 		* manager, and also set it here for gating purposes
 		*/
-				vmManager.NamespaceUsage = true;
+				velocimacroManager.NamespaceUsage = true;
 
 				/*
 		*  template-local inline VM mode : default is off
 		*/
-				TemplateLocalInline = rsvc.GetBoolean(RuntimeConstants.VM_PERM_INLINE_LOCAL, false);
+				TemplateLocalInline = runtimeServices.GetBoolean(RuntimeConstants.VM_PERM_INLINE_LOCAL, false);
 
 				if (TemplateLocalInline)
 				{
-					LogVMMessageInfo("Velocimacro : allowInlineLocal = true : VMs " +
-					                 "defined inline will be local to their defining template only.");
+					LogVMMessageInfo("Velocimacro : allowInlineLocal = true : VMs defined inline will be local to their defining template only.");
 				}
 				else
 				{
-					LogVMMessageInfo("Velocimacro : allowInlineLocal = false : VMs " +
-					                 "defined inline will be  global in scope if allowed.");
+					LogVMMessageInfo("Velocimacro : allowInlineLocal = false : VMs defined inline will be  global in scope if allowed.");
 				}
 
-				vmManager.TemplateLocalInlineVM = TemplateLocalInline;
+				velocimacroManager.TemplateLocalInlineVM = TemplateLocalInline;
 
 				/*
 		*  general message switch.  default is on
 		*/
-				Blather = rsvc.GetBoolean(RuntimeConstants.VM_MESSAGES_ON, true);
+				Blather = runtimeServices.GetBoolean(RuntimeConstants.VM_MESSAGES_ON, true);
 
 				if (Blather)
 				{
-					LogVMMessageInfo("Velocimacro : messages on  : VM system " + "will output logging messages");
+					LogVMMessageInfo("Velocimacro : messages on  : VM system will output logging messages");
 				}
 				else
 				{
@@ -288,18 +284,18 @@ namespace NVelocity.Runtime
 				/*
 		*  autoload VM libraries
 		*/
-				Autoload = rsvc.GetBoolean(RuntimeConstants.VM_LIBRARY_AUTORELOAD, false);
+				Autoload = runtimeServices.GetBoolean(RuntimeConstants.VM_LIBRARY_AUTORELOAD, false);
 
 				if (Autoload)
 				{
-					LogVMMessageInfo("Velocimacro : autoload on  : VM system " + "will automatically reload global library macros");
+					LogVMMessageInfo("Velocimacro : autoload on  : VM system will automatically reload global library macros");
 				}
 				else
 				{
-					LogVMMessageInfo("Velocimacro : autoload off  : VM system " + "will not automatically reload global library macros");
+					LogVMMessageInfo("Velocimacro : autoload off  : VM system will not automatically reload global library macros");
 				}
 
-				rsvc.Info("Velocimacro : initialization complete.");
+				runtimeServices.Info("Velocimacro : initialization complete.");
 			}
 
 			return;
@@ -317,7 +313,7 @@ namespace NVelocity.Runtime
 	    */
 			if (name == null || macroBody == null || argArray == null || sourceTemplate == null)
 			{
-				LogVMMessageWarn("Velocimacro : VM addition rejected : " + "programmer error : arg null");
+				LogVMMessageWarn("Velocimacro : VM addition rejected : programmer error : arg null");
 
 				return false;
 			}
@@ -336,7 +332,7 @@ namespace NVelocity.Runtime
 	    */
 			lock(this)
 			{
-				vmManager.AddVM(name, macroBody, argArray, sourceTemplate);
+				velocimacroManager.AddVM(name, macroBody, argArray, sourceTemplate);
 			}
 
 			/*
@@ -344,7 +340,7 @@ namespace NVelocity.Runtime
 	    */
 			if (blather)
 			{
-				String s = "#" + argArray[0];
+				String s = string.Format("#{0}", argArray[0]);
 				s += "(";
 
 				for(int i = 1; i < argArray.Length; i++)
@@ -356,7 +352,7 @@ namespace NVelocity.Runtime
 				s += " ) : source = ";
 				s += sourceTemplate;
 
-				LogVMMessageInfo("Velocimacro : added new VM : " + s);
+				LogVMMessageInfo(string.Format("Velocimacro : added new VM : {0}", s));
 			}
 
 			return true;
@@ -368,7 +364,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		/// <param name="name">Name of VM to add
 		/// </param>
-		/// <param name="sourceTemplate">Source template that contains the defintion of the VM
+		/// <param name="sourceTemplate">Source template that contains the definition of the VM
 		/// </param>
 		/// <returns>true if it is allowed to be added, false otherwise
 		///
@@ -399,13 +395,13 @@ namespace NVelocity.Runtime
 
 
 			/*
-	    * maybe the rules should be in manager?  I dunno. It's to manage 
+	    * maybe the rules should be in manager?  I don't. It's to manage 
 	    * the namespace issues first, are we allowed to add VMs at all? 
 	    * This trumps all.
 	    */
 			if (!addNewAllowed)
 			{
-				LogVMMessageWarn("Velocimacro : VM addition rejected : " + name + " : inline VMs not allowed.");
+				LogVMMessageWarn(string.Format("Velocimacro : VM addition rejected : {0} : inline VMs not allowed.", name));
 
 				return false;
 			}
@@ -418,14 +414,14 @@ namespace NVelocity.Runtime
 				/*
 				* otherwise, if we have it already in global namespace, and they can't replace
 				* since local templates are not allowed, the global namespace is implied.
-				*  remember, we don't know anything about namespace managment here, so lets
+				*  remember, we don't know anything about namespace management here, so lets
 				*  note do anything fancy like trying to give it the global namespace here
 				*
 				*  so if we have it, and we aren't allowed to replace, bail
 				*/
 				if (IsVelocimacro(name, sourceTemplate) && !replaceAllowed)
 				{
-					LogVMMessageWarn("Velocimacro : VM addition rejected : " + name + " : inline not allowed to replace existing VM");
+					LogVMMessageWarn(string.Format("Velocimacro : VM addition rejected : {0} : inline not allowed to replace existing VM", name));
 					return false;
 				}
 			}
@@ -438,7 +434,7 @@ namespace NVelocity.Runtime
 		private void LogVMMessageInfo(String s)
 		{
 			if (blather)
-				rsvc.Info(s);
+				runtimeServices.Info(s);
 		}
 
 		/// <summary>  localization of the logging logic
@@ -446,7 +442,7 @@ namespace NVelocity.Runtime
 		private void LogVMMessageWarn(String s)
 		{
 			if (blather)
-				rsvc.Warn(s);
+				runtimeServices.Warn(s);
 		}
 
 		/// <summary>  Tells the world if a given directive string is a Velocimacro
@@ -459,7 +455,7 @@ namespace NVelocity.Runtime
 		* first we check the locals to see if we have 
 		* a local definition for this template
 		*/
-				if (vmManager.get(vm, sourceTemplate) != null)
+				if (velocimacroManager.get(vm, sourceTemplate) != null)
 					return true;
 			}
 			return false;
@@ -471,7 +467,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		public Directive.Directive GetVelocimacro(String vmName, String sourceTemplate)
 		{
-			VelocimacroProxy vp = null;
+			VelocimacroProxy velocimacroProxy = null;
 
 			lock(this)
 			{
@@ -479,21 +475,21 @@ namespace NVelocity.Runtime
 		*  don't ask - do
 		*/
 
-				vp = vmManager.get(vmName, sourceTemplate);
+				velocimacroProxy = velocimacroManager.get(vmName, sourceTemplate);
 
 				/*
 		*  if this exists, and autoload is on, we need to check
 		*  where this VM came from
 		*/
 
-				if (vp != null && Autoload)
+				if (velocimacroProxy != null && Autoload)
 				{
 					/*
 		    *  see if this VM came from a library.  Need to pass sourceTemplate
 		    *  in the event namespaces are set, as it could be masked by local
 		    */
 
-					String lib = vmManager.GetLibraryName(vmName, sourceTemplate);
+					String lib = velocimacroManager.GetLibraryName(vmName, sourceTemplate);
 
 					if (lib != null)
 					{
@@ -503,11 +499,11 @@ namespace NVelocity.Runtime
 			    *  get the template from our map
 			    */
 
-							Twonk tw = (Twonk) libModMap[lib];
+							Twonk twonk = (Twonk) libModMap[lib];
 
-							if (tw != null)
+							if (twonk != null)
 							{
-								Template template = tw.template;
+								Template template = twonk.template;
 
 								/*
 				*  now, compare the last modified time of the resource
@@ -516,13 +512,13 @@ namespace NVelocity.Runtime
 				*  be ok.
 				*/
 
-								long tt = tw.modificationTime;
+								long tt = twonk.modificationTime;
 								long ft = template.ResourceLoader.GetLastModified(template)
 									;
 
 								if (ft > tt)
 								{
-									LogVMMessageInfo("Velocimacro : autoload reload for VMs from " + "VM library template : " + lib);
+									LogVMMessageInfo(string.Format("Velocimacro : autoload reload for VMs from VM library template : {0}", lib));
 
 									/*
 				    *  when there are VMs in a library that invoke each other,
@@ -532,17 +528,17 @@ namespace NVelocity.Runtime
 				    *  and then be honest when the reload is complete
 				    */
 
-									tw.modificationTime = ft;
+									twonk.modificationTime = ft;
 
-									template = rsvc.GetTemplate(lib)
+									template = runtimeServices.GetTemplate(lib)
 										;
 
 									/*
 				    * and now we be honest
 				    */
 
-									tw.template = template;
-									tw.modificationTime = template.LastModified;
+									twonk.template = template;
+									twonk.modificationTime = template.LastModified;
 
 									/*
 				    *  note that we don't need to put this twonk back 
@@ -554,25 +550,25 @@ namespace NVelocity.Runtime
 						}
 						catch(System.Exception e)
 						{
-							LogVMMessageInfo("Velocimacro : error using  VM " + "library template " + lib + " : " + e);
+							LogVMMessageInfo(string.Format("Velocimacro : error using  VM library template {0} : {1}", lib, e));
 						}
 
 						/*
 			*  and get again
 			*/
-						vp = vmManager.get(vmName, sourceTemplate);
+						velocimacroProxy = velocimacroManager.get(vmName, sourceTemplate);
 					}
 				}
 			}
 
-			return vp;
+			return velocimacroProxy;
 		}
 
-		/// <summary>  tells the vmManager to dump the specified namespace
+		/// <summary>  tells the velocimacroManager to dump the specified namespace
 		/// </summary>
 		public bool DumpVMNamespace(String ns)
 		{
-			return vmManager.DumpNamespace(ns);
+			return velocimacroManager.DumpNamespace(ns);
 		}
 
 		/// <summary>  sets permission to have VMs local in scope to their declaring template
@@ -595,7 +591,7 @@ namespace NVelocity.Runtime
 		/// <summary>  get the switch for automatic reloading of
 		/// global library-based VMs
 		/// </summary>
-		/// <summary> small continer class to hold the duple
+		/// <summary> small container class to hold the duple
 		/// of a template and modification time.
 		/// We keep the modification time so we can
 		/// 'override' it on a reload to prevent

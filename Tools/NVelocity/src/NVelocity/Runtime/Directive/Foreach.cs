@@ -113,7 +113,7 @@ namespace NVelocity.Runtime.Directive
 			else if (name == "each")
 				return new ForeachEachSection();
 
-			throw new NotSupportedException("Foreach directive error: Nested directive not supported: " + name);
+			throw new NotSupportedException(string.Format("Foreach directive error: Nested directive not supported: {0}", name));
 		}
 
 		/// <summary>  
@@ -124,8 +124,8 @@ namespace NVelocity.Runtime.Directive
 		{
 			base.Init(rs, context, node);
 
-			counterName = rsvc.GetString(RuntimeConstants.COUNTER_NAME);
-			counterInitialValue = rsvc.GetInt(RuntimeConstants.COUNTER_INITIAL_VALUE);
+			counterName = runtimeServices.GetString(RuntimeConstants.COUNTER_NAME);
+			counterInitialValue = runtimeServices.GetInt(RuntimeConstants.COUNTER_INITIAL_VALUE);
 
 			// this is really the only thing we can do here as everything
 			// else is context sensitive
@@ -150,17 +150,17 @@ namespace NVelocity.Runtime.Directive
 			// Use the introspection cache
 			EnumType type = EnumType.Unknown;
 
-			IntrospectionCacheData icd = context.ICacheGet(this);
+			IntrospectionCacheData introspectionCacheData = context.ICacheGet(this);
 			Type c = listObject.GetType();
 
 			// if we have an entry in the cache, and the Class we have
 			// cached is the same as the Class of the data object
 			// then we are ok
 
-			if (icd != null && icd.ContextData == c)
+			if (introspectionCacheData != null && introspectionCacheData.ContextData == c)
 			{
-				// dig the type out of the cata object
-				type = ((EnumType) icd.Thingy);
+				// dig the type out of the data object
+				type = ((EnumType) introspectionCacheData.Thingy);
 			}
 
 			// If we still don't know what this is, 
@@ -182,8 +182,8 @@ namespace NVelocity.Runtime.Directive
 				// if we did figure it out, cache it
 				if (type != EnumType.Unknown)
 				{
-					icd = new IntrospectionCacheData(c, type);
-					context.ICachePut(this, icd);
+					introspectionCacheData = new IntrospectionCacheData(c, type);
+					context.ICachePut(this, introspectionCacheData);
 				}
 			}
 
@@ -197,10 +197,7 @@ namespace NVelocity.Runtime.Directive
 					return ((IEnumerable) listObject).GetEnumerator();
 
 				case EnumType.Enumeration:
-					rsvc.Warn("Warning! The reference " + node.GetChild(2).FirstToken.Image +
-					          " is an Enumeration in the #foreach() loop at [" + Line + "," + Column + "]" + " in template " +
-					          context.CurrentTemplateName + ". Because it's not resetable," +
-					          " if used in more than once, this may lead to" + " unexpected results.");
+					runtimeServices.Warn(string.Format("Warning! The reference {0} is an Enumeration in the #foreach() loop at [{1},{2}] in template {3}. Because it's not resetable, if used in more than once, this may lead to unexpected results.", node.GetChild(2).FirstToken.Image, Line, Column, context.CurrentTemplateName));
 					return (IEnumerator) listObject;
 
 				case EnumType.Array:
@@ -211,9 +208,7 @@ namespace NVelocity.Runtime.Directive
 
 				default:
 					/*  we have no clue what this is  */
-					rsvc.Warn("Could not determine type of enumerator (" + listObject.GetType().Name + ") in " + "#foreach loop for " +
-					          node.GetChild(2).FirstToken.Image + " at [" + Line + "," + Column + "]" + " in template " +
-					          context.CurrentTemplateName);
+					runtimeServices.Warn(string.Format("Could not determine type of enumerator ({0}) in #foreach loop for {1} at [{2},{3}] in template {4}", listObject.GetType().Name, node.GetChild(2).FirstToken.Image, Line, Column, context.CurrentTemplateName));
 
 					return null;
 			}

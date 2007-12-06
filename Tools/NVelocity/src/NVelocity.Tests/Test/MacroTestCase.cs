@@ -55,7 +55,7 @@ namespace NVelocity.Test
 			
 			bool success = ve.Evaluate(context, sw, "MacroTest1", template);
 
-			Assert.IsTrue(success, "Evalutation failed");
+			Assert.IsTrue(success, "Evaluation failed");
 			Assert.AreEqual("12Done21", sw.GetStringBuilder().ToString());
 		}
 	}

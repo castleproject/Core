@@ -102,15 +102,15 @@ namespace NVelocity
 	[TestFixture]
 	public class DuckTestCase 
 	{
-		private VelocityEngine ve;
+		private VelocityEngine velocityEngine;
 		private Duck1 duck1;
 		private Duck2 duck2;
 
 		[SetUp]
 		public void Init()
 		{
-			ve = new VelocityEngine();
-			ve.Init();
+			velocityEngine = new VelocityEngine();
+			velocityEngine.Init();
 
 			duck1 = new Duck1();
 			duck2 = new Duck2();
@@ -185,7 +185,7 @@ namespace NVelocity
 			c.Put("msg1", "message 1");
 			c.Put("msg2", "message 2");
 
-			Assert.IsTrue(ve.Evaluate(c, sw, "eval1", toEvaluate));
+			Assert.IsTrue(velocityEngine.Evaluate(c, sw, "eval1", toEvaluate));
 
 			return sw.GetStringBuilder().ToString();
 		}

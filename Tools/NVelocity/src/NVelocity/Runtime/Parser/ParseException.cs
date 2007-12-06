@@ -37,13 +37,13 @@ namespace NVelocity.Runtime.Parser
 					}
 					for(int j = 0; j < expectedTokenSequences[i].Length; j++)
 					{
-						expected += tokenImage[expectedTokenSequences[i][j]] + " ";
+						expected += string.Format("{0} ", tokenImage[expectedTokenSequences[i][j]]);
 					}
 					if (expectedTokenSequences[i][expectedTokenSequences[i].Length - 1] != 0)
 					{
 						expected += "...";
 					}
-					expected += eol + "    ";
+					expected += string.Format("{0}    ", eol);
 				}
 				String retval = "Encountered \"";
 				Token tok = currentToken.Next;
@@ -56,18 +56,18 @@ namespace NVelocity.Runtime.Parser
 						retval += tokenImage[0];
 						break;
 					}
-					retval += add_escapes(tok.Image);
+					retval += AddEscapes(tok.Image);
 					tok = tok.Next;
 				}
-				retval += "\" at line " + currentToken.Next.BeginLine + ", column " + currentToken.Next.BeginColumn;
-				retval += "." + eol;
+				retval += string.Format("\" at line {0}, column {1}", currentToken.Next.BeginLine, currentToken.Next.BeginColumn);
+				retval += string.Format(".{0}", eol);
 				if (expectedTokenSequences.Length == 1)
 				{
-					retval += "Was expecting:" + eol + "    ";
+					retval += string.Format("Was expecting:{0}    ", eol);
 				}
 				else
 				{
-					retval += "Was expecting one of:" + eol + "    ";
+					retval += string.Format("Was expecting one of:{0}    ", eol);
 				}
 				retval += expected;
 				return retval;
@@ -148,10 +148,10 @@ namespace NVelocity.Runtime.Parser
 		/// when these raw version cannot be used as part of an ASCII
 		/// string literal.
 		/// </summary>
-		protected internal String add_escapes(String str)
+		protected internal String AddEscapes(String str)
 		{
 			StringBuilder retval = new StringBuilder();
-			char ch;
+			char character;
 			for(int i = 0; i < str.Length; i++)
 			{
 				switch(str[i])
@@ -192,14 +192,14 @@ namespace NVelocity.Runtime.Parser
 						continue;
 
 					default:
-						if ((ch = str[i]) < 0x20 || ch > 0x7e)
+						if ((character = str[i]) < 0x20 || character > 0x7e)
 						{
-							String s = "0000" + Convert.ToString(ch, 16);
-							retval.Append("\\u" + s.Substring(s.Length - 4, (s.Length) - (s.Length - 4)));
+							String s = string.Format("0000{0}", Convert.ToString(character, 16));
+							retval.AppendFormat("\\u{0}", s.Substring(s.Length - 4, (s.Length) - (s.Length - 4)));
 						}
 						else
 						{
-							retval.Append(ch);
+							retval.Append(character);
 						}
 						continue;
 				}

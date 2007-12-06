@@ -11,6 +11,6 @@ namespace NVelocity.Context
 	{
 		EventCartridge EventCartridge { get; }
 
-		EventCartridge AttachEventCartridge(EventCartridge ec);
+		EventCartridge AttachEventCartridge(EventCartridge eventCartridge);
 	}
 }

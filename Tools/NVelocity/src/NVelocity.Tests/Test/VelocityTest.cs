@@ -90,7 +90,7 @@ namespace NVelocity.Test
 			// test simple objects (no nesting)
 			StringWriter sw = new StringWriter();
 			bool ok = Velocity.Evaluate(c, sw, "", "$firstName is my first name, my last name is $lastName");
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			String s = sw.ToString();
 			Assert.AreEqual("Cort is my first name, my last name is Schaefer", s, "test simple objects (no nesting)");
 
@@ -98,7 +98,7 @@ namespace NVelocity.Test
 			sw = new StringWriter();
 			String template = "These are the individual properties:\naddr1=9339 Grand Teton Drive\naddr2=Office in the back";
 			ok = Velocity.Evaluate(c, sw, "", template);
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			s = sw.ToString();
 			Assert.IsFalse(String.Empty.Equals(s), "test nested object");
 
@@ -106,7 +106,7 @@ namespace NVelocity.Test
 			sw = new StringWriter();
 			template = "Hashtable lookup: foo=$hashtable.foo";
 			ok = Velocity.Evaluate(c, sw, "", template);
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			s = sw.ToString();
 			Assert.AreEqual("Hashtable lookup: foo=bar", s, "Evaluation did not evaluate right");
 
@@ -114,7 +114,7 @@ namespace NVelocity.Test
 			//    	    sw = new StringWriter();
 			//	    template = "These are the nested properties:\naddr1=$contact.Address.Address1\naddr2=$contact.Address.Address2";
 			//	    ok = Velocity.Evaluate(c, sw, "", template);
-			//	    Assert("Evalutation returned failure", ok);
+			//	    Assert("Evaluation returned failure", ok);
 			//	    s = sw.ToString();
 			//	    Assert("test nested properties", s.Equals("These are the nested properties:\naddr1=9339 Grand Teton Drive\naddr2=Office in the back"));
 
@@ -122,7 +122,7 @@ namespace NVelocity.Test
 			sw = new StringWriter();
 			template = "$!NOT_IN_CONTEXT";
 			ok = Velocity.Evaluate(c, sw, "", template);
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			s = sw.ToString();
 			Assert.AreEqual(String.Empty, s, "test key not found in context");
 
@@ -130,7 +130,7 @@ namespace NVelocity.Test
 			//	    sw = new StringWriter();
 			//	    template = "These are the non-existent nested properties:\naddr1=$contact.Address.Address1.Foo\naddr2=$contact.Bar.Address.Address2";
 			//	    ok = Velocity.Evaluate(c, sw, "", template);
-			//	    Assert("Evalutation returned failure", ok);
+			//	    Assert("Evaluation returned failure", ok);
 			//	    s = sw.ToString();
 			//	    Assert("test nested properties where property not found", s.Equals("These are the non-existent nested properties:\naddr1=\naddr2="));
 		}

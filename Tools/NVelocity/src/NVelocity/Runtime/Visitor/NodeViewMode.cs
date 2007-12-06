@@ -52,7 +52,7 @@ namespace NVelocity.Runtime.Visitor
 				if (t.SpecialToken != null && !t.SpecialToken.Image.StartsWith("##"))
 					special = t.SpecialToken.Image;
 
-				tokens = " -> " + special + t.Image;
+				tokens = string.Format(" -> {0}{1}", special, t.Image);
 			}
 
 			Console.Out.WriteLine(IndentString() + node + tokens);

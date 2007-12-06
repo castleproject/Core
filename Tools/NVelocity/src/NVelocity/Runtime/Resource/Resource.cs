@@ -70,7 +70,7 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		protected internal ResourceLoader resourceLoader;
 
-		protected internal IRuntimeServices rsvc = null;
+		protected internal IRuntimeServices runtimeServices = null;
 
 		public bool IsSourceModified()
 		{
@@ -152,7 +152,7 @@ namespace NVelocity.Runtime.Resource
 		}
 
 		/// <summary>
-		/// Return the lastModifed time of this
+		/// Return the lastModified time of this
 		/// template.
 		/// 
 		/// Set the last modified time for this
@@ -196,7 +196,7 @@ namespace NVelocity.Runtime.Resource
 
 		public IRuntimeServices RuntimeServices
 		{
-			set { rsvc = value; }
+			set { runtimeServices = value; }
 		}
 	}
 }

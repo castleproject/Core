@@ -36,7 +36,7 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>
 		/// The major meat of VelocimacroProxy, init() checks the # of arguments, 
-		/// patches the macro body, renders the macro into an AST, and then inits 
+		/// patches the macro body, renders the macro into an AST, and then initiates 
 		/// the AST, so it is ready for quick rendering.  Note that this is only 
 		/// AST dependant stuff. Not context.
 		/// </summary>
@@ -50,8 +50,7 @@ namespace NVelocity.Runtime.Directive
 			// right number of args?
 			if (NumArgs != i)
 			{
-				rsvc.Error("VM #" + macroName + ": error : too " + ((NumArgs > i) ? "few" : "many") + " arguments to macro. Wanted " +
-				           NumArgs + " got " + i);
+				runtimeServices.Error(string.Format("VM #{0}: error : too {1} arguments to macro. Wanted {2} got {3}", macroName, ((NumArgs > i) ? "few" : "many"), NumArgs, i));
 
 				return;
 			}
@@ -77,27 +76,27 @@ namespace NVelocity.Runtime.Directive
 				{
 					if (!init)
 					{
-						nodeTree.Init(context, rsvc);
+						nodeTree.Init(context, runtimeServices);
 						init = true;
 					}
 
 					// wrap the current context and add the VMProxyArg objects
-					VMContext vmc = new VMContext(context, rsvc);
+					VMContext vmContext = new VMContext(context, runtimeServices);
 
 					for(int i = 1; i < argArray.Length; i++)
 					{
 						// we can do this as VMProxyArgs don't change state. They change
 						// the context.
 						VMProxyArg arg = (VMProxyArg) proxyArgHash[argArray[i]];
-						vmc.AddVMProxyArg(arg);
+						vmContext.AddVMProxyArg(arg);
 					}
 
 					// now render the VM
-					nodeTree.Render(vmc, writer);
+					nodeTree.Render(vmContext, writer);
 				}
 				else
 				{
-					rsvc.Error("VM error : " + macroName + ". Null AST");
+					runtimeServices.Error(string.Format("VM error : {0}. Null AST", macroName));
 				}
 			}
 			catch(Exception e)
@@ -106,7 +105,7 @@ namespace NVelocity.Runtime.Directive
 				if (e is MethodInvocationException)
 					throw;
 
-				rsvc.Error("VelocimacroProxy.render() : exception VM = #" + macroName + "() : " + e);
+				runtimeServices.Error(string.Format("VelocimacroProxy.render() : exception VM = #{0}() : {1}", macroName, e));
 			}
 
 			return true;
@@ -136,7 +135,7 @@ namespace NVelocity.Runtime.Directive
 				TextReader br = new StringReader(macroBody);
 
 				// now parse the macro - and don't dump the namespace
-				nodeTree = rsvc.Parse(br, ns, false);
+				nodeTree = runtimeServices.Parse(br, ns, false);
 
 				// now, to make null references render as proper schmoo
 				// we need to tweak the tree and change the literal of
@@ -166,7 +165,7 @@ namespace NVelocity.Runtime.Directive
 			}
 			catch(Exception e)
 			{
-				rsvc.Error("VelocimacroManager.parseTree() : exception " + macroName + " : " + e);
+				runtimeServices.Error(string.Format("VelocimacroManager.parseTree() : exception {0} : {1}", macroName, e));
 			}
 		}
 
@@ -175,7 +174,7 @@ namespace NVelocity.Runtime.Directive
 			// for each of the args, make a ProxyArg
 			for(int i = 1; i < argArray.Length; i++)
 			{
-				VMProxyArg arg = new VMProxyArg(rsvc, argArray[i], callArgs[i - 1], callArgTypes[i - 1]);
+				VMProxyArg arg = new VMProxyArg(runtimeServices, argArray[i], callArgs[i - 1], callArgTypes[i - 1]);
 				proxyArgHash[argArray[i]] = arg;
 			}
 		}
@@ -266,7 +265,7 @@ namespace NVelocity.Runtime.Directive
 		}
 
 		/// <summary>
-		/// Returns the number of ars needed for this VM
+		/// Returns the number of arguments needed for this VM
 		/// </summary>
 		public int NumArgs
 		{
@@ -274,13 +273,13 @@ namespace NVelocity.Runtime.Directive
 		}
 
 		/// <summary>
-		/// Sets the orignal macro body.  This is simply the cat of the 
+		/// Sets the original macro body.  This is simply the cat of the 
 		/// macroArray, but the Macro object creates this once during parsing, 
 		/// and everyone shares it.
 		/// 
 		/// Note : it must not be modified.
 		/// </summary>
-		public String Macrobody
+		public String MacroBody
 		{
 			set { macroBody = value; }
 		}

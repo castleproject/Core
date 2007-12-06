@@ -162,13 +162,12 @@ namespace NVelocity.Runtime.Parser.Node
 
 				return result;
 			}
-			catch(MethodInvocationException mie)
+			catch(MethodInvocationException methodInvocationException)
 			{
 				// someone tossed their cookies
-				rsvc.Error("Method " + mie.MethodName + " threw exception for reference $" + rootString + " in template " +
-				           context.CurrentTemplateName + " at " + " [" + Line + "," + Column + "]");
+				runtimeServices.Error(string.Format("Method {0} threw exception for reference ${1} in template {2} at  [{3},{4}]", methodInvocationException.MethodName, rootString, context.CurrentTemplateName, Line, Column));
 
-				mie.ReferenceName = rootString;
+				methodInvocationException.ReferenceName = rootString;
 				throw;
 			}
 		}
@@ -210,11 +209,11 @@ namespace NVelocity.Runtime.Parser.Node
 			// the normal processing
 
 			// if we have an event cartridge, get a new value object
-			EventCartridge ec = context.EventCartridge;
+			EventCartridge eventCartridge = context.EventCartridge;
 
-			if (ec != null && referenceStack != null)
+			if (eventCartridge != null && referenceStack != null)
 			{
-				value = ec.ReferenceInsert(referenceStack, nullString, value);
+				value = eventCartridge.ReferenceInsert(referenceStack, nullString, value);
 			}
 
 			// if value is null...
@@ -231,9 +230,9 @@ namespace NVelocity.Runtime.Parser.Node
 				writer.Write(b);
 
 				if (referenceType != ReferenceType.Quiet &&
-				    rsvc.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true))
+				    runtimeServices.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true))
 				{
-					rsvc.Warn(new ReferenceException("reference : template = " + context.CurrentTemplateName, this));
+					runtimeServices.Warn(new ReferenceException(string.Format("reference : template = {0}", context.CurrentTemplateName), this));
 				}
 
 				return true;
@@ -292,7 +291,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 			if (result == null)
 			{
-				rsvc.Error(new ReferenceException("reference set : template = " + context.CurrentTemplateName, this));
+				runtimeServices.Error(new ReferenceException(string.Format("reference set : template = {0}", context.CurrentTemplateName), this));
 				return false;
 			}
 
@@ -303,7 +302,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				if (result == null)
 				{
-					rsvc.Error(new ReferenceException("reference set : template = " + context.CurrentTemplateName, this));
+					runtimeServices.Error(new ReferenceException(string.Format("reference set : template = {0}", context.CurrentTemplateName), this));
 					return false;
 				}
 			}
@@ -327,7 +326,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 					try
 					{
-						p = rsvc.Introspector.GetProperty(c, identifier);
+						p = runtimeServices.Introspector.GetProperty(c, identifier);
 
 						if (p == null)
 						{
@@ -348,7 +347,7 @@ namespace NVelocity.Runtime.Parser.Node
 							sb[0] = Char.ToLower(sb[0]);
 						}
 
-						p = rsvc.Introspector.GetProperty(c, sb.ToString());
+						p = runtimeServices.Introspector.GetProperty(c, sb.ToString());
 
 						if (p == null)
 							throw;
@@ -371,30 +370,26 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 					catch(Exception ex)
 					{
-						rsvc.Error("ASTReference Map.put : exception : " + ex + " template = " + context.CurrentTemplateName + " [" +
-						           Line + "," + Column + "]");
+						runtimeServices.Error(string.Format("ASTReference Map.put : exception : {0} template = {1} [{2},{3}]", ex, context.CurrentTemplateName, Line, Column));
 						return false;
 					}
 				}
 				else
 				{
-					rsvc.Error("ASTReference : cannot find " + identifier + " as settable property or key to Map in" + " template = " +
-					           context.CurrentTemplateName + " [" + Line + "," + Column + "]");
+					runtimeServices.Error(string.Format("ASTReference : cannot find {0} as settable property or key to Map in template = {1} [{2},{3}]", identifier, context.CurrentTemplateName, Line, Column));
 					return false;
 				}
 			}
-			catch(TargetInvocationException ite)
+			catch(TargetInvocationException targetInvocationException)
 			{
 				// this is possible 
 				throw new MethodInvocationException(
-					"ASTReference : Invocation of method '" + identifier + "' in  " + result.GetType() + " threw exception " +
-					ite.GetBaseException().GetType(), ite, identifier);
+					string.Format("ASTReference : Invocation of method '{0}' in  {1} threw exception {2}", identifier, result.GetType(), targetInvocationException.GetBaseException().GetType()), targetInvocationException, identifier);
 			}
 			catch(Exception e)
 			{
 				// maybe a security exception?
-				rsvc.Error("ASTReference setValue() : exception : " + e + " template = " + context.CurrentTemplateName + " [" +
-				           Line + "," + Column + "]");
+				runtimeServices.Error(string.Format("ASTReference setValue() : exception : {0} template = {1} [{2},{3}]", e, context.CurrentTemplateName, Line, Column));
 				return false;
 			}
 
@@ -419,11 +414,11 @@ namespace NVelocity.Runtime.Parser.Node
 
 				// so, see if we have "\\!"
 
-				int slashbang = t.Image.IndexOf("\\!");
+				int slashBang = t.Image.IndexOf("\\!");
 
-				if (slashbang != -1)
+				if (slashBang != -1)
 				{
-					// lets do all the work here.  I would argue that if this occurrs, it's 
+					// lets do all the work here.  I would argue that if this occurs, it's 
 					// not a reference at all, so preceeding \ characters in front of the $
 					// are just schmoo.  So we just do the escape processing trick (even | odd)
 					// and move on.  This kind of breaks the rule pattern of $ and # but '!' really
@@ -438,7 +433,7 @@ namespace NVelocity.Runtime.Parser.Node
 					if (i == -1)
 					{
 						// yikes!
-						rsvc.Error("ASTReference.getRoot() : internal error : no $ found for slashbang.");
+						runtimeServices.Error("ASTReference.getRoot() : internal error : no $ found for slashbang.");
 						computableReference = false;
 						nullString = t.Image;
 						return nullString;
@@ -473,7 +468,7 @@ namespace NVelocity.Runtime.Parser.Node
 				// we need to see if this reference is escaped.  if so
 				// we will clean off the leading \'s and let the 
 				// regular behavior determine if we should output this
-				// as \$foo or $foo later on in render(). Lazyness..
+				// as \$foo or $foo later on in render(). Laziness..
 				escaped = false;
 
 				if (t.Image.StartsWith(@"\"))
@@ -551,7 +546,7 @@ namespace NVelocity.Runtime.Parser.Node
 				else
 				{
 					// this is a 'RUNT', which can happen in certain circumstances where
-					// the parser is fooled into believeing that an IDENTIFIER is a real 
+					// the parser is fooled into believing that an IDENTIFIER is a real 
 					// reference.  Another 'dreaded' MORE hack :). 
 					referenceType = ReferenceType.Runt;
 					return t.Image;

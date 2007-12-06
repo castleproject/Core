@@ -202,9 +202,9 @@ namespace NVelocity.Util.Introspection
 		{
 			ArrayList methods = new ArrayList();
 
-			foreach(Type iface in clazz.GetInterfaces())
+			foreach(Type interfaceType in clazz.GetInterfaces())
 			{
-				methods.AddRange(iface.GetMethods());
+				methods.AddRange(interfaceType.GetMethods());
 			}
 
 			methods.AddRange(clazz.GetMethods());
@@ -216,9 +216,9 @@ namespace NVelocity.Util.Introspection
 		{
 			ArrayList props = new ArrayList();
 
-			foreach(Type iface in clazz.GetInterfaces())
+			foreach(Type interfaceType in clazz.GetInterfaces())
 			{
-				props.AddRange(iface.GetProperties());
+				props.AddRange(interfaceType.GetProperties());
 			}
 
 			props.AddRange(clazz.GetProperties());

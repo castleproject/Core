@@ -12,7 +12,7 @@ namespace NVelocity.Util.Introspection
 	/// The first time the Introspector sees a
 	/// class it creates a class method map for the
 	/// class in question. Basically the class method map
-	/// is a Hastable where Method objects are keyed by a
+	/// is a Hashtable where Method objects are keyed by a
 	/// concatenation of the method name and the names of
 	/// classes that make up the parameters.
 	///
@@ -54,7 +54,7 @@ namespace NVelocity.Util.Introspection
 		{
 			if (c == null)
 			{
-				throw new Exception("Introspector.getMethod(): Class method key was null: " + name);
+				throw new Exception(string.Format("Introspector.getMethod(): Class method key was null: {0}", name));
 			}
 
 			ClassMap classMap = null;
@@ -64,7 +64,7 @@ namespace NVelocity.Util.Introspection
 				classMap = (ClassMap) classMethodMaps[c];
 
 				// if we don't have this, check to see if we have it
-				// by name.  if so, then we have a classloader change
+				// by name.  if so, then we have a classLoader change
 				// so dump our caches.
 				if (classMap == null)
 				{
@@ -85,7 +85,7 @@ namespace NVelocity.Util.Introspection
 		public virtual PropertyInfo GetProperty(Type c, String name)
 		{
 			if (c == null)
-				throw new Exception("Introspector.getMethod(): Class method key was null: " + name);
+				throw new Exception(string.Format("Introspector.getMethod(): Class method key was null: {0}", name));
 
 			ClassMap classMap = null;
 

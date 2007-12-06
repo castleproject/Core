@@ -27,7 +27,7 @@ namespace NVelocity.Context
 	/// *
 	/// This class ensures that an InternalContextBase is available for internal
 	/// use.  If an application constructs their own Context-implementing
-	/// object w/o subclassing AbstractContext, it may be that support for
+	/// object w/o sub-classing AbstractContext, it may be that support for
 	/// InternalContext is not available.  Therefore, InternalContextAdapter will
 	/// create an InternalContextBase if necessary for this support.  Note that
 	/// if this is necessary, internal information such as node-cache data will be
@@ -56,7 +56,7 @@ namespace NVelocity.Context
 		/// people derive new contexts from AbstractContext
 		/// rather than piecing things together
 		/// </summary>
-		internal IInternalHousekeepingContext icb = null;
+		internal IInternalHousekeepingContext internalHousekeepingContext = null;
 
 		/// <summary>  The InternalEventContext that we are wrapping.  If
 		/// the context passed to us doesn't support it, no
@@ -64,7 +64,7 @@ namespace NVelocity.Context
 		/// user context thing, nothing gained by making one
 		/// for them now
 		/// </summary>
-		internal IInternalEventContext iec = null;
+		internal IInternalEventContext internalEventContext = null;
 
 		/// <summary>  CTOR takes a Context and wraps it, delegating all 'data' calls
 		/// to it.
@@ -78,34 +78,34 @@ namespace NVelocity.Context
 
 			if (!(c is IInternalHousekeepingContext))
 			{
-				icb = new InternalContextBase();
+				internalHousekeepingContext = new InternalContextBase();
 			}
 			else
 			{
-				icb = (IInternalHousekeepingContext)context;
+				internalHousekeepingContext = (IInternalHousekeepingContext)context;
 			}
 
 			if (c is IInternalEventContext)
 			{
-				iec = (IInternalEventContext)context;
+				internalEventContext = (IInternalEventContext)context;
 			}
 		}
 
 		public String CurrentTemplateName
 		{
-			get { return icb.CurrentTemplateName; }
+			get { return internalHousekeepingContext.CurrentTemplateName; }
 		}
 
 		public Object[] TemplateNameStack
 		{
-			get { return icb.TemplateNameStack; }
+			get { return internalHousekeepingContext.TemplateNameStack; }
 		}
 
 		public Resource CurrentResource
 		{
-			get { return icb.CurrentResource; }
+			get { return internalHousekeepingContext.CurrentResource; }
 
-			set { icb.CurrentResource = value; }
+			set { internalHousekeepingContext.CurrentResource = value; }
 		}
 
 		public Object[] Keys
@@ -164,9 +164,9 @@ namespace NVelocity.Context
 		{
 			get
 			{
-				if (iec != null)
+				if (internalEventContext != null)
 				{
-					return iec.EventCartridge;
+					return internalEventContext.EventCartridge;
 				}
 
 				return null;
@@ -177,22 +177,22 @@ namespace NVelocity.Context
 
 		public void PushCurrentTemplateName(String s)
 		{
-			icb.PushCurrentTemplateName(s);
+			internalHousekeepingContext.PushCurrentTemplateName(s);
 		}
 
 		public void PopCurrentTemplateName()
 		{
-			icb.PopCurrentTemplateName();
+			internalHousekeepingContext.PopCurrentTemplateName();
 		}
 
 		public IntrospectionCacheData ICacheGet(Object key)
 		{
-			return icb.ICacheGet(key);
+			return internalHousekeepingContext.ICacheGet(key);
 		}
 
 		public void ICachePut(Object key, IntrospectionCacheData o)
 		{
-			icb.ICachePut(key, o);
+			internalHousekeepingContext.ICachePut(key, o);
 		}
 
 
@@ -231,11 +231,11 @@ namespace NVelocity.Context
 		/// be something else
 		/// </summary>
 		/* -----  InternalEventContext ---- */
-		public EventCartridge AttachEventCartridge(EventCartridge ec)
+		public EventCartridge AttachEventCartridge(EventCartridge eventCartridge)
 		{
-			if (iec != null)
+			if (internalEventContext != null)
 			{
-				return iec.AttachEventCartridge(ec);
+				return internalEventContext.AttachEventCartridge(eventCartridge);
 			}
 
 			return null;
@@ -303,12 +303,12 @@ namespace NVelocity.Context
 	public class InternalContextAdapterImplEnumerator : IDictionaryEnumerator
 	{
 		private int index = -1;
-		private IContext ctx;
+		private IContext context;
 		private object[] keys;
 
 		public InternalContextAdapterImplEnumerator(IContext context)
 		{
-			ctx = context;
+			this.context = context;
 			keys = context.Keys;
 		}
 
@@ -321,7 +321,7 @@ namespace NVelocity.Context
 
 		public object Value
 		{
-			get { return ctx.Get(keys[index].ToString()); }
+			get { return context.Get(keys[index].ToString()); }
 		}
 
 		public DictionaryEntry Entry

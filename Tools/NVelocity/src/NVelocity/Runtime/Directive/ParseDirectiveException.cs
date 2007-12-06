@@ -23,7 +23,7 @@ namespace NVelocity.Runtime.Directive
 		{
 			get
 			{
-				String returnStr = "#parse() exception : depth = " + depthCount + " -> " + msg;
+				String returnStr = string.Format("#parse() exception : depth = {0} -> {1}", depthCount, msg);
 
 				returnStr += " File stack : ";
 

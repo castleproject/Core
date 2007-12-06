@@ -116,7 +116,7 @@ namespace NVelocity.Test
 			{
 				Assert.Fail(ex.Message);
 			}
-			ExtendedProperties ep = ri.Configuration;
+			ExtendedProperties extendedProperties = ri.Configuration;
 		}
 
 		[Test]
@@ -129,12 +129,12 @@ namespace NVelocity.Test
 				* setup
 				*/
 
-				VelocityEngine ve = new VelocityEngine();
+				VelocityEngine velocityEngine = new VelocityEngine();
 
-				ExtendedProperties ep = new ExtendedProperties();
-				ep.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
+				ExtendedProperties extendedProperties = new ExtendedProperties();
+				extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
 				
-				ve.Init(ep);
+				velocityEngine.Init(extendedProperties);
 
 				/*
 				*  Make a context object and populate with the data.  This 
@@ -160,16 +160,16 @@ namespace NVelocity.Test
 
 				try
 				{
-					template = ve.GetTemplate(templateFile);
+					template = velocityEngine.GetTemplate(templateFile);
 				}
-				catch (ResourceNotFoundException rnfe)
+				catch (ResourceNotFoundException resourceNotFoundException)
 				{
-					Console.Out.WriteLine("Example : error : cannot find template " + templateFile + " : \n" + rnfe.Message);
+					Console.Out.WriteLine("Example : error : cannot find template {0} : \n{1}", templateFile, resourceNotFoundException.Message);
 					Assert.Fail();
 				}
-				catch (ParseErrorException pee)
+				catch (ParseErrorException parseErrorException)
 				{
-					Console.Out.WriteLine("Example : Syntax error in template " + templateFile + " : \n" + pee);
+					Console.Out.WriteLine("Example : Syntax error in template {0} : \n{1}", templateFile, parseErrorException);
 					Assert.Fail();
 				}
 

@@ -33,7 +33,7 @@ namespace NVelocity.Runtime.Directive
 
 			if (type == null)
 			{
-				throw new Exception("Could not resolve type " + directiveTypeName);
+				throw new Exception(string.Format("Could not resolve type {0}", directiveTypeName));
 			}
 
 			Directive directive = (Directive) Activator.CreateInstance(type);

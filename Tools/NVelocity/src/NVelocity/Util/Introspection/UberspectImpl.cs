@@ -21,7 +21,7 @@ namespace NVelocity.Util.Introspection
 		/// <summary>
 		/// Our runtime logger.
 		/// </summary>
-		private IRuntimeLogger rlog;
+		private IRuntimeLogger runtimeLogger;
 
 		/// <summary>
 		/// the default Velocity introspector
@@ -37,8 +37,8 @@ namespace NVelocity.Util.Introspection
 		{
 			set
 			{
-				rlog = value;
-				introspector = new Introspector(rlog);
+				runtimeLogger = value;
+				introspector = new Introspector(runtimeLogger);
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace NVelocity.Util.Introspection
 			*  (also getfoo() )
 			*/
 
-			executor = new PropertyExecutor(rlog, introspector, claz, identifier);
+			executor = new PropertyExecutor(runtimeLogger, introspector, claz, identifier);
 
 			/*
 			*  if that didn't work, look for get("foo")
@@ -86,7 +86,7 @@ namespace NVelocity.Util.Introspection
 
 			if (!executor.IsAlive)
 			{
-				executor = new GetExecutor(rlog, introspector, claz, identifier);
+				executor = new GetExecutor(runtimeLogger, introspector, claz, identifier);
 			}
 
 			/*
@@ -95,7 +95,7 @@ namespace NVelocity.Util.Introspection
 
 			if (!executor.IsAlive)
 			{
-				executor = new BooleanPropertyExecutor(rlog, introspector, claz, identifier);
+				executor = new BooleanPropertyExecutor(runtimeLogger, introspector, claz, identifier);
 			}
 
 			return new VelGetterImpl(executor);
@@ -119,7 +119,7 @@ namespace NVelocity.Util.Introspection
 
 				try
 				{
-					vm = GetMethod(obj, "set" + identifier, parameters, i);
+					vm = GetMethod(obj, string.Format("set{0}", identifier), parameters, i);
 
 					if (vm == null)
 					{

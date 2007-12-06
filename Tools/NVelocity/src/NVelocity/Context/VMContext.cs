@@ -28,8 +28,8 @@ namespace NVelocity.Context
 	{
 		private void InitBlock()
 		{
-			vmproxyhash = new Hashtable();
-			localcontext = new Hashtable();
+			vmProxyHash = new Hashtable();
+			localContext = new Hashtable();
 		}
 
 		public IContext InternalUserContext
@@ -46,7 +46,7 @@ namespace NVelocity.Context
 		{
 			get
 			{
-				//return vmproxyhash.keySet().toArray();
+				//return vmProxyHash.keySet().toArray();
 				throw new NotImplementedException();
 			}
 		}
@@ -106,13 +106,13 @@ namespace NVelocity.Context
 
 		/// <summary>container for our VMProxy Objects
 		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'vmproxyhash' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		internal Hashtable vmproxyhash;
+		//UPGRADE_NOTE: The initialization of  'vmProxyHash' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
+		internal Hashtable vmProxyHash;
 
 		/// <summary>container for any local or constant VMProxy items
 		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'localcontext' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		internal Hashtable localcontext;
+		//UPGRADE_NOTE: The initialization of  'localContext' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
+		internal Hashtable localContext;
 
 		/// <summary>the base context store.  This is the 'global' context
 		/// </summary>
@@ -124,14 +124,14 @@ namespace NVelocity.Context
 
 		/// <summary>support for local context scope feature, where all references are local
 		/// </summary>
-		private bool localcontextscope = false;
+		private bool localContextScope = false;
 
 		/// <summary>  CTOR, wraps an ICA
 		/// </summary>
-		public VMContext(IInternalContextAdapter inner, IRuntimeServices rsvc)
+		public VMContext(IInternalContextAdapter inner, IRuntimeServices runtimeServices)
 		{
 			InitBlock();
-			localcontextscope = rsvc.GetBoolean(RuntimeConstants.VM_CONTEXT_LOCALSCOPE, false);
+			localContextScope = runtimeServices.GetBoolean(RuntimeConstants.VM_CONTEXT_LOCALSCOPE, false);
 
 			wrappedContext = inner;
 			innerContext = inner.BaseContext;
@@ -153,18 +153,18 @@ namespace NVelocity.Context
 		{
 			/*
 	    *  ask if it's a constant : if so, get the value and put into the
-	    *  local context, otherwise, put the vmpa in our vmproxyhash
+	    *  local context, otherwise, put the vmpa in our vmProxyHash
 	    */
 
 			String key = vmpa.ContextReference;
 
 			if (vmpa.isConstant())
 			{
-				localcontext[key] = vmpa.getObject(wrappedContext);
+				localContext[key] = vmpa.getObject(wrappedContext);
 			}
 			else
 			{
-				vmproxyhash[key] = vmpa;
+				vmProxyHash[key] = vmpa;
 			}
 		}
 
@@ -184,22 +184,22 @@ namespace NVelocity.Context
 	    *  first see if this is a vmpa
 	    */
 
-			VMProxyArg vmpa = (VMProxyArg) vmproxyhash[key];
+			VMProxyArg vmProxyArg = (VMProxyArg) vmProxyHash[key];
 
-			if (vmpa != null)
+			if (vmProxyArg != null)
 			{
-				return vmpa.setObject(wrappedContext, value_);
+				return vmProxyArg.setObject(wrappedContext, value_);
 			}
 			else
 			{
-				if (localcontextscope)
+				if (localContextScope)
 				{
 					/*
-		    *  if we have localcontextscope mode, then just 
+		    *  if we have localContextScope mode, then just 
 		    *  put in the local context
 		    */
 
-					return localcontext[key] = value_;
+					return localContext[key] = value_;
 				}
 				else
 				{
@@ -207,9 +207,9 @@ namespace NVelocity.Context
 		    *  ok, how about the local context?
 		    */
 
-					if (localcontext.ContainsKey(key))
+					if (localContext.ContainsKey(key))
 					{
-						return localcontext[key] = value_;
+						return localContext[key] = value_;
 					}
 					else
 					{
@@ -239,22 +239,22 @@ namespace NVelocity.Context
 
 			Object o = null;
 
-			VMProxyArg vmpa = (VMProxyArg) vmproxyhash[key];
+			VMProxyArg vmProxyArg = (VMProxyArg) vmProxyHash[key];
 
-			if (vmpa != null)
+			if (vmProxyArg != null)
 			{
-				o = vmpa.getObject(wrappedContext);
+				o = vmProxyArg.getObject(wrappedContext);
 			}
 			else
 			{
-				if (localcontextscope)
+				if (localContextScope)
 				{
 					/*
-		    * if we have localcontextscope mode, then just 
+		    * if we have localContextScope mode, then just 
 		    * put in the local context
 		    */
 
-					o = localcontext[key];
+					o = localContext[key];
 				}
 				else
 				{
@@ -262,7 +262,7 @@ namespace NVelocity.Context
 		    *  try the local context
 		    */
 
-					o = localcontext[key];
+					o = localContext[key];
 
 					if (o == null)
 					{
@@ -291,8 +291,8 @@ namespace NVelocity.Context
 		/// </summary>
 		public Object Remove(Object key)
 		{
-			Object o = vmproxyhash[key];
-			vmproxyhash.Remove(key);
+			Object o = vmProxyHash[key];
+			vmProxyHash.Remove(key);
 			return o;
 		}
 
@@ -322,9 +322,9 @@ namespace NVelocity.Context
 			innerContext.ICachePut(key, o);
 		}
 
-		public EventCartridge AttachEventCartridge(EventCartridge ec)
+		public EventCartridge AttachEventCartridge(EventCartridge eventCartridge)
 		{
-			return innerContext.AttachEventCartridge(ec);
+			return innerContext.AttachEventCartridge(eventCartridge);
 		}
 
 		public void CopyTo(Array array, int index)

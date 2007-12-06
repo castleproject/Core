@@ -31,8 +31,7 @@ namespace NVelocity.Runtime.Exception
 	{
 		public ReferenceException(String exceptionMessage, INode node)
 			: base(
-				exceptionMessage + " [line " + node.Line + ",column " + node.Column + "] : " + node.Literal +
-				" is not a valid reference.")
+				string.Format("{0} [line {1},column {2}] : {3} is not a valid reference.", exceptionMessage, node.Line, node.Column, node.Literal))
 		{
 		}
 

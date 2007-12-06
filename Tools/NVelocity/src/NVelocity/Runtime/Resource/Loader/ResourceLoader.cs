@@ -39,12 +39,12 @@ namespace NVelocity.Runtime.Resource.Loader
 		protected internal long modificationCheckInterval = 2;
 
 		/// <summary>
-		/// Class name for this loader, for logging/debuggin
+		/// Class name for this loader, for logging/debugging
 		/// purposes.
 		/// </summary>
 		protected internal String className = null;
 
-		protected internal IRuntimeServices rsvc = null;
+		protected internal IRuntimeServices runtimeServices = null;
 
 		/// <summary>
 		/// This initialization is used by all resource
@@ -53,10 +53,10 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// </summary>
 		public void CommonInit(IRuntimeServices rs, ExtendedProperties configuration)
 		{
-			rsvc = rs;
+			runtimeServices = rs;
 
 			// these two properties are not required for all loaders.
-			// For example, for ClasspathLoader, what would cache mean? 
+			// For example, for ClassPathLoader, what would cache mean? 
 			// so adding default values which I think are the safest
 
 			// don't cache, and modCheckInterval irrelevant...

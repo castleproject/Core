@@ -51,17 +51,14 @@ namespace NVelocity.Runtime.Parser.Node
 			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.Error((left == null ? "Left" : "Right") + " side of range operator [n..m] has null value." +
-				           " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				runtimeServices.Error(string.Format("{0} side of range operator [n..m] has null value. Operation not possible. {1} [line {2}, column {3}]", (left == null ? "Left" : "Right"), context.CurrentTemplateName, Line, Column));
 				return null;
 			}
 
 			// if not an Integer, not much we can do either
 			if (!(left is Int32) || !(right is Int32))
 			{
-				rsvc.Error((!(left is Int32) ? "Left" : "Right") + " side of range operator is not a valid type. " +
-				           "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName +
-				           " [line " + Line + ", column " + Column + "]");
+				runtimeServices.Error(string.Format("{0} side of range operator is not a valid type. Currently only integers (1,2,3...) and Integer type is supported. {1} [line {2}, column {3}]", (!(left is Int32) ? "Left" : "Right"), context.CurrentTemplateName, Line, Column));
 
 				return null;
 			}

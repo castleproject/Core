@@ -26,7 +26,7 @@ namespace NVelocity.Runtime
 	/// </author>
 	public class VelocimacroManager
 	{
-		private IRuntimeServices rsvc = null;
+		private IRuntimeServices runtimeServices = null;
 		private static String GLOBAL_NAMESPACE = "";
 
 		private bool registerFromLib = false;
@@ -36,7 +36,7 @@ namespace NVelocity.Runtime
 		//UPGRADE_NOTE: The initialization of  'namespaceHash' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private Hashtable namespaceHash;
 
-		/// <summary>map of names of library tempates/namespaces</summary>
+		/// <summary>map of names of library templates/namespaces</summary>
 		//UPGRADE_NOTE: The initialization of  'libraryMap' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private Hashtable libraryMap;
 
@@ -51,7 +51,7 @@ namespace NVelocity.Runtime
 		internal VelocimacroManager(IRuntimeServices rs)
 		{
 			InitBlock();
-			rsvc = rs;
+			runtimeServices = rs;
 
 			/*
 		*  add the global namespace to the namespace hash. We always have that.
@@ -383,7 +383,7 @@ namespace NVelocity.Runtime
 
 			public String SourceTemplate
 			{
-				get { return sourcetemplate; }
+				get { return sourceTemplate; }
 			}
 
 			public VelocimacroManager Enclosing_Instance
@@ -391,60 +391,60 @@ namespace NVelocity.Runtime
 				get { return enclosingInstance; }
 			}
 
-			internal String macroname;
-			internal String[] argarray;
-			internal String macrobody;
-			internal String sourcetemplate;
+			internal String macroName;
+			internal String[] argumentArray;
+			internal String macroBody;
+			internal String sourceTemplate;
 			internal SimpleNode nodeTree = null;
 			internal VelocimacroManager manager = null;
 			internal bool fromLibrary = false;
 
-			internal MacroEntry(VelocimacroManager enclosingInstance, VelocimacroManager vmm, String vmName, String macroBody,
+			internal MacroEntry(VelocimacroManager enclosingInstance, VelocimacroManager velocimacroManager, String vmName, String macroBody,
 			                    String[] argArray, String sourceTemplate)
 			{
 				InitBlock(enclosingInstance);
-				macroname = vmName;
-				argarray = argArray;
-				macrobody = macroBody;
-				sourcetemplate = sourceTemplate;
-				manager = vmm;
+				macroName = vmName;
+				argumentArray = argArray;
+				this.macroBody = macroBody;
+				this.sourceTemplate = sourceTemplate;
+				manager = velocimacroManager;
 			}
 
 
 			internal VelocimacroProxy CreateVelocimacro(String ns)
 			{
-				VelocimacroProxy vp = new VelocimacroProxy();
-				vp.Name = macroname;
-				vp.ArgArray = argarray;
-				vp.Macrobody = macrobody;
-				vp.NodeTree = nodeTree;
-				vp.Namespace = ns;
-				return vp;
+				VelocimacroProxy velocimacroProxy = new VelocimacroProxy();
+				velocimacroProxy.Name = macroName;
+				velocimacroProxy.ArgArray = argumentArray;
+				velocimacroProxy.MacroBody = macroBody;
+				velocimacroProxy.NodeTree = nodeTree;
+				velocimacroProxy.Namespace = ns;
+				return velocimacroProxy;
 			}
 
-			internal void setup(IInternalContextAdapter ica)
+			internal void setup(IInternalContextAdapter internalContextAdapter)
 			{
 				/*
 				 *  if not parsed yet, parse!
 				 */
 
 				if (nodeTree == null)
-					parseTree(ica);
+					parseTree(internalContextAdapter);
 			}
 
-			internal void parseTree(IInternalContextAdapter ica)
+			internal void parseTree(IInternalContextAdapter internalContextAdapter)
 			{
 				try
 				{
 					//UPGRADE_ISSUE: The equivalent of constructor 'java.io.BufferedReader.BufferedReader' is incompatible with the expected type in C#. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1109"'
-					TextReader br = new StringReader(macrobody);
+					TextReader br = new StringReader(macroBody);
 
-					nodeTree = Enclosing_Instance.rsvc.Parse(br, "VM:" + macroname, true);
-					nodeTree.Init(ica, null);
+					nodeTree = Enclosing_Instance.runtimeServices.Parse(br, string.Format("VM:{0}", macroName), true);
+					nodeTree.Init(internalContextAdapter, null);
 				}
 				catch(System.Exception e)
 				{
-					Enclosing_Instance.rsvc.Error("VelocimacroManager.parseTree() : exception " + macroname + " : " + e);
+					Enclosing_Instance.runtimeServices.Error(string.Format("VelocimacroManager.parseTree() : exception {0} : {1}", macroName, e));
 				}
 			}
 		}

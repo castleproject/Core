@@ -26,7 +26,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// 
 	/// Method support for identifiers :  $foo
 	/// 
-	/// mainly used by ASTRefrence
+	/// mainly used by ASTReference
 	/// 
 	/// Introspection is now moved to 'just in time' or at render / execution
 	/// time. There are many reasons why this has to be done, but the
@@ -81,12 +81,12 @@ namespace NVelocity.Runtime.Parser.Node
 			if (identifier == "to_quote" && (o.GetType() == typeof(string) ||
 			                                 o.GetType().IsPrimitive || o.GetType() == typeof(decimal)))
 			{
-				return "\"" + EscapeDoubleQuote(o.ToString()) + "\"";
+				return string.Format("\"{0}\"", EscapeDoubleQuote(o.ToString()));
 			}
 			else if (identifier == "to_squote" && (o.GetType() == typeof(string) ||
 			                                       o.GetType().IsPrimitive || o.GetType() == typeof(decimal)))
 			{
-				return "'" + EscapeSingleQuote(o.ToString()) + "'";
+				return string.Format("'{0}'", EscapeSingleQuote(o.ToString()));
 			}
 
 			IDuck duck = o as IDuck;
@@ -96,52 +96,52 @@ namespace NVelocity.Runtime.Parser.Node
 				return duck.GetInvoke(identifier);
 			}
 
-			IVelPropertyGet vg = null;
+			IVelPropertyGet velPropertyGet = null;
 
 			try
 			{
 				Type c = o.GetType();
 
 				// first, see if we have this information cached.
-				IntrospectionCacheData icd = context.ICacheGet(this);
+				IntrospectionCacheData introspectionCacheData = context.ICacheGet(this);
 
 				// if we have the cache data and the class of the object we are 
 				// invoked with is the same as that in the cache, then we must
-				// be allright.  The last 'variable' is the method name, and 
+				// be all-right.  The last 'variable' is the method name, and 
 				// that is fixed in the template :)
 
-				if (icd != null && icd.ContextData == c)
+				if (introspectionCacheData != null && introspectionCacheData.ContextData == c)
 				{
-					vg = (IVelPropertyGet) icd.Thingy;
+					velPropertyGet = (IVelPropertyGet) introspectionCacheData.Thingy;
 				}
 				else
 				{
 					// otherwise, do the introspection, and cache it
-					vg = rsvc.Uberspect.GetPropertyGet(o, identifier, uberInfo);
+					velPropertyGet = runtimeServices.Uberspect.GetPropertyGet(o, identifier, uberInfo);
 
-					if (vg != null && vg.Cacheable)
+					if (velPropertyGet != null && velPropertyGet.Cacheable)
 					{
-						icd = new IntrospectionCacheData(c, vg);
-						context.ICachePut(this, icd);
+						introspectionCacheData = new IntrospectionCacheData(c, velPropertyGet);
+						context.ICachePut(this, introspectionCacheData);
 					}
 				}
 			}
 			catch(Exception e)
 			{
-				rsvc.Error("ASTIdentifier.execute() : identifier = " + identifier + " : " + e);
+				runtimeServices.Error(string.Format("ASTIdentifier.execute() : identifier = {0} : {1}", identifier, e));
 			}
 
 			// we have no executor... punt...
-			if (vg == null)
+			if (velPropertyGet == null)
 				return null;
 
 			// now try and execute.  If we get a TargetInvocationException, 
 			// throw that as the app wants to get these. If not, log and punt.
 			try
 			{
-				return vg.Invoke(o);
+				return velPropertyGet.Invoke(o);
 			}
-			catch(TargetInvocationException ite)
+			catch(TargetInvocationException targetInvocationException)
 			{
 				EventCartridge ec = context.EventCartridge;
 
@@ -151,16 +151,16 @@ namespace NVelocity.Runtime.Parser.Node
 				{
 					try
 					{
-						return ec.HandleMethodException(o.GetType(), vg.MethodName, ite.InnerException);
+						return ec.HandleMethodException(o.GetType(), velPropertyGet.MethodName, targetInvocationException.InnerException);
 					}
 					catch(Exception)
 					{
 						String message = String.Format(
 							"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
-							vg.MethodName, o != null ? o.GetType().FullName : "",
+							velPropertyGet.MethodName, o != null ? o.GetType().FullName : "",
 							uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
 
-						throw new MethodInvocationException(message, ite.InnerException, vg.MethodName);
+						throw new MethodInvocationException(message, targetInvocationException.InnerException, velPropertyGet.MethodName);
 					}
 				}
 				else
@@ -168,10 +168,10 @@ namespace NVelocity.Runtime.Parser.Node
 					// no event cartridge to override. Just throw
 					String message = String.Format(
 						"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
-						vg.MethodName, o != null ? o.GetType().FullName : "",
+						velPropertyGet.MethodName, o != null ? o.GetType().FullName : "",
 						uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
 
-					throw new MethodInvocationException(message, ite.InnerException, vg.MethodName);
+					throw new MethodInvocationException(message, targetInvocationException.InnerException, velPropertyGet.MethodName);
 				}
 			}
 			catch(ArgumentException)
@@ -180,9 +180,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 			catch(Exception e)
 			{
-				rsvc.Error("ASTIdentifier() : exception invoking method "
-				           + "for identifier '" + identifier + "' in "
-				           + o.GetType() + " : " + e);
+				runtimeServices.Error(string.Format("ASTIdentifier() : exception invoking method for identifier '{0}' in {1} : {2}", identifier, o.GetType(), e));
 			}
 
 			return null;

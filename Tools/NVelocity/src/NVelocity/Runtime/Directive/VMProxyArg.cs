@@ -70,7 +70,7 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>not used in this impl : carries the appropriate user context
 		/// </summary>
-		private IInternalContextAdapter usercontext = null;
+		private IInternalContextAdapter userContext = null;
 
 		/// <summary>number of children in our tree if a reference
 		/// </summary>
@@ -96,7 +96,7 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		private const int GENERALSTATIC = - 1;
 
-		private IRuntimeServices rsvc = null;
+		private IRuntimeServices runtimeServices = null;
 
 		/// <summary>  ctor for current impl
 		/// *
@@ -115,7 +115,7 @@ namespace NVelocity.Runtime.Directive
 		/// </param>
 		public VMProxyArg(IRuntimeServices rs, String contextRef, String callerRef, int t)
 		{
-			rsvc = rs;
+			runtimeServices = rs;
 
 			contextReference = contextRef;
 			callerReference = callerRef;
@@ -169,7 +169,7 @@ namespace NVelocity.Runtime.Directive
 			get { return type; }
 		}
 
-		/// <summary>  tells if arg we are poxying for is
+		/// <summary>  tells if arg we are proxying for is
 		/// dynamic or constant.
 		/// *
 		/// </summary>
@@ -210,9 +210,9 @@ namespace NVelocity.Runtime.Directive
 					{
 						((ASTReference) nodeTree).SetValue(context, o);
 					}
-					catch(MethodInvocationException mie)
+					catch(MethodInvocationException methodInvocationException)
 					{
-						rsvc.Error("VMProxyArg.getObject() : method invocation error setting value : " + mie);
+						runtimeServices.Error(string.Format("VMProxyArg.getObject() : method invocation error setting value : {0}", methodInvocationException));
 					}
 				}
 				else
@@ -224,7 +224,7 @@ namespace NVelocity.Runtime.Directive
 
 					context.Put(singleLevelRef, o);
 
-					// alternate impl : usercontext.put( singleLevelRef, o);
+					// alternate impl : userContext.put( singleLevelRef, o);
 				}
 			}
 			else
@@ -239,8 +239,7 @@ namespace NVelocity.Runtime.Directive
 				type = GENERALSTATIC;
 				staticObject = o;
 
-				rsvc.Error("VMProxyArg.setObject() : Programmer error : I am a constant!  No setting! : " + contextReference + " / " +
-				           callerReference);
+				runtimeServices.Error(string.Format("VMProxyArg.setObject() : Programmer error : I am a constant!  No setting! : {0} / {1}", contextReference, callerReference));
 			}
 
 			return null;
@@ -248,7 +247,7 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>  returns the value of the reference.  Generally, this is only
 		/// called for dynamic proxies, as the static ones should have
-		/// been stored in the VMContext's localcontext store
+		/// been stored in the VMContext's localContext store
 		/// *
 		/// </summary>
 		/// <param name="context">Context to use for getting current value
@@ -317,7 +316,7 @@ namespace NVelocity.Runtime.Directive
 				else if (type == ParserTreeConstants.TEXT)
 				{
 					/*
-		    *  this really shouldn't happen.  text is just a thowaway arg for #foreach()
+		    *  this really shouldn't happen.  text is just a throwaway arg for #foreach()
 		    */
 
 					try
@@ -329,7 +328,7 @@ namespace NVelocity.Runtime.Directive
 					}
 					catch(Exception e)
 					{
-						rsvc.Error("VMProxyArg.getObject() : error rendering reference : " + e);
+						runtimeServices.Error(string.Format("VMProxyArg.getObject() : error rendering reference : {0}", e));
 					}
 				}
 				else if (type == GENERALSTATIC)
@@ -338,8 +337,7 @@ namespace NVelocity.Runtime.Directive
 				}
 				else
 				{
-					rsvc.Error("Unsupported VM arg type : VM arg = " + callerReference + " type = " + type +
-					           "( VMProxyArg.getObject() )");
+					runtimeServices.Error(string.Format("Unsupported VM arg type : VM arg = {0} type = {1}( VMProxyArg.getObject() )", callerReference, type));
 				}
 
 				return retObject;
@@ -347,19 +345,19 @@ namespace NVelocity.Runtime.Directive
 			catch(MethodInvocationException mie)
 			{
 				/*
-		*  not ideal, but otherwise we propogate out to the 
+		*  not ideal, but otherwise we propagate out to the 
 		*  VMContext, and the Context interface's put/get 
 		*  don't throw. So this is a the best compromise
 		*  I can think of
 		*/
 
-				rsvc.Error("VMProxyArg.getObject() : method invocation error getting value : " + mie);
+				runtimeServices.Error(string.Format("VMProxyArg.getObject() : method invocation error getting value : {0}", mie));
 
 				return null;
 			}
 		}
 
-		/// <summary>  does the housekeeping upon creationg.  If a dynamic type
+		/// <summary>  does the housekeeping upon creating.  If a dynamic type
 		/// it needs to make an AST for further get()/set() operations
 		/// Anything else is constant.
 		/// </summary>
@@ -388,14 +386,14 @@ namespace NVelocity.Runtime.Directive
 			    *   as if inline in schmoo
 			    */
 
-							String buff = "#include(" + callerReference + " ) ";
+							String buff = string.Format("#include({0} ) ", callerReference);
 
 							//ByteArrayInputStream inStream = new ByteArrayInputStream( buff.getBytes() );
 
 							//UPGRADE_ISSUE: The equivalent of constructor 'java.io.BufferedReader.BufferedReader' is incompatible with the expected type in C#. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1109"'
 							TextReader br = new StringReader(buff);
 
-							nodeTree = rsvc.Parse(br, "VMProxyArg:" + callerReference, true);
+							nodeTree = runtimeServices.Parse(br, string.Format("VMProxyArg:{0}", callerReference), true);
 
 							/*
 			    *  now, our tree really is the first DirectiveArg(), and only one
@@ -409,18 +407,18 @@ namespace NVelocity.Runtime.Directive
 
 							if (nodeTree != null && nodeTree.Type != type)
 							{
-								rsvc.Error("VMProxyArg.setup() : programmer error : type doesn't match node type.");
+								runtimeServices.Error("VMProxyArg.setup() : programmer error : type doesn't match node type.");
 							}
 
 							/*
 			    *  init.  We can do this as they are only references
 			    */
 
-							nodeTree.Init(null, rsvc);
+							nodeTree.Init(null, runtimeServices);
 						}
 						catch(Exception e)
 						{
-							rsvc.Error("VMProxyArg.setup() : exception " + callerReference + " : " + e);
+							runtimeServices.Error(string.Format("VMProxyArg.setup() : exception {0} : {1}", callerReference, e));
 						}
 
 						break;
@@ -453,8 +451,7 @@ namespace NVelocity.Runtime.Directive
 						*  this is technically an error...
 						*/
 
-						rsvc.Error("Unsupported arg type : " + callerReference +
-						           "  You most likely intended to call a VM with a string literal, so enclose with ' or \" characters. (VMProxyArg.setup())");
+						runtimeServices.Error(string.Format("Unsupported arg type : {0}  You most likely intended to call a VM with a string literal, so enclose with ' or \" characters. (VMProxyArg.setup())", callerReference));
 						constant = true;
 						staticObject = new String(callerReference.ToCharArray());
 
@@ -463,27 +460,27 @@ namespace NVelocity.Runtime.Directive
 
 				default:
 					{
-						rsvc.Error(" VMProxyArg.setup() : unsupported type : " + callerReference);
+						runtimeServices.Error(string.Format(" VMProxyArg.setup() : unsupported type : {0}", callerReference));
 					}
 					break;
 			}
 		}
 
 		/*
-	* CODE FOR ALTERNATE IMPL : please ignore.  I will remove when confortable with current.
+	* CODE FOR ALTERNATE IMPL : please ignore.  I will remove when comfortable with current.
 	*/
 
 		/// <summary>  not used in current impl
 		/// *
 		/// Constructor for alternate impl where VelProxy class would make new
-		/// VMProxyArg objects, and use this contructor to avoid reparsing the
+		/// VMProxyArg objects, and use this constructor to avoid re-parsing the
 		/// reference args
 		/// *
 		/// that impl also had the VMProxyArg carry it's context
 		/// </summary>
 		public VMProxyArg(VMProxyArg model, IInternalContextAdapter c)
 		{
-			usercontext = c;
+			userContext = c;
 			contextReference = model.ContextReference;
 			callerReference = model.CallerReference;
 			nodeTree = model.NodeTree;

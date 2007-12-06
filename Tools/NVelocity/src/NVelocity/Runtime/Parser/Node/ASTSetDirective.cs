@@ -53,7 +53,7 @@ namespace NVelocity.Runtime.Parser.Node
 			right = RightHandSide;
 			left = LeftHandSide;
 
-			blather = rsvc.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true);
+			blather = runtimeServices.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true);
 
 			/*
 	    *  grab this now.  No need to redo each time
@@ -84,22 +84,21 @@ namespace NVelocity.Runtime.Parser.Node
 				*/
 				if (blather)
 				{
-					EventCartridge ec = context.EventCartridge;
+					EventCartridge eventCartridge = context.EventCartridge;
 
-					bool doit = true;
+					bool doIt = true;
 
 					/*
 		    *  if we have an EventCartridge...
 		    */
-					if (ec != null)
+					if (eventCartridge != null)
 					{
-						doit = ec.ShouldLogOnNullSet(left.Literal, right.Literal);
+						doIt = eventCartridge.ShouldLogOnNullSet(left.Literal, right.Literal);
 					}
 
-					if (doit)
+					if (doIt)
 					{
-						rsvc.Error("RHS of #set statement is null. Context will not be modified. " + context.CurrentTemplateName +
-						           " [line " + Line + ", column " + Column + "]");
+						runtimeServices.Error(string.Format("RHS of #set statement is null. Context will not be modified. {0} [line {1}, column {2}]", context.CurrentTemplateName, Line, Column));
 					}
 				}
 

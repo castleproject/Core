@@ -45,10 +45,7 @@ namespace NVelocity.Runtime.Parser
 			}
 
 			if (debugPrint)
-				Console.Out.WriteLine(
-					" stack pop (" + stateStack.Count + ") : lparen=" +
-					((Int32) h["lparen"]) +
-					" newstate=" + ((Int32) h["lexstate"]));
+				Console.Out.WriteLine(" stack pop ({0}) : lparen={1} newstate={2}", stateStack.Count, ((Int32) h["lparen"]), ((Int32) h["lexstate"]));
 
 			lparen = (Int32) h["lparen"];
 			rparen = (Int32) h["rparen"];
@@ -67,8 +64,7 @@ namespace NVelocity.Runtime.Parser
 		public bool StateStackPush()
 		{
 			if (debugPrint)
-				Console.Out.WriteLine(" (" + stateStack.Count + ") pushing cur state : " +
-				                      curLexState);
+				Console.Out.WriteLine(" ({0}) pushing cur state : {1}", stateStack.Count, curLexState);
 
 			Hashtable h = new Hashtable();
 
@@ -3527,7 +3523,7 @@ namespace NVelocity.Runtime.Parser
 		public void SwitchTo(int lexState)
 		{
 			if (lexState >= 9 || lexState < 0)
-				throw new TokenMgrError("Error: Ignoring invalid lexical state : " + lexState + ". State unchanged.",
+				throw new TokenMgrError(string.Format("Error: Ignoring invalid lexical state : {0}. State unchanged.", lexState),
 				                        TokenMgrError.INVALID_LEXICAL_STATE);
 			else
 				curLexState = lexState;
@@ -3791,7 +3787,7 @@ namespace NVelocity.Runtime.Parser
 						}
 
 						if (debugPrint)
-							Console.Out.Write("$  : going to " + REFERENCE);
+							Console.Out.Write("$  : going to {0}", REFERENCE);
 
 						StateStackPush();
 						SwitchTo(REFERENCE);
@@ -3816,7 +3812,7 @@ namespace NVelocity.Runtime.Parser
 						}
 
 						if (debugPrint)
-							Console.Out.Write("$!  : going to " + REFERENCE);
+							Console.Out.Write("$!  : going to {0}", REFERENCE);
 
 						StateStackPush();
 						SwitchTo(REFERENCE);
@@ -3884,7 +3880,7 @@ namespace NVelocity.Runtime.Parser
 						inDirective = true;
 
 						if (debugPrint)
-							Console.Out.Write("# :  going to " + DIRECTIVE);
+							Console.Out.Write("# :  going to {0}", DIRECTIVE);
 
 						StateStackPush();
 						SwitchTo(PRE_DIRECTIVE);
@@ -3945,7 +3941,7 @@ namespace NVelocity.Runtime.Parser
 						inDirective = true;
 
 						if (debugPrint)
-							Console.Out.Write("#set :  going to " + DIRECTIVE);
+							Console.Out.Write("#set :  going to {0}", DIRECTIVE);
 
 						StateStackPush();
 						inSet = true;
@@ -4079,7 +4075,7 @@ namespace NVelocity.Runtime.Parser
 					matchedToken.Image = ".";
 
 					if (debugPrint)
-						Console.Out.Write("DOT : switching to " + REFMODIFIER);
+						Console.Out.Write("DOT : switching to {0}", REFMODIFIER);
 					SwitchTo(REFMODIFIER);
 					break;
 				case 59:

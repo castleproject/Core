@@ -124,11 +124,11 @@ namespace NVelocity.App
 		/// <param name="context">context to use in rendering input string</param>
 		/// <param name="writer"> Writer in which to render the output</param>
 		/// <param name="logTag"> string to be used as the template name for log messages in case of error</param>
-		/// <param name="instring">input string containing the VTL to be rendered</param>
+		/// <param name="inString">input string containing the VTL to be rendered</param>
 		/// <returns>true if successful, false otherwise.  If false, see Velocity runtime log</returns>
-		public static bool Evaluate(IContext context, TextWriter writer, String logTag, String instring)
+		public static bool Evaluate(IContext context, TextWriter writer, String logTag, String inString)
 		{
-			return Evaluate(context, writer, logTag, new StringReader(instring));
+			return Evaluate(context, writer, logTag, new StringReader(inString));
 		}
 
 		/// <summary>
@@ -153,10 +153,10 @@ namespace NVelocity.App
 				encoding = RuntimeSingleton.getString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT);
 				reader = new StreamReader(new StreamReader(instream, Encoding.GetEncoding(encoding)).BaseStream);
 			}
-			catch(IOException uce)
+			catch(IOException ioException)
 			{
-				String msg = "Unsupported input encoding : " + encoding + " for template " + logTag;
-				throw new ParseErrorException(msg, uce);
+				String msg = string.Format("Unsupported input encoding : {0} for template {1}", encoding, logTag);
+				throw new ParseErrorException(msg, ioException);
 			}
 
 			return Evaluate(context, writer, logTag, reader);
@@ -180,35 +180,35 @@ namespace NVelocity.App
 			{
 				nodeTree = RuntimeSingleton.Parse(reader, logTag);
 			}
-			catch(ParseException pex)
+			catch(ParseException parseException)
 			{
-				throw new ParseErrorException(pex.Message, pex);
+				throw new ParseErrorException(parseException.Message, parseException);
 			}
 
 			// now we want to init and render
 			if (nodeTree != null)
 			{
-				InternalContextAdapterImpl ica = new InternalContextAdapterImpl(context);
+				InternalContextAdapterImpl internalContextAdapterImpl = new InternalContextAdapterImpl(context);
 
-				ica.PushCurrentTemplateName(logTag);
+				internalContextAdapterImpl.PushCurrentTemplateName(logTag);
 
 				try
 				{
 					try
 					{
-						nodeTree.Init(ica, RuntimeSingleton.RuntimeServices);
+						nodeTree.Init(internalContextAdapterImpl, RuntimeSingleton.RuntimeServices);
 					}
-					catch(Exception e)
+					catch(Exception exception)
 					{
-						RuntimeSingleton.Error("Velocity.evaluate() : init exception for tag = " + logTag + " : " + e);
+						RuntimeSingleton.Error(string.Format("Velocity.evaluate() : init exception for tag = {0} : {1}", logTag, exception));
 					}
 
 					// now render, and let any exceptions fly
-					nodeTree.Render(ica, writer);
+					nodeTree.Render(internalContextAdapterImpl, writer);
 				}
 				finally
 				{
-					ica.PopCurrentTemplateName();
+					internalContextAdapterImpl.PopCurrentTemplateName();
 				}
 
 				return true;
@@ -218,7 +218,7 @@ namespace NVelocity.App
 		}
 
 		/// <summary>
-		/// Invokes a currently registered Velocimacro with the parms provided
+		/// Invokes a currently registered Velocimacro with the parameters provided
 		/// and places the rendered stream into the writer.
 		/// 
 		/// Note : currently only accepts args to the VM if they are in the context.
@@ -234,7 +234,7 @@ namespace NVelocity.App
 		public static bool InvokeVelocimacro(String vmName, String logTag, String[] parameters, IContext context,
 		                                     TextWriter writer)
 		{
-			// check parms
+			// check parameters
 			if (vmName == null || parameters == null || context == null || writer == null || logTag == null)
 			{
 				RuntimeSingleton.Error("Velocity.invokeVelocimacro() : invalid parameter");
@@ -244,7 +244,7 @@ namespace NVelocity.App
 			// does the VM exist?
 			if (!RuntimeSingleton.IsVelocimacro(vmName, logTag))
 			{
-				RuntimeSingleton.Error("Velocity.invokeVelocimacro() : VM '" + vmName + "' not registered.");
+				RuntimeSingleton.Error(string.Format("Velocity.invokeVelocimacro() : VM '{0}' not registered.", vmName));
 				return false;
 			}
 
@@ -269,7 +269,7 @@ namespace NVelocity.App
 			}
 			catch(Exception e)
 			{
-				RuntimeSingleton.Error("Velocity.invokeVelocimacro() : error " + e);
+				RuntimeSingleton.Error(string.Format("Velocity.invokeVelocimacro() : error {0}", e));
 			}
 
 			return false;
@@ -305,7 +305,7 @@ namespace NVelocity.App
 
 			if (template == null)
 			{
-				RuntimeSingleton.Error("Velocity.parseTemplate() failed loading template '" + templateName + "'");
+				RuntimeSingleton.Error(string.Format("Velocity.parseTemplate() failed loading template '{0}'", templateName));
 				return false;
 			}
 			else
@@ -355,7 +355,7 @@ namespace NVelocity.App
 		}
 
 		/// <summary>
-		/// <p>Determines whether a resource is accessable via the
+		/// <p>Determines whether a resource is accessible via the
 		/// currently configured resource loaders. <see cref="Resource"/>
 		/// is the generic description of templates, static content, etc.</p>
 		/// 
@@ -410,15 +410,15 @@ namespace NVelocity.App
 
 		/// <summary>
 		/// <p>
-		/// Set the an ApplicationAttribue, which is an Object
-		/// set by the application which is accessable from
+		/// Set the an ApplicationAttribute, which is an Object
+		/// set by the application which is accessible from
 		/// any component of the system that gets a RuntimeServices.
 		/// This allows communication between the application
 		/// environment and custom pluggable components of the
 		/// Velocity engine, such as loaders and loggers.
 		/// </p>
 		/// <p>
-		/// Note that there is no enfocement or rules for the key
+		/// Note that there is no enforcement or rules for the key
 		/// used - it is up to the application developer.  However, to
 		/// help make the intermixing of components possible, using
 		/// the target Class name (e.g.  com.foo.bar ) as the key

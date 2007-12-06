@@ -20,25 +20,25 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Container to hold the 'key' part of get(key).
 		/// </summary>
-		private Object[] args = new Object[1];
+		private Object[] arguments = new Object[1];
 
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
 		public GetExecutor(IRuntimeLogger r, Introspector i, Type c, String key)
 		{
-			rlog = r;
-			args[0] = key;
+			runtimeLogger = r;
+			arguments[0] = key;
 
 			// NOTE: changed from get to get to get_Item - assumption is that get would be converted to an indexer in .Net
-			// to keep some resembalance to the Java version, look for "Get" and "get" methods as well (both cases for .Net style and java)
-			method = i.GetMethod(c, "get_Item", args);
+			// to keep some resemblance to the Java version, look for "Get" and "get" methods as well (both cases for .Net style and java)
+			method = i.GetMethod(c, "get_Item", arguments);
 			if (method == null)
 			{
-				method = i.GetMethod(c, "Get", args);
+				method = i.GetMethod(c, "Get", arguments);
 				if (method == null)
 				{
-					method = i.GetMethod(c, "get", args);
+					method = i.GetMethod(c, "get", arguments);
 				}
 			}
 		}
@@ -51,7 +51,7 @@ namespace NVelocity.Runtime.Parser.Node
 			if (method == null)
 				return null;
 
-			return method.Invoke(o, args);
+			return method.Invoke(o, arguments);
 		}
 	}
 }

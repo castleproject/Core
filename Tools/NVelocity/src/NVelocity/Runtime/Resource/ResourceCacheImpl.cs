@@ -22,7 +22,7 @@ namespace NVelocity.Runtime.Resource
 	/// Default implementation of the resource cache for the default
 	/// ResourceManager.  The cache uses a <i>least recently used</i> (LRU)
 	/// algorithm, with a maximum size specified via the
-	/// <code>resource.manager.cache.size</code> property (idenfied by the
+	/// <code>resource.manager.cache.size</code> property (identified by the
 	/// {@link
 	/// org.apache.velocity.runtime.RuntimeConstants#RESOURCE_MANAGER_CACHE_SIZE}
 	/// constant).  This property get be set to <code>0</code> or less for
@@ -48,7 +48,7 @@ namespace NVelocity.Runtime.Resource
 		/// Runtime services, generally initialized by the
 		/// <code>initialize()</code> method.
 		/// </summary>
-		protected internal IRuntimeServices rsvc = null;
+		protected internal IRuntimeServices runtimeServices = null;
 
 		public ResourceCacheImpl()
 		{
@@ -56,9 +56,9 @@ namespace NVelocity.Runtime.Resource
 
 		public void initialize(IRuntimeServices rs)
 		{
-			rsvc = rs;
+			runtimeServices = rs;
 
-			int maxSize = rsvc.GetInt(RuntimeConstants.RESOURCE_MANAGER_DEFAULTCACHE_SIZE, 89);
+			int maxSize = runtimeServices.GetInt(RuntimeConstants.RESOURCE_MANAGER_DEFAULTCACHE_SIZE, 89);
 			if (maxSize > 0)
 			{
 				// Create a whole new Map here to avoid hanging on to a
@@ -68,7 +68,7 @@ namespace NVelocity.Runtime.Resource
 				cache = lruCache;
 			}
 
-			rsvc.Info("ResourceCache : initialized. (" + GetType() + ")");
+			runtimeServices.Info(string.Format("ResourceCache : initialized. ({0})", GetType()));
 		}
 
 		public Resource get(Object key)

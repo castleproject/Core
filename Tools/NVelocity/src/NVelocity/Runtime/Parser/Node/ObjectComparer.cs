@@ -83,7 +83,7 @@ namespace NVelocity.Runtime.Parser.Node
 			else if (y is IComparable)
 				return -(y as IComparable).CompareTo(x);
 
-			throw new ArgumentException("Unable to compare " + x + " and " + y);
+			throw new ArgumentException(string.Format("Unable to compare {0} and {1}", x, y));
 		}
 
 		public int ComparePrimitive(object x, object y)
@@ -94,12 +94,12 @@ namespace NVelocity.Runtime.Parser.Node
 			if (x.GetType() == y.GetType())
 				return (x as IComparable).CompareTo(y);
 
-			IObjectComparer cmp = comparers[x.GetType() + ":" + y.GetType()] as IObjectComparer;
+			IObjectComparer cmp = comparers[string.Format("{0}:{1}", x.GetType(), y.GetType())] as IObjectComparer;
 
 			if (cmp != null)
 				return cmp.Compare(x, y);
 
-			throw new ArgumentException("Unable to compare " + x.GetType() + " and " + y.GetType());
+			throw new ArgumentException(string.Format("Unable to compare {0} and {1}", x.GetType(), y.GetType()));
 		}
 
 		public object ReType(object value)
@@ -130,12 +130,12 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			public void Register(IDictionary map)
 			{
-				map[typeof(double) + ":" + typeof(long)] = this;
-				map[typeof(long) + ":" + typeof(double)] = this;
-				map[typeof(double) + ":" + typeof(ulong)] = this;
-				map[typeof(ulong) + ":" + typeof(double)] = this;
-				map[typeof(float) + ":" + typeof(double)] = this;
-				map[typeof(double) + ":" + typeof(float)] = this;
+				map[string.Format("{0}:{1}", typeof(double), typeof(long))] = this;
+				map[string.Format("{0}:{1}", typeof(long), typeof(double))] = this;
+				map[string.Format("{0}:{1}", typeof(double), typeof(ulong))] = this;
+				map[string.Format("{0}:{1}", typeof(ulong), typeof(double))] = this;
+				map[string.Format("{0}:{1}", typeof(float), typeof(double))] = this;
+				map[string.Format("{0}:{1}", typeof(double), typeof(float))] = this;
 			}
 
 			public int Compare(object x, object y)
@@ -166,7 +166,7 @@ namespace NVelocity.Runtime.Parser.Node
 					return d == f ? Equal : (d < f ? Smaller : Greater);
 				}
 
-				throw new ArgumentException("Unable to compare double and " + y.GetType());
+				throw new ArgumentException(string.Format("Unable to compare double and {0}", y.GetType()));
 			}
 		}
 
@@ -178,10 +178,10 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			public void Register(IDictionary map)
 			{
-				map[typeof(float) + ":" + typeof(ulong)] = this;
-				map[typeof(ulong) + ":" + typeof(float)] = this;
-				map[typeof(float) + ":" + typeof(long)] = this;
-				map[typeof(long) + ":" + typeof(float)] = this;
+				map[string.Format("{0}:{1}", typeof(float), typeof(ulong))] = this;
+				map[string.Format("{0}:{1}", typeof(ulong), typeof(float))] = this;
+				map[string.Format("{0}:{1}", typeof(float), typeof(long))] = this;
+				map[string.Format("{0}:{1}", typeof(long), typeof(float))] = this;
 			}
 
 			public int Compare(object x, object y)
@@ -206,7 +206,7 @@ namespace NVelocity.Runtime.Parser.Node
 					return f == l ? Equal : (f < l ? Smaller : Greater);
 				}
 
-				throw new ArgumentException("Unable to compare float and " + y.GetType());
+				throw new ArgumentException(string.Format("Unable to compare float and {0}", y.GetType()));
 			}
 		}
 
@@ -218,8 +218,8 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			public void Register(IDictionary map)
 			{
-				map[typeof(long) + ":" + typeof(ulong)] = this;
-				map[typeof(ulong) + ":" + typeof(long)] = this;
+				map[string.Format("{0}:{1}", typeof(long), typeof(ulong))] = this;
+				map[string.Format("{0}:{1}", typeof(ulong), typeof(long))] = this;
 			}
 
 			public int Compare(object x, object y)
@@ -244,7 +244,7 @@ namespace NVelocity.Runtime.Parser.Node
 					return ul == ull ? Equal : (ul < ull ? Smaller : Greater);
 				}
 
-				throw new ArgumentException("Unable to compare long and " + y.GetType());
+				throw new ArgumentException(string.Format("Unable to compare long and {0}", y.GetType()));
 			}
 		}
 

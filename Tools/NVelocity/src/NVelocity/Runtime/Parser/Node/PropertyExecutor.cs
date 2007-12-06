@@ -13,7 +13,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public PropertyExecutor(IRuntimeLogger r, Introspector i, Type clazz, String propertyName)
 		{
-			rlog = r;
+			runtimeLogger = r;
 			introspector = i;
 
 			Discover(clazz, propertyName);
@@ -59,7 +59,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 			catch(Exception e)
 			{
-				rlog.Error("PROGRAMMER ERROR : PropertyExector() : " + e);
+				runtimeLogger.Error(string.Format("PROGRAMMER ERROR : PropertyExector() : {0}", e));
 			}
 		}
 

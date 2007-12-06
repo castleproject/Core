@@ -38,15 +38,15 @@ namespace NVelocity.Runtime.Log
 		/// <summary>  Creates a new logging system or returns an existing one
 		/// specified by the application.
 		/// </summary>
-		public static ILogSystem CreateLogSystem(IRuntimeServices rsvc)
+		public static ILogSystem CreateLogSystem(IRuntimeServices runtimeServices)
 		{
-			// if a logSystem was set as a configuation value, use that.
+			// if a logSystem was set as a configuration value, use that.
 			// This is any class the user specifies.
-			Object o = rsvc.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM);
+			Object o = runtimeServices.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM);
 
 			if (o != null && o is ILogSystem)
 			{
-				((ILogSystem) o).Init(rsvc);
+				((ILogSystem) o).Init(runtimeServices);
 
 				return (ILogSystem) o;
 			}
@@ -58,7 +58,7 @@ namespace NVelocity.Runtime.Log
 			// AvalonLogSystem and the SimpleLog4JLogSystem for convenience -
 			// so we use whichever we find.
 			IList classes = new ArrayList();
-			Object obj = rsvc.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS);
+			Object obj = runtimeServices.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS);
 
 			// we might have a list, or not - so check
 			if (obj is IList)
@@ -77,7 +77,7 @@ namespace NVelocity.Runtime.Log
 			{
 				if (clazz != null && clazz.Length > 0)
 				{
-					rsvc.Info("Trying to use logger class " + clazz);
+					runtimeServices.Info(string.Format("Trying to use logger class {0}", clazz));
 
 					try
 					{
@@ -86,20 +86,20 @@ namespace NVelocity.Runtime.Log
 
 						if (o is ILogSystem)
 						{
-							((ILogSystem) o).Init(rsvc);
+							((ILogSystem) o).Init(runtimeServices);
 
-							rsvc.Info("Using logger class " + clazz);
+							runtimeServices.Info(string.Format("Using logger class {0}", clazz));
 
 							return (ILogSystem) o;
 						}
 						else
 						{
-							rsvc.Error("The specifid logger class " + clazz + " isn't a valid LogSystem");
+							runtimeServices.Error(string.Format("The specified logger class {0} isn't a valid LogSystem", clazz));
 						}
 					}
-					catch(ApplicationException ncdfe)
+					catch(ApplicationException applicationException)
 					{
-						rsvc.Debug("Couldn't find class " + clazz + " or necessary supporting classes in classpath. Exception : " + ncdfe);
+						runtimeServices.Debug(string.Format("Couldn't find class {0} or necessary supporting classes in classpath. Exception : {1}", clazz, applicationException));
 					}
 				}
 			}
@@ -111,28 +111,25 @@ namespace NVelocity.Runtime.Log
 			// dependencies for the default logger.
 			// Since we really don't know,
 			// then take a wack at the log4net as a last resort.
-			ILogSystem als = null;
+			ILogSystem logSystem = null;
 			try
 			{
-				als = new NullLogSystem();
-				als.Init(rsvc);
+				logSystem = new NullLogSystem();
+				logSystem.Init(runtimeServices);
 			}
-			catch(ApplicationException ncdfe)
+			catch(ApplicationException applicationException)
 			{
-				String errstr = "PANIC : NVelocity cannot find any of the" +
-				                " specified or default logging systems in the classpath," +
-				                " or the classpath doesn't contain the necessary classes" + " to support them." +
-				                " Please consult the documentation regarding logging." + " Exception : " + ncdfe;
+				String error = string.Format("PANIC : NVelocity cannot find any of the specified or default logging systems in the classpath, or the classpath doesn't contain the necessary classes to support them. Please consult the documentation regarding logging. Exception : {0}", applicationException);
 
-				Console.Out.WriteLine(errstr);
-				Console.Error.WriteLine(errstr);
+				Console.Out.WriteLine(error);
+				Console.Error.WriteLine(error);
 
 				throw;
 			}
 
-			rsvc.Info("Using log4net as logger of final resort.");
+			runtimeServices.Info("Using log4net as logger of final resort.");
 
-			return als;
+			return logSystem;
 		}
 	}
 }

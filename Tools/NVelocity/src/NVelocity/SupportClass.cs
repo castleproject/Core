@@ -406,11 +406,11 @@ namespace NVelocity
 						break;
 
 					case (int) formatTypes.General:
-						currentFormatString = "n" + numberFormat.NumberDecimalDigits;
+						currentFormatString = string.Format("n{0}", numberFormat.NumberDecimalDigits);
 						break;
 
 					case (int) formatTypes.Number:
-						currentFormatString = "n" + numberFormat.NumberDecimalDigits;
+						currentFormatString = string.Format("n{0}", numberFormat.NumberDecimalDigits);
 						break;
 
 					case (int) formatTypes.Percent:
@@ -520,7 +520,7 @@ namespace NVelocity
 		{
 			string timePattern = DateTimeFormatManager.manager.GetTimeFormatPattern(format);
 			string datePattern = DateTimeFormatManager.manager.GetDateFormatPattern(format);
-			return date.ToString(datePattern + " " + timePattern, format);
+			return date.ToString(string.Format("{0} {1}", datePattern, timePattern), format);
 		}
 
 		/*******************************/

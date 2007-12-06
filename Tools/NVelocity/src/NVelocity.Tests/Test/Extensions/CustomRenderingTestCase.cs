@@ -50,7 +50,7 @@ namespace NVelocity.Test.Extensions
 				"ExtensionsTest.EscapeEscapableSimpleObject",
 				@"$escString | $normal");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(@"&lt;escape me&gt; | normal>not<escapable", sw.ToString());
 		}
 
@@ -66,7 +66,7 @@ namespace NVelocity.Test.Extensions
 				"ExtensionsTest.EscapeEscapableComplexObject",
 				@"$escComplex.name $escComplex.value | $normal");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(@"my&gt;name my&amp;value | normal>not<escapable", sw.ToString());
 		}
 
@@ -83,7 +83,7 @@ namespace NVelocity.Test.Extensions
 				"ExtensionsTest.EscapeEscapableComplexMixedObject",
 				@"$escMixed.name $escMixed.value | $normal");
 
-			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(@"escape&amp;me don't &escape> me | normal>not<escapable", sw.ToString());
 		}
 

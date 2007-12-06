@@ -113,10 +113,10 @@ namespace Commons.Collections
 		/// <summary>
 		/// File separator.
 		/// </summary>
-		protected internal String fileSeparator = "" + Path.AltDirectorySeparatorChar;
+		protected internal String fileSeparator =  Path.AltDirectorySeparatorChar.ToString();
 
 		/// <summary>
-		/// Has this configuration been intialized.
+		/// Has this configuration been initialized.
 		/// </summary>
 		protected internal bool isInitialized = false;
 
@@ -284,7 +284,7 @@ namespace Commons.Collections
 									 * "./" form then just strip that off first
 									 * before continuing.
 									 */
-									if (value_.StartsWith("." + fileSeparator))
+									if (value_.StartsWith(string.Format(".{0}", fileSeparator)))
 									{
 										value_ = value_.Substring(2);
 									}
@@ -449,7 +449,7 @@ namespace Commons.Collections
 		}
 
 		/// <summary>   Adds a key/value pair to the map.  This routine does
-		/// no magic morphing.  It ensures the keylist is maintained
+		/// no magic morphing.  It ensures the keyList is maintained
 		/// *
 		/// </summary>
 		/// <param name="key">key to use for mapping
@@ -477,7 +477,7 @@ namespace Commons.Collections
 		/// <summary>  Sets a string property w/o checking for commas - used
 		/// internally when a property has been broken up into
 		/// strings that could contain escaped commas to prevent
-		/// the inadvertant vectorization.
+		/// the inadvertent vectorization.
 		///
 		/// Thanks to Leon Messerschmidt for this one.
 		///
@@ -534,7 +534,7 @@ namespace Commons.Collections
 			AddProperty(key, value_);
 		}
 
-		/// <summary> Save the properties to the given outputstream.
+		/// <summary> Save the properties to the given outputStream.
 		/// </summary>
 		/// <param name="output">An OutputStream.
 		/// </param>
@@ -573,11 +573,11 @@ namespace Commons.Collections
 			}
 		}
 
-		private void WriteKeyOutput(TextWriter theWrtr, String key, String value)
+		private void WriteKeyOutput(TextWriter textWriter, String key, String value)
 		{
 			StringBuilder currentOutput = new StringBuilder();
 			currentOutput.Append(key).Append("=").Append(value);
-			theWrtr.WriteLine(currentOutput.ToString());
+			textWriter.WriteLine(currentOutput.ToString());
 		}
 
 		/// <summary> Combines an existing Hashtable with this Hashtable.
@@ -593,7 +593,7 @@ namespace Commons.Collections
 			foreach(String key in c.Keys)
 			{
 				Object o = c[key];
-				// if the value is a String, escape it so that if there are delmiters that the value is not converted to a list
+				// if the value is a String, escape it so that if there are delimiters that the value is not converted to a list
 				if (o is String)
 					o = ((String) o).Replace(",", @"\,");
 
@@ -715,7 +715,7 @@ namespace Commons.Collections
 			foreach(String key in Keys)
 			{
 				Object value = this[key];
-				sb.Append(key + " => " + ValueToString(value)).Append(Environment.NewLine);
+				sb.AppendFormat("{0} => {1}", key, ValueToString(value)).Append(Environment.NewLine);
 			}
 			return sb.ToString();
 		}
@@ -731,7 +731,7 @@ namespace Commons.Collections
 					{
 						s += ", ";
 					}
-					s += "[" + o.ToString() + "]";
+					s += string.Format("[{0}]", o);
 				}
 				return s;
 			}
@@ -796,7 +796,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new InvalidCastException('\'' + key + "' doesn't map to a String object");
+				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a String object", '\'', key));
 			}
 		}
 
@@ -861,7 +861,7 @@ namespace Commons.Collections
 				}
 				else
 				{
-					throw new ArgumentException('\'' + token + "' does not contain " + "an equals sign");
+					throw new ArgumentException(string.Format("{0}{1}' does not contain an equals sign", '\'', token));
 				}
 			}
 			return props;
@@ -907,7 +907,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new InvalidCastException('\'' + key + "' doesn't map to a String/Vector object");
+				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a String/Vector object", '\'', key));
 			}
 
 			String[] tokens = new String[vector.Count];
@@ -978,7 +978,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new InvalidCastException('\'' + key + "' doesn't map to a Vector object");
+				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a Vector object", '\'', key));
 			}
 		}
 
@@ -1005,7 +1005,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new Exception('\'' + key + "' doesn't map to an existing object");
+				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
 		}
 
@@ -1051,7 +1051,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new InvalidCastException('\'' + key + "' doesn't map to a Boolean object");
+				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a Boolean object", '\'', key));
 			}
 		}
 
@@ -1110,7 +1110,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new Exception('\'' + key + " doesn't map to an existing object");
+				throw new Exception(string.Format("{0}{1} doesn't map to an existing object", '\'', key));
 			}
 		}
 
@@ -1172,7 +1172,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new InvalidCastException('\'' + key + "' doesn't map to a Byte object");
+				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a Byte object", '\'', key));
 			}
 		}
 
@@ -1229,7 +1229,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new Exception('\'' + key + "' doesn't map to an existing object");
+				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
 		}
 
@@ -1276,7 +1276,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new InvalidCastException('\'' + key + "' doesn't map to a Integer object");
+				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a Integer object", '\'', key));
 			}
 		}
 
@@ -1303,7 +1303,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new Exception('\'' + key + "' doesn't map to an existing object");
+				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
 		}
 
@@ -1347,7 +1347,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new InvalidCastException('\'' + key + "' doesn't map to a Long object");
+				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a Long object", '\'', key));
 			}
 		}
 
@@ -1374,7 +1374,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new Exception('\'' + key + "' doesn't map to an existing object");
+				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
 		}
 
@@ -1419,7 +1419,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new InvalidCastException('\'' + key + "' doesn't map to a Float object");
+				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a Float object", '\'', key));
 			}
 		}
 
@@ -1446,7 +1446,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new Exception('\'' + key + "' doesn't map to an existing object");
+				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
 		}
 
@@ -1491,7 +1491,7 @@ namespace Commons.Collections
 			}
 			else
 			{
-				throw new InvalidCastException('\'' + key + "' doesn't map to a Double object");
+				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a Double object", '\'', key));
 			}
 		}
 
@@ -1508,7 +1508,7 @@ namespace Commons.Collections
 			{
 				Object value = p.GetProperty(key);
 
-				// if the value is a String, escape it so that if there are delmiters that the value is not converted to a list
+				// if the value is a String, escape it so that if there are delimiters that the value is not converted to a list
 				if (value is String)
 					value = value.ToString().Replace(",", @"\,");
 				c.SetProperty(key, value);

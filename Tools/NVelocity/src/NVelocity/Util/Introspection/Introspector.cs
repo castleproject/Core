@@ -60,17 +60,17 @@ namespace NVelocity.Util.Introspection
 			catch(AmbiguousException)
 			{
 				// whoops.  Ambiguous.  Make a nice log message and return null...
-				String msg = "Introspection Error : Ambiguous method invocation " + name + "( ";
+				String msg = string.Format("Introspection Error : Ambiguous method invocation {0}( ", name);
 
 				for(int i = 0; i < parameters.Length; i++)
 				{
 					if (i > 0)
-						msg = msg + ", ";
+						msg = string.Format("{0}, ", msg);
 
 					msg = msg + parameters[i].GetType().FullName;
 				}
 
-				msg = msg + ") for class " + c;
+				msg = string.Format("{0}) for class {1}", msg, c);
 
 				rlog.Error(msg);
 			}
@@ -95,7 +95,7 @@ namespace NVelocity.Util.Introspection
 			catch(AmbiguousException)
 			{
 				// whoops.  Ambiguous.  Make a nice log message and return null...
-				String msg = "Introspection Error : Ambiguous property invocation " + name + " for class " + c;
+				String msg = string.Format("Introspection Error : Ambiguous property invocation {0} for class {1}", name, c);
 				rlog.Error(msg);
 			}
 			return null;

@@ -18,14 +18,14 @@ namespace NVelocity.Runtime.Visitor
 		/// Map containing VM arg to instance-use reference
 		/// Passed in with CTOR
 		/// </summary>
-		private Hashtable argmap = null;
+		private Hashtable argumentMap = null;
 
 		/// <summary>
 		/// CTOR - takes a map of args to reference
 		/// </summary>
 		public VMReferenceMungeVisitor(Hashtable map)
 		{
-			argmap = map;
+			argumentMap = map;
 		}
 
 		/// <summary>
@@ -38,7 +38,7 @@ namespace NVelocity.Runtime.Visitor
 		{
 			// see if there is an override value for this
 			// reference
-			String overrideVal = (String) argmap[node.Literal.Substring(1)];
+			String overrideVal = (String) argumentMap[node.Literal.Substring(1)];
 
 			// if so, set in the node
 			if (overrideVal != null)

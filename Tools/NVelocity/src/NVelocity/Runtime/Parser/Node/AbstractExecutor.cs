@@ -9,7 +9,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public abstract class AbstractExecutor
 	{
-		protected internal IRuntimeLogger rlog = null;
+		protected internal IRuntimeLogger runtimeLogger = null;
 
 		/// <summary>
 		/// Method to be executed.

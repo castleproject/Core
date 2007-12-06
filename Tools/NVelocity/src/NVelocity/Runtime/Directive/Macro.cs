@@ -54,7 +54,7 @@ namespace NVelocity.Runtime.Directive
 		}
 
 		/// <summary>
-		/// Used by Parser.java to process VMs withing the parsing process
+		/// Used by Parser.java to process VMs within the parsing process
 		///
 		/// processAndRegister() doesn't actually render the macro to the output
 		/// Processes the macro body into the internal representation used by the
@@ -74,7 +74,7 @@ namespace NVelocity.Runtime.Directive
 			{
 				// error - they didn't name the macro or
 				// define a block
-				rs.Error("#macro error : Velocimacro must have name as 1st " + "argument to #macro()");
+				rs.Error("#macro error : Velocimacro must have name as 1st argument to #macro()");
 
 				return;
 			}
@@ -101,7 +101,7 @@ namespace NVelocity.Runtime.Directive
 		}
 
 		/// <summary>  creates an array containing the literal
-		/// strings in the macro arguement
+		/// strings in the macro argument
 		/// </summary>
 		private static String[] getArgArray(Node node)
 		{

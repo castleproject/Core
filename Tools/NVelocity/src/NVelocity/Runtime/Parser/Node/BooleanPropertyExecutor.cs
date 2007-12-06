@@ -37,7 +37,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 			catch(Exception e)
 			{
-				rlog.Error("PROGRAMMER ERROR : BooleanPropertyExector() : " + e);
+				runtimeLogger.Error(string.Format("PROGRAMMER ERROR : BooleanPropertyExector() : {0}", e));
 			}
 		}
 	}

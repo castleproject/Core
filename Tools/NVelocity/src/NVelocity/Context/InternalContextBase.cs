@@ -107,11 +107,11 @@ namespace NVelocity.Context
 			introspectionCache[key] = o;
 		}
 
-		public EventCartridge AttachEventCartridge(EventCartridge ec)
+		public EventCartridge AttachEventCartridge(EventCartridge eventCartridge)
 		{
-			EventCartridge temp = eventCartridge;
+			EventCartridge temp = this.eventCartridge;
 
-			eventCartridge = ec;
+			this.eventCartridge = eventCartridge;
 
 			return temp;
 		}

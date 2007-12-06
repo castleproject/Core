@@ -46,7 +46,7 @@ namespace NVelocity.Test
 		private VelocityContext context2;
 		private ArrayList vec;
 		
-		private VelocityEngine ve;
+		private VelocityEngine velocityEngine;
 
 		/// <summary>
 		/// Creates a new instance.
@@ -55,16 +55,16 @@ namespace NVelocity.Test
 		{
 			try
 			{
-				ve = new VelocityEngine();
+				velocityEngine = new VelocityEngine();
 
-				ExtendedProperties ep = new ExtendedProperties();
-				ep.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
+				ExtendedProperties extendedProperties = new ExtendedProperties();
+				extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
 
-				ep.SetProperty(RuntimeConstants.RUNTIME_LOG_ERROR_STACKTRACE, "true");
-				ep.SetProperty(RuntimeConstants.RUNTIME_LOG_WARN_STACKTRACE, "true");
-				ep.SetProperty(RuntimeConstants.RUNTIME_LOG_INFO_STACKTRACE, "true");
+				extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_ERROR_STACKTRACE, "true");
+				extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_WARN_STACKTRACE, "true");
+				extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_INFO_STACKTRACE, "true");
 
-				ve.Init(ep);
+				velocityEngine.Init(extendedProperties);
 
 				testProperties = new ExtendedProperties();
 				testProperties.Load(new FileStream(TemplateTest.TEST_CASE_PROPERTIES, FileMode.Open, FileAccess.Read));
@@ -99,7 +99,7 @@ namespace NVelocity.Test
 
 			/*
 			*  set up 3 chained contexts, and add our data 
-			*  throught the 3 of them.
+			*  through the 3 of them.
 			*/
 
 			context2 = new VelocityContext();
@@ -147,7 +147,7 @@ namespace NVelocity.Test
 			context.Put( "AjaxHelper2", new AjaxHelper2() );
 			context.Put( "DictHelper", new DictHelper() );
 
-			Template template = ve.GetTemplate(
+			Template template = velocityEngine.GetTemplate(
 				GetFileName(null, "dicthelper", TemplateTest.TMPL_FILE_EXT));
 			
 			StringWriter writer = new StringWriter();
@@ -227,7 +227,7 @@ namespace NVelocity.Test
 
 			try
 			{
-				Template template = ve.GetTemplate(GetFileName(null, baseFileName, TemplateTest.TMPL_FILE_EXT));
+				Template template = velocityEngine.GetTemplate(GetFileName(null, baseFileName, TemplateTest.TMPL_FILE_EXT));
 
 				AssureResultsDirectoryExists(TemplateTest.RESULT_DIR);
 

@@ -28,7 +28,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <returns>TemplateLoader</returns>
 		public static ResourceLoader getLoader(IRuntimeServices rs, String loaderClassName)
 		{
-			ResourceLoader loader = null;
+			ResourceLoader loader;
 
 			try
 			{
@@ -39,15 +39,14 @@ namespace NVelocity.Runtime.Resource.Loader
 				Object o = Activator.CreateInstance(loaderType);
 				loader = (ResourceLoader) o;
 
-				rs.Info("Resource Loader Instantiated: " + loader.GetType().FullName);
+				rs.Info(string.Format("Resource Loader Instantiated: {0}", loader.GetType().FullName));
 
 				return loader;
 			}
 			catch(Exception e)
 			{
-				rs.Error("Problem instantiating the template loader.\n" + "Look at your properties file and make sure the\n" +
-				         "name of the template loader is correct. Here is the\n" + "error: " + e);
-				throw new Exception("Problem initializing template loader: " + loaderClassName + "\nError is: " + e);
+				rs.Error(string.Format("Problem instantiating the template loader.\nLook at your properties file and make sure the\nname of the template loader is correct. Here is the\nerror: {0}", e));
+				throw new Exception(string.Format("Problem initializing template loader: {0}\nError is: {1}", loaderClassName, e));
 			}
 		}
 	}

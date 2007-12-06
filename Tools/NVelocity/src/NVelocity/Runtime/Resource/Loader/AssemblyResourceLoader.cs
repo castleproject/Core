@@ -64,8 +64,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 			if (template == null || template.Length == 0)
 			{
-				String msg = "File resource error : argument " + template + " contains .. and may be trying to access " +
-				             "content outside of template root.  Rejected.";
+				String msg = string.Format("File resource error : argument {0} contains .. and may be trying to access content outside of template root.  Rejected.", template);
 
 				throw new ResourceNotFoundException(msg);
 			}
@@ -80,18 +79,18 @@ namespace NVelocity.Runtime.Resource.Loader
 
 			foreach(String assemblyName in assemblyNames)
 			{
-				Assembly assm = null;
+				Assembly assembly;
 
 				try
 				{
-					assm = Assembly.Load(assemblyName);
+					assembly = Assembly.Load(assemblyName);
 				}
 				catch(Exception ex)
 				{
-					throw new ResourceNotFoundException("Assembly could not be found " + assemblyName, ex);
+					throw new ResourceNotFoundException(string.Format("Assembly could not be found {0}", assemblyName), ex);
 				}
 
-				Stream stream = assm.GetManifestResourceStream(template);
+				Stream stream = assembly.GetManifestResourceStream(template);
 
 				if (stream != null)
 				{
@@ -99,7 +98,7 @@ namespace NVelocity.Runtime.Resource.Loader
 				}
 			}
 
-			throw new ResourceNotFoundException("AssemblyResourceLoader Error: cannot locate resource " + template);
+			throw new ResourceNotFoundException(string.Format("AssemblyResourceLoader Error: cannot locate resource {0}", template));
 		}
 
 		/// <summary> Given a template, check to see if the source of InputStream

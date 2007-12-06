@@ -18,7 +18,7 @@ namespace NVelocity.Runtime.Parser.Node
 		private bool interpolate = true;
 		private SimpleNode nodeTree = null;
 		private String image = "";
-		private String interpolateimage = "";
+		private String interpolateImage = "";
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ASTStringLiteral"/> class.
@@ -68,14 +68,14 @@ namespace NVelocity.Runtime.Parser.Node
 			* tack a space on the end (dreaded <MORE> kludge)
 			*/
 
-			interpolateimage = image + " ";
+			interpolateImage = string.Format("{0} ", image);
 
 			if (interpolate)
 			{
 				/*
 				*  now parse and init the nodeTree
 				*/
-				TextReader br = new StringReader(interpolateimage);
+				TextReader br = new StringReader(interpolateImage);
 
 				/*
 				* it's possible to not have an initialization context - or we don't
@@ -84,13 +84,13 @@ namespace NVelocity.Runtime.Parser.Node
 				*  Also, do *not* dump the VM namespace for this template
 				*/
 
-				nodeTree = rsvc.Parse(br, (context != null) ? context.CurrentTemplateName : "StringLiteral", false);
+				nodeTree = runtimeServices.Parse(br, (context != null) ? context.CurrentTemplateName : "StringLiteral", false);
 
 				/*
 				*  init with context. It won't modify anything
 				*/
 
-				nodeTree.Init(context, rsvc);
+				nodeTree.Init(context, runtimeServices);
 			}
 
 			return data;
@@ -139,7 +139,7 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 					catch(Exception e)
 					{
-						rsvc.Error("Error in interpolating string literal : " + e);
+						runtimeServices.Error(string.Format("Error in interpolating string literal : {0}", e));
 						result = image;
 					}
 				}
@@ -331,8 +331,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				if (keyVal == null)
 				{
-					throw new ArgumentException("The dictionary entry " + key +
-					                            " evaluated to null, but null is not a valid dictionary key");
+					throw new ArgumentException(string.Format("The dictionary entry {0} evaluated to null, but null is not a valid dictionary key", key));
 				}
 
 				key = keyVal;
@@ -366,8 +365,7 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 					catch(Exception)
 					{
-						throw new ArgumentException("Could not convert dictionary value for entry " + keyBuilder + " with value " + val +
-						                            " to Int32. If the value is supposed to be a string, it must be enclosed with '' (single quotes)");
+						throw new ArgumentException(string.Format("Could not convert dictionary value for entry {0} with value {1} to Int32. If the value is supposed to be a string, it must be enclosed with '' (single quotes)", keyBuilder, val));
 					}
 				}
 				else
@@ -378,8 +376,7 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 					catch(Exception)
 					{
-						throw new ArgumentException("Could not convert dictionary value for entry " + keyBuilder + " with value " + val +
-						                            " to Single. If the value is supposed to be a string, it must be enclosed with '' (single quotes)");
+						throw new ArgumentException(string.Format("Could not convert dictionary value for entry {0} with value {1} to Single. If the value is supposed to be a string, it must be enclosed with '' (single quotes)", keyBuilder, val));
 					}
 				}
 			}
@@ -395,15 +392,15 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			try
 			{
-				SimpleNode inlineNode = rsvc.Parse(new StringReader(content), context.CurrentTemplateName, false);
+				SimpleNode inlineNode = runtimeServices.Parse(new StringReader(content), context.CurrentTemplateName, false);
 
-				inlineNode.Init(context, rsvc);
+				inlineNode.Init(context, runtimeServices);
 
 				return Evaluate(inlineNode, context);
 			}
 			catch(Exception)
 			{
-				throw new ArgumentException("Problem evaluating dictionary entry with content " + content);
+				throw new ArgumentException(string.Format("Problem evaluating dictionary entry with content {0}", content));
 			}
 		}
 

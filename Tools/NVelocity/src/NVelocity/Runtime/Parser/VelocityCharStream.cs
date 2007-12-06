@@ -22,8 +22,8 @@ namespace NVelocity.Runtime.Parser
 		internal int available;
 		internal int tokenBegin;
 		public int bufferPosition = -1;
-		private int[] bufline;
-		private int[] bufcolumn;
+		private int[] bufferLine;
+		private int[] bufferColumn;
 
 		private int column = 0;
 		private int line = 1;
@@ -40,44 +40,44 @@ namespace NVelocity.Runtime.Parser
 		private bool currentCharacterAvailable = false;
 
 		public VelocityCharStream(TextReader dstream,
-								  int startline, int startcolumn, int buffersize)
+								  int startLine, int startColumn, int bufferSize)
 		{
 			inputStream = dstream;
-			line = startline;
-			column = startcolumn - 1;
+			line = startLine;
+			column = startColumn - 1;
 
-			available = bufferSize = buffersize;
-			buffer = new char[buffersize];
-			bufline = new int[buffersize];
-			bufcolumn = new int[buffersize];
+			available = this.bufferSize = bufferSize;
+			buffer = new char[bufferSize];
+			bufferLine = new int[bufferSize];
+			bufferColumn = new int[bufferSize];
 		}
 
-		public VelocityCharStream(TextReader dstream, int startline, int startcolumn)
-			: this(dstream, startline, startcolumn, 4096)
+		public VelocityCharStream(TextReader dstream, int startLine, int startColumn)
+			: this(dstream, startLine, startColumn, 4096)
 		{
 		}
 
-		public void ReInit(TextReader dstream, int startline, int startcolumn, int buffersize)
+		public void ReInit(TextReader dstream, int startLine, int startColumn, int bufferSize)
 		{
 			inputStream = dstream;
-			line = startline;
-			column = startcolumn - 1;
+			line = startLine;
+			column = startColumn - 1;
 
-			if (buffer == null || buffersize != buffer.Length)
+			if (buffer == null || bufferSize != buffer.Length)
 			{
-				available = bufferSize = buffersize;
-				buffer = new char[buffersize];
-				bufline = new int[buffersize];
-				bufcolumn = new int[buffersize];
+				available = this.bufferSize = bufferSize;
+				buffer = new char[bufferSize];
+				bufferLine = new int[bufferSize];
+				bufferColumn = new int[bufferSize];
 			}
 			prevCharIsLF = prevCharIsCR = false;
 			tokenBegin = inBuf = maxNextCharInd = 0;
 			bufferPosition = -1;
 		}
 
-		public void ReInit(TextReader dstream, int startline, int startcolumn)
+		public void ReInit(TextReader dstream, int startLine, int startColumn)
 		{
-			ReInit(dstream, startline, startcolumn, 4096);
+			ReInit(dstream, startLine, startColumn, 4096);
 		}
 
 		public String GetImage()
@@ -112,8 +112,8 @@ namespace NVelocity.Runtime.Parser
 		public void Done()
 		{
 			buffer = null;
-			bufline = null;
-			bufcolumn = null;
+			bufferLine = null;
+			bufferColumn = null;
 		}
 
 		/// <summary> Method to adjust line and column numbers for the start of a token.<br/>
@@ -135,61 +135,61 @@ namespace NVelocity.Runtime.Parser
 			int i = 0, j = 0, k = 0;
 			int nextColDiff = 0, columnDiff = 0;
 
-			while (i < len && bufline[j = start % bufferSize] == bufline[k = ++start % bufferSize])
+			while (i < len && bufferLine[j = start % bufferSize] == bufferLine[k = ++start % bufferSize])
 			{
-				bufline[j] = newLine;
-				nextColDiff = columnDiff + bufcolumn[k] - bufcolumn[j];
-				bufcolumn[j] = newCol + columnDiff;
+				bufferLine[j] = newLine;
+				nextColDiff = columnDiff + bufferColumn[k] - bufferColumn[j];
+				bufferColumn[j] = newCol + columnDiff;
 				columnDiff = nextColDiff;
 				i++;
 			}
 
 			if (i < len)
 			{
-				bufline[j] = newLine++;
-				bufcolumn[j] = newCol + columnDiff;
+				bufferLine[j] = newLine++;
+				bufferColumn[j] = newCol + columnDiff;
 
 				while (i++ < len)
 				{
-					if (bufline[j = start % bufferSize] != bufline[++start % bufferSize])
-						bufline[j] = newLine++;
+					if (bufferLine[j = start % bufferSize] != bufferLine[++start % bufferSize])
+						bufferLine[j] = newLine++;
 					else
-						bufline[j] = newLine;
+						bufferLine[j] = newLine;
 				}
 			}
 
-			line = bufline[j];
-			column = bufcolumn[j];
+			line = bufferLine[j];
+			column = bufferColumn[j];
 		}
 
 		public int Column
 		{
-			get { return bufcolumn[bufferPosition]; }
+			get { return bufferColumn[bufferPosition]; }
 		}
 
 		public int Line
 		{
-			get { return bufline[bufferPosition]; }
+			get { return bufferLine[bufferPosition]; }
 		}
 
 		public int EndColumn
 		{
-			get { return bufcolumn[bufferPosition]; }
+			get { return bufferColumn[bufferPosition]; }
 		}
 
 		public int EndLine
 		{
-			get { return bufline[bufferPosition]; }
+			get { return bufferLine[bufferPosition]; }
 		}
 
 		public int BeginColumn
 		{
-			get { return bufcolumn[tokenBegin]; }
+			get { return bufferColumn[tokenBegin]; }
 		}
 
 		public int BeginLine
 		{
-			get { return bufline[tokenBegin]; }
+			get { return bufferLine[tokenBegin]; }
 		}
 
 		public char CurrentCharacter
@@ -215,38 +215,38 @@ namespace NVelocity.Runtime.Parser
 
 		private void ExpandBuff(bool wrapAround)
 		{
-			char[] newbuffer = new char[bufferSize + 2048];
-			int[] newbufline = new int[bufferSize + 2048];
-			int[] newbufcolumn = new int[bufferSize + 2048];
+			char[] newBuffer = new char[bufferSize + 2048];
+			int[] newBufferLine = new int[bufferSize + 2048];
+			int[] newBufferColumn = new int[bufferSize + 2048];
 
 			try
 			{
 				if (wrapAround)
 				{
-					Array.Copy(buffer, tokenBegin, newbuffer, 0, bufferSize - tokenBegin);
-					Array.Copy(buffer, 0, newbuffer, bufferSize - tokenBegin, bufferPosition);
-					buffer = newbuffer;
+					Array.Copy(buffer, tokenBegin, newBuffer, 0, bufferSize - tokenBegin);
+					Array.Copy(buffer, 0, newBuffer, bufferSize - tokenBegin, bufferPosition);
+					buffer = newBuffer;
 
-					Array.Copy(bufline, tokenBegin, newbufline, 0, bufferSize - tokenBegin);
-					Array.Copy(bufline, 0, newbufline, bufferSize - tokenBegin, bufferPosition);
-					bufline = newbufline;
+					Array.Copy(bufferLine, tokenBegin, newBufferLine, 0, bufferSize - tokenBegin);
+					Array.Copy(bufferLine, 0, newBufferLine, bufferSize - tokenBegin, bufferPosition);
+					bufferLine = newBufferLine;
 
-					Array.Copy(bufcolumn, tokenBegin, newbufcolumn, 0, bufferSize - tokenBegin);
-					Array.Copy(bufcolumn, 0, newbufcolumn, bufferSize - tokenBegin, bufferPosition);
-					bufcolumn = newbufcolumn;
+					Array.Copy(bufferColumn, tokenBegin, newBufferColumn, 0, bufferSize - tokenBegin);
+					Array.Copy(bufferColumn, 0, newBufferColumn, bufferSize - tokenBegin, bufferPosition);
+					bufferColumn = newBufferColumn;
 
 					maxNextCharInd = (bufferPosition += (bufferSize - tokenBegin));
 				}
 				else
 				{
-					Array.Copy(buffer, tokenBegin, newbuffer, 0, bufferSize - tokenBegin);
-					buffer = newbuffer;
+					Array.Copy(buffer, tokenBegin, newBuffer, 0, bufferSize - tokenBegin);
+					buffer = newBuffer;
 
-					Array.Copy(bufline, tokenBegin, newbufline, 0, bufferSize - tokenBegin);
-					bufline = newbufline;
+					Array.Copy(bufferLine, tokenBegin, newBufferLine, 0, bufferSize - tokenBegin);
+					bufferLine = newBufferLine;
 
-					Array.Copy(bufcolumn, tokenBegin, newbufcolumn, 0, bufferSize - tokenBegin);
-					bufcolumn = newbufcolumn;
+					Array.Copy(bufferColumn, tokenBegin, newBufferColumn, 0, bufferSize - tokenBegin);
+					bufferColumn = newBufferColumn;
 
 					maxNextCharInd = (bufferPosition -= tokenBegin);
 				}
@@ -380,8 +380,8 @@ namespace NVelocity.Runtime.Parser
 					break;
 			}
 
-			bufline[bufferPosition] = line;
-			bufcolumn[bufferPosition] = column;
+			bufferLine[bufferPosition] = line;
+			bufferColumn[bufferPosition] = column;
 		}
 
 

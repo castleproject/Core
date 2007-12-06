@@ -32,8 +32,8 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		Type ReturnType { get; }
 
-		/// <summary>  invocation method - called when the method invocationshould be
-		/// preformed and a value returned
+		/// <summary>  invocation method - called when the method invocation should be
+		/// performed and a value returned
 		/// </summary>
 		Object Invoke(Object o, Object[] paramsRenamed);
 	}

@@ -25,13 +25,13 @@ namespace NVelocity.Runtime
 
 		/**
 		* Returns the configured class introspection/reflection
-		* implemenation.
+		* implementation.
 		*/
 		IUberspect Uberspect { get; }
 
 		/**
 		* Returns the configured method introspection/reflection
-		* implemenation.
+		* implementation.
 		*/
 		Introspector Introspector { get; }
 
@@ -115,14 +115,14 @@ namespace NVelocity.Runtime
 		/// PARSER_POOL_SIZE property appropriately for their
 		/// application.  We will revisit this.
 		/// </remarks>
-		/// <param name="reader">inputstream retrieved by a resource loader</param>
+		/// <param name="reader">inputStream retrieved by a resource loader</param>
 		/// <param name="templateName">name of the template being parsed</param>
 		SimpleNode Parse(TextReader reader, String templateName);
 
 		/// <summary>
 		/// Parse the input and return the root of the AST node structure.
 		/// </summary>
-		/// <param name="reader">inputstream retrieved by a resource loader</param>
+		/// <param name="reader">inputStream retrieved by a resource loader</param>
 		/// <param name="templateName">name of the template being parsed</param>
 		/// <param name="dumpNamespace">flag to dump the Velocimacro namespace for this template</param>
 		SimpleNode Parse(TextReader reader, String templateName, bool dumpNamespace);

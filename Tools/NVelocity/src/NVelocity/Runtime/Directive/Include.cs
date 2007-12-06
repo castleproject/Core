@@ -18,7 +18,7 @@ namespace NVelocity.Runtime.Directive
 	/// 1) The included source material can only come from somewhere in
 	/// the TemplateRoot tree for security reasons. There is no way
 	/// around this.  If you want to include content from elsewhere on
-	/// your disk, use a link from somwhere under Template Root to that
+	/// your disk, use a link from somewhere under Template Root to that
 	/// content.
 	/// 
 	/// 2) By default, there is no output to the render stream in the event of
@@ -78,11 +78,11 @@ namespace NVelocity.Runtime.Directive
 
 			// get the msg, and add the space so we don't have to
 			// do it each time
-			outputMsgStart = rsvc.GetString(RuntimeConstants.ERRORMSG_START);
-			outputMsgStart = outputMsgStart + " ";
+			outputMsgStart = runtimeServices.GetString(RuntimeConstants.ERRORMSG_START);
+			outputMsgStart = string.Format("{0} ", outputMsgStart);
 
-			outputMsgEnd = rsvc.GetString(RuntimeConstants.ERRORMSG_END);
-			outputMsgEnd = " " + outputMsgEnd;
+			outputMsgEnd = runtimeServices.GetString(RuntimeConstants.ERRORMSG_END);
+			outputMsgEnd = string.Format(" {0}", outputMsgEnd);
 		}
 
 		/// <summary>
@@ -103,13 +103,13 @@ namespace NVelocity.Runtime.Directive
 				if (n.Type == ParserTreeConstants.STRING_LITERAL || n.Type == ParserTreeConstants.REFERENCE)
 				{
 					if (!RenderOutput(n, context, writer))
-						OutputErrorToStream(writer, "error with arg " + i + " please see log.");
+						OutputErrorToStream(writer, string.Format("error with arg {0} please see log.", i));
 				}
 				else
 				{
 					//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
-					rsvc.Error("#include() error : invalid argument type : " + n.ToString());
-					OutputErrorToStream(writer, "error with arg " + i + " please see log.");
+					runtimeServices.Error(string.Format("#include() error : invalid argument type : {0}", n.ToString()));
+					OutputErrorToStream(writer, string.Format("error with arg {0} please see log.", i));
 				}
 			}
 
@@ -127,7 +127,7 @@ namespace NVelocity.Runtime.Directive
 		{
 			if (node == null)
 			{
-				rsvc.Error("#include() error :  null argument");
+				runtimeServices.Error("#include() error :  null argument");
 				return false;
 			}
 
@@ -135,7 +135,7 @@ namespace NVelocity.Runtime.Directive
 			Object val = node.Value(context);
 			if (val == null)
 			{
-				rsvc.Error("#include() error :  null argument");
+				runtimeServices.Error("#include() error :  null argument");
 				return false;
 			}
 
@@ -155,21 +155,19 @@ namespace NVelocity.Runtime.Directive
 				if (current != null)
 					encoding = current.Encoding;
 				else
-					encoding = (String) rsvc.GetProperty(RuntimeConstants.INPUT_ENCODING);
+					encoding = (String) runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
 
-				resource = rsvc.GetContent(arg, encoding);
+				resource = runtimeServices.GetContent(arg, encoding);
 			}
 			catch(ResourceNotFoundException)
 			{
 				// the arg wasn't found.  Note it and throw
-				rsvc.Error("#include(): cannot find resource '" + arg + "', called from template " + context.CurrentTemplateName +
-				           " at (" + Line + ", " + Column + ")");
+				runtimeServices.Error(string.Format("#include(): cannot find resource '{0}', called from template {1} at ({2}, {3})", arg, context.CurrentTemplateName, Line, Column));
 				throw;
 			}
 			catch(Exception e)
 			{
-				rsvc.Error("#include(): arg = '" + arg + "',  called from template " + context.CurrentTemplateName + " at (" + Line +
-				           ", " + Column + ") : " + e);
+				runtimeServices.Error(string.Format("#include(): arg = '{0}',  called from template {1} at ({2}, {3}) : {4}", arg, context.CurrentTemplateName, Line, Column, e));
 			}
 
 			if (resource == null)

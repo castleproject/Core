@@ -26,14 +26,14 @@ namespace NVelocity.Test
 	[TestFixture]
 	public class MethodCallTestCase
 	{
-		private VelocityEngine ve;
+		private VelocityEngine velocityEngine;
 		private VelocityContext c;
 
 		[TestFixtureSetUp]
 		public void StartNVelocity()
 		{
-			ve = new VelocityEngine();
-			ve.Init();
+			velocityEngine = new VelocityEngine();
+			velocityEngine.Init();
 		}
 
 		[SetUp]
@@ -141,9 +141,9 @@ namespace NVelocity.Test
 		{
 			using(StringWriter sw = new StringWriter())
 			{
-				bool ok = ve.Evaluate(c, sw, "ContextTest.CaseInsensitive", template);
+				bool ok = velocityEngine.Evaluate(c, sw, "ContextTest.CaseInsensitive", template);
 
-				Assert.IsTrue(ok, "Evalutation returned failure");
+				Assert.IsTrue(ok, "Evaluation returned failure");
 
 				return sw.ToString();
 			}

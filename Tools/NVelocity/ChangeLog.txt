@@ -1,3 +1,6 @@
+- Applied Simon Cropp's patch fixing NVELOCITY-17
+  "Clean up string concatenation, variable naming and spelling errors"
+
 - Applied patch by Simon Cropp fixing NVELOCITY-16
   "Exception handling in character parsing is not optimal"
 

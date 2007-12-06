@@ -72,16 +72,16 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		private bool logWhenFound = true;
 
-		protected internal IRuntimeServices rsvc = null;
+		protected internal IRuntimeServices runtimeServices = null;
 
 		/// <summary>
 		/// Initialize the ResourceManager.
 		/// </summary>
 		public void Initialize(IRuntimeServices rs)
 		{
-			rsvc = rs;
+			runtimeServices = rs;
 
-			rsvc.Info("Default ResourceManager initializing. (" + GetType() + ")");
+			runtimeServices.Info(string.Format("Default ResourceManager initializing. ({0})", GetType()));
 
 			ResourceLoader resourceLoader;
 
@@ -94,46 +94,41 @@ namespace NVelocity.Runtime.Resource
 
 				if (loaderClass == null)
 				{
-					rsvc.Error("Unable to find '" + configuration.GetString(RESOURCE_LOADER_IDENTIFIER) +
-					           ".resource.loader.class' specification in configuation." +
-					           " This is a critical value.  Please adjust configuration.");
+					runtimeServices.Error(string.Format("Unable to find '{0}.resource.loader.class' specification in configuration. This is a critical value.  Please adjust configuration.", configuration.GetString(RESOURCE_LOADER_IDENTIFIER)));
 					continue;
 				}
 
-				resourceLoader = ResourceLoaderFactory.getLoader(rsvc, loaderClass);
-				resourceLoader.CommonInit(rsvc, configuration);
+				resourceLoader = ResourceLoaderFactory.getLoader(runtimeServices, loaderClass);
+				resourceLoader.CommonInit(runtimeServices, configuration);
 				resourceLoader.Init(configuration);
 				resourceLoaders.Add(resourceLoader);
 			}
 
 			// now see if this is overridden by configuration
-			logWhenFound = rsvc.GetBoolean(RuntimeConstants.RESOURCE_MANAGER_LOGWHENFOUND, true);
+			logWhenFound = runtimeServices.GetBoolean(RuntimeConstants.RESOURCE_MANAGER_LOGWHENFOUND, true);
 
 			// now, is a global cache specified?
-			String claz = rsvc.GetString(RuntimeConstants.RESOURCE_MANAGER_CACHE_CLASS);
+			String clazz = runtimeServices.GetString(RuntimeConstants.RESOURCE_MANAGER_CACHE_CLASS);
 			Object o = null;
 
-			if (claz != null && claz.Length > 0)
+			if (clazz != null && clazz.Length > 0)
 			{
 				try
 				{
-					Type type = Type.GetType(claz);
+					Type type = Type.GetType(clazz);
 					o = Activator.CreateInstance(type);
 				}
 				catch(Exception)
 				{
-					String err = "The specified class for ResourceCache (" + claz +
-					             ") does not exist (or is not accessible to the current classloader).";
-					rsvc.Error(err);
+					String err = string.Format("The specified class for ResourceCache ({0}) does not exist (or is not accessible to the current classLoader).", clazz);
+					runtimeServices.Error(err);
 					o = null;
 				}
 
 				if (!(o is ResourceCache))
 				{
-					String err = "The specified class for ResourceCache (" + claz +
-					             ") does not implement NVelocity.Runtime.Resource.ResourceCache." +
-					             " Using default ResourceCache implementation.";
-					rsvc.Error(err);
+					String err = string.Format("The specified class for ResourceCache ({0}) does not implement NVelocity.Runtime.Resource.ResourceCache. Using default ResourceCache implementation.", clazz);
+					runtimeServices.Error(err);
 					o = null;
 				}
 			}
@@ -145,14 +140,14 @@ namespace NVelocity.Runtime.Resource
 			}
 
 			globalCache = (ResourceCache) o;
-			globalCache.initialize(rsvc);
-			rsvc.Info("Default ResourceManager initialization complete.");
+			globalCache.initialize(runtimeServices);
+			runtimeServices.Info("Default ResourceManager initialization complete.");
 		}
 
 		/// <summary>
 		/// This will produce a List of Hashtables, each
-		/// hashtable contains the intialization info for
-		/// a particular resource loader. This Hastable
+		/// hashtable contains the initialization info for
+		/// a particular resource loader. This Hashtable
 		/// will be passed in when initializing the
 		/// the template loader.
 		/// </summary>
@@ -163,7 +158,7 @@ namespace NVelocity.Runtime.Resource
 				return;
 			}
 
-			ArrayList resourceLoaderNames = rsvc.Configuration.GetVector(RuntimeConstants.RESOURCE_LOADER);
+			ArrayList resourceLoaderNames = runtimeServices.Configuration.GetVector(RuntimeConstants.RESOURCE_LOADER);
 
 			for(int i = 0; i < resourceLoaderNames.Count; i++)
 			{
@@ -175,17 +170,16 @@ namespace NVelocity.Runtime.Resource
 				 * The loader id is the prefix used for all properties
 				 * pertaining to a particular loader.
 				 */
-				String loaderID = resourceLoaderNames[i] + "." + RuntimeConstants.RESOURCE_LOADER;
+				String loaderID = string.Format("{0}.{1}", resourceLoaderNames[i], RuntimeConstants.RESOURCE_LOADER);
 
-				ExtendedProperties loaderConfiguration = rsvc.Configuration.Subset(loaderID);
+				ExtendedProperties loaderConfiguration = runtimeServices.Configuration.Subset(loaderID);
 
 				/*
 				 *  we can't really count on ExtendedProperties to give us an empty set
 				 */
 				if (loaderConfiguration == null)
 				{
-					rsvc.Warn("ResourceManager : No configuration information for resource loader named '" + resourceLoaderNames[i] +
-					          "'. Skipping.");
+					runtimeServices.Warn(string.Format("ResourceManager : No configuration information for resource loader named '{0}'. Skipping.", resourceLoaderNames[i]));
 					continue;
 				}
 
@@ -258,15 +252,15 @@ namespace NVelocity.Runtime.Resource
 
 					return GetResource(resourceName, resourceType, encoding);
 				}
-				catch(ParseErrorException pee)
+				catch(ParseErrorException parseErrorException)
 				{
-					rsvc.Error("ResourceManager.GetResource() exception: " + pee);
+					runtimeServices.Error(string.Format("ResourceManager.GetResource() exception: {0}", parseErrorException));
 
 					throw;
 				}
-				catch(Exception eee)
+				catch(Exception exception)
 				{
-					rsvc.Error("ResourceManager.GetResource() exception: " + eee);
+					runtimeServices.Error(string.Format("ResourceManager.GetResource() exception: {0}", exception));
 
 					throw;
 				}
@@ -285,19 +279,19 @@ namespace NVelocity.Runtime.Resource
 				}
 				catch(ResourceNotFoundException)
 				{
-					rsvc.Error("ResourceManager : unable to find resource '" + resourceName + "' in any resource loader.");
+					runtimeServices.Error(string.Format("ResourceManager : unable to find resource '{0}' in any resource loader.", resourceName));
 
 					throw;
 				}
 				catch(ParseErrorException pee)
 				{
-					rsvc.Error("ResourceManager.GetResource() parse exception: " + pee);
+					runtimeServices.Error(string.Format("ResourceManager.GetResource() parse exception: {0}", pee));
 
 					throw;
 				}
 				catch(Exception ee)
 				{
-					rsvc.Error("ResourceManager.GetResource() exception new: " + ee);
+					runtimeServices.Error(string.Format("ResourceManager.GetResource() exception new: {0}", ee));
 
 					throw;
 				}
@@ -325,7 +319,7 @@ namespace NVelocity.Runtime.Resource
 		{
 			Resource resource = ResourceFactory.GetResource(resourceName, resourceType);
 
-			resource.RuntimeServices = rsvc;
+			resource.RuntimeServices = runtimeServices;
 
 			resource.Name = resourceName;
 			resource.Encoding = encoding;
@@ -367,7 +361,7 @@ namespace NVelocity.Runtime.Resource
 
 						if (logWhenFound)
 						{
-							rsvc.Info("ResourceManager : found " + resourceName + " with loader " + resourceLoader.ClassName);
+							runtimeServices.Info(string.Format("ResourceManager : found {0} with loader {1}", resourceName, resourceLoader.ClassName));
 						}
 
 						howOldItWas = resourceLoader.GetLastModified(resource);
@@ -388,7 +382,7 @@ namespace NVelocity.Runtime.Resource
 			*/
 			if (resource.Data == null)
 			{
-				throw new ResourceNotFoundException("Unable to find resource '" + resourceName + "'");
+				throw new ResourceNotFoundException(string.Format("Unable to find resource '{0}'", resourceName));
 			}
 
 			/*
@@ -449,8 +443,7 @@ namespace NVelocity.Runtime.Resource
 
 					if (!resource.Encoding.Equals(encoding))
 					{
-						rsvc.Error("Declared encoding for template '" + resource.Name + "' is different on reload.  Old = '" +
-						           resource.Encoding + "'  New = '" + encoding);
+						runtimeServices.Error(string.Format("Declared encoding for template '{0}' is different on reload.  Old = '{1}'  New = '{2}", resource.Name, resource.Encoding, encoding));
 
 						resource.Encoding = encoding;
 					}

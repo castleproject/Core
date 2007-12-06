@@ -17,7 +17,7 @@ namespace NVelocity.Runtime.Directive
 	/// 1) The parsed source material can only come from somewhere in
 	/// the TemplateRoot tree for security reasons. There is no way
 	/// around this.  If you want to include content from elsewhere on
-	/// your disk, use a link from somwhere under Template Root to that
+	/// your disk, use a link from somewhere under Template Root to that
 	/// content.
 	/// 
 	/// 2) There is a limited parse depth.  It is set as a property
@@ -83,7 +83,7 @@ namespace NVelocity.Runtime.Directive
 			}
 			else
 			{
-				encoding = (String) rsvc.GetProperty(RuntimeConstants.INPUT_ENCODING);
+				encoding = (String) runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
 			}
 
 			// now use the Runtime resource loader to get the template
@@ -109,7 +109,7 @@ namespace NVelocity.Runtime.Directive
 			bool result = true;
 			if (node.GetChild(0) == null)
 			{
-				rsvc.Error("#parse() error :  null argument");
+				runtimeServices.Error("#parse() error :  null argument");
 				result = false;
 			}
 			return result;
@@ -123,7 +123,7 @@ namespace NVelocity.Runtime.Directive
 
 			if (value == null)
 			{
-				rsvc.Error("#parse() error :  null argument");
+				runtimeServices.Error("#parse() error :  null argument");
 				result = false;
 			}
 			return result;
@@ -138,16 +138,16 @@ namespace NVelocity.Runtime.Directive
 			bool result = true;
 			Object[] templateStack = context.TemplateNameStack;
 
-			if (templateStack.Length >= rsvc.GetInt(RuntimeConstants.PARSE_DIRECTIVE_MAXDEPTH, 20))
+			if (templateStack.Length >= runtimeServices.GetInt(RuntimeConstants.PARSE_DIRECTIVE_MAXDEPTH, 20))
 			{
 				StringBuilder path = new StringBuilder();
 
 				for(int i = 0; i < templateStack.Length; ++i)
 				{
-					path.Append(" > " + templateStack[i]);
+					path.AppendFormat(" > {0}", (object[]) templateStack[i]);
 				}
 
-				rsvc.Error("Max recursion depth reached (" + templateStack.Length + ")" + " File stack:" + path);
+				runtimeServices.Error(string.Format("Max recursion depth reached ({0}) File stack:{1}", templateStack.Length, path));
 				result = false;
 			}
 			return result;
@@ -159,27 +159,25 @@ namespace NVelocity.Runtime.Directive
 			Template result = null;
 			try
 			{
-				result = rsvc.GetTemplate(arg, encoding);
+				result = runtimeServices.GetTemplate(arg, encoding);
 			}
 			catch(ResourceNotFoundException)
 			{
 				// the arg wasn't found.  Note it and throw
-				rsvc.Error("#parse(): cannot find template '" + arg + "', called from template " + context.CurrentTemplateName +
-				           " at (" + Line + ", " + Column + ")");
+				runtimeServices.Error(string.Format("#parse(): cannot find template '{0}', called from template {1} at ({2}, {3})", arg, context.CurrentTemplateName, Line, Column));
 				throw;
 			}
 			catch(ParseErrorException)
 			{
 				// the arg was found, but didn't parse - syntax error
 				// note it and throw
-				rsvc.Error("#parse(): syntax error in #parse()-ed template '" + arg + "', called from template " +
-				           context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
+				runtimeServices.Error(string.Format("#parse(): syntax error in #parse()-ed template '{0}', called from template {1} at ({2}, {3})", arg, context.CurrentTemplateName, Line, Column));
 
 				throw;
 			}
 			catch(Exception e)
 			{
-				rsvc.Error("#parse() : arg = " + arg + ".  Exception : " + e);
+				runtimeServices.Error(string.Format("#parse() : arg = {0}.  Exception : {1}", arg, e));
 				result = null;
 			}
 			return result;
@@ -199,7 +197,7 @@ namespace NVelocity.Runtime.Directive
 				// if (e is MethodInvocationException)
 				throw;
 
-				// rsvc.Error("Exception rendering #parse( " + arg + " )  : " + e);
+				// runtimeServices.Error("Exception rendering #parse( " + arg + " )  : " + e);
 				// result = false;
 			}
 			finally
