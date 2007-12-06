@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied James Curran's patch fixing MR-347
+  "Cannot specify a default value for ViewComponentParameterAttribute"
+
 - Applied Adam Tybor's patch fixing MR-370
   "RouteContext and Http Method Filtering for PatternRule"
 

@@ -81,7 +81,23 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		private IRailsEngineContext railsContext;
 
-		private string[] sectionsFromAttribute;
+		/// <summary>
+		/// Holds a reference to the <see cref="ViewComponentDetailsAttribute"/> if any.
+		/// </summary>
+		private ViewComponentDetailsAttribute detailsAtt;
+
+		/// <summary>
+		/// Initializes a new instance of the ViewComponent class.
+		/// </summary>
+		public ViewComponent()
+		{
+			object[] attributes = GetType().GetCustomAttributes(typeof (ViewComponentDetailsAttribute), true);
+
+			if (attributes.Length != 0)
+			{
+				detailsAtt = attributes[0] as ViewComponentDetailsAttribute;
+			}
+		}
 
 		#region "Internal" core methods
 
@@ -108,13 +124,13 @@ namespace Castle.MonoRail.Framework
 			IConverter converter = new DefaultConverter();
 
 			PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-		
-			foreach(PropertyInfo property in properties)
+
+			foreach (PropertyInfo property in properties)
 			{
 				if (!property.CanWrite) continue;
 
-				object[] attributes = property.GetCustomAttributes(typeof(ViewComponentParamAttribute), true);
-			
+				object[] attributes = property.GetCustomAttributes(typeof (ViewComponentParamAttribute), true);
+
 				if (attributes.Length == 1)
 				{
 					BindParameter((ViewComponentParamAttribute) attributes[0], property, converter);
@@ -126,15 +142,16 @@ namespace Castle.MonoRail.Framework
 		{
 			string compParamKey = string.IsNullOrEmpty(paramAtt.ParamName) ? property.Name : paramAtt.ParamName;
 
-			object value = ComponentParams[compParamKey];
+			object value = ComponentParams[compParamKey] ?? paramAtt.Default;
 
 			if (value == null)
 			{
-				if (paramAtt.Required && 
-					(property.PropertyType.IsValueType || property.GetValue(this, null) == null))
+				if (paramAtt.Required &&
+				    (property.PropertyType.IsValueType || property.GetValue(this, null) == null))
 				{
 					throw new ViewComponentException(string.Format("The parameter '{0}' is required by " +
-						"the ViewComponent {1} but was not passed or had a null value", compParamKey, GetType().Name));
+					                                               "the ViewComponent {1} but was not passed or had a null value",
+					                                               compParamKey, GetType().Name));
 				}
 			}
 			else
@@ -154,10 +171,11 @@ namespace Castle.MonoRail.Framework
 						throw new Exception("Could not convert '" + value + "' to type " + property.PropertyType);
 					}
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					throw new ViewComponentException(string.Format("Error trying to set value for parameter '{0}' " +
-						"on ViewComponent {1}: {2}", compParamKey, GetType().Name, ex.Message), ex);
+					                                               "on ViewComponent {1}: {2}", compParamKey, GetType().Name,
+					                                               ex.Message), ex);
 				}
 			}
 		}
@@ -188,40 +206,26 @@ namespace Castle.MonoRail.Framework
 		/// <c>name</c> is a known section the view component
 		/// supports.
 		/// </summary>
+		/// <remarks>In general, this should not be implemented in a derived class. <see cref="ViewComponentDetailsAttribute"/>
+		/// should be used to indicate allowed section names instead.
+		/// </remarks>
 		/// <param name="name">section being added</param>
 		/// <returns><see langword="true"/> if section is supported</returns>
 		public virtual bool SupportsSection(string name)
 		{
-			// TODO: We need to cache this
-
-			if (sectionsFromAttribute == null)
+			if (detailsAtt != null)
 			{
-				object[] attributes = GetType().GetCustomAttributes(typeof(ViewComponentDetailsAttribute), true);
-
-				if (attributes.Length != 0)
-				{
-					ViewComponentDetailsAttribute detailsAtt = (ViewComponentDetailsAttribute) attributes[0];
-
-					if (!string.IsNullOrEmpty(detailsAtt.Sections))
-					{
-						sectionsFromAttribute = detailsAtt.Sections.Split(',');
-					}
-				}
-
-				if (sectionsFromAttribute == null)
-				{
-					sectionsFromAttribute = new string[0];
-				}
+				return detailsAtt.SupportsSection(name);
 			}
-			
-			return Array.Find(sectionsFromAttribute, 
-				delegate(string item)
-					{ return string.Equals(item, name, StringComparison.InvariantCultureIgnoreCase); }) != null;
+			else
+			{
+				return false;
+			}
 		}
 
 		#endregion
 
-		#region Usefull properties
+		#region Useful properties
 
 		/// <summary>
 		/// Gets the Component Context
@@ -415,9 +419,9 @@ namespace Castle.MonoRail.Framework
 		private String GetBaseViewPath(String componentName, string name)
 		{
 			string viewPath = Path.Combine("components", componentName);
-			if(Context.ViewEngine.HasTemplate(Path.Combine(viewPath, name))==false)
+			if (Context.ViewEngine.HasTemplate(Path.Combine(viewPath, name)) == false)
 			{
-				viewPath = Path.Combine("components", componentName+"Component");	
+				viewPath = Path.Combine("components", componentName + "Component");
 			}
 			return viewPath;
 		}

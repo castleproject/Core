@@ -38,28 +38,28 @@ namespace Castle.MonoRail.Framework
 	/// <summary>
 	/// Decorates a <see cref="ViewComponent"/> to associate a custom name with it.
 	/// </summary>
-    /// <remarks>
-    /// Decorates a <see cref="ViewComponent"/> to associate a custom name with it.
-    /// <para>
-    /// Optionally you can associate the section names supported by the 
-    /// <see cref="ViewComponent"/>.
-    /// </para>
-    /// </remarks>
-    /// <example>
-    /// In the code below, the class MyHeaderViewConponent will be referenced as just <c>Header</c>,
-    /// and it will support the subsections <c>header</c> and <c>footer</c>.
-    /// <code><![CDATA[
-    /// [ViewComponentDetails("Header", Sections="header,footer")
-    /// public class MyHeaderViewComponent : ViewComponent
-    /// {
-    ///    // :
-    ///    // :
-    /// }
-    /// ]]>
-    /// </code>
-    /// </example>
-    /// <seealso cref="ViewComponent"/>
-    /// <seealso cref="ViewComponentParamAttribute"/>
+	/// 	<remarks>
+	/// Decorates a <see cref="ViewComponent"/> to associate a custom name with it.
+	/// <para>
+	/// Optionally you can associate the section names supported by the 
+	/// <see cref="ViewComponent"/>.
+	/// </para>
+	/// </remarks>
+	/// <example>
+	/// In the code below, the class MyHeaderViewConponent will be referenced as just <c>Header</c>,
+	/// and it will support the subsections <c>header</c> and <c>footer</c>.
+	/// <code><![CDATA[
+	/// [ViewComponentDetails("Header", Sections="header,footer")
+	/// public class MyHeaderViewComponent : ViewComponent
+	/// {
+	///    // :
+	///    // :
+	/// }
+	/// ]]>
+	/// </code>
+	/// </example>
+	/// <seealso cref="ViewComponent"/>
+	/// <seealso cref="ViewComponentParamAttribute"/>
 	[AttributeUsage(AttributeTargets.Class), Serializable]
 	public class ViewComponentDetailsAttribute : Attribute
 	{
@@ -67,6 +67,7 @@ namespace Castle.MonoRail.Framework
 		private string sections;
 		private ViewComponentCache cache = ViewComponentCache.Disabled;
 		private Type cacheKeyFactory;
+		private string[] sectionsFromAttribute;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ViewComponentDetailsAttribute"/> class.
@@ -92,7 +93,19 @@ namespace Castle.MonoRail.Framework
 		public string Sections
 		{
 			get { return sections; }
-			set { sections = value; }
+			set
+			{
+				sections = value;
+				if (!string.IsNullOrEmpty(sections))
+				{
+					sectionsFromAttribute = sections.Split(new char[] {',', ' ', '|'}, StringSplitOptions.RemoveEmptyEntries);
+				}
+
+				if (sectionsFromAttribute == null)
+				{
+					sectionsFromAttribute = new string[0];
+				}
+			}
 		}
 
 		/// <summary>
@@ -120,6 +133,17 @@ namespace Castle.MonoRail.Framework
 				}
 				cacheKeyFactory = value;
 			}
+		}
+
+		/// <summary>
+		/// Returns true if the section name specified is present on the list of sections.
+		/// </summary>
+		/// <param name="name">The section name.</param>
+		/// <returns></returns>
+		public bool SupportsSection(string name)
+		{
+			return Array.FindIndex(sectionsFromAttribute,
+							  delegate(string item) { return string.Equals(item, name, StringComparison.InvariantCultureIgnoreCase); }) != -1;
 		}
 	}
 }
