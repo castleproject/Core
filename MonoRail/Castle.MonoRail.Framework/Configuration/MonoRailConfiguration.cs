@@ -35,6 +35,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private ControllersConfig controllersConfig;
 		private ViewComponentsConfig viewComponentsConfig;
 		private ScaffoldConfig scaffoldConfig;
+		private UrlConfig urlConfig;
 
 		private RoutingRuleCollection routingRules;
 		private ExtensionEntryCollection extensions;
@@ -51,6 +52,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			controllersConfig = new ControllersConfig();
 			viewComponentsConfig = new ViewComponentsConfig();
 			scaffoldConfig = new ScaffoldConfig();
+			urlConfig = new UrlConfig();
 			routingRules = new RoutingRuleCollection();
 			extensions = new ExtensionEntryCollection();
 			services = new ServiceEntryCollection();
@@ -107,6 +109,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			controllersConfig.Deserialize(node);
 			viewComponentsConfig.Deserialize(node);
 			scaffoldConfig.Deserialize(node);
+			urlConfig.Deserialize(node);
 
 			services.Deserialize(node);
 			extensions.Deserialize(node);
@@ -218,6 +221,15 @@ namespace Castle.MonoRail.Framework.Configuration
 		public ScaffoldConfig ScaffoldConfig
 		{
 			get { return scaffoldConfig; }
+		}
+
+		/// <summary>
+		/// Gets the url config.
+		/// </summary>
+		/// <value>The url config.</value>
+		public UrlConfig UrlConfig
+		{
+			get { return urlConfig; }	
 		}
 
 		/// <summary>

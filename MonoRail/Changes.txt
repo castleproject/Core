@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied Daniel Jin's patch fixing MR-372
+  "add monorail configuration section to set the useExtensions option on DefaultUrlBuilder"
+
 - Fixed MR-84
   "Nested classes are mapped wrongly to form fields"
 

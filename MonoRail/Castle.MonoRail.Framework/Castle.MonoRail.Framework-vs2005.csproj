@@ -161,6 +161,7 @@
     <Compile Include="Attributes\ViewComponentParamAttribute.cs" />
     <Compile Include="Configuration\DefaultUrl.cs" />
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
+    <Compile Include="Configuration\UrlConfig.cs" />
     <Compile Include="IController.cs" />
     <Compile Include="Extensions\ExceptionChaining\LocalExceptionFilterHandler.cs" />
     <Compile Include="Internal\Descriptors\ViewComponentDescriptor.cs" />
