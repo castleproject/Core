@@ -206,6 +206,7 @@ namespace Castle.MonoRail.Views.Brail
 				if (subView.Properties.Contains(entry.Key + ".@bubbleUp") == false)
 					continue;
 				properties[entry.Key] = entry.Value;
+				properties[entry.Key + ".@bubbleUp"] = true;
 			}
 		}
 

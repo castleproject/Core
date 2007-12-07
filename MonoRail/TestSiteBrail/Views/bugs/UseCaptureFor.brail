@@ -1,1 +1,1 @@
-<% component CaptureFor, {@id: "title", @bubbleUp: true}: %>ayende<% end %>
+<% component CaptureFor, {@id: "title"}: %>ayende<% end %>

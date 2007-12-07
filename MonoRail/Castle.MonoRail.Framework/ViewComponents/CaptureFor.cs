@@ -71,11 +71,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 			//This makes sure that Brail would bubble the content
 			//up to a parent view if called from a sub view.
-			bool? bubbleUp = (bool?)Context.ComponentParameters["bubbleUp"];
-			if (bubbleUp == true)
-			{
-				Context.ContextVars[id + ".@bubbleUp"] = true;
-			}
+			Context.ContextVars[id + ".@bubbleUp"] = true;
 		}
 	}
 }
