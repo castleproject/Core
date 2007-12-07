@@ -40,7 +40,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		/// </summary>
 		protected IDictionary service2Handler;
 
-		private ReaderWriterLock locker = new ReaderWriterLock();
+		private readonly ReaderWriterLock locker = new ReaderWriterLock();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultNamingSubSystem"/> class.
@@ -48,7 +48,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		public DefaultNamingSubSystem()
 		{
 			key2Handler = new ListDictionary();
-			service2Handler = new Hashtable();
+			service2Handler = new ListDictionary();
 		}
 
 		#region INamingSubSystem Members

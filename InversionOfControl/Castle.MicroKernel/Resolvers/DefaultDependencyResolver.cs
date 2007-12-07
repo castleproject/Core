@@ -336,16 +336,7 @@ namespace Castle.MicroKernel.Resolvers
 				}
 				else
 				{
-					IHandler[] handlers = kernel.GetHandlers(dependency.TargetType);
-
-					foreach (IHandler maybeCorrectHandler in handlers)
-					{
-						if (context.HandlerIsCurrentlyBeingResolved(maybeCorrectHandler) == false)
-						{
-							handler = maybeCorrectHandler;
-							break;
-						}
-					}
+					handler = TryGetHandlerFromKernel(dependency, context);
 
 					if (handler == null)
 					{
@@ -356,7 +347,6 @@ namespace Castle.MicroKernel.Resolvers
 							"You must provide an override if a component " +
 							"has a dependency on a service that it - itself - provides");
 					}
-
 				}
 			}
 
@@ -365,6 +355,29 @@ namespace Castle.MicroKernel.Resolvers
 			context = RebuildContextForParameter(context, dependency.TargetType);
 
 			return handler.Resolve(context);
+		}
+
+		private IHandler TryGetHandlerFromKernel(DependencyModel dependency, CreationContext context)
+		{
+			// we are doing it in two stages because it is likely to be faster to a lookup
+			// by key than a linear search
+			IHandler handler = kernel.GetHandler(dependency.TargetType);
+			if (context.HandlerIsCurrentlyBeingResolved(handler) == false)
+				return handler;
+			
+			// make a best effort to find another one that fit
+
+			IHandler[] handlers = kernel.GetHandlers(dependency.TargetType);
+
+			foreach (IHandler maybeCorrectHandler in handlers)
+			{
+				if (context.HandlerIsCurrentlyBeingResolved(maybeCorrectHandler) == false)
+				{
+					handler = maybeCorrectHandler;
+					break;
+				}
+			}
+			return handler;
 		}
 
 		protected virtual object ResolveParameterDependency(CreationContext context, ComponentModel model,
