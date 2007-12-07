@@ -31,12 +31,17 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		/// <summary>
 		/// Map(String, IHandler) to map component keys
 		/// to <see cref="IHandler"/>
+		/// Items in this dictionary are sorted in insertion order.
 		/// </summary>
 		protected IDictionary key2Handler;
 
 		/// <summary>
-		/// Map(Type, IHandler) to map services 
-		/// to <see cref="IHandler"/>
+		/// Map(Type, IHandler) to map a service
+		/// to <see cref="IHandler"/>.
+		/// If there is more than a single service of the type, only the first
+		/// registered services is stored in this dictionary.
+		/// It serve as a fast lookup for the common case of having a single handler for 
+		/// a type.
 		/// </summary>
 		protected IDictionary service2Handler;
 
@@ -48,7 +53,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		public DefaultNamingSubSystem()
 		{
 			key2Handler = new ListDictionary();
-			service2Handler = new ListDictionary();
+			service2Handler = new Hashtable();
 		}
 
 		#region INamingSubSystem Members
