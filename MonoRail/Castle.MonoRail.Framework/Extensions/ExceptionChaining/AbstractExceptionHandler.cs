@@ -89,6 +89,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	
 			sbMessage.Append("\r\nEnvironment and params");
 			sbMessage.Append("\r\n======================\r\n\r\n");
+			sbMessage.AppendFormat("Machine {0}\r\n", Environment.MachineName);
 			sbMessage.AppendFormat("ApplicationPath {0}\r\n", context.ApplicationPath);
 			sbMessage.AppendFormat("ApplicationPhysicalPath {0}\r\n", context.ApplicationPhysicalPath);
 			sbMessage.AppendFormat("RequestType {0}\r\n", context.RequestType);
