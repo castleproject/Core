@@ -170,6 +170,7 @@
     <Compile Include="Configuration\ConfigurationTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EventTests.cs" />
     <Compile Include="Facilities\FactorySupport\FactorySupportProgrammaticTestCase.cs" />
     <Compile Include="Facilities\FactorySupport\FactorySupportTestCase.cs" />
     <Compile Include="Facilities\Startable\Components\StartableComponentWithCustomDependencies.cs" />
@@ -181,9 +182,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DependencyResolvers.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DependencyResolvingTestCases.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Facilities\Startable\Components\NoInterfaceStartableComponent.cs">
