@@ -44,7 +44,6 @@ namespace Castle.MicroKernel.Tests
 
 			AlarmGenerator gen = (AlarmGenerator)kernel["generator"];
 			Assert.AreEqual(typeof(EmailSender), gen.Sender.GetType());
-
 		}
 	}
 

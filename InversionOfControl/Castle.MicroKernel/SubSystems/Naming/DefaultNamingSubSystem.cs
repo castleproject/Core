@@ -213,7 +213,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 			ArrayList list = new ArrayList();
 
-			foreach(IHandler handler in GetHandlers())
+			foreach (IHandler handler in GetHandlers())
 			{
 				if (service == handler.ComponentModel.Service)
 				{
@@ -221,7 +221,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 				}
 			}
 
-			return (IHandler[]) list.ToArray(typeof(IHandler));
+			return (IHandler[]) list.ToArray(typeof (IHandler));
 		}
 
 		public virtual IHandler[] GetAssignableHandlers(Type service)
@@ -230,15 +230,24 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 			ArrayList list = new ArrayList();
 
-			foreach(IHandler handler in GetHandlers())
+			foreach (IHandler handler in GetHandlers())
 			{
-				if (service.IsAssignableFrom(handler.ComponentModel.Service))
+				Type handlerService = handler.ComponentModel.Service;
+				if (service.IsAssignableFrom(handlerService))
 				{
 					list.Add(handler);
 				}
+				else
+				{
+					if (service.IsGenericType &&
+						service.GetGenericTypeDefinition().IsAssignableFrom(handlerService))
+					{
+						list.Add(handler);
+					}
+				}
 			}
 
-			return (IHandler[]) list.ToArray(typeof(IHandler));
+			return (IHandler[]) list.ToArray(typeof (IHandler));
 		}
 
 		public virtual IHandler[] GetHandlers()

@@ -703,6 +703,24 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
+		/// Returns all the valid component instances by
+		/// the service type
+		/// </summary>
+		/// <param name="service">The service type</param>
+		/// <param name="arguments">Arguments to resolve the services</param>
+		public Array ResolveAll(Type service, IDictionary arguments)
+		{
+			ArrayList list = new ArrayList();
+			IHandler[] handlers = GetAssignableHandlers(service);
+			foreach (IHandler handler in handlers)
+			{
+				object component = ResolveComponent(handler, service, arguments);
+				list.Add(component);
+			}
+			return list.ToArray(service);
+		}
+
+		/// <summary>
 		/// Returns the component instance by the service type
 		/// using dynamic arguments
 		/// </summary>
