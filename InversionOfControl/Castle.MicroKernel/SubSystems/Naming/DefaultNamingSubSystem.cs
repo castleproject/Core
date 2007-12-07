@@ -52,7 +52,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		/// </summary>
 		public DefaultNamingSubSystem()
 		{
-			key2Handler = new ListDictionary();
+			key2Handler = new OrderedDictionary();
 			service2Handler = new Hashtable();
 		}
 
