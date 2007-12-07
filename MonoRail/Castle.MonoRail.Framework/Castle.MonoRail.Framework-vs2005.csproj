@@ -167,7 +167,6 @@
     <Compile Include="Internal\Descriptors\ViewComponentDescriptor.cs" />
     <Compile Include="Internal\Providers\DefaultViewComponentDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\IViewComponentDescriptorProvider.cs" />
-    <Compile Include="Internal\ReflectionBasedDictionaryAdapter.cs" />
     <Compile Include="Internal\ViewComponentCacheBag.cs" />
     <Compile Include="IRescueController.cs" />
     <Compile Include="IRouteContext.cs" />

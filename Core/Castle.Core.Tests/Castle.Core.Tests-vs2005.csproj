@@ -47,6 +47,7 @@
     <Compile Include="GraphTestCase.cs" />
     <Compile Include="LevelFilteredLoggerTests.cs" />
     <Compile Include="LinkedListTestCase.cs" />
+    <Compile Include="ReflectionBasedDictionaryAdapterTestCase.cs" />
     <Compile Include="Resources\AssemblyResourceFactoryTestCase.cs" />
     <Compile Include="Resources\CustomUriTestCase.cs" />
     <Compile Include="Resources\FileResourceFactoryTestCase.cs" />

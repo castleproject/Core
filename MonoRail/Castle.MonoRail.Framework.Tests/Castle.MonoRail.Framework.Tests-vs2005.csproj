@@ -158,7 +158,6 @@
     <Compile Include="Helpers\TextHelperTestCase.cs" />
     <Compile Include="Helpers\UrlForHelperTestCase.cs" />
     <Compile Include="Helpers\Validations\FormValidationTestCase.cs" />
-    <Compile Include="Internal\ReflectionBasedDictionaryAdapterTestCase.cs" />
     <Compile Include="PostBackTestCase.cs" />
     <Compile Include="DefaultControllerFactoryTestCase.cs">
       <SubType>Code</SubType>
@@ -225,6 +224,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Internal\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
