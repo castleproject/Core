@@ -121,6 +121,27 @@
 		<property name="project.vsproj" value="${project::get-name()}-vs2005.csproj" />
 	</target>
 
+	<target name="set-net-3.5-framework-configuration">
+		<property name="nant.settings.currentframework" value="net-3.5" />
+		<property name="current.build.defines" value="${build.defines},NET,DOTNET35" />
+		<property name="link.sdkdoc.version" value="SDK_v3_5" />
+		<property name="merge.targetplatform" value="v3" />
+		<property name="csc.keyfile" value="/keyfile:${key.file}" />
+		<!-- If DevEnvDir exists, we grab it, otherwise we try if the default location (if it exists) 
+		<if test="${environment::variable-exists('DevEnvDir')}">
+			<property name="dev.env.dir" value="${environment::get-variable('DevEnvDir')}" />
+		</if>
+		<if test="${not environment::variable-exists('DevEnvDir')}">
+			<property name="default.dev.env.dir" value="%ProgramFiles%\Microsoft Visual Studio 8\Common7\IDE" />
+			<if test="${directory::exists(default.dev.env.dir)}">
+				<property name="dev.env.dir" value="${default.dev.env.dir}" />
+			</if>
+		</if>
+		-->
+		<property name="build.msbuild"	value="false" overwrite="false" />
+		<property name="project.vsproj" value="${project::get-name()}-vs2008.csproj" />
+	</target>
+
 	<target name="set-mono-1.0-framework-configuration">
 		<property name="nant.settings.currentframework" value="mono-1.0" />
 		<property name="current.build.defines" value="${build.defines},MONO,MONO1" />
