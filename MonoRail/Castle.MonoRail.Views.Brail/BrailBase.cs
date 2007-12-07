@@ -201,6 +201,12 @@ namespace Castle.MonoRail.Views.Brail
 				subView.properties[entry.Key] = entry.Value;
 			}
 			subView.Run();
+			foreach (DictionaryEntry entry in subView.Properties)
+			{
+				if (subView.Properties.Contains(entry.Key + ".@bubbleUp") == false)
+					continue;
+				properties[entry.Key] = entry.Value;
+			}
 		}
 
 		/// <summary>

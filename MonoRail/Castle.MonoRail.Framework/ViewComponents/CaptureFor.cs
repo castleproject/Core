@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		public override void Render()
 		{
-			String id = (String) Context.ComponentParameters["id"];
+			String id = (String)Context.ComponentParameters["id"];
 
 			if (id == null || id.Trim().Length == 0)
 			{
@@ -50,12 +50,13 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 			Context.RenderBody(buffer);
 
+
 			String currentContent = Context.ContextVars[id] as string;
 			StringBuilder sb = buffer.GetStringBuilder();
 			String appendAtt = Context.ComponentParameters["append"] as string;
 
 			if (appendAtt != null)
-			{				
+			{
 				if (appendAtt == "before")
 				{
 					sb.Append(currentContent);
@@ -63,10 +64,18 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				else
 				{
 					sb.Insert(0, currentContent);
-				}				
+				}
 			}
 
-			Context.ContextVars[id] = sb.ToString();	
+			Context.ContextVars[id] = sb.ToString();
+
+			//This makes sure that Brail would bubble the content
+			//up to a parent view if called from a sub view.
+			bool? bubbleUp = (bool?)Context.ComponentParameters["bubbleUp"];
+			if (bubbleUp == true)
+			{
+				Context.ContextVars[id + ".@bubbleUp"] = true;
+			}
 		}
 	}
 }

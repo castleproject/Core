@@ -31,6 +31,11 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 			
 		}
 
+		public void MR_294_CaptureForInSubViewDoesNotPropogateUpward()
+		{
+			
+		}
+
 		public void Add()
 		{
 			

@@ -29,6 +29,14 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		}
 
 		[Test]
+		public void MR_294_CaptureForInSubViewDoesNotPropogateUpward()
+		{
+			DoGet("bugs/MR_294_CaptureForInSubViewDoesNotPropogateUpward.rails");
+			AssertSuccess();
+			AssertReplyEqualTo("ayende");
+		}
+
+		[Test]
 		public void MR_371_OutputComponentInSectionTooManyTimes()
 		{
 			DoGet("bugs/mr_371.rails");
