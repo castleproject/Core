@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reflection.Emit;
-
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Reflection;
+	using System.Reflection.Emit;
 
 	public class NestedClassEmitter : AbstractTypeEmitter
 	{

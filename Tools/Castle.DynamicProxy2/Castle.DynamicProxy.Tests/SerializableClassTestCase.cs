@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Text.RegularExpressions;
-
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -22,6 +20,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Runtime.Serialization.Formatters.Binary;
+	using System.Text.RegularExpressions;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Serialization;
 	using Castle.DynamicProxy.Tests.Classes;

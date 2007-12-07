@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.IO;
-using System.Reflection;
-using System.Reflection.Emit;
-using Castle.Core.Interceptor;
-
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using System.IO;
+	using System.Reflection;
+	using System.Reflection.Emit;
+	using Castle.Core.Interceptor;
 	using NUnit.Framework;
 
 	[TestFixture]
