@@ -91,6 +91,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DefaultProxyBuilder.cs" />
+    <Compile Include="Generators\AttributesToAvoidReplicating.cs" />
     <Compile Include="Generators\BaseProxyGenerator.cs" />
     <Compile Include="Generators\CacheKey.cs" />
     <Compile Include="Generators\ClassProxyGenerator.cs" />
