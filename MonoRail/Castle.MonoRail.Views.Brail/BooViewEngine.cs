@@ -329,7 +329,11 @@ namespace Castle.MonoRail.Views.Brail
 			BrailBase layout = null;
 			if (controller.LayoutName != null)
 			{
-				string layoutTemplate = "layouts\\" + controller.LayoutName;
+				string layoutTemplate = controller.LayoutName;
+				if( layoutTemplate.StartsWith("/") == false )
+				{
+					layoutTemplate = "layouts\\" + layoutTemplate;
+				}
 				string layoutFilename = layoutTemplate + ViewFileExtension;
 				layout = GetCompiledScriptInstance(layoutFilename, output,
 												   context, controller);

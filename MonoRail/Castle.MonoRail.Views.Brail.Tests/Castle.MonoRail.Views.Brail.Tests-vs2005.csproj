@@ -60,6 +60,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="BrailBugsTestCase.cs" />
+    <Compile Include="BrailLayoutsTestCase.cs" />
     <Compile Include="DirectRenderTestCase.cs" />
     <Compile Include="DslFixture.cs" />
     <Compile Include="DslLayoutFixture.cs" />

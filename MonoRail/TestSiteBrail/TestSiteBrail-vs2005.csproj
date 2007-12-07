@@ -214,6 +214,8 @@
     <None Include="Views\home\CanUseUrlHelperWithoutPrefix.brail" />
     <None Include="Views\home\NullPropagation.brail" />
     <None Include="Views\home\WithNullableDynamicProxyObject.brail" />
+    <None Include="Views\layoutable\customLayoutLocation.brail" />
+    <None Include="Views\layoutable\notInLayouts.brail" />
     <None Include="Views\resourced\iterating.brail" />
   </ItemGroup>
   <ItemGroup>

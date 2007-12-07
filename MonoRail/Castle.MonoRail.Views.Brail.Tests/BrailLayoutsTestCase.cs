@@ -12,33 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
+namespace Castle.MonoRail.Views.Brail.Tests
 {
-    using Castle.MonoRail.Framework;
-    using System;
+	using System.Collections;
+	using Castle.MonoRail.Framework.Tests;
+	using NUnit.Framework;
 
-    [Serializable, ControllerDetails("layoutable"), Layout("master")]
-    public class LayoutController : Controller
-    {
-        public void ChangeLayout()
-        {
-            this.LayoutName = "master2";
-        }
-
-        public void Index()
-        {
-        }
-
-        public void RedirectAction()
-        {
-            this.Redirect("home", "index");
-        }
-
-		[Layout("/layoutable/notInLayouts")]
-		public void CustomLayoutLocation()
+	[TestFixture]
+	public class BrailLayoutsTestCase : AbstractTestCase
+	{
+		[Test]
+		public void CanUseLayoutThatIsNotInLayoutsFolder()
 		{
-
+			DoGet("layoutable/CustomLayoutLocation.rails");
+			AssertReplyEqualTo("not in layouts");
 		}
-    }
+	}
 }
-
