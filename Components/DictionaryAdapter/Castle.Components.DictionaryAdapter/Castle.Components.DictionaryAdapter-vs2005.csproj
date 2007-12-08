@@ -51,11 +51,6 @@
     <Compile Include="IDictionaryKeyBuilder.cs" />
     <Compile Include="DictionaryAdapterFactory.cs" />
     <Compile Include="Attributes\DictionaryKeyPrefixAttribute.cs" />
-    <Compile Include="Attributes\DictionaryAdapterPropertyBinder.cs" />
-    <Compile Include="Attributes\DictionaryAdapterPropertyBinderAttribute.cs" />
-    <Compile Include="Attributes\DictionaryAdapterPropertyBindingException.cs" />
-    <Compile Include="Attributes\DictionaryAdapterStringToNullableGuidBinder.cs" />
-    <Compile Include="Attributes\DictionaryAdapterStringToNullableIntBinder.cs" />
     <Compile Include="IDictionaryAdapterFactory.cs" />
     <Compile Include="IDictionaryPropertyGetter.cs" />
     <Compile Include="NameValueCollectionAdapter.cs" />

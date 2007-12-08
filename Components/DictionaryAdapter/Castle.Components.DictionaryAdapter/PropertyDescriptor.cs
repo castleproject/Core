@@ -168,9 +168,12 @@ namespace Castle.Components.DictionaryAdapter
 				}
 			}
 
-			if (descriptor != null)
+			if (descriptor != null && descriptor.KeyBuilders != null)
 			{
-				key = descriptor.GetKey(dictionary, key, null);
+				foreach (IDictionaryKeyBuilder builder in descriptor.KeyBuilders)
+				{
+					key = builder.GetKey(dictionary, key, this);
+				}
 			}
 
 			return key;
@@ -234,10 +237,13 @@ namespace Castle.Components.DictionaryAdapter
 				}
 			}
 
-			if (descriptor != null)
+			if (descriptor != null && descriptor.Getters != null)
 			{
-				storedValue = descriptor.GetPropertyValue(
-					factory, dictionary, key, storedValue, null);
+				foreach (IDictionaryPropertyGetter getter in descriptor.Getters)
+				{
+					storedValue = getter.GetPropertyValue(
+						factory, dictionary, key, storedValue, this);
+				}
 			}
 
 			return storedValue;
@@ -306,12 +312,15 @@ namespace Castle.Components.DictionaryAdapter
 				}
 			}
 
-			if (descriptor != null)
+			if (descriptor != null && descriptor.Setters != null)
 			{
-				if (!descriptor.SetPropertyValue(
-					factory, dictionary, key, ref value, null))
+				foreach (IDictionaryPropertySetter setter in descriptor.Setters)
 				{
-					consumed = true;
+					if (!setter.SetPropertyValue(
+						factory, dictionary, key, ref value, this))
+					{
+						consumed = true;
+					}
 				}
 			}
 

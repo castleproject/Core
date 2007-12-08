@@ -17,25 +17,49 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections.Specialized;
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public class NameValueCollectionAdapter : AbstractDictionaryAdapter
 	{
 		private readonly NameValueCollection nameValues;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NameValueCollectionAdapter"/> class.
+		/// </summary>
+		/// <param name="nameValues">The name values.</param>
 		public NameValueCollectionAdapter(NameValueCollection nameValues)
 		{
 			this.nameValues = nameValues;
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether the <see cref="T:System.Collections.IDictionary"></see> object is read-only.
+		/// </summary>
+		/// <value></value>
+		/// <returns>true if the <see cref="T:System.Collections.IDictionary"></see> object is read-only; otherwise, false.</returns>
 		public override bool IsReadOnly
 		{
 			get { return false; }
 		}
 
+		/// <summary>
+		/// Determines whether the <see cref="T:System.Collections.IDictionary"></see> object contains an element with the specified key.
+		/// </summary>
+		/// <param name="key">The key to locate in the <see cref="T:System.Collections.IDictionary"></see> object.</param>
+		/// <returns>
+		/// true if the <see cref="T:System.Collections.IDictionary"></see> contains an element with the key; otherwise, false.
+		/// </returns>
+		/// <exception cref="T:System.ArgumentNullException">key is null. </exception>
 		public override bool Contains(object key)
 		{
 			return Array.IndexOf(nameValues.AllKeys, key) >= 0;
 		}
 
+		/// <summary>
+		/// Gets or sets the <see cref="System.Object"/> with the specified key.
+		/// </summary>
+		/// <value></value>
 		public override object this[object key]
 		{
 			get { return nameValues[key.ToString()]; }
@@ -45,7 +69,12 @@ namespace Castle.Components.DictionaryAdapter
 				nameValues[key.ToString()] = val;
 			}
 		}
-		
+
+		/// <summary>
+		/// Adapts the specified name values.
+		/// </summary>
+		/// <param name="nameValues">The name values.</param>
+		/// <returns></returns>
 		public static NameValueCollectionAdapter Adapt(NameValueCollection nameValues)
 		{
 			return new NameValueCollectionAdapter(nameValues);
