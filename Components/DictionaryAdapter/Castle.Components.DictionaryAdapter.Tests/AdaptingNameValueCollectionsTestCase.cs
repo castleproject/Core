@@ -79,7 +79,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	{
 		string TypeName { get; set; }
 
-		[DictionaryAdapterPropertyBinder(typeof(DictionaryAdapterStringToNullableIntBinder))]
 		int? Legs { get; set;}
 	}
 }
