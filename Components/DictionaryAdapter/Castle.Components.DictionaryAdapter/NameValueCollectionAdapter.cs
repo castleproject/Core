@@ -17,7 +17,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections.Specialized;
 
-	internal class NameValueCollectionAdapter : AbstractDictionaryAdapter
+	public class NameValueCollectionAdapter : AbstractDictionaryAdapter
 	{
 		private readonly NameValueCollection nameValues;
 
@@ -44,6 +44,11 @@ namespace Castle.Components.DictionaryAdapter
 				String val = (value != null) ? value.ToString() : null;
 				nameValues[key.ToString()] = val;
 			}
+		}
+		
+		public static NameValueCollectionAdapter Adapt(NameValueCollection nameValues)
+		{
+			return new NameValueCollectionAdapter(nameValues);
 		}
 	}
 }

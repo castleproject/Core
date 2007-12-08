@@ -34,6 +34,13 @@ namespace Castle.Components.DictionaryAdapter
 		private TypeConverter typeConverter;
 
 		/// <summary>
+		/// Initializes an empty <see cref="PropertyDescriptor"/> class.
+		/// </summary>
+		public PropertyDescriptor()
+		{
+		}
+		
+		/// <summary>
 		/// Initializes a new instance of the <see cref="PropertyDescriptor"/> class.
 		/// </summary>
 		/// <param name="property">The property.</param>
@@ -68,7 +75,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		public string PropertyName
 		{
-			get { return Property.Name; }
+			get { return (Property != null) ? Property.Name : null; }
 		}
 
 		/// <summary>
@@ -76,7 +83,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		public Type PropertyType
 		{
-			get { return Property.PropertyType; }
+			get { return (Property != null) ? Property.PropertyType : null; }
 		}
 
 		/// <summary>
