@@ -17,8 +17,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 	using System;
 	using System.Xml;
 	using System.Configuration;
-	using System.Text;
-
+	using Castle.Core.Configuration.Xml;
 	using Castle.Core.Resource;
 	using Castle.Core.Configuration;
 	
@@ -107,13 +106,11 @@ namespace Castle.Windsor.Configuration.Interpreters
 			}
 		}
 
-		#region Deserialization methods
-
 		protected void Deserialize(XmlNode section, IConfigurationStore store)
 		{
 			foreach(XmlNode node in section)
 			{
-				if (IsTextNode(node))
+				if (XmlConfigurationDeserializer.IsTextNode(node))
 				{
 					string message = String.Format("{0} cannot contain text nodes", node.Name);
 
@@ -172,7 +169,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 			String name = GetRequiredAttributeValue(node, "name");
 
-			IConfiguration config = GetDeserializedNode(node);
+			IConfiguration config = XmlConfigurationDeserializer.GetDeserializedNode(node);
 			IConfiguration newConfig = new MutableConfiguration(config.Name, node.InnerXml);
 
 			// Copy all attributes
@@ -206,7 +203,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 			String id = GetRequiredAttributeValue(node, "id");
 
-			IConfiguration config = GetDeserializedNode(node);
+			IConfiguration config = XmlConfigurationDeserializer.GetDeserializedNode(node);
 
 			AddFacilityConfig(id, config, store);
 		}
@@ -241,7 +238,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 			String id = GetRequiredAttributeValue(node, "id");
 
-			IConfiguration config = GetDeserializedNode(node);
+			IConfiguration config = XmlConfigurationDeserializer.GetDeserializedNode(node);
 
 			AddComponentConfig(id, config, store);
 		}
@@ -250,56 +247,9 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 			String id = GetRequiredAttributeValue(node, "id");
 
-			IConfiguration config = GetDeserializedNode(node);
+			IConfiguration config = XmlConfigurationDeserializer.GetDeserializedNode(node);
 
 			AddBootstrapComponentConfig(id, config, store);
-		}
-
-		private IConfiguration GetDeserializedNode(XmlNode node)
-		{
-			MutableConfiguration config;
-			ConfigurationCollection configChilds = new ConfigurationCollection();
-
-			StringBuilder configValue = new StringBuilder();
-
-			if (node.HasChildNodes)
-			{
-				foreach(XmlNode child in node.ChildNodes)
-				{
-					if (IsTextNode(child))
-					{
-						configValue.Append(child.Value);
-					}
-					else if (child.NodeType == XmlNodeType.Element)
-					{
-						configChilds.Add(GetDeserializedNode(child));
-					}
-				}
-			}
-
-			config = new MutableConfiguration(node.Name, GetConfigValue(configValue.ToString()));
-
-			foreach(XmlAttribute attribute in node.Attributes)
-			{
-				config.Attributes.Add(attribute.Name, attribute.Value);
-			}
-
-			config.Children.AddRange(configChilds);
-
-			return config;
-		}
-
-		#endregion		
-
-		/// <summary>
-		/// If a config value is an empty string we return null, this is to keep
-		/// backward compability with old code
-		/// </summary>
-		private string GetConfigValue(string value)
-		{
-			value = value.Trim();
-
-			return value == String.Empty ? null : value;
 		}
 
 		private String GetRequiredAttributeValue(XmlNode node, String attName)
@@ -322,11 +272,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 			XmlAttribute att = node.Attributes[attName];
 
 			return (att == null) ? String.Empty : att.Value.Trim();
-		}
-
-		private bool IsTextNode(XmlNode node)
-		{
-			return node.NodeType == XmlNodeType.Text || node.NodeType == XmlNodeType.CDATA;
 		}
 
 		private void AssertNodeName(XmlNode node, string expectedName)

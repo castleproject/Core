@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -98,6 +98,7 @@
     <Compile Include="Model\Configuration\ConfigurationCollection.cs" />
     <Compile Include="Model\Configuration\IConfiguration.cs" />
     <Compile Include="Model\Configuration\MutableConfiguration.cs" />
+    <Compile Include="Model\Configuration\Xml\XmlConfigurationDeserializer.cs" />
     <Compile Include="Model\ConstructorCandidate.cs" />
     <Compile Include="Model\ConstructorCandidateCollection.cs" />
     <Compile Include="Model\DependencyModel.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Model\PropertySet.cs" />
     <Compile Include="Model\PropertySetCollection.cs" />
     <Compile Include="Pair.cs" />
+    <Compile Include="ReflectionBasedDictionaryAdapter.cs" />
     <Compile Include="Resource\AbstractResource.cs" />
     <Compile Include="Resource\AbstractStreamResource.cs" />
     <Compile Include="Resource\AssemblyResource.cs" />
