@@ -80,6 +80,15 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
+		public void AddComponentInstance_ByService()
+		{
+			CustomerImpl customer = new CustomerImpl();
+
+			kernel.AddComponentInstance <ICustomer>(customer);
+			Assert.AreSame(kernel[typeof(ICustomer)],customer);
+		}
+
+		[Test]
 		public void AddComponentInstance2()
 		{
 			CustomerImpl customer = new CustomerImpl();

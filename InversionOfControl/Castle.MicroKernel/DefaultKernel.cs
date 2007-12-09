@@ -140,7 +140,7 @@ namespace Castle.MicroKernel
 		{
 			MemberInfo[] members = FormatterServices.GetSerializableMembers(GetType(), context);
 
-			object[] kernelmembers = (object[]) info.GetValue("members", typeof(object[]));
+			object[] kernelmembers = (object[])info.GetValue("members", typeof(object[]));
 
 			FormatterServices.PopulateObjectMembers(this, members, kernelmembers);
 		}
@@ -152,16 +152,16 @@ namespace Castle.MicroKernel
 		protected virtual void RegisterSubSystems()
 		{
 			AddSubSystem(SubSystemConstants.ConfigurationStoreKey,
-			             new DefaultConfigurationStore());
+						 new DefaultConfigurationStore());
 
 			AddSubSystem(SubSystemConstants.ConversionManagerKey,
-			             new DefaultConversionManager());
+						 new DefaultConversionManager());
 
 			AddSubSystem(SubSystemConstants.NamingKey,
-			             new DefaultNamingSubSystem());
+						 new DefaultNamingSubSystem());
 
 			AddSubSystem(SubSystemConstants.ResourceKey,
-			             new DefaultResourceSubSystem());
+						 new DefaultResourceSubSystem());
 		}
 
 		#endregion
@@ -279,7 +279,7 @@ namespace Castle.MicroKernel
 		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
 		/// </exception>
 		public void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle,
-		                         bool overwriteLifestyle)
+								 bool overwriteLifestyle)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (serviceType == null) throw new ArgumentNullException("serviceType");
@@ -326,7 +326,7 @@ namespace Castle.MicroKernel
 		/// <param name="classType"></param>
 		/// <param name="parameters"></param>
 		public virtual void AddComponentWithExtendedProperties(String key, Type serviceType, Type classType,
-		                                                       IDictionary parameters)
+															   IDictionary parameters)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (parameters == null) throw new ArgumentNullException("parameters");
@@ -354,7 +354,7 @@ namespace Castle.MicroKernel
 
 			if (skipRegistration != null)
 			{
-				RegisterHandler(model.Name, handler, (bool) skipRegistration);
+				RegisterHandler(model.Name, handler, (bool)skipRegistration);
 			}
 			else
 			{
@@ -393,11 +393,15 @@ namespace Castle.MicroKernel
 		/// <param name="instance"></param>
 		public void AddComponentInstance(String key, Type serviceType, object instance)
 		{
+			AddComponentInstance(key, serviceType, instance.GetType(), instance);
+		}
+
+		public void AddComponentInstance(string key, Type serviceType, Type classType, object instance)
+		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (serviceType == null) throw new ArgumentNullException("serviceType");
 			if (instance == null) throw new ArgumentNullException("instance");
-
-			Type classType = instance.GetType();
+			if (classType == null) throw new ArgumentNullException("classType");
 
 			ComponentModel model = new ComponentModel(key, serviceType, classType);
 			model.CustomComponentActivator = typeof(ExternalInstanceActivator);
@@ -526,7 +530,7 @@ namespace Castle.MicroKernel
 		public void AddComponentInstance<T>(object instance)
 		{
 			Type serviceType = typeof(T);
-			AddComponentInstance(serviceType.FullName, instance);
+			AddComponentInstance(serviceType.FullName, serviceType, instance);
 		}
 
 		/// <summary>
@@ -538,7 +542,7 @@ namespace Castle.MicroKernel
 		public void AddComponentInstance<T>(Type serviceType, object instance)
 		{
 			Type classType = typeof(T);
-			AddComponentInstance(classType.FullName, serviceType, instance);
+			AddComponentInstance(classType.FullName, serviceType, classType, instance);
 		}
 
 		/// <summary>
@@ -550,7 +554,7 @@ namespace Castle.MicroKernel
 		public T Resolve<T>(IDictionary arguments)
 		{
 			Type serviceType = typeof(T);
-			return (T) Resolve(serviceType, arguments);
+			return (T)Resolve(serviceType, arguments);
 		}
 
 		/// <summary>
@@ -560,7 +564,7 @@ namespace Castle.MicroKernel
 		public T Resolve<T>()
 		{
 			Type serviceType = typeof(T);
-			return (T) Resolve(serviceType);
+			return (T)Resolve(serviceType);
 		}
 
 		/// <summary>
@@ -591,7 +595,7 @@ namespace Castle.MicroKernel
 						NamingSubSystem.UnRegister(handler.ComponentModel.Service);
 					}
 
-					foreach(ComponentModel model in handler.ComponentModel.Dependents)
+					foreach (ComponentModel model in handler.ComponentModel.Dependents)
 					{
 						model.RemoveDepender(handler.ComponentModel);
 					}
@@ -769,7 +773,7 @@ namespace Castle.MicroKernel
 		{
 			IHandler handler = GetHandler(service);
 
-			foreach(DictionaryEntry entry in dependencies)
+			foreach (DictionaryEntry entry in dependencies)
 			{
 				handler.AddCustomDependencyValue(entry.Key.ToString(), entry.Value);
 			}
@@ -779,7 +783,7 @@ namespace Castle.MicroKernel
 		{
 			IHandler handler = GetHandler(key);
 
-			foreach(DictionaryEntry entry in dependencies)
+			foreach (DictionaryEntry entry in dependencies)
 			{
 				handler.AddCustomDependencyValue(entry.Key.ToString(), entry.Value);
 			}
@@ -812,11 +816,11 @@ namespace Castle.MicroKernel
 			List<TService> services = new List<TService>();
 			IHandler[] handlers = GetHandlers(typeof(TService));
 
-			foreach(IHandler handler in handlers)
+			foreach (IHandler handler in handlers)
 			{
 				if (handler.CurrentState == HandlerState.Valid)
 				{
-					services.Add((TService) ResolveComponent(handler));
+					services.Add((TService)ResolveComponent(handler));
 				}
 			}
 
@@ -1069,16 +1073,16 @@ namespace Castle.MicroKernel
 			if (model.CustomComponentActivator == null)
 			{
 				activator = new DefaultComponentActivator(model, this,
-				                                          new ComponentInstanceDelegate(RaiseComponentCreated),
-				                                          new ComponentInstanceDelegate(RaiseComponentDestroyed));
+														  new ComponentInstanceDelegate(RaiseComponentCreated),
+														  new ComponentInstanceDelegate(RaiseComponentDestroyed));
 			}
 			else
 			{
 				try
 				{
 					activator = (IComponentActivator)
-					            Activator.CreateInstance(model.CustomComponentActivator,
-					                                     new object[]
+								Activator.CreateInstance(model.CustomComponentActivator,
+														 new object[]
 					                                     	{
 					                                     		model,
 					                                     		this,
@@ -1086,7 +1090,7 @@ namespace Castle.MicroKernel
 					                                     		new ComponentInstanceDelegate(RaiseComponentDestroyed)
 					                                     	});
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					throw new KernelException("Could not instantiate custom activator", e);
 				}
@@ -1108,7 +1112,7 @@ namespace Castle.MicroKernel
 
 				IHandler[] handlers = NamingSubSystem.GetHandlers();
 
-				foreach(IHandler handler in handlers)
+				foreach (IHandler handler in handlers)
 				{
 					nodes[index++] = handler.ComponentModel;
 				}
@@ -1152,7 +1156,7 @@ namespace Castle.MicroKernel
 		public T GetService<T>()
 		{
 			Type serviceType = typeof(T);
-			return (T) Resolve(serviceType);
+			return (T)Resolve(serviceType);
 		}
 
 		#endregion
@@ -1173,7 +1177,7 @@ namespace Castle.MicroKernel
 
 		private void TerminateFacilities()
 		{
-			foreach(IFacility facility in facilities)
+			foreach (IFacility facility in facilities)
 			{
 				facility.Terminate();
 			}
@@ -1184,9 +1188,9 @@ namespace Castle.MicroKernel
 			GraphNode[] nodes = GraphNodes;
 			IVertex[] vertices = TopologicalSortAlgo.Sort(nodes);
 
-			for(int i = 0; i < vertices.Length; i++)
+			for (int i = 0; i < vertices.Length; i++)
 			{
-				ComponentModel model = (ComponentModel) vertices[i];
+				ComponentModel model = (ComponentModel)vertices[i];
 
 				// Prevent the removal of a component that belongs 
 				// to other container
@@ -1228,7 +1232,7 @@ namespace Castle.MicroKernel
 
 		private void DisposeSubKernels()
 		{
-			foreach(IKernel childKernel in childKernels)
+			foreach (IKernel childKernel in childKernels)
 			{
 				childKernel.Dispose();
 			}
@@ -1240,7 +1244,7 @@ namespace Castle.MicroKernel
 
 			if (handler is IDisposable)
 			{
-				((IDisposable) handler).Dispose();
+				((IDisposable)handler).Dispose();
 			}
 		}
 
