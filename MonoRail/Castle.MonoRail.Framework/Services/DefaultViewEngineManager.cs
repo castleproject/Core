@@ -265,7 +265,7 @@ namespace Castle.MonoRail.Framework.Services
 				throw new MonoRailException(string.Format(
 @"MonoRail could not resolve a view engine instance for the template '{0}'
 There are two possible reasons: either the template does not exist, or the view engine " + 
-"that handles an specific file extension has not been configured correctly web.config (section monorail, node viewEngines).", templateName));
+"that handles the template (by file extension) has not been configured correctly in web.config (section monorail, node viewEngines).", templateName));
 			}
 
 			return null;
