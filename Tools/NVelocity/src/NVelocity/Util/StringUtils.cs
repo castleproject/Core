@@ -69,26 +69,27 @@ namespace NVelocity.Util
 		/// </returns>
 		public static String FileContentsToString(String file)
 		{
-			String contents = "";
+			String contents = string.Empty;
 
 			FileInfo f = new FileInfo(file);
 
 			bool tmpBool;
 			if (File.Exists(f.FullName))
+			{
 				tmpBool = true;
+			}
 			else
+			{
 				tmpBool = Directory.Exists(f.FullName);
+			}
 			if (tmpBool)
 			{
 				try
 				{
 					StreamReader fr = new StreamReader(f.FullName);
-					char[] template = new char[(int) SupportClass.FileLength(f)]
-						;
-					fr.Read((Char[]) template, 0, template.Length)
-						;
-					contents = new String(template)
-						;
+					char[] template = new char[(int) SupportClass.FileLength(f)];
+					fr.Read((Char[]) template, 0, template.Length);
+					contents = new String(template);
 					fr.Close();
 				}
 				catch(Exception e)
@@ -118,7 +119,9 @@ namespace NVelocity.Util
 			// Normalize the slashes and add leading slash if necessary
 			string normalized = path;
 			if (normalized.IndexOf(Path.AltDirectorySeparatorChar) >= 0)
+			{
 				normalized = normalized.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+			}
 
 			if (!normalized.StartsWith(Path.DirectorySeparatorChar.ToString()))
 			{
@@ -146,7 +149,9 @@ namespace NVelocity.Util
 			{
 				int index = normalized.IndexOf("/./");
 				if (index < 0)
+				{
 					break;
+				}
 				normalized = normalized.Substring(0, (index) - (0)) + normalized.Substring(index + 2);
 			}
 
@@ -155,9 +160,13 @@ namespace NVelocity.Util
 			{
 				int index = normalized.IndexOf("/../");
 				if (index < 0)
+				{
 					break;
+				}
 				if (index == 0)
+				{
 					return (null);
+				}
 				// Trying to go outside our context
 				int index2 = normalized.LastIndexOf((Char) '/', index - 1);
 				normalized = normalized.Substring(0, (index2) - (0)) + normalized.Substring(index + 3);

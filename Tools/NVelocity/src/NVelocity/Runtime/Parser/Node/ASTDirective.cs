@@ -15,7 +15,7 @@ namespace NVelocity.Runtime.Parser.Node
 	public class ASTDirective : SimpleNode
 	{
 		private Directive directive;
-		private String directiveName = "";
+		private String directiveName = string.Empty;
 
 		public ASTDirective(int id) : base(id)
 		{
@@ -54,14 +54,14 @@ namespace NVelocity.Runtime.Parser.Node
 		public override bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
 			// normal processing
-			if (directive != null)
-			{
-				directive.Render(context, writer, this);
-			}
-			else
+			if (directive == null)
 			{
 				writer.Write("#");
 				writer.Write(directiveName);
+			}
+			else
+			{
+				directive.Render(context, writer, this);
 			}
 
 			return true;

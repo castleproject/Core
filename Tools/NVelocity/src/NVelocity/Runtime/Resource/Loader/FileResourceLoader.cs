@@ -79,7 +79,10 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				if (template == null || template.Length == 0)
 				{
-					String msg = string.Format("File resource error : argument {0} contains .. and may be trying to access content outside of template root.  Rejected.", template);
+					String msg =
+						string.Format(
+							"File resource error : argument {0} contains .. and may be trying to access content outside of template root.  Rejected.",
+							template);
 
 					throw new ResourceNotFoundException(msg);
 				}

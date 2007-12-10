@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime
 {
 	using System;
@@ -167,7 +181,7 @@ namespace NVelocity.Runtime
 						/*
 			* only if it's a non-empty string do we bother
 			*/
-						if (lib != null && !lib.Equals(""))
+						if (lib != null && !lib.Equals(string.Empty))
 						{
 							/*
 			    *  let the VMManager know that the following is coming
@@ -238,11 +252,13 @@ namespace NVelocity.Runtime
 				{
 					ReplacementPermission = true;
 
-					LogVMMessageInfo("Velocimacro : allowInlineToOverride = true : VMs defined inline may replace previous VM definitions");
+					LogVMMessageInfo(
+						"Velocimacro : allowInlineToOverride = true : VMs defined inline may replace previous VM definitions");
 				}
 				else
 				{
-					LogVMMessageInfo("Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions");
+					LogVMMessageInfo(
+						"Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions");
 				}
 
 				/*
@@ -258,7 +274,8 @@ namespace NVelocity.Runtime
 
 				if (TemplateLocalInline)
 				{
-					LogVMMessageInfo("Velocimacro : allowInlineLocal = true : VMs defined inline will be local to their defining template only.");
+					LogVMMessageInfo(
+						"Velocimacro : allowInlineLocal = true : VMs defined inline will be local to their defining template only.");
 				}
 				else
 				{
@@ -421,7 +438,8 @@ namespace NVelocity.Runtime
 				*/
 				if (IsVelocimacro(name, sourceTemplate) && !replaceAllowed)
 				{
-					LogVMMessageWarn(string.Format("Velocimacro : VM addition rejected : {0} : inline not allowed to replace existing VM", name));
+					LogVMMessageWarn(
+						string.Format("Velocimacro : VM addition rejected : {0} : inline not allowed to replace existing VM", name));
 					return false;
 				}
 			}

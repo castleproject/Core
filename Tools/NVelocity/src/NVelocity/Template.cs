@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity
 {
 	using System;
@@ -28,12 +42,6 @@ namespace NVelocity
 	{
 		private System.Exception errorCondition = null;
 
-		/// <summary>
-		/// Default constructor.
-		/// </summary>
-		public Template()
-		{
-		}
 
 		/// <summary>
 		/// Gets the named resource as a stream, parses and inits.
@@ -51,11 +59,10 @@ namespace NVelocity
 		public override bool Process()
 		{
 			data = null;
-			Stream s = null;
 			errorCondition = null;
 
 			// first, try to get the stream from the loader
-			s = ObtainStream();
+			Stream s = ObtainStream();
 
 			// if that worked, lets protect in case a loader impl
 			// forgets to throw a proper exception

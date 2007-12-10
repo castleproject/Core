@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime.Directive
 {
 	using System;
@@ -17,12 +31,12 @@ namespace NVelocity.Runtime.Directive
 	/// <version> $Id: VelocimacroProxy.cs,v 1.4 2003/10/27 13:54:10 corts Exp $ </version>
 	public class VelocimacroProxy : Directive
 	{
-		private String macroName = "";
-		private String macroBody = "";
+		private String macroName = string.Empty;
+		private String macroBody = string.Empty;
 		private String[] argArray = null;
 		private SimpleNode nodeTree = null;
 		private int numMacroArgs = 0;
-		private String ns = "";
+		private String ns = string.Empty;
 
 		private bool init = false;
 		private String[] callingArgs;
@@ -50,7 +64,9 @@ namespace NVelocity.Runtime.Directive
 			// right number of args?
 			if (NumArgs != i)
 			{
-				runtimeServices.Error(string.Format("VM #{0}: error : too {1} arguments to macro. Wanted {2} got {3}", macroName, ((NumArgs > i) ? "few" : "many"), NumArgs, i));
+				runtimeServices.Error(
+					string.Format("VM #{0}: error : too {1} arguments to macro. Wanted {2} got {3}", macroName,
+					              ((NumArgs > i) ? "few" : "many"), NumArgs, i));
 
 				return;
 			}
@@ -72,7 +88,11 @@ namespace NVelocity.Runtime.Directive
 			{
 				// it's possible the tree hasn't been parsed yet, so get 
 				// the VMManager to parse and init it
-				if (nodeTree != null)
+				if (nodeTree == null)
+				{
+					runtimeServices.Error(string.Format("VM error : {0}. Null AST", macroName));
+				}
+				else
 				{
 					if (!init)
 					{
@@ -94,16 +114,14 @@ namespace NVelocity.Runtime.Directive
 					// now render the VM
 					nodeTree.Render(vmContext, writer);
 				}
-				else
-				{
-					runtimeServices.Error(string.Format("VM error : {0}. Null AST", macroName));
-				}
 			}
 			catch(Exception e)
 			{
 				// if it's a MIE, it came from the render.... throw it...
 				if (e is MethodInvocationException)
+				{
 					throw;
+				}
 
 				runtimeServices.Error(string.Format("VelocimacroProxy.render() : exception VM = #{0}() : {1}", macroName, e));
 			}
@@ -196,9 +214,9 @@ namespace NVelocity.Runtime.Directive
 
 			while(i < numArgs)
 			{
-				args[i] = "";
+				args[i] = string.Empty;
 
-				// we want string literalss to lose the quotes.  #foo( "blargh" ) should have 'blargh' patched 
+				// we want string liberalises to lose the quotes.  #foo( "blargh" ) should have 'blargh' patched 
 				// into macro body.  So for each arg in the use-instance, treat the stringlierals specially...
 				callingArgTypes[i] = node.GetChild(i).Type;
 

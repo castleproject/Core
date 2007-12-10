@@ -38,7 +38,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// <version> $Id: ASTIdentifier.cs,v 1.5 2004/12/27 05:55:30 corts Exp $ </version>
 	public class ASTIdentifier : SimpleNode
 	{
-		private String identifier = "";
+		private String identifier = string.Empty;
 
 		// This is really immutable after the init, so keep one for this node
 		protected Info uberInfo;
@@ -78,13 +78,14 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object Execute(Object o, IInternalContextAdapter context)
 		{
-			if (identifier == "to_quote" && (o.GetType() == typeof(string) ||
-			                                 o.GetType().IsPrimitive || o.GetType() == typeof(decimal)))
+			bool isString = o.GetType() == typeof(string);
+			bool isDecimal = o.GetType() == typeof(decimal);
+			bool isPrimitive = o.GetType().IsPrimitive;
+			if (identifier == "to_quote" && (isString || isPrimitive || isDecimal))
 			{
 				return string.Format("\"{0}\"", EscapeDoubleQuote(o.ToString()));
 			}
-			else if (identifier == "to_squote" && (o.GetType() == typeof(string) ||
-			                                       o.GetType().IsPrimitive || o.GetType() == typeof(decimal)))
+			else if (identifier == "to_squote" && (isString || isPrimitive || isDecimal))
 			{
 				return string.Format("'{0}'", EscapeSingleQuote(o.ToString()));
 			}
@@ -147,7 +148,17 @@ namespace NVelocity.Runtime.Parser.Node
 
 				// if we have an event cartridge, see if it wants to veto
 				// also, let non-Exception Throwables go...
-				if (ec != null)
+				if (ec == null)
+				{
+					// no event cartridge to override. Just throw
+					String message = String.Format(
+						"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
+						velPropertyGet.MethodName, o != null ? o.GetType().FullName : string.Empty,
+						uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
+
+					throw new MethodInvocationException(message, targetInvocationException.InnerException, velPropertyGet.MethodName);
+				}
+				else
 				{
 					try
 					{
@@ -157,21 +168,11 @@ namespace NVelocity.Runtime.Parser.Node
 					{
 						String message = String.Format(
 							"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
-							velPropertyGet.MethodName, o != null ? o.GetType().FullName : "",
+							velPropertyGet.MethodName, o != null ? o.GetType().FullName : string.Empty,
 							uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
 
 						throw new MethodInvocationException(message, targetInvocationException.InnerException, velPropertyGet.MethodName);
 					}
-				}
-				else
-				{
-					// no event cartridge to override. Just throw
-					String message = String.Format(
-						"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
-						velPropertyGet.MethodName, o != null ? o.GetType().FullName : "",
-						uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
-
-					throw new MethodInvocationException(message, targetInvocationException.InnerException, velPropertyGet.MethodName);
 				}
 			}
 			catch(ArgumentException)
@@ -180,7 +181,9 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 			catch(Exception e)
 			{
-				runtimeServices.Error(string.Format("ASTIdentifier() : exception invoking method for identifier '{0}' in {1} : {2}", identifier, o.GetType(), e));
+				runtimeServices.Error(
+					string.Format("ASTIdentifier() : exception invoking method for identifier '{0}' in {1} : {2}", identifier,
+					              o.GetType(), e));
 			}
 
 			return null;

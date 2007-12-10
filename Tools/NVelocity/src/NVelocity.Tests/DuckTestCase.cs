@@ -17,8 +17,8 @@ namespace NVelocity
 	using System;
 	using System.IO;
 	using System.Text;
+	using App;
 	using NUnit.Framework;
-	using NVelocity.App;
 
 	#region Ducks
 
@@ -100,7 +100,7 @@ namespace NVelocity
 	#endregion
 
 	[TestFixture]
-	public class DuckTestCase 
+	public class DuckTestCase
 	{
 		private VelocityEngine velocityEngine;
 		private Duck1 duck1;
@@ -121,13 +121,13 @@ namespace NVelocity
 		{
 			Assert.AreEqual("get invoked name", Evaluate("$duck1.name"));
 			Assert.AreEqual("get invoked some", Evaluate("$duck1.some"));
-			
+
 			Evaluate("$duck2.style.border");
 
 			StringBuilder expected = new StringBuilder();
 			expected.Append("get invoked style" + Environment.NewLine);
 			expected.Append("get invoked border" + Environment.NewLine);
-			
+
 			Assert.AreEqual(expected.ToString(), duck2.ToString());
 		}
 
@@ -138,7 +138,7 @@ namespace NVelocity
 
 			StringBuilder expected = new StringBuilder();
 			expected.Append("set invoked Name aaa" + Environment.NewLine);
-			
+
 			Assert.AreEqual(expected.ToString(), duck2.ToString());
 		}
 
@@ -149,10 +149,10 @@ namespace NVelocity
 			Assert.AreEqual("invoked some arg1 ", Evaluate("$duck1.some('arg1')"));
 			Assert.AreEqual("invoked some ", Evaluate("$duck1.some()"));
 			Evaluate("$duck2.set()");
-			
+
 			StringBuilder expected = new StringBuilder();
 			expected.Append("invoked set_0" + Environment.NewLine);
-			
+
 			Assert.AreEqual(expected.ToString(), duck2.ToString());
 		}
 
@@ -178,7 +178,7 @@ namespace NVelocity
 			StringWriter sw = new StringWriter();
 
 			VelocityContext c = new VelocityContext();
-			
+
 			c.Put("duck1", duck1);
 			c.Put("duck2", duck2);
 			c.Put("test", new Test1());

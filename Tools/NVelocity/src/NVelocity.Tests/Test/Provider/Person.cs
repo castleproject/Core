@@ -18,7 +18,5 @@ namespace NVelocity.Test.Provider
 		{
 			get { return "Person"; }
 		}
-
-
 	}
 }

@@ -21,15 +21,6 @@ namespace NVelocity.Runtime.Directive
 
 	public class Component : Directive
 	{
-		public Component()
-		{
-		}
-
-		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
-		{
-			base.Init(rs, context, node);
-		}
-
 		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
 			return true;

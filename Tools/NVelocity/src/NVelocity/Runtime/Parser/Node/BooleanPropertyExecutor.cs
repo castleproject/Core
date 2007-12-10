@@ -14,30 +14,34 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public class BooleanPropertyExecutor : PropertyExecutor
 	{
-		public BooleanPropertyExecutor(IRuntimeLogger r, Introspector i, Type clazz, String propertyName)
-			: base(r, i, clazz, propertyName)
+		public BooleanPropertyExecutor(IRuntimeLogger r, Introspector i, Type type, String propertyName)
+			: base(r, i, type, propertyName)
 		{
 		}
 
-		protected internal override void Discover(Type clazz, String propertyName)
+		protected internal override void Discover(Type type, String propertyName)
 		{
 			try
 			{
-				property = introspector.GetProperty(clazz, propertyName);
+				property = introspector.GetProperty(type, propertyName);
 				if (property != null && property.PropertyType.Equals(typeof(Boolean)))
+				{
 					return;
+				}
 
 				// now the convenience, flip the 1st character
 				propertyName = propertyName.Substring(0, 1).ToUpper() + propertyName.Substring(1);
-				property = introspector.GetProperty(clazz, propertyName);
+				property = introspector.GetProperty(type, propertyName);
 				if (property != null && property.PropertyType.Equals(typeof(Boolean)))
+				{
 					return;
+				}
 
 				property = null;
 			}
 			catch(Exception e)
 			{
-				runtimeLogger.Error(string.Format("PROGRAMMER ERROR : BooleanPropertyExector() : {0}", e));
+				runtimeLogger.Error(string.Format("PROGRAMMER ERROR : BooleanPropertyExecutor() : {0}", e));
 			}
 		}
 	}

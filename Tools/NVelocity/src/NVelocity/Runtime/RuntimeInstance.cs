@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime
 {
 	using System;
@@ -98,7 +112,7 @@ namespace NVelocity.Runtime
 		/// And a configuration is a lot more convenient to deal
 		/// with then conventional properties objects, or Maps.
 		/// </summary>
-		private ExtendedProperties configuration;
+		private readonly ExtendedProperties configuration;
 
 		private IResourceManager resourceManager = null;
 
@@ -106,7 +120,7 @@ namespace NVelocity.Runtime
 		/// Each runtime instance has it's own introspector
 		/// to ensure that each instance is completely separate.
 		/// </summary>
-		private Introspector introspector = null;
+		private readonly Introspector introspector = null;
 
 
 		/// <summary>
@@ -114,7 +128,7 @@ namespace NVelocity.Runtime
 		/// application for use in application supplied/specified
 		/// pluggable components.
 		/// </summary>
-		private Hashtable applicationAttributes = null;
+		private readonly Hashtable applicationAttributes = null;
 
 		private IUberspect uberSpect;
 
@@ -202,14 +216,19 @@ namespace NVelocity.Runtime
 				}
 				catch(System.Exception)
 				{
-					String err = string.Format("The specified class for Uberspect ({0}) does not exist (or is not accessible to the current classlaoder.", rm);
+					String err =
+						string.Format(
+							"The specified class for Uberspect ({0}) does not exist (or is not accessible to the current classlaoder.", rm);
 					Error(err);
 					throw new System.Exception(err);
 				}
 
 				if (!(o is IUberspect))
 				{
-					String err = string.Format("The specified class for Uberspect ({0}) does not implement org.apache.velocity.util.introspector.Uberspect. Velocity not initialized correctly.", rm);
+					String err =
+						string.Format(
+							"The specified class for Uberspect ({0}) does not implement org.apache.velocity.util.introspector.Uberspect. Velocity not initialized correctly.",
+							rm);
 
 					Error(err);
 					throw new System.Exception(err);
@@ -227,7 +246,8 @@ namespace NVelocity.Runtime
 			else
 			{
 				// someone screwed up.  Lets not fool around...
-				String err = "It appears that no class was specified as the Uberspect.  Please ensure that all configuration information is correct.";
+				String err =
+					"It appears that no class was specified as the Uberspect.  Please ensure that all configuration information is correct.";
 
 				Error(err);
 				throw new System.Exception(err);
@@ -398,7 +418,10 @@ namespace NVelocity.Runtime
 
 				if (!(o is IResourceManager))
 				{
-					String err = string.Format("The specified class for ResourceManager ({0}) does not implement ResourceManager. NVelocity not initialized correctly.", rm);
+					String err =
+						string.Format(
+							"The specified class for ResourceManager ({0}) does not implement ResourceManager. NVelocity not initialized correctly.",
+							rm);
 					Error(err);
 					throw new System.Exception(err);
 				}
@@ -487,7 +510,10 @@ namespace NVelocity.Runtime
 			}
 			catch(System.Exception ex)
 			{
-				throw new System.Exception(string.Format("Error loading directive.properties! Something is very wrong if these properties aren't being located. Either your Velocity distribution is incomplete or your Velocity jar file is corrupted!\n{0}", ex.Message));
+				throw new System.Exception(
+					string.Format(
+						"Error loading directive.properties! Something is very wrong if these properties aren't being located. Either your Velocity distribution is incomplete or your Velocity jar file is corrupted!\n{0}",
+						ex.Message));
 			}
 
 			/*
@@ -601,7 +627,8 @@ namespace NVelocity.Runtime
 			{
 				// if we couldn't get a parser from the pool
 				// make one and log it.
-				Error("Runtime : ran out of parsers. Creating new.  Please increment the parser.pool.size property. The current value is too small.");
+				Error(
+					"Runtime : ran out of parsers. Creating new.  Please increment the parser.pool.size property. The current value is too small.");
 
 				parser = CreateNewParser();
 
@@ -612,7 +639,11 @@ namespace NVelocity.Runtime
 			}
 
 			// now, if we have a parser
-			if (parser != null)
+			if (parser == null)
+			{
+				Error("Runtime : ran out of parsers and unable to create more.");
+			}
+			else
 			{
 				try
 				{
@@ -634,10 +665,6 @@ namespace NVelocity.Runtime
 						parserPool.put(parser);
 					}
 				}
-			}
-			else
-			{
-				Error("Runtime : ran out of parsers and unable to create more.");
 			}
 			return ast;
 		}

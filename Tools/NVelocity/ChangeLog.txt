@@ -1,3 +1,6 @@
+- Applied Simon Cropp's patch fixing NVELOCITY-18
+  "Clean up more code in nvelocity"
+
 - Applied Simon Cropp's patch fixing NVELOCITY-17
   "Clean up string concatenation, variable naming and spelling errors"
 

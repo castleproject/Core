@@ -15,19 +15,19 @@
 namespace NVelocity.Test
 {
 	using System;
-	using System.IO;
 	using System.Collections;
+	using System.IO;
 	using System.Text;
+	using App;
 	using NUnit.Framework;
-	using NVelocity.App;
 
 	[TestFixture]
 	public class StringInterpolationTestCase
 	{
 		[Test]
 		public void SingleParamDict()
-		{	
-			Assert.AreEqual("1:key1=<value1>", Eval("%{      key1     =  'value1' }") );
+		{
+			Assert.AreEqual("1:key1=<value1>", Eval("%{      key1     =  'value1' }"));
 			Assert.AreEqual("1:key1=<value1>", Eval("%{      key1='value1' }"));
 			Assert.AreEqual("1:key1=<value1>", Eval("%{key1='value1'}"));
 		}
@@ -45,10 +45,10 @@ namespace NVelocity.Test
 		{
 			Assert.AreEqual("2:key1=<> key2=<1:id=<123>>", Eval("%{key1=${siteRoot}, key2=$params}"));
 			Assert.AreEqual("3:key1=<value1> key2=<value2> key3=<value3>",
-							Eval("%{ key1='value${survey}', key2='value$id', key3='value3' }"));
+			                Eval("%{ key1='value${survey}', key2='value$id', key3='value3' }"));
 
 			Assert.AreEqual("2:key1=<value1> key2=<value2>",
-							Eval("%{ key1='value${survey}', key2='value$id' }"));
+			                Eval("%{ key1='value${survey}', key2='value$id' }"));
 
 			Assert.AreEqual("2:key1=<> key2=<2>", Eval("%{key1=${siteRoot}, key2=$id}"));
 		}
@@ -57,35 +57,35 @@ namespace NVelocity.Test
 		public void NestedDicts()
 		{
 			Assert.AreEqual("3:action=<index> controller=<area> params=<0>",
-							Eval("%{controller='area', action='index', params={}}"));
+			                Eval("%{controller='area', action='index', params={}}"));
 
 			Assert.AreEqual("3:action=<index> controller=<area> params=<2:id=<1> lastpage=<2>>",
-							Eval("%{controller='area', action='index', params={id=1, lastpage=$id} }"));
+			                Eval("%{controller='area', action='index', params={id=1, lastpage=$id} }"));
 
 			Assert.AreEqual("3:action=<index> controller=<area> params=<0>",
-							Eval("%{params={}, action='index', controller='area'}"));
+			                Eval("%{params={}, action='index', controller='area'}"));
 
 			Assert.AreEqual("3:action=<1> controller=<area> params=<0>",
-							Eval("%{params={}, action=$survey, controller='area'}"));
+			                Eval("%{params={}, action=$survey, controller='area'}"));
 
 			Assert.AreEqual("3:action=<index> controller=<area> params=<2:id=<'1'> lastpage=<2>>",
-							Eval("%{params={id=$survey.to_squote, lastpage=$id}, controller='area', action='index'}"));
+			                Eval("%{params={id=$survey.to_squote, lastpage=$id}, controller='area', action='index'}"));
 
 			Assert.AreEqual("1:url=<3:action=<viewpage> pathinfo=<> querystring=<1:id=<1>>>",
-							Eval("%{url={action='viewpage',pathinfo=$context.info,querystring={id=1}}}"));
+			                Eval("%{url={action='viewpage',pathinfo=$context.info,querystring={id=1}}}"));
 		}
 
 		[Test]
 		public void EscapeChars()
 		{
 			Assert.AreEqual("1:action=<'abc'>", Eval(@"%{action='\'abc\''}"));
-		} 
+		}
 
 		[Test]
 		public void ZeroParamDictInterpolation()
 		{
-			Assert.AreEqual( "0", Eval("%{       }") );
-			Assert.AreEqual( "0", Eval("%{}") );
+			Assert.AreEqual("0", Eval("%{       }"));
+			Assert.AreEqual("0", Eval("%{}"));
 		}
 
 		public string Eval(string text)
@@ -134,10 +134,10 @@ namespace NVelocity.Test
 			if (options == null) throw new ArgumentNullException("options");
 
 			StringBuilder stringBuilder = new StringBuilder();
-			
-			Array keysSorted = (new ArrayList(options.Keys)).ToArray(typeof(string)) as string[] ;
 
-			Array.Sort( keysSorted );
+			Array keysSorted = (new ArrayList(options.Keys)).ToArray(typeof(string)) as string[];
+
+			Array.Sort(keysSorted);
 
 			stringBuilder.Append(options.Count).Append(':');
 

@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime.Directive
 {
 	using System;
@@ -65,8 +79,8 @@ namespace NVelocity.Runtime.Directive
 			get { return DirectiveType.LINE; }
 		}
 
-		private String outputMsgStart = "";
-		private String outputMsgEnd = "";
+		private String outputMsgStart = string.Empty;
+		private String outputMsgEnd = string.Empty;
 
 		/// <summary>
 		/// simple init - init the tree and get the elementKey from
@@ -103,7 +117,9 @@ namespace NVelocity.Runtime.Directive
 				if (n.Type == ParserTreeConstants.STRING_LITERAL || n.Type == ParserTreeConstants.REFERENCE)
 				{
 					if (!RenderOutput(n, context, writer))
+					{
 						OutputErrorToStream(writer, string.Format("error with arg {0} please see log.", i));
+					}
 				}
 				else
 				{
@@ -150,28 +166,38 @@ namespace NVelocity.Runtime.Directive
 			{
 				// get the resource, and assume that we use the encoding of the current template
 				// the 'current resource' can be null if we are processing a stream....
-				String encoding = null;
+				String encoding;
 
-				if (current != null)
-					encoding = current.Encoding;
-				else
+				if (current == null)
+				{
 					encoding = (String) runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
+				}
+				else
+				{
+					encoding = current.Encoding;
+				}
 
 				resource = runtimeServices.GetContent(arg, encoding);
 			}
 			catch(ResourceNotFoundException)
 			{
 				// the arg wasn't found.  Note it and throw
-				runtimeServices.Error(string.Format("#include(): cannot find resource '{0}', called from template {1} at ({2}, {3})", arg, context.CurrentTemplateName, Line, Column));
+				runtimeServices.Error(
+					string.Format("#include(): cannot find resource '{0}', called from template {1} at ({2}, {3})", arg,
+					              context.CurrentTemplateName, Line, Column));
 				throw;
 			}
 			catch(Exception e)
 			{
-				runtimeServices.Error(string.Format("#include(): arg = '{0}',  called from template {1} at ({2}, {3}) : {4}", arg, context.CurrentTemplateName, Line, Column, e));
+				runtimeServices.Error(
+					string.Format("#include(): arg = '{0}',  called from template {1} at ({2}, {3}) : {4}", arg,
+					              context.CurrentTemplateName, Line, Column, e));
 			}
 
 			if (resource == null)
+			{
 				return false;
+			}
 
 			writer.Write((String) resource.Data);
 			return true;

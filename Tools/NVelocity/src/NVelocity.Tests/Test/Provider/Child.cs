@@ -15,6 +15,5 @@ namespace NVelocity.Test.Provider
 		{
 			get { return "Child"; }
 		}
-
 	}
 }

@@ -6,8 +6,8 @@ namespace NVelocity.Test
 {
 	using System;
 	using System.IO;
+	using App;
 	using NUnit.Framework;
-	using NVelocity.App;
 
 	/// <summary>
 	/// Test Velocity processing
@@ -60,8 +60,6 @@ namespace NVelocity.Test
 			ok = velocityEngine.Evaluate(c, sw, "VTLTest1", ":=t#${A.T1}ms");
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(":=t#0ms", sw.ToString());
-
 		}
-
 	}
 }

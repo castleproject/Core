@@ -115,7 +115,7 @@ namespace NVelocity.Test.Provider
 		{
 			get { return title; }
 
-			set { this.title = value; }
+			set { title = value; }
 		}
 
 		public virtual Object[] Menu
@@ -124,7 +124,7 @@ namespace NVelocity.Test.Provider
 			{
 				//ArrayList al = new ArrayList();
 				Object[] menu = new Object[3];
-				for (int i = 0; i < 3; i++)
+				for(int i = 0; i < 3; i++)
 				{
 					Hashtable item = new Hashtable();
 					SupportClass.PutElement(item, "id", "item" + Convert.ToString(i + 1));
@@ -221,9 +221,7 @@ namespace NVelocity.Test.Provider
 
 		public virtual Boolean State
 		{
-			set
-			{
-			}
+			set { }
 		}
 
 		public virtual Int32 BangStart
@@ -255,7 +253,7 @@ namespace NVelocity.Test.Provider
 
 		public String getTitleMethod()
 		{
-			return this.title;
+			return title;
 		}
 
 
@@ -285,7 +283,7 @@ namespace NVelocity.Test.Provider
 		{
 			StringBuilder result = new StringBuilder();
 
-			for (int i = 0; i < strings.Length; i++)
+			for(int i = 0; i < strings.Length; i++)
 			{
 				result.Append((String) strings[i]).Append(' ');
 			}
@@ -297,7 +295,7 @@ namespace NVelocity.Test.Provider
 		{
 			StringBuilder result = new StringBuilder();
 
-			for (int i = 0; i < strings.Count; i++)
+			for(int i = 0; i < strings.Count; i++)
 			{
 				result.Append((String) strings[i]).Append(' ');
 			}
@@ -309,7 +307,7 @@ namespace NVelocity.Test.Provider
 		{
 			StringBuilder result = new StringBuilder();
 
-			for (int i = 0; i < objects.Count; i++)
+			for(int i = 0; i < objects.Count; i++)
 			{
 				result.Append(objects[i]).Append(' ');
 			}
@@ -355,7 +353,7 @@ namespace NVelocity.Test.Provider
 		{
 			int size = list.Length;
 
-			for (int i = 0; i < size; i++)
+			for(int i = 0; i < size; i++)
 			{
 				//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
 				if (list[i].ToString().Length > 0)
@@ -416,7 +414,5 @@ namespace NVelocity.Test.Provider
 			ob = o;
 			return key;
 		}
-
-
 	}
 }

@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime.Directive
 {
 	using System;
@@ -7,7 +21,6 @@ namespace NVelocity.Runtime.Directive
 	using NVelocity.Exception;
 	using NVelocity.Runtime.Parser.Node;
 	using Resource;
-	using Node = NVelocity.Runtime.Parser.Node.INode;
 
 	/// <summary>
 	/// Pluggable directive that handles the #parse() statement in VTL.
@@ -51,7 +64,7 @@ namespace NVelocity.Runtime.Directive
 		/// argument that is appropriate.  Any non appropriate
 		/// arguments are logged, but render() continues.
 		/// </summary>
-		public override bool Render(IInternalContextAdapter context, TextWriter writer, Node node)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
 			// did we get an argument?
 			if (!AssertArgument(node))
@@ -60,14 +73,14 @@ namespace NVelocity.Runtime.Directive
 			}
 
 			// does it have a value?  If you have a null reference, then no.
-			Object value_;
-			if (!AssertNodeHasValue(node, context, out value_))
+			Object value;
+			if (!AssertNodeHasValue(node, context, out value))
 			{
 				return false;
 			}
 
 			// get the path
-			String arg = value_.ToString();
+			String arg = value.ToString();
 
 			AssertTemplateStack(context);
 
@@ -75,15 +88,15 @@ namespace NVelocity.Runtime.Directive
 
 			// get the resource, and assume that we use the encoding of the current template
 			// the 'current resource' can be null if we are processing a stream....
-			String encoding = null;
+			String encoding;
 
-			if (current != null)
+			if (current == null)
 			{
-				encoding = current.Encoding;
+				encoding = (String) runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
 			}
 			else
 			{
-				encoding = (String) runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
+				encoding = current.Encoding;
 			}
 
 			// now use the Runtime resource loader to get the template
@@ -104,7 +117,7 @@ namespace NVelocity.Runtime.Directive
 			return true;
 		}
 
-		private bool AssertArgument(Node node)
+		private bool AssertArgument(INode node)
 		{
 			bool result = true;
 			if (node.GetChild(0) == null)
@@ -115,7 +128,7 @@ namespace NVelocity.Runtime.Directive
 			return result;
 		}
 
-		private bool AssertNodeHasValue(Node node, IInternalContextAdapter context, out Object value)
+		private bool AssertNodeHasValue(INode node, IInternalContextAdapter context, out Object value)
 		{
 			bool result = true;
 
@@ -156,7 +169,7 @@ namespace NVelocity.Runtime.Directive
 
 		private Template GetTemplate(String arg, String encoding, IInternalContextAdapter context)
 		{
-			Template result = null;
+			Template result;
 			try
 			{
 				result = runtimeServices.GetTemplate(arg, encoding);
@@ -164,14 +177,18 @@ namespace NVelocity.Runtime.Directive
 			catch(ResourceNotFoundException)
 			{
 				// the arg wasn't found.  Note it and throw
-				runtimeServices.Error(string.Format("#parse(): cannot find template '{0}', called from template {1} at ({2}, {3})", arg, context.CurrentTemplateName, Line, Column));
+				runtimeServices.Error(
+					string.Format("#parse(): cannot find template '{0}', called from template {1} at ({2}, {3})", arg,
+					              context.CurrentTemplateName, Line, Column));
 				throw;
 			}
 			catch(ParseErrorException)
 			{
 				// the arg was found, but didn't parse - syntax error
 				// note it and throw
-				runtimeServices.Error(string.Format("#parse(): syntax error in #parse()-ed template '{0}', called from template {1} at ({2}, {3})", arg, context.CurrentTemplateName, Line, Column));
+				runtimeServices.Error(
+					string.Format("#parse(): syntax error in #parse()-ed template '{0}', called from template {1} at ({2}, {3})", arg,
+					              context.CurrentTemplateName, Line, Column));
 
 				throw;
 			}

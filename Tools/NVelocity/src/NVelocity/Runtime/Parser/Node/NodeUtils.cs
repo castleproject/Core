@@ -2,7 +2,7 @@ namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
 	using System.Text;
-	using Context = Context.IContext;
+	using Context;
 
 	/// <summary> Utilities for dealing with the AST node structure.
 	/// *
@@ -26,21 +26,23 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public static String specialText(Token t)
 		{
-			String specialText = "";
+			String specialText = string.Empty;
 
 			if (t.SpecialToken == null || t.SpecialToken.Image.StartsWith("##"))
-				return specialText;
-
-			Token tmp_t = t.SpecialToken;
-
-			while(tmp_t.SpecialToken != null)
 			{
-				tmp_t = tmp_t.SpecialToken;
+				return specialText;
 			}
 
-			while(tmp_t != null)
+			Token specialToken = t.SpecialToken;
+
+			while(specialToken.SpecialToken != null)
 			{
-				String st = tmp_t.Image;
+				specialToken = specialToken.SpecialToken;
+			}
+
+			while(specialToken != null)
+			{
+				String st = specialToken.Image;
 
 				StringBuilder sb = new StringBuilder();
 
@@ -61,7 +63,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 					if (c == '\\')
 					{
-						bool ok = true;
+						bool ok;
 						bool term = false;
 
 						int j = i;
@@ -104,7 +106,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				specialText += sb.ToString();
 
-				tmp_t = tmp_t.Next;
+				specialToken = specialToken.Next;
 			}
 
 			return specialText;
@@ -129,7 +131,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// be transformed into "candy.jpg" before
 		/// the method is executed.
 		/// </summary>
-		public static String interpolate(String argStr, Context vars)
+		public static String interpolate(String argStr, IContext vars)
 		{
 			StringBuilder argBuf = new StringBuilder();
 
@@ -145,23 +147,31 @@ namespace NVelocity.Runtime.Parser.Node
 						{
 							ch = argStr[cIdx];
 							if (ch == '_' || ch == '-' || Char.IsLetterOrDigit(ch))
+							{
 								nameBuf.Append(ch);
+							}
 							else if (ch == '{' || ch == '}')
+							{
 								continue;
+							}
 							else
+							{
 								break;
+							}
 						}
 
 						if (nameBuf.Length > 0)
 						{
-							Object value_ = vars.Get(nameBuf.ToString());
+							Object value = vars.Get(nameBuf.ToString());
 
-							if (value_ == null)
+							if (value == null)
+							{
 								argBuf.Append("$").Append(nameBuf.ToString());
+							}
 							else
 							{
 								//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
-								argBuf.Append(value_.ToString());
+								argBuf.Append(value.ToString());
 							}
 						}
 						break;

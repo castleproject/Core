@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Util.Introspection
 {
 	using System;
@@ -57,7 +71,9 @@ namespace NVelocity.Util.Introspection
 		public IVelMethod GetMethod(Object obj, String methodName, Object[] args, Info i)
 		{
 			if (obj == null)
+			{
 				return null;
+			}
 
 			MethodInfo m = introspector.GetMethod(obj.GetType(), methodName, args);
 
@@ -71,14 +87,14 @@ namespace NVelocity.Util.Introspection
 		{
 			AbstractExecutor executor;
 
-			Type claz = obj.GetType();
+			Type type = obj.GetType();
 
 			/*
 			*  first try for a getFoo() type of property
 			*  (also getfoo() )
 			*/
 
-			executor = new PropertyExecutor(runtimeLogger, introspector, claz, identifier);
+			executor = new PropertyExecutor(runtimeLogger, introspector, type, identifier);
 
 			/*
 			*  if that didn't work, look for get("foo")
@@ -86,7 +102,7 @@ namespace NVelocity.Util.Introspection
 
 			if (!executor.IsAlive)
 			{
-				executor = new GetExecutor(runtimeLogger, introspector, claz, identifier);
+				executor = new GetExecutor(runtimeLogger, introspector, type, identifier);
 			}
 
 			/*
@@ -95,7 +111,7 @@ namespace NVelocity.Util.Introspection
 
 			if (!executor.IsAlive)
 			{
-				executor = new BooleanPropertyExecutor(runtimeLogger, introspector, claz, identifier);
+				executor = new BooleanPropertyExecutor(runtimeLogger, introspector, type, identifier);
 			}
 
 			return new VelGetterImpl(executor);
@@ -105,9 +121,9 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public IVelPropertySet GetPropertySet(Object obj, String identifier, Object arg, Info i)
 		{
-			Type claz = obj.GetType();
+			Type type = obj.GetType();
 
-			IVelMethod vm = null;
+			IVelMethod method = null;
 
 			try
 			{
@@ -119,9 +135,9 @@ namespace NVelocity.Util.Introspection
 
 				try
 				{
-					vm = GetMethod(obj, string.Format("set{0}", identifier), parameters, i);
+					method = GetMethod(obj, string.Format("set{0}", identifier), parameters, i);
 
-					if (vm == null)
+					if (method == null)
 					{
 						throw new MethodAccessException();
 					}
@@ -140,27 +156,29 @@ namespace NVelocity.Util.Introspection
 						sb[3] = Char.ToLower(sb[3]);
 					}
 
-					vm = GetMethod(obj, sb.ToString(), parameters, i);
+					method = GetMethod(obj, sb.ToString(), parameters, i);
 
-					if (vm == null)
+					if (method == null)
 						throw;
 				}
 			}
 			catch(MethodAccessException)
 			{
 				// right now, we only support the IDictionary interface
-				if (typeof(IDictionary).IsAssignableFrom(claz))
+				if (typeof(IDictionary).IsAssignableFrom(type))
 				{
 					Object[] parameters = new Object[] {new Object(), new Object()};
 
-					vm = GetMethod(obj, "Add", parameters, i);
+					method = GetMethod(obj, "Add", parameters, i);
 
-					if (vm != null)
-						return new VelSetterImpl(vm, identifier);
+					if (method != null)
+					{
+						return new VelSetterImpl(method, identifier);
+					}
 				}
 			}
 
-			return (vm != null) ? new VelSetterImpl(vm) : null;
+			return (method != null) ? new VelSetterImpl(method) : null;
 		}
 
 		/// <summary>
@@ -168,9 +186,9 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public class VelMethodImpl : IVelMethod
 		{
-			public VelMethodImpl(MethodInfo m)
+			public VelMethodImpl(MethodInfo methodInfo)
 			{
-				method = m;
+				method = methodInfo;
 			}
 
 			public bool Cacheable
@@ -201,11 +219,11 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public class VelGetterImpl : IVelPropertyGet
 		{
-			internal AbstractExecutor ae = null;
+			internal AbstractExecutor abstractExecutor = null;
 
-			public VelGetterImpl(AbstractExecutor exec)
+			public VelGetterImpl(AbstractExecutor abstractExecutor)
 			{
-				ae = exec;
+				this.abstractExecutor = abstractExecutor;
 			}
 
 			public bool Cacheable
@@ -217,11 +235,15 @@ namespace NVelocity.Util.Introspection
 			{
 				get
 				{
-					if (ae.Property.Name != null)
-						return ae.Property.Name;
+					if (abstractExecutor.Property.Name != null)
+					{
+						return abstractExecutor.Property.Name;
+					}
 
-					if (ae.Method != null)
-						return ae.Method.Name;
+					if (abstractExecutor.Method != null)
+					{
+						return abstractExecutor.Method.Name;
+					}
 
 					return "undefined";
 				}
@@ -229,23 +251,23 @@ namespace NVelocity.Util.Introspection
 
 			public Object Invoke(Object o)
 			{
-				return ae.Execute(o);
+				return abstractExecutor.Execute(o);
 			}
 		}
 
 		public class VelSetterImpl : IVelPropertySet
 		{
-			internal IVelMethod vm = null;
+			internal IVelMethod velMethod = null;
 			internal String putKey = null;
 
-			public VelSetterImpl(IVelMethod velmethod)
+			public VelSetterImpl(IVelMethod velMethod)
 			{
-				vm = velmethod;
+				this.velMethod = velMethod;
 			}
 
-			public VelSetterImpl(IVelMethod velmethod, string key)
+			public VelSetterImpl(IVelMethod velMethod, string key)
 			{
-				vm = velmethod;
+				this.velMethod = velMethod;
 				putKey = key;
 			}
 
@@ -256,7 +278,7 @@ namespace NVelocity.Util.Introspection
 
 			public String MethodName
 			{
-				get { return vm.MethodName; }
+				get { return velMethod.MethodName; }
 			}
 
 			public Object Invoke(Object o, Object value)
@@ -273,7 +295,7 @@ namespace NVelocity.Util.Introspection
 					al.Add(value);
 				}
 
-				return vm.Invoke(o, al.ToArray());
+				return velMethod.Invoke(o, al.ToArray());
 			}
 		}
 	}

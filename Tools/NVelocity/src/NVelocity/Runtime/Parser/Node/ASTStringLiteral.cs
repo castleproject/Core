@@ -17,8 +17,8 @@ namespace NVelocity.Runtime.Parser.Node
 
 		private bool interpolate = true;
 		private SimpleNode nodeTree = null;
-		private String image = "";
-		private String interpolateImage = "";
+		private String image = string.Empty;
+		private String interpolateImage = string.Empty;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ASTStringLiteral"/> class.
@@ -331,7 +331,8 @@ namespace NVelocity.Runtime.Parser.Node
 
 				if (keyVal == null)
 				{
-					throw new ArgumentException(string.Format("The dictionary entry {0} evaluated to null, but null is not a valid dictionary key", key));
+					throw new ArgumentException(
+						string.Format("The dictionary entry {0} evaluated to null, but null is not a valid dictionary key", key));
 				}
 
 				key = keyVal;
@@ -365,7 +366,10 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 					catch(Exception)
 					{
-						throw new ArgumentException(string.Format("Could not convert dictionary value for entry {0} with value {1} to Int32. If the value is supposed to be a string, it must be enclosed with '' (single quotes)", keyBuilder, val));
+						throw new ArgumentException(
+							string.Format(
+								"Could not convert dictionary value for entry {0} with value {1} to Int32. If the value is supposed to be a string, it must be enclosed with '' (single quotes)",
+								keyBuilder, val));
 					}
 				}
 				else
@@ -376,7 +380,10 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 					catch(Exception)
 					{
-						throw new ArgumentException(string.Format("Could not convert dictionary value for entry {0} with value {1} to Single. If the value is supposed to be a string, it must be enclosed with '' (single quotes)", keyBuilder, val));
+						throw new ArgumentException(
+							string.Format(
+								"Could not convert dictionary value for entry {0} with value {1} to Single. If the value is supposed to be a string, it must be enclosed with '' (single quotes)",
+								keyBuilder, val));
 					}
 				}
 			}

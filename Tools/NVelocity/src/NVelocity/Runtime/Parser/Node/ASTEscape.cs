@@ -13,7 +13,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public class ASTEscape : SimpleNode
 	{
-		private String text = "";
+		private String text = string.Empty;
 
 		public ASTEscape(int id) : base(id)
 		{

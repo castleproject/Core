@@ -174,8 +174,10 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				runtimeServices.Error(string.Format("ASTMethod.execute() : exception from introspection : {0}", ex));
 
-				throw new RuntimeException(String.Format("Error during object introspection. Check inner exception for details. Node literal {0} Line {1} Column {2}",
-				                                         base.Literal, Line, Column), ex);
+				throw new RuntimeException(
+					String.Format(
+						"Error during object introspection. Check inner exception for details. Node literal {0} Line {1} Column {2}",
+						base.Literal, Line, Column), ex);
 			}
 
 			try
@@ -191,7 +193,11 @@ namespace NVelocity.Runtime.Parser.Node
 
 				Object obj;
 
-				if (method != null)
+				if (method == null)
+				{
+					obj = property.GetValue(o, null);
+				}
+				else
 				{
 					if (!preparedAlready)
 					{
@@ -204,10 +210,6 @@ namespace NVelocity.Runtime.Parser.Node
 					{
 						obj = String.Empty;
 					}
-				}
-				else
-				{
-					obj = property.GetValue(o, null);
 				}
 
 				return obj;
@@ -229,7 +231,19 @@ namespace NVelocity.Runtime.Parser.Node
 				*  also, let non-Exception Throwables go...
 				*/
 
-				if (eventCartridge != null)
+				if (eventCartridge == null)
+				{
+					/*
+					* no event cartridge to override. Just throw
+					*/
+
+					throw new MethodInvocationException(
+						string.Format("Invocation of method '{0}' in  {1} threw exception {2} : {3}", methodName, o.GetType(),
+						              targetInvocationException.GetBaseException().GetType(),
+						              targetInvocationException.GetBaseException().Message), targetInvocationException.GetBaseException(),
+						methodName);
+				}
+				else
 				{
 					try
 					{
@@ -238,22 +252,15 @@ namespace NVelocity.Runtime.Parser.Node
 					catch(Exception e)
 					{
 						throw new MethodInvocationException(
-							string.Format("Invocation of method '{0}' in  {1} threw exception {2} : {3}", methodName, o.GetType(), e.GetType(), e.Message), e, methodName);
+							string.Format("Invocation of method '{0}' in  {1} threw exception {2} : {3}", methodName, o.GetType(),
+							              e.GetType(), e.Message), e, methodName);
 					}
-				}
-				else
-				{
-					/*
-					* no event cartridge to override. Just throw
-					*/
-
-					throw new MethodInvocationException(
-						string.Format("Invocation of method '{0}' in  {1} threw exception {2} : {3}", methodName, o.GetType(), targetInvocationException.GetBaseException().GetType(), targetInvocationException.GetBaseException().Message), targetInvocationException.GetBaseException(), methodName);
 				}
 			}
 			catch(Exception e)
 			{
-				runtimeServices.Error(string.Format("ASTMethod.execute() : exception invoking method '{0}' in {1} : {2}", methodName, o.GetType(), e));
+				runtimeServices.Error(
+					string.Format("ASTMethod.execute() : exception invoking method '{0}' in {1} : {2}", methodName, o.GetType(), e));
 				throw e;
 			}
 		}
@@ -310,13 +317,13 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			// if a method was found, return it.  Otherwise, return whatever was found with a property, may be null
-			if (m != null)
+			if (m == null)
 			{
-				return m;
+				return p;
 			}
 			else
 			{
-				return p;
+				return m;
 			}
 		}
 

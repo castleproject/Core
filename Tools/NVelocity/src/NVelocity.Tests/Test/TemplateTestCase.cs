@@ -1,17 +1,14 @@
-using ExtendedProperties = Commons.Collections.ExtendedProperties;
+using ExtendedProperties=Commons.Collections.ExtendedProperties;
 
 namespace NVelocity.Test
 {
 	using System;
 	using System.Collections;
 	using System.IO;
-	using System.Text;
+	using App;
 	using NUnit.Framework;
-	using NVelocity.App;
-	using NVelocity.Runtime;
-	using NVelocity.Runtime.Resource;
-	using NVelocity.Runtime.Resource.Loader;
-	using NVelocity.Test.Provider;
+	using Provider;
+	using Runtime;
 
 	/// <summary>
 	/// Easily add test cases which evaluate templates and check their output.
@@ -45,7 +42,7 @@ namespace NVelocity.Test
 		private VelocityContext context1;
 		private VelocityContext context2;
 		private ArrayList vec;
-		
+
 		private VelocityEngine velocityEngine;
 
 		/// <summary>
@@ -69,7 +66,7 @@ namespace NVelocity.Test
 				testProperties = new ExtendedProperties();
 				testProperties.Load(new FileStream(TemplateTest.TEST_CASE_PROPERTIES, FileMode.Open, FileAccess.Read));
 			}
-			catch (Exception)
+			catch(Exception)
 			{
 				throw new Exception("Cannot setup TemplateTestSuite!");
 			}
@@ -117,7 +114,7 @@ namespace NVelocity.Test
 			context1.Put("searchResults", provider.RelSearches);
 			context2.Put("stringarray", provider.Array);
 			context.Put("vector", vec);
-			context.Put("mystring", new String("".ToCharArray()));
+			context.Put("mystring", new String(string.Empty.ToCharArray()));
 			context.Put("runtime", new FieldMethodizer("NVelocity.Runtime.RuntimeSingleton"));
 			context.Put("fmprov", new FieldMethodizer(provider));
 			context.Put("Floog", "floogie woogie");
@@ -144,29 +141,29 @@ namespace NVelocity.Test
 		{
 			VelocityContext context = new VelocityContext();
 
-			context.Put( "AjaxHelper2", new AjaxHelper2() );
-			context.Put( "DictHelper", new DictHelper() );
+			context.Put("AjaxHelper2", new AjaxHelper2());
+			context.Put("DictHelper", new DictHelper());
 
 			Template template = velocityEngine.GetTemplate(
 				GetFileName(null, "dicthelper", TemplateTest.TMPL_FILE_EXT));
-			
+
 			StringWriter writer = new StringWriter();
 
 			template.Merge(context, writer);
 
-			System.Console.WriteLine( writer.GetStringBuilder().ToString() );
+			System.Console.WriteLine(writer.GetStringBuilder().ToString());
 
 			writer = new StringWriter();
 
 			template.Merge(context, writer);
 
-			System.Console.WriteLine( writer.GetStringBuilder().ToString() );
+			System.Console.WriteLine(writer.GetStringBuilder().ToString());
 
 			writer = new StringWriter();
 
 			template.Merge(context, writer);
 
-			System.Console.WriteLine( writer.GetStringBuilder().ToString() );
+			System.Console.WriteLine(writer.GetStringBuilder().ToString());
 		}
 
 		/// <summary>
@@ -179,7 +176,7 @@ namespace NVelocity.Test
 			String template;
 			Boolean allpass = true;
 			Int32 failures = 0;
-			for (int i = 1;; i++)
+			for(int i = 1;; i++)
 			{
 				template = testProperties.GetString(getTemplateTestKey(i));
 
@@ -232,7 +229,8 @@ namespace NVelocity.Test
 				AssureResultsDirectoryExists(TemplateTest.RESULT_DIR);
 
 				/* get the file to write to */
-				FileStream fos = new FileStream(GetFileName(TemplateTest.RESULT_DIR, baseFileName, TemplateTest.RESULT_FILE_EXT), FileMode.Create);
+				FileStream fos =
+					new FileStream(GetFileName(TemplateTest.RESULT_DIR, baseFileName, TemplateTest.RESULT_FILE_EXT), FileMode.Create);
 
 				StreamWriter writer = new StreamWriter(fos);
 
@@ -250,7 +248,7 @@ namespace NVelocity.Test
 					return false;
 				}
 			}
-			catch (Exception)
+			catch(Exception)
 			{
 				Console.WriteLine("Test {0} failed", baseFileName);
 
@@ -260,5 +258,4 @@ namespace NVelocity.Test
 			return true;
 		}
 	}
-
 }

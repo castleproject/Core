@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace Commons.Collections
 {
 	using System;
@@ -113,7 +127,7 @@ namespace Commons.Collections
 		/// <summary>
 		/// File separator.
 		/// </summary>
-		protected internal String fileSeparator =  Path.AltDirectorySeparatorChar.ToString();
+		protected internal String fileSeparator = Path.AltDirectorySeparatorChar.ToString();
 
 		/// <summary>
 		/// Has this configuration been initialized.
@@ -137,7 +151,7 @@ namespace Commons.Collections
 		/// <summary>
 		/// Creates an empty extended properties object.
 		/// </summary>
-		public ExtendedProperties() : base()
+		public ExtendedProperties()
 		{
 		}
 
@@ -173,15 +187,16 @@ namespace Commons.Collections
 			}
 		}
 
-		/// <summary>
-		/// Private initializer method that sets up the generic
-		/// resources.
-		/// </summary>
-		/// <exception cref="IOException">if there was an I/O problem.</exception>
-		private void Init(ExtendedProperties exp)
-		{
-			isInitialized = true;
-		}
+		//Not used
+		///// <summary>
+		///// Private initializer method that sets up the generic
+		///// resources.
+		///// </summary>
+		///// <exception cref="IOException">if there was an I/O problem.</exception>
+		//private void Init(ExtendedProperties exp)
+		//{
+		//    isInitialized = true;
+		//}
 
 		/// <summary>
 		/// Indicate to client code whether property
@@ -214,19 +229,19 @@ namespace Commons.Collections
 		/// </summary>
 		/// <param name="input">An InputStream.
 		/// </param>
-		/// <param name="enc">An encoding.
+		/// <param name="encoding">An encoding.
 		/// </param>
 		/// <exception cref="IOException" />
-		public void Load(Stream input, String enc)
+		public void Load(Stream input, String encoding)
 		{
 			lock(this)
 			{
 				PropertiesReader reader = null;
-				if (enc != null)
+				if (encoding != null)
 				{
 					try
 					{
-						reader = new PropertiesReader(new StreamReader(input, Encoding.GetEncoding(enc)));
+						reader = new PropertiesReader(new StreamReader(input, Encoding.GetEncoding(encoding)));
 					}
 					catch(IOException)
 					{
@@ -245,36 +260,41 @@ namespace Commons.Collections
 					{
 						String line = reader.ReadProperty();
 
-						if (line == null) break;
-
-						int equalSign = line.IndexOf((Char) '=');
-
-						if (equalSign > 0)
+						if (line == null)
 						{
-							String key = line.Substring(0, (equalSign) - (0)).Trim();
-							String value_ = line.Substring(equalSign + 1).Trim();
+							break;
+						}
+
+						int equalSignIndex = line.IndexOf('=');
+
+						if (equalSignIndex > 0)
+						{
+							String key = line.Substring(0, (equalSignIndex) - (0)).Trim();
+							String value = line.Substring(equalSignIndex + 1).Trim();
 
 							/*
 							 * Configure produces lines like this ... just
 							 * ignore them.
 							 */
-							if (String.Empty.Equals(value_))
+							if (String.Empty.Equals(value))
+							{
 								continue;
+							}
 
 							if (Include != null && key.ToUpper().Equals(Include.ToUpper()))
 							{
 								/*
 								 * Recursively load properties files.
 								 */
-								FileInfo file = null;
+								FileInfo file;
 
-								if (value_.StartsWith(fileSeparator))
+								if (value.StartsWith(fileSeparator))
 								{
 									/*
 									 * We have an absolute path so we'll
 									 * use this.
 									 */
-									file = new FileInfo(value_);
+									file = new FileInfo(value);
 								}
 								else
 								{
@@ -284,11 +304,11 @@ namespace Commons.Collections
 									 * "./" form then just strip that off first
 									 * before continuing.
 									 */
-									if (value_.StartsWith(string.Format(".{0}", fileSeparator)))
+									if (value.StartsWith(string.Format(".{0}", fileSeparator)))
 									{
-										value_ = value_.Substring(2);
+										value = value.Substring(2);
 									}
-									file = new FileInfo(basePath + value_);
+									file = new FileInfo(basePath + value);
 								}
 
 								bool tmpBool;
@@ -309,7 +329,7 @@ namespace Commons.Collections
 							}
 							else
 							{
-								AddProperty(key, value_);
+								AddProperty(key, value);
 							}
 						}
 					}
@@ -527,11 +547,11 @@ namespace Commons.Collections
 		/// to clearProperty(key), addProperty(key,value).
 		/// </summary>
 		/// <param name="key"></param>
-		/// <param name="value_"></param>
-		public void SetProperty(String key, Object value_)
+		/// <param name="value"></param>
+		public void SetProperty(String key, Object value)
 		{
 			ClearProperty(key);
-			AddProperty(key, value_);
+			AddProperty(key, value);
 		}
 
 		/// <summary> Save the properties to the given outputStream.
@@ -548,26 +568,32 @@ namespace Commons.Collections
 			{
 				if (output != null)
 				{
-					TextWriter w = output;
+					TextWriter textWriter = output;
 					if (Header != null)
-						w.WriteLine(Header);
+					{
+						textWriter.WriteLine(Header);
+					}
 
 					foreach(String key in Keys)
 					{
 						Object value = this[key];
 						if (value == null)
+						{
 							continue;
+						}
 
 						if (value is String)
-							WriteKeyOutput(w, key, (String) value);
+						{
+							WriteKeyOutput(textWriter, key, (String) value);
+						}
 						else if (value is IEnumerable)
 						{
 							foreach(String currentElement in (IEnumerable) value)
-								WriteKeyOutput(w, key, currentElement);
+								WriteKeyOutput(textWriter, key, currentElement);
 						}
 
-						w.WriteLine();
-						w.Flush();
+						textWriter.WriteLine();
+						textWriter.Flush();
 					}
 				}
 			}
@@ -595,7 +621,9 @@ namespace Commons.Collections
 				Object o = c[key];
 				// if the value is a String, escape it so that if there are delimiters that the value is not converted to a list
 				if (o is String)
+				{
 					o = ((String) o).Replace(",", @"\,");
+				}
 
 				SetProperty(key, o);
 			}
@@ -652,7 +680,9 @@ namespace Commons.Collections
 			foreach(Object key in Keys)
 			{
 				if (key is String && ((String) key).StartsWith(prefix))
+				{
 					matchingKeys.Add(key);
+				}
 			}
 			return matchingKeys;
 		}
@@ -677,7 +707,7 @@ namespace Commons.Collections
 					if (!validSubset)
 						validSubset = true;
 
-					String newKey = null;
+					String newKey;
 
 					/*
 					* Check to make sure that c.subset(prefix) doesn't
@@ -686,9 +716,13 @@ namespace Commons.Collections
 					* subset but it is a valid subset.
 					*/
 					if (((String) key).Length == prefix.Length)
+					{
 						newKey = prefix;
+					}
 					else
+					{
 						newKey = ((String) key).Substring(prefix.Length + 1);
+					}
 
 					/*
 						*  use addPropertyDirect() - this will plug the data as 
@@ -701,9 +735,13 @@ namespace Commons.Collections
 			}
 
 			if (validSubset)
+			{
 				return c;
+			}
 			else
+			{
 				return null;
+			}
 		}
 
 		/// <summary> Display the configuration for debugging
@@ -773,26 +811,26 @@ namespace Commons.Collections
 		/// </exception>
 		public String GetString(String key, String defaultValue)
 		{
-			Object value_ = this[key];
+			Object value = this[key];
 
-			if (value_ is String)
+			if (value is String)
 			{
-				return (String) value_;
+				return (String) value;
 			}
-			else if (value_ == null)
+			else if (value == null)
 			{
-				if (defaults != null)
-				{
-					return defaults.GetString(key, defaultValue);
-				}
-				else
+				if (defaults == null)
 				{
 					return defaultValue;
 				}
+				else
+				{
+					return defaults.GetString(key, defaultValue);
+				}
 			}
-			else if (value_ is ArrayList)
+			else if (value is ArrayList)
 			{
-				return (String) ((ArrayList) value_)[0];
+				return (String) ((ArrayList) value)[0];
 			}
 			else
 			{
@@ -852,7 +890,7 @@ namespace Commons.Collections
 			for(int i = 0; i < tokens.Length; i++)
 			{
 				String token = tokens[i];
-				int equalSign = token.IndexOf((Char) '=');
+				int equalSign = token.IndexOf('=');
 				if (equalSign > 0)
 				{
 					String pkey = token.Substring(0, (equalSign) - (0)).Trim();
@@ -881,28 +919,28 @@ namespace Commons.Collections
 		/// </exception>
 		public String[] GetStringArray(String key)
 		{
-			Object value_ = this[key];
+			Object value = this[key];
 
 			// What's your vector, Victor?
 			ArrayList vector;
-			if (value_ is String)
+			if (value is String)
 			{
 				vector = new ArrayList(1);
-				vector.Add(value_);
+				vector.Add(value);
 			}
-			else if (value_ is ArrayList)
+			else if (value is ArrayList)
 			{
-				vector = (ArrayList) value_;
+				vector = (ArrayList) value;
 			}
-			else if (value_ == null)
+			else if (value == null)
 			{
-				if (defaults != null)
+				if (defaults == null)
 				{
-					return defaults.GetStringArray(key);
+					return new String[0];
 				}
 				else
 				{
-					return new String[0];
+					return defaults.GetStringArray(key);
 				}
 			}
 			else
@@ -952,28 +990,28 @@ namespace Commons.Collections
 		/// </exception>
 		public ArrayList GetVector(String key, ArrayList defaultValue)
 		{
-			Object value_ = this[key];
+			Object value = this[key];
 
-			if (value_ is ArrayList)
+			if (value is ArrayList)
 			{
-				return (ArrayList) value_;
+				return (ArrayList) value;
 			}
-			else if (value_ is String)
+			else if (value is String)
 			{
 				ArrayList v = new ArrayList(1);
-				v.Add((String) value_);
+				v.Add(value);
 				CollectionsUtil.PutElement(this, key, v);
 				return v;
 			}
-			else if (value_ == null)
+			else if (value == null)
 			{
-				if (defaults != null)
+				if (defaults == null)
 				{
-					return defaults.GetVector(key, defaultValue);
+					return (defaultValue ?? new ArrayList());
 				}
 				else
 				{
-					return (defaultValue ?? new ArrayList());
+					return defaults.GetVector(key, defaultValue);
 				}
 			}
 			else
@@ -999,13 +1037,13 @@ namespace Commons.Collections
 		public bool GetBoolean(String key)
 		{
 			Boolean b = GetBoolean(key, DEFAULT_BOOLEAN);
-			if ((Object) b != null)
+			if ((Object) b == null)
 			{
-				return b;
+				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
 			else
 			{
-				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
+				return b;
 			}
 		}
 
@@ -1025,28 +1063,28 @@ namespace Commons.Collections
 		/// </exception>
 		public Boolean GetBoolean(String key, Boolean defaultValue)
 		{
-			Object value_ = this[key];
+			Object value = this[key];
 
-			if (value_ is Boolean)
+			if (value is Boolean)
 			{
-				return (Boolean) value_;
+				return (Boolean) value;
 			}
-			else if (value_ is String)
+			else if (value is String)
 			{
-				String s = TestBoolean((String) value_);
+				String s = TestBoolean((String) value);
 				Boolean b = s.ToUpper().Equals("TRUE");
 				CollectionsUtil.PutElement(this, key, b);
 				return b;
 			}
-			else if (value_ == null)
+			else if (value == null)
 			{
-				if (defaults != null)
+				if (defaults == null)
 				{
-					return defaults.GetBoolean(key, defaultValue);
+					return defaultValue;
 				}
 				else
 				{
-					return defaultValue;
+					return defaults.GetBoolean(key, defaultValue);
 				}
 			}
 			else
@@ -1063,15 +1101,15 @@ namespace Commons.Collections
 		/// boolean status is ignored.
 		/// *
 		/// </summary>
-		/// <param name="value_">The value to test for boolean state.
+		/// <param name="value">The value to test for boolean state.
 		/// </param>
 		/// <returns><code>true</code> or <code>false</code> if the supplied
 		/// text maps to a boolean value, or <code>null</code> otherwise.
 		///
 		/// </returns>
-		public String TestBoolean(String value_)
+		public String TestBoolean(String value)
 		{
-			String s = value_.ToLower();
+			String s = value.ToLower();
 
 			if (s.Equals("true") || s.Equals("on") || s.Equals("yes"))
 			{
@@ -1129,7 +1167,7 @@ namespace Commons.Collections
 		/// </exception>
 		public sbyte GetByte(String key, sbyte defaultValue)
 		{
-			return (sbyte) GetByte(key, defaultValue);
+			return GetByte(key, defaultValue);
 		}
 
 		/// <summary> Get a byte associated with the given configuration key.
@@ -1147,27 +1185,27 @@ namespace Commons.Collections
 		/// </exception>
 		public Byte GetByte(String key, Byte defaultValue)
 		{
-			Object value_ = this[key];
+			Object value = this[key];
 
-			if (value_ is Byte)
+			if (value is Byte)
 			{
-				return (Byte) value_;
+				return (Byte) value;
 			}
-			else if (value_ is String)
+			else if (value is String)
 			{
-				Byte b = Byte.Parse((String) value_);
+				Byte b = Byte.Parse((String) value);
 				CollectionsUtil.PutElement(this, key, b);
 				return b;
 			}
-			else if (value_ == null)
+			else if (value == null)
 			{
-				if (defaults != null)
+				if (defaults == null)
 				{
-					return defaults.GetByte(key, defaultValue);
+					return defaultValue;
 				}
 				else
 				{
-					return defaultValue;
+					return defaults.GetByte(key, defaultValue);
 				}
 			}
 			else
@@ -1223,13 +1261,13 @@ namespace Commons.Collections
 		public Int32 GetInteger(String key)
 		{
 			Int32 i = GetInteger(key, DEFAULT_INT32);
-			if ((Object) i != null)
+			if ((Object) i == null)
 			{
-				return i;
+				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
 			else
 			{
-				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
+				return i;
 			}
 		}
 
@@ -1251,27 +1289,27 @@ namespace Commons.Collections
 		/// </exception>
 		public Int32 GetInteger(String key, Int32 defaultValue)
 		{
-			Object value_ = this[key];
+			Object value = this[key];
 
-			if (value_ is Int32)
+			if (value is Int32)
 			{
-				return (Int32) value_;
+				return (Int32) value;
 			}
-			else if (value_ is String)
+			else if (value is String)
 			{
-				Int32 i = Int32.Parse((String) value_);
+				Int32 i = Int32.Parse((String) value);
 				CollectionsUtil.PutElement(this, key, i);
 				return i;
 			}
-			else if (value_ == null)
+			else if (value == null)
 			{
-				if (defaults != null)
+				if (defaults == null)
 				{
-					return defaults.GetInteger(key, defaultValue);
+					return defaultValue;
 				}
 				else
 				{
-					return defaultValue;
+					return defaults.GetInteger(key, defaultValue);
 				}
 			}
 			else
@@ -1297,13 +1335,13 @@ namespace Commons.Collections
 		public Int64 GetLong(String key)
 		{
 			Int64 l = GetLong(key, DEFAULT_INT64);
-			if ((Object) l != null)
+			if ((Object) l == null)
 			{
-				return (long) l;
+				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
 			else
 			{
-				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
+				return l;
 			}
 		}
 
@@ -1322,27 +1360,27 @@ namespace Commons.Collections
 		/// </exception>
 		public Int64 GetLong(String key, Int64 defaultValue)
 		{
-			Object value_ = this[key];
+			Object value = this[key];
 
-			if (value_ is Int64)
+			if (value is Int64)
 			{
-				return (Int64) value_;
+				return (Int64) value;
 			}
-			else if (value_ is String)
+			else if (value is String)
 			{
-				Int64 l = Int64.Parse((String) value_);
+				Int64 l = Int64.Parse((String) value);
 				CollectionsUtil.PutElement(this, key, l);
 				return l;
 			}
-			else if (value_ == null)
+			else if (value == null)
 			{
-				if (defaults != null)
+				if (defaults == null)
 				{
-					return defaults.GetLong(key, defaultValue);
+					return defaultValue;
 				}
 				else
 				{
-					return defaultValue;
+					return defaults.GetLong(key, defaultValue);
 				}
 			}
 			else
@@ -1368,13 +1406,13 @@ namespace Commons.Collections
 		public float GetFloat(String key)
 		{
 			Single f = GetFloat(key, DEFAULT_SINGLE);
-			if ((Object) f != null)
+			if ((Object) f == null)
 			{
-				return (float) f;
+				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
 			else
 			{
-				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
+				return f;
 			}
 		}
 
@@ -1393,28 +1431,28 @@ namespace Commons.Collections
 		/// </exception>
 		public Single GetFloat(String key, Single defaultValue)
 		{
-			Object value_ = this[key];
+			Object value = this[key];
 
-			if (value_ is Single)
+			if (value is Single)
 			{
-				return (Single) value_;
+				return (Single) value;
 			}
-			else if (value_ is String)
+			else if (value is String)
 			{
 				//UPGRADE_TODO: Format of parameters of constructor 'java.lang.Float.Float' are different in the equivalent in .NET. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1092"'
-				Single f = Single.Parse((String) value_);
+				Single f = Single.Parse((String) value);
 				CollectionsUtil.PutElement(this, key, f);
 				return f;
 			}
-			else if (value_ == null)
+			else if (value == null)
 			{
-				if (defaults != null)
+				if (defaults == null)
 				{
-					return defaults.GetFloat(key, defaultValue);
+					return defaultValue;
 				}
 				else
 				{
-					return defaultValue;
+					return defaults.GetFloat(key, defaultValue);
 				}
 			}
 			else
@@ -1440,13 +1478,13 @@ namespace Commons.Collections
 		public Double GetDouble(String key)
 		{
 			Double d = GetDouble(key, DEFAULT_DOUBLE);
-			if ((Object) d != null)
+			if ((Object) d == null)
 			{
-				return d;
+				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
 			else
 			{
-				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
+				return d;
 			}
 		}
 
@@ -1465,28 +1503,28 @@ namespace Commons.Collections
 		/// </exception>
 		public Double GetDouble(String key, Double defaultValue)
 		{
-			Object value_ = this[key];
+			Object value = this[key];
 
-			if (value_ is Double)
+			if (value is Double)
 			{
-				return (Double) value_;
+				return (Double) value;
 			}
-			else if (value_ is String)
+			else if (value is String)
 			{
 				//UPGRADE_TODO: Format of parameters of constructor 'java.lang.Double.Double' are different in the equivalent in .NET. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1092"'
-				Double d = Double.Parse((String) value_);
+				Double d = Double.Parse((String) value);
 				CollectionsUtil.PutElement(this, key, d);
 				return d;
 			}
-			else if (value_ == null)
+			else if (value == null)
 			{
-				if (defaults != null)
+				if (defaults == null)
 				{
-					return defaults.GetDouble(key, defaultValue);
+					return defaultValue;
 				}
 				else
 				{
-					return defaultValue;
+					return defaults.GetDouble(key, defaultValue);
 				}
 			}
 			else

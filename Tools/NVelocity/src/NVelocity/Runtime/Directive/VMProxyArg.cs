@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime.Directive
 {
 	using System;
@@ -74,19 +88,19 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>number of children in our tree if a reference
 		/// </summary>
-		private int numTreeChildren = 0;
+		private readonly int numTreeChildren = 0;
 
 		/// <summary>our identity in the current context
 		/// </summary>
-		private String contextReference = null;
+		private readonly String contextReference = null;
 
 		/// <summary>the reference we are proxying for
 		/// </summary>
-		private String callerReference = null;
+		private readonly String callerReference = null;
 
 		/// <summary>the 'de-dollared' reference if we are a ref but don't have a method attached
 		/// </summary>
-		private String singleLevelRef = null;
+		private readonly String singleLevelRef = null;
 
 		/// <summary>by default, we are dynamic.  safest
 		/// </summary>
@@ -96,7 +110,7 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		private const int GENERALSTATIC = - 1;
 
-		private IRuntimeServices runtimeServices = null;
+		private readonly IRuntimeServices runtimeServices = null;
 
 		/// <summary>  ctor for current impl
 		/// *
@@ -212,7 +226,8 @@ namespace NVelocity.Runtime.Directive
 					}
 					catch(MethodInvocationException methodInvocationException)
 					{
-						runtimeServices.Error(string.Format("VMProxyArg.getObject() : method invocation error setting value : {0}", methodInvocationException));
+						runtimeServices.Error(
+							string.Format("VMProxyArg.getObject() : method invocation error setting value : {0}", methodInvocationException));
 					}
 				}
 				else
@@ -239,7 +254,9 @@ namespace NVelocity.Runtime.Directive
 				type = GENERALSTATIC;
 				staticObject = o;
 
-				runtimeServices.Error(string.Format("VMProxyArg.setObject() : Programmer error : I am a constant!  No setting! : {0} / {1}", contextReference, callerReference));
+				runtimeServices.Error(
+					string.Format("VMProxyArg.setObject() : Programmer error : I am a constant!  No setting! : {0} / {1}",
+					              contextReference, callerReference));
 			}
 
 			return null;
@@ -337,7 +354,8 @@ namespace NVelocity.Runtime.Directive
 				}
 				else
 				{
-					runtimeServices.Error(string.Format("Unsupported VM arg type : VM arg = {0} type = {1}( VMProxyArg.getObject() )", callerReference, type));
+					runtimeServices.Error(
+						string.Format("Unsupported VM arg type : VM arg = {0} type = {1}( VMProxyArg.getObject() )", callerReference, type));
 				}
 
 				return retObject;
@@ -451,7 +469,10 @@ namespace NVelocity.Runtime.Directive
 						*  this is technically an error...
 						*/
 
-						runtimeServices.Error(string.Format("Unsupported arg type : {0}  You most likely intended to call a VM with a string literal, so enclose with ' or \" characters. (VMProxyArg.setup())", callerReference));
+						runtimeServices.Error(
+							string.Format(
+								"Unsupported arg type : {0}  You most likely intended to call a VM with a string literal, so enclose with ' or \" characters. (VMProxyArg.setup())",
+								callerReference));
 						constant = true;
 						staticObject = new String(callerReference.ToCharArray());
 
@@ -488,7 +509,9 @@ namespace NVelocity.Runtime.Directive
 			type = model.Type;
 
 			if (nodeTree != null)
+			{
 				numTreeChildren = nodeTree.ChildrenCount;
+			}
 
 			if (type == ParserTreeConstants.REFERENCE)
 			{

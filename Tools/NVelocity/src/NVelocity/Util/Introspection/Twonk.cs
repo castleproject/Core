@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Util.Introspection
 {
 	/// <summary> 
@@ -17,7 +31,9 @@ namespace NVelocity.Util.Introspection
 		public int moreSpecific(Twonk other)
 		{
 			if (other.vec.Length != vec.Length)
+			{
 				return - 1;
+			}
 
 			bool low = false;
 			bool high = false;
@@ -41,7 +57,9 @@ namespace NVelocity.Util.Introspection
 	    */
 
 			if (high && low)
+			{
 				return 0;
+			}
 
 			/*
 	    *  we saw that all args were 'high', meaning
@@ -50,7 +68,9 @@ namespace NVelocity.Util.Introspection
 	    */
 
 			if (high && !low)
+			{
 				return - 1;
+			}
 
 			/*
 	    *  we saw that all points were lower, therefore
@@ -58,7 +78,9 @@ namespace NVelocity.Util.Introspection
 	    */
 
 			if (!high && low)
+			{
 				return 1;
+			}
 
 			/*
 	    *  the remainder, neither high or low

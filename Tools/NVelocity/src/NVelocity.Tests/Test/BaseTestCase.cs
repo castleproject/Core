@@ -5,8 +5,8 @@ namespace NVelocity.Test
 	using System.IO;
 	using System.Text;
 	using NUnit.Framework;
-	using NVelocity.Runtime;
-	using NVelocity.Util;
+	using Runtime;
+	using Util;
 
 	/// <summary>
 	/// This is a base interface that contains a bunch of static final
@@ -19,19 +19,23 @@ namespace NVelocity.Test
 		/// VTL file extension.
 		/// </summary>
 		public const String TMPL_FILE_EXT = "vm";
+
 		/// <summary>
 		/// Comparison file extension.
 		/// </summary>
 		public const String CMP_FILE_EXT = "cmp";
+
 		/// <summary>
 		/// Comparison file extension.
 		/// </summary>
 		public const String RESULT_FILE_EXT = "res";
+
 		/// <summary>
 		/// Path for templates. This property will override the
 		/// value in the default velocity properties file.
 		/// </summary>
-		public static readonly String FILE_RESOURCE_LOADER_PATH = Path.Combine(System.Configuration.ConfigurationManager.AppSettings["tests.src"], "../../test/templates");
+		public static readonly String FILE_RESOURCE_LOADER_PATH =
+			Path.Combine(System.Configuration.ConfigurationManager.AppSettings["tests.src"], "../../test/templates");
 
 		/// <summary>
 		/// Properties file that lists which template tests to run.
@@ -99,7 +103,7 @@ namespace NVelocity.Test
 				{
 					Directory.CreateDirectory(dir.FullName);
 				}
-				catch (Exception)
+				catch(Exception)
 				{
 					ok = false;
 				}
@@ -141,7 +145,8 @@ namespace NVelocity.Test
 		/// Whether the output matches the contents
 		/// of the comparison file.
 		/// </returns>
-		protected internal virtual bool IsMatch(String resultsDir, String compareDir, String baseFileName, String resultExt, String compareExt)
+		protected internal virtual bool IsMatch(String resultsDir, String compareDir, String baseFileName, String resultExt,
+		                                        String compareExt)
 		{
 			Boolean SHOW_RESULTS = true;
 
@@ -160,7 +165,7 @@ namespace NVelocity.Test
 				IEnumerator cmpi = cmp.GetEnumerator();
 				IEnumerator resi = res.GetEnumerator();
 				Int32 line = 0;
-				while (cmpi.MoveNext() && resi.MoveNext())
+				while(cmpi.MoveNext() && resi.MoveNext())
 				{
 					line++;
 					if (!cmpi.Current.Equals(resi.Current))

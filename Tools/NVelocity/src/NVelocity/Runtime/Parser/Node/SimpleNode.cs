@@ -103,7 +103,17 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public int ChildrenCount
 		{
-			get { return (children == null) ? 0 : children.Length; }
+			get
+			{
+				if (children == null)
+				{
+					return 0;
+				}
+				else
+				{
+					return children.Length;
+				}
+			}
 		}
 
 		/// <summary>Accept the visitor. *
@@ -220,7 +230,9 @@ namespace NVelocity.Runtime.Parser.Node
 			int i, k = ChildrenCount;
 
 			for(i = 0; i < k; i++)
+			{
 				GetChild(i).Render(context, writer);
+			}
 
 			return true;
 		}

@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Context
 {
 	using System;
@@ -173,12 +187,12 @@ namespace NVelocity.Context
 		/// </summary>
 		/// <param name="key">name of item to set
 		/// </param>
-		/// <param name="value_">object to set to key
+		/// <param name="value">object to set to key
 		/// </param>
 		/// <returns>old stored object
 		///
 		/// </returns>
-		public Object Put(String key, Object value_)
+		public Object Put(String key, Object value)
 		{
 			/*
 	    *  first see if this is a vmpa
@@ -186,11 +200,7 @@ namespace NVelocity.Context
 
 			VMProxyArg vmProxyArg = (VMProxyArg) vmProxyHash[key];
 
-			if (vmProxyArg != null)
-			{
-				return vmProxyArg.setObject(wrappedContext, value_);
-			}
-			else
+			if (vmProxyArg == null)
 			{
 				if (localContextScope)
 				{
@@ -199,7 +209,7 @@ namespace NVelocity.Context
 		    *  put in the local context
 		    */
 
-					return localContext[key] = value_;
+					return localContext[key] = value;
 				}
 				else
 				{
@@ -209,7 +219,7 @@ namespace NVelocity.Context
 
 					if (localContext.ContainsKey(key))
 					{
-						return localContext[key] = value_;
+						return localContext[key] = value;
 					}
 					else
 					{
@@ -217,9 +227,13 @@ namespace NVelocity.Context
 						* otherwise, let them push it into the 'global' context
 						*/
 
-						return innerContext.Put(key, value_);
+						return innerContext.Put(key, value);
 					}
 				}
+			}
+			else
+			{
+				return vmProxyArg.setObject(wrappedContext, value);
 			}
 		}
 
@@ -237,15 +251,11 @@ namespace NVelocity.Context
 	    * first, see if it's a VMPA
 	    */
 
-			Object o = null;
+			Object o;
 
 			VMProxyArg vmProxyArg = (VMProxyArg) vmProxyHash[key];
 
-			if (vmProxyArg != null)
-			{
-				o = vmProxyArg.getObject(wrappedContext);
-			}
-			else
+			if (vmProxyArg == null)
 			{
 				if (localContextScope)
 				{
@@ -273,6 +283,10 @@ namespace NVelocity.Context
 						o = innerContext.Get(key);
 					}
 				}
+			}
+			else
+			{
+				o = vmProxyArg.getObject(wrappedContext);
 			}
 
 			return o;

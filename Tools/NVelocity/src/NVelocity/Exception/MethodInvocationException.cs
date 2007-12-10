@@ -30,8 +30,8 @@ namespace NVelocity.Exception
 	[Serializable]
 	public class MethodInvocationException : VelocityException
 	{
-		private String methodName = "";
-		private String referenceName = "";
+		private readonly String methodName = string.Empty;
+		private String referenceName = string.Empty;
 
 		/// <summary>
 		/// Wraps the passed in exception for examination later

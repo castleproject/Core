@@ -19,11 +19,8 @@ namespace NVelocity.Runtime.Directive
 
 	public class DirectiveManager : IDirectiveManager
 	{
-		private IDictionary name2Type = Hashtable.Synchronized(new Hashtable());
+		private readonly IDictionary name2Type = Hashtable.Synchronized(new Hashtable());
 
-		public DirectiveManager()
-		{
-		}
 
 		public virtual void Register(String directiveTypeName)
 		{
@@ -45,18 +42,21 @@ namespace NVelocity.Runtime.Directive
 		{
 			Type type = (Type) name2Type[name];
 
-			if (type != null)
+			if (type == null)
+			{
+				if (directiveStack.Count != 0)
+				{
+					Directive parent = (Directive) directiveStack.Peek();
+
+					if (parent.SupportsNestedDirective(name))
+					{
+						return parent.CreateNestedDirective(name);
+					}
+				}
+			}
+			else
 			{
 				return (Directive) Activator.CreateInstance(type);
-			}
-			else if (directiveStack.Count != 0)
-			{
-				Directive parent = (Directive) directiveStack.Peek();
-
-				if (parent.SupportsNestedDirective(name))
-				{
-					return parent.CreateNestedDirective(name);
-				}
 			}
 
 			return null;

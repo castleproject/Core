@@ -20,7 +20,7 @@ namespace NVelocity.Test
 
 	public class DictHelper
 	{
-		public IDictionary CreateDict( params String[] args )
+		public IDictionary CreateDict(params String[] args)
 		{
 			IDictionary dictionary = new HybridDictionary();
 
@@ -30,11 +30,11 @@ namespace NVelocity.Test
 
 				if (parts.Length == 1)
 				{
-					dictionary[arg] = "";
+					dictionary[arg] = string.Empty;
 				}
 				else
 				{
-					dictionary[ parts[0] ] = String.Join("=", parts, 1, parts.Length - 1);
+					dictionary[parts[0]] = String.Join("=", parts, 1, parts.Length - 1);
 				}
 			}
 

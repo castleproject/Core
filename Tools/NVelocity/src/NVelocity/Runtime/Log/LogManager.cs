@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime.Log
 {
 	using System;
@@ -40,15 +54,16 @@ namespace NVelocity.Runtime.Log
 		/// </summary>
 		public static ILogSystem CreateLogSystem(IRuntimeServices runtimeServices)
 		{
+			ILogSystem logSystem;
 			// if a logSystem was set as a configuration value, use that.
 			// This is any class the user specifies.
 			Object o = runtimeServices.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM);
-
-			if (o != null && o is ILogSystem)
+			logSystem = o as ILogSystem;
+			if (logSystem != null)
 			{
-				((ILogSystem) o).Init(runtimeServices);
+				logSystem.Init(runtimeServices);
 
-				return (ILogSystem) o;
+				return logSystem;
 			}
 
 			// otherwise, see if a class was specified.  You
@@ -73,33 +88,35 @@ namespace NVelocity.Runtime.Log
 			// now run through the list, trying each.  It's ok to
 			// fail with a class not found, as we do this to also
 			// search out a default simple file logger
-			foreach(String clazz in classes)
+			foreach(String className in classes)
 			{
-				if (clazz != null && clazz.Length > 0)
+				if (className != null && className.Length > 0)
 				{
-					runtimeServices.Info(string.Format("Trying to use logger class {0}", clazz));
+					runtimeServices.Info(string.Format("Trying to use logger class {0}", className));
 
 					try
 					{
-						Type type = Type.GetType(clazz);
+						Type type = Type.GetType(className);
 						o = Activator.CreateInstance(type);
-
-						if (o is ILogSystem)
+						logSystem = o as ILogSystem;
+						if (logSystem == null)
 						{
-							((ILogSystem) o).Init(runtimeServices);
-
-							runtimeServices.Info(string.Format("Using logger class {0}", clazz));
-
-							return (ILogSystem) o;
+							runtimeServices.Error(string.Format("The specified logger class {0} isn't a valid LogSystem", className));
 						}
 						else
 						{
-							runtimeServices.Error(string.Format("The specified logger class {0} isn't a valid LogSystem", clazz));
+							logSystem.Init(runtimeServices);
+
+							runtimeServices.Info(string.Format("Using logger class {0}", className));
+
+							return logSystem;
 						}
 					}
 					catch(ApplicationException applicationException)
 					{
-						runtimeServices.Debug(string.Format("Couldn't find class {0} or necessary supporting classes in classpath. Exception : {1}", clazz, applicationException));
+						runtimeServices.Debug(
+							string.Format("Couldn't find class {0} or necessary supporting classes in classpath. Exception : {1}", className,
+							              applicationException));
 					}
 				}
 			}
@@ -111,7 +128,6 @@ namespace NVelocity.Runtime.Log
 			// dependencies for the default logger.
 			// Since we really don't know,
 			// then take a wack at the log4net as a last resort.
-			ILogSystem logSystem = null;
 			try
 			{
 				logSystem = new NullLogSystem();
@@ -119,7 +135,10 @@ namespace NVelocity.Runtime.Log
 			}
 			catch(ApplicationException applicationException)
 			{
-				String error = string.Format("PANIC : NVelocity cannot find any of the specified or default logging systems in the classpath, or the classpath doesn't contain the necessary classes to support them. Please consult the documentation regarding logging. Exception : {0}", applicationException);
+				String error =
+					string.Format(
+						"PANIC : NVelocity cannot find any of the specified or default logging systems in the classpath, or the classpath doesn't contain the necessary classes to support them. Please consult the documentation regarding logging. Exception : {0}",
+						applicationException);
 
 				Console.Out.WriteLine(error);
 				Console.Error.WriteLine(error);

@@ -1,7 +1,21 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.App
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Reflection;
 
 	/// <summary>
@@ -40,12 +54,12 @@ namespace NVelocity.App
 		/// <summary>
 		/// Hold the field objects by field name
 		/// </summary>
-		private Hashtable fieldHash = new Hashtable();
+		private Dictionary<string, FieldInfo> fieldHash = new Dictionary<string, FieldInfo>();
 
 		/// <summary>
 		/// Hold the class objects by field name
 		/// </summary>
-		private Hashtable classHash = new Hashtable();
+		private Dictionary<string, Type> classHash = new Dictionary<string, Type>();
 
 		/// <summary>
 		/// Allow object to be initialized without any data. You would use
@@ -116,9 +130,11 @@ namespace NVelocity.App
 		{
 			try
 			{
-				FieldInfo f = (FieldInfo) fieldHash[fieldName];
+				FieldInfo f = fieldHash[fieldName];
 				if (f != null)
-					return f.GetValue((Type) classHash[fieldName]);
+				{
+					return f.GetValue(classHash[fieldName]);
+				}
 			}
 			catch(Exception)
 			{
@@ -129,16 +145,16 @@ namespace NVelocity.App
 		/// <summary>  Method that retrieves all public static fields
 		/// in the class we are methodizing.
 		/// </summary>
-		private void Inspect(Type clas)
+		private void Inspect(Type type)
 		{
-			FieldInfo[] fields = clas.GetFields();
+			FieldInfo[] fields = type.GetFields();
 			for(int i = 0; i < fields.Length; i++)
 			{
 				// only if public and static
 				if (fields[i].IsPublic && fields[i].IsStatic)
 				{
 					fieldHash[fields[i].Name] = fields[i];
-					classHash[fields[i].Name] = clas;
+					classHash[fields[i].Name] = type;
 				}
 			}
 		}

@@ -1,12 +1,25 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Context
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Collections.Specialized;
 	using NVelocity.App.Events;
 	using NVelocity.Runtime.Resource;
 	using NVelocity.Util.Introspection;
-	using System.Collections.Generic;
-	using System.Collections.Specialized;
-
 
 	/// <summary>  class to encapsulate the 'stuff' for internal operation of velocity.
 	/// We use the context as a thread-safe storage : we take advantage of the
@@ -31,12 +44,12 @@ namespace NVelocity.Context
 		/// <summary>
 		/// cache for node/context specific introspection information
 		/// </summary>
-		private HybridDictionary introspectionCache;
+		private readonly HybridDictionary introspectionCache;
 
 		/// <summary>
 		/// Template name stack. The stack top contains the current template name.
 		/// </summary>
-		private Stack<string> templateNameStack;
+		private readonly Stack<string> templateNameStack;
 
 		/// <summary>
 		/// EventCartridge we are to carry.  Set by application
@@ -60,9 +73,13 @@ namespace NVelocity.Context
 			get
 			{
 				if ((templateNameStack.Count == 0))
+				{
 					return "<undef>";
+				}
 				else
+				{
 					return templateNameStack.Peek();
+				}
 			}
 		}
 

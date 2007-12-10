@@ -16,10 +16,10 @@ namespace NVelocity.Test
 
 			StringBuilder sb = new StringBuilder(name + " " + url + " ");
 
-			
-			Array keysSorted = (new ArrayList(options.Keys)).ToArray(typeof(string)) as string[] ;
 
-			Array.Sort( keysSorted );
+			Array keysSorted = (new ArrayList(options.Keys)).ToArray(typeof(string)) as string[];
+
+			Array.Sort(keysSorted);
 
 			foreach(string key in keysSorted)
 			{

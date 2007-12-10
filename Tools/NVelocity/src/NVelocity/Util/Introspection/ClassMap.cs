@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Util.Introspection
 {
 	using System;
@@ -18,20 +32,24 @@ namespace NVelocity.Util.Introspection
 
 		private static readonly Object OBJECT = new Object();
 
-		private readonly Type clazz;
+		private readonly Type type;
 
 		/// <summary> Cache of Methods, or CACHE_MISS, keyed by method
 		/// name and actual arguments used to find it.
 		/// </summary>
-		private readonly Dictionary<string, MethodInfo> methodCache = new Dictionary<string, MethodInfo>(StringComparer.OrdinalIgnoreCase);
-		private readonly Dictionary<string, MemberInfo> propertyCache = new Dictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
+		private readonly Dictionary<string, MethodInfo> methodCache =
+			new Dictionary<string, MethodInfo>(StringComparer.OrdinalIgnoreCase);
+
+		private readonly Dictionary<string, MemberInfo> propertyCache =
+			new Dictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
+
 		private readonly MethodMap methodMap = new MethodMap();
 
 		/// <summary> Standard constructor
 		/// </summary>
-		public ClassMap(Type clazz)
+		public ClassMap(Type type)
 		{
-			this.clazz = clazz;
+			this.type = type;
 			PopulateMethodCache();
 			PopulatePropertyCache();
 		}
@@ -46,12 +64,9 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		internal Type CachedClass
 		{
-			get { return clazz; }
+			get { return type; }
 		}
 
-		private static void MethodMiss()
-		{
-		}
 
 		/// <summary>
 		/// Find a Method using the methodKey provided.
@@ -136,7 +151,7 @@ namespace NVelocity.Util.Introspection
 		private void PopulateMethodCache()
 		{
 			// get all publicly accessible methods
-			MethodInfo[] methods = GetAccessibleMethods(clazz);
+			MethodInfo[] methods = GetAccessibleMethods(type);
 
 			// map and cache them
 			foreach(MethodInfo method in methods)
@@ -149,7 +164,7 @@ namespace NVelocity.Util.Introspection
 		private void PopulatePropertyCache()
 		{
 			// get all publicly accessible methods
-			PropertyInfo[] properties = GetAccessibleProperties(clazz);
+			PropertyInfo[] properties = GetAccessibleProperties(type);
 
 			// map and cache them
 			foreach(PropertyInfo property in properties)
@@ -198,30 +213,30 @@ namespace NVelocity.Util.Introspection
 		/// <summary>
 		/// Retrieves public methods for a class.
 		/// </summary>
-		private static MethodInfo[] GetAccessibleMethods(Type clazz)
+		private static MethodInfo[] GetAccessibleMethods(Type type)
 		{
 			ArrayList methods = new ArrayList();
 
-			foreach(Type interfaceType in clazz.GetInterfaces())
+			foreach(Type interfaceType in type.GetInterfaces())
 			{
 				methods.AddRange(interfaceType.GetMethods());
 			}
 
-			methods.AddRange(clazz.GetMethods());
+			methods.AddRange(type.GetMethods());
 
 			return (MethodInfo[]) methods.ToArray(typeof(MethodInfo));
 		}
 
-		private static PropertyInfo[] GetAccessibleProperties(Type clazz)
+		private static PropertyInfo[] GetAccessibleProperties(Type type)
 		{
 			ArrayList props = new ArrayList();
 
-			foreach(Type interfaceType in clazz.GetInterfaces())
+			foreach(Type interfaceType in type.GetInterfaces())
 			{
 				props.AddRange(interfaceType.GetProperties());
 			}
 
-			props.AddRange(clazz.GetProperties());
+			props.AddRange(type.GetProperties());
 
 			return (PropertyInfo[]) props.ToArray(typeof(PropertyInfo));
 		}

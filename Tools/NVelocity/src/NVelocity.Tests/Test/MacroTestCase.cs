@@ -16,8 +16,8 @@ namespace NVelocity.Test
 {
 	using System;
 	using System.IO;
+	using App;
 	using NUnit.Framework;
-	using NVelocity.App;
 
 	[TestFixture]
 	public class MacroTestCase
@@ -33,7 +33,7 @@ namespace NVelocity.Test
 			ve = new VelocityEngine();
 			ve.Init();
 		}
-		
+
 		[Test, Ignore("Does not pass, but would be easier to rewrite NVelocity than fix it")]
 		public void RecursiveMacroHaveArgsStacked()
 		{
@@ -50,9 +50,9 @@ namespace NVelocity.Test
 				"#end\r\n" +
 				"#end\r\n" +
 				"#rec('hello' 1)\r\n";
-			
+
 			StringWriter sw = new StringWriter();
-			
+
 			bool success = ve.Evaluate(context, sw, "MacroTest1", template);
 
 			Assert.IsTrue(success, "Evaluation failed");

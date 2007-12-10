@@ -4,15 +4,15 @@ namespace NVelocity.Test
 	using System.Collections;
 	using System.Globalization;
 	using System.IO;
+	using App;
 	using NUnit.Framework;
-	using NVelocity.App;
 
 	/// <summary>
 	/// Test Velocity processing
 	/// </summary>
 	[TestFixture]
 	public class VelocityTest
-	{	
+	{
 		[Test]
 		public void MathOperations()
 		{
@@ -26,43 +26,43 @@ namespace NVelocity.Test
 			Velocity.Init();
 
 			StringWriter sw = new StringWriter();
-			
-			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = 1 + 1)\r\n$total") );
+
+			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = 1 + 1)\r\n$total"));
 			Assert.AreEqual("2", sw.GetStringBuilder().ToString());
 
 			sw = new StringWriter();
-			
-			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $fval + $fval)\r\n$total") );
+
+			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = $fval + $fval)\r\n$total"));
 			Assert.AreEqual("2.4", sw.GetStringBuilder().ToString());
 
 			sw = new StringWriter();
-			
-			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $dval + $dval)\r\n$total") );
+
+			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = $dval + $dval)\r\n$total"));
 			Assert.AreEqual("10.6", sw.GetStringBuilder().ToString());
 
 			sw = new StringWriter();
-			
-			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = 1 + $dval)\r\n$total") );
+
+			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = 1 + $dval)\r\n$total"));
 			Assert.AreEqual("6.3", sw.GetStringBuilder().ToString());
 
 			sw = new StringWriter();
-			
-			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $fval * $dval)\r\n$total") );
+
+			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = $fval * $dval)\r\n$total"));
 			Assert.AreEqual("6.36000025272369", sw.GetStringBuilder().ToString());
 
 			sw = new StringWriter();
-			
-			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $fval - $dval)\r\n$total") );
+
+			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = $fval - $dval)\r\n$total"));
 			Assert.AreEqual("-4.09999995231628", sw.GetStringBuilder().ToString());
 
 			sw = new StringWriter();
-			
-			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $fval % $dval)\r\n$total") );
+
+			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = $fval % $dval)\r\n$total"));
 			Assert.AreEqual("1.20000004768372", sw.GetStringBuilder().ToString());
 
 			sw = new StringWriter();
-			
-			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $fval / $dval)\r\n$total") );
+
+			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = $fval / $dval)\r\n$total"));
 			Assert.AreEqual("0.22641510333655", sw.GetStringBuilder().ToString());
 		}
 
@@ -89,7 +89,7 @@ namespace NVelocity.Test
 
 			// test simple objects (no nesting)
 			StringWriter sw = new StringWriter();
-			bool ok = Velocity.Evaluate(c, sw, "", "$firstName is my first name, my last name is $lastName");
+			bool ok = Velocity.Evaluate(c, sw, string.Empty, "$firstName is my first name, my last name is $lastName");
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			String s = sw.ToString();
 			Assert.AreEqual("Cort is my first name, my last name is Schaefer", s, "test simple objects (no nesting)");
@@ -97,7 +97,7 @@ namespace NVelocity.Test
 			// test nested object
 			sw = new StringWriter();
 			String template = "These are the individual properties:\naddr1=9339 Grand Teton Drive\naddr2=Office in the back";
-			ok = Velocity.Evaluate(c, sw, "", template);
+			ok = Velocity.Evaluate(c, sw, string.Empty, template);
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			s = sw.ToString();
 			Assert.IsFalse(String.Empty.Equals(s), "test nested object");
@@ -105,7 +105,7 @@ namespace NVelocity.Test
 			// test hashtable
 			sw = new StringWriter();
 			template = "Hashtable lookup: foo=$hashtable.foo";
-			ok = Velocity.Evaluate(c, sw, "", template);
+			ok = Velocity.Evaluate(c, sw, string.Empty, template);
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			s = sw.ToString();
 			Assert.AreEqual("Hashtable lookup: foo=bar", s, "Evaluation did not evaluate right");
@@ -113,7 +113,7 @@ namespace NVelocity.Test
 			// test nested properties
 			//    	    sw = new StringWriter();
 			//	    template = "These are the nested properties:\naddr1=$contact.Address.Address1\naddr2=$contact.Address.Address2";
-			//	    ok = Velocity.Evaluate(c, sw, "", template);
+			//	    ok = Velocity.Evaluate(c, sw, string.Empty, template);
 			//	    Assert("Evaluation returned failure", ok);
 			//	    s = sw.ToString();
 			//	    Assert("test nested properties", s.Equals("These are the nested properties:\naddr1=9339 Grand Teton Drive\naddr2=Office in the back"));
@@ -121,7 +121,7 @@ namespace NVelocity.Test
 			// test key not found in context
 			sw = new StringWriter();
 			template = "$!NOT_IN_CONTEXT";
-			ok = Velocity.Evaluate(c, sw, "", template);
+			ok = Velocity.Evaluate(c, sw, string.Empty, template);
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			s = sw.ToString();
 			Assert.AreEqual(String.Empty, s, "test key not found in context");
@@ -129,7 +129,7 @@ namespace NVelocity.Test
 			// test nested properties where property not found
 			//	    sw = new StringWriter();
 			//	    template = "These are the non-existent nested properties:\naddr1=$contact.Address.Address1.Foo\naddr2=$contact.Bar.Address.Address2";
-			//	    ok = Velocity.Evaluate(c, sw, "", template);
+			//	    ok = Velocity.Evaluate(c, sw, string.Empty, template);
 			//	    Assert("Evaluation returned failure", ok);
 			//	    s = sw.ToString();
 			//	    Assert("test nested properties where property not found", s.Equals("These are the non-existent nested properties:\naddr1=\naddr2="));
@@ -163,14 +163,14 @@ namespace NVelocity.Test
 
 			public String Address1
 			{
-				get { return this.address1; }
-				set { this.address1 = value; }
+				get { return address1; }
+				set { address1 = value; }
 			}
 
 			public String Address2
 			{
-				get { return this.address2; }
-				set { this.address2 = value; }
+				get { return address2; }
+				set { address2 = value; }
 			}
 		}
 	}

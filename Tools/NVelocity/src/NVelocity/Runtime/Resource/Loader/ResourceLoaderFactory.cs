@@ -45,7 +45,10 @@ namespace NVelocity.Runtime.Resource.Loader
 			}
 			catch(Exception e)
 			{
-				rs.Error(string.Format("Problem instantiating the template loader.\nLook at your properties file and make sure the\nname of the template loader is correct. Here is the\nerror: {0}", e));
+				rs.Error(
+					string.Format(
+						"Problem instantiating the template loader.\nLook at your properties file and make sure the\nname of the template loader is correct. Here is the\nerror: {0}",
+						e));
 				throw new Exception(string.Format("Problem initializing template loader: {0}\nError is: {1}", loaderClassName, e));
 			}
 		}

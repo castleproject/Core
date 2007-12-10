@@ -2,9 +2,9 @@ namespace NVelocity.Test
 {
 	using System;
 	using System.IO;
+	using App;
 	using NUnit.Framework;
-	using NVelocity.App;
-	using NVelocity.Runtime;
+	using Runtime;
 
 	/// <summary>
 	/// This class is intended to test the App.Velocity class.
@@ -27,7 +27,7 @@ namespace NVelocity.Test
 				Velocity.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
 				Velocity.Init();
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				throw new Exception("Cannot setup VelocityAppTestCase!", e);
 			}
@@ -60,6 +60,5 @@ namespace NVelocity.Test
 				Assert.Fail("Output incorrect.");
 			}
 		}
-
 	}
 }

@@ -51,11 +51,15 @@ namespace NVelocity.Runtime.Parser.Node
 
 			// if the left is not null and true, then true
 			if (left != null && left.Evaluate(context))
+			{
 				return true;
+			}
 
 			// same for right
 			if (right != null && right.Evaluate(context))
+			{
 				return true;
+			}
 
 			return false;
 		}

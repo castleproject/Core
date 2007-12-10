@@ -1,4 +1,16 @@
-using Node = NVelocity.Runtime.Parser.Node.INode;
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 namespace NVelocity.Runtime.Directive
 {
@@ -47,7 +59,7 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>   render() doesn't do anything in the final output rendering.
 		/// There is no output from a #macro() directive.
 		/// </summary>
-		public override bool Render(IInternalContextAdapter context, TextWriter writer, Node node)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
 			// do nothing : We never render.  The VelocimacroProxy object does that
 			return true;
@@ -61,7 +73,7 @@ namespace NVelocity.Runtime.Directive
 		/// VelocimacroProxy objects, and if not currently used, adds it
 		/// to the macro Factory
 		/// </summary>
-		public static void processAndRegister(IRuntimeServices rs, Node node, String sourceTemplate)
+		public static void processAndRegister(IRuntimeServices rs, INode node, String sourceTemplate)
 		{
 			// There must be at least one arg to  #macro,
 			// the name of the VM.  Note that 0 following 
@@ -89,7 +101,9 @@ namespace NVelocity.Runtime.Directive
 			StringBuilder temp = new StringBuilder();
 
 			for(int i = 0; i < macroArray.Count; i++)
+			{
 				temp.Append(macroArray[i]);
+			}
 
 			String macroBody = temp.ToString();
 
@@ -103,7 +117,7 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>  creates an array containing the literal
 		/// strings in the macro argument
 		/// </summary>
-		private static String[] getArgArray(Node node)
+		private static String[] getArgArray(INode node)
 		{
 			// remember : this includes the block tree
 			int numArgs = node.ChildrenCount;
@@ -149,7 +163,7 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>  Returns an array of the literal rep of the AST
 		/// </summary>
-		private static IList getASTAsStringArray(Node rootNode)
+		private static IList getASTAsStringArray(INode rootNode)
 		{
 			// this assumes that we are passed in the root 
 			// node of the code block

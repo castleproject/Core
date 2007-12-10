@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Context
 {
 	using System;
@@ -76,18 +90,19 @@ namespace NVelocity.Context
 		{
 			context = c;
 
-			if (!(c is IInternalHousekeepingContext))
+			if (c is IInternalHousekeepingContext)
 			{
-				internalHousekeepingContext = new InternalContextBase();
+				internalHousekeepingContext = (IInternalHousekeepingContext) context;
 			}
 			else
 			{
-				internalHousekeepingContext = (IInternalHousekeepingContext)context;
+				internalHousekeepingContext = new InternalContextBase();
 			}
 
-			if (c is IInternalEventContext)
+			IInternalEventContext internalEventContext = context as IInternalEventContext;
+			if (internalEventContext != null)
 			{
-				internalEventContext = (IInternalEventContext)context;
+				this.internalEventContext = internalEventContext;
 			}
 		}
 
@@ -198,9 +213,9 @@ namespace NVelocity.Context
 
 		/* ---  Context interface methods --- */
 
-		public Object Put(String key, Object value_)
+		public Object Put(String key, Object value)
 		{
-			return context.Put(key, value_);
+			return context.Put(key, value);
 		}
 
 		public Object Get(String key)
@@ -303,8 +318,8 @@ namespace NVelocity.Context
 	public class InternalContextAdapterImplEnumerator : IDictionaryEnumerator
 	{
 		private int index = -1;
-		private IContext context;
-		private object[] keys;
+		private readonly IContext context;
+		private readonly object[] keys;
 
 		public InternalContextAdapterImplEnumerator(IContext context)
 		{

@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.App.Events
 {
 	using System;
@@ -10,9 +24,9 @@ namespace NVelocity.App.Events
 	/// </summary>
 	public class EventCartridge
 	{
-		public event ReferenceInsertionEventHandler ReferenceInsertion;
+		public event EventHandler<ReferenceInsertionEventArgs> ReferenceInsertion;
 		public event NullSetEventHandler NullSet;
-		public event MethodExceptionEventHandler MethodExceptionEvent;
+		public event EventHandler<MethodExceptionEventArgs> MethodExceptionEvent;
 
 		/// <summary>
 		/// Called during Velocity merge before a reference value will
@@ -45,7 +59,9 @@ namespace NVelocity.App.Events
 		internal bool ShouldLogOnNullSet(String lhs, String rhs)
 		{
 			if (NullSet == null)
+			{
 				return true;
+			}
 
 			NullSetEventArgs e = new NullSetEventArgs(lhs, rhs);
 			NullSet(this, e);
@@ -56,24 +72,30 @@ namespace NVelocity.App.Events
 		/// <summary>
 		/// Called during Velocity merge if a reference is null
 		/// </summary>
-		/// <param name="claz">Class that is causing the exception</param>
+		/// <param name="type">Class that is causing the exception</param>
 		/// <param name="method">method called that causes the exception</param>
 		/// <param name="e">Exception thrown by the method</param>
 		/// <returns>Object to return as method result</returns>
 		/// <exception cref="Exception">exception to be wrapped and propagated to app</exception>
-		internal Object HandleMethodException(Type claz, String method, Exception e)
+		internal Object HandleMethodException(Type type, String method, Exception e)
 		{
 			// if we don't have a handler, just throw what we were handed
 			if (MethodExceptionEvent == null)
+			{
 				throw new VelocityException(e.Message, e);
+			}
 
-			MethodExceptionEventArgs mea = new MethodExceptionEventArgs(claz, method, e);
+			MethodExceptionEventArgs mea = new MethodExceptionEventArgs(type, method, e);
 			MethodExceptionEvent(this, mea);
 
-			if (mea.ValueToRender != null)
-				return mea.ValueToRender;
-			else
+			if (mea.ValueToRender == null)
+			{
 				throw new VelocityException(e.Message, e);
+			}
+			else
+			{
+				return mea.ValueToRender;
+			}
 		}
 
 		/// <summary>
@@ -83,14 +105,16 @@ namespace NVelocity.App.Events
 		/// <returns>true if successful, false otherwise</returns>
 		public bool AttachToContext(IContext context)
 		{
-			if (context is IInternalEventContext)
+			IInternalEventContext internalEventContext = context as IInternalEventContext;
+			if (internalEventContext == null)
 			{
-				IInternalEventContext internalEventContext = (IInternalEventContext) context;
+				return false;
+			}
+			else
+			{
 				internalEventContext.AttachEventCartridge(this);
 				return true;
 			}
-			else
-				return false;
 		}
 	}
 }

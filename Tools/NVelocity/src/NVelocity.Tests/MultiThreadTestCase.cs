@@ -52,7 +52,7 @@ namespace NVelocity
 
 			Thread[] threads = new Thread[threadCount];
 
-			for (int i = 0; i < threadCount; i++)
+			for(int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(ExecuteMethodUntilSignal3);
 				threads[i].Start();
@@ -60,7 +60,7 @@ namespace NVelocity
 
 			startEvent.Set();
 
-			Thread.CurrentThread.Join(3*5000);
+			Thread.CurrentThread.Join(3 * 5000);
 
 			stopEvent.Set();
 		}
@@ -72,7 +72,7 @@ namespace NVelocity
 
 			Thread[] threads = new Thread[threadCount];
 
-			for (int i = 0; i < threadCount; i++)
+			for(int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(ExecuteMethodUntilSignal1);
 				threads[i].Start();
@@ -80,7 +80,7 @@ namespace NVelocity
 
 			startEvent.Set();
 
-			Thread.CurrentThread.Join(1*5000);
+			Thread.CurrentThread.Join(1 * 5000);
 
 			stopEvent.Set();
 		}
@@ -92,7 +92,7 @@ namespace NVelocity
 
 			Thread[] threads = new Thread[threadCount];
 
-			for (int i = 0; i < threadCount; i++)
+			for(int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(ExecuteMethodUntilSignal2);
 				threads[i].Start();
@@ -100,7 +100,7 @@ namespace NVelocity
 
 			startEvent.Set();
 
-			Thread.CurrentThread.Join(1*5000);
+			Thread.CurrentThread.Join(1 * 5000);
 
 			stopEvent.Set();
 		}
@@ -112,7 +112,7 @@ namespace NVelocity
 		{
 			startEvent.WaitOne(int.MaxValue, false);
 
-			while (!stopEvent.WaitOne(0, false))
+			while(!stopEvent.WaitOne(0, false))
 			{
 				VelocityEngine velocityEngine = new VelocityEngine();
 				velocityEngine.Init();
@@ -124,8 +124,8 @@ namespace NVelocity
 				c.Put("items", items);
 
 				bool ok = velocityEngine.Evaluate(c, sw,
-				                      "ContextTest.CaseInsensitive",
-				                      @"
+				                                  "ContextTest.CaseInsensitive",
+				                                  @"
 					#foreach( $item in $items )
 						$item,
 					#end
@@ -143,7 +143,7 @@ namespace NVelocity
 		{
 			startEvent.WaitOne(int.MaxValue, false);
 
-			while (!stopEvent.WaitOne(0, false))
+			while(!stopEvent.WaitOne(0, false))
 			{
 				StringWriter sw = new StringWriter();
 
@@ -152,8 +152,8 @@ namespace NVelocity
 				c.Put("items", items);
 
 				bool ok = velocityEngine.Evaluate(c, sw,
-				                      "ContextTest.CaseInsensitive",
-				                      @"
+				                                  "ContextTest.CaseInsensitive",
+				                                  @"
 					#foreach($item in $items)
 						$item,
 					#end
@@ -172,17 +172,17 @@ namespace NVelocity
 
 			try
 			{
-				while (!stopEvent.WaitOne(0, false))
+				while(!stopEvent.WaitOne(0, false))
 				{
 					StringWriter sw = new StringWriter();
 
 					VelocityContext c = new VelocityContext();
 					c.Put("x", new Urlhelper());
 
-					bool ok = velocityEngine.Evaluate(c, sw, "",
-					                      "#foreach($i in [1..3000]) \r\n" +
-					                      "#set($temp = $x.For(\"%{controller='Test',id=$i}\")) \r\n" +
-					                      "#end \r\n");
+					bool ok = velocityEngine.Evaluate(c, sw, string.Empty,
+					                                  "#foreach($i in [1..3000]) \r\n" +
+					                                  "#set($temp = $x.For(\"%{controller='Test',id=$i}\")) \r\n" +
+					                                  "#end \r\n");
 
 					Assert.IsTrue(ok, "Evaluation returned failure");
 				}
@@ -195,7 +195,7 @@ namespace NVelocity
 
 		private string Normalize(StringWriter sw)
 		{
-			return Regex.Replace(sw.ToString(), "\\s+", "");
+			return Regex.Replace(sw.ToString(), "\\s+", string.Empty);
 		}
 
 		private class Urlhelper
@@ -217,7 +217,7 @@ namespace NVelocity
 
 					return controller + " " + id;
 				}
-				catch (System.Exception ex)
+				catch(System.Exception ex)
 				{
 					Console.WriteLine(ex.ToString());
 					throw;

@@ -1,4 +1,4 @@
-using LRUMap = Commons.Collections.LRUMap;
+using LRUMap=Commons.Collections.LRUMap;
 
 namespace NVelocity.Test.Commons
 {
@@ -79,6 +79,5 @@ namespace NVelocity.Test.Commons
 			Assert.AreEqual(key, ((ArrayList) map.Keys)[0]);
 			Assert.AreEqual(value, ((ArrayList) map.Values)[0]);
 		}
-
 	}
 }

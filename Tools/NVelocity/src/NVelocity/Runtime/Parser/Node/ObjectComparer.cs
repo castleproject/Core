@@ -59,29 +59,47 @@ namespace NVelocity.Runtime.Parser.Node
 			Type xType, yType;
 
 			if (x != null)
+			{
 				xType = x.GetType();
+			}
 			else
+			{
 				return Smaller;
+			}
 
 			if (y != null)
+			{
 				yType = y.GetType();
+			}
 			else
+			{
 				return Greater;
+			}
 
 			if (x is string || y is string)
+			{
 				return string.Compare(x.ToString(), y.ToString());
+			}
 
 			if (xType.IsPrimitive && yType.IsPrimitive)
+			{
 				return ComparePrimitive(x, y);
+			}
 
 			if (xType == typeof(decimal) || yType == typeof(decimal))
+			{
 				return decimal.Compare(Convert.ToDecimal(x), Convert.ToDecimal(y));
+			}
 
 			// Finally try a IComparable comparison
 			if (x is IComparable)
+			{
 				return (x as IComparable).CompareTo(y);
+			}
 			else if (y is IComparable)
+			{
 				return -(y as IComparable).CompareTo(x);
+			}
 
 			throw new ArgumentException(string.Format("Unable to compare {0} and {1}", x, y));
 		}
@@ -92,12 +110,16 @@ namespace NVelocity.Runtime.Parser.Node
 			y = ReType(y);
 
 			if (x.GetType() == y.GetType())
+			{
 				return (x as IComparable).CompareTo(y);
+			}
 
 			IObjectComparer cmp = comparers[string.Format("{0}:{1}", x.GetType(), y.GetType())] as IObjectComparer;
 
 			if (cmp != null)
+			{
 				return cmp.Compare(x, y);
+			}
 
 			throw new ArgumentException(string.Format("Unable to compare {0} and {1}", x.GetType(), y.GetType()));
 		}
@@ -225,7 +247,10 @@ namespace NVelocity.Runtime.Parser.Node
 			public int Compare(object x, object y)
 			{
 				if (x is ulong)
-					return Compare((ulong) x, y);
+				{
+					ulong xAsLong = (ulong) x;
+					return Compare(xAsLong, y);
+				}
 
 				return -Compare((ulong) y, x);
 			}
@@ -237,7 +262,9 @@ namespace NVelocity.Runtime.Parser.Node
 					long l = (long) y;
 
 					if (l < 0)
+					{
 						return Smaller;
+					}
 
 					ulong ull = (ulong) l;
 

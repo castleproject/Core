@@ -18,10 +18,8 @@ namespace NVelocity.Test
 	using System.Collections;
 	using System.Globalization;
 	using System.IO;
-
+	using App;
 	using NUnit.Framework;
-
-	using NVelocity.App;
 
 	[TestFixture]
 	public class MethodCallTestCase

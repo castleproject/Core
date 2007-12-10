@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity
 {
 	using System;
@@ -87,9 +101,21 @@ namespace NVelocity
 
 				public void SetAutoCommit(OleDbConnection connection, bool boolean)
 				{
-					if (this[connection] != null)
+					object o = this[connection];
+					if (o == null)
 					{
-						ConnectionProperties Properties = ((ConnectionProperties) this[connection]);
+						ConnectionProperties TempProp = new ConnectionProperties();
+						TempProp.AutoCommit = boolean;
+						TempProp.TransactionLevel = 0;
+						if (boolean)
+						{
+							TempProp.Transaction = connection.BeginTransaction();
+						}
+						Add(connection, TempProp);
+					}
+					else
+					{
+						ConnectionProperties Properties = ((ConnectionProperties) o);
 						Properties.AutoCommit = boolean;
 						if (!boolean)
 						{
@@ -103,15 +129,6 @@ namespace NVelocity
 								transaction = connection.BeginTransaction(Properties.TransactionLevel);
 							}
 						}
-					}
-					else
-					{
-						ConnectionProperties TempProp = new ConnectionProperties();
-						TempProp.AutoCommit = boolean;
-						TempProp.TransactionLevel = 0;
-						if (boolean)
-							TempProp.Transaction = connection.BeginTransaction();
-						Add(connection, TempProp);
 					}
 				}
 
@@ -161,12 +178,14 @@ namespace NVelocity
 
 				public bool GetAutoCommit(OleDbConnection connection)
 				{
-					if (this[connection] != null)
+					if (this[connection] == null)
+					{
+						return false;
+					}
+					else
 					{
 						return ((ConnectionProperties) this[connection]).AutoCommit;
 					}
-					else
-						return false;
 				}
 
 				private class ConnectionProperties
@@ -218,7 +237,7 @@ namespace NVelocity
 			public string NextToken()
 			{
 				string result;
-				if (source == "")
+				if (source == string.Empty)
 					throw new System.Exception();
 				else
 				{
@@ -227,7 +246,7 @@ namespace NVelocity
 					RemoveEmptyStrings();
 					result = (string) elements[0];
 					elements.RemoveAt(0);
-					source = source.Replace(result, "");
+					source = source.Replace(result, string.Empty);
 					source = source.TrimStart(delimiters.ToCharArray());
 					return result;
 				}
@@ -243,7 +262,7 @@ namespace NVelocity
 			{
 				//VJ++ does not treat empty strings as tokens
 				for(int index = 0; index < elements.Count; index++)
-					if ((string) elements[index] == "")
+					if ((string) elements[index] == string.Empty)
 					{
 						elements.RemoveAt(index);
 						index--;
@@ -316,37 +335,37 @@ namespace NVelocity
 				this.digits = digits;
 			}
 
-			public static TextNumberFormat getTextNumberInstance()
+			public static TextNumberFormat GetTextNumberInstance()
 			{
 				TextNumberFormat instance = new TextNumberFormat(formatTypes.Number, 3);
 				return instance;
 			}
 
-			public static TextNumberFormat getTextNumberCurrencyInstance()
+			public static TextNumberFormat GetTextNumberCurrencyInstance()
 			{
 				TextNumberFormat instance = new TextNumberFormat(formatTypes.Currency, 3);
 				return instance;
 			}
 
-			public static TextNumberFormat getTextNumberPercentInstance()
+			public static TextNumberFormat GetTextNumberPercentInstance()
 			{
 				TextNumberFormat instance = new TextNumberFormat(formatTypes.Percent, 3);
 				return instance;
 			}
 
-			public static TextNumberFormat getTextNumberInstance(CultureInfo culture)
+			public static TextNumberFormat GetTextNumberInstance(CultureInfo culture)
 			{
 				TextNumberFormat instance = new TextNumberFormat(formatTypes.Number, culture, 3);
 				return instance;
 			}
 
-			public static TextNumberFormat getTextNumberCurrencyInstance(CultureInfo culture)
+			public static TextNumberFormat GetTextNumberCurrencyInstance(CultureInfo culture)
 			{
 				TextNumberFormat instance = new TextNumberFormat(formatTypes.Currency, culture, 3);
 				return instance;
 			}
 
-			public static TextNumberFormat getTextNumberPercentInstance(CultureInfo culture)
+			public static TextNumberFormat GetTextNumberPercentInstance(CultureInfo culture)
 			{
 				TextNumberFormat instance = new TextNumberFormat(formatTypes.Percent, culture, 3);
 				return instance;
@@ -370,7 +389,7 @@ namespace NVelocity
 				}
 				else
 				{
-					return (number.ToString(GetCurrentFormatString() + digits, numberFormat)).Replace(separator, "");
+					return (number.ToString(GetCurrentFormatString() + digits, numberFormat)).Replace(separator, string.Empty);
 				}
 			}
 
@@ -382,7 +401,7 @@ namespace NVelocity
 				}
 				else
 				{
-					return (number.ToString(GetCurrentFormatString() + digits, numberFormat)).Replace(separator, "");
+					return (number.ToString(GetCurrentFormatString() + digits, numberFormat)).Replace(separator, string.Empty);
 				}
 			}
 
@@ -532,7 +551,7 @@ namespace NVelocity
 			switch(timeStyle)
 			{
 				case -1:
-					DateTimeFormatManager.manager.SetTimeFormatPattern(format, "");
+					DateTimeFormatManager.manager.SetTimeFormatPattern(format, string.Empty);
 					break;
 
 				case 0:
@@ -555,7 +574,7 @@ namespace NVelocity
 			switch(dateStyle)
 			{
 				case -1:
-					DateTimeFormatManager.manager.SetDateFormatPattern(format, "");
+					DateTimeFormatManager.manager.SetDateFormatPattern(format, string.Empty);
 					break;
 
 				case 0:

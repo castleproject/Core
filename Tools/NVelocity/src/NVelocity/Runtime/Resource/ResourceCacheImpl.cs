@@ -50,9 +50,6 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		protected internal IRuntimeServices runtimeServices = null;
 
-		public ResourceCacheImpl()
-		{
-		}
 
 		public void initialize(IRuntimeServices rs)
 		{

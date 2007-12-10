@@ -2,9 +2,9 @@ namespace NVelocity.Test
 {
 	using System;
 	using System.IO;
+	using App;
 	using NUnit.Framework;
-	using NVelocity.App;
-	using NVelocity.Runtime;
+	using Runtime;
 
 	/// <summary>
 	/// This class tests strange Velocimacro issues.
@@ -24,7 +24,7 @@ namespace NVelocity.Test
 				Velocity.SetProperty(RuntimeConstants.VM_PERM_INLINE_LOCAL, true);
 				Velocity.Init();
 			}
-			catch (Exception)
+			catch(Exception)
 			{
 				throw new Exception("Cannot setup VelocimacroTestCase!");
 			}

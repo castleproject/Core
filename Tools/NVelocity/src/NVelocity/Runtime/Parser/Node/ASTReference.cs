@@ -40,9 +40,9 @@ namespace NVelocity.Runtime.Parser.Node
 		private String rootString;
 		private bool escaped = false;
 		private bool computableReference = true;
-		private String escPrefix = "";
-		private String morePrefix = "";
-		private String identifier = "";
+		private String escPrefix = string.Empty;
+		private String morePrefix = string.Empty;
+		private String identifier = string.Empty;
 
 		private String literal = null;
 
@@ -154,10 +154,14 @@ namespace NVelocity.Runtime.Parser.Node
 					result = GetChild(i).Execute(result, context);
 
 					if (referenceStack != null)
+					{
 						referenceStack.Push(result);
+					}
 
 					if (result == null)
+					{
 						return null;
+					}
 				}
 
 				return result;
@@ -165,7 +169,9 @@ namespace NVelocity.Runtime.Parser.Node
 			catch(MethodInvocationException methodInvocationException)
 			{
 				// someone tossed their cookies
-				runtimeServices.Error(string.Format("Method {0} threw exception for reference ${1} in template {2} at  [{3},{4}]", methodInvocationException.MethodName, rootString, context.CurrentTemplateName, Line, Column));
+				runtimeServices.Error(
+					string.Format("Method {0} threw exception for reference ${1} in template {2} at  [{3},{4}]",
+					              methodInvocationException.MethodName, rootString, context.CurrentTemplateName, Line, Column));
 
 				methodInvocationException.ReferenceName = rootString;
 				throw;
@@ -232,7 +238,8 @@ namespace NVelocity.Runtime.Parser.Node
 				if (referenceType != ReferenceType.Quiet &&
 				    runtimeServices.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true))
 				{
-					runtimeServices.Warn(new ReferenceException(string.Format("reference : template = {0}", context.CurrentTemplateName), this));
+					runtimeServices.Warn(
+						new ReferenceException(string.Format("reference : template = {0}", context.CurrentTemplateName), this));
 				}
 
 				return true;
@@ -262,11 +269,17 @@ namespace NVelocity.Runtime.Parser.Node
 			Object value = Execute(null, context);
 
 			if (value == null)
+			{
 				return false;
+			}
 			else if (value is Boolean)
+			{
 				return (bool) value;
+			}
 			else
+			{
 				return true;
+			}
 		}
 
 		public override Object Value(IInternalContextAdapter context)
@@ -291,7 +304,8 @@ namespace NVelocity.Runtime.Parser.Node
 
 			if (result == null)
 			{
-				runtimeServices.Error(new ReferenceException(string.Format("reference set : template = {0}", context.CurrentTemplateName), this));
+				runtimeServices.Error(
+					new ReferenceException(string.Format("reference set : template = {0}", context.CurrentTemplateName), this));
 				return false;
 			}
 
@@ -302,7 +316,8 @@ namespace NVelocity.Runtime.Parser.Node
 
 				if (result == null)
 				{
-					runtimeServices.Error(new ReferenceException(string.Format("reference set : template = {0}", context.CurrentTemplateName), this));
+					runtimeServices.Error(
+						new ReferenceException(string.Format("reference set : template = {0}", context.CurrentTemplateName), this));
 					return false;
 				}
 			}
@@ -314,11 +329,7 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				IDuck duck = result as IDuck;
 
-				if (duck != null)
-				{
-					duck.SetInvoke(identifier, value);
-				}
-				else
+				if (duck == null)
 				{
 					// first, we introspect for the set<identifier> setter method
 					Type c = result.GetType();
@@ -350,12 +361,18 @@ namespace NVelocity.Runtime.Parser.Node
 						p = runtimeServices.Introspector.GetProperty(c, sb.ToString());
 
 						if (p == null)
+						{
 							throw;
+						}
 					}
 
 					// and if we get here, getMethod() didn't chuck an exception...
 					Object[] args = new Object[] {};
 					p.SetValue(result, value, args);
+				}
+				else
+				{
+					duck.SetInvoke(identifier, value);
 				}
 			}
 			catch(MethodAccessException)
@@ -370,13 +387,17 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 					catch(Exception ex)
 					{
-						runtimeServices.Error(string.Format("ASTReference Map.put : exception : {0} template = {1} [{2},{3}]", ex, context.CurrentTemplateName, Line, Column));
+						runtimeServices.Error(
+							string.Format("ASTReference Map.put : exception : {0} template = {1} [{2},{3}]", ex, context.CurrentTemplateName,
+							              Line, Column));
 						return false;
 					}
 				}
 				else
 				{
-					runtimeServices.Error(string.Format("ASTReference : cannot find {0} as settable property or key to Map in template = {1} [{2},{3}]", identifier, context.CurrentTemplateName, Line, Column));
+					runtimeServices.Error(
+						string.Format("ASTReference : cannot find {0} as settable property or key to Map in template = {1} [{2},{3}]",
+						              identifier, context.CurrentTemplateName, Line, Column));
 					return false;
 				}
 			}
@@ -384,12 +405,15 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				// this is possible 
 				throw new MethodInvocationException(
-					string.Format("ASTReference : Invocation of method '{0}' in  {1} threw exception {2}", identifier, result.GetType(), targetInvocationException.GetBaseException().GetType()), targetInvocationException, identifier);
+					string.Format("ASTReference : Invocation of method '{0}' in  {1} threw exception {2}", identifier, result.GetType(),
+					              targetInvocationException.GetBaseException().GetType()), targetInvocationException, identifier);
 			}
 			catch(Exception e)
 			{
 				// maybe a security exception?
-				runtimeServices.Error(string.Format("ASTReference setValue() : exception : {0} template = {1} [{2},{3}]", e, context.CurrentTemplateName, Line, Column));
+				runtimeServices.Error(
+					string.Format("ASTReference setValue() : exception : {0} template = {1} [{2},{3}]", e, context.CurrentTemplateName,
+					              Line, Column));
 				return false;
 			}
 
@@ -483,10 +507,14 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 
 					if ((i % 2) != 0)
+					{
 						escaped = true;
+					}
 
 					if (i > 0)
+					{
 						escPrefix = t.Image.Substring(0, (i / 2) - (0));
+					}
 
 					t.Image = t.Image.Substring(i);
 				}
@@ -517,7 +545,9 @@ namespace NVelocity.Runtime.Parser.Node
 
 					// only if we aren't escaped do we want to null the output
 					if (!escaped)
-						nullString = "";
+					{
+						nullString = string.Empty;
+					}
 
 					if (t.Image.StartsWith("$!{"))
 					{

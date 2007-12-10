@@ -1,14 +1,12 @@
-using Commons.Collections;
+using ExtendedProperties=Commons.Collections.ExtendedProperties;
 
 namespace NVelocity.Test
 {
 	using System;
 	using System.Reflection;
-
 	using NUnit.Framework;
-
-	using NVelocity.Runtime;
 	using NVelocity.Util.Introspection;
+	using Runtime;
 
 	/// <summary>
 	/// Test Velocity Introspector

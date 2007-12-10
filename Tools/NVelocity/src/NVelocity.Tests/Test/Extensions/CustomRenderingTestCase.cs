@@ -1,14 +1,12 @@
 namespace NVelocity.Test.Extensions
 {
 	using System;
-	using System.IO;
 	using System.Collections;
-	using System.Collections.Specialized;
-
-	using NUnit.Framework;
-	using NVelocity.App;
-	using NVelocity.App.Events;
+	using System.IO;
 	using System.Text.RegularExpressions;
+	using App;
+	using NUnit.Framework;
+	using NVelocity.App.Events;
 
 	/// <summary>
 	/// This class exemplifies an extension to NVelocity rendering, using
@@ -18,37 +16,36 @@ namespace NVelocity.Test.Extensions
 	[TestFixture]
 	public class CustomRenderingTestCase
 	{
-		VelocityEngine ve;
-		VelocityContext c;
+		private VelocityEngine velocityEngine;
+		private VelocityContext velocityContext;
 
 		[SetUp]
 		public void Setup()
 		{
-			ve = new VelocityEngine();
-			ve.Init();
-			
+			velocityEngine = new VelocityEngine();
+			velocityEngine.Init();
+
 			// creates the context...
-			c = new VelocityContext();
+			velocityContext = new VelocityContext();
 
 			// attach a new event cartridge
-			c.AttachEventCartridge(new EventCartridge());
+			velocityContext.AttachEventCartridge(new EventCartridge());
 
 			// add our custom handler to the ReferenceInsertion event
-			c.EventCartridge.ReferenceInsertion +=
-				new ReferenceInsertionEventHandler(EventCartridge_ReferenceInsertion);
+			velocityContext.EventCartridge.ReferenceInsertion += EventCartridge_ReferenceInsertion;
 		}
-		
+
 		[Test]
 		public void EscapeEscapableSimpleObject()
 		{
-			c.Put("escString", new EscapableString("<escape me>"));
-			c.Put("normal", "normal>not<escapable");
+			velocityContext.Put("escString", new EscapableString("<escape me>"));
+			velocityContext.Put("normal", "normal>not<escapable");
 
 			StringWriter sw = new StringWriter();
 
-			Boolean ok = ve.Evaluate(c, sw,
-				"ExtensionsTest.EscapeEscapableSimpleObject",
-				@"$escString | $normal");
+			Boolean ok = velocityEngine.Evaluate(velocityContext, sw,
+			                                     "ExtensionsTest.EscapeEscapableSimpleObject",
+			                                     @"$escString | $normal");
 
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(@"&lt;escape me&gt; | normal>not<escapable", sw.ToString());
@@ -57,14 +54,14 @@ namespace NVelocity.Test.Extensions
 		[Test]
 		public void EscapeEscapableComplexObject()
 		{
-			c.Put("escComplex", new EscapableComplexObject("my>name", "my&value"));
-			c.Put("normal", "normal>not<escapable");
+			velocityContext.Put("escComplex", new EscapableComplexObject("my>name", "my&value"));
+			velocityContext.Put("normal", "normal>not<escapable");
 
 			StringWriter sw = new StringWriter();
 
-			Boolean ok = ve.Evaluate(c, sw,
-				"ExtensionsTest.EscapeEscapableComplexObject",
-				@"$escComplex.name $escComplex.value | $normal");
+			Boolean ok = velocityEngine.Evaluate(velocityContext, sw,
+			                                     "ExtensionsTest.EscapeEscapableComplexObject",
+			                                     @"$escComplex.name $escComplex.value | $normal");
 
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(@"my&gt;name my&amp;value | normal>not<escapable", sw.ToString());
@@ -74,14 +71,14 @@ namespace NVelocity.Test.Extensions
 		public void EscapeEscapableComplexMixedObject()
 		{
 			// adds some objects, escapable and not escapable
-			c.Put("escMixed", new EscapableComplexObject("escape&me", new NotEscapableString("don't &escape> me")));
-			c.Put("normal", "normal>not<escapable");
+			velocityContext.Put("escMixed", new EscapableComplexObject("escape&me", new NotEscapableString("don't &escape> me")));
+			velocityContext.Put("normal", "normal>not<escapable");
 
 			StringWriter sw = new StringWriter();
 
-			Boolean ok = ve.Evaluate(c, sw,
-				"ExtensionsTest.EscapeEscapableComplexMixedObject",
-				@"$escMixed.name $escMixed.value | $normal");
+			Boolean ok = velocityEngine.Evaluate(velocityContext, sw,
+			                                     "ExtensionsTest.EscapeEscapableComplexMixedObject",
+			                                     @"$escMixed.name $escMixed.value | $normal");
 
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(@"escape&amp;me don't &escape> me | normal>not<escapable", sw.ToString());
@@ -95,7 +92,7 @@ namespace NVelocity.Test.Extensions
 		private void EventCartridge_ReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
 		{
 			Stack rs = e.GetCopyOfReferenceStack();
-			while (rs.Count > 0)
+			while(rs.Count > 0)
 			{
 				Object current = rs.Pop();
 				if (current is INotEscapable)
@@ -111,17 +108,23 @@ namespace NVelocity.Test.Extensions
 
 		private string Escaper(Match m)
 		{
-			switch (m.Value)
+			switch(m.Value)
 			{
-				case "&": return "&amp;";
-				case "<": return "&lt;";
-				case ">": return "&gt;";
-				case "\"": return "&quot;";
-				default: return m.Value;
+				case "&":
+					return "&amp;";
+				case "<":
+					return "&lt;";
+				case ">":
+					return "&gt;";
+				case "\"":
+					return "&quot;";
+				default:
+					return m.Value;
 			}
 		}
 
 		#region IEscapable, INotEscapable and sample objects
+
 		public interface IEscapable
 		{
 		}
@@ -132,7 +135,7 @@ namespace NVelocity.Test.Extensions
 
 		public class EscapableString : IEscapable
 		{
-			String value;
+			private String value;
 
 			public EscapableString(String value)
 			{
@@ -147,7 +150,7 @@ namespace NVelocity.Test.Extensions
 
 		public class NotEscapableString : INotEscapable
 		{
-			String value;
+			private String value;
 
 			public NotEscapableString(String value)
 			{
@@ -162,7 +165,8 @@ namespace NVelocity.Test.Extensions
 
 		public class EscapableComplexObject : IEscapable
 		{
-			Object name, value;
+			private Object name;
+			private Object value;
 
 			public EscapableComplexObject(Object name, Object value)
 			{
@@ -170,9 +174,17 @@ namespace NVelocity.Test.Extensions
 				this.value = value;
 			}
 
-			public Object Name { get { return this.name; } }
-			public Object Value { get { return this.value; } }
+			public Object Name
+			{
+				get { return name; }
+			}
+
+			public Object Value
+			{
+				get { return value; }
+			}
 		}
+
 		#endregion
 	}
 }

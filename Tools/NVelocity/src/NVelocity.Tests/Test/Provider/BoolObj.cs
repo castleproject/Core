@@ -26,7 +26,5 @@ namespace NVelocity.Test.Provider
 		{
 			get { return "hello"; }
 		}
-
-
 	}
 }

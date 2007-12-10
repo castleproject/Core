@@ -1,4 +1,5 @@
-using ExtendedProperties = Commons.Collections.ExtendedProperties;
+using ExtendedProperties=Commons.Collections.ExtendedProperties;
+
 // Copyright 2004-2007 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +16,10 @@ using ExtendedProperties = Commons.Collections.ExtendedProperties;
 
 namespace NVelocity.Test
 {
-	using System;
 	using System.IO;
+	using App;
 	using NUnit.Framework;
-	using NVelocity.App;
-	using NVelocity.Runtime;
-
+	using Runtime;
 
 	[TestFixture]
 	public class ComponentDirectiveTestCase : BaseTestCase
@@ -34,14 +33,15 @@ namespace NVelocity.Test
 			velocityEngine = new VelocityEngine();
 
 			ExtendedProperties extendedProperties = new ExtendedProperties();
-			
-			extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, 
-				TemplateTest.FILE_RESOURCE_LOADER_PATH);
+
+			extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH,
+			                               TemplateTest.FILE_RESOURCE_LOADER_PATH);
 
 			extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_ERROR_STACKTRACE, "true");
 			extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_WARN_STACKTRACE, "true");
 			extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_INFO_STACKTRACE, "true");
-			extendedProperties.SetProperty("userdirective", "NVelocity.Runtime.Directive.Component;NVelocity,NVelocity.Runtime.Directive.BlockComponent;NVelocity");
+			extendedProperties.SetProperty("userdirective",
+			                               "NVelocity.Runtime.Directive.Component;NVelocity,NVelocity.Runtime.Directive.BlockComponent;NVelocity");
 
 			velocityEngine.Init(extendedProperties);
 
@@ -56,25 +56,24 @@ namespace NVelocity.Test
 
 			Template template = velocityEngine.GetTemplate(
 				GetFileName(null, "componentusage1", TemplateTest.TMPL_FILE_EXT));
-			
+
 			StringWriter writer = new StringWriter();
 
 			template.Merge(context, writer);
 
-			System.Console.WriteLine( writer.GetStringBuilder().ToString() );
+			System.Console.WriteLine(writer.GetStringBuilder().ToString());
 
 			writer = new StringWriter();
 
 			template.Merge(context, writer);
 
-			System.Console.WriteLine( writer.GetStringBuilder().ToString() );
+			System.Console.WriteLine(writer.GetStringBuilder().ToString());
 
 			writer = new StringWriter();
 
 			template.Merge(context, writer);
 
-			System.Console.WriteLine( writer.GetStringBuilder().ToString() );
+			System.Console.WriteLine(writer.GetStringBuilder().ToString());
 		}
-
 	}
 }

@@ -94,7 +94,10 @@ namespace NVelocity.Runtime.Resource
 
 				if (loaderClass == null)
 				{
-					runtimeServices.Error(string.Format("Unable to find '{0}.resource.loader.class' specification in configuration. This is a critical value.  Please adjust configuration.", configuration.GetString(RESOURCE_LOADER_IDENTIFIER)));
+					runtimeServices.Error(
+						string.Format(
+							"Unable to find '{0}.resource.loader.class' specification in configuration. This is a critical value.  Please adjust configuration.",
+							configuration.GetString(RESOURCE_LOADER_IDENTIFIER)));
 					continue;
 				}
 
@@ -108,26 +111,32 @@ namespace NVelocity.Runtime.Resource
 			logWhenFound = runtimeServices.GetBoolean(RuntimeConstants.RESOURCE_MANAGER_LOGWHENFOUND, true);
 
 			// now, is a global cache specified?
-			String clazz = runtimeServices.GetString(RuntimeConstants.RESOURCE_MANAGER_CACHE_CLASS);
+			String resourceManagerCacheClassName = runtimeServices.GetString(RuntimeConstants.RESOURCE_MANAGER_CACHE_CLASS);
 			Object o = null;
 
-			if (clazz != null && clazz.Length > 0)
+			if (resourceManagerCacheClassName != null && resourceManagerCacheClassName.Length > 0)
 			{
 				try
 				{
-					Type type = Type.GetType(clazz);
+					Type type = Type.GetType(resourceManagerCacheClassName);
 					o = Activator.CreateInstance(type);
 				}
 				catch(Exception)
 				{
-					String err = string.Format("The specified class for ResourceCache ({0}) does not exist (or is not accessible to the current classLoader).", clazz);
+					String err =
+						string.Format(
+							"The specified class for ResourceCache ({0}) does not exist (or is not accessible to the current classLoader).",
+							resourceManagerCacheClassName);
 					runtimeServices.Error(err);
 					o = null;
 				}
 
 				if (!(o is ResourceCache))
 				{
-					String err = string.Format("The specified class for ResourceCache ({0}) does not implement NVelocity.Runtime.Resource.ResourceCache. Using default ResourceCache implementation.", clazz);
+					String err =
+						string.Format(
+							"The specified class for ResourceCache ({0}) does not implement NVelocity.Runtime.Resource.ResourceCache. Using default ResourceCache implementation.",
+							resourceManagerCacheClassName);
 					runtimeServices.Error(err);
 					o = null;
 				}
@@ -179,7 +188,9 @@ namespace NVelocity.Runtime.Resource
 				 */
 				if (loaderConfiguration == null)
 				{
-					runtimeServices.Warn(string.Format("ResourceManager : No configuration information for resource loader named '{0}'. Skipping.", resourceLoaderNames[i]));
+					runtimeServices.Warn(
+						string.Format("ResourceManager : No configuration information for resource loader named '{0}'. Skipping.",
+						              resourceLoaderNames[i]));
 					continue;
 				}
 
@@ -230,7 +241,39 @@ namespace NVelocity.Runtime.Resource
 
 			Resource resource = globalCache.get(resourceName);
 
-			if (resource != null)
+			if (resource == null)
+			{
+				try
+				{
+					// it's not in the cache, so load it.
+					resource = LoadResource(resourceName, resourceType, encoding);
+
+					if (resource.ResourceLoader.CachingOn)
+					{
+						globalCache.put(resourceName, resource);
+					}
+				}
+				catch(ResourceNotFoundException)
+				{
+					runtimeServices.Error(
+						string.Format("ResourceManager : unable to find resource '{0}' in any resource loader.", resourceName));
+
+					throw;
+				}
+				catch(ParseErrorException pee)
+				{
+					runtimeServices.Error(string.Format("ResourceManager.GetResource() parse exception: {0}", pee));
+
+					throw;
+				}
+				catch(Exception ee)
+				{
+					runtimeServices.Error(string.Format("ResourceManager.GetResource() exception new: {0}", ee));
+
+					throw;
+				}
+			}
+			else
 			{
 				/*
 				 *  refresh the resource
@@ -261,37 +304,6 @@ namespace NVelocity.Runtime.Resource
 				catch(Exception exception)
 				{
 					runtimeServices.Error(string.Format("ResourceManager.GetResource() exception: {0}", exception));
-
-					throw;
-				}
-			}
-			else
-			{
-				try
-				{
-					// it's not in the cache, so load it.
-					resource = LoadResource(resourceName, resourceType, encoding);
-
-					if (resource.ResourceLoader.CachingOn)
-					{
-						globalCache.put(resourceName, resource);
-					}
-				}
-				catch(ResourceNotFoundException)
-				{
-					runtimeServices.Error(string.Format("ResourceManager : unable to find resource '{0}' in any resource loader.", resourceName));
-
-					throw;
-				}
-				catch(ParseErrorException pee)
-				{
-					runtimeServices.Error(string.Format("ResourceManager.GetResource() parse exception: {0}", pee));
-
-					throw;
-				}
-				catch(Exception ee)
-				{
-					runtimeServices.Error(string.Format("ResourceManager.GetResource() exception new: {0}", ee));
 
 					throw;
 				}
@@ -361,7 +373,8 @@ namespace NVelocity.Runtime.Resource
 
 						if (logWhenFound)
 						{
-							runtimeServices.Info(string.Format("ResourceManager : found {0} with loader {1}", resourceName, resourceLoader.ClassName));
+							runtimeServices.Info(
+								string.Format("ResourceManager : found {0} with loader {1}", resourceName, resourceLoader.ClassName));
 						}
 
 						howOldItWas = resourceLoader.GetLastModified(resource);
@@ -443,7 +456,9 @@ namespace NVelocity.Runtime.Resource
 
 					if (!resource.Encoding.Equals(encoding))
 					{
-						runtimeServices.Error(string.Format("Declared encoding for template '{0}' is different on reload.  Old = '{1}'  New = '{2}", resource.Name, resource.Encoding, encoding));
+						runtimeServices.Error(
+							string.Format("Declared encoding for template '{0}' is different on reload.  Old = '{1}'  New = '{2}",
+							              resource.Name, resource.Encoding, encoding));
 
 						resource.Encoding = encoding;
 					}
@@ -509,7 +524,7 @@ namespace NVelocity.Runtime.Resource
 		/// </returns>
 		public String GetLoaderNameForResource(String resourceName)
 		{
-			ResourceLoader resourceLoader = null;
+			ResourceLoader resourceLoader;
 
 			/*
 	    *  loop through our loaders...

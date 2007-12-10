@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime.Parser
 {
 	using System;
@@ -40,7 +54,7 @@ namespace NVelocity.Runtime.Parser
 		private bool currentCharacterAvailable = false;
 
 		public VelocityCharStream(TextReader dstream,
-								  int startLine, int startColumn, int bufferSize)
+		                          int startLine, int startColumn, int bufferSize)
 		{
 			inputStream = dstream;
 			line = startLine;
@@ -135,7 +149,7 @@ namespace NVelocity.Runtime.Parser
 			int i = 0, j = 0, k = 0;
 			int nextColDiff = 0, columnDiff = 0;
 
-			while (i < len && bufferLine[j = start % bufferSize] == bufferLine[k = ++start % bufferSize])
+			while(i < len && bufferLine[j = start % bufferSize] == bufferLine[k = ++start % bufferSize])
 			{
 				bufferLine[j] = newLine;
 				nextColDiff = columnDiff + bufferColumn[k] - bufferColumn[j];
@@ -149,7 +163,7 @@ namespace NVelocity.Runtime.Parser
 				bufferLine[j] = newLine++;
 				bufferColumn[j] = newCol + columnDiff;
 
-				while (i++ < len)
+				while(i++ < len)
 				{
 					if (bufferLine[j = start % bufferSize] != bufferLine[++start % bufferSize])
 						bufferLine[j] = newLine++;
@@ -206,10 +220,7 @@ namespace NVelocity.Runtime.Parser
 
 		public bool CurrentCharacterAvailable
 		{
-			get
-			{
-				return currentCharacterAvailable;
-			}
+			get { return currentCharacterAvailable; }
 		}
 
 
@@ -251,7 +262,7 @@ namespace NVelocity.Runtime.Parser
 					maxNextCharInd = (bufferPosition -= tokenBegin);
 				}
 			}
-			catch (Exception t)
+			catch(Exception t)
 			{
 				throw new ApplicationException(t.Message);
 			}
@@ -310,7 +321,7 @@ namespace NVelocity.Runtime.Parser
 					return true;
 				}
 			}
-			catch (Exception)
+			catch(Exception)
 			{
 				return EndRead();
 			}
@@ -361,7 +372,7 @@ namespace NVelocity.Runtime.Parser
 					line += (column = 1);
 			}
 
-			switch (currentCharacter)
+			switch(currentCharacter)
 			{
 				case '\r':
 					prevCharIsCR = true;

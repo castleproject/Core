@@ -1,3 +1,17 @@
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Util.Introspection
 {
 	using System;
@@ -271,11 +285,15 @@ namespace NVelocity.Util.Introspection
 
 			for(int i = 0; i < classes.Length; ++i)
 			{
-				ParameterInfo paramInfo = null;
+				ParameterInfo paramInfo;
 				if (i < indexOfParamArray)
+				{
 					paramInfo = methodArgs[i];
+				}
 				else
+				{
 					paramInfo = methodArgs[indexOfParamArray];
+				}
 
 				if (!IsMethodInvocationConvertible(paramInfo, classes[i]))
 				{
@@ -329,13 +347,21 @@ namespace NVelocity.Util.Introspection
 			if (underlyingType.IsPrimitive)
 			{
 				if (underlyingType == typeof(Boolean) && actual == typeof(Boolean))
+				{
 					return true;
+				}
 				if (underlyingType == typeof(Char) && actual == typeof(Char))
+				{
 					return true;
+				}
 				if (underlyingType == typeof(Byte) && actual == typeof(Byte))
+				{
 					return true;
+				}
 				if (underlyingType == typeof(Int16) && (actual == typeof(Int16) || actual == typeof(Byte)))
+				{
 					return true;
+				}
 				if (underlyingType == typeof(Int32) &&
 				    (actual == typeof(Int32) || actual == typeof(Int16) || actual == typeof(Byte)))
 					return true;
@@ -372,16 +398,24 @@ namespace NVelocity.Util.Introspection
 		private static bool IsStrictMethodInvocationConvertible(ParameterInfo formal, ParameterInfo actual)
 		{
 			// we shouldn't get a null into, but if so
-			if (actual == null && !formal.ParameterType.IsPrimitive) return true;
+			if (actual == null && !formal.ParameterType.IsPrimitive)
+			{
+				return true;
+			}
 
 			// Check for identity or widening reference conversion
-			if (formal.ParameterType.IsAssignableFrom(actual.ParameterType)) return true;
+			if (formal.ParameterType.IsAssignableFrom(actual.ParameterType))
+			{
+				return true;
+			}
 
 			// Check for widening primitive conversion.
 			if (formal.ParameterType.IsPrimitive)
 			{
 				if (formal.ParameterType == typeof(Int16) && (actual.ParameterType == typeof(Byte)))
+				{
 					return true;
+				}
 				if (formal.ParameterType == typeof(Int32) &&
 				    (actual.ParameterType == typeof(Int16) || actual.ParameterType == typeof(Byte)))
 					return true;
