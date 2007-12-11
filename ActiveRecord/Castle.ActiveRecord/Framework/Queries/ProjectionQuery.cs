@@ -184,7 +184,8 @@ namespace Castle.ActiveRecord.Queries
 			ICriteria criteria = detachedCriteria.GetExecutableCriteria(session);
 			criteria.SetProjection(projections);
 
-			if (typeof(TResultItem) != typeof(object[]))//we are not returning a tuple, so we need the result transformer
+			// we are not returning a tuple, so we need the result transformer
+			if (!typeof(TResultItem).IsPrimitive && typeof(TResultItem) != typeof(object[]))
 			{
 				criteria.SetResultTransformer(new TypedResultTransformer<TResultItem>());
 			}
