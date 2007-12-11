@@ -138,6 +138,16 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		}
 
 		[Test]
+		public void ShouldMatchWhenUrlHasQueryString()
+		{
+			PatternRule rule = PatternRule.Build("foo", "foo", typeof(ProductController), "View");
+
+			RouteMatch match = new RouteMatch(typeof(ProductController), "foo", "bar");
+
+			Assert.IsTrue(rule.Matches(CreateGetContext("", "foo?q=query"), match));
+		}
+
+		[Test]
 		public void SimplePatternGeneratesUrl()
 		{
 			PatternRule rule = PatternRule.Build("ProductHome", "product", typeof(ProductController), "View");

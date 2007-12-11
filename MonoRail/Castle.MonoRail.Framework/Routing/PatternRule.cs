@@ -103,7 +103,7 @@ namespace Castle.MonoRail.Framework.Routing
 				return false;
 			}
 
-			string[] pieces = context.Url.Split('/');
+			string[] pieces = StripQueryStringFrom(context.Url).Split('/');
 
 			if (!hasGreedyNode)
 			{
@@ -271,6 +271,16 @@ namespace Castle.MonoRail.Framework.Routing
 			/// Pendent
 			/// </summary>
 			Choice
+		}
+		
+		/// <summary>
+		/// Would strip the query string part from a given url
+		/// <param name="url">The url.</param>
+		/// <returns><paramref name="url"/>, stripped from query string.</returns>
+		/// </summary>
+		private static string StripQueryStringFrom(string url)
+		{
+			return url.Split('?')[0];
 		}
 
 		/// <summary>
