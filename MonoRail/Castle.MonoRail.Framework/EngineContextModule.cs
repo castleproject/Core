@@ -149,7 +149,7 @@ namespace Castle.MonoRail.Framework
 			{
 				controller = CreateController(context);
 			}
-			catch(Exception ex)
+			catch(ControllerNotFoundException ex)
 			{
 				IViewEngineManager viewEngineManager = context.GetService<IViewEngineManager>();
 
