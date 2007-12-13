@@ -61,7 +61,7 @@ namespace Castle.MicroKernel.Handlers
 		{
 			this.model = model;
 			state = HandlerState.Valid;
-			customParameters = new HybridDictionary(true);
+			InitializeCustomDependencies();
 		}
 
 		#region IHandler Members
@@ -642,6 +642,16 @@ namespace Castle.MicroKernel.Handlers
 					dependenciesByKey = new HybridDictionary();
 				}
 				return dependenciesByKey;
+			}
+		}
+
+		private void InitializeCustomDependencies()
+		{
+			customParameters = new HybridDictionary(true);
+
+			foreach (DictionaryEntry customParameter in model.CustomDependencies)
+			{
+				customParameters.Add(customParameter.Key, customParameter.Value);	
 			}
 		}
 

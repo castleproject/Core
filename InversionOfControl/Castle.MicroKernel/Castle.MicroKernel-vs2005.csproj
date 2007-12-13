@@ -310,6 +310,29 @@
     <Compile Include="Proxy\ProxyConstants.cs" />
     <Compile Include="Proxy\ProxyOptions.cs" />
     <Compile Include="Proxy\ProxyUtil.cs" />
+    <Compile Include="Registration\AbstractPropertyDescriptor.cs" />
+    <Compile Include="Registration\AttributeDescriptor.cs" />
+    <Compile Include="Registration\ComponentDescriptor.cs" />
+    <Compile Include="Registration\ComponentInstanceDescriptor.cs" />
+    <Compile Include="Registration\ComponentRegistration.cs" />
+    <Compile Include="Registration\CustomDependencyDescriptor.cs" />
+    <Compile Include="Registration\ExtendedPropertiesDescriptor.cs" />
+    <Compile Include="Registration\Interceptor\InterceptorDescriptor.cs" />
+    <Compile Include="Registration\Interceptor\InterceptorGroup.cs" />
+    <Compile Include="Registration\Lifestyle\Custom.cs" />
+    <Compile Include="Registration\Lifestyle\LifestyleDescriptor.cs" />
+    <Compile Include="Registration\Lifestyle\LifestyleGroup.cs" />
+    <Compile Include="Registration\Lifestyle\PerThread.cs" />
+    <Compile Include="Registration\Lifestyle\PerWebRequest.cs" />
+    <Compile Include="Registration\Lifestyle\Pooled.cs" />
+    <Compile Include="Registration\Lifestyle\Singleton.cs" />
+    <Compile Include="Registration\Lifestyle\Transient.cs" />
+    <Compile Include="Registration\Property.cs" />
+    <Compile Include="Registration\Proxy\ProxyGroup.cs" />
+    <Compile Include="Registration\Proxy\ProxyInterfaces.cs" />
+    <Compile Include="Registration\RegistrationGroup.cs" />
+    <Compile Include="Registration\ServiceOverride.cs" />
+    <Compile Include="Registration\ServiceOverrideDescriptor.cs" />
     <Compile Include="Releasers\AllComponentsReleasePolicy.cs">
       <SubType>Code</SubType>
     </Compile>

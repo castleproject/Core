@@ -130,6 +130,9 @@ namespace Castle.Core
 		/// <summary>Interceptors associated</summary>
 		private InterceptorReferenceCollection interceptors;
 
+		/// <summary>/// Custom dependencies/// </summary>
+		[NonSerialized] private IDictionary customDependencies;
+
 		private bool requiresGenericArguments;
 
 		#endregion
@@ -351,6 +354,23 @@ namespace Castle.Core
 				}
 				return dependencies;
 			}
+		}
+
+		/// <summary>
+		/// Gets or sets the custom dependencies.
+		/// </summary>
+		/// <value>The custom dependencies.</value>
+		public IDictionary CustomDependencies
+		{
+			get
+			{
+				lock (this)
+				{
+					if (customDependencies == null) customDependencies = new HybridDictionary();
+				}
+				return customDependencies;
+			}
+			set { customDependencies = value; }
 		}
 	}
 }

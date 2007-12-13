@@ -93,6 +93,7 @@
     <Compile Include="Model\Configuration\ConfigurationCollection.cs" />
     <Compile Include="Model\Configuration\IConfiguration.cs" />
     <Compile Include="Model\Configuration\MutableConfiguration.cs" />
+    <Compile Include="Model\Configuration\Xml\XmlConfigurationDeserializer.cs" />
     <Compile Include="Model\ConstructorCandidate.cs" />
     <Compile Include="Model\ConstructorCandidateCollection.cs" />
     <Compile Include="Model\DependencyModel.cs" />

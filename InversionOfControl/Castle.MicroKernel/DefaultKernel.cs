@@ -25,6 +25,7 @@ namespace Castle.MicroKernel
 	using Castle.MicroKernel.Handlers;
 	using Castle.MicroKernel.ModelBuilder;
 	using Castle.MicroKernel.Proxy;
+	using Castle.MicroKernel.Registration;
 	using Castle.MicroKernel.Releasers;
 	using Castle.MicroKernel.Resolvers;
 	using Castle.MicroKernel.SubSystems.Configuration;
@@ -543,6 +544,17 @@ namespace Castle.MicroKernel
 		{
 			Type classType = typeof(T);
 			AddComponentInstance(classType.FullName, serviceType, classType, instance);
+		}
+
+		/// <summary>
+		/// Adds a component to be registered with the <see cref="IKernel"/> 
+		/// using a fluent interface.
+		/// </summary>
+		/// <typeparam name="S">The service <see cref="Type"/> to manage.</typeparam>
+		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
+		public ComponentRegistration<S,IKernel> AddComponentEx<S>()
+		{
+			return new ComponentRegistration<S,IKernel>(this, this);
 		}
 
 		/// <summary>

@@ -203,6 +203,7 @@
     <Compile Include="Lifecycle\Components\HttpFakeServer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lifestyle\Components\MyCustomerActivator.cs" />
     <Compile Include="Lifestyle\DecomissioningResponsibilitiesTestCase.cs" />
     <Compile Include="Lifecycle\LifecycleTestCase.cs">
       <SubType>Code</SubType>
@@ -247,6 +248,7 @@
     <Compile Include="Pools\PooledLifestyleManagerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Registration\ComponentRegistrationTestCase.cs" />
     <Compile Include="RuntimeParametersTestCase.cs" />
     <Compile Include="RuntimeParameters\ComponentWithParameters.cs" />
     <Compile Include="SerializationTestCase.cs">

@@ -18,6 +18,7 @@ namespace Castle.Windsor
 	using System.Collections;
 	using Castle.Core;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Registration;
 
 	/// <summary>
 	/// The <c>IWindsorContainer</c> interface exposes all the 
@@ -196,6 +197,13 @@ namespace Castle.Windsor
 		/// <param name="key"></param>
 		/// <param name="extendedProperties"></param>
 		IWindsorContainer AddComponentWithLifestyle<I, T>(String key, IDictionary extendedProperties) where T : class;
+
+		/// <summary>
+		/// Adds a component to be registered in the container using a fluent interface.
+		/// </summary>
+		/// <typeparam name="S">The <see cref="Type"/> to manage.</typeparam>
+		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
+		ComponentRegistration<S,IWindsorContainer> AddComponentEx<S>();
 
 		/// <summary>
 		/// Returns a component instance by the key

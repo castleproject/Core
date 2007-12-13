@@ -19,6 +19,7 @@ namespace Castle.Windsor
 
 	using Castle.Core;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Registration;
 	using Castle.Windsor.Configuration;
 	using Castle.Windsor.Configuration.Interpreters;
 
@@ -473,6 +474,16 @@ namespace Castle.Windsor
 		{
 			AddComponentWithProperties(key, typeof(I), typeof(T), extendedProperties);
 			return this;
+		}
+
+		/// <summary>
+		/// Adds a component to be registered in the container using a fluent interface.
+		/// </summary>
+		/// <typeparam name="S">The <see cref="Type"/> to manage.</typeparam>
+		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
+		public ComponentRegistration<S,IWindsorContainer> AddComponentEx<S>()
+		{
+			return new ComponentRegistration<S,IWindsorContainer>(kernel, this);
 		}
 
 		/// <summary>

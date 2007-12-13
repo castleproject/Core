@@ -17,6 +17,7 @@ namespace Castle.MicroKernel
 	using System;
 	using System.Collections;
 	using Castle.Core;
+	using Castle.MicroKernel.Registration;
 
 	/// <summary>
 	/// The <c>IKernel</c> interface exposes all the functionality
@@ -296,6 +297,14 @@ namespace Castle.MicroKernel
 		/// <param name="instance"></param>
 		/// <param name="classType"></param>
 		void AddComponentInstance(string key, Type serviceType, Type classType, object instance);
+
+		/// <summary>
+		/// Adds a component to be registered with the <see cref="IKernel"/> 
+		/// using a fluent interface.
+		/// </summary>
+		/// <typeparam name="S">The service <see cref="Type"/> to manage.</typeparam>
+		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
+		ComponentRegistration<S, IKernel> AddComponentEx<S>();
 
 		/// <summary>
 		/// Returns true if the specified component was 

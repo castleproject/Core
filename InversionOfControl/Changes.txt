@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Initial version of MicroKernel/Windsor fluent interface IOC-99
+
 - Applied patch from Jacob Lewallen improving the locking performance in the DefaultNamingSubsystem under high load.
 
 - Applied Philippe Tremblay's patch fixing IOC-94 
