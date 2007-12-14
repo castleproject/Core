@@ -29,8 +29,8 @@ namespace Castle.Core
 	public class InterceptorReference
 	{
 		private readonly InterceptorReferenceType refType;
-		private Type serviceType;
-		private String componentKey;
+		private readonly Type serviceType;
+		private readonly String componentKey;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InterceptorReference"/> class.
@@ -87,6 +87,26 @@ namespace Castle.Core
 		public InterceptorReferenceType ReferenceType
 		{
 			get { return refType; }
+		}
+
+		/// <summary>
+		/// Gets an <see cref="InterceptorReference"/> for the component key.
+		/// </summary>
+		/// <param name="key">The component key.</param>
+		/// <returns>The <see cref="InterceptorReference"/></returns>
+		public static InterceptorReference WithKey(String key)
+		{
+			return new InterceptorReference(key);
+		}
+
+		/// <summary>
+		/// Gets an <see cref="InterceptorReference"/> for the service.
+		/// </summary>
+		/// <param name="service">The service.</param>
+		/// <returns>The <see cref="InterceptorReference"/></returns>
+		public static InterceptorReference WithType(Type service)
+		{
+			return new InterceptorReference(service);
 		}
 	}
 }
