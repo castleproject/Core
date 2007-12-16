@@ -23,6 +23,7 @@ namespace Castle.MonoRail.Views.Brail
 	using System.Runtime.Serialization;
 	using System.Text;
 	using System.Threading;
+	using System.Web;
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.IO;
 	using Boo.Lang.Compiler.Pipelines;
@@ -438,20 +439,17 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			string errors = result.Context.Errors.ToString(true);
 			Log("Failed to compile {0} because {1}", filename, errors);
-			StringBuilder msg = new StringBuilder();
-			msg.Append("Error during compile:")
-				.Append(Environment.NewLine)
-				.Append(errors)
-				.Append(Environment.NewLine);
-
+			StringBuilder code = new StringBuilder();
 			foreach (ICompilerInput input in inputs2FileName.Keys)
 			{
-				msg.Append("Input (").Append(input.Name).Append(")")
-					.Append(Environment.NewLine);
-				msg.Append(result.Processor.GetInputCode(input))
-					.Append(Environment.NewLine);
+				code.AppendLine()
+					.Append(result.Processor.GetInputCode(input))
+					.AppendLine();
 			}
-			throw new MonoRailException(msg.ToString());
+			throw new HttpParseException("Error compiling Brail code",
+				result.Context.Errors[0], 
+				filename,
+				code.ToString(), result.Context.Errors[0].LexicalInfo.Line);
 		}
 
 		// If batch compilation is set to true, this would return all the view scripts
