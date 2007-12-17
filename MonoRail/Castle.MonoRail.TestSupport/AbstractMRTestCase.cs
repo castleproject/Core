@@ -697,19 +697,19 @@ namespace Castle.MonoRail.TestSupport
 			{
 				if (cookie.Name.Equals(cookieName))
 				{
-					Assert.AreEqual(expectedExpiration.Day, cookie.Expires.Day, "Expiration day differs. Expecting {0} but was {1}",
-					                expectedExpiration.Day, cookie.Expires.Day);
-					Assert.AreEqual(expectedExpiration.Month, cookie.Expires.Month,
-					                "Expiration month differs. Expecting {0} but was {1}", expectedExpiration.Month,
-					                cookie.Expires.Month);
-					Assert.AreEqual(expectedExpiration.Year, cookie.Expires.Year, "Expiration year differs. Expecting {0} but was {1}",
-					                expectedExpiration.Year, cookie.Expires.Year);
-					Assert.AreEqual(expectedExpiration.Hour, cookie.Expires.Hour, "Expiration hour differs. Expecting {0} but was {1}",
-					                expectedExpiration.Hour, cookie.Expires.Hour);
-					Assert.AreEqual(expectedExpiration.Minute, cookie.Expires.Minute,
-					                "Expiration minute differs. Expecting {0} but was {1}", expectedExpiration.Minute,
-					                cookie.Expires.Minute);
-					// Assert.AreEqual(expectedExpiration.Second, cookie.Expires.Second, "Expiration second differs. Expecting {0} but was {1}", expectedExpiration.Second, cookie.Expires.Second);
+					TimeSpan acceptableDelta = new TimeSpan(0, 0, 5);
+
+					TimeSpan actualDelta =  expectedExpiration - cookie.Expires;
+					if (cookie.Expires > expectedExpiration)
+						actualDelta = cookie.Expires - expectedExpiration;
+
+					Assert.Greater(acceptableDelta, actualDelta,
+						"Expiration was {0}.{1:000} but a value of {2}.{3:000} was expected. The actual delta was {4} ticks, which is more than the expected {5}",
+						cookie.Expires, cookie.Expires.Millisecond,
+						expectedExpiration, expectedExpiration.Millisecond,
+						actualDelta.Ticks,
+						acceptableDelta.Ticks);
+
 					break;
 				}
 			}
