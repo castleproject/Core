@@ -551,5 +551,62 @@ namespace Castle.ActiveRecord
 		{
 			ActiveRecordBase.Replicate(instance, replicationMode);
 		}
+
+		/// <summary>
+		/// Evicts the specified instance from the first level cache (session level).
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		public static void Evict(object instance)
+		{
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			if (SessionScope.Current != null)
+			{
+				SessionScope.Current.Evict(instance);
+			}
+		}
+
+		/// <summary>
+		/// Evicts the specified type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		public static void GlobalEvict(Type type)
+		{
+			if (type == null) throw new ArgumentNullException("type");
+
+			ISessionFactory factory = GetFactory(type);
+
+			factory.Evict(type);
+		}
+
+		/// <summary>
+		/// Evicts the specified type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="id">The id.</param>
+		public static void GlobalEvict(Type type, object id)
+		{
+			if (type == null) throw new ArgumentNullException("type");
+
+			ISessionFactory factory = ActiveRecordBase.holder.GetSessionFactory(type);
+
+			if (factory == null)
+			{
+				throw new ActiveRecordException("Could not find registered session factory for type " + type.FullName);
+			}
+
+			factory.Evict(type, id);
+		}
+
+		private static ISessionFactory GetFactory(Type type)
+		{
+			ISessionFactory factory = ActiveRecordBase.holder.GetSessionFactory(type);
+
+			if (factory == null)
+			{
+				throw new ActiveRecordException("Could not find registered session factory for type " + type.FullName);
+			}
+			return factory;
+		}
 	}
 }
