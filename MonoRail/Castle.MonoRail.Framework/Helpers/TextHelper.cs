@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System;
 	using System.Collections;
 	using System.Text;
+	using System.Threading;
 
 	/// <summary>
 	/// Provides methods for working with strings and grammar. At the moment,
@@ -28,6 +29,28 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Default word connector
 		/// </summary>
 		public const string DefaultConnector = "and";
+
+		/// <summary>
+		/// Formats the specified string as a phone number, varying according to the culture. 
+		/// </summary>
+		/// <param name="phone">The phone number to format.</param>
+		/// <returns></returns>
+		public string FormatPhone(string phone)
+		{
+			if (string.IsNullOrEmpty(phone)) return string.Empty;
+			if (phone.Length <= 3) return phone;
+			if (phone.IndexOfAny(new char[] { '(', '-', '.' }) != -1) return phone;
+
+			if (Thread.CurrentThread.CurrentUICulture.ThreeLetterISOLanguageName == "eng")
+			{
+				phone = phone.Replace(" ", "");
+				return "(" + phone.Substring(0, 3) + ") " + phone.Substring(3, 3) + "-" + phone.Substring(6);
+			}
+			else
+			{
+				return phone;
+			}
+		}
 
 		/// <summary>
 		/// Converts a camelized text to words. For instance:

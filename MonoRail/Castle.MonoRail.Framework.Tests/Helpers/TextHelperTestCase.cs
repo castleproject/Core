@@ -16,14 +16,57 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System;
 	using System.Collections;
+	using System.Globalization;
+	using System.Threading;
 	using Castle.MonoRail.Framework.Helpers;
 	using NUnit.Framework;
-
 
 	[TestFixture]
 	public class TextHelperTestCase
 	{
-		private TextHelper helper = new TextHelper();
+		private static TextHelper helper = new TextHelper();
+
+		[Test]
+		public void FormatPhone_CanFormatForUSCulture()
+		{
+			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
+			Thread.CurrentThread.CurrentCulture = en;
+			Thread.CurrentThread.CurrentUICulture = en;
+
+			Assert.AreEqual("(123) 456-1234", helper.FormatPhone("1234561234"));
+		}
+
+		[Test]
+		public void FormatPhone_CanFormatForUSCulture_SmallString()
+		{
+			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
+			Thread.CurrentThread.CurrentCulture = en;
+			Thread.CurrentThread.CurrentUICulture = en;
+
+			Assert.AreEqual("(123) 456-", helper.FormatPhone("123456"));
+		}
+
+		[Test]
+		public void FormatPhone_IgnoresStringTooSmall()
+		{
+			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
+			Thread.CurrentThread.CurrentCulture = en;
+			Thread.CurrentThread.CurrentUICulture = en;
+
+			Assert.AreEqual("123", helper.FormatPhone("123"));
+		}
+
+		[Test]
+		public void FormatPhone_IgnoresStringIfSomeNonNumericCharsArePresent()
+		{
+			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
+			Thread.CurrentThread.CurrentCulture = en;
+			Thread.CurrentThread.CurrentUICulture = en;
+
+			Assert.AreEqual("123-111-1212", helper.FormatPhone("123-111-1212"));
+			Assert.AreEqual("(123)111-1212", helper.FormatPhone("(123)111-1212"));
+			Assert.AreEqual("123.111.1212", helper.FormatPhone("123.111.1212"));
+		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
