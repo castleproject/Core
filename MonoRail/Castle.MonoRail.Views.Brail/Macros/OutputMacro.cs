@@ -14,24 +14,18 @@
 namespace Castle.MonoRail.Views.Brail
 {
 	using Boo.Lang;
+	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.Ast;
+	using Boo.Lang.Extensions;
 	using Castle.MonoRail.Framework;
 
 	// This take statements such as:
 	//  output "something"
 	// and turn them into:
 	//  outputStream.Write("something")
-	public class OutputMacro : AbstractPrintMacro
+	public class OutputMacro : LexicalInfoPreservingMacro
 	{
-		private static ReferenceExpression output = AstUtil.CreateReferenceExpression("OutputStream.Write");
-
-		public override Statement Expand(MacroStatement macro)
-		{
-			if (macro.Arguments.Count == 0)
-				throw new MonoRailException("output must be called with arguemnts");
-			UnescapeInitialAndClosingDoubleQuotes(macro);
-			return Expand(macro, output, output);
-		}
+		private static readonly ReferenceExpression output = AstUtil.CreateReferenceExpression("OutputStream.Write");
 
 		private static void UnescapeInitialAndClosingDoubleQuotes(MacroStatement macro)
 		{
@@ -40,5 +34,13 @@ namespace Castle.MonoRail.Views.Brail
 				return;
 			value.Value = BrailPreProcessor.UnescapeInitialAndClosingDoubleQuotes(value.Value);
 		}
+
+	    protected override Statement ExpandImpl(MacroStatement macro)
+	    {
+            if (macro.Arguments.Count == 0)
+                throw new MonoRailException("output must be called with arguemnts");
+            UnescapeInitialAndClosingDoubleQuotes(macro);
+	        return PrintMacroModule.expandPrintMacro(macro, output, output);
+	    }
 	}
 }

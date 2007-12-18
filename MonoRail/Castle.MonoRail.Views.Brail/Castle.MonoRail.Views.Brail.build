@@ -18,6 +18,7 @@
 			<include name="Boo.Lang.dll" />
 			<include name="anrControls.Markdown.NET.dll"/>
 			<include name="Boo.Lang.Compiler.dll" />
+			<include name="Boo.Lang.Extensions.dll" />
 			<include name="Boo.Lang.Parser.dll" />
 			<include name="System.Web.dll" />
 			<include name="System.Configuration.dll" />

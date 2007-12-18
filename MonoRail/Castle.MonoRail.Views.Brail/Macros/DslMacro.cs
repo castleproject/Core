@@ -135,7 +135,7 @@ namespace Castle.MonoRail.Views.Brail
             {
                 List<string> nsPieces = new List<string>();
 
-                if (!_splitNamespaces.ContainsKey(type.Namespace))
+                if (type.Namespace != null && !_splitNamespaces.ContainsKey(type.Namespace))
                 {
                     nsPieces.Clear();
 
