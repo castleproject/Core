@@ -24,6 +24,7 @@
 			<include name="Castle.Components.Validator.dll" />
 			<include name="Castle.Components.Common.EmailSender.dll" />
 			<include name="Boo.Lang.dll" />
+			<include name="Boo.Lang.Extensions.dll" />
 			<include name="Boo.Lang.Compiler.dll" />
 			<include name="Boo.Lang.Parser.dll" />
 			<include name="anrControls.Markdown.NET.dll" />
