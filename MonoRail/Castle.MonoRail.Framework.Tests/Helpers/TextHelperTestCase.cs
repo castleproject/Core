@@ -37,16 +37,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		}
 
 		[Test]
-		public void FormatPhone_CanFormatForUSCulture_SmallString()
-		{
-			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
-			Thread.CurrentThread.CurrentCulture = en;
-			Thread.CurrentThread.CurrentUICulture = en;
-
-			Assert.AreEqual("(123) 456-", helper.FormatPhone("123456"));
-		}
-
-		[Test]
 		public void FormatPhone_IgnoresStringTooSmall()
 		{
 			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
