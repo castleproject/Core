@@ -119,10 +119,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				String sourceProperty = CommonUtils.ObtainEntryAndRemove(attributes, "sourceProperty");
 
-				return new DifferentTypeOperationState(initialSelectionType, 
-				                                       dataSourceType, initialSelection, dataSource,
-													   sourceProperty, valueProperty, textProperty, textFormat, valueFormat, 
-				                                       isInitialSelectionASet);
+				return new DifferentTypeOperationState(initialSelectionType,
+													   dataSourceType, initialSelection, dataSource,
+													   sourceProperty, valueProperty, textProperty, textFormat, valueFormat,
+													   isInitialSelectionASet);
 			}
 		}
 

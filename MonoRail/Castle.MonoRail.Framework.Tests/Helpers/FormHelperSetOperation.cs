@@ -15,10 +15,10 @@
 namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System.Globalization;
+	using System.IO;
 	using System.Threading;
-
 	using Castle.MonoRail.Framework.Helpers;
-	
+	using Core;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -29,37 +29,37 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
 
-			Thread.CurrentThread.CurrentCulture	= en;
+			Thread.CurrentThread.CurrentCulture = en;
 			Thread.CurrentThread.CurrentUICulture = en;
 		}
-		
+
 		[Test]
 		public void EmptyInitialSet()
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
 				null, new int[] {1, 2, 3, 4}, null);
-			
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is ListDataSourceState);
 			Assert.IsNull(state.TargetSuffix);
-			
+
 			bool iterated = false;
 			int index = 1;
-			
-			foreach(SetItem item in state)
+
+			foreach (SetItem item in state)
 			{
 				iterated = true;
-				
+
 				Assert.IsFalse(item.IsSelected);
 				Assert.IsNotNull(item.Text);
 				Assert.IsNotNull(item.Value);
 
 				Assert.AreEqual(index.ToString(), item.Text);
 				Assert.AreEqual(index.ToString(), item.Value);
-				
+
 				index++;
 			}
-			
+
 			Assert.IsTrue(iterated);
 		}
 
@@ -67,7 +67,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void ApplyingFormat()
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
-				null, new int[] { 1, 2, 3, 4 }, DictHelper.Create("textformat=C"));
+				null, new int[] {1, 2, 3, 4}, DictHelper.Create("textformat=C"));
 
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is ListDataSourceState);
@@ -76,7 +76,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			bool iterated = false;
 			int index = 1;
 
-			foreach(SetItem item in state)
+			foreach (SetItem item in state)
 			{
 				iterated = true;
 
@@ -99,25 +99,65 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
 				new int[] {1, 2, 3, 4}, null, null);
-			
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is NoIterationState);
 			Assert.IsNull(state.TargetSuffix);
-			
+
 			Assert.IsFalse(state.MoveNext());
 		}
-		
+
 		[Test]
 		public void EmptyDataSource()
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
 				new int[] {1, 2, 3, 4}, new int[0], null);
-			
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is NoIterationState);
 			Assert.IsNull(state.TargetSuffix);
-			
+
 			Assert.IsFalse(state.MoveNext());
+		}
+
+		[Test]
+		public void SingleValueInitialSet_EnumPairs()
+		{
+			OperationState state = SetOperation.IterateOnDataSource(
+				FileMode.Append, new Pair<FileMode, string>[]
+				                 	{
+				                 		new Pair<FileMode, string>(FileMode.Append, "append"),
+				                 		new Pair<FileMode, string>(FileMode.Create, "create"),
+				                 		new Pair<FileMode, string>(FileMode.CreateNew, "new"),
+				                 		new Pair<FileMode, string>(FileMode.Open, "open")
+				                 	}, DictHelper.Create("value=First", "text=Second"));
+
+			Assert.IsNotNull(state);
+			Assert.IsTrue(state is DifferentTypeOperationState);
+			Assert.AreEqual("", state.TargetSuffix);
+
+			bool iterated = false;
+			int index = 1;
+
+			foreach(SetItem item in state)
+			{
+				iterated = true;
+
+				if (index == 1)
+				{
+					Assert.IsTrue(item.IsSelected);
+				}
+				else
+				{
+					Assert.IsFalse(item.IsSelected);
+				}
+				Assert.IsNotNull(item.Text);
+				Assert.IsNotNull(item.Value);
+
+				index++;
+			}
+
+			Assert.IsTrue(iterated);
 		}
 
 		[Test]
@@ -125,18 +165,18 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
 				1, new int[] {1, 2, 3, 4}, null);
-			
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is SameTypeOperationState);
 			Assert.AreEqual("", state.TargetSuffix);
-			
+
 			bool iterated = false;
 			int index = 1;
-			
-			foreach(SetItem item in state)
+
+			foreach (SetItem item in state)
 			{
 				iterated = true;
-				
+
 				if (index == 1)
 				{
 					Assert.IsTrue(item.IsSelected);
@@ -150,10 +190,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 				Assert.AreEqual(index.ToString(), item.Text);
 				Assert.AreEqual(index.ToString(), item.Value);
-				
+
 				index++;
 			}
-			
+
 			Assert.IsTrue(iterated);
 		}
 
@@ -161,19 +201,19 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void MultipleValuesInitialSet_SameTypes()
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
-				new int[] {1,2}, new int[] {1, 2, 3, 4}, null);
-			
+				new int[] {1, 2}, new int[] {1, 2, 3, 4}, null);
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is SameTypeOperationState);
 			Assert.AreEqual("", state.TargetSuffix);
-			
+
 			bool iterated = false;
 			int index = 1;
-			
-			foreach(SetItem item in state)
+
+			foreach (SetItem item in state)
 			{
 				iterated = true;
-				
+
 				if (index == 1 || index == 2)
 				{
 					Assert.IsTrue(item.IsSelected);
@@ -187,10 +227,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 				Assert.AreEqual(index.ToString(), item.Text);
 				Assert.AreEqual(index.ToString(), item.Value);
-				
+
 				index++;
 			}
-			
+
 			Assert.IsTrue(iterated);
 		}
 
@@ -198,17 +238,17 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void SingleValueInitialSet_SameTypes_NonPrimitive()
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
-				new Role(1, "Admin"), new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
+				new Role(1, "Admin"), new Role[] {new Role(0, "User"), new Role(1, "Admin")},
 				DictHelper.Create("text=Name", "value=Id"));
-			
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is SameTypeOperationState);
 			Assert.AreEqual("Id", state.TargetSuffix);
-			
+
 			bool iterated = false;
 			int index = 1;
-			
-			foreach(SetItem item in state)
+
+			foreach (SetItem item in state)
 			{
 				iterated = true;
 
@@ -227,29 +267,29 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 					Assert.AreEqual("Admin", item.Text);
 					Assert.AreEqual("1", item.Value);
 				}
-				
+
 				index++;
 			}
-			
+
 			Assert.IsTrue(iterated);
 		}
-		
+
 		[Test]
 		public void MultipleValuesInitialSet_SameTypes_NonPrimitive()
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
-				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
-				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
+				new Role[] {new Role(0, "User"), new Role(1, "Admin")},
+				new Role[] {new Role(0, "User"), new Role(1, "Admin")},
 				DictHelper.Create("text=Name", "value=Id"));
-			
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is SameTypeOperationState);
 			Assert.AreEqual("Id", state.TargetSuffix);
-			
+
 			bool iterated = false;
 			int index = 1;
-			
-			foreach(SetItem item in state)
+
+			foreach (SetItem item in state)
 			{
 				iterated = true;
 
@@ -267,10 +307,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 					Assert.AreEqual("Admin", item.Text);
 					Assert.AreEqual("1", item.Value);
 				}
-				
+
 				index++;
 			}
-			
+
 			Assert.IsTrue(iterated);
 		}
 
@@ -278,18 +318,18 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void MultipleValuesInitialSet_DifferentTypes_NonPrimitive()
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
-				new ProductCategory[] {new ProductCategory(0,"User"), new ProductCategory(1,"Admin")}, 
-				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
+				new ProductCategory[] {new ProductCategory(0, "User"), new ProductCategory(1, "Admin")},
+				new Role[] {new Role(0, "User"), new Role(1, "Admin")},
 				DictHelper.Create("text=Name", "value=Id"));
-			
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is DifferentTypeOperationState);
 			Assert.AreEqual("Id", state.TargetSuffix);
-			
+
 			bool iterated = false;
 			int index = 1;
-			
-			foreach(SetItem item in state)
+
+			foreach (SetItem item in state)
 			{
 				iterated = true;
 
@@ -307,10 +347,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 					Assert.AreEqual("Admin", item.Text);
 					Assert.AreEqual("1", item.Value);
 				}
-				
+
 				index++;
 			}
-			
+
 			Assert.IsTrue(iterated);
 		}
 
@@ -318,18 +358,18 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void SingleValueInitialSet_DifferentTypes_NonPrimitive_NoNameMatching()
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
-				new Role2(1,"Admin"), 
-				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
+				new Role2(1, "Admin"),
+				new Role[] {new Role(0, "User"), new Role(1, "Admin")},
 				DictHelper.Create("text=Name", "value=Id", "sourceproperty=identification"));
-			
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is DifferentTypeOperationState);
 			Assert.AreEqual("Identification", state.TargetSuffix);
-			
+
 			bool iterated = false;
 			int index = 1;
-			
-			foreach(SetItem item in state)
+
+			foreach (SetItem item in state)
 			{
 				iterated = true;
 
@@ -348,10 +388,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 					Assert.AreEqual("Admin", item.Text);
 					Assert.AreEqual("1", item.Value);
 				}
-				
+
 				index++;
 			}
-			
+
 			Assert.IsTrue(iterated);
 		}
 
@@ -359,18 +399,18 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void MultipleValuesInitialSet_DifferentTypes_NonPrimitive_NoNameMatching()
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
-				new Role2[] {new Role2(0,"User"), new Role2(1,"Admin")}, 
-				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
+				new Role2[] {new Role2(0, "User"), new Role2(1, "Admin")},
+				new Role[] {new Role(0, "User"), new Role(1, "Admin")},
 				DictHelper.Create("text=Name", "value=Id", "sourceproperty=identification"));
-			
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is DifferentTypeOperationState);
 			Assert.AreEqual("Identification", state.TargetSuffix);
 
 			bool iterated = false;
 			int index = 1;
-			
-			foreach(SetItem item in state)
+
+			foreach (SetItem item in state)
 			{
 				iterated = true;
 
@@ -388,10 +428,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 					Assert.AreEqual("Admin", item.Text);
 					Assert.AreEqual("1", item.Value);
 				}
-				
+
 				index++;
 			}
-			
+
 			Assert.IsTrue(iterated);
 		}
 
@@ -408,14 +448,14 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			OperationState state = SetOperation.IterateOnDataSource(
 				(decimal?) 1.5,
-				new string[] { "1", "1,5", "2" }, null);
+				new string[] {"1", "1,5", "2"}, null);
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is DifferentTypeOperationState);
 
 			bool iterated = false;
 			int index = 0;
 
-			foreach(SetItem item in state)
+			foreach (SetItem item in state)
 			{
 				iterated = true;
 
@@ -443,18 +483,18 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void MultipleValuesInitialSet_DifferentTypes_Primitive_NoNameMatching()
 		{
 			OperationState state = SetOperation.IterateOnDataSource(
-				new int[] {0,1}, 
-				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
+				new int[] {0, 1},
+				new Role[] {new Role(0, "User"), new Role(1, "Admin")},
 				DictHelper.Create("text=Name", "value=Id"));
-			
+
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is DifferentTypeOperationState);
 			Assert.AreEqual("", state.TargetSuffix);
-			
+
 			bool iterated = false;
 			int index = 1;
-			
-			foreach(SetItem item in state)
+
+			foreach (SetItem item in state)
 			{
 				iterated = true;
 
@@ -472,10 +512,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 					Assert.AreEqual("Admin", item.Text);
 					Assert.AreEqual("1", item.Value);
 				}
-				
+
 				index++;
 			}
-			
+
 			Assert.IsTrue(iterated);
 		}
 	}

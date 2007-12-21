@@ -3048,7 +3048,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <returns></returns>
 			public override object GetValue(object instance)
 			{
-				return Enum.Format(enumType, Enum.Parse(enumType, Convert.ToString(instance)), "d");
+				return Convert.ToDecimal(Enum.Format(enumType, Enum.Parse(enumType, Convert.ToString(instance)), "d"));
 			}
 		}
 
