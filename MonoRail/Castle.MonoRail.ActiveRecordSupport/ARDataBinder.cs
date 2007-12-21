@@ -116,10 +116,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		/// <value>The current AR model.</value>
 		protected ActiveRecordModel CurrentARModel
 		{
-			get
-			{
-				return modelStack.Count == 0 ? null : modelStack.Peek();
-			}
+			get { return modelStack.Count == 0 ? null : modelStack.Peek(); }
 		}
 
 		public object BindObject(Type targetType, string prefix, string exclude, string allow, string expect,
@@ -488,6 +485,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			String pkPropName = pkModel.Property.Name;
 
 			Node idNode = node.GetChildNode(pkPropName);
+
+			if (idNode == null) return null;
 
 			if (idNode != null && idNode.NodeType != NodeType.Leaf)
 			{
