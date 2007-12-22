@@ -37,8 +37,6 @@ namespace Castle.Core.Resource
 			Dispose(false);
 		}
 
-		
-
 		public override TextReader GetStreamReader()
 		{
 			return new StreamReader(CreateStream());

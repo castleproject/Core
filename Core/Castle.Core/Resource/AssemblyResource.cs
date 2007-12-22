@@ -17,6 +17,7 @@ namespace Castle.Core.Resource
 	using System;
 	using System.IO;
 	using System.Reflection;
+	using System.Resources;
 
 	public class AssemblyResource : AbstractStreamResource
 	{
