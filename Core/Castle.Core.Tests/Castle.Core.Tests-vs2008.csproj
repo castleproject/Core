@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{087AD3BF-5E40-450D-8138-FBB5F57AC474}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -55,11 +55,21 @@
     <Compile Include="Resources\AssemblyResourceFactoryTestCase.cs" />
     <Compile Include="Resources\CustomUriTestCase.cs" />
     <Compile Include="Resources\FileResourceFactoryTestCase.cs" />
+    <Compile Include="Resources\MoreRes\TestRes.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestRes.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\UncResourceFactoryTestCase.cs" />
     <Compile Include="StreamLoggerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\file1.txt" />
+    <EmbeddedResource Include="Resources\MoreRes\TestRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TestRes.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="Resources\MoreRes\file2.txt" />
   </ItemGroup>
   <ItemGroup>

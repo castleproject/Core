@@ -17,7 +17,6 @@ namespace Castle.Core.Resource
 	using System;
 	using System.IO;
 	using System.Reflection;
-	using System.Resources;
 
 	public class AssemblyResource : AbstractStreamResource
 	{
@@ -129,7 +128,7 @@ namespace Castle.Core.Resource
 			return path;
 		}
 
-		private Assembly ObtainAssembly(String assemblyName)
+		private static Assembly ObtainAssembly(String assemblyName)
 		{
 			try
 			{

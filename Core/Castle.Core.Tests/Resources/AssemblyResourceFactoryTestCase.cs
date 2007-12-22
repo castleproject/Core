@@ -15,11 +15,9 @@
 namespace Castle.Core.Tests.Resources
 {
 	using System;
-
+	using System.Globalization;
 	using NUnit.Framework;
-	
 	using Castle.Core.Resource;
-
 
 
 	[TestFixture]
@@ -32,19 +30,29 @@ namespace Castle.Core.Tests.Resources
 		[Test]
 		public void Accept()
 		{
-			Assert.IsTrue(  resFactory.Accept( new CustomUri("assembly://something/") ) );
-			Assert.IsFalse( resFactory.Accept( new CustomUri("file://something") ) );
-			Assert.IsFalse( resFactory.Accept( new CustomUri("http://www.castleproject.org") ) );
+			Assert.IsTrue(resFactory.Accept(new CustomUri("assembly://something/")));
+			Assert.IsFalse(resFactory.Accept(new CustomUri("file://something")));
+			Assert.IsFalse(resFactory.Accept(new CustomUri("http://www.castleproject.org")));
 		}
 
 		[Test]
 		public void CreateWithAbsolutePath()
 		{
-			IResource resource = resFactory.Create( new CustomUri("assembly://" + AssemblyName + "/" + ResPath + "/file1.txt") );
+			IResource resource = resFactory.Create(new CustomUri("assembly://" + AssemblyName + "/" + ResPath + "/file1.txt"));
 
 			Assert.IsNotNull(resource);
 			String line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Something", line);
+		}
+
+		[Test, Explicit]
+		public void CanHandleBundleResource()
+		{
+			IResource resource = new AssemblyBundleResource(new CustomUri("assembly://" + AssemblyName + "/Castle.Core.Tests.Resources.MoreRes.TestRes/content1"));
+
+			Assert.IsNotNull(resource);
+			String line = resource.GetStreamReader().ReadLine();
+			Assert.AreEqual("Content content", line);
 		}
 	}
 }
