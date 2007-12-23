@@ -508,6 +508,17 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
+		/// Returns a component instance by the service
+		/// </summary>
+		/// <param name="service"></param>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		public virtual object Resolve(Type service, object argumentsAsAnonymousType)
+		{
+			return Resolve(service, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
+		}
+
+		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key"></param>
@@ -516,6 +527,17 @@ namespace Castle.Windsor
 		public virtual object Resolve(String key, IDictionary arguments)
 		{
 			return kernel.Resolve(key, arguments);
+		}
+
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		public virtual object Resolve(String key, object argumentsAsAnonymousType)
+		{
+			return Resolve(key, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
 		}
 
 		/// <summary>
@@ -548,6 +570,11 @@ namespace Castle.Windsor
 			return kernel.ResolveAll(service, arguments);
 		}
 
+		public Array ResolveAll(Type service, object argumentsAsAnonymousType)
+		{
+			return ResolveAll(service, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
+		}
+
 		/// <summary>
 		/// Resolve all valid components that match this type.
 		/// <typeparam name="T">The service type</typeparam>
@@ -556,6 +583,16 @@ namespace Castle.Windsor
 		public T[] ResolveAll<T>(IDictionary arguments)
 		{
 			return (T[]) ResolveAll(typeof (T), arguments);
+		}
+
+		/// <summary>
+		/// Resolve all valid components that match this type.
+		/// <typeparam name="T">The service type</typeparam>
+		/// <param name="argumentsAsAnonymousType">Arguments to resolve the service</param>
+		/// </summary>
+		public T[] ResolveAll<T>(object argumentsAsAnonymousType)
+		{
+			return ResolveAll<T>(new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
 		}
 
 		/// <summary>
@@ -586,7 +623,7 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
-		/// 
+		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="service"></param>
@@ -595,6 +632,18 @@ namespace Castle.Windsor
 		public virtual object Resolve(String key, Type service, IDictionary arguments)
 		{
 			return kernel.Resolve(key, service, arguments);
+		}
+
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="service"></param>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		public virtual object Resolve(String key, Type service, object argumentsAsAnonymousType)
+		{
+			return Resolve(key, service, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
 		}
 		
 		/// <summary>
@@ -609,6 +658,17 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
+		/// Returns a component instance by the service 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		public T Resolve<T>(object argumentsAsAnonymousType)
+		{
+			return Resolve<T>(new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
+		}
+
+		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key"></param>
@@ -620,13 +680,24 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		public virtual T Resolve<T>(String key, object argumentsAsAnonymousType)
+		{
+			return Resolve<T>(key, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
+		}
+
+		/// <summary>
 		/// Returns a component instance by the service 
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public T Resolve<T>()
 		{
-			return (T)Resolve(typeof(T));
+			return (T) Resolve(typeof(T));
 		}
 
 		/// <summary>
@@ -636,7 +707,7 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		public virtual T Resolve<T>(String key)
 		{
-			return (T)Resolve(key, typeof(T));
+			return (T) Resolve(key, typeof(T));
 		}
 
 		/// <summary>

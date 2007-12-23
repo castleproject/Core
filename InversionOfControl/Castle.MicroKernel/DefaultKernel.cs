@@ -97,8 +97,7 @@ namespace Castle.MicroKernel
 		/// Constructs a DefaultKernel with no component
 		/// proxy support.
 		/// </summary>
-		public DefaultKernel()
-			: this(new NotSupportedProxyFactory())
+		public DefaultKernel() : this(new NotSupportedProxyFactory())
 		{
 		}
 
@@ -112,7 +111,7 @@ namespace Castle.MicroKernel
 			: this(proxyFactory)
 		{
 			this.resolver = resolver;
-			this.resolver.Initialize(new DependencyDelegate(RaiseDependencyResolving));
+			this.resolver.Initialize(RaiseDependencyResolving);
 		}
 
 		/// <summary>
@@ -570,6 +569,17 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
+		/// Returns the component instance by the service type
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		public T Resolve<T>(object argumentsAsAnonymousType)
+		{
+			return Resolve<T>(new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
+		}
+
+		/// <summary>
 		/// Returns the component instance by the component key
 		/// </summary>
 		/// <returns></returns>
@@ -737,6 +747,17 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
+		/// Returns all the valid component instances by
+		/// the service type
+		/// </summary>
+		/// <param name="service">The service type</param>
+		/// <param name="argumentsAsAnonymousType">Arguments to resolve the services</param>
+		public Array ResolveAll(Type service, object argumentsAsAnonymousType)
+		{
+			return ResolveAll(service, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
+		}
+
+		/// <summary>
 		/// Returns the component instance by the service type
 		/// using dynamic arguments
 		/// </summary>
@@ -756,6 +777,18 @@ namespace Castle.MicroKernel
 			IHandler handler = GetHandler(service);
 
 			return ResolveComponent(handler, service, arguments);
+		}
+
+		/// <summary>
+		/// Returns the component instance by the service type
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="service"></param>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		public object Resolve(Type service, object argumentsAsAnonymousType)
+		{
+			return Resolve(service, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
 		}
 
 		/// <summary>
@@ -780,7 +813,25 @@ namespace Castle.MicroKernel
 			return ResolveComponent(handler, arguments);
 		}
 
+		/// <summary>
+		/// Returns the component instance by the component key
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		public object Resolve(string key, object argumentsAsAnonymousType)
+		{
+			return Resolve(key, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
+		}
 
+		/// <summary>
+		/// Associates objects with a component handler,
+		/// allowing it to use the specified dictionary
+		/// when resolving dependencies
+		/// </summary>
+		/// <param name="service"></param>
+		/// <param name="dependencies"></param>
 		public void RegisterCustomDependencies(Type service, IDictionary dependencies)
 		{
 			IHandler handler = GetHandler(service);
@@ -791,6 +842,25 @@ namespace Castle.MicroKernel
 			}
 		}
 
+		/// <summary>
+		/// Associates objects with a component handler,
+		/// allowing it to use the specified dictionary
+		/// when resolving dependencies
+		/// </summary>
+		/// <param name="service"></param>
+		/// <param name="dependenciesAsAnonymousType"></param>
+		public void RegisterCustomDependencies(Type service, object dependenciesAsAnonymousType)
+		{
+			RegisterCustomDependencies(service, new ReflectionBasedDictionaryAdapter(dependenciesAsAnonymousType));
+		}
+
+		/// <summary>
+		/// Associates objects with a component handler,
+		/// allowing it to use the specified dictionary
+		/// when resolving dependencies
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="dependencies"></param>
 		public void RegisterCustomDependencies(String key, IDictionary dependencies)
 		{
 			IHandler handler = GetHandler(key);
@@ -799,6 +869,18 @@ namespace Castle.MicroKernel
 			{
 				handler.AddCustomDependencyValue(entry.Key.ToString(), entry.Value);
 			}
+		}
+
+		/// <summary>
+		/// Associates objects with a component handler,
+		/// allowing it to use the specified dictionary
+		/// when resolving dependencies
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="dependenciesAsAnonymousType"></param>
+		public void RegisterCustomDependencies(String key, object dependenciesAsAnonymousType)
+		{
+			RegisterCustomDependencies(key, new ReflectionBasedDictionaryAdapter(dependenciesAsAnonymousType));
 		}
 
 		/// <summary>
@@ -861,6 +943,24 @@ namespace Castle.MicroKernel
 			return ResolveComponent(handler, service, arguments);
 		}
 
+		/// <summary>
+		/// Resolves the specified key.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <param name="service">The service.</param>
+		/// <param name="argumentsAsAnonymousType">Type of the arguments as anonymous.</param>
+		/// <returns></returns>
+		public virtual object Resolve(String key, Type service, object argumentsAsAnonymousType)
+		{
+			return Resolve(key, service, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
+		}
+
+		/// <summary>
+		/// Releases a component instance. This allows
+		/// the kernel to execute the proper decomission
+		/// lifecycles on the component instance.
+		/// </summary>
+		/// <param name="instance"></param>
 		public virtual void ReleaseComponent(object instance)
 		{
 			if (ReleasePolicy.HasTrack(instance))

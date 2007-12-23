@@ -352,6 +352,14 @@ namespace Castle.MicroKernel
 		Array ResolveAll(Type service, IDictionary arguments);
 
 		/// <summary>
+		/// Returns all the valid component instances by
+		/// the service type
+		/// </summary>
+		/// <param name="service">The service type</param>
+		/// <param name="argumentsAsAnonymousType">Arguments to resolve the services</param>
+		Array ResolveAll(Type service, object argumentsAsAnonymousType);
+
+		/// <summary>
 		/// Returns the component instance by the service type
 		/// using dynamic arguments
 		/// </summary>
@@ -370,6 +378,24 @@ namespace Castle.MicroKernel
 		object Resolve(String key, IDictionary arguments);
 
 		/// <summary>
+		/// Returns the component instance by the service type
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="service">Service to resolve</param>
+		/// <param name="argumentsAsAnonymousType">Arguments to resolve the services</param>
+		/// <returns></returns>
+		object Resolve(Type service, object argumentsAsAnonymousType);
+
+		/// <summary>
+		/// Returns the component instance by the component key
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="key">Key to resolve</param>
+		/// <param name="argumentsAsAnonymousType">Arguments to resolve the services</param>
+		/// <returns></returns>
+		object Resolve(String key, object argumentsAsAnonymousType);
+
+		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key"></param>
@@ -384,6 +410,14 @@ namespace Castle.MicroKernel
 		/// <param name="arguments"></param>
 		/// <returns></returns>
 		T Resolve<T>(IDictionary arguments);
+
+		/// <summary>
+		/// Returns the component instance by the service type
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="argumentsAsAnonymousType">Arguments to resolve the services</param>
+		/// <returns></returns>
+		T Resolve<T>(object argumentsAsAnonymousType);
 
 		/// <summary>
 		/// Returns the component instance by the component key
@@ -421,9 +455,27 @@ namespace Castle.MicroKernel
 		/// allowing it to use the specified dictionary
 		/// when resolving dependencies
 		/// </summary>
+		/// <param name="service"></param>
+		/// <param name="dependenciesAsAnonymousType"></param>
+		void RegisterCustomDependencies(Type service, object dependenciesAsAnonymousType);
+
+		/// <summary>
+		/// Associates objects with a component handler,
+		/// allowing it to use the specified dictionary
+		/// when resolving dependencies
+		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="dependencies"></param>
 		void RegisterCustomDependencies(String key, IDictionary dependencies);
+
+		/// <summary>
+		/// Associates objects with a component handler,
+		/// allowing it to use the specified dictionary
+		/// when resolving dependencies
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="dependenciesAsAnonymousType"></param>
+		void RegisterCustomDependencies(String key, object dependenciesAsAnonymousType);
 
 		/// <summary>
 		/// Releases a component instance. This allows

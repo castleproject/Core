@@ -219,6 +219,14 @@ namespace Castle.Windsor
 		/// <param name="arguments"></param>
 		/// <returns></returns>
 		object Resolve(String key, IDictionary arguments);
+
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		object Resolve(String key, object argumentsAsAnonymousType);
 		
 		/// <summary>
 		/// Returns a component instance by the key
@@ -242,7 +250,15 @@ namespace Castle.Windsor
 		/// <param name="arguments"></param>
 		/// <returns></returns>
 		object Resolve(Type service, IDictionary arguments);
-		
+
+		/// <summary>
+		/// Returns a component instance by the service
+		/// </summary>
+		/// <param name="service"></param>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		object Resolve(Type service, object argumentsAsAnonymousType);
+
 		/// <summary>
 		/// Releases a component instance
 		/// </summary>
@@ -295,6 +311,14 @@ namespace Castle.Windsor
 		T Resolve<T>(IDictionary arguments);
 		
 		/// <summary>
+		/// Returns a component instance by the service
+		/// </summary>
+		/// <typeparam name="T">Service type</typeparam>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns>The component instance</returns>
+		T Resolve<T>(object argumentsAsAnonymousType);
+		
+		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key">Component's key</param>
@@ -310,8 +334,16 @@ namespace Castle.Windsor
 		/// <param name="arguments"></param>
 		/// <returns>The Component instance</returns>
 		T Resolve<T>(String key, IDictionary arguments);
-
 		
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <typeparam name="T">Service type</typeparam>
+		/// <param name="key">Component's key</param>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns>The Component instance</returns>
+		T Resolve<T>(String key, object argumentsAsAnonymousType);
+
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
@@ -320,6 +352,15 @@ namespace Castle.Windsor
 		/// <param name="arguments"></param>
 		/// <returns></returns>
 		object Resolve(String key, Type service, IDictionary arguments);
+
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="service"></param>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		object Resolve(String key, Type service, object argumentsAsAnonymousType);
 		
 		/// <summary>
 		/// Returns the inner instance of the MicroKernel
@@ -352,10 +393,24 @@ namespace Castle.Windsor
 		Array ResolveAll(Type service, IDictionary arguments);
 
 		/// <summary>
+		/// Resolve all valid components that mathc this service
+		/// <param name="service">the service to match</param>
+		/// <param name="argumentsAsAnonymousType">Arguments to resolve the service</param>
+		/// </summary>
+		Array ResolveAll(Type service, object argumentsAsAnonymousType);
+
+		/// <summary>
 		/// Resolve all valid components that match this type.
 		/// <typeparam name="T">The service type</typeparam>
 		/// <param name="arguments">Arguments to resolve the service</param>
 		/// </summary>
 		T[] ResolveAll<T>(IDictionary arguments);
+
+		/// <summary>
+		/// Resolve all valid components that match this type.
+		/// <typeparam name="T">The service type</typeparam>
+		/// <param name="argumentsAsAnonymousType">Arguments to resolve the service</param>
+		/// </summary>
+		T[] ResolveAll<T>(object argumentsAsAnonymousType);
 	}
 }
