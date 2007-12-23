@@ -16,6 +16,7 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.Reflection;
 
 	/// <summary>
@@ -23,9 +24,7 @@ namespace Castle.Core
 	/// </summary>
 	public class ReflectionBasedDictionaryAdapter : IDictionary
 	{
-		private readonly object target;
-		private readonly Type targetType;
-		private readonly BindingFlags flags = BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public;
+		private readonly IDictionary properties = new HybridDictionary(true);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReflectionBasedDictionaryAdapter"/> class.
@@ -38,8 +37,14 @@ namespace Castle.Core
 				throw new ArgumentNullException("target");
 			}
 
-			this.target = target;
-			targetType = target.GetType();
+			Type targetType = target.GetType();
+
+			foreach(PropertyInfo property in targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+			{
+				object value = property.GetValue(target, null);
+
+				properties[property.Name] = value;
+			}
 		}
 
 		/// <summary>
@@ -53,7 +58,7 @@ namespace Castle.Core
 		/// 	<paramref name="key"/> is null. </exception>
 		public bool Contains(object key)
 		{
-			return targetType.GetProperty(key.ToString(), flags) != null;
+			return properties.Contains(key);
 		}
 
 		/// <summary>
@@ -64,14 +69,7 @@ namespace Castle.Core
 		{
 			get
 			{
-				PropertyInfo prop = targetType.GetProperty(key.ToString(), flags);
-
-				if (prop == null)
-				{
-					return null;
-				}
-
-				return prop.GetValue(target, null);
+				return properties[key];
 			}
 			set { throw new NotImplementedException(); }
 		}
@@ -107,7 +105,7 @@ namespace Castle.Core
 		/// </returns>
 		IDictionaryEnumerator IDictionary.GetEnumerator()
 		{
-			throw new NotImplementedException();
+			return properties.GetEnumerator();
 		}
 
 		/// <summary>
@@ -129,7 +127,7 @@ namespace Castle.Core
 		/// <returns>An <see cref="T:System.Collections.ICollection"/> object containing the keys of the <see cref="T:System.Collections.IDictionary"/> object.</returns>
 		public ICollection Keys
 		{
-			get { throw new NotImplementedException(); }
+			get { return properties.Keys; }
 		}
 
 		/// <summary>
@@ -139,7 +137,7 @@ namespace Castle.Core
 		/// <returns>An <see cref="T:System.Collections.ICollection"/> object containing the values in the <see cref="T:System.Collections.IDictionary"/> object.</returns>
 		public ICollection Values
 		{
-			get { throw new NotImplementedException(); }
+			get { return properties.Values; }
 		}
 
 		/// <summary>
@@ -149,7 +147,7 @@ namespace Castle.Core
 		/// <returns>true if the <see cref="T:System.Collections.IDictionary"/> object is read-only; otherwise, false.</returns>
 		public bool IsReadOnly
 		{
-			get { throw new NotImplementedException(); }
+			get { return true; }
 		}
 
 		/// <summary>
@@ -186,7 +184,7 @@ namespace Castle.Core
 		/// <returns>The number of elements contained in the <see cref="T:System.Collections.ICollection"/>.</returns>
 		public int Count
 		{
-			get { throw new NotImplementedException(); }
+			get { return properties.Count; }
 		}
 
 		/// <summary>
@@ -196,7 +194,7 @@ namespace Castle.Core
 		/// <returns>An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.</returns>
 		public object SyncRoot
 		{
-			get { throw new NotImplementedException(); }
+			get { return properties; }
 		}
 
 		/// <summary>
@@ -206,7 +204,7 @@ namespace Castle.Core
 		/// <returns>true if access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe); otherwise, false.</returns>
 		public bool IsSynchronized
 		{
-			get { throw new NotImplementedException(); }
+			get { return false; }
 		}
 
 		/// <summary>
@@ -217,7 +215,7 @@ namespace Castle.Core
 		/// </returns>
 		public IEnumerator GetEnumerator()
 		{
-			throw new NotImplementedException();
+			return properties.GetEnumerator();
 		}
 	}
 }
