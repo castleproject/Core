@@ -18,7 +18,7 @@ namespace Castle.MicroKernel.Registration
 	using System.Collections;
 	using Castle.Core;
 
-	public class ExtendedPropertiesDescriptor<S,T> : AbstractPropertyDescriptior<S,T>
+	public class ExtendedPropertiesDescriptor<S,T> : AbstractPropertyDescriptor<S,T>
 	{
 		public ExtendedPropertiesDescriptor(params Property[] properties)
 			: base(properties)
@@ -27,6 +27,11 @@ namespace Castle.MicroKernel.Registration
 
 		public ExtendedPropertiesDescriptor(IDictionary dictionary)
 			: base(dictionary)
+		{
+		}
+
+		public ExtendedPropertiesDescriptor(object overridesAsAnonymousType)
+			: base(new ReflectionBasedDictionaryAdapter(overridesAsAnonymousType))
 		{
 		}
 

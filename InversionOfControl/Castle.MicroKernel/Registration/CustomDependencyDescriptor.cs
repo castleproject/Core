@@ -18,7 +18,7 @@ namespace Castle.MicroKernel.Registration
 	using System.Collections;
 	using Castle.Core;
 
-	public class CustomDependencyDescriptor<S,T> : AbstractPropertyDescriptior<S,T>
+	public class CustomDependencyDescriptor<S,T> : AbstractPropertyDescriptor<S,T>
 	{
 		public CustomDependencyDescriptor(params Property[] properties)
 			: base(properties)
@@ -27,6 +27,11 @@ namespace Castle.MicroKernel.Registration
 
 		public CustomDependencyDescriptor(IDictionary dictionary)
 			: base(dictionary)
+		{
+		}
+
+		public CustomDependencyDescriptor(object overridesAsAnonymousType)
+			: base(new ReflectionBasedDictionaryAdapter(overridesAsAnonymousType))
 		{
 		}
 

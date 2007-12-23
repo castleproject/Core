@@ -143,6 +143,16 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
+		/// With the extended properties.
+		/// </summary>
+		/// <param name="anonymous">The properties.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S, T> WithExtendedProperties(object anonymous)
+		{
+			return AddDescriptor(new ExtendedPropertiesDescriptor<S, T>(anonymous));
+		}
+
+		/// <summary>
 		/// With the custom dependencies.
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
@@ -163,6 +173,16 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
+		/// With the custom dependencies.
+		/// </summary>
+		/// <param name="anonymous">The dependencies.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S, T> WithCustomDependencies(object anonymous)
+		{
+			return AddDescriptor(new CustomDependencyDescriptor<S, T>(anonymous));
+		}
+
+		/// <summary>
 		/// With the service overrides.
 		/// </summary>
 		/// <param name="overrides">The overrides.</param>
@@ -180,6 +200,16 @@ namespace Castle.MicroKernel.Registration
 		public ComponentRegistration<S,T> WithServiceOverrides(IDictionary overrides)
 		{
 			return AddDescriptor(new ServiceOverrideDescriptor<S,T>(overrides));
+		}
+
+		/// <summary>
+		/// With the service overrides.
+		/// </summary>
+		/// <param name="anonymous">The overrides.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S, T> WithServiceOverrides(object anonymous)
+		{
+			return AddDescriptor(new ServiceOverrideDescriptor<S, T>(anonymous));
 		}
 
 		/// <summary>

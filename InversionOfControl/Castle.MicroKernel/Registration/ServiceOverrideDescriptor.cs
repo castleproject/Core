@@ -19,7 +19,7 @@ namespace Castle.MicroKernel.Registration
 	using Castle.Core;
 	using Castle.MicroKernel.Util;
 
-	public class ServiceOverrideDescriptor<S,T> : AbstractPropertyDescriptior<S,T>
+	public class ServiceOverrideDescriptor<S,T> : AbstractPropertyDescriptor<S,T>
 	{
 		public ServiceOverrideDescriptor(params ServiceOverride[] overrides)
 			: base(overrides)
@@ -28,6 +28,11 @@ namespace Castle.MicroKernel.Registration
 
 		public ServiceOverrideDescriptor(IDictionary dictionary)
 			: base(dictionary)
+		{
+		}
+
+		public ServiceOverrideDescriptor(object overridesAsAnonymousType)
+			: base(new ReflectionBasedDictionaryAdapter(overridesAsAnonymousType))
 		{
 		}
 

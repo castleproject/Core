@@ -18,17 +18,17 @@ namespace Castle.MicroKernel.Registration
 	using System.Collections;
 	using Core;
 
-	public abstract class AbstractPropertyDescriptior<S,T> : ComponentDescriptor<S,T>
+	public abstract class AbstractPropertyDescriptor<S,T> : ComponentDescriptor<S,T>
 	{
 		private readonly Property[] properties;
 		private readonly IDictionary dictionary;
 
-		protected AbstractPropertyDescriptior(params Property[] properties)
+		protected AbstractPropertyDescriptor(params Property[] properties)
 		{
 			this.properties = properties;
 		}
 
-		protected AbstractPropertyDescriptior(IDictionary dictionary)
+		protected AbstractPropertyDescriptor(IDictionary dictionary)
 		{
 			this.dictionary = dictionary;
 		}
