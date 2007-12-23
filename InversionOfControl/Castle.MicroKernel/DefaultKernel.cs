@@ -1155,6 +1155,11 @@ namespace Castle.MicroKernel
 		/// <param name="serviceType">An object that specifies the type of service object to get. </param>
 		public object GetService(Type serviceType)
 		{
+			if (!HasComponent(serviceType))
+			{
+				return null;
+			}
+
 			return Resolve(serviceType);
 		}
 
@@ -1165,9 +1170,15 @@ namespace Castle.MicroKernel
 		/// <returns>
 		/// A service object of type serviceType.
 		/// </returns>
-		public T GetService<T>()
+		public T GetService<T>() where T : class
 		{
 			Type serviceType = typeof(T);
+
+			if (!HasComponent(serviceType))
+			{
+				return null;
+			}
+
 			return (T)Resolve(serviceType);
 		}
 

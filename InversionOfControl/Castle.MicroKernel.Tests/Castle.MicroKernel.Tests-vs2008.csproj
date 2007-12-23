@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -171,6 +171,8 @@
     <Compile Include="Configuration\ConfigurationTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DependencyResolvingTestCase.cs" />
+    <Compile Include="EventTests.cs" />
     <Compile Include="Facilities\FactorySupport\FactorySupportProgrammaticTestCase.cs" />
     <Compile Include="Facilities\FactorySupport\FactorySupportTestCase.cs" />
     <Compile Include="Facilities\Startable\Components\StartableComponentWithCustomDependencies.cs" />
@@ -182,9 +184,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DependencyResolvers.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DependencyResolvingTestCases.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Facilities\Startable\Components\NoInterfaceStartableComponent.cs">
@@ -205,6 +204,7 @@
     <Compile Include="Lifecycle\Components\HttpFakeServer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lifestyle\Components\MyCustomerActivator.cs" />
     <Compile Include="Lifestyle\DecomissioningResponsibilitiesTestCase.cs" />
     <Compile Include="Lifecycle\LifecycleTestCase.cs">
       <SubType>Code</SubType>
@@ -249,6 +249,7 @@
     <Compile Include="Pools\PooledLifestyleManagerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Registration\ComponentRegistrationTestCase.cs" />
     <Compile Include="RuntimeParametersTestCase.cs" />
     <Compile Include="RuntimeParameters\ComponentWithParameters.cs" />
     <Compile Include="SerializationTestCase.cs">
@@ -257,6 +258,7 @@
     <Compile Include="SubContainers\SubContainersTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SubResolverTestCase.cs" />
     <Compile Include="TransientMultiConstructorTestCase.cs" />
     <Compile Include="UnsatisfiedDependenciesTestCase.cs">
       <SubType>Code</SubType>

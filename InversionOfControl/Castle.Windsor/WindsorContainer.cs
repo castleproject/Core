@@ -717,7 +717,7 @@ namespace Castle.Windsor
 		/// <param name="serviceType">An object that specifies the type of service object to get. </param>
 		public object GetService(Type serviceType)
 		{
-			return kernel.Resolve(serviceType);
+			return kernel.GetService(serviceType);
 		}
 
 		/// <summary>
@@ -726,10 +726,9 @@ namespace Castle.Windsor
 		/// <returns>
 		/// A service object of type serviceType.
 		/// </returns>
-		public T GetService<T>()
+		public T GetService<T>() where T : class
 		{
-			Type serviceType = typeof(T);
-			return (T) kernel.Resolve(serviceType);
+			return kernel.GetService<T>();
 		}
 
 		#endregion
