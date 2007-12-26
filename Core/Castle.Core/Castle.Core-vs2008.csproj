@@ -134,6 +134,7 @@
     <Compile Include="Resource\StaticContentResource.cs" />
     <Compile Include="Resource\UncResource.cs" />
     <Compile Include="Resource\UncResourceFactory.cs" />
+    <Compile Include="StringObjectDictionaryAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\CastleKey.snk">
