@@ -136,7 +136,7 @@ namespace NVelocity.Runtime.Parser
 
 		/// <summary> This is the last token that has been consumed successfully.  If
 		/// this object has been created due to a parse error, the token
-		/// followng this token will (therefore) be the first error token.
+		/// following this token will (therefore) be the first error token.
 		/// </summary>
 		public Token currentToken;
 
@@ -165,10 +165,9 @@ namespace NVelocity.Runtime.Parser
 		/// when these raw version cannot be used as part of an ASCII
 		/// string literal.
 		/// </summary>
-		protected internal String AddEscapes(String str)
+		protected internal static String AddEscapes(String str)
 		{
 			StringBuilder retval = new StringBuilder();
-			char character;
 			for(int i = 0; i < str.Length; i++)
 			{
 				switch(str[i])
@@ -209,6 +208,7 @@ namespace NVelocity.Runtime.Parser
 						continue;
 
 					default:
+						char character;
 						if ((character = str[i]) < 0x20 || character > 0x7e)
 						{
 							String s = string.Format("0000{0}", Convert.ToString(character, 16));

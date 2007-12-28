@@ -400,6 +400,7 @@
     <Compile Include="Runtime\Resource\ContentResource.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Runtime\Resource\Loader\AssemblyRelativeResourceLoader.cs" />
     <Compile Include="Runtime\Resource\Loader\AssemblyResourceLoader.cs">
       <SubType>Code</SubType>
     </Compile>

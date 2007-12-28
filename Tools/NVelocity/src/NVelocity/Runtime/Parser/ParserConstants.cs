@@ -92,7 +92,8 @@ namespace NVelocity.Runtime.Parser
 		public static readonly String[] TokenImage =
 			new String[]
 				{
-					"<EOF>", "\"[\"", "\"]\"", "\",\"", "\"..\"", "\"(\"", "<RPAREN>", "\")\"", "<ESCAPE_DIRECTIVE>", "<SET_DIRECTIVE>"
+					"<EOF>",
+					"\"[\"", "\"]\"", "\",\"", "\"..\"", "\"(\"", "<RPAREN>", "\")\"", "<ESCAPE_DIRECTIVE>", "<SET_DIRECTIVE>"
 					, "<DOLLAR>", "<DOLLARBANG>", "\"##\"", "<token of kind 13>", "\"#*\"", "\"#\"", "\"\\\\\\\\\"", "\"\\\\\"",
 					"<TEXT>", "<SINGLE_LINE_COMMENT>", "\"*#\"", "\"*#\"", "<token of kind 22>", "<WHITESPACE>", "<STRING_LITERAL>",
 					"\"true\"", "\"false\"", "<NEWLINE>", "\"-\"", "\"+\"", "\"*\"", "\"/\"", "\"%\"", "\"&&\"", "\"||\"", "\"<\"",

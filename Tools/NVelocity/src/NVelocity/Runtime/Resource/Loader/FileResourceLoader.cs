@@ -38,9 +38,6 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// </summary>
 		protected Hashtable templatePaths = new Hashtable();
 
-		public FileResourceLoader()
-		{
-		}
 
 		public override void Init(ExtendedProperties configuration)
 		{
@@ -62,7 +59,6 @@ namespace NVelocity.Runtime.Resource.Loader
 		{
 			lock(this)
 			{
-				String template = null;
 				int size = paths.Count;
 
 				// Make sure we have a valid templateName.
@@ -75,7 +71,7 @@ namespace NVelocity.Runtime.Resource.Loader
 					throw new ResourceNotFoundException("Need to specify a file name or file path!");
 				}
 
-				template = StringUtils.NormalizePath(templateName);
+				string template = StringUtils.NormalizePath(templateName);
 
 				if (template == null || template.Length == 0)
 				{

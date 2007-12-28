@@ -33,6 +33,52 @@ namespace NVelocity.Runtime.Parser
 	/// </summary>
 	public class Parser
 	{
+		public ParserTokenManager token_source;
+		public Token token, jj_nt;
+		//UPGRADE_NOTE: Field jj_ntk was renamed. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1029"'
+		private int jj_ntk_Renamed_Field;
+		private Token jj_scanpos, jj_lastpos;
+		private int jj_la;
+		public bool lookingAhead = false;
+		private int jj_gen;
+		//UPGRADE_NOTE: Final was removed from the declaration of 'jj_la1 '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
+		//UPGRADE_NOTE: The initialization of  'jj_la1' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
+		private int[] jj_la1;
+		//UPGRADE_NOTE: Final was removed from the declaration of 'jj_la1_0 '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
+		private int[] jj_la1_0 =
+			new int[]
+				{
+					0x13f0360, 0x0, 0x13f0360, 0x380000, 0x1000000, 0x6800002, 0x800000, 0x7800002, 0x13f0360, 0x8, 0x7800002, 0x800000
+					, 0x0, 0x800000, 0x800000, 0x0, 0x800000, 0x800000, 0x1000000, 0x6000002, 0x800000, 0x8, 0x7800002, 0x0, 0x0, 0x0,
+					0x1060060, 0x800000, 0x13f0360, 0x0, 0x0, 0x0, 0x13f0360, 0x800000, 0x13f0360, 0x8000000, 0x7800022, 0x0, 0x0, 0x0,
+					0x0, 0x0, 0x0, 0x30000000, 0x30000000, (int) (- (0x100000000 - 0xc0000000)), (int) (- (0x100000000 - 0xc0000000)),
+					0x800000, 0x7800022, 0x800000, 0x1000000, 0x6000022, 0x800000
+				};
+
+		//UPGRADE_NOTE: Final was removed from the declaration of 'jj_la1_1 '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
+		private int[] jj_la1_1 =
+			new int[]
+				{
+					0xf129000, 0x9000, 0xe120000, 0x0, 0x5120000, 0x0, 0x0, 0x5120000, 0xf129000, 0x0, 0x5020000, 0x0, 0x5020000, 0x0,
+					0x0, 0x5020000, 0x0, 0x0, 0x0, 0x5020000, 0x0, 0x0, 0x5020000, 0x1000000, 0x1000000, 0x5000000, 0xe020000, 0x0,
+					0xf129000, 0x2000, 0x2000, 0x4000, 0xf129000, 0x0, 0xf129000, 0x0, 0x5020200, 0x4, 0x2, 0x180, 0x180, 0x78, 0x78,
+					0x0, 0x0, 0x1, 0x1, 0x0, 0x5020000, 0x0, 0x5020000, 0x0, 0x0
+				};
+
+		//UPGRADE_NOTE: Final was removed from the declaration of 'callsArray '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
+		//UPGRADE_NOTE: The initialization of  'callsArray' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
+		private Calls[] callsArray;
+		private bool jj_rescan = false;
+		private int jj_gc = 0;
+
+		//UPGRADE_NOTE: The initialization of  'expEntries' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
+		private ArrayList expEntries;
+		private int[] jj_expEntry;
+		private int jj_kind = -1;
+		//UPGRADE_NOTE: The initialization of  'lastTokens' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
+		private int[] lastTokens;
+		private int endPosition;
+
 		internal ParserState nodeTree;
 
 		/// <summary>  This Hashtable contains a list of all of the dynamic directives.
@@ -46,7 +92,7 @@ namespace NVelocity.Runtime.Parser
 
 		internal VelocityCharStream velcharstream = null;
 
-		private IRuntimeServices rsvc = null;
+		private IRuntimeServices runtimeServices = null;
 
 		protected Stack directiveStack = new Stack();
 
@@ -57,7 +103,8 @@ namespace NVelocity.Runtime.Parser
 		/// object, we satisfy the requirement of an InputStream
 		/// by using a newline character as an input stream.
 		/// </summary>
-		public Parser(IRuntimeServices rs) : this(new VelocityCharStream(new StringReader("\n"), 1, 1))
+		public Parser(IRuntimeServices rs)
+			: this(new VelocityCharStream(new StringReader("\n"), 1, 1))
 		{
 			InitBlock();
 
@@ -69,7 +116,7 @@ namespace NVelocity.Runtime.Parser
 			/*
 			*  and save the RuntimeServices
 			*/
-			rsvc = rs;
+			runtimeServices = rs;
 		}
 
 		private void InitBlock()
@@ -77,9 +124,9 @@ namespace NVelocity.Runtime.Parser
 			nodeTree = new ParserState();
 			directives = null;
 			jj_la1 = new int[53];
-			jj_2_rtns = new Calls[12];
-			jj_expentries = new ArrayList();
-			jj_lasttokens = new int[100];
+			callsArray = new Calls[12];
+			expEntries = new ArrayList();
+			lastTokens = new int[100];
 		}
 
 		public IDirectiveManager Directives
@@ -99,7 +146,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					token = token.Next = token_source.NextToken;
 				}
-				jj_ntk_Renamed_Field = - 1;
+				jj_ntk_Renamed_Field = -1;
 				jj_gen++;
 				return token;
 			}
@@ -139,7 +186,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			catch(ParseException pe)
 			{
-//				runtimeServices.Error("Parser Exception: " + templateName + " : " + StringUtils.StackTrace(pe));
+				//				runtimeServices.Error("Parser Exception: " + templateName + " : " + StringUtils.StackTrace(pe));
 				throw (pe.currentToken == null) ? pe : new ParseException(pe.currentToken, pe.expectedTokenSequences, pe.tokenImage);
 			}
 			catch(TokenMgrError tme)
@@ -148,7 +195,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			catch(Exception)
 			{
-//				runtimeServices.Error("Parser Error: " + templateName + " : " + StringUtils.StackTrace(e));
+				//				runtimeServices.Error("Parser Error: " + templateName + " : " + StringUtils.StackTrace(e));
 			}
 
 			currentTemplateName = string.Empty;
@@ -180,7 +227,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				bRecognizedDirective = true;
 			}
-			else if (rsvc.IsVelocimacro(name, currentTemplateName))
+			else if (runtimeServices.IsVelocimacro(name, currentTemplateName))
 			{
 				bRecognizedDirective = true;
 			}
@@ -252,7 +299,6 @@ namespace NVelocity.Runtime.Parser
 						case ParserConstants.DOT:
 						case ParserConstants.LCURLY:
 						case ParserConstants.RCURLY:
-							;
 							break;
 
 						default:
@@ -285,13 +331,11 @@ namespace NVelocity.Runtime.Parser
 				}
 				if (jjte000 is SystemException)
 				{
-					if (true)
-						throw (SystemException) jjte000;
+					throw;
 				}
 				if (jjte000 is ParseException)
 				{
-					if (true)
-						throw (ParseException) jjte000;
+					throw;
 				}
 
 				throw;
@@ -369,7 +413,7 @@ namespace NVelocity.Runtime.Parser
 
 							default:
 								jj_la1[2] = jj_gen;
-								ConsumeToken(- 1);
+								ConsumeToken(-1);
 								throw new ParseException();
 						}
 					}
@@ -391,8 +435,7 @@ namespace NVelocity.Runtime.Parser
 			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
-				Token t = null;
-				t = ConsumeToken(ParserConstants.ESCAPE_DIRECTIVE);
+				Token t = ConsumeToken(ParserConstants.ESCAPE_DIRECTIVE);
 				nodeTree.CloseNodeScope(jjtn000, true);
 				jjtc000 = false;
 				/*
@@ -423,7 +466,7 @@ namespace NVelocity.Runtime.Parser
 			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
-				Token t = null;
+				Token t;
 				int count = 0;
 				bool control = false;
 				while(true)
@@ -466,7 +509,7 @@ namespace NVelocity.Runtime.Parser
 
 				if (IsDirective(t.Next.Image.Substring(1)))
 					control = true;
-				else if (rsvc.IsVelocimacro(t.Next.Image.Substring(1), currentTemplateName))
+				else if (runtimeServices.IsVelocimacro(t.Next.Image.Substring(1), currentTemplateName))
 					control = true;
 
 				t.Image = string.Empty;
@@ -487,7 +530,6 @@ namespace NVelocity.Runtime.Parser
 		{
 			/*@bgen(jjtree) Comment */
 			ASTComment jjtn000 = new ASTComment(this, ParserTreeConstants.COMMENT);
-			bool jjtc000 = true;
 			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
@@ -507,16 +549,13 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[3] = jj_gen;
-						ConsumeToken(- 1);
+						ConsumeToken(-1);
 						throw new ParseException();
 				}
 			}
 			finally
 			{
-				if (jjtc000)
-				{
-					nodeTree.CloseNodeScope(jjtn000, true);
-				}
+				nodeTree.CloseNodeScope(jjtn000, true);
 			}
 		}
 
@@ -524,7 +563,6 @@ namespace NVelocity.Runtime.Parser
 		{
 			/*@bgen(jjtree) NumberLiteral */
 			ASTNumberLiteral jjtn000 = new ASTNumberLiteral(this, ParserTreeConstants.NUMBER_LITERAL);
-			bool jjtc000 = true;
 			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
@@ -532,10 +570,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			finally
 			{
-				if (jjtc000)
-				{
-					nodeTree.CloseNodeScope(jjtn000, true);
-				}
+				nodeTree.CloseNodeScope(jjtn000, true);
 			}
 		}
 
@@ -543,7 +578,6 @@ namespace NVelocity.Runtime.Parser
 		{
 			/*@bgen(jjtree) StringLiteral */
 			ASTStringLiteral jjtn000 = new ASTStringLiteral(this, ParserTreeConstants.STRING_LITERAL);
-			bool jjtc000 = true;
 			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
@@ -551,10 +585,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			finally
 			{
-				if (jjtc000)
-				{
-					nodeTree.CloseNodeScope(jjtn000, true);
-				}
+				nodeTree.CloseNodeScope(jjtn000, true);
 			}
 		}
 
@@ -572,7 +603,6 @@ namespace NVelocity.Runtime.Parser
 		{
 			/*@bgen(jjtree) Identifier */
 			ASTIdentifier jjtn000 = new ASTIdentifier(this, ParserTreeConstants.IDENTIFIER);
-			bool jjtc000 = true;
 			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
@@ -580,10 +610,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			finally
 			{
-				if (jjtc000)
-				{
-					nodeTree.CloseNodeScope(jjtn000, true);
-				}
+				nodeTree.CloseNodeScope(jjtn000, true);
 			}
 		}
 
@@ -591,7 +618,6 @@ namespace NVelocity.Runtime.Parser
 		{
 			/*@bgen(jjtree) Word */
 			ASTWord jjtn000 = new ASTWord(this, ParserTreeConstants.WORD);
-			bool jjtc000 = true;
 			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
@@ -599,10 +625,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			finally
 			{
-				if (jjtc000)
-				{
-					nodeTree.CloseNodeScope(jjtn000, true);
-				}
+				nodeTree.CloseNodeScope(jjtn000, true);
 			}
 		}
 
@@ -660,7 +683,7 @@ namespace NVelocity.Runtime.Parser
 
 							default:
 								jj_la1[5] = jj_gen;
-								ConsumeToken(- 1);
+								ConsumeToken(-1);
 								throw new ParseException();
 						}
 					}
@@ -677,9 +700,8 @@ namespace NVelocity.Runtime.Parser
 
 			bool isNodeScopeOpen = true;
 			nodeTree.OpenNodeScope(directiveNode);
-			Token token = null;
+			Token token;
 			Directive directive;
-			DirectiveType directiveType;
 			bool doItNow = false;
 
 			try
@@ -715,6 +737,7 @@ namespace NVelocity.Runtime.Parser
 
 				directiveNode.DirectiveName = directiveName;
 
+				DirectiveType directiveType;
 				if (directive == null)
 				{
 					// if null, then not a real directive, but maybe a Velocimacro
@@ -723,9 +746,9 @@ namespace NVelocity.Runtime.Parser
 
 					// TODO: adding a null check since RuntimeServices is not finished
 					// since the parser can be created without RuntimeServices - this may actually be needed here and in the orgiginal source as well.
-					if (rsvc != null)
+					if (runtimeServices != null)
 					{
-						if (!rsvc.IsVelocimacro(directiveName, currentTemplateName))
+						if (!runtimeServices.IsVelocimacro(directiveName, currentTemplateName))
 						{
 							token_source.StateStackPop();
 							token_source.inDirective = false;
@@ -853,33 +876,17 @@ namespace NVelocity.Runtime.Parser
 				}
 				catch(Exception jjte001)
 				{
-					if (jjtc001)
-					{
-						nodeTree.ClearNodeScope(jjtn001);
-						jjtc001 = false;
-					}
-					else
-					{
-						nodeTree.PopNode();
-					}
+					nodeTree.ClearNodeScope(jjtn001);
+					jjtc001 = false;
 					if (jjte001 is SystemException)
 					{
-						{
-							if (true)
-								throw (SystemException) jjte001;
-						}
+						throw;
 					}
 					if (jjte001 is ParseException)
 					{
-						{
-							if (true)
-								throw (ParseException) jjte001;
-						}
+						throw;
 					}
-					{
-						if (true)
-							throw (ApplicationException) jjte001;
-					}
+					throw (ApplicationException) jjte001;
 				}
 				finally
 				{
@@ -903,7 +910,7 @@ namespace NVelocity.Runtime.Parser
 
 				if (doItNow)
 				{
-					Macro.processAndRegister(rsvc, directiveNode, currentTemplateName);
+					Macro.processAndRegister(runtimeServices, directiveNode, currentTemplateName);
 				}
 
 				return directiveNode;
@@ -921,22 +928,13 @@ namespace NVelocity.Runtime.Parser
 				}
 				if (jjte000 is SystemException)
 				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
+					throw;
 				}
 				if (jjte000 is ParseException)
 				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
+					throw;
 				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) jjte000;
 			}
 			finally
 			{
@@ -949,7 +947,14 @@ namespace NVelocity.Runtime.Parser
 
 		private int GetCurrentTokenKind()
 		{
-			return (jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field;
+			if (jj_ntk_Renamed_Field == -1)
+			{
+				return jj_ntk();
+			}
+			else
+			{
+				return jj_ntk_Renamed_Field;
+			}
 		}
 
 		private void ConsumeWhiteSpaces()
@@ -962,7 +967,6 @@ namespace NVelocity.Runtime.Parser
 
 				default:
 					jj_la1[6] = jj_gen;
-					;
 					break;
 			}
 		}
@@ -1019,33 +1023,17 @@ namespace NVelocity.Runtime.Parser
 			}
 			catch(Exception jjte000)
 			{
-				if (jjtc000)
-				{
-					nodeTree.ClearNodeScope(jjtn000);
-					jjtc000 = false;
-				}
-				else
-				{
-					nodeTree.PopNode();
-				}
+				nodeTree.ClearNodeScope(jjtn000);
+				jjtc000 = false;
 				if (jjte000 is SystemException)
 				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
+					throw;
 				}
 				if (jjte000 is ParseException)
 				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
+					throw;
 				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) jjte000;
 			}
 			finally
 			{
@@ -1094,7 +1082,7 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[12] = jj_gen;
-						ConsumeToken(- 1);
+						ConsumeToken(-1);
 						throw new ParseException();
 				}
 				switch(GetCurrentTokenKind())
@@ -1105,7 +1093,6 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[13] = jj_gen;
-						;
 						break;
 				}
 				ConsumeToken(ParserConstants.DOUBLEDOT);
@@ -1132,7 +1119,7 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[15] = jj_gen;
-						ConsumeToken(- 1);
+						ConsumeToken(-1);
 						throw new ParseException();
 				}
 				switch(GetCurrentTokenKind())
@@ -1143,7 +1130,6 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[16] = jj_gen;
-						;
 						break;
 				}
 				ConsumeToken(ParserConstants.RBRACKET);
@@ -1161,22 +1147,13 @@ namespace NVelocity.Runtime.Parser
 				}
 				if (jjte000 is SystemException)
 				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
+					throw;
 				}
 				if (jjte000 is ParseException)
 				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
+					throw;
 				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) jjte000;
 			}
 			finally
 			{
@@ -1243,7 +1220,7 @@ namespace NVelocity.Runtime.Parser
 
 							default:
 								jj_la1[19] = jj_gen;
-								ConsumeToken(- 1);
+								ConsumeToken(-1);
 								throw new ParseException();
 						}
 					}
@@ -1293,9 +1270,7 @@ namespace NVelocity.Runtime.Parser
 							switch(GetCurrentTokenKind())
 							{
 								case ParserConstants.COMMA:
-									;
 									break;
-
 								default:
 									jj_la1[21] = jj_gen;
 									//UPGRADE_NOTE: Labeled break statement was changed to a goto statement. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1012"'
@@ -1330,22 +1305,13 @@ namespace NVelocity.Runtime.Parser
 				}
 				if (jjte000 is SystemException)
 				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
+					throw;
 				}
 				if (jjte000 is ParseException)
 				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
+					throw;
 				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) jjte000;
 			}
 			finally
 			{
@@ -1395,7 +1361,7 @@ namespace NVelocity.Runtime.Parser
 
 									default:
 										jj_la1[23] = jj_gen;
-										ConsumeToken(- 1);
+										ConsumeToken(-1);
 										throw new ParseException();
 								}
 							}
@@ -1411,11 +1377,7 @@ namespace NVelocity.Runtime.Parser
 						ConsumeToken(ParserConstants.IDENTIFIER);
 						while(true)
 						{
-							if (jj_2_7(2))
-							{
-								;
-							}
-							else
+							if (!jj_2_7(2))
 							{
 								//UPGRADE_NOTE: Labeled break statement was changed to a goto statement. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1012"'
 								goto label_8_brk;
@@ -1435,7 +1397,7 @@ namespace NVelocity.Runtime.Parser
 
 									default:
 										jj_la1[24] = jj_gen;
-										ConsumeToken(- 1);
+										ConsumeToken(-1);
 										throw new ParseException();
 								}
 							}
@@ -1449,39 +1411,23 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[25] = jj_gen;
-						ConsumeToken(- 1);
+						ConsumeToken(-1);
 						throw new ParseException();
 				}
 			}
-			catch(Exception jjte000)
+			catch(Exception exception)
 			{
-				if (jjtc000)
+				nodeTree.ClearNodeScope(jjtn000);
+				jjtc000 = false;
+				if (exception is SystemException)
 				{
-					nodeTree.ClearNodeScope(jjtn000);
-					jjtc000 = false;
+					throw;
 				}
-				else
+				if (exception is ParseException)
 				{
-					nodeTree.PopNode();
+					throw;
 				}
-				if (jjte000 is SystemException)
-				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
-				}
-				if (jjte000 is ParseException)
-				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
-				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) exception;
 			}
 			finally
 			{
@@ -1496,7 +1442,6 @@ namespace NVelocity.Runtime.Parser
 		{
 			/*@bgen(jjtree) True */
 			ASTTrue jjtn000 = new ASTTrue(this, ParserTreeConstants.TRUE);
-			bool jjtc000 = true;
 			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
@@ -1504,10 +1449,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			finally
 			{
-				if (jjtc000)
-				{
-					nodeTree.CloseNodeScope(jjtn000, true);
-				}
+				nodeTree.CloseNodeScope(jjtn000, true);
 			}
 		}
 
@@ -1515,7 +1457,6 @@ namespace NVelocity.Runtime.Parser
 		{
 			/*@bgen(jjtree) False */
 			ASTFalse jjtn000 = new ASTFalse(this, ParserTreeConstants.FALSE);
-			bool jjtc000 = true;
 			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
@@ -1523,10 +1464,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			finally
 			{
-				if (jjtc000)
-				{
-					nodeTree.CloseNodeScope(jjtn000, true);
-				}
+				nodeTree.CloseNodeScope(jjtn000, true);
 			}
 		}
 
@@ -1538,7 +1476,6 @@ namespace NVelocity.Runtime.Parser
 		{
 			/*@bgen(jjtree) Text */
 			ASTText jjtn000 = new ASTText(this, ParserTreeConstants.TEXT);
-			bool jjtc000 = true;
 			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
@@ -1582,16 +1519,13 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[26] = jj_gen;
-						ConsumeToken(- 1);
+						ConsumeToken(-1);
 						throw new ParseException();
 				}
 			}
 			finally
 			{
-				if (jjtc000)
-				{
-					nodeTree.CloseNodeScope(jjtn000, true);
-				}
+				nodeTree.CloseNodeScope(jjtn000, true);
 			}
 		}
 
@@ -1668,35 +1602,19 @@ namespace NVelocity.Runtime.Parser
 					label_9_brk:
 					;
 				}
-				catch(Exception jjte001)
+				catch(Exception exception)
 				{
-					if (jjtc001)
+					nodeTree.ClearNodeScope(jjtn001);
+					jjtc001 = false;
+					if (exception is SystemException)
 					{
-						nodeTree.ClearNodeScope(jjtn001);
-						jjtc001 = false;
+						throw;
 					}
-					else
+					if (exception is ParseException)
 					{
-						nodeTree.PopNode();
+						throw;
 					}
-					if (jjte001 is SystemException)
-					{
-						{
-							if (true)
-								throw (SystemException) jjte001;
-						}
-					}
-					if (jjte001 is ParseException)
-					{
-						{
-							if (true)
-								throw (ParseException) jjte001;
-						}
-					}
-					{
-						if (true)
-							throw (ApplicationException) jjte001;
-					}
+					throw (ApplicationException) exception;
 				}
 				finally
 				{
@@ -1726,13 +1644,11 @@ namespace NVelocity.Runtime.Parser
 						}
 						//UPGRADE_NOTE: Label 'label_10_brk' was added. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1011"'
 						label_10_brk:
-						;
 
 						break;
 
 					default:
 						jj_la1[30] = jj_gen;
-						;
 						break;
 				}
 
@@ -1741,43 +1657,25 @@ namespace NVelocity.Runtime.Parser
 					case ParserConstants.ELSE_DIRECTIVE:
 						ElseStatement();
 						break;
-
 					default:
 						jj_la1[31] = jj_gen;
-						;
 						break;
 				}
 				ConsumeToken(ParserConstants.END);
 			}
-			catch(Exception jjte000)
+			catch(Exception exception)
 			{
-				if (jjtc000)
+				nodeTree.ClearNodeScope(jjtn000);
+				jjtc000 = false;
+				if (exception is SystemException)
 				{
-					nodeTree.ClearNodeScope(jjtn000);
-					jjtc000 = false;
+					throw;
 				}
-				else
+				if (exception is ParseException)
 				{
-					nodeTree.PopNode();
+					throw;
 				}
-				if (jjte000 is SystemException)
-				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
-				}
-				if (jjte000 is ParseException)
-				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
-				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) exception;
 			}
 			finally
 			{
@@ -1841,35 +1739,19 @@ namespace NVelocity.Runtime.Parser
 					label_11_brk:
 					;
 				}
-				catch(Exception jjte001)
+				catch(Exception exception)
 				{
-					if (jjtc001)
+					nodeTree.ClearNodeScope(jjtn001);
+					jjtc001 = false;
+					if (exception is SystemException)
 					{
-						nodeTree.ClearNodeScope(jjtn001);
-						jjtc001 = false;
+						throw;
 					}
-					else
+					if (exception is ParseException)
 					{
-						nodeTree.PopNode();
+						throw;
 					}
-					if (jjte001 is SystemException)
-					{
-						{
-							if (true)
-								throw (SystemException) jjte001;
-						}
-					}
-					if (jjte001 is ParseException)
-					{
-						{
-							if (true)
-								throw (ParseException) jjte001;
-						}
-					}
-					{
-						if (true)
-							throw (ApplicationException) jjte001;
-					}
+					throw (ApplicationException) exception;
 				}
 				finally
 				{
@@ -1879,35 +1761,19 @@ namespace NVelocity.Runtime.Parser
 					}
 				}
 			}
-			catch(Exception jjte000)
+			catch(Exception exception)
 			{
-				if (jjtc000)
+				nodeTree.ClearNodeScope(jjtn000);
+				jjtc000 = false;
+				if (exception is SystemException)
 				{
-					nodeTree.ClearNodeScope(jjtn000);
-					jjtc000 = false;
+					throw;
 				}
-				else
+				if (exception is ParseException)
 				{
-					nodeTree.PopNode();
+					throw;
 				}
-				if (jjte000 is SystemException)
-				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
-				}
-				if (jjte000 is ParseException)
-				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
-				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) exception;
 			}
 			finally
 			{
@@ -1936,7 +1802,6 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[33] = jj_gen;
-						;
 						break;
 				}
 				ConsumeToken(ParserConstants.LPAREN);
@@ -1985,35 +1850,19 @@ namespace NVelocity.Runtime.Parser
 					label_12_brk:
 					;
 				}
-				catch(Exception jjte001)
+				catch(Exception exception)
 				{
-					if (jjtc001)
+					nodeTree.ClearNodeScope(jjtn001);
+					jjtc001 = false;
+					if (exception is SystemException)
 					{
-						nodeTree.ClearNodeScope(jjtn001);
-						jjtc001 = false;
+						throw;
 					}
-					else
+					if (exception is ParseException)
 					{
-						nodeTree.PopNode();
+						throw;
 					}
-					if (jjte001 is SystemException)
-					{
-						{
-							if (true)
-								throw (SystemException) jjte001;
-						}
-					}
-					if (jjte001 is ParseException)
-					{
-						{
-							if (true)
-								throw (ParseException) jjte001;
-						}
-					}
-					{
-						if (true)
-							throw (ApplicationException) jjte001;
-					}
+					throw (ApplicationException) exception;
 				}
 				finally
 				{
@@ -2023,35 +1872,19 @@ namespace NVelocity.Runtime.Parser
 					}
 				}
 			}
-			catch(Exception jjte000)
+			catch(Exception exception)
 			{
-				if (jjtc000)
+				nodeTree.ClearNodeScope(jjtn000);
+				jjtc000 = false;
+				if (exception is SystemException)
 				{
-					nodeTree.ClearNodeScope(jjtn000);
-					jjtc000 = false;
+					throw;
 				}
-				else
+				if (exception is ParseException)
 				{
-					nodeTree.PopNode();
+					throw;
 				}
-				if (jjte000 is SystemException)
-				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
-				}
-				if (jjte000 is ParseException)
-				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
-				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) exception;
 			}
 			finally
 			{
@@ -2080,10 +1913,6 @@ namespace NVelocity.Runtime.Parser
 				{
 					ConsumeToken(ParserConstants.WHITESPACE);
 				}
-				else
-				{
-					;
-				}
 				ConsumeToken(ParserConstants.LPAREN);
 				Expression();
 				ConsumeToken(ParserConstants.RPAREN);
@@ -2100,39 +1929,22 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[35] = jj_gen;
-						;
 						break;
 				}
 			}
-			catch(Exception jjte000)
+			catch(Exception exception)
 			{
-				if (jjtc000)
+				nodeTree.ClearNodeScope(jjtn000);
+				jjtc000 = false;
+				if (exception is SystemException)
 				{
-					nodeTree.ClearNodeScope(jjtn000);
-					jjtc000 = false;
+					throw;
 				}
-				else
+				if (exception is ParseException)
 				{
-					nodeTree.PopNode();
+					throw;
 				}
-				if (jjte000 is SystemException)
-				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
-				}
-				if (jjte000 is ParseException)
-				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
-				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) exception;
 			}
 			finally
 			{
@@ -2192,40 +2004,24 @@ namespace NVelocity.Runtime.Parser
 
 						default:
 							jj_la1[36] = jj_gen;
-							ConsumeToken(- 1);
+							ConsumeToken(-1);
 							throw new ParseException();
 					}
 				}
 			}
-			catch(Exception jjte000)
+			catch(Exception exception)
 			{
-				if (jjtc000)
+				nodeTree.ClearNodeScope(jjtn000);
+				jjtc000 = false;
+				if (exception is SystemException)
 				{
-					nodeTree.ClearNodeScope(jjtn000);
-					jjtc000 = false;
+					throw;
 				}
-				else
+				if (exception is ParseException)
 				{
-					nodeTree.PopNode();
+					throw;
 				}
-				if (jjte000 is SystemException)
-				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
-				}
-				if (jjte000 is ParseException)
-				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
-				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) exception;
 			}
 			finally
 			{
@@ -2249,35 +2045,19 @@ namespace NVelocity.Runtime.Parser
 				ConsumeToken(ParserConstants.EQUALS);
 				Expression();
 			}
-			catch(Exception jjte000)
+			catch(Exception exception)
 			{
-				if (jjtc000)
+				nodeTree.ClearNodeScope(jjtn000);
+				jjtc000 = false;
+				if (exception is SystemException)
 				{
-					nodeTree.ClearNodeScope(jjtn000);
-					jjtc000 = false;
+					throw;
 				}
-				else
+				if (exception is ParseException)
 				{
-					nodeTree.PopNode();
+					throw;
 				}
-				if (jjte000 is SystemException)
-				{
-					{
-						if (true)
-							throw (SystemException) jjte000;
-					}
-				}
-				if (jjte000 is ParseException)
-				{
-					{
-						if (true)
-							throw (ParseException) jjte000;
-					}
-				}
-				{
-					if (true)
-						throw (ApplicationException) jjte000;
-				}
+				throw (ApplicationException) exception;
 			}
 			finally
 			{
@@ -2293,16 +2073,11 @@ namespace NVelocity.Runtime.Parser
 			ConditionalAndExpression();
 			while(true)
 			{
-				switch(GetCurrentTokenKind())
+				if (GetCurrentTokenKind() != ParserConstants.LOGICAL_OR)
 				{
-					case ParserConstants.LOGICAL_OR:
-						;
-						break;
-
-					default:
-						jj_la1[37] = jj_gen;
-						//UPGRADE_NOTE: Labeled break statement was changed to a goto statement. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1012"'
-						goto label_13_brk;
+					jj_la1[37] = jj_gen;
+					//UPGRADE_NOTE: Labeled break statement was changed to a goto statement. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1012"'
+					goto label_13_brk;
 				}
 				ConsumeToken(ParserConstants.LOGICAL_OR);
 				ASTOrNode jjtn001 = new ASTOrNode(this, ParserTreeConstants.OR_NODE);
@@ -2313,35 +2088,19 @@ namespace NVelocity.Runtime.Parser
 				{
 					ConditionalAndExpression();
 				}
-				catch(Exception jjte001)
+				catch(Exception exception)
 				{
-					if (jjtc001)
+					nodeTree.ClearNodeScope(jjtn001);
+					jjtc001 = false;
+					if (exception is SystemException)
 					{
-						nodeTree.ClearNodeScope(jjtn001);
-						jjtc001 = false;
+						throw;
 					}
-					else
+					if (exception is ParseException)
 					{
-						nodeTree.PopNode();
+						throw;
 					}
-					if (jjte001 is SystemException)
-					{
-						{
-							if (true)
-								throw (SystemException) jjte001;
-						}
-					}
-					if (jjte001 is ParseException)
-					{
-						{
-							if (true)
-								throw (ParseException) jjte001;
-						}
-					}
-					{
-						if (true)
-							throw (ApplicationException) jjte001;
-					}
+					throw (ApplicationException) exception;
 				}
 				finally
 				{
@@ -2381,35 +2140,19 @@ namespace NVelocity.Runtime.Parser
 				{
 					EqualityExpression();
 				}
-				catch(Exception jjte001)
+				catch(Exception exception)
 				{
-					if (jjtc001)
+					nodeTree.ClearNodeScope(jjtn001);
+					jjtc001 = false;
+					if (exception is SystemException)
 					{
-						nodeTree.ClearNodeScope(jjtn001);
-						jjtc001 = false;
+						throw;
 					}
-					else
+					if (exception is ParseException)
 					{
-						nodeTree.PopNode();
+						throw;
 					}
-					if (jjte001 is SystemException)
-					{
-						{
-							if (true)
-								throw (SystemException) jjte001;
-						}
-					}
-					if (jjte001 is ParseException)
-					{
-						{
-							if (true)
-								throw (ParseException) jjte001;
-						}
-					}
-					{
-						if (true)
-							throw (ApplicationException) jjte001;
-					}
+					throw (ApplicationException) exception;
 				}
 				finally
 				{
@@ -2453,35 +2196,19 @@ namespace NVelocity.Runtime.Parser
 						{
 							RelationalExpression();
 						}
-						catch(Exception jjte001)
+						catch(Exception exception)
 						{
-							if (jjtc001)
+							nodeTree.ClearNodeScope(jjtn001);
+							jjtc001 = false;
+							if (exception is SystemException)
 							{
-								nodeTree.ClearNodeScope(jjtn001);
-								jjtc001 = false;
+								throw;
 							}
-							else
+							if (exception is ParseException)
 							{
-								nodeTree.PopNode();
+								throw;
 							}
-							if (jjte001 is SystemException)
-							{
-								{
-									if (true)
-										throw (SystemException) jjte001;
-								}
-							}
-							if (jjte001 is ParseException)
-							{
-								{
-									if (true)
-										throw (ParseException) jjte001;
-								}
-							}
-							{
-								if (true)
-									throw (ApplicationException) jjte001;
-							}
+							throw (ApplicationException) exception;
 						}
 						finally
 						{
@@ -2502,35 +2229,19 @@ namespace NVelocity.Runtime.Parser
 						{
 							RelationalExpression();
 						}
-						catch(Exception jjte002)
+						catch(Exception exception)
 						{
-							if (jjtc002)
+							nodeTree.ClearNodeScope(jjtn002);
+							jjtc002 = false;
+							if (exception is SystemException)
 							{
-								nodeTree.ClearNodeScope(jjtn002);
-								jjtc002 = false;
+								throw;
 							}
-							else
+							if (exception is ParseException)
 							{
-								nodeTree.PopNode();
+								throw;
 							}
-							if (jjte002 is SystemException)
-							{
-								{
-									if (true)
-										throw (SystemException) jjte002;
-								}
-							}
-							if (jjte002 is ParseException)
-							{
-								{
-									if (true)
-										throw (ParseException) jjte002;
-								}
-							}
-							{
-								if (true)
-									throw (ApplicationException) jjte002;
-							}
+							throw (ApplicationException) exception;
 						}
 						finally
 						{
@@ -2543,7 +2254,7 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[40] = jj_gen;
-						ConsumeToken(- 1);
+						ConsumeToken(-1);
 						throw new ParseException();
 				}
 			}
@@ -2585,33 +2296,17 @@ namespace NVelocity.Runtime.Parser
 						}
 						catch(Exception jjte001)
 						{
-							if (jjtc001)
-							{
-								nodeTree.ClearNodeScope(jjtn001);
-								jjtc001 = false;
-							}
-							else
-							{
-								nodeTree.PopNode();
-							}
+							nodeTree.ClearNodeScope(jjtn001);
+							jjtc001 = false;
 							if (jjte001 is SystemException)
 							{
-								{
-									if (true)
-										throw (SystemException) jjte001;
-								}
+								throw;
 							}
 							if (jjte001 is ParseException)
 							{
-								{
-									if (true)
-										throw (ParseException) jjte001;
-								}
+								throw;
 							}
-							{
-								if (true)
-									throw (ApplicationException) jjte001;
-							}
+							throw (ApplicationException) jjte001;
 						}
 						finally
 						{
@@ -2634,33 +2329,17 @@ namespace NVelocity.Runtime.Parser
 						}
 						catch(Exception jjte002)
 						{
-							if (jjtc002)
-							{
-								nodeTree.ClearNodeScope(jjtn002);
-								jjtc002 = false;
-							}
-							else
-							{
-								nodeTree.PopNode();
-							}
+							nodeTree.ClearNodeScope(jjtn002);
+							jjtc002 = false;
 							if (jjte002 is SystemException)
 							{
-								{
-									if (true)
-										throw (SystemException) jjte002;
-								}
+								throw;
 							}
 							if (jjte002 is ParseException)
 							{
-								{
-									if (true)
-										throw (ParseException) jjte002;
-								}
+								throw;
 							}
-							{
-								if (true)
-									throw (ApplicationException) jjte002;
-							}
+							throw (ApplicationException) jjte002;
 						}
 						finally
 						{
@@ -2683,33 +2362,17 @@ namespace NVelocity.Runtime.Parser
 						}
 						catch(Exception jjte003)
 						{
-							if (jjtc003)
-							{
-								nodeTree.ClearNodeScope(jjtn003);
-								jjtc003 = false;
-							}
-							else
-							{
-								nodeTree.PopNode();
-							}
+							nodeTree.ClearNodeScope(jjtn003);
+							jjtc003 = false;
 							if (jjte003 is SystemException)
 							{
-								{
-									if (true)
-										throw (SystemException) jjte003;
-								}
+								throw;
 							}
 							if (jjte003 is ParseException)
 							{
-								{
-									if (true)
-										throw (ParseException) jjte003;
-								}
+								throw;
 							}
-							{
-								if (true)
-									throw (ApplicationException) jjte003;
-							}
+							throw (ApplicationException) jjte003;
 						}
 						finally
 						{
@@ -2732,33 +2395,17 @@ namespace NVelocity.Runtime.Parser
 						}
 						catch(Exception jjte004)
 						{
-							if (jjtc004)
-							{
-								nodeTree.ClearNodeScope(jjtn004);
-								jjtc004 = false;
-							}
-							else
-							{
-								nodeTree.PopNode();
-							}
+							nodeTree.ClearNodeScope(jjtn004);
+							jjtc004 = false;
 							if (jjte004 is SystemException)
 							{
-								{
-									if (true)
-										throw (SystemException) jjte004;
-								}
+								throw;
 							}
 							if (jjte004 is ParseException)
 							{
-								{
-									if (true)
-										throw (ParseException) jjte004;
-								}
+								throw;
 							}
-							{
-								if (true)
-									throw (ApplicationException) jjte004;
-							}
+							throw (ApplicationException) jjte004;
 						}
 						finally
 						{
@@ -2771,7 +2418,7 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[42] = jj_gen;
-						ConsumeToken(- 1);
+						ConsumeToken(-1);
 						throw new ParseException();
 				}
 			}
@@ -2811,33 +2458,17 @@ namespace NVelocity.Runtime.Parser
 						}
 						catch(Exception jjte001)
 						{
-							if (jjtc001)
-							{
-								nodeTree.ClearNodeScope(jjtn001);
-								jjtc001 = false;
-							}
-							else
-							{
-								nodeTree.PopNode();
-							}
+							nodeTree.ClearNodeScope(jjtn001);
+							jjtc001 = false;
 							if (jjte001 is SystemException)
 							{
-								{
-									if (true)
-										throw (SystemException) jjte001;
-								}
+								throw;
 							}
 							if (jjte001 is ParseException)
 							{
-								{
-									if (true)
-										throw (ParseException) jjte001;
-								}
+								throw;
 							}
-							{
-								if (true)
-									throw (ApplicationException) jjte001;
-							}
+							throw (ApplicationException) jjte001;
 						}
 						finally
 						{
@@ -2860,33 +2491,17 @@ namespace NVelocity.Runtime.Parser
 						}
 						catch(Exception jjte002)
 						{
-							if (jjtc002)
-							{
-								nodeTree.ClearNodeScope(jjtn002);
-								jjtc002 = false;
-							}
-							else
-							{
-								nodeTree.PopNode();
-							}
+							nodeTree.ClearNodeScope(jjtn002);
+							jjtc002 = false;
 							if (jjte002 is SystemException)
 							{
-								{
-									if (true)
-										throw (SystemException) jjte002;
-								}
+								throw;
 							}
 							if (jjte002 is ParseException)
 							{
-								{
-									if (true)
-										throw (ParseException) jjte002;
-								}
+								throw;
 							}
-							{
-								if (true)
-									throw (ApplicationException) jjte002;
-							}
+							throw (ApplicationException) jjte002;
 						}
 						finally
 						{
@@ -2899,7 +2514,7 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[44] = jj_gen;
-						ConsumeToken(- 1);
+						ConsumeToken(-1);
 						throw new ParseException();
 				}
 			}
@@ -2940,33 +2555,17 @@ namespace NVelocity.Runtime.Parser
 						}
 						catch(Exception jjte001)
 						{
-							if (jjtc001)
-							{
-								nodeTree.ClearNodeScope(jjtn001);
-								jjtc001 = false;
-							}
-							else
-							{
-								nodeTree.PopNode();
-							}
+							nodeTree.ClearNodeScope(jjtn001);
+							jjtc001 = false;
 							if (jjte001 is SystemException)
 							{
-								{
-									if (true)
-										throw (SystemException) jjte001;
-								}
+								throw;
 							}
 							if (jjte001 is ParseException)
 							{
-								{
-									if (true)
-										throw (ParseException) jjte001;
-								}
+								throw;
 							}
-							{
-								if (true)
-									throw (ApplicationException) jjte001;
-							}
+							throw (ApplicationException) jjte001;
 						}
 						finally
 						{
@@ -2989,33 +2588,17 @@ namespace NVelocity.Runtime.Parser
 						}
 						catch(Exception jjte002)
 						{
-							if (jjtc002)
-							{
-								nodeTree.ClearNodeScope(jjtn002);
-								jjtc002 = false;
-							}
-							else
-							{
-								nodeTree.PopNode();
-							}
+							nodeTree.ClearNodeScope(jjtn002);
+							jjtc002 = false;
 							if (jjte002 is SystemException)
 							{
-								{
-									if (true)
-										throw (SystemException) jjte002;
-								}
+								throw;
 							}
 							if (jjte002 is ParseException)
 							{
-								{
-									if (true)
-										throw (ParseException) jjte002;
-								}
+								throw;
 							}
-							{
-								if (true)
-									throw (ApplicationException) jjte002;
-							}
+							throw (ApplicationException) jjte002;
 						}
 						finally
 						{
@@ -3038,33 +2621,17 @@ namespace NVelocity.Runtime.Parser
 						}
 						catch(Exception jjte003)
 						{
-							if (jjtc003)
-							{
-								nodeTree.ClearNodeScope(jjtn003);
-								jjtc003 = false;
-							}
-							else
-							{
-								nodeTree.PopNode();
-							}
+							nodeTree.ClearNodeScope(jjtn003);
+							jjtc003 = false;
 							if (jjte003 is SystemException)
 							{
-								{
-									if (true)
-										throw (SystemException) jjte003;
-								}
+								throw;
 							}
 							if (jjte003 is ParseException)
 							{
-								{
-									if (true)
-										throw (ParseException) jjte003;
-								}
+								throw;
 							}
-							{
-								if (true)
-									throw (ApplicationException) jjte003;
-							}
+							throw (ApplicationException) jjte003;
 						}
 						finally
 						{
@@ -3077,7 +2644,7 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[46] = jj_gen;
-						ConsumeToken(- 1);
+						ConsumeToken(-1);
 						throw new ParseException();
 				}
 			}
@@ -3112,33 +2679,17 @@ namespace NVelocity.Runtime.Parser
 				}
 				catch(Exception jjte001)
 				{
-					if (jjtc001)
-					{
-						nodeTree.ClearNodeScope(jjtn001);
-						jjtc001 = false;
-					}
-					else
-					{
-						nodeTree.PopNode();
-					}
+					nodeTree.ClearNodeScope(jjtn001);
+					jjtc001 = false;
 					if (jjte001 is SystemException)
 					{
-						{
-							if (true)
-								throw (SystemException) jjte001;
-						}
+						throw;
 					}
 					if (jjte001 is ParseException)
 					{
-						{
-							if (true)
-								throw (ParseException) jjte001;
-						}
+						throw;
 					}
-					{
-						if (true)
-							throw (ApplicationException) jjte001;
-					}
+					throw (ApplicationException) jjte001;
 				}
 				finally
 				{
@@ -3166,7 +2717,7 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[48] = jj_gen;
-						ConsumeToken(- 1);
+						ConsumeToken(-1);
 						throw new ParseException();
 				}
 			}
@@ -3182,7 +2733,6 @@ namespace NVelocity.Runtime.Parser
 
 				default:
 					jj_la1[49] = jj_gen;
-					;
 					break;
 			}
 			switch(GetCurrentTokenKind())
@@ -3230,7 +2780,7 @@ namespace NVelocity.Runtime.Parser
 
 							default:
 								jj_la1[51] = jj_gen;
-								ConsumeToken(- 1);
+								ConsumeToken(-1);
 								throw new ParseException();
 						}
 					}
@@ -3249,11 +2799,20 @@ namespace NVelocity.Runtime.Parser
 			}
 		}
 
+		private bool jj_3R_52()
+		{
+			if (ScanToken(ParserConstants.WHITESPACE))
+				return true;
+			if (ToRefactor1())
+				return false;
+			return false;
+		}
+
 		private bool jj_2_1(int xla)
 		{
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
-			bool retval = !jj_3_1();
+			bool retval = !jj_3R_50(jj_3R_19());
 			Save(0, xla);
 			return retval;
 		}
@@ -3289,7 +2848,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
-			bool retval = !jj_3_5();
+			bool retval = !jj_3_7();
 			Save(4, xla);
 			return retval;
 		}
@@ -3298,7 +2857,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
-			bool retval = !jj_3_6();
+			bool retval = !jj_3R_50(jj_3R_29());
 			Save(5, xla);
 			return retval;
 		}
@@ -3316,7 +2875,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
-			bool retval = !jj_3_8();
+			bool retval = !jj_3R_50(jj_3R_29());
 			Save(7, xla);
 			return retval;
 		}
@@ -3325,7 +2884,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
-			bool retval = !jj_3_9();
+			bool retval = !jj_3R_52();
 			Save(8, xla);
 			return retval;
 		}
@@ -3361,28 +2920,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (ScanToken(ParserConstants.TRUE))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3_7()
-		{
-			if (ScanToken(ParserConstants.DOT))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3_8())
-			{
-				jj_scanpos = xsp;
-				if (jj_3R_30())
-					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
-					return false;
-			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
@@ -3391,69 +2929,67 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (jj_3R_54())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
 			while(true)
 			{
-				xsp = jj_scanpos;
-				if (jj_3R_88())
+				Token xsp = jj_scanpos;
+				if (jj_3R_100(ParserConstants.COMMA, jj_3R_54()))
 				{
 					jj_scanpos = xsp;
 					break;
 				}
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
 			return false;
 		}
 
-		private bool jj_3_5()
+		private bool jj_3_7()
 		{
 			if (ScanToken(ParserConstants.DOT))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3_6())
+			Token xsp = jj_scanpos;
+			if (jj_3R_50(jj_3R_29()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_28())
+				if (jj_3R_50(jj_3R_41()))
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			return false;
 		}
+
 
 		private bool jj_3R_39()
 		{
 			if (ScanToken(ParserConstants.LCURLY))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.IDENTIFIER))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
 			while(true)
 			{
-				xsp = jj_scanpos;
+				Token xsp = jj_scanpos;
 				if (jj_3_7())
 				{
 					jj_scanpos = xsp;
 					break;
 				}
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
 			if (ScanToken(ParserConstants.RCURLY))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
@@ -3462,42 +2998,32 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (ScanToken(ParserConstants.LBRACKET))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3R_34())
+			Token xsp = jj_scanpos;
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_35())
+			if (jj_3R_50(jj_3R_19()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_36())
+				if (jj_3R_50(jj_3R_40()))
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_37())
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.DOUBLEDOT))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_24()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
@@ -3506,48 +3032,22 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (ScanToken(ParserConstants.IDENTIFIER))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
 			while(true)
 			{
-				xsp = jj_scanpos;
-				if (jj_3_5())
+				Token xsp = jj_scanpos;
+				if (jj_3_7())
 				{
 					jj_scanpos = xsp;
 					break;
 				}
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
 			return false;
 		}
 
-		private bool jj_3R_52()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_51()
-		{
-			if (ScanToken(ParserConstants.LPAREN))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_60())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (ScanToken(ParserConstants.RPAREN))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_19()
 		{
@@ -3558,28 +3058,10 @@ namespace NVelocity.Runtime.Parser
 				jj_scanpos = xsp;
 				if (jj_3R_39())
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_32()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_50()
-		{
-			if (jj_3R_59())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			return false;
 		}
@@ -3588,265 +3070,143 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (ScanToken(ParserConstants.IDENTIFIER))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_49()
+
+		private bool jj_3R_50(bool b)
 		{
-			if (jj_3R_58())
+			if (b)
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_48()
-		{
-			if (jj_3R_57())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_47()
-		{
-			if (jj_3R_56())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_46()
-		{
-			if (jj_3R_19())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_45()
-		{
-			if (jj_3R_40())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3_4()
 		{
 			if (ScanToken(ParserConstants.LBRACKET))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			Token xsp;
 			xsp = jj_scanpos;
-			if (jj_3R_24())
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_25())
+			if (jj_3R_50(jj_3R_19()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_26())
+				if (jj_3R_50(jj_3R_40()))
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_27())
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.DOUBLEDOT))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_44()
-		{
-			if (jj_3R_55())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_29()
 		{
 			if (jj_3R_41())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.LPAREN))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
-			xsp = jj_scanpos;
+			Token xsp = jj_scanpos;
 			if (jj_3R_42())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.REFMOD2_RPAREN))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_43()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_31()
 		{
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3R_43())
+			Token xsp = jj_scanpos;
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_44())
+			if (jj_3R_50(jj_3R_55()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_45())
+				if (jj_3R_50(jj_3R_40()))
 				{
 					jj_scanpos = xsp;
-					if (jj_3R_46())
+					if (jj_3R_50(jj_3R_19()))
 					{
 						jj_scanpos = xsp;
-						if (jj_3R_47())
+						if (jj_3R_50(jj_3R_56()))
 						{
 							jj_scanpos = xsp;
-							if (jj_3R_48())
+							if (jj_3R_50(jj_3R_57()))
 							{
 								jj_scanpos = xsp;
-								if (jj_3R_49())
+								if (jj_3R_50(jj_3R_58()))
 								{
 									jj_scanpos = xsp;
-									if (jj_3R_50())
+									if (jj_3R_50(jj_3R_59()))
 									{
 										jj_scanpos = xsp;
 										if (jj_3R_51())
 											return true;
-										if (jj_la == 0 && jj_scanpos == jj_lastpos)
+										if (ToRefactor1())
 											return false;
 									}
-									else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+									else if (ToRefactor1())
 										return false;
 								}
-								else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+								else if (ToRefactor1())
 									return false;
 							}
-							else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+							else if (ToRefactor1())
 								return false;
 						}
-						else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+						else if (ToRefactor1())
 							return false;
 					}
-					else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+					else if (ToRefactor1())
 						return false;
 				}
-				else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				else if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
 			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_73()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_68()
-		{
-			if (jj_3R_40())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_106()
-		{
-			if (ScanToken(ParserConstants.MODULUS))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_33())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_67()
-		{
-			if (jj_3R_19())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_105()
-		{
-			if (ScanToken(ParserConstants.DIVIDE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_33())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_83()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_66()
-		{
-			if (jj_3R_59())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_33()
 		{
@@ -3855,121 +3215,63 @@ namespace NVelocity.Runtime.Parser
 			if (jj_3_11())
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_53())
+				if (jj_3R_50(jj_3R_31()))
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			return false;
 		}
 
 		private bool jj_3_11()
 		{
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3R_32())
+			Token xsp = jj_scanpos;
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.LOGICAL_NOT))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			if (jj_3R_33())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_53()
-		{
-			if (jj_3R_31())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_104()
-		{
-			if (ScanToken(ParserConstants.MULTIPLY))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_33())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_101()
 		{
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3R_104())
+			Token xsp = jj_scanpos;
+			if (jj_3R_100(ParserConstants.MULTIPLY, jj_3R_33()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_105())
+				if (jj_3R_100(ParserConstants.DIVIDE, jj_3R_33()))
 				{
 					jj_scanpos = xsp;
-					if (jj_3R_106())
+					if (jj_3R_100(ParserConstants.MODULUS, jj_3R_33()))
 						return true;
-					if (jj_la == 0 && jj_scanpos == jj_lastpos)
+					if (ToRefactor1())
 						return false;
 				}
-				else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				else if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_65()
-		{
-			if (jj_3R_58())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_55()
 		{
 			if (ScanToken(ParserConstants.STRING_LITERAL))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_64()
-		{
-			if (jj_3R_57())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_63()
-		{
-			if (jj_3R_56())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_62()
-		{
-			if (jj_3R_55())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
@@ -3978,336 +3280,205 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (ScanToken(ParserConstants.NUMBER_LITERAL))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_75()
-		{
-			if (jj_3R_40())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_80()
-		{
-			if (ScanToken(ParserConstants.COMMA))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_54())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_71()
-		{
-			if (jj_3R_40())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_95()
 		{
 			if (jj_3R_33())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
 			while(true)
 			{
-				xsp = jj_scanpos;
+				Token xsp = jj_scanpos;
 				if (jj_3R_101())
 				{
 					jj_scanpos = xsp;
 					break;
 				}
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
 			return false;
 		}
 
-		private bool jj_3R_61()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_54()
 		{
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3R_61())
+			Token xsp = jj_scanpos;
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_62())
+			if (jj_3R_50(jj_3R_55()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_63())
+				if (jj_3R_50(jj_3R_56()))
 				{
 					jj_scanpos = xsp;
-					if (jj_3R_64())
+					if (jj_3R_50(jj_3R_57()))
 					{
 						jj_scanpos = xsp;
-						if (jj_3R_65())
+						if (jj_3R_50(jj_3R_58()))
 						{
 							jj_scanpos = xsp;
-							if (jj_3R_66())
+							if (jj_3R_50(jj_3R_59()))
 							{
 								jj_scanpos = xsp;
-								if (jj_3R_67())
+								if (jj_3R_50(jj_3R_19()))
 								{
 									jj_scanpos = xsp;
-									if (jj_3R_68())
+									if (jj_3R_50(jj_3R_40()))
 										return true;
-									if (jj_la == 0 && jj_scanpos == jj_lastpos)
+									if (ToRefactor1())
 										return false;
 								}
-								else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+								else if (ToRefactor1())
 									return false;
 							}
-							else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+							else if (ToRefactor1())
 								return false;
 						}
-						else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+						else if (ToRefactor1())
 							return false;
 					}
-					else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+					else if (ToRefactor1())
 						return false;
 				}
-				else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				else if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_83())
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_103()
-		{
-			if (ScanToken(ParserConstants.MINUS))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_95())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_102()
-		{
-			if (ScanToken(ParserConstants.PLUS))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_95())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			return false;
 		}
 
 		private bool jj_3R_96()
 		{
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3R_102())
+			Token xsp = jj_scanpos;
+			if (jj_3R_100(ParserConstants.PLUS, jj_3R_95()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_103())
+				if (jj_3R_100(ParserConstants.MINUS, jj_3R_95()))
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_69()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_91()
 		{
 			if (jj_3R_95())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
 			while(true)
 			{
-				xsp = jj_scanpos;
+				Token xsp = jj_scanpos;
 				if (jj_3R_96())
 				{
 					jj_scanpos = xsp;
 					break;
 				}
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
 			return false;
 		}
 
-		private bool jj_3R_100()
+		//TODO: refactor usages of this method
+		private bool jj_3R_100(int ge, bool r_91)
 		{
-			if (ScanToken(ParserConstants.LOGICAL_GE))
+			if (ScanToken(ge))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			if (jj_3R_91())
+			if (r_91)
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_76()
+
+		private bool jj_3R_51()
 		{
-			if (ScanToken(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.LPAREN))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
+				return false;
+			if (jj_3R_60())
+				return true;
+			if (ToRefactor1())
+				return false;
+			if (ScanToken(ParserConstants.RPAREN))
+				return true;
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_99()
-		{
-			if (ScanToken(ParserConstants.LOGICAL_LE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_91())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_74()
-		{
-			if (jj_3R_19())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_98()
-		{
-			if (ScanToken(ParserConstants.LOGICAL_GT))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_91())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_70()
-		{
-			if (jj_3R_19())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_72()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_77()
 		{
 			if (jj_3R_54())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
 			while(true)
 			{
-				xsp = jj_scanpos;
-				if (jj_3R_80())
+				Token xsp = jj_scanpos;
+				if (jj_3R_100(ParserConstants.COMMA, jj_3R_54()))
 				{
 					jj_scanpos = xsp;
 					break;
 				}
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
 			return false;
 		}
 
-		private bool jj_3R_97()
-		{
-			if (ScanToken(ParserConstants.LOGICAL_LT))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_91())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_92()
 		{
 			Token xsp;
 			xsp = jj_scanpos;
-			if (jj_3R_97())
+			if (jj_3R_100(ParserConstants.LOGICAL_LT, jj_3R_91()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_98())
+				if (jj_3R_100(ParserConstants.LOGICAL_GT, jj_3R_91()))
 				{
 					jj_scanpos = xsp;
-					if (jj_3R_99())
+					if (jj_3R_100(ParserConstants.LOGICAL_LE, jj_3R_91()))
 					{
 						jj_scanpos = xsp;
-						if (jj_3R_100())
+						if (jj_3R_100(ParserConstants.LOGICAL_GE, jj_3R_91()))
 							return true;
-						if (jj_la == 0 && jj_scanpos == jj_lastpos)
+						if (ToRefactor1())
 							return false;
 					}
-					else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+					else if (ToRefactor1())
 						return false;
 				}
-				else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				else if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			return false;
 		}
@@ -4316,58 +3487,58 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (ScanToken(ParserConstants.LBRACKET))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			Token xsp;
 			xsp = jj_scanpos;
-			if (jj_3R_69())
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_70())
+			if (jj_3R_50(jj_3R_19()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_71())
+				if (jj_3R_50(jj_3R_40()))
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_72())
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.DOUBLEDOT))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_73())
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_74())
+			if (jj_3R_50(jj_3R_19()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_75())
+				if (jj_3R_50(jj_3R_40()))
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_76())
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.RBRACKET))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
@@ -4376,62 +3547,35 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (jj_3R_91())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
 			while(true)
 			{
-				xsp = jj_scanpos;
+				Token xsp = jj_scanpos;
 				if (jj_3R_92())
 				{
 					jj_scanpos = xsp;
 					break;
 				}
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
 			return false;
 		}
 
-		private bool jj_3R_94()
-		{
-			if (ScanToken(ParserConstants.LOGICAL_NOT_EQUALS))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_89())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_93()
-		{
-			if (ScanToken(ParserConstants.LOGICAL_EQUALS))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_89())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_90()
 		{
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3R_93())
+			Token xsp = jj_scanpos;
+			if (jj_3R_100(ParserConstants.LOGICAL_EQUALS, jj_3R_89()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_94())
+				if (jj_3R_100(ParserConstants.LOGICAL_NOT_EQUALS, jj_3R_89()))
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			return false;
 		}
@@ -4440,17 +3584,16 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (ScanToken(ParserConstants.LBRACKET))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
-			xsp = jj_scanpos;
+			Token xsp = jj_scanpos;
 			if (jj_3R_77())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.RBRACKET))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
@@ -4459,75 +3602,49 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (jj_3R_89())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
 			while(true)
 			{
-				xsp = jj_scanpos;
+				Token xsp = jj_scanpos;
 				if (jj_3R_90())
 				{
 					jj_scanpos = xsp;
 					break;
 				}
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
 			return false;
 		}
 
-		private bool jj_3R_87()
-		{
-			if (ScanToken(ParserConstants.LOGICAL_AND))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_86())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_84()
 		{
 			if (jj_3R_86())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
 			while(true)
 			{
-				xsp = jj_scanpos;
-				if (jj_3R_87())
+				Token xsp = jj_scanpos;
+				if (jj_3R_100(ParserConstants.LOGICAL_AND, jj_3R_86()))
 				{
 					jj_scanpos = xsp;
 					break;
 				}
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
 			return false;
 		}
 
-		private bool jj_3R_85()
-		{
-			if (ScanToken(ParserConstants.LOGICAL_OR))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_84())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3_2()
 		{
 			if (ScanToken(ParserConstants.DOUBLE_ESCAPE))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
@@ -4536,31 +3653,36 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (jj_3R_31())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.EQUALS))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
+		}
+
+		//TODO: not sure what this does
+		private bool ToRefactor1()
+		{
+			return jj_la == 0 && jj_scanpos == jj_lastpos;
 		}
 
 		private bool jj_3R_82()
 		{
 			if (jj_3R_84())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
 			while(true)
 			{
-				xsp = jj_scanpos;
-				if (jj_3R_85())
+				Token xsp = jj_scanpos;
+				if (jj_3R_100(ParserConstants.LOGICAL_OR, jj_3R_84()))
 				{
 					jj_scanpos = xsp;
 					break;
 				}
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
 			return false;
@@ -4570,326 +3692,105 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (jj_3R_31())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.EQUALS))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			if (jj_3R_60())
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_79()
-		{
-			if (jj_3R_82())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_78()
-		{
-			if (jj_3R_81())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_60()
 		{
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3R_78())
+			Token xsp = jj_scanpos;
+			if (jj_3R_50(jj_3R_81()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_79())
+				if (jj_3R_50(jj_3R_82()))
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_23()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3_9()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3_1()
-		{
-			if (jj_3R_19())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_22()
-		{
-			if (jj_3R_40())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_37()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_21()
-		{
-			if (jj_3R_19())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_27()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_30()
-		{
-			if (jj_3R_41())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_28()
-		{
-			if (jj_3R_41())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_36()
-		{
-			if (jj_3R_40())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_20()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_35()
-		{
-			if (jj_3R_19())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_26()
-		{
-			if (jj_3R_40())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3_8()
-		{
-			if (jj_3R_29())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3_3()
 		{
 			if (ScanToken(ParserConstants.LBRACKET))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
-			Token xsp;
-			xsp = jj_scanpos;
-			if (jj_3R_20())
+			Token xsp = jj_scanpos;
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_21())
+			if (jj_3R_50(jj_3R_19()))
 			{
 				jj_scanpos = xsp;
-				if (jj_3R_22())
+				if (jj_3R_50(jj_3R_40()))
 					return true;
-				if (jj_la == 0 && jj_scanpos == jj_lastpos)
+				if (ToRefactor1())
 					return false;
 			}
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			xsp = jj_scanpos;
-			if (jj_3R_23())
+			if (jj_3R_52())
 				jj_scanpos = xsp;
-			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			else if (ToRefactor1())
 				return false;
 			if (ScanToken(ParserConstants.DOUBLEDOT))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
 
-		private bool jj_3R_88()
-		{
-			if (ScanToken(ParserConstants.COMMA))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			if (jj_3R_54())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3_6()
-		{
-			if (jj_3R_29())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		private bool jj_3R_25()
-		{
-			if (jj_3R_19())
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
 
 		private bool jj_3R_59()
 		{
 			if (ScanToken(ParserConstants.FALSE))
 				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
+			if (ToRefactor1())
 				return false;
 			return false;
 		}
-
-		private bool jj_3R_34()
-		{
-			if (ScanToken(ParserConstants.WHITESPACE))
-				return true;
-			if (jj_la == 0 && jj_scanpos == jj_lastpos)
-				return false;
-			return false;
-		}
-
-		public ParserTokenManager token_source;
-		public Token token, jj_nt;
-		//UPGRADE_NOTE: Field jj_ntk was renamed. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1029"'
-		private int jj_ntk_Renamed_Field;
-		private Token jj_scanpos, jj_lastpos;
-		private int jj_la;
-		public bool lookingAhead = false;
-		private int jj_gen;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'jj_la1 '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  'jj_la1' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private int[] jj_la1;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'jj_la1_0 '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
-		private int[] jj_la1_0 =
-			new int[]
-				{
-					0x13f0360, 0x0, 0x13f0360, 0x380000, 0x1000000, 0x6800002, 0x800000, 0x7800002, 0x13f0360, 0x8, 0x7800002, 0x800000
-					, 0x0, 0x800000, 0x800000, 0x0, 0x800000, 0x800000, 0x1000000, 0x6000002, 0x800000, 0x8, 0x7800002, 0x0, 0x0, 0x0,
-					0x1060060, 0x800000, 0x13f0360, 0x0, 0x0, 0x0, 0x13f0360, 0x800000, 0x13f0360, 0x8000000, 0x7800022, 0x0, 0x0, 0x0,
-					0x0, 0x0, 0x0, 0x30000000, 0x30000000, (int) (- (0x100000000 - 0xc0000000)), (int) (- (0x100000000 - 0xc0000000)),
-					0x800000, 0x7800022, 0x800000, 0x1000000, 0x6000022, 0x800000
-				};
-
-		//UPGRADE_NOTE: Final was removed from the declaration of 'jj_la1_1 '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
-		private int[] jj_la1_1 =
-			new int[]
-				{
-					0xf129000, 0x9000, 0xe120000, 0x0, 0x5120000, 0x0, 0x0, 0x5120000, 0xf129000, 0x0, 0x5020000, 0x0, 0x5020000, 0x0,
-					0x0, 0x5020000, 0x0, 0x0, 0x0, 0x5020000, 0x0, 0x0, 0x5020000, 0x1000000, 0x1000000, 0x5000000, 0xe020000, 0x0,
-					0xf129000, 0x2000, 0x2000, 0x4000, 0xf129000, 0x0, 0xf129000, 0x0, 0x5020200, 0x4, 0x2, 0x180, 0x180, 0x78, 0x78,
-					0x0, 0x0, 0x1, 0x1, 0x0, 0x5020000, 0x0, 0x5020000, 0x0, 0x0
-				};
-
-		//UPGRADE_NOTE: Final was removed from the declaration of 'jj_2_rtns '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  'jj_2_rtns' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private Calls[] jj_2_rtns;
-		private bool jj_rescan = false;
-		private int jj_gc = 0;
 
 		public Parser(ICharStream stream)
 		{
 			InitBlock();
 			token_source = new ParserTokenManager(stream);
 			token = new Token();
-			jj_ntk_Renamed_Field = - 1;
+			jj_ntk_Renamed_Field = -1;
 			jj_gen = 0;
 			for(int i = 0; i < 53; i++)
-				jj_la1[i] = - 1;
-			for(int i = 0; i < jj_2_rtns.Length; i++)
-				jj_2_rtns[i] = new Calls();
+				jj_la1[i] = -1;
+			for(int i = 0; i < callsArray.Length; i++)
+				callsArray[i] = new Calls();
 		}
 
 		public void ReInit(ICharStream stream)
 		{
 			token_source.ReInit(stream);
 			token = new Token();
-			jj_ntk_Renamed_Field = - 1;
+			jj_ntk_Renamed_Field = -1;
 			nodeTree.Reset();
 			jj_gen = 0;
 			for(int i = 0; i < 53; i++)
-				jj_la1[i] = - 1;
-			for(int i = 0; i < jj_2_rtns.Length; i++)
-				jj_2_rtns[i] = new Calls();
+				jj_la1[i] = -1;
+			for(int i = 0; i < callsArray.Length; i++)
+				callsArray[i] = new Calls();
 		}
 
 		public Parser(ParserTokenManager tm)
@@ -4897,25 +3798,25 @@ namespace NVelocity.Runtime.Parser
 			InitBlock();
 			token_source = tm;
 			token = new Token();
-			jj_ntk_Renamed_Field = - 1;
+			jj_ntk_Renamed_Field = -1;
 			jj_gen = 0;
 			for(int i = 0; i < 53; i++)
-				jj_la1[i] = - 1;
-			for(int i = 0; i < jj_2_rtns.Length; i++)
-				jj_2_rtns[i] = new Calls();
+				jj_la1[i] = -1;
+			for(int i = 0; i < callsArray.Length; i++)
+				callsArray[i] = new Calls();
 		}
 
 		public void ReInit(ParserTokenManager tm)
 		{
 			token_source = tm;
 			token = new Token();
-			jj_ntk_Renamed_Field = - 1;
+			jj_ntk_Renamed_Field = -1;
 			nodeTree.Reset();
 			jj_gen = 0;
 			for(int i = 0; i < 53; i++)
-				jj_la1[i] = - 1;
-			for(int i = 0; i < jj_2_rtns.Length; i++)
-				jj_2_rtns[i] = new Calls();
+				jj_la1[i] = -1;
+			for(int i = 0; i < callsArray.Length; i++)
+				callsArray[i] = new Calls();
 		}
 
 		private Token ConsumeToken(int kind)
@@ -4929,16 +3830,16 @@ namespace NVelocity.Runtime.Parser
 			{
 				token = token.Next;
 			}
-			jj_ntk_Renamed_Field = - 1;
+			jj_ntk_Renamed_Field = -1;
 			if (token.Kind == kind)
 			{
 				jj_gen++;
 				if (++jj_gc > 100)
 				{
 					jj_gc = 0;
-					for(int i = 0; i < jj_2_rtns.Length; i++)
+					for(int i = 0; i < callsArray.Length; i++)
 					{
-						Calls c = jj_2_rtns[i];
+						Calls c = callsArray[i];
 						while(c != null)
 						{
 							if (c.Gen < jj_gen)
@@ -4952,6 +3853,18 @@ namespace NVelocity.Runtime.Parser
 			token = oldToken;
 			jj_kind = kind;
 			throw GenerateParseException();
+		}
+
+		private int jj_ntk()
+		{
+			if ((jj_nt = token.Next) == null)
+			{
+				return (jj_ntk_Renamed_Field = (token.Next = token_source.NextToken).Kind);
+			}
+			else
+			{
+				return (jj_ntk_Renamed_Field = jj_nt.Kind);
+			}
 		}
 
 		private bool ScanToken(int kind)
@@ -5007,55 +3920,36 @@ namespace NVelocity.Runtime.Parser
 			return t;
 		}
 
-		private int jj_ntk()
-		{
-			if ((jj_nt = token.Next) == null)
-			{
-				return (jj_ntk_Renamed_Field = (token.Next = token_source.NextToken).Kind);
-			}
-			else
-			{
-				return (jj_ntk_Renamed_Field = jj_nt.Kind);
-			}
-		}
 
-		//UPGRADE_NOTE: The initialization of  'jj_expentries' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private ArrayList jj_expentries;
-		private int[] jj_expentry;
-		private int jj_kind = - 1;
-		//UPGRADE_NOTE: The initialization of  'jj_lasttokens' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private int[] jj_lasttokens;
-		private int jj_endpos;
-
-		private void AddErrorToken(int kind, int pos)
+		private void AddErrorToken(int kind, int position)
 		{
-			if (pos >= 100)
+			if (position >= 100)
 			{
 				return;
 			}
-			if (pos == jj_endpos + 1)
+			if (position == endPosition + 1)
 			{
-				jj_lasttokens[jj_endpos++] = kind;
+				lastTokens[endPosition++] = kind;
 			}
-			else if (jj_endpos != 0)
+			else if (endPosition != 0)
 			{
-				jj_expentry = new int[jj_endpos];
-				for(int i = 0; i < jj_endpos; i++)
+				jj_expEntry = new int[endPosition];
+				for(int i = 0; i < endPosition; i++)
 				{
-					jj_expentry[i] = jj_lasttokens[i];
+					jj_expEntry[i] = lastTokens[i];
 				}
 				bool exists = false;
 				//UPGRADE_TODO: method 'java.util.Enumeration.hasMoreElements' was converted to ' ' which has a different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1073_javautilEnumerationhasMoreElements"'
-				for(IEnumerator en = jj_expentries.GetEnumerator(); en.MoveNext();)
+				for(IEnumerator enumerator = expEntries.GetEnumerator(); enumerator.MoveNext();)
 				{
 					//UPGRADE_TODO: method 'java.util.Enumeration.nextElement' was converted to ' ' which has a different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1073_javautilEnumerationnextElement"'
-					int[] oldentry = (int[]) (en.Current);
-					if (oldentry.Length == jj_expentry.Length)
+					int[] oldEntry = (int[]) (enumerator.Current);
+					if (oldEntry.Length == jj_expEntry.Length)
 					{
 						exists = true;
-						for(int i = 0; i < jj_expentry.Length; i++)
+						for(int i = 0; i < jj_expEntry.Length; i++)
 						{
-							if (oldentry[i] != jj_expentry[i])
+							if (oldEntry[i] != jj_expEntry[i])
 							{
 								exists = false;
 								break;
@@ -5067,11 +3961,11 @@ namespace NVelocity.Runtime.Parser
 				}
 				if (!exists)
 				{
-					jj_expentries.Add(jj_expentry);
+					expEntries.Add(jj_expEntry);
 				}
-				if (pos != 0)
+				if (position != 0)
 				{
-					jj_lasttokens[(jj_endpos = pos) - 1] = kind;
+					lastTokens[(endPosition = position) - 1] = kind;
 				}
 			}
 		}
@@ -5079,7 +3973,7 @@ namespace NVelocity.Runtime.Parser
 		public ParseException GenerateParseException()
 		{
 			ArrayList temp_arraylist;
-			temp_arraylist = jj_expentries;
+			temp_arraylist = expEntries;
 			temp_arraylist.RemoveRange(0, temp_arraylist.Count);
 			bool[] la1tokens = new bool[62];
 			for(int i = 0; i < 62; i++)
@@ -5089,7 +3983,7 @@ namespace NVelocity.Runtime.Parser
 			if (jj_kind >= 0)
 			{
 				la1tokens[jj_kind] = true;
-				jj_kind = - 1;
+				jj_kind = -1;
 			}
 			for(int i = 0; i < 53; i++)
 			{
@@ -5112,36 +4006,29 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (la1tokens[i])
 				{
-					jj_expentry = new int[1];
-					jj_expentry[0] = i;
-					jj_expentries.Add(jj_expentry);
+					jj_expEntry = new int[1];
+					jj_expEntry[0] = i;
+					expEntries.Add(jj_expEntry);
 				}
 			}
-			jj_endpos = 0;
+			endPosition = 0;
 			RescanToken();
 			AddErrorToken(0, 0);
-			int[][] exptokseq = new int[jj_expentries.Count][];
-			for(int i = 0; i < jj_expentries.Count; i++)
+			int[][] exptokseq = new int[expEntries.Count][];
+			for(int i = 0; i < expEntries.Count; i++)
 			{
-				exptokseq[i] = (int[]) jj_expentries[i];
+				exptokseq[i] = (int[]) expEntries[i];
 			}
 			return new ParseException(token, exptokseq, ParserConstants.TokenImage);
 		}
 
-		public void EnableTracing()
-		{
-		}
-
-		public void DisableTracing()
-		{
-		}
 
 		private void RescanToken()
 		{
 			jj_rescan = true;
 			for(int i = 0; i < 12; i++)
 			{
-				Calls p = jj_2_rtns[i];
+				Calls p = callsArray[i];
 				do
 				{
 					if (p.Gen > jj_gen)
@@ -5151,7 +4038,7 @@ namespace NVelocity.Runtime.Parser
 						switch(i)
 						{
 							case 0:
-								jj_3_1();
+								jj_3R_50(jj_3R_19());
 								break;
 
 							case 1:
@@ -5167,11 +4054,11 @@ namespace NVelocity.Runtime.Parser
 								break;
 
 							case 4:
-								jj_3_5();
+								jj_3_7();
 								break;
 
 							case 5:
-								jj_3_6();
+								jj_3R_50(jj_3R_29());
 								break;
 
 							case 6:
@@ -5179,11 +4066,11 @@ namespace NVelocity.Runtime.Parser
 								break;
 
 							case 7:
-								jj_3_8();
+								jj_3R_50(jj_3R_29());
 								break;
 
 							case 8:
-								jj_3_9();
+								jj_3R_52();
 								break;
 
 							case 9:
@@ -5207,19 +4094,19 @@ namespace NVelocity.Runtime.Parser
 
 		private void Save(int index, int xla)
 		{
-			Calls p = jj_2_rtns[index];
-			while(p.Gen > jj_gen)
+			Calls calls = callsArray[index];
+			while(calls.Gen > jj_gen)
 			{
-				if (p.Next == null)
+				if (calls.Next == null)
 				{
-					p = p.Next = new Calls();
+					calls = calls.Next = new Calls();
 					break;
 				}
-				p = p.Next;
+				calls = calls.Next;
 			}
-			p.Gen = jj_gen + xla - jj_la;
-			p.First = token;
-			p.Arg = xla;
+			calls.Gen = jj_gen + xla - jj_la;
+			calls.First = token;
+			calls.Arg = xla;
 		}
 
 		private sealed class Calls

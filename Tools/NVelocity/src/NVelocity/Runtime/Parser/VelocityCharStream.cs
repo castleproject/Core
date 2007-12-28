@@ -53,10 +53,10 @@ namespace NVelocity.Runtime.Parser
 		private char currentCharacter;
 		private bool currentCharacterAvailable = false;
 
-		public VelocityCharStream(TextReader dstream,
+		public VelocityCharStream(TextReader textReader,
 		                          int startLine, int startColumn, int bufferSize)
 		{
-			inputStream = dstream;
+			inputStream = textReader;
 			line = startLine;
 			column = startColumn - 1;
 
@@ -66,14 +66,14 @@ namespace NVelocity.Runtime.Parser
 			bufferColumn = new int[bufferSize];
 		}
 
-		public VelocityCharStream(TextReader dstream, int startLine, int startColumn)
-			: this(dstream, startLine, startColumn, 4096)
+		public VelocityCharStream(TextReader textReader, int startLine, int startColumn)
+			: this(textReader, startLine, startColumn, 4096)
 		{
 		}
 
-		public void ReInit(TextReader dstream, int startLine, int startColumn, int bufferSize)
+		public void ReInit(TextReader textReader, int startLine, int startColumn, int bufferSize)
 		{
-			inputStream = dstream;
+			inputStream = textReader;
 			line = startLine;
 			column = startColumn - 1;
 
@@ -89,9 +89,9 @@ namespace NVelocity.Runtime.Parser
 			bufferPosition = -1;
 		}
 
-		public void ReInit(TextReader dstream, int startLine, int startColumn)
+		public void ReInit(TextReader textReader, int startLine, int startColumn)
 		{
-			ReInit(dstream, startLine, startColumn, 4096);
+			ReInit(textReader, startLine, startColumn, 4096);
 		}
 
 		public String GetImage()
@@ -146,13 +146,15 @@ namespace NVelocity.Runtime.Parser
 				len = bufferSize - tokenBegin + bufferPosition + 1 + inBuf;
 			}
 
-			int i = 0, j = 0, k = 0;
-			int nextColDiff = 0, columnDiff = 0;
+			int i = 0;
+			int j = 0;
+			int k;
+			int columnDiff = 0;
 
 			while(i < len && bufferLine[j = start % bufferSize] == bufferLine[k = ++start % bufferSize])
 			{
 				bufferLine[j] = newLine;
-				nextColDiff = columnDiff + bufferColumn[k] - bufferColumn[j];
+				int nextColDiff = columnDiff + bufferColumn[k] - bufferColumn[j];
 				bufferColumn[j] = newCol + columnDiff;
 				columnDiff = nextColDiff;
 				i++;

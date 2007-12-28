@@ -21,11 +21,6 @@ namespace NVelocity.Runtime.Parser
 
 	public class TokenMgrError : ApplicationException
 	{
-		public override String Message
-		{
-			get { return base.Message; }
-		}
-
 		/*
 	* Ordinals for various reasons why an Error of this type can be thrown.
 	*/
@@ -51,7 +46,7 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		internal int errorCode;
 
-		/// <summary> Replaces unprintable characters by their espaced (or unicode escaped)
+		/// <summary> Replaces unprintable characters by their escaped (or unicode escaped)
 		/// equivalents in the given string
 		/// </summary>
 		protected internal static String AddEscapes(String str)
@@ -116,23 +111,23 @@ namespace NVelocity.Runtime.Parser
 		/// <summary> Returns a detailed message for the Error when it is thrown by the
 		/// token manager to indicate a lexical error.
 		/// Parameters :
-		/// EOFSeen     : indicates if EOF caused the lexicl error
+		/// EOFSeen     : indicates if EOF caused the lexical error
 		/// curLexState : lexical state in which this error occurred
 		/// errorLine   : line number when the error occurred
 		/// errorColumn : column number when the error occurred
 		/// errorAfter  : prefix that was seen before this error occurred
-		/// curchar     : the offending character
+		/// currentCharacter     : the offending character
 		/// Note: You can customize the lexical error message by modifying this method.
 		/// </summary>
-		private static String LexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter,
-		                                   char curChar)
+		private static string LexicalError(bool EOFSeen, int errorLine, int errorColumn, string errorAfter,
+		                                   char currentCharacter)
 		{
 			return
 				(string.Format("Lexical error at line {0}, column {1}.  Encountered: {2}after : \"{3}\"", errorLine, errorColumn,
 				               (EOFSeen
 				                	? "<EOF> "
-				                	: string.Format("{0} ({1}), ", (string.Format("\"{0}\"", AddEscapes(curChar.ToString()))),
-				                	                (int) curChar)), AddEscapes(errorAfter)));
+				                	: string.Format("{0} ({1}), ", (string.Format("\"{0}\"", AddEscapes(currentCharacter.ToString()))),
+				                	                (int) currentCharacter)), AddEscapes(errorAfter)));
 		}
 
 		/// <summary> You can also modify the body of this method to customize your error messages.
@@ -155,9 +150,8 @@ namespace NVelocity.Runtime.Parser
 			errorCode = reason;
 		}
 
-		public TokenMgrError(bool EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar,
-		                     int reason)
-			: this(LexicalError(EOFSeen, lexState, errorLine, errorColumn, errorAfter, curChar), reason)
+		public TokenMgrError(bool EOFSeen, int errorLine, int errorColumn, string errorAfter, char curChar, int reason)
+			: this(LexicalError(EOFSeen, errorLine, errorColumn, errorAfter, curChar), reason)
 		{
 		}
 	}

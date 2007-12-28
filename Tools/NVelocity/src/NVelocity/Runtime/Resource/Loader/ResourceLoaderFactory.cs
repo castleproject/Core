@@ -28,8 +28,6 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <returns>TemplateLoader</returns>
 		public static ResourceLoader getLoader(IRuntimeServices rs, String loaderClassName)
 		{
-			ResourceLoader loader;
-
 			try
 			{
 				// since properties are parsed into arrays with commas, 
@@ -37,7 +35,7 @@ namespace NVelocity.Runtime.Resource.Loader
 				loaderClassName = loaderClassName.Replace(';', ',');
 				Type loaderType = Type.GetType(loaderClassName);
 				Object o = Activator.CreateInstance(loaderType);
-				loader = (ResourceLoader) o;
+				ResourceLoader loader = (ResourceLoader) o;
 
 				rs.Info(string.Format("Resource Loader Instantiated: {0}", loader.GetType().FullName));
 
