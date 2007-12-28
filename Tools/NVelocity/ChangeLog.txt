@@ -1,3 +1,6 @@
+- Applied Ashish Kulkarni's patch that adds a new loader. Fixes NVELOCITY-20
+  "add AssemblyRelativeResourceLoader for loading resources using with relative template names"
+
 - Applied Simon Cropp's patch fixing NVELOCITY-18
   "Clean up more code in nvelocity"
 
