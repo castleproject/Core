@@ -97,6 +97,8 @@ namespace NVelocity.Runtime.Resource.Loader
 					throw new ResourceNotFoundException(string.Format("Assembly could not be found {0}", assemblyName), ex);
 				}
 
+				prefix = prefix.Replace('\\', '.');
+				prefix = prefix.Replace('/', '.');
 				Stream stream = assembly.GetManifestResourceStream(prefix + "." + template);
 
 				if (stream != null)
