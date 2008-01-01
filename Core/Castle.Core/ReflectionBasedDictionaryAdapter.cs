@@ -117,7 +117,6 @@ namespace Castle.Core
 		/// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.IDictionary"/> object is read-only.-or- The <see cref="T:System.Collections.IDictionary"/> has a fixed size. </exception>
 		public void Remove(object key)
 		{
-			throw new NotImplementedException();
 		}
 
 		/// <summary>
