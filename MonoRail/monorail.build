@@ -19,28 +19,29 @@
 		<include name="Castle.MonoRail.WindsorExtension/Castle.MonoRail.WindsorExtension.build" />
 		<include name="Castle.MonoRail.Framework.Views.NVelocity/Castle.MonoRail.Framework.Views.NVelocity.build" />
 		<include name="Castle.MonoRail.Views.Brail/Castle.MonoRail.Views.Brail.build" />
-		<include name="Castle.MonoRail.Framework.Views.CompositeView/Castle.MonoRail.Framework.Views.CompositeView.build" />
 		<include name="Castle.MonoRail.ActiveRecordSupport/Castle.MonoRail.ActiveRecordSupport.build" />
 		<include name="Castle.MonoRail.ActiveRecordScaffold/Castle.MonoRail.ActiveRecordScaffold.build" />
 		<include name="Castle.MonoRail.TransformFilters/Castle.MonoRail.TransformFilters.build " />
 		<include name="Castle.MonoRail.TestSupport/Castle.MonoRail.TestSupport.build" />
-		<include name="Castle.Monorail.JSONSupport/Castle.Monorail.JSONSupport.build" />
 		
+		<!--
 		<include name="TestSite/TestSite.build" if="${common.testrunner.enabled}"/>
 		<include name="TestSiteWindsor/TestSiteWindsor.build" if="${common.testrunner.enabled}"/>
 		<include name="TestSiteNVelocity/TestSiteNVelocity.build" if="${common.testrunner.enabled}"/>
 		<include name="TestSiteBrail/TestSiteBrail.build" if="${common.testrunner.enabled}"/>
 		<include name="TestSiteARSupport/TestSiteARSupport.build" if="${common.testrunner.enabled}"/>
+		-->
 		
 		<include name="Castle.MonoRail.Framework.Tests/Castle.MonoRail.Framework.Tests.build" if="${common.testrunner.enabled}"/>
+		<!--
 		<include name="Castle.MonoRail.ActiveRecordSupport.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.TestSupport.Tests/Castle.MonoRail.TestSupport.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.Monorail.JSONSupport.Tests/Castle.Monorail.JSONSupport.Tests.build" if="${common.testrunner.enabled}"/>
-		
 		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" if="${common.testrunner.enabled}"/>
-		
+		-->
+
 	</fileset>
 
 	<target name="build" depends="common.build" />

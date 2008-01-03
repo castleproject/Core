@@ -1,6 +1,4 @@
 <monorail 
-	useWindsorIntegration="true|false"
-	checkClientIsConnected="true|false"
 	smtpHost="" 
 	smtpUsername="" 
 	smtpPassword="">

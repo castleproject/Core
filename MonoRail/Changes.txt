@@ -1,6 +1,15 @@
 1.0
 ===
 
+- Applied Felix Gartsman's patch fixing MR-387
+  "ViewComponent selective caching"
+
+- Applied Felix Gartsman's patch fixing MR-368
+  "Added DetachedCriteria support to ARPaginationHelper/ARPaginableCriteria"
+
+- Applied Gauthier Segay's patch fixing MR-384
+  "GenericCustomPage<T> should rely on IEnumerable<T> instead of IList<T> for it's datasource"
+
 - Applied James Curran's patch fixing MR-347
   "Cannot specify a default value for ViewComponentParameterAttribute"
 
@@ -1425,4 +1434,5 @@ Beta 2
 
 - Few bug corrections
 - Applied patch from Dru Sellers: NVelocityViewEngine adds a $siteRoot exposing the Request.ApplicationPath
+
 
