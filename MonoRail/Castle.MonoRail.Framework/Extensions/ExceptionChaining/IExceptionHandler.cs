@@ -32,15 +32,15 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// <summary>
 		/// Implementors should perform the action 
 		/// on the exception. Note that the exception 
-		/// is available in <see cref="IRailsEngineContext.LastException"/>
+		/// is available in <see cref="IEngineContext.LastException"/>
 		/// </summary>
 		/// <param name="context"></param>
-		void Process(IRailsEngineContext context);
+		void Process(IEngineContext context);
 
 		/// <summary>
 		/// The next exception in the sink 
 		/// or null if none exists.
 		/// </summary>
-		IExceptionHandler Next { get;set; }
+		IExceptionHandler Next { get; set; }
 	}
 }

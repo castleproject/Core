@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.ViewComponents
 {
 	using Castle.MonoRail.Framework.Helpers;
+	using JSGeneration;
 
 	/// <summary>
 	/// Renders a javascript tag block with an inline javascript 
@@ -22,7 +23,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// elements using a special dsl-like language.
 	/// </summary>
 	/// 
-	/// <seealso cref="PrototypeHelper"/>
+	/// <seealso cref="IJSGenerator"/>
 	/// 
 	/// <example>
 	/// The following illustrates its use.

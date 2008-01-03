@@ -16,9 +16,8 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 {
 	using System;
 	using System.Configuration;
-	using System.Xml;
-
 	using Castle.Components.Common.EmailSender;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// A handle that sends the exception by email
@@ -34,43 +33,43 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// </summary>
 		/// <param name="exceptionHandlerNode">The Xml node
 		/// that represents this handler on the configuration file</param>
-		public void Configure(XmlNode exceptionHandlerNode)
+		public void Configure(IConfiguration exceptionHandlerNode)
 		{
-			XmlAttribute mailToAtt = exceptionHandlerNode.Attributes["mailTo"];
+			string mailToAtt = exceptionHandlerNode.Attributes["mailTo"];
 
-			if (mailToAtt == null || mailToAtt.Value == String.Empty)
+			if (mailToAtt == null)
 			{
-				String message="'mailTo' is a required attribute " + 
-					"for EmailHandler (part of ExceptionChaining extension)";
+				String message = "'mailTo' is a required attribute " +
+				                 "for EmailHandler (part of ExceptionChaining extension)";
 				throw new ConfigurationErrorsException(message);
 			}
 
-			mailTo = mailToAtt.Value;
+			mailTo = mailToAtt;
 
-			XmlAttribute mailFromAtt = exceptionHandlerNode.Attributes["mailFrom"];
+			string mailFromAtt = exceptionHandlerNode.Attributes["mailFrom"];
 
-			if (mailFromAtt != null && mailFromAtt.Value != String.Empty)
+			if (mailFromAtt != null)
 			{
-				mailFrom = mailFromAtt.Value;
+				mailFrom = mailFromAtt;
 			}
 		}
 
 		/// <summary>
 		/// Implementors should perform the action
 		/// on the exception. Note that the exception
-		/// is available in <see cref="IRailsEngineContext.LastException"/>
+		/// is available in <see cref="IEngineContext.LastException"/>
 		/// </summary>
 		/// <param name="context"></param>
-		public override void Process(IRailsEngineContext context)
+		public override void Process(IEngineContext context)
 		{
-			IEmailSender emailSender = (IEmailSender) context.GetService( typeof(IEmailSender) );
+			IEmailSender emailSender = (IEmailSender) context.GetService(typeof(IEmailSender));
 
 			String message = BuildStandardMessage(context);
 
 			try
 			{
-				emailSender.Send( mailFrom, mailTo, 
-					"MonoRail Exception: " + context.LastException.GetType().Name, message );
+				emailSender.Send(mailFrom, mailTo,
+				                 "MonoRail Exception: " + context.LastException.GetType().Name, message);
 			}
 			catch(Exception)
 			{

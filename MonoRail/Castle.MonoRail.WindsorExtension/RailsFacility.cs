@@ -15,11 +15,9 @@
 namespace Castle.MonoRail.WindsorExtension
 {
 	using Castle.Core;
-	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Internal;
-	using Castle.MonoRail.Framework.Controllers;
+	using Castle.MonoRail.Framework.Descriptors;
 	using Castle.MonoRail.Framework.Services;
 	using Castle.MonoRail.Framework.Services.Utils;
 
@@ -32,39 +30,31 @@ namespace Castle.MonoRail.WindsorExtension
 		private IControllerTree controllerTree;
 		private IViewComponentRegistry componentRegistry;
 
-		public RailsFacility()
-		{
-		}
-
 		protected override void Init()
 		{
-			RegisterWindsorLocationWithinMonoRail();
+			RegisterWindsorLocatorStrategyWithinMonoRail();
 
-			Kernel.AddComponent("rails.controllertree", typeof(IControllerTree), typeof(DefaultControllerTree));
-			Kernel.AddComponent("rails.wizardpagefactory", typeof(IWizardPageFactory), typeof(DefaultWizardPageFactory));
-			Kernel.AddComponent("rails.viewcomponentregistry", typeof(IViewComponentRegistry), typeof(DefaultViewComponentRegistry));
+			Kernel.AddComponent("mr.controllertree", typeof(IControllerTree), typeof(DefaultControllerTree));
+			Kernel.AddComponent("mr.wizardpagefactory", typeof(IWizardPageFactory), typeof(DefaultWizardPageFactory));
+			Kernel.AddComponent("mr.viewcomponentregistry", typeof(IViewComponentRegistry), typeof(DefaultViewComponentRegistry));
+			Kernel.AddComponent("mr.controllerfactory", typeof(IControllerFactory), typeof(WindsorControllerFactory));
+			Kernel.AddComponent("mr.filterFactory", typeof(IFilterFactory), typeof(WindsorFilterFactory));
+			Kernel.AddComponent("mr.viewcompfactory", typeof(IViewComponentFactory), typeof(WindsorViewComponentFactory));
 
-			controllerTree = (IControllerTree) Kernel["rails.controllertree"];
-			componentRegistry = (IViewComponentRegistry) Kernel["rails.viewcomponentregistry"];
+			controllerTree = Kernel.Resolve<IControllerTree>();
+			componentRegistry = Kernel.Resolve<IViewComponentRegistry>();
 
 			Kernel.ComponentModelCreated += OnComponentModelCreated;
-
-			AddBuiltInControllers();
 		}
 
-		private void RegisterWindsorLocationWithinMonoRail()
+		private void RegisterWindsorLocatorStrategyWithinMonoRail()
 		{
 			ServiceProviderLocator.Instance.AddLocatorStrategy(new WindsorAccessorStrategy());
 		}
 
-		protected virtual void AddBuiltInControllers()
-		{
-			Kernel.AddComponent("files", typeof(FilesController), typeof(FilesController));
-		}
-
 		private void OnComponentModelCreated(ComponentModel model)
 		{
-			bool isController = typeof(Controller).IsAssignableFrom(model.Implementation);
+			bool isController = typeof(IController).IsAssignableFrom(model.Implementation);
 			bool isViewComponent = typeof(ViewComponent).IsAssignableFrom(model.Implementation);
 
 			if (!isController && !isViewComponent)

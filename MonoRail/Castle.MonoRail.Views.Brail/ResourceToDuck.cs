@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Text;
-
 namespace Castle.MonoRail.Views.Brail
 {
 	using System.Collections;
 	using Boo.Lang;
-	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Resources;
+	using Framework;
 
 	// This allows to treat resources in a natural way:
 	//	text.Hello
@@ -27,46 +25,53 @@ namespace Castle.MonoRail.Views.Brail
 	// 	text["Hello"]
 	public class ResourceToDuck : IQuackFu, IEnumerable
 	{
-		IResource resource;
+		private IResource resource;
 
 		public ResourceToDuck(IResource resource)
 		{
 			this.resource = resource;
 		}
 
-
-        public object QuackGet(string name, object[] parameters)
-		{
-			if(IsStringIndexer(name, parameters))
-			{
-				name = (string) parameters[0];
-			}
-			object val = resource.GetObject(name);
-			if(val==null)
-			{
-				throw new MonoRailException("Resource "+name+" does not exists");
-			}
-			return val;
-		}
-
-		private static bool IsStringIndexer(string name, object[] parameters)
-		{
-			return name.Length==0 && parameters.Length==1 && parameters[0] is string;
-		}
-
-		public object QuackSet(string name, object[] parameters, object value)
-		{
-			throw new MonoRailException("You cannnot set resource "+name);
-		}
-
-		public object QuackInvoke(string name, params object[] args)
-		{
-			throw new MonoRailException("You cannnot invoke resource "+name);
-		}
+		#region IEnumerable Members
 
 		public IEnumerator GetEnumerator()
 		{
 			return resource.GetEnumerator();
+		}
+
+		#endregion
+
+		#region IQuackFu Members
+
+		public object QuackGet(string name, object[] parameters)
+		{
+			if (IsStringIndexer(name, parameters))
+			{
+				name = (string) parameters[0];
+			}
+			object val = resource.GetObject(name);
+			if (val == null)
+			{
+				throw new MonoRailException("Resource " + name + " does not exists");
+			}
+			return val;
+		}
+
+		public object QuackSet(string name, object[] parameters, object value)
+		{
+			throw new MonoRailException("You cannnot set resource " + name);
+		}
+
+		public object QuackInvoke(string name, params object[] args)
+		{
+			throw new MonoRailException("You cannnot invoke resource " + name);
+		}
+
+		#endregion
+
+		private static bool IsStringIndexer(string name, object[] parameters)
+		{
+			return name.Length == 0 && parameters.Length == 1 && parameters[0] is string;
 		}
 	}
 }

@@ -15,11 +15,9 @@
 namespace Castle.MonoRail.Framework.Services
 {
 	using System;
-
 	using Castle.Core;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Controllers;
 
 	/// <summary>
 	/// Base implementation of <see cref="IControllerFactory"/>
@@ -43,8 +41,17 @@ namespace Castle.MonoRail.Framework.Services
 		/// <summary>
 		/// Initializes an <c>AbstractControllerFactory</c> instance
 		/// </summary>
-		public AbstractControllerFactory()
+		protected AbstractControllerFactory()
 		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AbstractControllerFactory"/> class.
+		/// </summary>
+		/// <param name="tree">The tree.</param>
+		protected AbstractControllerFactory(IControllerTree tree)
+		{
+			this.tree = tree;
 		}
 
 		#region IInitializable implementation
@@ -82,27 +89,44 @@ namespace Castle.MonoRail.Framework.Services
 
 		/// <summary>
 		/// Implementors should perform their logic to
-		/// return a instance of <see cref="Controller"/>.
-		/// If the <see cref="Controller"/> can not be found,
+		/// return a instance of <see cref="IController"/>.
+		/// If the <see cref="IController"/> can not be found,
 		/// it should return <c>null</c>.
 		/// </summary>
-		/// <param name="urlInfo"></param>
 		/// <returns></returns>
-		public virtual Controller CreateController(UrlInfo urlInfo)
+		public virtual IController CreateController(string area, string controller)
 		{
-			String area = urlInfo.Area ?? String.Empty;
-			String name = urlInfo.Controller;
+			area = area ?? String.Empty;
 			
-			return CreateControllerInstance(area, name);
+			return CreateControllerInstance(area, controller);
+		}
+
+		/// <summary>
+		/// Creates the controller.
+		/// </summary>
+		/// <param name="controllerType">Type of the controller.</param>
+		/// <returns></returns>
+		public IController CreateController(Type controllerType)
+		{
+			try
+			{
+				return (IController) Activator.CreateInstance(controllerType);
+			}
+			catch (Exception ex)
+			{
+				logger.Error("Could not create controller instance. Activation failed.", ex);
+
+				throw;
+			}
 		}
 
 		/// <summary>
 		/// Implementors should perform their logic
-		/// to release the <see cref="Controller"/> instance
+		/// to release the <see cref="IController"/> instance
 		/// and its resources.
 		/// </summary>
 		/// <param name="controller"></param>
-		public virtual void Release(Controller controller)
+		public virtual void Release(IController controller)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -119,6 +143,7 @@ namespace Castle.MonoRail.Framework.Services
 		public IControllerTree Tree
 		{
 			get { return tree; }
+			set { tree = value; }
 		}
 
 		/// <summary>
@@ -131,7 +156,7 @@ namespace Castle.MonoRail.Framework.Services
 				logger.Debug("Registering built-in controllers");
 			}
 			
-			Tree.AddController("MonoRail", "Files", typeof(FilesController));
+//			Tree.AddController("MonoRail", "Files", typeof(FilesController));
 		}
 
 		/// <summary>
@@ -140,7 +165,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="area">The area.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		protected virtual Controller CreateControllerInstance(String area, String name)
+		protected virtual IController CreateControllerInstance(String area, String name)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -156,16 +181,7 @@ namespace Castle.MonoRail.Framework.Services
 				throw new ControllerNotFoundException(area, name);
 			}
 
-			try
-			{
-				return (Controller) Activator.CreateInstance(type);
-			}
-			catch(Exception ex)
-			{
-				logger.Error("Could not create controller instance. Activation failed.", ex);
-				
-				throw;
-			}
+			return CreateController(type);
 		}
 	}
 }

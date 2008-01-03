@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework.Test
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Web;
+	using Castle.Components.Binder;
 
 	/// <summary>
 	/// Represents a mock implementation of <see cref="IRequest"/> for unit test purposes.
@@ -28,16 +29,15 @@ namespace Castle.MonoRail.Framework.Test
 		private NameValueCollection headers = new NameValueCollection();
 		private NameValueCollection queryString = new NameValueCollection();
 		private NameValueCollection @params = new NameValueCollection();
+		private string urlReferrer;
 		private IDictionary cookies;
 		private IDictionary files = new Hashtable();
-
 		private bool isLocal = true;
-		private string rawUrl = null;
 		private string httpMethod = "GET";
+		private string[] userLanguages = new string[] { "en-ES", "pt-BR" };
+		private string rawUrl = null;
 		private string filePath = null;
 		private Uri uri = null;
-
-		private string[] userLanguages = new string[] { "en-ES", "pt-BR" };
 		private string userHostAddress = "127.0.0.1";
 		private string pathInfo;
 
@@ -51,14 +51,50 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
-		/// Reads the request data as a byte array.
+		/// Initializes a new instance of the <see cref="MockRequest"/> class.
 		/// </summary>
-		/// <param name="count">How many bytes.</param>
-		/// <returns></returns>
-		public virtual byte[] BinaryRead(int count)
+		/// <param name="httpMethod">The HTTP method.</param>
+		public MockRequest(string httpMethod) : this()
 		{
-			throw new NotImplementedException();
+			this.httpMethod = httpMethod;
 		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockRequest"/> class.
+		/// </summary>
+		public MockRequest() : this(new Hashtable())
+		{
+		}
+
+		/// <summary>
+		/// Gets or sets the accept header.
+		/// </summary>
+		/// <value>The accept header.</value>
+		public string AcceptHeader
+		{
+			get { return headers["Accept"]; }
+			set { headers["Accept"] = value; }
+		}
+
+		/// <summary>
+		/// Gets the referring URL.
+		/// </summary>
+		/// <value></value>
+		public string UrlReferrer
+		{
+			get { return urlReferrer; }
+			set { urlReferrer = value; }
+		}
+
+//		/// <summary>
+//		/// Reads the request data as a byte array.
+//		/// </summary>
+//		/// <param name="count">How many bytes.</param>
+//		/// <returns></returns>
+//		public virtual byte[] BinaryRead(int count)
+//		{
+//			throw new NotImplementedException();
+//		}
 
 		/// <summary>
 		/// Reads the cookie.
@@ -96,15 +132,6 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
-		/// Gets the params which accumulates headers, post, querystring and cookies.
-		/// </summary>
-		/// <value>The params.</value>
-		public virtual NameValueCollection Params
-		{
-			get { return @params; }
-		}
-
-		/// <summary>
 		/// Gets a value indicating whether this requeest is from a local address.
 		/// </summary>
 		/// <value><c>true</c> if this instance is local; otherwise, <c>false</c>.</value>
@@ -123,6 +150,24 @@ namespace Castle.MonoRail.Framework.Test
 		{
 			get { return pathInfo; }
 			set { pathInfo = value; }
+		}
+
+		/// <summary>
+		/// Gets the request type (GET, POST, etc)
+		/// </summary>
+		/// <value></value>
+		public string RequestType
+		{
+			get { return HttpMethod; }
+		}
+
+		/// <summary>
+		/// Gets the request URL.
+		/// </summary>
+		/// <value></value>
+		public string Url
+		{
+			get { return RawUrl; }
 		}
 
 		/// <summary>
@@ -175,6 +220,15 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
+		/// Gets the params which accumulates headers, post, querystring and cookies.
+		/// </summary>
+		/// <value>The params.</value>
+		public virtual NameValueCollection Params
+		{
+			get { return @params; }
+		}
+
+		/// <summary>
 		/// Gets the query string.
 		/// </summary>
 		/// <value>The query string.</value>
@@ -200,6 +254,54 @@ namespace Castle.MonoRail.Framework.Test
 		{
 			get { return userLanguages; }
 			set { userLanguages = value; }
+		}
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical
+		/// representation of the flat data on <see cref="Controller.Params"/>
+		/// </summary>
+		/// <value></value>
+		public CompositeNode ParamsNode
+		{
+			get { return new TreeBuilder().BuildSourceNode(Params); }
+		}
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical
+		/// representation of the flat data on <see cref="IRequest.Form"/>
+		/// </summary>
+		/// <value></value>
+		public CompositeNode FormNode
+		{
+			get { return new TreeBuilder().BuildSourceNode(Form); }
+		}
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical
+		/// representation of the flat data on <see cref="IRequest.QueryString"/>
+		/// </summary>
+		/// <value>The query string node.</value>
+		public CompositeNode QueryStringNode
+		{
+			get { return new TreeBuilder().BuildSourceNode(QueryString); }
+		}
+
+		/// <summary>
+		/// Obtains the params node.
+		/// </summary>
+		/// <param name="from">From.</param>
+		/// <returns></returns>
+		public CompositeNode ObtainParamsNode(ParamStore from)
+		{
+			switch(from)
+			{
+				case ParamStore.Form:
+					return FormNode;
+				case ParamStore.Params:
+					return ParamsNode;
+				default:
+					return QueryStringNode;
+			}
 		}
 
 		/// <summary>

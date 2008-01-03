@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using System;
 	using System.IO;
 
 	/// <summary>

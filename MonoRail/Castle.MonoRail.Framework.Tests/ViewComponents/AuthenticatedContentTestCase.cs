@@ -18,24 +18,26 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 	using System.IO;
 	using System.Security.Principal;
 	using Castle.MonoRail.Framework.ViewComponents;
-	using Castle.MonoRail.TestSupport;
 	using NUnit.Framework;
+	using Test;
 
 	[TestFixture]
-	public class AuthenticatedContentTestCase : BaseViewComponentTest
+	public class AuthenticatedContentTestCase
 	{
 		private AuthenticatedContent authComponent;
+		private ViewEngineStub viewEngineStub;
+		private StringWriter writer;
+		private MockViewComponentContext componentContext;
+		private MockEngineContext engine;
 
 		[SetUp]
 		public void Init()
 		{
+			writer = new StringWriter();
+			viewEngineStub = new ViewEngineStub();
+			componentContext = new MockViewComponentContext("name", writer, viewEngineStub);
 			authComponent = new AuthenticatedContent();
-		}
-
-		[TearDown]
-		public void Terminate()
-		{
-			CleanUp();
+			engine = new MockEngineContext(null, null, null, null);
 		}
 
 		[Test]
@@ -45,12 +47,11 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 
 			loggedRendered = notloggedRendered = false;
 
-			SectionRender["logged"] = delegate(IDictionary context, TextWriter writer) { loggedRendered = true; };
-			SectionRender["notlogged"] = delegate(IDictionary context, TextWriter writer) { notloggedRendered = true; };
+			componentContext.SectionRender["logged"] = delegate { loggedRendered = true; };
+			componentContext.SectionRender["notlogged"] = delegate { notloggedRendered = true; };
 
-			BuildRailsContext("", "controller", "index");
-			Context.CurrentUser = new GenericPrincipal(new GenericIdentity("user", "test"), new string[0]);
-			PrepareViewComponent(authComponent);
+			engine.CurrentUser = new GenericPrincipal(new GenericIdentity("user", "test"), new string[0]);
+			authComponent.Init(engine, componentContext);
 			authComponent.Render();
 
 			Assert.IsTrue(loggedRendered);
@@ -64,12 +65,11 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 
 			loggedRendered = notloggedRendered = false;
 
-			SectionRender["logged"] = delegate(IDictionary context, TextWriter writer) { loggedRendered = true; };
-			SectionRender["notlogged"] = delegate(IDictionary context, TextWriter writer) { notloggedRendered = true; };
+			componentContext.SectionRender["logged"] = delegate(IDictionary context, TextWriter writer) { loggedRendered = true; };
+			componentContext.SectionRender["notlogged"] = delegate(IDictionary context, TextWriter writer) { notloggedRendered = true; };
 
-			BuildRailsContext("", "controller", "index");
-			Context.CurrentUser = null;
-			PrepareViewComponent(authComponent);
+			engine.CurrentUser = null;
+			authComponent.Init(engine, componentContext);
 			authComponent.Render();
 
 			Assert.IsFalse(loggedRendered);

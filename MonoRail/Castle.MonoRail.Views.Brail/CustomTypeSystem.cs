@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Views.Brail
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.Steps;
 	using Boo.Lang.Compiler.TypeSystem;
+
 	// This is a custom type implementation which allows to use common idioms such as 
 	// list & date as identifiers
 	public class CustomTypeSystem : TypeSystemServices

@@ -84,10 +84,11 @@ namespace Castle.MonoRail.Framework.Filters
 		/// <param name="exec">When this filter is being invoked</param>
 		/// <param name="context">Current context</param>
 		/// <param name="controller">The controller instance</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <returns>
 		/// 	<c>true</c> if the action should be invoked, otherwise <c>false</c>
 		/// </returns>
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, IController controller)
+		public bool Perform(ExecuteEnum exec, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 			try
 			{
@@ -134,7 +135,7 @@ namespace Castle.MonoRail.Framework.Filters
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <returns></returns>
-		private String GetLocaleId(IRailsEngineContext context)
+		private String GetLocaleId(IEngineContext context)
 		{
 			switch(setup.Store)
 			{

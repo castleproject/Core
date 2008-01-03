@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 namespace Castle.MonoRail.Views.Brail
 {
 	using System;
@@ -40,16 +41,16 @@ namespace Castle.MonoRail.Views.Brail
 		                                                 BindingFlags.FlattenHierarchy |
 		                                                 BindingFlags.Instance;
 
+		private const BindingFlags GetPropertyBindingFlags = DefaultBindingFlags |
+		                                                     BindingFlags.GetProperty |
+		                                                     BindingFlags.GetField;
+
 		private const BindingFlags InvokeBindingFlags = DefaultBindingFlags |
 		                                                BindingFlags.InvokeMethod;
 
 		private const BindingFlags SetPropertyBindingFlags = DefaultBindingFlags |
 		                                                     BindingFlags.SetProperty |
 		                                                     BindingFlags.SetField;
-
-		private const BindingFlags GetPropertyBindingFlags = DefaultBindingFlags |
-		                                                     BindingFlags.GetProperty |
-		                                                     BindingFlags.GetField;
 
 		protected override void InitializeDuckTypingServices()
 		{
@@ -210,7 +211,7 @@ namespace Castle.MonoRail.Views.Brail
 			MemberInfo[] found = type.GetMember(name, ResolveFlagsToUse(type, DefaultBindingFlags));
 			if (null == found || 0 == found.Length)
 			{
-				throw new System.MissingMemberException(type.FullName, name);
+				throw new MissingMemberException(type.FullName, name);
 			}
 			return found;
 		}
@@ -218,7 +219,8 @@ namespace Castle.MonoRail.Views.Brail
 
 		private static BindingFlags ResolveFlagsToUse(Type type, BindingFlags flags)
 		{
-            if (type.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen") || type.Assembly.FullName.StartsWith("DynamicProxyGenAssembly2"))
+			if (type.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen") ||
+			    type.Assembly.FullName.StartsWith("DynamicProxyGenAssembly2"))
 			{
 				return flags | BindingFlags.DeclaredOnly;
 			}
@@ -253,12 +255,6 @@ namespace Castle.MonoRail.Views.Brail
 					}
 			}
 		}
-
-		private enum SetOrGet
-		{
-			Set,
-			Get
-		} ;
 
 		private static MemberInfo SelectSliceMember(MemberInfo[] found, ref object[] args, SetOrGet sliceKind)
 		{
@@ -305,7 +301,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		private static bool IsGetArraySlice(object target, object[] args)
 		{
-			return args.Length == 1 && target is System.Array;
+			return args.Length == 1 && target is Array;
 		}
 
 		private static MethodInfo GetGetMethod(PropertyInfo property)
@@ -324,15 +320,22 @@ namespace Castle.MonoRail.Views.Brail
 
 		private static bool IsSetArraySlice(object target, object[] args)
 		{
-			return args.Length == 2 && target is System.Array;
+			return args.Length == 2 && target is Array;
 		}
 
 		private IMethod GetResolvedMethod(IType type, string name)
 		{
 			IMethod method = NameResolutionService.ResolveMethod(type, name);
-			if (null == method) throw new System.ArgumentException(string.Format("Method '{0}' not found in type '{1}'", type, name));
+			if (null == method) throw new ArgumentException(string.Format("Method '{0}' not found in type '{1}'", type, name));
 			return method;
 		}
+
+		private enum SetOrGet
+		{
+			Set,
+			Get
+		} ;
+
 		#endregion
 	}
 }

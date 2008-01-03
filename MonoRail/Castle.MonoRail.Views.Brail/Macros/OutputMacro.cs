@@ -11,13 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 namespace Castle.MonoRail.Views.Brail
 {
-	using Boo.Lang;
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.Ast;
 	using Boo.Lang.Extensions;
-	using Castle.MonoRail.Framework;
+	using Framework;
 
 	// This take statements such as:
 	//  output "something"
@@ -30,17 +30,15 @@ namespace Castle.MonoRail.Views.Brail
 		private static void UnescapeInitialAndClosingDoubleQuotes(MacroStatement macro)
 		{
 			StringLiteralExpression value = macro.Arguments[0] as StringLiteralExpression;
-			if(value==null)
-				return;
+			if (value == null) return;
 			value.Value = BrailPreProcessor.UnescapeInitialAndClosingDoubleQuotes(value.Value);
 		}
 
-	    protected override Statement ExpandImpl(MacroStatement macro)
-	    {
-            if (macro.Arguments.Count == 0)
-                throw new MonoRailException("output must be called with arguemnts");
-            UnescapeInitialAndClosingDoubleQuotes(macro);
-	        return PrintMacroModule.expandPrintMacro(macro, output, output);
-	    }
+		protected override Statement ExpandImpl(MacroStatement macro)
+		{
+			if (macro.Arguments.Count == 0) throw new MonoRailException("output must be called with arguemnts");
+			UnescapeInitialAndClosingDoubleQuotes(macro);
+			return PrintMacroModule.expandPrintMacro(macro, output, output);
+		}
 	}
 }

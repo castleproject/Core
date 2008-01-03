@@ -17,8 +17,7 @@ namespace Castle.MonoRail.Framework
 	/// <summary>
 	/// Delegate to create dynamic actions without the need for a separated class.
 	/// </summary>
-	/// <param name="controller">Controller instance</param>
-	public delegate void ActionDelegate(Controller controller);
+	public delegate object ActionDelegate(IEngineContext engineContext, IController controller, IControllerContext controllerContext);
 
 	/// <summary>
 	/// Represents a dynamic action that forwards the
@@ -41,10 +40,12 @@ namespace Castle.MonoRail.Framework
 		/// Implementors should perform the action
 		/// upon this invocation
 		/// </summary>
-		/// <param name="controller"></param>
-		public void Execute(Controller controller)
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
+		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
-			actionDelegate(controller);
+			return actionDelegate(engineContext, controller, controllerContext);
 		}
 	}
 }

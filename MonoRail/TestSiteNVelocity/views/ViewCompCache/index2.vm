@@ -1,9 +1,0 @@
-#blockcomponent(CachedComponent2)
-#capturefor(scripts)
-Something
-#end
-
-hello from body
-#end
-
-$scripts

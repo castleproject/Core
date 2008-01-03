@@ -14,22 +14,22 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
+	using System;
 	using System.Collections;
 	using System.IO;
 	using Boo.Lang;
-	using Castle.MonoRail.Framework;
+	using Framework;
 
 	public class BrailViewComponentContext : IViewComponentContext
 	{
-		string componentName;
-
-		IDictionary componentParameters;
-		IDictionary sections;
-		string viewToRender;
-
-		ICallable body;
 		private readonly TextWriter default_writer;
+		private ICallable body;
+		private string componentName;
+
+		private IDictionary componentParameters;
 		private BrailBase parent;
+		private IDictionary sections;
+		private string viewToRender;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BrailViewComponentContext"/> class.
@@ -40,7 +40,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// <param name="text">The text.</param>
 		/// <param name="parameters">The parameters.</param>
 		public BrailViewComponentContext(BrailBase parent, ICallable body,
-										 string name, TextWriter text, IDictionary parameters)
+		                                 string name, TextWriter text, IDictionary parameters)
 		{
 			this.parent = parent;
 			this.body = body;
@@ -48,6 +48,14 @@ namespace Castle.MonoRail.Views.Brail
 			default_writer = text;
 			componentParameters = parameters;
 		}
+
+		public ICallable Body
+		{
+			get { return body; }
+			set { body = value; }
+		}
+
+		#region IViewComponentContext Members
 
 		public string ComponentName
 		{
@@ -70,12 +78,6 @@ namespace Castle.MonoRail.Views.Brail
 			set { viewToRender = value; }
 		}
 
-		public ICallable Body
-		{
-			get { return body; }
-			set { body = value; }
-		}
-
 		public TextWriter Writer
 		{
 			get { return default_writer; }
@@ -92,9 +94,9 @@ namespace Castle.MonoRail.Views.Brail
 			{
 				throw new MonoRailException("This component does not have a body content to be rendered");
 			}
-			using (parent.SetOutputStream(writer))
+			using(parent.SetOutputStream(writer))
 			{
-				body.Call(new object[] { writer });
+				body.Call(new object[] {writer});
 			}
 		}
 
@@ -126,9 +128,9 @@ namespace Castle.MonoRail.Views.Brail
 		public void RenderSection(string sectionName, TextWriter writer)
 		{
 			if (HasSection(sectionName) == false)
-				return;//matching the NVelocity behavior, but maybe should throw?
-			ICallable callable = (ICallable)sections[sectionName];
-			callable.Call(new object[] { writer });
+				return; //matching the NVelocity behavior, but maybe should throw?
+			ICallable callable = (ICallable) sections[sectionName];
+			callable.Call(new object[] {writer});
 		}
 
 		public IViewEngine ViewEngine
@@ -136,11 +138,13 @@ namespace Castle.MonoRail.Views.Brail
 			get { return parent.ViewEngine; }
 		}
 
+		#endregion
+
 		public void RegisterSection(string name, ICallable section)
 		{
 			if (sections == null)
 			{
-				sections = new Hashtable(System.StringComparer.InvariantCultureIgnoreCase);
+				sections = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 			}
 			sections[name] = section;
 		}

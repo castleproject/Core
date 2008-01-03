@@ -32,7 +32,7 @@ namespace Castle.MonoRail.WindsorExtension
 		/// </summary>
 		/// <param name="key">The key used to register the component</param>
 		/// <returns>The step page instance</returns>
-		WizardStepPage CreatePage(String key);
+		IWizardStepPage CreatePage(String key);
 
 		/// <summary>
 		/// Requests a <see cref="WizardStepPage"/> by
@@ -41,6 +41,6 @@ namespace Castle.MonoRail.WindsorExtension
 		/// </summary>
 		/// <param name="stepPageType"></param>
 		/// <returns>The step page instance</returns>
-		WizardStepPage CreatePage(Type stepPageType);
+		IWizardStepPage CreatePage(Type stepPageType);
 	}
 }

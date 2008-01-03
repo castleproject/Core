@@ -23,6 +23,12 @@ namespace Castle.MonoRail.Framework.Test
 	public interface IMockRequest : IRequest
 	{
 		/// <summary>
+		/// Sets the accept header.
+		/// </summary>
+		/// <value>The accept header.</value>
+		new string AcceptHeader { set; }
+
+		/// <summary>
 		/// Sets the path info.
 		/// </summary>
 		/// <value>The path info.</value>
@@ -51,19 +57,19 @@ namespace Castle.MonoRail.Framework.Test
 		/// Sets the HTTP method.
 		/// </summary>
 		/// <value>The HTTP method.</value>
-		new String HttpMethod { set; }
+		new string HttpMethod { set; }
 
 		/// <summary>
 		/// Sets the file path.
 		/// </summary>
 		/// <value>The file path.</value>
-		new String FilePath { set; }
+		new string FilePath { set; }
 
 		/// <summary>
 		/// Sets the user languages.
 		/// </summary>
 		/// <value>The user languages.</value>
-		new String[] UserLanguages { set; }
+		new string[] UserLanguages { set; }
 
 		/// <summary>
 		/// Sets the IP host address of the remote client. 

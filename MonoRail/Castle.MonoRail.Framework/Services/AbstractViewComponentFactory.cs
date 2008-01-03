@@ -145,8 +145,8 @@ namespace Castle.MonoRail.Framework.Services
 			RegisterComponent("CaptureFor", typeof(CaptureFor));
 			RegisterComponent("SecurityComponent", typeof(SecurityComponent));
 			RegisterComponent("ChildContentComponent", typeof(ChildContentComponent));
-			RegisterComponent("UpdatePage", typeof(UpdatePage));
-			RegisterComponent("UpdatePageTag", typeof(UpdatePageTag));
+//			RegisterComponent("UpdatePage", typeof(UpdatePage));
+//			RegisterComponent("UpdatePageTag", typeof(UpdatePageTag));
 			RegisterComponent("AuthenticatedContent", typeof(AuthenticatedContent));
 			RegisterComponent("DiggStylePagination", typeof(DiggStylePagination));
 			RegisterComponent("SelectStylePagination", typeof(SelectStylePagination));

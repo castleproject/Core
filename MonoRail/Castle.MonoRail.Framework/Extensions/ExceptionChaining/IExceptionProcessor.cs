@@ -26,6 +26,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// Initiates the ExceptionChainingExtension manualy
 		/// </summary>
 		/// <param name="exception">The exception to process</param>
-		void ProcessException(Exception exception);
+		/// <param name="engineContext">The engine context.</param>
+		void ProcessException(Exception exception, IEngineContext engineContext);
 	}
 }

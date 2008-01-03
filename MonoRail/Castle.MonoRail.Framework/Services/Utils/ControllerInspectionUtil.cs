@@ -15,8 +15,7 @@
 namespace Castle.MonoRail.Framework.Services.Utils
 {
 	using System;
-	
-	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Descriptors;
 
 	/// <summary>
 	/// Utilities methods to inspect the controller Type
@@ -43,12 +42,12 @@ namespace Castle.MonoRail.Framework.Services.Utils
 
 				descriptor = new ControllerDescriptor(controllerType,
 				                                      ObtainControllerName(details.Name, controllerType),
-				                                      details.Area);
+				                                      details.Area, details.Sessionless);
 			}
 			else
 			{
 				descriptor = new ControllerDescriptor(controllerType,
-				                                      ObtainControllerName(null, controllerType), String.Empty);
+				                                      ObtainControllerName(null, controllerType), String.Empty, false);
 			}
 
 			return descriptor;

@@ -17,7 +17,6 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Text;
 	using System.Runtime.Serialization;
-	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Thrown when a controller is not found.
@@ -26,6 +25,14 @@ namespace Castle.MonoRail.Framework
 	public class ControllerNotFoundException : ApplicationException
 	{
 		private readonly String area, controller;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerNotFoundException"/> class.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		public ControllerNotFoundException(string message) : base(message)
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ControllerNotFoundException"/> class.

@@ -21,7 +21,6 @@ using IRuntimeServices = NVelocity.Runtime.IRuntimeServices;
 namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 {
 	using System;
-	using System.Collections;
 	using System.IO;
 
 	public class SubSectionDirective : Directive

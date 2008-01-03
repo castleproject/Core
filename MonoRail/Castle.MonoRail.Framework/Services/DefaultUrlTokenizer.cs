@@ -19,9 +19,8 @@ namespace Castle.MonoRail.Framework.Services
 	using System.Collections.Specialized;
 	using System.IO;
 	using System.Text;
-	using Castle.Core;
-	using Castle.MonoRail.Framework.Configuration;
-	using Castle.MonoRail.Framework.Internal;
+	using Configuration;
+	using Core;
 
 	/// <summary>
 	/// Breaks the url into smaller pieces to find out
@@ -63,7 +62,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="provider">The provider.</param>
 		public void Service(IServiceProvider provider)
 		{
-			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
+			IMonoRailConfiguration config = (IMonoRailConfiguration) provider.GetService(typeof(IMonoRailConfiguration));
 
 			foreach(DefaultUrl url in config.DefaultUrls)
 			{

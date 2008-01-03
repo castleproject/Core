@@ -37,10 +37,10 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// <summary>
 		/// Implementors should perform the action
 		/// on the exception. Note that the exception
-		/// is available in <see cref="IRailsEngineContext.LastException"/>
+		/// is available in <see cref="IEngineContext.LastException"/>
 		/// </summary>
 		/// <param name="context"></param>
-		public abstract void Process(IRailsEngineContext context);
+		public abstract void Process(IEngineContext context);
 
 		/// <summary>
 		/// The next exception in the sink
@@ -57,7 +57,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// Invokes the next handler.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		protected void InvokeNext(IRailsEngineContext context)
+		protected void InvokeNext(IEngineContext context)
 		{
 			if (nextHandler != null)
 			{
@@ -70,13 +70,13 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <returns></returns>
-		protected string BuildStandardMessage(IRailsEngineContext context)
+		protected string BuildStandardMessage(IEngineContext context)
 		{
 			StringBuilder sbMessage = new StringBuilder();
 	
 			sbMessage.Append("Controller details\r\n");
 			sbMessage.Append("==================\r\n\r\n");
-			sbMessage.AppendFormat("Url {0}\r\n", context.Url);
+			sbMessage.AppendFormat("Url {0}\r\n", context.Request.Url);
 			sbMessage.AppendFormat("Area {0}\r\n", context.UrlInfo.Area);
 			sbMessage.AppendFormat("Controller {0}\r\n", context.UrlInfo.Controller);
 			sbMessage.AppendFormat("Action {0}\r\n", context.UrlInfo.Action);
@@ -91,9 +91,9 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			sbMessage.Append("\r\n======================\r\n\r\n");
 			sbMessage.AppendFormat("Machine {0}\r\n", Environment.MachineName);
 			sbMessage.AppendFormat("ApplicationPath {0}\r\n", context.ApplicationPath);
-			sbMessage.AppendFormat("ApplicationPhysicalPath {0}\r\n", context.ApplicationPhysicalPath);
-			sbMessage.AppendFormat("RequestType {0}\r\n", context.RequestType);
-			sbMessage.AppendFormat("UrlReferrer {0}\r\n", context.UrlReferrer);
+//			sbMessage.AppendFormat("ApplicationPhysicalPath {0}\r\n", context.ApplicationPhysicalPath);
+			sbMessage.AppendFormat("HttpMethod {0}\r\n", context.Request.HttpMethod);
+			sbMessage.AppendFormat("UrlReferrer {0}\r\n", context.Request.UrlReferrer);
 	
 			if (context.CurrentUser != null)
 			{
@@ -103,9 +103,8 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			}
 	
 			DumpDictionary(context.Flash, "Flash", sbMessage);
-	
-			DumpDictionary(context.Params, "Params", sbMessage);
-	
+			DumpDictionary(context.Request.QueryString, "QueryString", sbMessage);
+			DumpDictionary(context.Request.Form, "Form", sbMessage);
 			DumpDictionary(context.Session, "Session", sbMessage);
 
 			return sbMessage.ToString();
@@ -113,6 +112,11 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 
 		private void DumpDictionary(IDictionary dict, String title, StringBuilder message)
 		{
+			if (dict == null || dict.Count == 0)
+			{
+				return;
+			}
+
 			message.AppendFormat("{0}: \r\n", title);
 
 			try
@@ -130,6 +134,11 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 
 		private void DumpDictionary(NameValueCollection dict, String title, StringBuilder message)
 		{
+			if (dict == null || dict.Count == 0)
+			{
+				return;
+			}
+
 			message.AppendFormat("{0}: \r\n", title);
 
 			try

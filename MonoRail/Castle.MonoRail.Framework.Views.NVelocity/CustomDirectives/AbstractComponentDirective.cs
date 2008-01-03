@@ -18,7 +18,10 @@ using NVelocity.Runtime.Directive;
 using NVelocity.Runtime;
 using NVelocity.Exception;
 using NVelocity.Runtime.Parser;
-using Template = NVelocity.Template;
+using NVelocity.App.Events;
+using NVelocity.Context;
+using NVelocity.Util.Introspection;
+using NVelocity;
 
 namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 {
@@ -30,9 +33,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 	using System.Text;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
-	using global::NVelocity.App.Events;
-	using global::NVelocity.Context;
-	using global::NVelocity.Util.Introspection;
+	using Descriptors;
+	using Providers;
 
 	/// <summary>
 	/// Pendent
@@ -40,12 +42,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 	public abstract class AbstractComponentDirective : Directive, IViewRenderer
 	{
 		private readonly IViewComponentFactory viewComponentFactory;
-
-		private String componentName;
-		private ViewComponent component;
-		private NVelocityViewContextAdapter contextAdapter;
 		private IViewEngine viewEngine;
-		private INode compNameNode;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AbstractComponentDirective"/> class.
@@ -58,41 +55,37 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			this.viewEngine = viewEngine;
 		}
 
-		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
-			base.Init(rs, context, node);
+			IEngineContext railsContext = MonoRailHttpHandlerFactory.CurrentEngineContext;
+			IViewComponentRegistry registry = railsContext.Services.GetService<IViewComponentFactory>().Registry;
+			IViewComponentDescriptorProvider viewDescProvider =
+				railsContext.Services.GetService<IViewComponentDescriptorProvider>();
+			ICacheProvider cacheProvider = railsContext.Services.CacheProvider;
 
-			compNameNode = node.GetChild(0);
+			INode compNameNode = node.GetChild(0);
 
 			if (compNameNode == null)
 			{
 				String message = String.Format("You must specify the component name on the #{0} directive", Name);
 				throw new ViewComponentException(message);
 			}
-		}
 
-		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
-		{
-			IRailsEngineContext railsContext = MonoRailHttpHandler.CurrentContext;
-			IViewComponentRegistry registry = railsContext.GetService<IViewComponentFactory>().Registry;
-			IViewComponentDescriptorProvider viewDescProvider = railsContext.GetService<IViewComponentDescriptorProvider>();
-			ICacheProvider cacheProvider = railsContext.GetService<ICacheProvider>();
-
-			componentName = compNameNode.FirstToken.Image;
+			string componentName = compNameNode.FirstToken.Image;
 
 			if (componentName == null)
 			{
 				String message = String.Format("Could not obtain component name from the #{0} directive", Name);
 				throw new ViewComponentException(message);
 			}
-			
-			 if (componentName.StartsWith("$")) 
-			 {
+
+			if (componentName.StartsWith("$"))
+			{
 				String nodeContent = compNameNode.Literal.Trim('"', '\'');
 				SimpleNode inlineNode = runtimeServices.Parse(new StringReader(nodeContent), context.CurrentTemplateName, false);
 
 				inlineNode.Init(context, runtimeServices);
-				componentName = (String) Evaluate(inlineNode, context);
+				componentName = (string) Evaluate(inlineNode, context);
 			}
 
 			IDictionary componentParams = CreateParameters(context, node);
@@ -114,49 +107,46 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			{
 				key = descriptor.CacheKeyGenerator.Create(componentName, componentParams, railsContext);
 
-				if (key == null)
+				if (key != null)
 				{
-					throw new MonoRailException("CacheKeyGenerator returned a null CacheKey implementation (Not good at all). " + 
-						"Please investigate the implementation: " + descriptor.CacheKeyGenerator.GetType().FullName);
-				}
+					ViewComponentCacheBag cachedContent = (ViewComponentCacheBag) cacheProvider.Get(key.ToString());
 
-				ViewComponentCacheBag cachedContent = (ViewComponentCacheBag) cacheProvider.Get(key.ToString());
-
-				if (cachedContent != null)
-				{
-					// Restore entries
-
-					foreach(KeyValuePair<string, object> pair in cachedContent.ContextEntries)
+					if (cachedContent != null)
 					{
-						context[pair.Key] = pair.Value;
+						// Restore entries
+
+						foreach(KeyValuePair<string, object> pair in cachedContent.ContextEntries)
+						{
+							context[pair.Key] = pair.Value;
+						}
+
+						// Render from cache
+
+						writer.Write(cachedContent.Content);
+
+						return true;
 					}
 
-					// Render from cache
-
-					writer.Write(cachedContent.Content);
-
-					return true;
+					isOutputtingToCache = true;
+					bag = new ViewComponentCacheBag();
 				}
-
-				isOutputtingToCache = true;
-				bag = new ViewComponentCacheBag();
 			}
 
-			component = viewComponentFactory.Create(componentName);
+			ViewComponent component = viewComponentFactory.Create(componentName);
 
 			if (component == null)
 			{
 				throw new MonoRailException("ViewComponentFactory returned a null ViewComponent for " + componentName + ". " +
-					"Please investigate the implementation: " + viewComponentFactory.GetType().FullName);
+				                            "Please investigate the implementation: " + viewComponentFactory.GetType().FullName);
 			}
 
 			ASTDirective directiveNode = (ASTDirective) node;
 			IViewRenderer renderer = (IViewRenderer) directiveNode.Directive;
 
-			contextAdapter = new NVelocityViewContextAdapter(componentName, node, viewEngine, renderer);
+			NVelocityViewContextAdapter contextAdapter = new NVelocityViewContextAdapter(componentName, node, viewEngine, renderer);
 			contextAdapter.Context = isOutputtingToCache ? new CacheAwareContext(context, bag) : context;
 
-			ProcessSubSections();
+			ProcessSubSections(component, contextAdapter);
 
 			INode bodyNode = null;
 
@@ -164,7 +154,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			{
 				bodyNode = node.GetChild(node.ChildrenCount - 1);
 			}
-
 
 			TextWriter output = isOutputtingToCache ? bag.CacheWriter : writer;
 
@@ -206,7 +195,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			return true;
 		}
 
-		public bool RenderComponentView(IInternalContextAdapter context, String viewToRender, TextWriter writer, NVelocityViewContextAdapter contextAdapter)
+		public bool RenderComponentView(IInternalContextAdapter context,
+		                                String viewToRender, TextWriter writer,
+		                                NVelocityViewContextAdapter contextAdapter)
 		{
 			viewToRender = viewToRender + NVelocityViewEngine.TemplateExtension;
 
@@ -219,7 +210,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			return RenderView(context, viewToRender, template, writer);
 		}
 
-		protected virtual void ProcessSubSections()
+		protected virtual void ProcessSubSections(ViewComponent component, NVelocityViewContextAdapter contextAdapter)
 		{
 		}
 
@@ -254,20 +245,20 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			return new Hashtable(0);
 		}
 
-		protected string ComponentName
-		{
-			get { return componentName; }
-		}
-
-		protected ViewComponent Component
-		{
-			get { return component; }
-		}
-
-		protected NVelocityViewContextAdapter ContextAdapter
-		{
-			get { return contextAdapter; }
-		}
+//		protected string ComponentName
+//		{
+//			get { return componentName; }
+//		}
+//
+//		protected ViewComponent Component
+//		{
+//			get { return component; }
+//		}
+//
+//		protected NVelocityViewContextAdapter ContextAdapter
+//		{
+//			get { return contextAdapter; }
+//		}
 
 		private IDictionary ProcessRemainingParams(int childrenCount, INode node, IInternalContextAdapter context)
 		{
@@ -306,13 +297,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 			ArrayList values = new ArrayList();
 
-			for(int i=0; i < inlineNode.ChildrenCount; i++)
+			for(int i = 0; i < inlineNode.ChildrenCount; i++)
 			{
 				INode node = inlineNode.GetChild(i);
 
 				if (node.Type == ParserTreeConstants.TEXT)
 				{
-					values.Add(((ASTText)node).Text);
+					values.Add(((ASTText) node).Text);
 				}
 				else
 				{
@@ -353,6 +344,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		/// <returns></returns>
 		private IDictionary ProcessFirstParam(INode node, IInternalContextAdapter context, int childrenCount)
 		{
+			INode compNameNode = node.GetChild(0);
+			string componentName = compNameNode.FirstToken.Image;
+
 			INode withNode = node.GetChild(1);
 
 			String withName = withNode.FirstToken.Image;
@@ -365,16 +359,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				{
 					if (childrenCount > 2)
 					{
-						String message = String.Format("A #{0} directive with a dictionary " + 
-							"string parameter cannot have extra params - component {0}", componentName);
+						String message = String.Format("A #{0} directive with a dictionary " +
+						                               "string parameter cannot have extra params - component {0}", componentName);
 						throw new ViewComponentException(message);
 					}
 					return dict;
 				}
 				else
 				{
-					String message = String.Format("A #{0} directive with parameters must use " + 
-							"the keyword 'with' - component {0}", componentName);
+					String message = String.Format("A #{0} directive with parameters must use " +
+					                               "the keyword 'with' - component {0}", componentName);
 					throw new ViewComponentException(message);
 				}
 			}
@@ -416,7 +410,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 			Resource current = context.CurrentResource;
 
-			String encoding = null;
+			String encoding;
 
 			if (current != null)
 			{
@@ -599,7 +593,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 		object[] IContext.Keys
 		{
-			get { return ((IContext)context).Keys; }
+			get { return ((IContext) context).Keys; }
 		}
 
 		public ICollection Values

@@ -24,14 +24,16 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <summary>
 		/// Registers the actions on the controller.
 		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
-		public static void RegisterActions(Controller controller)
+		/// <param name="context">The context.</param>
+		public static void RegisterActions(IEngineContext engineContext, IController controller, IControllerContext context)
 		{
-			foreach(Type providerType in controller.MetaDescriptor.ActionProviders)
+			foreach(Type providerType in context.ControllerDescriptor.ActionProviders)
 			{
 				IDynamicActionProvider provider = (IDynamicActionProvider) Activator.CreateInstance(providerType);
 
-				provider.IncludeActions(controller);
+				provider.IncludeActions(engineContext, controller, context);
 			}
 		}
 	}

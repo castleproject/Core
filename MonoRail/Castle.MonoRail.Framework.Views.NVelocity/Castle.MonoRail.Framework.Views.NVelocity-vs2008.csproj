@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -27,6 +27,7 @@
     </UpgradeBackupLocation>
     <SignAssembly>true</SignAssembly>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\bin\temp2\</OutputPath>
@@ -82,6 +83,9 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -91,8 +95,8 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
-      <Name>Castle.MonoRail.Framework-vs2005</Name>
+    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2008.csproj">
+      <Name>Castle.MonoRail.Framework-vs2008</Name>
       <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
@@ -101,30 +105,21 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CustomDirectiveManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CustomDirectives\AbstractComponentDirective.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CustomDirectives\BlockComponentDirective.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="CustomDirectiveManager.cs" />
+    <Compile Include="CustomDirectives\AbstractComponentDirective.cs" />
+    <Compile Include="CustomDirectives\BlockComponentDirective.cs" />
     <Compile Include="CustomDirectives\CaptureForDirective.cs" />
-    <Compile Include="CustomDirectives\ComponentDirective.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="CustomDirectives\ComponentDirective.cs" />
     <Compile Include="CustomDirectives\IViewRenderer.cs" />
     <Compile Include="CustomDirectives\SubSectionDirective.cs" />
-    <Compile Include="CustomResourceManager.cs" />
-    <Compile Include="CustomTemplate.cs" />
-    <Compile Include="Helpers\StaticAccessorHelper.cs" />
-    <Compile Include="JSGeneration\JSCollectionGeneratorDuck.cs" />
-    <Compile Include="JSGeneration\JSElementGeneratorDuck.cs" />
-    <Compile Include="JSGeneration\JSGeneratorDuck.cs" />
-    <Compile Include="NVelocityViewContextAdapter.cs">
+    <Compile Include="CustomResourceManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CustomTemplate.cs" />
+    <Compile Include="Helpers\StaticAccessorHelper.cs" />
+    <Compile Include="JSGeneration\JSElementGeneratorDuck.cs" />
+    <Compile Include="JSGeneration\JSGeneratorDuck.cs" />
+    <Compile Include="NVelocityViewContextAdapter.cs" />
     <Compile Include="NVelocityViewEngine.cs">
       <SubType>Code</SubType>
     </Compile>

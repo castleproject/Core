@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.EndFieldSet()
 		/// </code>
 		/// </example>
-		public String FieldSet(String legend)
+		public virtual String FieldSet(String legend)
 		{
 			return String.Format("<fieldset><legend>{0}</legend>", legend);
 		}
@@ -75,7 +75,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.EndFieldSet()
 		/// </code>
 		/// </example>
-		public String EndFieldSet()
+		public virtual String EndFieldSet()
 		{
 			return "</fieldset>";
 		}
@@ -104,7 +104,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.EndForm()
 		/// </code>
 		/// </example>
-		public String Form(String action)
+		public virtual String Form(String action)
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -142,7 +142,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.EndForm()
 		/// </code>
 		/// </example>
-		public String Form(String action, String id, String method)
+		public virtual String Form(String action, String id, String method)
 		{
 			return Form(action, id, method, null);
 		}
@@ -170,7 +170,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.EndForm()
 		/// </code>
 		/// </example>
-		public String Form(String action, String id, String method, String onSubmit)
+		public virtual String Form(String action, String id, String method, String onSubmit)
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -199,19 +199,19 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="action">Target action for the form.</param>
 		/// <param name="attributes">Html Attributes for the form tag</param>
 		/// <returns>HTML string with form opening tag.</returns>
-		public String Form(String action, IDictionary attributes)
+		public virtual String Form(String action, IDictionary attributes)
 		{
 			return String.Format("<form action=\"{0}\" {1}>", action, GetAttributes(attributes));
 		}
-		
+
 		/// <summary>
 		/// Creates a <b>form</b> tag targeting a URL in the style of the <see cref="LinkTo(String, String)"/> methods.
 		/// </summary>
 		/// <param name="action">An action on the current controller.</param>
 		/// <returns>HTML string with form opening tag.</returns>
-		public String FormTo(String action)
+		public virtual String FormTo(String action)
 		{
-			return FormTo(Controller.Name, action, null);
+			return FormTo(ControllerContext.Name, action, null);
 		}
 
 		/// <summary>
@@ -220,7 +220,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="controller">A controller name.</param>
 		/// <param name="action">An action on <paramref name="controller"/>.</param>
 		/// <returns>HTML string with form opening tag.</returns>
-		public String FormTo(String controller, String action)
+		public virtual String FormTo(String controller, String action)
 		{
 			return FormTo(controller, action, null);
 		}
@@ -232,7 +232,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="action">An action on <paramref name="controller"/>.</param>
 		/// <param name="id">Object to use for the action ID argument.</param>
 		/// <returns>HTML string with form opening tag.</returns>
-		public String FormTo(String controller, String action, object id)
+		public virtual String FormTo(String controller, String action, object id)
 		{
 			return FormToAttributed(controller, action, id, null);
 		}
@@ -244,7 +244,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="action">An action on <paramref name="controller"/>.</param>
 		/// <param name="attributes">Additional attributes for the <b>form</b> tag.</param>
 		/// <returns>HTML string with form opening tag.</returns>
-		public String FormToAttributed(String controller, String action, IDictionary attributes)
+		public virtual String FormToAttributed(String controller, String action, IDictionary attributes)
 		{
 			return FormToAttributed(controller, action, null, attributes);
 		}
@@ -257,7 +257,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="id">Object to use for the action ID argument.</param>
 		/// <param name="attributes">Additional attributes for the <b>form</b> tag.</param>
 		/// <returns>HTML string with form opening tag.</returns>
-		public String FormToAttributed(String controller, String action, object id, IDictionary attributes)
+		public virtual String FormToAttributed(String controller, String action, object id, IDictionary attributes)
 		{
 			return FormToAttributed(controller, action, id, null, attributes);
 		}
@@ -271,7 +271,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="method">Form method (get, post, etc).</param>
 		/// <param name="attributes">Additional attributes for the <b>form</b> tag.</param>
 		/// <returns>HTML string with form opening tag.</returns>
-		public String FormToAttributed(String controller, String action, object id, string method, IDictionary attributes)
+		public virtual String FormToAttributed(String controller, String action, object id, string method, IDictionary attributes)
 		{
 			string formAction = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
@@ -316,7 +316,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.EndForm()
 		/// </code>
 		/// </example>
-		public String EndForm()
+		public virtual String EndForm()
 		{
 			return "</form>";
 		}
@@ -343,7 +343,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.Link( "mypage.html", "This is a link to my page" )
 		/// </code>
 		/// </example>
-		public String Link(String target, String linkText)
+		public virtual String Link(String target, String linkText)
 		{
 			return LinkTo(target, linkText);
 		}
@@ -366,7 +366,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.Link( "mypage.html", "This is a link to my page", $DictHelper.CreateDict("class=mylinkclass") )
 		/// </code>
 		/// </example>
-		public String Link(String target, String linkText, IDictionary attributes)
+		public virtual String Link(String target, String linkText, IDictionary attributes)
 		{
 			return String.Format("<a href=\"{0}\" {1}>{2}</a>",
 			                     target, GetAttributes(attributes), linkText);
@@ -390,7 +390,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.LinkTo( "linkName", "requiredAction" )
 		/// </code>
 		/// </example>
-		public String LinkTo(String name, String action)
+		public virtual String LinkTo(String name, String action)
 		{
 			string url = UrlHelper.For(DictHelper.Create("action=" + action));
 
@@ -415,7 +415,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.LinkTo( "linkName", DictHelper.CreateDict("controller=home","action=index") )
 		/// </code>
 		/// </example>
-		public String LinkTo(String name, IDictionary options)
+		public virtual String LinkTo(String name, IDictionary options)
 		{
 			string url = UrlHelper.For(options);
 			// remove the common action attribute 
@@ -446,7 +446,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.LinkTo( "linkName", {@action:} )
 		/// </code>
 		/// </example>
-		public String LinkTo(String name, String controller, String action)
+		public virtual String LinkTo(String name, String controller, String action)
 		{
 			string url = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
@@ -476,7 +476,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.LinkTo( "linkName", "someController", "requiredAction", objectToRefByID )
 		/// </code>
 		/// </example>
-		public String LinkTo(String name, String controller, String action, object id)
+		public virtual String LinkTo(String name, String controller, String action, object id)
 		{
 			string url = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
@@ -502,7 +502,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.LinkToAttributed( "linkName", "someController", "requiredAction", $DictHelper.CreateDict("class=something") )
 		/// </code>
 		/// </example>
-		public String LinkToAttributed(String name, String controller, String action, IDictionary attributes)
+		public virtual String LinkToAttributed(String name, String controller, String action, IDictionary attributes)
 		{
 			string url = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
@@ -529,7 +529,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.LinkToAttributed( "linkName", "someController", "requiredAction", $DictHelper.CreateDict("class=something") )
 		/// </code>
 		/// </example>
-		public String LinkToAttributed(String name, String controller, String action, object id, IDictionary attributes)
+		public virtual String LinkToAttributed(String name, String controller, String action, object id, IDictionary attributes)
 		{
 			string url = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
@@ -543,7 +543,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="name">Name for the link.</param>
 		/// <param name="action">Action to link to on the current controller.</param>
 		/// <returns>HTML string with anchor that posts to the current controller</returns>
-		public String LinkToWithPost(String name, String action)
+		public virtual String LinkToWithPost(String name, String action)
 		{
 			return LinkToWithPost(name, action, null);
 		}
@@ -556,9 +556,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="action">Action to link to on the current controller.</param>
 		/// <param name="id">The ID to be passed as a parameter for the action.</param>
 		/// <returns>HTML string with anchor that posts to the current controller</returns>
-		public String LinkToWithPost(String name, String action, object id)
+		public virtual String LinkToWithPost(String name, String action, object id)
 		{
-			return LinkToWithPost(name, Controller.Name, action, id);
+			return LinkToWithPost(name, ControllerContext.Name, action, id);
 		}
 
 		/// <summary>
@@ -569,9 +569,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="action">Action to link to on the current controller.</param>
 		/// <param name="confirm">Guards the form submission with a javascript confirm popup.</param>
 		/// <returns>HTML string with anchor that posts to the current controller</returns>
-		public String LinkToWithPost(String name, String action, String confirm)
+		public virtual String LinkToWithPost(String name, String action, String confirm)
 		{
-			return LinkToWithPost(name, Controller.Name, action, confirm);
+			return LinkToWithPost(name, ControllerContext.Name, action, confirm);
 		}
 
 		/// <summary>
@@ -583,9 +583,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="id">The ID to be passed as a parameter for the action.</param>
 		/// <param name="confirm">Guards the form submission with a javascript confirm popup.</param>
 		/// <returns>HTML string with anchor that posts to the current controller</returns>
-		public String LinkToWithPost(String name, String action, object id, string confirm)
+		public virtual String LinkToWithPost(String name, String action, object id, string confirm)
 		{
-			return LinkToWithPost(name, Controller.Name, action, id, confirm);
+			return LinkToWithPost(name, ControllerContext.Name, action, id, confirm);
 		}
 
 		/// <summary>
@@ -597,7 +597,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="action">Action to link to.</param>
 		/// <param name="id">The ID to be passed as a parameter for the action.</param>
 		/// <returns>HTML string with anchor that posts to the specified <paramref name="controller"/></returns>
-		public String LinkToWithPost(String name, String controller, String action, object id)
+		public virtual String LinkToWithPost(String name, String controller, String action, object id)
 		{
 			return LinkToWithPost(name, controller, action, id, null);
 		}
@@ -611,7 +611,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="action">Action to link to.</param>
 		/// <param name="confirm">Guards the form submission with a javascript confirm popup.</param>
 		/// <returns>HTML string with anchor that posts to the specified <paramref name="controller"/></returns>
-		public String LinkToWithPost(String name, String controller, String action, String confirm)
+		public virtual String LinkToWithPost(String name, String controller, String action, String confirm)
 		{
 			return LinkToWithPost(name, controller, action, null, confirm);
 		}
@@ -626,7 +626,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="id">The ID to be passed as a parameter for the action.</param>
 		/// <param name="confirm">Guards the form submission with a javascript confirm popup.</param>
 		/// <returns>HTML string with anchor that posts to the specified <paramref name="controller"/></returns>
-		public String LinkToWithPost(String name, String controller, String action, object id, String confirm)
+		public virtual String LinkToWithPost(String name, String controller, String action, object id, String confirm)
 		{
 			return LinkToWithPostAttributed(name, controller, action, id, confirm, null);
 		}
@@ -641,7 +641,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="confirm">Guards the form submission with a javascript confirm popup.</param>
 		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
 		/// <returns>HTML string with anchor that posts to the specified <paramref name="controller"/></returns>
-		public String LinkToWithPostAttributed(String name, String controller, String action, String confirm, IDictionary attributes)
+		public virtual String LinkToWithPostAttributed(String name, String controller, String action, String confirm,
+		                                       IDictionary attributes)
 		{
 			return LinkToWithPostAttributed(name, controller, action, null, confirm, attributes);
 		}
@@ -658,7 +659,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="confirm">Guards the form submission with a javascript confirm popup.</param>
 		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
 		/// <returns>HTML string with anchor that posts to the specified <paramref name="controller"/></returns>
-		public String LinkToWithPostAttributed(String name, String controller, String action, object id, String confirm, IDictionary attributes)
+		public virtual String LinkToWithPostAttributed(String name, String controller, String action, object id, String confirm,
+		                                       IDictionary attributes)
 		{
 			IDictionary formAttributes = DictHelper.Create("style=display:inline;margin:0;");
 
@@ -696,7 +698,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return stringBuilder.ToString();
 		}
 
-		#endregion 
+		#endregion
 
 		#region MapToVirtual
 
@@ -714,13 +716,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.MapToVirtual( "targetFolder/targetFile.html" )
 		/// </code>
 		/// </example>
-		public String MapToVirtual(String target)
+		public virtual String MapToVirtual(String target)
 		{
-			String appPath = Controller.Context.ApplicationPath.EndsWith("/")
-			                 	?
-			                 Controller.Context.ApplicationPath
-			                 	:
-			                 Controller.Context.ApplicationPath + "/";
+			String appPath = Context.ApplicationPath.EndsWith("/") ? Context.ApplicationPath : Context.ApplicationPath + "/";
 
 			String targetPath = target.StartsWith("/") ? target.Substring(1) : target;
 
@@ -750,7 +748,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.LabelFor( "forIdArg", "labelArg" )
 		/// </code>
 		/// </example>
-		public String LabelFor(String forId, String label)
+		public virtual String LabelFor(String forId, String label)
 		{
 			return LabelFor(forId, label, null);
 		}
@@ -779,7 +777,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.LabelFor( "forIdArg", "labelArg", IDictionary )
 		/// </code>
 		/// </example>
-		public String LabelFor(String forId, String label, IDictionary attributes)
+		public virtual String LabelFor(String forId, String label, IDictionary attributes)
 		{
 			StringBuilder sb = new StringBuilder();
 			StringWriter sbWriter = new StringWriter(sb);
@@ -854,7 +852,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.DateTime( "nameArg", new DateTime( 2005, 07, 15 ) )
 		/// </code>
 		/// </example>
-		public String DateTime(String name, DateTime value)
+		public virtual String DateTime(String name, DateTime value)
 		{
 			return DateTime(name, value, null);
 		}
@@ -917,7 +915,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.DateTime( "nameArg", new DateTime( 2005, 07, 15 ), IDictionary )
 		/// </code>
 		/// </example>
-		public String DateTime(String name, DateTime value, IDictionary attributes)
+		public virtual String DateTime(String name, DateTime value, IDictionary attributes)
 		{
 			String[] days = new String[31];
 			int index = 0;
@@ -972,7 +970,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.TextArea( "nameArg", 10, 20, "Text inside text area." )
 		/// </code>
 		/// </example>
-		public String TextArea(String name, int cols, int rows, String value)
+		public virtual String TextArea(String name, int cols, int rows, String value)
 		{
 			return String.Format("<textarea id=\"{0}\" name=\"{0}\" cols=\"{1}\" rows=\"{2}\">{3}</textarea>",
 			                     name, cols, rows, value);
@@ -997,7 +995,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.InputButton( "valueArg" )
 		/// </code>
 		/// </example>
-		public String InputButton(String value)
+		public virtual String InputButton(String value)
 		{
 			return InputButton(value, value);
 		}
@@ -1009,7 +1007,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
 		/// <returns>HTML string with button type <b>input</b> tag.</returns>
-		public String InputButton(String name, String value)
+		public virtual String InputButton(String name, String value)
 		{
 			return InputButton(name, value, null);
 		}
@@ -1022,7 +1020,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
 		/// <param name="attributes">Additional attributes for the <b>input</b> tag.</param>
 		/// <returns>HTML string with button type <b>input</b> tag.</returns>
-		public String InputButton(String name, String value, IDictionary attributes)
+		public virtual String InputButton(String name, String value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"button\" name=\"{0}\" value=\"{1}\" {2} />",
 			                     name, value, GetAttributes(attributes));
@@ -1043,7 +1041,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>Calling <c>InputCheckbox( "name", "1" )</c> results in:
 		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;name&quot; id=&quot;name&quot; value=&quot;1&quot; /&gt;</code>
 		/// </remarks>
-		public String InputCheckbox(String name, Object value)
+		public virtual String InputCheckbox(String name, Object value)
 		{
 			return InputCheckbox(name, value, null);
 		}
@@ -1056,7 +1054,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
 		/// <param name="isChecked">If true, adds the <c>checked</c> attributed to the tag</param>
 		/// <returns>HTML string with checkbox type <b>input</b> tag.</returns>
-		public String InputCheckbox(String name, Object value, bool isChecked)
+		public virtual String InputCheckbox(String name, Object value, bool isChecked)
 		{
 			IDictionary attributes = null;
 
@@ -1077,7 +1075,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
 		/// <param name="attributes">Additional attributes for the <b>input</b> tag.</param>
 		/// <returns>HTML string with checkbox type <b>input</b> tag.</returns>
-		public String InputCheckbox(String name, Object value, IDictionary attributes)
+		public virtual String InputCheckbox(String name, Object value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"checkbox\" name=\"{0}\" id=\"{0}\" value=\"{1}\" {2} />",
 			                     name, value, GetAttributes(attributes));
@@ -1098,7 +1096,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>Calling <c>InputRadio( "name", "1" )</c> results in:
 		/// <code>&lt;input type=&quot;radio&quot; name=&quot;name&quot; value=&quot;1&quot; /&gt;</code>
 		/// </remarks>
-		public String InputRadio(String name, Object value)
+		public virtual String InputRadio(String name, Object value)
 		{
 			return InputRadio(name, value, null);
 		}
@@ -1111,7 +1109,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
 		/// <param name="attributes">Additional attributes for the <b>input</b> tag.</param>
 		/// <returns>HTML string with radio type <b>input</b> tag.</returns>
-		public String InputRadio(String name, Object value, IDictionary attributes)
+		public virtual String InputRadio(String name, Object value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"radio\" name=\"{0}\" value=\"{1}\" {2} />",
 			                     name, value, GetAttributes(attributes));
@@ -1131,7 +1129,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>Calling <c>InputFile( "name" )</c> results in:
 		/// <code>&lt;input type=&quot;file&quot; name=&quot;name&quot; /&gt;</code>
 		/// </remarks>
-		public String InputFile(String name)
+		public virtual String InputFile(String name)
 		{
 			return InputFile(name, null);
 		}
@@ -1143,7 +1141,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="name">Value for <b>name</b> attribute.</param>
 		/// <param name="attributes">Additional attributes for the <b>input</b> tag.</param>
 		/// <returns>HTML string with file type <b>input</b> tag.</returns>
-		public String InputFile(String name, IDictionary attributes)
+		public virtual String InputFile(String name, IDictionary attributes)
 		{
 			return String.Format("<input type=\"file\" name=\"{0}\" {1} />",
 			                     name, GetAttributes(attributes));
@@ -1169,7 +1167,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.InputText( "nameArg", "valueArg" )
 		/// </code>
 		/// </example>
-		public String InputText(String name, String value)
+		public virtual String InputText(String name, String value)
 		{
 			return InputText(name, value, name);
 		}
@@ -1192,7 +1190,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.InputText( "nameArg", "valueArg", 10, 10 )
 		/// </code>
 		/// </example>
-		public String InputText(String name, String value, int size, int maxlength)
+		public virtual String InputText(String name, String value, int size, int maxlength)
 		{
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" />",
 			                     name, value, size, maxlength);
@@ -1222,7 +1220,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.InputText( "nameArg", "valueArg", 10, 10, IDictionary )
 		/// </code>
 		/// </example>
-		public String InputText(String name, String value, int size, int maxlength, IDictionary attributes)
+		public virtual String InputText(String name, String value, int size, int maxlength, IDictionary attributes)
 		{
 			return
 				String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" {4}/>",
@@ -1245,7 +1243,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.InputText( "nameArg", "valueArg", "idArg" )
 		/// </code>
 		/// </example>
-		public String InputText(String name, String value, String id)
+		public virtual String InputText(String name, String value, String id)
 		{
 			if (id == null) id = name;
 
@@ -1257,7 +1255,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Creates a hidden type input element.
 		/// <code>&lt;input type=&quot;hidden&quot; name=&quot;nameArg&quot; id=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
-		public String InputText(String name, String value, IDictionary attributes)
+		public virtual String InputText(String name, String value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" {2}/>",
 			                     name, value, GetAttributes(attributes));
@@ -1270,7 +1268,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Creates an input element of password type
 		/// </summary>
-		public String InputPassword(String name)
+		public virtual String InputPassword(String name)
 		{
 			return InputPassword(name, null);
 		}
@@ -1278,7 +1276,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Creates an input element of password type
 		/// </summary>
-		public String InputPassword(String name, String value)
+		public virtual String InputPassword(String name, String value)
 		{
 			return InputPassword(name, value, null);
 		}
@@ -1286,7 +1284,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Creates an input element of password type
 		/// </summary>
-		public String InputPassword(String name, String value, IDictionary attributes)
+		public virtual String InputPassword(String name, String value, IDictionary attributes)
 		{
 			if (value == null) value = String.Empty;
 
@@ -1312,7 +1310,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.InputHidden( "nameArg", "valueArg" )
 		/// </code>
 		/// </example>
-		public String InputHidden(String name, String value)
+		public virtual String InputHidden(String name, String value)
 		{
 			return String.Format("<input type=\"hidden\" name=\"{0}\" id=\"{0}\" value=\"{1}\" />", name, value);
 		}
@@ -1338,7 +1336,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.InputHidden( "nameArg", object  )
 		/// </code>
 		/// </example>
-		public String InputHidden(String name, object value)
+		public virtual String InputHidden(String name, object value)
 		{
 			return InputHidden(name, value != null ? value.ToString() : String.Empty);
 		}
@@ -1362,7 +1360,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.SubmitButton( "valueArg" )
 		/// </code>
 		/// </example>
-		public String SubmitButton(String value)
+		public virtual String SubmitButton(String value)
 		{
 			return SubmitButton(value, null);
 		}
@@ -1386,7 +1384,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.SubmitButton( "valueArg", IDictionary )
 		/// </code>
 		/// </example>
-		public String SubmitButton(String value, IDictionary attributes)
+		public virtual String SubmitButton(String value, IDictionary attributes)
 		{
 			StringBuilder sb = new StringBuilder();
 			StringWriter sbWriter = new StringWriter(sb);
@@ -1424,7 +1422,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.EndSelect()
 		/// </code>
 		/// </example>
-		public String Select(String name)
+		public virtual String Select(String name)
 		{
 			return String.Format("<select name=\"{0}\" id=\"{0}\">", name);
 		}
@@ -1450,7 +1448,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.EndSelect()
 		/// </code>
 		/// </example>
-		public String Select(String name, IDictionary attributes)
+		public virtual String Select(String name, IDictionary attributes)
 		{
 			String htmlAttrs = GetAttributes(attributes);
 
@@ -1470,7 +1468,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.EndSelect()
 		/// </code>
 		/// </example>
-		public String EndSelect()
+		public virtual String EndSelect()
 		{
 			return String.Format("</select>");
 		}
@@ -1484,7 +1482,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="label">The label attribute.</param>
 		/// <returns>An opening <b>optgroup</b> element.</returns>
-		public String OptionGroup(String label)
+		public virtual String OptionGroup(String label)
 		{
 			return String.Format("<optgroup label=\"{0}\">", label);
 		}
@@ -1493,7 +1491,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Creates a closing <b>optgroup</b> element.
 		/// </summary>
 		/// <returns>A closing <b>optgroup</b> element.</returns>
-		public String EndOptionGroup()
+		public virtual String EndOptionGroup()
 		{
 			return String.Format("</optgroup>");
 		}
@@ -1501,7 +1499,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// TODO: Document this!
 		/// </summary>
-		public String CreateOption(String text, object value)
+		public virtual String CreateOption(String text, object value)
 		{
 			return CreateOption(text, value, null);
 		}
@@ -1512,7 +1510,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>
 		/// Valid html attributes include: selected and disabled
 		/// </remarks>
-		public String CreateOption(String text, object value, IDictionary htmlAttributes)
+		public virtual String CreateOption(String text, object value, IDictionary htmlAttributes)
 		{
 			if (value != null)
 			{
@@ -1559,7 +1557,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.CreateOptionsFromPrimitiveArray( Array, "selectedArg" )
 		/// </code>
 		/// </example>
-		public String CreateOptionsFromPrimitiveArray(Array elems, String selected)
+		public virtual String CreateOptionsFromPrimitiveArray(Array elems, String selected)
 		{
 			if (elems.GetLength(0) == 0) return String.Empty;
 
@@ -1658,7 +1656,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.CreateOptionsFromArray( ICollection, "textPropertyArg", "valuePropertyArg" )
 		/// </code>
 		/// </example>
-		public String CreateOptionsFromArray(Array elems, String textProperty, String valueProperty)
+		public virtual String CreateOptionsFromArray(Array elems, String textProperty, String valueProperty)
 		{
 			return CreateOptions(elems, textProperty, valueProperty);
 		}
@@ -1749,7 +1747,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.CreateOptionsFromArray( ICollection, "textPropertyArg", "valuePropertyArg", object )
 		/// </code>
 		/// </example>
-		public String CreateOptionsFromArray(Array elems, String textProperty, String valueProperty, object selectedValue)
+		public virtual String CreateOptionsFromArray(Array elems, String textProperty, String valueProperty, object selectedValue)
 		{
 			return CreateOptions(elems, textProperty, valueProperty, selectedValue);
 		}
@@ -1834,7 +1832,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.CreateOptions( ICollection, "textPropertyArg", "valuePropertyArg" )
 		/// </code>
 		/// </example>
-		public String CreateOptions(ICollection elems, String textProperty, String valueProperty)
+		public virtual String CreateOptions(ICollection elems, String textProperty, String valueProperty)
 		{
 			return CreateOptions(elems, textProperty, valueProperty, null);
 		}
@@ -1922,7 +1920,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.CreateOptions( ICollection, "textPropertyArg", "valuePropertyArg", object )
 		/// </code>
 		/// </example>
-		public String CreateOptions(ICollection elems, String textProperty, String valueProperty, object selectedValue)
+		public virtual String CreateOptions(ICollection elems, String textProperty, String valueProperty, object selectedValue)
 		{
 			if (elems == null) throw new ArgumentNullException("elems");
 
@@ -2070,7 +2068,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.BuildUnorderedList( ICollection )
 		/// </code>
 		/// </example>
-		public String BuildUnorderedList(ICollection elements)
+		public virtual String BuildUnorderedList(ICollection elements)
 		{
 			return BuildUnorderedList(elements, null, null);
 		}
@@ -2110,7 +2108,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.BuildUnorderedList( ICollection, "styleClassArg", "itemClassArg" )
 		/// </code>
 		/// </example>
-		public String BuildUnorderedList(ICollection elements, String styleClass, String itemClass)
+		public virtual String BuildUnorderedList(ICollection elements, String styleClass, String itemClass)
 		{
 			return BuildList("ul", elements, styleClass, itemClass);
 		}
@@ -2148,7 +2146,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.BuildOrderedList( ICollection )
 		/// </code>
 		/// </example>
-		public String BuildOrderedList(ICollection elements)
+		public virtual String BuildOrderedList(ICollection elements)
 		{
 			return BuildOrderedList(elements, null, null);
 		}
@@ -2188,7 +2186,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.BuildOrderedList( ICollection, "styleClassArg", "itemClassArg" )
 		/// </code>
 		/// </example>
-		public String BuildOrderedList(ICollection elements, String styleClass, String itemClass)
+		public virtual String BuildOrderedList(ICollection elements, String styleClass, String itemClass)
 		{
 			return BuildList("ol", elements, styleClass, itemClass);
 		}

@@ -131,7 +131,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>An anchor tag</returns>
 		public String CreatePageLinkWithCurrentQueryString(int page, String text, IDictionary htmlAttributes)
 		{
-			NameValueCollection queryStringParams = Controller.Request.QueryString;
+			NameValueCollection queryStringParams = Context.Request.QueryString;
 			IDictionary dictionary = null;
 			if (queryStringParams != null && queryStringParams.Count > 0)
 			{
@@ -155,13 +155,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Creates a <see cref="Page"/> which is a sliced view of
 		/// the data source
 		/// </summary>
-		/// <param name="controller">the current controller</param>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="datasource">Data source to be used as target of the pagination</param>
 		/// <param name="pageSize">Page size</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static IPaginatedPage CreatePagination(Controller controller, IList datasource, int pageSize)
+		public static IPaginatedPage CreatePagination(IEngineContext engineContext, IList datasource, int pageSize)
 		{
-			return CreatePagination(datasource, pageSize, GetCurrentPageFromRequest(controller));
+			return CreatePagination(datasource, pageSize, GetCurrentPageFromRequest(engineContext));
 		}
 
 		/// <summary>
@@ -187,13 +187,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Creates a <see cref="Page"/> which is a sliced view of
 		/// the data source
 		/// </summary>
-		/// <param name="controller">the current controller</param>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="datasource">Data source to be used as target of the pagination</param>
 		/// <param name="pageSize">Page size</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static IPaginatedPage CreatePagination<T>(Controller controller, ICollection<T> datasource, int pageSize)
+		public static IPaginatedPage CreatePagination<T>(IEngineContext engineContext,
+		                                                 ICollection<T> datasource, int pageSize)
 		{
-			return CreatePagination<T>(datasource, pageSize, GetCurrentPageFromRequest(controller));
+			return CreatePagination<T>(datasource, pageSize, GetCurrentPageFromRequest(engineContext));
 		}
 
 		/// <summary>
@@ -204,7 +205,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="pageSize">Page size</param>
 		/// <param name="currentPage">current page index (1 based)</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static IPaginatedPage CreatePagination<T>(ICollection<T> datasource, int pageSize, int currentPage)
+		public static IPaginatedPage CreatePagination<T>(ICollection<T> datasource,
+		                                                 int pageSize, int currentPage)
 		{
 			if (currentPage <= 0) currentPage = 1;
 
@@ -217,38 +219,36 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Creates a <see cref="Page"/> which is a sliced view of
-		/// the data source. This method first looks for the datasource 
-		/// in the <see cref="System.Web.Caching.Cache"/> and if not found, 
+		/// the data source. This method first looks for the datasource
+		/// in the <see cref="System.Web.Caching.Cache"/> and if not found,
 		/// it invokes the <c>dataObtentionCallback</c> and caches the result
 		/// using the specifed <c>cacheKey</c>
 		/// </summary>
-		///
-		/// <remarks>
-		/// CreateCachedPagination is quite dangerous exactly because the cache is
-		/// shared. If the results vary per logged user, then the programmer must
-		/// rather pay a lot of attention when generating the cache key.
-		/// 
-		/// It is preferable to have caching happen at a lower level of the stack, for example the NHibernate query cache.
-		/// </remarks>
-		///
-		/// <param name="controller">the current controller</param>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="cacheKey">Cache key used to query/store the datasource</param>
 		/// <param name="pageSize">Page size</param>
 		/// <param name="dataObtentionCallback">Callback to be used to populate the cache</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static IPaginatedPage CreateCachedPagination(Controller controller, String cacheKey, int pageSize,
+		/// <remarks>
+		/// CreateCachedPagination is quite dangerous exactly because the cache is
+		/// shared. If the results vary per logged user, then the programmer must
+		/// rather pay a lot of attention when generating the cache key.
+		/// It is preferable to have caching happen at a lower level of the stack, for example the NHibernate query cache.
+		/// </remarks>
+		public static IPaginatedPage CreateCachedPagination(IEngineContext engineContext, String cacheKey, int pageSize,
 		                                                    DataObtentionDelegate dataObtentionCallback)
 		{
-			IList datasource = (IList) GetCache(controller).Get(cacheKey);
+			ICacheProvider cacheProvider = engineContext.Services.CacheProvider;
+			IList datasource = (IList) cacheProvider.Get(cacheKey);
 
 			if (datasource == null)
 			{
 				datasource = dataObtentionCallback();
 
-				GetCache(controller).Store(cacheKey, datasource);
+				cacheProvider.Store(cacheKey, datasource);
 			}
 
-			return CreatePagination(controller, datasource, pageSize);
+			return CreatePagination(engineContext, datasource, pageSize);
 		}
 
 		#endregion
@@ -262,14 +262,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Assumes that the slicing is managed by the caller.
 		/// </para>
 		/// </summary>
-		/// <param name="controller">the current controller</param>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="datasource">Data source to be used as target of the pagination</param>
 		/// <param name="pageSize">Page size</param>
 		/// <param name="total">The total of items in the datasource</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static IPaginatedPage CreateCustomPage(Controller controller, IList datasource, int pageSize, int total)
+		public static IPaginatedPage CreateCustomPage(IEngineContext engineContext, IList datasource, int pageSize, int total)
 		{
-			return CreateCustomPage(datasource, pageSize, GetCurrentPageFromRequest(controller), total);
+			return CreateCustomPage(datasource, pageSize, GetCurrentPageFromRequest(engineContext), total);
 		}
 
 		/// <summary>
@@ -303,7 +303,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="total">The total of items in the datasource</param>
 		/// <param name="currentPage">The current page index (1 based).</param>
 		/// <returns></returns>
-		public static IPaginatedPage CreateCustomPage<T>(IList<T> datasource, int pageSize, int currentPage, int total)
+		public static IPaginatedPage CreateCustomPage<T>(IEnumerable<T> datasource, int pageSize, int currentPage, int total)
 		{
 			if (currentPage <= 0) currentPage = 1;
 
@@ -312,14 +312,9 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
-		private static ICacheProvider GetCache(Controller controller)
+		private static int GetCurrentPageFromRequest(IEngineContext engineContext)
 		{
-			return controller.Context.Cache;
-		}
-
-		private static int GetCurrentPageFromRequest(Controller controller)
-		{
-			String currentPage = GetParameter(controller, PageParameterName);
+			String currentPage = GetParameter(engineContext, PageParameterName);
 
 			int curPage = 1;
 
@@ -331,9 +326,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			return curPage <= 0 ? 1 : curPage;
 		}
 
-		private static string GetParameter(Controller controller, string parameterName)
+		private static string GetParameter(IEngineContext engineContext, string parameterName)
 		{
-			return controller.Context.Request.Params[parameterName];
+			return engineContext.Request.Params[parameterName];
 		}
 	}
 
@@ -345,8 +340,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	public class Page : AbstractPage
 	{
 		private readonly IList slice = new ArrayList();
-		private int startIndex;
-		private int endIndex;
+		private readonly int startIndex;
+		private readonly int endIndex;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Page"/> class.
@@ -484,7 +479,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	[Serializable]
 	public class GenericCustomPage<T> : AbstractPage, IEnumerable<T>
 	{
-		private readonly IList<T> sourceList;
+		private readonly IEnumerable<T> sourceList;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericCustomPage&lt;T&gt;"/> class.
@@ -493,7 +488,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="curPage">The cur page.</param>
 		/// <param name="pageSize">Size of the page.</param>
 		/// <param name="total">The total.</param>
-		public GenericCustomPage(IList<T> list, int curPage, int pageSize, int total)
+		public GenericCustomPage(IEnumerable<T> list, int curPage, int pageSize, int total)
 		{
 			int startIndex = (pageSize * curPage) - pageSize;
 			int endIndex = Math.Min(startIndex + pageSize, total);
@@ -510,9 +505,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>Enumerator instance</returns>
 		public override IEnumerator GetEnumerator()
 		{
-			for(int i = 0; i < sourceList.Count; i++)
+			foreach(T item in sourceList)
 			{
-				yield return sourceList[i];
+				yield return item;
 			}
 		}
 
@@ -524,9 +519,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </returns>
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
-			for(int i = 0; i < sourceList.Count; i++)
+			foreach(T item in sourceList)
 			{
-				yield return sourceList[i];
+				yield return item;
 			}
 		}
 	}
@@ -552,7 +547,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="count">Total of elements</param>
 		/// <param name="pageSize">Page size</param>
 		/// <param name="curPage">This page index</param>
-		protected void CalculatePaginationInfo(int startIndex, int endIndex, int count, int pageSize, int curPage)
+		protected void CalculatePaginationInfo(int startIndex, int endIndex,
+		                                       int count, int pageSize, int curPage)
 		{
 			firstItem = count != 0 ? startIndex + 1 : 0;
 			lastItem = endIndex;

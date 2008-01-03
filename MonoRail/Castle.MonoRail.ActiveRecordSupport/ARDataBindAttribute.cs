@@ -72,7 +72,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	/// ActiveRecord specific functionallity
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Parameter), Serializable]
-	public class ARDataBindAttribute : DataBindAttribute, IParameterBinder
+	public class ARDataBindAttribute : DataBindAttribute
 	{
 		private AutoLoadBehavior autoLoad = AutoLoadBehavior.Never;
 		private string expect = null;
@@ -124,20 +124,31 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { expect = value; }
 		}
 
-		public override object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
+		/// <summary>
+		/// Implementation of <see cref="IParameterBinder.Bind"/>
+		/// and it is used to read the data available and construct the
+		/// parameter type accordingly.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="controller">The controller instance</param>
+		/// <param name="controllerContext">The controller context.</param>
+		/// <param name="parameterInfo">The parameter info</param>
+		/// <returns>The bound instance</returns>
+		public override object Bind(IEngineContext context, IController controller, IControllerContext controllerContext, ParameterInfo parameterInfo)
 		{
 			ARDataBinder binder = (ARDataBinder) CreateBinder();
+			IValidatorAccessor validatorAccessor = controller as IValidatorAccessor;
 
-			ConfigureValidator(controller, binder);
+			ConfigureValidator(validatorAccessor, binder);
 
 			binder.AutoLoad = autoLoad;
-			
-			CompositeNode node = controller.ObtainParamsNode(From);
+
+			CompositeNode node = context.Request.ObtainParamsNode(From);
 
 			object instance = binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, Expect, node);
 
-			BindInstanceErrors(controller, binder, instance);
-			PopulateValidatorErrorSummary(controller, binder, instance);
+			BindInstanceErrors(validatorAccessor, binder, instance);
+			PopulateValidatorErrorSummary(validatorAccessor, binder, instance);
 
 			return instance;
 		}

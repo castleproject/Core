@@ -17,18 +17,23 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System;
 	using System.Configuration;
 	using System.Xml;
+	using Castle.Core.Configuration;
+	using Castle.Core.Configuration.Xml;
+	using Castle.MonoRail.Framework.Helpers.ValidationStrategy;
+	using Castle.MonoRail.Framework.JSGeneration.Prototype;
+	using JSGeneration;
 
 	/// <summary>
 	/// Represents the MonoRail external configuration
 	/// </summary>
-	public class MonoRailConfiguration : ISerializedConfig
+	public class MonoRailConfiguration : IMonoRailConfiguration, ISerializedConfig
 	{
 		private static readonly String SectionName = "monorail";
 		private static readonly String AlternativeSectionName = "monoRail";
 
-		private bool checkClientIsConnected, useWindsorIntegration, matchHostNameAndPath, excludeAppPath;
+		private bool matchHostNameAndPath, excludeAppPath;
 		private Type customFilterFactory;
-		private XmlNode configurationSection;
+		private IConfiguration configurationSection;
 
 		private SmtpConfig smtpConfig;
 		private ViewEngineConfig viewEngineConfig;
@@ -36,11 +41,11 @@ namespace Castle.MonoRail.Framework.Configuration
 		private ViewComponentsConfig viewComponentsConfig;
 		private ScaffoldConfig scaffoldConfig;
 		private UrlConfig urlConfig;
-
+		private JSGeneratorConfiguration jsGeneratorConfig;
 		private RoutingRuleCollection routingRules;
 		private ExtensionEntryCollection extensions;
-		private ServiceEntryCollection services;
 		private DefaultUrlCollection defaultUrls;
+		private IConfiguration servicesConfig;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MonoRailConfiguration"/> class.
@@ -55,10 +60,17 @@ namespace Castle.MonoRail.Framework.Configuration
 			urlConfig = new UrlConfig();
 			routingRules = new RoutingRuleCollection();
 			extensions = new ExtensionEntryCollection();
-			services = new ServiceEntryCollection();
 			defaultUrls = new DefaultUrlCollection();
+			jsGeneratorConfig = new JSGeneratorConfiguration();
 
-			checkClientIsConnected = false;
+			jsGeneratorConfig.AddLibrary("prototype-1.5.1", typeof(PrototypeGenerator))
+				.AddExtension(typeof(CommonJSExtension))
+				.AddExtension(typeof(ScriptaculousExtension))
+				.AddExtension(typeof(BehaviourExtension))
+				.BrowserValidatorIs(typeof(PrototypeWebValidator))
+				.SetAsDefault();
+
+			// old routing support related
 			matchHostNameAndPath = false;
 			excludeAppPath = false;
 		}
@@ -69,7 +81,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		/// <param name="section"></param>
 		public MonoRailConfiguration(XmlNode section) : this()
 		{
-			configurationSection = section;
+			configurationSection = XmlConfigurationDeserializer.GetDeserializedNode(section);
 		}
 
 		/// <summary>
@@ -78,19 +90,12 @@ namespace Castle.MonoRail.Framework.Configuration
 		/// <returns></returns>
 		public static MonoRailConfiguration GetConfig()
 		{
-			MonoRailConfiguration config =
+			MonoRailConfiguration config = 
 				ConfigurationManager.GetSection(SectionName) as MonoRailConfiguration;
 
 			if (config == null)
 			{
-				config =
-					ConfigurationManager.GetSection(AlternativeSectionName) as MonoRailConfiguration;
-			}
-
-			if (config == null)
-			{
-				throw new ApplicationException("You have to provide a small configuration to use " +
-				                               "MonoRail. Check the samples or the documentation");
+				config = ConfigurationManager.GetSection(AlternativeSectionName) as MonoRailConfiguration;
 			}
 
 			return config;
@@ -111,7 +116,6 @@ namespace Castle.MonoRail.Framework.Configuration
 			scaffoldConfig.Deserialize(node);
 			urlConfig.Deserialize(node);
 
-			services.Deserialize(node);
 			extensions.Deserialize(node);
 			routingRules.Deserialize(node);
 			defaultUrls.Deserialize(node);
@@ -120,23 +124,11 @@ namespace Castle.MonoRail.Framework.Configuration
 			ProcessMatchHostNameAndPath(node.SelectSingleNode("routing"));
 			ProcessExcludeAppPath(node.SelectSingleNode("routing"));
 
-			XmlAttribute checkClientIsConnectedAtt = node.Attributes["checkClientIsConnected"];
+			XmlNode services = node.SelectSingleNode("services");
 
-			if (checkClientIsConnectedAtt != null && checkClientIsConnectedAtt.Value != String.Empty)
+			if (services != null)
 			{
-				checkClientIsConnected = String.Compare(checkClientIsConnectedAtt.Value, "true", true) == 0;
-			}
-
-			XmlAttribute useWindsorAtt = node.Attributes["useWindsorIntegration"];
-
-			if (useWindsorAtt != null && useWindsorAtt.Value != String.Empty)
-			{
-				useWindsorIntegration = String.Compare(useWindsorAtt.Value, "true", true) == 0;
-
-				if (useWindsorIntegration)
-				{
-					ConfigureWindsorIntegration();
-				}
+				servicesConfig = XmlConfigurationDeserializer.GetDeserializedNode(services);
 			}
 		}
 
@@ -167,6 +159,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		public ControllersConfig ControllersConfig
 		{
 			get { return controllersConfig; }
+			set { controllersConfig = value; }
 		}
 
 		/// <summary>
@@ -176,6 +169,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		public ViewComponentsConfig ViewComponentsConfig
 		{
 			get { return viewComponentsConfig; }
+			set { viewComponentsConfig = value; }
 		}
 
 		/// <summary>
@@ -185,6 +179,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		public RoutingRuleCollection RoutingRules
 		{
 			get { return routingRules; }
+			set { routingRules = value; }
 		}
 
 		/// <summary>
@@ -197,21 +192,13 @@ namespace Castle.MonoRail.Framework.Configuration
 		}
 
 		/// <summary>
-		/// Gets the service entries.
-		/// </summary>
-		/// <value>The service entries.</value>
-		public ServiceEntryCollection ServiceEntries
-		{
-			get { return services; }
-		}
-
-		/// <summary>
 		/// Gets the custom filter factory.
 		/// </summary>
 		/// <value>The custom filter factory.</value>
 		public Type CustomFilterFactory
 		{
 			get { return customFilterFactory; }
+			set { customFilterFactory = value; }
 		}
 
 		/// <summary>
@@ -221,6 +208,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		public ScaffoldConfig ScaffoldConfig
 		{
 			get { return scaffoldConfig; }
+			set { scaffoldConfig = value; }
 		}
 
 		/// <summary>
@@ -229,29 +217,18 @@ namespace Castle.MonoRail.Framework.Configuration
 		/// <value>The url config.</value>
 		public UrlConfig UrlConfig
 		{
-			get { return urlConfig; }	
+			get { return urlConfig; }
+			set { urlConfig = value; }
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether MR should check for client connection.
+		/// Gets or sets the JS generator configuration.
 		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if it should check client is connected; otherwise, <c>false</c>.
-		/// </value>
-		public bool CheckClientIsConnected
+		/// <value>The JS generator configuration.</value>
+		public JSGeneratorConfiguration JSGeneratorConfiguration
 		{
-			get { return checkClientIsConnected; }
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether to use windsor integration.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if it should use windsor integration; otherwise, <c>false</c>.
-		/// </value>
-		public bool UseWindsorIntegration
-		{
-			get { return useWindsorIntegration; }
+			get { return jsGeneratorConfig; }
+			set { jsGeneratorConfig = value; }
 		}
 
 		/// <summary>
@@ -264,6 +241,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		public bool MatchHostNameAndPath
 		{
 			get { return matchHostNameAndPath; }
+			set { matchHostNameAndPath = value; }
 		}
 
 		/// <summary>
@@ -273,15 +251,17 @@ namespace Castle.MonoRail.Framework.Configuration
 		public bool ExcludeAppPath
 		{
 			get { return excludeAppPath; }
+			set { excludeAppPath = value; }
 		}
 
 		/// <summary>
 		/// Gets the configuration section.
 		/// </summary>
 		/// <value>The configuration section.</value>
-		public XmlNode ConfigurationSection
+		public IConfiguration ConfigurationSection
 		{
 			get { return configurationSection; }
+			set { configurationSection = value; }
 		}
 
 		/// <summary>
@@ -291,6 +271,16 @@ namespace Castle.MonoRail.Framework.Configuration
 		public DefaultUrlCollection DefaultUrls
 		{
 			get { return defaultUrls; }
+		}
+
+		/// <summary>
+		/// Gets or sets the services config.
+		/// </summary>
+		/// <value>The services config.</value>
+		public IConfiguration ServicesConfig
+		{
+			get { return servicesConfig; }
+			set { servicesConfig = value; }
 		}
 
 		private void ProcessFilterFactoryNode(XmlNode node)
@@ -332,28 +322,6 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				excludeAppPath = String.Compare(excludeAppPathAtt.Value, "true", true) == 0;
 			}
-		}
-
-		private void ConfigureWindsorIntegration()
-		{
-			const string windsorExtensionAssemblyName = "Castle.MonoRail.WindsorExtension";
-
-			services.RegisterService(ServiceIdentification.ControllerTree, TypeLoadUtil.GetType(
-			                                                               	TypeLoadUtil.GetEffectiveTypeName(
-			                                                               		"Castle.MonoRail.WindsorExtension.ControllerTreeAccessor, " +
-			                                                               		windsorExtensionAssemblyName)));
-
-			controllersConfig.CustomControllerFactory = TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorControllerFactory, " +
-				                                  windsorExtensionAssemblyName));
-
-			viewComponentsConfig.CustomViewComponentFactory = TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorViewComponentFactory, " +
-				                                  windsorExtensionAssemblyName));
-
-			customFilterFactory = TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorFilterFactory, " +
-				                                  windsorExtensionAssemblyName));
 		}
 	}
 }

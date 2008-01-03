@@ -21,9 +21,10 @@ namespace Castle.MonoRail.Framework
 	public interface IControllerAware
 	{
 		/// <summary>
-		/// Sets the controller.
+		/// Sets the controller and its context.
 		/// </summary>
 		/// <param name="controller">The controller.</param>
-		void SetController(Controller controller);
+		/// <param name="context">The controller context.</param>
+		void SetController(IController controller, IControllerContext context);
 	}
 }

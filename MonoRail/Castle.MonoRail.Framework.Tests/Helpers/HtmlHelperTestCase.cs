@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 
 	[TestFixture]
-	public class HtmlHelperTestCase : AbstractTestCase
+	public class HtmlHelperTestCase
 	{
 		[Test]
 		public void FormTag()
@@ -62,20 +62,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			HtmlHelper helper = new HtmlHelper();
 			Assert.AreEqual( "<ul class=\"style1\">" + Environment.NewLine + "<li class=\"style2\">arg1</li>" + Environment.NewLine + "</ul>" + Environment.NewLine, 
 				helper.BuildUnorderedList(args, "style1", "style2") );
-		}
-
-		[Test]
-		public void LinkTo()
-		{
-			DoGet("helper/linkto.rails", "name=Click", "action=href");
-
-			AssertSuccess();
-			AssertReplyEqualTo("<a href=\"/helper/href.rails\">Click</a>");
-
-			DoGet("test/helper2/linkto.rails", "name=Click", "action=href");
-
-			AssertSuccess();
-			AssertReplyEqualTo("<a href=\"/test/helper2/href.rails\">Click</a>");
 		}
 	}
 }

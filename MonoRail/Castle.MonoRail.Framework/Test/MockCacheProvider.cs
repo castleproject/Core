@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// Services the specified provider.
 		/// </summary>
 		/// <param name="provider">The provider.</param>
-		public void Service(IServiceProvider provider)
+		public void Service(IMonoRailServices provider)
 		{	
 		}
 

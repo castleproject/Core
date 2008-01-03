@@ -58,15 +58,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Sets the controller.
+		/// Sets the context.
 		/// </summary>
-		/// <param name="controller">Current view's <see cref="AbstractHelper.Controller"/>.</param>
-		public override void SetController(Controller controller)
+		/// <param name="context">The context.</param>
+		public override void SetContext(IEngineContext context)
 		{
-			base.SetController(controller);
+			base.SetContext(context);
 
-			urlBuilder = controller.Context.GetService<IUrlBuilder>();
-			currentUrl = controller.Context.UrlInfo;
+			urlBuilder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
+			currentUrl = context.UrlInfo;
 		}
 
 		/// <summary>

@@ -17,6 +17,8 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System;
 	using System.Configuration;
 	using System.Xml;
+	using Castle.Core.Configuration;
+	using Castle.Core.Configuration.Xml;
 
 	/// <summary>
 	/// Represents a MonoRail extension configuration entry
@@ -24,8 +26,26 @@ namespace Castle.MonoRail.Framework.Configuration
 	public class ExtensionEntry : ISerializedConfig
 	{
 		private Type extensionType;
-		private XmlNode extensionNode;
-		
+		private IConfiguration extensionNode;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ExtensionEntry"/> class.
+		/// </summary>
+		public ExtensionEntry()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ExtensionEntry"/> class.
+		/// </summary>
+		/// <param name="extensionType">Type of the extension.</param>
+		/// <param name="extensionNode">The extension node.</param>
+		public ExtensionEntry(Type extensionType, IConfiguration extensionNode)
+		{
+			this.extensionType = extensionType;
+			this.extensionNode = extensionNode;
+		}
+
 		#region ISerializedConfig implementation
 
 		/// <summary>
@@ -44,8 +64,8 @@ namespace Castle.MonoRail.Framework.Configuration
 			}
 		
 			extensionType = TypeLoadUtil.GetType(typeAtt.Value);
-			
-			extensionNode = section;
+
+			extensionNode = XmlConfigurationDeserializer.GetDeserializedNode(section);
 		}
 		
 		#endregion
@@ -64,7 +84,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		/// Gets or sets the extension node.
 		/// </summary>
 		/// <value>The extension node.</value>
-		public XmlNode ExtensionNode
+		public IConfiguration ExtensionNode
 		{
 			get { return extensionNode; }
 			set { extensionNode = value; }

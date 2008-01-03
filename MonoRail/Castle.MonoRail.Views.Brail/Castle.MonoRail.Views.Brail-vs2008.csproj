@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CC39D6D0-2467-4DD5-A53E-92D580B60038}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -16,6 +16,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,12 +57,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Boo.Lang.Parser.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -74,22 +74,24 @@
     <Compile Include="BooViewEngineOptions.cs" />
     <Compile Include="BrailBase.cs" />
     <Compile Include="BrailConfigurationSection.cs" />
-    <Compile Include="BrailJSCollectionGenerator.cs" />
     <Compile Include="BrailJSElementGenerator.cs" />
+    <Compile Include="BrailJSGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="BrailPreProcessor.cs" />
     <Compile Include="BrailViewComponentContext.cs" />
-    <Compile Include="BrailJSGenerator.cs" />
     <Compile Include="DslWrapper.cs" />
     <Compile Include="ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.cs">
     </Compile>
     <Compile Include="FixTryGetParameterConditionalChecks.cs" />
     <Compile Include="HtmlExtension.cs" />
     <Compile Include="IDslLanguageExtension.cs" />
-    <Compile Include="IndependentBooViewEngine.cs" />
+    <Compile Include="StandaloneBooViewEngine.cs" />
     <Compile Include="Macros\CodeBuilderHelper.cs" />
     <Compile Include="Macros\ComponentMacro.cs" />
     <Compile Include="CustomTypeSystem.cs" />
     <Compile Include="IgnoreNull.cs" />
+    <Compile Include="Macros\ComponentNaming.cs" />
     <Compile Include="Macros\OutputMacro.cs" />
     <Compile Include="Attributes\OutputMethodAttribute.cs" />
     <Compile Include="Macros\SectionMacro.cs" />
@@ -101,18 +103,22 @@
     <Compile Include="XmlExtension.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
-      <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
-      <Name>Castle.MonoRail.Framework-vs2005</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core-vs2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2008.csproj">
+      <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
+      <Name>Castle.MonoRail.Framework-vs2008</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

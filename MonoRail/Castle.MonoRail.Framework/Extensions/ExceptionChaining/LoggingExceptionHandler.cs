@@ -24,10 +24,10 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// <summary>
 		/// Implementors should perform the action
 		/// on the exception. Note that the exception
-		/// is available in <see cref="IRailsEngineContext.LastException"/>
+		/// is available in <see cref="IEngineContext.LastException"/>
 		/// </summary>
 		/// <param name="context"></param>
-		public override void Process(IRailsEngineContext context)
+		public override void Process(IEngineContext context)
 		{
 			ILoggerFactory factory = (ILoggerFactory) context.GetService(typeof(ILoggerFactory));
 

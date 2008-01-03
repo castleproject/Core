@@ -91,7 +91,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		private IViewComponentFactory GetViewComponentFactory()
 		{
 			IViewComponentFactory compFactory = (IViewComponentFactory) 
-				MonoRailHttpHandler.CurrentContext.GetService(typeof(IViewComponentFactory));
+				MonoRailHttpHandlerFactory.CurrentEngineContext.GetService(typeof(IViewComponentFactory));
 
 			if (compFactory == null)
 			{
@@ -104,7 +104,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		private IViewEngine GetViewEngine()
 		{
 			IViewEngine viewEngine = (IViewEngine)
-				MonoRailHttpHandler.CurrentContext.GetService(typeof(IViewEngine));
+				MonoRailHttpHandlerFactory.CurrentEngineContext.GetService(typeof(IViewEngine));
 
 			if (viewEngine == null)
 			{

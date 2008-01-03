@@ -12,23 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Text;
-
 namespace Castle.MonoRail.Views.Brail
 {
 	using System.Collections;
-	using Castle.MonoRail.Framework;
+	using Boo.Lang.Extensions;
+	using Framework;
 
 	public class BooViewEngineOptions
 	{
-		bool debug;
-		bool batchCompile;
-		bool saveToDisk;
-		string commonScriptsDirectory = "CommonScripts";
-		string saveDirectory = "Brail_Generated_Code";
-	    readonly IList assembliesToReference = new ArrayList();
-	    readonly IList namespacesToImport = new ArrayList();
+		private readonly IList assembliesToReference = new ArrayList();
+		private readonly IList namespacesToImport = new ArrayList();
+		private bool batchCompile;
+		private string commonScriptsDirectory = "CommonScripts";
+		private bool debug;
+		private string saveDirectory = "Brail_Generated_Code";
+		private bool saveToDisk;
+
+		public BooViewEngineOptions()
+		{
+			AssembliesToReference.Add(typeof(BooViewEngineOptions).Assembly); //Brail's assembly
+			AssembliesToReference.Add(typeof(Controller).Assembly); //MonoRail.Framework's assembly
+			AssembliesToReference.Add(typeof(AssertMacro).Assembly); //Boo.Lang.Extensions assembly
+		}
 
 		public bool Debug
 		{
@@ -68,13 +73,6 @@ namespace Castle.MonoRail.Views.Brail
 		public IList NamespacesToImport
 		{
 			get { return namespacesToImport; }
-		}
-
-		public BooViewEngineOptions()
-		{
-			AssembliesToReference.Add(typeof(BooViewEngineOptions).Assembly);//Brail's assembly
-			AssembliesToReference.Add(typeof(Controller).Assembly);//MonoRail.Framework's assembly
-            AssembliesToReference.Add(typeof(Boo.Lang.Extensions.AssertMacro).Assembly);//Boo.Lang.Extensions assembly
 		}
 	}
 }

@@ -14,7 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 {
-	using System.Xml;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// Extends <see cref="IExceptionHandler"/> providing
@@ -29,6 +29,6 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// </summary>
 		/// <param name="exceptionHandlerNode">The Xml node 
 		/// that represents this handler on the configuration file</param>
-		void Configure(XmlNode exceptionHandlerNode);
+		void Configure(IConfiguration exceptionHandlerNode);
 	}
 }

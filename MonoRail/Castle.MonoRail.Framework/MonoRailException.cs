@@ -23,12 +23,28 @@ namespace Castle.MonoRail.Framework
 	[Serializable]
 	public class MonoRailException : ApplicationException
 	{
+		private int? httpStatusCode;
+		private string httpStatusDesc;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MonoRailException"/> class.
 		/// </summary>
 		/// <param name="message">The message.</param>
-		public MonoRailException(String message) : base(message)
+		public MonoRailException(string message) : base(message)
 		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MonoRailException"/> class.
+		/// </summary>
+		/// <param name="httpStatusCode">The HTTP status code.</param>
+		/// <param name="httpStatusDesc">The HTTP status desc.</param>
+		/// <param name="message">The message.</param>
+		public MonoRailException(int httpStatusCode, string httpStatusDesc, string message)
+			: base(message)
+		{
+			this.httpStatusCode = httpStatusCode;
+			this.httpStatusDesc = httpStatusDesc;
 		}
 
 		/// <summary>
@@ -56,6 +72,24 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The contextual information about the source or destination.</param>
 		public MonoRailException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
+		}
+
+		/// <summary>
+		/// Gets the HTTP status code.
+		/// </summary>
+		/// <value>The HTTP status code.</value>
+		public int? HttpStatusCode
+		{
+			get { return httpStatusCode; }
+		}
+
+		/// <summary>
+		/// Gets the HTTP status description.
+		/// </summary>
+		/// <value>The HTTP status description.</value>
+		public string HttpStatusDesc
+		{
+			get { return httpStatusDesc; }
 		}
 	}
 }

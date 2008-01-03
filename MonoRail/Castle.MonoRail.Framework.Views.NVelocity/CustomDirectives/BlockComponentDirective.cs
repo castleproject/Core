@@ -30,20 +30,19 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 		}
 
-		protected override void ProcessSubSections()
+		protected override void ProcessSubSections(ViewComponent component, NVelocityViewContextAdapter contextAdapter)
 		{
 			foreach(SubSectionDirective section in sectionsCreated)
 			{
-				if (!Component.SupportsSection(section.Name))
+				if (!component.SupportsSection(section.Name))
 				{
 					throw new ViewComponentException(
 						String.Format("The section '{0}' is not supported by the ViewComponent '{1}'",
-							section.Name, ComponentName));
+							section.Name, component.Context.ComponentName));
 				}
 
-				ContextAdapter.RegisterSection(section);
-
-				section.ContextAdapter = ContextAdapter;
+				contextAdapter.RegisterSection(section);
+				section.ContextAdapter = contextAdapter;
 			}
 		}
 

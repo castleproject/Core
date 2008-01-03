@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.WindsorExtension
 {
 	using System.Xml;
-
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 

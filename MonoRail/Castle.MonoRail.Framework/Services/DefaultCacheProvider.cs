@@ -30,14 +30,14 @@ namespace Castle.MonoRail.Framework.Services
 		/// </summary>
 		private ILogger logger = NullLogger.Instance;
 		
-		#region IServiceEnabledComponent implementation
+		#region IMRServiceEnabled implementation
 		
 		/// <summary>
 		/// Invoked by the framework in order to give a chance to
 		/// obtain other services
 		/// </summary>
 		/// <param name="provider">The service proviver</param>
-		public void Service(IServiceProvider provider)
+		public void Service(IMonoRailServices provider)
 		{
 			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
 			

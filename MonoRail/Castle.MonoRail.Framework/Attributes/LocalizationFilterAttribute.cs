@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using Filters;
+	using Castle.MonoRail.Framework.Filters;
 
 	/// <summary>
 	/// This is an special filter attribute. It is used

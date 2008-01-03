@@ -30,7 +30,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// Prevents next handler from invoked if the request is local.
 		/// </summary>
 		/// <param name="context"></param>
-		public override void Process(IRailsEngineContext context)
+		public override void Process(IEngineContext context)
 		{
 			if (context.Request.IsLocal)
 			{

@@ -14,14 +14,8 @@
 
 namespace Castle.MonoRail.Framework.Tests.Controllers
 {
-	using System;
-
 	public class HomeController : Controller
 	{
-		public HomeController()
-		{
-		}
-
 		public void Index()
 		{
 		}

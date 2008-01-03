@@ -15,8 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-
-	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Descriptors;
 
 	/// <summary>
 	/// Associates a helper class with the controller.

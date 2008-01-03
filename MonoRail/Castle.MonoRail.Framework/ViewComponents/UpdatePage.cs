@@ -15,14 +15,14 @@
 namespace Castle.MonoRail.Framework.ViewComponents
 {
 	using System.IO;
-	using Helpers;
+	using JSGeneration;
 
 	/// <summary>
 	/// Renders a javascript content that changes the page 
 	/// elements using a special dsl-like language.
 	/// </summary>
 	/// 
-	/// <seealso cref="PrototypeHelper"/>
+	/// <seealso cref="IJSGenerator"/>
 	/// 
 	/// <example>
 	/// The following illustrates its use.
@@ -50,17 +50,25 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		/// <summary>
 		/// Evaluates the component's body providing a <c>page</c>
-		/// instance which is a <see cref="PrototypeHelper"/>
+		/// instance which is a <see cref="IJSGenerator"/>
 		/// </summary>
 		/// <returns></returns>
 		protected string GenerateJS()
 		{
-			object generator = Context.ViewEngine.CreateJSGenerator(RailsContext);
+			IViewEngineManager viewEngManager = EngineContext.Services.ViewEngineManager;
+			IViewEngine viewEngine = Context.ViewEngine;
+			IController currentController = EngineContext.CurrentController;
+			IControllerContext currentControllerCtx = EngineContext.CurrentControllerContext;
+
+			JSCodeGeneratorInfo jsCodeGen =
+				viewEngManager.CreateJSCodeGeneratorInfo(EngineContext, currentController, currentControllerCtx);
+
+			object generator = viewEngine.CreateJSGenerator(jsCodeGen, EngineContext, currentController, currentControllerCtx);
 
 			PropertyBag["page"] = generator;
 
-			Context.RenderBody(new StringWriter());
-			
+			Context.RenderBody(new StringWriter()); // Just for evaluation of generator
+
 			PropertyBag.Remove("page");
 
 			return generator.ToString();

@@ -27,17 +27,16 @@ namespace Castle.MonoRail.Framework.Test
 	public class MockResponse : IMockResponse
 	{
 		private readonly IDictionary cookies;
-		private int statusCode = 400;
+		private int statusCode = 200;
+		private string statusDescription = "OK";
 		private string contentType = "text/html";
-		private string cacheControlHeader = null;
+		private string cacheControlHeader;
 		private string charset = "ISO-8859-1";
 		private string redirectedTo;
 		private bool wasRedirected = false;
 		private bool isClientConnected = false;
-		private TextWriter output = new StringWriter();
-		private Stream outputStream = new MemoryStream();
-		private TextWriter outputStreamWriter;
-		private HttpCachePolicy cachePolicy = null;
+		private StringWriter output;
+		private HttpCachePolicy cachePolicy;
 		private NameValueCollection headers = new NameValueCollection();
 
 		/// <summary>
@@ -47,7 +46,14 @@ namespace Castle.MonoRail.Framework.Test
 		public MockResponse(IDictionary cookies)
 		{
 			this.cookies = cookies;
-			outputStreamWriter = new StreamWriter(outputStream);
+			output = new StringWriter();
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockResponse"/> class.
+		/// </summary>
+		public MockResponse() : this(new Hashtable())
+		{
 		}
 
 		/// <summary>
@@ -59,14 +65,14 @@ namespace Castle.MonoRail.Framework.Test
 			get { return redirectedTo; }
 		}
 
-		/// <summary>
-		/// Gets the http headers.
-		/// </summary>
-		/// <value>The headers.</value>
-		public virtual NameValueCollection Headers
-		{
-			get { return headers; }
-		}
+//		/// <summary>
+//		/// Gets the http headers.
+//		/// </summary>
+//		/// <value>The headers.</value>
+//		public virtual NameValueCollection Headers
+//		{
+//			get { return headers; }
+//		}
 
 		#region IResponse Related
 
@@ -80,34 +86,34 @@ namespace Castle.MonoRail.Framework.Test
 			headers[name] = value;
 		}
 
-		/// <summary>
-		/// Writes the buffer to the browser
-		/// </summary>
-		/// <param name="buffer">The buffer.</param>
-		public virtual void BinaryWrite(byte[] buffer)
-		{
-			outputStream.Write(buffer, 0, buffer.Length);
-		}
-
-		/// <summary>
-		/// Writes the stream to the browser
-		/// </summary>
-		/// <param name="stream">The stream.</param>
-		public virtual void BinaryWrite(Stream stream)
-		{
-			byte[] buffer = new byte[stream.Length];
-
-			stream.Read(buffer, 0, buffer.Length);
-
-			BinaryWrite(buffer);
-		}
+//		/// <summary>
+//		/// Writes the buffer to the browser
+//		/// </summary>
+//		/// <param name="buffer">The buffer.</param>
+//		public virtual void BinaryWrite(byte[] buffer)
+//		{
+//			outputStream.Write(buffer, 0, buffer.Length);
+//		}
+//
+//		/// <summary>
+//		/// Writes the stream to the browser
+//		/// </summary>
+//		/// <param name="stream">The stream.</param>
+//		public virtual void BinaryWrite(Stream stream)
+//		{
+//			byte[] buffer = new byte[stream.Length];
+//
+//			stream.Read(buffer, 0, buffer.Length);
+//
+//			BinaryWrite(buffer);
+//		}
 
 		/// <summary>
 		/// Clears the response (only works if buffered)
 		/// </summary>
 		public virtual void Clear()
 		{
-			outputStream.SetLength(0);
+			output.GetStringBuilder().Length = 0;
 		}
 
 		/// <summary>
@@ -115,7 +121,6 @@ namespace Castle.MonoRail.Framework.Test
 		/// </summary>
 		public virtual void ClearContent()
 		{
-			outputStreamWriter.Flush();
 		}
 
 		/// <summary>
@@ -124,7 +129,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="s">The string.</param>
 		public virtual void Write(string s)
 		{
-			outputStreamWriter.Write(s);
+			output.Write(s);
 		}
 
 		/// <summary>
@@ -133,7 +138,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="obj">The obj.</param>
 		public virtual void Write(object obj)
 		{
-			outputStreamWriter.Write(obj);
+			output.Write(obj);
 		}
 
 		/// <summary>
@@ -142,7 +147,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="ch">The char.</param>
 		public virtual void Write(char ch)
 		{
-			outputStreamWriter.Write(ch);
+			output.Write(ch);
 		}
 
 		/// <summary>
@@ -153,16 +158,25 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="count">The count.</param>
 		public virtual void Write(char[] buffer, int index, int count)
 		{
-			outputStreamWriter.Write(buffer, index, count);
+			output.Write(buffer, index, count);
 		}
 
+//		/// <summary>
+//		/// Writes the file.
+//		/// </summary>
+//		/// <param name="fileName">Name of the file.</param>
+//		public virtual void WriteFile(string fileName)
+//		{
+//			throw new NotImplementedException();
+//		}
+
 		/// <summary>
-		/// Writes the file.
+		/// Redirects the specified controller.
 		/// </summary>
-		/// <param name="fileName">Name of the file.</param>
-		public virtual void WriteFile(string fileName)
+		/// <param name="parameters">The parameters.</param>
+		public void Redirect(object parameters)
 		{
-			throw new NotImplementedException();
+			// TODO: figure a way to do this
 		}
 
 		/// <summary>
@@ -172,7 +186,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="action">The action.</param>
 		public virtual void Redirect(string controller, string action)
 		{
-			Redirect(BuildMockUrl(null, controller, action));
+			RedirectToUrl(BuildMockUrl(null, controller, action));
 		}
 
 		/// <summary>
@@ -183,7 +197,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="action">The action.</param>
 		public virtual void Redirect(string area, string controller, string action)
 		{
-			Redirect(BuildMockUrl(area, controller, action));
+			RedirectToUrl(BuildMockUrl(area, controller, action));
 		}
 
 		/// <summary>
@@ -194,7 +208,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="parameters">Key/value pairings</param>
 		public void Redirect(string controller, string action, NameValueCollection parameters)
 		{
-			Redirect(BuildMockUrl(controller, action, parameters));
+			RedirectToUrl(BuildMockUrl(controller, action, parameters));
 		}
 
 		/// <summary>
@@ -206,7 +220,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="parameters">Key/value pairings</param>
 		public void Redirect(string area, string controller, string action, NameValueCollection parameters)
 		{
-			Redirect(BuildMockUrl(area, controller, action, parameters));
+			RedirectToUrl(BuildMockUrl(area, controller, action, parameters));
 		}
 
 		/// <summary>
@@ -217,7 +231,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="parameters">Key/value pairings</param>
 		public void Redirect(string controller, string action, IDictionary parameters)
 		{
-			Redirect(BuildMockUrl(controller, action, parameters));
+			RedirectToUrl(BuildMockUrl(controller, action, parameters));
 		}
 
 		/// <summary>
@@ -229,14 +243,14 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="parameters">Key/value pairings</param>
 		public void Redirect(string area, string controller, string action, IDictionary parameters)
 		{
-			Redirect(BuildMockUrl(area, controller, action, parameters));
+			RedirectToUrl(BuildMockUrl(area, controller, action, parameters));
 		}
 
 		/// <summary>
 		/// Redirects the specified URL.
 		/// </summary>
 		/// <param name="url">The URL.</param>
-		public virtual void Redirect(string url)
+		public virtual void RedirectToUrl(string url)
 		{
 			wasRedirected = true;
 			redirectedTo = url;
@@ -247,9 +261,9 @@ namespace Castle.MonoRail.Framework.Test
 		/// </summary>
 		/// <param name="url">The URL.</param>
 		/// <param name="endProcess">if set to <c>true</c> [end process].</param>
-		public virtual void Redirect(string url, bool endProcess)
+		public virtual void RedirectToUrl(string url, bool endProcess)
 		{
-			Redirect(url);
+			RedirectToUrl(url);
 		}
 
 		/// <summary>
@@ -279,7 +293,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="cookie">The cookie.</param>
 		public virtual void CreateCookie(HttpCookie cookie)
 		{
-			throw new NotSupportedException();
+			CreateCookie(cookie.Name, cookie.Value);
 		}
 
 		/// <summary>
@@ -302,6 +316,16 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
+		/// Gets or sets the status description.
+		/// </summary>
+		/// <value>The status code.</value>
+		public string StatusDescription
+		{
+			get { return statusDescription; }
+			set { statusDescription = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets the type of the content.
 		/// </summary>
 		/// <value>The type of the content.</value>
@@ -319,6 +343,7 @@ namespace Castle.MonoRail.Framework.Test
 		public HttpCachePolicy CachePolicy
 		{
 			get { return cachePolicy; }
+			set { cachePolicy = value; }
 		}
 
 		/// <summary>
@@ -348,6 +373,7 @@ namespace Castle.MonoRail.Framework.Test
 		public virtual TextWriter Output
 		{
 			get { return output; }
+			set { output = (StringWriter) value; }
 		}
 
 		/// <summary>
@@ -356,7 +382,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <value>The output stream.</value>
 		public virtual Stream OutputStream
 		{
-			get { return outputStream; }
+			get { return new MemoryStream(); }
 		}
 
 		/// <summary>
@@ -377,6 +403,15 @@ namespace Castle.MonoRail.Framework.Test
 		public virtual bool IsClientConnected
 		{
 			get { return isClientConnected; }
+		}
+
+		/// <summary>
+		/// Gets the output.
+		/// </summary>
+		/// <value>The output.</value>
+		public string OutputContent
+		{
+			get { return output.GetStringBuilder().ToString(); }
 		}
 
 		#endregion

@@ -1,9 +1,0 @@
-$!msg
-$!msg.To
-$!msg.Cc
-$!msg.Bcc
-$!msg.Subject
-$!msg.Priority
-$!msg.Headers.Count
-$!msg.Format
-$!msg.Body

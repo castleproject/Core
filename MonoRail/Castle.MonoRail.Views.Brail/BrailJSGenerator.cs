@@ -16,16 +16,23 @@ namespace Castle.MonoRail.Views.Brail
 {
 	using System;
 	using Boo.Lang;
-	using Castle.MonoRail.Framework.Helpers;
-	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.JSGeneration;
+	using Castle.MonoRail.Framework.JSGeneration.DynamicDispatching;
 
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BrailJSGenerator : JSGeneratorBase, IQuackFu
+	public class BrailJSGenerator : JSGeneratorDispatcherBase, IQuackFu
 	{
-		public BrailJSGenerator(PrototypeHelper.JSGenerator generator)
-			: base(generator)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BrailJSGenerator"/> class.
+		/// </summary>
+		/// <param name="codeGen">The code gen.</param>
+		/// <param name="generator">The generator.</param>
+		/// <param name="extensions">The extensions.</param>
+		/// <param name="elementExtensions">The element extensions.</param>
+		public BrailJSGenerator(IJSCodeGenerator codeGen, IJSGenerator generator, object[] extensions, object[] elementExtensions) : 
+			base(codeGen, generator, extensions, elementExtensions)
 		{
 		}
 
@@ -60,19 +67,15 @@ namespace Castle.MonoRail.Views.Brail
 		public object QuackInvoke(string method, params object[] args)
 		{
 			if (method == "get_Item")
+			{
 				method = "el";
+			}
 			return InternalInvoke(method, args);
 		}
 
-		/// <summary>
-		/// Delegates to the generator
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
-		/// </returns>
 		public override string ToString()
 		{
-			return generator.ToString();
+			return CodeGen.ToString();
 		}
 
 		protected override object CreateNullGenerator()
@@ -80,14 +83,10 @@ namespace Castle.MonoRail.Views.Brail
 			return null;
 		}
 
-		protected override object CreateJSCollectionGenerator(IJSCollectionGenerator collectionGenerator)
+		protected override object CreateJSElementGeneratorProxy(IJSCodeGenerator codeGen, IJSElementGenerator elementGenerator,
+		                                                        object[] elementExtensions)
 		{
-			return new BrailJSCollectionGenerator(collectionGenerator);
-		}
-
-		protected override object CreateJSElementGenerator(IJSElementGenerator elementGenerator)
-		{
-			return new BrailJSElementGenerator(elementGenerator);
+			return new BrailJSElementGenerator(codeGen, elementGenerator, elementExtensions);
 		}
 	}
 }

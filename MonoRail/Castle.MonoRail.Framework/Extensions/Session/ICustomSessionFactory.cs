@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		IDictionary ObtainSession(IRailsEngineContext context);
+		IDictionary ObtainSession(IEngineContext context);
 
 		/// <summary>
 		/// Should persist the session state associated with the context (again, a cookie 
@@ -36,6 +36,6 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// </summary>
 		/// <param name="session"></param>
 		/// <param name="context"></param>
-		void PersistSession(IDictionary session, IRailsEngineContext context);
+		void PersistSession(IDictionary session, IEngineContext context);
 	}
 }

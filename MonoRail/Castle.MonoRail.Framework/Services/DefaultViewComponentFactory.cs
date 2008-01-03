@@ -101,7 +101,7 @@ namespace Castle.MonoRail.Framework.Services
 				logger = loggerFactory.Create(typeof(DefaultViewComponentFactory));
 			}
 
-			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
+			IMonoRailConfiguration config = (IMonoRailConfiguration) provider.GetService(typeof(IMonoRailConfiguration));
 			
 			if (config != null)
 			{
@@ -111,7 +111,7 @@ namespace Castle.MonoRail.Framework.Services
 				{
 					// Convetion: uses the controller assemblies in this case
 					
-					assemblies = config.ControllersConfig.Assemblies;
+					assemblies = config.ControllersConfig.Assemblies.ToArray();
 				}
 			}
 		}

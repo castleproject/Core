@@ -15,9 +15,9 @@
 namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Reflection;
-	using System.Xml;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// This class expects to be configured with exclude types that detail the types of 
@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	/// </summary>
 	public class FilteredExceptionHandler : AbstractExceptionHandler, IConfigurableHandler
 	{
-		private ArrayList excludedTypes = new ArrayList();
+		private List<Type> excludedTypes = new List<Type>();
 
 		/// <summary>
 		/// Implementors should check for known attributes and child nodes
@@ -37,12 +37,17 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// </summary>
 		/// <param name="exceptionHandlerNode">The Xml node
 		/// that represents this handler on the configuration file</param>
-		public void Configure(XmlNode exceptionHandlerNode)
+		public void Configure(IConfiguration exceptionHandlerNode)
 		{
-			XmlNodeList excludeNodes = exceptionHandlerNode.SelectNodes("exclude");
-			foreach (XmlNode excludeNode in excludeNodes)
+			foreach(IConfiguration excludeNode in exceptionHandlerNode.Children)
 			{
-				string excludedType = excludeNode.Attributes["type"].Value;
+				if (excludeNode.Name != "exclude")
+				{
+					continue;
+				}
+
+				string excludedType = excludeNode.Attributes["type"];
+
 				excludedTypes.Add(Type.GetType(excludedType, true));
 			}
 		}
@@ -50,14 +55,15 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// <summary>
 		/// Implementors should perform the action
 		/// on the exception. Note that the exception
-		/// is available in <see cref="IRailsEngineContext.LastException"/>
+		/// is available in <see cref="IEngineContext.LastException"/>
 		/// </summary>
 		/// <param name="context"></param>
-		public override void Process(IRailsEngineContext context)
+		public override void Process(IEngineContext context)
 		{
 			Exception ex = context.LastException is TargetInvocationException
 			               	? context.LastException.InnerException
 			               	: context.LastException;
+
 			if (!excludedTypes.Contains(ex.GetType()))
 			{
 				InvokeNext(context);

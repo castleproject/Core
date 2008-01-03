@@ -36,7 +36,7 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 			singlePage = new Page(new string[] {"a", "b", "c"}, 1, 4, 1);
 			secondPageOfThree = new Page(new string[] {"a", "b", "c", "d"}, 2, 4, 10);
 
-			BuildRailsContext("area", "controller", "action");
+			BuildEngineContext("area", "controller", "action");
 		}
 
 		[TearDown]
@@ -59,9 +59,9 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 		{
 			List<string> actions = new List<string>();
 
-			SectionRender["startblock"] = delegate(IDictionary context, TextWriter writer) { actions.Add("started"); };
-			SectionRender["endblock"] = delegate(IDictionary context, TextWriter writer) { actions.Add("ended"); };
-			SectionRender["link"] = delegate(IDictionary context, TextWriter writer) { actions.Add("link"); };
+			SectionRender["startblock"] = delegate { actions.Add("started"); };
+			SectionRender["endblock"] = delegate { actions.Add("ended"); };
+			SectionRender["link"] = delegate { actions.Add("link"); };
 
 			diggComponent.Page = singlePage;
 			Request.FilePath = "/something";
@@ -78,9 +78,9 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 		{
 			List<string> actions = new List<string>();
 
-			SectionRender["startblock"] = delegate(IDictionary context, TextWriter writer) { actions.Add("started"); };
-			SectionRender["endblock"] = delegate(IDictionary context, TextWriter writer) { actions.Add("ended"); };
-			SectionRender["link"] = delegate(IDictionary context, TextWriter writer) { actions.Add("link"); };
+			SectionRender["startblock"] = delegate { actions.Add("started"); };
+			SectionRender["endblock"] = delegate { actions.Add("ended"); };
+			SectionRender["link"] = delegate { actions.Add("link"); };
 
 			diggComponent.Page = secondPageOfThree;
 			Request.FilePath = "/something";

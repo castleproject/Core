@@ -15,8 +15,9 @@
 namespace Castle.MonoRail.Framework.Configuration
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Configuration;
+	using System.Reflection;
 	using System.Xml;
 
 	/// <summary>
@@ -24,9 +25,16 @@ namespace Castle.MonoRail.Framework.Configuration
 	/// </summary>
 	public class ControllersConfig : ISerializedConfig
 	{
-		private String[] assemblies;
+		private readonly List<string> assemblies = new List<string>();
 		private Type customControllerFactory;
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllersConfig"/> class.
+		/// </summary>
+		public ControllersConfig()
+		{
+		}
+
 		#region ISerializedConfig implementation
 
 		/// <summary>
@@ -55,31 +63,49 @@ namespace Castle.MonoRail.Framework.Configuration
 			
 			XmlNodeList nodeList = section.SelectNodes("controllers/assembly");
 			
-			ArrayList items = new ArrayList();
-			
 			foreach(XmlNode node in nodeList)
 			{
-				items.Add(node.ChildNodes[0].Value);
+				assemblies.Add(node.ChildNodes[0].Value);
 			}
-			
-			assemblies = (String[]) items.ToArray(typeof(String));
 		}
 		
 		#endregion
 
 		/// <summary>
+		/// Adds an assembly that should be source of controllers.
+		/// </summary>
+		/// <param name="assembly">The assembly.</param>
+		public void AddAssembly(Assembly assembly)
+		{
+			if (assembly == null) throw new ArgumentNullException("assembly");
+
+			assemblies.Add(assembly.FullName);
+		}
+
+		/// <summary>
+		/// Adds an assembly that should be source of controllers.
+		/// </summary>
+		/// <param name="assemblyName">Name of the assembly.</param>
+		public void AddAssembly(string assemblyName)
+		{
+			if (assemblyName == null) throw new ArgumentNullException("assemblyName");
+
+			assemblies.Add(assemblyName);
+		}
+
+		/// <summary>
 		/// Gets or sets the assemblies.
 		/// </summary>
 		/// <value>The assemblies.</value>
-		public string[] Assemblies
+		public List<string> Assemblies
 		{
 			get { return assemblies; }
-			set { assemblies = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the custom controller factory.
 		/// </summary>
+		/// <seealso cref="IControllerFactory"/>
 		/// <value>The custom controller factory.</value>
 		public Type CustomControllerFactory
 		{

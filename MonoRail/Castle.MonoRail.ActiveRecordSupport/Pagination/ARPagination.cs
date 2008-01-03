@@ -56,6 +56,15 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		}
 
 		/// <summary>
+		/// Paginates using an <see cref="ARPaginableCriteria"/>
+		/// </summary>
+		public static IPaginatedPage CreatePagination(int pageSize, Type targetType, DetachedCriteria detachedCriteria)
+		{
+			IARPaginableDataSource criteria = new ARPaginableCriteria(targetType, detachedCriteria);
+			return CreatePagination(pageSize, criteria);
+		}
+
+		/// <summary>
 		/// Paginates using the specified <see cref="IARPaginableDataSource"/>.
 		/// </summary>
 		public static IPaginatedPage CreatePagination(int pageSize, IARPaginableDataSource criteria)
@@ -63,52 +72,10 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 			return new ARPager(pageSize, criteria, ObtainCurrentPage());
 		}
 
-//		/// <summary>
-//		/// Paginates using the specified <see cref="SimpleQuery{T}"/>.
-//		/// </summary>
-//		/// <param name="pageSize">The page size</param>
-//		/// <param name="query">The query</param>
-//		/// <param name="useEnumerate">If true, calls <see cref="SimpleQuery{T}.Enumerate()"/> instead of <see cref="SimpleQuery{T}.Execute()"/>.</param>
-//		public static IPaginatedPage CreatePagination<T>(int pageSize, SimpleQuery<T> query, bool useEnumerate)
-//		{
-//			return CreatePagination(pageSize, new SimpleQueryPaginableWrapper<T>(query, useEnumerate));
-//		}
-//
-//		private class SimpleQueryPaginableWrapper<T> : IARPaginableDataSource
-//		{
-//			private readonly SimpleQuery<T> query;
-//			private readonly bool useEnumerate;
-//
-//			public SimpleQueryPaginableWrapper(SimpleQuery<T> query, bool useEnumerate)
-//			{
-//				this.query = query;
-//				this.useEnumerate = useEnumerate;
-//			}
-//
-//			public int ObtainCount()
-//			{
-//				return query.Count();
-//			}
-//
-//			public IEnumerable ListAll()
-//			{
-//				return query.Execute();
-//			}
-//
-//			public IEnumerable Paginate(int pageSize, int currentPage)
-//			{
-//				SimpleQuery<T> queryClone = (SimpleQuery<T>) query.Clone();
-//				queryClone.SetQueryRange((currentPage - 1) * pageSize, pageSize);
-//				if (useEnumerate)
-//					return queryClone.Enumerate();
-//				else
-//					return queryClone.Execute();
-//			}
-//		}
-
 		private static int ObtainCurrentPage()
 		{
-			String page = MonoRailHttpHandler.CurrentContext.Request.Params["page"];
+			// Tight coupling that makes difficult to test. Review this!
+			String page = MonoRailHttpHandlerFactory.CurrentEngineContext.Request.Params["page"];
 			return page == null || Regex.IsMatch(page, "\\D")
 				? 1 : Convert.ToInt32(page);
 		}

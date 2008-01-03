@@ -14,8 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 {
-	using System;
-
 	/// <summary>
 	/// Provides a service which generates a <em>JavaScript</em> block, that
 	/// can be used to call Ajax actions on the controller.
@@ -29,6 +27,6 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 		/// <param name="proxyName">Name of the javascript proxy object</param>
 		/// <param name="controller">Controller which will be target of the proxy</param>
 		/// <param name="area">area which the controller belongs to</param>
-		String GenerateJSProxy(IRailsEngineContext context, String proxyName, String area, String controller);
+		string GenerateJSProxy(IEngineContext context, string proxyName, string area, string controller);
 	}
 }

@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		IHttpHandler ObtainMonoRailHttpHandler(IRailsEngineContext context);
+		IHttpHandler ObtainMonoRailHttpHandler(IEngineContext context);
 
 		/// <summary>
 		/// Implementors should perform their logic 

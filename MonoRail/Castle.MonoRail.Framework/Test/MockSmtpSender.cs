@@ -21,13 +21,13 @@ namespace Castle.MonoRail.Framework.Test
 	/// </summary>
 	public class MockSmtpSender : IEmailSender
 	{
-		private readonly MockRailsEngineContext context;
+		private readonly MockEngineContext context;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockSmtpSender"/> class.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public MockSmtpSender(MockRailsEngineContext context)
+		public MockSmtpSender(MockEngineContext context)
 		{
 			this.context = context;
 		}

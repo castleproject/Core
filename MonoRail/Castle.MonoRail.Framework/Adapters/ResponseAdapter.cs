@@ -20,6 +20,8 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.IO;
 	using System.Web;
 	using Castle.MonoRail.Framework;
+	using Core;
+	using Services;
 
 	/// <summary>
 	/// Adapts the <see cref="IResponse"/> to
@@ -27,19 +29,22 @@ namespace Castle.MonoRail.Framework.Adapters
 	/// </summary>
 	public class ResponseAdapter : IResponse
 	{
-		private readonly IRailsEngineContext context;
 		private readonly HttpResponse response;
+		private readonly UrlInfo currentUrl;
+		private readonly IUrlBuilder urlBuilder;
 		private bool redirected;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ResponseAdapter"/> class.
 		/// </summary>
 		/// <param name="response">The response.</param>
-		/// <param name="context">The parent context.</param>
-		public ResponseAdapter(HttpResponse response, IRailsEngineContext context)
+		/// <param name="currentUrl">The current URL.</param>
+		/// <param name="urlBuilder">The URL builder.</param>
+		public ResponseAdapter(HttpResponse response, UrlInfo currentUrl, IUrlBuilder urlBuilder)
 		{
 			this.response = response;
-			this.context = context;
+			this.currentUrl = currentUrl;
+			this.urlBuilder = urlBuilder;
 		}
 
 		/// <summary>
@@ -80,6 +85,16 @@ namespace Castle.MonoRail.Framework.Adapters
 		}
 
 		/// <summary>
+		/// Gets or sets the status code.
+		/// </summary>
+		/// <value>The status code.</value>
+		public string StatusDescription
+		{
+			get { return response.StatusDescription; }
+			set { response.StatusDescription = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets the content type.
 		/// </summary>
 		/// <value>The type of the content.</value>
@@ -117,27 +132,27 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return response.OutputStream; }
 		}
 
-		/// <summary>
-		/// Writes the buffer to the browser
-		/// </summary>
-		/// <param name="buffer">The buffer.</param>
-		public void BinaryWrite(byte[] buffer)
-		{
-			response.BinaryWrite(buffer);
-		}
-
-		/// <summary>
-		/// Writes the stream to the browser
-		/// </summary>
-		/// <param name="stream">The stream.</param>
-		public void BinaryWrite(Stream stream)
-		{
-			byte[] buffer = new byte[stream.Length];
-
-			stream.Read(buffer, 0, buffer.Length);
-
-			BinaryWrite(buffer);
-		}
+//		/// <summary>
+//		/// Writes the buffer to the browser
+//		/// </summary>
+//		/// <param name="buffer">The buffer.</param>
+//		public void BinaryWrite(byte[] buffer)
+//		{
+//			response.BinaryWrite(buffer);
+//		}
+//
+//		/// <summary>
+//		/// Writes the stream to the browser
+//		/// </summary>
+//		/// <param name="stream">The stream.</param>
+//		public void BinaryWrite(Stream stream)
+//		{
+//			byte[] buffer = new byte[stream.Length];
+//
+//			stream.Read(buffer, 0, buffer.Length);
+//
+//			BinaryWrite(buffer);
+//		}
 
 		/// <summary>
 		/// Clears the response (only works if buffered)
@@ -193,20 +208,20 @@ namespace Castle.MonoRail.Framework.Adapters
 			response.Write(buffer, index, count);
 		}
 
-		/// <summary>
-		/// Writes the file.
-		/// </summary>
-		/// <param name="fileName">Name of the file.</param>
-		public void WriteFile(String fileName)
-		{
-			response.WriteFile(fileName);
-		}
+//		/// <summary>
+//		/// Writes the file.
+//		/// </summary>
+//		/// <param name="fileName">Name of the file.</param>
+//		public void WriteFile(String fileName)
+//		{
+//			response.WriteFile(fileName);
+//		}
 
 		/// <summary>
 		/// Redirects the specified URL.
 		/// </summary>
 		/// <param name="url">The URL.</param>
-		public void Redirect(String url)
+		public void RedirectToUrl(String url)
 		{
 			redirected = true;
 
@@ -218,7 +233,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="url">The URL.</param>
 		/// <param name="endProcess">if set to <c>true</c> [end process].</param>
-		public void Redirect(String url, bool endProcess)
+		public void RedirectToUrl(String url, bool endProcess)
 		{
 			redirected = true;
 
@@ -234,9 +249,18 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			redirected = true;
 
-			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
+			response.Redirect(urlBuilder.BuildUrl(currentUrl, controller, action), false);
+		}
 
-			response.Redirect(builder.BuildUrl(context.UrlInfo, controller, action), false);
+		/// <summary>
+		/// Redirects the specified controller.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
+		public void Redirect(object parameters)
+		{
+			redirected = true;
+
+			response.Redirect(urlBuilder.BuildUrl(currentUrl, new ReflectionBasedDictionaryAdapter(parameters)), false);
 		}
 
 		/// <summary>
@@ -249,9 +273,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			redirected = true;
 
-			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
-
-			response.Redirect(builder.BuildUrl(context.UrlInfo, area, controller, action), false);
+			response.Redirect(urlBuilder.BuildUrl(currentUrl, area, controller, action), false);
 		}
 
 		/// <summary>
@@ -264,9 +286,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			redirected = true;
 
-			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
-
-			response.Redirect(builder.BuildUrl(context.UrlInfo, controller, action, parameters), false);
+			response.Redirect(urlBuilder.BuildUrl(currentUrl, controller, action, parameters), false);
 		}
 
 		/// <summary>
@@ -280,9 +300,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			redirected = true;
 
-			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
-
-			response.Redirect(builder.BuildUrl(context.UrlInfo, area, controller, action, parameters), false);
+			response.Redirect(urlBuilder.BuildUrl(currentUrl, area, controller, action, parameters), false);
 		}
 
 		/// <summary>
@@ -295,9 +313,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			redirected = true;
 
-			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
-
-			response.Redirect(builder.BuildUrl(context.UrlInfo, controller, action, parameters), false);
+			response.Redirect(urlBuilder.BuildUrl(currentUrl, controller, action, parameters), false);
 		}
 
 		/// <summary>
@@ -311,9 +327,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			redirected = true;
 
-			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
-
-			response.Redirect(builder.BuildUrl(context.UrlInfo, area, controller, action, parameters), false);
+			response.Redirect(urlBuilder.BuildUrl(currentUrl, area, controller, action, parameters), false);
 		}
 
 		/// <summary>
@@ -357,7 +371,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			HttpCookie cookie = new HttpCookie(name, cookieValue);
 
 			cookie.Expires = expiration;
-			cookie.Path = context.ApplicationPath;
+			cookie.Path = SafeAppPath();
 
 			CreateCookie(cookie);
 		}
@@ -380,9 +394,14 @@ namespace Castle.MonoRail.Framework.Adapters
 			HttpCookie cookie = new HttpCookie(name, "");
 			
 			cookie.Expires = DateTime.Now.AddYears(-10);
-			cookie.Path = context.ApplicationPath;
+			cookie.Path = SafeAppPath();
 			
 			CreateCookie(cookie);
+		}
+
+		private string SafeAppPath()
+		{
+			return currentUrl.AppVirtualDir == string.Empty ? "/" : currentUrl.AppVirtualDir;
 		}
 	}
 }

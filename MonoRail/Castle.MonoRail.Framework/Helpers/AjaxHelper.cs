@@ -122,7 +122,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="proxyName">Name of the javascript proxy object</param>
 		public String GenerateJSProxy(string proxyName)
 		{
-			return GenerateJSProxy(proxyName, Controller.AreaName, Controller.Name);
+			return GenerateJSProxy(proxyName, ControllerContext.AreaName, ControllerContext.Name);
 		}
 
 		/// <summary>

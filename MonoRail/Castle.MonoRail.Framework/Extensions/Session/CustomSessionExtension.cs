@@ -18,13 +18,12 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 	using System.Xml;
 	using System.Collections;
 	using System.Configuration;
-
-	using Castle.MonoRail.Framework.Adapters;
+	using Castle.Core.Configuration;
 	using Castle.MonoRail.Framework.Configuration;
 
 	/// <summary>
 	/// This extension allow one to provide a custom 
-	/// implementation of the session available on <see cref="IRailsEngineContext"/>
+	/// implementation of the session available on <see cref="IEngineContext"/>
 	/// </summary>
 	/// <remarks>
 	/// To successfully install this extension you must add the attribute <c>customSession</c>
@@ -44,7 +43,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// obtained from the configuration
 		/// </summary>
 		private ICustomSessionFactory customSession;
-		
+
 		#region IMonoRailExtension implementation
 
 		/// <summary>
@@ -52,29 +51,28 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// attributes and child nodes of the extension node
 		/// </summary>
 		/// <param name="node">The node that defines the MonoRail extension</param>
-		public void SetExtensionConfigNode(XmlNode node)
+		public void SetExtensionConfigNode(IConfiguration node)
 		{
 			// Ignored
 		}
-		
+
 		#endregion
-		
+
 		#region IServiceEnabledComponent implementation
 
 		/// <summary>
 		/// Services the specified provider.
 		/// </summary>
 		/// <param name="provider">The provider.</param>
-		public void Service(IServiceProvider provider)
+		public void Service(IMonoRailServices provider)
 		{
 			ExtensionManager manager = (ExtensionManager) provider.GetService(typeof(ExtensionManager));
-			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
-			
+			IMonoRailConfiguration config = (IMonoRailConfiguration) provider.GetService(typeof(IMonoRailConfiguration));
+
 			Init(manager, config);
 		}
-		
-		#endregion
 
+		#endregion
 
 		/// <summary>
 		/// Reads the attribute <c>customSession</c> 
@@ -87,28 +85,28 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// </exception>
 		/// <param name="manager">The Extension Manager</param>
 		/// <param name="configuration">The configuration</param>
-		private void Init(ExtensionManager manager, MonoRailConfiguration configuration)
+		private void Init(ExtensionManager manager, IMonoRailConfiguration configuration)
 		{
 			manager.AcquireSessionState += OnAdquireSessionState;
 			manager.ReleaseSessionState += OnReleaseSessionState;
 
-			XmlAttribute customSessionAtt = 
+			string customSessionAtt =
 				configuration.ConfigurationSection.Attributes["customSession"];
 
-			if (customSessionAtt == null || customSessionAtt.Value.Length == 0)
+			if (customSessionAtt == null)
 			{
-				String message = "The CustomSessionExtension requires that " + 
-					"the type that implements ICustomSessionFactory be specified through the " + 
-					"'customSession' attribute on 'monorail' configuration node";
+				String message = "The CustomSessionExtension requires that " +
+				                 "the type that implements ICustomSessionFactory be specified through the " +
+				                 "'customSession' attribute on 'monorail' configuration node";
 				throw new ConfigurationErrorsException(message);
 			}
 
-			Type customSessType = TypeLoadUtil.GetType(customSessionAtt.Value);
+			Type customSessType = TypeLoadUtil.GetType(customSessionAtt);
 
 			if (customSessType == null)
 			{
-				String message = "The Type for the custom session could not be loaded. " + 
-					customSessionAtt.Value;
+				String message = "The Type for the custom session could not be loaded. " +
+				                 customSessionAtt;
 				throw new ConfigurationErrorsException(message);
 			}
 
@@ -118,30 +116,30 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 			}
 			catch(InvalidCastException)
 			{
-				String message = "The Type for the custom session must " + 
-					"implement ICustomSessionFactory. " + customSessionAtt.Value;
+				String message = "The Type for the custom session must " +
+				                 "implement ICustomSessionFactory. " + customSessionAtt;
 				throw new ConfigurationErrorsException(message);
 			}
 		}
 
 		/// <summary>
-		/// Overrides the ISession instance on <see cref="IRailsEngineContext"/>.
+		/// Overrides the ISession instance on <see cref="IEngineContext"/>.
 		/// </summary>
 		/// <remarks>
 		/// Note that the session available through IHttpContext is left untouched</remarks>
 		/// <param name="context"></param>
-		private void OnAdquireSessionState(IRailsEngineContext context)
+		private void OnAdquireSessionState(IEngineContext context)
 		{
 			IDictionary session = customSession.ObtainSession(context);
 
-			(context as DefaultRailsEngineContext).Session = session;
+			context.Session = session;
 		}
 
 		/// <summary>
-		/// Retrives the ISession instance from <see cref="IRailsEngineContext"/>.
+		/// Retrives the ISession instance from <see cref="IEngineContext"/>.
 		/// and invokes <see cref="ICustomSessionFactory.PersistSession"/>
 		/// </summary>
-		private void OnReleaseSessionState(IRailsEngineContext context)
+		private void OnReleaseSessionState(IEngineContext context)
 		{
 			customSession.PersistSession(context.Session, context);
 		}

@@ -16,8 +16,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 {
 	using System;
 	using System.Configuration;
-	using System.Xml;
-
+	using Castle.Core.Configuration;
 	using Castle.MonoRail.Framework.Configuration;
 
 	/// <summary>
@@ -77,47 +76,45 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// attributes and child nodes of the extension node
 		/// </summary>
 		/// <param name="node">The node that defines the MonoRail extension</param>
-		public void SetExtensionConfigNode(XmlNode node)
+		public void SetExtensionConfigNode(IConfiguration node)
 		{
 			// Ignored
 		}
-		
+
 		#endregion
-		
+
 		#region IServiceEnabledComponent implementation
 
 		/// <summary>
 		/// Services the specified provider.
 		/// </summary>
-		/// <param name="provider">The provider.</param>
-		public void Service(IServiceProvider provider)
+		/// <param name="serviceProvider">The provider.</param>
+		public void Service(IMonoRailServices serviceProvider)
 		{
-			ExtensionManager manager = (ExtensionManager) 
-			                           provider.GetService(typeof(ExtensionManager));
-			
-			MonoRailConfiguration config = (MonoRailConfiguration) 
-			                               provider.GetService(typeof(MonoRailConfiguration));
-			
-			manager.ActionException += new ExtensionHandler(OnException);
-			manager.UnhandledException += new ExtensionHandler(OnException);
+			ExtensionManager manager = (ExtensionManager)
+									   serviceProvider.GetService(typeof(ExtensionManager));
 
-			XmlNodeList handlers = config.ConfigurationSection.SelectNodes("exception/exceptionHandler");
+			IMonoRailConfiguration config = (IMonoRailConfiguration)
+										   serviceProvider.GetService(typeof(IMonoRailConfiguration));
 
-			foreach(XmlNode node in handlers)
+			manager.ActionException += OnException;
+			manager.UnhandledException += OnException;
+
+			IConfiguration exceptionNode = config.ConfigurationSection.Children["exception"];
+
+			foreach(IConfiguration node in exceptionNode.Children)
 			{
-				XmlAttribute typeAtt = node.Attributes["type"];
+				string typeAtt = node.Attributes["type"];
 
 				if (typeAtt == null)
 				{
-					// TODO: Throw configuration exception
+					throw new MonoRailException("Configuration error: missing type attribute on exception handler configuration.");
 				}
 
-				InstallExceptionHandler(node, typeAtt.Value);
+				InstallExceptionHandler(node, typeAtt);
 			}
-
-			manager.ServiceContainer.AddService(typeof(IExceptionProcessor), this);
 		}
-		
+
 		#endregion
 
 		#region IExceptionProcessor implementation
@@ -126,35 +123,35 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// Initiates the ExceptionChainingExtension manualy
 		/// </summary>
 		/// <param name="exception">The exception to process</param>
-		public void ProcessException(Exception exception)
+		/// <param name="engineContext">The engine context.</param>
+		public void ProcessException(Exception exception, IEngineContext engineContext)
 		{
 			if (exception == null) return;
-			
-			IRailsEngineContext context = MonoRailHttpHandler.CurrentContext;
-			context.LastException = exception;
 
-			OnException(context);
+			engineContext.LastException = exception;
+
+			OnException(engineContext);
 		}
-		
+
 		#endregion
 
 		/// <summary>
 		/// Called when an exception happens.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void OnException(IRailsEngineContext context)
+		private void OnException(IEngineContext context)
 		{
 			const String mrExceptionKey = "MonoRail.ExceptionHandled";
-			
+
 			if (context.Items.Contains(mrExceptionKey))
 			{
 				return;
 			}
-			
+
 			if (firstHandler != null)
 			{
 				context.Items.Add(mrExceptionKey, true);
-				
+
 				firstHandler.Process(context);
 			}
 		}
@@ -164,7 +161,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="typeName">Name of the type.</param>
-		private void InstallExceptionHandler(XmlNode node, String typeName)
+		private void InstallExceptionHandler(IConfiguration node, String typeName)
 		{
 			IExceptionHandler handler;
 
@@ -172,8 +169,8 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 
 			if (handlerType == null)
 			{
-				String message = "The Type for the custom session could not be loaded. " + 
-					typeName;
+				String message = "The Type for the custom session could not be loaded. " +
+				                 typeName;
 				throw new ConfigurationErrorsException(message);
 			}
 
@@ -183,8 +180,8 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			}
 			catch(InvalidCastException)
 			{
-				String message = "The Type for the custom session must " + 
-					"implement ICustomSessionFactory. " + typeName;
+				String message = "The Type for the custom session must " +
+				                 "implement ICustomSessionFactory. " + typeName;
 				throw new ConfigurationErrorsException(message);
 			}
 
@@ -204,7 +201,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			else
 			{
 				IExceptionHandler navHandler = firstHandler;
-				
+
 				while(navHandler != null)
 				{
 					if (navHandler.Next == null)

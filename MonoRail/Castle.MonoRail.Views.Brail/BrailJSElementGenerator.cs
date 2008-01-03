@@ -14,16 +14,26 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-	using System;
 	using Boo.Lang;
-	using Castle.MonoRail.Framework.Helpers;
-	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.JSGeneration;
+	using Castle.MonoRail.Framework.JSGeneration.DynamicDispatching;
 
-	public class BrailJSElementGenerator : JSElementGeneratorBase, IQuackFu
+	public class BrailJSElementGenerator : JSElementGeneratorDispatcherBase, IQuackFu
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BrailJSElementGenerator"/> class.
+		/// </summary>
+		/// <param name="codeGen">The code gen.</param>
+		/// <param name="elementGenerator">The element generator.</param>
+		/// <param name="extensions">The extensions.</param>
+		public BrailJSElementGenerator(IJSCodeGenerator codeGen, IJSElementGenerator elementGenerator, params object[] extensions) : 
+			base(codeGen, elementGenerator, extensions)
+		{
+		}
+
 		public object QuackGet(string name, object[] parameters)
 		{
-			base.InternalGet(name);
+			InternalGet(name);
 			return this;
 		}
 
@@ -35,11 +45,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		public object QuackInvoke(string name, params object[] args)
 		{
-			return base.InternalInvoke(name, args);
-		}
-
-		public BrailJSElementGenerator(IJSElementGenerator generator) : base(generator)
-		{
+			return InternalInvoke(name, args);
 		}
 	}
 }

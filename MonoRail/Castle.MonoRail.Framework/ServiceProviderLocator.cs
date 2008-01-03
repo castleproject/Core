@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework
 	/// Uses the HttpContext and the <see cref="IServiceProviderExAccessor"/> 
 	/// to access the container instance.
 	/// </summary>
-	public class ServiceProviderLocator
+	public class ServiceProviderLocator : IServiceProviderLocator
 	{
 		private static readonly ServiceProviderLocator instance = new ServiceProviderLocator();
 		

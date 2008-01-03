@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// <param name="parameters">The parameters.</param>
 		/// <param name="context">The context.</param>
 		/// <returns></returns>
-		public CacheKey Create(string viewComponentName, IDictionary parameters, IRailsEngineContext context)
+		public CacheKey Create(string viewComponentName, IDictionary parameters, IEngineContext context)
 		{
 			return new NamedCacheKey(viewComponentName);
 		}

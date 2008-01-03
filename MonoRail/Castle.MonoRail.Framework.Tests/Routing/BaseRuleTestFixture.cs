@@ -15,18 +15,23 @@
 namespace Castle.MonoRail.Framework.Tests.Routing
 {
 	using Framework.Routing;
-	using Stubs;
+	using Test;
 
 	public class BaseRuleTestFixture
 	{
-		protected static IRouteContext CreateGetContext(string appPath, string url)
+		protected static IRouteContext CreateGetContext()
 		{
-			return new RouteContext(new StubRequest(Verb.Get), appPath, RouteContext.StripUrl(url));
+			return new RouteContext(new MockRequest("GET"), "/");
 		}
 
-		protected static IRouteContext CreateContext(string appPath, string url, Verb httpMethod)
+		protected static IRouteContext CreateGetContext(string appPath)
 		{
-			return new RouteContext(new StubRequest(httpMethod), appPath, RouteContext.StripUrl(url));
+			return new RouteContext(new MockRequest("GET"), appPath);
+		}
+
+		protected static IRouteContext CreateContext(string appPath, Verb httpMethod)
+		{
+			return new RouteContext(new MockRequest(httpMethod.ToString()), appPath);
 		}	
 	}
 }

@@ -15,18 +15,19 @@
 namespace Castle.MonoRail.Framework.Services
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Reflection;
 	
 	using Castle.Core;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Configuration;
-	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Descriptors;
 	using Castle.MonoRail.Framework.Services.Utils;
 
 	/// <summary>
 	/// Standard implementation of <see cref="IControllerFactory"/>.
 	/// It inspects assemblies looking for concrete classes
-	/// that extend <see cref="Controller"/>.
+	/// that extend <see cref="IController"/>.
 	/// </summary>
 	public class DefaultControllerFactory : AbstractControllerFactory, IInitializable
 	{
@@ -35,12 +36,20 @@ namespace Castle.MonoRail.Framework.Services
 		/// </summary>
 		private ILogger logger = NullLogger.Instance;
 
-		private string[] assemblies;
+		private List<string> assemblies;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultControllerFactory"/> class.
 		/// </summary>
 		public DefaultControllerFactory()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultControllerFactory"/> class.
+		/// </summary>
+		/// <param name="tree">The tree.</param>
+		public DefaultControllerFactory(IControllerTree tree) : base(tree)
 		{
 		}
 
@@ -82,13 +91,13 @@ namespace Castle.MonoRail.Framework.Services
 				logger = loggerFactory.Create(typeof(AbstractControllerFactory));
 			}
 			
-			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
+			IMonoRailConfiguration config = (IMonoRailConfiguration) provider.GetService(typeof(IMonoRailConfiguration));
 			
 			if (config != null)
 			{
 				assemblies = config.ControllersConfig.Assemblies;
 				
-				if (assemblies == null || assemblies.Length == 0)
+				if (assemblies.Count == 0)
 				{
 					throw new System.Configuration.ConfigurationErrorsException("No assembly was informed on the configuration file. " +
 						"Unfortunatelly this cannot be inferred (we tried)");
@@ -126,7 +135,7 @@ namespace Castle.MonoRail.Framework.Services
 					continue;
 				}
 
-				if (typeof(Controller).IsAssignableFrom(type))
+				if (typeof(IController).IsAssignableFrom(type))
 				{
 					ControllerDescriptor contrDesc = ControllerInspectionUtil.Inspect(type);
 					

@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Reflection;
 
 	/// <summary>
 	/// Contract that Rescue Controllers must satisfy
@@ -27,7 +26,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="exception">Exception thrown</param>
 		/// <param name="controller">Controller where the exception happened</param>
-		/// <param name="method">The method that the controller happened on</param>
-		void Rescue(Exception exception, Controller controller, MethodInfo method);
+		/// <param name="controllerContext">The source controller context.</param>
+		void Rescue(Exception exception, IController controller, IControllerContext controllerContext);
 	}
 }

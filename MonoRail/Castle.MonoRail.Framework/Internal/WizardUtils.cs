@@ -25,32 +25,27 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <summary>
 		/// Constructs the wizard namespace.
 		/// </summary>
-		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <returns></returns>
-		public static String ConstructWizardNamespace(Controller controller)
+		public static String ConstructWizardNamespace(IControllerContext controllerContext)
 		{
-			if (controller is WizardStepPage)
-			{
-				return ConstructWizardNamespace( (controller as WizardStepPage).WizardController );
-			}
-
-			return String.Format("wizard.{0}", controller.Name);
+			return String.Format("wizard.{0}", controllerContext.Name);
 		}
 
 		/// <summary>
 		/// Determines whether the current wizard has a previous step.
 		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <returns>
 		/// 	<c>true</c> if has previous step; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool HasPreviousStep(Controller controller)
+		public static bool HasPreviousStep(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
-			IRailsEngineContext context = controller.Context;
+			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
-			String wizardName = WizardUtils.ConstructWizardNamespace(controller);
-
-			int currentIndex = (int) context.Session[wizardName + "currentstepindex"];
+			int currentIndex = (int) engineContext.Session[wizardName + "currentstepindex"];
 
 			return currentIndex > 0;
 		}
@@ -58,37 +53,71 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <summary>
 		/// Determines whether the current wizard has a next step.
 		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <returns>
 		/// 	<c>true</c> if has next step; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool HasNextStep(Controller controller)
+		public static bool HasNextStep(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
-			IRailsEngineContext context = controller.Context;
+			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
-			String wizardName = WizardUtils.ConstructWizardNamespace(controller);
+			IList stepList = (IList) engineContext.Items["wizard.step.list"];
 
-			IList stepList = (IList) context.Items["wizard.step.list"];
+			int currentIndex = (int) engineContext.Session[wizardName + "currentstepindex"];
 
-			int currentIndex = (int) context.Session[wizardName + "currentstepindex"];
-						
 			return (currentIndex + 1) < stepList.Count;
+		}
+
+		/// <summary>
+		/// Gets the index of the current step.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
+		/// <returns></returns>
+		public static int GetCurrentStepIndex(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
+		{
+			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
+
+			int curIndex = (int) engineContext.Session[wizardName + "currentstepindex"];
+
+			return curIndex;
+		}
+
+		/// <summary>
+		/// Gets the name of the current step.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
+		/// <returns></returns>
+		public static String GetCurrentStepName(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
+		{
+			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
+
+			int curIndex = (int) engineContext.Session[wizardName + "currentstepindex"];
+
+			IList stepList = (IList) engineContext.Items["wizard.step.list"];
+
+			return (String) stepList[curIndex];
 		}
 
 		/// <summary>
 		/// Gets the name of the previous step.
 		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <returns></returns>
-		public static String GetPreviousStepName(Controller controller)
+		public static String GetPreviousStepName(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
-			IRailsEngineContext context = controller.Context;
+			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
-			String wizardName = WizardUtils.ConstructWizardNamespace(controller);
+			int curIndex = (int) engineContext.Session[wizardName + "currentstepindex"];
 
-			int curIndex = (int) context.Session[wizardName + "currentstepindex"];
-
-			IList stepList = (IList) context.Items["wizard.step.list"];
+			IList stepList = (IList) engineContext.Items["wizard.step.list"];
 
 			if ((curIndex - 1) >= 0)
 			{
@@ -101,17 +130,17 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <summary>
 		/// Gets the name of the next step.
 		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <returns></returns>
-		public static String GetNextStepName(Controller controller)
+		public static String GetNextStepName(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
-			IRailsEngineContext context = controller.Context;
+			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
-			String wizardName = WizardUtils.ConstructWizardNamespace(controller);
+			int curIndex = (int) engineContext.Session[wizardName + "currentstepindex"];
 
-			int curIndex = (int) context.Session[wizardName + "currentstepindex"];
-
-			IList stepList = (IList) context.Items["wizard.step.list"];
+			IList stepList = (IList) engineContext.Items["wizard.step.list"];
 
 			if ((curIndex + 1) < stepList.Count)
 			{
@@ -124,22 +153,22 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <summary>
 		/// Registers the current step info/state.
 		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <param name="actionName">Name of the action.</param>
-		public static void RegisterCurrentStepInfo(Controller controller, String actionName)
+		public static void RegisterCurrentStepInfo(IEngineContext engineContext, IController controller,
+												   IControllerContext controllerContext, String actionName)
 		{
-			IRailsEngineContext context = controller.Context;
+			IList stepList = (IList) engineContext.Items["wizard.step.list"];
 
-			IList stepList = (IList) context.Items["wizard.step.list"];
-
-			for(int i=0; i < stepList.Count; i++)
+			for(int i = 0; i < stepList.Count; i++)
 			{
 				String stepName = (String) stepList[i];
 
 				if (actionName == stepName)
 				{
-					RegisterCurrentStepInfo(controller, i, stepName);
-
+					RegisterCurrentStepInfo(engineContext, controller, controllerContext, i, stepName);
 					break;
 				}
 			}
@@ -148,16 +177,18 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <summary>
 		/// Registers the current step info/state.
 		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <param name="stepIndex">Index of the step.</param>
 		/// <param name="stepName">Name of the step.</param>
-		public static void RegisterCurrentStepInfo(Controller controller, int stepIndex, String stepName)
+		public static void RegisterCurrentStepInfo(IEngineContext engineContext, IController controller,
+		                                           IControllerContext controllerContext, int stepIndex, String stepName)
 		{
-			IRailsEngineContext context = controller.Context;
-			String wizardName = WizardUtils.ConstructWizardNamespace(controller);
+			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
-			context.Session[wizardName + "currentstepindex"] = stepIndex;
-			context.Session[wizardName + "currentstep"] = stepName;
+			engineContext.Session[wizardName + "currentstepindex"] = stepIndex;
+			engineContext.Session[wizardName + "currentstep"] = stepName;
 		}
 	}
 }

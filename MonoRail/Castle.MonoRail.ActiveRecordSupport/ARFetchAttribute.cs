@@ -16,7 +16,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
 	using System.Reflection;
-
+	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
@@ -26,7 +26,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	/// </summary>
 	/// <remarks>
 	/// The <see cref="ARFetchAttribute"/> only loads an instance
-	/// based on the primary key value obtained from <see cref="IRailsEngineContext.Params"/>
+	/// based on the primary key value obtained from <see cref="IRequest.Params"/>
 	/// <para>For example:</para>
 	/// <code>
 	/// public class CustomerController : ARSmartDispatcherController
@@ -48,8 +48,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	public class ARFetchAttribute : Attribute, IParameterBinder
 	{
 		private String requestParameterName;
-		private bool create, required;
 		private String eager;
+		private bool create, required;
+		private IDataBinder binder;
 		
 		/// <summary>
 		/// Constructs an <see cref="ARFetchAttribute"/> 
@@ -133,18 +134,37 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { eager = value; }
 		}
 
-		public virtual int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo)
+		public virtual int CalculateParamPoints(IEngineContext context, IController controller, IControllerContext controllerContext, ParameterInfo parameterInfo)
 		{
-			String paramName = RequestParameterName != null ? RequestParameterName : parameterInfo.Name;
+			String paramName = RequestParameterName ?? parameterInfo.Name;
 
-			return controller.Request.Params.Get(paramName) != null ? 10 : 0;
+			return context.Request.Params.Get(paramName) != null ? 10 : 0;
 		}
 
-		public virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
+		public virtual object Bind(IEngineContext context, IController controller, IControllerContext controllerContext, ParameterInfo parameterInfo)
 		{
-			ARFetcher fetcher = new ARFetcher(controller.Binder.Converter);
-			
-			return fetcher.FetchActiveRecord(parameterInfo, this, controller.Request);
+			EnsureBinderExists();
+
+			ARFetcher fetcher = new ARFetcher(binder.Converter);
+
+			return fetcher.FetchActiveRecord(parameterInfo, this, context.Request);
+		}
+
+		private void EnsureBinderExists()
+		{
+			if (binder == null)
+			{
+				binder = CreateBinder();
+			}
+		}
+
+		/// <summary>
+		/// Creates the data binder implementation.
+		/// </summary>
+		/// <returns></returns>
+		protected virtual IDataBinder CreateBinder()
+		{
+			return new DataBinder();
 		}
 	}
 }

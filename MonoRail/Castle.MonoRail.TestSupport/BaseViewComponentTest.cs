@@ -113,7 +113,7 @@ namespace Castle.MonoRail.TestSupport
 		{
 			if (Context == null)
 			{
-				BuildRailsContext("", "Controller", "Action");
+				BuildEngineContext("", "Controller", "Action");
 			}
 
 			viewEngine = BuildViewEngine();
@@ -149,7 +149,7 @@ namespace Castle.MonoRail.TestSupport
 		/// <returns></returns>
 		protected virtual IViewEngine BuildViewEngine()
 		{
-			return new MockViewEngine(".view", ".jsview", true, true);
+			return new ViewEngineStub(".view", ".jsview", true);
 		}
 
 		/// <summary>

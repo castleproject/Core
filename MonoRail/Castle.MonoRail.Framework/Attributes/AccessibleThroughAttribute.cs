@@ -23,6 +23,10 @@ namespace Castle.MonoRail.Framework
 	public enum Verb
 	{
 		/// <summary>
+		/// Not defined
+		/// </summary>
+		Undefined,
+		/// <summary>
 		/// The GET method means retrieve whatever information is identified by the Request-URI.
 		/// <remarks>
 		/// The convention has been established that the GET method SHOULD 

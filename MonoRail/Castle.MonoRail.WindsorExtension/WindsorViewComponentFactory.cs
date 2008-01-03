@@ -17,11 +17,19 @@ namespace Castle.MonoRail.WindsorExtension
 	using System;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Services;
-	using Castle.Windsor;
+	using MicroKernel;
 
 	public class WindsorViewComponentFactory : AbstractViewComponentFactory
 	{
+		private readonly IViewComponentRegistry viewCompRegistry;
+		private readonly IKernel kernel;
 		private IViewEngine viewEngine;
+
+		public WindsorViewComponentFactory(IViewComponentRegistry viewCompRegistry, IKernel kernel)
+		{
+			this.viewCompRegistry = viewCompRegistry;
+			this.kernel = kernel;
+		}
 
 		public override IViewEngine ViewEngine
 		{
@@ -31,19 +39,19 @@ namespace Castle.MonoRail.WindsorExtension
 
 		public override ViewComponent Create(String name)
 		{
-			IWindsorContainer container = WindsorContainerAccessorUtil.ObtainContainer();
 			Type type = ResolveType(name);
-			if (container.Kernel.HasComponent(type))
+			
+			if (kernel.HasComponent(type))
 			{
-				return (ViewComponent) container[type];
+				return (ViewComponent) kernel[type];
 			}
+
 			return (ViewComponent) Activator.CreateInstance(type);
 		}
 
 		protected override IViewComponentRegistry GetViewComponentRegistry()
 		{
-			IWindsorContainer container = WindsorContainerAccessorUtil.ObtainContainer();
-			return (IViewComponentRegistry) container["rails.viewcomponentregistry"];
+			return viewCompRegistry;
 		}
 	}
 }

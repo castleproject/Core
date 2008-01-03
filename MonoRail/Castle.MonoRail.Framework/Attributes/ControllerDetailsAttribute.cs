@@ -20,7 +20,7 @@ namespace Castle.MonoRail.Framework
 	/// Decorates a controller with a different name
 	/// and optionally an area which the controller belongs to.
 	/// This is used to override the convention for controller
-	/// names and to optionally associate a controller with an 
+	/// names and to optionally associate a controller with an
 	/// area name.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class), Serializable]
@@ -28,6 +28,7 @@ namespace Castle.MonoRail.Framework
 	{
 		private String name;
 		private String area = String.Empty;
+		private bool sessionless = false;
 
 		/// <summary>
 		/// Constructs a ControllerDetailsAttribute
@@ -61,6 +62,17 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return area; }
 			set { area = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the controller does not need a session. 
+		/// Defaults to <c>false</c>.
+		/// </summary>
+		/// <value><c>true</c> if sessionless; otherwise, <c>false</c>.</value>
+		public bool Sessionless
+		{
+			get { return sessionless; }
+			set { sessionless = value; }
 		}
 	}
 }

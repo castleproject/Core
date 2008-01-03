@@ -1,2 +1,0 @@
-## Missing id parameter which is required
-#component(AutoParameterBinding with "name=xpto" "url=something.castle?val=1")

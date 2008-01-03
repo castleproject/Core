@@ -1,5 +1,0 @@
-#blockcomponent(CaptureFor with "id=content") =1= #end
-#blockcomponent(CaptureFor with "id=content") =2= #end
-#blockcomponent(CaptureFor with "id=contentAppend")	=3= #end
-#blockcomponent(CaptureFor with "id=contentAppend" "append=before")	=4= #end
-${content}some content${contentAppend}

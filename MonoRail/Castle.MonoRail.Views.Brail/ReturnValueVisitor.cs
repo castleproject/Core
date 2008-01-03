@@ -16,7 +16,7 @@ namespace Castle.MonoRail.Views.Brail
 {
 	using Boo.Lang.Compiler.Ast;
 	using Boo.Lang.Compiler.Steps;
-	using Castle.MonoRail.Framework;
+	using Framework;
 
 	//This will search for all return statements in a method
 	//and will replace them with a method call (only a marker)
@@ -24,20 +24,20 @@ namespace Castle.MonoRail.Views.Brail
 	//with the correct method call.
 	public class ReturnValueVisitor : DepthFirstVisitor
 	{
-		private NormalizeStatementModifiers normalizer;
-		private MethodInvocationExpression mie;
 		private bool found = false;
-
-		public bool Found
-		{
-			get { return found; }
-		}
+		private MethodInvocationExpression mie;
+		private NormalizeStatementModifiers normalizer;
 
 		public ReturnValueVisitor()
 		{
 			normalizer = new NormalizeStatementModifiers();
 			mie = new MethodInvocationExpression();
 			mie.Target = AstUtil.CreateReferenceExpression("transform");
+		}
+
+		public bool Found
+		{
+			get { return found; }
 		}
 
 		public override void OnReturnStatement(ReturnStatement stmt)

@@ -20,61 +20,20 @@ namespace Castle.MonoRail.Framework.Routing
 	/// <summary>
 	/// Pendent
 	/// </summary>
+	[Serializable]
 	public class RouteMatch
 	{
-		private readonly Type controllerType;
-		private readonly string ruleName;
-		private readonly string action;
-		private readonly List<string> literals = new List<string>();
+		/// <summary>
+		/// Key used to store the route match on the HttpContext.Items
+		/// </summary>
+		public static readonly string RouteMatchKey = "route.match";
 		private readonly Dictionary<string, string> parameters = new Dictionary<string, string>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RouteMatch"/> class.
 		/// </summary>
-		/// <param name="controllerType">Type of the controller.</param>
-		/// <param name="ruleName">Name of the rule.</param>
-		/// <param name="action">The action.</param>
-		public RouteMatch(Type controllerType, string ruleName, string action)
+		public RouteMatch()
 		{
-			this.controllerType = controllerType;
-			this.ruleName = ruleName;
-			this.action = action;
-		}
-
-		/// <summary>
-		/// Gets the type of the controller.
-		/// </summary>
-		/// <value>The type of the controller.</value>
-		public Type ControllerType
-		{
-			get { return controllerType; }
-		}
-
-		/// <summary>
-		/// Gets the name of the rule.
-		/// </summary>
-		/// <value>The name of the rule.</value>
-		public string RuleName
-		{
-			get { return ruleName; }
-		}
-
-		/// <summary>
-		/// Gets the action.
-		/// </summary>
-		/// <value>The action.</value>
-		public string Action
-		{
-			get { return action; }
-		}
-
-		/// <summary>
-		/// Gets the literals.
-		/// </summary>
-		/// <value>The literals.</value>
-		public List<string> Literals
-		{
-			get { return literals; }
 		}
 
 		/// <summary>
@@ -84,15 +43,6 @@ namespace Castle.MonoRail.Framework.Routing
 		public Dictionary<string, string> Parameters
 		{
 			get { return parameters; }
-		}
-
-		/// <summary>
-		/// Adds the specified literal.
-		/// </summary>
-		/// <param name="literal">The literal.</param>
-		public void Add(string literal)
-		{
-			literals.Add(literal);
 		}
 
 		/// <summary>

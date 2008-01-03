@@ -27,7 +27,8 @@ namespace Castle.MonoRail.Views.Brail
 	/// </summary>
 	public abstract class BrailBase
 	{
-		protected Controller __controller;
+		protected IController __controller;
+		protected IControllerContext __controllerContext;
 
 		/// <summary>
 		/// Reference to the DSL service
@@ -39,7 +40,8 @@ namespace Castle.MonoRail.Views.Brail
 		/// </summary>
 		protected TextWriter childOutput;
 
-		protected IRailsEngineContext context;
+		protected IEngineContext context;
+		public string LastVariableAccessed;
 		private TextWriter outputStream;
 
 		/// <summary>
@@ -55,7 +57,6 @@ namespace Castle.MonoRail.Views.Brail
 		private IList viewComponentsParameters;
 
 		protected BooViewEngine viewEngine;
-		public string LastVariableAccessed;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BrailBase"/> class.
@@ -64,15 +65,17 @@ namespace Castle.MonoRail.Views.Brail
 		/// <param name="output">The output.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="__controller">The controller.</param>
-		public BrailBase(BooViewEngine viewEngine, TextWriter output, IRailsEngineContext context, Controller __controller)
+		/// <param name="__controllerContext">The __controller context.</param>
+		public BrailBase(BooViewEngine viewEngine, TextWriter output,
+		                 IEngineContext context, IController __controller, IControllerContext __controllerContext)
 		{
 			this.viewEngine = viewEngine;
 			outputStream = output;
 			this.context = context;
 			this.__controller = __controller;
-			InitProperties(context, __controller);
+			this.__controllerContext = __controllerContext;
+			InitProperties(context, __controller, __controllerContext);
 		}
-
 
 		/// <summary>
 		///The path of the script, this is filled by AddBrailBaseClassStep
@@ -194,14 +197,15 @@ namespace Castle.MonoRail.Views.Brail
 		public void OutputSubView(string subviewName, TextWriter writer, IDictionary parameters)
 		{
 			string subViewFileName = GetSubViewFilename(subviewName);
-			BrailBase subView = viewEngine.GetCompiledScriptInstance(subViewFileName, writer, context, __controller);
+			BrailBase subView =
+				viewEngine.GetCompiledScriptInstance(subViewFileName, writer, context, __controller, __controllerContext);
 			subView.SetParent(this);
-			foreach (DictionaryEntry entry in parameters)
+			foreach(DictionaryEntry entry in parameters)
 			{
 				subView.properties[entry.Key] = entry.Value;
 			}
 			subView.Run();
-			foreach (DictionaryEntry entry in subView.Properties)
+			foreach(DictionaryEntry entry in subView.Properties)
 			{
 				if (subView.Properties.Contains(entry.Key + ".@bubbleUp") == false)
 					continue;
@@ -267,7 +271,7 @@ namespace Castle.MonoRail.Views.Brail
 				return new ParameterSearch(name.Substring(1), true);
 			if (viewComponentsParameters != null)
 			{
-				foreach (IDictionary viewComponentProperties in viewComponentsParameters)
+				foreach(IDictionary viewComponentProperties in viewComponentsParameters)
 				{
 					if (viewComponentProperties.Contains(name))
 						return new ParameterSearch(viewComponentProperties[name], true);
@@ -367,7 +371,7 @@ namespace Castle.MonoRail.Views.Brail
 				new BrailViewComponentContext(this, null, componentName, OutputStream,
 				                              new Hashtable(StringComparer.InvariantCultureIgnoreCase));
 			AddViewComponentProperties(componentContext.ComponentParameters);
-			IViewComponentFactory componentFactory = (IViewComponentFactory) context.GetService(typeof (IViewComponentFactory));
+			IViewComponentFactory componentFactory = (IViewComponentFactory) context.GetService(typeof(IViewComponentFactory));
 			ViewComponent component = componentFactory.Create(componentName);
 			component.Init(context, componentContext);
 			component.Render();
@@ -383,9 +387,10 @@ namespace Castle.MonoRail.Views.Brail
 		/// One thing to note here is that resources are wrapped in ResourceToDuck wrapper
 		/// to enable easy use by the script
 		/// </summary>
-		/// <param name="myContext"></param>
-		/// <param name="myController"></param>
-		private void InitProperties(IRailsEngineContext myContext, IController myController)
+		/// <param name="myContext">My context.</param>
+		/// <param name="myController">My controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
+		private void InitProperties(IEngineContext myContext, IController myController, IControllerContext controllerContext)
 		{
 			properties = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 			//properties.Add("dsl", new DslWrapper(this));
@@ -398,48 +403,58 @@ namespace Castle.MonoRail.Views.Brail
 				properties.Add("session", myContext.Session);
 			}
 
-			if (myController.Resources != null)
+			if (controllerContext.Resources != null)
 			{
-				foreach (object key in myController.Resources.Keys)
+				foreach(string key in controllerContext.Resources.Keys)
 				{
-					properties.Add(key, new ResourceToDuck(myController.Resources[key]));
+					properties.Add(key, new ResourceToDuck(controllerContext.Resources[key]));
 				}
 			}
 
-			if (myContext != null && myController.Params != null)
+			if (myContext != null && myContext.Request.QueryString != null)
 			{
-				foreach (string key in myController.Params.AllKeys)
+				foreach(string key in myContext.Request.QueryString.AllKeys)
 				{
-					if (key == null)
-						continue;
-					properties[key] = myContext.Params[key];
+					if (key == null) continue;
+					properties[key] = myContext.Request.QueryString[key];
 				}
 			}
+
+			if (myContext != null && myContext.Request.Form != null)
+			{
+				foreach(string key in myContext.Request.Form.AllKeys)
+				{
+					if (key == null) continue;
+					properties[key] = myContext.Request.Form[key];
+				}
+			}
+
+
 			if (myContext != null && myContext.Flash != null)
 			{
-				foreach (DictionaryEntry entry in myContext.Flash)
+				foreach(DictionaryEntry entry in myContext.Flash)
 				{
 					properties[entry.Key] = entry.Value;
 				}
 			}
 
-			if (myController.PropertyBag != null)
+			if (controllerContext.PropertyBag != null)
 			{
-				foreach (DictionaryEntry entry in myController.PropertyBag)
+				foreach(DictionaryEntry entry in controllerContext.PropertyBag)
 				{
 					properties[entry.Key] = entry.Value;
 				}
 			}
 
-			if (myController.Helpers != null)
+			if (controllerContext.Helpers != null)
 			{
-				foreach (DictionaryEntry entry in myController.Helpers)
+				foreach(DictionaryEntry entry in controllerContext.Helpers)
 				{
 					properties[entry.Key] = entry.Value;
 				}
 			}
 
-			if(myContext != null )
+			if (myContext != null)
 			{
 				properties["siteRoot"] = myContext.ApplicationPath;
 			}

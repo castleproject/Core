@@ -22,7 +22,6 @@ namespace Castle.MonoRail.Framework.Routing
 	public class RouteContext : IRouteContext
 	{
 		private readonly string applicationPath;
-		private readonly string url;
 		private readonly IRequest request;
 
 		/// <summary>
@@ -30,12 +29,10 @@ namespace Castle.MonoRail.Framework.Routing
 		/// </summary>
 		/// <param name="request"></param>
 		/// <param name="applicationPath"></param>
-		/// <param name="url"></param>
-		public RouteContext(IRequest request, string applicationPath, string url)
+		public RouteContext(IRequest request, string applicationPath)
 		{
 			this.request = request;
 			this.applicationPath = applicationPath;
-			this.url = url;
 		}
 
 		/// <summary>
@@ -47,36 +44,11 @@ namespace Castle.MonoRail.Framework.Routing
 		}
 
 		/// <summary>
-		/// The raw url with leading and trailing slashes stripped.
-		/// </summary>
-		public string Url
-		{
-			get { return url; }
-		}
-
-		/// <summary>
 		/// The Http Request
 		/// </summary>
 		public IRequest Request
 		{
 			get { return request; }
-		}
-
-		/// <summary>
-		/// Strips leading and trailing /'s from the url.
-		/// </summary>
-		/// <param name="url"></param>
-		/// <returns>The input url, stripped from leading and trailing slashes</returns>
-		public static string StripUrl(string url)
-		{
-			if (string.IsNullOrEmpty(url))
-			{
-				throw new ArgumentNullException("url", "url cannot be empty nor null");
-			}
-
-			return url
-				.TrimEnd('/')
-				.TrimStart('/');
 		}
 	}
 }

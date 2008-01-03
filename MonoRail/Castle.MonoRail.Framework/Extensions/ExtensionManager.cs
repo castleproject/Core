@@ -15,14 +15,14 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.ComponentModel.Design;
 
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <param name="context"></param>
-	public delegate void ExtensionHandler(IRailsEngineContext context);
+	public delegate void ExtensionHandler(IEngineContext context);
 
 	/// <summary>
 	/// MonoRail's extension manager. 
@@ -30,64 +30,47 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class ExtensionManager : MarshalByRefObject
 	{
-		private static readonly object ContextCreatedEvent = new object();
-		private static readonly object ContextDisposedEvent = new object();
 		private static readonly object ActionExceptionEvent = new object();
 		private static readonly object UnhandledExceptionEvent = new object();
 		private static readonly object AcquireSessionStateEvent = new object();
 		private static readonly object ReleaseSessionStateEvent = new object();
-		private static readonly object PreProcessEvent = new object();
-		private static readonly object PostProcessEvent = new object();
-		private static readonly object AuthorizeRequestEvent = new object();
-		private static readonly object AuthenticateRequestEvent = new object();
-		private static readonly object ResolveRequestCacheEvent = new object();
-		private static readonly object UpdateRequestCacheEvent = new object();
 
-		private EventHandlerList events;
-
-		private IServiceContainer serviceContainer;
+		private readonly EventHandlerList events;
+		private readonly IMonoRailServices serviceProvider;
+		private readonly List<IMonoRailExtension> extensions = new List<IMonoRailExtension>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExtensionManager"/> class.
 		/// </summary>
 		/// <param name="serviceContainer">The service container.</param>
-		public ExtensionManager(IServiceContainer serviceContainer)
+		public ExtensionManager(IMonoRailServices serviceContainer)
 		{
 			events = new EventHandlerList();
-			this.serviceContainer = serviceContainer;
+			serviceProvider = serviceContainer;
 		}
 
 		/// <summary>
 		/// Gets the service container.
 		/// </summary>
 		/// <value>The service container.</value>
-		public IServiceContainer ServiceContainer
+		public IMonoRailServices ServiceProvider
 		{
-			get { return serviceContainer; }
+			get { return serviceProvider; }
 		}
 
 		/// <summary>
-		/// Occurs when a context is created.
+		/// Gets the extensions.
 		/// </summary>
-		public event ExtensionHandler ContextCreated
+		/// <value>The extensions.</value>
+		public List<IMonoRailExtension> Extensions
 		{
-			add { events.AddHandler(ContextCreatedEvent, value); }
-			remove { events.RemoveHandler(ContextCreatedEvent, value); }
-		}
-
-		/// <summary>
-		/// Occurs when a context is disposed.
-		/// </summary>
-		public event ExtensionHandler ContextDisposed		
-		{
-			add { events.AddHandler(ContextDisposedEvent, value); }
-			remove { events.RemoveHandler(ContextDisposedEvent, value); }
+			get { return extensions; }
 		}
 
 		/// <summary>
 		/// Occurs when an action throws an exception.
 		/// </summary>
-		public event ExtensionHandler ActionException		
+		public event ExtensionHandler ActionException
 		{
 			add { events.AddHandler(ActionExceptionEvent, value); }
 			remove { events.RemoveHandler(ActionExceptionEvent, value); }
@@ -120,129 +103,27 @@ namespace Castle.MonoRail.Framework
 			remove { events.RemoveHandler(ReleaseSessionStateEvent, value); }
 		}
 
-		/// <summary>
-		/// Occurs before pre process a handler.
-		/// </summary>
-		public event ExtensionHandler PreProcess
-		{
-			add { events.AddHandler(PreProcessEvent, value); }
-			remove { events.RemoveHandler(PreProcessEvent, value); }
-		}
-
-		/// <summary>
-		/// Occurs after process a handler.
-		/// </summary>
-		public event ExtensionHandler PostProcess
-		{
-			add { events.AddHandler(PostProcessEvent, value); }
-			remove { events.RemoveHandler(PostProcessEvent, value); }
-		}
-
-		/// <summary>
-		/// Occurs when a request needs to authenticate.
-		/// </summary>
-		public event ExtensionHandler AuthenticateRequest
-		{
-			add { events.AddHandler(AuthenticateRequestEvent, value); }
-			remove { events.RemoveHandler(AuthenticateRequestEvent, value); }
-		}
-
-		/// <summary>
-		/// Occurs when a request needs to be authorized.
-		/// </summary>
-		public event ExtensionHandler AuthorizeRequest
-		{
-			add { events.AddHandler(AuthorizeRequestEvent, value); }
-			remove { events.RemoveHandler(AuthorizeRequestEvent, value); }
-		}
-
-		/// <summary>
-		/// Occurs upon request cache resolval.
-		/// </summary>
-		public event ExtensionHandler ResolveRequestCache
-		{
-			add { events.AddHandler(ResolveRequestCacheEvent, value); }
-			remove { events.RemoveHandler(ResolveRequestCacheEvent, value); }
-		}
-
-		/// <summary>
-		/// Occurs when a cache need to be updated.
-		/// </summary>
-		public event ExtensionHandler UpdateRequestCache
-		{
-			add { events.AddHandler(UpdateRequestCacheEvent, value); }
-			remove { events.RemoveHandler(UpdateRequestCacheEvent, value); }
-		}
-
-		internal void RaiseContextCreated(IRailsEngineContext context)
-		{
-			ExtensionHandler eventDelegate = (ExtensionHandler) events[ContextCreatedEvent];
-			if (eventDelegate != null) eventDelegate(context);
-		}
-
-		internal void RaiseContextDisposed(IRailsEngineContext context)
-		{
-			ExtensionHandler eventDelegate = (ExtensionHandler) events[ContextDisposedEvent];
-			if (eventDelegate != null) eventDelegate(context);
-		}
-
-		internal void RaisePostProcess(IRailsEngineContext context)
-		{
-			ExtensionHandler eventDelegate = (ExtensionHandler) events[PostProcessEvent];
-			if (eventDelegate != null) eventDelegate(context);
-		}
-
-		internal void RaisePreProcess(IRailsEngineContext context)
-		{
-			ExtensionHandler eventDelegate = (ExtensionHandler) events[PreProcessEvent];
-			if (eventDelegate != null) eventDelegate(context);
-		}
-
-		internal void RaiseReleaseRequestState(IRailsEngineContext context)
+		internal void RaiseReleaseRequestState(IEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[ReleaseSessionStateEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		internal void RaiseAcquireRequestState(IRailsEngineContext context)
+		internal void RaiseAcquireRequestState(IEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[AcquireSessionStateEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		internal void RaiseUnhandledError(IRailsEngineContext context)
+		internal void RaiseUnhandledError(IEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[UnhandledExceptionEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		internal void RaiseActionError(IRailsEngineContext context)
+		internal void RaiseActionError(IEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[ActionExceptionEvent];
-			if (eventDelegate != null) eventDelegate(context);
-		}
-
-		internal void RaiseAuthenticateRequest(IRailsEngineContext context)
-		{
-			ExtensionHandler eventDelegate = (ExtensionHandler) events[AuthenticateRequestEvent];
-			if (eventDelegate != null) eventDelegate(context);
-		}
-
-		internal void RaiseAuthorizeRequest(IRailsEngineContext context)
-		{
-			ExtensionHandler eventDelegate = (ExtensionHandler) events[AuthorizeRequestEvent];
-			if (eventDelegate != null) eventDelegate(context);
-		}
-
-		internal void RaiseResolveRequestCache(IRailsEngineContext context)
-		{
-			ExtensionHandler eventDelegate = (ExtensionHandler) events[UpdateRequestCacheEvent];
-			if (eventDelegate != null) eventDelegate(context);
-		}
-		
-		internal void RaiseUpdateRequestCache(IRailsEngineContext context)
-		{
-			ExtensionHandler eventDelegate = (ExtensionHandler) events[UpdateRequestCacheEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 	}

@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework
 	/// 
 	/// <remarks>
 	/// To attach a dynamic action to a controller use 
-	/// the <see cref="Controller.DynamicActions"/> dictionary.
+	/// the <see cref="IControllerContext.DynamicActions"/> dictionary.
 	/// </remarks>
 	public interface IDynamicAction
 	{
@@ -31,6 +31,6 @@ namespace Castle.MonoRail.Framework
 		/// Implementors should perform the action 
 		/// upon this invocation
 		/// </summary>
-		void Execute(Controller controller);
+		object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext);
 	}
 }

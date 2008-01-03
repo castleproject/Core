@@ -1,2 +1,0 @@
-$FormHelper.HiddenField("somearg")
-$FormHelper.TextField("otherarg")

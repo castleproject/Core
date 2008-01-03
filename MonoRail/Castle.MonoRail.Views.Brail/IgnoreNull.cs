@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-	using System;
 	using System.Collections.Generic;
 	using Boo.Lang;
 
@@ -26,6 +25,8 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			this.target = target;
 		}
+
+		#region IQuackFu Members
 
 		public object QuackGet(string name, object[] parameters)
 		{
@@ -42,11 +43,6 @@ namespace Castle.MonoRail.Views.Brail
 			return new IgnoreNull(value);
 		}
 
-		private static bool IsNullOrEmpty(object[] parameters)
-		{
-			return parameters == null || parameters.Length == 0;
-		}
-
 		public object QuackSet(string name, object[] parameters, object obj)
 		{
 			if (target == null)
@@ -54,15 +50,9 @@ namespace Castle.MonoRail.Views.Brail
 			if (IsNullOrEmpty(parameters))
 				ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.SetProperty(target, name, obj);
 			else
-				ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.SetSlice(target, name, GetParameterArray(parameters, obj));
+				ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.SetSlice(target, name,
+				                                                                         GetParameterArray(parameters, obj));
 			return this;
-		}
-
-		private static object[] GetParameterArray(object[] parameters, object obj)
-		{
-			List<object> args = new List<object>(parameters); 
-			args.Add(obj);
-			return args.ToArray();
 		}
 
 		public object QuackInvoke(string name, object[] args)
@@ -72,10 +62,24 @@ namespace Castle.MonoRail.Views.Brail
 			object value = ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.Invoke(target, name, args);
 			return new IgnoreNull(value);
 		}
-		
+
+		#endregion
+
+		private static bool IsNullOrEmpty(object[] parameters)
+		{
+			return parameters == null || parameters.Length == 0;
+		}
+
+		private static object[] GetParameterArray(object[] parameters, object obj)
+		{
+			List<object> args = new List<object>(parameters);
+			args.Add(obj);
+			return args.ToArray();
+		}
+
 		public override string ToString()
 		{
-			if(target == null)
+			if (target == null)
 				return string.Empty;
 			return target.ToString();
 		}

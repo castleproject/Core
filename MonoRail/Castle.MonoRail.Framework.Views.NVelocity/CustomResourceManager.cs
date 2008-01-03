@@ -20,8 +20,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 {
 	using System;
 
-	using Castle.MonoRail.Framework.Internal;
-
 	///<summary>
 	/// Manages resource (views) loading and processing, calls and is also
 	/// called by NVelocity to allow recursive expansion of templates

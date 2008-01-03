@@ -14,35 +14,25 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using System.Collections;
 	using Castle.MonoRail.Framework.Routing;
 
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public interface IRoutingEngine
+	public interface IRoutingEngine : IRoutingRuleContainer
 	{
 		/// <summary>
 		/// Pendent
 		/// </summary>
-		/// <param name="rule">The rule.</param>
-		void Add(IRoutingRule rule);
+		/// <param name="domainName">Name of the domain.</param>
+		/// <returns></returns>
+		IRoutingRuleContainer ForDomain(string domainName);
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
-		/// <param name="routeName">Name of the route.</param>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
-		/// <param name="parameters">The parameters.</param>
+		/// <param name="subdomain">The subdomain.</param>
 		/// <returns></returns>
-		string CreateUrl(string routeName, string hostname, string virtualPath, IDictionary parameters);
-
-		/// <summary>
-		/// Pendent
-		/// </summary>
-		/// <param name="context">The routing context.</param>
-		/// <returns></returns>
-		RouteMatch FindMatch(IRouteContext context);
+		IRoutingRuleContainer ForSubDomain(string subdomain);
 	}
 }

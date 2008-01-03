@@ -1,8 +1,0 @@
-#set($intVal = 2)
-#set($strVal = "hello")
-#set($dict = "%{x='1'}")
-#blockcomponent(ChildContentComponent)
-#blockcomponent(ComponentAndParams with "strParamLiteral=Something" "strParam=$strVal" "intParamLiteral=1" "intParam=$intVal" "dictParam=$dict")
-Something
-#end
-#end

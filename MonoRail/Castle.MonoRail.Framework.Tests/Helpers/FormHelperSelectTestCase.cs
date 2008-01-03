@@ -55,16 +55,17 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			contact = new Contact();
 
 			HomeController controller = new HomeController();
+			ControllerContext context = new ControllerContext();
 
-			controller.PropertyBag.Add("product", product);
-			controller.PropertyBag.Add("user", user);
-			controller.PropertyBag.Add("roles", new Role[] { new Role(1, "a"), new Role(2, "b"), new Role(3, "c") });
-			controller.PropertyBag.Add("sendemail", true);
-			controller.PropertyBag.Add("confirmation", "abc");
-			controller.PropertyBag.Add("fileaccess", FileAccess.Read);
-			controller.PropertyBag.Add("subscription", subscription);
-			controller.PropertyBag.Add("months", months);
-			controller.PropertyBag.Add("contact", contact);
+			context.PropertyBag.Add("product", product);
+			context.PropertyBag.Add("user", user);
+			context.PropertyBag.Add("roles", new Role[] { new Role(1, "a"), new Role(2, "b"), new Role(3, "c") });
+			context.PropertyBag.Add("sendemail", true);
+			context.PropertyBag.Add("confirmation", "abc");
+			context.PropertyBag.Add("fileaccess", FileAccess.Read);
+			context.PropertyBag.Add("subscription", subscription);
+			context.PropertyBag.Add("months", months);
+			context.PropertyBag.Add("contact", contact);
 
 			workTable = new DataTable("Customers");
 			DataColumn workCol = workTable.Columns.Add("CustID", typeof(Int32));
@@ -81,7 +82,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			row[1] = "will ferrell";
 			workTable.Rows.Add(row);
 
-			helper.SetController(controller);
+			helper.SetController(controller, context);
 		}
 
 		[Test]

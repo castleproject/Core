@@ -1,7 +1,0 @@
-<form action="Save.rails" method="post">
-
-$FormHelper.CheckboxField("model.SubscribeMe")
-
-<input type="submit" />
-
-</form>

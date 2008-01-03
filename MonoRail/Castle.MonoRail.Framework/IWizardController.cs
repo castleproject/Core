@@ -20,8 +20,8 @@ namespace Castle.MonoRail.Framework
 	/// Depicts the contract for wizard controllers. 
 	/// </summary>
 	/// 
-	/// <seealso cref="WizardActionProvider"/>
-	/// <seealso cref="WizardStepPage"/>
+	/// <seealso xref="WizardActionProvider"/>
+	/// <seealso xref="WizardStepPage"/>
 	/// 
 	/// <example>
 	/// The following code shows how to create a simple wizard with two pages.
@@ -40,7 +40,7 @@ namespace Castle.MonoRail.Framework
 	/// 	public void OnAfterStep(String wizardName, String stepName, WizardStepPage step)
 	///		{ }
 	///		
-	///		public WizardStepPage[] GetSteps(IRailsEngineContext context)
+	///		public WizardStepPage[] GetSteps(IHandlerContext context)
 	///		{
 	///			return new WizardStepPage[] { new MyPage1(), new MyPage2() }; 
 	///		}
@@ -53,7 +53,7 @@ namespace Castle.MonoRail.Framework
 	/// events from a wizard lifecycle. The <see cref="GetSteps"/> must be used
 	/// to return the steps the wizard has.
 	/// </remarks>
-	public interface IWizardController
+	public interface IWizardController : IController
 	{
 		/// <summary>
 		/// Called when the wizard starts. 
@@ -72,15 +72,15 @@ namespace Castle.MonoRail.Framework
 		/// <param name="stepName">Name of the step.</param>
 		/// <param name="step">The step instance.</param>
 		/// <returns><c>true</c> if the process should proceed, otherwise, <c>false</c></returns>
-		bool OnBeforeStep(String wizardName, String stepName, WizardStepPage step);
-		
+		bool OnBeforeStep(string wizardName, string stepName, IWizardStepPage step);
+
 		/// <summary>
 		/// Called after processing a step.
 		/// </summary>
 		/// <param name="wizardName">Name of the wizard.</param>
 		/// <param name="stepName">Name of the step.</param>
 		/// <param name="step">The step instance.</param>
-		void OnAfterStep(String wizardName, String stepName, WizardStepPage step);
+		void OnAfterStep(string wizardName, string stepName, IWizardStepPage step);
 
 		/// <summary>
 		/// Implementors should return an array of steps that compose the wizard. 
@@ -91,6 +91,6 @@ namespace Castle.MonoRail.Framework
 		/// </remarks>
 		/// <param name="context">The web request context.</param>
 		/// <returns>An array of steps</returns>
-		WizardStepPage[] GetSteps(IRailsEngineContext context);
+		IWizardStepPage[] GetSteps(IEngineContext context);
 	}
 }

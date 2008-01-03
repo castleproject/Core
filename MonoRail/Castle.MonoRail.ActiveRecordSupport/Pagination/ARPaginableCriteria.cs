@@ -32,6 +32,9 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		private Type targetType;
 		private ICriterion[] criterions;
 		private Order[] orders;
+		private DetachedCriteria detachedCriteria;
+
+		private ICriteria cachedCriteria;
 		
 		private int pageSize, currentPage;
 
@@ -45,6 +48,44 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		public ARPaginableCriteria(Type targetType, params ICriterion[] criterions) : this(targetType, null, criterions) { }
 
 		public ARPaginableCriteria(Type targetType, params Order[] orders) : this(targetType, orders, null) { }
+
+		public ARPaginableCriteria(Type targetType, DetachedCriteria detachedCriteria) : this(targetType, null, (ICriterion[])null)
+		{
+			this.detachedCriteria = detachedCriteria;
+		}
+
+		protected virtual ICriteria BuildCriteria(ISession session)
+		{
+			if (cachedCriteria == null)
+			{
+				if (detachedCriteria != null)
+				{
+					cachedCriteria = detachedCriteria.GetExecutableCriteria(session);
+				}
+				else
+				{
+					cachedCriteria = session.CreateCriteria(targetType);
+
+					if (criterions != null)
+					{
+						foreach (ICriterion queryCriteria in criterions)
+						{
+							cachedCriteria.Add(queryCriteria);
+						}
+					}
+				}
+
+				if (orders != null)
+				{
+					foreach (Order order in orders)
+					{
+						cachedCriteria.AddOrder(order);
+					}
+				}
+			}
+
+			return cachedCriteria;
+		}
 
 		/// <summary>
 		/// Implementors should execute a query
@@ -61,23 +102,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 			try
 			{
-				ICriteria criteria = session.CreateCriteria(targetType);
-
-				if (criterions != null)
-				{
-					foreach (ICriterion queryCriteria in criterions)
-					{
-						criteria.Add(queryCriteria);
-					}
-				}
-			
-				if (orders != null)
-				{
-					foreach (Order order in orders)
-					{
-						criteria.AddOrder(order);
-					}
-				}
+				ICriteria criteria = BuildCriteria(session);
 
 				return criteria.List().Count;
 			}
@@ -106,23 +131,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 			try
 			{
-				ICriteria criteria = session.CreateCriteria(targetType);
-			
-				if (criterions != null)
-				{
-					foreach (ICriterion queryCriteria in criterions)
-					{
-						criteria.Add(queryCriteria);
-					}
-				}
-			
-				if (orders != null)
-				{
-					foreach (Order order in orders)
-					{
-						criteria.AddOrder(order);
-					}
-				}
+				ICriteria criteria = BuildCriteria(session);
 
 				if (!skipPagination)
 				{

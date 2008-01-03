@@ -15,22 +15,23 @@
 namespace Castle.MonoRail.Framework.Test
 {
 	using System.Collections;
+	using Castle.Core;
 	using Castle.Components.Common.EmailSender;
 
 	/// <summary>
 	/// Mocks the <see cref="IEmailTemplateService"/> calling 
-	/// <see cref="MockRailsEngineContext.AddMailTemplateRendered"/> to register
+	/// <see cref="MockEngineContext.AddMailTemplateRendered"/> to register
 	/// the calls made to these methods
 	/// </summary>
 	public class MockEmailTemplateService : IEmailTemplateService
 	{
-		private readonly MockRailsEngineContext context;
+		private readonly MockEngineContext context;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockEmailTemplateService"/> class.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public MockEmailTemplateService(MockRailsEngineContext context)
+		public MockEmailTemplateService(MockEngineContext context)
 		{
 			this.context = context;
 		}
@@ -41,13 +42,30 @@ namespace Castle.MonoRail.Framework.Test
 		/// </summary>
 		/// <param name="templateName">Name of the template to load.
 		/// Will look in <c>Views/mail</c> for that template file.</param>
+		/// <param name="layoutName">Name of the layout.</param>
 		/// <param name="parameters">Dictionary with parameters
 		/// that you can use on the email template</param>
-		/// <param name="doNotApplyLayout">If <c>true</c>, it will skip the layout</param>
 		/// <returns>An instance of <see cref="Message"/></returns>
-		public Message RenderMailMessage(string templateName, IDictionary parameters, bool doNotApplyLayout)
+		public Message RenderMailMessage(string templateName, string layoutName, IDictionary parameters)
 		{
 			context.AddMailTemplateRendered(templateName, parameters);
+
+			return new Message("from", "to", "subject", "body");
+		}
+
+		/// <summary>
+		/// Creates an instance of <see cref="Message"/>
+		/// using the specified template for the body
+		/// </summary>
+		/// <param name="templateName">Name of the template to load.
+		/// Will look in <c>Views/mail</c> for that template file.</param>
+		/// <param name="layoutName">Name of the layout.</param>
+		/// <param name="parameters">Dictionary with parameters
+		/// that you can use on the email template</param>
+		/// <returns>An instance of <see cref="Message"/></returns>
+		public Message RenderMailMessage(string templateName, string layoutName, object parameters)
+		{
+			context.AddMailTemplateRendered(templateName, new ReflectionBasedDictionaryAdapter(parameters));
 
 			return new Message("from", "to", "subject", "body");
 		}
@@ -58,12 +76,13 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="templateName">Name of the template.</param>
 		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <param name="doNotApplyLayout">if set to <c>true</c> [do not apply layout].</param>
 		/// <returns></returns>
-		public Message RenderMailMessage(string templateName, IRailsEngineContext engineContext, IController controller,
-		                                 bool doNotApplyLayout)
+		public Message RenderMailMessage(string templateName, IEngineContext engineContext, IController controller,
+		                                 IControllerContext controllerContext, bool doNotApplyLayout)
 		{
-			context.AddMailTemplateRendered(templateName, controller.PropertyBag);
+			context.AddMailTemplateRendered(templateName, controllerContext.PropertyBag);
 
 			return new Message("from", "to", "subject", "body");
 		}

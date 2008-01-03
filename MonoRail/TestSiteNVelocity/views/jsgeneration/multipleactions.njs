@@ -1,7 +1,0 @@
-$page.show("a")
-$page.show("a", "b", "c")
-$page.hide("a")
-$page.hide("a", "b", "c")
-$page.toggle("a")
-$page.toggle("a", "b", "c")
-$page.remove("a", "b", "c")

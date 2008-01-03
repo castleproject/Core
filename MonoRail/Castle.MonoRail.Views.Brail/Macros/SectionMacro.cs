@@ -14,84 +14,82 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-    using System;
-    using System.Collections;
-    using Boo.Lang.Compiler;
-    using Boo.Lang.Compiler.Ast;
-    using Castle.MonoRail.Framework;
-    using Macros;
+	using System;
+	using System.Collections;
+	using Boo.Lang.Compiler;
+	using Boo.Lang.Compiler.Ast;
+	using Framework;
+	using Macros;
 
 	public class SectionMacro : AbstractAstMacro
-    {
+	{
 		private string componentContextName;
-		private string componentFactoryName;
 		private string componentVariableName;
 
-        public override Statement Expand(MacroStatement macro)
-        {
+		public override Statement Expand(MacroStatement macro)
+		{
+			if (macro.Arguments.Count == 0)
+				throw new MonoRailException("Section must be called with a name");
 
-            if (macro.Arguments.Count == 0)
-                throw new MonoRailException("Section must be called with a name");
-
-            MacroStatement component = GetParentComponent(macro);
+			MacroStatement component = GetParentComponent(macro);
 
 			componentContextName = ComponentNaming.GetComponentContextName(component);
-			componentFactoryName = ComponentNaming.GetComponentFactoryName(component);
 			componentVariableName = ComponentNaming.GetComponentNameFor(component);
 
 
-            string sectionName = macro.Arguments[0].ToString();
-            Block block = new Block();
-            //if (!Component.SupportsSection(section.Name))
-            //   throw new ViewComponentException( String.Format("The section '{0}' is not supported by the ViewComponent '{1}'", section.Name, ComponentName));
-            MethodInvocationExpression supportsSection = new MethodInvocationExpression(
-                AstUtil.CreateReferenceExpression(componentVariableName+".SupportsSection"),
-                 new StringLiteralExpression(sectionName));
-            //create the new exception
-            RaiseStatement raiseSectionNotSupportted = new RaiseStatement(
-                new MethodInvocationExpression(
-                    AstUtil.CreateReferenceExpression(typeof(ViewComponentException).FullName),
-                new StringLiteralExpression(
-                    String.Format("The section '{0}' is not supported by the ViewComponent '{1}'", sectionName,
-                                  component.Arguments[0].ToString())
-                    )
-                ));
+			string sectionName = macro.Arguments[0].ToString();
+			Block block = new Block();
+			//if (!Component.SupportsSection(section.Name))
+			//   throw new ViewComponentException( String.Format("The section '{0}' is not supported by the ViewComponent '{1}'", section.Name, ComponentName));
+			MethodInvocationExpression supportsSection = new MethodInvocationExpression(
+				AstUtil.CreateReferenceExpression(componentVariableName + ".SupportsSection"),
+				new StringLiteralExpression(sectionName));
+			//create the new exception
+			RaiseStatement raiseSectionNotSupportted = new RaiseStatement(
+				new MethodInvocationExpression(
+					AstUtil.CreateReferenceExpression(typeof(ViewComponentException).FullName),
+					new StringLiteralExpression(
+						String.Format("The section '{0}' is not supported by the ViewComponent '{1}'", sectionName,
+						              component.Arguments[0].ToString())
+						)
+					));
 
-            Block trueBlock = new Block();
-            trueBlock.Add(raiseSectionNotSupportted);
-            IfStatement ifSectionNotSupported = new IfStatement(new UnaryExpression(UnaryOperatorType.LogicalNot, supportsSection),
-                                                                trueBlock, null);
-            block.Add(ifSectionNotSupported);
-            //componentContext.RegisterSection(sectionName);
-            MethodInvocationExpression mie = new MethodInvocationExpression(
-                new MemberReferenceExpression(new ReferenceExpression(componentContextName), "RegisterSection"),
-                new StringLiteralExpression(sectionName),
-                CodeBuilderHelper.CreateCallableFromMacroBody(CodeBuilder, macro));
-            block.Add(mie);
-            
-            IDictionary sections = (IDictionary)component["sections"];
-            if(sections==null)
-            {
-                component["sections"] = sections = new Hashtable();
-            }
-            sections.Add(sectionName, block);
-            return null;
-        }
+			Block trueBlock = new Block();
+			trueBlock.Add(raiseSectionNotSupportted);
+			IfStatement ifSectionNotSupported =
+				new IfStatement(new UnaryExpression(UnaryOperatorType.LogicalNot, supportsSection),
+				                trueBlock, null);
+			block.Add(ifSectionNotSupported);
+			//componentContext.RegisterSection(sectionName);
+			MethodInvocationExpression mie = new MethodInvocationExpression(
+				new MemberReferenceExpression(new ReferenceExpression(componentContextName), "RegisterSection"),
+				new StringLiteralExpression(sectionName),
+				CodeBuilderHelper.CreateCallableFromMacroBody(CodeBuilder, macro));
+			block.Add(mie);
 
-        private static MacroStatement GetParentComponent(Node macro)
-        {
-            Node parent = macro.ParentNode;
-            while( !(parent is MacroStatement) )
-            {
-                parent = parent.ParentNode;
-            }
-            MacroStatement parentComponent = (MacroStatement) parent;
-            if(parentComponent == null ||
-               parentComponent.Name.ToLowerInvariant() != "component" )
-            {
-                throw new MonoRailException("A section must be contained in a component");
-            }
-            return parentComponent;
-        }
-    }
+			IDictionary sections = (IDictionary) component["sections"];
+			if (sections == null)
+			{
+				component["sections"] = sections = new Hashtable();
+			}
+			sections.Add(sectionName, block);
+			return null;
+		}
+
+		private static MacroStatement GetParentComponent(Node macro)
+		{
+			Node parent = macro.ParentNode;
+			while(!(parent is MacroStatement))
+			{
+				parent = parent.ParentNode;
+			}
+			MacroStatement parentComponent = (MacroStatement) parent;
+			if (parentComponent == null ||
+			    parentComponent.Name.ToLowerInvariant() != "component")
+			{
+				throw new MonoRailException("A section must be contained in a component");
+			}
+			return parentComponent;
+		}
+	}
 }

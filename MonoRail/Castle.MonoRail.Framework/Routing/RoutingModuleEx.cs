@@ -16,11 +16,10 @@ namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Text;
 	using System.Web;
 	using Castle.MonoRail.Framework.Adapters;
-	using Castle.MonoRail.Framework.Services.Utils;
-	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Pendent
@@ -56,60 +55,89 @@ namespace Castle.MonoRail.Framework.Routing
 			HttpContext context = HttpContext.Current;
 			HttpRequest request = context.Request;
 
-			RouteMatch match =
-				engine.FindMatch(
-					new RouteContext(new RequestAdapter(request), request.ApplicationPath, RouteContext.StripUrl(request.RawUrl)));
-
-			if (match != null)
+			if (File.Exists(request.PhysicalPath))
 			{
-				string mrPath = CreateMrPath(match);
-				string url = request.RawUrl;
-
-				string paramsAsQueryString = ConvertToQueryString(match.Parameters, context.Server);
-
-				int queryStringIndex = url.IndexOf('?');
-
-				if (queryStringIndex != -1)
-				{
-					if (paramsAsQueryString.Length != 0)
-					{
-						// Concat
-						paramsAsQueryString += url.Substring(queryStringIndex + 1);
-					}
-					else
-					{
-						paramsAsQueryString = url.Substring(queryStringIndex + 1);
-					}
-				}
-
-				if (paramsAsQueryString.Length != 0)
-				{
-					context.RewritePath(mrPath, request.PathInfo, paramsAsQueryString);
-				}
-				else
-				{
-					context.RewritePath(mrPath);
-				}
-			}			
-		}
-
-		private static string ConvertToQueryString(Dictionary<string, string> parameters, HttpServerUtility serverUtil)
-		{
-			StringBuilder sb = new StringBuilder();
-
-			foreach(KeyValuePair<string, string> pair in parameters)
-			{
-				sb.AppendFormat("{0}={1}&", serverUtil.UrlEncode(pair.Key), serverUtil.UrlEncode(pair.Value));
+				return; // Possibly requesting a static file, so we skip routing altogether
 			}
 
-			return sb.ToString();
+			RouteMatch match =
+				engine.FindMatch(StripAppPathFrom(request.FilePath, request.ApplicationPath) + request.PathInfo, 
+					new RouteContext(new RequestAdapter(request), 
+						request.ApplicationPath));
+
+			if (match == null)
+			{
+				return;
+			}
+
+			string mrPath = CreateMrPath(match);
+			string url = request.RawUrl;
+
+			string paramsAsQueryString = "";
+//			string paramsAsQueryString = ConvertToQueryString(match.Parameters, context.Server);
+
+			int queryStringIndex = url.IndexOf('?');
+
+			if (queryStringIndex != -1)
+			{
+//				if (paramsAsQueryString.Length != 0)
+//				{
+//					// Concat
+//					paramsAsQueryString += url.Substring(queryStringIndex + 1);
+//				}
+//				else
+//				{
+					paramsAsQueryString = url.Substring(queryStringIndex + 1);
+//				}
+			}
+
+			if (paramsAsQueryString.Length != 0)
+			{
+				context.RewritePath(mrPath, request.PathInfo, paramsAsQueryString);
+			}
+			else
+			{
+				context.RewritePath(mrPath);
+			}
+
+			context.Items.Add(RouteMatch.RouteMatchKey, match);
 		}
+
+		private string StripAppPathFrom(string path, string applicationPath)
+		{
+			if (applicationPath.Length != 1)
+			{
+				return path.Substring(applicationPath.Length);
+			}
+			return path;
+		}
+
+//		private static string ConvertToQueryString(Dictionary<string, string> parameters, HttpServerUtility serverUtil)
+//		{
+//			StringBuilder sb = new StringBuilder();
+//
+//			foreach(KeyValuePair<string, string> pair in parameters)
+//			{
+//				sb.AppendFormat("{0}={1}&", serverUtil.UrlEncode(pair.Key), serverUtil.UrlEncode(pair.Value));
+//			}
+//
+//			return sb.ToString();
+//		}
 
 		private static string CreateMrPath(RouteMatch match)
 		{
-			ControllerDescriptor desc = ControllerInspectionUtil.Inspect(match.ControllerType);
+			string controller = match.Parameters["controller"];
+			string area = match.Parameters.ContainsKey("area") ? match.Parameters["area"] : null;
+			string action = match.Parameters["action"];
 
-			return "~/" + (string.IsNullOrEmpty(desc.Area) ? null : desc.Area + "/") + desc.Name + "/" + match.Action + MonoRailServiceContainer.MonoRailExtension;
+			if (area != null)
+			{
+				return "~/" + area + "/" + controller + "/" + action + ".castle";
+			}
+			else
+			{
+				return "~/" + controller + "/" + action + ".castle";
+			}
 		}
 
 		/// <summary>

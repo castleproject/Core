@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 			singlePage = new Page(new string[] { "a", "b", "c" }, 1, 4, 1);
 			secondPageOfThree = new Page(new string[] { "a", "b", "c", "d" }, 2, 4, 10);
 
-			BuildRailsContext("area", "controller", "action");
+			BuildEngineContext("area", "controller", "action");
 		}
 
 		[TearDown]

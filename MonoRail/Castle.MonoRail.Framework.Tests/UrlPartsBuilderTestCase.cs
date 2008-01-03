@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Tests
 {
+	using Castle.MonoRail.Framework.Services;
 	using NUnit.Framework;
 
 	[TestFixture]

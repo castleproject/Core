@@ -1,4 +1,4 @@
-// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,17 +15,20 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Collections.Generic;
-	using System.IO;
-	using System.Web;
-	using System.Reflection;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
-
+	using System.IO;
+	using System.Reflection;
+	using System.Web;
+	using Castle.Components.Binder;
 	using Castle.Components.Common.EmailSender;
 	using Castle.Components.Validator;
+	using Castle.Core;
 	using Castle.Core.Logging;
-	using Castle.MonoRail.Framework.Configuration;
+	using Castle.MonoRail.Framework.Descriptors;
+	using Castle.MonoRail.Framework.Resources;
+	using Castle.MonoRail.Framework.Services;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -33,99 +36,207 @@ namespace Castle.MonoRail.Framework
 	/// Implements the core functionality and exposes the
 	/// common methods for concrete controllers.
 	/// </summary>
-	public abstract class Controller : IController
+	public abstract class Controller : IController, IValidatorAccessor
 	{
-		#region Fields
+		private IEngineContext engineContext;
+		private IControllerContext context;
+		private ILogger logger = NullLogger.Instance;
+		private bool directRenderInvoked;
+
+		private IUrlBuilder urlBuilder;
+		private IFilterFactory filterFactory;
+		private IViewEngineManager viewEngineManager;
+		private IActionSelector actionSelector;
+		private IScaffoldingSupport scaffoldSupport;
+		private FilterDescriptor[] filters = new FilterDescriptor[0];
+		private ValidatorRunner validatorRunner;
+		private Dictionary<object, ErrorSummary> validationSummaryPerInstance;
+		private Dictionary<object, ErrorList> boundInstances;
+
+		#region IController
 
 		/// <summary>
-		/// Holds the request/context information
+		/// Occurs just before the action execution.
 		/// </summary>
-		internal IRailsEngineContext context;
+		public event ControllerHandler BeforeAction;
 
 		/// <summary>
-		/// The reference to the <see cref="IViewEngineManager"/> instance
+		/// Occurs just after the action execution.
 		/// </summary>
-		internal IViewEngineManager viewEngineManager;
+		public event ControllerHandler AfterAction;
 
 		/// <summary>
-		/// Logger instance. Should never be null
+		/// Performs the specified action, which means:
+		/// <br/>
+		/// 1. Define the default view name<br/>
+		/// 2. Run the before filters<br/>
+		/// 3. Select the method related to the action name and invoke it<br/>
+		/// 4. On error, execute the rescues if available<br/>
+		/// 5. Run the after filters<br/>
+		/// 6. Invoke the view engine<br/>
 		/// </summary>
-		internal ILogger logger = NullLogger.Instance;
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="context">The controller context.</param>
+		public virtual void Process(IEngineContext engineContext, IControllerContext context)
+		{
+			this.context = context;
+			SetEngineContext(engineContext);
+
+			ResolveLayout();
+			CreateControllerLevelResources();
+			CreateAndInitializeHelpers();
+			CreateFiltersDescriptors();
+			ProcessScaffoldIfAvailable();
+			ActionProviderUtil.RegisterActions(engineContext, this, context);
+			Initialize();
+			RunActionAndRenderView();
+		}
 
 		/// <summary>
-		/// Holds information to pass to the view
+		/// Invoked by the view engine to perform
+		/// any logic before the view is sent to the client.
 		/// </summary>
-		private IDictionary bag = new HybridDictionary();
+		/// <param name="view"></param>
+		public virtual void PreSendView(object view)
+		{
+		}
 
 		/// <summary>
-		/// The area name which was used to access this controller
+		/// Invoked by the view engine to perform
+		/// any logic after the view had been sent to the client.
 		/// </summary>
-		private string _areaName;
+		/// <param name="view"></param>
+		public virtual void PostSendView(object view)
+		{
+		}
 
 		/// <summary>
-		/// The controller name which was used to access this controller
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
-		private string _controllerName;
-
-		/// <summary>
-		/// The view name selected to be rendered after the execution 
-		/// of the action
-		/// </summary>
-		internal string _selectedViewName;
-
-		/// <summary>
-		/// The layout name that the view engine should use
-		/// </summary>
-		private string _layoutName;
-
-		/// <summary>
-		/// The original action requested
-		/// </summary>
-		private string _evaluatedAction;
-
-		/// <summary>
-		/// True if any Controller.Send operation was called.
-		/// </summary>
-		private bool _resetIsPostBack;
-		
-		/// <summary>
-		/// The helper instances collected
-		/// </summary>
-		internal IDictionary helpers = null;
-
-		/// <summary>
-		/// The resources associated with this controller
-		/// </summary>
-		internal ResourceDictionary resources = null;
-
-		/// <summary>
-		/// Reference to the <see cref="IResourceFactory"/> instance
-		/// </summary>
-		// internal IResourceFactory resourceFactory;
-		internal IDictionary<string, IDynamicAction> _dynamicActions = new Dictionary<string, IDynamicAction>(StringComparer.InvariantCultureIgnoreCase);
-
-		internal bool directRenderInvoked;
-
-		internal ControllerMetaDescriptor metaDescriptor;
-
-		internal IServiceProvider serviceProvider;
-
-		internal ValidatorRunner validator;
+		public virtual void Dispose()
+		{
+			DisposeFilters();
+		}
 
 		#endregion
 
-		#region Constructors
+		#region IValidatorAccessor
 
 		/// <summary>
-		/// Constructs a Controller
+		/// Gets the validator runner instance.
 		/// </summary>
-		public Controller()
+		/// <value>The validator instance.</value>
+		public ValidatorRunner Validator
 		{
+			get
+			{
+				if (validatorRunner == null)
+				{
+					validatorRunner = CreateValidatorRunner(engineContext.Services.ValidatorRegistry);
+				}
+				return validatorRunner;
+			}
+			set { validatorRunner = value; }
+		}
+
+		/// <summary>
+		/// Gets the bound instance errors. These are errors relative to
+		/// the binding process performed for the specified instance.
+		/// </summary>
+		/// <value>The bound instance errors.</value>
+		public IDictionary<object, ErrorList> BoundInstanceErrors
+		{
+			get
+			{
+				if (boundInstances == null)
+				{
+					boundInstances = new Dictionary<object, ErrorList>();
+				}
+				return boundInstances;
+			}
+		}
+
+		/// <summary>
+		/// Populates the validator error summary with errors relative to the
+		/// validation rules associated with the target type.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		/// <param name="binderUsedForBinding">The binder used for binding.</param>
+		public void PopulateValidatorErrorSummary(object instance, ErrorSummary binderUsedForBinding)
+		{
+			if (validationSummaryPerInstance == null)
+			{
+				validationSummaryPerInstance = new Dictionary<object, ErrorSummary>();
+			}
+			validationSummaryPerInstance[instance] = binderUsedForBinding;
+		}
+
+		/// <summary>
+		/// Gets the error summary associated with validation errors.
+		/// <para>
+		/// Will only work for instances populated by the <c>DataBinder</c>
+		/// </para>
+		/// </summary>
+		/// <param name="instance">object instance</param>
+		/// <returns>Error summary instance (can be null if the DataBinder wasn't configured to validate)</returns>
+		protected ErrorSummary GetErrorSummary(object instance)
+		{
+			if (validationSummaryPerInstance == null)
+			{
+				return null;
+			}
+			return validationSummaryPerInstance.ContainsKey(instance) ? validationSummaryPerInstance[instance] : null;
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if the given instance had 
+		/// validation errors during binding.
+		/// <para>
+		/// Will only work for instances populated by the <c>DataBinder</c>
+		/// </para>
+		/// </summary>
+		/// <param name="instance">object instance</param>
+		/// <returns><c>true</c> if the validation had an error</returns>
+		protected bool HasValidationError(object instance)
+		{
+			ErrorSummary summary = GetErrorSummary(instance);
+
+			if (summary == null)
+			{
+				return false;
+			}
+
+			return summary.ErrorsCount != 0;
+		}
+
+		/// <summary>
+		/// Gets a list of errors that were thrown during the 
+		/// object process, like conversion errors.
+		/// </summary>
+		/// <param name="instance">The instance that was populated by a binder.</param>
+		/// <returns>List of errors</returns>
+		protected ErrorList GetDataBindErrors(object instance)
+		{
+			if (boundInstances != null && boundInstances.ContainsKey(instance))
+			{
+				return boundInstances[instance];
+			}
+			return null;
 		}
 
 		#endregion
 
 		#region Useful Properties
+
+		/// <summary>
+		/// Gets the controller context.
+		/// </summary>
+		/// <value>The controller context.</value>
+		public IControllerContext ControllerContext
+		{
+			get { return context; }
+			set { context = value; }
+		}
 
 		/// <summary>
 		/// Gets the view folder -- (areaname + 
@@ -134,15 +245,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public string ViewFolder
 		{
-			get
-			{
-				if (_areaName != null && _areaName.Length > 0)
-				{
-					return Path.Combine(_areaName, _controllerName);
-				}
-
-				return _controllerName;
-			}
+			get { return context.ViewFolder; }
+			set { context.ViewFolder = value; }
 		}
 
 		/// <summary>
@@ -150,7 +254,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public ControllerMetaDescriptor MetaDescriptor
 		{
-			get { return metaDescriptor; }
+			get { return context.ControllerDescriptor; }
+			set { context.ControllerDescriptor = value; }
 		}
 
 		/// <summary>
@@ -160,7 +265,7 @@ namespace Castle.MonoRail.Framework
 		/// <value>The actions.</value>
 		public ICollection Actions
 		{
-			get { return metaDescriptor.Actions.Values; }
+			get { return MetaDescriptor.Actions.Values; }
 		}
 
 		/// <summary>
@@ -168,9 +273,9 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <remarks>It is supposed to be used by MonoRail infrastructure only</remarks>
 		/// <value>The resources.</value>
-		public ResourceDictionary Resources
+		public IDictionary<string, IResource> Resources
 		{
-			get { return resources; }
+			get { return context.Resources; }
 		}
 
 		/// <summary>
@@ -179,7 +284,7 @@ namespace Castle.MonoRail.Framework
 		/// <value>The helpers.</value>
 		public IDictionary Helpers
 		{
-			get { return helpers; }
+			get { return context.Helpers; }
 		}
 
 		/// <summary>
@@ -190,9 +295,9 @@ namespace Castle.MonoRail.Framework
 		/// </value>
 		public bool IsPost
 		{
-			get { return context.Request.HttpMethod == "POST"; }
+			get { return engineContext.Request.HttpMethod == "POST"; }
 		}
-		
+
 		/// <summary>
 		/// Gets a value indicating whether the request is a get.
 		/// </summary>
@@ -201,9 +306,9 @@ namespace Castle.MonoRail.Framework
 		/// </value>
 		public bool IsGet
 		{
-			get { return context.Request.HttpMethod == "GET"; }
+			get { return engineContext.Request.HttpMethod == "GET"; }
 		}
-		
+
 		/// <summary>
 		/// Gets a value indicating whether the request is a put.
 		/// </summary>
@@ -212,9 +317,9 @@ namespace Castle.MonoRail.Framework
 		/// </value>
 		public bool IsPut
 		{
-			get { return context.Request.HttpMethod == "PUT"; }
+			get { return engineContext.Request.HttpMethod == "PUT"; }
 		}
-		
+
 		/// <summary>
 		/// Gets a value indicating whether the request is a head.
 		/// </summary>
@@ -223,15 +328,15 @@ namespace Castle.MonoRail.Framework
 		/// </value>
 		public bool IsHead
 		{
-			get { return context.Request.HttpMethod == "HEAD"; }
+			get { return engineContext.Request.HttpMethod == "HEAD"; }
 		}
-		
+
 		/// <summary>
 		/// Gets the controller's name.
 		/// </summary>
 		public string Name
 		{
-			get { return _controllerName; }
+			get { return context.Name; }
 		}
 
 		/// <summary>
@@ -239,7 +344,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public string AreaName
 		{
-			get { return _areaName; }
+			get { return context.AreaName; }
 		}
 
 		/// <summary>
@@ -247,8 +352,27 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public string LayoutName
 		{
-			get { return _layoutName; }
-			set { _layoutName = value; }
+			get { return (context.LayoutNames != null && context.LayoutNames.Length != 0) ? context.LayoutNames[0] : null; }
+			set
+			{
+				if (value == null)
+				{
+					context.LayoutNames = null;
+				}
+				else
+				{
+					context.LayoutNames = new string[] { value };
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or set the layouts being used.
+		/// </summary>
+		public string[] LayoutNames
+		{
+			get { return context.LayoutNames; }
+			set { context.LayoutNames = value; }
 		}
 
 		/// <summary>
@@ -256,7 +380,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public string Action
 		{
-			get { return _evaluatedAction; }
+			get { return context.Action; }
 		}
 
 		/// <summary>
@@ -273,8 +397,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public string SelectedViewName
 		{
-			get { return _selectedViewName; }
-			set { _selectedViewName = value; }
+			get { return context.SelectedViewName; }
+			set { context.SelectedViewName = value; }
 		}
 
 		/// <summary>
@@ -283,16 +407,16 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public IDictionary PropertyBag
 		{
-			get { return bag; }
-			set { bag = value; }
+			get { return context.PropertyBag; }
+			set { context.PropertyBag = value; }
 		}
 
 		/// <summary>
 		/// Gets the context of this request execution.
 		/// </summary>
-		public IRailsEngineContext Context
+		public IEngineContext Context
 		{
-			get { return context; }
+			get { return engineContext; }
 		}
 
 		/// <summary>
@@ -300,7 +424,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected IDictionary Session
 		{
-			get { return context.Session; }
+			get { return engineContext.Session; }
 		}
 
 		/// <summary>
@@ -309,7 +433,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public Flash Flash
 		{
-			get { return context.Flash; }
+			get { return engineContext.Flash; }
 		}
 
 		/// <summary>
@@ -317,7 +441,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected internal HttpContext HttpContext
 		{
-			get { return context.UnderlyingContext; }
+			get { return engineContext.UnderlyingContext; }
 		}
 
 		/// <summary>
@@ -343,7 +467,7 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return Request.Params; }
 		}
-		
+
 		/// <summary>
 		/// Shortcut to <see cref="IRequest.Form"/> 
 		/// </summary>
@@ -369,17 +493,7 @@ namespace Castle.MonoRail.Framework
 		/// <value>The dynamic actions dictionary.</value>
 		public IDictionary<string, IDynamicAction> DynamicActions
 		{
-			get { return _dynamicActions; }
-		}
-
-		/// <summary>
-		/// Gets the validator runner instance.
-		/// </summary>
-		/// <value>The validator instance.</value>
-		public ValidatorRunner Validator
-		{
-			get { return validator; }
-			set { validator = value; }		
+			get { return context.DynamicActions; }
 		}
 
 		/// <summary>
@@ -388,7 +502,7 @@ namespace Castle.MonoRail.Framework
 		/// <value>The URL builder.</value>
 		public IUrlBuilder UrlBuilder
 		{
-			get { return (IUrlBuilder) serviceProvider.GetService(typeof(IUrlBuilder)); }
+			get { return urlBuilder; }
 		}
 
 		/// <summary>
@@ -397,10 +511,10 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected bool IsClientConnected
 		{
-			get { return context.Response.IsClientConnected; }
+			get { return engineContext.Response.IsClientConnected; }
 		}
 
- 		/// <summary>
+		/// <summary>
 		/// Indicates that the current Action resulted from an ASP.NET PostBack.
 		/// As a result, this property is only relavent to controllers using 
 		/// WebForms views.  It is placed on the base Controller for convenience 
@@ -411,9 +525,7 @@ namespace Castle.MonoRail.Framework
 		{
 			get
 			{
-				if (_resetIsPostBack) return false;
-				
-				NameValueCollection fields = Context.Params;
+				NameValueCollection fields = Params;
 				return (fields["__VIEWSTATE"] != null) || (fields["__EVENTTARGET"] != null);
 			}
 		}
@@ -423,12 +535,28 @@ namespace Castle.MonoRail.Framework
 		#region Useful Operations
 
 		/// <summary>
+		/// Sets the engine context. Also initialize all required services by querying
+		/// <see cref="IEngineContext.Services"/>
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public virtual void SetEngineContext(IEngineContext engineContext)
+		{
+			this.engineContext = engineContext;
+
+			urlBuilder = engineContext.Services.UrlBuilder; // should not be null (affects redirects)
+			filterFactory = engineContext.Services.FilterFactory; // should not be null
+			viewEngineManager = engineContext.Services.ViewEngineManager; // should not be null
+			actionSelector = engineContext.Services.ActionSelector; // should not be null
+			scaffoldSupport = engineContext.Services.ScaffoldSupport; // might be null
+		}
+
+		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
 		/// <param name="name">view template name (the file extension is optional)</param>
 		public void RenderView(string name)
 		{
-			_selectedViewName = Path.Combine(ViewFolder, name);
+			context.SelectedViewName = Path.Combine(ViewFolder, name);
 		}
 
 		/// <summary>
@@ -464,7 +592,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">view template name (the file extension is optional)</param>
 		public void RenderView(string controller, string name)
 		{
-			_selectedViewName = Path.Combine(controller, name);
+			context.SelectedViewName = Path.Combine(controller, name);
 		}
 
 		/// <summary>
@@ -490,8 +618,8 @@ namespace Castle.MonoRail.Framework
 		public void RenderView(string controller, string name, bool skipLayout, string mimeType)
 		{
 			if (skipLayout) CancelLayout();
-			Response.ContentType = mimeType;
 
+			Response.ContentType = mimeType;
 			RenderView(controller, name);
 		}
 
@@ -504,7 +632,6 @@ namespace Castle.MonoRail.Framework
 		public void RenderView(string controller, string name, string mimeType)
 		{
 			Response.ContentType = mimeType;
-
 			RenderView(controller, name);
 		}
 
@@ -515,7 +642,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">The name of the view to process.</param>
 		public void InPlaceRenderView(TextWriter output, string name)
 		{
-			viewEngineManager.Process(output, Context, this, Path.Combine(ViewFolder, name));
+			viewEngineManager.Process(Path.Combine(ViewFolder, name), output, Context, this, context);
 		}
 
 		/// <summary>
@@ -526,7 +653,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public void RenderSharedView(string name)
 		{
-			_selectedViewName = name;
+			context.SelectedViewName = name;
 		}
 
 		/// <summary>
@@ -538,7 +665,7 @@ namespace Castle.MonoRail.Framework
 		public void RenderSharedView(string name, bool skipLayout)
 		{
 			if (skipLayout) CancelLayout();
-			
+
 			RenderSharedView(name);
 		}
 
@@ -551,7 +678,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">The name of the view to process.</param>
 		public void InPlaceRenderSharedView(TextWriter output, string name)
 		{
-			viewEngineManager.Process(output, Context, this, name);
+			viewEngineManager.Process(name, output, Context, this, context);
 		}
 
 		/// <summary>
@@ -559,7 +686,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public void CancelView()
 		{
-			_selectedViewName = null;
+			context.SelectedViewName = null;
 		}
 
 		/// <summary>
@@ -578,9 +705,9 @@ namespace Castle.MonoRail.Framework
 		{
 			CancelView();
 
-			Response.Write(contents);
+			engineContext.Response.Write(contents);
 		}
-		
+
 		/// <summary>
 		/// Cancels the view processing and writes
 		/// the specified contents to the browser
@@ -615,7 +742,7 @@ namespace Castle.MonoRail.Framework
 
 			directRenderInvoked = true;
 
-			viewEngineManager.ProcessContents(context, this, contents);
+			viewEngineManager.RenderStaticWithinLayout(contents, engineContext, this, context);
 		}
 
 		/// <summary>
@@ -733,7 +860,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected void RedirectToReferrer()
 		{
-			Redirect(Context.UrlReferrer);
+			Redirect(Context.Request.UrlReferrer);
 		}
 
 		/// <summary> 
@@ -752,7 +879,18 @@ namespace Castle.MonoRail.Framework
 		{
 			CancelView();
 
-			context.Response.Redirect(url);
+			Context.Response.RedirectToUrl(url);
+		}
+
+		/// <summary>
+		/// Redirects to the specified URL. All other Redirects call this one.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
+		public virtual void Redirect(object parameters)
+		{
+			CancelView();
+
+			Context.Response.Redirect(parameters);
 		}
 
 		/// <summary>
@@ -842,7 +980,7 @@ namespace Castle.MonoRail.Framework
 		{
 			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, area, controller, action, parameters));
 		}
-		
+
 		/// <summary>
 		/// Redirects to another controller and action with the specified paramters.
 		/// </summary>
@@ -888,279 +1026,6 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		#region Core members
-
-		/// <summary>
-		/// Extracts the services the controller uses from the context -- which ultimately 
-		/// is a service provider.
-		/// </summary>
-		/// <param name="context">The context/service provider.</param>
-		public void InitializeFieldsFromServiceProvider(IRailsEngineContext context)
-		{
-			serviceProvider = context;
-
-			viewEngineManager = (IViewEngineManager) serviceProvider.GetService(typeof(IViewEngineManager));
-
-			IControllerDescriptorProvider controllerDescriptorBuilder = (IControllerDescriptorProvider)
-				serviceProvider.GetService( typeof(IControllerDescriptorProvider) );
-
-			metaDescriptor = controllerDescriptorBuilder.BuildDescriptor(this);
-
-			ILoggerFactory loggerFactory = (ILoggerFactory) context.GetService(typeof(ILoggerFactory));
-			
-			if (loggerFactory != null)
-			{
-				logger = loggerFactory.Create(GetType());
-			}
-			
-			this.context = context;
-
-			Initialize();
-		}
-
-		/// <summary>
-		/// Initializes the state of the controller.
-		/// </summary>
-		/// <param name="areaName">Name of the area.</param>
-		/// <param name="controllerName">Name of the controller.</param>
-		/// <param name="actionName">Name of the action.</param>
-		public void InitializeControllerState(string areaName, string controllerName, string actionName)
-		{
-			SetEvaluatedAction(actionName);
-			_areaName = areaName;
-			_controllerName = controllerName;
-		}
-
-		/// <summary>
-		/// Sets the evaluated action.
-		/// </summary>
-		/// <param name="actionName">Name of the action.</param>
-		internal void SetEvaluatedAction(string actionName)
-		{
-			_evaluatedAction = actionName;
-		}
-
-		/// <summary>
-		/// Gets the service provider.
-		/// </summary>
-		/// <value>The service provider.</value>
-		protected internal IServiceProvider ServiceProvider
-		{
-			get { return serviceProvider; }
-		}
-
-		/// <summary>
-		/// Performs the specified action, which means:
-		/// <br/>
-		/// 1. Define the default view name<br/>
-		/// 2. Run the before filters<br/>
-		/// 3. Select the method related to the action name and invoke it<br/>
-		/// 4. On error, execute the rescues if available<br/>
-		/// 5. Run the after filters<br/>
-		/// 6. Invoke the view engine<br/>
-		/// </summary>
-		/// <param name="action">Action name</param>
-		public void Send(string action)
-		{
-			ResetIsPostback();
-			InternalSend(action, null);
-		}
-
-		/// <summary>
-		/// Performs the specified action with arguments.
-		/// </summary>
-		/// <param name="action">Action name</param>
-		/// <param name="actionArgs">Action arguments</param>
-		public void Send(string action, IDictionary actionArgs)
-		{
-			ResetIsPostback();
-			InternalSend(action, actionArgs);
-		}
-	    
-		/// <summary>
-		/// Performs the specified action, which means:
-		/// <br/>
-		/// 1. Define the default view name<br/>
-		/// 2. Run the before filters<br/>
-		/// 3. Select the method related to the action name and invoke it<br/>
-		/// 4. On error, execute the rescues if available<br/>
-		/// 5. Run the after filters<br/>
-		/// 6. Invoke the view engine<br/>
-		/// </summary>
-		/// <param name="action">Action name</param>
-		/// <param name="actionArgs">Action arguments</param>
-		protected virtual void InternalSend(string action, IDictionary actionArgs)
-		{
-			// If a redirect was sent there's no point in
-			// wasting processor cycles
-			
-			if (Response.WasRedirected) return;
-			
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("InternalSend for action '{0}'", action);
-			}
-
-			bool checkWhetherClientHasDisconnected = ShouldCheckWhetherClientHasDisconnected;
-
-			// Nothing to do if the peer disconnected
-			if (checkWhetherClientHasDisconnected && !IsClientConnected) return;
-
-			IControllerLifecycleExecutor executor =
-				(IControllerLifecycleExecutor) context.Items[ControllerLifecycleExecutor.ExecutorEntry];
-
-			if (!executor.SelectAction(action, Name, actionArgs))
-			{
-				executor.PerformErrorHandling();
-
-				executor.Dispose();
-				
-				return;
-			}
-			
-			executor.ProcessSelectedAction(actionArgs);
-		}
-
-
-		/// <summary>
-		/// Gives a chance to subclasses to format the action name properly
-		/// <seealso cref="WizardStepPage"/>
-		/// </summary>
-		/// <param name="action">Raw action name</param>
-		/// <returns>Properly formatted action name</returns>
-		internal virtual string TransformActionName(string action)
-		{
-			return action;
-		}
-
-		private bool ShouldCheckWhetherClientHasDisconnected
-		{
-			get
-			{
-				MonoRailConfiguration conf = (MonoRailConfiguration)
-											 context.GetService(typeof(MonoRailConfiguration));
-
-				return conf.CheckClientIsConnected;
-			}
-		}
-
-		/// <summary>
-		/// To preserve standard Action semantics when using ASP.NET Views,
-		/// the event handlers in the CodeBehind typically call <see cref="Send(String)"/>.
-		/// As a result, the <see cref="IsPostBack"/> property must be logically 
-		/// cleared to allow the Action to behave as if it was called directly.
-		/// </summary>
-		private void ResetIsPostback()
-		{
-			_resetIsPostBack = true;	
-		}
-		
-		#endregion
-
-		#region Action Invocation
-
-		/// <summary>
-		/// Pendent
-		/// </summary>
-		/// <param name="action"></param>
-		/// <param name="actions"></param>
-		/// <param name="request"></param>
-		/// <param name="actionArgs"></param>
-		/// <returns></returns>
-		protected internal virtual MethodInfo SelectMethod(string action, IDictionary actions, 
-		                                          IRequest request, IDictionary actionArgs)
-		{
-			return actions[action] as MethodInfo;
-		}
-
-		/// <summary>
-		/// Pendent
-		/// </summary>
-		/// <param name="method"></param>
-		/// <param name="methodArgs"></param>
-		protected internal virtual void InvokeMethod(MethodInfo method, IDictionary methodArgs)
-		{
-			InvokeMethod(method, context.Request, methodArgs);
-		}
-
-		/// <summary>
-		/// Pendent
-		/// </summary>
-		/// <param name="method"></param>
-		/// <param name="request"></param>
-		/// <param name="methodArgs"></param>
-		protected internal virtual void InvokeMethod(MethodInfo method, IRequest request, IDictionary methodArgs)
-		{
- 			method.Invoke(this, new object[0]);
-		}
-	    
-		#endregion
-
-		#region Lifecycle (overridables)
-
-		/// <summary>
-		/// Initializes this instance. Implementors 
-		/// can use this method to perform initialization
-		/// </summary>
-		protected virtual void Initialize()
-		{
-			IValidatorRegistry validatorRegistry = 
-				(IValidatorRegistry) serviceProvider.GetService(typeof(IValidatorRegistry));
-
-			validator = CreateValidatorRunner(validatorRegistry);
-		}
-
-		/// <summary>
-		/// Performs application-defined tasks associated 
-		/// with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public virtual void Dispose()
-		{
-		}
-
-		/// <summary>
-		/// Creates the default validator runner. 
-		/// </summary>
-		/// <param name="validatorRegistry">The validator registry.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// You can override this method to create a runner
-		/// with some different configuration
-		/// </remarks>
-		protected virtual ValidatorRunner CreateValidatorRunner(IValidatorRegistry validatorRegistry)
-		{
-			return new ValidatorRunner(validatorRegistry);
-		}
-
-		/// <summary>
-		/// Invoked by the view engine to perform
-		/// any logic before the view is sent to the client.
-		/// </summary>
-		/// <param name="view"></param>
-		public virtual void PreSendView(object view)
-		{
-			if (view is IControllerAware)
-			{
-				(view as IControllerAware).SetController(this);
-			}
-
-			if (context != null && context.Items != null)
-			{
-				context.Items[Constants.ControllerContextKey] = this;
-			}
-		}
-
-		/// <summary>
-		/// Invoked by the view engine to perform
-		/// any logic after the view had been sent to the client.
-		/// </summary>
-		/// <param name="view"></param>
-		public virtual void PostSendView(object view)
-		{
-		}
-
-		#endregion
-
 		#region Email operations
 
 		/// <summary>
@@ -1172,6 +1037,7 @@ namespace Castle.MonoRail.Framework
 		/// Will look in Views/mail for that template file.
 		/// </param>
 		/// <returns>An instance of <see cref="Message"/></returns>
+		[Obsolete]
 		public Message RenderMailMessage(string templateName)
 		{
 			return RenderMailMessage(templateName, false);
@@ -1187,12 +1053,56 @@ namespace Castle.MonoRail.Framework
 		/// </param>
 		/// <param name="doNotApplyLayout">If <c>true</c>, it will skip the layout</param>
 		/// <returns>An instance of <see cref="Message"/></returns>
+		[Obsolete]
 		public Message RenderMailMessage(string templateName, bool doNotApplyLayout)
 		{
-			IEmailTemplateService templateService = (IEmailTemplateService)
-				ServiceProvider.GetService(typeof(IEmailTemplateService));
+			IEmailTemplateService templateService = engineContext.Services.EmailTemplateService;
+			return templateService.RenderMailMessage(templateName, Context, this, ControllerContext, doNotApplyLayout);
+		}
 
-			return templateService.RenderMailMessage(templateName, Context, this, doNotApplyLayout);
+		/// <summary>
+		/// Creates an instance of <see cref="Message"/>
+		/// using the specified template for the body
+		/// </summary>
+		/// <param name="templateName">Name of the template to load.
+		/// Will look in Views/mail for that template file.</param>
+		/// <param name="layoutName">Name of the layout.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns>An instance of <see cref="Message"/></returns>
+		public Message RenderMailMessage(string templateName, string layoutName, IDictionary parameters)
+		{
+			IEmailTemplateService templateService = engineContext.Services.EmailTemplateService;
+			return templateService.RenderMailMessage(templateName, layoutName, parameters);
+		}
+
+		/// <summary>
+		/// Creates an instance of <see cref="Message"/>
+		/// using the specified template for the body
+		/// </summary>
+		/// <param name="templateName">Name of the template to load.
+		/// Will look in Views/mail for that template file.</param>
+		/// <param name="layoutName">Name of the layout.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns>An instance of <see cref="Message"/></returns>
+		public Message RenderMailMessage(string templateName, string layoutName, IDictionary<string, object> parameters)
+		{
+			IEmailTemplateService templateService = engineContext.Services.EmailTemplateService;
+			return templateService.RenderMailMessage(templateName, layoutName, parameters);
+		}
+
+		/// <summary>
+		/// Creates an instance of <see cref="Message"/>
+		/// using the specified template for the body
+		/// </summary>
+		/// <param name="templateName">Name of the template to load.
+		/// Will look in Views/mail for that template file.</param>
+		/// <param name="layoutName">Name of the layout.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns>An instance of <see cref="Message"/></returns>
+		public Message RenderMailMessage(string templateName, string layoutName, object parameters)
+		{
+			IEmailTemplateService templateService = engineContext.Services.EmailTemplateService;
+			return templateService.RenderMailMessage(templateName, layoutName, parameters);
 		}
 
 		/// <summary>
@@ -1203,8 +1113,7 @@ namespace Castle.MonoRail.Framework
 		{
 			try
 			{
-				IEmailSender sender = (IEmailSender) ServiceProvider.GetService( typeof(IEmailSender) );
-
+				IEmailSender sender = engineContext.Services.EmailSender;
 				sender.Send(message);
 			}
 			catch(Exception ex)
@@ -1213,7 +1122,7 @@ namespace Castle.MonoRail.Framework
 				{
 					logger.Error("Error sending e-mail", ex);
 				}
-				
+
 				throw new MonoRailException("Error sending e-mail", ex);
 			}
 		}
@@ -1223,6 +1132,7 @@ namespace Castle.MonoRail.Framework
 		/// <seealso cref="DeliverEmail"/>
 		/// </summary>
 		/// <param name="templateName"></param>
+		[Obsolete]
 		public void RenderEmailAndSend(string templateName)
 		{
 			Message message = RenderMailMessage(templateName);
@@ -1231,12 +1141,708 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		internal class EmptyController : Controller
+		#region Lifecycle (overridables)
+
+		/// <summary>
+		/// Initializes this instance. Implementors 
+		/// can use this method to perform initialization
+		/// </summary>
+		protected virtual void Initialize()
 		{
-			public EmptyController(IRailsEngineContext context)
+		}
+
+		#endregion
+
+		#region Resources/i18n
+
+		/// <summary>
+		/// Creates the controller level resources.
+		/// </summary>
+		protected virtual void CreateControllerLevelResources()
+		{
+			CreateResources(MetaDescriptor.Resources);
+		}
+
+		/// <summary>
+		/// Creates the controller level resources.
+		/// </summary>
+		/// <param name="action">The action.</param>
+		protected virtual void CreateActionLevelResources(IExecutableAction action)
+		{
+			CreateResources(action.Resources);
+		}
+
+		/// <summary>
+		/// Creates the resources and adds them to the <see cref="IControllerContext.Resources"/>.
+		/// </summary>
+		/// <param name="resources">The resources.</param>
+		protected virtual void CreateResources(ResourceDescriptor[] resources)
+		{
+			if (resources == null || resources.Length == 0)
 			{
-				InitializeFieldsFromServiceProvider(context);
+				return;
 			}
+
+			Assembly typeAssembly = GetType().Assembly;
+
+			IResourceFactory resourceFactory = engineContext.Services.ResourceFactory;
+
+			foreach(ResourceDescriptor resDesc in resources)
+			{
+				if (ControllerContext.Resources.ContainsKey(resDesc.Name))
+				{
+					throw new MonoRailException("There is a duplicated entry on the resource dictionary. Resource entry name: " +
+					                            resDesc.Name);
+				}
+
+				ControllerContext.Resources.Add(resDesc.Name, resourceFactory.Create(resDesc, typeAssembly));
+			}
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Gives a change to subclass 
+		/// to override the layout resolution code
+		/// </summary>
+		protected virtual void ResolveLayout()
+		{
+			context.LayoutNames = ObtainDefaultLayoutName();
+		}
+
+		private void RunActionAndRenderView()
+		{
+			IExecutableAction action = null;
+			Exception actionException = null;
+			bool cancel;
+
+			try
+			{
+				action = SelectAction(Action);
+
+				if (action == null)
+				{
+					throw new MonoRailException(404, "Not Found", "Could not find action named " + Action);
+				}
+
+				EnsureActionIsAccessibleWithCurrentHttpVerb(action);
+				CreateActionLevelResources(action);
+
+				RunBeforeActionFilters(action, out cancel);
+				if (cancel) return;
+
+				if (BeforeAction != null)
+				{
+					BeforeAction(action, engineContext, this, context);
+				}
+
+				action.Execute(engineContext, this, context);
+
+				// Action executed successfully, so it's safe to process the cache configurer
+				if ((MetaDescriptor.CacheConfigurer != null || action.CachePolicyConfigurer != null) &&
+				    !Response.WasRedirected && Response.StatusCode == 200)
+				{
+					ConfigureCachePolicy(action);
+				}
+			}
+			catch(MonoRailException ex)
+			{
+				if (Response.StatusCode == 200 && ex.HttpStatusCode.HasValue)
+				{
+					Response.StatusCode = ex.HttpStatusCode.Value;
+					Response.StatusDescription = ex.HttpStatusDesc;
+				}
+
+				engineContext.LastException = actionException = ex;
+
+				RaiseOnActionExceptionOnExtension();
+			}
+			catch(Exception ex)
+			{
+				if (Response.StatusCode == 200)
+				{
+					Response.StatusCode = 500;
+					Response.StatusDescription = "Error processing action";
+				}
+
+				actionException = (ex is TargetInvocationException) ? ex.InnerException : ex;
+				engineContext.LastException = actionException;
+
+				RaiseOnActionExceptionOnExtension();
+			}
+			finally
+			{
+				// AfterAction event: always executed
+				if (AfterAction != null)
+				{
+					AfterAction(action, engineContext, this, context);
+				}
+			}
+
+			RunAfterActionFilters(action, out cancel);
+			if (cancel) return;
+
+			if (engineContext.Response.WasRedirected) // No need to process view or rescue in this case
+			{
+				return;
+			}
+
+			if (actionException == null)
+			{
+				if (context.SelectedViewName != null)
+				{
+					ProcessView();
+					RunAfterRenderingFilters(action);
+				}
+			}
+			else
+			{
+				if (!ProcessRescue(action, actionException))
+				{
+					throw actionException;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Configures the cache policy.
+		/// </summary>
+		/// <param name="action">The action.</param>
+		protected virtual void ConfigureCachePolicy(IExecutableAction action)
+		{
+			ICachePolicyConfigurer configurer = action.CachePolicyConfigurer ?? MetaDescriptor.CacheConfigurer;
+
+			configurer.Configure(Response.CachePolicy);
+		}
+
+		/// <summary>
+		/// Selects the appropriate action.
+		/// </summary>
+		/// <param name="action">The action name.</param>
+		/// <returns></returns>
+		protected virtual IExecutableAction SelectAction(string action)
+		{
+			// For backward compatibility purposes
+			MethodInfo method = SelectMethod(action, MetaDescriptor.Actions, engineContext.Request, null);
+
+			if (method != null)
+			{
+				ActionMetaDescriptor actionMeta = MetaDescriptor.GetAction(method);
+
+				return new ActionMethodExecutorCompatible(method, actionMeta ?? new ActionMetaDescriptor(), InvokeMethod);
+			}
+
+			// New supported way
+			return actionSelector.Select(engineContext, this, context);
+		}
+
+		/// <summary>
+		/// Invokes the scaffold support if the controller
+		/// is associated with a scaffold
+		/// </summary>
+		protected virtual void ProcessScaffoldIfAvailable()
+		{
+			if (MetaDescriptor.Scaffoldings.Count != 0)
+			{
+				if (scaffoldSupport == null)
+				{
+					String message = "You must enable scaffolding support on the " +
+					                 "configuration file, or, to use the standard ActiveRecord support " +
+					                 "copy the necessary assemblies to the bin folder.";
+
+					throw new MonoRailException(message);
+				}
+
+				scaffoldSupport.Process(engineContext, this, context);
+			}
+		}
+
+		/// <summary>
+		/// Ensures the action is accessible with current HTTP verb.
+		/// </summary>
+		/// <param name="action">The action.</param>
+		protected virtual void EnsureActionIsAccessibleWithCurrentHttpVerb(IExecutableAction action)
+		{
+			Verb allowedVerbs = action.AccessibleThroughVerb;
+
+			if (allowedVerbs == Verb.Undefined)
+			{
+				return;
+			}
+
+			string method = engineContext.Request.HttpMethod;
+
+			Verb currentVerb = (Verb) Enum.Parse(typeof(Verb), method, true);
+
+			if ((allowedVerbs & currentVerb) != currentVerb)
+			{
+				throw new MonoRailException(403, "Forbidden",
+				                            string.Format("Access to the action [{0}] " +
+				                                          "on controller [{1}] is not allowed to the http verb [{2}].",
+				                                          Action, Name, method));
+			}
+		}
+
+		#region Views and Layout
+
+		/// <summary>
+		/// Obtains the name of the default layout.
+		/// </summary>
+		/// <returns></returns>
+		protected virtual String[] ObtainDefaultLayoutName()
+		{
+			if (MetaDescriptor.Layout != null)
+			{
+				return MetaDescriptor.Layout.LayoutNames;
+			}
+			else
+			{
+				String defaultLayout = String.Format("layouts/{0}", Name);
+
+				if (viewEngineManager.HasTemplate(defaultLayout))
+				{
+					return new String[] {Name};
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		/// Processes the view.
+		/// </summary>
+		protected virtual void ProcessView()
+		{
+			if (context.SelectedViewName != null)
+			{
+				viewEngineManager.Process(context.SelectedViewName, engineContext.Response.Output, engineContext, this, context);
+			}
+		}
+
+		#endregion
+
+		#region Helpers
+
+		/// <summary>
+		/// Creates the and initialize helpers associated with a controller.
+		/// </summary>
+		public virtual void CreateAndInitializeHelpers()
+		{
+			IDictionary helpers = context.Helpers;
+
+			// Custom helpers
+
+			foreach(HelperDescriptor helper in MetaDescriptor.Helpers)
+			{
+				object helperInstance = Activator.CreateInstance(helper.HelperType);
+
+				PerformHelperInitialization(helperInstance);
+
+				if (helpers.Contains(helper.Name))
+				{
+					throw new ControllerException(String.Format("Found a duplicate helper " +
+					                                            "attribute named '{0}' on controller '{1}'", helper.Name, Name));
+				}
+
+				helpers.Add(helper.Name, helperInstance);
+			}
+
+			CreateStandardHelpers();
+		}
+
+		/// <summary>
+		/// Creates the standard helpers.
+		/// </summary>
+		public virtual void CreateStandardHelpers()
+		{
+			AbstractHelper[] builtInHelpers =
+				new AbstractHelper[]
+					{
+						new AjaxHelper(), new BehaviourHelper(),
+						new UrlHelper(), new TextHelper(),
+						new EffectsFatHelper(), new ScriptaculousHelper(),
+						new DateFormatHelper(), new HtmlHelper(),
+						new ValidationHelper(), new DictHelper(),
+						new PaginationHelper(), new FormHelper(),
+						new JSONHelper(), new ZebdaHelper()
+					};
+
+			foreach(AbstractHelper helper in builtInHelpers)
+			{
+				helper.SetController(this, context);
+				helper.SetContext(engineContext);
+
+				string helperName = helper.GetType().Name;
+
+				if (!context.Helpers.Contains(helperName))
+				{
+					context.Helpers[helperName] = helper;
+				}
+
+				// Also makes the helper available with a less verbose name
+				// i.e. FormHelper and Form, AjaxHelper and Ajax
+				if (helperName.EndsWith("Helper"))
+				{
+					string alias = helperName.Substring(0, helperName.Length - 6);
+
+					if (!context.Helpers.Contains(alias))
+					{
+						context.Helpers[alias] = helper;
+					}
+				}
+
+				PerformHelperInitialization(helper);
+			}
+		}
+
+		/// <summary>
+		/// Performs the additional helper initialization
+		/// checking if the helper instance implements <see cref="IServiceEnabledComponent"/>.
+		/// </summary>
+		/// <param name="helperInstance">The helper instance.</param>
+		private void PerformHelperInitialization(object helperInstance)
+		{
+			IContextAware ctxAware = helperInstance as IContextAware;
+
+			if (ctxAware != null)
+			{
+				ctxAware.SetContext(engineContext);
+			}
+
+			IControllerAware aware = helperInstance as IControllerAware;
+
+			if (aware != null)
+			{
+				aware.SetController(this, context);
+			}
+
+			IServiceEnabledComponent serviceEnabled = helperInstance as IServiceEnabledComponent;
+
+			if (serviceEnabled != null)
+			{
+				serviceEnabled.Service(engineContext);
+			}
+
+			IMRServiceEnabled mrServiceEnabled = helperInstance as IMRServiceEnabled;
+
+			if (mrServiceEnabled != null)
+			{
+				mrServiceEnabled.Service(engineContext.Services);
+			}
+		}
+
+		#endregion
+
+		#region Filters
+
+		private void CreateFiltersDescriptors()
+		{
+			if (MetaDescriptor.Filters.Length != 0)
+			{
+				filters = CopyFilterDescriptors();
+			}
+		}
+
+		private void RunBeforeActionFilters(IExecutableAction action, out bool cancel)
+		{
+			cancel = false;
+			if (action.ShouldSkipAllFilters) return;
+
+			if (!ProcessFilters(action, ExecuteEnum.BeforeAction))
+			{
+				cancel = true;
+				return; // A filter returned false... so we stop
+			}
+		}
+
+		private void RunAfterActionFilters(IExecutableAction action, out bool cancel)
+		{
+			cancel = false;
+			if (action == null) return;
+
+			if (action.ShouldSkipAllFilters) return;
+
+			if (!ProcessFilters(action, ExecuteEnum.AfterAction))
+			{
+				cancel = true;
+				return; // A filter returned false... so we stop
+			}
+		}
+
+		private void RunAfterRenderingFilters(IExecutableAction action)
+		{
+			if (action.ShouldSkipAllFilters) return;
+
+			ProcessFilters(action, ExecuteEnum.AfterRendering);
+		}
+
+		/// <summary>
+		/// Identifies if no filter should run for the given action.
+		/// </summary>
+		/// <param name="action">The action.</param>
+		/// <returns></returns>
+		protected virtual bool ShouldSkipFilters(IExecutableAction action)
+		{
+			if (filters == null)
+			{
+				// No filters, so skip 
+				return true;
+			}
+
+			return action.ShouldSkipAllFilters;
+
+//			ActionMetaDescriptor actionMeta = MetaDescriptor.GetAction(method);
+//
+//			if (actionMeta.SkipFilters.Count == 0)
+//			{
+//				// Nothing against filters declared for this action
+//				return false;
+//			}
+//
+//			foreach(SkipFilterAttribute skipfilter in actionMeta.SkipFilters)
+//			{
+//				// SkipAllFilters handling...
+//				if (skipfilter.BlanketSkip)
+//				{
+//					return true;
+//				}
+//
+//				filtersToSkip[skipfilter.FilterType] = String.Empty;
+//			}
+//
+//			return false;
+		}
+
+		/// <summary>
+		/// Clones all Filter descriptors, in order to get a writable copy.
+		/// </summary>
+		protected internal FilterDescriptor[] CopyFilterDescriptors()
+		{
+			FilterDescriptor[] clone = (FilterDescriptor[]) MetaDescriptor.Filters.Clone();
+
+			for(int i = 0; i < clone.Length; i++)
+			{
+				clone[i] = (FilterDescriptor) clone[i].Clone();
+			}
+
+			return clone;
+		}
+
+		private bool ProcessFilters(IExecutableAction action, ExecuteEnum when)
+		{
+			foreach(FilterDescriptor desc in filters)
+			{
+				if (action.ShouldSkipFilter(desc.FilterType))
+				{
+					continue;
+				}
+
+				if ((desc.When & when) != 0)
+				{
+					if (!ProcessFilter(when, desc))
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		private bool ProcessFilter(ExecuteEnum when, FilterDescriptor desc)
+		{
+			if (desc.FilterInstance == null)
+			{
+				desc.FilterInstance = filterFactory.Create(desc.FilterType);
+
+				IFilterAttributeAware filterAttAware = desc.FilterInstance as IFilterAttributeAware;
+
+				if (filterAttAware != null)
+				{
+					filterAttAware.Filter = desc.Attribute;
+				}
+			}
+
+			try
+			{
+				if (logger.IsDebugEnabled)
+				{
+					logger.DebugFormat("Running filter {0}/{1}", when, desc.FilterType.FullName);
+				}
+
+				return desc.FilterInstance.Perform(when, engineContext, this, context);
+			}
+			catch(Exception ex)
+			{
+				if (logger.IsErrorEnabled)
+				{
+					logger.ErrorFormat("Error processing filter " + desc.FilterType.FullName, ex);
+				}
+
+				throw;
+			}
+		}
+
+		private void DisposeFilters()
+		{
+			if (filters == null) return;
+
+			foreach(FilterDescriptor desc in filters)
+			{
+				if (desc.FilterInstance != null)
+				{
+					filterFactory.Release(desc.FilterInstance);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Rescue
+
+		/// <summary>
+		/// Performs the rescue.
+		/// </summary>
+		/// <param name="action">The action (can be null in the case of dynamic actions).</param>
+		/// <param name="actionException">The exception.</param>
+		/// <returns></returns>
+		protected bool ProcessRescue(IExecutableAction action, Exception actionException)
+		{
+			if (action != null && action.ShouldSkipRescues)
+			{
+				return false;
+			}
+
+			Type exceptionType = actionException.GetType();
+
+			RescueDescriptor desc = action != null ? action.GetRescueFor(exceptionType) : null;
+
+			if (desc == null)
+			{
+				desc = GetControllerRescueFor(exceptionType);
+			}
+
+			try
+			{
+				if (desc.RescueController != null)
+				{
+					CreateAndProcessRescueController(desc, actionException);
+				}
+				else
+				{
+					context.SelectedViewName = Path.Combine("rescues", desc.ViewName);
+
+					ProcessView();
+				}
+
+				return true;
+			}
+			catch(Exception exception)
+			{
+				// In this situation, the rescue view could not be found
+				// So we're back to the default error exibition
+
+				if (logger.IsFatalEnabled)
+				{
+					logger.FatalFormat("Failed to process rescue view. View name " +
+					                   context.SelectedViewName, exception);
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Gets the best rescue that matches the exception type
+		/// </summary>
+		/// <param name="exceptionType">Type of the exception.</param>
+		/// <returns></returns>
+		protected virtual RescueDescriptor GetControllerRescueFor(Type exceptionType)
+		{
+			return RescueUtils.SelectBest(MetaDescriptor.Rescues, exceptionType);
+		}
+
+		private void CreateAndProcessRescueController(RescueDescriptor desc, Exception actionException)
+		{
+			IController rescueController = engineContext.Services.ControllerFactory.CreateController(desc.RescueController);
+
+			ControllerMetaDescriptor rescueControllerMeta =
+				engineContext.Services.ControllerDescriptorProvider.BuildDescriptor(rescueController);
+
+			ControllerDescriptor rescueControllerDesc = rescueControllerMeta.ControllerDescriptor;
+
+			IControllerContext rescueControllerContext = engineContext.Services.ControllerContextFactory.Create(
+				rescueControllerDesc.Area, rescueControllerDesc.Name, desc.RescueMethod.Name,
+				rescueControllerMeta);
+
+			rescueControllerContext.CustomActionParameters["exception"] = actionException;
+			rescueControllerContext.CustomActionParameters["controller"] = this;
+			rescueControllerContext.CustomActionParameters["controllerContext"] = ControllerContext;
+
+			rescueController.Process(engineContext, rescueControllerContext);
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="action">The action.</param>
+		/// <param name="actions">The actions.</param>
+		/// <param name="request">The request.</param>
+		/// <param name="actionArgs">The action args.</param>
+		/// <returns></returns>
+		protected virtual MethodInfo SelectMethod(string action, IDictionary actions, IRequest request,
+		                                          IDictionary<string, object> actionArgs)
+		{
+			return null;
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <param name="request">The request.</param>
+		/// <param name="methodArgs">The method args.</param>
+		protected virtual object InvokeMethod(MethodInfo method, IRequest request,
+		                                      IDictionary<string, object> methodArgs)
+		{
+			return method.Invoke(this, new object[0]);
+		}
+
+		/// <summary>
+		/// Creates the default validator runner. 
+		/// </summary>
+		/// <param name="validatorRegistry">The validator registry.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// You can override this method to create a runner
+		/// with some different configuration
+		/// </remarks>
+		protected virtual ValidatorRunner CreateValidatorRunner(IValidatorRegistry validatorRegistry)
+		{
+			if (validatorRegistry == null)
+			{
+				throw new ArgumentNullException("validatorRegistry");
+			}
+
+			return new ValidatorRunner(validatorRegistry);
+		}
+
+		/// <summary>
+		/// Gives a chance to subclasses to format the action name properly
+		/// </summary>
+		/// <param name="action">Raw action name</param>
+		/// <returns>Properly formatted action name</returns>
+		protected virtual string TransformActionName(string action)
+		{
+			return action;
+		}
+
+
+		private void RaiseOnActionExceptionOnExtension()
+		{
+			engineContext.Services.ExtensionManager.RaiseActionError(engineContext);
 		}
 	}
 }

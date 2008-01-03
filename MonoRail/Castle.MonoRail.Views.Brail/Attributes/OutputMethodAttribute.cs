@@ -17,10 +17,12 @@ namespace Castle.MonoRail.Views.Brail
 	using anrControls;
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.Ast;
-	
+
 	//base class for the [Html], [Markdown], etc attributes
 	public abstract class OutputMethodAttribute : AbstractAstAttribute
 	{
+		public abstract string TransformMethodName { get; }
+
 		public override void Apply(Node targetNode)
 		{
 			Method method = targetNode as Method;
@@ -33,8 +35,6 @@ namespace Castle.MonoRail.Views.Brail
 			method.Body.Accept(new ReturnValueVisitor());
 			ReplaceReferences(method.Body, "transform", TransformMethodName);
 		}
-
-		public abstract string TransformMethodName { get; }
 
 		private void ReplaceReferences(Node node, string what, string value)
 		{

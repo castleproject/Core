@@ -14,68 +14,38 @@
 
 namespace Castle.MonoRail.Framework.Routing
 {
-	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public class RoutingEngine : IRoutingEngine
+	public class RoutingEngine : RoutingRuleContainer, IRoutingEngine
 	{
-		private readonly IList rules = ArrayList.Synchronized(new ArrayList());
-		private readonly Dictionary<string,IRoutingRule> name2Rule = new Dictionary<string,IRoutingRule>();
+		private readonly List<DomainRule> domainRules = new List<DomainRule>();
 
 		/// <summary>
-		/// Adds the specified rule.
+		/// Pendent
 		/// </summary>
-		/// <param name="rule">The rule.</param>
-		public void Add(IRoutingRule rule)
+		/// <param name="domainName">Name of the domain.</param>
+		/// <returns></returns>
+		public IRoutingRuleContainer ForDomain(string domainName)
 		{
-			rules.Add(rule);
-
-			// For really fast access
-			name2Rule[rule.RouteName] = rule;
+			throw new System.NotImplementedException();
 		}
 
 		/// <summary>
-		/// Creates the URL.
+		/// Pendent
 		/// </summary>
-		/// <param name="routeName">Name of the route.</param>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
-		/// <param name="parameters">The parameters.</param>
+		/// <param name="subdomain">The subdomain.</param>
 		/// <returns></returns>
-		public string CreateUrl(string routeName, string hostname, string virtualPath, IDictionary parameters)
+		public IRoutingRuleContainer ForSubDomain(string subdomain)
 		{
-			IRoutingRule rule;
-
-			if (!name2Rule.TryGetValue(routeName, out rule))
-			{
-				throw new MonoRailException("Could not find named route: " + routeName);
-			}
-
-			return rule.CreateUrl(hostname, virtualPath, parameters);
+			throw new System.NotImplementedException();
 		}
 
-		/// <summary>
-		/// Finds the match.
-		/// </summary>
-		/// <param name="context"></param>
-		/// <returns></returns>
-		public RouteMatch FindMatch(IRouteContext context)
+		class DomainRule
 		{
-			foreach(IRoutingRule rule in rules)
-			{
-				RouteMatch match = new RouteMatch(rule.ControllerType, rule.RouteName, rule.Action);
-
-				if (rule.Matches(context, match))
-				{
-					return match;
-				}
-			}
-
-			return null;
+			
 		}
 	}
 }

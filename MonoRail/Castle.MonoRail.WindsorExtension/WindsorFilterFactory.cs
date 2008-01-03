@@ -15,10 +15,9 @@
 namespace Castle.MonoRail.WindsorExtension
 {
 	using System;
-
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Services;
-	using Castle.Windsor;
+	using MicroKernel;
 
 	/// <summary>
 	/// Custom implementation of <see cref="IFilterFactory"/>
@@ -28,13 +27,18 @@ namespace Castle.MonoRail.WindsorExtension
 	/// </summary>
 	public class WindsorFilterFactory : DefaultFilterFactory
 	{
+		private readonly IKernel kernel;
+
+		public WindsorFilterFactory(IKernel kernel)
+		{
+			this.kernel = kernel;
+		}
+
 		public override IFilter Create(Type filterType)
 		{
-			IWindsorContainer container = WindsorContainerAccessorUtil.ObtainContainer();
-
-			if (container.Kernel.HasComponent(filterType))
+			if (kernel.HasComponent(filterType))
 			{
-				return (IFilter) container[filterType];
+				return (IFilter) kernel.Resolve(filterType);
 			}
 			else
 			{
@@ -44,9 +48,7 @@ namespace Castle.MonoRail.WindsorExtension
 
 		public override void Release(IFilter filter)
 		{
-			IWindsorContainer container = WindsorContainerAccessorUtil.ObtainContainer();
-
-			container.Release(filter);
+			kernel.ReleaseComponent(filter);
 
 			base.Release(filter);
 		}

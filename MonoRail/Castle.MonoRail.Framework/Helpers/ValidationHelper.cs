@@ -16,7 +16,6 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 
 	/// <summary>
 	/// Helper that provides client-side validation.

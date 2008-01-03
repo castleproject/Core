@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public bool HasNextStep()
 		{
-			return WizardUtils.HasNextStep(Controller);
+			return WizardUtils.HasNextStep(Context, Controller, ControllerContext);
 		}
 
 		/// <summary>
@@ -46,7 +46,16 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public bool HasPreviousStep()
 		{
-			return WizardUtils.HasPreviousStep(Controller);
+			return WizardUtils.HasPreviousStep(Context, Controller, ControllerContext);
+		}
+
+		/// <summary>
+		/// Gets the name of the current step.
+		/// </summary>
+		/// <value>The name of the current step.</value>
+		public int CurrentStepIndex
+		{
+			get { return WizardUtils.GetCurrentStepIndex(Context, Controller, ControllerContext); }
 		}
 
 		/// <summary>
@@ -54,7 +63,16 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		public String PreviousStepName
 		{
-			get { return WizardUtils.GetPreviousStepName(Controller); }
+			get { return WizardUtils.GetPreviousStepName(Context, Controller, ControllerContext); }
+		}
+
+		/// <summary>
+		/// Gets the name of the current step.
+		/// </summary>
+		/// <value>The name of the current step.</value>
+		public string CurrentStepName
+		{
+			get { return WizardUtils.GetCurrentStepName(Context, Controller, ControllerContext); }
 		}
 
 		/// <summary>
@@ -62,7 +80,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		public String NextStepName
 		{
-			get { return WizardUtils.GetNextStepName(Controller); }
+			get { return WizardUtils.GetNextStepName(Context, Controller, ControllerContext); }
 		}
 
 		#region LinkToStep
@@ -77,9 +95,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="linkText">The label for the step</param>
 		/// <param name="step">The WizardStepPage to link to</param>
 		/// <returns></returns>
-		public String LinkToStep(String linkText, WizardStepPage step)
+		public String LinkToStep(String linkText, IWizardStepPage step)
 		{
-			return LinkTo( linkText, step.WizardController.Name, step.ActionName);
+			return LinkTo(linkText, step.WizardControllerContext.Name, step.ActionName);
 		}
 
 		/// <summary>
@@ -92,9 +110,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="step">The WizardStepPage to link to</param>
 		/// <param name="id">Object to use for the action ID argument.</param>
 		/// <returns></returns>
-		public String LinkToStep(String linkText, WizardStepPage step, object id)
+		public String LinkToStep(String linkText, IWizardStepPage step, object id)
 		{
-			return LinkTo( linkText, step.WizardController.Name, step.ActionName, id);
+			return LinkTo(linkText, step.WizardControllerContext.Name, step.ActionName, id);
 		}
 
 		/// <summary>
@@ -108,9 +126,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="id">Object to use for the action ID argument.</param>
 		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
 		/// <returns></returns>
-		public String LinkToStep(String linkText, WizardStepPage step, object id, IDictionary attributes)
+		public String LinkToStep(String linkText, IWizardStepPage step, object id, IDictionary attributes)
 		{
-			return LinkToAttributed( linkText, step.WizardController.Name, step.ActionName, id, attributes);
+			return LinkToAttributed(linkText, step.WizardControllerContext.Name, step.ActionName, id, attributes);
 		}
 
 		#endregion
@@ -132,7 +150,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToNext(String linkText)
 		{
-			return LinkTo( linkText, Controller.Name, NextStepName );
+			return LinkTo( linkText, ControllerContext.Name, NextStepName );
 		}
 
 		/// <summary>
@@ -150,7 +168,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToNext(String linkText, IDictionary attributes)
 		{
-			return LinkToAttributed( linkText, Controller.Name, NextStepName, attributes );
+			return LinkToAttributed(linkText, ControllerContext.Name, NextStepName, attributes);
 		}
 
 		/// <summary>
@@ -168,7 +186,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToNext(String linkText, object id)
 		{
-			return LinkTo( linkText, Controller.Name, NextStepName, id );
+			return LinkTo(linkText, ControllerContext.Name, NextStepName, id);
 		}
 
 		/// <summary>
@@ -187,7 +205,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToNext(String linkText, object id, IDictionary attributes)
 		{
-			return LinkToAttributed( linkText, Controller.Name, NextStepName, id, attributes );
+			return LinkToAttributed(linkText, ControllerContext.Name, NextStepName, id, attributes);
 		}
 		
 		/// <overloads>This method has four overloads.</overloads>
@@ -205,7 +223,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToPrevious(String linkText)
 		{
-			return LinkTo( linkText, Controller.Name, PreviousStepName );
+			return LinkTo(linkText, ControllerContext.Name, PreviousStepName);
 		}
 
 		/// <summary>
@@ -223,7 +241,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToPrevious(String linkText, IDictionary attributes)
 		{
-			return LinkToAttributed( linkText, Controller.Name, PreviousStepName, attributes );
+			return LinkToAttributed(linkText, ControllerContext.Name, PreviousStepName, attributes);
 		}
 
 		/// <summary>
@@ -241,7 +259,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToPrevious(String linkText, object id)
 		{
-			return LinkTo( linkText, Controller.Name, PreviousStepName, id );
+			return LinkTo(linkText, ControllerContext.Name, PreviousStepName, id);
 		}
 
 		/// <summary>
@@ -260,7 +278,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToPrevious(String linkText, object id, IDictionary attributes)
 		{
-			return LinkToAttributed( linkText, Controller.Name, PreviousStepName, id, attributes );
+			return LinkToAttributed(linkText, ControllerContext.Name, PreviousStepName, id, attributes);
 		}
 
 		#endregion

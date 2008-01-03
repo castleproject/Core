@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Tests.Helpers
 {
-	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using NUnit.Framework;
@@ -24,14 +23,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	[TestFixture]
 	public class PaginationHelperTestCase
 	{
-		private PaginationHelper helper;
-
-		[SetUp]
-		public void Init()
-		{
-			helper = new PaginationHelper();
-		}
-
 		[Test]
 		public void EmptyCollection()
 		{

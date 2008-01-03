@@ -22,7 +22,7 @@ namespace Castle.MonoRail.TestSupport
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Test;
 
-	public delegate void ContextInitializer(MockRailsEngineContext context);
+	public delegate void ContextInitializer(MockEngineContext context);
 
 	/// <summary>
 	/// Base class that set ups the necessary infrastructure 
@@ -102,12 +102,14 @@ namespace Castle.MonoRail.TestSupport
 		private readonly string domain;
 		private readonly string domainPrefix;
 		private readonly int port;
-		protected string virtualDir = "";
-		private MockRailsEngineContext context;
+		private MockEngineContext context;
 		private IMockRequest request;
 		private IMockResponse response;
+		private MockServices services;
 		private ITrace trace;
 		private IDictionary cookies;
+		private IControllerContext controllerContext;
+		protected string virtualDir = "";
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseControllerTest"/> class.
@@ -149,7 +151,7 @@ namespace Castle.MonoRail.TestSupport
 		/// Gets the context.
 		/// </summary>
 		/// <value>The context.</value>
-		protected IRailsEngineContext Context
+		protected IEngineContext Context
 		{
 			get { return context; }
 		}
@@ -182,13 +184,31 @@ namespace Castle.MonoRail.TestSupport
 		}
 
 		/// <summary>
+		/// Gets the controller context.
+		/// </summary>
+		/// <value>The controller context.</value>
+		public IControllerContext ControllerContext
+		{
+			get { return controllerContext; }
+		}
+
+		/// <summary>
+		/// Gets the services.
+		/// </summary>
+		/// <value>The services.</value>
+		public MockServices Services
+		{
+			get { return services; }
+		}
+
+		/// <summary>
 		/// Prepares the controller giving it mock implementations
 		/// of the service it requires to function normally.
 		/// </summary>
 		/// <param name="controller">The controller.</param>
 		protected void PrepareController(Controller controller)
 		{
-			PrepareController(controller, InitializeRailsEngineContext);
+			PrepareController(controller, InitializeEngineContext);
 		}
 
 		/// <summary>
@@ -224,7 +244,7 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="actionName">Name of the action.</param>
 		protected void PrepareController(Controller controller, string areaName, string controllerName, string actionName)
 		{
-			PrepareController(controller, areaName, controllerName, actionName, InitializeRailsEngineContext);
+			PrepareController(controller, areaName, controllerName, actionName, InitializeEngineContext);
 		}
 
 		/// <summary>
@@ -254,18 +274,16 @@ namespace Castle.MonoRail.TestSupport
 			{
 				throw new ArgumentNullException("actionName");
 			}
-			if( contextInitializer == null) {
-				throw new ArgumentNullException("contextInitializer");
-			}
 
 			cookies = new HybridDictionary(true);
 
-			BuildRailsContext(areaName, controllerName, actionName, contextInitializer);
-			controller.InitializeFieldsFromServiceProvider(context);
-			controller.InitializeControllerState(areaName, controllerName, actionName);
-			ControllerLifecycleExecutor executor = new ControllerLifecycleExecutor(controller, context);
-			executor.Service(context);
-			executor.InitializeController(controller.AreaName, controller.Name, controller.Action);
+			BuildEngineContext(areaName, controllerName, actionName, contextInitializer);
+
+			controllerContext = services.ControllerContextFactory.Create(areaName, controllerName, actionName, services.ControllerDescriptorProvider.BuildDescriptor(controller));
+
+			controller.SetEngineContext(Context);
+			controller.ControllerContext = controllerContext;
+			controller.CreateStandardHelpers();
 		}
 
 		/// <summary>
@@ -274,9 +292,9 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="areaName">Name of the area.</param>
 		/// <param name="controllerName">Name of the controller.</param>
 		/// <param name="actionName">Name of the action.</param>
-		protected void BuildRailsContext(string areaName, string controllerName, string actionName)
+		protected void BuildEngineContext(string areaName, string controllerName, string actionName)
 		{
-			BuildRailsContext(areaName, controllerName, actionName, InitializeRailsEngineContext);
+			BuildEngineContext(areaName, controllerName, actionName, InitializeEngineContext);
 		}
 
 		/// <summary>
@@ -286,13 +304,14 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="controllerName">Name of the controller.</param>
 		/// <param name="actionName">Name of the action.</param>
 		/// <param name="contextInitializer">The context initializer.</param>
-		protected void BuildRailsContext(string areaName, string controllerName, string actionName, ContextInitializer contextInitializer)
+		protected void BuildEngineContext(string areaName, string controllerName, string actionName, ContextInitializer contextInitializer)
 		{
 			UrlInfo info = BuildUrlInfo(areaName, controllerName, actionName);
+			services = BuildServices();
 			request = BuildRequest();
 			response = BuildResponse();
 			trace = BuildTrace();
-			context = BuildRailsEngineContext(request, response, trace, info);
+			context = BuildRailsEngineContext(request, response, services, trace, info);
 			contextInitializer(context);
 		}
 
@@ -303,6 +322,15 @@ namespace Castle.MonoRail.TestSupport
 		protected virtual IMockRequest BuildRequest()
 		{
 			return new MockRequest(cookies);
+		}
+
+		/// <summary>
+		/// Builds the services.
+		/// </summary>
+		/// <returns></returns>
+		protected virtual MockServices BuildServices()
+		{
+			return new MockServices();
 		}
 
 		/// <summary>
@@ -324,18 +352,21 @@ namespace Castle.MonoRail.TestSupport
 		}
 
 		/// <summary>
-		/// Builds the a mock context. You can override this method to 
+		/// Builds the a mock context. You can override this method to
 		/// create a special configured mock context.
 		/// </summary>
 		/// <param name="request">The request.</param>
 		/// <param name="response">The response.</param>
+		/// <param name="services">The services.</param>
 		/// <param name="trace">The trace.</param>
 		/// <param name="urlInfo">The URL info.</param>
 		/// <returns></returns>
-		protected virtual MockRailsEngineContext BuildRailsEngineContext(IRequest request, IResponse response, ITrace trace,
-		                                                                 UrlInfo urlInfo)
+		protected virtual MockEngineContext BuildRailsEngineContext(IRequest request, IResponse response, 
+			IMonoRailServices services, ITrace trace, UrlInfo urlInfo)
 		{
-			return new MockRailsEngineContext(request, response, trace, urlInfo);
+			MockEngineContext engine = new MockEngineContext(request, response, services, urlInfo);
+			engine.Trace = trace;
+			return engine;
 		}
 
 		/// <summary>
@@ -355,8 +386,8 @@ namespace Castle.MonoRail.TestSupport
 		/// <summary>
 		/// Allows modifying of the engine context created by <see cref="BuildRailsEngineContext"/>
 		/// </summary>
-		/// <param name="mockRailsEngineContext">The engine context to modify</param>
-		protected virtual void InitializeRailsEngineContext(MockRailsEngineContext mockRailsEngineContext)
+		/// <param name="mockEngineContext">The engine context to modify</param>
+		protected virtual void InitializeEngineContext(MockEngineContext mockEngineContext)
 		{}
 
 		/// <summary>
@@ -368,9 +399,9 @@ namespace Castle.MonoRail.TestSupport
 		/// </returns>
 		protected bool HasRenderedEmailTemplateNamed(string templateName)
 		{
-			MockRailsEngineContext.RenderedEmailTemplate template = 
+			MockEngineContext.RenderedEmailTemplate template = 
 				context.RenderedEmailTemplates.Find(
-					delegate(MockRailsEngineContext.RenderedEmailTemplate emailTemplate)
+					delegate(MockEngineContext.RenderedEmailTemplate emailTemplate)
 					{
 						return templateName.Equals(emailTemplate.Name, StringComparison.OrdinalIgnoreCase);
 					});
@@ -391,7 +422,7 @@ namespace Castle.MonoRail.TestSupport
 		/// Gets the rendered email templates.
 		/// </summary>
 		/// <value>The rendered email templates.</value>
-		protected MockRailsEngineContext.RenderedEmailTemplate[] RenderedEmailTemplates
+		protected MockEngineContext.RenderedEmailTemplate[] RenderedEmailTemplates
 		{
 			get { return context.RenderedEmailTemplates.ToArray(); }
 		}

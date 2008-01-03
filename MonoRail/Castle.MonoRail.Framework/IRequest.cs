@@ -18,6 +18,26 @@ namespace Castle.MonoRail.Framework
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Web;
+	using Castle.Components.Binder;
+
+	/// <summary>
+	/// Defines where the parameters should be obtained from
+	/// </summary>
+	public enum ParamStore
+	{
+		/// <summary>
+		/// Query string
+		/// </summary>
+		QueryString,
+		/// <summary>
+		/// Only from the Form
+		/// </summary>
+		Form,
+		/// <summary>
+		/// From QueryString, Form and Environment variables.
+		/// </summary>
+		Params
+	}
 
 	/// <summary>
 	/// Represents the request data
@@ -25,27 +45,16 @@ namespace Castle.MonoRail.Framework
 	public interface IRequest
 	{
 		/// <summary>
-		/// Gets the Http headers.
+		/// Gets the accept header.
 		/// </summary>
-		/// <value>The Http headers.</value>
-		NameValueCollection Headers { get; }
+		/// <value>The accept header.</value>
+		string AcceptHeader { get; }
 
 		/// <summary>
-		/// Gets the <see cref="HttpPostedFile"/> per key.
+		/// Gets the request type (GET, POST, etc)
 		/// </summary>
-		IDictionary Files { get; }
-
-		/// <summary>
-		/// Gets the params which accumulates headers, post, querystring and cookies.
-		/// </summary>
-		/// <value>The params.</value>
-		NameValueCollection Params { get; }
-
-		/// <summary>
-		/// Gets a value indicating whether this requeest is from a local address.
-		/// </summary>
-		/// <value><c>true</c> if this instance is local; otherwise, <c>false</c>.</value>
-		bool IsLocal { get; }
+		[Obsolete("Use the property HttpMethod instead")]
+		String RequestType { get; }
 
 		/// <summary>
 		/// Gets additional path information for 
@@ -58,6 +67,7 @@ namespace Castle.MonoRail.Framework
 		/// Gets the raw URL.
 		/// </summary>
 		/// <value>The raw URL.</value>
+		[Obsolete("Use the property Url instead")]
 		String RawUrl { get; }
 
 		/// <summary>
@@ -67,36 +77,25 @@ namespace Castle.MonoRail.Framework
 		Uri Uri { get; }
 
 		/// <summary>
-		/// Gets the HTTP method.
+		/// Gets the request URL.
 		/// </summary>
-		/// <value>The HTTP method.</value>
-		String HttpMethod { get; }
+		String Url { get; }
 
 		/// <summary>
-		/// Gets the file path.
+		/// Gets the referring URL.
 		/// </summary>
-		/// <value>The file path.</value>
-		String FilePath { get; }
+		String UrlReferrer { get; }
 
 		/// <summary>
-		/// Reads the request data as a byte array.
+		/// Gets the <see cref="HttpPostedFile"/> per key.
 		/// </summary>
-		/// <param name="count">How many bytes.</param>
-		/// <returns></returns>
-		byte[] BinaryRead(int count);
+		IDictionary Files { get; }
 
 		/// <summary>
-		/// Gets the param with the specified key.
+		/// Gets the params which accumulates headers, post, querystring and cookies.
 		/// </summary>
-		/// <value></value>
-		String this [String key] { get; }
-
-		/// <summary>
-		/// Reads the cookie.
-		/// </summary>
-		/// <param name="name">The cookie name.</param>
-		/// <returns></returns>
-		String ReadCookie( String name );
+		/// <value>The params.</value>
+		NameValueCollection Params { get; }
 
 		/// <summary>
 		/// Gets the query string.
@@ -111,6 +110,51 @@ namespace Castle.MonoRail.Framework
 		NameValueCollection Form { get; }
 
 		/// <summary>
+		/// Gets the Http headers.
+		/// </summary>
+		/// <value>The Http headers.</value>
+		NameValueCollection Headers { get; }
+
+		/// <summary>
+		/// Indexer to access <see cref="Params"/> entries.
+		/// </summary>
+		/// <value></value>
+		string this[string name] { get; }
+		
+		/// <summary>
+		/// Gets a value indicating whether this requeest is from a local address.
+		/// </summary>
+		/// <value><c>true</c> if this instance is local; otherwise, <c>false</c>.</value>
+		bool IsLocal { get; }
+
+		/// <summary>
+		/// Gets the HTTP method.
+		/// </summary>
+		/// <value>The HTTP method.</value>
+		String HttpMethod { get; }
+
+		/// <summary>
+		/// Gets the file path.
+		/// </summary>
+		/// <value>The file path.</value>
+		String FilePath { get; }
+
+//		/// <summary>
+//		/// Reads the request data as a byte array.
+//		/// </summary>
+//		/// <param name="count">How many bytes.</param>
+//		/// <returns></returns>
+//		byte[] BinaryRead(int count);
+
+
+		/// <summary>
+		/// Reads the cookie.
+		/// </summary>
+		/// <param name="name">The cookie name.</param>
+		/// <returns></returns>
+		String ReadCookie(String name);
+
+		/// <summary>
 		/// Gets the user languages.
 		/// </summary>
 		/// <value>The user languages.</value>
@@ -121,6 +165,32 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <value>The IP address of the remote client.</value>
 		string UserHostAddress { get; }
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical 
+		/// representation of the flat data on <see cref="Controller.Params"/>
+		/// </summary>
+		CompositeNode ParamsNode { get; }
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical 
+		/// representation of the flat data on <see cref="IRequest.Form"/>
+		/// </summary>
+		CompositeNode FormNode { get; }
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical 
+		/// representation of the flat data on <see cref="IRequest.QueryString"/>
+		/// </summary>
+		/// <value>The query string node.</value>
+		CompositeNode QueryStringNode { get; }
+
+		/// <summary>
+		/// Obtains the params node.
+		/// </summary>
+		/// <param name="from">From.</param>
+		/// <returns></returns>
+		CompositeNode ObtainParamsNode(ParamStore from);
 
 		/// <summary>
 		/// Validates the input.

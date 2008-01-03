@@ -18,9 +18,15 @@
 			<include name="Castle.Components.Binder.dll" />
 			<include name="Castle.Components.Validator.dll" />
 			<include name="NHibernate.dll" />
-			<include name="Nullables.dll" />
+			<include name="Castle.Components.Common.TemplateEngine.dll" />
+			<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
 			<include name="Iesi.Collections.dll" />
 		</assemblyfileset>
+
+		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">
+			<include name="**/*.vm" />
+			<exclude name="obj/**" />
+		</resourcefileset>
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />

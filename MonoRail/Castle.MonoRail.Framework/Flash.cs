@@ -31,10 +31,8 @@ namespace Castle.MonoRail.Framework
 
 		[NonSerialized] 
 		private ArrayList keep = new ArrayList();
-
 		[NonSerialized] 
 		private bool hasItemsToKeep;
-
 		[NonSerialized] 
 		private bool hasSwept;
 
@@ -59,7 +57,14 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		internal Flash(SerializationInfo info, StreamingContext context) : base(info, context)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Flash"/> class.
+		/// </summary>
+		/// <param name="info">A <see cref="T:System.Runtime.Serialization.SerializationInfo"/> object containing the information required to serialize the <see cref="T:System.Collections.Hashtable"/> object.</param>
+		/// <param name="context">A <see cref="T:System.Runtime.Serialization.StreamingContext"/> object containing the source and destination of the serialized stream associated with the <see cref="T:System.Collections.Hashtable"/>.</param>
+		/// <exception cref="T:System.ArgumentNullException">
+		/// <paramref name="info"/> is null. </exception>
+		public Flash(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 
@@ -195,7 +200,7 @@ namespace Castle.MonoRail.Framework
 		/// <value>
 		/// 	<c>true</c> if this instance has items to keep; otherwise, <c>false</c>.
 		/// </value>
-		internal bool HasItemsToKeep
+		public bool HasItemsToKeep
 		{
 			get { return hasItemsToKeep; }
 		}

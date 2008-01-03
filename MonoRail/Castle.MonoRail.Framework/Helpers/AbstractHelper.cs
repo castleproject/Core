@@ -15,9 +15,9 @@
 namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Text;
-	using System.Collections;
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
@@ -26,45 +26,65 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// a reference to the controller which is using it or
 	/// if you need to use one of the protected utility methods.
 	/// </summary>
-	public abstract class AbstractHelper : IControllerAware
+	public abstract class AbstractHelper : IContextAware, IControllerAware
 	{
 		private const string MonoRailVersion = "RC3_0006";
 
-		#region Controller Reference
+		#region Context and Controller Reference
 
-		/// <summary>
-		/// Store's <see cref="Controller"/> for the current view.
-		/// </summary>
-		private Controller controller;
+		private IController controller;
+		private IControllerContext controllerContext;
+		private IEngineContext context;
+		private IServerUtility serverUtility;
 
 		private UrlHelper urlHelper;
 
-		private IServerUtility serverUtility;
-
-		private IRailsEngineContext context;
+		/// <summary>
+		/// Sets the context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public virtual void SetContext(IEngineContext context)
+		{
+			this.context = context;
+			serverUtility = context.Server;
+		}
 
 		/// <summary>
 		/// Sets the controller.
 		/// </summary>
 		/// <param name="controller">Current view's <see cref="Controller"/>.</param>
-		public virtual void SetController(Controller controller)
+		/// <param name="controllerContext">The controller context.</param>
+		public virtual void SetController(IController controller, IControllerContext controllerContext)
 		{
 			this.controller = controller;
-
-			if (controller.Context != null) // It will be null when invoked from test cases
-			{
-				context = controller.Context;
-				serverUtility = controller.Context.Server;
-			}
+			this.controllerContext = controllerContext;
 		}
 
 		/// <summary>
 		/// Gets the controller.
 		/// </summary>
 		/// <value>The <see cref="Controller"/> used with the current view.</value>
-		public Controller Controller
+		public IController Controller
 		{
 			get { return controller; }
+		}
+
+		/// <summary>
+		/// Gets the controller context.
+		/// </summary>
+		/// <value>The controller context.</value>
+		public IControllerContext ControllerContext
+		{
+			get { return controllerContext; }
+		}
+
+		/// <summary>
+		/// Gets the engine context.
+		/// </summary>
+		/// <value>The context.</value>
+		public IEngineContext Context
+		{
+			get { return context; }
 		}
 
 		#endregion
@@ -85,7 +105,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <value>The URL helper.</value>
 		public UrlHelper UrlHelper
 		{
-			get { return urlHelper ?? (UrlHelper) controller.Helpers["UrlHelper"]; }
+			get { return urlHelper ?? (UrlHelper) controllerContext.Helpers["UrlHelper"]; }
 			set { urlHelper = value; }
 		}
 
@@ -109,7 +129,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Gets the current context.
 		/// </summary>
 		/// <value>The current context.</value>
-		public IRailsEngineContext CurrentContext
+		public IEngineContext CurrentContext
 		{
 			get { return context; }
 			set { context = value; }

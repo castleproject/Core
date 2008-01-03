@@ -16,7 +16,7 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.IO;
-	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Descriptors;
 
 	/// <summary>
 	/// Decorates an action associating a <see cref="IFilter"/>

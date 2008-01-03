@@ -19,11 +19,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 	using Castle.Components.Validator;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Tests.Controllers;
-	using Castle.MonoRail.TestSupport;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class FormValidationTestCase : BaseControllerTest
+	public class FormValidationTestCase
 	{
 		private FormHelper helper;
 		private ModelWithValidation model;
@@ -40,11 +39,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 			model = new ModelWithValidation();
 
 			HomeController controller = new HomeController();
-			PrepareController(controller, "", "Home", "Index");
+			ControllerContext controllerContext = new ControllerContext();
 
-			controller.PropertyBag.Add("model", model);
+			controllerContext.PropertyBag.Add("model", model);
 
-			helper.SetController(controller);
+			helper.SetController(controller, controllerContext);
 		}
 
 		[Test]

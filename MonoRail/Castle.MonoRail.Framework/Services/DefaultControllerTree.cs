@@ -35,14 +35,17 @@ namespace Castle.MonoRail.Framework.Services
 		/// The default area is <c>String.Empty</c>
 		/// </summary>
 		private readonly String area;
+
 		/// <summary>
 		/// A dictionary of controllers that belongs to this node (area)
 		/// </summary>
 		private readonly IDictionary controllers;
+
 		/// <summary>
 		/// The controllers node on the left
 		/// </summary>
 		private DefaultControllerTree left;
+
 		/// <summary>
 		/// The controllers node on the right
 		/// </summary>
@@ -71,9 +74,10 @@ namespace Castle.MonoRail.Framework.Services
 			controllers = new HybridDictionary(true);
 		}
 
-		private void OnControllerAdded(String area, String controllerName, Type controller) 
+		private void OnControllerAdded(String area, String controllerName, Type controller)
 		{
-			if(ControllerAdded != null) {
+			if (ControllerAdded != null)
+			{
 				ControllerAddedEventArgs args = new ControllerAddedEventArgs(area, controllerName, controller);
 				ControllerAdded(this, args);
 			}
@@ -110,7 +114,7 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				// Otherwise, check if the controller should be registered
 				// on the left or on the right
-				
+
 				DefaultControllerTree node;
 
 				if (cmp < 0)
@@ -147,7 +151,7 @@ namespace Castle.MonoRail.Framework.Services
 			if (controllerName == null) throw new ArgumentNullException("controllerName");
 
 			int cmp = String.Compare(areaName, area, true);
-			
+
 			if (cmp == 0)
 			{
 				return (Type) controllers[controllerName];

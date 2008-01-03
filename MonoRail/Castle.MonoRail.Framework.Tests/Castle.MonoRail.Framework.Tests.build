@@ -16,12 +16,21 @@
 			<include name="Castle.MonoRail.TestSupport.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Castle.DynamicProxy.dll" />
+			<include name="Castle.Components.Common.EmailSender.dll" />
 			<include name="Castle.Components.Validator.dll" />
+			<include name="Castle.Components.Binder.dll" />
+
+			<include name="Castle.MicroKernel.dll" />
+			<include name="Castle.Windsor.dll" />
+			<include name="Castle.MonoRail.WindsorExtension.dll" />
+
 			<include name="System.Data.dll" />
+			<include name="Rhino.Mocks.dll" />
 		</assemblyfileset>
 
-		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true" >
+		<resourcefileset id="project.resources" basedir="${src.dir}" prefix="${project::get-name()}" dynamicprefix="true">
 			<include name="Content/contentinassembly.vm" />
+			<include name="**/*.resx" />
 			<exclude name="obj/**" />
 		</resourcefileset>
 	</target>

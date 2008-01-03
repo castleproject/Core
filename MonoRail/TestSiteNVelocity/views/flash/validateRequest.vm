@@ -1,7 +1,0 @@
-<form action="validateRequest.rails" method="post">
-	<input type="text" name="malicious" value="delete from tb_table"></input>
-	<textarea name="id" id="text"><script></script></textarea>
-	<input type="submit" />
-</form>
-
-<p><font color="red">$!{validationError}</font></p>

@@ -20,7 +20,6 @@ namespace Castle.MonoRail.Framework
 	/// Implemented by attributes that wants to perform 
 	/// some conversion to populate a smart dispatcher 
 	/// action argument.
-	/// <seealso cref="DataBindAttribute"/>
 	/// </summary>
 	public interface IParameterBinder
 	{
@@ -29,17 +28,21 @@ namespace Castle.MonoRail.Framework
 		/// zero indicating whether the parameter can be bound successfully. The greater the value (points)
 		/// the more successful the implementation indicates to the framework
 		/// </summary>
+		/// <param name="context">The context.</param>
 		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <param name="parameterInfo">The parameter info.</param>
 		/// <returns></returns>
-		int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo);
+		int CalculateParamPoints(IEngineContext context, IController controller, IControllerContext controllerContext, ParameterInfo parameterInfo);
 
 		/// <summary>
 		/// Binds the specified parameters for the action.
 		/// </summary>
+		/// <param name="context">The context.</param>
 		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
 		/// <param name="parameterInfo">The parameter info.</param>
 		/// <returns></returns>
-		object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo);
+		object Bind(IEngineContext context, IController controller, IControllerContext controllerContext, ParameterInfo parameterInfo);
 	}
 }

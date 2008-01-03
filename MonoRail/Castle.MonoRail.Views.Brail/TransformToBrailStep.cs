@@ -30,7 +30,7 @@ namespace Castle.MonoRail.Views.Brail
 	// * Create a constructor that delegate to BrailBase constructor
 	public class TransformToBrailStep : AbstractCompilerStep
 	{
-		private BooViewEngineOptions options;
+		private readonly BooViewEngineOptions options;
 
 		public TransformToBrailStep(BooViewEngineOptions options)
 		{
@@ -69,7 +69,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		public static string GetViewTypeName(string name)
 		{
-			return "BrailView_"+ name;
+			return "BrailView_" + name;
 		}
 
 		// get the directory name where this script reside and create a property
@@ -103,6 +103,7 @@ namespace Castle.MonoRail.Views.Brail
 		private void AddConstructor(ClassDefinition macro)
 		{
 			Constructor ctor = new Constructor(macro.LexicalInfo);
+
 			ctor.Parameters.Add(
 				new ParameterDeclaration("viewEngine",
 				                         new SimpleTypeReference("Castle.MonoRail.Views.Brail.BooViewEngine")));
@@ -112,11 +113,15 @@ namespace Castle.MonoRail.Views.Brail
 				                         new SimpleTypeReference("System.IO.TextWriter")));
 			ctor.Parameters.Add(
 				new ParameterDeclaration("context",
-				                         new SimpleTypeReference("Castle.MonoRail.Framework.IRailsEngineContext")));
+				                         new SimpleTypeReference("Castle.MonoRail.Framework.IEngineContext")));
 
 			ctor.Parameters.Add(
 				new ParameterDeclaration("__controller",
-				                         new SimpleTypeReference("Castle.MonoRail.Framework.Controller")));
+				                         new SimpleTypeReference("Castle.MonoRail.Framework.IController")));
+
+			ctor.Parameters.Add(
+				new ParameterDeclaration("__controllerContext",
+										 new SimpleTypeReference("Castle.MonoRail.Framework.IControllerContext")));
 
 
 			MethodInvocationExpression mie = new MethodInvocationExpression(new SuperLiteralExpression());
@@ -124,6 +129,7 @@ namespace Castle.MonoRail.Views.Brail
 			mie.Arguments.Add(AstUtil.CreateReferenceExpression("output"));
 			mie.Arguments.Add(AstUtil.CreateReferenceExpression("context"));
 			mie.Arguments.Add(AstUtil.CreateReferenceExpression("__controller"));
+			mie.Arguments.Add(AstUtil.CreateReferenceExpression("__controllerContext"));
 
 			ctor.Body.Add(mie);
 

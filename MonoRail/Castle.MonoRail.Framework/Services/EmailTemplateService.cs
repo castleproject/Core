@@ -17,9 +17,8 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.IO;
+	using System.Text;
 	using System.Text.RegularExpressions;
-	using System.Web;
-
 	using Castle.Components.Common.EmailSender;
 	using Castle.Core;
 	using Castle.Core.Logging;
@@ -28,15 +27,21 @@ namespace Castle.MonoRail.Framework
 	/// Default implementation of <see cref="IEmailTemplateService"/>
 	/// </summary>
 	/// <remarks>
-	/// Will work only during a MonoRail process as it needs a <see cref="IRailsEngineContext"/>
+	/// Will work only during a MonoRail process as it needs a <see cref="IEngineContext"/>
 	/// and a <see cref="Controller"/> instance to execute.
 	/// </remarks>
-	public class EmailTemplateService : IServiceEnabledComponent, IEmailTemplateService
+	public class EmailTemplateService : IMRServiceEnabled, IEmailTemplateService
 	{
+		private static readonly String HeaderPattern = @"[ \t]*(?<header>(to|from|cc|bcc|subject|X-\w+)):[ \t]*(?<value>(.)+)(\r*\n*)?";
+		private static readonly Regex HeaderRegEx = new Regex(HeaderPattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private static readonly string EmailTemplatePath = "mail";
+
 		/// <summary>
 		/// The logger instance
 		/// </summary>
 		private ILogger logger = NullLogger.Instance;
+
+		private IViewEngineManager viewEngineManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EmailTemplateService"/> class.
@@ -44,22 +49,33 @@ namespace Castle.MonoRail.Framework
 		public EmailTemplateService()
 		{
 		}
-		
-		#region IServiceEnabledComponent implementation
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EmailTemplateService"/> class.
+		/// </summary>
+		/// <param name="viewEngineManager">The view engine manager.</param>
+		public EmailTemplateService(IViewEngineManager viewEngineManager)
+		{
+			this.viewEngineManager = viewEngineManager;
+		}
+
+		#region IMRServiceEnabled
+
 		/// <summary>
 		/// Invoked by the framework in order to give a chance to
 		/// obtain other services
 		/// </summary>
-		/// <param name="provider">The service proviver</param>
-		public void Service(IServiceProvider provider)
+		/// <param name="serviceProvider">The service proviver</param>
+		public void Service(IMonoRailServices serviceProvider)
 		{
-			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
-			
+			ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+
 			if (loggerFactory != null)
 			{
 				logger = loggerFactory.Create(typeof(EmailTemplateService));
 			}
+
+			viewEngineManager = serviceProvider.ViewEngineManager;
 		}
 
 		#endregion
@@ -68,187 +84,159 @@ namespace Castle.MonoRail.Framework
 		/// Creates an instance of <see cref="Message"/>
 		/// using the specified template for the body
 		/// </summary>
-		/// <param name="templateName">
-		/// Name of the template to load. 
-		/// Will look in <c>Views/mail</c> for that template file.
-		/// </param>
-		/// <param name="parameters">
-		/// Dictionary with parameters 
-		/// that you can use on the email template
-		/// </param>
-		/// <param name="doNotApplyLayout">If <c>true</c>, it will skip the layout</param>
+		/// <param name="templateName">Name of the template to load.
+		/// Will look in <c>Views/mail</c> for that template file.</param>
+		/// <param name="layoutName">Name of the layout.</param>
+		/// <param name="parameters">Dictionary with parameters
+		/// that you can use on the email template</param>
 		/// <returns>An instance of <see cref="Message"/></returns>
-		public Message RenderMailMessage(String templateName, IDictionary parameters, bool doNotApplyLayout)
+		public Message RenderMailMessage(string templateName, string layoutName, object parameters)
 		{
-			if (HttpContext.Current == null)
-			{
-				throw new MonoRailException("No http context available");
-			}
-			
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("Rendering email message. Template name {0}", templateName);
-			}
-
-			IRailsEngineContext context = EngineContextModule.ObtainRailsEngineContext(HttpContext.Current);
-
-			IController controller = context.CurrentController;
-
-			if (controller == null)
-			{
-				throw new MonoRailException("No controller found on the executing activity");
-			}
-
-			if (parameters != null && parameters.Count != 0)
-			{
-				foreach(DictionaryEntry entry in parameters)
-				{
-					controller.PropertyBag.Add(entry.Key, entry.Value);
-				}
-			}
-
-			try
-			{
-				return RenderMailMessage(templateName, context, controller, doNotApplyLayout);
-			}
-			finally
-			{
-				if (parameters != null && parameters.Count != 0)
-				{
-					foreach(DictionaryEntry entry in parameters)
-					{
-						controller.PropertyBag.Remove(entry.Key);
-					}
-				}
-			}
+			return RenderMailMessage(templateName, layoutName, new ReflectionBasedDictionaryAdapter(parameters));
 		}
 
 		/// <summary>
 		/// Creates an instance of <see cref="Message"/>
 		/// using the specified template for the body
 		/// </summary>
-		/// <param name="templateName">
-		/// Name of the template to load. 
-		/// Will look in Views/mail for that template file.
-		/// </param>
-		/// <param name="context">Context that represents the current request</param>
-		/// <param name="controller">Controller instance</param>
-		/// <param name="doNotApplyLayout">If <c>true</c>, it will skip the layout</param>
+		/// <param name="templateName">Name of the template to load.
+		/// Will look in <c>Views/mail</c> for that template file.</param>
+		/// <param name="layoutName">Name of the layout.</param>
+		/// <param name="parameters">Dictionary with parameters
+		/// that you can use on the email template</param>
 		/// <returns>An instance of <see cref="Message"/></returns>
-		public Message RenderMailMessage(String templateName, IRailsEngineContext context,
-										 IController controller, bool doNotApplyLayout)
+		public Message RenderMailMessage(string templateName, string layoutName, IDictionary parameters)
 		{
-			// create a message object
-			Message message = new Message();
+			if (logger.IsDebugEnabled)
+			{
+				logger.DebugFormat("Rendering email message. Template name {0}", templateName);
+			}
+
+			if (!templateName.StartsWith("/"))
+			{
+				templateName = Path.Combine(EmailTemplatePath, templateName);
+			}
 
 			// use the template engine to generate the body of the message
 			StringWriter writer = new StringWriter();
 
-			String oldLayout = controller.LayoutName;
+			viewEngineManager.Process(templateName, layoutName, writer, new StringObjectDictionaryAdapter(parameters));
+
+			return CreateMessage(writer);
+		}
+
+		/// <summary>
+		/// Creates an instance of <see cref="Message"/>
+		/// using the specified template for the body
+		/// </summary>
+		/// <param name="templateName">Name of the template to load.
+		/// Will look in Views/mail for that template file.</param>
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="controller">Controller instance</param>
+		/// <param name="controllerContext">The controller context.</param>
+		/// <param name="doNotApplyLayout">If <c>true</c>, it will skip the layout</param>
+		/// <returns>An instance of <see cref="Message"/></returns>
+		public Message RenderMailMessage(string templateName, IEngineContext engineContext,
+		                                 IController controller, IControllerContext controllerContext, bool doNotApplyLayout)
+		{
+			// use the template engine to generate the body of the message
+			StringWriter writer = new StringWriter();
+
+			String[] oldLayout = controllerContext.LayoutNames;
 
 			if (doNotApplyLayout)
 			{
-				controller.LayoutName = null;
+				controllerContext.LayoutNames = null;
 			}
 
-			if (templateName.StartsWith("/"))
+			if (!templateName.StartsWith("/"))
 			{
-				controller.InPlaceRenderSharedView(writer, templateName);
-			}
-			else
-			{
-				controller.InPlaceRenderSharedView(writer, Path.Combine(Constants.EmailTemplatePath, templateName));
-			}
-			
-			if (doNotApplyLayout)
-			{
-				controller.LayoutName = oldLayout;
+				templateName = Path.Combine(EmailTemplatePath, templateName);
 			}
 
-			String body = writer.ToString();
-			
-			// process delivery addresses from template.
-			MatchCollection matches = Constants.readdress.Matches(body);
+			viewEngineManager.Process(templateName, writer, engineContext, controller, controllerContext);
 
-			for(int i = 0; i < matches.Count; i++)
+			controllerContext.LayoutNames = oldLayout;
+
+			return CreateMessage(writer);
+		}
+
+		private Message CreateMessage(StringWriter writer)
+		{
+			// create a message object
+			Message message = new Message();
+
+			StringReader reader = new StringReader(writer.ToString());
+
+			bool isInBody = false;
+			StringBuilder body = new StringBuilder();
+			string line;
+
+			while((line = reader.ReadLine()) != null)
 			{
-				String header = matches[i].Groups[Constants.HeaderKey].ToString().ToLower();
-				String address = matches[i].Groups[Constants.ValueKey].ToString();
-
-				switch(header)
+				string header, value;
+				if (!isInBody && IsLineAHeader(line, out header, out value))
 				{
-					case Constants.To :
-						message.To = address;
-						break;
-					case Constants.Cc :
-						message.Cc = address;
-						break;
-					case Constants.Bcc :
-						message.Bcc = address;
-						break;
-				}
-			}
-			
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("Rendering email message to {0} cc {1} bcc {2}", message.To, message.Cc, message.Bcc);
-			}
-
-			body = Constants.readdress.Replace(body, String.Empty);
-
-			// process from address from template
-			Match match = Constants.refrom.Match(body);
-			
-			if (match.Success)
-			{
-				message.From = match.Groups[Constants.ValueKey].ToString();
-				body = Constants.refrom.Replace(body, String.Empty);
-			}
-
-			// process subject and X headers from template
-			matches = Constants.reheader.Matches(body);
-			
-			for(int i=0; i< matches.Count; i++)
-			{
-				String header = matches[i].Groups[Constants.HeaderKey].ToString();
-				String strval = matches[i].Groups[Constants.ValueKey].ToString();
-
-				if (header.ToLower(System.Globalization.CultureInfo.InvariantCulture) == Constants.Subject)
-				{
-					message.Subject = strval;
+					switch(header.ToLowerInvariant())
+					{
+						case "to":
+							message.To = value;
+							break;
+						case "cc":
+							message.Cc = value;
+							break;
+						case "bcc":
+							message.Bcc = value;
+							break;
+						case "subject":
+							message.Subject = value;
+							break;
+						case "from":
+							message.From = value;
+							break;
+						default:
+							message.Headers[header] = value;
+							break;
+					}
 				}
 				else
 				{
-					message.Headers.Add(header, strval);
-				}
-				
-				if (logger.IsDebugEnabled)
-				{
-					logger.DebugFormat("Adding header {0} value {1}", header, strval);
+					isInBody = true;
+
+					if (line == string.Empty)
+					{
+						continue;
+					}
+
+					body.AppendLine(line);
 				}
 			}
-			
-			body = Constants.reheader.Replace(body, String.Empty);
 
-			message.Body = body;
-			
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("Email message body {0}", body);
-			}
+			message.Body = body.ToString();
 
-			// a little magic to see if the body is html
-			if (message.Body.ToLower(System.Globalization.CultureInfo.InvariantCulture).IndexOf(Constants.HtmlTag) != -1)
+			if (message.Body.ToLowerInvariant().IndexOf("<html>") != -1)
 			{
 				message.Format = Format.Html;
-				
-				if (logger.IsDebugEnabled)
-				{
-					logger.Debug("Content set to Html");
-				}
 			}
-			
+
 			return message;
+		}
+
+		private static bool IsLineAHeader(string line, out string header, out string value)
+		{
+			Match match = HeaderRegEx.Match(line);
+
+			if (match.Success)
+			{
+				header = match.Groups["header"].ToString().ToLower();
+				value = match.Groups["value"].ToString();
+				return true;
+			}
+			else
+			{
+				header = value = null;
+				return false;
+			}
 		}
 	}
 }

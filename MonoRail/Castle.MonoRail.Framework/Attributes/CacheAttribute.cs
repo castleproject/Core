@@ -20,7 +20,7 @@ namespace Castle.MonoRail.Framework
 	/// <summary>
 	/// Defines the cache configuration for an action.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true), Serializable]
+	[AttributeUsage(AttributeTargets.Method|AttributeTargets.Class, AllowMultiple = false, Inherited = true), Serializable]
 	public class CacheAttribute : Attribute, ICachePolicyConfigurer
 	{
 		private readonly HttpCacheability cacheability;

@@ -14,27 +14,27 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-    using System.IO;
-    using Boo.Lang.Compiler.Ast;
-    using Boo.Lang.Compiler.TypeSystem;
+	using System.IO;
+	using Boo.Lang.Compiler.Ast;
+	using Boo.Lang.Compiler.TypeSystem;
 
-    public class CodeBuilderHelper
-    {
-        public static Expression CreateCallableFromMacroBody(BooCodeBuilder builder, MacroStatement macro)
-        {
-            // create closure for macro's body or null
-            Expression macroBody = new NullLiteralExpression();
-            if (macro.Block.Statements.Count > 0)
-            {
-                BlockExpression callableExpr = new BlockExpression();
-                callableExpr.Body = macro.Block;
-                callableExpr.Parameters.Add(
-                    new ParameterDeclaration("OutputStream", 
-                    builder.CreateTypeReference(typeof(TextWriter))));
+	public class CodeBuilderHelper
+	{
+		public static Expression CreateCallableFromMacroBody(BooCodeBuilder builder, MacroStatement macro)
+		{
+			// create closure for macro's body or null
+			Expression macroBody = new NullLiteralExpression();
+			if (macro.Block.Statements.Count > 0)
+			{
+				BlockExpression callableExpr = new BlockExpression();
+				callableExpr.Body = macro.Block;
+				callableExpr.Parameters.Add(
+					new ParameterDeclaration("OutputStream",
+					                         builder.CreateTypeReference(typeof(TextWriter))));
 
-                macroBody = callableExpr;
-            }
-            return macroBody;
-        }
-    }
+				macroBody = callableExpr;
+			}
+			return macroBody;
+		}
+	}
 }

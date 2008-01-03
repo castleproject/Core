@@ -24,25 +24,23 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	using Castle.DynamicProxy;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Tests.Controllers;
-	
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class FormHelperTestCase
 	{
 		private FormHelper helper;
-		private Product product, productProxy;
+		private Product product;
 		private SimpleUser user;
 		private Subscription subscription;
 		private Month[] months;
-		private ProxyGenerator generator = new ProxyGenerator();
 
 		[SetUp]
 		public void Init()
 		{
 			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
 
-			Thread.CurrentThread.CurrentCulture	= en;
+			Thread.CurrentThread.CurrentCulture = en;
 			Thread.CurrentThread.CurrentUICulture = en;
 
 			helper = new FormHelper();
@@ -50,28 +48,22 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			subscription = new Subscription();
 			months = new Month[] {new Month(1, "January"), new Month(1, "February")};
 			product = new Product("memory card", 10, (decimal) 12.30);
-			
-			productProxy = (Product) generator.CreateClassProxy(typeof(Product), new StandardInterceptor());
-			
-			productProxy.Name = "memory card";
-			productProxy.Quantity = 10;
-			productProxy.Price = (decimal) 12.30;
 
 			user = new SimpleUser();
 
 			HomeController controller = new HomeController();
+			ControllerContext context = new ControllerContext();
 
-			controller.PropertyBag.Add("product", product);
-			controller.PropertyBag.Add("productproxy", productProxy);
-			controller.PropertyBag.Add("user", user);
-			controller.PropertyBag.Add("roles", new Role[] { new Role(1, "a"), new Role(2, "b"), new Role(3, "c") });
-			controller.PropertyBag.Add("sendemail", true);
-			controller.PropertyBag.Add("confirmation", "abc");
-			controller.PropertyBag.Add("fileaccess", FileAccess.Read);
-			controller.PropertyBag.Add("subscription", subscription);
-			controller.PropertyBag.Add("months", months);
+			context.PropertyBag.Add("product", product);
+			context.PropertyBag.Add("user", user);
+			context.PropertyBag.Add("roles", new Role[] { new Role(1, "a"), new Role(2, "b"), new Role(3, "c") });
+			context.PropertyBag.Add("sendemail", true);
+			context.PropertyBag.Add("confirmation", "abc");
+			context.PropertyBag.Add("fileaccess", FileAccess.Read);
+			context.PropertyBag.Add("subscription", subscription);
+			context.PropertyBag.Add("months", months);
 
-			helper.SetController(controller);
+			helper.SetController(controller, context);
 		}
 
 		[Test]
@@ -80,32 +72,33 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			// No solution here. Id is ambiguous
 			// helper.FormTag(DictHelper.Create("noaction=true"));
 		}
-		
+
 		[Test]
 		public void OverridingElementId()
 		{
-			Assert.AreEqual("<input type=\"text\" id=\"something\" name=\"product.name\" value=\"memory card\" />", 
-				helper.TextField("product.name", DictHelper.Create("id=something")));
-		
-			Assert.AreEqual("<input type=\"password\" id=\"something\" name=\"product.name\" value=\"memory card\" />", 
-				helper.PasswordField("product.name", DictHelper.Create("id=something")));
-			
-			Assert.AreEqual("<input type=\"hidden\" id=\"something\" name=\"product.name\" value=\"memory card\" />", 
-				helper.HiddenField("product.name", DictHelper.Create("id=something")));
-			
+			Assert.AreEqual("<input type=\"text\" id=\"something\" name=\"product.name\" value=\"memory card\" />",
+			                helper.TextField("product.name", DictHelper.Create("id=something")));
+
+			Assert.AreEqual("<input type=\"password\" id=\"something\" name=\"product.name\" value=\"memory card\" />",
+			                helper.PasswordField("product.name", DictHelper.Create("id=something")));
+
+			Assert.AreEqual("<input type=\"hidden\" id=\"something\" name=\"product.name\" value=\"memory card\" />",
+			                helper.HiddenField("product.name", DictHelper.Create("id=something")));
+
 			product.IsAvailable = false;
 
-			Assert.AreEqual("<input type=\"checkbox\" id=\"something\" name=\"product.isavailable\" value=\"true\" />" + 
-				"<input type=\"hidden\" id=\"somethingH\" name=\"product.isavailable\" value=\"false\" />", 
-				helper.CheckboxField("product.isavailable", DictHelper.Create("id=something")));
+			Assert.AreEqual("<input type=\"checkbox\" id=\"something\" name=\"product.isavailable\" value=\"true\" />" +
+			                "<input type=\"hidden\" id=\"somethingH\" name=\"product.isavailable\" value=\"false\" />",
+			                helper.CheckboxField("product.isavailable", DictHelper.Create("id=something")));
 
 			user.IsActive = true;
 
-			Assert.AreEqual("<input type=\"radio\" id=\"something\" name=\"user.isactive\" value=\"True\" checked=\"checked\" />", 
+			Assert.AreEqual(
+				"<input type=\"radio\" id=\"something\" name=\"user.isactive\" value=\"True\" checked=\"checked\" />",
 				helper.RadioField("user.isactive", true, DictHelper.Create("id=something")));
 
-			Assert.AreEqual("<label for=\"something\">Name:</label>", 
-				helper.LabelFor("product.name", "Name:", DictHelper.Create("id=something")));
+			Assert.AreEqual("<label for=\"something\">Name:</label>",
+			                helper.LabelFor("product.name", "Name:", DictHelper.Create("id=something")));
 
 			ArrayList list = new ArrayList();
 
@@ -113,43 +106,39 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			list.Add("cat2");
 
 			Assert.AreEqual("<select id=\"something\" name=\"product.category.id\" >" + Environment.NewLine +
-				"<option value=\"cat1\">cat1</option>" + Environment.NewLine + "<option value=\"cat2\">cat2</option>" + Environment.NewLine + "</select>",
-				helper.Select("product.category.id", list, DictHelper.Create("id=something")));
+			                "<option value=\"cat1\">cat1</option>" + Environment.NewLine + "<option value=\"cat2\">cat2</option>" +
+			                Environment.NewLine + "</select>",
+			                helper.Select("product.category.id", list, DictHelper.Create("id=something")));
 		}
 
 		[Test]
 		public void TextField()
 		{
-			Assert.AreEqual("<input type=\"text\" id=\"product_name\" name=\"product.name\" value=\"memory card\" />", 
-				helper.TextField("product.name"));
-			Assert.AreEqual("<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" />", 
-				helper.TextField("product.quantity"));
-		}
-
-		[Test]
-		public void ProxiedComponent()
-		{
-			Assert.AreEqual("<input type=\"text\" id=\"productproxy_name\" name=\"productproxy.name\" value=\"memory card\" />",
-				helper.TextField("productproxy.name"));
-			Assert.AreEqual("<input type=\"text\" id=\"productproxy_quantity\" name=\"productproxy.quantity\" value=\"10\" />",
-				helper.TextField("productproxy.quantity"));
+			Assert.AreEqual("<input type=\"text\" id=\"product_name\" name=\"product.name\" value=\"memory card\" />",
+			                helper.TextField("product.name"));
+			Assert.AreEqual("<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" />",
+			                helper.TextField("product.quantity"));
 		}
 
 		[Test]
 		public void NumberField()
 		{
-			Assert.AreEqual("<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [], []);\" />",
+			Assert.AreEqual(
+				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [], []);\" />",
 				helper.NumberField("product.quantity"));
-			Assert.AreEqual("<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [1], []);\" />",
+			Assert.AreEqual(
+				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [1], []);\" />",
 				helper.NumberField("product.quantity", DictHelper.Create("exceptions=1")));
-			Assert.AreEqual("<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [1,2], []);\" />",
+			Assert.AreEqual(
+				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [1,2], []);\" />",
 				helper.NumberField("product.quantity", DictHelper.Create("exceptions=1,2")));
 		}
 
 		[Test]
 		public void MaskedNumberField()
 		{
-			Assert.AreEqual("<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [], []);\" " +
+			Assert.AreEqual(
+				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [], []);\" " +
 				"onBlur=\"javascript:void(0);return monorail_formhelper_mask(event,this,'2,5','-');\" onKeyUp=\"javascript:void(0);return monorail_formhelper_mask(event,this,'2,5','-');\" />",
 				helper.NumberField("product.quantity", DictHelper.Create("mask=2,5")));
 		}
@@ -157,35 +146,35 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void PasswordField()
 		{
-			Assert.AreEqual("<input type=\"password\" id=\"product_name\" name=\"product.name\" value=\"memory card\" />", 
-				helper.PasswordField("product.name"));
-			Assert.AreEqual("<input type=\"password\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" />", 
-				helper.PasswordField("product.quantity"));
-			Assert.AreEqual("<input type=\"password\" id=\"confirmation\" name=\"confirmation\" value=\"abc\" />", 
-				helper.PasswordField("confirmation"));
+			Assert.AreEqual("<input type=\"password\" id=\"product_name\" name=\"product.name\" value=\"memory card\" />",
+			                helper.PasswordField("product.name"));
+			Assert.AreEqual("<input type=\"password\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" />",
+			                helper.PasswordField("product.quantity"));
+			Assert.AreEqual("<input type=\"password\" id=\"confirmation\" name=\"confirmation\" value=\"abc\" />",
+			                helper.PasswordField("confirmation"));
 		}
 
 		[Test]
 		public void TextFieldValue()
 		{
-			Assert.AreEqual("<input type=\"text\" id=\"product_price\" name=\"product.price\" value=\"$12.30\" />", 
-				helper.TextFieldValue("product.price", product.Price.ToString("C")));
+			Assert.AreEqual("<input type=\"text\" id=\"product_price\" name=\"product.price\" value=\"$12.30\" />",
+			                helper.TextFieldValue("product.price", product.Price.ToString("C")));
 		}
 
 		[Test]
 		public void TextFieldFormat()
 		{
-			Assert.AreEqual("<input type=\"text\" id=\"product_price\" name=\"product.price\" value=\"$12.30\" />", 
-				helper.TextField("product.price", DictHelper.Create("textformat=C")));
+			Assert.AreEqual("<input type=\"text\" id=\"product_price\" name=\"product.price\" value=\"$12.30\" />",
+			                helper.TextField("product.price", DictHelper.Create("textformat=C")));
 		}
 
 		[Test]
 		public void HiddenField()
 		{
-			Assert.AreEqual("<input type=\"hidden\" id=\"product_name\" name=\"product.name\" value=\"memory card\" />", 
-				helper.HiddenField("product.name"));
-			Assert.AreEqual("<input type=\"hidden\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" />", 
-				helper.HiddenField("product.quantity"));
+			Assert.AreEqual("<input type=\"hidden\" id=\"product_name\" name=\"product.name\" value=\"memory card\" />",
+			                helper.HiddenField("product.name"));
+			Assert.AreEqual("<input type=\"hidden\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" />",
+			                helper.HiddenField("product.quantity"));
 		}
 
 		[Test]
@@ -193,22 +182,26 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			product.IsAvailable = false;
 
-			Assert.AreEqual("<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" />" + 
-				"<input type=\"hidden\" id=\"product_isavailableH\" name=\"product.isavailable\" value=\"false\" />", 
+			Assert.AreEqual(
+				"<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" />" +
+				"<input type=\"hidden\" id=\"product_isavailableH\" name=\"product.isavailable\" value=\"false\" />",
 				helper.CheckboxField("product.isavailable"));
 
 			product.IsAvailable = true;
 
-			Assert.AreEqual("<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" checked=\"checked\" />" + 
-				"<input type=\"hidden\" id=\"product_isavailableH\" name=\"product.isavailable\" value=\"false\" />", 
+			Assert.AreEqual(
+				"<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" checked=\"checked\" />" +
+				"<input type=\"hidden\" id=\"product_isavailableH\" name=\"product.isavailable\" value=\"false\" />",
 				helper.CheckboxField("product.isavailable"));
 
-			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked=\"checked\" />" + 
-				"<input type=\"hidden\" id=\"sendemailH\" name=\"sendemail\" value=\"false\" />", 
+			Assert.AreEqual(
+				"<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked=\"checked\" />" +
+				"<input type=\"hidden\" id=\"sendemailH\" name=\"sendemail\" value=\"false\" />",
 				helper.CheckboxField("sendemail"));
 
-			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked=\"checked\" />" + 
-				"<input type=\"hidden\" id=\"sendemailH\" name=\"sendemail\" value=\"0\" />", 
+			Assert.AreEqual(
+				"<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked=\"checked\" />" +
+				"<input type=\"hidden\" id=\"sendemailH\" name=\"sendemail\" value=\"0\" />",
 				helper.CheckboxField("sendemail", new DictHelper().CreateDict("falseValue=0")));
 		}
 
@@ -217,36 +210,37 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			user.IsActive = true;
 
-			Assert.AreEqual("<input type=\"radio\" id=\"user_isactive\" name=\"user.isactive\" value=\"True\" checked=\"checked\" />", 
+			Assert.AreEqual(
+				"<input type=\"radio\" id=\"user_isactive\" name=\"user.isactive\" value=\"True\" checked=\"checked\" />",
 				helper.RadioField("user.isactive", true));
 
 			user.IsActive = false;
 
-			Assert.AreEqual("<input type=\"radio\" id=\"user_isactive\" name=\"user.isactive\" value=\"True\" />", 
-				helper.RadioField("user.isactive", true));
+			Assert.AreEqual("<input type=\"radio\" id=\"user_isactive\" name=\"user.isactive\" value=\"True\" />",
+			                helper.RadioField("user.isactive", true));
 		}
 
 		[Test]
 		public void RadioFieldWithEnums()
 		{
-			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Read\" checked=\"checked\" />", 
-				helper.RadioField("fileaccess", FileAccess.Read));
+			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Read\" checked=\"checked\" />",
+			                helper.RadioField("fileaccess", FileAccess.Read));
 
-			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Read\" checked=\"checked\" />", 
-				helper.RadioField("fileaccess", "Read"));
+			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Read\" checked=\"checked\" />",
+			                helper.RadioField("fileaccess", "Read"));
 
-			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Write\" />", 
-				helper.RadioField("fileaccess", FileAccess.Write));
+			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Write\" />",
+			                helper.RadioField("fileaccess", FileAccess.Write));
 
-			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Write\" />", 
-				helper.RadioField("fileaccess", "Write"));
+			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Write\" />",
+			                helper.RadioField("fileaccess", "Write"));
 		}
 
 		[Test]
 		public void LabelFor()
 		{
-			Assert.AreEqual("<label for=\"product_name\">Name:</label>", 
-				helper.LabelFor("product.name", "Name:"));
+			Assert.AreEqual("<label for=\"product_name\">Name:</label>",
+			                helper.LabelFor("product.name", "Name:"));
 		}
 
 		[Test]
@@ -255,16 +249,17 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			IDictionary attrs = new ListDictionary();
 			attrs.Add("class", "cssclass");
 			Assert.AreEqual("<label for=\"product_name\" class=\"cssclass\" >Name:</label>",
-			                helper.LabelFor("product.name", "Name:",attrs));
+			                helper.LabelFor("product.name", "Name:", attrs));
 		}
+
 		[Test]
 		public void TextFieldWithIndex()
 		{
 			Assert.AreEqual("<input type=\"text\" id=\"roles_0_Id\" name=\"roles[0].Id\" value=\"1\" />",
-				helper.TextField("roles[0].Id"));
+			                helper.TextField("roles[0].Id"));
 
 			Assert.AreEqual("<input type=\"text\" id=\"roles_1_Name\" name=\"roles[1].Name\" value=\"b\" />",
-				helper.TextField("roles[1].Name"));
+			                helper.TextField("roles[1].Name"));
 		}
 
 		[Test]
@@ -274,13 +269,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(2, "role2"));
 
 			Assert.AreEqual("<input type=\"text\" id=\"user_roles_0_Id\" name=\"user.roles[0].Id\" value=\"1\" />",
-				helper.TextField("user.roles[0].Id"));
+			                helper.TextField("user.roles[0].Id"));
 
 			Assert.AreEqual("<input type=\"text\" id=\"user_roles_0_Name\" name=\"user.roles[0].Name\" value=\"role1\" />",
-				helper.TextField("user.roles[0].Name"));
+			                helper.TextField("user.roles[0].Name"));
 
 			Assert.AreEqual("<input type=\"text\" id=\"user_roles_1_Name\" name=\"user.roles[1].Name\" value=\"role2\" />",
-				helper.TextField("user.roles[1].Name"));
+			                helper.TextField("user.roles[1].Name"));
 		}
 
 		[Test]
@@ -289,13 +284,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles = null;
 
 			Assert.AreEqual("<input type=\"text\" id=\"user_roles_0_Id\" name=\"user.roles[0].Id\" value=\"\" />",
-				helper.TextField("user.roles[0].Id"));
+			                helper.TextField("user.roles[0].Id"));
 
 			Assert.AreEqual("<input type=\"text\" id=\"user_roles_0_Name\" name=\"user.roles[0].Name\" value=\"\" />",
-				helper.TextField("user.roles[0].Name"));
+			                helper.TextField("user.roles[0].Name"));
 
 			Assert.AreEqual("<input type=\"text\" id=\"user_roles_1_Name\" name=\"user.roles[1].Name\" value=\"\" />",
-				helper.TextField("user.roles[1].Name"));
+			                helper.TextField("user.roles[1].Name"));
 		}
 
 		[Test]
@@ -305,10 +300,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(2, null));
 
 			Assert.AreEqual("<input type=\"text\" id=\"user_roles_0_Name\" name=\"user.roles[0].Name\" value=\"\" />",
-				helper.TextField("user.roles[0].Name"));
+			                helper.TextField("user.roles[0].Name"));
 
 			Assert.AreEqual("<input type=\"text\" id=\"user_roles_1_Name\" name=\"user.roles[1].Name\" value=\"\" />",
-				helper.TextField("user.roles[1].Name"));
+			                helper.TextField("user.roles[1].Name"));
 		}
 
 		[Test]
@@ -318,9 +313,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			subscription.Months4.Add(new Month(1, "Jan"));
 			subscription.Months4.Add(new Month(2, "Feb"));
 
-			Assert.AreEqual("<input type=\"text\" id=\"subscription_months4_0_id\" name=\"subscription.months4[0].id\" value=\"1\" />",
+			Assert.AreEqual(
+				"<input type=\"text\" id=\"subscription_months4_0_id\" name=\"subscription.months4[0].id\" value=\"1\" />",
 				helper.TextField("subscription.months4[0].id"));
-			Assert.AreEqual("<input type=\"text\" id=\"subscription_months4_0_name\" name=\"subscription.months4[0].name\" value=\"Jan\" />",
+			Assert.AreEqual(
+				"<input type=\"text\" id=\"subscription_months4_0_name\" name=\"subscription.months4[0].name\" value=\"Jan\" />",
 				helper.TextField("subscription.months4[0].name"));
 		}
 
@@ -344,7 +341,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	}
 
 	#region Classes skeletons
-	
+
 	public class Month
 	{
 		private int id;
@@ -368,13 +365,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			set { name = value; }
 		}
 	}
-	
+
 	public class Subscription
 	{
-		int[] months; 
-		IList months2 = new ArrayList();
-		Month[] months3;
-		IList<Month> months4 = new CustomList<Month>();
+		private int[] months;
+		private IList months2 = new ArrayList();
+		private Month[] months3;
+		private IList<Month> months4 = new CustomList<Month>();
 
 		public int[] Months
 		{
@@ -505,7 +502,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public override bool Equals(object obj)
 		{
 			Role other = obj as Role;
-			
+
 			if (other != null)
 			{
 				return other.Id == Id;
@@ -524,7 +521,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			return name;
 		}
 	}
-	
+
 	public class Role2
 	{
 		private int identification;
@@ -532,7 +529,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 		public Role2(int id, string name)
 		{
-			this.identification = id;
+			identification = id;
 			this.name = name;
 		}
 
@@ -609,22 +606,22 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			set { roles = value; }
 		}
 	}
-	
+
 	public class Contact
 	{
 		private Month dobMonth;
 
 		public Month DobMonth
 		{
-			get { return this.dobMonth; }
-			set { this.dobMonth = value; }
+			get { return dobMonth; }
+			set { dobMonth = value; }
 		}
 	}
-	
+
 	public class CustomList<T> : IList<T>
 	{
 		private List<T> innerList = new List<T>();
-		
+
 		public int IndexOf(T item)
 		{
 			return innerList.IndexOf(item);
@@ -694,8 +691,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 	public interface IInterfacedList
 	{
-		int Id { get; set;}
-		string Name { get; set;}
+		int Id { get; set; }
+		string Name { get; set; }
 	}
 
 	public class InterfacedClassA : IInterfacedList
@@ -713,14 +710,14 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 		public int Id
 		{
-			get{ return id; }
-			set{ id = value; }
+			get { return id; }
+			set { id = value; }
 		}
 
 		public string Name
 		{
-			get{ return name; }
-			set{ name = value; }
+			get { return name; }
+			set { name = value; }
 		}
 
 		#endregion
@@ -757,6 +754,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	public class Key
 	{
 		private int id;
+
 		public int Id
 		{
 			get { return id; }

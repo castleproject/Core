@@ -16,8 +16,6 @@ namespace Castle.MonoRail.Framework.Views
 {
 	using System;
 	using System.IO;
-	
-	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Represents a view source embedded as an assembly resource.

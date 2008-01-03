@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		internal IViewSource GetViewSource(String templateName)
 		{
-			if (sourceLoader.HasTemplate(templateName))
+			if (sourceLoader.HasSource(templateName))
 			{
 				return sourceLoader.GetViewSource(templateName);
 			}

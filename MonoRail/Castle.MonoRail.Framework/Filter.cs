@@ -27,27 +27,26 @@ namespace Castle.MonoRail.Framework
 		/// <param name="exec">When this filter is being invoked</param>
 		/// <param name="context">Current context</param>
 		/// <param name="controller">The controller instance</param>
-		/// <returns><c>true</c> if the action 
-		/// should be invoked, otherwise <c>false</c></returns>
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, IController controller)
+		/// <param name="controllerContext">The controller context.</param>
+		/// <returns>
+		/// 	<c>true</c> if the action
+		/// should be invoked, otherwise <c>false</c>
+		/// </returns>
+		public bool Perform(ExecuteEnum exec, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 			if (exec == ExecuteEnum.AfterAction)
 			{
-				OnAfterAction(context, controller);
+				OnAfterAction(context, controller, controllerContext);
 				return true;
 			}
 			else if (exec == ExecuteEnum.AfterRendering)
 			{
-				OnAfterRendering(context, controller);
+				OnAfterRendering(context, controller, controllerContext);
 				return true;
 			}
-			else if (exec == ExecuteEnum.BeforeAction)
+			else // if (exec == ExecuteEnum.BeforeAction)
 			{
-				return OnBeforeAction(context, controller);
-			}
-			else // if (exec == ExecuteEnum.StartRequest)
-			{
-				return OnStartRequest(context, controller);
+				return OnBeforeAction(context, controller, controllerContext);
 			}
 		}
 
@@ -57,7 +56,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="context">The MonoRail request context</param>
 		/// <param name="controller">The controller instance</param>
-		protected virtual void OnAfterAction(IRailsEngineContext context, IController controller)
+		/// <param name="controllerContext">The controller context.</param>
+		protected virtual void OnAfterAction(IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 		}
 
@@ -67,7 +67,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="context">The MonoRail request context</param>
 		/// <param name="controller">The controller instance</param>
-		protected virtual void OnAfterRendering(IRailsEngineContext context, IController controller)
+		/// <param name="controllerContext">The controller context.</param>
+		protected virtual void OnAfterRendering(IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 		}
 
@@ -77,20 +78,11 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="context">The MonoRail request context</param>
 		/// <param name="controller">The controller instance</param>
-		/// <returns><c>true</c> if the request should proceed, otherwise <c>false</c></returns>
-		protected virtual bool OnBeforeAction(IRailsEngineContext context, IController controller)
-		{
-			return true;
-		}
-
-		/// <summary>
-		/// Override this method if the filter was set to
-		/// handle <see cref="ExecuteEnum.StartRequest"/>
-		/// </summary>
-		/// <param name="context">The MonoRail request context</param>
-		/// <param name="controller">The controller instance</param>
-		/// <returns><c>true</c> if the request should proceed, otherwise <c>false</c></returns>
-		protected virtual bool OnStartRequest(IRailsEngineContext context, IController controller)
+		/// <param name="controllerContext">The controller context.</param>
+		/// <returns>
+		/// 	<c>true</c> if the request should proceed, otherwise <c>false</c>
+		/// </returns>
+		protected virtual bool OnBeforeAction(IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 			return true;
 		}

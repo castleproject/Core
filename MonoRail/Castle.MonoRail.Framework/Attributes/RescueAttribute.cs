@@ -16,11 +16,10 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.Reflection;
-
-	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Descriptors;
 
 	/// <summary>
-	/// Associates a rescue template with a <see cref="Controller"/> or an action 
+	/// Associates a rescue template with a <see cref="IController"/> or an action 
 	/// (method). The rescue is invoked in response to some exception during the 
 	/// action processing.
 	/// </summary>
@@ -106,11 +105,10 @@ namespace Castle.MonoRail.Framework
 					"controller implement the IRescueController interface" , rescueController.Name, typeof(IRescueController).Name));
 			}
 
-			if (!typeof(Controller).IsAssignableFrom(rescueController))
+			if (!typeof(IController).IsAssignableFrom(rescueController))
 			{
 				throw new ArgumentException(string.Format("{0} does not inherit from the Controller class", rescueController.Name));
 			}
-
 
 			this.rescueController = rescueController;
 			this.exceptionType = exceptionType;

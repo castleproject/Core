@@ -42,7 +42,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="provider">The provider.</param>
 		public void Service(IServiceProvider provider)
 		{
-			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
+			IMonoRailConfiguration config = (IMonoRailConfiguration) provider.GetService(typeof(IMonoRailConfiguration));
 
 			sender = new SmtpSender(config.SmtpConfig.Host);
 			sender.Port = config.SmtpConfig.Port;

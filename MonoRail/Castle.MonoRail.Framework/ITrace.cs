@@ -25,35 +25,14 @@ namespace Castle.MonoRail.Framework
 		/// Logs the specified message on the ASP.Net trace
 		/// </summary>
 		/// <param name="message">The message.</param>
-		void Warn(String message);
+		void Warn(string message);
 
 		/// <summary>
 		/// Logs the specified message on the ASP.Net trace
 		/// </summary>
 		/// <param name="category">The category.</param>
 		/// <param name="message">The message.</param>
-		void Warn(String category, String message);
-
-		/// <summary>
-		/// Logs the specified message on the ASP.Net trace
-		/// </summary>
-		/// <param name="category">The category.</param>
-		/// <param name="message">The message.</param>
-		/// <param name="errorInfo">The error info.</param>
-		void Warn(String category, String message, Exception errorInfo);
-
-		/// <summary>
-		/// Logs the specified message on the ASP.Net trace
-		/// </summary>
-		/// <param name="message">The message.</param>
-		void Write(String message);
-
-		/// <summary>
-		/// Logs the specified message on the ASP.Net trace
-		/// </summary>
-		/// <param name="category">The category.</param>
-		/// <param name="message">The message.</param>
-		void Write(String category, String message);
+		void Warn(string category, string message);
 
 		/// <summary>
 		/// Logs the specified message on the ASP.Net trace
@@ -61,6 +40,27 @@ namespace Castle.MonoRail.Framework
 		/// <param name="category">The category.</param>
 		/// <param name="message">The message.</param>
 		/// <param name="errorInfo">The error info.</param>
-		void Write(String category, String message, Exception errorInfo);
+		void Warn(string category, string message, Exception errorInfo);
+
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="message">The message.</param>
+		void Write(string message);
+
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
+		void Write(string category, string message);
+
+		/// <summary>
+		/// Logs the specified message on the ASP.Net trace
+		/// </summary>
+		/// <param name="category">The category.</param>
+		/// <param name="message">The message.</param>
+		/// <param name="errorInfo">The error info.</param>
+		void Write(string category, string message, Exception errorInfo);
 	}
 }

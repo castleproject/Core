@@ -15,31 +15,44 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-
-	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Descriptors;
 
 	/// <summary>
 	/// Associates a layout name with a controller.
 	/// The layout can later be changed using the LayoutName
-	/// property of the <see cref="Controller"/>.
+	/// property of the <see cref="IController"/>.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=false), Serializable]
 	public class LayoutAttribute : Attribute, ILayoutDescriptorBuilder
 	{
-		private readonly String layoutName;
+		private readonly string[] layoutNames;
 
 		/// <summary>
 		/// Constructs a LayoutAttribute with the 
-		/// layout name.
+		/// layout names.
 		/// </summary>
-		public LayoutAttribute(String layoutName)
+		public LayoutAttribute(string layoutName)
 		{
-			if (layoutName == null || layoutName.Length == 0)
+			if (string.IsNullOrEmpty(layoutName))
 			{
 				throw new ArgumentNullException("layoutName", "Invalid layout name");
 			}
 
-			this.layoutName = layoutName;
+			layoutNames = new string[] { layoutName };
+		}
+
+		/// <summary>
+		/// Constructs a LayoutAttribute with the 
+		/// layout names.
+		/// </summary>
+		public LayoutAttribute(params string[] layoutNames)
+		{
+			if (layoutNames.Length == 0)
+			{
+				throw new ArgumentNullException("layoutNames", "Invalid layout name");
+			}
+
+			this.layoutNames = layoutNames;
 		}
 
 		/// <summary>
@@ -47,7 +60,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public String LayoutName
 		{
-			get { return layoutName; }
+			get { return layoutNames[0]; }
 		}
 
 		/// <summary>
@@ -56,7 +69,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public LayoutDescriptor BuildLayoutDescriptor()
 		{
-			return new LayoutDescriptor(layoutName);
+			return new LayoutDescriptor(layoutNames);
 		}
 	}
 }

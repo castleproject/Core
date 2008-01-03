@@ -76,10 +76,10 @@ namespace Castle.MonoRail.Framework
 		private IViewComponentContext context;
 
 		/// <summary>
-		/// Holds the <see cref="IRailsEngineContext"/> associated
+		/// Holds the <see cref="IEngineContext"/> associated
 		/// to the request lifetime.
 		/// </summary>
-		private IRailsEngineContext railsContext;
+		private IEngineContext engineContext;
 
 		/// <summary>
 		/// Holds a reference to the <see cref="ViewComponentDetailsAttribute"/> if any.
@@ -104,12 +104,12 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Invoked by the framework.
 		/// </summary>
-		/// <param name="engineContext">Request context</param>
+		/// <param name="context">Request context</param>
 		/// <param name="componentContext">ViewComponent context</param>
-		public void Init(IRailsEngineContext engineContext, IViewComponentContext componentContext)
+		public void Init(IEngineContext context, IViewComponentContext componentContext)
 		{
-			railsContext = engineContext;
-			context = componentContext;
+			engineContext = context;
+			this.context = componentContext;
 
 			BindComponentParameters();
 
@@ -236,12 +236,12 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Gets the <see cref="IRailsEngineContext"/>
+		/// Gets the <see cref="IEngineContext"/>
 		/// associated with the current request
 		/// </summary>
-		protected IRailsEngineContext RailsContext
+		protected IEngineContext EngineContext
 		{
-			get { return railsContext; }
+			get { return engineContext; }
 		}
 
 		/// <summary>
@@ -257,7 +257,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected IDictionary Session
 		{
-			get { return railsContext.Session; }
+			get { return engineContext.Session; }
 		}
 
 		/// <summary>
@@ -266,7 +266,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected Flash Flash
 		{
-			get { return railsContext.Flash; }
+			get { return engineContext.Flash; }
 		}
 
 		/// <summary>
@@ -274,7 +274,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected HttpContext HttpContext
 		{
-			get { return railsContext.UnderlyingContext; }
+			get { return engineContext.UnderlyingContext; }
 		}
 
 		/// <summary>
@@ -282,7 +282,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected IRequest Request
 		{
-			get { return railsContext.Request; }
+			get { return engineContext.Request; }
 		}
 
 		/// <summary>
@@ -290,7 +290,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected IResponse Response
 		{
-			get { return railsContext.Response; }
+			get { return engineContext.Response; }
 		}
 
 		/// <summary>

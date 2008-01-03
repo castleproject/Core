@@ -22,6 +22,15 @@ namespace Castle.MonoRail.Framework.Configuration
 	/// </summary>
 	public class ExtensionEntryCollection : CollectionBase, ISerializedConfig
 	{
+		/// <summary>
+		/// Adds the specified entry.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		public void Add(ExtensionEntry entry)
+		{
+			InnerList.Add(entry);
+		}
+
 		#region ISerializedConfig implementation
 
 		/// <summary>
@@ -35,9 +44,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			foreach(XmlNode node in services)
 			{
 				ExtensionEntry entry = new ExtensionEntry();
-				
 				entry.Deserialize(node);
-				
 				InnerList.Add(entry);
 			}
 		}

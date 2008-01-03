@@ -14,10 +14,10 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-	using System;
 	using Boo.Lang.Compiler.Ast;
 	using Boo.Lang.Compiler.Steps;
 	using Boo.Lang.Compiler.TypeSystem;
+
 	///<summary>
 	/// Replace any uknown identifier with a call to GetParameter('unknown')
 	/// this mean that unknonw identifier in scripts will only fail in run time if they
@@ -25,8 +25,8 @@ namespace Castle.MonoRail.Views.Brail
 	/// </summary>
 	public class ReplaceUknownWithParameters : ProcessMethodBodiesWithDuckTyping
 	{
-		private IMethod _getParam;
-		private IMethod _tryGetParam;
+		private IMethod getParam;
+		private IMethod tryGetParam;
 
 		public override void OnReferenceExpression(ReferenceExpression node)
 		{
@@ -48,16 +48,16 @@ namespace Castle.MonoRail.Views.Brail
 		protected override void InitializeMemberCache()
 		{
 			base.InitializeMemberCache();
-			_getParam = TypeSystemServices.Map(typeof(BrailBase).GetMethod("GetParameter"));
-			_tryGetParam = TypeSystemServices.Map(typeof(BrailBase).GetMethod("TryGetParameter"));
+			getParam = TypeSystemServices.Map(typeof(BrailBase).GetMethod("GetParameter"));
+			tryGetParam = TypeSystemServices.Map(typeof(BrailBase).GetMethod("TryGetParameter"));
 		}
 
 		public IMethod GetMethod(string name)
 		{
 			if (name[0] == '?')
-				return _tryGetParam;
+				return tryGetParam;
 			else
-				return _getParam;
+				return getParam;
 		}
 
 		public StringLiteralExpression GetNameLiteral(string name)

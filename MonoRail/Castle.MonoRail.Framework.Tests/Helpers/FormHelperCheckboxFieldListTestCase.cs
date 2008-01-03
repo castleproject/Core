@@ -65,19 +65,20 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			mock.Values = new int[] { 2, 3 };
 
 			HomeController controller = new HomeController();
+			ControllerContext context = new ControllerContext();
 
-			controller.PropertyBag.Add("product", product);
-			controller.PropertyBag.Add("user", user);
-			controller.PropertyBag.Add("users", users);
-			controller.PropertyBag.Add("roles", new Role[] { new Role(1, "a"), new Role(2, "b"), new Role(3, "c") });
-			controller.PropertyBag.Add("sendemail", true);
-			controller.PropertyBag.Add("confirmation", "abc");
-			controller.PropertyBag.Add("fileaccess", FileAccess.Read);
-			controller.PropertyBag.Add("subscription", subscription);
-			controller.PropertyBag.Add("months", months);
-			controller.PropertyBag.Add("mock", mock);
+			context.PropertyBag.Add("product", product);
+			context.PropertyBag.Add("user", user);
+			context.PropertyBag.Add("users", users);
+			context.PropertyBag.Add("roles", new Role[] { new Role(1, "a"), new Role(2, "b"), new Role(3, "c") });
+			context.PropertyBag.Add("sendemail", true);
+			context.PropertyBag.Add("confirmation", "abc");
+			context.PropertyBag.Add("fileaccess", FileAccess.Read);
+			context.PropertyBag.Add("subscription", subscription);
+			context.PropertyBag.Add("months", months);
+			context.PropertyBag.Add("mock", mock);
 
-			helper.SetController(controller);
+			helper.SetController(controller, context);
 		}
 
 		/// <summary>

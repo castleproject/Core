@@ -18,13 +18,16 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Web;
+	using Castle.Components.Binder;
 
 	/// <summary>
 	/// This class adapts the <c>HttpRequest</c> to a MonoRail <c>IRequest</c>.
 	/// </summary>
 	public class RequestAdapter : IRequest
 	{
+		private TreeBuilder treeBuilder = new TreeBuilder();
 		private HttpRequest request;
+		private CompositeNode paramsNode, formNode, queryStringNode;
 		private FileDictionaryAdapter files;
 
 		/// <summary>
@@ -37,12 +40,42 @@ namespace Castle.MonoRail.Framework.Adapters
 		}
 
 		/// <summary>
-		/// Gets the Http headers.
+		/// Gets the request URL.
 		/// </summary>
-		/// <value>The Http headers.</value>
-		public NameValueCollection Headers
+		/// <value></value>
+		public string Url
 		{
-			get { return request.Headers; }
+			get { return RawUrl; }
+		}
+
+		/// <summary>
+		/// Gets the accept header.
+		/// </summary>
+		/// <value>The accept header.</value>
+		public string AcceptHeader
+		{
+			get { return request.Headers["Accept"]; }
+		}
+
+		/// <summary>
+		/// Gets the referring URL.
+		/// </summary>
+		/// <value></value>
+		public String UrlReferrer
+		{
+			get
+			{
+				Uri referrer = request.UrlReferrer;
+
+				if (referrer != null)
+				{
+					return referrer.ToString();
+				}
+				else
+				{
+					return null;
+				}
+			}
 		}
 
 		/// <summary>
@@ -55,7 +88,16 @@ namespace Castle.MonoRail.Framework.Adapters
 		}
 
 		/// <summary>
-		/// Gets the HTTP method.
+		/// Gets the request type (GET, POST, etc)
+		/// </summary>
+		/// <value></value>
+		public string RequestType
+		{
+			get { return HttpMethod; }
+		}
+
+		/// <summary>
+		/// Gets the HTTP method (GET, POST, etc).
 		/// </summary>
 		/// <value>The HTTP method.</value>
 		public string HttpMethod
@@ -101,6 +143,24 @@ namespace Castle.MonoRail.Framework.Adapters
 		}
 
 		/// <summary>
+		/// Gets the Http headers.
+		/// </summary>
+		/// <value>The Http headers.</value>
+		public NameValueCollection Headers
+		{
+			get { return request.Headers; }
+		}
+
+		/// <summary>
+		/// Gets the params which accumulates headers, post, querystring and cookies.
+		/// </summary>
+		/// <value>The params.</value>
+		public NameValueCollection Params
+		{
+			get { return request.Params; }
+		}
+
+		/// <summary>
 		/// Gets the query string.
 		/// </summary>
 		/// <value>The query string.</value>
@@ -119,23 +179,24 @@ namespace Castle.MonoRail.Framework.Adapters
 		}
 
 		/// <summary>
-		/// Reads the request data as a byte array.
-		/// </summary>
-		/// <param name="count">How many bytes.</param>
-		/// <returns></returns>
-		public byte[] BinaryRead(int count)
-		{
-			return request.BinaryRead(count);
-		}
-
-		/// <summary>
-		/// Gets the param with the specified key.
+		/// Indexer to access <see cref="Params"/> entries.
 		/// </summary>
 		/// <value></value>
-		public String this[String key]
+		public string this[string name]
 		{
-			get { return request[key]; }
+			get { return request[name]; }
 		}
+
+//		/// <summary>
+//		/// Reads the request data as a byte array.
+//		/// </summary>
+//		/// <param name="count">How many bytes.</param>
+//		/// <returns></returns>
+//		public byte[] BinaryRead(int count)
+//		{
+//			return request.BinaryRead(count);
+//		}
+
 
 		/// <summary>
 		/// Gets the <see cref="HttpPostedFile"/> per key.
@@ -151,15 +212,6 @@ namespace Castle.MonoRail.Framework.Adapters
 				}
 				return files;
 			}
-		}
-
-		/// <summary>
-		/// Gets the params which accumulates headers, post, querystring and cookies.
-		/// </summary>
-		/// <value>The params.</value>
-		public NameValueCollection Params
-		{
-			get { return request.Params; }
 		}
 
 		/// <summary>
@@ -193,6 +245,78 @@ namespace Castle.MonoRail.Framework.Adapters
 				return null;
 			}
 			return cookie.Value;
+		}
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical 
+		/// representation of the flat data on <see cref="Controller.Params"/>
+		/// </summary>
+		public CompositeNode ParamsNode
+		{
+			get
+			{
+				if (paramsNode == null)
+				{
+					paramsNode = treeBuilder.BuildSourceNode(Params);
+					treeBuilder.PopulateTree(paramsNode, request.Files);
+				}
+
+				return paramsNode;
+			}
+		}
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical 
+		/// representation of the flat data on <see cref="IRequest.Form"/>
+		/// </summary>
+		public CompositeNode FormNode
+		{
+			get
+			{
+				if (formNode == null)
+				{
+					formNode = treeBuilder.BuildSourceNode(Form);
+					treeBuilder.PopulateTree(formNode, request.Files);
+				}
+
+				return formNode;
+			}
+		}
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical 
+		/// representation of the flat data on <see cref="IRequest.QueryString"/>
+		/// </summary>
+		public CompositeNode QueryStringNode
+		{
+			get
+			{
+				if (queryStringNode == null)
+				{
+					queryStringNode = treeBuilder.BuildSourceNode(QueryString);
+					treeBuilder.PopulateTree(queryStringNode, request.Files);
+				}
+
+				return queryStringNode;
+			}
+		}
+
+		/// <summary>
+		/// This method is for internal use only
+		/// </summary>
+		/// <param name="from"></param>
+		/// <returns></returns>
+		public CompositeNode ObtainParamsNode(ParamStore from)
+		{
+			switch (from)
+			{
+				case ParamStore.Form:
+					return FormNode;
+				case ParamStore.QueryString:
+					return QueryStringNode;
+				default:
+					return ParamsNode;
+			}
 		}
 
 		/// <summary>

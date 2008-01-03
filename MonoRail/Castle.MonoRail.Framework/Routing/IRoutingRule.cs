@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Routing
 {
-	using System;
 	using System.Collections;
 
 	/// <summary>
@@ -32,18 +31,6 @@ namespace Castle.MonoRail.Framework.Routing
 		string RouteName { get; }
 
 		/// <summary>
-		/// Gets the type of the controller.
-		/// </summary>
-		/// <value>The type of the controller.</value>
-		Type ControllerType { get; }
-
-		/// <summary>
-		/// Gets the action.
-		/// </summary>
-		/// <value>The action.</value>
-		string Action { get; }
-
-		/// <summary>
 		/// Pendent
 		/// </summary>
 		/// <param name="hostname">The hostname.</param>
@@ -53,12 +40,13 @@ namespace Castle.MonoRail.Framework.Routing
 		string CreateUrl(string hostname, string virtualPath, IDictionary parameters);
 
 		/// <summary>
-		/// Determines if the specified URL matches the 
-		/// routing rule. 
+		/// Determines if the specified URL matches the
+		/// routing rule.
 		/// </summary>
+		/// <param name="url">The URL.</param>
 		/// <param name="context">The context</param>
 		/// <param name="match">The match.</param>
 		/// <returns></returns>
-		bool Matches(IRouteContext context, RouteMatch match);
+		bool Matches(string url, IRouteContext context, RouteMatch match);
 	}
 }

@@ -31,10 +31,16 @@ namespace Castle.MonoRail.Framework
 		int StatusCode { get; set; }
 
 		/// <summary>
+		/// Gets or sets the status code.
+		/// </summary>
+		/// <value>The status code.</value>
+		string StatusDescription { get; set; }
+
+		/// <summary>
 		/// Gets or sets the type of the content.
 		/// </summary>
 		/// <value>The type of the content.</value>
-		String ContentType { get; set; }
+		string ContentType { get; set; }
 
 		/// <summary>
 		/// Gets the caching policy (expiration time, privacy, 
@@ -71,17 +77,17 @@ namespace Castle.MonoRail.Framework
 		/// <param name="value">The value.</param>
 		void AppendHeader(String name, String value);
 
-		/// <summary>
-		/// Writes the buffer to the browser
-		/// </summary>
-		/// <param name="buffer">The buffer.</param>
-		void BinaryWrite(byte[] buffer);
-
-		/// <summary>
-		/// Writes the stream to the browser
-		/// </summary>
-		/// <param name="stream">The stream.</param>
-		void BinaryWrite(System.IO.Stream stream);
+//		/// <summary>
+//		/// Writes the buffer to the browser
+//		/// </summary>
+//		/// <param name="buffer">The buffer.</param>
+//		void BinaryWrite(byte[] buffer);
+//
+//		/// <summary>
+//		/// Writes the stream to the browser
+//		/// </summary>
+//		/// <param name="stream">The stream.</param>
+//		void BinaryWrite(System.IO.Stream stream);
 
 		/// <summary>
 		/// Clears the response (only works if buffered)
@@ -119,11 +125,17 @@ namespace Castle.MonoRail.Framework
 		/// <param name="count">The count.</param>
 		void Write(char[] buffer, int index, int count);
 
+//		/// <summary>
+//		/// Writes the file.
+//		/// </summary>
+//		/// <param name="fileName">Name of the file.</param>
+//		void WriteFile(String fileName);
+
 		/// <summary>
-		/// Writes the file.
+		/// Redirects the specified controller.
 		/// </summary>
-		/// <param name="fileName">Name of the file.</param>
-		void WriteFile(String fileName);
+		/// <param name="parameters">The parameters.</param>
+		void Redirect(object parameters);
 
 		/// <summary>
 		/// Redirects the specified controller.
@@ -178,14 +190,14 @@ namespace Castle.MonoRail.Framework
 		/// Redirects the specified URL.
 		/// </summary>
 		/// <param name="url">The URL.</param>
-		void Redirect(String url);
+		void RedirectToUrl(String url);
 
 		/// <summary>
 		/// Redirects the specified URL.
 		/// </summary>
 		/// <param name="url">The URL.</param>
 		/// <param name="endProcess">if set to <c>true</c> [end process].</param>
-		void Redirect(String url, bool endProcess);
+		void RedirectToUrl(String url, bool endProcess);
 
 		/// <summary>
 		/// Gets a value indicating whether the response sent a redirect.

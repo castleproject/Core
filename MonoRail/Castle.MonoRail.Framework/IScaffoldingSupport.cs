@@ -24,10 +24,12 @@ namespace Castle.MonoRail.Framework
 	public interface IScaffoldingSupport
 	{
 		/// <summary>
-		/// Implementors should use this method to read information 
+		/// Implementors should use this method to read information
 		/// from the controller instance and add dynamic actions to the controller.
 		/// </summary>
-		/// <param name="controller"></param>
-		void Process(Controller controller);
+		/// <param name="context">The context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
+		void Process(IEngineContext context, IController controller, IControllerContext controllerContext);
 	}
 }
