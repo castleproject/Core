@@ -107,7 +107,11 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
+				engineContext.Services.ExtensionManager.RaisePreProcessController(engineContext);
+
 				controller.Process(engineContext, controllerContext);
+
+				engineContext.Services.ExtensionManager.RaisePostProcessController(engineContext);
 			}
 			catch(Exception ex)
 			{

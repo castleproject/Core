@@ -1,6 +1,8 @@
 1.0
 ===
 
+- Applied Mike Nichols' patch adding two more events to the extension manager.
+
 - Applied Felix Gartsman's patch fixing MR-387
   "ViewComponent selective caching"
 

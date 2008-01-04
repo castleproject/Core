@@ -34,6 +34,8 @@ namespace Castle.MonoRail.Framework
 		private static readonly object UnhandledExceptionEvent = new object();
 		private static readonly object AcquireSessionStateEvent = new object();
 		private static readonly object ReleaseSessionStateEvent = new object();
+		private static readonly object PreProcessControllerEvent = new object();
+		private static readonly object PostProcessControllerEvent = new object();
 
 		private readonly EventHandlerList events;
 		private readonly IMonoRailServices serviceProvider;
@@ -103,6 +105,24 @@ namespace Castle.MonoRail.Framework
 			remove { events.RemoveHandler(ReleaseSessionStateEvent, value); }
 		}
 
+		/// <summary>
+		/// Occurs before processing controller.
+		/// </summary>
+		public event ExtensionHandler PreControllerProcess
+		{
+			add { events.AddHandler(PreProcessControllerEvent, value); }
+			remove { events.RemoveHandler(PreProcessControllerEvent, value); }
+		}
+
+		/// <summary>
+		/// Occurs after processing controller.
+		/// </summary>
+		public event ExtensionHandler PostControllerProcess
+		{
+			add { events.AddHandler(PostProcessControllerEvent, value); }
+			remove { events.RemoveHandler(PostProcessControllerEvent, value); }
+		}
+
 		internal void RaiseReleaseRequestState(IEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[ReleaseSessionStateEvent];
@@ -124,6 +144,18 @@ namespace Castle.MonoRail.Framework
 		internal void RaiseActionError(IEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[ActionExceptionEvent];
+			if (eventDelegate != null) eventDelegate(context);
+		}
+
+		internal void RaisePostProcessController(IEngineContext context)
+		{
+			ExtensionHandler eventDelegate = (ExtensionHandler) events[PostProcessControllerEvent];
+			if (eventDelegate != null) eventDelegate(context);
+		}
+
+		internal void RaisePreProcessController(IEngineContext context)
+		{
+			ExtensionHandler eventDelegate = (ExtensionHandler) events[PreProcessControllerEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 	}
