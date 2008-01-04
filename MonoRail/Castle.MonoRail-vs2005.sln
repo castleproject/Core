@@ -12,12 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.T
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite-vs2005", "TestSite\TestSite-vs2005.csproj", "{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.TestSupport-vs2005", "Castle.MonoRail.TestSupport\Castle.MonoRail.TestSupport-vs2005.csproj", "{E572DC59-2A96-482F-BE39-E938AB47EA9D}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -30,31 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.V
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.NVelocity.Tests-vs2005", "Castle.MonoRail.Framework.Views.NVelocity.Tests\Castle.MonoRail.Framework.Views.NVelocity.Tests-vs2005.csproj", "{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteNVelocity-vs2005", "TestSiteNVelocity\TestSiteNVelocity-vs2005.csproj", "{824EC872-2992-4518-8C41-4F87640D752A}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteWindsor-vs2005", "TestSiteWindsor\TestSiteWindsor-vs2005.csproj", "{22432F75-FD21-474A-AB8F-43100DE79FDB}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.WindsorExtension-vs2005", "Castle.MonoRail.WindsorExtension\Castle.MonoRail.WindsorExtension-vs2005.csproj", "{6C51A1E3-7F20-4696-BFD6-829134678341}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.WindsorExtension.Tests-vs2005", "Castle.MonoRail.WindsorExtension.Tests\Castle.MonoRail.WindsorExtension.Tests-vs2005.csproj", "{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -126,12 +96,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", 
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordScaffold-vs2005", "Castle.MonoRail.ActiveRecordScaffold\Castle.MonoRail.ActiveRecordScaffold-vs2005.csproj", "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Views.Brail-vs2005", "Castle.MonoRail.Views.Brail\Castle.MonoRail.Views.Brail-vs2005.csproj", "{CC39D6D0-2467-4DD5-A53E-92D580B60038}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -183,18 +147,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.TransformFi
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Monorail.JSONSupport-vs2005", "Castle.Monorail.JSONSupport\Castle.Monorail.JSONSupport-vs2005.csproj", "{B7571D23-EE5A-4B90-BB14-353AA61E2E5A}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Monorail.JSONSupport.Tests-vs2005", "Castle.Monorail.JSONSupport.Tests\Castle.Monorail.JSONSupport.Tests-vs2005.csproj", "{CE8B7A9D-2BA7-4E95-97BC-5829D61468C5}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordSupport.Tests-vs2005", "Castle.MonoRail.ActiveRecordSupport.Tests\Castle.MonoRail.ActiveRecordSupport.Tests-vs2005.csproj", "{86CAA470-BFAC-4D14-B4C2-C5BEFE3AD003}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -202,12 +154,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecor
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder-vs2005", "..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.TestSupport.Tests-vs2005", "Castle.MonoRail.TestSupport.Tests\Castle.MonoRail.TestSupport.Tests-vs2005.csproj", "{27FF38D9-DC85-4AF8-B4CE-C6C24B7F01E9}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -239,10 +185,6 @@ Global
 		{844F5EC4-9224-42A9-986D-CE645AC970F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{844F5EC4-9224-42A9-986D-CE645AC970F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{844F5EC4-9224-42A9-986D-CE645AC970F2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E572DC59-2A96-482F-BE39-E938AB47EA9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E572DC59-2A96-482F-BE39-E938AB47EA9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E572DC59-2A96-482F-BE39-E938AB47EA9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -251,34 +193,14 @@ Global
 		{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{824EC872-2992-4518-8C41-4F87640D752A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{824EC872-2992-4518-8C41-4F87640D752A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{824EC872-2992-4518-8C41-4F87640D752A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{824EC872-2992-4518-8C41-4F87640D752A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2409063E-BE05-4596-A677-758096D1C759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2409063E-BE05-4596-A677-758096D1C759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2409063E-BE05-4596-A677-758096D1C759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2409063E-BE05-4596-A677-758096D1C759}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC39D6D0-2467-4DD5-A53E-92D580B60038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC39D6D0-2467-4DD5-A53E-92D580B60038}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC39D6D0-2467-4DD5-A53E-92D580B60038}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -299,14 +221,6 @@ Global
 		{BB60A834-F753-4091-9709-676B6A9F0188}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB60A834-F753-4091-9709-676B6A9F0188}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB60A834-F753-4091-9709-676B6A9F0188}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7571D23-EE5A-4B90-BB14-353AA61E2E5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7571D23-EE5A-4B90-BB14-353AA61E2E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7571D23-EE5A-4B90-BB14-353AA61E2E5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7571D23-EE5A-4B90-BB14-353AA61E2E5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE8B7A9D-2BA7-4E95-97BC-5829D61468C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE8B7A9D-2BA7-4E95-97BC-5829D61468C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE8B7A9D-2BA7-4E95-97BC-5829D61468C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE8B7A9D-2BA7-4E95-97BC-5829D61468C5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{86CAA470-BFAC-4D14-B4C2-C5BEFE3AD003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{86CAA470-BFAC-4D14-B4C2-C5BEFE3AD003}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86CAA470-BFAC-4D14-B4C2-C5BEFE3AD003}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -315,10 +229,6 @@ Global
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27FF38D9-DC85-4AF8-B4CE-C6C24B7F01E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27FF38D9-DC85-4AF8-B4CE-C6C24B7F01E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27FF38D9-DC85-4AF8-B4CE-C6C24B7F01E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27FF38D9-DC85-4AF8-B4CE-C6C24B7F01E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -334,25 +244,16 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{EC393863-333E-49CE-94A6-654B9F323954} = {3C5EC9DD-79E4-4C13-ADAE-DA7416E6DAEA}
 		{E572DC59-2A96-482F-BE39-E938AB47EA9D} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
-		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
-		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
 		{844F5EC4-9224-42A9-986D-CE645AC970F2} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
 		{3FBEADBB-692E-44CF-A06F-B4E7F2DE27D0} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
-		{CE8B7A9D-2BA7-4E95-97BC-5829D61468C5} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
 		{86CAA470-BFAC-4D14-B4C2-C5BEFE3AD003} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
-		{27FF38D9-DC85-4AF8-B4CE-C6C24B7F01E9} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
-		{824EC872-2992-4518-8C41-4F87640D752A} = {A287E189-50B7-4EA3-A683-135F9F54ACF9}
-		{22432F75-FD21-474A-AB8F-43100DE79FDB} = {A287E189-50B7-4EA3-A683-135F9F54ACF9}
-		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53} = {A287E189-50B7-4EA3-A683-135F9F54ACF9}
 		{26AA3359-6571-4575-845D-ED05E4EDB586} = {A287E189-50B7-4EA3-A683-135F9F54ACF9}
 		{B39CC8B7-1391-40AF-9DA3-BF294CB16383} = {A287E189-50B7-4EA3-A683-135F9F54ACF9}
 		{CC39D6D0-2467-4DD5-A53E-92D580B60038} = {2A065720-7939-49FF-A9E1-6DCC3ED71F18}
 		{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69} = {2A065720-7939-49FF-A9E1-6DCC3ED71F18}
 		{2409063E-BE05-4596-A677-758096D1C759} = {4CA9E7D1-3BEF-4B35-A771-EFBD1FC52BD6}
 		{6C51A1E3-7F20-4696-BFD6-829134678341} = {4CA9E7D1-3BEF-4B35-A771-EFBD1FC52BD6}
-		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9} = {4CA9E7D1-3BEF-4B35-A771-EFBD1FC52BD6}
 		{BB60A834-F753-4091-9709-676B6A9F0188} = {4CA9E7D1-3BEF-4B35-A771-EFBD1FC52BD6}
-		{B7571D23-EE5A-4B90-BB14-353AA61E2E5A} = {4CA9E7D1-3BEF-4B35-A771-EFBD1FC52BD6}
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D} = {9264F1C2-88DA-497B-AD12-99AC46B0292B}
 		{4C945D49-02E9-43F2-9202-E7A6E7C56E77} = {9264F1C2-88DA-497B-AD12-99AC46B0292B}
 		{E4FA5B53-7D36-429E-8E5C-53D5479242BA} = {9264F1C2-88DA-497B-AD12-99AC46B0292B}

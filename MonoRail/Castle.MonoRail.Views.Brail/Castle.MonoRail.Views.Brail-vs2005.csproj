@@ -69,7 +69,6 @@
     <Compile Include="BooViewEngineOptions.cs" />
     <Compile Include="BrailBase.cs" />
     <Compile Include="BrailConfigurationSection.cs" />
-    <Compile Include="BrailJSCollectionGenerator.cs" />
     <Compile Include="BrailJSElementGenerator.cs" />
     <Compile Include="BrailPreProcessor.cs" />
     <Compile Include="BrailViewComponentContext.cs" />
@@ -80,7 +79,6 @@
     <Compile Include="FixTryGetParameterConditionalChecks.cs" />
     <Compile Include="HtmlExtension.cs" />
     <Compile Include="IDslLanguageExtension.cs" />
-    <Compile Include="IndependentBooViewEngine.cs" />
     <Compile Include="Macros\CodeBuilderHelper.cs" />
     <Compile Include="Macros\ComponentMacro.cs" />
     <Compile Include="CustomTypeSystem.cs" />
@@ -93,6 +91,7 @@
     <Compile Include="ReplaceUknownWithParameters.cs" />
     <Compile Include="ResourceToDuck.cs" />
     <Compile Include="ReturnValueVisitor.cs" />
+    <Compile Include="StandaloneBooViewEngine.cs" />
     <Compile Include="TransformToBrailStep.cs" />
     <Compile Include="XmlExtension.cs" />
   </ItemGroup>

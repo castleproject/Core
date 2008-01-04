@@ -74,6 +74,14 @@
       <Name>Castle.ActiveRecord</Name>
       <HintPath>..\..\build\net-2.0\debug\Castle.ActiveRecord.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Components.Common.TemplateEngine, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.TemplateEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
       <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
@@ -82,6 +90,10 @@
     <Reference Include="NHibernate, Version=1.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\net\2.0\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NVelocity, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -134,11 +146,30 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Pagination\IARPaginableDataSource.cs" />
+    <Compile Include="Scaffold\AbstractScaffoldAction.cs" />
+    <Compile Include="Scaffold\ConfirmRemoveAction.cs" />
+    <Compile Include="Scaffold\CreateAction.cs" />
+    <Compile Include="Scaffold\EditAction.cs" />
+    <Compile Include="Scaffold\Helpers\ARFormHelper.cs" />
+    <Compile Include="Scaffold\Helpers\PresentationHelper.cs" />
+    <Compile Include="Scaffold\ListAction.cs" />
+    <Compile Include="Scaffold\NewAction.cs" />
+    <Compile Include="Scaffold\RemoveAction.cs" />
+    <Compile Include="Scaffold\ScaffoldingSupport.cs" />
+    <Compile Include="Scaffold\UpdateAction.cs" />
+    <Compile Include="Scaffold\Utils\CommonOperationUtils.cs" />
+    <Compile Include="Scaffold\Utils\CreationUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
+    <EmbeddedResource Include="Scaffold\Templates\confirm.vm" />
+    <EmbeddedResource Include="Scaffold\Templates\edit.vm" />
+    <EmbeddedResource Include="Scaffold\Templates\layout.vm" />
+    <EmbeddedResource Include="Scaffold\Templates\list.vm" />
+    <EmbeddedResource Include="Scaffold\Templates\new.vm" />
+    <EmbeddedResource Include="Scaffold\Templates\remove.vm" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

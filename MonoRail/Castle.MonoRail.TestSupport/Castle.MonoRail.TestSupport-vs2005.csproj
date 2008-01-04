@@ -106,9 +106,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractMRTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -116,19 +113,7 @@
     <Compile Include="BaseViewComponentTest.cs" />
     <Compile Include="GenericBaseControllerTest.cs" />
     <Compile Include="GenericBaseWizardStepTest.cs" />
-    <Compile Include="MonoRailTestWorkerRequest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ReflectionHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestRequest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestResponse.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WebAppHost.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WebServer.cs" />
@@ -137,6 +122,7 @@
     <None Include="..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
+    <None Include="Castle.MonoRail.TestSupport.build" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
@@ -145,7 +131,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>"$(DevEnvDir)..\..\SDK\v2.0\Bin\gacutil.exe" /u "$(TargetName)" 
-"$(DevEnvDir)..\..\SDK\v2.0\Bin\gacutil.exe" /i "$(TargetPath)"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

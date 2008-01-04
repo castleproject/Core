@@ -75,6 +75,14 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Components.Common.EmailSender, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.EmailSender.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
       <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
@@ -83,9 +91,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Castle.DynamicProxy.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.MicroKernel, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
       <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.3.0.906, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\net\2.0\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -114,31 +134,44 @@
       <Project>{E572DC59-2A96-482F-BE39-E938AB47EA9D}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
+    <ProjectReference Include="..\Castle.MonoRail.WindsorExtension\Castle.MonoRail.WindsorExtension-vs2005.csproj">
+      <Project>{6C51A1E3-7F20-4696-BFD6-829134678341}</Project>
+      <Name>Castle.MonoRail.WindsorExtension-vs2005</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Castle.MonoRail.Framework.Tests.build" />
     <None Include="contentinfs.vm" />
-    <EmbeddedResource Include="Content\contentinassembly.vm" />
     <None Include="Content\notinassembly.vm" />
-    <Compile Include="AbstractTestCase.cs" />
-    <Compile Include="AccessibleThroughTestCase.cs" />
+    <Compile Include="Actions\ActionMethodExecutorCompatibleTestCase.cs" />
+    <Compile Include="Actions\ActionMethodExecutorTestCase.cs" />
+    <Compile Include="Actions\DefaultActionSelectorTestCase.cs" />
+    <Compile Include="Actions\DynamicActionExecutorTestCase.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BasicFunctionalityTestCase.cs">
+    <Compile Include="Configuration\ViewEngineConfigTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Configuration\ViewEngineConfigTestCase.cs" />
-    <Compile Include="Controllers\Clients\ClientCartController.cs" />
-    <Compile Include="Controllers\Clients\ClientContactController.cs" />
+    <Compile Include="Controllers\AccessibleThroughTestCase.cs" />
+    <Compile Include="Controllers\Clients\ClientCartController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\Clients\ClientContactController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controllers\Clients\ClientHomeController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\Clients\OtherController.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\ContactController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\ControllerTestCase.cs" />
+    <Compile Include="Controllers\ControllerWithAccessibleThroughTestCase.cs" />
     <Compile Include="Controllers\HomeController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -148,28 +181,14 @@
     <Compile Include="Controllers\Products\ListController.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ControllerTreeTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DefaultUrlBuilderTestCase.cs" />
-    <Compile Include="DefaultViewComponentRegistryTests.cs" />
-    <Compile Include="Helpers\AbstractHelperTestCase.cs" />
-    <Compile Include="Helpers\ScriptaculousHelperTestCase.cs" />
-    <Compile Include="Helpers\TextHelperTestCase.cs" />
-    <Compile Include="Helpers\UrlForHelperTestCase.cs" />
-    <Compile Include="Helpers\Validations\FormValidationTestCase.cs" />
-    <Compile Include="PostBackTestCase.cs" />
-    <Compile Include="DefaultControllerFactoryTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DescriptorBuilderMultiThreadedTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FileAssemblyViewSourceLoaderTestCase.cs" />
-    <Compile Include="FilterTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Controllers\SmartDispatcherSimpleBindingTestCase.cs" />
+    <Compile Include="Filters\ControllerLevelFiltersTestCase.cs" />
     <Compile Include="FlashTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\MRHandlerFactoryTestCase.cs" />
+    <Compile Include="Handlers\ResourceFileHandlerTestCase.cs" />
+    <Compile Include="Helpers\AbstractHelperTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\AjaxHelper2TestCase.cs">
@@ -181,52 +200,111 @@
     <Compile Include="Helpers\DictHelperTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\FormHelperCheckboxFieldListTestCase.cs" />
-    <Compile Include="Helpers\FormHelperSelectTestCase.cs" />
-    <Compile Include="Helpers\FormHelperSetOperation.cs" />
-    <Compile Include="Helpers\FormHelperTestCase.cs" />
+    <Compile Include="Helpers\FormHelperCheckboxFieldListTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\FormHelperSelectTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\FormHelperSetOperation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\FormHelperTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Helpers\HtmlHelperTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\PaginationHelperTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\ScriptaculousHelperTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\TextHelperTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Helpers\ValidationHelperTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LayoutTestCase.cs">
+    <Compile Include="Helpers\Validations\FormValidationTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LocalizationTestCase.cs">
+    <Compile Include="JSGeneration\DynamicDispatcherTestCase.cs" />
+    <Compile Include="JSGeneration\JSCodeGeneratorTestCase.cs" />
+    <Compile Include="JSGeneration\JSGeneratorDispatcherBaseTestCase.cs" />
+    <Compile Include="JSGeneration\PrototypeElementGeneratorTestCase.cs" />
+    <Compile Include="JSGeneration\PrototypeGeneratorTestCase.cs" />
+    <Compile Include="JSON\JsonDataBinderTestCase.cs" />
+    <Compile Include="JSON\JsonHelperTestCase.cs" />
+    <Compile Include="Providers\DefaultControllerDescriptorProviderTestCase.cs" />
+    <Compile Include="Providers\DefaultFilterDescriptorProviderTestCase.cs" />
+    <Compile Include="Providers\DefaultHelperDescriptorProviderTestCase.cs" />
+    <Compile Include="Providers\DefaultLayoutDescriptorProviderTestCase.cs" />
+    <Compile Include="Providers\DefaultRescueDescriptorProviderTestCase.cs" />
+    <Compile Include="Providers\DefaultResourceDescriptorProviderTestCase.cs" />
+    <Compile Include="Providers\DefaultTransformFilterDescriptorProviderTestCase.cs" />
+    <Compile Include="Rescues\ActionLevelRescuesTestCase.cs" />
+    <Compile Include="Rescues\ControllerLevelRescuesTestCase.cs" />
+    <Compile Include="Rescues\CustomRescueControllerTestCase.cs" />
+    <Compile Include="Resources\ActionsWithResourcesTestCase.cs" />
+    <Compile Include="Resources\ControllerWithResourcesTestCase.cs" />
+    <Compile Include="Resources\DefaultResourceFactoryTestCase.cs" />
+    <Compile Include="Routing\BaseRuleTestFixture.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RescueTestCase.cs">
+    <Compile Include="Routing\PatternRouteCreateUrlTestCase.cs" />
+    <Compile Include="Routing\PatternRouteTestCase.cs" />
+    <Compile Include="Routing\RoutingEngineTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Routing\BaseRuleTestFixture.cs" />
-    <Compile Include="Routing\PatternRuleTestCase.cs" />
-    <Compile Include="Routing\RegexRuleTestCase.cs" />
-    <Compile Include="Routing\RoutingEngineTestCase.cs" />
-    <Compile Include="Routing\Stubs\StubRequest.cs" />
-    <Compile Include="ServerUtilityTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DefaultUrlTokenizerTestCase.cs" />
-    <Compile Include="TransformFilterTestCase.cs" />
+    <Compile Include="Services\ControllerTreeTestCase.cs" />
+    <Compile Include="Services\DefaultControllerFactoryTestCase.cs" />
+    <Compile Include="Services\DefaultUrlBuilderTestCase.cs" />
+    <Compile Include="Services\DefaultUrlTokenizerTestCase.cs" />
+    <Compile Include="Services\EmailTemplateServiceTestCase.cs" />
+    <Compile Include="Services\FileAssemblyViewSourceLoaderTestCase.cs" />
+    <Compile Include="Services\PrototypeAjaxProxyGeneratorTestCase.cs" />
+    <Compile Include="Services\StaticResourceRegistry\DefaultStaticResourceRegistryTestCase.cs" />
     <Compile Include="UrlPartsBuilderTestCase.cs" />
-    <Compile Include="ViewComponents\AuthenticatedContentTestCase.cs" />
-    <Compile Include="ViewComponents\DiggStylePaginationTestCase.cs" />
-    <Compile Include="ViewComponents\SelectStylePaginationTestCase.cs" />
-    <Compile Include="ViewComponents\SiteMapComponentTestCase.cs" />
-    <Compile Include="ViewComponents\TreeMakerComponentTestCase.cs" />
-    <Compile Include="ViewEngineBaseTestCase.cs" />
+    <Compile Include="ViewComponents\AuthenticatedContentTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\DefaultViewComponentRegistryTests.cs" />
+    <Compile Include="ViewComponents\DiggStylePaginationTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\SelectStylePaginationTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewEngines\ViewEngineBaseTestCase.cs" />
     <Compile Include="WikiFormatterTestCase.cs" />
+    <Compile Include="WindsorIntegration\FacilityTestCase.cs" />
+    <Compile Include="Wizards\WizardActionProviderTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Internal\" />
+    <EmbeddedResource Include="Content\contentinassembly.vm" />
+    <EmbeddedResource Include="Resources\Language.de.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Language.nl.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Language.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Services\StaticResourceRegistry\DummyRes.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Handlers\Files\simplerequest.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Routing\Stubs\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
