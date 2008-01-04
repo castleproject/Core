@@ -68,9 +68,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
             }
             else
             {
-                builder = parentTypeEmitter.TypeBuilder.DefineProperty(
-                name, attributes, CallingConventions.HasThis, propertyType,
-                null, null, new Type[0], null, null);
+                builder = newDefinedProperty(
+					name, attributes, CallingConventions.HasThis, propertyType,
+					null, null, new Type[0], null, null);
             }
         }
 
