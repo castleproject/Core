@@ -302,6 +302,14 @@ namespace Castle.MicroKernel
 		/// Adds a component to be registered with the <see cref="IKernel"/> 
 		/// using a fluent interface.
 		/// </summary>
+		/// <param name="serviceType">The service type.</param>
+		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
+		ComponentRegistration<IKernel> AddComponentEx(Type serviceType);
+
+		/// <summary>
+		/// Adds a component to be registered with the <see cref="IKernel"/> 
+		/// using a fluent interface.
+		/// </summary>
 		/// <typeparam name="S">The service <see cref="Type"/> to manage.</typeparam>
 		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
 		ComponentRegistration<S, IKernel> AddComponentEx<S>();

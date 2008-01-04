@@ -323,7 +323,6 @@ namespace Castle.MicroKernel.Tests.Registration
 						Property.WithKey("Name").Eq("Caption Hook"),
 						Property.WithKey("Address").Eq("Fairyland"),
 						Property.WithKey("Age").Eq(45))
-				.Register()
 				.AddComponentEx<CustomerChain1>()
 					.WithName("customer2")
 					.WithCustomDependencies(
@@ -354,7 +353,6 @@ namespace Castle.MicroKernel.Tests.Registration
 						Property.WithKey("Name").Eq("Caption Hook"),
 						Property.WithKey("Address").Eq("Fairyland"),
 						Property.WithKey("Age").Eq(45))
-				.Register()
 				.AddComponentEx<CustomerChain1>()
 					.WithName("customer2")
 					.WithCustomDependencies(
@@ -387,7 +385,6 @@ namespace Castle.MicroKernel.Tests.Registration
 						Property.WithKey("Name").Eq("Caption Hook"),
 						Property.WithKey("Address").Eq("Fairyland"),
 						Property.WithKey("Age").Eq(45))
-				.Register()
 				.AddComponentEx<CustomerChain1>()
 					.WithName("customer2")
 					.WithCustomDependencies(

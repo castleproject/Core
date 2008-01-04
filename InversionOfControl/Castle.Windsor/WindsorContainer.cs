@@ -479,6 +479,16 @@ namespace Castle.Windsor
 		/// <summary>
 		/// Adds a component to be registered in the container using a fluent interface.
 		/// </summary>
+		/// <param name="serviceType">The service type.</param>
+		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
+		public ComponentRegistration<IWindsorContainer> AddComponentEx(Type serviceType)
+		{
+			return new ComponentRegistration<IWindsorContainer>(serviceType, kernel, this);			
+		}
+
+		/// <summary>
+		/// Adds a component to be registered in the container using a fluent interface.
+		/// </summary>
 		/// <typeparam name="S">The <see cref="Type"/> to manage.</typeparam>
 		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
 		public ComponentRegistration<S,IWindsorContainer> AddComponentEx<S>()

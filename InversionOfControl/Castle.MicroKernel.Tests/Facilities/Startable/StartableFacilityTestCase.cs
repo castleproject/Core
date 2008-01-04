@@ -19,6 +19,7 @@ namespace Castle.Facilities.Startable.Tests
 	using Castle.Core.Configuration;
 	using Castle.Facilities.Startable.Tests.Components;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Registration;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -84,7 +85,7 @@ namespace Castle.Facilities.Startable.Tests
 		}
 
 		[Test]
-		public void TestStartableWithCustomDependencies()
+		public void TestStartableWithRegisteredCustomDependencies()
 		{
 			IKernel kernel = new DefaultKernel();
 			kernel.ComponentCreated += new ComponentInstanceDelegate(OnStartableComponentStarted);
@@ -95,6 +96,31 @@ namespace Castle.Facilities.Startable.Tests
 			dependencies.Add("config", 1);
 			kernel.AddComponent("a", typeof(StartableComponentWithCustomDependencies));
 			kernel.RegisterCustomDependencies(typeof(StartableComponentWithCustomDependencies), dependencies);
+
+			Assert.IsTrue(startableCreatedBeforeResolved, "Component was not properly started");
+
+			StartableComponentWithCustomDependencies component = kernel["a"] as StartableComponentWithCustomDependencies;
+
+			Assert.IsNotNull(component);
+			Assert.IsTrue(component.Started);
+			Assert.IsFalse(component.Stopped);
+
+			kernel.ReleaseComponent(component);
+			Assert.IsTrue(component.Stopped);
+		}
+
+		[Test]
+		public void TestStartableWithCustomDependencies()
+		{
+			IKernel kernel = new DefaultKernel();
+			kernel.ComponentCreated += new ComponentInstanceDelegate(OnStartableComponentStarted);
+
+			kernel.AddFacility("startable", new StartableFacility());
+
+			kernel.AddComponentEx<StartableComponentWithCustomDependencies>()
+				.WithName("a")
+				.WithCustomDependencies(Property.WithKey("config").Eq(1))
+				.Register();
 
 			Assert.IsTrue(startableCreatedBeforeResolved, "Component was not properly started");
 

@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Added support for non-generic usage of fluent-interface.  Needed for dynamic registrations scenarios (Binsor)
+  Automatically register the component between consecutive AddComponentEx (Saves a few strokes).
+
 - Initial version of MicroKernel/Windsor fluent interface IOC-99
 
 - Applied patch from Jacob Lewallen improving the locking performance in the DefaultNamingSubsystem under high load.

@@ -30,9 +30,11 @@ namespace Castle.MicroKernel.Registration
 		private String name;
 		private bool overwrite;
 		private readonly IKernel kernel;
+		private readonly Type serviceType;
 		private Type classType;
 		private readonly T chain;
 		private readonly List<ComponentDescriptor<S,T>> descriptors;
+		private ComponentModel componentModel;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ComponentRegistration{S,T}"/> class.
@@ -40,11 +42,17 @@ namespace Castle.MicroKernel.Registration
 		/// <param name="kernel">The kernel.</param>
 		/// <param name="chain">The chain</param>
 		public ComponentRegistration(IKernel kernel, T chain)
+			: this(typeof(S), kernel, chain)
+		{
+		}
+
+		protected ComponentRegistration(Type serviceType, IKernel kernel, T chain)
 		{
 			overwrite = false;
 			this.kernel = kernel;
 			this.chain = chain;
-			descriptors = new List<ComponentDescriptor<S,T>>();
+			this.serviceType = serviceType;
+			descriptors = new List<ComponentDescriptor<S, T>>();
 		}
 
 		internal bool Overwrite
@@ -234,14 +242,28 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
+		/// Registers the current component and add another.
+		/// </summary>
+		/// <typeparam name="SS"></typeparam>
+		/// <returns></returns>
+		public ComponentRegistration<SS, T> AddComponentEx<SS>()
+		{
+			Register();
+			return new ComponentRegistration<SS, T>(kernel, chain);
+		}
+
+		/// <summary>
 		/// Registers this instance.
 		/// </summary>
 		/// <returns></returns>
 		public T Register()
 		{
-			InitializeDefaults();
-			ComponentModel model = BuildComponentModel();
-			kernel.AddCustomComponent(model);
+			if (componentModel == null)
+			{
+				InitializeDefaults();
+				componentModel = BuildComponentModel();
+				kernel.AddCustomComponent(componentModel);
+			}
 			return chain;
 		}
 
@@ -258,7 +280,7 @@ namespace Castle.MicroKernel.Registration
 			}
 
 			ComponentModel model = kernel.ComponentModelBuilder.BuildModel(
-				name, typeof(S), classType, null);
+				name, serviceType, classType, null);
 			foreach(ComponentDescriptor<S,T> descriptor in descriptors)
 			{
 				descriptor.ApplyToModel(model);
@@ -310,7 +332,7 @@ namespace Castle.MicroKernel.Registration
 		{
 			if (classType == null)
 			{
-				classType = typeof(S);	
+				classType = serviceType;	
 			}
 
 			if (String.IsNullOrEmpty(name))
@@ -328,6 +350,14 @@ namespace Castle.MicroKernel.Registration
 				kernel.ConfigurationStore.AddComponentConfiguration(name, configuration);
 			}
 			return configuration;
+		}
+	}
+
+	public class ComponentRegistration<T> : ComponentRegistration<object, T>
+	{
+		public ComponentRegistration(Type serviceType, IKernel kernel, T chain)
+			: base( serviceType, kernel, chain)
+		{
 		}
 	}
 }
