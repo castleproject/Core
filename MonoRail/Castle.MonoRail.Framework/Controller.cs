@@ -1222,7 +1222,8 @@ namespace Castle.MonoRail.Framework
 
 				if (action == null)
 				{
-					throw new MonoRailException(404, "Not Found", "Could not find action named " + Action);
+					throw new MonoRailException(404, "Not Found", "Could not find action named " + 
+						Action + " on controller " + AreaName + "\\" + Name);
 				}
 
 				EnsureActionIsAccessibleWithCurrentHttpVerb(action);
