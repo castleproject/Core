@@ -53,6 +53,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
         {
             this.parentTypeEmitter = parentTypeEmitter;
 
+            // DYNPROXY-73 - AmbiguousMatchException for properties
+            // This is a workaround for a framework limitation in CLR 2.0 
+            // This limitation was removed in CLR 2.0 SP1, but we don't want to 
+            // tie ourselves to that version. This perform the lookup for the new overload
+            // dynamically, so we have a nice fallback on vanilla CLR 2.0
             DefineProperty_Clr2_0 oldDefineProperty = parentTypeEmitter.TypeBuilder.DefineProperty;
             DefineProperty_Clr_2_0_SP1 newDefinedProperty = (DefineProperty_Clr_2_0_SP1)
                 Delegate.CreateDelegate(typeof(DefineProperty_Clr_2_0_SP1), parentTypeEmitter.TypeBuilder, newDefinePropertyMethodInfo);
