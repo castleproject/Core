@@ -14,139 +14,173 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters
 {
-	using System;
-	using System.Reflection;
-	using System.Reflection.Emit;
-	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+    using System;
+    using System.Reflection;
+    using System.Reflection.Emit;
 
-	public class PropertyEmitter : IMemberEmitter
-	{
-		private PropertyBuilder builder;
-		private AbstractTypeEmitter parentTypeEmitter;
-		private MethodEmitter getMethod;
-		private MethodEmitter setMethod;
-		// private ParameterInfo[] indexParameters;
+    public class PropertyEmitter : IMemberEmitter
+    {
+        private PropertyBuilder builder;
+        private AbstractTypeEmitter parentTypeEmitter;
+        private MethodEmitter getMethod;
+        private MethodEmitter setMethod;
 
-		public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, String name, PropertyAttributes attributes,
-		                       Type propertyType)
-		{
-			this.parentTypeEmitter = parentTypeEmitter;
+        private static readonly MethodInfo newDefinePropertyMethodInfo = typeof (TypeBuilder).GetMethod("DefineProperty", new Type[]
+                                                                                                              {
+                                                                                                                  typeof (string), typeof (PropertyAttributes),
+                                                                                                                  typeof (CallingConventions), typeof (Type),
+                                                                                                                  typeof (Type[]), typeof (Type[]), typeof (Type[]),
+                                                                                                                  typeof (Type[][]), typeof (Type[][])
+                                                                                                              });
 
-			builder = parentTypeEmitter.TypeBuilder.DefineProperty(name, attributes, propertyType, new Type[0]);
-		}
+        // private ParameterInfo[] indexParameters;
 
-		public MethodEmitter GetMethod
-		{
-			get { return getMethod; }
-			set { getMethod = value; }
-		}
+        private delegate PropertyBuilder DefineProperty_Clr2_0(
+            string name, PropertyAttributes attributes, Type propertyType, Type[] parameters);
 
-		public MethodEmitter SetMethod
-		{
-			get { return setMethod; }
-			set { setMethod = value; }
-		}
+        public delegate PropertyBuilder DefineProperty_Clr_2_0_SP1(string name,
+                                                                   PropertyAttributes attributes,
+                                                                   CallingConventions callingConvention,
+                                                                   Type returnType,
+                                                                   Type[] returnTypeRequiredCustomModifiers,
+                                                                   Type[] returnTypeOptionalCustomModifiers,
+                                                                   Type[] parameterTypes,
+                                                                   Type[][] parameterTypeRequiredCustomModifiers,
+                                                                   Type[][] parameterTypeOptionalCustomModifiers);
 
-		public MethodEmitter CreateGetMethod()
-		{
-			return CreateGetMethod(MethodAttributes.Public |
-			                       MethodAttributes.Virtual |
-			                       MethodAttributes.SpecialName);
-		}
+        public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, String name, PropertyAttributes attributes,
+                               Type propertyType)
+        {
+            this.parentTypeEmitter = parentTypeEmitter;
 
-		public MethodEmitter CreateGetMethod(MethodAttributes attrs, params Type[] parameters)
-		{
-			if (getMethod != null)
-			{
-				throw new InvalidOperationException("A getMethod exists");
-			}
+            DefineProperty_Clr2_0 oldDefineProperty = parentTypeEmitter.TypeBuilder.DefineProperty;
+            DefineProperty_Clr_2_0_SP1 newDefinedProperty = (DefineProperty_Clr_2_0_SP1)
+                Delegate.CreateDelegate(typeof(DefineProperty_Clr_2_0_SP1), parentTypeEmitter.TypeBuilder, newDefinePropertyMethodInfo);
 
-			if (parameters.Length == 0)
-			{
-				getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name, attrs);
-			}
-			else
-			{
-				getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name,
-				                              attrs,
-				                              ReturnType,
-				                              parameters);
-			}
+            if(newDefinedProperty==null)
+            {
+                   builder = oldDefineProperty(name, attributes, propertyType, new Type[0]);
+            }
+            else
+            {
+                builder = parentTypeEmitter.TypeBuilder.DefineProperty(
+                name, attributes, CallingConventions.HasThis, propertyType,
+                null, null, new Type[0], null, null);
+            }
+        }
 
-			return getMethod;
-		}
+        public MethodEmitter GetMethod
+        {
+            get { return getMethod; }
+            set { getMethod = value; }
+        }
 
-		public MethodEmitter CreateSetMethod()
-		{
-			return CreateSetMethod(MethodAttributes.Public |
-			                       MethodAttributes.Virtual |
-			                       MethodAttributes.SpecialName);
-		}
+        public MethodEmitter SetMethod
+        {
+            get { return setMethod; }
+            set { setMethod = value; }
+        }
 
-		public MethodEmitter CreateSetMethod(Type arg)
-		{
-			return CreateSetMethod(MethodAttributes.Public |
-			                       MethodAttributes.Virtual |
-			                       MethodAttributes.SpecialName, arg);
-		}
+        public MethodEmitter CreateGetMethod()
+        {
+            return CreateGetMethod(MethodAttributes.Public |
+                                   MethodAttributes.Virtual |
+                                   MethodAttributes.SpecialName);
+        }
 
-		public MethodEmitter CreateSetMethod(MethodAttributes attrs, params Type[] parameters)
-		{
-			if (setMethod != null)
-			{
-				throw new InvalidOperationException("A setMethod exists");
-			}
+        public MethodEmitter CreateGetMethod(MethodAttributes attrs, params Type[] parameters)
+        {
+            if (getMethod != null)
+            {
+                throw new InvalidOperationException("A getMethod exists");
+            }
 
-			if (parameters.Length == 0)
-			{
-				setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name, attrs);
-			}
-			else
-			{
-				setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name,
-				                              attrs, typeof(void),
-				                              parameters);
-			}
+            if (parameters.Length == 0)
+            {
+                getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name, attrs);
+            }
+            else
+            {
+                getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name,
+                                              attrs,
+                                              ReturnType,
+                                              parameters);
+            }
 
-			return setMethod;
-		}
+            return getMethod;
+        }
 
-		public MemberInfo Member
-		{
-			get { return null; }
-		}
+        public MethodEmitter CreateSetMethod()
+        {
+            return CreateSetMethod(MethodAttributes.Public |
+                                   MethodAttributes.Virtual |
+                                   MethodAttributes.SpecialName);
+        }
 
-		public Type ReturnType
-		{
-			get { return builder.PropertyType; }
-		}
+        public MethodEmitter CreateSetMethod(Type arg)
+        {
+            return CreateSetMethod(MethodAttributes.Public |
+                                   MethodAttributes.Virtual |
+                                   MethodAttributes.SpecialName, arg);
+        }
 
-		public void Generate()
-		{
-			if (setMethod != null)
-			{
-				setMethod.Generate();
-				builder.SetSetMethod(setMethod.MethodBuilder);
-			}
+        public MethodEmitter CreateSetMethod(MethodAttributes attrs, params Type[] parameters)
+        {
+            if (setMethod != null)
+            {
+                throw new InvalidOperationException("A setMethod exists");
+            }
 
-			if (getMethod != null)
-			{
-				getMethod.Generate();
-				builder.SetGetMethod(getMethod.MethodBuilder);
-			}
-		}
+            if (parameters.Length == 0)
+            {
+                setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name, attrs);
+            }
+            else
+            {
+                setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name,
+                                              attrs, typeof (void),
+                                              parameters);
+            }
 
-		public void EnsureValidCodeBlock()
-		{
-			if (setMethod != null)
-			{
-				setMethod.EnsureValidCodeBlock();
-			}
+            return setMethod;
+        }
 
-			if (getMethod != null)
-			{
-				getMethod.EnsureValidCodeBlock();
-			}
-		}
-	}
+        public MemberInfo Member
+        {
+            get { return null; }
+        }
+
+        public Type ReturnType
+        {
+            get { return builder.PropertyType; }
+        }
+
+        public void Generate()
+        {
+            if (setMethod != null)
+            {
+                setMethod.Generate();
+                builder.SetSetMethod(setMethod.MethodBuilder);
+            }
+
+            if (getMethod != null)
+            {
+                getMethod.Generate();
+                builder.SetGetMethod(getMethod.MethodBuilder);
+            }
+        }
+
+        public void EnsureValidCodeBlock()
+        {
+            if (setMethod != null)
+            {
+                setMethod.EnsureValidCodeBlock();
+            }
+
+            if (getMethod != null)
+            {
+                getMethod.EnsureValidCodeBlock();
+            }
+        }
+    }
 }

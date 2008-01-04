@@ -125,6 +125,16 @@ namespace Castle.DynamicProxy.Tests
 #endif
 
 		[Test]
+		public void GetPropertyByReflectionTest()
+		{
+			object proxy = generator.CreateClassProxy(
+				typeof(ServiceClass), new StandardInterceptor());
+
+			Assert.IsFalse( (bool) proxy.GetType().GetProperty("Valid").GetValue(proxy, null),
+							"check reflected property is true" );
+		}
+
+		[Test]
 		public void ClassWithInheritance()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
