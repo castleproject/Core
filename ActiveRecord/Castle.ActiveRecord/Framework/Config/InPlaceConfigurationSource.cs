@@ -29,9 +29,13 @@ namespace Castle.ActiveRecord.Framework.Config
 	public enum DatabaseType
 	{
 		/// <summary>
-		/// Microsoft SQL Server
+		/// Microsoft SQL Server 2005
 		/// </summary>
-		MSSQLServer
+		MSSQLServer2005, 
+		/// <summary>
+		/// Microsoft SQL Server 2000
+		/// </summary>
+		MSSQLServer2000
 	}
 
 	/// <summary>
@@ -159,7 +163,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			if (string.IsNullOrEmpty(server)) throw new ArgumentNullException("server");
 			if (string.IsNullOrEmpty(initialCatalog)) throw new ArgumentNullException("initialCatalog");
 
-			return Build(DatabaseType.MSSQLServer, "Server=" + server + ";initial catalog=" + initialCatalog + ";Integrated Security=SSPI");
+			return Build(DatabaseType.MSSQLServer2005, "Server=" + server + ";initial catalog=" + initialCatalog + ";Integrated Security=SSPI");
 		}
 
 		/// <summary>
@@ -177,7 +181,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			if (string.IsNullOrEmpty(username)) throw new ArgumentNullException("username");
 			if (string.IsNullOrEmpty(password)) throw new ArgumentNullException("password");
 
-			return Build(DatabaseType.MSSQLServer, "Server=" + server + ";initial catalog=" + initialCatalog + ";User id=" + username + ";password=" + password);
+			return Build(DatabaseType.MSSQLServer2005, "Server=" + server + ";initial catalog=" + initialCatalog + ";User id=" + username + ";password=" + password);
 		}
 
 		/// <summary>
@@ -195,10 +199,16 @@ namespace Castle.ActiveRecord.Framework.Config
 			Hashtable parameters = new Hashtable();
 			parameters["hibernate.connection.provider"] = "NHibernate.Connection.DriverConnectionProvider";
 
-			if (database == DatabaseType.MSSQLServer)
+			if (database == DatabaseType.MSSQLServer2000)
 			{
 				parameters["hibernate.connection.driver_class"] = "NHibernate.Driver.SqlClientDriver";
 				parameters["hibernate.dialect"] = "NHibernate.Dialect.MsSql2000Dialect";
+				parameters["hibernate.connection.connection_string"] = connectionString;
+			}
+			else if (database == DatabaseType.MSSQLServer2005)
+			{
+				parameters["hibernate.connection.driver_class"] = "NHibernate.Driver.SqlClientDriver";
+				parameters["hibernate.dialect"] = "NHibernate.Dialect.MsSql2005Dialect";
 				parameters["hibernate.connection.connection_string"] = connectionString;
 			}
 
