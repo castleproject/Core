@@ -111,6 +111,7 @@
     <Compile Include="ReflectionBasedDictionaryAdapter.cs" />
     <Compile Include="Resource\AbstractResource.cs" />
     <Compile Include="Resource\AbstractStreamResource.cs" />
+    <Compile Include="Resource\AssemblyBundleResource.cs" />
     <Compile Include="Resource\AssemblyResource.cs" />
     <Compile Include="Resource\AssemblyResourceFactory.cs" />
     <Compile Include="Resource\ConfigResource.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Resource\StaticContentResource.cs" />
     <Compile Include="Resource\UncResource.cs" />
     <Compile Include="Resource\UncResourceFactory.cs" />
+    <Compile Include="StringObjectDictionaryAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\CastleKey.snk">
