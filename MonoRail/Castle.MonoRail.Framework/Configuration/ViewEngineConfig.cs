@@ -115,8 +115,6 @@ namespace Castle.MonoRail.Framework.Configuration
 				viewPathRoot = "views";
 			}
 
-			ArrayList viewEnginesList = new ArrayList();
-
 			foreach(XmlElement addNode in engines.SelectNodes("add"))
 			{
 				string typeName = addNode.GetAttribute("type");
@@ -136,10 +134,10 @@ namespace Castle.MonoRail.Framework.Configuration
 					throw new ConfigurationErrorsException(message);
 				}
 
-				viewEnginesList.Add(new ViewEngineInfo(engine, xhtmlVal == "true"));
+				viewEngines.Add(new ViewEngineInfo(engine, xhtmlVal == "true"));
 			}
 
-			if (viewEnginesList.Count == 0)
+			if (viewEngines.Count == 0)
 			{
 				ConfigureDefaultViewEngine();
 			}

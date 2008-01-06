@@ -19,6 +19,8 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 	using System.IO;
 	using System.Xml;
 	using Castle.MonoRail.Framework.Configuration;
+	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Views.Aspx;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -80,6 +82,46 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 			config.Deserialize(doc.DocumentElement);
 
 			Assert.IsTrue(config.Sources.Count > 0, "Additional sources not loaded");
+		}
+		
+		[Test]
+		public void ConfigureWithMultipleViewEngines_AssignedEnginesToViewEnginesProperty()
+		{
+			string configXml =@"
+<monorail>
+	<controllers>
+		<assembly>Castle.MonoRail.Framework.Tests</assembly>
+	</controllers>
+	<viewEngines viewPathRoot=""" + viewFolder + @""">
+		<add
+			type=""Castle.MonoRail.Framework.Tests.Configuration.TestViewEngine,
+					Castle.MonoRail.Framework.Tests"" />
+		<add
+			type=""Castle.MonoRail.Framework.Views.Aspx.WebFormsViewEngine,
+					Castle.MonoRail.Framework"" />
+	</viewEngines>
+</monorail>";
+
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml(configXml);
+			ViewEngineConfig config = new ViewEngineConfig();
+			config.Deserialize(doc.DocumentElement);
+			
+			Assert.AreEqual(2, config.ViewEngines.Count);
+			
+			Assert.IsTrue(config.ViewEngines.Exists(TestViewEngineSpecification));
+			
+			Assert.IsTrue(config.ViewEngines.Exists(WebFormsViewEngineSpecification));
+		}
+		
+		static bool TestViewEngineSpecification(ViewEngineInfo engineInfo)
+		{
+			return engineInfo.Engine == typeof(TestViewEngine);
+		}
+
+		static bool WebFormsViewEngineSpecification(ViewEngineInfo engineInfo)
+		{
+			return engineInfo.Engine == typeof(WebFormsViewEngine);
 		}
 	}
 
