@@ -197,19 +197,20 @@ namespace Castle.ActiveRecord.Framework.Config
 			InPlaceConfigurationSource config = new InPlaceConfigurationSource();
 
 			Hashtable parameters = new Hashtable();
-			parameters["hibernate.connection.provider"] = "NHibernate.Connection.DriverConnectionProvider";
+			parameters["connection.provider"] = "NHibernate.Connection.DriverConnectionProvider";
+			parameters["cache.use_second_level_cache"] = "false";
 
 			if (database == DatabaseType.MSSQLServer2000)
 			{
-				parameters["hibernate.connection.driver_class"] = "NHibernate.Driver.SqlClientDriver";
-				parameters["hibernate.dialect"] = "NHibernate.Dialect.MsSql2000Dialect";
-				parameters["hibernate.connection.connection_string"] = connectionString;
+				parameters["connection.driver_class"] = "NHibernate.Driver.SqlClientDriver";
+				parameters["dialect"] = "NHibernate.Dialect.MsSql2000Dialect";
+				parameters["connection.connection_string"] = connectionString;
 			}
 			else if (database == DatabaseType.MSSQLServer2005)
 			{
-				parameters["hibernate.connection.driver_class"] = "NHibernate.Driver.SqlClientDriver";
-				parameters["hibernate.dialect"] = "NHibernate.Dialect.MsSql2005Dialect";
-				parameters["hibernate.connection.connection_string"] = connectionString;
+				parameters["connection.driver_class"] = "NHibernate.Driver.SqlClientDriver";
+				parameters["dialect"] = "NHibernate.Dialect.MsSql2005Dialect";
+				parameters["connection.connection_string"] = connectionString;
 			}
 
 			config.Add(typeof(ActiveRecordBase), parameters);

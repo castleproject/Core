@@ -193,7 +193,7 @@ namespace Castle.ActiveRecord.Framework
 		/// </remarks>
 		/// <param name="entity">A transient entity</param>
 		/// <returns></returns>
-		public override object IsUnsaved(object entity)
+		public override bool? IsUnsaved(object entity)
 		{
 			ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
 

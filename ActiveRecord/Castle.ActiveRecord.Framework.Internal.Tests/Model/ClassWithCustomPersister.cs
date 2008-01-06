@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	using System;
+	using System.Collections;
 	using NHibernate;
 	using NHibernate.Cache;
 	using NHibernate.Engine;
@@ -71,11 +72,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 
 	public class CustomPersister : IEntityPersister
 	{
-		public void PostInstantiate(ISessionFactoryImplementor factory)
-		{
-			throw new NotImplementedException();
-		}
-
 		public void PostInstantiate()
 		{
 			throw new NotImplementedException();
@@ -176,42 +172,18 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			throw new NotImplementedException();
 		}
 
-		///<summary>
-		///
-		///            Update a persistent instance
-		///            
-		///</summary>
-		///
-		///<param name="id">The id.</param>
-		///<param name="fields">The fields.</param>
-		///<param name="dirtyFields">The dirty fields.</param>
-		///<param name="hasDirtyCollection">if set to <c>true</c> [has dirty collection].</param>
-		///<param name="oldFields">The old fields.</param>
-		///<param name="oldVersion">The old version.</param>
-		///<param name="obj">The obj.</param>
-		///<param name="session">The session.</param>
-		public void Update(object id, object[] fields, int[] dirtyFields, bool hasDirtyCollection, object[] oldFields, object oldVersion, object obj, ISessionImplementor session)
+		public void Update(object id, object[] fields, int[] dirtyFields, bool hasDirtyCollection, object[] oldFields,
+		                   object oldVersion, object obj, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsInstrumented(EntityMode entityMode)
 		{
 			throw new NotImplementedException();
 		}
 
 		public object[] GetDatabaseSnapshot(object id, ISessionImplementor session)
-		{
-			throw new NotImplementedException();
-		}
-
-		public object[] GetDatabaseSnapshot(object id, object version, ISessionImplementor session)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Update(object id, object[] fields, int[] dirtyFields, object[] oldFields, object oldVersion, object obj,
-		                   ISessionImplementor session)
-		{
-			throw new NotImplementedException();
-		}
-
-		public object[] GetCurrentPersistentState(object id, object version, ISessionImplementor session)
 		{
 			throw new NotImplementedException();
 		}
@@ -242,6 +214,12 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public void ProcessUpdateGeneratedProperties(object id, object entity, object[] state, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEntityPersister GetSubclassEntityPersister(object instance, ISessionFactoryImplementor factory,
+		                                                   EntityMode entityMode)
 		{
 			throw new NotImplementedException();
 		}
@@ -321,12 +299,12 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool HasIdentifierPropertyOrEmbeddedCompositeIdentifier
+		public bool CanExtractIdOutOfEntity
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool IsVersioned
+		bool IEntityPersister.IsVersioned
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -361,13 +339,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		///<summary>
-		///
-		///            Properties that may be dirty (and thus should be dirty-checked). These
-		///            include all updatable properties and some associations.
-		///            
-		///</summary>
-		///
 		public bool[] PropertyCheckability
 		{
 			get { throw new NotImplementedException(); }
@@ -383,18 +354,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		///<summary>
-		///
-		///            Get the "versionability" of the properties of this class (is the property optimistic-locked)
-		///            
-		///</summary>
-		///
-		///<value>
-		///
-		///<c>true</c> if the property is optimistic-locked; otherwise, 
-		///<c>false</c>.
-		///</value>
-		///
 		public bool[] PropertyVersionability
 		{
 			get { throw new NotImplementedException(); }
@@ -445,13 +404,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		///<summary>
-		///
-		///            Returns an array of objects that identify spaces in which properties of this class are persisted,
-		///            for instances of this class and its subclasses.
-		///            
-		///</summary>
-		///
 		public object[] QuerySpaces
 		{
 			get { throw new NotImplementedException(); }
@@ -478,6 +430,16 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public bool IsSelectBeforeUpdateRequired
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool IsVersioned
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public IComparer VersionComparator
 		{
 			get { throw new NotImplementedException(); }
 		}

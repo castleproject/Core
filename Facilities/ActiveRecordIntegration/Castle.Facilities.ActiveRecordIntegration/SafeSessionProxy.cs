@@ -19,6 +19,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	using System.Data;
 
 	using NHibernate;
+	using NHibernate.Stat;
 	using NHibernate.Type;
 
 	using Castle.ActiveRecord.Framework;
@@ -295,6 +296,32 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return innerSession.Filter(collection, filter, values, types);
+		}
+
+		public string GetEntityName(object obj)
+		{
+			return innerSession.GetEntityName(obj);
+		}
+
+		public ISession SetBatchSize(int batchSize)
+		{
+			return innerSession.SetBatchSize(batchSize);
+		}
+
+		public IMultiCriteria CreateMultiCriteria()
+		{
+			return innerSession.CreateMultiCriteria();
+		}
+
+		public CacheMode CacheMode
+		{
+			get { return innerSession.CacheMode; }
+			set { innerSession.CacheMode = value; }
+		}
+
+		public ISessionStatistics Statistics
+		{
+			get { return innerSession.Statistics; }
 		}
 
 		public int Delete(String query)

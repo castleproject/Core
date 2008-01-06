@@ -19,6 +19,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	using System.Collections;
 
 	using NHibernate;
+	using NHibernate.Stat;
 	using NHibernate.Type;
 
 	/// <summary>
@@ -395,6 +396,33 @@ namespace Castle.Facilities.NHibernateIntegration
 		public IDbConnection Close()
 		{
 			return DoClose(true);
+		}
+
+
+		public string GetEntityName(object obj)
+		{
+			return inner.GetEntityName(obj);
+		}
+
+		public ISession SetBatchSize(int batchSize)
+		{
+			return inner.SetBatchSize(batchSize);
+		}
+
+		public IMultiCriteria CreateMultiCriteria()
+		{
+			return inner.CreateMultiCriteria();
+		}
+
+		public CacheMode CacheMode
+		{
+			get { return inner.CacheMode; }
+			set { inner.CacheMode = value; }
+		}
+
+		public ISessionStatistics Statistics
+		{
+			get { return inner.Statistics; }
 		}
 
 		#endregion

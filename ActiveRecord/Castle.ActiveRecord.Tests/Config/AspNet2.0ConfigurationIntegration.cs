@@ -32,7 +32,7 @@ namespace Castle.ActiveRecord.Tests.Config
 
             IConfiguration config = source.GetConfiguration(typeof(ActiveRecordBase));
 
-            string expected = config.Children["hibernate.connection.connection_string"].Value;
+            string expected = config.Children["connection.connection_string"].Value;
             
             Assert.AreEqual("Test Connection String", expected);
         }

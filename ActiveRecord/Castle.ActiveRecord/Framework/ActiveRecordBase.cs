@@ -136,14 +136,14 @@ namespace Castle.ActiveRecord
 				holder.FailSession(session);
 
 				// NHibernate catches our ValidationException, and as such it is the innerexception here
+				if (ex is ValidationException)
+					throw ;
+
 				if (ex.InnerException is ValidationException)
-				{
 					throw ex.InnerException;
-				}
-				else
-				{
-					throw new ActiveRecordException("Could not perform Create for " + instance.GetType().Name, ex);
-				}
+
+				throw new ActiveRecordException("Could not perform Create for " + instance.GetType().Name, ex);
+
 			}
 			finally
 			{

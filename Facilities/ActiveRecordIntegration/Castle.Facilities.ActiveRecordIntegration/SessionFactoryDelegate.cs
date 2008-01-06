@@ -16,6 +16,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Data;
 
 	using NHibernate;
@@ -26,6 +27,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	using NHibernate.Metadata;
 
 	using Castle.ActiveRecord.Framework;
+	using NHibernate.Stat;
 
 	/// <summary>
 	/// Implements <see cref="ISessionFactory"/> allowing 
@@ -147,17 +149,37 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
 		}
 
-		public ICollection DefinedFilterNames
+		public void EvictEntity(string entityName)
 		{
-			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
+			throw new NotImplementedException();
+		}
+
+		public IStatelessSession OpenStatelessSession()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IStatelessSession OpenStatelessSession(IDbConnection connection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ICollection<string> DefinedFilterNames
+		{
+			get { throw new NotImplementedException(); }
 		}
 
 		public Settings Settings
 		{
-			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
+			get { throw new NotImplementedException(); }
 		}
 
 		public IDictionary Items
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public IStatistics Statistics
 		{
 			get { throw new NotImplementedException(); }
 		}

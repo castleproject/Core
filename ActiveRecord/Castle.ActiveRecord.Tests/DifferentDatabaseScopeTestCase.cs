@@ -429,7 +429,7 @@ namespace Castle.ActiveRecord.Tests
 	
 			foreach(IConfiguration child in db2.Children)
 			{
-				if (child.Name == "hibernate.connection.connection_string")
+				if (child.Name == "connection.connection_string")
 				{
 					conn = new SqlConnection(child.Value);
 				}
@@ -448,7 +448,7 @@ namespace Castle.ActiveRecord.Tests
 	
 			foreach(IConfiguration child in db2.Children)
 			{
-				if (child.Name == "hibernate.connection.connection_string")
+				if (child.Name == "connection.connection_string")
 				{
 					conn = new SqlConnection(child.Value);
 				}

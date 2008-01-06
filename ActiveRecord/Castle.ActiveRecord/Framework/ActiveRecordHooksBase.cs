@@ -92,7 +92,7 @@ namespace Castle.ActiveRecord
 		///	</list>
 		/// </remarks>
 		/// <returns></returns>
-		protected virtual internal object IsUnsaved()
+		protected virtual internal bool? IsUnsaved()
 		{
 			return null;
 		}

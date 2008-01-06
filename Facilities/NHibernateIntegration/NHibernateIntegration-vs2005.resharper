@@ -8,6 +8,15 @@
     <TerminatingMethod MethodName="System.Diagnostics.Debug.Fail" />
     <TerminatingMethod MethodName="System.Environment.Exit" />
     <TerminatingMethod MethodName="NUnit.Framework.Assert.Fail" />
+    <StringFormatMethod MethodName="System.String.Format" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Text.StringBuilder.AppendFormat" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.IO.TextWriter.WriteLine" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.IO.TextWriter.Write" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Console.WriteLine" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Console.Write" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Console.Out.Write" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Diagnostics.Debug.Print" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Text.StringBuilder.AppendFormat" FormatParameterName="format" />
     <NotNullableValueAttribute>
     </NotNullableValueAttribute>
     <CanBeNullValueAttribute>
