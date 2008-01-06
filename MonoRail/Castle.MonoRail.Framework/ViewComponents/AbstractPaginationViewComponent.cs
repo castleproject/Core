@@ -33,6 +33,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private UrlPartsBuilder urlPartsBuilder;
 		private bool usePathInfo;
 		private bool useInlineStyle = true;
+		private bool preserveQueryString = false;
 		private string pageParamName = "page";
 
 		/// <summary>
@@ -104,6 +105,28 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			set { urlParam = value; }
 		}
 
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the component should render existing query string arguments and overwrite page parameter 
+		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// Default value is <c>false</c>
+		/// </para>
+		/// <para>
+		/// Only has effect when <see cref="Url"/> or <see cref="PaginateFunction"/> are not defined
+		/// </para>
+		/// </remarks>
+		/// <value>
+		///	<c>true</c> if it should preserve existing query string arguments; otherwise <c>false</c>.
+		///	</value>
+		[ViewComponentParam]
+		public bool PreserveQueryString 
+		{
+			get { return preserveQueryString; }
+			set { preserveQueryString = value; }
+		}
+
 		/// <summary>
 		/// Called by the framework once the component instance
 		/// is initialized
@@ -163,11 +186,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		}
 
 		/// <summary>
-		/// Pendent
+		/// Compute url for given page index.
 		/// </summary>
 		/// <param name="pageIndex">The page index.</param>
-		/// <returns></returns>
-		protected string CreateUrlForPage(int pageIndex)
+		/// <returns>return the computed url for given page index.</returns>
+		protected virtual string CreateUrlForPage(int pageIndex)
 		{
 			if (usePathInfo)
 			{
@@ -201,7 +224,14 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				}
 				else
 				{
-					urlPartsBuilder = new UrlPartsBuilder(EngineContext.Request.FilePath);
+					if (!PreserveQueryString) 
+					{
+						urlPartsBuilder = new UrlPartsBuilder(EngineContext.Request.FilePath);
+					}
+					else
+					{
+						urlPartsBuilder = UrlPartsBuilder.Parse(EngineContext.Request.Url);
+					}
 				}
 			}
 		}

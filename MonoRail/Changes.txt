@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied Gauthier Segay's patch fixing MR-388 
+  "There should be a way to preserve url query string arguments while using DiggStylePagination" 
+
 - Applied Mike Nichols' patch adding two more events to the extension manager.
 
 - Applied Felix Gartsman's patch fixing MR-387
