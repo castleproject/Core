@@ -26,10 +26,26 @@ namespace Castle.MonoRail.Framework.Helpers
 	{
 		private IDictionary _submitOptions;
 
+
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="ValidationHelper"/> class.
 		/// </summary>
 		public ValidationHelper()
+		{
+			_submitOptions = new Hashtable();
+
+			_submitOptions["confirm"] = false;
+			_submitOptions["disable"] = false;
+			_submitOptions["groupError"] = false;
+			_submitOptions["errorMode"] = 0;
+		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidationHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public ValidationHelper(IEngineContext engineContext)
+			: base(engineContext)
 		{
 			_submitOptions = new Hashtable();
 

@@ -30,6 +30,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </remarks>
 	public class HtmlHelper : AbstractHelper
 	{
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HtmlHelper"/> class.
+		/// </summary>
+		public HtmlHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HtmlHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public HtmlHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		#region Fieldset
 
 		/// <summary>

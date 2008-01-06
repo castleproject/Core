@@ -261,6 +261,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		private IValidatorRegistry validatorRegistry;
 		private ValidatorRunner validatorRunner;
 
+
+
+		#region Constructors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FormHelper"/> class.
 		/// </summary>
@@ -269,6 +272,20 @@ namespace Castle.MonoRail.Framework.Helpers
 			validatorRegistry = new CachedValidationRegistry();
 			validatorRunner = new ValidatorRunner(false, validatorRegistry);
 		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FormHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public FormHelper(IEngineContext engineContext) : base(engineContext)
+		{
+			validatorRegistry = new CachedValidationRegistry();
+			validatorRunner = new ValidatorRunner(false, validatorRegistry);
+		}
+
+		#endregion
+
 
 		/// <summary>
 		/// Logger instance

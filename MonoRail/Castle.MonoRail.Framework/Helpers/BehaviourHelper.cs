@@ -27,6 +27,20 @@ namespace Castle.MonoRail.Framework.Helpers
 	{
 		private bool behaviourCommaNeeded;
 
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BehaviourHelper"/> class.
+		/// </summary>
+		public BehaviourHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BehaviourHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public BehaviourHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
+
 		#region Scripts
 
 		/// <summary>

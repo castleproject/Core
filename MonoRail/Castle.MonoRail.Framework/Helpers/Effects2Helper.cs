@@ -26,6 +26,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	[Obsolete("Use ScriptaculousHelper instead")]
 	public class Effects2Helper : ScriptaculousHelper
 	{
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Effects2Helper"/> class.
+		/// </summary>
+		public Effects2Helper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Effects2Helper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public Effects2Helper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		/// <summary>
 		/// Make an element appear. If the element was previously set to display:none;  
 		/// inside the style attribute of the element, the effect will automatically 

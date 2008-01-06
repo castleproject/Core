@@ -28,6 +28,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class TextHelper : AbstractHelper
 	{
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TextHelper"/> class.
+		/// </summary>
+		public TextHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TextHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public TextHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		/// <summary>
 		/// Default word connector
 		/// </summary>

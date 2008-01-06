@@ -29,6 +29,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </remarks>
 	public class ScriptaculousHelper : AbstractHelper
 	{
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScriptaculousHelper"/> class.
+		/// </summary>
+		public ScriptaculousHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScriptaculousHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public ScriptaculousHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		#region Scripts
 
 		/// <summary>

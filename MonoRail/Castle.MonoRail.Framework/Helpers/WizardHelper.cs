@@ -25,6 +25,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class WizardHelper : HtmlHelper
 	{
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WizardHelper"/> class.
+		/// </summary>
+		public WizardHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WizardHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public WizardHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		/// <summary>
 		/// Returns <c>true</c> if the current wizard 
 		/// flow has a next step.

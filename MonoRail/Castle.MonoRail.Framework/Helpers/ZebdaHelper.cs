@@ -21,6 +21,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class ZebdaHelper : AbstractHelper
 	{
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZebdaHelper"/> class.
+		/// </summary>
+		public ZebdaHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZebdaHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public ZebdaHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		#region Scripts
 
 		/// <summary>

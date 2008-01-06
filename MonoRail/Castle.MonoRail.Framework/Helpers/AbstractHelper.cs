@@ -30,6 +30,24 @@ namespace Castle.MonoRail.Framework.Helpers
 	{
 		private const string MonoRailVersion = "RC3_0006";
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AbstractHelper"/> class.
+		/// </summary>
+		public AbstractHelper()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AbstractHelper"/> class, 
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public AbstractHelper(IEngineContext engineContext)
+		{
+			SetController(engineContext.CurrentController, engineContext.CurrentControllerContext);
+			SetContext(engineContext);
+		}
+
 		#region Context and Controller Reference
 
 		private IController controller;

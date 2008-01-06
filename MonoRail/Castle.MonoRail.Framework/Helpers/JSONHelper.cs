@@ -21,6 +21,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class JSONHelper : AbstractHelper
 	{
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JSONHelper"/> class.
+		/// </summary>
+		public JSONHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JSONHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public JSONHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		/// <summary>
 		/// Converts a instance of the model to its JSON representation.
 		/// </summary>

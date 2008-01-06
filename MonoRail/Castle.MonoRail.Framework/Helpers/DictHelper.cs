@@ -23,6 +23,18 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class DictHelper : AbstractHelper
 	{
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DictHelper"/> class.
+		/// </summary>
+		public DictHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DictHelper"/> class.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public DictHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		/// <summary>
 		/// Creates an <see cref="IDictionary"/> with entries
 		/// infered from the arguments. 

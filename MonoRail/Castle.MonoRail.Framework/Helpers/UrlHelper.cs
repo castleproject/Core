@@ -37,6 +37,19 @@ namespace Castle.MonoRail.Framework.Helpers
 		private IUrlBuilder urlBuilder;
 		private UrlInfo	currentUrl;
 
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UrlHelper"/> class.
+		/// </summary>
+		public UrlHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UrlHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public UrlHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		/// <summary>
 		/// Gets or sets the URL builder.
 		/// </summary>

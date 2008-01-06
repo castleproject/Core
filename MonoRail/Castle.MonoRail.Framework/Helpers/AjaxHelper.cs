@@ -79,6 +79,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	{
 		private IAjaxProxyGenerator ajaxProxyGenerator;
 
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AjaxHelper"/> class.
+		/// </summary>
+		public AjaxHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AjaxHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public AjaxHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		#region IServiceEnabledComponent implementation
 
 		/// <summary>

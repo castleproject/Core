@@ -47,6 +47,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </remarks>
 	public class EffectsFatHelper : AbstractHelper
 	{
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EffectsFatHelper"/> class.
+		/// </summary>
+		public EffectsFatHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EffectsFatHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public EffectsFatHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		/// <summary>
 		/// Renders a Javascript library inside a single script tag.
 		/// </summary>

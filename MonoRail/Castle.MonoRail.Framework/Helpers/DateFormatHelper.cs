@@ -21,6 +21,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class DateFormatHelper : AbstractHelper
 	{
+		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DateFormatHelper"/> class.
+		/// </summary>
+		public DateFormatHelper() { }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DateFormatHelper"/> class.
+		/// setting the Controller, Context and ControllerContext.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		public DateFormatHelper(IEngineContext engineContext) : base(engineContext) { }
+		#endregion
+
 		/// <summary>
 		/// Alternative representation of a difference
 		/// between the specified date and now. If within 24hr
