@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Reflection.Emit;
+
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -124,14 +126,38 @@ namespace Castle.DynamicProxy.Tests
 		
 #endif
 
+
 		[Test]
 		public void GetPropertyByReflectionTest()
 		{
 			object proxy = generator.CreateClassProxy(
-				typeof(ServiceClass), new StandardInterceptor());
+				typeof (ServiceClass), new StandardInterceptor());
 
-			Assert.IsFalse( (bool) proxy.GetType().GetProperty("Valid").GetValue(proxy, null),
-							"check reflected property is true" );
+			try
+			{
+				Assert.IsFalse((bool) proxy.GetType().GetProperty("Valid").GetValue(proxy, null),
+				               "check reflected property is true");
+			}
+			catch (AmbiguousMatchException)
+			{
+				// this exception is acceptible if the current runtime doesn't
+				// have .NET 2.0 SP1 installed
+				// we'd try to grab a method info that in in .NET 2.0 SP1, and if it's
+				// not present then we'd ignore that exception
+				MethodInfo newDefinePropertyMethodInfo = typeof(TypeBuilder).GetMethod("DefineProperty", new Type[]
+				{
+					typeof (string), typeof (PropertyAttributes),
+					typeof (CallingConventions), typeof (Type),
+					typeof (Type[]), typeof (Type[]), typeof (Type[]),
+					typeof (Type[][]), typeof (Type[][])
+				});
+
+				bool net20SP1IsInstalled = newDefinePropertyMethodInfo != null;
+
+				if (net20SP1IsInstalled)
+					throw;
+
+			}
 		}
 
 		[Test]

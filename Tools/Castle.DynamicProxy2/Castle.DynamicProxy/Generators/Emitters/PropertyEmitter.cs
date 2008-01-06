@@ -58,16 +58,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
             // This limitation was removed in CLR 2.0 SP1, but we don't want to 
             // tie ourselves to that version. This perform the lookup for the new overload
             // dynamically, so we have a nice fallback on vanilla CLR 2.0
-            DefineProperty_Clr2_0 oldDefineProperty = parentTypeEmitter.TypeBuilder.DefineProperty;
-            DefineProperty_Clr_2_0_SP1 newDefinedProperty = (DefineProperty_Clr_2_0_SP1)
-                Delegate.CreateDelegate(typeof(DefineProperty_Clr_2_0_SP1), parentTypeEmitter.TypeBuilder, newDefinePropertyMethodInfo);
 
-            if(newDefinedProperty==null)
-            {
-                   builder = oldDefineProperty(name, attributes, propertyType, new Type[0]);
-            }
-            else
-            {
+			if (newDefinePropertyMethodInfo == null)
+			{
+				DefineProperty_Clr2_0 oldDefineProperty = parentTypeEmitter.TypeBuilder.DefineProperty;
+				builder = oldDefineProperty(name, attributes, propertyType, new Type[0]);
+			}
+			else 
+			{
+				DefineProperty_Clr_2_0_SP1 newDefinedProperty = (DefineProperty_Clr_2_0_SP1)
+					Delegate.CreateDelegate(typeof(DefineProperty_Clr_2_0_SP1), parentTypeEmitter.TypeBuilder, newDefinePropertyMethodInfo);
                 builder = newDefinedProperty(
 					name, attributes, CallingConventions.HasThis, propertyType,
 					null, null, new Type[0], null, null);
