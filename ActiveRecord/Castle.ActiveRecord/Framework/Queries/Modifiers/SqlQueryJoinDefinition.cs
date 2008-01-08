@@ -19,51 +19,49 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 	using NHibernate;
 
 	/// <summary>
-	/// Represents a SQL query return definition.
+	/// Represents a SQL query join definition.
 	/// See <see cref="NHibernate.ISession.CreateSQLQuery(string,string[],Type[])"/> for more information.
 	/// </summary>
-	public class SqlQueryReturnDefinition : IQueryModifier
+	public class SqlQueryJoinDefinition : IQueryModifier
 	{
-		private readonly Type returnType;
-		private readonly String returnAlias;
+		private readonly String associationPath;
+		private readonly String associationAlias;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlQueryReturnDefinition"/> class.
+		/// Initializes a new instance of the <see cref="SqlQueryJoinDefinition"/> class.
 		/// </summary>
-		/// <param name="returnType">Type of the return object.</param>
-		/// <param name="returnAlias">Gets the alias for the object</param>
-		public SqlQueryReturnDefinition(Type returnType, String returnAlias)
+		/// <param name="associationPath">The association path.</param>
+		/// <param name="associationAlias">The association alias.</param>
+		public SqlQueryJoinDefinition(String associationPath, String associationAlias)
 		{
-			if (returnType == null) throw new ArgumentNullException("returnType");
-			if (returnAlias == null) throw new ArgumentNullException("returnAlias");
+			if (associationPath == null) throw new ArgumentNullException("associationPath");
+			if (associationAlias == null) throw new ArgumentNullException("associationAlias");
 
-			this.returnType = returnType;
-			this.returnAlias = returnAlias;
+			this.associationPath = associationPath;
+			this.associationAlias = associationAlias;
 		}
 
 		/// <summary>
-		/// Gets the type of the returned object
+		/// Gets the path of the assocation
 		/// </summary>
-		/// <value>The type of the return.</value>
-		public Type ReturnType
+		public String AssociationPath
 		{
-			get { return returnType; }
+			get { return associationPath; }
 		}
 
 		/// <summary>
-		/// Gets the alias for the object
+		/// Gets the alias for the association
 		/// </summary>
-		/// <value>The return alias.</value>
-		public String ReturnAlias
+		public String AssociationAlias
 		{
-			get { return returnAlias; }
+			get { return associationAlias; }
 		}
 
 		#region "Apply" method
 
 		/// <summary>
 		/// Applies this modifier to the query.
-		/// </summary>
+		/// </summary>s
 		/// <param name="query">The query</param>
 		void IQueryModifier.Apply(IQuery query)
 		{
@@ -71,7 +69,7 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 
 			if (sqlQuery != null)
 			{
-				sqlQuery.AddEntity(returnAlias, returnType);
+				sqlQuery.AddJoin(associationAlias, associationPath);
 			}
 		}
 		

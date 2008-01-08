@@ -17,53 +17,52 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 	using System;
 
 	using NHibernate;
+	using NHibernate.Type;
 
 	/// <summary>
-	/// Represents a SQL query return definition.
+	/// Represents a SQL query scalar definition.
 	/// See <see cref="NHibernate.ISession.CreateSQLQuery(string,string[],Type[])"/> for more information.
 	/// </summary>
-	public class SqlQueryReturnDefinition : IQueryModifier
+	public class SqlQueryScalarDefinition : IQueryModifier
 	{
-		private readonly Type returnType;
-		private readonly String returnAlias;
+		private readonly IType scalarType;
+		private readonly String columnAlias;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlQueryReturnDefinition"/> class.
+		/// Initializes a new instance of the <see cref="SqlQueryScalarDefinition"/> class.
 		/// </summary>
-		/// <param name="returnType">Type of the return object.</param>
-		/// <param name="returnAlias">Gets the alias for the object</param>
-		public SqlQueryReturnDefinition(Type returnType, String returnAlias)
+		/// <param name="scalarType">The scalar type.</param>
+		/// <param name="columnAlias">The column alias.</param>
+		public SqlQueryScalarDefinition(IType scalarType, String columnAlias)
 		{
-			if (returnType == null) throw new ArgumentNullException("returnType");
-			if (returnAlias == null) throw new ArgumentNullException("returnAlias");
+			if (scalarType == null) throw new ArgumentNullException("scalarType");
+			if (columnAlias == null) throw new ArgumentNullException("columnAlias");
 
-			this.returnType = returnType;
-			this.returnAlias = returnAlias;
+			this.scalarType = scalarType;
+			this.columnAlias = columnAlias;
 		}
 
 		/// <summary>
-		/// Gets the type of the returned object
+		/// Gets the scalar type
 		/// </summary>
-		/// <value>The type of the return.</value>
-		public Type ReturnType
+		public IType ScalarType
 		{
-			get { return returnType; }
+			get { return scalarType; }
 		}
 
 		/// <summary>
-		/// Gets the alias for the object
+		/// Gets the column alias for the scalar
 		/// </summary>
-		/// <value>The return alias.</value>
-		public String ReturnAlias
+		public String ColumnAlias
 		{
-			get { return returnAlias; }
+			get { return columnAlias; }
 		}
 
 		#region "Apply" method
 
 		/// <summary>
 		/// Applies this modifier to the query.
-		/// </summary>
+		/// </summary>s
 		/// <param name="query">The query</param>
 		void IQueryModifier.Apply(IQuery query)
 		{
@@ -71,7 +70,7 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 
 			if (sqlQuery != null)
 			{
-				sqlQuery.AddEntity(returnAlias, returnType);
+				sqlQuery.AddScalar(columnAlias, scalarType);
 			}
 		}
 		

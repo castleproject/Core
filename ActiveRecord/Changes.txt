@@ -1,3 +1,9 @@
+
+- Added SqlQueryJoinDefinition, SqlQueryScalarDefinition and refactored to 
+  put behavior in IQueryModifier.Apply.
+
+- Added QueryResultTransformer modifier to allow setting a results transformer.
+
 - Applied patch from Patrick Steele adding support for DiscriminatorLength in mappings. 
 
 - Added support for validating nested properties. 

@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@ namespace Castle.ActiveRecord.Queries
 {
 	using System;
 	using System.Collections;
-	using System.Text.RegularExpressions;
 
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Queries.Modifiers;
 
 	using NHibernate;
 	using NHibernate.Type;
+	using NHibernate.Transform;
 
 	/// <summary>
 	/// defines the possible query langauges
@@ -179,15 +179,46 @@ namespace Castle.ActiveRecord.Queries
 
 		#endregion
 
-		#region AddSqlReturnDefinition
+		#region SqlQuery Modifiers
 
 		/// <summary>
 		/// Adds a SQL query return definition.
 		/// See <see cref="NHibernate.ISession.CreateSQLQuery(string,string[],Type[])"/> for more information.
 		/// </summary>
-		public void AddSqlReturnDefinition(Type returnType, string returnAlias)
+		public void AddSqlReturnDefinition(Type returnType, String returnAlias)
 		{
 			AddModifier(new SqlQueryReturnDefinition(returnType, returnAlias));
+		}
+
+		/// <summary>
+		/// Adds a SQL query join definition.
+		/// See <see cref="NHibernate.ISession.CreateSQLQuery(string,string[],Type[])"/> for more information.
+		/// </summary>
+		public void AddSqlJoinDefinition(String associationPath, String associationAlias)
+		{
+			AddModifier(new SqlQueryJoinDefinition(associationPath, associationAlias));
+		}
+
+		/// <summary>
+		/// Adds a SQL query scalar definition.
+		/// See <see cref="NHibernate.ISession.CreateSQLQuery(string,string[],Type[])"/> for more information.
+		/// </summary>
+		public void AddSqlScalarDefinition(IType scalarType, String columnAlias)
+		{
+			AddModifier(new SqlQueryScalarDefinition(scalarType, columnAlias));
+		}
+
+		#endregion
+
+		#region SetResultTransformer
+
+		/// <summary>
+		/// Adds a query result transformer.
+		/// See <see cref="IResultTransformer"/> for more information.
+		/// </summary>
+		public void SetResultTransformer(IResultTransformer transformer)
+		{
+			AddModifier(new QueryResultTransformer(transformer));
 		}
 
 		#endregion
@@ -208,21 +239,7 @@ namespace Castle.ActiveRecord.Queries
 					break;
 
 				case QueryLanguage.Sql:
-					ISQLQuery sqlQuery = session.CreateSQLQuery(Query);
-
-					if (queryModifiers != null)
-					{
-						foreach(IQueryModifier mod in queryModifiers)
-						{
-							SqlQueryReturnDefinition returnDef = mod as SqlQueryReturnDefinition;
-
-							if (returnDef == null) continue;
-
-							sqlQuery.AddEntity(returnDef.ReturnAlias, returnDef.ReturnType);
-						}
-					}
-					
-					nhibQuery = sqlQuery;
+					nhibQuery = session.CreateSQLQuery(Query);
 					break;
 
 				default:
