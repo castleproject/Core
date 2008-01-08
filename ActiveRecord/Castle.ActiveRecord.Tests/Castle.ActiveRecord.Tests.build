@@ -32,33 +32,33 @@
 		
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/activerecord/config/add[@key='hibernate.dialect']/@value"
+			xpath="/configuration/activerecord/config/add[@key='dialect']/@value"
 			value="${ar.dialect}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.driver_class']/@value"
+			xpath="/configuration/activerecord/config/add[@key='connection.driver_class']/@value"
 			value="${ar.connection.driver_class}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.connection_string']/@value"
+			xpath="/configuration/activerecord/config/add[@key='connection.connection_string']/@value"
 			value="${ar.connection.connection_string.1}" 
 		/>
 		
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='hibernate.dialect']/@value"
+			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='dialect']/@value"
 			value="${ar.dialect}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='hibernate.connection.driver_class']/@value"
+			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='connection.driver_class']/@value"
 			value="${ar.connection.driver_class}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='hibernate.connection.connection_string']/@value"
+			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='connection.connection_string']/@value"
 			value="${ar.connection.connection_string.2}" 
 		/>
 	</target>
