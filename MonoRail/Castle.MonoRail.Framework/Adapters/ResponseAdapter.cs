@@ -132,27 +132,27 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return response.OutputStream; }
 		}
 
-//		/// <summary>
-//		/// Writes the buffer to the browser
-//		/// </summary>
-//		/// <param name="buffer">The buffer.</param>
-//		public void BinaryWrite(byte[] buffer)
-//		{
-//			response.BinaryWrite(buffer);
-//		}
-//
-//		/// <summary>
-//		/// Writes the stream to the browser
-//		/// </summary>
-//		/// <param name="stream">The stream.</param>
-//		public void BinaryWrite(Stream stream)
-//		{
-//			byte[] buffer = new byte[stream.Length];
-//
-//			stream.Read(buffer, 0, buffer.Length);
-//
-//			BinaryWrite(buffer);
-//		}
+		/// <summary>
+		/// Writes the buffer to the browser
+		/// </summary>
+		/// <param name="buffer">The buffer.</param>
+		public void BinaryWrite(byte[] buffer)
+		{
+			response.BinaryWrite(buffer);
+		}
+
+		/// <summary>
+		/// Writes the stream to the browser
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		public void BinaryWrite(Stream stream)
+		{
+			byte[] buffer = new byte[stream.Length];
+
+			stream.Read(buffer, 0, buffer.Length);
+
+			BinaryWrite(buffer);
+		}
 
 		/// <summary>
 		/// Clears the response (only works if buffered)

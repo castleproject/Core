@@ -77,17 +77,17 @@ namespace Castle.MonoRail.Framework
 		/// <param name="value">The value.</param>
 		void AppendHeader(String name, String value);
 
-//		/// <summary>
-//		/// Writes the buffer to the browser
-//		/// </summary>
-//		/// <param name="buffer">The buffer.</param>
-//		void BinaryWrite(byte[] buffer);
-//
-//		/// <summary>
-//		/// Writes the stream to the browser
-//		/// </summary>
-//		/// <param name="stream">The stream.</param>
-//		void BinaryWrite(System.IO.Stream stream);
+		/// <summary>
+		/// Writes the buffer to the browser
+		/// </summary>
+		/// <param name="buffer">The buffer.</param>
+		void BinaryWrite(byte[] buffer);
+
+		/// <summary>
+		/// Writes the stream to the browser
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		void BinaryWrite(System.IO.Stream stream);
 
 		/// <summary>
 		/// Clears the response (only works if buffered)

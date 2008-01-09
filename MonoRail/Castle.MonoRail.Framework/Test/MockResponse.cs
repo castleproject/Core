@@ -86,27 +86,27 @@ namespace Castle.MonoRail.Framework.Test
 			headers[name] = value;
 		}
 
-//		/// <summary>
-//		/// Writes the buffer to the browser
-//		/// </summary>
-//		/// <param name="buffer">The buffer.</param>
-//		public virtual void BinaryWrite(byte[] buffer)
-//		{
-//			outputStream.Write(buffer, 0, buffer.Length);
-//		}
-//
-//		/// <summary>
-//		/// Writes the stream to the browser
-//		/// </summary>
-//		/// <param name="stream">The stream.</param>
-//		public virtual void BinaryWrite(Stream stream)
-//		{
-//			byte[] buffer = new byte[stream.Length];
-//
-//			stream.Read(buffer, 0, buffer.Length);
-//
-//			BinaryWrite(buffer);
-//		}
+		/// <summary>
+		/// Writes the buffer to the browser
+		/// </summary>
+		/// <param name="buffer">The buffer.</param>
+		public virtual void BinaryWrite(byte[] buffer)
+		{
+//			output.Write(buffer, 0, buffer.Length);
+		}
+
+		/// <summary>
+		/// Writes the stream to the browser
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		public virtual void BinaryWrite(Stream stream)
+		{
+			byte[] buffer = new byte[stream.Length];
+
+			stream.Read(buffer, 0, buffer.Length);
+
+			BinaryWrite(buffer);
+		}
 
 		/// <summary>
 		/// Clears the response (only works if buffered)
