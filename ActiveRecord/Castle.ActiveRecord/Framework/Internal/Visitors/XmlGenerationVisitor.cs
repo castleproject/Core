@@ -278,9 +278,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				foreach(String param in paras)
 				{
-					String[] pair = param.Split('=');
-
-					AppendF("<param name=\"{0}\">{1}</param>", pair[0], pair[1]);
+					int eqIndex = param.IndexOf("=");
+					//need to handle parameters that may contains =, so we will take into account only the first one
+					string paramName = param.Substring(0, eqIndex);
+					string paramValue = param.Substring(eqIndex+1);
+					
+					AppendF("<param name=\"{0}\">{1}</param>", paramName, paramValue);
 				}
 
 				Dedent();
