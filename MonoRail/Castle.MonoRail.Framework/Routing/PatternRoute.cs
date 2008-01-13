@@ -29,6 +29,7 @@ namespace Castle.MonoRail.Framework.Routing
 	[DebuggerDisplay("PatternRoute {pattern}")]
 	public class PatternRoute : IRoutingRule
 	{
+		private readonly string name;
 		private readonly string pattern;
 		private readonly List<DefaultNode> nodes = new List<DefaultNode>();
 		private readonly Dictionary<string, string> defaults = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
@@ -44,12 +45,22 @@ namespace Castle.MonoRail.Framework.Routing
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="PatternRoute"/> class.
+		/// </summary>
+		/// <param name="name">The route name.</param>
+		/// <param name="pattern">The pattern.</param>
+		public PatternRoute(string name, string pattern) : this(pattern)
+		{
+			this.name = name;
+		}
+
+		/// <summary>
 		/// Gets the name of the route.
 		/// </summary>
 		/// <value>The name of the route.</value>
 		public string RouteName
 		{
-			get { return null; }
+			get { return name; }
 		}
 
 		/// <summary>
@@ -235,9 +246,9 @@ namespace Castle.MonoRail.Framework.Routing
 			public readonly bool afterDot;
 			public bool hasRestriction;
 			private string defaultVal;
-			private bool acceptsIntOnly;
 			private string[] acceptedTokens;
 			private Regex exp;
+			private string acceptedRegex;
 
 			public DefaultNode(string part, bool optional, bool afterDot)
 			{
@@ -287,9 +298,9 @@ namespace Castle.MonoRail.Framework.Routing
 
 			private string GetExpression()
 			{
-				if (acceptsIntOnly)
+				if (!string.IsNullOrEmpty(acceptedRegex))
 				{
-					return "[0-9]+";
+					return acceptedRegex;
 				}
 				else if (acceptedTokens != null && acceptedTokens.Length != 0)
 				{
@@ -364,10 +375,25 @@ namespace Castle.MonoRail.Framework.Routing
 			{
 				set
 				{
-					hasRestriction = true;
-					acceptsIntOnly = value;
-					ReBuildRegularExpression();
+					AcceptsRegex("[0-9]+");
 				}
+			}
+
+			public bool AcceptsGuidsOnly
+			{
+				set
+				{
+					AcceptsRegex("[A-Fa-f0-9]{32}|" +
+								"({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?|" +
+								"({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})");
+				}
+			}
+
+			public void AcceptsRegex(string regex)
+			{
+				hasRestriction = true;
+				acceptedRegex = regex;
+				ReBuildRegularExpression();
 			}
 
 			public bool Accepts(string val)
@@ -447,7 +473,8 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 
 			/// <summary>
-			/// Anies the of.
+			/// Restricts this named pattern part to only accept one of the 
+			/// strings passed in.
 			/// </summary>
 			/// <param name="validNames">The valid names.</param>
 			/// <returns></returns>
@@ -458,7 +485,7 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 
 			/// <summary>
-			/// Gets the valid integer.
+			/// Restricts this named pattern part to only accept integers.
 			/// </summary>
 			/// <value>The valid integer.</value>
 			public PatternRoute ValidInteger
@@ -468,6 +495,30 @@ namespace Castle.MonoRail.Framework.Routing
 					targetNode.AcceptsIntOnly = true;
 					return route;
 				}
+			}
+
+			/// <summary>
+			/// Restricts this named pattern part to only accept guids.
+			/// </summary>
+			public PatternRoute ValidGuid
+			{
+				get
+				{
+					targetNode.AcceptsGuidsOnly = true;
+					return route;
+				}
+			}
+
+			/// <summary>
+			/// Restricts this named pattern part to only accept strings
+			/// matching the regular expression passed in.
+			/// </summary>
+			/// <param name="regex"></param>
+			/// <returns></returns>
+			public PatternRoute ValidRegex(string regex)
+			{
+				targetNode.AcceptsRegex(regex);
+				return route;
 			}
 		}
 

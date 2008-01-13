@@ -570,6 +570,21 @@
         <member name="M:NHibernate.Mapping.Attributes.DatabaseObjectAttribute.#ctor(System.Int32)">
             <summary> Constructor taking the position of the attribute. </summary>
         </member>
+        <member name="T:NHibernate.Mapping.Attributes.DefinitionAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DefinitionAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DefinitionAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DefinitionAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DefinitionAttribute.ClassType">
+            <summary> </summary>
+        </member>
         <member name="T:NHibernate.Mapping.Attributes.DialectScopeAttribute">
             <summary> </summary>
         </member>
@@ -960,11 +975,17 @@
         <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteDialectScope(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.DialectScopeAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
             <summary> Write a DialectScope XML Element from attributes in a member. </summary>
         </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteDefinition(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.DefinitionAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Definition XML Element from attributes in a member. </summary>
+        </member>
         <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteDatabaseObject(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.DatabaseObjectAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
             <summary> Write a DatabaseObject XML Element from attributes in a member. </summary>
         </member>
-        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteImport(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ImportAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
-            <summary> Write a Import XML Element from attributes in a member. </summary>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteImport(System.Xml.XmlWriter,System.Type)">
+            <summary> Write a Import XML Element from attributes in a type. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteNestedImportTypes(System.Xml.XmlWriter,System.Type)">
+            <summary> Write Import XML Elements from nested mapped classes in a not-mapped class. </summary>
         </member>
         <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteClass(System.Xml.XmlWriter,System.Type)">
             <summary> Write a Class XML Element from attributes in a type. </summary>
@@ -998,6 +1019,9 @@
         </member>
         <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteNestedJoinedSubclassTypes(System.Xml.XmlWriter,System.Type)">
             <summary> Write JoinedSubclass XML Elements from nested mapped classes in a not-mapped class. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteJoin(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.JoinAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Join XML Element from attributes in a member. </summary>
         </member>
         <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteProperty(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.PropertyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
             <summary> Write a Property XML Element from attributes in a member. </summary>
@@ -1343,6 +1367,9 @@
         <member name="P:NHibernate.Mapping.Attributes.ImportAttribute.Class">
             <summary> </summary>
         </member>
+        <member name="P:NHibernate.Mapping.Attributes.ImportAttribute.ClassType">
+            <summary> </summary>
+        </member>
         <member name="P:NHibernate.Mapping.Attributes.ImportAttribute.Rename">
             <summary> </summary>
         </member>
@@ -1438,6 +1465,36 @@
         </member>
         <member name="F:NHibernate.Mapping.Attributes.JcsCacheUsage.NonStrictReadWrite">
             <summary>nonstrict-read-write</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.JoinAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.JoinAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.JoinAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinAttribute.Table">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinAttribute.Schema">
+            <summary>default: no value</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinAttribute.Fetch">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinAttribute.Inverse">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinAttribute.InverseSpecified">
+            <summary> Tells if Inverse has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinAttribute.Optional">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinAttribute.OptionalSpecified">
+            <summary> Tells if Optional has been specified. </summary>
         </member>
         <member name="T:NHibernate.Mapping.Attributes.JoinedSubclassAttribute">
             <summary>Joined subclasses are used for the normalized table-per-subclass mapping strategy</summary>

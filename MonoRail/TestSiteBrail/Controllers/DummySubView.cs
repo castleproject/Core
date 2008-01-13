@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
     [Serializable]
     public class DummySubView : BrailBase
     {
-        public DummySubView(BooViewEngine viewEngine, TextWriter output, IRailsEngineContext context, Controller controller) : base(viewEngine, output, context, controller)
+        public DummySubView(BooViewEngine viewEngine, TextWriter output, IEngineContext context, Controller controller, IControllerContext controllerContext) : base(viewEngine, output, context, controller, controllerContext)
         {
         }
 

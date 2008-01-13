@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Queries;
 
 	using NHibernate;
-	using NHibernate.Expression;
+	using NHibernate.Expressions;
 	using Castle.Components.Validator;
 
 	/// <summary>

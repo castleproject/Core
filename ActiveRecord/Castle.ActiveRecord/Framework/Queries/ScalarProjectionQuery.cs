@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Queries
 	using System;
 	using System.Collections;
 	using NHibernate;
-	using NHibernate.Expression;
+	using NHibernate.Expressions;
 
 	/// <summary>
 	/// Perform a scalar projection ( aggeregate ) type of query:

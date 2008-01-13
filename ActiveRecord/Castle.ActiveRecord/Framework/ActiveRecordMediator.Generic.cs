@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using Framework;
-	using NHibernate.Expression;
+	using NHibernate.Expressions;
 
 	/// <summary>
 	/// Allow programmers to use the 

@@ -21,7 +21,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Binder;
 	using Iesi.Collections;
-	using NHibernate.Property;
+	using NHibernate.Properties;
 	using Iesi.Collections.Generic;
 	using System.Collections.Generic;
 

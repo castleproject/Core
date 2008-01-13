@@ -18,7 +18,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using System.Reflection;
 
 	using NHibernate;
-	using NHibernate.Expression;
+	using NHibernate.Expressions;
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;

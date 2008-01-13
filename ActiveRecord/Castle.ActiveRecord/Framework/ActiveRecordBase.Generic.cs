@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord
 	using System.Collections;
 	using Castle.ActiveRecord.Framework;
 	using NHibernate;
-	using NHibernate.Expression;
+	using NHibernate.Expressions;
 
 	/// <summary>
 	/// Base class for all ActiveRecord Generic classes. 

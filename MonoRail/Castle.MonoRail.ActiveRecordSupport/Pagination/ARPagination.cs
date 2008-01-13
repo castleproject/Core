@@ -22,7 +22,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 	
-	using NHibernate.Expression;
+	using NHibernate.Expressions;
 
 	/// <summary>
 	/// Pendent

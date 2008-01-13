@@ -18,7 +18,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	using System.Collections;
 	using NHibernate;
 	using NHibernate.Collection;
-	using NHibernate.Expression;
+	using NHibernate.Expressions;
 	using NHibernate.Proxy;
 	using Castle.Facilities.NHibernateIntegration.Util;
 

@@ -20,7 +20,7 @@ namespace Castle.ActiveRecord.Tests
 	using System.Threading;
 	using Castle.ActiveRecord.Queries;
 	using Castle.ActiveRecord.Tests.Model.GenericModel;
-	using NHibernate.Expression;
+	using NHibernate.Expressions;
 	using NUnit.Framework;
 
 	[TestFixture]

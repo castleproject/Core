@@ -37,7 +37,7 @@ namespace Castle.MonoRail.Framework.Routing
 			rules.Add(rule);
 
 			// For really fast access
-			// name2Rule[rule.RouteName] = rule;
+			name2Rule[rule.RouteName] = rule;
 		}
 
 		/// <summary>

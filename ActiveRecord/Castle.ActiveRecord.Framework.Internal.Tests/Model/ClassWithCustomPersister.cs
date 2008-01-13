@@ -229,7 +229,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		public object[] PropertySpaces
+		public string[] PropertySpaces
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -404,7 +404,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		public object[] QuerySpaces
+		public string[] QuerySpaces
 		{
 			get { throw new NotImplementedException(); }
 		}

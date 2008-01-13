@@ -20,8 +20,8 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
     [Serializable]
     public class FilterBadHeader : IFilter
     {
-        public bool Perform(ExecuteEnum exec, IRailsEngineContext context, IController controller)
-        {
+        public bool Perform(ExecuteEnum exec, IEngineContext context, IController controller, IControllerContext controllerContext)
+    	{
             if (context.Request.Headers["mybadheader"] != null)
             {
                 context.Response.Write("Denied!");
@@ -29,7 +29,6 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
             }
             return true;
         }
-
     }
 }
 

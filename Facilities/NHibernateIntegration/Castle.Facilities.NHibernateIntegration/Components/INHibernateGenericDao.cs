@@ -16,7 +16,7 @@ namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
 
-	using NHibernate.Expression;
+	using NHibernate.Expressions;
 
 	/// <summary>
 	/// Summary description for INHibernateGenericDao.

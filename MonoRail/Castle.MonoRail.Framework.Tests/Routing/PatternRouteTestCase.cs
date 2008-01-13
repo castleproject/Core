@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text.RegularExpressions;
+
 namespace Castle.MonoRail.Framework.Tests.Routing
 {
 	using Framework.Routing;
@@ -139,6 +141,24 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.IsFalse(route.Matches("/some/index/foo", CreateGetContext(), match));
 			Assert.IsFalse(route.Matches("/some/list/bar", CreateGetContext(), match));
 			Assert.IsTrue(route.Matches("/some/list/1", CreateGetContext(), match));
+		}
+
+		[Test]
+		public void NamedRequiredParametersWithRestrictions()
+		{
+			string matchGuid = 
+				"[A-Fa-f0-9]{32}|" +
+				"({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?|" +
+				"({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})";
+
+			PatternRoute route = new PatternRoute("/<param>/<key>")
+				.Restrict("key").ValidRegex(matchGuid);
+
+			RouteMatch match = new RouteMatch();
+			Assert.IsFalse(route.Matches("/something/zzzzzzzz-c123-11dc-95ff-0800200c9a66", CreateGetContext(), match));
+			Assert.IsTrue(route.Matches("/something/173e0970-c123-11dc-95ff-0800200c9a66", CreateGetContext(), match));
+			Assert.AreEqual("something", match.Parameters["param"]);
+			Assert.AreEqual("173e0970-c123-11dc-95ff-0800200c9a66", match.Parameters["key"]);
 		}
 	}
 }

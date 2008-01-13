@@ -21,7 +21,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	using Castle.ActiveRecord.Framework;
 
 	using NHibernate;
-	using NHibernate.Expression;
+	using NHibernate.Expressions;
 
 	/// <summary>
 	/// A paginable criteria.
