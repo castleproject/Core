@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Web;
+
 namespace Castle.MonoRail.Framework.Test
 {
 	using System;
@@ -40,7 +42,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <returns>The HTML encoded text.</returns>
 		public virtual string HtmlEncode(string content)
 		{
-			return content;
+			return HttpUtility.HtmlEncode(content);
 		}
 
 		/// <summary>
@@ -50,7 +52,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <returns>The URL encoded text.</returns>
 		public virtual string UrlEncode(string content)
 		{
-			return content.Replace("&", "&amp;");
+			return HttpUtility.UrlEncode(content);
 		}
 
 		/// <summary>
@@ -60,7 +62,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <returns>The URL decoded text.</returns>
 		public virtual string UrlDecode(string content)
 		{
-			return content.Replace("&amp", "&");
+			return HttpUtility.UrlDecode(content);
 		}
 
 		/// <summary>
@@ -70,7 +72,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <returns>The URL encoded text.</returns>
 		public virtual string UrlPathEncode(string content)
 		{
-			return content;
+			return HttpUtility.UrlPathEncode(content);
 		}
 
 		/// <summary>
