@@ -1313,7 +1313,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			Assert.AreEqual(expected, xml);
 		}
 
-
 		[Test]
 		public void ManyToMayViaComponents()
 		{
@@ -1340,6 +1339,35 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"        <many-to-one name=\"A\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"aId\" />\r\n" +
 				"      </composite-element>\r\n" +
 				"    </list>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
+		public void IdBagPrimitive()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(IdBagPrimitive));
+			Assert.IsNotNull(model);
+
+			String xml = Process(builder, model);
+			string expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.IdBagPrimitive, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"IdBagPrimitive\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <idbag name=\"Items\" access=\"property\" table=\"IdToItems\" lazy=\"false\">\r\n" +
+				"      <collection-id type=\"Int32\" column=\"col\">\r\n" +
+				"        <generator class=\"sequence\">\r\n" + 
+				"        </generator>\r\n" +
+				"      </collection-id>\r\n" +
+				"      <key column=\"keyid\" />\r\n" +
+				"      <element  type=\"string\" />\r\n" + 
+				"    </idbag>\r\n" + 
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 			Assert.AreEqual(expected, xml);

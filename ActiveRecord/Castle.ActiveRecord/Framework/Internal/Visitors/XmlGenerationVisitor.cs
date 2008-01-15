@@ -444,7 +444,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Type mapType = GuessType(att.MapType, model.Property.PropertyType);
 			WriteCollection(att.Cascade, mapType, att.RelationType, model.Property.Name,
 			                model.HasManyToAnyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
-			                att.Where, att.Sort, att.ColumnKey, null, null, null, null, model.Configuration, att.Index,
+			                att.Where, att.Sort, att.ColumnKey, null, null, null, null, null, model.Configuration, att.Index,
 			                att.IndexType,
 							att.Cache, att.CacheRegion, att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
 		}
@@ -600,7 +600,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Type mapType = GuessType(att.MapType, model.Property.PropertyType);
 			WriteCollection(att.Cascade, mapType, att.RelationType, model.Property.Name,
 			                model.HasManyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
-			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, att.Element, null, null,
+			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, att.Element, att.ElementType, null, null,
 			                model.DependentObjectModel, att.Index, att.IndexType,
 							att.Cache, att.CacheRegion, att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
 		}
@@ -616,7 +616,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Type mapType = GuessType(att.MapType, model.Property.PropertyType);
 			WriteCollection(att.Cascade, mapType, att.RelationType, model.Property.Name,
 			                att.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
-			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, null, att.ColumnRef,
+			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, att.Element, att.ElementType, 
+							att.ColumnRef,
 							att.CompositeKeyColumnRefs, model.CollectionID, att.Index, att.IndexType, att.Cache, att.CacheRegion, 
 							att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
 		}
@@ -731,11 +732,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 		                             Type targetType, RelationType type, string name,
 		                             string accessString, string table, string schema, bool lazy,
 		                             bool inverse, string orderBy, string where, string sort,
-		                             string columnKey, string[] compositeKeyColumnKeys, string element,
+		                             string columnKey, string[] compositeKeyColumnKeys, string element, string elementType,
 		                             string columnRef, string[] compositeKeyColumnRefs,
 		                             IVisitable extraModel, string index, string indexType, CacheEnum cache, string cacheregion,
 		                             NotFoundBehaviour notFoundBehaviour, FetchEnum fetch, int batchSize, Type collectionType)
 		{
+			bool extraModelVisited = false;
+
 			String cascade = TranslateCascadeEnum(cascadeEnum);
 			String notFoundMode = TranslateNotFoundBehaviourEnum(notFoundBehaviour);
 			String fetchString = TranslateFetch(fetch);
@@ -798,8 +801,10 @@ namespace Castle.ActiveRecord.Framework.Internal
                         WriteIfNonNull("fetch", fetchString),
 						WriteIfNotOne("batch-size", batchSize),
 						WriteIfNonNull("collection-type", MakeTypeName(collectionType)));
-
+				extraModelVisited = true;
+				Ident();
 				VisitNode(extraModel);
+				Dedent();
 			}
 			else if (type == RelationType.Map)
 			{
@@ -860,9 +865,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 				WriteIndex(index, indexType);
 			}
 
-			if (element != null)
+			if (element != null || elementType != null)
 			{
-				WriteElement(element, targetType);
+				WriteElement(element, elementType, targetType);
 			}
 			else if (columnRef == null && compositeKeyColumnRefs == null)
 			{
@@ -870,7 +875,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				{
 					WriteOneToMany(targetType, notFoundMode);
 				}
-				else
+				else if (!extraModelVisited)
 				{
 					VisitNode(extraModel);
 				}
@@ -1041,11 +1046,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private void WriteElement(string element, Type targetType)
+		private void WriteElement(string element, string elementType, Type targetType)
 		{
-			AppendF("<element {0} {1}/>",
-			        MakeAtt("column", element),
-			        MakeAtt("type", MakeTypeName(targetType)));
+			if (element != null)
+			{
+				AppendF("<element {0} {1}/>",
+						MakeAtt("column", element),
+						MakeAtt("type", MakeTypeName(targetType)));
+			}
+			else
+			{
+				AppendF("<element {0} />",
+						MakeAtt("type", elementType));
+			}
 		}
 
 		private void WriteOneToMany(Type type, String notFoundMode)

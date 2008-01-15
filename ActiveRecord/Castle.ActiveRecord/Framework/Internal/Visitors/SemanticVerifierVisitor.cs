@@ -643,7 +643,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				                                	currentModel.Type.Name, model.Property.Name));
 			}
 
-			if (model.HasManyAtt.ColumnRef == null && model.HasManyAtt.CompositeKeyColumnRefs == null)
+			if (model.HasManyAtt.RelationType != RelationType.IdBag && 
+				model.HasManyAtt.ColumnRef == null && model.HasManyAtt.CompositeKeyColumnRefs == null)
 			{
 				throw new ActiveRecordException(String.Format(
 				                                	"For a many to many association (HasAndBelongsToMany) we need that you " +
