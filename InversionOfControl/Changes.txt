@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed Facilities-97
+  "EventWiring Facility fails to create some components"
+  
 - Added support for non-generic usage of fluent-interface.  Needed for dynamic registrations scenarios (Binsor)
   Automatically register the component between consecutive AddComponentEx (Saves a few strokes).
 

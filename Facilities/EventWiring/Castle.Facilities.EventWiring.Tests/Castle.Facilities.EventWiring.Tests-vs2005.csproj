@@ -74,7 +74,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.3.6293.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharedLibs\net\2.0\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -88,7 +91,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigHelper.cs" />
+    <Compile Include="Model\GenericService.cs" />
+    <Compile Include="Model\SimpleService.cs" />
+    <Compile Include="Model\SubscriberWithDependency.cs" />
+    <Compile Include="Model\SubscriberWithGenericDependency.cs" />
     <Compile Include="SingletonStartableTestCase.cs" />
+    <Compile Include="SubscriberWithDependenciesTestCase.cs" />
     <Compile Include="WiringTestBase.cs" />
     <Compile Include="SingletonComponentsTestCase.cs" />
     <Compile Include="InvalidConfigTestCase.cs" />
@@ -130,6 +138,9 @@
     <None Include="Config\startable.config" />
     <None Include="Config\singleton.config" />
     <None Include="Config\invalid.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
