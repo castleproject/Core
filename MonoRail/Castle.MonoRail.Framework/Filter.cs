@@ -16,7 +16,7 @@ namespace Castle.MonoRail.Framework
 {
 	/// <summary>
 	/// Base class for filters which dispatches to virtual methods
-	/// based on the <see cref="ExecuteEnum"/> value.
+	/// based on the <see cref="ExecuteWhen"/> value.
 	/// </summary>
 	public abstract class Filter : IFilter
 	{
@@ -32,19 +32,19 @@ namespace Castle.MonoRail.Framework
 		/// 	<c>true</c> if the action
 		/// should be invoked, otherwise <c>false</c>
 		/// </returns>
-		public bool Perform(ExecuteEnum exec, IEngineContext context, IController controller, IControllerContext controllerContext)
+		public bool Perform(ExecuteWhen exec, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
-			if (exec == ExecuteEnum.AfterAction)
+			if (exec == ExecuteWhen.AfterAction)
 			{
 				OnAfterAction(context, controller, controllerContext);
 				return true;
 			}
-			else if (exec == ExecuteEnum.AfterRendering)
+			else if (exec == ExecuteWhen.AfterRendering)
 			{
 				OnAfterRendering(context, controller, controllerContext);
 				return true;
 			}
-			else // if (exec == ExecuteEnum.BeforeAction)
+			else // if (exec == ExecuteWhen.BeforeAction)
 			{
 				return OnBeforeAction(context, controller, controllerContext);
 			}
@@ -52,7 +52,7 @@ namespace Castle.MonoRail.Framework
 
 		/// <summary>
 		/// Override this method if the filter was set to
-		/// handle <see cref="ExecuteEnum.AfterAction"/>
+		/// handle <see cref="ExecuteWhen.AfterAction"/>
 		/// </summary>
 		/// <param name="context">The MonoRail request context</param>
 		/// <param name="controller">The controller instance</param>
@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Framework
 
 		/// <summary>
 		/// Override this method if the filter was set to
-		/// handle <see cref="ExecuteEnum.AfterRendering"/>
+		/// handle <see cref="ExecuteWhen.AfterRendering"/>
 		/// </summary>
 		/// <param name="context">The MonoRail request context</param>
 		/// <param name="controller">The controller instance</param>
@@ -74,7 +74,7 @@ namespace Castle.MonoRail.Framework
 
 		/// <summary>
 		/// Override this method if the filter was set to
-		/// handle <see cref="ExecuteEnum.BeforeAction"/>
+		/// handle <see cref="ExecuteWhen.BeforeAction"/>
 		/// </summary>
 		/// <param name="context">The MonoRail request context</param>
 		/// <param name="controller">The controller instance</param>

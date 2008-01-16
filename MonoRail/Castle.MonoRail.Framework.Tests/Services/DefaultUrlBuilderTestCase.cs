@@ -14,37 +14,17 @@
 
 namespace Castle.MonoRail.Framework.Tests.Services
 {
-	using System;
 	using System.Collections.Specialized;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Routing;
 	using Castle.MonoRail.Framework.Services;
 	using NUnit.Framework;
-	using Routing;
 	using Test;
 
 	[TestFixture]
 	public class DefaultUrlBuilderTestCase
 	{
-		private readonly UrlInfo noAreaUrl, areaUrl, withSubDomain, diffPort, withPathInfo;
 		private DefaultUrlBuilder urlBuilder;
-
-		public DefaultUrlBuilderTestCase()
-		{
-			DefaultUrlTokenizer tokenizer = new DefaultUrlTokenizer();
-
-			noAreaUrl = tokenizer.TokenizeUrl("/home/index.rails", null, new Uri("http://localhost/home/index.rails"), true, "/");
-			areaUrl =
-				tokenizer.TokenizeUrl("/area/home/index.rails", null, new Uri("http://localhost/area/home/index.rails"), true, "/");
-			withSubDomain =
-				tokenizer.TokenizeUrl("/app/home/index.rails", null, new Uri("http://sub.domain.com/app/home/index.rails"), false,
-				                      "/app");
-			diffPort =
-				tokenizer.TokenizeUrl("/app/home/index.rails", null, new Uri("http://localhost:81/app/home/index.rails"), false,
-				                      "/app");
-			withPathInfo =
-				tokenizer.TokenizeUrl("/home/index.rails", "/state/fl", new Uri("http://localhost:81/home/index.rails"), false, "/");
-		}
 
 		[SetUp]
 		public void Init()
@@ -54,152 +34,244 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			urlBuilder.RoutingEngine = new RoutingEngine();
 		}
 
-		[Test, Ignore("Should be reviewed")]
-		public void ShouldUseRoutingEngineForNamedRoutes()
+		[Test]
+		public void InheritsControllerAndAreaWhenCreatingUrl()
 		{
-			urlBuilder.RoutingEngine.Add(new PatternRoute("/products/view"));
+			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
 
-			HybridDictionary dict = new HybridDictionary(true);
-			dict["named"] = "link";
-
-			Assert.AreEqual("/products", urlBuilder.BuildUrl(noAreaUrl, dict));
-		}
-
-		[Test, Ignore("Should be reviewed")]
-		public void ShouldUseTheParamsEntryForRoutesWithParams()
-		{
-			urlBuilder.RoutingEngine.Add(new PatternRoute("/products/id"));
-
-			HybridDictionary dict = new HybridDictionary(true);
-			dict["named"] = "link";
-			dict["params"] = DictHelper.Create("id=1");
-
-			Assert.AreEqual("/products/1", urlBuilder.BuildUrl(noAreaUrl, dict));
+			Assert.AreEqual("/controller/new.castle",
+			                urlBuilder.BuildUrl(url, DictHelper.Create("action=new")));
 		}
 
 		[Test]
-		public void SimpleOperations()
+		public void OverridingController()
 		{
-			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(noAreaUrl, "product", "list"));
-			Assert.AreEqual("/home/list.rails", urlBuilder.BuildUrl(noAreaUrl, DictHelper.Create("action=list")));
-			Assert.AreEqual("/product/list.rails?id=1&name=hammett",
-			                urlBuilder.BuildUrl(noAreaUrl, "product", "list", DictHelper.Create("id=1", "name=hammett")));
+			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
+
+			Assert.AreEqual("/cars/new.castle",
+			                urlBuilder.BuildUrl(url, DictHelper.Create("controller=cars", "action=new")));
 		}
 
 		[Test]
-		public void OperationsWithArea()
+		public void OverridingArea()
 		{
-			Assert.AreEqual("/product/list.rails/state/FL?key=value",
-			                urlBuilder.BuildUrl(withPathInfo,
-			                                    DictHelper.Create("controller=product", "action=list", "pathinfo=/state/FL",
-			                                                      "querystring=key=value")));
+			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
 
-			Assert.AreEqual("/product/list.rails/state/FL?key=value",
-			                urlBuilder.BuildUrl(withPathInfo,
-			                                    DictHelper.Create("controller=product", "action=list", "pathinfo=state/FL",
-			                                                      "querystring=key=value")));
+			Assert.AreEqual("/admin/cars/new.castle",
+			                urlBuilder.BuildUrl(url, DictHelper.Create("area=admin", "controller=cars", "action=new")));
 		}
 
 		[Test]
-		public void OperationsWithPathInfo()
+		public void UsesAppPath()
 		{
-			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(noAreaUrl, "product", "list"));
-			Assert.AreEqual("/home/list.rails", urlBuilder.BuildUrl(noAreaUrl, DictHelper.Create("action=list")));
-			Assert.AreEqual("/product/list.rails?id=1&name=hammett",
-			                urlBuilder.BuildUrl(noAreaUrl, "product", "list", DictHelper.Create("id=1", "name=hammett")));
+			UrlInfo url = new UrlInfo("", "controller", "action", "/app", ".castle");
+
+			Assert.AreEqual("/app/controller/new.castle",
+			                urlBuilder.BuildUrl(url, DictHelper.Create("action=new")));
 		}
 
 		[Test]
-		public void NoExtensions()
+		public void UsesMoreThanASingleLevelAppPath()
+		{
+			UrlInfo url = new UrlInfo("", "controller", "action", "/app/some", ".castle");
+
+			Assert.AreEqual("/app/some/controller/new.castle",
+			                urlBuilder.BuildUrl(url, DictHelper.Create("action=new")));
+		}
+
+		[Test]
+		public void CanHandleEmptyAppPath()
+		{
+			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
+
+			Assert.AreEqual("/controller/edit.castle",
+			                urlBuilder.BuildUrl(url, DictHelper.Create("action=edit")));
+		}
+
+		[Test]
+		public void TurningOffUseExtensions()
 		{
 			urlBuilder.UseExtensions = false;
 
-			Assert.AreEqual("/product/list", urlBuilder.BuildUrl(noAreaUrl, "product", "list"));
-			Assert.AreEqual("/home/list", urlBuilder.BuildUrl(noAreaUrl, DictHelper.Create("action=list")));
-			Assert.AreEqual("/product/list?id=1&name=hammett",
-			                urlBuilder.BuildUrl(noAreaUrl, "product", "list", DictHelper.Create("id=1", "name=hammett")));
-			Assert.AreEqual("/area/home/list", urlBuilder.BuildUrl(areaUrl, DictHelper.Create("action=list")));
-			Assert.AreEqual("/app/home/list", urlBuilder.BuildUrl(withSubDomain, DictHelper.Create("action=list")));
+			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
+
+			Assert.AreEqual("/controller/edit",
+			                urlBuilder.BuildUrl(url, DictHelper.Create("action=edit")));
 		}
 
 		[Test]
-		public void AbsoluteUrls()
+		public void SupportsQueryInfoAsString()
 		{
-			Assert.AreEqual("http://localhost:81/app/home/list.rails",
-			                urlBuilder.BuildUrl(diffPort, DictHelper.Create("absolute=true", "action=list")));
+			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
+
+			Assert.AreEqual("/controller/new.castle?something=1",
+			                urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "querystring=something=1")));
 		}
 
 		[Test]
-		public void AbsoluteUrlWithDifferentPort()
+		public void SupportsPathInfoAsDictionary()
 		{
-			Assert.AreEqual("http://localhost:81/app/home/list.rails",
-			                urlBuilder.BuildUrl(diffPort, DictHelper.Create("absolute=true", "action=list")));
+			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
+
+			HybridDictionary parameters = new HybridDictionary(true);
+			parameters["action"] = "new";
+			parameters["querystring"] = DictHelper.Create("id=1", "name=john doe");
+
+			Assert.AreEqual("/controller/new.castle?id=1&name=john+doe",
+			                urlBuilder.BuildUrl(url, parameters));
 		}
 
 		[Test]
-		public void WithDomains()
+		public void SupportsPathInfoAsNameValueCollection()
 		{
-			Assert.AreEqual("http://sub.domain.com/app/home/list.rails",
-			                urlBuilder.BuildUrl(withSubDomain, DictHelper.Create("absolute=true", "action=list")));
+			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
+
+			NameValueCollection namedParams = new NameValueCollection();
+			namedParams["id"] = "1";
+			namedParams["name"] = "john doe";
+
+			HybridDictionary parameters = new HybridDictionary(true);
+			parameters["action"] = "new";
+			parameters["querystring"] = namedParams;
+
+			Assert.AreEqual("/controller/new.castle?id=1&name=john+doe",
+			                urlBuilder.BuildUrl(url, parameters));
 		}
 
 		[Test]
-		public void SwitchingDomains()
+		public void SupportsSettingPathInfo()
 		{
-			Assert.AreEqual("http://testsub.domain.com/app/home/list.rails",
-			                urlBuilder.BuildUrl(withSubDomain,
-			                                    DictHelper.Create("absolute=true", "action=list", "subdomain=test")));
-			Assert.AreEqual("http://something.else/app/home/list.rails",
-			                urlBuilder.BuildUrl(withSubDomain,
-			                                    DictHelper.Create("absolute=true", "action=list", "domain=something.else")));
+			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
+
+			Assert.AreEqual("/controller/new.castle/id/1/name/doe",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "pathinfo=id/1/name/doe")));
+		}
+
+		[Test]
+		public void SupportsAbsolutePaths()
+		{
+			UrlInfo url = new UrlInfo("localhost", "", "", "https", 443, "", "area", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://localhost/area/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true")));
+
+			url = new UrlInfo("localhost", "", "/app", "https", 443, "", "area", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://localhost/app/area/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true")));
+		}
+
+		[Test]
+		public void SupportsAbsolutePathsWithSubDomains()
+		{
+			UrlInfo url = new UrlInfo("vpn", "staging", "", "https", 443, "", "area", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://staging.vpn/area/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true")));
+		}
+
+		[Test]
+		public void CanOverrideSubDomain()
+		{
+			UrlInfo url = new UrlInfo("vpn", "staging", "", "https", 443, "", "area", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://intranet.vpn/area/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "subdomain=intranet", "absolute=true")));
+		}
+
+		[Test]
+		public void CanOverrideDomain()
+		{
+			UrlInfo url = new UrlInfo("vpn", "staging", "", "https", 443, "", "area", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://staging.intranet/area/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "domain=intranet", "absolute=true")));
+		}
+
+		[Test]
+		public void EncodesToCreateValidHtmlContent()
+		{
+			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
+
+			HybridDictionary parameters = new HybridDictionary(true);
+			parameters["action"] = "new";
+			parameters["encode"] = "true";
+			parameters["querystring"] = DictHelper.Create("id=1", "name=john doe");
+
+			Assert.AreEqual("/controller/new.castle?id=1&amp;name=john+doe",
+							urlBuilder.BuildUrl(url, parameters));
+
+			Assert.AreEqual("/controller/new.castle?id=1&amp;name=john+doe",
+							urlBuilder.BuildUrl(url, 
+								DictHelper.Create("encode=true", "action=new", "querystring=id=1&name=john doe")));
+		}
+
+		[Test]
+		public void PortsAreSkippedForDefaults()
+		{
+			UrlInfo url = new UrlInfo("localhost", "", "", "https", 443, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://localhost/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true")));
+
+			url = new UrlInfo("localhost", "", "", "http", 80, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("http://localhost/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true")));
+
+			url = new UrlInfo("localhost", "", "", "http", 8080, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("http://localhost:8080/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true")));
+
+			url = new UrlInfo("localhost", "", "", "https", 441, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://localhost:441/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true")));
 		}
 
 		[Test]
 		public void UseBasePathMustDiscardTheAppVirtualDirInfo()
 		{
-			Assert.AreEqual("http://localhost/theArea/home/index.rails", urlBuilder.BuildUrl(areaUrl,
-			                                                                                 DictHelper.Create(
-			                                                                                 	"basepath=http://localhost/",
-			                                                                                 	"area=theArea", "controller=home",
-			                                                                                 	"action=index")));
+			UrlInfo url = new UrlInfo("area", "controller", "action", "/app", ".castle");
 
-			Assert.AreEqual("http://localhost/theArea/home/index.rails", urlBuilder.BuildUrl(areaUrl,
-			                                                                                 DictHelper.Create(
-			                                                                                 	"basepath=http://localhost",
-			                                                                                 	"area=theArea", "controller=home",
-			                                                                                 	"action=index")));
+			Assert.AreEqual("http://localhost/theArea/home/index.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("basepath=http://localhost/",
+			                                                               "area=theArea", "controller=home",
+			                                                               "action=index")));
+
+			Assert.AreEqual("http://localhost/theArea/home/index.castle",
+							urlBuilder.BuildUrl(url,
+			                                    DictHelper.Create(
+			                                    	"basepath=http://localhost",
+			                                    	"area=theArea", "controller=home",
+			                                    	"action=index")));
 		}
 
 		[Test]
 		public void UseBasePathMustDiscardTheAreaIfTheValueIsDuplicated()
 		{
-			Assert.AreEqual("http://localhost/theArea/home/index.rails", urlBuilder.BuildUrl(areaUrl,
-			                                                                                 DictHelper.Create(
-			                                                                                 	"basepath=http://localhost/theArea",
-			                                                                                 	"area=theArea", "controller=home",
-			                                                                                 	"action=index")));
+			UrlInfo url = new UrlInfo("theArea", "controller", "action", "/app", ".castle");
 
-			Assert.AreEqual("http://localhost/theArea/home/index.rails", urlBuilder.BuildUrl(areaUrl,
-			                                                                                 DictHelper.Create(
-			                                                                                 	"basepath=http://localhost/theArea/",
-			                                                                                 	"area=theArea", "controller=home",
-			                                                                                 	"action=index")));
+			Assert.AreEqual("http://localhost/theArea/home/index.castle",
+							urlBuilder.BuildUrl(url,
+			                                    DictHelper.Create(
+			                                    	"basepath=http://localhost/theArea",
+			                                    	"area=theArea", "controller=home",
+			                                    	"action=index")));
+
+			Assert.AreEqual("http://localhost/theArea/home/index.castle",
+							urlBuilder.BuildUrl(url,
+			                                    DictHelper.Create(
+			                                    	"basepath=http://localhost/theArea/",
+			                                    	"area=theArea", "controller=home",
+			                                    	"action=index")));
 		}
 
 		[Test]
 		public void UseBasePathWithQuerystring()
 		{
-			Assert.AreEqual("http://localhost/theArea/home/index.rails?key=value", urlBuilder.BuildUrl(areaUrl,
-			                                                                                           DictHelper.Create(
-			                                                                                           	"basepath=http://localhost/theArea",
-			                                                                                           	"area=theArea",
-			                                                                                           	"controller=home",
-			                                                                                           	"action=index",
-			                                                                                           	"querystring=key=value")));
-		}
+			UrlInfo url = new UrlInfo("area", "controller", "action", "/app", ".castle");
 
-		public class HomeController : Controller
-		{
+			Assert.AreEqual("http://localhost/theArea/home/index.castle?key=value",
+							urlBuilder.BuildUrl(url,
+			                                    DictHelper.Create(
+			                                    	"basepath=http://localhost/theArea",
+			                                    	"area=theArea",
+			                                    	"controller=home",
+			                                    	"action=index",
+			                                    	"querystring=key=value")));
 		}
 	}
 }

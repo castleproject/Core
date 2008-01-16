@@ -119,9 +119,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 
 			Assert.IsNotNull(views);
 			Assert.AreEqual(1, views.Length);
-			//Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
-			//Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "notinassembly.vm", views[1]);
-			Assert.AreEqual(@"Content"+ Path.DirectorySeparatorChar +"contentinassembly.vm", views[0]);
+			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
 
 			foreach (string view in views)
 			{

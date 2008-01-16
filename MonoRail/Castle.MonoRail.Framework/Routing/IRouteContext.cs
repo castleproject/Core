@@ -14,7 +14,7 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using Castle.MonoRail.Framework.Routing;
+	using System.Collections;
 
 	/// <summary>
 	/// Context used for matching routes.
@@ -30,5 +30,11 @@ namespace Castle.MonoRail.Framework
 		/// The Http Request
 		/// </summary>
 		IRequest Request { get; }
+
+		/// <summary>
+		/// Gets the context items.
+		/// </summary>
+		/// <value>The context items.</value>
+		IDictionary ContextItems { get; }
 	}
 }

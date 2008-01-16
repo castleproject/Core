@@ -21,6 +21,7 @@ namespace Castle.MonoRail.Framework
 	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
+	using Services;
 
 	/// <summary>
 	/// Represents a wizard step. In essence it is a controller, but with some subtle differences. 
@@ -284,7 +285,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else if (navigateTo.StartsWith(uriPrefix))
 			{
-				Redirect(navigateTo.Substring(uriPrefix.Length), queryStringParameters);
+				RedirectToUrl(navigateTo.Substring(uriPrefix.Length), queryStringParameters);
 			}
 			else if (navigateTo == "first")
 			{
@@ -471,6 +472,8 @@ namespace Castle.MonoRail.Framework
 		{
 			WizardUtils.RegisterCurrentStepInfo(engineContext, wizardParentController, wizardcontrollerContext, stepIndex, step);
 
+			// Does this support areas?
+
 			if (queryStringParameters != null && queryStringParameters.Count != 0)
 			{
 				Redirect(wizardcontrollerContext.Name, step, queryStringParameters);
@@ -480,10 +483,7 @@ namespace Castle.MonoRail.Framework
 				// We need to preserve any attribute from the QueryString
 				// for example in case the url has an Id
 
-				string url = UrlBuilder.BuildUrl(Context.UrlInfo, wizardcontrollerContext.Name, step) +
-				             engineContext.Request.Uri.Query;
-
-				Context.Response.RedirectToUrl(url);
+				Context.Response.Redirect(wizardcontrollerContext.Name, step, Query);
 			}
 			else
 			{

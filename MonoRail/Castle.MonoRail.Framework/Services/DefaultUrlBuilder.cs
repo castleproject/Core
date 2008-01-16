@@ -28,12 +28,6 @@ namespace Castle.MonoRail.Framework.Services
 	/// <remarks>
 	/// The property <see cref="UseExtensions"/> defines whether the builder should output
 	/// file extension. This might be handy to use in combination with a url rewrite strategy
-	/// 
-	/// <para>
-	/// If you want to create a custom urlbuilder, you can extend this one and override 
-	/// the <see cref="InternalBuildUrl(string,string,string,string,string,string,string,string,string,bool,bool,string)"/>
-	/// </para>
-	/// 
 	/// </remarks>
 	/// <seealso cref="BuildUrl(UrlInfo,IDictionary)"/>
 	public class DefaultUrlBuilder : IUrlBuilder, IServiceEnabledComponent
@@ -114,535 +108,246 @@ namespace Castle.MonoRail.Framework.Services
 		#region IUrlBuilder
 
 		/// <summary>
-		/// Builds the URL using the current url as contextual information and a parameter dictionary.
+		/// Builds the URL using the current url as contextual information and the specified parameters.
 		/// <para>
-		/// Common parameters includes area, controller and action. 
+		/// Common parameters includes area, controller and action. See <see cref="UrlBuilderParameters"/>
+		/// for more information regarding the parameters.
 		/// </para>
 		/// </summary>
-		/// <param name="current">The current Url information.</param>
-		/// <param name="parameters">The parameters.</param>
-		/// <returns></returns>
-		public UrlPartsBuilder CreateUrlPartsBuilder(UrlInfo current, IDictionary parameters)
-		{
-			string area;
-
-			if (parameters.Contains("area"))
-			{
-				area = CommonUtils.ObtainEntryAndRemove(parameters, "area");
-
-				if (area == null) area = string.Empty;
-			}
-			else
-			{
-				area = current.Area;
-			}
-
-			string controller = CommonUtils.ObtainEntryAndRemove(parameters, "controller", current.Controller);
-			string action = CommonUtils.ObtainEntryAndRemove(parameters, "action");
-
-			string routeName = CommonUtils.ObtainEntryAndRemove(parameters, "named");
-			bool encode = CommonUtils.ObtainEntryAndRemove(parameters, "encode", "false") == "true";
-			object routeParams = parameters["params"];
-			parameters.Remove("params");
-
-			UrlPartsBuilder url;
-
-			if (routeName == null)
-			{
-				url = CreateUrlUsingRouting(area, controller, action, current.AppVirtualDir, parameters, routeParams, encode);
-
-				if (url != null)
-				{
-					return url;
-				}
-			}
-
-			if (routeName != null)
-			{
-				return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, routeParams, encode);
-			}
-			else
-			{
-				bool applySubdomain = false;
-				bool createAbsolutePath = CommonUtils.ObtainEntryAndRemove(parameters, "absolute", "false") == "true";
-
-				action = action ?? current.Action;
-
-				string domain = CommonUtils.ObtainEntryAndRemove(parameters, "domain", current.Domain);
-				string subdomain = CommonUtils.ObtainEntryAndRemove(parameters, "subdomain", current.Subdomain);
-				string protocol = CommonUtils.ObtainEntryAndRemove(parameters, "protocol", current.Protocol);
-				string port = CommonUtils.ObtainEntryAndRemove(parameters, "port", current.Port.ToString());
-				string pathInfo = CommonUtils.ObtainEntryAndRemove(parameters, "pathinfo");
-				string suffix = null;
-
-				object queryString = CommonUtils.ObtainObjectEntryAndRemove(parameters, "querystring");
-
-				string basePath = null;
-
-				if (parameters.Contains("basepath"))
-				{
-					basePath = CommonUtils.ObtainEntryAndRemove(parameters, "basepath");
-				}
-
-				if (queryString != null)
-				{
-					if (queryString is IDictionary)
-					{
-						IDictionary qsDictionary = (IDictionary) queryString;
-
-						suffix = CommonUtils.BuildQueryString(serverUtil, qsDictionary, encode);
-					}
-					else if (queryString is NameValueCollection)
-					{
-						suffix = CommonUtils.BuildQueryString(serverUtil, (NameValueCollection) queryString, encode);
-					}
-					else if (queryString is string)
-					{
-						suffix = queryString.ToString();
-					}
-				}
-
-				if (subdomain.ToLower() != current.Subdomain.ToLower())
-				{
-					applySubdomain = true;
-				}
-
-				return InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain,
-				                        current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix,
-				                        basePath, pathInfo);
-			}
-		}
-
-		/// <summary>
-		/// Builds the URL using the current url as contextual information and a parameter dictionary.
-		/// 
-		/// </summary>
-		/// 
-		/// <remarks>
-		/// <para>
-		/// Common parameters includes <c>area</c>, <c>controller</c> and <c>action</c>, which outputs
-		/// <c>/area/controller/name.extension</c>
-		/// </para>
-		/// 
-		/// <para>
-		/// Please note that if you dont specify an area or controller name, they will be inferred from the 
-		/// context. If you want to use an empty area, you must specify <c>area=''</c>. 
-		/// This is commonly a source of confusion, so understand the following cases:
-		/// </para>
-		/// 
-		/// <example>
-		/// <code>
-		/// UrlInfo current = ... // Assume that the current is area Admin, controller Products and action List
-		/// 
-		/// BuildUrl(current, {action: 'view'})
-		/// // returns /Admin/Products/view.castle
-		/// 
-		/// BuildUrl(current, {controller: 'Home', action: 'index'})
-		/// // returns /Admin/Home/index.castle
-		///  
-		/// BuildUrl(current, {area:'', controller: 'Home', action: 'index'})
-		/// // returns /Home/index.castle
-		/// </code>
-		/// </example>
-		/// 
-		/// <para>
-		/// The <c>querystring</c> parameter can be a string or a dictionary. It appends a query string to the url:
-		/// <c>/area/controller/name.extension?id=1</c>
-		/// </para>
-		/// 
-		/// <para>
-		/// The <c>absolute</c> parameter forces the builder to output a full url like
-		/// <c>http://hostname/virtualdir/area/controller/name.extension</c>
-		/// </para>
-		///
-		/// <para>
-		/// The <c>pathinfo</c> parameter can be used to add information between the resource identifier and the 
-		/// query string (optional)
-		/// <c>http://hostname/virtualdir/area/controller/name.extension/path/info/here</c> or
-		/// <c>http://hostname/virtualdir/area/controller/name.extension/path/info/here?key=value</c>
-		/// </para>
-		/// 
-		/// <para>
-		/// The <c>encode</c> parameter forces the builder to encode the querystring
-		/// <c>/controller/name.extension?id=1&amp;name=John</c> which is required to output full xhtml compliant content.
-		/// </para>
-		/// 
-		/// </remarks>
 		/// <param name="current">The current Url information.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
 		public virtual string BuildUrl(UrlInfo current, IDictionary parameters)
 		{
-			return CreateUrlPartsBuilder(current, parameters).BuildPath();
+			AssertArguments(current, parameters);
+
+			UrlBuilderParameters typedParams = UrlBuilderParameters.From(parameters);
+
+			return BuildUrl(current, typedParams, ConvertRouteParams(typedParams.RouteParameters));
 		}
 
 		/// <summary>
-		/// Pendent.
+		/// Builds the URL using the current url as contextual information and the specified parameters.
+		/// <para>
+		/// Common parameters includes area, controller and action. See <see cref="UrlBuilderParameters"/>
+		/// for more information regarding the parameters.
+		/// </para>
 		/// </summary>
-		/// <param name="current">The current.</param>
-		/// <param name="routeName">Name of the route.</param>
+		/// <param name="current">The current Url information.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="routeParameters">The route parameters.</param>
 		/// <returns></returns>
-		public string BuildRouteUrl(UrlInfo current, string routeName)
+		public virtual string BuildUrl(UrlInfo current, IDictionary parameters, IDictionary routeParameters)
 		{
-			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, null, false).BuildPath();
+			AssertArguments(current, parameters);
+
+			UrlBuilderParameters typedParams = UrlBuilderParameters.From(parameters, routeParameters);
+
+			return BuildUrl(current, typedParams, ConvertRouteParams(typedParams.RouteParameters));
 		}
 
 		/// <summary>
-		/// Pendent.
+		/// Builds the URL using the current url as contextual information and the specified parameters.
+		/// <para>
+		/// Common parameters includes area, controller and action. See <see cref="UrlBuilderParameters"/>
+		/// for more information regarding the parameters.
+		/// </para>
 		/// </summary>
-		/// <param name="current">The current.</param>
-		/// <param name="routeName">Name of the route.</param>
+		/// <param name="current">The current Url information.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public string BuildRouteUrl(UrlInfo current, string routeName, IDictionary parameters)
+		public virtual string BuildUrl(UrlInfo current, UrlBuilderParameters parameters)
 		{
-			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, parameters, false).BuildPath();
+			AssertArguments(current, parameters);
+
+			return BuildUrl(current, parameters, ConvertRouteParams(parameters.RouteParameters));
 		}
 
 		/// <summary>
-		/// Pendent.
+		/// Builds the URL using the current url as contextual information and the specified parameters.
+		/// <para>
+		/// Common parameters includes area, controller and action. See <see cref="UrlBuilderParameters"/>
+		/// for more information regarding the parameters.
+		/// </para>
 		/// </summary>
-		/// <param name="current">The current.</param>
-		/// <param name="routeName">Name of the route.</param>
+		/// <param name="current">The current Url information.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="routeParameters">The route parameters.</param>
+		/// <returns></returns>
+		public virtual string BuildUrl(UrlInfo current, UrlBuilderParameters parameters, IDictionary routeParameters)
+		{
+			AssertArguments(current, parameters);
+
+			bool encodeForLink = parameters.EncodeForLink;
+
+			UrlParts url = CreateUrlPartsBuilder(current, parameters, routeParameters);
+
+			if (encodeForLink)
+			{
+				return url.BuildPathForLink(serverUtil);
+			}
+
+			return url.BuildPath();
+		}
+
+		/// <summary>
+		/// Builds the URL using the current url as contextual information and the specified parameters.
+		/// <para>
+		/// Common parameters includes area, controller and action. See <see cref="UrlBuilderParameters"/>
+		/// for more information regarding the parameters.
+		/// </para>
+		/// </summary>
+		/// <param name="current">The current Url information.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public string BuildRouteUrl(UrlInfo current, string routeName, object parameters)
+		public virtual UrlParts CreateUrlPartsBuilder(UrlInfo current, IDictionary parameters)
 		{
-			return InternalBuildRouteUrl(current.Domain, current.AppVirtualDir, routeName, parameters, false).BuildPath();
+			AssertArguments(current, parameters);
+
+			UrlBuilderParameters typedParams = UrlBuilderParameters.From(parameters);
+
+			return CreateUrlPartsBuilder(current, parameters, ConvertRouteParams(typedParams.RouteParameters));
 		}
 
 		/// <summary>
-		/// Builds an URL using the controller name and action name.
+		/// Builds the URL using the current url as contextual information and the specified parameters.
+		/// <para>
+		/// Common parameters includes area, controller and action. See <see cref="UrlBuilderParameters"/>
+		/// for more information regarding the parameters.
+		/// </para>
 		/// </summary>
 		/// <param name="current">The current Url information.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="routeParameters">The route parameters.</param>
 		/// <returns></returns>
-		public virtual string BuildUrl(UrlInfo current, string controller, string action)
+		public virtual UrlParts CreateUrlPartsBuilder(UrlInfo current, IDictionary parameters, IDictionary routeParameters)
 		{
-			Hashtable parameters = new Hashtable();
-			parameters["controller"] = controller;
-			parameters["action"] = action;
-			return BuildUrl(current, parameters);
+			AssertArguments(current, parameters);
+
+			UrlBuilderParameters typedParams = UrlBuilderParameters.From(parameters, routeParameters);
+
+			return CreateUrlPartsBuilder(current, parameters, ConvertRouteParams(typedParams.RouteParameters));
 		}
 
 		/// <summary>
-		/// Builds an URL using the controller name, action name, and a querystring dictionary.
+		/// Builds the URL using the current url as contextual information and the specified parameters.
+		/// <para>
+		/// Common parameters includes area, controller and action. See <see cref="UrlBuilderParameters"/>
+		/// for more information regarding the parameters.
+		/// </para>
 		/// </summary>
 		/// <param name="current">The current Url information.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		/// <param name="queryStringParams">The query string params.</param>
+		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public virtual string BuildUrl(UrlInfo current, string controller, string action, IDictionary queryStringParams)
+		public virtual UrlParts CreateUrlPartsBuilder(UrlInfo current, UrlBuilderParameters parameters)
 		{
-			Hashtable parameters = new Hashtable();
-			parameters["controller"] = controller;
-			parameters["action"] = action;
-			parameters["querystring"] = queryStringParams;
-			return BuildUrl(current, parameters);
+			AssertArguments(current, parameters);
+
+			return CreateUrlPartsBuilder(current, parameters, ConvertRouteParams(parameters.RouteParameters));
 		}
 
 		/// <summary>
-		/// Builds an URL using the controller name, action name, and a querystring name value collection.
+		/// Builds the URL using the current url as contextual information and the specified parameters.
+		/// <para>
+		/// Common parameters includes area, controller and action. See <see cref="UrlBuilderParameters"/>
+		/// for more information regarding the parameters.
+		/// </para>
 		/// </summary>
 		/// <param name="current">The current Url information.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		/// <param name="queryStringParams">The query string params.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="routeParameters">The route parameters.</param>
 		/// <returns></returns>
-		public virtual string BuildUrl(UrlInfo current, string controller, string action,
-		                               NameValueCollection queryStringParams)
+		public virtual UrlParts CreateUrlPartsBuilder(UrlInfo current, UrlBuilderParameters parameters, IDictionary routeParameters)
 		{
-			Hashtable parameters = new Hashtable();
-			parameters["controller"] = controller;
-			parameters["action"] = action;
-			parameters["querystring"] = queryStringParams;
-			return BuildUrl(current, parameters);
-		}
+			AssertArguments(current, parameters);
 
-		/// <summary>
-		/// Builds an URL using the area name, controller name and action name.
-		/// </summary>
-		/// <param name="current">The current Url information.</param>
-		/// <param name="area">The area.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		/// <returns></returns>
-		public virtual string BuildUrl(UrlInfo current, string area, string controller, string action)
-		{
-			Hashtable parameters = new Hashtable();
-			parameters["area"] = area;
-			parameters["controller"] = controller;
-			parameters["action"] = action;
-			return BuildUrl(current, parameters);
-		}
+			string appVirtualDir = current.AppVirtualDir;
 
-		/// <summary>
-		/// Builds an URL using the area name, controller name, action name, and a querystring dictionary.
-		/// </summary>
-		/// <param name="current">The current Url information.</param>
-		/// <param name="area">The area.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		/// <param name="queryStringParams">The query string params.</param>
-		/// <returns></returns>
-		public virtual string BuildUrl(UrlInfo current, string area, string controller, string action,
-		                               IDictionary queryStringParams)
-		{
-			Hashtable parameters = new Hashtable();
-			parameters["area"] = area;
-			parameters["controller"] = controller;
-			parameters["action"] = action;
-			parameters["querystring"] = queryStringParams;
-			return BuildUrl(current, parameters);
-		}
-
-		/// <summary>
-		/// Builds an URL using the area name, controller name, action name, and a querystring name value collection.
-		/// </summary>
-		/// <param name="current">The current Url information.</param>
-		/// <param name="area">The area.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		/// <param name="queryStringParams">The query string params.</param>
-		/// <returns></returns>
-		public virtual string BuildUrl(UrlInfo current, string area, string controller, string action,
-		                               NameValueCollection queryStringParams)
-		{
-			Hashtable parameters = new Hashtable();
-			parameters["area"] = area;
-			parameters["controller"] = controller;
-			parameters["action"] = action;
-			parameters["querystring"] = queryStringParams;
-			return BuildUrl(current, parameters);
-		}
-
-		#endregion
-
-		/// <summary>
-		/// Internals the build URL.
-		/// </summary>
-		/// <param name="area">The area.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		/// <param name="protocol">The protocol.</param>
-		/// <param name="port">The port.</param>
-		/// <param name="domain">The domain.</param>
-		/// <param name="subdomain">The subdomain.</param>
-		/// <param name="appVirtualDir">The app virtual dir.</param>
-		/// <param name="extension">The extension.</param>
-		/// <param name="absolutePath">if set to <c>true</c> [absolute path].</param>
-		/// <param name="applySubdomain">if set to <c>true</c> [apply subdomain].</param>
-		/// <param name="suffix">The suffix.</param>
-		/// <returns></returns>
-		protected virtual string InternalBuildUrl(string area, string controller, string action, string protocol,
-		                                          string port, string domain, string subdomain, string appVirtualDir,
-		                                          string extension,
-		                                          bool absolutePath, bool applySubdomain, string suffix)
-		{
-			return
-				InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain, appVirtualDir, extension, absolutePath,
-				                 applySubdomain, suffix, null, null).BuildPath();
-		}
-
-		/// <summary>
-		/// Internals the build URL.
-		/// </summary>
-		/// <param name="area">The area.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		/// <param name="protocol">The protocol.</param>
-		/// <param name="port">The port.</param>
-		/// <param name="domain">The domain.</param>
-		/// <param name="subdomain">The subdomain.</param>
-		/// <param name="appVirtualDir">The app virtual dir.</param>
-		/// <param name="extension">The extension.</param>
-		/// <param name="absolutePath">if set to <c>true</c> [absolute path].</param>
-		/// <param name="applySubdomain">if set to <c>true</c> [apply subdomain].</param>
-		/// <param name="suffix">The suffix.</param>
-		/// <param name="basePath">The base path.</param>
-		/// <param name="pathInfo">Path info</param>
-		/// <returns></returns>
-		protected virtual UrlPartsBuilder InternalBuildUrl(string area, string controller, string action, string protocol,
-		                                                   string port, string domain, string subdomain, string appVirtualDir,
-		                                                   string extension,
-		                                                   bool absolutePath, bool applySubdomain, string suffix,
-		                                                   string basePath,
-		                                                   string pathInfo)
-		{
-			if (area == null) throw new ArgumentNullException("area");
-			if (controller == null) throw new ArgumentNullException("controller");
-			if (action == null) throw new ArgumentNullException("action");
-			if (appVirtualDir == null) throw new ArgumentNullException("appVirtualDir");
-
-			string path;
-
-			if (basePath != null)
-			{
-				path = InternalBuildUrlUsingBasePath(action, area, basePath, controller);
-			}
-			else
-			{
-				path =
-					InternalBuildUsingAppVirtualDir(absolutePath, action, applySubdomain, appVirtualDir, area, controller, domain, port,
-					                                protocol, subdomain);
-			}
-
-			if (useExtensions)
-			{
-				path += "." + extension;
-			}
-
-			UrlPartsBuilder urlBuilder = new UrlPartsBuilder(path);
-
-			urlBuilder.PathInfoDict.Parse(pathInfo);
-
-			if (!string.IsNullOrEmpty(suffix))
-			{
-				urlBuilder.SetQueryString(suffix);
-			}
-
-			return urlBuilder;
-		}
-
-		/// <summary>
-		/// Internals the build route URL.
-		/// </summary>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualDir">The virtual dir.</param>
-		/// <param name="name">The name.</param>
-		/// <param name="routeParams">The route params.</param>
-		/// <param name="encode">if set to <c>true</c> [encode].</param>
-		/// <returns></returns>
-		protected virtual UrlPartsBuilder InternalBuildRouteUrl(string hostname, string virtualDir,
-		                                                        string name, object routeParams, bool encode)
-		{
-			IDictionary parameters = CreateParameters(routeParams);
-
-			string url = routingEng.CreateUrl(name, hostname, virtualDir, parameters);
-
-			// TODO: should encode?
-
-			return new UrlPartsBuilder(url);
-		}
-
-		/// <summary>
-		/// Internals the build using app virtual dir.
-		/// </summary>
-		/// <param name="absolutePath">if set to <c>true</c> [absolute path].</param>
-		/// <param name="action">The action.</param>
-		/// <param name="applySubdomain">if set to <c>true</c> [apply subdomain].</param>
-		/// <param name="appVirtualDir">The app virtual dir.</param>
-		/// <param name="area">The area.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="domain">The domain.</param>
-		/// <param name="port">The port.</param>
-		/// <param name="protocol">The protocol.</param>
-		/// <param name="subdomain">The subdomain.</param>
-		/// <returns></returns>
-		protected static string InternalBuildUsingAppVirtualDir(bool absolutePath, string action,
-		                                                        bool applySubdomain, string appVirtualDir,
-		                                                        string area, string controller,
-		                                                        string domain, string port, string protocol, string subdomain)
-		{
-			string path;
-
+			string area = parameters.Area ?? current.Area;
+			string controller = parameters.Controller ?? current.Controller;
+			string action = parameters.Action ?? current.Action;
+			
 			if (appVirtualDir.Length > 1 && !(appVirtualDir[0] == '/'))
 			{
 				appVirtualDir = "/" + appVirtualDir;
 			}
 
-			if (area != String.Empty)
+			string path = ComputeStandardBasePath(appVirtualDir, area);
+			path = ApplyBasePathOrAbsolutePathIfNecessary(appVirtualDir, area, current, parameters, path);
+
+			UrlParts parts = TryCreateUrlUsingRegisteredRoutes(parameters, appVirtualDir, routeParameters);
+
+			if (parts == null)
 			{
-				path = appVirtualDir + "/" + area + "/" + controller + "/" + action;
+				parts = new UrlParts(path, controller, action + (useExtensions ? SafeExt(current.Extension) : ""));
+				AppendPathInfo(parts, parameters);
 			}
-			else
+			
+			AppendQueryString(parts, parameters);
+
+			return parts;
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Tries the create URL using registered routes.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="appVirtualDir">The app virtual dir.</param>
+		/// <param name="routeParameters">The route parameters.</param>
+		/// <returns></returns>
+		protected UrlParts TryCreateUrlUsingRegisteredRoutes(UrlBuilderParameters parameters,
+		                                                     string appVirtualDir,
+		                                                     IDictionary routeParameters)
+		{
+			if (routingEng != null && !routingEng.IsEmpty)
 			{
-				path = appVirtualDir + "/" + controller + "/" + action;
+				// We take was was explicitly set (we do not inherit those from the context)
+				routeParameters["area"] = parameters.Area;
+				routeParameters["controller"] = parameters.Controller;
+				routeParameters["action"] = parameters.Action;
+
+				if (parameters.UseCurrentRouteParams)
+				{
+					if (parameters.RouteMatch == null)
+					{
+						throw new InvalidOperationException("Error creating URL. 'UseCurrentRouteParams' was set, but routematch is null.");
+					}
+
+					CommonUtils.MergeOptions(routeParameters, parameters.RouteMatch.Parameters);
+				}
+
+				string url = routingEng.CreateUrl(appVirtualDir, routeParameters);
+
+				if (url != null)
+				{
+					return new UrlParts(url);
+				}
 			}
 
-			if (absolutePath)
-			{
-				string url;
-
-				if (applySubdomain)
-				{
-					url = protocol + "://" + subdomain + domain;
-				}
-				else
-				{
-					url = protocol + "://" + domain;
-				}
-
-				if (port != "80")
-				{
-					url += ":" + port;
-				}
-
-				path = url + path;
-			}
-
-			return path;
+			return null;
 		}
 
 		/// <summary>
-		/// Internals the build URL using base path.
+		/// Appends the path info.
 		/// </summary>
-		/// <param name="action">The action.</param>
-		/// <param name="area">The area.</param>
-		/// <param name="basePath">The base path.</param>
-		/// <param name="controller">The controller.</param>
-		/// <returns></returns>
-		protected static string InternalBuildUrlUsingBasePath(string action, string area, string basePath, string controller)
+		/// <param name="parts">The parts.</param>
+		/// <param name="parameters">The parameters.</param>
+		protected virtual void AppendPathInfo(UrlParts parts, UrlBuilderParameters parameters)
 		{
-			string path;
-
-			basePath = basePath[basePath.Length - 1] == '/' ? basePath.Substring(0, basePath.Length - 1) : basePath;
-
-			if (basePath.EndsWith(area))
+			if (!string.IsNullOrEmpty(parameters.PathInfo))
 			{
-				path = basePath + "/" + controller + "/" + action;
+				parts.PathInfoDict.Parse(parameters.PathInfo);
 			}
-			else
-			{
-				path = basePath + "/" + area + "/" + controller + "/" + action;
-			}
-
-			return path;
 		}
 
 		/// <summary>
-		/// Routings the can create URL.
+		/// Converts the route params.
 		/// </summary>
+		/// <param name="routeParams">The route params.</param>
 		/// <returns></returns>
-		private UrlPartsBuilder CreateUrlUsingRouting(string area, string controller, string action, string appVirDir,
-		                                              IDictionary parameters, object routeParams, bool encode)
-		{
-			// This code will get a bit more complex once support for 
-			// domain/subdomain is implemented on the routing module
-
-			if (routingEng == null || routingEng.IsEmpty)
-			{
-				return null;
-			}
-
-			IDictionary finalParams = CreateParameters(routeParams);
-			finalParams["area"] = area;
-			finalParams["controller"] = controller;
-			finalParams["action"] = action;
-			CommonUtils.MergeOptions(finalParams, parameters);
-			string url = routingEng.CreateUrl(appVirDir, finalParams);
-
-			if (url == null)
-			{
-				return null;
-			}
-
-			return new UrlPartsBuilder(url);
-		}
-
-		private static IDictionary CreateParameters(object routeParams)
+		protected virtual IDictionary ConvertRouteParams(object routeParams)
 		{
 			IDictionary parameters;
 
@@ -656,6 +361,9 @@ namespace Castle.MonoRail.Framework.Services
 				{
 					parameters = new ReflectionBasedDictionaryAdapter(routeParams);
 				}
+
+				// Forces copying entries to a non readonly dictionary, preserving the original one
+				parameters = new Hashtable(parameters, StringComparer.InvariantCultureIgnoreCase);
 			}
 			else
 			{
@@ -663,6 +371,160 @@ namespace Castle.MonoRail.Framework.Services
 			}
 
 			return parameters;
+		}
+
+		/// <summary>
+		/// Computes the standard base path.
+		/// </summary>
+		/// <param name="appVirtualDir">The app virtual dir.</param>
+		/// <param name="area">The area.</param>
+		/// <returns></returns>
+		protected virtual string ComputeStandardBasePath(string appVirtualDir, string area)
+		{
+			string path;
+
+			if (area != String.Empty)
+			{
+				path = appVirtualDir + "/" + area + "/";
+			}
+			else
+			{
+				path = appVirtualDir + "/";
+			}
+
+			return path;
+		}
+
+		/// <summary>
+		/// Applies the base path or absolute path if necessary.
+		/// </summary>
+		/// <param name="appVirtualDir">The app virtual dir.</param>
+		/// <param name="area">The area.</param>
+		/// <param name="current">The current.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="path">The path.</param>
+		/// <returns></returns>
+		protected virtual string ApplyBasePathOrAbsolutePathIfNecessary(string appVirtualDir, string area, UrlInfo current,
+															  UrlBuilderParameters parameters, string path)
+		{
+			bool createAbsolutePath = parameters.CreateAbsolutePath;
+			string basePath = parameters.BasePath;
+
+			if (!string.IsNullOrEmpty(basePath))
+			{
+				basePath = basePath[basePath.Length - 1] == '/' ? basePath.Substring(0, basePath.Length - 1) : basePath;
+
+				if (basePath.EndsWith(area, StringComparison.InvariantCultureIgnoreCase))
+				{
+					path = basePath;
+				}
+				else
+				{
+					path = basePath + "/" + area;
+				}
+			}
+			else if (createAbsolutePath)
+			{
+				string domain = parameters.Domain ?? current.Domain;
+				string subdomain = parameters.Subdomain ?? current.Subdomain;
+				string protocol = parameters.Protocol ?? current.Protocol;
+				int port = parameters.Port == 0 ? current.Port : 0;
+
+				bool includePort =
+					(protocol == "http" && port != 80) ||
+					(protocol == "https" && port != 443);
+
+				path = protocol + "://";
+
+				if (!string.IsNullOrEmpty(subdomain))
+				{
+					path += subdomain + "." + domain;
+				}
+				else
+				{
+					path += domain;
+				}
+
+				if (includePort)
+				{
+					path += ":" + port;
+				}
+
+				path += ComputeStandardBasePath(appVirtualDir, area);
+			}
+
+			return path;
+		}
+
+		/// <summary>
+		/// Appends the query string.
+		/// </summary>
+		/// <param name="parts">The parts.</param>
+		/// <param name="parameters">The parameters.</param>
+		protected virtual void AppendQueryString(UrlParts parts, UrlBuilderParameters parameters)
+		{
+			object queryString = parameters.QueryString;
+
+			string suffix = string.Empty;
+
+			if (queryString != null)
+			{
+				if (queryString is IDictionary)
+				{
+					IDictionary qsDictionary = (IDictionary) queryString;
+
+					suffix = CommonUtils.BuildQueryString(serverUtil, qsDictionary, false);
+				}
+				else if (queryString is NameValueCollection)
+				{
+					suffix = CommonUtils.BuildQueryString(serverUtil, (NameValueCollection) queryString, false);
+				}
+				else if (queryString is string)
+				{
+					string[] pairs = queryString.ToString().Split('&');
+
+					suffix = string.Empty;
+
+					foreach(string pair in pairs)
+					{
+						string[] keyvalues = pair.Split(new char[] { '=' }, 2);
+
+						if (suffix.Length != 0)
+						{
+							suffix += "&";
+						}
+
+						suffix += serverUtil.UrlEncode(keyvalues[0]) + "=" + serverUtil.UrlEncode(keyvalues[1]);
+					}
+				}
+			}
+
+			if (suffix != string.Empty)
+			{
+				parts.SetQueryString(suffix);
+			}
+		}
+
+		private string SafeExt(string extension)
+		{
+			if (extension.StartsWith("."))
+			{
+				return extension;
+			}
+
+			return "." + extension;
+		}
+
+		private void AssertArguments<T>(UrlInfo current, T parameters) where T : class
+		{
+			if (current == null)
+			{
+				throw new ArgumentNullException("current");
+			}
+			if (parameters == null)
+			{
+				throw new ArgumentNullException("parameters");
+			}
 		}
 	}
 }

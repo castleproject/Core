@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework.Descriptors
 	public class FilterDescriptor : ICloneable
 	{
 		private readonly Type filterType;
-		private readonly ExecuteEnum when;
+		private readonly ExecuteWhen when;
 		private readonly int executionOrder;
 		private IFilter filterInstance;
 		private FilterAttribute attribute;
@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Descriptors
 		/// <param name="when">The flag that defines when it should run.</param>
 		/// <param name="executionOrder">The execution order.</param>
 		/// <param name="attribute">The attribute.</param>
-		public FilterDescriptor(Type filterType, ExecuteEnum when, int executionOrder, FilterAttribute attribute)
+		public FilterDescriptor(Type filterType, ExecuteWhen when, int executionOrder, FilterAttribute attribute)
 		{
 			this.filterType = filterType;
 			this.when = when;
@@ -56,7 +56,7 @@ namespace Castle.MonoRail.Framework.Descriptors
 		/// Gets the flag that defines when it should run.
 		/// </summary>
 		/// <value>The when.</value>
-		public ExecuteEnum When
+		public ExecuteWhen When
 		{
 			get { return when; }
 		}

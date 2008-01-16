@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework.Services
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public class UrlPartsBuilder
+	public class UrlParts
 	{
 		private readonly StringBuilder url;
 		private PathInfoBuilder pathInfoBuilder;
@@ -33,10 +33,10 @@ namespace Castle.MonoRail.Framework.Services
 		private NameValueCollection queryStringDict;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UrlPartsBuilder"/> class.
+		/// Initializes a new instance of the <see cref="UrlParts"/> class.
 		/// </summary>
 		/// <param name="pathPieces">The path pieces.</param>
-		public UrlPartsBuilder(params string[] pathPieces)
+		public UrlParts(params string[] pathPieces)
 		{
 			url = new StringBuilder();
 
@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// </summary>
 		/// <param name="url">The URL.</param>
 		/// <returns></returns>
-		public static UrlPartsBuilder Parse(string url)
+		public static UrlParts Parse(string url)
 		{
 			if (url == null)
 			{
@@ -103,7 +103,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// Pendent
 		/// </summary>
 		/// <param name="queryStringParam">The query string.</param>
-		public UrlPartsBuilder SetQueryString(string queryStringParam)
+		public UrlParts SetQueryString(string queryStringParam)
 		{
 			if (queryStringParam != null && queryStringParam.StartsWith("?"))
 			{
@@ -150,7 +150,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// Pendent
 		/// </summary>
 		/// <returns></returns>
-		public UrlPartsBuilder ConvertPathInfoToDict()
+		public UrlParts ConvertPathInfoToDict()
 		{
 			if (pathInfoBuilder == null)
 			{
@@ -203,6 +203,11 @@ namespace Castle.MonoRail.Framework.Services
 				sb.Append('?');
 				sb.Append(CommonUtils.BuildQueryString(serverUtiliy, QueryString, true));
 			}
+			else if (!string.IsNullOrEmpty(queryString))
+			{
+				sb.Append('?');
+				sb.Append(serverUtiliy.HtmlEncode(queryString));
+			}
 
 			return sb.ToString();
 		}
@@ -211,9 +216,9 @@ namespace Castle.MonoRail.Framework.Services
 		/// Pendent
 		/// </summary>
 		/// <param name="piece">The piece.</param>
-		public UrlPartsBuilder AppendPath(string piece)
+		public UrlParts AppendPath(string piece)
 		{
-			if (piece.EndsWith("/"))
+			if (piece.Length != 1 && piece.EndsWith("/"))
 			{
 				piece = piece.Substring(0, piece.Length - 1);
 			}
@@ -278,7 +283,7 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
-		private static UrlPartsBuilder CreateForRelativePath(string url)
+		private static UrlParts CreateForRelativePath(string url)
 		{
 			string path = url;
 			string qs = null;
@@ -304,18 +309,18 @@ namespace Castle.MonoRail.Framework.Services
 				}
 			}
 
-			UrlPartsBuilder parts = new UrlPartsBuilder(path);
+			UrlParts parts = new UrlParts(path);
 			parts.SetQueryString(qs);
 			parts.PathInfoDict.Parse(pathInfo);
 
 			return parts;
 		}
 
-		private static UrlPartsBuilder CreateForAbsolutePath(Uri uri)
+		private static UrlParts CreateForAbsolutePath(Uri uri)
 		{
 			string host = uri.AbsoluteUri.Substring(0, uri.AbsoluteUri.Length - uri.PathAndQuery.Length);
 
-			UrlPartsBuilder parts = new UrlPartsBuilder(host);
+			UrlParts parts = new UrlParts(host);
 
 			foreach (string segment in uri.Segments)
 			{
@@ -359,14 +364,14 @@ namespace Castle.MonoRail.Framework.Services
 		/// </summary>
 		public class PathInfoBuilder
 		{
-			private readonly UrlPartsBuilder parent;
+			private readonly UrlParts parent;
 			private readonly List<string> pieces;
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="PathInfoBuilder"/> class.
 			/// </summary>
 			/// <param name="parent">The parent.</param>
-			public PathInfoBuilder(UrlPartsBuilder parent)
+			public PathInfoBuilder(UrlParts parent)
 			{
 				this.parent = parent;
 				pieces = new List<string>();
@@ -386,7 +391,7 @@ namespace Castle.MonoRail.Framework.Services
 			/// <summary>
 			/// Returns to the previous builder context.
 			/// </summary>
-			public UrlPartsBuilder Done
+			public UrlParts Done
 			{
 				get { return parent; }
 			}
@@ -435,14 +440,14 @@ namespace Castle.MonoRail.Framework.Services
 		/// </summary>
 		public class PathInfoDictBuilder
 		{
-			private readonly UrlPartsBuilder parent;
+			private readonly UrlParts parent;
 			private readonly IDictionary<string, string> parameters;
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="PathInfoBuilder"/> class.
 			/// </summary>
 			/// <param name="parent">The parent.</param>
-			public PathInfoDictBuilder(UrlPartsBuilder parent)
+			public PathInfoDictBuilder(UrlParts parent)
 			{
 				this.parent = parent;
 				parameters = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
@@ -515,7 +520,7 @@ namespace Castle.MonoRail.Framework.Services
 			/// <summary>
 			/// Returns to the previous builder context.
 			/// </summary>
-			public UrlPartsBuilder Done
+			public UrlParts Done
 			{
 				get { return parent; }
 			}

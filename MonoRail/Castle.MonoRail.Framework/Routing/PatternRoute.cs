@@ -88,8 +88,9 @@ namespace Castle.MonoRail.Framework.Routing
 					hasNamed = true;
 
 					object value = parameters[node.name];
+					string valAsString = value != null ? value.ToString() : null;
 
-					if (value == null)
+					if (string.IsNullOrEmpty(valAsString))
 					{
 						if (!node.optional)
 						{

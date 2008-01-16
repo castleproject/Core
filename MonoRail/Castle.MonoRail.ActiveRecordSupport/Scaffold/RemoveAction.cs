@@ -42,7 +42,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 		{
 			base.PerformActionProcess(engineContext, controller, controllerContext);
 
-			object idVal = CommonOperationUtils.ReadPkFromParams(engineContext.Request, ObtainPKProperty());
+			object idVal = CommonOperationUtils.ReadPkFromParams(controllerContext.CustomActionParameters, engineContext.Request, ObtainPKProperty());
 
 			controllerContext.PropertyBag["id"] = idVal;
 

@@ -261,8 +261,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		private IValidatorRegistry validatorRegistry;
 		private ValidatorRunner validatorRunner;
 
-
-
 		#region Constructors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FormHelper"/> class.
@@ -285,7 +283,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		#endregion
-
 
 		/// <summary>
 		/// Logger instance

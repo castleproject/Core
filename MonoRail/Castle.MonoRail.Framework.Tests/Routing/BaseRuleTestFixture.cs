@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Tests.Routing
 {
+	using System.Collections;
 	using Framework.Routing;
 	using Test;
 
@@ -21,17 +22,17 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 	{
 		protected static IRouteContext CreateGetContext()
 		{
-			return new RouteContext(new MockRequest("GET"), "/");
+			return new RouteContext(new MockRequest("GET"), "/", new Hashtable());
 		}
 
 		protected static IRouteContext CreateGetContext(string appPath)
 		{
-			return new RouteContext(new MockRequest("GET"), appPath);
+			return new RouteContext(new MockRequest("GET"), appPath, new Hashtable());
 		}
 
 		protected static IRouteContext CreateContext(string appPath, Verb httpMethod)
 		{
-			return new RouteContext(new MockRequest(httpMethod.ToString()), appPath);
+			return new RouteContext(new MockRequest(httpMethod.ToString()), appPath, new Hashtable());
 		}	
 	}
 }

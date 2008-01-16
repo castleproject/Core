@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
+namespace Castle.MonoRail.Framework
 {
-    using Castle.MonoRail.Framework;
-    using System;
+	using System;
 
-    [Serializable, Filter(ExecuteWhen.BeforeAction, typeof(FilterBadHeader))]
-    public class FilterController : Controller
-    {
-        public void Index()
-        {
-        }
-
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	public interface IHelperFactory
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		object Create(Type helperType, IEngineContext engineContext, out bool initialized);
+	}
 }
-

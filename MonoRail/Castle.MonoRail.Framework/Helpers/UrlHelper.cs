@@ -113,7 +113,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		public string For(IDictionary parameters)
 		{
 			SetEncodeDefault(parameters);
-			return urlBuilder.BuildUrl(currentUrl, parameters);
+
+			UrlBuilderParameters urlParams = UrlBuilderParameters.From(parameters).
+				SetRouteMatch(ControllerContext.RouteMatch);
+		
+			return urlBuilder.BuildUrl(currentUrl, urlParams);
 		}
 
 		/// <summary>
@@ -147,7 +151,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public string Link(string innerContent, IDictionary parameters)
 		{
-			SetEncodeDefault(parameters);
 			return "<a href=\"" + For(parameters) + "\">" + innerContent + "</a>";
 		}
 
@@ -176,7 +179,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public string Link(string innerContent, IDictionary parameters, IDictionary anchorAttributes)
 		{
-			SetEncodeDefault(parameters);
 			return "<a " + GetAttributes(anchorAttributes) + " href=\"" + For(parameters) + "\">" + innerContent + "</a>";
 		}
 
@@ -204,7 +206,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public string ButtonLink(string innerContent, IDictionary parameters)
 		{
-			SetEncodeDefault(parameters);
 			return "<button type=\"button\" onclick=\"javascript:window.location.href = '" + For(parameters) + "'\">" + innerContent + "</button>";
 		}
 
@@ -233,7 +234,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public string ButtonLink(string innerContent, IDictionary parameters, IDictionary buttonAttributes)
 		{
-			SetEncodeDefault(parameters);
 			return "<button type=\"button\"" + GetAttributes(buttonAttributes) + " onclick=\"javascript:window.location.href = '" + For(parameters) + "'\">" + innerContent + "</button>";
 		}
 

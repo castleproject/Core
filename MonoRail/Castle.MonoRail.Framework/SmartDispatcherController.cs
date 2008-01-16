@@ -199,6 +199,7 @@ namespace Castle.MonoRail.Framework
 				requestParameterName = GetRequestParameterName(param);
 
 				Type parameterType = param.ParameterType;
+				bool usedActionArgs = false;
 
 				if ((actionArgs != null) && actionArgs.ContainsKey(requestParameterName))
 				{
@@ -211,15 +212,14 @@ namespace Castle.MonoRail.Framework
 					{
 						points += 10;
 						matchCount++;
+						usedActionArgs = true;
 					}
 				}
-				else
+
+				if (!usedActionArgs && binder.CanBindParameter(parameterType, requestParameterName, Request.ParamsNode))
 				{
-					if (binder.CanBindParameter(parameterType, requestParameterName, Request.ParamsNode))
-					{
-						points += 10;
-						matchCount++;
-					}
+					points += 10;
+					matchCount++;
 				}
 			}
 
@@ -288,8 +288,8 @@ namespace Castle.MonoRail.Framework
 
 					if (!handled)
 					{
-						object convertedVal;
-						bool conversionSucceeded;
+						object convertedVal= null;
+						bool conversionSucceeded = false;
 
 						if (actionArgs != null && actionArgs.ContainsKey(paramName))
 						{
@@ -299,7 +299,8 @@ namespace Castle.MonoRail.Framework
 
 							convertedVal = binder.Converter.Convert(param.ParameterType, actionArgType, actionArg, out conversionSucceeded);
 						}
-						else
+
+						if (!conversionSucceeded)
 						{
 							convertedVal = binder.BindParameter(param.ParameterType, paramName, Request.ParamsNode);
 						}

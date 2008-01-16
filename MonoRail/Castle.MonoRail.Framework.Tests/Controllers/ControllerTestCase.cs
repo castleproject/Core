@@ -157,6 +157,9 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 			IControllerContext context = services.ControllerContextFactory.
 				Create("", "home", "index", services.ControllerDescriptorProvider.BuildDescriptor(controller));
 
+			engineContext.CurrentController = controller;
+			engineContext.CurrentControllerContext = context;
+
 			controller.Process(engineContext, context);
 
 			MyCustomHelper helper = (MyCustomHelper) context.Helpers["MyCustomHelper"];

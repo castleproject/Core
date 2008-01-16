@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Collections;
 	using Castle.ActiveRecord;
@@ -111,6 +112,20 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 			bool conversionSuceeded;
 			
 			return new DefaultConverter().Convert(keyProperty.PropertyType, id, out conversionSuceeded);
+		}
+
+		internal static object ReadPkFromParams(IDictionary<string,object> customParams, IRequest request, PropertyInfo keyProperty)
+		{
+			if (customParams.ContainsKey("id"))
+			{
+				bool conversionSuceeded;
+
+				object id = customParams["id"];
+
+				return new DefaultConverter().Convert(keyProperty.PropertyType, id, out conversionSuceeded);
+			}
+
+			return ReadPkFromParams(request, keyProperty);
 		}
 	}
 }

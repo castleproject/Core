@@ -25,7 +25,7 @@ namespace Castle.MonoRail.WindsorExtension
 	/// Facility responsible for registering the controllers in
 	/// the controllerTree.
 	/// </summary>
-	public class RailsFacility : AbstractFacility
+	public class MonoRailFacility : AbstractFacility
 	{
 		private IControllerTree controllerTree;
 		private IViewComponentRegistry componentRegistry;
@@ -40,6 +40,7 @@ namespace Castle.MonoRail.WindsorExtension
 			Kernel.AddComponent("mr.controllerfactory", typeof(IControllerFactory), typeof(WindsorControllerFactory));
 			Kernel.AddComponent("mr.filterFactory", typeof(IFilterFactory), typeof(WindsorFilterFactory));
 			Kernel.AddComponent("mr.viewcompfactory", typeof(IViewComponentFactory), typeof(WindsorViewComponentFactory));
+			Kernel.AddComponent("mr.helperfactory", typeof(IHelperFactory), typeof(WindsorHelperFactory));
 
 			controllerTree = Kernel.Resolve<IControllerTree>();
 			componentRegistry = Kernel.Resolve<IViewComponentRegistry>();

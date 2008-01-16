@@ -14,19 +14,25 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using System.Web;
-	using Container;
-	using Routing;
+	using System;
 
 	/// <summary>
-	/// Pendent
+	/// 
 	/// </summary>
-	public interface IEngineContextFactory
+	public interface IServiceInitializer
 	{
 		/// <summary>
-		/// Pendent.
+		/// Initializes the specified service instance.
 		/// </summary>
-		/// <returns></returns>
-		IEngineContext Create(IMonoRailContainer container, UrlInfo urlInfo, HttpContext context, RouteMatch routeMatch);
+		/// <param name="serviceInstance">The service instance.</param>
+		/// <param name="engineContext">The engine context.</param>
+		void Initialize(object serviceInstance, IEngineContext engineContext);
+
+		/// <summary>
+		/// Initializes the specified service instance.
+		/// </summary>
+		/// <param name="serviceInstance">The service instance.</param>
+		/// <param name="container">The container.</param>
+		void Initialize(object serviceInstance, IMonoRailServices container);
 	}
 }

@@ -17,6 +17,11 @@ namespace Castle.MonoRail.Framework.Routing
 	using System.Collections;
 
 	/// <summary>
+	/// 
+	/// </summary>
+	public delegate void RouteAction(IRouteContext context, RouteMatch match);
+
+	/// <summary>
 	/// Pendent
 	/// </summary>
 	public interface IRoutingRuleContainer
@@ -26,6 +31,13 @@ namespace Castle.MonoRail.Framework.Routing
 		/// </summary>
 		/// <param name="rule">The rule.</param>
 		void Add(IRoutingRule rule);
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="rule">The rule.</param>
+		/// <param name="action">The action executed if the rule matches.</param>
+		void Add(IRoutingRule rule, RouteAction action);
 
 		/// <summary>
 		/// Pendent
@@ -44,6 +56,14 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
 		string CreateUrl(string virtualPath, IDictionary parameters);
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="virtualPath">The virtual path.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		string CreateUrl(string virtualPath, object parameters);
 
 		/// <summary>
 		/// Pendent

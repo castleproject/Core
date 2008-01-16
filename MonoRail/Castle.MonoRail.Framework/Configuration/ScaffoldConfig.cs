@@ -26,7 +26,15 @@ namespace Castle.MonoRail.Framework.Configuration
 	public class ScaffoldConfig : ISerializedConfig
 	{
 		private Type scaffoldImplType;
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScaffoldConfig"/> class.
+		/// </summary>
+		public ScaffoldConfig()
+		{
+			TryLoadDefaultScaffoldingImplementation();
+		}
+
 		#region ISerializedConfig implementation
 
 		/// <summary>
@@ -61,6 +69,11 @@ namespace Castle.MonoRail.Framework.Configuration
 		public Type ScaffoldImplType
 		{
 			get { return scaffoldImplType; }
+		}
+
+		private void TryLoadDefaultScaffoldingImplementation()
+		{
+			scaffoldImplType = Type.GetType("Castle.MonoRail.ActiveRecordSupport.Scaffold.ScaffoldingSupport, Castle.MonoRail.ActiveRecordSupport", false, false);
 		}
 	}
 }

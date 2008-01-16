@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,26 +24,26 @@ namespace Castle.MonoRail.Framework
 	using Castle.Components.Binder;
 	using Castle.Components.Common.EmailSender;
 	using Castle.Components.Validator;
-	using Castle.Core;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Descriptors;
 	using Castle.MonoRail.Framework.Resources;
-	using Castle.MonoRail.Framework.Services;
-	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
+	using Core;
+	using Helpers;
 
 	/// <summary>
 	/// Implements the core functionality and exposes the
 	/// common methods for concrete controllers.
 	/// </summary>
-	public abstract class Controller : IController, IValidatorAccessor
+	public abstract class Controller : IController, IValidatorAccessor, IRedirectSupport
 	{
 		private IEngineContext engineContext;
 		private IControllerContext context;
 		private ILogger logger = NullLogger.Instance;
 		private bool directRenderInvoked;
 
-		private IUrlBuilder urlBuilder;
+		private IHelperFactory helperFactory;
+		private IServiceInitializer serviceInitializer;
 		private IFilterFactory filterFactory;
 		private IViewEngineManager viewEngineManager;
 		private IActionSelector actionSelector;
@@ -83,7 +83,6 @@ namespace Castle.MonoRail.Framework
 			SetEngineContext(engineContext);
 
 			ResolveLayout();
-			CreateControllerLevelResources();
 			CreateAndInitializeHelpers();
 			CreateFiltersDescriptors();
 			ProcessScaffoldIfAvailable();
@@ -497,15 +496,6 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Gets the URL builder instance.
-		/// </summary>
-		/// <value>The URL builder.</value>
-		public IUrlBuilder UrlBuilder
-		{
-			get { return urlBuilder; }
-		}
-
-		/// <summary>
 		/// Shortcut to 
 		/// <see cref="IResponse.IsClientConnected"/>
 		/// </summary>
@@ -543,7 +533,9 @@ namespace Castle.MonoRail.Framework
 		{
 			this.engineContext = engineContext;
 
-			urlBuilder = engineContext.Services.UrlBuilder; // should not be null (affects redirects)
+			helperFactory = engineContext.Services.HelperFactory; // should not be null
+			serviceInitializer = engineContext.Services.ServiceInitializer; // should not be null
+//			urlBuilder = engineContext.Services.UrlBuilder; // should not be null (affects redirects)
 			filterFactory = engineContext.Services.FilterFactory; // should not be null
 			viewEngineManager = engineContext.Services.ViewEngineManager; // should not be null
 			actionSelector = engineContext.Services.ActionSelector; // should not be null
@@ -754,255 +746,331 @@ namespace Castle.MonoRail.Framework
 			return viewEngineManager.HasTemplate(templateName);
 		}
 
-		#region RedirectToRoute
+		#region Redirects
 
 		/// <summary>
-		/// Pendent.
-		/// </summary>
-		/// <param name="routeName">Name of the route.</param>
-		public void RedirectToRoute(string routeName)
-		{
-			Redirect(UrlBuilder.BuildRouteUrl(Context.UrlInfo, routeName));
-		}
-
-		/// <summary>
-		/// Pendent.
-		/// </summary>
-		/// <param name="routeName">Name of the route.</param>
-		/// <param name="parameters">The parameters.</param>
-		public void RedirectToRoute(string routeName, IDictionary parameters)
-		{
-			Redirect(UrlBuilder.BuildRouteUrl(Context.UrlInfo, routeName, parameters));
-		}
-
-		/// <summary>
-		/// Pendent.
-		/// </summary>
-		/// <param name="routeName">Name of the route.</param>
-		/// <param name="parameters">The parameters.</param>
-		public void RedirectToRoute(string routeName, object parameters)
-		{
-			Redirect(UrlBuilder.BuildRouteUrl(Context.UrlInfo, routeName, parameters));
-		}
-
-		#endregion
-
-		#region RedirectToAction
-
-		/// <summary> 
 		/// Redirects to another action in the same controller.
 		/// </summary>
 		/// <param name="action">The action name</param>
-		protected void RedirectToAction(string action)
+		public void RedirectToAction(string action)
 		{
 			RedirectToAction(action, (NameValueCollection) null);
 		}
 
-		/// <summary> 
-		/// Redirects to another action in the same controller.
+		/// <summary>
+		/// Redirects to another action in the same controller passing the specified querystring parameters.
 		/// </summary>
 		/// <param name="action">The action name</param>
-		/// <param name="queryStringParameters">list of key/value pairs. Each string is supposed
-		/// to have the format "key=value" that will be converted to a proper 
-		/// query string</param>
-		protected void RedirectToAction(string action, params String[] queryStringParameters)
+		/// <param name="queryStringParameters">The querystring entries</param>
+		public void RedirectToAction(string action, IDictionary queryStringParameters)
+		{
+			if (queryStringParameters != null)
+			{
+				Response.Redirect(AreaName, Name, TransformActionName(action), queryStringParameters);
+			}
+			else
+			{
+				Response.Redirect(AreaName, Name, TransformActionName(action));
+			}
+		}
+
+		/// <summary>
+		/// Redirects to another action in the same controller passing the specified querystring parameters.
+		/// </summary>
+		/// <param name="action">The action name</param>
+		/// <param name="queryStringParameters">The querystring entries</param>
+		public void RedirectToAction(string action, NameValueCollection queryStringParameters)
+		{
+			if (queryStringParameters != null)
+			{
+				Response.Redirect(AreaName, Name, TransformActionName(action), queryStringParameters);
+			}
+			else
+			{
+				Response.Redirect(AreaName, Name, TransformActionName(action));
+			}
+		}
+
+		/// <summary>
+		/// Redirects to another action in the same controller passing the specified querystring parameters.
+		/// </summary>
+		/// <param name="action">The action name</param>
+		/// <param name="queryStringParameters">The querystring entries</param>
+		public void RedirectToAction(string action, params string[] queryStringParameters)
 		{
 			RedirectToAction(action, DictHelper.Create(queryStringParameters));
 		}
 
-		/// <summary> 
-		/// Redirects to another action in the same controller.
-		/// </summary>
-		/// <param name="action">The action name</param>
-		/// <param name="queryStringParameters">Query string entries</param>
-		protected void RedirectToAction(string action, IDictionary queryStringParameters)
-		{
-			if (queryStringParameters != null)
-			{
-				Redirect(AreaName, Name, TransformActionName(action), queryStringParameters);
-			}
-			else
-			{
-				Redirect(AreaName, Name, TransformActionName(action));
-			}
-		}
-
-		/// <summary> 
-		/// Redirects to another action in the same controller.
-		/// </summary>
-		/// <param name="action">The action name</param>
-		/// <param name="queryStringParameters">Query string entries</param>
-		protected void RedirectToAction(string action, NameValueCollection queryStringParameters)
-		{
-			if (queryStringParameters != null)
-			{
-				Redirect(AreaName, Name, TransformActionName(action), queryStringParameters);
-			}
-			else
-			{
-				Redirect(AreaName, Name, TransformActionName(action));
-			}
-		}
-
-		#endregion
-
 		/// <summary>
-		/// Redirects to the referrer action, according to the "HTTP_REFERER" header (<c>Context.UrlReferrer</c>).
+		/// Redirects to another action in the same controller passing the specified querystring parameters.
 		/// </summary>
-		[Obsolete("Use RedirectToReferrer")]
-		protected void RedirectToReferer()
+		/// <param name="action">The action name</param>
+		/// <param name="queryStringAnonymousDictionary">The querystring entries as an anonymous dictionary</param>
+		public void RedirectToAction(string action, object queryStringAnonymousDictionary)
 		{
-			RedirectToReferrer();
+			RedirectToAction(action, new ReflectionBasedDictionaryAdapter(queryStringAnonymousDictionary));
 		}
 
 		/// <summary>
-		/// Redirects to the referrer action, according to the "HTTP_REFERER" header (<c>Context.UrlReferrer</c>).
-		/// </summary>
-		protected void RedirectToReferrer()
-		{
-			Redirect(Context.Request.UrlReferrer);
-		}
-
-		/// <summary> 
 		/// Redirects to the site root directory (<c>Context.ApplicationPath + "/"</c>).
 		/// </summary>
 		public void RedirectToSiteRoot()
 		{
-			Redirect(Context.ApplicationPath + "/");
+			Response.RedirectToSiteRoot();
 		}
 
 		/// <summary>
-		/// Redirects to the specified URL. All other Redirects call this one.
+		/// Redirects to the specified url
 		/// </summary>
-		/// <param name="url">Target URL</param>
-		public virtual void Redirect(string url)
+		/// <param name="url">An relative or absolute URL to redirect the client to</param>
+		public void RedirectToUrl(string url)
 		{
-			CancelView();
-
-			Context.Response.RedirectToUrl(url);
+			Response.RedirectToUrl(url);
 		}
 
 		/// <summary>
-		/// Redirects to the specified URL. All other Redirects call this one.
+		/// Redirects to the specified url
 		/// </summary>
-		/// <param name="parameters">The parameters.</param>
-		public virtual void Redirect(object parameters)
+		/// <param name="url">An relative or absolute URL to redirect the client to</param>
+		/// <param name="endProcess">if set to <c>true</c>, sends the redirect and
+		/// kills the current request process.</param>
+		public void RedirectToUrl(string url, bool endProcess)
 		{
-			CancelView();
-
-			Context.Response.Redirect(parameters);
+			Response.RedirectToUrl(url, endProcess);
 		}
 
 		/// <summary>
-		/// Redirects to the specified URL. 
+		/// Redirects to the specified url
 		/// </summary>
-		/// <param name="url">Target URL</param>
-		/// <param name="parameters">URL parameters</param>
-		public virtual void Redirect(string url, IDictionary parameters)
+		/// <param name="url">An relative or absolute URL to redirect the client to</param>
+		/// <param name="queryStringParameters">The querystring entries</param>
+		public void RedirectToUrl(string url, IDictionary queryStringParameters)
 		{
-			if (parameters != null && parameters.Count != 0)
-			{
-				if (url.IndexOf('?') != -1)
-				{
-					url = url + '&' + ToQueryString(parameters);
-				}
-				else
-				{
-					url = url + '?' + ToQueryString(parameters);
-				}
-			}
-
-			Redirect(url);
+			Response.RedirectToUrl(url, queryStringParameters);
 		}
 
 		/// <summary>
-		/// Redirects to the specified URL. 
+		/// Redirects to the specified url
 		/// </summary>
-		/// <param name="url">Target URL</param>
-		/// <param name="parameters">URL parameters</param>
-		public virtual void Redirect(string url, NameValueCollection parameters)
+		/// <param name="url">An relative or absolute URL to redirect the client to</param>
+		/// <param name="queryStringParameters">The querystring entries</param>
+		public void RedirectToUrl(string url, NameValueCollection queryStringParameters)
 		{
-			if (parameters != null && parameters.Count != 0)
-			{
-				if (url.IndexOf('?') != -1)
-				{
-					url = url + '&' + ToQueryString(parameters);
-				}
-				else
-				{
-					url = url + '?' + ToQueryString(parameters);
-				}
-			}
-
-			Redirect(url);
+			Response.RedirectToUrl(url, queryStringParameters);
 		}
 
 		/// <summary>
-		/// Redirects to another controller and action.
+		/// Redirects to the specified url
 		/// </summary>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
+		/// <param name="url">An relative or absolute URL to redirect the client to</param>
+		/// <param name="queryStringParameters">The querystring entries</param>
+		public void RedirectToUrl(string url, params string[] queryStringParameters)
+		{
+			Response.RedirectToUrl(url, queryStringParameters);
+		}
+
+		/// <summary>
+		/// Redirects to the specified url
+		/// </summary>
+		/// <param name="url">An relative or absolute URL to redirect the client to</param>
+		/// <param name="queryStringAnonymousDictionary">The querystring entries as an anonymous dictionary</param>
+		public void RedirectToUrl(string url, object queryStringAnonymousDictionary)
+		{
+			Response.RedirectToUrl(url, queryStringAnonymousDictionary);
+		}
+
+		/// <summary>
+		/// Redirects to another controller's action.
+		/// </summary>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
 		public void Redirect(string controller, string action)
 		{
-			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, controller, action));
+			Response.Redirect(controller, action);
 		}
 
 		/// <summary>
-		/// Redirects to another controller and action.
+		/// Redirects to another controller's action with the specified parameters.
 		/// </summary>
-		/// <param name="area">Area name</param>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="queryStringParameters">The querystring entries</param>
+		public void Redirect(string controller, string action, NameValueCollection queryStringParameters)
+		{
+			Response.Redirect(controller, action, queryStringParameters);
+		}
+
+		/// <summary>
+		/// Redirects to another controller's action with the specified parameters.
+		/// </summary>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="queryStringParameters">The querystring entries</param>
+		public void Redirect(string controller, string action, IDictionary queryStringParameters)
+		{
+			Response.Redirect(controller, action, queryStringParameters);
+		}
+
+		/// <summary>
+		/// Redirects to another controller's action with the specified parameters.
+		/// </summary>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="queryStringAnonymousDictionary">The querystring entries as an anonymous dictionary</param>
+		public void Redirect(string controller, string action, object queryStringAnonymousDictionary)
+		{
+			Response.Redirect(controller, action, queryStringAnonymousDictionary);
+		}
+
+		/// <summary>
+		/// Redirects to another controller's action in a different area.
+		/// </summary>
+		/// <param name="area">The area the target controller belongs to.</param>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
 		public void Redirect(string area, string controller, string action)
 		{
-			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, area, controller, action));
+			Response.Redirect(area, controller, action);
 		}
 
 		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
+		/// Redirects to another controller's action in a different area with the specified parameters.
 		/// </summary>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(string controller, string action, NameValueCollection parameters)
+		/// <param name="area">The area the target controller belongs to.</param>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="queryStringParameters">The querystring entries</param>
+		public void Redirect(string area, string controller, string action, IDictionary queryStringParameters)
 		{
-			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, controller, action, parameters));
+			Response.Redirect(area, controller, action, queryStringParameters);
 		}
 
 		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
+		/// Redirects to another controller's action in a different area with the specified parameters.
 		/// </summary>
-		/// <param name="area">Area name</param>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(string area, string controller, string action, NameValueCollection parameters)
+		/// <param name="area">The area the target controller belongs to.</param>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="queryStringParameters">The querystring entries</param>
+		public void Redirect(string area, string controller, string action, NameValueCollection queryStringParameters)
 		{
-			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, area, controller, action, parameters));
+			Response.Redirect(area, controller, action, queryStringParameters);
 		}
 
 		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
+		/// Redirects to another controller's action in a different area with the specified parameters.
 		/// </summary>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(string controller, string action, IDictionary parameters)
+		/// <param name="area">The area the target controller belongs to.</param>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="queryStringAnonymousDictionary">The querystring entries as an anonymous dictionary</param>
+		public void Redirect(string area, string controller, string action, object queryStringAnonymousDictionary)
 		{
-			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, controller, action, parameters));
+			Response.Redirect(area, controller, action, queryStringAnonymousDictionary);
 		}
 
 		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
+		/// Tries to resolve the target redirect url by using the routing rules registered.
 		/// </summary>
-		/// <param name="area">Area name</param>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(string area, string controller, string action, IDictionary parameters)
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="useCurrentRouteParams">if set to <c>true</c> the current request matching route rules will be used.</param>
+		public void RedirectUsingRoute(string action, bool useCurrentRouteParams)
 		{
-			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, area, controller, action, parameters));
+			Response.RedirectUsingRoute(Name, action, useCurrentRouteParams);
 		}
+
+		/// <summary>
+		/// Tries to resolve the target redirect url by using the routing rules registered.
+		/// </summary>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="routeParameters">The routing rule parameters.</param>
+		public void RedirectUsingRoute(string action, IDictionary routeParameters)
+		{
+			Response.RedirectUsingRoute(Name, action, routeParameters);
+		}
+
+		/// <summary>
+		/// Tries to resolve the target redirect url by using the routing rules registered.
+		/// </summary>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="routeParameters">The routing rule parameters.</param>
+		public void RedirectUsingRoute(string action, object routeParameters)
+		{
+			Response.RedirectUsingRoute(Name, action, routeParameters);
+		}
+
+		/// <summary>
+		/// Tries to resolve the target redirect url by using the routing rules registered.
+		/// </summary>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="useCurrentRouteParams">if set to <c>true</c> the current request matching route rules will be used.</param>
+		public void RedirectUsingRoute(string controller, string action, bool useCurrentRouteParams)
+		{
+			Response.RedirectUsingRoute(controller, action, useCurrentRouteParams);
+		}
+
+		/// <summary>
+		/// Tries to resolve the target redirect url by using the routing rules registered.
+		/// </summary>
+		/// <param name="area">The area the target controller belongs to.</param>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="useCurrentRouteParams">if set to <c>true</c> the current request matching route rules will be used.</param>
+		public void RedirectUsingRoute(string area, string controller, string action, bool useCurrentRouteParams)
+		{
+			Response.RedirectUsingRoute(area, controller, action, useCurrentRouteParams);
+		}
+
+		/// <summary>
+		/// Tries to resolve the target redirect url by using the routing rules registered.
+		/// </summary>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="routeParameters">The routing rule parameters.</param>
+		public void RedirectUsingRoute(string controller, string action, IDictionary routeParameters)
+		{
+			Response.RedirectUsingRoute(controller, action, routeParameters);
+		}
+
+		/// <summary>
+		/// Tries to resolve the target redirect url by using the routing rules registered.
+		/// </summary>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="routeParameters">The routing rule parameters.</param>
+		public void RedirectUsingRoute(string controller, string action, object routeParameters)
+		{
+			Response.RedirectUsingRoute(controller, action, routeParameters);
+		}
+
+		/// <summary>
+		/// Tries to resolve the target redirect url by using the routing rules registered.
+		/// </summary>
+		/// <param name="area">The area the target controller belongs to.</param>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="routeParameters">The routing rule parameters.</param>
+		public void RedirectUsingRoute(string area, string controller, string action, IDictionary routeParameters)
+		{
+			Response.RedirectUsingRoute(area, controller, action, routeParameters);
+		}
+
+		/// <summary>
+		/// Tries to resolve the target redirect url by using the routing rules registered.
+		/// </summary>
+		/// <param name="area">The area the target controller belongs to.</param>
+		/// <param name="controller">The controller name to be redirected to.</param>
+		/// <param name="action">The desired action on the target controller.</param>
+		/// <param name="routeParameters">The routing rule parameters.</param>
+		public void RedirectUsingRoute(string area, string controller, string action, object routeParameters)
+		{
+			Response.RedirectUsingRoute(area, controller, action, routeParameters);
+		}
+
+		#endregion
+
+		#region Redirect utilities
 
 		/// <summary>
 		/// Creates a querystring string representation of the namevalue collection.
@@ -1023,6 +1091,8 @@ namespace Castle.MonoRail.Framework
 		{
 			return CommonUtils.BuildQueryString(Context.Server, parameters, false);
 		}
+
+		#endregion
 
 		#endregion
 
@@ -1227,9 +1297,12 @@ namespace Castle.MonoRail.Framework
 				}
 
 				EnsureActionIsAccessibleWithCurrentHttpVerb(action);
-				CreateActionLevelResources(action);
 
 				RunBeforeActionFilters(action, out cancel);
+
+				CreateControllerLevelResources();
+				CreateActionLevelResources(action);
+
 				if (cancel) return;
 
 				if (BeforeAction != null)
@@ -1254,9 +1327,9 @@ namespace Castle.MonoRail.Framework
 					Response.StatusDescription = ex.HttpStatusDesc;
 				}
 
-				engineContext.LastException = actionException = ex;
+				actionException = ex;
 
-				RaiseOnActionExceptionOnExtension();
+				RegisterExceptionAndNotifyExtensions(actionException);
 			}
 			catch(Exception ex)
 			{
@@ -1267,9 +1340,8 @@ namespace Castle.MonoRail.Framework
 				}
 
 				actionException = (ex is TargetInvocationException) ? ex.InnerException : ex;
-				engineContext.LastException = actionException;
 
-				RaiseOnActionExceptionOnExtension();
+				RegisterExceptionAndNotifyExtensions(actionException);
 			}
 			finally
 			{
@@ -1435,9 +1507,13 @@ namespace Castle.MonoRail.Framework
 
 			foreach(HelperDescriptor helper in MetaDescriptor.Helpers)
 			{
-				object helperInstance = Activator.CreateInstance(helper.HelperType);
+				bool initialized;
+				object helperInstance = helperFactory.Create(helper.HelperType, engineContext, out initialized);
 
-				PerformHelperInitialization(helperInstance);
+				if (!initialized)
+				{
+					serviceInitializer.Initialize(helperInstance, engineContext);
+				}
 
 				if (helpers.Contains(helper.Name))
 				{
@@ -1459,20 +1535,17 @@ namespace Castle.MonoRail.Framework
 			AbstractHelper[] builtInHelpers =
 				new AbstractHelper[]
 					{
-						new AjaxHelper(), new BehaviourHelper(),
-						new UrlHelper(), new TextHelper(),
-						new EffectsFatHelper(), new ScriptaculousHelper(),
-						new DateFormatHelper(), new HtmlHelper(),
-						new ValidationHelper(), new DictHelper(),
-						new PaginationHelper(), new FormHelper(),
-						new JSONHelper(), new ZebdaHelper()
+						new AjaxHelper(engineContext), new BehaviourHelper(engineContext),
+						new UrlHelper(engineContext), new TextHelper(engineContext),
+						new EffectsFatHelper(engineContext), new ScriptaculousHelper(engineContext),
+						new DateFormatHelper(engineContext), new HtmlHelper(engineContext),
+						new ValidationHelper(engineContext), new DictHelper(engineContext),
+						new PaginationHelper(engineContext), new FormHelper(engineContext),
+						new JSONHelper(engineContext), new ZebdaHelper(engineContext)
 					};
 
 			foreach(AbstractHelper helper in builtInHelpers)
 			{
-				helper.SetController(this, context);
-				helper.SetContext(engineContext);
-
 				string helperName = helper.GetType().Name;
 
 				if (!context.Helpers.Contains(helperName))
@@ -1492,43 +1565,12 @@ namespace Castle.MonoRail.Framework
 					}
 				}
 
-				PerformHelperInitialization(helper);
-			}
-		}
+				Type helperType = helper.GetType();
 
-		/// <summary>
-		/// Performs the additional helper initialization
-		/// checking if the helper instance implements <see cref="IServiceEnabledComponent"/>.
-		/// </summary>
-		/// <param name="helperInstance">The helper instance.</param>
-		private void PerformHelperInitialization(object helperInstance)
-		{
-			IContextAware ctxAware = helperInstance as IContextAware;
-
-			if (ctxAware != null)
-			{
-				ctxAware.SetContext(engineContext);
-			}
-
-			IControllerAware aware = helperInstance as IControllerAware;
-
-			if (aware != null)
-			{
-				aware.SetController(this, context);
-			}
-
-			IServiceEnabledComponent serviceEnabled = helperInstance as IServiceEnabledComponent;
-
-			if (serviceEnabled != null)
-			{
-				serviceEnabled.Service(engineContext);
-			}
-
-			IMRServiceEnabled mrServiceEnabled = helperInstance as IMRServiceEnabled;
-
-			if (mrServiceEnabled != null)
-			{
-				mrServiceEnabled.Service(engineContext.Services);
+				if (helperType == typeof(FormHelper) || helperType == typeof(AjaxHelper))
+				{
+					serviceInitializer.Initialize(helper, engineContext);
+				}
 			}
 		}
 
@@ -1549,7 +1591,7 @@ namespace Castle.MonoRail.Framework
 			cancel = false;
 			if (action.ShouldSkipAllFilters) return;
 
-			if (!ProcessFilters(action, ExecuteEnum.BeforeAction))
+			if (!ProcessFilters(action, ExecuteWhen.BeforeAction))
 			{
 				cancel = true;
 				return; // A filter returned false... so we stop
@@ -1563,7 +1605,7 @@ namespace Castle.MonoRail.Framework
 
 			if (action.ShouldSkipAllFilters) return;
 
-			if (!ProcessFilters(action, ExecuteEnum.AfterAction))
+			if (!ProcessFilters(action, ExecuteWhen.AfterAction))
 			{
 				cancel = true;
 				return; // A filter returned false... so we stop
@@ -1574,7 +1616,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (action.ShouldSkipAllFilters) return;
 
-			ProcessFilters(action, ExecuteEnum.AfterRendering);
+			ProcessFilters(action, ExecuteWhen.AfterRendering);
 		}
 
 		/// <summary>
@@ -1629,7 +1671,7 @@ namespace Castle.MonoRail.Framework
 			return clone;
 		}
 
-		private bool ProcessFilters(IExecutableAction action, ExecuteEnum when)
+		private bool ProcessFilters(IExecutableAction action, ExecuteWhen when)
 		{
 			foreach(FilterDescriptor desc in filters)
 			{
@@ -1650,7 +1692,7 @@ namespace Castle.MonoRail.Framework
 			return true;
 		}
 
-		private bool ProcessFilter(ExecuteEnum when, FilterDescriptor desc)
+		private bool ProcessFilter(ExecuteWhen when, FilterDescriptor desc)
 		{
 			if (desc.FilterInstance == null)
 			{
@@ -1723,30 +1765,33 @@ namespace Castle.MonoRail.Framework
 				desc = GetControllerRescueFor(exceptionType);
 			}
 
-			try
+			if (desc != null)
 			{
-				if (desc.RescueController != null)
+				try
 				{
-					CreateAndProcessRescueController(desc, actionException);
+					if (desc.RescueController != null)
+					{
+						CreateAndProcessRescueController(desc, actionException);
+					}
+					else
+					{
+						context.SelectedViewName = Path.Combine("rescues", desc.ViewName);
+
+						ProcessView();
+					}
+
+					return true;
 				}
-				else
+				catch(Exception exception)
 				{
-					context.SelectedViewName = Path.Combine("rescues", desc.ViewName);
+					// In this situation, the rescue view could not be found
+					// So we're back to the default error exibition
 
-					ProcessView();
-				}
-
-				return true;
-			}
-			catch(Exception exception)
-			{
-				// In this situation, the rescue view could not be found
-				// So we're back to the default error exibition
-
-				if (logger.IsFatalEnabled)
-				{
-					logger.FatalFormat("Failed to process rescue view. View name " +
-					                   context.SelectedViewName, exception);
+					if (logger.IsFatalEnabled)
+					{
+						logger.FatalFormat("Failed to process rescue view. View name " +
+										   context.SelectedViewName, exception);
+					}
 				}
 			}
 
@@ -1840,9 +1885,13 @@ namespace Castle.MonoRail.Framework
 			return action;
 		}
 
-
-		private void RaiseOnActionExceptionOnExtension()
+		/// <summary>
+		/// Registers the exception and notify extensions.
+		/// </summary>
+		/// <param name="exception">The exception.</param>
+		protected void RegisterExceptionAndNotifyExtensions(Exception exception)
 		{
+			engineContext.LastException = exception;
 			engineContext.Services.ExtensionManager.RaiseActionError(engineContext);
 		}
 	}

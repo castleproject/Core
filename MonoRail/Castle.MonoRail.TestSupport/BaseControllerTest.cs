@@ -15,9 +15,10 @@
 namespace Castle.MonoRail.TestSupport
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.IO;
+	using System.Web;
 	using Castle.Components.Common.EmailSender;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Test;
@@ -107,7 +108,7 @@ namespace Castle.MonoRail.TestSupport
 		private IMockResponse response;
 		private MockServices services;
 		private ITrace trace;
-		private IDictionary cookies;
+		private IDictionary<string, HttpCookie> cookies;
 		private IControllerContext controllerContext;
 		protected string virtualDir = "";
 
@@ -142,7 +143,7 @@ namespace Castle.MonoRail.TestSupport
 		/// Gets the cookies.
 		/// </summary>
 		/// <value>The cookies.</value>
-		public IDictionary Cookies
+		public IDictionary<string, HttpCookie> Cookies
 		{
 			get { return cookies; }
 		}
@@ -275,7 +276,7 @@ namespace Castle.MonoRail.TestSupport
 				throw new ArgumentNullException("actionName");
 			}
 
-			cookies = new HybridDictionary(true);
+			cookies = new Dictionary<string, HttpCookie>(StringComparer.InvariantCultureIgnoreCase);
 
 			BuildEngineContext(areaName, controllerName, actionName, contextInitializer);
 
@@ -361,7 +362,7 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="trace">The trace.</param>
 		/// <param name="urlInfo">The URL info.</param>
 		/// <returns></returns>
-		protected virtual MockEngineContext BuildRailsEngineContext(IRequest request, IResponse response, 
+		protected virtual MockEngineContext BuildRailsEngineContext(IMockRequest request, IMockResponse response, 
 			IMonoRailServices services, ITrace trace, UrlInfo urlInfo)
 		{
 			MockEngineContext engine = new MockEngineContext(request, response, services, urlInfo);

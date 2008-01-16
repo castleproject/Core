@@ -37,14 +37,14 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 
 		protected override string ComputeTemplateName(IControllerContext controller)
 		{
-			return String.Format(@"{0}\confirm{1}remove", controller.Name, Model.Type.Name);
+			return controller.Name + "\\confirm";
 		}
 
 		protected override void PerformActionProcess(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
 			base.PerformActionProcess(engineContext, controller, controllerContext);
 			
-			object idVal = CommonOperationUtils.ReadPkFromParams(engineContext.Request, ObtainPKProperty());
+			object idVal = CommonOperationUtils.ReadPkFromParams(controllerContext.CustomActionParameters, engineContext.Request, ObtainPKProperty());
 
 			try
 			{

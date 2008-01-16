@@ -173,6 +173,8 @@ namespace Castle.MonoRail.Framework.Container
 		private IEmailTemplateService emailTemplateServiceCached;
 		private IEmailSender emailSenderCached;
 		private IResourceFactory resourceFactoryCached;
+		private IHelperFactory helperFactoryCached;
+		private IServiceInitializer serviceInitializerCached;
 		private ExtensionManager extensionManager;
 
 		/// <summary>
@@ -198,6 +200,18 @@ namespace Castle.MonoRail.Framework.Container
 			if (Parent == null)
 			{
 				return;
+			}
+
+			IServiceInitializer serviceInitializer = (IServiceInitializer) Parent.GetService(typeof(IServiceInitializer));
+			if (serviceInitializer != null)
+			{
+				AddService(typeof(IServiceInitializer), serviceInitializer);
+			}
+
+			IHelperFactory helperFactory = (IHelperFactory) Parent.GetService(typeof(IHelperFactory));
+			if (helperFactory != null)
+			{
+				AddService(typeof(IHelperFactory), helperFactory);
 			}
 
 			IUrlTokenizer urlTokenizer = (IUrlTokenizer) Parent.GetService(typeof(IUrlTokenizer));
@@ -333,6 +347,14 @@ namespace Castle.MonoRail.Framework.Container
 		/// </summary>
 		public void InstallMissingServices()
 		{
+			if (!HasService<IServiceInitializer>())
+			{
+				AddService<IServiceInitializer>(new DefaultServiceInitializer());
+			}
+			if (!HasService<IHelperFactory>())
+			{
+				AddService<IHelperFactory>(new DefaultHelperFactory());
+			}
 			if (!HasService<IControllerTree>())
 			{
 				AddService<IControllerTree>(CreateService<DefaultControllerTree>());
@@ -487,6 +509,11 @@ namespace Castle.MonoRail.Framework.Container
 					RegisterServiceOverrideFromConfigurationNode(serviceConfig);
 				}
 			}
+
+			if (!HasService<IScaffoldingSupport>() && config.ScaffoldConfig.ScaffoldImplType != null)
+			{
+				AddService<IScaffoldingSupport>(Activator.CreateInstance(config.ScaffoldConfig.ScaffoldImplType));
+			}
 		}
 
 		/// <summary>
@@ -496,27 +523,29 @@ namespace Castle.MonoRail.Framework.Container
 		/// <returns></returns>
 		protected override object CreateService(Type type)
 		{
-			object instance = Activator.CreateInstance(type);
-
-			IMRServiceEnabled mrServiceEnabled = instance as IMRServiceEnabled;
-
-			if (mrServiceEnabled != null)
+			if (type == null)
 			{
-				mrServiceEnabled.Service(this);
+				throw new ArgumentNullException("type");
 			}
 
-			IServiceEnabledComponent serviceEnabled = instance as IServiceEnabledComponent;
+			object instance;
 
-			if (serviceEnabled != null)
+			try
 			{
-				serviceEnabled.Service(this);
+				instance = Activator.CreateInstance(type);
+			}
+			catch(Exception ex)
+			{
+				throw new MonoRailException("Error trying to instantiate service " + type.FullName, ex);
 			}
 
-			IInitializable initializable = instance as IInitializable;
-
-			if (initializable != null)
+			try
 			{
-				initializable.Initialize();
+				ServiceInitializer.Initialize(instance, this);
+			}
+			catch(Exception ex)
+			{
+				throw new MonoRailException("Error running lifecycle steps for MonoRail service " + type.FullName, ex);
 			}
 
 			return instance;
@@ -857,6 +886,40 @@ namespace Castle.MonoRail.Framework.Container
 			set { resourceFactoryCached = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the service initializer.
+		/// </summary>
+		/// <value>The service initializer.</value>
+		public IServiceInitializer ServiceInitializer
+		{
+			get
+			{
+				if (serviceInitializerCached == null)
+				{
+					serviceInitializerCached = GetService<IServiceInitializer>();
+				}
+				return serviceInitializerCached;
+			}
+			set { serviceInitializerCached = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the helper factory.
+		/// </summary>
+		/// <value>The helper factory.</value>
+		public IHelperFactory HelperFactory
+		{
+			get
+			{
+				if (helperFactoryCached == null)
+				{
+					helperFactoryCached = GetService<IHelperFactory>();
+				}
+				return helperFactoryCached;
+			}
+			set { helperFactoryCached = value; }
+		}
+
 		#endregion
 
 		private void RegisterServiceOverrideFromConfigurationNode(IConfiguration serviceConfig)
@@ -959,20 +1022,20 @@ namespace Castle.MonoRail.Framework.Container
 					return typeof(ITransformFilterDescriptorProvider);
 				case ServiceIdentification.ValidatorRegistry:
 					return typeof(IValidatorRegistry);
-//				case ServiceIdentification.EmailSender:
-//					return typeof(IEmailSender);
+				case ServiceIdentification.EmailSender:
+					return typeof(IEmailSender);
 				case ServiceIdentification.ViewComponentFactory:
 					return typeof(IViewComponentFactory);
 				case ServiceIdentification.ScaffoldingSupport:
 					return typeof(IScaffoldingSupport);
-//				case ServiceIdentification.EmailTemplateService:
-//					return typeof(IEmailTemplateService);
+				case ServiceIdentification.EmailTemplateService:
+					return typeof(IEmailTemplateService);
 //				case ServiceIdentification.TransformationFilterFactory:
 //					return typeof(ITransformFilterFactory);
-//				case ServiceIdentification.AjaxProxyGenerator:
-//					return typeof(IAjaxProxyGenerator);
-//				case ServiceIdentification.ViewComponentDescriptorProvider:
-//					return typeof(IViewComponentDescriptorProvider);
+				case ServiceIdentification.AjaxProxyGenerator:
+					return typeof(IAjaxProxyGenerator);
+				case ServiceIdentification.ViewComponentDescriptorProvider:
+					return typeof(IViewComponentDescriptorProvider);
 				default:
 					throw new NotSupportedException("Id not supported " + id);
 			}

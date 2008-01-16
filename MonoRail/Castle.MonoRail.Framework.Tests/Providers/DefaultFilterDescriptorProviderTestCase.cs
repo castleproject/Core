@@ -25,7 +25,7 @@
 			Assert.AreEqual(1, filterDesc.Length);
 
 			Assert.AreEqual(typeof(DummyFilter), filterDesc[0].FilterType);
-			Assert.AreEqual(ExecuteEnum.Always, filterDesc[0].When);
+			Assert.AreEqual(ExecuteWhen.Always, filterDesc[0].When);
 			Assert.AreEqual(4, filterDesc[0].ExecutionOrder);
 		}
 
@@ -43,14 +43,14 @@
 		{
 		}
 
-		[Filter(ExecuteEnum.Always, typeof(DummyFilter), ExecutionOrder = 4)]
+		[Filter(ExecuteWhen.Always, typeof(DummyFilter), ExecutionOrder = 4)]
 		public class SingleFilterController : Controller
 		{
 		}
 
-		[Filter(ExecuteEnum.AfterAction, typeof(DummyFilter))]
-		[Filter(ExecuteEnum.BeforeAction, typeof(DummyFilter))]
-		[Filter(ExecuteEnum.AfterRendering, typeof(DummyFilter))]
+		[Filter(ExecuteWhen.AfterAction, typeof(DummyFilter))]
+		[Filter(ExecuteWhen.BeforeAction, typeof(DummyFilter))]
+		[Filter(ExecuteWhen.AfterRendering, typeof(DummyFilter))]
 		public class MultiFilterController : Controller
 		{
 		}

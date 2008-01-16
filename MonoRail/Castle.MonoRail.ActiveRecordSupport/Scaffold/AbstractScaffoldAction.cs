@@ -105,6 +105,9 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 		/// <param name="controllerContext">The controller context.</param>
 		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
+			// Cancel any rendering
+			controllerContext.SelectedViewName = null;
+
 			// We make sure the code is always surrounded by a SessionScope.
 			// If none is found, we create one
 			
@@ -129,6 +132,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 				}
 				else
 				{
+					controllerContext.SelectedViewName = null;
 					RenderStandardHtml(engineContext, controller, controllerContext);
 				}
 			}
@@ -221,6 +225,11 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 
 			context.Add("flash", engineContext.Flash);
 
+			foreach(DictionaryEntry entry in controllerContext.Helpers)
+			{
+				context[entry.Key] = entry.Value;
+			}
+
 			foreach(DictionaryEntry entry in controllerContext.PropertyBag)
 			{
 				context.Add(entry.Key, entry.Value);
@@ -229,7 +238,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 #if USE_LOCAL_TEMPLATES
 			templateEngine.Process( context, templateName, writer );
 #else
-			templateEngine.Process( context, "Castle.MonoRail.ActiveRecordSupport.Scaffold/Templates/" + templateName, writer );
+			templateEngine.Process(context, "Castle.MonoRail.ActiveRecordSupport/Scaffold/Templates/" + templateName, writer);
 #endif
 
 			if (useDefaultLayout)
@@ -241,7 +250,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 #if USE_LOCAL_TEMPLATES
 				templateEngine.Process(context, "layout.vm", layoutwriter);
 #else
-				templateEngine.Process(context, "Castle.MonoRail.ActiveRecordSupport.Scaffold/Templates/layout.vm", layoutwriter);
+				templateEngine.Process(context, "Castle.MonoRail.ActiveRecordSupport/Scaffold/Templates/layout.vm", layoutwriter);
 #endif
 				
 				writer = layoutwriter;

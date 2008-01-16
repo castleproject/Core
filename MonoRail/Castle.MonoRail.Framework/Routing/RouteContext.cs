@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
+	using System.Collections;
 
 	/// <summary>
 	/// The default RouteContext
@@ -22,17 +23,20 @@ namespace Castle.MonoRail.Framework.Routing
 	public class RouteContext : IRouteContext
 	{
 		private readonly string applicationPath;
+		private readonly IDictionary contextItems;
 		private readonly IRequest request;
 
 		/// <summary>
 		/// Creates a new RouteContext
 		/// </summary>
-		/// <param name="request"></param>
-		/// <param name="applicationPath"></param>
-		public RouteContext(IRequest request, string applicationPath)
+		/// <param name="request">The request.</param>
+		/// <param name="applicationPath">The application path.</param>
+		/// <param name="contextItems">The context items.</param>
+		public RouteContext(IRequest request, string applicationPath, IDictionary contextItems)
 		{
 			this.request = request;
 			this.applicationPath = applicationPath;
+			this.contextItems = contextItems;
 		}
 
 		/// <summary>
@@ -49,6 +53,15 @@ namespace Castle.MonoRail.Framework.Routing
 		public IRequest Request
 		{
 			get { return request; }
+		}
+
+		/// <summary>
+		/// Gets the context items.
+		/// </summary>
+		/// <value>The context items.</value>
+		public IDictionary ContextItems
+		{
+			get { return contextItems; }
 		}
 	}
 }

@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework.Services
 	using System.Web.SessionState;
 	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Container;
+	using Routing;
 
 	/// <summary>
 	/// Pendent
@@ -31,17 +32,20 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="container"></param>
 		/// <param name="urlInfo"></param>
 		/// <param name="context"></param>
+		/// <param name="routeMatch"></param>
 		/// <returns></returns>
-		public IEngineContext Create(IMonoRailContainer container, UrlInfo urlInfo, HttpContext context)
+		public IEngineContext Create(IMonoRailContainer container, UrlInfo urlInfo, HttpContext context, RouteMatch routeMatch)
 		{
 			IDictionary session = ResolveRequestSession(container, urlInfo, context);
 
 			IUrlBuilder urlBuilder = container.UrlBuilder;
 
+			ServerUtilityAdapter serverUtility = new ServerUtilityAdapter(context.Server);
+
 			return new DefaultEngineContext(container, urlInfo, context,
-			                                new ServerUtilityAdapter(context.Server),
+			                                serverUtility,
 			                                new RequestAdapter(context.Request),
-											new ResponseAdapter(context.Response, urlInfo, urlBuilder),
+											new ResponseAdapter(context.Response, urlInfo, urlBuilder, serverUtility, routeMatch),
 											new TraceAdapter(context.Trace), session);
 		}
 

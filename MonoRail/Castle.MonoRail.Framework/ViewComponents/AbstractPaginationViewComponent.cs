@@ -30,7 +30,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private string paginatefunction;
 		private object urlParam;
 		private IPaginatedPage page;
-		private UrlPartsBuilder urlPartsBuilder;
+		private UrlParts urlParts;
 		private bool usePathInfo;
 		private bool useInlineStyle = true;
 		private bool preserveQueryString = false;
@@ -194,15 +194,15 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			if (usePathInfo)
 			{
-				urlPartsBuilder.PathInfoDict[pageParamName] = pageIndex.ToString();
+				urlParts.PathInfoDict[pageParamName] = pageIndex.ToString();
 			}
 			else
 			{
-				urlPartsBuilder.QueryString.Remove(pageParamName);
-				urlPartsBuilder.QueryString[pageParamName] = pageIndex.ToString();
+				urlParts.QueryString.Remove(pageParamName);
+				urlParts.QueryString[pageParamName] = pageIndex.ToString();
 			}
 
-			return urlPartsBuilder.BuildPathForLink(EngineContext.Server);
+			return urlParts.BuildPathForLink(EngineContext.Server);
 		}
 
 		private void CreateUrlPartBuilder()
@@ -214,23 +214,23 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				urlParams["encode"] = "true";
 
 				IUrlBuilder urlBuilder = EngineContext.Services.GetService<IUrlBuilder>();
-				urlPartsBuilder = urlBuilder.CreateUrlPartsBuilder(EngineContext.UrlInfo, urlParams);
+				urlParts = urlBuilder.CreateUrlPartsBuilder(EngineContext.UrlInfo, urlParams);
 			}
 			else
 			{
 				if (urlParam != null)
 				{
-					urlPartsBuilder = UrlPartsBuilder.Parse(urlParam.ToString());
+					urlParts = UrlParts.Parse(urlParam.ToString());
 				}
 				else
 				{
 					if (!PreserveQueryString) 
 					{
-						urlPartsBuilder = new UrlPartsBuilder(EngineContext.Request.FilePath);
+						urlParts = new UrlParts(EngineContext.Request.FilePath);
 					}
 					else
 					{
-						urlPartsBuilder = UrlPartsBuilder.Parse(EngineContext.Request.Url);
+						urlParts = UrlParts.Parse(EngineContext.Request.Url);
 					}
 				}
 			}

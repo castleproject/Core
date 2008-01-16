@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Test
 	using System.IO;
 	using System.Web;
 	using Castle.MonoRail.Framework;
+	using Services;
 
 	/// <summary>
 	/// Exposes methods on top of <see cref="IResponse"/>
@@ -48,10 +49,16 @@ namespace Castle.MonoRail.Framework.Test
 		/// <value>The output.</value>
 		string OutputContent { get; }
 
-//		/// <summary>
-//		/// Gets the http headers.
-//		/// </summary>
-//		/// <value>The headers.</value>
-//		NameValueCollection Headers { get; }
+		/// <summary>
+		/// Gets or sets the URL info.
+		/// </summary>
+		/// <value>The URL info.</value>
+		UrlInfo UrlInfo { get; set; }
+
+		/// <summary>
+		/// Gets or sets the URL builder.
+		/// </summary>
+		/// <value>The URL builder.</value>
+		IUrlBuilder UrlBuilder { get; set; }
 	}
 }

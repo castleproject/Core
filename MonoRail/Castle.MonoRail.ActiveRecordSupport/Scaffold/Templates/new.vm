@@ -9,9 +9,9 @@
 #end
 
 #if($useModelName)
-$Form.FormTag("%{action='create${model.Type.Name}', id='scaffoldingform'}")
+$Form.FormTag("%{action='create${model.Type.Name}', useCurrentRouteParams='true', id='scaffoldingform'}")
 #else
-$Form.FormTag("%{action='create', id='scaffoldingform'}")
+$Form.FormTag("%{action='create', useCurrentRouteParams='true', id='scaffoldingform'}")
 #end
 
 <div id="scaffoldmain">

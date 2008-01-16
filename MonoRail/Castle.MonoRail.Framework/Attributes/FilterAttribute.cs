@@ -30,7 +30,7 @@ namespace Castle.MonoRail.Framework
 	public class FilterAttribute : Attribute, IFilterDescriptorBuilder
 	{
 		private readonly Type filterType;
-		private readonly ExecuteEnum when;
+		private readonly ExecuteWhen when;
 		private int executionOrder = Int32.MaxValue;
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="when">When to execute the filter</param>
 		/// <param name="filterType">The filter implementation</param>
-		public FilterAttribute(ExecuteEnum when, Type filterType)
+		public FilterAttribute(ExecuteWhen when, Type filterType)
 		{
 			if (!typeof(IFilter).IsAssignableFrom(filterType))
 			{
@@ -61,7 +61,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets when to run the filter
 		/// </summary>
-		public ExecuteEnum When
+		public ExecuteWhen When
 		{
 			get { return when; }
 		}

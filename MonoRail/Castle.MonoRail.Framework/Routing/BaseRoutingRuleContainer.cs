@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Routing
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Threading;
+	using Core;
 
 	/// <summary>
 	/// Pendent
@@ -37,7 +38,16 @@ namespace Castle.MonoRail.Framework.Routing
 			rules.Add(rule);
 
 			// For really fast access
-			name2Rule[rule.RouteName] = rule;
+//			name2Rule[rule.RouteName] = rule;
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		public void Add(IRoutingRule rule, RouteAction action)
+		{
+			// Lock for writing
+			rules.Add(new RoutingRuleWithActionDecorator(rule, action));
 		}
 
 		/// <summary>
@@ -81,6 +91,17 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="virtualPath">The virtual path.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public string CreateUrl(string virtualPath, object parameters)
+		{
+			return CreateUrl(virtualPath, new ReflectionBasedDictionaryAdapter(parameters));
 		}
 
 		/// <summary>

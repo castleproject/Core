@@ -140,6 +140,18 @@ namespace Castle.MonoRail.Framework
 		IResourceFactory ResourceFactory { get; set; }
 
 		/// <summary>
+		/// Gets or sets the service initializer.
+		/// </summary>
+		/// <value>The service initializer.</value>
+		IServiceInitializer ServiceInitializer { get; set; }
+
+		/// <summary>
+		/// Gets or sets the helper factory.
+		/// </summary>
+		/// <value>The helper factory.</value>
+		IHelperFactory HelperFactory { get; set; }
+
+		/// <summary>
 		/// Gets or sets the extension manager.
 		/// </summary>
 		/// <value>The extension manager.</value>

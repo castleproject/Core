@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Tests.Actions
 {
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
 	using Castle.MonoRail.Framework.Descriptors;

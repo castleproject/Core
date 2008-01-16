@@ -15,14 +15,12 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 	using System.Web;
 
 	/// <summary>
 	/// Represents the response data and operations
 	/// </summary>
-	public interface IResponse
+	public interface IResponse : IRedirectSupport
 	{
 		/// <summary>
 		/// Gets or sets the status code.
@@ -51,12 +49,12 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sets the Cache-Control HTTP header to Public or Private.
 		/// </summary>
-		String CacheControlHeader { get; set; } 
+		string CacheControlHeader { get; set; } 
 
 		/// <summary>
 		/// Gets or sets the HTTP character set of the output stream.
 		/// </summary>
-		String Charset { get; set; }
+		string Charset { get; set; }
 
 		/// <summary>
 		/// Gets the output.
@@ -75,7 +73,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <param name="value">The value.</param>
-		void AppendHeader(String name, String value);
+		void AppendHeader(string name, string value);
 
 		/// <summary>
 		/// Writes the buffer to the browser
@@ -103,7 +101,7 @@ namespace Castle.MonoRail.Framework
 		/// Writes the specified string.
 		/// </summary>
 		/// <param name="s">The string.</param>
-		void Write(String s);
+		void Write(string s);
 
 		/// <summary>
 		/// Writes the specified obj.
@@ -125,79 +123,11 @@ namespace Castle.MonoRail.Framework
 		/// <param name="count">The count.</param>
 		void Write(char[] buffer, int index, int count);
 
-//		/// <summary>
-//		/// Writes the file.
-//		/// </summary>
-//		/// <param name="fileName">Name of the file.</param>
-//		void WriteFile(String fileName);
-
 		/// <summary>
-		/// Redirects the specified controller.
+		/// Writes the file.
 		/// </summary>
-		/// <param name="parameters">The parameters.</param>
-		void Redirect(object parameters);
-
-		/// <summary>
-		/// Redirects the specified controller.
-		/// </summary>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		void Redirect(String controller, String action);
-
-		/// <summary>
-		/// Redirects the specified area.
-		/// </summary>
-		/// <param name="area">The area.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		void Redirect(String area, String controller, String action);
-
-		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
-		/// </summary>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		void Redirect(string controller, string action, NameValueCollection parameters);
-
-		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
-		/// </summary>
-		/// <param name="area">Area name</param>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		void Redirect(string area, string controller, string action, NameValueCollection parameters);
-
-		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
-		/// </summary>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		void Redirect(string controller, string action, IDictionary parameters);
-
-		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
-		/// </summary>
-		/// <param name="area">Area name</param>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		void Redirect(string area, string controller, string action, IDictionary parameters);
-
-		/// <summary>
-		/// Redirects the specified URL.
-		/// </summary>
-		/// <param name="url">The URL.</param>
-		void RedirectToUrl(String url);
-
-		/// <summary>
-		/// Redirects the specified URL.
-		/// </summary>
-		/// <param name="url">The URL.</param>
-		/// <param name="endProcess">if set to <c>true</c> [end process].</param>
-		void RedirectToUrl(String url, bool endProcess);
+		/// <param name="fileName">Name of the file.</param>
+		void WriteFile(string fileName);
 
 		/// <summary>
 		/// Gets a value indicating whether the response sent a redirect.
@@ -218,7 +148,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <param name="value">The value.</param>
-		void CreateCookie(String name, String value);
+		void CreateCookie(string name, string value);
 
 		/// <summary>
 		/// Creates a cookie.
@@ -226,7 +156,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">The name.</param>
 		/// <param name="value">The value.</param>
 		/// <param name="expiration">The expiration.</param>
-		void CreateCookie(String name, String value, DateTime expiration);
+		void CreateCookie(string name, string value, DateTime expiration);
 
 		/// <summary>
 		/// Creates a cookie.

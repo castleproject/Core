@@ -98,83 +98,232 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionMethodExecutor.cs" />
+    <Compile Include="ActionMethodExecutor.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Adapters\DefaultEngineContext.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Adapters\FileDictionaryAdapter.cs" />
-    <Compile Include="Adapters\RequestAdapter.cs" />
-    <Compile Include="Adapters\ResponseAdapter.cs" />
-    <Compile Include="Adapters\ServerUtilityAdapter.cs" />
-    <Compile Include="Adapters\SessionAdapter.cs" />
-    <Compile Include="Adapters\TraceAdapter.cs" />
+    <Compile Include="Adapters\FileDictionaryAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\RequestAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\ResponseAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\ServerUtilityAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\SessionAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\TraceAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Attributes\AccessibleThroughAttribute.cs" />
-    <Compile Include="Attributes\AjaxActionAttribute.cs" />
-    <Compile Include="Attributes\CacheAttribute.cs" />
+    <Compile Include="Attributes\AccessibleThroughAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\AjaxActionAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\CacheAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Attributes\ControllerDetailsAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Attributes\DataBindAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Attributes\DefaultActionAttribute.cs" />
-    <Compile Include="Attributes\DynamicActionProviderAttribute.cs" />
+    <Compile Include="Attributes\DefaultActionAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\DynamicActionProviderAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Attributes\FilterAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Attributes\HelperAttribute.cs" />
+    <Compile Include="Attributes\HelperAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Attributes\JSONBinderAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Attributes\LayoutAttribute.cs" />
-    <Compile Include="Attributes\LocalizationFilterAttribute.cs" />
-    <Compile Include="Attributes\RescueAttribute.cs" />
-    <Compile Include="Attributes\ResourceAttribute.cs" />
-    <Compile Include="Attributes\ScaffoldingAttribute.cs" />
-    <Compile Include="Attributes\SkipFilterAttribute.cs" />
-    <Compile Include="Attributes\SkipRescueAttribute.cs" />
-    <Compile Include="Attributes\TransformFilterAttribute.cs" />
-    <Compile Include="Attributes\ViewComponentDetailsAttribute.cs" />
-    <Compile Include="Attributes\ViewComponentParamAttribute.cs" />
-    <Compile Include="BaseExecutableAction.cs" />
-    <Compile Include="BaseHttpHandler.cs" />
+    <Compile Include="Attributes\LayoutAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\LocalizationFilterAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\RescueAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\ResourceAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\ScaffoldingAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\SkipFilterAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\SkipRescueAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\TransformFilterAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\ViewComponentDetailsAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\ViewComponentParamAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BaseExecutableAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BaseHttpHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CacheKey.cs" />
-    <Compile Include="Configuration\ControllersConfig.cs" />
-    <Compile Include="Configuration\DefaultUrl.cs" />
-    <Compile Include="Configuration\DefaultUrlCollection.cs" />
-    <Compile Include="Configuration\ExtensionEntry.cs" />
-    <Compile Include="Configuration\ExtensionEntryCollection.cs" />
-    <Compile Include="Configuration\ISerializedConfig.cs" />
-    <Compile Include="Configuration\JSGeneratorConfiguration.cs" />
-    <Compile Include="Configuration\MonoRailConfiguration.cs" />
-    <Compile Include="Configuration\MonoRailSectionHandler.cs" />
-    <Compile Include="Configuration\RoutingRule.cs" />
-    <Compile Include="Configuration\RoutingRuleCollection.cs" />
-    <Compile Include="Configuration\ScaffoldConfig.cs" />
-    <Compile Include="Configuration\SmtpConfig.cs" />
-    <Compile Include="Configuration\TypeLoadUtil.cs" />
-    <Compile Include="Configuration\UrlConfig.cs" />
-    <Compile Include="Configuration\ViewComponentsConfig.cs" />
-    <Compile Include="Configuration\ViewEngineConfig.cs" />
+    <Compile Include="Configuration\ControllersConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\DefaultUrl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\DefaultUrlCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ExtensionEntry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ExtensionEntryCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\IMonoRailConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ISerializedConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\JSGeneratorConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\MonoRailConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\MonoRailSectionHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\RoutingRule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\RoutingRuleCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ScaffoldConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\SmtpConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\TypeLoadUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\UrlConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ViewComponentsConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ViewEngineConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Container\AbstractServiceContainer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Container\DefaultMonoRailContainer.cs" />
-    <Compile Include="Container\IMonoRailContainer.cs" />
-    <Compile Include="Controller.cs" />
-    <Compile Include="ControllerContext.cs" />
+    <Compile Include="Container\DefaultMonoRailContainer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Container\IMonoRailContainer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ControllerContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ControllerException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ControllerNotFoundException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DelegateDynamicAction.cs" />
-    <Compile Include="Descriptors\ViewComponentDescriptor.cs" />
-    <Compile Include="DynamicActionExecutor.cs" />
+    <Compile Include="DelegateDynamicAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\ActionMetaDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\BaseMetaDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\ControllerDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\ControllerMetaDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\FilterDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\HelperDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\IFilterDescriptorBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\IHelperDescriptorBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\ILayoutDescriptorBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\IRescueDescriptorBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\IResourceDescriptorBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\ITransformFilterDescriptorBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\LayoutDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\RescueDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\ResourceDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\TransformFilterDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descriptors\ViewComponentDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DynamicActionExecutor.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Extensions\ExceptionChaining\AbstractExceptionHandler.cs" />
     <Compile Include="Extensions\ExceptionChaining\EmailHandler.cs" />
     <Compile Include="Extensions\ExceptionChaining\ExceptionChainingExtension.cs" />
@@ -184,218 +333,271 @@
     <Compile Include="Extensions\ExceptionChaining\IExceptionProcessor.cs" />
     <Compile Include="Extensions\ExceptionChaining\LocalExceptionFilterHandler.cs" />
     <Compile Include="Extensions\ExceptionChaining\LoggingExceptionHandler.cs" />
-    <Compile Include="Extensions\ExtensionManager.cs" />
-    <Compile Include="Extensions\IMonoRailExtension.cs" />
+    <Compile Include="Extensions\ExtensionManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\IMonoRailExtension.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Extensions\Session\CustomSessionExtension.cs" />
     <Compile Include="Extensions\Session\ICustomSessionFactory.cs" />
-    <Compile Include="Filter.cs" />
-    <Compile Include="Filters\AntiGoogleWebAcceleratorFilter.cs" />
-    <Compile Include="Filters\LocalizationFilter.cs" />
-    <Compile Include="Filters\RequestValidatorFilter.cs" />
-    <Compile Include="Flash.cs" />
-    <Compile Include="Helpers\AbstractHelper.cs" />
-    <Compile Include="Helpers\AjaxHelper.cs" />
-    <Compile Include="Helpers\BehaviourHelper.cs" />
-    <Compile Include="Helpers\DateFormatHelper.cs" />
-    <Compile Include="Helpers\DictHelper.cs" />
-    <Compile Include="Helpers\Effects2Helper.cs" />
-    <Compile Include="Helpers\EffectsFatHelper.cs" />
-    <Compile Include="Helpers\FormHelper.cs" />
-    <Compile Include="Helpers\HtmlHelper.cs" />
-    <Compile Include="Helpers\IPaginatedPage.cs" />
-    <Compile Include="Helpers\JSONHelper.cs" />
-    <Compile Include="Helpers\PaginationHelper.cs" />
-    <Compile Include="Helpers\ScriptaculousHelper.cs" />
-    <Compile Include="Helpers\SetOperation.cs" />
-    <Compile Include="Helpers\TextHelper.cs" />
-    <Compile Include="Helpers\ValidationHelper.cs" />
-    <Compile Include="Helpers\ValidationStrategy\FValidateValidator.cs" />
-    <Compile Include="Helpers\ValidationStrategy\IBrowserValidatorProvider.cs" />
-    <Compile Include="Helpers\ValidationStrategy\PrototypeWebValidator.cs" />
-    <Compile Include="Helpers\ValidationStrategy\ZebdaWebValidator.cs" />
+    <Compile Include="Filter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Filters\AntiGoogleWebAcceleratorFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Filters\LocalizationFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Filters\RequestValidatorFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Flash.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\AbstractHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\AjaxHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\BehaviourHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\DateFormatHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\DictHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\Effects2Helper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\EffectsFatHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\FormHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\HtmlHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\IPaginatedPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\JSONHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\PaginationHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\ScriptaculousHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\SetOperation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\TextHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\UrlHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\ValidationHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\ValidationStrategy\FValidateValidator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\ValidationStrategy\IBrowserValidatorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\ValidationStrategy\PrototypeWebValidator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\ValidationStrategy\ZebdaWebValidator.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Helpers\WizardHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\ZebdaHelper.cs" />
-    <Compile Include="IActionSelector.cs" />
-    <Compile Include="ICachePolicyConfigurer.cs" />
-    <Compile Include="IContextAware.cs" />
-    <Compile Include="IControllerAware.cs" />
-    <Compile Include="Configuration\IMonoRailConfiguration.cs" />
-    <Compile Include="IControllerDescriptorProvider.cs" />
-    <Compile Include="IDynamicAction.cs" />
-    <Compile Include="IDynamicActionProvider.cs" />
-    <Compile Include="IExecutableAction.cs" />
-    <Compile Include="IMRServiceEnabled.cs" />
-    <Compile Include="Descriptors\ActionMetaDescriptor.cs" />
-    <Compile Include="Descriptors\BaseMetaDescriptor.cs" />
-    <Compile Include="Descriptors\ControllerMetaDescriptor.cs" />
-    <Compile Include="Descriptors\HelperDescriptor.cs" />
-    <Compile Include="Descriptors\IHelperDescriptorBuilder.cs" />
-    <Compile Include="Descriptors\ILayoutDescriptorBuilder.cs" />
-    <Compile Include="Descriptors\IRescueDescriptorBuilder.cs" />
-    <Compile Include="Descriptors\IResourceDescriptorBuilder.cs" />
-    <Compile Include="Descriptors\ITransformFilterDescriptorBuilder.cs" />
-    <Compile Include="Descriptors\LayoutDescriptor.cs" />
-    <Compile Include="Descriptors\RescueDescriptor.cs" />
-    <Compile Include="Descriptors\TransformFilterDescriptor.cs" />
-    <Compile Include="Internal\ActionProviderUtil.cs" />
-    <Compile Include="Internal\RescueUtils.cs" />
-    <Compile Include="Internal\ViewComponentCacheBag.cs" />
-    <Compile Include="Internal\WizardUtils.cs" />
-    <Compile Include="IParameterBinder.cs" />
-    <Compile Include="ISubActionSelector.cs" />
-    <Compile Include="ITrace.cs" />
-    <Compile Include="IValidatorAccessor.cs" />
+    <Compile Include="Helpers\ZebdaHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IActionSelector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ICachePolicyConfigurer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IContextAware.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IControllerAware.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IControllerContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IControllerDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDynamicAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDynamicActionProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IEngineContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IEngineContextFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IExecutableAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IHelperFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IMonoRailHttpHandlerProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IMonoRailServices.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IMRServiceEnabled.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ActionProviderUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\AssemblySourceInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\BaseResponse.cs" />
+    <Compile Include="Internal\CommonUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\RescueUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ScaffoldException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\UrlInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ViewComponentCacheBag.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ViewEngineInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\WizardUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IParameterBinder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IRedirectSupport.cs" />
+    <Compile Include="IRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IRescueController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IScaffoldingSupport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IServiceInitializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IServiceProviderLocator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ISubActionSelector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITrace.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITransformFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IValidatorAccessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IViewEngine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IViewEngineManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IViewSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IViewSourceLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="IWizardController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IWizardStepPage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="JSGeneration\AbstractJSGenerator.cs" />
+    <Compile Include="JSGeneration\AbstractJSGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="JSGeneration\CommonJSExtension.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="JSGeneration\DynamicDispatching\DynamicDispatcher.cs" />
-    <Compile Include="JSGeneration\DynamicDispatching\DynamicOperationAttribute.cs" />
-    <Compile Include="JSGeneration\IJSCodeGenerator.cs" />
-    <Compile Include="JSGeneration\IJSElementGenerator.cs" />
-    <Compile Include="JSGeneration\IJSGenerator.cs" />
-    <Compile Include="JSGeneration\JSCodeGenerator.cs" />
-    <Compile Include="JSGeneration\DynamicDispatching\JSElementGeneratorDispatcherBase.cs" />
-    <Compile Include="JSGeneration\DynamicDispatching\JSGeneratorDispatcherBase.cs" />
-    <Compile Include="JSGeneration\Prototype\BehaviourExtension.cs" />
+    <Compile Include="JSGeneration\DynamicDispatching\DynamicDispatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JSGeneration\DynamicDispatching\DynamicOperationAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JSGeneration\DynamicDispatching\JSElementGeneratorDispatcherBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JSGeneration\DynamicDispatching\JSGeneratorDispatcherBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JSGeneration\IJSCodeGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JSGeneration\IJSElementGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JSGeneration\IJSGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JSGeneration\JSCodeGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JSGeneration\Prototype\BehaviourExtension.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="JSGeneration\Prototype\PrototypeElementGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="JSGeneration\Prototype\PrototypeGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="JSGeneration\Prototype\ScriptaculousExtension.cs" />
-    <Compile Include="Providers\DefaultFilterDescriptorProvider.cs" />
-    <Compile Include="Providers\DefaultHelperDescriptorProvider.cs" />
-    <Compile Include="Providers\DefaultLayoutDescriptorProvider.cs" />
-    <Compile Include="Providers\DefaultRescueDescriptorProvider.cs" />
-    <Compile Include="Providers\DefaultResourceDescriptorProvider.cs" />
-    <Compile Include="Providers\DefaultTransformFilterDescriptorProvider.cs" />
-    <Compile Include="Providers\DefaultViewComponentDescriptorProvider.cs" />
-    <Compile Include="Providers\IFilterDescriptorProvider.cs" />
-    <Compile Include="Providers\IHelperDescriptorProvider.cs" />
-    <Compile Include="Providers\ILayoutDescriptorProvider.cs" />
-    <Compile Include="Providers\IRescueDescriptorProvider.cs" />
-    <Compile Include="Providers\IResourceDescriptorProvider.cs" />
-    <Compile Include="Providers\ITransformDescriptorFilterProvider.cs" />
-    <Compile Include="Internal\ScaffoldException.cs" />
-    <Compile Include="IRescueController.cs" />
-    <Compile Include="IResponse.cs" />
-    <Compile Include="ITransformFilter.cs" />
-    <Compile Include="IViewEngineManager.cs" />
-    <Compile Include="Helpers\UrlHelper.cs" />
-    <Compile Include="IController.cs">
+    <Compile Include="JSGeneration\Prototype\ScriptaculousExtension.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IControllerContext.cs" />
-    <Compile Include="IEngineContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IEngineContextFactory.cs" />
-    <Compile Include="IFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IMonoRailHttpHandlerProvider.cs" />
-    <Compile Include="IMonoRailServices.cs" />
-    <Compile Include="Internal\AssemblySourceInfo.cs" />
-    <Compile Include="Internal\CommonUtils.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descriptors\ControllerDescriptor.cs" />
-    <Compile Include="Descriptors\FilterDescriptor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descriptors\IFilterDescriptorBuilder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descriptors\ResourceDescriptor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Providers\IProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\UrlInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\ViewEngineInfo.cs" />
-    <Compile Include="IRouteContext.cs" />
-    <Compile Include="IRoutingEngine.cs" />
-    <Compile Include="IScaffoldingSupport.cs" />
-    <Compile Include="IViewEngine.cs" />
-    <Compile Include="IViewSource.cs" />
-    <Compile Include="IViewSourceLoader.cs" />
-    <Compile Include="Providers\IViewComponentDescriptorProvider.cs" />
-    <Compile Include="ResourceFileHandler.cs" />
-    <Compile Include="RoutingModule.cs" />
-    <Compile Include="Routing\BaseRoutingRuleContainer.cs" />
-    <Compile Include="Routing\IRoutingRule.cs" />
-    <Compile Include="Routing\IRoutingRuleContainer.cs" />
-    <Compile Include="Routing\PatternRoute.cs" />
-    <Compile Include="Routing\RouteContext.cs" />
-    <Compile Include="Routing\RouteMatch.cs" />
-    <Compile Include="Routing\RoutingEngine.cs" />
-    <Compile Include="Routing\RoutingModuleEx.cs" />
-    <Compile Include="Services\AbstractControllerFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Services\AbstractViewComponentFactory.cs" />
-    <Compile Include="Services\AjaxProxyGenerator\IAjaxProxyGenerator.cs" />
-    <Compile Include="Services\AjaxProxyGenerator\PrototypeAjaxProxyGenerator.cs" />
-    <Compile Include="Services\DefaultActionSelector.cs" />
-    <Compile Include="Services\DefaultCacheProvider.cs" />
-    <Compile Include="Services\DefaultControllerContextFactory.cs" />
-    <Compile Include="Providers\DefaultControllerDescriptorProvider.cs" />
-    <Compile Include="Services\DefaultControllerFactory.cs" />
-    <Compile Include="Services\DefaultControllerTree.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Services\DefaultEngineContextFactory.cs" />
-    <Compile Include="Services\DefaultFilterFactory.cs" />
-    <Compile Include="Resources\DefaultResourceFactory.cs" />
-    <Compile Include="Services\DefaultStaticResourceRegistry.cs" />
-    <Compile Include="Services\DefaultUrlBuilder.cs" />
-    <Compile Include="Services\DefaultViewComponentFactory.cs" />
-    <Compile Include="Services\DefaultViewComponentRegistry.cs" />
-    <Compile Include="Services\DefaultViewEngineManager.cs" />
-    <Compile Include="Services\EmailTemplateService.cs" />
-    <Compile Include="Services\IControllerContextFactory.cs" />
-    <Compile Include="Services\IControllerFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Services\IControllerTree.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Services\IEmailTemplateService.cs" />
-    <Compile Include="Services\IFilterFactory.cs" />
-    <Compile Include="Services\IJSONSerializer.cs" />
-    <Compile Include="Services\IStaticResourceRegistry.cs" />
-    <Compile Include="Services\IViewComponentFactory.cs" />
-    <Compile Include="Services\IViewComponentRegistry.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Services\MonoRailSmtpSender.cs" />
-    <Compile Include="Services\NewtonsoftJSONSerializer.cs" />
-    <Compile Include="Services\UrlTokenizerException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IRequest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Resources\IResource.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IServerUtility.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IServiceProviderLocator.cs" />
     <Compile Include="MonoRailException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -405,96 +607,351 @@
     <Compile Include="MonoRailHttpHandlerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Providers\DefaultControllerDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DefaultFilterDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DefaultHelperDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DefaultLayoutDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DefaultRescueDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DefaultResourceDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DefaultTransformFilterDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DefaultViewComponentDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\IFilterDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\IHelperDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ILayoutDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\IProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\IRescueDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\IResourceDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ITransformDescriptorFilterProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\IViewComponentDescriptorProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ResourceFileHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resources\DefaultResourceFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resources\IResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Resources\IResourceFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Resources\ResourceFacade.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RoutingModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Routing\IRouteContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Routing\IRoutingEngine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IServerUtility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Routing\BaseRoutingRuleContainer.cs" />
+    <Compile Include="Routing\IRoutingRule.cs" />
+    <Compile Include="Routing\IRoutingRuleContainer.cs" />
+    <Compile Include="Routing\PatternRoute.cs" />
+    <Compile Include="Routing\RouteContext.cs" />
+    <Compile Include="Routing\RouteMatch.cs" />
+    <Compile Include="Routing\RoutingEngine.cs" />
+    <Compile Include="Routing\RoutingModuleEx.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Routing\RoutingRuleWithActionDecorator.cs" />
     <Compile Include="ServiceProviderLocator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\AbstractControllerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\AbstractViewComponentFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\AjaxProxyGenerator\IAjaxProxyGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\AjaxProxyGenerator\PrototypeAjaxProxyGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultActionSelector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultCacheProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultControllerContextFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultControllerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultControllerTree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultEngineContextFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultFilterFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultHelperFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultServiceInitializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultStaticResourceRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultTransformFilterFactory.cs" />
+    <Compile Include="Services\DefaultUrlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\DefaultUrlTokenizer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\DefaultViewComponentFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultViewComponentRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DefaultViewEngineManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\EmailTemplateService.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Services\ICacheProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\IControllerContextFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IControllerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IControllerTree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IEmailTemplateService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IFilterFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IJSONSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IStaticResourceRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\ITransformFilterFactory.cs" />
     <Compile Include="Services\IUrlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\IUrlTokenizer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\UrlPartsBuilder.cs">
+    <Compile Include="Services\IViewComponentFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\Utils\ControllerInspectionUtil.cs" />
-    <Compile Include="SessionlessMonoRailHttpHandler.cs" />
+    <Compile Include="Services\IViewComponentRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\MonoRailSmtpSender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\NewtonsoftJSONSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\UrlParts.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\UrlTokenizerException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\Utils\ControllerInspectionUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SessionlessMonoRailHttpHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SmartDispatcherController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Test\IMockRequest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\IMockResponse.cs" />
-    <Compile Include="Test\IMockViewComponentContext.cs" />
-    <Compile Include="Test\MockCacheProvider.cs" />
-    <Compile Include="Test\MockEmailTemplateService.cs" />
+    <Compile Include="Test\IMockResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\IMockViewComponentContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\MockCacheProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\MockEmailTemplateService.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Test\MockEngineContext.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Test\MockRequest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockResponse.cs" />
-    <Compile Include="Test\MockRoutingEngine.cs" />
-    <Compile Include="Test\MockScaffoldingSupport.cs" />
+    <Compile Include="Test\MockResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\MockRoutingEngine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\MockScaffoldingSupport.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Test\MockServerUtility.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockServices.cs" />
-    <Compile Include="Test\MockSmtpSender.cs" />
-    <Compile Include="Test\MockTrace.cs" />
-    <Compile Include="Test\MockViewComponentContext.cs" />
-    <Compile Include="Test\ViewEngineManagerStub.cs" />
-    <Compile Include="Test\ViewEngineStub.cs" />
-    <Compile Include="TransformFilter.cs" />
-    <Compile Include="TransformFilters\Formatters\WikiFormatter.cs" />
-    <Compile Include="TransformFilters\LowerCaseTransformFilter.cs" />
-    <Compile Include="TransformFilters\UpperCaseTransformFilter.cs" />
-    <Compile Include="TransformFilters\WikiTransformFilter.cs" />
-    <Compile Include="ViewComponent.cs" />
-    <Compile Include="ViewComponentException.cs" />
-    <Compile Include="ViewComponents\AbstractPaginationViewComponent.cs" />
-    <Compile Include="ViewComponents\AlwaysCacheKeyGenerator.cs" />
-    <Compile Include="ViewComponents\AuthenticatedContent.cs" />
-    <Compile Include="ViewComponents\CaptureFor.cs" />
-    <Compile Include="ViewComponents\ChildContentComponent.cs" />
-    <Compile Include="ViewComponents\ColumnRenderer.cs" />
-    <Compile Include="ViewComponents\DiggStylePagination.cs" />
-    <Compile Include="ViewComponents\IViewComponentCacheKeyGenerator.cs" />
-    <Compile Include="ViewComponents\IViewComponentContext.cs" />
-    <Compile Include="ViewComponents\SecurityComponent.cs" />
-    <Compile Include="ViewComponents\SelectStylePagination.cs" />
-    <Compile Include="ViewComponents\SiteMapComponent.cs" />
-    <Compile Include="ViewComponents\TreeMakerComponent.cs" />
-    <Compile Include="ViewComponents\UpdatePage.cs" />
-    <Compile Include="ViewComponents\UpdatePageTag.cs" />
+    <Compile Include="Test\MockServices.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\MockSmtpSender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\MockTrace.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\MockViewComponentContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\ViewEngineManagerStub.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\ViewEngineStub.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TransformFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TransformFilters\Formatters\WikiFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TransformFilters\LowerCaseTransformFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TransformFilters\UpperCaseTransformFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TransformFilters\WikiTransformFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponentException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\AbstractPaginationViewComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\AlwaysCacheKeyGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\AuthenticatedContent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\CaptureFor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\ChildContentComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\ColumnRenderer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\DiggStylePagination.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\IViewComponentCacheKeyGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\IViewComponentContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\SecurityComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\SelectStylePagination.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\SiteMapComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\TreeMakerComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\UpdatePage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponents\UpdatePageTag.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Views\Aspx\PageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Views\Aspx\WebFormsViewEngine.cs" />
-    <Compile Include="Views\EmbeddedResourceViewSource.cs" />
-    <Compile Include="Views\FileAssemblyViewSourceLoader.cs" />
-    <Compile Include="Views\FileViewSource.cs" />
-    <Compile Include="Views\ViewEngineBase.cs" />
-    <Compile Include="WizardActionProvider.cs">
+    <Compile Include="Views\Aspx\WebFormsViewEngine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WizardStepPage.cs">
+    <Compile Include="Views\EmbeddedResourceViewSource.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\FileAssemblyViewSourceLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\FileViewSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\ViewEngineBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WizardActionProvider.cs" />
+    <Compile Include="WizardStepPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\CastleKey.snk">
@@ -557,6 +1014,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="JSGeneration\jQuery\" />
+    <Folder Include="Views\Aspx\ControllerBinder\Design\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

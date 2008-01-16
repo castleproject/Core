@@ -49,6 +49,8 @@ namespace Castle.MonoRail.Framework.Test
 		private IResourceFactory resourceFactory;
 		private ExtensionManager extensionManager;
 		private readonly Dictionary<Type, object> service2Impl = new Dictionary<Type, object>();
+		private IServiceInitializer serviceInitializer;
+		private IHelperFactory helperFactory;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockServices"/> class with default mock services.
@@ -92,6 +94,8 @@ namespace Castle.MonoRail.Framework.Test
 			resourceFactory = new DefaultResourceFactory();
 			scaffoldSupport = new MockScaffoldingSupport();
 			cacheProvider = new MockCacheProvider();
+			helperFactory = new DefaultHelperFactory();
+			serviceInitializer = new DefaultServiceInitializer();
 
 			extensionManager = new ExtensionManager(this);
 		}
@@ -352,6 +356,26 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
+		/// Gets or sets the service initializer.
+		/// </summary>
+		/// <value>The service initializer.</value>
+		public IServiceInitializer ServiceInitializer
+		{
+			get { return serviceInitializer; }
+			set { serviceInitializer = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the helper factory.
+		/// </summary>
+		/// <value>The helper factory.</value>
+		public IHelperFactory HelperFactory
+		{
+			get { return helperFactory; }
+			set { helperFactory = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets the extension manager.
 		/// </summary>
 		/// <value>The extension manager.</value>
@@ -380,7 +404,9 @@ namespace Castle.MonoRail.Framework.Test
 		/// </returns>
 		public object GetService(Type serviceType)
 		{
-			return service2Impl[serviceType];
+			object value;
+			service2Impl.TryGetValue(serviceType, out value);
+			return value;
 		}
 	}
 }

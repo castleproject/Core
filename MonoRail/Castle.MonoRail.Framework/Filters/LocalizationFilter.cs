@@ -88,7 +88,7 @@ namespace Castle.MonoRail.Framework.Filters
 		/// <returns>
 		/// 	<c>true</c> if the action should be invoked, otherwise <c>false</c>
 		/// </returns>
-		public bool Perform(ExecuteEnum exec, IEngineContext context, IController controller, IControllerContext controllerContext)
+		public bool Perform(ExecuteWhen exec, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 			try
 			{

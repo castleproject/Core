@@ -96,7 +96,7 @@ namespace Castle.MonoRail.Framework
 
 			// TODO: Identify requests for files (js files) and serve them directly bypassing the flow
 
-			IEngineContext engineContext = engineContextFactory.Create(mrContainer, urlInfo, context);
+			IEngineContext engineContext = engineContextFactory.Create(mrContainer, urlInfo, context, routeMatch);
 			engineContext.AddService(typeof(IEngineContext), engineContext);
 
 			IController controller;

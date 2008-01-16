@@ -87,7 +87,11 @@ namespace Castle.MonoRail.Framework.Test
 		/// </remarks>
 		public virtual string JavaScriptEscape(string content)
 		{
-			return content;
+			return content.
+				Replace("\"", "\\\"").
+				Replace("\r", "").
+				Replace("\n", "\\n").
+				Replace("'", "\\'");
 		}
 	}
 }

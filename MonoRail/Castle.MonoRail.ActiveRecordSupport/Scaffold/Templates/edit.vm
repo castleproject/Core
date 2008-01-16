@@ -9,9 +9,9 @@
 #end
 
 #if($useModelName)
-$Form.FormTag("%{action='update${model.Type.Name}', id='scaffoldingform'}")
+$Form.FormTag("%{action='update${model.Type.Name}', useCurrentRouteParams='true', id='scaffoldingform'}")
 #else
-$Form.FormTag("%{action='update', id='scaffoldingform'}")
+$Form.FormTag("%{action='update', useCurrentRouteParams='true', id='scaffoldingform'}")
 #end
 
 $Form.HiddenField("${prefix}.${keyprop.Name}")

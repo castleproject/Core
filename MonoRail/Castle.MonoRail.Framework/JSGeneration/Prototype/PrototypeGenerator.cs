@@ -167,35 +167,6 @@ namespace Castle.MonoRail.Framework.JSGeneration.Prototype
 		}
 
 		/// <summary>
-		/// Outputs the content using the renderOptions approach.
-		/// <para>
-		/// If the renderOptions is a string, the content is escaped and quoted.
-		/// </para>
-		/// 	<para>
-		/// If the renderOptions is a dictionary, we extract the key <c>partial</c>
-		/// and evaluate the template it points to. The content is escaped and quoted.
-		/// </para>
-		/// </summary>
-		/// <param name="renderOptions">The render options.</param>
-		/// <returns></returns>
-		/// <example>
-		/// The following example uses nvelocity syntax:
-		/// <code>
-		/// $page.Call('myJsFunction', $page.render("%{partial='shared/newmessage.vm'}") )
-		/// </code>
-		/// 	<para>
-		/// Which outputs:
-		/// </para>
-		/// 	<code>
-		/// myJsFunction('the content from the newmessage partial view template')
-		/// </code>
-		/// </example>
-		public override object Render(object renderOptions)
-		{
-			return CodeGenerator.Render(renderOptions);
-		}
-
-		/// <summary>
 		/// Creates a generator for an element.
 		/// </summary>
 		/// <param name="root">The root expression.</param>

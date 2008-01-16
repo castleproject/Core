@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Test
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Web;
 	using Castle.Components.Binder;
@@ -30,7 +31,7 @@ namespace Castle.MonoRail.Framework.Test
 		private NameValueCollection queryString = new NameValueCollection();
 		private NameValueCollection @params = new NameValueCollection();
 		private string urlReferrer;
-		private IDictionary cookies;
+		private IDictionary<string, HttpCookie> cookies;
 		private IDictionary files = new Hashtable();
 		private bool isLocal = true;
 		private string httpMethod = "GET";
@@ -45,7 +46,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// Initializes a new instance of the <see cref="MockRequest"/> class.
 		/// </summary>
 		/// <param name="cookies">The cookies.</param>
-		public MockRequest(IDictionary cookies)
+		public MockRequest(IDictionary<string,HttpCookie> cookies)
 		{
 			this.cookies = cookies;
 		}
@@ -62,7 +63,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockRequest"/> class.
 		/// </summary>
-		public MockRequest() : this(new Hashtable())
+		public MockRequest() : this(new Dictionary<string,HttpCookie>(StringComparer.InvariantCultureIgnoreCase))
 		{
 		}
 
@@ -103,7 +104,12 @@ namespace Castle.MonoRail.Framework.Test
 		/// <returns></returns>
 		public virtual string ReadCookie(string name)
 		{
-			return (string) cookies[name];
+			HttpCookie cookie;
+			if (cookies.TryGetValue(name, out cookie))
+			{
+				return cookie.Value;
+			}
+			return null;
 		}
 
 		/// <summary>

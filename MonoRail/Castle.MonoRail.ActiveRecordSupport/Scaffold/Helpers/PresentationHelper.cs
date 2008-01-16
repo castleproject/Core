@@ -16,6 +16,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold.Helpers
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.MonoRail.Framework.Helpers;
 	
@@ -44,73 +45,58 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold.Helpers
 
 		public String LinkToList(ActiveRecordModel model, bool useModelName, String text, IDictionary attributes)
 		{
-			if (useModelName)
-			{
-				return String.Format("<a href=\"list{0}.{1}\" {3}>{2}</a>", model.Type.Name, 
-					Context.UrlInfo.Extension, text, GetAttributes(attributes));
-			}
-			else
-			{
-				return String.Format("<a href=\"list.{0}\" {2}>{1}</a>",
-					Context.UrlInfo.Extension, text, GetAttributes(attributes));
-			}
+			string targetAction = "list" + (useModelName ? model.Type.Name : "");
+
+			return LinkTo(targetAction, text, attributes);
 		}
 
 		public String LinkToNew(ActiveRecordModel model, bool useModelName, String text, IDictionary attributes)
 		{
-			if (useModelName)
-			{
-				return String.Format("<a href=\"new{0}.{1}\" {3}>{2}</a>", model.Type.Name, 
-					Context.UrlInfo.Extension, text, GetAttributes(attributes));
-			}
-			else
-			{
-				return String.Format("<a href=\"new.{0}\" {2}>{1}</a>", 
-					Context.UrlInfo.Extension, text, GetAttributes(attributes));
-			}
+			string targetAction = "new" + (useModelName ? model.Type.Name : "");
+
+			return LinkTo(targetAction, text, attributes);
 		}
 
 		public String LinkToEdit(ActiveRecordModel model, bool useModelName, 
 		                         String text, object key, IDictionary attributes)
 		{
-			if (useModelName)
-			{
-				return String.Format("<a href=\"edit{0}.{1}?id={4}\" {3}>{2}</a>", model.Type.Name, 
-					Context.UrlInfo.Extension, text, GetAttributes(attributes), key);
-			}
-			else
-			{
-				return String.Format("<a href=\"edit.{0}?id={3}\" {2}>{1}</a>", 
-					Context.UrlInfo.Extension, text, GetAttributes(attributes), key);
-			}
+			string targetAction = "edit" + (useModelName ? model.Type.Name : "");
+
+			return LinkTo(targetAction, key, text, attributes);
 		}
 
 		public String LinkToConfirm(ActiveRecordModel model, bool useModelName, String text, object key, IDictionary attributes)
 		{
-			if (useModelName)
-			{
-				return String.Format("<a href=\"confirm{0}.{1}?id={4}\" {3}>{2}</a>", model.Type.Name, 
-					Context.UrlInfo.Extension, text, GetAttributes(attributes), key);
-			}
-			else
-			{
-				return String.Format("<a href=\"confirm.{0}?id={3}\" {2}>{1}</a>", 
-					Context.UrlInfo.Extension, text, GetAttributes(attributes), key);
-			}
+			string targetAction = "confirm" + (useModelName ? model.Type.Name : "");
+
+			return LinkTo(targetAction, key, text, attributes);
 		}
 
 		public String LinkToRemove(ActiveRecordModel model, bool useModelName, String text, object key, IDictionary attributes)
 		{
-			if (useModelName)
-			{
-				return String.Format("<a href=\"remove{0}.{1}?id={4}\" {3}>{2}</a>", model.Type.Name, 
-					Context.UrlInfo.Extension, text, GetAttributes(attributes), key);
-			}
-			else
-			{
-				return String.Format("<a href=\"remove.{0}?id={3}\" {2}>{1}</a>", 
-					Context.UrlInfo.Extension, text, GetAttributes(attributes), key);
-			}
+			string targetAction = "remove" + (useModelName ? model.Type.Name : "");
+
+			return LinkTo(targetAction, text, attributes);
+		}
+
+		private string LinkTo(string action, string text, IDictionary attributes)
+		{
+			HybridDictionary dict = new HybridDictionary(true);
+			dict["action"] = action;
+			dict["params"] = ControllerContext.RouteMatch.Parameters;
+
+			return UrlHelper.Link(text, dict, attributes);
+		}
+
+		private string LinkTo(string action, object key, string text, IDictionary attributes)
+		{
+			HybridDictionary dict = new HybridDictionary(true);
+			dict["action"] = action;
+			dict["id"] = key;
+			ControllerContext.RouteMatch.AddNamed("id", key.ToString());
+			dict["params"] = ControllerContext.RouteMatch.Parameters;
+
+			return UrlHelper.Link(text, dict, attributes);
 		}
 	}
 }

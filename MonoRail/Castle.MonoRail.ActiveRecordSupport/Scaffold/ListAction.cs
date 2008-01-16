@@ -49,8 +49,6 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 				PaginationHelper.CreatePagination(engineContext, PerformFindAll(), 10));
 
 			controllerContext.PropertyBag["properties"] = ObtainListableProperties(Model);
-
-			controllerContext.SelectedViewName = controllerContext.Name + "/" + "list" + Model.Type.Name;
 		}
 
 		private IList PerformFindAll()
@@ -60,7 +58,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 
 		protected override string ComputeTemplateName(IControllerContext controller)
 		{
-			return String.Format(@"{0}\list{1}", controller.Name, Model.Type.Name);
+			return controller.Name + "/list";
 		}
 
 		/// <summary>

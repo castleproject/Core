@@ -384,15 +384,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				context.PushCurrentTemplateName(viewToRender);
 				((SimpleNode) template.Data).Render(context, writer);
 			}
-			catch(Exception e)
-			{
-				if (e is MethodInvocationException)
-				{
-					throw;
-				}
-
-				return false;
-			}
 			finally
 			{
 				context.PopCurrentTemplateName();

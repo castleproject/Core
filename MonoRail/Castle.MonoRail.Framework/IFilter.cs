@@ -21,22 +21,22 @@ namespace Castle.MonoRail.Framework
 	/// or is invoked.
 	/// </summary>
 	[Flags]
-	public enum ExecuteEnum
+	public enum ExecuteWhen
 	{
 		/// <summary>
 		/// The filter is invoked before the action.
 		/// </summary>
-		[Obsolete("Use ExecuteEnum.BeforeAction")]
+		[Obsolete("Use ExecuteWhen.BeforeAction")]
 		Before = BeforeAction,
 		/// <summary>
 		/// The filter is invoked after the action.
 		/// </summary>
-		[Obsolete("Use ExecuteEnum.AfterRendering or ExecuteEnum.AfterAction")]
+		[Obsolete("Use ExecuteWhen.AfterRendering or ExecuteWhen.AfterAction")]
 		After = AfterRendering,
 		/// <summary>
 		/// The filter is invoked before and after the action.
 		/// </summary>
-		[Obsolete("Use ExecuteEnum.Always or combine the ExecuteEnum values you want")]
+		[Obsolete("Use ExecuteWhen.Always or combine the ExecuteWhen values you want")]
 		Around = BeforeAction | AfterAction,
 
 		/// <summary>
@@ -76,7 +76,7 @@ namespace Castle.MonoRail.Framework
 		/// 	<c>true</c> if the action
 		/// should be invoked, otherwise <c>false</c>
 		/// </returns>
-		bool Perform(ExecuteEnum exec, IEngineContext context, IController controller, IControllerContext controllerContext);
+		bool Perform(ExecuteWhen exec, IEngineContext context, IController controller, IControllerContext controllerContext);
 	}
 
 	/// <summary>

@@ -139,15 +139,15 @@
     <None Include="contentinfs.vm" />
     <EmbeddedResource Include="Content\contentinassembly.vm" />
     <None Include="Content\notinassembly.vm" />
-    <Compile Include="Controllers\AccessibleThroughTestCase.cs" />
     <Compile Include="Actions\ActionMethodExecutorCompatibleTestCase.cs" />
     <Compile Include="Actions\ActionMethodExecutorTestCase.cs" />
+    <Compile Include="Actions\DefaultActionSelectorTestCase.cs" />
     <Compile Include="Actions\DynamicActionExecutorTestCase.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Actions\DefaultActionSelectorTestCase.cs" />
     <Compile Include="Configuration\ViewEngineConfigTestCase.cs" />
+    <Compile Include="Controllers\AccessibleThroughTestCase.cs" />
     <Compile Include="Controllers\Clients\ClientCartController.cs" />
     <Compile Include="Controllers\Clients\ClientContactController.cs" />
     <Compile Include="Controllers\Clients\ClientHomeController.cs" />
@@ -160,19 +160,8 @@
     <Compile Include="Controllers\Products\ListController.cs" />
     <Compile Include="Controllers\SmartDispatcherSimpleBindingTestCase.cs" />
     <Compile Include="Filters\ControllerLevelFiltersTestCase.cs" />
-    <Compile Include="Resources\ActionsWithResourcesTestCase.cs" />
-    <Compile Include="Resources\ControllerWithResourcesTestCase.cs" />
-    <Compile Include="Resources\DefaultResourceFactoryTestCase.cs" />
-    <Compile Include="Routing\BaseRuleTestFixture.cs" />
-    <Compile Include="Routing\PatternRouteCreateUrlTestCase.cs" />
-    <Compile Include="Routing\PatternRouteTestCase.cs" />
-    <Compile Include="Routing\RoutingEngineTestCase.cs" />
-    <Compile Include="Services\DefaultUrlBuilderTestCase.cs" />
-    <Compile Include="Services\EmailTemplateServiceTestCase.cs" />
-    <Compile Include="Services\PrototypeAjaxProxyGeneratorTestCase.cs" />
-    <Compile Include="ViewComponents\AuthenticatedContentTestCase.cs" />
-    <Compile Include="ViewComponents\DefaultViewComponentRegistryTests.cs" />
     <Compile Include="FlashTestCase.cs" />
+    <Compile Include="Handlers\MRHandlerFactoryTestCase.cs" />
     <Compile Include="Handlers\ResourceFileHandlerTestCase.cs" />
     <Compile Include="Helpers\AbstractHelperTestCase.cs" />
     <Compile Include="Helpers\AjaxHelper2TestCase.cs" />
@@ -195,14 +184,6 @@
     <Compile Include="JSGeneration\PrototypeGeneratorTestCase.cs" />
     <Compile Include="JSON\JsonDataBinderTestCase.cs" />
     <Compile Include="JSON\JsonHelperTestCase.cs" />
-    <Compile Include="Rescues\ActionLevelRescuesTestCase.cs" />
-    <Compile Include="Rescues\ControllerLevelRescuesTestCase.cs" />
-    <Compile Include="Rescues\CustomRescueControllerTestCase.cs" />
-    <Compile Include="Services\ControllerTreeTestCase.cs" />
-    <Compile Include="Handlers\MRHandlerFactoryTestCase.cs" />
-    <Compile Include="Services\DefaultControllerFactoryTestCase.cs" />
-    <Compile Include="Services\FileAssemblyViewSourceLoaderTestCase.cs" />
-    <Compile Include="Services\DefaultUrlTokenizerTestCase.cs" />
     <Compile Include="Providers\DefaultControllerDescriptorProviderTestCase.cs" />
     <Compile Include="Providers\DefaultFilterDescriptorProviderTestCase.cs" />
     <Compile Include="Providers\DefaultHelperDescriptorProviderTestCase.cs" />
@@ -210,12 +191,34 @@
     <Compile Include="Providers\DefaultRescueDescriptorProviderTestCase.cs" />
     <Compile Include="Providers\DefaultResourceDescriptorProviderTestCase.cs" />
     <Compile Include="Providers\DefaultTransformFilterDescriptorProviderTestCase.cs" />
-    <Compile Include="Services\StaticResourceRegistry\DefaultStaticResourceRegistryTestCase.cs" />
-    <Compile Include="UrlPartsBuilderTestCase.cs" />
-    <Compile Include="ViewComponents\DiggStylePaginationTestCase.cs" />
-    <Compile Include="ViewComponents\SelectStylePaginationTestCase.cs">
+    <Compile Include="RedirectSupportTestCase.cs" />
+    <Compile Include="Rescues\ActionLevelRescuesTestCase.cs" />
+    <Compile Include="Rescues\ControllerLevelRescuesTestCase.cs" />
+    <Compile Include="Rescues\CustomRescueControllerTestCase.cs" />
+    <Compile Include="Resources\ActionsWithResourcesTestCase.cs" />
+    <Compile Include="Resources\ControllerWithResourcesTestCase.cs" />
+    <Compile Include="Resources\DefaultResourceFactoryTestCase.cs" />
+    <Compile Include="Routing\BaseRuleTestFixture.cs" />
+    <Compile Include="Routing\PatternRouteCreateUrlTestCase.cs" />
+    <Compile Include="Routing\PatternRouteTestCase.cs" />
+    <Compile Include="Routing\RoutingEngineTestCase.cs" />
+    <Compile Include="Routing\RoutingRuleWithActionDecoratorTestCase.cs" />
+    <Compile Include="Services\ControllerTreeTestCase.cs" />
+    <Compile Include="Services\DefaultControllerFactoryTestCase.cs" />
+    <Compile Include="Services\DefaultUrlBuilderRouteIntegrationTestCase.cs" />
+    <Compile Include="Services\DefaultUrlBuilderTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\DefaultUrlTokenizerTestCase.cs" />
+    <Compile Include="Services\EmailTemplateServiceTestCase.cs" />
+    <Compile Include="Services\FileAssemblyViewSourceLoaderTestCase.cs" />
+    <Compile Include="Services\PrototypeAjaxProxyGeneratorTestCase.cs" />
+    <Compile Include="Services\StaticResourceRegistry\DefaultStaticResourceRegistryTestCase.cs" />
+    <Compile Include="UrlPartsBuilderTestCase.cs" />
+    <Compile Include="ViewComponents\AuthenticatedContentTestCase.cs" />
+    <Compile Include="ViewComponents\DefaultViewComponentRegistryTests.cs" />
+    <Compile Include="ViewComponents\DiggStylePaginationTestCase.cs" />
+    <Compile Include="ViewComponents\SelectStylePaginationTestCase.cs" />
     <Compile Include="ViewEngines\ViewEngineBaseTestCase.cs" />
     <Compile Include="WikiFormatterTestCase.cs" />
     <Compile Include="WindsorIntegration\FacilityTestCase.cs" />
@@ -225,21 +228,24 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Handlers\Files\simplerequest.txt" />
-    <EmbeddedResource Include="Resources\Language.nl.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <Content Include="Handlers\Files\simplerequest.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\Language.de.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Language.nl.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Language.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Language.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Services\StaticResourceRegistry\DummyRes.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Routing\Stubs\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

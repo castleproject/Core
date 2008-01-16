@@ -55,7 +55,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 			{
 				Expect.Call(filterFactoryMock.Create(typeof(DummyFilter))).Return(filterMock);
 
-				Expect.Call(filterMock.Perform(ExecuteEnum.BeforeAction, engineContext, controller, context)).Return(false);
+				Expect.Call(filterMock.Perform(ExecuteWhen.BeforeAction, engineContext, controller, context)).Return(false);
 
 				filterFactoryMock.Release(filterMock);
 				LastCall.Repeat.Once();
@@ -86,7 +86,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 			{
 				Expect.Call(filterFactoryMock.Create(typeof(DummyFilter))).Return(filterMock);
 
-				Expect.Call(filterMock.Perform(ExecuteEnum.BeforeAction, engineContext, controller, context)).Return(true);
+				Expect.Call(filterMock.Perform(ExecuteWhen.BeforeAction, engineContext, controller, context)).Return(true);
 
 				filterFactoryMock.Release(filterMock);
 				LastCall.Repeat.Once();
@@ -117,7 +117,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 			{
 				Expect.Call(filterFactoryMock.Create(typeof(DummyFilter))).Return(filterMock);
 
-				Expect.Call(filterMock.Perform(ExecuteEnum.AfterAction, engineContext, controller, context)).Return(true);
+				Expect.Call(filterMock.Perform(ExecuteWhen.AfterAction, engineContext, controller, context)).Return(true);
 
 				filterFactoryMock.Release(filterMock);
 				LastCall.Repeat.Once();
@@ -148,7 +148,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 			{
 				Expect.Call(filterFactoryMock.Create(typeof(DummyFilter))).Return(filterMock);
 
-				Expect.Call(filterMock.Perform(ExecuteEnum.AfterAction, engineContext, controller, context)).Return(false);
+				Expect.Call(filterMock.Perform(ExecuteWhen.AfterAction, engineContext, controller, context)).Return(false);
 
 				filterFactoryMock.Release(filterMock);
 				LastCall.Repeat.Once();
@@ -179,7 +179,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 			{
 				Expect.Call(filterFactoryMock.Create(typeof(DummyFilter))).Return(filterMock);
 
-				Expect.Call(filterMock.Perform(ExecuteEnum.AfterRendering, engineContext, controller, context)).Return(true);
+				Expect.Call(filterMock.Perform(ExecuteWhen.AfterRendering, engineContext, controller, context)).Return(true);
 
 				filterFactoryMock.Release(filterMock);
 				LastCall.Repeat.Once();
@@ -222,7 +222,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 
 		#region Controllers
 
-		[Filter(ExecuteEnum.BeforeAction, typeof(DummyFilter))]
+		[Filter(ExecuteWhen.BeforeAction, typeof(DummyFilter))]
 		private class ControllerWithSingleBeforeActionFilter : Controller
 		{
 			public bool indexActionExecuted;
@@ -233,7 +233,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 			}
 		}
 
-		[Filter(ExecuteEnum.BeforeAction, typeof(DummyFilter))]
+		[Filter(ExecuteWhen.BeforeAction, typeof(DummyFilter))]
 		private class ControllerWithSkipFilter : Controller
 		{
 			public bool indexActionExecuted;
@@ -245,7 +245,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 			}
 		}
 
-		[Filter(ExecuteEnum.AfterAction, typeof(DummyFilter))]
+		[Filter(ExecuteWhen.AfterAction, typeof(DummyFilter))]
 		private class ControllerWithAfterActionFilter : Controller
 		{
 			public bool indexActionExecuted;
@@ -256,7 +256,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 			}
 		}
 
-		[Filter(ExecuteEnum.AfterRendering, typeof(DummyFilter))]
+		[Filter(ExecuteWhen.AfterRendering, typeof(DummyFilter))]
 		private class ControllerWithAfterRenderingFilter : Controller
 		{
 			public bool indexActionExecuted;
@@ -271,7 +271,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 
 		private class DummyFilter : IFilter
 		{
-			public bool Perform(ExecuteEnum exec, IEngineContext context, IController controller,
+			public bool Perform(ExecuteWhen exec, IEngineContext context, IController controller,
 			                    IControllerContext controllerContext)
 			{
 				return false;

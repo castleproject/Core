@@ -35,7 +35,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 
 		protected override string ComputeTemplateName(IControllerContext controllerContext)
 		{
-			return String.Format(@"{0}\create{1}", controllerContext.Name, Model.Type.Name);
+			return controllerContext.Name + "\\create";
 		}
 
 		protected override void PerformActionProcess(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
@@ -54,11 +54,13 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 
 				if (UseModelName)
 				{
-					engineContext.Response.Redirect(controllerContext.AreaName, controllerContext.Name, "list" + Model.Type.Name);
+					engineContext.Response.RedirectUsingRoute(
+						controllerContext.AreaName, controllerContext.Name, "list" + Model.Type.Name, true);
 				}
 				else
 				{
-					engineContext.Response.Redirect(controllerContext.AreaName, controllerContext.Name, "list");
+					engineContext.Response.RedirectUsingRoute(
+						controllerContext.AreaName, controllerContext.Name, "list", true);
 				}
 			}
 			catch(Exception ex)

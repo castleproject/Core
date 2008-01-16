@@ -62,8 +62,7 @@ namespace Castle.MonoRail.Framework.Routing
 
 			RouteMatch match =
 				engine.FindMatch(StripAppPathFrom(request.FilePath, request.ApplicationPath) + request.PathInfo, 
-					new RouteContext(new RequestAdapter(request), 
-						request.ApplicationPath));
+					new RouteContext(new RequestAdapter(request), request.ApplicationPath, context.Items));
 
 			if (match == null)
 			{
@@ -74,21 +73,12 @@ namespace Castle.MonoRail.Framework.Routing
 			string url = request.RawUrl;
 
 			string paramsAsQueryString = "";
-//			string paramsAsQueryString = ConvertToQueryString(match.Parameters, context.Server);
 
 			int queryStringIndex = url.IndexOf('?');
 
 			if (queryStringIndex != -1)
 			{
-//				if (paramsAsQueryString.Length != 0)
-//				{
-//					// Concat
-//					paramsAsQueryString += url.Substring(queryStringIndex + 1);
-//				}
-//				else
-//				{
-					paramsAsQueryString = url.Substring(queryStringIndex + 1);
-//				}
+				paramsAsQueryString = url.Substring(queryStringIndex + 1);
 			}
 
 			if (paramsAsQueryString.Length != 0)
@@ -111,18 +101,6 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 			return path;
 		}
-
-//		private static string ConvertToQueryString(Dictionary<string, string> parameters, HttpServerUtility serverUtil)
-//		{
-//			StringBuilder sb = new StringBuilder();
-//
-//			foreach(KeyValuePair<string, string> pair in parameters)
-//			{
-//				sb.AppendFormat("{0}={1}&", serverUtil.UrlEncode(pair.Key), serverUtil.UrlEncode(pair.Value));
-//			}
-//
-//			return sb.ToString();
-//		}
 
 		private static string CreateMrPath(RouteMatch match)
 		{

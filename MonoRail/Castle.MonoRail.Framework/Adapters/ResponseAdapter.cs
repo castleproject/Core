@@ -21,45 +21,48 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.Web;
 	using Castle.MonoRail.Framework;
 	using Core;
+	using Helpers;
+	using Internal;
+	using Routing;
 	using Services;
 
 	/// <summary>
 	/// Adapts the <see cref="IResponse"/> to
 	/// an <see cref="HttpResponse"/> instance.
 	/// </summary>
-	public class ResponseAdapter : IResponse
+	public class ResponseAdapter : BaseResponse
 	{
 		private readonly HttpResponse response;
-		private readonly UrlInfo currentUrl;
-		private readonly IUrlBuilder urlBuilder;
-		private bool redirected;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ResponseAdapter"/> class.
 		/// </summary>
-		/// <param name="response">The response.</param>
 		/// <param name="currentUrl">The current URL.</param>
 		/// <param name="urlBuilder">The URL builder.</param>
-		public ResponseAdapter(HttpResponse response, UrlInfo currentUrl, IUrlBuilder urlBuilder)
+		/// <param name="serverUtility">The server utility.</param>
+		/// <param name="routeMatch">The route match.</param>
+		/// <param name="response">The response.</param>
+		public ResponseAdapter(HttpResponse response, UrlInfo currentUrl, 
+			IUrlBuilder urlBuilder, IServerUtility serverUtility, 
+			RouteMatch routeMatch) : base(currentUrl, urlBuilder, serverUtility, routeMatch)
 		{
 			this.response = response;
-			this.currentUrl = currentUrl;
-			this.urlBuilder = urlBuilder;
 		}
 
 		/// <summary>
 		/// Gets the caching policy (expiration time, privacy, 
 		/// vary clauses) of a Web page.
 		/// </summary>
-		public HttpCachePolicy CachePolicy
+		public override HttpCachePolicy CachePolicy
 		{
 			get { return response.Cache; }
+			set { throw new NotImplementedException(); }
 		}
 
 		/// <summary>
 		/// Sets the Cache-Control HTTP header to Public or Private.
 		/// </summary>
-		public String CacheControlHeader
+		public override string CacheControlHeader
 		{
 			get { return response.CacheControl; }
 			set { response.CacheControl = value; }
@@ -68,7 +71,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <summary>
 		/// Gets or sets the HTTP character set of the output stream.
 		/// </summary>
-		public String Charset
+		public override string Charset
 		{
 			get { return response.Charset; }
 			set { response.Charset = value; }
@@ -78,7 +81,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Gets or sets the status code.
 		/// </summary>
 		/// <value>The status code.</value>
-		public int StatusCode
+		public override int StatusCode
 		{
 			get { return response.StatusCode; }
 			set { response.StatusCode = value; }
@@ -88,7 +91,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Gets or sets the status code.
 		/// </summary>
 		/// <value>The status code.</value>
-		public string StatusDescription
+		public override string StatusDescription
 		{
 			get { return response.StatusDescription; }
 			set { response.StatusDescription = value; }
@@ -98,7 +101,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Gets or sets the content type.
 		/// </summary>
 		/// <value>The type of the content.</value>
-		public String ContentType
+		public override string ContentType
 		{
 			get { return response.ContentType; }
 			set { response.ContentType = value; }
@@ -109,7 +112,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <param name="headerValue">The header value.</param>
-		public void AppendHeader(String name, String headerValue)
+		public override void AppendHeader(string name, string headerValue)
 		{
 			response.AppendHeader(name, headerValue);
 		}
@@ -118,16 +121,17 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Gets the output.
 		/// </summary>
 		/// <value>The output.</value>
-		public TextWriter Output
+		public override TextWriter Output
 		{
 			get { return response.Output; }
+			set { throw new NotImplementedException(); }
 		}
 
 		/// <summary>
 		/// Gets the output stream.
 		/// </summary>
 		/// <value>The output stream.</value>
-		public Stream OutputStream
+		public override Stream OutputStream
 		{
 			get { return response.OutputStream; }
 		}
@@ -136,7 +140,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Writes the buffer to the browser
 		/// </summary>
 		/// <param name="buffer">The buffer.</param>
-		public void BinaryWrite(byte[] buffer)
+		public override void BinaryWrite(byte[] buffer)
 		{
 			response.BinaryWrite(buffer);
 		}
@@ -145,7 +149,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Writes the stream to the browser
 		/// </summary>
 		/// <param name="stream">The stream.</param>
-		public void BinaryWrite(Stream stream)
+		public override void BinaryWrite(Stream stream)
 		{
 			byte[] buffer = new byte[stream.Length];
 
@@ -157,7 +161,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <summary>
 		/// Clears the response (only works if buffered)
 		/// </summary>
-		public void Clear()
+		public override void Clear()
 		{
 			response.Clear();
 		}
@@ -165,7 +169,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <summary>
 		/// Clears the response content (only works if buffered).
 		/// </summary>
-		public void ClearContent()
+		public override void ClearContent()
 		{
 			response.ClearContent();
 		}
@@ -174,7 +178,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Writes the specified string.
 		/// </summary>
 		/// <param name="s">The string.</param>
-		public void Write(String s)
+		public override void Write(string s)
 		{
 			response.Write(s);
 		}
@@ -183,7 +187,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Writes the specified obj.
 		/// </summary>
 		/// <param name="obj">The obj.</param>
-		public void Write(object obj)
+		public override void Write(object obj)
 		{
 			response.Write(obj);
 		}
@@ -192,7 +196,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Writes the specified char.
 		/// </summary>
 		/// <param name="ch">The char.</param>
-		public void Write(char ch)
+		public override void Write(char ch)
 		{
 			response.Write(ch);
 		}
@@ -203,131 +207,18 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <param name="buffer">The buffer.</param>
 		/// <param name="index">The index.</param>
 		/// <param name="count">The count.</param>
-		public void Write(char[] buffer, int index, int count)
+		public override void Write(char[] buffer, int index, int count)
 		{
 			response.Write(buffer, index, count);
 		}
 
-//		/// <summary>
-//		/// Writes the file.
-//		/// </summary>
-//		/// <param name="fileName">Name of the file.</param>
-//		public void WriteFile(String fileName)
-//		{
-//			response.WriteFile(fileName);
-//		}
-
 		/// <summary>
-		/// Redirects the specified URL.
+		/// Writes the file.
 		/// </summary>
-		/// <param name="url">The URL.</param>
-		public void RedirectToUrl(String url)
+		/// <param name="fileName">Name of the file.</param>
+		public override void WriteFile(string fileName)
 		{
-			redirected = true;
-
-			response.Redirect(url, false);
-		}
-
-		/// <summary>
-		/// Redirects the specified URL.
-		/// </summary>
-		/// <param name="url">The URL.</param>
-		/// <param name="endProcess">if set to <c>true</c> [end process].</param>
-		public void RedirectToUrl(String url, bool endProcess)
-		{
-			redirected = true;
-
-			response.Redirect(url, endProcess);
-		}
-
-		/// <summary>
-		/// Redirects the specified controller.
-		/// </summary>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		public void Redirect(String controller, String action)
-		{
-			redirected = true;
-
-			response.Redirect(urlBuilder.BuildUrl(currentUrl, controller, action), false);
-		}
-
-		/// <summary>
-		/// Redirects the specified controller.
-		/// </summary>
-		/// <param name="parameters">The parameters.</param>
-		public void Redirect(object parameters)
-		{
-			redirected = true;
-
-			response.Redirect(urlBuilder.BuildUrl(currentUrl, new ReflectionBasedDictionaryAdapter(parameters)), false);
-		}
-
-		/// <summary>
-		/// Redirects the specified area.
-		/// </summary>
-		/// <param name="area">The area.</param>
-		/// <param name="controller">The controller.</param>
-		/// <param name="action">The action.</param>
-		public void Redirect(String area, String controller, String action)
-		{
-			redirected = true;
-
-			response.Redirect(urlBuilder.BuildUrl(currentUrl, area, controller, action), false);
-		}
-
-		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
-		/// </summary>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(string controller, string action, NameValueCollection parameters)
-		{
-			redirected = true;
-
-			response.Redirect(urlBuilder.BuildUrl(currentUrl, controller, action, parameters), false);
-		}
-
-		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
-		/// </summary>
-		/// <param name="area">Area name</param>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(string area, string controller, string action, NameValueCollection parameters)
-		{
-			redirected = true;
-
-			response.Redirect(urlBuilder.BuildUrl(currentUrl, area, controller, action, parameters), false);
-		}
-
-		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
-		/// </summary>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(string controller, string action, IDictionary parameters)
-		{
-			redirected = true;
-
-			response.Redirect(urlBuilder.BuildUrl(currentUrl, controller, action, parameters), false);
-		}
-
-		/// <summary>
-		/// Redirects to another controller and action with the specified paramters.
-		/// </summary>
-		/// <param name="area">Area name</param>
-		/// <param name="controller">Controller name</param>
-		/// <param name="action">Action name</param>
-		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(string area, string controller, string action, IDictionary parameters)
-		{
-			redirected = true;
-
-			response.Redirect(urlBuilder.BuildUrl(currentUrl, area, controller, action, parameters), false);
+			response.WriteFile(fileName);
 		}
 
 		/// <summary>
@@ -336,7 +227,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <value>
 		/// 	<c>true</c> if this instance is client connected; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsClientConnected
+		public override bool IsClientConnected
 		{
 			get { return response.IsClientConnected; }
 		}
@@ -345,63 +236,30 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Gets a value indicating whether the response sent a redirect.
 		/// </summary>
 		/// <value><c>true</c> if was redirected; otherwise, <c>false</c>.</value>
-		public bool WasRedirected
+		public override bool WasRedirected
 		{
 			get { return redirected; }
 		}
 
 		/// <summary>
-		/// Creates the cookie.
+		/// Redirects to the specified url
 		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <param name="cookieValue">The cookie value.</param>
-		public void CreateCookie(String name, String cookieValue)
+		/// <param name="url">An relative or absolute URL to redirect the client to</param>
+		/// <param name="endProcess">if set to <c>true</c>, sends the redirect and
+		/// kills the current request process.</param>
+		public override void RedirectToUrl(string url, bool endProcess)
 		{
-			CreateCookie(new HttpCookie(name, cookieValue));
-		}
-
-		/// <summary>
-		/// Creates the cookie.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <param name="cookieValue">The cookie value.</param>
-		/// <param name="expiration">The expiration.</param>
-		public void CreateCookie(String name, String cookieValue, DateTime expiration)
-		{
-			HttpCookie cookie = new HttpCookie(name, cookieValue);
-
-			cookie.Expires = expiration;
-			cookie.Path = SafeAppPath();
-
-			CreateCookie(cookie);
+			redirected = true;
+			response.Redirect(url, endProcess);
 		}
 
 		/// <summary>
 		/// Creates the cookie.
 		/// </summary>
 		/// <param name="cookie">The cookie.</param>
-		public void CreateCookie(HttpCookie cookie)
+		public override void CreateCookie(HttpCookie cookie)
 		{
 			response.Cookies.Add(cookie);
-		}
-
-		/// <summary>
-		/// Removes the cookie.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		public void RemoveCookie(string name)
-		{
-			HttpCookie cookie = new HttpCookie(name, "");
-			
-			cookie.Expires = DateTime.Now.AddYears(-10);
-			cookie.Path = SafeAppPath();
-			
-			CreateCookie(cookie);
-		}
-
-		private string SafeAppPath()
-		{
-			return currentUrl.AppVirtualDir == string.Empty ? "/" : currentUrl.AppVirtualDir;
 		}
 	}
 }

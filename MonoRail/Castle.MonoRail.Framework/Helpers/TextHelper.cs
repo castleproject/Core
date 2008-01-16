@@ -20,7 +20,6 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Globalization;
 	using System.Text;
 	using System.Text.RegularExpressions;
-	using System.Threading;
 
 	/// <summary>
 	/// Provides methods for working with strings and grammar. At the moment,
@@ -45,6 +44,25 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Default word connector
 		/// </summary>
 		public const string DefaultConnector = "and";
+
+		/// <summary>
+		/// Converts the special characters to HTML.
+		/// </summary>
+		/// <param name="content">The content.</param>
+		/// <returns></returns>
+		public string ConvertSpecialCharsToHtml(string content)
+		{
+			if (string.IsNullOrEmpty(content))
+			{
+				return string.Empty;
+			}
+
+			return HtmlEncode(content).
+				Replace("\r\n", "<br />").
+				Replace("\r", "<br />").
+				Replace("\n", "<br />").
+				Replace("\t", "&nbsp;");
+		}
 
 		/// <summary>
 		/// Formats the specified string as a phone number, varying according to the culture. 

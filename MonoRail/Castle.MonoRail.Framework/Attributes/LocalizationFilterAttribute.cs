@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework
 		/// "locale", but if that fails it falls back
 		/// to the client's browser locale.
 		/// </summary>
-		public LocalizationFilterAttribute() : base(ExecuteEnum.BeforeAction, typeof(LocalizationFilter))
+		public LocalizationFilterAttribute() : base(ExecuteWhen.BeforeAction, typeof(LocalizationFilter))
 		{
 		}
 

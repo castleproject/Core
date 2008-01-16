@@ -28,30 +28,21 @@ namespace Castle.MonoRail.Framework.Test
 	/// </summary>
 	public class MockEngineContext : AbstractServiceContainer, IEngineContext
 	{
-//		private readonly string physicalPath = AppDomain.CurrentDomain.BaseDirectory;
-		private readonly IRequest request;
-		private readonly IResponse response;
-		private Flash flash = new Flash();
-		private IServerUtility serverUtility = new MockServerUtility();
+		private readonly IMockRequest request;
+		private readonly IMockResponse response;
 		private readonly IDictionary contextItems = new HybridDictionary(true);
 		private readonly List<RenderedEmailTemplate> renderedEmailTemplates = new List<RenderedEmailTemplate>();
 		private readonly List<Message> messagesSent = new List<Message>();
-		private UrlInfo urlInfo;
-		private ITrace trace;
+		private IServerUtility serverUtility = new MockServerUtility();
 		private IPrincipal currentUser;
-		private Exception lastException;
 		private IDictionary session = new HybridDictionary(true);
 		private IController currentController;
 		private IControllerContext currentControllerContext;
 		private IMonoRailServices services;
-//
-//		/// <summary>
-//		/// Initializes a new instance of the <see cref="MockRailsEngineContext"/> class.
-//		/// </summary>
-//		protected MockRailsEngineContext()
-//		{
-//			RegisterServices();
-//		}
+		private ITrace trace;
+		private UrlInfo urlInfo;
+		private Flash flash = new Flash();
+		private Exception lastException;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockEngineContext"/> class.
@@ -60,33 +51,19 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="response">The response.</param>
 		/// <param name="services">The services.</param>
 		/// <param name="urlInfo">The URL info.</param>
-		public MockEngineContext(IRequest request, IResponse response, IMonoRailServices services, UrlInfo urlInfo)
+		public MockEngineContext(IMockRequest request, IMockResponse response, IMonoRailServices services, UrlInfo urlInfo)
 		{
 			this.request = request;
 			this.response = response;
 			this.services = services;
 			this.urlInfo = urlInfo;
-		}
 
-//		#region IEngineContext Members
-//
-//		/// <summary>
-//		/// Gets the request type (GET, POST, etc)
-//		/// </summary>
-//		/// <value></value>
-//		public virtual String RequestType
-//		{
-//			get { return request.HttpMethod; }
-//		}
-//
-//		/// <summary>
-//		/// Gets the request URL.
-//		/// </summary>
-//		/// <value></value>
-//		public virtual string Url
-//		{
-//			get { return urlInfo.UrlRaw; }
-//		}
+			if (response != null)
+			{
+				response.UrlInfo = urlInfo;
+				response.UrlBuilder = services.UrlBuilder;
+			}
+		}
 
 		/// <summary>
 		/// Gets the underlying context of the API being used.
@@ -180,24 +157,6 @@ namespace Castle.MonoRail.Framework.Test
 			get { return urlInfo.AppVirtualDir ?? "/"; }
 		}
 
-//		/// <summary>
-//		/// Transfer the execution to another resource.
-//		/// </summary>
-//		/// <param name="path"></param>
-//		/// <param name="preserveForm"></param>
-//		public virtual void Transfer(string path, bool preserveForm)
-//		{
-//		}
-
-//		/// <summary>
-//		/// Returns the physical application path.
-//		/// </summary>
-//		/// <value></value>
-//		public virtual string ApplicationPhysicalPath
-//		{
-//			get { return physicalPath; }
-//		}
-
 		/// <summary>
 		/// Returns the <see cref="UrlInfo"/> of the the current request.
 		/// </summary>
@@ -256,17 +215,6 @@ namespace Castle.MonoRail.Framework.Test
 			get { return services; }
 			set { services = value; }
 		}
-
-//		#endregion
-//
-//		/// <summary>
-//		/// Sets the container.
-//		/// </summary>
-//		/// <param name="serviceProvider">The service provider.</param>
-//		public void SetContainer(IServiceProvider serviceProvider)
-//		{
-//			container = serviceProvider;
-//		}
 
 		/// <summary>
 		/// Gets the rendered email templates.

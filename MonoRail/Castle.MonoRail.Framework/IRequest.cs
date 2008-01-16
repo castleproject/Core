@@ -146,7 +146,6 @@ namespace Castle.MonoRail.Framework
 //		/// <returns></returns>
 //		byte[] BinaryRead(int count);
 
-
 		/// <summary>
 		/// Reads the cookie.
 		/// </summary>

@@ -44,6 +44,23 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UrlInfo"/> class.
 		/// </summary>
+		/// <param name="area">The area.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="action">The action.</param>
+		/// <param name="appVirtualDir">The app virtual dir.</param>
+		/// <param name="extension">The extension.</param>
+		public UrlInfo(string area, string controller, string action, string appVirtualDir, string extension)
+		{
+			this.area = area;
+			this.controller = controller;
+			this.action = action;
+			this.appVirtualDir = appVirtualDir;
+			this.extension = extension;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UrlInfo"/> class.
+		/// </summary>
 		/// <param name="domain">The domain (host).</param>
 		/// <param name="subdomain">The subdomain (first token on the domain).</param>
 		/// <param name="appVirtualDir">The application virtual dir.</param>
