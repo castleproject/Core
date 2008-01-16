@@ -23,7 +23,6 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	/// </summary>
 	public sealed class ThreadScopeInfo : AbstractThreadScopeInfo
 	{
-		static readonly Object syncObject = new Object();
 		[ThreadStatic] static Stack stack;
 
 		/// <summary>
@@ -34,15 +33,12 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		{
 			get
 			{
-				lock (syncObject)
+				if (stack == null)
 				{
-					if (stack == null)
-					{
-						stack = new Stack();
-					}
-
-					return stack;
+					stack = new Stack();
 				}
+
+				return stack;
 			}
 		}
 	}

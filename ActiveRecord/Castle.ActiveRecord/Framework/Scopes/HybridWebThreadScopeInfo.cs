@@ -32,8 +32,6 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	{
 		const string ActiveRecordCurrentStack = "activerecord.currentstack";
 
-		static readonly Object syncObject = new Object();
-		
 		[ThreadStatic] static Stack stack;
 
 		/// <summary>
@@ -49,15 +47,12 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 				if (current == null)
 				{
-					lock (syncObject)
+					if (stack == null)
 					{
-						if (stack == null)
-						{
-							stack = new Stack();
-						}
-
-						return stack;
+						stack = new Stack();
 					}
+
+					return stack;
 				}
 
 				Stack contextstack = (Stack)current.Items[ActiveRecordCurrentStack];
