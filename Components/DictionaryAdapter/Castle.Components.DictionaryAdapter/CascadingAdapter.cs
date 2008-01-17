@@ -16,7 +16,7 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System.Collections;
 
-	internal class CascadingAdapter : AbstractDictionaryAdapter
+	public class CascadingAdapter : AbstractDictionaryAdapter
 	{
 		private readonly IDictionary primary;
 		private readonly IDictionary secondary;
