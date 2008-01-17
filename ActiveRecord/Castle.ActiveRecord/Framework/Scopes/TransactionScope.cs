@@ -387,7 +387,7 @@ namespace Castle.ActiveRecord
 
 			if (transactionError != null)
 			{
-				throw transactionError;
+				throw new TransactionException("An error occured when trying to dispose the transaction", transactionError);
 			}
 		}
 
