@@ -45,7 +45,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private RoutingRuleCollection routingRules;
 		private ExtensionEntryCollection extensions;
 		private DefaultUrlCollection defaultUrls;
-		private IConfiguration servicesConfig;
+		private IConfiguration servicesConfig = new MutableConfiguration("services");
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MonoRailConfiguration"/> class.

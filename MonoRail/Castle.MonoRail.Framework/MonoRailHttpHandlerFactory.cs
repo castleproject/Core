@@ -247,6 +247,7 @@ namespace Castle.MonoRail.Framework
 			DefaultMonoRailContainer container = new DefaultMonoRailContainer(userServiceProvider);
 
 			container.UseServicesFromParent();
+			container.InstallPrimordialServices();
 			container.Configure(Configuration);
 
 			FireContainerCreated(appInstance, container);

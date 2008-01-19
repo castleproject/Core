@@ -343,14 +343,21 @@ namespace Castle.MonoRail.Framework.Container
 		}
 
 		/// <summary>
-		/// Pendent
+		/// Installs the primordial services.
 		/// </summary>
-		public void InstallMissingServices()
+		public void InstallPrimordialServices()
 		{
 			if (!HasService<IServiceInitializer>())
 			{
 				AddService<IServiceInitializer>(new DefaultServiceInitializer());
 			}
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		public void InstallMissingServices()
+		{
 			if (!HasService<IHelperFactory>())
 			{
 				AddService<IHelperFactory>(new DefaultHelperFactory());

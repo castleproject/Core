@@ -102,6 +102,11 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			object routeParams = CommonUtils.ObtainObjectEntryAndRemove(parameters, "params");
 
+			if (routeParams == null)
+			{
+				routeParams = CommonUtils.ObtainObjectEntryAndRemove(parameters, "routeparams");
+			}
+
 			return From(parameters, routeParams);
 		}
 
