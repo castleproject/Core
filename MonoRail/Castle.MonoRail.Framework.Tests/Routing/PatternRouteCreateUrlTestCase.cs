@@ -96,5 +96,71 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.AreEqual("/projects/MonoRail/bugs", route.CreateUrl("localhost", "",
 				DictHelper.Create("project=MonoRail", "controller=bugs", "action=index")));
 		}
+
+		[Test]
+		public void ShouldNotCreateRouteUrlIfDefaultsDoNotMatchAndDefaultDoesNotHaveARestriction()
+		{
+			PatternRoute route = new PatternRoute("/people/<id>/edit").
+				DefaultForAction().Is("edit").
+				DefaultForController().Is("companies").
+				Restrict("id").ValidInteger;
+
+			Assert.IsNull(route.CreateUrl("localhost", "",
+				DictHelper.Create("controller=people", "action=edit", "id=1")));
+		}
+
+		[Test]
+		public void ShouldCreateRouteUrlIfDefaultsDoNotMatchAndDefaultsHaveRestrictions()
+		{
+			PatternRoute route = new PatternRoute("/people/<id>/edit.[format]").
+				DefaultForAction().Is("edit").
+				DefaultForController().Is("people").
+				Restrict("id").ValidInteger.
+				Restrict("format").AnyOf(new string[]{"html", "json", "xml"}).
+				DefaultFor("format").Is("html");
+
+			Assert.AreEqual("/people/1/edit.json", route.CreateUrl("localhost", "",
+				DictHelper.Create("id=1", "format=json")));
+		}
+
+		[Test]
+		public void ShouldCreateRouteUrlIfDefaultsAreNotSupplied()
+		{
+			PatternRoute route = new PatternRoute("/people/<id>/edit").
+				DefaultForAction().Is("edit").
+				DefaultForController().Is("people").
+				Restrict("id").ValidInteger;
+
+			Assert.AreEqual("/people/1/edit", route.CreateUrl("localhost", "",
+				DictHelper.Create("id=1")));
+		}
+
+		[Test]
+		public void ShouldNotLeaveATrailingDot()
+		{
+			PatternRoute route = new PatternRoute("/people/<id>/edit.[format]").
+				DefaultForAction().Is("edit").
+				DefaultForController().Is("people").
+				Restrict("id").ValidInteger.
+				Restrict("format").AnyOf(new string[] { "html", "json", "xml" }).
+				DefaultFor("format").Is("html");
+
+			Assert.AreEqual("/people/1/edit", route.CreateUrl("localhost", "",
+				DictHelper.Create("id=1")));
+		}
+
+		[Test]
+		public void ShouldNotLeaveATrailingSlash()
+		{
+			PatternRoute route = new PatternRoute("/people/<id>/edit.[format]/").
+				DefaultForAction().Is("edit").
+				DefaultForController().Is("people").
+				Restrict("id").ValidInteger.
+				Restrict("format").AnyOf(new string[] { "html", "json", "xml" }).
+				DefaultFor("format").Is("html");
+
+			Assert.AreEqual("/people/1/edit", route.CreateUrl("localhost", "",
+				DictHelper.Create("id=1")));
+		}
 	}
 }

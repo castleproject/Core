@@ -73,6 +73,8 @@ namespace Castle.MonoRail.Framework.Routing
 		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
 		{
 			StringBuilder text = new StringBuilder(virtualPath);
+			IList<string> checkedParameters = new List<string>();
+
 			bool hasNamed = false;
 
 			foreach(DefaultNode node in nodes)
@@ -86,6 +88,7 @@ namespace Castle.MonoRail.Framework.Routing
 				else
 				{
 					hasNamed = true;
+					checkedParameters.Add(node.name);
 
 					object value = parameters[node.name];
 					string valAsString = value != null ? value.ToString() : null;
@@ -118,7 +121,24 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 			}
 
-			if (text.Length == 0 || text[text.Length - 1] == '/')
+			// Validate that default parameters match parameters passed into to create url.
+			foreach (KeyValuePair<string, string> defaultParameter in defaults)
+			{
+				// Skip parameters we already checked.
+				if(checkedParameters.Contains(defaultParameter.Key))
+				{
+					continue;
+				}
+
+				object value = parameters[defaultParameter.Key];
+				string valAsString = value != null ? value.ToString() : null;
+				if(!string.IsNullOrEmpty(valAsString) && !defaultParameter.Value.Equals(valAsString, StringComparison.OrdinalIgnoreCase))
+				{
+					return null;
+				}
+			}
+
+			if (text.Length == 0 || text[text.Length - 1] == '/' || text[text.Length -1] == '.')
 			{
 				text.Length = text.Length - 1;
 			}
