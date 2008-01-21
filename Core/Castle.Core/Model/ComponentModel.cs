@@ -83,6 +83,8 @@ namespace Castle.Core
 		public const string SkipRegistration = "skip.registration";
 
 		#region Fields
+		// Note the use of volatile for fields used in the double checked lock pattern.
+		// This is necessary to ensure the pattern works correctly.
 
 		/// <summary>Name (key) of the component</summary>
 		private String name;
@@ -94,7 +96,7 @@ namespace Castle.Core
 		private Type implementation;
 
 		/// <summary>Extended properties</summary>
-		[NonSerialized] private IDictionary extended;
+		[NonSerialized] private volatile IDictionary extended;
 
 		/// <summary>Lifestyle for the component</summary>
 		private LifestyleType lifestyleType;
@@ -108,27 +110,27 @@ namespace Castle.Core
 		private Type customComponentActivator;
 
 		/// <summary>Dependencies the kernel must resolve</summary>
-		private DependencyModelCollection dependencies;
+		private volatile DependencyModelCollection dependencies;
 
 		/// <summary>All available constructors</summary>
-		private ConstructorCandidateCollection constructors;
+		private volatile ConstructorCandidateCollection constructors;
 
 		/// <summary>All potential properties that can be setted by the kernel</summary>
-		private PropertySetCollection properties;
+		private volatile PropertySetCollection properties;
 
 		//private MethodMetaModelCollection methodMetaModels;
 
 		/// <summary>Steps of lifecycle</summary>
-		private LifecycleStepCollection lifecycleSteps;
+		private volatile LifecycleStepCollection lifecycleSteps;
 
 		/// <summary>External parameters</summary>
-		private ParameterModelCollection parameters;
+		private volatile ParameterModelCollection parameters;
 
 		/// <summary>Configuration node associated</summary>
 		private IConfiguration configuration;
 
 		/// <summary>Interceptors associated</summary>
-		private InterceptorReferenceCollection interceptors;
+		private volatile InterceptorReferenceCollection interceptors;
 
 		/// <summary>/// Custom dependencies/// </summary>
 		[NonSerialized] private IDictionary customDependencies;
@@ -198,9 +200,12 @@ namespace Castle.Core
 		{
 			get
 			{
-				lock(this)
+				if (extended == null)
 				{
-					if (extended == null) extended = new HybridDictionary();
+					lock (this)
+					{
+						if (extended == null) extended = new HybridDictionary();
+					}
 				}
 				return extended;
 			}
@@ -215,9 +220,12 @@ namespace Castle.Core
 		{
 			get
 			{
-				lock(this)
+				if (constructors == null)
 				{
-					if (constructors == null) constructors = new ConstructorCandidateCollection();
+					lock (this)
+					{
+						if (constructors == null) constructors = new ConstructorCandidateCollection();
+					}
 				}
 				return constructors;
 			}
@@ -231,9 +239,12 @@ namespace Castle.Core
 		{
 			get
 			{
-				lock(this)
+				if (properties == null)
 				{
-					if (properties == null) properties = new PropertySetCollection();
+					lock (this)
+					{
+						if (properties == null) properties = new PropertySetCollection();
+					}
 				}
 				return properties;
 			}
@@ -257,9 +268,12 @@ namespace Castle.Core
 		{
 			get
 			{
-				lock(this)
+				if (lifecycleSteps == null)
 				{
-					if (lifecycleSteps == null) lifecycleSteps = new LifecycleStepCollection();
+					lock (this)
+					{
+						if (lifecycleSteps == null) lifecycleSteps = new LifecycleStepCollection();
+					}
 				}
 				return lifecycleSteps;
 			}
@@ -314,9 +328,12 @@ namespace Castle.Core
 		{
 			get
 			{
-				lock(this)
+				if (interceptors == null)
 				{
-					if (interceptors == null) interceptors = new InterceptorReferenceCollection();
+					lock (this)
+					{
+						if (interceptors == null) interceptors = new InterceptorReferenceCollection();
+					}
 				}
 				return interceptors;
 			}
@@ -330,9 +347,12 @@ namespace Castle.Core
 		{
 			get
 			{
-				lock(this)
+				if (parameters == null)
 				{
-					if (parameters == null) parameters = new ParameterModelCollection();
+					lock (this)
+					{
+						if (parameters == null) parameters = new ParameterModelCollection();
+					}
 				}
 				return parameters;
 			}
@@ -348,9 +368,12 @@ namespace Castle.Core
 		{
 			get
 			{
-				lock(this)
+				if (dependencies == null)
 				{
-					if (dependencies == null) dependencies = new DependencyModelCollection();
+					lock (this)
+					{
+						if (dependencies == null) dependencies = new DependencyModelCollection();
+					}
 				}
 				return dependencies;
 			}
