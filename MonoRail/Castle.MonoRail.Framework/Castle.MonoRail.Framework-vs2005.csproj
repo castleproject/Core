@@ -413,6 +413,7 @@
     <Compile Include="IFilter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IHelperFactory.cs" />
     <Compile Include="IMonoRailHttpHandlerProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -424,6 +425,7 @@
     <Compile Include="Internal\AssemblySourceInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\BaseResponse.cs" />
     <Compile Include="Internal\CommonUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -446,6 +448,7 @@
     <Compile Include="IParameterBinder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IRedirectSupport.cs" />
     <Compile Include="IRequest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -455,18 +458,13 @@
     <Compile Include="IResponse.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IRouteContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IRoutingEngine.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IScaffoldingSupport.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IServerUtility.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IServiceInitializer.cs" />
     <Compile Include="IServiceProviderLocator.cs" />
     <Compile Include="ISubActionSelector.cs" />
     <Compile Include="ITrace.cs">
@@ -540,6 +538,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Routing\BaseRoutingRuleContainer.cs" />
+    <Compile Include="Routing\IRouteContext.cs" />
+    <Compile Include="Routing\IRoutingEngine.cs" />
     <Compile Include="Routing\IRoutingRule.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -557,6 +557,7 @@
     <Compile Include="Routing\RoutingModuleEx.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Routing\RoutingRuleWithActionDecorator.cs" />
     <Compile Include="ServiceProviderLocator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -587,6 +588,8 @@
     <Compile Include="Services\DefaultFilterFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\DefaultHelperFactory.cs" />
+    <Compile Include="Services\DefaultServiceInitializer.cs" />
     <Compile Include="Services\DefaultStaticResourceRegistry.cs" />
     <Compile Include="Services\DefaultTransformFilterFactory.cs">
       <SubType>Code</SubType>
@@ -626,7 +629,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\NewtonsoftJSONSerializer.cs" />
-    <Compile Include="Services\UrlPartsBuilder.cs" />
+    <Compile Include="Services\UrlParts.cs" />
     <Compile Include="Services\UrlTokenizerException.cs" />
     <Compile Include="Services\Utils\ControllerInspectionUtil.cs">
       <SubType>Code</SubType>

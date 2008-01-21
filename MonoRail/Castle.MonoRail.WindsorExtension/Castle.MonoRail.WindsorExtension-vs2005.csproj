@@ -110,9 +110,7 @@
     </Compile>
     <Compile Include="DefaultWizardPageFactory.cs" />
     <Compile Include="IWizardPageFactory.cs" />
-    <Compile Include="RailsFacility.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="MonoRailFacility.cs" />
     <Compile Include="WindsorContainerAccessorUtil.cs" />
     <Compile Include="WindsorControllerFactory.cs">
       <SubType>Code</SubType>
@@ -120,6 +118,7 @@
     <Compile Include="WindsorFilterFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WindsorHelperFactory.cs" />
     <Compile Include="WindsorMonoRailSectionHandler.cs" />
     <Compile Include="WindsorViewComponentFactory.cs">
       <SubType>Code</SubType>
