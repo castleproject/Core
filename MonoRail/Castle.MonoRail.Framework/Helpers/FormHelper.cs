@@ -1662,7 +1662,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			else
 			{
 				isChecked = ((value != null && value is bool && ((bool)value)) || 
-							 (!(value is bool) && (value != null)));
+							 (!(value is bool) && (value != null) && 
+							 (!(value is string) || ((string) value).ToLower() != "false")));
 			}
 
 			if (isChecked)

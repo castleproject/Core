@@ -58,6 +58,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			context.PropertyBag.Add("user", user);
 			context.PropertyBag.Add("roles", new Role[] { new Role(1, "a"), new Role(2, "b"), new Role(3, "c") });
 			context.PropertyBag.Add("sendemail", true);
+			context.PropertyBag.Add("sendemailstringtrue", "true");
+			context.PropertyBag.Add("sendemailstringfalse", "false"); 
 			context.PropertyBag.Add("confirmation", "abc");
 			context.PropertyBag.Add("fileaccess", FileAccess.Read);
 			context.PropertyBag.Add("subscription", subscription);
@@ -203,6 +205,18 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				"<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked=\"checked\" />" +
 				"<input type=\"hidden\" id=\"sendemailH\" name=\"sendemail\" value=\"0\" />",
 				helper.CheckboxField("sendemail", new DictHelper().CreateDict("falseValue=0")));
+
+			// Checkbox values are actually added as string values to the Flash
+			// NameValueCollection of the Controller. Therefore a string "false"
+			// must render an unchecked checkbox.
+			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemailstringtrue\" name=\"sendemailstringtrue\" value=\"true\" checked=\"checked\" />" +
+				"<input type=\"hidden\" id=\"sendemailstringtrueH\" name=\"sendemailstringtrue\" value=\"false\" />",
+				helper.CheckboxField("sendemailstringtrue"));
+
+			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemailstringfalse\" name=\"sendemailstringfalse\" value=\"true\" />" +
+				"<input type=\"hidden\" id=\"sendemailstringfalseH\" name=\"sendemailstringfalse\" value=\"false\" />",
+				helper.CheckboxField("sendemailstringfalse"));
+
 		}
 
 		[Test]
