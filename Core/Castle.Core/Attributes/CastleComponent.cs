@@ -22,7 +22,7 @@ namespace Castle.Core
 	/// By doing so, the batch register will look 
 	/// for this attribute to distinguish components from other classes.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true)]
 	public class CastleComponentAttribute : LifestyleAttribute
 	{
 		private readonly Type service;
