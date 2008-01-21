@@ -134,7 +134,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			}
 			else
 			{
-				using (MailMessage msg = CreateMailMessage(message))
+				using(MailMessage msg = CreateMailMessage(message))
 				{
 					smtpClient.Send(msg);
 				}
@@ -143,7 +143,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 
 		public void Send(Message[] messages)
 		{
-			foreach (Message message in messages)
+			foreach(Message message in messages)
 			{
 				Send(message);
 			}

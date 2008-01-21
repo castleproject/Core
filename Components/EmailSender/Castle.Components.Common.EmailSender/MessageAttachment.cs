@@ -28,7 +28,7 @@ namespace Castle.Components.Common.EmailSender
 	/// </summary>
 	public class MessageAttachment
 	{
-		private readonly String fileName;
+		private String fileName;
 		private readonly String mediaType;
 		private readonly Stream stream;
 
@@ -66,7 +66,18 @@ namespace Castle.Components.Common.EmailSender
 
 			this.stream = stream;
 		}
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MessageAttachment"/> class.
+		/// </summary>
+		/// <param name="fileName">Name of the file.</param>
+		/// <param name="mediaType">Type of the media.</param>
+		/// <param name="stream">The stream.</param>
+		public MessageAttachment(string fileName, string mediaType, Stream stream) : this(mediaType, stream)
+		{
+			this.fileName = fileName;
+		}
+
 		/// <summary>
 		/// Gets the name of the file.
 		/// </summary>
@@ -74,9 +85,9 @@ namespace Castle.Components.Common.EmailSender
 		public String FileName
 		{
 			get { return fileName; }
+			set { fileName = value; }
 		}
 		
-
 		/// <summary>
 		/// Gets the type of the media.
 		/// </summary>
