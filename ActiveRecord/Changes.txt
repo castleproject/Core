@@ -1,3 +1,5 @@
+- Added IsOverride to Property attribute to allow a property in a derived
+  class to override one in the base class.
 
 - Added SqlQueryJoinDefinition, SqlQueryScalarDefinition and refactored to 
   put behavior in IQueryModifier.Apply.

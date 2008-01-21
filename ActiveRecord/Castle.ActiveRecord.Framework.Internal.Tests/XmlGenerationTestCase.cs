@@ -1372,5 +1372,52 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"</hibernate-mapping>\r\n";
 			Assert.AreEqual(expected, xml);
 		}
+
+		[Test]
+		public void SimpleClassWithOverride()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(SimpleClass));
+			Assert.IsNotNull(model);
+
+			String xml = Process(builder, model);
+
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.SimpleClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"SimpleClass\" lazy=\"false\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name\"/>\r\n" +
+				"    </property>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+
+			model = builder.Create(typeof(SimpleClassOverride));
+			Assert.IsNotNull(model);
+
+			xml = Process(builder, model);
+
+			expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.SimpleClassOverride, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"SimpleClassOverride\" lazy=\"false\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name\" length=\"50\"/>\r\n" +
+				"    </property>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
 	}
 }

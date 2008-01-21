@@ -246,6 +246,21 @@ namespace Castle.ActiveRecord.Framework.Internal
 						PropertyAttribute propAtt = attribute as PropertyAttribute;
 						isArProperty = true;
 
+						// If this property overrides a base class property remove the old one
+						if (propAtt.IsOverride)
+						{
+							for (int index = 0; index < model.Properties.Count; ++index)
+							{
+								PropertyModel oldModel = (PropertyModel)model.Properties[index];
+
+								if (oldModel.Property.Name == prop.Name)
+								{
+									model.Properties.RemoveAt(index);
+									break;
+								}
+							}
+						}
+
 						model.Properties.Add(new PropertyModel(prop, propAtt));
 					}
 					else if (attribute is NestedAttribute)

@@ -59,6 +59,7 @@ namespace Castle.ActiveRecord
 		private bool unique;
 		private bool update = true;
 		private bool insert = true;
+		private bool isOverride;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PropertyAttribute"/> class.
@@ -213,6 +214,15 @@ namespace Castle.ActiveRecord
 		{
 			get { return check; }
 			set { check = value; }
+		}
+
+		/// <summary>
+		/// Set to <c>true</c> if this property overrides a property in a base class
+		/// </summary>
+		public bool IsOverride
+		{
+			get { return isOverride; }
+			set { isOverride = value; }
 		}
 	}
 }
