@@ -22,7 +22,7 @@ namespace Castle.MicroKernel.Lifestyle
 	[Serializable]
 	public class SingletonLifestyleManager : AbstractLifestyleManager
 	{
-		private Object instance;
+		private volatile Object instance;
 
 		public override void Dispose()
 		{
@@ -31,11 +31,14 @@ namespace Castle.MicroKernel.Lifestyle
 
 		public override object Resolve(CreationContext context)
 		{
-			lock(ComponentActivator)
+			if (instance == null)
 			{
-				if (instance == null)
+				lock (ComponentActivator)
 				{
-					instance = base.Resolve(context);
+					if (instance == null)
+					{
+						instance = base.Resolve(context);
+					}
 				}
 			}
 
