@@ -317,7 +317,7 @@ namespace Castle.MonoRail.Views.Brail
 			}
 		}
 
-		internal void SetViewSourceLoader(IViewSourceLoader loader)
+		public void SetViewSourceLoader(IViewSourceLoader loader)
 		{
 			ViewSourceLoader = loader;
 		}
