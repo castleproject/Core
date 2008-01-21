@@ -127,7 +127,7 @@ namespace Castle.ActiveRecord
 		/// <param name="property">A property name (not a column name)</param>
 		/// <param name="value">The value to be equals to</param>
 		/// <returns></returns>
-		public static Array FindAllByProperty(String property, object value)
+		public static T[] FindAllByProperty(String property, object value)
 		{
 			return ActiveRecordBase<T>.FindAllByProperty(property, value);
 		}
