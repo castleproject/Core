@@ -705,13 +705,13 @@ namespace Castle.ActiveRecord
 				GraphConnectorVisitor connectorVisitor = new GraphConnectorVisitor(models);
 				connectorVisitor.VisitNodes(models);
 
-				SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(models);
-				semanticVisitor.VisitNodes(models);
-
 				if (ModelsCreated != null)
 				{
 					ModelsCreated(models, source);
 				}
+
+				SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(models);
+				semanticVisitor.VisitNodes(models);
 
 				AddXmlToNHibernateCfg(holder, models);
 

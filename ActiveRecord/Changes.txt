@@ -1,3 +1,6 @@
+- Applied Alun Harford's patch fixing AR-182
+  "ActiveRecordStarter.ModelsCreated run too late"
+
 - Added IsOverride to Property attribute to allow a property in a derived
   class to override one in the base class.
 

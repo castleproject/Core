@@ -167,6 +167,7 @@
     </Compile>
     <Compile Include="Model\ClassWithAnyAttribute.cs" />
     <Compile Include="Model\ClassWithCompositeKey.cs" />
+    <Compile Include="Model\ClassWithOverride.cs" />
     <Compile Include="Model\Component.cs" />
     <Compile Include="Model\ComponentManyToClassA.cs" />
     <Compile Include="Model\CompositeKeyModels.cs" />
