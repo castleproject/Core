@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +63,7 @@
     </Compile>
     <Compile Include="Resources\UncResourceFactoryTestCase.cs" />
     <Compile Include="StreamLoggerTests.cs" />
+    <Compile Include="WebLoggerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\file1.txt" />

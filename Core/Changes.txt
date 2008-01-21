@@ -1,3 +1,6 @@
+- Applied Chris Bilson's patch fixing CORE-15
+  "WebLogger Throws When Logging Outside of an HttpContext"
+
 Release Candidate 3
 ===================
 

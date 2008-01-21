@@ -68,7 +68,9 @@ namespace Castle.Core.Logging
 		/// <param name="exception">The Exception</param>
 		protected override void Log(LoggerLevel level, String name, String message, Exception exception)
 		{
-			TraceContext ctx = HttpContext.Current.Trace;
+			TraceContext ctx = TryToGetTraceContext();
+			if (ctx == null)
+				return;
 
 			if (ctx.IsEnabled)
 			{
@@ -100,6 +102,19 @@ namespace Castle.Core.Logging
 			}
 
 			return new WebLogger(String.Format("{0}.{1}", Name, newName), Level);
+		}
+
+		/// <summary>
+		/// Tries to get the current http context's trace context.
+		/// </summary>
+		/// <returns>The current http context's trace context or null if none is 
+		/// available</returns>
+		protected virtual TraceContext TryToGetTraceContext()
+		{
+			if (null == HttpContext.Current)
+				return null;
+
+			return HttpContext.Current.Trace;
 		}
 	}
 }
