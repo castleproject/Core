@@ -15,13 +15,9 @@
 namespace Castle.MonoRail.Framework.Adapters
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 	using System.IO;
 	using System.Web;
 	using Castle.MonoRail.Framework;
-	using Core;
-	using Helpers;
 	using Internal;
 	using Routing;
 	using Services;
