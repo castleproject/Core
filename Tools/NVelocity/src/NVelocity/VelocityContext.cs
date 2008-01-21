@@ -136,24 +136,7 @@ namespace NVelocity
 			return o;
 		}
 
-		/// <summary>
-		/// Clones this context object.
-		/// </summary>
-		/// <returns>A deep copy of this <code>Context</code>.</returns>
-		public Object Clone()
-		{
-			VelocityContext clone = null;
-			try
-			{
-				clone = (VelocityContext) base.MemberwiseClone();
-				clone.context = new Hashtable(context);
-			}
-			catch(System.Exception)
-			{
-				// ignore
-			}
-			return clone;
-		}
+
 
 		public override int Count
 		{

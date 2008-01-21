@@ -496,9 +496,6 @@
     <Compile Include="Util\Introspection\MethodMap.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\Introspection\Twonk.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Util\Introspection\UberspectImpl.cs">
       <SubType>Code</SubType>
     </Compile>

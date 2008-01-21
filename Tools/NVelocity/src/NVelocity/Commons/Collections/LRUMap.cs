@@ -338,11 +338,7 @@ namespace Commons.Collections
 				_table.CopyTo(array, arrayIndex);
 			}
 
-//	    public override Object Clone() {
-//		lock (_table.SyncRoot) {
-//		    return Hashtable.Synchronized((Hashtable)_table.Clone());
-//		}
-//	    }
+
 
 			IDictionaryEnumerator IDictionary.GetEnumerator()
 			{

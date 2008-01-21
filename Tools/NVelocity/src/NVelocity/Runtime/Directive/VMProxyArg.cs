@@ -28,7 +28,7 @@ namespace NVelocity.Runtime.Directive
 	/// which knows how to get and set values via it, rather than a simple get()
 	/// or put() from a hashtable-like object.
 	/// *
-	/// There is probably a lot of undocumented subtlty here, so step lightly.
+	/// There is probably a lot of undocumented subtlety here, so step lightly.
 	/// *
 	/// We rely on the observation that an instance of this object has a constant
 	/// state throughout its lifetime as it's bound to the use-instance of a VM.
