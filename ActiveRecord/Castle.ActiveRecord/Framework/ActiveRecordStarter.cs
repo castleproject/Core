@@ -77,6 +77,17 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static event ModelsCreatedDelegate ModelsCreated;
 
+    /// <summary>
+    /// Allows other frameworks to modify the ActiveRecordModel
+    /// before the generation of the NHibernate XML configuration.
+    /// As an example, this may be used to rewrite table names to
+    /// conform to an application-specific standard.  Since the
+    /// configuration source is passed in, it is possible to
+    /// determine the underlying database type and make changes
+    /// if necessary.
+    /// </summary>
+    public static event ModelsCreatedDelegate ModelsValidated;
+
 		/// <summary>
 		/// Initialize the mappings using the configuration and 
 		/// the list of types
@@ -705,13 +716,20 @@ namespace Castle.ActiveRecord
 				GraphConnectorVisitor connectorVisitor = new GraphConnectorVisitor(models);
 				connectorVisitor.VisitNodes(models);
 
-				if (ModelsCreated != null)
+				ModelsCreatedDelegate modelsCreatedHandler = ModelsCreated;
+				if (modelsCreatedHandler != null)
 				{
-					ModelsCreated(models, source);
+					modelsCreatedHandler(models, source);
 				}
 
 				SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(models);
 				semanticVisitor.VisitNodes(models);
+
+				ModelsCreatedDelegate modelsValidatedHandler = ModelsValidated;
+				if(modelsValidatedHandler != null)
+				{
+					modelsValidatedHandler(models, source);
+				}
 
 				AddXmlToNHibernateCfg(holder, models);
 
