@@ -14,37 +14,36 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using Castle.MonoRail.Framework.Tests;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class ComponentsTestCase : AbstractTestCase
+	public class ComponentsTestCase : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void BlockComp1()
 		{
-			DoGet("usingcomponents/index8.rails");
+			ProcessView_StripRailsExtension("usingcomponents/index8.rails");
 			AssertReplyEqualTo("\r\ninner content 1\r\n\r\ninner content 2\r\n");
 		}
 
 		[Test]
 		public void CanGetParamsFromTheComponentInTheView()
 		{
-			DoGet("usingcomponents/template.rails");
+			ProcessView_StripRailsExtension("usingcomponents/template.rails");
 			AssertReplyEqualTo("123");
 		}
 
 		[Test]
 		public void CanPassParametersFromComponentToView()
 		{
-			DoGet("usingcomponents/withParams.rails");
+			ProcessView_StripRailsExtension("usingcomponents/withParams.rails");
 			AssertReplyEqualTo("brail");
 		}
 
 		[Test]
 		public void ComponentWithInvalidSection()
 		{
-			DoGet("usingcomponent2/ComponentWithInvalidSections.rails");
+			ProcessView_StripRailsExtension("usingcomponent2/ComponentWithInvalidSections.rails");
 
 			AssertReplyContains("The section 'invalidsection' is not supported by the ViewComponent 'GridComponent'");
 		}
@@ -52,7 +51,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void GridComponent1()
 		{
-			DoGet("usingcomponent2/GridComponent1.rails");
+			ProcessView_StripRailsExtension("usingcomponent2/GridComponent1.rails");
 
 			AssertReplyEqualTo(
 				@"<table>
@@ -70,7 +69,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void GridComponent2()
 		{
-			DoGet("usingcomponent2/GridComponent2.rails");
+			ProcessView_StripRailsExtension("usingcomponent2/GridComponent2.rails");
 			AssertReplyEqualTo(
 				@"<table>
     <th>EMail</th>
@@ -84,7 +83,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		public void InlineComponentNotOverridingRender()
 		{
 			string expected = "static 1\r\ndefault component view picked up automatically static 2";
-			DoGet("usingcomponents/index3.rails");
+			ProcessView_StripRailsExtension("usingcomponents/index3.rails");
 			AssertReplyEqualTo(expected);
 		}
 
@@ -92,14 +91,14 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		public void InlineComponentUsingRender()
 		{
 			string expected = "static 1\r\nThis is a view used by a component static 2";
-			DoGet("usingcomponents/index2.rails");
+			ProcessView_StripRailsExtension("usingcomponents/index2.rails");
 			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
 		public void InlineComponentWithParam1()
 		{
-			DoGet("usingcomponents/index4.rails");
+			ProcessView_StripRailsExtension("usingcomponents/index4.rails");
 			AssertReplyEqualTo("Done");
 		}
 
@@ -110,7 +109,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			{
 				string expected =
 					"static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n";
-				DoGet("usingcomponents/index9.rails");
+				ProcessView_StripRailsExtension("usingcomponents/index9.rails");
 				AssertReplyEqualTo(expected);
 			}
 		}
@@ -119,21 +118,21 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		public void SimpleInlineViewComponent()
 		{
 			string expected = "static 1\r\nHello from SimpleInlineViewComponent\r\nstatic 2";
-			DoGet("usingcomponents/index1.rails");
+			ProcessView_StripRailsExtension("usingcomponents/index1.rails");
 			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
 		public void UsingCaptureFor()
 		{
-			DoGet("usingcomponents/captureFor.rails");
+			ProcessView_StripRailsExtension("usingcomponents/captureFor.rails");
 			AssertReplyEqualTo("\r\n1234 Foo, Bar");
 		}
 
 		[Test]
 		public void UsingCaptureForWithLayout()
 		{
-			DoGet("usingcomponents/captureForWithLayout.rails");
+			ProcessView_StripRailsExtension("usingcomponents/captureForWithLayout.rails");
 			AssertReplyEqualTo("Numbers: 1234\r\n");
 		}
 	}

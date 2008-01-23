@@ -18,16 +18,16 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	using System;
 	using System.Globalization;
 	using System.Threading;
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class BrailHelperTestCase : AbstractTestCase
+	public class BrailHelperTestCase : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void DictHelperUsage()
 		{
-			DoGet("helper/DictHelperUsage.rails");
+			ProcessView_StripRailsExtension("helper/DictHelperUsage.rails");
 			string expected =
 				"<input type=\"text\" name=\"name\" id=\"name\" value=\"value\" size=\"30\" maxlength=\"20\" style=\"something\" eol=\"true\" />";
 			AssertReplyEqualTo(expected);
@@ -37,7 +37,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		public void InheritedHelpers()
 		{
 			Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-us");
-			DoGet("helper/inheritedhelpers.rails");
+			ProcessView_StripRailsExtension("helper/inheritedhelpers.rails");
 			string expected = "Date formatted " + new DateTime(1979, 7, 16).ToShortDateString();
 			AssertReplyEqualTo(expected);
 		}

@@ -14,41 +14,112 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using System;
-	using System.Collections;
-	using System.Configuration;
-	using System.IO;
-	using System.Reflection;
-	using Framework;
-	using TestSupport;
+    using System;
+    using System.Collections;
+    using System.IO;
+    using System.Reflection;
+    using Castle.MonoRail.Framework.Helpers;
+    using Castle.MonoRail.Framework.Services;
+    using Castle.MonoRail.Framework.Test;
+    using Framework;
+    using NUnit.Framework;
 
-	public class BaseViewOnlyTestFixture : BaseControllerTest
-	{
-		protected static string ProcessView(string templatePath)
-		{
-			return ProcessView(new Hashtable(), templatePath);
-		}
+    public class BaseViewOnlyTestFixture
+    {
+        private readonly string viewSourcePath;
+        protected BooViewEngineOptions BrailOptions;
+        protected ControllerContext ControllerContext;
+        protected Hashtable Helpers;
+        private string lastOutput;
+        protected string Layout;
+        protected MockEngineContext MockEngineContext;
+        protected Hashtable PropertyBag;
+        protected string Area = null;
+        protected string ControllerName = "test_controller";
+        protected string Action = "test_action";
 
-		protected static string ProcessView(IDictionary dictionary, string templatePath)
-		{
-			BooViewEngineOptions options = new BooViewEngineOptions();
-			options.SaveDirectory = Environment.CurrentDirectory;
-			options.SaveToDisk = true;
-			options.Debug = true;
-			options.BatchCompile = true;
-			string viewPath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Views");
+        public BaseViewOnlyTestFixture()
+            : this("../../../TestSiteBrail")
+        {
+        }
 
-			FileAssemblyViewSourceLoader loader = new FileAssemblyViewSourceLoader(viewPath);
-			loader.AddAssemblySource(new AssemblySourceInfo(Assembly.GetExecutingAssembly().FullName,"Castle.MonoRail.Views.Brail.Tests.ResourcedViews"));
-			IndependentBooViewEngine engine = new IndependentBooViewEngine(
-				loader,
-				options);
+        public BaseViewOnlyTestFixture(string viewSource)
+        {
+            viewSourcePath = viewSource;
+        }
 
-			StringWriter sw = new StringWriter();
 
-			engine.Process(templatePath, sw, dictionary);
+        public string ViewSourcePath
+        {
+            get { return viewSourcePath; }
+        }
 
-			return sw.ToString();
-		}
-	}
+        [SetUp]
+        public void SetUp()
+        {
+            Layout = null;
+            PropertyBag = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+            Helpers = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+            BrailOptions = new BooViewEngineOptions();
+            MockServices services = new MockServices();
+            services.UrlBuilder = new DefaultUrlBuilder(new MockServerUtility(),new MockRoutingEngine());
+            services.UrlTokenizer = new DefaultUrlTokenizer();
+            UrlInfo urlInfo = new UrlInfo(
+                "example.org", "test", "/TestBrail", "http", 80,
+                "http://test.example.org/test_area/test_controller/test_action.tdd",
+                Area, ControllerName, Action, "tdd", "no.idea");
+            MockEngineContext = new MockEngineContext(new MockRequest(), new MockResponse(), services,
+                                                      urlInfo);
+            MockEngineContext.AddService<IUrlBuilder>(services.UrlBuilder);
+            MockEngineContext.AddService<IUrlTokenizer>(services.UrlTokenizer);
+            ControllerContext = new ControllerContext();
+            ControllerContext.Helpers = Helpers;
+            ControllerContext.PropertyBag = PropertyBag;
+            MockEngineContext.CurrentControllerContext = ControllerContext;
+
+            Helpers["urlhelper"] = Helpers["url"] = new UrlHelper(MockEngineContext);
+            Helpers["htmlhelper"] = Helpers["html"] = new HtmlHelper(MockEngineContext);
+        }
+
+
+        public void ProcessView_StripRailsExtension(string url)
+        {
+            ProcessView(url.Replace(".rails", ""));
+        }
+
+        protected string ProcessView(string templatePath)
+        {
+            BrailOptions.SaveDirectory = Environment.CurrentDirectory;
+            BrailOptions.SaveToDisk = true;
+            BrailOptions.Debug = false;
+            BrailOptions.BatchCompile = false;
+            string viewPath = Path.Combine(viewSourcePath, "Views");
+
+            FileAssemblyViewSourceLoader loader = new FileAssemblyViewSourceLoader(viewPath);
+            loader.AddAssemblySource(
+                new AssemblySourceInfo(Assembly.GetExecutingAssembly().FullName,
+                                       "Castle.MonoRail.Views.Brail.Tests.ResourcedViews"));
+            BooViewEngine engine = new BooViewEngine();
+            engine.Options = BrailOptions;
+            engine.SetViewSourceLoader(loader);
+            engine.Initialize();
+            StringWriter sw = new StringWriter();
+            if (string.IsNullOrEmpty(Layout) == false)
+                ControllerContext.LayoutNames = new string[] {Layout,};
+            MockEngineContext.CurrentControllerContext = ControllerContext;
+            engine.Process(templatePath, sw, MockEngineContext, null, ControllerContext);
+            lastOutput = sw.ToString();
+            return lastOutput;
+        }
+
+        public void AssertReplyEqualTo(string actual)
+        {
+            Assert.AreEqual(actual, lastOutput);
+        }
+
+        public void AssertReplyContains(string contained)
+        {
+            StringAssert.Contains(lastOutput, contained);
+        }
+    }
 }

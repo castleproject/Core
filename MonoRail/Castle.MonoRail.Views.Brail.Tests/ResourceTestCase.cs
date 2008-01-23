@@ -16,11 +16,11 @@ namespace Castle.MonoRail.Views.Brail.Tests
 {
 	using System.Globalization;
 	using System.Threading;
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class ResourceTestCase : AbstractTestCase
+	public class ResourceTestCase : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void GetIndexedResources()
@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 			Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 			string expected = "testValue";
-			DoGet("resourced/indexingResources.rails");
+			ProcessView_StripRailsExtension("resourced/indexingResources.rails");
 			AssertReplyEqualTo(expected);
 		}
 
@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 			Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 			string expected = "testValue";
-			DoGet("resourced/getresources.rails");
+			ProcessView_StripRailsExtension("resourced/getresources.rails");
 			AssertReplyEqualTo(expected);
 		}
 
@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 			Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 			string expected = "testKey: testValue";
-			DoGet("resourced/iterating.rails");
+			ProcessView_StripRailsExtension("resourced/iterating.rails");
 			AssertReplyEqualTo(expected);
 		}
 	}

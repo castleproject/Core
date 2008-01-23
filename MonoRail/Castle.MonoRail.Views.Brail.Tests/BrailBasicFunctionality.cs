@@ -15,32 +15,39 @@
 namespace Castle.MonoRail.Views.Brail.Tests
 {
 	using System;
+	using System.Collections;
 	using System.IO;
+	using System.Net;
 	using System.Threading;
-	using Castle.MonoRail.Framework.Tests;
+	using DynamicProxy;
 	using NUnit.Framework;
 
-	[TestFixture]
-	public class BrailBasicFunctionality : AbstractTestCase
+    [TestFixture]
+    public class BrailBasicFunctionality : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void AppPath()
 		{
-			DoGet("apppath/index.rails");
-			AssertReplyEqualTo("Current apppath is ");
+			ProcessView_StripRailsExtension("apppath/index.rails");
+			AssertReplyEqualTo("Current apppath is /TestBrail");
 		}
 
 		[Test]
 		public void CanUseUrlHelperWithoutPrefix()
 		{
-			DoGet("home/CanUseUrlHelperWithoutPrefix.rails");
+            PropertyBag["url"] = "blah";
+
+            ProcessView_StripRailsExtension("home/CanUseUrlHelperWithoutPrefix.rails");
 			AssertReplyEqualTo("Castle.MonoRail.Framework.Helpers.UrlHelper");
 		}
 
 		[Test]
 		public void WithNullableDynamicProxyObject()
 		{
-			DoGet("home/WithNullableDynamicProxyObject.rails");
+            ProxyGenerator generator = new ProxyGenerator();
+            SimpleProxy proxy = (SimpleProxy)generator.CreateClassProxy(typeof(SimpleProxy), new StandardInterceptor());
+            PropertyBag["src"] = proxy;
+			ProcessView_StripRailsExtension("home/WithNullableDynamicProxyObject.rails");
 			string expected = @"BarBaz
 foo
 what?
@@ -51,14 +58,14 @@ there";
 		[Test]
 		public void AppPathChangeOnTheFly()
 		{
-			string script = Path.Combine(GetPhysicalDir(), @"Views\AppPath\Index.brail");
+			string script = Path.Combine(ViewSourcePath, @"Views\AppPath\Index.brail");
 			string newContent = "new content";
 			string old;
 			using (TextReader read = File.OpenText(script))
 			{
 				old = read.ReadToEnd();
 			}
-            DoGet("apppath/index.rails");//init brail engine
+            ProcessView_StripRailsExtension("apppath/index.rails");//init brail engine
 			using (TextWriter write = File.CreateText(script))
 			{
 				write.Write(newContent);
@@ -67,7 +74,7 @@ there";
 			Thread.Sleep(1000);
 			try
 			{
-				DoGet("apppath/index.rails");
+				ProcessView_StripRailsExtension("apppath/index.rails");
 				AssertReplyEqualTo(newContent);
 			}
 			finally
@@ -82,7 +89,8 @@ there";
 		[Test]
 		public void CommonScripts()
 		{
-			DoGet("home/nullables.rails");
+		    PropertyBag["doesExists"] = "foo";
+			ProcessView_StripRailsExtension("home/nullables.rails");
 			string expected = "\r\nfoo";
 			AssertReplyEqualTo(expected);
 		}
@@ -90,7 +98,7 @@ there";
 		[Test]
 		public void Empty()
 		{
-			DoGet("home/Empty.rails");
+			ProcessView_StripRailsExtension("home/Empty.rails");
 			string expected = "";
 			AssertReplyEqualTo(expected);
 		}
@@ -98,7 +106,7 @@ there";
 		[Test]
 		public void CommonScriptsChangeOnTheFly()
 		{
-			string common = Path.Combine(GetPhysicalDir(), @"Views\CommonScripts\Hello.brail");
+			string common = Path.Combine(ViewSourcePath, @"Views\CommonScripts\Hello.brail");
 			string old;
 			using (TextReader read = File.OpenText(common))
 			{
@@ -118,7 +126,7 @@ end";
 			Thread.Sleep(500);
 			try
 			{
-				DoGet("home/hellofromcommon.rails");
+				ProcessView_StripRailsExtension("home/hellofromcommon.rails");
 				AssertReplyEqualTo(expected);
 			}
 			finally
@@ -136,7 +144,8 @@ end";
 		[Test]
 		public void LayoutsChangeOnTheFly()
 		{
-			string layout = Path.Combine(GetPhysicalDir(), @"Views\layouts\defaultlayout.brail");
+		    Layout = "defaultlayout";
+			string layout = Path.Combine(ViewSourcePath, @"Views\layouts\defaultlayout.brail");
 			string old;
 			using (TextReader read = File.OpenText(layout))
 			{
@@ -155,7 +164,7 @@ end";
 			Thread.Sleep(500);
 			try
 			{
-				DoGet("defaultlayout/index.rails");
+				ProcessView_StripRailsExtension("defaultlayout/index.rails");
 				AssertReplyEqualTo(expected);
 			}
 			finally
@@ -171,8 +180,9 @@ end";
 
 		[Test]
 		public void PreProcessor()
-		{
-			DoGet("home/preprocessor.rails");
+        {
+            this.PropertyBag.Add("Title", "Ayende");
+			ProcessView_StripRailsExtension("home/preprocessor.rails");
 			string expected =
 				@"
 <html>
@@ -191,24 +201,30 @@ end";
 		[Test]
 		public void CanUseNamespacesFromConfig()
 		{
+		    BrailOptions.NamespacesToImport.Add(typeof (TransportType).Namespace);
 			string expected = "Using Udp without namespace, since it is in the web.config\r\n";
-			DoGet("home/namespacesInConfig.rails");
+			ProcessView_StripRailsExtension("home/namespacesInConfig.rails");
 			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
 		public void ComplexNestedExpressions()
 		{
-			string expected = "<a href=\"/customers/list.rails\" onclick=\"paginate(5)\" >first</a>";
-			DoGet("home/complexNestedExpressions.rails");
+		    PropertyBag["title"] = "first";
+            PropertyBag["pageIndex"] = 5;
+			string expected = "<a href=\"/TestBrail/customers/list.tdd\" onclick=\"paginate(5)\" >first</a>";
+			ProcessView_StripRailsExtension("home/complexNestedExpressions.rails");
 			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
 		public void ComplexNestedExpressions2()
 		{
-			string expected = "<a onclick=\"alert(5)\"  href=\"/customers/list.rails?page=5\">first</a>";
-			DoGet("home/complexNestedExpressions2.rails");
+            PropertyBag["title"] = "first";
+            PropertyBag["pageIndex"] = 5;
+
+            string expected = "<a onclick=\"alert(5)\"  href=\"/TestBrail/customers/list.tdd?page=5\">first</a>";
+			ProcessView_StripRailsExtension("home/complexNestedExpressions2.rails");
 			AssertReplyEqualTo(expected);
 		}
 		
@@ -221,7 +237,7 @@ end";
 		alert(index);
 	}
 </script>";;
-			DoGet("home/javascript.rails");
+			ProcessView_StripRailsExtension("home/javascript.rails");
 			AssertReplyEqualTo(expected);
 		}
 
@@ -231,7 +247,7 @@ end";
 			string expected = @"<script type='text/javascript'>
 	function paginate(index)
 	{
-		var url = '/customers/list.rails';
+		var url = '/TestBrail/customers/list.tdd';
 		var params = 'page='+index+'&isAjax=true';
 		new Ajax.Request(url, {
 			method: 'get', 
@@ -239,8 +255,8 @@ end";
 			parameters: params
 			});
 	}
-</script>";;
-			DoGet("home/javascript2.rails");
+</script>"; ;
+			ProcessView_StripRailsExtension("home/javascript2.rails");
 			AssertReplyEqualTo(expected);
 		}
 
@@ -250,30 +266,54 @@ end";
 			string expected = @"<div>
 Contents for heyhello View
 </div>";
-			DoGet("home/subview.rails");
+			ProcessView_StripRailsExtension("home/subview.rails");
 			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
 		public void UsingQuotes()
 		{
-			string expected = "<script type=\"text/javascript\" language=\"javascript\" src=\"/Content/js/datepicker.js\"></script>";
-			DoGet("home/usingQuotes.rails");
+            string expected = "<script type=\"text/javascript\" language=\"javascript\" src=\"/TestBrail/Content/js/datepicker.js\"></script>";
+			ProcessView_StripRailsExtension("home/usingQuotes.rails");
 			AssertReplyEqualTo(expected);
 		}
 
         [Test]
         public void DuckOverloadToString()
         {
-            DoGet("home/DuckOverloadToString.rails");
+            PropertyBag["birthday"] = new DateTime(1981, 12, 20);
+            ProcessView_StripRailsExtension("home/DuckOverloadToString.rails");
             AssertReplyEqualTo("20-12-1981");   
         }
 
         [Test]
         public void NullPropagation()
         {
-            DoGet("home/NullPropagation.rails");
-            AssertReplyIsBlank();
+            ProcessView_StripRailsExtension("home/NullPropagation.rails");
+            AssertReplyEqualTo("");
+        }
+
+        public class SimpleProxy
+        {
+            private string text = "BarBaz";
+            readonly Hashtable items = new Hashtable();
+
+            public virtual object this[string key]
+            {
+                get { return items[key]; }
+                set { items[key] = value; }
+            }
+
+            public virtual string Text
+            {
+                get { return text; }
+                set { text = value; }
+            }
+
+            public virtual string Say()
+            {
+                return "what?";
+            }
         }
 	}
 }

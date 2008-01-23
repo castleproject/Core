@@ -14,55 +14,52 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class BrailBugsTestCase : AbstractTestCase
+	public class BrailBugsTestCase : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void MR_233_TagInDoubleQuotes()
 		{
-			DoGet("bugs/mr_233.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("bugs/mr_233.rails");
 			AssertReplyEqualTo("<body id=\"123\">");
 		}
 
 		[Test]
 		public void MR_294_CaptureForInSubViewDoesNotPropogateUpward()
 		{
-			DoGet("bugs/MR_294_CaptureForInSubViewDoesNotPropogateUpward.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("bugs/MR_294_CaptureForInSubViewDoesNotPropogateUpward.rails");
 			AssertReplyEqualTo("ayende");
 		}
 
 		[Test]
 		public void MR_371_OutputComponentInSectionTooManyTimes()
 		{
-			DoGet("bugs/mr_371.rails");
+			ProcessView_StripRailsExtension("bugs/mr_371.rails");
 			AssertReplyEqualTo("123ayende 0<br/>123ayende 1<br/>123ayende 2<br/>");
 		}
 
 		[Test]
 		public void MR_262_DynamicComponents()
 		{
-			DoGet("usingcomponents/DynamicComponents.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("usingcomponents/DynamicComponents.rails");
 			AssertReplyEqualTo("default component view picked up automaticallyThis is a view used by a component");
 		}
 
 		[Test]
 		public void MR_285_ViewName_Is_Reserved_CompilerKeyword()
 		{
-			DoGet("bugs/add.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("bugs/add.rails");
 			AssertReplyContains("Success");
 		}
 
-		[Test]
+
+	    [Test]
 		public void MR_299_Inline_SubView()
 		{
-			DoGet("bugs/inlineSubView.rails");
+			ProcessView_StripRailsExtension("bugs/inlineSubView.rails");
 			AssertReplyContains("Success");
 		}
 	}

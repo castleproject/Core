@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Views.Brail.Tests
 {
 	using System.Collections;
+	using System.Collections.Generic;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -23,44 +24,40 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void CanCompareToNullableParameter()
 		{
-			Hashtable args = new Hashtable();
-			args["myVariable"] = "Hello";
-			string view = ProcessView(args, "regressions/CanCompareToNullableParameter");
-			Assert.AreEqual("Eq", view);
+            PropertyBag["myVariable"] = "Hello";
+			ProcessView("regressions/CanCompareToNullableParameter");
+			AssertReplyEqualTo("Eq");
 		}
 
 		[Test]
 		public void CanUseQuestionMarkOperatorInIfStatementToValidatePresenceOfParameter()
 		{
-			string view = ProcessView("regressions/questionMarkOp_if");
-			Assert.AreEqual("", view);
+			ProcessView("regressions/questionMarkOp_if");
+            AssertReplyEqualTo("");
 		}
 
 		[Test]
 		public void CanUseQuestionMarkOperatorInIfStatementToValidatePresenceOfParameter_WhenPassed()
 		{
-			Hashtable args = new Hashtable();
-			args["errorMsg"] = "Hello"; 
-			string view = ProcessView(args, "regressions/questionMarkOp_if_whenPassed");
-			Assert.AreEqual("Hello", view);
+            PropertyBag["errorMsg"] = "Hello"; 
+			ProcessView("regressions/questionMarkOp_if_whenPassed");
+            AssertReplyEqualTo("Hello");
 		}
 
 		[Test]
 		public void CanUseQuestionMarkOperatorInIfStatementToValidatePresenceOfParameter_WhenExists()
 		{
-			Hashtable args = new Hashtable();
-			args["Errors"] = new string[] {"Hello",}; 
-			string view = ProcessView(args, "regressions/questionMarkOp_if_when_exists");
-			Assert.AreEqual("Hello<br />\r\n", view);
+			PropertyBag["Errors"] = new string[] {"Hello",}; 
+			ProcessView("regressions/questionMarkOp_if_when_exists");
+            AssertReplyEqualTo("Hello<br />\r\n");
 		}
 
 		
 		[Test]
 		public void CanUseQuestionMarkOperatorInIfStatementToValidatePresenceOfParameter_WhenMissing()
 		{
-			Hashtable args = new Hashtable();
-			string view = ProcessView(args, "regressions/questionMarkOp_if_when_missing");
-			Assert.AreEqual("", view);
+			ProcessView("regressions/questionMarkOp_if_when_missing");
+		    AssertReplyEqualTo("");
 		}
 
 		[Test]
@@ -73,9 +70,9 @@ namespace Castle.MonoRail.Views.Brail.Tests
         [Test]
         public void CanUseQuestionMarkOperatorInUnlessStatementToValidatePresenceOfParameter_whenPassed()
         {
-            Hashtable args = new Hashtable();
-            args["errorMsg"] = "Hello";
-            string view = ProcessView(args, "regressions/questionMarkOp_unless_whenPassed");
+			
+            PropertyBag["errorMsg"] = "Hello";
+            string view = ProcessView("regressions/questionMarkOp_unless_whenPassed");
             Assert.AreEqual("", view);
         }
 
@@ -83,18 +80,16 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void HtmlEncodingStringInterpolation()
 		{
-			Hashtable args = new Hashtable();
-			args["htmlCode"] = "<script>alert('a');</script>";
-			string view = ProcessView(args, "regressions/HtmlEncodingStringInterpolation");
+            PropertyBag["htmlCode"] = "<script>alert('a');</script>";
+			string view = ProcessView("regressions/HtmlEncodingStringInterpolation");
 			Assert.AreEqual("&lt;script&gt;alert('a');&lt;/script&gt;", view);
 		}
 
 		[Test]
 		public void StringInterpolationInCodeBlockWillNotBeEscaped()
 		{
-			Hashtable args = new Hashtable();
-			args["htmlCode"] = "<script>alert('a');</script>";
-			string view = ProcessView(args, "regressions/StringInterpolationInCodeBlockWillNotBeEscaped");
+            PropertyBag["htmlCode"] = "<script>alert('a');</script>";
+			string view = ProcessView("regressions/StringInterpolationInCodeBlockWillNotBeEscaped");
 			Assert.AreEqual("<script>alert('a');</script>", view);
 		}
 

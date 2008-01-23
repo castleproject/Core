@@ -15,16 +15,16 @@
 namespace Castle.MonoRail.Views.Brail.Tests
 {
 	using System.Collections;
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class BrailLayoutsTestCase : AbstractTestCase
+	public class BrailLayoutsTestCase : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void CanUseLayoutThatIsNotInLayoutsFolder()
 		{
-			DoGet("layoutable/CustomLayoutLocation.rails");
+			ProcessView_StripRailsExtension("layoutable/CustomLayoutLocation.rails");
 			AssertReplyEqualTo("not in layouts");
 		}
 	}

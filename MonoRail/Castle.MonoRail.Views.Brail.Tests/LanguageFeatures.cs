@@ -14,11 +14,11 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class LanguageFeatures : AbstractTestCase
+	public class LanguageFeatures : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void CanHandleDynamicProxyObjects()
@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 <h1>BarBaz</h1>
 </html>";
 			// should not raise ambigious match exception
-			DoGet("Home/withDynamicProxyObject.rails");
+			ProcessView_StripRailsExtension("Home/withDynamicProxyObject.rails");
 			AssertReplyEqualTo(expected);
 		}
 
@@ -40,7 +40,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 <h1>BarBaz</h1>
 </html>";
 			// should not raise null exception
-			DoGet("Home/nullableProperties.rails");
+			ProcessView_StripRailsExtension("Home/nullableProperties.rails");
 			AssertReplyEqualTo(expected);
 		}
 	}

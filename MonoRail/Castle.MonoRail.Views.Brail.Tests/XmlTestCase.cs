@@ -14,11 +14,11 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class XmlTestCase : AbstractTestCase
+	public class XmlTestCase : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void ComplexXml()
@@ -35,7 +35,7 @@ html string
 <li>2</li>
 
 </ol>";
-			DoGet("Xml/Complex.rails");
+			ProcessView_StripRailsExtension("Xml/Complex.rails");
 			AssertReplyEqualTo(expected);
 		}
 
@@ -43,7 +43,7 @@ html string
 		public void PureXml()
 		{
 			string expected = "0,1,2,3,4,5,6,7,8,9,";
-			DoGet("Xml/Pure.rails");
+			ProcessView_StripRailsExtension("Xml/Pure.rails");
 			AssertReplyEqualTo(expected);
 		}
 	}

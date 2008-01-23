@@ -14,16 +14,16 @@
 namespace Castle.MonoRail.Views.Brail.Tests
 {
 	using System.Text;
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class BrailSubViewTestCase : AbstractTestCase
+	public class BrailSubViewTestCase : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void BrailWillCacheSubViewsWhenUsingForwardSlash()
 		{
-			DoGet("subview/useLotsOfSubViews.rails");
+			ProcessView_StripRailsExtension("subview/useLotsOfSubViews.rails");
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < 50; i++)
 			{
@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			{
 				sb.Append("dummy");
 			}
-			DoGet("subview/useLotsOfSubViews.rails", "replaceSubView=true");
+			ProcessView_StripRailsExtension("subview/useLotsOfSubViews.rails");
 			expected = sb.ToString();
 			AssertReplyEqualTo(expected);
 		}
@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void CanCallSubViews()
 		{
-			DoGet("subview/index.rails");
+			ProcessView_StripRailsExtension("subview/index.rails");
 			string expected = "View With SubView Content\r\nFrom SubView";
 			AssertReplyEqualTo(expected);
 		}
@@ -55,7 +55,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void CanCallSubViewWithPath()
 		{
-			DoGet("subview/SubViewWithPath.rails");
+			ProcessView_StripRailsExtension("subview/SubViewWithPath.rails");
 			string expected = "View With SubView Content\r\nContents for heyhello View";
 			AssertReplyEqualTo(expected);
 		}
@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void SubViewWithLayout()
 		{
-			DoGet("subview/SubViewWithLayout.rails");
+			ProcessView_StripRailsExtension("subview/SubViewWithLayout.rails");
 			string expected = "\r\nWelcome!\r\n<p>View With SubView Content\r\nFrom SubView</p>\r\nFooter";
 			AssertReplyEqualTo(expected);
 		}
@@ -71,7 +71,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void SubViewWithParameters()
 		{
-			DoGet("subview/SubViewWithParameters.rails");
+			ProcessView_StripRailsExtension("subview/SubViewWithParameters.rails");
 			string expected = "View SubView Content With Parameters\r\nMonth: 0\r\nAllow Select: False";
 			AssertReplyEqualTo(expected);
 		}

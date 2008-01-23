@@ -14,65 +14,58 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class JSGenerationTestCase : AbstractTestCase
+	public class JSGenerationTestCase : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void AccessingElementAttribute()
 		{
-			DoGet("jsgeneration/elementattribute.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/elementattribute.rails");
 			AssertReplyContains("$('aa').className = \"newclass\";");
 		}
 
 		[Test]
 		public void AccessingElementAttributeDepth()
 		{
-			DoGet("jsgeneration/elementattributedepth.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/elementattributedepth.rails");
 			AssertReplyContains("$('aa').style.display = \"none\";");
 		}
 
 		[Test]
 		public void AccessingElementMethod()
 		{
-			DoGet("jsgeneration/elementmethod.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/elementmethod.rails");
 			AssertReplyContains("$('aa').hide();");
 		}
 
 		[Test]
 		public void AccessingElementMethodDepth()
 		{
-			DoGet("jsgeneration/elementmethoddepth.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/elementmethoddepth.rails");
 			AssertReplyContains("$('aa').read().test();");
 		}
 
 		[Test]
 		public void AccessingElementStockOperationReplace()
 		{
-			DoGet("jsgeneration/elementreplace.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/elementreplace.rails");
 			AssertReplyContains("$('aa').replace(\"new content\")");
 		}
 
 		[Test]
 		public void AccessingElementStockOperationReplaceHtml()
 		{
-			DoGet("jsgeneration/elementreplacehtml.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/elementreplacehtml.rails");
 			AssertReplyContains("$('aa').update(\"new content\")");
 		}
 
 		[Test]
 		public void CollectionFirstLast()
 		{
-			DoGet("jsgeneration/collectionfirstlast.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/collectionfirstlast.rails");
 			AssertReplyContains("$$('p.welcome b').first().hide();");
 			AssertReplyContains("$$('p.welcome b').last().show();");
 		}
@@ -80,8 +73,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void InsertHtml()
 		{
-			DoGet("jsgeneration/InsertHtml.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/InsertHtml.rails");
 			AssertReplyContains("new Insertion.Top(\"aa\",\"new content\");");
 			AssertReplyContains("new Insertion.Bottom(\"aa\",\"new content\");");
 			AssertReplyContains("new Insertion.After(\"aa\",\"new content\");");
@@ -91,7 +83,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void MR_264()
 		{
-			DoGet("jsgeneration/mr264.rails");
+			ProcessView_StripRailsExtension("jsgeneration/mr264.rails");
 			AssertReplyContains(
 				"Element.update(\"holder\",\"test\");\r\n" +
 				"new Effect.Highlight('holder', {});");
@@ -100,32 +92,28 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void Replace()
 		{
-			DoGet("jsgeneration/replace.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/replace.rails");
 			AssertReplyContains("Element.replace(\"aa\",\"new content\")");
 		}
 
 		[Test]
 		public void ReplaceHtml()
 		{
-			DoGet("jsgeneration/replacehtml.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/replacehtml.rails");
 			AssertReplyContains("Element.update(\"aa\",\"new content\");");
 		}
 
 		[Test]
 		public void ReplaceHtmlUsingPartial()
 		{
-			DoGet("jsgeneration/replacehtmlwithpartial.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/replacehtmlwithpartial.rails");
 			AssertReplyContains("Element.update(\"aa\",\"You\'re hammett <br> [ a ][ b ]\")");
 		}
 
 		[Test]
 		public void ShowHideToggleRemove()
 		{
-			DoGet("jsgeneration/multipleactions.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/multipleactions.rails");
 			AssertReplyContains("Element.show(\"a\");");
 			AssertReplyContains("Element.show(\"a\",\"b\",\"c\");");
 			AssertReplyContains("Element.hide(\"a\");");
@@ -138,24 +126,21 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void SimpleCollectionAccess()
 		{
-			DoGet("jsgeneration/collectionaccess.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/collectionaccess.rails");
 			AssertReplyContains("$$('aa');");
 		}
 
 		[Test]
 		public void SimpleElementAccess()
 		{
-			DoGet("jsgeneration/elementaccess.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/elementaccess.rails");
 			AssertReplyContains("$('aa');");
 		}
 
 		[Test]
 		public void VisualEffect()
 		{
-			DoGet("jsgeneration/visualeffect.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("jsgeneration/visualeffect.rails");
 			AssertReplyContains("Effect.Highlight('element1', {});");
 			AssertReplyContains("Effect.Highlight('element1', {duration:4});");
 		}

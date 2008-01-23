@@ -15,17 +15,17 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class HappenedOnTheFieldFixture : AbstractTestCase
+	public class HappenedOnTheFieldFixture : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void UsingEmptyComponent()
 		{
-			DoGet("happenedOnTheField/JustComponent.rails");
-			AssertSuccess();
+			ProcessView_StripRailsExtension("happenedOnTheField/JustComponent.rails");
+			// should complete succesfully
 		}
 	}
 }

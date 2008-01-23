@@ -14,16 +14,15 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using Castle.MonoRail.Framework.Tests;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class DirectRenderTestCase : AbstractTestCase
+	public class DirectRenderTestCase : BaseViewOnlyTestFixture
 	{
 		[Test, Ignore("DirectRender without layout doesnt work anymore")]
 		public void DirectRendering()
 		{
-			DoGet("directrender/direct.rails");
+			ProcessView_StripRailsExtension("directrender/direct.rails");
 			string expected = "Ayende";
 			AssertReplyEqualTo(expected);
 		}
@@ -31,7 +30,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void DirectRenderingWithLayout()
 		{
-			DoGet("directrender/directwithlayout.rails");
+			ProcessView_StripRailsExtension("directrender/directwithlayout.rails");
 			string expected = "\r\nWelcome!\r\n<p>Ayende</p>\r\nFooter";
 			AssertReplyEqualTo(expected);
 		}

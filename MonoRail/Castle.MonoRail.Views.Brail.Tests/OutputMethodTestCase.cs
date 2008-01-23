@@ -14,17 +14,17 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class OutputMethodTestCase : AbstractTestCase
+	public class OutputMethodTestCase : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void HtmlAttribute()
 		{
 			string expected = @"Some text that will be &lt;html&gt; encoded";
-			DoGet("OutputMethods/HtmlOutputAttribute.rails");
+			ProcessView_StripRailsExtension("OutputMethods/HtmlOutputAttribute.rails");
 			AssertReplyEqualTo(expected);
 		}
 
@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		public void RawAttribute()
 		{
 			string expected = @"1<2 && 3>4";
-			DoGet("OutputMethods/RawOutputAttribute.rails");
+			ProcessView_StripRailsExtension("OutputMethods/RawOutputAttribute.rails");
 			AssertReplyEqualTo(expected);
 		}
 
@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		{
 			string expected = "<p><a href=\"http://www.ayende.com/\">Ayende Rahien</a>, <strong>Rahien</strong>.</p>\n";
 
-			DoGet("OutputMethods/MarkDownOutputAttribute.rails");
+			ProcessView_StripRailsExtension("OutputMethods/MarkDownOutputAttribute.rails");
 			AssertReplyEqualTo(expected);
 		}
 	}

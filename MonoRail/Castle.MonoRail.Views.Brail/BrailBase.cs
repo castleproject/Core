@@ -392,10 +392,11 @@ namespace Castle.MonoRail.Views.Brail
 		/// <param name="controllerContext">The controller context.</param>
 		private void InitProperties(IEngineContext myContext, IController myController, IControllerContext controllerContext)
 		{
+            
 			properties = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 			//properties.Add("dsl", new DslWrapper(this));
 			properties.Add("Controller", myController);
-			properties.Add("Context", myContext);
+			
 			if (myContext != null)
 			{
 				properties.Add("request", myContext.Request);

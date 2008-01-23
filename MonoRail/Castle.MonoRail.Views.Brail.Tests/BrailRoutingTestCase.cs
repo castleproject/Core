@@ -13,16 +13,16 @@
 // limitations under the License.
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using Castle.MonoRail.Framework.Tests;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class BrailRoutingTestCase : AbstractTestCase
+	public class BrailRoutingTestCase : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void BlogRoutingRule()
 		{
-			DoGet("blog/posts/2005/07/");
+			ProcessView_StripRailsExtension("blog/posts/2005/07/");
 			string expected = "Blog: year=2005 month=7";
 
 			AssertReplyEqualTo(expected);
@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void NewsRoutingRule()
 		{
-			DoGet("news/2004/11/");
+			ProcessView_StripRailsExtension("news/2004/11/");
 			string expected = "News: year=2004 month=11";
 			AssertReplyEqualTo(expected);
 		}

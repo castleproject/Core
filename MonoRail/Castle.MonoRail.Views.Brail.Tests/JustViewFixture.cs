@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Views.Brail.Tests
 {
 	using System.Collections;
+	using System.Collections.Generic;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -30,11 +31,9 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void UsingExtentionMethods()
 		{
-			IDictionary dictionary = new Hashtable();
-			dictionary["items"] = new int[] {};
-			string templatePath = "home/extensionMethods";
+            PropertyBag["items"] = new int[] { };
 
-			string actual = ProcessView(dictionary, templatePath);
+		    string actual = ProcessView("home/extensionMethods");
 			Assert.AreEqual("No Data", actual);
 		}
 
@@ -42,12 +41,11 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void WithParameters()
 		{
-			IDictionary dictionary = new Hashtable();
-			dictionary["list"] = new int[] {2, 5, 7, 8};
-			dictionary["name"] = "test";
+            PropertyBag["list"] = new int[] { 2, 5, 7, 8 };
+            PropertyBag["name"] = "test";
 			string templatePath = "home/bag";
 
-			string actual = ProcessView(dictionary, templatePath);
+			string actual = ProcessView(templatePath);
 			string expected = @"test is the name
  2
  5
