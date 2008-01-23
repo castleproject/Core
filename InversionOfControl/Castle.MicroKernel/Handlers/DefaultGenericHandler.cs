@@ -79,7 +79,7 @@ namespace Castle.MicroKernel.Handlers
 
 					newModel.ExtendedProperties[ComponentModel.SkipRegistration] = true;
 
-					CloneParentProperties(context, newModel);
+					CloneParentProperties(newModel);
 
 					Kernel.AddCustomComponent(newModel);
 
@@ -106,21 +106,16 @@ namespace Castle.MicroKernel.Handlers
 		/// </item>
 		/// </list>
 		/// </remarks>
-		/// <param name="context">The parent context</param>
 		/// <param name="newModel">the subhandler</param>
-		private static void CloneParentProperties(CreationContext context, ComponentModel newModel)
+		private void CloneParentProperties(ComponentModel newModel)
 		{
 			// Inherits from LifeStyle's context.
-			if (newModel.LifestyleType == LifestyleType.Undefined)
-				newModel.LifestyleType = context.Handler.ComponentModel.LifestyleType;
+			newModel.LifestyleType = ComponentModel.LifestyleType;
 
-			// Inherit context interceptors.
-			if (newModel.Interceptors.HasInterceptors == false)
+			// Inherit the parent handler interceptors.
+			foreach (InterceptorReference interceptor in ComponentModel.Interceptors)
 			{
-				foreach (InterceptorReference interceptor in context.Handler.ComponentModel.Interceptors)
-				{
-					newModel.Interceptors.Add(interceptor);
-				}
+				newModel.Interceptors.Add(interceptor);
 			}
 		}
 	}

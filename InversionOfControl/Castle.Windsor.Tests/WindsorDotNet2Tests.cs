@@ -32,7 +32,7 @@ namespace Castle.Windsor.Tests
 		{
 			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
 			ICalcService svr = container.Resolve<ICalcService>();
-			Assert.IsTrue(typeof (CalculatorService).IsInstanceOfType(svr));
+			Assert.IsTrue(typeof(CalculatorService).IsInstanceOfType(svr));
 		}
 
 		[Test]
@@ -40,7 +40,7 @@ namespace Castle.Windsor.Tests
 		{
 			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
 			ICalcService svr = container.Resolve<ICalcService>("calc");
-			Assert.IsTrue(typeof (CalculatorService).IsInstanceOfType(svr));
+			Assert.IsTrue(typeof(CalculatorService).IsInstanceOfType(svr));
 		}
 
 		[Test]
@@ -49,7 +49,7 @@ namespace Castle.Windsor.Tests
 			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
 			IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos.generic");
 			Assert.IsNotNull(repos);
-			Assert.IsTrue(typeof (DemoRepository<int>).IsInstanceOfType(repos));
+			Assert.IsTrue(typeof(DemoRepository<int>).IsInstanceOfType(repos));
 		}
 
 		[Test]
@@ -58,8 +58,8 @@ namespace Castle.Windsor.Tests
 			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
 			IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos");
 			Assert.IsNotNull(repos);
-			Assert.IsTrue(typeof (LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
-			Assert.IsTrue(typeof (DemoRepository<int>).IsInstanceOfType(((LoggingRepositoryDecorator<int>) repos).inner));
+			Assert.IsTrue(typeof(LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
+			Assert.IsTrue(typeof(DemoRepository<int>).IsInstanceOfType(((LoggingRepositoryDecorator<int>)repos).inner));
 		}
 
 		[Test]
@@ -68,7 +68,7 @@ namespace Castle.Windsor.Tests
 			IWindsorContainer container =
 				new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
 			LoggingRepositoryDecorator<int> resolve =
-				(LoggingRepositoryDecorator<int>) container.Resolve<IRepository<int>>();
+				(LoggingRepositoryDecorator<int>)container.Resolve<IRepository<int>>();
 			Assert.IsNull(resolve.inner);
 		}
 
@@ -77,12 +77,12 @@ namespace Castle.Windsor.Tests
 		{
 			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("DecoratorConfig.xml")));
 			IRepository<int> repos = container.Resolve<IRepository<int>>();
-			Assert.IsTrue(typeof (LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
+			Assert.IsTrue(typeof(LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
 
-			Assert.IsTrue(typeof (LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
-			Assert.IsTrue(typeof (DemoRepository<int>).IsInstanceOfType(((LoggingRepositoryDecorator<int>) repos).inner));
+			Assert.IsTrue(typeof(LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
+			Assert.IsTrue(typeof(DemoRepository<int>).IsInstanceOfType(((LoggingRepositoryDecorator<int>)repos).inner));
 
-			DemoRepository<int> inner = ((LoggingRepositoryDecorator<int>) repos).inner as DemoRepository<int>;
+			DemoRepository<int> inner = ((LoggingRepositoryDecorator<int>)repos).inner as DemoRepository<int>;
 
 			Assert.AreEqual("second", inner.Name);
 		}
@@ -94,9 +94,9 @@ namespace Castle.Windsor.Tests
 				new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
 
 			IRepository<string> repos = container.Resolve<IRepository<string>>();
-			Assert.IsTrue(typeof (LoggingRepositoryDecorator<string>).IsInstanceOfType(repos));
+			Assert.IsTrue(typeof(LoggingRepositoryDecorator<string>).IsInstanceOfType(repos));
 
-			DemoRepository<string> inner = ((LoggingRepositoryDecorator<string>) repos).inner as DemoRepository<string>;
+			DemoRepository<string> inner = ((LoggingRepositoryDecorator<string>)repos).inner as DemoRepository<string>;
 
 			Assert.AreEqual("second", inner.Name);
 		}
@@ -135,17 +135,17 @@ namespace Castle.Windsor.Tests
 		{
 			IWindsorContainer container =
 				new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
-			IRepository<IEmployee> empRepost = container[typeof (IRepository<IEmployee>)] as IRepository<IEmployee>;
+			IRepository<IEmployee> empRepost = container[typeof(IRepository<IEmployee>)] as IRepository<IEmployee>;
 			Assert.IsNotNull(empRepost);
-			Assert.IsTrue(typeof (LoggingRepositoryDecorator<IEmployee>).IsInstanceOfType(empRepost));
+			Assert.IsTrue(typeof(LoggingRepositoryDecorator<IEmployee>).IsInstanceOfType(empRepost));
 			LoggingRepositoryDecorator<IEmployee> log = empRepost as LoggingRepositoryDecorator<IEmployee>;
 			IRepository<IEmployee> inner = log.inner;
 			Assert.IsNotNull(inner);
-			Assert.IsTrue(typeof (DemoRepository<IEmployee>).IsInstanceOfType(inner));
+			Assert.IsTrue(typeof(DemoRepository<IEmployee>).IsInstanceOfType(inner));
 			DemoRepository<IEmployee> demoEmpRepost = inner as DemoRepository<IEmployee>;
 			Assert.AreEqual("Generic Repostiory", demoEmpRepost.Name);
 			Assert.IsNotNull(demoEmpRepost.Cache);
-			Assert.IsTrue(typeof (HashTableCache<IEmployee>).IsInstanceOfType(demoEmpRepost.Cache));
+			Assert.IsTrue(typeof(HashTableCache<IEmployee>).IsInstanceOfType(demoEmpRepost.Cache));
 		}
 
 		[Test]
@@ -155,11 +155,11 @@ namespace Castle.Windsor.Tests
 				new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
 			IRepository<IReviewer> rev = container.Resolve<IRepository<IReviewer>>();
 
-			Assert.IsTrue(typeof (ReviewerRepository).IsInstanceOfType(rev));
+			Assert.IsTrue(typeof(ReviewerRepository).IsInstanceOfType(rev));
 			ReviewerRepository repos = rev as ReviewerRepository;
 			Assert.AreEqual("Reviewer Repository", repos.Name);
 			Assert.IsNotNull(repos.Cache);
-			Assert.IsTrue(typeof (HashTableCache<IReviewer>).IsInstanceOfType(repos.Cache));
+			Assert.IsTrue(typeof(HashTableCache<IReviewer>).IsInstanceOfType(repos.Cache));
 		}
 
 		[Test]
@@ -171,16 +171,16 @@ namespace Castle.Windsor.Tests
 				new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
 			IRepository<IReviewableEmployee> empRepost = container.Resolve<IRepository<IReviewableEmployee>>();
 			Assert.IsNotNull(empRepost);
-			Assert.IsTrue(typeof (LoggingRepositoryDecorator<IReviewableEmployee>).IsInstanceOfType(empRepost));
+			Assert.IsTrue(typeof(LoggingRepositoryDecorator<IReviewableEmployee>).IsInstanceOfType(empRepost));
 			LoggingRepositoryDecorator<IReviewableEmployee> log =
 				empRepost as LoggingRepositoryDecorator<IReviewableEmployee>;
 			IRepository<IReviewableEmployee> inner = log.inner;
 			Assert.IsNotNull(inner);
-			Assert.IsTrue(typeof (DemoRepository<IReviewableEmployee>).IsInstanceOfType(inner));
+			Assert.IsTrue(typeof(DemoRepository<IReviewableEmployee>).IsInstanceOfType(inner));
 			DemoRepository<IReviewableEmployee> demoEmpRepost = inner as DemoRepository<IReviewableEmployee>;
 			Assert.AreEqual("Generic Repostiory With No Cache", demoEmpRepost.Name);
 			Assert.IsNotNull(demoEmpRepost.Cache);
-			Assert.IsTrue(typeof (NullCache<IReviewableEmployee>).IsInstanceOfType(demoEmpRepost.Cache));
+			Assert.IsTrue(typeof(NullCache<IReviewableEmployee>).IsInstanceOfType(demoEmpRepost.Cache));
 		}
 
 		[Test]
@@ -189,7 +189,7 @@ namespace Castle.Windsor.Tests
 			IWindsorContainer container =
 				new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
 			IRepository<IReviewer> repository = container.Resolve<IRepository<IReviewer>>();
-			Assert.IsTrue(typeof (ReviewerRepository).IsInstanceOfType(repository), "Not ReviewerRepository!");
+			Assert.IsTrue(typeof(ReviewerRepository).IsInstanceOfType(repository), "Not ReviewerRepository!");
 		}
 
 		[Test]
@@ -198,7 +198,7 @@ namespace Castle.Windsor.Tests
 			IWindsorContainer container =
 				new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
 			IRepository<IReviewer> repository = container.Resolve<IRepository<IReviewer>>("generic.repository");
-			Assert.IsTrue(typeof (DemoRepository<IReviewer>).IsInstanceOfType(repository), "Not DemoRepository!");
+			Assert.IsTrue(typeof(DemoRepository<IReviewer>).IsInstanceOfType(repository), "Not DemoRepository!");
 		}
 
 		[Test]
@@ -206,7 +206,7 @@ namespace Castle.Windsor.Tests
 		{
 			IWindsorContainer container = new WindsorContainer();
 
-			container.AddComponent("comp", typeof (IRepository<>), typeof (TransientRepository<>));
+			container.AddComponent("comp", typeof(IRepository<>), typeof(TransientRepository<>));
 
 			object o1 = container.Resolve<IRepository<Employee>>();
 			object o2 = container.Resolve<IRepository<Employee>>();
@@ -223,8 +223,8 @@ namespace Castle.Windsor.Tests
 		{
 			IWindsorContainer container = new WindsorContainer();
 
-			container.AddComponent("comp", typeof (NeedsGenericType));
-			container.AddComponent("cache", typeof (ICache<>), typeof (NullCache<>));
+			container.AddComponent("comp", typeof(NeedsGenericType));
+			container.AddComponent("cache", typeof(ICache<>), typeof(NullCache<>));
 
 			NeedsGenericType needsGenericType = container.Resolve<NeedsGenericType>();
 
@@ -237,12 +237,12 @@ namespace Castle.Windsor.Tests
 			WindsorContainer container = new WindsorContainer();
 
 			container.AddFacility("interceptor-facility", new MyInterceptorGreedyFacility());
-			container.AddComponent("interceptor", typeof (StandardInterceptor));
-			container.AddComponent("key", typeof (IRepository<Employee>), typeof (DemoRepository<Employee>));
+			container.AddComponent("interceptor", typeof(StandardInterceptor));
+			container.AddComponent("key", typeof(IRepository<Employee>), typeof(DemoRepository<Employee>));
 
 			IRepository<Employee> store = container.Resolve<IRepository<Employee>>();
 
-			Assert.IsFalse(typeof (DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
+			Assert.IsFalse(typeof(DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
 		}
 
 		[Test]
@@ -251,12 +251,12 @@ namespace Castle.Windsor.Tests
 			WindsorContainer container = new WindsorContainer();
 
 			container.AddFacility("interceptor-facility", new MyInterceptorGreedyFacility2());
-			container.AddComponent("interceptor", typeof (StandardInterceptor));
-			container.AddComponent("key", typeof (IRepository<>), typeof (DemoRepository<>));
+			container.AddComponent("interceptor", typeof(StandardInterceptor));
+			container.AddComponent("key", typeof(IRepository<>), typeof(DemoRepository<>));
 
 			IRepository<Employee> store = container.Resolve<IRepository<Employee>>();
 
-			Assert.IsFalse(typeof (DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
+			Assert.IsFalse(typeof(DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
 		}
 
 		[Test]
@@ -293,13 +293,13 @@ namespace Castle.Windsor.Tests
 			WindsorContainer container = new WindsorContainer();
 
 			container.AddFacility("interceptor-facility", new MyInterceptorGreedyFacility2());
-			container.AddComponent("interceptor", typeof (StandardInterceptor));
-			container.AddComponentWithLifestyle("key", typeof (IRepository<>), typeof (DemoRepository<>), LifestyleType.Transient);
+			container.AddComponent("interceptor", typeof(StandardInterceptor));
+			container.AddComponentWithLifestyle("key", typeof(IRepository<>), typeof(DemoRepository<>), LifestyleType.Transient);
 
 			IRepository<Employee> store = container.Resolve<IRepository<Employee>>();
 			IRepository<Employee> anotherStore = container.Resolve<IRepository<Employee>>();
 
-			Assert.IsFalse(typeof (DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
+			Assert.IsFalse(typeof(DemoRepository<Employee>).IsInstanceOfType(store), "This should have been a proxy");
 			Assert.AreNotSame(store, anotherStore, "This should be two different instances");
 		}
 
@@ -308,15 +308,34 @@ namespace Castle.Windsor.Tests
 		{
 			WindsorContainer container = new WindsorContainer();
 
-			container.AddComponent("interceptor", typeof (MyInterceptor));
-			container.AddComponent("key", typeof (IRepository<>), typeof (DemoRepository<>));
-			container.Kernel.GetHandler(typeof (IRepository<>)).ComponentModel.Interceptors.Add(
-				new InterceptorReference(typeof (MyInterceptor)));
+			container.AddComponent("interceptor", typeof(MyInterceptor));
+			container.AddComponent("key", typeof(IRepository<>), typeof(DemoRepository<>));
+			container.Kernel.GetHandler(typeof(IRepository<>)).ComponentModel.Interceptors.Add(
+				new InterceptorReference(typeof(MyInterceptor)));
 
 			IRepository<object> demoRepository = container.Resolve<IRepository<object>>();
 			demoRepository.Get(12);
 
 			Assert.IsTrue(MyInterceptor.InterceptedId == 12, "invocation should have been intercepted by MyInterceptor");
+		}
+
+		[Test]
+		public void ParentResolverIntercetorShouldNotAffectGenericComponentInterceptor()
+		{
+			WindsorContainer container = new WindsorContainer();
+			container.AddComponent<MyInterceptor>();
+
+			container.AddComponentEx<ISpecification>()
+				.WithImplementation<MySpecification>()
+				.WithInterceptors(new InterceptorReference(typeof(MyInterceptor)))
+				.Anywhere
+				.Register();
+
+			container.AddComponent("repos", typeof(IRepository<>), typeof(TransientRepository<>));
+
+			ISpecification specification = container.Resolve<ISpecification>();
+			bool isProxy = specification.Repository.GetType().FullName.Contains("Proxy");
+			Assert.IsFalse(isProxy);
 		}
 
 		public string GetFilePath(string fileName)
@@ -333,7 +352,8 @@ namespace Castle.Windsor.Tests
 		public void Intercept(IInvocation invocation)
 		{
 			invocation.Proceed();
-			InterceptedId = (int) invocation.Arguments[0];
+			if (invocation.Arguments.Length > 0)
+				InterceptedId = (int)invocation.Arguments[0];
 		}
 	}
 
@@ -450,6 +470,22 @@ namespace Castle.Windsor.Tests
 
 	public interface ISpecification
 	{
+		IRepository<int> Repository { get; }
+	}
+
+	public class MySpecification : ISpecification
+	{
+		private readonly IRepository<int> repository;
+
+		public IRepository<int> Repository
+		{
+			get { return repository; }
+		}
+
+		public MySpecification(IRepository<int> repository)
+		{
+			this.repository = repository;
+		}
 	}
 }
 
