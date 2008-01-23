@@ -24,7 +24,7 @@ namespace Castle.Core
 	[Serializable]
 	public class InterceptorReferenceCollection : ICollection
 	{
-		private LinkedList list = new LinkedList();
+		private readonly LinkedList list = new LinkedList();
 
 		/// <summary>
 		/// Adds the specified interceptor.
@@ -141,5 +141,16 @@ namespace Castle.Core
 		{
 			return list.GetEnumerator();
 		}
+
+		/// <summary>
+		/// Adds the interceptor to the end of the interceptors list if it does not exist already.
+		/// </summary>
+		/// <param name="interceptorReference">The interceptor reference.</param>
+		public void AddIfNotInCollection(InterceptorReference interceptorReference)
+		{
+			if (list.Contains(interceptorReference) == false)
+				list.AddLast(interceptorReference);
+		}
+		
 	}
 }

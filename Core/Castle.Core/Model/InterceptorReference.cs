@@ -26,7 +26,7 @@ namespace Castle.Core
 	/// Represents an reference to a Interceptor component.
 	/// </summary>
 	[Serializable]
-	public class InterceptorReference
+	public class InterceptorReference : IEquatable<InterceptorReference>
 	{
 		private readonly InterceptorReferenceType refType;
 		private readonly Type serviceType;
@@ -107,6 +107,30 @@ namespace Castle.Core
 		public static InterceptorReference WithType(Type service)
 		{
 			return new InterceptorReference(service);
+		}
+
+
+		public bool Equals(InterceptorReference interceptorReference)
+		{
+			if (interceptorReference == null) return false;
+			if (!Equals(refType, interceptorReference.refType)) return false;
+			if (!Equals(serviceType, interceptorReference.serviceType)) return false;
+			if (!Equals(componentKey, interceptorReference.componentKey)) return false;
+			return true;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(this, obj)) return true;
+			return Equals(obj as InterceptorReference);
+		}
+
+		public override int GetHashCode()
+		{
+			int result = refType.GetHashCode();
+			result = 29*result + (serviceType != null ? serviceType.GetHashCode() : 0);
+			result = 29*result + (componentKey != null ? componentKey.GetHashCode() : 0);
+			return result;
 		}
 	}
 }

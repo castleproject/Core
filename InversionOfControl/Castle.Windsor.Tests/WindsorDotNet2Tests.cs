@@ -316,7 +316,7 @@ namespace Castle.Windsor.Tests
 			IRepository<object> demoRepository = container.Resolve<IRepository<object>>();
 			demoRepository.Get(12);
 
-			Assert.IsTrue(MyInterceptor.InterceptedId == 12, "invocation should have been intercepted by MyInterceptor");
+			Assert.AreEqual(12, MyInterceptor.InterceptedId , "invocation should have been intercepted by MyInterceptor");
 		}
 
 		[Test]

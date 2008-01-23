@@ -115,7 +115,9 @@ namespace Castle.MicroKernel.Handlers
 			// Inherit the parent handler interceptors.
 			foreach (InterceptorReference interceptor in ComponentModel.Interceptors)
 			{
-				newModel.Interceptors.Add(interceptor);
+				// we need to check that we are not adding the inteceptor again, if it was added
+				// by a facility already
+				newModel.Interceptors.AddIfNotInCollection(interceptor);
 			}
 		}
 	}
