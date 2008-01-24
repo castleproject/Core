@@ -37,6 +37,8 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		public void InheritedHelpers()
 		{
 			Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-us");
+			this.PropertyBag.Add("date", new DateTime(1979, 7, 16));
+
 			ProcessView_StripRailsExtension("helper/inheritedhelpers.rails");
 			string expected = "Date formatted " + new DateTime(1979, 7, 16).ToShortDateString();
 			AssertReplyEqualTo(expected);

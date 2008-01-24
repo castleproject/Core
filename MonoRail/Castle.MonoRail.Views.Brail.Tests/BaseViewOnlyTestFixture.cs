@@ -88,6 +88,8 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
             Helpers["urlhelper"] = Helpers["url"] = new UrlHelper(MockEngineContext);
             Helpers["htmlhelper"] = Helpers["html"] = new HtmlHelper(MockEngineContext);
+			Helpers["dicthelper"] = Helpers["dict"] = new DictHelper(MockEngineContext);
+				Helpers["DateFormatHelper"] = Helpers["DateFormat"] = new DateFormatHelper(MockEngineContext);
         }
 
 
