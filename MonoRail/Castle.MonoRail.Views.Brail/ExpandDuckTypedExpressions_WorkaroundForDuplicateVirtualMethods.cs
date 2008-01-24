@@ -65,8 +65,11 @@ namespace Castle.MonoRail.Views.Brail
 
 		public static object Invoke(object target, string name, object[] args)
 		{
+			args = IgnoreNull.ReplaceIgnoreNullsWithTargets(args);
+
 			IQuackFu duck = target as IQuackFu;
 			if (null != duck) return duck.QuackInvoke(name, args);
+
 
 			Type type = target as Type;
 			if (null != type)
@@ -89,8 +92,13 @@ namespace Castle.MonoRail.Views.Brail
 
 		public static object SetProperty(object target, string name, object value)
 		{
+
+			if (value is IgnoreNull) {
+				value = IgnoreNull.ExtractTarget((IgnoreNull)value);
+			}
+
 			IQuackFu duck = target as IQuackFu;
-			if (null != duck) return duck.QuackSet(name, null, value);
+			if (null != duck) return duck.QuackSet(name, null, value);					
 
 			Type type = target as Type;
 			if (null == type)
@@ -158,6 +166,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		public static object SetSlice(object target, string name, object[] args)
 		{
+			args = IgnoreNull.ReplaceIgnoreNullsWithTargets(args);
 			IQuackFu duck = target as IQuackFu;
 			if (null != duck)
 				return duck.QuackSet(name, (object[]) RuntimeServices.GetRange2(args, 0, args.Length - 1), args[args.Length - 1]);
@@ -323,6 +332,8 @@ namespace Castle.MonoRail.Views.Brail
 			return args.Length == 2 && target is Array;
 		}
 
+		
+
 		private IMethod GetResolvedMethod(IType type, string name)
 		{
 			IMethod method = NameResolutionService.ResolveMethod(type, name);
@@ -330,6 +341,7 @@ namespace Castle.MonoRail.Views.Brail
 			return method;
 		}
 
+		
 		private enum SetOrGet
 		{
 			Set,

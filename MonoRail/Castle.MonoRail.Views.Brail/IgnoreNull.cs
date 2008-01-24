@@ -14,7 +14,10 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
+	using System;
+	using System.Collections;
 	using System.Collections.Generic;
+
 	using Boo.Lang;
 
 	public class IgnoreNull : IQuackFu
@@ -31,34 +34,50 @@ namespace Castle.MonoRail.Views.Brail
 		public object QuackGet(string name, object[] parameters)
 		{
 			if (name == "_IsIgnoreNullReferencingNotNullObject_")
+			{
 				return target != null;
+			}
 
 			if (target == null)
+			{
 				return this;
+			}
 			object value;
 			if (IsNullOrEmpty(parameters))
+			{
 				value = ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.GetProperty(target, name);
+			}
 			else
+			{
 				value = ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.GetSlice(target, name, parameters);
+			}
 			return new IgnoreNull(value);
 		}
 
 		public object QuackSet(string name, object[] parameters, object obj)
 		{
 			if (target == null)
+			{
 				return this;
+			}
 			if (IsNullOrEmpty(parameters))
+			{
 				ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.SetProperty(target, name, obj);
+			}
 			else
+			{
 				ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.SetSlice(target, name,
 				                                                                         GetParameterArray(parameters, obj));
+			}
 			return this;
 		}
 
 		public object QuackInvoke(string name, object[] args)
 		{
 			if (target == null)
+			{
 				return this;
+			}
 			object value = ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.Invoke(target, name, args);
 			return new IgnoreNull(value);
 		}
@@ -80,7 +99,9 @@ namespace Castle.MonoRail.Views.Brail
 		public override string ToString()
 		{
 			if (target == null)
+			{
 				return string.Empty;
+			}
 			return target.ToString();
 		}
 
@@ -88,11 +109,73 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			IgnoreNull temp = left as IgnoreNull;
 			if (temp != null)
+			{
 				left = temp.target;
+			}
 			temp = right as IgnoreNull;
 			if (temp != null)
+			{
 				right = temp.target;
+			}
 			return Equals(left, right);
+		}
+
+		/// <summary>
+		/// Gets the underlying target object of the IgnorNull
+		/// </summary>
+		/// <param name="ignored"></param>
+		/// <returns>target</returns>
+		public static Object ExtractTarget(IgnoreNull ignored)
+		{
+			return ignored.target;
+		}
+
+		/// <summary>
+		/// Returns a new array copied from args that has replaced IgnoreNull instances
+		/// with the underlying target object.
+		/// </summary>
+		/// <param name="args">source array</param>
+		/// <returns>new array</returns>
+		public static Object[] ReplaceIgnoreNullsWithTargets(Object[] args)
+		{
+			Object[] replaced = new object[args.Length];
+			for (int i = 0; i < args.Length; i++)
+			{
+				if (args[i] is IgnoreNull)
+				{
+					replaced[i] = ExtractTarget((IgnoreNull) args[i]);
+				}
+				else
+				{
+					replaced[i] = args[i];
+				}
+			}
+			return replaced;
+		}
+
+		/// <summary>
+		/// Returns a new Hashtable that has copied the entries from dict
+		/// and replaced values of IgnoreNull with the underlying target object.
+		/// </summary>
+		/// <param name="dict"></param>
+		/// <returns>Hashtable</returns>
+		public static IDictionary ReplaceIgnoreNullsWithTargets(IDictionary dict)
+		{
+			Hashtable hash = new Hashtable(dict.Count);
+
+			foreach (DictionaryEntry de in dict)
+			{
+				if (de.Value is IgnoreNull)
+				{
+					hash[de.Key] = ExtractTarget((IgnoreNull) de.Value);
+				}
+				else
+				{
+					hash[de.Key] = de.Value;
+				}
+			}
+
+			return hash;
 		}
 	}
 }

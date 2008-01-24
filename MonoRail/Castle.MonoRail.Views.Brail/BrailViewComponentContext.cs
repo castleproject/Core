@@ -46,7 +46,7 @@ namespace Castle.MonoRail.Views.Brail
 			this.body = body;
 			componentName = name;
 			default_writer = text;
-			componentParameters = parameters;
+			componentParameters = IgnoreNull.ReplaceIgnoreNullsWithTargets(parameters);
 		}
 
 		public ICallable Body
