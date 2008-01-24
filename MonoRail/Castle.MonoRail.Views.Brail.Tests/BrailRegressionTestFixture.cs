@@ -21,6 +21,12 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	[TestFixture]
 	public class BrailRegressionTestFixture : BaseViewOnlyTestFixture
 	{
+		public BrailRegressionTestFixture()
+			: base("../../../Castle.MonoRail.Views.Brail.Tests")
+		{
+
+		}
+
 		[Test]
 		public void CanCompareToNullableParameter()
 		{

@@ -13,13 +13,27 @@
 // limitations under the License.
 namespace Castle.MonoRail.Views.Brail.Tests
 {
+	using System;
+	using System.Collections;
+	using System.IO;
+	using System.Reflection;
 	using System.Text;
-	
+	using Castle.MonoRail.Views.Brail.TestSite.Controllers;
+	using Framework;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class BrailSubViewTestCase : BaseViewOnlyTestFixture
 	{
+		private void SwitchViewImplementation()
+		{
+			Hashtable hashtable1 = (Hashtable) typeof (BooViewEngine).GetField("compilations", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(BooViewEngine);
+			Hashtable hashtable2 = (Hashtable) typeof (BooViewEngine).GetField("constructors", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(BooViewEngine);
+			hashtable1[@"subview\listItem.brail"] = typeof (DummySubView);
+			Type[] typeArray1 = new Type[] {typeof (BooViewEngine), typeof (TextWriter), typeof (IEngineContext), typeof (Controller), typeof (IControllerContext)};
+			hashtable2[typeof (DummySubView)] = typeof (DummySubView).GetConstructor(typeArray1);
+		}
+
 		[Test]
 		public void BrailWillCacheSubViewsWhenUsingForwardSlash()
 		{
@@ -32,8 +46,8 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			string expected = sb.ToString();
 			AssertReplyEqualTo(expected);
 
-			// Here we tell the controller to replace the subview with a dummy implementation
-			// if brail doesn't cache it, it will use the real implementation, and the test will fail.
+			SwitchViewImplementation();
+			// if it was cached, we should get something else
 			sb = new StringBuilder();
 			for (int i = 0; i < 50; i++)
 			{
@@ -63,7 +77,8 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void SubViewWithLayout()
 		{
-			ProcessView_StripRailsExtension("subview/SubViewWithLayout.rails");
+			Layout = "master";
+			ProcessView_StripRailsExtension("subview/index.rails");
 			string expected = "\r\nWelcome!\r\n<p>View With SubView Content\r\nFrom SubView</p>\r\nFooter";
 			AssertReplyEqualTo(expected);
 		}
@@ -71,7 +86,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void SubViewWithParameters()
 		{
-			ProcessView_StripRailsExtension("subview/SubViewWithParameters.rails");
+			ProcessView_StripRailsExtension("subview/CallSubViewWithParameters.rails");
 			string expected = "View SubView Content With Parameters\r\nMonth: 0\r\nAllow Select: False";
 			AssertReplyEqualTo(expected);
 		}

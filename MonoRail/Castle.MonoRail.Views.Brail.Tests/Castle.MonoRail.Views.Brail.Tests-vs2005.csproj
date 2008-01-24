@@ -52,7 +52,6 @@
     <Compile Include="BrailHelperTestCase.cs" />
     <Compile Include="BrailPreProcessorFixture.cs" />
     <Compile Include="BrailRegressionTestFixture.cs" />
-    <Compile Include="BrailRoutingTestCase.cs" />
     <Compile Include="BrailSubViewTestCase.cs" />
     <Compile Include="ComponentsTestCase.cs" />
     <Compile Include="Controllers\DslController.cs" />

@@ -201,7 +201,7 @@ end";
 		[Test]
 		public void CanUseNamespacesFromConfig()
 		{
-		    BrailOptions.NamespacesToImport.Add(typeof (TransportType).Namespace);
+		    BooViewEngine.Options.NamespacesToImport.Add(typeof (TransportType).Namespace);
 			string expected = "Using Udp without namespace, since it is in the web.config\r\n";
 			ProcessView_StripRailsExtension("home/namespacesInConfig.rails");
 			AssertReplyEqualTo(expected);

@@ -24,6 +24,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void CanUseLayoutThatIsNotInLayoutsFolder()
 		{
+			Layout = "/layoutable/notInLayouts";
 			ProcessView_StripRailsExtension("layoutable/CustomLayoutLocation.rails");
 			AssertReplyEqualTo("not in layouts");
 		}
