@@ -24,7 +24,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	using Framework;
 	using NUnit.Framework;
 
-	public class BaseViewOnlyTestFixture
+	public abstract class BaseViewOnlyTestFixture
 	{
 		private readonly string viewSourcePath;
 		protected ControllerContext ControllerContext;
@@ -105,6 +105,13 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
 			BooViewEngine.SetViewSourceLoader(loader);
 			BooViewEngine.Initialize();
+
+			BeforEachTest();
+		}
+
+		protected virtual void BeforEachTest()
+		{
+			
 		}
 
 
@@ -124,9 +131,9 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			return lastOutput;
 		}
 
-		public void AssertReplyEqualTo(string actual)
+		public void AssertReplyEqualTo(string expected)
 		{
-			Assert.AreEqual(actual, lastOutput);
+			Assert.AreEqual(expected, lastOutput);
 		}
 
 		public void AssertReplyContains(string contained)

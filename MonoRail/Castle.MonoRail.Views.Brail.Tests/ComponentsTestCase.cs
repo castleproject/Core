@@ -14,14 +14,24 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
+	using System.Collections;
+	using Castle.MonoRail.Views.Brail.TestSite.Components;
+	using Castle.MonoRail.Views.Brail.TestSite.Controllers;
+	using Framework;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class ComponentsTestCase : BaseViewOnlyTestFixture
 	{
+		protected override void BeforEachTest()
+		{
+			ViewComponentFactory.Inspect(typeof(BlockViewComponent2).Assembly);
+		}
+
 		[Test]
 		public void BlockComp1()
 		{
+			PropertyBag.Add("items", new object[] {1, 2});
 			ProcessView_StripRailsExtension("usingcomponents/index8.rails");
 			AssertReplyEqualTo("\r\ninner content 1\r\n\r\ninner content 2\r\n");
 		}
@@ -43,14 +53,22 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void ComponentWithInvalidSection()
 		{
-			ProcessView_StripRailsExtension("usingcomponent2/ComponentWithInvalidSections.rails");
-
-			AssertReplyContains("The section 'invalidsection' is not supported by the ViewComponent 'GridComponent'");
+			try
+			{
+				ProcessView_StripRailsExtension("usingcomponent2/ComponentWithInvalidSections.rails");
+			}
+			catch (MonoRailException ex)
+			{
+				string message = ((ViewComponentException)ex.InnerException).Message;
+				Assert.AreEqual("The section 'invalidsection' is not supported by the ViewComponent 'GridComponent'",
+					message);
+			}
 		}
 
 		[Test]
 		public void GridComponent1()
 		{
+			FillPropertyBag();
 			ProcessView_StripRailsExtension("usingcomponent2/GridComponent1.rails");
 
 			AssertReplyEqualTo(
@@ -69,6 +87,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void GridComponent2()
 		{
+			PropertyBag.Add("contacts", new ArrayList());
 			ProcessView_StripRailsExtension("usingcomponent2/GridComponent2.rails");
 			AssertReplyEqualTo(
 				@"<table>
@@ -132,8 +151,43 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void UsingCaptureForWithLayout()
 		{
+			Layout = "layout_with_captureFor";
 			ProcessView_StripRailsExtension("usingcomponents/captureForWithLayout.rails");
 			AssertReplyEqualTo("Numbers: 1234\r\n");
 		}
+
+		private void FillPropertyBag()
+		{
+			ArrayList items = new ArrayList();
+
+			items.Add(new Contact("hammett", "111"));
+			items.Add(new Contact("Peter Griffin", "222"));
+
+			PropertyBag.Add("contacts", items);
+		}
+
+		public class Contact
+	{
+		string email;
+		string phone;
+
+		public string Email
+		{
+			get { return email; }
+			set { email = value; }
+		}
+
+		public string Phone
+		{
+			get { return phone; }
+			set { phone = value; }
+		}
+
+        public Contact(string email, string phone)
+		{
+			this.email = email;
+			this.phone = phone;
+		}
+	}
 	}
 }
