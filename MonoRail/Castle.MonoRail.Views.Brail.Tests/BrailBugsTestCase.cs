@@ -14,7 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	
+	using Castle.MonoRail.Views.Brail.TestSite.Controllers;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -23,6 +23,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void MR_233_TagInDoubleQuotes()
 		{
+			PropertyBag["page_id"] = 123;
 			ProcessView_StripRailsExtension("bugs/mr_233.rails");
 			AssertReplyEqualTo("<body id=\"123\">");
 		}
@@ -37,6 +38,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void MR_371_OutputComponentInSectionTooManyTimes()
 		{
+			ViewComponentFactory.Inspect(typeof(BugsController).Assembly);
 			ProcessView_StripRailsExtension("bugs/mr_371.rails");
 			AssertReplyEqualTo("123ayende 0<br/>123ayende 1<br/>123ayende 2<br/>");
 		}
@@ -44,6 +46,12 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void MR_262_DynamicComponents()
 		{
+			ViewComponentFactory.Inspect(typeof(BugsController).Assembly);
+			 PropertyBag["components"] = new string[]
+                {
+                    "SimpleInlineViewComponent3", 
+                    "SimpleInlineViewComponent2"
+                };
 			ProcessView_StripRailsExtension("usingcomponents/DynamicComponents.rails");
 			AssertReplyEqualTo("default component view picked up automaticallyThis is a view used by a component");
 		}

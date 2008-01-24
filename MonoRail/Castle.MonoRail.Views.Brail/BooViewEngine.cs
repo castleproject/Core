@@ -20,6 +20,7 @@ namespace Castle.MonoRail.Views.Brail
     using System.Configuration;
     using System.IO;
     using System.Reflection;
+    using System.Runtime.CompilerServices;
     using System.Runtime.Serialization;
     using System.Text;
     using System.Threading;
@@ -431,6 +432,7 @@ namespace Castle.MonoRail.Views.Brail
         // to the cache and return the compiled type.
         // If an error occurs in batch compilation, then an attempt is made to compile just the single
         // request file.
+		[MethodImpl(MethodImplOptions.Synchronized)]
         public Type CompileScript(string filename, bool batch)
         {
             IDictionary<ICompilerInput, string> inputs2FileName = GetInput(filename, batch);
@@ -454,7 +456,6 @@ namespace Castle.MonoRail.Views.Brail
                 string typeName = TransformToBrailStep.GetViewTypeName(viewName);
                 type = result.Context.GeneratedAssembly.GetType(typeName);
                 Log("Adding {0} to the cache", type.FullName);
-                compilations[inputs2FileName[input]] = type;
                 constructors[type] = type.GetConstructor(new Type[]
 				                                         	{
 				                                         		typeof(BooViewEngine),
@@ -463,6 +464,7 @@ namespace Castle.MonoRail.Views.Brail
 				                                         		typeof(IController),
 				                                         		typeof(IControllerContext)
 				                                         	});
+                compilations[inputs2FileName[input]] = type;
             }
             type = (Type)compilations[filename];
             return type;

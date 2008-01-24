@@ -21,6 +21,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
     using Castle.MonoRail.Framework.Helpers;
     using Castle.MonoRail.Framework.Services;
     using Castle.MonoRail.Framework.Test;
+    using Castle.MonoRail.Framework.ViewComponents;
     using Framework;
     using NUnit.Framework;
 
@@ -37,8 +38,9 @@ namespace Castle.MonoRail.Views.Brail.Tests
         protected string Area = null;
         protected string ControllerName = "test_controller";
         protected string Action = "test_action";
+    	protected DefaultViewComponentFactory ViewComponentFactory ;
 
-        public BaseViewOnlyTestFixture()
+    	public BaseViewOnlyTestFixture()
             : this("../../../TestSiteBrail")
         {
         }
@@ -72,10 +74,17 @@ namespace Castle.MonoRail.Views.Brail.Tests
                                                       urlInfo);
             MockEngineContext.AddService<IUrlBuilder>(services.UrlBuilder);
             MockEngineContext.AddService<IUrlTokenizer>(services.UrlTokenizer);
+			
+			ViewComponentFactory = new DefaultViewComponentFactory();
+			ViewComponentFactory.Service(MockEngineContext);
+        	ViewComponentFactory.Initialize();
+			
+			MockEngineContext.AddService<IViewComponentFactory>(ViewComponentFactory);
             ControllerContext = new ControllerContext();
             ControllerContext.Helpers = Helpers;
             ControllerContext.PropertyBag = PropertyBag;
             MockEngineContext.CurrentControllerContext = ControllerContext;
+
 
             Helpers["urlhelper"] = Helpers["url"] = new UrlHelper(MockEngineContext);
             Helpers["htmlhelper"] = Helpers["html"] = new HtmlHelper(MockEngineContext);
@@ -91,7 +100,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
         {
             BrailOptions.SaveDirectory = Environment.CurrentDirectory;
             BrailOptions.SaveToDisk = true;
-            BrailOptions.Debug = false;
+            BrailOptions.Debug = true;
             BrailOptions.BatchCompile = false;
             string viewPath = Path.Combine(viewSourcePath, "Views");
 
@@ -119,7 +128,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
         public void AssertReplyContains(string contained)
         {
-            StringAssert.Contains(lastOutput, contained);
+            StringAssert.Contains(contained, lastOutput);
         }
     }
 }
