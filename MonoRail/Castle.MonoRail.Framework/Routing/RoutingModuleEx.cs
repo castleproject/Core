@@ -19,6 +19,8 @@ namespace Castle.MonoRail.Framework.Routing
 	using System.IO;
 	using System.Text;
 	using System.Web;
+	using System.Web.Configuration;
+
 	using Castle.MonoRail.Framework.Adapters;
 
 	/// <summary>
@@ -27,6 +29,7 @@ namespace Castle.MonoRail.Framework.Routing
 	public class RoutingModuleEx : IHttpModule
 	{
 		private static readonly RoutingEngine engine = new RoutingEngine();
+		private string defaultUrlExtension = ".castle";
 
 		/// <summary>
 		/// Inits the specified app.
@@ -35,6 +38,28 @@ namespace Castle.MonoRail.Framework.Routing
 		public void Init(HttpApplication app)
 		{
 			app.BeginRequest += OnBeginRequest;
+
+			try
+			{
+				HttpHandlersSection httpHandlersConfig =
+					(HttpHandlersSection) WebConfigurationManager.GetSection("system.web/httpHandlers");
+				foreach (HttpHandlerAction handlerAction in httpHandlersConfig.Handlers)
+				{
+					if (Type.GetType(handlerAction.Type) == typeof (MonoRailHttpHandlerFactory))
+					{
+						if (handlerAction.Path.StartsWith("*."))
+						{
+							defaultUrlExtension = handlerAction.Path.Substring(1);
+							break;
+						}
+					}
+				}
+			}
+			catch 
+			{
+				//just swallow and keep on using .castle as the default.
+			}
+
 		}
 
 		/// <summary>
@@ -102,7 +127,7 @@ namespace Castle.MonoRail.Framework.Routing
 			return path;
 		}
 
-		private static string CreateMrPath(RouteMatch match)
+		private string CreateMrPath(RouteMatch match)
 		{
 			string controller = match.Parameters["controller"];
 			string area = match.Parameters.ContainsKey("area") ? match.Parameters["area"] : null;
@@ -110,11 +135,11 @@ namespace Castle.MonoRail.Framework.Routing
 
 			if (area != null)
 			{
-				return "~/" + area + "/" + controller + "/" + action + ".castle";
+				return "~/" + area + "/" + controller + "/" + action + defaultUrlExtension;
 			}
 			else
 			{
-				return "~/" + controller + "/" + action + ".castle";
+				return "~/" + controller + "/" + action + defaultUrlExtension;
 			}
 		}
 
