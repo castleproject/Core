@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Framework.Test
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.IO;
@@ -49,7 +48,8 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="urlBuilder">The URL builder.</param>
 		/// <param name="serverUtility">The server utility.</param>
 		/// <param name="routeMatch">The route match.</param>
-		public MockResponse(UrlInfo currentUrl, IUrlBuilder urlBuilder, IServerUtility serverUtility, RouteMatch routeMatch) : base(currentUrl, urlBuilder, serverUtility, routeMatch)
+		public MockResponse(UrlInfo currentUrl, IUrlBuilder urlBuilder, IServerUtility serverUtility, RouteMatch routeMatch)
+			: base(currentUrl, urlBuilder, serverUtility, routeMatch)
 		{
 		}
 
@@ -205,7 +205,7 @@ namespace Castle.MonoRail.Framework.Test
 		{
 			if (cookie.Value == string.Empty)
 			{
-				cookies.Remove(cookie.Name);				
+				cookies.Remove(cookie.Name);
 			}
 			else
 			{

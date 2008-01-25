@@ -15,8 +15,8 @@
 namespace Castle.MonoRail.Framework.Test
 {
 	using System.Collections;
-	using Castle.Core;
 	using Castle.Components.Common.EmailSender;
+	using Core;
 
 	/// <summary>
 	/// Mocks the <see cref="IEmailTemplateService"/> calling 

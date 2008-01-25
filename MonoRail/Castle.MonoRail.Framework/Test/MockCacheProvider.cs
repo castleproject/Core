@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Test
 {
-	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
 
@@ -30,7 +29,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		public void Service(IMonoRailServices provider)
-		{	
+		{
 		}
 
 		/// <summary>

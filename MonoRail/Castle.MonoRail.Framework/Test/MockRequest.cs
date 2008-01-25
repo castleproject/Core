@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Test
 		private IDictionary files = new Hashtable();
 		private bool isLocal = true;
 		private string httpMethod = "GET";
-		private string[] userLanguages = new string[] { "en-ES", "pt-BR" };
+		private string[] userLanguages = new string[] {"en-ES", "pt-BR"};
 		private string rawUrl = null;
 		private string filePath = null;
 		private Uri uri = null;
@@ -46,7 +46,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// Initializes a new instance of the <see cref="MockRequest"/> class.
 		/// </summary>
 		/// <param name="cookies">The cookies.</param>
-		public MockRequest(IDictionary<string,HttpCookie> cookies)
+		public MockRequest(IDictionary<string, HttpCookie> cookies)
 		{
 			this.cookies = cookies;
 		}
@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockRequest"/> class.
 		/// </summary>
-		public MockRequest() : this(new Dictionary<string,HttpCookie>(StringComparer.InvariantCultureIgnoreCase))
+		public MockRequest() : this(new Dictionary<string, HttpCookie>(StringComparer.InvariantCultureIgnoreCase))
 		{
 		}
 

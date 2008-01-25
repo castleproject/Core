@@ -74,10 +74,7 @@ namespace Castle.MonoRail.Framework.Test
 		public bool HasTemplate(string templateName)
 		{
 			return templates.Exists(
-				delegate(string item)
-            	{
-            		return item.Equals(templateName, StringComparison.InvariantCultureIgnoreCase);
-            	});
+				delegate(string item) { return item.Equals(templateName, StringComparison.InvariantCultureIgnoreCase); });
 		}
 
 		/// <summary>

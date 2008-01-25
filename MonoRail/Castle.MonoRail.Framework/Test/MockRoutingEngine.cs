@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Test
 {
-	using System.Collections;
 	using Routing;
 
 	/// <summary>

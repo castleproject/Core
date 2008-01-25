@@ -16,8 +16,8 @@ namespace Castle.MonoRail.Framework.Test
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 	using System.Collections.Generic;
+	using System.Collections.Specialized;
 	using System.IO;
 
 	/// <summary>
@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <param name="context">The content available to the section</param>
 	/// <param name="writer">The writer</param>
 	public delegate void TestSectionRender(IDictionary context, TextWriter writer);
-	
+
 	/// <summary>
 	/// Used to hook a viewcomponent call to render a view template
 	/// </summary>
@@ -46,13 +46,13 @@ namespace Castle.MonoRail.Framework.Test
 		private IDictionary contextVars = new HybridDictionary(true);
 		private IDictionary componentParameters = new HybridDictionary(true);
 		private IViewEngine viewEngine;
-		private IDictionary<string,  TestSectionRender> section2delegate;
+		private IDictionary<string, TestSectionRender> section2delegate;
 
 		/// <summary>
 		/// Event that is raised when a section is rendered by the viewcomponent.
 		/// </summary>
 		public TestSectionRender OnBodyRender;
-		
+
 		/// <summary>
 		/// Event that is raised when a view is rendered by the viewcomponent.
 		/// </summary>

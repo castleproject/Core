@@ -16,7 +16,6 @@ namespace Castle.MonoRail.Framework.Test
 {
 	using System.IO;
 	using System.Web;
-	using Castle.MonoRail.Framework;
 	using Services;
 
 	/// <summary>
