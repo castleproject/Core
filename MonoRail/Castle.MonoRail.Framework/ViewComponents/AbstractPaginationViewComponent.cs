@@ -28,6 +28,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private const string EndSection = "endblock";
 
 		private string paginatefunction;
+		private string paginatefunctionFixedArgs;
 		private object urlParam;
 		private IPaginatedPage page;
 		private UrlParts urlParts;
@@ -92,6 +93,17 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			get { return paginatefunction; }
 			set { paginatefunction = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the js paginate function fixed args.
+		/// </summary>
+		/// <value>The paginate function fixed args.</value>
+		[ViewComponentParam]
+		public string PaginatefunctionFixedArgs
+		{
+			get { return paginatefunctionFixedArgs; }
+			set { paginatefunctionFixedArgs = value; }
 		}
 
 		/// <summary>

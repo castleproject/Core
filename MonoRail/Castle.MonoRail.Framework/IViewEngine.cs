@@ -17,7 +17,6 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
-	using JSGeneration;
 
 	/// <summary>
 	/// Depicts the contract used by the engine

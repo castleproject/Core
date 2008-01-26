@@ -72,10 +72,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.ActiveRecord">
-      <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\build\net-2.0\debug\Castle.ActiveRecord.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Components.Common.TemplateEngine, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL" />
@@ -97,6 +93,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\..\ActiveRecord\Castle.ActiveRecord\Castle.ActiveRecord-vs2008.csproj">
+      <Project>{652F95D4-86E2-40B6-919D-CFC6E449386B}</Project>
+      <Name>Castle.ActiveRecord-vs2008</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
       <Name>Castle.Components.Binder-vs2005</Name>

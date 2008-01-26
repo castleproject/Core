@@ -190,6 +190,8 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			IViewEngine engine = ResolveEngine(partialName);
 
+			ContextualizeViewEngine(engine);
+
 			engine.ProcessPartial(partialName, output, context, controller, controllerContext);
 		}
 
@@ -208,6 +210,8 @@ namespace Castle.MonoRail.Framework.Services
 			String templateName = Path.Combine("layouts", controllerContext.LayoutNames[0]);
 
 			IViewEngine engine = ResolveEngine(templateName);
+
+			ContextualizeViewEngine(engine);
 
 			engine.RenderStaticWithinLayout(contents, context, controller, controllerContext);
 		}

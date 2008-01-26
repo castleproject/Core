@@ -232,7 +232,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 				if (PaginateFunction != null)
 				{
-					href = "javascript:" + PaginateFunction + "(" + pageIndex + ");void(0);";
+					href = "javascript:" + PaginateFunction + "(" + pageIndex + 
+						(PaginatefunctionFixedArgs != null ? "," + PaginatefunctionFixedArgs : "") + 
+						");void(0);";
 				}
 				else
 				{

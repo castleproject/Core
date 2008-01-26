@@ -1396,7 +1396,7 @@ namespace Castle.MonoRail.Framework
 		protected virtual IExecutableAction SelectAction(string action)
 		{
 			// For backward compatibility purposes
-			MethodInfo method = SelectMethod(action, MetaDescriptor.Actions, engineContext.Request, null);
+			MethodInfo method = SelectMethod(action, MetaDescriptor.Actions, engineContext.Request, context.CustomActionParameters);
 
 			if (method != null)
 			{

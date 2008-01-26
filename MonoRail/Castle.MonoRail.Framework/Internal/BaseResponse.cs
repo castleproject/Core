@@ -446,7 +446,9 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <param name="cookieValue">The cookie value.</param>
 		public virtual void CreateCookie(string name, string cookieValue)
 		{
-			CreateCookie(new HttpCookie(name, cookieValue));
+			HttpCookie cookie = new HttpCookie(name, cookieValue);
+			cookie.Path = SafeAppPath();
+			CreateCookie(cookie);
 		}
 
 		/// <summary>
@@ -458,10 +460,8 @@ namespace Castle.MonoRail.Framework.Internal
 		public virtual void CreateCookie(string name, string cookieValue, DateTime expiration)
 		{
 			HttpCookie cookie = new HttpCookie(name, cookieValue);
-
 			cookie.Expires = expiration;
 			cookie.Path = SafeAppPath();
-
 			CreateCookie(cookie);
 		}
 

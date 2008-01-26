@@ -125,7 +125,7 @@ namespace Castle.MonoRail.Framework
 
 			PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-			foreach (PropertyInfo property in properties)
+			foreach(PropertyInfo property in properties)
 			{
 				if (!property.CanWrite) continue;
 
