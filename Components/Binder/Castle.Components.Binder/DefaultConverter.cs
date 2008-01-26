@@ -102,7 +102,7 @@ namespace Castle.Components.Binder
 				}
 				else if (desiredType == typeof(String))
 				{
-					if (conversionSucceeded && ((String) input) == String.Empty)
+					if (conversionSucceeded && input.GetType() == typeof(string) && ((String) input) == String.Empty)
 					{
 						return null;
 					}
