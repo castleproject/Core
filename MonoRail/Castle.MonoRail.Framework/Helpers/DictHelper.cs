@@ -23,6 +23,53 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class DictHelper : AbstractHelper
 	{
+		#region MonoRailDictionary inner class
+		/// <summary>
+		/// Helper (for the Helper) used to create <see cref="IDictionary"/> instances.
+		/// 
+		/// </summary>
+		public class MonoRailDictionary : HybridDictionary
+		{
+			/// <summary>
+			/// Initializes a new instance of the <see cref="MonoRailDictionary"/> class.
+			/// Forces case Insensitivty.
+			/// </summary>
+			public MonoRailDictionary() : base(true) { }
+
+
+			// Removed. See explaination in outer class.
+			//public MonoRailDictionary N<T>(string key, T value)
+			//{
+			//    this[key] = value.ToString();
+			//    return (this);
+			//}
+
+			/// <summary>
+			/// Adds the specified key &amp; value to the collection.
+			/// </summary>
+			/// <remarks>Usuable in placed where the generic version is not available.</remarks>
+			/// <param name="key">The key.</param>
+			/// <param name="value">The value.</param>
+			/// <returns>itself, to allow for chaning.</returns>
+			public MonoRailDictionary N(string key, object value)
+			{
+				this[key] = value.ToString();
+				return (this);
+			}
+
+			/// <summary>
+			/// Adds the specified key to the collection.
+			/// </summary>
+			/// <param name="key">The key.</param>
+			/// <returns>itself, to allow for chaning.</returns>
+			public MonoRailDictionary N(string key)
+			{
+				this[key] = "";
+				return (this);
+			}
+		}
+		#endregion
+
 		#region Constructors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DictHelper"/> class.
@@ -38,13 +85,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Creates an <see cref="IDictionary"/> with entries
 		/// infered from the arguments. 
-		/// <code>
-		/// CreateDict( "style=display: none;", "selected" )
-		/// </code>
 		/// </summary>
+		/// <example>
+		/// <code>
+		/// helper.CreateDict( "style=display: none;", "selected" )
+		/// </code></example>
 		/// <param name="args"></param>
-		/// <returns></returns>
-		public IDictionary CreateDict(params String[] args)
+		/// <returns>an <see cref="IDictionary"/></returns>
+		public MonoRailDictionary CreateDict(params String[] args)
 		{
 			return Create(args);
 		}
@@ -52,46 +100,94 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Creates a dictionary from specified arguments.
 		/// </summary>
+		/// <remarks> Returns a MonoRailDictionary object, 
+		/// which is an IDictionary like previous versions of this method.
+		/// </remarks>
+		/// <example>
+		/// <code>
+		/// DictHelper.Create( "style=display: none;", "selected" )
+		/// </code></example>
 		/// <param name="args">The arguments.</param>
-		/// <returns></returns>
-		public static IDictionary Create(params String[] args)
+		/// <returns>an <see cref="IDictionary"/></returns>
+		public static MonoRailDictionary Create(params String[] args)
 		{
-			IDictionary dict = new HybridDictionary(true);
-
-			foreach(String arg in args)
+			MonoRailDictionary dict = new MonoRailDictionary();
+			foreach (String arg in args)
 			{
-				String[] parts = arg.Split('=');
+				int pos = arg.IndexOf('=');
 
-				if (parts.Length == 1)
+				if (pos == -1)
 				{
 					dict[arg] = "";
 				}
-				else if (parts.Length == 2)
-				{
-					dict[ parts[0] ] = parts[1];
-				}
 				else
 				{
-					dict[ parts[0] ] = String.Join("=", parts, 1, parts.Length - 1);
+					dict[arg.Substring(0, pos)] = arg.Substring(pos + 1);
 				}
 			}
-
 			return dict;
 		}
 
+		///// <summary>
+		///// Create a new collections and adds the specified key &amp; value.
+		///// </summary>
+		///// <typeparam name="T"></typeparam>
+		///// <param name="key">The key.</param>
+		///// <param name="value">The value.</param>
+		///// <returns></returns>
+		//
+		// Generic version can't be used in an nVelocity template, 
+		// and the non-generic, object version (below) would need a 
+		// different name to avoid conflict, so I figured I'd
+		// just get rid of it, even thought it's slightly faster.
+		//public MonoRailDictionary N<T>(string key, T value)
+		//{
+		//    MonoRailDictionary helper = new MonoRailDictionary();
+		//    helper[key] = value.ToString();
+		//    return helper;
+		//}
+
 		/// <summary>
-		/// Creates a dictionary fros a name value collection.
+		/// Creates an <see cref="IDictionary"/> and adds the 
+		/// specified key &amp; value to the collection.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
+		/// <returns>an <see cref="IDictionary"/></returns>
+		public MonoRailDictionary N(string name, object value)
+		{
+			return CreateN(name, value);
+		}
+
+		/// <summary>
+		/// Creates an <see cref="IDictionary"/> and adds the 
+		/// specified key &amp; value to the collection.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <param name="value">The value.</param>
+		/// <returns>an <see cref="IDictionary"/></returns>
+		public static MonoRailDictionary CreateN(string key, object value)
+		{
+			MonoRailDictionary helper = new MonoRailDictionary();
+			helper[key] = value.ToString();
+			return helper;
+		}
+
+		/// <summary>
+		/// Creates a dictionary froms a name value collection.
 		/// </summary>
 		/// <param name="collection">The collection.</param>
 		/// <returns></returns>
 		public IDictionary FromNameValueCollection(NameValueCollection collection)
 		{
-			IDictionary dict = new HybridDictionary(true);
+			IDictionary dict = new MonoRailDictionary();
 
 			foreach(string key in collection.AllKeys)
 			{
-				if (key == null) continue;
-				dict[key] = collection.GetValues(key);
+				if (key != null)
+				{
+					dict[key] = collection.GetValues(key);
+				}
 			}
 			
 			return dict;
