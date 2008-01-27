@@ -37,7 +37,7 @@ namespace Castle.MonoRail.Framework
 		private IDictionary<string, object> customActionParameters = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 		private IDictionary propertyBag = new HybridDictionary(true);
 		private IDictionary helpers = new HybridDictionary(true);
-		private readonly IDictionary<string, IDynamicAction> dynamicActions = new Dictionary<string, IDynamicAction>();
+        private readonly IDictionary<string, IDynamicAction> dynamicActions = new Dictionary<string, IDynamicAction>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly IDictionary<string, IResource> resources = new Dictionary<string, IResource>(StringComparer.InvariantCultureIgnoreCase);
 		private RouteMatch routeMatch;
 
