@@ -85,5 +85,11 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(BaseJoinedClass), typeof(JoinedSubClassWithPrimaryKey));
 		}
 	
+		[Test]
+		[ExpectedException(typeof(ActiveRecordException), "You can't specify more than one PrimaryKeyAttribute in a class. Check type Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithMultiplePrimaryKeys")]
+		public void ClassWithMultiplePrimaryKeys()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(BaseJoinedClass), typeof(ClassWithMultiplePrimaryKeys));
+		}
 	}
 }

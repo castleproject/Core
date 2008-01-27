@@ -182,10 +182,12 @@
     </Compile>
     <Compile Include="Model\CompositeKeyForClassWithCompositeKey.cs" />
     <Compile Include="Model\ClassADynamicInsertUpdate.cs" />
+    <Compile Include="Model\ClassWithMultiplePrimaryKeys.cs" />
     <Compile Include="Model\HasManyWithBatch.cs" />
     <Compile Include="Model\ComponentWithNested.cs" />
     <Compile Include="Model\ComponentWithNested2LevelsDeep.cs" />
     <Compile Include="Model\HasManyDependentObjectsWithNested2LevelsDeep.cs" />
+    <Compile Include="Model\IdBagPrimitive.cs" />
     <Compile Include="Model\JoinedSubClassWithPrimaryKey.cs" />
     <Compile Include="Model\SimpleNestedComponentWithFieldAccess.cs" />
     <Compile Include="Model\HasManyDependentObjectsWithNested.cs" />

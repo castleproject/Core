@@ -222,6 +222,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 						}
 						else
 						{
+							if (model.PrimaryKey != null)
+							{
+								throw new ActiveRecordException("You can't specify more than one PrimaryKeyAttribute in a " +
+								                                "class. Check type " + model.Type.FullName);
+							}
+
 							model.PrimaryKey = new PrimaryKeyModel(prop, propAtt);
 						}
 					}
