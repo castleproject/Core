@@ -58,7 +58,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// </summary>
 		/// <param name="cookies">The cookies.</param>
 		public MockResponse(IDictionary<string, HttpCookie> cookies) : this(
-			new UrlInfo("", "controller", "action"), new DefaultUrlBuilder(), new MockServerUtility(), new RouteMatch())
+			new UrlInfo("", "controller", "action","/",".castle"), new DefaultUrlBuilder(), new MockServerUtility(), new RouteMatch())
 		{
 			this.cookies = cookies;
 			output = new StringWriter();
