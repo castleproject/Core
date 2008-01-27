@@ -31,7 +31,7 @@ namespace Castle.ActiveRecord.Queries
 	/// int rowCount = proj.Execute();
 	/// </code>
 	/// </example>
-	public class ScalarProjectionQuery<ARType, TResult> : IActiveRecordQuery
+	public class ScalarProjectionQuery<ARType, TResult> : IActiveRecordQuery<TResult>
 	{
 		private readonly IProjection projection;
 		private readonly ICriterion[] criterions;
