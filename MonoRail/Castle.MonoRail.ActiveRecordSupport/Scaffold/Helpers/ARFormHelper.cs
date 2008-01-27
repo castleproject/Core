@@ -421,7 +421,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold.Helpers
 			{
 				stringBuilder.AppendFormat(NumberField(propName, htmlAttributes));
 			}
-			else if (propType == typeof(Single) || propType == typeof(Double))
+			else if (propType == typeof(Single) || propType == typeof(Double) || propType == typeof(Decimal))
 			{
 				stringBuilder.AppendFormat(NumberField(propName, htmlAttributes));
 			}
