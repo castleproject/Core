@@ -18,6 +18,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Threading;
 
 	using Castle.MonoRail.Framework.Helpers;
 	
@@ -33,6 +35,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void Init()
 		{
 			helper = new DictHelper();
+			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 		}
 
 		[Test]
@@ -52,15 +55,15 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.IsNotNull(dict);
 			Assert.AreEqual(2, dict.Count);
 
-			foreach(String key in dict.Keys)
+			foreach (String key in dict.Keys)
 			{
 				if (key.Equals("name"))
 				{
-					Assert.AreEqual( "value", dict["name"] );
+					Assert.AreEqual("value", dict["name"]);
 				}
 				else if (key.Equals("other"))
 				{
-					Assert.AreEqual( "somethingelse", dict["other"] );
+					Assert.AreEqual("somethingelse", dict["other"]);
 				}
 				else
 				{
@@ -80,13 +83,14 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			double i = 3.1415;
 			int j = 5;
 			IDictionary dict = helper.CreateDict("name=value", "other=somethingelse", "A=B",
-				"CCC=DDD", "EEE=FFF=GGG",
-				"hhh=" + h.ToString(),
-				"iii=" + i.ToString(),
-				"jjj=" + j.ToString()
+			                                     "CCC=DDD", "EEE=FFF=GGG",
+			                                     "hhh=" + h.ToString(),
+			                                     "iii=" + i.ToString(),
+			                                     "jjj=" + j.ToString()
 				);
 			return dict;
 		}
+
 		[Test]
 		public void ComplexDict()
 		{
@@ -115,6 +119,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			return dict;
 		}
+
 		[Test]
 		public void ComplexDict2()
 		{
@@ -127,7 +132,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			int h = 1;
 			double i = 3.1415;
 			int j = 5;
-			return  DictHelper.CreateN("name", "value")
+			return DictHelper.CreateN("name", "value")
 				.N("other", "somethingelse")
 				.N("A", "B")
 				.N("CCC", "DDD")
@@ -136,6 +141,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				.N("iii", i)
 				.N("jjj", j);
 		}
+
 		[Test]
 		public void ComplexDictStatic()
 		{
@@ -149,7 +155,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			double i = 3.1415;
 			int j = 5;
 			return helper.CreateDict("name=value", "other=somethingelse", "A=B")
-				.N("CCC","DDD").N("EEE","FFF=GGG").N("hhh", h).N("iii", i).N("jjj",j);
+				.N("CCC", "DDD").N("EEE", "FFF=GGG").N("hhh", h).N("iii", i).N("jjj", j);
 		}
 
 		[Test]
@@ -214,15 +220,15 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.Contains("iii", keys);
 			Assert.Contains("jjj", keys);
 
-			Assert.AreEqual("value",		 ((string[])dict["name"])[0]);
-			Assert.AreEqual("value2",		 ((string[])dict["name"])[1]);
-			Assert.AreEqual("somethingelse", ((string[])dict["other"])[0]);
-			Assert.AreEqual("B",			 ((string[])dict["A"])[0]);
-			Assert.AreEqual("DDD",			 ((string[])dict["CCC"])[0]);
-			Assert.AreEqual("FFF=GGG",		 ((string[])dict["EEE"])[0]);
-			Assert.AreEqual("1",			 ((string[])dict["hhh"])[0]);
-			Assert.AreEqual("3.1415",		 ((string[])dict["iii"])[0]);
-			Assert.AreEqual("5",			 ((string[])dict["jjj"])[0]);
+			Assert.AreEqual("value", ((string[]) dict["name"])[0]);
+			Assert.AreEqual("value2", ((string[]) dict["name"])[1]);
+			Assert.AreEqual("somethingelse", ((string[]) dict["other"])[0]);
+			Assert.AreEqual("B", ((string[]) dict["A"])[0]);
+			Assert.AreEqual("DDD", ((string[]) dict["CCC"])[0]);
+			Assert.AreEqual("FFF=GGG", ((string[]) dict["EEE"])[0]);
+			Assert.AreEqual("1", ((string[]) dict["hhh"])[0]);
+			Assert.AreEqual("3.1415", ((string[]) dict["iii"])[0]);
+			Assert.AreEqual("5", ((string[]) dict["jjj"])[0]);
 		}
 
 
@@ -234,11 +240,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.IsNotNull(dict);
 			Assert.AreEqual(1, dict.Count);
 
-			foreach(String key in dict.Keys)
+			foreach (String key in dict.Keys)
 			{
 				if (key.Equals("name"))
 				{
-					Assert.AreEqual( "value=aa", dict["name"] );
+					Assert.AreEqual("value=aa", dict["name"]);
 				}
 				else
 				{
@@ -249,7 +255,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 		#region Testing test (set to Ignore presently)
 
-		const int NumReps = 200000;
+		private const int NumReps = 200000;
 
 		[Test, Ignore]
 		public void RepeatTest()
@@ -258,7 +264,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			{
 				ComplexDict_woChk();
 			}
-
 		}
 
 		[Test, Ignore]
@@ -268,7 +273,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			{
 				ComplexDict2_woChk();
 			}
-
 		}
 
 		[Test, Ignore]
@@ -278,9 +282,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			{
 				ComplexDictStatic();
 			}
-
 		}
-		#endregion
 
+		#endregion
 	}
 }
