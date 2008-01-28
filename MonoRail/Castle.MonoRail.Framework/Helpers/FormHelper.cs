@@ -1458,6 +1458,25 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Creates a label for an item of the checkbox list (internal use). The method mirrors
+		/// <see cref="CheckboxItem"/> to ensure that the HTML ID is created consistently.
+		/// </summary>
+		/// <param name="index">Index for creating HTML ID</param>
+		/// <param name="target">Target object for which the HTML ID is needed</param>
+		/// <param name="suffix"></param>
+		/// <param name="label">The label to display</param>
+		/// <param name="attributes">additional attributes that influence HTML ID creation</param>
+		/// <returns></returns>
+		internal string CheckboxLabel(int index, string target, string suffix, string label, IDictionary attributes)
+		{
+			target = String.Format("{0}[{1}]", target, index);
+
+			string elementId = CreateHtmlId(attributes, target, true);
+
+			return "<label for=\"" + elementId + "\">" + label + "</label>";
+		}
+
+		/// <summary>
 		/// This class is an enumerable list of checkboxes. 
 		/// It uses the <see cref="OperationState"/> to manage the sets
 		/// and to control the check/uncheck state.
@@ -1530,6 +1549,45 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 
 				return helper.CheckboxItem(index, target, operationState.TargetSuffix, CurrentSetItem, attributes);
+			}
+
+			/// <summary>
+			/// Outputs a label for the current checkbox element based on the generated id. 
+			/// <seealso cref="FormHelper.CreateCheckboxList(string,IEnumerable,IDictionary)"/>
+			/// </summary>
+			/// <param name="label">The text to display</param>
+			/// <returns>The generated label element</returns>
+			public string LabelFor(string label)
+			{
+				return LabelFor(null, label);
+			}
+
+			/// <summary>
+			/// Outputs a label for the current checkbox element based on the given id.
+			/// <seealso cref="FormHelper.CreateCheckboxList(string,IEnumerable,IDictionary)"/>
+			/// </summary>
+			/// <param name="id">The id to use within the label</param>
+			/// <param name="label">The text to display</param>
+			/// <returns>The generated label element</returns>
+			public string LabelFor(string id, string label)
+			{
+				if (!hasMovedNext)
+				{
+					throw new InvalidOperationException("Before rendering a checkbox item, you must use MoveNext");
+				}
+
+				if (!hasItem)
+				{
+					// Nothing to render
+					return String.Empty;
+				}
+
+				if (id != null)
+				{
+					attributes["id"] = id;
+				}
+
+				return helper.CheckboxLabel(index, target, operationState.TargetSuffix, label, attributes);
 			}
 
 			/// <summary>

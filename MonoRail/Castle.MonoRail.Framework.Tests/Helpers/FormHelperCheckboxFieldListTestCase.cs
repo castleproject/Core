@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text.RegularExpressions;
+
 namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System;
@@ -319,6 +321,60 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				String content = list.Item();
 				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months4_" + index + "_\" name=\"subscription.Months4[" + index + "].Id\" value=\"" + item.Id + "\" checked=\"checked\" />", content);
 				index++;
+			}
+		}
+
+		/// <summary>
+		/// Test a simple checkbox list with LabelFor values
+		/// </summary>
+		[Test]
+		public void CheckBoxFieldListWithLabelFor()
+		{
+			subscription.Months = new int[] { 1, 2, 3, 4, 5 };
+
+			FormHelper.CheckboxList list =
+				helper.CreateCheckboxList("subscription.Months", new int[] { 1, 2, 3, 4, 5 });
+
+			Assert.IsNotNull(list);
+
+			foreach (Object item in list)
+			{
+				string content = list.Item();
+				string label = list.LabelFor(item.ToString());
+
+				Match checkboxIdMatch = new Regex("\\s+id=\"(?<value>[^\"]+)\"(?:\\s+|>)", RegexOptions.IgnoreCase).Match(content);
+				Match labelIdMatch = new Regex("\\s+for=\"(?<value>[^\"]+)\"(?:\\s+|>)", RegexOptions.IgnoreCase).Match(label);
+				Match labelContentMatch = new Regex("<label[^>]*>(?<value>[^<]*)</label>", RegexOptions.IgnoreCase).Match(label);
+
+				Assert.AreEqual(checkboxIdMatch.Groups["value"].Value, labelIdMatch.Groups["value"].Value);
+				Assert.AreEqual(item.ToString(), labelContentMatch.Groups["value"].Value);
+			}			
+		}
+
+		/// <summary>
+		/// Test a simple checkbox list with LabelFor values
+		/// </summary>
+		[Test]
+		public void CheckBoxFieldListWithLabelForUsingCustomLabel()
+		{
+			subscription.Months = new int[] { 1, 2, 3, 4, 5 };
+
+			FormHelper.CheckboxList list =
+				helper.CreateCheckboxList("subscription.Months", new int[] { 1, 2, 3, 4, 5 });
+
+			Assert.IsNotNull(list);
+
+			foreach (Object item in list)
+			{
+				string content = list.Item();
+				string label = list.LabelFor("Item "+item);
+
+				Match checkboxIdMatch = new Regex("\\s+id=\"(?<value>[^\"]+)\"(?:\\s+|>)", RegexOptions.IgnoreCase).Match(content);
+				Match labelIdMatch = new Regex("\\s+for=\"(?<value>[^\"]+)\"(?:\\s+|>)", RegexOptions.IgnoreCase).Match(label);
+				Match labelContentMatch = new Regex("<label[^>]*>(?<value>[^<]*)</label>", RegexOptions.IgnoreCase).Match(label);
+
+				Assert.AreEqual(checkboxIdMatch.Groups["value"].Value, labelIdMatch.Groups["value"].Value);
+				Assert.AreEqual("Item " + item, labelContentMatch.Groups["value"].Value);
 			}
 		}
 	}

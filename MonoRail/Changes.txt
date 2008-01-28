@@ -1,6 +1,8 @@
 1.0
 ===
 
+- Added possibility to create labels in CheckboxLists.
+
 - Applied James Curran's patch fixing MR-390
   "Adding AbstractHelper(IEngineContext) ctor"
 
