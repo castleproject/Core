@@ -87,7 +87,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	
 			foreach(PropertyInfo property in properties)
 			{
-				if (!property.CanWrite)
+				if (!property.CanWrite || property.GetSetMethod() == null)
 				{
 					continue;
 				}
