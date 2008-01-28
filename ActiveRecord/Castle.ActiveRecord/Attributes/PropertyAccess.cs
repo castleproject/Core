@@ -123,6 +123,19 @@ namespace Castle.ActiveRecord
 		NosetterCamelcaseUnderscore,
 		/// <summary>
 		/// Use the property' getter to get the value, and use the field with the same name and in pascal case
+		/// with initial "_" in order to set it.
+		/// </summary>
+		/// <example>
+		/// <code>
+		/// string _UserName;//this will be use to set the value
+		/// 
+		/// [Property(Access=PropertyAccess.NosetterPascalcaseUnderscore)]
+		/// public string UserName { get {... } set { ... } } // this will be used just to get the value
+		/// </code>
+		/// </example>
+		NosetterPascalcaseUnderscore,
+		/// <summary>
+		/// Use the property' getter to get the value, and use the field with the same name and in pascal case
 		/// with initial "m_" in order to set it.
 		/// </summary>
 		/// <example>
@@ -193,6 +206,8 @@ namespace Castle.ActiveRecord
 					return "nosetter.camelcase-underscore";
 				case PropertyAccess.NosetterPascalcaseMUndersc:
 					return "nosetter.pascalcase-m-underscore";
+				case PropertyAccess.NosetterPascalcaseUnderscore:
+					return "nosetter.pascalcase-underscore";
 				case PropertyAccess.NosetterLowercaseUnderscore:
 					return "nosetter.lowercase-underscore";
 				case PropertyAccess.NosetterLowercase:

@@ -78,5 +78,11 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		{
 			Assert.AreEqual("nosetter.pascalcase-m-underscore", PropertyAccessHelper.ToString(PropertyAccess.NosetterPascalcaseMUndersc));
 		}
+
+		[Test]
+		public void NosetterPascalcaseUnderscore()
+		{
+			Assert.AreEqual("nosetter.pascalcase-underscore", PropertyAccessHelper.ToString(PropertyAccess.NosetterPascalcaseUnderscore));
+		}
 	}
 }
