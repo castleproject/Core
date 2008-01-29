@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	{
 		private readonly string viewSourcePath;
 		protected ControllerContext ControllerContext;
-		protected Hashtable Helpers;
+		protected HelperDictionary Helpers;
 		private string lastOutput;
 		protected string Layout;
 		protected MockEngineContext MockEngineContext;
@@ -60,7 +60,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		{
 			Layout = null;
 			PropertyBag = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
-			Helpers = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+			Helpers = new HelperDictionary();
 			MockServices services = new MockServices();
 			services.UrlBuilder = new DefaultUrlBuilder(new MockServerUtility(), new MockRoutingEngine());
 			services.UrlTokenizer = new DefaultUrlTokenizer();

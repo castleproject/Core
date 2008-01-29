@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework
 		/// Gets a dictionary of name/helper instance
 		/// </summary>
 		/// <value>The helpers.</value>
-		IDictionary Helpers { get; set; }
+		HelperDictionary Helpers { get; set; }
 
 		/// <summary>
 		/// Gets the controller's name.

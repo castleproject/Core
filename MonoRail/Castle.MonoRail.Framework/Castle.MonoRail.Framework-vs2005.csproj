@@ -319,6 +319,7 @@
     <Compile Include="Flash.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HelperDictionary.cs" />
     <Compile Include="Helpers\AbstractHelper.cs">
       <SubType>Code</SubType>
     </Compile>

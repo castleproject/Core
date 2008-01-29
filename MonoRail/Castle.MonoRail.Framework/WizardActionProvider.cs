@@ -305,7 +305,7 @@ namespace Castle.MonoRail.Framework
 			helper.SetContext(engineContext);
 			helper.SetController(controller, controllerContext);
 
-			controllerContext.Helpers["wizardhelper"] = helper;
+			controllerContext.Helpers.Add(helper);
 		}
 	}
 }

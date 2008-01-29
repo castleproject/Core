@@ -1546,25 +1546,8 @@ namespace Castle.MonoRail.Framework
 
 			foreach(AbstractHelper helper in builtInHelpers)
 			{
-				string helperName = helper.GetType().Name;
-
-				if (!context.Helpers.Contains(helperName))
-				{
-					context.Helpers[helperName] = helper;
-				}
-
-				// Also makes the helper available with a less verbose name
-				// i.e. FormHelper and Form, AjaxHelper and Ajax
-				if (helperName.EndsWith("Helper"))
-				{
-					string alias = helperName.Substring(0, helperName.Length - 6);
-
-					if (!context.Helpers.Contains(alias))
-					{
-						context.Helpers[alias] = helper;
-					}
-				}
-
+				context.Helpers.Add(helper);
+				
 				Type helperType = helper.GetType();
 
 				if (helperType == typeof(FormHelper) || helperType == typeof(AjaxHelper))

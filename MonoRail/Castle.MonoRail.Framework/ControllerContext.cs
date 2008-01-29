@@ -36,7 +36,7 @@ namespace Castle.MonoRail.Framework
 		private ControllerMetaDescriptor metaDescriptor;
 		private IDictionary<string, object> customActionParameters = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 		private IDictionary propertyBag = new HybridDictionary(true);
-		private IDictionary helpers = new HybridDictionary(true);
+		private HelperDictionary helpers = new HelperDictionary();
         private readonly IDictionary<string, IDynamicAction> dynamicActions = new Dictionary<string, IDynamicAction>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly IDictionary<string, IResource> resources = new Dictionary<string, IResource>(StringComparer.InvariantCultureIgnoreCase);
 		private RouteMatch routeMatch;
@@ -99,7 +99,7 @@ namespace Castle.MonoRail.Framework
 		/// Gets a dictionary of name/helper instance
 		/// </summary>
 		/// <value>The helpers.</value>
-		public IDictionary Helpers
+		public HelperDictionary Helpers
 		{
 			get { return helpers; }
 			set { helpers = value; }
