@@ -190,6 +190,7 @@ namespace Castle.MonoRail.Framework
 					engineContext.Services.ControllerContextFactory.Create(
 						controllerContext.AreaName, controllerContext.Name, innerAction, 
 						stepMetaDescriptor, controllerContext.RouteMatch);
+				stepContext.PropertyBag = controllerContext.PropertyBag;
 
 				SetUpWizardHelper(engineContext, currentStepInstance, stepContext);
 
