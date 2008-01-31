@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Added FormHelper.TextFieldAutoComplete for combining AJAX AutoCompletion and FormHelper's round trip
+  support.
+
 - Added possibility to create labels in CheckboxLists.
 
 - Applied James Curran's patch fixing MR-390

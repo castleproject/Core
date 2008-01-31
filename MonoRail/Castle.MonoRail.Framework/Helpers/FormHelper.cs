@@ -839,6 +839,32 @@ namespace Castle.MonoRail.Framework.Helpers
 			return CreateInputElement("text", target, value, attributes);
 		}
 
+		/// <summary>
+		/// Combines <see cref="AjaxHelper.InputTextWithAutoCompletion(string,string,IDictionary,IDictionary)"/>
+		/// with <see cref="TextField(string,IDictionary)"/> to achieve an TextField that offers
+		/// both input completion and databinding support.
+		/// </summary>
+		/// <param name="target">The target of the text field (analogous to <see cref="TextField(string,IDictionary)"/>)</param>
+		/// <param name="url">The url to call for completion options (analogous to <see cref="AjaxHelper.InputTextWithAutoCompletion(string,string,IDictionary,IDictionary)"/>)</param>
+		/// <param name="tagAttributes">The attributes to apply to the text input field. If this dictionary does not contain a value for browser-based autocompletion (autocomplete="off|on"), it will default to "off" to prevent interference of AJAX-based and browser-based autocompletion.</param>
+		/// <param name="completionOptions">The options for the AJAX-call analogous to <see cref="AjaxHelper.InputTextWithAutoCompletion(string,string,IDictionary,IDictionary)"/>.</param>
+		/// <returns>The generated form elements.</returns>
+		/// <remarks>Please note that this function requires Ajax scripts (Prototype/Scriptaculous)</remarks>
+		public virtual string TextFieldAutoComplete(string target, string url, IDictionary tagAttributes, IDictionary completionOptions)
+		{
+			if (!tagAttributes.Contains("autocomplete")) tagAttributes.Add("autocomplete", "off");
+
+			StringBuilder sb = new StringBuilder();
+			sb.Append(TextField(target, tagAttributes));
+
+			string textFieldId = CreateHtmlId(tagAttributes, target);
+			sb.AppendFormat("<div id=\"{0}\" class=\"auto_complete\"></div>", textFieldId + "autocomplete");
+			sb.Append(new AjaxHelper().AutoCompleteInputText(textFieldId, url, completionOptions));
+
+			return sb.ToString();
+		}
+
+
 		#endregion
 
 		#region FilteredTextField

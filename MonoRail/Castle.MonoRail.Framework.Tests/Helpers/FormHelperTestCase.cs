@@ -123,6 +123,16 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		}
 
 		[Test]
+		public void TextFieldWithAutoCompletion()
+		{
+			Assert.AreEqual("<input type=\"text\" id=\"product_name\" name=\"product.name\" value=\"memory card\" autocomplete=\"off\" /><div id=\"product_nameautocomplete\" class=\"auto_complete\"></div><script type=\"text/javascript\">new Ajax.Autocompleter('product_name', 'product_nameautocomplete', 'someurl',{})</script>",
+							helper.TextFieldAutoComplete("product.name", "someurl", DictHelper.Create(), DictHelper.Create()));
+			Assert.AreEqual("<input type=\"text\" id=\"product_name\" name=\"product.name\" value=\"memory card\" autocomplete=\"on\" /><div id=\"product_nameautocomplete\" class=\"auto_complete\"></div><script type=\"text/javascript\">new Ajax.Autocompleter('product_name', 'product_nameautocomplete', 'someurl',{})</script>",
+							helper.TextFieldAutoComplete("product.name", "someurl", DictHelper.Create("autocomplete=on"), DictHelper.Create()));
+			Assert.IsTrue(helper.TextFieldAutoComplete("product.name", "someurl", DictHelper.Create(), DictHelper.Create()).Contains(helper.TextField("product.name", DictHelper.Create("autocomplete=off"))));
+		}
+
+		[Test]
 		public void NumberField()
 		{
 			Assert.AreEqual(
