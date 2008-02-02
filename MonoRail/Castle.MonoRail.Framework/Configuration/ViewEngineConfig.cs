@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Framework.Configuration
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Configuration;
 	using System.IO;
@@ -30,7 +29,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private string viewPathRoot;
 		private string virtualPathRoot;
 		private List<AssemblySourceInfo> sources = new List<AssemblySourceInfo>();
-		private List<ViewEngineInfo> viewEngines = new List<ViewEngineInfo>();
+		private readonly List<ViewEngineInfo> viewEngines = new List<ViewEngineInfo>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ViewEngineConfig"/> class.
@@ -163,9 +162,9 @@ namespace Castle.MonoRail.Framework.Configuration
 		/// </summary>
 		public void ConfigureDefaultViewEngine()
 		{
-//			Type engineType = typeof(Castle.MonoRail.Framework.Views.Aspx.WebFormsViewEngine);
-//
-//			viewEngines.Add(new ViewEngineInfo(engineType, false));
+			Type engineType = typeof(Views.Aspx.WebFormsViewEngine);
+
+			viewEngines.Add(new ViewEngineInfo(engineType, false));
 		}
 
 		private void ConfigureSingleViewEngine(XmlNode section)
@@ -209,14 +208,14 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			XmlAttribute customEngineAtt = section.Attributes["customEngine"];
 
-//			Type engineType = typeof(Castle.MonoRail.Framework.Views.Aspx.WebFormsViewEngine);
+			Type engineType = typeof(Views.Aspx.WebFormsViewEngine);
 
-//			if (customEngineAtt != null)
-//			{
-//				engineType = TypeLoadUtil.GetType(customEngineAtt.Value);
-//			}
-//
-//			viewEngines.Add(new ViewEngineInfo(engineType, enableXhtmlRendering));
+			if (customEngineAtt != null)
+			{
+				engineType = TypeLoadUtil.GetType(customEngineAtt.Value);
+			}
+
+			viewEngines.Add(new ViewEngineInfo(engineType, enableXhtmlRendering));
 		}
 
 		private void LoadAdditionalSources(XmlNode section)

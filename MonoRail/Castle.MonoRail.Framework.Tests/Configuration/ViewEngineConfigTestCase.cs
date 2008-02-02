@@ -113,6 +113,25 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 			
 			Assert.IsTrue(config.ViewEngines.Exists(WebFormsViewEngineSpecification));
 		}
+
+		[Test]
+		public void ConfigureWithSingleViewEngine_Should_Work_For_Backward_Compatibility()
+		{
+			string configXml =
+				@"
+				<monorail>
+					<viewEngine customEngine=""Castle.MonoRail.Framework.Tests.Configuration.TestViewEngine,Castle.MonoRail.Framework.Tests"" viewPathRoot=""" + viewFolder + @"""/>
+				</monorail>";
+
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml(configXml);
+			ViewEngineConfig config = new ViewEngineConfig();
+			config.Deserialize(doc.DocumentElement);
+
+			Assert.AreEqual(1, config.ViewEngines.Count);
+
+			Assert.IsTrue(config.ViewEngines.Exists(TestViewEngineSpecification));
+		}
 		
 		static bool TestViewEngineSpecification(ViewEngineInfo engineInfo)
 		{
