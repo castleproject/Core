@@ -1,3 +1,5 @@
+- Applied Vladimir Okhotnikov's patch fixing TransactionScope Flush 
+
 - Applied Alun Harford's patch fixing AR-182
   "ActiveRecordStarter.ModelsCreated run too late"
 

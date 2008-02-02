@@ -281,6 +281,25 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Flushes the sessions that this scope 
+		/// or its parents are maintaining
+		/// </summary>
+		public override void Flush()
+		{
+			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
+			{
+				parentTransactionScope.Flush();
+			}
+
+			if (parentSimpleScope != null)
+			{
+				parentSimpleScope.Flush();
+			}
+
+			base.Flush();
+		}
+
+		/// <summary>
 		/// Ensures that a transaction exist, creating one if neccecary
 		/// </summary>
 		/// <param name="session">The session.</param>

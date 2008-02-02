@@ -69,7 +69,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// Flushes the sessions that this scope 
 		/// is maintaining
 		/// </summary>
-		public void Flush()
+		public virtual void Flush()
 		{
 			foreach(ISession session in GetSessions())
 			{
