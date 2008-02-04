@@ -88,6 +88,13 @@ namespace NVelocity.Test
 			Assert.AreEqual("0", Eval("%{}"));
 		}
 
+		[Test]
+		public void InnerStringBug()
+		{
+			Assert.AreEqual("1:class=<loader {department: {url: 'something' } }>",
+				Eval("%{class='loader {department: {url: \\'something\\' } }'}"));
+		}
+
 		public string Eval(string text)
 		{
 			return Eval(text, true);

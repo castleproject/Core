@@ -174,10 +174,11 @@ namespace NVelocity.Runtime.Parser.Node
 
 			HybridDictionary hash = new HybridDictionary(true);
 
-			bool inKey, valueStarted, expectSingleCommaAtEnd, inTransition, inEvaluationContext;
+			bool inKey, valueStarted, expectSingleCommaAtEnd, inTransition;
+			int inEvaluationContext = 0;
 			inKey = false;
 			inTransition = true;
-			valueStarted = expectSingleCommaAtEnd = inEvaluationContext = false;
+			valueStarted = expectSingleCommaAtEnd = false;
 			StringBuilder sbKeyBuilder = new StringBuilder();
 			StringBuilder sbValBuilder = new StringBuilder();
 
@@ -269,7 +270,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 					if ((c == '\'' && expectSingleCommaAtEnd) ||
 					    (!expectSingleCommaAtEnd && c == ',') ||
-					    (!inEvaluationContext && c == '}'))
+					    (inEvaluationContext == 0 && c == '}'))
 					{
 						ProcessDictEntry(hash, sbKeyBuilder, sbValBuilder, expectSingleCommaAtEnd, context);
 
@@ -278,7 +279,7 @@ namespace NVelocity.Runtime.Parser.Node
 						inTransition = true;
 						expectSingleCommaAtEnd = false;
 
-						if (!inEvaluationContext && c == '}')
+						if (inEvaluationContext == 0 && c == '}')
 						{
 							lastIndex = i;
 							break;
@@ -286,13 +287,13 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 					else
 					{
-						if (!inEvaluationContext && c == '{')
+						if (c == '{')
 						{
-							inEvaluationContext = true;
+							inEvaluationContext++;
 						}
-						else if (inEvaluationContext && c == '}')
+						else if (inEvaluationContext != 0 && c == '}')
 						{
-							inEvaluationContext = false;
+							inEvaluationContext--;
 						}
 
 						sbValBuilder.Append(c);
