@@ -476,18 +476,18 @@ namespace Castle.MonoRail.Framework
 
 			if (queryStringParameters != null && queryStringParameters.Count != 0)
 			{
-				Redirect(wizardcontrollerContext.Name, step, queryStringParameters);
+				Redirect(WizardControllerContext.AreaName, wizardcontrollerContext.Name, step, queryStringParameters);
 			}
 			else if (Context.Request.QueryString.HasKeys())
 			{
 				// We need to preserve any attribute from the QueryString
 				// for example in case the url has an Id
 
-				Context.Response.Redirect(wizardcontrollerContext.Name, step, Query);
+				Redirect(WizardControllerContext.AreaName, wizardcontrollerContext.Name, step, Query);
 			}
 			else
 			{
-				Context.Response.Redirect(wizardcontrollerContext.Name, step);
+				Redirect(WizardControllerContext.AreaName, wizardcontrollerContext.Name, step);
 			}
 		}
 

@@ -97,16 +97,16 @@
       <Project>{652F95D4-86E2-40B6-919D-CFC6E449386B}</Project>
       <Name>Castle.ActiveRecord-vs2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
+    <ProjectReference Include="..\..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2008.csproj">
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
-      <Name>Castle.Components.Binder-vs2005</Name>
+      <Name>Castle.Components.Binder-vs2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core-vs2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
-      <Name>Castle.MonoRail.Framework-vs2005</Name>
+    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2008.csproj">
+      <Name>Castle.MonoRail.Framework-vs2008</Name>
       <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>

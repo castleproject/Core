@@ -1499,7 +1499,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			string elementId = CreateHtmlId(attributes, target, true);
 
-			return "<label for=\"" + elementId + "\">" + label + "</label>";
+			return "<label for=\"" + elementId + "\" " + GetAttributes(attributes) + ">" + label + "</label>";
 		}
 
 		/// <summary>
@@ -1585,7 +1585,19 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <returns>The generated label element</returns>
 			public string LabelFor(string label)
 			{
-				return LabelFor(null, label);
+				return LabelFor(null, label, null);
+			}
+
+			/// <summary>
+			/// Outputs a label for the current checkbox element based on the generated id.
+			/// <seealso cref="FormHelper.CreateCheckboxList(string,IEnumerable,IDictionary)"/>
+			/// </summary>
+			/// <param name="label">The text to display</param>
+			/// <param name="attributes">The attributes.</param>
+			/// <returns>The generated label element</returns>
+			public string LabelFor(string label, IDictionary attributes)
+			{
+				return LabelFor(null, label, attributes);
 			}
 
 			/// <summary>
@@ -1594,12 +1606,18 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// </summary>
 			/// <param name="id">The id to use within the label</param>
 			/// <param name="label">The text to display</param>
+			/// <param name="attributes">The attributes.</param>
 			/// <returns>The generated label element</returns>
-			public string LabelFor(string id, string label)
+			public string LabelFor(string id, string label, IDictionary attributes)
 			{
 				if (!hasMovedNext)
 				{
 					throw new InvalidOperationException("Before rendering a checkbox item, you must use MoveNext");
+				}
+
+				if (attributes == null)
+				{
+					attributes = new HybridDictionary(true);
 				}
 
 				if (!hasItem)

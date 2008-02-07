@@ -130,6 +130,26 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <summary>
 		/// Gets the name of the next step.
 		/// </summary>
+		/// <param name="index">The step index.</param>
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
+		/// <returns></returns>
+		public static string GetStepName(int index, IEngineContext engineContext, IController controller, IControllerContext controllerContext)
+		{
+			IList stepList = (IList) engineContext.Items["wizard.step.list"];
+
+			if ((index) < stepList.Count)
+			{
+				return (String) stepList[index];
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		/// Gets the name of the next step.
+		/// </summary>
 		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="controllerContext">The controller context.</param>

@@ -145,6 +145,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				return typeof(String);
 			}
+			else if (source.GetType().IsArray)
+			{
+				return source.GetType().GetElementType();
+			}
 			else if (source is IEnumerable)
 			{
 				return ExtractType(source as IEnumerable);

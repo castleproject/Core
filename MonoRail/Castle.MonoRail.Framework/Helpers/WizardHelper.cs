@@ -26,16 +26,19 @@ namespace Castle.MonoRail.Framework.Helpers
 	public class WizardHelper : HtmlHelper
 	{
 		#region Constructors
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WizardHelper"/> class.
 		/// </summary>
 		public WizardHelper() { }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WizardHelper"/> class.
 		/// setting the Controller, Context and ControllerContext.
 		/// </summary>
 		/// <param name="engineContext">The engine context.</param>
 		public WizardHelper(IEngineContext engineContext) : base(engineContext) { }
+
 		#endregion
 
 		/// <summary>
@@ -94,6 +97,16 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String NextStepName
 		{
 			get { return WizardUtils.GetNextStepName(Context, Controller, ControllerContext); }
+		}
+
+		/// <summary>
+		/// Gets a wizard step name by index.
+		/// </summary>
+		/// <param name="stepindex">The stepindex.</param>
+		/// <returns></returns>
+		public String GetStepName(int stepindex)
+		{
+			return WizardUtils.GetStepName(stepindex, Context, Controller, ControllerContext);
 		}
 
 		#region LinkToStep
