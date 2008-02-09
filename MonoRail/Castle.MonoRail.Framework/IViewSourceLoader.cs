@@ -42,7 +42,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="dirName">Directory name</param>
 		/// <returns></returns>
-		String[] ListViews(String dirName);
+		/// <param name="fileExtensionsToInclude">Optional fileExtensions to include in listing.</param>
+        String[] ListViews(String dirName, params string[] fileExtensionsToInclude);
 
 		/// <summary>
 		/// Gets/sets the root directory of views, obtained from the configuration.
@@ -74,5 +75,7 @@ namespace Castle.MonoRail.Framework
 		/// Raised when the view is changed.
 		/// </summary>
 		event FileSystemEventHandler ViewChanged;
+
+	   
 	}
 }

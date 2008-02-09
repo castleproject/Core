@@ -501,7 +501,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		private void LoadMacros(ExtendedProperties props)
 		{
-			String[] macros = ViewSourceLoader.ListViews("macros");
+			String[] macros = ViewSourceLoader.ListViews("macros",this.ViewFileExtension,this.JSGeneratorFileExtension);
 
 			ArrayList macroList = new ArrayList(macros);
 

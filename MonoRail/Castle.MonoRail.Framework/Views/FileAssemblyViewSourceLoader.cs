@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text;
+
 namespace Castle.MonoRail.Framework
 {
 	using System;
@@ -105,16 +107,17 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		/// <summary>
-		/// Gets a list of views on the specified directory
-		/// </summary>
-		/// <param name="dirName">Directory name</param>
-		/// <returns></returns>
-		public String[] ListViews(String dirName)
+        /// <summary>
+        /// Gets a list of views on the specified directory
+        /// </summary>
+        /// <param name="dirName">Directory name</param>
+        /// <param name="fileExtensionsToInclude">Optional fileExtensions to include in listing.</param>
+        /// <returns></returns>
+		public String[] ListViews(String dirName,params string[] fileExtensionsToInclude)
 		{
 			ArrayList views = new ArrayList();
 
-			CollectViewsOnFileSystem(dirName, views);
+			CollectViewsOnFileSystem(dirName, views,fileExtensionsToInclude);
 			CollectViewsOnAssemblies(dirName, views);
 
 			return (String[]) views.ToArray(typeof(String));
@@ -282,17 +285,28 @@ namespace Castle.MonoRail.Framework
 			return null;
 		}
 
-		private void CollectViewsOnFileSystem(string dirName, ArrayList views)
+		private void CollectViewsOnFileSystem(string dirName, ArrayList views,params string[] fileExtensionsToInclude)
 		{
 			DirectoryInfo dir = new DirectoryInfo(Path.Combine(ViewRootDir, dirName));
+            if(!dir.Exists)
+            {
+                return; //early return
+            }
 
-			if (dir.Exists)
-			{
-				foreach(FileInfo file in dir.GetFiles("*.*"))
-				{
-					views.Add(Path.Combine(dirName, file.Name));
-				}
-			}
+		    
+            if(fileExtensionsToInclude ==null || fileExtensionsToInclude.Length==0)
+            {
+                fileExtensionsToInclude = new string[] {".*"};
+            }
+		    
+		    foreach (string ext in fileExtensionsToInclude)
+		    {
+                foreach (FileInfo file in dir.GetFiles("*" + ext))
+                {
+                    views.Add(Path.Combine(dirName, file.Name));
+                }
+		    }
+		    
 		}
 
 		private void CollectViewsOnAssemblies(string dirName, ArrayList views)

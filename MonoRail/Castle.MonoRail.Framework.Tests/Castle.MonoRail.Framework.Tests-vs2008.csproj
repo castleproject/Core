@@ -144,6 +144,7 @@
     <None Include="Castle.MonoRail.Framework.Tests.build" />
     <None Include="contentinfs.vm" />
     <EmbeddedResource Include="Content\contentinassembly.vm" />
+    <None Include="Content\zdonotlist.bad" />
     <None Include="Content\notinassembly.vm" />
     <Compile Include="Actions\ActionMethodExecutorCompatibleTestCase.cs" />
     <Compile Include="Actions\ActionMethodExecutorTestCase.cs" />

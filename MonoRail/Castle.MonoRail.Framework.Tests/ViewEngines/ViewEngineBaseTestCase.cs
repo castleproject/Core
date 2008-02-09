@@ -103,12 +103,13 @@ namespace Castle.MonoRail.Framework.Tests
 			throw new NotImplementedException();
 		}
 
-		/// <summary>
-		/// Gets a list of views on the specified directory
-		/// </summary>
-		/// <param name="dirName">Directory name</param>
-		/// <returns></returns>
-		public string[] ListViews(string dirName)
+        /// <summary>
+        /// Gets a list of views on the specified directory
+        /// </summary>
+        /// <param name="dirName">Directory name</param>
+        /// <param name="fileExtensionsToInclude">Optional fileExtensions to include in listing.</param>
+        /// <returns></returns>
+        public string[] ListViews(string dirName, params string[] fileExtensionsToInclude)
 		{
 			throw new NotImplementedException();
 		}

@@ -1189,9 +1189,25 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
-		#region LabelFor
+        #region LiteralFor
 
-		/// <summary>
+        ///<summary>Returns the value for specified target with no additional markup. If no value is obtained
+        /// an empty string is returned.
+        ///</summary>
+        ///<param name="target">The object to get the value from.</param>
+        ///<returns>The value or an empty string if none is found.</returns>
+        public virtual string LiteralFor(string target)
+        {
+            target = RewriteTargetIfWithinObjectScope(target);
+            object value = ObtainValue(target);
+            if(value==null)
+                return string.Empty;
+            return value.ToString();
+        }
+        #endregion
+        #region LabelFor
+
+        /// <summary>
 		/// Generates a label element.
 		/// </summary>
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>

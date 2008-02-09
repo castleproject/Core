@@ -269,6 +269,12 @@ namespace Castle.MonoRail.Views.Brail
 
         private void OnViewChanged(object sender, FileSystemEventArgs e)
         {
+            
+            if (Path.GetExtension(e.FullPath).IndexOf(this.ViewFileExtension) == -1 &&
+                Path.GetExtension(e.FullPath).IndexOf(this.JSGeneratorFileExtension) == -1)
+            {
+                return;//early return since only watching view extensions and jsgenerator extensions
+            }
             string path = e.FullPath.Substring(ViewRootDir.Length);
             if (path.Length > 0 && (path[0] == Path.DirectorySeparatorChar ||
                                     path[0] == Path.AltDirectorySeparatorChar))
@@ -502,7 +508,7 @@ namespace Castle.MonoRail.Views.Brail
             // use the System.IO.Path to get the folder name even though
             // we are using the ViewSourceLoader to load the actual file
             string directory = Path.GetDirectoryName(filename);
-            foreach (string file in ViewSourceLoader.ListViews(directory))
+            foreach (string file in ViewSourceLoader.ListViews(directory, this.ViewFileExtension, this.JSGeneratorFileExtension))
             {
                 ICompilerInput input = CreateInput(file);
                 input2FileName.Add(input, file);

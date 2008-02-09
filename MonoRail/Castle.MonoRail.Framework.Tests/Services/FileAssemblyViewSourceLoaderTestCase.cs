@@ -62,10 +62,12 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			string[] views = loader.ListViews("Content");
 			
 			Assert.IsNotNull(views);
-			Assert.AreEqual(3, views.Length);
+			Assert.AreEqual(4, views.Length);
 			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
 			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "notinassembly.vm", views[1]);
-			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[2]);
+            Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "zdonotlist.bad", views[2]);
+			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[3]);
+            
 
 			foreach(string view in views)
 			{
@@ -73,6 +75,26 @@ namespace Castle.MonoRail.Framework.Tests.Services
 				Assert.IsNotNull(loader.GetViewSource(view));
 			}
 		}
+        [Test]
+        public void ListViewsWithOptionalFileExtensions()
+        {
+            loader.AddAssemblySource(new AssemblySourceInfo("Castle.MonoRail.Framework.Tests", "Castle.MonoRail.Framework.Tests"));
+
+            string[] views = loader.ListViews("Content",".vm");
+
+            Assert.IsNotNull(views);
+            Assert.AreEqual(3, views.Length);
+            Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
+            Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "notinassembly.vm", views[1]);
+            Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[2]);
+
+
+            foreach (string view in views)
+            {
+                Assert.IsTrue(loader.HasSource(view));
+                Assert.IsNotNull(loader.GetViewSource(view));
+            }
+        }
 	}
 
 	[TestFixture]
