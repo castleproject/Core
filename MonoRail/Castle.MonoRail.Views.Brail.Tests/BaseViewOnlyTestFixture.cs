@@ -18,11 +18,14 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	using System.Collections;
 	using System.IO;
 	using System.Reflection;
+	using Castle.MonoRail.Framework.Descriptors;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.JSGeneration;
 	using Castle.MonoRail.Framework.JSGeneration.Prototype;
+	using Castle.MonoRail.Framework.Resources;
 	using Castle.MonoRail.Framework.Services;
 	using Castle.MonoRail.Framework.Test;
+	using Castle.MonoRail.Views.Brail.TestSite.Controllers;
 	using Framework;
 	using NUnit.Framework;
 
@@ -152,6 +155,21 @@ namespace Castle.MonoRail.Views.Brail.Tests
             BooViewEngine.GenerateJS(templatePath, sw, info,MockEngineContext, null, ControllerContext);
             lastOutput = sw.ToString();
             return lastOutput;
+        }
+
+        protected void AddResource(string name, string resourceName, Assembly asm)
+        {
+            IResourceFactory resourceFactory = new DefaultResourceFactory();
+            ResourceDescriptor descriptor = new ResourceDescriptor(
+                null,
+                name,
+                resourceName,
+                null,
+                null);
+            IResource resource = resourceFactory.Create(
+                descriptor,
+                asm);
+            ControllerContext.Resources.Add(name, resource);
         }
 
         protected string RenderStaticWithLayout(string staticText)
