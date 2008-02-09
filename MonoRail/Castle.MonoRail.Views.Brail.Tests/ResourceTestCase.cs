@@ -22,6 +22,11 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	[TestFixture]
 	public class ResourceTestCase : BaseViewOnlyTestFixture
 	{
+        protected override void BeforEachTest()
+        {
+            
+        }
+
 		[Test]
 		public void GetIndexedResources()
 		{

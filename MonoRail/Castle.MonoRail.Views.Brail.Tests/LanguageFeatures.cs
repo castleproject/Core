@@ -14,8 +14,10 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	
-	using NUnit.Framework;
+    using System;
+    using Castle.MonoRail.Views.Brail.TestSite.Controllers;
+    using DynamicProxy;
+    using NUnit.Framework;
 
 	[TestFixture]
 	public class LanguageFeatures : BaseViewOnlyTestFixture
@@ -23,6 +25,18 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void CanHandleDynamicProxyObjects()
 		{
+            ProxyGenerator generator = new ProxyGenerator();
+            object o = generator.CreateClassProxy(typeof(HomeController.SimpleProxy), new StandardInterceptor());
+            try
+            {
+                o.GetType().GetProperty("Text");
+                throw new InvalidOperationException("Should have gotten AmbiguousMatchException  here");
+            }
+            catch
+            {
+            }
+            PropertyBag["src"] = o;
+
 			string expected = "<?xml version=\"1.0\" ?>\r\n" +
 			                  @"<html>
 <h1>BarBaz</h1>
@@ -35,6 +49,9 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void NullableProperties()
 		{
+            Foo[] fooArray1 = new Foo[] { new Foo("Bar"), new Foo(null), new Foo("Baz") };
+            this.PropertyBag.Add("List", fooArray1);
+
 			string expected = "<?xml version=\"1.0\" ?>\r\n" +
 			                  @"<html>
 <h1>BarBaz</h1>

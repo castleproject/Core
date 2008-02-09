@@ -14,8 +14,8 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	
-	using NUnit.Framework;
+    using Boo.Lang;
+    using NUnit.Framework;
 
 	[TestFixture]
 	public class XmlTestCase : BaseViewOnlyTestFixture
@@ -23,7 +23,8 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void ComplexXml()
 		{
-			string expected = @"
+            this.PropertyBag.Add("Numbers", Builtins.range(10));
+            string expected = @"
 0,1,2,3,4,5,6,7,8,9,
 html string
 <ol>
@@ -42,7 +43,8 @@ html string
 		[Test]
 		public void PureXml()
 		{
-			string expected = "0,1,2,3,4,5,6,7,8,9,";
+            this.PropertyBag.Add("Numbers", Builtins.range(10));
+            string expected = "0,1,2,3,4,5,6,7,8,9,";
 			ProcessView_StripRailsExtension("Xml/Pure.rails");
 			AssertReplyEqualTo(expected);
 		}
