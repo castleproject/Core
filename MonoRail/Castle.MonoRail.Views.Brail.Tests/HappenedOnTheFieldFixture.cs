@@ -15,8 +15,8 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	
-	using NUnit.Framework;
+    using Castle.MonoRail.Views.Brail.TestSite.Components;
+    using NUnit.Framework;
 
 	[TestFixture]
 	public class HappenedOnTheFieldFixture : BaseViewOnlyTestFixture
@@ -24,6 +24,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void UsingEmptyComponent()
 		{
+            ViewComponentFactory.Inspect(typeof(SimpleInlineViewComponent3).Assembly);
 			ProcessView_StripRailsExtension("happenedOnTheField/JustComponent.rails");
 			// should complete succesfully
 		}

@@ -23,49 +23,49 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void AccessingElementAttribute()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/elementattribute.rails");
+			ProcessViewJS("jsgeneration/elementattribute");
 			AssertReplyContains("$('aa').className = \"newclass\";");
 		}
 
 		[Test]
 		public void AccessingElementAttributeDepth()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/elementattributedepth.rails");
+			ProcessViewJS("jsgeneration/elementattributedepth");
 			AssertReplyContains("$('aa').style.display = \"none\";");
 		}
 
 		[Test]
 		public void AccessingElementMethod()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/elementmethod.rails");
+			ProcessViewJS("jsgeneration/elementmethod");
 			AssertReplyContains("$('aa').hide();");
 		}
 
 		[Test]
 		public void AccessingElementMethodDepth()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/elementmethoddepth.rails");
+			ProcessViewJS("jsgeneration/elementmethoddepth");
 			AssertReplyContains("$('aa').read().test();");
 		}
 
 		[Test]
 		public void AccessingElementStockOperationReplace()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/elementreplace.rails");
+			ProcessViewJS("jsgeneration/elementreplace");
 			AssertReplyContains("$('aa').replace(\"new content\")");
 		}
 
 		[Test]
 		public void AccessingElementStockOperationReplaceHtml()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/elementreplacehtml.rails");
+			ProcessViewJS("jsgeneration/elementreplacehtml");
 			AssertReplyContains("$('aa').update(\"new content\")");
 		}
 
 		[Test]
 		public void CollectionFirstLast()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/collectionfirstlast.rails");
+			ProcessViewJS("jsgeneration/collectionfirstlast");
 			AssertReplyContains("$$('p.welcome b').first().hide();");
 			AssertReplyContains("$$('p.welcome b').last().show();");
 		}
@@ -73,7 +73,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void InsertHtml()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/InsertHtml.rails");
+			ProcessViewJS("jsgeneration/InsertHtml");
 			AssertReplyContains("new Insertion.Top(\"aa\",\"new content\");");
 			AssertReplyContains("new Insertion.Bottom(\"aa\",\"new content\");");
 			AssertReplyContains("new Insertion.After(\"aa\",\"new content\");");
@@ -83,7 +83,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void MR_264()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/mr264.rails");
+			ProcessViewJS("jsgeneration/mr264");
 			AssertReplyContains(
 				"Element.update(\"holder\",\"test\");\r\n" +
 				"new Effect.Highlight('holder', {});");
@@ -92,28 +92,28 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void Replace()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/replace.rails");
+			ProcessViewJS("jsgeneration/replace");
 			AssertReplyContains("Element.replace(\"aa\",\"new content\")");
 		}
 
 		[Test]
 		public void ReplaceHtml()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/replacehtml.rails");
+			ProcessViewJS("jsgeneration/replacehtml");
 			AssertReplyContains("Element.update(\"aa\",\"new content\");");
 		}
 
 		[Test]
 		public void ReplaceHtmlUsingPartial()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/replacehtmlwithpartial.rails");
+			ProcessViewJS("jsgeneration/replacehtmlwithpartial");
 			AssertReplyContains("Element.update(\"aa\",\"You\'re hammett <br> [ a ][ b ]\")");
 		}
 
 		[Test]
 		public void ShowHideToggleRemove()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/multipleactions.rails");
+			ProcessViewJS("jsgeneration/multipleactions");
 			AssertReplyContains("Element.show(\"a\");");
 			AssertReplyContains("Element.show(\"a\",\"b\",\"c\");");
 			AssertReplyContains("Element.hide(\"a\");");
@@ -126,21 +126,21 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void SimpleCollectionAccess()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/collectionaccess.rails");
+			ProcessViewJS("jsgeneration/collectionaccess");
 			AssertReplyContains("$$('aa');");
 		}
 
 		[Test]
 		public void SimpleElementAccess()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/elementaccess.rails");
+			ProcessViewJS("jsgeneration/elementaccess");
 			AssertReplyContains("$('aa');");
 		}
 
 		[Test]
 		public void VisualEffect()
 		{
-			ProcessView_StripRailsExtension("jsgeneration/visualeffect.rails");
+			ProcessViewJS("jsgeneration/visualeffect");
 			AssertReplyContains("Effect.Highlight('element1', {});");
 			AssertReplyContains("Effect.Highlight('element1', {duration:4});");
 		}

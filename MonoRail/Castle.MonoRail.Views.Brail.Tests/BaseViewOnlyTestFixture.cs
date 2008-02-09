@@ -19,6 +19,8 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	using System.IO;
 	using System.Reflection;
 	using Castle.MonoRail.Framework.Helpers;
+	using Castle.MonoRail.Framework.JSGeneration;
+	using Castle.MonoRail.Framework.JSGeneration.Prototype;
 	using Castle.MonoRail.Framework.Services;
 	using Castle.MonoRail.Framework.Test;
 	using Framework;
@@ -130,6 +132,27 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			lastOutput = sw.ToString();
 			return lastOutput;
 		}
+
+        protected string ProcessViewJS(string templatePath)
+        {
+            StringWriter sw = new StringWriter();
+            if (string.IsNullOrEmpty(Layout) == false)
+                ControllerContext.LayoutNames = new string[] { Layout, };
+            MockEngineContext.CurrentControllerContext = ControllerContext;
+            JSCodeGenerator codeGenerator =
+                  new JSCodeGenerator(MockEngineContext.Server, null,
+                      MockEngineContext, null, ControllerContext, MockEngineContext.Services.UrlBuilder);
+
+            IJSGenerator jsGen = new PrototypeGenerator(codeGenerator);
+
+            codeGenerator.JSGenerator = jsGen;
+
+            JSCodeGeneratorInfo info = new JSCodeGeneratorInfo(codeGenerator, jsGen, new object[0], new object[0]);
+
+            BooViewEngine.GenerateJS(templatePath, sw, info,MockEngineContext, null, ControllerContext);
+            lastOutput = sw.ToString();
+            return lastOutput;
+        }
 
         protected string RenderStaticWithLayout(string staticText)
         {
