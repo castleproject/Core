@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Views\bugs\add.brail" />
+    <None Include="Views\bugs\mr_378.brail" />
     <None Include="Views\bugs\InlineSubView.brail" />
     <None Include="Views\bugs\MR_294_CaptureForInSubViewDoesNotPropogateUpward.brail" />
     <None Include="Views\bugs\UseCaptureFor.brail" />

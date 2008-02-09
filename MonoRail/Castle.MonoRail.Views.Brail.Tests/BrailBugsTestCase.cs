@@ -70,5 +70,22 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			ProcessView_StripRailsExtension("bugs/inlineSubView.rails");
 			AssertReplyContains("Success");
 		}
+
+	    [Test]
+	    public void MS_378_AccessingIndexers()
+	    {
+	        PropertyBag["Data"] = new Data();
+	        ProcessView("bugs/mr_378");
+	    }
+
+        public class Data
+        {
+            public string[] array = new string[] { "one", "two", "three" };
+
+            public string[] Items
+            {
+                get { return array; }
+            }
+        } 
 	}
 }

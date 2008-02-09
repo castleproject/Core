@@ -202,7 +202,11 @@ namespace Castle.MonoRail.Views.Brail
 					}
 				case MemberTypes.Property:
 					{
-						GetSetMethod((PropertyInfo) member).Invoke(target, args);
+                        PropertyInfo prop = (PropertyInfo)member;
+                        if (prop.GetIndexParameters().Length != 0)
+                            GetSetMethod(prop).Invoke(target, args);
+                        else
+                            SetArraySlice(GetGetMethod(prop).Invoke(target, new object[0]), args);
 						break;
 					}
 				default:
@@ -254,10 +258,14 @@ namespace Castle.MonoRail.Views.Brail
 						return method.Invoke(target, args);
 					}
 				case MemberTypes.Property:
-					{
-						return GetGetMethod((PropertyInfo) member).Invoke(target, args);
-					}
-				default:
+			        {
+			            PropertyInfo prop = (PropertyInfo) member;
+                        if (prop.GetIndexParameters().Length != 0)
+                            return GetGetMethod(prop).Invoke(target, args);
+                        else
+                            return GetArraySlice(GetGetMethod(prop).Invoke(target, new object[0]), args);
+			        }
+			    default:
 					{
 						MemberNotSupported(member);
 						return null; // this line is never reached
