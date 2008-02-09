@@ -19,20 +19,21 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	[TestFixture]
 	public class DirectRenderTestCase : BaseViewOnlyTestFixture
 	{
-		[Test, Ignore("DirectRender without layout doesnt work anymore")]
+		[Test]
 		public void DirectRendering()
 		{
-			ProcessView_StripRailsExtension("directrender/direct.rails");
 			string expected = "Ayende";
-			AssertReplyEqualTo(expected);
+            string actual = RenderStaticWithLayout("Ayende");
+            Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
 		public void DirectRenderingWithLayout()
 		{
-			ProcessView_StripRailsExtension("directrender/directwithlayout.rails");
 			string expected = "\r\nWelcome!\r\n<p>Ayende</p>\r\nFooter";
-			AssertReplyEqualTo(expected);
+		    Layout = "master";
+		    string actual = RenderStaticWithLayout("Ayende");
+            Assert.AreEqual(expected, actual);
 		}
 	}
 }

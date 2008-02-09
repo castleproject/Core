@@ -131,6 +131,18 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			return lastOutput;
 		}
 
+        protected string RenderStaticWithLayout(string staticText)
+        {
+            if (string.IsNullOrEmpty(Layout) == false)
+                ControllerContext.LayoutNames = new string[] { Layout, };
+            MockEngineContext.CurrentControllerContext = ControllerContext;
+            
+            BooViewEngine.RenderStaticWithinLayout(staticText, MockEngineContext, null, ControllerContext);
+            lastOutput = ((StringWriter)MockEngineContext.Response.Output)
+                .GetStringBuilder().ToString();
+            return lastOutput;
+        }
+
 		public void AssertReplyEqualTo(string expected)
 		{
 			Assert.AreEqual(expected, lastOutput);
