@@ -18,7 +18,7 @@ namespace Castle.MicroKernel.Registration
 	using System.Collections;
 	using Core;
 
-	public abstract class AbstractPropertyDescriptor<S,T> : ComponentDescriptor<S,T>
+	public abstract class AbstractPropertyDescriptor<S> : ComponentDescriptor<S>
 	{
 		private readonly Property[] properties;
 		private readonly IDictionary dictionary;
@@ -33,25 +33,25 @@ namespace Castle.MicroKernel.Registration
 			this.dictionary = dictionary;
 		}
 
-		protected internal override void ApplyToModel(ComponentModel model)
+		protected internal override void ApplyToModel(IKernel kernel, ComponentModel model)
 		{
 			if (dictionary != null)
 			{
 				foreach(DictionaryEntry property in dictionary)
 				{
-					ApplyProperty(model, property.Key.ToString(), property.Value);
+					ApplyProperty(kernel, model, property.Key.ToString(), property.Value);
 				}
 			}
 			else if (properties != null)
 			{
 				foreach(Property property in properties)
 				{
-					ApplyProperty(model, property.Key, property.Value);
+					ApplyProperty(kernel, model, property.Key, property.Value);
 				}
 			}
 		}
 
-		protected abstract void ApplyProperty(ComponentModel model,
+		protected abstract void ApplyProperty(IKernel kernel, ComponentModel model,
 		                                      String key, Object value);
 	}
 }

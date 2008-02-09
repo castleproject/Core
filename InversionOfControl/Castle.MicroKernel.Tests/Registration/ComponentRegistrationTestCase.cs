@@ -15,10 +15,10 @@
 namespace Castle.MicroKernel.Tests.Registration
 {
 	using System.Collections;
-	using Castle.Core;
 	using Castle.MicroKernel.Registration;
-	using Castle.MicroKernel.Tests.ClassComponents;
 	using Castle.MicroKernel.Tests.Lifestyle.Components;
+	using ClassComponents;
+	using Core;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -35,8 +35,8 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void AddComponent_WithServiceOnly_RegisteredWithServiceTypeName()
 		{
-			kernel.AddComponentEx<CustomerImpl>()
-				.Register();
+			kernel.Register(
+				Component.ForService<CustomerImpl>());
 
 			IHandler handler = kernel.GetHandler(typeof(CustomerImpl));
 			Assert.AreEqual(typeof(CustomerImpl), handler.ComponentModel.Service);
@@ -51,38 +51,40 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
-		public void AddComponent_WithServiceAndName_RegisteredWithName()
+		public void AddComponent_WithServiceAndName_RegisteredNamed()
 		{
-			kernel.AddComponentEx<CustomerImpl>()
-				.WithName("customer")
-				.Register();
+			kernel.Register(
+				Component.ForService<CustomerImpl>()
+					.Named("customer")
+					);
 
 			IHandler handler = kernel.GetHandler("customer");
 			Assert.AreEqual("customer", handler.ComponentModel.Name);
 			Assert.AreEqual(typeof(CustomerImpl), handler.ComponentModel.Service);
 			Assert.AreEqual(typeof(CustomerImpl), handler.ComponentModel.Implementation);
 
-			CustomerImpl customer = (CustomerImpl)kernel["customer"];
+			CustomerImpl customer = (CustomerImpl) kernel["customer"];
 			Assert.IsNotNull(customer);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ComponentRegistrationException),
 			"This component has already been assigned name 'customer'")]
-		public void AddComponent_WithNameAlreadyAssigned_ThrowsException()
+		public void AddComponent_NamedAlreadyAssigned_ThrowsException()
 		{
-			kernel.AddComponentEx<CustomerImpl>()
-				.WithName("customer")
-				.WithName("customer1")
-				.Register();
+			kernel.Register(
+				Component.ForService<CustomerImpl>()
+					.Named("customer")
+					.Named("customer1")
+					);
 		}
 
 		[Test]
 		public void AddComponent_WithServiceAndClass_RegisteredWithClassTypeName()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithImplementation<CustomerImpl>()
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.ImplementedBy<CustomerImpl>());
 
 			ICustomer customer = kernel.Resolve<ICustomer>();
 			Assert.IsNotNull(customer);
@@ -93,24 +95,26 @@ namespace Castle.MicroKernel.Tests.Registration
 
 		[Test]
 		[ExpectedException(typeof(ComponentRegistrationException),
-		   "This component has already been assigned implementation Castle.MicroKernel.Tests.ClassComponents.CustomerImpl")]
+			"This component has already been assigned implementation Castle.MicroKernel.Tests.ClassComponents.CustomerImpl")]
 		public void AddComponent_WithImplementationAlreadyAssigned_ThrowsException()
 		{
-			kernel.AddComponentEx<CustomerImpl>()
-				.WithImplementation<CustomerImpl>()
-				.WithImplementation<CustomerImpl2>()
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.ImplementedBy<CustomerImpl>()
+					.ImplementedBy<CustomerImpl2>()
+					);
 		}
 
 		[Test]
-		public void AddComponent_WithInstance_UsesInstance()
+		public void AddComponent_Instance_UsesInstance()
 		{
 			CustomerImpl customer = new CustomerImpl();
 
-			kernel.AddComponentEx<ICustomer>()
-				.WithName("key")
-				.WithInstance(customer)
-				.Register();				
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("key")
+					.Instance(customer)
+					);
 			Assert.IsTrue(kernel.HasComponent("key"));
 
 			CustomerImpl customer2 = kernel["key"] as CustomerImpl;
@@ -123,11 +127,12 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void AddComponent_WithTransientLifestyle_WorksFine()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithName("customer")
-				.WithImplementation<CustomerImpl>()
-				.WithLifestyle.Transient
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer")
+					.ImplementedBy<CustomerImpl>()
+					.LifeStyle.Transient
+					);
 
 			IHandler handler = kernel.GetHandler("customer");
 			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
@@ -136,11 +141,12 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void AddComponent_WithSingletonLifestyle_WorksFine()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithName("customer")
-				.WithImplementation<CustomerImpl>()
-				.WithLifestyle.Singleton
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer")
+					.ImplementedBy<CustomerImpl>()
+					.LifeStyle.Singleton
+					);
 
 			IHandler handler = kernel.GetHandler("customer");
 			Assert.AreEqual(LifestyleType.Singleton, handler.ComponentModel.LifestyleType);
@@ -149,11 +155,12 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void AddComponent_WithCustomLifestyle_WorksFine()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithName("customer")
-				.WithImplementation<CustomerImpl>()
-				.WithLifestyle.Custom<MyLifestyleHandler>()
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer")
+					.ImplementedBy<CustomerImpl>()
+					.LifeStyle.Custom<MyLifestyleHandler>()
+					);
 
 			IHandler handler = kernel.GetHandler("customer");
 			Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
@@ -162,11 +169,12 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void AddComponent_WithThreadLifestyle_WorksFine()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithName("customer")
-				.WithImplementation<CustomerImpl>()
-				.WithLifestyle.PerThread
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer")
+					.ImplementedBy<CustomerImpl>()
+					.LifeStyle.PerThread
+					);
 
 			IHandler handler = kernel.GetHandler("customer");
 			Assert.AreEqual(LifestyleType.Thread, handler.ComponentModel.LifestyleType);
@@ -175,11 +183,12 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void AddComponent_WithPerWebRequestLifestyle_WorksFine()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithName("customer")
-				.WithImplementation<CustomerImpl>()
-				.WithLifestyle.PerWebRequest
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer")
+					.ImplementedBy<CustomerImpl>()
+					.LifeStyle.PerWebRequest
+					);
 
 			IHandler handler = kernel.GetHandler("customer");
 			Assert.AreEqual(LifestyleType.PerWebRequest, handler.ComponentModel.LifestyleType);
@@ -188,11 +197,12 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void AddComponent_WithPooledLifestyle_WorksFine()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithName("customer")
-				.WithImplementation<CustomerImpl>()
-				.WithLifestyle.Pooled
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer")
+					.ImplementedBy<CustomerImpl>()
+					.LifeStyle.Pooled
+					);
 
 			IHandler handler = kernel.GetHandler("customer");
 			Assert.AreEqual(LifestyleType.Pooled, handler.ComponentModel.LifestyleType);
@@ -201,24 +211,26 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void AddComponent_WithPooledWithSizeLifestyle_WorksFine()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithName("customer")
-				.WithImplementation<CustomerImpl>()
-				.WithLifestyle.PooledWithSize(5, 10)
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer")
+					.ImplementedBy<CustomerImpl>()
+					.LifeStyle.PooledWithSize(5, 10)
+					);
 
 			IHandler handler = kernel.GetHandler("customer");
 			Assert.AreEqual(LifestyleType.Pooled, handler.ComponentModel.LifestyleType);
 		}
 
 		[Test]
-		public void AddComponent_WithActivator_WorksFine()
+		public void AddComponent_Activator_WorksFine()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithName("customer")
-				.WithImplementation<CustomerImpl>()
-				.WithActivator<MyCustomerActivator>()
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer")
+					.ImplementedBy<CustomerImpl>()
+					.Activator<MyCustomerActivator>()
+					);
 
 			IHandler handler = kernel.GetHandler("customer");
 			Assert.AreEqual(typeof(MyCustomerActivator), handler.ComponentModel.CustomComponentActivator);
@@ -228,47 +240,51 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
-		public void AddComponent_WithExtendedProperties_WorksFine()
+		public void AddComponent_ExtendedProperties_WorksFine()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithImplementation<CustomerImpl>()
-				.WithExtendedProperties(
-					Property.WithKey("key1").Eq("value1"),
-					Property.WithKey("key2").Eq("value2"))
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.ImplementedBy<CustomerImpl>()
+					.ExtendedProperties(
+						Property.ForKey("key1").Eq("value1"),
+						Property.ForKey("key2").Eq("value2")
+						)
+					);
 
 			IHandler handler = kernel.GetHandler(typeof(ICustomer));
 			Assert.AreEqual("value1", handler.ComponentModel.ExtendedProperties["key1"]);
 			Assert.AreEqual("value2", handler.ComponentModel.ExtendedProperties["key2"]);
 		}
 
-		#if DOTNET35
+#if DOTNET35
 
 		[Test]
-		public void AddComponent_WithExtendedProperties_UsingAnonymousType()
+		public void AddComponent_ExtendedProperties_UsingAnonymousType()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithImplementation<CustomerImpl>()
-				.WithExtendedProperties(new { key1 = "value1", key2 = "value2" })
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.ImplementedBy<CustomerImpl>()
+					.ExtendedProperties(new { key1 = "value1", key2 = "value2" }));
 
 			IHandler handler = kernel.GetHandler(typeof(ICustomer));
 			Assert.AreEqual("value1", handler.ComponentModel.ExtendedProperties["key1"]);
 			Assert.AreEqual("value2", handler.ComponentModel.ExtendedProperties["key2"]);
 		}
 
-		#endif
+#endif
 
 		[Test]
-		public void AddComponent_WithCustomDependencies_WorksFine()
+		public void AddComponent_CustomDependencies_WorksFine()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithImplementation<CustomerImpl>()
-				.WithCustomDependencies(
-					Property.WithKey("Name").Eq("Caption Hook"),
-					Property.WithKey("Address").Eq("Fairyland"),
-					Property.WithKey("Age").Eq(45))
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.ImplementedBy<CustomerImpl>()
+					.CustomDependencies(
+						Property.ForKey("Name").Eq("Caption Hook"),
+						Property.ForKey("Address").Eq("Fairyland"),
+						Property.ForKey("Age").Eq(45)
+						)
+					);
 
 			ICustomer customer = kernel.Resolve<ICustomer>();
 			Assert.AreEqual(customer.Name, "Caption Hook");
@@ -279,12 +295,12 @@ namespace Castle.MicroKernel.Tests.Registration
 #if DOTNET35
 
 		[Test]
-		public void AddComponent_WithCustomDependencies_UsingAnonymousType()
+		public void AddComponent_CustomDependencies_UsingAnonymousType()
 		{
-			kernel.AddComponentEx<ICustomer>()
-				.WithImplementation<CustomerImpl>()
-				.WithCustomDependencies(new { Name = "Caption Hook", Address = "Fairyland", Age = 45 })
-				.Register();
+				kernel.Register(
+				Component.ForService<ICustomer>()
+					.ImplementedBy<CustomerImpl>()
+					.CustomDependencies(new { Name = "Caption Hook", Address = "Fairyland", Age = 45 }));
 
 			ICustomer customer = kernel.Resolve<ICustomer>();
 			Assert.AreEqual(customer.Name, "Caption Hook");
@@ -294,17 +310,18 @@ namespace Castle.MicroKernel.Tests.Registration
 #endif
 
 		[Test]
-		public void AddComponent_WithCustomDependenciesDictionary_WorksFine()
+		public void AddComponent_CustomDependenciesDictionary_WorksFine()
 		{
 			Hashtable customDependencies = new Hashtable();
 			customDependencies["Name"] = "Caption Hook";
 			customDependencies["Address"] = "Fairyland";
 			customDependencies["Age"] = 45;
 
-			kernel.AddComponentEx<ICustomer>()
-				.WithImplementation<CustomerImpl>()
-				.WithCustomDependencies(customDependencies)
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.ImplementedBy<CustomerImpl>()
+					.CustomDependencies(customDependencies)
+					);
 
 			ICustomer customer = kernel.Resolve<ICustomer>();
 			Assert.AreEqual(customer.Name, "Caption Hook");
@@ -313,27 +330,30 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
-		public void AddComponent_WithServiceOverrides_WorksFine()
+		public void AddComponent_ServiceOverrides_WorksFine()
 		{
-			kernel
-				.AddComponentEx<ICustomer>()
-					.WithName("customer1")
-					.WithImplementation<CustomerImpl>()
-					.WithCustomDependencies(
-						Property.WithKey("Name").Eq("Caption Hook"),
-						Property.WithKey("Address").Eq("Fairyland"),
-						Property.WithKey("Age").Eq(45))
-				.AddComponentEx<CustomerChain1>()
-					.WithName("customer2")
-					.WithCustomDependencies(
-						Property.WithKey("Name").Eq("Bigfoot"),
-						Property.WithKey("Address").Eq("Forest"),
-						Property.WithKey("Age").Eq(100))
-					.WithServiceOverrides(
-						ServiceOverride.WithKey("customer").Eq("customer1"))
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer1")
+					.ImplementedBy<CustomerImpl>()
+					.CustomDependencies(
+						Property.ForKey("Name").Eq("Caption Hook"),
+						Property.ForKey("Address").Eq("Fairyland"),
+						Property.ForKey("Age").Eq(45)
+						),
+				Component.ForService<CustomerChain1>()
+					.Named("customer2")
+					.CustomDependencies(
+						Property.ForKey("Name").Eq("Bigfoot"),
+						Property.ForKey("Address").Eq("Forest"),
+						Property.ForKey("Age").Eq(100)
+						)
+					.ServiceOverrides(
+						ServiceOverride.ForKey("customer").Eq("customer1")
+						)
+				);
 
-			CustomerChain1 customer = (CustomerChain1)kernel["customer2"];
+			CustomerChain1 customer = (CustomerChain1) kernel["customer2"];
 			Assert.IsNotNull(customer.CustomerBase);
 			Assert.AreEqual(customer.CustomerBase.Name, "Caption Hook");
 			Assert.AreEqual(customer.CustomerBase.Address, "Fairyland");
@@ -343,24 +363,26 @@ namespace Castle.MicroKernel.Tests.Registration
 #if DOTNET35
 
 		[Test]
-		public void AddComponent_WithServiceOverrides_UsingAnonymousType()
+		public void AddComponent_ServiceOverrides_UsingAnonymousType()
 		{
-			kernel
-				.AddComponentEx<ICustomer>()
-					.WithName("customer1")
-					.WithImplementation<CustomerImpl>()
-					.WithCustomDependencies(
-						Property.WithKey("Name").Eq("Caption Hook"),
-						Property.WithKey("Address").Eq("Fairyland"),
-						Property.WithKey("Age").Eq(45))
-				.AddComponentEx<CustomerChain1>()
-					.WithName("customer2")
-					.WithCustomDependencies(
-						Property.WithKey("Name").Eq("Bigfoot"),
-						Property.WithKey("Address").Eq("Forest"),
-						Property.WithKey("Age").Eq(100))
-						.WithServiceOverrides(new { customer = "customer1" })
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer1")
+					.ImplementedBy<CustomerImpl>()
+					.CustomDependencies(
+						Property.ForKey("Name").Eq("Caption Hook"),
+						Property.ForKey("Address").Eq("Fairyland"),
+						Property.ForKey("Age").Eq(45)
+						),
+				Component.ForService<CustomerChain1>()
+					.Named("customer2")
+					.CustomDependencies(
+						Property.ForKey("Name").Eq("Bigfoot"),
+						Property.ForKey("Address").Eq("Forest"),
+						Property.ForKey("Age").Eq(100)
+						)
+					.ServiceOverrides(new { customer = "customer1" })
+				);
 
 			CustomerChain1 customer = (CustomerChain1) kernel["customer2"];
 			Assert.IsNotNull(customer.CustomerBase);
@@ -372,29 +394,31 @@ namespace Castle.MicroKernel.Tests.Registration
 #endif
 
 		[Test]
-		public void AddComponent_WithServiceOverridesDictionary_WorksFine()
+		public void AddComponent_ServiceOverridesDictionary_WorksFine()
 		{
 			Hashtable serviceOverrides = new Hashtable();
 			serviceOverrides["customer"] = "customer1";
 
-			kernel
-				.AddComponentEx<ICustomer>()
-					.WithName("customer1")
-					.WithImplementation<CustomerImpl>()
-					.WithCustomDependencies(
-						Property.WithKey("Name").Eq("Caption Hook"),
-						Property.WithKey("Address").Eq("Fairyland"),
-						Property.WithKey("Age").Eq(45))
-				.AddComponentEx<CustomerChain1>()
-					.WithName("customer2")
-					.WithCustomDependencies(
-						Property.WithKey("Name").Eq("Bigfoot"),
-						Property.WithKey("Address").Eq("Forest"),
-						Property.WithKey("Age").Eq(100))
-					.WithServiceOverrides(serviceOverrides)
-				.Register();
+			kernel.Register(
+				Component.ForService<ICustomer>()
+					.Named("customer1")
+					.ImplementedBy<CustomerImpl>()
+					.CustomDependencies(
+						Property.ForKey("Name").Eq("Caption Hook"),
+						Property.ForKey("Address").Eq("Fairyland"),
+						Property.ForKey("Age").Eq(45)
+						),
+				Component.ForService<CustomerChain1>()
+					.Named("customer2")
+					.CustomDependencies(
+						Property.ForKey("Name").Eq("Bigfoot"),
+						Property.ForKey("Address").Eq("Forest"),
+						Property.ForKey("Age").Eq(100)
+						)
+					.ServiceOverrides(serviceOverrides)
+				);
 
-			CustomerChain1 customer = (CustomerChain1)kernel["customer2"];
+			CustomerChain1 customer = (CustomerChain1) kernel["customer2"];
 			Assert.IsNotNull(customer.CustomerBase);
 			Assert.AreEqual(customer.CustomerBase.Name, "Caption Hook");
 			Assert.AreEqual(customer.CustomerBase.Address, "Fairyland");

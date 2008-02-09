@@ -18,7 +18,7 @@ namespace Castle.MicroKernel.Registration
 	using System.Collections;
 	using Castle.Core;
 
-	public class ExtendedPropertiesDescriptor<S,T> : AbstractPropertyDescriptor<S,T>
+	public class ExtendedPropertiesDescriptor<S> : AbstractPropertyDescriptor<S>
 	{
 		public ExtendedPropertiesDescriptor(params Property[] properties)
 			: base(properties)
@@ -35,7 +35,7 @@ namespace Castle.MicroKernel.Registration
 		{
 		}
 
-		protected override void ApplyProperty(ComponentModel model,
+		protected override void ApplyProperty(IKernel kernel, ComponentModel model,
 		                                      String key, Object value)
 		{
 			model.ExtendedProperties[key] = value;

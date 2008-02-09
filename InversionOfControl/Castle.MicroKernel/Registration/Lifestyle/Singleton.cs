@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 {
 	using Castle.Core;
 
-	public class Singleton<S,T> : LifestyleDescriptor<S,T>
+	public class Singleton<S> : LifestyleDescriptor<S>
 	{
 		public Singleton()
 			: base(LifestyleType.Singleton)

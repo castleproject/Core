@@ -312,11 +312,13 @@
     <Compile Include="Proxy\ProxyUtil.cs" />
     <Compile Include="Registration\AbstractPropertyDescriptor.cs" />
     <Compile Include="Registration\AttributeDescriptor.cs" />
+    <Compile Include="Registration\Component.cs" />
     <Compile Include="Registration\ComponentDescriptor.cs" />
     <Compile Include="Registration\ComponentInstanceDescriptor.cs" />
-    <Compile Include="Registration\ComponentRegistration.cs" />
+    <Compile Include="Registration\ComponentRegiatration.cs" />
     <Compile Include="Registration\CustomDependencyDescriptor.cs" />
     <Compile Include="Registration\ExtendedPropertiesDescriptor.cs" />
+    <Compile Include="Registration\IComponentRegistration.cs" />
     <Compile Include="Registration\Interceptor\InterceptorDescriptor.cs" />
     <Compile Include="Registration\Interceptor\InterceptorGroup.cs" />
     <Compile Include="Registration\Lifestyle\Custom.cs" />

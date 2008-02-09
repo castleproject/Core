@@ -94,7 +94,7 @@ namespace Castle.Core
 		/// </summary>
 		/// <param name="key">The component key.</param>
 		/// <returns>The <see cref="InterceptorReference"/></returns>
-		public static InterceptorReference WithKey(String key)
+		public static InterceptorReference ForKey(String key)
 		{
 			return new InterceptorReference(key);
 		}

@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.Registration.Interceptor
 	using System;
 	using Castle.Core;
 
-	public class InterceptorDescriptor<S,T> : ComponentDescriptor<S,T>
+	public class InterceptorDescriptor<S> : ComponentDescriptor<S>
 	{
 		private readonly Where where;
 		private readonly int insertIndex;
@@ -54,7 +54,7 @@ namespace Castle.MicroKernel.Registration.Interceptor
 			this.interceptors = interceptors;
 		}
 
-		protected internal override void ApplyToModel(ComponentModel model)
+		protected internal override void ApplyToModel(IKernel kernel, ComponentModel model)
 		{
 			foreach(InterceptorReference interceptor in interceptors)
 			{

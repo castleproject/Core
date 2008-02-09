@@ -19,7 +19,7 @@ namespace Castle.MicroKernel.Registration
 	using Castle.Core;
 	using Castle.MicroKernel.Util;
 
-	public class ServiceOverrideDescriptor<S,T> : AbstractPropertyDescriptor<S,T>
+	public class ServiceOverrideDescriptor<S> : AbstractPropertyDescriptor<S>
 	{
 		public ServiceOverrideDescriptor(params ServiceOverride[] overrides)
 			: base(overrides)
@@ -36,11 +36,11 @@ namespace Castle.MicroKernel.Registration
 		{
 		}
 
-		protected override void ApplyProperty(ComponentModel model,
+		protected override void ApplyProperty(IKernel kernel, ComponentModel model,
 		                                      String key, Object value)
 		{
 			String reference = FormattedReferenceExpression(value.ToString());
-			Registration.AddParameter(model, key, reference);
+			Registration.AddParameter(kernel, model, key, reference);
 		}
 
 		private static String FormattedReferenceExpression(String value)

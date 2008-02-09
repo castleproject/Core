@@ -286,7 +286,7 @@ namespace Castle.Windsor
 		/// <param name="key">The key by which the component gets indexed.</param>
 		/// <param name="classType">The <see cref="Type"/> to manage.</param>
 		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
-		public IWindsorContainer AddComponentWithLifestyle(string key, Type classType, LifestyleType lifestyle)
+		public IWindsorContainer AddComponentLifeStyle(string key, Type classType, LifestyleType lifestyle)
 		{
 			kernel.AddComponent(key, classType, lifestyle, true);
 			return this;
@@ -299,7 +299,7 @@ namespace Castle.Windsor
 		/// <param name="serviceType">The service <see cref="Type"/> that the component implements.</param>
 		/// <param name="classType">The <see cref="Type"/> to manage.</param>
 		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
-		public IWindsorContainer AddComponentWithLifestyle(string key, Type serviceType, Type classType, LifestyleType lifestyle)
+		public IWindsorContainer AddComponentLifeStyle(string key, Type serviceType, Type classType, LifestyleType lifestyle)
 		{
 			kernel.AddComponent(key, serviceType, classType, lifestyle, true);
 			return this;
@@ -347,10 +347,10 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
 		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
-		public IWindsorContainer AddComponentWithLifestyle<T>(LifestyleType lifestyle)
+		public IWindsorContainer AddComponentLifeStyle<T>(LifestyleType lifestyle)
 		{
 			Type t = typeof(T);
-			AddComponentWithLifestyle(t.FullName, t, lifestyle);
+			AddComponentLifeStyle(t.FullName, t, lifestyle);
 			return this;
 		}
 
@@ -373,10 +373,10 @@ namespace Castle.Windsor
 		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
 		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
 		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
-		public IWindsorContainer AddComponentWithLifestyle<I, T>(LifestyleType lifestyle) where T : class
+		public IWindsorContainer AddComponentLifeStyle<I, T>(LifestyleType lifestyle) where T : class
 		{
 			Type t = typeof(T);
-			AddComponentWithLifestyle(t.FullName, typeof(I), t, lifestyle);
+			AddComponentLifeStyle(t.FullName, typeof(I), t, lifestyle);
 			return this;
 		}
 
@@ -386,9 +386,9 @@ namespace Castle.Windsor
 		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
 		/// <param name="key">The key by which the component gets indexed.</param>		
 		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
-		public IWindsorContainer AddComponentWithLifestyle<T>(string key, LifestyleType lifestyle)
+		public IWindsorContainer AddComponentLifeStyle<T>(string key, LifestyleType lifestyle)
 		{
-			AddComponentWithLifestyle(key, typeof(T), lifestyle);
+			AddComponentLifeStyle(key, typeof(T), lifestyle);
 			return this;
 		}
 
@@ -412,9 +412,9 @@ namespace Castle.Windsor
 		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
 		/// <param name="key">The key by which the component gets indexed.</param>
 		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
-		public IWindsorContainer AddComponentWithLifestyle<I, T>(string key, LifestyleType lifestyle) where T : class
+		public IWindsorContainer AddComponentLifeStyle<I, T>(string key, LifestyleType lifestyle) where T : class
 		{
-			AddComponentWithLifestyle(key, typeof(I), typeof(T), lifestyle);
+			AddComponentLifeStyle(key, typeof(I), typeof(T), lifestyle);
 			return this;
 		}
 
@@ -454,7 +454,7 @@ namespace Castle.Windsor
 		/// <typeparam name="I"></typeparam>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extendedProperties"></param>
-		public IWindsorContainer AddComponentWithLifestyle<I, T>(IDictionary extendedProperties) where T : class
+		public IWindsorContainer AddComponentLifeStyle<I, T>(IDictionary extendedProperties) where T : class
 		{
 			Type t = typeof(T);
 			AddComponentWithProperties(t.FullName, typeof(I), t, extendedProperties);
@@ -470,30 +470,22 @@ namespace Castle.Windsor
 		/// <typeparam name="T"></typeparam>
 		/// <param name="key"></param>
 		/// <param name="extendedProperties"></param>
-		public IWindsorContainer AddComponentWithLifestyle<I, T>(string key, IDictionary extendedProperties) where T : class
+		public IWindsorContainer AddComponentLifeStyle<I, T>(string key, IDictionary extendedProperties) where T : class
 		{
 			AddComponentWithProperties(key, typeof(I), typeof(T), extendedProperties);
 			return this;
 		}
 
 		/// <summary>
-		/// Adds a component to be registered in the container using a fluent interface.
+		/// Registers the components described by the <see cref="ComponentRegistration{S}"/>s
+		/// with the <see cref="IWindsorContainer"/>.
+		/// <param name="registrations">The component registrations.</param>
+		/// <returns>The container.</returns>
 		/// </summary>
-		/// <param name="serviceType">The service type.</param>
-		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
-		public ComponentRegistration<IWindsorContainer> AddComponentEx(Type serviceType)
+		public IWindsorContainer Register(params IComponentRegistration[] registrations)
 		{
-			return new ComponentRegistration<IWindsorContainer>(serviceType, kernel, this);			
-		}
-
-		/// <summary>
-		/// Adds a component to be registered in the container using a fluent interface.
-		/// </summary>
-		/// <typeparam name="S">The <see cref="Type"/> to manage.</typeparam>
-		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
-		public ComponentRegistration<S,IWindsorContainer> AddComponentEx<S>()
-		{
-			return new ComponentRegistration<S,IWindsorContainer>(kernel, this);
+			Kernel.Register(registrations);
+			return this;
 		}
 
 		/// <summary>

@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 {
 	using Castle.Core;
 
-	public class Transient<S,T> : LifestyleDescriptor<S,T>
+	public class Transient<S> : LifestyleDescriptor<S>
 	{
 		public Transient()
 			: base(LifestyleType.Transient)

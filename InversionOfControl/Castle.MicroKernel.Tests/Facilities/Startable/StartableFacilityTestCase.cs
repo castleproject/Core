@@ -94,12 +94,12 @@ namespace Castle.Facilities.Startable.Tests
 
 			Hashtable dependencies = new Hashtable();
 			dependencies.Add("config", 1);
-			kernel.AddComponent("a", typeof(StartableComponentWithCustomDependencies));
-			kernel.RegisterCustomDependencies(typeof(StartableComponentWithCustomDependencies), dependencies);
+			kernel.AddComponent("a", typeof(StartableComponentCustomDependencies));
+			kernel.RegisterCustomDependencies(typeof(StartableComponentCustomDependencies), dependencies);
 
 			Assert.IsTrue(startableCreatedBeforeResolved, "Component was not properly started");
 
-			StartableComponentWithCustomDependencies component = kernel["a"] as StartableComponentWithCustomDependencies;
+			StartableComponentCustomDependencies component = kernel["a"] as StartableComponentCustomDependencies;
 
 			Assert.IsNotNull(component);
 			Assert.IsTrue(component.Started);
@@ -110,21 +110,21 @@ namespace Castle.Facilities.Startable.Tests
 		}
 
 		[Test]
-		public void TestStartableWithCustomDependencies()
+		public void TestStartableCustomDependencies()
 		{
 			IKernel kernel = new DefaultKernel();
 			kernel.ComponentCreated += new ComponentInstanceDelegate(OnStartableComponentStarted);
 
 			kernel.AddFacility("startable", new StartableFacility());
 
-			kernel.AddComponentEx<StartableComponentWithCustomDependencies>()
-				.WithName("a")
-				.WithCustomDependencies(Property.WithKey("config").Eq(1))
-				.Register();
-
+			kernel.Register(
+				Component.ForService<StartableComponentCustomDependencies>()
+					.Named("a")
+					.CustomDependencies(Property.ForKey("config").Eq(1))
+				);
 			Assert.IsTrue(startableCreatedBeforeResolved, "Component was not properly started");
 
-			StartableComponentWithCustomDependencies component = kernel["a"] as StartableComponentWithCustomDependencies;
+			StartableComponentCustomDependencies component = kernel["a"] as StartableComponentCustomDependencies;
 
 			Assert.IsNotNull(component);
 			Assert.IsTrue(component.Started);

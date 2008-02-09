@@ -19,40 +19,34 @@ namespace Castle.MicroKernel.Registration
 	using System.Collections.Generic;
 	using Castle.Core;
 	using Castle.Core.Configuration;
+	using MicroKernel;
 
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <typeparam name="S">The service type</typeparam>
-	/// <typeparam name="T">The chaining type</typeparam>
-	public class ComponentRegistration<S,T>
+	public class ComponentRegistration<S> : IComponentRegistration
 	{
 		private String name;
 		private bool overwrite;
-		private readonly IKernel kernel;
 		private readonly Type serviceType;
 		private Type classType;
-		private readonly T chain;
-		private readonly List<ComponentDescriptor<S,T>> descriptors;
+		private readonly List<ComponentDescriptor<S>> descriptors;
 		private ComponentModel componentModel;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ComponentRegistration{S,T}"/> class.
+		/// Initializes a new instance of the <see cref="ComponentRegistration{S}"/> class.
 		/// </summary>
-		/// <param name="kernel">The kernel.</param>
-		/// <param name="chain">The chain</param>
-		public ComponentRegistration(IKernel kernel, T chain)
-			: this(typeof(S), kernel, chain)
+		public ComponentRegistration()
+			: this(typeof(S))
 		{
 		}
 
-		protected ComponentRegistration(Type serviceType, IKernel kernel, T chain)
+		protected ComponentRegistration(Type serviceType)
 		{
 			overwrite = false;
-			this.kernel = kernel;
-			this.chain = chain;
 			this.serviceType = serviceType;
-			descriptors = new List<ComponentDescriptor<S, T>>();
+			descriptors = new List<ComponentDescriptor<S>>();
 		}
 
 		internal bool Overwrite
@@ -64,7 +58,7 @@ namespace Castle.MicroKernel.Registration
 		/// With the overwrite.
 		/// </summary>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> WithOverwrite()
+		public ComponentRegistration<S> OverWrite()
 		{
 			overwrite = true;
 			return this;
@@ -75,7 +69,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> WithName(String name)
+		public ComponentRegistration<S> Named(String name)
 		{
 			if (this.name != null)
 			{
@@ -89,17 +83,21 @@ namespace Castle.MicroKernel.Registration
 			return this;
 		}
 
-		public ComponentRegistration<S, T> WithImplementation<C>()
+		public ComponentRegistration<S> ImplementedBy<C>()
+		{
+			return ImplementedBy(typeof(C));
+		}
+
+		public ComponentRegistration<S> ImplementedBy(Type type)
 		{
 			if (classType != null)
 			{
 				String message = String.Format("This component has " +
 					"already been assigned implementation {0}", classType.FullName);
-
 				throw new ComponentRegistrationException(message);					
 			}
 
-			classType = typeof(C);
+			classType = type;
 			return this;
 		}
 
@@ -108,34 +106,34 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="instance">The instance.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> WithInstance(S instance)
+		public ComponentRegistration<S> Instance(S instance)
 		{
-			return AddDescriptor(new ComponentInstanceDescriptior<S,T>(instance));
+			return AddDescriptor(new ComponentInstanceDescriptior<S>(instance));
 		}
 
 		/// <summary>
 		/// Gets the proxy.
 		/// </summary>
 		/// <value>The proxy.</value>
-		public Proxy.ProxyGroup<S,T> Proxy
+		public Proxy.ProxyGroup<S> Proxy
 		{
-			get { return new Proxy.ProxyGroup<S,T>(this); }
+			get { return new Proxy.ProxyGroup<S>(this); }
 		}
 
 		/// <summary>
 		/// Gets the with lifestyle.
 		/// </summary>
 		/// <value>The with lifestyle.</value>
-		public Lifestyle.LifestyleGroup<S,T> WithLifestyle
+		public Lifestyle.LifestyleGroup<S> LifeStyle
 		{
-			get { return new Lifestyle.LifestyleGroup<S,T>(this); }
+			get { return new Lifestyle.LifestyleGroup<S>(this); }
 		}
 
 		/// <summary>
 		/// With the activator.
 		/// </summary>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> WithActivator<A>() where A : IComponentActivator
+		public ComponentRegistration<S> Activator<A>() where A : IComponentActivator
 		{
 			return AddAttributeDescriptor("componentActivatorType", typeof(A).AssemblyQualifiedName);
 		}
@@ -145,9 +143,9 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="properties">The properties.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> WithExtendedProperties(params Property[] properties)
+		public ComponentRegistration<S> ExtendedProperties(params Property[] properties)
 		{
-			return AddDescriptor(new ExtendedPropertiesDescriptor<S,T>(properties));
+			return AddDescriptor(new ExtendedPropertiesDescriptor<S>(properties));
 		}
 
 		/// <summary>
@@ -155,9 +153,9 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="anonymous">The properties.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S, T> WithExtendedProperties(object anonymous)
+		public ComponentRegistration<S> ExtendedProperties(object anonymous)
 		{
-			return AddDescriptor(new ExtendedPropertiesDescriptor<S, T>(anonymous));
+			return AddDescriptor(new ExtendedPropertiesDescriptor<S>(anonymous));
 		}
 
 		/// <summary>
@@ -165,9 +163,9 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> WithCustomDependencies(params Property[] dependencies)
+		public ComponentRegistration<S> CustomDependencies(params Property[] dependencies)
 		{
-			return AddDescriptor(new CustomDependencyDescriptor<S,T>(dependencies));	
+			return AddDescriptor(new CustomDependencyDescriptor<S>(dependencies));	
 		}
 
 		/// <summary>
@@ -175,9 +173,9 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> WithCustomDependencies(IDictionary dependencies)
+		public ComponentRegistration<S> CustomDependencies(IDictionary dependencies)
 		{
-			return AddDescriptor(new CustomDependencyDescriptor<S,T>(dependencies));	
+			return AddDescriptor(new CustomDependencyDescriptor<S>(dependencies));	
 		}
 
 		/// <summary>
@@ -185,9 +183,9 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="anonymous">The dependencies.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S, T> WithCustomDependencies(object anonymous)
+		public ComponentRegistration<S> CustomDependencies(object anonymous)
 		{
-			return AddDescriptor(new CustomDependencyDescriptor<S, T>(anonymous));
+			return AddDescriptor(new CustomDependencyDescriptor<S>(anonymous));
 		}
 
 		/// <summary>
@@ -195,9 +193,9 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="overrides">The overrides.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> WithServiceOverrides(params ServiceOverride[] overrides)
+		public ComponentRegistration<S> ServiceOverrides(params ServiceOverride[] overrides)
 		{
-			return AddDescriptor(new ServiceOverrideDescriptor<S,T>(overrides));
+			return AddDescriptor(new ServiceOverrideDescriptor<S>(overrides));
 		}
 
 		/// <summary>
@@ -205,9 +203,9 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="overrides">The overrides.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> WithServiceOverrides(IDictionary overrides)
+		public ComponentRegistration<S> ServiceOverrides(IDictionary overrides)
 		{
-			return AddDescriptor(new ServiceOverrideDescriptor<S,T>(overrides));
+			return AddDescriptor(new ServiceOverrideDescriptor<S>(overrides));
 		}
 
 		/// <summary>
@@ -215,9 +213,9 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="anonymous">The overrides.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S, T> WithServiceOverrides(object anonymous)
+		public ComponentRegistration<S> ServiceOverrides(object anonymous)
 		{
-			return AddDescriptor(new ServiceOverrideDescriptor<S, T>(anonymous));
+			return AddDescriptor(new ServiceOverrideDescriptor<S>(anonymous));
 		}
 
 		/// <summary>
@@ -225,65 +223,53 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="interceptors">The interceptors.</param>
 		/// <returns></returns>
-		public Interceptor.InterceptorGroup<S,T> WithInterceptors(
+		public Interceptor.InterceptorGroup<S> Interceptors(
 				params InterceptorReference[] interceptors)
 		{
-			return new Interceptor.InterceptorGroup<S,T>(this, interceptors);
+			return new Interceptor.InterceptorGroup<S>(this, interceptors);
 		}
 
 		/// <summary>
 		/// Ases the startable.
 		/// </summary>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> AsStartable()
+		public ComponentRegistration<S> Startable()
 		{
-			return AddDescriptor(new ExtendedPropertiesDescriptor<S,T>(
-			                     	Property.WithKey("startable").Eq(true)));
+			return AddDescriptor(new ExtendedPropertiesDescriptor<S>(
+			                     	Property.ForKey("startable").Eq(true)));
 		}
 
 		/// <summary>
-		/// Registers the current component and add another.
+		/// Registers this component with the <see cref="IKernel"/>.
 		/// </summary>
-		/// <typeparam name="SS"></typeparam>
-		/// <returns></returns>
-		public ComponentRegistration<SS, T> AddComponentEx<SS>()
-		{
-			Register();
-			return new ComponentRegistration<SS, T>(kernel, chain);
-		}
-
-		/// <summary>
-		/// Registers this instance.
-		/// </summary>
-		/// <returns></returns>
-		public T Register()
+		/// <param name="kernel">The kernel.</param>
+		void IComponentRegistration.Register(IKernel kernel)
 		{
 			if (componentModel == null)
 			{
 				InitializeDefaults();
-				componentModel = BuildComponentModel();
+				componentModel = BuildComponentModel(kernel);
 				kernel.AddCustomComponent(componentModel);
 			}
-			return chain;
 		}
 
 		/// <summary>
 		/// Builds the component model.
 		/// </summary>
 		/// <returns></returns>
-		private ComponentModel BuildComponentModel()
+		private ComponentModel BuildComponentModel(IKernel kernel)
 		{
-			IConfiguration configuration = EnsureComponentConfiguration();
-			foreach(ComponentDescriptor<S,T> descriptor in descriptors)
+			IConfiguration configuration = EnsureComponentConfiguration(kernel);
+			foreach(ComponentDescriptor<S> descriptor in descriptors)
 			{
-				descriptor.ApplyToConfiguration(configuration);
+				descriptor.ApplyToConfiguration(kernel, configuration);
 			}
 
 			ComponentModel model = kernel.ComponentModelBuilder.BuildModel(
 				name, serviceType, classType, null);
-			foreach(ComponentDescriptor<S,T> descriptor in descriptors)
+			foreach(ComponentDescriptor<S> descriptor in descriptors)
 			{
-				descriptor.ApplyToModel(model);
+				descriptor.ApplyToModel(kernel, model);
 			}
 
 			return model;
@@ -295,9 +281,9 @@ namespace Castle.MicroKernel.Registration
 		/// <param name="name">The name.</param>
 		/// <param name="value">The value.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> AddAttributeDescriptor(string name, string value)
+		public ComponentRegistration<S> AddAttributeDescriptor(string name, string value)
 		{
-			AddDescriptor(new AttributeDescriptor<S,T>(name, value));
+			AddDescriptor(new AttributeDescriptor<S>(name, value));
 			return this;
 		}
 
@@ -306,16 +292,16 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="descriptor">The descriptor.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S,T> AddDescriptor(ComponentDescriptor<S,T> descriptor)
+		public ComponentRegistration<S> AddDescriptor(ComponentDescriptor<S> descriptor)
 		{
 			descriptor.Registration = this;
 			descriptors.Add(descriptor);
 			return this;
 		}
 
-		internal void AddParameter(ComponentModel model, String name, String value)
+		internal void AddParameter(IKernel kernel, ComponentModel model, String name, String value)
 		{
-			IConfiguration configuration = EnsureComponentConfiguration();
+			IConfiguration configuration = EnsureComponentConfiguration(kernel);
 			IConfiguration parameters = configuration.Children["parameters"];
 			if (parameters == null)
 			{
@@ -341,7 +327,7 @@ namespace Castle.MicroKernel.Registration
 			}
 		}
 
-		private IConfiguration EnsureComponentConfiguration()
+		private IConfiguration EnsureComponentConfiguration(IKernel kernel)
 		{
 			IConfiguration configuration = kernel.ConfigurationStore.GetComponentConfiguration(name);
 			if (configuration == null)
@@ -353,10 +339,10 @@ namespace Castle.MicroKernel.Registration
 		}
 	}
 
-	public class ComponentRegistration<T> : ComponentRegistration<object, T>
+	public class ComponentRegistration : ComponentRegistration<object>
 	{
-		public ComponentRegistration(Type serviceType, IKernel kernel, T chain)
-			: base( serviceType, kernel, chain)
+		public ComponentRegistration(Type serviceType)
+			: base( serviceType )
 		{
 		}
 	}

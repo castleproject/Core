@@ -29,7 +29,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 
-		public new static ServiceOverrideKey WithKey(String key)
+		public new static ServiceOverrideKey ForKey(String key)
 		{
 			return new ServiceOverrideKey(key);
 		}

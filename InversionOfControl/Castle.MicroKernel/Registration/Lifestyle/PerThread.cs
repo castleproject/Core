@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 {
 	using Castle.Core;
 
-	public class PerThread<S,T> : LifestyleDescriptor<S,T>
+	public class PerThread<S> : LifestyleDescriptor<S>
 	{
 		public PerThread()
 			: base(LifestyleType.Thread)

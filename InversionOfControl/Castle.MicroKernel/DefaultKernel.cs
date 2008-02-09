@@ -546,25 +546,24 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
-		/// Adds a component to be registered with the <see cref="IKernel"/> 
-		/// using a fluent interface.
+		/// Registers the components described by the <see cref="ComponentRegistration{S}"/>s
+		/// with the <see cref="IKernel"/>.
+		/// <param name="registrations">The component registrations.</param>
+		/// <returns>The kernel.</returns>
 		/// </summary>
-		/// <param name="serviceType">The service type.</param>
-		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
-		public ComponentRegistration<IKernel> AddComponentEx(Type serviceType)
+		public IKernel Register(params IComponentRegistration[] registrations)
 		{
-			return new ComponentRegistration<IKernel>(serviceType, this, this);
-		}
+			if (registrations == null)
+			{
+				throw new ArgumentNullException("registrations");
+			}
 
-		/// <summary>
-		/// Adds a component to be registered with the <see cref="IKernel"/> 
-		/// using a fluent interface.
-		/// </summary>
-		/// <typeparam name="S">The service <see cref="Type"/> to manage.</typeparam>
-		/// <returns>The <see cref="ComponentRegistration{S,T}"/></returns>
-		public ComponentRegistration<S, IKernel> AddComponentEx<S>()
-		{
-			return new ComponentRegistration<S, IKernel>(this, this);
+			foreach(IComponentRegistration registration in registrations)
+			{
+				registration.Register(this);
+			}
+
+			return this;
 		}
 
 		/// <summary>

@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 	using Castle.Core;
 	using Castle.Core.Configuration;
 
-	public class Pooled<S,T> : LifestyleDescriptor<S,T>
+	public class Pooled<S> : LifestyleDescriptor<S>
 	{
 		private readonly int? initialSize;
 		private readonly int? maxSize;

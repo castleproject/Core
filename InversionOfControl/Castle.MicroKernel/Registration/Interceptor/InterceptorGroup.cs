@@ -16,49 +16,49 @@ namespace Castle.MicroKernel.Registration.Interceptor
 {
 	using Core;
 
-	public class InterceptorGroup<S,T> : RegistrationGroup<S,T>
+	public class InterceptorGroup<S> : RegistrationGroup<S>
 	{
 		private readonly InterceptorReference[] interceptors;
 
-		public InterceptorGroup(ComponentRegistration<S,T> registration,
+		public InterceptorGroup(ComponentRegistration<S> registration,
 		                        InterceptorReference[] interceptors)
 			: base(registration)
 		{
 			this.interceptors = interceptors;
 		}
 
-		public ComponentRegistration<S,T> Anywhere
+		public ComponentRegistration<S> Anywhere
 		{
 			get
 			{
-				AddDescriptor(new InterceptorDescriptor<S,T>(interceptors));
+				AddDescriptor(new InterceptorDescriptor<S>(interceptors));
 				return Registration;
 			}
 		}
 
-		public ComponentRegistration<S,T> First
+		public ComponentRegistration<S> First
 		{
 			get
 			{
-				AddDescriptor(new InterceptorDescriptor<S,T>(
-					interceptors, InterceptorDescriptor<S,T>.Where.First));
+				AddDescriptor(new InterceptorDescriptor<S>(
+					interceptors, InterceptorDescriptor<S>.Where.First));
 				return Registration;
 			}
 		}
 
-		public ComponentRegistration<S,T> Last
+		public ComponentRegistration<S> Last
 		{
 			get
 			{
-				AddDescriptor(new InterceptorDescriptor<S,T>(
-					interceptors, InterceptorDescriptor<S,T>.Where.Last));
+				AddDescriptor(new InterceptorDescriptor<S>(
+					interceptors, InterceptorDescriptor<S>.Where.Last));
 				return Registration;
 			}
 		}
 
-		public ComponentRegistration<S,T> AtIndex(int index)
+		public ComponentRegistration<S> AtIndex(int index)
 		{
-			AddDescriptor(new InterceptorDescriptor<S,T>(interceptors, index));
+			AddDescriptor(new InterceptorDescriptor<S>(interceptors, index));
 			return Registration;
 		}
 	}

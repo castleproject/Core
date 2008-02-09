@@ -18,7 +18,7 @@ namespace Castle.MicroKernel.Registration.Proxy
 	using Castle.Core;
 	using Castle.MicroKernel.Proxy;
 
-	public class ProxyInterfaces<S,T> : ComponentDescriptor<S,T>
+	public class ProxyInterfaces<S> : ComponentDescriptor<S>
 	{
 		private readonly Type[] interfaces;
 
@@ -27,7 +27,7 @@ namespace Castle.MicroKernel.Registration.Proxy
 			this.interfaces = interfaces;
 		}
 
-		protected internal override void ApplyToModel(ComponentModel model)
+		protected internal override void ApplyToModel(IKernel kernel, ComponentModel model)
 		{
 			if (interfaces.Length > 0)
 			{

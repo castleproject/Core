@@ -18,7 +18,7 @@ namespace Castle.MicroKernel.Registration
 	using System.Collections;
 	using Castle.Core;
 
-	public class CustomDependencyDescriptor<S,T> : AbstractPropertyDescriptor<S,T>
+	public class CustomDependencyDescriptor<S> : AbstractPropertyDescriptor<S>
 	{
 		public CustomDependencyDescriptor(params Property[] properties)
 			: base(properties)
@@ -35,7 +35,7 @@ namespace Castle.MicroKernel.Registration
 		{
 		}
 
-		protected override void ApplyProperty(ComponentModel model,
+		protected override void ApplyProperty(IKernel kernel, ComponentModel model,
 		                                      String key, Object value)
 		{
 			model.CustomDependencies[key] = value;

@@ -1,6 +1,10 @@
 RC 4
 ====
 
+- Restructured the registration fluent interface to be a little more readable,
+  better support component registrations and prevent errors resulting from 
+  forgetting to call ComponentRegistration.Register
+
 - Fixed Facilities-97
   "EventWiring Facility fails to create some components"
   
@@ -234,7 +238,7 @@ RC 3
 
 - Implemented IoC-29 using a different approach
 
-- Renamed IKernel.AddComponentWithProperties to AddComponentWithExtendedProperties.
+- Renamed IKernel.AddComponentWithProperties to AddComponentExtendedProperties.
   The old method name misled the programmer about its purpose.
 
 - Added a PerWebRequestLifestyleManager which creates at most one instance of

@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 {
 	using Castle.Core;
 
-	public class PerWebRequest<S,T> : LifestyleDescriptor<S,T>
+	public class PerWebRequest<S> : LifestyleDescriptor<S>
 	{
 		public PerWebRequest()
 			: base(LifestyleType.PerWebRequest)

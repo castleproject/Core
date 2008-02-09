@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.Registration
 	using System;
 	using Castle.Core.Configuration;
 
-	public class AttributeDescriptor<S,T> : ComponentDescriptor<S,T>
+	public class AttributeDescriptor<S> : ComponentDescriptor<S>
 	{
 		private readonly String name;
 		private readonly String value;
@@ -28,7 +28,7 @@ namespace Castle.MicroKernel.Registration
 			this.value = value;
 		}
 
-		protected internal override void ApplyToConfiguration(IConfiguration configuration)
+		protected internal override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
 		{
 			if (configuration.Attributes[name] == null || Registration.Overwrite)
 			{

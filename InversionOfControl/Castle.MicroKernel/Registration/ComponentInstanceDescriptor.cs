@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.Registration
 	using Castle.Core;
 	using Castle.MicroKernel.ComponentActivator;
 
-	public class ComponentInstanceDescriptior<S,T> : ComponentDescriptor<S,T>
+	public class ComponentInstanceDescriptior<S> : ComponentDescriptor<S>
 	{
 		private readonly object instance;
 
@@ -26,7 +26,7 @@ namespace Castle.MicroKernel.Registration
 			this.instance = instance;
 		}
 
-		protected internal override void ApplyToModel(ComponentModel model)
+		protected internal override void ApplyToModel(IKernel kernel, ComponentModel model)
 		{
 			model.CustomComponentActivator = typeof(ExternalInstanceActivator);
 			model.ExtendedProperties["instance"] = instance;

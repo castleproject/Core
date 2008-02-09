@@ -19,6 +19,7 @@ namespace Castle.Windsor.Tests
 	using System;
 	using System.IO;
 	using Castle.Core.Interceptor;
+	using Castle.MicroKernel.Registration;
 	using Castle.Windsor.Configuration.Interpreters;
 	using Components;
 	using Core;
@@ -294,7 +295,7 @@ namespace Castle.Windsor.Tests
 
 			container.AddFacility("interceptor-facility", new MyInterceptorGreedyFacility2());
 			container.AddComponent("interceptor", typeof(StandardInterceptor));
-			container.AddComponentWithLifestyle("key", typeof(IRepository<>), typeof(DemoRepository<>), LifestyleType.Transient);
+			container.AddComponentLifeStyle("key", typeof(IRepository<>), typeof(DemoRepository<>), LifestyleType.Transient);
 
 			IRepository<Employee> store = container.Resolve<IRepository<Employee>>();
 			IRepository<Employee> anotherStore = container.Resolve<IRepository<Employee>>();
@@ -325,12 +326,12 @@ namespace Castle.Windsor.Tests
 			WindsorContainer container = new WindsorContainer();
 			container.AddComponent<MyInterceptor>();
 
-			container.AddComponentEx<ISpecification>()
-				.WithImplementation<MySpecification>()
-				.WithInterceptors(new InterceptorReference(typeof(MyInterceptor)))
-				.Anywhere
-				.Register();
-
+			container.Register(
+				Component.ForService<ISpecification>()
+					.ImplementedBy<MySpecification>()
+					.Interceptors(new InterceptorReference(typeof(MyInterceptor)))
+					.Anywhere
+				);
 			container.AddComponent("repos", typeof(IRepository<>), typeof(TransientRepository<>));
 
 			ISpecification specification = container.Resolve<ISpecification>();

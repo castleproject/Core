@@ -12,12 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable.Tests.Components
+namespace Castle.MicroKernel.Registration
 {
-	public class StartableComponentCustomDependencies : StartableComponent
+	/// <summary>
+	/// The contract for all component registrations with the kernel.
+	/// </summary>
+	public interface IComponentRegistration
 	{
-		public StartableComponentCustomDependencies(int config)
-		{
-		}
+		/// <summary>
+		/// Registers this component with the <see cref="IKernel"/>.
+		/// </summary>
+		/// <param name="kernel">The kernel.</param>
+		void Register(IKernel kernel);
 	}
 }

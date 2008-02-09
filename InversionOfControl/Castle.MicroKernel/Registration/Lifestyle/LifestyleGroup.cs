@@ -14,47 +14,47 @@
 
 namespace Castle.MicroKernel.Registration.Lifestyle
 {
-	public class LifestyleGroup<S,T> : RegistrationGroup<S,T>
+	public class LifestyleGroup<S> : RegistrationGroup<S>
 	{
-		public LifestyleGroup(ComponentRegistration<S,T> registration)
+		public LifestyleGroup(ComponentRegistration<S> registration)
 			: base(registration)
 		{
 		}
 
-		public ComponentRegistration<S,T> Transient
+		public ComponentRegistration<S> Transient
 		{
-			get { return AddDescriptor(new Transient<S,T>()); }
+			get { return AddDescriptor(new Transient<S>()); }
 		}
 
-		public ComponentRegistration<S,T> Singleton
+		public ComponentRegistration<S> Singleton
 		{
-			get { return AddDescriptor(new Singleton<S,T>()); }
+			get { return AddDescriptor(new Singleton<S>()); }
 		}
 
-		public ComponentRegistration<S,T> PerThread
+		public ComponentRegistration<S> PerThread
 		{
-			get { return AddDescriptor(new PerThread<S,T>()); }
+			get { return AddDescriptor(new PerThread<S>()); }
 		}
 
-		public ComponentRegistration<S,T> PerWebRequest
+		public ComponentRegistration<S> PerWebRequest
 		{
-			get { return AddDescriptor(new PerWebRequest<S,T>()); }
+			get { return AddDescriptor(new PerWebRequest<S>()); }
 		}
 
-		public ComponentRegistration<S,T> Pooled
+		public ComponentRegistration<S> Pooled
 		{
-			get { return AddDescriptor(new Pooled<S,T>()); }
+			get { return AddDescriptor(new Pooled<S>()); }
 		}
 
-		public ComponentRegistration<S,T> PooledWithSize(int initialSize, int maxSize)
+		public ComponentRegistration<S> PooledWithSize(int initialSize, int maxSize)
 		{
-			return AddDescriptor(new Pooled<S,T>(initialSize, maxSize));			
+			return AddDescriptor(new Pooled<S>(initialSize, maxSize));			
 		}
 
-		public ComponentRegistration<S,T> Custom<L>()
+		public ComponentRegistration<S> Custom<L>()
 			where L : ILifestyleManager, new()
 		{
-			return AddDescriptor(new Custom<S,T,L>());
+			return AddDescriptor(new Custom<S,L>());
 		}
 	}
 }

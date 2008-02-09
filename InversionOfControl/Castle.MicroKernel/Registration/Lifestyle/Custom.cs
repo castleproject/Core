@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 	using Castle.Core;
 	using Castle.Core.Configuration;
 
-	public class Custom<S, T, L> : LifestyleDescriptor<S,T> where L : ILifestyleManager
+	public class Custom<S,L> : LifestyleDescriptor<S> where L : ILifestyleManager
 	{
 		public Custom()
 			: base(LifestyleType.Custom)

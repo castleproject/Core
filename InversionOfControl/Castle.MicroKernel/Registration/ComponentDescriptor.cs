@@ -17,21 +17,21 @@ namespace Castle.MicroKernel.Registration
 	using Castle.Core;
 	using Castle.Core.Configuration;
 
-	public abstract class ComponentDescriptor<S,T>
+	public abstract class ComponentDescriptor<S>
 	{
-		private ComponentRegistration<S,T> registration;
+		private ComponentRegistration<S> registration;
 
-		internal ComponentRegistration<S,T> Registration
+		internal ComponentRegistration<S> Registration
 		{
 			get { return registration; }
 			set { registration = value; }
 		}
 
-		protected internal virtual void ApplyToConfiguration(IConfiguration configuration)
+		protected internal virtual void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
 		{
 		}
 
-		protected internal virtual void ApplyToModel(ComponentModel model)
+		protected internal virtual void ApplyToModel(IKernel kernel, ComponentModel model)
 		{
 		}
 	}

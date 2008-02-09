@@ -16,14 +16,14 @@ namespace Castle.MicroKernel.Registration.Proxy
 {
 	using System;
 
-	public class ProxyGroup<S,T> : RegistrationGroup<S,T>
+	public class ProxyGroup<S> : RegistrationGroup<S>
 	{
-		public ProxyGroup(ComponentRegistration<S,T> registration)
+		public ProxyGroup(ComponentRegistration<S> registration)
 			: base(registration)
 		{
 		}
 
-		public ComponentRegistration<S,T> UsingSingleInterface
+		public ComponentRegistration<S> UsingSingleInterface
 		{
 			get
 			{
@@ -31,7 +31,7 @@ namespace Castle.MicroKernel.Registration.Proxy
 			}
 		}
 
-		public ComponentRegistration<S,T> AsMarshalByRefClass
+		public ComponentRegistration<S> AsMarshalByRefClass
 		{
 			get
 			{
@@ -39,9 +39,9 @@ namespace Castle.MicroKernel.Registration.Proxy
 			}
 		}
 
-		public ComponentRegistration<S,T> AdditionalInterfaces(params Type[] interfaces)
+		public ComponentRegistration<S> AdditionalInterfaces(params Type[] interfaces)
 		{
-			AddDescriptor(new ProxyInterfaces<S,T>(interfaces));
+			AddDescriptor(new ProxyInterfaces<S>(interfaces));
 			return Registration;
 		}
 	}

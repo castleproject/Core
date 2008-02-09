@@ -14,29 +14,27 @@
 
 namespace Castle.MicroKernel.Registration
 {
-	using Castle.Core;
-	using Castle.Core.Configuration;
+	using System;
 
-	public abstract class LifestyleDescriptor<S> : ComponentDescriptor<S>
+	public static class Component
 	{
-		private readonly LifestyleType lifestyle;
-
-		protected LifestyleDescriptor(LifestyleType lifestyle)
+		/// <summary>
+		/// Creates a component registration for the <paramref name="serviceType"/>
+		/// </summary>
+		/// <param name="serviceType">Type of the service.</param>
+		/// <returns>The component registration.</returns>
+		public static ComponentRegistration ForService(Type serviceType)
 		{
-			this.lifestyle = lifestyle;	
+			return new ComponentRegistration(serviceType);
 		}
 
-		protected internal override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
+		/// <summary>
+		/// Creates a component registration for the service type.
+		/// </summary>
+		/// <returns>The component registration.</returns>
+		public static ComponentRegistration<S> ForService<S>()
 		{
-			if (configuration.Attributes["lifestyle"] == null || Registration.Overwrite)
-			{
-				configuration.Attributes["lifestyle"] = lifestyle.ToString();
-				ApplyLifestyleDetails(configuration);
-			}
-		}
-
-		protected virtual void ApplyLifestyleDetails(IConfiguration configuration)
-		{
+			return new ComponentRegistration<S>();
 		}
 	}
 }

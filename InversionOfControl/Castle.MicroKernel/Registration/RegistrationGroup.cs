@@ -14,26 +14,26 @@
 
 namespace Castle.MicroKernel.Registration
 {
-	public abstract class RegistrationGroup<S,T>
+	public abstract class RegistrationGroup<S>
 	{
-		private readonly ComponentRegistration<S,T> registration;
+		private readonly ComponentRegistration<S> registration;
 
-		public RegistrationGroup(ComponentRegistration<S,T> registration)
+		public RegistrationGroup(ComponentRegistration<S> registration)
 		{
 			this.registration = registration;	
 		}
 
-		public ComponentRegistration<S,T> Registration
+		public ComponentRegistration<S> Registration
 		{
 			get { return registration; }
 		}
 
-		protected ComponentRegistration<S,T> AddAttributeDescriptor(string name, string value)
+		protected ComponentRegistration<S> AddAttributeDescriptor(string name, string value)
 		{
-			return registration.AddDescriptor(new AttributeDescriptor<S,T>(name, value));
+			return registration.AddDescriptor(new AttributeDescriptor<S>(name, value));
 		}
 
-		protected ComponentRegistration<S,T> AddDescriptor(ComponentDescriptor<S,T> descriptor)
+		protected ComponentRegistration<S> AddDescriptor(ComponentDescriptor<S> descriptor)
 		{
 			return registration.AddDescriptor(descriptor);
 		}

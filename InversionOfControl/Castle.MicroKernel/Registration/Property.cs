@@ -37,7 +37,7 @@ namespace Castle.MicroKernel.Registration
 			get { return value; }
 		}
 
-		public static PropertyKey WithKey(String key)
+		public static PropertyKey ForKey(String key)
 		{
 			return new PropertyKey(key);
 		}
