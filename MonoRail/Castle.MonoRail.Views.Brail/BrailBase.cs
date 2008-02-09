@@ -40,7 +40,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// </summary>
 		protected TextWriter childOutput;
 
-		protected IEngineContext context;
+		protected internal IEngineContext context;
 		public string LastVariableAccessed;
 		private TextWriter outputStream;
 

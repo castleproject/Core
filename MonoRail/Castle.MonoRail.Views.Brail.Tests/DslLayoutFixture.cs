@@ -14,15 +14,27 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	
-	using NUnit.Framework;
+    using Castle.MonoRail.Views.Brail.TestSite.Components;
+    using NUnit.Framework;
+    using TestSiteBrail.Components;
 
-	[TestFixture]
+    [TestFixture]
 	public class DslLayoutFixture : BaseViewOnlyTestFixture
 	{
-		[Test]
+        protected override void BeforEachTest()
+        {
+            ViewComponentFactory.Inspect(typeof(GridComponent).Assembly);
+        }
+        
+        [Test]
 		public void ComponentOuputUsingDsl()
 		{
+            Layout = "dsl";
+            PropertyBag["items"] = new string[]
+            {
+                "Ayende",
+                "Rahien"
+            }; 
 			string expected =
 				"<html><body><table><tr><th>Names</th></tr><tr><td>Ayende</td></tr><tr><td>Rahien</td></tr></table></body></html>";
 			ProcessView_StripRailsExtension("dsl/testSubViewWithComponents.rails");
@@ -32,17 +44,23 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void LayoutAndChildOuputUsingDsl()
 		{
-			string expected = "<html><p>Hello, Harris</p></html>";
+            PropertyBag["SayHelloTo"] = "Harris";
+		    Layout = "dsl";
+            string expected = "<html><p>Hello, Harris</p></html>";
 			ProcessView_StripRailsExtension("dsl/testSubViewOutput.rails");
 			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
-		//[Ignore("We have issue with parameters references")]
 		public void XmlDsl()
 		{
+            PropertyBag["items"] = new string[]
+            {
+                "Ayende",
+                "Rahien"
+            };    
 			string expected =
-				"<html><?xml version=\"1.0\" encoding=\"utf-16\"?><rss><channel><title>RSS DSL</title><item><title>Title: Ayende</title><description>Description: Ayende</description></item><item><title>Title: Rahien</title><description>Description: Rahien</description></item></channel></rss></html>";
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?><rss><channel><title>RSS DSL</title><item><title>Title: Ayende</title><description>Description: Ayende</description></item><item><title>Title: Rahien</title><description>Description: Rahien</description></item></channel></rss>";
 			ProcessView_StripRailsExtension("dsl/testXml.rails");
 			AssertReplyEqualTo(expected);
 		}

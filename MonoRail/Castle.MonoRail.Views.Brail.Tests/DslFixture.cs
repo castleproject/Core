@@ -9,6 +9,12 @@ namespace Castle.MonoRail.Views.Brail.Tests
     [TestFixture]
     public class DslFixture : BaseViewOnlyTestFixture
     {
+        public DslFixture()
+            : base("../../")
+        {
+
+        }
+
         [Test]
         public void CanOutputParagraphWithClassAttribute()
         {
@@ -28,7 +34,6 @@ namespace Castle.MonoRail.Views.Brail.Tests
         public void RegisterHtmlAllowsCallToHtml()
         {
             ProcessView("dsl/registerHtml");
-            AssertReplyEqualTo("<html><p class=\"foo\">hello world</p></html>");
             AssertReplyEqualTo(@"<html>hello world</html>");
         }
     }

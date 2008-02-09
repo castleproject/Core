@@ -24,21 +24,11 @@ namespace Castle.MonoRail.Views.Brail
 	{
 		private readonly IDictionary<string, MethodInfo> extensionMethods = new Dictionary<string, MethodInfo>();
 		private readonly BrailBase view = null;
-		private readonly IDictionary<string, MethodInfo> viewProperties = new Dictionary<string, MethodInfo>();
 		private IDslLanguageExtension currentExtension = null;
 
 		public DslProvider(BrailBase view)
 		{
 			this.view = view;
-			foreach(PropertyInfo prop in typeof(BrailBase).GetProperties(BindingFlags.Public | BindingFlags.Instance))
-			{
-				if (prop.Name == "Dsl" || prop.Name == "ViewEngine" || prop.Name == "Properties" || prop.CanRead == false)
-				{
-					continue;
-				}
-
-				viewProperties.Add(prop.Name, prop.GetGetMethod());
-			}
 		}
 
 		#region IQuackFu Members
@@ -50,9 +40,18 @@ namespace Castle.MonoRail.Views.Brail
 				return view.GetParameter(name);
 			}
 
-			if (viewProperties.ContainsKey(name))
+			switch(name)
 			{
-				return viewProperties[name].Invoke(view, null);
+			    case "ScriptDirectory":
+			        return view.ScriptDirectory;
+                case "Flash":
+			        return view.Flash;
+                case "OutputStream":
+			        return view.OutputStream;
+                case "ChildOutput":
+			        return view.ChildOutput;
+                case "context":
+			        return view.context;
 			}
 
 			return null;
