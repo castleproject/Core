@@ -16,6 +16,9 @@ namespace Castle.MicroKernel.Registration
 {
 	using System;
 
+	/// <summary>
+	/// Represents a key/value pair.
+	/// </summary>
 	public class Property
 	{
 		private readonly String key;
@@ -27,22 +30,36 @@ namespace Castle.MicroKernel.Registration
 			this.value = value;
 		}
 
+		/// <summary>
+		/// Gets the property key.
+		/// </summary>
 		public string Key
 		{
 			get { return key; }
 		}
 
+		/// <summary>
+		/// Gets the property value.
+		/// </summary>
 		public object Value
 		{
 			get { return value; }
 		}
 
+		/// <summary>
+		/// Create a <see cref="PropertyKey"/> with key.
+		/// </summary>
+		/// <param name="key">The property key.</param>
+		/// <returns>The new <see cref="PropertyKey"/></returns>
 		public static PropertyKey ForKey(String key)
 		{
 			return new PropertyKey(key);
 		}
 	}
 
+	/// <summary>
+	/// Represents a property key.
+	/// </summary>
 	public class PropertyKey
 	{
 		private readonly String name;
@@ -52,11 +69,19 @@ namespace Castle.MicroKernel.Registration
 			this.name = name;
 		}
 
+		/// <summary>
+		/// The property key name.
+		/// </summary>
 		public string Name
 		{
 			get { return name; }
 		}
 
+		/// <summary>
+		/// Builds the <see cref="Property"/> with key/value.
+		/// </summary>
+		/// <param name="value">The property value.</param>
+		/// <returns>The new <see cref="Property"/></returns>
 		public Property Eq(Object value)
 		{
 			return new Property(name, value);

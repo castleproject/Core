@@ -15,6 +15,7 @@
 namespace Castle.MicroKernel.Tests.Registration
 {
 	using System.Collections;
+	using Castle.Core.Configuration;
 	using Castle.MicroKernel.Registration;
 	using Castle.MicroKernel.Tests.Lifestyle.Components;
 	using ClassComponents;
@@ -360,6 +361,56 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreEqual(customer.CustomerBase.Age, 45);
 		}
 
+		[Test]
+		public void AddComponent_ArrayServiceOverrides_WorksFine()
+		{
+			kernel.Register(
+				Component.ForService<ICommon>()
+					.Named("common1")
+					.ImplementedBy<CommonImpl1>(),
+				Component.ForService<ICommon>()
+					.Named("common2")
+					.ImplementedBy<CommonImpl2>(),
+				Component.ForService<ClassWithArrayConstructor>()
+					.ServiceOverrides(
+						ServiceOverride.ForKey("first").Eq("common2"),
+						ServiceOverride.ForKey("services").Eq("common1", "common2")
+					)
+				);
+
+			ICommon common1 = (ICommon) kernel["common1"];
+			ICommon common2 = (ICommon) kernel["common2"];
+			ClassWithArrayConstructor component = kernel.Resolve<ClassWithArrayConstructor>();
+			Assert.AreSame(common2, component.First);
+			Assert.AreEqual(2, component.Services.Length);
+			Assert.AreSame(common1, component.Services[0]);
+			Assert.AreSame(common2, component.Services[1]);
+		}
+
+		[Test]
+		public void AddComponent_GenericListServiceOverrides_WorksFine()
+		{
+			kernel.Register(
+				Component.ForService<ICommon>()
+					.Named("common1")
+					.ImplementedBy<CommonImpl1>(),
+				Component.ForService<ICommon>()
+					.Named("common2")
+					.ImplementedBy<CommonImpl2>(),
+				Component.ForService<ClassWithListConstructor>()
+					.ServiceOverrides(
+						ServiceOverride.ForKey("services").Eq<ICommon>("common1", "common2")
+					)
+				);
+
+			ICommon common1 = (ICommon)kernel["common1"];
+			ICommon common2 = (ICommon)kernel["common2"];
+			ClassWithListConstructor component = kernel.Resolve<ClassWithListConstructor>();
+			Assert.AreEqual(2, component.Services.Count);
+			Assert.AreSame(common1, component.Services[0]);
+			Assert.AreSame(common2, component.Services[1]);
+		}
+
 #if DOTNET35
 
 		[Test]
@@ -423,6 +474,66 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreEqual(customer.CustomerBase.Name, "Caption Hook");
 			Assert.AreEqual(customer.CustomerBase.Address, "Fairyland");
 			Assert.AreEqual(customer.CustomerBase.Age, 45);
+		}
+
+		[Test]
+		public void AddComponent_ArrayConfigurationParameters_WorksFine()
+		{
+			MutableConfiguration list = new MutableConfiguration("list");
+			list.Attributes.Add("type", typeof(ICommon).AssemblyQualifiedName);
+			list.Children.Add(new MutableConfiguration("item", "${common1}"));
+			list.Children.Add(new MutableConfiguration("item", "${common2}"));
+
+			kernel.Register(
+				Component.ForService<ICommon>()
+					.Named("common1")
+					.ImplementedBy<CommonImpl1>(),
+				Component.ForService<ICommon>()
+					.Named("common2")
+					.ImplementedBy<CommonImpl2>(),
+				Component.ForService<ClassWithArrayConstructor>()
+					.Parameters(
+						Parameter.ForKey("first").Eq("${common2}"),
+						Parameter.ForKey("services").Eq(list)
+					)
+				);
+
+			ICommon common1 = (ICommon)kernel["common1"];
+			ICommon common2 = (ICommon)kernel["common2"];
+			ClassWithArrayConstructor component = kernel.Resolve<ClassWithArrayConstructor>();
+			Assert.AreSame(common2, component.First);
+			Assert.AreEqual(2, component.Services.Length);
+			Assert.AreSame(common1, component.Services[0]);
+			Assert.AreSame(common2, component.Services[1]);
+		}
+
+		[Test]
+		public void AddComponent_ListConfigurationParameters_WorksFine()
+		{
+			MutableConfiguration list = new MutableConfiguration("list");
+			list.Attributes.Add("type", typeof(ICommon).AssemblyQualifiedName);
+			list.Children.Add(new MutableConfiguration("item", "${common1}"));
+			list.Children.Add(new MutableConfiguration("item", "${common2}"));
+
+			kernel.Register(
+				Component.ForService<ICommon>()
+					.Named("common1")
+					.ImplementedBy<CommonImpl1>(),
+				Component.ForService<ICommon>()
+					.Named("common2")
+					.ImplementedBy<CommonImpl2>(),
+				Component.ForService<ClassWithListConstructor>()
+					.Parameters(
+						Parameter.ForKey("services").Eq(list)
+					)
+				);
+
+			ICommon common1 = (ICommon)kernel["common1"];
+			ICommon common2 = (ICommon)kernel["common2"];
+			ClassWithListConstructor component = kernel.Resolve<ClassWithListConstructor>();
+			Assert.AreEqual(2, component.Services.Count);
+			Assert.AreSame(common1, component.Services[0]);
+			Assert.AreSame(common2, component.Services[1]);
 		}
 	}
 }

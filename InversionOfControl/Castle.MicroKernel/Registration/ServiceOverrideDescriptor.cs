@@ -16,7 +16,9 @@ namespace Castle.MicroKernel.Registration
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using Castle.Core;
+	using Castle.Core.Configuration;
 	using Castle.MicroKernel.Util;
 
 	public class ServiceOverrideDescriptor<S> : AbstractPropertyDescriptor<S>
@@ -37,10 +39,45 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		protected override void ApplyProperty(IKernel kernel, ComponentModel model,
-		                                      String key, Object value)
+		                                      String key, Object value, Property property)
 		{
-			String reference = FormattedReferenceExpression(value.ToString());
-			Registration.AddParameter(kernel, model, key, reference);
+			if (value is string)
+			{
+				ApplySimpleReference(kernel, model, key, (String)value);
+			}
+			else if (value is IEnumerable<String>)
+			{
+				ServiceOverride serviceOverride = (ServiceOverride)property;
+				ApplyReferenceList(kernel, model, key, (IEnumerable<String>)value, serviceOverride);	
+			}
+		}
+
+		private void ApplySimpleReference(IKernel kernel, ComponentModel model,
+			                              String key, String componentKey)
+		{
+			String reference = FormattedReferenceExpression(componentKey);
+			Registration.AddParameter(kernel, model, key, reference);			
+		}
+
+		private void ApplyReferenceList(IKernel kernel, ComponentModel model,
+										String key, IEnumerable<String> componentKeys,
+			                            ServiceOverride serviceOverride)
+		{
+			MutableConfiguration list = new MutableConfiguration("list");
+			
+			if (serviceOverride != null && serviceOverride.Type != null)
+			{
+				list.Attributes.Add("type", serviceOverride.Type.AssemblyQualifiedName);	
+			}
+
+			foreach (String componentKey in componentKeys )
+			{
+				String reference = FormattedReferenceExpression(componentKey);
+				MutableConfiguration node = new MutableConfiguration("item", reference);
+				list.Children.Add(node);
+			}
+
+			Registration.AddParameter(kernel, model, key, list);
 		}
 
 		private static String FormattedReferenceExpression(String value)

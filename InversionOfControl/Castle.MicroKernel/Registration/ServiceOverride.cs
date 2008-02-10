@@ -15,26 +15,48 @@
 namespace Castle.MicroKernel.Registration
 {
 	using System;
+	using System.Collections.Generic;
 
+	/// <summary>
+	/// Represents a service override.
+	/// </summary>
 	public class ServiceOverride : Property
 	{
-		internal ServiceOverride(String key, String value)
+		private readonly Type type;
+
+		internal ServiceOverride(String key, object value)
 			: base(key, value)
 		{
 		}
 
-		public new String Value
+		internal ServiceOverride(String key, object value, Type type)
+			: base(key, value)
 		{
-			get { return (String) base.Value; }
+			this.type = type;
 		}
 
+		/// <summary>
+		/// Gets the optional value type specifier.
+		/// </summary>
+		public Type Type
+		{
+			get { return type; }
+		}
 
+		/// <summary>
+		/// Creates a <see cref="ServiceOverrideKey"/> with key.
+		/// </summary>
+		/// <param name="key">The service override key.</param>
+		/// <returns>The new <see cref="ServiceOverrideKey"/></returns>
 		public new static ServiceOverrideKey ForKey(String key)
 		{
 			return new ServiceOverrideKey(key);
 		}
 	}
 
+	/// <summary>
+	/// Represents a service override key.
+	/// </summary>
 	public class ServiceOverrideKey
 	{
 		private readonly String name;
@@ -44,14 +66,64 @@ namespace Castle.MicroKernel.Registration
 			this.name = name;
 		}
 
+		/// <summary>
+		/// Gets the service override key name.
+		/// </summary>
 		public string Name
 		{
 			get { return name; }
 		}
 
+		/// <summary>
+		/// Builds the <see cref="ServiceOverride"/> with key/value.
+		/// </summary>
+		/// <param name="value">The service overeride value.</param>
+		/// <returns>The new <see cref="ServiceOverride"/></returns>
 		public ServiceOverride Eq(String value)
 		{
 			return new ServiceOverride(name, value);
+		}
+
+		/// <summary>
+		/// Builds the <see cref="ServiceOverride"/> with key/values.
+		/// </summary>
+		/// <param name="value">The service overeride values.</param>
+		/// <returns>The new <see cref="ServiceOverride"/></returns>
+		public ServiceOverride Eq(params String[] value)
+		{
+			return new ServiceOverride(name, value);
+		}
+
+		/// <summary>
+		/// Builds the <see cref="ServiceOverride"/> with key/values.
+		/// </summary>
+		/// <param name="value">The service overeride values.</param>
+		/// <returns>The new <see cref="ServiceOverride"/></returns>
+		/// <typeparam name="V">The value type.</typeparam>
+		public ServiceOverride Eq<V>(params String[] value)
+		{
+			return new ServiceOverride(name, value, typeof(V));
+		}
+
+		/// <summary>
+		/// Builds the <see cref="ServiceOverride"/> with key/values.
+		/// </summary>
+		/// <param name="value">The service overeride values.</param>
+		/// <returns>The new <see cref="ServiceOverride"/></returns>
+		public ServiceOverride Eq(IEnumerable<String> value)
+		{
+			return new ServiceOverride(name, value);
+		}
+
+		/// <summary>
+		/// Builds the <see cref="ServiceOverride"/> with key/values.
+		/// </summary>
+		/// <param name="value">The service overeride values.</param>
+		/// <returns>The new <see cref="ServiceOverride"/></returns>
+		/// <typeparam name="V">The value type.</typeparam>
+		public ServiceOverride Eq<V>(IEnumerable<String> value)
+		{
+			return new ServiceOverride(name, value, typeof(V));
 		}
 	}
 }

@@ -1,6 +1,10 @@
 RC 4
 ====
 
+- Added support for list service overrides using the fluent registration interface.
+  Added support for specifying configuration parameters using the fluent interface to allow any complex
+  registration scenarios.
+
 - Restructured the registration fluent interface to be a little more readable,
   better support component registrations and prevent errors resulting from 
   forgetting to call ComponentRegistration.Register

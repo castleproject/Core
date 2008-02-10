@@ -39,19 +39,19 @@ namespace Castle.MicroKernel.Registration
 			{
 				foreach(DictionaryEntry property in dictionary)
 				{
-					ApplyProperty(kernel, model, property.Key.ToString(), property.Value);
+					ApplyProperty(kernel, model, property.Key.ToString(), property.Value, null);
 				}
 			}
 			else if (properties != null)
 			{
 				foreach(Property property in properties)
 				{
-					ApplyProperty(kernel, model, property.Key, property.Value);
+					ApplyProperty(kernel, model, property.Key, property.Value, property);
 				}
 			}
 		}
 
 		protected abstract void ApplyProperty(IKernel kernel, ComponentModel model,
-		                                      String key, Object value);
+		                                      String key, Object value, Property property);
 	}
 }

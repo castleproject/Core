@@ -219,6 +219,16 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
+		/// With the configuration parameters.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> Parameters(params Parameter[] parameters)
+		{
+			return AddDescriptor(new ParametersDescriptor<S>(parameters));
+		}
+
+		/// <summary>
 		/// With the interceptors.
 		/// </summary>
 		/// <param name="interceptors">The interceptors.</param>
@@ -278,12 +288,12 @@ namespace Castle.MicroKernel.Registration
 		/// <summary>
 		/// Adds the attribute descriptor.
 		/// </summary>
-		/// <param name="name">The name.</param>
+		/// <param name="key">The key.</param>
 		/// <param name="value">The value.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S> AddAttributeDescriptor(string name, string value)
+		public ComponentRegistration<S> AddAttributeDescriptor(string key, string value)
 		{
-			AddDescriptor(new AttributeDescriptor<S>(name, value));
+			AddDescriptor(new AttributeDescriptor<S>(key, value));
 			return this;
 		}
 
@@ -299,19 +309,21 @@ namespace Castle.MicroKernel.Registration
 			return this;
 		}
 
-		internal void AddParameter(IKernel kernel, ComponentModel model, String name, String value)
+		internal void AddParameter(IKernel kernel, ComponentModel model, String key, String value)
 		{
-			IConfiguration configuration = EnsureComponentConfiguration(kernel);
-			IConfiguration parameters = configuration.Children["parameters"];
-			if (parameters == null)
-			{
-				parameters = new MutableConfiguration("component");
-				configuration.Children.Add(parameters);
-			}
+			IConfiguration parameters = EnsureParametersConfiguration(kernel);
+			MutableConfiguration parameter = new MutableConfiguration(key, value);
+			parameters.Children.Add(parameter);
+			model.Parameters.Add(key, value);
+		}
 
-			MutableConfiguration reference = new MutableConfiguration(name, value);
-			parameters.Children.Add(reference);
-			model.Parameters.Add(name, value);
+		internal void AddParameter(IKernel kernel, ComponentModel model, String key, IConfiguration value)
+		{
+			IConfiguration parameters = EnsureParametersConfiguration(kernel);
+			MutableConfiguration parameter = new MutableConfiguration(key);
+			parameter.Children.Add(value);
+			parameters.Children.Add(parameter);
+			model.Parameters.Add(key, value);
 		}
 
 		private void InitializeDefaults()
@@ -325,6 +337,18 @@ namespace Castle.MicroKernel.Registration
 			{
 				name = classType.FullName;
 			}
+		}
+
+		private IConfiguration EnsureParametersConfiguration(IKernel kernel)
+		{
+			IConfiguration configuration = EnsureComponentConfiguration(kernel);
+			IConfiguration parameters = configuration.Children["parameters"];
+			if (parameters == null)
+			{
+				parameters = new MutableConfiguration("component");
+				configuration.Children.Add(parameters);
+			}
+			return parameters;
 		}
 
 		private IConfiguration EnsureComponentConfiguration(IKernel kernel)
