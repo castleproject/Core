@@ -1408,7 +1408,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.SimpleClassOverride, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"SimpleClassOverride\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
-				"      <generator class=\"native\">\r\n" +
+				"      <generator class=\"assigned\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
 				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +

@@ -23,7 +23,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		private String name;
 
 		[PrimaryKey]
-		public int Id
+		public virtual int Id
 		{
 			get { return id; }
 			set { id = value; }
@@ -40,6 +40,13 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	[ActiveRecord(Lazy = false)]
 	public class SimpleClassOverride : SimpleClass
 	{
+		[PrimaryKey(IsOverride=true, Generator=PrimaryKeyType.Assigned)]
+		public override int Id
+		{
+			get { return base.Id; }
+			set { base.Id = value; }
+		}
+
 		[Property(IsOverride=true, Length=50)]
 		public override string Name
 		{

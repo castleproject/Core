@@ -1,3 +1,6 @@
+- Added IsOverride to PrimaryKey attribute to allow a primary key in a derived
+  class to override one in the base class.
+
 - Applied Vladimir Okhotnikov's patch fixing TransactionScope Flush 
 
 - Applied Alun Harford's patch fixing AR-182

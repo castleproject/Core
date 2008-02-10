@@ -118,6 +118,7 @@ namespace Castle.ActiveRecord
 		private String type;
 		private String _params;
 		private int length;
+		private bool isOverride;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PrimaryKeyAttribute"/> class.
@@ -242,6 +243,15 @@ namespace Castle.ActiveRecord
 		{
 			get { return _params; }
 			set { _params = value; }
+		}
+
+		/// <summary>
+		/// Set to <c>true</c> if this primary key overrides a primary key in a base class
+		/// </summary>
+		public bool IsOverride
+		{
+			get { return isOverride; }
+			set { isOverride = value; }
 		}
 	}
 }
