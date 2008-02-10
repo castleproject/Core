@@ -15,11 +15,12 @@
 namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 {
 	using System;
-	using Core;
-	using MicroKernel;
+	using Castle.Core;
+	using Castle.MicroKernel;
+	using Castle.MicroKernel.Registration;
+	using Castle.Windsor;
+	using Castle.MonoRail.WindsorExtension;
 	using NUnit.Framework;
-	using Windsor;
-	using WindsorExtension;
 
 	[TestFixture]
 	public class FacilityTestCase
@@ -54,15 +55,19 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 		{
 			IControllerTree tree = container.Resolve<IControllerTree>();
 
-			container.AddComponentEx<HomeController>().
-				WithName("home.controller").Register();
+			container.Register(
+				Component.ForService<HomeController>().
+					Named("home.controller")
+					);
 
 			Type controllerType = tree.GetController("", "home");
 			Assert.IsNotNull(controllerType);
 			Assert.AreEqual(typeof(HomeController), controllerType);
 
-			container.AddComponentEx<DummyController>().
-				WithName("dummy.controller").Register();
+			container.Register(
+				Component.ForService<DummyController>().
+					Named("dummy.controller")
+					);
 
 			controllerType = tree.GetController("", "dummy");
 			Assert.IsNotNull(controllerType);
@@ -72,8 +77,10 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 		[Test]
 		public void ControllersAreMadeTransient()
 		{
-			container.AddComponentEx<HomeController>().
-				WithName("home.controller").Register();
+			container.Register(
+				Component.ForService<HomeController>().
+					Named("home.controller")
+					);
 
 			IHandler handler = container.Kernel.GetHandler("home.controller");
 			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
@@ -84,8 +91,10 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 		{
 			IViewComponentRegistry registry = container.Resolve<IViewComponentRegistry>();
 
-			container.AddComponentEx<DummyComponent>().
-				WithName("my.component").Register();
+			container.Register(
+				Component.ForService<DummyComponent>().
+					Named("my.component")
+					);
 
 			Type componentType = registry.GetViewComponent("my.component");
 			Assert.IsNotNull(componentType);
@@ -95,8 +104,10 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 		[Test]
 		public void ViewComponentsAreMadeTransient()
 		{
-			container.AddComponentEx<DummyComponent>().
-				WithName("my.viewcomponent").Register();
+			container.Register(
+				Component.ForService<DummyComponent>().
+					Named("my.viewcomponent")
+					);
 
 			IHandler handler = container.Kernel.GetHandler("my.viewcomponent");
 			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
