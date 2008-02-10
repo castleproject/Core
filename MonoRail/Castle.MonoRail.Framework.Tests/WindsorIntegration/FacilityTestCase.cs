@@ -56,7 +56,7 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 			IControllerTree tree = container.Resolve<IControllerTree>();
 
 			container.Register(
-				Component.ForService<HomeController>().
+				Component.For<HomeController>().
 					Named("home.controller")
 					);
 
@@ -65,7 +65,7 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 			Assert.AreEqual(typeof(HomeController), controllerType);
 
 			container.Register(
-				Component.ForService<DummyController>().
+				Component.For<DummyController>().
 					Named("dummy.controller")
 					);
 
@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 		public void ControllersAreMadeTransient()
 		{
 			container.Register(
-				Component.ForService<HomeController>().
+				Component.For<HomeController>().
 					Named("home.controller")
 					);
 
@@ -92,7 +92,7 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 			IViewComponentRegistry registry = container.Resolve<IViewComponentRegistry>();
 
 			container.Register(
-				Component.ForService<DummyComponent>().
+				Component.For<DummyComponent>().
 					Named("my.component")
 					);
 
@@ -105,7 +105,7 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 		public void ViewComponentsAreMadeTransient()
 		{
 			container.Register(
-				Component.ForService<DummyComponent>().
+				Component.For<DummyComponent>().
 					Named("my.viewcomponent")
 					);
 

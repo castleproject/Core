@@ -37,7 +37,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithServiceOnly_RegisteredWithServiceTypeName()
 		{
 			kernel.Register(
-				Component.ForService<CustomerImpl>());
+				Component.For<CustomerImpl>());
 
 			IHandler handler = kernel.GetHandler(typeof(CustomerImpl));
 			Assert.AreEqual(typeof(CustomerImpl), handler.ComponentModel.Service);
@@ -55,7 +55,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithServiceAndName_RegisteredNamed()
 		{
 			kernel.Register(
-				Component.ForService<CustomerImpl>()
+				Component.For<CustomerImpl>()
 					.Named("customer")
 					);
 
@@ -74,7 +74,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_NamedAlreadyAssigned_ThrowsException()
 		{
 			kernel.Register(
-				Component.ForService<CustomerImpl>()
+				Component.For<CustomerImpl>()
 					.Named("customer")
 					.Named("customer1")
 					);
@@ -84,7 +84,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithServiceAndClass_RegisteredWithClassTypeName()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.ImplementedBy<CustomerImpl>());
 
 			ICustomer customer = kernel.Resolve<ICustomer>();
@@ -100,7 +100,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithImplementationAlreadyAssigned_ThrowsException()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.ImplementedBy<CustomerImpl>()
 					.ImplementedBy<CustomerImpl2>()
 					);
@@ -112,7 +112,7 @@ namespace Castle.MicroKernel.Tests.Registration
 			CustomerImpl customer = new CustomerImpl();
 
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("key")
 					.Instance(customer)
 					);
@@ -129,7 +129,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithTransientLifestyle_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer")
 					.ImplementedBy<CustomerImpl>()
 					.LifeStyle.Transient
@@ -143,7 +143,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithSingletonLifestyle_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer")
 					.ImplementedBy<CustomerImpl>()
 					.LifeStyle.Singleton
@@ -157,7 +157,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithCustomLifestyle_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer")
 					.ImplementedBy<CustomerImpl>()
 					.LifeStyle.Custom<MyLifestyleHandler>()
@@ -171,7 +171,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithThreadLifestyle_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer")
 					.ImplementedBy<CustomerImpl>()
 					.LifeStyle.PerThread
@@ -185,7 +185,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithPerWebRequestLifestyle_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer")
 					.ImplementedBy<CustomerImpl>()
 					.LifeStyle.PerWebRequest
@@ -199,7 +199,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithPooledLifestyle_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer")
 					.ImplementedBy<CustomerImpl>()
 					.LifeStyle.Pooled
@@ -213,7 +213,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_WithPooledWithSizeLifestyle_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer")
 					.ImplementedBy<CustomerImpl>()
 					.LifeStyle.PooledWithSize(5, 10)
@@ -227,7 +227,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_Activator_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer")
 					.ImplementedBy<CustomerImpl>()
 					.Activator<MyCustomerActivator>()
@@ -244,7 +244,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_ExtendedProperties_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.ImplementedBy<CustomerImpl>()
 					.ExtendedProperties(
 						Property.ForKey("key1").Eq("value1"),
@@ -278,7 +278,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_CustomDependencies_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.ImplementedBy<CustomerImpl>()
 					.CustomDependencies(
 						Property.ForKey("Name").Eq("Caption Hook"),
@@ -319,7 +319,7 @@ namespace Castle.MicroKernel.Tests.Registration
 			customDependencies["Age"] = 45;
 
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.ImplementedBy<CustomerImpl>()
 					.CustomDependencies(customDependencies)
 					);
@@ -334,7 +334,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_ServiceOverrides_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer1")
 					.ImplementedBy<CustomerImpl>()
 					.CustomDependencies(
@@ -342,7 +342,7 @@ namespace Castle.MicroKernel.Tests.Registration
 						Property.ForKey("Address").Eq("Fairyland"),
 						Property.ForKey("Age").Eq(45)
 						),
-				Component.ForService<CustomerChain1>()
+				Component.For<CustomerChain1>()
 					.Named("customer2")
 					.CustomDependencies(
 						Property.ForKey("Name").Eq("Bigfoot"),
@@ -365,13 +365,13 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_ArrayServiceOverrides_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICommon>()
+				Component.For<ICommon>()
 					.Named("common1")
 					.ImplementedBy<CommonImpl1>(),
-				Component.ForService<ICommon>()
+				Component.For<ICommon>()
 					.Named("common2")
 					.ImplementedBy<CommonImpl2>(),
-				Component.ForService<ClassWithArrayConstructor>()
+				Component.For<ClassWithArrayConstructor>()
 					.ServiceOverrides(
 						ServiceOverride.ForKey("first").Eq("common2"),
 						ServiceOverride.ForKey("services").Eq("common1", "common2")
@@ -391,13 +391,13 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_GenericListServiceOverrides_WorksFine()
 		{
 			kernel.Register(
-				Component.ForService<ICommon>()
+				Component.For<ICommon>()
 					.Named("common1")
 					.ImplementedBy<CommonImpl1>(),
-				Component.ForService<ICommon>()
+				Component.For<ICommon>()
 					.Named("common2")
 					.ImplementedBy<CommonImpl2>(),
-				Component.ForService<ClassWithListConstructor>()
+				Component.For<ClassWithListConstructor>()
 					.ServiceOverrides(
 						ServiceOverride.ForKey("services").Eq<ICommon>("common1", "common2")
 					)
@@ -451,7 +451,7 @@ namespace Castle.MicroKernel.Tests.Registration
 			serviceOverrides["customer"] = "customer1";
 
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer1")
 					.ImplementedBy<CustomerImpl>()
 					.CustomDependencies(
@@ -459,7 +459,7 @@ namespace Castle.MicroKernel.Tests.Registration
 						Property.ForKey("Address").Eq("Fairyland"),
 						Property.ForKey("Age").Eq(45)
 						),
-				Component.ForService<CustomerChain1>()
+				Component.For<CustomerChain1>()
 					.Named("customer2")
 					.CustomDependencies(
 						Property.ForKey("Name").Eq("Bigfoot"),
@@ -485,13 +485,13 @@ namespace Castle.MicroKernel.Tests.Registration
 			list.Children.Add(new MutableConfiguration("item", "${common2}"));
 
 			kernel.Register(
-				Component.ForService<ICommon>()
+				Component.For<ICommon>()
 					.Named("common1")
 					.ImplementedBy<CommonImpl1>(),
-				Component.ForService<ICommon>()
+				Component.For<ICommon>()
 					.Named("common2")
 					.ImplementedBy<CommonImpl2>(),
-				Component.ForService<ClassWithArrayConstructor>()
+				Component.For<ClassWithArrayConstructor>()
 					.Parameters(
 						Parameter.ForKey("first").Eq("${common2}"),
 						Parameter.ForKey("services").Eq(list)
@@ -516,13 +516,13 @@ namespace Castle.MicroKernel.Tests.Registration
 			list.Children.Add(new MutableConfiguration("item", "${common2}"));
 
 			kernel.Register(
-				Component.ForService<ICommon>()
+				Component.For<ICommon>()
 					.Named("common1")
 					.ImplementedBy<CommonImpl1>(),
-				Component.ForService<ICommon>()
+				Component.For<ICommon>()
 					.Named("common2")
 					.ImplementedBy<CommonImpl2>(),
-				Component.ForService<ClassWithListConstructor>()
+				Component.For<ClassWithListConstructor>()
 					.Parameters(
 						Parameter.ForKey("services").Eq(list)
 					)

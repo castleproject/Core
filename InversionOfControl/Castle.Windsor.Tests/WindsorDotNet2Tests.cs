@@ -327,7 +327,7 @@ namespace Castle.Windsor.Tests
 			container.AddComponent<MyInterceptor>();
 
 			container.Register(
-				Component.ForService<ISpecification>()
+				Component.For<ISpecification>()
 					.ImplementedBy<MySpecification>()
 					.Interceptors(new InterceptorReference(typeof(MyInterceptor)))
 					.Anywhere

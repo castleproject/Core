@@ -118,7 +118,7 @@ namespace Castle.Facilities.Startable.Tests
 			kernel.AddFacility("startable", new StartableFacility());
 
 			kernel.Register(
-				Component.ForService<StartableComponentCustomDependencies>()
+				Component.For<StartableComponentCustomDependencies>()
 					.Named("a")
 					.CustomDependencies(Property.ForKey("config").Eq(1))
 				);

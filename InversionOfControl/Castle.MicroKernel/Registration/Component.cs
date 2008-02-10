@@ -23,7 +23,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="serviceType">Type of the service.</param>
 		/// <returns>The component registration.</returns>
-		public static ComponentRegistration ForService(Type serviceType)
+		public static ComponentRegistration For(Type serviceType)
 		{
 			return new ComponentRegistration(serviceType);
 		}
@@ -32,7 +32,7 @@ namespace Castle.MicroKernel.Registration
 		/// Creates a component registration for the service type.
 		/// </summary>
 		/// <returns>The component registration.</returns>
-		public static ComponentRegistration<S> ForService<S>()
+		public static ComponentRegistration<S> For<S>()
 		{
 			return new ComponentRegistration<S>();
 		}
