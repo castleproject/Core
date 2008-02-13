@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 
+	[Serializable]
 	public class CacheKey
 	{
 		private readonly Type targetType;

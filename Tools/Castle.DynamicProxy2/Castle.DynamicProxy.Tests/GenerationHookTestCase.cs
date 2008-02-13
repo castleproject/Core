@@ -68,6 +68,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Sum get_Valid ", logger.LogContents);
 		}
 
+		[Serializable]
 		public class LogHook : IProxyGenerationHook
 		{
 			private readonly Type targetTypeToAssert;

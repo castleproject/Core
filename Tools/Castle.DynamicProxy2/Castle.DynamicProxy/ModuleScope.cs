@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -22,6 +24,7 @@ namespace Castle.DynamicProxy
 	using System.Resources;
 	using System.Threading;
 	using Castle.DynamicProxy.Generators;
+	using System.Runtime.Serialization.Formatters.Binary;
 
 	/// <summary>
 	/// Summary description for ModuleScope.
@@ -38,27 +41,26 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		public static readonly String DEFAULT_ASSEMBLY_NAME = "DynamicProxyGenAssembly2";
 
-		// Avoid leaks caused by non disposal of generated types.
 		private ModuleBuilder moduleBuilderWithStrongName = null;
 		private ModuleBuilder moduleBuilder = null;
 
 		// The names to use for the generated assemblies and the paths (including the names) of their manifest modules
-		private string strongAssemblyName;
-		private string weakAssemblyName;
-		private string strongModulePath;
-		private string weakModulePath;
+		private readonly string strongAssemblyName;
+		private readonly string weakAssemblyName;
+		private readonly string strongModulePath;
+		private readonly string weakModulePath;
 
 		// Keeps track of generated types
-		private Hashtable typeCache = Hashtable.Synchronized(new Hashtable());
+		private readonly Hashtable typeCache = Hashtable.Synchronized(new Hashtable());
 
 		// Users of ModuleScope should use this lock when accessing the cache
-		private ReaderWriterLock readerWriterLock = new ReaderWriterLock ();
+		private readonly ReaderWriterLock readerWriterLock = new ReaderWriterLock ();
 
 		// Used to lock the module builder creation
-		private object _lockobj = new object();
+		private readonly object _lockobj = new object();
 
 		// Specified whether the generated assemblies are intended to be saved
-		private bool savePhysicalAssembly;
+		private readonly bool savePhysicalAssembly;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ModuleScope"/> class; assemblies created by this instance will not be saved.
@@ -409,8 +411,56 @@ namespace Castle.DynamicProxy
 			if (File.Exists (assemblyFilePath))
 				File.Delete (assemblyFilePath);
 
+			AddCacheMappings (assemblyBuilder);
 			assemblyBuilder.Save (assemblyFileName);
 			return assemblyFilePath;
+		}
+
+		private void AddCacheMappings (AssemblyBuilder builder)
+		{
+			Dictionary<CacheKey, string> mappings;
+
+			lock (typeCache.SyncRoot)
+			{
+				mappings = new Dictionary<CacheKey, string>();
+				foreach (DictionaryEntry cacheEntry in typeCache)
+					mappings.Add ((CacheKey) cacheEntry.Key, ((Type) cacheEntry.Value).FullName);
+			}
+			CacheMappingsAttribute.ApplyTo (builder, mappings);
+		}
+
+		/// <summary>
+		/// Loads the generated types from the given assembly into this <see cref="ModuleScope"/>'s cache.
+		/// </summary>
+		/// <param name="assembly">The assembly to load types from. This assembly must have been saved via <see cref="SaveAssembly(bool)"/> or
+		/// <see cref="SaveAssembly()"/>, or it must have the <see cref="CacheMappingsAttribute"/> manually applied.</param>
+		/// <remarks>
+		/// This method can be used to load previously generated and persisted proxy types from disk into this scope's type cache, eg. in order
+		/// to avoid the performance hit associated with proxy generation.
+		/// </remarks>
+		public void LoadAssemblyIntoCache (Assembly assembly)
+		{
+			if (assembly == null)
+				throw new ArgumentNullException ("assembly");
+
+			CacheMappingsAttribute[] cacheMappings = (CacheMappingsAttribute[]) assembly.GetCustomAttributes (typeof (CacheMappingsAttribute), false);
+			if (cacheMappings.Length == 0)
+			{
+				string message = string.Format (
+						"The given assembly '{0}' does not contain any cache information for generated types.",
+						assembly.FullName);
+				throw new ArgumentException (message, "assembly");
+			}
+
+			lock (typeCache.SyncRoot)
+			{
+				foreach (KeyValuePair<CacheKey, string> mapping in cacheMappings[0].GetDeserializedMappings())
+				{
+					Type loadedType = assembly.GetType (mapping.Value);
+					if (loadedType != null)
+						RegisterInCache (mapping.Key, loadedType);
+				}
+			}
 		}
 	}
 }

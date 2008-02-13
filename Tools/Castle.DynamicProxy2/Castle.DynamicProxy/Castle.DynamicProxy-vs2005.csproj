@@ -90,6 +90,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CacheMappingsAttribute.cs" />
     <Compile Include="DefaultProxyBuilder.cs" />
     <Compile Include="Generators\AttributesToAvoidReplicating.cs" />
     <Compile Include="Generators\BaseProxyGenerator.cs" />

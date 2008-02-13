@@ -112,6 +112,7 @@
     <Compile Include="Classes\ClassWithConstructors.cs" />
     <Compile Include="Classes\MySerializableClass.cs" />
     <Compile Include="Classes\ProtectedInternalConstructorClass.cs" />
+    <Compile Include="CrossAppDomainCaller.cs" />
     <Compile Include="MethodComparerTestCase.cs" />
     <Compile Include="GenericTestUtility.cs" />
     <Compile Include="GenInterfaces\GenInterfaceHierarchy.cs" />

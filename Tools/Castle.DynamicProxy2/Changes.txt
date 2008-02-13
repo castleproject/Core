@@ -1,5 +1,8 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Added a load API to ModuleScope
+- SaveAssembly now serializes the cache keys together with the generated types
+
 - Fixed test issue - PEVerify is now called with a quoted assembly path (to allow for spaces in the path)
 - Fixed test annoyance - PEVerify is now not called in a separate window
 - Changed PersistentProxyBuilder behavior - SaveAssembly is not called by the class generators any more, instead PersistentProxyBuilder.SaveAssemblies
