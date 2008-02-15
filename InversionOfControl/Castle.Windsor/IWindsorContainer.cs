@@ -318,7 +318,65 @@ namespace Castle.Windsor
 		/// <param name="argumentsAsAnonymousType"></param>
 		/// <returns>The component instance</returns>
 		T Resolve<T>(object argumentsAsAnonymousType);
-		
+
+        /// <summary>
+        /// Returns an instance of <typeparamref name="T"/> that
+        /// was created by the container with all its dependencies
+        /// filled
+        /// </summary>
+        /// <typeparam name="T">Service type</typeparam>
+        /// <returns>The component instance</returns>
+        T CreateInstance<T>();
+
+        /// <summary>
+        /// Returns an instance of <typeparamref name="T"/> that
+        /// was created by the container with all its dependencies
+        /// filled
+        /// </summary>
+        /// <typeparam name="T">Service type</typeparam>
+        /// <param name="arguments"></param>
+        /// <returns>The component instance</returns>
+        T CreateInstance<T>(IDictionary arguments);
+
+        /// <summary>
+        /// Returns an instance of <typeparamref name="T"/> that
+        /// was created by the container with all its dependencies
+        /// filled
+        /// </summary>
+        /// <typeparam name="T">Service type</typeparam>
+        /// <param name="argumentsAsAnonymousType"></param>
+        /// <returns>The component instance</returns>
+        T CreateInstance<T>(object argumentsAsAnonymousType);
+
+        /// <summary>
+        /// Returns an instance of the service that
+        /// was created by the container with all its dependencies
+        /// filled
+        /// </summary>
+        /// <returns>The component instance</returns>
+        object CreateInstance(Type service);
+
+        /// <summary>
+        /// Returns an instance of the service that
+        /// was created by the container with all its dependencies
+        /// filled
+        /// </summary>
+        /// <param name="service">The service.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <returns>The component instance</returns>
+        object CreateInstance(Type service, IDictionary arguments);
+
+        /// <summary>
+        /// Returns an instance of the service that
+        /// was created by the container with all its dependencies
+        /// filled
+        /// </summary>
+        /// <param name="service">The service.</param>
+        /// <param name="argumentsAsAnonymousType">Type of the arguments as anonymous.</param>
+        /// <returns>The component instance</returns>
+        object CreateInstance(Type service, object argumentsAsAnonymousType);
+
+
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>

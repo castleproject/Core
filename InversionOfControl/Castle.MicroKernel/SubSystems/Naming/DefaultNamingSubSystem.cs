@@ -64,7 +64,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 			try
 			{
-				locker.AcquireWriterLock(Timeout.Infinite);
+                locker.AcquireWriterLock(Timeout.Infinite);
 				if (key2Handler.Contains(key))
 				{
 					throw new ComponentRegistrationException(
