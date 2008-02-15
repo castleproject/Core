@@ -228,7 +228,7 @@ namespace Castle.Windsor
 		/// <param name="argumentsAsAnonymousType"></param>
 		/// <returns></returns>
 		object Resolve(String key, object argumentsAsAnonymousType);
-		
+
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
@@ -282,12 +282,12 @@ namespace Castle.Windsor
 		/// <summary>
 		/// Shortcut to <see cref="Resolve(string)"/>
 		/// </summary>
-		object this [String key] { get; }
+		object this[String key] { get; }
 
 		/// <summary>
 		/// Shortcut to <see cref="Resolve(Type)"/>
 		/// </summary>
-		object this [Type service] { get; }
+		object this[Type service] { get; }
 
 		/// <summary>
 		/// Gets a child container instance by name.
@@ -310,7 +310,7 @@ namespace Castle.Windsor
 		/// <param name="arguments"></param>
 		/// <returns>The component instance</returns>
 		T Resolve<T>(IDictionary arguments);
-		
+
 		/// <summary>
 		/// Returns a component instance by the service
 		/// </summary>
@@ -319,62 +319,62 @@ namespace Castle.Windsor
 		/// <returns>The component instance</returns>
 		T Resolve<T>(object argumentsAsAnonymousType);
 
-        /// <summary>
-        /// Returns an instance of <typeparamref name="T"/> that
-        /// was created by the container with all its dependencies
-        /// filled
-        /// </summary>
-        /// <typeparam name="T">Service type</typeparam>
-        /// <returns>The component instance</returns>
-        T CreateInstance<T>();
+		/// <summary>
+		/// Returns an instance of <typeparamref name="T"/> that
+		/// was created by the container with all its dependencies
+		/// filled
+		/// </summary>
+		/// <typeparam name="T">Service type</typeparam>
+		/// <returns>The component instance</returns>
+		T CreateInstance<T>();
 
-        /// <summary>
-        /// Returns an instance of <typeparamref name="T"/> that
-        /// was created by the container with all its dependencies
-        /// filled
-        /// </summary>
-        /// <typeparam name="T">Service type</typeparam>
-        /// <param name="arguments"></param>
-        /// <returns>The component instance</returns>
-        T CreateInstance<T>(IDictionary arguments);
+		/// <summary>
+		/// Returns an instance of <typeparamref name="T"/> that
+		/// was created by the container with all its dependencies
+		/// filled
+		/// </summary>
+		/// <typeparam name="T">Service type</typeparam>
+		/// <param name="arguments"></param>
+		/// <returns>The component instance</returns>
+		T CreateInstance<T>(IDictionary arguments);
 
-        /// <summary>
-        /// Returns an instance of <typeparamref name="T"/> that
-        /// was created by the container with all its dependencies
-        /// filled
-        /// </summary>
-        /// <typeparam name="T">Service type</typeparam>
-        /// <param name="argumentsAsAnonymousType"></param>
-        /// <returns>The component instance</returns>
-        T CreateInstance<T>(object argumentsAsAnonymousType);
+		/// <summary>
+		/// Returns an instance of <typeparamref name="T"/> that
+		/// was created by the container with all its dependencies
+		/// filled
+		/// </summary>
+		/// <typeparam name="T">Service type</typeparam>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns>The component instance</returns>
+		T CreateInstance<T>(object argumentsAsAnonymousType);
 
-        /// <summary>
-        /// Returns an instance of the service that
-        /// was created by the container with all its dependencies
-        /// filled
-        /// </summary>
-        /// <returns>The component instance</returns>
-        object CreateInstance(Type service);
+		/// <summary>
+		/// Returns an instance of the service that
+		/// was created by the container with all its dependencies
+		/// filled
+		/// </summary>
+		/// <returns>The component instance</returns>
+		object CreateInstance(Type service);
 
-        /// <summary>
-        /// Returns an instance of the service that
-        /// was created by the container with all its dependencies
-        /// filled
-        /// </summary>
-        /// <param name="service">The service.</param>
-        /// <param name="arguments">The arguments.</param>
-        /// <returns>The component instance</returns>
-        object CreateInstance(Type service, IDictionary arguments);
+		/// <summary>
+		/// Returns an instance of the service that
+		/// was created by the container with all its dependencies
+		/// filled
+		/// </summary>
+		/// <param name="service">The service.</param>
+		/// <param name="arguments">The arguments.</param>
+		/// <returns>The component instance</returns>
+		object CreateInstance(Type service, IDictionary arguments);
 
-        /// <summary>
-        /// Returns an instance of the service that
-        /// was created by the container with all its dependencies
-        /// filled
-        /// </summary>
-        /// <param name="service">The service.</param>
-        /// <param name="argumentsAsAnonymousType">Type of the arguments as anonymous.</param>
-        /// <returns>The component instance</returns>
-        object CreateInstance(Type service, object argumentsAsAnonymousType);
+		/// <summary>
+		/// Returns an instance of the service that
+		/// was created by the container with all its dependencies
+		/// filled
+		/// </summary>
+		/// <param name="service">The service.</param>
+		/// <param name="argumentsAsAnonymousType">Type of the arguments as anonymous.</param>
+		/// <returns>The component instance</returns>
+		object CreateInstance(Type service, object argumentsAsAnonymousType);
 
 
 		/// <summary>
@@ -393,7 +393,7 @@ namespace Castle.Windsor
 		/// <param name="arguments"></param>
 		/// <returns>The Component instance</returns>
 		T Resolve<T>(String key, IDictionary arguments);
-		
+
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
@@ -420,7 +420,7 @@ namespace Castle.Windsor
 		/// <param name="argumentsAsAnonymousType"></param>
 		/// <returns></returns>
 		object Resolve(String key, Type service, object argumentsAsAnonymousType);
-		
+
 		/// <summary>
 		/// Returns the inner instance of the MicroKernel
 		/// </summary>
