@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="collection_not_empty" xml:space="preserve">
-    <value>Kopa nevar būt tukša</value>
+    <value>Kopai jāsatur vismaz viens elements</value>
   </data>
   <data name="date_invalid" xml:space="preserve">
-    <value>Nekorekts datuma formāts</value>
+    <value>Laukā jānorāda korekts datums</value>
   </data>
   <data name="decimal_invalid" xml:space="preserve">
     <value>Laukā jānorāda korekts skaitlis</value>
@@ -130,13 +130,13 @@
     <value>Laukā jānorāda korekts skaitlis</value>
   </data>
   <data name="email" xml:space="preserve">
-    <value>Norādītā e-pasta adrese ir nekorekta. Korektas adreses piemērs: 'john@domain.com'</value>
+    <value>Jānorāda korekta e-pasta adrese, piemēram: 'john@domain.com'</value>
   </data>
   <data name="exactlength" xml:space="preserve">
     <value>Vērtībai jābūt tieši {0} simbolus garai</value>
   </data>
   <data name="generic_invalid" xml:space="preserve">
-    <value>Nekorekta lauka vērtība</value>
+    <value>Jānorāda korekta lauka vērtība</value>
   </data>
   <data name="group_not_empty_invalid" xml:space="preserve">
     <value>Vismaz vienā no laukiem ({0}) jānorāda vērtība</value>
@@ -175,18 +175,18 @@
     <value>Vērtībai jābūt lielākai vai vienādai ar {0}</value>
   </data>
   <data name="same_as_invalid" xml:space="preserve">
-    <value>Lauku vērtības nesakrīt</value>
+    <value>Lauku vērtībām jāsakrīt</value>
   </data>
   <data name="set_invalid" xml:space="preserve">
-    <value>Vērtība nav no pieļaujamo vērtību kopas</value>
+    <value>Jānorāda vērtība no pieļaujamo vērtību kopas</value>
   </data>
   <data name="single_invalid" xml:space="preserve">
-    <value>Vērtība nav korekts skaitlis</value>
+    <value>Jānorāda korekts skaitlis</value>
   </data>
   <data name="time_invalid" xml:space="preserve">
-    <value>Vērtība nav korekts laiks</value>
+    <value>Jānorāda korekts laiks</value>
   </data>
   <data name="credit_card_invalid" xml:space="preserve">
-    <value>Laukā norādītā vērtība neatbilst zināmajiem kredītkaršu numuru formātiem</value>
+    <value>Vērībai jāatbilst kādam no zināmajiem kredītkartes numura formātiem</value>
   </data>
 </root>
