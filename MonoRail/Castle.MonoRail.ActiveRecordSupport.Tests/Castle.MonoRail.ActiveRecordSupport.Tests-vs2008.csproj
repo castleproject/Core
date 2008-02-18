@@ -14,6 +14,7 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,6 +42,9 @@
       <HintPath>..\..\SharedLibs\net\2.0\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WatiN.Core, Version=1.0.0.1001, Culture=neutral, processorArchitecture=MSIL">
@@ -64,13 +68,13 @@
       <Project>{2409063E-BE05-4596-A677-758096D1C759}</Project>
       <Name>Castle.MonoRail.ActiveRecordSupport-vs2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.MonoRail.TestSupport\Castle.MonoRail.TestSupport-vs2005.csproj">
+    <ProjectReference Include="..\Castle.MonoRail.TestSupport\Castle.MonoRail.TestSupport-vs2008.csproj">
       <Project>{E572DC59-2A96-482F-BE39-E938AB47EA9D}</Project>
-      <Name>Castle.MonoRail.TestSupport-vs2005</Name>
+      <Name>Castle.MonoRail.TestSupport-vs2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestSiteARSupport\TestSiteARSupport-vs2005.csproj">
+    <ProjectReference Include="..\TestSiteARSupport\TestSiteARSupport-vs2008.csproj">
       <Project>{26AA3359-6571-4575-845D-ED05E4EDB586}</Project>
-      <Name>TestSiteARSupport-vs2005</Name>
+      <Name>TestSiteARSupport-vs2008</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

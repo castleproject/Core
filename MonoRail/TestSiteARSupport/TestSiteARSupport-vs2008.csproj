@@ -60,7 +60,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\net\2.0\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NVelocity, Version=0.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="NVelocity, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-3.5\debug\NVelocity.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -87,7 +90,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPermissionController.cs" />
     <Compile Include="Controllers\MR296.cs" />
@@ -114,10 +116,6 @@
     <ProjectReference Include="..\..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
       <Name>Castle.Components.Binder-vs2005</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Castle.MonoRail.ActiveRecordScaffold\Castle.MonoRail.ActiveRecordScaffold-vs2005.csproj">
-      <Project>{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}</Project>
-      <Name>Castle.MonoRail.ActiveRecordScaffold-vs2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.ActiveRecordSupport\Castle.MonoRail.ActiveRecordSupport-vs2005.csproj">
       <Project>{2409063E-BE05-4596-A677-758096D1C759}</Project>

@@ -110,17 +110,17 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2005.csproj">
+    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
-      <Name>Castle.Core-vs2005</Name>
+      <Name>Castle.Core-vs2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-vs2005.csproj">
+    <ProjectReference Include="..\..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-vs2008.csproj">
       <Project>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</Project>
-      <Name>Castle.DynamicProxy-net-2-0</Name>
+      <Name>Castle.DynamicProxy-vs2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-vs2005.csproj">
+    <ProjectReference Include="..\Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-vs2008.csproj">
       <Project>{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}</Project>
-      <Name>Castle.MicroKernel.Tests-2-0</Name>
+      <Name>Castle.MicroKernel.Tests-vs2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-vs2005.csproj">
       <Name>Castle.MicroKernel</Name>

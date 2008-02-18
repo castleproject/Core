@@ -317,11 +317,13 @@
     <Compile Include="Proxy\ProxyUtil.cs" />
     <Compile Include="Registration\AbstractPropertyDescriptor.cs" />
     <Compile Include="Registration\AttributeDescriptor.cs" />
+    <Compile Include="Registration\Component.cs" />
     <Compile Include="Registration\ComponentDescriptor.cs" />
     <Compile Include="Registration\ComponentInstanceDescriptor.cs" />
-    <Compile Include="Registration\ComponentRegistration.cs" />
+    <Compile Include="Registration\ComponentRegiatration.cs" />
     <Compile Include="Registration\CustomDependencyDescriptor.cs" />
     <Compile Include="Registration\ExtendedPropertiesDescriptor.cs" />
+    <Compile Include="Registration\IComponentRegistration.cs" />
     <Compile Include="Registration\Interceptor\InterceptorDescriptor.cs" />
     <Compile Include="Registration\Interceptor\InterceptorGroup.cs" />
     <Compile Include="Registration\Lifestyle\Custom.cs" />
@@ -332,6 +334,8 @@
     <Compile Include="Registration\Lifestyle\Pooled.cs" />
     <Compile Include="Registration\Lifestyle\Singleton.cs" />
     <Compile Include="Registration\Lifestyle\Transient.cs" />
+    <Compile Include="Registration\Parameter.cs" />
+    <Compile Include="Registration\ParametersDescriptor.cs" />
     <Compile Include="Registration\Property.cs" />
     <Compile Include="Registration\Proxy\ProxyGroup.cs" />
     <Compile Include="Registration\Proxy\ProxyInterfaces.cs" />
@@ -449,6 +453,7 @@
     <Compile Include="SubSystems\SubSystemConstants.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\GenericTypeNameProvider.cs" />
     <Compile Include="Util\ReferenceComparer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -457,18 +462,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2005.csproj">
-      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
-      <Name>Castle.Core-vs2005</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core-vs2008</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

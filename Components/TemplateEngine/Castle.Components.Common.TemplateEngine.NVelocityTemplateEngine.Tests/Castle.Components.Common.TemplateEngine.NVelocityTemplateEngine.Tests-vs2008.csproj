@@ -3,14 +3,14 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E1B10210-6A42-4993-B383-0F6AAC255A24}</ProjectGuid>
+    <ProjectGuid>{F1FF896B-573D-4B67-83FB-EB9CA947188D}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>NVelocity.Test</AssemblyName>
+    <AssemblyName>Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
@@ -18,7 +18,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>NVelocity</RootNamespace>
+    <RootNamespace>Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -27,6 +27,21 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <PublishUrl>http://localhost/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -36,8 +51,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -54,14 +68,13 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -69,7 +82,7 @@
     <NoStdLib>false</NoStdLib>
     <NoWarn>
     </NoWarn>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -78,9 +91,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="mscorlib">
-      <Name>mscorlib</Name>
-    </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
       <HintPath>..\..\..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
@@ -98,85 +108,61 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\NVelocity\NVelocity-vs2005.csproj">
-      <Name>NVelocity</Name>
+    <ProjectReference Include="..\..\..\Tools\NVelocity\src\NVelocity\NVelocity-vs2008.csproj">
       <Project>{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}</Project>
+      <Name>NVelocity-vs2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR-vs2008.csproj">
+      <Project>{B1DEC754-7B3F-4F3F-A99E-CB475C1AAFA2}</Project>
+      <Name>Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR-vs2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine\Castle.Components.Common.NVelocityTemplateEngine-vs2008.csproj">
+      <Name>Castle.Components.Common.NVelocityTemplateEngine-vs2008</Name>
+      <Project>{AA95F54F-BEC7-469A-B420-B19D1BBB8C3F}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.Components.Common.TemplateEngine\Castle.Components.Common.TemplateEngine-vs2008.csproj">
+      <Name>Castle.Components.Common.TemplateEngine-vs2008</Name>
+      <Project>{9698FE03-CD65-4FBC-B734-7326674A4894}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR-vs2008.csproj">
+      <Project>{B1DEC754-7B3F-4F3F-A99E-CB475C1AAFA2}</Project>
+      <Name>Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR-vs2008</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DuckTestCase.cs" />
-    <Compile Include="MultiThreadTestCase.cs" />
-    <Compile Include="Test\AjaxHelper2.cs" />
-    <Compile Include="Test\AmbiguousExceptionTestCase.cs" />
-    <Compile Include="Test\BaseTestCase.cs">
+    <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\CommonsTest.cs">
+    <Compile Include="NVelocityTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\Commons\LRUMapTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\ComponentDirectiveTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\ContextTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\DictHelper.cs" />
-    <Compile Include="Test\EncodingTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\Extensions\CustomRenderingTestCase.cs" />
-    <Compile Include="Test\ForeachTest.cs" />
-    <Compile Include="Test\IntrospectorTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\MacroTestCase.cs" />
-    <Compile Include="Test\MethodCallTestCase.cs" />
-    <Compile Include="Test\ObjectComparisonTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\ParserTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\Provider\BoolObj.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\Provider\Child.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\Provider\Person.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\Provider\TestProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\StringInterpolationTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\TemplateTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\VelocimacroTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\VelocityAppTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\VelocityTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\VTLTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <EmbeddedResource Include="compiledres\simple.vm" />
+    <EmbeddedResource Include="templates\simple.vm" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

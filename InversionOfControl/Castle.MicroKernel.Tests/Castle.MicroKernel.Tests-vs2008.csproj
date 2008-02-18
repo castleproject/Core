@@ -95,9 +95,9 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2005.csproj">
+    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
-      <Name>Castle.Core-vs2005</Name>
+      <Name>Castle.Core-vs2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-vs2005.csproj">
       <Name>Castle.MicroKernel</Name>
