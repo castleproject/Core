@@ -263,7 +263,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_ExtendedProperties_UsingAnonymousType()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.ImplementedBy<CustomerImpl>()
 					.ExtendedProperties(new { key1 = "value1", key2 = "value2" }));
 
@@ -299,7 +299,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_CustomDependencies_UsingAnonymousType()
 		{
 				kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.ImplementedBy<CustomerImpl>()
 					.CustomDependencies(new { Name = "Caption Hook", Address = "Fairyland", Age = 45 }));
 
@@ -417,7 +417,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void AddComponent_ServiceOverrides_UsingAnonymousType()
 		{
 			kernel.Register(
-				Component.ForService<ICustomer>()
+				Component.For<ICustomer>()
 					.Named("customer1")
 					.ImplementedBy<CustomerImpl>()
 					.CustomDependencies(
@@ -425,7 +425,7 @@ namespace Castle.MicroKernel.Tests.Registration
 						Property.ForKey("Address").Eq("Fairyland"),
 						Property.ForKey("Age").Eq(45)
 						),
-				Component.ForService<CustomerChain1>()
+				Component.For<CustomerChain1>()
 					.Named("customer2")
 					.CustomDependencies(
 						Property.ForKey("Name").Eq("Bigfoot"),
