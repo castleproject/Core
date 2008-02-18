@@ -30,10 +30,14 @@ namespace Castle.Components.Binder.Tests
 		public void Init()
 		{
 			binder = new DataBinder();
+		}
 
+		[SetUp]
+		public void SetUp()
+		{
 			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
 
-			Thread.CurrentThread.CurrentCulture	= en;
+			Thread.CurrentThread.CurrentCulture = en;
 			Thread.CurrentThread.CurrentUICulture = en;
 		}
 

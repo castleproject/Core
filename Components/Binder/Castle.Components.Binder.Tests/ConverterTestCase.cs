@@ -30,12 +30,16 @@ namespace Castle.Components.Binder.Tests
 		[TestFixtureSetUp]
 		public void Init()
 		{
+			converter = new DefaultConverter();
+		}
+
+		[SetUp]
+		public void SetUp()
+		{
 			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
 
 			Thread.CurrentThread.CurrentCulture = en;
 			Thread.CurrentThread.CurrentUICulture = en;
-
-			converter = new DefaultConverter();
 		}
 
 		[Test]
