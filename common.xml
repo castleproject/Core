@@ -127,7 +127,7 @@
 		<property name="link.sdkdoc.version" value="SDK_v3_5" />
 		<property name="merge.targetplatform" value="v3" />
 		<property name="csc.keyfile" value="/keyfile:${key.file}" />
-		<!-- If DevEnvDir exists, we grab it, otherwise we try if the default location (if it exists) 
+		<!-- If DevEnvDir exists, we grab it, otherwise we try if the default location (if it exists) -->
 		<if test="${environment::variable-exists('DevEnvDir')}">
 			<property name="dev.env.dir" value="${environment::get-variable('DevEnvDir')}" />
 		</if>
@@ -137,7 +137,6 @@
 				<property name="dev.env.dir" value="${default.dev.env.dir}" />
 			</if>
 		</if>
-		-->
 		<property name="build.msbuild"	value="false" overwrite="false" />
 		<property name="project.vsproj" value="${project::get-name()}-vs2008.csproj" />
 	</target>
