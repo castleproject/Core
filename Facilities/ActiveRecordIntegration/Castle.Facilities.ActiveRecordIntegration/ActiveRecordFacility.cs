@@ -38,10 +38,17 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		private ILogger log = NullLogger.Instance;
 		private int sessionFactoryCount, sessionFactoryHolderCount;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ActiveRecordFacility"/> class.
+		/// </summary>
 		public ActiveRecordFacility()
 		{
 		}
 
+		/// <summary>
+		/// The custom initialization for the Facility.
+		/// </summary>
+		/// <remarks>It must be overriden.</remarks>
 		protected override void Init()
 		{
 			if (Kernel.HasComponent(typeof(ILoggerFactory)))
@@ -83,6 +90,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			InitializeFramework(assemblies);
 		}
 
+		/// <summary>
+		/// Performs the tasks associated with freeing, releasing, or resetting
+		/// the facility resources.
+		/// </summary>
+		/// <remarks>It can be overriden.</remarks>
 		public override void Dispose()
 		{
 			log.Info("AR Facility is being disposed.");

@@ -24,10 +24,17 @@ namespace Castle.Facilities.Cache
 	/// </summary>
 	public class CacheInterceptor : IInterceptor
 	{
-		public static readonly object NULL_OBJECT = new Object(); 
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly object NullObject = new Object(); 
 
 		private CacheConfigHolder _cacheConfigHolder = null;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CacheInterceptor"/> class.
+		/// </summary>
+		/// <param name="transactionConfHolder">The transaction conf holder.</param>
 		public CacheInterceptor(CacheConfigHolder transactionConfHolder)
 		{
 			_cacheConfigHolder = transactionConfHolder;
@@ -60,14 +67,14 @@ namespace Castle.Facilities.Cache
 					//cache method result
 					if (result == null)
 					{
-						cacheManager[ cacheKey ] = NULL_OBJECT;
+						cacheManager[ cacheKey ] = NullObject;
 					}
 					else
 					{
 						cacheManager[ cacheKey ] = result;	
 					}
 				}
-				else if (result == NULL_OBJECT) 
+				else if (result == NullObject) 
 				{ 
 					// convert the marker object back into a null value 
 					result = null; 

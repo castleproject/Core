@@ -22,6 +22,9 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// </summary>
 	public class Constants
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly String DefaultAlias = "nh.facility.default";
 	}
 }

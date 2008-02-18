@@ -18,6 +18,9 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	using Castle.Services.Transaction;
 	using TransactionMode = Castle.Services.Transaction.TransactionMode;
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public class TransactionScopeResourceAdapter : IResource
 	{
 		private readonly TransactionMode transactionMode;
@@ -32,6 +35,10 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			this.transactionMode = transactionMode;
 		}
 
+		/// <summary>
+		/// Implementors should start the
+		/// transaction on the underlying resource
+		/// </summary>
 		public void Start()
 		{
 			Castle.ActiveRecord.TransactionMode mode = (transactionMode == TransactionMode.Requires)
@@ -41,6 +48,10 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			scope = new TransactionScope(mode);
 		}
 
+		/// <summary>
+		/// Implementors should commit the
+		/// transaction on the underlying resource
+		/// </summary>
 		public void Commit()
 		{
 			scope.VoteCommit();
@@ -48,6 +59,10 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			Dispose();
 		}
 
+		/// <summary>
+		/// Implementors should rollback the
+		/// transaction on the underlying resource
+		/// </summary>
 		public void Rollback()
 		{
 			scope.VoteRollBack();
@@ -55,6 +70,9 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			Dispose();
 		}
 
+		/// <summary>
+		/// Releases unmanaged and - optionally - managed resources
+		/// </summary>
 		protected void Dispose()
 		{
 			scope.Dispose();

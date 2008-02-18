@@ -25,6 +25,10 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	/// </summary>
 	public class WebSessionStore : AbstractDictStackSessionStore
 	{
+		/// <summary>
+		/// Gets the dictionary.
+		/// </summary>
+		/// <returns></returns>
 		protected override IDictionary GetDictionary()
 		{
 			HttpContext curContext = ObtainSessionContext();
@@ -32,6 +36,10 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			return curContext.Items[SlotKey] as IDictionary;
 		}
 
+		/// <summary>
+		/// Stores the dictionary.
+		/// </summary>
+		/// <param name="dictionary">The dictionary.</param>
 		protected override void StoreDictionary(IDictionary dictionary)
 		{
 			HttpContext curContext = ObtainSessionContext();

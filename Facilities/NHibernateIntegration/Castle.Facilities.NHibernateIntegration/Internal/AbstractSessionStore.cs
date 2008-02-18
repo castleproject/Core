@@ -19,10 +19,24 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 	using NHibernate;
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public abstract class AbstractSessionStore : MarshalByRefObject, ISessionStore
 	{
+		/// <summary>
+		/// Gets the stack of <see cref="SessionDelegate"/> objects for the specified <paramref name="alias"/>.
+		/// </summary>
+		/// <param name="alias">The alias.</param>
+		/// <returns></returns>
 		protected abstract Stack GetStackFor(String alias);
 
+		/// <summary>
+		/// Should return a previously stored session
+		/// for the given alias if available, otherwise null.
+		/// </summary>
+		/// <param name="alias"></param>
+		/// <returns></returns>
 		public SessionDelegate FindCompatibleSession(String alias)
 		{
 			Stack stack = GetStackFor(alias);
@@ -32,6 +46,11 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			return stack.Peek() as SessionDelegate;
 		}
 
+		/// <summary>
+		/// Should store the specified session instance
+		/// </summary>
+		/// <param name="alias"></param>
+		/// <param name="session"></param>
 		public void Store(String alias, SessionDelegate session)
 		{
 			Stack stack = GetStackFor(alias);
@@ -41,6 +60,11 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			session.SessionStoreCookie = stack;
 		}
 
+		/// <summary>
+		/// Should remove the session from the store
+		/// only.
+		/// </summary>
+		/// <param name="session"></param>
 		public void Remove(SessionDelegate session)
 		{
 			Stack stack = (Stack) session.SessionStoreCookie;
@@ -68,6 +92,13 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			stack.Pop();
 		}
 
+		/// <summary>
+		/// Returns <c>true</c> if the current activity
+		/// (which is an execution activity context) has no
+		/// sessions available
+		/// </summary>
+		/// <param name="alias"></param>
+		/// <returns></returns>
 		public bool IsCurrentActivityEmptyFor(String alias)
 		{
 			Stack stack = GetStackFor(alias);

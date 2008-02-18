@@ -24,14 +24,25 @@ namespace Castle.Facilities.Cache
 	{
 		string _cacheManagerId = string.Empty;
 
+		/// <summary>
+		/// Gets the cache manager id.
+		/// </summary>
+		/// <value>The cache manager id.</value>
 		public string CacheManagerId
 		{
 			get { return _cacheManagerId; }
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CacheAttribute"/> class.
+		/// </summary>
 		public CacheAttribute()
 		{}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CacheAttribute"/> class.
+		/// </summary>
+		/// <param name="cacheManagerId">The cache manager id.</param>
 		public CacheAttribute(string cacheManagerId)
 		{
 			_cacheManagerId = cacheManagerId;

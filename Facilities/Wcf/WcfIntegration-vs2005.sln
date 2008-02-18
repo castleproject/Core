@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.WcfIntegration", "Castle.Facilities.WcfIntegration.csproj", "{0F1CAD31-322E-4266-B3A0-BB424E1AE0A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.WcfIntegration", "Castle.Facilities.WcfIntegration\Castle.Facilities.WcfIntegration.csproj", "{0F1CAD31-322E-4266-B3A0-BB424E1AE0A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.WcfIntegration.Demo", "..\Castle.Facilities.WcfIntegration.Demo\Castle.Facilities.WcfIntegration.Demo.csproj", "{BCDBC6AC-C85A-4564-AB6E-354262BB1A87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.WcfIntegration.Demo", "Castle.Facilities.WcfIntegration.Demo\Castle.Facilities.WcfIntegration.Demo.csproj", "{BCDBC6AC-C85A-4564-AB6E-354262BB1A87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.WcfIntegration.Tests", "..\Castle.Facilities.WcfIntegration.Tests\Castle.Facilities.WcfIntegration.Tests.csproj", "{A3CF9ED0-BE9A-4534-B756-3D680D607B0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.WcfIntegration.Tests", "Castle.Facilities.WcfIntegration.Tests\Castle.Facilities.WcfIntegration.Tests.csproj", "{A3CF9ED0-BE9A-4534-B756-3D680D607B0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -23,11 +23,19 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	/// </summary>
 	public class CallContextSessionStore : AbstractDictStackSessionStore
 	{
+		/// <summary>
+		/// Gets the dictionary.
+		/// </summary>
+		/// <returns></returns>
 		protected override IDictionary GetDictionary()
 		{
 			return CallContext.GetData(SlotKey) as IDictionary;
 		}
 
+		/// <summary>
+		/// Stores the dictionary.
+		/// </summary>
+		/// <param name="dictionary">The dictionary.</param>
 		protected override void StoreDictionary(IDictionary dictionary)
 		{
 			CallContext.SetData(SlotKey, dictionary);

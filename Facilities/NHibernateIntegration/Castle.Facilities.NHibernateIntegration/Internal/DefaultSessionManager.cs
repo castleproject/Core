@@ -48,17 +48,31 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			this.factoryResolver = factoryResolver;
 		}
 
+		/// <summary>
+		/// The flushmode the created session gets
+		/// </summary>
+		/// <value></value>
 		public FlushMode DefaultFlushMode
 		{
 			get { return defaultFlushMode; }
 			set { defaultFlushMode = value; }
 		}
-		
+
+		/// <summary>
+		/// Returns a valid opened and connected ISession instance
+		/// </summary>
+		/// <returns></returns>
 		public ISession OpenSession()
 		{
 			return OpenSession(Constants.DefaultAlias);
 		}
 
+		/// <summary>
+		/// Returns a valid opened and connected ISession instance
+		/// for the given connection alias.
+		/// </summary>
+		/// <param name="alias"></param>
+		/// <returns></returns>
 		public ISession OpenSession(String alias)
 		{
 			if (alias == null) throw new ArgumentNullException("alias");
@@ -90,6 +104,13 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			return wrapped;
 		}
 
+		/// <summary>
+		/// Enlists if necessary.
+		/// </summary>
+		/// <param name="weAreSessionOwner">if set to <c>true</c> [we are session owner].</param>
+		/// <param name="transaction">The transaction.</param>
+		/// <param name="session">The session.</param>
+		/// <returns></returns>
 		protected bool EnlistIfNecessary(bool weAreSessionOwner, 
 		                                 ITransaction transaction, 
 		                                 SessionDelegate session)

@@ -33,21 +33,38 @@ namespace Castle.Facilities.NHibernateIntegration
 		private readonly ISessionManager sessionManager;
 		private string sessionFactoryAlias = null;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NHibernateGenericDao"/> class.
+		/// </summary>
+		/// <param name="sessionManager">The session manager.</param>
 		public NHibernateGenericDao(ISessionManager sessionManager)
 		{
 			this.sessionManager = sessionManager;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NHibernateGenericDao"/> class.
+		/// </summary>
+		/// <param name="sessionManager">The session manager.</param>
+		/// <param name="sessionFactoryAlias">The session factory alias.</param>
 		public NHibernateGenericDao(ISessionManager sessionManager, string sessionFactoryAlias) : this(sessionManager)
 		{
 			this.sessionFactoryAlias = sessionFactoryAlias;
 		}
 
+		/// <summary>
+		/// Gets the session manager.
+		/// </summary>
+		/// <value>The session manager.</value>
 		protected ISessionManager SessionManager
 		{
 			get { return sessionManager; }
 		}
 
+		/// <summary>
+		/// Gets or sets the session factory alias.
+		/// </summary>
+		/// <value>The session factory alias.</value>
 		public string SessionFactoryAlias
 		{
 			get { return sessionFactoryAlias; }
@@ -56,11 +73,23 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		#region IGenericDAO Members
 
+		/// <summary>
+		/// Returns all instances found for the specified type.
+		/// </summary>
+		/// <param name="type">The target type.</param>
+		/// <returns>The <see cref="Array"/> of results</returns>
 		public virtual Array FindAll(Type type)
 		{
 			return FindAll(type, int.MinValue, int.MinValue);
 		}
 
+		/// <summary>
+		/// Returns a portion of the query results (sliced)
+		/// </summary>
+		/// <param name="type">The target type.</param>
+		/// <param name="firstRow">The number of the first row to retrieve.</param>
+		/// <param name="maxRows">The maximum number of results retrieved.</param>
+		/// <returns>The <see cref="Array"/> of results</returns>
 		public virtual Array FindAll(Type type, int firstRow, int maxRows)
 		{
 			using(ISession session = GetSession())
@@ -85,6 +114,12 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Finds an object instance by an unique ID
+		/// </summary>
+		/// <param name="type">The AR subclass type</param>
+		/// <param name="id">ID value</param>
+		/// <returns>The object instance.</returns>
 		public virtual object FindById(Type type, object id)
 		{
 			using(ISession session = GetSession())
@@ -104,6 +139,11 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Creates (Saves) a new instance to the database.
+		/// </summary>
+		/// <param name="instance">The instance to be created on the database</param>
+		/// <returns>The instance</returns>
 		public virtual object Create(object instance)
 		{
 			using(ISession session = GetSession())
@@ -119,6 +159,10 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Deletes the instance from the database.
+		/// </summary>
+		/// <param name="instance">The instance to be deleted from the database</param>
 		public virtual void Delete(object instance)
 		{
 			using(ISession session = GetSession())
@@ -134,6 +178,11 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Persists the modification on the instance
+		/// state to the database.
+		/// </summary>
+		/// <param name="instance">The instance to be updated on the database</param>
 		public virtual void Update(object instance)
 		{
 			using(ISession session = GetSession())
@@ -149,6 +198,10 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Deletes all rows for the specified type
+		/// </summary>
+		/// <param name="type">type on which the rows on the database should be deleted</param>
 		public virtual void DeleteAll(Type type)
 		{
 			using(ISession session = GetSession())
@@ -164,6 +217,15 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Saves the instance to the database. If the primary key is unitialized
+		/// it creates the instance on the database. Otherwise it updates it.
+		/// <para>
+		/// If the primary key is assigned, then you must invoke <see cref="Create"/>
+		/// or <see cref="Update"/> instead.
+		/// </para>
+		/// </summary>
+		/// <param name="instance">The instance to be saved</param>
 		public virtual void Save(object instance)
 		{
 			using(ISession session = GetSession())
@@ -183,21 +245,55 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		#region INHibernateGenericDAO Members
 
+		/// <summary>
+		/// Returns all instances found for the specified type
+		/// using criteria.
+		/// </summary>
+		/// <param name="type">The target type.</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <returns>The <see cref="Array"/> of results.</returns>
 		public virtual Array FindAll(Type type, ICriterion[] criterias)
 		{
 			return FindAll(type, criterias, null, int.MinValue, int.MinValue);
 		}
 
+		/// <summary>
+		/// Returns all instances found for the specified type
+		/// using criteria.
+		/// </summary>
+		/// <param name="type">The target type.</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <param name="firstRow">The number of the first row to retrieve.</param>
+		/// <param name="maxRows">The maximum number of results retrieved.</param>
+		/// <returns>The <see cref="Array"/> of results.</returns>
 		public virtual Array FindAll(Type type, ICriterion[] criterias, int firstRow, int maxRows)
 		{
 			return FindAll(type, criterias, null, firstRow, maxRows);
 		}
 
+		/// <summary>
+		/// Returns all instances found for the specified type
+		/// using criteria.
+		/// </summary>
+		/// <param name="type">The target type.</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <param name="sortItems">An <see cref="Array"/> of <see cref="Order"/> objects.</param>
+		/// <returns>The <see cref="Array"/> of results.</returns>
 		public virtual Array FindAll(Type type, ICriterion[] criterias, Order[] sortItems)
 		{
 			return FindAll(type, criterias, sortItems, int.MinValue, int.MinValue);
 		}
 
+		/// <summary>
+		/// Returns all instances found for the specified type
+		/// using criteria.
+		/// </summary>
+		/// <param name="type">The target type.</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <param name="sortItems">An <see cref="Array"/> of <see cref="Order"/> objects.</param>
+		/// <param name="firstRow">The number of the first row to retrieve.</param>
+		/// <param name="maxRows">The maximum number of results retrieved.</param>
+		/// <returns>The <see cref="Array"/> of results.</returns>
 		public virtual Array FindAll(Type type, ICriterion[] criterias, Order[] sortItems, int firstRow, int maxRows)
 		{
 			using(ISession session = GetSession())
@@ -239,11 +335,23 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Finds all with custom query.
+		/// </summary>
+		/// <param name="queryString">The query string.</param>
+		/// <returns></returns>
 		public virtual Array FindAllWithCustomQuery(string queryString)
 		{
 			return FindAllWithCustomQuery(queryString, int.MinValue, int.MinValue);
 		}
 
+		/// <summary>
+		/// Finds all with custom HQL query.
+		/// </summary>
+		/// <param name="queryString">The query string.</param>
+		/// <param name="firstRow">The number of the first row to retrieve.</param>
+		/// <param name="maxRows">The maximum number of results retrieved.</param>
+		/// <returns></returns>
 		public virtual Array FindAllWithCustomQuery(string queryString, int firstRow, int maxRows)
 		{
 			if (queryString == null || queryString.Length == 0) throw new ArgumentNullException("queryString");
@@ -272,11 +380,23 @@ namespace Castle.Facilities.NHibernateIntegration
 		}
 
 
+		/// <summary>
+		/// Finds all with named HQL query.
+		/// </summary>
+		/// <param name="namedQuery">The named query.</param>
+		/// <returns></returns>
 		public virtual Array FindAllWithNamedQuery(string namedQuery)
 		{
 			return FindAllWithNamedQuery(namedQuery, int.MinValue, int.MinValue);
 		}
 
+		/// <summary>
+		/// Finds all with named HQL query.
+		/// </summary>
+		/// <param name="namedQuery">The named query.</param>
+		/// <param name="firstRow">The number of the first row to retrieve.</param>
+		/// <param name="maxRows">The maximum number of results retrieved.</param>
+		/// <returns></returns>
 		public virtual Array FindAllWithNamedQuery(string namedQuery, int firstRow, int maxRows)
 		{
 			if (namedQuery == null || namedQuery.Length == 0) throw new ArgumentNullException("queryString");
@@ -305,6 +425,10 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Initializes the lazy properties.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
 		public void InitializeLazyProperties(object instance)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
@@ -325,6 +449,11 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Initializes the lazy property.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		/// <param name="propertyName">Name of the property.</param>
 		public void InitializeLazyProperty(object instance, string propertyName)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");

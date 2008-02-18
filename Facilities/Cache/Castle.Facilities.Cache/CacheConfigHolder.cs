@@ -24,11 +24,21 @@ namespace Castle.Facilities.Cache
 	{
 		Hashtable _impl2Config = new Hashtable();
 
+		/// <summary>
+		/// Registers the specified implementation.
+		/// </summary>
+		/// <param name="implementation">The implementation.</param>
+		/// <param name="config">The config.</param>
 		public void Register(Type implementation, CacheConfig config)
 		{
 			_impl2Config[implementation] = config;
 		}
 
+		/// <summary>
+		/// Gets the configuration for the specified type.
+		/// </summary>
+		/// <param name="implementation">The implementation.</param>
+		/// <returns></returns>
 		public CacheConfig GetConfig(Type implementation)
 		{
 			return _impl2Config[implementation] as CacheConfig;

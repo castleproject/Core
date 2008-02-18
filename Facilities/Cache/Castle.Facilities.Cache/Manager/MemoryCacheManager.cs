@@ -29,6 +29,9 @@ namespace Castle.Facilities.Cache.Manager
 
 		#endregion
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MemoryCacheManager"/> class.
+		/// </summary>
 		public MemoryCacheManager()
 		{
 			_cache = new HybridDictionary();

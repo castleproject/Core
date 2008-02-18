@@ -27,21 +27,37 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	{
 		private readonly ITransaction transaction;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ResourceAdapter"/> class.
+		/// </summary>
+		/// <param name="transaction">The transaction.</param>
 		public ResourceAdapter(ITransaction transaction)
 		{
 			this.transaction = transaction;
 		}
 
+		/// <summary>
+		/// Implementors should start the
+		/// transaction on the underlying resource
+		/// </summary>
 		public void Start()
 		{
 			
 		}
 
+		/// <summary>
+		/// Implementors should commit the
+		/// transaction on the underlying resource
+		/// </summary>
 		public void Commit()
 		{
 			transaction.Commit();
 		}
 
+		/// <summary>
+		/// Implementors should rollback the
+		/// transaction on the underlying resource
+		/// </summary>
 		public void Rollback()
 		{
 			transaction.Rollback();

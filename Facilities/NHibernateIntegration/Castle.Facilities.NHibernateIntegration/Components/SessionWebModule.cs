@@ -47,18 +47,31 @@ namespace Castle.Facilities.NHibernateIntegration.Components
 	/// </remarks>
 	public class SessionWebModule : IHttpModule
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		protected static readonly String SessionKey = "SessionWebModule.session";
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SessionWebModule"/> class.
+		/// </summary>
 		public SessionWebModule()
 		{
 		}
 
+		/// <summary>
+		/// Initializes a module and prepares it to handle requests.
+		/// </summary>
+		/// <param name="app">The app.</param>
 		public void Init(HttpApplication app)
 		{
 			app.BeginRequest += new EventHandler(OnBeginRequest);
 			app.EndRequest += new EventHandler(OnEndRequest);
 		}
 
+		/// <summary>
+		/// Disposes of the resources (other than memory) used by the module that implements <see cref="T:System.Web.IHttpModule"/>.
+		/// </summary>
 		public void Dispose()
 		{
 		}

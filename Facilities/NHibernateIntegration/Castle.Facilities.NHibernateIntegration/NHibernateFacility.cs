@@ -74,7 +74,11 @@ namespace Castle.Facilities.NHibernateIntegration
 	public class NHibernateFacility : AbstractFacility
 	{
 		private const String nHMappingAttributesAssemblyName = "NHibernate.Mapping.Attributes";
-		
+
+		/// <summary>
+		/// The custom initialization for the Facility.
+		/// </summary>
+		/// <remarks>It must be overriden.</remarks>
 		protected override void Init()
 		{
 			AssertHasConfig();
@@ -88,6 +92,9 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		#region Set up of components
 
+		/// <summary>
+		/// Registers the session factory resolver, the session store, the session manager and the transaction manager.
+		/// </summary>
 		protected virtual void RegisterComponents()
 		{
 			RegisterSessionFactoryResolver();
@@ -96,12 +103,18 @@ namespace Castle.Facilities.NHibernateIntegration
 			RegisterTransactionManager();
 		}
 
+		/// <summary>
+		/// Registers <see cref="SessionFactoryResolver"/> as the session factory resolver.
+		/// </summary>
 		protected void RegisterSessionFactoryResolver()
 		{
 			Kernel.AddComponent( "nhfacility.sessionfactory.resolver", 
 				typeof(ISessionFactoryResolver), typeof(SessionFactoryResolver) );
 		}
 
+		/// <summary>
+		/// Registers the configured session store.
+		/// </summary>
 		protected void RegisterSessionStore()
 		{
 			String isWeb = FacilityConfig.Attributes["isWeb"];
@@ -136,6 +149,9 @@ namespace Castle.Facilities.NHibernateIntegration
 				typeof(ISessionStore), sessionStoreType );
 		}
 
+		/// <summary>
+		/// Registers <see cref="DefaultSessionManager"/> as the session manager.
+		/// </summary>
 		protected void RegisterSessionManager()
 		{
 			string defaultFlushMode = FacilityConfig.Attributes["defaultFlushMode"];
@@ -156,6 +172,9 @@ namespace Castle.Facilities.NHibernateIntegration
 				typeof(ISessionManager), typeof(DefaultSessionManager) );
 		}
 
+		/// <summary>
+		/// Registers <see cref="DefaultTransactionManager"/> as the transaction manager.
+		/// </summary>
 		protected void RegisterTransactionManager()
 		{
 			Kernel.AddComponent( "nhibernate.transaction.manager",
@@ -166,6 +185,9 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		#region Configuration methods
 
+		/// <summary>
+		/// Configures the facility.
+		/// </summary>
 		protected void ConfigureFacility()
 		{
 			ISessionFactoryResolver sessionFactoryResolver = (ISessionFactoryResolver) 
@@ -276,6 +298,11 @@ namespace Castle.Facilities.NHibernateIntegration
 			sessionFactoryResolver.RegisterAliasComponentIdMapping(alias, id);
 		}
 
+		/// <summary>
+		/// Applies the configuration settings.
+		/// </summary>
+		/// <param name="cfg">The CFG.</param>
+		/// <param name="facilityConfig">The facility config.</param>
 		protected void ApplyConfigurationSettings(Configuration cfg, IConfiguration facilityConfig)
 		{
 			if (facilityConfig == null) return;
@@ -289,6 +316,11 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Registers the resources.
+		/// </summary>
+		/// <param name="cfg">The CFG.</param>
+		/// <param name="facilityConfig">The facility config.</param>
 		protected void RegisterResources(Configuration cfg, IConfiguration facilityConfig)
 		{
 			if (facilityConfig == null) return;
@@ -345,6 +377,11 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// Registers the assemblies.
+		/// </summary>
+		/// <param name="cfg">The CFG.</param>
+		/// <param name="facilityConfig">The facility config.</param>
 		protected void RegisterAssemblies(Configuration cfg, IConfiguration facilityConfig)
 		{
 			if (facilityConfig == null) return;

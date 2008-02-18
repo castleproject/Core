@@ -178,6 +178,12 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 				throw new NotSupportedException("Converting type " + type.FullName + " is not supported.");
 		}
 
+		/// <summary>
+		/// Adds to array.
+		/// </summary>
+		/// <param name="field">The field.</param>
+		/// <param name="instance">The instance.</param>
+		/// <param name="val">The val.</param>
 		public static void AddToArray(FieldInfo field, object instance, object val)
 		{
 			if (!field.FieldType.IsArray)
@@ -251,6 +257,12 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 			}
 		}
 
+		/// <summary>
+		/// Removes from array.
+		/// </summary>
+		/// <param name="field">The field.</param>
+		/// <param name="instance">The instance.</param>
+		/// <param name="index">The index.</param>
 		public static void RemoveFromArray(FieldInfo field, object instance, int index)
 		{
 			Array c = (Array) field.GetValue(instance);
@@ -263,6 +275,11 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 			field.SetValue(instance, list.ToArray(field.FieldType.GetElementType()));
 		}
 
+		/// <summary>
+		/// Gets the properties.
+		/// </summary>
+		/// <param name="obj">The obj.</param>
+		/// <returns></returns>
 		public static PropertyInfo [] GetProperties(object obj)
 		{
 			return obj.GetType().
@@ -271,6 +288,12 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 				BindingFlags.NonPublic);
 		}
 
+		/// <summary>
+		/// Gets the property value.
+		/// </summary>
+		/// <param name="property">The property.</param>
+		/// <param name="obj">The obj.</param>
+		/// <returns></returns>
 		public static object GetPropertyValue(PropertyInfo property, object obj)
 		{
 			if (property.CanRead && property.GetIndexParameters().Length == 0)

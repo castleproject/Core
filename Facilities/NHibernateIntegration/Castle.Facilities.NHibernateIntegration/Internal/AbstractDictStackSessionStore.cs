@@ -25,8 +25,16 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	/// </summary>
 	public abstract class AbstractDictStackSessionStore : AbstractSessionStore
 	{
+		/// <summary>
+		/// Name used for storage in <see cref="CallContext"/>
+		/// </summary>
 		protected readonly String SlotKey = "nh.facility.stacks";
 
+		/// <summary>
+		/// Gets the stack of <see cref="SessionDelegate"/> objects for the specified <paramref name="alias"/>.
+		/// </summary>
+		/// <param name="alias">The alias.</param>
+		/// <returns></returns>
 		[MethodImpl(MethodImplOptions.Synchronized)]
 		protected override Stack GetStackFor(String alias)
 		{
@@ -53,8 +61,16 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			return stack;
 		}
 
+		/// <summary>
+		/// Gets the dictionary.
+		/// </summary>
+		/// <returns></returns>
 		protected abstract IDictionary GetDictionary();
 
+		/// <summary>
+		/// Stores the dictionary.
+		/// </summary>
+		/// <param name="dictionary">The dictionary.</param>
 		protected abstract void StoreDictionary(IDictionary dictionary);
 	}
 }

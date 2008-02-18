@@ -61,11 +61,18 @@ namespace Castle.Facilities.DynamicLoader
 			kernel = null;
 		}
 
+		/// <summary>
+		/// Releases unmanaged resources and performs other cleanup operations before the
+		/// <see cref="DynamicLoaderFacility"/> is reclaimed by garbage collection.
+		/// </summary>
 		~DynamicLoaderFacility()
 		{
 			Dispose(false);
 		}
 
+		/// <summary>
+		/// Inits this instance.
+		/// </summary>
 		protected void Init()
 		{
 			if (kernel.HasComponent(typeof(ILoggerFactory)))
@@ -185,6 +192,11 @@ namespace Castle.Facilities.DynamicLoader
 			}
 		}
 
+		/// <summary>
+		/// Initializes the batch registration.
+		/// </summary>
+		/// <param name="loader">The loader.</param>
+		/// <param name="batchRegistrationNode">The batch registration node.</param>
 		protected virtual void InitializeBatchRegistration(RemoteLoader loader, IConfiguration batchRegistrationNode)
 		{
 			if (batchRegistrationNode == null)
@@ -253,6 +265,14 @@ namespace Castle.Facilities.DynamicLoader
 			return node.Value;
 		}
 
+		/// <summary>
+		/// Gets the config attribute.
+		/// </summary>
+		/// <param name="cfg">The CFG.</param>
+		/// <param name="attribute">The attribute.</param>
+		/// <param name="defaultValue">The default value.</param>
+		/// <param name="defaultValueArguments">The default value arguments.</param>
+		/// <returns></returns>
 		protected string GetConfigAttribute(IConfiguration cfg, string attribute, string defaultValue,
 		                                    params object[] defaultValueArguments)
 		{
@@ -317,6 +337,10 @@ namespace Castle.Facilities.DynamicLoader
 			GC.SuppressFinalize(this);
 		}
 
+		/// <summary>
+		/// Releases unmanaged and - optionally - managed resources
+		/// </summary>
+		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
 		protected virtual void Dispose(bool disposing)
 		{
 			if (disposing)

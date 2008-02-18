@@ -21,6 +21,10 @@ namespace Castle.Facilities.Cache
 	/// </summary>
 	public class CacheFacility : AbstractFacility
 	{
+		/// <summary>
+		/// The custom initialization for the Facility.
+		/// </summary>
+		/// <remarks>It must be overriden.</remarks>
 		protected override void Init()
 		{
 			Kernel.AddComponent( "cache.interceptor", typeof(CacheInterceptor) );

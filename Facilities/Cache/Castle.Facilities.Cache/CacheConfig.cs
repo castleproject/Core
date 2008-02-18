@@ -47,6 +47,11 @@ namespace Castle.Facilities.Cache
 			_kernel = kernel;
 		}
 
+		/// <summary>
+		/// Gets the cache manager.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns></returns>
 		public ICacheManager GetCacheManager(MethodInfo method)
 		{
 			string cacheManagerId = string.Empty;
@@ -63,6 +68,11 @@ namespace Castle.Facilities.Cache
 			return (ICacheManager)_kernel[cacheManagerId];
 		}
 
+		/// <summary>
+		/// Adds the method.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <param name="cacheManagerId">The cache manager id.</param>
 		public void AddMethod(MethodInfo method, string cacheManagerId)
 		{
 			if ( cacheManagerId == string.Empty )
@@ -82,6 +92,11 @@ namespace Castle.Facilities.Cache
 			}
 		}
 
+		/// <summary>
+		/// Adds the method with the specified name.
+		/// </summary>
+		/// <param name="methodName">Name of the method.</param>
+		/// <param name="cacheManagerId">The cache manager id.</param>
 		public void AddMethodName(string methodName, string cacheManagerId)
 		{
 			_cacheManagerByMethodName.Add(methodName, cacheManagerId);
