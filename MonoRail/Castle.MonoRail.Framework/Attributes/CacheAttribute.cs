@@ -25,9 +25,15 @@ namespace Castle.MonoRail.Framework
 	{
 		private readonly HttpCacheability cacheability;
 		private bool allowInHistory, slidingExpiration, validUntilExpires;
+		private bool setEtagFromFileDependencies, setLastModifiedFromFileDependencies;
+		private bool setNoServerCaching, setNoStore, setNoTransforms, omitVaryStar;
+		private string cacheExtension;
 		private string etag;
 		private int duration;
-		private string varyByCustom, varyByHeaders, varyByParams;
+		private string varyByCustom, varyByContentEncodings, varyByHeaders, varyByParams;
+		private DateTime? lastModified;
+		private TimeSpan? maxAge, proxyMaxAge;
+		private HttpCacheRevalidation revalidation;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CacheAttribute"/> class.
@@ -40,6 +46,7 @@ namespace Castle.MonoRail.Framework
 
 			allowInHistory = true;
 			validUntilExpires = true;
+			revalidation = HttpCacheRevalidation.None;
 		}
 
 		/// <summary>
@@ -62,6 +69,60 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return allowInHistory; }
 			set { allowInHistory = value; }
+		}
+
+		/// <summary>
+		/// If true, sets the ETag HTTP header based on the time stamps of the handler's file dependencies.
+		/// </summary>
+		public bool SetEtagFromFileDependencies
+		{
+			get { return setEtagFromFileDependencies; }
+			set { setEtagFromFileDependencies = value; }
+		}
+
+		/// <summary>
+		/// If true, sets the Last-Modified HTTP header based on the time stamps of the handler's file dependencies.
+		/// </summary>
+		public bool SetLastModifiedFromFileDependencies
+		{
+			get { return setLastModifiedFromFileDependencies; }
+			set { setLastModifiedFromFileDependencies = value; }
+		}
+
+		/// <summary>
+		/// If true, stops all origin-server caching for the current response.
+		/// </summary>
+		public bool SetNoServerCaching
+		{
+			get { return setNoServerCaching; }
+			set { setNoServerCaching = value; }
+		}
+
+		/// <summary>
+		/// If true, sets the Cache-Control: no-store HTTP header.
+		/// </summary>
+		public bool SetNoStore
+		{
+			get { return setNoStore; }
+			set { setNoStore = value; }
+		}
+
+		/// <summary>
+		/// If true, sets the Cache-Control: no-transform HTTP header.
+		/// </summary>
+		public bool SetNoTransforms
+		{
+			get { return setNoTransforms; }
+			set { setNoTransforms = value; }
+		}
+
+		/// <summary>
+		/// If true, includes the vary:* header in the response when varying by parameters.
+		/// </summary>
+		public bool OmitVaryStar
+		{
+			get { return omitVaryStar; }
+			set { omitVaryStar = value; }
 		}
 
 		/// <summary>
@@ -103,6 +164,15 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Text to be appended to the Cache-Control HTTP header.
+		/// </summary>
+		public string CacheExtension
+		{
+			get { return cacheExtension; }
+			set { cacheExtension = value; }
+		}
+
+		/// <summary>
 		/// Sets the ETag HTTP header to the specified string.
 		/// </summary>
 		/// <remarks>
@@ -124,6 +194,15 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return duration; }
 			set { duration = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the list of all Content-Encoding headers that will be used to vary the output cache.
+		/// </summary>
+		public string VaryByContentEncodings
+		{
+			get { return varyByContentEncodings; }
+			set { varyByContentEncodings = value; }
 		}
 
 		/// <summary>
@@ -162,19 +241,65 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Gets or sets the Last-Modified header HTTP header.
+		/// </summary>
+		public DateTime? LastModified
+		{
+			get { return lastModified; }
+			set { lastModified = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the Cache-Control: max-age HTTP header.
+		/// </summary>
+		public TimeSpan? MaxAge
+		{
+			get { return maxAge; }
+			set { maxAge = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the Cache-Control: s-maxage HTTP header.
+		/// </summary>
+		public TimeSpan? ProxyMaxAge
+		{
+			get { return proxyMaxAge; }
+			set { proxyMaxAge = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the Cache-Control must-revalidate or proxy-revalidate HTTP header.
+		/// </summary>
+		public HttpCacheRevalidation Revalidation
+		{
+			get { return revalidation; }
+			set { revalidation = value; }
+		}
+
+		/// <summary>
 		/// Configures ASP.Net's Cache policy based on properties set
 		/// </summary>
 		/// <param name="policy">cache policy to set</param>
 		void ICachePolicyConfigurer.Configure(HttpCachePolicy policy)
-		{
-			policy.SetCacheability(cacheability);
+		{			
+			policy.SetAllowResponseInBrowserHistory(allowInHistory);
+			policy.SetCacheability(cacheability);			
+			policy.SetOmitVaryStar(omitVaryStar);			
+			policy.SetRevalidation(revalidation);
 			policy.SetSlidingExpiration(slidingExpiration);
 			policy.SetValidUntilExpires(validUntilExpires);
-			policy.SetAllowResponseInBrowserHistory(allowInHistory);
 			
 			if (duration != 0)
 			{
 				policy.SetExpires(DateTime.Now.AddSeconds(duration));
+			}
+
+			if (varyByContentEncodings != null)
+			{
+				foreach (String header in varyByContentEncodings.Split(','))
+				{
+					policy.VaryByContentEncodings[header.Trim()] = true;
+				}
 			}
 
 			if (varyByCustom != null)
@@ -198,9 +323,54 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
+			if (cacheExtension != null)
+			{
+				policy.AppendCacheExtension(cacheExtension);
+			}
+
+			if (setEtagFromFileDependencies)
+			{
+				policy.SetETagFromFileDependencies();
+			}
+
+			if (setLastModifiedFromFileDependencies)
+			{
+				policy.SetLastModifiedFromFileDependencies();
+			}
+
+			if (setNoServerCaching)
+			{
+				policy.SetNoServerCaching();
+			}
+
+			if (setNoStore)
+			{
+				policy.SetNoStore();
+			}
+
+			if (setNoTransforms)
+			{
+				policy.SetNoTransforms();
+			}
+
 			if (etag != null)
 			{
 				policy.SetETag(etag);
+			}
+
+			if (lastModified != null)
+			{
+				policy.SetLastModified(lastModified.Value);
+			}
+
+			if (maxAge != null)
+			{
+				policy.SetMaxAge(maxAge.Value);
+			}
+
+			if (proxyMaxAge != null)
+			{
+				policy.SetProxyMaxAge(proxyMaxAge.Value);
 			}
 		}
 	}
