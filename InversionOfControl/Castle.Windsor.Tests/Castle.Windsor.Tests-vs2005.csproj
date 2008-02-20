@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
@@ -199,7 +199,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ContainerProblem2.cs" />
-    <Compile Include="CreateInstanceFixture.cs" />
     <Compile Include="DependencyProblem.cs">
       <SubType>Code</SubType>
     </Compile>

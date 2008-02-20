@@ -16,7 +16,7 @@ namespace Castle.Windsor
 {
 	using System;
 	using System.Collections;
-	using System.Threading;
+
 	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Registration;
@@ -34,10 +34,10 @@ namespace Castle.Windsor
 
 		private readonly string name = Guid.NewGuid().ToString();
 		private readonly IDictionary childContainers = Hashtable.Synchronized(new Hashtable());
-		private readonly ReaderWriterLock locker = new ReaderWriterLock();
-		private readonly IKernel kernel;
+
+		private IKernel kernel;
 		private IWindsorContainer parent;
-		private readonly IComponentsInstaller installer;
+		private IComponentsInstaller installer;
 
 		#endregion
 
@@ -47,8 +47,7 @@ namespace Castle.Windsor
 		/// Constructs a container without any external 
 		/// configuration reference
 		/// </summary>
-		public WindsorContainer()
-			: this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
+		public WindsorContainer() : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
 		{
 		}
 
@@ -57,8 +56,7 @@ namespace Castle.Windsor
 		/// <see cref="IConfigurationStore"/> implementation.
 		/// </summary>
 		/// <param name="store">The instance of an <see cref="IConfigurationStore"/> implementation.</param>
-		public WindsorContainer(IConfigurationStore store)
-			: this()
+		public WindsorContainer(IConfigurationStore store) : this()
 		{
 			kernel.ConfigurationStore = store;
 
@@ -70,8 +68,7 @@ namespace Castle.Windsor
 		/// <see cref="IConfigurationInterpreter"/> implementation.
 		/// </summary>
 		/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter"/> implementation.</param>
-		public WindsorContainer(IConfigurationInterpreter interpreter)
-			: this()
+		public WindsorContainer(IConfigurationInterpreter interpreter) : this()
 		{
 			if (interpreter == null) throw new ArgumentNullException("interpreter");
 
@@ -85,8 +82,7 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <param name="interpreter">The interpreter.</param>
 		/// <param name="environmentInfo">The environment info.</param>
-		public WindsorContainer(IConfigurationInterpreter interpreter, IEnvironmentInfo environmentInfo)
-			: this()
+		public WindsorContainer(IConfigurationInterpreter interpreter, IEnvironmentInfo environmentInfo) : this()
 		{
 			if (interpreter == null) throw new ArgumentNullException("interpreter");
 			if (environmentInfo == null) throw new ArgumentNullException("environmentInfo");
@@ -105,8 +101,7 @@ namespace Castle.Windsor
 		/// </para>
 		/// </summary>
 		/// <param name="xmlFile">The XML file.</param>
-		public WindsorContainer(String xmlFile)
-			: this(new XmlInterpreter(xmlFile))
+		public WindsorContainer(String xmlFile) : this(new XmlInterpreter(xmlFile))
 		{
 		}
 
@@ -120,8 +115,7 @@ namespace Castle.Windsor
 		/// </remarks>
 		/// <param name="kernel">Kernel instance</param>
 		/// <param name="installer">Installer instance</param>
-		public WindsorContainer(IKernel kernel, IComponentsInstaller installer)
-			: this(Guid.NewGuid().ToString(), kernel, installer)
+		public WindsorContainer(IKernel kernel, IComponentsInstaller installer) : this(Guid.NewGuid().ToString(), kernel, installer)
 		{
 		}
 
@@ -167,8 +161,7 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <param name="parent">The instance of an <see cref="IWindsorContainer"/></param>
 		/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter"/> implementation</param>
-		public WindsorContainer(IWindsorContainer parent, IConfigurationInterpreter interpreter)
-			: this()
+		public WindsorContainer(IWindsorContainer parent, IConfigurationInterpreter interpreter) : this()
 		{
 			if (parent == null) throw new ArgumentNullException("parent");
 			if (interpreter == null) throw new ArgumentNullException("interpreter");
@@ -186,8 +179,7 @@ namespace Castle.Windsor
 		/// <param name="name">The container's name.</param>
 		/// <param name="parent">The parent.</param>
 		/// <param name="interpreter">The interpreter.</param>
-		public WindsorContainer(string name, IWindsorContainer parent, IConfigurationInterpreter interpreter)
-			: this()
+		public WindsorContainer(string name, IWindsorContainer parent, IConfigurationInterpreter interpreter) : this()
 		{
 			if (name == null) throw new ArgumentNullException("name");
 			if (parent == null) throw new ArgumentNullException("parent");
@@ -235,7 +227,7 @@ namespace Castle.Windsor
 			get { return parent; }
 			set
 			{
-				if (value == null)
+				if( value == null )
 				{
 					if (parent != null)
 					{
@@ -307,22 +299,20 @@ namespace Castle.Windsor
 		/// <param name="serviceType">The service <see cref="Type"/> that the component implements.</param>
 		/// <param name="classType">The <see cref="Type"/> to manage.</param>
 		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
-		public IWindsorContainer AddComponentLifeStyle(string key, Type serviceType, Type classType,
-													   LifestyleType lifestyle)
+		public IWindsorContainer AddComponentLifeStyle(string key, Type serviceType, Type classType, LifestyleType lifestyle)
 		{
 			kernel.AddComponent(key, serviceType, classType, lifestyle, true);
 			return this;
 		}
 
-		public virtual IWindsorContainer AddComponentWithProperties(string key, Type classType,
-																	IDictionary extendedProperties)
+		public virtual IWindsorContainer AddComponentWithProperties(string key, Type classType, IDictionary extendedProperties)
 		{
 			kernel.AddComponentWithExtendedProperties(key, classType, extendedProperties);
 			return this;
 		}
 
 		public virtual IWindsorContainer AddComponentWithProperties(string key, Type serviceType, Type classType,
-																	IDictionary extendedProperties)
+		                                               IDictionary extendedProperties)
 		{
 			kernel.AddComponentWithExtendedProperties(key, serviceType, classType, extendedProperties);
 			return this;
@@ -568,7 +558,7 @@ namespace Castle.Windsor
 		/// <typeparam name="T">The service type</typeparam>
 		public T[] ResolveAll<T>()
 		{
-			return (T[])ResolveAll(typeof(T));
+			return (T[]) ResolveAll(typeof(T));
 		}
 
 
@@ -594,7 +584,7 @@ namespace Castle.Windsor
 		/// </summary>
 		public T[] ResolveAll<T>(IDictionary arguments)
 		{
-			return (T[])ResolveAll(typeof(T), arguments);
+			return (T[]) ResolveAll(typeof (T), arguments);
 		}
 
 		/// <summary>
@@ -631,7 +621,7 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		public virtual object Resolve(String key, Type service)
 		{
-			return kernel.Resolve(key, service);
+            return kernel.Resolve(key, service);
 		}
 
 		/// <summary>
@@ -657,7 +647,7 @@ namespace Castle.Windsor
 		{
 			return Resolve(key, service, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
 		}
-
+		
 		/// <summary>
 		/// Returns a component instance by the service 
 		/// </summary>
@@ -666,7 +656,7 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		public T Resolve<T>(IDictionary arguments)
 		{
-			return (T)Resolve(typeof(T), arguments);
+			return (T) Resolve(typeof(T), arguments);
 		}
 
 		/// <summary>
@@ -688,7 +678,7 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		public virtual T Resolve<T>(String key, IDictionary arguments)
 		{
-			return (T)Resolve(key, typeof(T), arguments);
+			return (T) Resolve(key, typeof(T), arguments);
 		}
 
 		/// <summary>
@@ -709,7 +699,7 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		public T Resolve<T>()
 		{
-			return (T)Resolve(typeof(T));
+			return (T) Resolve(typeof(T));
 		}
 
 		/// <summary>
@@ -719,116 +709,7 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		public virtual T Resolve<T>(String key)
 		{
-			return (T)Resolve(key, typeof(T));
-		}
-
-
-		/// <summary>
-		/// Returns an instance of <typeparamref name="T"/> that
-		/// was created by the container with all its dependencies
-		/// filled
-		/// </summary>
-		/// <typeparam name="T">Service type</typeparam>
-		/// <returns>The component instance</returns>
-		public T CreateInstance<T>()
-		{
-			return (T)CreateInstance(typeof(T));
-		}
-
-		/// <summary>
-		/// Returns an instance of <typeparamref name="T"/> that
-		/// was created by the container with all its dependencies
-		/// filled
-		/// </summary>
-		/// <typeparam name="T">Service type</typeparam>
-		/// <param name="arguments"></param>
-		/// <returns>The component instance</returns>
-		public T CreateInstance<T>(IDictionary arguments)
-		{
-			return (T)CreateInstance(typeof(T), arguments);
-		}
-
-		/// <summary>
-		/// Returns an instance of <typeparamref name="T"/> that
-		/// was created by the container with all its dependencies
-		/// filled
-		/// </summary>
-		/// <typeparam name="T">Service type</typeparam>
-		/// <param name="argumentsAsAnonymousType"></param>
-		/// <returns>The component instance</returns>
-		public T CreateInstance<T>(object argumentsAsAnonymousType)
-		{
-			return (T)CreateInstance(typeof(T), argumentsAsAnonymousType);
-		}
-
-		/// <summary>
-		/// Returns an instance of the service that
-		/// was created by the container with all its dependencies
-		/// filled
-		/// </summary>
-		/// <returns>The component instance</returns>
-		public object CreateInstance(Type service)
-		{
-			return CreateInstance(service, new Hashtable());
-		}
-
-		/// <summary>
-		/// Returns an instance of the service that
-		/// was created by the container with all its dependencies
-		/// filled
-		/// </summary>
-		/// <param name="service">The service.</param>
-		/// <param name="arguments">The arguments.</param>
-		/// <returns>The component instance</returns>
-		public object CreateInstance(Type service, IDictionary arguments)
-		{
-			EnsureTypeRegisteredInKernel(service);
-			return Resolve(service, arguments);
-		}
-
-		private void EnsureTypeRegisteredInKernel(Type service)
-		{
-			locker.AcquireReaderLock(Timeout.Infinite);
-			try
-			{
-				if (Kernel.HasComponent(service) == false)
-				{
-					LockCookie writerLock = locker.UpgradeToWriterLock(Timeout.Infinite);
-					try
-					{
-						if (Kernel.HasComponent(service) == false)
-						{
-							Kernel.AddComponent(
-								service.GUID.ToString(),
-								service,
-								// if we are going the CreateInstance route, we 
-								// certainly do not want a singleton 
-								LifestyleType.Transient);
-						}
-					}
-					finally
-					{
-						locker.DowngradeFromWriterLock(ref writerLock);
-					}
-				}
-			}
-			finally
-			{
-				locker.ReleaseReaderLock();
-			}
-		}
-
-		/// <summary>
-		/// Returns an instance of the service that
-		/// was created by the container with all its dependencies
-		/// filled
-		/// </summary>
-		/// <param name="service">The service.</param>
-		/// <param name="argumentsAsAnonymousType">Type of the arguments as anonymous.</param>
-		/// <returns>The component instance</returns>
-		public object CreateInstance(Type service, object argumentsAsAnonymousType)
-		{
-			return CreateInstance(service, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
+			return (T) Resolve(key, typeof(T));
 		}
 
 		/// <summary>
