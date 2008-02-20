@@ -20,6 +20,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	using System.Collections.Specialized;
 	using System.Globalization;
 	using System.IO;
+	using System.Reflection;
 	using System.Threading;
 	using Castle.DynamicProxy;
 	using Castle.MonoRail.Framework.Helpers;
@@ -361,6 +362,54 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void InvalidIndex3()
 		{
 			helper.TextField("roles[10].Id");
+		}
+
+		[Test]
+		public void ShouldDiscoverRootTypeOnCollectionWhenIndexedRootInPropertyBag()
+		{
+			FormHelperEx sut = new FormHelperEx();
+			sut.SetController(new HomeController(), new ControllerContext());
+
+			//this is what current code requires to discover
+			sut.ControllerContext.PropertyBag["items[0]type"] = typeof(Product);
+			PropertyInfo prop = sut.ObtainTargetProperty(RequestContext.PropertyBag, "items[0].Name");
+			PropertyInfo expect = typeof(Product).GetProperty("Name");
+			Assert.AreEqual(expect, prop);
+		}
+
+		[Test]
+		public void ShouldDiscoverRootTypeOnCollection()
+		{
+			FormHelperEx sut = new FormHelperEx();
+			sut.SetController(new HomeController(), new ControllerContext());
+
+			sut.ControllerContext.PropertyBag["itemstype"] = typeof(Product); //no need to pass indexer
+			PropertyInfo prop = sut.ObtainTargetProperty(RequestContext.PropertyBag, "items[0].Name");
+			PropertyInfo expect = typeof(Product).GetProperty("Name");
+			Assert.AreEqual(expect, prop);
+		}
+
+		[Test]
+		public void ShouldFailToDiscoverRootTypeOnCollectionWhenNoTypeInPropertyBag()
+		{
+			FormHelperEx sut = new FormHelperEx();
+			sut.SetController(new HomeController(), new ControllerContext());
+
+			PropertyInfo prop = sut.ObtainTargetProperty(RequestContext.PropertyBag, "items[0].Name");
+			Assert.IsNull(prop);
+		}
+
+		public class FormHelperEx : FormHelper
+		{
+			public FormHelperEx()
+				: base()
+			{
+			}
+
+			public PropertyInfo ObtainTargetProperty(RequestContext context, string target)
+			{
+				return ObtainTargetProperty(context, target, null);
+			}
 		}
 	}
 

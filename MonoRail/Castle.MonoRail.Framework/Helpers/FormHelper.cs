@@ -2534,12 +2534,19 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (foundType == null)
 			{
-				object root = ObtainRootInstance(context, target, out pieces);
+			    string trimmed = pieces[0].Split('[')[0];
+			    
+                foundType = (Type) ControllerContext.PropertyBag[trimmed + "type"];
+                
+                if(foundType==null)
+                {
+                    object root = ObtainRootInstance(context, target, out pieces);
 
-				if (root != null)
-				{
-					foundType = root.GetType();
-				}
+                    if (root != null)
+                    {
+                        foundType = root.GetType();
+                    }
+                }
 			}
 
 			return foundType;
