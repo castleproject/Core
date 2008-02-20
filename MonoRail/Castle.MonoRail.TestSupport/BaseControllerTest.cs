@@ -285,6 +285,8 @@ namespace Castle.MonoRail.TestSupport
 			controller.SetEngineContext(Context);
 			controller.ControllerContext = controllerContext;
 			controller.CreateStandardHelpers();
+
+			controller.Initialize();
 		}
 
 		/// <summary>

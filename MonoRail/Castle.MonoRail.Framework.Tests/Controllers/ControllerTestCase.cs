@@ -175,7 +175,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 		{
 			private bool initialized;
 
-			protected override void Initialize()
+			public override void Initialize()
 			{
 				initialized = true;
 			}

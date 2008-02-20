@@ -1217,7 +1217,7 @@ namespace Castle.MonoRail.Framework
 		/// Initializes this instance. Implementors 
 		/// can use this method to perform initialization
 		/// </summary>
-		protected virtual void Initialize()
+		public virtual void Initialize()
 		{
 		}
 
