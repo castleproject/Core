@@ -312,7 +312,7 @@ namespace Castle.MonoRail.TestSupport
 			UrlInfo info = BuildUrlInfo(areaName, controllerName, actionName);
 			services = BuildServices();
 			request = BuildRequest();
-			response = BuildResponse();
+			response = BuildResponse(info);
 			trace = BuildTrace();
 			context = BuildRailsEngineContext(request, response, services, trace, info);
 			contextInitializer(context);
@@ -340,9 +340,9 @@ namespace Castle.MonoRail.TestSupport
 		/// Builds the response.
 		/// </summary>
 		/// <returns></returns>
-		protected virtual IMockResponse BuildResponse()
+		protected virtual IMockResponse BuildResponse(UrlInfo info)
 		{
-			return new MockResponse(cookies);
+			return new MockResponse(cookies, info);
 		}
 
 		/// <summary>
@@ -383,7 +383,7 @@ namespace Castle.MonoRail.TestSupport
 		{
 			return new UrlInfo(domain, domainPrefix, virtualDir, "http", port,
 			                   Path.Combine(Path.Combine(areaName, controllerName), actionName),
-			                   areaName, controllerName, actionName, "rails", null);
+			                   areaName, controllerName, actionName, ".castle", null);
 		}
 
 		/// <summary>

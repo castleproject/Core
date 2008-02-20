@@ -57,8 +57,9 @@ namespace Castle.MonoRail.Framework.Test
 		/// Initializes a new instance of the <see cref="MockResponse"/> class.
 		/// </summary>
 		/// <param name="cookies">The cookies.</param>
-		public MockResponse(IDictionary<string, HttpCookie> cookies) : this(
-			new UrlInfo("", "controller", "action","/",".castle"), new DefaultUrlBuilder(), new MockServerUtility(), new RouteMatch())
+		/// <param name="info">Current url</param>
+		public MockResponse(IDictionary<string, HttpCookie> cookies, UrlInfo info): this(
+			info, new DefaultUrlBuilder(), new MockServerUtility(), new RouteMatch())
 		{
 			this.cookies = cookies;
 			output = new StringWriter();
@@ -67,7 +68,16 @@ namespace Castle.MonoRail.Framework.Test
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockResponse"/> class.
 		/// </summary>
-		public MockResponse() : this(new Dictionary<string, HttpCookie>(StringComparer.InvariantCultureIgnoreCase))
+		/// <param name="cookies">The cookies.</param>
+		public MockResponse(IDictionary<string, HttpCookie> cookies)
+			: this(cookies, new UrlInfo("", "controller", "action", "/", ".castle"))
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockResponse"/> class.
+		/// </summary>
+		public MockResponse(): this(new Dictionary<string, HttpCookie>(StringComparer.InvariantCultureIgnoreCase))
 		{
 		}
 
