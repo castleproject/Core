@@ -132,7 +132,7 @@
 			<property name="dev.env.dir" value="${environment::get-variable('DevEnvDir')}" />
 		</if>
 		<if test="${not environment::variable-exists('DevEnvDir')}">
-			<property name="default.dev.env.dir" value="%ProgramFiles%\Microsoft Visual Studio 8\Common7\IDE" />
+			<property name="default.dev.env.dir" value="%ProgramFiles%\Microsoft Visual Studio 9.0\Common7\IDE" />
 			<if test="${directory::exists(default.dev.env.dir)}">
 				<property name="dev.env.dir" value="${default.dev.env.dir}" />
 			</if>

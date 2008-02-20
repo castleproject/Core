@@ -9,6 +9,7 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
+		
 		<property name="build.warnaserrors" value="false" />
 		<property name="assembly.version" value="1.0.6.10" />
 		<property name="assembly.description" value="Castle Project Visual Studio Wizards" />
@@ -19,6 +20,11 @@
 		<property name="assembly.is-com-visible" value="false" />
 
 		<if test="${nant.settings.currentframework=='net-2.0'}">
+			<property name="extensibility.dll.dir" value="${dev.env.dir}" />
+			<property name="public.dll.dir" value="${dev.env.dir}\PublicAssemblies" />
+			<property name="envdte.dll.dir" value="${public.dll.dir}" />
+		</if>
+		<if test="${nant.settings.currentframework=='net-3.5'}">
 			<property name="extensibility.dll.dir" value="${dev.env.dir}" />
 			<property name="public.dll.dir" value="${dev.env.dir}\PublicAssemblies" />
 			<property name="envdte.dll.dir" value="${public.dll.dir}" />
