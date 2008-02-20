@@ -30,11 +30,15 @@ namespace Castle.MonoRail.Framework
 		private string cacheExtension;
 		private string etag;
 		private int duration;
-		private string varyByCustom, varyByContentEncodings, varyByHeaders, varyByParams;
+		private string varyByCustom, varyByHeaders, varyByParams;
 		private DateTime? lastModified;
 		private TimeSpan? maxAge, proxyMaxAge;
 		private HttpCacheRevalidation revalidation;
 
+#if NET35
+		private string varyByContentEncodings;
+#endif
+		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CacheAttribute"/> class.
 		/// </summary>
@@ -196,6 +200,7 @@ namespace Castle.MonoRail.Framework
 			set { duration = value; }
 		}
 
+#if NET35
 		/// <summary>
 		/// Gets or sets the list of all Content-Encoding headers that will be used to vary the output cache.
 		/// </summary>
@@ -204,6 +209,7 @@ namespace Castle.MonoRail.Framework
 			get { return varyByContentEncodings; }
 			set { varyByContentEncodings = value; }
 		}
+#endif
 
 		/// <summary>
 		/// Specifies a custom text string to vary cached output responses by.
@@ -294,6 +300,7 @@ namespace Castle.MonoRail.Framework
 				policy.SetExpires(DateTime.Now.AddSeconds(duration));
 			}
 
+#if NET35
 			if (varyByContentEncodings != null)
 			{
 				foreach (String header in varyByContentEncodings.Split(','))
@@ -301,6 +308,7 @@ namespace Castle.MonoRail.Framework
 					policy.VaryByContentEncodings[header.Trim()] = true;
 				}
 			}
+#endif
 
 			if (varyByCustom != null)
 			{
