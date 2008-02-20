@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed CORE-16 (Should be Facilities) 
+ "The FactorySupportFacility does not create proxies if interceptors are present"
+
 - Added support for list service overrides using the fluent registration interface.
   Added support for specifying configuration parameters using the fluent interface to allow any complex
   registration scenarios.

@@ -97,6 +97,9 @@ namespace Castle.Facilities.FactorySupport
 
 		private object Create(object factoryInstance, string factoryId, MethodInfo instanceCreateMethod, string factoryCreate, CreationContext context)
 		{
+			object instance;
+			ArrayList methodArgs = new ArrayList();
+
 			IConversionManager converter = (IConversionManager)
 				Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 
@@ -104,7 +107,6 @@ namespace Castle.Facilities.FactorySupport
 			{
 				ParameterInfo[] parameters = instanceCreateMethod.GetParameters();
 
-				ArrayList methodArgs = new ArrayList();
 
 				foreach(ParameterInfo parameter in parameters)
 				{
@@ -134,7 +136,7 @@ namespace Castle.Facilities.FactorySupport
 					methodArgs.Add(arg);
 				}
 
-				return instanceCreateMethod.Invoke(factoryInstance, methodArgs.ToArray());
+				instance = instanceCreateMethod.Invoke(factoryInstance, methodArgs.ToArray());
 			}
 			catch (Exception ex)
 			{
@@ -145,6 +147,21 @@ namespace Castle.Facilities.FactorySupport
 
 				throw new FacilityException(message, ex);
 			}
+
+			if (Model.Interceptors.HasInterceptors)
+			{
+				try
+				{
+					instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, methodArgs.ToArray());
+				}
+				catch ( Exception ex )
+				{
+					throw new ComponentActivatorException( "FactoryActivator: could not proxy " +
+						 instance.GetType().FullName, ex );
+				}
+			}	
+			
+			return instance;
 		}
 	}
 }
