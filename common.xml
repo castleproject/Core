@@ -95,6 +95,11 @@
 		</if>
 		<property name="csc.keyfile" 	value="" />
 		<property name="csc.args" 		value="" />
+		<readregistry property="dotnet.SPlevel" 
+					  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v${framework::get-clr-version(framework::get-runtime-framework())}\SP"
+					  hive="LocalMachine"
+					  unless="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
+		<property name="dotnet.SPlevel" value="0" if="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
 		<call target="set-${framework::get-target-framework()}-framework-configuration" />
 
 		<property name="build.msbuild" 	value="false" overwrite="false" />
@@ -104,6 +109,7 @@
 	<target name="set-net-2.0-framework-configuration">
 		<property name="nant.settings.currentframework" value="net-2.0" />
 		<property name="current.build.defines" value="${build.defines},NET,DOTNET2" />
+		<property name="current.build.defines" value="${current.build.defines},DOTNET2SP1" if="${dotnet.SPlevel == '1'}" />
 		<property name="link.sdkdoc.version" value="SDK_v2_0" />
 		<property name="merge.targetplatform" value="v2" />
 		<property name="csc.keyfile" value="/keyfile:${key.file}" />
