@@ -35,10 +35,10 @@ namespace Castle.MonoRail.Framework
 		private TimeSpan? maxAge, proxyMaxAge;
 		private HttpCacheRevalidation revalidation;
 
-#if NET35
+#if DOTNET35
 		private string varyByContentEncodings;
 #endif
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CacheAttribute"/> class.
 		/// </summary>
@@ -200,7 +200,7 @@ namespace Castle.MonoRail.Framework
 			set { duration = value; }
 		}
 
-#if NET35
+#if DOTNET35
 		/// <summary>
 		/// Gets or sets the list of all Content-Encoding headers that will be used to vary the output cache.
 		/// </summary>
@@ -300,7 +300,7 @@ namespace Castle.MonoRail.Framework
 				policy.SetExpires(DateTime.Now.AddSeconds(duration));
 			}
 
-#if NET35
+#if DOTNET35
 			if (varyByContentEncodings != null)
 			{
 				foreach (String header in varyByContentEncodings.Split(','))
