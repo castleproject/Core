@@ -98,6 +98,8 @@ namespace Castle.MonoRail.Framework.Test
 			serviceInitializer = new DefaultServiceInitializer();
 
 			extensionManager = new ExtensionManager(this);
+
+			validatorRegistry = new CachedValidationRegistry();
 		}
 
 		#region IServiceContainer
