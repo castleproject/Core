@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied James Curran's patch fixing MR-391
+  "ViewComponentDetailsAttribute use could lead to duplicate names."
+
 - Applied Mike Nichols' patch fixing MR-392
   "FormHelper.LiteralFor feature addition"
 

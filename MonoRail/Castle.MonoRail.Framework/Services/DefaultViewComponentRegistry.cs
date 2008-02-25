@@ -102,7 +102,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			// TODO: Add cache here, GetCustomAttributes is a lengthy call.
 
-			object[] attributes = type.GetCustomAttributes(typeof(ViewComponentDetailsAttribute), true);
+			object[] attributes = type.GetCustomAttributes(typeof(ViewComponentDetailsAttribute), false);
 			
 			if (attributes.Length == 0)
 			{
