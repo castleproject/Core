@@ -320,7 +320,7 @@
     <Compile Include="Registration\Component.cs" />
     <Compile Include="Registration\ComponentDescriptor.cs" />
     <Compile Include="Registration\ComponentInstanceDescriptor.cs" />
-    <Compile Include="Registration\ComponentRegiatration.cs" />
+    <Compile Include="Registration\ComponentRegistration.cs" />
     <Compile Include="Registration\CustomDependencyDescriptor.cs" />
     <Compile Include="Registration\ExtendedPropertiesDescriptor.cs" />
     <Compile Include="Registration\IComponentRegistration.cs" />
