@@ -47,6 +47,7 @@ namespace Castle.MonoRail.Framework.Providers
 		private IRescueDescriptorProvider rescueDescriptorProvider;
 		private IResourceDescriptorProvider resourceDescriptorProvider;
 		private ITransformFilterDescriptorProvider transformFilterDescriptorProvider;
+		private IReturnBinderDescriptorProvider returnBinderDescriptorProvider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultControllerDescriptorProvider"/> class.
@@ -64,12 +65,14 @@ namespace Castle.MonoRail.Framework.Providers
 		/// <param name="rescueDescriptorProvider">The rescue descriptor provider.</param>
 		/// <param name="resourceDescriptorProvider">The resource descriptor provider.</param>
 		/// <param name="transformFilterDescriptorProvider">The transform filter descriptor provider.</param>
+		/// <param name="returnBinderDescriptorProvider">The return binder descriptor provider.</param>
 		public DefaultControllerDescriptorProvider(IHelperDescriptorProvider helperDescriptorProvider,
 		                                           IFilterDescriptorProvider filterDescriptorProvider,
 		                                           ILayoutDescriptorProvider layoutDescriptorProvider,
 		                                           IRescueDescriptorProvider rescueDescriptorProvider,
 		                                           IResourceDescriptorProvider resourceDescriptorProvider,
-		                                           ITransformFilterDescriptorProvider transformFilterDescriptorProvider)
+		                                           ITransformFilterDescriptorProvider transformFilterDescriptorProvider,
+		                                           IReturnBinderDescriptorProvider returnBinderDescriptorProvider)
 		{
 			this.helperDescriptorProvider = helperDescriptorProvider;
 			this.filterDescriptorProvider = filterDescriptorProvider;
@@ -77,6 +80,7 @@ namespace Castle.MonoRail.Framework.Providers
 			this.rescueDescriptorProvider = rescueDescriptorProvider;
 			this.resourceDescriptorProvider = resourceDescriptorProvider;
 			this.transformFilterDescriptorProvider = transformFilterDescriptorProvider;
+			this.returnBinderDescriptorProvider = returnBinderDescriptorProvider;
 		}
 
 		#region IMRServiceEnabled implementation
@@ -100,6 +104,7 @@ namespace Castle.MonoRail.Framework.Providers
 			rescueDescriptorProvider = serviceProvider.GetService<IRescueDescriptorProvider>();
 			resourceDescriptorProvider = serviceProvider.GetService<IResourceDescriptorProvider>();
 			transformFilterDescriptorProvider = serviceProvider.GetService<ITransformFilterDescriptorProvider>();
+			returnBinderDescriptorProvider = serviceProvider.GetService<IReturnBinderDescriptorProvider>();
 		}
 
 		#endregion
@@ -232,10 +237,13 @@ namespace Castle.MonoRail.Framework.Providers
 			{
 				Type declaringType = method.DeclaringType;
 
-				if (method.IsSpecialName) continue;
+				if (method.IsSpecialName)
+				{
+					continue;
+				}
 
 				if (declaringType == typeof(Object) ||
-					declaringType == typeof(IController) || declaringType == typeof(Controller))
+				    declaringType == typeof(IController) || declaringType == typeof(Controller))
 					// || declaringType == typeof(SmartDispatcherController))
 				{
 					continue;
@@ -313,6 +321,7 @@ namespace Castle.MonoRail.Framework.Providers
 			CollectLayout(actionDescriptor, method);
 			CollectCacheConfigure(actionDescriptor, method);
 			CollectTransformFilter(actionDescriptor, method);
+			CollectReturnTypeBinder(actionDescriptor, method);
 
 			if (method.IsDefined(typeof(AjaxActionAttribute), true))
 			{
@@ -400,6 +409,16 @@ namespace Castle.MonoRail.Framework.Providers
 		{
 			actionDescriptor.TransformFilters = transformFilterDescriptorProvider.CollectFilters((method));
 			Array.Sort(actionDescriptor.TransformFilters, TransformFilterDescriptorComparer.Instance);
+		}
+
+		/// <summary>
+		/// Collects the return type binder.
+		/// </summary>
+		/// <param name="actionDescriptor">The action descriptor.</param>
+		/// <param name="method">The method.</param>
+		private void CollectReturnTypeBinder(ActionMetaDescriptor actionDescriptor, MethodInfo method)
+		{
+			actionDescriptor.ReturnDescriptor = returnBinderDescriptorProvider.Collect(method);
 		}
 
 		/// <summary>

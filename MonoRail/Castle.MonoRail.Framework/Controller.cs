@@ -1310,7 +1310,16 @@ namespace Castle.MonoRail.Framework
 					BeforeAction(action, engineContext, this, context);
 				}
 
-				action.Execute(engineContext, this, context);
+				object actionRetValue = action.Execute(engineContext, this, context);
+
+				// TO DO: review/refactor this code
+				if (action.ReturnBinderDescriptor != null)
+				{
+					IReturnBinder binder = action.ReturnBinderDescriptor.ReturnTypeBinder;
+
+					// Runs return binder and keep going
+					binder.Bind(Context, this, ControllerContext, action.ReturnBinderDescriptor.ReturnType, actionRetValue);
+				}
 
 				// Action executed successfully, so it's safe to process the cache configurer
 				if ((MetaDescriptor.CacheConfigurer != null || action.CachePolicyConfigurer != null) &&

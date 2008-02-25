@@ -155,6 +155,7 @@
     <Compile Include="Attributes\JSONBinderAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\JSONReturnBinderAttribute.cs" />
     <Compile Include="Attributes\LayoutAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -315,6 +316,7 @@
     <Compile Include="Descriptors\ResourceDescriptor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Descriptors\ReturnBinderDescriptor.cs" />
     <Compile Include="Descriptors\TransformFilterDescriptor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -518,6 +520,7 @@
     <Compile Include="IResponse.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IReturnBinder.cs" />
     <Compile Include="IScaffoldingSupport.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -626,6 +629,7 @@
     <Compile Include="Providers\DefaultResourceDescriptorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Providers\DefaultReturnBinderDescriptorProvider.cs" />
     <Compile Include="Providers\DefaultTransformFilterDescriptorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -650,6 +654,7 @@
     <Compile Include="Providers\IResourceDescriptorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Providers\IReturnBinderDescriptorProvider.cs" />
     <Compile Include="Providers\ITransformDescriptorFilterProvider.cs">
       <SubType>Code</SubType>
     </Compile>

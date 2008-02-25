@@ -75,6 +75,12 @@ namespace Castle.MonoRail.Framework
 		ICachePolicyConfigurer CachePolicyConfigurer { get; }
 
 		/// <summary>
+		/// Gets the return binder descriptor.
+		/// </summary>
+		/// <value>The return binder descriptor.</value>
+		ReturnBinderDescriptor ReturnBinderDescriptor { get; }
+
+		/// <summary>
 		/// Executes the action this instance represents.
 		/// </summary>
 		/// <param name="engineContext">The engine context.</param>

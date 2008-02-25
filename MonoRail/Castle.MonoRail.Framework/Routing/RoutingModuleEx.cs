@@ -15,12 +15,9 @@
 namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
-	using System.Collections.Generic;
 	using System.IO;
-	using System.Text;
 	using System.Web;
 	using System.Web.Configuration;
-
 	using Castle.MonoRail.Framework.Adapters;
 
 	/// <summary>
@@ -43,7 +40,8 @@ namespace Castle.MonoRail.Framework.Routing
 			{
 				HttpHandlersSection httpHandlersConfig =
 					(HttpHandlersSection) WebConfigurationManager.GetSection("system.web/httpHandlers");
-				foreach (HttpHandlerAction handlerAction in httpHandlersConfig.Handlers)
+
+				foreach(HttpHandlerAction handlerAction in httpHandlersConfig.Handlers)
 				{
 					if (Type.GetType(handlerAction.Type) == typeof (MonoRailHttpHandlerFactory))
 					{
@@ -94,7 +92,7 @@ namespace Castle.MonoRail.Framework.Routing
 				return;
 			}
 
-			string mrPath = CreateMrPath(match);
+			string mrPath = CreateMonoRailPath(match);
 			string url = request.RawUrl;
 
 			string paramsAsQueryString = "";
@@ -127,8 +125,21 @@ namespace Castle.MonoRail.Framework.Routing
 			return path;
 		}
 
-		private string CreateMrPath(RouteMatch match)
+		private string CreateMonoRailPath(RouteMatch match)
 		{
+			if (!match.Parameters.ContainsKey("controller"))
+			{
+				throw new MonoRailException(
+					"Parameter 'controller' is not optional. Check your routing rules to make " + 
+					"sure this parameter is being added to the RouteMatch");
+			}
+			if (!match.Parameters.ContainsKey("action"))
+			{
+				throw new MonoRailException(
+					"Parameter 'action' is not optional. Check your routing rules to make " + 
+					"sure this parameter is being added to the RouteMatch");
+			}
+
 			string controller = match.Parameters["controller"];
 			string area = match.Parameters.ContainsKey("area") ? match.Parameters["area"] : null;
 			string action = match.Parameters["action"];

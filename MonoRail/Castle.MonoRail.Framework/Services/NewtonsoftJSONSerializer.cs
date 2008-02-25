@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Services
 {
 	using System;
+	using System.Collections.Generic;
 	using Newtonsoft.Json;
 
 	/// <summary>
@@ -30,6 +31,24 @@ namespace Castle.MonoRail.Framework.Services
 		public string Serialize(object target)
 		{
 			return JavaScriptConvert.SerializeObject(target);
+		}
+
+		/// <summary>
+		/// Serializes the specified object.
+		/// </summary>
+		/// <param name="target">The object.</param>
+		/// <param name="converters">The converters.</param>
+		/// <returns></returns>
+		public string Serialize(object target, params IJSONConverter[] converters)
+		{
+			List<JsonConverter> adapters = new List<JsonConverter>();
+
+			foreach(IJSONConverter converter in converters)
+			{
+				adapters.Add(new JsonConverterAdapter(converter));
+			}
+
+			return JavaScriptConvert.SerializeObject(target, adapters.ToArray());
 		}
 
 		/// <summary>
@@ -63,6 +82,131 @@ namespace Castle.MonoRail.Framework.Services
 		public T[] DeserializeArray<T>(string jsonString)
 		{
 			return (T[]) JavaScriptConvert.DeserializeObject(jsonString, typeof(T));
+		}
+
+		class JsonConverterAdapter : JsonConverter
+		{
+			private readonly IJSONConverter converter;
+
+			public JsonConverterAdapter(IJSONConverter converter)
+			{
+				this.converter = converter;
+			}
+
+			public override void WriteJson(JsonWriter writer, object value)
+			{
+				converter.Write(new JSONWriterAdapter(writer), value);
+			}
+
+			public override bool CanConvert(Type objectType)
+			{
+				return converter.CanHandle(objectType);
+			}
+		}
+
+		class JSONWriterAdapter : IJSONWriter
+		{
+			private readonly JsonWriter writer;
+
+			public JSONWriterAdapter(JsonWriter writer)
+			{
+				this.writer = writer;
+			}
+
+			public JsonWriter Writer
+			{
+				get { return writer; }
+			}
+
+			public void WriteValue(object value)
+			{
+				new JsonSerializer().Serialize(writer, value);
+			}
+
+			public void WriteStartObject()
+			{
+				writer.WriteStartObject();
+			}
+
+			public void WriteEndObject()
+			{
+				writer.WriteEndObject();
+			}
+
+			public void WriteStartArray()
+			{
+				writer.WriteStartArray();
+			}
+
+			public void WriteEndArray()
+			{
+				writer.WriteEndArray();
+			}
+
+			public void WritePropertyName(string name)
+			{
+				writer.WritePropertyName(name);
+			}
+
+			public void WriteEnd()
+			{
+				writer.WriteEnd();
+			}
+
+			public void WriteNull()
+			{
+				writer.WriteNull();
+			}
+
+			public void WriteUndefined()
+			{
+				writer.WriteUndefined();
+			}
+
+			public void WriteRaw(string javaScript)
+			{
+				writer.WriteRaw(javaScript);
+			}
+
+			public void WriteValue(string value)
+			{
+				writer.WriteValue(value);
+			}
+
+			public void WriteValue(int value)
+			{
+				writer.WriteValue(value);
+			}
+
+			public void WriteValue(long value)
+			{
+				writer.WriteValue(value);
+			}
+
+			public void WriteValue(float value)
+			{
+				writer.WriteValue(value);
+			}
+
+			public void WriteValue(bool value)
+			{
+				writer.WriteValue(value);
+			}
+
+			public void WriteValue(short value)
+			{
+				writer.WriteValue(value);
+			}
+
+			public void WriteValue(decimal value)
+			{
+				writer.WriteValue(value);
+			}
+
+			public void WriteValue(DateTime value)
+			{
+				writer.WriteValue(value);
+			}
 		}
 	}
 }

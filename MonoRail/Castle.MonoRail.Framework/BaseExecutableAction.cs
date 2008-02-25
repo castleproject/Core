@@ -151,6 +151,15 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Gets the return binder descriptor.
+		/// </summary>
+		/// <value>The return binder descriptor.</value>
+		public ReturnBinderDescriptor ReturnBinderDescriptor
+		{
+			get { return actionMetaDescriptor.ReturnDescriptor; }
+		}
+
+		/// <summary>
 		/// Gets the cache policy configurer.
 		/// </summary>
 		/// <value>The cache policy configurer.</value>

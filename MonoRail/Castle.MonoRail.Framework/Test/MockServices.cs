@@ -89,7 +89,8 @@ namespace Castle.MonoRail.Framework.Test
 				new DefaultLayoutDescriptorProvider(),
 				new DefaultRescueDescriptorProvider(),
 				new DefaultResourceDescriptorProvider(),
-				new DefaultTransformFilterDescriptorProvider());
+				new DefaultTransformFilterDescriptorProvider(), 
+				new DefaultReturnBinderDescriptorProvider());
 
 			resourceFactory = new DefaultResourceFactory();
 			scaffoldSupport = new MockScaffoldingSupport();

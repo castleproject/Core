@@ -32,6 +32,7 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 		private IRescueDescriptorProvider rescueDescProviderMock;
 		private IResourceDescriptorProvider resourceProviderMock;
 		private ITransformFilterDescriptorProvider transformDescProviderMock;
+		private IReturnBinderDescriptorProvider returnTypeDescProviderMock;
 
 		[Test]
 		public void CollectsSkipRescueForAction()
@@ -126,13 +127,14 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 			rescueDescProviderMock = mockRepository.CreateMock<IRescueDescriptorProvider>();
 			resourceProviderMock = mockRepository.CreateMock<IResourceDescriptorProvider>();
 			transformDescProviderMock = mockRepository.CreateMock<ITransformFilterDescriptorProvider>();
+			returnTypeDescProviderMock = mockRepository.CreateMock<IReturnBinderDescriptorProvider>();
 
 			provider = new DefaultControllerDescriptorProvider(helperDescProviderMock,
 															   filterDescProviderMock,
 															   layoutDescProviderMock,
 															   rescueDescProviderMock,
 															   resourceProviderMock,
-															   transformDescProviderMock);
+															   transformDescProviderMock, returnTypeDescProviderMock);
 
 			Type controllerType = typeof(SingleActionController);
 			MethodInfo actionMethod = controllerType.GetMethod("Action1");
@@ -151,6 +153,7 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 				Expect.Call(rescueDescProviderMock.CollectRescues(actionMethod)).Return(new RescueDescriptor[0]);
 				Expect.Call(layoutDescProviderMock.CollectLayout(actionMethod)).Return(null);
 				Expect.Call(transformDescProviderMock.CollectFilters(actionMethod)).Return(new TransformFilterDescriptor[0]);
+				Expect.Call(returnTypeDescProviderMock.Collect(actionMethod)).Return(null);
 			}
 
 			using(mockRepository.Playback())
@@ -230,7 +233,7 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 			provider = new DefaultControllerDescriptorProvider(new DefaultHelperDescriptorProvider(),
 															   new DefaultFilterDescriptorProvider(), new DefaultLayoutDescriptorProvider(),
 															   new DefaultRescueDescriptorProvider(), new DefaultResourceDescriptorProvider(),
-															   new DefaultTransformFilterDescriptorProvider());
+															   new DefaultTransformFilterDescriptorProvider(), new DefaultReturnBinderDescriptorProvider());
 		}
 	}
 }
