@@ -1557,9 +1557,7 @@ namespace Castle.MonoRail.Framework
 			{
 				context.Helpers.Add(helper);
 				
-				Type helperType = helper.GetType();
-
-				if (helperType == typeof(FormHelper) || helperType == typeof(AjaxHelper))
+				if (helper is IServiceEnabledComponent)
 				{
 					serviceInitializer.Initialize(helper, engineContext);
 				}

@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied James Curran's patch fixing MR-419
+  "Improving initializing Service Enabled Components"
+
 - Added FormHelper.TextFieldAutoComplete for combining AJAX AutoCompletion and FormHelper's round trip
   support.
 
