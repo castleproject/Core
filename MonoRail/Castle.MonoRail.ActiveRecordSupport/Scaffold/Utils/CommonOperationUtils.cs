@@ -32,13 +32,13 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 		internal static object[] FindAll(Type type, String customWhere)
 		{
 			MethodInfo findAll = type.GetMethod("FindAll",
-			                                    BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
+												BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
 
 			object[] items = null;
 
 			if (findAll != null)
 			{
-				items = (object[]) findAll.Invoke(null, null);
+				items = (object[])findAll.Invoke(null, null);
 			}
 			else
 			{
@@ -52,26 +52,28 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 			return items;
 		}
 
-		internal static void SaveInstance(object instance, IController controller, 
-		                                  ArrayList errors, ref IDictionary prop2Validation, bool create)
+		internal static void SaveInstance(object instance, IController controller,
+										  ArrayList errors, ref IDictionary prop2Validation, bool create)
 		{
 			bool isValid = true;
-			
+
 			Type genType = typeof(ActiveRecordValidationBase<>).MakeGenericType(instance.GetType());
-			
+
 			if (genType.IsAssignableFrom(instance.GetType()))
 			{
-				MethodInfo isValidMethod = instance.GetType().GetMethod("IsValid");
+				// System.Type.EmptyTypes added because otherwise you get an AmbiguousMatchException for 
+				//  {Boolean IsValid()} and {Boolean IsValid(Castle.Components.Validator.RunWhen)}
+				MethodInfo isValidMethod = instance.GetType().GetMethod("IsValid", System.Type.EmptyTypes);
 
-				isValid = (bool) isValidMethod.Invoke(instance, null);
-				
+				isValid = (bool)isValidMethod.Invoke(instance, null);
+
 				if (!isValid)
 				{
 					MethodInfo getValidationErrorMessages = instance.GetType().GetMethod("get_ValidationErrorMessages");
 					MethodInfo getPropertiesValidationErrorMessage = instance.GetType().GetMethod("get_PropertiesValidationErrorMessage");
 
-					errors.AddRange((ICollection) getValidationErrorMessages.Invoke(instance, null));
-					prop2Validation = (IDictionary) getPropertiesValidationErrorMessage.Invoke(instance, null);
+					errors.AddRange((ICollection)getValidationErrorMessages.Invoke(instance, null));
+					prop2Validation = (IDictionary)getPropertiesValidationErrorMessage.Invoke(instance, null);
 				}
 			}
 			else if (instance is ActiveRecordValidationBase)
@@ -79,7 +81,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 				ActiveRecordValidationBase instanceBase = instance as ActiveRecordValidationBase;
 
 				isValid = instanceBase.IsValid();
-				
+
 				if (!isValid)
 				{
 					errors.AddRange(instanceBase.ValidationErrorMessages);
@@ -110,11 +112,11 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 			}
 
 			bool conversionSuceeded;
-			
+
 			return new DefaultConverter().Convert(keyProperty.PropertyType, id, out conversionSuceeded);
 		}
 
-		internal static object ReadPkFromParams(IDictionary<string,object> customParams, IRequest request, PropertyInfo keyProperty)
+		internal static object ReadPkFromParams(IDictionary<string, object> customParams, IRequest request, PropertyInfo keyProperty)
 		{
 			if (customParams.ContainsKey("id"))
 			{

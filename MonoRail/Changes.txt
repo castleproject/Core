@@ -1,6 +1,10 @@
 1.0
 ===
 
+- Applied Alwin's patch fixing MR-398
+  "Could not save <model>. Ambiguous match found. (AmbiguousMatchException 
+   when using Scaffolding and ActiveRecordValidationBase<T>)"
+
 - Applied James Curran's patch fixing MR-419
   "Improving initializing Service Enabled Components"
 
