@@ -15,7 +15,7 @@
 namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Reflection;
 
 	using Castle.ActiveRecord;
@@ -28,7 +28,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	{
 		private readonly PropertyInfo prop;
 		private readonly HasManyToAnyAttribute hasManyToAnyAtt;
-		private IList metaValues;
+		private IList<Any.MetaValueAttribute> metaValues;
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HasManyToAnyModel"/> class.
 		/// </summary>
@@ -38,7 +38,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			this.prop = prop;
 			this.hasManyToAnyAtt = hasManyToAnyAtt;
-			metaValues = new ArrayList();
+			metaValues = new List<Any.MetaValueAttribute>();
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets or sets the meta values.
 		/// </summary>
 		/// <value>The meta values.</value>
-		public IList MetaValues
+		public IList<Any.MetaValueAttribute> MetaValues
 		{
 			get { return metaValues; }
 			set { metaValues = value; }

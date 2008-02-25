@@ -31,15 +31,20 @@ namespace Castle.ActiveRecord
 	using Environment=NHibernate.Cfg.Environment;
 
 	/// <summary>
-	/// Delegate for use in <see cref="ActiveRecordStarter.SessionFactoryHolderCreated"/>
+	/// Delegate for use in <see cref="ActiveRecordStarter.ModelsCreated"/> and <see cref="ActiveRecordStarter.ModelsValidated"/>
 	/// </summary>
 	/// <param name="holder"></param>
 	public delegate void SessionFactoryHolderDelegate(ISessionFactoryHolder holder);
 	
 	/// <summary>
-	/// Delegate for use in <see cref="ActiveRecordStarter.ModelsCreated"/>
+	/// Delegate for use in <see cref="ActiveRecordStarter.ModelsCreated"/> and <see cref="ActiveRecordStarter.ModelsValidated"/>
 	/// </summary>
-	public delegate void ModelsCreatedDelegate(ActiveRecordModelCollection models, IConfigurationSource source);
+	public delegate void ModelsDelegate(ActiveRecordModelCollection models, IConfigurationSource source);
+
+	/// <summary>
+	/// Delegate for use in <see cref="ActiveRecordStarter.ModelCreated"/>
+	/// </summary>
+	public delegate void ModelDelegate(ActiveRecordModel model, IConfigurationSource source);
 
 	/// <summary>
 	/// Performs the framework initialization.
@@ -75,18 +80,26 @@ namespace Castle.ActiveRecord
 		/// determine the underlying database type and make changes
 		/// if necessary.
 		/// </summary>
-		public static event ModelsCreatedDelegate ModelsCreated;
+		public static event ModelsDelegate ModelsCreated;
 
-    /// <summary>
-    /// Allows other frameworks to modify the ActiveRecordModel
-    /// before the generation of the NHibernate XML configuration.
-    /// As an example, this may be used to rewrite table names to
-    /// conform to an application-specific standard.  Since the
-    /// configuration source is passed in, it is possible to
-    /// determine the underlying database type and make changes
-    /// if necessary.
-    /// </summary>
-    public static event ModelsCreatedDelegate ModelsValidated;
+		/// <summary>
+		/// Allows other frameworks to modify the ActiveRecordModel
+		/// before the generation of the NHibernate XML configuration.
+		/// As an example, this may be used to rewrite table names to
+		/// conform to an application-specific standard.  Since the
+		/// configuration source is passed in, it is possible to
+		/// determine the underlying database type and make changes
+		/// if necessary.
+		/// </summary>
+		public static event ModelsDelegate ModelsValidated;
+
+		/// <summary>
+		/// Allows other frameworks to modify the ActiveRecordModel
+		/// before the generation of the NHibernate XML configuration.
+		/// </summary>
+		public static event ModelDelegate ModelCreated;
+//		public static event ModelsDelegate ModelsCreated;
+
 
 		/// <summary>
 		/// Initialize the mappings using the configuration and 
@@ -495,6 +508,11 @@ namespace Castle.ActiveRecord
 				}
 
 				registeredTypes.Add(type, String.Empty);
+
+				if (ModelCreated != null)
+				{
+					ModelCreated(model, source);
+				}
 			}
 
 			return models;
@@ -716,7 +734,7 @@ namespace Castle.ActiveRecord
 				GraphConnectorVisitor connectorVisitor = new GraphConnectorVisitor(models);
 				connectorVisitor.VisitNodes(models);
 
-				ModelsCreatedDelegate modelsCreatedHandler = ModelsCreated;
+				ModelsDelegate modelsCreatedHandler = ModelsCreated;
 				if (modelsCreatedHandler != null)
 				{
 					modelsCreatedHandler(models, source);
@@ -725,7 +743,7 @@ namespace Castle.ActiveRecord
 				SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(models);
 				semanticVisitor.VisitNodes(models);
 
-				ModelsCreatedDelegate modelsValidatedHandler = ModelsValidated;
+				ModelsDelegate modelsValidatedHandler = ModelsValidated;
 				if(modelsValidatedHandler != null)
 				{
 					modelsValidatedHandler(models, source);

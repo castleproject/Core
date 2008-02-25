@@ -15,7 +15,7 @@
 namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using Castle.Components.Validator;
 
@@ -422,7 +422,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private static void CollectMetaValues(IList metaStore, PropertyInfo prop)
+		private static void CollectMetaValues(IList<Any.MetaValueAttribute> metaStore, PropertyInfo prop)
 		{
 			if (metaStore == null)
 				throw new ArgumentNullException("metaStore");

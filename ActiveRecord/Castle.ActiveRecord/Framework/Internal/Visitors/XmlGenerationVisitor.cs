@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Reflection;
 	using System.Text;
@@ -464,7 +465,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			// This is here so the XmlGenerationVisitor will always
 			// output the meta-values in consistent order, to aid the tests,
 			// MetaValueAttribute implements IComparable
-			ArrayList sortedMetaValues = new ArrayList(model.Parent.MetaValues);
+			List<Any.MetaValueAttribute> sortedMetaValues = new List<Any.MetaValueAttribute>(model.Parent.MetaValues);
 			sortedMetaValues.Sort();
 			foreach(Any.MetaValueAttribute meta in sortedMetaValues)
 			{
@@ -707,11 +708,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="model">The model.</param>
 		public override void VisitCompositeUserType(CompositeUserTypeModel model)
 		{
-			/*WriteProperty(model.Property.Name, model.Property.PropertyType, att.AccessString,
-						  att.ColumnType, att.Insert,
-						  att.Update, att.Formula, att.Column,
-						  att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check);*/
-
 			CompositeUserTypeAttribute attribute = model.Attribute;
 			BeginWriteProperty(null, MakeTypeName(attribute.CompositeType), null, attribute.Insert,
 			                   model.Property.Name, model.Property.PropertyType, attribute.Update);
