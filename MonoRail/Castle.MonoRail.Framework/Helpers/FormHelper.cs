@@ -1189,25 +1189,29 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
-        #region LiteralFor
+		#region LiteralFor
 
-        ///<summary>Returns the value for specified target with no additional markup. If no value is obtained
-        /// an empty string is returned.
-        ///</summary>
-        ///<param name="target">The object to get the value from.</param>
-        ///<returns>The value or an empty string if none is found.</returns>
-        public virtual string LiteralFor(string target)
-        {
-            target = RewriteTargetIfWithinObjectScope(target);
-            object value = ObtainValue(target);
-            if(value==null)
-                return string.Empty;
-            return value.ToString();
-        }
-        #endregion
-        #region LabelFor
+		///<summary>Returns the value for specified target with no additional markup. If no value is obtained
+		/// an empty string is returned.
+		///</summary>
+		///<param name="target">The object to get the value from.</param>
+		///<returns>The value or an empty string if none is found.</returns>
+		public virtual string LiteralFor(string target)
+		{
+			target = RewriteTargetIfWithinObjectScope(target);
+			object value = ObtainValue(target);
+			if (value == null)
+			{
+				return string.Empty;
+			}
+			return value.ToString();
+		}
 
-        /// <summary>
+		#endregion
+
+		#region LabelFor
+
+		/// <summary>
 		/// Generates a label element.
 		/// </summary>
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
@@ -1217,7 +1221,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return LabelFor(target, label, null);
 		}
-		
+
 		/// <summary>
 		/// Generates a label element.
 		/// </summary>
@@ -1238,9 +1242,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			writer.WriteBeginTag("label");
 			writer.WriteAttribute("for", id);
 			string strAttributes = GetAttributes(attributes);
-			if (strAttributes != String.Empty) writer.Write(HtmlTextWriter.SpaceChar);
+			if (strAttributes != String.Empty)
+			{
+				writer.Write(HtmlTextWriter.SpaceChar);
+			}
 
-			writer.Write(strAttributes); 
+			writer.Write(strAttributes);
 			writer.Write(HtmlTextWriter.TagRightChar);
 			writer.Write(label);
 			writer.WriteEndTag("label");
@@ -2535,18 +2542,18 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (foundType == null)
 			{
 			    string trimmed = pieces[0].Split('[')[0];
-			    
-                foundType = (Type) ControllerContext.PropertyBag[trimmed + "type"];
-                
-                if(foundType==null)
-                {
-                    object root = ObtainRootInstance(context, target, out pieces);
 
-                    if (root != null)
-                    {
-                        foundType = root.GetType();
-                    }
-                }
+				foundType = (Type) ControllerContext.PropertyBag[trimmed + "type"];
+
+				if (foundType == null)
+				{
+					object root = ObtainRootInstance(context, target, out pieces);
+
+					if (root != null)
+					{
+						foundType = root.GetType();
+					}
+				}
 			}
 
 			return foundType;

@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied Mike Nichols' patch fixing MR-392
+  "FormHelper.LiteralFor feature addition"
+
 - Applied Alwin's patch fixing MR-398
   "Could not save <model>. Ambiguous match found. (AmbiguousMatchException 
    when using Scaffolding and ActiveRecordValidationBase<T>)"
