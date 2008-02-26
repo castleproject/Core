@@ -231,6 +231,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Views\bugs\add.brail" />
+    <None Include="Views\bugs\no_code.brail" />
     <None Include="Views\bugs\InlineSubView.brail" />
     <None Include="Views\dsl\testXml.brail" />
     <None Include="Views\dsl\testSubViewWithComponents.brail" />

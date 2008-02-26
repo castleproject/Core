@@ -29,6 +29,17 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		}
 
 		[Test]
+		public void ScriptWithNoTempatingCode()
+		{
+			ProcessView_StripRailsExtension("bugs/no_code.rails");
+			AssertReplyEqualTo(@"<html>
+<body>test</body>
+</html>
+");
+		}
+
+
+		[Test]
 		public void MR_294_CaptureForInSubViewDoesNotPropogateUpward()
 		{
 			ProcessView_StripRailsExtension("bugs/MR_294_CaptureForInSubViewDoesNotPropogateUpward.rails");
