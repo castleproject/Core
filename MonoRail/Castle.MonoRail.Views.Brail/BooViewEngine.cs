@@ -49,7 +49,13 @@ namespace Castle.MonoRail.Views.Brail
 		/// used to hold the constructors of types, so we can avoid using
 		/// Activator (which takes a long time
 		/// </summary>
-		private readonly Hashtable constructors = new Hashtable();
+		private readonly Hashtable constructors = Hashtable.Synchronized(new Hashtable());
+		
+		/// <summary>
+		/// Used to map between type and file name, this is useful when we
+		/// want to remove a script by its type.
+		/// </summary>
+		private readonly Hashtable typeToFileName = Hashtable.Synchronized(new Hashtable());
 
 		private string baseSavePath;
 
@@ -456,6 +462,19 @@ namespace Castle.MonoRail.Views.Brail
 		                                  TextWriter output, Type type)
 		{
 			ConstructorInfo constructor = (ConstructorInfo) constructors[type];
+			if(constructor==null)
+			{
+				string message = "Could not find a constructor for "+type+", but it was found in the compilation cache. Clearing the compilation cache for the type, please try again";
+				Log(message);
+
+				object key = this.typeToFileName[type];
+				if(key!=null)
+				{
+					compilations.Remove(key);
+				}
+
+				throw new MonoRailException(message);
+			}
 			BrailBase self = (BrailBase) FormatterServices.GetUninitializedObject(type);
 			constructor.Invoke(self, new object[] {this, output, context, controller, controllerContext});
 			return self;
@@ -497,7 +516,9 @@ namespace Castle.MonoRail.Views.Brail
 				                                         		typeof(IController),
 				                                         		typeof(IControllerContext)
 				                                         	});
-				compilations[inputs2FileName[input]] = type;
+				string compilationName = inputs2FileName[input];
+				typeToFileName[type] = compilationName;
+				compilations[compilationName] = type;
 			}
 			type = (Type) compilations[filename];
 			return type;
