@@ -28,6 +28,17 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			engine = new RoutingEngine();
 		}
 
-		// We should test the RoutingRuleContainer here
+		[Test]
+		public void FindMatch_SelectsTheMatchWithMostPoints()
+		{
+			engine.Add(new PatternRoute("/<controller>/<action>/[id]").
+				Restrict("id").ValidInteger);
+			engine.Add(new PatternRoute("/<controller>/shop/<category>"));
+
+			RouteMatch match = engine.FindMatch("/home/shop/movies", CreateGetContext());
+			Assert.IsNotNull(match);
+			Assert.AreEqual("home", match.Parameters["controller"]);
+			Assert.AreEqual("movies", match.Parameters["category"]);
+		}
 	}
 }

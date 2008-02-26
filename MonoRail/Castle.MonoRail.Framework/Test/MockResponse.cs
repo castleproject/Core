@@ -48,8 +48,21 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="urlBuilder">The URL builder.</param>
 		/// <param name="serverUtility">The server utility.</param>
 		/// <param name="routeMatch">The route match.</param>
+		/// <param name="referrer">The referrer.</param>
+		public MockResponse(UrlInfo currentUrl, IUrlBuilder urlBuilder, IServerUtility serverUtility, RouteMatch routeMatch, string referrer)
+			: base(currentUrl, urlBuilder, serverUtility, routeMatch, referrer)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockResponse"/> class.
+		/// </summary>
+		/// <param name="currentUrl">The current URL.</param>
+		/// <param name="urlBuilder">The URL builder.</param>
+		/// <param name="serverUtility">The server utility.</param>
+		/// <param name="routeMatch">The route match.</param>
 		public MockResponse(UrlInfo currentUrl, IUrlBuilder urlBuilder, IServerUtility serverUtility, RouteMatch routeMatch)
-			: base(currentUrl, urlBuilder, serverUtility, routeMatch)
+			: this(currentUrl, urlBuilder, serverUtility, routeMatch, null)
 		{
 		}
 

@@ -209,7 +209,6 @@
     <Compile Include="Routing\PatternRouteCreateUrlTestCase.cs" />
     <Compile Include="Routing\PatternRouteTestCase.cs" />
     <Compile Include="Routing\RoutingEngineTestCase.cs" />
-    <Compile Include="Routing\RoutingRuleWithActionDecoratorTestCase.cs" />
     <Compile Include="Services\ControllerTreeTestCase.cs" />
     <Compile Include="Services\DefaultControllerFactoryTestCase.cs" />
     <Compile Include="Services\DefaultUrlBuilderRouteIntegrationTestCase.cs" />

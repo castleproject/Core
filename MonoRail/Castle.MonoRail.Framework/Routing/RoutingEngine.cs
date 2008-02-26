@@ -45,7 +45,6 @@ namespace Castle.MonoRail.Framework.Routing
 
 		class DomainRule
 		{
-			
 		}
 	}
 }

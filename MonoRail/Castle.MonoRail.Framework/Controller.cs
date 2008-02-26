@@ -812,6 +812,14 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Redirects to url using referrer.
+		/// </summary>
+		public void RedirectToReferrer()
+		{
+			Response.RedirectToReferrer();
+		}
+
+		/// <summary>
 		/// Redirects to the site root directory (<c>Context.ApplicationPath + "/"</c>).
 		/// </summary>
 		public void RedirectToSiteRoot()

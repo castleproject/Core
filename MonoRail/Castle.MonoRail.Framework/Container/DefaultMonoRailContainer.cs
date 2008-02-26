@@ -18,7 +18,6 @@ namespace Castle.MonoRail.Framework.Container
 	using System.Configuration;
 	using Castle.Components.Common.EmailSender;
 	using Castle.Components.Validator;
-	using Castle.Core;
 	using Castle.Core.Configuration;
 	using Castle.MonoRail.Framework.Services;
 	using Castle.MonoRail.Framework.Configuration;

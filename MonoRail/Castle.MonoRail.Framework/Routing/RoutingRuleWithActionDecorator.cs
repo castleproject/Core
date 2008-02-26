@@ -41,10 +41,11 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="hostname">The hostname.</param>
 		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
+		/// <param name="points">The points.</param>
 		/// <returns></returns>
-		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
+		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters, out int points)
 		{
-			return inner.CreateUrl(hostname, virtualPath, parameters);
+			return inner.CreateUrl(hostname, virtualPath, parameters, out points);
 		}
 
 		/// <summary>
@@ -55,16 +56,17 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="context">The context</param>
 		/// <param name="match">The match.</param>
 		/// <returns></returns>
-		public bool Matches(string url, IRouteContext context, RouteMatch match)
+		public int Matches(string url, IRouteContext context, RouteMatch match)
 		{
-			bool matches = inner.Matches(url, context, match);
-
-			if (matches)
-			{
-				action(context, match);
-			}
-
-			return matches;
+			return inner.Matches(url, context, match);
+//			bool matches = inner.Matches(url, context, match);
+//
+//			if (matches)
+//			{
+//				action(context, match);
+//			}
+//
+//			return matches;
 		}
 
 		/// <summary>

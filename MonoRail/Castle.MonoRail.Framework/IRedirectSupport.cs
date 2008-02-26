@@ -22,6 +22,11 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface IRedirectSupport
 	{
+		/// <summary>
+		/// Redirects to url using referrer.
+		/// </summary>
+		void RedirectToReferrer();
+
 		/// <summary> 
 		/// Redirects to the site root directory (<c>Context.ApplicationPath + "/"</c>).
 		/// </summary>

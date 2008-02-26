@@ -470,6 +470,8 @@
     <Compile Include="IHelperFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IMonoRailConfigurationEvents.cs" />
+    <Compile Include="IMonoRailContainerEvents.cs" />
     <Compile Include="IMonoRailHttpHandlerProvider.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -33,6 +33,7 @@ namespace Castle.MonoRail.Framework.Internal
 		private readonly UrlInfo currentUrl;
 		private readonly IServerUtility serverUtility;
 		private readonly RouteMatch routeMatch;
+		private readonly string referrer;
 		private IUrlBuilder urlBuilder;
 		/// <summary>
 		/// Indicates if a redirected has been issued
@@ -47,12 +48,14 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <param name="urlBuilder">The URL builder.</param>
 		/// <param name="serverUtility">The server utility.</param>
 		/// <param name="routeMatch">The route match.</param>
-		protected BaseResponse(UrlInfo currentUrl, IUrlBuilder urlBuilder, IServerUtility serverUtility, RouteMatch routeMatch)
+		/// <param name="referrer">The referrer.</param>
+		protected BaseResponse(UrlInfo currentUrl, IUrlBuilder urlBuilder, IServerUtility serverUtility, RouteMatch routeMatch, string referrer)
 		{
 			this.currentUrl = currentUrl;
 			this.urlBuilder = urlBuilder;
 			this.serverUtility = serverUtility;
 			this.routeMatch = routeMatch;
+			this.referrer = referrer;
 		}
 
 		#region abstracts 
@@ -180,6 +183,18 @@ namespace Castle.MonoRail.Framework.Internal
 		public abstract void RedirectToUrl(string url, bool endProcess);
 
 		#endregion
+
+		/// <summary>
+		/// Redirects to url using referrer.
+		/// </summary>
+		public void RedirectToReferrer()
+		{
+			if (referrer == null)
+			{
+				throw new InvalidOperationException("No referrer available");
+			}
+			RedirectToUrl(referrer);
+		}
 
 		/// <summary>
 		/// Redirects to the site root directory (<c>Context.ApplicationPath + "/"</c>).

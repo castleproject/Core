@@ -275,7 +275,7 @@ namespace Castle.MonoRail.Framework.Services
 			string path = ComputeStandardBasePath(appVirtualDir, area);
 			path = ApplyBasePathOrAbsolutePathIfNecessary(appVirtualDir, area, current, parameters, path);
 
-			UrlParts parts = TryCreateUrlUsingRegisteredRoutes(parameters, appVirtualDir, routeParameters);
+			UrlParts parts = TryCreateUrlUsingRegisteredRoutes(current.Domain, parameters, appVirtualDir, routeParameters);
 
 			if (parts == null)
 			{
@@ -293,11 +293,12 @@ namespace Castle.MonoRail.Framework.Services
 		/// <summary>
 		/// Tries the create URL using registered routes.
 		/// </summary>
+		/// <param name="domain">The domain.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <param name="appVirtualDir">The app virtual dir.</param>
 		/// <param name="routeParameters">The route parameters.</param>
 		/// <returns></returns>
-		protected UrlParts TryCreateUrlUsingRegisteredRoutes(UrlBuilderParameters parameters,
+		protected UrlParts TryCreateUrlUsingRegisteredRoutes(string domain, UrlBuilderParameters parameters,
 		                                                     string appVirtualDir,
 		                                                     IDictionary routeParameters)
 		{
@@ -318,7 +319,16 @@ namespace Castle.MonoRail.Framework.Services
 					CommonUtils.MergeOptions(routeParameters, parameters.RouteMatch.Parameters);
 				}
 
-				string url = routingEng.CreateUrl(appVirtualDir, routeParameters);
+				string url;
+
+				if (parameters.RouteName != null)
+				{
+					url = routingEng.CreateUrl(parameters.RouteName, domain, appVirtualDir, routeParameters);
+				}
+				else
+				{
+					url = routingEng.CreateUrl(domain, appVirtualDir, routeParameters);
+				}
 
 				if (url != null)
 				{

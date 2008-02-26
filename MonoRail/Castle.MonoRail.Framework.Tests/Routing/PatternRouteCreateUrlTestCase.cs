@@ -25,46 +25,58 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		public void ShouldNotMatchStaticRule()
 		{
 			PatternRoute route = new PatternRoute("/some/path");
-			Assert.IsNull(route.CreateUrl("localhost", "", DictHelper.Create("")));
+			int points;
+			route.CreateUrl("localhost", "", DictHelper.Create(""), out points);
+			Assert.AreEqual(0, points);
 		}
 
 		[Test]
 		public void ShouldNotMatchIfParameterIsNotPresent()
 		{
 			PatternRoute route = new PatternRoute("/some/<controller>");
-			Assert.IsNull(route.CreateUrl("localhost", "", DictHelper.Create("")));
+			int points;
+			Assert.IsNull(route.CreateUrl("localhost", "", DictHelper.Create(""), out points));
+			Assert.AreEqual(0, points);
 		}
 
 		[Test]
 		public void ShouldMatchNamedRequiredParameter()
 		{
 			PatternRoute route = new PatternRoute("/some/<controller>");
-			Assert.AreEqual("/some/home", route.CreateUrl("localhost", "", DictHelper.Create("controller=home")));
+			int points;
+			Assert.AreEqual("/some/home", route.CreateUrl("localhost", "",
+				DictHelper.Create("controller=home"), out points));
+			Assert.AreEqual(1, points);
 		}
 
 		[Test]
 		public void ShouldMatchNamedRequiredParameters()
 		{
 			PatternRoute route = new PatternRoute("/some/<controller>/<action>");
-			Assert.AreEqual("/some/home/index", route.CreateUrl("localhost", "", 
-				DictHelper.Create("controller=home", "action=index")));
+			int points;
+			Assert.AreEqual("/some/home/index", route.CreateUrl("localhost", "",
+				DictHelper.Create("controller=home", "action=index"), out points));
+			Assert.AreEqual(2, points);
 		}
 
 		[Test]
 		public void ShouldMatchNamedRequiredParametersWithExtension()
 		{
 			PatternRoute route = new PatternRoute("/some/<controller>.castle/<action>");
-			Assert.AreEqual("/some/home.castle/index", route.CreateUrl("localhost", "", 
-				DictHelper.Create("controller=home", "action=index")));
+			int points;
+			Assert.AreEqual("/some/home.castle/index", route.CreateUrl("localhost", "",
+				DictHelper.Create("controller=home", "action=index"), out points));
+			Assert.AreEqual(2, points);
 		}
 
 		[Test]
 		public void ShouldIgnoreOptionalParameterButMatchOthers()
 		{
 			PatternRoute route = new PatternRoute("/<controller>/[action]");
-
-			Assert.AreEqual("/home", route.CreateUrl("localhost", "", 
-				DictHelper.Create("controller=home")));
+			int points;
+			Assert.AreEqual("/home", route.CreateUrl("localhost", "",
+				DictHelper.Create("controller=home"), out points));
+			Assert.AreEqual(1, points);
 		}
 
 		[Test]
@@ -75,14 +87,18 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 					Restrict("controller").AnyOf("stories", "bugs", "tasks").
 					Restrict("id").ValidInteger;
 
+			int points;
 			Assert.IsNull(route.CreateUrl("localhost", "",
-				DictHelper.Create("project=MonoRail", "controller=home")));
+				DictHelper.Create("project=MonoRail", "controller=home"), out points));
+			Assert.AreEqual(1, points);
 
 			Assert.AreEqual("/projects/MonoRail/Stories", route.CreateUrl("localhost", "",
-				DictHelper.Create("project=MonoRail", "controller=Stories")));
+				DictHelper.Create("project=MonoRail", "controller=Stories"), out points));
+			Assert.AreEqual(2, points);
 			
 			Assert.AreEqual("/projects/MonoRail/bugs", route.CreateUrl("localhost", "",
-				DictHelper.Create("project=MonoRail", "controller=bugs", "action=index")));
+				DictHelper.Create("project=MonoRail", "controller=bugs", "action=index"), out points));
+			Assert.AreEqual(3, points);
 		}
 
 		[Test]
@@ -93,8 +109,10 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 					Restrict("controller").AnyOf("stories", "bugs", "tasks").
 					Restrict("id").ValidInteger;
 
+			int points;
 			Assert.AreEqual("/projects/MonoRail/bugs", route.CreateUrl("localhost", "",
-				DictHelper.Create("project=MonoRail", "controller=bugs", "action=index")));
+				DictHelper.Create("project=MonoRail", "controller=bugs", "action=index"), out points));
+			Assert.AreEqual(3, points);
 		}
 
 		[Test]
@@ -105,8 +123,10 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 				DefaultForController().Is("companies").
 				Restrict("id").ValidInteger;
 
+			int points;
 			Assert.IsNull(route.CreateUrl("localhost", "",
-				DictHelper.Create("controller=people", "action=edit", "id=1")));
+				DictHelper.Create("controller=people", "action=edit", "id=1"), out points));
+			Assert.AreEqual(1, points);
 		}
 
 		[Test]
@@ -119,8 +139,10 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 				Restrict("format").AnyOf(new string[]{"html", "json", "xml"}).
 				DefaultFor("format").Is("html");
 
+			int points;
 			Assert.AreEqual("/people/1/edit.json", route.CreateUrl("localhost", "",
-				DictHelper.Create("id=1", "format=json")));
+				DictHelper.Create("id=1", "format=json"), out points));
+			Assert.AreEqual(2, points);
 		}
 
 		[Test]
@@ -131,8 +153,10 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 				DefaultForController().Is("people").
 				Restrict("id").ValidInteger;
 
+			int points;
 			Assert.AreEqual("/people/1/edit", route.CreateUrl("localhost", "",
-				DictHelper.Create("id=1")));
+				DictHelper.Create("id=1"), out points));
+			Assert.AreEqual(1, points);
 		}
 
 		[Test]
@@ -145,8 +169,10 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 				Restrict("format").AnyOf(new string[] { "html", "json", "xml" }).
 				DefaultFor("format").Is("html");
 
+			int points;
 			Assert.AreEqual("/people/1/edit", route.CreateUrl("localhost", "",
-				DictHelper.Create("id=1")));
+				DictHelper.Create("id=1"), out points));
+			Assert.AreEqual(1, points);
 		}
 
 		[Test]
@@ -159,8 +185,10 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 				Restrict("format").AnyOf(new string[] { "html", "json", "xml" }).
 				DefaultFor("format").Is("html");
 
+			int points;
 			Assert.AreEqual("/people/1/edit", route.CreateUrl("localhost", "",
-				DictHelper.Create("id=1")));
+				DictHelper.Create("id=1"), out points));
+			Assert.AreEqual(1, points);
 		}
 	}
 }

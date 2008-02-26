@@ -33,14 +33,16 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ResponseAdapter"/> class.
 		/// </summary>
+		/// <param name="response">The response.</param>
 		/// <param name="currentUrl">The current URL.</param>
 		/// <param name="urlBuilder">The URL builder.</param>
 		/// <param name="serverUtility">The server utility.</param>
 		/// <param name="routeMatch">The route match.</param>
-		/// <param name="response">The response.</param>
+		/// <param name="referrer">The referrer.</param>
 		public ResponseAdapter(HttpResponse response, UrlInfo currentUrl, 
-			IUrlBuilder urlBuilder, IServerUtility serverUtility, 
-			RouteMatch routeMatch) : base(currentUrl, urlBuilder, serverUtility, routeMatch)
+			IUrlBuilder urlBuilder, IServerUtility serverUtility,
+			RouteMatch routeMatch, string referrer)
+			: base(currentUrl, urlBuilder, serverUtility, routeMatch, referrer)
 		{
 			this.response = response;
 		}

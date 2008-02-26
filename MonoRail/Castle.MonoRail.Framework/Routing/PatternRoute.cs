@@ -32,7 +32,9 @@ namespace Castle.MonoRail.Framework.Routing
 		private readonly string name;
 		private readonly string pattern;
 		private readonly List<DefaultNode> nodes = new List<DefaultNode>();
-		private readonly Dictionary<string, string> defaults = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
+		private readonly Dictionary<string, string> defaults =
+			new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PatternRoute"/> class.
@@ -69,13 +71,13 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="hostname">The hostname.</param>
 		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
+		/// <param name="points">The points.</param>
 		/// <returns></returns>
-		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
+		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters, out int points)
 		{
+			points = 0;
 			StringBuilder text = new StringBuilder(virtualPath);
 			IList<string> checkedParameters = new List<string>();
-
-			bool hasNamed = false;
 
 			foreach(DefaultNode node in nodes)
 			{
@@ -87,7 +89,6 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 				else
 				{
-					hasNamed = true;
 					checkedParameters.Add(node.name);
 
 					object value = parameters[node.name];
@@ -111,7 +112,10 @@ namespace Castle.MonoRail.Framework.Routing
 							return null;
 						}
 
-						if (node.optional && StringComparer.InvariantCultureIgnoreCase.Compare(node.DefaultVal, value.ToString()) == 0)
+						points += 1;
+
+						if (node.optional && 
+							StringComparer.InvariantCultureIgnoreCase.Compare(node.DefaultVal, value.ToString()) == 0)
 						{
 							break; // end as there can't be more required nodes after an optional one
 						}
@@ -122,28 +126,29 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 
 			// Validate that default parameters match parameters passed into to create url.
-			foreach (KeyValuePair<string, string> defaultParameter in defaults)
+			foreach(KeyValuePair<string, string> defaultParameter in defaults)
 			{
 				// Skip parameters we already checked.
-				if(checkedParameters.Contains(defaultParameter.Key))
+				if (checkedParameters.Contains(defaultParameter.Key))
 				{
 					continue;
 				}
 
 				object value = parameters[defaultParameter.Key];
 				string valAsString = value != null ? value.ToString() : null;
-				if(!string.IsNullOrEmpty(valAsString) && !defaultParameter.Value.Equals(valAsString, StringComparison.OrdinalIgnoreCase))
+				if (!string.IsNullOrEmpty(valAsString) &&
+				    !defaultParameter.Value.Equals(valAsString, StringComparison.OrdinalIgnoreCase))
 				{
 					return null;
 				}
 			}
 
-			if (text.Length == 0 || text[text.Length - 1] == '/' || text[text.Length -1] == '.')
+			if (text.Length == 0 || text[text.Length - 1] == '/' || text[text.Length - 1] == '.')
 			{
 				text.Length = text.Length - 1;
 			}
 
-			return hasNamed ? text.ToString() : null;
+			return text.ToString();
 		}
 
 		/// <summary>
@@ -154,18 +159,19 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="context">The context</param>
 		/// <param name="match">The match.</param>
 		/// <returns></returns>
-		public bool Matches(string url, IRouteContext context, RouteMatch match)
+		public int Matches(string url, IRouteContext context, RouteMatch match)
 		{
 			string[] parts = url.Split(new char[] {'/', '.'}, StringSplitOptions.RemoveEmptyEntries);
 			int index = 0;
+			int points = 0;
 
 			foreach(DefaultNode node in nodes)
 			{
 				string part = index < parts.Length ? parts[index] : null;
 
-				if (!node.Matches(part, match))
+				if (!node.Matches(part, match, ref points))
 				{
-					return false;
+					return 0;
 				}
 
 				index++;
@@ -179,7 +185,7 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 			}
 
-			return true;
+			return points;
 		}
 
 		private void CreatePatternNodes()
@@ -188,7 +194,7 @@ namespace Castle.MonoRail.Framework.Routing
 
 			foreach(string part in parts)
 			{
-				string[] subparts = part.Split(new char[] { '.' }, 2, StringSplitOptions.RemoveEmptyEntries);
+				string[] subparts = part.Split(new char[] {'.'}, 2, StringSplitOptions.RemoveEmptyEntries);
 
 				if (subparts.Length == 2)
 				{
@@ -346,7 +352,7 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 			}
 
-			public bool Matches(string part, RouteMatch match)
+			public bool Matches(string part, RouteMatch match, ref int points)
 			{
 				if (part == null)
 				{
@@ -356,6 +362,9 @@ namespace Castle.MonoRail.Framework.Routing
 						{
 							match.AddNamed(name, defaultVal);
 						}
+
+						// points += 2;
+
 						return true;
 					}
 					else
@@ -372,6 +381,8 @@ namespace Castle.MonoRail.Framework.Routing
 					{
 						match.AddNamed(name, part);
 					}
+
+					points += 2;
 
 					return true;
 				}
@@ -394,10 +405,7 @@ namespace Castle.MonoRail.Framework.Routing
 
 			public bool AcceptsIntOnly
 			{
-				set
-				{
-					AcceptsRegex("[0-9]+");
-				}
+				set { AcceptsRegex("[0-9]+"); }
 			}
 
 			public bool AcceptsGuidsOnly
@@ -405,8 +413,8 @@ namespace Castle.MonoRail.Framework.Routing
 				set
 				{
 					AcceptsRegex("[A-Fa-f0-9]{32}|" +
-								"({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?|" +
-								"({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})");
+					             "({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?|" +
+					             "({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})");
 				}
 			}
 

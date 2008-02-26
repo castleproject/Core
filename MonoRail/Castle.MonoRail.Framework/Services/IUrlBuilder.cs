@@ -30,7 +30,9 @@ namespace Castle.MonoRail.Framework.Services
 		private string area, controller, action;
 		private string domain, subdomain, protocol, basePath, pathInfo;
 		private int port;
-		private object routeParameters, queryString;
+		private object routeParameters;
+		private readonly string routeName;
+		private object queryString;
 		private IDictionary customParameters;
 		private bool encodeForLink, createAbsolutePath, useCurrentRouteParams;
 		private RouteMatch routeMatch;
@@ -74,8 +76,8 @@ namespace Castle.MonoRail.Framework.Services
 		/// </summary>
 		private UrlBuilderParameters(string area, string controller, string action, 
 			bool createAbsolutePath, string basePath, string domain, string subdomain, string protocol, int port, 
-			string pathInfo, object queryString, bool encodeForLink, IDictionary customParameters, 
-			object routeParams) : 
+			string pathInfo, object queryString, bool encodeForLink, IDictionary customParameters,
+			object routeParams, string routeName) : 
 			this(area, controller, action)
 		{
 			this.createAbsolutePath = createAbsolutePath;
@@ -90,6 +92,7 @@ namespace Castle.MonoRail.Framework.Services
 			this.customParameters = customParameters;
 
 			routeParameters = routeParams;
+			this.routeName = routeName;
 		}
 
 		/// <summary>
@@ -133,14 +136,16 @@ namespace Castle.MonoRail.Framework.Services
 			string protocol = CommonUtils.ObtainEntryAndRemove(parameters, "protocol");
 			int port = Convert.ToInt32(CommonUtils.ObtainEntryAndRemove(parameters, "port", "0"));
 
+			string routeName = CommonUtils.ObtainEntryAndRemove(parameters, "route");
+
 			string pathInfo = CommonUtils.ObtainEntryAndRemove(parameters, "pathinfo");
 			object queryString = CommonUtils.ObtainObjectEntryAndRemove(parameters, "querystring");
 			RouteMatch routeMatch = (RouteMatch) CommonUtils.ObtainObjectEntryAndRemove(parameters, "routeMatch");
 
 			return new UrlBuilderParameters(area, controller, action, 
 				createAbsolutePath, basePath, domain, subdomain, protocol, port, 
-				pathInfo, queryString, 
-				encodeForLink, parameters, routeParams).
+				pathInfo, queryString,
+				encodeForLink, parameters, routeParams, routeName).
 				SetRouteMatch(useCurrentRouteParams, routeMatch);
 		}
 
@@ -309,6 +314,15 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			get { return useCurrentRouteParams; }
 			set { useCurrentRouteParams = value; }
+		}
+
+		/// <summary>
+		/// Gets the name of the route.
+		/// </summary>
+		/// <value>The name of the route.</value>
+		public string RouteName
+		{
+			get { return routeName; }
 		}
 
 		/// <summary>

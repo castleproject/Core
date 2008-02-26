@@ -42,10 +42,12 @@ namespace Castle.MonoRail.Framework.Services
 
 			ServerUtilityAdapter serverUtility = new ServerUtilityAdapter(context.Server);
 
+			string referrer = context.Request.Headers["Referer"];
+
 			return new DefaultEngineContext(container, urlInfo, context,
 			                                serverUtility,
 			                                new RequestAdapter(context.Request),
-											new ResponseAdapter(context.Response, urlInfo, urlBuilder, serverUtility, routeMatch),
+											new ResponseAdapter(context.Response, urlInfo, urlBuilder, serverUtility, routeMatch, referrer),
 											new TraceAdapter(context.Trace), session);
 		}
 

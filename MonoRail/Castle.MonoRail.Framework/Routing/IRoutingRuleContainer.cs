@@ -52,18 +52,11 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <summary>
 		/// Pendent
 		/// </summary>
+		/// <param name="hostname">The hostname.</param>
 		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		string CreateUrl(string virtualPath, IDictionary parameters);
-
-		/// <summary>
-		/// Pendent
-		/// </summary>
-		/// <param name="virtualPath">The virtual path.</param>
-		/// <param name="parameters">The parameters.</param>
-		/// <returns></returns>
-		string CreateUrl(string virtualPath, object parameters);
+		string CreateUrl(string hostname, string virtualPath, IDictionary parameters);
 
 		/// <summary>
 		/// Pendent

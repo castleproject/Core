@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Routing
 {
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Threading;
@@ -24,7 +25,7 @@ namespace Castle.MonoRail.Framework.Routing
 	/// </summary>
 	public class RoutingRuleContainer : IRoutingRuleContainer
 	{
-		private readonly List<IRoutingRule> rules = new List<IRoutingRule>();
+		private readonly List<DecoratedRule> rules = new List<DecoratedRule>();
 		private readonly Dictionary<string, IRoutingRule> name2Rule = new Dictionary<string, IRoutingRule>();
 		private readonly ReaderWriterLock locker = new ReaderWriterLock();
 
@@ -35,10 +36,18 @@ namespace Castle.MonoRail.Framework.Routing
 		public void Add(IRoutingRule rule)
 		{
 			// Lock for writing
-			rules.Add(rule);
+			rules.Add(new DecoratedRule(rule));
 
 			// For really fast access
-//			name2Rule[rule.RouteName] = rule;
+			if (rule.RouteName != null)
+			{
+				if (name2Rule.ContainsKey(rule.RouteName))
+				{
+					throw new InvalidOperationException("Attempt to register route with duplicated name: " + rule.RouteName);
+				}
+
+				name2Rule[rule.RouteName] = rule;
+			}
 		}
 
 		/// <summary>
@@ -47,7 +56,7 @@ namespace Castle.MonoRail.Framework.Routing
 		public void Add(IRoutingRule rule, RouteAction action)
 		{
 			// Lock for writing
-			rules.Add(new RoutingRuleWithActionDecorator(rule, action));
+			rules.Add(new DecoratedRule(rule, action));
 		}
 
 		/// <summary>
@@ -69,39 +78,48 @@ namespace Castle.MonoRail.Framework.Routing
 				throw new MonoRailException("Could not find named route: " + routeName);
 			}
 
-			return rule.CreateUrl(hostname, virtualPath, parameters);
+			int points;
+			return rule.CreateUrl(hostname, virtualPath, parameters, out points);
 		}
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
+		/// <param name="hostname">The hostname.</param>
 		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public string CreateUrl(string virtualPath, IDictionary parameters)
+		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
 		{
+			int winnerPoints = 0;
+			string winnerUrl = null;
+
 			foreach(IRoutingRule rule in rules)
 			{
-				string url = rule.CreateUrl("", virtualPath, parameters);
+				int points;
 
-				if (url != null)
+				string url = rule.CreateUrl(hostname, virtualPath, parameters, out points);
+
+				if (url != null && points > winnerPoints)
 				{
-					return url;
+					winnerUrl = url;
+					winnerPoints = points;
 				}
 			}
 
-			return null;
+			return winnerUrl;
 		}
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
+		/// <param name="hostname">The hostname.</param>
 		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public string CreateUrl(string virtualPath, object parameters)
+		public string CreateUrl(string hostname, string virtualPath, object parameters)
 		{
-			return CreateUrl(virtualPath, new ReflectionBasedDictionaryAdapter(parameters));
+			return CreateUrl(hostname, virtualPath, new ReflectionBasedDictionaryAdapter(parameters));
 		}
 
 		/// <summary>
@@ -114,17 +132,30 @@ namespace Castle.MonoRail.Framework.Routing
 		{
 			// lock for reading
 
-			foreach(IRoutingRule rule in rules)
+			int winnerPoints = 0;
+			RouteMatch winner = null;
+			DecoratedRule winnerule = null;
+
+			foreach(DecoratedRule rule in rules)
 			{
 				RouteMatch match = new RouteMatch();
 
-				if (rule.Matches(url, context, match))
+				int points = rule.Matches(url, context, match);
+
+				if (points != 0 && points > winnerPoints)
 				{
-					return match;
+					winnerPoints = points;
+					winner = match;
+					winnerule = rule;
 				}
 			}
 
-			return null;
+			if (winner != null && winnerule.SelectionAction != null)
+			{
+				winnerule.SelectionAction(context, winner);
+			}
+
+			return winner;
 		}
 
 		/// <summary>
@@ -134,6 +165,42 @@ namespace Castle.MonoRail.Framework.Routing
 		public bool IsEmpty
 		{
 			get { return rules.Count == 0; }
+		}
+
+		class DecoratedRule : IRoutingRule
+		{
+			private readonly IRoutingRule inner;
+			private RouteAction selectionAction;
+
+			public DecoratedRule(IRoutingRule inner)
+			{
+				this.inner = inner;
+			}
+
+			public DecoratedRule(IRoutingRule inner, RouteAction selectionAction) : this(inner)
+			{
+				this.selectionAction = selectionAction;
+			}
+
+			public string CreateUrl(string hostname, string virtualPath, IDictionary parameters, out int points)
+			{
+				return inner.CreateUrl(hostname, virtualPath, parameters, out points);
+			}
+
+			public int Matches(string url, IRouteContext context, RouteMatch match)
+			{
+				return inner.Matches(url, context, match);
+			}
+
+			public string RouteName
+			{
+				get { return inner.RouteName; }
+			}
+
+			public RouteAction SelectionAction
+			{
+				get { return selectionAction; }
+			}
 		}
 	}
 }

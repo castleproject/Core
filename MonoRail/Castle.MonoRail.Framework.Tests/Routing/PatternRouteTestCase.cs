@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Text.RegularExpressions;
-
 namespace Castle.MonoRail.Framework.Tests.Routing
 {
 	using Framework.Routing;
@@ -27,7 +25,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/some/path");
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/some/path", CreateGetContext(), match)); 
+			Assert.AreEqual(4, route.Matches("/some/path", CreateGetContext(), match)); 
 		}
 
 		[Test]
@@ -35,7 +33,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/default.aspx");
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/default.aspx", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/default.aspx", CreateGetContext(), match));
 		}
 
 		[Test]
@@ -43,11 +41,11 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/default.aspx");
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/DEFAULT.ASPX", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/DEFAULT.ASPX", CreateGetContext(), match));
 
 			route = new PatternRoute("/some/path");
 			match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/SOME/Path", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/SOME/Path", CreateGetContext(), match));
 		}
 
 		[Test]
@@ -55,7 +53,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/some/path_to-this");
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/some/path_to-this", CreateGetContext(), match)); 
+			Assert.AreEqual(4, route.Matches("/some/path_to-this", CreateGetContext(), match)); 
 		}
 
 		[Test]
@@ -63,7 +61,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/<action>");
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/some/act", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/some/act", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act", match.Parameters["action"]);
 		}
@@ -73,7 +71,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/<action>.<format>");
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/some/act.xml", CreateGetContext(), match));
+			Assert.AreEqual(6, route.Matches("/some/act.xml", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act", match.Parameters["action"]);
 			Assert.AreEqual("xml", match.Parameters["format"]);
@@ -84,7 +82,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/<action>");
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/some/act_name", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/some/act_name", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act_name", match.Parameters["action"]);
 		}
@@ -94,7 +92,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/<action>");
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/some/act-name", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/some/act-name", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act-name", match.Parameters["action"]);
 		}
@@ -104,12 +102,12 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/[action]/[id]");
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/some/act", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/some/act", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act", match.Parameters["action"]);
 
 			match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/some/act/10", CreateGetContext(), match));
+			Assert.AreEqual(6, route.Matches("/some/act/10", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act", match.Parameters["action"]);
 			Assert.AreEqual("10", match.Parameters["id"]);
@@ -121,7 +119,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			PatternRoute route = new PatternRoute("/<controller>/[action]/[id]")
 				.DefaultFor("action").Is("index").DefaultFor("id").Is("0");
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/some", CreateGetContext(), match));
+			Assert.AreEqual(2, route.Matches("/some", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("index", match.Parameters["action"]);
 			Assert.AreEqual("0", match.Parameters["id"]);
@@ -135,12 +133,12 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 				.Restrict("id").ValidInteger;
 
 			RouteMatch match = new RouteMatch();
-			Assert.IsTrue(route.Matches("/some/index", CreateGetContext(), match));
-			Assert.IsTrue(route.Matches("/some/list", CreateGetContext(), match));
-			Assert.IsFalse(route.Matches("/some/new", CreateGetContext(), match));
-			Assert.IsFalse(route.Matches("/some/index/foo", CreateGetContext(), match));
-			Assert.IsFalse(route.Matches("/some/list/bar", CreateGetContext(), match));
-			Assert.IsTrue(route.Matches("/some/list/1", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/some/index", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/some/list", CreateGetContext(), match));
+			Assert.AreEqual(0, route.Matches("/some/new", CreateGetContext(), match));
+			Assert.AreEqual(0, route.Matches("/some/index/foo", CreateGetContext(), match));
+			Assert.AreEqual(0, route.Matches("/some/list/bar", CreateGetContext(), match));
+			Assert.AreEqual(6, route.Matches("/some/list/1", CreateGetContext(), match));
 		}
 
 		[Test]
@@ -155,8 +153,8 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 				.Restrict("key").ValidRegex(matchGuid);
 
 			RouteMatch match = new RouteMatch();
-			Assert.IsFalse(route.Matches("/something/zzzzzzzz-c123-11dc-95ff-0800200c9a66", CreateGetContext(), match));
-			Assert.IsTrue(route.Matches("/something/173e0970-c123-11dc-95ff-0800200c9a66", CreateGetContext(), match));
+			Assert.AreEqual(0, route.Matches("/something/zzzzzzzz-c123-11dc-95ff-0800200c9a66", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/something/173e0970-c123-11dc-95ff-0800200c9a66", CreateGetContext(), match));
 			Assert.AreEqual("something", match.Parameters["param"]);
 			Assert.AreEqual("173e0970-c123-11dc-95ff-0800200c9a66", match.Parameters["key"]);
 		}

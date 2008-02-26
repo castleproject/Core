@@ -36,8 +36,9 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="hostname">The hostname.</param>
 		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
+		/// <param name="points">The points.</param>
 		/// <returns></returns>
-		string CreateUrl(string hostname, string virtualPath, IDictionary parameters);
+		string CreateUrl(string hostname, string virtualPath, IDictionary parameters, out int points);
 
 		/// <summary>
 		/// Determines if the specified URL matches the
@@ -47,6 +48,6 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="context">The context</param>
 		/// <param name="match">The match.</param>
 		/// <returns></returns>
-		bool Matches(string url, IRouteContext context, RouteMatch match);
+		int Matches(string url, IRouteContext context, RouteMatch match);
 	}
 }

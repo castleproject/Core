@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Flash"/> class.
 		/// </summary>
-		public Flash()
+		public Flash() : base(StringComparer.InvariantCultureIgnoreCase)
 		{
 		}
 
@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Framework
 		/// Initializes a new instance of the <see cref="Flash"/> class.
 		/// </summary>
 		/// <param name="copy">The copy.</param>
-		public Flash(Flash copy)
+		public Flash(Flash copy) : base(StringComparer.InvariantCultureIgnoreCase)
 		{
 			if (copy == null) return;
 

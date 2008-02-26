@@ -338,32 +338,21 @@ namespace Castle.MonoRail.Framework
 
 		private void FireContainerCreated(HttpApplication instance, DefaultMonoRailContainer container)
 		{
-			MethodInfo eventMethod = instance.GetType().GetMethod("MonoRail_ContainerCreated");
+			IMonoRailContainerEvents events = instance as IMonoRailContainerEvents;
 
-			ExecuteContainerEvent(eventMethod, instance, container);
+			if (events != null)
+			{
+				events.Created(container);
+			}
 		}
 
 		private void FireContainerInitialized(HttpApplication instance, DefaultMonoRailContainer container)
 		{
-			MethodInfo eventMethod = instance.GetType().GetMethod("MonoRail_ContainerInitialized");
+			IMonoRailContainerEvents events = instance as IMonoRailContainerEvents;
 
-			ExecuteContainerEvent(eventMethod, instance, container);
-		}
-
-		private static void ExecuteContainerEvent(MethodInfo eventMethod, HttpApplication instance, DefaultMonoRailContainer container)
-		{
-			if (eventMethod == null)
+			if (events != null)
 			{
-				return;
-			}
-
-			if (eventMethod.IsStatic)
-			{
-				eventMethod.Invoke(null, new object[] { container });
-			}
-			else
-			{
-				eventMethod.Invoke(instance, new object[] { container });
+				events.Initialized(container);
 			}
 		}
 
@@ -371,20 +360,13 @@ namespace Castle.MonoRail.Framework
 		{
 			IMonoRailConfiguration config = MonoRailConfiguration.GetConfig();
 
-			MethodInfo mrConfigurer = appInstance.GetType().GetMethod("MonoRail_Configure");
+			IMonoRailConfigurationEvents events = appInstance as IMonoRailConfigurationEvents;
 
-			if (mrConfigurer != null)
+			if (events != null)
 			{
 				config = config ?? new MonoRailConfiguration();
 
-				if (mrConfigurer.IsStatic)
-				{
-					mrConfigurer.Invoke(null, new object[] { config });
-				}
-				else
-				{
-					mrConfigurer.Invoke(appInstance, new object[] { config });
-				}
+				events.Configure(config);
 			}
 
 			if (config == null)
