@@ -2230,7 +2230,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			bool disableValidation = CommonUtils.ObtainEntryAndRemove(attributes, "disablevalidation", "false") == "true";
 
-			if (!IsValidationEnabled && disableValidation)
+			if (!IsValidationEnabled || disableValidation)
 			{
 				return;
 			}
