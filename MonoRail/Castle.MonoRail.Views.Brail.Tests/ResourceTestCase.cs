@@ -26,15 +26,14 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	{
         protected override void BeforEachTest()
         {
-            AddResource("resx", "TestSiteBrail.Controllers.ResourceFile", 
+			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+			AddResource("resx", "TestSiteBrail.Controllers.ResourceFile", 
                 typeof(ResourcedController).Assembly);
         }
 
 		[Test]
 		public void GetIndexedResources()
 		{
-			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-			Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 			string expected = "testValue";
 			ProcessView_StripRailsExtension("resourced/indexingResources.rails");
 			AssertReplyEqualTo(expected);
@@ -43,8 +42,6 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void GetResources()
 		{
-			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-			Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 			string expected = "testValue";
 			ProcessView_StripRailsExtension("resourced/getresources.rails");
 			AssertReplyEqualTo(expected);
@@ -53,8 +50,6 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void IterateOnResources()
 		{
-			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-			Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 			string expected = "testKey: testValue";
 			ProcessView_StripRailsExtension("resourced/iterating.rails");
 			AssertReplyEqualTo(expected);

@@ -131,6 +131,11 @@
     <Compile Include="Controllers\OutputMethodsController.cs" />
     <Compile Include="Controllers\RescueController.cs" />
     <Compile Include="Controllers\ResourcedController.cs" />
+    <Compile Include="Controllers\ResourceFile.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceFile.resx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\SubArea\HomeController.cs" />
     <Compile Include="Controllers\SubViewController.cs" />
     <Compile Include="Controllers\UsingComponent2Controller.cs" />
@@ -222,9 +227,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controllers\ResourceFile.resources" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +238,13 @@
     <None Include="Views\home\NullPropagation.brail" />
     <None Include="Views\home\WithNullableDynamicProxyObject.brail" />
     <None Include="Views\resourced\iterating.brail" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controllers\ResourceFile.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceFile.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

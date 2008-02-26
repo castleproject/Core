@@ -6,6 +6,7 @@
 	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
 >
 
+	<property overwrite="false" name="assembly.is-cls-compliant" value="false" />
 	<property name="root.dir" value="../.." />
 	<include buildfile="${root.dir}/common-project.xml" />
 
@@ -13,8 +14,9 @@
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
 			<include name="Castle.Core.dll" />
+			<include name="Castle.DynamicProxy.dll" />
 			<include name="Boo.Lang.Compiler.dll" />
-			<include name="${root.dir}/MonoRail/TestSiteBrail/Bin/TestSiteBrail.dll" />
+			<include name="${src.dir}/../TestSiteBrail/Bin/TestSiteBrail.dll" />
 			<include name="Castle.MonoRail.TestSupport.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Boo.Lang.dll" />		
