@@ -515,7 +515,7 @@ namespace Castle.MonoRail.Framework.Services
 			return "." + extension;
 		}
 
-		private void AssertArguments<T>(UrlInfo current, T parameters) where T : class
+		private static void AssertArguments<T>(UrlInfo current, T parameters) where T : class
 		{
 			if (current == null)
 			{
