@@ -1,6 +1,10 @@
 Beta 2
 ======
 
+- Fixed MR-383
+  "Databinding object with non-public constructor"
+  Added ability to create types with non-public constructors. Not sure I like it, but...
+
 - Changed DefaultConversion behavior: empty string is now considered 
   a non succeeded conversion. It used to be considered successful returning false. 
 
