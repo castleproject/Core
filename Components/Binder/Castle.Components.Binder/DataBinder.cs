@@ -556,9 +556,9 @@ namespace Castle.Components.Binder
 
 		protected virtual object CreateInstance(Type instanceType, String paramPrefix, Node node)
 		{
-			const BindingFlags creationFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+			const BindingFlags creationFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
 
-			return Activator.CreateInstance(instanceType, creationFlags);
+			return Activator.CreateInstance(instanceType, creationFlags, null, null, null);
 		}
 
 		#endregion
