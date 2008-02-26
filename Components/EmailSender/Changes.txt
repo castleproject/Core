@@ -1,3 +1,9 @@
+1.0
+---
+
+- Applied Jan Limpens' patch adding support for inline attachments
+
+
 Nov 5th, 2006
 -------------
 

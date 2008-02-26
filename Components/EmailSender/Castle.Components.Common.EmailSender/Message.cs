@@ -15,7 +15,9 @@
 namespace Castle.Components.Common.EmailSender
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Net;
+	using System.Net.Mail;
 	using System.Text;
 	using System.Collections;
 	using System.Collections.Specialized;
@@ -62,7 +64,8 @@ namespace Castle.Components.Common.EmailSender
 		private IDictionary fields = new HybridDictionary();
 		private MessagePriority priority = MessagePriority.Normal;
 		private MessageAttachmentCollection attachments = new MessageAttachmentCollection();
-		
+		private readonly IDictionary<string, LinkedResource> linkedResources = new Dictionary<string, LinkedResource>();
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Message"/> class.
 		/// </summary>
@@ -152,6 +155,11 @@ namespace Castle.Components.Common.EmailSender
 		public MessageAttachmentCollection Attachments
 		{
 			get { return attachments; }
+		}
+
+		public IDictionary<string, LinkedResource> Resources
+		{
+			get { return linkedResources; }
 		}
 	}
 }

@@ -17,6 +17,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 	using System;
 	using System.Collections;
 	using System.ComponentModel;
+	using System.IO;
 	using System.Net;
 	using System.Net.Mail;
 
@@ -134,7 +135,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			}
 			else
 			{
-				using(MailMessage msg = CreateMailMessage(message))
+				using (MailMessage msg = CreateMailMessage(message))
 				{
 					smtpClient.Send(msg);
 				}
@@ -143,7 +144,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 
 		public void Send(Message[] messages)
 		{
-			foreach(Message message in messages)
+			foreach (Message message in messages)
 			{
 				Send(message);
 			}
@@ -196,8 +197,23 @@ namespace Castle.Components.Common.EmailSender.Smtp
 				mailMessage.Attachments.Add(mailAttach);
 			}
 
+			if (message.Resources != null && message.Resources.Count > 0)
+			{
+				AlternateView htmlView = AlternateView.CreateAlternateViewFromString(message.Body, message.Encoding, "text/html");
+				foreach (string id in message.Resources.Keys)
+				{
+					LinkedResource r = message.Resources[id];
+					r.ContentId = id;
+					if (r.ContentStream != null)
+					{
+						htmlView.LinkedResources.Add(r);
+					}
+				}
+				mailMessage.AlternateViews.Add(htmlView);
+			}
 			return mailMessage;
 		}
+
 
 		/// <summary>
 		/// Gets or sets the domain.
