@@ -1347,6 +1347,14 @@ namespace Castle.MonoRail.Framework
 				actionException = ex;
 
 				RegisterExceptionAndNotifyExtensions(actionException);
+
+				RunAfterActionFilters(action, out cancel);
+
+				if (!ProcessRescue(action, actionException))
+				{
+					throw;
+				}
+				return;
 			}
 			catch(Exception ex)
 			{
@@ -1359,6 +1367,14 @@ namespace Castle.MonoRail.Framework
 				actionException = (ex is TargetInvocationException) ? ex.InnerException : ex;
 
 				RegisterExceptionAndNotifyExtensions(actionException);
+
+				RunAfterActionFilters(action, out cancel);
+
+				if (!ProcessRescue(action, actionException))
+				{
+					throw;
+				}
+				return;
 			}
 			finally
 			{
@@ -1377,20 +1393,10 @@ namespace Castle.MonoRail.Framework
 				return;
 			}
 
-			if (actionException == null)
+			if (context.SelectedViewName != null)
 			{
-				if (context.SelectedViewName != null)
-				{
-					ProcessView();
-					RunAfterRenderingFilters(action);
-				}
-			}
-			else
-			{
-				if (!ProcessRescue(action, actionException))
-				{
-					throw actionException;
-				}
+				ProcessView();
+				RunAfterRenderingFilters(action);
 			}
 		}
 

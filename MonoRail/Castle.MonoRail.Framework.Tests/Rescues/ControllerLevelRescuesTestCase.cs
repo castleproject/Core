@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Tests.Rescues
 {
 	using System;
 	using System.Data;
+	using System.Reflection;
 	using Castle.MonoRail.Framework.Services;
 	using NUnit.Framework;
 	using Test;
@@ -99,7 +100,7 @@ namespace Castle.MonoRail.Framework.Tests.Rescues
 			Assert.AreEqual("rescues\\generalerror", viewEngStub.TemplateRendered);
 		}
 
-		[Test, ExpectedException(typeof(MonoRailException), "Testing")]
+		[Test, ExpectedException(typeof(TargetInvocationException), "Exception has been thrown by the target of an invocation.")]
 		public void FallsBackToExceptionIfNothingMatches()
 		{
 			ControllerWithSpecializedRescuesOnly controller = new ControllerWithSpecializedRescuesOnly();
@@ -111,10 +112,11 @@ namespace Castle.MonoRail.Framework.Tests.Rescues
 			{
 				controller.Process(engineContext, context);
 			}
-			catch(Exception)
+			catch(Exception ex)
 			{
 				Assert.AreEqual(500, response.StatusCode);
 				Assert.AreEqual("Error processing action", response.StatusDescription);
+				Assert.AreEqual("Testing", ex.InnerException.Message);
 
 				throw;
 			}
