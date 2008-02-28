@@ -489,7 +489,7 @@ namespace Castle.MonoRail.Framework.Services
 				{
 					suffix = CommonUtils.BuildQueryString(serverUtil, (NameValueCollection) queryString, false);
 				}
-				else if (queryString is string)
+				else if (queryString is string && ((string)queryString).Length > 0)
 				{
 					string[] pairs = queryString.ToString().Split('&');
 
