@@ -30,7 +30,7 @@ namespace Castle.Components.Binder
 	public class DataBinder : MarshalByRefObject, IDataBinder, IServiceEnabledComponent
 	{
 		protected internal static readonly BindingFlags PropertiesBindingFlags =
-			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+			BindingFlags.Instance | BindingFlags.Public;
 
 		private IConverter converter = new DefaultConverter();
 
