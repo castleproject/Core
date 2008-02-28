@@ -498,6 +498,8 @@ namespace Castle.MonoRail.Framework.Services
 					foreach(string pair in pairs)
 					{
 						string[] keyvalues = pair.Split(new char[] { '=' }, 2);
+						
+						if (keyvalues.Length < 2) continue;
 
 						if (suffix.Length != 0)
 						{
