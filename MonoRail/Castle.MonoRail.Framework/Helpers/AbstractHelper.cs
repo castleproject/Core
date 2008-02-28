@@ -240,7 +240,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 				else
 				{
-					contents.AppendFormat("{0}=\"{1}\"", entry.Key, entry.Value);
+					contents.AppendFormat("{0}=\"{1}\"", entry.Key.ToString().ToLower(), entry.Value);
 				}
 				contents.Append(' ');
 			}
