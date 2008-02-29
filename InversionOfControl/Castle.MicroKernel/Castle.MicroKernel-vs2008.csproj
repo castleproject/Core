@@ -323,9 +323,9 @@
     <Compile Include="Registration\ComponentRegistration.cs" />
     <Compile Include="Registration\CustomDependencyDescriptor.cs" />
     <Compile Include="Registration\ExtendedPropertiesDescriptor.cs" />
-    <Compile Include="Registration\IComponentRegistration.cs" />
     <Compile Include="Registration\Interceptor\InterceptorDescriptor.cs" />
     <Compile Include="Registration\Interceptor\InterceptorGroup.cs" />
+    <Compile Include="Registration\IRegistration.cs" />
     <Compile Include="Registration\Lifestyle\Custom.cs" />
     <Compile Include="Registration\Lifestyle\LifestyleDescriptor.cs" />
     <Compile Include="Registration\Lifestyle\LifestyleGroup.cs" />
