@@ -204,7 +204,7 @@ namespace Castle.Windsor
 		/// <param name="registrations">The component registrations.</param>
 		/// <returns>The container.</returns>
 		/// </summary>
-		IWindsorContainer Register(params IComponentRegistration[] registrations);
+		IWindsorContainer Register(params IRegistration[] registrations);
 
 		/// <summary>
 		/// Returns a component instance by the key

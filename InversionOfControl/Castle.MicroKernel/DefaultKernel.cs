@@ -551,14 +551,14 @@ namespace Castle.MicroKernel
 		/// <param name="registrations">The component registrations.</param>
 		/// <returns>The kernel.</returns>
 		/// </summary>
-		public IKernel Register(params IComponentRegistration[] registrations)
+		public IKernel Register(params IRegistration[] registrations)
 		{
 			if (registrations == null)
 			{
 				throw new ArgumentNullException("registrations");
 			}
 
-			foreach(IComponentRegistration registration in registrations)
+			foreach(IRegistration registration in registrations)
 			{
 				registration.Register(this);
 			}

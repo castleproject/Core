@@ -482,7 +482,7 @@ namespace Castle.Windsor
 		/// <param name="registrations">The component registrations.</param>
 		/// <returns>The container.</returns>
 		/// </summary>
-		public IWindsorContainer Register(params IComponentRegistration[] registrations)
+		public IWindsorContainer Register(params IRegistration[] registrations)
 		{
 			Kernel.Register(registrations);
 			return this;

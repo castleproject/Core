@@ -15,12 +15,12 @@
 namespace Castle.MicroKernel.Registration
 {
 	/// <summary>
-	/// The contract for all component registrations with the kernel.
+	/// The contract for all registrations with the kernel.
 	/// </summary>
-	public interface IComponentRegistration
+	public interface IRegistration
 	{
 		/// <summary>
-		/// Registers this component with the <see cref="IKernel"/>.
+		/// Performs the registration in the <see cref="IKernel"/>.
 		/// </summary>
 		/// <param name="kernel">The kernel.</param>
 		void Register(IKernel kernel);

@@ -30,7 +30,7 @@ namespace Castle.MicroKernel.Registration
 
 		protected internal override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
 		{
-			if (configuration.Attributes[name] == null || Registration.Overwrite)
+			if (configuration.Attributes[name] == null || IsOverWrite)
 			{
 				configuration.Attributes[name] = value;
 			}

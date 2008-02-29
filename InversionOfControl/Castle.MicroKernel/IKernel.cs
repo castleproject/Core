@@ -304,7 +304,7 @@ namespace Castle.MicroKernel
 		/// <param name="registrations">The component registrations.</param>
 		/// <returns>The kernel.</returns>
 		/// </summary>
-		IKernel Register(params IComponentRegistration[] registrations);
+		IKernel Register(params IRegistration[] registrations);
 
 		/// <summary>
 		/// Returns true if the specified component was 

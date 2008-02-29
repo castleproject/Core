@@ -28,7 +28,7 @@ namespace Castle.MicroKernel.Registration
 
 		protected internal override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
 		{
-			if (configuration.Attributes["lifestyle"] == null || Registration.Overwrite)
+			if (configuration.Attributes["lifestyle"] == null || IsOverWrite)
 			{
 				configuration.Attributes["lifestyle"] = lifestyle.ToString();
 				ApplyLifestyleDetails(configuration);

@@ -21,10 +21,15 @@ namespace Castle.MicroKernel.Registration
 	{
 		private ComponentRegistration<S> registration;
 
-		internal ComponentRegistration<S> Registration
+		internal protected ComponentRegistration<S> Registration
 		{
 			get { return registration; }
 			set { registration = value; }
+		}
+
+		internal protected bool IsOverWrite
+		{
+			get { return registration.IsOverWrite; }
 		}
 
 		protected internal virtual void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
@@ -34,5 +39,9 @@ namespace Castle.MicroKernel.Registration
 		protected internal virtual void ApplyToModel(IKernel kernel, ComponentModel model)
 		{
 		}
+	}
+
+	public abstract class ComponentDescriptor : ComponentDescriptor<object>
+	{	
 	}
 }

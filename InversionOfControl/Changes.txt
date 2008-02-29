@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Added IRegistration interface to allow alternate registration mechanisms.
+
 - Fixed CORE-16 (Should be Facilities) 
  "The FactorySupportFacility does not create proxies if interceptors are present"
 

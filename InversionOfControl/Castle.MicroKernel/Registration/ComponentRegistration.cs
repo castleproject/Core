@@ -25,11 +25,11 @@ namespace Castle.MicroKernel.Registration
 	/// 
 	/// </summary>
 	/// <typeparam name="S">The service type</typeparam>
-	public class ComponentRegistration<S> : IComponentRegistration
+	public class ComponentRegistration<S> : IRegistration
 	{
 		private String name;
 		private bool overwrite;
-		private readonly Type serviceType;
+		private Type serviceType;
 		private Type classType;
 		private readonly List<ComponentDescriptor<S>> descriptors;
 		private ComponentModel componentModel;
@@ -49,9 +49,14 @@ namespace Castle.MicroKernel.Registration
 			descriptors = new List<ComponentDescriptor<S>>();
 		}
 
-		internal bool Overwrite
+		internal bool IsOverWrite
 		{
 			get { return overwrite; }	
+		}
+
+		protected Type ServiceType
+		{
+			set { serviceType = value; }	
 		}
 
 		/// <summary>
@@ -253,7 +258,7 @@ namespace Castle.MicroKernel.Registration
 		/// Registers this component with the <see cref="IKernel"/>.
 		/// </summary>
 		/// <param name="kernel">The kernel.</param>
-		void IComponentRegistration.Register(IKernel kernel)
+		void IRegistration.Register(IKernel kernel)
 		{
 			if (componentModel == null)
 			{
@@ -365,9 +370,19 @@ namespace Castle.MicroKernel.Registration
 
 	public class ComponentRegistration : ComponentRegistration<object>
 	{
+		public ComponentRegistration()
+		{
+		}
+
 		public ComponentRegistration(Type serviceType)
 			: base( serviceType )
 		{
+		}
+
+		public ComponentRegistration For(Type serviceType)
+		{
+			ServiceType = serviceType;
+			return this;
 		}
 	}
 }
