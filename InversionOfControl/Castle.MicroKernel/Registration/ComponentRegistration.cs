@@ -38,14 +38,9 @@ namespace Castle.MicroKernel.Registration
 		/// Initializes a new instance of the <see cref="ComponentRegistration{S}"/> class.
 		/// </summary>
 		public ComponentRegistration()
-			: this(typeof(S))
-		{
-		}
-
-		protected ComponentRegistration(Type serviceType)
 		{
 			overwrite = false;
-			this.serviceType = serviceType;
+			serviceType = typeof(S);
 			descriptors = new List<ComponentDescriptor<S>>();
 		}
 
@@ -386,8 +381,8 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		public ComponentRegistration(Type serviceType)
-			: base(serviceType)
 		{
+			ServiceType = serviceType;
 		}
 
 		public ComponentRegistration For(Type serviceType)
