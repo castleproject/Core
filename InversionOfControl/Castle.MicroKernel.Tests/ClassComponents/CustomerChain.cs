@@ -14,6 +14,8 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
+	using System;
+	
 	public class CustomerChain1 : CustomerImpl
 	{
 		public ICustomer CustomerBase;
@@ -66,6 +68,7 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 		}
 	}
 
+	[Serializable]
 	public class CustomerChain8 : CustomerChain1
 	{
 		public CustomerChain8(ICustomer customer) : base(customer)
@@ -73,6 +76,7 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 		}
 	}
 
+	[Serializable]
 	public class CustomerChain9 : CustomerChain1
 	{
 		public CustomerChain9(ICustomer customer) : base(customer)

@@ -30,7 +30,7 @@ namespace Castle.MicroKernel.Registration
 		private String name;
 		private bool overwrite;
 		private Type serviceType;
-		private Type classType;
+		private Type implementation;
 		private readonly List<ComponentDescriptor<S>> descriptors;
 		private ComponentModel componentModel;
 
@@ -49,16 +49,27 @@ namespace Castle.MicroKernel.Registration
 			descriptors = new List<ComponentDescriptor<S>>();
 		}
 
+		public String Name
+		{
+			get { return name; }
+		}
+		
+		public Type ServiceType
+		{
+			get { return serviceType; }
+			protected set { serviceType = value; }	
+		}
+
+		public Type Implementation
+		{
+			get { return implementation; }
+		}
+		
 		internal bool IsOverWrite
 		{
-			get { return overwrite; }	
+			get { return overwrite; }
 		}
-
-		protected Type ServiceType
-		{
-			set { serviceType = value; }	
-		}
-
+		
 		/// <summary>
 		/// With the overwrite.
 		/// </summary>
@@ -95,14 +106,14 @@ namespace Castle.MicroKernel.Registration
 
 		public ComponentRegistration<S> ImplementedBy(Type type)
 		{
-			if (classType != null)
+			if (implementation != null)
 			{
 				String message = String.Format("This component has " +
-					"already been assigned implementation {0}", classType.FullName);
+					"already been assigned implementation {0}", implementation.FullName);
 				throw new ComponentRegistrationException(message);					
 			}
 
-			classType = type;
+			implementation = type;
 			return this;
 		}
 
@@ -281,7 +292,7 @@ namespace Castle.MicroKernel.Registration
 			}
 
 			ComponentModel model = kernel.ComponentModelBuilder.BuildModel(
-				name, serviceType, classType, null);
+				name, serviceType, implementation, null);
 			foreach(ComponentDescriptor<S> descriptor in descriptors)
 			{
 				descriptor.ApplyToModel(kernel, model);
@@ -333,14 +344,14 @@ namespace Castle.MicroKernel.Registration
 
 		private void InitializeDefaults()
 		{
-			if (classType == null)
+			if (implementation == null)
 			{
-				classType = serviceType;	
+				implementation = serviceType;	
 			}
 
 			if (String.IsNullOrEmpty(name))
 			{
-				name = classType.FullName;
+				name = implementation.FullName;
 			}
 		}
 

@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Added AllTypesOf registration stratgey to simplify custom registration
+  scenarios.
+
 - Added IRegistration interface to allow alternate registration mechanisms.
 
 - Fixed CORE-16 (Should be Facilities) 
