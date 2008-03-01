@@ -15,12 +15,15 @@
 namespace Castle.MicroKernel.Tests.Registration
 {
 	using System;
-	using System.Linq;
 	using System.Reflection;
 	using Castle.Core;
 	using Castle.MicroKernel.Registration;
 	using Castle.MicroKernel.Tests.ClassComponents;
 	using NUnit.Framework;
+
+#if DOTNET35
+	using System.Linq;
+#endif
 
 	[TestFixture]
 	public class AllTypesOfTestCase

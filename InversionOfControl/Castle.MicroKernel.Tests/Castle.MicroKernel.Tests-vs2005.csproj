@@ -248,6 +248,7 @@
     <Compile Include="Pools\PooledLifestyleManagerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Registration\AllTypesOfTestCase.cs" />
     <Compile Include="Registration\ComponentRegistrationTestCase.cs" />
     <Compile Include="RuntimeParametersTestCase.cs" />
     <Compile Include="RuntimeParameters\ComponentWithParameters.cs" />
