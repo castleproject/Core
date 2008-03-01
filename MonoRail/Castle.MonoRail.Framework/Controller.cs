@@ -41,6 +41,7 @@ namespace Castle.MonoRail.Framework
 		private IControllerContext context;
 		private ILogger logger = NullLogger.Instance;
 		private bool directRenderInvoked;
+		private bool isContextualized;
 
 		private IHelperFactory helperFactory;
 		private IServiceInitializer serviceInitializer;
@@ -66,6 +67,24 @@ namespace Castle.MonoRail.Framework
 		public event ControllerHandler AfterAction;
 
 		/// <summary>
+		/// Sets the context for the controller
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="context">The controller context.</param>
+		public virtual void Contextualize(IEngineContext engineContext, IControllerContext context)
+		{
+			this.context = context;
+			SetEngineContext(engineContext);
+			ResolveLayout();
+			CreateAndInitializeHelpers();
+			CreateFiltersDescriptors();
+			ProcessScaffoldIfAvailable();
+			ActionProviderUtil.RegisterActions(engineContext, this, context);
+			Initialize();
+			isContextualized = true;
+		}
+
+		/// <summary>
 		/// Performs the specified action, which means:
 		/// <br/>
 		/// 1. Define the default view name<br/>
@@ -79,18 +98,13 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The controller context.</param>
 		public virtual void Process(IEngineContext engineContext, IControllerContext context)
 		{
-			this.context = context;
-			SetEngineContext(engineContext);
-
-			ResolveLayout();
-			CreateAndInitializeHelpers();
-			CreateFiltersDescriptors();
-			ProcessScaffoldIfAvailable();
-			ActionProviderUtil.RegisterActions(engineContext, this, context);
-			Initialize();
+			if (isContextualized == false) 
+			{
+				Contextualize(engineContext, context);
+			}
 			RunActionAndRenderView();
 		}
-
+		
 		/// <summary>
 		/// Invoked by the view engine to perform
 		/// any logic before the view is sent to the client.

@@ -178,12 +178,6 @@ namespace Castle.MonoRail.Framework
 			// Record the step we're working with
 			WizardUtils.RegisterCurrentStepInfo(engineContext, controller, controllerContext, currentStepInstance.ActionName);
 
-			// The step cannot be accessed in the current state of matters
-			if (!currentStepInstance.IsPreConditionSatisfied(engineContext))
-			{
-				return null;
-			}
-
 			try
 			{
 				IControllerContext stepContext =
@@ -193,6 +187,18 @@ namespace Castle.MonoRail.Framework
 				stepContext.PropertyBag = controllerContext.PropertyBag;
 
 				SetUpWizardHelper(engineContext, currentStepInstance, stepContext);
+				
+				// IsPreConditionSatisfied might need the controller's context
+				if (currentStepInstance is Controller)
+				{
+					((Controller)currentStepInstance).Contextualize(engineContext, stepContext);
+				}
+				
+				// The step cannot be accessed in the current state of matters
+				if (!currentStepInstance.IsPreConditionSatisfied(engineContext))
+				{
+					return null;
+				}
 
 				currentStepInstance.Process(engineContext, stepContext);
 
