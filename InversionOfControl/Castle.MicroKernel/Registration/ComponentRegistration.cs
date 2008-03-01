@@ -386,12 +386,19 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		public ComponentRegistration(Type serviceType)
-			: base( serviceType )
+			: base(serviceType)
 		{
 		}
 
 		public ComponentRegistration For(Type serviceType)
 		{
+			if (ServiceType != null)
+			{
+				String message = String.Format("This component has " +
+					"already been assigned service type {0}", ServiceType.FullName);
+				throw new ComponentRegistrationException(message);
+			}
+
 			ServiceType = serviceType;
 			return this;
 		}

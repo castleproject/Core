@@ -139,7 +139,7 @@ namespace Castle.MicroKernel.Tests.Registration
 				.Pick(from type in Assembly.GetExecutingAssembly().GetExportedTypes()
 					  where type.IsDefined(typeof(SerializableAttribute), true)
 					  select type
-					 ));
+					));
 
 			IHandler[] handlers = kernel.GetAssignableHandlers(typeof(CustomerChain1));
 			Assert.AreEqual(2, handlers.Length);		
@@ -148,17 +148,17 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void RegisterAssemblyTypes_WithKLinqConfiguration_RegisteredInContainer()
 		{
-			kernel.Register( AllTypesOf<ICommon>
-				.FromAssembly( Assembly.GetExecutingAssembly() )
-				.Configure( component => component.LifeStyle.Transient
-							.Named( component.Implementation.FullName + "XYZ" )
+			kernel.Register(AllTypesOf<ICommon>
+				.FromAssembly(Assembly.GetExecutingAssembly())
+				.Configure(component => component.LifeStyle.Transient
+							.Named(component.Implementation.FullName + "XYZ")
 							)
 				);
 
-			foreach ( IHandler handler in kernel.GetAssignableHandlers( typeof( ICommon ) ) )
+			foreach (IHandler handler in kernel.GetAssignableHandlers(typeof(ICommon)))
 			{
-				Assert.AreEqual( LifestyleType.Transient, handler.ComponentModel.LifestyleType );
-				Assert.AreEqual( handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name );
+				Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+				Assert.AreEqual(handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name);
 			}
 		}	
 		

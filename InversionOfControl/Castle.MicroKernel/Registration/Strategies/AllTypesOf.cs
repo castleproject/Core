@@ -83,9 +83,9 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="types">The list of types.</param>
 		/// <returns>The corresponding <see cref="TypesDescriptor{T}"/></returns>
-		public static TypesDescriptor<T> Pick( IEnumerable<Type> types )
+		public static TypesDescriptor<T> Pick(IEnumerable<Type> types)
 		{
-			return new TypesDescriptor<T>( types );
+			return new TypesDescriptor<T>(types);
 		}
 		
 		/// <summary>
@@ -93,9 +93,9 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="types">The list of types.</param>
 		/// <returns>The corresponding <see cref="TypesDescriptor{T}"/></returns>
-		public static TypesDescriptor<T> From( params Type[] types )
+		public static TypesDescriptor<T> From(params Type[] types)
 		{
-			return new TypesDescriptor<T>( types );
+			return new TypesDescriptor<T>(types);
 		}
 	}
 }

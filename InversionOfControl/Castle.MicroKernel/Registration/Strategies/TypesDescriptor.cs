@@ -94,7 +94,7 @@ namespace Castle.MicroKernel.Registration
 				ComponentRegistration registration = Component.For(serviceType);
 				registration.ImplementedBy(type);
 
-				if ( configurer != null )
+				if (configurer != null)
 				{
 					configurer(registration);
 				}
