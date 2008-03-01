@@ -992,6 +992,38 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Redirects using a named route.
+		/// The name must exists otherwise a <see cref="MonoRailException"/> will be thrown.
+		/// </summary>
+		/// <param name="routeName">Route name.</param>
+		public void RedirectUsingNamedRoute(string routeName)
+		{
+			Response.RedirectUsingNamedRoute(routeName);
+		}
+
+		/// <summary>
+		/// Redirects using a named route.
+		/// The name must exists otherwise a <see cref="MonoRailException"/> will be thrown.
+		/// </summary>
+		/// <param name="routeName">Route name.</param>
+		/// <param name="routeParameters">The route parameters.</param>
+		public void RedirectUsingNamedRoute(string routeName, object routeParameters)
+		{
+			Response.RedirectUsingNamedRoute(routeName, routeParameters);
+		}
+
+		/// <summary>
+		/// Redirects using a named route.
+		/// The name must exists otherwise a <see cref="MonoRailException"/> will be thrown.
+		/// </summary>
+		/// <param name="routeName">Route name.</param>
+		/// <param name="routeParameters">The route parameters.</param>
+		public void RedirectUsingNamedRoute(string routeName, IDictionary routeParameters)
+		{
+			Response.RedirectUsingNamedRoute(routeName, routeParameters);
+		}
+
+		/// <summary>
 		/// Tries to resolve the target redirect url by using the routing rules registered.
 		/// </summary>
 		/// <param name="action">The desired action on the target controller.</param>

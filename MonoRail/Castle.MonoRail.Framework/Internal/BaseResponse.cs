@@ -58,7 +58,7 @@ namespace Castle.MonoRail.Framework.Internal
 			this.referrer = referrer;
 		}
 
-		#region abstracts 
+		#region abstracts
 
 		/// <summary>
 		/// Gets or sets the status code.
@@ -371,6 +371,46 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			RedirectToUrl(urlBuilder.BuildUrl(currentUrl, new UrlBuilderParameters(area, controller, action).
 				SetQueryString(new ReflectionBasedDictionaryAdapter(queryStringAnonymousDictionary))), false);
+		}
+
+		/// <summary>
+		/// Redirects using a named route.
+		/// The name must exists otherwise a <see cref="MonoRailException"/> will be thrown.
+		/// </summary>
+		/// <param name="routeName">Route name.</param>
+		public void RedirectUsingNamedRoute(string routeName)
+		{
+			UrlBuilderParameters @params = new UrlBuilderParameters();
+			@params.RouteName = routeName;
+			RedirectToUrl(urlBuilder.BuildUrl(currentUrl, @params), false);
+		}
+
+		/// <summary>
+		/// Redirects using a named route.
+		/// The name must exists otherwise a <see cref="MonoRailException"/> will be thrown.
+		/// </summary>
+		/// <param name="routeName">Route name.</param>
+		/// <param name="routeParameters">The route parameters.</param>
+		public void RedirectUsingNamedRoute(string routeName, object routeParameters)
+		{
+			UrlBuilderParameters @params = new UrlBuilderParameters();
+			@params.RouteName = routeName;
+			@params.RouteParameters = routeParameters;
+			RedirectToUrl(urlBuilder.BuildUrl(currentUrl, @params), false);
+		}
+
+		/// <summary>
+		/// Redirects using a named route.
+		/// The name must exists otherwise a <see cref="MonoRailException"/> will be thrown.
+		/// </summary>
+		/// <param name="routeName">Route name.</param>
+		/// <param name="routeParameters">The route parameters.</param>
+		public void RedirectUsingNamedRoute(string routeName, IDictionary routeParameters)
+		{
+			UrlBuilderParameters @params = new UrlBuilderParameters();
+			@params.RouteName = routeName;
+			@params.RouteParameters = routeParameters;
+			RedirectToUrl(urlBuilder.BuildUrl(currentUrl, @params), false);
 		}
 
 		/// <summary>

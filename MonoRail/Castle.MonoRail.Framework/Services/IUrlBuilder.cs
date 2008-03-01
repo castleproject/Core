@@ -29,13 +29,20 @@ namespace Castle.MonoRail.Framework.Services
 	{
 		private string area, controller, action;
 		private string domain, subdomain, protocol, basePath, pathInfo;
+		private string routeName;
 		private int port;
 		private object routeParameters;
-		private readonly string routeName;
 		private object queryString;
 		private IDictionary customParameters;
 		private bool encodeForLink, createAbsolutePath, useCurrentRouteParams;
 		private RouteMatch routeMatch;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UrlBuilderParameters"/> class.
+		/// </summary>
+		public UrlBuilderParameters()
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UrlBuilderParameters"/> class.
@@ -323,6 +330,7 @@ namespace Castle.MonoRail.Framework.Services
 		public string RouteName
 		{
 			get { return routeName; }
+			set { routeName = value; }
 		}
 
 		/// <summary>

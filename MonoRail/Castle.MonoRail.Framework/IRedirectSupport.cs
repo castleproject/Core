@@ -129,6 +129,30 @@ namespace Castle.MonoRail.Framework
 		/// <param name="queryStringAnonymousDictionary">The querystring entries as an anonymous dictionary</param>
 		void Redirect(string area, string controller, string action, object queryStringAnonymousDictionary);
 
+		
+		/// <summary>
+		/// Redirects using a named route. 
+		/// The name must exists otherwise a <see cref="MonoRailException"/> will be thrown. 
+		/// </summary>
+		/// <param name="routeName">Route name.</param>
+		void RedirectUsingNamedRoute(string routeName);
+		
+		/// <summary>
+		/// Redirects using a named route.
+		/// The name must exists otherwise a <see cref="MonoRailException"/> will be thrown.
+		/// </summary>
+		/// <param name="routeName">Route name.</param>
+		/// <param name="routeParameters">The route parameters.</param>
+		void RedirectUsingNamedRoute(string routeName, object routeParameters);
+
+		/// <summary>
+		/// Redirects using a named route.
+		/// The name must exists otherwise a <see cref="MonoRailException"/> will be thrown.
+		/// </summary>
+		/// <param name="routeName">Route name.</param>
+		/// <param name="routeParameters">The route parameters.</param>
+		void RedirectUsingNamedRoute(string routeName, IDictionary routeParameters);
+
 
 		/// <summary>
 		/// Tries to resolve the target redirect url by using the routing rules registered.
