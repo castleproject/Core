@@ -137,13 +137,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void NumberField()
 		{
 			Assert.AreEqual(
-				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [], []);\" />",
+				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onkeypress=\"return monorail_formhelper_numberonly(event, [], []);\" />",
 				helper.NumberField("product.quantity"));
 			Assert.AreEqual(
-				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [1], []);\" />",
+				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onkeypress=\"return monorail_formhelper_numberonly(event, [1], []);\" />",
 				helper.NumberField("product.quantity", DictHelper.Create("exceptions=1")));
 			Assert.AreEqual(
-				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [1,2], []);\" />",
+				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onkeypress=\"return monorail_formhelper_numberonly(event, [1,2], []);\" />",
 				helper.NumberField("product.quantity", DictHelper.Create("exceptions=1,2")));
 		}
 
@@ -151,8 +151,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void MaskedNumberField()
 		{
 			Assert.AreEqual(
-				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [], []);\" " +
-				"onBlur=\"javascript:void(0);return monorail_formhelper_mask(event,this,'2,5','-');\" onKeyUp=\"javascript:void(0);return monorail_formhelper_mask(event,this,'2,5','-');\" />",
+				"<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onkeypress=\"return monorail_formhelper_numberonly(event, [], []);\" " +
+				"onblur=\"javascript:void(0);return monorail_formhelper_mask(event,this,'2,5','-');\" onkeyup=\"javascript:void(0);return monorail_formhelper_mask(event,this,'2,5','-');\" />",
 				helper.NumberField("product.quantity", DictHelper.Create("mask=2,5")));
 		}
 
