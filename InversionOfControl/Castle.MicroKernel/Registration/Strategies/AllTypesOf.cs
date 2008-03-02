@@ -23,7 +23,7 @@ namespace Castle.MicroKernel.Registration
 	/// The starting point to describe types to register.
 	/// </summary>
 	/// <typeparam name="T">The base type to match against.</typeparam>
-	public static class AllTypesOf<T>
+	public class AllTypesOf<T>
 	{
 		/// <summary>
 		/// Prepares to register types from an assembly.
@@ -97,5 +97,9 @@ namespace Castle.MicroKernel.Registration
 		{
 			return new TypesDescriptor<T>(types);
 		}
+	}
+
+	public class AllTypes : AllTypesOf<object>
+	{
 	}
 }

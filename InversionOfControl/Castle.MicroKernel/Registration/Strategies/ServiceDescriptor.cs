@@ -38,10 +38,7 @@ namespace Castle.MicroKernel.Registration
 		/// <returns></returns>
 		public TypesDescriptor<T> Base()
 		{
-			return Select(delegate(Type type)
-			{
-				return typeof(T);
-			});
+			return Select(delegate { return typeof(T); });
 		}
 				
 		/// <summary>
@@ -52,12 +49,21 @@ namespace Castle.MicroKernel.Registration
 		{
 			return Select(delegate(Type type)
 			{
+				Type first = null;
 				Type[] interfaces = type.GetInterfaces();
 				if (interfaces.Length > 0)
 				{
-					return interfaces[0];
+					first = interfaces[0];
+
+					// This is a workaround for a CLR bug in
+					// which GetInterfaces() returns interfaces
+					// with no implementations.
+					if (first.IsGenericType && first.ReflectedType == null)
+					{
+						first = first.GetGenericTypeDefinition();
+					}
 				}
-				return null;
+				return first;
 			});
 		}
 		
@@ -68,7 +74,7 @@ namespace Castle.MicroKernel.Registration
 		/// <returns></returns>
 		public TypesDescriptor<T> Select(ServiceSelector selector)
 		{
-			this.serviceSelector = selector;
+			serviceSelector = selector;
 			return typesDescriptor;
 		}
 		

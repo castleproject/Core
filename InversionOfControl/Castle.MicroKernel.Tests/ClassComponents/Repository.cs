@@ -18,6 +18,12 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 	{
 	}
 
+	public interface IRepository<T> : IRepository 
+		where T : class
+	{
+		T Find();
+	}
+
 	public class DecoratedRepository : IRepository
 	{
 		public DecoratedRepository()
@@ -67,6 +73,15 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 		public Repository3(IRepository inner)
 		{
 			_inner = inner;
+		}
+	}
+
+	public class DefaultRepository<T> : IRepository<T> 
+		where T : class, new()
+	{
+		public T Find()
+		{
+			return new T();
 		}
 	}
 }

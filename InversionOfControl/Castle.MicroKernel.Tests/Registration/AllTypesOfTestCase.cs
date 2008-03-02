@@ -97,9 +97,22 @@ namespace Castle.MicroKernel.Tests.Registration
 				Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
 				Assert.AreEqual(handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name);
 			}
-		}	
-		
-		#if DOTNET35
+		}
+
+		[Test]
+		public void RegisterGenericTypes_WithGenericDefinition_RegisteredInContainer()
+		{
+			kernel.Register(AllTypes
+				.From(typeof(DefaultRepository<>))
+				.WithService.FirstInterface()
+				);
+
+			Type t = typeof(IRepository<CustomerImpl>);
+
+			IRepository<CustomerImpl> repository = kernel.Resolve<IRepository<CustomerImpl>>();
+		}
+
+#if DOTNET35
 
 		[Test]
 		public void RegisterAssemblyTypes_IfCondition_RegisteredInContainer()
