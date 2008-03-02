@@ -107,9 +107,8 @@ namespace Castle.MicroKernel.Tests.Registration
 				.WithService.FirstInterface()
 				);
 
-			Type t = typeof(IRepository<CustomerImpl>);
-
 			IRepository<CustomerImpl> repository = kernel.Resolve<IRepository<CustomerImpl>>();
+			Assert.IsNotNull(repository);
 		}
 
 #if DOTNET35
