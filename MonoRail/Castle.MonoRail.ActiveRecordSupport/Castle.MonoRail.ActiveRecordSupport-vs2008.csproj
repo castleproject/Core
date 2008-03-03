@@ -76,6 +76,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-3.5\debug\Castle.ActiveRecord.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\net\2.0\Iesi.Collections.dll</HintPath>
@@ -84,7 +88,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\net\2.0\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NVelocity, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -101,10 +104,6 @@
     <ProjectReference Include="..\..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2008.csproj">
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
       <Name>Castle.Components.Binder-vs2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Components\TemplateEngine\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine\Castle.Components.Common.NVelocityTemplateEngine-vs2008.csproj">
-      <Project>{AA95F54F-BEC7-469A-B420-B19D1BBB8C3F}</Project>
-      <Name>Castle.Components.Common.NVelocityTemplateEngine-vs2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Components\TemplateEngine\Castle.Components.Common.TemplateEngine\Castle.Components.Common.TemplateEngine-vs2008.csproj">
       <Project>{9698FE03-CD65-4FBC-B734-7326674A4894}</Project>

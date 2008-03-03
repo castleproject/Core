@@ -76,6 +76,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="NVelocity, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\NVelocity.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -91,10 +95,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\Tools\NVelocity\src\NVelocity\NVelocity-vs2008.csproj">
-      <Project>{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}</Project>
-      <Name>NVelocity-vs2008</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2008.csproj">
       <Name>Castle.MonoRail.Framework-vs2008</Name>
       <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
