@@ -121,15 +121,27 @@ namespace Castle.MonoRail.Framework
 			context.Items[CurrentEngineContextKey] = engineContext;
 			context.Items[CurrentControllerKey] = controller;
 			context.Items[CurrentControllerContextKey] = controllerContext;
+			
+			return CreateHandler(controllerDesc, engineContext, controller, controllerContext);
+		}
 
+		/// <summary>
+		/// Creates the handler.
+		/// </summary>
+		/// <param name="controllerDesc">The controller descriptor.</param>
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
+		/// <returns>
+		/// A new <see cref="T:System.Web.IHttpHandler"></see> object that processes the request.
+		/// </returns>
+		protected virtual IHttpHandler CreateHandler(ControllerMetaDescriptor controllerDesc, IEngineContext engineContext, IController controller, IControllerContext controllerContext)
+		{
 			if (IgnoresSession(controllerDesc.ControllerDescriptor))
 			{
 				return new SessionlessMonoRailHttpHandler(engineContext, controller, controllerContext);
 			}
-			else
-			{
-				return new MonoRailHttpHandler(engineContext, controller, controllerContext);
-			}
+			return new MonoRailHttpHandler(engineContext, controller, controllerContext);
 		}
 
 		/// <summary>
