@@ -399,6 +399,15 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.IsNull(prop);
 		}
 
+		[Test]
+		public void TargetValueCanBeObtainedForOverridenProperties()
+		{
+			ProxyGenerator generator = new ProxyGenerator();
+			object proxy = generator.CreateClassProxy(typeof(Month), new NullInterceptor(), 12, "December");
+			helper.ControllerContext.PropertyBag["december"] = proxy;
+			helper.TextField("december.Name");
+		}
+		
 		public class FormHelperEx : FormHelper
 		{
 			public FormHelperEx()
@@ -432,10 +441,31 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			set { id = value; }
 		}
 
-		public string Name
+		public virtual string Name
 		{
 			get { return name; }
 			set { name = value; }
+		}
+	}
+
+	public class NullInterceptor : IInterceptor
+	{
+		public object Intercept(IInvocation invocation, params object[] args)
+		{
+			return invocation.Proceed(args);
+		}
+	}
+
+	public class December : Month
+	{
+		public December() : base(12, "December")
+		{
+		}
+
+		public override string Name
+		{
+			get { return base.Name; }
+			set { throw new InvalidOperationException(); }
 		}
 	}
 
