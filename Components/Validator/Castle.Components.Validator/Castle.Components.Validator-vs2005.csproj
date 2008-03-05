@@ -48,6 +48,7 @@
     <Compile Include="Attributes\ValidateEmailAttribute.cs" />
     <Compile Include="Attributes\ValidateGroupNotEmptyAttribute.cs" />
     <Compile Include="Attributes\ValidateIntegerAttribute.cs" />
+    <Compile Include="Attributes\ValidateIsGreaterAttribute.cs" />
     <Compile Include="Attributes\ValidateLengthAttribute.cs" />
     <Compile Include="Attributes\ValidateRangeAttribute.cs" />
     <Compile Include="Attributes\ValidateNotSameValueAttribute.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Validators\AbstractValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
     <Compile Include="Validators\CollectionNotEmptyValidator.cs" />
+    <Compile Include="Validators\IsGreaterValidator.cs" />
     <Compile Include="Validators\NotSameAsValidator.cs" />
     <Compile Include="Validators\CreditCardValidator.cs" />
     <Compile Include="Validators\GroupNotEmptyValidator.cs" />
@@ -138,7 +140,7 @@
       <LastGenOutput>Messages.es.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-		<EmbeddedResource Include="Messages.es.resx">
+    <EmbeddedResource Include="Messages.es.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.es.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>

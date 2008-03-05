@@ -57,6 +57,7 @@
     <Compile Include="Attributes\ValidateEmailAttribute.cs" />
     <Compile Include="Attributes\ValidateGroupNotEmptyAttribute.cs" />
     <Compile Include="Attributes\ValidateIntegerAttribute.cs" />
+    <Compile Include="Attributes\ValidateIsGreaterAttribute.cs" />
     <Compile Include="Attributes\ValidateLengthAttribute.cs" />
     <Compile Include="Attributes\ValidateRangeAttribute.cs" />
     <Compile Include="Attributes\ValidateNotSameValueAttribute.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Validators\AbstractValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
     <Compile Include="Validators\CollectionNotEmptyValidator.cs" />
+    <Compile Include="Validators\IsGreaterValidator.cs" />
     <Compile Include="Validators\NotSameAsValidator.cs" />
     <Compile Include="Validators\CreditCardValidator.cs" />
     <Compile Include="Validators\GroupNotEmptyValidator.cs" />

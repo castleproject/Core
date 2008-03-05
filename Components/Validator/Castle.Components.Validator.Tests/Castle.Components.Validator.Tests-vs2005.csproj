@@ -55,6 +55,7 @@
     <Compile Include="ValidatorTests\CollectionNotEmptyValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\CreditCardValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\GroupNotEmptyValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\IsGreaterValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\NotSameValueValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\NullableDateTimeValidatorTestCase.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="ValidatorTests\SingleValidatorTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Castle.Components.Validator\Castle.Components.Validator.csproj">
+    <ProjectReference Include="..\Castle.Components.Validator\Castle.Components.Validator-vs2005.csproj">
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
       <Name>Castle.Components.Validator</Name>
     </ProjectReference>
