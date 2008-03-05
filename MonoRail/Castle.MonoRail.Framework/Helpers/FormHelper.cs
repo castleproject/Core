@@ -242,15 +242,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Common property flags for reflection
 		/// </summary>
-		protected static readonly BindingFlags PropertyFlags = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
+		protected static readonly BindingFlags PropertyFlags = BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase;
 		/// <summary>
 		/// Common property flags for reflection (with declared only)
 		/// </summary>
-		protected static readonly BindingFlags PropertyFlags2 = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase|BindingFlags.DeclaredOnly;
+		protected static readonly BindingFlags propertyFlagsDeclaredOnly = BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.DeclaredOnly;
 		/// <summary>
 		/// Common field flags for reflection
 		/// </summary>
-		protected static readonly BindingFlags FieldFlags = BindingFlags.GetField|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
+		protected static readonly BindingFlags FieldFlags = BindingFlags.GetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase;
 
 		private int formCount;
 		private string currentFormId;
@@ -276,7 +276,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// setting the Controller, Context and ControllerContext.
 		/// </summary>
 		/// <param name="engineContext">The engine context.</param>
-		public FormHelper(IEngineContext engineContext) : base(engineContext)
+		public FormHelper(IEngineContext engineContext)
+			: base(engineContext)
 		{
 			validatorRegistry = new CachedValidationRegistry();
 			validatorRunner = new ValidatorRunner(false, validatorRegistry);
@@ -298,14 +299,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="provider">The service proviver</param>
 		public virtual void Service(IServiceProvider provider)
 		{
-			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			ILoggerFactory loggerFactory = (ILoggerFactory)provider.GetService(typeof(ILoggerFactory));
 
 			if (loggerFactory != null)
 			{
 				logger = loggerFactory.Create(typeof(FormHelper));
 			}
 
-			IMonoRailConfiguration config = (IMonoRailConfiguration) provider.GetService(typeof(IMonoRailConfiguration));
+			IMonoRailConfiguration config = (IMonoRailConfiguration)provider.GetService(typeof(IMonoRailConfiguration));
 
 			if (config != null)
 			{
@@ -321,7 +322,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 			}
 
-			validatorRegistry = (IValidatorRegistry) provider.GetService(typeof(IValidatorRegistry));
+			validatorRegistry = (IValidatorRegistry)provider.GetService(typeof(IValidatorRegistry));
 
 			if (validatorRegistry != null)
 			{
@@ -487,8 +488,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			validationConfig = validatorProvider.CreateConfiguration(parameters);
 
-			string afterFormTag = IsValidationEnabled ? 
-				validationConfig.CreateAfterFormOpened(currentFormId) : 
+			string afterFormTag = IsValidationEnabled ?
+				validationConfig.CreateAfterFormOpened(currentFormId) :
 				String.Empty;
 
 			string formContent;
@@ -514,7 +515,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public virtual string AjaxFormTag(IDictionary parameters)
 		{
 			currentFormId = CommonUtils.ObtainEntryAndRemove(parameters, "id", "form" + ++formCount);
-			
+
 			validationConfig = validatorProvider.CreateConfiguration(parameters);
 
 			string afterFormTag = IsValidationEnabled ?
@@ -543,17 +544,17 @@ namespace Castle.MonoRail.Framework.Helpers
 					conditionFunc += " && ";
 				}
 				conditionFunc += onSubmitFunc;
-				
+
 				parameters["condition"] = conditionFunc;
 			}
 			bool isMethodAssigned = parameters.Contains("method");
 
 			string method = CommonUtils.ObtainEntryAndRemove(parameters, "method", "post");
-			
+
 			parameters["url"] = url;
-			
+
 			// reassign method so in case if there is no value the default is assigned.
-			
+
 			if (isMethodAssigned)
 			{
 				parameters["method"] = method;
@@ -561,7 +562,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			String remoteFunc = new AjaxHelper().RemoteFunction(parameters);
 
-			string formContent = String.Format("<form id='{1}' method='{2}' {3} onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\">", remoteFunc, currentFormId, method,GetAttributes(parameters));
+			string formContent = String.Format("<form id='{1}' method='{2}' {3} onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\">", remoteFunc, currentFormId, method, GetAttributes(parameters));
 
 			return formContent + afterFormTag;
 		}
@@ -584,7 +585,7 @@ namespace Castle.MonoRail.Framework.Helpers
 					validationConfig.CreateBeforeFormClosed(currentFormId) :
 					String.Empty;
 			}
-			
+
 			return beforeEndTag + "</form>";
 		}
 
@@ -688,7 +689,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			attributes["alt"] = alttext;
 			return CreateInputElement("image", alttext, attributes);
 		}
-		
+
 		/// <summary>
 		/// Generates an input button element.
 		/// </summary>
@@ -1286,7 +1287,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return CreateInputElement("hidden", target, value, null);
 		}
-		
+
 		/// <summary>
 		/// Generates a hidden form element.
 		/// <para>
@@ -1301,14 +1302,14 @@ namespace Castle.MonoRail.Framework.Helpers
 			target = RewriteTargetIfWithinObjectScope(target);
 
 			object value = ObtainValue(target);
-			
+
 			string id = CreateHtmlId(attributes, target);
-			
+
 			value = value != null ? value : String.Empty;
 
 			return CreateInputElement("hidden", id, target, value.ToString(), attributes);
 		}
-		
+
 		/// <summary>
 		/// Generates a hidden form element with the specified value
 		/// </summary>
@@ -1468,10 +1469,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			target = RewriteTargetIfWithinObjectScope(target);
 
 			object value = ObtainValue(target);
-			
+
 			return new CheckboxList(this, target, value, dataSource, attributes);
 		}
-		
+
 		/// <summary>
 		/// Outputs a checkbox element (for internal use)
 		/// </summary>
@@ -1493,11 +1494,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			target = String.Format("{0}[{1}]", target, index);
-			
+
 			string elementId = CreateHtmlId(attributes, target, true);
-			
+
 			string computedTarget = target;
-			
+
 			if (suffix != null && suffix != String.Empty)
 			{
 				computedTarget += "." + suffix;
@@ -1556,11 +1557,11 @@ namespace Castle.MonoRail.Framework.Helpers
 				this.helper = helper;
 				this.target = target;
 				this.attributes = attributes ?? new HybridDictionary(true);
-				
+
 				operationState = SetOperation.IterateOnDataSource(initialSelectionSet, dataSource, attributes);
 				enumerator = operationState.GetEnumerator();
 			}
-			
+
 			/// <summary>
 			/// Outputs the Checkbox in the correct state (checked/unchecked) based
 			/// on the Set. 
@@ -1679,9 +1680,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				hasMovedNext = true;
 				hasItem = enumerator.MoveNext();
-				
+
 				if (hasItem) index++;
-				
+
 				return hasItem;
 			}
 
@@ -1717,7 +1718,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		#endregion
-		
+
 		#region CheckboxField
 
 		/// <summary>
@@ -1777,7 +1778,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			object value = ObtainValue(target);
 
 			string trueValue = CommonUtils.ObtainEntryAndRemove(attributes, "trueValue", "true");
-			
+
 			bool isChecked;
 
 			if (trueValue != "true")
@@ -1786,9 +1787,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			else
 			{
-				isChecked = ((value != null && value is bool && ((bool)value)) || 
-							 (!(value is bool) && (value != null) && 
-							 (!(value is string) || ((string) value).ToLower() != "false")));
+				isChecked = ((value != null && value is bool && ((bool)value)) ||
+							 (!(value is bool) && (value != null) &&
+							 (!(value is string) || ((string)value).ToLower() != "false")));
 			}
 
 			if (isChecked)
@@ -1808,9 +1809,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			string hiddenElementValue = CommonUtils.ObtainEntryAndRemove(attributes, "falseValue", "false");
 
 			string result = CreateInputElement("checkbox", id, target, trueValue, attributes);
-			
+
 			result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
-			
+
 			return result;
 		}
 
@@ -2006,7 +2007,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return Select(target, selectedValue, dataSource, attributes);
 		}
-		
+
 		/// <summary>
 		/// Creates a <c>select</c> element and its <c>option</c>s based on the <c>dataSource</c>.
 		/// If the <c>dataSource</c>
@@ -2068,13 +2069,13 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				if (attributes.Contains("name"))
 				{
-					name = (String) attributes["name"];
+					name = (String)attributes["name"];
 					attributes.Remove("name");
 				}
 
 				if (attributes.Contains("id"))
 				{
-					id = (String) attributes["id"];
+					id = (String)attributes["id"];
 					attributes.Remove("id");
 				}
 			}
@@ -2099,7 +2100,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				writer.WriteLine();
 			}
 
-			foreach(SetItem item in state)
+			foreach (SetItem item in state)
 			{
 				writer.WriteBeginTag("option");
 
@@ -2163,7 +2164,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			List<Pair<int, string>> listOfPairs = new List<Pair<int, string>>();
 			int index = 0;
 
-			foreach(string name in names)
+			foreach (string name in names)
 			{
 				int value = Convert.ToInt32(values.GetValue(index++));
 				listOfPairs.Add(new Pair<int, string>(value, TextHelper.PascalCaseToWord(name)));
@@ -2172,7 +2173,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return listOfPairs.ToArray();
 		}
 
-		#endregion 
+		#endregion
 
 		#region Validation
 
@@ -2249,7 +2250,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			IBrowserValidationGenerator generator = validatorProvider.CreateGenerator(validationConfig, inputType, attributes);
 
-			foreach(IValidator validator in validators)
+			foreach (IValidator validator in validators)
 			{
 				if (validator.SupportsBrowserValidation)
 				{
@@ -2299,7 +2300,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			else
 			{
-				return ((FormScopeInfo) objectStack.Peek()).RootTarget + "." + target;
+				return ((FormScopeInfo)objectStack.Peek()).RootTarget + "." + target;
 			}
 		}
 
@@ -2355,8 +2356,8 @@ namespace Castle.MonoRail.Framework.Helpers
 				attributes["onBlur"] = "javascript:" + onBlur + ";" + js;
 				attributes["onKeyUp"] = "javascript:" + onKeyUp + ";" + js;
 			}
-			
-			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>", 
+
+			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>",
 								 type, id, target, value, GetAttributes(attributes));
 		}
 
@@ -2494,7 +2495,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		protected object ObtainRootInstance(RequestContext context, string target, out string[] pieces)
 		{
-			pieces = target.Split(new char[] {'.'});
+			pieces = target.Split(new char[] { '.' });
 
 			string root = pieces[0];
 
@@ -2513,7 +2514,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				AssertIsValidArray(rootInstance, root, index);
 			}
-	
+
 			if (!isIndexed && pieces.Length == 1)
 			{
 				return rootInstance;
@@ -2537,13 +2538,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			pieces = target.Split(new char[] { '.' });
 
-			Type foundType = (Type) ControllerContext.PropertyBag[pieces[0] + "type"];
+			Type foundType = (Type)ControllerContext.PropertyBag[pieces[0] + "type"];
 
 			if (foundType == null)
 			{
-			    string trimmed = pieces[0].Split('[')[0];
+				string trimmed = pieces[0].Split('[')[0];
 
-				foundType = (Type) ControllerContext.PropertyBag[trimmed + "type"];
+				foundType = (Type)ControllerContext.PropertyBag[trimmed + "type"];
 
 				if (foundType == null)
 				{
@@ -2570,7 +2571,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			bool isIndexed = CheckForExistenceAndExtractIndex(ref property, out index);
 
-			PropertyInfo propertyInfo = type.GetProperty(property, ResolveFlagsToUse(type));
+			//PropertyInfo propertyInfo = type.GetProperty(property, ResolveFlagsToUse(type));
+			PropertyInfo propertyInfo = GetPropertyInfo(type, property);
 
 			if (propertyInfo == null)
 			{
@@ -2656,7 +2658,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			bool isIndexed = CheckForExistenceAndExtractIndex(ref property, out index);
 
-			PropertyInfo propertyInfo = instanceType.GetProperty(property, ResolveFlagsToUse(instanceType));
+			//PropertyInfo propertyInfo = instanceType.GetProperty(property, ResolveFlagsToUse(instanceType));
+			PropertyInfo propertyInfo = GetPropertyInfo(instanceType, property);
 
 			object instance = null;
 
@@ -2673,13 +2676,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				if (!propertyInfo.CanRead)
 				{
-					throw new BindingException("Property '{0}' for type '{1}' can not be read", 
+					throw new BindingException("Property '{0}' for type '{1}' can not be read",
 						propertyInfo.Name, instanceType.FullName);
 				}
-				
+
 				if (propertyInfo.GetIndexParameters().Length != 0)
 				{
-					throw new BindingException("Property '{0}' for type '{1}' has indexes, which are not supported", 
+					throw new BindingException("Property '{0}' for type '{1}' has indexes, which are not supported",
 						propertyInfo.Name, instanceType.FullName);
 				}
 
@@ -2711,7 +2714,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return CreateHtmlId(attributes, target, true);
 		}
-		
+
 		/// <summary>
 		/// Creates the HTML id.
 		/// </summary>
@@ -2722,7 +2725,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		protected static string CreateHtmlId(IDictionary attributes, string target, bool removeEntry)
 		{
 			string id;
-			
+
 			if (removeEntry)
 			{
 				id = CommonUtils.ObtainEntryAndRemove(attributes, "id");
@@ -2736,7 +2739,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				id = CreateHtmlId(target);
 			}
-			
+
 			return id;
 		}
 
@@ -2776,17 +2779,17 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				validList = genList.IsAssignableFrom(genTypeDef);
 			}
-			
+
 			if (!validList && list == null)
 			{
-				throw new MonoRailException("The property {0} is being accessed as " + 
-					"an indexed property but does not seem to implement IList. " + 
+				throw new MonoRailException("The property {0} is being accessed as " +
+					"an indexed property but does not seem to implement IList. " +
 					"In fact the type is {1}", property, instanceType.FullName);
 			}
 
 			if (index < 0)
 			{
-				throw new MonoRailException("The specified index '{0}' is outside the bounds " + 
+				throw new MonoRailException("The specified index '{0}' is outside the bounds " +
 					"of the array. Property {1}", index, property);
 			}
 		}
@@ -2802,14 +2805,14 @@ namespace Castle.MonoRail.Framework.Helpers
 				Type[] genArguments = instanceType.GetGenericArguments();
 
 				Type genType = instanceType.GetGenericTypeDefinition().MakeGenericType(genArguments);
-				
+
 				// I'm not going to retest for IList implementation as 
 				// if we got here, the AssertIsValidArray has run successfully
 
 				PropertyInfo countPropInfo = genType.GetProperty("Count");
 
-				int count = (int) countPropInfo.GetValue(instance, null);
-				
+				int count = (int)countPropInfo.GetValue(instance, null);
+
 				if (count == 0 || index + 1 > count)
 				{
 					return null;
@@ -2819,7 +2822,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				return indexerPropInfo.GetValue(instance, new object[] { index });
 			}
-			
+
 			if (list == null || list.Count == 0 || index + 1 > list.Count)
 			{
 				return null;
@@ -2845,9 +2848,9 @@ namespace Castle.MonoRail.Framework.Helpers
 				{
 					index = Convert.ToInt32(indexStr);
 				}
-				catch(Exception)
+				catch (Exception)
 				{
-					throw new MonoRailException("Could not convert (param {0}) index to Int32. Value is {1}", 
+					throw new MonoRailException("Could not convert (param {0}) index to Int32. Value is {1}",
 						property, indexStr);
 				}
 
@@ -2880,7 +2883,7 @@ namespace Castle.MonoRail.Framework.Helpers
 					object newleft = convertible.ToType(right.GetType(), null);
 					return (newleft.Equals(right));
 				}
-				catch(Exception)
+				catch (Exception)
 				{
 					// Do nothing
 				}
@@ -2908,31 +2911,31 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="propertyOnInitialSet">Optional. Property to obtain the value from</param>
 		/// <param name="isMultiple"><c>true</c> if the initial selection is a set</param>
 		/// <returns><c>true</c> if it's selected</returns>
-		protected internal static bool IsPresent(object value, object initialSetValue, 
+		protected internal static bool IsPresent(object value, object initialSetValue,
 												 ValueGetter propertyOnInitialSet, bool isMultiple)
 		{
 			if (!isMultiple)
 			{
 				object valueToCompare = initialSetValue;
-				
+
 				if (propertyOnInitialSet != null)
 				{
 					// propertyOnInitialSet.GetValue(initialSetValue, null);
-					valueToCompare = propertyOnInitialSet.GetValue(initialSetValue); 
+					valueToCompare = propertyOnInitialSet.GetValue(initialSetValue);
 				}
-				
+
 				return AreEqual(value, valueToCompare);
 			}
 			else
 			{
-				foreach(object item in (IEnumerable) initialSetValue)
+				foreach (object item in (IEnumerable)initialSetValue)
 				{
 					object valueToCompare = item;
 
 					if (propertyOnInitialSet != null)
 					{
 						// valueToCompare = propertyOnInitialSet.GetValue(item, null);
-						valueToCompare = propertyOnInitialSet.GetValue(item); 
+						valueToCompare = propertyOnInitialSet.GetValue(item);
 					}
 
 					if (AreEqual(value, valueToCompare))
@@ -2941,10 +2944,10 @@ namespace Castle.MonoRail.Framework.Helpers
 					}
 				}
 			}
-			
+
 			return false;
 		}
-		
+
 		private static void AddChecked(IDictionary attributes)
 		{
 			attributes["checked"] = "checked";
@@ -2961,9 +2964,9 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			bool canUseUnderline = false;
 
-			foreach(char c in name.ToCharArray())
+			foreach (char c in name.ToCharArray())
 			{
-				switch(c)
+				switch (c)
 				{
 					case '.':
 					case '[':
@@ -2979,7 +2982,7 @@ namespace Castle.MonoRail.Framework.Helpers
 						sb.Append(c);
 						break;
 				}
-				
+
 			}
 
 			return sb.ToString();
@@ -3041,7 +3044,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				{
 					return propInfo.GetValue(instance, null);
 				}
-				catch(TargetException)
+				catch (TargetException)
 				{
 					PropertyInfo tempProp = instance.GetType().GetProperty(Name);
 
@@ -3142,7 +3145,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <returns></returns>
 			public override object GetValue(object instance)
 			{
-				DataRow row = (DataRow) instance;
+				DataRow row = (DataRow)instance;
 
 				return row[columnName];
 			}
@@ -3280,13 +3283,13 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 				else
 				{
-					PropertyInfo info;
+					PropertyInfo info = null;
 
-					// check for recusion
-					if(keyName.Contains("."))
+					// check for recursion
+					if (keyName.Contains("."))
 					{
 						info = QueryPropertyInfoRecursive(targetType, keyName.Split('.'));
-						
+
 						if (info != null)
 						{
 							return new RecursiveReflectionValueGetter(targetType, keyName);
@@ -3294,7 +3297,8 @@ namespace Castle.MonoRail.Framework.Helpers
 					}
 					else
 					{
-						info = targetType.GetProperty(keyName, ResolveFlagsToUse(targetType));
+						info = GetPropertyInfo(targetType, keyName);
+
 						if (info != null)
 						{
 							return new ReflectionValueGetter(info);
@@ -3304,6 +3308,7 @@ namespace Castle.MonoRail.Framework.Helpers
 					return null;
 				}
 			}
+
 		}
 
 		#endregion
@@ -3349,14 +3354,56 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		/// <summary>
+		/// Gets the property info for the property with the <paramref name="propertyName"/>.
+		/// </summary>
+		/// <param name="type">Type that has the property.</param>
+		/// <param name="propertyName">Name of the property.</param>
+		/// <returns></returns>
+		private static PropertyInfo GetPropertyInfo(Type type, string propertyName)
+		{
+			PropertyInfo info = null;
+
+			try
+			{
+				info = type.GetProperty(propertyName, ResolveFlagsToUse(type));
+			}
+			catch (AmbiguousMatchException amex)
+			{
+				// This is kind of an edge case, so tried it the normal way first,
+				// seems to happen if you override a generic property
+
+				if (logger.IsDebugEnabled)
+				{
+					logger.DebugFormat(amex, "Retrieving property {0} on type {1} raised a {2}. Maybe it is generic and overriden. Will try to get the most specific property now.",
+						propertyName, type, amex.GetType().Name);
+				}
+
+				// Try again on instance only, loop through base type hierarchy
+				Type baseType = type;
+				while (info == null)
+				{
+					info = baseType.GetProperty(propertyName, propertyFlagsDeclaredOnly);
+
+					baseType = baseType.BaseType;
+					if (baseType == typeof(object) || baseType == null)
+					{
+						break;
+					}
+				}
+			}
+
+			return info;
+		}
+
 		private static BindingFlags ResolveFlagsToUse(Type type)
 		{
 			if (type.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen") || type.Assembly.FullName.StartsWith("DynamicProxyGenAssembly2"))
 			{
-				return PropertyFlags2;
+				return propertyFlagsDeclaredOnly;
 			}
 
 			return PropertyFlags;
 		}
 	}
-} 
+}
