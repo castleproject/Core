@@ -20,11 +20,15 @@ namespace Castle.MicroKernel.Registration
 	using System.Collections.Generic;
 	
 	/// <summary>
-	/// The starting point to describe types to register.
+	/// Describes a set of components to register in the kernel.
 	/// </summary>
 	/// <typeparam name="T">The base type to match against.</typeparam>
 	public class AllTypesOf<T>
 	{
+		protected AllTypesOf()
+		{
+		}
+		
 		/// <summary>
 		/// Prepares to register types from an assembly.
 		/// </summary>
@@ -99,6 +103,9 @@ namespace Castle.MicroKernel.Registration
 		}
 	}
 
+	/// <summary>
+	/// Describes a set of components to register in the kernel.
+	/// </summary>
 	public class AllTypes : AllTypesOf<object>
 	{
 	}

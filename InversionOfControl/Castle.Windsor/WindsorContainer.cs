@@ -22,6 +22,7 @@ namespace Castle.Windsor
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor.Configuration;
 	using Castle.Windsor.Configuration.Interpreters;
+	using Castle.Windsor.Installer;
 
 	/// <summary>
 	/// Implementation of <see cref="IWindsorContainer"/>
@@ -488,6 +489,32 @@ namespace Castle.Windsor
 			return this;
 		}
 
+		/// <summary>
+		/// Installs the components provided by the <see cref="IWindsorInstaller"/>s
+		/// with the <see cref="IWindsorContainer"/>.
+		/// <param name="installers">The component installers.</param>
+		/// <returns>The container.</returns>
+		/// </summary>
+		public IWindsorContainer Install(params IWindsorInstaller[] installers)
+		{
+			if (installers == null)
+			{
+				throw new ArgumentNullException("installers");
+			}
+
+			using (PartialConfigurationStore store = new PartialConfigurationStore(kernel))
+            {
+				foreach (IWindsorInstaller windsorInstaller in installers)
+				{
+					windsorInstaller.Install(this, store);
+				}
+
+				installer.SetUp(this, store);            	
+            }
+		
+			return this;
+		}
+		
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>

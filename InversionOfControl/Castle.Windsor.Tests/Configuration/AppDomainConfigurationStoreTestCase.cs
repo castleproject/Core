@@ -34,7 +34,7 @@ namespace Castle.Windsor.Tests.Configuration
 			interpreter.ProcessResource(interpreter.Source, store);
 
 			Assert.AreEqual(2, store.GetFacilities().Length);
-			Assert.AreEqual(2, store.GetComponents().Length);
+			Assert.AreEqual(3, store.GetComponents().Length);
 
 			IConfiguration config = store.GetFacilityConfiguration("testidengine");
 			IConfiguration childItem = config.Children["item"];

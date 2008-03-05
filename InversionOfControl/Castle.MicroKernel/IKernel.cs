@@ -299,7 +299,7 @@ namespace Castle.MicroKernel
 		void AddComponentInstance(string key, Type serviceType, Type classType, object instance);
 
 		/// <summary>
-		/// Registers the components described by the <see cref="ComponentRegistration{S}"/>s
+		/// Registers the components provided by the <see cref="IRegistration"/>s
 		/// with the <see cref="IKernel"/>.
 		/// <param name="registrations">The component registrations.</param>
 		/// <returns>The kernel.</returns>

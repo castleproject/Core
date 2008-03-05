@@ -199,13 +199,21 @@ namespace Castle.Windsor
 		IWindsorContainer AddComponentLifeStyle<I, T>(String key, IDictionary extendedProperties) where T : class;
 
 		/// <summary>
-		/// Registers the components described by the <see cref="ComponentRegistration{S}"/>s
+		/// Registers the components provided by the <see cref="IRegistration"/>s
 		/// with the <see cref="IWindsorContainer"/>.
 		/// <param name="registrations">The component registrations.</param>
 		/// <returns>The container.</returns>
 		/// </summary>
 		IWindsorContainer Register(params IRegistration[] registrations);
 
+		/// <summary>
+		/// Installs the components provided by the <see cref="IWindsorInstaller"/>s
+		/// with the <see cref="IWindsorContainer"/>.
+		/// <param name="installers">The component installers.</param>
+		/// <returns>The container.</returns>
+		/// </summary>
+		IWindsorContainer Install(params IWindsorInstaller[] installers);
+		
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
@@ -367,7 +375,7 @@ namespace Castle.Windsor
 		/// Returns the inner instance of the MicroKernel
 		/// </summary>
 		IKernel Kernel { get; }
-
+				
 		/// <summary>
 		/// Gets or sets the parent container if this instance
 		/// is a sub container.

@@ -235,6 +235,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IgnoreWireTestCase.cs" />
+    <Compile Include="Installer\ConfigurationInstallerTestCase.cs" />
     <Compile Include="Installer\InstallerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

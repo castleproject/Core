@@ -22,7 +22,7 @@ namespace Castle.MicroKernel.Registration
 	using MicroKernel;
 
 	/// <summary>
-	/// 
+	/// Registration for a single component with the kernel.
 	/// </summary>
 	/// <typeparam name="S">The service type</typeparam>
 	public class ComponentRegistration<S> : IRegistration
