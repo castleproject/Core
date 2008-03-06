@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord.Tests
 	using System.Threading;
 	using Castle.ActiveRecord.Queries;
 	using Castle.ActiveRecord.Tests.Model.GenericModel;
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 	using NUnit.Framework;
 
 	[TestFixture]

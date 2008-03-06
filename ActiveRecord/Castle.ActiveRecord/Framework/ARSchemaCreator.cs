@@ -17,7 +17,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Collections.Specialized;
 	using System.Data;
 	using System.IO;
 
@@ -31,7 +30,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// </summary>
 	public class ARSchemaCreator
 	{
-		private readonly IDictionary connectionProperties;
+		private readonly IDictionary<string,string> connectionProperties;
 		private readonly Dialect dialect;
 
 		/// <summary>
@@ -165,18 +164,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			return (String[]) parts.ToArray(typeof(String));
 		}
 
-		private IDictionary CreateConnectionProperties()
+		private IDictionary<string,string> CreateConnectionProperties()
 		{
-			IDictionary props = new HybridDictionary();
-
-			foreach(KeyValuePair<string,string> entry in dialect.DefaultProperties)
-			{
-				props[entry.Key] = entry.Value;
-			}
+			Dictionary<string,string> props = new Dictionary<string,string>(dialect.DefaultProperties);
 
 			if (connectionProperties != null)
 			{
-				foreach(DictionaryEntry entry in connectionProperties)
+				foreach (KeyValuePair<string, string> entry in connectionProperties )
 				{
 					props[entry.Key] = entry.Value;
 				}

@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord
 	using System;
 
 	using NHibernate;
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 
 	internal class CriteriaHelper
 	{

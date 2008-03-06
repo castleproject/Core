@@ -14,7 +14,7 @@
 
 namespace Castle.ActiveRecord.Tests
 {
-	using System.Collections;
+	using System.Collections.Generic;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Config;
 	using NUnit.Framework;
@@ -26,7 +26,7 @@ namespace Castle.ActiveRecord.Tests
 		{
 			InPlaceConfigurationSource source = new InPlaceConfigurationSource();
 
-			Hashtable properties = new Hashtable();
+			Dictionary<string,string> properties = new Dictionary<string,string>();
 			properties.Add("hibernate.connection.driver_class", "NHibernate.Driver.SqlClientDriver");
 			properties.Add("hibernate.dialect", "NHibernate.Dialect.MsSql2000Dialect");
 			properties.Add("hibernate.connection.provider", "NHibernate.Connection.DriverConnectionProvider");

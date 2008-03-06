@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using Castle.ActiveRecord.Framework.Internal;
 	using NHibernate;
 	using NHibernate.Classic;
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 	using Castle.Components.Validator;
 
 

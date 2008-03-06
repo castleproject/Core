@@ -23,7 +23,7 @@ namespace Castle.ActiveRecord.Tests
 
 	using Castle.ActiveRecord.Tests.Model.GenericModel;
 
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 
 	[TestFixture]
 	public class ActiveRecordBaseGenericsTestCase : AbstractActiveRecordTest

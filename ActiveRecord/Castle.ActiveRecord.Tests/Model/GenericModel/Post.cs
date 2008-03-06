@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 	using System;
 	using System.Collections;
 
-    using NHibernate.Expressions;
+    using NHibernate.Criterion;
 
 	[ActiveRecord("PostTable")]
 	public class Post : ActiveRecordBase<Post>

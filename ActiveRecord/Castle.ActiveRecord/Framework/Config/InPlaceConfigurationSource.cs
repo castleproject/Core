@@ -15,7 +15,6 @@
 namespace Castle.ActiveRecord.Framework.Config
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Configuration;
 	using System.Text.RegularExpressions;
@@ -196,7 +195,7 @@ namespace Castle.ActiveRecord.Framework.Config
 
 			InPlaceConfigurationSource config = new InPlaceConfigurationSource();
 
-			Hashtable parameters = new Hashtable();
+			Dictionary<string,string> parameters = new Dictionary<string,string>();
 			parameters["connection.provider"] = "NHibernate.Connection.DriverConnectionProvider";
 			parameters["cache.use_second_level_cache"] = "false";
 
@@ -234,7 +233,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="properties">The properties.</param>
-		public void Add(Type type, IDictionary properties)
+		public void Add(Type type, IDictionary<string,string> properties)
 		{
 			Add(type, ConvertToConfiguration(properties));
 		}
@@ -365,13 +364,13 @@ namespace Castle.ActiveRecord.Framework.Config
 			pluralizeTableNames = pluralize;
 		}
 
-		private static IConfiguration ConvertToConfiguration(IDictionary properties)
+		private static IConfiguration ConvertToConfiguration(IDictionary<string,string> properties)
 		{
 			MutableConfiguration conf = new MutableConfiguration("Config");
 
-			foreach(DictionaryEntry entry in properties)
+			foreach(KeyValuePair<string,string> entry in properties)
 			{
-				conf.Children.Add(new MutableConfiguration(entry.Key.ToString(), entry.Value.ToString()));
+				conf.Children.Add(new MutableConfiguration(entry.Key, entry.Value));
 			}
 
 			return conf;

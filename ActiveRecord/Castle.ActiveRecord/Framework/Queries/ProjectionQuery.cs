@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord.Queries
 	using System.Collections.Generic;
 	using Castle.ActiveRecord.Framework;
 	using NHibernate;
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 	using NHibernate.Transform;
 
 	/// <summary>

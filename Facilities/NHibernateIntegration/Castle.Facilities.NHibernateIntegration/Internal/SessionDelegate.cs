@@ -356,6 +356,19 @@ namespace Castle.Facilities.NHibernateIntegration
 		}
 
 		/// <summary>
+		/// Starts a new Session with the given entity mode in effect. This secondary
+		/// Session inherits the connection, transaction, and other context
+		///	information from the primary Session. It doesn't need to be flushed
+		/// or closed by the developer.
+		/// </summary>
+		/// <param name="entityMode">The entity mode to use for the new session.</param>
+		/// <returns>The new session</returns>
+		public ISession GetSession(EntityMode entityMode)
+		{
+			return inner.GetSession(entityMode);
+		}
+		
+		/// <summary>
 		/// Gets the specified id.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>

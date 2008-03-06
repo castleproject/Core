@@ -15,8 +15,7 @@
 namespace Castle.ActiveRecord.Framework.Config
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
+	using System.Collections.Generic;
 	using System.Configuration;
 	using System.IO;
 	using System.Xml;
@@ -156,9 +155,9 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <returns></returns>
-		protected IDictionary BuildProperties(XmlNode node)
+		protected IDictionary<string,string> BuildProperties(XmlNode node)
 		{
-			HybridDictionary dict = new HybridDictionary();
+			Dictionary<string,string> dict = new Dictionary<string,string>();
 
 			foreach(XmlNode addNode in node.SelectNodes("add"))
 			{

@@ -17,7 +17,7 @@ namespace TestSiteARSupport.Model
 	using System;
 	using Castle.ActiveRecord;
 	using Castle.Components.Validator;
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 
 	[ActiveRecord("TSAS_User")]
 	public class User

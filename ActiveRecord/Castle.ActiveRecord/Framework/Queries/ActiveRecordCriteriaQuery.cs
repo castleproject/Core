@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Queries
 	using System;
 
 	using NHibernate;
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 
 	/// <summary>
 	/// Criteria Query

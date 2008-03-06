@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Tests
 
 	using Castle.ActiveRecord.Tests.Model;
 
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 
 	using NUnit.Framework;
 

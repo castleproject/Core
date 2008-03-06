@@ -26,7 +26,7 @@ namespace Castle.ActiveRecord
 	using Castle.Core.Configuration;
 	using NHibernate.Cfg;
 	using Iesi.Collections;
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 	using NHibernate.Tool.hbm2ddl;
 	using Environment=NHibernate.Cfg.Environment;
 

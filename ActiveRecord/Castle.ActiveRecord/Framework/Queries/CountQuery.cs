@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Queries
 {
 	using System;
 	using NHibernate;
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 
 	/// <summary>
 	/// Query the database for a count (using COUNT(*) ) of all the entites of the specified type.

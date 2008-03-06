@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord.Tests.Model
 	using System.Collections;
 	using Castle.ActiveRecord.Framework;
 	using NHibernate;
-	using NHibernate.Expressions;
+	using NHibernate.Criterion;
 
 	[ActiveRecord("BlogTable")]
 	public class Blog : ActiveRecordBase
