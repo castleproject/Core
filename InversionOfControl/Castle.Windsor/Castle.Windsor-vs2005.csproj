@@ -194,12 +194,16 @@
     <Compile Include="InitializationException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Installer\Configuration.cs" />
+    <Compile Include="Installer\ConfigurationInstaller.cs" />
     <Compile Include="Installer\DefaultComponentInstaller.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Installer\IComponentsInstaller.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Installer\IWindsorInstaller.cs" />
+    <Compile Include="Installer\PartialConfigurationStore.cs" />
     <Compile Include="IWindsorContainer.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,4 +1,4 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
@@ -215,6 +215,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IgnoreWireTestCase.cs" />
+    <Compile Include="Installer\ConfigurationInstallerTestCase.cs" />
     <Compile Include="Installer\InstallerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
