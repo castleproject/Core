@@ -97,6 +97,7 @@ namespace Castle.MonoRail.Framework
 
 			IEngineContext engineContext = engineContextFactory.Create(mrContainer, urlInfo, context, routeMatch);
 			engineContext.AddService(typeof(IEngineContext), engineContext);
+			context.Items[CurrentEngineContextKey] = engineContext;
 
 			IController controller;
 
@@ -118,7 +119,6 @@ namespace Castle.MonoRail.Framework
 			engineContext.CurrentController = controller;
 			engineContext.CurrentControllerContext = controllerContext;
 
-			context.Items[CurrentEngineContextKey] = engineContext;
 			context.Items[CurrentControllerKey] = controller;
 			context.Items[CurrentControllerContextKey] = controllerContext;
 			
