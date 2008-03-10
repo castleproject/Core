@@ -537,6 +537,7 @@
     <Compile Include="Providers\IReturnBinderDescriptorProvider.cs" />
     <Compile Include="Providers\ITransformDescriptorFilterProvider.cs" />
     <Compile Include="Providers\IViewComponentDescriptorProvider.cs" />
+    <Compile Include="RenderingSupport.cs" />
     <Compile Include="ResourceFileHandler.cs" />
     <Compile Include="Resources\DefaultResourceFactory.cs" />
     <Compile Include="Resources\IResource.cs" />

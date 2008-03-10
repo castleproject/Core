@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ namespace Castle.MonoRail.Framework
 		private ValidatorRunner validatorRunner;
 		private Dictionary<object, ErrorSummary> validationSummaryPerInstance;
 		private Dictionary<object, ErrorList> boundInstances;
+		private RenderingSupport renderingSupport;
 
 		#region IController
 
@@ -80,6 +81,7 @@ namespace Castle.MonoRail.Framework
 			CreateFiltersDescriptors();
 			ProcessScaffoldIfAvailable();
 			ActionProviderUtil.RegisterActions(engineContext, this, context);
+			renderingSupport = new RenderingSupport(context, engineContext);
 			Initialize();
 			isContextualized = true;
 		}
@@ -556,13 +558,15 @@ namespace Castle.MonoRail.Framework
 			scaffoldSupport = engineContext.Services.ScaffoldSupport; // might be null
 		}
 
+		#region From RenderingSupport
+
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
 		/// <param name="name">view template name (the file extension is optional)</param>
-		public void RenderView(string name)
+		public virtual void RenderView(string name)
 		{
-			context.SelectedViewName = Path.Combine(ViewFolder, name);
+			renderingSupport.RenderView(name);
 		}
 
 		/// <summary>
@@ -570,11 +574,9 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="name">view template name (the file extension is optional)</param>
 		/// <param name="skipLayout">If set to <c>true</c>, no layout will be used when rendering the view</param>
-		public void RenderView(string name, bool skipLayout)
+		public virtual void RenderView(string name, bool skipLayout)
 		{
-			if (skipLayout) CancelLayout();
-
-			RenderView(name);
+			renderingSupport.RenderView(name, skipLayout);
 		}
 
 		/// <summary>
@@ -583,12 +585,9 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">view template name (the file extension is optional)</param>
 		/// <param name="skipLayout">If set to <c>true</c>, no layout will be used when rendering the view</param>
 		/// <param name="mimeType">The mime type to use on the reply</param>
-		public void RenderView(string name, bool skipLayout, string mimeType)
+		public virtual void RenderView(string name, bool skipLayout, string mimeType)
 		{
-			if (skipLayout) CancelLayout();
-			Response.ContentType = mimeType;
-
-			RenderView(name);
+			renderingSupport.RenderView(name, skipLayout, mimeType);
 		}
 
 		/// <summary>
@@ -596,9 +595,9 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="controller">Controller name get view from (if you intend to user another controller's view</param>
 		/// <param name="name">view template name (the file extension is optional)</param>
-		public void RenderView(string controller, string name)
+		public virtual void RenderView(string controller, string name)
 		{
-			context.SelectedViewName = Path.Combine(controller, name);
+			renderingSupport.RenderView(controller, name);
 		}
 
 		/// <summary>
@@ -607,11 +606,9 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">Controller name get view from (if you intend to user another controller's view</param>
 		/// <param name="name">view template name (the file extension is optional)</param>
 		/// <param name="skipLayout">If set to <c>true</c>, no layout will be used when rendering the view</param>
-		public void RenderView(string controller, string name, bool skipLayout)
+		public virtual void RenderView(string controller, string name, bool skipLayout)
 		{
-			if (skipLayout) CancelLayout();
-
-			RenderView(controller, name);
+			renderingSupport.RenderView(controller, name, skipLayout);
 		}
 
 		/// <summary>
@@ -621,12 +618,9 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">view template name (the file extension is optional)</param>
 		/// <param name="skipLayout">If set to <c>true</c>, no layout will be used when rendering the view</param>
 		/// <param name="mimeType">The mime type to use on the reply</param>
-		public void RenderView(string controller, string name, bool skipLayout, string mimeType)
+		public virtual void RenderView(string controller, string name, bool skipLayout, string mimeType)
 		{
-			if (skipLayout) CancelLayout();
-
-			Response.ContentType = mimeType;
-			RenderView(controller, name);
+			renderingSupport.RenderView(controller, name, skipLayout, mimeType);
 		}
 
 		/// <summary>
@@ -635,11 +629,77 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">Controller name get view from (if you intend to user another controller's view</param>
 		/// <param name="name">view template name (the file extension is optional)</param>
 		/// <param name="mimeType">The mime type to use on the reply</param>
-		public void RenderView(string controller, string name, string mimeType)
+		public virtual void RenderView(string controller, string name, string mimeType)
 		{
-			Response.ContentType = mimeType;
-			RenderView(controller, name);
+			renderingSupport.RenderView(controller, name, mimeType);
 		}
+
+		/// <summary>
+		/// Specifies the shared view to be processed after the action has finished its
+		/// processing. (A partial view shared 
+		/// by others views and usually in the root folder
+		/// of the view directory).
+		/// </summary>
+		public virtual void RenderSharedView(string name)
+		{
+			renderingSupport.RenderSharedView(name);
+		}
+
+		/// <summary>
+		/// Specifies the shared view to be processed after the action has finished its
+		/// processing. (A partial view shared 
+		/// by others views and usually in the root folder
+		/// of the view directory).
+		/// </summary>
+		public virtual void RenderSharedView(string name, bool skipLayout)
+		{
+			renderingSupport.RenderSharedView(name, skipLayout);
+		}
+
+		/// <summary>
+		/// Cancels the view processing.
+		/// </summary>
+		public virtual void CancelView()
+		{
+			renderingSupport.CancelView();
+		}
+
+		/// <summary>
+		/// Cancels the layout processing.
+		/// </summary>
+		public virtual void CancelLayout()
+		{
+			renderingSupport.CancelLayout();
+		}
+
+		/// <summary>
+		/// Cancels the view processing and writes
+		/// the specified contents to the browser
+		/// </summary>
+		public virtual void RenderText(string contents)
+		{
+			renderingSupport.RenderText(contents);
+		}
+
+		/// <summary>
+		/// Cancels the view processing and writes
+		/// the specified contents to the browser
+		/// </summary>
+		public virtual void RenderText(string contents, params object[] args)
+		{
+			renderingSupport.RenderText(contents, args);
+		}
+
+		/// <summary>
+		/// Cancels the view processing and writes
+		/// the specified contents to the browser
+		/// </summary>
+		public virtual void RenderText(IFormatProvider formatProvider, string contents, params object[] args)
+		{
+			renderingSupport.RenderText(formatProvider, contents, args);
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Specifies the view to be processed and results are written to System.IO.TextWriter. 
@@ -652,30 +712,6 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Specifies the shared view to be processed after the action has finished its
-		/// processing. (A partial view shared 
-		/// by others views and usually in the root folder
-		/// of the view directory).
-		/// </summary>
-		public void RenderSharedView(string name)
-		{
-			context.SelectedViewName = name;
-		}
-
-		/// <summary>
-		/// Specifies the shared view to be processed after the action has finished its
-		/// processing. (A partial view shared 
-		/// by others views and usually in the root folder
-		/// of the view directory).
-		/// </summary>
-		public void RenderSharedView(string name, bool skipLayout)
-		{
-			if (skipLayout) CancelLayout();
-
-			RenderSharedView(name);
-		}
-
-		/// <summary>
 		/// Specifies the shared view to be processed and results are written to System.IO.TextWriter.
 		/// (A partial view shared by others views and usually in the root folder
 		/// of the view directory).
@@ -685,51 +721,6 @@ namespace Castle.MonoRail.Framework
 		public void InPlaceRenderSharedView(TextWriter output, string name)
 		{
 			viewEngineManager.Process(name, output, Context, this, context);
-		}
-
-		/// <summary>
-		/// Cancels the view processing.
-		/// </summary>
-		public void CancelView()
-		{
-			context.SelectedViewName = null;
-		}
-
-		/// <summary>
-		/// Cancels the layout processing.
-		/// </summary>
-		public void CancelLayout()
-		{
-			LayoutName = null;
-		}
-
-		/// <summary>
-		/// Cancels the view processing and writes
-		/// the specified contents to the browser
-		/// </summary>
-		public void RenderText(string contents)
-		{
-			CancelView();
-
-			engineContext.Response.Write(contents);
-		}
-
-		/// <summary>
-		/// Cancels the view processing and writes
-		/// the specified contents to the browser
-		/// </summary>
-		public void RenderText(string contents, params object[] args)
-		{
-			RenderText(String.Format(contents, args));
-		}
-
-		/// <summary>
-		/// Cancels the view processing and writes
-		/// the specified contents to the browser
-		/// </summary>
-		public void RenderText(IFormatProvider formatProvider, string contents, params object[] args)
-		{
-			RenderText(String.Format(formatProvider, contents, args));
 		}
 
 		/// <summary>
@@ -768,7 +759,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="action">The action name</param>
 		public void RedirectToAction(string action)
 		{
-			RedirectToAction(action, (NameValueCollection) null);
+			RedirectToAction(action, (NameValueCollection)null);
 		}
 
 		/// <summary>
@@ -1240,7 +1231,7 @@ namespace Castle.MonoRail.Framework
 				IEmailSender sender = engineContext.Services.EmailSender;
 				sender.Send(message);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				if (logger.IsErrorEnabled)
 				{
@@ -1311,12 +1302,12 @@ namespace Castle.MonoRail.Framework
 
 			IResourceFactory resourceFactory = engineContext.Services.ResourceFactory;
 
-			foreach(ResourceDescriptor resDesc in resources)
+			foreach (ResourceDescriptor resDesc in resources)
 			{
 				if (ControllerContext.Resources.ContainsKey(resDesc.Name))
 				{
 					throw new MonoRailException("There is a duplicated entry on the resource dictionary. Resource entry name: " +
-					                            resDesc.Name);
+												resDesc.Name);
 				}
 
 				ControllerContext.Resources.Add(resDesc.Name, resourceFactory.Create(resDesc, typeAssembly));
@@ -1346,7 +1337,7 @@ namespace Castle.MonoRail.Framework
 
 				if (action == null)
 				{
-					throw new MonoRailException(404, "Not Found", "Could not find action named " + 
+					throw new MonoRailException(404, "Not Found", "Could not find action named " +
 						Action + " on controller " + AreaName + "\\" + Name);
 				}
 
@@ -1377,12 +1368,12 @@ namespace Castle.MonoRail.Framework
 
 				// Action executed successfully, so it's safe to process the cache configurer
 				if ((MetaDescriptor.CacheConfigurer != null || action.CachePolicyConfigurer != null) &&
-				    !Response.WasRedirected && Response.StatusCode == 200)
+					!Response.WasRedirected && Response.StatusCode == 200)
 				{
 					ConfigureCachePolicy(action);
 				}
 			}
-			catch(MonoRailException ex)
+			catch (MonoRailException ex)
 			{
 				if (Response.StatusCode == 200 && ex.HttpStatusCode.HasValue)
 				{
@@ -1402,7 +1393,7 @@ namespace Castle.MonoRail.Framework
 				}
 				return;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				if (Response.StatusCode == 200)
 				{
@@ -1489,8 +1480,8 @@ namespace Castle.MonoRail.Framework
 				if (scaffoldSupport == null)
 				{
 					String message = "You must enable scaffolding support on the " +
-					                 "configuration file, or, to use the standard ActiveRecord support " +
-					                 "copy the necessary assemblies to the bin folder.";
+									 "configuration file, or, to use the standard ActiveRecord support " +
+									 "copy the necessary assemblies to the bin folder.";
 
 					throw new MonoRailException(message);
 				}
@@ -1514,14 +1505,14 @@ namespace Castle.MonoRail.Framework
 
 			string method = engineContext.Request.HttpMethod;
 
-			Verb currentVerb = (Verb) Enum.Parse(typeof(Verb), method, true);
+			Verb currentVerb = (Verb)Enum.Parse(typeof(Verb), method, true);
 
 			if ((allowedVerbs & currentVerb) != currentVerb)
 			{
 				throw new MonoRailException(403, "Forbidden",
-				                            string.Format("Access to the action [{0}] " +
-				                                          "on controller [{1}] is not allowed to the http verb [{2}].",
-				                                          Action, Name, method));
+											string.Format("Access to the action [{0}] " +
+														  "on controller [{1}] is not allowed to the http verb [{2}].",
+														  Action, Name, method));
 			}
 		}
 
@@ -1543,7 +1534,7 @@ namespace Castle.MonoRail.Framework
 
 				if (viewEngineManager.HasTemplate(defaultLayout))
 				{
-					return new String[] {Name};
+					return new String[] { Name };
 				}
 			}
 
@@ -1574,7 +1565,7 @@ namespace Castle.MonoRail.Framework
 
 			// Custom helpers
 
-			foreach(HelperDescriptor helper in MetaDescriptor.Helpers)
+			foreach (HelperDescriptor helper in MetaDescriptor.Helpers)
 			{
 				bool initialized;
 				object helperInstance = helperFactory.Create(helper.HelperType, engineContext, out initialized);
@@ -1587,7 +1578,7 @@ namespace Castle.MonoRail.Framework
 				if (helpers.Contains(helper.Name))
 				{
 					throw new ControllerException(String.Format("Found a duplicate helper " +
-					                                            "attribute named '{0}' on controller '{1}'", helper.Name, Name));
+																"attribute named '{0}' on controller '{1}'", helper.Name, Name));
 				}
 
 				helpers.Add(helper.Name, helperInstance);
@@ -1613,7 +1604,7 @@ namespace Castle.MonoRail.Framework
 						new JSONHelper(engineContext), new ZebdaHelper(engineContext)
 					};
 
-			foreach(AbstractHelper helper in builtInHelpers)
+			foreach (AbstractHelper helper in builtInHelpers)
 			{
 				context.Helpers.Add(helper);
 				
@@ -1711,11 +1702,11 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected internal FilterDescriptor[] CopyFilterDescriptors()
 		{
-			FilterDescriptor[] clone = (FilterDescriptor[]) MetaDescriptor.Filters.Clone();
+			FilterDescriptor[] clone = (FilterDescriptor[])MetaDescriptor.Filters.Clone();
 
-			for(int i = 0; i < clone.Length; i++)
+			for (int i = 0; i < clone.Length; i++)
 			{
-				clone[i] = (FilterDescriptor) clone[i].Clone();
+				clone[i] = (FilterDescriptor)clone[i].Clone();
 			}
 
 			return clone;
@@ -1723,7 +1714,7 @@ namespace Castle.MonoRail.Framework
 
 		private bool ProcessFilters(IExecutableAction action, ExecuteWhen when)
 		{
-			foreach(FilterDescriptor desc in filters)
+			foreach (FilterDescriptor desc in filters)
 			{
 				if (action.ShouldSkipFilter(desc.FilterType))
 				{
@@ -1765,7 +1756,7 @@ namespace Castle.MonoRail.Framework
 
 				return desc.FilterInstance.Perform(when, engineContext, this, context);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				if (logger.IsErrorEnabled)
 				{
@@ -1780,7 +1771,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (filters == null) return;
 
-			foreach(FilterDescriptor desc in filters)
+			foreach (FilterDescriptor desc in filters)
 			{
 				if (desc.FilterInstance != null)
 				{
@@ -1889,7 +1880,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="actionArgs">The action args.</param>
 		/// <returns></returns>
 		protected virtual MethodInfo SelectMethod(string action, IDictionary actions, IRequest request,
-		                                          IDictionary<string, object> actionArgs)
+												  IDictionary<string, object> actionArgs)
 		{
 			return null;
 		}
@@ -1901,7 +1892,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="request">The request.</param>
 		/// <param name="methodArgs">The method args.</param>
 		protected virtual object InvokeMethod(MethodInfo method, IRequest request,
-		                                      IDictionary<string, object> methodArgs)
+											  IDictionary<string, object> methodArgs)
 		{
 			return method.Invoke(this, new object[0]);
 		}
