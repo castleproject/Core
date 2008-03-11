@@ -33,6 +33,7 @@ namespace Castle.MicroKernel.Registration
 		private Type implementation;
 		private readonly List<ComponentDescriptor<S>> descriptors;
 		private ComponentModel componentModel;
+		private bool registered;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ComponentRegistration{S}"/> class.
@@ -40,10 +41,33 @@ namespace Castle.MicroKernel.Registration
 		public ComponentRegistration()
 		{
 			overwrite = false;
+			registered = false;
 			serviceType = typeof(S);
 			descriptors = new List<ComponentDescriptor<S>>();
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ComponentRegistration{S}"/> class
+		/// with an existing <see cref="ComponentModel"/>.
+		/// </summary>
+		public ComponentRegistration(ComponentModel componentModel) : this()
+		{
+			if (componentModel == null)
+			{
+				throw new ArgumentNullException("componentModel");
+			}
+			
+			if (componentModel.Service != typeof(S))
+			{
+				throw new ArgumentException("The componentModel Service does not" +
+					" match the expected type " + typeof(S).FullName);
+			}
+
+			this.componentModel = componentModel;
+			name = componentModel.Name;
+			implementation = componentModel.Implementation;			
+		}
+		
 		public String Name
 		{
 			get { return name; }
@@ -240,6 +264,16 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
+		/// With the configuration.
+		/// </summary>
+		/// <param name="configNodes">The config nodes.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> Configuration(params Node[] configNodes)
+		{
+			return AddDescriptor( new ConfigurationDescriptor<S>(configNodes));
+		}
+		
+		/// <summary>
 		/// With the interceptors.
 		/// </summary>
 		/// <param name="interceptors">The interceptors.</param>
@@ -266,34 +300,33 @@ namespace Castle.MicroKernel.Registration
 		/// <param name="kernel">The kernel.</param>
 		void IRegistration.Register(IKernel kernel)
 		{
-			if (componentModel == null)
+			if (!registered)
 			{
+				registered = true;
 				InitializeDefaults();
-				componentModel = BuildComponentModel(kernel);
-				kernel.AddCustomComponent(componentModel);
-			}
-		}
 
-		/// <summary>
-		/// Builds the component model.
-		/// </summary>
-		/// <returns></returns>
-		private ComponentModel BuildComponentModel(IKernel kernel)
-		{
-			IConfiguration configuration = EnsureComponentConfiguration(kernel);
-			foreach(ComponentDescriptor<S> descriptor in descriptors)
-			{
-				descriptor.ApplyToConfiguration(kernel, configuration);
-			}
+				IConfiguration configuration = EnsureComponentConfiguration(kernel);
+				foreach(ComponentDescriptor<S> descriptor in descriptors)
+				{
+					descriptor.ApplyToConfiguration(kernel, configuration);
+				}
 
-			ComponentModel model = kernel.ComponentModelBuilder.BuildModel(
-				name, serviceType, implementation, null);
-			foreach(ComponentDescriptor<S> descriptor in descriptors)
-			{
-				descriptor.ApplyToModel(kernel, model);
-			}
+				if (componentModel == null)
+				{
+					componentModel = kernel.ComponentModelBuilder.BuildModel(
+						name, serviceType, implementation, null);
+				}
 
-			return model;
+				foreach (ComponentDescriptor<S> descriptor in descriptors)
+				{
+					descriptor.ApplyToModel(kernel, componentModel);
+				}
+
+				if (!kernel.HasComponent(name))
+				{
+					kernel.AddCustomComponent(componentModel);
+				}	
+			}
 		}
 
 		/// <summary>
@@ -374,6 +407,8 @@ namespace Castle.MicroKernel.Registration
 		}
 	}
 
+	#region Nested Type: ComponentRegistration
+	
 	public class ComponentRegistration : ComponentRegistration<object>
 	{
 		public ComponentRegistration()
@@ -398,4 +433,6 @@ namespace Castle.MicroKernel.Registration
 			return this;
 		}
 	}
+	
+	#endregion
 }

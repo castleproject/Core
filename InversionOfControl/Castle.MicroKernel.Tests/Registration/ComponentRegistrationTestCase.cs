@@ -15,11 +15,12 @@
 namespace Castle.MicroKernel.Tests.Registration
 {
 	using System.Collections;
+	using Castle.Core;
 	using Castle.Core.Configuration;
 	using Castle.MicroKernel.Registration;
 	using Castle.MicroKernel.Tests.Lifestyle.Components;
-	using ClassComponents;
-	using Core;
+	using Castle.MicroKernel.Tests.Configuration.Components;
+	using Castle.MicroKernel.Tests.ClassComponents;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -535,5 +536,29 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreSame(common1, component.Services[0]);
 			Assert.AreSame(common2, component.Services[1]);
 		}
+
+		[Test]
+		public void AddComponent_WithComplexConfiguration_WorksFine()
+		{
+			kernel.Register(
+				Component.For<ClassWithComplexParameter>()
+					.Configuration(
+						Child.ForName("parameters").Eq(
+							Child.ForName("complexparam").Eq(
+								Child.ForName("complexparametertype").Eq(
+									Child.ForName("mandatoryvalue").Eq("value1"),
+									Child.ForName("optionalvalue").Eq("value2")
+									)
+								)
+							)
+						)
+				);
+
+			ClassWithComplexParameter component = kernel.Resolve<ClassWithComplexParameter>();
+			Assert.IsNotNull(component);
+			Assert.IsNotNull(component.ComplexParam);
+			Assert.AreEqual("value1", component.ComplexParam.MandatoryValue);
+			Assert.AreEqual("value2", component.ComplexParam.OptionalValue);			
+		}		
 	}
 }

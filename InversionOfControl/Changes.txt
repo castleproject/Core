@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Added generalized configuration support to ComponentRegistration.
+
 - Added IWindsorInstaller interface to enhance Windsor component installation.
 
 - Added AllTypesOf registration stratgey to simplify custom registration

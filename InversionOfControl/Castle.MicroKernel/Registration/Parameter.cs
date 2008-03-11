@@ -73,6 +73,8 @@ namespace Castle.MicroKernel.Registration
 		}
 	}
 
+	#region ParameterKey
+	
 	/// <summary>
 	/// Represents a parameter key.
 	/// </summary>
@@ -112,5 +114,7 @@ namespace Castle.MicroKernel.Registration
 		{
 			return new Parameter(name, configNode);
 		}
+		
+		#endregion
 	}
 }
