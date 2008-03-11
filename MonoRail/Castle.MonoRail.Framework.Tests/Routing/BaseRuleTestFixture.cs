@@ -18,7 +18,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 	using Framework.Routing;
 	using Test;
 
-	public class BaseRuleTestFixture
+	public abstract class BaseRuleTestFixture
 	{
 		protected static IRouteContext CreateGetContext()
 		{

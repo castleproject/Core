@@ -663,6 +663,7 @@
     <Compile Include="Providers\IViewComponentDescriptorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RenderingSupport.cs" />
     <Compile Include="ResourceFileHandler.cs">
       <SubType>Code</SubType>
     </Compile>
