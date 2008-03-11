@@ -91,12 +91,12 @@ namespace Castle.MonoRail.Framework
 		/// Returns the application path.
 		/// </summary>
 		String ApplicationPath { get; }
-//
-//		/// <summary>
-//		/// Returns the physical application path.
-//		/// </summary>
-//		String ApplicationPhysicalPath { get; }
-//
+
+		/// <summary>
+		/// Returns the physical application path.
+		/// </summary>
+		String ApplicationPhysicalPath { get; }
+
 		/// <summary>
 		/// Returns the <see cref="UrlInfo"/> of the the current request.
 		/// </summary>
@@ -118,19 +118,5 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <value>The current controller context.</value>
 		IControllerContext CurrentControllerContext { get; set; }
-
-//
-//		/// <summary>
-//		/// If a container is available for the app, this 
-//		/// property exposes its instance.
-//		/// </summary>
-//		IServiceProvider Container { get; }
-//
-//		/// <summary>
-//		/// Request a service from the engine context.
-//		/// </summary>
-//		/// <typeparam name="T">Service type</typeparam>
-//		/// <returns>Service instance</returns>
-//		T GetService<T>();
 	}
 }

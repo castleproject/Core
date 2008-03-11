@@ -216,7 +216,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		}
 
 		/// <summary>
-		/// Returns the application path.
+		/// Returns the application virtual path.
 		/// </summary>
 		/// <value></value>
 		public String ApplicationPath
@@ -236,6 +236,7 @@ namespace Castle.MonoRail.Framework.Adapters
 				}
 				else
 				{
+					// Huh? That is supposed to be the virtual path
 					path = AppDomain.CurrentDomain.BaseDirectory;
 				}
 
@@ -243,27 +244,27 @@ namespace Castle.MonoRail.Framework.Adapters
 			}
 		}
 
-//		/// <summary>
-//		/// Returns the physical application path.
-//		/// </summary>
-//		public String ApplicationPhysicalPath
-//		{
-//			get 
-//			{ 
-//				String path;
-//
-//				if (UnderlyingContext != null)
-//				{
-//					path = UnderlyingContext.Request.ApplicationPath;
-//				}
-//				else
-//				{
-//					path = AppDomain.CurrentDomain.BaseDirectory;
-//				}
-//
-//				return _context.Server.MapPath(path);
-//			}
-//		}
+		/// <summary>
+		/// Returns the physical application path.
+		/// </summary>
+		public String ApplicationPhysicalPath
+		{
+			get 
+			{ 
+				String path;
+
+				if (UnderlyingContext != null)
+				{
+					path = UnderlyingContext.Request.PhysicalApplicationPath;
+				}
+				else
+				{
+					path = AppDomain.CurrentDomain.BaseDirectory;
+				}
+
+				return path;
+			}
+		}
 
 		/// <summary>
 		/// Returns the Items collection from the current HttpContext.

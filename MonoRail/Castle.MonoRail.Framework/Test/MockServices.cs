@@ -101,6 +101,8 @@ namespace Castle.MonoRail.Framework.Test
 			extensionManager = new ExtensionManager(this);
 
 			validatorRegistry = new CachedValidationRegistry();
+
+			jsonSerializer = new NewtonsoftJSONSerializer();
 		}
 
 		#region IServiceContainer

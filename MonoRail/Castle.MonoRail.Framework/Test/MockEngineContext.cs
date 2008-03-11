@@ -55,6 +55,26 @@ namespace Castle.MonoRail.Framework.Test
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockEngineContext"/> class.
 		/// </summary>
+		/// <param name="urlInfo">The URL info.</param>
+		public MockEngineContext(UrlInfo urlInfo)
+			: this(new MockRequest(), new MockResponse(), new MockServices(), urlInfo)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockEngineContext"/> class.
+		/// </summary>
+		/// <param name="request">The request.</param>
+		/// <param name="response">The response.</param>
+		/// <param name="urlInfo">The URL info.</param>
+		public MockEngineContext(IMockRequest request, IMockResponse response, UrlInfo urlInfo)
+			: this(request, response, new MockServices(), urlInfo)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockEngineContext"/> class.
+		/// </summary>
 		/// <param name="request">The request.</param>
 		/// <param name="response">The response.</param>
 		/// <param name="services">The services.</param>
@@ -183,6 +203,15 @@ namespace Castle.MonoRail.Framework.Test
 		public virtual string ApplicationPath
 		{
 			get { return urlInfo.AppVirtualDir ?? "/"; }
+		}
+
+		/// <summary>
+		/// Returns the physical application path.
+		/// </summary>
+		/// <value></value>
+		public string ApplicationPhysicalPath
+		{
+			get { return AppDomain.CurrentDomain.BaseDirectory; }
 		}
 
 		/// <summary>
