@@ -28,11 +28,11 @@ namespace Castle.MonoRail.Framework.Test
 	/// </summary>
 	public class MockEngineContext : AbstractServiceContainer, IEngineContext
 	{
-		private readonly IMockRequest request;
-		private readonly IMockResponse response;
 		private readonly IDictionary contextItems = new HybridDictionary(true);
 		private readonly List<RenderedEmailTemplate> renderedEmailTemplates = new List<RenderedEmailTemplate>();
 		private readonly List<Message> messagesSent = new List<Message>();
+		private IMockRequest request;
+		private IMockResponse response;
 		private IServerUtility serverUtility = new MockServerUtility();
 		private IPrincipal currentUser;
 		private IDictionary session = new HybridDictionary(true);
@@ -43,6 +43,14 @@ namespace Castle.MonoRail.Framework.Test
 		private UrlInfo urlInfo;
 		private Flash flash = new Flash();
 		private Exception lastException;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MockEngineContext"/> class.
+		/// </summary>
+		public MockEngineContext()
+			: this(new MockRequest(), new MockResponse(), new MockServices(), new UrlInfo("area", "home", "index"))
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockEngineContext"/> class.
@@ -63,6 +71,26 @@ namespace Castle.MonoRail.Framework.Test
 				response.UrlInfo = urlInfo;
 				response.UrlBuilder = services.UrlBuilder;
 			}
+		}
+
+		/// <summary>
+		/// Gets or sets the mock request.
+		/// </summary>
+		/// <value>The mock request.</value>
+		public IMockRequest MockRequest
+		{
+			get { return request; }
+			set { request = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the mock response.
+		/// </summary>
+		/// <value>The mock response.</value>
+		public IMockResponse MockResponse
+		{
+			get { return response; }
+			set { response = value; }
 		}
 
 		/// <summary>

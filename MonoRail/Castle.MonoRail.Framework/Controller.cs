@@ -76,13 +76,6 @@ namespace Castle.MonoRail.Framework
 		{
 			this.context = context;
 			SetEngineContext(engineContext);
-			ResolveLayout();
-			CreateAndInitializeHelpers();
-			CreateFiltersDescriptors();
-			ProcessScaffoldIfAvailable();
-			ActionProviderUtil.RegisterActions(engineContext, this, context);
-			renderingSupport = new RenderingSupport(context, engineContext);
-			Initialize();
 			isContextualized = true;
 		}
 
@@ -104,6 +97,15 @@ namespace Castle.MonoRail.Framework
 			{
 				Contextualize(engineContext, context);
 			}
+
+			ResolveLayout();
+			CreateAndInitializeHelpers();
+			CreateFiltersDescriptors();
+			ProcessScaffoldIfAvailable();
+			ActionProviderUtil.RegisterActions(engineContext, this, context);
+			renderingSupport = new RenderingSupport(context, engineContext);
+			Initialize();
+
 			RunActionAndRenderView();
 		}
 		
