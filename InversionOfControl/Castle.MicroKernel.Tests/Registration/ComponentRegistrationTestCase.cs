@@ -544,6 +544,7 @@ namespace Castle.MicroKernel.Tests.Registration
 				Component.For<ClassWithComplexParameter>()
 					.Configuration(
 						Child.ForName("parameters").Eq(
+							Attrib.ForName("notUsed").Eq(true),
 							Child.ForName("complexparam").Eq(
 								Child.ForName("complexparametertype").Eq(
 									Child.ForName("mandatoryvalue").Eq("value1"),
@@ -559,6 +560,20 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.IsNotNull(component.ComplexParam);
 			Assert.AreEqual("value1", component.ComplexParam.MandatoryValue);
 			Assert.AreEqual("value2", component.ComplexParam.OptionalValue);			
+		}
+		
+		[Test]
+		public void CanUseExistingComponentModelWithComponentRegistration()
+		{
+			kernel.Register(Component.For<ICustomer>()
+				.ImplementedBy<CustomerImpl>()
+				);
+
+			IHandler handler = kernel.GetHandler(typeof(ICustomer));
+			ComponentRegistration component = Component.For(handler.ComponentModel);
+
+			Assert.AreEqual(typeof(ICustomer), component.ServiceType);			
+			Assert.AreEqual(typeof(CustomerImpl), component.Implementation);
 		}		
 	}
 }

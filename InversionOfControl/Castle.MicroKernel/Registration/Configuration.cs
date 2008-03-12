@@ -50,11 +50,11 @@ namespace Castle.MicroKernel.Registration
 	/// <summary>
 	/// Represents a configuration attribute.
 	/// </summary>
-	public class Attribute : Node
+	public class Attrib : Node
 	{
 		private readonly String value;
 
-		internal Attribute(String name, String value)
+		internal Attrib(String name, String value)
 			: base(name)
 		{
 			this.value = value;
@@ -101,10 +101,21 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="value">The attribute value.</param>
 		/// <returns>The new <see cref="SimpleChild"/></returns>
-		public Attribute Eq(String value)
+		public Attrib Eq(String value)
 		{
-			return new Attribute(name, value);
+			return new Attrib(name, value);
 		}
+
+		/// <summary>
+		/// Builds the <see cref="Attribute"/> with name/value.
+		/// </summary>
+		/// <param name="value">The attribute value.</param>
+		/// <returns>The new <see cref="SimpleChild"/></returns>
+		public Attrib Eq(object value)
+		{
+			String valueStr = (value != null) ? value.ToString() : String.Empty;
+			return new Attrib(name, valueStr);
+		}		
 	}
 	
 	#endregion
@@ -151,6 +162,17 @@ namespace Castle.MicroKernel.Registration
 			return new SimpleChild(Name, value);
 		}
 
+		/// <summary>
+		/// Builds the <see cref="SimpleChild"/> with name/value.
+		/// </summary>
+		/// <param name="value">The child value.</param>
+		/// <returns>The new <see cref="SimpleChild"/></returns>
+		public SimpleChild Eq(object value)
+		{
+			String valueStr = (value != null) ? value.ToString() : String.Empty;
+			return new SimpleChild(Name, valueStr);
+		}		
+		
 		/// <summary>
 		/// Builds the <see cref="ComplexChild"/> with name/config.
 		/// </summary>
@@ -265,7 +287,7 @@ namespace Castle.MicroKernel.Registration
 			MutableConfiguration node = new MutableConfiguration(Name);
 			foreach (Node childNode in childNodes)
 			{
-				childNode.ApplyTo( node );
+				childNode.ApplyTo(node);
 			}
 			configuration.Children.Add(node);
 		}
