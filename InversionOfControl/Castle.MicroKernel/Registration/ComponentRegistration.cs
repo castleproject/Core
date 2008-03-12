@@ -50,21 +50,16 @@ namespace Castle.MicroKernel.Registration
 		/// Initializes a new instance of the <see cref="ComponentRegistration{S}"/> class
 		/// with an existing <see cref="ComponentModel"/>.
 		/// </summary>
-		public ComponentRegistration(ComponentModel componentModel) : this()
+		protected ComponentRegistration(ComponentModel componentModel) : this()
 		{
 			if (componentModel == null)
 			{
 				throw new ArgumentNullException("componentModel");
 			}
 			
-			if (componentModel.Service != typeof(S))
-			{
-				throw new ArgumentException("The componentModel Service does not" +
-					" match the expected type " + typeof(S).FullName);
-			}
-
 			this.componentModel = componentModel;
 			name = componentModel.Name;
+			serviceType = componentModel.Service;
 			implementation = componentModel.Implementation;			
 		}
 		
@@ -420,6 +415,11 @@ namespace Castle.MicroKernel.Registration
 			ServiceType = serviceType;
 		}
 
+		public ComponentRegistration(ComponentModel componentModel)
+			: base(componentModel)
+		{
+		}
+		
 		public ComponentRegistration For(Type serviceType)
 		{
 			if (ServiceType != null)
