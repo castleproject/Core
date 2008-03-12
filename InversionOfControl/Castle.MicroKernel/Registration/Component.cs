@@ -15,6 +15,7 @@
 namespace Castle.MicroKernel.Registration
 {
 	using System;
+	using Castle.Core;
 
 	public static class Component
 	{
@@ -35,6 +36,16 @@ namespace Castle.MicroKernel.Registration
 		public static ComponentRegistration<S> For<S>()
 		{
 			return new ComponentRegistration<S>();
+		}
+		
+		/// <summary>
+		/// Create a component registration for an exisiting <see cref="ComponentModel"/>
+		/// </summary>
+		/// <param name="model">The component model.</param>
+		/// <returns>The component registration.</returns>
+		public static ComponentRegistration For(ComponentModel model)
+		{
+			return new ComponentRegistration(model);
 		}
 	}
 }
