@@ -33,6 +33,20 @@ namespace Castle.MonoRail.Framework.Internal
 		}
 
 		/// <summary>
+		/// Determines whether the current request is within a wizard context.
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="controllerContext">The controller context.</param>
+		/// <returns>
+		/// 	<c>true</c> if is on wizard context; otherwise, <c>false</c>.
+		/// </returns>
+		public static bool IsOnWizard(IEngineContext engineContext, IControllerContext controllerContext)
+		{
+			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
+			return engineContext.Session.Contains(wizardName + "currentstepindex");
+		}
+
+		/// <summary>
 		/// Determines whether the current wizard has a previous step.
 		/// </summary>
 		/// <param name="engineContext">The engine context.</param>
@@ -43,6 +57,11 @@ namespace Castle.MonoRail.Framework.Internal
 		/// </returns>
 		public static bool HasPreviousStep(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
+			if (!IsOnWizard(engineContext, controllerContext))
+			{
+				return false;
+			}
+
 			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
 			int currentIndex = (int) engineContext.Session[wizardName + "currentstepindex"];
@@ -61,6 +80,11 @@ namespace Castle.MonoRail.Framework.Internal
 		/// </returns>
 		public static bool HasNextStep(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
+			if (!IsOnWizard(engineContext, controllerContext))
+			{
+				return false;
+			}
+
 			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
 			IList stepList = (IList) engineContext.Items["wizard.step.list"];
@@ -79,6 +103,11 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <returns></returns>
 		public static int GetCurrentStepIndex(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
+			if (!IsOnWizard(engineContext, controllerContext))
+			{
+				return -1;
+			}
+
 			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
 			int curIndex = (int) engineContext.Session[wizardName + "currentstepindex"];
@@ -95,6 +124,11 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <returns></returns>
 		public static String GetCurrentStepName(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
+			if (!IsOnWizard(engineContext, controllerContext))
+			{
+				return null;
+			}
+
 			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
 			int curIndex = (int) engineContext.Session[wizardName + "currentstepindex"];
@@ -113,6 +147,11 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <returns></returns>
 		public static String GetPreviousStepName(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
+			if (!IsOnWizard(engineContext, controllerContext))
+			{
+				return null;
+			}
+
 			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
 			int curIndex = (int) engineContext.Session[wizardName + "currentstepindex"];
@@ -137,6 +176,11 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <returns></returns>
 		public static string GetStepName(int index, IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
+			if (!IsOnWizard(engineContext, controllerContext))
+			{
+				return null;
+			}
+
 			IList stepList = (IList) engineContext.Items["wizard.step.list"];
 
 			if ((index) < stepList.Count)
@@ -156,6 +200,11 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <returns></returns>
 		public static String GetNextStepName(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
+			if (!IsOnWizard(engineContext, controllerContext))
+			{
+				return null;
+			}
+
 			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
 			int curIndex = (int) engineContext.Session[wizardName + "currentstepindex"];

@@ -53,6 +53,7 @@ namespace Castle.MonoRail.Framework
 		private ValidatorRunner validatorRunner;
 		private Dictionary<object, ErrorSummary> validationSummaryPerInstance;
 		private Dictionary<object, ErrorList> boundInstances;
+		private ErrorSummary simplerErrorList = new ErrorSummary();
 		private RenderingSupport renderingSupport;
 
 		#region IController
@@ -158,7 +159,7 @@ namespace Castle.MonoRail.Framework
 
 		/// <summary>
 		/// Gets the bound instance errors. These are errors relative to
-		/// the binding process performed for the specified instance.
+		/// the binding process performed for the specified instance, nothing more.
 		/// </summary>
 		/// <value>The bound instance errors.</value>
 		public IDictionary<object, ErrorList> BoundInstanceErrors
@@ -203,6 +204,16 @@ namespace Castle.MonoRail.Framework
 				return null;
 			}
 			return validationSummaryPerInstance.ContainsKey(instance) ? validationSummaryPerInstance[instance] : null;
+		}
+
+		/// <summary>
+		/// Gets an error summary not associated with an object instance. This is useful 
+		/// to register errors not associated with a data binding object.
+		/// </summary>
+		/// <value>The error summary.</value>
+		public ErrorSummary SimpleErrorSummary
+		{
+			get { return simplerErrorList; }
 		}
 
 		/// <summary>
