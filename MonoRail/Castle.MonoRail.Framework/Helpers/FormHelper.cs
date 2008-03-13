@@ -2250,11 +2250,13 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			IBrowserValidationGenerator generator = validatorProvider.CreateGenerator(validationConfig, inputType, attributes);
 
-			foreach (IValidator validator in validators)
+			string id = CreateHtmlId(attributes, target, false);
+
+			foreach(IValidator validator in validators)
 			{
 				if (validator.SupportsBrowserValidation)
 				{
-					validator.ApplyBrowserValidation(validationConfig, inputType, generator, attributes, target);
+					validator.ApplyBrowserValidation(validationConfig, inputType, generator, attributes, id);
 				}
 			}
 		}
