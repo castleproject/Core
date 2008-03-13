@@ -449,6 +449,17 @@ namespace Castle.ActiveRecord
 			isInitialized = false;
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether ActiveRecord was initialized properly (see the Initialize method).
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if it is initialized; otherwise, <c>false</c>.
+		/// </value>
+		public static bool IsInitialized
+		{
+			get { return isInitialized; }
+		}
+
 		private static ActiveRecordModelCollection BuildModels(ISessionFactoryHolder holder,
 															   IConfigurationSource source,
 															   IEnumerable<Type> types, bool ignoreProblematicTypes)
