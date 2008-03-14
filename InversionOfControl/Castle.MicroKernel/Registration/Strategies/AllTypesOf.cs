@@ -34,7 +34,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="assemblyName">The assembly name.</param>
 		/// <returns>The corresponding <see cref="TypesDescriptor{T}"/></returns>
-		public static TypesDescriptor<T> FromAssembly(string assemblyName)
+		public static TypesDescriptor<T> FromAssemblyNamed(string assemblyName)
 		{
 			Assembly assembly;
 			String extension = Path.GetExtension(assemblyName);

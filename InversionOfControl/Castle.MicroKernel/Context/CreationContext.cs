@@ -123,6 +123,11 @@ namespace Castle.MicroKernel
 
 		#endregion
 
+		public IDictionary AdditionalParameters
+		{
+			get { return additionalArguments; }
+		}
+
 		public bool HasAdditionalParameters
 		{
 			get { return additionalArguments != null && additionalArguments.Count != 0; }

@@ -104,11 +104,20 @@ namespace Castle.Core
 		/// </summary>
 		/// <param name="service">The service.</param>
 		/// <returns>The <see cref="InterceptorReference"/></returns>
-		public static InterceptorReference WithType(Type service)
+		public static InterceptorReference ForType(Type service)
 		{
 			return new InterceptorReference(service);
 		}
 
+		/// <summary>
+		/// Gets an <see cref="InterceptorReference"/> for the service.
+		/// </summary>
+		/// <typeparam name="T">The service type.</typeparam>
+		/// <returns>The <see cref="InterceptorReference"/></returns>
+		public static InterceptorReference ForType<T>()
+		{
+			return new InterceptorReference(typeof(T));
+		}
 
 		public bool Equals(InterceptorReference interceptorReference)
 		{
