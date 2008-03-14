@@ -14,9 +14,9 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests
 {
-	using Behaviors;
+	using Castle.Facilities.WcfIntegration.Tests.Behaviors;
 
-	public class Operations : IOperations
+	public class Operations : IOperations, IOperationsEx
 	{
 		private readonly int number;
 
@@ -35,6 +35,14 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public bool UnitOfWorkIsInitialized()
 		{
 			return UnitOfWork.initialized;
+		}
+
+		#endregion
+
+		#region IOperationsEx Members
+
+		public void Backup()
+		{
 		}
 
 		#endregion

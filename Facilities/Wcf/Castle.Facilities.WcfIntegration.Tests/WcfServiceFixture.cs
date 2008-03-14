@@ -18,54 +18,59 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using System.Collections.Generic;
 	using System.ServiceModel;
 	using System.ServiceModel.Description;
-	using Behaviors;
+	using Castle.Core;
 	using Castle.Core.Interceptor;
-	using Core;
-	using MicroKernel;
+	using Castle.Facilities.WcfIntegration.Demo;
+	using Castle.Facilities.WcfIntegration.Tests.Behaviors;
+	using Castle.MicroKernel;
+	using Castle.MicroKernel.Registration;
+	using Castle.Windsor;
 	using NUnit.Framework;
-	using Windsor;
 
 	[TestFixture]
-	public class WcfIntegrationFixture
+	public class WcfServiceFixture
 	{
 		#region Setup/Teardown
 
 		[SetUp]
 		public void TestInitialize()
 		{
-			WindsorContainer windsorContainer = new WindsorContainer();
-			windsorContainer.AddComponent("logging", typeof (LoggingInterceptor));
-			windsorContainer.AddComponent("call_count", typeof (IServiceBehavior), typeof (CallCountServiceBehavior));
-			windsorContainer.AddComponent("operations", typeof (IOperations), typeof (Operations));
-			windsorContainer.AddComponent("unit_of_work", typeof (IEndpointBehavior), typeof (UnitOfworkEndPointBehavior));
+			windsorContainer = new WindsorContainer()
+				.AddFacility("wcf_facility", new WcfFacility())
+				.Register(
+					Component.For<LoggingInterceptor>(),
+					Component.For<IServiceBehavior>().ImplementedBy<CallCountServiceBehavior>(),
+					Component.For<IEndpointBehavior>().ImplementedBy<UnitOfworkEndPointBehavior>(),
+					Component.For<IOperations>().ImplementedBy<Operations>()
+						.Interceptors(InterceptorReference.ForType<LoggingInterceptor>()).Anywhere
+						.CustomDependencies(new
+						{
+							number = 42,
+							serviceModel = new WcfServiceModel()
+								.AddEndpoints(new WcfEndpoint()
+								{
+									Binding = new NetTcpBinding(),
+									Address = "net.tcp://localhost/Operations"
+								})
+						})
+				);
 
-			IHandler handler = windsorContainer.Kernel.GetHandler("operations");
-			handler.ComponentModel.Interceptors.Add(new InterceptorReference("logging"));
-			handler.AddCustomDependencyValue("number", 42);
-
-			Uri uri = new Uri("net.tcp://localhost/WCF.Facility");
-			host = new WindsorServiceHost(windsorContainer.Kernel, typeof (Operations),
-			                              uri);
-			EndpointAddress endpointAddress = new EndpointAddress(uri);
-			host.Description.Endpoints.Add(
-				new ServiceEndpoint(ContractDescription.GetContract(typeof (IOperations)),
-				                    new NetTcpBinding(),
-				                    endpointAddress));
-			CallCountServiceBehavior.CallCount = 0;
 			LoggingInterceptor.Calls.Clear();
-			host.Open();
-			client = ChannelFactory<IOperations>.CreateChannel(new NetTcpBinding(), endpointAddress);
+			CallCountServiceBehavior.CallCount = 0;
+
+			client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding(), new EndpointAddress("net.tcp://localhost/Operations"));
 		}
 
 		[TearDown]
 		public void TestCleanup()
 		{
-			host.Close();
+			windsorContainer.Dispose();
 		}
 
 		#endregion
 
-		private WindsorServiceHost host;
+		private IWindsorContainer windsorContainer;
 		private IOperations client;
 
 		[Test]

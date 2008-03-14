@@ -25,4 +25,12 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		[OperationContract]
 		bool UnitOfWorkIsInitialized();
 	}
+
+
+	[ServiceContract]
+	public interface IOperationsEx
+	{
+		[OperationContract]
+		void Backup();
+	}
 }
