@@ -71,6 +71,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WcfClientActivator.cs" />
+    <Compile Include="WcfClientModel.cs" />
+    <Compile Include="WcfClientResolver.cs" />
+    <Compile Include="WcfConstants.cs" />
+    <Compile Include="WcfEndpoint.cs" />
+    <Compile Include="WcfFacility.cs" />
+    <Compile Include="WcfServiceModel.cs" />
     <Compile Include="WindsorDependencyInjectionServiceBehavior.cs" />
     <Compile Include="WindsorInstanceProvider.cs" />
     <Compile Include="WindsorServiceHost.cs" />

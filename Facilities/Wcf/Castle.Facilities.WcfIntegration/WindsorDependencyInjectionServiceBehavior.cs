@@ -75,7 +75,8 @@ namespace Castle.Facilities.WcfIntegration
 						{
 							ed.DispatchRuntime.InstanceProvider =
 								new WindsorInstanceProvider(kernel,
-								                            contractNameToContractType[ed.ContractName]
+									contractNameToContractType[ed.ContractName],
+									serviceDescription.ServiceType
 									);
 						}
 					}

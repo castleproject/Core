@@ -20,67 +20,69 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Dispatcher;
-	using Windsor;
+	using Castle.Windsor;
 
 	/// <summary>
 	/// Initialize a service using Windsor
 	/// </summary>
 	public class WindsorInstanceProvider : IInstanceProvider
 	{
+		private readonly Type contractType;
 		private readonly IKernel kernel;
-		private readonly Type type;
+		private readonly Type serviceType;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="WindsorInstanceProvider"/> class.
+		/// Initializes a new instance of the <see cref="T:Castle.Facilities.WcfIntegration.WindsorInstanceProvider" /> class.
 		/// </summary>
-		public WindsorInstanceProvider(IKernel kernel, Type type)
+		public WindsorInstanceProvider(IKernel kernel, Type contractType, Type serviceType)
 		{
 			this.kernel = kernel;
-			this.type = type;
+			this.contractType = contractType;
+			this.serviceType = serviceType;
 		}
 
-		#region IInstanceProvider Members
-
-		///<summary>
-		///Returns a service object given the specified <see cref="T:System.ServiceModel.InstanceContext"></see> object.
-		///</summary>
-		///
-		///<returns>
-		///A user-defined service object.
-		///</returns>
-		///
-		///<param name="instanceContext">The current <see cref="T:System.ServiceModel.InstanceContext"></see> object.</param>
+		/// <summary>
+		/// Returns a service object given the specified <see cref="T:System.ServiceModel.InstanceContext"></see> object.
+		/// </summary>
+		/// 
+		/// <returns>
+		/// A user-defined service object.
+		/// </returns>
+		/// 
+		/// <param name="instanceContext">The current <see cref="T:System.ServiceModel.InstanceContext"></see> object.</param>
 		public object GetInstance(InstanceContext instanceContext)
 		{
 			return GetInstance(instanceContext, null);
 		}
 
-		///<summary>
-		///Returns a service object given the specified <see cref="T:System.ServiceModel.InstanceContext"></see> object.
-		///</summary>
-		///
-		///<returns>
-		///The service object.
-		///</returns>
-		///
-		///<param name="message">The message that triggered the creation of a service object.</param>
-		///<param name="instanceContext">The current <see cref="T:System.ServiceModel.InstanceContext"></see> object.</param>
+		/// <summary>
+		/// Returns a service object given the specified <see cref="T:System.ServiceModel.InstanceContext"></see> object.
+		/// </summary>
+		/// 
+		/// <returns>
+		/// The service object.
+		/// </returns>
+		/// 
+		/// <param name="message">The message that triggered the creation of a service object.</param>
+		/// <param name="instanceContext">The current <see cref="T:System.ServiceModel.InstanceContext"></see> object.</param>
 		public object GetInstance(InstanceContext instanceContext, Message message)
 		{
-			return kernel.Resolve(type);
+			if (kernel.HasComponent(contractType) || !kernel.HasComponent(serviceType))
+			{
+				return kernel.Resolve(contractType);
+			}
+			return kernel.Resolve(serviceType);
 		}
 
-		///<summary>
-		///Called when an <see cref="T:System.ServiceModel.InstanceContext"></see> object recycles a service object.
-		///</summary>
-		///
-		///<param name="instanceContext">The service's instance context.</param>
-		///<param name="instance">The service object to be recycled.</param>
+		/// <summary>
+		/// Called when an <see cref="T:System.ServiceModel.InstanceContext"></see> object recycles a service object.
+		/// </summary>
+		/// 
+		/// <param name="instanceContext">The service's instance context.</param>
+		/// <param name="instance">The service object to be recycled.</param>
 		public void ReleaseInstance(InstanceContext instanceContext, object instance)
 		{
 			kernel.ReleaseComponent(instance);
 		}
-
-		#endregion
 	}
 }
