@@ -37,12 +37,22 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	{
 		private ILogger log = NullLogger.Instance;
 		private int sessionFactoryCount, sessionFactoryHolderCount;
+		private bool skipARInitialization;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordFacility"/> class.
 		/// </summary>
-		public ActiveRecordFacility()
+		public ActiveRecordFacility() : this(false)
 		{
+		}
+
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ActiveRecordFacility"/> class.
+		/// </summary>
+		public ActiveRecordFacility(bool skipARInitialization)
+		{
+			this.skipARInitialization = skipARInitialization;
 		}
 
 		/// <summary>
@@ -56,38 +66,41 @@ namespace Castle.Facilities.ActiveRecordIntegration
 				log = ((ILoggerFactory) Kernel[typeof(ILoggerFactory)]).Create(GetType());
 			}
 
-			log.Debug("Initializing AR Facility");
-
-			if (FacilityConfig == null)
+			if (!skipARInitialization)
 			{
-				log.FatalError("Configuration for AR Facility not found.");
-				throw new FacilityException("Sorry, but the ActiveRecord Facility depends on a proper configuration node.");
+				log.Debug("Initializing AR Facility");
+
+				if (FacilityConfig == null)
+				{
+					log.FatalError("Configuration for AR Facility not found.");
+					throw new FacilityException("Sorry, but the ActiveRecord Facility depends on a proper configuration node.");
+				}
+
+				IConfiguration assemblyConfig = FacilityConfig.Children["assemblies"];
+
+				if (assemblyConfig == null || assemblyConfig.Children.Count == 0)
+				{
+					log.FatalError("No assembly specified on AR Facility config.");
+
+					throw new FacilityException("You need to specify at least one assembly that contains " +
+						"the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>");
+				}
+
+				ConfigurationCollection assembliyConfigNodes = assemblyConfig.Children;
+
+				ArrayList assemblies = new ArrayList(assembliyConfigNodes.Count);
+
+				foreach (IConfiguration assemblyNode in assembliyConfigNodes)
+				{
+					assemblies.Add(ObtainAssembly(assemblyNode.Value));
+				}
+
+				InitializeFramework(assemblies);
 			}
 
-			IConfiguration assemblyConfig = FacilityConfig.Children["assemblies"];
-
-			if (assemblyConfig == null || assemblyConfig.Children.Count == 0)
-			{
-				log.FatalError("No assembly specified on AR Facility config.");
-
-				throw new FacilityException("You need to specify at least one assembly that contains " +
-					"the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>");
-			}
-
-			ConfigurationCollection assembliyConfigNodes = assemblyConfig.Children;
-
-			ArrayList assemblies = new ArrayList(assembliyConfigNodes.Count);
-
-			foreach(IConfiguration assemblyNode in assembliyConfigNodes)
-			{
-				assemblies.Add(ObtainAssembly(assemblyNode.Value));
-			}
-
-			Kernel.ComponentCreated += new Castle.MicroKernel.ComponentInstanceDelegate(Kernel_ComponentCreated);
+			Kernel.ComponentCreated += Kernel_ComponentCreated;
 
 			SetUpTransactionManager();
-
-			InitializeFramework(assemblies);
 		}
 
 		/// <summary>
