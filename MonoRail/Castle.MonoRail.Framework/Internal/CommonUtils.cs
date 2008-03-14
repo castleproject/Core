@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="key">The key.</param>
 		/// <returns>The generated form element</returns>
-		internal static string ObtainEntry(IDictionary attributes, string key)
+		public static string ObtainEntry(IDictionary attributes, string key)
 		{
 			if (attributes != null && attributes.Contains(key))
 			{
@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <param name="key">The key.</param>
 		/// <param name="defaultValue">The default value.</param>
 		/// <returns>the entry value or the default value</returns>
-		internal static string ObtainEntry(IDictionary attributes, string key, string defaultValue)
+		public static string ObtainEntry(IDictionary attributes, string key, string defaultValue)
 		{
 			string value = ObtainEntry(attributes, key);
 
@@ -62,7 +62,7 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <param name="key">The key.</param>
 		/// <param name="defaultValue">The default value.</param>
 		/// <returns>the entry value or the default value</returns>
-		internal static string ObtainEntryAndRemove(IDictionary attributes, string key, string defaultValue)
+		public static string ObtainEntryAndRemove(IDictionary attributes, string key, string defaultValue)
 		{
 			string value = ObtainEntryAndRemove(attributes, key);
 
@@ -75,7 +75,7 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="key">The key.</param>
 		/// <returns>the entry value or null</returns>
-		internal static string ObtainEntryAndRemove(IDictionary attributes, string key)
+		public static string ObtainEntryAndRemove(IDictionary attributes, string key)
 		{
 			string value = null;
 
@@ -95,7 +95,7 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="key">The key.</param>
 		/// <returns>the entry value or null</returns>
-		internal static object ObtainObjectEntryAndRemove(IDictionary attributes, string key)
+		public static object ObtainObjectEntryAndRemove(IDictionary attributes, string key)
 		{
 			object value = null;
 
@@ -120,7 +120,7 @@ namespace Castle.MonoRail.Framework.Internal
 		/// are copied to <paramref name="userOptions"/>. Entries with the same <see cref="DictionaryEntry.Key"/> in
 		/// <paramref name="defaultOptions"/> and <paramref name="userOptions"/> are skipped.
 		/// </remarks>
-		internal static void MergeOptions(IDictionary userOptions, IDictionary defaultOptions)
+		public static void MergeOptions(IDictionary userOptions, IDictionary defaultOptions)
 		{
 			foreach(DictionaryEntry entry in defaultOptions)
 			{
