@@ -1803,7 +1803,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="action">The action (can be null in the case of dynamic actions).</param>
 		/// <param name="actionException">The exception.</param>
 		/// <returns></returns>
-		protected bool ProcessRescue(IExecutableAction action, Exception actionException)
+		protected virtual bool ProcessRescue(IExecutableAction action, Exception actionException)
 		{
 			if (action != null && action.ShouldSkipRescues)
 			{

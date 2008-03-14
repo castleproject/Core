@@ -271,7 +271,7 @@ namespace Castle.MonoRail.Framework.Routing
 			public readonly string name, start, end;
 			public readonly bool optional;
 			public readonly bool afterDot;
-			public bool hasRestriction;
+			public bool hasRestriction, isStaticNode;
 			private string defaultVal;
 			private string[] acceptedTokens;
 			private Regex exp;
@@ -315,10 +315,12 @@ namespace Castle.MonoRail.Framework.Routing
 
 				if (name != null)
 				{
+					isStaticNode = false;
 					exp = new Regex("^" + CharClass(start) + "(" + GetExpression() + ")" + CharClass(end) + "$", options);
 				}
 				else
 				{
+					isStaticNode = true;
 					exp = new Regex("^(" + CharClass(start) + ")$");
 				}
 			}
@@ -363,8 +365,6 @@ namespace Castle.MonoRail.Framework.Routing
 							match.AddNamed(name, defaultVal);
 						}
 
-						// points += 2;
-
 						return true;
 					}
 					else
@@ -382,7 +382,7 @@ namespace Castle.MonoRail.Framework.Routing
 						match.AddNamed(name, part);
 					}
 
-					points += 2;
+					points += isStaticNode ? 4 : 2;
 
 					return true;
 				}
