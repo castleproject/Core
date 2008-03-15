@@ -1,3 +1,8 @@
+1.0
+===
+
+- Applied Rick Fleming's patch adding GetRegisteredTypes to ActiveRecordStarter.
+
 - Added IsOverride to PrimaryKey attribute to allow a primary key in a derived
   class to override one in the base class.
 

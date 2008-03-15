@@ -460,6 +460,15 @@ namespace Castle.ActiveRecord
 			get { return isInitialized; }
 		}
 
+		/// <summary>
+		/// Retrieves a copy of the types registered within ActiveRecord
+		/// </summary>
+		/// <returns></returns>
+		public static Type[] GetRegisteredTypes()
+		{
+			return new List<Type>(registeredTypes.Keys).ToArray();
+		}
+
 		private static ActiveRecordModelCollection BuildModels(ISessionFactoryHolder holder,
 															   IConfigurationSource source,
 															   IEnumerable<Type> types, bool ignoreProblematicTypes)
