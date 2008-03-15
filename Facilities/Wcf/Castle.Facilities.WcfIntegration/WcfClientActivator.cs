@@ -31,16 +31,46 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			WcfClientModel clientModel = (WcfClientModel)
 				model.ExtendedProperties[WcfConstants.ClientModelKey];
-			createChannel = clientModel.GetChannelBuilder();
+			createChannel = clientModel.GetChannelBuilder(model.Service);
 		}
 
 		protected override object InternalCreate(CreationContext context)
 		{
-			return createChannel();
+			WcfClientModel clientModelOverride = GetClientModelOverride(context);
+
+			if (clientModelOverride != null)
+			{
+				return clientModelOverride.GetChannelBuilder(Model.Service)();
+			}
+			else
+			{
+				return createChannel();
+			}
 		}
 
 		protected override void InternalDestroy(object instance)
 		{
+		}
+
+		private WcfClientModel GetClientModelOverride(CreationContext context)
+		{
+			WcfClientModel clientModel = null;
+			Predicate<WcfClientModel> contractMatch = delegate(WcfClientModel candidate)
+			{
+				return candidate.Contract == null || 
+					(Model.Service == candidate.Contract);
+			};
+
+			if (context != null && context.HasAdditionalParameters)
+			{
+				if (WcfUtils.FindDependency<WcfClientModel>(
+						context.AdditionalParameters, contractMatch,
+						out clientModel))
+				{
+					return clientModel;
+				}
+			}
+			return clientModel;
 		}
 	}
 }

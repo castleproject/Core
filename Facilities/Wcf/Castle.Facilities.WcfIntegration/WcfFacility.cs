@@ -29,7 +29,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 		}
 
-		public WcfFacility(WcfClientModel[] clientModels)
+		public WcfFacility(params WcfClientModel[] clientModels)
 		{
 			foreach (WcfClientModel clientModel in clientModels)
 			{
@@ -43,6 +43,11 @@ namespace Castle.Facilities.WcfIntegration
 			Kernel.ComponentRegistered += Kernel_ComponentRegistered;
 			Kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
 			Kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
+
+			if (clientModels != null && clientModels.Length > 0)
+			{
+				Kernel.Resolver.AddSubResolver(new WcfClientResolver(clientModels));
+			}
 		}
 
 		private void Kernel_ComponentModelCreated(ComponentModel componentModel)
@@ -83,36 +88,35 @@ namespace Castle.Facilities.WcfIntegration
 
 		private WcfClientModel ResolveClientModel(ComponentModel componentModel)
 		{
+			WcfClientModel clientModel = null;
+
 			if (componentModel.Service.IsInterface)
 			{
-				foreach (object dependency in componentModel.CustomDependencies.Values)
+				if (WcfUtils.FindDependency<WcfClientModel>(
+					componentModel.CustomDependencies, out clientModel))
 				{
-					if (dependency is WcfClientModel)
-					{
-						WcfClientModel clientModel = (WcfClientModel)dependency;
-						ValidateClientModel(clientModel, componentModel);
-						return clientModel;
-					}
+					ValidateClientModel(clientModel, componentModel);
 				}
 			}
-			return null;
+
+			return clientModel;
 		}
 
 		private WcfServiceModel ResolveServiceModel(ComponentModel componentModel)
 		{
-			if (componentModel.Implementation.IsClass && !componentModel.Implementation.IsAbstract)
+			WcfServiceModel serviceModel = null;
+
+			if (componentModel.Implementation.IsClass && 
+				!componentModel.Implementation.IsAbstract)
 			{
-				foreach (object dependency in componentModel.CustomDependencies.Values)
+				if (WcfUtils.FindDependency<WcfServiceModel>(
+					componentModel.CustomDependencies, out serviceModel))
 				{
-					if (dependency is WcfServiceModel)
-					{
-						WcfServiceModel serviceModel = (WcfServiceModel)dependency;
-						ValidateServiceModel(serviceModel, componentModel);
-						return serviceModel;
-					}
+					ValidateServiceModel(serviceModel, componentModel);
 				}
-			}
-			return null;
+			} 
+			
+			return serviceModel;
 		}
 
 

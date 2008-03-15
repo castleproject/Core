@@ -31,7 +31,12 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void TestInitialize()
 		{
 			windsorContainer = new WindsorContainer()
-				.AddFacility("wcf_facility", new WcfFacility())
+				.AddFacility("wcf_facility", new WcfFacility(
+					new WcfClientModel<IOperations>()
+					{
+						Binding = new NetTcpBinding(),
+						Address = "net.tcp://localhost/Operations"
+					}))
 				.Register(
 					Component.For<IOperations>().ImplementedBy<Operations>()
 						.CustomDependencies(new
@@ -95,6 +100,44 @@ namespace Castle.Facilities.WcfIntegration.Tests
 
 			IAmUsingWindsor client = windsorContainer.Resolve<IAmUsingWindsor>("usingWindsor");
 			Assert.AreEqual(42, client.GetValueFromWindsorConfig());
+		}
+
+		[Test]
+		public void CanResolveClientWhenListedInTheFacility()
+		{
+			windsorContainer.Register(Component.For<ClassNeedingService>());
+			ClassNeedingService component = windsorContainer.Resolve<ClassNeedingService>();
+			Assert.IsNotNull(component.Operations);
+			Assert.AreEqual(42, component.Operations.GetValueFromConstructor());
+		}
+
+		[Test]
+		public void CanResolveClientAssociatedWithChannelWithContextOverride()
+		{
+			windsorContainer.Register(
+				Component.For<IOperations>()
+					.Named("operations")
+					.CustomDependencies(new
+					{
+						clientModel = new WcfClientModel()
+						{
+							Binding = new BasicHttpBinding(),
+							Address = "http://localhost/BadOperations"
+						}
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>(
+				"operations", new
+				{
+					clientModel = new WcfClientModel()
+					{
+						Binding = new NetTcpBinding(),
+						Address = "net.tcp://localhost/Operations"
+					}
+				});
+
+			Assert.AreEqual(42, client.GetValueFromConstructor());
 		}
 	}
 }

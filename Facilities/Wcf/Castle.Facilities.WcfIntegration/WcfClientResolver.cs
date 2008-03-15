@@ -56,47 +56,41 @@ namespace Castle.Facilities.WcfIntegration
 
 		private WcfClientModel ResolveClientModel(Type contract, ComponentModel model, CreationContext context)
 		{
-			// First, try the contexrt overrides.
-			if (context.HasAdditionalParameters)
+			WcfClientModel clientModel;
+			Predicate<WcfClientModel> contractMatch = delegate(WcfClientModel candidate)
 			{
-				foreach (object dependency in context.AdditionalParameters.Values)
+				return contract == candidate.Contract;
+			};
+
+			// First, try the contexrt overrides.
+			if (context != null && context.HasAdditionalParameters)
+			{
+				if (WcfUtils.FindDependency<WcfClientModel>(
+						context.AdditionalParameters, contractMatch, 
+						out clientModel))
 				{
-					if (dependency is WcfClientModel)
-					{
-						WcfClientModel clientModel = (WcfClientModel)dependency;
-						if (clientModel.Contract == contract)
-						{
-							return clientModel;
-						}
-					}
+					return clientModel;
 				}
 			}
 
 			// Then try the component overrides.
 			if (model != null)
 			{
-				foreach (object dependency in model.CustomDependencies.Values)
-				{
-					if (dependency is WcfClientModel)
-					{
-						WcfClientModel clientModel = (WcfClientModel)dependency;
-						if (clientModel.Contract == contract)
-						{
-							return clientModel;
-						}
-					}
-				}
-			}
-
-			// Finally, try the client models.
-			foreach (WcfClientModel clientModel in clientModels)
-			{
-				if (clientModel.Contract == contract)
+				if (WcfUtils.FindDependency<WcfClientModel>(
+						model.CustomDependencies, contractMatch, 
+						out clientModel))
 				{
 					return clientModel;
 				}
 			}
 
+			// Finally, try the client models.
+			if (WcfUtils.FindDependency<WcfClientModel>(
+					clientModels, contractMatch, out clientModel))
+			{
+				return clientModel;
+			}
+		
 			return null;
 		}
 

@@ -78,6 +78,7 @@
     <Compile Include="WcfEndpoint.cs" />
     <Compile Include="WcfFacility.cs" />
     <Compile Include="WcfServiceModel.cs" />
+    <Compile Include="WcfUtils.cs" />
     <Compile Include="WindsorDependencyInjectionServiceBehavior.cs" />
     <Compile Include="WindsorInstanceProvider.cs" />
     <Compile Include="WindsorServiceHost.cs" />

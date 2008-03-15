@@ -78,6 +78,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Behaviors\UnitOfworkEndPointBehavior.cs" />
+    <Compile Include="ClassNeedingService.cs" />
     <Compile Include="WcfClientFixture.cs" />
     <Compile Include="IOperations.cs" />
     <Compile Include="Operations.cs" />
