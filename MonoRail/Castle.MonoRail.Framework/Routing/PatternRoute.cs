@@ -514,6 +514,20 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 
 			/// <summary>
+			/// Restricts this named pattern part to only accept content
+			/// that does not match the string specified.
+			/// </summary>
+			/// <param name="name">The name that cannot be matched.</param>
+			/// <returns></returns>
+			public PatternRoute AnythingBut(string name)
+			{
+				// \w+(?<!view|index)\b
+				// targetNode.DoesNotAccept(name);
+				// return route;
+				throw new NotImplementedException();
+			}
+
+			/// <summary>
 			/// Restricts this named pattern part to only accept integers.
 			/// </summary>
 			/// <value>The valid integer.</value>
