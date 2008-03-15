@@ -2060,12 +2060,15 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			string firstOption = null;
 			string firstOptionValue = null;
+			bool pascalCaseToWord = false;
 			string name = target;
 
 			if (attributes != null)
 			{
 				firstOption = CommonUtils.ObtainEntryAndRemove(attributes, "firstoption");
 				firstOptionValue = CommonUtils.ObtainEntryAndRemove(attributes, "firstoptionvalue");
+
+				pascalCaseToWord = Convert.ToBoolean(CommonUtils.ObtainEntryAndRemove(attributes, "pascalCaseToWord"));
 
 				if (attributes.Contains("name"))
 				{
@@ -2111,7 +2114,16 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				writer.WriteAttribute("value", SafeHtmlEncode(item.Value));
 				writer.Write(HtmlTextWriter.TagRightChar);
-				writer.Write(SafeHtmlEncode(item.Text));
+
+				if (pascalCaseToWord)
+				{
+					writer.Write(SafeHtmlEncode(TextHelper.PascalCaseToWord(item.Text)));
+				}
+				else
+				{
+					writer.Write(SafeHtmlEncode(item.Text));
+				}
+
 				writer.WriteEndTag("option");
 				writer.WriteLine();
 			}

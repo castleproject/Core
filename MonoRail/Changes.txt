@@ -1,8 +1,11 @@
 1.0
 ===
 
+- Applied Roger Chapman's patch adding the pascalcasetoword option to FormHelper.Select options dictionary. 
+
 - Applied Dan Goldstein's patch fixing MR-346
   "FormHelper's disablevalidation parameter only works when in Push command and on field"
+
 - Fixed MR-409
   Introduced IMonoRailContainerEvents and IMonoRailConfigurationEvents that might be implemented by the
   HttpApplication subclass
