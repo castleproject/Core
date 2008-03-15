@@ -157,6 +157,14 @@ namespace Castle.Components.Common.EmailSender
 			get { return attachments; }
 		}
 
+		/// <summary>
+		/// You can add any number of inline attachments to this mail message. Inline attachments 
+		/// differ from normal attachments in that they can be displayed withing the email body, 
+		/// which makes this very handy for displaying images that can be viewed without having to 
+		/// access an external server. 
+		/// Provide an unique identifier (id) and use it with a &lt;img src="cid:my_id" /> tag from 
+		/// within your view code.
+		/// </summary>
 		public IDictionary<string, LinkedResource> Resources
 		{
 			get { return linkedResources; }
