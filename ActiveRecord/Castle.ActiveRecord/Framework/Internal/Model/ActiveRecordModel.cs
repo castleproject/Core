@@ -16,6 +16,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
+	using System.Reflection;
+	using Castle.Components.Validator;
 
 	/// <summary>
 	/// This model of a full Active Record persistent class.
@@ -61,24 +64,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private VersionModel version;
 		private NestedModel parentNested;
 
-		private readonly IList imports = new ArrayList();
-		private readonly IList hasManyToAny = new ArrayList();
-		private readonly IList anys = new ArrayList();
-		private readonly IList properties = new ArrayList();
-		private readonly IList fields = new ArrayList();
-		private readonly IList componentParent = new ArrayList();
-		private readonly IList classes = new ArrayList();
-		private readonly IList joinedclasses = new ArrayList();
-		private readonly IList components = new ArrayList();
-		private readonly IList belongsTo = new ArrayList();
-		private readonly IList hasMany = new ArrayList();
-		private readonly IList hasAndBelongsToMany = new ArrayList();
-		private readonly IList oneToOne = new ArrayList();
-		private readonly IList collectionIds = new ArrayList();
-		private readonly IList hilos = new ArrayList();
-		private readonly IList notMappedProperties = new ArrayList();
-		private readonly IList validators = new ArrayList();
-		private readonly IList compositeUserType = new ArrayList();
+		private readonly IList<ImportModel> imports = new List<ImportModel>();
+		private readonly IList<HasManyToAnyModel> hasManyToAny = new List<HasManyToAnyModel>();
+		private readonly IList<AnyModel> anys = new List<AnyModel>();
+		private readonly IList<PropertyModel> properties = new List<PropertyModel>();
+		private readonly IList<FieldModel> fields = new List<FieldModel>();
+		private readonly IList<NestedParentReferenceModel> componentParent = new List<NestedParentReferenceModel>();
+		private readonly IList<ActiveRecordModel> classes = new List<ActiveRecordModel>();
+		private readonly IList<ActiveRecordModel> joinedclasses = new List<ActiveRecordModel>();
+		private readonly IList<NestedModel> components = new List<NestedModel>();
+		private readonly IList<BelongsToModel> belongsTo = new List<BelongsToModel>();
+		private readonly IList<HasManyModel> hasMany = new List<HasManyModel>();
+		private readonly IList<HasAndBelongsToManyModel> hasAndBelongsToMany = new List<HasAndBelongsToManyModel>();
+		private readonly IList<OneToOneModel> oneToOne = new List<OneToOneModel>();
+		private readonly IList<CollectionIDModel> collectionIds = new List<CollectionIDModel>();
+		private readonly IList<HiloModel> hilos = new List<HiloModel>();
+		private readonly IList<PropertyInfo> notMappedProperties = new List<PropertyInfo>();
+		private readonly IList<CompositeUserTypeModel> compositeUserType = new List<CompositeUserTypeModel>();
+		private readonly IList<IValidator> validators = new List<IValidator>();
+
+		private readonly IDictionary<string, PropertyModel> propertyDictionary = 
+			new Dictionary<string, PropertyModel>(StringComparer.InvariantCultureIgnoreCase);
+		
+		private readonly IDictionary<string, BelongsToModel> belongsToDictionary =
+			new Dictionary<string, BelongsToModel>(StringComparer.InvariantCultureIgnoreCase);
+
+		private readonly IDictionary<string, HasManyToAnyModel> hasManyToAnyDictionary =
+			new Dictionary<string, HasManyToAnyModel>(StringComparer.InvariantCultureIgnoreCase);
+		
+		private readonly IDictionary<string, HasManyModel> hasManyDictionary =
+			new Dictionary<string, HasManyModel>(StringComparer.InvariantCultureIgnoreCase);
+
+		private readonly IDictionary<string, HasAndBelongsToManyModel> hasAndBelongsToManyDictionary =
+			new Dictionary<string, HasAndBelongsToManyModel>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordModel"/> class.
@@ -233,7 +251,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets all the imports
 		/// </summary>
 		/// <value>The imports.</value>
-		public IList Imports
+		public IList<ImportModel> Imports
 		{
 			get { return imports; }
 		}
@@ -242,7 +260,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets all the properties
 		/// </summary>
 		/// <value>The properties.</value>
-		public IList Properties
+		public IList<PropertyModel> Properties
 		{
 			get { return properties; }
 		}
@@ -251,7 +269,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets all the fields
 		/// </summary>
 		/// <value>The fields.</value>
-		public IList Fields
+		public IList<FieldModel> Fields
 		{
 			get { return fields; }
 		}
@@ -260,7 +278,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// If the object is a component, will return the objects declared parent property.
 		/// There should only be one, but implemented as a list
 		/// </summary>
-		public IList ComponentParent
+		public IList<NestedParentReferenceModel> ComponentParent
 		{
 			get { return componentParent; }
 		}
@@ -269,7 +287,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of [has many to any] models
 		/// </summary>
 		/// <value>The has many to any.</value>
-		public IList HasManyToAny
+		public IList<HasManyToAnyModel> HasManyToAny
 		{
 			get { return hasManyToAny; }
 		}
@@ -278,7 +296,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of [any] model
 		/// </summary>
 		/// <value>The anys.</value>
-		public IList Anys
+		public IList<AnyModel> Anys
 		{
 			get { return anys; }
 		}
@@ -287,7 +305,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of the derived classes
 		/// </summary>
 		/// <value>The classes.</value>
-		public IList Classes
+		public IList<ActiveRecordModel> Classes
 		{
 			get { return classes; }
 		}
@@ -296,7 +314,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of derived joined classes.
 		/// </summary>
 		/// <value>The joined classes.</value>
-		public IList JoinedClasses
+		public IList<ActiveRecordModel> JoinedClasses
 		{
 			get { return joinedclasses; }
 		}
@@ -305,7 +323,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of components.
 		/// </summary>
 		/// <value>The components.</value>
-		public IList Components
+		public IList<NestedModel> Components
 		{
 			get { return components; }
 		}
@@ -314,7 +332,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of [belongs to] models
 		/// </summary>
 		/// <value>The belongs to.</value>
-		public IList BelongsTo
+		public IList<BelongsToModel> BelongsTo
 		{
 			get { return belongsTo; }
 		}
@@ -323,7 +341,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of [has many] models
 		/// </summary>
 		/// <value>The has many.</value>
-		public IList HasMany
+		public IList<HasManyModel> HasMany
 		{
 			get { return hasMany; }
 		}
@@ -332,7 +350,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of [has and belongs to many] models
 		/// </summary>
 		/// <value>The has and belongs to many.</value>
-		public IList HasAndBelongsToMany
+		public IList<HasAndBelongsToManyModel> HasAndBelongsToMany
 		{
 			get { return hasAndBelongsToMany; }
 		}
@@ -341,7 +359,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of [one to one] models
 		/// </summary>
 		/// <value>The one to ones.</value>
-		public IList OneToOnes
+		public IList<OneToOneModel> OneToOnes
 		{
 			get { return oneToOne; }
 		}
@@ -350,7 +368,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of [collection id] models
 		/// </summary>
 		/// <value>The collection I ds.</value>
-		public IList CollectionIDs
+		public IList<CollectionIDModel> CollectionIDs
 		{
 			get { return collectionIds; }
 		}
@@ -377,7 +395,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of [hilo] models
 		/// </summary>
 		/// <value>The hilos.</value>
-		public IList Hilos
+		public IList<HiloModel> Hilos
 		{
 			get { return hilos; }
 		}
@@ -386,7 +404,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the list of  properties not mapped .
 		/// </summary>
 		/// <value>The not mapped properties.</value>
-		public IList NotMappedProperties
+		public IList<PropertyInfo> NotMappedProperties
 		{
 			get { return notMappedProperties; }
 		}
@@ -395,7 +413,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the validators.
 		/// </summary>
 		/// <value>The validators.</value>
-		public IList Validators
+		public IList<IValidator> Validators
 		{
 			get { return validators; }
 		}
@@ -421,9 +439,59 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Gets the composite user types properties.
 		/// </summary>
 		/// <value>The type of the composite user.</value>
-		public IList CompositeUserType
+		public IList<CompositeUserTypeModel> CompositeUserType
 		{
 			get { return compositeUserType; }
+		}
+
+		/// <summary>
+		/// Gets the property dictionary. Used to provide fast access 
+		/// to a <see cref="PropertyModel"/> based on the property name.
+		/// </summary>
+		/// <value>The property dictionary.</value>
+		public IDictionary<string, PropertyModel> PropertyDictionary
+		{
+			get { return propertyDictionary; }
+		}
+
+		/// <summary>
+		/// Gets the belongs to dictionary. Used to provide fast access 
+		/// to a <see cref="BelongsToModel"/> based on the property name.
+		/// </summary>
+		/// <value>The belongs to dictionary.</value>
+		public IDictionary<string, BelongsToModel> BelongsToDictionary
+		{
+			get { return belongsToDictionary; }
+		}
+
+		/// <summary>
+		/// Gets the has many to any dictionary. Used to provide fast access 
+		/// to a <see cref="HasManyToAnyModel"/> based on the property name.
+		/// </summary>
+		/// <value>The has many to any dictionary.</value>
+		public IDictionary<string, HasManyToAnyModel> HasManyToAnyDictionary
+		{
+			get { return hasManyToAnyDictionary; }
+		}
+
+		/// <summary>
+		/// Gets the has many dictionary. Used to provide fast access 
+		/// to a <see cref="HasManyModel"/> based on the property name.
+		/// </summary>
+		/// <value>The has many dictionary.</value>
+		public IDictionary<string, HasManyModel> HasManyDictionary
+		{
+			get { return hasManyDictionary; }
+		}
+
+		/// <summary>
+		/// Gets the has and belongs to many dictionary. Used to provide fast access 
+		/// to a <see cref="HasAndBelongsToManyModel"/> based on the property name.
+		/// </summary>
+		/// <value>The has and belongs to many dictionary.</value>
+		public IDictionary<string, HasAndBelongsToManyModel> HasAndBelongsToManyDictionary
+		{
+			get { return hasAndBelongsToManyDictionary; }
 		}
 
 		/// <summary>

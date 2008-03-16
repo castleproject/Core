@@ -181,7 +181,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			PropertyInfo[] props = type.GetProperties(DefaultBindingFlags);
 
-			foreach (PropertyInfo prop in props)
+			foreach(PropertyInfo prop in props)
 			{
 				bool isArProperty = false;
 				AnyModel anyModel;
@@ -189,7 +189,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				object[] valAtts = prop.GetCustomAttributes(typeof(AbstractValidationAttribute), true);
 
-				foreach (AbstractValidationAttribute valAtt in valAtts)
+				foreach(AbstractValidationAttribute valAtt in valAtts)
 				{
 					IValidator validator = valAtt.Build();
 					validator.Initialize(validatorRegistry, prop);
@@ -197,7 +197,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					model.Validators.Add(validator);
 				}
 
-				foreach (object attribute in prop.GetCustomAttributes(false))
+				foreach(object attribute in prop.GetCustomAttributes(false))
 				{
 					if (attribute is PrimaryKeyAttribute)
 					{
@@ -267,7 +267,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 							}
 						}
 
-						model.Properties.Add(new PropertyModel(prop, propAtt));
+						PropertyModel propModel = new PropertyModel(prop, propAtt);
+						model.Properties.Add(propModel);
+						model.PropertyDictionary[prop.Name] = propModel;
 					}
 					else if (attribute is NestedAttribute)
 					{
@@ -347,7 +349,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 						BelongsToAttribute propAtt = attribute as BelongsToAttribute;
 						isArProperty = true;
 
-						model.BelongsTo.Add(new BelongsToModel(prop, propAtt));
+						BelongsToModel btModel = new BelongsToModel(prop, propAtt);
+						model.BelongsTo.Add(btModel);
+						model.BelongsToDictionary[prop.Name] = btModel;
 					}
 					// The ordering is important here, HasManyToAny must comes before HasMany!
 					else if (attribute is HasManyToAnyAttribute)
@@ -357,6 +361,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						hasManyToAnyModel = new HasManyToAnyModel(prop, propAtt);
 						model.HasManyToAny.Add(hasManyToAnyModel);
+						model.HasManyToAnyDictionary[prop.Name] = hasManyToAnyModel;
 
 						CollectMetaValues(hasManyToAnyModel.MetaValues, prop);
 					}
@@ -376,13 +381,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 							hasManyModel.DependentObjectModel = new DependentObjectModel(prop, propAtt, dependentObjectModel);
 						}
 						model.HasMany.Add(hasManyModel);
+						model.HasManyDictionary[prop.Name] = hasManyModel;
 					}
 					else if (attribute is HasAndBelongsToManyAttribute)
 					{
 						HasAndBelongsToManyAttribute propAtt = attribute as HasAndBelongsToManyAttribute;
 						isArProperty = true;
 
-						model.HasAndBelongsToMany.Add(new HasAndBelongsToManyModel(prop, propAtt));
+						HasAndBelongsToManyModel habtManyModel = new HasAndBelongsToManyModel(prop, propAtt);
+						model.HasAndBelongsToMany.Add(habtManyModel);
+						model.HasAndBelongsToManyDictionary[prop.Name] = habtManyModel;
 					}
 					else if (attribute is Any.MetaValueAttribute)
 					{
