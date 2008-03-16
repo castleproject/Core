@@ -71,6 +71,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internal\ChannelBuilder.cs" />
+    <Compile Include="Internal\ServiceHostBuilder.cs" />
+    <Compile Include="Internal\IWcfEndpointVisitor.cs" />
+    <Compile Include="IWcfEndpoint.cs" />
     <Compile Include="WcfClientActivator.cs" />
     <Compile Include="WcfClientModel.cs" />
     <Compile Include="WcfClientResolver.cs" />
@@ -78,7 +82,7 @@
     <Compile Include="WcfEndpoint.cs" />
     <Compile Include="WcfFacility.cs" />
     <Compile Include="WcfServiceModel.cs" />
-    <Compile Include="WcfUtils.cs" />
+    <Compile Include="Internal\WcfUtils.cs" />
     <Compile Include="WindsorDependencyInjectionServiceBehavior.cs" />
     <Compile Include="WindsorInstanceProvider.cs" />
     <Compile Include="WindsorServiceHost.cs" />

@@ -16,10 +16,10 @@ namespace Castle.Facilities.WcfIntegration
 {
 	using System;
 	using System.ServiceModel;
-	using System.ServiceModel.Description;
 	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
+	using Castle.Facilities.WcfIntegration.Internal;
 
 	public class WcfFacility : AbstractFacility
 	{
@@ -119,36 +119,16 @@ namespace Castle.Facilities.WcfIntegration
 			return serviceModel;
 		}
 
-
-		private void AddServiceEndpoint(WcfEndpoint endpoint, WindsorServiceHost serviceHost)
-		{
-			if (endpoint.EndpointAddress != null)
-			{
-				ContractDescription contract = ContractDescription.GetContract(endpoint.Contract);
-				serviceHost.Description.Endpoints.Add(
-					new ServiceEndpoint(contract, endpoint.Binding, endpoint.EndpointAddress));
-			}
-			else if (!string.IsNullOrEmpty(endpoint.Via))
-			{
-				serviceHost.AddServiceEndpoint(endpoint.Contract, endpoint.Binding,
-					endpoint.Address, new Uri(endpoint.Via));
-			}
-			else
-			{
-				serviceHost.AddServiceEndpoint(
-					endpoint.Contract, endpoint.Binding, endpoint.Address);
-			}
-		}
-
 		private WindsorServiceHost CreateAndOpenServiceHost(WcfServiceModel serviceModel,
 															ComponentModel componentModel)
 		{
 			WindsorServiceHost serviceHost = new WindsorServiceHost(
 				Kernel, componentModel.Implementation, serviceModel.GetBaseAddressesUris());
 
-			foreach (WcfEndpoint endpoint in serviceModel.Endpoints)
+			ServiceHostBuilder serviceHostBuilder = new ServiceHostBuilder(); 
+			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
 			{
-				AddServiceEndpoint(endpoint, serviceHost);
+				serviceHostBuilder.AddServiceEndpoint(serviceHost, endpoint);
 			}
 
 			serviceHost.Open();
@@ -183,25 +163,16 @@ namespace Castle.Facilities.WcfIntegration
 
 			clientModel.Contract = contract;
 
-			if (string.IsNullOrEmpty(clientModel.EndpointName))
+			if (clientModel.Endpoint == null)
 			{
-				if (string.IsNullOrEmpty(clientModel.Address) && (clientModel.EndpointAddress == null))
-				{
-					throw new FacilityException("The client endpoint for contract " +
-						contract.FullName + " does not specify an address.");
-				}
-
-				if (clientModel.Binding == null)
-				{
-					throw new FacilityException("The client endpoint for contract " +
-						contract.FullName + " does not specify a binding.");
-				}
+				throw new FacilityException(
+					"The client model requires an endpoint.");
 			}
 		}
 
 		private void ValidateServiceModel(WcfServiceModel serviceModel, ComponentModel componentModel)
 		{
-			foreach (WcfEndpoint endpoint in serviceModel.Endpoints)
+			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
 			{
 				Type contract = endpoint.Contract;
 
@@ -221,17 +192,6 @@ namespace Castle.Facilities.WcfIntegration
 				else
 				{
 					endpoint.Contract = componentModel.Service;
-				}
-
-				if (endpoint.Binding == null)
-				{
-					throw new FacilityException("The service endpoint for contract " +
-						endpoint.Contract.FullName + " does not specify a binding.");
-				}
-
-				if (endpoint.Address == null && endpoint.EndpointAddress == null)
-				{
-					endpoint.Address = string.Empty;  // Maybe has a base address
 				}
 			}
 		}

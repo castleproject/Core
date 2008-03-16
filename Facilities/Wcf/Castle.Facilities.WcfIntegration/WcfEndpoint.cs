@@ -11,73 +11,282 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+using Castle.Facilities.WcfIntegration.Internal;
 
 namespace Castle.Facilities.WcfIntegration
 {
     using System;
     using System.ServiceModel;
     using System.ServiceModel.Channels;
+	using System.ServiceModel.Description;
 
-    public class WcfEndpoint
-    {
-        private string address;
-        private Binding binding;
-        private Type contract;
-        private EndpointAddress endpointAddress;
-        private string endpointName;
-        private string via;
+	public abstract class WcfEndpoint : IWcfEndpoint
+	{
+		private Type contract;
 
-        public WcfEndpoint()
-        {
-        }
+		protected WcfEndpoint(Type contract)
+		{
+			this.contract = contract;
+		}
 
-        public WcfEndpoint(Type contract)
-        {
-            this.contract = contract;
-        }
+		#region IWcfEndpoint Members
 
-        public string Address
-        {
-			get { return address; }
-			set { address = value; }
-        }
-
-        public Binding Binding
-        {
-			get { return binding; }
-			set { binding = value; }
-        }
-
-        public Type Contract
-        {
+		public Type Contract
+		{
 			get { return contract; }
 			set { contract = value; }
-        }
+		}
 
-        public EndpointAddress EndpointAddress
-        {
-			get { return endpointAddress; }
-			set { endpointAddress = value; }
-        }
+		void IWcfEndpoint.Accept(IWcfEndpointVisitor visitor)
+		{
+			Accept(visitor);
+		}
 
-        public string EndpointName
-        {
-			get { return endpointName; }
-			set { endpointName = value; }
-        }
+		protected abstract void Accept(IWcfEndpointVisitor visitor);
 
-        public string Via
-        {
-			get { return via; }
-			set { via = value; }
-        }
-    }
+		#endregion
 
-	public class WcfEndpoint<Contract> : WcfEndpoint
+		#region WcfEndpoint Builders
+
+		public static ServiceEndpointModel FromEndpoint(ServiceEndpoint endpoint)
+		{
+			return new ContractEndpointModel().FromEndpoint(endpoint);
+		}
+
+		public static ConfigurationEndpointModel FromConfiguration(string endpointName)
+		{
+			return new ContractEndpointModel().FromConfiguration(endpointName);
+		}
+
+		public static BindingEndpointModel WithBinding(Binding binding)
+		{
+			return new ContractEndpointModel().WithBinding(binding);
+		}
+
+		public static ContractEndpointModel ForContract(Type contract)
+		{
+			return new ContractEndpointModel(contract);
+		}
+
+		public static ContractEndpointModel ForContract<Contract>()
+			where Contract : class
+		{
+			return ForContract(typeof(Contract));
+		}
+
+		#endregion
+	}
+
+	#region Nested Class: ContractModel
+
+	public class ContractEndpointModel
 	{
-		public WcfEndpoint() : base(typeof(Contract))
+		private readonly Type contract;
+
+		internal ContractEndpointModel()
 		{
 		}
+
+		internal ContractEndpointModel(Type contract)
+		{
+			this.contract = contract;
+		}
+
+		public ServiceEndpointModel FromEndpoint(ServiceEndpoint endpoint)
+		{
+			if (endpoint == null)
+			{
+				throw new ArgumentNullException("endpoint");
+			}
+
+			return new ServiceEndpointModel(contract, endpoint);
+		}
+
+		public ConfigurationEndpointModel FromConfiguration(string endpointName)
+		{
+			if (string.IsNullOrEmpty(endpointName))
+			{
+				throw new ArgumentException("endpointName cannot be nul or empty");
+			}
+			return new ConfigurationEndpointModel(contract, endpointName);
+		}
+
+		public BindingEndpointModel WithBinding(Binding binding)
+		{
+			if (binding == null)
+			{
+				throw new ArgumentNullException("binding");
+			}
+			return new BindingEndpointModel(contract, binding);
+		}
 	}
+
+	#endregion
+
+	#region Nested Class: ServiceEndpointModel
+
+	public class ServiceEndpointModel : WcfEndpoint
+	{
+		private readonly ServiceEndpoint endpoint;
+
+		internal ServiceEndpointModel(Type contract, ServiceEndpoint endpoint)
+			: base(contract)
+		{
+			this.endpoint = endpoint;
+		}
+
+		public ServiceEndpoint ServiceEndpoint
+		{
+			get { return endpoint; }
+		}
+
+		protected override void Accept(IWcfEndpointVisitor visitor)
+		{
+			visitor.VisitServiceEndpointModel(this);
+		}
+	}
+
+	#endregion
+
+	#region Nested Class: ConfigurationEndpointModel
+
+	public class ConfigurationEndpointModel : WcfEndpoint
+	{
+		private readonly string endpointName;
+
+		internal ConfigurationEndpointModel(Type contract, string endpointName)
+			: base(contract)
+		{
+			this.endpointName = endpointName;
+		}
+
+		public string EndpointName
+		{
+			get { return endpointName; }
+		}
+
+		protected override void Accept(IWcfEndpointVisitor visitor)
+		{
+			visitor.VisitConfigurationEndpointModel(this);
+		}
+	}
+
+	#endregion
+
+	#region Nested Class: BindingEndpointModel
+
+	public class BindingEndpointModel : WcfEndpoint
+	{
+		private readonly Binding binding;
+
+		internal BindingEndpointModel(Type contract, Binding binding)
+			: base(contract)
+		{
+			this.binding = binding;
+		}
+
+		public Binding Binding
+		{
+			get { return binding; }
+		}
+
+		public BindingAddressEndpointModel At(string address)
+		{
+			if (string.IsNullOrEmpty(address))
+			{
+				throw new ArgumentException("address cannot be null or empty");
+			}
+			return new BindingAddressEndpointModel(Contract, Binding, address);
+		}
+
+		public BindingAddressEndpointModel At(Uri address)
+		{
+			if (address == null)
+			{
+				throw new ArgumentNullException("address");
+			}
+			return new BindingAddressEndpointModel(Contract, Binding, address.AbsoluteUri);
+		}
+
+		public BindingAddressEndpointModel At(EndpointAddress address)
+		{
+			if (address == null)
+			{
+				throw new ArgumentNullException("address");
+			}
+			return new BindingAddressEndpointModel(Contract, Binding, address);
+		}
+
+		protected override void Accept(IWcfEndpointVisitor visitor)
+		{
+			visitor.VisitBindingEndpointModel(this);
+		}
+	}
+
+	#endregion
+
+	#region Nested Class: BindingAddressEndpointModel
+
+	public class BindingAddressEndpointModel : WcfEndpoint
+	{
+		private readonly Binding binding;
+		private readonly string address;
+		private readonly EndpointAddress endpointAddress;
+		private string via;
+
+		internal BindingAddressEndpointModel(Type contract, Binding binding,
+											 string address)
+			: base(contract)
+		{
+			this.binding = binding;
+			this.address = address;
+		}
+
+		internal BindingAddressEndpointModel(Type contract, Binding binding,
+											 EndpointAddress address)
+			: base(contract)
+		{
+			this.binding = binding;
+			this.endpointAddress = address;
+		}
+
+		public Binding Binding
+		{
+			get { return binding; }
+		}
+
+		public string Address
+		{
+			get { return address ?? endpointAddress.Uri.AbsoluteUri; }
+		}
+
+		public EndpointAddress EndpointAddress
+		{
+			get { return endpointAddress; }
+		}
+
+		public Uri ViaAddress
+		{
+			get { return new Uri(via, UriKind.Absolute); }
+		}
+
+		public bool HasViaAddress
+		{
+			get { return !string.IsNullOrEmpty(via); }
+		}
+
+		public BindingAddressEndpointModel Via(string physicalAddress)
+		{
+			via = physicalAddress;
+			return this;
+		}
+
+		protected override void Accept(IWcfEndpointVisitor visitor)
+		{
+			visitor.VisitBindingAddressEndpointModel(this);
+		}
+	}
+
+	#endregion
 }
 

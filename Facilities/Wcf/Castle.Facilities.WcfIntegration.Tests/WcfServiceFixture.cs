@@ -47,11 +47,10 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						{
 							number = 42,
 							serviceModel = new WcfServiceModel()
-								.AddEndpoints(new WcfEndpoint()
-								{
-									Binding = new NetTcpBinding(),
-									Address = "net.tcp://localhost/Operations"
-								})
+								.AddEndpoints(
+									WcfEndpoint.WithBinding(new NetTcpBinding())
+										.At("net.tcp://localhost/Operations")
+										)
 						})
 				);
 

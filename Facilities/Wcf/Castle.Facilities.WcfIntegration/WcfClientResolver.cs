@@ -19,17 +19,18 @@ namespace Castle.Facilities.WcfIntegration
 	using System.Threading;
 	using Castle.Core;
 	using Castle.MicroKernel;
+	using Castle.Facilities.WcfIntegration.Internal;
 
 	public class WcfClientResolver : ISubDependencyResolver
 	{
-		private readonly Dictionary<Type, CreateChannel> channelBuilders;
 		private readonly ICollection<WcfClientModel> clientModels;
+		private readonly Dictionary<Type, CreateChannel> channelCreators;
 		private readonly ReaderWriterLock locker;
 
 		public WcfClientResolver(WcfClientModel[] clientModels)
 		{
 			this.clientModels = clientModels;
-			channelBuilders = new Dictionary<Type, CreateChannel>();
+			channelCreators = new Dictionary<Type, CreateChannel>();
 			locker = new ReaderWriterLock();
 		}
 
@@ -96,27 +97,27 @@ namespace Castle.Facilities.WcfIntegration
 
 		private CreateChannel GetChannelBuilder(WcfClientModel clientModel)
 		{
-			CreateChannel channelBuilder;
+			CreateChannel channelCreator;
 
 			locker.AcquireReaderLock(Timeout.Infinite);
 
 			try
 			{
-				if (channelBuilders.TryGetValue(clientModel.Contract, out channelBuilder))
+				if (channelCreators.TryGetValue(clientModel.Contract, out channelCreator))
 				{
-					return channelBuilder;
+					return channelCreator;
 				}
 
 				locker.UpgradeToWriterLock(Timeout.Infinite);
 
-				if (channelBuilders.TryGetValue(clientModel.Contract, out channelBuilder))
+				if (channelCreators.TryGetValue(clientModel.Contract, out channelCreator))
 				{
-					return channelBuilder;
+					return channelCreator;
 				}
 
-				channelBuilder = clientModel.GetChannelBuilder();
-				channelBuilders[clientModel.Contract] = channelBuilder;
-				return channelBuilder;
+				channelCreator = new ChannelBuilder().GetChannelCreator(clientModel.Endpoint);
+				channelCreators[clientModel.Contract] = channelCreator;
+				return channelCreator;
 			}
 			finally
 			{

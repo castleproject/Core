@@ -20,7 +20,7 @@ namespace Castle.Facilities.WcfIntegration
     public class WcfServiceModel
     {
         private ICollection<string> baseAddresses;
-        private ICollection<WcfEndpoint> endpoints;
+        private ICollection<IWcfEndpoint> endpoints;
 
 		public ICollection<string> BaseAddresses
 		{
@@ -44,22 +44,22 @@ namespace Castle.Facilities.WcfIntegration
             return this;
         }
 
-		public ICollection<WcfEndpoint> Endpoints
+		public ICollection<IWcfEndpoint> Endpoints
 		{
 			get
 			{
 				if (endpoints == null)
 				{
-					endpoints = new List<WcfEndpoint>();
+					endpoints = new List<IWcfEndpoint>();
 				}
 				return endpoints;
 			}
 			set { endpoints = value; }
 		}
 
-        public WcfServiceModel AddEndpoints(params WcfEndpoint[] endpoints)
+        public WcfServiceModel AddEndpoints(params IWcfEndpoint[] endpoints)
         {
-            foreach (WcfEndpoint endpoint in endpoints)
+            foreach (IWcfEndpoint endpoint in endpoints)
             {
                 Endpoints.Add(endpoint);
             }

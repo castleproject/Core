@@ -27,7 +27,8 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		[Test]
 		public void CanCreateServiceHost()
 		{
-			WindsorServiceHost host = new WindsorServiceHost(new WindsorContainer().Kernel, typeof (Operations));
+			WindsorServiceHost host = new WindsorServiceHost(
+				new WindsorContainer().Kernel, typeof (Operations));
 			Assert.IsNotNull(host);
 		}
 
@@ -41,11 +42,10 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					{
 						number = 42,
 						serviceModel = new WcfServiceModel()
-							.AddEndpoints(new WcfEndpoint()
-							{
-								Binding = new NetTcpBinding(),
-								Address = "net.tcp://localhost/Operations"
-							})
+							.AddEndpoints(
+								WcfEndpoint.WithBinding(new NetTcpBinding())
+									.At("net.tcp://localhost/Operations")
+									)
 					})
 				))
 			{
@@ -85,17 +85,14 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						number = 42,
 						serviceModel = new WcfServiceModel()
 							.AddEndpoints(
-								new WcfEndpoint<IOperations>()
-								{
-									Binding = new NetTcpBinding(),
-									Address = "net.tcp://localhost/Operations"
-								},
-								new WcfEndpoint<IOperationsEx>()
-								{
-									Binding = new BasicHttpBinding(),
-									Address = "http://localhost:27198/UsingWindsor.svc"
-								}
-							)
+								WcfEndpoint.ForContract<IOperations>()
+									.WithBinding(new NetTcpBinding())
+									.At("net.tcp://localhost/Operations"),
+								WcfEndpoint.ForContract<IOperationsEx>()
+									.WithBinding(new BasicHttpBinding())
+									.At("http://localhost:27198/UsingWindsor.svc")
+
+								)
 					})
 				))
 			{
@@ -123,16 +120,12 @@ namespace Castle.Facilities.WcfIntegration.Tests
 								"net.tcp://localhost/Operations",
 								"http://localhost:27198/UsingWindsor.svc")
 							.AddEndpoints(
-								new WcfEndpoint<IOperations>()
-								{
-									Binding = new NetTcpBinding()
-								},
-								new WcfEndpoint<IOperationsEx>()
-								{
-									Binding = new BasicHttpBinding(),
-									Address = "Extended"
-								}
-							)
+								WcfEndpoint.ForContract<IOperations>()
+									.WithBinding(new NetTcpBinding()),
+								WcfEndpoint.ForContract<IOperationsEx>()
+									.WithBinding(new BasicHttpBinding())
+									.At("Extended")
+								)
 					})
 				))
 			{

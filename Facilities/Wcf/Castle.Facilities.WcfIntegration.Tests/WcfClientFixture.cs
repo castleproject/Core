@@ -32,10 +32,11 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			windsorContainer = new WindsorContainer()
 				.AddFacility("wcf_facility", new WcfFacility(
-					new WcfClientModel<IOperations>()
+					new WcfClientModel()
 					{
-						Binding = new NetTcpBinding(),
-						Address = "net.tcp://localhost/Operations"
+						Endpoint = WcfEndpoint.ForContract<IOperations>()
+							.WithBinding(new NetTcpBinding())
+							.At("net.tcp://localhost/Operations")
 					}))
 				.Register(
 					Component.For<IOperations>().ImplementedBy<Operations>()
@@ -43,11 +44,10 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						{
 							number = 42,
 							serviceModel = new WcfServiceModel()
-								.AddEndpoints(new WcfEndpoint()
-								{
-									Binding = new NetTcpBinding(),
-									Address = "net.tcp://localhost/Operations"
-								})
+								.AddEndpoints(
+									WcfEndpoint.WithBinding(new NetTcpBinding())
+										.At("net.tcp://localhost/Operations")
+										)
 						}),
 					Component.For<IAmUsingWindsor>().ImplementedBy<UsingWindsor>()
 						.CustomDependencies(new
@@ -78,8 +78,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						{
 							clientModel = new WcfClientModel()
 							{
-								Binding = new NetTcpBinding(),
-								Address = "net.tcp://localhost/Operations"
+								Endpoint = WcfEndpoint
+									.WithBinding(new NetTcpBinding())
+									.At("net.tcp://localhost/Operations")
 							}
 						})
 				);
@@ -95,7 +96,11 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.Named("usingWindsor")
 				.CustomDependencies(new
 				{
-					clientModel = new WcfClientModel("WSHttpBinding_IAmUsingWindsor")
+					clientModel = new WcfClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.FromConfiguration("WSHttpBinding_IAmUsingWindsor")
+					}
 				}));
 
 			IAmUsingWindsor client = windsorContainer.Resolve<IAmUsingWindsor>("usingWindsor");
@@ -121,8 +126,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					{
 						clientModel = new WcfClientModel()
 						{
-							Binding = new BasicHttpBinding(),
-							Address = "http://localhost/BadOperations"
+							Endpoint = WcfEndpoint
+								.WithBinding(new BasicHttpBinding())
+								.At("http://localhost/BadOperations")
 						}
 					})
 				);
@@ -132,8 +138,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				{
 					clientModel = new WcfClientModel()
 					{
-						Binding = new NetTcpBinding(),
-						Address = "net.tcp://localhost/Operations"
+						Endpoint = WcfEndpoint
+							.WithBinding(new NetTcpBinding())
+							.At("net.tcp://localhost/Operations")
 					}
 				});
 
