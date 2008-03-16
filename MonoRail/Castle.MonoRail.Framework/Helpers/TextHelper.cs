@@ -28,16 +28,23 @@ namespace Castle.MonoRail.Framework.Helpers
 	public class TextHelper : AbstractHelper
 	{
 		#region Constructors
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextHelper"/> class.
 		/// </summary>
-		public TextHelper() { }
+		public TextHelper()
+		{
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextHelper"/> class.
 		/// setting the Controller, Context and ControllerContext.
 		/// </summary>
 		/// <param name="engineContext">The engine context.</param>
-		public TextHelper(IEngineContext engineContext) : base(engineContext) { }
+		public TextHelper(IEngineContext engineContext) : base(engineContext)
+		{
+		}
+
 		#endregion
 
 		/// <summary>
@@ -71,9 +78,18 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public string FormatPhone(string phone)
 		{
-			if (string.IsNullOrEmpty(phone)) return string.Empty;
-			if (phone.Length <= 3) return phone;
-			if (phone.IndexOfAny(new char[] { '(', '-', '.' }) != -1) return phone;
+			if (string.IsNullOrEmpty(phone))
+			{
+				return string.Empty;
+			}
+			if (phone.Length <= 3)
+			{
+				return phone;
+			}
+			if (phone.IndexOfAny(new char[] {'(', '-', '.'}) != -1)
+			{
+				return phone;
+			}
 
 			PhoneFormatter formatter = new PhoneFormatter();
 			return formatter.Format(phone);
@@ -87,8 +103,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public static string PascalCaseToWord(string pascalText)
 		{
-			if (pascalText == null) throw new ArgumentNullException("pascalText");
-			if (pascalText == string.Empty) return string.Empty;
+			if (pascalText == null)
+			{
+				throw new ArgumentNullException("pascalText");
+			}
+			if (pascalText == string.Empty)
+			{
+				return string.Empty;
+			}
 
 			StringBuilder sbText = new StringBuilder(pascalText.Length + 4);
 
@@ -96,7 +118,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			sbText.Append(chars[0]);
 
-			for(int i=1; i < chars.Length; i++)
+			for(int i = 1; i < chars.Length; i++)
 			{
 				char c = chars[i];
 
@@ -131,7 +153,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $TextHelper.ToSentence( elements, "y" )
 		/// </code>
 		/// </example>
-		public string ToSentence(ICollection elements, string connector)
+		public static string ToSentence(ICollection elements, string connector)
 		{
 			return ToSentence(elements, connector, true);
 		}
@@ -156,7 +178,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $TextHelper.ToSentence( elements, false )
 		/// </code>
 		/// </example>
-		public string ToSentence(ICollection elements, bool skipLastComma)
+		public static string ToSentence(ICollection elements, bool skipLastComma)
 		{
 			return ToSentence(elements, DefaultConnector, skipLastComma);
 		}
@@ -180,7 +202,36 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $TextHelper.ToSentence( elements )
 		/// </code>
 		/// </example>
-		public string ToSentence(ICollection elements)
+		public static string ToSentence(ICollection elements)
+		{
+			if (elements == null)
+			{
+				throw new ArgumentNullException("elements");
+			}
+
+			return ToSentence(elements, DefaultConnector, true);
+		}
+
+		/// <summary>
+		/// Builds a phrase listing a series of strings with with proper sentence semantics,
+		/// i.e. separating elements with &quot;, &quot; and prefacing the last element with
+		/// &quot; and &quot;.
+		/// </summary>
+		/// <param name="elements">Collection with items to use in the sentence.</param>
+		/// <returns>String suitable for use in a sentence.</returns>
+		/// <remarks>Calling <c>ToSentence( elements )</c> results in:
+		/// <code>
+		/// element1, element2 and element3
+		/// </code>
+		/// <para>If <paramref name="elements"/> is not an array of strings, each element will be
+		/// converted to string through <see cref="object.ToString"/>.</para>
+		/// </remarks>
+		/// <example>This example shows how to use <b>ToSentence</b>:
+		/// <code>
+		/// $TextHelper.ToSentence( elements )
+		/// </code>
+		/// </example>
+		public static string ToSentence(IList elements)
 		{
 			if (elements == null)
 			{
@@ -211,7 +262,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $TextHelper.ToSentence( elements, "y", false )
 		/// </code>
 		/// </example>
-		public string ToSentence(ICollection elements, string connector, bool skipLastComma)
+		public static string ToSentence(ICollection elements, string connector, bool skipLastComma)
 		{
 			string[] array = elements as string[];
 			if (array == null)
@@ -246,34 +297,33 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $TextHelper.ToSentence( elements, "y", false )
 		/// </code>
 		/// </example>
-		public string ToSentence(string[] elements, string connector, bool skipLastComma)
+		public static string ToSentence(string[] elements, string connector, bool skipLastComma)
 		{
 			switch(elements.Length)
 			{
 				case 0:
-					{
-						return String.Empty;
-					}
+				{
+					return String.Empty;
+				}
 				case 1:
-					{
-						return elements[0];
-					}
+				{
+					return elements[0];
+				}
 				case 2:
-					{
-						return String.Format("{0} {1} {2}", elements[0], connector, elements[1]);
-					}
+				{
+					return elements[0] + " " + connector + " " + elements[1];
+				}
 				default:
-					{
-						String[] allButLast = new String[elements.Length - 1];
+				{
+					String[] allButLast = new String[elements.Length - 1];
 
-						Array.Copy(elements, allButLast, elements.Length - 1);
+					Array.Copy(elements, allButLast, elements.Length - 1);
 
-						return String.Format("{0}{1} {2} {3}",
-						                     String.Join(", ", allButLast),
-						                     skipLastComma ? "" : ",",
-						                     connector,
-						                     elements[elements.Length - 1]);
-					}
+					return
+						String.Join(", ", allButLast) + (skipLastComma ? "" : ",") + " " +
+						connector + " " +
+						elements[elements.Length - 1];
+				}
 			}
 		}
 
@@ -293,17 +343,29 @@ namespace Castle.MonoRail.Framework.Helpers
 		public string Fold(string text, int maxLength)
 		{
 			// Empty text
-			if (text == null) return "";
+			if (text == null)
+			{
+				return "";
+			}
 
 			// maxLenght <= 0 switches off folding
 			// Determine whether text must be cut
-			if (maxLength <= 0 || text.Length < maxLength) return text;
+			if (maxLength <= 0 || text.Length < maxLength)
+			{
+				return text;
+			}
 
 			StringBuilder caption = new StringBuilder();
 			foreach(string word in text.Split())
 			{
-				if (caption.Length + word.Length + 1 > maxLength - 1) break;
-				if (caption.Length > 0) caption.Append(" "); // Adding space
+				if (caption.Length + word.Length + 1 > maxLength - 1)
+				{
+					break;
+				}
+				if (caption.Length > 0)
+				{
+					caption.Append(" "); // Adding space
+				}
 				caption.Append(word);
 			}
 
@@ -349,7 +411,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <summary>
 			/// Initializes a new instance of the PhoneFormatter class for the region used by the current thread.
 			/// </summary>
-			public PhoneFormatter() : this((RegionInfo)null)
+			public PhoneFormatter() : this((RegionInfo) null)
 			{
 			}
 
@@ -378,7 +440,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				Regex strip = new Regex(@"[^\w]", RegexOptions.IgnoreCase);
 				string stripped = strip.Replace(orig, "");
 
-				foreach (FormatPair testcase in formats)
+				foreach(FormatPair testcase in formats)
 				{
 					Regex convert = new Regex(testcase.Pattern);
 					Match match = convert.Match(stripped);
@@ -395,6 +457,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			public string Pattern;
 			public string Formatted;
+
 			/// <summary>
 			/// Initializes a new instance of the FormatPair class.
 			/// </summary>
@@ -418,9 +481,9 @@ namespace Castle.MonoRail.Framework.Helpers
 				//  b) should be cached.
 				//  c) Should be handled in a more robust fashion.  (resource files?  Xml file?)
 
-				switch (rinfo.TwoLetterISORegionName)
+				switch(rinfo.TwoLetterISORegionName)
 				{
-					case "US":	// United States
+					case "US": // United States
 						pairs.Add(new FormatPair(@"^(\w\w\d)(\d\d\d\d)$", @"$1-$2"));
 						pairs.Add(new FormatPair(@"^(\d\d\d)(\w\w\d)(\d\d\d\d)$", @"($1) $2-$3"));
 						pairs.Add(new FormatPair(@"^1(\d\d\d)(\w\w\d)(\d\d\d\d)$", @"+1 ($1) $2-$3"));
@@ -428,7 +491,7 @@ namespace Castle.MonoRail.Framework.Helpers
 						pairs.Add(new FormatPair(@"^1(\d\d\d)(\w\w\d)(\d\d\d\d)x?(\d+)$", @"+1 ($1) $2-$3 ext. $4"));
 						break;
 
-					case "BR":		// Brazil
+					case "BR": // Brazil
 						pairs.Add(new FormatPair(@"^(\d\d\d\d)(\d\d\d\d)$", @"$1-$2"));
 						pairs.Add(new FormatPair(@"^(\d\d)(\d\d\d\d)(\d\d\d\d)$", @"($1) $2-$3"));
 						pairs.Add(new FormatPair(@"^(0\d\d)(\d\d\d\d)(\d\d\d\d)$", @"($1) $2-$3"));

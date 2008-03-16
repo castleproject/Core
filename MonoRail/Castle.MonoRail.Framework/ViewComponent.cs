@@ -84,7 +84,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Holds a reference to the <see cref="ViewComponentDetailsAttribute"/> if any.
 		/// </summary>
-		private ViewComponentDetailsAttribute detailsAtt;
+		private readonly ViewComponentDetailsAttribute detailsAtt;
 
 		/// <summary>
 		/// Initializes a new instance of the ViewComponent class.

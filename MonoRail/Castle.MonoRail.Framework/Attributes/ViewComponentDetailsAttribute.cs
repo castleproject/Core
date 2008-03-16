@@ -67,7 +67,7 @@ namespace Castle.MonoRail.Framework
 		private string sections;
 		private ViewComponentCache cache = ViewComponentCache.Disabled;
 		private Type cacheKeyFactory;
-		private string[] sectionsFromAttribute;
+		private string[] sectionsFromAttribute = new string[0];
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ViewComponentDetailsAttribute"/> class.
@@ -136,14 +136,18 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Returns true if the section name specified is present on the list of sections.
+		/// Returns true if the section sectionName specified is present on the list of sections.
 		/// </summary>
-		/// <param name="name">The section name.</param>
+		/// <param name="sectionName">The section name.</param>
 		/// <returns></returns>
-		public bool SupportsSection(string name)
+		public bool SupportsSection(string sectionName)
 		{
+			if (sectionsFromAttribute == null || sectionsFromAttribute.Length == 0)
+			{
+				return false;
+			}
 			return Array.FindIndex(sectionsFromAttribute,
-							  delegate(string item) { return string.Equals(item, name, StringComparison.InvariantCultureIgnoreCase); }) != -1;
+							  delegate(string item) { return string.Equals(item, sectionName, StringComparison.InvariantCultureIgnoreCase); }) != -1;
 		}
 	}
 }

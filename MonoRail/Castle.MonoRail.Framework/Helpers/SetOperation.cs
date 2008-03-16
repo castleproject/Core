@@ -308,7 +308,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (valueProperty != null || emptyValueCase) 
 			{
-				valuePropInfo = FormHelper.ValueGetterAbstractFactory.Create(type, valueProperty); // FormHelper.GetMethod(type, valueProperty);
+				valuePropInfo = FormHelper.ValueGetterAbstractFactory.Create(type, valueProperty);
 			}
 
 			if (textProperty != null)
