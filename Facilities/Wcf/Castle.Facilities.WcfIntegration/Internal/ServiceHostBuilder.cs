@@ -52,7 +52,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 		void IWcfEndpointVisitor.VisitConfigurationEndpointModel(ConfigurationEndpointModel model)
 		{
 			throw new InvalidOperationException("The ServiceEndpoint for a ServiceHost " +
-				"cannot be created from and endpoint name.");
+				"cannot be created from an endpoint name.");
 		}
 
 		void IWcfEndpointVisitor.VisitBindingEndpointModel(BindingEndpointModel model)

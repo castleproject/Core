@@ -23,7 +23,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 		public static bool FindDependency<T>(IDictionary dependencies,
 										     out T match)
 		{
-			return FindDependency<T>(dependencies, t => true, out match);
+			return FindDependency<T>(dependencies, null, out match);
 		}
 
 		public static bool FindDependency<T>(IDictionary dependencies, 
@@ -37,7 +37,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 				{
 					T candidate = (T)dependency;
 
-					if (test(candidate))
+					if (test == null || test(candidate))
 					{
 						match = candidate;
 						return true;
@@ -50,7 +50,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 		public static bool FindDependency<T>(ICollection<T> dependencies,
 										     out T match)
 		{
-			return FindDependency<T>(dependencies, t => true, out match);
+			return FindDependency<T>(dependencies, null, out match);
 		}
 
 		public static bool FindDependency<T>(ICollection<T> dependencies,
@@ -64,7 +64,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 				{
 					T candidate = (T)dependency;
 
-					if (test(candidate))
+					if (test == null || test(candidate))
 					{
 						match = candidate;
 						return true;

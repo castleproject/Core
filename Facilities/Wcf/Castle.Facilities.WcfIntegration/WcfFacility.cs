@@ -161,8 +161,6 @@ namespace Castle.Facilities.WcfIntegration
 					componentModel.Service.FullName + ".");
 			}
 
-			clientModel.Contract = contract;
-
 			if (clientModel.Endpoint == null)
 			{
 				throw new FacilityException(

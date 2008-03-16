@@ -34,6 +34,11 @@ namespace Castle.Facilities.WcfIntegration
 		public Type Contract
 		{
 			get { return contract; }
+		}
+
+		Type IWcfEndpoint.Contract
+		{
+			get { return contract; }
 			set { contract = value; }
 		}
 
