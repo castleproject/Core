@@ -48,7 +48,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 							number = 42,
 							serviceModel = new WcfServiceModel()
 								.AddEndpoints(
-									WcfEndpoint.WithBinding(new NetTcpBinding())
+									WcfEndpoint.BoundTo(new NetTcpBinding())
 										.At("net.tcp://localhost/Operations")
 										)
 						})

@@ -66,12 +66,12 @@ namespace Castle.Facilities.WcfIntegration.Internal
 				EndpointAddress address = model.EndpointAddress ?? new EndpointAddress(model.Address);
 				ContractDescription description = ContractDescription.GetContract(contract);
 				ServiceEndpoint endpoint = new ServiceEndpoint(description, model.Binding, address);
-				endpoint.ListenUri = model.ViaAddress;
+				endpoint.Behaviors.Add(new ClientViaBehavior(model.ViaAddress));
 				channelCreator = GetChannelCreator(endpoint);
 			}
 			else
 			{
-				object address = (object)model.EndpointAddress ?? (object)model.Address;
+				object address = (object)model.EndpointAddress ?? model.Address;
 				channelCreator = GetChannelCreator(model.Binding, address);
 			}
 		}

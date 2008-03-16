@@ -75,18 +75,20 @@
     <Compile Include="Internal\ServiceHostBuilder.cs" />
     <Compile Include="Internal\IWcfEndpointVisitor.cs" />
     <Compile Include="IWcfEndpoint.cs" />
-    <Compile Include="WcfClientActivator.cs" />
-    <Compile Include="WcfClientModel.cs" />
-    <Compile Include="WcfClientResolver.cs" />
-    <Compile Include="WcfConstants.cs" />
+    <Compile Include="Client\WcfClientActivator.cs" />
+    <Compile Include="Client\WcfClientExtension.cs" />
+    <Compile Include="Client\WcfClientModel.cs" />
+    <Compile Include="Client\WcfClientResolver.cs" />
+    <Compile Include="Internal\WcfConstants.cs" />
     <Compile Include="WcfEndpoint.cs" />
     <Compile Include="WcfFacility.cs" />
-    <Compile Include="WcfServiceModel.cs" />
+    <Compile Include="Service\WcfServiceExtension.cs" />
+    <Compile Include="Service\WcfServiceModel.cs" />
     <Compile Include="Internal\WcfUtils.cs" />
-    <Compile Include="WindsorDependencyInjectionServiceBehavior.cs" />
-    <Compile Include="WindsorInstanceProvider.cs" />
-    <Compile Include="WindsorServiceHost.cs" />
-    <Compile Include="WindsorServiceHostFactory.cs" />
+    <Compile Include="Service\WindsorDependencyInjectionServiceBehavior.cs" />
+    <Compile Include="Service\WindsorInstanceProvider.cs" />
+    <Compile Include="Service\WindsorServiceHost.cs" />
+    <Compile Include="Service\WindsorServiceHostFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

@@ -63,9 +63,9 @@ namespace Castle.Facilities.WcfIntegration
 			return new ContractEndpointModel().FromConfiguration(endpointName);
 		}
 
-		public static BindingEndpointModel WithBinding(Binding binding)
+		public static BindingEndpointModel BoundTo(Binding binding)
 		{
-			return new ContractEndpointModel().WithBinding(binding);
+			return new ContractEndpointModel().BoundTo(binding);
 		}
 
 		public static ContractEndpointModel ForContract(Type contract)
@@ -116,7 +116,7 @@ namespace Castle.Facilities.WcfIntegration
 			return new ConfigurationEndpointModel(contract, endpointName);
 		}
 
-		public BindingEndpointModel WithBinding(Binding binding)
+		public BindingEndpointModel BoundTo(Binding binding)
 		{
 			if (binding == null)
 			{

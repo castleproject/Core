@@ -14,15 +14,12 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System;
-	using System.ServiceModel;
-	using Castle.Core;
-	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
-	using Castle.Facilities.WcfIntegration.Internal;
 
 	public class WcfFacility : AbstractFacility
 	{
+		private WcfClientExtension clientExtension;
+		private WcfServiceExtension serviceExtension;
 		private readonly WcfClientModel[] clientModels;
 
 		public WcfFacility()
@@ -31,167 +28,20 @@ namespace Castle.Facilities.WcfIntegration
 
 		public WcfFacility(params WcfClientModel[] clientModels)
 		{
-			foreach (WcfClientModel clientModel in clientModels)
-			{
-				ValidateClientModel(clientModel, null);
-			}
 			this.clientModels = clientModels;
 		}
 
 		protected override void Init()
 		{
-			Kernel.ComponentRegistered += Kernel_ComponentRegistered;
-			Kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
-			Kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
-
-			if (clientModels != null && clientModels.Length > 0)
-			{
-				Kernel.Resolver.AddSubResolver(new WcfClientResolver(clientModels));
-			}
+			clientExtension = new WcfClientExtension(Kernel, clientModels);
+			serviceExtension = new WcfServiceExtension(Kernel);
 		}
 
-		private void Kernel_ComponentModelCreated(ComponentModel componentModel)
+		public override void Dispose()
 		{
-			WcfClientModel clientModel = ResolveClientModel(componentModel);
-
-			if (clientModel != null)
-			{
-				componentModel.ExtendedProperties[WcfConstants.ClientModelKey] = clientModel;
-				componentModel.CustomComponentActivator = typeof(WcfClientActivator);
-				componentModel.LifestyleType = LifestyleType.Transient;
-			}
-		}
-
-		private void Kernel_ComponentRegistered(string key, IHandler handler)
-		{
-			ComponentModel componentModel = handler.ComponentModel;
-			WcfServiceModel serviceModel = ResolveServiceModel(componentModel);
-
-			if (serviceModel != null)
-			{
-				WindsorServiceHost serviceHost = CreateAndOpenServiceHost(serviceModel, componentModel);
-				componentModel.ExtendedProperties[WcfConstants.ServiceHostKey] = serviceHost;
-			}
-		}
-
-		private void Kernel_ComponentUnregistered(string key, IHandler handler)
-		{
-			ComponentModel componentModel = handler.ComponentModel;
-			ServiceHost serviceHost =
-				componentModel.ExtendedProperties[WcfConstants.ServiceHostKey] as ServiceHost;
-
-			if (serviceHost != null)
-			{
-				serviceHost.Close();
-			}
-		}
-
-		private WcfClientModel ResolveClientModel(ComponentModel componentModel)
-		{
-			WcfClientModel clientModel = null;
-
-			if (componentModel.Service.IsInterface)
-			{
-				if (WcfUtils.FindDependency<WcfClientModel>(
-					componentModel.CustomDependencies, out clientModel))
-				{
-					ValidateClientModel(clientModel, componentModel);
-				}
-			}
-
-			return clientModel;
-		}
-
-		private WcfServiceModel ResolveServiceModel(ComponentModel componentModel)
-		{
-			WcfServiceModel serviceModel = null;
-
-			if (componentModel.Implementation.IsClass && 
-				!componentModel.Implementation.IsAbstract)
-			{
-				if (WcfUtils.FindDependency<WcfServiceModel>(
-					componentModel.CustomDependencies, out serviceModel))
-				{
-					ValidateServiceModel(serviceModel, componentModel);
-				}
-			} 
-			
-			return serviceModel;
-		}
-
-		private WindsorServiceHost CreateAndOpenServiceHost(WcfServiceModel serviceModel,
-															ComponentModel componentModel)
-		{
-			WindsorServiceHost serviceHost = new WindsorServiceHost(
-				Kernel, componentModel.Implementation, serviceModel.GetBaseAddressesUris());
-
-			ServiceHostBuilder serviceHostBuilder = new ServiceHostBuilder(); 
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
-			{
-				serviceHostBuilder.AddServiceEndpoint(serviceHost, endpoint);
-			}
-
-			serviceHost.Open();
-			return serviceHost;
-		}
-
-		private void ValidateClientModel(WcfClientModel clientModel, ComponentModel componentModel)
-		{
-			Type contract;
-
-			if (componentModel != null)
-			{
-				contract = componentModel.Service;
-			}
-			else if (clientModel.Contract != null)
-			{
-				contract = clientModel.Contract;
-			}
-			else
-			{
-				throw new FacilityException(
-					"The client endpoint does not specify a contract.");
-			}
-
-			if ((componentModel != null) && (clientModel.Contract != null) &&
-				(clientModel.Contract != componentModel.Service))
-			{
-				throw new FacilityException("The client endpoint contract " +
-					clientModel.Contract.FullName + " does not match the expected contaxt" +
-					componentModel.Service.FullName + ".");
-			}
-
-			if (clientModel.Endpoint == null)
-			{
-				throw new FacilityException(
-					"The client model requires an endpoint.");
-			}
-		}
-
-		private void ValidateServiceModel(WcfServiceModel serviceModel, ComponentModel componentModel)
-		{
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
-			{
-				Type contract = endpoint.Contract;
-
-				if (contract != null)
-				{
-					if (!contract.IsInterface)
-					{
-						throw new FacilityException("The service endpoint contract " +
-							contract.FullName + " does not represent an interface.");
-					}
-				}
-				else if (!componentModel.Service.IsInterface)
-				{
-					throw new FacilityException(
-						"No service endpoint contract can be implied from the componnt.");
-				}
-				else
-				{
-					endpoint.Contract = componentModel.Service;
-				}
-			}
+			base.Dispose();
+			if (clientExtension != null) clientExtension.Dispose();
+			if (serviceExtension != null) serviceExtension.Dispose();
 		}
 	}
 }

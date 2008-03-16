@@ -35,7 +35,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					new WcfClientModel()
 					{
 						Endpoint = WcfEndpoint.ForContract<IOperations>()
-							.WithBinding(new NetTcpBinding())
+							.BoundTo(new NetTcpBinding())
 							.At("net.tcp://localhost/Operations")
 					}))
 				.Register(
@@ -45,7 +45,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 							number = 42,
 							serviceModel = new WcfServiceModel()
 								.AddEndpoints(
-									WcfEndpoint.WithBinding(new NetTcpBinding())
+									WcfEndpoint.BoundTo(new NetTcpBinding())
 										.At("net.tcp://localhost/Operations")
 										)
 						}),
@@ -79,7 +79,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 							clientModel = new WcfClientModel()
 							{
 								Endpoint = WcfEndpoint
-									.WithBinding(new NetTcpBinding())
+									.BoundTo(new NetTcpBinding())
 									.At("net.tcp://localhost/Operations")
 							}
 						})
@@ -127,7 +127,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						clientModel = new WcfClientModel()
 						{
 							Endpoint = WcfEndpoint
-								.WithBinding(new BasicHttpBinding())
+								.BoundTo(new BasicHttpBinding())
 								.At("http://localhost/BadOperations")
 						}
 					})
@@ -139,12 +139,48 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					clientModel = new WcfClientModel()
 					{
 						Endpoint = WcfEndpoint
-							.WithBinding(new NetTcpBinding())
+							.BoundTo(new NetTcpBinding())
 							.At("net.tcp://localhost/Operations")
 					}
 				});
 
 			Assert.AreEqual(42, client.GetValueFromConstructor());
+		}
+
+		[Test]
+		public void CanResolveClientAssociatedWithChannelUsingViaAddress()
+		{
+			using (IWindsorContainer localContainer = new WindsorContainer()
+				.AddFacility("wcf_facility", new WcfFacility())
+				.Register(
+					Component.For<IOperations>().ImplementedBy<Operations>()
+						.CustomDependencies(new
+						{
+							number = 22,
+							serviceModel = new WcfServiceModel()
+								.AddEndpoints(
+									WcfEndpoint.BoundTo(new NetTcpBinding())
+										.At("urn:castle:operations")
+										.Via("net.tcp://localhost/OperationsVia")
+										)
+						}),
+					Component.For<IOperations>()
+						.Named("operations")
+						.CustomDependencies(new
+						{
+							clientModel = new WcfClientModel()
+							{
+								Endpoint = WcfEndpoint
+									.BoundTo(new NetTcpBinding())
+									.At("urn:castle:operations")
+									.Via("net.tcp://localhost/OperationsVia")
+							}
+						})
+					))
+			{
+				IOperations client = localContainer.Resolve<IOperations>("operations");
+				Assert.AreEqual(22, client.GetValueFromConstructor());
+			}
 		}
 	}
 }

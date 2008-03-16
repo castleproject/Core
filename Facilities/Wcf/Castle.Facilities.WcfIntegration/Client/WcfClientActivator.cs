@@ -22,7 +22,7 @@ namespace Castle.Facilities.WcfIntegration
 
 	internal delegate object CreateChannel();
 
-	public class WcfClientActivator : AbstractComponentActivator
+	public class WcfClientActivator : DefaultComponentActivator
 	{
 		private readonly CreateChannel createChannel;
 
@@ -37,7 +37,7 @@ namespace Castle.Facilities.WcfIntegration
 				clientModel.Endpoint, model.Service);
 		}
 
-		protected override object InternalCreate(CreationContext context)
+		protected override object Instantiate(CreationContext context)
 		{
 			WcfClientModel clientModelOverride = GetClientModelOverride(context);
 
@@ -49,10 +49,6 @@ namespace Castle.Facilities.WcfIntegration
 			}
 			
 			return createChannel();
-		}
-
-		protected override void InternalDestroy(object instance)
-		{
 		}
 
 		private WcfClientModel GetClientModelOverride(CreationContext context)

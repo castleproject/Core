@@ -43,7 +43,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						number = 42,
 						serviceModel = new WcfServiceModel()
 							.AddEndpoints(
-								WcfEndpoint.WithBinding(new NetTcpBinding())
+								WcfEndpoint.BoundTo(new NetTcpBinding())
 									.At("net.tcp://localhost/Operations")
 									)
 					})
@@ -86,10 +86,10 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						serviceModel = new WcfServiceModel()
 							.AddEndpoints(
 								WcfEndpoint.ForContract<IOperations>()
-									.WithBinding(new NetTcpBinding())
+									.BoundTo(new NetTcpBinding())
 									.At("net.tcp://localhost/Operations"),
 								WcfEndpoint.ForContract<IOperationsEx>()
-									.WithBinding(new BasicHttpBinding())
+									.BoundTo(new BasicHttpBinding())
 									.At("http://localhost:27198/UsingWindsor.svc")
 
 								)
@@ -121,9 +121,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 								"http://localhost:27198/UsingWindsor.svc")
 							.AddEndpoints(
 								WcfEndpoint.ForContract<IOperations>()
-									.WithBinding(new NetTcpBinding()),
+									.BoundTo(new NetTcpBinding()),
 								WcfEndpoint.ForContract<IOperationsEx>()
-									.WithBinding(new BasicHttpBinding())
+									.BoundTo(new BasicHttpBinding())
 									.At("Extended")
 								)
 					})
@@ -136,6 +136,31 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				IOperationsEx clientEx = ChannelFactory<IOperationsEx>.CreateChannel(
 					new BasicHttpBinding(), new EndpointAddress("http://localhost:27198/UsingWindsor.svc/Extended"));
 				clientEx.Backup();
+			}
+		}
+
+		[Test]
+		public void CanCreateServiceHostAndOpenHostWithListenAddress()
+		{
+			using (new WindsorContainer()
+				.AddFacility("wcf_facility", new WcfFacility())
+				.Register(Component.For<IOperations>().ImplementedBy<Operations>()
+					.CustomDependencies(new
+					{
+						number = 42,
+						serviceModel = new WcfServiceModel()
+							.AddEndpoints(
+								WcfEndpoint.BoundTo(new NetTcpBinding())
+									.At("urn:castle:operations")
+									.Via("net.tcp://localhost/Operations")
+									)
+					})
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding(), new EndpointAddress("urn:castle:operations"),
+					new Uri("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
 			}
 		}
 	}
