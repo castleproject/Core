@@ -203,7 +203,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// For example: mask='2,5',mask_separator='/' will mask the content to '12/34/1234'
 	/// </para>
 	/// </remarks>
-	public class FormHelper : AbstractFormRelatedHelper
+	public class FormHelper : AbstractFormRelatedHelper, IServiceEnabledComponent
 	{
 		private int formCount;
 		private string currentFormId;
