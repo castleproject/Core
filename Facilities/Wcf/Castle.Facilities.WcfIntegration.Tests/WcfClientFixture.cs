@@ -22,6 +22,8 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using Castle.Facilities.WcfIntegration.Demo;
 	using NUnit.Framework;
 
+#if DOTNET35
+
 	[TestFixture]
 	public class WcfClientFixture
 	{
@@ -183,4 +185,5 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			}
 		}
 	}
+#endif // DOTNET35
 }
