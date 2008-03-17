@@ -40,11 +40,15 @@ namespace Castle.Facilities.Synchronize.Tests
 
 			container.AddFacility("sync.facility", new SynchronizeFacility());
 			container.AddComponent("sync.context", typeof(SynchronizationContext));
+			container.AddComponent("async.context", typeof(AsynchronousContext));
 			container.AddComponent("dummy.form.class", typeof(DummyForm));
 			container.AddComponent("dummy.form.service", typeof(IDummyForm), typeof(DummyForm));
-			container.AddComponent("class.in.context", typeof(ClassUsingFormInContext));
+			container.AddComponent("class.in.windows.context", typeof(ClassUsingFormInWindowsContext));
 			container.AddComponent("sync.class.no.context", typeof(SyncClassWithoutContext));
 			container.AddComponent("sync.class.override.context", typeof(SyncClassOverrideContext));
+			container.AddComponent("simple.worker", typeof(IWorker), typeof(SimpleWorker));
+			container.AddComponent("async.worker", typeof(IWorker), typeof(AsynchronousWorker));
+			container.AddComponent("manual.worker", typeof(ManualWorker));
 
 			MutableConfiguration componentNode = new MutableConfiguration("component");
 			componentNode.Attributes[Constants.SynchronizedAttrib] = "true";
@@ -126,7 +130,7 @@ namespace Castle.Facilities.Synchronize.Tests
 
 			uncaughtException = null;
 
-			ClassUsingFormInContext classInCtx = new ClassUsingFormInContext();
+			ClassUsingFormInWindowsContext classInCtx = new ClassUsingFormInWindowsContext();
 			ExecuteInThread(delegate { classInCtx.DoWork(form); });
 			Assert.IsNotNull(uncaughtException, "Expected an exception");
 		}
@@ -135,7 +139,11 @@ namespace Castle.Facilities.Synchronize.Tests
 		public void AddControl_DifferentThreadUsingClass_WorksFine()
 		{
 			DummyForm form = container.Resolve<DummyForm>();
-			ExecuteInThread(delegate { form.AddControl(new Button()); });
+			Assert.AreEqual(0, form.Controls.Count);
+			ExecuteInThread(delegate { 
+				int count = form.AddControl(new Button());
+				Assert.AreEqual(1, count);
+			});
 			Assert.IsNull(uncaughtException, "Expected no exception");
 		}
 
@@ -143,7 +151,11 @@ namespace Castle.Facilities.Synchronize.Tests
 		public void AddControl_DifferentThreadUsingService_WorksFine()
 		{
 			IDummyForm form = container.Resolve<IDummyForm>();
-			ExecuteInThread(delegate { form.AddControl(new Button()); });
+			ExecuteInThread(delegate
+			{
+				int count = form.AddControl(new Button());
+				Assert.AreEqual(1, count);
+			});
 			Assert.IsNull(uncaughtException, "Expected no exception");
 		}
 
@@ -151,7 +163,7 @@ namespace Castle.Facilities.Synchronize.Tests
 		public void AddControl_DifferentThreadInContext_WorksFine()
 		{
 			DummyForm form = new DummyForm();
-			ClassUsingFormInContext client = container.Resolve<ClassUsingFormInContext>();
+			ClassUsingFormInWindowsContext client = container.Resolve<ClassUsingFormInWindowsContext>();
 			ExecuteInThread(delegate { client.DoWork(form); });
 			Assert.IsNull(uncaughtException, "Expected no exception");
 		}
@@ -172,6 +184,57 @@ namespace Castle.Facilities.Synchronize.Tests
 			IClassUsingContext<DummyForm> client = container.Resolve<IClassUsingContext<DummyForm>>();
 			ExecuteInThread(delegate { client.DoWork(form); });
 			Assert.IsNull(uncaughtException, "Expected no exception");
+		}
+
+		[Test]
+		public void GetResultOf_UsingSynchronousContext_WorksFine()
+		{
+			IWorker worker = container.Resolve<IWorker>("simple.worker");
+			Result<int> remaining = Result.Of(worker.DoWork(2));
+			Assert.AreEqual(4, remaining);
+		}
+
+		[Test]
+		public void GetResultOf_UsingAsynchronousContext_WorksFine()
+		{
+			IWorker worker = container.Resolve<IWorker>("async.worker");
+			Result<int> remaining = Result.Of(worker.DoWork(5));
+			Assert.AreEqual(10, remaining);
+			Assert.IsFalse(remaining.CompletedSynchronously);
+		}
+
+		[Test]
+		public void GetResultOf_WaitingForResult_WorksFine()
+		{
+			ManualWorker worker = container.Resolve<ManualWorker>();
+			Result<int> remaining = Result.Of(worker.DoWork(5));
+			ExecuteInThread(delegate
+			{
+				Thread.Sleep(3000);
+				worker.Ready();
+			});
+			Assert.AreEqual(10, remaining);
+			Assert.IsFalse(remaining.CompletedSynchronously);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentException), "Bad Bad Bad...")]
+		public void GetResultOf_WaitingForResultThrowsException_WorksFine()
+		{
+			ManualWorker worker = container.Resolve<ManualWorker>();
+			Result<int> remaining = Result.Of(worker.DoWork(5));
+			ExecuteInThread(delegate
+			{
+				worker.Failed(new ArgumentException("Bad Bad Bad..."));
+			});
+			Assert.AreEqual(10, remaining);
+		}
+
+		[Test, ExpectedException(typeof(InvalidOperationException))]
+		public void GetResultOf_NotWithAnySynchronizationContext_ThrowsInvalidOperationException()
+		{
+			IWorker worker = new AsynchronousWorker();
+			Result<int> remaining = Result.Of(worker.DoWork(2));
+			Assert.AreEqual(4, remaining);
 		}
 
 		[Test, ExpectedException(typeof(FacilityException))]
@@ -220,19 +283,19 @@ namespace Castle.Facilities.Synchronize.Tests
 		private void ExecuteInThread(ThreadStart run)
 		{
 			Thread thread = new Thread((ThreadStart) delegate
-			                                         	{
-			                                         		try
-			                                         		{
-			                                         			run();
-			                                         		}
-			                                         		catch(Exception e)
-			                                         		{
-			                                         			uncaughtException = e;
-			                                         		}
+                         	{
+                         		try
+                         		{
+                         			run();
+                         		}
+                         		catch(Exception e)
+                         		{
+                         			uncaughtException = e;
+                         		}
 
-			                                         		Application.DoEvents();
-			                                         		Application.Exit();
-			                                         	});
+                         		Application.DoEvents();
+                         		Application.Exit();
+                         	});
 
 			Form form = new Form();
 			if (form.Handle == IntPtr.Zero)

@@ -22,7 +22,7 @@ namespace Castle.Facilities.Synchronize.Tests
 
 	public interface IDummyForm
 	{
-		void AddControl(Control control);
+		int AddControl(Control control);
 	}
 
 	public class DummyForm : Form, IDummyForm
@@ -32,18 +32,81 @@ namespace Castle.Facilities.Synchronize.Tests
 			IntPtr handle = Handle;
 		}
 
-		public virtual void AddControl(Control control)
+		public virtual int AddControl(Control control)
 		{
 			Controls.Add(control);
+			return Controls.Count;
+		}
+	}
+
+	public interface IWorker
+	{
+		[Synchronize]
+		int DoWork(int work);
+	}
+
+	public class AsynchronousContext : SynchronizationContext
+	{
+		public override void Send(SendOrPostCallback d, object state)
+		{
+			Post(d, state);
+		}
+	}
+
+	[Synchronize(typeof(SynchronizationContext))]
+	public class SimpleWorker : IWorker
+	{
+		[Synchronize]
+		public virtual int DoWork(int work)
+		{
+			return work * 2;
+		}
+	}
+
+	[Synchronize(typeof(AsynchronousContext))]
+	public class AsynchronousWorker : SimpleWorker
+	{
+	}
+
+	public class ManualWorker : AsynchronousWorker
+	{
+		private Exception exception;
+		private ManualResetEvent ready = new ManualResetEvent(false);
+
+		[Synchronize]
+		public override int DoWork(int work)
+		{
+			int remaining = base.DoWork(work);
+			if (ready.WaitOne(5000, false))
+			{
+				if (exception != null)
+				{
+					throw exception;
+				}
+				return remaining;
+			}
+			return 0;
+		}
+
+		public void Ready()
+		{
+			ready.Set();
+		}
+
+		public void Failed(Exception ex)
+		{
+			exception = ex;
+			Ready();
 		}
 	}
 
 	public class ClassUsingForm
 	{
 		[Synchronize]
-		public virtual void DoWork(Form form)
+		public virtual int DoWork(Form form)
 		{
 			form.Controls.Add(new Button());
+			return form.Controls.Count;
 		}
 	}
 
@@ -64,7 +127,7 @@ namespace Castle.Facilities.Synchronize.Tests
 	}
 
 	[Synchronize(typeof(WindowsFormsSynchronizationContext))]
-	public class ClassUsingFormInContext : ClassUsingForm
+	public class ClassUsingFormInWindowsContext : ClassUsingForm
 	{
 	}
 

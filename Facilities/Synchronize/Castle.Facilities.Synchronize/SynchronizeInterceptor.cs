@@ -18,6 +18,7 @@ namespace Castle.Facilities.Synchronize
 	using System.ComponentModel;
 	using System.Reflection;
 	using System.Threading;
+	using System.Runtime.Serialization;
 	using Castle.Core;
 	using Castle.Core.Interceptor;
 	using Castle.MicroKernel;
@@ -35,7 +36,7 @@ namespace Castle.Facilities.Synchronize
 		private readonly InvocationDelegate safeInvokeDelegate = InvokeSafely;
 		[ThreadStatic] private SynchronizationContext activeSyncContext;
 
-		private delegate void InvocationDelegate(IInvocation invocation);
+		private delegate void InvocationDelegate(IInvocation invocation, Result result);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SynchronizeInterceptor"/> class.
@@ -69,9 +70,9 @@ namespace Castle.Facilities.Synchronize
 		public void Intercept(IInvocation invocation)
 		{
 			if (!InvokeInSynchronizationContext(invocation) &&
-			    !InvokeUsingSynchronizationTarget(invocation))
+				!InvokeUsingSynchronizationTarget(invocation))
 			{
-				invocation.Proceed();
+				InvokeSynchronously(invocation);
 			}
 		}
 
@@ -93,11 +94,11 @@ namespace Castle.Facilities.Synchronize
 
 				if (syncContextRef == null)
 				{
-					invocation.Proceed();
+					InvokeSynchronously(invocation);
 					return true;
 				}
 
-				switch(syncContextRef.ReferenceType)
+				switch (syncContextRef.ReferenceType)
 				{
 					case SynchronizeContextReferenceType.Key:
 						handler = kernel.GetHandler(syncContextRef.ComponentKey);
@@ -114,12 +115,12 @@ namespace Castle.Facilities.Synchronize
 				}
 
 				SynchronizationContext syncContext = handler.Resolve(CreationContext.Empty)
-				                                     as SynchronizationContext;
+													 as SynchronizationContext;
 
 				if (syncContext == null)
 				{
 					throw new ApplicationException(string.Format("{0} does not implement {1}",
-					                                             syncContextRef, typeof(SynchronizationContext).FullName));
+						syncContextRef, typeof(SynchronizationContext).FullName));
 				}
 
 				if (syncContext != activeSyncContext)
@@ -128,21 +129,21 @@ namespace Castle.Facilities.Synchronize
 
 					try
 					{
+						Result result = CreateResult(invocation);
 						SynchronizationContext.SetSynchronizationContext(syncContext);
 
-						syncContext.Send(delegate
-						                 	{
-						                 		activeSyncContext = syncContext;
+						syncContext.Send(delegate {
+								activeSyncContext = syncContext;
 
-						                 		try
-						                 		{
-						                 			InvokeSafely(invocation);
-						                 		}
-						                 		finally
-						                 		{
-						                 			activeSyncContext = null;
-						                 		}
-						                 	}, null);
+								try
+								{
+									InvokeSafely(invocation, result);
+								}
+								finally
+								{
+									activeSyncContext = null;
+								}
+							}, null);
 					}
 					finally
 					{
@@ -151,7 +152,7 @@ namespace Castle.Facilities.Synchronize
 				}
 				else
 				{
-					invocation.Proceed();
+					InvokeSynchronously(invocation);
 				}
 
 				return true;
@@ -170,17 +171,19 @@ namespace Castle.Facilities.Synchronize
 		/// </returns>
 		private bool InvokeUsingSynchronizationTarget(IInvocation invocation)
 		{
-			ISynchronizeInvoke syncTarget = (ISynchronizeInvoke) invocation.InvocationTarget;
+			ISynchronizeInvoke syncTarget = (ISynchronizeInvoke)invocation.InvocationTarget;
 
 			if (syncTarget != null)
 			{
+				Result result = CreateResult(invocation);
+				
 				if (syncTarget.InvokeRequired)
 				{
-					syncTarget.Invoke(safeInvokeDelegate, new object[] {invocation});
+					syncTarget.Invoke(safeInvokeDelegate, new object[] { invocation, result });
 				}
 				else
 				{
-					invocation.Proceed();
+					InvokeSynchronously(invocation);
 				}
 
 				return true;
@@ -190,12 +193,76 @@ namespace Castle.Facilities.Synchronize
 		}
 
 		/// <summary>
+		/// Continues the invocation synchronously.
+		/// </summary>
+		/// <param name="invocation">The invocation.</param>
+		private static void InvokeSynchronously(IInvocation invocation)
+		{
+			invocation.Proceed();
+
+			Result result = CreateResult(invocation);
+			if (result != null)
+			{
+				result.SetValue(true, invocation.ReturnValue);
+			}
+		}
+		
+		/// <summary>
 		/// Used by the safe synchronization delegate.
 		/// </summary>
 		/// <param name="invocation">The invocation.</param>
-		private static void InvokeSafely(IInvocation invocation)
+		/// <param name="result">The result holder.</param>
+		private static void InvokeSafely(IInvocation invocation, Result result)
 		{
-			invocation.Proceed();
+			if (result == null)
+			{
+				invocation.Proceed();
+			}
+			else
+			{
+				try
+				{
+					invocation.Proceed();
+					result.SetValue(false, invocation.ReturnValue);
+				}
+				catch (Exception exception)
+				{
+					result.SetException(false, exception);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Creates the result of the invocation.
+		/// </summary>
+		/// <param name="invocation">The invocation.</param>
+		/// <returns>Holds the invocation result.</returns>
+		private static Result CreateResult(IInvocation invocation)
+		{
+			Result result = null;
+			Type returnType = invocation.Method.ReturnType;
+			if (returnType != typeof(void))
+			{
+				invocation.ReturnValue = GetDefault(returnType);
+				result = new Result();
+			}
+			Result.Last = result;
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the default value for a type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns>The default value for the type.</returns>
+		private static object GetDefault(Type type)
+		{
+			object defaultValue = null;
+			if (type.IsValueType)
+			{
+				defaultValue = FormatterServices.GetUninitializedObject(type);
+			}
+			return defaultValue;
 		}
 	}
 }
