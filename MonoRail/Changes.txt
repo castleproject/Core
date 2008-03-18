@@ -1,6 +1,8 @@
 1.0
 ===
 
+- Applied Aaron Jensen's adding call to RaiseUnhandledError when a controller fails to be created.
+
 - Applied Roger Chapman's patch adding the pascalcasetoword option to FormHelper.Select options dictionary. 
 
 - Applied Dan Goldstein's patch fixing MR-346

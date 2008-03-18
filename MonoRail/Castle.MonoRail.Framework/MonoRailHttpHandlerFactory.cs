@@ -109,6 +109,21 @@ namespace Castle.MonoRail.Framework
 			{
 				return new NotFoundHandler(urlInfo.Area, urlInfo.Controller, engineContext);
 			}
+			catch(Exception ex)
+			{
+				HttpResponse response = context.Response;
+
+				if (response.StatusCode == 200)
+				{
+					response.StatusCode = 500;
+				}
+
+				engineContext.LastException = ex;
+
+				engineContext.Services.ExtensionManager.RaiseUnhandledError(engineContext);
+
+				throw new MonoRailException("Error creating controller " + urlInfo.Controller, ex);
+			}
 
 			ControllerMetaDescriptor controllerDesc = 
 				mrContainer.ControllerDescriptorProvider.BuildDescriptor(controller);
