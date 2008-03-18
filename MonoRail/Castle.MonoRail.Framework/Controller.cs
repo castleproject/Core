@@ -77,6 +77,7 @@ namespace Castle.MonoRail.Framework
 		{
 			this.context = context;
 			SetEngineContext(engineContext);
+			renderingSupport = new RenderingSupport(context, engineContext);
 			isContextualized = true;
 		}
 
@@ -104,7 +105,6 @@ namespace Castle.MonoRail.Framework
 			CreateFiltersDescriptors();
 			ProcessScaffoldIfAvailable();
 			ActionProviderUtil.RegisterActions(engineContext, this, context);
-			renderingSupport = new RenderingSupport(context, engineContext);
 			Initialize();
 
 			RunActionAndRenderView();
@@ -564,7 +564,6 @@ namespace Castle.MonoRail.Framework
 
 			helperFactory = engineContext.Services.HelperFactory; // should not be null
 			serviceInitializer = engineContext.Services.ServiceInitializer; // should not be null
-//			urlBuilder = engineContext.Services.UrlBuilder; // should not be null (affects redirects)
 			filterFactory = engineContext.Services.FilterFactory; // should not be null
 			viewEngineManager = engineContext.Services.ViewEngineManager; // should not be null
 			actionSelector = engineContext.Services.ActionSelector; // should not be null

@@ -11,19 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.IO;
 
 	/// <summary>
-	/// Support functions for setting view and layout.
+	/// Support operations for setting view and layout.
 	/// </summary>
 	/// <remarks>
 	/// <para>
 	/// This class holds the diverse RenderView, RenderSharedView and 
-	/// RenderText methods originated from <see cref="Controller"/> along with CancelView and
-	/// CancelLayout. This has be done because <see cref="IDynamicAction"/>s do not have
+	/// RenderText family of methods originated from <see cref="Controller"/> along with CancelView and
+	/// CancelLayout. This has been done as <see cref="IDynamicAction"/>s do not have
 	/// access to the Controller itself, but only to <see cref="IController"/>,
 	/// <see cref="IEngineContext"/> and <see cref="IControllerContext"/>.
 	/// <see cref="RenderingSupport"/> allows dynamic actions to set the 
@@ -62,6 +63,9 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public class RenderingSupport
 	{
+		private readonly IControllerContext context;
+		private readonly IEngineContext engineContext;
+
 		/// <summary>
 		/// Instantiates RenderingSupport for the attached contexts.
 		/// </summary>
@@ -72,9 +76,6 @@ namespace Castle.MonoRail.Framework
 			this.context = context;
 			this.engineContext = engineContext;
 		}
-
-		private readonly IControllerContext context;
-		private readonly IEngineContext engineContext;
 
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
@@ -229,7 +230,5 @@ namespace Castle.MonoRail.Framework
 		{
 			RenderText(String.Format(formatProvider, contents, args));
 		}
-
 	}
-
 }

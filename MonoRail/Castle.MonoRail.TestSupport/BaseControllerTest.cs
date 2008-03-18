@@ -282,8 +282,7 @@ namespace Castle.MonoRail.TestSupport
 
 			controllerContext = services.ControllerContextFactory.Create(areaName, controllerName, actionName, services.ControllerDescriptorProvider.BuildDescriptor(controller));
 
-			controller.SetEngineContext(Context);
-			controller.ControllerContext = controllerContext;
+			controller.Contextualize(Context, controllerContext);
 			controller.CreateStandardHelpers();
 
 			controller.Initialize();
