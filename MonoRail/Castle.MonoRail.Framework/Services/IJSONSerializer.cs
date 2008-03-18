@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Services
 {
 	using System;
+	using System.IO;
 
 	/// <summary>
 	/// Abstracts the underlying JSON writer
@@ -148,6 +149,14 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="converters">The converters.</param>
 		/// <returns></returns>
 		string Serialize(object target, params IJSONConverter[] converters);
+
+		/// <summary>
+		/// Serializes the specified object.
+		/// </summary>
+		/// <param name="target">The target.</param>
+		/// <param name="writer">The writer.</param>
+		/// <param name="converters">The converters.</param>
+		void Serialize(object target, TextWriter writer, params IJSONConverter[] converters);
 
 		/// <summary>
 		/// Deserializes the specified object.

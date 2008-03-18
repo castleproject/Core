@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Services
 {
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
 	using Newtonsoft.Json;
 
 	/// <summary>
@@ -43,12 +44,36 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			List<JsonConverter> adapters = new List<JsonConverter>();
 
-			foreach(IJSONConverter converter in converters)
+			if (converters != null)
 			{
-				adapters.Add(new JsonConverterAdapter(converter));
+				foreach(IJSONConverter converter in converters)
+				{
+					adapters.Add(new JsonConverterAdapter(converter));
+				}
 			}
 
 			return JavaScriptConvert.SerializeObject(target, adapters.ToArray());
+		}
+
+		/// <summary>
+		/// Serializes the specified object.
+		/// </summary>
+		/// <param name="target">The target.</param>
+		/// <param name="writer">The writer.</param>
+		/// <param name="converters">The converters.</param>
+		public void Serialize(object target, TextWriter writer, params IJSONConverter[] converters)
+		{
+			List<JsonConverter> adapters = new List<JsonConverter>();
+
+			if (converters != null)
+			{
+				foreach(IJSONConverter converter in converters)
+				{
+					adapters.Add(new JsonConverterAdapter(converter));
+				}
+			}
+
+			JavaScriptConvert.SerializeObject(target, writer, adapters.ToArray());
 		}
 
 		/// <summary>

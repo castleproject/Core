@@ -54,21 +54,32 @@ namespace Castle.MonoRail.Framework
 
 			IJSONSerializer serializer = context.Services.JSONSerializer;
 
-			// Sets the mime type
-			context.Response.ContentType = "application/json";
+			IResponse response = context.Response;
+
+			string userAgent = context.Request.Headers["User-Agent"];
+
+			// Ridiculous hack, but necessary. If we set the mime type for mobile clients, they 
+			// will treat the response as binary!! 
+			if (userAgent != null && userAgent.IndexOf("Windows CE") == -1)
+			{
+				// Sets the mime type
+				response.ContentType = "application/json, text/javascript";
+			}
+
+			string raw;
 
 			if (properties == null || returnValue == null)
 			{
-				// Serializes the return value (what if it's null?)
-				context.Response.Write(serializer.Serialize(returnValue));
+				raw = serializer.Serialize(returnValue);
 			}
 			else
 			{
 				Type normalized = returnType.IsArray ? returnType.GetElementType() : returnType;
 
-				context.Response.Write(serializer.Serialize(returnValue, 
-					new PropertyConverter(normalized, properties)));
+				raw = serializer.Serialize(returnValue, new PropertyConverter(normalized, properties));
 			}
+
+			response.Output.Write(raw);
 		}
 
 		class PropertyConverter : IJSONConverter
