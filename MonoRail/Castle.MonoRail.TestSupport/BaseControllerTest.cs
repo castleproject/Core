@@ -229,6 +229,18 @@ namespace Castle.MonoRail.TestSupport
 		/// </summary>
 		/// <param name="controller">The controller.</param>
 		/// <param name="controllerName">Name of the controller.</param>
+		protected void PrepareController(Controller controller, string controllerName)
+		{
+			PrepareController(controller, controllerName, "Action");
+
+		}
+
+		/// <summary>
+		/// Prepares the controller giving it mock implementations
+		/// of the service it requires to function normally.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		/// <param name="controllerName">Name of the controller.</param>
 		/// <param name="actionName">Name of the action.</param>
 		protected void PrepareController(Controller controller, string controllerName, string actionName)
 		{
