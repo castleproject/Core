@@ -74,6 +74,7 @@
     <Compile Include="Logging\Factories\DiagnosticsLoggerFactory.cs" />
     <Compile Include="Logging\Factories\NullLogFactory.cs" />
     <Compile Include="Logging\Factories\StreamLoggerFactory.cs" />
+    <Compile Include="Logging\Factories\TraceLoggerFactory.cs" />
     <Compile Include="Logging\Factories\WebLoggerFactory.cs" />
     <Compile Include="Logging\IContextStack.cs" />
     <Compile Include="Logging\IContextStacks.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Logging\Loggers\LevelFilteredLogger.cs" />
     <Compile Include="Logging\Loggers\NullLogger.cs" />
     <Compile Include="Logging\Loggers\StreamLogger.cs" />
+    <Compile Include="Logging\Loggers\TraceLogger.cs" />
     <Compile Include="Logging\Loggers\WebLogger.cs" />
     <Compile Include="Model\ComponentModel.cs" />
     <Compile Include="Model\Configuration\AbstractConfiguration.cs" />

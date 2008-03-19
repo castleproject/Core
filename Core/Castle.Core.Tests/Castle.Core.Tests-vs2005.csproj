@@ -53,6 +53,7 @@
     <Compile Include="Resources\FileResourceFactoryTestCase.cs" />
     <Compile Include="Resources\UncResourceFactoryTestCase.cs" />
     <Compile Include="StreamLoggerTests.cs" />
+    <Compile Include="TraceLoggerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\file1.txt" />

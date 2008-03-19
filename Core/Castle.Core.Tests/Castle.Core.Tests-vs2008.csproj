@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="Resources\UncResourceFactoryTestCase.cs" />
     <Compile Include="StreamLoggerTests.cs" />
+    <Compile Include="TraceLoggerTests.cs" />
     <Compile Include="WebLoggerTests.cs" />
   </ItemGroup>
   <ItemGroup>

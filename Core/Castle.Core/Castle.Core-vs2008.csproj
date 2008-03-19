@@ -77,6 +77,7 @@
     <Compile Include="Lifecycle\IRecyclable.cs" />
     <Compile Include="Lifecycle\IStartable.cs" />
     <Compile Include="Logging\Factories\AbstractExtendedLoggerFactory.cs" />
+    <Compile Include="Logging\Factories\TraceLoggerFactory.cs" />
     <Compile Include="Logging\IContextProperties.cs" />
     <Compile Include="Logging\Factories\AbstractLoggerFactory.cs" />
     <Compile Include="Logging\Factories\ConsoleFactory.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Logging\Loggers\LevelFilteredLogger.cs" />
     <Compile Include="Logging\Loggers\NullLogger.cs" />
     <Compile Include="Logging\Loggers\StreamLogger.cs" />
+    <Compile Include="Logging\Loggers\TraceLogger.cs" />
     <Compile Include="Logging\Loggers\WebLogger.cs" />
     <Compile Include="Model\ComponentModel.cs" />
     <Compile Include="Model\Configuration\AbstractConfiguration.cs" />
