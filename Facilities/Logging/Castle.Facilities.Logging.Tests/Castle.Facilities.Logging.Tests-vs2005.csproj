@@ -151,6 +151,8 @@
     <Compile Include="NLogFacilityTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TraceFacilityTest.cs" />
+    <None Include="App.config" />
     <None Include="log4net.facilities.test.config" />
     <None Include="NLog.facilities.test.config" />
   </ItemGroup>

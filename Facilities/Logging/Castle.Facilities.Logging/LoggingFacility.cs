@@ -35,7 +35,8 @@ namespace Castle.Facilities.Logging
 		NLog,
 		Log4net,
 		ExtendedNLog,
-		ExtendedLog4net
+		ExtendedLog4net,
+        Trace
 	}
 
 	/// <summary>
@@ -298,6 +299,9 @@ namespace Castle.Facilities.Logging
 				case LoggerImplementation.Diagnostics:
 					loggerFactoryType = typeof(DiagnosticsLoggerFactory);
 					break;
+                case LoggerImplementation.Trace:
+			        loggerFactoryType = typeof (TraceLoggerFactory);
+			        break;
 				case LoggerImplementation.Web:
 					loggerFactoryType = typeof(WebLoggerFactory);
 					break;
