@@ -68,15 +68,29 @@ namespace Castle.MonoRail.Framework
 
 			string raw;
 
-			if (properties == null || returnValue == null)
+			if (returnValue != null)
 			{
-				raw = serializer.Serialize(returnValue);
+				if (properties == null)
+				{
+					raw = serializer.Serialize(returnValue);
+				}
+				else
+				{
+					Type normalized = returnType.IsArray ? returnType.GetElementType() : returnType;
+
+					raw = serializer.Serialize(returnValue, new PropertyConverter(normalized, properties));
+				}
 			}
 			else
 			{
-				Type normalized = returnType.IsArray ? returnType.GetElementType() : returnType;
-
-				raw = serializer.Serialize(returnValue, new PropertyConverter(normalized, properties));
+				if (returnType.IsArray)
+				{
+					raw = "[]";
+				}
+				else
+				{
+					raw = "{}";
+				}
 			}
 
 			response.Output.Write(raw);
