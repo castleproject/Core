@@ -14,6 +14,8 @@
 
 namespace Castle.Core.Logging
 {
+	#if !SILVERLIGHT
+
 	/// <summary>
 	/// Used to create the TraceLogger implementation of ILogger interface. See <see cref="TraceLogger"/>. 
 	/// </summary>
@@ -29,4 +31,6 @@ namespace Castle.Core.Logging
 			return new TraceLogger(name, level);
 		}
 	}
+
+	#endif
 }

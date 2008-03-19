@@ -17,21 +17,25 @@ namespace Castle.Core
 	using System;
 	using System.Collections;
 	using Castle.Core.Configuration;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Collection of <see cref="ParameterModel"/>
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class ParameterModelCollection : IEnumerable
 	{
-		private Hashtable dictionary;
+		private IDictionary<string, ParameterModel> dictionary;
+		private readonly object syncRoot = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ParameterModelCollection"/> class.
 		/// </summary>
 		public ParameterModelCollection()
 		{
-			dictionary = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
+			dictionary = new Dictionary<string, ParameterModel>(StringComparer.InvariantCultureIgnoreCase);
 		}
 
 		/// <summary>
@@ -63,7 +67,7 @@ namespace Castle.Core
 		/// </returns>
 		public bool Contains(object key)
 		{
-			return dictionary.Contains(key);
+			return dictionary.ContainsKey((string) key);
 		}
 
 		/// <summary>
@@ -145,7 +149,7 @@ namespace Castle.Core
 		/// </value>
 		public bool IsFixedSize
 		{
-			get { return dictionary.IsFixedSize; }
+			get { return false; }
 		}
 
 		/// <summary>
@@ -154,7 +158,12 @@ namespace Castle.Core
 		/// <value></value>
 		public ParameterModel this[object key]
 		{
-			get { return (ParameterModel) dictionary[key]; }
+			get
+			{
+				ParameterModel result;
+				dictionary.TryGetValue((string) key, out result);
+				return result;
+			}
 		}
 
 		/// <summary>
@@ -185,7 +194,7 @@ namespace Castle.Core
 		/// <value>The sync root.</value>
 		public object SyncRoot
 		{
-			get { return dictionary.SyncRoot; }
+			get { return syncRoot; }
 		}
 
 		/// <summary>
@@ -196,7 +205,7 @@ namespace Castle.Core
 		/// </value>
 		public bool IsSynchronized
 		{
-			get { return dictionary.IsSynchronized; }
+			get { return false; }
 		}
 
 		/// <summary>

@@ -17,11 +17,14 @@ namespace Castle.Core
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+    using System.Collections.Generic;
 
 	/// <summary>
 	/// Collection of <see cref="MethodMetaModel"/>
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class MethodMetaModelCollection : ReadOnlyCollectionBase
 	{
 		private IDictionary methodInfo2Model;
@@ -43,7 +46,7 @@ namespace Castle.Core
 		{
 			get
 			{
-				if (methodInfo2Model == null) methodInfo2Model = new HybridDictionary();
+				if (methodInfo2Model == null) methodInfo2Model = new Dictionary<object, object>();
 
 				return methodInfo2Model;
 			}

@@ -21,7 +21,9 @@ namespace Castle.Core
 	/// <summary>
 	/// Collection of <see cref="PropertySet"/>
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class PropertySetCollection : ReadOnlyCollectionBase
 	{
 		/// <summary>

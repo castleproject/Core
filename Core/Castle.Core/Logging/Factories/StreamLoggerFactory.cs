@@ -14,6 +14,8 @@
 
 namespace Castle.Core.Logging
 {
+	#if !SILVERLIGHT
+
 	using System;
 	using System.IO;
 	using System.Text;
@@ -39,4 +41,6 @@ namespace Castle.Core.Logging
 			return logger;
 		}
 	}
+
+	#endif
 }

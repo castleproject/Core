@@ -14,6 +14,8 @@
 
 namespace Castle.Core.Resource
 {
+	#if !SILVERLIGHT
+
 	using System;
 
 	public class ConfigResourceFactory : IResourceFactory
@@ -37,4 +39,6 @@ namespace Castle.Core.Resource
 			return Create(uri);
 		}
 	}
+	
+	#endif
 }

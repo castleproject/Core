@@ -17,7 +17,9 @@ namespace Castle.Core.Logging
 	using System;
 	using System.Runtime.Serialization;
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class LoggerException : Exception
 	{
 		public LoggerException(String message) : base(message)
@@ -28,8 +30,10 @@ namespace Castle.Core.Logging
 		{
 		}
 
+#if !SILVERLIGHT
 		public LoggerException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
+#endif
 	}
 }

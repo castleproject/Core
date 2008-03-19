@@ -14,6 +14,7 @@
 
 namespace Castle.Core.Logging
 {
+	#if !SILVERLIGHT
 	using System;
 
 	[Serializable]
@@ -29,4 +30,5 @@ namespace Castle.Core.Logging
 			return new WebLogger(name, level);
 		}
 	}
+	#endif
 }

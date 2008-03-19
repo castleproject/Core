@@ -14,6 +14,8 @@
 
 namespace Castle.Core.Logging
 {
+	#if !SILVERLIGHT
+
 	using System;
 	using System.Diagnostics;
 	using System.Collections.Generic;
@@ -215,4 +217,6 @@ namespace Castle.Core.Logging
 			return TraceEventType.Verbose;
 		}
 	}
+
+	#endif
 }

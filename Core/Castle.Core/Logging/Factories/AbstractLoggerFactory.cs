@@ -17,8 +17,12 @@ namespace Castle.Core.Logging
 	using System;
 	using System.IO;
 
+#if SILVERLIGHT
+	public abstract class AbstractLoggerFactory : ILoggerFactory
+#else
 	[Serializable]
 	public abstract class AbstractLoggerFactory : MarshalByRefObject, ILoggerFactory
+#endif
 	{
 		public virtual ILogger Create(Type type)
 		{
@@ -38,6 +42,7 @@ namespace Castle.Core.Logging
 
 		public abstract ILogger Create(String name, LoggerLevel level);
 
+#if !SILVERLIGHT
 		/// <summary>
 		/// Gets the configuration file.
 		/// </summary>
@@ -58,5 +63,6 @@ namespace Castle.Core.Logging
 
 			return result;
 		}
+#endif
 	}
 }

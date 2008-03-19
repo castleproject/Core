@@ -16,6 +16,7 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	public enum LifecycleStepType
 	{
@@ -26,19 +27,22 @@ namespace Castle.Core
 	/// <summary>
 	/// Represents a collection of ordered lifecycle steps.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class LifecycleStepCollection : ICollection
 	{
-		private IList commissionSteps;
-		private IList decommissionSteps;
+		private static object _syncRoot = new object();
+		private List<object> commissionSteps;
+		private List<object> decommissionSteps;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LifecycleStepCollection"/> class.
 		/// </summary>
 		public LifecycleStepCollection()
 		{
-			commissionSteps = new ArrayList();
-			decommissionSteps = new ArrayList();
+			commissionSteps = new List<object>();
+			decommissionSteps = new List<object>();
 		}
 
 		/// <summary>
@@ -146,7 +150,7 @@ namespace Castle.Core
 		/// <value></value>
 		public object SyncRoot
 		{
-			get { return commissionSteps.SyncRoot; }
+			get { return _syncRoot; }
 		}
 
 		/// <summary>
@@ -157,7 +161,7 @@ namespace Castle.Core
 		/// <value></value>
 		public bool IsSynchronized
 		{
-			get { return commissionSteps.IsSynchronized; }
+			get { return false; }
 		}
 
 		/// <summary>
@@ -169,7 +173,7 @@ namespace Castle.Core
 		/// </returns>
 		public IEnumerator GetEnumerator()
 		{
-			ArrayList newList = new ArrayList(commissionSteps);
+			List<object> newList = new List<object>(commissionSteps);
 			newList.AddRange(decommissionSteps);
 			return newList.GetEnumerator();
 		}

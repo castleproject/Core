@@ -20,9 +20,6 @@ namespace Castle.Core.Logging.Tests
 
 	using NUnit.Framework;
 
-	/// <summary>
-	/// Summary description for StreamLoggerTests.
-	/// </summary>
 	[TestFixture]
 	public class StreamLoggerTests
 	{

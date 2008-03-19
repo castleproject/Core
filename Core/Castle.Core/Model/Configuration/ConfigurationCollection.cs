@@ -20,7 +20,9 @@ namespace Castle.Core.Configuration
 	/// <summary>
 	/// A collection of <see cref="IConfiguration"/> objects.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class ConfigurationCollection : ReadOnlyCollectionBase
 	{
 		/// <summary>

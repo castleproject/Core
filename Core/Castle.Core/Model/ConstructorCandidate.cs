@@ -21,7 +21,9 @@ namespace Castle.Core
 	/// Represents a constructor of the component 
 	/// that the container can use to initialize it properly.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class ConstructorCandidate
 	{
 		private ConstructorInfo constructorInfo;

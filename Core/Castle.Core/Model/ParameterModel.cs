@@ -21,7 +21,9 @@ namespace Castle.Core
 	/// Represents a parameter. Usually the parameter
 	/// comes from the external world, ie, an external configuration.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class ParameterModel
 	{
 		private String name;

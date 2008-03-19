@@ -14,6 +14,8 @@
 
 namespace Castle.Core.Logging
 {
+	#if !SILVERLIGHT
+
 	using System;
 
 	[Serializable]
@@ -33,4 +35,6 @@ namespace Castle.Core.Logging
 			return logger;
 		}
 	}
+
+	#endif
 }

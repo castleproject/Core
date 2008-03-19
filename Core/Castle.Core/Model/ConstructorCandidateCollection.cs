@@ -20,7 +20,9 @@ namespace Castle.Core
 	/// <summary>
 	/// Collection of <see cref="ConstructorCandidate"/>
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class ConstructorCandidateCollection : ReadOnlyCollectionBase
 	{
 		private bool hasAmbiguousFewerArgumentsCandidate;

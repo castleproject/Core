@@ -16,8 +16,12 @@ namespace Castle.Core.Interceptor
 {
 	using System;
 
+#if SILVERLIGHT
+    public class StandardInterceptor : IInterceptor
+#else
 	[Serializable]
-	public class StandardInterceptor : MarshalByRefObject, IInterceptor
+    public class StandardInterceptor : MarshalByRefObject, IInterceptor
+#endif
 	{
 		public void Intercept(IInvocation invocation)
 		{

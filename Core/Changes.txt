@@ -1,3 +1,6 @@
+- Applied Mark's -- <mwatts42@gmail.com> -- patch that changes 
+  the Core to support being compiled for Silverlight 2
+
 - Applied Louis DeJardin's patch adding TraceLogger as a new logger implementation
 
 - Applied Chris Bilson's patch fixing CORE-15

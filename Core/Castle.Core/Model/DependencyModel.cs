@@ -27,7 +27,9 @@ namespace Castle.Core
 	/// Represents a dependency (other component or a 
 	/// fixed value available through external configuration).
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class DependencyModel
 	{
 		private String dependencyKey;

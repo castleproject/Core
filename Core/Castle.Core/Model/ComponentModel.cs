@@ -19,6 +19,7 @@ namespace Castle.Core
 	using System.Collections.Specialized;
 	using System.Diagnostics;
 	using Castle.Core.Configuration;
+    using System.Collections.Generic;
 
 	#region Enums
 
@@ -77,7 +78,9 @@ namespace Castle.Core
 	/// meta information collected about a component.
 	/// </summary>
 	[DebuggerDisplay("{Implementation} / {Service}")]
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public sealed class ComponentModel : GraphNode
 	{
 		public const string SkipRegistration = "skip.registration";
@@ -96,7 +99,10 @@ namespace Castle.Core
 		private Type implementation;
 
 		/// <summary>Extended properties</summary>
-		[NonSerialized] private volatile IDictionary extended;
+#if !SILVERLIGHT
+		[NonSerialized] 
+#endif
+		private volatile IDictionary extended;
 
 		/// <summary>Lifestyle for the component</summary>
 		private LifestyleType lifestyleType;
@@ -133,7 +139,10 @@ namespace Castle.Core
 		private volatile InterceptorReferenceCollection interceptors;
 
 		/// <summary>/// Custom dependencies/// </summary>
-		[NonSerialized] private IDictionary customDependencies;
+#if !SILVERLIGHT
+		[NonSerialized] 
+#endif
+		private IDictionary customDependencies;
 
 		private bool requiresGenericArguments;
 
@@ -204,7 +213,7 @@ namespace Castle.Core
 				{
 					lock (this)
 					{
-						if (extended == null) extended = new HybridDictionary();
+						if (extended == null) extended = new Dictionary<object, object>();
 					}
 				}
 				return extended;
@@ -389,7 +398,7 @@ namespace Castle.Core
 			{
 				lock (this)
 				{
-					if (customDependencies == null) customDependencies = new HybridDictionary();
+                    if (customDependencies == null) customDependencies = new Dictionary<object, object>();
 				}
 				return customDependencies;
 			}

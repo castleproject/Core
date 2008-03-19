@@ -20,7 +20,9 @@ namespace Castle.Core
 	/// <summary>
 	/// Represents a property and the respective dependency.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class PropertySet
 	{
 		private readonly PropertyInfo propertyInfo;

@@ -45,8 +45,8 @@ namespace Castle.Core.Tests
 		{
 			ReflectionBasedDictionaryAdapter dict = new ReflectionBasedDictionaryAdapter(new Customer(1, "name"));
 
-			Assert.IsFalse(dict.Contains("Age"));
-			Assert.IsFalse(dict.Contains("Address"));
+			Assert.IsFalse(dict.Contains("Age"), "Age property found when it should not be");
+            Assert.IsFalse(dict.Contains("Address"), "Address property found when it should not be");
 		}
 
 		[Test]

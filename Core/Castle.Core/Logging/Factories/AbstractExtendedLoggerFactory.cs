@@ -17,7 +17,11 @@ namespace Castle.Core.Logging.Factories
 	using System;
 	using System.IO;
 
+#if SILVERLIGHT
+	public abstract class AbstractExtendedLoggerFactory : IExtendedLoggerFactory
+#else
 	public abstract class AbstractExtendedLoggerFactory : MarshalByRefObject, IExtendedLoggerFactory
+#endif
 	{
 		#region IExtendedLoggerFactory Members
 
@@ -89,6 +93,7 @@ namespace Castle.Core.Logging.Factories
 
 		#endregion
 
+#if !SILVERLIGHT
 		/// <summary>
 		/// Gets the configuration file.
 		/// </summary>
@@ -109,5 +114,6 @@ namespace Castle.Core.Logging.Factories
 
 			return result;
 		}
+#endif
 	}
 }

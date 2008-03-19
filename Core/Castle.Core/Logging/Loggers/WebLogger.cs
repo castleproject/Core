@@ -14,6 +14,8 @@
 
 namespace Castle.Core.Logging
 {
+	#if !SILVERLIGHT
+
 	using System;
 	using System.Web;
 
@@ -117,4 +119,6 @@ namespace Castle.Core.Logging
 			return HttpContext.Current.Trace;
 		}
 	}
+
+	#endif
 }

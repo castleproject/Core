@@ -14,6 +14,8 @@
 
 namespace Castle.Core.Logging
 {
+	#if !SILVERLIGHT
+
 	using System;
 
 	/// <summary>
@@ -94,4 +96,5 @@ namespace Castle.Core.Logging
 			return new ConsoleLogger(String.Format("{0}.{1}", Name, newName), Level);
 		}
 	}
+	#endif
 }

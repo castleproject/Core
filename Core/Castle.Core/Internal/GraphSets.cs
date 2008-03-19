@@ -15,6 +15,7 @@
 namespace Castle.Core.Internal
 {
 	using System.Collections;
+    using System.Collections.Generic;
 
 	internal enum VertexColor
 	{
@@ -40,7 +41,7 @@ namespace Castle.Core.Internal
 	/// </summary>
 	internal class ColorsSet
 	{
-		private Hashtable items = new Hashtable();
+        private IDictionary<IVertex, VertexColor> items = new Dictionary<IVertex, VertexColor>();
 
 		public ColorsSet(IVertex[] items)
 		{
@@ -68,7 +69,7 @@ namespace Castle.Core.Internal
 	/// </summary>
 	internal class TimestampSet
 	{
-		private Hashtable items = new Hashtable();
+        private IDictionary<IVertex, int> items = new Dictionary<IVertex, int>();
 
 		public TimestampSet()
 		{

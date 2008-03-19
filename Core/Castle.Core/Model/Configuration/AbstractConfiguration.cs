@@ -26,7 +26,9 @@ namespace Castle.Core.Configuration
 	/// <para><b>AbstractConfiguration</b> makes easier to implementers 
 	/// to create a new version of <see cref="IConfiguration"/></para>
 	/// </remarks>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public abstract class AbstractConfiguration : IConfiguration
 	{
 		protected String internalName;
@@ -89,7 +91,7 @@ namespace Castle.Core.Configuration
 		{
 			try
 			{
-				return Convert.ChangeType(Value, type);
+				return Convert.ChangeType(Value, type, System.Threading.Thread.CurrentThread.CurrentCulture);
 			}
 			catch(Exception)
 			{

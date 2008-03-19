@@ -25,7 +25,9 @@ namespace Castle.Core
 	/// <summary>
 	/// Represents an reference to a Interceptor component.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class InterceptorReference : IEquatable<InterceptorReference>
 	{
 		private readonly InterceptorReferenceType refType;

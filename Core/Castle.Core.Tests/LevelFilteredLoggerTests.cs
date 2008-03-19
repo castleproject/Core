@@ -112,21 +112,23 @@ namespace Castle.Core.Logging.Tests
 		public void DefaultLevel()
 		{
 			Assert.AreEqual(LoggerLevel.Off, logger.Level, "Default LevelFilteredLogger.Level is not Off");
-		}
+        }
 
-		[Test]
-		public void Level()
-		{
-			// Set the level to all available levels,
-			// and then check that it was properly set
-			foreach (LoggerLevel level in Enum.GetValues(typeof(LoggerLevel)))
-			{
-				logger.Level = level;
-				Assert.AreEqual(level, logger.Level, "LevelFilteredLogger.Level did not change");
-			}
-		}
+#if !SILVERLIGHT
+		    [Test]
+		    public void Level()
+		    {
+			    // Set the level to all available levels,
+			    // and then check that it was properly set
+			    foreach (LoggerLevel level in Enum.GetValues(typeof(LoggerLevel)))
+			    {
+				    logger.Level = level;
+				    Assert.AreEqual(level, logger.Level, "LevelFilteredLogger.Level did not change");
+			    }
+		    }
+#endif
 
-		[Test]
+        [Test]
 		public void DefaultName()
 		{
 			Assert.AreEqual("unnamed", logger.Name, "Default LevelFilteredLogger.Name is not String.Empty");

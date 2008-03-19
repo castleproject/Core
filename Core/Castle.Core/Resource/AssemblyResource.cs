@@ -103,7 +103,7 @@ namespace Castle.Core.Resource
 			string nameFound = null;
 			foreach(String name in names)
 			{
-				if (String.Compare(resourcePath, name, true) == 0)
+				if (String.Compare(resourcePath, name, StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					nameFound = name;
 					break;

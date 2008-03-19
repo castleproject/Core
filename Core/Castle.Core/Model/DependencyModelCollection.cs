@@ -20,7 +20,9 @@ namespace Castle.Core
 	/// <summary>
 	/// Collection of <see cref="DependencyModel"/>.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class DependencyModelCollection : ReadOnlyCollectionBase
 	{
 		/// <summary>

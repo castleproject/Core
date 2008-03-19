@@ -21,7 +21,9 @@ namespace Castle.Core
 	/// <summary>
 	/// Collection of <see cref="InterceptorReference"/>
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class InterceptorReferenceCollection : ICollection
 	{
 		private readonly LinkedList list = new LinkedList();

@@ -14,6 +14,8 @@
 
 namespace Castle.Core.Logging
 {
+	#if !SILVERLIGHT
+
 	using System;
 	using System.Diagnostics;
 
@@ -143,4 +145,5 @@ namespace Castle.Core.Logging
 			}
 		}
 	}
+	#endif
 }

@@ -20,6 +20,8 @@ namespace Castle.Core.Resource
 	using System.Text;
 	using System.Xml;
 
+	#if !SILVERLIGHT
+
 	public class ConfigResource : AbstractResource
 	{
 		private readonly XmlNode configSectionNode;
@@ -74,4 +76,6 @@ namespace Castle.Core.Resource
 			return String.Format("ConfigResource: [{0}]", sectionName);
 		}
 	}
+
+	#endif
 }

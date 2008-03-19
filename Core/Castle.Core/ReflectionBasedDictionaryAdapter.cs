@@ -16,15 +16,15 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 	using System.Reflection;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Pendent
 	/// </summary>
 	public class ReflectionBasedDictionaryAdapter : IDictionary
 	{
-		private readonly IDictionary properties = new HybridDictionary(true);
+		private readonly Dictionary<string,object> properties = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReflectionBasedDictionaryAdapter"/> class.
@@ -58,7 +58,7 @@ namespace Castle.Core
 		/// 	<paramref name="key"/> is null. </exception>
 		public bool Contains(object key)
 		{
-			return properties.Contains(key);
+			return properties.ContainsKey(key.ToString());
 		}
 
 		/// <summary>
@@ -69,7 +69,9 @@ namespace Castle.Core
 		{
 			get
 			{
-				return properties[key];
+				object value;
+				properties.TryGetValue(key.ToString(), out value);
+				return value;
 			}
 			set { throw new NotImplementedException(); }
 		}
@@ -105,7 +107,7 @@ namespace Castle.Core
 		/// </returns>
 		IDictionaryEnumerator IDictionary.GetEnumerator()
 		{
-			return properties.GetEnumerator();
+			return new DictionaryEntryEnumeratorAdapter( properties.GetEnumerator() );
 		}
 
 		/// <summary>
@@ -214,7 +216,53 @@ namespace Castle.Core
 		/// </returns>
 		public IEnumerator GetEnumerator()
 		{
-			return properties.GetEnumerator();
+			return new DictionaryEntryEnumeratorAdapter( properties.GetEnumerator() );
+		}
+
+		class DictionaryEntryEnumeratorAdapter : IDictionaryEnumerator
+		{
+			private readonly IDictionaryEnumerator enumerator;
+			private KeyValuePair<string, object> current;
+
+			public DictionaryEntryEnumeratorAdapter(IDictionaryEnumerator enumerator)
+			{
+				this.enumerator = enumerator;
+			}
+
+			public object Key
+			{
+				get { return current.Key; }
+			}
+
+			public object Value
+			{
+				get { return current.Value; }
+			}
+
+			public DictionaryEntry Entry
+			{
+				get { return new DictionaryEntry(Key, Value); }
+			}
+
+			public bool MoveNext()
+			{
+				return enumerator.MoveNext();
+			}
+
+			public void Reset()
+			{
+				enumerator.Reset();
+			}
+
+			public object Current
+			{
+				get 
+				{
+
+					current = (KeyValuePair<string, object>) enumerator.Current;
+					return new DictionaryEntry(Key, Value); 
+				}
+			}
 		}
 	}
 }

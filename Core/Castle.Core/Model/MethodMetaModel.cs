@@ -21,7 +21,9 @@ namespace Castle.Core
 	/// Represents meta information associated with a method
 	/// (not yet defined)
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class MethodMetaModel
 	{
 		private readonly IConfiguration configNode;

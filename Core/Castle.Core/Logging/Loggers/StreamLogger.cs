@@ -26,7 +26,9 @@ namespace Castle.Core.Logging
 	/// <remarks>
 	/// This logger is not thread safe.
 	/// </remarks>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class StreamLogger : LevelFilteredLogger, IDisposable
 	{
 		private StreamWriter writer;

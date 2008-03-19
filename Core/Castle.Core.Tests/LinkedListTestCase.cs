@@ -320,7 +320,7 @@ namespace Castle.Core.Tests
 			
 			list.Add( "0" );
 			list.Add( "1" );
-			Assert.IsFalse( list.Replace("11", "x") ); 
+			Assert.IsFalse( list.Replace("11", "x"), "Successfully replaced 11 with x when it should have failed." ); 
 
 			Assert.AreEqual( 2, list.Count );
 			

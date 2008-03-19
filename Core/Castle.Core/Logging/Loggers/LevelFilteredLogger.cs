@@ -21,8 +21,12 @@ namespace Castle.Core.Logging
 	///	provides a LogLevel attribute and reroutes all functions into
 	///	one Log method.
 	/// </summary>
+#if SILVERLIGHT
+	public abstract class LevelFilteredLogger : ILogger
+#else  
 	[Serializable]
 	public abstract class LevelFilteredLogger : MarshalByRefObject, ILogger
+#endif
 	{
 		private LoggerLevel level = LoggerLevel.Off;
 		private String name = "unnamed";
@@ -49,7 +53,8 @@ namespace Castle.Core.Logging
 			ChangeName(name);
 		}
 
-		/// <summary>
+#if !SILVERLIGHT
+        /// <summary>
 		/// Keep the instance alive in a remoting scenario
 		/// </summary>
 		/// <returns></returns>
@@ -57,6 +62,7 @@ namespace Castle.Core.Logging
 		{
 			return null;
 		}
+#endif
 
 		public abstract ILogger CreateChildLogger(string name);
 

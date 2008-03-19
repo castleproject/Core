@@ -40,9 +40,13 @@ namespace Castle.Core.Resource
 		{
 			Assembly assembly = ObtainAssembly(resource.Host);
 
-			string[] paths = resource.Path.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
+#if SILVERLIGHT
+            string[] paths = resource.Path.Split(new char[] { '/' }).FindAll(s => !string.IsNullOrEmpty(s));
+#else
+            string[] paths = resource.Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+#endif
 
-			if (paths.Length != 2)
+            if (paths.Length != 2)
 			{
 				throw new ResourceException("AssemblyBundleResource does not support paths with more than 2 levels in depth. See " + resource.Path);
 			}

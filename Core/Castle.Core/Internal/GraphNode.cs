@@ -16,12 +16,17 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
+    using System.Collections.Generic;
 
+#if SILVERLIGHT
+	public class GraphNode : IVertex
+#else
 	[Serializable]
 	public class GraphNode : MarshalByRefObject, IVertex
+#endif
 	{
-		private ArrayList incoming;
-		private ArrayList outgoing;
+        private List<GraphNode> incoming;
+        private List<GraphNode> outgoing;
 
 		public GraphNode()
 		{
@@ -52,20 +57,20 @@ namespace Castle.Core
 			node.Incoming.Add(this);
 		}
 
-		private ArrayList Incoming
+		private List<GraphNode> Incoming
 		{
 			get
 			{
-				if (incoming == null) incoming = new ArrayList();
+                if (incoming == null) incoming = new List<GraphNode>();
 				return incoming;
 			}
 		}
 
-		private ArrayList Outgoing
+        private List<GraphNode> Outgoing
 		{
 			get
 			{
-				if (outgoing == null) outgoing = new ArrayList();
+                if (outgoing == null) outgoing = new List<GraphNode>();
 				return outgoing;
 			}
 		}
@@ -78,7 +83,7 @@ namespace Castle.Core
 			get
 			{
 				if (incoming == null) return new GraphNode[0];
-				return (GraphNode[]) incoming.ToArray(typeof(GraphNode));
+				return incoming.ToArray();
 			}
 		}
 
@@ -90,7 +95,7 @@ namespace Castle.Core
 			get
 			{
 				if (outgoing == null) return new GraphNode[0];
-				return (GraphNode[]) outgoing.ToArray(typeof(GraphNode));
+				return outgoing.ToArray();
 			}
 		}
 

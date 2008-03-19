@@ -17,7 +17,9 @@ namespace Castle.Core.Internal
 	using System;
 	using System.Collections;
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class LinkedList : IList
 	{
 		private LinkNode internalhead;
@@ -311,7 +313,9 @@ namespace Castle.Core.Internal
 		}
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	internal class LinkNode
 	{
 		private object _value;
