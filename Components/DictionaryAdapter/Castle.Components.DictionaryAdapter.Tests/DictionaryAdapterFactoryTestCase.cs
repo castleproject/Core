@@ -124,6 +124,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void UpdateAdapterAndRead_TypePrefix_Matches()
+		{
+			IPersonWithTypePrefixOverride person = 
+				factory.GetAdapter<IPersonWithTypePrefixOverride>(dictionary);
+			person.Height = 72;
+
+			Assert.AreEqual(72, person.Height);
+			Assert.AreEqual(72, dictionary["Castle.Components.DictionaryAdapter.Tests.IPersonWithTypePrefixOverride#Height"]);
+		}
+
+		[Test]
 		public void ReadAdapter_NoPrefixUnitialized_ReturnsDefaults()
 		{
 			IPerson person = factory.GetAdapter<IPerson>(dictionary);
@@ -719,6 +730,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	{
 		[DictionaryKey("Eye__Colour")]
 		string EyeColour { get; set; }
+	}
+
+	[DictionaryTypeKeyPrefix]
+	public interface IPersonWithTypePrefixOverride : IPersonWithPrefixOverride
+	{
+		int Height { get; set; }
 	}
 
 	public interface IPersonWithPrefixOverrideFurtherOverride : IPersonWithPrefixOverride

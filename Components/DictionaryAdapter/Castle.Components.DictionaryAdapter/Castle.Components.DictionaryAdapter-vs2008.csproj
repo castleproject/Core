@@ -61,6 +61,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AbstractDictionaryAdapter.cs" />
     <Compile Include="Attributes\AttributesUtil.cs" />
+    <Compile Include="Attributes\DictionaryTypeKeyPrefixAttribute.cs" />
     <Compile Include="Attributes\DictionaryBehaviorAttribute.cs" />
     <Compile Include="Attributes\DictionaryStringListAttribute.cs" />
     <Compile Include="Attributes\DictionaryComponentAttribute.cs" />

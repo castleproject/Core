@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Added DictionaryTypeKeyPrefixAttribute to use the interface type for scoping
+
 - Added DictionaryStringListAttribute to support delimited string conversion
 
 - Created PropertyDescriptor to simplify IL generation
