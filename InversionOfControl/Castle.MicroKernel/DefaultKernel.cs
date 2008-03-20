@@ -1115,6 +1115,16 @@ namespace Castle.MicroKernel
 			facilities.Add(facility);
 		}
 
+		public void AddFacility<T>(String key) where T : IFacility, new()
+		{
+			AddFacility(key, new T());
+		}
+
+		public void AddFacility<T>() where T : IFacility, new()
+		{
+			AddFacility<T>(typeof(T).FullName);
+		}
+
 		/// <summary>
 		/// Returns the facilities registered on the kernel.
 		/// </summary>

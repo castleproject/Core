@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Added generic AddFacility methods to kernel.
+
 - Added generalized configuration support to ComponentRegistration.
 
 - Added IWindsorInstaller interface to enhance Windsor component installation.

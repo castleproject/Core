@@ -259,6 +259,29 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
+		/// Creates and adds an <see cref="IFacility"/> facility to the container.
+		/// </summary>
+		/// <typeparam name="T">The facility type.</typeparam>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public IWindsorContainer AddFacility<T>(String key) where T : IFacility, new()
+		{
+			kernel.AddFacility<T>(key);
+			return this;
+		}
+
+		/// <summary>
+		/// Creates and adds an <see cref="IFacility"/> facility to the container.
+		/// </summary>
+		/// <typeparam name="T">The facility type.</typeparam>
+		/// <returns></returns>
+		public IWindsorContainer AddFacility<T>() where T : IFacility, new()
+		{
+			kernel.AddFacility<T>();
+			return this;
+		}
+
+		/// <summary>
 		/// Adds a component to be managed by the container
 		/// </summary>
 		/// <param name="key"></param>

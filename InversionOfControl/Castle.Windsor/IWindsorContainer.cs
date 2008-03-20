@@ -36,11 +36,26 @@ namespace Castle.Windsor
 		string Name { get; }
 
 		/// <summary>
-		/// Registers a facility within the kernel.
+		/// Registers a facility within the container.
 		/// </summary>
 		/// <param name="key">The key by which the <see cref="IFacility"/> gets indexed.</param>
 		/// <param name="facility">The <see cref="IFacility"/> to add to the container.</param>
 		IWindsorContainer AddFacility(String key, IFacility facility);
+
+		/// <summary>
+		/// Creates and adds an <see cref="IFacility"/> facility to the container.
+		/// </summary>
+		/// <typeparam name="T">The facility type.</typeparam>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		IWindsorContainer AddFacility<T>(String key) where T : IFacility, new();
+
+		/// <summary>
+		/// Creates and adds an <see cref="IFacility"/> facility to the container.
+		/// </summary>
+		/// <typeparam name="T">The facility type.</typeparam>
+		/// <returns></returns>
+		IWindsorContainer AddFacility<T>() where T : IFacility, new();
 
 		/// <summary>
 		/// Adds a component to be managed by the container

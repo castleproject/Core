@@ -60,7 +60,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		private void ApplyReferenceList(IKernel kernel, ComponentModel model,
-										String key, IEnumerable<String> componentKeys,
+										String key, IEnumerable<String> items,
 			                            ServiceOverride serviceOverride)
 		{
 			MutableConfiguration list = new MutableConfiguration("list");
@@ -70,9 +70,9 @@ namespace Castle.MicroKernel.Registration
 				list.Attributes.Add("type", serviceOverride.Type.AssemblyQualifiedName);	
 			}
 
-			foreach (String componentKey in componentKeys )
+			foreach (String item in items )
 			{
-				String reference = FormattedReferenceExpression(componentKey);
+				String reference = FormattedReferenceExpression(item);
 				MutableConfiguration node = new MutableConfiguration("item", reference);
 				list.Children.Add(node);
 			}
