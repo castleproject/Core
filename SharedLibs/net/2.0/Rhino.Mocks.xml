@@ -374,6 +374,33 @@
       <value>
       </value>
     </member>
+    <member name="T:Rhino.Mocks.Constraints.ContainsAll">
+      <summary>
+            Constrains that all elements are in the parameter list
+            </summary>
+    </member>
+    <member name="M:Rhino.Mocks.Constraints.ContainsAll.#ctor(System.Collections.IEnumerable)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rhino.Mocks.Constraints.ContainsAll" /> class.
+            </summary>
+      <param name="these">The these.</param>
+    </member>
+    <member name="M:Rhino.Mocks.Constraints.ContainsAll.Eval(System.Object)">
+      <summary>
+            determains if the object pass the constraints
+            </summary>
+      <param name="obj">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="P:Rhino.Mocks.Constraints.ContainsAll.Message">
+      <summary>
+            Gets the message for this constraint
+            </summary>
+      <value>
+      </value>
+    </member>
     <member name="T:Rhino.Mocks.Constraints.Or">
       <summary>
             Combines two constraints, constraint pass if either is fine.
@@ -601,6 +628,79 @@
       <value>
       </value>
     </member>
+    <member name="M:Rhino.Mocks.Constraints.AllPropertiesMatchConstraint.#ctor(System.Object)">
+      <summary>
+            Initializes a new constraint object.
+            </summary>
+      <param name="expected">The expected object, The actual object is passed in as a parameter to the <see cref="M:Rhino.Mocks.Constraints.AllPropertiesMatchConstraint.Eval(System.Object)" /> method</param>
+    </member>
+    <member name="M:Rhino.Mocks.Constraints.AllPropertiesMatchConstraint.Eval(System.Object)">
+      <summary>
+            Evaluate this constraint.
+            </summary>
+      <param name="obj">The actual object that was passed in the method call to the mock.</param>
+      <returns>True when the constraint is met, else false.</returns>
+    </member>
+    <member name="M:Rhino.Mocks.Constraints.AllPropertiesMatchConstraint.CheckReferenceType(System.Object,System.Object)">
+      <summary>
+            Checks if the properties of the <paramref name="actual" /> object
+            are the same as the properies of the <paramref name="expected" /> object.
+            </summary>
+      <param name="expected">The expected object</param>
+      <param name="actual">The actual object</param>
+      <returns>True when both objects have the same values, else False.</returns>
+    </member>
+    <member name="M:Rhino.Mocks.Constraints.AllPropertiesMatchConstraint.CheckValue(System.Object,System.Object)">
+      <summary>
+      </summary>
+      <param name="expected">
+      </param>
+      <param name="actual">
+      </param>
+      <returns>
+      </returns>
+      <remarks>This is the real heart of the beast.</remarks>
+    </member>
+    <member name="M:Rhino.Mocks.Constraints.AllPropertiesMatchConstraint.CheckProperties(System.Object,System.Object)">
+      <summary>
+            Used by CheckReferenceType to check all properties of the reference type.
+            </summary>
+      <param name="expected">The expected object</param>
+      <param name="actual">The actual object</param>
+      <returns>True when both objects have the same values, else False.</returns>
+    </member>
+    <member name="M:Rhino.Mocks.Constraints.AllPropertiesMatchConstraint.CheckFields(System.Object,System.Object)">
+      <summary>
+            Used by CheckReferenceType to check all fields of the reference type.
+            </summary>
+      <param name="expected">The expected object</param>
+      <param name="actual">The actual object</param>
+      <returns>True when both objects have the same values, else False.</returns>
+    </member>
+    <member name="M:Rhino.Mocks.Constraints.AllPropertiesMatchConstraint.CheckCollection(System.Collections.IEnumerable,System.Collections.IEnumerable)">
+      <summary>
+            Checks the items of both collections
+            </summary>
+      <param name="expectedCollection">The expected collection</param>
+      <param name="actualCollection">
+      </param>
+      <returns>True if both collections contain the same items in the same order.</returns>
+    </member>
+    <member name="M:Rhino.Mocks.Constraints.AllPropertiesMatchConstraint.BuildPropertyName">
+      <summary>
+            Builds a propertyname from the Stack _properties like 'Order.Product.Price'
+            to be used in the error message.
+            </summary>
+      <returns>A nested property name.</returns>
+    </member>
+    <member name="P:Rhino.Mocks.Constraints.AllPropertiesMatchConstraint.Message">
+      <summary>
+            Rhino.Mocks uses this property to generate an error message.
+            </summary>
+      <value>
+            A message telling the tester why the constraint failed.
+            </value>
+    </member>
     <member name="T:Rhino.Mocks.Constraints.PublicField">
       <summary>
             Central location for constraints for object's public fields
@@ -801,6 +901,13 @@
       <param name="index">The zero-based index of the list element.</param>
       <param name="constraint">The constraint which should be applied to the list element.</param>
     </member>
+    <member name="M:Rhino.Mocks.Constraints.List.ContainsAll(System.Collections.IEnumerable)">
+      <summary>
+             Determines that all elements of the specified collection are in the the parameter collection 
+            </summary>
+      <param name="collection">The collection to compare against</param>
+      <returns>The constraint which should be applied to the list parameter.</returns>
+    </member>
     <member name="T:Rhino.Mocks.Constraints.Property">
       <summary>
             Central location for constraints for object's properties
@@ -874,6 +981,21 @@
       <returns>
       </returns>
     </member>
+    <member name="M:Rhino.Mocks.Constraints.Property.AllPropertiesMatch(System.Object)">
+      <summary>
+            constraints the parameter to have the exact same property values as the expected object.
+            </summary>
+      <param name="expected">An object, of the same type as the parameter, whose properties are set with the expected values.</param>
+      <returns>An instance of the constraint that will do the actual check.</returns>
+      <remarks>
+            The parameter's public property values and public field values will be matched against the expected object's
+            public property values and public field values. The first mismatch will be reported and no further matching is done.
+            The matching is recursive for any property or field that has properties or fields of it's own.
+            Collections are supported through IEnumerable, which means the constraint will check if the actual and expected
+            collection contain the same values in the same order, where the values contained by the collection can have properties
+            and fields of their own that will be checked as well because of the recursive nature of this constraint.
+            </remarks>
+    </member>
     <member name="T:Rhino.Mocks.Constraints.Text">
       <summary>
             Central location for all text related constraints
@@ -898,6 +1020,37 @@
       <summary>
             Constrain the argument to validate according to regex pattern
             </summary>
+    </member>
+    <member name="T:Rhino.Mocks.DoNotExpect">
+      <summary>
+            Allows expectations to be set on methods that should never be called.
+            For methods with void return value, you need to use LastCall or
+            DoNotExpect.Call() with a delegate.
+            </summary>
+    </member>
+    <member name="T:Rhino.Mocks.DoNotExpect.Action">
+      <summary>
+             A delegate that executes an action
+            </summary>
+    </member>
+    <member name="M:Rhino.Mocks.DoNotExpect.Call(System.Object)">
+      <summary>
+            Sets LastCall.Repeat.Never() on /any/ proxy on /any/ repository on the current thread.
+            This method if not safe for multi threading scenarios.
+            </summary>
+    </member>
+    <member name="M:Rhino.Mocks.DoNotExpect.Call(Rhino.Mocks.DoNotExpect.Action)">
+      <summary>
+            Accepts a delegate that will execute inside the method which
+            LastCall.Repeat.Never() will be applied to.
+            It is expected to be used with anonymous delegates / lambda expressions and only one
+            method should be called.
+            </summary>
+      <example>
+            IService mockSrv = mocks.CreateMock(typeof(IService)) as IService;
+            DoNotExpect.Call(delegate{ mockSrv.Stop(); });
+            ...
+            </example>
     </member>
     <member name="T:Rhino.Mocks.Exceptions.ExpectationViolationException">
       <summary>
@@ -1470,6 +1623,27 @@
             Doesn't log anything, just makes happy noises
             </summary>
     </member>
+    <member name="M:Rhino.Mocks.Impl.NullLogger.LogRecordedExpectation(Castle.Core.Interceptor.IInvocation,Rhino.Mocks.Interfaces.IExpectation)">
+      <summary>
+            Logs the expectation as is was recorded
+            </summary>
+      <param name="invocation">The invocation.</param>
+      <param name="expectation">The expectation.</param>
+    </member>
+    <member name="M:Rhino.Mocks.Impl.NullLogger.LogReplayedExpectation(Castle.Core.Interceptor.IInvocation,Rhino.Mocks.Interfaces.IExpectation)">
+      <summary>
+            Logs the expectation as it was recorded
+            </summary>
+      <param name="invocation">The invocation.</param>
+      <param name="expectation">The expectation.</param>
+    </member>
+    <member name="M:Rhino.Mocks.Impl.NullLogger.LogUnexpectedMethodCall(Castle.Core.Interceptor.IInvocation,System.String)">
+      <summary>
+            Logs the unexpected method call.
+            </summary>
+      <param name="invocation">The invocation.</param>
+      <param name="message">The message.</param>
+    </member>
     <member name="T:Rhino.Mocks.Impl.RemotingMock.IRemotingProxyOperation">
       <summary>
             Operation on a remoting proxy
@@ -1817,45 +1991,73 @@
     </member>
     <member name="T:Rhino.Mocks.Impl.TraceWriterExpectationLogger">
       <summary>
-      </summary>
+            Write rhino mocks log info to the trace
+            </summary>
     </member>
     <member name="M:Rhino.Mocks.Impl.TraceWriterExpectationLogger.#ctor">
       <summary>
-      </summary>
+            Initializes a new instance of the <see cref="T:Rhino.Mocks.Impl.TraceWriterExpectationLogger" /> class.
+            </summary>
     </member>
     <member name="M:Rhino.Mocks.Impl.TraceWriterExpectationLogger.#ctor(System.Boolean,System.Boolean,System.Boolean)">
       <summary>
-      </summary>
-      <param name="logRecorded">
-      </param>
-      <param name="logReplayed">
-      </param>
-      <param name="logUnexpected">
-      </param>
+            Initializes a new instance of the <see cref="T:Rhino.Mocks.Impl.TraceWriterExpectationLogger" /> class.
+            </summary>
+      <param name="logRecorded">if set to <c>true</c> [log recorded].</param>
+      <param name="logReplayed">if set to <c>true</c> [log replayed].</param>
+      <param name="logUnexpected">if set to <c>true</c> [log unexpected].</param>
     </member>
     <member name="M:Rhino.Mocks.Impl.TraceWriterExpectationLogger.LogRecordedExpectation(Castle.Core.Interceptor.IInvocation,Rhino.Mocks.Interfaces.IExpectation)">
       <summary>
-      </summary>
-      <param name="invocation">
-      </param>
-      <param name="expectation">
-      </param>
+            Logs the expectation as is was recorded
+            </summary>
+      <param name="invocation">The invocation.</param>
+      <param name="expectation">The expectation.</param>
     </member>
     <member name="M:Rhino.Mocks.Impl.TraceWriterExpectationLogger.LogReplayedExpectation(Castle.Core.Interceptor.IInvocation,Rhino.Mocks.Interfaces.IExpectation)">
       <summary>
-      </summary>
-      <param name="invocation">
-      </param>
-      <param name="expectation">
-      </param>
+            Logs the expectation as it was recorded
+            </summary>
+      <param name="invocation">The invocation.</param>
+      <param name="expectation">The expectation.</param>
     </member>
     <member name="M:Rhino.Mocks.Impl.TraceWriterExpectationLogger.LogUnexpectedMethodCall(Castle.Core.Interceptor.IInvocation,System.String)">
       <summary>
-      </summary>
-      <param name="invocation">
-      </param>
-      <param name="message">
-      </param>
+            Logs the unexpected method call.
+            </summary>
+      <param name="invocation">The invocation.</param>
+      <param name="message">The message.</param>
+    </member>
+    <member name="T:Rhino.Mocks.Impl.TraceWriterWithStackTraceExpectationWriter">
+      <summary>
+            Writes log information as stack traces about rhino mocks activity
+            </summary>
+    </member>
+    <member name="F:Rhino.Mocks.Impl.TraceWriterWithStackTraceExpectationWriter.AlternativeWriter">
+      <summary>
+            Allows to redirect output to a different location.
+            </summary>
+    </member>
+    <member name="M:Rhino.Mocks.Impl.TraceWriterWithStackTraceExpectationWriter.LogRecordedExpectation(Castle.Core.Interceptor.IInvocation,Rhino.Mocks.Interfaces.IExpectation)">
+      <summary>
+            Logs the expectation as is was recorded
+            </summary>
+      <param name="invocation">The invocation.</param>
+      <param name="expectation">The expectation.</param>
+    </member>
+    <member name="M:Rhino.Mocks.Impl.TraceWriterWithStackTraceExpectationWriter.LogReplayedExpectation(Castle.Core.Interceptor.IInvocation,Rhino.Mocks.Interfaces.IExpectation)">
+      <summary>
+            Logs the expectation as it was recorded
+            </summary>
+      <param name="invocation">The invocation.</param>
+      <param name="expectation">The expectation.</param>
+    </member>
+    <member name="M:Rhino.Mocks.Impl.TraceWriterWithStackTraceExpectationWriter.LogUnexpectedMethodCall(Castle.Core.Interceptor.IInvocation,System.String)">
+      <summary>
+            Logs the unexpected method call.
+            </summary>
+      <param name="invocation">The invocation.</param>
+      <param name="message">The message.</param>
     </member>
     <member name="T:Rhino.Mocks.Interfaces.IPartialMockMarker">
       <summary>
@@ -1963,6 +2165,23 @@
       <param name="type">Type.</param>
       <param name="argumentsForConstructor">Arguments for the class' constructor, if mocking a concrete class</param>
     </member>
+    <member name="M:Rhino.Mocks.MockRepository.CreateMockWithRemoting(System.Type,System.Object[])">
+      <summary>
+            Creates a remoting mock for the specified type.
+            </summary>
+      <param name="type">Type.</param>
+      <param name="argumentsForConstructor">Arguments for the class' constructor, if mocking a concrete class</param>
+    </member>
+    <member name="M:Rhino.Mocks.MockRepository.CreateMockWithRemoting``1(System.Object[])">
+      <summary>
+            Creates a remoting mock for the specified type.
+            </summary>
+      <typeparam name="T">
+      </typeparam>
+      <param name="argumentsForConstructor">Arguments for the class' constructor, if mocking a concrete class</param>
+      <returns>
+      </returns>
+    </member>
     <member name="M:Rhino.Mocks.MockRepository.CreateMultiMock(System.Type,System.Type[])">
       <summary>
             Creates a mock from several types, with strict semantics.
@@ -2001,6 +2220,23 @@
             </summary>
       <param name="type">Type.</param>
       <param name="argumentsForConstructor">Arguments for the class' constructor, if mocking a concrete class</param>
+    </member>
+    <member name="M:Rhino.Mocks.MockRepository.DynamicMockWithRemoting(System.Type,System.Object[])">
+      <summary>
+            Creates a dynamic mock for the specified type.
+            </summary>
+      <param name="type">Type.</param>
+      <param name="argumentsForConstructor">Arguments for the class' constructor, if mocking a concrete class</param>
+    </member>
+    <member name="M:Rhino.Mocks.MockRepository.DynamicMockWithRemoting``1(System.Object[])">
+      <summary>
+            Creates a dynamic mock for the specified type.
+            </summary>
+      <typeparam name="T">
+      </typeparam>
+      <param name="argumentsForConstructor">Arguments for the class' constructor, if mocking a concrete class</param>
+      <returns>
+      </returns>
     </member>
     <member name="M:Rhino.Mocks.MockRepository.PartialMock(System.Type,System.Object[])">
       <summary>
@@ -2942,7 +3178,7 @@
             This method will call the original method
             </summary>
     </member>
-    <member name="F:Rhino.Mocks.Impl.RepeatableOption.OriginalCallBypassingMokcing">
+    <member name="F:Rhino.Mocks.Impl.RepeatableOption.OriginalCallBypassingMocking">
       <summary>
             This method will call the original method, bypassing the mocking layer
             </summary>
@@ -4218,8 +4454,25 @@
     </member>
     <member name="M:Castle.DynamicProxy.Serialization.ProxyObjectReference.ResetScope">
       <summary>
-            Usefull for test cases
+            Resets the <see cref="P:Castle.DynamicProxy.Serialization.ProxyObjectReference.ModuleScope" /> used for deserialization to a new scope.
             </summary>
+      <remarks>This is useful for test cases.</remarks>
+    </member>
+    <member name="M:Castle.DynamicProxy.Serialization.ProxyObjectReference.SetScope(Castle.DynamicProxy.ModuleScope)">
+      <summary>
+            Resets the <see cref="P:Castle.DynamicProxy.Serialization.ProxyObjectReference.ModuleScope" /> used for deserialization to a given <paramref name="scope" />.
+            </summary>
+      <param name="scope">The scope to be used for deserialization.</param>
+      <remarks>By default, the deserialization process uses a different scope than the rest of the application, which can lead to multiple proxies
+            being generated for the same type. By explicitly setting the deserialization scope to the application's scope, this can be avoided.</remarks>
+    </member>
+    <member name="P:Castle.DynamicProxy.Serialization.ProxyObjectReference.ModuleScope">
+      <summary>
+            Gets the <see cref="T:Castle.DynamicProxy.ModuleScope" /> used for deserialization.
+            </summary>
+      <value>As <see cref="T:Castle.DynamicProxy.Serialization.ProxyObjectReference" /> has no way of automatically determining the scope used by the application (and the application
+            might use more than one scope at the same time), <see cref="T:Castle.DynamicProxy.Serialization.ProxyObjectReference" /> uses a dedicated scope instance for deserializing proxy
+            types. This instance can be reset and set to a specific value via <see cref="M:Castle.DynamicProxy.Serialization.ProxyObjectReference.ResetScope" /> and <see cref="M:Castle.DynamicProxy.Serialization.ProxyObjectReference.SetScope(Castle.DynamicProxy.ModuleScope)" />.</value>
     </member>
     <member name="T:Castle.DynamicProxy.IProxyGenerationHook">
       <summary>
@@ -4444,8 +4697,8 @@
             If this <see cref="T:Castle.DynamicProxy.ModuleScope" /> was created without indicating that the assembly should be saved, this method does nothing.
             </para>
       </remarks>
-      <exception cref="T:System.InvalidOperationException">Both a strong-named and a weak-named assembly have been generated or no assembly has been
-            generated.</exception>
+      <exception cref="T:System.InvalidOperationException">Both a strong-named and a weak-named assembly have been generated.</exception>
+      <returns>The path of the generated assembly file, or null if no file has been generated.</returns>
     </member>
     <member name="M:Castle.DynamicProxy.ModuleScope.SaveAssembly(System.Boolean)">
       <summary>
@@ -4465,6 +4718,7 @@
       </remarks>
       <exception cref="T:System.InvalidOperationException">No assembly has been generated that matches the <paramref name="strongNamed" /> parameter.
             </exception>
+      <returns>The path of the generated assembly file, or null if no file has been generated.</returns>
     </member>
     <member name="P:Castle.DynamicProxy.ModuleScope.RWLock">
       <summary>
@@ -4523,6 +4777,14 @@
       <summary>
             Initializes a new instance of the <see cref="T:Castle.DynamicProxy.PersistentProxyBuilder" /> class.
             </summary>
+    </member>
+    <member name="M:Castle.DynamicProxy.PersistentProxyBuilder.SaveAssembly">
+      <summary>
+            Saves the generated assembly to a physical file. Note that this renders the <see cref="T:Castle.DynamicProxy.PersistentProxyBuilder" /> unusable.
+            </summary>
+      <returns>The path of the generated assembly file, or null if no assembly has been generated.</returns>
+      <remarks>This method does not support saving multiple files. If both a signed and an unsigned module have been generated, use the 
+            respective methods of the <see cref="T:Castle.DynamicProxy.ModuleScope" />.</remarks>
     </member>
     <member name="M:Castle.DynamicProxy.ProxyGenerationOptions.#ctor(Castle.DynamicProxy.IProxyGenerationHook)">
       <summary>
@@ -6423,6 +6685,13 @@
       <param name="newName">Ignored</param>
       <returns>This ILogger instance.</returns>
     </member>
+    <member name="M:Castle.Core.Logging.WebLogger.TryToGetTraceContext">
+      <summary>
+            Tries to get the current http context's trace context.
+            </summary>
+      <returns>The current http context's trace context or null if none is 
+            available</returns>
+    </member>
     <member name="T:Castle.Core.Logging.LoggerLevel">
       <summary>
             Supporting Logger levels.
@@ -6456,6 +6725,25 @@
     <member name="F:Castle.Core.Logging.LoggerLevel.Debug">
       <summary>
             Debug logging level
+            </summary>
+    </member>
+    <member name="T:Castle.Core.Configuration.Xml.XmlConfigurationDeserializer">
+      <summary>
+            Pendent
+            </summary>
+    </member>
+    <member name="M:Castle.Core.Configuration.Xml.XmlConfigurationDeserializer.Deserialize(System.Xml.XmlNode)">
+      <summary>
+            Deserializes the specified node into an abstract representation of configuration.
+            </summary>
+      <param name="node">The node.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Castle.Core.Configuration.Xml.XmlConfigurationDeserializer.GetConfigValue(System.String)">
+      <summary>
+            If a config value is an empty string we return null, this is to keep
+            backward compability with old code
             </summary>
     </member>
     <member name="T:Castle.Core.Configuration.IConfiguration">
@@ -6749,6 +7037,9 @@
     <member name="F:Castle.Core.ComponentModel.interceptors">
       <summary>Interceptors associated</summary>
     </member>
+    <member name="F:Castle.Core.ComponentModel.customDependencies">
+      <summary>/// Custom dependencies/// </summary>
+    </member>
     <member name="M:Castle.Core.ComponentModel.#ctor(System.String,System.Type,System.Type)">
       <summary>
             Constructs a ComponentModel
@@ -6853,6 +7144,12 @@
             registered here, so the kernel (as a matter 
             of fact the handler) can check them
             </summary>
+    </member>
+    <member name="P:Castle.Core.ComponentModel.CustomDependencies">
+      <summary>
+            Gets or sets the custom dependencies.
+            </summary>
+      <value>The custom dependencies.</value>
     </member>
     <member name="T:Castle.Core.ConstructorCandidate">
       <summary>
@@ -7033,6 +7330,20 @@
             </summary>
       <param name="serviceType">Type of the service.</param>
     </member>
+    <member name="M:Castle.Core.InterceptorReference.WithKey(System.String)">
+      <summary>
+            Gets an <see cref="T:Castle.Core.InterceptorReference" /> for the component key.
+            </summary>
+      <param name="key">The component key.</param>
+      <returns>The <see cref="T:Castle.Core.InterceptorReference" /></returns>
+    </member>
+    <member name="M:Castle.Core.InterceptorReference.WithType(System.Type)">
+      <summary>
+            Gets an <see cref="T:Castle.Core.InterceptorReference" /> for the service.
+            </summary>
+      <param name="service">The service.</param>
+      <returns>The <see cref="T:Castle.Core.InterceptorReference" /></returns>
+    </member>
     <member name="P:Castle.Core.InterceptorReference.ServiceType">
       <summary>
             Gets the type of the service.
@@ -7110,6 +7421,12 @@
             An <see cref="T:System.Collections.IEnumerator" />
             that can be used to iterate through the collection.
             </returns>
+    </member>
+    <member name="M:Castle.Core.InterceptorReferenceCollection.AddIfNotInCollection(Castle.Core.InterceptorReference)">
+      <summary>
+            Adds the interceptor to the end of the interceptors list if it does not exist already.
+            </summary>
+      <param name="interceptorReference">The interceptor reference.</param>
     </member>
     <member name="P:Castle.Core.InterceptorReferenceCollection.HasInterceptors">
       <summary>
@@ -7558,10 +7875,10 @@
       <summary>
       </summary>
     </member>
-    <member name="T:Castle.Core.Resource.AbstractStreamResource.StreamHideCloseDelegate">
+    <member name="F:Castle.Core.Resource.AbstractStreamResource.CreateStream">
       <summary>
-            Do not allow closing and disposal of the 
-            underlying <see cref="P:Castle.Core.Resource.AbstractStreamResource.Stream" />.
+            This returns a new stream instance each time it is called.
+            It is the responsability of the caller to dispose of this stream
             </summary>
     </member>
     <member name="T:Castle.Core.Resource.IResourceFactory">
@@ -7672,6 +7989,139 @@
       </param>
       <param name="second">
       </param>
+    </member>
+    <member name="T:Castle.Core.ReflectionBasedDictionaryAdapter">
+      <summary>
+            Pendent
+            </summary>
+    </member>
+    <member name="M:Castle.Core.ReflectionBasedDictionaryAdapter.#ctor(System.Object)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Castle.Core.ReflectionBasedDictionaryAdapter" /> class.
+            </summary>
+      <param name="target">The target.</param>
+    </member>
+    <member name="M:Castle.Core.ReflectionBasedDictionaryAdapter.Contains(System.Object)">
+      <summary>
+            Determines whether the <see cref="T:System.Collections.IDictionary" /> object contains an element with the specified key.
+            </summary>
+      <param name="key">The key to locate in the <see cref="T:System.Collections.IDictionary" /> object.</param>
+      <returns>
+            true if the <see cref="T:System.Collections.IDictionary" /> contains an element with the key; otherwise, false.
+            </returns>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="key" /> is null. </exception>
+    </member>
+    <member name="M:Castle.Core.ReflectionBasedDictionaryAdapter.Add(System.Object,System.Object)">
+      <summary>
+            Adds an element with the provided key and value to the <see cref="T:System.Collections.IDictionary" /> object.
+            </summary>
+      <param name="key">The <see cref="T:System.Object" /> to use as the key of the element to add.</param>
+      <param name="value">The <see cref="T:System.Object" /> to use as the value of the element to add.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="key" /> is null. </exception>
+      <exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.IDictionary" /> object. </exception>
+      <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.IDictionary" /> is read-only.-or- The <see cref="T:System.Collections.IDictionary" /> has a fixed size. </exception>
+    </member>
+    <member name="M:Castle.Core.ReflectionBasedDictionaryAdapter.Clear">
+      <summary>
+            Removes all elements from the <see cref="T:System.Collections.IDictionary" /> object.
+            </summary>
+      <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.IDictionary" /> object is read-only. </exception>
+    </member>
+    <member name="M:Castle.Core.ReflectionBasedDictionaryAdapter.Remove(System.Object)">
+      <summary>
+            Removes the element with the specified key from the <see cref="T:System.Collections.IDictionary" /> object.
+            </summary>
+      <param name="key">The key of the element to remove.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="key" /> is null. </exception>
+      <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.IDictionary" /> object is read-only.-or- The <see cref="T:System.Collections.IDictionary" /> has a fixed size. </exception>
+    </member>
+    <member name="M:Castle.Core.ReflectionBasedDictionaryAdapter.CopyTo(System.Array,System.Int32)">
+      <summary>
+            Copies the elements of the <see cref="T:System.Collections.ICollection" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.ICollection" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+      <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null. </exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is less than zero. </exception>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="array" /> is multidimensional.-or- <paramref name="index" /> is equal to or greater than the length of <paramref name="array" />.-or- The number of elements in the source <see cref="T:System.Collections.ICollection" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />. </exception>
+      <exception cref="T:System.ArgumentException">The type of the source <see cref="T:System.Collections.ICollection" /> cannot be cast automatically to the type of the destination <paramref name="array" />. </exception>
+    </member>
+    <member name="M:Castle.Core.ReflectionBasedDictionaryAdapter.GetEnumerator">
+      <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+      <returns>
+            An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+            </returns>
+    </member>
+    <member name="P:Castle.Core.ReflectionBasedDictionaryAdapter.Item(System.Object)">
+      <summary>
+            Gets or sets the <see cref="T:System.Object" /> with the specified key.
+            </summary>
+      <value>
+      </value>
+    </member>
+    <member name="P:Castle.Core.ReflectionBasedDictionaryAdapter.Keys">
+      <summary>
+            Gets an <see cref="T:System.Collections.ICollection" /> object containing the keys of the <see cref="T:System.Collections.IDictionary" /> object.
+            </summary>
+      <value>
+      </value>
+      <returns>An <see cref="T:System.Collections.ICollection" /> object containing the keys of the <see cref="T:System.Collections.IDictionary" /> object.</returns>
+    </member>
+    <member name="P:Castle.Core.ReflectionBasedDictionaryAdapter.Values">
+      <summary>
+            Gets an <see cref="T:System.Collections.ICollection" /> object containing the values in the <see cref="T:System.Collections.IDictionary" /> object.
+            </summary>
+      <value>
+      </value>
+      <returns>An <see cref="T:System.Collections.ICollection" /> object containing the values in the <see cref="T:System.Collections.IDictionary" /> object.</returns>
+    </member>
+    <member name="P:Castle.Core.ReflectionBasedDictionaryAdapter.IsReadOnly">
+      <summary>
+            Gets a value indicating whether the <see cref="T:System.Collections.IDictionary" /> object is read-only.
+            </summary>
+      <value>
+      </value>
+      <returns>true if the <see cref="T:System.Collections.IDictionary" /> object is read-only; otherwise, false.</returns>
+    </member>
+    <member name="P:Castle.Core.ReflectionBasedDictionaryAdapter.IsFixedSize">
+      <summary>
+            Gets a value indicating whether the <see cref="T:System.Collections.IDictionary" /> object has a fixed size.
+            </summary>
+      <value>
+      </value>
+      <returns>true if the <see cref="T:System.Collections.IDictionary" /> object has a fixed size; otherwise, false.</returns>
+    </member>
+    <member name="P:Castle.Core.ReflectionBasedDictionaryAdapter.Count">
+      <summary>
+            Gets the number of elements contained in the <see cref="T:System.Collections.ICollection" />.
+            </summary>
+      <value>
+      </value>
+      <returns>The number of elements contained in the <see cref="T:System.Collections.ICollection" />.</returns>
+    </member>
+    <member name="P:Castle.Core.ReflectionBasedDictionaryAdapter.SyncRoot">
+      <summary>
+            Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection" />.
+            </summary>
+      <value>
+      </value>
+      <returns>An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection" />.</returns>
+    </member>
+    <member name="P:Castle.Core.ReflectionBasedDictionaryAdapter.IsSynchronized">
+      <summary>
+            Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection" /> is synchronized (thread safe).
+            </summary>
+      <value>
+      </value>
+      <returns>true if access to the <see cref="T:System.Collections.ICollection" /> is synchronized (thread safe); otherwise, false.</returns>
     </member>
   </members>
 </doc>
