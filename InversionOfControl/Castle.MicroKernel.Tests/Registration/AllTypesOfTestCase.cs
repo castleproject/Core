@@ -26,7 +26,7 @@ namespace Castle.MicroKernel.Tests.Registration
 #endif
 
 	[TestFixture]
-	public class AllTypesOfTestCase
+	public class AllTypesTestCase
 	{
 		private IKernel kernel;
 
@@ -37,9 +37,23 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
+		public void RegisterAssemblyTypes_BasedOn_RegisteredInContainer()
+		{
+			kernel.Register(AllTypes.Of(typeof(ICommon))
+				.FromAssembly(Assembly.GetExecutingAssembly())
+				);
+
+			IHandler[] handlers = kernel.GetHandlers(typeof(ICommon));
+			Assert.AreEqual(0, handlers.Length);
+
+			handlers = kernel.GetAssignableHandlers(typeof(ICommon));
+			Assert.AreNotEqual(0, handlers.Length);
+		}
+
+		[Test]
 		public void RegisterAssemblyTypes_NoService_RegisteredInContainer()
 		{
-			kernel.Register(AllTypesOf<ICommon>
+			kernel.Register(AllTypes.Of<ICommon>()
 				.FromAssembly(Assembly.GetExecutingAssembly())
 				);
 
@@ -53,7 +67,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void RegisterAssemblyTypes_FirstInterfaceService_RegisteredInContainer()
 		{
-			kernel.Register(AllTypesOf<ICommon>
+			kernel.Register(AllTypes.Of<ICommon>()
 				.FromAssembly(Assembly.GetExecutingAssembly())
 				.WithService.FirstInterface()
 				);
@@ -68,7 +82,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void RegisterAssemblyTypes_DefaultService_RegisteredInContainer()
 		{
-			kernel.Register(AllTypesOf<ICommon>
+			kernel.Register(AllTypes.Of<ICommon>()
 				.FromAssembly(Assembly.GetExecutingAssembly())
 				.WithService.Base()
 				);
@@ -83,7 +97,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void RegisterAssemblyTypes_WithConfiguration_RegisteredInContainer()
 		{
-			kernel.Register(AllTypesOf<ICommon>
+			kernel.Register(AllTypes.Of<ICommon>()
 				.FromAssembly(Assembly.GetExecutingAssembly())
 				.Configure(delegate(ComponentRegistration component)
 					{
@@ -102,7 +116,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void RegisterGenericTypes_WithGenericDefinition_RegisteredInContainer()
 		{
-			kernel.Register(AllTypes
+			kernel.Register(AllTypes.Pick()
 				.From(typeof(DefaultRepository<>))
 				.WithService.FirstInterface()
 				);
@@ -116,7 +130,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void RegisterAssemblyTypes_IfCondition_RegisteredInContainer()
 		{
-			kernel.Register(AllTypesOf<ICustomer>
+			kernel.Register(AllTypes.Of<ICustomer>()
 				.FromAssembly(Assembly.GetExecutingAssembly())
 				.If(t => t.FullName.Contains("Chain"))
 				);
@@ -133,7 +147,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void RegisterAssemblyTypes_UnlessCondition_RegisteredInContainer()
 		{
-			kernel.Register(AllTypesOf<ICustomer>
+			kernel.Register(AllTypes.Of<ICustomer>()
 				.FromAssembly(Assembly.GetExecutingAssembly())
 				.Unless(t => typeof(CustomerChain1).IsAssignableFrom(t))
 				);
@@ -147,7 +161,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void RegisterTypes_WithLinq_RegisteredInContainer()
 		{
-			kernel.Register(AllTypesOf<CustomerChain1>
+			kernel.Register(AllTypes.Of<CustomerChain1>()
 				.Pick(from type in Assembly.GetExecutingAssembly().GetExportedTypes()
 					  where type.IsDefined(typeof(SerializableAttribute), true)
 					  select type
@@ -160,7 +174,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		[Test]
 		public void RegisterAssemblyTypes_WithKLinqConfiguration_RegisteredInContainer()
 		{
-			kernel.Register(AllTypesOf<ICommon>
+			kernel.Register(AllTypes.Of<ICommon>()
 				.FromAssembly(Assembly.GetExecutingAssembly())
 				.Configure(component => component.LifeStyle.Transient
 							.Named(component.Implementation.FullName + "XYZ")

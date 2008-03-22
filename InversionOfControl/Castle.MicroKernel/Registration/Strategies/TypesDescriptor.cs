@@ -20,11 +20,11 @@ namespace Castle.MicroKernel.Registration
 	/// <summary>
 	/// Describes how to register a group of types.
 	/// </summary>
-	/// <typeparam name="T">The The base type to match against.</typeparam>
-	public class TypesDescriptor<T> : IRegistration
+	public class TypesDescriptor : IRegistration
 	{
+		private readonly Type basedOn;
 		private readonly IEnumerable<Type> types;
-		private readonly ServiceDescriptor<T> service;
+		private readonly ServiceDescriptor service;
 		private Action<ComponentRegistration> configurer;
 		private Predicate<Type> unlessFilter;
 		private Predicate<Type> ifFilter;
@@ -32,18 +32,27 @@ namespace Castle.MicroKernel.Registration
 		/// <summary>
 		/// Initializes a new instance of the TypesDescriptor.
 		/// </summary>
-		internal TypesDescriptor(IEnumerable<Type> types)
+		internal TypesDescriptor(Type basedOn, IEnumerable<Type> types)
 		{
+			this.basedOn = basedOn;
 			this.types = types;
-			service = new ServiceDescriptor<T>(this);
+			service = new ServiceDescriptor(this);
 		}
-		
+
+		/// <summary>
+		/// Gets the type all types must be based on.
+		/// </summary>
+		public Type BasedOn
+		{
+			get { return basedOn; }
+		}
+
 		/// <summary>
 		/// Assigns a conditional predication which must be satisfied.
 		/// </summary>
 		/// <param name="ifFilter">The predicate to satisfy.</param>
 		/// <returns></returns>
-		public TypesDescriptor<T> If(Predicate<Type> ifFilter)
+		public TypesDescriptor If(Predicate<Type> ifFilter)
 		{
 			this.ifFilter = ifFilter;
 			return this;
@@ -54,7 +63,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="unlessFilter">The predicate not to satisify.</param>
 		/// <returns></returns>
-		public TypesDescriptor<T> Unless( Predicate<Type> unlessFilter )
+		public TypesDescriptor Unless( Predicate<Type> unlessFilter )
 		{
 			this.unlessFilter = unlessFilter;
 			return this;
@@ -63,7 +72,7 @@ namespace Castle.MicroKernel.Registration
 		/// <summary>
 		/// Gets the service descriptor.
 		/// </summary>
-		public ServiceDescriptor<T> WithService
+		public ServiceDescriptor WithService
 		{
 			get { return service; }
 		}
@@ -73,7 +82,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="configurer">The configuration action.</param>
 		/// <returns></returns>
-		public TypesDescriptor<T> Configure(Action<ComponentRegistration> configurer)
+		public TypesDescriptor Configure(Action<ComponentRegistration> configurer)
 		{
 			this.configurer = configurer;
 			return this;
@@ -115,7 +124,7 @@ namespace Castle.MicroKernel.Registration
 	
 		private bool IsTypeAccepted(Type type)
 		{
-			return type.IsClass && !type.IsAbstract && typeof(T).IsAssignableFrom(type)
+			return type.IsClass && !type.IsAbstract && basedOn.IsAssignableFrom(type)
 				&& (ifFilter == null || ifFilter(type))
 				&& (unlessFilter == null || !unlessFilter(type)
 				);

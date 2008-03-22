@@ -19,15 +19,14 @@ namespace Castle.MicroKernel.Registration
 	/// <summary>
 	/// Describes how to select a types service.
 	/// </summary>
-	/// <typeparam name="T">The base type to match against.</typeparam>
-	public class ServiceDescriptor<T>
+	public class ServiceDescriptor
 	{
 		public delegate Type ServiceSelector(Type type);
 		
-		private readonly TypesDescriptor<T> typesDescriptor;
+		private readonly TypesDescriptor typesDescriptor;
 		private ServiceSelector serviceSelector;
 		
-		internal ServiceDescriptor(TypesDescriptor<T> typesDescriptor)
+		internal ServiceDescriptor(TypesDescriptor typesDescriptor)
 		{
 			this.typesDescriptor = typesDescriptor;
 		}
@@ -36,16 +35,16 @@ namespace Castle.MicroKernel.Registration
 		/// Uses the base type matched on.
 		/// </summary>
 		/// <returns></returns>
-		public TypesDescriptor<T> Base()
+		public TypesDescriptor Base()
 		{
-			return Select(delegate { return typeof(T); });
+			return Select(delegate { return typesDescriptor.BasedOn; });
 		}
 				
 		/// <summary>
 		/// Uses the first interface of a type.
 		/// </summary>
 		/// <returns></returns>
-		public TypesDescriptor<T> FirstInterface()
+		public TypesDescriptor FirstInterface()
 		{
 			return Select(delegate(Type type)
 			{
@@ -72,7 +71,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="selector"></param>
 		/// <returns></returns>
-		public TypesDescriptor<T> Select(ServiceSelector selector)
+		public TypesDescriptor Select(ServiceSelector selector)
 		{
 			serviceSelector = selector;
 			return typesDescriptor;

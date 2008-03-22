@@ -22,19 +22,21 @@ namespace Castle.MicroKernel.Registration
 	/// <summary>
 	/// Describes a set of components to register in the kernel.
 	/// </summary>
-	/// <typeparam name="T">The base type to match against.</typeparam>
-	public class AllTypesOf<T>
+	public class AllTypes
 	{
-		protected AllTypesOf()
+		private readonly Type basedOn;
+
+		internal AllTypes(Type basedOn)
 		{
+			this.basedOn = basedOn;
 		}
 		
 		/// <summary>
 		/// Prepares to register types from an assembly.
 		/// </summary>
 		/// <param name="assemblyName">The assembly name.</param>
-		/// <returns>The corresponding <see cref="TypesDescriptor{T}"/></returns>
-		public static TypesDescriptor<T> FromAssemblyNamed(string assemblyName)
+		/// <returns>The corresponding <see cref="TypesDescriptor"/></returns>
+		public TypesDescriptor FromAssemblyNamed(string assemblyName)
 		{
 			Assembly assembly;
 			String extension = Path.GetExtension(assemblyName);
@@ -62,8 +64,8 @@ namespace Castle.MicroKernel.Registration
 		/// Prepares to register types from an assembly.
 		/// </summary>
 		/// <param name="assembly">The assembly.</param>
-		/// <returns>The corresponding <see cref="TypesDescriptor{T}"/></returns>
-		public static TypesDescriptor<T> FromAssembly(Assembly assembly)
+		/// <returns>The corresponding <see cref="TypesDescriptor"/></returns>
+		public TypesDescriptor FromAssembly(Assembly assembly)
 		{
 			if (assembly == null)
 			{
@@ -76,37 +78,59 @@ namespace Castle.MicroKernel.Registration
 		/// Prepares to register types from a list of types.
 		/// </summary>
 		/// <param name="types">The list of types.</param>
-		/// <returns>The corresponding <see cref="TypesDescriptor{T}"/></returns>
-		public static TypesDescriptor<T> From(IEnumerable<Type> types)
+		/// <returns>The corresponding <see cref="TypesDescriptor"/></returns>
+		public TypesDescriptor From(IEnumerable<Type> types)
 		{
-			return new TypesDescriptor<T>(types);
+			return new TypesDescriptor(basedOn, types);
 		}
 
 		/// <summary>
 		/// Prepares to register types from a list of types.
 		/// </summary>
 		/// <param name="types">The list of types.</param>
-		/// <returns>The corresponding <see cref="TypesDescriptor{T}"/></returns>
-		public static TypesDescriptor<T> Pick(IEnumerable<Type> types)
+		/// <returns>The corresponding <see cref="TypesDescriptor"/></returns>
+		public TypesDescriptor Pick(IEnumerable<Type> types)
 		{
-			return new TypesDescriptor<T>(types);
+			return new TypesDescriptor(basedOn, types);
 		}
 		
 		/// <summary>
 		/// Prepares to register types from a list of types.
 		/// </summary>
 		/// <param name="types">The list of types.</param>
-		/// <returns>The corresponding <see cref="TypesDescriptor{T}"/></returns>
-		public static TypesDescriptor<T> From(params Type[] types)
+		/// <returns>The corresponding <see cref="TypesDescriptor"/></returns>
+		public TypesDescriptor From(params Type[] types)
 		{
-			return new TypesDescriptor<T>(types);
+			return new TypesDescriptor(basedOn, types);
 		}
-	}
 
-	/// <summary>
-	/// Describes a set of components to register in the kernel.
-	/// </summary>
-	public class AllTypes : AllTypesOf<object>
-	{
+		/// <summary>
+		/// Describes all the types based on <see cref="basedOn"/>
+		/// </summary>
+		/// <param name="basedOn">The base type.</param>
+		/// <returns></returns>
+		public static AllTypes Of(Type basedOn)
+		{
+			return new AllTypes(basedOn);
+		}
+
+		/// <summary>
+		/// Describes all the types based on type T.
+		/// </summary>
+		/// <typeparam name="T">The base type.</typeparam>
+		/// <returns></returns>
+		public static AllTypes Of<T>()
+		{
+			return new AllTypes(typeof(T));
+		}
+
+		/// <summary>
+		/// Describes any types that are supplied.
+		/// </summary>
+		/// <returns></returns>
+		public static AllTypes Pick()
+		{
+			return Of<object>();
+		}
 	}
 }
