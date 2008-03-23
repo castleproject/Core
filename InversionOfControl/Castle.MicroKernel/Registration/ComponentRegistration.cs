@@ -138,6 +138,12 @@ namespace Castle.MicroKernel.Registration
 		/// <returns></returns>
 		public ComponentRegistration<S> Instance(S instance)
 		{
+			if (instance == null)
+			{
+				throw new ArgumentNullException("instance");
+			}
+
+			ImplementedBy(instance.GetType());
 			return AddDescriptor(new ComponentInstanceDescriptior<S>(instance));
 		}
 

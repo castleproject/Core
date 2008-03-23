@@ -118,6 +118,8 @@ namespace Castle.MicroKernel.Tests.Registration
 					.Instance(customer)
 					);
 			Assert.IsTrue(kernel.HasComponent("key"));
+			IHandler handler = kernel.GetHandler("key");
+			Assert.AreEqual(customer.GetType(), handler.ComponentModel.Implementation);
 
 			CustomerImpl customer2 = kernel["key"] as CustomerImpl;
 			Assert.AreSame(customer, customer2);
