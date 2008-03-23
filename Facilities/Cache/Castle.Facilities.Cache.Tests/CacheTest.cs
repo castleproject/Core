@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Threading;
+
 namespace Castle.Facilities.Cache.Tests
 {
 	using System;
@@ -138,19 +140,11 @@ namespace Castle.Facilities.Cache.Tests
 			serviceC.MyMethod(2, 5.5M);
 
 			ResetConsoleOut();
-			
-			WaitOneMillisecond();
+
+		    Thread.Sleep(10);
 
 			serviceA.MyMethod(2, 5.5M);
-			Assert.IsFalse( consoleContents == _outWriter.GetStringBuilder().ToString() );
-		}
-
-		private void WaitOneMillisecond()
-		{
-			// Wait a moment
-			DateTime startTime = DateTime.Now;
-			while(startTime.Millisecond==DateTime.Now.Millisecond)
-			{}
+			Assert.AreNotEqual( consoleContents , _outWriter.GetStringBuilder().ToString() );
 		}
 	}
 }
