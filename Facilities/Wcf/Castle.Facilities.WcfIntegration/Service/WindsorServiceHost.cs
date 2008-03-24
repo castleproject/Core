@@ -17,12 +17,13 @@ namespace Castle.Facilities.WcfIntegration
 	using System;
 	using System.ServiceModel;
 	using System.ServiceModel.Description;
-	using MicroKernel;
-	using Windsor;
+	using Castle.Core;
+	using Castle.MicroKernel;
 
 	public class WindsorServiceHost : ServiceHost
 	{
 		private readonly IKernel kernel;
+		private readonly ComponentModel model;
 
 		public WindsorServiceHost(IKernel kernel, Type serviceType, params Uri[] baseAddresses)
 			: base(serviceType, baseAddresses)
@@ -30,22 +31,45 @@ namespace Castle.Facilities.WcfIntegration
 			this.kernel = kernel;
 		}
 
+		public WindsorServiceHost(IKernel kernel, ComponentModel model, params Uri[] baseAddresses)
+			: this(kernel, model.Implementation, baseAddresses)
+		{
+			this.model = model;
+		}
+
 		protected override void OnOpening()
 		{
-			Description.Behaviors.Add(new WindsorDependencyInjectionServiceBehavior(kernel));
+			Description.Behaviors.Add(new WindsorDependencyInjectionServiceBehavior(kernel, model));
+
 			IHandler[] serviceBehaviorHandlers = kernel.GetHandlers(typeof (IServiceBehavior));
 			foreach (IHandler handler in serviceBehaviorHandlers)
 			{
+				if (handler.ComponentModel.Implementation == typeof(ServiceDebugBehavior))
+				{
+					Description.Behaviors.Remove<ServiceDebugBehavior>();
+				}
 				Description.Behaviors.Add((IServiceBehavior) handler.Resolve(CreationContext.Empty));
 			}
+
 			IHandler[] endPointBehaviors = kernel.GetHandlers(typeof (IEndpointBehavior));
-			foreach (IHandler handler in endPointBehaviors)
+			IHandler[] operationBehaviors = kernel.GetHandlers(typeof(IOperationBehavior));
+
+			foreach (ServiceEndpoint endpoint in Description.Endpoints)
 			{
-				foreach (ServiceEndpoint endpoint in Description.Endpoints)
+				foreach (IHandler handler in endPointBehaviors)
 				{
 					endpoint.Behaviors.Add((IEndpointBehavior) handler.Resolve(CreationContext.Empty));
 				}
+
+				foreach (OperationDescription operation in endpoint.Contract.Operations)
+				{
+					foreach (IHandler operationHandler in operationBehaviors)
+					{
+						operation.Behaviors.Add((IOperationBehavior)operationHandler.Resolve(CreationContext.Empty));
+					}
+				}
 			}
+
 			base.OnOpening();
 		}
 	}

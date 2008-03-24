@@ -1,5 +1,6 @@
 RC 4
 ====
+- Added ability to change invocation target to DefaultProxyFactory.
 
 - Fixed bug with ComponentRegistration.Instance in which the instance type was not assigned as the ComponentModel implementation.
 

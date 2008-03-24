@@ -21,34 +21,39 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel.Facilities;
 
-	public class WcfServiceExtension : IDisposable
+	internal class WcfServiceExtension : IDisposable
 	{
 		private readonly IKernel kernel;
+		private IServiceHostBuilder serviceHostBuilder;
 
 		public WcfServiceExtension(IKernel kernel)
 		{
 			this.kernel = kernel;
+
+			SetUpServiceHostBuilder();
+			WindsorServiceHostFactory.RegisterContainer(kernel);
+
 			kernel.ComponentRegistered += Kernel_ComponentRegistered;
 			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
 		}
 
 		private void Kernel_ComponentRegistered(string key, IHandler handler)
 		{
-			ComponentModel componentModel = handler.ComponentModel;
-			WcfServiceModel serviceModel = ResolveServiceModel(componentModel);
+			ComponentModel model = handler.ComponentModel;
+			WcfServiceModel serviceModel = ResolveServiceModel(model);
 
 			if (serviceModel != null)
 			{
-				WindsorServiceHost serviceHost = CreateAndOpenServiceHost(serviceModel, componentModel);
-				componentModel.ExtendedProperties[WcfConstants.ServiceHostKey] = serviceHost;
+				ServiceHost serviceHost = CreateAndOpenServiceHost(serviceModel, model);
+				model.ExtendedProperties[WcfConstants.ServiceHostKey] = serviceHost;
 			}
 		}
 
 		private void Kernel_ComponentUnregistered(string key, IHandler handler)
 		{
-			ComponentModel componentModel = handler.ComponentModel;
+			ComponentModel model = handler.ComponentModel;
 			ServiceHost serviceHost =
-				componentModel.ExtendedProperties[WcfConstants.ServiceHostKey] as ServiceHost;
+				model.ExtendedProperties[WcfConstants.ServiceHostKey] as ServiceHost;
 
 			if (serviceHost != null)
 			{
@@ -56,40 +61,45 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
-		private WcfServiceModel ResolveServiceModel(ComponentModel componentModel)
+		private void SetUpServiceHostBuilder()
+		{
+			if (!kernel.HasComponent(typeof(IServiceHostBuilder)))
+			{
+				kernel.AddComponent<WindsorServiceHostBuilder>(typeof(IServiceHostBuilder));
+			}
+			serviceHostBuilder = kernel.Resolve<IServiceHostBuilder>();
+		}
+
+		private WcfServiceModel ResolveServiceModel(ComponentModel model)
 		{
 			WcfServiceModel serviceModel = null;
 
-			if (componentModel.Implementation.IsClass &&
-				!componentModel.Implementation.IsAbstract)
+			if (model.Implementation.IsClass && !model.Implementation.IsAbstract)
 			{
 				if (WcfUtils.FindDependency<WcfServiceModel>(
-					componentModel.CustomDependencies, out serviceModel))
+					model.CustomDependencies, out serviceModel))
 				{
-					ValidateServiceModel(serviceModel, componentModel);
+					ValidateServiceModel(serviceModel, model);
+				}
+				else if (model.Configuration != null &&
+					"true" == model.Configuration.Attributes[WcfConstants.ServiceHostEnabled])
+				{
+					serviceModel = new WcfServiceModel();
 				}
 			}
 
 			return serviceModel;
 		}
 
-		private WindsorServiceHost CreateAndOpenServiceHost(WcfServiceModel serviceModel,
-															ComponentModel componentModel)
+		private ServiceHost CreateAndOpenServiceHost(WcfServiceModel serviceModel,
+												     ComponentModel model)
 		{
-			WindsorServiceHost serviceHost = new WindsorServiceHost(
-				kernel, componentModel.Implementation, serviceModel.GetBaseAddressesUris());
-
-			ServiceHostBuilder serviceHostBuilder = new ServiceHostBuilder();
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
-			{
-				serviceHostBuilder.AddServiceEndpoint(serviceHost, endpoint);
-			}
-
+			ServiceHost serviceHost = serviceHostBuilder.Build(model, serviceModel);
 			serviceHost.Open();
 			return serviceHost;
 		}
 
-		private void ValidateServiceModel(WcfServiceModel serviceModel, ComponentModel componentModel)
+		private void ValidateServiceModel(WcfServiceModel serviceModel, ComponentModel model)
 		{
 			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
 			{
@@ -103,14 +113,14 @@ namespace Castle.Facilities.WcfIntegration
 							contract.FullName + " does not represent an interface.");
 					}
 				}
-				else if (!componentModel.Service.IsInterface)
+				else if (!model.Service.IsInterface)
 				{
 					throw new FacilityException(
 						"No service endpoint contract can be implied from the componnt.");
 				}
 				else
 				{
-					endpoint.Contract = componentModel.Service;
+					endpoint.Contract = model.Service;
 				}
 			}
 		}

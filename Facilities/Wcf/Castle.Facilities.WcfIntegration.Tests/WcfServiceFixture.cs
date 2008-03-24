@@ -43,6 +43,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					Component.For<LoggingInterceptor>(),
 					Component.For<IServiceBehavior>().ImplementedBy<CallCountServiceBehavior>(),
 					Component.For<IEndpointBehavior>().ImplementedBy<UnitOfworkEndPointBehavior>(),
+					Component.For<IOperationBehavior>().ImplementedBy<NetDataContractFormatBehavior>(),
 					Component.For<IOperations>().ImplementedBy<Operations>()
 						.Interceptors(InterceptorReference.ForType<LoggingInterceptor>()).Anywhere
 						.CustomDependencies(new

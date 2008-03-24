@@ -12,28 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration.Tests
+namespace Castle.Facilities.WcfIntegration
 {
-	using System.ServiceModel;
-	using System.Collections.Generic;
-
-	[ServiceContract]
-	public interface IOperations
+	public interface IWcfEndpointVisitor
 	{
-		[OperationContract]
-		int GetValueFromConstructor();
-
-		[OperationContract]
-		bool UnitOfWorkIsInitialized();
-	}
-
-	[ServiceContract]
-	public interface IOperationsEx
-	{
-		[OperationContract]
-		void Backup(IDictionary<string, object> context);
-
-		[OperationContract]
-		void ThrowException();
+		void VisitServiceEndpointModel(ServiceEndpointModel model);
+		void VisitConfigurationEndpointModel(ConfigurationEndpointModel model);
+		void VisitBindingEndpointModel(BindingEndpointModel model);
+		void VisitBindingAddressEndpointModel(BindingAddressEndpointModel model);
 	}
 }

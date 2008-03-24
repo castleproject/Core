@@ -14,6 +14,8 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests
 {
+	using System;
+	using System.Collections.Generic;
 	using Castle.Facilities.WcfIntegration.Tests.Behaviors;
 
 	public class Operations : IOperations, IOperationsEx
@@ -41,10 +43,14 @@ namespace Castle.Facilities.WcfIntegration.Tests
 
 		#region IOperationsEx Members
 
-		public void Backup()
+		public void Backup(IDictionary<string, object> context)
 		{
 		}
 
+		public void ThrowException()
+		{
+			throw new InvalidOperationException("Oh No!");
+		}
 		#endregion
 	}
 }

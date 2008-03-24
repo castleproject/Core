@@ -12,30 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration.Internal
+namespace Castle.Facilities.WcfIntegration
 {
 	using System;
 	using System.ServiceModel;
 	using System.ServiceModel.Description;
+	using Castle.Core;
 
-	internal class ServiceHostBuilder : IWcfEndpointVisitor
+	public abstract class AbstractServiceHostBuilder : IServiceHostBuilder, IWcfEndpointVisitor
 	{
 		private ServiceHost serviceHost;
 		private ServiceEndpoint serviceEndpoint;
 
-		public ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, 
-			                                      IWcfEndpoint endpoint)
+		#region IServiceHostBuilder Members
+
+		/// <summary>
+		/// Builds a new <see cref="ServiceHost"/> for the <see cref="ComponentModel"/>.
+		/// </summary>
+		/// <param name="model">The component model.</param>
+		/// <param name="serviceModel">The service model.</param>
+		/// <returns>The correpsonding service host.</returns>
+		public ServiceHost Build(ComponentModel model, WcfServiceModel serviceModel)
 		{
-			if (serviceHost == null)
+			ServiceHost serviceHost = CreateServiceHost(model, serviceModel);
+
+			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
 			{
-				throw new ArgumentNullException("serviceHost");
+				AddServiceEndpoint(serviceHost, endpoint);
 			}
 
-			if (endpoint == null)
-			{
-				throw new ArgumentNullException("endpoint");
-			}
+			return serviceHost;
+		}
 
+		#endregion
+
+		protected abstract ServiceHost CreateServiceHost(ComponentModel model,
+												         WcfServiceModel serviceModel);
+
+		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, 
+			                                                 IWcfEndpoint endpoint)
+		{
 			this.serviceHost = serviceHost;
 			endpoint.Accept(this);
 			return serviceEndpoint;

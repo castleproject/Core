@@ -12,31 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.MicroKernel;
-
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Dispatcher;
-	using Castle.Windsor;
+	using Castle.Core;
+	using Castle.MicroKernel;
 
 	/// <summary>
 	/// Initialize a service using Windsor
 	/// </summary>
 	public class WindsorInstanceProvider : IInstanceProvider
 	{
-		private readonly Type contractType;
 		private readonly IKernel kernel;
+		private readonly ComponentModel model;
+		private readonly Type contractType;
 		private readonly Type serviceType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:Castle.Facilities.WcfIntegration.WindsorInstanceProvider" /> class.
 		/// </summary>
-		public WindsorInstanceProvider(IKernel kernel, Type contractType, Type serviceType)
+		public WindsorInstanceProvider(IKernel kernel, ComponentModel model, 
+			                           Type contractType, Type serviceType)
 		{
 			this.kernel = kernel;
+			this.model = model;
 			this.contractType = contractType;
 			this.serviceType = serviceType;
 		}
@@ -67,11 +69,15 @@ namespace Castle.Facilities.WcfIntegration
 		/// <param name="instanceContext">The current <see cref="T:System.ServiceModel.InstanceContext"></see> object.</param>
 		public object GetInstance(InstanceContext instanceContext, Message message)
 		{
-			if (kernel.HasComponent(contractType) || !kernel.HasComponent(serviceType))
+			if (model != null)
 			{
-				return kernel.Resolve(contractType);
+				return kernel[model.Name];
 			}
-			return kernel.Resolve(serviceType);
+			else if (kernel.HasComponent(serviceType))
+			{
+				return kernel.Resolve(serviceType);
+			}
+			return kernel.Resolve(contractType);
 		}
 
 		/// <summary>

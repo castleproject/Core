@@ -17,8 +17,7 @@ namespace Castle.Facilities.WcfIntegration
 	using System;
 	using System.ServiceModel;
 	using System.ServiceModel.Activation;
-	using MicroKernel;
-	using Windsor;
+	using Castle.MicroKernel;
 
 	public class WindsorServiceHostFactory : ServiceHostFactory
 	{
@@ -34,8 +33,8 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			if (kernel == null)
 			{
-				throw new ArgumentNullException("kernel",
-				                                "Kernel was null, did you forgot to call WindsorServiceHostFactory.RegisterContainer() ?");
+				string message = "Kernel was null, did you forgot to call WindsorServiceHostFactory.RegisterContainer() ?";
+				throw new ArgumentNullException("kernel", message);
 			}
 			this.kernel = kernel;
 		}
@@ -66,10 +65,13 @@ namespace Castle.Facilities.WcfIntegration
 				constructorStringType = "name";
 			}
 			if (handler == null)
+			{
 				throw new InvalidOperationException(
-					string.Format("Could not find a component with {0} {1}, did you forget to register it?", constructorStringType, constructorString));
+					string.Format("Could not find a component with {0} {1}, did you forget to register it?", 
+					constructorStringType, constructorString));
+			}
 
-			return CreateServiceHost(handler.ComponentModel.Implementation, baseAddresses);
+			return new WindsorServiceHost(kernel, handler.ComponentModel, baseAddresses);
 		}
 
 		protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)

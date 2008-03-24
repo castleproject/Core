@@ -12,13 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration.Internal
+namespace Castle.Facilities.WcfIntegration
 {
-	public interface IWcfEndpointVisitor
+	using Castle.Core;
+	using System.ServiceModel;
+
+	/// <summary>
+	/// Contract for building service hosts.
+	/// </summary>
+	public interface IServiceHostBuilder
 	{
-		void VisitServiceEndpointModel(ServiceEndpointModel model);
-		void VisitConfigurationEndpointModel(ConfigurationEndpointModel model);
-		void VisitBindingEndpointModel(BindingEndpointModel model);
-		void VisitBindingAddressEndpointModel(BindingAddressEndpointModel model);
+		/// <summary>
+		/// Builds a service host.
+		/// </summary>
+		/// <param name="model">The component model.</param>
+		/// <param name="serviceModel">The service model.</param>
+		/// <returns>The service host.</returns>
+		ServiceHost Build(ComponentModel model, WcfServiceModel serviceModel);
 	}
 }

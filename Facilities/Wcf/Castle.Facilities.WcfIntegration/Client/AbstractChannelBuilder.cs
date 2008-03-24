@@ -12,51 +12,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration.Internal
+namespace Castle.Facilities.WcfIntegration
 {
 	using System;
-	using System.Reflection;
 	using System.ServiceModel;
-	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
+	using System.ServiceModel.Channels;
 
-	internal class ChannelBuilder : IWcfEndpointVisitor
+	public abstract class AbstractChannelBuilder : IClientChannelBuilder, IWcfEndpointVisitor
 	{
 		private Type contract;
-		private CreateChannel channelCreator;
+		private ChannelCreator channelCreator;
 
-		public CreateChannel GetChannelCreator(IWcfEndpoint endpoint)
+		/// <summary>
+		/// Get a delegate capable of creating channels.
+		/// </summary>
+		/// <param name="endpoint">The endpoint.</param>
+		/// <returns>The <see cref="ChannelCreator"/></returns>
+		public ChannelCreator GetChannelCreator(IWcfEndpoint endpoint)
 		{
 			return GetChannelCreator(endpoint, null);
 		}
 
-		public CreateChannel GetChannelCreator(IWcfEndpoint endpoint, Type contract)
+		/// <summary>
+		/// Get a delegate capable of creating channels.
+		/// </summary>
+		/// <param name="endpoint">The endpoint.</param>
+		/// <param name="contract">The contract override.</param>
+		/// <returns>The <see cref="ChannelCreator"/></returns>
+		public ChannelCreator GetChannelCreator(IWcfEndpoint endpoint, Type contract)
 		{
-			if (endpoint == null)
-			{
-				throw new ArgumentNullException("endpoint");
-			}
-
 			this.contract = contract ?? endpoint.Contract;
 			endpoint.Accept(this);
 			return channelCreator;
 		}
 
+		protected abstract ChannelCreator GetChannelCreator(Type contract, ServiceEndpoint endpoint);
+		protected abstract ChannelCreator GetChannelCreator(Type contract, string configurationName);
+		protected abstract ChannelCreator GetChannelCreator(Type contract, Binding binding, string address);
+		protected abstract ChannelCreator GetChannelCreator(Type contract, Binding binding, EndpointAddress address);
+
 		#region IWcfEndpointVisitor Members
 
 		void IWcfEndpointVisitor.VisitServiceEndpointModel(ServiceEndpointModel model)
 		{
-			channelCreator = GetChannelCreator(model.ServiceEndpoint);
+			channelCreator = GetChannelCreator(contract, model.ServiceEndpoint);
 		}
 
 		void IWcfEndpointVisitor.VisitConfigurationEndpointModel(ConfigurationEndpointModel model)
 		{
-			channelCreator = GetChannelCreator(model.EndpointName);
+			channelCreator = GetChannelCreator(contract, model.EndpointName);
 		}
 
 		void IWcfEndpointVisitor.VisitBindingEndpointModel(BindingEndpointModel model)
 		{
-			channelCreator = GetChannelCreator(model.Binding, string.Empty);
+			channelCreator = GetChannelCreator(contract, model.Binding, string.Empty);
 		}
 
 		void IWcfEndpointVisitor.VisitBindingAddressEndpointModel(BindingAddressEndpointModel model)
@@ -67,27 +77,21 @@ namespace Castle.Facilities.WcfIntegration.Internal
 				ContractDescription description = ContractDescription.GetContract(contract);
 				ServiceEndpoint endpoint = new ServiceEndpoint(description, model.Binding, address);
 				endpoint.Behaviors.Add(new ClientViaBehavior(model.ViaAddress));
-				channelCreator = GetChannelCreator(endpoint);
+				channelCreator = GetChannelCreator(contract, endpoint);
 			}
 			else
 			{
-				object address = (object)model.EndpointAddress ?? model.Address;
-				channelCreator = GetChannelCreator(model.Binding, address);
+				if (model.EndpointAddress != null)
+				{
+					channelCreator = GetChannelCreator(contract, model.Binding, model.EndpointAddress);
+				}
+				else
+				{
+					channelCreator = GetChannelCreator(contract, model.Binding, model.Address);
+				}
 			}
 		}
 
 		#endregion
-
-		private CreateChannel GetChannelCreator(params object[] channelFactoryArgs)
-		{
-			Type type = typeof(ChannelFactory<>).MakeGenericType(new Type[] { contract });
-
-			IChannelFactory channelFactory = (IChannelFactory)
-				Activator.CreateInstance(type, channelFactoryArgs);
-
-			MethodInfo methodInfo = type.GetMethod("CreateChannel", new Type[0]);
-			return (CreateChannel)Delegate.CreateDelegate(
-				typeof(CreateChannel), channelFactory, methodInfo);
-		}
 	}
 }

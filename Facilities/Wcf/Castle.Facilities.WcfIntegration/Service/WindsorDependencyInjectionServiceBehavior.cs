@@ -23,14 +23,17 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
 	using System.ServiceModel.Dispatcher;
+	using Castle.Core;
 
 	public class WindsorDependencyInjectionServiceBehavior : IServiceBehavior
 	{
 		private readonly IKernel kernel;
+		private readonly ComponentModel model;
 
-		public WindsorDependencyInjectionServiceBehavior(IKernel kernel)
+		public WindsorDependencyInjectionServiceBehavior(IKernel kernel, ComponentModel model)
 		{
 			this.kernel = kernel;
+			this.model = model;
 		}
 
 		#region IServiceBehavior Members
@@ -74,7 +77,7 @@ namespace Castle.Facilities.WcfIntegration
 						if (contractNameToContractType.ContainsKey(ed.ContractName))
 						{
 							ed.DispatchRuntime.InstanceProvider =
-								new WindsorInstanceProvider(kernel,
+								new WindsorInstanceProvider(kernel, model,
 									contractNameToContractType[ed.ContractName],
 									serviceDescription.ServiceType
 									);

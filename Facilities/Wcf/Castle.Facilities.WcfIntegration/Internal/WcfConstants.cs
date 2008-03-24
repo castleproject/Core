@@ -16,8 +16,12 @@ namespace Castle.Facilities.WcfIntegration
 {
     internal static class WcfConstants
     {
-        public const string ClientModelKey = "wcf.clientModel";
         public const string ServiceHostKey = "wcf.serviceHost";
-    }
+		public const string ServiceHostEnabled = "wcfServiceHost";
+
+		public const string ClientModelKey = "wcf.clientModel";
+		public const string ChannelCreatorKey = "wcf.channelCreator";
+		public const string EndpointConfiguration = "wcfEndpointConfiguration";
+	}
 }
 

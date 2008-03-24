@@ -17,6 +17,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.ServiceModel;
 
 	internal static class WcfUtils
 	{
@@ -72,6 +73,49 @@ namespace Castle.Facilities.WcfIntegration.Internal
 				}
 			}
 			return false;
+		}
+
+		public static bool IsCommunicationObjectReady(ICommunicationObject comm)
+		{
+			switch (comm.State)
+			{
+				case CommunicationState.Closed:
+				case CommunicationState.Closing:
+				case CommunicationState.Faulted:
+					return false;
+			}
+			return true;
+		}
+
+		public static void ReleaseCommunicationObject(ICommunicationObject comm)
+		{
+			if (comm != null)
+			{
+				if (comm.State != CommunicationState.Faulted)
+				{
+					try
+					{
+						comm.Close();
+					}
+					catch (CommunicationException)
+					{
+						comm.Abort();
+					}
+					catch (TimeoutException)
+					{
+						comm.Abort();
+					}
+					catch
+					{
+						comm.Abort();
+						throw;
+					}
+				}
+				else
+				{
+					comm.Abort();
+				}
+			}
 		}
 	}
 }

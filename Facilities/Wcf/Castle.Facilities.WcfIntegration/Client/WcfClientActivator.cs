@@ -18,59 +18,53 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
-	using Castle.Facilities.WcfIntegration.Internal;
-
-	internal delegate object CreateChannel();
 
 	public class WcfClientActivator : DefaultComponentActivator
 	{
-		private readonly CreateChannel createChannel;
+		private readonly ChannelCreator createChannel;
 
 		public WcfClientActivator(ComponentModel model, IKernel kernel,
 			ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 			: base(model, kernel, onCreation, onDestruction)
 		{
-			WcfClientModel clientModel = (WcfClientModel)
-				model.ExtendedProperties[WcfConstants.ClientModelKey];
+			createChannel = CreateChannelCreator(kernel, model);
+		}
 
-			createChannel = new ChannelBuilder().GetChannelCreator(
-				clientModel.Endpoint, model.Service);
+		protected override object InternalCreate(CreationContext context)
+		{
+			object instance = Instantiate(context);
+
+			ApplyCommissionConcerns(instance);
+
+			return instance;
 		}
 
 		protected override object Instantiate(CreationContext context)
 		{
-			WcfClientModel clientModelOverride = GetClientModelOverride(context);
+			object instance = createChannel();
 
-			if (clientModelOverride != null)
+			try
 			{
-				CreateChannel createChannelOverride = new ChannelBuilder()
-					.GetChannelCreator(clientModelOverride.Endpoint, Model.Service);
-				return createChannelOverride();
+				instance = Kernel.ProxyFactory.Create(Kernel, instance, Model);
 			}
-			
-			return createChannel();
+			catch (Exception ex)
+			{
+				throw new ComponentActivatorException("WcfClientActivator: could not proxy service " +
+					Model.Service.FullName, ex);
+			}
+
+			return instance;
 		}
 
-		private WcfClientModel GetClientModelOverride(CreationContext context)
+		private ChannelCreator CreateChannelCreator(IKernel kernel, ComponentModel model)
 		{
-			WcfClientModel clientModel = null;
-			Predicate<WcfClientModel> contractMatch = delegate(WcfClientModel candidate)
-			{
-				return candidate.Contract == null || 
-					(Model.Service == candidate.Contract);
-			};
+			WcfClientModel clientModel = (WcfClientModel)
+				model.ExtendedProperties[WcfConstants.ClientModelKey];
 
-			if (context != null && context.HasAdditionalParameters)
-			{
-				if (WcfUtils.FindDependency<WcfClientModel>(
-						context.AdditionalParameters, contractMatch,
-						out clientModel))
-				{
-					return clientModel;
-				}
-			}
-
-			return clientModel;
+			IClientChannelBuilder channelBuilder = kernel.Resolve<IClientChannelBuilder>();
+			ChannelCreator creator = channelBuilder.GetChannelCreator(clientModel.Endpoint, model.Service);
+			model.ExtendedProperties[WcfConstants.ChannelCreatorKey] = creator;
+			return creator;
 		}
 	}
 }

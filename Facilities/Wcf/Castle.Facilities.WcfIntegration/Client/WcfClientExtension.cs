@@ -15,25 +15,26 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.ServiceModel.Channels;
 	using Castle.Core;
 	using Castle.MicroKernel;
-	using Castle.MicroKernel.LifecycleConcerns;
 	using Castle.MicroKernel.Facilities;
+	using Castle.MicroKernel.Proxy;
 	using Castle.Facilities.WcfIntegration.Internal;
+	using System.ServiceModel;
 
 	internal class WcfClientExtension : IDisposable
 	{
-		public WcfClientExtension(IKernel kernel, WcfClientModel[] clientModels)
+		private readonly IKernel kernel;
+		private IClientChannelBuilder channelBuilder;
+ 
+		public WcfClientExtension(IKernel kernel)
 		{
-			if (clientModels != null && clientModels.Length > 0)
-			{
-				foreach (WcfClientModel clientModel in clientModels)
-				{
-					ValidateClientModel(clientModel, null);
-				}
-				kernel.Resolver.AddSubResolver(new WcfClientResolver(clientModels));
-			}
+			this.kernel = kernel;
 
+			SetUpClientChannelBuilder();
+
+			kernel.AddComponent<WcfManagedChannelInterceptor>();
 			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
 		}
 
@@ -43,25 +44,29 @@ namespace Castle.Facilities.WcfIntegration
 
 			if (clientModel != null)
 			{
-				model.ExtendedProperties[WcfConstants.ClientModelKey] = clientModel;
 				model.CustomComponentActivator = typeof(WcfClientActivator);
-				model.LifestyleType = LifestyleType.Transient;
-				EnsureDisposalConcernAttached(model);
+				model.ExtendedProperties[WcfConstants.ClientModelKey] = clientModel;
+				model.LifecycleSteps.Add(LifecycleStepType.Decommission, WcfChannelCleanupConcern.Instance);
+				InstallWcfManagedChannelInterceptor(model);
 			}
 		}
 
-		private void EnsureDisposalConcernAttached(ComponentModel model)
+		private void SetUpClientChannelBuilder()
 		{
-			foreach (object step in model.LifecycleSteps.GetDecommissionSteps())
+			if (!kernel.HasComponent(typeof(IClientChannelBuilder)))
 			{
-				if (step is DisposalConcern)
-				{
-					return;
-				}
+				kernel.AddComponent<DefaultChannelBuilder>(typeof(IClientChannelBuilder));
 			}
+			channelBuilder = kernel.Resolve<IClientChannelBuilder>();
+		}
 
-			model.LifecycleSteps.Add(LifecycleStepType.Decommission,
-						             DisposalConcern.Instance);
+		private void InstallWcfManagedChannelInterceptor(ComponentModel model)
+		{
+			model.Dependencies.Add(new DependencyModel(DependencyType.Service, null,
+													   typeof(WcfManagedChannelInterceptor), false));
+			model.Interceptors.Add(new InterceptorReference(typeof(WcfManagedChannelInterceptor)));
+			ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
+			options.AllowChangeTarget = true;
 		}
 
 		private WcfClientModel ResolveClientModel(ComponentModel model)
@@ -74,6 +79,17 @@ namespace Castle.Facilities.WcfIntegration
 					model.CustomDependencies, out clientModel))
 				{
 					ValidateClientModel(clientModel, model);
+				}
+				else if (model.Configuration != null)
+				{
+					string endpointConfiguration =
+						 model.Configuration.Attributes[WcfConstants.EndpointConfiguration];
+
+					if (!string.IsNullOrEmpty(endpointConfiguration))
+					{
+						clientModel = new WcfClientModel(
+							WcfEndpoint.FromConfiguration(endpointConfiguration));
+					}
 				}
 			}
 

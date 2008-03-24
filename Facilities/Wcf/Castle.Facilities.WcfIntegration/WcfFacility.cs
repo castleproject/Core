@@ -20,20 +20,10 @@ namespace Castle.Facilities.WcfIntegration
 	{
 		private WcfClientExtension clientExtension;
 		private WcfServiceExtension serviceExtension;
-		private readonly WcfClientModel[] clientModels;
-
-		public WcfFacility()
-		{
-		}
-
-		public WcfFacility(params WcfClientModel[] clientModels)
-		{
-			this.clientModels = clientModels;
-		}
 
 		protected override void Init()
 		{
-			clientExtension = new WcfClientExtension(Kernel, clientModels);
+			clientExtension = new WcfClientExtension(Kernel);
 			serviceExtension = new WcfServiceExtension(Kernel);
 		}
 

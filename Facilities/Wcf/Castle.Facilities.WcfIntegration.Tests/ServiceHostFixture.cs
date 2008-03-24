@@ -15,9 +15,11 @@
 namespace Castle.Facilities.WcfIntegration.Tests
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ServiceModel;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
+	using Castle.Windsor.Installer;
 	using Castle.Facilities.WcfIntegration.Demo;
 	using NUnit.Framework;
 
@@ -104,7 +106,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 
 				IOperationsEx clientEx = ChannelFactory<IOperationsEx>.CreateChannel(
 					new BasicHttpBinding(), new EndpointAddress("http://localhost:27198/UsingWindsor.svc"));
-				clientEx.Backup();
+				clientEx.Backup(new Dictionary<string, object>());
 			}
 		}
 
@@ -137,7 +139,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 
 				IOperationsEx clientEx = ChannelFactory<IOperationsEx>.CreateChannel(
 					new BasicHttpBinding(), new EndpointAddress("http://localhost:27198/UsingWindsor.svc/Extended"));
-				clientEx.Backup();
+				clientEx.Backup(new Dictionary<string, object>());
 			}
 		}
 
@@ -163,6 +165,18 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					new NetTcpBinding(), new EndpointAddress("urn:castle:operations"),
 					new Uri("net.tcp://localhost/Operations"));
 				Assert.AreEqual(42, client.GetValueFromConstructor());
+			}
+		}
+
+		[Test]
+		public void CanCreateServiceHostAndOpenHostFromXmlConfiguration()
+		{
+			using (new WindsorContainer()
+					.Install(Configuration.FromXmlFile("..\\..\\ConfigureServices.xml")))
+			{
+				IAmUsingWindsor client = ChannelFactory<IAmUsingWindsor>.CreateChannel(
+					new BasicHttpBinding(), new EndpointAddress("http://localhost:27198/UsingWindsor.svc"));
+				Assert.AreEqual(42, client.GetValueFromWindsorConfig());
 			}
 		}
 	}

@@ -39,6 +39,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -67,19 +69,29 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.Web">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Internal\ChannelBuilder.cs" />
-    <Compile Include="Internal\ServiceHostBuilder.cs" />
-    <Compile Include="Internal\IWcfEndpointVisitor.cs" />
+    <Compile Include="Client\WcfChannelCleanupConcern.cs" />
+    <Compile Include="Client\DefaulttChannelBuilder.cs" />
+    <Compile Include="Client\WcfManagedChannelInterceptor.cs" />
+    <Compile Include="Client\WcfClient.cs" />
+    <Compile Include="Client\WcfClientDescriptor.cs" />
+    <Compile Include="IClientChannelBuilder.cs" />
+    <Compile Include="Client\AbstractChannelBuilder.cs" />
+    <Compile Include="IWcfEndpointVisitor.cs" />
+    <Compile Include="IServiceHostBuilder.cs" />
     <Compile Include="IWcfEndpoint.cs" />
     <Compile Include="Client\WcfClientActivator.cs" />
     <Compile Include="Client\WcfClientExtension.cs" />
     <Compile Include="Client\WcfClientModel.cs" />
-    <Compile Include="Client\WcfClientResolver.cs" />
     <Compile Include="Internal\WcfConstants.cs" />
+    <Compile Include="Service\AbstractServiceHostBuilder.cs" />
+    <Compile Include="Service\WindsorServiceHostBuilder.cs" />
     <Compile Include="WcfEndpoint.cs" />
     <Compile Include="WcfFacility.cs" />
     <Compile Include="Service\WcfServiceExtension.cs" />

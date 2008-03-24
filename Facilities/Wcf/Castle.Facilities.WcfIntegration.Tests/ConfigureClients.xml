@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<facilities>
+		<facility id="wcf" 
+				  type="Castle.Facilities.WcfIntegration.WcfFacility,
+				        Castle.Facilities.WcfIntegration" />
+	</facilities>
+
+	<components>
+		<component id="usingWindsor"
+			       type="Castle.Facilities.WcfIntegration.Demo.IAmUsingWindsor, 
+				         Castle.Facilities.WcfIntegration.Demo"
+			       wcfEndpointConfiguration="WSHttpBinding_IAmUsingWindsor">
+		</component>
+	</components>
+</configuration>
