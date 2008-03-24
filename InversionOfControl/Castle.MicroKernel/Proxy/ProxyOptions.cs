@@ -26,6 +26,7 @@ namespace Castle.MicroKernel.Proxy
 		private ArrayList interfaceList;
 		private bool useSingleInterfaceProxy;
 		private bool useMarshalByRefAsBaseClass;
+		private bool allowChangeTarget;
 		private bool omitTarget;
 
 		/// <summary>
@@ -53,6 +54,15 @@ namespace Castle.MicroKernel.Proxy
 		{
 			get { return omitTarget; }
 			set { omitTarget = value; }
+		}
+
+		/// <summary>
+		/// Determines if the proxied component can change targets.
+		/// </summary>
+		public bool AllowChangeTarget
+		{
+			get { return allowChangeTarget; }
+			set { allowChangeTarget = value; }
 		}
 
 		/// <summary>

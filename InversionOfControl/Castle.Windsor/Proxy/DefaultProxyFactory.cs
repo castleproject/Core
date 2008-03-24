@@ -76,6 +76,11 @@ namespace Castle.Windsor.Proxy
 					proxy = generator.CreateInterfaceProxyWithoutTarget(model.Service, interfaces,
 					                                                    proxyGenOptions, interceptors);
 				}
+				else if (proxyOptions.AllowChangeTarget)
+				{
+					proxy = generator.CreateInterfaceProxyWithTargetInterface(model.Service, target, 
+						                                                      proxyGenOptions, interceptors);
+				}
 				else
 				{
 					if (!proxyOptions.UseSingleInterfaceProxy)
@@ -84,7 +89,7 @@ namespace Castle.Windsor.Proxy
 					}
 
 					proxy = generator.CreateInterfaceProxyWithTarget(model.Service, interfaces,
-					                                                 target, proxyGenOptions, interceptors);
+																	 target, proxyGenOptions, interceptors);
 				}
 			}
 			else
