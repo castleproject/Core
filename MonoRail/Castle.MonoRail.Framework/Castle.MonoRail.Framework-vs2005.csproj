@@ -322,6 +322,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HelperDictionary.cs" />
+    <Compile Include="Helpers\AbstractFormRelatedHelper.cs" />
     <Compile Include="Helpers\AbstractHelper.cs">
       <SubType>Code</SubType>
     </Compile>

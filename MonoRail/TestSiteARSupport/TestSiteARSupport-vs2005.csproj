@@ -65,7 +65,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPermissionController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
