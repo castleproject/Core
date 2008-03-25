@@ -23,7 +23,7 @@ namespace Castle.Facilities.Remoting.Tests
 		{
 			IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, BuildConfigPath("client_confreg_clientactivated.xml"));
 
-			Assert.IsNotNull(clientContainer.Kernel.ResolveServices<ICalcService>());
+			Assert.IsNotNull(clientContainer.Kernel.ResolveAll<ICalcService>());
 		}
 	}
 }
