@@ -69,18 +69,6 @@ namespace Castle.Windsor.Tests
 			IRepository<IsraelClock>[] repositories = container.ResolveAll<IRepository<IsraelClock>>();
 			Assert.AreEqual(2, repositories.Length);
 		}
-
-		[Test]
-		[ExpectedException(typeof(HandlerException))]
-		public void WillThrowIfOneOfTheComponentsIsNotValid()
-		{
-			IWindsorContainer container = new WindsorContainer()
-				.AddComponent<IClock, IsraelClock>()
-				.AddComponent<IClock, WorldClock>()
-				.AddComponent<IClock, DependantClock>();
-
-			container.ResolveAll<IClock>();
-		}
 	}
 
 	public interface IClock{}
@@ -88,11 +76,8 @@ namespace Castle.Windsor.Tests
 	public class WorldClock : IClock{}
 	public class DependantClock : IClock
 	{
-		private IDisposable disposable;
-
 		public DependantClock(IDisposable disposable)
 		{
-			this.disposable = disposable;
 		}
 	}
 }

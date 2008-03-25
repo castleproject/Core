@@ -611,7 +611,6 @@ namespace Castle.Windsor
 			return (T[]) ResolveAll(typeof(T));
 		}
 
-
 		public Array ResolveAll(Type service)
 		{
 			return kernel.ResolveAll(service, new Hashtable());

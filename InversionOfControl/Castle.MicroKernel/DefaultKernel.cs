@@ -750,6 +750,9 @@ namespace Castle.MicroKernel
 			IHandler[] handlers = GetAssignableHandlers(service);
 			foreach (IHandler handler in handlers)
 			{
+				if(handler.CurrentState!=HandlerState.Valid)
+					continue;
+
 				object component = ResolveComponent(handler, service, arguments);
 				list.Add(component);
 			}
@@ -766,6 +769,31 @@ namespace Castle.MicroKernel
 		{
 			return ResolveAll(service, new ReflectionBasedDictionaryAdapter(argumentsAsAnonymousType));
 		}
+
+
+		/// <summary>
+		/// Returns component instances that implement TService
+		/// </summary>
+		/// <typeparam name="TService"></typeparam>
+		/// <param name="argumentsAsAnonymousType"></param>
+		/// <returns></returns>
+		public TService[] ResolveAll<TService>(object argumentsAsAnonymousType)
+		{
+			return (TService[]) ResolveAll(typeof(TService), argumentsAsAnonymousType);
+		}
+
+		/// <summary>
+		/// Returns component instances that implement TService
+		/// </summary>
+		/// <typeparam name="TService"></typeparam>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		public TService[] ResolveAll<TService>(IDictionary arguments)
+		{
+			return (TService[])ResolveAll(typeof(TService), arguments);
+		}
+
+
 
 		/// <summary>
 		/// Returns the component instance by the service type
@@ -915,20 +943,14 @@ namespace Castle.MicroKernel
 		}
 
 
-		public TService[] ResolveServices<TService>()
+		/// <summary>
+		/// Returns component instances that implement TService
+		/// </summary>
+		/// <typeparam name="TService"></typeparam>
+		/// <returns></returns>
+		public TService[] ResolveAll<TService>()
 		{
-			List<TService> services = new List<TService>();
-			IHandler[] handlers = GetHandlers(typeof(TService));
-
-			foreach (IHandler handler in handlers)
-			{
-				if (handler.CurrentState == HandlerState.Valid)
-				{
-					services.Add((TService)ResolveComponent(handler));
-				}
-			}
-
-			return services.ToArray();
+			return (TService[]) ResolveAll(typeof (TService), new Hashtable());
 		}
 
 		/// <summary>
