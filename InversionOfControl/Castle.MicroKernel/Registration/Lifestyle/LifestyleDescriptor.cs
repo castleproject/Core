@@ -17,11 +17,11 @@ namespace Castle.MicroKernel.Registration
 	using Castle.Core;
 	using Castle.Core.Configuration;
 
-	public abstract class LifestyleDescriptor<S> : ComponentDescriptor<S>
+	public class LifestyleDescriptor<S> : ComponentDescriptor<S>
 	{
 		private readonly LifestyleType lifestyle;
 
-		protected LifestyleDescriptor(LifestyleType lifestyle)
+		public LifestyleDescriptor(LifestyleType lifestyle)
 		{
 			this.lifestyle = lifestyle;	
 		}

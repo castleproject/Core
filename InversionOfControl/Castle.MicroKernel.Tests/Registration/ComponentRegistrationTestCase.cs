@@ -129,6 +129,20 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
+		public void AddComponent_WithExplicitLifestyle_WorksFine()
+		{
+			kernel.Register(
+				Component.For<ICustomer>()
+					.Named("customer")
+					.ImplementedBy<CustomerImpl>()
+					.LifeStyle.Is(LifestyleType.Transient)
+					);
+
+			IHandler handler = kernel.GetHandler("customer");
+			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+		}
+
+		[Test]
 		public void AddComponent_WithTransientLifestyle_WorksFine()
 		{
 			kernel.Register(

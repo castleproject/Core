@@ -14,11 +14,18 @@
 
 namespace Castle.MicroKernel.Registration.Lifestyle
 {
+	using Castle.Core;
+
 	public class LifestyleGroup<S> : RegistrationGroup<S>
 	{
 		public LifestyleGroup(ComponentRegistration<S> registration)
 			: base(registration)
 		{
+		}
+
+		public ComponentRegistration<S> Is(LifestyleType type)
+		{
+			return AddDescriptor(new LifestyleDescriptor<S>(type));
 		}
 
 		public ComponentRegistration<S> Transient
