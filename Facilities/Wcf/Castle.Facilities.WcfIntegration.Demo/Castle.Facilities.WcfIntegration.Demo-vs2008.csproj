@@ -73,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="UsingWindsorWithoutConfig.svc" />
     <Content Include="Default.aspx" />
     <Content Include="UsingWindsor.svc" />
     <Content Include="Global.asax" />

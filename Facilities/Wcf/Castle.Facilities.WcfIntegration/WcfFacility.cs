@@ -14,8 +14,14 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System;
+	using System.ServiceModel.Description;
+	using Castle.Core;
 	using Castle.MicroKernel.Facilities;
 
+	/// <summary>
+	/// Facility to simplify the management of WCF clients and services. 
+	/// </summary>
 	public class WcfFacility : AbstractFacility
 	{
 		private WcfClientExtension clientExtension;
@@ -25,11 +31,27 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			clientExtension = new WcfClientExtension(Kernel);
 			serviceExtension = new WcfServiceExtension(Kernel);
+
+			Kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
+		}
+
+		private void Kernel_ComponentModelCreated(ComponentModel model)
+		{
+			Type implementation = model.Implementation;
+
+			if (typeof(IServiceBehavior).IsAssignableFrom(implementation) ||
+				typeof(IEndpointBehavior).IsAssignableFrom(implementation) ||
+				typeof(IOperationBehavior).IsAssignableFrom(implementation) ||
+				typeof(IContractBehavior).IsAssignableFrom(implementation))
+			{
+				model.LifestyleType = LifestyleType.Transient;
+			}
 		}
 
 		public override void Dispose()
 		{
 			base.Dispose();
+
 			if (clientExtension != null) clientExtension.Dispose();
 			if (serviceExtension != null) serviceExtension.Dispose();
 		}

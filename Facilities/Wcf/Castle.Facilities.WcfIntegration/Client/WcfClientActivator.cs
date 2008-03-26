@@ -15,6 +15,9 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.Reflection;
+	using System.Collections.Generic;
+	using System.Threading;
 	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
@@ -22,6 +25,25 @@ namespace Castle.Facilities.WcfIntegration
 	public class WcfClientActivator : DefaultComponentActivator
 	{
 		private readonly ChannelCreator createChannel;
+
+		#region ClientChannelBuilder Delegate Fields
+
+		private delegate ChannelCreator CreateChannelDelegate(
+			IKernel kernel, IWcfClientModel clientModel, ComponentModel model);
+
+		private static readonly MethodInfo createChannelMethod =
+			typeof(WcfClientActivator).GetMethod("CreateChannelCreatorInternal",
+				BindingFlags.NonPublic | BindingFlags.Static, null,
+					new Type[] { typeof(IKernel), typeof(IWcfClientModel),
+						typeof(ComponentModel) }, null
+				);
+
+		private static readonly Dictionary<Type, CreateChannelDelegate>
+			createChannelCache = new Dictionary<Type, CreateChannelDelegate>();
+
+		private static ReaderWriterLock locker = new ReaderWriterLock();
+
+		#endregion
 
 		public WcfClientActivator(ComponentModel model, IKernel kernel,
 			ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
@@ -58,13 +80,43 @@ namespace Castle.Facilities.WcfIntegration
 
 		private ChannelCreator CreateChannelCreator(IKernel kernel, ComponentModel model)
 		{
+			CreateChannelDelegate createChannel;
+
 			WcfClientModel clientModel = (WcfClientModel)
 				model.ExtendedProperties[WcfConstants.ClientModelKey];
 
-			IClientChannelBuilder channelBuilder = kernel.Resolve<IClientChannelBuilder>();
-			ChannelCreator creator = channelBuilder.GetChannelCreator(clientModel.Endpoint, model.Service);
+			try
+			{
+				locker.AcquireReaderLock(Timeout.Infinite);
+
+				Type clientModelType = clientModel.GetType();
+
+				if (!createChannelCache.TryGetValue(clientModelType, out createChannel))
+				{
+					locker.UpgradeToWriterLock(Timeout.Infinite);
+
+					createChannel = (CreateChannelDelegate)
+						Delegate.CreateDelegate(typeof(CreateChannelDelegate),
+							createChannelMethod.MakeGenericMethod(clientModelType));
+					createChannelCache.Add(clientModelType, createChannel);
+				}
+			}
+			finally
+			{
+				locker.ReleaseLock();
+			}
+
+			ChannelCreator creator = createChannel(kernel, clientModel, model);
 			model.ExtendedProperties[WcfConstants.ChannelCreatorKey] = creator;
 			return creator;
+		}
+
+		internal static ChannelCreator CreateChannelCreatorInternal<M>(
+			IKernel kernel, IWcfClientModel clientModel, ComponentModel model)
+			where M : IWcfClientModel
+		{
+			IClientChannelBuilder<M> channelBuilder = kernel.Resolve<IClientChannelBuilder<M>>();
+			return channelBuilder.GetChannelCreator((M) clientModel, model.Service);
 		}
 	}
 }

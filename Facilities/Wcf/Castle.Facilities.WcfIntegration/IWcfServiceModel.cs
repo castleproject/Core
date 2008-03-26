@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,42 +14,14 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-    using System;
-
-	public class WcfClientModel : IWcfClientModel
+	/// <summary>
+	/// Contract for all WCF service models.
+	/// </summary>
+	public interface IWcfServiceModel
 	{
-		private IWcfEndpoint endpoint;
-
-		public WcfClientModel()
-		{
-		}
-
-		public WcfClientModel(IWcfEndpoint endpoint)
-		{
-			Endpoint = endpoint;
-		}
-
-		#region IWcfClientModel Members
-
-		public Type Contract
-		{
-			get { return endpoint.Contract; }
-		}
-
-		public IWcfEndpoint Endpoint
-		{
-			get { return endpoint; }
-			set 
-			{
-				if (value == null)
-				{
-					throw new ArgumentNullException("value");
-				}
-				endpoint = value; 
-			}
-		}
-
-		#endregion
+		/// <summary>
+		/// Determines if the service will be hosted.
+		/// </summary>
+		bool IsHosted { get; }
 	}
 }
-

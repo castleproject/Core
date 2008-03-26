@@ -22,23 +22,24 @@ namespace Castle.Facilities.WcfIntegration
 	public delegate object ChannelCreator();
 
 	/// <summary>
-	/// Contract for building channel factories.
+	/// The contract for building client channels.
 	/// </summary>
-	public interface IClientChannelBuilder
+	/// <typeparam name="M">The <see cref="IWcfClientModel"/> type.</typeparam>
+	public interface IClientChannelBuilder<M> where M : IWcfClientModel
 	{
 		/// <summary>
 		/// Get a delegate capable of creating channels.
 		/// </summary>
-		/// <param name="endpoint">The endpoint.</param>
+		/// <param name="clientModel">The client model.</param>
 		/// <returns>The <see cref="ChannelCreator"/></returns>
-		ChannelCreator GetChannelCreator(IWcfEndpoint endpoint);
+		ChannelCreator GetChannelCreator(M clientModel);
 
 		/// <summary>
 		/// Get a delegate capable of creating channels.
 		/// </summary>
-		/// <param name="endpoint">The endpoint.</param>
+		/// <param name="clientModel">The client model.</param>
 		/// <param name="contract">The contract override.</param>
 		/// <returns>The <see cref="ChannelCreator"/></returns>
-		ChannelCreator GetChannelCreator(IWcfEndpoint endpoint, Type contract);
+		ChannelCreator GetChannelCreator(M clientModel, Type contract);
 	}
 }

@@ -16,8 +16,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 {
 	using System;
 	using System.ServiceModel;
+	using Castle.Windsor;
+	using Castle.Facilities.WcfIntegration.Demo;
 	using NUnit.Framework;
-	using Windsor;
 
 	[TestFixture]
 	public class ServiceHostFactoryFixture
@@ -25,10 +26,13 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		[Test]
 		public void CanCreateServiceByName()
 		{
-			WindsorContainer windsorContainer = new WindsorContainer();
-			windsorContainer.AddComponent("operations", typeof (IOperations), typeof (Operations));
+			IWindsorContainer windsorContainer = new WindsorContainer()
+				.AddComponent("operations", typeof(IOperations), typeof(Operations))
+				.AddComponent<IServiceHostBuilder<WcfServiceModel>, DefaultServiceHostBuilder>();
+
 			WindsorServiceHostFactory factory = new WindsorServiceHostFactory(windsorContainer.Kernel);
-			ServiceHostBase serviceHost = factory.CreateServiceHost("operations", new Uri[] {new Uri("http://localhost/Foo.svc")});
+			ServiceHostBase serviceHost = factory.CreateServiceHost("operations", 
+				new Uri[] {new Uri("http://localhost/Foo.svc")});
 			Assert.IsInstanceOfType(typeof (WindsorServiceHost), serviceHost);
 		}
 
@@ -37,6 +41,14 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			WindsorServiceHostFactory factory = new WindsorServiceHostFactory(new WindsorContainer().Kernel);
 			Assert.IsNotNull(factory);
+		}
+
+		[Test, Ignore("This test requires the Castle.Facilities.WcfIntegration.Demo running")]
+		public void CanCallHostedService()
+		{
+			IAmUsingWindsor client = ChannelFactory<IAmUsingWindsor>.CreateChannel(
+				new BasicHttpBinding(), new EndpointAddress("http://localhost:27197/UsingWindsorWithoutConfig.svc"));
+			Assert.AreEqual(42, client.GetValueFromWindsorConfig());
 		}
 	}
 }

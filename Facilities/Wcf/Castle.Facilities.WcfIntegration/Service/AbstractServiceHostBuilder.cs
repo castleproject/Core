@@ -19,38 +19,12 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Description;
 	using Castle.Core;
 
-	public abstract class AbstractServiceHostBuilder : IServiceHostBuilder, IWcfEndpointVisitor
+	public abstract class AbstractServiceHostBuilder : IWcfEndpointVisitor
 	{
 		private ServiceHost serviceHost;
 		private ServiceEndpoint serviceEndpoint;
 
-		#region IServiceHostBuilder Members
-
-		/// <summary>
-		/// Builds a new <see cref="ServiceHost"/> for the <see cref="ComponentModel"/>.
-		/// </summary>
-		/// <param name="model">The component model.</param>
-		/// <param name="serviceModel">The service model.</param>
-		/// <returns>The correpsonding service host.</returns>
-		public ServiceHost Build(ComponentModel model, WcfServiceModel serviceModel)
-		{
-			ServiceHost serviceHost = CreateServiceHost(model, serviceModel);
-
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
-			{
-				AddServiceEndpoint(serviceHost, endpoint);
-			}
-
-			return serviceHost;
-		}
-
-		#endregion
-
-		protected abstract ServiceHost CreateServiceHost(ComponentModel model,
-												         WcfServiceModel serviceModel);
-
-		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, 
-			                                                 IWcfEndpoint endpoint)
+		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, IWcfEndpoint endpoint)
 		{
 			this.serviceHost = serviceHost;
 			endpoint.Accept(this);
@@ -92,5 +66,43 @@ namespace Castle.Facilities.WcfIntegration
 		}
 
 		#endregion
+	}
+
+	public abstract class AbstractServiceHostBuilder<M> : AbstractServiceHostBuilder, IServiceHostBuilder<M>
+			where M : IWcfServiceModel
+	{
+		#region IServiceHostBuilder Members
+
+		/// <summary>
+		/// Builds a new <see cref="ServiceHost"/> for the <see cref="ComponentModel"/>.
+		/// </summary>
+		/// <param name="model">The component model.</param>
+		/// <param name="serviceModel">The service model.</param>
+		/// <returns>The correpsonding service host.</returns>
+		public ServiceHost Build(ComponentModel model, M serviceModel)
+		{
+			ValidateServiceModel(model, serviceModel);
+			return CreateServiceHost(model, serviceModel);
+		}
+
+		/// <summary>
+		///  Builds a service host.
+		/// </summary>
+		/// <param name="serviceType">The service type.</param>
+		/// <param name="serviceModel">The service model.</param>
+		/// <returns>The service host.</returns>
+		public ServiceHost Build(Type serviceType, M serviceModel)
+		{
+			ValidateServiceModel(null, serviceModel);
+			return CreateServiceHost(serviceType, serviceModel);
+		}
+
+		#endregion
+
+		protected abstract ServiceHost CreateServiceHost(Type serviceType, M serviceModel);
+
+		protected abstract ServiceHost CreateServiceHost(ComponentModel model, M serviceModel);
+
+		protected abstract void ValidateServiceModel(ComponentModel model, M serviceModel);
 	}
 }

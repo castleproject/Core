@@ -14,13 +14,16 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System;
 	using Castle.Core;
 	using System.ServiceModel;
 
 	/// <summary>
-	/// Contract for building service hosts.
+	/// The contract for building service hosts.
 	/// </summary>
-	public interface IServiceHostBuilder
+	/// <typeparam name="M">The <see cref="IWcfServiceModel"/> type.</typeparam>
+	public interface IServiceHostBuilder<M> 
+		where M : IWcfServiceModel
 	{
 		/// <summary>
 		/// Builds a service host.
@@ -28,6 +31,15 @@ namespace Castle.Facilities.WcfIntegration
 		/// <param name="model">The component model.</param>
 		/// <param name="serviceModel">The service model.</param>
 		/// <returns>The service host.</returns>
-		ServiceHost Build(ComponentModel model, WcfServiceModel serviceModel);
+		/// 
+		ServiceHost Build(ComponentModel model, M serviceModel);
+
+		/// <summary>
+		///  Builds a service host.
+		/// </summary>
+		/// <param name="serviceType">The service type.</param>
+		/// <param name="serviceModel">The service model.</param>
+		/// <returns>The service host.</returns>
+		ServiceHost Build(Type serviceType, M serviceModel);
 	}
 }

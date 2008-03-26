@@ -26,13 +26,12 @@ namespace Castle.Facilities.WcfIntegration
 	internal class WcfClientExtension : IDisposable
 	{
 		private readonly IKernel kernel;
-		private IClientChannelBuilder channelBuilder;
  
 		public WcfClientExtension(IKernel kernel)
 		{
 			this.kernel = kernel;
 
-			SetUpClientChannelBuilder();
+			SetUpDefaultClientChannelBuilder();
 
 			kernel.AddComponent<WcfManagedChannelInterceptor>();
 			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
@@ -40,27 +39,26 @@ namespace Castle.Facilities.WcfIntegration
 
 		private void Kernel_ComponentModelCreated(ComponentModel model)
 		{
-			WcfClientModel clientModel = ResolveClientModel(model);
+			IWcfClientModel clientModel = ResolveClientModel(model);
 
 			if (clientModel != null)
 			{
 				model.CustomComponentActivator = typeof(WcfClientActivator);
 				model.ExtendedProperties[WcfConstants.ClientModelKey] = clientModel;
 				model.LifecycleSteps.Add(LifecycleStepType.Decommission, WcfChannelCleanupConcern.Instance);
-				InstallWcfManagedChannelInterceptor(model);
+				InstallManagedChannelInterceptor(model);
 			}
 		}
 
-		private void SetUpClientChannelBuilder()
+		private void SetUpDefaultClientChannelBuilder()
 		{
-			if (!kernel.HasComponent(typeof(IClientChannelBuilder)))
+			if (!kernel.HasComponent(typeof(IClientChannelBuilder<WcfClientModel>)))
 			{
-				kernel.AddComponent<DefaultChannelBuilder>(typeof(IClientChannelBuilder));
+				kernel.AddComponent<DefaultChannelBuilder>(typeof(IClientChannelBuilder<WcfClientModel>));
 			}
-			channelBuilder = kernel.Resolve<IClientChannelBuilder>();
 		}
 
-		private void InstallWcfManagedChannelInterceptor(ComponentModel model)
+		private void InstallManagedChannelInterceptor(ComponentModel model)
 		{
 			model.Dependencies.Add(new DependencyModel(DependencyType.Service, null,
 													   typeof(WcfManagedChannelInterceptor), false));
@@ -69,18 +67,15 @@ namespace Castle.Facilities.WcfIntegration
 			options.AllowChangeTarget = true;
 		}
 
-		private WcfClientModel ResolveClientModel(ComponentModel model)
+		private IWcfClientModel ResolveClientModel(ComponentModel model)
 		{
-			WcfClientModel clientModel = null;
+			IWcfClientModel clientModel = null;
 
 			if (model.Service.IsInterface)
 			{
-				if (WcfUtils.FindDependency<WcfClientModel>(
-					model.CustomDependencies, out clientModel))
-				{
-					ValidateClientModel(clientModel, model);
-				}
-				else if (model.Configuration != null)
+				if (!WcfUtils.FindDependency<IWcfClientModel>(
+						model.CustomDependencies, out clientModel) &&
+                    model.Configuration != null)
 				{
 					string endpointConfiguration =
 						 model.Configuration.Attributes[WcfConstants.EndpointConfiguration];
@@ -94,38 +89,6 @@ namespace Castle.Facilities.WcfIntegration
 			}
 
 			return clientModel;
-		}
-
-		private void ValidateClientModel(WcfClientModel clientModel, ComponentModel model)
-		{
-			Type contract;
-
-			if (model != null)
-			{
-				contract = model.Service;
-			}
-			else if (clientModel.Contract != null)
-			{
-				contract = clientModel.Contract;
-			}
-			else
-			{
-				throw new FacilityException(
-					"The client endpoint does not specify a contract.");
-			}
-
-			if ((model != null) && (clientModel.Contract != null) &&
-				(clientModel.Contract != model.Service))
-			{
-				throw new FacilityException("The client endpoint contract " +
-					clientModel.Contract.FullName + " does not match the expected contaxt" +
-					model.Service.FullName + ".");
-			}
-
-			if (clientModel.Endpoint == null)
-			{
-				throw new FacilityException("The client model requires an endpoint.");
-			}
 		}
 
 		#region IDisposable Members

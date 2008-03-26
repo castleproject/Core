@@ -19,28 +19,17 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Description;
 	using System.ServiceModel.Channels;
 
-	public abstract class AbstractChannelBuilder : IClientChannelBuilder, IWcfEndpointVisitor
+	public abstract class AbstractChannelBuilder : IWcfEndpointVisitor
 	{
 		private Type contract;
 		private ChannelCreator channelCreator;
 
-		/// <summary>
-		/// Get a delegate capable of creating channels.
-		/// </summary>
-		/// <param name="endpoint">The endpoint.</param>
-		/// <returns>The <see cref="ChannelCreator"/></returns>
-		public ChannelCreator GetChannelCreator(IWcfEndpoint endpoint)
+		protected ChannelCreator GetEndpointChannelCreator(IWcfEndpoint endpoint)
 		{
-			return GetChannelCreator(endpoint, null);
+			return GetEndpointChannelCreator(endpoint, null);
 		}
 
-		/// <summary>
-		/// Get a delegate capable of creating channels.
-		/// </summary>
-		/// <param name="endpoint">The endpoint.</param>
-		/// <param name="contract">The contract override.</param>
-		/// <returns>The <see cref="ChannelCreator"/></returns>
-		public ChannelCreator GetChannelCreator(IWcfEndpoint endpoint, Type contract)
+		protected ChannelCreator GetEndpointChannelCreator(IWcfEndpoint endpoint, Type contract)
 		{
 			this.contract = contract ?? endpoint.Contract;
 			endpoint.Accept(this);
@@ -93,5 +82,63 @@ namespace Castle.Facilities.WcfIntegration
 		}
 
 		#endregion
+	}
+
+	public abstract class AbstractChannelBuilder<M> : AbstractChannelBuilder, IClientChannelBuilder<M>
+			where M : IWcfClientModel
+	{
+		private M clientModel;
+
+		/// <summary>
+		/// Get a delegate capable of creating channels.
+		/// </summary>
+		/// <param name="clientModel">The client model.</param>
+		/// <returns>The <see cref="ChannelCreator"/></returns>
+		public ChannelCreator GetChannelCreator(M clientModel)
+		{
+			this.clientModel = clientModel;
+			return GetEndpointChannelCreator(clientModel.Endpoint);
+		}
+
+		/// <summary>
+		/// Get a delegate capable of creating channels.
+		/// </summary>
+		/// <param name="clientModel">The client model.</param>
+		/// <param name="contract">The contract override.</param>
+		/// <returns>The <see cref="ChannelCreator"/></returns>
+		public ChannelCreator GetChannelCreator(M clientModel, Type contract)
+		{
+			this.clientModel = clientModel;
+			return GetEndpointChannelCreator(clientModel.Endpoint, contract);
+		}
+
+		#region AbstractChannelBuilder Members
+
+		protected override ChannelCreator GetChannelCreator(Type contract, ServiceEndpoint endpoint)
+		{
+			return GetChannelCreator(clientModel, contract, endpoint);
+		}
+
+		protected override ChannelCreator GetChannelCreator(Type contract, string configurationName)
+		{
+			return GetChannelCreator(clientModel, contract, configurationName);
+		}
+
+		protected override ChannelCreator GetChannelCreator(Type contract, Binding binding, string address)
+		{
+			return GetChannelCreator(clientModel, contract, binding, address);
+		}
+
+		protected override ChannelCreator GetChannelCreator(Type contract, Binding binding, EndpointAddress address)
+		{
+			return GetChannelCreator(contract, binding, address);
+		}
+
+		#endregion
+
+		protected abstract ChannelCreator GetChannelCreator(M clientModel, Type contract, ServiceEndpoint endpoint);
+		protected abstract ChannelCreator GetChannelCreator(M clientModel, Type contract, string configurationName);
+		protected abstract ChannelCreator GetChannelCreator(M clientModel, Type contract, Binding binding, string address);
+		protected abstract ChannelCreator GetChannelCreator(M clientModel, Type contract, Binding binding, EndpointAddress address);
 	}
 }

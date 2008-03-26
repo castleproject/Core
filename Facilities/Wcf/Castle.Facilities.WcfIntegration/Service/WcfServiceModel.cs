@@ -17,29 +17,54 @@ namespace Castle.Facilities.WcfIntegration
     using System;
     using System.Collections.Generic;
 
-    public class WcfServiceModel
+    public class WcfServiceModel : IWcfServiceModel
     {
-        private ICollection<string> baseAddresses;
+		private bool hosted;
+        private ICollection<Uri> baseAddresses;
         private ICollection<IWcfEndpoint> endpoints;
 
-		public ICollection<string> BaseAddresses
+		#region IWfcServiceModel Members
+
+		public bool IsHosted
+		{
+			get { return hosted; }
+		}
+
+		#endregion
+	
+		public WcfServiceModel Hosted()
+		{
+			hosted = true;
+			return this;
+		}
+
+		public ICollection<Uri> BaseAddresses
 		{
 			get
 			{
 				if (baseAddresses == null)
 				{
-					baseAddresses = new List<string>();
+					baseAddresses = new List<Uri>();
 				}
 				return baseAddresses;
 			}
 			set { baseAddresses = value; }
 		}
 
+		public WcfServiceModel AddBaseAddresses(params Uri[] baseAddresses)
+		{
+			foreach (Uri baseAddress in baseAddresses)
+			{
+				BaseAddresses.Add(baseAddress);
+			}
+			return this;
+		}
+
         public WcfServiceModel AddBaseAddresses(params string[] baseAddresses)
         {
             foreach (string baseAddress in baseAddresses)
             {
-                BaseAddresses.Add(baseAddress);
+                BaseAddresses.Add(new Uri(baseAddress, UriKind.Absolute));
             }
             return this;
         }
@@ -65,17 +90,6 @@ namespace Castle.Facilities.WcfIntegration
             }
             return this;
         }
-
-        public Uri[] GetBaseAddressesUris()
-        {
-            int i = 0;
-            Uri[] baseAddressUris = new Uri[BaseAddresses.Count];
-            foreach (string baseAddress in BaseAddresses)
-            {
-                baseAddressUris[i++] = new Uri(baseAddress, UriKind.Absolute);
-            }
-            return baseAddressUris;
-        }
-    }
+	}
 }
 

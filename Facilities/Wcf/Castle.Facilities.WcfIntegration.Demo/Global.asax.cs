@@ -16,18 +16,50 @@ namespace Castle.Facilities.WcfIntegration.Demo
 {
 	using System;
 	using System.Web;
-	using Windsor;
+	using System.ServiceModel;
+	using System.ServiceModel.Description;
+	using Castle.MicroKernel.Registration;
+	using Castle.Windsor;
+	using Castle.Windsor.Installer;
 
 	public class Global : HttpApplication
 	{
+		private static IWindsorContainer container;
+
 		protected void Application_Start(object sender, EventArgs e)
 		{
-			WindsorContainer container = new WindsorContainer("windsor.xml");
+			ServiceDebugBehavior returnFaults = new ServiceDebugBehavior();
+			returnFaults.IncludeExceptionDetailInFaults = true;
+			returnFaults.HttpHelpPageEnabled = true;
+
+			ServiceMetadataBehavior metadata = new ServiceMetadataBehavior();
+			metadata.HttpGetEnabled = true;
+
+			container = new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Install(Configuration.FromXmlFile("windsor.xml"))
+				.Register(
+					Component.For<IServiceBehavior>().Instance(returnFaults),
+					Component.For<IServiceBehavior>().Instance(metadata),
+					Component.For<IAmUsingWindsor>()
+					.Named("look no config")
+					.ImplementedBy<UsingWindsorWithoutConfig>()
+					.CustomDependencies(
+						Property.ForKey("number").Eq(42),
+						Property.ForKey("serviceModel").Eq(
+							new WcfServiceModel().Hosted()
+								.AddEndpoints(WcfEndpoint.BoundTo(new BasicHttpBinding()))
+							))
+					);
 			WindsorServiceHostFactory.RegisterContainer(container.Kernel);
 		}
 
 		protected void Application_End(object sender, EventArgs e)
 		{
+			if (container != null)
+			{
+				container.Dispose();
+			}
 		}
 	}
 }

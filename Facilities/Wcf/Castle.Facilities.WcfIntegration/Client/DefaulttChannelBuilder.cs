@@ -21,7 +21,10 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Description;
 	using Castle.MicroKernel;
 
-	public class DefaultChannelBuilder : AbstractChannelBuilder
+	/// <summary>
+	/// The default implementation of <see cref="IClientChannelBuilder{M}"/>.
+	/// </summary>
+	public class DefaultChannelBuilder : AbstractChannelBuilder<WcfClientModel>
 	{
 		private readonly IKernel kernel;
 
@@ -30,23 +33,26 @@ namespace Castle.Facilities.WcfIntegration
 			this.kernel = kernel;
 		}
 
-		protected override ChannelCreator GetChannelCreator(Type contract, ServiceEndpoint endpoint)
+		protected override ChannelCreator GetChannelCreator(WcfClientModel clientModel, Type contract,
+			                                                ServiceEndpoint endpoint)
 		{
 			return CreateChannelCreator(contract, endpoint);
 		}
 
-		protected override ChannelCreator GetChannelCreator(Type contract, string configurationName)
+		protected override ChannelCreator GetChannelCreator(WcfClientModel clientMode, Type contract, 
+			                                                string configurationName)
 		{
 			return CreateChannelCreator(contract, configurationName);
 		}
 
-		protected override ChannelCreator GetChannelCreator(Type contract, Binding binding, string address)
+		protected override ChannelCreator GetChannelCreator(WcfClientModel clientModel, Type contract, 
+			                                                Binding binding, string address)
 		{
 			return CreateChannelCreator(contract, binding, address);
 		}
 
-		protected override ChannelCreator GetChannelCreator(Type contract, Binding binding, 
-			                                                EndpointAddress address)
+		protected override ChannelCreator GetChannelCreator(WcfClientModel clientModel, Type contract, 
+			                                                Binding binding, EndpointAddress address)
 		{
 			return CreateChannelCreator(contract, binding, address);
 		}

@@ -41,4 +41,12 @@ namespace Castle.Facilities.WcfIntegration.Demo
 
 		#endregion
 	}
+
+	public class UsingWindsorWithoutConfig : UsingWindsor
+	{
+		public UsingWindsorWithoutConfig(int number)
+			: base(number)
+		{
+		}
+	}
 }
