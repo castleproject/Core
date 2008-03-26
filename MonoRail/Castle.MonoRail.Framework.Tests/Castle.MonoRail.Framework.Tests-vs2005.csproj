@@ -148,9 +148,6 @@
     <Compile Include="Actions\ActionMethodExecutorTestCase.cs" />
     <Compile Include="Actions\DefaultActionSelectorTestCase.cs" />
     <Compile Include="Actions\DynamicActionExecutorTestCase.cs" />
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Configuration\ViewEngineConfigTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

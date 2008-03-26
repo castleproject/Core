@@ -35,7 +35,7 @@
 		</resourcefileset>
 	</target>
 
-	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+	<target name="generate-assemblyinfo" /> <!-- NOP -->
 
 	<target name="test" depends="init generate-assemblyinfo common.compile-tests common.run-tests" description="Runs the tests" />
 
