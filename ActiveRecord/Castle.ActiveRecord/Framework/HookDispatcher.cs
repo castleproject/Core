@@ -181,31 +181,6 @@ namespace Castle.ActiveRecord.Framework
 		}
 
 		/// <summary>
-		/// Called when a transient entity is passed to <c>SaveOrUpdate</c>.
-		/// </summary>
-		/// <remarks>
-		///	The return value determines if the object is saved
-		///	<list>
-		///		<item><c>true</c> - the entity is passed to <c>Save()</c>, resulting in an <c>INSERT</c></item>
-		///		<item><c>false</c> - the entity is passed to <c>Update()</c>, resulting in an <c>UPDATE</c></item>
-		///		<item><c>null</c> - Hibernate uses the <c>unsaved-value</c> mapping to determine if the object is unsaved</item>
-		///	</list>
-		/// </remarks>
-		/// <param name="entity">A transient entity</param>
-		/// <returns></returns>
-		public override bool? IsUnsaved(object entity)
-		{
-			ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
-
-			if (hookTarget != null)
-			{
-				return hookTarget.IsUnsaved();
-			}
-
-			return null;
-		}
-
-		/// <summary>
 		/// Called from <c>Flush()</c>. The return value determines whether the entity is updated
 		/// </summary>
 		/// <remarks>
@@ -235,13 +210,18 @@ namespace Castle.ActiveRecord.Framework
 		}
 
 		/// <summary>
-		/// Instantiate the entity class. Return <c>null</c> to indicate that Hibernate should use the default
+		/// Instantiate the entity class. Return <see langword="null" /> to indicate that Hibernate should use the default
 		/// constructor of the class
 		/// </summary>
-		/// <param name="type">A mapped type</param>
-		/// <param name="id">The identifier of the new instance</param>
-		/// <returns>An instance of the class, or <c>null</c> to choose default behaviour</returns>
-		public override object Instantiate(Type type, object id)
+		/// <param name="entityName">the name of the entity </param>
+		/// <param name="entityMode">The type of entity instance to be returned. </param>
+		/// <param name="id">the identifier of the new instance </param>
+		/// <returns>An instance of the class, or <see langword="null" /> to choose default behaviour</returns>
+		/// <remarks>
+		/// The identifier property of the returned instance
+		/// should be initialized with the given identifier.
+		/// </remarks>
+		public override object Instantiate(System.String entityName, EntityMode entityMode, object id)
 		{
 			return null;
 		}

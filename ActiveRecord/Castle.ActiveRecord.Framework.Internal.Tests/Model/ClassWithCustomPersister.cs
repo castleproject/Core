@@ -359,7 +359,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		public Cascades.CascadeStyle[] PropertyCascadeStyles
+		public CascadeStyle[] PropertyCascadeStyles
 		{
 			get { throw new NotImplementedException(); }
 		}

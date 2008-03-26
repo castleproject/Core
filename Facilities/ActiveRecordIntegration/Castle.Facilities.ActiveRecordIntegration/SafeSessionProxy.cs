@@ -341,6 +341,19 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			return innerSession.Get(clazz, id, lockMode);
 		}
 
+		/// <summary> 
+		/// Return the persistent instance of the given named entity with the given identifier,
+		/// or null if there is no such persistent instance. (If the instance, or a proxy for the
+		/// instance, is already associated with the session, return that instance or proxy.) 
+		/// </summary>
+		/// <param name="entityName">the entity name </param>
+		/// <param name="id">an identifier </param>
+		/// <returns> a persistent instance or null </returns>
+		public object Get(string entityName, object id)
+		{
+			return innerSession.Get(entityName, id);
+		}
+
 		/// <summary>
 		/// Gets the specified id.
 		/// </summary>
@@ -423,6 +436,19 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			innerSession.Replicate(obj, replicationMode);
 		}
 
+		/// <summary> 
+		/// Persist the state of the given detached instance, reusing the current
+		/// identifier value.  This operation cascades to associated instances if
+		/// the association is mapped with <tt>cascade="replicate"</tt>. 
+		/// </summary>
+		/// <param name="entityName"></param>
+		/// <param name="obj">a detached instance of a persistent class </param>
+		/// <param name="replicationMode"></param>
+		public void Replicate(string entityName, object obj, ReplicationMode replicationMode)
+		{
+			innerSession.Replicate(entityName, obj, replicationMode);
+		}
+
 		/// <summary>
 		/// Persist the given transient instance, first assigning a generated identifier.
 		/// </summary>
@@ -448,6 +474,23 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		}
 
 		/// <summary>
+		/// Persist the given transient instance, first assigning a generated identifier. (Or
+		/// using the current value of the identifier property if the <tt>assigned</tt>
+		/// generator is used.)
+		/// </summary>
+		/// <param name="entityName">The Entity name.</param>
+		/// <param name="obj">a transient instance of a persistent class </param>
+		/// <returns> the generated identifier </returns>
+		/// <remarks>
+		/// This operation cascades to associated instances if the
+		/// association is mapped with <tt>cascade="save-update"</tt>. 
+		/// </remarks>
+		public object Save(string entityName, object obj)
+		{
+			return innerSession.Save(entityName, obj);
+		}
+
+		/// <summary>
 		/// Either <c>Save()</c> or <c>Update()</c> the given instance, depending upon the value of
 		/// its identifier property.
 		/// </summary>
@@ -459,6 +502,24 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public void SaveOrUpdate(object obj)
 		{
 			innerSession.SaveOrUpdate(obj);
+		}
+
+		/// <summary> 
+		/// Either <see cref="Save(String,Object)"/> or <see cref="Update(String,Object)"/>
+		/// the given instance, depending upon resolution of the unsaved-value checks
+		/// (see the manual for discussion of unsaved-value checking).
+		/// </summary>
+		/// <param name="entityName">The name of the entity </param>
+		/// <param name="obj">a transient or detached instance containing new or updated state </param>
+		/// <seealso cref="ISession.Save(String,Object)"/>
+		/// <seealso cref="ISession.Update(String,Object)"/>
+		/// <remarks>
+		/// This operation cascades to associated instances if the association is mapped
+		/// with <tt>cascade="save-update"</tt>. 
+		/// </remarks>
+		public void SaveOrUpdate(string entityName, object obj)
+		{
+			innerSession.SaveOrUpdate(entityName, obj);
 		}
 
 		/// <summary>
@@ -486,6 +547,84 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public void Update(object obj, object id)
 		{
 			innerSession.Update(obj, id);
+		}
+
+		/// <summary> 
+		/// Update the persistent instance with the identifier of the given detached
+		/// instance. 
+		/// </summary>
+		/// <param name="entityName">The Entity name.</param>
+		/// <param name="obj">a detached instance containing updated state </param>
+		/// <remarks>
+		/// If there is a persistent instance with the same identifier,
+		/// an exception is thrown. This operation cascades to associated instances
+		/// if the association is mapped with <tt>cascade="save-update"</tt>. 
+		/// </remarks>
+		public void Update(string entityName, object obj)
+		{
+			innerSession.Update(entityName, obj);
+		}
+
+		/// <summary> 
+		/// Copy the state of the given object onto the persistent object with the same
+		/// identifier. If there is no persistent instance currently associated with
+		/// the session, it will be loaded. Return the persistent instance. If the
+		/// given instance is unsaved, save a copy of and return it as a newly persistent
+		/// instance. The given instance does not become associated with the session.
+		/// This operation cascades to associated instances if the association is mapped
+		/// with <tt>cascade="merge"</tt>.<br/>
+		/// <br/>
+		/// The semantics of this method are defined by JSR-220. 
+		/// </summary>
+		/// <param name="obj">a detached instance with state to be copied </param>
+		/// <returns> an updated persistent instance </returns>
+		public object Merge(object obj)
+		{
+			return innerSession.Merge(obj);
+		}
+
+		/// <summary> 
+		/// Copy the state of the given object onto the persistent object with the same
+		/// identifier. If there is no persistent instance currently associated with
+		/// the session, it will be loaded. Return the persistent instance. If the
+		/// given instance is unsaved, save a copy of and return it as a newly persistent
+		/// instance. The given instance does not become associated with the session.
+		/// This operation cascades to associated instances if the association is mapped
+		/// with <tt>cascade="merge"</tt>.<br/>
+		/// <br/>
+		/// The semantics of this method are defined by JSR-220. 
+		/// </summary>
+		/// <param name="entityName">The entity name</param>
+		/// <param name="obj">a detached instance with state to be copied </param>
+		/// <returns> an updated persistent instance </returns>
+		public object Merge(string entityName, object obj)
+		{
+			return innerSession.Merge(entityName, obj);
+		}
+
+		/// <summary> 
+		/// Make a transient instance persistent. This operation cascades to associated
+		/// instances if the association is mapped with <tt>cascade="persist"</tt>.<br/>
+		/// <br/>
+		/// The semantics of this method are defined by JSR-220. 
+		/// </summary>
+		/// <param name="obj">a transient instance to be made persistent </param>
+		public void Persist(object obj)
+		{
+			innerSession.Persist(obj);
+		}
+
+		/// <summary> 
+		/// Make a transient instance persistent. This operation cascades to associated
+		/// instances if the association is mapped with <tt>cascade="persist"</tt>.<br/>
+		/// <br/>
+		/// The semantics of this method are defined by JSR-220. 
+		/// </summary>
+		/// <param name="entityName">The entity name.</param>
+		/// <param name="obj">a transient instance to be made persistent </param>
+		public void Persist(string entityName, object obj)
+		{
+			innerSession.Persist(entityName, obj);
 		}
 
 		/// <summary>
@@ -793,6 +932,23 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public void Lock(object obj, LockMode lockMode)
 		{
 			innerSession.Lock(obj, lockMode);
+		}
+
+		/// <summary> 
+		/// Obtain the specified lock level upon the given object. 
+		/// </summary>
+		/// <param name="entityName">The Entity name.</param>
+		/// <param name="obj">a persistent or transient instance </param>
+		/// <param name="lockMode">the lock level </param>
+		/// <remarks>
+		/// This may be used to perform a version check (<see cref="LockMode.Read"/>), to upgrade to a pessimistic
+		/// lock (<see cref="LockMode.Upgrade"/>), or to simply reassociate a transient instance
+		/// with a session (<see cref="LockMode.None"/>). This operation cascades to associated
+		/// instances if the association is mapped with <tt>cascade="lock"</tt>.
+		/// </remarks>
+		public void Lock(string entityName, object obj, LockMode lockMode)
+		{
+			innerSession.Lock(entityName, obj, lockMode);
 		}
 
 		/// <summary>
