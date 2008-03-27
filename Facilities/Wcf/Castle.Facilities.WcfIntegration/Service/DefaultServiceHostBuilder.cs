@@ -25,29 +25,29 @@ namespace Castle.Facilities.WcfIntegration
 	/// </summary>
 	public class DefaultServiceHostBuilder : AbstractServiceHostBuilder<WcfServiceModel>
 	{
-		private readonly IKernel kernel;
-
 		/// <summary>
 		/// Constructs a new <see cref="DefaultServiceHostBuilder"/>.
 		/// </summary>
 		/// <param name="kernel">The kernel.</param>
 		public DefaultServiceHostBuilder(IKernel kernel)
+			: base(kernel)
 		{
-			this.kernel = kernel;
 		}
 
 		#region AbstractServiceHostBuilder Members
 
 		protected override ServiceHost CreateServiceHost(ComponentModel model, WcfServiceModel serviceModel)
 		{
-			ServiceHost serviceHost = new WindsorServiceHost(kernel, model, GetBaseAddressArray(serviceModel));
+			Uri[] baseAddresss = GetBaseAddressArray(serviceModel);
+			ServiceHost serviceHost = new ServiceHost(model.Implementation, baseAddresss);
 			ConfigureServiceHost(serviceHost, serviceModel);
 			return serviceHost;
 		}
 
 		protected override ServiceHost CreateServiceHost(Type serviceType, WcfServiceModel serviceModel)
 		{
-			ServiceHost serviceHost = new WindsorServiceHost(kernel, serviceType, GetBaseAddressArray(serviceModel));
+			Uri[] baseAddresss = GetBaseAddressArray(serviceModel);
+			ServiceHost serviceHost = new ServiceHost(serviceType, baseAddresss);
 			ConfigureServiceHost(serviceHost, serviceModel);
 			return serviceHost;
 		}
@@ -85,11 +85,6 @@ namespace Castle.Facilities.WcfIntegration
 			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
 			{
 				AddServiceEndpoint(serviceHost, endpoint);
-			}
-
-			if (!serviceModel.IsHosted)
-			{
-				serviceHost.Open();
 			}
 		}
 

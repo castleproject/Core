@@ -33,7 +33,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			WindsorServiceHostFactory factory = new WindsorServiceHostFactory(windsorContainer.Kernel);
 			ServiceHostBase serviceHost = factory.CreateServiceHost("operations", 
 				new Uri[] {new Uri("http://localhost/Foo.svc")});
-			Assert.IsInstanceOfType(typeof (WindsorServiceHost), serviceHost);
+			Assert.IsNotNull(serviceHost);
 		}
 
 		[Test]

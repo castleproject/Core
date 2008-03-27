@@ -101,7 +101,6 @@
     <Compile Include="Internal\WcfUtils.cs" />
     <Compile Include="Service\WindsorDependencyInjectionServiceBehavior.cs" />
     <Compile Include="Service\WindsorInstanceProvider.cs" />
-    <Compile Include="Service\WindsorServiceHost.cs" />
     <Compile Include="Service\WindsorServiceHostFactory.cs" />
   </ItemGroup>
   <ItemGroup>

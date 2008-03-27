@@ -27,7 +27,7 @@ namespace Castle.Facilities.WcfIntegration
 		Type Contract { get; }
 
 		/// <summary>
-		/// Gets the service endpoint.
+		/// Gets the endpoint of the service.
 		/// </summary>
 		IWcfEndpoint Endpoint { get; }
 	}

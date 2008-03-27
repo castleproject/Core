@@ -29,14 +29,6 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	public class ServiceHostFixture
 	{
 		[Test]
-		public void CanCreateServiceHost()
-		{
-			WindsorServiceHost host = new WindsorServiceHost(
-				new WindsorContainer().Kernel, typeof (Operations));
-			Assert.IsNotNull(host);
-		}
-
-		[Test]
 		public void CanCreateServiceHostAndOpenHost()
 		{
 			using (new WindsorContainer()

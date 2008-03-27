@@ -18,11 +18,23 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel;
 	using System.ServiceModel.Description;
 	using Castle.Core;
+	using Castle.MicroKernel;
 
 	public abstract class AbstractServiceHostBuilder : IWcfEndpointVisitor
 	{
+		private readonly IKernel kernel;
 		private ServiceHost serviceHost;
 		private ServiceEndpoint serviceEndpoint;
+
+		protected AbstractServiceHostBuilder(IKernel kernel)
+		{
+			this.kernel = kernel;
+		}
+		
+		protected IKernel Kernel
+		{
+			get { return kernel; }
+		}
 
 		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, IWcfEndpoint endpoint)
 		{
@@ -31,6 +43,40 @@ namespace Castle.Facilities.WcfIntegration
 			return serviceEndpoint;
 		}
 
+		protected virtual void OnOpening(ServiceHost serviceHost, ComponentModel model)
+		{
+			serviceHost.Description.Behaviors.Add(new WindsorDependencyInjectionServiceBehavior(Kernel, model));
+
+			IHandler[] serviceBehaviorHandlers = Kernel.GetAssignableHandlers(typeof(IServiceBehavior));
+			foreach (IHandler handler in serviceBehaviorHandlers)
+			{
+				if (handler.ComponentModel.Implementation == typeof(ServiceDebugBehavior))
+				{
+					serviceHost.Description.Behaviors.Remove<ServiceDebugBehavior>();
+				}
+				serviceHost.Description.Behaviors.Add((IServiceBehavior)handler.Resolve(CreationContext.Empty));
+			}
+
+			IHandler[] endPointBehaviors = kernel.GetAssignableHandlers(typeof(IEndpointBehavior));
+			IHandler[] operationBehaviors = kernel.GetAssignableHandlers(typeof(IOperationBehavior));
+
+			foreach (ServiceEndpoint endpoint in serviceHost.Description.Endpoints)
+			{
+				foreach (IHandler handler in endPointBehaviors)
+				{
+					endpoint.Behaviors.Add((IEndpointBehavior)handler.Resolve(CreationContext.Empty));
+				}
+
+				foreach (OperationDescription operation in endpoint.Contract.Operations)
+				{
+					foreach (IHandler operationHandler in operationBehaviors)
+					{
+						operation.Behaviors.Add((IOperationBehavior)operationHandler.Resolve(CreationContext.Empty));
+					}
+				}
+			}
+		}
+		
 		#region IWcfEndpointVisitor Members
 
 		void IWcfEndpointVisitor.VisitServiceEndpointModel(ServiceEndpointModel model)
@@ -71,6 +117,18 @@ namespace Castle.Facilities.WcfIntegration
 	public abstract class AbstractServiceHostBuilder<M> : AbstractServiceHostBuilder, IServiceHostBuilder<M>
 			where M : IWcfServiceModel
 	{
+		private M serviceModel;
+
+		protected AbstractServiceHostBuilder(IKernel kernel)
+			: base(kernel)
+		{
+		}
+
+		protected M ServiceModel
+		{
+			get { return serviceModel; }
+		}
+
 		#region IServiceHostBuilder Members
 
 		/// <summary>
@@ -81,8 +139,11 @@ namespace Castle.Facilities.WcfIntegration
 		/// <returns>The correpsonding service host.</returns>
 		public ServiceHost Build(ComponentModel model, M serviceModel)
 		{
+			this.serviceModel = serviceModel;
 			ValidateServiceModel(model, serviceModel);
-			return CreateServiceHost(model, serviceModel);
+			ServiceHost serviceHost = CreateServiceHost(model, serviceModel);
+			OpenServiceHost(serviceHost, serviceModel, model);
+			return serviceHost;
 		}
 
 		/// <summary>
@@ -93,12 +154,25 @@ namespace Castle.Facilities.WcfIntegration
 		/// <returns>The service host.</returns>
 		public ServiceHost Build(Type serviceType, M serviceModel)
 		{
+			this.serviceModel = serviceModel;
 			ValidateServiceModel(null, serviceModel);
-			return CreateServiceHost(serviceType, serviceModel);
+			ServiceHost serviceHost = CreateServiceHost(serviceType, serviceModel);
+			OpenServiceHost(serviceHost, serviceModel, null);
+			return serviceHost;
 		}
 
 		#endregion
 
+		private void OpenServiceHost(ServiceHost serviceHost, M serviceModel, ComponentModel model)
+		{
+			serviceHost.Opening += delegate { OnOpening(serviceHost, model); };
+			
+			if (!serviceModel.IsHosted)
+			{
+				serviceHost.Open();
+			}
+		}
+		
 		protected abstract ServiceHost CreateServiceHost(Type serviceType, M serviceModel);
 
 		protected abstract ServiceHost CreateServiceHost(ComponentModel model, M serviceModel);
