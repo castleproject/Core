@@ -75,13 +75,13 @@ namespace Castle.Facilities.WcfIntegration
 			ChannelFactory channelFactory = (ChannelFactory)sender;
 			ServiceEndpoint endpoint = channelFactory.Endpoint;
 
-			IHandler[] endPointBehaviors = kernel.GetHandlers(typeof(IEndpointBehavior));
+			IHandler[] endPointBehaviors = kernel.GetAssignableHandlers(typeof(IEndpointBehavior));
 			foreach (IHandler handler in endPointBehaviors)
 			{
 				endpoint.Behaviors.Add((IEndpointBehavior)handler.Resolve(CreationContext.Empty));
 			}
 
-			IHandler[] operationBehaviors = kernel.GetHandlers(typeof(IOperationBehavior));
+			IHandler[] operationBehaviors = kernel.GetAssignableHandlers(typeof(IOperationBehavior));
 			foreach (OperationDescription operation in endpoint.Contract.Operations)
 			{
 				foreach (IHandler operationHandler in operationBehaviors)

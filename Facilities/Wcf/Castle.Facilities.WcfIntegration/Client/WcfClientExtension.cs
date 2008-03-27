@@ -31,7 +31,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.kernel = kernel;
 
-			SetUpDefaultClientChannelBuilder();
+			AddClientChannelBuilder<DefaultChannelBuilder, WcfClientModel>(false);
 
 			kernel.AddComponent<WcfManagedChannelInterceptor>();
 			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
@@ -50,11 +50,13 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
-		private void SetUpDefaultClientChannelBuilder()
+		internal void AddClientChannelBuilder<T, M>(bool force)
+			where T : IClientChannelBuilder<M>
+			where M : IWcfClientModel
 		{
-			if (!kernel.HasComponent(typeof(IClientChannelBuilder<WcfClientModel>)))
+			if (force || !kernel.HasComponent(typeof(IClientChannelBuilder<M>)))
 			{
-				kernel.AddComponent<DefaultChannelBuilder>(typeof(IClientChannelBuilder<WcfClientModel>));
+				kernel.AddComponent<T>(typeof(IClientChannelBuilder<M>));
 			}
 		}
 

@@ -21,6 +21,7 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
+	using Castle.MicroKernel.Facilities;
 
 	public class WcfClientActivator : DefaultComponentActivator
 	{
@@ -78,12 +79,53 @@ namespace Castle.Facilities.WcfIntegration
 			return instance;
 		}
 
+		private IWcfClientModel ObtainClientModel(ComponentModel model)
+		{
+			WcfClientModel clientModel = (WcfClientModel)
+				model.ExtendedProperties[WcfConstants.ClientModelKey];
+
+			ValidateClientModel(clientModel, model);
+
+			return clientModel;
+		}
+
+		private void ValidateClientModel(WcfClientModel clientModel, ComponentModel model)
+		{
+			Type contract;
+
+			if (model != null)
+			{
+				contract = model.Service;
+			}
+			else if (clientModel.Contract != null)
+			{
+				contract = clientModel.Contract;
+			}
+			else
+			{
+				throw new FacilityException(
+					"The client endpoint does not specify a contract.");
+			}
+
+			if ((model != null) && (clientModel.Contract != null) &&
+				(clientModel.Contract != model.Service))
+			{
+				throw new FacilityException("The client endpoint contract " +
+					clientModel.Contract.FullName + " conflicts with the expected contaxt" +
+					model.Service.FullName + ".");
+			}
+
+			if (clientModel.Endpoint == null)
+			{
+				throw new FacilityException("The client model requires an endpoint.");
+			}
+		}
+
 		private ChannelCreator CreateChannelCreator(IKernel kernel, ComponentModel model)
 		{
 			CreateChannelDelegate createChannel;
 
-			WcfClientModel clientModel = (WcfClientModel)
-				model.ExtendedProperties[WcfConstants.ClientModelKey];
+			IWcfClientModel clientModel = ObtainClientModel(model);
 
 			try
 			{

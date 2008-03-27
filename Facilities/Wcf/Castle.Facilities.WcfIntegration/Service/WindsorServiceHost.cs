@@ -41,7 +41,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			Description.Behaviors.Add(new WindsorDependencyInjectionServiceBehavior(kernel, model));
 
-			IHandler[] serviceBehaviorHandlers = kernel.GetHandlers(typeof (IServiceBehavior));
+			IHandler[] serviceBehaviorHandlers = kernel.GetAssignableHandlers(typeof (IServiceBehavior));
 			foreach (IHandler handler in serviceBehaviorHandlers)
 			{
 				if (handler.ComponentModel.Implementation == typeof(ServiceDebugBehavior))
@@ -51,8 +51,8 @@ namespace Castle.Facilities.WcfIntegration
 				Description.Behaviors.Add((IServiceBehavior) handler.Resolve(CreationContext.Empty));
 			}
 
-			IHandler[] endPointBehaviors = kernel.GetHandlers(typeof (IEndpointBehavior));
-			IHandler[] operationBehaviors = kernel.GetHandlers(typeof(IOperationBehavior));
+			IHandler[] endPointBehaviors = kernel.GetAssignableHandlers(typeof(IEndpointBehavior));
+			IHandler[] operationBehaviors = kernel.GetAssignableHandlers(typeof(IOperationBehavior));
 
 			foreach (ServiceEndpoint endpoint in Description.Endpoints)
 			{

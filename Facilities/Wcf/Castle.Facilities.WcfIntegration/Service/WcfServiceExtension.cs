@@ -50,13 +50,13 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.kernel = kernel;
 
-			SetUpDefaultServiceHostBuilder();
 			WindsorServiceHostFactory.RegisterContainer(kernel);
+			AddServiceHostBuilder<DefaultServiceHostBuilder, WcfServiceModel>(false);
 
 			kernel.ComponentRegistered += Kernel_ComponentRegistered;
 			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
 		}
-
+	
 		private void Kernel_ComponentRegistered(string key, IHandler handler)
 		{
 			ComponentModel model = handler.ComponentModel;
@@ -86,11 +86,13 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
-		private void SetUpDefaultServiceHostBuilder()
+		internal void AddServiceHostBuilder<T, M>(bool force)
+			where T : IServiceHostBuilder<M>
+			where M : IWcfServiceModel
 		{
-			if (!kernel.HasComponent(typeof(IServiceHostBuilder<WcfServiceModel>)))
+			if (force || !kernel.HasComponent(typeof(IServiceHostBuilder<M>)))
 			{
-				kernel.AddComponent<DefaultServiceHostBuilder>(typeof(IServiceHostBuilder<WcfServiceModel>));
+				kernel.AddComponent<T>(typeof(IServiceHostBuilder<M>));
 			}
 		}
 
