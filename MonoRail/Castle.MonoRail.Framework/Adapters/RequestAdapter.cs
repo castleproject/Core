@@ -12,11 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.MonoRail.Framework;
+
 namespace Castle.MonoRail.Framework.Adapters
 {
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.IO;
 	using System.Web;
 	using Castle.Components.Binder;
 
@@ -27,9 +30,26 @@ namespace Castle.MonoRail.Framework.Adapters
 	{
 		private TreeBuilder treeBuilder = new TreeBuilder();
 		private HttpRequest request;
-		private CompositeNode paramsNode, formNode, queryStringNode;
 		private FileDictionaryAdapter files;
 
+		/// <summary>
+		/// Lazy initialized property with a hierarchical 
+		/// representation of the flat data on <see cref="Controller.Params"/>
+		/// </summary>
+		protected CompositeNode paramsCompositeNode;
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical 
+		/// representation of the flat data on <see cref="IRequest.Form"/>
+		/// </summary>
+		protected CompositeNode formCompositeNode;
+
+		/// <summary>
+		/// Lazy initialized property with a hierarchical 
+		/// representation of the flat data on <see cref="IRequest.QueryString"/>
+		/// </summary>
+		protected CompositeNode queryStringCompositeNode;
+		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RequestAdapter"/> class.
 		/// </summary>
@@ -87,6 +107,25 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return request.Url.IsLoopback; }
 		}
 
+		/// <summary>
+		/// Gets the contents of the incoming HTTP entity body.
+		/// </summary>
+		/// <value></value>
+		public Stream InputStream
+		{
+			get { return request.InputStream; }
+		}
+		
+		/// <summary>
+		/// Gets or sets the MIME content type of the incoming request.
+		/// </summary>
+		/// <value></value>
+		public string ContentType
+		{
+			get { return request.ContentType; }
+			set { request.ContentType = value; }
+		}
+		
 		/// <summary>
 		/// Gets the request type (GET, POST, etc)
 		/// </summary>
@@ -251,17 +290,17 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Lazy initialized property with a hierarchical 
 		/// representation of the flat data on <see cref="Controller.Params"/>
 		/// </summary>
-		public CompositeNode ParamsNode
+		public virtual CompositeNode ParamsNode
 		{
 			get
 			{
-				if (paramsNode == null)
+				if (paramsCompositeNode == null)
 				{
-					paramsNode = treeBuilder.BuildSourceNode(Params);
-					treeBuilder.PopulateTree(paramsNode, request.Files);
+					paramsCompositeNode = treeBuilder.BuildSourceNode(Params);
+					treeBuilder.PopulateTree(paramsCompositeNode, request.Files);
 				}
 
-				return paramsNode;
+				return paramsCompositeNode;
 			}
 		}
 
@@ -269,17 +308,17 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Lazy initialized property with a hierarchical 
 		/// representation of the flat data on <see cref="IRequest.Form"/>
 		/// </summary>
-		public CompositeNode FormNode
+		public virtual CompositeNode FormNode
 		{
 			get
 			{
-				if (formNode == null)
+				if (formCompositeNode == null)
 				{
-					formNode = treeBuilder.BuildSourceNode(Form);
-					treeBuilder.PopulateTree(formNode, request.Files);
+					formCompositeNode = treeBuilder.BuildSourceNode(Form);
+					treeBuilder.PopulateTree(formCompositeNode, request.Files);
 				}
 
-				return formNode;
+				return formCompositeNode;
 			}
 		}
 
@@ -287,17 +326,17 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Lazy initialized property with a hierarchical 
 		/// representation of the flat data on <see cref="IRequest.QueryString"/>
 		/// </summary>
-		public CompositeNode QueryStringNode
+		public virtual CompositeNode QueryStringNode
 		{
 			get
 			{
-				if (queryStringNode == null)
+				if (queryStringCompositeNode == null)
 				{
-					queryStringNode = treeBuilder.BuildSourceNode(QueryString);
-					treeBuilder.PopulateTree(queryStringNode, request.Files);
+					queryStringCompositeNode = treeBuilder.BuildSourceNode(QueryString);
+					treeBuilder.PopulateTree(queryStringCompositeNode, request.Files);
 				}
 
-				return queryStringNode;
+				return queryStringCompositeNode;
 			}
 		}
 
