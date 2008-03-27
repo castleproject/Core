@@ -48,7 +48,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Common
 			return null;
 		}
 
-		public override object Instantiate(System.Type type, object id)
+		public override object Instantiate(string clazz, EntityMode entityMode, object id)
 		{
 			instantiationCall = true;
 			return null;
@@ -57,11 +57,6 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Common
 		public override bool OnFlushDirty(object entity, object id, object[] currentState, object[] previousState, string[] propertyNames, NHibernate.Type.IType[] types)
 		{
 			return false;
-		}
-
-		public override bool? IsUnsaved(object entity)
-		{
-			return null;
 		}
 
 		public override bool OnLoad(object entity, object id, object[] state, string[] propertyNames, NHibernate.Type.IType[] types)

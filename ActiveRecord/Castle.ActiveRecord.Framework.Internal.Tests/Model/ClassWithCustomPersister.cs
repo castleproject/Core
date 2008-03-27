@@ -18,11 +18,12 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	using System.Collections;
 	using NHibernate;
 	using NHibernate.Cache;
+	using NHibernate.Cache.Entry;
 	using NHibernate.Engine;
 	using NHibernate.Id;
 	using NHibernate.Metadata;
-	using NHibernate.Persister;
 	using NHibernate.Persister.Entity;
+	using NHibernate.Tuple.Entity;
 	using NHibernate.Type;
 
 	[ActiveRecord("ClassA", Persister=typeof(CustomPersister))]
@@ -77,37 +78,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			throw new NotImplementedException();
 		}
 
-		public object CreateProxy(object id, ISessionImplementor session)
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool IsUnsaved(object obj)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void SetPropertyValues(object obj, object[] values)
-		{
-			throw new NotImplementedException();
-		}
-
-		public object[] GetPropertyValues(object obj)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void SetPropertyValue(object obj, int i, object value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public object GetPropertyValue(object obj, int i)
-		{
-			throw new NotImplementedException();
-		}
-
-		public object GetPropertyValue(object obj, string name)
+		public bool IsSubclassEntityName(string entityName)
 		{
 			throw new NotImplementedException();
 		}
@@ -117,32 +88,17 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			throw new NotImplementedException();
 		}
 
-		public int[] FindDirty(object[] x, object[] y, object owner, ISessionImplementor session)
+		public int[] FindDirty(object[] currentState, object[] previousState, object entity, ISessionImplementor session)
 		{
 			throw new NotImplementedException();
 		}
 
-		public int[] FindModified(object[] old, object[] current, object owner, ISessionImplementor session)
+		public int[] FindModified(object[] old, object[] current, object entity, ISessionImplementor session)
 		{
 			throw new NotImplementedException();
 		}
 
-		public object GetIdentifier(object obj)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void SetIdentifier(object obj, object id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public object GetVersion(object obj)
-		{
-			throw new NotImplementedException();
-		}
-
-		public object Instantiate(object id)
+		public object[] GetNaturalIdentifierSnapshot(object id, ISessionImplementor session)
 		{
 			throw new NotImplementedException();
 		}
@@ -173,12 +129,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public void Update(object id, object[] fields, int[] dirtyFields, bool hasDirtyCollection, object[] oldFields,
-		                   object oldVersion, object obj, ISessionImplementor session)
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool IsInstrumented(EntityMode entityMode)
+		                   object oldVersion, object obj, object rowId, ISessionImplementor session)
 		{
 			throw new NotImplementedException();
 		}
@@ -198,12 +149,37 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			throw new NotImplementedException();
 		}
 
-		public bool IsUnsavedVersion(object[] values)
+		public EntityMode? GuessEntityMode(object obj)
 		{
 			throw new NotImplementedException();
 		}
 
-		public bool IsInstance(object entity)
+		public bool IsInstrumented(EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AfterInitialize(object entity, bool lazyPropertiesAreUnfetched, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AfterReassociate(object entity, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object CreateProxy(object id, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool? IsTransient(object obj, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object[] GetPropertyValuesToInsert(object obj, IDictionary mergeMap, ISessionImplementor session)
 		{
 			throw new NotImplementedException();
 		}
@@ -218,28 +194,98 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			throw new NotImplementedException();
 		}
 
+		public Type GetMappedClass(EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool ImplementsLifecycle(EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool ImplementsValidatable(EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Type GetConcreteProxyClass(EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetPropertyValues(object obj, object[] values, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetPropertyValue(object obj, int i, object value, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object[] GetPropertyValues(object obj, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object GetPropertyValue(object obj, int i, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object GetPropertyValue(object obj, string name, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object GetIdentifier(object obj, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetIdentifier(object obj, object id, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object GetVersion(object obj, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object Instantiate(object id, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsInstance(object entity, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool HasUninitializedLazyProperties(object obj, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ResetIdentifier(object entity, object currentId, object currentVersion, EntityMode entityMode)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEntityPersister GetSubclassEntityPersister(object instance, ISessionFactoryImplementor factory,
 		                                                   EntityMode entityMode)
 		{
 			throw new NotImplementedException();
 		}
 
-		public object IdentifierSpace
+		public bool? IsUnsavedVersion(object version)
 		{
-			get { throw new NotImplementedException(); }
+			throw new NotImplementedException();
 		}
 
-		public string[] PropertySpaces
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public Type MappedClass
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public string ClassName
+		public ISessionFactoryImplementor Factory
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -254,32 +300,17 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool ImplementsLifecycle
+		public EntityMetamodel EntityMetamodel
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool ImplementsValidatable
+		public string[] PropertySpaces
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool HasProxy
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public Type ConcreteProxyClass
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool HasCollections
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool HasCascades
+		public string[] QuerySpaces
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -289,22 +320,22 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
+		public bool IsInherited
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 		public bool IsIdentifierAssignedByInsert
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool HasIdentifierProperty
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool CanExtractIdOutOfEntity
-		{
-			get { throw new NotImplementedException(); }
-		}
-
 		bool IEntityPersister.IsVersioned
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool IsVersioned
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -315,6 +346,11 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public int VersionProperty
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public int[] NaturalIdentifierProperties
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -334,7 +370,17 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool[] PropertyUpdateability
+		public bool[] PropertyInsertability
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public ValueInclusion[] PropertyInsertGenerationInclusions
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public ValueInclusion[] PropertyUpdateGenerationInclusions
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -349,12 +395,12 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool[] PropertyInsertability
+		public bool[] PropertyVersionability
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool[] PropertyVersionability
+		public bool[] PropertyLaziness
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -384,12 +430,12 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool HasCache
+		public ICacheConcurrencyStrategy Cache
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public ICacheConcurrencyStrategy Cache
+		public ICacheEntryStructure CacheEntryStructure
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -404,17 +450,67 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
-		public string[] QuerySpaces
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public ISessionFactoryImplementor Factory
+		public bool IsSelectBeforeUpdateRequired
 		{
 			get { throw new NotImplementedException(); }
 		}
 
 		public bool IsVersionPropertyGenerated
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasProxy
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasCollections
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasMutableProperties
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasSubselectLoadableCollections
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasCascades
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasIdentifierProperty
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool CanExtractIdOutOfEntity
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasNaturalIdentifier
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasLazyProperties
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool[] PropertyUpdateability
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasCache
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -425,16 +521,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public bool HasUpdateGeneratedProperties
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool IsSelectBeforeUpdateRequired
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool IsVersioned
 		{
 			get { throw new NotImplementedException(); }
 		}
