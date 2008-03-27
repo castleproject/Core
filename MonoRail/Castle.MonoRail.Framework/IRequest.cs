@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.IO;
 	using System.Web;
 	using Castle.Components.Binder;
 
@@ -183,6 +184,18 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <value>The query string node.</value>
 		CompositeNode QueryStringNode { get; }
+
+		/// <summary>
+		/// Gets the contents of the incoming HTTP entity body.
+		/// </summary>
+		/// <value></value>
+		Stream InputStream { get; }
+
+		/// <summary>
+		/// Gets or sets the MIME content type of the incoming request.
+		/// </summary>
+		/// <value></value>
+		string ContentType { get; set; }
 
 		/// <summary>
 		/// Obtains the params node.

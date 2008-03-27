@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework.Test
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
+	using System.IO;
 	using System.Web;
 	using Castle.Components.Binder;
 
@@ -41,6 +42,8 @@ namespace Castle.MonoRail.Framework.Test
 		private Uri uri = null;
 		private string userHostAddress = "127.0.0.1";
 		private string pathInfo;
+		private string contentType;
+		private Stream inputStream = null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockRequest"/> class.
@@ -290,6 +293,23 @@ namespace Castle.MonoRail.Framework.Test
 		public CompositeNode QueryStringNode
 		{
 			get { return new TreeBuilder().BuildSourceNode(QueryString); }
+		}
+
+		/// <summary>
+		/// Gets the contents of the incoming HTTP entity body.
+		/// </summary>
+		public Stream InputStream
+		{
+			get { return inputStream; }
+		}
+
+		/// <summary>
+		/// Gets or sets the MIME content type of the incoming request.
+		/// </summary>
+		public string ContentType
+		{
+			get { return contentType; }
+			set { contentType = value; }
 		}
 
 		/// <summary>
