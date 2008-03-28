@@ -34,15 +34,11 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			using (new WindsorContainer()
 				.AddFacility("wcf_facility", new WcfFacility())
 				.Register(Component.For<IOperations>().ImplementedBy<Operations>()
-					.CustomDependencies(new
-					{
-						number = 42,
-						serviceModel = new WcfServiceModel()
-							.AddEndpoints(
-								WcfEndpoint.BoundTo(new NetTcpBinding())
-									.At("net.tcp://localhost/Operations")
-									)
-					})
+					.CustomDependencies(new { number = 42 } )
+					.ActAs(new WcfServiceModel().AddEndpoints(
+						WcfEndpoint.BoundTo(new NetTcpBinding())
+							.At("net.tcp://localhost/Operations"))
+						)	
 				))
 			{
 				IOperations client = ChannelFactory<IOperations>.CreateChannel(
@@ -57,11 +53,8 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			using (new WindsorContainer()
 				.AddFacility("wcf_facility", new WcfFacility())
 				.Register(Component.For<UsingWindsor>()
-					.CustomDependencies(new
-					{
-						number = 42,
-						serviceModel = new WcfServiceModel()
-					})
+					.CustomDependencies(new { number = 42 } )
+					.ActAs(new WcfServiceModel())
 				))
 			{
 				IAmUsingWindsor client = ChannelFactory<IAmUsingWindsor>.CreateChannel(
@@ -87,7 +80,6 @@ namespace Castle.Facilities.WcfIntegration.Tests
 								WcfEndpoint.ForContract<IOperationsEx>()
 									.BoundTo(new BasicHttpBinding())
 									.At("http://localhost:27198/UsingWindsor.svc")
-
 								)
 					})
 				))
@@ -108,21 +100,19 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			using (new WindsorContainer()
 				.AddFacility("wcf_facility", new WcfFacility())
 				.Register(Component.For<Operations>()
-					.CustomDependencies(new
-					{
-						number = 42,
-						serviceModel = new WcfServiceModel()
-							.AddBaseAddresses(
-								"net.tcp://localhost/Operations",
-								"http://localhost:27198/UsingWindsor.svc")
-							.AddEndpoints(
-								WcfEndpoint.ForContract<IOperations>()
-									.BoundTo(new NetTcpBinding()),
-								WcfEndpoint.ForContract<IOperationsEx>()
-									.BoundTo(new BasicHttpBinding())
-									.At("Extended")
-								)
-					})
+					.CustomDependencies(new { number = 42 })
+					.ActAs(new WcfServiceModel()
+						.AddBaseAddresses(
+							"net.tcp://localhost/Operations",
+							"http://localhost:27198/UsingWindsor.svc")
+						.AddEndpoints(
+							WcfEndpoint.ForContract<IOperations>()
+								.BoundTo(new NetTcpBinding()),
+							WcfEndpoint.ForContract<IOperationsEx>()
+								.BoundTo(new BasicHttpBinding())
+								.At("Extended")
+							)
+					)
 				))
 			{
 				IOperations client = ChannelFactory<IOperations>.CreateChannel(
@@ -141,17 +131,13 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			using (new WindsorContainer()
 				.AddFacility("wcf_facility", new WcfFacility())
 				.Register(Component.For<IOperations>().ImplementedBy<Operations>()
-					.CustomDependencies(new
-					{
-						number = 42,
-						serviceModel = new WcfServiceModel()
-							.AddEndpoints(
-								WcfEndpoint.BoundTo(new NetTcpBinding())
-									.At("urn:castle:operations")
-									.Via("net.tcp://localhost/Operations")
-									)
-					})
-				))
+					.CustomDependencies(new { number = 42 })
+					.ActAs(new WcfServiceModel().AddEndpoints(
+						WcfEndpoint.BoundTo(new NetTcpBinding())
+							.At("urn:castle:operations")
+							.Via("net.tcp://localhost/Operations")
+							)
+				)))
 			{
 				IOperations client = ChannelFactory<IOperations>.CreateChannel(
 					new NetTcpBinding(), new EndpointAddress("urn:castle:operations"),

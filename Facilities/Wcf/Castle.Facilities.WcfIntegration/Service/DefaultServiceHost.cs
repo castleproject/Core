@@ -16,6 +16,7 @@ namespace Castle.Facilities.WcfIntegration
 {
 	using System;
 	using System.ServiceModel;
+	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
 	using Castle.Core;
 
@@ -51,7 +52,7 @@ namespace Castle.Facilities.WcfIntegration
 				{
 					foreach (Uri baseAddress in BaseAddresses)
 					{
-						BasicHttpBinding binding = null;
+						Binding binding = null;
 
 						if (baseAddress.Scheme == Uri.UriSchemeHttp)
 						{
@@ -60,6 +61,10 @@ namespace Castle.Facilities.WcfIntegration
 						else if (baseAddress.Scheme == Uri.UriSchemeHttps)
 						{
 							binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+						}
+						else if (baseAddress.Scheme == Uri.UriSchemeNetTcp)
+						{
+							binding = new NetTcpBinding();
 						}
 
 						if (binding != null)

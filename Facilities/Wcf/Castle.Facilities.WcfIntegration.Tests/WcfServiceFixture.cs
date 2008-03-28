@@ -46,15 +46,12 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					Component.For<IOperationBehavior>().ImplementedBy<NetDataContractFormatBehavior>(),
 					Component.For<IOperations>().ImplementedBy<Operations>()
 						.Interceptors(InterceptorReference.ForType<LoggingInterceptor>()).Anywhere
-						.CustomDependencies(new
-						{
-							number = 42,
-							serviceModel = new WcfServiceModel()
-								.AddEndpoints(
-									WcfEndpoint.BoundTo(new NetTcpBinding())
-										.At("net.tcp://localhost/Operations")
-										)
-						})
+						.CustomDependencies(new { number = 42 })
+						.ActAs(new WcfServiceModel().AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding())
+								.At("net.tcp://localhost/Operations")
+								)
+						)
 				);
 
 			LoggingInterceptor.Calls.Clear();

@@ -52,25 +52,20 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						}),
 					Component.For<IOperationBehavior>().ImplementedBy<NetDataContractFormatBehavior>(),
 					Component.For<Operations>()
-						.CustomDependencies(new
-						{
-							number = 42,
-							serviceModel = new WcfServiceModel()
-								.AddEndpoints(
-									WcfEndpoint.ForContract<IOperations>()
-										.BoundTo(new NetTcpBinding())
-										.At("net.tcp://localhost/Operations"),
-									WcfEndpoint.ForContract<IOperationsEx>()
-										.BoundTo(new NetTcpBinding())
-										.At("net.tcp://localhost/Operations/Ex")
-										)
-						}),
+						.CustomDependencies(new { number = 42 })
+						.ActAs(new WcfServiceModel().AddEndpoints(
+							WcfEndpoint.ForContract<IOperations>()
+								.BoundTo(new NetTcpBinding())
+								.At("net.tcp://localhost/Operations"),
+							WcfEndpoint.ForContract<IOperationsEx>()
+								.BoundTo(new NetTcpBinding())
+								.At("net.tcp://localhost/Operations/Ex")
+								)
+						),
 					Component.For<IAmUsingWindsor>().ImplementedBy<UsingWindsor>()
-						.CustomDependencies(new
-						{
-							number = 42,
-							serviceModel = new WcfServiceModel()
-						})
+						.CustomDependencies(new { number = 42 })
+						.ActAs(new WcfServiceModel()
+						)
 				);
 		}
 
@@ -90,15 +85,12 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer.Register(
 				Component.For<IOperations>()
 					.Named("operations")
-					.CustomDependencies(new
-						{
-							clientModel = new WcfClientModel()
-							{
-								Endpoint = WcfEndpoint
-									.BoundTo(new NetTcpBinding())
-									.At("net.tcp://localhost/Operations")
-							}
-						})
+					.ActAs(new WcfClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding())
+							.At("net.tcp://localhost/Operations")
+					})
 				);
 
 			IOperations client = windsorContainer.Resolve<IOperations>("operations");
@@ -110,13 +102,10 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			windsorContainer.Register(Component.For<IAmUsingWindsor>()
 				.Named("usingWindsor")
-				.CustomDependencies(new
+				.ActAs(new WcfClientModel()
 				{
-					clientModel = new WcfClientModel()
-					{
-						Endpoint = WcfEndpoint
-							.FromConfiguration("WSHttpBinding_IAmUsingWindsor")
-					}
+					Endpoint = WcfEndpoint
+						.FromConfiguration("WSHttpBinding_IAmUsingWindsor")
 				}));
 
 			IAmUsingWindsor client = windsorContainer.Resolve<IAmUsingWindsor>("usingWindsor");
@@ -138,32 +127,25 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			using (new WindsorContainer()
 				.AddFacility("wcf_facility", new WcfFacility())
 				.Register(Component.For<Operations>()
-					.CustomDependencies(new
-					{
-						number = 28,
-						serviceModel = new WcfServiceModel()
-							.AddBaseAddresses(
-								"net.tcp://localhost/Operations")
-							.AddEndpoints(
-								WcfEndpoint.ForContract<IOperations>()
-									.BoundTo(new NetTcpBinding())
-									.At("Extended")
-								)
-					})
-				))
+					.CustomDependencies(new { number = 28 })
+					.ActAs(new WcfServiceModel()
+						.AddBaseAddresses("net.tcp://localhost/Operations")
+						.AddEndpoints(WcfEndpoint.ForContract<IOperations>()
+							.BoundTo(new NetTcpBinding())
+							.At("Extended")
+							)	
+				)))
 			{
 				using (IWindsorContainer clientContainer = new WindsorContainer()
 					.AddFacility("wcf_facility", new WcfFacility())
 					.Register(Component.For<IOperations>()
 						.Named("operations")
-						.CustomDependencies(new
+						.ActAs(new WcfClientModel()
 						{
-							clientModel = new WcfClientModel()
-							{
-								Endpoint = WcfEndpoint
-									.BoundTo(new NetTcpBinding())
-									.At("net.tcp://localhost/Operations/Extended")
-							}
+							Endpoint = WcfEndpoint
+								.BoundTo(new NetTcpBinding())
+								.At("net.tcp://localhost/Operations/Extended")
+						
 						})
 					))
 				{
@@ -180,27 +162,21 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.AddFacility("wcf_facility", new WcfFacility())
 				.Register(
 					Component.For<IOperations>().ImplementedBy<Operations>()
-						.CustomDependencies(new
-						{
-							number = 22,
-							serviceModel = new WcfServiceModel()
-								.AddEndpoints(
-									WcfEndpoint.BoundTo(new NetTcpBinding())
-										.At("urn:castle:operations")
-										.Via("net.tcp://localhost/OperationsVia")
-										)
-						}),
+						.CustomDependencies(new { number = 22 })
+						.ActAs(new WcfServiceModel().AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding())
+								.At("urn:castle:operations")
+								.Via("net.tcp://localhost/OperationsVia")
+								)
+						),
 					Component.For<IOperations>()
 						.Named("operations")
-						.CustomDependencies(new
+						.ActAs(new WcfClientModel()
 						{
-							clientModel = new WcfClientModel()
-							{
-								Endpoint = WcfEndpoint
-									.BoundTo(new NetTcpBinding())
-									.At("urn:castle:operations")
-									.Via("net.tcp://localhost/OperationsVia")
-							}
+							Endpoint = WcfEndpoint
+								.BoundTo(new NetTcpBinding())
+								.At("urn:castle:operations")
+								.Via("net.tcp://localhost/OperationsVia")
 						})
 					))
 			{
@@ -215,14 +191,11 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer.Register(
 				Component.For<IOperationsEx>()
 					.Named("operations")
-					.CustomDependencies(new
+					.ActAs(new WcfClientModel()
 					{
-						clientModel = new WcfClientModel()
-						{
-							Endpoint = WcfEndpoint
-								.BoundTo(new NetTcpBinding())
-								.At("net.tcp://localhost/Operations/Ex")
-						}
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding())
+							.At("net.tcp://localhost/Operations/Ex")
 					})
 				);
 
@@ -236,14 +209,12 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer.Register(
 				Component.For<IOperationsEx>()
 					.Named("operations")
-					.CustomDependencies(new
+					.ActAs(new WcfClientModel()
 					{
-						clientModel = new WcfClientModel()
-						{
-							Endpoint = WcfEndpoint
-								.BoundTo(new NetTcpBinding())
-								.At("net.tcp://localhost/Operations/Ex")
-						}
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding())
+							.At("net.tcp://localhost/Operations/Ex")
+					
 					})
 				);
 
