@@ -93,6 +93,7 @@
     <Compile Include="Internal\WcfConstants.cs" />
     <Compile Include="IWcfServiceModel.cs" />
     <Compile Include="Service\AbstractServiceHostBuilder.cs" />
+    <Compile Include="Service\DefaultServiceHost.cs" />
     <Compile Include="Service\DefaultServiceHostBuilder.cs" />
     <Compile Include="WcfEndpoint.cs" />
     <Compile Include="WcfFacility.cs" />

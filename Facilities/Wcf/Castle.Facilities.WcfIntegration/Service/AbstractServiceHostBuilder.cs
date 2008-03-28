@@ -19,6 +19,7 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Description;
 	using Castle.Core;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Facilities;
 
 	public abstract class AbstractServiceHostBuilder : IWcfEndpointVisitor
 	{
@@ -140,8 +141,9 @@ namespace Castle.Facilities.WcfIntegration
 		public ServiceHost Build(ComponentModel model, M serviceModel)
 		{
 			this.serviceModel = serviceModel;
-			ValidateServiceModel(model, serviceModel);
+			ValidateServiceModelInternal(model, serviceModel);
 			ServiceHost serviceHost = CreateServiceHost(model, serviceModel);
+			ConfigureServiceHost(serviceHost, serviceModel);
 			OpenServiceHost(serviceHost, serviceModel, model);
 			return serviceHost;
 		}
@@ -155,13 +157,22 @@ namespace Castle.Facilities.WcfIntegration
 		public ServiceHost Build(Type serviceType, M serviceModel)
 		{
 			this.serviceModel = serviceModel;
-			ValidateServiceModel(null, serviceModel);
+			ValidateServiceModelInternal(null, serviceModel);
 			ServiceHost serviceHost = CreateServiceHost(serviceType, serviceModel);
+			ConfigureServiceHost(serviceHost, serviceModel);
 			OpenServiceHost(serviceHost, serviceModel, null);
 			return serviceHost;
 		}
 
 		#endregion
+
+		protected virtual void ConfigureServiceHost(ServiceHost serviceHost, M serviceModel)
+		{
+			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
+			{
+				AddServiceEndpoint(serviceHost, endpoint);
+			}
+		}
 
 		private void OpenServiceHost(ServiceHost serviceHost, M serviceModel, ComponentModel model)
 		{
@@ -172,11 +183,41 @@ namespace Castle.Facilities.WcfIntegration
 				serviceHost.Open();
 			}
 		}
-		
+
+		private void ValidateServiceModelInternal(ComponentModel model, M serviceModel)
+		{
+			ValidateServiceModel(model, serviceModel);
+
+			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
+			{
+				Type contract = endpoint.Contract;
+
+				if (contract != null)
+				{
+					if (!contract.IsInterface)
+					{
+						throw new FacilityException("The service endpoint contract " +
+							contract.FullName + " does not represent an interface.");
+					}
+				}
+				else if (model == null || !model.Service.IsInterface)
+				{
+					throw new FacilityException(
+						"No service endpoint contract can be implied from the component.");
+				}
+				else
+				{
+					endpoint.Contract = model.Service;
+				}
+			}
+		}
+
+		protected virtual void ValidateServiceModel(ComponentModel model, M serviceModel)
+		{
+		}
+
 		protected abstract ServiceHost CreateServiceHost(Type serviceType, M serviceModel);
 
 		protected abstract ServiceHost CreateServiceHost(ComponentModel model, M serviceModel);
-
-		protected abstract void ValidateServiceModel(ComponentModel model, M serviceModel);
 	}
 }

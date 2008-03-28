@@ -45,11 +45,7 @@ namespace Castle.Facilities.WcfIntegration.Demo
 					.Named("look no config")
 					.ImplementedBy<UsingWindsorWithoutConfig>()
 					.CustomDependencies(
-						Property.ForKey("number").Eq(42),
-						Property.ForKey("serviceModel").Eq(
-							new WcfServiceModel().Hosted()
-								.AddEndpoints(WcfEndpoint.BoundTo(new BasicHttpBinding()))
-							))
+						Property.ForKey("number").Eq(42))
 					);
 			WindsorServiceHostFactory.RegisterContainer(container.Kernel);
 		}

@@ -18,7 +18,6 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel;
 	using Castle.Core;
 	using Castle.MicroKernel;
-	using Castle.MicroKernel.Facilities;
 
 	/// <summary>
 	/// The default implementation of <see cref="IServiceHostBuilder{M}"/>.
@@ -39,54 +38,16 @@ namespace Castle.Facilities.WcfIntegration
 		protected override ServiceHost CreateServiceHost(ComponentModel model, WcfServiceModel serviceModel)
 		{
 			Uri[] baseAddresss = GetBaseAddressArray(serviceModel);
-			ServiceHost serviceHost = new ServiceHost(model.Implementation, baseAddresss);
-			ConfigureServiceHost(serviceHost, serviceModel);
-			return serviceHost;
+			return new DefaultServiceHost(model, baseAddresss);
 		}
 
 		protected override ServiceHost CreateServiceHost(Type serviceType, WcfServiceModel serviceModel)
 		{
 			Uri[] baseAddresss = GetBaseAddressArray(serviceModel);
-			ServiceHost serviceHost = new ServiceHost(serviceType, baseAddresss);
-			ConfigureServiceHost(serviceHost, serviceModel);
-			return serviceHost;
-		}
-
-		protected override void ValidateServiceModel(ComponentModel model, WcfServiceModel serviceModel)
-		{
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
-			{
-				Type contract = endpoint.Contract;
-
-				if (contract != null)
-				{
-					if (!contract.IsInterface)
-					{
-						throw new FacilityException("The service endpoint contract " +
-							contract.FullName + " does not represent an interface.");
-					}
-				}
-				else if (model == null || !model.Service.IsInterface)
-				{
-					throw new FacilityException(
-						"No service endpoint contract can be implied from the componnt.");
-				}
-				else
-				{
-					endpoint.Contract = model.Service;
-				}
-			}
+			return new DefaultServiceHost(serviceType, baseAddresss);
 		}
 
 		#endregion
-
-		protected virtual void ConfigureServiceHost(ServiceHost serviceHost, WcfServiceModel serviceModel)
-		{
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
-			{
-				AddServiceEndpoint(serviceHost, endpoint);
-			}
-		}
 
 		private Uri[] GetBaseAddressArray(WcfServiceModel serviceModel)
 		{

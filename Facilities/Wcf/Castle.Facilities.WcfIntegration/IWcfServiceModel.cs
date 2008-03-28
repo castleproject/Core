@@ -14,6 +14,9 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System;
+	using System.Collections.Generic;
+
 	/// <summary>
 	/// Contract for all WCF service models.
 	/// </summary>
@@ -23,5 +26,15 @@ namespace Castle.Facilities.WcfIntegration
 		/// Determines if the service will be hosted.
 		/// </summary>
 		bool IsHosted { get; }
+
+		/// <summary>
+		/// Gets the service base addresses.
+		/// </summary>
+		ICollection<Uri> BaseAddresses { get; }
+
+		/// <summary>
+		/// Gets the service endpoints.
+		/// </summary>
+		ICollection<IWcfEndpoint> Endpoints { get; }
 	}
 }
