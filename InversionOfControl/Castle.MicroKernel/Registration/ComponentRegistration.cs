@@ -296,6 +296,23 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
+		/// Marks the components with one or more actors.
+		/// </summary>
+		/// <param name="actors">The component actors.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> ActAs(params object[] actors)
+		{
+			foreach (object actor in actors)
+			{
+				if (actor != null)
+				{
+					CustomDependencies(Property.ForKey(Guid.NewGuid().ToString()).Eq(actor));
+				}
+			}
+			return this;
+		}
+
+		/// <summary>
 		/// Registers this component with the <see cref="IKernel"/>.
 		/// </summary>
 		/// <param name="kernel">The kernel.</param>
