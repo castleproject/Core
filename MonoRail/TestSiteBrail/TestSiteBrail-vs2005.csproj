@@ -97,6 +97,7 @@
     <Compile Include="Components\GridComponent.cs" />
     <Compile Include="Components\InlineComponentWithParam1.cs" />
     <Compile Include="Components\ModifyViewProperyBagComponent.cs" />
+    <Compile Include="Components\RenderComponentWithParamsComponent.cs" />
     <Compile Include="Components\RepeaterComponent.cs" />
     <Compile Include="Components\SimpleInlineViewComponent.cs" />
     <Compile Include="Components\SimpleInlineViewComponent2.cs" />
@@ -130,7 +131,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ResourceFile.resx</DependentUpon>
     </Compile>
-
     <Compile Include="Controllers\SubArea\HomeController.cs" />
     <Compile Include="Controllers\SubViewController.cs" />
     <Compile Include="Controllers\UsingComponent2Controller.cs" />
@@ -223,6 +223,7 @@
     <None Include="Views\layoutable\customLayoutLocation.brail" />
     <None Include="Views\layoutable\notInLayouts.brail" />
     <None Include="Views\resourced\iterating.brail" />
+    <None Include="Views\usingcomponents\renderComponentWithParams.brail" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controllers\ResourceFile.resx">

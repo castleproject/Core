@@ -156,6 +156,13 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			AssertReplyEqualTo("Numbers: 1234\r\n");
 		}
 
+		[Test]
+		public void RenderComponentWithParams()
+		{
+			ProcessView_StripRailsExtension("usingcomponents/renderComponentWithParams.rails");
+			AssertReplyEqualTo("fromview");
+		}
+
 		private void FillPropertyBag()
 		{
 			ArrayList items = new ArrayList();

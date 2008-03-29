@@ -369,7 +369,7 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			BrailViewComponentContext componentContext =
 				new BrailViewComponentContext(this, null, componentName, OutputStream,
-				                              new Hashtable(StringComparer.InvariantCultureIgnoreCase));
+				                              new Hashtable(parameters, StringComparer.InvariantCultureIgnoreCase));
 			AddViewComponentProperties(componentContext.ComponentParameters);
 			IViewComponentFactory componentFactory = (IViewComponentFactory) context.GetService(typeof(IViewComponentFactory));
 			ViewComponent component = componentFactory.Create(componentName);

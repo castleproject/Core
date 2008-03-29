@@ -100,6 +100,7 @@
   <ItemGroup>
     <Compile Include="Components\BlockViewComponent1.cs" />
     <Compile Include="Components\BlockViewComponent2.cs" />
+    <Compile Include="Components\RenderComponentWithParamsComponent.cs" />
     <Compile Include="Components\GridComponent.cs" />
     <Compile Include="Components\InlineComponentWithParam1.cs" />
     <Compile Include="Components\ModifyViewProperyBagComponent.cs" />
@@ -239,6 +240,7 @@
     <None Include="Views\home\NullPropagation.brail" />
     <None Include="Views\home\WithNullableDynamicProxyObject.brail" />
     <None Include="Views\resourced\iterating.brail" />
+    <None Include="Views\usingcomponents\renderComponentWithParams.brail" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controllers\ResourceFile.resx">
