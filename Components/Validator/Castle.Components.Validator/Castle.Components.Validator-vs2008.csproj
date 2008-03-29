@@ -113,6 +113,11 @@
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
     <Compile Include="CachedValidationRegistry.cs" />
+    <Compile Include="Messages.sv.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.sv.resx</DependentUpon>
+    </Compile>
     <Compile Include="ValidationException.cs" />
     <Compile Include="ValidationInternalError.cs" />
     <Compile Include="ValidatorRunner.cs" />
@@ -195,7 +200,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Messages.sv.resx" />
+    <EmbeddedResource Include="Messages.sv.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Castle.Components.Validator.build" />
