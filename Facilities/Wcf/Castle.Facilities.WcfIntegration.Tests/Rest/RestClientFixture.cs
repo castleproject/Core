@@ -14,6 +14,8 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests.Rest
 {
+#if DOTNET35
+
 	using System;
 	using System.ServiceModel;
 	using Castle.MicroKernel.Registration;
@@ -21,7 +23,6 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 	using Castle.Facilities.WcfIntegration.Rest;
 	using NUnit.Framework;
 
-#if DOTNET35
 
 	[TestFixture]
 	public class RestClientFixture

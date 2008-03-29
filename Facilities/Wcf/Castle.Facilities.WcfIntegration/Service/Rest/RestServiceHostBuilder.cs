@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration.Rest
 {
+#if DOTNET35
 	using System;
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
@@ -61,4 +62,5 @@ namespace Castle.Facilities.WcfIntegration.Rest
 
 		#endregion
 	}
+#endif
 }

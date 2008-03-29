@@ -98,7 +98,9 @@ namespace Castle.Facilities.WcfIntegration
 		private void AddDefaultServiceHostBuilders()
 		{
 			AddServiceHostBuilder<DefaultServiceHostBuilder, WcfServiceModel>(false);
+#if DOTNET35
 			AddServiceHostBuilder<RestServiceHostBuilder, RestServiceModel>(false);
+#endif
 		}
 
 		internal void AddServiceHostBuilder<T, M>(bool force)

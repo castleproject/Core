@@ -14,6 +14,8 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests
 {
+#if DOTNET35
+
 	public class Calculator : ICalculator
 	{
 		public long Add(long x, long y)
@@ -36,4 +38,5 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			return x / y;
 		}
 	}
+#endif
 }

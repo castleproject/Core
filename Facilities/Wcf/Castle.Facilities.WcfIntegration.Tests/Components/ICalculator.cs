@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests
 {
+#if DOTNET35
 	using System.ServiceModel;
 	using System.ServiceModel.Web;
 
@@ -36,4 +37,6 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		[WebInvoke(BodyStyle=WebMessageBodyStyle.Wrapped)]
 		long Divide(long x, long y);
 	}
+	
+#endif
 }
