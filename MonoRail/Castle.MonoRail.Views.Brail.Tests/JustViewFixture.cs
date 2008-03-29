@@ -21,7 +21,8 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	[TestFixture]
 	public class JustViewFixture : BaseViewOnlyTestFixture
 	{
-        public JustViewFixture() : base("../..")
+		public JustViewFixture()
+			: base(ViewLocations.BrailTestsView)
         {
 
         }

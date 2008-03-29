@@ -85,6 +85,7 @@
     <Compile Include="LanguageFeatures.cs" />
     <Compile Include="OutputMethodTestCase.cs" />
     <Compile Include="ResourceTestCase.cs" />
+    <Compile Include="ViewLocations.cs" />
     <Compile Include="ViewSourceLoaderServiceProvider.cs" />
     <None Include="Views\regressions\questionMarkOp_if_whenPassed.brail" />
     <Compile Include="XmlTestCase.cs" />

@@ -46,7 +46,7 @@
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
@@ -101,6 +101,7 @@
     <Compile Include="ActionMethodExecutor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ActionType.cs" />
     <Compile Include="Adapters\DefaultEngineContext.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -125,6 +126,9 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AsyncInvocationInformation.cs" />
+    <Compile Include="AsyncMonoRailHttpHandler.cs" />
+    <Compile Include="AsyncSessionlessMonoRailHttpHandler.cs" />
     <Compile Include="Attributes\AccessibleThroughAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -186,6 +190,7 @@
     <Compile Include="Attributes\ViewComponentParamAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BaseAsyncHttpHandler.cs" />
     <Compile Include="BaseExecutableAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -355,6 +360,7 @@
     <Compile Include="Filters\RequestValidatorFilter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FailedToExecuteBeginActionAsyncResult.cs" />
     <Compile Include="Flash.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -432,6 +438,7 @@
     <Compile Include="IActionSelector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IAsyncController.cs" />
     <Compile Include="ICachePolicyConfigurer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -614,6 +621,7 @@
     <Compile Include="MonoRailHttpHandlerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Providers\AsyncActionPair.cs" />
     <Compile Include="Providers\DefaultControllerDescriptorProvider.cs">
       <SubType>Code</SubType>
     </Compile>

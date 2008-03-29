@@ -10,7 +10,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
     public class DslFixture : BaseViewOnlyTestFixture
     {
         public DslFixture()
-            : base("../../")
+			: base(ViewLocations.BrailTestsView)
         {
 
         }

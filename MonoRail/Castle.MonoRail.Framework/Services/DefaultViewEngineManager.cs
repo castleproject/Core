@@ -93,7 +93,11 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
-		private void RegisterEngineForExtesionLookup(IViewEngine engine)
+		/// <summary>
+		/// Registers the engine for extesion lookup.
+		/// </summary>
+		/// <param name="engine">The engine.</param>
+		public void RegisterEngineForExtesionLookup(IViewEngine engine)
 		{
 			viewEnginesFastLookup.Add(engine, null);
 		}
@@ -256,7 +260,10 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="engine">The engine.</param>
 		private void ContextualizeViewEngine(IViewEngine engine)
 		{
-			MonoRailHttpHandlerFactory.CurrentEngineContext.AddService(typeof(IViewEngine), engine);
+			if (MonoRailHttpHandlerFactory.CurrentEngineContext!=null)//required for tests
+			{
+				MonoRailHttpHandlerFactory.CurrentEngineContext.AddService(typeof(IViewEngine), engine);
+			}
 		}
 
 		private static object[] CreateExtensions(IJSCodeGenerator generator, List<Type> extensions)
@@ -328,7 +335,7 @@ There are two possible reasons: either the template does not exist, or the view 
 		/// Associates extensions with the view engine instance.
 		/// </summary>
 		/// <param name="engine">The view engine instance</param>
-		private void RegisterEngineForView(IViewEngine engine)
+		public void RegisterEngineForView(IViewEngine engine)
 		{
 			if (ext2ViewEngine.Contains(engine.ViewFileExtension))
 			{

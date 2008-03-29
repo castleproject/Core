@@ -3,13 +3,16 @@
 	using System.Collections.Generic;
 	using System.Reflection;
 	using Descriptors;
+	using Providers;
 
 	/// <summary>
 	/// Pendent
 	/// </summary>
 	public class DefaultActionSelector : IActionSelector
 	{
-		private List<ISubActionSelector> subSelectors = new List<ISubActionSelector>();
+		private readonly List<ISubActionSelector> subSelectors = new List<ISubActionSelector>();
+
+		#region IActionSelector Members
 
 		/// <summary>
 		/// Selects the an action.
@@ -17,13 +20,15 @@
 		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="context">The context.</param>
+		/// <param name="actionType">Type of the action.</param>
 		/// <returns></returns>
-		public IExecutableAction Select(IEngineContext engineContext, IController controller, IControllerContext context)
+		public IExecutableAction Select(IEngineContext engineContext, IController controller, IControllerContext context,
+		                                ActionType actionType)
 		{
 			string actionName = context.Action;
 
 			// Look for the target method
-			MethodInfo actionMethod = SelectActionMethod(controller, context, context.Action);
+			MethodInfo actionMethod = SelectActionMethod(controller, context, context.Action, actionType);
 
 			if (actionMethod == null)
 			{
@@ -47,7 +52,7 @@
 				return new ActionMethodExecutor(actionMethod, actionDesc ?? new ActionMetaDescriptor());
 			}
 
-			IExecutableAction executableAction = RunSubSelectors(engineContext, controller, context);
+			IExecutableAction executableAction = RunSubSelectors(engineContext, controller, context, actionType);
 
 			if (executableAction != null)
 			{
@@ -55,7 +60,7 @@
 			}
 
 			// Last try:
-			return ResolveDefaultMethod(context.ControllerDescriptor, controller, context);
+			return ResolveDefaultMethod(context.ControllerDescriptor, controller, context, actionType);
 		}
 
 		/// <summary>
@@ -76,23 +81,39 @@
 			subSelectors.Remove(subSelector);
 		}
 
+		#endregion
+
 		/// <summary>
 		/// Selects the action method.
 		/// </summary>
 		/// <param name="controller">The controller.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="name">The name.</param>
+		/// <param name="actionType">The action type</param>
 		/// <returns></returns>
-		protected virtual MethodInfo SelectActionMethod(IController controller, IControllerContext context, string name)
+		protected virtual MethodInfo SelectActionMethod(IController controller, IControllerContext context, string name,
+		                                                ActionType actionType)
 		{
-			MethodInfo methodInfo = context.ControllerDescriptor.Actions[name] as MethodInfo;
-
-			if (methodInfo != null)
+			object action = context.ControllerDescriptor.Actions[name];
+			if (actionType == ActionType.Sync)
 			{
-				return methodInfo;
-			}
+				MethodInfo methodInfo = action as MethodInfo;
 
-			return controller.GetType().GetMethod(name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+				if (methodInfo != null)
+				{
+					return methodInfo;
+				}
+
+				return controller.GetType().GetMethod(name,
+				                                      BindingFlags.Public | BindingFlags.Instance |
+				                                      BindingFlags.IgnoreCase);
+			}
+			AsyncActionPair actionPair = (AsyncActionPair) action;
+			if (actionPair == null)
+			{
+				return null;
+			}
+			return actionType == ActionType.AsyncBegin ? actionPair.BeginActionInfo : actionPair.EndActionInfo;
 		}
 
 		/// <summary>
@@ -101,12 +122,14 @@
 		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="context">The context.</param>
+		/// <param name="actionType">Type of the action.</param>
 		/// <returns></returns>
-		protected virtual IExecutableAction RunSubSelectors(IEngineContext engineContext, IController controller, IControllerContext context)
+		protected virtual IExecutableAction RunSubSelectors(IEngineContext engineContext, IController controller,
+		                                                    IControllerContext context, ActionType actionType)
 		{
 			foreach(ISubActionSelector selector in subSelectors)
 			{
-				IExecutableAction action = selector.Select(engineContext, controller, context);
+				IExecutableAction action = selector.Select(engineContext, controller, context, actionType);
 
 				if (action != null)
 				{
@@ -122,13 +145,14 @@
 		/// if present look for and load _default action method
 		/// <seealso cref="DefaultActionAttribute"/>
 		/// </summary>
-		private IExecutableAction ResolveDefaultMethod(ControllerMetaDescriptor controllerDesc, IController controller, IControllerContext context)
+		private IExecutableAction ResolveDefaultMethod(ControllerMetaDescriptor controllerDesc, IController controller,
+		                                               IControllerContext context, ActionType actionType)
 		{
 			if (controllerDesc.DefaultAction != null)
 			{
 				MethodInfo method = SelectActionMethod(
-					controller, context, 
-					controllerDesc.DefaultAction.DefaultAction);
+					controller, context,
+					controllerDesc.DefaultAction.DefaultAction, actionType);
 
 				if (method != null)
 				{

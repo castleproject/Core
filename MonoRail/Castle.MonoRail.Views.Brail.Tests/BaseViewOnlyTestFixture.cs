@@ -45,7 +45,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		protected BooViewEngine BooViewEngine;
 
 		public BaseViewOnlyTestFixture()
-			: this("../../../TestSiteBrail")
+			: this(ViewLocations.TestSiteBrail)
 		{
 		}
 
@@ -104,7 +104,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			BooViewEngine = new BooViewEngine();
 			BooViewEngine.Options = new BooViewEngineOptions();
 			BooViewEngine.Options.SaveDirectory = Environment.CurrentDirectory;
-			BooViewEngine.Options.SaveToDisk = true;
+			BooViewEngine.Options.SaveToDisk = false;
 			BooViewEngine.Options.Debug = true;
 			BooViewEngine.Options.BatchCompile = false;
 
@@ -142,15 +142,21 @@ namespace Castle.MonoRail.Views.Brail.Tests
             if (string.IsNullOrEmpty(Layout) == false)
                 ControllerContext.LayoutNames = new string[] { Layout, };
             MockEngineContext.CurrentControllerContext = ControllerContext;
-            JSCodeGenerator codeGenerator =
-                  new JSCodeGenerator(MockEngineContext.Server, null,
+        	DefaultViewEngineManager engineManager = new DefaultViewEngineManager();
+			engineManager.RegisterEngineForView(BooViewEngine);
+			engineManager.RegisterEngineForExtesionLookup((BooViewEngine));
+        	JSCodeGenerator codeGenerator =
+                  new JSCodeGenerator(MockEngineContext.Server, 
+					  engineManager,
                       MockEngineContext, null, ControllerContext, MockEngineContext.Services.UrlBuilder);
 
             IJSGenerator jsGen = new PrototypeGenerator(codeGenerator);
 
             codeGenerator.JSGenerator = jsGen;
 
-            JSCodeGeneratorInfo info = new JSCodeGeneratorInfo(codeGenerator, jsGen, new object[0], new object[0]);
+            JSCodeGeneratorInfo info = new JSCodeGeneratorInfo(codeGenerator, jsGen,
+				new object[] { new ScriptaculousExtension(codeGenerator) },
+				new object[] { new ScriptaculousExtension(codeGenerator) });
 
             BooViewEngine.GenerateJS(templatePath, sw, info,MockEngineContext, null, ControllerContext);
             lastOutput = sw.ToString();

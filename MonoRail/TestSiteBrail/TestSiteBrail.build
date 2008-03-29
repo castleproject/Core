@@ -33,6 +33,7 @@
 		
 		<resourcefileset id="project.resources" basedir="${src.dir}" dynamicprefix="True" prefix="TestSiteBrail">
 			<include name="**.resources"/>
+			<include name="**.resx"/>
 			<exclude name="obj/**"/>
 		</resourcefileset>
 

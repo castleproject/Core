@@ -36,6 +36,8 @@ namespace Castle.MonoRail.Views.Brail
 
 	public class BooViewEngine : ViewEngineBase, IInitializable
 	{
+		public event Action<string> ViewRecompiled = delegate { };
+
 		private static BooViewEngineOptions options;
 
 		/// <summary>
@@ -283,7 +285,8 @@ namespace Castle.MonoRail.Views.Brail
 		private void OnViewChanged(object sender, FileSystemEventArgs e)
 		{
 			if (Path.GetExtension(e.FullPath).IndexOf(this.ViewFileExtension) == -1 &&
-			    Path.GetExtension(e.FullPath).IndexOf(this.JSGeneratorFileExtension) == -1)
+			    Path.GetExtension(e.FullPath).IndexOf(this.JSGeneratorFileExtension) == -1 &&
+				Path.GetExtension(e.FullPath).IndexOf(".boo") == -1)
 			{
 				return; //early return since only watching view extensions and jsgenerator extensions
 			}
@@ -328,6 +331,7 @@ namespace Castle.MonoRail.Views.Brail
 				// Will cause a recompilation
 				compilations[path] = null;
 			}
+			ViewRecompiled(path);
 		}
 
 		private string EnsurePathDoesNotStartWithDirectorySeparator(string path)

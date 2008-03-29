@@ -34,12 +34,21 @@ namespace Castle.MonoRail.Framework
 		private string viewFolder;
 		private string[] layoutNames;
 		private ControllerMetaDescriptor metaDescriptor;
-		private IDictionary<string, object> customActionParameters = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+
+		private IDictionary<string, object> customActionParameters =
+			new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+
 		private IDictionary propertyBag = new HybridDictionary(true);
 		private HelperDictionary helpers = new HelperDictionary();
-        private readonly IDictionary<string, IDynamicAction> dynamicActions = new Dictionary<string, IDynamicAction>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly IDictionary<string, IResource> resources = new Dictionary<string, IResource>(StringComparer.InvariantCultureIgnoreCase);
+
+		private readonly IDictionary<string, IDynamicAction> dynamicActions =
+			new Dictionary<string, IDynamicAction>(StringComparer.InvariantCultureIgnoreCase);
+
+		private readonly IDictionary<string, IResource> resources =
+			new Dictionary<string, IResource>(StringComparer.InvariantCultureIgnoreCase);
+
 		private RouteMatch routeMatch;
+		private AsyncInvocationInformation asyncInformation = new AsyncInvocationInformation();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ControllerContext"/> class.
@@ -54,7 +63,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">The controller name.</param>
 		/// <param name="action">The action name.</param>
 		/// <param name="metaDescriptor">The meta descriptor.</param>
-		public ControllerContext(string name, string action, ControllerMetaDescriptor metaDescriptor) : 
+		public ControllerContext(string name, string action, ControllerMetaDescriptor metaDescriptor) :
 			this(name, string.Empty, action, metaDescriptor)
 		{
 		}
@@ -204,6 +213,15 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return routeMatch; }
 			set { routeMatch = value; }
+		}
+
+		/// <summary>
+		/// Get or set the information used to manage async invocations
+		/// </summary>
+		public AsyncInvocationInformation Async
+		{
+			get { return asyncInformation; }
+			set { asyncInformation = value; }
 		}
 	}
 }

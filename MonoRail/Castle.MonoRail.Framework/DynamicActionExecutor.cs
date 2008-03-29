@@ -123,7 +123,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="context">The context.</param>
-		public object Execute(IEngineContext engineContext, Controller controller, IControllerContext context)
+		public object Execute(IEngineContext engineContext, IController controller, IControllerContext context)
 		{
 			return action.Execute(engineContext, controller, context);
 		}

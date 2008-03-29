@@ -66,7 +66,7 @@ namespace Castle.MonoRail.Framework
 		/// <value><c>true</c> if they should be skipped; otherwise, <c>false</c>.</value>
 		public bool ShouldSkipAllFilters
 		{
-			get 
+			get
 			{
 				foreach(SkipFilterAttribute skip in actionMetaDescriptor.SkipFilters)
 				{
@@ -175,7 +175,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">The controller.</param>
 		/// <param name="context">The context.</param>
 		/// <returns></returns>
-		public abstract object Execute(IEngineContext engineContext, Controller controller, IControllerContext context);
+		public abstract object Execute(IEngineContext engineContext, IController controller, IControllerContext context);
 
 		#endregion
 	}

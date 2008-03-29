@@ -81,6 +81,8 @@ namespace Castle.MonoRail.Views.Brail
 				                         null,
 				                         args);
 			}
+			if(target==null)
+				throw new NullReferenceException("Could not invoke method "+name+" on null target");
 
 			Type targetType = target.GetType();
 			return targetType.InvokeMember(name,

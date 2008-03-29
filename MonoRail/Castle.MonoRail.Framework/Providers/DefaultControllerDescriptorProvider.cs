@@ -155,13 +155,18 @@ namespace Castle.MonoRail.Framework.Providers
 			ControllerMetaDescriptor desc;
 
 			locker.AcquireReaderLock(-1);
+			try
+			{
+				desc = (ControllerMetaDescriptor) descriptorRepository[controllerType];
 
-			desc = (ControllerMetaDescriptor) descriptorRepository[controllerType];
-
-			if (desc != null)
+				if (desc != null)
+				{
+					return desc;
+				}
+			}
+			finally
 			{
 				locker.ReleaseReaderLock();
-				return desc;
 			}
 
 			try
@@ -268,6 +273,66 @@ namespace Castle.MonoRail.Framework.Providers
 					desc.Actions[method.Name] = method;
 				}
 			}
+
+			MergeAsyncMethodPairsToSingleAction(desc);
+		}
+
+		private void MergeAsyncMethodPairsToSingleAction(ControllerMetaDescriptor desc)
+		{
+			foreach(string name in new ArrayList(desc.Actions.Keys))
+			{
+				if (name.StartsWith("Begin", StringComparison.InvariantCultureIgnoreCase) == false)
+				{
+					continue;
+				}
+
+				string actionName = name.Substring("Begin".Length);
+
+				ArrayList list = desc.Actions[name] as ArrayList;
+				if (list != null)
+				{
+					foreach(MethodInfo info in list)
+					{
+						if (info.ReturnType == typeof(IAsyncResult))
+						{
+							throw new MonoRailException("Action '" + actionName + "' on controller '" + desc.ControllerDescriptor.Name +
+							                            "' is an async action, but there are method overloads '" + name +
+							                            "(...)', which is not allowed on async actions.");
+						}
+					}
+					continue;
+				}
+
+				if (desc.Actions.Contains(actionName))
+				{
+					throw new MonoRailException("Found both async method '" + name + "' and sync method '" + actionName +
+					                            "' on controller '" + desc.ControllerDescriptor.Name +
+					                            "'. MonoRail doesn't support mixing sync and async methods for the same action");
+				}
+
+				string endActionName = "End" + actionName;
+				if (desc.Actions.Contains(endActionName) == false)
+				{
+					throw new MonoRailException("Found beginning of async pair '" + name + "' but not the end '" + endActionName +
+					                            "' on controller '" + desc.ControllerDescriptor.Name + "', did you forget to define " +
+					                            endActionName + "(IAsyncResult ar) ?");
+				}
+
+				if (desc.Actions[endActionName] is IList)
+				{
+					throw new MonoRailException("Found more than a single " + endActionName +
+					                            " method, for async action '" + actionName + "' on controller '" +
+					                            desc.ControllerDescriptor.Name + "', only a single " +
+					                            endActionName + " may be defined as part of an async action");
+				}
+
+				MethodInfo beginActionInfo = (MethodInfo) desc.Actions[name];
+				MethodInfo endActionInfo = (MethodInfo) desc.Actions[endActionName];
+
+				desc.Actions.Remove(name);
+				desc.Actions.Remove(endActionName);
+				desc.Actions[actionName] = new AsyncActionPair(actionName, beginActionInfo, endActionInfo);
+			}
 		}
 
 		/// <summary>
@@ -288,7 +353,17 @@ namespace Castle.MonoRail.Framework.Providers
 					continue;
 				}
 
-				CollectActionAttributes(action as MethodInfo, descriptor);
+				MethodInfo methodInfo = action as MethodInfo;
+				if (methodInfo != null)
+				{
+					CollectActionAttributes(methodInfo, descriptor);
+				}
+				else
+				{
+					AsyncActionPair asyncActionPair = (AsyncActionPair) action;
+					CollectActionAttributes(asyncActionPair.BeginActionInfo, descriptor);
+					CollectActionAttributes(asyncActionPair.EndActionInfo, descriptor);
+				}
 			}
 		}
 

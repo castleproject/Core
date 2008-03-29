@@ -153,6 +153,16 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 				throw new System.NotImplementedException();
 			}
 
+			public IAsyncResult BeginProcess(IEngineContext engineContext, IControllerContext context)
+			{
+				throw new NotImplementedException();
+			}
+
+			public void EndProcess()
+			{
+				throw new NotImplementedException();
+			}
+
 			public void Dispose()
 			{
 				throw new System.NotImplementedException();

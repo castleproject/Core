@@ -1,1 +1,1 @@
-page.el('aa').replace('new content')
+page.el('aa').replace('"new content"')

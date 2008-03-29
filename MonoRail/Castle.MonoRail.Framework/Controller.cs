@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework
 	/// Implements the core functionality and exposes the
 	/// common methods for concrete controllers.
 	/// </summary>
-	public abstract class Controller : IController, IValidatorAccessor, IRedirectSupport
+	public abstract class Controller : IAsyncController, IValidatorAccessor, IRedirectSupport
 	{
 		private IEngineContext engineContext;
 		private IControllerContext context;
@@ -95,7 +95,15 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The controller context.</param>
 		public virtual void Process(IEngineContext engineContext, IControllerContext context)
 		{
-			if (isContextualized == false) 
+			PrepareToExecuteAction(engineContext, context);
+			Initialize();
+
+			RunActionAndRenderView();
+		}
+
+		private void PrepareToExecuteAction(IEngineContext engineContext, IControllerContext context)
+		{
+			if (isContextualized == false)
 			{
 				Contextualize(engineContext, context);
 			}
@@ -105,11 +113,8 @@ namespace Castle.MonoRail.Framework
 			CreateFiltersDescriptors();
 			ProcessScaffoldIfAvailable();
 			ActionProviderUtil.RegisterActions(engineContext, this, context);
-			Initialize();
-
-			RunActionAndRenderView();
 		}
-		
+
 		/// <summary>
 		/// Invoked by the view engine to perform
 		/// any logic before the view is sent to the client.
@@ -126,6 +131,209 @@ namespace Castle.MonoRail.Framework
 		/// <param name="view"></param>
 		public virtual void PostSendView(object view)
 		{
+		}
+
+		/// <summary>
+		/// Begin to perform the specified async action, which means:
+		/// <br/>
+		/// 1. Define the default view name<br/>
+		/// 2. Run the before filters<br/>
+		/// 3. Select the begin method related to the action name and invoke it<br/>
+		/// 4. Return the result of the async method start and let ASP.Net wait on it
+		/// </summary>
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="context">The controller context.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// The async infomrmation about this call is pass using the controller context Async property
+		/// </remarks>
+		public IAsyncResult BeginProcess(IEngineContext engineContext, IControllerContext context)
+		{
+			PrepareToExecuteAction(engineContext, context);
+			Initialize();
+
+			IExecutableAction action = null;
+			Exception actionException = null;
+			bool cancel;
+
+			try
+			{
+				action = SelectAction(Action, ActionType.AsyncBegin);
+
+				if (action == null)
+				{
+					throw new MonoRailException(404, "Not Found", "Could not find action named " +
+																  Action + " on controller " + AreaName + "\\" + Name);
+				}
+
+				EnsureActionIsAccessibleWithCurrentHttpVerb(action);
+
+				RunBeforeActionFilters(action, out cancel);
+
+				CreateControllerLevelResources();
+				CreateActionLevelResources(action);
+				ResolveLayout(action);
+
+				if (cancel)
+				{
+					return new FailedToExecuteBeginActionAsyncResult();
+				}
+
+				if (BeforeAction != null)
+				{
+					BeforeAction(action, engineContext, this, context);
+				}
+
+				return (IAsyncResult)action.Execute(engineContext, this, context);
+			}
+			catch (MonoRailException ex)
+			{
+				if (Response.StatusCode == 200 && ex.HttpStatusCode.HasValue)
+				{
+					Response.StatusCode = ex.HttpStatusCode.Value;
+					Response.StatusDescription = ex.HttpStatusDesc;
+				}
+
+				actionException = ex;
+
+				RegisterExceptionAndNotifyExtensions(actionException);
+
+				RunAfterActionFilters(action, out cancel);
+
+				if (!ProcessRescue(action, actionException))
+				{
+					throw;
+				}
+				return new FailedToExecuteBeginActionAsyncResult();
+			}
+			catch (Exception ex)
+			{
+				if (Response.StatusCode == 200)
+				{
+					Response.StatusCode = 500;
+					Response.StatusDescription = "Error processing action";
+				}
+
+				actionException = (ex is TargetInvocationException) ? ex.InnerException : ex;
+
+				RegisterExceptionAndNotifyExtensions(actionException);
+
+				RunAfterActionFilters(action, out cancel);
+
+				if (!ProcessRescue(action, actionException))
+				{
+					throw;
+				}
+				return new FailedToExecuteBeginActionAsyncResult();
+			}
+		}
+
+		/// <summary>
+		/// Complete processing of the request:<br/>
+		/// 1. Execute end method related to the action name<br/>
+		/// 2. On error, execute the rescues if available<br/>
+		/// 3. Run the after filters<br/>
+		/// 4. Invoke the view engine<br/>
+		/// </summary>
+		/// <remarks>
+		/// The async infomrmation about this call is pass using the controller context Async property
+		/// </remarks>
+		public void EndProcess()
+		{
+			PrepareToExecuteAction(engineContext, context);
+
+			IExecutableAction action = null;
+			Exception actionException = null;
+			bool cancel;
+
+			try
+			{
+				action = SelectAction(Action, ActionType.AsyncEnd);
+				ResolveLayout(action);
+
+				object actionRetValue = action.Execute(engineContext, this, context);
+
+				// TO DO: review/refactor this code
+				if (action.ReturnBinderDescriptor != null)
+				{
+					IReturnBinder binder = action.ReturnBinderDescriptor.ReturnTypeBinder;
+
+					// Runs return binder and keep going
+					binder.Bind(Context, this, ControllerContext, action.ReturnBinderDescriptor.ReturnType, actionRetValue);
+				}
+
+				// Action executed successfully, so it's safe to process the cache configurer
+				if ((MetaDescriptor.CacheConfigurer != null || action.CachePolicyConfigurer != null) &&
+					!Response.WasRedirected && Response.StatusCode == 200)
+				{
+					ConfigureCachePolicy(action);
+				}
+			}
+			catch (MonoRailException ex)
+			{
+				if (Response.StatusCode == 200 && ex.HttpStatusCode.HasValue)
+				{
+					Response.StatusCode = ex.HttpStatusCode.Value;
+					Response.StatusDescription = ex.HttpStatusDesc;
+				}
+
+				actionException = ex;
+
+				RegisterExceptionAndNotifyExtensions(actionException);
+
+				RunAfterActionFilters(action, out cancel);
+
+				if (!ProcessRescue(action, actionException))
+				{
+					throw;
+				}
+				return;
+			}
+			catch (Exception ex)
+			{
+				if (Response.StatusCode == 200)
+				{
+					Response.StatusCode = 500;
+					Response.StatusDescription = "Error processing action";
+				}
+
+				actionException = (ex is TargetInvocationException) ? ex.InnerException : ex;
+
+				RegisterExceptionAndNotifyExtensions(actionException);
+
+				RunAfterActionFilters(action, out cancel);
+
+				if (!ProcessRescue(action, actionException))
+				{
+					throw;
+				}
+				return;
+			}
+			finally
+			{
+				// AfterAction event: always executed
+				if (AfterAction != null)
+				{
+					AfterAction(action, engineContext, this, context);
+				}
+			}
+
+			RunAfterActionFilters(action, out cancel);
+			if (cancel)
+			{
+				return;
+			}
+
+			if (engineContext.Response.WasRedirected) // No need to process view or rescue in this case
+			{
+				return;
+			}
+
+			if (context.SelectedViewName != null)
+			{
+				ProcessView();
+				RunAfterRenderingFilters(action);
+			}
 		}
 
 		/// <summary>
@@ -1329,15 +1537,6 @@ namespace Castle.MonoRail.Framework
 		#endregion
 
 		/// <summary>
-		/// Gives a change to subclass 
-		/// to override the layout resolution code
-		/// </summary>
-		protected virtual void ResolveLayout()
-		{
-			context.LayoutNames = ObtainDefaultLayoutName();
-		}
-
-		/// <summary>
 		/// Resolves the layout override for the specified action
 		/// </summary>
 		/// <param name="action">The action.</param>
@@ -1349,6 +1548,16 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		/// <summary>
+		/// Gives a change to subclass 
+		/// to override the layout resolution code
+		/// </summary>
+		protected virtual void ResolveLayout()
+		{
+			context.LayoutNames = ObtainDefaultLayoutName();
+		}
+
+
 		private void RunActionAndRenderView()
 		{
 			IExecutableAction action = null;
@@ -1357,12 +1566,12 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
-				action = SelectAction(Action);
+				action = SelectAction(Action, ActionType.Sync);
 
 				if (action == null)
 				{
 					throw new MonoRailException(404, "Not Found", "Could not find action named " +
-						Action + " on controller " + AreaName + "\\" + Name);
+																  Action + " on controller " + AreaName + "\\" + Name);
 				}
 
 				EnsureActionIsAccessibleWithCurrentHttpVerb(action);
@@ -1374,6 +1583,11 @@ namespace Castle.MonoRail.Framework
 				CreateControllerLevelResources();
 				CreateActionLevelResources(action);
 				ResolveLayout(action);
+
+				if (cancel)
+				{
+					return;
+				}
 
 				if (BeforeAction != null)
 				{
@@ -1448,7 +1662,10 @@ namespace Castle.MonoRail.Framework
 			}
 
 			RunAfterActionFilters(action, out cancel);
-			if (cancel) return;
+			if (cancel)
+			{
+				return;
+			}
 
 			if (engineContext.Response.WasRedirected) // No need to process view or rescue in this case
 			{
@@ -1477,11 +1694,13 @@ namespace Castle.MonoRail.Framework
 		/// Selects the appropriate action.
 		/// </summary>
 		/// <param name="action">The action name.</param>
+		/// <param name="actionType">Type of the action.</param>
 		/// <returns></returns>
-		protected virtual IExecutableAction SelectAction(string action)
+		protected virtual IExecutableAction SelectAction(string action, ActionType actionType)
 		{
 			// For backward compatibility purposes
-			MethodInfo method = SelectMethod(action, MetaDescriptor.Actions, engineContext.Request, context.CustomActionParameters);
+			MethodInfo method = SelectMethod(action, MetaDescriptor.Actions, engineContext.Request,
+											 context.CustomActionParameters, actionType);
 
 			if (method != null)
 			{
@@ -1491,7 +1710,7 @@ namespace Castle.MonoRail.Framework
 			}
 
 			// New supported way
-			return actionSelector.Select(engineContext, this, context);
+			return actionSelector.Select(engineContext, this, context, actionType);
 		}
 
 		/// <summary>
@@ -1632,7 +1851,7 @@ namespace Castle.MonoRail.Framework
 			foreach (AbstractHelper helper in builtInHelpers)
 			{
 				context.Helpers.Add(helper);
-				
+
 				if (helper is IServiceEnabledComponent)
 				{
 					serviceInitializer.Initialize(helper, engineContext);
@@ -1655,7 +1874,10 @@ namespace Castle.MonoRail.Framework
 		private void RunBeforeActionFilters(IExecutableAction action, out bool cancel)
 		{
 			cancel = false;
-			if (action.ShouldSkipAllFilters) return;
+			if (action.ShouldSkipAllFilters)
+			{
+				return;
+			}
 
 			if (!ProcessFilters(action, ExecuteWhen.BeforeAction))
 			{
@@ -1667,9 +1889,15 @@ namespace Castle.MonoRail.Framework
 		private void RunAfterActionFilters(IExecutableAction action, out bool cancel)
 		{
 			cancel = false;
-			if (action == null) return;
+			if (action == null)
+			{
+				return;
+			}
 
-			if (action.ShouldSkipAllFilters) return;
+			if (action.ShouldSkipAllFilters)
+			{
+				return;
+			}
 
 			if (!ProcessFilters(action, ExecuteWhen.AfterAction))
 			{
@@ -1680,7 +1908,10 @@ namespace Castle.MonoRail.Framework
 
 		private void RunAfterRenderingFilters(IExecutableAction action)
 		{
-			if (action.ShouldSkipAllFilters) return;
+			if (action.ShouldSkipAllFilters)
+			{
+				return;
+			}
 
 			ProcessFilters(action, ExecuteWhen.AfterRendering);
 		}
@@ -1700,26 +1931,26 @@ namespace Castle.MonoRail.Framework
 
 			return action.ShouldSkipAllFilters;
 
-//			ActionMetaDescriptor actionMeta = MetaDescriptor.GetAction(method);
-//
-//			if (actionMeta.SkipFilters.Count == 0)
-//			{
-//				// Nothing against filters declared for this action
-//				return false;
-//			}
-//
-//			foreach(SkipFilterAttribute skipfilter in actionMeta.SkipFilters)
-//			{
-//				// SkipAllFilters handling...
-//				if (skipfilter.BlanketSkip)
-//				{
-//					return true;
-//				}
-//
-//				filtersToSkip[skipfilter.FilterType] = String.Empty;
-//			}
-//
-//			return false;
+			//			ActionMetaDescriptor actionMeta = MetaDescriptor.GetAction(method);
+			//
+			//			if (actionMeta.SkipFilters.Count == 0)
+			//			{
+			//				// Nothing against filters declared for this action
+			//				return false;
+			//			}
+			//
+			//			foreach(SkipFilterAttribute skipfilter in actionMeta.SkipFilters)
+			//			{
+			//				// SkipAllFilters handling...
+			//				if (skipfilter.BlanketSkip)
+			//				{
+			//					return true;
+			//				}
+			//
+			//				filtersToSkip[skipfilter.FilterType] = String.Empty;
+			//			}
+			//
+			//			return false;
 		}
 
 		/// <summary>
@@ -1794,7 +2025,10 @@ namespace Castle.MonoRail.Framework
 
 		private void DisposeFilters()
 		{
-			if (filters == null) return;
+			if (filters == null)
+			{
+				return;
+			}
 
 			foreach (FilterDescriptor desc in filters)
 			{
@@ -1848,7 +2082,7 @@ namespace Castle.MonoRail.Framework
 
 					return true;
 				}
-				catch(Exception exception)
+				catch (Exception exception)
 				{
 					// In this situation, the rescue view could not be found
 					// So we're back to the default error exibition
@@ -1903,9 +2137,10 @@ namespace Castle.MonoRail.Framework
 		/// <param name="actions">The actions.</param>
 		/// <param name="request">The request.</param>
 		/// <param name="actionArgs">The action args.</param>
+		/// <param name="actionType">Type of the action.</param>
 		/// <returns></returns>
 		protected virtual MethodInfo SelectMethod(string action, IDictionary actions, IRequest request,
-												  IDictionary<string, object> actionArgs)
+												  IDictionary<string, object> actionArgs, ActionType actionType)
 		{
 			return null;
 		}

@@ -116,6 +116,11 @@ there";
 def SayHello(name as string):
 	return 'Hello, '+name+'! Modified!' 
 end";
+			ManualResetEvent e = new ManualResetEvent(false);
+			BooViewEngine.ViewRecompiled +=delegate
+			                               {
+			                               	e.Set();
+			                               };
 			using (TextWriter write = File.CreateText(common))
 			{
 				write.Write(@new);
@@ -123,7 +128,7 @@ end";
 			string expected = "Hello, Ayende! Modified!";
 			// Have to wait for the common scripts recompilation otherwise you get random test failure since the request
 			// sometimes gets there faster you can recompile and it gets the old version.
-			Thread.Sleep(500);
+			e.WaitOne();
 			try
 			{
 				ProcessView_StripRailsExtension("home/hellofromcommon.rails");

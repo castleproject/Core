@@ -99,5 +99,10 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <value>The route match.</value>
 		RouteMatch RouteMatch { get; set; }
+
+		/// <summary>
+		/// Get or set the information used to manage async invocations
+		/// </summary>
+		AsyncInvocationInformation Async { get; set; }
 	}
 }

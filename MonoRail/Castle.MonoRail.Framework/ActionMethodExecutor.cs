@@ -44,7 +44,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="context">The context.</param>
-		public override object Execute(IEngineContext engineContext, Controller controller, IControllerContext context)
+		public override object Execute(IEngineContext engineContext, IController controller, IControllerContext context)
 		{
 			return actionMethod.Invoke(controller, null);
 		}
@@ -68,8 +68,9 @@ namespace Castle.MonoRail.Framework
 		/// <param name="actionMethod">The action method.</param>
 		/// <param name="metaDescriptor">The meta descriptor.</param>
 		/// <param name="invoke">The invoke.</param>
-		public ActionMethodExecutorCompatible(MethodInfo actionMethod, ActionMetaDescriptor metaDescriptor, InvokeOnController invoke) : 
-			base(actionMethod, metaDescriptor)
+		public ActionMethodExecutorCompatible(MethodInfo actionMethod, ActionMetaDescriptor metaDescriptor,
+		                                      InvokeOnController invoke) :
+		                                      	base(actionMethod, metaDescriptor)
 		{
 			this.invoke = invoke;
 		}
@@ -80,7 +81,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="context">The context.</param>
-		public override object Execute(IEngineContext engineContext, Controller controller, IControllerContext context)
+		public override object Execute(IEngineContext engineContext, IController controller, IControllerContext context)
 		{
 			return invoke(actionMethod, engineContext.Request, context.CustomActionParameters);
 		}

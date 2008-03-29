@@ -175,8 +175,9 @@ namespace Castle.MonoRail.Framework
 		/// <param name="actions">The avaliable actions</param>
 		/// <param name="request">The request instance</param>
 		/// <param name="actionArgs">The custom arguments for the action</param>
+		/// <param name="actionType">Type of the action.</param>
 		/// <returns></returns>
-		protected override MethodInfo SelectMethod(string action, IDictionary actions, IRequest request, IDictionary<string, object> actionArgs)
+		protected override MethodInfo SelectMethod(string action, IDictionary actions, IRequest request, IDictionary<string, object> actionArgs, ActionType actionType)
 		{
 			if (action == "RenderWizardView")
 			{
@@ -184,7 +185,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else
 			{
-				return base.SelectMethod(action, actions, request, actionArgs);
+				return base.SelectMethod(action, actions, request, actionArgs, actionType);
 			}
 		}
 

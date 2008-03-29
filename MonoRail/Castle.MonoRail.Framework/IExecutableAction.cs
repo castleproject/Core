@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework
 		/// Gets the layout override.
 		/// </summary>
 		/// <value>The layout override.</value>
-		string[] LayoutOverride { get;  }
+		string[] LayoutOverride { get; }
 
 		/// <summary>
 		/// Gets the http method that the action requires before being executed.
@@ -86,6 +86,6 @@ namespace Castle.MonoRail.Framework
 		/// <param name="engineContext">The engine context.</param>
 		/// <param name="controller">The controller.</param>
 		/// <param name="context">The context.</param>
-		object Execute(IEngineContext engineContext, Controller controller, IControllerContext context);
+		object Execute(IEngineContext engineContext, IController controller, IControllerContext context);
 	}
 }

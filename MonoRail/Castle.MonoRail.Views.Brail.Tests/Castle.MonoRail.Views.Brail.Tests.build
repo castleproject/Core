@@ -11,12 +11,19 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
+		
+		<copy todir="${build.dir}" >
+			<fileset basedir="${lib.dir}">
+				<include name="${src.dir}/../TestSiteBrail/Bin/TestSiteBrail.dll" />
+			</fileset>
+		</copy>
+		
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
 			<include name="Castle.Core.dll" />
 			<include name="Castle.DynamicProxy.dll" />
 			<include name="Boo.Lang.Compiler.dll" />
-			<include name="${src.dir}/../TestSiteBrail/Bin/TestSiteBrail.dll" />
+			<include name="TestSiteBrail.dll" />
 			<include name="Castle.MonoRail.TestSupport.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Boo.Lang.dll" />		

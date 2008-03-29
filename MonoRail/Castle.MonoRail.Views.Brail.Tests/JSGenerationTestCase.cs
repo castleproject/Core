@@ -59,15 +59,15 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		public void AccessingElementStockOperationReplaceHtml()
 		{
 			ProcessViewJS("jsgeneration/elementreplacehtml");
-			AssertReplyContains("$('aa').update(\"new content\")");
+			AssertReplyContains("$('aa').replacehtml(\"new content\")");
 		}
 
 		[Test]
 		public void CollectionFirstLast()
 		{
 			ProcessViewJS("jsgeneration/collectionfirstlast");
-			AssertReplyContains("$$('p.welcome b').first().hide();");
-			AssertReplyContains("$$('p.welcome b').last().show();");
+			AssertReplyContains("$('p.welcome b').first().hide();");
+			AssertReplyContains("$('p.welcome b').last().show();");
 		}
 
 		[Test]
@@ -106,6 +106,9 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void ReplaceHtmlUsingPartial()
 		{
+			PropertyBag["Name"] = "hammett";
+			PropertyBag["list"] = new string[] {"a", "b"};
+
 			ProcessViewJS("jsgeneration/replacehtmlwithpartial");
 			AssertReplyContains("Element.update(\"aa\",\"You\'re hammett <br> [ a ][ b ]\")");
 		}
@@ -121,13 +124,6 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			AssertReplyContains("Element.toggle(\"a\");");
 			AssertReplyContains("Element.toggle(\"a\",\"b\",\"c\");");
 			AssertReplyContains("[\"a\",\"b\",\"c\"].each(Element.remove);");
-		}
-
-		[Test]
-		public void SimpleCollectionAccess()
-		{
-			ProcessViewJS("jsgeneration/collectionaccess");
-			AssertReplyContains("$$('aa');");
 		}
 
 		[Test]

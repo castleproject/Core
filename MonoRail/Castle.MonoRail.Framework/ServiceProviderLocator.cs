@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework
 	public class ServiceProviderLocator : IServiceProviderLocator
 	{
 		private static readonly ServiceProviderLocator instance = new ServiceProviderLocator();
-		
+
 		private readonly IList<IAccessorStrategy> locatorStrategies = new List<IAccessorStrategy>();
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace Castle.MonoRail.Framework
 			foreach(IAccessorStrategy strategy in locatorStrategies)
 			{
 				IServiceProviderEx serviceProvider = strategy.LocateProvider();
-			
+
 				if (serviceProvider != null)
 				{
 					return serviceProvider;

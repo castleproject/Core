@@ -14,15 +14,13 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
-	using System.Collections;
-	using System.Collections.Generic;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class BrailRegressionTestFixture : BaseViewOnlyTestFixture
 	{
 		public BrailRegressionTestFixture()
-			: base("../../../Castle.MonoRail.Views.Brail.Tests")
+			: base(ViewLocations.BrailTestsView)
 		{
 
 		}

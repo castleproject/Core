@@ -45,7 +45,7 @@ namespace Castle.MonoRail.Framework.Tests.Actions
 
 			controllerMeta.Actions["action1"] = typeof(BaseClassController).GetMethod("Action1");
 
-			IExecutableAction action = selector.Select(engine, controller, context);
+			IExecutableAction action = selector.Select(engine, controller, context,ActionType.Sync);
 			Assert.IsNotNull(action);
 			Assert.IsInstanceOfType(typeof(ActionMethodExecutor), action);
 		}
@@ -59,7 +59,7 @@ namespace Castle.MonoRail.Framework.Tests.Actions
 
 			context.DynamicActions.Add("action2", new DummyDynamicAction());
 
-			IExecutableAction action = selector.Select(engine, controller, context);
+			IExecutableAction action = selector.Select(engine, controller, context,ActionType.Sync);
 			Assert.IsNotNull(action);
 			Assert.IsInstanceOfType(typeof(DynamicActionExecutor), action);
 		}

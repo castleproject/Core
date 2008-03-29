@@ -23,6 +23,7 @@ namespace Castle.MonoRail.Framework
 	using Castle.MonoRail.Framework.Container;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Descriptors;
+	using Providers;
 	using Routing;
 	using Services;
 
@@ -33,9 +34,9 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class MonoRailHttpHandlerFactory : IHttpHandlerFactory
 	{
-		private readonly static string CurrentEngineContextKey = "currentmrengineinstance";
-		private readonly static string CurrentControllerKey = "currentmrcontroller";
-		private readonly static string CurrentControllerContextKey = "currentmrcontrollercontext";
+		private static readonly string CurrentEngineContextKey = "currentmrengineinstance";
+		private static readonly string CurrentControllerKey = "currentmrcontroller";
+		private static readonly string CurrentControllerContextKey = "currentmrcontrollercontext";
 		private readonly ReaderWriterLock locker = new ReaderWriterLock();
 
 		private static IMonoRailConfiguration configuration;
@@ -50,7 +51,8 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MonoRailHttpHandlerFactory"/> class.
 		/// </summary>
-		public MonoRailHttpHandlerFactory() : this(ServiceProviderLocator.Instance)
+		public MonoRailHttpHandlerFactory()
+			: this(ServiceProviderLocator.Instance)
 		{
 		}
 
@@ -74,9 +76,9 @@ namespace Castle.MonoRail.Framework
 		/// <returns>
 		/// A new <see cref="T:System.Web.IHttpHandler"></see> object that processes the request.
 		/// </returns>
-		public virtual IHttpHandler GetHandler(HttpContext context, 
-		                                       String requestType, 
-		                                       String url, String pathTranslated)
+		public virtual IHttpHandler GetHandler(HttpContext context,
+											   String requestType,
+											   String url, String pathTranslated)
 		{
 			PerformOneTimeInitializationIfNecessary(context);
 
@@ -84,7 +86,7 @@ namespace Castle.MonoRail.Framework
 
 			HttpRequest req = context.Request;
 
-			RouteMatch routeMatch = (RouteMatch) context.Items[RouteMatch.RouteMatchKey] ?? new RouteMatch();
+			RouteMatch routeMatch = (RouteMatch)context.Items[RouteMatch.RouteMatchKey] ?? new RouteMatch();
 
 			UrlInfo urlInfo = urlTokenizer.TokenizeUrl(req.FilePath, req.PathInfo, req.Url, req.IsLocal, req.ApplicationPath);
 
@@ -125,7 +127,7 @@ namespace Castle.MonoRail.Framework
 				throw new MonoRailException("Error creating controller " + urlInfo.Controller, ex);
 			}
 
-			ControllerMetaDescriptor controllerDesc = 
+			ControllerMetaDescriptor controllerDesc =
 				mrContainer.ControllerDescriptorProvider.BuildDescriptor(controller);
 
 			IControllerContext controllerContext =
@@ -136,8 +138,15 @@ namespace Castle.MonoRail.Framework
 
 			context.Items[CurrentControllerKey] = controller;
 			context.Items[CurrentControllerContextKey] = controllerContext;
-			
-			return CreateHandler(controllerDesc, engineContext, controller, controllerContext);
+
+			if (IsAsyncAction(controllerContext) == false)
+			{
+				return CreateHandler(controllerDesc, engineContext, controller, controllerContext);
+			}
+			else
+			{
+				return CreateAsyncHandler(controllerDesc, engineContext, (IAsyncController)controller, controllerContext);
+			}
 		}
 
 		/// <summary>
@@ -150,7 +159,8 @@ namespace Castle.MonoRail.Framework
 		/// <returns>
 		/// A new <see cref="T:System.Web.IHttpHandler"></see> object that processes the request.
 		/// </returns>
-		protected virtual IHttpHandler CreateHandler(ControllerMetaDescriptor controllerDesc, IEngineContext engineContext, IController controller, IControllerContext controllerContext)
+		protected virtual IHttpHandler CreateHandler(ControllerMetaDescriptor controllerDesc, IEngineContext engineContext,
+													 IController controller, IControllerContext controllerContext)
 		{
 			if (IgnoresSession(controllerDesc.ControllerDescriptor))
 			{
@@ -158,6 +168,29 @@ namespace Castle.MonoRail.Framework
 			}
 			return new MonoRailHttpHandler(engineContext, controller, controllerContext);
 		}
+
+
+		/// <summary>
+		/// Creates the handler.
+		/// </summary>
+		/// <param name="controllerDesc">The controller descriptor.</param>
+		/// <param name="engineContext">The engine context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="controllerContext">The controller context.</param>
+		/// <returns>
+		/// A new <see cref="T:System.Web.IHttpHandler"></see> object that processes the request.
+		/// </returns>
+		protected virtual IHttpAsyncHandler CreateAsyncHandler(ControllerMetaDescriptor controllerDesc,
+															   IEngineContext engineContext, IAsyncController controller,
+															   IControllerContext controllerContext)
+		{
+			if (IgnoresSession(controllerDesc.ControllerDescriptor))
+			{
+				return new AsyncSessionlessMonoRailHttpHandler(engineContext, controller, controllerContext);
+			}
+			return new AsyncMonoRailHttpHandler(engineContext, controller, controllerContext);
+		}
+
 
 		/// <summary>
 		/// Enables a factory to reuse an existing handler instance.
@@ -263,12 +296,27 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Checks whether the target action is an async method.
+		/// </summary>
+		/// <param name="controllerContext">The controller context.</param>
+		/// <returns></returns>
+		protected virtual bool IsAsyncAction(IControllerContext controllerContext)
+		{
+			if (controllerContext.ControllerDescriptor == null || controllerContext.Action == null)
+			{
+				return false;
+			}
+			return controllerContext.ControllerDescriptor.Actions[controllerContext.Action] is AsyncActionPair;
+		}
+
+		/// <summary>
 		/// Creates the default service container.
 		/// </summary>
 		/// <param name="userServiceProvider">The user service provider.</param>
 		/// <param name="appInstance">The app instance.</param>
 		/// <returns></returns>
-		protected virtual IMonoRailContainer CreateDefaultMonoRailContainer(IServiceProviderEx userServiceProvider, HttpApplication appInstance)
+		protected virtual IMonoRailContainer CreateDefaultMonoRailContainer(IServiceProviderEx userServiceProvider,
+																			HttpApplication appInstance)
 		{
 			DefaultMonoRailContainer container = new DefaultMonoRailContainer(userServiceProvider);
 
@@ -304,7 +352,12 @@ namespace Castle.MonoRail.Framework
 		/// <value>The current engine context.</value>
 		public static IEngineContext CurrentEngineContext
 		{
-			get { return HttpContext.Current.Items[CurrentEngineContextKey] as IEngineContext; }
+			get
+			{
+				if (HttpContext.Current == null)//for tests
+					return null;
+				return HttpContext.Current.Items[CurrentEngineContextKey] as IEngineContext;
+			}
 		}
 
 		/// <summary>
