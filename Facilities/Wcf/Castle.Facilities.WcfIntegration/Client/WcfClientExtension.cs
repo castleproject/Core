@@ -15,15 +15,13 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
-	using System.ServiceModel.Channels;
 	using Castle.Core;
 	using Castle.MicroKernel;
-	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.Proxy;
 	using Castle.Facilities.WcfIntegration.Internal;
-	using System.ServiceModel;
+	using Castle.Facilities.WcfIntegration.Rest;
 
-	internal class WcfClientExtension : IDisposable
+	public class WcfClientExtension : IDisposable
 	{
 		private readonly IKernel kernel;
  
@@ -31,10 +29,18 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.kernel = kernel;
 
-			AddClientChannelBuilder<DefaultChannelBuilder, WcfClientModel>(false);
+			AddDefaultChannelBuilders();
 
 			kernel.AddComponent<WcfManagedChannelInterceptor>();
 			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
+		}
+
+		public WcfClientExtension AddChannelBuilder<T, M>()
+			where T : IClientChannelBuilder<M>
+			where M : IWcfClientModel
+		{
+			AddChannelBuilder<T, M>(true);
+			return this;
 		}
 
 		private void Kernel_ComponentModelCreated(ComponentModel model)
@@ -50,7 +56,13 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
-		internal void AddClientChannelBuilder<T, M>(bool force)
+		private void AddDefaultChannelBuilders()
+		{
+			AddChannelBuilder<DefaultChannelBuilder, WcfClientModel>(false);
+			AddChannelBuilder<RestChannelBuilder, RestClientModel>(false);
+		}
+
+		internal void AddChannelBuilder<T, M>(bool force)
 			where T : IClientChannelBuilder<M>
 			where M : IWcfClientModel
 		{

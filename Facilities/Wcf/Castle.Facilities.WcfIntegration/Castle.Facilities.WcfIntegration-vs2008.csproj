@@ -76,8 +76,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\Rest\RestChannelBuilder.cs" />
+    <Compile Include="Client\Rest\RestClientModel.cs" />
     <Compile Include="Client\WcfChannelCleanupConcern.cs" />
-    <Compile Include="Client\DefaulttChannelBuilder.cs" />
+    <Compile Include="Client\Default\DefaulttChannelBuilder.cs" />
     <Compile Include="Client\WcfManagedChannelInterceptor.cs" />
     <Compile Include="Client\WcfClient.cs" />
     <Compile Include="Client\WcfClientDescriptor.cs" />
@@ -93,9 +95,10 @@
     <Compile Include="Internal\WcfConstants.cs" />
     <Compile Include="IWcfServiceModel.cs" />
     <Compile Include="Service\AbstractServiceHostBuilder.cs" />
-    <Compile Include="Service\DefaultServiceHost.cs" />
-    <Compile Include="Service\DefaultServiceHostBuilder.cs" />
-    <Compile Include="Service\Web\WebServiceModel.cs" />
+    <Compile Include="Service\Default\DefaultServiceHost.cs" />
+    <Compile Include="Service\Default\DefaultServiceHostBuilder.cs" />
+    <Compile Include="Service\Rest\RestServiceHostBuilder.cs" />
+    <Compile Include="Service\Rest\RestServiceModel.cs" />
     <Compile Include="WcfEndpoint.cs" />
     <Compile Include="WcfFacility.cs" />
     <Compile Include="Service\WcfServiceExtension.cs" />

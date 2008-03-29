@@ -20,6 +20,7 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
+	using System.ServiceModel.Channels;
 
 	public abstract class AbstractServiceHostBuilder : IWcfEndpointVisitor
 	{
@@ -37,7 +38,14 @@ namespace Castle.Facilities.WcfIntegration
 			get { return kernel; }
 		}
 
-		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, IWcfEndpoint endpoint)
+		protected Uri[] GetBaseAddressArray(IWcfServiceModel serviceModel)
+		{
+			Uri[] baseAddresses = new Uri[serviceModel.BaseAddresses.Count];
+			serviceModel.BaseAddresses.CopyTo(baseAddresses, 0);
+			return baseAddresses;
+		}
+
+		protected ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, IWcfEndpoint endpoint)
 		{
 			this.serviceHost = serviceHost;
 			endpoint.Accept(this);
@@ -77,16 +85,28 @@ namespace Castle.Facilities.WcfIntegration
 				}
 			}
 		}
-		
+
 		#region IWcfEndpointVisitor Members
 
 		void IWcfEndpointVisitor.VisitServiceEndpointModel(ServiceEndpointModel model)
 		{
+			serviceEndpoint = AddServiceEndpoint(serviceHost, model);
+		}
+
+		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, 
+			                                                 ServiceEndpointModel model)
+		{
 			serviceHost.Description.Endpoints.Add(model.ServiceEndpoint);
-			serviceEndpoint = model.ServiceEndpoint;
+			return model.ServiceEndpoint;
 		}
 
 		void IWcfEndpointVisitor.VisitConfigurationEndpointModel(ConfigurationEndpointModel model)
+		{
+			serviceEndpoint = AddServiceEndpoint(serviceHost, model);
+		}
+
+		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
+			                                                 ConfigurationEndpointModel model)
 		{
 			throw new InvalidOperationException("The ServiceEndpoint for a ServiceHost " +
 				"cannot be created from an endpoint name.");
@@ -94,22 +114,40 @@ namespace Castle.Facilities.WcfIntegration
 
 		void IWcfEndpointVisitor.VisitBindingEndpointModel(BindingEndpointModel model)
 		{
-			serviceEndpoint = serviceHost.AddServiceEndpoint(
-				model.Contract, model.Binding, string.Empty);
+			serviceEndpoint = AddServiceEndpoint(serviceHost, model);
+		}
+
+		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
+			                                                 BindingEndpointModel model)
+		{
+			Binding binding = model.Binding ?? GetDefaultBinding(serviceHost, string.Empty);
+			return serviceHost.AddServiceEndpoint(model.Contract, binding, string.Empty);
 		}
 
 		void IWcfEndpointVisitor.VisitBindingAddressEndpointModel(BindingAddressEndpointModel model)
 		{
+			serviceEndpoint = AddServiceEndpoint(serviceHost, model);
+		}
+
+		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
+													         BindingAddressEndpointModel model)
+		{
+			Binding binding = model.Binding ?? GetDefaultBinding(serviceHost, model.Address);
+
 			if (model.HasViaAddress)
 			{
-				serviceEndpoint = serviceHost.AddServiceEndpoint(
-					model.Contract, model.Binding, model.Address, model.ViaAddress);
+				return serviceHost.AddServiceEndpoint(
+					model.Contract, binding, model.Address, model.ViaAddress);
 			}
 			else
 			{
-				serviceEndpoint = serviceHost.AddServiceEndpoint(
-					model.Contract, model.Binding, model.Address);
+				return serviceHost.AddServiceEndpoint(model.Contract, binding, model.Address);
 			}
+		}
+
+		protected virtual Binding GetDefaultBinding(ServiceHost serviceHost, string address)
+		{
+			return null;
 		}
 
 		#endregion
@@ -216,8 +254,8 @@ namespace Castle.Facilities.WcfIntegration
 		{
 		}
 
-		protected abstract ServiceHost CreateServiceHost(Type serviceType, M serviceModel);
-
 		protected abstract ServiceHost CreateServiceHost(ComponentModel model, M serviceModel);
+
+		protected abstract ServiceHost CreateServiceHost(Type serviceType, M serviceModel);
 	}
 }

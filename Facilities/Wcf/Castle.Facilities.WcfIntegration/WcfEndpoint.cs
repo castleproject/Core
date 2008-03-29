@@ -19,11 +19,52 @@ namespace Castle.Facilities.WcfIntegration
     using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
 
-	public abstract class WcfEndpoint : IWcfEndpoint
+	public static class WcfEndpoint
+	{
+		public static ServiceEndpointModel FromEndpoint(ServiceEndpoint endpoint)
+		{
+			return new ContractEndpointModel().FromEndpoint(endpoint);
+		}
+
+		public static ConfigurationEndpointModel FromConfiguration(string endpointName)
+		{
+			return new ContractEndpointModel().FromConfiguration(endpointName);
+		}
+
+		public static BindingEndpointModel BoundTo(Binding binding)
+		{
+			return new ContractEndpointModel().BoundTo(binding);
+		}
+
+		public static BindingAddressEndpointModel At(string address)
+		{
+			return new ContractEndpointModel().At(address);
+		}
+
+		public static BindingAddressEndpointModel At(Uri address)
+		{
+			return new ContractEndpointModel().At(address);
+		}
+
+		public static ContractEndpointModel ForContract(Type contract)
+		{
+			return new ContractEndpointModel(contract);
+		}
+
+		public static ContractEndpointModel ForContract<Contract>()
+			where Contract : class
+		{
+			return ForContract(typeof(Contract));
+		}
+	}
+
+	#region Nested Class: WcfEndpointBase
+
+	public abstract class WcfEndpointBase : IWcfEndpoint
 	{
 		private Type contract;
 
-		protected WcfEndpoint(Type contract)
+		protected WcfEndpointBase(Type contract)
 		{
 			this.contract = contract;
 		}
@@ -49,37 +90,9 @@ namespace Castle.Facilities.WcfIntegration
 		protected abstract void Accept(IWcfEndpointVisitor visitor);
 
 		#endregion
-
-		#region WcfEndpoint Builders
-
-		public static ServiceEndpointModel FromEndpoint(ServiceEndpoint endpoint)
-		{
-			return new ContractEndpointModel().FromEndpoint(endpoint);
-		}
-
-		public static ConfigurationEndpointModel FromConfiguration(string endpointName)
-		{
-			return new ContractEndpointModel().FromConfiguration(endpointName);
-		}
-
-		public static BindingEndpointModel BoundTo(Binding binding)
-		{
-			return new ContractEndpointModel().BoundTo(binding);
-		}
-
-		public static ContractEndpointModel ForContract(Type contract)
-		{
-			return new ContractEndpointModel(contract);
-		}
-
-		public static ContractEndpointModel ForContract<Contract>()
-			where Contract : class
-		{
-			return ForContract(typeof(Contract));
-		}
-
-		#endregion
 	}
+
+	#endregion
 
 	#region Nested Class: ContractModel
 
@@ -123,13 +136,23 @@ namespace Castle.Facilities.WcfIntegration
 			}
 			return new BindingEndpointModel(contract, binding);
 		}
+
+		public BindingAddressEndpointModel At(string address)
+		{
+			return new BindingEndpointModel(contract, null).At(address);
+		}
+
+		public BindingAddressEndpointModel At(Uri address)
+		{
+			return new BindingEndpointModel(contract, null).At(address);
+		}
 	}
 
 	#endregion
 
 	#region Nested Class: ServiceEndpointModel
 
-	public class ServiceEndpointModel : WcfEndpoint
+	public class ServiceEndpointModel : WcfEndpointBase
 	{
 		private readonly ServiceEndpoint endpoint;
 
@@ -154,7 +177,7 @@ namespace Castle.Facilities.WcfIntegration
 
 	#region Nested Class: ConfigurationEndpointModel
 
-	public class ConfigurationEndpointModel : WcfEndpoint
+	public class ConfigurationEndpointModel : WcfEndpointBase
 	{
 		private readonly string endpointName;
 
@@ -179,7 +202,7 @@ namespace Castle.Facilities.WcfIntegration
 
 	#region Nested Class: BindingEndpointModel
 
-	public class BindingEndpointModel : WcfEndpoint
+	public class BindingEndpointModel : WcfEndpointBase
 	{
 		private readonly Binding binding;
 
@@ -231,7 +254,7 @@ namespace Castle.Facilities.WcfIntegration
 
 	#region Nested Class: BindingAddressEndpointModel
 
-	public class BindingAddressEndpointModel : WcfEndpoint
+	public class BindingAddressEndpointModel : WcfEndpointBase
 	{
 		private readonly Binding binding;
 		private readonly string address;

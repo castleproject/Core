@@ -22,8 +22,9 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.Facilities.WcfIntegration.Internal;
+	using Castle.Facilities.WcfIntegration.Rest;
 
-	internal class WcfServiceExtension : IDisposable
+	public class WcfServiceExtension : IDisposable
 	{
 		private readonly IKernel kernel;
 
@@ -50,13 +51,21 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.kernel = kernel;
 
+			AddDefaultServiceHostBuilders();
 			WindsorServiceHostFactory.RegisterContainer(kernel);
-			AddServiceHostBuilder<DefaultServiceHostBuilder, WcfServiceModel>(false);
 
 			kernel.ComponentRegistered += Kernel_ComponentRegistered;
 			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
 		}
-	
+
+		WcfServiceExtension AddServiceHostBuilder<T, M>()
+			where T : IServiceHostBuilder<M>
+			where M : IWcfServiceModel
+		{
+			AddServiceHostBuilder<T, M>(true);
+			return this;
+		}
+
 		private void Kernel_ComponentRegistered(string key, IHandler handler)
 		{
 			ComponentModel model = handler.ComponentModel;
@@ -84,6 +93,12 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				serviceHost.Close();
 			}
+		}
+
+		private void AddDefaultServiceHostBuilders()
+		{
+			AddServiceHostBuilder<DefaultServiceHostBuilder, WcfServiceModel>(false);
+			AddServiceHostBuilder<RestServiceHostBuilder, RestServiceModel>(false);
 		}
 
 		internal void AddServiceHostBuilder<T, M>(bool force)

@@ -48,12 +48,5 @@ namespace Castle.Facilities.WcfIntegration
 		}
 
 		#endregion
-
-		private Uri[] GetBaseAddressArray(WcfServiceModel serviceModel)
-		{
-			Uri[] baseAddresses = new Uri[serviceModel.BaseAddresses.Count];
-			serviceModel.BaseAddresses.CopyTo(baseAddresses, 0);
-			return baseAddresses;
-		}
 	}
 }

@@ -35,20 +35,14 @@ namespace Castle.Facilities.WcfIntegration
 			Kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
 		}
 
-		public WcfFacility AddClientChannelBuilder<T, M>()
-			where T : IClientChannelBuilder<M>
-			where M : IWcfClientModel
+		public WcfClientExtension Clients
 		{
-			clientExtension.AddClientChannelBuilder<T, M>(true);
-			return this;
+			get { return clientExtension; }
 		}
 
-		public WcfFacility AddServiceHostBuilder<T, M>()
-			where T : IServiceHostBuilder<M>
-			where M : IWcfServiceModel
+		public WcfServiceExtension Services
 		{
-			serviceExtension.AddServiceHostBuilder<T, M>(true);
-			return this;
+			get { return serviceExtension; }
 		}
 
 		private void Kernel_ComponentModelCreated(ComponentModel model)

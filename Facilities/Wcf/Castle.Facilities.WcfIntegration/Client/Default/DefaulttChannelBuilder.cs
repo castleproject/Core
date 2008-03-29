@@ -12,9 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration.Service.Web
+namespace Castle.Facilities.WcfIntegration
 {
-	public class WebServiceModel : WcfServiceModel
+	using System;
+	using Castle.MicroKernel;
+
+	/// <summary>
+	/// The default implementation of <see cref="IClientChannelBuilder{M}"/>.
+	/// </summary>
+	public class DefaultChannelBuilder : AbstractChannelBuilder<WcfClientModel>
 	{
+		public DefaultChannelBuilder(IKernel kernel)
+			: base(kernel)
+		{
+		}
 	}
 }
