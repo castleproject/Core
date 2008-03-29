@@ -51,7 +51,7 @@ namespace Castle.Facilities.WcfIntegration
 			foreach (WcfClientModel channel in channels)
 			{
 				ComponentRegistration registration = Component.For(channel.Contract);
-				registration.CustomDependencies(Property.ForKey("channel").Eq(channel));
+				registration.DependsOn(Property.ForKey("channel").Eq(channel));
 
 				if (configurer != null)
 				{

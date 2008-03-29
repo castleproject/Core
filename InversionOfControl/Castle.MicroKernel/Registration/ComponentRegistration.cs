@@ -199,7 +199,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S> CustomDependencies(params Property[] dependencies)
+		public ComponentRegistration<S> DependsOn(params Property[] dependencies)
 		{
 			return AddDescriptor(new CustomDependencyDescriptor<S>(dependencies));	
 		}
@@ -209,7 +209,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S> CustomDependencies(IDictionary dependencies)
+		public ComponentRegistration<S> DependsOn(IDictionary dependencies)
 		{
 			return AddDescriptor(new CustomDependencyDescriptor<S>(dependencies));	
 		}
@@ -219,9 +219,42 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="anonymous">The dependencies.</param>
 		/// <returns></returns>
-		public ComponentRegistration<S> CustomDependencies(object anonymous)
+		public ComponentRegistration<S> DependsOn(object anonymous)
 		{
 			return AddDescriptor(new CustomDependencyDescriptor<S>(anonymous));
+		}
+
+		/// <summary>
+		/// With the custom dependencies.
+		/// </summary>
+		/// <param name="dependencies">The dependencies.</param>
+		/// <returns></returns>
+		[Obsolete]
+		public ComponentRegistration<S> CustomDependencies(params Property[] dependencies)
+		{
+			return DependsOn(dependencies);
+		}
+
+		/// <summary>
+		/// With the custom dependencies.
+		/// </summary>
+		/// <param name="dependencies">The dependencies.</param>
+		/// <returns></returns>
+		[Obsolete]
+		public ComponentRegistration<S> CustomDependencies(IDictionary dependencies)
+		{
+			return DependsOn(dependencies);
+		}
+
+		/// <summary>
+		/// With the custom dependencies.
+		/// </summary>
+		/// <param name="dependencies">The dependencies.</param>
+		/// <returns></returns>
+		[Obsolete]
+		public ComponentRegistration<S> CustomDependencies(object dependencies)
+		{
+			return DependsOn(dependencies);
 		}
 
 		/// <summary>
@@ -306,7 +339,7 @@ namespace Castle.MicroKernel.Registration
 			{
 				if (actor != null)
 				{
-					CustomDependencies(Property.ForKey(Guid.NewGuid().ToString()).Eq(actor));
+					DependsOn(Property.ForKey(Guid.NewGuid().ToString()).Eq(actor));
 				}
 			}
 			return this;

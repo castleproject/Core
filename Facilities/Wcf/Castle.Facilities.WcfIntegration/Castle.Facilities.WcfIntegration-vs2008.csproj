@@ -95,6 +95,7 @@
     <Compile Include="Service\AbstractServiceHostBuilder.cs" />
     <Compile Include="Service\DefaultServiceHost.cs" />
     <Compile Include="Service\DefaultServiceHostBuilder.cs" />
+    <Compile Include="Service\Web\WebServiceModel.cs" />
     <Compile Include="WcfEndpoint.cs" />
     <Compile Include="WcfFacility.cs" />
     <Compile Include="Service\WcfServiceExtension.cs" />

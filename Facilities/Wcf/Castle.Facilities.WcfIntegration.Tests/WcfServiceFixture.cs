@@ -38,7 +38,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void TestInitialize()
 		{
 			windsorContainer = new WindsorContainer()
-				.AddFacility("wcf_facility", new WcfFacility())
+				.AddFacility<WcfFacility>()
 				.Register(
 					Component.For<LoggingInterceptor>(),
 					Component.For<IServiceBehavior>().ImplementedBy<CallCountServiceBehavior>(),
@@ -46,7 +46,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					Component.For<IOperationBehavior>().ImplementedBy<NetDataContractFormatBehavior>(),
 					Component.For<IOperations>().ImplementedBy<Operations>()
 						.Interceptors(InterceptorReference.ForType<LoggingInterceptor>()).Anywhere
-						.CustomDependencies(new { number = 42 })
+						.DependsOn(new { number = 42 })
 						.ActAs(new WcfServiceModel().AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding())
 								.At("net.tcp://localhost/Operations")

@@ -120,7 +120,7 @@ namespace Castle.Facilities.Startable.Tests
 			kernel.Register(
 				Component.For<StartableComponentCustomDependencies>()
 					.Named("a")
-					.CustomDependencies(Property.ForKey("config").Eq(1))
+					.DependsOn(Property.ForKey("config").Eq(1))
 				);
 			Assert.IsTrue(startableCreatedBeforeResolved, "Component was not properly started");
 

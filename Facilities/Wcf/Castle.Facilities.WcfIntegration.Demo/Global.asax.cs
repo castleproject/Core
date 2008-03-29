@@ -44,7 +44,7 @@ namespace Castle.Facilities.WcfIntegration.Demo
 					Component.For<IAmUsingWindsor>()
 					.Named("look no config")
 					.ImplementedBy<UsingWindsorWithoutConfig>()
-					.CustomDependencies(
+					.DependsOn(
 						Property.ForKey("number").Eq(42))
 					);
 			WindsorServiceHostFactory.RegisterContainer(container.Kernel);

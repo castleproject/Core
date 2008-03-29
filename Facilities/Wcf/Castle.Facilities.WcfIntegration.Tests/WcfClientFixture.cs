@@ -46,13 +46,15 @@ namespace Castle.Facilities.WcfIntegration.Tests
 							.At("net.tcp://localhost/Operations")
 					}))
 				.Register(
-					Component.For<IServiceBehavior>().Instance(new ServiceDebugBehavior()
+					Component.For<IServiceBehavior>()
+						.Instance(new ServiceDebugBehavior()
 						{
 							IncludeExceptionDetailInFaults = true
 						}),
-					Component.For<IOperationBehavior>().ImplementedBy<NetDataContractFormatBehavior>(),
+					Component.For<IOperationBehavior>()
+						.ImplementedBy<NetDataContractFormatBehavior>(),
 					Component.For<Operations>()
-						.CustomDependencies(new { number = 42 })
+						.DependsOn(new { number = 42 })
 						.ActAs(new WcfServiceModel().AddEndpoints(
 							WcfEndpoint.ForContract<IOperations>()
 								.BoundTo(new NetTcpBinding())
@@ -62,8 +64,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 								.At("net.tcp://localhost/Operations/Ex")
 								)
 						),
-					Component.For<IAmUsingWindsor>().ImplementedBy<UsingWindsor>()
-						.CustomDependencies(new { number = 42 })
+					Component.For<IAmUsingWindsor>()
+						.ImplementedBy<UsingWindsor>()
+						.DependsOn(new { number = 42 })
 						.ActAs(new WcfServiceModel()
 						)
 				);
@@ -125,9 +128,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanResolveClientAssociatedWithChannelUsingRelativeAddress()
 		{
 			using (new WindsorContainer()
-				.AddFacility("wcf_facility", new WcfFacility())
+				.AddFacility<WcfFacility>()
 				.Register(Component.For<Operations>()
-					.CustomDependencies(new { number = 28 })
+					.DependsOn(new { number = 28 })
 					.ActAs(new WcfServiceModel()
 						.AddBaseAddresses("net.tcp://localhost/Operations")
 						.AddEndpoints(WcfEndpoint.ForContract<IOperations>()
@@ -137,7 +140,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				)))
 			{
 				using (IWindsorContainer clientContainer = new WindsorContainer()
-					.AddFacility("wcf_facility", new WcfFacility())
+					.AddFacility<WcfFacility>()
 					.Register(Component.For<IOperations>()
 						.Named("operations")
 						.ActAs(new WcfClientModel()
@@ -159,10 +162,11 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanResolveClientAssociatedWithChannelUsingViaAddress()
 		{
 			using (IWindsorContainer localContainer = new WindsorContainer()
-				.AddFacility("wcf_facility", new WcfFacility())
+				.AddFacility<WcfFacility>()
 				.Register(
-					Component.For<IOperations>().ImplementedBy<Operations>()
-						.CustomDependencies(new { number = 22 })
+					Component.For<IOperations>()
+						.ImplementedBy<Operations>()
+						.DependsOn(new { number = 22 })
 						.ActAs(new WcfServiceModel().AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding())
 								.At("urn:castle:operations")

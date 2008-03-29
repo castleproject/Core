@@ -297,7 +297,7 @@ namespace Castle.MicroKernel.Tests.Registration
 			kernel.Register(
 				Component.For<ICustomer>()
 					.ImplementedBy<CustomerImpl>()
-					.CustomDependencies(
+					.DependsOn(
 						Property.ForKey("Name").Eq("Caption Hook"),
 						Property.ForKey("Address").Eq("Fairyland"),
 						Property.ForKey("Age").Eq(45)
@@ -318,7 +318,7 @@ namespace Castle.MicroKernel.Tests.Registration
 				kernel.Register(
 				Component.For<ICustomer>()
 					.ImplementedBy<CustomerImpl>()
-					.CustomDependencies(new { Name = "Caption Hook", Address = "Fairyland", Age = 45 }));
+					.DependsOn(new { Name = "Caption Hook", Address = "Fairyland", Age = 45 }));
 
 			ICustomer customer = kernel.Resolve<ICustomer>();
 			Assert.AreEqual(customer.Name, "Caption Hook");
@@ -338,7 +338,7 @@ namespace Castle.MicroKernel.Tests.Registration
 			kernel.Register(
 				Component.For<ICustomer>()
 					.ImplementedBy<CustomerImpl>()
-					.CustomDependencies(customDependencies)
+					.DependsOn(customDependencies)
 					);
 
 			ICustomer customer = kernel.Resolve<ICustomer>();
@@ -354,14 +354,14 @@ namespace Castle.MicroKernel.Tests.Registration
 				Component.For<ICustomer>()
 					.Named("customer1")
 					.ImplementedBy<CustomerImpl>()
-					.CustomDependencies(
+					.DependsOn(
 						Property.ForKey("Name").Eq("Caption Hook"),
 						Property.ForKey("Address").Eq("Fairyland"),
 						Property.ForKey("Age").Eq(45)
 						),
 				Component.For<CustomerChain1>()
 					.Named("customer2")
-					.CustomDependencies(
+					.DependsOn(
 						Property.ForKey("Name").Eq("Bigfoot"),
 						Property.ForKey("Address").Eq("Forest"),
 						Property.ForKey("Age").Eq(100)
@@ -437,14 +437,14 @@ namespace Castle.MicroKernel.Tests.Registration
 				Component.For<ICustomer>()
 					.Named("customer1")
 					.ImplementedBy<CustomerImpl>()
-					.CustomDependencies(
+					.DependsOn(
 						Property.ForKey("Name").Eq("Caption Hook"),
 						Property.ForKey("Address").Eq("Fairyland"),
 						Property.ForKey("Age").Eq(45)
 						),
 				Component.For<CustomerChain1>()
 					.Named("customer2")
-					.CustomDependencies(
+					.DependsOn(
 						Property.ForKey("Name").Eq("Bigfoot"),
 						Property.ForKey("Address").Eq("Forest"),
 						Property.ForKey("Age").Eq(100)
@@ -471,14 +471,14 @@ namespace Castle.MicroKernel.Tests.Registration
 				Component.For<ICustomer>()
 					.Named("customer1")
 					.ImplementedBy<CustomerImpl>()
-					.CustomDependencies(
+					.DependsOn(
 						Property.ForKey("Name").Eq("Caption Hook"),
 						Property.ForKey("Address").Eq("Fairyland"),
 						Property.ForKey("Age").Eq(45)
 						),
 				Component.For<CustomerChain1>()
 					.Named("customer2")
-					.CustomDependencies(
+					.DependsOn(
 						Property.ForKey("Name").Eq("Bigfoot"),
 						Property.ForKey("Address").Eq("Forest"),
 						Property.ForKey("Age").Eq(100)
