@@ -30,9 +30,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private static readonly BindingFlags FieldDefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public |
 																		BindingFlags.NonPublic | BindingFlags.Instance;
 
-		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
-
 		private static readonly IValidatorRegistry validatorRegistry = new CachedValidationRegistry();
+		
+		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
+		
+		private IModelBuilderExtension extension;
 
 		/// <summary>
 		/// Creates a <see cref="ActiveRecordModel"/> from the specified type.
@@ -57,6 +59,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		/// <summary>
+		/// Sets the extension.
+		/// </summary>
+		/// <param name="extension">The extension.</param>
+		public void SetExtension(IModelBuilderExtension extension)
+		{
+			this.extension = extension;
+		}
+
+		/// <summary>
 		/// Gets the models.
 		/// </summary>
 		/// <value>The models.</value>
@@ -78,8 +89,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		/// <param name="model">The model.</param>
 		/// <param name="type">The type.</param>
-		private static void PopulateModel(ActiveRecordModel model, Type type)
+		private void PopulateModel(ActiveRecordModel model, Type type)
 		{
+			if (extension != null)
+			{
+				extension.ProcessClass(type, model);
+			}
+
 			ProcessActiveRecordAttribute(type, model);
 
 			ProcessImports(type, model);
@@ -150,7 +166,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			return name.Substring(0, index);
 		}
 
-		private static void ProcessFields(Type type, ActiveRecordModel model)
+		private void ProcessFields(Type type, ActiveRecordModel model)
 		{
 			//Check persistent fields of the base class as well
 			if (ShouldCheckBase(type))
@@ -168,10 +184,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 					model.Fields.Add(new FieldModel(field, fieldAtt));
 				}
+
+				if (extension != null)
+				{
+					extension.ProcessField(field, model);
+				}
 			}
 		}
 
-		private static void ProcessProperties(Type type, ActiveRecordModel model)
+		private void ProcessProperties(Type type, ActiveRecordModel model)
 		{
 			// Check persistent properties of the base class as well
 			if (ShouldCheckBase(type))
@@ -186,6 +207,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 				bool isArProperty = false;
 				AnyModel anyModel;
 				HasManyToAnyModel hasManyToAnyModel;
+
+				if (extension != null)
+				{
+					extension.ProcessProperty(prop, model);
+				}
 
 				object[] valAtts = prop.GetCustomAttributes(typeof(AbstractValidationAttribute), true);
 
@@ -352,6 +378,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 						BelongsToModel btModel = new BelongsToModel(prop, propAtt);
 						model.BelongsTo.Add(btModel);
 						model.BelongsToDictionary[prop.Name] = btModel;
+
+						if (extension != null)
+						{
+							extension.ProcessBelongsTo(prop, btModel, model);
+						}
 					}
 					// The ordering is important here, HasManyToAny must comes before HasMany!
 					else if (attribute is HasManyToAnyAttribute)
@@ -364,6 +395,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 						model.HasManyToAnyDictionary[prop.Name] = hasManyToAnyModel;
 
 						CollectMetaValues(hasManyToAnyModel.MetaValues, prop);
+
+						if (extension != null)
+						{
+							extension.ProcessHasManyToAny(prop, hasManyToAnyModel, model);
+						}
 					}
 					else if (attribute is HasManyAttribute)
 					{
@@ -382,6 +418,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 						}
 						model.HasMany.Add(hasManyModel);
 						model.HasManyDictionary[prop.Name] = hasManyModel;
+
+						if (extension != null)
+						{
+							extension.ProcessHasMany(prop, hasManyModel, model);
+						}
 					}
 					else if (attribute is HasAndBelongsToManyAttribute)
 					{
@@ -391,6 +432,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 						HasAndBelongsToManyModel habtManyModel = new HasAndBelongsToManyModel(prop, propAtt);
 						model.HasAndBelongsToMany.Add(habtManyModel);
 						model.HasAndBelongsToManyDictionary[prop.Name] = habtManyModel;
+
+						if (extension != null)
+						{
+							extension.ProcessHasAndBelongsToMany(prop, habtManyModel, model);
+						}
 					}
 					else if (attribute is Any.MetaValueAttribute)
 					{

@@ -52,12 +52,13 @@ namespace Castle.ActiveRecord
 	/// <remarks>
 	/// This class is not thread safe.
 	/// </remarks>
-	public sealed class ActiveRecordStarter
+	public static class ActiveRecordStarter
 	{
 		private static readonly Object lockConfig = new object();
 
 		private static bool isInitialized = false;
 
+		private static List<IModelBuilderExtension> extensions = new List<IModelBuilderExtension>();
 		private static IDictionary<Type, string> registeredTypes;
 
 		/// <summary>
@@ -98,7 +99,6 @@ namespace Castle.ActiveRecord
 		/// before the generation of the NHibernate XML configuration.
 		/// </summary>
 		public static event ModelDelegate ModelCreated;
-//		public static event ModelsDelegate ModelsCreated;
 
 
 		/// <summary>
@@ -469,11 +469,26 @@ namespace Castle.ActiveRecord
 			return new List<Type>(registeredTypes.Keys).ToArray();
 		}
 
+		/// <summary>
+		/// Registers a builder extension.
+		/// </summary>
+		/// <param name="extension">The extension.</param>
+		public static void RegisterExtension(IModelBuilderExtension extension)
+		{
+			if (extension == null)
+			{
+				throw new ArgumentNullException("extension");
+			}
+			extensions.Add(extension);
+		}
+
 		private static ActiveRecordModelCollection BuildModels(ISessionFactoryHolder holder,
 															   IConfigurationSource source,
 															   IEnumerable<Type> types, bool ignoreProblematicTypes)
 		{
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+
+			builder.SetExtension(new ModelBuilderExtensionComposite(extensions));
 
 			ActiveRecordModelCollection models = builder.Models;
 

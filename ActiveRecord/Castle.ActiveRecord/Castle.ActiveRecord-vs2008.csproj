@@ -352,7 +352,9 @@
     <Compile Include="Framework\CriteriaHelper.cs" />
     <Compile Include="Framework\InterceptorFactory.cs" />
     <Compile Include="Framework\Internal\Constants.cs" />
+    <Compile Include="Framework\Internal\IModelBuilderExtension.cs" />
     <Compile Include="Framework\Internal\Inflector.cs" />
+    <Compile Include="Framework\Internal\ModelBuilderExtensionComposite.cs" />
     <Compile Include="Framework\Internal\Model\CompositeKeyModel.cs" />
     <Compile Include="Framework\Internal\Model\CompositeUserTypeModel.cs" />
     <Compile Include="Framework\Internal\Model\DependentObjectModel.cs" />

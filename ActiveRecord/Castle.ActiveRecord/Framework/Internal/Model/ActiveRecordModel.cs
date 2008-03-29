@@ -83,6 +83,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private readonly IList<CompositeUserTypeModel> compositeUserType = new List<CompositeUserTypeModel>();
 		private readonly IList<IValidator> validators = new List<IValidator>();
 
+		private readonly IDictionary<string, object> extendedProperties =
+			new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+
 		private readonly IDictionary<string, PropertyModel> propertyDictionary = 
 			new Dictionary<string, PropertyModel>(StringComparer.InvariantCultureIgnoreCase);
 		
@@ -442,6 +445,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public IList<CompositeUserTypeModel> CompositeUserType
 		{
 			get { return compositeUserType; }
+		}
+
+		/// <summary>
+		/// Gets the extended properties. Used to store/retrieve information collected by model builder extensions.
+		/// <seealso cref="IModelBuilderExtension"/>
+		/// </summary>
+		/// <value>The extended properties.</value>
+		public IDictionary<string, object> ExtendedProperties
+		{
+			get { return extendedProperties; }
 		}
 
 		/// <summary>
