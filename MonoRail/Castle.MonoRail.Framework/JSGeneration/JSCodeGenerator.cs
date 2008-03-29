@@ -311,13 +311,13 @@ namespace Castle.MonoRail.Framework.JSGeneration
 		/// <returns></returns>
 		public string GenerateFinalJsCode()
 		{
-			return @"try " +
-			       "\n{\n" + lines +
+			return "try \n" +
+			       "{\n" + lines +
 			       "}\n" +
 			       "catch(e)\n" +
 			       "{\n" +
 			       "alert('JS error ' + e.toString());\n" +
-			       "alert(\"Generated content: \\n" + JsEscapeWithSQuotes(lines.ToString()) + "\");\n}";
+			       "}";
 		}
 
 		/// <summary>

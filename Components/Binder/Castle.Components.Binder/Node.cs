@@ -16,6 +16,7 @@ namespace Castle.Components.Binder
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 
 	public enum NodeType
@@ -71,7 +72,7 @@ namespace Castle.Components.Binder
 	public class CompositeNode : Node
 	{
 		private readonly HybridDictionary name2Node = new HybridDictionary(true);
-		private readonly ArrayList nodeList = new ArrayList();
+		private readonly List<Node> nodeList = new List<Node>();
 
 		public CompositeNode(String name) : base(name, NodeType.Composite)
 		{
@@ -114,7 +115,7 @@ namespace Castle.Components.Binder
 		
 		public Node[] ChildNodes
 		{
-			get { return (Node[]) nodeList.ToArray(typeof(Node)); }
+			get { return nodeList.ToArray(); }
 		}
 		
 		public int ChildrenCount

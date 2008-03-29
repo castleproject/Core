@@ -14,16 +14,16 @@
 		<include name="ActiveRecordIntegration/ActiveRecordIntegration.build" />
 		<!--
 		<include name="AspectSharp/AspectSharp.build" />
+		<include name="IBatisNet/IBatisNet.build" /> 
+		<include name="Prevalence/Prevalence.build" />
+		<include name="DynamicLoader/DynamicLoader.build" />
+		<include name="Db4o/Db4o.build" />
 		-->
 		<include name="BatchRegistration/BatchRegistration.build" />
 		<include name="Cache/Cache.build" />
-		<include name="DynamicLoader/DynamicLoader.build" />
-		<include name="IBatisNet/IBatisNet.build" /> 
 		<include name="Logging/Logging.build" /> 
 		<include name="NHibernateIntegration/NHibernateIntegration.build" />
-		<include name="Prevalence/Prevalence.build" />
 		<include name="Synchronize/Synchronize.build" />
-		<include name="Db4o/Db4o.build" />
 		<include name="Remoting/Remoting.build" />
 		
 		<!-- probably need a better way to detect if .Net 3.0 is installed -->

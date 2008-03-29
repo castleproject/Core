@@ -101,7 +101,7 @@ namespace Castle.MonoRail.Framework.Tests.JSGeneration
 		{
 			string expected = "try \n{\n}\ncatch(e)\n{\n" + 
 				"alert('JS error ' + e.toString());\n" +
-				"alert(\"Generated content: \\n\");\n}";
+				"}";
 
 			Assert.AreEqual(expected, codeGen.GenerateFinalJsCode());
 		}
