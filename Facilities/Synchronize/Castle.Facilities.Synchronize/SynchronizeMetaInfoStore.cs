@@ -17,10 +17,8 @@ namespace Castle.Facilities.Synchronize
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-	using Castle.Core;
 	using Castle.Core.Configuration;
 	using Castle.MicroKernel;
-	using Castle.MicroKernel.Proxy;
 	using Castle.MicroKernel.SubSystems.Conversion;
 
 	/// <summary>
@@ -51,25 +49,16 @@ namespace Castle.Facilities.Synchronize
 		/// <summary>
 		/// Creates the meta-info from the specified type.
 		/// </summary>
-		/// <param name="model">The component model.</param>
+		/// <param name="implementation">The implementation type.</param>
 		/// <returns>The corresponding meta-info.</returns>
-		public SynchronizeMetaInfo CreateMetaFromModel(ComponentModel model)
+		public SynchronizeMetaInfo CreateMetaFromType(Type implementation)
 		{
-			Type implementation = model.Implementation;
-
 			SynchronizeAttribute syncAttrib = (SynchronizeAttribute)
-				model.Implementation.GetCustomAttributes(true)[0];
+			                                  implementation.GetCustomAttributes(true)[0];
 
 			SynchronizeMetaInfo metaInfo = new SynchronizeMetaInfo(syncAttrib);
 
-			if (model.Service.IsInterface)
-			{
-			    PopulateMetaInfoFromService(metaInfo, model);
-			}
-			else
-			{
-				PopulateMetaInfoFromClass(metaInfo, implementation);
-			}
+			PopulateMetaInfoFromType(metaInfo, implementation);
 
 			Register(implementation, metaInfo);
 
@@ -77,16 +66,15 @@ namespace Castle.Facilities.Synchronize
 		}
 
 		/// <summary>
-		/// Populates the meta-info from the class attributes.
+		/// Populates the meta-info from the attributes.
 		/// </summary>
 		/// <param name="metaInfo">The meta info.</param>
 		/// <param name="implementation">The implementation type.</param>
-		private static void PopulateMetaInfoFromClass(SynchronizeMetaInfo metaInfo,
-		                                              Type implementation)
+		private static void PopulateMetaInfoFromType(SynchronizeMetaInfo metaInfo,
+		                                             Type implementation)
 		{
 			if (implementation == typeof(object) ||
-			    implementation == typeof(MarshalByRefObject) ||
-				implementation.IsGenericTypeDefinition)
+			    implementation == typeof(MarshalByRefObject))
 			{
 				return;
 			}
@@ -95,69 +83,15 @@ namespace Castle.Facilities.Synchronize
 
 			foreach(MethodInfo method in methods)
 			{
-				PopulateMetaInfoFromMethod(metaInfo, method, null);
-			}
+				object[] atts = method.GetCustomAttributes(typeof(SynchronizeAttribute), true);
 
-			PopulateMetaInfoFromClass(metaInfo, implementation.BaseType);
-		}
-
-		/// <summary>
-		/// Populates the meta-info from the service attributes.
-		/// </summary>
-		/// <param name="metaInfo">The mata info.</param>
-		/// <param name="model">The component model.</param>
-		private static void PopulateMetaInfoFromService(SynchronizeMetaInfo metaInfo,
-												        ComponentModel model)
-		{
-			Type service = model.Service;
-
-			if (!service.IsGenericTypeDefinition)
-			{
-				ProxyOptions proxyOptions = ProxyUtil.ObtainProxyOptions(model, true);
-
-				if (proxyOptions.OmitTarget)
+				if (atts.Length != 0)
 				{
-					MethodInfo[] methods = service.GetMethods();
-
-					foreach (MethodInfo method in methods)
-					{
-						PopulateMetaInfoFromMethod(metaInfo, method, null);
-					}
-				}
-				else
-				{
-					InterfaceMapping mapping = model.Implementation.GetInterfaceMap(service);
-					MethodInfo[] interfaceMethods = mapping.InterfaceMethods;
-					MethodInfo[] targetMethods = mapping.TargetMethods;
-
-					for (int i = 0; i < interfaceMethods.Length; ++i)
-					{
-						PopulateMetaInfoFromMethod(metaInfo, targetMethods[i], interfaceMethods[i]);
-					}
+					metaInfo.Add(method, atts[0] as SynchronizeAttribute);
 				}
 			}
-		}
 
-		/// <summary>
-		/// Populates the meta-info from the method attributes.
-		/// </summary>
-		/// <param name="metaInfo">The meta info.</param>
-		/// <param name="method">The method.</param>
-		/// <param name="interfaceMethod">The base method.</param>
-		private static void PopulateMetaInfoFromMethod(SynchronizeMetaInfo metaInfo,
-													   MethodInfo method, MethodInfo interfaceMethod)
-		{
-			object[] atts = method.GetCustomAttributes(typeof(SynchronizeAttribute), true);
-
-			if (atts.Length == 0 && interfaceMethod != null)
-			{
-				atts = interfaceMethod.GetCustomAttributes(typeof(SynchronizeAttribute), true);
-			}
-
-			if (atts.Length != 0)
-			{
-				metaInfo.Add(method, atts[0] as SynchronizeAttribute);
-			}
+			PopulateMetaInfoFromType(metaInfo, implementation.BaseType);
 		}
 
 		/// <summary>
