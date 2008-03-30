@@ -27,6 +27,7 @@
 			<include name="Boo.Lang.Extensions.dll" />
 			<include name="Boo.Lang.Compiler.dll" />
 			<include name="Boo.Lang.Parser.dll" />
+			<include name="Newtonsoft.Json.dll" />
 			<include name="anrControls.Markdown.NET.dll" />
 			<include name="log4net.dll"/>
 		</assemblyfileset>
