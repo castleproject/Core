@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework.Tests.Async
 			string webDevPath2005 =
 				Environment.ExpandEnvironmentVariables(@"%WINDIR%\Microsoft.NET\Framework\v2.0.50727\Webdev.WebServer.exe");
 			string webDevPath2008 =
-				Environment.ExpandEnvironmentVariables(@"%ProgramFiles%\Common Files\microsoft shared\DevServer\9.0\WebDev.WebServer.exe");
+				Environment.ExpandEnvironmentVariables(@"%CommonProgramFiles%\microsoft shared\DevServer\9.0\WebDev.WebServer.exe");
 
 			string webDevPath;
 
