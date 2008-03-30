@@ -15,7 +15,9 @@
 namespace Castle.Facilities.WcfIntegration.Demo
 {
 	using System.ServiceModel;
+#if DOTNET35
 	using System.ServiceModel.Web;
+#endif
 
 	[ServiceContract()]
 	public interface IAmUsingWindsor
@@ -24,7 +26,9 @@ namespace Castle.Facilities.WcfIntegration.Demo
 		int GetValueFromWindsorConfig();
 
 		[OperationContract]
+#if DOTNET35
 		[WebGet]
+#endif
 		int MultiplyValueFromWindsorConfig(int multiplier);
 	}
 
