@@ -28,15 +28,17 @@ namespace Castle.Facilities.WcfIntegration
 	{
 		private readonly IKernel kernel;
 
+		internal static IKernel GlobalKernel;
+
 		#region ServiceHostBuilder Delegate Fields 
 	
 		private delegate ServiceHost CreateServiceHostDelegate(
-			IKernel kernel, IWcfServiceModel serviceModel, Type serviceType, ComponentModel model);
+			IKernel kernel, IWcfServiceModel serviceModel, ComponentModel model);
 
 		private static readonly MethodInfo createServiceHostMethod =
 			typeof(WcfServiceExtension).GetMethod("CreateServiceHostInternal",
 				BindingFlags.NonPublic | BindingFlags.Static, null,
-				new Type[] { typeof(IKernel), typeof(IWcfServiceModel), typeof(Type),
+				new Type[] { typeof(IKernel), typeof(IWcfServiceModel),
 					typeof(ComponentModel) }, null
 				);
 
@@ -74,11 +76,11 @@ namespace Castle.Facilities.WcfIntegration
 			if (serviceModel != null)
 			{
 				model.ExtendedProperties[WcfConstants.ServiceModelKey] = serviceModel;
-
 				if (!serviceModel.IsHosted)
 				{
 					ServiceHost serviceHost = CreateServiceHost(kernel, serviceModel, model);
 					model.ExtendedProperties[WcfConstants.ServiceHostKey] = serviceHost;
+					serviceHost.Open();
 				}
 			}
 		}
@@ -134,21 +136,9 @@ namespace Castle.Facilities.WcfIntegration
 		}
 
 		#region CreateServiceHost Members
-	
-		public static ServiceHost CreateServiceHost(IKernel kernel, IWcfServiceModel serviceModel,
-													Type serviceType)
-		{
-			return CreateServiceHost(kernel, serviceModel, serviceType, null);
-		}
 
 		public static ServiceHost CreateServiceHost(IKernel kernel, IWcfServiceModel serviceModel,
 													ComponentModel model)
-		{
-			return CreateServiceHost(kernel, serviceModel, null, model);
-		}
-
-		private static ServiceHost CreateServiceHost(IKernel kernel, IWcfServiceModel serviceModel, 
-			                                         Type serviceType, ComponentModel model)
 		{
 			CreateServiceHostDelegate createServiceHost;
 
@@ -173,19 +163,16 @@ namespace Castle.Facilities.WcfIntegration
 				locker.ReleaseLock();
 			}
 
-			return createServiceHost(kernel, serviceModel, serviceType, model);
+			return createServiceHost(kernel, serviceModel, model);
 		}
 
-		internal static ServiceHost CreateServiceHostInternal<M>(IKernel kernel, IWcfServiceModel serviceModel, 
-			                                                     Type serviceType, ComponentModel model)
+		internal static ServiceHost CreateServiceHostInternal<M>(IKernel kernel, 
+		                                                         IWcfServiceModel serviceModel, 
+			                                                     ComponentModel model)
 			where M : IWcfServiceModel
 		{
 			IServiceHostBuilder<M> serviceHostBuilder = kernel.Resolve<IServiceHostBuilder<M>>();
-			if (model != null)
-			{
-				return serviceHostBuilder.Build(model, (M)serviceModel);
-			}
-			return serviceHostBuilder.Build(serviceType, (M)serviceModel);
+			return serviceHostBuilder.Build(model, (M)serviceModel);
 		}
 
 		#endregion

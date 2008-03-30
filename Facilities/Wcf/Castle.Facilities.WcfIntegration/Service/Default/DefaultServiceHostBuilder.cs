@@ -35,16 +35,23 @@ namespace Castle.Facilities.WcfIntegration
 
 		#region AbstractServiceHostBuilder Members
 
-		protected override ServiceHost CreateServiceHost(ComponentModel model, WcfServiceModel serviceModel)
+		protected override ServiceHost CreateServiceHost(ComponentModel model, 
+			                                             WcfServiceModel serviceModel,
+			                                             params Uri[] baseAddresses)
 		{
-			Uri[] baseAddresss = GetBaseAddressArray(serviceModel);
-			return new DefaultServiceHost(model, baseAddresss);
+			return CreateServiceHost(model, GetEffectiveBaseAddresses(serviceModel, baseAddresses));
 		}
 
-		protected override ServiceHost CreateServiceHost(Type serviceType, WcfServiceModel serviceModel)
+		protected override ServiceHost CreateServiceHost(ComponentModel model,
+													     params Uri[] baseAddresses)
 		{
-			Uri[] baseAddresss = GetBaseAddressArray(serviceModel);
-			return new DefaultServiceHost(serviceType, baseAddresss);
+			return new DefaultServiceHost(model, baseAddresses);
+		}
+
+		protected override ServiceHost CreateServiceHost(Type serviceType,
+														 params Uri[] baseAddresses)
+		{
+			return new DefaultServiceHost(serviceType, baseAddresses);
 		}
 
 		#endregion

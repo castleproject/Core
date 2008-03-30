@@ -20,14 +20,13 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Core;
 	using Castle.MicroKernel;
 
-	public class WindsorServiceHostFactory : ServiceHostFactory
+	public class WindsorServiceHostFactory<M> : ServiceHostFactory
+		where M : IWcfServiceModel
 	{
 		private readonly IKernel kernel;
 
-		private static IKernel globalKernel;
-
 		public WindsorServiceHostFactory()
-			: this(globalKernel)
+			: this(WcfServiceExtension.GlobalKernel)
 		{
 		}
 
@@ -42,14 +41,9 @@ namespace Castle.Facilities.WcfIntegration
 			this.kernel = kernel;
 		}
 
-		private IKernel Kernel
+		protected IServiceHostBuilder<M> ServiceHostBuilder
 		{
-			get { return kernel; }
-		}
-
-		public static void RegisterContainer(IKernel kernel)
-		{
-			globalKernel = kernel;
+			get { return kernel.Resolve<IServiceHostBuilder<M>>(); }
 		}
 
 		public override ServiceHostBase CreateServiceHost(string constructorString, Uri[] baseAddresses)
@@ -59,12 +53,12 @@ namespace Castle.Facilities.WcfIntegration
 			IHandler handler;
 			if (maybeType != null)
 			{
-				handler = Kernel.GetHandler(maybeType);
+				handler = kernel.GetHandler(maybeType);
 				constructorStringType = "type";
 			}
 			else
 			{
-				handler = Kernel.GetHandler(constructorString);
+				handler = kernel.GetHandler(constructorString);
 				constructorStringType = "name";
 			}
 			if (handler == null)
@@ -74,37 +68,48 @@ namespace Castle.Facilities.WcfIntegration
 					constructorStringType, constructorString));
 			}
 
-			ComponentModel model = handler.ComponentModel;
-			WcfServiceModel serviceModel = ObtainServiceModel(model, baseAddresses);
-			return WcfServiceExtension.CreateServiceHost(kernel, serviceModel, model);
+			ComponentModel componentModel = handler.ComponentModel;
+			IWcfServiceModel serviceModel = ObtainServiceModel(componentModel);
+
+			if (serviceModel != null)
+			{
+				return WcfServiceExtension.CreateServiceHost(kernel, serviceModel, componentModel);
+			}
+			else
+			{
+				return ServiceHostBuilder.Build(handler.ComponentModel, baseAddresses);
+			}
 		}
 
 		protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
 		{
-			WcfServiceModel serviceModel = ObtainServiceModel(null, baseAddresses);
-			return WcfServiceExtension.CreateServiceHost(kernel, serviceModel, serviceType);
+			return ServiceHostBuilder.Build(serviceType, baseAddresses);
 		}
 
-		private WcfServiceModel ObtainServiceModel(ComponentModel model, Uri[] baseAddresses)
+		private IWcfServiceModel ObtainServiceModel(ComponentModel model)
 		{
-			WcfServiceModel serviceModel = null;
-
-			if (model != null)
-			{
-				serviceModel = model.ExtendedProperties[WcfConstants.ServiceModelKey] as WcfServiceModel;
-			}
-
-			if (serviceModel == null)
-			{
-				serviceModel = new WcfServiceModel();
-			}
-
-			if (serviceModel.BaseAddresses.Count == 0)
-			{
-				serviceModel.AddBaseAddresses(baseAddresses);
-			}
-
-			return serviceModel.Hosted();
+			return model.ExtendedProperties[WcfConstants.ServiceModelKey] as IWcfServiceModel;
 		}
 	}
+
+	#region WindsorServiceHostFactory Default 
+
+	public class WindsorServiceHostFactory : WindsorServiceHostFactory<WcfServiceModel>
+	{
+		public WindsorServiceHostFactory()
+		{
+		}
+
+		public WindsorServiceHostFactory(IKernel kernel)
+			: base(kernel)
+		{
+		}
+
+		public static void RegisterContainer(IKernel kernel)
+		{
+			WcfServiceExtension.GlobalKernel = kernel;
+		}
+	}
+
+	#endregion
 }

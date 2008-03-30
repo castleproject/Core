@@ -15,6 +15,7 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ServiceModel;
 	using System.ServiceModel.Description;
 	using Castle.Core;
@@ -38,11 +39,20 @@ namespace Castle.Facilities.WcfIntegration
 			get { return kernel; }
 		}
 
-		protected Uri[] GetBaseAddressArray(IWcfServiceModel serviceModel)
+		protected Uri[] GetEffectiveBaseAddresses(IWcfServiceModel serviceModel, Uri[] defaultBaseAddresses)
 		{
-			Uri[] baseAddresses = new Uri[serviceModel.BaseAddresses.Count];
-			serviceModel.BaseAddresses.CopyTo(baseAddresses, 0);
-			return baseAddresses;
+			List<Uri> baseAddresses = new List<Uri>(serviceModel.BaseAddresses);
+			foreach (Uri defaultBaseAddress in defaultBaseAddresses)
+			{
+				if (!baseAddresses.Exists(delegate(Uri uri)
+					{
+						return uri.Scheme == defaultBaseAddress.Scheme;
+					}))
+				{
+					baseAddresses.Add(defaultBaseAddress);
+				}
+			}
+			return baseAddresses.ToArray();
 		}
 
 		protected ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, IWcfEndpoint endpoint)
@@ -156,49 +166,33 @@ namespace Castle.Facilities.WcfIntegration
 	public abstract class AbstractServiceHostBuilder<M> : AbstractServiceHostBuilder, IServiceHostBuilder<M>
 			where M : IWcfServiceModel
 	{
-		private M serviceModel;
-
 		protected AbstractServiceHostBuilder(IKernel kernel)
 			: base(kernel)
 		{
 		}
 
-		protected M ServiceModel
-		{
-			get { return serviceModel; }
-		}
-
 		#region IServiceHostBuilder Members
 
-		/// <summary>
-		/// Builds a new <see cref="ServiceHost"/> for the <see cref="ComponentModel"/>.
-		/// </summary>
-		/// <param name="model">The component model.</param>
-		/// <param name="serviceModel">The service model.</param>
-		/// <returns>The correpsonding service host.</returns>
-		public ServiceHost Build(ComponentModel model, M serviceModel)
+		public ServiceHost Build(ComponentModel model, M serviceModel, params Uri[] baseAddresses)
 		{
-			this.serviceModel = serviceModel;
 			ValidateServiceModelInternal(model, serviceModel);
-			ServiceHost serviceHost = CreateServiceHost(model, serviceModel);
+			ServiceHost serviceHost = CreateServiceHost(model, serviceModel, baseAddresses);
+			serviceHost.Opening += delegate { OnOpening(serviceHost, model); };
 			ConfigureServiceHost(serviceHost, serviceModel);
-			OpenServiceHost(serviceHost, serviceModel, model);
 			return serviceHost;
 		}
 
-		/// <summary>
-		///  Builds a service host.
-		/// </summary>
-		/// <param name="serviceType">The service type.</param>
-		/// <param name="serviceModel">The service model.</param>
-		/// <returns>The service host.</returns>
-		public ServiceHost Build(Type serviceType, M serviceModel)
+		public ServiceHost Build(ComponentModel model, params Uri[] baseAddresses)
 		{
-			this.serviceModel = serviceModel;
-			ValidateServiceModelInternal(null, serviceModel);
-			ServiceHost serviceHost = CreateServiceHost(serviceType, serviceModel);
-			ConfigureServiceHost(serviceHost, serviceModel);
-			OpenServiceHost(serviceHost, serviceModel, null);
+			ServiceHost serviceHost = CreateServiceHost(model, baseAddresses);
+			serviceHost.Opening += delegate { OnOpening(serviceHost, model); };
+			return serviceHost;
+		}
+
+		public ServiceHost Build(Type serviceType, params Uri[] baseAddresses)
+		{
+			ServiceHost serviceHost = CreateServiceHost(serviceType, baseAddresses);
+			serviceHost.Opening += delegate { OnOpening(serviceHost, null); };
 			return serviceHost;
 		}
 
@@ -209,16 +203,6 @@ namespace Castle.Facilities.WcfIntegration
 			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
 			{
 				AddServiceEndpoint(serviceHost, endpoint);
-			}
-		}
-
-		private void OpenServiceHost(ServiceHost serviceHost, M serviceModel, ComponentModel model)
-		{
-			serviceHost.Opening += delegate { OnOpening(serviceHost, model); };
-			
-			if (!serviceModel.IsHosted)
-			{
-				serviceHost.Open();
 			}
 		}
 
@@ -254,8 +238,9 @@ namespace Castle.Facilities.WcfIntegration
 		{
 		}
 
-		protected abstract ServiceHost CreateServiceHost(ComponentModel model, M serviceModel);
-
-		protected abstract ServiceHost CreateServiceHost(Type serviceType, M serviceModel);
+		protected abstract ServiceHost CreateServiceHost(ComponentModel model, M serviceModel, 
+			                                             params Uri[] baseAddresses);
+		protected abstract ServiceHost CreateServiceHost(ComponentModel model, Uri[] baseAddresses);
+		protected abstract ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses);
 	}
 }

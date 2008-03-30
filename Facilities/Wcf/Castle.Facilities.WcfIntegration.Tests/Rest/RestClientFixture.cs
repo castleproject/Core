@@ -22,6 +22,7 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 	using Castle.Windsor;
 	using Castle.Facilities.WcfIntegration.Rest;
 	using NUnit.Framework;
+	using Castle.Facilities.WcfIntegration.Demo;
 
 
 	[TestFixture]
@@ -81,6 +82,15 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 			ICalculator calculator = windsorContainer.Resolve<ICalculator>("calculator");
 			Assert.AreEqual(75, calculator.Subtract(100, 25));
 		}
+
+		[Test, Ignore("This test requires the Castle.Facilities.WcfIntegration.Demo running")]
+		public void CanCallRestfulHostedService()
+		{
+			IAmUsingWindsor client = ChannelFactory<IAmUsingWindsor>.CreateChannel(
+				new BasicHttpBinding(), new EndpointAddress("http://localhost:27197/UsingWindsorWithoutConfig.svc"));
+			Assert.AreEqual(126, client.MultiplyValueFromWindsorConfig(3));
+		}
 	}
+
 #endif // DOTNET35
 }

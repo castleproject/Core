@@ -15,12 +15,17 @@
 namespace Castle.Facilities.WcfIntegration.Demo
 {
 	using System.ServiceModel;
+	using System.ServiceModel.Web;
 
 	[ServiceContract()]
 	public interface IAmUsingWindsor
 	{
 		[OperationContract]
 		int GetValueFromWindsorConfig();
+
+		[OperationContract]
+		[WebGet]
+		int MultiplyValueFromWindsorConfig(int multiplier);
 	}
 
 	public class UsingWindsor : IAmUsingWindsor
@@ -37,6 +42,11 @@ namespace Castle.Facilities.WcfIntegration.Demo
 		public int GetValueFromWindsorConfig()
 		{
 			return number;
+		}
+
+		public int MultiplyValueFromWindsorConfig(int multiplier)
+		{
+			return number * multiplier;
 		}
 
 		#endregion

@@ -1,0 +1,2 @@
+<% @ServiceHost Service="look no config" 
+	Factory="Castle.Facilities.WcfIntegration.WindsorServiceHostFactory`1[[Castle.Facilities.WcfIntegration.Rest.RestServiceModel, Castle.Facilities.WcfIntegration]], Castle.Facilities.WcfIntegration" %>

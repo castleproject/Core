@@ -15,6 +15,7 @@
 namespace Castle.Facilities.WcfIntegration.Rest
 {
 #if DOTNET35
+
 	using System;
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
@@ -48,19 +49,28 @@ namespace Castle.Facilities.WcfIntegration.Rest
 			return binding;
 		}
 
-		protected override ServiceHost CreateServiceHost(ComponentModel model, RestServiceModel serviceModel)
+		protected override ServiceHost CreateServiceHost(ComponentModel model, 
+			                                             RestServiceModel serviceModel,
+														 params Uri[] baseAddresses)
 		{
-			Uri[] baseAddresss = GetBaseAddressArray(serviceModel);
-			return new WebServiceHost(model.Implementation, baseAddresss);
+			return new WebServiceHost(model.Implementation, 
+				GetEffectiveBaseAddresses(serviceModel, baseAddresses));
 		}
 
-		protected override ServiceHost CreateServiceHost(Type serviceType, RestServiceModel serviceModel)
+		protected override ServiceHost CreateServiceHost(ComponentModel model, 
+			                                             params Uri[] baseAddresses)
 		{
-			Uri[] baseAddresss = GetBaseAddressArray(serviceModel);
-			return new WebServiceHost(serviceType, baseAddresss);
+			return new WebServiceHost(model.Implementation, baseAddresses);
+		}
+
+		protected override ServiceHost CreateServiceHost(Type serviceType, 
+			                                             params Uri[] baseAddresses)
+		{
+			return new WebServiceHost(serviceType, baseAddresses);
 		}
 
 		#endregion
 	}
+
 #endif
 }

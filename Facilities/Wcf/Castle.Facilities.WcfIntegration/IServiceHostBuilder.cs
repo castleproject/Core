@@ -22,24 +22,32 @@ namespace Castle.Facilities.WcfIntegration
 	/// The contract for building service hosts.
 	/// </summary>
 	/// <typeparam name="M">The <see cref="IWcfServiceModel"/> type.</typeparam>
-	public interface IServiceHostBuilder<M> 
-		where M : IWcfServiceModel
+	public interface IServiceHostBuilder<M> where M : IWcfServiceModel
 	{
 		/// <summary>
 		/// Builds a service host.
 		/// </summary>
 		/// <param name="model">The component model.</param>
 		/// <param name="serviceModel">The service model.</param>
+		/// <param name="baseAddresses">The base addresses.</param>
 		/// <returns>The service host.</returns>
 		/// 
-		ServiceHost Build(ComponentModel model, M serviceModel);
+		ServiceHost Build(ComponentModel model, M serviceModel, params Uri[] baseAddresses);
 
 		/// <summary>
-		///  Builds a service host.
+		///  Builds a service host for a hosted environment.
+		/// </summary>
+		/// <param name="model">The component model.</param>
+		/// <param name="baseAddresses">The base addresses.</param>
+		/// <returns>The service host.</returns>
+		ServiceHost Build(ComponentModel model, params Uri[] baseAddresses);
+
+		/// <summary>
+		///  Builds a service host for a hosted environment.
 		/// </summary>
 		/// <param name="serviceType">The service type.</param>
-		/// <param name="serviceModel">The service model.</param>
+		/// <param name="baseAddresses">The base addresses.</param>
 		/// <returns>The service host.</returns>
-		ServiceHost Build(Type serviceType, M serviceModel);
+		ServiceHost Build(Type serviceType, params Uri[] baseAddresses);
 	}
 }

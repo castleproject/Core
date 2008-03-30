@@ -14,7 +14,6 @@
 
 namespace Castle.Facilities.WcfIntegration.Rest
 {
-
 #if DOTNET35
 
 	using System;
@@ -63,5 +62,6 @@ namespace Castle.Facilities.WcfIntegration.Rest
 				typeof(ChannelCreator), channelFactory, methodInfo);
 		}
 	}
+
 #endif
 }

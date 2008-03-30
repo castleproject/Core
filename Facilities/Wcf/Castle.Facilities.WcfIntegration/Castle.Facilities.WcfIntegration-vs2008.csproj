@@ -36,7 +36,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET35</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>1591</NoWarn>
@@ -99,6 +99,7 @@
     <Compile Include="Service\Default\DefaultServiceHostBuilder.cs" />
     <Compile Include="Service\Rest\RestServiceHostBuilder.cs" />
     <Compile Include="Service\Rest\RestServiceModel.cs" />
+    <Compile Include="Service\WindsorServiceHostFactory.cs" />
     <Compile Include="WcfEndpoint.cs" />
     <Compile Include="WcfFacility.cs" />
     <Compile Include="Service\WcfServiceExtension.cs" />
@@ -106,7 +107,6 @@
     <Compile Include="Internal\WcfUtils.cs" />
     <Compile Include="Service\WindsorDependencyInjectionServiceBehavior.cs" />
     <Compile Include="Service\WindsorInstanceProvider.cs" />
-    <Compile Include="Service\WindsorServiceHostFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

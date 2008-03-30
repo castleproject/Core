@@ -23,15 +23,11 @@ namespace Castle.Facilities.WcfIntegration
         private ICollection<Uri> baseAddresses;
         private ICollection<IWcfEndpoint> endpoints;
 
-		#region IWfcServiceModel Members
-
 		public bool IsHosted
 		{
 			get { return hosted; }
 		}
 
-		#endregion
-	
 		public WcfServiceModel Hosted()
 		{
 			hosted = true;
