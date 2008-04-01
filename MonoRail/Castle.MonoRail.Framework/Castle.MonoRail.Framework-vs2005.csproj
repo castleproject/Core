@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionMethodExecutor.cs" />
+    <Compile Include="ActionType.cs" />
     <Compile Include="Adapters\DefaultEngineContext.cs" />
     <Compile Include="Adapters\FileDictionaryAdapter.cs">
       <SubType>Code</SubType>
@@ -120,6 +121,9 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AsyncInvocationInformation.cs" />
+    <Compile Include="AsyncMonoRailHttpHandler.cs" />
+    <Compile Include="AsyncSessionlessMonoRailHttpHandler.cs" />
     <Compile Include="Attributes\AccessibleThroughAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -179,6 +183,7 @@
     <Compile Include="Attributes\ViewComponentParamAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BaseAsyncHttpHandler.cs" />
     <Compile Include="BaseExecutableAction.cs" />
     <Compile Include="BaseHttpHandler.cs" />
     <Compile Include="CacheKey.cs" />
@@ -306,6 +311,7 @@
     <Compile Include="Extensions\Session\ICustomSessionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FailedToExecuteBeginActionAsyncResult.cs" />
     <Compile Include="Filter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -391,6 +397,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IActionSelector.cs" />
+    <Compile Include="IAsyncController.cs" />
     <Compile Include="ICachePolicyConfigurer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -520,6 +527,7 @@
     <Compile Include="MonoRailHttpHandlerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Providers\AsyncActionPair.cs" />
     <Compile Include="Providers\DefaultControllerDescriptorProvider.cs" />
     <Compile Include="Providers\DefaultFilterDescriptorProvider.cs" />
     <Compile Include="Providers\DefaultHelperDescriptorProvider.cs" />
