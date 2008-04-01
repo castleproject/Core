@@ -281,7 +281,8 @@ namespace Castle.MonoRail.Framework.Providers
 		{
 			foreach(string name in new ArrayList(desc.Actions.Keys))
 			{
-				if (name.StartsWith("Begin", StringComparison.InvariantCultureIgnoreCase) == false)
+				// skip methods that are not named "BeginXyz", including "Begin"
+				if (name.StartsWith("Begin", StringComparison.InvariantCultureIgnoreCase) == false || name.length == 5)
 				{
 					continue;
 				}
