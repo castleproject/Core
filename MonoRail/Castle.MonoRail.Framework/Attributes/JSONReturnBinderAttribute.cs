@@ -138,6 +138,13 @@ namespace Castle.MonoRail.Framework
 			{
 				return type == targetType;
 			}
+
+#if DOTNET35
+			public object ReadJson(IJSONReader reader, Type objectType)
+			{
+				throw new NotImplementedException();
+			}
+#endif
 		}
 	}
 }

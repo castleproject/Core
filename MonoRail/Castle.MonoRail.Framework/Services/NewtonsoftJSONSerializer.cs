@@ -73,7 +73,11 @@ namespace Castle.MonoRail.Framework.Services
 				}
 			}
 
+#if DOTNET35
+			writer.Write(JavaScriptConvert.SerializeObject(target, adapters.ToArray()));
+#else
 			JavaScriptConvert.SerializeObject(target, writer, adapters.ToArray());
+#endif
 		}
 
 		/// <summary>
@@ -127,6 +131,13 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				return converter.CanHandle(objectType);
 			}
+
+#if DOTNET35
+			public override object ReadJson(JsonReader reader, Type objectType)
+			{
+				return converter.ReadJson(new JSONReaderAdapter(reader), objectType);
+			}
+#endif
 		}
 
 		class JSONWriterAdapter : IJSONWriter
@@ -233,5 +244,57 @@ namespace Castle.MonoRail.Framework.Services
 				writer.WriteValue(value);
 			}
 		}
+
+#if DOTNET35
+		class JSONReaderAdapter : IJSONReader
+		{
+			private readonly JsonReader reader;
+
+			public JSONReaderAdapter(JsonReader reader)
+			{
+				this.reader = reader;
+			}
+
+			public JsonReader Reader
+			{
+				get { return reader; }
+			}
+
+			public char QuoteChar
+			{
+				get { return reader.QuoteChar; }
+			}
+
+			public object Value
+			{
+				get { return reader.Value; }
+			}
+
+			public Type ValueType
+			{
+				get { return reader.ValueType; }
+			}
+
+			public int Depth
+			{
+				get { return reader.Depth; }
+			}
+
+			public bool Read()
+			{
+				return reader.Read();
+			}
+
+			public void Skip()
+			{
+				reader.Skip();
+			}
+
+			public void Close()
+			{
+				reader.Close();
+			}
+		}
+#endif
 	}
 }

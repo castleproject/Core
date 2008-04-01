@@ -128,6 +128,16 @@ namespace Castle.MonoRail.Framework.Services
 		/// 	<c>true</c> if this instance can handle the specified type; otherwise, <c>false</c>.
 		/// </returns>
 		bool CanHandle(Type type);
+
+#if DOTNET35
+		/// <summary>
+		/// Converts the JSON read by the supplied reader into an instance of the requested type.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		/// <param name="objectType">The type.</param>
+		/// <returns></returns>
+		object ReadJson(IJSONReader reader, Type objectType);
+#endif
 	}
 
 	/// <summary>
@@ -180,4 +190,48 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		T[] DeserializeArray<T>(string jsonString);
 	}
+
+#if DOTNET35
+	/// <summary>
+	/// Represents a reader that provides fast, non-cached, forward-only access to serialized Json data.
+	/// </summary>
+	public interface IJSONReader
+	{
+		/// <summary>
+		/// Gets the quotation mark character used to enclose the value of a string.
+		/// </summary>
+		char QuoteChar { get; }
+
+		/// <summary>
+		/// Gets the text value of the current Json token.
+		/// </summary>
+		object Value { get; }
+
+		/// <summary>
+		/// Gets The Common Language Runtime (CLR) type for the current Json token.
+		/// </summary>
+		Type ValueType { get; }
+
+		/// <summary>
+		/// Pending.
+		/// </summary>
+		int Depth { get; }
+
+		/// <summary>
+		/// Reads the next Json token from the stream.
+		/// </summary>
+		/// <returns></returns>
+		bool Read();
+
+		/// <summary>
+		/// Pending.
+		/// </summary>
+		void Skip();
+
+		/// <summary>
+		/// Changes the <see cref="Newtonsoft.Json.JsonReader.State"/> to Closed. 
+		/// </summary>
+		void Close();
+	}
+#endif
 }
