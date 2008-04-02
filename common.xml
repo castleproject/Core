@@ -30,6 +30,7 @@
 	<property name="lib.dir" value="SharedLibs" dynamic="true" />
 	<property name="lib.family.dir" value="${path::combine(lib.dir, framework::get-family(framework::get-target-framework()))}" dynamic="true" />
 	<property name="lib.framework.dir" value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}" dynamic="true" />
+	<property name="lib.framework.ext.dir" value="${path::combine(lib.family.dir, string::replace(framework::get-target-framework(), framework::get-family(framework::get-target-framework()) + '-', ''))}" dynamic="true" />
 
 	<!-- 
 		Versioning
