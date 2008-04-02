@@ -73,7 +73,8 @@ namespace Castle.Facilities.WcfIntegration
 
 			if (serviceModel != null)
 			{
-				return WcfServiceExtension.CreateServiceHost(kernel, serviceModel, componentModel);
+				return WcfServiceExtension.CreateServiceHost(kernel, serviceModel, 
+					                                         componentModel, baseAddresses);
 			}
 			else
 			{

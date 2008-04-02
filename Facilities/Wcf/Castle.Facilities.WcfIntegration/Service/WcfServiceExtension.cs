@@ -33,13 +33,14 @@ namespace Castle.Facilities.WcfIntegration
 		#region ServiceHostBuilder Delegate Fields 
 	
 		private delegate ServiceHost CreateServiceHostDelegate(
-			IKernel kernel, IWcfServiceModel serviceModel, ComponentModel model);
+			IKernel kernel, IWcfServiceModel serviceModel, ComponentModel model,
+			Uri[] baseAddresses);
 
 		private static readonly MethodInfo createServiceHostMethod =
 			typeof(WcfServiceExtension).GetMethod("CreateServiceHostInternal",
 				BindingFlags.NonPublic | BindingFlags.Static, null,
 				new Type[] { typeof(IKernel), typeof(IWcfServiceModel),
-					typeof(ComponentModel) }, null
+					typeof(ComponentModel), typeof(Uri[]) }, null
 				);
 
 		private static readonly Dictionary<Type, CreateServiceHostDelegate> 
@@ -138,7 +139,7 @@ namespace Castle.Facilities.WcfIntegration
 		#region CreateServiceHost Members
 
 		public static ServiceHost CreateServiceHost(IKernel kernel, IWcfServiceModel serviceModel,
-													ComponentModel model)
+													ComponentModel model, params Uri[] baseAddresses)
 		{
 			CreateServiceHostDelegate createServiceHost;
 
@@ -163,16 +164,17 @@ namespace Castle.Facilities.WcfIntegration
 				locker.ReleaseLock();
 			}
 
-			return createServiceHost(kernel, serviceModel, model);
+			return createServiceHost(kernel, serviceModel, model, baseAddresses);
 		}
 
 		internal static ServiceHost CreateServiceHostInternal<M>(IKernel kernel, 
 		                                                         IWcfServiceModel serviceModel, 
-			                                                     ComponentModel model)
+			                                                     ComponentModel model,
+																 params Uri[] baseAddresses)
 			where M : IWcfServiceModel
 		{
 			IServiceHostBuilder<M> serviceHostBuilder = kernel.Resolve<IServiceHostBuilder<M>>();
-			return serviceHostBuilder.Build(model, (M)serviceModel);
+			return serviceHostBuilder.Build(model, (M)serviceModel, baseAddresses);
 		}
 
 		#endregion
