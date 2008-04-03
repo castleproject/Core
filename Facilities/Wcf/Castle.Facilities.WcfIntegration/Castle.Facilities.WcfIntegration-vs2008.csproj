@@ -76,6 +76,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\AbstractChannelBuilder.Generic.cs" />
+    <Compile Include="Client\ServiceEndpointBehaviors.cs" />
+    <Compile Include="IWcfBehaviorVisitor.cs" />
+    <Compile Include="IWcfBehavior.cs" />
+    <Compile Include="Behaviors\WcfEndpointBehaviors.cs" />
+    <Compile Include="Behaviors\WcfBehaviorScope.cs" />
     <Compile Include="Client\Rest\RestChannelBuilder.cs" />
     <Compile Include="Client\Rest\RestClientModel.cs" />
     <Compile Include="Client\WcfChannelCleanupConcern.cs" />
@@ -95,11 +101,14 @@
     <Compile Include="Internal\WcfConstants.cs" />
     <Compile Include="IWcfServiceModel.cs" />
     <Compile Include="Service\AbstractServiceHostBuilder.cs" />
+    <Compile Include="Service\AbstractServiceHostBuilder.Generic.cs" />
     <Compile Include="Service\Default\DefaultServiceHost.cs" />
     <Compile Include="Service\Default\DefaultServiceHostBuilder.cs" />
     <Compile Include="Service\Rest\RestServiceHostBuilder.cs" />
     <Compile Include="Service\Rest\RestServiceModel.cs" />
+    <Compile Include="Service\ServiceHostBehaviors.cs" />
     <Compile Include="Service\WindsorServiceHostFactory.cs" />
+    <Compile Include="Behaviors\WcfExplicitBehavior.cs" />
     <Compile Include="WcfEndpoint.cs" />
     <Compile Include="WcfFacility.cs" />
     <Compile Include="Service\WcfServiceExtension.cs" />
@@ -107,6 +116,7 @@
     <Compile Include="Internal\WcfUtils.cs" />
     <Compile Include="Service\WindsorDependencyInjectionServiceBehavior.cs" />
     <Compile Include="Service\WindsorInstanceProvider.cs" />
+    <Compile Include="Behaviors\WcfServiceBehaviors.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

@@ -16,9 +16,9 @@ namespace Castle.Facilities.WcfIntegration
 {
 	public interface IWcfEndpointVisitor
 	{
-		void VisitServiceEndpointModel(ServiceEndpointModel model);
-		void VisitConfigurationEndpointModel(ConfigurationEndpointModel model);
-		void VisitBindingEndpointModel(BindingEndpointModel model);
-		void VisitBindingAddressEndpointModel(BindingAddressEndpointModel model);
+		void VisitServiceEndpoint(ServiceEndpointModel model);
+		void VisitConfigurationEndpoint(ConfigurationEndpointModel model);
+		void VisitBindingEndpoint(BindingEndpointModel model);
+		void VisitBindingAddressEndpoint(BindingAddressEndpointModel model);
 	}
 }

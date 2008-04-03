@@ -15,6 +15,7 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Contract for all WCF client models.
@@ -30,5 +31,10 @@ namespace Castle.Facilities.WcfIntegration
 		/// Gets the endpoint of the service.
 		/// </summary>
 		IWcfEndpoint Endpoint { get; }
+
+		/// <summary>
+		/// Gets the service behaviors.
+		/// </summary>
+		ICollection<IWcfBehavior> Behaviors { get; }
 	}
 }

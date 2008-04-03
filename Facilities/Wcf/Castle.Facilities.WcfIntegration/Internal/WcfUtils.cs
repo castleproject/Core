@@ -18,6 +18,8 @@ namespace Castle.Facilities.WcfIntegration.Internal
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.ServiceModel;
+	using Castle.Core;
+	using Castle.MicroKernel;
 
 	internal static class WcfUtils
 	{
@@ -73,6 +75,25 @@ namespace Castle.Facilities.WcfIntegration.Internal
 				}
 			}
 			return false;
+		}
+
+		public static ICollection<IHandler> FindBehaviors<T>(IKernel kernel, WcfBehaviorScope scope)
+		{
+			List<IHandler> handlers = new List<IHandler>();
+			foreach (IHandler handler in kernel.GetAssignableHandlers(typeof(T)))
+			{
+				ComponentModel model = handler.ComponentModel;
+				if (model.Configuration != null)
+				{
+					string scopeAttrib = model.Configuration.Attributes[WcfConstants.BehaviorScopeKey];
+					if (string.IsNullOrEmpty(scopeAttrib) ||
+						scopeAttrib.Equals(scope.ToString(), StringComparison.InvariantCultureIgnoreCase))
+					{
+						handlers.Add(handler);
+					}
+				}
+			}
+			return handlers;
 		}
 
 		public static bool IsCommunicationObjectReady(ICommunicationObject comm)

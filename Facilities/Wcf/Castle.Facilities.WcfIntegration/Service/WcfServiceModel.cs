@@ -21,17 +21,14 @@ namespace Castle.Facilities.WcfIntegration
     {
 		private bool hosted;
         private ICollection<Uri> baseAddresses;
-        private ICollection<IWcfEndpoint> endpoints;
+		private ICollection<IWcfEndpoint> endpoints;
+		private ICollection<IWcfBehavior> behaviors;
+
+		#region IWcfServiceModel 
 
 		public bool IsHosted
 		{
 			get { return hosted; }
-		}
-
-		public WcfServiceModel Hosted()
-		{
-			hosted = true;
-			return this;
 		}
 
 		public ICollection<Uri> BaseAddresses
@@ -45,6 +42,39 @@ namespace Castle.Facilities.WcfIntegration
 				return baseAddresses;
 			}
 			set { baseAddresses = value; }
+		}
+
+		public ICollection<IWcfEndpoint> Endpoints
+		{
+			get
+			{
+				if (endpoints == null)
+				{
+					endpoints = new List<IWcfEndpoint>();
+				}
+				return endpoints;
+			}
+			set { endpoints = value; }
+		}
+
+		public ICollection<IWcfBehavior> Behaviors
+		{
+			get
+			{
+				if (behaviors == null)
+				{
+					behaviors = new List<IWcfBehavior>();
+				}
+				return behaviors;
+			}
+		}
+
+		#endregion
+
+		public WcfServiceModel Hosted()
+		{
+			hosted = true;
+			return this;
 		}
 
 		public WcfServiceModel AddBaseAddresses(params Uri[] baseAddresses)
@@ -65,18 +95,6 @@ namespace Castle.Facilities.WcfIntegration
             return this;
         }
 
-		public ICollection<IWcfEndpoint> Endpoints
-		{
-			get
-			{
-				if (endpoints == null)
-				{
-					endpoints = new List<IWcfEndpoint>();
-				}
-				return endpoints;
-			}
-			set { endpoints = value; }
-		}
 
         public WcfServiceModel AddEndpoints(params IWcfEndpoint[] endpoints)
         {
@@ -86,6 +104,14 @@ namespace Castle.Facilities.WcfIntegration
             }
             return this;
         }
+
+		public WcfServiceModel AddBehaviors(params object[] behaviors)
+		{
+			foreach (object behavior in behaviors)
+			{
+				Behaviors.Add(WcfExplcitBehavior.CreateFrom(behavior));
+			}
+			return this;
+		}
 	}
 }
-

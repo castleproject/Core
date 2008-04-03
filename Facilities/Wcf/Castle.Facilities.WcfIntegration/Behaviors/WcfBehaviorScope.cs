@@ -14,32 +14,22 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System;
-	using System.Collections.Generic;
-
 	/// <summary>
-	/// Contract for all WCF service models.
+	/// Determines how a global behavior will be applied.
 	/// </summary>
-	public interface IWcfServiceModel
+	public enum WcfBehaviorScope
 	{
 		/// <summary>
-		/// Determines if the service will be hosted.
+		/// Only apply to client endpoints.
 		/// </summary>
-		bool IsHosted { get; }
-
+		Clients,
 		/// <summary>
-		/// Gets the service base addresses.
+		/// Only apply to service hosts.
 		/// </summary>
-		ICollection<Uri> BaseAddresses { get; }
-
+		Services,
 		/// <summary>
-		/// Gets the service endpoints.
+		/// Do not apply automatically.
 		/// </summary>
-		ICollection<IWcfEndpoint> Endpoints { get; }
-
-		/// <summary>
-		/// Gets the service behaviors.
-		/// </summary>
-		ICollection<IWcfBehavior> Behaviors { get; }
+		Explicit
 	}
 }

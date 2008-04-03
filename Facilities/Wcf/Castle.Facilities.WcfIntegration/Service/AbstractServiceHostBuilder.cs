@@ -20,7 +20,6 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Description;
 	using Castle.Core;
 	using Castle.MicroKernel;
-	using Castle.MicroKernel.Facilities;
 	using System.ServiceModel.Channels;
 
 	public abstract class AbstractServiceHostBuilder : IWcfEndpointVisitor
@@ -33,10 +32,17 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.kernel = kernel;
 		}
-		
+
 		protected IKernel Kernel
 		{
 			get { return kernel; }
+		}
+
+		protected ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, IWcfEndpoint endpoint)
+		{
+			this.serviceHost = serviceHost;
+			endpoint.Accept(this);
+			return serviceEndpoint;
 		}
 
 		protected Uri[] GetEffectiveBaseAddresses(IWcfServiceModel serviceModel, Uri[] defaultBaseAddresses)
@@ -55,92 +61,70 @@ namespace Castle.Facilities.WcfIntegration
 			return baseAddresses.ToArray();
 		}
 
-		protected ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, IWcfEndpoint endpoint)
+		protected virtual void OnOpening(ServiceHost serviceHost, IWcfServiceModel serviceModel,
+			                             ComponentModel model)
 		{
-			this.serviceHost = serviceHost;
-			endpoint.Accept(this);
-			return serviceEndpoint;
-		}
+			serviceHost.Description.Behaviors.Add(
+				new WindsorDependencyInjectionServiceBehavior(kernel, model));
 
-		protected virtual void OnOpening(ServiceHost serviceHost, ComponentModel model)
-		{
-			serviceHost.Description.Behaviors.Add(new WindsorDependencyInjectionServiceBehavior(Kernel, model));
+			ServiceHostBehaviors behaviors = new ServiceHostBehaviors(serviceHost, kernel)
+				.Install(new WcfServiceBehaviors())
+				.Install(new WcfEndpointBehaviors(WcfBehaviorScope.Services));
 
-			IHandler[] serviceBehaviorHandlers = Kernel.GetAssignableHandlers(typeof(IServiceBehavior));
-			foreach (IHandler handler in serviceBehaviorHandlers)
+			if (serviceModel != null)
 			{
-				if (handler.ComponentModel.Implementation == typeof(ServiceDebugBehavior))
+				foreach (IWcfBehavior behavior in serviceModel.Behaviors)
 				{
-					serviceHost.Description.Behaviors.Remove<ServiceDebugBehavior>();
-				}
-				serviceHost.Description.Behaviors.Add((IServiceBehavior)handler.Resolve(CreationContext.Empty));
-			}
-
-			IHandler[] endPointBehaviors = kernel.GetAssignableHandlers(typeof(IEndpointBehavior));
-			IHandler[] operationBehaviors = kernel.GetAssignableHandlers(typeof(IOperationBehavior));
-
-			foreach (ServiceEndpoint endpoint in serviceHost.Description.Endpoints)
-			{
-				foreach (IHandler handler in endPointBehaviors)
-				{
-					endpoint.Behaviors.Add((IEndpointBehavior)handler.Resolve(CreationContext.Empty));
-				}
-
-				foreach (OperationDescription operation in endpoint.Contract.Operations)
-				{
-					foreach (IHandler operationHandler in operationBehaviors)
-					{
-						operation.Behaviors.Add((IOperationBehavior)operationHandler.Resolve(CreationContext.Empty));
-					}
+					behaviors.Install(behavior);
 				}
 			}
 		}
 
 		#region IWcfEndpointVisitor Members
 
-		void IWcfEndpointVisitor.VisitServiceEndpointModel(ServiceEndpointModel model)
+		void IWcfEndpointVisitor.VisitServiceEndpoint(ServiceEndpointModel model)
 		{
 			serviceEndpoint = AddServiceEndpoint(serviceHost, model);
 		}
 
-		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost, 
-			                                                 ServiceEndpointModel model)
+		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
+															 ServiceEndpointModel model)
 		{
 			serviceHost.Description.Endpoints.Add(model.ServiceEndpoint);
 			return model.ServiceEndpoint;
 		}
 
-		void IWcfEndpointVisitor.VisitConfigurationEndpointModel(ConfigurationEndpointModel model)
+		void IWcfEndpointVisitor.VisitConfigurationEndpoint(ConfigurationEndpointModel model)
 		{
 			serviceEndpoint = AddServiceEndpoint(serviceHost, model);
 		}
 
 		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
-			                                                 ConfigurationEndpointModel model)
+															 ConfigurationEndpointModel model)
 		{
 			throw new InvalidOperationException("The ServiceEndpoint for a ServiceHost " +
 				"cannot be created from an endpoint name.");
 		}
 
-		void IWcfEndpointVisitor.VisitBindingEndpointModel(BindingEndpointModel model)
+		void IWcfEndpointVisitor.VisitBindingEndpoint(BindingEndpointModel model)
 		{
 			serviceEndpoint = AddServiceEndpoint(serviceHost, model);
 		}
 
 		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
-			                                                 BindingEndpointModel model)
+															 BindingEndpointModel model)
 		{
 			Binding binding = model.Binding ?? GetDefaultBinding(serviceHost, string.Empty);
 			return serviceHost.AddServiceEndpoint(model.Contract, binding, string.Empty);
 		}
 
-		void IWcfEndpointVisitor.VisitBindingAddressEndpointModel(BindingAddressEndpointModel model)
+		void IWcfEndpointVisitor.VisitBindingAddressEndpoint(BindingAddressEndpointModel model)
 		{
 			serviceEndpoint = AddServiceEndpoint(serviceHost, model);
 		}
 
 		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
-													         BindingAddressEndpointModel model)
+															 BindingAddressEndpointModel model)
 		{
 			Binding binding = model.Binding ?? GetDefaultBinding(serviceHost, model.Address);
 
@@ -161,86 +145,5 @@ namespace Castle.Facilities.WcfIntegration
 		}
 
 		#endregion
-	}
-
-	public abstract class AbstractServiceHostBuilder<M> : AbstractServiceHostBuilder, IServiceHostBuilder<M>
-			where M : IWcfServiceModel
-	{
-		protected AbstractServiceHostBuilder(IKernel kernel)
-			: base(kernel)
-		{
-		}
-
-		#region IServiceHostBuilder Members
-
-		public ServiceHost Build(ComponentModel model, M serviceModel, params Uri[] baseAddresses)
-		{
-			ValidateServiceModelInternal(model, serviceModel);
-			ServiceHost serviceHost = CreateServiceHost(model, serviceModel, baseAddresses);
-			serviceHost.Opening += delegate { OnOpening(serviceHost, model); };
-			ConfigureServiceHost(serviceHost, serviceModel);
-			return serviceHost;
-		}
-
-		public ServiceHost Build(ComponentModel model, params Uri[] baseAddresses)
-		{
-			ServiceHost serviceHost = CreateServiceHost(model, baseAddresses);
-			serviceHost.Opening += delegate { OnOpening(serviceHost, model); };
-			return serviceHost;
-		}
-
-		public ServiceHost Build(Type serviceType, params Uri[] baseAddresses)
-		{
-			ServiceHost serviceHost = CreateServiceHost(serviceType, baseAddresses);
-			serviceHost.Opening += delegate { OnOpening(serviceHost, null); };
-			return serviceHost;
-		}
-
-		#endregion
-
-		protected virtual void ConfigureServiceHost(ServiceHost serviceHost, M serviceModel)
-		{
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
-			{
-				AddServiceEndpoint(serviceHost, endpoint);
-			}
-		}
-
-		private void ValidateServiceModelInternal(ComponentModel model, M serviceModel)
-		{
-			ValidateServiceModel(model, serviceModel);
-
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
-			{
-				Type contract = endpoint.Contract;
-
-				if (contract != null)
-				{
-					if (!contract.IsInterface)
-					{
-						throw new FacilityException("The service endpoint contract " +
-							contract.FullName + " does not represent an interface.");
-					}
-				}
-				else if (model == null || !model.Service.IsInterface)
-				{
-					throw new FacilityException(
-						"No service endpoint contract can be implied from the component.");
-				}
-				else
-				{
-					endpoint.Contract = model.Service;
-				}
-			}
-		}
-
-		protected virtual void ValidateServiceModel(ComponentModel model, M serviceModel)
-		{
-		}
-
-		protected abstract ServiceHost CreateServiceHost(ComponentModel model, M serviceModel, 
-			                                             params Uri[] baseAddresses);
-		protected abstract ServiceHost CreateServiceHost(ComponentModel model, Uri[] baseAddresses);
-		protected abstract ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses);
 	}
 }

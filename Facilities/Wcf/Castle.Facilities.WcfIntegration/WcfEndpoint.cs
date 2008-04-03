@@ -169,7 +169,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected override void Accept(IWcfEndpointVisitor visitor)
 		{
-			visitor.VisitServiceEndpointModel(this);
+			visitor.VisitServiceEndpoint(this);
 		}
 	}
 
@@ -194,7 +194,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected override void Accept(IWcfEndpointVisitor visitor)
 		{
-			visitor.VisitConfigurationEndpointModel(this);
+			visitor.VisitConfigurationEndpoint(this);
 		}
 	}
 
@@ -246,7 +246,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected override void Accept(IWcfEndpointVisitor visitor)
 		{
-			visitor.VisitBindingEndpointModel(this);
+			visitor.VisitBindingEndpoint(this);
 		}
 	}
 
@@ -310,7 +310,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected override void Accept(IWcfEndpointVisitor visitor)
 		{
-			visitor.VisitBindingAddressEndpointModel(this);
+			visitor.VisitBindingAddressEndpoint(this);
 		}
 	}
 

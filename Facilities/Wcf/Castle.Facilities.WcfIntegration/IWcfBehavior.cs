@@ -14,32 +14,21 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System;
-	using System.Collections.Generic;
+	using System.ServiceModel.Description;
+	using Castle.MicroKernel;
 
-	/// <summary>
-	/// Contract for all WCF service models.
-	/// </summary>
-	public interface IWcfServiceModel
+	public interface IWcfBehavior
 	{
-		/// <summary>
-		/// Determines if the service will be hosted.
-		/// </summary>
-		bool IsHosted { get; }
+		void Accept(IWcfBehaviorVisitor visitor);
+	}
 
-		/// <summary>
-		/// Gets the service base addresses.
-		/// </summary>
-		ICollection<Uri> BaseAddresses { get; }
+	public interface IWcfServiceBehavior : IWcfBehavior
+	{
+		void Install(ServiceDescription description, IKernel kernel);
+	}
 
-		/// <summary>
-		/// Gets the service endpoints.
-		/// </summary>
-		ICollection<IWcfEndpoint> Endpoints { get; }
-
-		/// <summary>
-		/// Gets the service behaviors.
-		/// </summary>
-		ICollection<IWcfBehavior> Behaviors { get; }
+	public interface IWcfEndpointBehavior : IWcfBehavior
+	{
+		void Install(ServiceEndpoint endpoint, IKernel kernel);
 	}
 }

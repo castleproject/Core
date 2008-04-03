@@ -15,10 +15,12 @@
 namespace Castle.Facilities.WcfIntegration
 {
     using System;
+	using System.Collections.Generic;
 
 	public class WcfClientModel : IWcfClientModel
 	{
 		private IWcfEndpoint endpoint;
+		private ICollection<IWcfBehavior> behaviors;
 
 		public WcfClientModel()
 		{
@@ -49,7 +51,29 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
+		public ICollection<IWcfBehavior> Behaviors
+		{
+			get
+			{
+				if (behaviors == null)
+				{
+					behaviors = new List<IWcfBehavior>();
+				}
+				return behaviors;
+			}
+		}
+
 		#endregion
+
+
+		public WcfClientModel AddBehaviors(params object[] behaviors)
+		{
+			foreach (object behavior in behaviors)
+			{
+				Behaviors.Add(WcfExplcitBehavior.CreateFrom(behavior));
+			}
+			return this;
+		}
 	}
 }
 
