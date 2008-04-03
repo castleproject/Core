@@ -45,7 +45,6 @@ namespace Castle.Facilities.WcfIntegration
 		/// <summary>
 		/// Get a delegate capable of creating channels.
 		/// </summary>
-		/// <param name="model">The component model.</param>
 		/// <param name="clientModel">The client model.</param>
 		/// <param name="contract">The contract override.</param>
 		/// <returns>The <see cref="ChannelCreator"/></returns>
