@@ -1,5 +1,7 @@
 RC 4
 ====
+- Collection handlers from parent container for GetAssignableHandlers.
+
 - Added ability to change invocation target to DefaultProxyFactory.
 
 - Fixed bug with ComponentRegistration.Instance in which the instance type was not assigned as the ComponentModel implementation.

@@ -617,14 +617,15 @@ namespace Castle.MicroKernel
 				{
 					NamingSubSystem.UnRegister(key);
 
-					IHandler[] assignableHandlers = GetAssignableHandlers(handler.ComponentModel.Service);
+					Type service = handler.ComponentModel.Service;
+					IHandler[] assignableHandlers = NamingSubSystem.GetAssignableHandlers(service);
 					if (assignableHandlers.Length > 0)
 					{
 						NamingSubSystem[handler.ComponentModel.Service] = assignableHandlers[0];
 					}
 					else
 					{
-						NamingSubSystem.UnRegister(handler.ComponentModel.Service);
+						NamingSubSystem.UnRegister(service);
 					}
 
 					foreach (ComponentModel model in handler.ComponentModel.Dependents)
@@ -1118,7 +1119,23 @@ namespace Castle.MicroKernel
 		/// <returns></returns>
 		public virtual IHandler[] GetAssignableHandlers(Type service)
 		{
-			return NamingSubSystem.GetAssignableHandlers(service);
+			IHandler[] result = NamingSubSystem.GetAssignableHandlers(service);
+
+			// If a parent kernel exists, we merge both results
+			if (Parent != null)
+			{
+				IHandler[] parentResult = Parent.GetAssignableHandlers(service);
+
+				if (parentResult.Length > 0)
+				{
+					IHandler[] newResult = new IHandler[result.Length + parentResult.Length];
+					result.CopyTo(newResult, 0);
+					parentResult.CopyTo(newResult, result.Length);
+					result = newResult;
+				}
+			}
+
+			return result;
 		}
 
 		public virtual IReleasePolicy ReleasePolicy
