@@ -15,12 +15,28 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.Collections.Generic;
 	using Castle.Facilities.WcfIntegration.Internal;
 
+	/// <summary>
+	/// Contract for all WCF endpoints.
+	/// </summary>
 	public interface IWcfEndpoint
 	{
+		/// <summary>
+		/// Gets the endpoint contract.
+		/// </summary>
 		Type Contract { get; set; }
 
+		/// <summary>
+		/// Gets the service behaviors.
+		/// </summary>
+		ICollection<IWcfBehavior> Behaviors { get; }
+
+		/// <summary>
+		/// Supports management of endpoints.
+		/// </summary>
+		/// <param name="visitor"></param>
 		void Accept(IWcfEndpointVisitor visitor);
 	}
 }

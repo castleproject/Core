@@ -22,6 +22,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using Castle.Windsor.Installer;
 	using Castle.Facilities.WcfIntegration.Demo;
 	using NUnit.Framework;
+	using Castle.Facilities.WcfIntegration.Tests.Behaviors;
 
 #if DOTNET35
 
@@ -155,6 +156,120 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				Assert.AreEqual(42, client.GetValueFromWindsorConfig());
 			}
 		}
+
+		[Test]
+		public void WillApplyServiceScopedBehaviors()
+		{
+			CallCountServiceBehavior.CallCount = 0;
+			Assert.IsFalse(UnitOfWork.initialized, "Should be false before starting");
+
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(
+					Component.For<CallCountServiceBehavior>()
+						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Clients)),
+					Component.For<UnitOfworkEndPointBehavior>()
+						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Services)),
+					Component.For<IOperations>().ImplementedBy<Operations>()
+					.DependsOn(new { number = 42 })
+					.ActAs(new WcfServiceModel().AddEndpoints(
+						WcfEndpoint.BoundTo(new NetTcpBinding())
+							.At("net.tcp://localhost/Operations"))
+						)
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding(), new EndpointAddress("net.tcp://localhost/Operations"));
+				bool unitOfWorkIsInitialized_DuringCall = client.UnitOfWorkIsInitialized();
+				Assert.IsTrue(unitOfWorkIsInitialized_DuringCall);
+				Assert.IsFalse(UnitOfWork.initialized, "Should be false after call");
+				Assert.AreEqual(0, CallCountServiceBehavior.CallCount);
+			}
+		}
+
+		[Test]
+		public void WillApplyExplcitScopedKeyBehaviors()
+		{
+			CallCountServiceBehavior.CallCount = 0;
+
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(
+					Component.For<CallCountServiceBehavior>()
+						.Named("callcounts")
+						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit)),
+					Component.For<IOperations>().ImplementedBy<Operations>()
+					.DependsOn(new { number = 42 })
+					.ActAs(new WcfServiceModel()
+						.AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding())
+								.At("net.tcp://localhost/Operations"))
+						.AddBehaviors("callcounts")
+						)
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding(), new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+				Assert.AreEqual(1, CallCountServiceBehavior.CallCount);
+			}
+		}
+
+		[Test]
+		public void WillApplyExplcitScopedServiceBehaviors()
+		{
+			CallCountServiceBehavior.CallCount = 0;
+
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(
+					Component.For<CallCountServiceBehavior>()
+						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit)),
+					Component.For<IOperations>().ImplementedBy<Operations>()
+					.DependsOn(new { number = 42 })
+					.ActAs(new WcfServiceModel()
+						.AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding())
+								.At("net.tcp://localhost/Operations"))
+						.AddBehaviors(typeof(CallCountServiceBehavior))
+						)
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding(), new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+				Assert.AreEqual(1, CallCountServiceBehavior.CallCount);
+			}
+		}
+
+		[Test]
+		public void WillApplyInstanceBehaviors()
+		{
+			CallCountServiceBehavior.CallCount = 0;
+
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(
+					Component.For<IOperations>().ImplementedBy<Operations>()
+					.DependsOn(new { number = 42 })
+					.ActAs(new WcfServiceModel()
+						.AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding())
+								.At("net.tcp://localhost/Operations"))
+						.AddBehaviors(new CallCountServiceBehavior(),
+						              new UnitOfworkEndPointBehavior())
+						)
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding(), new EndpointAddress("net.tcp://localhost/Operations"));
+				bool unitOfWorkIsInitialized_DuringCall = client.UnitOfWorkIsInitialized();
+				Assert.IsTrue(unitOfWorkIsInitialized_DuringCall);
+				Assert.IsFalse(UnitOfWork.initialized, "Should be false after call");
+				Assert.AreEqual(1, CallCountServiceBehavior.CallCount);
+			}
+		}
 	}
+
 #endif // DOTNET35
 }

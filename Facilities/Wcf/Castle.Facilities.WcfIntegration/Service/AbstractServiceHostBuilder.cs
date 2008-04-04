@@ -15,12 +15,12 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.ServiceModel.Channels;
 	using System.Collections.Generic;
 	using System.ServiceModel;
 	using System.ServiceModel.Description;
 	using Castle.Core;
 	using Castle.MicroKernel;
-	using System.ServiceModel.Channels;
 
 	public abstract class AbstractServiceHostBuilder : IWcfEndpointVisitor
 	{
@@ -42,6 +42,8 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.serviceHost = serviceHost;
 			endpoint.Accept(this);
+			new ServiceEndpointBehaviors(serviceEndpoint, kernel)
+				.Install(endpoint.Behaviors);
 			return serviceEndpoint;
 		}
 
@@ -65,18 +67,18 @@ namespace Castle.Facilities.WcfIntegration
 			                             ComponentModel model)
 		{
 			serviceHost.Description.Behaviors.Add(
-				new WindsorDependencyInjectionServiceBehavior(kernel, model));
+				new WindsorDependencyInjectionServiceBehavior(kernel, model)
+				);
 
-			ServiceHostBehaviors behaviors = new ServiceHostBehaviors(serviceHost, kernel)
-				.Install(new WcfServiceBehaviors())
-				.Install(new WcfEndpointBehaviors(WcfBehaviorScope.Services));
+			ServiceHostBehaviors behaviors = 
+				new ServiceHostBehaviors(serviceHost, kernel)
+					.Install(new WcfServiceBehaviors())
+					.Install(new WcfEndpointBehaviors(WcfBehaviorScope.Services)
+					);
 
 			if (serviceModel != null)
 			{
-				foreach (IWcfBehavior behavior in serviceModel.Behaviors)
-				{
-					behaviors.Install(behavior);
-				}
+				behaviors.Install(serviceModel.Behaviors);
 			}
 		}
 

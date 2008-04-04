@@ -77,7 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\AbstractChannelBuilder.Generic.cs" />
-    <Compile Include="Client\ServiceEndpointBehaviors.cs" />
+    <Compile Include="Behaviors\ServiceEndpointBehaviors.cs" />
     <Compile Include="IWcfBehaviorVisitor.cs" />
     <Compile Include="IWcfBehavior.cs" />
     <Compile Include="Behaviors\WcfEndpointBehaviors.cs" />
@@ -134,6 +134,9 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WcfIntegration.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

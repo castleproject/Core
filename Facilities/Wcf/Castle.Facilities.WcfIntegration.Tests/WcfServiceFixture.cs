@@ -41,9 +41,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.AddFacility<WcfFacility>()
 				.Register(
 					Component.For<LoggingInterceptor>(),
-					Component.For<IServiceBehavior>().ImplementedBy<CallCountServiceBehavior>(),
-					Component.For<IEndpointBehavior>().ImplementedBy<UnitOfworkEndPointBehavior>(),
-					Component.For<IOperationBehavior>().ImplementedBy<NetDataContractFormatBehavior>(),
+					Component.For<CallCountServiceBehavior>(),
+					Component.For<UnitOfworkEndPointBehavior>(),
+					Component.For<NetDataContractFormatBehavior>(),
 					Component.For<IOperations>().ImplementedBy<Operations>()
 						.Interceptors(InterceptorReference.ForType<LoggingInterceptor>()).Anywhere
 						.DependsOn(new { number = 42 })

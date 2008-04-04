@@ -122,14 +122,11 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			ServiceEndpointBehaviors behaviors =
 				new ServiceEndpointBehaviors(channelFactory.Endpoint, Kernel)
-				.Install(new WcfEndpointBehaviors(WcfBehaviorScope.Clients));
+					.Install(new WcfEndpointBehaviors(WcfBehaviorScope.Clients));
 
 			if (clientModel != null)
 			{
-				foreach (IWcfBehavior behavior in clientModel.Behaviors)
-				{
-					behaviors.Install(behavior);
-				}
+				behaviors.Install(clientModel.Behaviors);
 			}
 		}
 

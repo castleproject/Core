@@ -15,6 +15,7 @@
 namespace Castle.Facilities.WcfIntegration
 {
     using System;
+	using System.Collections.Generic;
     using System.ServiceModel;
     using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
@@ -63,6 +64,7 @@ namespace Castle.Facilities.WcfIntegration
 	public abstract class WcfEndpointBase : IWcfEndpoint
 	{
 		private Type contract;
+		private ICollection<IWcfBehavior> behaviors;
 
 		protected WcfEndpointBase(Type contract)
 		{
@@ -82,6 +84,18 @@ namespace Castle.Facilities.WcfIntegration
 			set { contract = value; }
 		}
 
+		public ICollection<IWcfBehavior> Behaviors
+		{
+			get
+			{
+				if (behaviors == null)
+				{
+					behaviors = new List<IWcfBehavior>();
+				}
+				return behaviors;
+			}
+		}
+
 		void IWcfEndpoint.Accept(IWcfEndpointVisitor visitor)
 		{
 			Accept(visitor);
@@ -90,6 +104,24 @@ namespace Castle.Facilities.WcfIntegration
 		protected abstract void Accept(IWcfEndpointVisitor visitor);
 
 		#endregion
+	}
+
+	public abstract class WcfEndpointBase<T> : WcfEndpointBase
+		where T : WcfEndpointBase<T>
+	{
+		protected WcfEndpointBase(Type contract)
+			: base(contract)
+		{
+		}
+
+		public T AddBehaviors(params object[] behaviors)
+		{
+			foreach (object behavior in behaviors)
+			{
+				Behaviors.Add(WcfExplcitBehavior.CreateFrom(behavior));
+			}
+			return (T)this;
+		}
 	}
 
 	#endregion
@@ -152,7 +184,7 @@ namespace Castle.Facilities.WcfIntegration
 
 	#region Nested Class: ServiceEndpointModel
 
-	public class ServiceEndpointModel : WcfEndpointBase
+	public class ServiceEndpointModel : WcfEndpointBase<ServiceEndpointModel>
 	{
 		private readonly ServiceEndpoint endpoint;
 
@@ -177,7 +209,7 @@ namespace Castle.Facilities.WcfIntegration
 
 	#region Nested Class: ConfigurationEndpointModel
 
-	public class ConfigurationEndpointModel : WcfEndpointBase
+	public class ConfigurationEndpointModel : WcfEndpointBase<ConfigurationEndpointModel>
 	{
 		private readonly string endpointName;
 
@@ -202,7 +234,7 @@ namespace Castle.Facilities.WcfIntegration
 
 	#region Nested Class: BindingEndpointModel
 
-	public class BindingEndpointModel : WcfEndpointBase
+	public class BindingEndpointModel : WcfEndpointBase<BindingEndpointModel>
 	{
 		private readonly Binding binding;
 
@@ -254,7 +286,7 @@ namespace Castle.Facilities.WcfIntegration
 
 	#region Nested Class: BindingAddressEndpointModel
 
-	public class BindingAddressEndpointModel : WcfEndpointBase
+	public class BindingAddressEndpointModel : WcfEndpointBase<BindingAddressEndpointModel>
 	{
 		private readonly Binding binding;
 		private readonly string address;

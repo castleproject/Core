@@ -51,8 +51,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						{
 							IncludeExceptionDetailInFaults = true
 						}),
-					Component.For<IOperationBehavior>()
-						.ImplementedBy<NetDataContractFormatBehavior>(),
+					Component.For<NetDataContractFormatBehavior>(),
 					Component.For<Operations>()
 						.DependsOn(new { number = 42 })
 						.ActAs(new WcfServiceModel().AddEndpoints(

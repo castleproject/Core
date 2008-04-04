@@ -58,7 +58,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected abstract object GetBehaviorInstance(IKernel kernel);
 
-		internal static WcfExplcitBehavior CreateFrom(object behavior)
+		internal static IWcfBehavior CreateFrom(object behavior)
 		{
 			if (behavior is Type)
 			{
@@ -67,6 +67,10 @@ namespace Castle.Facilities.WcfIntegration
 			else if (behavior is string)
 			{
 				return new WcfServiceKeyBehavior((string)behavior);
+			}
+			else if (behavior is IWcfBehavior)
+			{
+				return (IWcfBehavior)behavior;
 			}
 			else
 			{

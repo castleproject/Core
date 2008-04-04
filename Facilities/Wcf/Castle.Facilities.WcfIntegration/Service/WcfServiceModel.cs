@@ -95,7 +95,6 @@ namespace Castle.Facilities.WcfIntegration
             return this;
         }
 
-
         public WcfServiceModel AddEndpoints(params IWcfEndpoint[] endpoints)
         {
             foreach (IWcfEndpoint endpoint in endpoints)

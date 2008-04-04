@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System.Collections.Generic;
 	using System.ServiceModel;
 	using System.ServiceModel.Description;
 	using Castle.MicroKernel;
@@ -29,10 +30,18 @@ namespace Castle.Facilities.WcfIntegration
 			this.kernel = kernel;
 		}
 
-		public ServiceHostBehaviors Install(IWcfBehavior behavior)
+		public ServiceHostBehaviors Install(ICollection<IWcfBehavior> behaviors)
 		{
-			behavior.Accept(this);
+			foreach (IWcfBehavior behavior in behaviors)
+			{
+				behavior.Accept(this);
+			}
 			return this;
+		}
+
+		public ServiceHostBehaviors Install(params IWcfBehavior[] behaviors)
+		{
+			return Install((ICollection<IWcfBehavior>)behaviors);
 		}
 
 		#region IWcfBehaviorVisitor Members
