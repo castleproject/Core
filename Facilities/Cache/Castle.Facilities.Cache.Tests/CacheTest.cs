@@ -52,7 +52,7 @@ namespace Castle.Facilities.Cache.Tests
 
 		public void ResetConsoleOut()
 		{
-			_outWriter.GetStringBuilder().Length = 0;
+			_outWriter = new StringWriter();
 			Console.SetOut(_outWriter);
 		}
 
