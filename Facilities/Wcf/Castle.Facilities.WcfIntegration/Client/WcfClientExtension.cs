@@ -51,7 +51,8 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				model.CustomComponentActivator = typeof(WcfClientActivator);
 				model.ExtendedProperties[WcfConstants.ClientModelKey] = clientModel;
-				model.LifecycleSteps.Add(LifecycleStepType.Decommission, WcfChannelCleanupConcern.Instance);
+				model.LifecycleSteps.Add(LifecycleStepType.Decommission,
+					WcfCommunicationDecomissionConcern.Instance);
 				InstallManagedChannelInterceptor(model);
 			}
 		}
@@ -85,26 +86,28 @@ namespace Castle.Facilities.WcfIntegration
 
 		private IWcfClientModel ResolveClientModel(ComponentModel model)
 		{
-			IWcfClientModel clientModel = null;
 
 			if (model.Service.IsInterface)
 			{
-				if (!WcfUtils.FindDependency<IWcfClientModel>(
-						model.CustomDependencies, out clientModel) &&
-                    model.Configuration != null)
+				foreach (IWcfClientModel clientModel in WcfUtils
+					.FindDependencies<IWcfClientModel>(model.CustomDependencies))
 				{
-					string endpointConfiguration =
-						 model.Configuration.Attributes[WcfConstants.EndpointConfiguration];
-
-					if (!string.IsNullOrEmpty(endpointConfiguration))
-					{
-						clientModel = new WcfClientModel(
-							WcfEndpoint.FromConfiguration(endpointConfiguration));
-					}
+					return clientModel;
 				}
 			}
 
-			return clientModel;
+			if (model.Configuration != null)
+			{
+				string endpointConfiguration =
+					model.Configuration.Attributes[WcfConstants.EndpointConfiguration];
+
+				if (!string.IsNullOrEmpty(endpointConfiguration))
+				{
+					return new WcfClientModel(WcfEndpoint.FromConfiguration(endpointConfiguration));
+				}
+			}
+
+			return null;
 		}
 
 		#region IDisposable Members

@@ -84,7 +84,7 @@
     <Compile Include="Behaviors\WcfBehaviorScope.cs" />
     <Compile Include="Client\Rest\RestChannelBuilder.cs" />
     <Compile Include="Client\Rest\RestClientModel.cs" />
-    <Compile Include="Client\WcfChannelCleanupConcern.cs" />
+    <Compile Include="Internal\WcfCommunicationDecommisionConcern.cs" />
     <Compile Include="Client\Default\DefaulttChannelBuilder.cs" />
     <Compile Include="Client\WcfManagedChannelInterceptor.cs" />
     <Compile Include="Client\WcfClient.cs" />

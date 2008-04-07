@@ -19,6 +19,7 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Activation;
 	using Castle.Core;
 	using Castle.MicroKernel;
+	using Castle.Facilities.WcfIntegration.Internal;
 
 	public class WindsorServiceHostFactory<M> : ServiceHostFactory
 		where M : IWcfServiceModel
@@ -64,36 +65,29 @@ namespace Castle.Facilities.WcfIntegration
 			if (handler == null)
 			{
 				throw new InvalidOperationException(
-					string.Format("Could not find a component with {0} {1}, did you forget to register it?", 
+					string.Format("Could not find a component with {0} {1}, did you forget to register it?",
 					constructorStringType, constructorString));
 			}
 
-			ComponentModel componentModel = handler.ComponentModel;
-			IWcfServiceModel serviceModel = ObtainServiceModel(componentModel);
+			ComponentModel model = handler.ComponentModel;
+			foreach (IWcfServiceModel serviceModel in WcfUtils
+						.FindDependencies<IWcfServiceModel>(model.CustomDependencies,
+						WcfUtils.IsHosted))
+			{
+				return WcfServiceExtension.CreateServiceHost(kernel, serviceModel,
+														     model, baseAddresses);
+			}
 
-			if (serviceModel != null)
-			{
-				return WcfServiceExtension.CreateServiceHost(kernel, serviceModel, 
-					                                         componentModel, baseAddresses);
-			}
-			else
-			{
-				return ServiceHostBuilder.Build(handler.ComponentModel, baseAddresses);
-			}
+			return ServiceHostBuilder.Build(handler.ComponentModel, baseAddresses);
 		}
 
 		protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
 		{
 			return ServiceHostBuilder.Build(serviceType, baseAddresses);
 		}
-
-		private IWcfServiceModel ObtainServiceModel(ComponentModel model)
-		{
-			return model.ExtendedProperties[WcfConstants.ServiceModelKey] as IWcfServiceModel;
-		}
 	}
 
-	#region WindsorServiceHostFactory Default 
+	#region WindsorServiceHostFactory Default
 
 	public class WindsorServiceHostFactory : WindsorServiceHostFactory<WcfServiceModel>
 	{

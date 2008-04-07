@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Internal
 {
 	using System;
 	using System.ServiceModel;
 	using Castle.Core;
 	using Castle.MicroKernel.LifecycleConcerns;
-	using Castle.Facilities.WcfIntegration.Internal;
 
 	/// <summary>
 	/// Ensure that the communication channel is properly disposed.
 	/// </summary>
 	[Serializable]
-	internal class WcfChannelCleanupConcern : ILifecycleConcern
+	internal class WcfCommunicationDecomissionConcern : ILifecycleConcern
 	{
-		public static readonly WcfChannelCleanupConcern Instance = new WcfChannelCleanupConcern();
+		public static readonly WcfCommunicationDecomissionConcern 
+			Instance = new WcfCommunicationDecomissionConcern();
 
-		protected WcfChannelCleanupConcern()
+		protected WcfCommunicationDecomissionConcern()
 		{
 		}
 

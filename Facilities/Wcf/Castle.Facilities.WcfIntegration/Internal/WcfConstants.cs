@@ -18,8 +18,7 @@ namespace Castle.Facilities.WcfIntegration
     {
 		public const string BehaviorScopeKey = "scope";
 
-		public const string ServiceModelKey = "wcf.serviceModel";
-        public const string ServiceHostKey = "wcf.serviceHost";
+        public const string ServiceHostsKey = "wcf.serviceHosts";
 		public const string ServiceHostEnabled = "wcfServiceHost";
 
 		public const string ClientModelKey = "wcf.clientModel";

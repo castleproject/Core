@@ -158,6 +158,40 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
+		public void CanCreateServiceHostAndOpenHostWithMultipleServiceModels()
+		{
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(Component.For<IOperations>()
+					.ImplementedBy<Operations>()
+					.DependsOn(new { number = 42 })
+					.ActAs(
+						new WcfServiceModel().AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding())
+								.At("net.tcp://localhost/Operations")
+								),
+						new WcfServiceModel()
+							.AddBaseAddresses(
+								"http://localhost:27198/UsingWindsor.svc")
+							.AddEndpoints(
+								WcfEndpoint.ForContract<IOperationsEx>()
+									.BoundTo(new BasicHttpBinding())
+									.At("Extended")
+								)
+							)
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding(), new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+
+				IOperationsEx clientEx = ChannelFactory<IOperationsEx>.CreateChannel(
+					new BasicHttpBinding(), new EndpointAddress("http://localhost:27198/UsingWindsor.svc/Extended"));
+				clientEx.Backup(new Dictionary<string, object>());
+			}
+		}
+
+		[Test]
 		public void WillApplyServiceScopedBehaviors()
 		{
 			CallCountServiceBehavior.CallCount = 0;

@@ -61,7 +61,7 @@ namespace Castle.Facilities.WcfIntegration
 			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
 		}
 
-		WcfServiceExtension AddServiceHostBuilder<T, M>()
+		public WcfServiceExtension AddServiceHostBuilder<T, M>()
 			where T : IServiceHostBuilder<M>
 			where M : IWcfServiceModel
 		{
@@ -71,30 +71,37 @@ namespace Castle.Facilities.WcfIntegration
 
 		private void Kernel_ComponentRegistered(string key, IHandler handler)
 		{
+			IList<ServiceHost> serviceHosts = null;
 			ComponentModel model = handler.ComponentModel;
-			IWcfServiceModel serviceModel = ResolveServiceModel(model);
 
-			if (serviceModel != null)
-			{
-				model.ExtendedProperties[WcfConstants.ServiceModelKey] = serviceModel;
+			foreach (IWcfServiceModel serviceModel in ResolveServiceModels(model))
+			{ 
 				if (!serviceModel.IsHosted)
 				{
+					serviceHosts = serviceHosts ?? new List<ServiceHost>();
 					ServiceHost serviceHost = CreateServiceHost(kernel, serviceModel, model);
-					model.ExtendedProperties[WcfConstants.ServiceHostKey] = serviceHost;
+					serviceHosts.Add(serviceHost);
 					serviceHost.Open();
 				}
+			}
+
+			if (serviceHosts != null)
+			{
+				model.ExtendedProperties[WcfConstants.ServiceHostsKey] = serviceHosts;
 			}
 		}
 
 		private void Kernel_ComponentUnregistered(string key, IHandler handler)
 		{
-			ComponentModel model = handler.ComponentModel;
-			ServiceHost serviceHost =
-				model.ExtendedProperties[WcfConstants.ServiceHostKey] as ServiceHost;
+			IList<ServiceHost> serviceHosts = handler.ComponentModel
+				.ExtendedProperties[WcfConstants.ServiceHostsKey] as IList<ServiceHost>;
 
-			if (serviceHost != null)
+			if (serviceHosts != null)
 			{
-				serviceHost.Close();
+				foreach (ServiceHost serviceHost in serviceHosts)
+				{
+					serviceHost.Close();
+				}
 			}
 		}
 
@@ -116,24 +123,25 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
-		private IWcfServiceModel ResolveServiceModel(ComponentModel model)
+		private IEnumerable<IWcfServiceModel> ResolveServiceModels(ComponentModel model)
 		{
-			IWcfServiceModel serviceModel = null;
+			bool foundOne = false;
 
 			if (model.Implementation.IsClass && !model.Implementation.IsAbstract)
 			{
-				if (!WcfUtils.FindDependency<IWcfServiceModel>(
-						model.CustomDependencies, out serviceModel) &&
-					model.Configuration != null)
+				foreach (IWcfServiceModel serviceModel in 
+					WcfUtils.FindDependencies<IWcfServiceModel>(model.CustomDependencies))
 				{
-					if ("true" == model.Configuration.Attributes[WcfConstants.ServiceHostEnabled])
-					{
-						serviceModel = new WcfServiceModel();
-					}
+					foundOne = true;
+					yield return serviceModel;
+				}
+
+				if (!foundOne && model.Configuration != null &&
+					"true" == model.Configuration.Attributes[WcfConstants.ServiceHostEnabled])
+				{
+					yield return new WcfServiceModel();
 				}
 			}
-
-			return serviceModel;
 		}
 
 		#region CreateServiceHost Members

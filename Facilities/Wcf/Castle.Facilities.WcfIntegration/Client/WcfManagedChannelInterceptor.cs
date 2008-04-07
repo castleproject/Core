@@ -14,7 +14,6 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using Castle.Core;
 	using Castle.Core.Interceptor;

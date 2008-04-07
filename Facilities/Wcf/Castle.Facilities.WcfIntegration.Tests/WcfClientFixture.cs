@@ -63,8 +63,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 								.At("net.tcp://localhost/Operations/Ex")
 								)
 						),
-					Component.For<IAmUsingWindsor>()
-						.ImplementedBy<UsingWindsor>()
+					Component.For<IAmUsingWindsor>().ImplementedBy<UsingWindsor>()
 						.DependsOn(new { number = 42 })
 						.ActAs(new WcfServiceModel()
 						)

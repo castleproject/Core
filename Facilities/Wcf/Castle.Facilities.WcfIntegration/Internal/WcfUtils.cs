@@ -23,17 +23,19 @@ namespace Castle.Facilities.WcfIntegration.Internal
 
 	internal static class WcfUtils
 	{
-		public static bool FindDependency<T>(IDictionary dependencies,
-										     out T match)
+		public static bool IsHosted(IWcfServiceModel serviceModel)
 		{
-			return FindDependency<T>(dependencies, null, out match);
+			return serviceModel.IsHosted;
 		}
 
-		public static bool FindDependency<T>(IDictionary dependencies, 
-			                                 Predicate<T> test, out T match)
+		public static IEnumerable<T> FindDependencies<T>(IDictionary dependencies)
 		{
-			match = default(T);
+			return FindDependencies<T>(dependencies, null);
+		}
 
+		public static IEnumerable<T> FindDependencies<T>(IDictionary dependencies, 
+			                                             Predicate<T> test)
+		{
 			foreach (object dependency in dependencies.Values)
 			{
 				if (dependency is T)
@@ -42,25 +44,20 @@ namespace Castle.Facilities.WcfIntegration.Internal
 
 					if (test == null || test(candidate))
 					{
-						match = candidate;
-						return true;
+						yield return candidate;
 					}
 				}
 			}
-			return false;
 		}
 
-		public static bool FindDependency<T>(ICollection<T> dependencies,
-										     out T match)
+		public static IEnumerable<T> FindDependencies<T>(ICollection<T> dependencies)
 		{
-			return FindDependency<T>(dependencies, null, out match);
+			return FindDependencies<T>(dependencies, null);
 		}
 
-		public static bool FindDependency<T>(ICollection<T> dependencies,
-											 Predicate<T> test, out T match)
+		public static IEnumerable<T> FindDependencies<T>(ICollection<T> dependencies,
+											             Predicate<T> test)
 		{
-			match = default(T);
-
 			foreach (object dependency in dependencies)
 			{
 				if (dependency is T)
@@ -69,12 +66,10 @@ namespace Castle.Facilities.WcfIntegration.Internal
 
 					if (test == null || test(candidate))
 					{
-						match = candidate;
-						return true;
+						yield return candidate;
 					}
 				}
 			}
-			return false;
 		}
 
 		public static ICollection<IHandler> FindBehaviors<T>(IKernel kernel, WcfBehaviorScope scope)
