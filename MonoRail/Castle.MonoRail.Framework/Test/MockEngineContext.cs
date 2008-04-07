@@ -317,7 +317,7 @@ namespace Castle.MonoRail.Framework.Test
 			public RenderedEmailTemplate(string name, IDictionary parameters)
 			{
 				this.name = name;
-				this.parameters = parameters;
+				this.parameters = new Hashtable(parameters);
 			}
 
 			/// <summary>
