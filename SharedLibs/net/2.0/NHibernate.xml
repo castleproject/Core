@@ -2332,6 +2332,12 @@
         <member name="F:NHibernate.Cfg.MappingSchema.HbmKeyManyToOne.lazySpecified">
             <remarks/>
         </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmKeyManyToOne.notfound">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmKeyManyToOne.notfoundSpecified">
+            <remarks/>
+        </member>
         <member name="T:NHibernate.Cfg.MappingSchema.HbmColumn">
             <remarks/>
         </member>
@@ -2372,6 +2378,15 @@
             <remarks/>
         </member>
         <member name="F:NHibernate.Cfg.MappingSchema.HbmRestrictedLaziness.Proxy">
+            <remarks/>
+        </member>
+        <member name="T:NHibernate.Cfg.MappingSchema.HbmNotFoundMode">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmNotFoundMode.Ignore">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmNotFoundMode.Exception">
             <remarks/>
         </member>
         <member name="T:NHibernate.Cfg.MappingSchema.HbmKeyProperty">
@@ -2801,15 +2816,6 @@
             <remarks/>
         </member>
         <member name="F:NHibernate.Cfg.MappingSchema.HbmFetchMode.Join">
-            <remarks/>
-        </member>
-        <member name="T:NHibernate.Cfg.MappingSchema.HbmNotFoundMode">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmNotFoundMode.Ignore">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmNotFoundMode.Exception">
             <remarks/>
         </member>
         <member name="T:NHibernate.Cfg.MappingSchema.HbmLaziness">
@@ -10722,10 +10728,10 @@
             </summary>
             <value><c>false</c></value>
         </member>
-        <member name="T:NHibernate.Dialect.MsSql2005Dialect.QuotedAndParanthesisStringTokenizer">
+        <member name="T:NHibernate.Dialect.MsSql2005Dialect.QuotedAndParenthesisStringTokenizer">
             <summary>
             This specialized string tokenizier will break a string to tokens, taking
-            into account single quotes, paranthesis and commas and [ ]
+            into account single quotes, parenthesis and commas and [ ]
             Notice that we aren't differenciating between [ ) and ( ] on purpose, it would complicate
             the code and it is not legal at any rate.
             </summary>
@@ -28430,13 +28436,6 @@
             <param name="columnNames">An array of the column names for the Property</param>
             <param name="versionType">The IVersionType of the Version Property.</param>
             <returns>The SqlSimpleSelectBuilder.</returns>
-        </member>
-        <member name="M:NHibernate.SqlCommand.SqlSimpleSelectBuilder.SetForUpdateFragment(System.String)">
-            <summary>
-            Sets the For Update Fragment to the Select Command
-            </summary>
-            <param name="fragment">The fragment to set.</param>
-            <returns>The SqlSimpleSelectBuilder</returns>
         </member>
         <member name="M:NHibernate.SqlCommand.SqlSimpleSelectBuilder.SetOrderBy(System.String)">
             <summary>
