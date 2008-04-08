@@ -37,7 +37,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.Register(Component.For<IOperations>()
 					.ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 } )
-					.ActAs(new WcfServiceModel().AddEndpoints(
+					.ActAs(new DefaultServiceModel().AddEndpoints(
 						WcfEndpoint.BoundTo(new NetTcpBinding())
 							.At("net.tcp://localhost/Operations"))
 						)	
@@ -56,7 +56,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.AddFacility<WcfFacility>()
 				.Register(Component.For<UsingWindsor>()
 					.DependsOn(new { number = 42 } )
-					.ActAs(new WcfServiceModel())
+					.ActAs(new DefaultServiceModel())
 				))
 			{
 				IAmUsingWindsor client = ChannelFactory<IAmUsingWindsor>.CreateChannel(
@@ -72,7 +72,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.AddFacility<WcfFacility>()
 				.Register(Component.For<Operations>()
 					.DependsOn(new { number = 42 })
-					.ActAs(new WcfServiceModel().AddEndpoints(
+					.ActAs(new DefaultServiceModel().AddEndpoints(
 						WcfEndpoint.ForContract<IOperations>()
 							.BoundTo(new NetTcpBinding())
 							.At("net.tcp://localhost/Operations"),
@@ -99,7 +99,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.AddFacility<WcfFacility>()
 				.Register(Component.For<Operations>()
 					.DependsOn(new { number = 42 })
-					.ActAs(new WcfServiceModel()
+					.ActAs(new DefaultServiceModel()
 						.AddBaseAddresses(
 							"net.tcp://localhost/Operations",
 							"http://localhost:27198/UsingWindsor.svc")
@@ -131,7 +131,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.Register(Component.For<IOperations>()
 					.ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
-					.ActAs(new WcfServiceModel().AddEndpoints(
+					.ActAs(new DefaultServiceModel().AddEndpoints(
 						WcfEndpoint.BoundTo(new NetTcpBinding())
 							.At("urn:castle:operations")
 							.Via("net.tcp://localhost/Operations")
@@ -166,11 +166,11 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					.ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
 					.ActAs(
-						new WcfServiceModel().AddEndpoints(
+						new DefaultServiceModel().AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding())
 								.At("net.tcp://localhost/Operations")
 								),
-						new WcfServiceModel()
+						new DefaultServiceModel()
 							.AddBaseAddresses(
 								"http://localhost:27198/UsingWindsor.svc")
 							.AddEndpoints(
@@ -206,7 +206,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Services)),
 					Component.For<IOperations>().ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
-					.ActAs(new WcfServiceModel().AddEndpoints(
+					.ActAs(new DefaultServiceModel().AddEndpoints(
 						WcfEndpoint.BoundTo(new NetTcpBinding())
 							.At("net.tcp://localhost/Operations"))
 						)
@@ -234,7 +234,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit)),
 					Component.For<IOperations>().ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
-					.ActAs(new WcfServiceModel()
+					.ActAs(new DefaultServiceModel()
 						.AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding())
 								.At("net.tcp://localhost/Operations"))
@@ -261,7 +261,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit)),
 					Component.For<IOperations>().ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
-					.ActAs(new WcfServiceModel()
+					.ActAs(new DefaultServiceModel()
 						.AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding())
 								.At("net.tcp://localhost/Operations"))
@@ -286,7 +286,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.Register(
 					Component.For<IOperations>().ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
-					.ActAs(new WcfServiceModel()
+					.ActAs(new DefaultServiceModel()
 						.AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding())
 								.At("net.tcp://localhost/Operations"))

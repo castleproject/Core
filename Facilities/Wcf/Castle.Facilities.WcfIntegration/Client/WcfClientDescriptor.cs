@@ -24,10 +24,10 @@ namespace Castle.Facilities.WcfIntegration
 	/// </summary>
 	public class WcfClientDescriptor : IRegistration
 	{
-		private readonly IEnumerable<WcfClientModel> channels;
+		private readonly IEnumerable<IWcfClientModel> channels;
 		private Action<ComponentRegistration> configurer;
 
-		internal WcfClientDescriptor(IEnumerable<WcfClientModel> channels)
+		internal WcfClientDescriptor(IEnumerable<IWcfClientModel> channels)
 		{
 			ValidateChannels(channels);
 			this.channels = channels;
@@ -48,7 +48,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		void IRegistration.Register(IKernel kernel)
 		{
-			foreach (WcfClientModel channel in channels)
+			foreach (IWcfClientModel channel in channels)
 			{
 				ComponentRegistration registration = Component.For(channel.Contract);
 				registration.DependsOn(Property.ForKey("channel").Eq(channel));
@@ -72,9 +72,9 @@ namespace Castle.Facilities.WcfIntegration
 
 		#endregion
 
-		private void ValidateChannels(IEnumerable<WcfClientModel> channels)
+		private void ValidateChannels(IEnumerable<IWcfClientModel> channels)
 		{
-			foreach (WcfClientModel channel in channels)
+			foreach (IWcfClientModel channel in channels)
 			{
 				if (channel.Contract == null)
 				{

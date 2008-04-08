@@ -17,7 +17,7 @@ namespace Castle.Facilities.WcfIntegration
     using System;
     using System.Collections.Generic;
 
-    public class WcfServiceModel : IWcfServiceModel
+    public abstract class WcfServiceModelBase : IWcfServiceModel
     {
 		private bool hosted;
         private ICollection<Uri> baseAddresses;
@@ -29,6 +29,7 @@ namespace Castle.Facilities.WcfIntegration
 		public bool IsHosted
 		{
 			get { return hosted; }
+			protected set { hosted = value; }
 		}
 
 		public ICollection<Uri> BaseAddresses
@@ -70,47 +71,51 @@ namespace Castle.Facilities.WcfIntegration
 		}
 
 		#endregion
+	}
 
-		public WcfServiceModel Hosted()
+	public abstract class WcfServiceModel<T> : WcfServiceModelBase
+		where T : WcfServiceModel<T>
+	{
+		public T Hosted()
 		{
-			hosted = true;
-			return this;
+			IsHosted = true;
+			return (T)this;
 		}
 
-		public WcfServiceModel AddBaseAddresses(params Uri[] baseAddresses)
+		public T AddBaseAddresses(params Uri[] baseAddresses)
 		{
 			foreach (Uri baseAddress in baseAddresses)
 			{
 				BaseAddresses.Add(baseAddress);
 			}
-			return this;
+			return (T)this;
 		}
 
-        public WcfServiceModel AddBaseAddresses(params string[] baseAddresses)
-        {
-            foreach (string baseAddress in baseAddresses)
-            {
-                BaseAddresses.Add(new Uri(baseAddress, UriKind.Absolute));
-            }
-            return this;
-        }
+		public T AddBaseAddresses(params string[] baseAddresses)
+		{
+			foreach (string baseAddress in baseAddresses)
+			{
+				BaseAddresses.Add(new Uri(baseAddress, UriKind.Absolute));
+			}
+			return (T)this;
+		}
 
-        public WcfServiceModel AddEndpoints(params IWcfEndpoint[] endpoints)
-        {
-            foreach (IWcfEndpoint endpoint in endpoints)
-            {
-                Endpoints.Add(endpoint);
-            }
-            return this;
-        }
+		public T AddEndpoints(params IWcfEndpoint[] endpoints)
+		{
+			foreach (IWcfEndpoint endpoint in endpoints)
+			{
+				Endpoints.Add(endpoint);
+			}
+			return (T)this;
+		}
 
-		public WcfServiceModel AddBehaviors(params object[] behaviors)
+		public T AddBehaviors(params object[] behaviors)
 		{
 			foreach (object behavior in behaviors)
 			{
 				Behaviors.Add(WcfExplcitBehavior.CreateFrom(behavior));
 			}
-			return this;
+			return (T)this;
 		}
 	}
 }

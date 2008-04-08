@@ -1,2 +1,2 @@
 <% @ServiceHost Service="look no config" 
-	Factory="Castle.Facilities.WcfIntegration.WindsorServiceHostFactory, Castle.Facilities.WcfIntegration" %>
+	Factory="Castle.Facilities.WcfIntegration.DefaultServiceHostFactory, Castle.Facilities.WcfIntegration" %>

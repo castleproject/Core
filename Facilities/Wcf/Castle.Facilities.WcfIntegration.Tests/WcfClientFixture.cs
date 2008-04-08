@@ -39,7 +39,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer = new WindsorContainer()
 				.AddFacility<WcfFacility>()
 				.Register(WcfClient.ForChannels(
-					new WcfClientModel()
+					new DefaultClientModel()
 					{
 						Endpoint = WcfEndpoint.ForContract<IOperations>()
 							.BoundTo(new NetTcpBinding())
@@ -54,7 +54,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					Component.For<NetDataContractFormatBehavior>(),
 					Component.For<Operations>()
 						.DependsOn(new { number = 42 })
-						.ActAs(new WcfServiceModel().AddEndpoints(
+						.ActAs(new DefaultServiceModel().AddEndpoints(
 							WcfEndpoint.ForContract<IOperations>()
 								.BoundTo(new NetTcpBinding())
 								.At("net.tcp://localhost/Operations"),
@@ -65,7 +65,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						),
 					Component.For<IAmUsingWindsor>().ImplementedBy<UsingWindsor>()
 						.DependsOn(new { number = 42 })
-						.ActAs(new WcfServiceModel()
+						.ActAs(new DefaultServiceModel()
 						)
 				);
 		}
@@ -86,7 +86,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer.Register(
 				Component.For<IOperations>()
 					.Named("operations")
-					.ActAs(new WcfClientModel()
+					.ActAs(new DefaultClientModel()
 					{
 						Endpoint = WcfEndpoint
 							.BoundTo(new NetTcpBinding())
@@ -103,7 +103,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			windsorContainer.Register(Component.For<IAmUsingWindsor>()
 				.Named("usingWindsor")
-				.ActAs(new WcfClientModel()
+				.ActAs(new DefaultClientModel()
 				{
 					Endpoint = WcfEndpoint
 						.FromConfiguration("WSHttpBinding_IAmUsingWindsor")
@@ -129,7 +129,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.AddFacility<WcfFacility>()
 				.Register(Component.For<Operations>()
 					.DependsOn(new { number = 28 })
-					.ActAs(new WcfServiceModel()
+					.ActAs(new DefaultServiceModel()
 						.AddBaseAddresses("net.tcp://localhost/Operations")
 						.AddEndpoints(WcfEndpoint.ForContract<IOperations>()
 							.BoundTo(new NetTcpBinding())
@@ -141,7 +141,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					.AddFacility<WcfFacility>()
 					.Register(Component.For<IOperations>()
 						.Named("operations")
-						.ActAs(new WcfClientModel()
+						.ActAs(new DefaultClientModel()
 						{
 							Endpoint = WcfEndpoint
 								.BoundTo(new NetTcpBinding())
@@ -165,7 +165,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					Component.For<IOperations>()
 						.ImplementedBy<Operations>()
 						.DependsOn(new { number = 22 })
-						.ActAs(new WcfServiceModel().AddEndpoints(
+						.ActAs(new DefaultServiceModel().AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding())
 								.At("urn:castle:operations")
 								.Via("net.tcp://localhost/OperationsVia")
@@ -173,7 +173,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						),
 					Component.For<IOperations>()
 						.Named("operations")
-						.ActAs(new WcfClientModel()
+						.ActAs(new DefaultClientModel()
 						{
 							Endpoint = WcfEndpoint
 								.BoundTo(new NetTcpBinding())
@@ -193,7 +193,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer.Register(
 				Component.For<IOperationsEx>()
 					.Named("operations")
-					.ActAs(new WcfClientModel()
+					.ActAs(new DefaultClientModel()
 					{
 						Endpoint = WcfEndpoint
 							.BoundTo(new NetTcpBinding())
@@ -211,7 +211,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer.Register(
 				Component.For<IOperationsEx>()
 					.Named("operations")
-					.ActAs(new WcfClientModel()
+					.ActAs(new DefaultClientModel()
 					{
 						Endpoint = WcfEndpoint
 							.BoundTo(new NetTcpBinding())

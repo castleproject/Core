@@ -55,7 +55,7 @@ namespace Castle.Facilities.WcfIntegration
 			this.kernel = kernel;
 
 			AddDefaultServiceHostBuilders();
-			WindsorServiceHostFactory.RegisterContainer(kernel);
+			DefaultServiceHostFactory.RegisterContainer(kernel);
 
 			kernel.ComponentRegistered += Kernel_ComponentRegistered;
 			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
@@ -100,14 +100,14 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				foreach (ServiceHost serviceHost in serviceHosts)
 				{
-					serviceHost.Close();
+					WcfUtils.ReleaseCommunicationObject(serviceHost);
 				}
 			}
 		}
 
 		private void AddDefaultServiceHostBuilders()
 		{
-			AddServiceHostBuilder<DefaultServiceHostBuilder, WcfServiceModel>(false);
+			AddServiceHostBuilder<DefaultServiceHostBuilder, DefaultServiceModel>(false);
 #if DOTNET35
 			AddServiceHostBuilder<RestServiceHostBuilder, RestServiceModel>(false);
 #endif
@@ -139,7 +139,7 @@ namespace Castle.Facilities.WcfIntegration
 				if (!foundOne && model.Configuration != null &&
 					"true" == model.Configuration.Attributes[WcfConstants.ServiceHostEnabled])
 				{
-					yield return new WcfServiceModel();
+					yield return new DefaultServiceModel();
 				}
 			}
 		}

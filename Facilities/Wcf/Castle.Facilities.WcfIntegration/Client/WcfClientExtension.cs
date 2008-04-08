@@ -59,7 +59,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		private void AddDefaultChannelBuilders()
 		{
-			AddChannelBuilder<DefaultChannelBuilder, WcfClientModel>(false);
+			AddChannelBuilder<DefaultChannelBuilder, DefaultClientModel>(false);
 #if DOTNET35
 			AddChannelBuilder<RestChannelBuilder, RestClientModel>(false);
 #endif
@@ -103,7 +103,7 @@ namespace Castle.Facilities.WcfIntegration
 
 				if (!string.IsNullOrEmpty(endpointConfiguration))
 				{
-					return new WcfClientModel(WcfEndpoint.FromConfiguration(endpointConfiguration));
+					return new DefaultClientModel(WcfEndpoint.FromConfiguration(endpointConfiguration));
 				}
 			}
 

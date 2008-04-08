@@ -81,7 +81,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		private IWcfClientModel ObtainClientModel(ComponentModel model)
 		{
-			WcfClientModel clientModel = (WcfClientModel)
+			IWcfClientModel clientModel = (IWcfClientModel)
 				model.ExtendedProperties[WcfConstants.ClientModelKey];
 
 			ValidateClientModel(clientModel, model);
@@ -89,7 +89,7 @@ namespace Castle.Facilities.WcfIntegration
 			return clientModel;
 		}
 
-		private void ValidateClientModel(WcfClientModel clientModel, ComponentModel model)
+		private void ValidateClientModel(IWcfClientModel clientModel, ComponentModel model)
 		{
 			Type contract;
 

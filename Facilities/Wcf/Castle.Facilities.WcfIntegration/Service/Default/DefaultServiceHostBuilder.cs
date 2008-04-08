@@ -22,7 +22,7 @@ namespace Castle.Facilities.WcfIntegration
 	/// <summary>
 	/// The default implementation of <see cref="IServiceHostBuilder{M}"/>.
 	/// </summary>
-	public class DefaultServiceHostBuilder : AbstractServiceHostBuilder<WcfServiceModel>
+	public class DefaultServiceHostBuilder : AbstractServiceHostBuilder<DefaultServiceModel>
 	{
 		/// <summary>
 		/// Constructs a new <see cref="DefaultServiceHostBuilder"/>.
@@ -36,7 +36,7 @@ namespace Castle.Facilities.WcfIntegration
 		#region AbstractServiceHostBuilder Members
 
 		protected override ServiceHost CreateServiceHost(ComponentModel model, 
-			                                             WcfServiceModel serviceModel,
+			                                             DefaultServiceModel serviceModel,
 			                                             params Uri[] baseAddresses)
 		{
 			return CreateServiceHost(model, GetEffectiveBaseAddresses(serviceModel, baseAddresses));

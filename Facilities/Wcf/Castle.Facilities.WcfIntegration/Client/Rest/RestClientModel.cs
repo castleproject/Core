@@ -16,7 +16,7 @@ namespace Castle.Facilities.WcfIntegration.Rest
 {
 	using System;
 
-	public class RestClientModel : WcfClientModel
+	public class RestClientModel : WcfClientModel<RestClientModel>
 	{
 		public RestClientModel()
 		{

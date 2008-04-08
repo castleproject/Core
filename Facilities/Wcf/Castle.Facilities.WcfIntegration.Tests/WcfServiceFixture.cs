@@ -47,7 +47,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					Component.For<IOperations>().ImplementedBy<Operations>()
 						.Interceptors(InterceptorReference.ForType<LoggingInterceptor>()).Anywhere
 						.DependsOn(new { number = 42 })
-						.ActAs(new WcfServiceModel().AddEndpoints(
+						.ActAs(new DefaultServiceModel().AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding())
 								.At("net.tcp://localhost/Operations")
 								)

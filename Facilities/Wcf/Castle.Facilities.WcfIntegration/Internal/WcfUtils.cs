@@ -47,26 +47,11 @@ namespace Castle.Facilities.WcfIntegration.Internal
 						yield return candidate;
 					}
 				}
-			}
-		}
-
-		public static IEnumerable<T> FindDependencies<T>(ICollection<T> dependencies)
-		{
-			return FindDependencies<T>(dependencies, null);
-		}
-
-		public static IEnumerable<T> FindDependencies<T>(ICollection<T> dependencies,
-											             Predicate<T> test)
-		{
-			foreach (object dependency in dependencies)
-			{
-				if (dependency is T)
+				else if (dependency is IEnumerable<T>)
 				{
-					T candidate = (T)dependency;
-
-					if (test == null || test(candidate))
+					foreach (T item in (IEnumerable<T>)dependency)
 					{
-						yield return candidate;
+						yield return item;
 					}
 				}
 			}

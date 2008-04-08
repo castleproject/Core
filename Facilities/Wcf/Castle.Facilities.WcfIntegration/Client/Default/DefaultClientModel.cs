@@ -14,16 +14,14 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System;
-	using Castle.MicroKernel;
-
-	/// <summary>
-	/// The default implementation of <see cref="IClientChannelBuilder{M}"/>.
-	/// </summary>
-	public class DefaultChannelBuilder : AbstractChannelBuilder<DefaultClientModel>
+	public class DefaultClientModel : WcfClientModel<DefaultClientModel>
 	{
-		public DefaultChannelBuilder(IKernel kernel)
-			: base(kernel)
+		public DefaultClientModel()
+		{
+		}
+
+		public DefaultClientModel(IWcfEndpoint endpoint)
+			: base(endpoint)
 		{
 		}
 	}

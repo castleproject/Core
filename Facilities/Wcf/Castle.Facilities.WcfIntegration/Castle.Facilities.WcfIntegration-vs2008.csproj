@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Client\AbstractChannelBuilder.Generic.cs" />
     <Compile Include="Behaviors\ServiceEndpointBehaviors.cs" />
+    <Compile Include="Client\Default\DefaultClientModel.cs" />
     <Compile Include="IWcfBehaviorVisitor.cs" />
     <Compile Include="IWcfBehavior.cs" />
     <Compile Include="Behaviors\WcfEndpointBehaviors.cs" />
@@ -104,6 +105,8 @@
     <Compile Include="Service\AbstractServiceHostBuilder.Generic.cs" />
     <Compile Include="Service\Default\DefaultServiceHost.cs" />
     <Compile Include="Service\Default\DefaultServiceHostBuilder.cs" />
+    <Compile Include="Service\Default\DefaultServiceModel.cs" />
+    <Compile Include="Service\Default\DefaultServiceHostFactory.cs" />
     <Compile Include="Service\Rest\RestServiceHostBuilder.cs" />
     <Compile Include="Service\Rest\RestServiceModel.cs" />
     <Compile Include="Service\ServiceHostBehaviors.cs" />

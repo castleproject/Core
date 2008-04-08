@@ -18,12 +18,12 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 
 	using System;
 	using System.ServiceModel;
+	using System.ServiceModel.Web;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 	using Castle.Facilities.WcfIntegration.Rest;
 	using NUnit.Framework;
 	using Castle.Facilities.WcfIntegration.Demo;
-
 
 	[TestFixture]
 	public class RestClientFixture
@@ -86,9 +86,11 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 		[Test, Ignore("This test requires the Castle.Facilities.WcfIntegration.Demo running")]
 		public void CanCallRestfulHostedService()
 		{
-			IAmUsingWindsor client = ChannelFactory<IAmUsingWindsor>.CreateChannel(
-				new BasicHttpBinding(), new EndpointAddress("http://localhost:27197/UsingWindsorWithoutConfig.svc"));
-			Assert.AreEqual(126, client.MultiplyValueFromWindsorConfig(3));
+			using (WebChannelFactory<IAmUsingWindsor> factory =	new WebChannelFactory<IAmUsingWindsor>(
+					new Uri("http://localhost:27197/UsingWindsorRest.svc")))
+			{
+				Assert.AreEqual(126, factory.CreateChannel().MultiplyValueFromWindsorConfig(3));
+			}				
 		}
 	}
 

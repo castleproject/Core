@@ -35,7 +35,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			if (kernel == null)
 			{
-				string message = "Kernel was null, did you forgot to call WindsorServiceHostFactory.RegisterContainer() ?";
+				string message = "Kernel was null, did you forgot to call DefaultServiceHostFactory.RegisterContainer() ?";
 				throw new ArgumentNullException("kernel", message);
 			}
 
@@ -70,12 +70,11 @@ namespace Castle.Facilities.WcfIntegration
 			}
 
 			ComponentModel model = handler.ComponentModel;
-			foreach (IWcfServiceModel serviceModel in WcfUtils
-						.FindDependencies<IWcfServiceModel>(model.CustomDependencies,
-						WcfUtils.IsHosted))
+			IWcfServiceModel serviceModel = SelectBestHostedServiceModel(model);
+
+			if (serviceModel != null)
 			{
-				return WcfServiceExtension.CreateServiceHost(kernel, serviceModel,
-														     model, baseAddresses);
+				return WcfServiceExtension.CreateServiceHost(kernel, serviceModel, model, baseAddresses);
 			}
 
 			return ServiceHostBuilder.Build(handler.ComponentModel, baseAddresses);
@@ -85,26 +84,27 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			return ServiceHostBuilder.Build(serviceType, baseAddresses);
 		}
+
+		private IWcfServiceModel SelectBestHostedServiceModel(ComponentModel model)
+		{
+			IWcfServiceModel serviceModel = null;
+
+			foreach (IWcfServiceModel candidateServiceModel in WcfUtils
+						.FindDependencies<IWcfServiceModel>(model.CustomDependencies,
+						WcfUtils.IsHosted))
+			{
+				if (candidateServiceModel is M)
+				{
+					serviceModel = candidateServiceModel;
+					break;
+				}
+				else
+				{
+					serviceModel = serviceModel ?? candidateServiceModel;
+				}
+			}
+
+			return serviceModel;
+		}
 	}
-
-	#region WindsorServiceHostFactory Default
-
-	public class WindsorServiceHostFactory : WindsorServiceHostFactory<WcfServiceModel>
-	{
-		public WindsorServiceHostFactory()
-		{
-		}
-
-		public WindsorServiceHostFactory(IKernel kernel)
-			: base(kernel)
-		{
-		}
-
-		public static void RegisterContainer(IKernel kernel)
-		{
-			WcfServiceExtension.GlobalKernel = kernel;
-		}
-	}
-
-	#endregion
 }

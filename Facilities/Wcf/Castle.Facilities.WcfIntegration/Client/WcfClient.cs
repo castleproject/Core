@@ -27,9 +27,9 @@ namespace Castle.Facilities.WcfIntegration
 		/// </summary>
 		/// <param name="channels">The channels.</param>
 		/// <returns>The <see cref="WcfClientDescriptor"/></returns>
-		public static WcfClientDescriptor ForChannels(params WcfClientModel[] channels)
+		public static WcfClientDescriptor ForChannels(params IWcfClientModel[] channels)
 		{
-			return ForChannels((IEnumerable<WcfClientModel>)channels);
+			return ForChannels((IEnumerable<IWcfClientModel>)channels);
 		}
 
 		/// <summary>
@@ -37,7 +37,7 @@ namespace Castle.Facilities.WcfIntegration
 		/// </summary>
 		/// <param name="channels">The channels.</param>
 		/// <returns>The <see cref="WcfClientDescriptor"/></returns>
-		public static WcfClientDescriptor ForChannels(IEnumerable<WcfClientModel> channels)
+		public static WcfClientDescriptor ForChannels(IEnumerable<IWcfClientModel> channels)
 		{
 			if (channels == null)
 			{

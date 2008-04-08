@@ -17,16 +17,16 @@ namespace Castle.Facilities.WcfIntegration
     using System;
 	using System.Collections.Generic;
 
-	public class WcfClientModel : IWcfClientModel
+	public abstract class WcfClientModelBase : IWcfClientModel
 	{
 		private IWcfEndpoint endpoint;
 		private ICollection<IWcfBehavior> behaviors;
 
-		public WcfClientModel()
+		protected WcfClientModelBase()
 		{
 		}
 
-		public WcfClientModel(IWcfEndpoint endpoint)
+		protected WcfClientModelBase(IWcfEndpoint endpoint)
 		{
 			Endpoint = endpoint;
 		}
@@ -64,15 +64,27 @@ namespace Castle.Facilities.WcfIntegration
 		}
 
 		#endregion
+	}
 
+	public abstract class WcfClientModel<T> : WcfClientModelBase
+		where T : WcfClientModel<T>
+	{
+		protected WcfClientModel()
+		{
+		}
 
-		public WcfClientModel AddBehaviors(params object[] behaviors)
+		protected WcfClientModel(IWcfEndpoint endpoint)
+			: base(endpoint)
+		{
+		}
+
+		public T AddBehaviors(params object[] behaviors)
 		{
 			foreach (object behavior in behaviors)
 			{
 				Behaviors.Add(WcfExplcitBehavior.CreateFrom(behavior));
 			}
-			return this;
+			return (T)this;
 		}
 	}
 }

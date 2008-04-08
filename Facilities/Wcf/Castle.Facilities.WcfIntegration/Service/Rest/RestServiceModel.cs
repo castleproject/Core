@@ -15,8 +15,9 @@
 namespace Castle.Facilities.WcfIntegration.Rest
 {
 	using System;
+	using System.ServiceModel.Description;
 
-	public class RestServiceModel : WcfServiceModel
+	public class RestServiceModel : WcfServiceModel<RestServiceModel>
 	{
 		public RestServiceModel()
 		{
@@ -30,6 +31,12 @@ namespace Castle.Facilities.WcfIntegration.Rest
 		public RestServiceModel(Uri baseAddress)
 		{
 			AddBaseAddresses(baseAddress);
+		}
+
+		public RestServiceModel EnableWebScripting()
+		{
+			AddBehaviors(new WebScriptEnablingBehavior());
+			return this;
 		}
 	}
 }
