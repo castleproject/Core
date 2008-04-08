@@ -47,7 +47,6 @@ namespace Castle.Facilities.WcfIntegration.Demo
 					.DependsOn(
 						Property.ForKey("number").Eq(42))
 					);
-			WindsorServiceHostFactory.RegisterContainer(container.Kernel);
 		}
 
 		protected void Application_End(object sender, EventArgs e)
