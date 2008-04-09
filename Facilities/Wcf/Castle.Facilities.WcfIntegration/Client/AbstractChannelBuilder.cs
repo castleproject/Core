@@ -48,26 +48,32 @@ namespace Castle.Facilities.WcfIntegration
 			return channelCreator;
 		}
 
-		protected abstract ChannelCreator GetChannelCreator(Type contract, ServiceEndpoint endpoint);
-		protected abstract ChannelCreator GetChannelCreator(Type contract, string configurationName);
-		protected abstract ChannelCreator GetChannelCreator(Type contract, Binding binding, string address);
-		protected abstract ChannelCreator GetChannelCreator(Type contract, Binding binding, EndpointAddress address);
+		protected abstract ChannelCreator GetChannel(Type contract);
+		protected abstract ChannelCreator GetChannel(Type contract, ServiceEndpoint endpoint);
+		protected abstract ChannelCreator GetChannel(Type contract, string configurationName);
+		protected abstract ChannelCreator GetChannel(Type contract, Binding binding, string address);
+		protected abstract ChannelCreator GetChannel(Type contract, Binding binding, EndpointAddress address);
 
 		#region IWcfEndpointVisitor Members
 
+		void IWcfEndpointVisitor.VisitContractEndpoint(ContractEndpointModel model)
+		{
+			channelCreator = GetChannel(contract);
+		}
+        
 		void IWcfEndpointVisitor.VisitServiceEndpoint(ServiceEndpointModel model)
 		{
-			channelCreator = GetChannelCreator(contract, model.ServiceEndpoint);
+			channelCreator = GetChannel(contract, model.ServiceEndpoint);
 		}
 
 		void IWcfEndpointVisitor.VisitConfigurationEndpoint(ConfigurationEndpointModel model)
 		{
-			channelCreator = GetChannelCreator(contract, model.EndpointName);
+			channelCreator = GetChannel(contract, model.EndpointName);
 		}
 
 		void IWcfEndpointVisitor.VisitBindingEndpoint(BindingEndpointModel model)
 		{
-			channelCreator = GetChannelCreator(contract, model.Binding, string.Empty);
+			channelCreator = GetChannel(contract, model.Binding, string.Empty);
 		}
 
 		void IWcfEndpointVisitor.VisitBindingAddressEndpoint(BindingAddressEndpointModel model)
@@ -78,17 +84,17 @@ namespace Castle.Facilities.WcfIntegration
 				ContractDescription description = ContractDescription.GetContract(contract);
 				ServiceEndpoint endpoint = new ServiceEndpoint(description, model.Binding, address);
 				endpoint.Behaviors.Add(new ClientViaBehavior(model.ViaAddress));
-				channelCreator = GetChannelCreator(contract, endpoint);
+				channelCreator = GetChannel(contract, endpoint);
 			}
 			else
 			{
 				if (model.EndpointAddress != null)
 				{
-					channelCreator = GetChannelCreator(contract, model.Binding, model.EndpointAddress);
+					channelCreator = GetChannel(contract, model.Binding, model.EndpointAddress);
 				}
 				else
 				{
-					channelCreator = GetChannelCreator(contract, model.Binding, model.Address);
+					channelCreator = GetChannel(contract, model.Binding, model.Address);
 				}
 			}
 		}

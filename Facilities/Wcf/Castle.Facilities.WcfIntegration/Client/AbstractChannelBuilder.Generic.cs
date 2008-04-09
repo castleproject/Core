@@ -16,10 +16,10 @@ namespace Castle.Facilities.WcfIntegration
 {
 	using System;
 	using System.Reflection;
-	using Castle.MicroKernel;
 	using System.ServiceModel;
 	using System.ServiceModel.Description;
 	using System.ServiceModel.Channels;
+	using Castle.MicroKernel;
 
 	public abstract class AbstractChannelBuilder<M> : AbstractChannelBuilder, IClientChannelBuilder<M>
 			where M : IWcfClientModel
@@ -56,55 +56,62 @@ namespace Castle.Facilities.WcfIntegration
 
 		#region AbstractChannelBuilder Members
 
-		protected override ChannelCreator GetChannelCreator(Type contract, ServiceEndpoint endpoint)
+		protected override ChannelCreator GetChannel(Type contract)
 		{
-			return GetChannelCreator(clientModel, contract, endpoint);
+			return GetChannel(clientModel, contract);
 		}
 
-		protected override ChannelCreator GetChannelCreator(Type contract, string configurationName)
+		protected override ChannelCreator GetChannel(Type contract, ServiceEndpoint endpoint)
 		{
-			return GetChannelCreator(clientModel, contract, configurationName);
+			return GetChannel(clientModel, contract, endpoint);
 		}
 
-		protected override ChannelCreator GetChannelCreator(Type contract, Binding binding, string address)
+		protected override ChannelCreator GetChannel(Type contract, string configurationName)
 		{
-			return GetChannelCreator(clientModel, contract, binding, address);
+			return GetChannel(clientModel, contract, configurationName);
 		}
 
-		protected override ChannelCreator GetChannelCreator(Type contract, Binding binding, EndpointAddress address)
+		protected override ChannelCreator GetChannel(Type contract, Binding binding, string address)
 		{
-			return GetChannelCreator(contract, binding, address);
+			return GetChannel(clientModel, contract, binding, address);
+		}
+
+		protected override ChannelCreator GetChannel(Type contract, Binding binding, EndpointAddress address)
+		{
+			return GetChannel(contract, binding, address);
 		}
 
 		#endregion
 
-		#region GetChannelCreator Members
+		#region GetChannel Members
 
-		protected virtual ChannelCreator GetChannelCreator(M clientModel, Type contract,
-														   ServiceEndpoint endpoint)
+		protected virtual ChannelCreator GetChannel(M clientModel, Type contract)
+		{
+			return CreateChannelCreator(contract, clientModel, contract);
+		}
+
+		protected virtual ChannelCreator GetChannel(M clientModel, Type contract, ServiceEndpoint endpoint)
 		{
 			return CreateChannelCreator(contract, clientModel, endpoint);
 		}
 
-		protected virtual ChannelCreator GetChannelCreator(M clientModel, Type contract,
-														   string configurationName)
+		protected virtual ChannelCreator GetChannel(M clientModel, Type contract, string configurationName)
 		{
 			return CreateChannelCreator(contract, clientModel, configurationName);
 		}
 
-		protected virtual ChannelCreator GetChannelCreator(M clientModel, Type contract,
-														   Binding binding, string address)
+		protected virtual ChannelCreator GetChannel(M clientModel, Type contract, Binding binding, string address)
 		{
 			return CreateChannelCreator(contract, clientModel, binding, address);
 		}
 
-		protected virtual ChannelCreator GetChannelCreator(M clientModel, Type contract,
-														   Binding binding, EndpointAddress address)
+		protected virtual ChannelCreator GetChannel(M clientModel, Type contract, Binding binding, 
+			                                        EndpointAddress address)
 		{
 			return CreateChannelCreator(contract, clientModel, binding, address);
 		}
 
-		protected virtual ChannelCreator CreateChannelCreator(Type contract, M clientModel,
+		protected virtual ChannelCreator CreateChannelCreator(Type contract, M clientModel, 
 			                                                  params object[] channelFactoryArgs)
 		{
 			Type type = typeof(ChannelFactory<>).MakeGenericType(new Type[] { contract });

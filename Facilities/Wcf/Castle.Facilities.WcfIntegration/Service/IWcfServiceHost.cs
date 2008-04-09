@@ -14,12 +14,14 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	public interface IWcfEndpointVisitor
+	using System;
+	using System.ServiceModel;
+
+	/// <summary>
+	/// Contract extension for <see cref="ServiceHost"/>.
+	/// </summary>
+	public interface IWcfServiceHost
 	{
-		void VisitContractEndpoint(ContractEndpointModel model);
-		void VisitServiceEndpoint(ServiceEndpointModel model);
-		void VisitConfigurationEndpoint(ConfigurationEndpointModel model);
-		void VisitBindingEndpoint(BindingEndpointModel model);
-		void VisitBindingAddressEndpoint(BindingAddressEndpointModel model);
+		event EventHandler OpeningComplete;
 	}
 }

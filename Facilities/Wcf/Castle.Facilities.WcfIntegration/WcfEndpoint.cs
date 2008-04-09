@@ -128,17 +128,16 @@ namespace Castle.Facilities.WcfIntegration
 
 	#region Nested Class: ContractModel
 
-	public class ContractEndpointModel
+	public class ContractEndpointModel : WcfEndpointBase<ContractEndpointModel>
 	{
-		private readonly Type contract;
-
 		internal ContractEndpointModel()
+			: this(null)
 		{
 		}
 
 		internal ContractEndpointModel(Type contract)
+			: base(contract)
 		{
-			this.contract = contract;
 		}
 
 		public ServiceEndpointModel FromEndpoint(ServiceEndpoint endpoint)
@@ -148,7 +147,7 @@ namespace Castle.Facilities.WcfIntegration
 				throw new ArgumentNullException("endpoint");
 			}
 
-			return new ServiceEndpointModel(contract, endpoint);
+			return new ServiceEndpointModel(Contract, endpoint);
 		}
 
 		public ConfigurationEndpointModel FromConfiguration(string endpointName)
@@ -157,7 +156,7 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				throw new ArgumentException("endpointName cannot be nul or empty");
 			}
-			return new ConfigurationEndpointModel(contract, endpointName);
+			return new ConfigurationEndpointModel(Contract, endpointName);
 		}
 
 		public BindingEndpointModel BoundTo(Binding binding)
@@ -166,17 +165,22 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				throw new ArgumentNullException("binding");
 			}
-			return new BindingEndpointModel(contract, binding);
+			return new BindingEndpointModel(Contract, binding);
 		}
 
 		public BindingAddressEndpointModel At(string address)
 		{
-			return new BindingEndpointModel(contract, null).At(address);
+			return new BindingEndpointModel(Contract, null).At(address);
 		}
 
 		public BindingAddressEndpointModel At(Uri address)
 		{
-			return new BindingEndpointModel(contract, null).At(address);
+			return new BindingEndpointModel(Contract, null).At(address);
+		}
+
+		protected override void Accept(IWcfEndpointVisitor visitor)
+		{
+			visitor.VisitContractEndpoint(this);
 		}
 	}
 

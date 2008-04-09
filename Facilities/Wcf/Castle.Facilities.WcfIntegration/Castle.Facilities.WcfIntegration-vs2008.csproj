@@ -107,6 +107,8 @@
     <Compile Include="Service\Default\DefaultServiceHostBuilder.cs" />
     <Compile Include="Service\Default\DefaultServiceModel.cs" />
     <Compile Include="Service\Default\DefaultServiceHostFactory.cs" />
+    <Compile Include="Service\IWcfServiceHost.cs" />
+    <Compile Include="Service\Rest\RestServiceHost.cs" />
     <Compile Include="Service\Rest\RestServiceHostBuilder.cs" />
     <Compile Include="Service\Rest\RestServiceModel.cs" />
     <Compile Include="Service\ServiceHostBehaviors.cs" />

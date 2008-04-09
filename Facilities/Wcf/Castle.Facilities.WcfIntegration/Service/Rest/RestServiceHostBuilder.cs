@@ -19,7 +19,6 @@ namespace Castle.Facilities.WcfIntegration.Rest
 	using System;
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
-	using System.ServiceModel.Web;
 	using Castle.Core;
 	using Castle.MicroKernel;
 
@@ -53,23 +52,28 @@ namespace Castle.Facilities.WcfIntegration.Rest
 			                                             RestServiceModel serviceModel,
 														 params Uri[] baseAddresses)
 		{
-			return new WebServiceHost(model.Implementation, 
+			return CreateRestServiceHost(model.Implementation, 
 				GetEffectiveBaseAddresses(serviceModel, baseAddresses));
 		}
 
 		protected override ServiceHost CreateServiceHost(ComponentModel model, 
 			                                             params Uri[] baseAddresses)
 		{
-			return new WebServiceHost(model.Implementation, baseAddresses);
+			return CreateRestServiceHost(model.Implementation, baseAddresses);
 		}
 
 		protected override ServiceHost CreateServiceHost(Type serviceType, 
 			                                             params Uri[] baseAddresses)
 		{
-			return new WebServiceHost(serviceType, baseAddresses);
+			return CreateRestServiceHost(serviceType, baseAddresses);
 		}
 
 		#endregion
+
+		private RestServiceHost CreateRestServiceHost(Type serviceType, Uri[] baseAddresses)
+		{
+			return new RestServiceHost(serviceType, baseAddresses);
+		}
 	}
 
 #endif

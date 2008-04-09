@@ -12,14 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Rest
 {
-	public interface IWcfEndpointVisitor
+	using System;
+	using System.ServiceModel.Web;
+
+	public class RestServiceHost : WebServiceHost, IWcfServiceHost
 	{
-		void VisitContractEndpoint(ContractEndpointModel model);
-		void VisitServiceEndpoint(ServiceEndpointModel model);
-		void VisitConfigurationEndpoint(ConfigurationEndpointModel model);
-		void VisitBindingEndpoint(BindingEndpointModel model);
-		void VisitBindingAddressEndpoint(BindingAddressEndpointModel model);
+        public event EventHandler OpeningComplete;
+        
+		public RestServiceHost()
+		{
+		}
+
+		public RestServiceHost(Type serviceType, params Uri[] baseAddresses)
+			: base(serviceType, baseAddresses)
+		{
+		}
+
+		protected override void OnOpening()
+		{
+			base.OnOpening();
+
+			if (OpeningComplete != null)
+			{
+				OpeningComplete(this, EventArgs.Empty);
+			}
+		}
 	}
 }

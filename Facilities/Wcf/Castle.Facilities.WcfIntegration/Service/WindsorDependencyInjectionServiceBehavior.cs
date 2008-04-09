@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.MicroKernel;
-
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
@@ -24,6 +22,7 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Description;
 	using System.ServiceModel.Dispatcher;
 	using Castle.Core;
+	using Castle.MicroKernel;
 
 	public class WindsorDependencyInjectionServiceBehavior : IServiceBehavior
 	{

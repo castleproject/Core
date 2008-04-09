@@ -63,8 +63,25 @@ namespace Castle.Facilities.WcfIntegration
 			return baseAddresses.ToArray();
 		}
 
+
 		protected virtual void OnOpening(ServiceHost serviceHost, IWcfServiceModel serviceModel,
-			                             ComponentModel model)
+										 ComponentModel model)
+		{
+			if (serviceHost is IWcfServiceHost)
+			{
+				((IWcfServiceHost)serviceHost).OpeningComplete += delegate
+				{
+					ApplyBehaviors(serviceHost, serviceModel, model);
+				};
+			}
+			else
+			{
+				ApplyBehaviors(serviceHost, serviceModel, model);
+			}
+		}
+
+		protected virtual void ApplyBehaviors(ServiceHost serviceHost, IWcfServiceModel serviceModel,
+			                                  ComponentModel model)
 		{
 			serviceHost.Description.Behaviors.Add(
 				new WindsorDependencyInjectionServiceBehavior(kernel, model)
@@ -83,6 +100,18 @@ namespace Castle.Facilities.WcfIntegration
 		}
 
 		#region IWcfEndpointVisitor Members
+
+		void IWcfEndpointVisitor.VisitContractEndpoint(ContractEndpointModel model)
+		{
+			serviceEndpoint = AddServiceEndpoint(serviceHost, model);
+		}
+
+		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
+															 ContractEndpointModel model)
+		{
+			Binding binding = GetDefaultBinding(serviceHost, string.Empty);
+			return serviceHost.AddServiceEndpoint(model.Contract, binding, string.Empty);
+		}
 
 		void IWcfEndpointVisitor.VisitServiceEndpoint(ServiceEndpointModel model)
 		{

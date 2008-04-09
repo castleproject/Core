@@ -20,10 +20,12 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Description;
 	using Castle.Core;
 
-	public class DefaultServiceHost : ServiceHost
+	public class DefaultServiceHost : ServiceHost, IWcfServiceHost
 	{
 		private readonly ComponentModel model;
 
+		public event EventHandler OpeningComplete;
+        
 		public DefaultServiceHost(ComponentModel model, params Uri[] baseAddresses)
 			: base(model.Implementation, baseAddresses)
 		{
@@ -40,6 +42,11 @@ namespace Castle.Facilities.WcfIntegration
 			base.OnOpening();
 
 			AddDefaultEndpointIfNoneFound();
+
+			if (OpeningComplete != null)
+			{
+				OpeningComplete(this, EventArgs.Empty);
+			}
 		}
 
 		private void AddDefaultEndpointIfNoneFound()

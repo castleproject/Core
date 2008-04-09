@@ -30,8 +30,8 @@ namespace Castle.Facilities.WcfIntegration.Rest
 		{
 		}
 
-		protected override ChannelCreator GetChannelCreator(RestClientModel clientModel, Type contract,
-														    Binding binding, string address)
+		protected override ChannelCreator GetChannel(RestClientModel clientModel, Type contract,
+												     Binding binding, string address)
 		{
 			Uri remoteAddress = new Uri(address, UriKind.Absolute);
 
@@ -43,14 +43,14 @@ namespace Castle.Facilities.WcfIntegration.Rest
 			return CreateChannelCreator(contract, clientModel, binding, remoteAddress);
 		}
 
-		protected override ChannelCreator GetChannelCreator(RestClientModel clientModel, Type contract, 
-			                                                Binding binding, EndpointAddress address)
+		protected override ChannelCreator GetChannel(RestClientModel clientModel, Type contract, 
+			                                         Binding binding, EndpointAddress address)
 		{
-			return GetChannelCreator(clientModel, contract, binding, address.Uri.AbsoluteUri);
+			return GetChannel(clientModel, contract, binding, address.Uri.AbsoluteUri);
 		}
 
 		protected override ChannelCreator CreateChannelCreator(Type contract, RestClientModel clientModel,
-			                                                   params object[] channelFactoryArgs)
+			                                            params object[] channelFactoryArgs)
 		{
 			Type type = typeof(WebChannelFactory<>).MakeGenericType(new Type[] { contract });
 
