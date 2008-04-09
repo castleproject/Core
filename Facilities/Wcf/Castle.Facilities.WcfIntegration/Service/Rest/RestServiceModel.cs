@@ -14,6 +14,8 @@
 
 namespace Castle.Facilities.WcfIntegration.Rest
 {
+#if DOTNET35
+
 	using System;
 	using System.ServiceModel.Description;
 
@@ -39,4 +41,6 @@ namespace Castle.Facilities.WcfIntegration.Rest
 			return this;
 		}
 	}
+
+#endif
 }
