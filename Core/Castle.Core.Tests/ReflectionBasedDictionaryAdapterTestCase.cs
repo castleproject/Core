@@ -15,6 +15,7 @@
 namespace Castle.Core.Tests
 {
 	using System;
+	using System.Collections;
 	using Castle.Core;
 	using NUnit.Framework;
 
@@ -65,6 +66,25 @@ namespace Castle.Core.Tests
 
 			Assert.IsNull(dict["age"]);
 		}
+
+#if DOTNET35
+		[Test]
+		public void EnumeratorIteration()
+		{
+			ReflectionBasedDictionaryAdapter dict = new ReflectionBasedDictionaryAdapter(new {id = 1, name = "jonh", age = 25});
+
+			Assert.AreEqual(3, dict.Count);
+
+			IDictionaryEnumerator enumerator = (IDictionaryEnumerator) dict.GetEnumerator();
+
+			while (enumerator.MoveNext())
+			{
+				Assert.IsNotNull(enumerator.Key);
+				Assert.IsNotNull(enumerator.Value);
+			}
+		}
+#endif
+
 
 		public class Customer
 		{

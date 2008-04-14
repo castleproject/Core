@@ -246,7 +246,14 @@ namespace Castle.Core
 
 			public bool MoveNext()
 			{
-				return enumerator.MoveNext();
+				bool moved = enumerator.MoveNext();
+
+				if (moved)
+				{
+					current = (KeyValuePair<string, object>)enumerator.Current;
+				}
+
+				return moved;
 			}
 
 			public void Reset()
@@ -256,12 +263,7 @@ namespace Castle.Core
 
 			public object Current
 			{
-				get 
-				{
-
-					current = (KeyValuePair<string, object>) enumerator.Current;
-					return new DictionaryEntry(Key, Value); 
-				}
+				get { return new DictionaryEntry(Key, Value); }
 			}
 		}
 	}
