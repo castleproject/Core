@@ -224,7 +224,7 @@ namespace Castle.MonoRail.Framework
 		/// <description>A custom step name to navigate</description></item>
 		/// </list>
 		/// </remarks>
-		protected void DoNavigate()
+		protected virtual void DoNavigate()
 		{
 			DoNavigate((IDictionary) null);
 		}
@@ -247,7 +247,7 @@ namespace Castle.MonoRail.Framework
 		/// </list>
 		/// </remarks>
 		/// <param name="queryStringParameters">Query string parameters to be on the URL</param>
-		protected void DoNavigate(params String[] queryStringParameters)
+		protected virtual void DoNavigate(params String[] queryStringParameters)
 		{
 			DoNavigate(DictHelper.Create(queryStringParameters));
 		}
@@ -270,7 +270,7 @@ namespace Castle.MonoRail.Framework
 		/// </list>
 		/// </remarks>
 		/// <param name="queryStringParameters">Query string parameters to be on the URL</param>
-		protected void DoNavigate(IDictionary queryStringParameters)
+		protected virtual void DoNavigate(IDictionary queryStringParameters)
 		{
 			string uriPrefix = "uri:";
 
@@ -302,7 +302,7 @@ namespace Castle.MonoRail.Framework
 		/// Sends a redirect to the next wizard step (if it exists)
 		/// </summary>
 		/// <exception cref="MonoRailException">if no further step exists</exception>
-		protected void RedirectToNextStep()
+		protected virtual void RedirectToNextStep()
 		{
 			RedirectToNextStep((IDictionary) null);
 		}
@@ -311,7 +311,7 @@ namespace Castle.MonoRail.Framework
 		/// Sends a redirect to the next wizard step (if it exists)
 		/// </summary>
 		/// <exception cref="MonoRailException">if no further step exists</exception>
-		protected void RedirectToNextStep(params String[] queryStringParameters)
+		protected virtual void RedirectToNextStep(params String[] queryStringParameters)
 		{
 			RedirectToNextStep(DictHelper.Create(queryStringParameters));
 		}
@@ -320,7 +320,7 @@ namespace Castle.MonoRail.Framework
 		/// Sends a redirect to the next wizard step (if it exists)
 		/// </summary>
 		/// <exception cref="MonoRailException">if no further step exists</exception>
-		protected void RedirectToNextStep(IDictionary queryStringParameters)
+		protected virtual void RedirectToNextStep(IDictionary queryStringParameters)
 		{
 			String wizardName = WizardUtils.ConstructWizardNamespace(ControllerContext);
 
@@ -349,7 +349,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <exception cref="MonoRailException">
 		/// if no previous step exists (ie. already in the first one)</exception>
-		protected void RedirectToPreviousStep()
+		protected virtual void RedirectToPreviousStep()
 		{
 			RedirectToPreviousStep((IDictionary) null);
 		}
@@ -359,7 +359,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <exception cref="MonoRailException">
 		/// if no previous step exists (ie. already in the first one)</exception>
-		protected void RedirectToPreviousStep(params String[] queryStringParameters)
+		protected virtual void RedirectToPreviousStep(params String[] queryStringParameters)
 		{
 			RedirectToPreviousStep(DictHelper.Create(queryStringParameters));
 		}
@@ -369,7 +369,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <exception cref="MonoRailException">
 		/// if no previous step exists (ie. already in the first one)</exception>
-		protected void RedirectToPreviousStep(IDictionary queryStringParameters)
+		protected virtual void RedirectToPreviousStep(IDictionary queryStringParameters)
 		{
 			String wizardName = WizardUtils.ConstructWizardNamespace(wizardcontrollerContext);
 
@@ -394,7 +394,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to the first wizard step
 		/// </summary>
-		protected void RedirectToFirstStep()
+		protected virtual void RedirectToFirstStep()
 		{
 			RedirectToFirstStep((IDictionary) null);
 		}
@@ -402,7 +402,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to the first wizard step
 		/// </summary>
-		protected void RedirectToFirstStep(params String[] queryStringParameters)
+		protected virtual void RedirectToFirstStep(params String[] queryStringParameters)
 		{
 			RedirectToFirstStep(DictHelper.Create(queryStringParameters));
 		}
@@ -410,7 +410,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to the first wizard step
 		/// </summary>
-		protected void RedirectToFirstStep(IDictionary queryStringParameters)
+		protected virtual void RedirectToFirstStep(IDictionary queryStringParameters)
 		{
 			IList stepList = (IList) Context.Items["wizard.step.list"];
 
@@ -422,7 +422,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to a custom step (that must exists)
 		/// </summary>
-		protected bool RedirectToStep(String stepName)
+		protected virtual bool RedirectToStep(String stepName)
 		{
 			return RedirectToStep(stepName, (IDictionary) null);
 		}
@@ -430,7 +430,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to a custom step (that must exists)
 		/// </summary>
-		protected bool RedirectToStep(String stepName, params String[] queryStringParameters)
+		protected virtual bool RedirectToStep(String stepName, params String[] queryStringParameters)
 		{
 			return RedirectToStep(stepName, DictHelper.Create(queryStringParameters));
 		}
@@ -438,7 +438,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to a custom step (that must exists)
 		/// </summary>
-		protected bool RedirectToStep(String stepName, IDictionary queryStringParameters)
+		protected virtual bool RedirectToStep(String stepName, IDictionary queryStringParameters)
 		{
 			IList stepList = (IList) Context.Items["wizard.step.list"];
 
