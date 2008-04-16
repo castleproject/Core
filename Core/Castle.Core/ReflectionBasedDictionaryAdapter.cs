@@ -41,6 +41,7 @@ namespace Castle.Core
 
 			foreach(PropertyInfo property in targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
 			{
+				if (!property.CanRead) continue;
 				object value = property.GetValue(target, null);
 
 				properties[property.Name] = value;
