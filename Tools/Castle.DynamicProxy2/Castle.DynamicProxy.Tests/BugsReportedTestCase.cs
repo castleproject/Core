@@ -105,6 +105,7 @@ namespace Castle.DynamicProxy.Tests
 	{
 		public void Intercept(IInvocation invocation)
 		{
+
 		}
 	}
 

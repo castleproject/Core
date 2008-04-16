@@ -188,6 +188,27 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(2, logging.Invocations.Count);
 		}
 
+        [Test]
+        public void CanProxyMethodWithOutIntPtrParamter()
+        {
+            IFooWithOutIntPtr o =
+                (IFooWithOutIntPtr)generator.CreateInterfaceProxyWithoutTarget(typeof(IFooWithOutIntPtr),
+                                                                              new Type[0], new SkipCallingMethodInterceptorWithOutputParams());
+            Assert.IsNotNull(o);
+            IntPtr i;
+            o.Bar(out i);
+        }
+
+
+        public class SkipCallingMethodInterceptorWithOutputParams : IInterceptor
+        {
+            public void Intercept(IInvocation invocation)
+            {
+                invocation.Arguments[0] = IntPtr.Zero;
+                invocation.ReturnValue = 5;
+            }
+        }
+
 		public interface IWithEvents
 		{
 			event EventHandler Foo;
@@ -319,5 +340,23 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
+    public interface IFooWithOutIntPtr
+    {
+        int Bar(out IntPtr i);
+    }
+
+    public class Foo : IFooWithOutIntPtr
+    {
+        public int Bar(out IntPtr i)
+        {
+            i = (IntPtr)Test();
+            return 5;
+        }
+
+        private object Test()
+        {
+            return new IntPtr(3);
+        }
+    }
 #endif
 }
