@@ -88,7 +88,7 @@ namespace Castle.Core.Tests
 
 			Assert.AreEqual(3, dict.Count);
 
-			IDictionaryEnumerator enumerator = (IDictionaryEnumerator) dict.GetEnumerator();
+			System.Collections.IDictionaryEnumerator enumerator = (System.Collections.IDictionaryEnumerator)dict.GetEnumerator();
 
 			while (enumerator.MoveNext())
 			{
