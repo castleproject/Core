@@ -18,8 +18,8 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Text;
-	using Castle.Components.Validator;
-	using Castle.MonoRail.Framework.Internal;
+	using Components.Validator;
+	using Internal;
 
 	/// <summary>
 	/// Implements support for really easy field validation 
@@ -418,9 +418,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
-				string rule = "validate-same-as-" + comparisonFieldName;
+				string prefixedComparisonFieldName = GetPrefixedFieldld(target, comparisonFieldName);
+				string rule = "validate-same-as-" + prefixedComparisonFieldName;
 				AddClass(rule);
-				config.AddCustomRule(rule, violationMessage, "equalToField : '" + GetPrefixedFieldld(target, comparisonFieldName) + "'");
+				config.AddCustomRule(rule, violationMessage, "equalToField : '" + prefixedComparisonFieldName + "'");
 				AddTitle(violationMessage);
 			}
 
@@ -432,9 +433,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsNotSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
-				string rule = "validate-not-same-as-" + comparisonFieldName;
+				string prefixedComparisonFieldName = GetPrefixedFieldld(target, comparisonFieldName);
+				string rule = "validate-not-same-as-" + prefixedComparisonFieldName;
 				AddClass(rule);
-				config.AddCustomRule(rule, violationMessage, "notEqualToField : '" + GetPrefixedFieldld(target, comparisonFieldName) + "'");
+				config.AddCustomRule(rule, violationMessage, "notEqualToField : '" + prefixedComparisonFieldName + "'");
 				AddTitle(violationMessage);
 			}
 
@@ -487,7 +489,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			private static string GetPrefixedFieldld(string target, string field)
 			{
-				string[] parts = target.Split('.');
+				string[] parts = target.Split('_');
 
 				return string.Join("_", parts, 0, parts.Length - 1) + "_" + field;
 			}

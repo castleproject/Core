@@ -16,9 +16,9 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 {
 	using System.Globalization;
 	using System.Threading;
-	using Castle.Components.Validator;
-	using Castle.MonoRail.Framework.Helpers;
-	using Castle.MonoRail.Framework.Tests.Controllers;
+	using Components.Validator;
+	using Framework.Helpers;
+	using Controllers;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -125,13 +125,38 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 
 			helper.EndFormTag();
 		}
+
+		[Test]
+		public void ValidateSameAsIsPrefixedWithModelName()
+		{
+			helper.FormTag(DictHelper.Create("noaction=true"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_ConfirmedEmailField\" " +
+	"name=\"model.ConfirmedEmailField\" value=\"\" class=\"validate-same-as-model_EmailField\" " +
+	"title=\"Fields do not match.\" />", helper.TextField("model.ConfirmedEmailField"));
+
+			helper.EndFormTag();
+		}
+		[Test]
+		public void ValidateNotSameAsIsPrefixedWithModelName()
+		{
+			helper.FormTag(DictHelper.Create("noaction=true"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_Name\" " +
+	"name=\"model.Name\" value=\"\" class=\"validate-not-same-as-model_EmailField\" " +
+	"title=\"Fields should not match.\" />", helper.TextField("model.Name"));
+
+			helper.EndFormTag();
+		}
 	}
 
 	public class ModelWithValidation
 	{
 		private string nonEmptyField;
 		private string emailField;
+		private string confirmedEmailField;
 		private string nonEmptyEmailField;
+		private string name;
 		private string city;
 		private Country country;
 
@@ -168,6 +193,19 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		{
 			get { return nonEmptyEmailField; }
 			set { nonEmptyEmailField = value; }
+		}
+
+		[ValidateSameAs("EmailField")]
+		public string ConfirmedEmailField
+		{
+			get { return confirmedEmailField; }
+			set { confirmedEmailField = value; }
+		}
+		[ValidateNotSameAs("EmailField")]
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
 		}
 	}
 
