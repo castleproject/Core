@@ -35,8 +35,21 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="rule">The rule.</param>
 		public void Add(IRoutingRule rule)
 		{
+			Add(new DecoratedRule(rule));
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		public void Add(IRoutingRule rule, RouteAction action)
+		{
+			Add(new DecoratedRule(rule, action));
+		}
+
+		private void Add(DecoratedRule rule)
+		{
 			// Lock for writing
-			rules.Add(new DecoratedRule(rule));
+			rules.Add(rule);
 
 			// For really fast access
 			if (rule.RouteName != null)
@@ -46,17 +59,8 @@ namespace Castle.MonoRail.Framework.Routing
 					throw new InvalidOperationException("Attempt to register route with duplicated name: " + rule.RouteName);
 				}
 
-				name2Rule[rule.RouteName] = rule;
+				name2Rule[rule.RouteName] = rule.inner;
 			}
-		}
-
-		/// <summary>
-		/// Pendent
-		/// </summary>
-		public void Add(IRoutingRule rule, RouteAction action)
-		{
-			// Lock for writing
-			rules.Add(new DecoratedRule(rule, action));
 		}
 
 		/// <summary>
@@ -169,7 +173,7 @@ namespace Castle.MonoRail.Framework.Routing
 
 		class DecoratedRule : IRoutingRule
 		{
-			private readonly IRoutingRule inner;
+			internal readonly IRoutingRule inner;
 			private RouteAction selectionAction;
 
 			public DecoratedRule(IRoutingRule inner)

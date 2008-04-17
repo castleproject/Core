@@ -50,13 +50,22 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				throw new MonoRailException("SecurityComponent: you must supply a role (or roles) parameter");
 			}
 
-			shouldRender = false;
+			shouldRender = IsInRole(role, roles);
+		}
 
+		/// <summary>
+		/// Verify if the user is at least in one of the given role(s).
+		/// </summary>
+		/// <param name="role">string representing a role.</param>
+		/// <param name="roles">string (comma separated) representing an array of roles.</param>
+		/// <returns><c>true</c> if the user is at least in one of the roles, otherwise <c>false</c>.</returns>
+		protected virtual bool IsInRole(string role, string roles)
+		{
 			if (EngineContext.CurrentUser != null)
 			{
 				if (role != null)
 				{
-					shouldRender = EngineContext.CurrentUser.IsInRole(role);
+					return EngineContext.CurrentUser.IsInRole(role);
 				}
 				else
 				{
@@ -64,12 +73,13 @@ namespace Castle.MonoRail.Framework.ViewComponents
 					{
 						if (EngineContext.CurrentUser.IsInRole(itRole.Trim()))
 						{
-							shouldRender = true;
-							break;
+							return true;
 						}
 					}
 				}
 			}
+
+			return false;
 		}
 
 		/// <summary>
