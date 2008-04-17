@@ -15,7 +15,6 @@
 namespace Castle.Core.Tests
 {
 	using System;
-	using System.Collections;
 	using Castle.Core;
 	using NUnit.Framework;
 
@@ -67,6 +66,20 @@ namespace Castle.Core.Tests
 			Assert.IsNull(dict["age"]);
 		}
 
+		[Test(Description = "Test case for patch supplied on the mailing list by Jan Limpens")]
+		public void ShouldNotAccessWriteOnlyProperties()
+		{
+			try
+			{
+				ReflectionBasedDictionaryAdapter dict = new ReflectionBasedDictionaryAdapter(new Customer(1, "name", true));
+				Assert.IsTrue((bool) dict["IsWriteOnly"]);
+			}
+			catch(ArgumentException)
+			{
+				Assert.Fail("Attempted to read a write-only property");
+			}
+		}
+
 #if DOTNET35
 		[Test]
 		public void EnumeratorIteration()
@@ -90,11 +103,18 @@ namespace Castle.Core.Tests
 		{
 			private int id;
 			private string name;
+			private bool writeOnly;
 
 			public Customer(int id, string name)
+				: this(id, name, false)
+			{
+			}
+
+			public Customer(int id, string name, bool writeOnly)
 			{
 				this.id = id;
 				this.name = name;
+				this.writeOnly = writeOnly;
 			}
 
 			public int Id
@@ -107,6 +127,16 @@ namespace Castle.Core.Tests
 			{
 				get { return name; }
 				set { name = value; }
+			}
+
+			public bool WriteOnly
+			{
+				set { writeOnly = value; }
+			}
+
+			public bool IsWriteOnly
+			{
+				get { return writeOnly; }
 			}
 		}
 	}
