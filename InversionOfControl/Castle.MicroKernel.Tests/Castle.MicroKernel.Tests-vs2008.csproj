@@ -159,6 +159,7 @@
     <Compile Include="ClassComponents\DefaultTemplateEngine.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClassComponents\GenericClassWithParameter.cs" />
     <Compile Include="ClassComponents\HiperFacility.cs">
       <SubType>Code</SubType>
     </Compile>

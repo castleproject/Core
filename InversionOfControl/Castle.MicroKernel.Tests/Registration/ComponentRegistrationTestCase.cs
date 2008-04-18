@@ -590,6 +590,18 @@ namespace Castle.MicroKernel.Tests.Registration
 
 			Assert.AreEqual(typeof(ICustomer), component.ServiceType);			
 			Assert.AreEqual(typeof(CustomerImpl), component.Implementation);
-		}		
+		}
+
+		[Test]
+		public void AddGenericComponent_WithParameters()
+		{
+			kernel.Register(Component.For(typeof(IGenericClassWithParameter<>))
+				.ImplementedBy(typeof(GenericClassWithParameter<>))
+				.Parameters(Parameter.ForKey("name").Eq("NewName"))
+				);
+
+			IGenericClassWithParameter<int> instance = kernel.Resolve<IGenericClassWithParameter<int>>();
+			Assert.AreEqual("NewName", instance.Name);
+		}
 	}
 }

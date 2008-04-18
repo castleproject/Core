@@ -440,7 +440,7 @@ namespace Castle.MicroKernel.Registration
 			IConfiguration parameters = configuration.Children["parameters"];
 			if (parameters == null)
 			{
-				parameters = new MutableConfiguration("component");
+				parameters = new MutableConfiguration("parameters");
 				configuration.Children.Add(parameters);
 			}
 			return parameters;
