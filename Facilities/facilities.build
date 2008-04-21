@@ -25,9 +25,7 @@
 		<include name="NHibernateIntegration/NHibernateIntegration.build" />
 		<include name="Synchronize/Synchronize.build" />
 		<include name="Remoting/Remoting.build" />
-		
-		<!-- probably need a better way to detect if .Net 3.0 is installed -->
-		<include name="Wcf/default.build" if="${file::exists('C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.ServiceModel.dll')}"/>
+		<include name="Wcf/default.build" if="${dotnet.v3.0.installed}"/>
 	</fileset>
 
 	<target name="build" depends="common.build" />

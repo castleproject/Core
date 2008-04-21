@@ -32,6 +32,20 @@
 	<property name="lib.framework.dir" value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}" dynamic="true" />
 	<property name="lib.framework.ext.dir" value="${path::combine(lib.family.dir, string::replace(framework::get-target-framework(), framework::get-family(framework::get-target-framework()) + '-', ''))}" dynamic="true" />
 
+	<readregistry property="registry.dotnet.v3.0.Installed"
+		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Install"
+		  hive="LocalMachine"
+		  unless="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
+
+	<property name="dotnet.v3.0.installed" value="${registry.dotnet.v3.0.Installed == '1'}" unless="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
+	<property name="dotnet.v3.0.installed" value="false" if="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
+
+	<readregistry property="dotnet.v3.0.ReferenceInstallPath"
+		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\Windows Communication Foundation\ReferenceInstallPath"
+		  hive="LocalMachine"
+		  if="${dotnet.v3.0.installed}" />
+	<property name="dotnet.v3.0.ReferenceInstallPath" value="" unless="${dotnet.v3.0.installed}" />
+
 	<!-- 
 		Versioning
 	-->
@@ -104,7 +118,6 @@
 		<call target="set-${framework::get-target-framework()}-framework-configuration" />
 
 		<property name="build.msbuild" 	value="false" overwrite="false" />
-
 	</target>
 
 	<target name="set-net-2.0-framework-configuration">
