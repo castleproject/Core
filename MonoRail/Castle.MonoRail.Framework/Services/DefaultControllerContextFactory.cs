@@ -57,7 +57,7 @@ namespace Castle.MonoRail.Framework.Services
 
 			foreach(KeyValuePair<string, string> pair in match.Parameters)
 			{
-				if (pair.Key == "controller" || pair.Key == "action" || pair.Key == "area")
+				if (pair.Value == null || pair.Key == "controller" || pair.Key == "action" || pair.Key == "area")
 				{
 					// We skip those only to avoid compatibility issues as 
 					// customactionparameters have higher precedence on parameters matching
