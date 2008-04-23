@@ -182,7 +182,7 @@ namespace Castle.Facilities.Synchronize.Tests
 		{
 			DummyForm form = new DummyForm();
 			IClassUsingContext<DummyForm> client = container.Resolve<IClassUsingContext<DummyForm>>();
-			ExecuteInThread(delegate { client.DoWork(form); });
+			ExecuteInThread(delegate { Assert.AreEqual(form, client.DoWork(form)); });
 			Assert.IsNull(uncaughtException, "Expected no exception");
 		}
 

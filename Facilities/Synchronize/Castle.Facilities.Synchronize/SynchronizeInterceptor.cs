@@ -183,7 +183,7 @@ namespace Castle.Facilities.Synchronize
 				}
 				else
 				{
-					InvokeSynchronously(invocation);
+					InvokeSynchronously(invocation, result);
 				}
 
 				return true;
@@ -198,9 +198,19 @@ namespace Castle.Facilities.Synchronize
 		/// <param name="invocation">The invocation.</param>
 		private static void InvokeSynchronously(IInvocation invocation)
 		{
+			InvokeSynchronously(invocation, null);
+		}
+
+		/// <summary>
+		/// Continues the invocation synchronously.
+		/// </summary>
+		/// <param name="invocation">The invocation.</param>
+		/// <param name="result">The result holder.</param>
+		private static void InvokeSynchronously(IInvocation invocation, Result result)
+		{
 			invocation.Proceed();
 
-			Result result = CreateResult(invocation);
+			result = result ?? CreateResult(invocation);
 			if (result != null)
 			{
 				result.SetValue(true, invocation.ReturnValue);
@@ -243,7 +253,10 @@ namespace Castle.Facilities.Synchronize
 			Type returnType = invocation.Method.ReturnType;
 			if (returnType != typeof(void))
 			{
-				invocation.ReturnValue = GetDefault(returnType);
+				if (invocation.ReturnValue == null)
+				{
+					invocation.ReturnValue = GetDefault(returnType);
+				}
 				result = new Result();
 			}
 			Result.Last = result;

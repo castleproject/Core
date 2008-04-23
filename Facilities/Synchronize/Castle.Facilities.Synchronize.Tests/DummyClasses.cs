@@ -153,16 +153,17 @@ namespace Castle.Facilities.Synchronize.Tests
 
 	public interface IClassUsingContext<T> where T : Control
 	{
-		void DoWork(T work);
+		T DoWork(T work);
 	}
 
 	[Synchronize]
 	public class ClassUsingContext<T> : IClassUsingContext<T> where T : Control
 	{
 		[Synchronize(typeof(WindowsFormsSynchronizationContext))]
-		public void DoWork(T work)
+		public T DoWork(T work)
 		{
 			work.Controls.Add(new Button());
+			return work;
 		}
 	}
 
