@@ -37,7 +37,7 @@ namespace Castle.MonoRail.Framework
 		private static readonly string CurrentEngineContextKey = "currentmrengineinstance";
 		private static readonly string CurrentControllerKey = "currentmrcontroller";
 		private static readonly string CurrentControllerContextKey = "currentmrcontrollercontext";
-		private readonly ReaderWriterLock locker = new ReaderWriterLock();
+		private static readonly ReaderWriterLock locker = new ReaderWriterLock();
 
 		private static IMonoRailConfiguration configuration;
 		private static IMonoRailContainer mrContainer;

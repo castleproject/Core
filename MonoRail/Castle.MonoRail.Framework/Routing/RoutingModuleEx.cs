@@ -43,7 +43,7 @@ namespace Castle.MonoRail.Framework.Routing
 
 				foreach(HttpHandlerAction handlerAction in httpHandlersConfig.Handlers)
 				{
-					if (Type.GetType(handlerAction.Type) == typeof (MonoRailHttpHandlerFactory))
+					if (Type.GetType(handlerAction.Type) == typeof(MonoRailHttpHandlerFactory))
 					{
 						if (handlerAction.Path.StartsWith("*."))
 						{

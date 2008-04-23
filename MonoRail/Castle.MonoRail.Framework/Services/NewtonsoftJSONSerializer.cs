@@ -31,7 +31,13 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public string Serialize(object target)
 		{
-			return JavaScriptConvert.SerializeObject(target);
+			JsonSerializer serializer = new JsonSerializer();
+			serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+			StringWriter writer = new StringWriter();
+			serializer.Serialize(writer, target);
+
+			return writer.GetStringBuilder().ToString();
 		}
 
 		/// <summary>
@@ -42,17 +48,22 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public string Serialize(object target, params IJSONConverter[] converters)
 		{
-			List<JsonConverter> adapters = new List<JsonConverter>();
+			JsonSerializer serializer = new JsonSerializer();
 
 			if (converters != null)
 			{
 				foreach(IJSONConverter converter in converters)
 				{
-					adapters.Add(new JsonConverterAdapter(converter));
+					serializer.Converters.Add(new JsonConverterAdapter(serializer, converter));
 				}
 			}
 
-			return JavaScriptConvert.SerializeObject(target, adapters.ToArray());
+			serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+			StringWriter writer = new StringWriter();
+			serializer.Serialize(writer, target);
+
+			return writer.GetStringBuilder().ToString();
 		}
 
 		/// <summary>
@@ -63,21 +74,18 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="converters">The converters.</param>
 		public void Serialize(object target, TextWriter writer, params IJSONConverter[] converters)
 		{
-			List<JsonConverter> adapters = new List<JsonConverter>();
+			JsonSerializer serializer = new JsonSerializer();
 
 			if (converters != null)
 			{
 				foreach(IJSONConverter converter in converters)
 				{
-					adapters.Add(new JsonConverterAdapter(converter));
+					serializer.Converters.Add(new JsonConverterAdapter(serializer, converter));
 				}
 			}
 
-#if DOTNET35
-			writer.Write(JavaScriptConvert.SerializeObject(target, adapters.ToArray()));
-#else
-			JavaScriptConvert.SerializeObject(target, writer, adapters.ToArray());
-#endif
+			serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+			serializer.Serialize(writer, target);
 		}
 
 		/// <summary>
@@ -115,16 +123,18 @@ namespace Castle.MonoRail.Framework.Services
 
 		class JsonConverterAdapter : JsonConverter
 		{
+			private readonly JsonSerializer serializer;
 			private readonly IJSONConverter converter;
 
-			public JsonConverterAdapter(IJSONConverter converter)
+			public JsonConverterAdapter(JsonSerializer serializer, IJSONConverter converter)
 			{
+				this.serializer = serializer;
 				this.converter = converter;
 			}
 
 			public override void WriteJson(JsonWriter writer, object value)
 			{
-				converter.Write(new JSONWriterAdapter(writer), value);
+				converter.Write(new JSONWriterAdapter(serializer, writer), value);
 			}
 
 			public override bool CanConvert(Type objectType)
@@ -142,21 +152,18 @@ namespace Castle.MonoRail.Framework.Services
 
 		class JSONWriterAdapter : IJSONWriter
 		{
+			private readonly JsonSerializer serializer;
 			private readonly JsonWriter writer;
 
-			public JSONWriterAdapter(JsonWriter writer)
+			public JSONWriterAdapter(JsonSerializer serializer, JsonWriter writer)
 			{
+				this.serializer = serializer;
 				this.writer = writer;
-			}
-
-			public JsonWriter Writer
-			{
-				get { return writer; }
 			}
 
 			public void WriteValue(object value)
 			{
-				new JsonSerializer().Serialize(writer, value);
+				serializer.Serialize(writer, value);
 			}
 
 			public void WriteStartObject()
