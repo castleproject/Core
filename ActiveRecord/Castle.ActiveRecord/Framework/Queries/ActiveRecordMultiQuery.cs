@@ -30,8 +30,8 @@ namespace Castle.ActiveRecord.Queries
 	/// </summary>
 	public class ActiveRecordMultiQuery : IActiveRecordQuery
 	{
-		readonly Type _rootType;
-		readonly List<ActiveRecordBaseQuery> _queryList = new List<ActiveRecordBaseQuery>();
+		private readonly Type _rootType;
+		private readonly List<ActiveRecordBaseQuery> _queryList = new List<ActiveRecordBaseQuery>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordMultiQuery"/> class.
