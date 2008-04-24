@@ -35,7 +35,14 @@
 	<readregistry property="registry.dotnet.v3.0.Installed"
 		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Install"
 		  hive="LocalMachine"
-		  unless="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
+		  unless="${framework::get-family(framework::get-runtime-framework()) == 'mono'}"
+		  failonerror="false" />
+
+	<readregistry property="registry.dotnet.v3.0.Installed"
+		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\InstallSuccess"
+		  hive="LocalMachine"
+		  unless="${framework::get-family(framework::get-runtime-framework()) == 'mono' or property::exists('registry.dotnet.v3.0.Installed')}"
+		  failonerror="false" />
 
 	<property name="dotnet.v3.0.installed" value="${registry.dotnet.v3.0.Installed == '1'}" unless="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
 	<property name="dotnet.v3.0.installed" value="false" if="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
@@ -191,6 +198,7 @@
 		<echo message="framework directory : ${framework::get-framework-directory(framework::get-target-framework())}" />
 		<echo message="assembly directory : ${framework::get-assembly-directory(framework::get-target-framework())}" />
 		<echo message="runtime engine : ${framework::get-runtime-engine(framework::get-target-framework())}" />
+		<echo message="extra : .Net 3.0 installed" if="${dotnet.v3.0.installed}" />
 		<echo message="" />
 	</target>
 
