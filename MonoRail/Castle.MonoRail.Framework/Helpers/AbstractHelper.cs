@@ -177,8 +177,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>An script block pointing to the given url.</returns>
 		protected string RenderScriptBlockToSource(string url)
 		{
-			return string.Format("<script type=\"text/javascript\" src=\"{0}.{1}?" + MonoRailVersion + "\"></script>",
-				context.ApplicationPath + url, context.UrlInfo.Extension);
+			string extension = context.UrlInfo.Extension ?? string.Empty;
+			return string.Format("<script type=\"text/javascript\" src=\"{0}{1}{2}?" + MonoRailVersion + "\"></script>",
+				context.ApplicationPath + url, extension.Length == 0 ? string.Empty : ".", extension);
 		}
 
 		/// <summary>
@@ -209,8 +210,9 @@ namespace Castle.MonoRail.Framework.Helpers
 				queryString = "&" + queryString;
 			}
 
-			return string.Format("<script type=\"text/javascript\" src=\"{0}.{1}?" + MonoRailVersion + "{2}\"></script>",
-				context.ApplicationPath + url, context.UrlInfo.Extension, queryString);
+			string extension = context.UrlInfo.Extension ?? string.Empty;
+			return string.Format("<script type=\"text/javascript\" src=\"{0}{1}{2}?" + MonoRailVersion + "{3}\"></script>",
+				context.ApplicationPath + url, extension.Length == 0 ? string.Empty : ".", extension, queryString);
 		}
 
 		/// <summary>
