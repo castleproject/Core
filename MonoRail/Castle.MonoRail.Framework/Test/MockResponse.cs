@@ -103,14 +103,14 @@ namespace Castle.MonoRail.Framework.Test
 			get { return redirectedTo; }
 		}
 
-//		/// <summary>
-//		/// Gets the http headers.
-//		/// </summary>
-//		/// <value>The headers.</value>
-//		public NameValueCollection Headers
-//		{
-//			get { return headers; }
-//		}
+		/// <summary>
+		/// Gets the http headers.
+		/// </summary>
+		/// <value>The headers.</value>
+		public NameValueCollection Headers
+		{
+			get { return headers; }
+		}
 
 		#region IResponse Related
 
