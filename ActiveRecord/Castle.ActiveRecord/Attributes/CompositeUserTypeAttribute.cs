@@ -81,6 +81,16 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="CompositeUserTypeAttribute"/> class.
+		/// </summary>
+		/// <param name="compositeTypeName">Type name of the ICompositeUserType implmentor.</param>
+		/// <param name="columnNames">The column names.</param>
+		public CompositeUserTypeAttribute(String compositeTypeName, string[] columnNames)
+			: this(Type.GetType(compositeTypeName), columnNames)
+		{
+		}
+
+		/// <summary>
 		/// Gets or sets the type of the ICompositeUserType implementor.
 		/// </summary>
 		/// <value>The type of the composite.</value>

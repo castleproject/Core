@@ -34,6 +34,7 @@ namespace Castle.ActiveRecord.Tests
 
 			c.Name = new string[] {"Jonh", "Doe"};
 			c.ManufacturerName = new string[] {"Acme", "Inc"};
+			c.InventorsName = new string[]{"Emmet", "Brown"};
 
 			c.Create();
 
@@ -43,6 +44,8 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual("Jonh", loaded.Name[0]);
 			Assert.AreEqual("Doe", loaded.Name[1]);
 			Assert.AreEqual("Acme", loaded.ManufacturerName[0]);
+			Assert.AreEqual("Emmet", loaded.InventorsName[0]);
+			Assert.AreEqual("Brown", loaded.InventorsName[1]);
 		}
 
 		[Test]
@@ -85,6 +88,26 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual("Doe", loaded.Name.Name[1]);
 			Assert.AreEqual("Acme", loaded.ManufacturerName.Name[0]);
 			Assert.AreEqual("Inc", loaded.ManufacturerName.Name[1]);
+		}
+
+		[Test]
+		public void CompositeUserTypeWithAccess()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Product));
+			Recreate();
+
+			Product product = new Product(new string[]{"John", "Doe"}, new string[]{"Acme", "Inc"});
+
+			product.Create();
+			
+			Product loaded = Product.Find(product.Id);
+
+			Assert.IsNotNull(loaded);
+			Assert.AreEqual("John", loaded.Name[0]);
+			Assert.AreEqual("Doe", loaded.Name[1]);
+			Assert.AreEqual("Acme", loaded.ManufacturerName[0]);
+			Assert.AreEqual("Inc", loaded.ManufacturerName[1]);
+		
 		}
 	}
 }

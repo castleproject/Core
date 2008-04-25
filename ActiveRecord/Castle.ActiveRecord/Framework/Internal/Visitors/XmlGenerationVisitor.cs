@@ -709,7 +709,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public override void VisitCompositeUserType(CompositeUserTypeModel model)
 		{
 			CompositeUserTypeAttribute attribute = model.Attribute;
-			BeginWriteProperty(null, MakeTypeName(attribute.CompositeType), null, attribute.Insert,
+			BeginWriteProperty(attribute.AccessString, MakeTypeName(attribute.CompositeType), null, attribute.Insert,
 			                   model.Property.Name, model.Property.PropertyType, attribute.Update);
 
 			Ident();
