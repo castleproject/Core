@@ -152,7 +152,11 @@ namespace Castle.MonoRail.Framework.Container
 			/// <summary>
 			/// The <see cref="IAjaxProxyGenerator"/> service
 			/// </summary>
-			AjaxProxyGenerator
+			AjaxProxyGenerator,
+			/// <summary>
+			/// The <see cref="IEngineContextFactory"/> service.
+			/// </summary>
+			EngineContextFactory
 		}
 
 		#endregion
@@ -1059,6 +1063,8 @@ namespace Castle.MonoRail.Framework.Container
 					return typeof(IAjaxProxyGenerator);
 				case ServiceIdentification.ViewComponentDescriptorProvider:
 					return typeof(IViewComponentDescriptorProvider);
+				case ServiceIdentification.EngineContextFactory:
+					return typeof(IEngineContextFactory);
 				default:
 					throw new NotSupportedException("Id not supported " + id);
 			}
