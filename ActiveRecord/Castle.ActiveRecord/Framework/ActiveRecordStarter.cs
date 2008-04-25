@@ -67,6 +67,19 @@ namespace Castle.ActiveRecord
 		private static IConfigurationSource configSource;
 
 		/// <summary>
+		/// The schema delimiter that is used by the hbm2ddl tool.
+		/// Change the delimiter by calling <see cref="SetSchemaDelimiter"/>.
+		/// </summary>
+		private static string schemaDelimiter = null;
+
+		/// <summary>
+		/// The default schema delimiter. The delimiter of the schema is only set if 
+		/// <see cref="schemaDelimiter"/> is different from this default value.
+		/// The default should be the same as the default delimiter of the hbm2ddl tool.
+		/// </summary>
+		private static readonly string defaultSchemaDelimiter = null;
+
+		/// <summary>
 		/// So others frameworks can intercept the 
 		/// creation and act on the holder instance
 		/// </summary>
@@ -450,6 +463,18 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Sets the schema delimiter that is used for the creation of schema scripts.
+		/// For example, <see cref="CreateSchema()"/>, <see cref="DropSchema()"/>, 
+		/// <see cref="GenerateCreationScripts(string)"/> and <see cref="GenerateDropScripts(string)"/> 
+		/// use the delimiter in the schema they create.
+		/// </summary>
+		/// <param name="newDelimiter">The new schema delimiter.</param>
+		public static void SetSchemaDelimiter(string newDelimiter)
+		{
+			schemaDelimiter = newDelimiter;
+		}
+
+		/// <summary>
 		/// Gets a value indicating whether ActiveRecord was initialized properly (see the Initialize method).
 		/// </summary>
 		/// <value>
@@ -664,7 +689,15 @@ namespace Castle.ActiveRecord
 
 		private static SchemaExport CreateSchemaExport(Configuration cfg)
 		{
-			return new SchemaExport(cfg);
+			SchemaExport export = new SchemaExport(cfg);
+
+			// set the delimiter, but only if it is not the default delimiter
+			if (schemaDelimiter != defaultSchemaDelimiter)
+			{
+				export.SetDelimiter(schemaDelimiter);
+			}
+
+			return export;
 		}
 
 		/// <summary>
