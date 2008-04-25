@@ -323,9 +323,11 @@ namespace Castle.MonoRail.TestSupport
 			UrlInfo info = BuildUrlInfo(areaName, controllerName, actionName);
 			services = BuildServices();
 			request = BuildRequest();
+		    request.RawUrl = info.UrlRaw;
 			response = BuildResponse(info);
 			trace = BuildTrace();
 			context = BuildRailsEngineContext(request, response, services, trace, info);
+            AddEmailServices( context );
 			contextInitializer(context);
 		}
 
@@ -364,6 +366,16 @@ namespace Castle.MonoRail.TestSupport
 		{
 			return new MockTrace();
 		}
+
+        /// <summary>
+        /// Adds the default mock email services to the context.
+        /// </summary>
+        /// <param name="mockEngineContext"></param>
+        protected virtual void AddEmailServices(MockEngineContext mockEngineContext)
+        {
+            mockEngineContext.Services.EmailTemplateService = new MockEmailTemplateService(mockEngineContext);
+            mockEngineContext.Services.EmailSender = new MockSmtpSender(mockEngineContext);
+        }
 
 		/// <summary>
 		/// Builds the a mock context. You can override this method to
