@@ -19,6 +19,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 	using System.Reflection;
 	using System.Collections;
 	using Castle.ActiveRecord;
+	using Castle.ActiveRecord.Framework;
 	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
 
@@ -57,37 +58,18 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold
 		{
 			bool isValid = true;
 
-			Type genType = typeof(ActiveRecordValidationBase<>).MakeGenericType(instance.GetType());
-
-			if (genType.IsAssignableFrom(instance.GetType()))
+			IValidationProvider validationProvider = instance as IValidationProvider;
+			if (validationProvider != null)
 			{
-				// System.Type.EmptyTypes added because otherwise you get an AmbiguousMatchException for 
-				//  {Boolean IsValid()} and {Boolean IsValid(Castle.Components.Validator.RunWhen)}
-				MethodInfo isValidMethod = instance.GetType().GetMethod("IsValid", System.Type.EmptyTypes);
-
-				isValid = (bool)isValidMethod.Invoke(instance, null);
+				isValid = validationProvider.IsValid();
 
 				if (!isValid)
 				{
-					MethodInfo getValidationErrorMessages = instance.GetType().GetMethod("get_ValidationErrorMessages");
-					MethodInfo getPropertiesValidationErrorMessage = instance.GetType().GetMethod("get_PropertiesValidationErrorMessage");
-
-					errors.AddRange((ICollection)getValidationErrorMessages.Invoke(instance, null));
-					prop2Validation = (IDictionary)getPropertiesValidationErrorMessage.Invoke(instance, null);
+					errors.AddRange(validationProvider.ValidationErrorMessages);
+					prop2Validation = validationProvider.PropertiesValidationErrorMessages;
 				}
 			}
-			else if (instance is ActiveRecordValidationBase)
-			{
-				ActiveRecordValidationBase instanceBase = instance as ActiveRecordValidationBase;
 
-				isValid = instanceBase.IsValid();
-
-				if (!isValid)
-				{
-					errors.AddRange(instanceBase.ValidationErrorMessages);
-					prop2Validation = instanceBase.PropertiesValidationErrorMessage;
-				}
-			}
 
 			if (isValid)
 			{

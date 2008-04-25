@@ -27,6 +27,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
     <PublishUrl>http://localhost/Castle.ActiveRecord.Tests/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -39,7 +40,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -325,6 +325,7 @@
     <Compile Include="Model\Ship.cs" />
     <Compile Include="NestedModelValidation.cs" />
     <Compile Include="Model\NestedValidation\UserWithNestedAddress.cs" />
+    <Compile Include="Validation\ARValidatorTestCase.cs" />
     <Compile Include="VerifyModelsAgainstDBSchemaTestCase.cs" />
     <Compile Include="LazyTestCase.cs" />
     <Compile Include="Model\AnyModel\Models.cs" />

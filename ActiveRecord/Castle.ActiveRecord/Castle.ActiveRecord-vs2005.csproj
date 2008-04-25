@@ -342,6 +342,9 @@
     <Compile Include="Attributes\Validations\ValidateIsUniqueAttribute.cs" />
     <Compile Include="Framework\ActiveRecordBase.Generic.cs" />
     <Compile Include="Framework\ActiveRecordHooksBase.cs" />
+    <Compile Include="Framework\ActiveRecordHooksValidationBase.cs" />
+    <Compile Include="Framework\ActiveRecordValidationException.cs" />
+    <Compile Include="Framework\ActiveRecordValidator.cs" />
     <Compile Include="Framework\ARSchemaCreator.cs" />
     <Compile Include="Framework\ActiveRecordValidationBase.Generic.cs" />
     <Compile Include="Framework\CriteriaHelper.cs" />
@@ -355,6 +358,7 @@
     <Compile Include="Framework\Internal\Model\NestedParentReferenceModel.cs" />
     <Compile Include="Framework\Internal\NHibernateNullablesSupport.cs" />
     <Compile Include="Framework\Internal\AssemblyXmlGenerator.cs" />
+    <Compile Include="Framework\IValidationProvider.cs" />
     <Compile Include="Framework\IWebThreadScopeInfo.cs" />
     <Compile Include="Framework\Queries\ActiveRecordCriteriaQuery.cs" />
     <Compile Include="Framework\Queries\ActiveRecordMultiQuery.cs" />

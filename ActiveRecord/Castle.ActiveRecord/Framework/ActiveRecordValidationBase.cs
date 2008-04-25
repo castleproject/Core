@@ -20,6 +20,7 @@ namespace Castle.ActiveRecord
 	using System.Reflection;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Validator;
+	using Castle.ActiveRecord.Framework;
 
 	/// <summary>
 	/// Extends <see cref="ActiveRecordBase"/> adding automatic validation support.
@@ -48,29 +49,52 @@ namespace Castle.ActiveRecord
 	///	</code>
 	/// </example>
 	[Serializable]
-	public abstract class ActiveRecordValidationBase : ActiveRecordBase
+	public abstract class ActiveRecordValidationBase : ActiveRecordBase, IValidationProvider 
 	{
+		/// <summary>
+		/// Field for <see cref="ActualValidator"/>.
+		/// </summary>
 		[NonSerialized]
-		private ValidatorRunner __runner = new ValidatorRunner(ActiveRecordModelBuilder.ValidatorRegistry);
-
-		[System.Xml.Serialization.XmlIgnore]
-		private IDictionary __failedProperties;
+		private IValidationProvider _actualValidator;
 
 		/// <summary>
 		/// Constructs an ActiveRecordValidationBase
 		/// </summary>
-		public ActiveRecordValidationBase()
+		protected ActiveRecordValidationBase()
 		{
 		}
+
+
+		/// <summary>
+		/// Gets the <see cref="IValidationProvider"/> that actually validates this AR object.
+		/// Normally returns a <see cref="ActiveRecordValidator"/>, but you can override this
+		/// to return a custom validator.
+		/// </summary>
+		/// <value>The validator.</value>
+		[System.Xml.Serialization.XmlIgnore]
+		protected virtual IValidationProvider ActualValidator
+		{
+			get
+			{
+				if (_actualValidator == null)
+				{
+					_actualValidator = new ActiveRecordValidator(this);
+				}
+				return _actualValidator;
+			}
+		}
+
+		#region IValidationProvider Members
 
 		/// <summary>
 		/// Performs the fields validation. Returns true if no 
 		/// validation error was found.
 		/// </summary>
 		/// <returns></returns>
+		/// <remarks>Forwards the call to <see cref="ActualValidator"/>.</remarks>
 		public virtual bool IsValid()
 		{
-			return IsValid(RunWhen.Everytime);
+			return ActualValidator.IsValid();
 		}
 
 		/// <summary>
@@ -78,77 +102,33 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="runWhen">Use validators appropriate to the action being performed.</param>
 		/// <returns>True if no validation error was found</returns>
+		/// <remarks>Forwards the call to <see cref="ActualValidator"/>.</remarks>
 		public virtual bool IsValid(RunWhen runWhen)
 		{
-			__failedProperties = new Hashtable();
-
-			if (__runner == null)
-			{
-				__runner = new ValidatorRunner(ActiveRecordModelBuilder.ValidatorRegistry);
-			}
-
-			bool returnValue = __runner.IsValid(this, runWhen);
-
-			foreach (PropertyInfo propinfo in GetNestedPropertiesToValidate(this)) {
-				object propval = propinfo.GetValue(this, null);
-
-				if (propval != null) {
-					bool tmp = __runner.IsValid(propval, runWhen);
-					if (!tmp)
-						__failedProperties.Add(propinfo,
-											   new ArrayList(__runner.GetErrorSummary(propval).GetErrorsForProperty(propinfo.Name)));
-					returnValue &= tmp;
-				}
-			}
-
-			if (!returnValue)
-			{
-				Type type = GetType();
-				ErrorSummary summary = __runner.GetErrorSummary(this);
-
-				foreach(string property in summary.InvalidProperties)
-				{
-					__failedProperties.Add(type.GetProperty(property), new ArrayList(summary.GetErrorsForProperty(property)));
-				}
-			}
-
-			return returnValue;
+			return ActualValidator.IsValid(runWhen);
 		}
 
 		/// <summary>
 		/// Returns a list of current validation errors messages.
 		/// </summary>
+		/// <remarks>Forwards the call to <see cref="ActualValidator"/>.</remarks>
 		public virtual String[] ValidationErrorMessages
 		{
-			get
-			{
-				if (__runner == null)
-				{
-					__runner = new ValidatorRunner(ActiveRecordModelBuilder.ValidatorRegistry);
-				}
-
-				if (__runner.GetErrorSummary(this) == null)
-				{
-					IsValid();
-				}
-
-				List<string> errorMessages = new List<string>(__runner.GetErrorSummary(this).ErrorMessages);
-
-				AddNestedPropertyValidationErrorMessages(errorMessages, this, __runner);
-
-				return errorMessages.ToArray();
-			}
+			get { return ActualValidator.ValidationErrorMessages; }
 		}
 
 		/// <summary>
 		/// Maps a specific PropertyInfo to a list of
 		/// error messages. Useful for frameworks.
 		/// </summary>
+		/// <remarks>Forwards the call to <see cref="ActualValidator"/>.</remarks>
 		[System.Xml.Serialization.XmlIgnore]
-		public virtual IDictionary PropertiesValidationErrorMessage
+		public virtual IDictionary PropertiesValidationErrorMessages
 		{
-			get { return __failedProperties; }
+			get { return ActualValidator.PropertiesValidationErrorMessages; }
 		}
+
+		#endregion
 
 		/// <summary>
 		/// Override the base hook to call validators required for create.
@@ -190,30 +170,11 @@ namespace Castle.ActiveRecord
 		/// <remarks>
 		/// You can override this method to declare a better behavior.
 		/// </remarks>
+		/// <remarks>Forwards the call to <see cref="ActualValidator"/>.</remarks>
 		protected virtual void OnNotValid()
 		{
-			throw new ValidationException("Can't save or update as there is one (or more) " + 
-				"field that has not passed the validation test", ValidationErrorMessages);
+			ActiveRecordValidator.ThrowNotValidException(ValidationErrorMessages, PropertiesValidationErrorMessages);
 		}
 
-		internal static IEnumerable GetNestedPropertiesToValidate(object instance)
-		{
-			Type type = instance.GetType();
-			ActiveRecordModel me = GetModel(type);
-
-			foreach (NestedModel component in me.Components) {
-				yield return component.Property;
-			}
-		}
-
-		internal static void AddNestedPropertyValidationErrorMessages(List<string> errorMessages, object instance, ValidatorRunner runner) {
-			foreach (PropertyInfo propinfo in GetNestedPropertiesToValidate(instance)) {
-				object propval = propinfo.GetValue(instance, null);
-				if (propval != null) {
-					errorMessages.AddRange(
-						runner.GetErrorSummary(propval).ErrorMessages);
-				}
-			}
-		}
 	}
 }

@@ -67,35 +67,35 @@ namespace Castle.ActiveRecord.Tests.Validation
 			Assert.AreEqual("This is a required field", user.ValidationErrorMessages[3]);
 			Assert.AreEqual("This is a required field", user.ValidationErrorMessages[4]);
 
-			Assert.AreEqual(5, user.PropertiesValidationErrorMessage.Count);
+			Assert.AreEqual(5, user.PropertiesValidationErrorMessages.Count);
 
 			info = type.GetProperty("Login");
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Contains(info));
-			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessage[info];
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Contains(info));
+			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessages[info];
 			Assert.AreEqual(1, propertyMessages.Count);
 			Assert.AreEqual("This is a required field", propertyMessages[0]);
 
 			info = type.GetProperty("Name");
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Contains(info));
-			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessage[info];
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Contains(info));
+			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessages[info];
 			Assert.AreEqual(1, propertyMessages.Count);
 			Assert.AreEqual("This is a required field", propertyMessages[0]);
 
 			info = type.GetProperty("Email");
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Contains(info));
-			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessage[info];
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Contains(info));
+			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessages[info];
 			Assert.AreEqual(1, propertyMessages.Count);
 			Assert.AreEqual("This is a required field", propertyMessages[0]);
 
 			info = type.GetProperty("Password");
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Contains(info));
-			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessage[info];
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Contains(info));
+			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessages[info];
 			Assert.AreEqual(1, propertyMessages.Count);
 			Assert.AreEqual("This is a required field", propertyMessages[0]);
 
 			info = type.GetProperty("ConfirmationPassword");
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Contains(info));
-			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessage[info];
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Contains(info));
+			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessages[info];
 			Assert.AreEqual(1, propertyMessages.Count);
 			Assert.AreEqual("This is a required field", propertyMessages[0]);
 
@@ -110,8 +110,8 @@ namespace Castle.ActiveRecord.Tests.Validation
 			Assert.AreEqual("Fields do not match", user.ValidationErrorMessages[0]);
 
 			info = type.GetProperty("Password");
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Contains(info));
-			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessage[info];
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Contains(info));
+			propertyMessages = (ArrayList)user.PropertiesValidationErrorMessages[info];
 			Assert.AreEqual(1, propertyMessages.Count);
 			Assert.AreEqual("Fields do not match", propertyMessages[0]);
 
@@ -121,7 +121,7 @@ namespace Castle.ActiveRecord.Tests.Validation
 			Assert.AreEqual(0, user.ValidationErrorMessages.Length);
 		}
 
-		[Test, ExpectedException(typeof(ValidationException))]
+		[Test, ExpectedException(typeof(ActiveRecordValidationException))]
 		public void InvalidClassIsNotPersisted()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(User) );
@@ -165,7 +165,7 @@ namespace Castle.ActiveRecord.Tests.Validation
 		}
 
 		[Test]
-		[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
+		[ExpectedException(typeof(ActiveRecordValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
 		public void IsUnique()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Blog2) );

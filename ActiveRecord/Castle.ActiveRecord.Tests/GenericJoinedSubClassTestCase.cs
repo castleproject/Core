@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Tests
 	[TestFixture]
 	public class GenericJoinedSubClassTestCase : AbstractActiveRecordTest
 	{
-		[Test]
+		[Test(Description = "Fails when NHibernate.Cfg.Environment.UseReflectionOptimizer = true")]
 		public void Entities()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(),

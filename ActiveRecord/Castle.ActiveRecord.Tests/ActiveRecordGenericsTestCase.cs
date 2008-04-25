@@ -459,7 +459,7 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual(1, fromDB.Posts.Count);
 		}
 
-		[Test]
+		[Test(Description = "Fails when NHibernate.Cfg.Environment.UseReflectionOptimizer = true")]
 		public void AbstractClassTableName()
 		{
 			ActiveRecordStarter.ResetInitializationFlag();

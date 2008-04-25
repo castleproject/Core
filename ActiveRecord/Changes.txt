@@ -1,6 +1,8 @@
 1.0
 ===
 
+- Applied Alwin's patch adding IValidationProvider common interface for AR models that can be validated.
+
 - Applied Rick Fleming's patch adding GetRegisteredTypes to ActiveRecordStarter.
 
 - Added IsOverride to PrimaryKey attribute to allow a primary key in a derived

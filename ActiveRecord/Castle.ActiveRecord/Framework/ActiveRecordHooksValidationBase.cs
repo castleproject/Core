@@ -23,23 +23,25 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework;
 
 	/// <summary>
-	/// Extends <see cref="ActiveRecordBase"/> adding automatic validation support.
-	/// <seealso cref="ActiveRecordValidationBase.IsValid()"/>
+	/// Extends <see cref="ActiveRecordHooksBase"/> adding automatic validation support, 
+	/// through implementing <see cref="IValidationProvider"/>.
 	/// </summary>
 	/// <example>
 	/// <code>
-	/// public class Customer : ActiveRecordBase
+	/// using Castle.Components.Validator;
+	/// 
+	/// public class Customer : ActiveRecordHooksBase
 	/// {
 	///		...
 	///		
-	///		[Property, ValidateNotEmpty]
+	///		[Property, ValidateNonEmpty]
 	///		public int Name
 	///		{
 	///			get { return _name; }
 	///			set { _name = value; }
 	///		}
 	///		
-	///		[Property, ValidateNotEmpty, ValidateEmail]
+	///		[Property, ValidateNonEmpty, ValidateEmail]
 	///		public int Email
 	///		{
 	///			get { return _email; }
@@ -47,21 +49,22 @@ namespace Castle.ActiveRecord
 	///		}
 	///	</code>
 	/// </example>
+	/// <remarks>
+	/// Uses an <see cref="IValidationProvider"/> internally to do the actual validation.
+	/// </remarks>
 	[Serializable]
-	public abstract class ActiveRecordValidationBase<T> : ActiveRecordBase<T>, IValidationProvider
-		where T : class
+	public abstract class ActiveRecordHooksValidationBase : ActiveRecordHooksBase, IValidationProvider
 	{
-
 		/// <summary>
 		/// Field for <see cref="ActualValidator"/>.
 		/// </summary>
 		[NonSerialized]
-		private IValidationProvider _actualValidator;
+		private Framework.IValidationProvider _actualValidator;
 
 		/// <summary>
-		/// Constructs an ActiveRecordValidationBase
+		/// Constructs an ActiveRecordHooksValidationBase
 		/// </summary>
-		protected ActiveRecordValidationBase()
+		protected ActiveRecordHooksValidationBase()
 		{
 		}
 
@@ -176,6 +179,5 @@ namespace Castle.ActiveRecord
 		{
 			ActiveRecordValidator.ThrowNotValidException(ValidationErrorMessages, PropertiesValidationErrorMessages);
 		}
-
 	}
 }

@@ -35,7 +35,7 @@ namespace Castle.ActiveRecord.Tests
 			Assert.IsFalse(user.IsValid(),"Nested class not validated");
 			Assert.IsTrue(user.ValidationErrorMessages.Length == 3,"Both nested props are required and should have error messages");
 
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Count == 2,"Two properties should be invalid");
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Count == 2,"Two properties should be invalid");
 
 			user.PostalAddress.AddressLine1 = "15st"; //to short
 			user.PostalAddress.Country = "Brazil";
@@ -44,7 +44,7 @@ namespace Castle.ActiveRecord.Tests
 			Assert.IsFalse(user.IsValid());
 			Assert.IsTrue(user.ValidationErrorMessages.Length == 1,"Should be a too short error message");
 
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Count ==1,"One property should be invalid") ;
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Count ==1,"One property should be invalid") ;
 
 			user.PostalAddress.AddressLine1 = "12345";
 			Assert.IsTrue(user.IsValid());
@@ -60,7 +60,7 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.IsTrue(user.ValidationErrorMessages.Length == 1, "Should be one error message about required length");
 
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Count == 1, "One property should be invalid");
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Count == 1, "One property should be invalid");
 
 			user.BillingAddress.AddressLine1 = "12345";
 
@@ -81,7 +81,7 @@ namespace Castle.ActiveRecord.Tests
 			Assert.IsFalse(user.IsValid(), "Nested class not validated");
 			Assert.IsTrue(user.ValidationErrorMessages.Length == 3, "Both nested props are required and should have error messages");
 
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Count == 2, "Two properties should be invalid");
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Count == 2, "Two properties should be invalid");
 
 			user.PostalAddress.AddressLine1 = "15st"; //to short
 			user.PostalAddress.Country = "Brazil";
@@ -90,7 +90,7 @@ namespace Castle.ActiveRecord.Tests
 			Assert.IsFalse(user.IsValid());
 			Assert.IsTrue(user.ValidationErrorMessages.Length == 1, "Should be a too short error message");
 
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Count == 1, "One property should be invalid");
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Count == 1, "One property should be invalid");
 
 			user.PostalAddress.AddressLine1 = "12345";
 			Assert.IsTrue(user.IsValid());
@@ -106,7 +106,7 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.IsTrue(user.ValidationErrorMessages.Length == 1, "Should be one error message about required length");
 
-			Assert.IsTrue(user.PropertiesValidationErrorMessage.Count == 1, "One property should be invalid");
+			Assert.IsTrue(user.PropertiesValidationErrorMessages.Count == 1, "One property should be invalid");
 
 			user.BillingAddress.AddressLine1 = "12345";
 
