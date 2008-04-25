@@ -198,6 +198,16 @@ namespace Castle.ActiveRecord.Framework
 						return genericTypeDef;
 					}
 				}
+
+				// check implemented interfaces of class
+				Type[] interfaces = type.GetInterfaces();
+				foreach (Type interfaceType in interfaces)
+				{
+					if (type2Conf.ContainsKey(interfaceType))
+					{
+						return interfaceType;
+					}
+				}
 			}
 
 			return typeof(ActiveRecordBase);
