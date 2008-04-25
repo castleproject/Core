@@ -162,6 +162,31 @@ namespace Castle.ActiveRecord.Framework
 			}
 		}
 
+        /// <summary>
+        /// Called when a transient entity is passed to <c>SaveOrUpdate</c>.
+        /// </summary>
+        /// <remarks>
+        ///	The return value determines if the object is saved
+        ///	<list>
+        ///		<item><see langword="true" /> - the entity is passed to <c>Save()</c>, resulting in an <c>INSERT</c></item>
+        ///		<item><see langword="false" /> - the entity is passed to <c>Update()</c>, resulting in an <c>UPDATE</c></item>
+        ///		<item><see langword="null" /> - Hibernate uses the <c>unsaved-value</c> mapping to determine if the object is unsaved</item>
+        ///	</list>
+        /// </remarks>
+        /// <param name="entity">A transient entity</param>
+        /// <returns>Boolean or <see langword="null" /> to choose default behaviour</returns>
+        public override bool? IsTransient(object entity)
+        {
+            ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
+
+            if (hookTarget != null)
+            {
+                return hookTarget.IsUnsaved();
+            }
+
+            return null;
+        }
+
 		/// <summary>
 		/// Called after a flush that actually ends in execution of the SQL statements required to
 		/// synchronize in-memory state with the database.
