@@ -93,11 +93,11 @@ namespace Castle.MonoRail.Framework.Services
 			string domain = uri.Host;
 			string subdomain = GetDomainToken(domain, 0);
 
-//			if (subdomain != null && subdomain.Length < domain.Length)
-//			{
-//				// Strip the subdomain from the main domain name
-//				domain = domain.Substring(subdomain.Length);
-//			}
+			if (subdomain != null && (subdomain.Length+1) < domain.Length)
+			{
+				// Strip the subdomain from the main domain name
+				domain = domain.Substring(subdomain.Length + 1);
+			}
 
 			if (rawUrl[0] == '/')
 			{

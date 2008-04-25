@@ -171,5 +171,29 @@ namespace Castle.MonoRail.Framework.Tests.Services
 	    {
 			tokenizer.TokenizeUrl("/index.rails", null, new Uri("http://localhost"), true, null);
 	    }
+
+		[Test]
+		public void DomainSubDomainExpectWwwSubdomain()
+		{
+			UrlInfo info = tokenizer.TokenizeUrl("/area/home/index.castle", null,
+								  new Uri("http://www.castleproject.org"), true, string.Empty);
+			Assert.AreEqual("castleproject.org", info.Domain);
+			Assert.AreEqual("www", info.Subdomain);
+			Assert.AreEqual("area", info.Area);
+			Assert.AreEqual("home", info.Controller);
+			Assert.AreEqual("index", info.Action);
+		}
+
+		[Test]
+		public void DomainSubDomainExpectCastleprojectSubdomain()
+		{
+			UrlInfo info = tokenizer.TokenizeUrl("/area/home/index.castle", null,
+								  new Uri("http://castleproject.org"), true, string.Empty);
+			Assert.AreEqual("org", info.Domain);
+			Assert.AreEqual("castleproject", info.Subdomain);
+			Assert.AreEqual("area", info.Area);
+			Assert.AreEqual("home", info.Controller);
+			Assert.AreEqual("index", info.Action);
+		}
 	}
 }

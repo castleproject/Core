@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Tests.Services
 {
+	using System;
 	using System.Collections.Specialized;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Routing;
@@ -272,6 +273,21 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			                                    	"controller=home",
 			                                    	"action=index",
 			                                    	"querystring=key=value")));
+		}
+
+		[Test]
+		public void UseAbsPathWithWWW()
+		{
+			DefaultUrlTokenizer tokenizer = new DefaultUrlTokenizer();
+			UrlInfo urlinfo = tokenizer.TokenizeUrl("/area/home/index.castle", null,
+			                      new Uri("http://www.castleproject.org"), true, string.Empty);
+
+
+			UrlBuilderParameters parameters = new UrlBuilderParameters("test", "action");
+			parameters.CreateAbsolutePath = true;
+
+			Assert.AreEqual("http://www.castleproject.org/area/test/action.castle",
+				urlBuilder.BuildUrl(urlinfo, parameters));
 		}
 	}
 }
