@@ -142,7 +142,16 @@ namespace Castle.ActiveRecord.Framework
 		///</summary>
 		public void RegisterSessionFactory(ISessionFactory sessionFactory, Type baseType)
 		{
-			type2SessFactory[baseType] = sessionFactory;
+			readerWriterLock.AcquireWriterLock(-1);
+
+			try 
+			{
+				type2SessFactory[baseType] = sessionFactory;
+			}
+			finally 
+			{
+				readerWriterLock.ReleaseWriterLock();
+			}
 		}
 
 		/// <summary>
