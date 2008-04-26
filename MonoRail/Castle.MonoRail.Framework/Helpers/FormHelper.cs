@@ -2152,6 +2152,14 @@ namespace Castle.MonoRail.Framework.Helpers
 			UseWebValidatorProvider(new ZebdaWebValidator());
 		}
 
+		/// <summary>
+		/// Configures this FormHelper instance to use JQuery validate plugin for form fields validation
+		/// </summary>
+		public virtual void UseJQueryValidation()
+		{
+			UseWebValidatorProvider( new JQueryValidator() );
+		}
+
 		#endregion
 
 		#region private static members

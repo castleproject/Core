@@ -192,6 +192,7 @@
     <Compile Include="Helpers\TextHelperTestCase.cs" />
     <Compile Include="Helpers\ValidationHelperTestCase.cs" />
     <Compile Include="Helpers\Validations\FormValidationTestCase.cs" />
+    <Compile Include="Helpers\Validations\JQueryFormValidationTestCase.cs" />
     <Compile Include="JSGeneration\DynamicDispatcherTestCase.cs" />
     <Compile Include="JSGeneration\JSCodeGeneratorTestCase.cs" />
     <Compile Include="JSGeneration\JSGeneratorDispatcherBaseTestCase.cs" />

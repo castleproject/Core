@@ -423,6 +423,7 @@
     <Compile Include="Helpers\ValidationStrategy\IBrowserValidatorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\ValidationStrategy\JQueryValidator.cs" />
     <Compile Include="Helpers\ValidationStrategy\PrototypeWebValidator.cs">
       <SubType>Code</SubType>
     </Compile>
