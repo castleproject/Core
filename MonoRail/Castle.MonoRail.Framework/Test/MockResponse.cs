@@ -40,6 +40,7 @@ namespace Castle.MonoRail.Framework.Test
 		private StringWriter output;
 		private HttpCachePolicy cachePolicy;
 		private NameValueCollection headers = new NameValueCollection();
+		private Stream outputStream = new MemoryStream();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockResponse"/> class.
@@ -313,7 +314,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <value>The output stream.</value>
 		public override Stream OutputStream
 		{
-			get { return new MemoryStream(); }
+			get { return outputStream; }
 		}
 
 		/// <summary>
