@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework.Descriptors
 		/// <value>The name of the layout.</value>
 		public string[] LayoutNames
 		{
-			get { return layoutNames; }
+			get { return (string[]) layoutNames.Clone(); }
 		}
 
 		/// <summary>
