@@ -584,7 +584,12 @@ namespace Castle.MonoRail.Framework.Internal
 
 		private string SafeAppPath()
 		{
-			return currentUrl.AppVirtualDir == string.Empty ? "/" : currentUrl.AppVirtualDir;
+			string appVirtualDir = String.IsNullOrEmpty(currentUrl.AppVirtualDir) ? "/" : currentUrl.AppVirtualDir;
+			if (appVirtualDir[0] != '/')
+			{
+				return '/' + appVirtualDir;
+			}
+			return appVirtualDir;
 		}
 	}
 }
