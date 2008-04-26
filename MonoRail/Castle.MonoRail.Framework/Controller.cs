@@ -1534,6 +1534,23 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="action"></param>
+		protected virtual void CreateTransformsFilters(IExecutableAction action)
+		{
+			if (action == null) return;
+
+			ITransformFilterFactory transformFilterFactory = engineContext.Services.TransformFilterFactory;
+
+			foreach (TransformFilterDescriptor transformFilter in action.TransformFilters)
+			{
+				ITransformFilter filter = transformFilterFactory.Create(transformFilter.TransformFilterType, engineContext.UnderlyingContext.Response.Filter);
+				engineContext.UnderlyingContext.Response.Filter = filter as Stream;
+			}
+		}
+
 		#endregion
 
 		/// <summary>
@@ -1582,6 +1599,7 @@ namespace Castle.MonoRail.Framework
 
 				CreateControllerLevelResources();
 				CreateActionLevelResources(action);
+				CreateTransformsFilters(action);
 				ResolveLayout(action);
 
 				if (cancel)

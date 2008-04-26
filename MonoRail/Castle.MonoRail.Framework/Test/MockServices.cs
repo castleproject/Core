@@ -47,6 +47,7 @@ namespace Castle.MonoRail.Framework.Test
 		private IEmailTemplateService emailTemplateService;
 		private IEmailSender emailSender;
 		private IResourceFactory resourceFactory;
+		private ITransformFilterFactory transformFilterFactory;
 		private ExtensionManager extensionManager;
 		private readonly Dictionary<Type, object> service2Impl = new Dictionary<Type, object>();
 		private IServiceInitializer serviceInitializer;
@@ -358,6 +359,16 @@ namespace Castle.MonoRail.Framework.Test
 		{
 			get { return resourceFactory; }
 			set { resourceFactory = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the transformfilter factory.
+		/// </summary>
+		/// <value>The resource factory.</value>
+		public ITransformFilterFactory TransformFilterFactory
+		{
+			get { return transformFilterFactory; }
+			set { transformFilterFactory = value; }
 		}
 
 		/// <summary>

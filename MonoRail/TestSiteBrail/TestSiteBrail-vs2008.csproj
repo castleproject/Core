@@ -222,9 +222,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
+    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2008.csproj">
       <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
-      <Name>Castle.MonoRail.Framework-vs2005</Name>
+      <Name>Castle.MonoRail.Framework-vs2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.Views.Brail\Castle.MonoRail.Views.Brail-vs2008.csproj">
       <Project>{CC39D6D0-2467-4DD5-A53E-92D580B60038}</Project>

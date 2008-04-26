@@ -69,6 +69,12 @@ namespace Castle.MonoRail.Framework
 		ResourceDescriptor[] Resources { get; }
 
 		/// <summary>
+		/// Gets the transform filters.
+		/// </summary>
+		/// <value>The transform filters.</value>
+		TransformFilterDescriptor[] TransformFilters { get;  }
+
+		/// <summary>
 		/// Gets the cache policy configurer.
 		/// </summary>
 		/// <value>The cache policy configurer.</value>

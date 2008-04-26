@@ -180,6 +180,7 @@ namespace Castle.MonoRail.Framework.Container
 		private IEmailTemplateService emailTemplateServiceCached;
 		private IEmailSender emailSenderCached;
 		private IResourceFactory resourceFactoryCached;
+		private ITransformFilterFactory transformFilterFactoryCached;
 		private IHelperFactory helperFactoryCached;
 		private IServiceInitializer serviceInitializerCached;
 		private ExtensionManager extensionManager;
@@ -423,6 +424,10 @@ namespace Castle.MonoRail.Framework.Container
 			if (!HasService<IResourceFactory>())
 			{
 				AddService<IResourceFactory>(CreateService<DefaultResourceFactory>());
+			}
+			if (!HasService<ITransformFilterFactory>())
+			{
+				AddService<ITransformFilterFactory>(CreateService<DefaultTransformFilterFactory>());
 			}
 			if (!HasService<IFilterDescriptorProvider>())
 			{
@@ -909,6 +914,23 @@ namespace Castle.MonoRail.Framework.Container
 				return resourceFactoryCached;
 			}
 			set { resourceFactoryCached = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the transformfilter factory.
+		/// </summary>
+		/// <value>The resource factory.</value>
+		public ITransformFilterFactory TransformFilterFactory
+		{
+			get
+			{ 
+				if( transformFilterFactoryCached == null)
+				{
+					transformFilterFactoryCached = GetService<ITransformFilterFactory>();
+				}
+				return transformFilterFactoryCached;
+			}
+			set { transformFilterFactoryCached = value; }
 		}
 
 		/// <summary>

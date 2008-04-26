@@ -49,9 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
+    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2008.csproj">
       <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
-      <Name>Castle.MonoRail.Framework-vs2005</Name>
+      <Name>Castle.MonoRail.Framework-vs2008</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

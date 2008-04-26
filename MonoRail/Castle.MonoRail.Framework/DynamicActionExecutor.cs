@@ -100,6 +100,15 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Gets the transform filters.
+		/// </summary>
+		/// <value>The transform filters.</value>
+		public TransformFilterDescriptor[] TransformFilters
+		{
+			get { return new TransformFilterDescriptor[0]; }
+		}
+
+		/// <summary>
 		/// Gets the return binder descriptor.
 		/// </summary>
 		/// <value>The return binder descriptor.</value>

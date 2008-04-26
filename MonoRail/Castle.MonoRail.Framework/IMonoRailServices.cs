@@ -140,6 +140,12 @@ namespace Castle.MonoRail.Framework
 		IResourceFactory ResourceFactory { get; set; }
 
 		/// <summary>
+		/// Gets or sets the transformfilter factory.
+		/// </summary>
+		/// <value>The resource factory.</value>
+		ITransformFilterFactory TransformFilterFactory { get; set; }
+
+		/// <summary>
 		/// Gets or sets the service initializer.
 		/// </summary>
 		/// <value>The service initializer.</value>

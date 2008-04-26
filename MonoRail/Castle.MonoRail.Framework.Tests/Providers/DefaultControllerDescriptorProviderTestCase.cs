@@ -20,6 +20,7 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 	using Descriptors;
 	using NUnit.Framework;
 	using Rhino.Mocks;
+	using TransformFilters;
 
 	[TestFixture]
 	public class DefaultControllerDescriptorProviderTestCase
@@ -101,6 +102,22 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 			ActionMetaDescriptor actionMetaDesc = metaDesc.GetAction(actionMethod);
 			Assert.IsNotNull(actionMetaDesc);
 			Assert.IsNotNull(actionMetaDesc.SkipFilters);
+		}
+
+		[Test]
+		public void CollectsTransformFilterForAction()
+		{
+			BuildDescriptor();
+
+			Type controllerType = typeof(TransformFilterController);
+
+			ControllerMetaDescriptor metaDesc = provider.BuildDescriptor(controllerType);
+			Assert.IsNotNull(metaDesc);
+			MethodInfo actionMethod = controllerType.GetMethod("Action1");
+			ActionMetaDescriptor actionMetaDesc = metaDesc.GetAction(actionMethod);
+			Assert.IsNotNull(actionMetaDesc);
+			Assert.AreEqual(1, actionMetaDesc.TransformFilters.Length);
+			Assert.AreEqual(typeof(UpperCaseTransformFilter), actionMetaDesc.TransformFilters[0].TransformFilterType);
 		}
 
 		[Test]
@@ -196,6 +213,15 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 			[SkipFilter]
 			public void Action1()
 			{
+			}
+		}
+
+		public class TransformFilterController : Controller
+		{
+			[TransformFilter(typeof(UpperCaseTransformFilter))]
+			public void Action1()
+			{
+				RenderText("test");
 			}
 		}
 
