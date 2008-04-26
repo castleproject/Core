@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="collection_not_empty" xml:space="preserve">
+    <value>La colección no debe estar vacía</value>
+  </data>
+  <data name="credit_card_invalid" xml:space="preserve">
+    <value>Este campo no contiene un número de tarjeta de crédito válido o es de un tipo no soportado.</value>
+  </data>
   <data name="date_invalid" xml:space="preserve">
     <value>Por favor, ingrese una fecha válida</value>
   </data>
@@ -127,13 +133,19 @@
     <value>Por favor, ingrese un número decimal válido</value>
   </data>
   <data name="email" xml:space="preserve">
-    <value>Ingrese una dirección de correo válida. Por ejemplo fred@domain.com</value>
+    <value>Ingrese una dirección de correo válida. Por ejemplo pedro@dominio.com</value>
   </data>
   <data name="exactlength" xml:space="preserve">
     <value>Este campo debe tener {0} caracteres</value>
   </data>
   <data name="generic_invalid" xml:space="preserve">
     <value>Este campo tiene contenido no válido</value>
+  </data>
+  <data name="group_not_empty_invalid" xml:space="preserve">
+    <value>Al menos uno de los valores en ({0}) no debería estar vacío</value>
+  </data>
+  <data name="group_not_empty_seperator" xml:space="preserve">
+    <value>, </value>
   </data>
   <data name="integer_invalid" xml:space="preserve">
     <value>Por favor, ingrese un número entero válido</value>
@@ -150,13 +162,34 @@
   <data name="length_tooshort" xml:space="preserve">
     <value>Este campo debe tener por lo menos {1} caracteres</value>
   </data>
+  <data name="not_same_as_invalid" xml:space="preserve">
+    <value>Los campos no deben coincidir</value>
+  </data>
+  <data name="not_same_value_invalid" xml:space="preserve">
+    <value>Este campo debe ser distinto a '{0}'</value>
+  </data>
+  <data name="range_invalid" xml:space="preserve">
+    <value>Este campo debe estar entre {0} y {1}</value>
+  </data>
+  <data name="range_toohigh" xml:space="preserve">
+    <value>Este campo debe ser menor o igual a {0}</value>
+  </data>
+  <data name="range_toohighorlow" xml:space="preserve">
+    <value>Este campo debe estar entre {0} y {1}</value>
+  </data>
+  <data name="range_toolow" xml:space="preserve">
+    <value>Este campo debe ser mayor o igual a {0}</value>
+  </data>
   <data name="same_as_invalid" xml:space="preserve">
     <value>Los campos no coinciden</value>
   </data>
+  <data name="set_invalid" xml:space="preserve">
+    <value>Este campo debe pertenecer a una serie de valores dados</value>
+  </data>
   <data name="single_invalid" xml:space="preserve">
-    <value>Campo no válido (no es un número decimal válido)</value>
+    <value>Este campo requiere un número decimal válido</value>
   </data>
   <data name="time_invalid" xml:space="preserve">
-    <value>Campo no válido (no es una hora válida)</value>
+    <value>Este campo requiere una hora válida</value>
   </data>
 </root>
