@@ -1,6 +1,12 @@
 1.0
 ===
 
+- Applied Gildas's patch fixing MR-433 
+  Support for the jQuery Validation plugin.
+
+- Applied Fixed MR-428
+  Transformation Filters didn't work in trunk
+
 - Applied Aaron Jensen's adding call to RaiseUnhandledError when a controller fails to be created.
 
 - Applied Roger Chapman's patch adding the pascalcasetoword option to FormHelper.Select options dictionary. 
