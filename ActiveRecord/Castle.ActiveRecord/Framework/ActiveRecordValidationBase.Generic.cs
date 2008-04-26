@@ -28,18 +28,20 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	/// <example>
 	/// <code>
+	/// using Castle.Components.Validator;
+	///
 	/// public class Customer : ActiveRecordBase
 	/// {
 	///		...
 	///		
-	///		[Property, ValidateNotEmpty]
+	///		[Property, ValidateNonEmpty]
 	///		public int Name
 	///		{
 	///			get { return _name; }
 	///			set { _name = value; }
 	///		}
 	///		
-	///		[Property, ValidateNotEmpty, ValidateEmail]
+	///		[Property, ValidateNonEmpty, ValidateEmail]
 	///		public int Email
 	///		{
 	///			get { return _email; }
