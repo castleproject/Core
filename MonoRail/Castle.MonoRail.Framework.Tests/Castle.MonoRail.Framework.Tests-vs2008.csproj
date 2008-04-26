@@ -229,6 +229,7 @@
     <Compile Include="Services\FileAssemblyViewSourceLoaderTestCase.cs" />
     <Compile Include="Services\PrototypeAjaxProxyGeneratorTestCase.cs" />
     <Compile Include="Services\StaticResourceRegistry\DefaultStaticResourceRegistryTestCase.cs" />
+    <Compile Include="TransformFilters\TransformFilterTestCase.cs" />
     <Compile Include="UrlPartsBuilderTestCase.cs" />
     <Compile Include="ViewComponents\AuthenticatedContentTestCase.cs" />
     <Compile Include="ViewComponents\DefaultViewComponentRegistryTests.cs" />
