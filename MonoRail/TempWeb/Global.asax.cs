@@ -3,6 +3,8 @@
 	using System;
 	using System.IO;
 	using Castle.Core.Configuration;
+	using Castle.MicroKernel.Registration;
+	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Extensions.ExceptionChaining;
 	using Castle.MonoRail.Framework.Internal;
@@ -12,11 +14,11 @@
 	using Castle.Windsor;
 	using Controllers;
 
-	public class Global : System.Web.HttpApplication, IContainerAccessor
+	public class Global : System.Web.HttpApplication, IContainerAccessor, IMonoRailConfigurationEvents
 	{
 		private static WindsorContainer container;
 
-		public void MonoRail_Configure(IMonoRailConfiguration config)
+		public void Configure(IMonoRailConfiguration config)
 		{
 			config.ControllersConfig.AddAssembly(typeof(Global).Assembly);
 			config.ViewEngineConfig.ViewPathRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Views");
@@ -36,11 +38,11 @@
 		public void Application_OnStart()
 		{
 			container = new WindsorContainer();
-			container.AddFacility("rails", new RailsFacility());
+			container.AddFacility("rails", new MonoRailFacility());
 
-			container.AddComponentEx<HomeController>().WithName("home.controller").Register();
-			container.AddComponentEx<AccCreationWizard>().WithName("acc.creation.wizard").Register();
-			container.AddComponentEx<Home2Controller>().WithName("home2.controller").Register();
+			container.Register(Component.For<HomeController>().Named("home.controller"));
+			container.Register(Component.For<AccCreationWizard>().Named("acc.creation.wizard"));
+			container.Register(Component.For<Home2Controller>().Named("home2.controller"));
 		}
 
 		public void Application_OnEnd()
