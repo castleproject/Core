@@ -90,8 +90,8 @@ namespace Castle.Components.Validator.Tests
 			CultureInfo prevUI = Thread.CurrentThread.CurrentUICulture;
 			try
 			{
-				Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-				Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+				Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("mk-MK");
+				Thread.CurrentThread.CurrentUICulture = CultureInfo.CreateSpecificCulture("mk-MK");
 
 				ResourceManager resourceManager = new ResourceManager("Castle.Components.Validator.Tests.Messages", typeof(CachedValidationRegistryTestCase).Assembly);
 				registry = new CachedValidationRegistry(resourceManager);
