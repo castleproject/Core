@@ -79,12 +79,12 @@ namespace Castle.Components.Binder
 			}
 		}
 
-		private string NormalizeKey(string key)
+		protected string NormalizeKey(string key)
 		{
 				return key.EndsWith("[]") ? key.Substring(0, key.Length - 2) : key;
 		}
 
-		private void ProcessNode(CompositeNode node, Type type, String name, object value)
+		protected void ProcessNode(CompositeNode node, Type type, String name, object value)
 		{
 			if (name == null || name == String.Empty)
 			{
