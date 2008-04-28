@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+
 namespace Castle.MicroKernel.Tests
 {
 	using System;
@@ -175,5 +177,23 @@ namespace Castle.MicroKernel.Tests
 			ICommon[] services = kernel.ResolveAll<ICommon>();
 			Assert.AreEqual(0, services.Length);
 		}
+
+		[Test]
+		public void ResolveViaGenerics()
+		{
+			kernel.AddComponent("cust", typeof(ICustomer), typeof(CustomerImpl));
+			kernel.AddComponent("cust2", typeof(ICustomer), typeof(CustomerImpl2));
+			ICustomer customer = kernel.Resolve<ICustomer>("cust");
+
+			Dictionary<string, object> dictionary = new Dictionary<string, object>();
+			dictionary.Add("name", "customer2Name");
+			dictionary.Add("address", "customer2Address");
+			dictionary.Add("age", 18);
+			ICustomer customer2 = kernel.Resolve<ICustomer>("cust2", dictionary);
+
+			Assert.AreEqual(customer.GetType(), typeof(CustomerImpl));
+			Assert.AreEqual(customer2.GetType(), typeof(CustomerImpl2));
+		}
+
 	}
 }

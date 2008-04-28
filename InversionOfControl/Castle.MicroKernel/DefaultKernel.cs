@@ -600,6 +600,31 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key">Component's key</param>
+		/// <typeparam name="T">Service type</typeparam>
+		/// <returns>The Component instance</returns>
+		public T Resolve<T>(String key)
+		{
+			Type serviceType = typeof(T);
+			return (T)Resolve(key, serviceType);
+		}
+
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <typeparam name="T">Service type</typeparam>
+		/// <param name="key">Component's key</param>
+		/// <param name="arguments"></param>
+		/// <returns>The Component instance</returns>
+		public T Resolve<T>(String key, IDictionary arguments)
+		{
+			Type serviceType = typeof(T);
+			return (T)Resolve(key, serviceType, arguments);
+		}
+
+		/// <summary>
 		/// Returns true if the specified component was
 		/// found and could be removed (i.e. no other component depends on it)
 		/// </summary>
