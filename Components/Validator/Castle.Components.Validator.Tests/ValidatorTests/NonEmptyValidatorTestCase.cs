@@ -22,6 +22,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 	public class NonEmptyValidatorTestCase
 	{
 		private NonEmptyValidator validator;
+		private NonEmptyValidator nullableTypeValidator;
 		private TestTarget target;
 
 		[SetUp]
@@ -32,6 +33,8 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 
 			validator = new NonEmptyValidator();
 			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
+			nullableTypeValidator = new NonEmptyValidator();
+			nullableTypeValidator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("NullableTargetField"));
 			target = new TestTarget();
 		}
 
@@ -49,14 +52,31 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsTrue(validator.IsValid(target, "  "));
 		}
 
+		[Test]
+		public void NullableTypes()
+		{
+			int? nullValue = null;
+			int? notNullValue = 0;
+
+			Assert.IsTrue(nullableTypeValidator.IsValid(target, notNullValue));
+			Assert.IsFalse(nullableTypeValidator.IsValid(target, nullValue));
+		}
+
 		public class TestTarget
 		{
 			private string targetField;
+			private int? nullableTargetField;
 
 			public string TargetField
 			{
 				get { return targetField; }
 				set { targetField = value; }
+			}
+
+			public int? NullableTargetField
+			{
+				get { return nullableTargetField; }
+				set { nullableTargetField = value; }
 			}
 		}
 	}
