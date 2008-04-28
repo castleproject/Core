@@ -53,6 +53,12 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsTrue(validator.IsValid(target, ""));
 		}
 
+		[Test]
+		public void COMP54_ApostrophesShouldBeAllowed()
+		{
+			Assert.IsTrue(validator.IsValid(target, "hammett'@gmail.com"));
+		}
+
 		public class TestTarget
 		{
 			private string targetField;
