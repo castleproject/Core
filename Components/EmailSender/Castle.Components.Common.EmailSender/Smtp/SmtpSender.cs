@@ -152,7 +152,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 
 		/// <summary>
 		/// Converts a message from Castle.Components.Common.EmailSender.Message  type
-		/// to System.Web.Mail.MailMessage
+		/// to System.Net.Mail.MailMessage
 		/// </summary>
 		/// <param name="message">The message to convert.</param>
 		/// <returns>The converted message .</returns>
@@ -175,6 +175,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			mailMessage.BodyEncoding = message.Encoding;
 			mailMessage.IsBodyHtml = (message.Format == Format.Html);
 			mailMessage.Priority = (MailPriority)Enum.Parse(typeof(MailPriority), message.Priority.ToString());
+			mailMessage.ReplyTo = message.ReplyTo;
 
 			foreach (DictionaryEntry entry in message.Headers)
 			{

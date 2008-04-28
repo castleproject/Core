@@ -58,6 +58,7 @@ namespace Castle.Components.Common.EmailSender
 		private String bcc;
 		private String body;
 		private String subject;
+		private MailAddress replyTo;
 		private Format format = Format.Text;
 		private Encoding encoding = Encoding.ASCII;
 		private IDictionary headers = new HybridDictionary();
@@ -122,6 +123,12 @@ namespace Castle.Components.Common.EmailSender
 		{
 			get { return subject; }
 			set { subject = value; }
+		}
+
+		public MailAddress ReplyTo
+		{
+			get { return replyTo; }
+			set { replyTo = value; }
 		}
 
 		public Format Format
