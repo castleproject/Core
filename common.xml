@@ -32,25 +32,29 @@
 	<property name="lib.framework.dir" value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}" dynamic="true" />
 	<property name="lib.framework.ext.dir" value="${path::combine(lib.family.dir, string::replace(framework::get-target-framework(), framework::get-family(framework::get-target-framework()) + '-', ''))}" dynamic="true" />
 
-	<readregistry property="registry.dotnet.v3.0.Installed"
-		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Install"
-		  hive="LocalMachine"
-		  unless="${framework::get-family(framework::get-runtime-framework()) == 'mono'}"
-		  failonerror="false" />
+	<if test="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
+		<readregistry property="registry.dotnet.v3.0.Installed"
+			  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Install"
+			  hive="LocalMachine"
+			  failonerror="false" />
 
-	<readregistry property="registry.dotnet.v3.0.Installed"
-		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\InstallSuccess"
-		  hive="LocalMachine"
-		  unless="${framework::get-family(framework::get-runtime-framework()) == 'mono' or property::exists('registry.dotnet.v3.0.Installed')}"
-		  failonerror="false" />
+		<readregistry property="registry.dotnet.v3.0.Installed"
+			  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\InstallSuccess"
+			  hive="LocalMachine"
+			  unless="${property::exists('registry.dotnet.v3.0.Installed')}"
+			  failonerror="false" />
+		
+		<property name="dotnet.v3.0.installed" value="${registry.dotnet.v3.0.Installed == '1'}" />
 
-	<property name="dotnet.v3.0.installed" value="${registry.dotnet.v3.0.Installed == '1'}" unless="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
+		<if test="${dotnet.v3.0.installed}">
+			<readregistry property="dotnet.v3.0.ReferenceInstallPath"
+				  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\Windows Communication Foundation\ReferenceInstallPath"
+				  hive="LocalMachine"
+				  if="${dotnet.v3.0.installed}" />
+		</if>
+	</if>
+
 	<property name="dotnet.v3.0.installed" value="false" if="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
-
-	<readregistry property="dotnet.v3.0.ReferenceInstallPath"
-		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\Windows Communication Foundation\ReferenceInstallPath"
-		  hive="LocalMachine"
-		  if="${dotnet.v3.0.installed}" />
 	<property name="dotnet.v3.0.ReferenceInstallPath" value="" unless="${dotnet.v3.0.installed}" />
 
 	<!-- 
@@ -117,10 +121,12 @@
 		</if>
 		<property name="csc.keyfile" 	value="" />
 		<property name="csc.args" 		value="" />
-		<readregistry property="dotnet.SPlevel" 
-					  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v${framework::get-clr-version(framework::get-runtime-framework())}\SP"
-					  hive="LocalMachine"
-					  unless="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
+		<if test="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
+			<readregistry property="dotnet.SPlevel" 
+						  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v${framework::get-clr-version(framework::get-runtime-framework())}\SP"
+						  hive="LocalMachine"
+			 />
+		</if>
 		<property name="dotnet.SPlevel" value="0" if="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
 		<call target="set-${framework::get-target-framework()}-framework-configuration" />
 
