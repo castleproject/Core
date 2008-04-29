@@ -42,6 +42,7 @@ namespace Castle.MonoRail.Framework.Tests.WindsorIntegration
 			Assert.IsTrue(container.Kernel.HasComponent(typeof(IControllerFactory)));
 			Assert.IsTrue(container.Kernel.HasComponent(typeof(IFilterFactory)));
 			Assert.IsTrue(container.Kernel.HasComponent(typeof(IViewComponentFactory)));
+			Assert.IsTrue(container.Kernel.HasComponent(typeof(IDynamicActionProviderFactory)));
 		}
 
 		[Test]

@@ -1,7 +1,10 @@
 1.0
 ===
 
-- Applied Gildas's patch fixing MR-433 
+- Applied Mike Nichols's patch fixing MR-396
+  Get WindsorIntegration on DynamicActionProviders.
+
+  - Applied Gildas's patch fixing MR-433 
   Support for the jQuery Validation plugin.
 
 - Applied Fixed MR-428

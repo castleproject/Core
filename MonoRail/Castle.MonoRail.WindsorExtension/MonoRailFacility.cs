@@ -41,7 +41,7 @@ namespace Castle.MonoRail.WindsorExtension
 			Kernel.AddComponent("mr.filterFactory", typeof(IFilterFactory), typeof(WindsorFilterFactory));
 			Kernel.AddComponent("mr.viewcompfactory", typeof(IViewComponentFactory), typeof(WindsorViewComponentFactory));
 			Kernel.AddComponent("mr.helperfactory", typeof(IHelperFactory), typeof(WindsorHelperFactory));
-
+			Kernel.AddComponent("mr.dynamicactionproviderfactory", typeof(IDynamicActionProviderFactory), typeof(WindsorDynamicActionProviderFactory));
 			controllerTree = Kernel.Resolve<IControllerTree>();
 			componentRegistry = Kernel.Resolve<IViewComponentRegistry>();
 

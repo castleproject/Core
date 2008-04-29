@@ -52,6 +52,7 @@ namespace Castle.MonoRail.Framework.Test
 		private readonly Dictionary<Type, object> service2Impl = new Dictionary<Type, object>();
 		private IServiceInitializer serviceInitializer;
 		private IHelperFactory helperFactory;
+		private IDynamicActionProviderFactory dynamicActionProviderFactory;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MockServices"/> class with default mock services.
@@ -59,7 +60,8 @@ namespace Castle.MonoRail.Framework.Test
 		public MockServices() : this(new DefaultUrlBuilder(new MockServerUtility(), new MockRoutingEngine()),
 		                             new DefaultFilterFactory(),
 		                             new ViewEngineManagerStub(),
-		                             new DefaultActionSelector())
+		                             new DefaultActionSelector(),
+									 new DefaultDynamicActionProviderFactory())
 		{
 		}
 
@@ -70,14 +72,15 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="filterFactory">The filter factory.</param>
 		/// <param name="viewEngineManager">The view engine manager.</param>
 		/// <param name="actionSelector">The action selector.</param>
+		/// <param name="dynamicActionProviderFactory">The dynamic action provider factory.</param>
 		public MockServices(IUrlBuilder urlBuilder, IFilterFactory filterFactory, IViewEngineManager viewEngineManager,
-		                    IActionSelector actionSelector)
+		                    IActionSelector actionSelector,IDynamicActionProviderFactory dynamicActionProviderFactory)
 		{
 			this.urlBuilder = urlBuilder;
 			this.filterFactory = filterFactory;
 			this.viewEngineManager = viewEngineManager;
 			this.actionSelector = actionSelector;
-
+			this.dynamicActionProviderFactory = dynamicActionProviderFactory;
 			controllerTree = new DefaultControllerTree();
 			controllerFactory = new DefaultControllerFactory(controllerTree);
 			staticResourceRegistry = new DefaultStaticResourceRegistry();
@@ -91,7 +94,8 @@ namespace Castle.MonoRail.Framework.Test
 				new DefaultRescueDescriptorProvider(),
 				new DefaultResourceDescriptorProvider(),
 				new DefaultTransformFilterDescriptorProvider(), 
-				new DefaultReturnBinderDescriptorProvider());
+				new DefaultReturnBinderDescriptorProvider(),
+				new DefaultDynamicActionProviderDescriptorProvider());
 
 			resourceFactory = new DefaultResourceFactory();
 			scaffoldSupport = new MockScaffoldingSupport();
@@ -259,6 +263,16 @@ namespace Castle.MonoRail.Framework.Test
 		{
 			get { return filterFactory; }
 			set { filterFactory = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the dynamic action provider factory.
+		/// </summary>
+		/// <value>The dynamic action provider factory.</value>
+		public IDynamicActionProviderFactory DynamicActionProviderFactory
+		{
+			get { return dynamicActionProviderFactory; }
+			set { dynamicActionProviderFactory = value; }
 		}
 
 		/// <summary>

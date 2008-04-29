@@ -288,12 +288,14 @@
     <Compile Include="Descriptors\ControllerMetaDescriptor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Descriptors\DynamicActionProviderDescriptor.cs" />
     <Compile Include="Descriptors\FilterDescriptor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Descriptors\HelperDescriptor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Descriptors\IDynamicActionProviderDescriptorBuilder.cs" />
     <Compile Include="Descriptors\IFilterDescriptorBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -490,9 +492,6 @@
     <Compile Include="IMRServiceEnabled.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\ActionProviderUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Internal\AssemblySourceInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -626,6 +625,7 @@
     <Compile Include="Providers\DefaultControllerDescriptorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Providers\DefaultDynamicActionProviderDescriptorProvider.cs" />
     <Compile Include="Providers\DefaultFilterDescriptorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -648,6 +648,7 @@
     <Compile Include="Providers\DefaultViewComponentDescriptorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Providers\IDynamicActionProviderDescriptorProvider.cs" />
     <Compile Include="Providers\IFilterDescriptorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -742,6 +743,7 @@
     <Compile Include="Services\DefaultControllerTree.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\DefaultDynamicActionProviderFactory.cs" />
     <Compile Include="Services\DefaultEngineContextFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -788,6 +790,7 @@
     <Compile Include="Services\IControllerTree.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\IDynamicActionProviderFactory.cs" />
     <Compile Include="Services\IEmailTemplateService.cs">
       <SubType>Code</SubType>
     </Compile>

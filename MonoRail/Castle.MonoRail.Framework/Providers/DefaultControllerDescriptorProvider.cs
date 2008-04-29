@@ -48,6 +48,7 @@ namespace Castle.MonoRail.Framework.Providers
 		private IResourceDescriptorProvider resourceDescriptorProvider;
 		private ITransformFilterDescriptorProvider transformFilterDescriptorProvider;
 		private IReturnBinderDescriptorProvider returnBinderDescriptorProvider;
+		private IDynamicActionProviderDescriptorProvider dynamicActionProviderDescriptorProvider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultControllerDescriptorProvider"/> class.
@@ -66,13 +67,15 @@ namespace Castle.MonoRail.Framework.Providers
 		/// <param name="resourceDescriptorProvider">The resource descriptor provider.</param>
 		/// <param name="transformFilterDescriptorProvider">The transform filter descriptor provider.</param>
 		/// <param name="returnBinderDescriptorProvider">The return binder descriptor provider.</param>
-		public DefaultControllerDescriptorProvider(IHelperDescriptorProvider helperDescriptorProvider,
-		                                           IFilterDescriptorProvider filterDescriptorProvider,
-		                                           ILayoutDescriptorProvider layoutDescriptorProvider,
-		                                           IRescueDescriptorProvider rescueDescriptorProvider,
-		                                           IResourceDescriptorProvider resourceDescriptorProvider,
-		                                           ITransformFilterDescriptorProvider transformFilterDescriptorProvider,
-		                                           IReturnBinderDescriptorProvider returnBinderDescriptorProvider)
+		/// <param name="dynamicActionProviderDescriptorProvider">The dynamic action provider descriptor provider.</param>
+		public DefaultControllerDescriptorProvider(IHelperDescriptorProvider helperDescriptorProvider, 
+													IFilterDescriptorProvider filterDescriptorProvider, 
+													ILayoutDescriptorProvider layoutDescriptorProvider, 
+													IRescueDescriptorProvider rescueDescriptorProvider, 
+													IResourceDescriptorProvider resourceDescriptorProvider, 
+													ITransformFilterDescriptorProvider transformFilterDescriptorProvider, 
+													IReturnBinderDescriptorProvider returnBinderDescriptorProvider, 
+													IDynamicActionProviderDescriptorProvider dynamicActionProviderDescriptorProvider)
 		{
 			this.helperDescriptorProvider = helperDescriptorProvider;
 			this.filterDescriptorProvider = filterDescriptorProvider;
@@ -81,6 +84,7 @@ namespace Castle.MonoRail.Framework.Providers
 			this.resourceDescriptorProvider = resourceDescriptorProvider;
 			this.transformFilterDescriptorProvider = transformFilterDescriptorProvider;
 			this.returnBinderDescriptorProvider = returnBinderDescriptorProvider;
+			this.dynamicActionProviderDescriptorProvider = dynamicActionProviderDescriptorProvider;
 		}
 
 		#region IMRServiceEnabled implementation
@@ -105,6 +109,7 @@ namespace Castle.MonoRail.Framework.Providers
 			resourceDescriptorProvider = serviceProvider.GetService<IResourceDescriptorProvider>();
 			transformFilterDescriptorProvider = serviceProvider.GetService<ITransformFilterDescriptorProvider>();
 			returnBinderDescriptorProvider = serviceProvider.GetService<IReturnBinderDescriptorProvider>();
+			dynamicActionProviderDescriptorProvider = serviceProvider.GetService<IDynamicActionProviderDescriptorProvider>();
 		}
 
 		#endregion
@@ -543,7 +548,7 @@ namespace Castle.MonoRail.Framework.Providers
 			CollectRescues(descriptor, controllerType);
 			CollectDefaultAction(descriptor, controllerType);
 			CollectScaffolding(descriptor, controllerType);
-			CollectDynamicAction(descriptor, controllerType);
+			CollectDynamicActionProviders(descriptor, controllerType);
 			CollectCacheConfigure(descriptor, controllerType);
 		}
 
@@ -581,21 +586,13 @@ namespace Castle.MonoRail.Framework.Providers
 		}
 
 		/// <summary>
-		/// Collects the dynamic action.
+		/// Collects the dynamic action providers.
 		/// </summary>
 		/// <param name="descriptor">The descriptor.</param>
 		/// <param name="controllerType">Type of the controller.</param>
-		private void CollectDynamicAction(ControllerMetaDescriptor descriptor, Type controllerType)
+		private void CollectDynamicActionProviders(ControllerMetaDescriptor descriptor, Type controllerType)
 		{
-			object[] attributes = controllerType.GetCustomAttributes(typeof(DynamicActionProviderAttribute), true);
-
-			if (attributes.Length != 0)
-			{
-				foreach(DynamicActionProviderAttribute attr in attributes)
-				{
-					descriptor.ActionProviders.Add(attr.ProviderType);
-				}
-			}
+			descriptor.DynamicActionProviders = dynamicActionProviderDescriptorProvider.CollectProviders(controllerType);
 		}
 
 		/// <summary>

@@ -55,6 +55,8 @@ namespace Castle.MonoRail.Framework
 		private Dictionary<object, ErrorList> boundInstances;
 		private ErrorSummary simplerErrorList = new ErrorSummary();
 		private RenderingSupport renderingSupport;
+		private IDynamicActionProviderFactory dynamicActionProviderFactory;
+		private DynamicActionProviderDescriptor[] dynamicActionProviders = new DynamicActionProviderDescriptor[0];
 
 		#region IController
 
@@ -111,8 +113,9 @@ namespace Castle.MonoRail.Framework
 			ResolveLayout();
 			CreateAndInitializeHelpers();
 			CreateFiltersDescriptors();
+			CreateDynamicActionProvidersDescriptors();
+			ProcessDynamicActionProviders();
 			ProcessScaffoldIfAvailable();
-			ActionProviderUtil.RegisterActions(engineContext, this, context);
 		}
 
 		/// <summary>
@@ -342,6 +345,7 @@ namespace Castle.MonoRail.Framework
 		public virtual void Dispose()
 		{
 			DisposeFilters();
+			DisposeDynamicActionProviders();
 		}
 
 		#endregion
@@ -776,6 +780,7 @@ namespace Castle.MonoRail.Framework
 			viewEngineManager = engineContext.Services.ViewEngineManager; // should not be null
 			actionSelector = engineContext.Services.ActionSelector; // should not be null
 			scaffoldSupport = engineContext.Services.ScaffoldSupport; // might be null
+			dynamicActionProviderFactory = engineContext.Services.DynamicActionProviderFactory; // should not be null
 		}
 
 		#region From RenderingSupport
@@ -2053,6 +2058,80 @@ namespace Castle.MonoRail.Framework
 				if (desc.FilterInstance != null)
 				{
 					filterFactory.Release(desc.FilterInstance);
+				}
+			}
+		}
+
+		#endregion
+
+		#region DynamicActionProviders
+		/// <summary>
+		/// Creates the dynamic action providers descriptors.
+		/// </summary>
+		private void CreateDynamicActionProvidersDescriptors()
+		{
+			if (MetaDescriptor.DynamicActionProviders.Length != 0)
+			{
+				dynamicActionProviders = CopyDynamicActionProviderDescriptors();
+			}
+		}
+
+		/// <summary>
+		/// Clones all Dynamic Action Provider descriptors, in order to get a writable copy.
+		/// </summary>
+		protected internal DynamicActionProviderDescriptor[] CopyDynamicActionProviderDescriptors()
+		{
+			DynamicActionProviderDescriptor[] clone = (DynamicActionProviderDescriptor[])MetaDescriptor.DynamicActionProviders.Clone();
+
+			for (int i = 0; i < clone.Length; i++)
+			{
+				clone[i] = (DynamicActionProviderDescriptor)clone[i].Clone();
+			}
+
+			return clone;
+		}
+
+		/// <summary>
+		/// Processes the dynamic action providers.
+		/// </summary>
+		private void ProcessDynamicActionProviders()
+		{
+			foreach (DynamicActionProviderDescriptor desc in dynamicActionProviders)
+			{
+				if (desc.DynamicActionProviderInstance == null)
+				{
+					desc.DynamicActionProviderInstance =
+						dynamicActionProviderFactory.Create(desc.DynamicActionProviderType);
+				}
+			}
+
+			RegisterDynamicActions();
+		}
+
+		/// <summary>
+		/// Registers the dynamic actions on the controller. Brought inside for meta descriptor reference.
+		/// </summary>
+		private void RegisterDynamicActions()
+		{
+			foreach (DynamicActionProviderDescriptor descriptor in dynamicActionProviders)
+			{
+				IDynamicActionProvider provider = descriptor.DynamicActionProviderInstance;
+				provider.IncludeActions(engineContext, this, context);
+			}
+		}
+
+		/// <summary>
+		/// Disposes the dynamic action providers.
+		/// </summary>
+		private void DisposeDynamicActionProviders()
+		{
+			if (dynamicActionProviders == null) return;
+
+			foreach (DynamicActionProviderDescriptor desc in dynamicActionProviders)
+			{
+				if (desc.DynamicActionProviderInstance != null)
+				{
+					dynamicActionProviderFactory.Release(desc.DynamicActionProviderInstance);
 				}
 			}
 		}

@@ -162,5 +162,12 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <value>The extension manager.</value>
 		ExtensionManager ExtensionManager { get; set; }
+
+		/// <summary>
+		/// Gets or sets the dynamic action provider factory.
+		/// </summary>
+		/// <value>The dynamic action provider factory.</value>
+		IDynamicActionProviderFactory DynamicActionProviderFactory { get; set; }
+
 	}
 }

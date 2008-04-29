@@ -257,8 +257,10 @@
     <Compile Include="Descriptors\BaseMetaDescriptor.cs" />
     <Compile Include="Descriptors\ControllerDescriptor.cs" />
     <Compile Include="Descriptors\ControllerMetaDescriptor.cs" />
+    <Compile Include="Descriptors\DynamicActionProviderDescriptor.cs" />
     <Compile Include="Descriptors\FilterDescriptor.cs" />
     <Compile Include="Descriptors\HelperDescriptor.cs" />
+    <Compile Include="Descriptors\IDynamicActionProviderDescriptorBuilder.cs" />
     <Compile Include="Descriptors\IFilterDescriptorBuilder.cs" />
     <Compile Include="Descriptors\IHelperDescriptorBuilder.cs" />
     <Compile Include="Descriptors\ILayoutDescriptorBuilder.cs" />
@@ -384,6 +386,7 @@
     <Compile Include="Helpers\ValidationStrategy\IBrowserValidatorProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\ValidationStrategy\JQueryValidator.cs" />
     <Compile Include="Helpers\ValidationStrategy\PrototypeWebValidator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -432,9 +435,6 @@
     </Compile>
     <Compile Include="IMonoRailServices.cs" />
     <Compile Include="IMRServiceEnabled.cs" />
-    <Compile Include="Internal\ActionProviderUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Internal\AssemblySourceInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -529,6 +529,7 @@
     </Compile>
     <Compile Include="Providers\AsyncActionPair.cs" />
     <Compile Include="Providers\DefaultControllerDescriptorProvider.cs" />
+    <Compile Include="Providers\DefaultDynamicActionProviderDescriptorProvider.cs" />
     <Compile Include="Providers\DefaultFilterDescriptorProvider.cs" />
     <Compile Include="Providers\DefaultHelperDescriptorProvider.cs" />
     <Compile Include="Providers\DefaultLayoutDescriptorProvider.cs" />
@@ -537,6 +538,7 @@
     <Compile Include="Providers\DefaultReturnBinderDescriptorProvider.cs" />
     <Compile Include="Providers\DefaultTransformFilterDescriptorProvider.cs" />
     <Compile Include="Providers\DefaultViewComponentDescriptorProvider.cs" />
+    <Compile Include="Providers\IDynamicActionProviderDescriptorProvider.cs" />
     <Compile Include="Providers\IFilterDescriptorProvider.cs" />
     <Compile Include="Providers\IHelperDescriptorProvider.cs" />
     <Compile Include="Providers\ILayoutDescriptorProvider.cs" />
@@ -602,6 +604,7 @@
     <Compile Include="Services\DefaultControllerTree.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\DefaultDynamicActionProviderFactory.cs" />
     <Compile Include="Services\DefaultEngineContextFactory.cs" />
     <Compile Include="Services\DefaultFilterFactory.cs">
       <SubType>Code</SubType>
@@ -634,6 +637,7 @@
     <Compile Include="Services\IControllerContextFactory.cs" />
     <Compile Include="Services\IControllerFactory.cs" />
     <Compile Include="Services\IControllerTree.cs" />
+    <Compile Include="Services\IDynamicActionProviderFactory.cs" />
     <Compile Include="Services\IEmailTemplateService.cs" />
     <Compile Include="Services\IFilterFactory.cs" />
     <Compile Include="Services\IJSONSerializer.cs" />

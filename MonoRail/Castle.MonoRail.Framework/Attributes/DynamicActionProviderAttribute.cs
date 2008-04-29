@@ -16,12 +16,14 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
+	using Castle.MonoRail.Framework.Descriptors;
+
 	/// <summary>
 	/// Associates a provider that can add dynamic actions 
 	/// to a controller
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true), Serializable]
-	public class DynamicActionProviderAttribute : Attribute
+	public class DynamicActionProviderAttribute : Attribute, IDynamicActionProviderDescriptorBuilder
 	{
 		private readonly Type providerType;
 
@@ -46,6 +48,15 @@ namespace Castle.MonoRail.Framework
 		public Type ProviderType
 		{
 			get { return providerType; }
+		}
+
+		/// <summary>
+		/// Builds the dynamic action provider descriptors.
+		/// </summary>
+		/// <returns></returns>
+		public DynamicActionProviderDescriptor[] BuildDynamicActionProviderDescriptors()
+		{
+			return new DynamicActionProviderDescriptor[] { new DynamicActionProviderDescriptor(ProviderType, this) };
 		}
 	}
 }

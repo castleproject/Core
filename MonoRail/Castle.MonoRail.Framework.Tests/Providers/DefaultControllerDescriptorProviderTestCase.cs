@@ -35,6 +35,7 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 		private IResourceDescriptorProvider resourceProviderMock;
 		private ITransformFilterDescriptorProvider transformDescProviderMock;
 		private IReturnBinderDescriptorProvider returnTypeDescProviderMock;
+		private IDynamicActionProviderDescriptorProvider dynamicActionProviderDescProviderMock;
 
 		[Test]
 		public void CollectsSkipRescueForAction()
@@ -73,8 +74,8 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 
 			ControllerMetaDescriptor metaDesc = provider.BuildDescriptor(controllerType);
 			Assert.IsNotNull(metaDesc);
-			Assert.AreEqual(1, metaDesc.ActionProviders.Count);
-			Assert.AreEqual(typeof(DummyDynActionProvider), metaDesc.ActionProviders[0]);
+			Assert.AreEqual(1, metaDesc.DynamicActionProviders.Length);
+			Assert.AreEqual(typeof(DummyDynActionProvider), metaDesc.DynamicActionProviders[0].DynamicActionProviderType);
 		}
 
 		[Test]
@@ -146,13 +147,15 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 			resourceProviderMock = mockRepository.CreateMock<IResourceDescriptorProvider>();
 			transformDescProviderMock = mockRepository.CreateMock<ITransformFilterDescriptorProvider>();
 			returnTypeDescProviderMock = mockRepository.CreateMock<IReturnBinderDescriptorProvider>();
+			dynamicActionProviderDescProviderMock = mockRepository.CreateMock<IDynamicActionProviderDescriptorProvider>();
 
 			provider = new DefaultControllerDescriptorProvider(helperDescProviderMock,
 															   filterDescProviderMock,
 															   layoutDescProviderMock,
 															   rescueDescProviderMock,
 															   resourceProviderMock,
-															   transformDescProviderMock, returnTypeDescProviderMock);
+															   transformDescProviderMock, returnTypeDescProviderMock,
+															   dynamicActionProviderDescProviderMock);
 
 			Type controllerType = typeof(SingleActionController);
 			MethodInfo actionMethod = controllerType.GetMethod("Action1");
@@ -172,6 +175,8 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 				Expect.Call(layoutDescProviderMock.CollectLayout(actionMethod)).Return(null);
 				Expect.Call(transformDescProviderMock.CollectFilters(actionMethod)).Return(new TransformFilterDescriptor[0]);
 				Expect.Call(returnTypeDescProviderMock.Collect(actionMethod)).Return(null);
+				Expect.Call(dynamicActionProviderDescProviderMock.CollectProviders(controllerType)).Return(
+					new DynamicActionProviderDescriptor[0]);
 			}
 
 			using(mockRepository.Playback())
@@ -260,7 +265,8 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 			provider = new DefaultControllerDescriptorProvider(new DefaultHelperDescriptorProvider(),
 															   new DefaultFilterDescriptorProvider(), new DefaultLayoutDescriptorProvider(),
 															   new DefaultRescueDescriptorProvider(), new DefaultResourceDescriptorProvider(),
-															   new DefaultTransformFilterDescriptorProvider(), new DefaultReturnBinderDescriptorProvider());
+															   new DefaultTransformFilterDescriptorProvider(), new DefaultReturnBinderDescriptorProvider(), 
+															   new DefaultDynamicActionProviderDescriptorProvider());
 		}
 	}
 }

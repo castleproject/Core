@@ -35,9 +35,9 @@ namespace Castle.MonoRail.Framework.Descriptors
 		private TransformFilterDescriptor[] transformFilters = new TransformFilterDescriptor[0];
 		private Dictionary<object, ActionMetaDescriptor> actionMetaDescriptors = new Dictionary<object, ActionMetaDescriptor>();
 		private IList<ScaffoldingAttribute> scaffoldings = new List<ScaffoldingAttribute>();
-		private IList<Type> actionProviders = new List<Type>();
 		private IList<MethodInfo> ajaxActions = new List<MethodInfo>();
 		private IDictionary actions = new HybridDictionary(true);
+		private DynamicActionProviderDescriptor[] dynamicActionProviders = new DynamicActionProviderDescriptor[0];
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ControllerMetaDescriptor"/> class.
@@ -144,21 +144,22 @@ namespace Castle.MonoRail.Framework.Descriptors
 		}
 
 		/// <summary>
+		/// Gets or sets the dynamic action providers.
+		/// </summary>
+		/// <value>The dynamic action providers.</value>
+		public DynamicActionProviderDescriptor[] DynamicActionProviders
+		{
+			get { return dynamicActionProviders; }
+			set { dynamicActionProviders = value; }
+		}
+
+		/// <summary>
 		/// Gets the scaffoldings.
 		/// </summary>
 		/// <value>The scaffoldings.</value>
 		public IList<ScaffoldingAttribute> Scaffoldings
 		{
 			get { return scaffoldings; }
-		}
-
-		/// <summary>
-		/// Gets the action providers.
-		/// </summary>
-		/// <value>The action providers.</value>
-		public IList<Type> ActionProviders
-		{
-			get { return actionProviders; }
 		}
 
 		/// <summary>

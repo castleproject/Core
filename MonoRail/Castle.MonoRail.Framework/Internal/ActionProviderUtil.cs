@@ -29,12 +29,13 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <param name="context">The context.</param>
 		public static void RegisterActions(IEngineContext engineContext, IController controller, IControllerContext context)
 		{
-			foreach(Type providerType in context.ControllerDescriptor.ActionProviders)
-			{
-				IDynamicActionProvider provider = (IDynamicActionProvider) Activator.CreateInstance(providerType);
+		//TODO: DynamicActionProvider strategy has made this obsolete
+		//	foreach(Type providerType in context.ControllerDescriptor.ActionProviders)
+		//	{
+		//		IDynamicActionProvider provider = (IDynamicActionProvider) Activator.CreateInstance(providerType);
 
-				provider.IncludeActions(engineContext, controller, context);
-			}
+		//		provider.IncludeActions(engineContext, controller, context);
+		//	}
 		}
 	}
 }

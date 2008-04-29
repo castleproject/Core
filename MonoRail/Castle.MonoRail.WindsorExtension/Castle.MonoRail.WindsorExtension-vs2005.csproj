@@ -115,6 +115,7 @@
     <Compile Include="WindsorControllerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WindsorDynamicActionProviderFactory.cs" />
     <Compile Include="WindsorFilterFactory.cs">
       <SubType>Code</SubType>
     </Compile>

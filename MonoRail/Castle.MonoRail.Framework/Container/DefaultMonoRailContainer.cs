@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Container
 {
 	using System;
 	using System.Configuration;
+
 	using Castle.Components.Common.EmailSender;
 	using Castle.Components.Validator;
 	using Castle.Core.Configuration;
@@ -156,7 +157,15 @@ namespace Castle.MonoRail.Framework.Container
 			/// <summary>
 			/// The <see cref="IEngineContextFactory"/> service.
 			/// </summary>
-			EngineContextFactory
+			EngineContextFactory,
+			/// <summary>
+			/// The <see cref="IDynamicActionProviderFactory"/> service.
+			/// </summary>
+			DynamicActionProviderFactory,
+			/// <summary>
+			/// The <see cref="IDynamicActionProviderDescriptorProvider"/> service.
+			/// </summary>
+			DynamicActionProviderDescriptorProvider
 		}
 
 		#endregion
@@ -184,6 +193,7 @@ namespace Castle.MonoRail.Framework.Container
 		private IHelperFactory helperFactoryCached;
 		private IServiceInitializer serviceInitializerCached;
 		private ExtensionManager extensionManager;
+		private IDynamicActionProviderFactory dynamicActionProviderFactoryCached;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultMonoRailContainer"/> class.
@@ -275,6 +285,13 @@ namespace Castle.MonoRail.Framework.Container
 			if (filterFactory != null)
 			{
 				AddService(typeof(IFilterFactory), filterFactory);
+			}
+
+			IDynamicActionProviderFactory dynamicActionProviderFactory =
+				(IDynamicActionProviderFactory)Parent.GetService(typeof(IDynamicActionProviderFactory));
+			if (dynamicActionProviderFactory != null)
+			{
+				AddService(typeof(IDynamicActionProviderFactory), dynamicActionProviderFactory);
 			}
 
 			IControllerDescriptorProvider controllerDescriptorProvider =
@@ -449,6 +466,14 @@ namespace Castle.MonoRail.Framework.Container
 			{
 				AddService<IReturnBinderDescriptorProvider>(CreateService<DefaultReturnBinderDescriptorProvider>());
 			}
+			if (!HasService<IDynamicActionProviderFactory>())
+			{
+				AddService<IDynamicActionProviderFactory>(CreateService<DefaultDynamicActionProviderFactory>());
+			}
+			if (!HasService<IDynamicActionProviderDescriptorProvider>())
+			{
+				AddService<IDynamicActionProviderDescriptorProvider>(CreateService<DefaultDynamicActionProviderDescriptorProvider>());
+			}
 			if (!HasService<IControllerDescriptorProvider>())
 			{
 				AddService<IControllerDescriptorProvider>(CreateService<DefaultControllerDescriptorProvider>());
@@ -497,6 +522,8 @@ namespace Castle.MonoRail.Framework.Container
 			{
 				AddService<IAjaxProxyGenerator>(CreateService<PrototypeAjaxProxyGenerator>());
 			}
+			
+
 		}
 
 		/// <summary>
@@ -967,6 +994,23 @@ namespace Castle.MonoRail.Framework.Container
 			set { helperFactoryCached = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the dynamic action provider factory.
+		/// </summary>
+		/// <value>The dynamic action provider factory.</value>
+		public IDynamicActionProviderFactory DynamicActionProviderFactory
+		{
+			get
+			{
+				if (dynamicActionProviderFactoryCached == null)
+				{
+					dynamicActionProviderFactoryCached = GetService<IDynamicActionProviderFactory>();
+				}
+				return dynamicActionProviderFactoryCached;
+			}
+			set { dynamicActionProviderFactoryCached = value; }
+		}
+
 		#endregion
 
 		private void RegisterServiceOverrideFromConfigurationNode(IConfiguration serviceConfig)
@@ -1087,6 +1131,10 @@ namespace Castle.MonoRail.Framework.Container
 					return typeof(IViewComponentDescriptorProvider);
 				case ServiceIdentification.EngineContextFactory:
 					return typeof(IEngineContextFactory);
+				case ServiceIdentification.DynamicActionProviderFactory:
+					return typeof(IDynamicActionProviderFactory);
+				case ServiceIdentification.DynamicActionProviderDescriptorProvider:
+					return typeof(IDynamicActionProviderDescriptorProvider);
 				default:
 					throw new NotSupportedException("Id not supported " + id);
 			}
