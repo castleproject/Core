@@ -122,27 +122,30 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="parameters">The parameters.</param>
 			public override void Configure( IDictionary parameters )
 			{
-				AddParameterToOptions( parameters, JQueryOptions.Debug );
-				AddParameterToOptions( parameters, JQueryOptions.ErrorClass );
-				AddParameterToOptions( parameters, JQueryOptions.ErrorContainer );
-				AddParameterToOptions( parameters, JQueryOptions.ErrorElement );
-				AddParameterToOptions( parameters, JQueryOptions.ErrorLabelContainer );
-				AddParameterToOptions( parameters, JQueryOptions.ErrorPlacement );
-				AddParameterToOptions( parameters, JQueryOptions.FocusCleanup );
-				AddParameterToOptions( parameters, JQueryOptions.FocusInvalid );
-				AddParameterToOptions( parameters, JQueryOptions.Highlight );
-				AddParameterToOptions( parameters, JQueryOptions.Ignore );
-				AddParameterToOptions( parameters, JQueryOptions.Messages );
-				AddParameterToOptions( parameters, JQueryOptions.Meta );
-				AddParameterToOptions( parameters, JQueryOptions.OnClick );
-				AddParameterToOptions( parameters, JQueryOptions.OnFocusOut );
-				AddParameterToOptions( parameters, JQueryOptions.OnKeyUp );
-				AddParameterToOptions( parameters, JQueryOptions.OnSubmit );
-				AddParameterToOptions( parameters, JQueryOptions.ShowErrors );
-				AddParameterToOptions( parameters, JQueryOptions.SubmitHandler );
-				AddParameterToOptions( parameters, JQueryOptions.Success );
-				AddParameterToOptions( parameters, JQueryOptions.Unhighlight );
-				AddParameterToOptions( parameters, JQueryOptions.Wrapper );
+				AddParameterToOptions( parameters, JQueryOptions.Debug, false );
+				AddParameterToOptions( parameters, JQueryOptions.ErrorClass, true );
+				AddParameterToOptions( parameters, JQueryOptions.ErrorContainer, true );
+				AddParameterToOptions( parameters, JQueryOptions.ErrorElement, true );
+				AddParameterToOptions( parameters, JQueryOptions.ErrorLabelContainer, true );
+				AddParameterToOptions( parameters, JQueryOptions.ErrorPlacement, false );
+				AddParameterToOptions( parameters, JQueryOptions.FocusCleanup, false );
+				AddParameterToOptions( parameters, JQueryOptions.FocusInvalid, false );
+				AddParameterToOptions( parameters, JQueryOptions.Highlight, false );
+				AddParameterToOptions( parameters, JQueryOptions.Ignore, true );
+				AddParameterToOptions( parameters, JQueryOptions.Messages, false );
+				AddParameterToOptions( parameters, JQueryOptions.Meta, true );
+				AddParameterToOptions( parameters, JQueryOptions.OnClick, false );
+				AddParameterToOptions( parameters, JQueryOptions.OnFocusOut, false );
+				AddParameterToOptions( parameters, JQueryOptions.OnKeyUp, false );
+				AddParameterToOptions( parameters, JQueryOptions.OnSubmit, false );
+				AddParameterToOptions( parameters, JQueryOptions.ShowErrors, false );
+				AddParameterToOptions( parameters, JQueryOptions.SubmitHandler, false );
+				AddParameterToOptions( parameters, JQueryOptions.Success, false );
+				AddParameterToOptions( parameters, JQueryOptions.Unhighlight, false );
+				AddParameterToOptions( parameters, JQueryOptions.Wrapper, true );
+				AddParameterToOptions( parameters, JQueryOptions.IsAjax, false );
+
+				AddCustomRules();
 			}
 
 			/// <summary>
@@ -158,6 +161,19 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				if ( _Rules.Count > 0 )
 				{
 					_Options[ JQueryOptions.Rules ] = AjaxHelper.JavascriptOptions( _Rules );
+				}
+
+				bool isAjax = false;
+				bool.TryParse( CommonUtils.ObtainEntryAndRemove( _Options, JQueryOptions.IsAjax, bool.FalseString ), out isAjax );
+
+				if( isAjax )
+				{
+					string submitHandler = CommonUtils.ObtainEntryAndRemove( _Options, JQueryOptions.SubmitHandler );
+
+					if( submitHandler == null )
+					{
+						_Options.Add( JQueryOptions.SubmitHandler, "function( form ) { $( form ).ajaxSubmit(); }" );
+					}
 				}
 
 				stringBuilder.AppendFormat( "$(\"#{0}\").validate( {1} );", formId, AjaxHelper.JavascriptOptions( _Options ) );
@@ -205,20 +221,43 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			#region Private Methods
 
-			void AddParameterToOptions( IDictionary parameters, string parameterName )
+			void AddCustomRules()
+			{
+				AddCustomRule( "notEqualTo", "Must not be equal to {0}.", "function(value, element, param) { return value != jQuery(param).val(); }" );
+				AddCustomRule( "greaterThan", "Must be greater than {0}.", "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) || ( value > jQuery(param).val() ); }" );
+				AddCustomRule( "lesserThan", "Must be lesser than {0}.", "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) || ( value < jQuery(param).val() ); }" );
+			}
+
+			void AddParameterToOptions( IDictionary parameters, string parameterName, bool quote )
 			{
 				string parameterValue = CommonUtils.ObtainEntryAndRemove( parameters, parameterName, null );
 
-				if ( parameterValue != null )
-					_Options.Add( parameterName, parameterValue );
+				if( parameterValue != null )
+				{
+					if( quote )
+						if( !parameterValue.StartsWith( "'" ) && !parameterValue.StartsWith( "\"" ) )
+							_Options.Add( parameterName, AbstractHelper.SQuote( parameterValue ) );
+						else
+							_Options.Add( parameterName, parameterValue );
+					else
+						_Options.Add( parameterName, parameterValue );
+				}
 			}
 
-			void AddParameterToOptions( IDictionary parameters, string parameterName, string defaultValue )
+			void AddParameterToOptions( IDictionary parameters, string parameterName, bool quote, string defaultValue )
 			{
 				string parameterValue = CommonUtils.ObtainEntryAndRemove( parameters, parameterName, defaultValue );
 
-				if ( parameterValue != null )
-					_Options.Add( parameterName, parameterValue );
+				if( parameterValue != null )
+				{
+					if( quote )
+						if( !parameterValue.StartsWith( "'" ) && !parameterValue.StartsWith( "\"" ) )
+							_Options.Add( parameterName, AbstractHelper.SQuote( parameterValue ) );
+						else
+							_Options.Add( parameterName, parameterValue );
+					else
+						_Options.Add( parameterName, parameterValue );
+				}
 			}
 
 			#endregion Private Methods
@@ -274,6 +313,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				public const string Success = "success";
 				public const string Unhighlight = "unhighlight";
 				public const string Wrapper = "wrapper";
+				public const string IsAjax = "isAjax";
 
 			}
 
@@ -603,6 +643,45 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				AddClass( "date" );
 				AddTitle( violationMessage );
+			}
+
+			/// <summary>
+			/// Sets that a field's value must greater than another field's value.
+			/// </summary>
+			/// <remarks>
+			/// Only numeric values can be compared for now. The JQuery validation plugin does not yet support dates comparison.
+			/// </remarks>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+			/// <param name="validationType">The type of data to compare.</param>
+			/// <param name="violationMessage">The violation message.</param>
+			/// <remarks>Not implemented by the JQuery validate plugin. Done via a custom rule.</remarks>
+			public void SetAsGreaterThan( string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage )
+			{
+				if( validationType == IsGreaterValidationType.Decimal || validationType == IsGreaterValidationType.Integer )
+				{
+					AddClass( "greaterThan" );
+					AddParameter( "greaterThan", comparisonFieldName );
+					AddTitle( violationMessage );
+				}
+			}
+
+			/// <summary>
+			/// Sets that a field's value must be lesser than another field's value.
+			/// </summary>
+			/// <remarks>Not implemented by the JQuery validate plugin. Done via a custom rule.</remarks>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+			/// <param name="validationType">The type of data to compare.</param>
+			/// <param name="violationMessage">The violation message.</param>
+			public void SetAsLesserThan( string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage )
+			{
+				if( validationType == IsGreaterValidationType.Decimal || validationType == IsGreaterValidationType.Integer )
+				{
+					AddClass( "lesserThan" );
+					AddParameter( "lesserThan", comparisonFieldName );
+					AddTitle( violationMessage );
+				}
 			}
 
 			#endregion IBrowserValidationGenerator Members

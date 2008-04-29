@@ -192,4 +192,10 @@
   <data name="not_same_value_invalid" xml:space="preserve">
     <value>Field must not equals '{0}'</value>
   </data>
+  <data name="greater_than_invalid" xml:space="preserve">
+    <value>This field value must be greater than the other field value.</value>
+  </data>
+  <data name="lesser_than_invalid" xml:space="preserve">
+    <value>This field value must be lesser than the other field value.</value>
+  </data>
 </root>

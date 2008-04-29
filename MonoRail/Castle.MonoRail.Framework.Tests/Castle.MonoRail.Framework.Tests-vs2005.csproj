@@ -227,6 +227,7 @@
     <Compile Include="Helpers\Validations\FormValidationTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\Validations\JQueryFormValidationTestCase.cs" />
     <Compile Include="JSGeneration\DynamicDispatcherTestCase.cs" />
     <Compile Include="JSGeneration\JSCodeGeneratorTestCase.cs" />
     <Compile Include="JSGeneration\JSGeneratorDispatcherBaseTestCase.cs" />

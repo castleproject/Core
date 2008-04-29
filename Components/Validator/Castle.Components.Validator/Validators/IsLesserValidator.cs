@@ -20,7 +20,7 @@ namespace Castle.Components.Validator
 	/// Specifies the data type the <see cref="IsGreaterValidator"/>
 	/// is dealing with.
 	/// </summary>
-	public enum IsGreaterValidationType
+	public enum IsLesserValidationType
 	{
 		/// <summary>
 		/// Value compare as Integer
@@ -44,9 +44,9 @@ namespace Castle.Components.Validator
 	}
 
 	/// <summary>
-	/// Comparing properties value and make sure it greater than one another.
+	/// Comparing properties value and make sure it is lesser than one another.
 	/// </summary>
-	public class IsGreaterValidator : AbstractValidator
+	public class IsLesserValidator : AbstractValidator
 	{
 		#region Private variables
 
@@ -58,11 +58,11 @@ namespace Castle.Components.Validator
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a IsGreaterValidator of the given type and target property.
+		/// Initializes a IsLesserValidator of the given type and target property.
 		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="propertyToCompare"></param>
-		public IsGreaterValidator(IsGreaterValidationType type, string propertyToCompare)
+		/// <param name="type">The type of data to compare.</param>
+		/// <param name="propertyToCompare">The name of the property to compare.</param>
+		public IsLesserValidator( IsGreaterValidationType type, string propertyToCompare )
 		{
 			this.validationType = type;
 			this.propertyToCompare = propertyToCompare;
@@ -102,6 +102,8 @@ namespace Castle.Components.Validator
 		{
 			object refValue = GetFieldOrPropertyValue(instance, propertyToCompare);
 
+			if( ( fieldValue == null || fieldValue.ToString() == "" ) && ( refValue == null || refValue.ToString() == "" ) ) return true;
+
 			bool valid = false;
 
 			switch (validationType)
@@ -113,7 +115,7 @@ namespace Castle.Components.Validator
 					int.TryParse(refValue.ToString(), out intRefVal);
 					int.TryParse(fieldValue.ToString(), out intFieldValue);
 
-					valid = intFieldValue > intRefVal;
+					valid = intFieldValue < intRefVal;
 
 					break;
 
@@ -124,7 +126,7 @@ namespace Castle.Components.Validator
 					decimal.TryParse(refValue.ToString(), out decRefVal);
 					decimal.TryParse(fieldValue.ToString(), out decFieldVal);
 
-					valid = decFieldVal > decRefVal;
+					valid = decFieldVal < decRefVal;
 
 					break;
 
@@ -139,12 +141,12 @@ namespace Castle.Components.Validator
 
 					if (validationType == IsGreaterValidationType.DateTime)
 					{
-						valid = dateFieldVal.CompareTo(dateRefVal) > 0;
+						valid = dateFieldVal < dateRefVal;
 					}
 
 					if (validationType == IsGreaterValidationType.Date)
 					{
-						valid = dateFieldVal.Subtract(dateRefVal).TotalDays > 0;
+						valid = dateFieldVal < dateRefVal;
 					}
 
 					break;
@@ -171,7 +173,7 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyBrowserValidation( config, inputType, generator, attributes, target );
 
-			generator.SetAsGreaterThan( target, propertyToCompare, validationType, BuildErrorMessage() );
+			generator.SetAsLesserThan( target, propertyToCompare, validationType, BuildErrorMessage() );
 		}
 
 		/// <summary>
@@ -180,7 +182,7 @@ namespace Castle.Components.Validator
 		/// <value></value>
 		protected override string MessageKey
 		{
-			get { return MessageConstants.GreaterThanMessage; }
+			get { return MessageConstants.LesserThanMessage; }
 		}
 
 		/// <summary>

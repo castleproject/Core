@@ -179,5 +179,25 @@ namespace Castle.Components.Validator
 		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="violationMessage">The violation message.</param>
 		void SetDate(string target, string violationMessage);
+
+		/// <summary>
+		/// Sets that a field's value must be greater than another field's value.
+		/// </summary>
+		/// <remarks>Not implemented by the JQuery validate plugin. Done via a custom rule.</remarks>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+		/// <param name="validationType">The type of data to compare.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetAsGreaterThan( string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage );
+
+		/// <summary>
+		/// Sets that a field's value must be lesser than another field's value.
+		/// </summary>
+		/// <remarks>Not implemented by the JQuery validate plugin. Done via a custom rule.</remarks>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+		/// <param name="validationType">The type of data to compare.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetAsLesserThan( string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage );
 	}
 }

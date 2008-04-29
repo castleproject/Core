@@ -141,6 +141,9 @@
   <data name="generic_invalid" xml:space="preserve">
 	<value>Le contenu du champ est invalide.</value>
   </data>
+  <data name="greater_than_invalid" xml:space="preserve">
+    <value>La valeur du champ doit être plus grande que la valeur de l'autre champ.</value>
+  </data>
   <data name="group_not_empty_invalid" xml:space="preserve">
 	<value>Au moins une des valeurs de ({0}) ne doit pas être vide.</value>
   </data>
@@ -161,6 +164,9 @@
   </data>
   <data name="length_tooshort" xml:space="preserve">
 	<value>La longueur du champ doit être de plus de {0} caractères.</value>
+  </data>
+  <data name="lesser_than_invalid" xml:space="preserve">
+    <value>La valeur du champ doit être plus petite que la valeur de l'autre champ.</value>
   </data>
   <data name="not_same_as_invalid" xml:space="preserve">
 	<value>Ces deux champs ne doivent pas être identiques.</value>

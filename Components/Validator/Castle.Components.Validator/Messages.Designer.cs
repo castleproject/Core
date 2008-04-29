@@ -133,6 +133,15 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This field value must be greater than the other field value..
+        /// </summary>
+        internal static string greater_than_invalid {
+            get {
+                return ResourceManager.GetString("greater_than_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to At least one of the values in ({0}) should not be empty.
         /// </summary>
         internal static string group_not_empty_invalid {
@@ -192,6 +201,15 @@ namespace Castle.Components.Validator {
         internal static string length_tooshort {
             get {
                 return ResourceManager.GetString("length_tooshort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This field value must be lesser than the other field value..
+        /// </summary>
+        internal static string lesser_than_invalid {
+            get {
+                return ResourceManager.GetString("lesser_than_invalid", resourceCulture);
             }
         }
         

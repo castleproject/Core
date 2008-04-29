@@ -135,5 +135,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 
 			helper.EndFormTag();
 		}
+
+		[Test]
+		public void TestIsAjaxOption()
+		{
+			helper.FormTag( DictHelper.CreateN( "isAjax", true ).N( "noaction", true ) );
+
+			Assert.AreEqual( "\r\n<script type=\"text/javascript\">\r\n$(\"#form1\").validate( {submitHandler:function( form ) { $( form ).ajaxSubmit(); }} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }', 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return value > jQuery(param).val(); }', 'Must be greater than {0}.' );</script>\r\n</form>", helper.EndFormTag() );
+		}
 	}
 }

@@ -41,5 +41,7 @@ namespace Castle.Components.Validator
 		public const string CollectionNotEmpty = "collection_not_empty";
 		public const string InvalidSetMessage = "set_invalid";
 		public const string InvalidCreditCardMessage = "credit_card_invalid";
+		public const string GreaterThanMessage = "greater_than_invalid";
+		public const string LesserThanMessage = "lesser_than_invalid";
 	}
 }

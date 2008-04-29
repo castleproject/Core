@@ -367,6 +367,30 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			AddTitle(violationMessage);
 		}
 
+		/// <summary>
+		/// Sets that a field's value must greater than another field's value.
+		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+		/// <param name="validationType">The type of data to compare.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		/// <remarks>Not implemented by the JQuery validate plugin. Done via a custom rule.</remarks>
+		public void SetAsGreaterThan( string target, string comparisonFieldName, Castle.Components.Validator.IsGreaterValidationType validationType, string violationMessage )
+		{
+		}
+
+		/// <summary>
+		/// Sets that a field's value must be lesser than another field's value.
+		/// </summary>
+		/// <remarks>Not implemented by the JQuery validate plugin. Done via a custom rule.</remarks>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+		/// <param name="validationType">The type of data to compare.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		public void SetAsLesserThan( string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage )
+		{
+		}
+
 		private void AddTitle(string message)
 		{
 			AddZebdaAttribute("message", message);
