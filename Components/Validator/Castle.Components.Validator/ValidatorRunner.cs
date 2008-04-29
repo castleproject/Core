@@ -37,6 +37,16 @@ namespace Castle.Components.Validator
 	/// </example>
 	public class ValidatorRunner
 	{
+
+		/// <summary>
+		/// Default settings value being used for constructor or method overloads
+		/// </summary>
+		public static class DefaultSettings {
+			/// <summary>
+			/// Default setting is false: the validation runner will not infer validators based on data types
+			/// </summary>
+			public const bool InferValidators = false;
+		}
 		private readonly static IDictionary<Type, Type> type2Validator;
 		private readonly IDictionary extendedProperties = new Hashtable();
 		private readonly IDictionary<object, ErrorSummary> errorPerInstance;
@@ -66,7 +76,7 @@ namespace Castle.Components.Validator
 		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
 		/// </summary>
 		/// <param name="registry">The registry.</param>
-		public ValidatorRunner(IValidatorRegistry registry) : this(false, registry)
+		public ValidatorRunner(IValidatorRegistry registry) : this(DefaultSettings.InferValidators, registry)
 		{
 		}
 
@@ -116,23 +126,13 @@ namespace Castle.Components.Validator
 		{
 			if (objectInstance == null) throw new ArgumentNullException("objectInstance");
 
-			bool isValid = true;
+			bool isValid;
 
 			ErrorSummary summary = new ErrorSummary();
 
-			foreach(IValidator validator in GetValidators(objectInstance, runWhen))
-			{
-				if (!validator.IsValid(objectInstance))
-				{
-					string name = validator.FriendlyName ?? validator.Name;
-
-					summary.RegisterErrorMessage(name, validator.ErrorMessage);
-
-					isValid = false;
-				}
-			}
-
-			errorPerInstance[objectInstance] = summary;
+			IEnumerable<IValidator> validators = GetValidators(objectInstance, runWhen);
+			
+			isValid = PerformValidation(objectInstance, validators, summary);
 
 			return isValid;
 		}
@@ -174,7 +174,7 @@ namespace Castle.Components.Validator
 				}
 			}
 
-			Array.Sort(validators, ValidatorComparer.Instance);
+			SortValidators(validators);
 
 			return validators;
 		}
@@ -213,13 +213,63 @@ namespace Castle.Components.Validator
 			get { return extendedProperties; }
 		}
 
-		private IValidator[] GetValidators(object objectInstance, RunWhen runWhen)
+		/// <summary>
+		/// main validation logic happens here
+		/// </summary>
+		/// <param name="objectInstance">object instance to be validated</param>
+		/// <param name="validators">the validators to run</param>
+		/// <param name="summaryToPopulate"></param>
+		protected virtual bool PerformValidation(object objectInstance, IEnumerable<IValidator> validators, ErrorSummary summaryToPopulate) 
+		{
+			bool isValid = true;
+
+			foreach (IValidator validator in validators) {
+				if (!validator.IsValid(objectInstance)) {
+					string name = validator.FriendlyName ?? validator.Name;
+
+					summaryToPopulate.RegisterErrorMessage(name, validator.ErrorMessage);
+
+					isValid = false;
+				}
+			}
+
+			SetErrorSummaryForInstance(objectInstance, summaryToPopulate);
+
+			return isValid;
+		}
+
+		/// <summary>
+		/// associate error summary to the object instance
+		/// </summary>
+		/// <param name="objectInstance">object instance to associate validation error summary with</param>
+		/// <param name="summary">error summary to be associated with object instance</param>
+		protected void SetErrorSummaryForInstance(object objectInstance, ErrorSummary summary)
+		{
+			errorPerInstance[objectInstance] = summary;
+		}
+
+		/// <summary>
+		/// provide read access to validator registry
+		/// </summary>
+		protected IValidatorRegistry Registry { get { return registry; } }
+
+		/// <summary>
+		/// Sort given validators with default algorithm
+		/// </summary>
+		/// <param name="validators"></param>
+		protected virtual void SortValidators(IValidator[] validators)
+		{
+			Array.Sort(validators, ValidatorComparer.Instance);
+		}
+
+
+		private IValidator[] GetValidators(object objectInstance, RunWhen runWhen) 
 		{
 			if (objectInstance == null) throw new ArgumentNullException("objectInstance");
 
 			IValidator[] validators = registry.GetValidators(this, objectInstance.GetType(), runWhen);
 
-			Array.Sort(validators, ValidatorComparer.Instance);
+			SortValidators(validators);
 
 			return validators;
 		}

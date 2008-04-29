@@ -77,8 +77,7 @@ namespace Castle.Components.Validator
 
 			if (properties == null)
 			{
-				properties = targetType.GetProperties();
-				propertiesPerType[targetType] = properties;
+				propertiesPerType[targetType] = properties = ResolveProperties(targetType);
 			}
 
 			ArrayList list = new ArrayList();
@@ -148,6 +147,16 @@ namespace Castle.Components.Validator
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Resolve properties that will be inspected for registered validators
+		/// </summary>
+		/// <param name="targetType">the type to examinate properties for</param>
+		/// <returns>resolved properties</returns>
+		protected virtual PropertyInfo[] ResolveProperties(Type targetType)
+		{
+			return targetType.GetProperties();
+		}
 
 		private static bool IsValidatorOnPhase(IValidator validator, RunWhen when)
 		{
