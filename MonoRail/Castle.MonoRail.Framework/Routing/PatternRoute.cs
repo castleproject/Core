@@ -274,6 +274,7 @@ namespace Castle.MonoRail.Framework.Routing
 			public bool hasRestriction, isStaticNode;
 			private string defaultVal;
 			private string[] acceptedTokens;
+			private string notAcceptedToken;
 			private Regex exp;
 			private string acceptedRegex;
 
@@ -330,6 +331,11 @@ namespace Castle.MonoRail.Framework.Routing
 				if (!string.IsNullOrEmpty(acceptedRegex))
 				{
 					return acceptedRegex;
+				}
+				else if (!string.IsNullOrEmpty(notAcceptedToken))
+				{
+					// \w+(?<!view|index)\b
+					return "\\w+(?<!" + CharClass(notAcceptedToken) + ")\\b";
 				}
 				else if (acceptedTokens != null && acceptedTokens.Length != 0)
 				{
@@ -394,6 +400,13 @@ namespace Castle.MonoRail.Framework.Routing
 			{
 				hasRestriction = true;
 				acceptedTokens = names;
+				ReBuildRegularExpression();
+			}
+
+			public void DoesNotAccept(string value)
+			{
+				hasRestriction = true;
+				notAcceptedToken = value;
 				ReBuildRegularExpression();
 			}
 
@@ -521,10 +534,8 @@ namespace Castle.MonoRail.Framework.Routing
 			/// <returns></returns>
 			public PatternRoute AnythingBut(string name)
 			{
-				// \w+(?<!view|index)\b
-				// targetNode.DoesNotAccept(name);
-				// return route;
-				throw new NotImplementedException();
+				targetNode.DoesNotAccept(name);
+				return route;
 			}
 
 			/// <summary>

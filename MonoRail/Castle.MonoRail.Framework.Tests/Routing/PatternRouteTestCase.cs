@@ -158,5 +158,19 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.AreEqual("something", match.Parameters["param"]);
 			Assert.AreEqual("173e0970-c123-11dc-95ff-0800200c9a66", match.Parameters["key"]);
 		}
+
+		[Test]
+		public void AnythingBut_Restriction()
+		{
+			PatternRoute route = new PatternRoute("/<controller>/[action]/[id]")
+				.Restrict("controller").AnythingBut("dummy")
+				.Restrict("id").ValidInteger;
+
+			RouteMatch match = new RouteMatch();
+			Assert.AreEqual(0, route.Matches("/dummy/index", CreateGetContext(), match));
+			Assert.AreEqual(0, route.Matches("/DUMMY/list", CreateGetContext(), match));
+			Assert.AreEqual(4, route.Matches("/some/new", CreateGetContext(), match));
+			Assert.AreEqual(6, route.Matches("/some/list/1", CreateGetContext(), match));
+		}
 	}
 }
