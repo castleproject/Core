@@ -33,6 +33,8 @@
 	<property name="lib.framework.ext.dir" value="${path::combine(lib.family.dir, string::replace(framework::get-target-framework(), framework::get-family(framework::get-target-framework()) + '-', ''))}" dynamic="true" />
 
 	<if test="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
+		<property name="registry.dotnet.v3.0.Installed" value="0" overwrite="false"/>
+
 		<readregistry property="registry.dotnet.v3.0.Installed"
 			  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Install"
 			  hive="LocalMachine"
