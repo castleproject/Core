@@ -78,7 +78,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected override ChannelCreator GetChannel(Type contract, Binding binding, EndpointAddress address)
 		{
-			return GetChannel(contract, binding, address);
+			return GetChannel(clientModel, contract, binding, address);
 		}
 
 		#endregion
