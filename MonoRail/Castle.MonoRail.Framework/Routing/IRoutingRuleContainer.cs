@@ -36,8 +36,21 @@ namespace Castle.MonoRail.Framework.Routing
 		/// Pendent
 		/// </summary>
 		/// <param name="rule">The rule.</param>
+		void AddFirst(IRoutingRule rule);
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="rule">The rule.</param>
 		/// <param name="action">The action executed if the rule matches.</param>
 		void Add(IRoutingRule rule, RouteAction action);
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="rule">The rule.</param>
+		/// <param name="action">The action executed if the rule matches.</param>
+		void AddFirst(IRoutingRule rule, RouteAction action);
 
 		/// <summary>
 		/// Pendent

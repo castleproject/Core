@@ -39,28 +39,28 @@ namespace Castle.MonoRail.Framework.Routing
 		}
 
 		/// <summary>
+		/// Adds the specified rule.
+		/// </summary>
+		/// <param name="rule">The rule.</param>
+		public void AddFirst(IRoutingRule rule)
+		{
+			Add(new DecoratedRule(rule));
+		}
+
+		/// <summary>
 		/// Pendent
 		/// </summary>
 		public void Add(IRoutingRule rule, RouteAction action)
 		{
-			Add(new DecoratedRule(rule, action));
+			AddFirst(new DecoratedRule(rule, action));
 		}
 
-		private void Add(DecoratedRule rule)
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		public void AddFirst(IRoutingRule rule, RouteAction action)
 		{
-			// Lock for writing
-			rules.Add(rule);
-
-			// For really fast access
-			if (rule.RouteName != null)
-			{
-				if (name2Rule.ContainsKey(rule.RouteName))
-				{
-					throw new InvalidOperationException("Attempt to register route with duplicated name: " + rule.RouteName);
-				}
-
-				name2Rule[rule.RouteName] = rule.inner;
-			}
+			AddFirst(new DecoratedRule(rule, action));
 		}
 
 		/// <summary>
@@ -127,6 +127,19 @@ namespace Castle.MonoRail.Framework.Routing
 		}
 
 		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="routeName">Name of the route.</param>
+		/// <param name="hostname">The hostname.</param>
+		/// <param name="virtualPath">The virtual path.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public string CreateUrl(string routeName, string hostname, string virtualPath, object parameters)
+		{
+			return CreateUrl(routeName, hostname, virtualPath, new ReflectionBasedDictionaryAdapter(parameters));
+		}
+
+		/// <summary>
 		/// Finds the match.
 		/// </summary>
 		/// <param name="url">The URL.</param>
@@ -169,6 +182,36 @@ namespace Castle.MonoRail.Framework.Routing
 		public bool IsEmpty
 		{
 			get { return rules.Count == 0; }
+		}
+
+		private void Add(DecoratedRule rule)
+		{
+			// Lock for writing
+			rules.Add(rule);
+
+			RegisterNamedRoute(rule);
+		}
+
+		private void AddFirst(DecoratedRule rule)
+		{
+			// Lock for writing
+			rules.Insert(0, rule);
+
+			RegisterNamedRoute(rule);
+		}
+
+		private void RegisterNamedRoute(DecoratedRule rule)
+		{
+			// For really fast access
+			if (rule.RouteName != null)
+			{
+				if (name2Rule.ContainsKey(rule.RouteName))
+				{
+					throw new InvalidOperationException("Attempt to register route with duplicated name: " + rule.RouteName);
+				}
+
+				name2Rule[rule.RouteName] = rule.inner;
+			}
 		}
 
 		class DecoratedRule : IRoutingRule
