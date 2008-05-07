@@ -18,7 +18,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class PatternRouteTestCase : BaseRuleTestFixture
+	public class PatternRouteMatchTestCase : BaseRuleTestFixture
 	{
 		[Test]
 		public void ShouldMatchStatic()

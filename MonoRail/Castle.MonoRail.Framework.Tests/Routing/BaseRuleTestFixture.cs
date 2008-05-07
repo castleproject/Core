@@ -22,17 +22,17 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 	{
 		protected static IRouteContext CreateGetContext()
 		{
-			return new RouteContext(new MockRequest("GET"), "/", new Hashtable());
+			return new RouteContext(new MockRequest("GET"), null, "/", new Hashtable());
 		}
 
 		protected static IRouteContext CreateGetContext(string appPath)
 		{
-			return new RouteContext(new MockRequest("GET"), appPath, new Hashtable());
+			return new RouteContext(new MockRequest("GET"), null, appPath, new Hashtable());
 		}
 
 		protected static IRouteContext CreateContext(string appPath, Verb httpMethod)
 		{
-			return new RouteContext(new MockRequest(httpMethod.ToString()), appPath, new Hashtable());
+			return new RouteContext(new MockRequest(httpMethod.ToString()), null, appPath, new Hashtable());
 		}	
 	}
 }
