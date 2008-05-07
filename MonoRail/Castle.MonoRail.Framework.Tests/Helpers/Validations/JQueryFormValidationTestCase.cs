@@ -141,7 +141,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		{
 			helper.FormTag( DictHelper.CreateN( "isAjax", true ).N( "noaction", true ) );
 
-			Assert.AreEqual("\r\n<script type=\"text/javascript\">\r\n$(\"#form1\").validate( {submitHandler:function( form ) { $( form ).ajaxSubmit(); }} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }', 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) || ( value > jQuery(param).val() ); }', 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) || ( value < jQuery(param).val() ); }', 'Must be lesser than {0}.' );</script>\r\n</form>", helper.EndFormTag());
+			Assert.AreEqual( "\r\n<script type=\"text/javascript\">\r\njQuery(\"#form1\").validate( {submitHandler:function( form ) { jQuery( form ).ajaxSubmit(); }} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );</script>\r\n</form>", helper.EndFormTag() );
 		}
 	}
 }

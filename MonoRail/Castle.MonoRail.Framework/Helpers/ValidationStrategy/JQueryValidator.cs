@@ -172,11 +172,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 					if( submitHandler == null )
 					{
-						_Options.Add( JQueryOptions.SubmitHandler, "function( form ) { $( form ).ajaxSubmit(); }" );
+						_Options.Add( JQueryOptions.SubmitHandler, "function( form ) { jQuery( form ).ajaxSubmit(); }" );
 					}
 				}
 
-				stringBuilder.AppendFormat( "$(\"#{0}\").validate( {1} );", formId, AjaxHelper.JavascriptOptions( _Options ) );
+				stringBuilder.AppendFormat( "jQuery(\"#{0}\").validate( {1} );", formId, AjaxHelper.JavascriptOptions( _Options ) );
 
 				if ( _CustomRules.Count > 0 )
 				{
@@ -187,7 +187,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 						stringBuilder.Append( rule.Name );
 						stringBuilder.Append( "', " );
 						stringBuilder.Append( rule.Rule );
-						stringBuilder.Append( "', '" );
+						stringBuilder.Append( ", '" );
 						stringBuilder.Append( rule.ViolationMessage );
 						stringBuilder.Append( "' );" );
 					}
@@ -224,8 +224,8 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			void AddCustomRules()
 			{
 				AddCustomRule( "notEqualTo", "Must not be equal to {0}.", "function(value, element, param) { return value != jQuery(param).val(); }" );
-				AddCustomRule( "greaterThan", "Must be greater than {0}.", "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) || ( value > jQuery(param).val() ); }" );
-				AddCustomRule( "lesserThan", "Must be lesser than {0}.", "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) || ( value < jQuery(param).val() ); }" );
+				AddCustomRule( "greaterThan", "Must be greater than {0}.", "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }" );
+				AddCustomRule( "lesserThan", "Must be lesser than {0}.", "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }" );
 			}
 
 			void AddParameterToOptions( IDictionary parameters, string parameterName, bool quote )
