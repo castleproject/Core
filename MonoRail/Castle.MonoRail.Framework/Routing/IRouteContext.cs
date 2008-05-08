@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework
 {
+	using System.Web;
 	using System.Collections;
 
 	/// <summary>
@@ -30,6 +31,12 @@ namespace Castle.MonoRail.Framework
 		/// The Http Request
 		/// </summary>
 		IRequest Request { get; }
+
+		/// <summary>
+		/// Gets the response.
+		/// </summary>
+		/// <value>The response.</value>
+		HttpResponse Response { get;}
 
 		/// <summary>
 		/// Gets the context items.

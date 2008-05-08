@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Web;
+
 namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
@@ -23,6 +25,7 @@ namespace Castle.MonoRail.Framework.Routing
 	public class RouteContext : IRouteContext
 	{
 		private readonly string applicationPath;
+		private readonly HttpResponse response;
 		private readonly IDictionary contextItems;
 		private readonly IRequest request;
 
@@ -30,11 +33,13 @@ namespace Castle.MonoRail.Framework.Routing
 		/// Creates a new RouteContext
 		/// </summary>
 		/// <param name="request">The request.</param>
+		/// <param name="response">The response.</param>
 		/// <param name="applicationPath">The application path.</param>
 		/// <param name="contextItems">The context items.</param>
-		public RouteContext(IRequest request, string applicationPath, IDictionary contextItems)
+		public RouteContext(IRequest request, HttpResponse response, string applicationPath, IDictionary contextItems)
 		{
 			this.request = request;
+			this.response = response;
 			this.applicationPath = applicationPath;
 			this.contextItems = contextItems;
 		}
@@ -53,6 +58,15 @@ namespace Castle.MonoRail.Framework.Routing
 		public IRequest Request
 		{
 			get { return request; }
+		}
+
+		/// <summary>
+		/// Gets the Http response.
+		/// </summary>
+		/// <value>The response.</value>
+		public HttpResponse Response
+		{
+			get { return response; }
 		}
 
 		/// <summary>

@@ -77,6 +77,7 @@ namespace Castle.MonoRail.Framework.Routing
 		{
 			HttpContext context = HttpContext.Current;
 			HttpRequest request = context.Request;
+			HttpResponse response = context.Response;
 
 			if (File.Exists(request.PhysicalPath))
 			{
@@ -85,9 +86,9 @@ namespace Castle.MonoRail.Framework.Routing
 
 			RouteMatch match =
 				engine.FindMatch(StripAppPathFrom(request.FilePath, request.ApplicationPath) + request.PathInfo, 
-					new RouteContext(new RequestAdapter(request), request.ApplicationPath, context.Items));
+					new RouteContext(new RequestAdapter(request), response, request.ApplicationPath, context.Items));
 
-			if (match == null)
+			if (match == null || response.StatusCode == 301 || response.StatusCode == 302)
 			{
 				return;
 			}
