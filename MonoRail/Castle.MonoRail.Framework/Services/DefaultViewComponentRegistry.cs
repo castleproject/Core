@@ -15,14 +15,14 @@
 namespace Castle.MonoRail.Framework.Services
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Centralizes the registration and lookup of ViewComponents
 	/// </summary>
 	public class DefaultViewComponentRegistry : IViewComponentRegistry
 	{
-		private readonly Hashtable name2Type = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<string,Type> name2Type = new Dictionary<string,Type>(StringComparer.InvariantCultureIgnoreCase);
 
 		#region IViewComponentRegistry
 
@@ -40,18 +40,16 @@ namespace Castle.MonoRail.Framework.Services
 				name = details.Name;
 			}
 
-			name = NormalizeName(name);
+			if (!typeof(ViewComponent).IsAssignableFrom(type))
+			{
+				throw new MonoRailException(String.Format("You tried to register '{0}' as a view component but it " +
+					"doesn't seem the extend the ViewComponent abstract class: {1}", name, type.FullName));
+			}
 
-			if (name2Type.Contains(name))
+			if (name2Type.ContainsKey(name))
 			{
 				throw new MonoRailException(String.Format("ViewComponent '{0}' seems to be registered already. " + 
 					"This is due to it being registered more than once or a name clash", name));
-			}
-			
-			if (!typeof(ViewComponent).IsAssignableFrom(type))
-			{
-				throw new MonoRailException(String.Format("You tried to register '{0}' as a view component but it " + 
-					"doesn't seem the extend the ViewComponent abstract class: {1}", name, type.FullName));
 			}
 
 			name2Type[name] = type;
@@ -64,34 +62,28 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public Type GetViewComponent(string name)
 		{
-			name = NormalizeName(name);
+			Type viewComponentType;
 
-			if (!name2Type.Contains(name))
+			if (name2Type.TryGetValue(name, out viewComponentType))
 			{
-				throw new MonoRailException(String.Format("ViewComponent '{0}' could not be found. Was it registered? " + 
-					"If you have enabled Windsor Integration, then it's likely that you have forgot to register the " + 
-					"view component as a Windsor component. If you are sure you did it, then make sure the name used " + 
-					"is the component id or the key passed to ViewComponentDetailsAttribute", name));
+				return viewComponentType;
+			}
+			else if (name2Type.TryGetValue(name + "component", out viewComponentType))
+			{
+				return viewComponentType;
+			}
+			else if (name2Type.TryGetValue(name + "viewcomponent", out viewComponentType))
+			{
+				return viewComponentType;
 			}
 
-			return (Type) name2Type[name];
+			throw new MonoRailException(String.Format("ViewComponent '{0}' could not be found. Was it registered? " + 
+				"If you have enabled Windsor Integration, then it's likely that you have forgot to register the " + 
+				"view component as a Windsor component. If you are sure you did it, then make sure the name used " + 
+				"is the component id or the key passed to ViewComponentDetailsAttribute", name));
 		}
 
 		#endregion
-
-		/// <summary>
-		/// Normalizes the name.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		private static string NormalizeName(string name)
-		{
-			if (!name.EndsWith("Component", StringComparison.InvariantCultureIgnoreCase))
-			{
-				return name + "Component";
-			}
-			return name;
-		}
 
 		/// <summary>
 		/// Gets the details.

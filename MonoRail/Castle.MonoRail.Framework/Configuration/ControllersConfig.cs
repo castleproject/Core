@@ -65,7 +65,10 @@ namespace Castle.MonoRail.Framework.Configuration
 			
 			foreach(XmlNode node in nodeList)
 			{
-				assemblies.Add(node.ChildNodes[0].Value);
+				if (node.HasChildNodes)
+				{
+					assemblies.Add(node.ChildNodes[0].Value);
+				}
 			}
 		}
 		

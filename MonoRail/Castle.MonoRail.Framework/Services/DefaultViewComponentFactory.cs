@@ -44,7 +44,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <summary>
 		/// A dictionary of name to ViewComponent
 		/// </summary>
-		private IViewComponentRegistry registry;
+		private readonly IViewComponentRegistry registry;
 
 		/// <summary>
 		/// Constructs a <c>DefaultViewComponentFactory</c>
@@ -109,7 +109,7 @@ namespace Castle.MonoRail.Framework.Services
 				
 				if (assemblies == null || assemblies.Length == 0)
 				{
-					// Convetion: uses the controller assemblies in this case
+					// Convention: uses the controller assemblies in this case
 					
 					assemblies = config.ControllersConfig.Assemblies.ToArray();
 				}
