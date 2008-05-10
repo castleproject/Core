@@ -199,7 +199,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		                                String viewToRender, TextWriter writer,
 		                                NVelocityViewContextAdapter contextAdapter)
 		{
-			viewToRender = viewToRender + NVelocityViewEngine.TemplateExtension;
+			if (!viewToRender.ToLower().EndsWith(NVelocityViewEngine.TemplateExtension))
+			{
+				viewToRender = viewToRender + NVelocityViewEngine.TemplateExtension;
+			}
 
 			CheckTemplateStack(context);
 
