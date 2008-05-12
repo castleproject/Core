@@ -28,7 +28,10 @@ namespace Castle.MonoRail.Framework.Adapters
 	/// </summary>
 	public class ResponseAdapter : BaseResponse
 	{
-		private readonly HttpResponse response;
+		/// <summary>
+		/// Store original <see cref="HttpResponse"/> class.
+		/// </summary>
+		protected readonly HttpResponse response;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ResponseAdapter"/> class.
