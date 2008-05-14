@@ -141,9 +141,11 @@
     <Compile Include="Components\Util\ReflectionUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\DefaultConfigurationBuilder.cs" />
     <Compile Include="Constants.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\IConfigurationBuilder.cs" />
     <Compile Include="Internal\AbstractDictStackSessionStore.cs">
       <SubType>Code</SubType>
     </Compile>

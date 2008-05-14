@@ -146,9 +146,6 @@
     <Compile Include="AbstractNHibernateTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Common\Blog.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -164,6 +161,8 @@
     <Compile Include="Common\BlogRef.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\CustomDeleteListener.cs" />
+    <Compile Include="Common\CustomSaveUpdateListener.cs" />
     <Compile Include="Common\DaoTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -172,6 +171,7 @@
     </Compile>
     <Compile Include="Common\TestInterceptor.cs" />
     <Compile Include="ConfigHelper.cs" />
+    <Compile Include="Internals\ConfigurationBuilderTestCase.cs" />
     <Compile Include="Internals\SessionManagerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
