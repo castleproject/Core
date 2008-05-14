@@ -1054,7 +1054,7 @@ namespace Castle.MonoRail.Framework.Container
 
 			if (impl == null)
 			{
-				throw new MonoRailException("Could not load service implementation: '" + impl + "'.");
+				throw new MonoRailException("Could not load service implementation: '" + type + "'.");
 			}
 
 			object instance;
