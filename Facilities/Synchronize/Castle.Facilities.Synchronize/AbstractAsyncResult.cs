@@ -29,6 +29,7 @@ namespace Castle.Facilities.Synchronize
 		private readonly AsyncCallback _asyncCallback;
 		private bool completedSynchronously;
 		private bool endCalled;
+		private Timeout timeout;
 		private Exception exception;
 		private object result;
 		private object waitEvent;
@@ -99,6 +100,25 @@ namespace Castle.Facilities.Synchronize
 
 				return ev;
 			}
+		}
+
+		/// <summary>
+		/// Establishes an async timeout for the interval.
+		/// </summary>
+		/// <param name="interval">The timeout interval without units.</param>
+		/// <returns>The timeout specification.</returns>
+		public Timeout TimeoutAfter(int interval)
+		{
+			lock (this)
+			{
+				if (timeout != null)
+				{
+					throw new InvalidOperationException(
+						"A timeout has already been established");
+				}
+				timeout = new Timeout(this, interval);
+			}
+			return timeout;
 		}
 
 		/// <summary>
@@ -188,6 +208,14 @@ namespace Castle.Facilities.Synchronize
 		}
 
 		/// <summary>
+		/// Performs any behavior when a timeout occurs.
+		/// </summary>
+		protected virtual void OnTimeout()
+		{
+			Complete(false, new TimeoutException());
+		}
+
+		/// <summary>
 		/// Performs any cleanup.
 		/// </summary>
 		protected virtual void Cleanup()
@@ -209,5 +237,74 @@ namespace Castle.Facilities.Synchronize
 		{
 			InternalCleanup();
 		}
+
+		#region Nested Class: Timeout
+
+		/// <summary>
+		/// Represents the timeout description.
+		/// </summary>
+		public class Timeout
+		{
+			private readonly int interval;
+			private readonly AbstractAsyncResult result;
+
+			/// <summary>
+			/// Constructs a new <see cref="Timeout"/>
+			/// </summary>
+			/// <param name="result">The async result.</param>
+			/// <param name="interval">The timeout interval.</param>
+			public Timeout(AbstractAsyncResult result, int interval)
+			{
+				this.result = result;
+				this.interval = interval;
+			}
+
+			/// <summary>
+			/// Registers the timeout in milliseconds.
+			/// </summary>
+			/// <returns></returns>
+			public AbstractAsyncResult MilliSeconds()
+			{
+				RegisterTimeout(interval);
+				return result;
+			}
+
+			/// <summary>
+			/// Registers the timeout in seconds. 
+			/// </summary>
+			/// <returns></returns>
+			public AbstractAsyncResult Seconds()
+			{
+				RegisterTimeout(interval * 1000);
+				return result;
+			}
+
+			/// <summary>
+			/// Registers the timeout in minutes.
+			/// </summary>
+			/// <returns></returns>
+			public AbstractAsyncResult Minutes()
+			{
+				RegisterTimeout(interval * 60 * 1000);
+				return result;
+			}
+
+			private void RegisterTimeout(int milliInterval)
+			{
+				ThreadPool.RegisterWaitForSingleObject(
+					result.AsyncWaitHandle, OnCompleteOrTimeout, null,
+					milliInterval, true);
+			}
+
+			private void OnCompleteOrTimeout(object state, bool timedOut)
+			{
+				if (timedOut)
+				{
+					result.OnTimeout();
+				}
+			}
+		}
+
+		#endregion
 	}
 }
