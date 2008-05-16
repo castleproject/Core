@@ -261,14 +261,8 @@
 
 			<echo message="Running tests in '${project::get-name()}'" />
 
-			<exec if="${mbunit.found and string::to-lower(testrunner)=='mbunit'}"
-				program="${mbunit-console}" 
-				workingdir="${build.dir}"
-				commandline="${project::get-name()}.dll /rf:${testresults.dir} /rnf:${project::get-name()}.dll-results /rt:Xml"
-				failonerror="${common.testrunner.failonerror}"
-			/>
 			<!-- Use nunit-console.exe if found, otherwise fall back to nunit2 task -->
-			<exec if="${nunit.found and string::to-lower(testrunner)=='nunit'}"
+			<exec if="${nunit.found}"
 				program="${nunit-console}" 
 				workingdir="${build.dir}" 
 				commandline="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo"

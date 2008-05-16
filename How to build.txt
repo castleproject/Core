@@ -58,24 +58,17 @@ release:	"nant release rebuild" will rebuild the entire project in release confi
 quick: 		"nant quick build" will run the build without tests and generally will try to skip as much as possible to speed up the build.
 
 
-Disabling all tests
+Running the tests
+-------------------
+It's strongly advised to use the NUnit console test runner (nunit-console.exe) for running the tests.
+If you do not have NUnit installed the build script will fall back to using NAnt's <nunit2> task, which may or may not work for you.
+The build will search for nunit-console.exe on the path, in case you don't have it on the path you can specify it's location by
+setting the NAnt property -D:nunit-console=<full path to nunit-console.exe>.
+
+Building without running the tests
 -------------------
 
   > nant -D:common.testrunner.enabled=false
-
-Selecting a different test framework (EXPERIMENTAL)
--------------------
-
-NUnit (default)
-  > nant -D:testrunner=NUnit
-
-MbUnit:
-  > nant -D:testrunner=MbUnit
-
-N.B.
-MbUnit or NUnit needs to be on the path, alternatively you can specify the test runner console location by
-setting the properties -D:mbunit-console=<path to MBUnit.Cons.exe> or 
--D:nunit-console=<path to nunit-console.exe> respectively.
 
 
 Compiling a version not strongly signed

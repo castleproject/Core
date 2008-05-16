@@ -240,23 +240,15 @@
 
 	<target name="common.find-nunit">
 		<if test="${not property::exists('nunit.found')}">
-			<exec 
-				program="${mbunit-console}" 
-				resultproperty="mbunit.found"
-				failonerror="false" />
-
-			<property name="mbunit.found" value="${mbunit.found == '0' and string::to-lower(testrunner)=='mbunit'}" readonly="true" />
-			
 			<property name="nunit.found" value="-1" />
 			<exec
-				unless="${mbunit.found}"
 				program="${nunit-console2}" 
 				resultproperty="nunit.found"
 				failonerror="false" />
 
 			<property name="nunit-console" value="${nunit-console2}" if="${nunit.found == '0'}" />
 
-			<exec unless="${mbunit.found or nunit.found == '0'}"
+			<exec unless="${nunit.found == '0'}"
 				program="${nunit-console}" 
 				commandline="/help"
 				resultproperty="nunit.found"
@@ -265,10 +257,8 @@
 
 			<property name="nunit.found" value="${nunit.found == '0'}" readonly="true" />
 			
-			<fail message="ERROR: NUnit or MBUnit not found, cannot continue." unless="${nunit.found or mbunit.found}"/>
+			<fail message="ERROR: NUnit not found, cannot continue." unless="${nunit.found}"/>
 
-			<echo message="INFO: Using MBUnit for running unit tests" if="${mbunit.found}"/>
-			
 			<if test="${nunit.found}"> <!-- Determine if we can use this version of NUnit -->
 				<loadfile file="_nunit.txt" property="nunit_txt" />
 				<delete file="_nunit.txt" failonerror="false" />
@@ -288,14 +278,9 @@
 	</target>
 
 	<target name="common.find-tools">
-		<!-- Where is MbUnit.Cons.exe ? -->
-		<property name="mbunit-console" value="MbUnit.Cons.exe" overwrite="false" />
-
 		<!-- Where is nunit-console executable(win/mono) ? -->
 		<property name="nunit-console2" value="nunit-console2" overwrite="false" />
 		<property name="nunit-console" value="nunit-console" overwrite="false" />
-
-		<property name="testrunner" value="NUnit" />
 
 		<!-- Where is WiX? -->
 		<property name="wix.dir" value="${environment::get-folder-path('ProgramFiles')}\Windows Installer XML v3\bin" overwrite="false" />
