@@ -47,6 +47,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"    <property name=\"Name1\" access=\"property\" type=\"String\">\r\n" +
 				"      <column name=\"Name1\"/>\r\n" +
 				"    </property>\r\n" +
+				"    <property name=\"Insertion\" access=\"property\" type=\"System.DateTime\">\r\n" +
+				"      <column name=\"Insertion\" default=\"getdate()\"/>\r\n" +
+				"    </property>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 

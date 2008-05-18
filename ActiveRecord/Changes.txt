@@ -1,6 +1,10 @@
 1.0
 ===
 
+- Added Default property to PropertyAttribute and FieldAttribute. When present it renders
+    <column default="value" />
+  Which one day will be supported by NHibernate, right?
+
 - Added UpdateSchema to ARStarter
 
 - Applied Alwin's patch adding IValidationProvider common interface for AR models that can be validated.

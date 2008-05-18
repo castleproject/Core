@@ -47,13 +47,9 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public class PropertyAttribute : WithAccessAttribute
 	{
-		private String column;
-		private String formula;
-		private String type;
-		private String uniqueKey;
-		private String index;
-		private String sqlType;
-		private String check;
+		private string column, formula, @default;
+		private string type, uniqueKey, index;
+		private string sqlType, check;
 		private int length;
 		private bool notNull;
 		private bool unique;
@@ -214,6 +210,18 @@ namespace Castle.ActiveRecord
 		{
 			get { return check; }
 			set { check = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the default value for a column (used by schema generation). 
+		/// Please note that you should be careful to set Insert=false or set the value to the same 
+		/// as the default on the database. 
+		/// </summary>
+		/// <value>The default value for the column.</value>
+		public string Default
+		{
+			get { return @default; }
+			set { @default = value; }
 		}
 
 		/// <summary>

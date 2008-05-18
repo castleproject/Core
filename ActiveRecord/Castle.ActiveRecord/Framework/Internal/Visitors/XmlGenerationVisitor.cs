@@ -15,7 +15,6 @@
 namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Reflection;
@@ -371,7 +370,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			WriteProperty(model.Property.Name, model.Property.PropertyType, att.AccessString,
 			              att.ColumnType, att.Insert,
 			              att.Update, att.Formula, att.Column,
-			              att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check);
+						  att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check, att.Default);
 		}
 
 		/// <summary>
@@ -385,7 +384,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			WriteProperty(model.Field.Name, model.Field.FieldType, att.AccessString,
 			              att.ColumnType, att.Insert,
 			              att.Update, att.Formula, att.Column,
-			              att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check);
+			              att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check, att.Default);
 		}
 
 		/// <summary>
@@ -716,7 +715,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			for (int i = 0; i < attribute.ColumnNames.Length; i++)
 			{
-				WriteColumn(null, attribute.ColumnNames[i], null, attribute.Length[i], false, null, false, null);
+				WriteColumn(null, attribute.ColumnNames[i], null, attribute.Length[i], false, null, false, null, null);
 			}
 
 			Dedent();
@@ -1122,13 +1121,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private void WriteProperty(String name, Type propType, String accessString, String columnType,
 		                           bool insert, bool update, String formula,
 		                           String column, int length, bool notNull, bool unique,
-		                           String uniqueKey, String sqlType, String index, String check)
+		                           String uniqueKey, String sqlType, String index, String check, String @default)
 		{
 			BeginWriteProperty(accessString, columnType, formula, insert, name, propType, update);
 			
 			Ident();
-			
-			WriteColumn(check, column, index, length, notNull, sqlType, unique, uniqueKey);
+
+			WriteColumn(check, column, index, length, notNull, sqlType, unique, uniqueKey, @default);
 			
 			Dedent();
 
@@ -1140,9 +1139,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Append("</property>");
 		}
 
-		private void WriteColumn(string check, string column, string index, int length, bool notNull, string sqlType, bool unique, string uniqueKey)
+		private void WriteColumn(string check, string column, string index, int length,
+		                         bool notNull, string sqlType, bool unique, string uniqueKey, string @default)
 		{
-			AppendF("<column{0}{1}{2}{3}{4}{5}{6}{7}/>",
+			AppendF("<column{0}{1}{2}{3}{4}{5}{6}{7}{8}/>",
 			        MakeAtt("name", column),
 			        WriteIfNotZero("length", length),
 			        WriteIfTrue("not-null", notNull),
@@ -1150,7 +1150,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        WriteIfNonNull("unique-key", uniqueKey),
 			        WriteIfNonNull("sql-type", sqlType),
 			        WriteIfNonNull("index", index),
-			        WriteIfNonNull("check", check));
+			        WriteIfNonNull("check", check),
+			        WriteIfNonNull("default", @default));
 		}
 
 		private void BeginWriteProperty(string accessString, string columnType, string formula, bool insert, string name, Type propType, bool update)

@@ -21,6 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	{
 		private int id;
 		private String name1;
+		private DateTime insertion;
 		
 		[PrimaryKey(PrimaryKeyType.Assigned)]
 		public int Id
@@ -34,6 +35,13 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		{
 			get { return name1; }
 			set { name1 = value; }
+		}
+
+		[Property(Default="getdate()")]
+		public DateTime Insertion
+		{
+			get { return insertion; }
+			set { insertion = value; }
 		}
 	}
 }

@@ -41,6 +41,7 @@ namespace Castle.ActiveRecord
 		private String index;
 		private String sqlType;
 		private String check;
+		private string @default;
 		private int length;
 		private bool notNull;
 		private bool unique;
@@ -203,6 +204,18 @@ namespace Castle.ActiveRecord
 		{
 			get { return type; }
 			set { type = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the default value for a column (used by schema generation). 
+		/// Please note that you should be careful to set Insert=false or set the value to the same 
+		/// as the default on the database. 
+		/// </summary>
+		/// <value>The default value for the column.</value>
+		public string Default
+		{
+			get { return @default; }
+			set { @default = value; }
 		}
 	}
 }
