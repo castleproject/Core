@@ -159,7 +159,7 @@ namespace Castle.MonoRail.Framework.Services
 
 			action = parts[parts.Length - 1];
 
-			int fileNameIndex = action.IndexOf('.');
+			int fileNameIndex = action.LastIndexOf('.');
 
 			if (fileNameIndex != -1)
 			{
