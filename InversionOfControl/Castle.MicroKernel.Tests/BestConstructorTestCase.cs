@@ -163,8 +163,8 @@ namespace Castle.MicroKernel.Tests
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
 
 			MutableConfiguration config = new MutableConfiguration("component");
-			MutableConfiguration parameters = (MutableConfiguration)
-			                                  config.Children.Add(new MutableConfiguration("parameters"));
+			MutableConfiguration parameters = new MutableConfiguration("parameters");
+			config.Children.Add(parameters);
 			parameters.Children.Add(new MutableConfiguration("name", "hammett"));
 			parameters.Children.Add(new MutableConfiguration("port", "120"));
 
@@ -191,8 +191,8 @@ namespace Castle.MicroKernel.Tests
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
 
 			MutableConfiguration config = new MutableConfiguration("component");
-			MutableConfiguration parameters = (MutableConfiguration)
-			                                  config.Children.Add(new MutableConfiguration("parameters"));
+			MutableConfiguration parameters = new MutableConfiguration("parameters");
+			config.Children.Add(parameters);
 			parameters.Children.Add(new MutableConfiguration("name", "hammett"));
 			parameters.Children.Add(new MutableConfiguration("port", "120"));
 			parameters.Children.Add(new MutableConfiguration("Scheduleinterval", "22"));

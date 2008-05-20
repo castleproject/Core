@@ -54,8 +54,8 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 		{
 			MutableConfiguration config = new MutableConfiguration("component");
 
-			MutableConfiguration parameters = (MutableConfiguration)
-			                                  config.Children.Add(new MutableConfiguration("parameters"));
+			MutableConfiguration parameters = new MutableConfiguration("parameters");
+			config.Children.Add(parameters);
 
 			parameters.Children.Add(new MutableConfiguration("name", "hammett"));
 			parameters.Children.Add(new MutableConfiguration("address", "something"));

@@ -16,6 +16,7 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using Castle.Core.Internal;
 
 	/// <summary>
@@ -24,7 +25,7 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
-	public class InterceptorReferenceCollection : ICollection
+	public class InterceptorReferenceCollection : ICollection<InterceptorReference>
 	{
 		private readonly LinkedList list = new LinkedList();
 
@@ -35,6 +36,27 @@ namespace Castle.Core
 		public void Add(InterceptorReference interceptor)
 		{
 			list.Add(interceptor);
+		}
+
+		public void Clear()
+		{
+			list.Clear();
+		}
+
+		public bool Contains(InterceptorReference item)
+		{
+			return list.Contains(item);
+		}
+
+		public void CopyTo(InterceptorReference[] array, int arrayIndex)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool Remove(InterceptorReference item)
+		{
+			list.Remove(item);
+			return true;
 		}
 
 		/// <summary>
@@ -111,6 +133,11 @@ namespace Castle.Core
 			get { return list.Count; }
 		}
 
+		public bool IsReadOnly
+		{
+			get { return list.IsReadOnly; }
+		}
+
 		/// <summary>
 		/// Gets an object that
 		/// can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
@@ -153,6 +180,10 @@ namespace Castle.Core
 			if (list.Contains(interceptorReference) == false)
 				list.AddLast(interceptorReference);
 		}
-		
+
+		IEnumerator<InterceptorReference> IEnumerable<InterceptorReference>.GetEnumerator()
+		{
+			return (IEnumerator<InterceptorReference>) list.GetEnumerator();
+		}
 	}
 }

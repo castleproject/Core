@@ -50,8 +50,8 @@ namespace Castle.MicroKernel.Tests.Configuration
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
 
-			IConfiguration parameters =
-				confignode.Children.Add(new MutableConfiguration("parameters"));
+			IConfiguration parameters = new MutableConfiguration("parameters");
+            confignode.Children.Add(parameters);
 
 			parameters.Children.Add(new MutableConfiguration("host", "castleproject.org"));
 
@@ -70,8 +70,8 @@ namespace Castle.MicroKernel.Tests.Configuration
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
 
-			IConfiguration parameters =
-				confignode.Children.Add(new MutableConfiguration("parameters"));
+			IConfiguration parameters = new MutableConfiguration("parameters");
+			confignode.Children.Add(parameters);
 
 			parameters.Children.Add(new MutableConfiguration("common", "${commonservice2}"));
 
@@ -92,8 +92,8 @@ namespace Castle.MicroKernel.Tests.Configuration
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
 
-			IConfiguration parameters =
-				confignode.Children.Add(new MutableConfiguration("parameters"));
+			IConfiguration parameters = new MutableConfiguration("parameters");
+			confignode.Children.Add(parameters);
 
 			parameters.Children.Add(new MutableConfiguration("CommonService", "${commonservice2}"));
 
@@ -115,11 +115,13 @@ namespace Castle.MicroKernel.Tests.Configuration
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
 
-			IConfiguration parameters =
-				confignode.Children.Add(new MutableConfiguration("parameters"));
+			IConfiguration parameters = new MutableConfiguration("parameters");
+			confignode.Children.Add(parameters);
 
-			IConfiguration hosts = parameters.Children.Add(new MutableConfiguration("hosts"));
-			IConfiguration array = hosts.Children.Add(new MutableConfiguration("array"));
+			IConfiguration hosts = new MutableConfiguration("hosts");
+			parameters.Children.Add(hosts);
+			IConfiguration array = new MutableConfiguration("array");
+			hosts.Children.Add(array);
 			array.Children.Add(new MutableConfiguration("item", "castle"));
 			array.Children.Add(new MutableConfiguration("item", "uol"));
 			array.Children.Add(new MutableConfiguration("item", "folha"));
@@ -141,12 +143,13 @@ namespace Castle.MicroKernel.Tests.Configuration
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
 
-			IConfiguration parameters =
-				confignode.Children.Add(new MutableConfiguration("parameters"));
+			IConfiguration parameters = new MutableConfiguration("parameters");
+			confignode.Children.Add(parameters);
 
-			IConfiguration services = parameters.Children.Add(new MutableConfiguration("services"));
-			MutableConfiguration list = (MutableConfiguration)
-			                            services.Children.Add(new MutableConfiguration("list"));
+			IConfiguration services = new MutableConfiguration("services");
+			parameters.Children.Add(services);
+			MutableConfiguration list = new MutableConfiguration("list");
+			services.Children.Add(list);
 			list.Attributes.Add("type", "Castle.MicroKernel.Tests.ClassComponents.ICommon, Castle.MicroKernel.Tests");
 
 			list.Children.Add(new MutableConfiguration("item", "${commonservice1}"));
@@ -170,12 +173,13 @@ namespace Castle.MicroKernel.Tests.Configuration
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
 
-			IConfiguration parameters =
-				confignode.Children.Add(new MutableConfiguration("parameters"));
+			IConfiguration parameters = new MutableConfiguration("parameters");
+			confignode.Children.Add(parameters);
 
-			IConfiguration services = parameters.Children.Add(new MutableConfiguration("services"));
-			MutableConfiguration array = (MutableConfiguration)
-			                             services.Children.Add(new MutableConfiguration("array"));
+			IConfiguration services = new MutableConfiguration("services");
+			parameters.Children.Add(services);
+			MutableConfiguration array = new MutableConfiguration("array");
+			services.Children.Add(array);
 			//list.Attributes.Add("type", "Castle.MicroKernel.Tests.ClassComponents.ICommon, Castle.MicroKernel.Tests");
 
 			array.Children.Add(new MutableConfiguration("item", "${commonservice1}"));
@@ -226,14 +230,14 @@ namespace Castle.MicroKernel.Tests.Configuration
 
 			MutableConfiguration confignode = new MutableConfiguration(key);
 
-			IConfiguration parameters =
-				confignode.Children.Add(new MutableConfiguration("parameters"));
+			IConfiguration parameters = new MutableConfiguration("parameters");
+			confignode.Children.Add(parameters);
 
-			IConfiguration complexParam
-				= parameters.Children.Add(new MutableConfiguration("complexparam"));
+			IConfiguration complexParam = new MutableConfiguration("complexparam");
+			parameters.Children.Add(complexParam);
 
-			IConfiguration complexNode
-				= complexParam.Children.Add(new MutableConfiguration("complexparametertype"));
+			IConfiguration complexNode = new MutableConfiguration("complexparametertype");
+			complexParam.Children.Add(complexNode);
 
 			complexNode.Children.Add(new MutableConfiguration("mandatoryvalue", value1));
 			complexNode.Children.Add(new MutableConfiguration("optionalvalue", value2));

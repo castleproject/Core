@@ -54,8 +54,8 @@ namespace Castle.MicroKernel.Tests
 		{
 			MutableConfiguration config = new MutableConfiguration("component");
 
-			MutableConfiguration parameters = (MutableConfiguration)
-			                                  config.Children.Add(new MutableConfiguration("parameters"));
+			MutableConfiguration parameters = new MutableConfiguration("parameters");
+			config.Children.Add(parameters);
 
 			parameters.Children.Add(new MutableConfiguration("name", "hammett"));
 
@@ -74,8 +74,8 @@ namespace Castle.MicroKernel.Tests
 		{
 			MutableConfiguration config = new MutableConfiguration("component");
 
-			MutableConfiguration parameters = (MutableConfiguration)
-			                                  config.Children.Add(new MutableConfiguration("parameters"));
+			MutableConfiguration parameters = new MutableConfiguration("parameters");
+			config.Children.Add(parameters);
 
 			parameters.Children.Add(new MutableConfiguration("common", "${common2}"));
 
@@ -94,8 +94,8 @@ namespace Castle.MicroKernel.Tests
 		{
 			MutableConfiguration config = new MutableConfiguration("component");
 
-			MutableConfiguration parameters = (MutableConfiguration)
-			                                  config.Children.Add(new MutableConfiguration("parameters"));
+			MutableConfiguration parameters = new MutableConfiguration("parameters");
+			config.Children.Add(parameters);
 
 			parameters.Children.Add(new MutableConfiguration("common", "${common2}"));
 
@@ -111,8 +111,8 @@ namespace Castle.MicroKernel.Tests
 		{
 			MutableConfiguration config = new MutableConfiguration("component");
 
-			MutableConfiguration parameters = (MutableConfiguration)
-			                                  config.Children.Add(new MutableConfiguration("parameters"));
+			MutableConfiguration parameters = new MutableConfiguration("parameters");
+			config.Children.Add(parameters);
 
 			parameters.Children.Add(new MutableConfiguration("common", "${common2}"));
 
@@ -132,22 +132,22 @@ namespace Castle.MicroKernel.Tests
 		public void SatisfiedOverrideRecursive()
 		{
 			MutableConfiguration config1 = new MutableConfiguration("component");
-			MutableConfiguration parameters1 =
-				(MutableConfiguration) config1.Children.Add(new MutableConfiguration("parameters"));
+			MutableConfiguration parameters1 = new MutableConfiguration("parameters");
+			config1.Children.Add(parameters1);
 			parameters1.Children.Add(new MutableConfiguration("inner", "${repository2}"));
 			kernel.ConfigurationStore.AddComponentConfiguration("repository1", config1);
 			kernel.AddComponent("repository1", typeof(IRepository), typeof(Repository1));
 
 			MutableConfiguration config2 = new MutableConfiguration("component");
-			MutableConfiguration parameters2 =
-				(MutableConfiguration) config2.Children.Add(new MutableConfiguration("parameters"));
+			MutableConfiguration parameters2 = new MutableConfiguration("parameters");
+			config2.Children.Add(parameters2);
 			parameters2.Children.Add(new MutableConfiguration("inner", "${repository3}"));
 			kernel.ConfigurationStore.AddComponentConfiguration("repository2", config2);
 			kernel.AddComponent("repository2", typeof(IRepository), typeof(Repository2));
 
 			MutableConfiguration config3 = new MutableConfiguration("component");
-			MutableConfiguration parameters3 =
-				(MutableConfiguration) config3.Children.Add(new MutableConfiguration("parameters"));
+			MutableConfiguration parameters3 = new MutableConfiguration("parameters");
+			config3.Children.Add(parameters3);
 			parameters3.Children.Add(new MutableConfiguration("inner", "${decoratedRepository}"));
 			kernel.ConfigurationStore.AddComponentConfiguration("repository3", config3);
 			kernel.AddComponent("repository3", typeof(IRepository), typeof(Repository3));

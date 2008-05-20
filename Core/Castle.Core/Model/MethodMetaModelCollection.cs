@@ -16,7 +16,6 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
     using System.Collections.Generic;
 
 	/// <summary>
@@ -25,18 +24,9 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
-	public class MethodMetaModelCollection : ReadOnlyCollectionBase
+	public class MethodMetaModelCollection : List<MethodMetaModel>
 	{
 		private IDictionary methodInfo2Model;
-
-		/// <summary>
-		/// Adds the specified model.
-		/// </summary>
-		/// <param name="model">The model.</param>
-		public void Add(MethodMetaModel model)
-		{
-			InnerList.Add(model);
-		}
 
 		/// <summary>
 		/// Gets the method info2 model.

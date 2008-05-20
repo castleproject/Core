@@ -166,8 +166,8 @@ namespace Castle.Facilities.NHibernateIntegration
 			{
 				MutableConfiguration confignode = new MutableConfiguration("nhfacility.sessionmanager");
 
-				IConfiguration properties =
-					confignode.Children.Add(new MutableConfiguration("parameters"));
+				IConfiguration properties = new MutableConfiguration("parameters");
+				confignode.Children.Add(properties);
 
 				properties.Children.Add(new MutableConfiguration("DefaultFlushMode", defaultFlushMode));
 

@@ -15,7 +15,7 @@
 namespace Castle.Core
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Collection of <see cref="ConstructorCandidate"/>
@@ -23,38 +23,33 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
-	public class ConstructorCandidateCollection : ReadOnlyCollectionBase
+	public class ConstructorCandidateCollection : List<ConstructorCandidate>
 	{
 		private bool hasAmbiguousFewerArgumentsCandidate;
 		private ConstructorCandidate fewerArgumentsCandidate;
 
-		/// <summary>
-		/// Adds the specified candidate.
-		/// </summary>
-		/// <param name="candidate">The candidate.</param>
-		public void Add(ConstructorCandidate candidate)
+		public new void Add(ConstructorCandidate item)
 		{
 			if (fewerArgumentsCandidate == null)
 			{
-				fewerArgumentsCandidate = candidate;
+				fewerArgumentsCandidate = item;
 				hasAmbiguousFewerArgumentsCandidate = false;
 			}
 			else
 			{
-				int constructorParamCount = candidate.Constructor.GetParameters().Length;
+				int constructorParamCount = item.Constructor.GetParameters().Length;
 				int fewerArgumentsCount = fewerArgumentsCandidate.Constructor.GetParameters().Length;
 
 				if (constructorParamCount < fewerArgumentsCount)
 				{
-					fewerArgumentsCandidate = candidate;
+					fewerArgumentsCandidate = item;
 				}
 				else if (constructorParamCount == fewerArgumentsCount)
 				{
 					hasAmbiguousFewerArgumentsCandidate = true;
 				}
 			}
-
-			InnerList.Add(candidate);
+			base.Add(item);
 		}
 
 		/// <summary>
@@ -69,14 +64,6 @@ namespace Castle.Core
 		public bool HasAmbiguousFewerArgumentsCandidate
 		{
 			get { return hasAmbiguousFewerArgumentsCandidate; }
-		}
-
-		/// <summary>
-		/// Clears this instance.
-		/// </summary>
-		public void Clear()
-		{
-			InnerList.Clear();
 		}
 	}
 }

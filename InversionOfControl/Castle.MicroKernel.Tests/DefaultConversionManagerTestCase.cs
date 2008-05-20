@@ -82,9 +82,15 @@ namespace Castle.MicroKernel.Tests
 			config.Attributes["keyType"] = "System.String";
 			config.Attributes["valueType"] = "System.String";
 
-			config.Children.Add(new MutableConfiguration("item", "first")).Attributes["key"] = "key1";
-			config.Children.Add(new MutableConfiguration("item", "second")).Attributes["key"] = "key2";
-			config.Children.Add(new MutableConfiguration("item", "third")).Attributes["key"] = "key3";
+			MutableConfiguration firstItem = new MutableConfiguration("item", "first");
+			firstItem.Attributes["key"] = "key1";
+			config.Children.Add(firstItem);
+			MutableConfiguration secondItem = new MutableConfiguration("item", "second");
+			secondItem.Attributes["key"] = "key2";
+			config.Children.Add(secondItem);
+			MutableConfiguration thirdItem = new MutableConfiguration("item", "third");
+			thirdItem.Attributes["key"] = "key3";
+			config.Children.Add(thirdItem);
 
 			MutableConfiguration intItem = new MutableConfiguration("item", "40");
 			intItem.Attributes["key"] = "4";
@@ -190,9 +196,15 @@ namespace Castle.MicroKernel.Tests
 			config.Attributes["keyType"] = "System.String";
 			config.Attributes["valueType"] = "System.Int32";
 
-			config.Children.Add(new MutableConfiguration("item", "1")).Attributes["key"] = "key1";
-			config.Children.Add(new MutableConfiguration("item", "2")).Attributes["key"] = "key2";
-			config.Children.Add(new MutableConfiguration("item", "3")).Attributes["key"] = "key3";
+			MutableConfiguration firstItem = new MutableConfiguration("item", "1");
+			firstItem.Attributes["key"] = "key1";
+			config.Children.Add(firstItem);
+			MutableConfiguration secondItem = new MutableConfiguration("item", "2");
+			secondItem.Attributes["key"] = "key2";
+			config.Children.Add(secondItem);
+			MutableConfiguration thirdItem = new MutableConfiguration("item", "3");
+			thirdItem.Attributes["key"] = "key3";
+			config.Children.Add(thirdItem);
 
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(IDictionary<string, string>)));
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(Dictionary<string, int>)));

@@ -69,27 +69,6 @@ namespace System.Collections.Specialized
 	}
 }
 
-namespace System.Collections
-{
-	using Generic;
-
-	public class CollectionBase : List<object>
-	{
-		protected CollectionBase InnerList
-		{
-			get { return this; }
-		}
-	}
-
-	public class ReadOnlyCollectionBase : List<object>
-	{
-		protected ReadOnlyCollectionBase InnerList
-		{
-			get { return this; }
-		}
-	}
-}
-
 namespace System.Threading
 {
 	public class ReaderWriterLock

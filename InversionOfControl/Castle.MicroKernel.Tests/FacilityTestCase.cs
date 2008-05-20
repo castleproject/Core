@@ -35,7 +35,8 @@ namespace Castle.MicroKernel.Tests
 			_kernel = new DefaultKernel();
 
 			IConfiguration confignode = new MutableConfiguration("facility");
-			IConfiguration facilityConf = confignode.Children.Add(new MutableConfiguration(FacilityKey));
+			IConfiguration facilityConf = new MutableConfiguration(FacilityKey);
+			confignode.Children.Add(facilityConf);
 			_kernel.ConfigurationStore.AddFacilityConfiguration(FacilityKey, confignode);
 
 			_facility = new HiperFacility();

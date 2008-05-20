@@ -15,7 +15,7 @@
 namespace Castle.Core
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Reflection;
 
 	/// <summary>
@@ -24,25 +24,8 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
-	public class PropertySetCollection : ReadOnlyCollectionBase
+	public class PropertySetCollection : List<PropertySet>
 	{
-		/// <summary>
-		/// Adds the specified property.
-		/// </summary>
-		/// <param name="property">The property.</param>
-		public void Add(PropertySet property)
-		{
-			InnerList.Add(property);
-		}
-
-		/// <summary>
-		/// Clears this instance.
-		/// </summary>
-		public void Clear()
-		{
-			InnerList.Clear();
-		}
-
 		/// <summary>
 		/// Finds a PropertySet the by PropertyInfo.
 		/// </summary>
@@ -50,7 +33,7 @@ namespace Castle.Core
 		/// <returns></returns>
 		public PropertySet FindByPropertyInfo(PropertyInfo info)
 		{
-			foreach(PropertySet prop in InnerList)
+			foreach(PropertySet prop in this)
 			{
 				if (info == prop.Property)
 				{

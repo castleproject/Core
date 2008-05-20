@@ -15,7 +15,7 @@
 namespace Castle.Core
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Collection of <see cref="DependencyModel"/>.
@@ -23,7 +23,7 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
-	public class DependencyModelCollection : ReadOnlyCollectionBase
+	public class DependencyModelCollection : List<DependencyModel>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DependencyModelCollection"/> class.
@@ -36,56 +36,9 @@ namespace Castle.Core
 		/// Initializes a new instance of the <see cref="DependencyModelCollection"/> class.
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
-		public DependencyModelCollection(DependencyModelCollection dependencies)
+		public DependencyModelCollection(IList<DependencyModel> dependencies)
+			: base(dependencies)
 		{
-			InnerList.AddRange(dependencies);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DependencyModelCollection"/> class.
-		/// </summary>
-		/// <param name="dependencies">The dependencies.</param>
-		public DependencyModelCollection(DependencyModel[] dependencies)
-		{
-			InnerList.AddRange(dependencies);
-		}
-
-		/// <summary>
-		/// Adds the specified model.
-		/// </summary>
-		/// <param name="model">The model.</param>
-		public void Add(DependencyModel model)
-		{
-			InnerList.Add(model);
-		}
-
-		/// <summary>
-		/// Removes the specified model.
-		/// </summary>
-		/// <param name="model">The model.</param>
-		public void Remove(DependencyModel model)
-		{
-			InnerList.Remove(model);
-		}
-
-		/// <summary>
-		/// Clears this instance.
-		/// </summary>
-		public void Clear()
-		{
-			InnerList.Clear();
-		}
-
-		/// <summary>
-		/// Determines whether this collection contains the the specified model.
-		/// </summary>
-		/// <param name="model">The model.</param>
-		/// <returns>
-		/// <c>true</c> if the collection contains the specified model; otherwise, <c>false</c>.
-		/// </returns>
-		public bool Contains(DependencyModel model)
-		{
-			return InnerList.Contains(model);
 		}
 	}
 }
