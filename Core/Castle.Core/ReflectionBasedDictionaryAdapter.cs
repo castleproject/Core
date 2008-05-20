@@ -24,7 +24,7 @@ namespace Castle.Core
 	/// </summary>
 	public class ReflectionBasedDictionaryAdapter : IDictionary
 	{
-		private readonly Dictionary<string,object> properties = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<string,object> properties = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReflectionBasedDictionaryAdapter"/> class.

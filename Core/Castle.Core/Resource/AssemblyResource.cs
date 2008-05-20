@@ -61,7 +61,7 @@ namespace Castle.Core.Resource
 
 		private Stream CreateResourceFromPath(String resource, String path)
 		{
-			if (!resource.StartsWith("assembly" + CustomUri.SchemeDelimiter))
+			if (!resource.StartsWith("assembly" + CustomUri.SchemeDelimiter, StringComparison.CurrentCulture))
 			{
 				resource = "assembly" + CustomUri.SchemeDelimiter + resource;
 			}
@@ -104,7 +104,7 @@ namespace Castle.Core.Resource
 			string nameFound = null;
 			foreach(String name in names)
 			{
-				if (String.Compare(resourcePath, name, StringComparison.InvariantCultureIgnoreCase) == 0)
+				if (String.Compare(resourcePath, name, StringComparison.OrdinalIgnoreCase) == 0)
 				{
 					nameFound = name;
 					break;

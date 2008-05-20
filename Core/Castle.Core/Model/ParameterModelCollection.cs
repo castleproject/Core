@@ -35,7 +35,7 @@ namespace Castle.Core
 		/// </summary>
 		public ParameterModelCollection()
 		{
-			dictionary = new Dictionary<string, ParameterModel>(StringComparer.InvariantCultureIgnoreCase);
+			dictionary = new Dictionary<string, ParameterModel>(StringComparer.OrdinalIgnoreCase);
 		}
 
 		/// <summary>
