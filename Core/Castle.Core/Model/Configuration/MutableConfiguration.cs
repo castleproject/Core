@@ -34,8 +34,8 @@ namespace Castle.Core.Configuration
 
 		public MutableConfiguration(String name, String value)
 		{
-			internalName = name;
-			internalValue = value;
+			Name = name;
+			Value = value;
 		}
 
 		public static MutableConfiguration Create(string name)
@@ -45,7 +45,8 @@ namespace Castle.Core.Configuration
 
 		public new string Value
 		{
-			set { internalValue = value; }
+			get { return base.Value; }
+			set { base.Value = value; }
 		}
 
 		public MutableConfiguration Attribute(string name, string value)

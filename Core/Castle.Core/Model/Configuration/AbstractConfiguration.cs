@@ -31,10 +31,10 @@ namespace Castle.Core.Configuration
 #endif
 	public abstract class AbstractConfiguration : IConfiguration
 	{
-		protected String internalName;
-		protected String internalValue;
-		private NameValueCollection attributes = new NameValueCollection();
-		private ConfigurationCollection children = new ConfigurationCollection();
+		private String internalName;
+		private String internalValue;
+		private readonly NameValueCollection attributes = new NameValueCollection();
+		private readonly ConfigurationCollection children = new ConfigurationCollection();
 
 		/// <summary>
 		/// Gets the name of the <see cref="IConfiguration"/>.
@@ -45,6 +45,7 @@ namespace Castle.Core.Configuration
 		public virtual String Name
 		{
 			get { return internalName; }
+			protected set { internalName = value; }
 		}
 
 		/// <summary>
@@ -56,6 +57,7 @@ namespace Castle.Core.Configuration
 		public virtual String Value
 		{
 			get { return internalValue; }
+			protected set { internalValue = value; }
 		}
 
 		/// <summary>
@@ -89,11 +91,16 @@ namespace Castle.Core.Configuration
 		/// <returns>The Value converted into the specified type.</returns>
 		public virtual object GetValue(Type type, object defaultValue)
 		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
 			try
 			{
 				return Convert.ChangeType(Value, type, System.Threading.Thread.CurrentThread.CurrentCulture);
 			}
-			catch(Exception)
+			catch(InvalidCastException)
 			{
 				return defaultValue;
 			}
