@@ -245,7 +245,7 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void PrimitiveConvert()
 		{
-			Assert.AreEqual(12.01, Convert(typeof(float), "12.01"));
+			Assert.AreEqual(12.01f, Convert(typeof(float), "12.01"));
 			Assert.IsTrue(convSucceed);
 
 			Assert.AreEqual(null, Convert(typeof(float), ""));

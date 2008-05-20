@@ -402,7 +402,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			IConversions conversions = factory.GetAdapter<IConversions>(dictionary);
 			Assert.AreEqual(22, conversions.Int);
-			Assert.AreEqual(98.6, conversions.Float);
+			Assert.AreEqual(98.6f, conversions.Float);
 			Assert.AreEqual(3.14, conversions.Double);
 			Assert.AreEqual(100, conversions.Decimal);
 			Assert.AreEqual("Hello World", conversions.String);
@@ -449,7 +449,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			IConversions conversions = factory.GetAdapter<IConversions>(dictionary);
 			Assert.AreEqual(22, conversions.NullInt);
-			Assert.AreEqual(98.6, conversions.NullFloat);
+			Assert.AreEqual(98.6f, conversions.NullFloat);
 			Assert.AreEqual(3.14, conversions.NullDouble);
 			Assert.AreEqual(100, conversions.NullDecimal);
 			Assert.AreEqual(now.Value.Date, conversions.NullDateTime.Value.Date);
