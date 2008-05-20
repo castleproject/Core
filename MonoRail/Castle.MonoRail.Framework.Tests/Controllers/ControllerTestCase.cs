@@ -52,7 +52,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 			Assert.IsTrue(controller.Initialized);
 		}
 
-		[Test, ExpectedException(typeof(MonoRailException), "Could not find action named NonExistentAction on controller \\home")]
+		[Test, ExpectedException(typeof(MonoRailException), ExpectedMessage = "Could not find action named NonExistentAction on controller \\home")]
 		public void InvokingNonExistingActionResultsIn404()
 		{
 			ControllerAndViews controller = new ControllerAndViews();

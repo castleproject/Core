@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy.Tests
 
 #if !MONO
 
-		[Test, ExpectedException(typeof(GeneratorException), "Type is not public, so a proxy " +
+		[Test, ExpectedException(typeof(GeneratorException), ExpectedMessage = "Type is not public, so a proxy " +
 		                                                     "cannot be generated. Type: System.AppDomainInitializerInfo")]
 		public void ProxyForNonPublicClass()
 		{

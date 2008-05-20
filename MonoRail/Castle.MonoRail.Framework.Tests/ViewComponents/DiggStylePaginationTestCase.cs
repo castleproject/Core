@@ -45,7 +45,7 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 			CleanUp();
 		}
 
-		[Test, ExpectedException(typeof(ViewComponentException), "The DiggStylePagination requires a view component " +
+		[Test, ExpectedException(typeof(ViewComponentException), ExpectedMessage = "The DiggStylePagination requires a view component " +
 		                                                         "parameter named 'page' which should contain 'IPaginatedPage' instance"
 			)]
 		public void ThrowsExceptionIfNoPageWasSupplied()

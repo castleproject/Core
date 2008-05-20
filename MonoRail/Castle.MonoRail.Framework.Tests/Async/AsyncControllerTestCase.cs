@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Framework.Tests.Async
 
 		[Test]
 		[ExpectedException(typeof(MonoRailException),
-			"Action 'Index' on controller 'ControllerWithTwoBeginIndex' is an async action, but there are method overloads 'BeginIndex(...)', which is not allowed on async actions."
+			ExpectedMessage = "Action 'Index' on controller 'ControllerWithTwoBeginIndex' is an async action, but there are method overloads 'BeginIndex(...)', which is not allowed on async actions."
 			)]
 		public void OverloadingOfAsyncActionsIsNotAllowed()
 		{
@@ -59,7 +59,7 @@ namespace Castle.MonoRail.Framework.Tests.Async
 
 		[Test]
 		[ExpectedException(typeof(MonoRailException),
-			"Found both async method 'BeginIndex' and sync method 'Index' on controller 'ControllerWithBeginIndexAndIndex'. MonoRail doesn't support mixing sync and async methods for the same action"
+			ExpectedMessage = "Found both async method 'BeginIndex' and sync method 'Index' on controller 'ControllerWithBeginIndexAndIndex'. MonoRail doesn't support mixing sync and async methods for the same action"
 			)]
 		public void MixingAsyncAndSyncMethodNotAllowed()
 		{
@@ -69,7 +69,7 @@ namespace Castle.MonoRail.Framework.Tests.Async
 
 		[Test]
 		[ExpectedException(typeof(MonoRailException),
-			"Found beginning of async pair 'BeginIndex' but not the end 'EndIndex' on controller 'ControllerWithBeginIndexWithoutEndIndex', did you forget to define EndIndex(IAsyncResult ar) ?"
+			ExpectedMessage = "Found beginning of async pair 'BeginIndex' but not the end 'EndIndex' on controller 'ControllerWithBeginIndexWithoutEndIndex', did you forget to define EndIndex(IAsyncResult ar) ?"
 			)]
 		public void BeginActionWithoutEndActionNotAllowed()
 		{
@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Framework.Tests.Async
 
 		[Test]
 		[ExpectedException(typeof(MonoRailException),
-			"Found more than a single EndIndex method, for async action 'Index' on controller 'ControllerWithTwoEndActions', only a single EndIndex may be defined as part of an async action"
+			ExpectedMessage = "Found more than a single EndIndex method, for async action 'Index' on controller 'ControllerWithTwoEndActions', only a single EndIndex may be defined as part of an async action"
 			)]
 		public void OverloadingForEndActionIsNotAllowed()
 		{

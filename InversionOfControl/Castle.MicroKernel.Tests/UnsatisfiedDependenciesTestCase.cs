@@ -47,7 +47,7 @@ namespace Castle.MicroKernel.Tests
 
 		[Test]
 		[ExpectedException(typeof(HandlerException),
-		   "Can't create component 'key' as it has dependencies to be satisfied. \r\nkey is waiting for the following dependencies: \r\n\r\n" +
+		   ExpectedMessage = "Can't create component 'key' as it has dependencies to be satisfied. \r\nkey is waiting for the following dependencies: \r\n\r\n" +
 		   "Keys (components with specific keys)\r\n- name which was not registered. \r\n- address which was not registered. \r\n" +
 		   "- age which was not registered. \r\n")]
 		public void UnsatisfiedConfigValues()
@@ -68,7 +68,7 @@ namespace Castle.MicroKernel.Tests
 
 		[Test]
 		[ExpectedException(typeof(HandlerException),
-			"Can't create component 'key' as it has dependencies to be satisfied. \r\nkey is waiting for the following dependencies: \r\n\r\nKeys (components with specific keys)\r\n- common2 which was not registered. \r\n"
+			ExpectedMessage = "Can't create component 'key' as it has dependencies to be satisfied. \r\nkey is waiting for the following dependencies: \r\n\r\nKeys (components with specific keys)\r\n- common2 which was not registered. \r\n"
 			)]
 		public void UnsatisfiedOverride()
 		{
@@ -88,7 +88,7 @@ namespace Castle.MicroKernel.Tests
 
 		[Test]
 		[ExpectedException(typeof(HandlerException),
-			"Can't create component 'key' as it has dependencies to be satisfied. \r\nkey is waiting for the following dependencies: \r\n\r\nKeys (components with specific keys)\r\n- common2 which was not registered. \r\n"
+			ExpectedMessage = "Can't create component 'key' as it has dependencies to be satisfied. \r\nkey is waiting for the following dependencies: \r\n\r\nKeys (components with specific keys)\r\n- common2 which was not registered. \r\n"
 			)]
 		public void OverrideIsForcedDependency()
 		{

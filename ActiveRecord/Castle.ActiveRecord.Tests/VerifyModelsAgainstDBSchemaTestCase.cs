@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Tests
 	[TestFixture]
 	public class VerifyModelsAgainstDBSchemaTestCase : AbstractActiveRecordTest
 	{
-		[Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), "Error verifying the schema for model Post")]
+		[Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), ExpectedMessage = "Error verifying the schema for model Post")]
 		public void VerificationOnWithMissingTableError()
 		{
 			XmlConfigurationSource config = (XmlConfigurationSource) GetConfigSource();
@@ -33,7 +33,7 @@ namespace Castle.ActiveRecord.Tests
 
 		[Test,
 		 ExpectedExceptionAttribute(typeof(ActiveRecordException),
-		 	"Error verifying the schema for model ModelClassWithBrokenField")]
+			ExpectedMessage = "Error verifying the schema for model ModelClassWithBrokenField")]
 		public void VerificationOnWithMissingFieldError()
 		{
 			// Create the tables first

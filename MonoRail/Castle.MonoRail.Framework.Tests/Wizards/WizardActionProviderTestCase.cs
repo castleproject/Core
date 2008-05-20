@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework.Tests.Wizards
 			actionProvider = new WizardActionProvider();
 		}
 
-		[Test, ExpectedException(typeof(MonoRailException), "The controller home must implement the interface IWizardController to be used as a wizard")]
+		[Test, ExpectedException(typeof(MonoRailException), ExpectedMessage = "The controller home must implement the interface IWizardController to be used as a wizard")]
 		public void RejectsControllerThatDoesNotImplementIWizardController()
 		{
 			NotAWizardController controller = new NotAWizardController();
@@ -50,7 +50,7 @@ namespace Castle.MonoRail.Framework.Tests.Wizards
 			actionProvider.IncludeActions(engineContext, controller, context);
 		}
 
-		[Test, ExpectedException(typeof(MonoRailException), "The controller home returned no WizardStepPage")]
+		[Test, ExpectedException(typeof(MonoRailException), ExpectedMessage = "The controller home returned no WizardStepPage")]
 		public void ThrowsExceptionIfNoStepsAreReturned()
 		{
 			WizardWithNoSteps controller = new WizardWithNoSteps();

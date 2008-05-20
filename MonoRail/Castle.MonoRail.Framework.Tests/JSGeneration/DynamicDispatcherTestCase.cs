@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework.Tests.JSGeneration
 			Assert.AreEqual("good code!", dispatcher.Dispatch("PublicOp", null));
 		}
 
-		[Test, ExpectedException(typeof(InvalidOperationException), "Method HiddenOp not found for dynamic dispatching")]
+		[Test, ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Method HiddenOp not found for dynamic dispatching")]
 		public void CannotInvokeMethodsNotMarkedAsOperation()
 		{
 			DynamicDispatcher dispatcher = new DynamicDispatcher(new MainTarget());

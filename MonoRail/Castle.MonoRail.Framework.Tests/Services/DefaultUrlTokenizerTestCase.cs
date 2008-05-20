@@ -166,7 +166,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			Assert.AreEqual( String.Empty, info.Area );
 		}
 
-		[Test, ExpectedException(typeof(UrlTokenizerException), "Url smaller than 2 tokens")]
+		[Test, ExpectedException(typeof(UrlTokenizerException), ExpectedMessage = "Url smaller than 2 tokens")]
 	    public void BadUrl()
 	    {
 			tokenizer.TokenizeUrl("/index.rails", null, new Uri("http://localhost"), true, null);

@@ -55,7 +55,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 		[Test,
 		 ExpectedException(typeof(MonoRailException),
-		 	"Access to the action [GetOnly] on controller [home] is not allowed to the http verb [POST].")]
+			ExpectedMessage = "Access to the action [GetOnly] on controller [home] is not allowed to the http verb [POST].")]
 		public void ActionWithGetOnlyAttributeCannotBeInvokedWithPOST()
 		{
 			AccThrController controller = new AccThrController();
@@ -80,7 +80,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 		[Test,
 		 ExpectedException(typeof(MonoRailException),
-		 	"Access to the action [PostOnly] on controller [home] is not allowed to the http verb [GET].")]
+			ExpectedMessage = "Access to the action [PostOnly] on controller [home] is not allowed to the http verb [GET].")]
 		public void ActionWithPostOnlyAttributeCannotBeInvokedWithGET()
 		{
 			AccThrController controller = new AccThrController();

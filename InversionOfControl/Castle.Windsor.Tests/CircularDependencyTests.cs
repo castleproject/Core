@@ -37,7 +37,7 @@ namespace Castle.Windsor.Tests
 		[Test]
 		[
 			ExpectedException(typeof(HandlerException),
-				@"Can't create component 'compA' as it has dependencies to be satisfied. 
+				ExpectedMessage = @"Can't create component 'compA' as it has dependencies to be satisfied. 
 compA is waiting for the following dependencies: 
 
 Services: 

@@ -217,7 +217,7 @@ namespace Castle.Facilities.Synchronize.Tests
 			Assert.IsFalse(remaining.CompletedSynchronously);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException), "Bad Bad Bad...")]
+		[Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Bad Bad Bad...")]
 		public void GetResultOf_WaitingForResultThrowsException_WorksFine()
 		{
 			ManualWorker worker = container.Resolve<ManualWorker>();

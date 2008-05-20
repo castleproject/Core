@@ -26,7 +26,7 @@ namespace Castle.ActiveRecord.Tests
 	public class SessionScopeTestCase : AbstractActiveRecordTest
 	{
         [Test]
-        [ExpectedException(typeof(ActiveRecordException), "A scope tried to registered itself within the framework, but the Active Record was not initialized")]
+		[ExpectedException(typeof(ActiveRecordException), ExpectedMessage = "A scope tried to registered itself within the framework, but the Active Record was not initialized")]
         public void GoodErrorMessageIfTryingToUseScopeWithoutInitializingFramework()
         {
             //Need to do this because other tests may have already initialized the framework.

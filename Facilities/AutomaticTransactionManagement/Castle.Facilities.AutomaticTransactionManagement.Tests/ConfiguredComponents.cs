@@ -24,7 +24,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 	[TestFixture]
 	public class ConfiguredComponents
 	{
-		[Test, ExpectedException(typeof(FacilityException), "The class Castle.Facilities.AutomaticTransactionManagement.Tests.TransactionalComp1 has configured transaction in a child node but has not specified istransaction=\"true\" on the component node.")]
+		[Test, ExpectedException(typeof(FacilityException), ExpectedMessage = "The class Castle.Facilities.AutomaticTransactionManagement.Tests.TransactionalComp1 has configured transaction in a child node but has not specified istransaction=\"true\" on the component node.")]
 		public void IsTransactionalMissing()
 		{
 			new WindsorContainer( ConfigHelper.ResolvePath("../IsTransactionalMissing.xml" ));

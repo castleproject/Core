@@ -44,7 +44,7 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(HandlerException), "Can't create component 'compb' as it has " +
+		[ExpectedException(typeof(HandlerException), ExpectedMessage = "Can't create component 'compb' as it has " +
 		                                             "dependencies to be satisfied. \r\ncompb is waiting for the following dependencies: \r\n\r\n" +
 		                                             "Services: \r\n- Castle.MicroKernel.Tests.RuntimeParameters.CompC which was not registered. \r\n\r\n" +
 													 "Keys (components with specific keys)\r\n- myArgument which was not registered. \r\n"

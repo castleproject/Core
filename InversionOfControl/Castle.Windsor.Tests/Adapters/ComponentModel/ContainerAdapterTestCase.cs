@@ -54,14 +54,14 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 
 		[Test]
 		[ExpectedException(typeof(ArgumentException),
-			"A service for type 'Castle.Windsor.IWindsorContainer' already exists")]
+			ExpectedMessage = "A service for type 'Castle.Windsor.IWindsorContainer' already exists")]
 		public void AddIntrinsicService()
 		{
 			container.AddService(typeof(IWindsorContainer), new WindsorContainer());
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException), "Cannot remove an instrinsic service")]
+		[ExpectedException(typeof(ArgumentException), ExpectedMessage = "Cannot remove an instrinsic service")]
 		public void RemoveInstrinsicService()
 		{
 			container.RemoveService(typeof(IWindsorContainer));
@@ -120,7 +120,7 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 
 		[Test]
 		[ExpectedException(typeof(ArgumentException),
-			"There is a component already registered for the given key myComponent")]
+			ExpectedMessage = "There is a component already registered for the given key myComponent")]
 		public void AddDuplicateComponent()
 		{
 			container.Add(new Component(), "myComponent");
@@ -212,7 +212,7 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 
 		[Test]
 		[ExpectedException(typeof(ArgumentException),
-			"A service for type 'Castle.Windsor.Tests.Components.ICalcService' already exists")]
+			ExpectedMessage = "A service for type 'Castle.Windsor.Tests.Components.ICalcService' already exists")]
 		public void AddExistingServiceInstance()
 		{
 			container.AddService(typeof(ICalcService), new CalculatorService());

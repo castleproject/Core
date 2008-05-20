@@ -24,7 +24,7 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 	{
 		[Test]
 		[ExpectedException(typeof(FacilityException),
-			"You need to specify at least one assembly that contains the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>"
+			ExpectedMessage = "You need to specify at least one assembly that contains the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>"
 			)]
 		public void FACILITIES66()
 		{

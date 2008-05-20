@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Tests
 
 		[Test]
 		[ExpectedException(typeof(NotImplementedException),
-			"This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
+			ExpectedMessage = "This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
 			)]
 		public void CallingProceedOnAbstractMethodShouldThrowException()
 		{

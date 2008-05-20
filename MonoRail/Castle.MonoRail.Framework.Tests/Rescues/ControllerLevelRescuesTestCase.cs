@@ -100,7 +100,7 @@ namespace Castle.MonoRail.Framework.Tests.Rescues
 			Assert.AreEqual("rescues\\generalerror", viewEngStub.TemplateRendered);
 		}
 
-		[Test, ExpectedException(typeof(TargetInvocationException), "Exception has been thrown by the target of an invocation.")]
+		[Test, ExpectedException(typeof(TargetInvocationException), ExpectedMessage = "Exception has been thrown by the target of an invocation.")]
 		public void FallsBackToExceptionIfNothingMatches()
 		{
 			ControllerWithSpecializedRescuesOnly controller = new ControllerWithSpecializedRescuesOnly();

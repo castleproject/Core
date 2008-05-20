@@ -71,7 +71,7 @@ namespace Castle.MicroKernel.Tests.Registration
 
 		[Test]
 		[ExpectedException(typeof(ComponentRegistrationException),
-			"This component has already been assigned name 'customer'")]
+			ExpectedMessage = "This component has already been assigned name 'customer'")]
 		public void AddComponent_NamedAlreadyAssigned_ThrowsException()
 		{
 			kernel.Register(
@@ -97,7 +97,7 @@ namespace Castle.MicroKernel.Tests.Registration
 
 		[Test]
 		[ExpectedException(typeof(ComponentRegistrationException),
-			"This component has already been assigned implementation Castle.MicroKernel.Tests.ClassComponents.CustomerImpl")]
+			ExpectedMessage = "This component has already been assigned implementation Castle.MicroKernel.Tests.ClassComponents.CustomerImpl")]
 		public void AddComponent_WithImplementationAlreadyAssigned_ThrowsException()
 		{
 			kernel.Register(

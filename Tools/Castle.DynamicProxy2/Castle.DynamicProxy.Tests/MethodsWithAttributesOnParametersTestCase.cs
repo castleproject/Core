@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Tests
 	public class MethodsWithAttributesOnParametersTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		[ExpectedException(typeof(ArgumentException), "No default value for argument")]
+		[ExpectedException(typeof(ArgumentException), ExpectedMessage = "No default value for argument")]
 		public void ParametersAreCopiedToProxiedObject()
 		{
 			ClassWithAttributesOnMethodParameters requiredObj = (ClassWithAttributesOnMethodParameters)

@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Tests
 	{
 		[Test]
 		[ExpectedException(typeof(NotImplementedException),
-			"This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
+			ExpectedMessage = "This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
 			)]
 		public void BasicInterfaceProxyWithValidTarget_ThrowsIfInterceptorCallsProceed()
 		{
@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(DBConcurrencyException), "Because I feel like it")]
+		[ExpectedException(typeof(DBConcurrencyException), ExpectedMessage = "Because I feel like it")]
 		public void CanThrowExceptionFromInterceptorOfInterfaceMethod()
 		{
 			IService service = (IService)

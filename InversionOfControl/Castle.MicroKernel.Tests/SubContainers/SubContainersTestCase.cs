@@ -275,7 +275,7 @@ namespace Castle.MicroKernel.Tests.SubContainers
 
 		[Test]
 		[ExpectedException(typeof(KernelException),
-			"You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this."
+			ExpectedMessage = "You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this."
 			)]
 		public void AddChildKernelToTwoParentsThrowsException()
 		{

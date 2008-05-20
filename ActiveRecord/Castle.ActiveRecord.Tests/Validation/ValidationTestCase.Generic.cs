@@ -165,7 +165,7 @@ namespace Castle.ActiveRecord.Tests.Validation
 		}
 
 		[Test]
-		[ExpectedException(typeof(ActiveRecordValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
+		[ExpectedException(typeof(ActiveRecordValidationException), ExpectedMessage = "Can't save or update as there is one (or more) field that has not passed the validation test")]
 		public void IsUnique()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Blog2) );

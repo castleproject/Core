@@ -69,7 +69,7 @@ namespace Castle.MonoRail.Framework.Tests.Resources
 			}
 		}
 
-		[Test, ExpectedException(typeof(MonoRailException), "There is a duplicated entry on the resource dictionary. Resource entry name: key")]
+		[Test, ExpectedException(typeof(MonoRailException), ExpectedMessage = "There is a duplicated entry on the resource dictionary. Resource entry name: key")]
 		public void DuplicatedResourceEntriesHaveDecentErrorMessage()
 		{
 			ControllerWithResourceDuplicated controller = new ControllerWithResourceDuplicated();

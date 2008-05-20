@@ -111,7 +111,7 @@ namespace Castle.MicroKernel.Tests
 
 		[Test]
 		[ExpectedException(typeof(HandlerException),
-			"Can't create component 'a' as it has dependencies to be satisfied. \r\na is waiting for the following dependencies: \r\n\r\nServices: \r\n- Castle.MicroKernel.Tests.CycleB which was registered but is also waiting for dependencies. \r\n\r\nb is waiting for the following dependencies: \r\n\r\nServices: \r\n- Castle.MicroKernel.Tests.CycleA which was registered but is also waiting for dependencies. \r\n"
+			ExpectedMessage = "Can't create component 'a' as it has dependencies to be satisfied. \r\na is waiting for the following dependencies: \r\n\r\nServices: \r\n- Castle.MicroKernel.Tests.CycleB which was registered but is also waiting for dependencies. \r\n\r\nb is waiting for the following dependencies: \r\n\r\nServices: \r\n- Castle.MicroKernel.Tests.CycleA which was registered but is also waiting for dependencies. \r\n"
 			)]
 		public void CycleComponentGraphs()
 		{

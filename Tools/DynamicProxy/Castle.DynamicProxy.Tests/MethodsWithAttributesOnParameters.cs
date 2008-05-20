@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Test
 	public class MethodsWithAttributesOnParameters
 	{
 		[Test]
-		[ExpectedException(typeof(ArgumentException),"No default value for argument")]
+		[ExpectedException(typeof(ArgumentException), ExpectedMessage="No default value for argument")]
 		public void ParametersAreCopiedToProxiedObject()
 		{
 			ProxyGenerator pg = new ProxyGenerator();

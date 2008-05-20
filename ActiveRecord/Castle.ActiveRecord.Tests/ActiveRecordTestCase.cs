@@ -27,7 +27,7 @@ namespace Castle.ActiveRecord.Tests
 	{
 		[Test,
 		 ExpectedException(typeof(ActiveRecordInitializationException),
-		 	"You can't invoke ActiveRecordStarter.Initialize more than once")]
+			ExpectedMessage = "You can't invoke ActiveRecordStarter.Initialize more than once")]
 		public void InitializeCantBeInvokedMoreThanOnce()
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post));
@@ -712,7 +712,7 @@ namespace Castle.ActiveRecord.Tests
 			               	Expression.Eq("Author", "Andrew Peters")));
 		}
 
-		[Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), "Could not perform Save for ModelClassWithBrokenField")]
+		[Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), ExpectedMessage = "Could not perform Save for ModelClassWithBrokenField")]
 		public void SaveWithBadTableSchemaThrowsException()
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(ModelClassUsedToCreateTableForClassWithBrokenField));
