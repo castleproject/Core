@@ -114,6 +114,11 @@
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
     <Compile Include="CachedValidationRegistry.cs" />
+    <Compile Include="Messages.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.ru.resx</DependentUpon>
+    </Compile>
     <Compile Include="Messages.sv.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
