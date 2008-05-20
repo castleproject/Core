@@ -65,17 +65,17 @@ namespace Castle.Core.Logging
 		/// <summary>
 		/// A Common method to log.
 		/// </summary>
-		/// <param name="level">The level of logging</param>
+		/// <param name="loggerLevel">The level of logging</param>
 		/// <param name="name">The name of the logger</param>
 		/// <param name="message">The Message</param>
 		/// <param name="exception">The Exception</param>
-		protected override void Log(LoggerLevel level, String name, String message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, String name, String message, Exception exception)
 		{
-			Console.Out.WriteLine(string.Format("[{0}] '{1}' {2}", level.ToString(), name, message));
+			Console.Out.WriteLine(string.Format("[{0}] '{1}' {2}", loggerLevel.ToString(), name, message));
 
 			if (exception != null)
 			{
-				Console.Out.WriteLine("[{0}] '{1}' {2}: {3} {4}", level.ToString(), name, exception.GetType().FullName,
+				Console.Out.WriteLine("[{0}] '{1}' {2}: {3} {4}", loggerLevel.ToString(), name, exception.GetType().FullName,
 				                      exception.Message, exception.StackTrace);
 			}
 		}
@@ -84,16 +84,16 @@ namespace Castle.Core.Logging
 		///	Returns a new <c>ConsoleLogger</c> with the name
 		///	added after this loggers name, with a dot in between.
 		/// </summary>
-		/// <param name="newName">The added hierarchical name.</param>
+		/// <param name="name">The added hierarchical name.</param>
 		/// <returns>A new <c>ConsoleLogger</c>.</returns> 
-		public override ILogger CreateChildLogger(string newName)
+		public override ILogger CreateChildLogger(string name)
 		{
-			if (newName == null)
+			if (name == null)
 			{
-				throw new ArgumentNullException("newName", "To create a child logger you must supply a non null name");
+				throw new ArgumentNullException("name", "To create a child logger you must supply a non null name");
 			}
 
-			return new ConsoleLogger(String.Format("{0}.{1}", Name, newName), Level);
+			return new ConsoleLogger(String.Format("{0}.{1}", Name, name), Level);
 		}
 	}
 	#endif

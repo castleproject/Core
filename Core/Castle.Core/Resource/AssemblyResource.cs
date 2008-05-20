@@ -48,7 +48,7 @@ namespace Castle.Core.Resource
 			};
 		}
 
-		public override IResource CreateRelative(String resourceName)
+		public override IResource CreateRelative(String relativePath)
 		{
 			throw new NotImplementedException();
 		}

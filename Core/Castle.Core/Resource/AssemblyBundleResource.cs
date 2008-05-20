@@ -63,14 +63,14 @@ namespace Castle.Core.Resource
 
 		public override IResource CreateRelative(string relativePath)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public override void Dispose()
 		{
 		}
 
-		private Assembly ObtainAssembly(string assemblyName)
+		private static Assembly ObtainAssembly(string assemblyName)
 		{
 			try
 			{

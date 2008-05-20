@@ -104,34 +104,34 @@ namespace Castle.Core.Logging
 			}
 		}
 
-		public override ILogger CreateChildLogger(string newName)
+		public override ILogger CreateChildLogger(string name)
 		{
 			return new DiagnosticsLogger(eventLog.Log, eventLog.MachineName, eventLog.Source);
 		}
 
-		protected override void Log(LoggerLevel level, string name, string message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, string name, string message, Exception exception)
 		{
 			if (eventLog == null) return; // just in case it was disposed
 
-			EventLogEntryType type = TranslateLevel(level);
+			EventLogEntryType type = TranslateLevel(loggerLevel);
 
 			String contentToLog;
 
 			if (exception == null)
 			{
-				contentToLog = string.Format("[{0}] '{1}' message: {2}", level.ToString(), name, message);
+				contentToLog = string.Format("[{0}] '{1}' message: {2}", loggerLevel.ToString(), name, message);
 			}
 			else
 			{
 				contentToLog = string.Format("[{0}] '{1}' message: {2} exception: {3} {4} {5}",
-				                             level.ToString(), name, message, exception.GetType(), exception.Message,
+				                             loggerLevel.ToString(), name, message, exception.GetType(), exception.Message,
 				                             exception.StackTrace);
 			}
 
 			eventLog.WriteEntry(contentToLog, type);
 		}
 
-		private EventLogEntryType TranslateLevel(LoggerLevel level)
+		private static EventLogEntryType TranslateLevel(LoggerLevel level)
 		{
 			switch(level)
 			{

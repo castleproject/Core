@@ -22,6 +22,10 @@ namespace Castle.Core.Logging
 #endif
 	public class LoggerException : Exception
 	{
+		public LoggerException()
+		{
+		}
+
 		public LoggerException(String message) : base(message)
 		{
 		}
@@ -31,7 +35,7 @@ namespace Castle.Core.Logging
 		}
 
 #if !SILVERLIGHT
-		public LoggerException(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected LoggerException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 #endif

@@ -1365,9 +1365,9 @@ namespace Castle.Core.Logging.Tests
 			base.ChangeName(name);
 		}
 
-		protected override void Log(LoggerLevel level, string name, string message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, string name, string message, Exception exception)
 		{
-			Fixture.level = level;
+			Fixture.level = loggerLevel;
 			Fixture.name = name;
 			Fixture.message = message;
 			Fixture.exception = exception;

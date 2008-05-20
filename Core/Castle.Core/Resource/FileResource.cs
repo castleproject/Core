@@ -67,9 +67,9 @@ namespace Castle.Core.Resource
 			get { return basePath; }
 		}
 
-		public override IResource CreateRelative(String resourceName)
+		public override IResource CreateRelative(String relativePath)
 		{
-			return new FileResource(resourceName, basePath);
+			return new FileResource(relativePath, basePath);
 		}
 
 		private Stream CreateStreamFromUri(CustomUri resource, String basePath)

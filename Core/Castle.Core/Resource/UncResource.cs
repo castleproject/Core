@@ -20,6 +20,7 @@ namespace Castle.Core.Resource
 	/// <summary>
 	/// Enable access to files on network shares
 	/// </summary>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unc")]
 	public class UncResource : AbstractStreamResource
 	{
 		private String basePath;
@@ -54,9 +55,9 @@ namespace Castle.Core.Resource
 			get { return basePath; }
 		}
 
-		public override IResource CreateRelative(String resourceName)
+		public override IResource CreateRelative(String relativePath)
 		{
-			return new UncResource(Path.Combine(basePath, resourceName));
+			return new UncResource(Path.Combine(basePath, relativePath));
 		}
 
 		public override string ToString()
@@ -73,22 +74,22 @@ namespace Castle.Core.Resource
 			if (!resource.IsFile)
 				throw new ArgumentException("The specified resource is not a file", "resource");
 
-			String filePath = resource.Path;
+			String resourcePath = resource.Path;
 
-			if (!File.Exists(filePath) && basePath != null)
+			if (!File.Exists(resourcePath) && basePath != null)
 			{
-				filePath = Path.Combine(basePath, filePath);
+				resourcePath = Path.Combine(basePath, resourcePath);
 			}
 
-			this.filePath = Path.GetFileName(filePath);
-			this.basePath = Path.GetDirectoryName(filePath);
+			filePath = Path.GetFileName(resourcePath);
+			this.basePath = Path.GetDirectoryName(resourcePath);
 
-			CheckFileExists(filePath);
+			CheckFileExists(resourcePath);
 
-			return File.OpenRead(filePath);
+			return File.OpenRead(resourcePath);
 		}
 
-		private void CheckFileExists(String path)
+		private static void CheckFileExists(String path)
 		{
 			if (!File.Exists(path))
 			{

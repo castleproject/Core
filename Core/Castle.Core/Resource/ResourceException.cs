@@ -22,6 +22,10 @@ namespace Castle.Core.Resource
 #endif
 	public class ResourceException : Exception
 	{
+		public ResourceException()
+		{
+		}
+
 		public ResourceException(string message) : base(message)
 		{
 		}
@@ -30,7 +34,7 @@ namespace Castle.Core.Resource
 		{
 		}
 #if !SILVERLIGHT
-		public ResourceException(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected ResourceException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 #endif

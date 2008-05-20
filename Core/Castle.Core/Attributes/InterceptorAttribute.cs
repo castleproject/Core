@@ -22,7 +22,7 @@ namespace Castle.Core
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true)]
 	public class InterceptorAttribute : Attribute
 	{
-		private InterceptorReference interceptorRef;
+		private readonly InterceptorReference interceptorRef;
 
 		/// <summary>
 		/// Constructs the InterceptorAttribute pointing to

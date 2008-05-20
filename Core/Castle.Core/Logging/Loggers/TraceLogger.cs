@@ -77,15 +77,15 @@ namespace Castle.Core.Logging
 			return new TraceLogger(string.Concat(Name, ".", name), Level);
 		}
 
-		protected override void Log(LoggerLevel level, string name, string message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, string name, string message, Exception exception)
 		{
 			if (exception == null)
 			{
-				traceSource.TraceEvent(MapTraceEventType(level), 0, message);
+				traceSource.TraceEvent(MapTraceEventType(loggerLevel), 0, message);
 			}
 			else
 			{
-				traceSource.TraceData(MapTraceEventType(level), 0, message, exception);
+				traceSource.TraceData(MapTraceEventType(loggerLevel), 0, message, exception);
 			}
 		}
 

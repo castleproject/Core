@@ -15,6 +15,7 @@
 namespace Castle.Core.Logging
 {
 	using System;
+	using System.Security.Permissions;
 
 	/// <summary>
 	///	The Level Filtered Logger class.  This is a base clase which
@@ -34,23 +35,23 @@ namespace Castle.Core.Logging
 		/// <summary>
 		/// Creates a new <c>LevelFilteredLogger</c>.
 		/// </summary>
-		public LevelFilteredLogger()
+		protected LevelFilteredLogger()
 		{
 		}
 
-		public LevelFilteredLogger(String name)
+		protected LevelFilteredLogger(String name)
 		{
 			ChangeName(name);
 		}
 
-		public LevelFilteredLogger(LoggerLevel level)
+		protected LevelFilteredLogger(LoggerLevel loggerLevel)
 		{
-			this.level = level;
+			this.level = loggerLevel;
 		}
 
-		public LevelFilteredLogger(String name, LoggerLevel level) : this(level)
+		protected LevelFilteredLogger(String loggerName, LoggerLevel loggerLevel) : this(loggerLevel)
 		{
-			ChangeName(name);
+			ChangeName(loggerName);
 		}
 
 #if !SILVERLIGHT
@@ -58,6 +59,7 @@ namespace Castle.Core.Logging
 		/// Keep the instance alive in a remoting scenario
 		/// </summary>
 		/// <returns></returns>
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.Infrastructure)]
 		public override object InitializeLifetimeService()
 		{
 			return null;
@@ -645,11 +647,11 @@ namespace Castle.Core.Logging
 		/// Implementors output the log content by implementing this method only.
 		/// Note that exception can be null
 		/// </summary>
-		/// <param name="level"></param>
+		/// <param name="loggerLevel"></param>
 		/// <param name="name"></param>
 		/// <param name="message"></param>
 		/// <param name="exception"></param>
-		protected abstract void Log(LoggerLevel level, String name, String message, Exception exception);
+		protected abstract void Log(LoggerLevel loggerLevel, String name, String message, Exception exception);
 
 		protected void ChangeName(String newName)
 		{
@@ -661,9 +663,9 @@ namespace Castle.Core.Logging
 			name = newName;
 		}
 
-		private void Log(LoggerLevel level, String message, Exception exception)
+		private void Log(LoggerLevel loggerLevel, String message, Exception exception)
 		{
-			Log(level, Name, message, exception);
+			Log(loggerLevel, Name, message, exception);
 		}
 	}
 }

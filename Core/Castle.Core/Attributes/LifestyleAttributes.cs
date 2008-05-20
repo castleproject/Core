@@ -160,7 +160,7 @@ namespace Castle.Core
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class CustomLifestyleAttribute : LifestyleAttribute
 	{
-		private Type lifestyleHandler;
+		private readonly Type lifestyleHandler;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CustomLifestyleAttribute"/> class.

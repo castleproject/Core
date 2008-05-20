@@ -52,13 +52,13 @@ namespace Castle.Core
 			return first + " " + second;
 		}
 
-		public bool Equals(Pair<TFirst, TSecond> pair)
+		public bool Equals(Pair<TFirst, TSecond> other)
 		{
-			if (pair == null)
+			if (other == null)
 			{
 				return false;
 			}
-			return Equals(first, pair.first) && Equals(second, pair.second);
+			return Equals(first, other.first) && Equals(second, other.second);
 		}
 
 		public override bool Equals(object obj)

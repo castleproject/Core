@@ -137,16 +137,16 @@ namespace Castle.Core.Logging
 			writer.AutoFlush = true;
 		}
 
-		protected override void Log(LoggerLevel level, String name, String message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, String name, String message, Exception exception)
 		{
 			if (writer == null) return; // just in case it's been disposed
 
-			writer.WriteLine("[{0}] '{1}' {2}", level.ToString(), name, message);
+			writer.WriteLine("[{0}] '{1}' {2}", loggerLevel.ToString(), name, message);
 
 			if (exception != null)
 			{
 				writer.WriteLine("[{0}] '{1}' {2}: {3} {4}",
-				                 level.ToString(),
+				                 loggerLevel.ToString(),
 				                 name,
 				                 exception.GetType().FullName,
 				                 exception.Message,

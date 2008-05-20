@@ -121,12 +121,12 @@ namespace Castle.Core
 			return new InterceptorReference(typeof(T));
 		}
 
-		public bool Equals(InterceptorReference interceptorReference)
+		public bool Equals(InterceptorReference other)
 		{
-			if (interceptorReference == null) return false;
-			if (!Equals(refType, interceptorReference.refType)) return false;
-			if (!Equals(serviceType, interceptorReference.serviceType)) return false;
-			if (!Equals(componentKey, interceptorReference.componentKey)) return false;
+			if (other == null) return false;
+			if (!Equals(refType, other.refType)) return false;
+			if (!Equals(serviceType, other.serviceType)) return false;
+			if (!Equals(componentKey, other.componentKey)) return false;
 			return true;
 		}
 

@@ -23,6 +23,7 @@ namespace Castle.Core.Logging
 	/// </summary>
 	public class NullLogger : IExtendedLogger
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
 		public static readonly NullLogger Instance = new NullLogger();
 
 		/// <summary>

@@ -36,6 +36,7 @@ namespace Castle.Core.Resource
 			ParseIdentifier(resourceIdentifier);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unc")]
 		public bool IsUnc
 		{
 			get { return isUnc; }
@@ -51,6 +52,7 @@ namespace Castle.Core.Resource
 			get { return isAssembly; }
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public String AbsolutePath
 		{
 			get { throw new NotImplementedException(); }
@@ -131,6 +133,7 @@ namespace Castle.Core.Resource
 			path = sb.ToString();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength")]
 		private static void SanityCheck(String resourceIdentifier)
 		{
 			if (resourceIdentifier == null)

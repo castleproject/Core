@@ -97,19 +97,19 @@ namespace Castle.Core.Logging.Factories
 		/// <summary>
 		/// Gets the configuration file.
 		/// </summary>
-		/// <param name="filename">i.e. log4net.config</param>
+		/// <param name="fileName">i.e. log4net.config</param>
 		/// <returns></returns>
-		protected FileInfo GetConfigFile(string filename)
+		protected static FileInfo GetConfigFile(string fileName)
 		{
 			FileInfo result;
 
-			if (Path.IsPathRooted(filename))
+			if (Path.IsPathRooted(fileName))
 			{
-				result = new FileInfo(filename);
+				result = new FileInfo(fileName);
 			}
 			else
 			{
-				result = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename));
+				result = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName));
 			}
 
 			return result;

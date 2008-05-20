@@ -56,19 +56,19 @@ namespace Castle.Core.Logging
 		/// Creates a new WebLogger.
 		/// </summary>
 		/// <param name="name">The Log name.</param>
-		/// <param name="logLevel">The Log level typecode.</param>
-		public WebLogger(String name, LoggerLevel logLevel) : base(name, logLevel)
+		/// <param name="loggerLevel">The Log level typecode.</param>
+		public WebLogger(String name, LoggerLevel loggerLevel) : base(name, loggerLevel)
 		{
 		}
 
 		/// <summary>
 		/// A Common method to log.
 		/// </summary>
-		/// <param name="level">The level of logging</param>
+		/// <param name="loggerLevel">The level of logging</param>
 		/// <param name="name">The Log name.</param>
 		/// <param name="message">The Message</param>
 		/// <param name="exception">The Exception</param>
-		protected override void Log(LoggerLevel level, String name, String message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, String name, String message, Exception exception)
 		{
 			TraceContext ctx = TryToGetTraceContext();
 			if (ctx == null)
@@ -76,7 +76,7 @@ namespace Castle.Core.Logging
 
 			if (ctx.IsEnabled)
 			{
-				String category = String.Format("[{0}]", level.ToString());
+				String category = String.Format("[{0}]", loggerLevel.ToString());
 				String formattedMessage = String.Format("{0} {1}", name, message);
 
 				ctx.Write(category, formattedMessage);
@@ -94,16 +94,16 @@ namespace Castle.Core.Logging
 		/// <summary>
 		///	Just returns this logger (<c>WebLogger</c> is not hierarchical).
 		/// </summary>
-		/// <param name="newName">Ignored</param>
+		/// <param name="name">Ignored</param>
 		/// <returns>This ILogger instance.</returns> 
-		public override ILogger CreateChildLogger(String newName)
+		public override ILogger CreateChildLogger(String name)
 		{
-			if (newName == null)
+			if (name == null)
 			{
-				throw new ArgumentNullException("newName", "To create a child logger you must supply a non null name");
+				throw new ArgumentNullException("name", "To create a child logger you must supply a non null name");
 			}
 
-			return new WebLogger(String.Format("{0}.{1}", Name, newName), Level);
+			return new WebLogger(String.Format("{0}.{1}", Name, name), Level);
 		}
 
 		/// <summary>

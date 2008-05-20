@@ -21,7 +21,7 @@ namespace Castle.Core.Logging
 	[Serializable]
 	public class DiagnosticsLoggerFactory : AbstractLoggerFactory
 	{
-		private static readonly String DefaultLogName = "CastleDefaultLogger";
+		private const string DefaultLogName = "CastleDefaultLogger";
 
 		public override ILogger Create(string name)
 		{

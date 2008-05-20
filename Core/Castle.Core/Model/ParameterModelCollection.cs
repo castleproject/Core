@@ -27,7 +27,7 @@ namespace Castle.Core
 #endif
 	public class ParameterModelCollection : IEnumerable
 	{
-		private IDictionary<string, ParameterModel> dictionary;
+		private readonly IDictionary<string, ParameterModel> dictionary;
 		private readonly object syncRoot = new object();
 
 		/// <summary>
@@ -78,6 +78,7 @@ namespace Castle.Core
 		/// </remarks>
 		/// <param name="key">The key.</param>
 		/// <param name="value">The value.</param>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "key"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public void Add(object key, object value)
 		{
 			throw new NotImplementedException();
@@ -89,6 +90,7 @@ namespace Castle.Core
 		/// <remarks>
 		/// Not implemented
 		/// </remarks>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public void Clear()
 		{
 			throw new NotImplementedException();
@@ -101,6 +103,7 @@ namespace Castle.Core
 		/// <remarks>
 		/// Not implemented
 		/// </remarks>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "key")]
 		public void Remove(object key)
 		{
 			throw new NotImplementedException();
@@ -113,6 +116,7 @@ namespace Castle.Core
 		/// <remarks>
 		/// Not implemented
 		/// </remarks>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public ICollection Keys
 		{
 			get { throw new NotImplementedException(); }
@@ -125,6 +129,7 @@ namespace Castle.Core
 		/// <remarks>
 		/// Not implemented
 		/// </remarks>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public ICollection Values
 		{
 			get { throw new NotImplementedException(); }
@@ -147,6 +152,7 @@ namespace Castle.Core
 		/// <value>
 		/// 	<c>true</c> if this instance is fixed size; otherwise, <c>false</c>.
 		/// </value>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public bool IsFixedSize
 		{
 			get { return false; }
@@ -174,6 +180,7 @@ namespace Castle.Core
 		/// <remarks>
 		/// Not implemented
 		/// </remarks>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "index"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "array")]
 		public void CopyTo(Array array, int index)
 		{
 			throw new NotImplementedException();

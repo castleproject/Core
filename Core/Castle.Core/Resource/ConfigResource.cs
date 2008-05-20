@@ -25,7 +25,7 @@ namespace Castle.Core.Resource
 	public class ConfigResource : AbstractResource
 	{
 		private readonly XmlNode configSectionNode;
-		private string sectionName;
+		private readonly string sectionName;
 
 		public ConfigResource() : this("castle")
 		{
