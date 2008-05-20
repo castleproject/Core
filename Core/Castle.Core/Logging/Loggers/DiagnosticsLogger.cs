@@ -18,6 +18,7 @@ namespace Castle.Core.Logging
 
 	using System;
 	using System.Diagnostics;
+	using System.Globalization;
 
 	/// <summary>
 	/// The Logger using standart Diagnostics namespace.
@@ -114,11 +115,11 @@ namespace Castle.Core.Logging
 
 			if (exception == null)
 			{
-				contentToLog = string.Format("[{0}] '{1}' message: {2}", loggerLevel.ToString(), loggerName, message);
+				contentToLog = string.Format(CultureInfo.CurrentCulture, "[{0}] '{1}' message: {2}", loggerLevel.ToString(), loggerName, message);
 			}
 			else
 			{
-				contentToLog = string.Format("[{0}] '{1}' message: {2} exception: {3} {4} {5}",
+				contentToLog = string.Format(CultureInfo.CurrentCulture, "[{0}] '{1}' message: {2} exception: {3} {4} {5}",
 				                             loggerLevel.ToString(), loggerName, message, exception.GetType(), exception.Message,
 				                             exception.StackTrace);
 			}

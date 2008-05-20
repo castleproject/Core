@@ -74,7 +74,7 @@ namespace Castle.Core.Resource
 			}
 			catch(Exception ex)
 			{
-				String message = String.Format("The assembly {0} could not be loaded", assemblyName);
+				String message = String.Format(CultureInfo.InvariantCulture, "The assembly {0} could not be loaded", assemblyName);
 				throw new ResourceException(message, ex);
 			}
 		}

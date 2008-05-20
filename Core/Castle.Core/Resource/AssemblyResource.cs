@@ -15,6 +15,7 @@
 namespace Castle.Core.Resource
 {
 	using System;
+	using System.Globalization;
 	using System.IO;
 	using System.Reflection;
 
@@ -55,7 +56,7 @@ namespace Castle.Core.Resource
 
 		public override string ToString()
 		{
-			return String.Format("AssemblyResource: [{0}] [{1}]", assemblyName, resourcePath);
+			return String.Format(CultureInfo.CurrentCulture, "AssemblyResource: [{0}] [{1}]", assemblyName, resourcePath);
 		}
 
 		private Stream CreateResourceFromPath(String resource, String path)
@@ -89,7 +90,7 @@ namespace Castle.Core.Resource
 
 			if (nameFound == null)
 			{
-				String message = String.Format("The assembly resource {0} could not be located", resourcePath);
+				String message = String.Format(CultureInfo.InvariantCulture, "The assembly resource {0} could not be located", resourcePath);
 				throw new ResourceException(message);
 			}
 
@@ -115,7 +116,7 @@ namespace Castle.Core.Resource
 		private string ConvertToResourceName(String assembly, String resource, String path)
 		{
 			// TODO: use path for relative name construction
-			return String.Format("{0}{1}", assembly, resource.Replace('/', '.'));
+			return String.Format(CultureInfo.CurrentCulture, "{0}{1}", assembly, resource.Replace('/', '.'));
 		}
 
 		private string ConvertToPath(String resource)
@@ -123,7 +124,7 @@ namespace Castle.Core.Resource
 			string path = resource.Replace('.', '/');
 			if (path[0] != '/')
 			{
-				path = string.Format("/{0}", path);
+				path = string.Format(CultureInfo.CurrentCulture, "/{0}", path);
 			}
 			return path;
 		}
@@ -136,7 +137,7 @@ namespace Castle.Core.Resource
 			}
 			catch(Exception ex)
 			{
-				String message = String.Format("The assembly {0} could not be loaded", assemblyName);
+				String message = String.Format(CultureInfo.InvariantCulture, "The assembly {0} could not be loaded", assemblyName);
 				throw new ResourceException(message, ex);
 			}
 		}

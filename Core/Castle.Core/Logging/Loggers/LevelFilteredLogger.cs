@@ -15,6 +15,7 @@
 namespace Castle.Core.Logging
 {
 	using System;
+	using System.Globalization;
 	using System.Security.Permissions;
 
 	/// <summary>
@@ -123,7 +124,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsDebugEnabled) return;
 
-			Log(LoggerLevel.Debug, String.Format(format, args), null);
+			Log(LoggerLevel.Debug, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -136,7 +137,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsDebugEnabled) return;
 
-			Log(LoggerLevel.Debug, String.Format(format, args), exception);
+			Log(LoggerLevel.Debug, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -175,7 +176,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsDebugEnabled) return;
 
-			Log(LoggerLevel.Debug, String.Format(format, args), null);
+			Log(LoggerLevel.Debug, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		#endregion
@@ -214,7 +215,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsInfoEnabled) return;
 
-			Log(LoggerLevel.Info, String.Format(format, args), null);
+			Log(LoggerLevel.Info, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -227,7 +228,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsInfoEnabled) return;
 
-			Log(LoggerLevel.Info, String.Format(format, args), exception);
+			Log(LoggerLevel.Info, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -266,7 +267,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsInfoEnabled) return;
 
-			Log(LoggerLevel.Info, String.Format(format, args), null);
+			Log(LoggerLevel.Info, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		#endregion
@@ -305,7 +306,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsWarnEnabled) return;
 
-			Log(LoggerLevel.Warn, String.Format(format, args), null);
+			Log(LoggerLevel.Warn, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -318,7 +319,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsWarnEnabled) return;
 
-			Log(LoggerLevel.Warn, String.Format(format, args), exception);
+			Log(LoggerLevel.Warn, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -357,7 +358,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsWarnEnabled) return;
 
-			Log(LoggerLevel.Warn, String.Format(format, args), null);
+			Log(LoggerLevel.Warn, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		#endregion
@@ -396,7 +397,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsErrorEnabled) return;
 
-			Log(LoggerLevel.Error, String.Format(format, args), null);
+			Log(LoggerLevel.Error, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -409,7 +410,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsErrorEnabled) return;
 
-			Log(LoggerLevel.Error, String.Format(format, args), exception);
+			Log(LoggerLevel.Error, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -448,7 +449,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsErrorEnabled) return;
 
-			Log(LoggerLevel.Error, String.Format(format, args), null);
+			Log(LoggerLevel.Error, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		#endregion
@@ -487,7 +488,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsFatalEnabled) return;
 
-			Log(LoggerLevel.Fatal, String.Format(format, args), null);
+			Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -500,7 +501,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsFatalEnabled) return;
 
-			Log(LoggerLevel.Fatal, String.Format(format, args), exception);
+			Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -539,7 +540,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsFatalEnabled) return;
 
-			Log(LoggerLevel.Fatal, String.Format(format, args), null);
+			Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		#endregion
@@ -581,7 +582,7 @@ namespace Castle.Core.Logging
 		{
 			if (!IsFatalEnabled) return;
 
-			Log(LoggerLevel.Fatal, String.Format(format, args), null);
+			Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		#endregion

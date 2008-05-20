@@ -17,6 +17,7 @@ namespace Castle.Core.Logging
 	#if !SILVERLIGHT
 
 	using System;
+	using System.Globalization;
 	using System.Web;
 
 	/// <summary>
@@ -76,14 +77,14 @@ namespace Castle.Core.Logging
 
 			if (ctx.IsEnabled)
 			{
-				String category = String.Format("[{0}]", loggerLevel.ToString());
-				String formattedMessage = String.Format("{0} {1}", loggerName, message);
+				String category = String.Format(CultureInfo.CurrentCulture, "[{0}]", loggerLevel.ToString());
+				String formattedMessage = String.Format(CultureInfo.CurrentCulture, "{0} {1}", loggerName, message);
 
 				ctx.Write(category, formattedMessage);
 
 				if (exception != null)
 				{
-					formattedMessage = String.Format("{0}: {1} {2}Stack Trace: {3}",
+					formattedMessage = String.Format(CultureInfo.CurrentCulture, "{0}: {1} {2}Stack Trace: {3}",
 					                                 exception.GetType(), exception.Message, Environment.NewLine, exception.StackTrace);
 
 					ctx.Warn(category, formattedMessage);
@@ -103,7 +104,7 @@ namespace Castle.Core.Logging
 				throw new ArgumentNullException("loggerName", "To create a child logger you must supply a non null name");
 			}
 
-			return new WebLogger(String.Format("{0}.{1}", Name, loggerName), Level);
+			return new WebLogger(String.Format(CultureInfo.CurrentCulture, "{0}.{1}", Name, loggerName), Level);
 		}
 
 		/// <summary>

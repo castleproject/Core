@@ -17,6 +17,7 @@ namespace Castle.Core.Logging
 	#if !SILVERLIGHT
 
 	using System;
+	using System.Globalization;
 
 	/// <summary>
 	///	The Logger sending everything to the standard output streams.
@@ -71,7 +72,7 @@ namespace Castle.Core.Logging
 		/// <param name="exception">The Exception</param>
 		protected override void Log(LoggerLevel loggerLevel, String loggerName, String message, Exception exception)
 		{
-			Console.Out.WriteLine(string.Format("[{0}] '{1}' {2}", loggerLevel.ToString(), loggerName, message));
+			Console.Out.WriteLine("[{0}] '{1}' {2}", loggerLevel, loggerName, message);
 
 			if (exception != null)
 			{
@@ -93,7 +94,7 @@ namespace Castle.Core.Logging
 				throw new ArgumentNullException("loggerName", "To create a child logger you must supply a non null name");
 			}
 
-			return new ConsoleLogger(String.Format("{0}.{1}", Name, loggerName), Level);
+			return new ConsoleLogger(String.Format(CultureInfo.CurrentCulture, "{0}.{1}", Name, loggerName), Level);
 		}
 	}
 	#endif

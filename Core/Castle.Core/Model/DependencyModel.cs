@@ -15,6 +15,7 @@
 namespace Castle.Core
 {
 	using System;
+	using System.Globalization;
 
 	public enum DependencyType
 	{
@@ -102,7 +103,7 @@ namespace Castle.Core
 		/// </returns>
 		public override string ToString()
 		{
-			return string.Format("{0} dependency '{1}' type '{2}'",
+			return string.Format(CultureInfo.CurrentCulture, "{0} dependency '{1}' type '{2}'",
 			                     DependencyType, dependencyKey, TargetType);
 		}
 

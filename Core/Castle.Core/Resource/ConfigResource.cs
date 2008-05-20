@@ -16,6 +16,7 @@ namespace Castle.Core.Resource
 {
 	using System;
 	using System.Configuration;
+	using System.Globalization;
 	using System.IO;
 	using System.Text;
 	using System.Xml;
@@ -43,7 +44,7 @@ namespace Castle.Core.Resource
 
 			if (node == null)
 			{
-				String message = String.Format(
+				String message = String.Format(CultureInfo.InvariantCulture, 
 					"Could not find section '{0}' in the configuration file associated with this domain.", sectionName);
 				throw new ConfigurationErrorsException(message);
 			}
@@ -69,7 +70,7 @@ namespace Castle.Core.Resource
 
 		public override string ToString()
 		{
-			return String.Format("ConfigResource: [{0}]", sectionName);
+			return String.Format(CultureInfo.CurrentCulture, "ConfigResource: [{0}]", sectionName);
 		}
 	}
 
