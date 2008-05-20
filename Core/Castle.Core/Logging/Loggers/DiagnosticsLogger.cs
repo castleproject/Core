@@ -25,6 +25,7 @@ namespace Castle.Core.Logging
 	[Serializable]
 	public class DiagnosticsLogger : LevelFilteredLogger, IDisposable
 	{
+		[NonSerialized]
 		private EventLog eventLog;
 
 		/// <summary>
