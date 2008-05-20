@@ -16,7 +16,6 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 	using System.Diagnostics;
 	using Castle.Core.Configuration;
     using System.Collections.Generic;
@@ -142,9 +141,11 @@ namespace Castle.Core
 #if !SILVERLIGHT
 		[NonSerialized] 
 #endif
-		private IDictionary customDependencies;
+		private volatile IDictionary customDependencies;
 
 		private bool requiresGenericArguments;
+
+		private readonly object syncRoot = new object();
 
 		#endregion
 
@@ -211,7 +212,7 @@ namespace Castle.Core
 			{
 				if (extended == null)
 				{
-					lock (this)
+					lock (syncRoot)
 					{
 						if (extended == null) extended = new Dictionary<object, object>();
 					}
@@ -231,7 +232,7 @@ namespace Castle.Core
 			{
 				if (constructors == null)
 				{
-					lock (this)
+					lock (syncRoot)
 					{
 						if (constructors == null) constructors = new ConstructorCandidateCollection();
 					}
@@ -250,7 +251,7 @@ namespace Castle.Core
 			{
 				if (properties == null)
 				{
-					lock (this)
+					lock (syncRoot)
 					{
 						if (properties == null) properties = new PropertySetCollection();
 					}
@@ -279,7 +280,7 @@ namespace Castle.Core
 			{
 				if (lifecycleSteps == null)
 				{
-					lock (this)
+					lock (syncRoot)
 					{
 						if (lifecycleSteps == null) lifecycleSteps = new LifecycleStepCollection();
 					}
@@ -339,7 +340,7 @@ namespace Castle.Core
 			{
 				if (interceptors == null)
 				{
-					lock (this)
+					lock (syncRoot)
 					{
 						if (interceptors == null) interceptors = new InterceptorReferenceCollection();
 					}
@@ -358,7 +359,7 @@ namespace Castle.Core
 			{
 				if (parameters == null)
 				{
-					lock (this)
+					lock (syncRoot)
 					{
 						if (parameters == null) parameters = new ParameterModelCollection();
 					}
@@ -379,7 +380,7 @@ namespace Castle.Core
 			{
 				if (dependencies == null)
 				{
-					lock (this)
+					lock (syncRoot)
 					{
 						if (dependencies == null) dependencies = new DependencyModelCollection();
 					}
@@ -398,7 +399,7 @@ namespace Castle.Core
 			{
 				if (customDependencies == null)
 				{
-					lock (this)
+					lock (syncRoot)
 					{
 						if (customDependencies == null) customDependencies = new Dictionary<object, object>();
 					}
