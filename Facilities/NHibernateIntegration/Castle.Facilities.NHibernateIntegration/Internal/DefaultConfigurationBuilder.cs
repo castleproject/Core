@@ -16,6 +16,11 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	{
 		private const String nHMappingAttributesAssemblyName = "NHibernate.Mapping.Attributes";
 
+		/// <summary>
+		/// Builds the Configuration object from the specifed configuration
+		/// </summary>
+		/// <param name="config"></param>
+		/// <returns></returns>
 		public Configuration GetConfiguration(IConfiguration config)
 		{
 			Configuration cfg = new Configuration();
@@ -69,6 +74,11 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			}
 		}
 
+		/// <summary>
+		/// Registers the listeners.
+		/// </summary>
+		/// <param name="cfg">The CFG.</param>
+		/// <param name="facilityConfig">The facility config.</param>
 		protected void RegisterListeners(Configuration cfg, IConfiguration facilityConfig)
 		{
 			if (facilityConfig == null) return;

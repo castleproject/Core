@@ -77,6 +77,9 @@ namespace Castle.Facilities.NHibernateIntegration
 			this.configurationBuilder = configurationBuilder;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NHibernateFacility"/> class.
+		/// </summary>
 		public NHibernateFacility() : this(new DefaultConfigurationBuilder())
 		{
 		}
@@ -247,12 +250,18 @@ namespace Castle.Facilities.NHibernateIntegration
 			NHibernate.Cfg.Environment.UseReflectionOptimizer = useReflectionOptimizer;
 		}
 
+		/// <summary>
+		/// Configures the factories.
+		/// </summary>
+		/// <param name="config">The config.</param>
+		/// <param name="sessionFactoryResolver">The session factory resolver.</param>
+		/// <param name="firstFactory">if set to <c>true</c> [first factory].</param>
 		protected void ConfigureFactories(IConfiguration config, 
 			ISessionFactoryResolver sessionFactoryResolver, bool firstFactory)
 		{
 			String id = config.Attributes["id"];
 
-			if (id == null || String.Empty.Equals(id))
+			if (string.IsNullOrEmpty(id))
 			{
 				String message = "You must provide a " + 
 					"valid 'id' attribute for the 'factory' node. This id is used as key for " + 
@@ -263,7 +272,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			String alias = config.Attributes["alias"];
 
-			if (!firstFactory && (alias == null || alias.Length == 0))
+			if (!firstFactory && (string.IsNullOrEmpty(alias)))
 			{
 				String message = "You must provide a " + 
 					"valid 'alias' attribute for the 'factory' node. This id is used to obtain " + 
@@ -271,7 +280,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 				throw new ConfigurationErrorsException(message);
 			}
-			else if (alias == null || alias.Length == 0)
+			else if (string.IsNullOrEmpty(alias))
 			{
 				alias = Constants.DefaultAlias;
 			}

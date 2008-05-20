@@ -354,7 +354,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns></returns>
 		public virtual Array FindAllWithCustomQuery(string queryString, int firstRow, int maxRows)
 		{
-			if (queryString == null || queryString.Length == 0) throw new ArgumentNullException("queryString");
+			if (string.IsNullOrEmpty(queryString)) throw new ArgumentNullException("queryString");
 
 			using(ISession session = GetSession())
 			{
@@ -399,7 +399,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns></returns>
 		public virtual Array FindAllWithNamedQuery(string namedQuery, int firstRow, int maxRows)
 		{
-			if (namedQuery == null || namedQuery.Length == 0) throw new ArgumentNullException("queryString");
+			if (string.IsNullOrEmpty(namedQuery)) throw new ArgumentNullException("namedQuery");
 
 			using(ISession session = GetSession())
 			{
@@ -457,11 +457,11 @@ namespace Castle.Facilities.NHibernateIntegration
 		public void InitializeLazyProperty(object instance, string propertyName)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
-			if (propertyName == null || propertyName.Length == 0) throw new ArgumentNullException("collectionPropertyName");
+			if (string.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");
 
 			IDictionary properties = ReflectionUtil.GetPropertiesDictionary(instance);
 			if (! properties.Contains(propertyName))
-				throw new ArgumentOutOfRangeException("collectionPropertyName", "Property "
+				throw new ArgumentOutOfRangeException("propertyName", "Property "
 				                                                                + propertyName + " doest not exist for type "
 				                                                                + instance.GetType().ToString() + ".");
 
@@ -486,7 +486,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		private ISession GetSession()
 		{
-			if (sessionFactoryAlias == null || sessionFactoryAlias.Length == 0)
+			if (string.IsNullOrEmpty(sessionFactoryAlias))
 			{
 				return sessionManager.OpenSession();
 			}
