@@ -160,15 +160,15 @@ namespace Castle.Core
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class CustomLifestyleAttribute : LifestyleAttribute
 	{
-		private readonly Type lifestyleHandler;
+		private readonly Type lifestyleHandlerType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CustomLifestyleAttribute"/> class.
 		/// </summary>
-		/// <param name="lifestyleHandler">The lifestyle handler.</param>
-		public CustomLifestyleAttribute(Type lifestyleHandler) : base(LifestyleType.Custom)
+		/// <param name="lifestyleHandlerType">The lifestyle handler.</param>
+		public CustomLifestyleAttribute(Type lifestyleHandlerType) : base(LifestyleType.Custom)
 		{
-			this.lifestyleHandler = lifestyleHandler;
+			this.lifestyleHandlerType = lifestyleHandlerType;
 		}
 
 		/// <summary>
@@ -177,7 +177,7 @@ namespace Castle.Core
 		/// <value>The type of the lifestyle handler.</value>
 		public Type LifestyleHandlerType
 		{
-			get { return lifestyleHandler; }
+			get { return lifestyleHandlerType; }
 		}
 	}
 }

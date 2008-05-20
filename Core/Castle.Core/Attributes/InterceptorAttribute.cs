@@ -19,7 +19,7 @@ namespace Castle.Core
 	/// <summary>
 	/// Used to declare that a component wants interceptors acting on it.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true)]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments"), AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 	public class InterceptorAttribute : Attribute
 	{
 		private readonly InterceptorReference interceptorRef;
