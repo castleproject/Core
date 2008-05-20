@@ -130,24 +130,24 @@ namespace Castle.Core.Logging
 			writer.AutoFlush = true;
 		}
 
-		protected override void Log(LoggerLevel loggerLevel, String name, String message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, String loggerName, String message, Exception exception)
 		{
 			if (writer == null) return; // just in case it's been disposed
 
-			writer.WriteLine("[{0}] '{1}' {2}", loggerLevel.ToString(), name, message);
+			writer.WriteLine("[{0}] '{1}' {2}", loggerLevel.ToString(), loggerName, message);
 
 			if (exception != null)
 			{
 				writer.WriteLine("[{0}] '{1}' {2}: {3} {4}",
 				                 loggerLevel.ToString(),
-				                 name,
+				                 loggerName,
 				                 exception.GetType().FullName,
 				                 exception.Message,
 				                 exception.StackTrace);
 			}
 		}
 
-		public override ILogger CreateChildLogger(string name)
+		public override ILogger CreateChildLogger(string loggerName)
 		{
 			// TODO: We could create a ChildStreamLogger that didn't take ownership of the stream
 

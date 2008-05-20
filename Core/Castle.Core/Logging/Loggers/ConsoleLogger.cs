@@ -66,16 +66,16 @@ namespace Castle.Core.Logging
 		/// A Common method to log.
 		/// </summary>
 		/// <param name="loggerLevel">The level of logging</param>
-		/// <param name="name">The name of the logger</param>
+		/// <param name="loggerName">The name of the logger</param>
 		/// <param name="message">The Message</param>
 		/// <param name="exception">The Exception</param>
-		protected override void Log(LoggerLevel loggerLevel, String name, String message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, String loggerName, String message, Exception exception)
 		{
-			Console.Out.WriteLine(string.Format("[{0}] '{1}' {2}", loggerLevel.ToString(), name, message));
+			Console.Out.WriteLine(string.Format("[{0}] '{1}' {2}", loggerLevel.ToString(), loggerName, message));
 
 			if (exception != null)
 			{
-				Console.Out.WriteLine("[{0}] '{1}' {2}: {3} {4}", loggerLevel.ToString(), name, exception.GetType().FullName,
+				Console.Out.WriteLine("[{0}] '{1}' {2}: {3} {4}", loggerLevel.ToString(), loggerName, exception.GetType().FullName,
 				                      exception.Message, exception.StackTrace);
 			}
 		}
@@ -84,16 +84,16 @@ namespace Castle.Core.Logging
 		///	Returns a new <c>ConsoleLogger</c> with the name
 		///	added after this loggers name, with a dot in between.
 		/// </summary>
-		/// <param name="name">The added hierarchical name.</param>
+		/// <param name="loggerName">The added hierarchical name.</param>
 		/// <returns>A new <c>ConsoleLogger</c>.</returns> 
-		public override ILogger CreateChildLogger(string name)
+		public override ILogger CreateChildLogger(string loggerName)
 		{
-			if (name == null)
+			if (loggerName == null)
 			{
-				throw new ArgumentNullException("name", "To create a child logger you must supply a non null name");
+				throw new ArgumentNullException("loggerName", "To create a child logger you must supply a non null name");
 			}
 
-			return new ConsoleLogger(String.Format("{0}.{1}", Name, name), Level);
+			return new ConsoleLogger(String.Format("{0}.{1}", Name, loggerName), Level);
 		}
 	}
 	#endif

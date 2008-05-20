@@ -410,9 +410,9 @@ namespace Castle.Core.Logging
 		/// Create a new child logger.
 		/// The name of the child logger is [current-loggers-name].[passed-in-name]
 		/// </summary>
-		/// <param name="name">The Subname of this logger.</param>
+		/// <param name="loggerName">The Subname of this logger.</param>
 		/// <returns>The New ILogger instance.</returns> 
 		/// <exception cref="System.ArgumentException">If the name has an empty element name.</exception>
-		ILogger CreateChildLogger(String name);
+		ILogger CreateChildLogger(String loggerName);
 	}
 }

@@ -65,10 +65,10 @@ namespace Castle.Core.Logging
 		/// A Common method to log.
 		/// </summary>
 		/// <param name="loggerLevel">The level of logging</param>
-		/// <param name="name">The Log name.</param>
+		/// <param name="loggerName">The Log name.</param>
 		/// <param name="message">The Message</param>
 		/// <param name="exception">The Exception</param>
-		protected override void Log(LoggerLevel loggerLevel, String name, String message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, String loggerName, String message, Exception exception)
 		{
 			TraceContext ctx = TryToGetTraceContext();
 			if (ctx == null)
@@ -77,7 +77,7 @@ namespace Castle.Core.Logging
 			if (ctx.IsEnabled)
 			{
 				String category = String.Format("[{0}]", loggerLevel.ToString());
-				String formattedMessage = String.Format("{0} {1}", name, message);
+				String formattedMessage = String.Format("{0} {1}", loggerName, message);
 
 				ctx.Write(category, formattedMessage);
 
@@ -94,16 +94,16 @@ namespace Castle.Core.Logging
 		/// <summary>
 		///	Just returns this logger (<c>WebLogger</c> is not hierarchical).
 		/// </summary>
-		/// <param name="name">Ignored</param>
+		/// <param name="loggerName">Ignored</param>
 		/// <returns>This ILogger instance.</returns> 
-		public override ILogger CreateChildLogger(String name)
+		public override ILogger CreateChildLogger(String loggerName)
 		{
-			if (name == null)
+			if (loggerName == null)
 			{
-				throw new ArgumentNullException("name", "To create a child logger you must supply a non null name");
+				throw new ArgumentNullException("loggerName", "To create a child logger you must supply a non null name");
 			}
 
-			return new WebLogger(String.Format("{0}.{1}", Name, name), Level);
+			return new WebLogger(String.Format("{0}.{1}", Name, loggerName), Level);
 		}
 
 		/// <summary>

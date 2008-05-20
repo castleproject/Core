@@ -70,14 +70,14 @@ namespace Castle.Core.Logging
 		/// Create a new child logger.
 		/// The name of the child logger is [current-loggers-name].[passed-in-name]
 		/// </summary>
-		/// <param name="name">The Subname of this logger.</param>
+		/// <param name="loggerName">The Subname of this logger.</param>
 		/// <returns>The New ILogger instance.</returns> 
-		public override ILogger CreateChildLogger(string name)
+		public override ILogger CreateChildLogger(string loggerName)
 		{
-			return new TraceLogger(string.Concat(Name, ".", name), Level);
+			return new TraceLogger(string.Concat(Name, ".", loggerName), Level);
 		}
 
-		protected override void Log(LoggerLevel loggerLevel, string name, string message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, string loggerName, string message, Exception exception)
 		{
 			if (exception == null)
 			{

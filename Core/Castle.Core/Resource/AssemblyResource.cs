@@ -68,12 +68,12 @@ namespace Castle.Core.Resource
 			return CreateResourceFromUri(new CustomUri(resource), path);
 		}
 
-		private Stream CreateResourceFromUri(CustomUri resourcex, String basePath)
+		private Stream CreateResourceFromUri(CustomUri resourcex, String path)
 		{
 			if (resourcex == null) throw new ArgumentNullException("resourcex");
 
 			assemblyName = resourcex.Host;
-			resourcePath = ConvertToResourceName(assemblyName, resourcex.Path, basePath);
+			resourcePath = ConvertToResourceName(assemblyName, resourcex.Path, path);
 
 			Assembly assembly = ObtainAssembly(assemblyName);
 
@@ -93,7 +93,7 @@ namespace Castle.Core.Resource
 				throw new ResourceException(message);
 			}
 
-			this.basePath = ConvertToPath(resourcePath);
+			basePath = ConvertToPath(resourcePath);
 
 			return assembly.GetManifestResourceStream(nameFound);
 		}
@@ -112,10 +112,10 @@ namespace Castle.Core.Resource
 			return nameFound;
 		}
 
-		private string ConvertToResourceName(String assemblyName, String resource, String basePath)
+		private string ConvertToResourceName(String assembly, String resource, String path)
 		{
-			// TODO: use basePath for relative name construction
-			return String.Format("{0}{1}", assemblyName, resource.Replace('/', '.'));
+			// TODO: use path for relative name construction
+			return String.Format("{0}{1}", assembly, resource.Replace('/', '.'));
 		}
 
 		private string ConvertToPath(String resource)

@@ -65,7 +65,7 @@ namespace Castle.Core.Resource
 			return String.Format("UncResource: [{0}] [{1}]", filePath, basePath);
 		}
 
-		private Stream CreateStreamFromUri(CustomUri resource, String basePath)
+		private Stream CreateStreamFromUri(CustomUri resource, String rootPath)
 		{
 			if (resource == null)
 				throw new ArgumentNullException("resource");
@@ -76,13 +76,13 @@ namespace Castle.Core.Resource
 
 			String resourcePath = resource.Path;
 
-			if (!File.Exists(resourcePath) && basePath != null)
+			if (!File.Exists(resourcePath) && rootPath != null)
 			{
-				resourcePath = Path.Combine(basePath, resourcePath);
+				resourcePath = Path.Combine(rootPath, resourcePath);
 			}
 
 			filePath = Path.GetFileName(resourcePath);
-			this.basePath = Path.GetDirectoryName(resourcePath);
+			basePath = Path.GetDirectoryName(resourcePath);
 
 			CheckFileExists(resourcePath);
 

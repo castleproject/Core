@@ -72,38 +72,38 @@ namespace Castle.Core.Resource
 			return new FileResource(relativePath, basePath);
 		}
 
-		private Stream CreateStreamFromUri(CustomUri resource, String basePath)
+		private Stream CreateStreamFromUri(CustomUri resource, String rootPath)
 		{
 			if (resource == null) throw new ArgumentNullException("resource");
-			if (basePath == null) throw new ArgumentNullException("basePath");
+			if (rootPath == null) throw new ArgumentNullException("rootPath");
 
 			if (!resource.IsFile)
 				throw new ArgumentException("The specified resource is not a file", "resource");
 
-			return CreateStreamFromPath(resource.Path, basePath);
+			return CreateStreamFromPath(resource.Path, rootPath);
 		}
 
-		private Stream CreateStreamFromPath(String filePath, String basePath)
+		private Stream CreateStreamFromPath(String resourcePath, String rootPath)
 		{
-			if (filePath == null)
-				throw new ArgumentNullException("filePath");
-			if (basePath == null)
-				throw new ArgumentNullException("basePath");
+			if (resourcePath == null)
+				throw new ArgumentNullException("resourcePath");
+			if (rootPath == null)
+				throw new ArgumentNullException("rootPath");
 
-			if (!Path.IsPathRooted(filePath) || !File.Exists(filePath))
+			if (!Path.IsPathRooted(resourcePath) || !File.Exists(resourcePath))
 			{
 				// For a relative path, we use the basePath to
 				// resolve the full path
 
-				filePath = Path.Combine(basePath, filePath);
+				resourcePath = Path.Combine(rootPath, resourcePath);
 			}
 
-			CheckFileExists(filePath);
+			CheckFileExists(resourcePath);
 
-			this.filePath = Path.GetFileName(filePath);
-			this.basePath = Path.GetDirectoryName(filePath);
+			this.filePath = Path.GetFileName(resourcePath);
+			this.basePath = Path.GetDirectoryName(resourcePath);
 
-			return File.OpenRead(filePath);
+			return File.OpenRead(resourcePath);
 		}
 
 		private static void CheckFileExists(String path)

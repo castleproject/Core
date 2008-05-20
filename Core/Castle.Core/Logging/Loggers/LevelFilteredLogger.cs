@@ -66,7 +66,7 @@ namespace Castle.Core.Logging
 		}
 #endif
 
-		public abstract ILogger CreateChildLogger(string name);
+		public abstract ILogger CreateChildLogger(string loggerName);
 
 		/// <value>
 		/// The <c>LoggerLevel</c> that this logger
@@ -648,10 +648,10 @@ namespace Castle.Core.Logging
 		/// Note that exception can be null
 		/// </summary>
 		/// <param name="loggerLevel"></param>
-		/// <param name="name"></param>
+		/// <param name="loggerName"></param>
 		/// <param name="message"></param>
 		/// <param name="exception"></param>
-		protected abstract void Log(LoggerLevel loggerLevel, String name, String message, Exception exception);
+		protected abstract void Log(LoggerLevel loggerLevel, String loggerName, String message, Exception exception);
 
 		protected void ChangeName(String newName)
 		{

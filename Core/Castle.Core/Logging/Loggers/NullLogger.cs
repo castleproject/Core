@@ -474,9 +474,9 @@ namespace Castle.Core.Logging
 		/// <summary>
 		/// Returns this <c>NullLogger</c>.
 		/// </summary>
-		/// <param name="name">Ignored</param>
+		/// <param name="loggerName">Ignored</param>
 		/// <returns>This ILogger instance.</returns> 
-		public ILogger CreateChildLogger(string name)
+		public ILogger CreateChildLogger(string loggerName)
 		{
 			return this;
 		}

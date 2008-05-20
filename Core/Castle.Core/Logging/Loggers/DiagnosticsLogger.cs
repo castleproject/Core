@@ -99,12 +99,12 @@ namespace Castle.Core.Logging
 			}
 		}
 
-		public override ILogger CreateChildLogger(string name)
+		public override ILogger CreateChildLogger(string loggerName)
 		{
 			return new DiagnosticsLogger(eventLog.Log, eventLog.MachineName, eventLog.Source);
 		}
 
-		protected override void Log(LoggerLevel loggerLevel, string name, string message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, string loggerName, string message, Exception exception)
 		{
 			if (eventLog == null) return; // just in case it was disposed
 
@@ -114,12 +114,12 @@ namespace Castle.Core.Logging
 
 			if (exception == null)
 			{
-				contentToLog = string.Format("[{0}] '{1}' message: {2}", loggerLevel.ToString(), name, message);
+				contentToLog = string.Format("[{0}] '{1}' message: {2}", loggerLevel.ToString(), loggerName, message);
 			}
 			else
 			{
 				contentToLog = string.Format("[{0}] '{1}' message: {2} exception: {3} {4} {5}",
-				                             loggerLevel.ToString(), name, message, exception.GetType(), exception.Message,
+				                             loggerLevel.ToString(), loggerName, message, exception.GetType(), exception.Message,
 				                             exception.StackTrace);
 			}
 
