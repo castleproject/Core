@@ -66,10 +66,6 @@ namespace Castle.Core.Resource
 			throw new NotImplementedException();
 		}
 
-		public override void Dispose()
-		{
-		}
-
 		private static Assembly ObtainAssembly(string assemblyName)
 		{
 			try

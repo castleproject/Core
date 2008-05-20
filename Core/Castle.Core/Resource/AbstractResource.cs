@@ -37,6 +37,13 @@ namespace Castle.Core.Resource
 
 		public abstract IResource CreateRelative(String relativePath);
 
-		public abstract void Dispose();
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{}
 	}
 }

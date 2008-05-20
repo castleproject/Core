@@ -45,18 +45,5 @@ namespace Castle.Core.Resource
 		{
 			return new StreamReader(CreateStream(), encoding);
 		}
-
-		public override void Dispose()
-		{
-			Dispose(true);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				GC.SuppressFinalize(this);
-			}
-		}
 	}
 }

@@ -93,36 +93,29 @@ namespace Castle.Core.Logging
 
 		~StreamLogger()
 		{
-			Close(false);
+			Dispose(false);
 		}
 
 		#region IDisposable Members
 
 		public void Dispose()
 		{
-			Close(true);
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
 		#endregion
 
-		public void Close()
+		protected virtual void Dispose(bool disposing)
 		{
-			Close(true);
-		}
-
-		protected void Close(bool supressFinalize)
-		{
-			if (supressFinalize)
+			if (disposing)
 			{
-				GC.SuppressFinalize(this);
+				if (writer != null)
+				{
+					writer.Close();
+					writer = null;
+				}
 			}
-
-			if (writer != null)
-			{
-				writer.Close();
-			}
-
-			writer = null;
 		}
 
 		/// <summary>

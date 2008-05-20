@@ -54,8 +54,6 @@ namespace Castle.Core.Logging.Tests
 			log.MachineName = ".";
 
 			Assert.AreEqual(2, log.Entries.Count);
-
-			logger.Close();
 		}
 	}
 }

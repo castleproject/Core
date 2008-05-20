@@ -547,6 +547,7 @@ namespace Castle.Core.Logging
 
 			public void Dispose()
 			{
+				GC.SuppressFinalize(this);
 			}
 		}
 

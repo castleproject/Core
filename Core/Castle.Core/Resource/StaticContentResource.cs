@@ -44,9 +44,5 @@ namespace Castle.Core.Resource
 		{
 			throw new NotImplementedException();
 		}
-
-		public override void Dispose()
-		{
-		}
 	}
 }

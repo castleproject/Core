@@ -67,10 +67,6 @@ namespace Castle.Core.Resource
 			return new ConfigResource(relativePath);
 		}
 
-		public override void Dispose()
-		{
-		}
-
 		public override string ToString()
 		{
 			return String.Format("ConfigResource: [{0}]", sectionName);

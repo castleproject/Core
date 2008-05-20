@@ -73,34 +73,28 @@ namespace Castle.Core.Logging
 
 		~DiagnosticsLogger()
 		{
-			Close(false);
+			Dispose(false);
 		}
 
 		#region IDisposable Members
 
 		public void Dispose()
 		{
-			Close(true);
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
 		#endregion
 
-		public void Close()
+		protected virtual void Dispose(bool disposing)
 		{
-			Close(true);
-		}
-
-		protected void Close(bool supressFinalize)
-		{
-			if (supressFinalize)
+			if( disposing )
 			{
-				GC.SuppressFinalize(this);
-			}
-
-			if (eventLog != null)
-			{
-				eventLog.Close();
-				eventLog = null;
+				if (eventLog != null)
+				{
+					eventLog.Close();
+					eventLog = null;
+				}
 			}
 		}
 
