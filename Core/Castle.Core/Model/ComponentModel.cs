@@ -389,20 +389,22 @@ namespace Castle.Core
 		}
 
 		/// <summary>
-		/// Gets or sets the custom dependencies.
+		/// Gets the custom dependencies.
 		/// </summary>
 		/// <value>The custom dependencies.</value>
 		public IDictionary CustomDependencies
 		{
 			get
 			{
-				lock (this)
+				if (customDependencies == null)
 				{
-                    if (customDependencies == null) customDependencies = new Dictionary<object, object>();
+					lock (this)
+					{
+						if (customDependencies == null) customDependencies = new Dictionary<object, object>();
+					}
 				}
 				return customDependencies;
 			}
-			set { customDependencies = value; }
 		}
 	}
 }
