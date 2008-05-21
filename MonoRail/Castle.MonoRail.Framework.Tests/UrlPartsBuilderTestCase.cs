@@ -266,5 +266,27 @@ namespace Castle.MonoRail.Framework.Tests
 
 			Assert.AreEqual("home/index.ext?page=3", builder.BuildPath());
 		}
+
+		[Test]
+		public void InsertFrontPath_ShouldKeepExistingPath()
+		{
+			UrlParts builder = new UrlParts("controller", "action");
+			builder.PathInfo.Add("State").Add("FL");
+
+			builder.InsertFrontPath("http://something");
+
+			Assert.AreEqual("http://something/controller/action/State/FL", builder.BuildPath());
+		}
+
+		[Test]
+		public void InsertFrontPath_ShouldHandleTwoPathsWithSlash()
+		{
+			UrlParts builder = new UrlParts();
+			builder.AppendPath("/something");
+
+			builder.InsertFrontPath("http://something/else/");
+
+			Assert.AreEqual("http://something/else/something", builder.BuildPath());
+		}
 	}
 }

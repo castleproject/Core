@@ -76,7 +76,7 @@ namespace Castle.MonoRail.Framework.Routing
 		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters, out int points)
 		{
 			points = 0;
-			StringBuilder text = new StringBuilder(virtualPath);
+			StringBuilder text = new StringBuilder();// = new StringBuilder(virtualPath);
 			IList<string> checkedParameters = new List<string>();
 
 			foreach(DefaultNode node in nodes)

@@ -211,6 +211,28 @@ namespace Castle.MonoRail.Framework.Services
 
 			return sb.ToString();
 		}
+
+		/// <summary>
+		/// Inserts the piece in front of the existing path.
+		/// </summary>
+		/// <param name="piece">The path.</param>
+		public void InsertFrontPath(string piece)
+		{
+			if (piece.Length != 1 && piece.EndsWith("/") && url.Length != 0 && url[0] == '/')
+			{
+				piece = piece.Substring(0, piece.Length - 1);
+			}
+			if (piece.Length != 1 && !piece.EndsWith("/") && url.Length != 0 && url[0] != '/')
+			{
+				piece += "/";
+			}
+
+			string newUrl = piece + url;
+
+			url.Length = 0;
+			url.Append(newUrl);
+
+		}
 		
 		/// <summary>
 		/// Pendent

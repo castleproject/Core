@@ -53,6 +53,40 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		}
 
 		[Test]
+		public void ShouldBeAbleToConstructAnAbsoluteURL()
+		{
+			engine.Add(new PatternRoute("/<area>/<controller>/something/<action>/[id]"));
+			engine.Add(new PatternRoute("/<controller>/something/<action>/[id]"));
+
+			UrlInfo url = new UrlInfo("domain.com", null, "", "http", 80, "", "", "controller", "action", ".castle", null);
+
+			HybridDictionary dict = new HybridDictionary(true);
+			dict["absolute"] = "true";
+			dict["controller"] = "cart";
+			dict["action"] = "new";
+			dict["params"] = DictHelper.Create("id=10");
+
+			Assert.AreEqual("http://domain.com/cart/something/new/10", urlBuilder.BuildUrl(url, dict));
+		}
+
+		[Test]
+		public void ShouldBeAbleToConstructAnAbsoluteURLWithAppVirtualDir()
+		{
+			engine.Add(new PatternRoute("/<area>/<controller>/something/<action>/[id]"));
+			engine.Add(new PatternRoute("/<controller>/something/<action>/[id]"));
+
+			UrlInfo url = new UrlInfo("domain.com", null, "someproject", "http", 80, "", "", "controller", "action", ".castle", null);
+
+			HybridDictionary dict = new HybridDictionary(true);
+			dict["absolute"] = "true";
+			dict["controller"] = "cart";
+			dict["action"] = "new";
+			dict["params"] = DictHelper.Create("id=10");
+
+			Assert.AreEqual("http://domain.com/someproject/cart/something/new/10", urlBuilder.BuildUrl(url, dict));
+		}
+
+		[Test]
 		public void OptionalPartsShouldMatchOnlyIfExplictlyPresent()
 		{
 			engine.Add(new PatternRoute("/<controller>/something/[action]/[id]"));
