@@ -17,7 +17,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 	using System;
 	using System.Collections;
 	using System.ComponentModel;
-	using System.IO;
 	using System.Net;
 	using System.Net.Mail;
 
