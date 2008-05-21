@@ -349,7 +349,7 @@ namespace Castle.ActiveRecord
 		/// Generates and executes the creation scripts for the database.
 		/// </summary>
 		/// <returns>List of exceptions that occurred during the update process</returns>
-		public static IList<Exception> UpdateSchema()
+		public static IList UpdateSchema()
 		{
 			CheckInitialized();
 			List<Exception> exceptions = new List<Exception>();
@@ -377,7 +377,7 @@ namespace Castle.ActiveRecord
 		/// Generates and executes the creation scripts for the database using 
 		/// the specified baseClass to know which database it should create the schema for.
 		/// </summary>
-		public static IList<Exception> UpdateSchema(Type baseClass)
+		public static IList UpdateSchema(Type baseClass)
 		{
 			CheckInitialized();
 
