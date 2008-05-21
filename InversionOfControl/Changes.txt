@@ -1,5 +1,7 @@
 RC 4
 ====
+- Updated AllTypes strategy to support multiple registrations from a single set of types.
+
 - Collection handlers from parent container for GetAssignableHandlers.
 
 - Added ability to change invocation target to DefaultProxyFactory.

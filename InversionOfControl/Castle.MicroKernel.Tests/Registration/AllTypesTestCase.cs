@@ -172,7 +172,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
-		public void RegisterAssemblyTypes_WithKLinqConfiguration_RegisteredInContainer()
+		public void RegisterAssemblyTypes_WithLinqConfiguration_RegisteredInContainer()
 		{
 			kernel.Register(AllTypes.Of<ICommon>()
 				.FromAssembly(Assembly.GetExecutingAssembly())
@@ -186,8 +186,38 @@ namespace Castle.MicroKernel.Tests.Registration
 				Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
 				Assert.AreEqual(handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name);
 			}
-		}	
-		
-		#endif	
+		}
+
+		[Test]
+		public void RegisterMultipleAssemblyTypes_BasedOn_RegisteredInContainer()
+		{
+			kernel.Register(
+				AllTypes.FromAssembly(Assembly.GetExecutingAssembly())
+					.BasedOn<ICommon>()
+					.BasedOn<ICustomer>()
+						.If(t => t.FullName.Contains("Chain"))
+					.BasedOn<DefaultTemplateEngine>()
+					.BasedOn<DefaultMailSenderService>()
+					.BasedOn<DefaultSpamServiceWithConstructor>()
+					);
+
+			IHandler[] handlers = kernel.GetHandlers(typeof(ICommon));
+			Assert.AreEqual(0, handlers.Length);
+
+			handlers = kernel.GetAssignableHandlers(typeof(ICommon));
+			Assert.AreNotEqual(0, handlers.Length);
+
+			handlers = kernel.GetAssignableHandlers(typeof(ICustomer));
+			Assert.AreNotEqual(0, handlers.Length);
+
+			foreach (IHandler handler in handlers)
+			{
+				Assert.IsTrue(handler.ComponentModel.Implementation.FullName.Contains("Chain"));
+			}
+
+			handlers = kernel.GetAssignableHandlers(typeof(DefaultSpamServiceWithConstructor));
+			Assert.AreEqual(1, handlers.Length);		
+		}
+#endif	
 	}
 }

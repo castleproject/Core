@@ -15,34 +15,33 @@
 namespace Castle.MicroKernel.Registration
 {
 	using System;
-	using System.Collections.Generic;
 	
 	/// <summary>
-	/// Describes how to register a group of types.
+	/// Describes how to register a group of related types.
 	/// </summary>
-	public class TypesDescriptor : IRegistration
+	public class BasedOnDescriptor : IRegistration
 	{
 		private readonly Type basedOn;
-		private readonly IEnumerable<Type> types;
+		private readonly FromDescriptor from;
 		private readonly ServiceDescriptor service;
 		private Action<ComponentRegistration> configurer;
 		private Predicate<Type> unlessFilter;
 		private Predicate<Type> ifFilter;
 		
 		/// <summary>
-		/// Initializes a new instance of the TypesDescriptor.
+		/// Initializes a new instance of the BasedOnDescriptor.
 		/// </summary>
-		internal TypesDescriptor(Type basedOn, IEnumerable<Type> types)
+		internal BasedOnDescriptor(Type basedOn, FromDescriptor from)
 		{
 			this.basedOn = basedOn;
-			this.types = types;
+			this.from = from;
 			service = new ServiceDescriptor(this);
 		}
 
 		/// <summary>
 		/// Gets the type all types must be based on.
 		/// </summary>
-		public Type BasedOn
+		internal Type InternalBasedOn
 		{
 			get { return basedOn; }
 		}
@@ -52,7 +51,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="ifFilter">The predicate to satisfy.</param>
 		/// <returns></returns>
-		public TypesDescriptor If(Predicate<Type> ifFilter)
+		public BasedOnDescriptor If(Predicate<Type> ifFilter)
 		{
 			this.ifFilter = ifFilter;
 			return this;
@@ -63,7 +62,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="unlessFilter">The predicate not to satisify.</param>
 		/// <returns></returns>
-		public TypesDescriptor Unless( Predicate<Type> unlessFilter )
+		public BasedOnDescriptor Unless( Predicate<Type> unlessFilter )
 		{
 			this.unlessFilter = unlessFilter;
 			return this;
@@ -82,24 +81,45 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="configurer">The configuration action.</param>
 		/// <returns></returns>
-		public TypesDescriptor Configure(Action<ComponentRegistration> configurer)
+		public BasedOnDescriptor Configure(Action<ComponentRegistration> configurer)
 		{
 			this.configurer = configurer;
 			return this;
 		}
-		
-		#region IRegistration Members
 
-		void IRegistration.Register(IKernel kernel)
+		/// <summary>
+		/// Allows a type to be registered multiple times.
+		/// </summary>
+		public FromDescriptor AllowMultipleMatches()
 		{
-			foreach (Type type in types)
+			return from.AllowMultipleMatches();
+		}
+
+		/// <summary>
+		/// Returns the descriptor for accepting a new type.
+		/// </summary>
+		/// <typeparam name="T">The base type.</typeparam>
+		/// <returns>The descriptor for the type.</returns>
+		public BasedOnDescriptor BasedOn<T>()
+		{
+			return from.BasedOn<T>();
+		}
+
+		/// <summary>
+		/// Returns the descriptor for accepting a new type.
+		/// </summary>
+		/// <param name="basedOn">The base type.</param>
+		/// <returns>The descriptor for the type.</returns>
+		public BasedOnDescriptor BasedOn(Type basedOn)
+		{
+			return from.BasedOn(basedOn);
+		}
+
+		internal bool TryRegister(Type type, IKernel kernel)
+		{
+			if (Accepts(type))
 			{
-				if (!IsTypeAccepted(type))
-				{	
-					continue;
-				}
-								
-				Type serviceType = service.GetService(type);			
+				Type serviceType = service.GetService(type);
 				ComponentRegistration registration = Component.For(serviceType);
 				registration.ImplementedBy(type);
 
@@ -107,27 +127,38 @@ namespace Castle.MicroKernel.Registration
 				{
 					configurer(registration);
 				}
-				
+
 				if (String.IsNullOrEmpty(registration.Name))
 				{
 					registration.Named(type.FullName);
 				}
-				
+
 				if (!kernel.HasComponent(registration.Name))
-				{	
+				{
 					kernel.Register(registration);
 				}
+
+				return true;
 			}
+
+			return false;
 		}
 
-		#endregion
-	
-		private bool IsTypeAccepted(Type type)
+		private bool Accepts(Type type)
 		{
 			return type.IsClass && !type.IsAbstract && basedOn.IsAssignableFrom(type)
 				&& (ifFilter == null || ifFilter(type))
 				&& (unlessFilter == null || !unlessFilter(type)
 				);
 		}
+
+		#region IRegistration Members
+
+		void IRegistration.Register(IKernel kernel)
+		{
+			((IRegistration)from).Register(kernel);
+		}
+
+		#endregion
 	}
 }

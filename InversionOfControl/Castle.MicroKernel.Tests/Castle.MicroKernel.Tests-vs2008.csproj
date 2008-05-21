@@ -256,7 +256,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Registration\ComponentRegistrationTestCase.cs" />
-    <Compile Include="Registration\AllTypesOfTestCase.cs" />
+    <Compile Include="Registration\AllTypesTestCase.cs" />
     <Compile Include="RuntimeParametersTestCase.cs" />
     <Compile Include="RuntimeParameters\ComponentWithParameters.cs" />
     <Compile Include="SerializationTestCase.cs">

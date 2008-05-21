@@ -15,18 +15,17 @@
 namespace Castle.MicroKernel.Registration
 {
 	using System;
-	using System.IO;
 	using System.Reflection;
 	using System.Collections.Generic;
 	
 	/// <summary>
-	/// Describes a set of components to register in the kernel.
+	/// Describes a related group of components to register in the kernel.
 	/// </summary>
-	public class AllTypes
+	public class AllTypesOf
 	{
 		private readonly Type basedOn;
 
-		internal AllTypes(Type basedOn)
+		internal AllTypesOf(Type basedOn)
 		{
 			this.basedOn = basedOn;
 		}
@@ -35,102 +34,50 @@ namespace Castle.MicroKernel.Registration
 		/// Prepares to register types from an assembly.
 		/// </summary>
 		/// <param name="assemblyName">The assembly name.</param>
-		/// <returns>The corresponding <see cref="TypesDescriptor"/></returns>
-		public TypesDescriptor FromAssemblyNamed(string assemblyName)
+		/// <returns>The corresponding <see cref="BasedOnDescriptor"/></returns>
+		public BasedOnDescriptor FromAssemblyNamed(string assemblyName)
 		{
-			Assembly assembly;
-			String extension = Path.GetExtension(assemblyName);
-			
-			if (extension == ".dll" || extension == ".exe")
-			{
-				if (Path.GetDirectoryName(assemblyName) == AppDomain.CurrentDomain.BaseDirectory)
-				{
-					assembly = Assembly.Load(Path.GetFileNameWithoutExtension(assemblyName));
-				}
-				else
-				{
-					assembly = Assembly.LoadFile(assemblyName);
-				}
-			}
-			else
-			{
-				assembly = Assembly.Load(assemblyName);
-			}
-			
-			return FromAssembly(assembly);
+			return AllTypes.FromAssemblyNamed(assemblyName).BasedOn(basedOn);
 		}
 
 		/// <summary>
 		/// Prepares to register types from an assembly.
 		/// </summary>
 		/// <param name="assembly">The assembly.</param>
-		/// <returns>The corresponding <see cref="TypesDescriptor"/></returns>
-		public TypesDescriptor FromAssembly(Assembly assembly)
+		/// <returns>The corresponding <see cref="BasedOnDescriptor"/></returns>
+		public BasedOnDescriptor FromAssembly(Assembly assembly)
 		{
-			if (assembly == null)
-			{
-				throw new ArgumentNullException("assembly");
-			}
-			return From(assembly.GetExportedTypes());
+			return AllTypes.FromAssembly(assembly).BasedOn(basedOn);
 		}
 
 		/// <summary>
 		/// Prepares to register types from a list of types.
 		/// </summary>
 		/// <param name="types">The list of types.</param>
-		/// <returns>The corresponding <see cref="TypesDescriptor"/></returns>
-		public TypesDescriptor From(IEnumerable<Type> types)
+		/// <returns>The corresponding <see cref="BasedOnDescriptor"/></returns>
+		public BasedOnDescriptor From(IEnumerable<Type> types)
 		{
-			return new TypesDescriptor(basedOn, types);
+			return AllTypes.From(types).BasedOn(basedOn);
 		}
 
 		/// <summary>
 		/// Prepares to register types from a list of types.
 		/// </summary>
 		/// <param name="types">The list of types.</param>
-		/// <returns>The corresponding <see cref="TypesDescriptor"/></returns>
-		public TypesDescriptor Pick(IEnumerable<Type> types)
+		/// <returns>The corresponding <see cref="BasedOnDescriptor"/></returns>
+		public BasedOnDescriptor Pick(IEnumerable<Type> types)
 		{
-			return new TypesDescriptor(basedOn, types);
+			return AllTypes.Pick(types).BasedOn(basedOn);
 		}
 		
 		/// <summary>
 		/// Prepares to register types from a list of types.
 		/// </summary>
 		/// <param name="types">The list of types.</param>
-		/// <returns>The corresponding <see cref="TypesDescriptor"/></returns>
-		public TypesDescriptor From(params Type[] types)
+		/// <returns>The corresponding <see cref="BasedOnDescriptor"/></returns>
+		public BasedOnDescriptor From(params Type[] types)
 		{
-			return new TypesDescriptor(basedOn, types);
-		}
-
-		/// <summary>
-		/// Describes all the types based on <see cref="basedOn"/>
-		/// </summary>
-		/// <param name="basedOn">The base type.</param>
-		/// <returns></returns>
-		public static AllTypes Of(Type basedOn)
-		{
-			return new AllTypes(basedOn);
-		}
-
-		/// <summary>
-		/// Describes all the types based on type T.
-		/// </summary>
-		/// <typeparam name="T">The base type.</typeparam>
-		/// <returns></returns>
-		public static AllTypes Of<T>()
-		{
-			return new AllTypes(typeof(T));
-		}
-
-		/// <summary>
-		/// Describes any types that are supplied.
-		/// </summary>
-		/// <returns></returns>
-		public static AllTypes Pick()
-		{
-			return Of<object>();
+			return AllTypes.From(types).BasedOn(basedOn);
 		}
 	}
 }

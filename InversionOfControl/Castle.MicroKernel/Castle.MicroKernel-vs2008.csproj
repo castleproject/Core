@@ -344,9 +344,11 @@
     <Compile Include="Registration\RegistrationGroup.cs" />
     <Compile Include="Registration\ServiceOverride.cs" />
     <Compile Include="Registration\ServiceOverrideDescriptor.cs" />
+    <Compile Include="Registration\Strategies\AllTypes.cs" />
     <Compile Include="Registration\Strategies\AllTypesOf.cs" />
+    <Compile Include="Registration\Strategies\FromDescriptor.cs" />
     <Compile Include="Registration\Strategies\ServiceDescriptor.cs" />
-    <Compile Include="Registration\Strategies\TypesDescriptor.cs" />
+    <Compile Include="Registration\Strategies\BasedOnDescriptor.cs" />
     <Compile Include="Releasers\AllComponentsReleasePolicy.cs">
       <SubType>Code</SubType>
     </Compile>
