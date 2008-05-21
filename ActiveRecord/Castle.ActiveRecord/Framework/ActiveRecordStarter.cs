@@ -352,7 +352,7 @@ namespace Castle.ActiveRecord
 		public static IList UpdateSchema()
 		{
 			CheckInitialized();
-			List<Exception> exceptions = new List<Exception>();
+			ArrayList exceptions = new ArrayList();
 
 			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
