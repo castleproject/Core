@@ -16,6 +16,7 @@ namespace NVelocity.Runtime.Resource.Loader
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
 	using Commons.Collections;
@@ -24,7 +25,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 	public class AssemblyResourceLoader : ResourceLoader
 	{
-		private ArrayList assemblyNames;
+		private List<string> assemblyNames;
 
 
 		/// <summary> 
@@ -33,7 +34,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// </summary>
 		public override void Init(ExtendedProperties configuration)
 		{
-			assemblyNames = configuration.GetVector("assembly");
+			assemblyNames = configuration.GetStringList("assembly");
 		}
 
 		///

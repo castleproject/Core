@@ -16,6 +16,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
 	using System.Web;
@@ -39,9 +40,10 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		private VelocityEngine vengine;
 		private ILogger log = NullLogger.Instance;
 
-		private ArrayList assemblies = new ArrayList();
+		private List<string> assemblies = new List<string>();
 		private String templateDir = ".";
 		private bool enableCache = true;
+		private string assemblyName;
 
 		/// <summary>
 		/// Constructs a NVelocityTemplateEngine instance
@@ -70,7 +72,11 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		/// The property is obsolete, please use the AddResourceAssembly function.
 		/// </remarks>
 		[Obsolete("Please use the AddResourceAssembly function")]
-		public string AssemblyName;
+		public string AssemblyName
+		{
+			get { return assemblyName; }
+			set { assemblyName = value; }
+		}
 		
 		/// <summary>
 		/// Add an assembly to the resource collection.
@@ -78,12 +84,14 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		/// <param name="assembly"></param>
 		public void AddResourceAssembly(string assembly)
 		{
-			if (assembly == null || assembly == string.Empty)
+			if (string.IsNullOrEmpty(assembly))
+			{
 				throw new ArgumentException("assembly name can not be null or empty");
-
+			}
 			if (assemblies.Contains(assembly))
+			{
 				return;
-			
+			}
 			
 			assemblies.Add(assembly);
 		}
@@ -97,7 +105,9 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			set
 			{
 				if (vengine != null)
+				{
 					throw new InvalidOperationException("Could not change the TemplateDir after Template Engine initialization.");
+				}
 				
 				templateDir = value;
 			}
@@ -112,6 +122,10 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			set { enableCache = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the logger.
+		/// </summary>
+		/// <value>The log.</value>
 		public ILogger Log
 		{
 			get { return log; }
@@ -127,13 +141,21 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			
 			ExtendedProperties props = new ExtendedProperties();
 
+			if (!string.IsNullOrEmpty(assemblyName))
+			{
+				AddResourceAssembly(assemblyName);
+			}
+
  			if (assemblies.Count != 0)
   			{
- 				log.Info("Initializing NVelocityTemplateEngine component using Assemblies:");
- 				foreach(string s in assemblies)
- 				{
- 					log.Info(" - {0}", s);	
- 				}
+				if (log.IsInfoEnabled)
+				{
+					log.Info("Initializing NVelocityTemplateEngine component using Assemblies:");
+					foreach (string s in assemblies)
+					{
+						log.Info(" - {0}", s);
+					}
+				}
   				
   				props.SetProperty(RuntimeConstants.RESOURCE_LOADER, "assembly");
   				props.SetProperty("assembly.resource.loader.class", "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader;NVelocity");

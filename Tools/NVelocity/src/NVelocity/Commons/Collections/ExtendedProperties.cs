@@ -16,6 +16,7 @@ namespace Commons.Collections
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Text;
 
@@ -972,6 +973,17 @@ namespace Commons.Collections
 		public ArrayList GetVector(String key)
 		{
 			return GetVector(key, null);
+		}
+
+		/// <summary>
+		/// Gets the string list.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns></returns>
+		public List<string> GetStringList(String key)
+		{
+			Object value = this[key];
+			return (List<string>) value;
 		}
 
 		/// <summary> Get a Vector of strings associated with the given configuration
