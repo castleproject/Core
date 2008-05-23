@@ -50,6 +50,10 @@ namespace Castle.MonoRail.Framework.Routing
 							defaultUrlExtension = handlerAction.Path.Substring(1);
 							break;
 						}
+						else if(handlerAction.Path == "*")
+						{
+							defaultUrlExtension = string.Empty;
+						}
 					}
 				}
 			}
