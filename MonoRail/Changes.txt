@@ -1,10 +1,13 @@
 1.0
 ===
 
+- Applied Andre Loker's patch fixing MR-456
+  "Routing Engine: support for root-routing + excluding MonoRail resource files from routing"
+
 - Applied Mike Nichols's patch fixing MR-396
   Get WindsorIntegration on DynamicActionProviders.
 
-  - Applied Gildas's patch fixing MR-433 
+- Applied Gildas's patch fixing MR-433 
   Support for the jQuery Validation plugin.
 
 - Applied Fixed MR-428

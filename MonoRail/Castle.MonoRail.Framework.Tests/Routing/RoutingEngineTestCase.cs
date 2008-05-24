@@ -40,5 +40,23 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.AreEqual("home", match.Parameters["controller"]);
 			Assert.AreEqual("movies", match.Parameters["category"]);
 		}
+
+		[Test]
+		public void FindMatch_IgnoresMonoRailResourceUrls()
+		{
+			engine.Add(new PatternRoute("/<area>/<controller>/<action>"));
+
+			RouteMatch match = engine.FindMatch("/admin/users/edit", CreateGetContext());
+			Assert.IsNotNull(match);
+			Assert.AreEqual("admin", match.Parameters["area"]);
+			Assert.AreEqual("users", match.Parameters["controller"]);
+			Assert.AreEqual("edit", match.Parameters["action"]);
+
+			Assert.IsNull(engine.FindMatch("/MonoRail/Files/BehaviourScripts", CreateGetContext()));
+			Assert.IsNull(engine.FindMatch("/MonoRail/Files/AjaxScripts", CreateGetContext()));
+			Assert.IsNull(engine.FindMatch("/MonoRail/Files/FormHelperScript", CreateGetContext()));
+			Assert.IsNull(engine.FindMatch("/MonoRail/Files/ZebdaScripts", CreateGetContext()));
+			Assert.IsNull(engine.FindMatch("/MonoRail/Files/NonExistent", CreateGetContext()));
+		}
 	}
 }

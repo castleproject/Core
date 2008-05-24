@@ -147,6 +147,11 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		public RouteMatch FindMatch(string url, IRouteContext context)
 		{
+			if (IsExcludedUrl(url)) 
+			{
+				return null;
+			}
+
 			// lock for reading
 
 			int winnerPoints = 0;
@@ -212,6 +217,22 @@ namespace Castle.MonoRail.Framework.Routing
 
 				name2Rule[rule.RouteName] = rule.inner;
 			}
+		}
+
+		/// <summary>
+		/// Determines whether the given url should be excluded from routing.
+		/// </summary>
+		/// <param name="appRelativeUrl">The app relative url</param>
+		/// <returns><c>true</c> if the given url should be excluded from routing; 
+		/// otherwise, <c>false</c></returns>
+		/// <remarks>
+		/// The <paramref name="appRelativeUrl"/> is expected to be relative to the
+		/// application directory. 
+		/// </remarks>
+		protected virtual bool IsExcludedUrl(string appRelativeUrl)
+		{
+			// do not route MonoRail resource file requests
+			return appRelativeUrl.ToLowerInvariant().StartsWith("/monorail/files");
 		}
 
 		class DecoratedRule : IRoutingRule

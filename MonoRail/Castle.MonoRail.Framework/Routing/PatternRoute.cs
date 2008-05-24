@@ -368,6 +368,9 @@ namespace Castle.MonoRail.Framework.Routing
 					{
 						if (name != null)
 						{
+							// matching defaults is better than nothing, so
+							// assign at least a very small number of points
+							points += 1;
 							match.AddNamed(name, defaultVal);
 						}
 
@@ -387,8 +390,11 @@ namespace Castle.MonoRail.Framework.Routing
 					{
 						match.AddNamed(name, part);
 					}
-
-					points += isStaticNode ? 4 : 2;
+					// matching non-default nodes is preferred, static nodes even more,
+					// so assign a high number of points.
+					// By using very high values it is ensured that defaults are never
+					// preferred over non-default matches
+					points += isStaticNode ? 4000 : 2000;
 
 					return true;
 				}

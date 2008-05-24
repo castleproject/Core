@@ -33,7 +33,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/some/path");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(8, route.Matches("/some/path", CreateGetContext(), match));
+			Assert.AreEqual(8000, route.Matches("/some/path", CreateGetContext(), match));
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/default.aspx");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(8, route.Matches("/default.aspx", CreateGetContext(), match));
+			Assert.AreEqual(8000, route.Matches("/default.aspx", CreateGetContext(), match));
 		}
 
 		[Test]
@@ -49,11 +49,11 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/default.aspx");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(8, route.Matches("/DEFAULT.ASPX", CreateGetContext(), match));
+			Assert.AreEqual(8000, route.Matches("/DEFAULT.ASPX", CreateGetContext(), match));
 
 			route = new PatternRoute("/some/path");
 			match = new RouteMatch();
-			Assert.AreEqual(8, route.Matches("/SOME/Path", CreateGetContext(), match));
+			Assert.AreEqual(8000, route.Matches("/SOME/Path", CreateGetContext(), match));
 		}
 
 		[Test]
@@ -61,7 +61,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/some/path_to-this");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(8, route.Matches("/some/path_to-this", CreateGetContext(), match)); 
+			Assert.AreEqual(8000, route.Matches("/some/path_to-this", CreateGetContext(), match)); 
 		}
 
 		[Test]
@@ -69,7 +69,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/<action>");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(4, route.Matches("/some/act", CreateGetContext(), match));
+			Assert.AreEqual(4000, route.Matches("/some/act", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act", match.Parameters["action"]);
 		}
@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/<action>.<format>");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(6, route.Matches("/some/act.xml", CreateGetContext(), match));
+			Assert.AreEqual(6000, route.Matches("/some/act.xml", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act", match.Parameters["action"]);
 			Assert.AreEqual("xml", match.Parameters["format"]);
@@ -90,7 +90,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/<action>");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(4, route.Matches("/some/act_name", CreateGetContext(), match));
+			Assert.AreEqual(4000, route.Matches("/some/act_name", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act_name", match.Parameters["action"]);
 		}
@@ -100,7 +100,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/<action>");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(4, route.Matches("/some/act-name", CreateGetContext(), match));
+			Assert.AreEqual(4000, route.Matches("/some/act-name", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act-name", match.Parameters["action"]);
 		}
@@ -110,12 +110,12 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/[action]/[id]");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(4, route.Matches("/some/act", CreateGetContext(), match));
+			Assert.AreEqual(4001, route.Matches("/some/act", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act", match.Parameters["action"]);
 
 			match = new RouteMatch();
-			Assert.AreEqual(6, route.Matches("/some/act/10", CreateGetContext(), match));
+			Assert.AreEqual(6000, route.Matches("/some/act/10", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act", match.Parameters["action"]);
 			Assert.AreEqual("10", match.Parameters["id"]);
@@ -127,7 +127,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			PatternRoute route = new PatternRoute("/<controller>/[action]/[id]")
 				.DefaultFor("action").Is("index").DefaultFor("id").Is("0");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(2, route.Matches("/some", CreateGetContext(), match));
+			Assert.AreEqual(2002, route.Matches("/some", CreateGetContext(), match));
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("index", match.Parameters["action"]);
 			Assert.AreEqual("0", match.Parameters["id"]);
@@ -141,12 +141,12 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 				.Restrict("id").ValidInteger;
 
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(4, route.Matches("/some/index", CreateGetContext(), match));
-			Assert.AreEqual(4, route.Matches("/some/list", CreateGetContext(), match));
+			Assert.AreEqual(4001, route.Matches("/some/index", CreateGetContext(), match));
+			Assert.AreEqual(4001, route.Matches("/some/list", CreateGetContext(), match));
 			Assert.AreEqual(0, route.Matches("/some/new", CreateGetContext(), match));
 			Assert.AreEqual(0, route.Matches("/some/index/foo", CreateGetContext(), match));
 			Assert.AreEqual(0, route.Matches("/some/list/bar", CreateGetContext(), match));
-			Assert.AreEqual(6, route.Matches("/some/list/1", CreateGetContext(), match));
+			Assert.AreEqual(6000, route.Matches("/some/list/1", CreateGetContext(), match));
 		}
 
 		[Test]
@@ -162,7 +162,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 
 			RouteMatch match = new RouteMatch();
 			Assert.AreEqual(0, route.Matches("/something/zzzzzzzz-c123-11dc-95ff-0800200c9a66", CreateGetContext(), match));
-			Assert.AreEqual(4, route.Matches("/something/173e0970-c123-11dc-95ff-0800200c9a66", CreateGetContext(), match));
+			Assert.AreEqual(4000, route.Matches("/something/173e0970-c123-11dc-95ff-0800200c9a66", CreateGetContext(), match));
 			Assert.AreEqual("something", match.Parameters["param"]);
 			Assert.AreEqual("173e0970-c123-11dc-95ff-0800200c9a66", match.Parameters["key"]);
 		}
@@ -177,8 +177,40 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			RouteMatch match = new RouteMatch();
 			Assert.AreEqual(0, route.Matches("/dummy/index", CreateGetContext(), match));
 			Assert.AreEqual(0, route.Matches("/DUMMY/list", CreateGetContext(), match));
-			Assert.AreEqual(4, route.Matches("/some/new", CreateGetContext(), match));
-			Assert.AreEqual(6, route.Matches("/some/list/1", CreateGetContext(), match));
+			Assert.AreEqual(4001, route.Matches("/some/new", CreateGetContext(), match));
+			Assert.AreEqual(6000, route.Matches("/some/list/1", CreateGetContext(), match));
 		}
+
+		[Test]
+		public void ShouldReturnNonZeroForMatchedDefaults()
+		{
+			PatternRoute route = new PatternRoute("/[controller]/[action]");
+
+			RouteMatch match = new RouteMatch();
+			Assert.AreEqual(2, route.Matches("/", CreateGetContext(), match));
+			Assert.IsTrue(match.Parameters.ContainsKey("controller"));
+			Assert.IsTrue(match.Parameters.ContainsKey("action"));
+		}
+
+		[Test]
+		public void ShouldMatchEmptyUrl()
+		{
+			PatternRoute route = new PatternRoute("/[controller]/[action]");
+
+			RouteMatch match = new RouteMatch();
+			Assert.AreEqual(2, route.Matches("", CreateGetContext(), match));
+			Assert.IsTrue(match.Parameters.ContainsKey("controller"));
+			Assert.IsTrue(match.Parameters.ContainsKey("action"));
+		}
+
+		[Test]
+		public void ShouldReturnZeroForMissingRequiredPart()
+		{
+			PatternRoute route = new PatternRoute("/<controller>/[action]");
+
+			RouteMatch match = new RouteMatch();
+			Assert.AreEqual(0, route.Matches("/", CreateGetContext(), match));
+		}
+
 	}
 }
