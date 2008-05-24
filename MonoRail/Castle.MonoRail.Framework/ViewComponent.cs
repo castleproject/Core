@@ -89,7 +89,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Initializes a new instance of the ViewComponent class.
 		/// </summary>
-		public ViewComponent()
+		protected ViewComponent()
 		{
 			object[] attributes = GetType().GetCustomAttributes(typeof (ViewComponentDetailsAttribute), true);
 
@@ -97,6 +97,21 @@ namespace Castle.MonoRail.Framework
 			{
 				detailsAtt = attributes[0] as ViewComponentDetailsAttribute;
 			}
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ViewComponent"/> class.
+		/// </summary>
+		/// <remarks>
+		/// Only provided to be used from Controllers 
+		/// that needs non render related methods implemented by the ViewComponent.
+		/// Note that the ViewComponent would be in an invalid state 
+		/// (wont have the view engine context) and any rendering related operation will fail.
+		/// </remarks>
+		/// <param name="engineContext">The engine/request context.</param>
+		protected ViewComponent(IEngineContext engineContext) : this()
+		{
+			this.engineContext = engineContext;
 		}
 
 		#region "Internal" core methods
