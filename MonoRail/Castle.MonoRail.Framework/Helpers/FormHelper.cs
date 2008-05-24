@@ -1027,9 +1027,27 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <returns>The generated form element</returns>
+		/// <remarks>
+		/// The value of the password field is extracted from the target (if present) and used as the <c>value</c> attribute
+		/// of the generated form element. In situations where this is a security risk consider using 
+		/// <see cref="PasswordField(string,ValueBehaviour)"/> and define <see cref="ValueBehaviour.DoNotSet"/>
+		/// as the value behaviour to suppress this behaviour.
+		/// </remarks>
 		public virtual string PasswordField(string target)
 		{
-			return PasswordField(target, null);
+			return PasswordField(target, null, ValueBehaviour.Set);
+		}
+
+		/// <summary>
+		/// Generates a password input field.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="valueBehaviour">The value behaviour which defines whether the <c>value</c> attribute
+		/// will be filled from the target.</param>
+		/// <returns>The generated form element</returns>
+		public virtual string PasswordField(string target, ValueBehaviour valueBehaviour)
+		{
+			return PasswordField(target, null, valueBehaviour);
 		}
 
 		/// <summary>
@@ -1038,11 +1056,42 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
+		/// <remarks>
+		/// The value of the password field is extracted from the target (if present) and used as the <c>value</c> attribute
+		/// of the generated form element. In situations where this is a security risk consider using 
+		/// <see cref="PasswordField(string,IDictionary,ValueBehaviour)"/> and define <see cref="ValueBehaviour.DoNotSet"/>
+		/// as the value behaviour to suppress this behaviour.
+		/// </remarks>
 		public virtual string PasswordField(string target, IDictionary attributes)
+		{
+			return PasswordField(target, attributes, ValueBehaviour.Set);
+		}
+
+		/// <summary>
+		/// Generates a password input field.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <param name="valueBehaviour">The value behaviour which defines whether the <c>value</c> attribute
+		/// will be filled from the target.</param>
+		/// <returns>The generated form element</returns>
+		public virtual string PasswordField(string target, IDictionary attributes, ValueBehaviour valueBehaviour) 
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object value = ObtainValue(target);
+			object value;
+			
+			switch(valueBehaviour) 
+			{
+				case ValueBehaviour.Set:
+					value = ObtainValue(target);
+					break;
+				case ValueBehaviour.DoNotSet:
+					value = string.Empty;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException("valueBehaviour");
+			}
 
 			ApplyValidation(InputElementType.Text, target, ref attributes);
 
@@ -1065,9 +1114,34 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </remarks>
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <returns>The generated form element</returns>
+		/// <remarks>
+		/// The value of the password field is extracted from the target (if present) and used as the <c>value</c> attribute
+		/// of the generated form element. In situations where this is a security risk consider using 
+		/// <see cref="PasswordNumberField(string,ValueBehaviour)"/> and define <see cref="ValueBehaviour.DoNotSet"/>
+		/// as the value behaviour to suppress this behaviour.
+		/// </remarks>
 		public virtual string PasswordNumberField(string target)
 		{
-			return PasswordNumberField(target, null);
+			return PasswordNumberField(target, null, ValueBehaviour.Set);
+		}
+
+		/// <summary>
+		/// Generates an input password element with a javascript that prevents
+		/// chars other than numbers from being entered.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="valueBehaviour">The value behaviour which defines whether the <c>value</c> attribute
+		/// will be filled from the target.</param>
+		/// <returns>The generated form element</returns>
+		/// <remarks>
+		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
+		/// </remarks>
+		public virtual string PasswordNumberField(string target, ValueBehaviour valueBehaviour)
+		{
+			return PasswordNumberField(target, null, valueBehaviour);
 		}
 
 		/// <summary>
@@ -1101,13 +1175,70 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
+		/// <remarks>
+		/// The value of the password field is extracted from the target (if present) and used as the <c>value</c> attribute
+		/// of the generated form element. In situations where this is a security risk consider using 
+		/// <see cref="PasswordNumberField(string,IDictionary,ValueBehaviour)"/> and define <see cref="ValueBehaviour.DoNotSet"/>
+		/// as the value behaviour to suppress this behaviour.
+		/// </remarks>
 		public virtual string PasswordNumberField(string target, IDictionary attributes)
+		{
+			return PasswordNumberField(target, attributes, ValueBehaviour.Set);
+		}
+
+
+		/// <summary>
+		/// Generates an input password element with a javascript that prevents
+		/// chars other than numbers from being entered.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// 	<para>
+		/// You can optionally pass an <c>exceptions</c> value through the dictionary.
+		/// It must be a comma separated list of chars that can be accepted on the field.
+		/// For example:
+		/// </para>
+		/// 	<code>
+		/// FormHelper.NumberField("product.price", {exceptions='13,10,11'})
+		/// </code>
+		/// In this case the key codes 13, 10 and 11 will be accepted on the field.
+		/// <para>
+		/// You can aslo optionally pass an <c>forbid</c> value through the dictionary.
+		/// It must be a comma separated list of chars that cannot be accepted on the field.
+		/// For example:
+		/// </para>
+		/// 	<code>
+		/// FormHelper.NumberField("product.price", {forbid='46'})
+		/// </code>
+		/// In this case the key code 46 (period) will not be accepted on the field.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <param name="valueBehaviour">The value behaviour which defines whether the <c>value</c> attribute
+		/// will be filled from the target.</param>
+		/// <returns>The generated form element</returns>
+		/// <remarks>
+		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
+		/// </remarks>
+		public virtual string PasswordNumberField(string target, IDictionary attributes, ValueBehaviour valueBehaviour)
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object value = ObtainValue(target);
+			object value;
 
-			attributes = attributes != null ? attributes : new Hashtable();
+			switch (valueBehaviour)
+			{
+				case ValueBehaviour.Set:
+					value = ObtainValue(target);
+					break;
+				case ValueBehaviour.DoNotSet:
+					value = string.Empty;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException("valueBehaviour");
+			}
+
+			attributes = attributes ?? new Hashtable();
 
 			ApplyNumberOnlyOptions(attributes);
 			ApplyValidation(InputElementType.Text, target, ref attributes);

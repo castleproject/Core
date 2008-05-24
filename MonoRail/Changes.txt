@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied Andre Loker's patch fixing MR-453
+  "FormHelper.PasswordNumberField/PasswordField: option to decide whether to fill value attribute"
+
 - Applied Mike Nichols's patch fixing MR-455
   DefaultUrlBuilder doesn't persist route parameters when using RedirectUsingNamedRoute
 

@@ -432,6 +432,7 @@
     <Compile Include="Helpers\ValidationStrategy\ZebdaWebValidator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\ValueBehaviour.cs" />
     <Compile Include="Helpers\WizardHelper.cs">
       <SubType>Code</SubType>
     </Compile>

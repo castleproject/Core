@@ -66,6 +66,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			context.PropertyBag.Add("fileaccess", FileAccess.Read);
 			context.PropertyBag.Add("subscription", subscription);
 			context.PropertyBag.Add("months", months);
+			context.PropertyBag.Add("age", 26);
 
 			helper.SetController(controller, context);
 		}
@@ -85,6 +86,9 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.AreEqual("<input type=\"password\" id=\"something\" name=\"product.name\" value=\"memory card\" />",
 							helper.PasswordField("product.name", DictHelper.Create("id=something")));
+
+			Assert.AreEqual("<input type=\"password\" id=\"something\" name=\"product.quantity\" value=\"10\" onkeypress=\"return monorail_formhelper_numberonly(event, [], []);\" />",
+							helper.PasswordNumberField("product.quantity", DictHelper.Create("id=something")));
 
 			Assert.AreEqual("<input type=\"hidden\" id=\"something\" name=\"product.name\" value=\"memory card\" />",
 							helper.HiddenField("product.name", DictHelper.Create("id=something")));
@@ -166,6 +170,51 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 							helper.PasswordField("product.quantity"));
 			Assert.AreEqual("<input type=\"password\" id=\"confirmation\" name=\"confirmation\" value=\"abc\" />",
 							helper.PasswordField("confirmation"));
+		}
+
+		[Test]
+		public void PasswordFieldWithDoNotSetBehaviour()
+		{
+			Assert.AreEqual("<input type=\"password\" id=\"product_name\" name=\"product.name\" value=\"\" />",
+							helper.PasswordField("product.name", ValueBehaviour.DoNotSet));
+			Assert.AreEqual("<input type=\"password\" id=\"product_quantity\" name=\"product.quantity\" value=\"\" />",
+							helper.PasswordField("product.quantity", ValueBehaviour.DoNotSet));
+			Assert.AreEqual("<input type=\"password\" id=\"confirmation\" name=\"confirmation\" value=\"\" />",
+							helper.PasswordField("confirmation", ValueBehaviour.DoNotSet));
+		}
+
+		[Test]
+		public void PasswordNumberField()
+		{
+			Assert.AreEqual("<input type=\"password\" id=\"age\" name=\"age\" value=\"26\" onkeypress=\"return monorail_formhelper_numberonly(event, [], []);\" />",
+							helper.PasswordNumberField("age"));
+			Assert.AreEqual("<input type=\"password\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onkeypress=\"return monorail_formhelper_numberonly(event, [], []);\" />",
+							helper.PasswordNumberField("product.quantity"));
+
+			Hashtable attributes = new Hashtable();
+			attributes.Add("exceptions", "65,66,67,68"); // accept A,B,C and D
+			attributes.Add("forbid", "48,57"); // ignore 0 and 9
+
+			Assert.AreEqual("<input type=\"password\" id=\"age\" name=\"age\" value=\"26\" onkeypress=\"return monorail_formhelper_numberonly(event, [65,66,67,68], [48,57]);\" />",
+							helper.PasswordNumberField("age", attributes));
+		}
+
+		[Test]
+		public void PasswordNumberFieldWithDoNotSetBehaviour()
+		{
+			Assert.AreEqual(
+				"<input type=\"password\" id=\"age\" name=\"age\" value=\"\" onkeypress=\"return monorail_formhelper_numberonly(event, [], []);\" />",
+				helper.PasswordNumberField("age", ValueBehaviour.DoNotSet));
+			Assert.AreEqual(
+				"<input type=\"password\" id=\"product_quantity\" name=\"product.quantity\" value=\"\" onkeypress=\"return monorail_formhelper_numberonly(event, [], []);\" />",
+				helper.PasswordNumberField("product.quantity", ValueBehaviour.DoNotSet));
+
+			Hashtable attributes = new Hashtable();
+			attributes.Add("exceptions", "65,66,67,68"); // accept A,B,C and D
+			attributes.Add("forbid", "48,57"); // ignore 0 and 9
+			Assert.AreEqual(
+				"<input type=\"password\" id=\"age\" name=\"age\" value=\"\" onkeypress=\"return monorail_formhelper_numberonly(event, [65,66,67,68], [48,57]);\" />",
+				helper.PasswordNumberField("age", attributes, ValueBehaviour.DoNotSet));
 		}
 
 		[Test]
