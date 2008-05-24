@@ -63,6 +63,8 @@ namespace Castle.MonoRail.Framework
 
 				string mimeType;
 				string content = staticResourceRegistry.GetResource(name, location, version, out mimeType);
+				
+				SetContentCache(context);
 
 				context.Response.ContentType = mimeType;
 				context.Response.Write(content);
@@ -83,6 +85,25 @@ namespace Castle.MonoRail.Framework
 		public bool IsReusable
 		{
 			get { return false; }
+		}
+
+		/// <summary>
+		/// Configures the cache policy for the static content
+		/// </summary>
+		/// <param name="context">The context.</param>
+		protected virtual void SetContentCache(HttpContext context)
+		{
+			HttpCachePolicy cache = context.Response.Cache;
+
+			// HTTP 1.0 
+			cache.SetExpires(DateTime.Today.AddDays(3));
+
+			// HTTP 1.1
+			cache.SetMaxAge(TimeSpan.FromDays(3));
+			cache.SetCacheability(HttpCacheability.Public);
+			cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+
+			cache.SetValidUntilExpires(true);
 		}
 	}
 }
