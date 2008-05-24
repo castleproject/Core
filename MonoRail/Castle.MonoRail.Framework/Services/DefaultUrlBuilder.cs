@@ -309,9 +309,9 @@ namespace Castle.MonoRail.Framework.Services
 			if (routingEng != null && !routingEng.IsEmpty)
 			{
 				// We take was was explicitly set (we do not inherit those from the context)
-				routeParameters["area"] = parameters.Area;
-				routeParameters["controller"] = parameters.Controller;
-				routeParameters["action"] = parameters.Action;
+				routeParameters["area"] = parameters.Area ?? routeParameters["area"];
+				routeParameters["controller"] = parameters.Controller ?? routeParameters["controller"];
+				routeParameters["action"] = parameters.Action ?? routeParameters["action"];
 
 				if (parameters.UseCurrentRouteParams)
 				{

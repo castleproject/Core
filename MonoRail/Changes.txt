@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied Mike Nichols's patch fixing MR-455
+  DefaultUrlBuilder doesn't persist route parameters when using RedirectUsingNamedRoute
+
 - Applied Andre Loker's patch fixing MR-456
   "Routing Engine: support for root-routing + excluding MonoRail resource files from routing"
 

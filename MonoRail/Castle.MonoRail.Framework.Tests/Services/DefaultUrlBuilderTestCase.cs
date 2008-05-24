@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Tests.Services
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Specialized;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Routing;
@@ -288,6 +289,26 @@ namespace Castle.MonoRail.Framework.Tests.Services
 
 			Assert.AreEqual("http://www.castleproject.org/area/test/action.castle",
 				urlBuilder.BuildUrl(urlinfo, parameters));
+		}
+
+		[Test]
+		public void RouteParametersShouldBePersistedDuringCreateUrlPartsWhenNoneSpecifiedInParameters()
+		{
+			UrlInfo urlInfo = new UrlInfo("i", "shouldbe", "overridden", "/", ".castle");
+			
+			UrlBuilderParameters parameters = new UrlBuilderParameters();//empty collection
+			IDictionary routeParameters = new HybridDictionary();
+			routeParameters.Add("area","routearea");
+			routeParameters.Add("controller","routecontroller");
+			routeParameters.Add("action","routeaction");
+
+			IRoutingEngine routingEngine = new MockRoutingEngine();
+			routingEngine.Add(new PatternRoute("default","<area>/<controller>/<action>"));//keep routing engine from being empty
+			urlBuilder.RoutingEngine = routingEngine;
+
+			Assert.AreEqual("/routearea/routecontroller/routeaction",
+				urlBuilder.BuildUrl(urlInfo,parameters,routeParameters));
+
 		}
 	}
 }
