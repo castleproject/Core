@@ -187,11 +187,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>The generated form element</returns>
 		protected virtual string CreateInputElement(string type, string target, Object value, IDictionary attributes)
 		{
-			if (value == null)
-			{
-				value = CommonUtils.ObtainEntryAndRemove(attributes, "defaultValue");
-			}
-
 			string id = CreateHtmlId(attributes, target);
 
 			return CreateInputElement(type, id, target, FormatIfNecessary(value, attributes), attributes);
@@ -291,6 +286,27 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Queries the context for the target value
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">The attributes. Accepts a "defaultValue" attribute value.</param>
+		/// <returns>The generated form element</returns>
+		protected object ObtainValue(string target, IDictionary attributes)
+		{
+			object value = ObtainValue(target);
+			if (attributes != null && attributes.Contains("defaultValue"))
+			{
+				object defaultValue = CommonUtils.ObtainEntryAndRemove(attributes, "defaultValue");
+				if (value == null)
+				{
+					value = defaultValue;
+				}
+			}
+
+			return value;
 		}
 
 		/// <summary>

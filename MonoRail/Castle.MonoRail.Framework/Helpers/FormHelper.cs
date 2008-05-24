@@ -537,7 +537,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public virtual void Push(string target, IDictionary parameters)
 		{
 			string disableValidation = CommonUtils.ObtainEntryAndRemove(parameters, "disablevalidation", "false");
-			object value = ObtainValue(target);
+			object value = ObtainValue(target, parameters);
 
 			if (value != null)
 			{
@@ -760,7 +760,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object value = ObtainValue(target);
+			object value = ObtainValue(target, attributes);
 
 			ApplyValidation(InputElementType.Text, target, ref attributes);
 
@@ -823,7 +823,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object value = ObtainValue(target);
+			object value = ObtainValue(target, attributes);
 
 			attributes = attributes != null ? attributes : new Hashtable();
 
@@ -898,7 +898,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object value = ObtainValue(target);
+			object value = ObtainValue(target, attributes);
 
 			attributes = attributes != null ? attributes : new Hashtable();
 
@@ -1080,11 +1080,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			target = RewriteTargetIfWithinObjectScope(target);
 
 			object value;
-			
+
 			switch(valueBehaviour) 
 			{
 				case ValueBehaviour.Set:
-					value = ObtainValue(target);
+					value = ObtainValue(target, attributes);
 					break;
 				case ValueBehaviour.DoNotSet:
 					value = string.Empty;
@@ -1224,7 +1224,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object value;
+			object value = ObtainValue(target, attributes);
 
 			switch (valueBehaviour)
 			{
@@ -1359,7 +1359,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object value = ObtainValue(target);
+			object value = ObtainValue(target, attributes);
 
 			string id = CreateHtmlId(attributes, target);
 
@@ -1526,7 +1526,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object value = ObtainValue(target);
+			object value = ObtainValue(target, attributes);
 
 			return new CheckboxList(this, target, value, dataSource, attributes);
 		}
@@ -1833,7 +1833,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object value = ObtainValue(target);
+			object value = ObtainValue(target, attributes);
 
 			string trueValue = CommonUtils.ObtainEntryAndRemove(attributes, "trueValue", "true");
 
@@ -1943,7 +1943,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object value = ObtainValue(target);
+			object value = ObtainValue(target, attributes);
 
 			bool isChecked = AreEqual(valueToSend, value);
 
@@ -2061,7 +2061,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
-			object selectedValue = ObtainValue(target);
+			object selectedValue = ObtainValue(target, attributes);
 
 			return Select(target, selectedValue, dataSource, attributes);
 		}

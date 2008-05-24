@@ -1,6 +1,10 @@
 1.0
 ===
 
+- Applied Robert Ream's patch fixing MR-438
+  "FormHelper element methods "defaultValue" attribute."
+  From description: This patch adds the "defaultValue" attribute to most of the FormHelper element generator methods.
+
 - Applied Victor Kornov's patch fixing MR-448
   "Make JSONReturnBinderAttribute open for extension"
 
