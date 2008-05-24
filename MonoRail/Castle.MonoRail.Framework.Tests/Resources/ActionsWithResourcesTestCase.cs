@@ -33,7 +33,7 @@ namespace Castle.MonoRail.Framework.Tests.Resources
 		[SetUp]
 		public void Init()
 		{
-			resourceFactoryMock = mockRepository.CreateMock<IResourceFactory>();
+			resourceFactoryMock = mockRepository.DynamicMock<IResourceFactory>();
 
 			MockRequest request = new MockRequest();
 			MockResponse response = new MockResponse();

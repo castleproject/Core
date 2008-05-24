@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 			services = new MockServices();
 			viewEngStub = new ViewEngineManagerStub();
 			services.ViewEngineManager = viewEngStub;
-			filterFactoryMock = mockRepository.CreateMock<IFilterFactory>();
+			filterFactoryMock = mockRepository.DynamicMock<IFilterFactory>();
 			services.FilterFactory = filterFactoryMock;
 			engineContext = new MockEngineContext(request, response, services, null);
 		}
@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				Create("", "home", "index",
 				       services.ControllerDescriptorProvider.BuildDescriptor(controller));
 
-			IFilter filterMock = mockRepository.CreateMock<IFilter>();
+			IFilter filterMock = mockRepository.DynamicMock<IFilter>();
 
 			using(mockRepository.Record())
 			{
@@ -80,7 +80,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				Create("", "home", "index",
 				       services.ControllerDescriptorProvider.BuildDescriptor(controller));
 
-			IFilter filterMock = mockRepository.CreateMock<IFilter>();
+			IFilter filterMock = mockRepository.DynamicMock<IFilter>();
 
 			using(mockRepository.Record())
 			{
@@ -111,7 +111,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				Create("", "home", "index",
 				       services.ControllerDescriptorProvider.BuildDescriptor(controller));
 
-			IFilter filterMock = mockRepository.CreateMock<IFilter>();
+			IFilter filterMock = mockRepository.DynamicMock<IFilter>();
 
 			using(mockRepository.Record())
 			{
@@ -142,7 +142,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				Create("", "home", "index",
 				       services.ControllerDescriptorProvider.BuildDescriptor(controller));
 
-			IFilter filterMock = mockRepository.CreateMock<IFilter>();
+			IFilter filterMock = mockRepository.DynamicMock<IFilter>();
 
 			using(mockRepository.Record())
 			{
@@ -173,7 +173,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				Create("", "home", "index",
 				       services.ControllerDescriptorProvider.BuildDescriptor(controller));
 
-			IFilter filterMock = mockRepository.CreateMock<IFilter>();
+			IFilter filterMock = mockRepository.DynamicMock<IFilter>();
 
 			using(mockRepository.Record())
 			{
@@ -204,7 +204,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				Create("", "home", "index",
 				       services.ControllerDescriptorProvider.BuildDescriptor(controller));
 
-			IFilter filterMock = mockRepository.CreateMock<IFilter>();
+			IFilter filterMock = mockRepository.DynamicMock<IFilter>();
 
 			using(mockRepository.Record())
 			{

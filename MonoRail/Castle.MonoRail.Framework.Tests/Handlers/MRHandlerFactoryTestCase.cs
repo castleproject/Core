@@ -41,12 +41,12 @@ namespace Castle.MonoRail.Framework.Tests.Handlers
 		[SetUp]
 		public void Init()
 		{
-			container = mockRepository.CreateMock<IMonoRailContainer>();
-			serviceProviderLocatorMock = mockRepository.CreateMock<IServiceProviderLocator>();
-			controllerFactoryMock = mockRepository.CreateMock<IControllerFactory>();
-			controllerMock = mockRepository.CreateMock<IAsyncController>();
-			controllerDescriptorProviderMock = mockRepository.CreateMock<IControllerDescriptorProvider>();
-			controllerContextFactoryMock = mockRepository.CreateMock<IControllerContextFactory>();
+			container = mockRepository.DynamicMock<IMonoRailContainer>();
+			serviceProviderLocatorMock = mockRepository.DynamicMock<IServiceProviderLocator>();
+			controllerFactoryMock = mockRepository.DynamicMock<IControllerFactory>();
+			controllerMock = mockRepository.DynamicMock<IAsyncController>();
+			controllerDescriptorProviderMock = mockRepository.DynamicMock<IControllerDescriptorProvider>();
+			controllerContextFactoryMock = mockRepository.DynamicMock<IControllerContextFactory>();
 
 			SetupResult.For(container.UrlTokenizer).Return(new DefaultUrlTokenizer());
 			SetupResult.For(container.UrlBuilder).Return(new DefaultUrlBuilder());

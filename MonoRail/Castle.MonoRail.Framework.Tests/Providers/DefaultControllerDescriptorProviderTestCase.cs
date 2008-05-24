@@ -140,14 +140,14 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 		[Test]
 		public void DescriptorIsCreatedForControllerAndAction()
 		{
-			helperDescProviderMock = mockRepository.CreateMock<IHelperDescriptorProvider>();
-			filterDescProviderMock = mockRepository.CreateMock<IFilterDescriptorProvider>();
-			layoutDescProviderMock = mockRepository.CreateMock<ILayoutDescriptorProvider>();
-			rescueDescProviderMock = mockRepository.CreateMock<IRescueDescriptorProvider>();
-			resourceProviderMock = mockRepository.CreateMock<IResourceDescriptorProvider>();
-			transformDescProviderMock = mockRepository.CreateMock<ITransformFilterDescriptorProvider>();
-			returnTypeDescProviderMock = mockRepository.CreateMock<IReturnBinderDescriptorProvider>();
-			dynamicActionProviderDescProviderMock = mockRepository.CreateMock<IDynamicActionProviderDescriptorProvider>();
+			helperDescProviderMock = mockRepository.DynamicMock<IHelperDescriptorProvider>();
+			filterDescProviderMock = mockRepository.DynamicMock<IFilterDescriptorProvider>();
+			layoutDescProviderMock = mockRepository.DynamicMock<ILayoutDescriptorProvider>();
+			rescueDescProviderMock = mockRepository.DynamicMock<IRescueDescriptorProvider>();
+			resourceProviderMock = mockRepository.DynamicMock<IResourceDescriptorProvider>();
+			transformDescProviderMock = mockRepository.DynamicMock<ITransformFilterDescriptorProvider>();
+			returnTypeDescProviderMock = mockRepository.DynamicMock<IReturnBinderDescriptorProvider>();
+			dynamicActionProviderDescProviderMock = mockRepository.DynamicMock<IDynamicActionProviderDescriptorProvider>();
 
 			provider = new DefaultControllerDescriptorProvider(helperDescProviderMock,
 															   filterDescProviderMock,

@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 	[TestFixture]
 	public class EmailTemplateServiceTestCase
 	{
-		private MockRepository mockRepository = new MockRepository();
+		private readonly MockRepository mockRepository = new MockRepository();
 		private EmailTemplateService service;
 		private IViewEngineManager viewEngineManagerMock;
 		private MockEngineContext engineContext;
@@ -36,7 +36,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		[SetUp]
 		public void Init()
 		{
-			viewEngineManagerMock = mockRepository.CreateMock<IViewEngineManager>();
+			viewEngineManagerMock = mockRepository.DynamicMock<IViewEngineManager>();
 
 			service = new EmailTemplateService(viewEngineManagerMock);
 
