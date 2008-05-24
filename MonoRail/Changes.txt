@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied Victor Kornov's patch fixing MR-448
+  "Make JSONReturnBinderAttribute open for extension"
+
 - Applied Steven Radack's patch fixing MR-449
   "Change ResourceFileHandler to add HTTP cache headers"
   Used some of Andre Loker's suggestions. Wont use Assembly CodeBase as I think that might 

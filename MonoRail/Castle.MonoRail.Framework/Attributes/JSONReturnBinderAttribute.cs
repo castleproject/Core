@@ -46,16 +46,25 @@ namespace Castle.MonoRail.Framework
 		/// <param name="returnType">Type being returned.</param>
 		/// <param name="returnValue">The return value.</param>
 		/// <returns></returns>
-		public void Bind(IEngineContext context, IController controller, IControllerContext controllerContext,
+		public virtual void Bind(IEngineContext context, IController controller, IControllerContext controllerContext,
 						 Type returnType, object returnValue)
 		{
 			// Cancel any view rendering
 			controllerContext.SelectedViewName = null;
 
-			IJSONSerializer serializer = context.Services.JSONSerializer;
+			SetContentType(context);
 
-			IResponse response = context.Response;
+			string raw = GetRawValue(returnType, returnValue, context.Services.JSONSerializer);
 
+			context.Response.Output.Write(raw);
+		}
+
+		/// <summary>
+		/// Sets response content type
+		/// </summary>
+		/// <param name="context">The context</param>
+		protected virtual void SetContentType(IEngineContext context)
+		{
 			string userAgent = context.Request.Headers["User-Agent"];
 
 			// Ridiculous hack, but necessary. If we set the mime type for mobile clients, they 
@@ -63,37 +72,28 @@ namespace Castle.MonoRail.Framework
 			if (userAgent != null && userAgent.IndexOf("Windows CE") == -1)
 			{
 				// Sets the mime type
-				response.ContentType = "application/json, text/javascript";
+				context.Response.ContentType = "application/json, text/javascript";
 			}
+		}
 
-			string raw;
+		/// <summary>
+		/// Converts target object to its JSON representation
+		/// </summary>
+		/// <param name="returnType">Type of the target object</param>
+		/// <param name="returnValue">The target object</param>
+		/// <param name="serializer">The JSON serializer</param>
+		/// <returns></returns>
+		public virtual string GetRawValue(Type returnType, object returnValue, IJSONSerializer serializer)
+		{
+			if (returnValue == null)
+				return returnType.IsArray ? "[]" : "{}";
 
-			if (returnValue != null)
-			{
-				if (properties == null)
-				{
-					raw = serializer.Serialize(returnValue);
-				}
-				else
-				{
-					Type normalized = returnType.IsArray ? returnType.GetElementType() : returnType;
+			if (properties == null)
+				return serializer.Serialize(returnValue);
 
-					raw = serializer.Serialize(returnValue, new PropertyConverter(normalized, properties));
-				}
-			}
-			else
-			{
-				if (returnType.IsArray)
-				{
-					raw = "[]";
-				}
-				else
-				{
-					raw = "{}";
-				}
-			}
+			Type normalized = returnType.IsArray ? returnType.GetElementType() : returnType;
 
-			response.Output.Write(raw);
+			return serializer.Serialize(returnValue, new PropertyConverter(normalized, properties));
 		}
 
 		class PropertyConverter : IJSONConverter
