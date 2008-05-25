@@ -29,7 +29,7 @@ namespace TestSiteARSupport
 
 			ActiveRecordStarter.Initialize( Assembly.GetExecutingAssembly(), source );
 			
-			ActiveRecordStarter.CreateSchema();
+//			ActiveRecordStarter.CreateSchema();
 		}
 	}
 }

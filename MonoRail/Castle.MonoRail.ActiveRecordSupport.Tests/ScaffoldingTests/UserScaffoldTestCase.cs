@@ -20,7 +20,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 	using NUnit.Framework;
 	using TestSiteARSupport.Model;
 	using WatiN.Core;
-	using Attribute=WatiN.Core.Attribute;
+	using WatiN.Core.Interfaces;
 
 	[TestFixture]
 	public class UserScaffoldTestCase : BaseAcceptanceTestCase
@@ -47,7 +47,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 		{
 			ie.GoTo("http://localhost:88/UserScaffold/new.castle");
 
-			ie.Button(new Value("Create")).Click(); // Trying to save will spark the validation
+			ie.Button(Find.ByValue("Create")).Click(); // Trying to save will spark the validation
 
 			Assert.AreEqual("http://localhost:88/UserScaffold/new.castle", ie.Url);
 
@@ -57,11 +57,11 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 			ie.TextField("User_Name").TypeText("John Doe");
 			ie.SelectList("User_Account_Id").SelectByValue(account1.Id.ToString());
 
-			ie.Button(new Value("Create")).Click(); // Now it should save
+			ie.Button(Find.ByValue("Create")).Click(); // Now it should save
 
 			Assert.AreEqual("http://localhost:88/UserScaffold/list.castle", ie.Url);
 
-			ElementCollection elements = ie.Elements.Filter(new Attribute("className", "idRow"));
+			IWatiNElementCollection elements = ie.Elements.Filter(Find.ByClass("idRow"));
 		
 			Assert.IsTrue(elements.Length > 0, "Newly added object not present on the list?");
 
@@ -82,7 +82,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 			ie.GoTo("http://localhost:88/UserScaffold/edit.castle?id=" + user.Id);
 
 			ie.TextField("User_Name").TypeText("");
-			ie.Button(new Value("Save Changes")).Click(); // Trying to save will spark the validation
+			ie.Button(Find.ByValue("Save Changes")).Click(); // Trying to save will spark the validation
 
 			Assert.AreEqual("http://localhost:88/UserScaffold/edit.castle?id=" + user.Id, ie.Url);
 
@@ -92,11 +92,11 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 			ie.TextField("User_Name").TypeText("Mary Jane");
 			ie.SelectList("User_Account_Id").SelectByValue(account2.Id.ToString());
 
-			ie.Button(new Value("Save Changes")).Click(); // Now it should save
+			ie.Button(Find.ByValue("Save Changes")).Click(); // Now it should save
 
 			Assert.AreEqual("http://localhost:88/UserScaffold/list.castle", ie.Url);
 
-			ElementCollection elements = ie.Elements.Filter(new Attribute("className", "idRow"));
+			IWatiNElementCollection elements = ie.Elements.Filter(Find.ByClass("idRow"));
 
 			Assert.IsTrue(elements.Length > 0, "Changed object not present on the list?");
 
@@ -116,7 +116,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 
 			Assert.AreEqual("http://localhost:88/UserScaffold/list.castle", ie.Url);
 
-			ElementCollection elements = ie.Elements.Filter(new Attribute("className", "deletelink"));
+			IWatiNElementCollection elements = ie.Elements.Filter(Find.ByClass("deletelink"));
 
 			Link delLink = null;
 
@@ -133,7 +133,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 
 			delLink.Click();
 
-			ie.Button(new Value("Yes")).Click();
+			ie.Button(Find.ByValue("Yes")).Click();
 
 			try
 			{

@@ -52,22 +52,22 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ARDataBinderTests
 		{
 			ie.GoTo("http://localhost:88/Account/new.castle");
 
-			ie.Button(new Value("Insert")).Click(); // Trying to save will spark the validation
+			ie.Button(Find.ByValue("Insert")).Click(); // Trying to save will spark the validation
 
 			Assert.IsTrue(ie.Elements.Exists("advice-required-account_name"));
 			Assert.IsTrue(ie.Elements.Exists("advice-required-account_email"));
 			Assert.IsTrue(ie.Elements.Exists("advice-required-account_password"));
 
 			Assert.AreEqual("This is a required field.", ie.Element("advice-required-account_name").InnerHtml);
-			Assert.AreEqual("Please enter a valid email address. For example fred@domain.com. This is a required field.", ie.Element("advice-required-account_email").InnerHtml);
+			Assert.AreEqual("This is a required field. Please enter a valid email address. For example fred@domain.com.", ie.Element("advice-required-account_email").InnerHtml);
 			Assert.AreEqual("This is a required field.", ie.Element("advice-required-account_password").InnerHtml);
 
 			// Passwords wont match
 			ie.TextField("account_password").TypeText("123");
 			ie.TextField("account_confirmationpassword").TypeText("321");
 
-			Assert.IsTrue(ie.Elements.Exists("advice-validate-same-as-password-account_confirmationpassword"));
-			Assert.AreEqual("Fields do not match.", ie.Element("advice-validate-same-as-password-account_confirmationpassword").InnerHtml);
+			Assert.IsTrue(ie.Elements.Exists("advice-validate-same-as-account_Password-account_confirmationpassword"));
+			Assert.AreEqual("Fields do not match.", ie.Element("advice-validate-same-as-account_Password-account_confirmationpassword").InnerHtml);
 
 			// This should fix it
 			ie.TextField("account_password").TypeText("123987");
@@ -84,7 +84,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ARDataBinderTests
 			ie.CheckBox("account_users").Checked = true;
 			ie.CheckBox("account_Users_1_").Checked = true;
 
-			ie.Button(new Value("Insert")).Click();
+			ie.Button(Find.ByValue("Insert")).Click();
 
 			int accountId = Convert.ToInt32(ie.Element("newid").InnerHtml);
 
@@ -117,7 +117,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ARDataBinderTests
 			ie.CheckBox("account_Users_0_").Checked = false;
 			ie.CheckBox("account_Users_1_").Checked = false;
 
-			ie.Button(new Value("Update")).Click();
+			ie.Button(Find.ByValue("Update")).Click();
 
 			ActiveRecordMediator<Account>.Refresh(account);
 
