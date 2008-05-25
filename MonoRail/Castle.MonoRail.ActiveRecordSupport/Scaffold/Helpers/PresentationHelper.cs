@@ -96,6 +96,9 @@ namespace Castle.MonoRail.ActiveRecordSupport.Scaffold.Helpers
 			ControllerContext.RouteMatch.AddNamed("id", key.ToString());
 			dict["params"] = ControllerContext.RouteMatch.Parameters;
 
+			IDictionary querystring = DictHelper.CreateN("id", key);
+			dict["querystring"] = UrlHelper.BuildQueryString(querystring);
+
 			return UrlHelper.Link(text, dict, attributes);
 		}
 	}
