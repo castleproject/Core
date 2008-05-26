@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Routing
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Collections.Specialized;
 	using System.Diagnostics;
 	using System.Text;
 	using System.Text.RegularExpressions;
@@ -31,7 +32,7 @@ namespace Castle.MonoRail.Framework.Routing
 	{
 		private readonly string name;
 		private readonly string pattern;
-		private readonly List<DefaultNode> nodes = new List<DefaultNode>();
+		private readonly NodeCollection nodes = new NodeCollection();
 
 		private readonly Dictionary<string, string> defaults =
 			new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
@@ -71,13 +72,29 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="hostname">The hostname.</param>
 		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
-		/// <param name="points">The points.</param>
 		/// <returns></returns>
-		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters, out int points)
+		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
 		{
-			points = 0;
-			StringBuilder text = new StringBuilder();// = new StringBuilder(virtualPath);
+			StringBuilder text = new StringBuilder();
 			IList<string> checkedParameters = new List<string>();
+
+			// int namedParamsToCheck = 0;
+
+			// checks whether we have a named node for every parameter
+			foreach(string key in parameters.Keys)
+			{
+				string val = (string) parameters[key];
+
+				if (string.IsNullOrEmpty(val))
+				{
+					continue;
+				}
+
+				if (nodes.FindByName(key) == null)
+				{
+					return null;
+				}
+			}
 
 			foreach(DefaultNode node in nodes)
 			{
@@ -111,8 +128,6 @@ namespace Castle.MonoRail.Framework.Routing
 						{
 							return null;
 						}
-
-						points += 1;
 
 						if (node.optional && 
 							StringComparer.InvariantCultureIgnoreCase.Compare(node.DefaultVal, value.ToString()) == 0)
@@ -262,6 +277,43 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 			}
 		}
+
+		#region NodeCollection
+
+		[DebuggerDisplay("Nodes {Length}")]
+		private class NodeCollection : System.Collections.ObjectModel.Collection<DefaultNode>
+		{
+			private readonly Dictionary<string, DefaultNode> nameToNode = new Dictionary<string, DefaultNode>(StringComparer.OrdinalIgnoreCase);
+
+			protected override void InsertItem(int index, DefaultNode item)
+			{
+				AddToDictionary(item);
+				base.InsertItem(index, item);
+			}
+
+			protected override void SetItem(int index, DefaultNode item)
+			{
+				AddToDictionary(item);
+				base.SetItem(index, item);
+			}
+
+			private void AddToDictionary(DefaultNode item)
+			{
+				if (item.name != null)
+				{
+					nameToNode[item.name] = item;
+				}
+			}
+
+			public DefaultNode FindByName(string name)
+			{
+				DefaultNode node;
+				nameToNode.TryGetValue(name, out node);
+				return node;
+			}
+		}
+
+		#endregion
 
 		#region DefaultNode
 
@@ -676,7 +728,7 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		private DefaultNode GetNamedNode(string part, bool mustFind)
 		{
-			DefaultNode found = nodes.Find(delegate(DefaultNode node) { return node.name == part; });
+			DefaultNode found = nodes.FindByName(part); // (delegate(DefaultNode node) { return node.name == part; });
 
 			if (found == null && mustFind)
 			{

@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Routing
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Threading;
 	using Core;
 
@@ -44,7 +45,7 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="rule">The rule.</param>
 		public void AddFirst(IRoutingRule rule)
 		{
-			Add(new DecoratedRule(rule));
+			AddFirst(new DecoratedRule(rule));
 		}
 
 		/// <summary>
@@ -52,7 +53,7 @@ namespace Castle.MonoRail.Framework.Routing
 		/// </summary>
 		public void Add(IRoutingRule rule, RouteAction action)
 		{
-			AddFirst(new DecoratedRule(rule, action));
+			Add(new DecoratedRule(rule, action));
 		}
 
 		/// <summary>
@@ -82,8 +83,7 @@ namespace Castle.MonoRail.Framework.Routing
 				throw new MonoRailException("Could not find named route: " + routeName);
 			}
 
-			int points;
-			return rule.CreateUrl(hostname, virtualPath, parameters, out points);
+			return rule.CreateUrl(hostname, virtualPath, parameters);
 		}
 
 		/// <summary>
@@ -95,23 +95,17 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
 		{
-			int winnerPoints = 0;
-			string winnerUrl = null;
-
 			foreach(IRoutingRule rule in rules)
 			{
-				int points;
+				string url = rule.CreateUrl(hostname, virtualPath, parameters);
 
-				string url = rule.CreateUrl(hostname, virtualPath, parameters, out points);
-
-				if (url != null && points > winnerPoints)
+				if (url != null)
 				{
-					winnerUrl = url;
-					winnerPoints = points;
+					return url;
 				}
 			}
 
-			return winnerUrl;
+			return null;
 		}
 
 		/// <summary>
@@ -235,10 +229,11 @@ namespace Castle.MonoRail.Framework.Routing
 			return appRelativeUrl.ToLowerInvariant().StartsWith("/monorail/files");
 		}
 
+		[DebuggerDisplay("DecoratedRule {inner}")]
 		class DecoratedRule : IRoutingRule
 		{
 			internal readonly IRoutingRule inner;
-			private RouteAction selectionAction;
+			private readonly RouteAction selectionAction;
 
 			public DecoratedRule(IRoutingRule inner)
 			{
@@ -250,9 +245,9 @@ namespace Castle.MonoRail.Framework.Routing
 				this.selectionAction = selectionAction;
 			}
 
-			public string CreateUrl(string hostname, string virtualPath, IDictionary parameters, out int points)
+			public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
 			{
-				return inner.CreateUrl(hostname, virtualPath, parameters, out points);
+				return inner.CreateUrl(hostname, virtualPath, parameters);
 			}
 
 			public int Matches(string url, IRouteContext context, RouteMatch match)

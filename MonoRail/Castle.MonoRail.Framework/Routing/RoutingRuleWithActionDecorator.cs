@@ -41,11 +41,10 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="hostname">The hostname.</param>
 		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
-		/// <param name="points">The points.</param>
 		/// <returns></returns>
-		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters, out int points)
+		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
 		{
-			return inner.CreateUrl(hostname, virtualPath, parameters, out points);
+			return inner.CreateUrl(hostname, virtualPath, parameters);
 		}
 
 		/// <summary>

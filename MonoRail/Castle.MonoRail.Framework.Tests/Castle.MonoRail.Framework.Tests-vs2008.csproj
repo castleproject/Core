@@ -218,6 +218,7 @@
     <Compile Include="Routing\BaseRuleTestFixture.cs" />
     <Compile Include="Routing\PatternRouteCreateUrlTestCase.cs" />
     <Compile Include="Routing\PatternRouteMatchTestCase.cs" />
+    <Compile Include="Routing\RoutingEngineCreateUrlTestCase.cs" />
     <Compile Include="Routing\RoutingEngineTestCase.cs" />
     <Compile Include="Services\ControllerTreeTestCase.cs" />
     <Compile Include="Services\DefaultControllerFactoryTestCase.cs" />
