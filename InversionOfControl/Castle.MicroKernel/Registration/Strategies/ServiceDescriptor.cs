@@ -22,7 +22,8 @@ namespace Castle.MicroKernel.Registration
 	public class ServiceDescriptor
 	{
 		public delegate Type ServiceSelector(Type type);
-		
+
+		private bool useBaseType;
 		private readonly BasedOnDescriptor basedOnDescriptor;
 		private ServiceSelector serviceSelector;
 		
@@ -37,7 +38,8 @@ namespace Castle.MicroKernel.Registration
 		/// <returns></returns>
 		public BasedOnDescriptor Base()
 		{
-			return Select(delegate { return basedOnDescriptor.InternalBasedOn; });
+			useBaseType = true;
+			return basedOnDescriptor;
 		}
 				
 		/// <summary>
@@ -46,6 +48,7 @@ namespace Castle.MicroKernel.Registration
 		/// <returns></returns>
 		public BasedOnDescriptor FirstInterface()
 		{
+			useBaseType = false;
 			return Select(delegate(Type type)
 			{
 				Type first = null;
@@ -73,13 +76,18 @@ namespace Castle.MicroKernel.Registration
 		/// <returns></returns>
 		public BasedOnDescriptor Select(ServiceSelector selector)
 		{
+			useBaseType = false;
 			serviceSelector = selector;
 			return basedOnDescriptor;
 		}
 		
-		internal Type GetService(Type type)
+		internal Type GetService(Type type, Type baseType)
 		{
-			if (serviceSelector != null)
+			if (useBaseType)
+			{
+				return baseType;
+			}
+			else if (serviceSelector != null)
 			{
 				return serviceSelector(type) ?? type;
 			}

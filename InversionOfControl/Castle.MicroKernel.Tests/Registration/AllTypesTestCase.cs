@@ -114,15 +114,34 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
-		public void RegisterGenericTypes_WithGenericDefinition_RegisteredInContainer()
+		public void RegisterGenericTypes_BasedOnGenericDefinition_RegisteredInContainer()
 		{
 			kernel.Register(AllTypes.Pick()
 				.From(typeof(DefaultRepository<>))
 				.WithService.FirstInterface()
-				);
+			);
 
 			IRepository<CustomerImpl> repository = kernel.Resolve<IRepository<CustomerImpl>>();
 			Assert.IsNotNull(repository);
+		}
+		
+		[Test]
+		public void RegisterGenericTypes_WithGenericDefinition_RegisteredInContainer()
+		{
+			kernel.Register(AllTypes.FromAssembly(Assembly.GetExecutingAssembly())
+				.BasedOn(typeof(IValidator<>))
+					.WithService.Base()
+				);
+
+			IHandler[] handlers = kernel.GetHandlers(typeof(IValidator<ICustomer>));
+			Assert.AreNotEqual(0, handlers.Length);
+			IValidator<ICustomer> validator = kernel.Resolve<IValidator<ICustomer>>();
+			Assert.IsNotNull(validator);
+
+			handlers = kernel.GetHandlers(typeof(IValidator<CustomerChain1>));
+			Assert.AreNotEqual(0, handlers.Length);
+			IValidator<CustomerChain1> validator2 = kernel.Resolve<IValidator<CustomerChain1>>();
+			Assert.IsNotNull(validator2);
 		}
 
 #if DOTNET35

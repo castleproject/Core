@@ -117,9 +117,11 @@ namespace Castle.MicroKernel.Registration
 
 		internal bool TryRegister(Type type, IKernel kernel)
 		{
-			if (Accepts(type))
+			Type baseType;
+
+			if (Accepts(type, out baseType))
 			{
-				Type serviceType = service.GetService(type);
+				Type serviceType = service.GetService(type, baseType);
 				ComponentRegistration registration = Component.For(serviceType);
 				registration.ImplementedBy(type);
 
@@ -144,12 +146,70 @@ namespace Castle.MicroKernel.Registration
 			return false;
 		}
 
-		private bool Accepts(Type type)
+		private bool Accepts(Type type, out Type baseType)
 		{
-			return type.IsClass && !type.IsAbstract && basedOn.IsAssignableFrom(type)
+			baseType = basedOn;
+			return type.IsClass && !type.IsAbstract 
+				&& IsBasedOn(type, ref baseType)
 				&& (ifFilter == null || ifFilter(type))
 				&& (unlessFilter == null || !unlessFilter(type)
 				);
+		}
+
+		private bool IsBasedOn(Type type, ref Type baseType)
+		{
+			if (basedOn.IsAssignableFrom(type))
+			{
+				return true;
+			}
+			else if (basedOn.IsGenericTypeDefinition)
+			{
+				if (basedOn.IsInterface)
+				{
+					return IsBasedOnGenericInterface(type, ref baseType);
+				}
+				return IsBasedOnGenericClass(type, ref baseType);
+			}
+			return false;
+
+		}
+
+		private bool IsBasedOnGenericInterface(Type type, ref Type baseType)
+		{
+			foreach (Type @interface in type.GetInterfaces())
+			{
+				if (@interface.IsGenericType &&
+					@interface.GetGenericTypeDefinition() == basedOn)
+				{
+					if (@interface.ReflectedType == null &&
+						@interface.ContainsGenericParameters)
+					{
+						baseType = @interface.GetGenericTypeDefinition();
+					}
+					else
+					{
+						baseType = @interface;
+					}
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool IsBasedOnGenericClass(Type type, ref Type baseType)
+		{
+			while (type != null)
+			{
+				if (type.IsGenericType &&
+					type.GetGenericTypeDefinition() == basedOn)
+				{
+					baseType = type;
+					return true;
+				}
+
+				type = type.BaseType;
+			}
+			return false;
 		}
 
 		#region IRegistration Members

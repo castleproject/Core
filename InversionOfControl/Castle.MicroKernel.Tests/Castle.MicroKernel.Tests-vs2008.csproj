@@ -134,6 +134,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassComponents\CommonImplWithDependancy.cs" />
+    <Compile Include="ClassComponents\CustomerValidator.cs" />
+    <Compile Include="ClassComponents\IValidator.cs" />
     <Compile Include="ClassComponents\CustomerChain.cs" />
     <Compile Include="ClassComponents\CustomerImpl.cs">
       <SubType>Code</SubType>
