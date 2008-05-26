@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Tests.Routing
 {
+	using Castle.MonoRail.Framework.Helpers;
 	using Framework.Routing;
 	using NUnit.Framework;
 
@@ -46,8 +47,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void CreateUrl_ForProject_WithoutActionButWithKey()
 		{
-			string url = engine.CreateUrl("host", "vpath",
-				new { project = "some", controller = "products", key = "123" });
+			string url = engine.CreateUrl("host", "vpath", DictHelper.Create("project=some", "controller=products", "key=123"));
 			Assert.IsNotNull(url);
 			Assert.AreEqual("/projects/some/products/123", url);
 		}
@@ -55,8 +55,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void CreateUrl_ForProject_WithActionAndKey()
 		{
-			string url = engine.CreateUrl("host", "vpath",
-				new { project = "some", controller = "products", action="show", key = "123" });
+			string url = engine.CreateUrl("host", "vpath", DictHelper.Create("project=some", "controller=products", "action=show", "key=123"));
 			Assert.IsNotNull(url);
 			Assert.AreEqual("/projects/some/products/show/123", url);
 		}
@@ -64,8 +63,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void CreateUrl_ShouldWorkForAreaControllerAndAction()
 		{
-			string url = engine.CreateUrl("host", "vpath", 
-				new { area="shopping", controller="products", action="list"  });
+			string url = engine.CreateUrl("host", "vpath", DictHelper.Create("area=shopping", "controller=products", "action=list"));
 			Assert.IsNotNull(url);
 			Assert.AreEqual("/shopping/products/list", url);
 		}
@@ -73,8 +71,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void CreateUrl_ShouldWorkForAreaControllerAndAction_WithKey()
 		{
-			string url = engine.CreateUrl("host", "vpath",
-				new { area = "shopping", controller = "products", action = "show", key = "1" });
+			string url = engine.CreateUrl("host", "vpath", DictHelper.Create("area=shopping", "controller=products", "action=show", "key=1"));
 			Assert.IsNotNull(url);
 			Assert.AreEqual("/shopping/products/show/1", url);
 		}
@@ -82,8 +79,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void CreateUrl_ShouldWorkForAreaControllerAndNoAction()
 		{
-			string url = engine.CreateUrl("host", "vpath",
-				new { area = "shopping", controller = "products" });
+			string url = engine.CreateUrl("host", "vpath", DictHelper.Create("area=shopping", "controller=products"));
 			Assert.IsNotNull(url);
 			Assert.AreEqual("/shopping/products", url);
 		}
@@ -91,8 +87,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void CreateUrl_ShouldWorkForControllerAndAction()
 		{
-			string url = engine.CreateUrl("host", "vpath",
-				new { controller = "products", action = "list" });
+			string url = engine.CreateUrl("host", "vpath", DictHelper.Create("controller=products", "action=list"));
 			Assert.IsNotNull(url);
 			Assert.AreEqual("/products/list", url);
 		}
@@ -100,8 +95,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void CreateUrl_EmptyAreaShouldBeIgnored()
 		{
-			string url = engine.CreateUrl("host", "vpath",
-				new { area="", controller = "products", action = "list" });
+			string url = engine.CreateUrl("host", "vpath", DictHelper.Create("area=", "controller=products", "action=list"));
 			Assert.IsNotNull(url);
 			Assert.AreEqual("/products/list", url);
 		}
@@ -109,8 +103,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		[Test]
 		public void CreateUrl_CustomerParameterShouldRestrictSetOfRoutesThatCanBeUsedToBuildURL()
 		{
-			string url = engine.CreateUrl("host", "vpath",
-				new { customer = "apple", controller = "workflow", action = "list" });
+			string url = engine.CreateUrl("host", "vpath", DictHelper.Create("customer=apple", "controller=workflow", "action=list"));
 			Assert.IsNotNull(url);
 			Assert.AreEqual("/admin/apple/workflow/list", url);
 		}
