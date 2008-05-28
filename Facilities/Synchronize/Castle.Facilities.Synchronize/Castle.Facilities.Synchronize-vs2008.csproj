@@ -92,6 +92,7 @@
     <Compile Include="SynchronizeInterceptor.cs" />
     <Compile Include="SynchronizeMetaInfo.cs" />
     <Compile Include="SynchronizeMetaInfoStore.cs" />
+    <Compile Include="SynchronousResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
