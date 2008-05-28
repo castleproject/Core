@@ -55,11 +55,13 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractAsyncResult.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ControlComponentActivator.cs" />
     <Compile Include="ControlComponentHook.cs" />
     <Compile Include="ControlComponentInspector.cs" />
     <Compile Include="ControlUtils.cs" />
+    <Compile Include="Result.cs" />
     <Compile Include="SynchronizeAttribute.cs" />
     <Compile Include="SynchronizeComponentInspector.cs" />
     <Compile Include="SynchronizeContextReference.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="SynchronizeInterceptor.cs" />
     <Compile Include="SynchronizeMetaInfo.cs" />
     <Compile Include="SynchronizeMetaInfoStore.cs" />
+    <Compile Include="SynchronousResult.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
