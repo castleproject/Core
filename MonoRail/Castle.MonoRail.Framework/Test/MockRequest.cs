@@ -71,6 +71,25 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
+		/// Adds a cookie to this mock object cookie collection
+		/// </summary>
+		/// <param name="cookie">The cookie.</param>
+		public void AddCookie(HttpCookie cookie)
+		{
+			cookies[cookie.Name] = cookie;
+		}
+
+		/// <summary>
+		/// Adds a cookie to this mock object cookie collection
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="cookieContent">The cookie content.</param>
+		public void AddCookie(string name, string cookieContent)
+		{
+			cookies[name] = new HttpCookie(name, cookieContent);
+		}
+
+		/// <summary>
 		/// Gets or sets the accept header.
 		/// </summary>
 		/// <value>The accept header.</value>

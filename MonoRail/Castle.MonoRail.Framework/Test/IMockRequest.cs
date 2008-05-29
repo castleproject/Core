@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Test
 {
 	using System;
+	using System.Web;
 
 	/// <summary>
 	/// Exposes methods on top of <see cref="IRequest"/>
@@ -22,6 +23,19 @@ namespace Castle.MonoRail.Framework.Test
 	/// </summary>
 	public interface IMockRequest : IRequest
 	{
+		/// <summary>
+		/// Adds a cookie to this mock object cookie collection
+		/// </summary>
+		/// <param name="cookie">The cookie.</param>
+		void AddCookie(HttpCookie cookie);
+		
+		/// <summary>
+		/// Adds a cookie to this mock object cookie collection
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="cookieContent">The cookie content.</param>
+		void AddCookie(string name, string cookieContent);
+
 		/// <summary>
 		/// Sets the accept header.
 		/// </summary>
