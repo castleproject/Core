@@ -68,11 +68,9 @@ namespace Castle.MonoRail.Framework.Routing
 		/// Creates the URL.
 		/// </summary>
 		/// <param name="routeName">Name of the route.</param>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public string CreateUrl(string routeName, string hostname, string virtualPath, IDictionary parameters)
+		public string CreateUrl(string routeName, IDictionary parameters)
 		{
 			// lock for reading
 
@@ -83,21 +81,19 @@ namespace Castle.MonoRail.Framework.Routing
 				throw new MonoRailException("Could not find named route: " + routeName);
 			}
 
-			return rule.CreateUrl(hostname, virtualPath, parameters);
+			return rule.CreateUrl(parameters);
 		}
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
+		public string CreateUrl(IDictionary parameters)
 		{
 			foreach(IRoutingRule rule in rules)
 			{
-				string url = rule.CreateUrl(hostname, virtualPath, parameters);
+				string url = rule.CreateUrl(parameters);
 
 				if (url != null)
 				{
@@ -111,26 +107,22 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <summary>
 		/// Pendent
 		/// </summary>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public string CreateUrl(string hostname, string virtualPath, object parameters)
+		public string CreateUrl(object parameters)
 		{
-			return CreateUrl(hostname, virtualPath, new ReflectionBasedDictionaryAdapter(parameters));
+			return CreateUrl(new ReflectionBasedDictionaryAdapter(parameters));
 		}
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
 		/// <param name="routeName">Name of the route.</param>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public string CreateUrl(string routeName, string hostname, string virtualPath, object parameters)
+		public string CreateUrl(string routeName, object parameters)
 		{
-			return CreateUrl(routeName, hostname, virtualPath, new ReflectionBasedDictionaryAdapter(parameters));
+			return CreateUrl(routeName, new ReflectionBasedDictionaryAdapter(parameters));
 		}
 
 		/// <summary>
@@ -245,9 +237,9 @@ namespace Castle.MonoRail.Framework.Routing
 				this.selectionAction = selectionAction;
 			}
 
-			public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
+			public string CreateUrl(IDictionary parameters)
 			{
-				return inner.CreateUrl(hostname, virtualPath, parameters);
+				return inner.CreateUrl(parameters);
 			}
 
 			public int Matches(string url, IRouteContext context, RouteMatch match)

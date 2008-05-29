@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.Tests.Async
 	using NUnit.Framework;
 	using Test;
 
-	[TestFixture]
+	[TestFixture, Explicit]
 	public class AsyncControllerTestCase
 	{
 		private MockEngineContext engineContext;

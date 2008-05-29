@@ -6,7 +6,7 @@ namespace Castle.MonoRail.Framework.Tests.Async
 	using NUnit.Framework;
 	using System.Diagnostics;
 
-	[TestFixture]
+	[TestFixture, Explicit]
 	public class AsyncIntegrationTestCase
 	{
 		private Process server;

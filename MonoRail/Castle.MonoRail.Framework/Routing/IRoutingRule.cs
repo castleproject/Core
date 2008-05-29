@@ -33,11 +33,9 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <summary>
 		/// Pendent
 		/// </summary>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		string CreateUrl(string hostname, string virtualPath, IDictionary parameters);
+		string CreateUrl(IDictionary parameters);
 
 		/// <summary>
 		/// Determines if the specified URL matches the

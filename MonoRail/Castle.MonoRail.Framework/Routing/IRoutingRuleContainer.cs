@@ -56,20 +56,16 @@ namespace Castle.MonoRail.Framework.Routing
 		/// Pendent
 		/// </summary>
 		/// <param name="routeName">Name of the route.</param>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		string CreateUrl(string routeName, string hostname, string virtualPath, IDictionary parameters);
+		string CreateUrl(string routeName, IDictionary parameters);
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		string CreateUrl(string hostname, string virtualPath, IDictionary parameters);
+		string CreateUrl(IDictionary parameters);
 
 		/// <summary>
 		/// Pendent

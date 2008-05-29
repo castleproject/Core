@@ -327,11 +327,11 @@ namespace Castle.MonoRail.Framework.Services
 
 				if (parameters.RouteName != null)
 				{
-					url = routingEng.CreateUrl(parameters.RouteName, domain, appVirtualDir, routeParameters);
+					url = routingEng.CreateUrl(parameters.RouteName, routeParameters);
 				}
 				else
 				{
-					url = routingEng.CreateUrl(domain, appVirtualDir, routeParameters);
+					url = routingEng.CreateUrl(routeParameters);
 				}
 
 				if (url != null)

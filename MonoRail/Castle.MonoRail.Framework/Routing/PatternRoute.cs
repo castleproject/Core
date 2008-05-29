@@ -17,7 +17,6 @@ namespace Castle.MonoRail.Framework.Routing
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Collections.Specialized;
 	using System.Diagnostics;
 	using System.Text;
 	using System.Text.RegularExpressions;
@@ -69,11 +68,9 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <summary>
 		/// Pendent
 		/// </summary>
-		/// <param name="hostname">The hostname.</param>
-		/// <param name="virtualPath">The virtual path.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public string CreateUrl(string hostname, string virtualPath, IDictionary parameters)
+		public string CreateUrl(IDictionary parameters)
 		{
 			StringBuilder text = new StringBuilder();
 			IList<string> checkedParameters = new List<string>();
@@ -83,9 +80,13 @@ namespace Castle.MonoRail.Framework.Routing
 			// checks whether we have a named node for every parameter
 			foreach(string key in parameters.Keys)
 			{
-				string val = (string) parameters[key];
+				object param = parameters[key];
+				string val = param == null ? null : param.ToString();
 
-				if (string.IsNullOrEmpty(val))
+				if (string.IsNullOrEmpty(val) || 
+					key.Equals("area", StringComparison.OrdinalIgnoreCase) || 
+					key.Equals("controller", StringComparison.OrdinalIgnoreCase) || 
+					key.Equals("action", StringComparison.OrdinalIgnoreCase))
 				{
 					continue;
 				}
