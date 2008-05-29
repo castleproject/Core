@@ -362,7 +362,7 @@ namespace Castle.ActiveRecord
 				{
 					updater.Execute(false, true);
 
-					exceptions.AddRange(updater.Exceptions);
+					exceptions.AddRange((IList) updater.Exceptions);
 				}
 				catch(Exception ex)
 				{
@@ -394,7 +394,7 @@ namespace Castle.ActiveRecord
 				throw new ActiveRecordException("Could not update the schema", ex);
 			}
 
-			return updater.Exceptions;
+			return (IList) updater.Exceptions;
 		}
 
 		/// <summary>
