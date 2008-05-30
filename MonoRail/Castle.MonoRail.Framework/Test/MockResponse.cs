@@ -113,6 +113,31 @@ namespace Castle.MonoRail.Framework.Test
 			get { return headers; }
 		}
 
+		/// <summary>
+		/// Determines whether a cookie is present on the response.
+		/// </summary>
+		/// <param name="name">The cookie name.</param>
+		/// <returns>
+		/// 	<c>true</c> if the cookie exists in the response; otherwise, <c>false</c>.
+		/// </returns>
+		public override bool IsCookiePresent(string name)
+		{
+			return cookies.ContainsKey(name);
+		}
+
+		/// <summary>
+		/// Gets a cookie added through one of
+		/// the <see cref="IResponse.CreateCookie(HttpCookie)"/> overloads.
+		/// </summary>
+		/// <param name="name">The cookie name.</param>
+		/// <returns></returns>
+		public override HttpCookie GetCookie(string name)
+		{
+			HttpCookie cookie;
+			cookies.TryGetValue(name, out cookie);
+			return cookie;
+		}
+
 		#region IResponse Related
 
 		/// <summary>

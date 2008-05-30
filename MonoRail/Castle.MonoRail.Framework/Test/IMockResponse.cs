@@ -25,6 +25,23 @@ namespace Castle.MonoRail.Framework.Test
 	public interface IMockResponse : IResponse
 	{
 		/// <summary>
+		/// Determines whether a cookie is present on the response.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns>
+		/// 	<c>true</c> if the cookie exists in the response; otherwise, <c>false</c>.
+		/// </returns>
+		bool IsCookiePresent(string name);
+
+		/// <summary>
+		/// Gets a cookie added through one of 
+		/// the <see cref="IResponse.CreateCookie(HttpCookie)"/> overloads.
+		/// </summary>
+		/// <param name="name">The cookie name.</param>
+		/// <returns></returns>
+		HttpCookie GetCookie(string name);
+
+		/// <summary>
 		/// Gets the urls the request was redirected to.
 		/// </summary>
 		/// <value>The redirected to.</value>
