@@ -32,6 +32,15 @@ namespace Castle.Components.Validator
 			new Dictionary<string, string[]>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
+		/// Indicates whether some error was registered on this summary instance.
+		/// </summary>
+		/// <value><c>true</c> if this instance has any error registered; otherwise, <c>false</c>.</value>
+		public bool HasError
+		{
+			get { return errorsCount != 0 || invalidPropertiesCount != 0; }
+		}
+
+		/// <summary>
 		/// Gets the total of validation errors since the last validation check.
 		/// <para>
 		/// That includes all errors for all properties.
