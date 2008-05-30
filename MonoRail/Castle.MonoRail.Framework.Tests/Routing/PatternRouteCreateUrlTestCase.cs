@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			// Those simulate the parameters created by DefaultUrlBuilder
 			standardRouteParamsWithArea = DictHelper.Create("area=area", "controller=home", "action=index");
-			standardRouteParamsWithoutArea = DictHelper.Create("area=area", "controller=home", "action=index");
+			standardRouteParamsWithoutArea = DictHelper.Create("area=", "controller=home", "action=index");
 		}
 
 		[Test, Ignore("Need to re-think this one")]
@@ -51,13 +51,13 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/some/<controller>");
 			Assert.AreEqual("/some/home", route.CreateUrl(DictHelper.Create("controller=home")));
-			Assert.AreEqual("/some/home", route.CreateUrl(standardRouteParamsWithArea));
 			Assert.AreEqual("/some/home", route.CreateUrl(standardRouteParamsWithoutArea));
+			Assert.IsNull(route.CreateUrl(standardRouteParamsWithArea));
 
 			route = new PatternRoute("/some/<controller>/<action>");
 			Assert.AreEqual("/some/home/index", route.CreateUrl(DictHelper.Create("controller=home", "action=index")));
-			Assert.AreEqual("/some/home/index", route.CreateUrl(standardRouteParamsWithArea));
 			Assert.AreEqual("/some/home/index", route.CreateUrl(standardRouteParamsWithoutArea));
+			Assert.IsNull(route.CreateUrl(standardRouteParamsWithArea));
 		}
 
 		[Test]

@@ -282,9 +282,16 @@ namespace Castle.MonoRail.Framework.Services
 				parts = new UrlParts(path, controller, action + (useExtensions ? SafeExt(current.Extension) : ""));
 				AppendPathInfo(parts, parameters);
 			}
-			else if (parameters.CreateAbsolutePath)
+			else 
 			{
-				parts.InsertFrontPath(path);
+				if (parameters.CreateAbsolutePath)
+				{
+					parts.InsertFrontPath(path);
+				}
+				else if (appVirtualDir != "/")
+				{
+					parts.InsertFrontPath(appVirtualDir);
+				}
 			}
 			
 			AppendQueryString(parts, parameters);

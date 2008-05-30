@@ -84,7 +84,6 @@ namespace Castle.MonoRail.Framework.Routing
 				string val = param == null ? null : param.ToString();
 
 				if (string.IsNullOrEmpty(val) || 
-					key.Equals("area", StringComparison.OrdinalIgnoreCase) || 
 					key.Equals("controller", StringComparison.OrdinalIgnoreCase) || 
 					key.Equals("action", StringComparison.OrdinalIgnoreCase))
 				{

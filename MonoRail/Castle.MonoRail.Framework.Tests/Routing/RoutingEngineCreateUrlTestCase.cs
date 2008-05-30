@@ -28,9 +28,9 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			engine = new RoutingEngine();
 
-			engine.Add(new PatternRoute("<area>/<controller>/[action]/[key]").
-				DefaultForAction().Is("index"));
 			engine.Add(new PatternRoute("<controller>/[action]").
+				DefaultForAction().Is("index"));
+			engine.Add(new PatternRoute("<area>/<controller>/[action]/[key]").
 				DefaultForAction().Is("index"));
 			engine.Add(new PatternRoute("admin/<customer>/<controller>/[action]").
 				DefaultForAction().Is("index"));
