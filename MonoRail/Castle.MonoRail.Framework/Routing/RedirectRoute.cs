@@ -52,7 +52,7 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		public string CreateUrl(IDictionary parameters)
 		{
-			throw new NotImplementedException("RedirectRoute.CreateUrl is not implemented");
+			return null;
 		}
 
 		/// <summary>
