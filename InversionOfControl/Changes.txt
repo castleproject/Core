@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed IOC-125
+  "DefaultGenericHandler does not properly handle proxied generic components"
+
 - Updated AllTypes strategy to support types based on generic type definitions.
 
 - Updated AllTypes strategy to support multiple registrations from a single set of types.

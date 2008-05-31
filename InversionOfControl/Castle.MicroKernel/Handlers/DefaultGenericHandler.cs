@@ -16,7 +16,8 @@ namespace Castle.MicroKernel.Handlers
 {
 	using System;
 	using System.Collections.Generic;
-	using Core;
+	using Castle.Core;
+	using Castle.MicroKernel.Proxy;
 
 	/// <summary>
 	/// Summary description for DefaultGenericHandler.
@@ -55,7 +56,9 @@ namespace Castle.MicroKernel.Handlers
 
 		public override void Release(object instance)
 		{
-			IHandler handler = GetSubHandler(CreationContext.Empty, instance.GetType());
+			Type genericType = ProxyUtil.GetUnproxiedType(instance);
+
+			IHandler handler = GetSubHandler(CreationContext.Empty, genericType);
 
 			handler.Release(instance);
 		}

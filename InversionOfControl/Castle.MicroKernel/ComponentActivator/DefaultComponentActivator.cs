@@ -22,6 +22,7 @@ namespace Castle.MicroKernel.ComponentActivator
 	using Castle.Core;
 	using Castle.Core.Interceptor;
 	using Castle.MicroKernel.LifecycleConcerns;
+	using Castle.MicroKernel.Proxy;
 
 	/// <summary>
 	/// Standard implementation of <see cref="IComponentActivator"/>.
@@ -146,14 +147,14 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual void ApplyCommissionConcerns(object instance)
 		{
-			instance = GetUnproxiedInstance(instance);
+			instance = ProxyUtil.GetUnproxiedInstance(instance);
 			object[] steps = Model.LifecycleSteps.GetCommissionSteps();
 			ApplyConcerns(steps, instance);
 		}
 
 		protected virtual void ApplyDecommissionConcerns(object instance)
 		{
-			instance = GetUnproxiedInstance(instance);
+			instance = ProxyUtil.GetUnproxiedInstance(instance);
 			object[] steps = Model.LifecycleSteps.GetDecommissionSteps();
 			ApplyConcerns(steps, instance);
 		}
@@ -247,7 +248,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual void SetUpProperties(object instance, CreationContext context)
 		{
-			instance = GetUnproxiedInstance(instance);
+			instance = ProxyUtil.GetUnproxiedInstance(instance);
 
 			foreach (PropertySet property in Model.Properties)
 			{
@@ -278,21 +279,6 @@ namespace Castle.MicroKernel.ComponentActivator
 					throw new ComponentActivatorException(message, ex);
 				}
 			}
-		}
-
-		private static object GetUnproxiedInstance(object instance)
-		{
-			if (!RemotingServices.IsTransparentProxy(instance))
-			{
-				IProxyTargetAccessor accessor = instance as IProxyTargetAccessor;
-
-				if (accessor != null)
-				{
-					instance = accessor.DynProxyGetTarget();
-				}
-			}
-
-			return instance;
 		}
 	}
 }
