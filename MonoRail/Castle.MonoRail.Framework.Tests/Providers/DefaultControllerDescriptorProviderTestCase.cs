@@ -189,6 +189,16 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 			}
 		}
 
+		[Test]
+		public void DescriptorCanHandleActionsWithShortNames() 
+		{
+			BuildDescriptor();
+			Type controllerType = typeof(ShortActionNameController);
+			ControllerMetaDescriptor descriptor = provider.BuildDescriptor(controllerType);
+			Assert.IsNotNull(descriptor);
+			Assert.IsTrue(descriptor.Actions.Contains("A"));
+		}
+
 		#region Controllers
 
 		public class SingleActionController : Controller
@@ -219,6 +229,14 @@ namespace Castle.MonoRail.Framework.Tests.Providers
 			[SkipFilter]
 			public void Action1()
 			{
+			}
+		}
+
+		public class ShortActionNameController : Controller 
+		{
+			public void A() 
+			{
+				
 			}
 		}
 
