@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
+	using Castle.MonoRail.Views.Brail.TestSite.Components;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -102,6 +103,27 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		{
 			string view = ProcessView("login/welcome");
 			Assert.AreEqual("Hi there, anonymous user!", view);
+		}
+
+		[Test]
+		public void MR_415_CaptureForInNestedComponentsLoosesItsContextVars()
+		{
+			this.ViewComponentFactory.Inspect(typeof(ComponentUsingCaptureFor).Assembly);
+			PropertyBag["HelpMessage"] = "SOS";
+			string view = ProcessView("bugs/mr_415");
+			Assert.AreEqual(2, CountOccurancesOf("<div class=\"tooltip_content\">SOS</div>", view));
+		}
+
+		private int CountOccurancesOf(string stringOccuring, string view)
+		{
+			int count = 0;
+			int index = 0;
+			while((index = view.IndexOf(stringOccuring, index))!=-1)
+			{
+				index++;
+				count++;
+			}
+			return count;
 		}
 	}
 }

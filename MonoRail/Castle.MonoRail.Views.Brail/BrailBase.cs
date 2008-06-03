@@ -266,7 +266,7 @@ namespace Castle.MonoRail.Views.Brail
 		private ParameterSearch GetParameterInternal(string name)
 		{
 			LastVariableAccessed = name;
-			//temporary syntax to turn @variable to varaible, imitating :symbol in ruby
+			//turn @variable to varaible, imitating :symbol in ruby
 			if (name.StartsWith("@"))
 				return new ParameterSearch(name.Substring(1), true);
 			if (viewComponentsParameters != null)
@@ -392,9 +392,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// <param name="controllerContext">The controller context.</param>
 		private void InitProperties(IEngineContext myContext, IController myController, IControllerContext controllerContext)
 		{
-            
 			properties = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
-			//properties.Add("dsl", new DslWrapper(this));
 			properties.Add("Controller", myController);
 			
 			if (myContext != null)
@@ -459,6 +457,15 @@ namespace Castle.MonoRail.Views.Brail
 			{
 				properties["siteRoot"] = myContext.ApplicationPath;
 			}
+
+			if(parent != null)
+			{
+				foreach(DictionaryEntry entry in parent.Properties)
+				{
+					properties[entry.Key] = entry.Value;
+				}
+			}
+
 		}
 
 		#region Nested type: ParameterSearch

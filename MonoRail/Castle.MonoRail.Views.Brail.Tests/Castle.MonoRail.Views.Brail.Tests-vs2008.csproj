@@ -88,6 +88,8 @@
     <Compile Include="ViewLocations.cs" />
     <Compile Include="ViewSourceLoaderServiceProvider.cs" />
     <None Include="Views\regressions\questionMarkOp_if_whenPassed.brail" />
+    <None Include="Views\Bugs\MR_415.brail" />
+    <None Include="Views\components\ComponentUsingCaptureFor\ComponentUsingCaptureFor.brail" />
     <Compile Include="XmlTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
