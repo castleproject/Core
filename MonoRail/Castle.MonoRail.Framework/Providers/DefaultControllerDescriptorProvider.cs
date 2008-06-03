@@ -286,8 +286,8 @@ namespace Castle.MonoRail.Framework.Providers
 		{
 			foreach(string name in new ArrayList(desc.Actions.Keys))
 			{
-				// skip methods that are not named "BeginXyz", including "Begin"
-				if (name.StartsWith("Begin", StringComparison.InvariantCultureIgnoreCase) == false || name.Length == 5)
+				// skip methods that are not named "BeginXyz"
+				if (name.StartsWith("Begin", StringComparison.InvariantCultureIgnoreCase))
 				{
 					continue;
 				}
@@ -315,7 +315,13 @@ namespace Castle.MonoRail.Framework.Providers
 					                            "' on controller '" + desc.ControllerDescriptor.Name +
 					                            "'. MonoRail doesn't support mixing sync and async methods for the same action");
 				}
-
+				
+				MethodInfo beginActionInfo = (MethodInfo) desc.Actions[name];
+				// we allow BeginXyz method as sync methods, as long as they do not return
+				// IAsyncResult
+				if(beginActionInfo.ReturnType != typeof(IAsyncResult))
+					continue;
+				
 				string endActionName = "End" + actionName;
 				if (desc.Actions.Contains(endActionName) == false)
 				{
@@ -332,7 +338,6 @@ namespace Castle.MonoRail.Framework.Providers
 					                            endActionName + " may be defined as part of an async action");
 				}
 
-				MethodInfo beginActionInfo = (MethodInfo) desc.Actions[name];
 				MethodInfo endActionInfo = (MethodInfo) desc.Actions[endActionName];
 
 				desc.Actions.Remove(name);
