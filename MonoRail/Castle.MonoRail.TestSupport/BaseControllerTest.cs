@@ -23,7 +23,7 @@ namespace Castle.MonoRail.TestSupport
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Test;
 
-	public delegate void ContextInitializer(MockEngineContext context);
+	public delegate void ContextInitializer(StubEngineContext context);
 
 	/// <summary>
 	/// Base class that set ups the necessary infrastructure 
@@ -103,10 +103,10 @@ namespace Castle.MonoRail.TestSupport
 		private readonly string domain;
 		private readonly string domainPrefix;
 		private readonly int port;
-		private MockEngineContext context;
+		private StubEngineContext context;
 		private IMockRequest request;
 		private IMockResponse response;
-		private MockServices services;
+		private StubMonoRailServices services;
 		private ITrace trace;
 		private IDictionary<string, HttpCookie> cookies;
 		private IControllerContext controllerContext;
@@ -197,7 +197,7 @@ namespace Castle.MonoRail.TestSupport
 		/// Gets the services.
 		/// </summary>
 		/// <value>The services.</value>
-		public MockServices Services
+		public StubMonoRailServices Services
 		{
 			get { return services; }
 		}
@@ -337,16 +337,16 @@ namespace Castle.MonoRail.TestSupport
 		/// <returns></returns>
 		protected virtual IMockRequest BuildRequest()
 		{
-			return new MockRequest(cookies);
+			return new StubRequest(cookies);
 		}
 
 		/// <summary>
 		/// Builds the services.
 		/// </summary>
 		/// <returns></returns>
-		protected virtual MockServices BuildServices()
+		protected virtual StubMonoRailServices BuildServices()
 		{
-			return new MockServices();
+			return new StubMonoRailServices();
 		}
 
 		/// <summary>
@@ -355,7 +355,7 @@ namespace Castle.MonoRail.TestSupport
 		/// <returns></returns>
 		protected virtual IMockResponse BuildResponse(UrlInfo info)
 		{
-			return new MockResponse(cookies, info);
+			return new StubResponse(cookies, info);
 		}
 
 		/// <summary>
@@ -364,17 +364,17 @@ namespace Castle.MonoRail.TestSupport
 		/// <returns></returns>
 		protected virtual ITrace BuildTrace()
 		{
-			return new MockTrace();
+			return new StubTrace();
 		}
 
         /// <summary>
         /// Adds the default mock email services to the context.
         /// </summary>
-        /// <param name="mockEngineContext"></param>
-        protected virtual void AddEmailServices(MockEngineContext mockEngineContext)
+        /// <param name="stubEngineContext"></param>
+        protected virtual void AddEmailServices(StubEngineContext stubEngineContext)
         {
-            mockEngineContext.Services.EmailTemplateService = new MockEmailTemplateService(mockEngineContext);
-            mockEngineContext.Services.EmailSender = new MockSmtpSender(mockEngineContext);
+            stubEngineContext.Services.EmailTemplateService = new StubEmailTemplateService(stubEngineContext);
+            stubEngineContext.Services.EmailSender = new StubSmtpSender(stubEngineContext);
         }
 
 		/// <summary>
@@ -387,10 +387,10 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="trace">The trace.</param>
 		/// <param name="urlInfo">The URL info.</param>
 		/// <returns></returns>
-		protected virtual MockEngineContext BuildRailsEngineContext(IMockRequest request, IMockResponse response, 
+		protected virtual StubEngineContext BuildRailsEngineContext(IMockRequest request, IMockResponse response, 
 			IMonoRailServices services, ITrace trace, UrlInfo urlInfo)
 		{
-			MockEngineContext engine = new MockEngineContext(request, response, services, urlInfo);
+			StubEngineContext engine = new StubEngineContext(request, response, services, urlInfo);
 			engine.Trace = trace;
 			return engine;
 		}
@@ -412,8 +412,8 @@ namespace Castle.MonoRail.TestSupport
 		/// <summary>
 		/// Allows modifying of the engine context created by <see cref="BuildRailsEngineContext"/>
 		/// </summary>
-		/// <param name="mockEngineContext">The engine context to modify</param>
-		protected virtual void InitializeEngineContext(MockEngineContext mockEngineContext)
+		/// <param name="stubEngineContext">The engine context to modify</param>
+		protected virtual void InitializeEngineContext(StubEngineContext stubEngineContext)
 		{}
 
 		/// <summary>
@@ -425,9 +425,9 @@ namespace Castle.MonoRail.TestSupport
 		/// </returns>
 		protected bool HasRenderedEmailTemplateNamed(string templateName)
 		{
-			MockEngineContext.RenderedEmailTemplate template = 
+			StubEngineContext.RenderedEmailTemplate template = 
 				context.RenderedEmailTemplates.Find(
-					delegate(MockEngineContext.RenderedEmailTemplate emailTemplate)
+					delegate(StubEngineContext.RenderedEmailTemplate emailTemplate)
 					{
 						return templateName.Equals(emailTemplate.Name, StringComparison.OrdinalIgnoreCase);
 					});
@@ -448,7 +448,7 @@ namespace Castle.MonoRail.TestSupport
 		/// Gets the rendered email templates.
 		/// </summary>
 		/// <value>The rendered email templates.</value>
-		protected MockEngineContext.RenderedEmailTemplate[] RenderedEmailTemplates
+		protected StubEngineContext.RenderedEmailTemplate[] RenderedEmailTemplates
 		{
 			get { return context.RenderedEmailTemplates.ToArray(); }
 		}

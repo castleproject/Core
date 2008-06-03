@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Represents a mock implementation of <see cref="IMockResponse"/> for unit test purposes.
 	/// </summary>
-	public class MockResponse : BaseResponse, IMockResponse
+	public class StubResponse : BaseResponse, IMockResponse
 	{
 		private readonly IDictionary<string, HttpCookie> cookies;
 		private int statusCode = 200;
@@ -43,55 +43,55 @@ namespace Castle.MonoRail.Framework.Test
 		private Stream outputStream = new MemoryStream();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockResponse"/> class.
+		/// Initializes a new instance of the <see cref="StubResponse"/> class.
 		/// </summary>
 		/// <param name="currentUrl">The current URL.</param>
 		/// <param name="urlBuilder">The URL builder.</param>
 		/// <param name="serverUtility">The server utility.</param>
 		/// <param name="routeMatch">The route match.</param>
 		/// <param name="referrer">The referrer.</param>
-		public MockResponse(UrlInfo currentUrl, IUrlBuilder urlBuilder, IServerUtility serverUtility, RouteMatch routeMatch, string referrer)
+		public StubResponse(UrlInfo currentUrl, IUrlBuilder urlBuilder, IServerUtility serverUtility, RouteMatch routeMatch, string referrer)
 			: base(currentUrl, urlBuilder, serverUtility, routeMatch, referrer)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockResponse"/> class.
+		/// Initializes a new instance of the <see cref="StubResponse"/> class.
 		/// </summary>
 		/// <param name="currentUrl">The current URL.</param>
 		/// <param name="urlBuilder">The URL builder.</param>
 		/// <param name="serverUtility">The server utility.</param>
 		/// <param name="routeMatch">The route match.</param>
-		public MockResponse(UrlInfo currentUrl, IUrlBuilder urlBuilder, IServerUtility serverUtility, RouteMatch routeMatch)
+		public StubResponse(UrlInfo currentUrl, IUrlBuilder urlBuilder, IServerUtility serverUtility, RouteMatch routeMatch)
 			: this(currentUrl, urlBuilder, serverUtility, routeMatch, null)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockResponse"/> class.
+		/// Initializes a new instance of the <see cref="StubResponse"/> class.
 		/// </summary>
 		/// <param name="cookies">The cookies.</param>
 		/// <param name="info">Current url</param>
-		public MockResponse(IDictionary<string, HttpCookie> cookies, UrlInfo info): this(
-			info, new DefaultUrlBuilder(), new MockServerUtility(), new RouteMatch())
+		public StubResponse(IDictionary<string, HttpCookie> cookies, UrlInfo info): this(
+			info, new DefaultUrlBuilder(), new StubServerUtility(), new RouteMatch())
 		{
 			this.cookies = cookies;
 			output = new StringWriter();
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockResponse"/> class.
+		/// Initializes a new instance of the <see cref="StubResponse"/> class.
 		/// </summary>
 		/// <param name="cookies">The cookies.</param>
-		public MockResponse(IDictionary<string, HttpCookie> cookies)
+		public StubResponse(IDictionary<string, HttpCookie> cookies)
 			: this(cookies, new UrlInfo("", "controller", "action", "/", ".castle"))
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockResponse"/> class.
+		/// Initializes a new instance of the <see cref="StubResponse"/> class.
 		/// </summary>
-		public MockResponse(): this(new Dictionary<string, HttpCookie>(StringComparer.InvariantCultureIgnoreCase))
+		public StubResponse(): this(new Dictionary<string, HttpCookie>(StringComparer.InvariantCultureIgnoreCase))
 		{
 		}
 

@@ -20,9 +20,9 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Represents a mock implementation of <see cref="ICacheProvider"/> for unit test purposes.
 	/// </summary>
-	public class MockCacheProvider : ICacheProvider
+	public class StubCacheProvider : ICacheProvider
 	{
-		private IDictionary dictionary = new HybridDictionary(true);
+		private readonly IDictionary dictionary = new HybridDictionary(true);
 
 		/// <summary>
 		/// Services the specified provider.

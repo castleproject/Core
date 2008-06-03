@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework.Tests.JSON
 		[Test, Ignore("Need to be reviewed")]
 		public void BindData()
 		{
-//			MockEngineContext engineContext = new MockEngineContext();
+//			StubEngineContext engineContext = new StubEngineContext();
 
 //			Person p = (Person) JSONBinderAttribute.Bind("{\"Name\":\"Json\", \"Age\":23}", typeof(Person));
 //

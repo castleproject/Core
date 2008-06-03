@@ -19,15 +19,15 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Represents a mock implementation of <see cref="IEmailSender"/> for unit test purposes.
 	/// </summary>
-	public class MockSmtpSender : IEmailSender
+	public class StubSmtpSender : IEmailSender
 	{
-		private readonly MockEngineContext context;
+		private readonly StubEngineContext context;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockSmtpSender"/> class.
+		/// Initializes a new instance of the <see cref="StubSmtpSender"/> class.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public MockSmtpSender(MockEngineContext context)
+		public StubSmtpSender(StubEngineContext context)
 		{
 			this.context = context;
 		}

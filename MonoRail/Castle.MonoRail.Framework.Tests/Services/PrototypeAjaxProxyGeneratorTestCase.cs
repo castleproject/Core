@@ -22,19 +22,19 @@ namespace Castle.MonoRail.Framework.Tests.Services
 	public class PrototypeAjaxProxyGeneratorTestCase
 	{
 		private PrototypeAjaxProxyGenerator generator;
-		private MockEngineContext engineContext;
-		private ViewEngineManagerStub viewEngStub;
-		private MockResponse response;
+		private StubEngineContext engineContext;
+		private StubViewEngineManager engStubViewEngineManager;
+		private StubResponse response;
 
 		[SetUp]
 		public void Init()
 		{
-			MockRequest request = new MockRequest();
-			response = new MockResponse();
-			MockServices services = new MockServices();
-			viewEngStub = new ViewEngineManagerStub();
-			services.ViewEngineManager = viewEngStub;
-			engineContext = new MockEngineContext(request, response, services, new UrlInfo("area", "controller", "action"));
+			StubRequest request = new StubRequest();
+			response = new StubResponse();
+			StubMonoRailServices services = new StubMonoRailServices();
+			engStubViewEngineManager = new StubViewEngineManager();
+			services.ViewEngineManager = engStubViewEngineManager;
+			engineContext = new StubEngineContext(request, response, services, new UrlInfo("area", "controller", "action"));
 
 			generator = new PrototypeAjaxProxyGenerator();
 			generator.ControllerTree = services.ControllerTree;

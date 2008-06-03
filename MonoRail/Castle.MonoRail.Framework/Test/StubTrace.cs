@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Represents a mock implementation of <see cref="ITrace"/> for unit test purposes.
 	/// </summary>
-	public class MockTrace : ITrace
+	public class StubTrace : ITrace
 	{
 		/// <summary>
 		/// Logs the specified message on the ASP.Net trace

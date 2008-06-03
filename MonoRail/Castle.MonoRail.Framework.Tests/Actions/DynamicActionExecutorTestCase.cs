@@ -27,10 +27,10 @@ namespace Castle.MonoRail.Framework.Tests.Actions
 
 			DynamicActionExecutor executor = new DynamicActionExecutor(dynAction);
 
-			MockRequest req = new MockRequest();
-			MockResponse res = new MockResponse();
-			MockServices services = new MockServices();
-			IEngineContext engineContext = new MockEngineContext(req, res, services, new UrlInfo("area", "controller", "action"));
+			StubRequest req = new StubRequest();
+			StubResponse res = new StubResponse();
+			StubMonoRailServices services = new StubMonoRailServices();
+			IEngineContext engineContext = new StubEngineContext(req, res, services, new UrlInfo("area", "controller", "action"));
 
 			object retVal = executor.Execute(engineContext, new DummyController(), new ControllerContext());
 			Assert.IsTrue(dynAction.WasExecuted);

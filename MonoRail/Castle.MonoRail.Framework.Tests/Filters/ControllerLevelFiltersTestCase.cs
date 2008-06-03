@@ -22,22 +22,22 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 	public class ControllerLevelFiltersTestCase
 	{
 		private MockRepository mockRepository = new MockRepository();
-		private MockEngineContext engineContext;
-		private ViewEngineManagerStub viewEngStub;
-		private MockServices services;
+		private StubEngineContext engineContext;
+		private StubViewEngineManager engStubViewEngineManager;
+		private StubMonoRailServices services;
 		private IFilterFactory filterFactoryMock;
 
 		[SetUp]
 		public void Init()
 		{
-			MockRequest request = new MockRequest();
-			MockResponse response = new MockResponse();
-			services = new MockServices();
-			viewEngStub = new ViewEngineManagerStub();
-			services.ViewEngineManager = viewEngStub;
+			StubRequest request = new StubRequest();
+			StubResponse response = new StubResponse();
+			services = new StubMonoRailServices();
+			engStubViewEngineManager = new StubViewEngineManager();
+			services.ViewEngineManager = engStubViewEngineManager;
 			filterFactoryMock = mockRepository.DynamicMock<IFilterFactory>();
 			services.FilterFactory = filterFactoryMock;
-			engineContext = new MockEngineContext(request, response, services, null);
+			engineContext = new StubEngineContext(request, response, services, null);
 		}
 
 		[Test]
@@ -66,7 +66,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				controller.Process(engineContext, context);
 				controller.Dispose();
 
-				Assert.IsNull(viewEngStub.TemplateRendered);
+				Assert.IsNull(engStubViewEngineManager.TemplateRendered);
 				Assert.IsFalse(controller.indexActionExecuted);
 			}
 		}
@@ -97,7 +97,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				controller.Process(engineContext, context);
 				controller.Dispose();
 
-				Assert.AreEqual("home\\index", viewEngStub.TemplateRendered);
+				Assert.AreEqual("home\\index", engStubViewEngineManager.TemplateRendered);
 				Assert.IsTrue(controller.indexActionExecuted);
 			}
 		}
@@ -128,7 +128,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				controller.Process(engineContext, context);
 				controller.Dispose();
 
-				Assert.AreEqual("home\\index", viewEngStub.TemplateRendered);
+				Assert.AreEqual("home\\index", engStubViewEngineManager.TemplateRendered);
 				Assert.IsTrue(controller.indexActionExecuted);
 			}
 		}
@@ -159,7 +159,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				controller.Process(engineContext, context);
 				controller.Dispose();
 
-				Assert.IsNull(viewEngStub.TemplateRendered);
+				Assert.IsNull(engStubViewEngineManager.TemplateRendered);
 				Assert.IsTrue(controller.indexActionExecuted);
 			}
 		}
@@ -190,7 +190,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				controller.Process(engineContext, context);
 				controller.Dispose();
 
-				Assert.AreEqual("home\\index", viewEngStub.TemplateRendered);
+				Assert.AreEqual("home\\index", engStubViewEngineManager.TemplateRendered);
 				Assert.IsTrue(controller.indexActionExecuted);
 			}
 		}
@@ -215,7 +215,7 @@ namespace Castle.MonoRail.Framework.Tests.Filters
 				controller.Process(engineContext, context);
 				controller.Dispose();
 
-				Assert.AreEqual("home\\index", viewEngStub.TemplateRendered);
+				Assert.AreEqual("home\\index", engStubViewEngineManager.TemplateRendered);
 				Assert.IsTrue(controller.indexActionExecuted);
 			}
 		}

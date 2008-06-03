@@ -21,20 +21,20 @@ namespace Castle.MonoRail.Framework.Tests.Rescues
 	[TestFixture]
 	public class ActionLevelRescuesTestCase
 	{
-		private MockEngineContext engineContext;
-		private ViewEngineManagerStub viewEngStub;
-		private MockServices services;
-		private MockResponse response;
+		private StubEngineContext engineContext;
+		private StubViewEngineManager engStubViewEngineManager;
+		private StubMonoRailServices services;
+		private StubResponse response;
 
 		[SetUp]
 		public void Init()
 		{
-			MockRequest request = new MockRequest();
-			response = new MockResponse();
-			services = new MockServices();
-			viewEngStub = new ViewEngineManagerStub();
-			services.ViewEngineManager = viewEngStub;
-			engineContext = new MockEngineContext(request, response, services, null);
+			StubRequest request = new StubRequest();
+			response = new StubResponse();
+			services = new StubMonoRailServices();
+			engStubViewEngineManager = new StubViewEngineManager();
+			services.ViewEngineManager = engStubViewEngineManager;
+			engineContext = new StubEngineContext(request, response, services, null);
 		}
 
 		[Test]
@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Framework.Tests.Rescues
 
 			Assert.AreEqual(500, response.StatusCode);
 			Assert.AreEqual("Error processing action", response.StatusDescription);
-			Assert.AreEqual("rescues\\specificerror", viewEngStub.TemplateRendered);
+			Assert.AreEqual("rescues\\specificerror", engStubViewEngineManager.TemplateRendered);
 		}
 
 		#region Controllers

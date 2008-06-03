@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		{
 			engine = new RoutingEngine();
 			urlBuilder = new DefaultUrlBuilder();
-			urlBuilder.ServerUtil = new MockServerUtility();
+			urlBuilder.ServerUtil = new StubServerUtility();
 			urlBuilder.RoutingEngine = engine;
 		}
 

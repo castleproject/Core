@@ -26,14 +26,14 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Represents a mock implementation of <see cref="IEngineContext"/> for unit test purposes.
 	/// </summary>
-	public class MockEngineContext : AbstractServiceContainer, IEngineContext
+	public class StubEngineContext : AbstractServiceContainer, IEngineContext
 	{
 		private readonly IDictionary contextItems = new HybridDictionary(true);
 		private readonly List<RenderedEmailTemplate> renderedEmailTemplates = new List<RenderedEmailTemplate>();
 		private readonly List<Message> messagesSent = new List<Message>();
 		private IMockRequest request;
 		private IMockResponse response;
-		private IServerUtility serverUtility = new MockServerUtility();
+		private IServerUtility serverUtility = new StubServerUtility();
 		private IPrincipal currentUser;
 		private IDictionary session = new HybridDictionary(true);
 		private IController currentController;
@@ -45,41 +45,41 @@ namespace Castle.MonoRail.Framework.Test
 		private Exception lastException;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockEngineContext"/> class.
+		/// Initializes a new instance of the <see cref="StubEngineContext"/> class.
 		/// </summary>
-		public MockEngineContext()
-			: this(new MockRequest(), new MockResponse(), new MockServices(), new UrlInfo("area", "home", "index"))
+		public StubEngineContext()
+			: this(new StubRequest(), new StubResponse(), new StubMonoRailServices(), new UrlInfo("area", "home", "index"))
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockEngineContext"/> class.
+		/// Initializes a new instance of the <see cref="StubEngineContext"/> class.
 		/// </summary>
 		/// <param name="urlInfo">The URL info.</param>
-		public MockEngineContext(UrlInfo urlInfo)
-			: this(new MockRequest(), new MockResponse(), new MockServices(), urlInfo)
+		public StubEngineContext(UrlInfo urlInfo)
+			: this(new StubRequest(), new StubResponse(), new StubMonoRailServices(), urlInfo)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockEngineContext"/> class.
+		/// Initializes a new instance of the <see cref="StubEngineContext"/> class.
 		/// </summary>
 		/// <param name="request">The request.</param>
 		/// <param name="response">The response.</param>
 		/// <param name="urlInfo">The URL info.</param>
-		public MockEngineContext(IMockRequest request, IMockResponse response, UrlInfo urlInfo)
-			: this(request, response, new MockServices(), urlInfo)
+		public StubEngineContext(IMockRequest request, IMockResponse response, UrlInfo urlInfo)
+			: this(request, response, new StubMonoRailServices(), urlInfo)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockEngineContext"/> class.
+		/// Initializes a new instance of the <see cref="StubEngineContext"/> class.
 		/// </summary>
 		/// <param name="request">The request.</param>
 		/// <param name="response">The response.</param>
 		/// <param name="services">The services.</param>
 		/// <param name="urlInfo">The URL info.</param>
-		public MockEngineContext(IMockRequest request, IMockResponse response, IMonoRailServices services, UrlInfo urlInfo)
+		public StubEngineContext(IMockRequest request, IMockResponse response, IMonoRailServices services, UrlInfo urlInfo)
 		{
 			this.request = request;
 			this.response = response;

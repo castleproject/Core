@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public class ViewEngineManagerStub : IViewEngineManager
+	public class StubViewEngineManager : IViewEngineManager
 	{
 		private readonly List<string> templates = new List<string>();
 		private string templateRendered;

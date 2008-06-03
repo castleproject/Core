@@ -29,9 +29,9 @@ namespace Castle.MonoRail.Framework.Tests.JSON
 		{
 			helper = new JSONHelper();
 
-			MockServices services = new MockServices();
+			StubMonoRailServices services = new StubMonoRailServices();
 			services.JSONSerializer = new NewtonsoftJSONSerializer();
-			helper.SetContext(new MockEngineContext(null, null, services, null));
+			helper.SetContext(new StubEngineContext(null, null, services, null));
 		}
 
 		[Test]

@@ -159,7 +159,7 @@ namespace Castle.MonoRail.TestSupport
 		/// <returns></returns>
 		protected virtual IMockViewComponentContext BuildViewComponentContext(string viewComponentName)
 		{
-			MockViewComponentContext compContext = new MockViewComponentContext(viewComponentName, writer, viewEngine);
+			StubViewComponentContext compContext = new StubViewComponentContext(viewComponentName, writer, viewEngine);
 
 			compContext.SectionRender = SectionRender;
 			compContext.OnBodyRender = OnBodyRender;

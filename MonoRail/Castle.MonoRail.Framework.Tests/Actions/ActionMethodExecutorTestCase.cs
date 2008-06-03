@@ -125,10 +125,10 @@ namespace Castle.MonoRail.Framework.Tests.Actions
 
 			ActionMethodExecutor executor = new ActionMethodExecutor(GetActionMethod(controller), actionMeta);
 
-			MockRequest req = new MockRequest();
-			MockResponse res = new MockResponse();
-			MockServices services = new MockServices();
-			IEngineContext engineContext = new MockEngineContext(req, res, services, new UrlInfo("area", "controller", "action"));
+			StubRequest req = new StubRequest();
+			StubResponse res = new StubResponse();
+			StubMonoRailServices services = new StubMonoRailServices();
+			IEngineContext engineContext = new StubEngineContext(req, res, services, new UrlInfo("area", "controller", "action"));
 			object retVal = executor.Execute(engineContext, controller, new ControllerContext());
 
 			Assert.IsTrue(controller.WasExecuted);

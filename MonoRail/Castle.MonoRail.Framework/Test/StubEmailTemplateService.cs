@@ -20,18 +20,18 @@ namespace Castle.MonoRail.Framework.Test
 
 	/// <summary>
 	/// Mocks the <see cref="IEmailTemplateService"/> calling 
-	/// <see cref="MockEngineContext.AddMailTemplateRendered"/> to register
+	/// <see cref="StubEngineContext.AddMailTemplateRendered"/> to register
 	/// the calls made to these methods
 	/// </summary>
-	public class MockEmailTemplateService : IEmailTemplateService
+	public class StubEmailTemplateService : IEmailTemplateService
 	{
-		private readonly MockEngineContext context;
+		private readonly StubEngineContext context;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockEmailTemplateService"/> class.
+		/// Initializes a new instance of the <see cref="StubEmailTemplateService"/> class.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public MockEmailTemplateService(MockEngineContext context)
+		public StubEmailTemplateService(StubEngineContext context)
 		{
 			this.context = context;
 		}

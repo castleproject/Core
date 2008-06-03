@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void Init()
 		{
 			helper = new DummyHelper();
-			helper.ServerUtility = new MockServerUtility();
+			helper.ServerUtility = new StubServerUtility();
 		}
 
 		[Test]

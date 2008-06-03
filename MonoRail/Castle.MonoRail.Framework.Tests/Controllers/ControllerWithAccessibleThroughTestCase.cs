@@ -21,21 +21,21 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 	[TestFixture]
 	public class ControllerWithAccessibleThroughTestCase
 	{
-		private MockEngineContext engineContext;
-		private ViewEngineManagerStub viewEngStub;
-		private MockServices services;
-		private MockRequest request;
-		private MockResponse response;
+		private StubEngineContext engineContext;
+		private StubViewEngineManager engStubViewEngineManager;
+		private StubMonoRailServices services;
+		private StubRequest request;
+		private StubResponse response;
 
 		[SetUp]
 		public void Init()
 		{
-			request = new MockRequest();
-			response = new MockResponse();
-			services = new MockServices();
-			viewEngStub = new ViewEngineManagerStub();
-			services.ViewEngineManager = viewEngStub;
-			engineContext = new MockEngineContext(request, response, services, null);
+			request = new StubRequest();
+			response = new StubResponse();
+			services = new StubMonoRailServices();
+			engStubViewEngineManager = new StubViewEngineManager();
+			services.ViewEngineManager = engStubViewEngineManager;
+			engineContext = new StubEngineContext(request, response, services, null);
 		}
 
 		[Test]
@@ -50,7 +50,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 			controller.Process(engineContext, context);
 
-			Assert.AreEqual("home\\GetOnly", viewEngStub.TemplateRendered);
+			Assert.AreEqual("home\\GetOnly", engStubViewEngineManager.TemplateRendered);
 		}
 
 		[Test,
@@ -113,11 +113,11 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 			request.HttpMethod = "GET";
 			controller.Process(engineContext, context);
-			Assert.AreEqual("home\\GetAndPost", viewEngStub.TemplateRendered);
+			Assert.AreEqual("home\\GetAndPost", engStubViewEngineManager.TemplateRendered);
 
 			request.HttpMethod = "POST";
 			controller.Process(engineContext, context);
-			Assert.AreEqual("home\\GetAndPost", viewEngStub.TemplateRendered);
+			Assert.AreEqual("home\\GetAndPost", engStubViewEngineManager.TemplateRendered);
 		}
 
 		#region Controllers

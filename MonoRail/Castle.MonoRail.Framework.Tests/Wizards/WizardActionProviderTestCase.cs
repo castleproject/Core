@@ -20,22 +20,22 @@ namespace Castle.MonoRail.Framework.Tests.Wizards
 	[TestFixture]
 	public class WizardActionProviderTestCase
 	{
-		private MockEngineContext engineContext;
-		private ViewEngineManagerStub viewEngStub;
-		private MockServices services;
-		private MockRequest request;
-		private MockResponse response;
+		private StubEngineContext engineContext;
+		private StubViewEngineManager engStubViewEngineManager;
+		private StubMonoRailServices services;
+		private StubRequest request;
+		private StubResponse response;
 		private WizardActionProvider actionProvider;
 
 		[SetUp]
 		public void Init()
 		{
-			request = new MockRequest();
-			response = new MockResponse();
-			services = new MockServices();
-			viewEngStub = new ViewEngineManagerStub();
-			services.ViewEngineManager = viewEngStub;
-			engineContext = new MockEngineContext(request, response, services, null);
+			request = new StubRequest();
+			response = new StubResponse();
+			services = new StubMonoRailServices();
+			engStubViewEngineManager = new StubViewEngineManager();
+			services.ViewEngineManager = engStubViewEngineManager;
+			engineContext = new StubEngineContext(request, response, services, null);
 			actionProvider = new WizardActionProvider();
 		}
 

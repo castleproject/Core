@@ -24,20 +24,20 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 	[TestFixture]
 	public class ControllerTestCase
 	{
-		private MockEngineContext engineContext;
-		private ViewEngineManagerStub viewEngStub;
-		private MockServices services;
-		private MockResponse response;
+		private StubEngineContext engineContext;
+		private StubViewEngineManager engStubViewEngineManager;
+		private StubMonoRailServices services;
+		private StubResponse response;
 
 		[SetUp]
 		public void Init()
 		{
-			MockRequest request = new MockRequest();
-			response = new MockResponse();
-			services = new MockServices();
-			viewEngStub = new ViewEngineManagerStub();
-			services.ViewEngineManager = viewEngStub;
-			engineContext = new MockEngineContext(request, response, services, null);
+			StubRequest request = new StubRequest();
+			response = new StubResponse();
+			services = new StubMonoRailServices();
+			engStubViewEngineManager = new StubViewEngineManager();
+			services.ViewEngineManager = engStubViewEngineManager;
+			engineContext = new StubEngineContext(request, response, services, null);
 		}
 
 		[Test]
@@ -84,7 +84,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 			Assert.AreEqual(200, response.StatusCode);
 			Assert.AreEqual("OK", response.StatusDescription);
-			Assert.AreEqual("home\\EmptyAction", viewEngStub.TemplateRendered);
+			Assert.AreEqual("home\\EmptyAction", engStubViewEngineManager.TemplateRendered);
 		}
 
 		[Test]
@@ -99,7 +99,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 			Assert.AreEqual(200, response.StatusCode);
 			Assert.AreEqual("OK", response.StatusDescription);
-			Assert.AreEqual("home\\SomethingElse", viewEngStub.TemplateRendered);
+			Assert.AreEqual("home\\SomethingElse", engStubViewEngineManager.TemplateRendered);
 		}
 
 		[Test]
@@ -114,7 +114,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 			Assert.AreEqual(200, response.StatusCode);
 			Assert.AreEqual("OK", response.StatusDescription);
-			Assert.IsNull(viewEngStub.TemplateRendered);
+			Assert.IsNull(engStubViewEngineManager.TemplateRendered);
 		}
 
 		[Test]
@@ -128,7 +128,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 			controller.Process(engineContext, context);
 
 			Assert.IsTrue(controller.DefExecuted);
-			Assert.AreEqual("home\\index", viewEngStub.TemplateRendered);
+			Assert.AreEqual("home\\index", engStubViewEngineManager.TemplateRendered);
 			Assert.AreEqual(200, response.StatusCode);
 			Assert.AreEqual("OK", response.StatusDescription);
 		}
@@ -144,7 +144,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 			controller.Process(engineContext, context);
 
 			Assert.IsTrue(controller.DefExecuted);
-			Assert.AreEqual("home\\index", viewEngStub.TemplateRendered);
+			Assert.AreEqual("home\\index", engStubViewEngineManager.TemplateRendered);
 			Assert.AreEqual(200, response.StatusCode);
 			Assert.AreEqual("OK", response.StatusDescription);
 		}

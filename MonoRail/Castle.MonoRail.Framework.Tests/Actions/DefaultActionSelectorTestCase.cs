@@ -23,17 +23,17 @@ namespace Castle.MonoRail.Framework.Tests.Actions
 	public class DefaultActionSelectorTestCase
 	{
 		private DefaultActionSelector selector;
-		private MockEngineContext engine;
+		private StubEngineContext engine;
 
 		[SetUp]
 		public void Init()
 		{
 			selector = new DefaultActionSelector();
 
-			MockRequest request = new MockRequest();
-			MockResponse response = new MockResponse();
-			MockServices services = new MockServices();
-			engine = new MockEngineContext(request, response, services, new UrlInfo("area", "controller", "action1"));
+			StubRequest request = new StubRequest();
+			StubResponse response = new StubResponse();
+			StubMonoRailServices services = new StubMonoRailServices();
+			engine = new StubEngineContext(request, response, services, new UrlInfo("area", "controller", "action1"));
 		}
 
 		[Test]

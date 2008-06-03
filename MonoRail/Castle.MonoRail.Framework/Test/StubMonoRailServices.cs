@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public class MockServices : IMonoRailServices, IServiceContainer
+	public class StubMonoRailServices : IMonoRailServices, IServiceContainer
 	{
 		private IUrlTokenizer urlTokenizer;
 		private IUrlBuilder urlBuilder;
@@ -55,25 +55,25 @@ namespace Castle.MonoRail.Framework.Test
 		private IDynamicActionProviderFactory dynamicActionProviderFactory;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockServices"/> class with default mock services.
+		/// Initializes a new instance of the <see cref="StubMonoRailServices"/> class with default mock services.
 		/// </summary>
-		public MockServices() : this(new DefaultUrlBuilder(new MockServerUtility(), new MockRoutingEngine()),
+		public StubMonoRailServices() : this(new DefaultUrlBuilder(new StubServerUtility(), new StubRoutingEngine()),
 		                             new DefaultFilterFactory(),
-		                             new ViewEngineManagerStub(),
+		                             new StubViewEngineManager(),
 		                             new DefaultActionSelector(),
 									 new DefaultDynamicActionProviderFactory())
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockServices"/> class.
+		/// Initializes a new instance of the <see cref="StubMonoRailServices"/> class.
 		/// </summary>
 		/// <param name="urlBuilder">The URL builder.</param>
 		/// <param name="filterFactory">The filter factory.</param>
 		/// <param name="viewEngineManager">The view engine manager.</param>
 		/// <param name="actionSelector">The action selector.</param>
 		/// <param name="dynamicActionProviderFactory">The dynamic action provider factory.</param>
-		public MockServices(IUrlBuilder urlBuilder, IFilterFactory filterFactory, IViewEngineManager viewEngineManager,
+		public StubMonoRailServices(IUrlBuilder urlBuilder, IFilterFactory filterFactory, IViewEngineManager viewEngineManager,
 		                    IActionSelector actionSelector,IDynamicActionProviderFactory dynamicActionProviderFactory)
 		{
 			this.urlBuilder = urlBuilder;
@@ -98,8 +98,8 @@ namespace Castle.MonoRail.Framework.Test
 				new DefaultDynamicActionProviderDescriptorProvider());
 
 			resourceFactory = new DefaultResourceFactory();
-			scaffoldSupport = new MockScaffoldingSupport();
-			cacheProvider = new MockCacheProvider();
+			scaffoldSupport = new StubScaffoldingSupport();
+			cacheProvider = new StubCacheProvider();
 			helperFactory = new DefaultHelperFactory();
 			serviceInitializer = new DefaultServiceInitializer();
 

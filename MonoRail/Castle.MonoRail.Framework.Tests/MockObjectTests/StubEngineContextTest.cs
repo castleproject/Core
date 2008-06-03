@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.Tests.MockObjectTests
 	using Castle.MonoRail.TestSupport;
 	
 	[TestFixture]
-	public class MockRailsEngineContextTest : BaseControllerTest
+	public class StubEngineContextTest : BaseControllerTest
 	{
 		private DummyController controller;
 
@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework.Tests.MockObjectTests
 		{
 			controller = new DummyController();
 			PrepareController(controller);
-			controller.Context.Services.EmailTemplateService = new MockEmailTemplateService((MockEngineContext)controller.Context);
+			controller.Context.Services.EmailTemplateService = new StubEmailTemplateService((StubEngineContext)controller.Context);
 			string templateName = "welcome";
 
 			controller.PropertyBag["Value"] = "One";

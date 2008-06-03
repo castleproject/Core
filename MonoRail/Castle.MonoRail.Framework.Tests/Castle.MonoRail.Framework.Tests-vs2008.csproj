@@ -200,7 +200,7 @@
     <Compile Include="JSGeneration\PrototypeGeneratorTestCase.cs" />
     <Compile Include="JSON\JsonDataBinderTestCase.cs" />
     <Compile Include="JSON\JsonHelperTestCase.cs" />
-    <Compile Include="MockObjectTests\MockRailsEngineContextTest.cs" />
+    <Compile Include="MockObjectTests\StubEngineContextTest.cs" />
     <Compile Include="Providers\DefaultControllerDescriptorProviderTestCase.cs" />
     <Compile Include="Providers\DefaultFilterDescriptorProviderTestCase.cs" />
     <Compile Include="Providers\DefaultHelperDescriptorProviderTestCase.cs" />

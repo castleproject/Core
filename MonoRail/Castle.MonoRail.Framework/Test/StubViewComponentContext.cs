@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Represents a mock implementation of <see cref="IMockViewComponentContext"/> for unit test purposes.
 	/// </summary>
-	public class MockViewComponentContext : IMockViewComponentContext
+	public class StubViewComponentContext : IMockViewComponentContext
 	{
 		private string viewToRender;
 		private string componentName;
@@ -59,20 +59,20 @@ namespace Castle.MonoRail.Framework.Test
 		public TestViewRender OnViewRender;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockViewComponentContext"/> class.
+		/// Initializes a new instance of the <see cref="StubViewComponentContext"/> class.
 		/// </summary>
-		protected MockViewComponentContext()
+		protected StubViewComponentContext()
 		{
 			section2delegate = new Dictionary<string, TestSectionRender>(StringComparer.InvariantCultureIgnoreCase);
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockViewComponentContext"/> class.
+		/// Initializes a new instance of the <see cref="StubViewComponentContext"/> class.
 		/// </summary>
 		/// <param name="componentName">Name of the component.</param>
 		/// <param name="writer">The writer.</param>
 		/// <param name="viewEngine">The view engine.</param>
-		public MockViewComponentContext(string componentName, TextWriter writer, IViewEngine viewEngine) : this()
+		public StubViewComponentContext(string componentName, TextWriter writer, IViewEngine viewEngine) : this()
 		{
 			this.writer = writer;
 			this.componentName = componentName;

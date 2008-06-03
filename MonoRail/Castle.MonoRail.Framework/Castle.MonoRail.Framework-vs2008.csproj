@@ -847,43 +847,43 @@
     <Compile Include="Test\IMockViewComponentContext.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockCacheProvider.cs">
+    <Compile Include="Test\StubCacheProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockEmailTemplateService.cs">
+    <Compile Include="Test\StubEmailTemplateService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockEngineContext.cs">
+    <Compile Include="Test\StubEngineContext.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockRequest.cs">
+    <Compile Include="Test\StubRequest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockResponse.cs">
+    <Compile Include="Test\StubResponse.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockRoutingEngine.cs">
+    <Compile Include="Test\StubRoutingEngine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockScaffoldingSupport.cs">
+    <Compile Include="Test\StubScaffoldingSupport.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockServerUtility.cs">
+    <Compile Include="Test\StubServerUtility.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockServices.cs">
+    <Compile Include="Test\StubMonoRailServices.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockSmtpSender.cs">
+    <Compile Include="Test\StubSmtpSender.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockTrace.cs">
+    <Compile Include="Test\StubTrace.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockViewComponentContext.cs">
+    <Compile Include="Test\StubViewComponentContext.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\ViewEngineManagerStub.cs">
+    <Compile Include="Test\StubViewEngineManager.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Test\ViewEngineStub.cs">

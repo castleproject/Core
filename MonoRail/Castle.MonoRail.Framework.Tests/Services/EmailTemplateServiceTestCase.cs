@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		private readonly MockRepository mockRepository = new MockRepository();
 		private EmailTemplateService service;
 		private IViewEngineManager viewEngineManagerMock;
-		private MockEngineContext engineContext;
+		private StubEngineContext engineContext;
 		private DummyController controller;
 		private ControllerContext controllerContext;
 
@@ -40,7 +40,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 
 			service = new EmailTemplateService(viewEngineManagerMock);
 
-			engineContext = new MockEngineContext(null, null, null, null);
+			engineContext = new StubEngineContext(null, null, null, null);
 			controller = new DummyController();
 			controllerContext = new ControllerContext();
 		}

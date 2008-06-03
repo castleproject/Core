@@ -21,7 +21,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Represents a mock implementation of <see cref="IServerUtility"/> for unit test purposes.
 	/// </summary>
-	public class MockServerUtility : IServerUtility
+	public class StubServerUtility : IServerUtility
 	{
 		/// <summary>
 		/// Returns the physical path for the

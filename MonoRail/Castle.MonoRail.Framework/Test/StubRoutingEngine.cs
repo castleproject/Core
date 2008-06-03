@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Lot to do here
 	/// </summary>
-	public class MockRoutingEngine : RoutingRuleContainer, IRoutingEngine
+	public class StubRoutingEngine : RoutingRuleContainer, IRoutingEngine
 	{
 		/// <summary>
 		/// Pendent

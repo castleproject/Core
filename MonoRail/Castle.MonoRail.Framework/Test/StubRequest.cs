@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Represents a mock implementation of <see cref="IRequest"/> for unit test purposes.
 	/// </summary>
-	public class MockRequest : IMockRequest
+	public class StubRequest : IMockRequest
 	{
 		private NameValueCollection form = new NameValueCollection();
 		private NameValueCollection headers = new NameValueCollection();
@@ -46,27 +46,27 @@ namespace Castle.MonoRail.Framework.Test
 		private Stream inputStream = null;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockRequest"/> class.
+		/// Initializes a new instance of the <see cref="StubRequest"/> class.
 		/// </summary>
 		/// <param name="cookies">The cookies.</param>
-		public MockRequest(IDictionary<string, HttpCookie> cookies)
+		public StubRequest(IDictionary<string, HttpCookie> cookies)
 		{
 			this.cookies = cookies;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockRequest"/> class.
+		/// Initializes a new instance of the <see cref="StubRequest"/> class.
 		/// </summary>
 		/// <param name="httpMethod">The HTTP method.</param>
-		public MockRequest(string httpMethod) : this()
+		public StubRequest(string httpMethod) : this()
 		{
 			this.httpMethod = httpMethod;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MockRequest"/> class.
+		/// Initializes a new instance of the <see cref="StubRequest"/> class.
 		/// </summary>
-		public MockRequest() : this(new Dictionary<string, HttpCookie>(StringComparer.InvariantCultureIgnoreCase))
+		public StubRequest() : this(new Dictionary<string, HttpCookie>(StringComparer.InvariantCultureIgnoreCase))
 		{
 		}
 

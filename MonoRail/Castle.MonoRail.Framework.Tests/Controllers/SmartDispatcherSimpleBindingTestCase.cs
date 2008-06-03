@@ -21,18 +21,18 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 	[TestFixture]
 	public class SmartDispatcherSimpleBindingTestCase
 	{
-		private MockEngineContext engineContext;
-		private MockServices services;
-		private MockResponse response;
-		private MockRequest request;
+		private StubEngineContext engineContext;
+		private StubMonoRailServices services;
+		private StubResponse response;
+		private StubRequest request;
 
 		[SetUp]
 		public void Init()
 		{
-			request = new MockRequest();
-			response = new MockResponse();
-			services = new MockServices();
-			engineContext = new MockEngineContext(request, response, services, null);
+			request = new StubRequest();
+			response = new StubResponse();
+			services = new StubMonoRailServices();
+			engineContext = new StubEngineContext(request, response, services, null);
 		}
 
 		[Test]

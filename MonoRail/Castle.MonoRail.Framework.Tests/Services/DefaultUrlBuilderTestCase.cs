@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		public void Init()
 		{
 			urlBuilder = new DefaultUrlBuilder();
-			urlBuilder.ServerUtil = new MockServerUtility();
+			urlBuilder.ServerUtil = new StubServerUtility();
 			urlBuilder.RoutingEngine = new RoutingEngine();
 		}
 
@@ -302,7 +302,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			routeParameters.Add("controller","routecontroller");
 			routeParameters.Add("action","routeaction");
 
-			IRoutingEngine routingEngine = new MockRoutingEngine();
+			IRoutingEngine routingEngine = new StubRoutingEngine();
 			routingEngine.Add(new PatternRoute("default","<area>/<controller>/<action>"));//keep routing engine from being empty
 			urlBuilder.RoutingEngine = routingEngine;
 

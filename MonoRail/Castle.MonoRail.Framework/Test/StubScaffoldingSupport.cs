@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework.Test
 	/// <summary>
 	/// Represents a mock implementation of <see cref="IScaffoldingSupport"/> for unit test purposes.
 	/// </summary>
-	public class MockScaffoldingSupport : IScaffoldingSupport
+	public class StubScaffoldingSupport : IScaffoldingSupport
 	{
 		/// <summary>
 		/// Implementors should use this method to read information

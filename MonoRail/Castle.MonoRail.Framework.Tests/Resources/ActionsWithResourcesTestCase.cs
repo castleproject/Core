@@ -25,9 +25,9 @@ namespace Castle.MonoRail.Framework.Tests.Resources
 	public class ActionsWithResourcesTestCase
 	{
 		private MockRepository mockRepository = new MockRepository();
-		private MockEngineContext engineContext;
-		private ViewEngineManagerStub viewEngStub;
-		private MockServices services;
+		private StubEngineContext engineContext;
+		private StubViewEngineManager engStubViewEngineManager;
+		private StubMonoRailServices services;
 		private IResourceFactory resourceFactoryMock;
 
 		[SetUp]
@@ -35,13 +35,13 @@ namespace Castle.MonoRail.Framework.Tests.Resources
 		{
 			resourceFactoryMock = mockRepository.DynamicMock<IResourceFactory>();
 
-			MockRequest request = new MockRequest();
-			MockResponse response = new MockResponse();
-			services = new MockServices();
-			viewEngStub = new ViewEngineManagerStub();
-			services.ViewEngineManager = viewEngStub;
+			StubRequest request = new StubRequest();
+			StubResponse response = new StubResponse();
+			services = new StubMonoRailServices();
+			engStubViewEngineManager = new StubViewEngineManager();
+			services.ViewEngineManager = engStubViewEngineManager;
 			services.ResourceFactory = resourceFactoryMock;
-			engineContext = new MockEngineContext(request, response, services, null);
+			engineContext = new StubEngineContext(request, response, services, null);
 		}
 
 		[Test]

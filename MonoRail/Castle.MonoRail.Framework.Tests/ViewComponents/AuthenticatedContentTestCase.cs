@@ -27,17 +27,17 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 		private AuthenticatedContent authComponent;
 		private ViewEngineStub viewEngineStub;
 		private StringWriter writer;
-		private MockViewComponentContext componentContext;
-		private MockEngineContext engine;
+		private StubViewComponentContext componentContext;
+		private StubEngineContext engine;
 
 		[SetUp]
 		public void Init()
 		{
 			writer = new StringWriter();
 			viewEngineStub = new ViewEngineStub();
-			componentContext = new MockViewComponentContext("name", writer, viewEngineStub);
+			componentContext = new StubViewComponentContext("name", writer, viewEngineStub);
 			authComponent = new AuthenticatedContent();
-			engine = new MockEngineContext(null, null, null, null);
+			engine = new StubEngineContext(null, null, null, null);
 		}
 
 		[Test]
