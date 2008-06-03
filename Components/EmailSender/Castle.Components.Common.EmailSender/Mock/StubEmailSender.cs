@@ -17,9 +17,9 @@ namespace Castle.Components.Common.EmailSender.Mock
 	using System;
 
 
-	public class MockEmailSender : IEmailSender
+	public class StubEmailSender : IEmailSender
 	{
-		public MockEmailSender()
+		public StubEmailSender()
 		{
 		}
 

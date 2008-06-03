@@ -120,7 +120,7 @@
     <Compile Include="MessageAttachmentCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Mock\MockEmailSender.cs" />
+    <Compile Include="Mock\StubEmailSender.cs" />
     <Compile Include="Smtp\SmtpSender.cs" />
   </ItemGroup>
   <ItemGroup>
