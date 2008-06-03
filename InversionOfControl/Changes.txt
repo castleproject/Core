@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed IOC-126
+  "PoolableLifestyleManager creates pool in constructor" 
+
 - Fixed IOC-125
   "DefaultGenericHandler does not properly handle proxied generic components"
 

@@ -37,23 +37,38 @@ namespace Castle.MicroKernel.Lifestyle
 		public override void Init(IComponentActivator componentActivator, IKernel kernel, ComponentModel model)
 		{
 			base.Init(componentActivator, kernel, model);
-
-			pool = CreatePool(initialSize, maxSize);
 		}
 
 		public override object Resolve(CreationContext context)
 		{
+			if (pool == null)
+			{
+				lock (ComponentActivator)
+				{
+					if (pool == null)
+					{
+						pool = CreatePool(initialSize, maxSize);
+					}
+				}
+			}
+
 			return pool.Request(context);
 		}
 
 		public override void Release(object instance)
 		{
-			pool.Release(instance);
+			if (pool != null)
+			{
+				pool.Release(instance);
+			}
 		}
 
 		public override void Dispose()
 		{
-			pool.Dispose();
+			if (pool != null)
+			{
+				pool.Dispose();
+			}
 		}
 
 		protected IPool CreatePool(int initialSize, int maxSize)
