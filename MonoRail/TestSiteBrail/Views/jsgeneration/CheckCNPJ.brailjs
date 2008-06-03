@@ -1,5 +1,5 @@
 if  not isValid: 
-	## not valid CNPJ  
+	## not valid CNPJ   
 	
 	page.Call('alert', '"start"')
     page.Call('showError', '"invalid data"')
@@ -9,10 +9,9 @@ if  not isValid:
 else:
 
 	if exists:
-			##page.ReplaceHtml('divOperation', {"partial":"shared/cnpjDiv.brail"})
 			page.ReplaceHtml('divOperation', 'TODDDDDDDDDDDDDDDDDDDDDDDDDD AAAAAAAAAAAAAAAAAAAAA DDDDDDDDDDDDDDDDDDD AAAAAA')
 			page.Show('divOperation')
-			page['txtSenhaErro'].focus()
+			page['txtCNPJ'].focus()
 	end 
 
     page['lblcnpj'].style.color = '"#6784A0"'

@@ -44,6 +44,8 @@ namespace Castle.MonoRail.Views.Brail
 		/// <returns>value back to the template</returns>
 		public object QuackGet(string propName, object[] parameters)
 		{
+			if (propName == "")//using the indexer
+				return QuackInvoke("el", parameters);
 			return QuackInvoke(propName, parameters);
 		}
 

@@ -89,6 +89,36 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	        ProcessView("bugs/mr_378");
 	    }
 
+		[Test]
+		public void JS_Generation_1()
+		{
+			PropertyBag["isValid"] = true;
+			PropertyBag["exists"] = true;
+			string view = ProcessViewJS("jsgeneration/CheckCNPJ");
+			string expected = "try \n{\nElement.update(\"divOperation\",\"TODDDDDDDDDDDDDDDDDDDDDDDDDD AAAAAAAAAAAAAAAAAAAAA DDDDDDDDDDDDDDDDDDD AAAAAA\");\r\nElement.show(\"divOperation\");\r\n$('txtCNPJ').focus();\r\n$('lblcnpj').style.color = \"#6784A0\";\r\nElement.hide(\"errormsg\");\r\n}\ncatch(e)\n{\nalert('JS error ' + e.toString());\n}\r\n";
+			Assert.AreEqual(expected, view);
+		}
+
+		[Test]
+		public void JS_Generation_2()
+		{
+			PropertyBag["isValid"] = true;
+			PropertyBag["exists"] = false;
+			string view = ProcessViewJS("jsgeneration/CheckCNPJ");
+			string expected = "try \n{\n$('lblcnpj').style.color = \"#6784A0\";\r\nElement.hide(\"errormsg\");\r\n}\ncatch(e)\n{\nalert('JS error ' + e.toString());\n}\r\n";
+			Assert.AreEqual(expected, view);
+		}
+
+		[Test]
+		public void JS_Generation_3()
+		{
+			PropertyBag["isValid"] = false;
+			PropertyBag["exists"] = false;
+			string view = ProcessViewJS("jsgeneration/CheckCNPJ");
+			string expected = "try \n{\n$('lblcnpj').style.color = \"#FF0000\";\r\n}\ncatch(e)\n{\nalert('JS error ' + e.toString());\n}\r\n";
+			Assert.AreEqual(expected, view);
+		}
+
         public class Data
         {
             public string[] array = new string[] { "one", "two", "three" };

@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// <param name="codeGen">The code gen.</param>
 		/// <param name="elementGenerator">The element generator.</param>
 		/// <param name="extensions">The extensions.</param>
-		public BrailJSElementGenerator(IJSCodeGenerator codeGen, IJSElementGenerator elementGenerator, params object[] extensions) : 
+		public BrailJSElementGenerator(IJSCodeGenerator codeGen, IJSElementGenerator elementGenerator, params object[] extensions) :
 			base(codeGen, elementGenerator, extensions)
 		{
 		}
@@ -40,7 +40,7 @@ namespace Castle.MonoRail.Views.Brail
 		public object QuackSet(string name, object[] parameters, object value)
 		{
 			InternalGet(name); //get the current element and then set it
-			return InternalInvoke("set", parameters);
+			return InternalInvoke("set", new object[] { value });
 		}
 
 		public object QuackInvoke(string name, params object[] args)

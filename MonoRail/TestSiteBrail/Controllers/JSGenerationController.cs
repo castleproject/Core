@@ -25,7 +25,7 @@ namespace TestSiteBrail.Controllers
 			PropertyBag["exists"] = cnpj == "123456";
 		}
 
-		public void Default()
+		public void Index()
 		{
 			PropertyBag["Name"] = "hammett";
 			PropertyBag["list"] = new string[] { "a", "b" };
