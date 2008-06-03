@@ -154,28 +154,22 @@ namespace Castle.MonoRail.Views.Brail
 		}
 
 		/// <summary>
-		/// Returns a new Hashtable that has copied the entries from dict
-		/// and replaced values of IgnoreNull with the underlying target object.
+		/// Replace all the values in the Hashtable that are marked as 
+		/// replaced values of IgnoreNull with the underlying target object.
 		/// </summary>
 		/// <param name="dict"></param>
-		/// <returns>Hashtable</returns>
+		/// <returns>The original hashtable, with all the IgnoreNull values stripped to their targets</returns>
 		public static IDictionary ReplaceIgnoreNullsWithTargets(IDictionary dict)
 		{
-			Hashtable hash = new Hashtable(dict.Count);
-
-			foreach (DictionaryEntry de in dict)
+			Hashtable modificationSafeCopy = new Hashtable(dict);
+			foreach (DictionaryEntry de in modificationSafeCopy)
 			{
 				if (de.Value is IgnoreNull)
 				{
-					hash[de.Key] = ExtractTarget((IgnoreNull) de.Value);
-				}
-				else
-				{
-					hash[de.Key] = de.Value;
+					dict[de.Key] = ExtractTarget((IgnoreNull)de.Value);
 				}
 			}
-
-			return hash;
+			return dict;
 		}
 	}
 }
