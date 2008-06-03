@@ -86,6 +86,11 @@ namespace Castle.MonoRail.Views.Brail
 			get { return viewEngine.ViewRootDir; }
 		}
 
+		public abstract string ViewFileName
+		{ 
+			get;
+		}
+
 		/// <summary>
 		/// Gets the view engine.
 		/// </summary>

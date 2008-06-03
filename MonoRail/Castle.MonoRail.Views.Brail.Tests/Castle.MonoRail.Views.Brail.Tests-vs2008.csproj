@@ -109,6 +109,8 @@
     <None Include="Views\home\extensionMethods.brail" />
     <None Include="Views\home\index.brail" />
     <None Include="Views\home\resource.brail" />
+    <None Include="Views\layouts\secondary.brail" />
+    <None Include="Views\layouts\master.brail" />
     <None Include="Views\layouts\general.brail" />
     <None Include="Views\layouts\printable.brail" />
     <None Include="Views\layout\index.brail" />

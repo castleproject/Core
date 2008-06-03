@@ -26,7 +26,12 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
         {
         }
 
-        public override void Run()
+    	public override string ViewFileName
+    	{
+			get { return "dummy"; }
+    	}
+
+    	public override void Run()
         {
             this.OutputStream.Write("dummy");
         }

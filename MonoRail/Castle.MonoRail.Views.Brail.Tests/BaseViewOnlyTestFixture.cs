@@ -31,11 +31,11 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
 	public abstract class BaseViewOnlyTestFixture
 	{
-		private readonly string viewSourcePath;
+		protected string viewSourcePath;
 		protected ControllerContext ControllerContext;
 		protected HelperDictionary Helpers;
 		private string lastOutput;
-		protected string Layout;
+		protected string[] Layouts;
 		protected MockEngineContext MockEngineContext;
 		protected Hashtable PropertyBag;
 		protected string Area = null;
@@ -43,6 +43,11 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		protected string Action = "test_action";
 		protected DefaultViewComponentFactory ViewComponentFactory;
 		protected BooViewEngine BooViewEngine;
+
+		protected string Layout
+		{
+			set { Layouts = new string[] { value }; }
+		}
 
 		public BaseViewOnlyTestFixture()
 			: this(ViewLocations.TestSiteBrail)
@@ -116,7 +121,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
 		protected virtual void BeforEachTest()
 		{
-			
+
 		}
 
 
@@ -128,67 +133,64 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		protected string ProcessView(string templatePath)
 		{
 			StringWriter sw = new StringWriter();
-			if (string.IsNullOrEmpty(Layout) == false)
-				ControllerContext.LayoutNames = new string[] { Layout, };
+			ControllerContext.LayoutNames = Layouts;
 			MockEngineContext.CurrentControllerContext = ControllerContext;
 			BooViewEngine.Process(templatePath, sw, MockEngineContext, null, ControllerContext);
 			lastOutput = sw.ToString();
 			return lastOutput;
 		}
 
-        protected string ProcessViewJS(string templatePath)
-        {
-            StringWriter sw = new StringWriter();
-            if (string.IsNullOrEmpty(Layout) == false)
-                ControllerContext.LayoutNames = new string[] { Layout, };
-            MockEngineContext.CurrentControllerContext = ControllerContext;
-        	DefaultViewEngineManager engineManager = new DefaultViewEngineManager();
+		protected string ProcessViewJS(string templatePath)
+		{
+			StringWriter sw = new StringWriter();
+			ControllerContext.LayoutNames = Layouts;
+			MockEngineContext.CurrentControllerContext = ControllerContext;
+			DefaultViewEngineManager engineManager = new DefaultViewEngineManager();
 			engineManager.RegisterEngineForView(BooViewEngine);
 			engineManager.RegisterEngineForExtesionLookup((BooViewEngine));
-        	JSCodeGenerator codeGenerator =
-                  new JSCodeGenerator(MockEngineContext.Server, 
+			JSCodeGenerator codeGenerator =
+				  new JSCodeGenerator(MockEngineContext.Server,
 					  engineManager,
-                      MockEngineContext, null, ControllerContext, MockEngineContext.Services.UrlBuilder);
+					  MockEngineContext, null, ControllerContext, MockEngineContext.Services.UrlBuilder);
 
-            IJSGenerator jsGen = new PrototypeGenerator(codeGenerator);
+			IJSGenerator jsGen = new PrototypeGenerator(codeGenerator);
 
-            codeGenerator.JSGenerator = jsGen;
+			codeGenerator.JSGenerator = jsGen;
 
-            JSCodeGeneratorInfo info = new JSCodeGeneratorInfo(codeGenerator, jsGen,
+			JSCodeGeneratorInfo info = new JSCodeGeneratorInfo(codeGenerator, jsGen,
 				new object[] { new ScriptaculousExtension(codeGenerator) },
 				new object[] { new ScriptaculousExtension(codeGenerator) });
 
-            BooViewEngine.GenerateJS(templatePath, sw, info,MockEngineContext, null, ControllerContext);
-            lastOutput = sw.ToString();
-            return lastOutput;
-        }
+			BooViewEngine.GenerateJS(templatePath, sw, info, MockEngineContext, null, ControllerContext);
+			lastOutput = sw.ToString();
+			return lastOutput;
+		}
 
-        protected void AddResource(string name, string resourceName, Assembly asm)
-        {
-            IResourceFactory resourceFactory = new DefaultResourceFactory();
-            ResourceDescriptor descriptor = new ResourceDescriptor(
-                null,
-                name,
-                resourceName,
-                null,
-                null);
-            IResource resource = resourceFactory.Create(
-                descriptor,
-                asm);
-            ControllerContext.Resources.Add(name, resource);
-        }
+		protected void AddResource(string name, string resourceName, Assembly asm)
+		{
+			IResourceFactory resourceFactory = new DefaultResourceFactory();
+			ResourceDescriptor descriptor = new ResourceDescriptor(
+				null,
+				name,
+				resourceName,
+				null,
+				null);
+			IResource resource = resourceFactory.Create(
+				descriptor,
+				asm);
+			ControllerContext.Resources.Add(name, resource);
+		}
 
-        protected string RenderStaticWithLayout(string staticText)
-        {
-            if (string.IsNullOrEmpty(Layout) == false)
-                ControllerContext.LayoutNames = new string[] { Layout, };
-            MockEngineContext.CurrentControllerContext = ControllerContext;
-            
-            BooViewEngine.RenderStaticWithinLayout(staticText, MockEngineContext, null, ControllerContext);
-            lastOutput = ((StringWriter)MockEngineContext.Response.Output)
-                .GetStringBuilder().ToString();
-            return lastOutput;
-        }
+		protected string RenderStaticWithLayout(string staticText)
+		{
+			ControllerContext.LayoutNames = Layouts;
+			MockEngineContext.CurrentControllerContext = ControllerContext;
+
+			BooViewEngine.RenderStaticWithinLayout(staticText, MockEngineContext, null, ControllerContext);
+			lastOutput = ((StringWriter)MockEngineContext.Response.Output)
+				.GetStringBuilder().ToString();
+			return lastOutput;
+		}
 
 		public void AssertReplyEqualTo(string expected)
 		{

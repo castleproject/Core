@@ -55,6 +55,7 @@ namespace Castle.MonoRail.Views.Brail
 
 				AddConstructor(macro);
 				ScriptDirectoryProperty(macro, module);
+				ViewFileNameProperty(macro, module);
 				AddRunMethod(macro, module);
 
 				foreach(TypeMember member in module.Members)
@@ -84,6 +85,20 @@ namespace Castle.MonoRail.Views.Brail
 				new ReturnStatement(
 					new StringLiteralExpression(
 						Path.GetDirectoryName(module.LexicalInfo.FileName))));
+
+			macro.Members.Add(p);
+		}
+
+		// get the original file name for this script and create a property
+		// that return this value.
+		private void ViewFileNameProperty(ClassDefinition macro, Module module)
+		{
+			Property p = new Property("ViewFileName");
+			p.Modifiers = TypeMemberModifiers.Override;
+			p.Getter = new Method("getViewFileName");
+			p.Getter.Body.Add(
+				new ReturnStatement(
+					new StringLiteralExpression(module.LexicalInfo.FileName)));
 
 			macro.Members.Add(p);
 		}

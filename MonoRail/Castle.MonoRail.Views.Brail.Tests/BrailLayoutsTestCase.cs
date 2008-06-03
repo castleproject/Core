@@ -15,11 +15,11 @@
 namespace Castle.MonoRail.Views.Brail.Tests
 {
 	using System.Collections;
-	
+
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class BrailLayoutsTestCase : BaseViewOnlyTestFixture
+	public class BrailLayoutsTestCase_TestSite : BaseViewOnlyTestFixture
 	{
 		[Test]
 		public void CanUseLayoutThatIsNotInLayoutsFolder()
@@ -27,6 +27,30 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			Layout = "/layoutable/notInLayouts";
 			ProcessView_StripRailsExtension("layoutable/CustomLayoutLocation.rails");
 			AssertReplyEqualTo("not in layouts");
+		}
+	}
+
+	[TestFixture]
+	public class BrailLayoutsTestCase_TestViews : BaseViewOnlyTestFixture
+	{
+		public BrailLayoutsTestCase_TestViews()
+			: base(ViewLocations.BrailTestsView)
+		{
+
+		}
+
+		[Test]
+		public void CanUseNestedViews()
+		{
+			Layouts = new string[] { "/layouts/master", "/layouts/secondary" };
+
+			string view = ProcessView("home/index");
+			const string expected = @"Master Layout Header
+Secondary Layout Header
+Brail is wonderful
+Secondary Layout Footer
+Master Layout Footer";
+			Assert.AreEqual(expected, view);
 		}
 	}
 }
