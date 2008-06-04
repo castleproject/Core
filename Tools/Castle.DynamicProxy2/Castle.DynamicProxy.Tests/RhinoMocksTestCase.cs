@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Tests
 			object o = proxy.Call<string>(1, "");
 			Assert.AreEqual(3, o);
 		}
-#if DOTNET35
+
 		[Test]
 		public void CanProxyMethodWithModOpt()
 		{
@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Tests
 				(IHaveMethodWithModOpts)generator.CreateInterfaceProxyWithoutTarget(typeof(IHaveMethodWithModOpts),interceptor);
 			proxy.StartLiveOnSlot(4);
 		}
-#endif
+
 		[Test]
 		public void GenericMethodReturningGenericArray()
 		{
