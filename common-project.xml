@@ -212,7 +212,7 @@
 	>
 		<property name="assemblyinfo.cs" value="${path::combine(src.dir,'AssemblyInfo.cs')}" />
 		<attrib file="${assemblyinfo.cs}" readonly="false" />
-		<asminfo output="${assemblyinfo.cs}" language="CSharp">
+		<asminfo output="${assemblyinfo.cs}" language="CSharp" failonerror="false">
 			<imports>
 				<import namespace="System" />
 				<import namespace="System.Reflection" />
