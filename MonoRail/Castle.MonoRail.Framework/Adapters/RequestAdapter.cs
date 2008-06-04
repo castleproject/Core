@@ -78,6 +78,15 @@ namespace Castle.MonoRail.Framework.Adapters
 		}
 
 		/// <summary>
+		/// Gets a string array of client-supported MIME accept types.
+		/// </summary>
+		/// <value>A string array of client-supported MIME accept types.</value>
+		public string[] AcceptTypes
+		{
+			get { return request.AcceptTypes; }
+		}
+
+		/// <summary>
 		/// Gets the referring URL.
 		/// </summary>
 		/// <value></value>

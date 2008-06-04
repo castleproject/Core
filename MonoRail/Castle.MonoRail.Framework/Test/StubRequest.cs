@@ -100,6 +100,20 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
+		/// Gets a string array of client-supported MIME accept types.
+		/// </summary>
+		/// <value>A string array of client-supported MIME accept types.</value>
+		public string[] AcceptTypes
+		{
+			get 
+			{ 
+				return AcceptHeader != null ? 
+					AcceptHeader.Split(new char[] { ',' }) : 
+					new string[0]; 
+			}
+		}
+
+		/// <summary>
 		/// Gets the referring URL.
 		/// </summary>
 		/// <value></value>

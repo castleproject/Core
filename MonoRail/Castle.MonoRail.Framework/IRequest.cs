@@ -52,6 +52,12 @@ namespace Castle.MonoRail.Framework
 		string AcceptHeader { get; }
 
 		/// <summary>
+		/// Gets a string array of client-supported MIME accept types.
+		/// </summary>
+		/// <value>A string array of client-supported MIME accept types.</value>
+		string[] AcceptTypes { get; }
+
+		/// <summary>
 		/// Gets the request type (GET, POST, etc)
 		/// </summary>
 		[Obsolete("Use the property HttpMethod instead")]
