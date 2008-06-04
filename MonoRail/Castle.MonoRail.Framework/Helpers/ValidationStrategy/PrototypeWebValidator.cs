@@ -210,7 +210,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				}
 				else if (inputType == InputElementType.Checkbox)
 				{
-					AddClass("validate-checked");
+					AddClass("required");
 				}
 				AddTitle(violationMessage);
 			}
