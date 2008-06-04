@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Runtime.CompilerServices;
+using RhinoMocksCPPInterfaces;
 
 [assembly :
 	InternalsVisibleTo(
@@ -56,6 +57,25 @@ namespace Castle.DynamicProxy.Tests
 			object o = proxy.Call<string>(1, "");
 			Assert.AreEqual(3, o);
 		}
+#if DOTNET35
+		[Test]
+		public void CanProxyMethodWithModOpt()
+		{
+			SkipCallingMethodInterceptor interceptor =
+				new SkipCallingMethodInterceptor();
+			IHaveMethodWithModOpts proxy =
+				(IHaveMethodWithModOpts)generator.CreateInterfaceProxyWithoutTarget(typeof(IHaveMethodWithModOpts),interceptor);
+			proxy.StartLiveOnSlot(4);
+		}
+#endif
+		[Test]
+		public void GenericMethodReturningGenericArray()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(
+				typeof(IStore1), 
+				new SkipCallingMethodInterceptor());
+		}
+
 
 		[Test]
 		public void UsingEvents_Interface()
@@ -358,5 +378,10 @@ namespace Castle.DynamicProxy.Tests
             return new IntPtr(3);
         }
     }
+
+	public interface IStore1
+	{
+		R[] TestMethod<R>();
+	}
 #endif
 }

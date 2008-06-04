@@ -71,14 +71,24 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// </summary>
 		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod, AbstractTypeEmitter parentEmitter)
 		{
-			GenericUtil.PopulateGenericArguments(parentEmitter, name2GenericType);
+			GenericUtil.PopulateGenericArguments(parentEmitter, name2GenericType); 
+			Type returnType = GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType);
+			ParameterInfo[] baseMethodParameters = baseMethod.GetParameters();
+			Type[] parameters = GenericUtil.ExtractParametersTypes
+		   (baseMethodParameters, name2GenericType);
+
+			List<Type[]> paramModReq = new List<Type[]>();
+			List<Type[]> paramModOpt = new List<Type[]>();
+			foreach (ParameterInfo parameterInfo in baseMethodParameters)
+			{
+				paramModOpt.Add(parameterInfo.GetOptionalCustomModifiers());
+				paramModReq.Add(parameterInfo.GetRequiredCustomModifiers());
+			} 
 
 			Type[] genericArguments = baseMethod.GetGenericArguments();
 
 			genericTypeParams = GenericUtil.DefineGenericArguments(genericArguments, builder, name2GenericType);
 			// Bind parameter types
-
-			ParameterInfo[] baseMethodParameters = baseMethod.GetParameters();
 
 			SetParameters(GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType));
 
@@ -86,6 +96,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			// definition for the method
 
 			SetReturnType(GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType));
+
+			builder.SetSignature(
+				 returnType,
+				 baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
+				 baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
+				 parameters,
+				 paramModReq.ToArray(),
+				 paramModOpt.ToArray());
 
 			DefineParameters(baseMethodParameters);
 		}

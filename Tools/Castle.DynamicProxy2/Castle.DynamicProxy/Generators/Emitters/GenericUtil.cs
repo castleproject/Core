@@ -175,8 +175,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 				if (underlyingType.IsGenericParameter)
 				{
-					GenericTypeParameterBuilder genericType = name2GenericType[underlyingType.Name];
-
+					GenericTypeParameterBuilder genericType;
+					if (name2GenericType.TryGetValue(underlyingType.Name, out genericType) == false)
+						return paramType;
+ 
 					if (rank == 1)
 					{
 						return genericType.MakeArrayType();
@@ -201,7 +203,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			if (paramType.IsGenericParameter)
 			{
-				return name2GenericType[paramType.Name];
+				GenericTypeParameterBuilder value;
+				if (name2GenericType.TryGetValue(paramType.Name, out value))
+					return value;
 			}
 
 			return paramType;
