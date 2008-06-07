@@ -346,6 +346,14 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Immediately renders the specified component view using the writer.
+		/// </summary>
+		protected void RenderView(String name, TextWriter writer)
+		{
+			context.RenderView(Path.Combine(GetBaseViewPath(name), name), writer);
+		}
+
+		/// <summary>
 		/// Specifies the shared view to be processed after the component has finished its
 		/// processing. (A partial view shared 
 		/// by others views and usually in the root folder

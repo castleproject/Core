@@ -40,7 +40,8 @@ namespace Castle.MonoRail.Framework
 		bool HasSection(String sectionName);
 
 		/// <summary>
-		/// Renders the view specified to the writer.
+		/// Renders the view specified to the writer. This is any view, 
+		/// not tied to the components view. 
 		/// </summary>
 		/// <param name="name">The view template name</param>
 		/// <param name="writer">A writer to output</param>
