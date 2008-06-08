@@ -162,6 +162,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			contextAdapter.TextWriter = output;
 
 			const string ViewComponentContextKey = "viewcomponent";
+			object previousComp = context[ViewComponentContextKey];
 
 			try
 			{
@@ -189,7 +190,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			}
 			finally
 			{
-				context.Remove(ViewComponentContextKey);
+				if (previousComp != null)
+				{
+					context[ViewComponentContextKey] = previousComp;
+				}
+				else
+				{
+					context.Remove(ViewComponentContextKey);
+				}
 			}
 
 			return true;
