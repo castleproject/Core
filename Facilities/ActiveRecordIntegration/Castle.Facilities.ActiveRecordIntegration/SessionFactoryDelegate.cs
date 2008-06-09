@@ -149,29 +149,16 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
 
-		IDictionary<string, IClassMetadata> ISessionFactory.GetAllClassMetadata()
+		/// <summary>
+		/// Get all <see cref="T:NHibernate.Metadata.IClassMetadata"/> as a <see cref="T:System.Collections.IDictionary"/> from entityname <see langword="string"/>
+		/// to metadata object
+		/// </summary>
+		/// <returns>
+		/// A dictionary from <see langword="string"/> an entity name to <see cref="T:NHibernate.Metadata.IClassMetadata"/>
+		/// </returns>
+		public IDictionary<string, IClassMetadata> GetAllClassMetadata()
 		{
 			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Get all <c>ClassMetadata</c> as a <c>IDictionary</c> from <c>Type</c>
-		/// to metadata object
-		/// </summary>
-		/// <returns></returns>
-		public IDictionary GetAllClassMetadata()
-		{
-			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
-		}
-
-		/// <summary>
-		/// Get all <c>CollectionMetadata</c> as a <c>IDictionary</c> from role name
-		/// to metadata object
-		/// </summary>
-		/// <returns></returns>
-		public IDictionary GetAllCollectionMetadata()
-		{
-			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
 
 		/// <summary>
@@ -387,7 +374,12 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 		}
 
-		IDictionary<string, ICollectionMetadata> ISessionFactory.GetAllCollectionMetadata()
+		/// <summary>
+		/// Get all <c>CollectionMetadata</c> as a <c>IDictionary</c> from role name
+		/// to metadata object
+		/// </summary>
+		/// <returns></returns>
+		public IDictionary<string, ICollectionMetadata> GetAllCollectionMetadata()
 		{
 			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
