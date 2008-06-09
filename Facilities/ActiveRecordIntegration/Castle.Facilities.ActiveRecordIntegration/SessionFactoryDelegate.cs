@@ -124,6 +124,21 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
 
+		#region ISessionFactory Members
+
+		/// <summary>
+		/// Get the <see cref="T:NHibernate.Metadata.IClassMetadata"/> associated with the given entity name
+		/// </summary>
+		/// <param name="entityName">the given entity name.</param>
+		/// <returns>
+		/// The class metadata or <see langword="null"/> if not found.
+		/// </returns>
+		/// <seealso cref="T:NHibernate.Metadata.IClassMetadata"/>
+		public IClassMetadata GetClassMetadata(string entityName)
+		{
+			throw new NotImplementedException();
+		}
+
 		/// <summary>
 		/// Get the <c>CollectionMetadata</c> associated with the named collection role
 		/// </summary>
@@ -132,6 +147,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public ICollectionMetadata GetCollectionMetadata(string roleName)
 		{
 			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
+		}
+
+		IDictionary<string, IClassMetadata> ISessionFactory.GetAllClassMetadata()
+		{
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -275,7 +295,19 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		/// <param name="entityName"></param>
 		public void EvictEntity(string entityName)
 		{
-			throw new NotImplementedException();
+			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
+		}
+
+		/// <summary>
+		/// Evict an entry from the second-level  cache. This method occurs outside
+		/// of any transaction; it performs an immediate "hard" remove, so does not respect
+		/// any transaction isolation semantics of the usage strategy. Use with care.
+		/// </summary>
+		/// <param name="entityName"></param>
+		/// <param name="id"></param>
+		public void EvictEntity(string entityName, object id)
+		{
+			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
 
 		/// <summary>
@@ -284,7 +316,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		/// <returns></returns>
 		public IStatelessSession OpenStatelessSession()
 		{
-			throw new NotImplementedException();
+			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
 
 		/// <summary>
@@ -294,7 +326,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		/// <returns></returns>
 		public IStatelessSession OpenStatelessSession(IDbConnection connection)
 		{
-			throw new NotImplementedException();
+			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
 
 		/// <summary>
@@ -304,7 +336,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		/// <return>The set of filter names.</return>
 		public ICollection<string> DefinedFilterNames
 		{
-			get { throw new NotImplementedException(); }
+			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
 		}
 
 		/// <summary>
@@ -313,7 +345,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		/// <value>The settings.</value>
 		public Settings Settings
 		{
-			get { throw new NotImplementedException(); }
+			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
 		}
 
 		/// <summary>
@@ -325,7 +357,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		/// <value></value>
 		public IDictionary Items
 		{
-			get { throw new NotImplementedException(); }
+			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
 		}
 
 		/// <summary>
@@ -334,14 +366,30 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		/// <value></value>
 		public IStatistics Statistics
 		{
-			get { throw new NotImplementedException(); }
+			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
 		}
+
+		/// <summary>
+		/// Was this <see cref="T:NHibernate.ISessionFactory"/> already closed?
+		/// </summary>
+		/// <value></value>
+		public bool IsClosed
+		{
+			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
 		public void Dispose()
 		{
+		}
+
+		IDictionary<string, ICollectionMetadata> ISessionFactory.GetAllCollectionMetadata()
+		{
+			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
 	}
 }
