@@ -194,5 +194,14 @@ namespace Castle.MonoRail.Framework.Test
 		{
 			partialRendered.Add(contents);
 		}
+
+        /// <summary>
+        /// Evaluates whether the specified template exists.
+        /// </summary>
+        /// <returns><c>true</c> if it exists</returns>
+        public override bool HasTemplate(string templateName)
+        {
+            return true;
+        }
 	}
 }
