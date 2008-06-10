@@ -95,9 +95,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-3.5\debug\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.DynamicProxy">
-      <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\..\..\build\net-3.5\debug\Castle.DynamicProxy.dll</HintPath>
+    <Reference Include="Castle.DynamicProxy2, Version=2.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-3.5\debug\Castle.DynamicProxy2.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>

@@ -218,7 +218,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			Kernel.AddComponentInstance(
 				componentName,
 				typeof(NHibernate.ISessionFactory),
-				new SessionFactoryDelegate((ISessionFactoryHolder) sender, rootType));
+				SessionFactoryDelegate.Create((ISessionFactoryHolder) sender, rootType));
 		}
 	}
 
