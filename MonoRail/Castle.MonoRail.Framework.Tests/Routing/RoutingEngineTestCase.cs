@@ -29,6 +29,20 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		}
 
 		[Test]
+		public void FindMatch_WillReturnValidResultForRootPath()
+		{
+			engine.Add(new PatternRoute("/")
+			           	.DefaultForController().Is("home")
+			           	.DefaultForAction().Is("index"));
+			engine.Add(new PatternRoute("/<controller>/<action>"));
+
+			RouteMatch match = engine.FindMatch("/", CreateGetContext());
+			Assert.IsNotNull(match);
+			Assert.AreEqual("home", match.Parameters["controller"]);
+			Assert.AreEqual("index", match.Parameters["action"]);
+		}
+
+		[Test]
 		public void FindMatch_SelectsTheMatchWithMostPoints()
 		{
 			engine.Add(new PatternRoute("/<controller>/<action>/[id]").

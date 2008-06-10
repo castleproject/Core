@@ -51,7 +51,8 @@ namespace Castle.MonoRail.Framework.Routing
 		/// </summary>
 		/// <param name="name">The route name.</param>
 		/// <param name="pattern">The pattern.</param>
-		public PatternRoute(string name, string pattern) : this(pattern)
+		public PatternRoute(string name, string pattern)
+			: this(pattern)
 		{
 			this.name = name;
 		}
@@ -78,13 +79,13 @@ namespace Castle.MonoRail.Framework.Routing
 			// int namedParamsToCheck = 0;
 
 			// checks whether we have a named node for every parameter
-			foreach(string key in parameters.Keys)
+			foreach (string key in parameters.Keys)
 			{
 				object param = parameters[key];
 				string val = param == null ? null : param.ToString();
 
-				if (string.IsNullOrEmpty(val) || 
-					key.Equals("controller", StringComparison.OrdinalIgnoreCase) || 
+				if (string.IsNullOrEmpty(val) ||
+					key.Equals("controller", StringComparison.OrdinalIgnoreCase) ||
 					key.Equals("action", StringComparison.OrdinalIgnoreCase))
 				{
 					continue;
@@ -96,7 +97,7 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 			}
 
-			foreach(DefaultNode node in nodes)
+			foreach (DefaultNode node in nodes)
 			{
 				AppendSlashOrDot(text, node);
 
@@ -129,7 +130,7 @@ namespace Castle.MonoRail.Framework.Routing
 							return null;
 						}
 
-						if (node.optional && 
+						if (node.optional &&
 							StringComparer.InvariantCultureIgnoreCase.Compare(node.DefaultVal, value.ToString()) == 0)
 						{
 							break; // end as there can't be more required nodes after an optional one
@@ -141,7 +142,7 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 
 			// Validate that default parameters match parameters passed into to create url.
-			foreach(KeyValuePair<string, string> defaultParameter in defaults)
+			foreach (KeyValuePair<string, string> defaultParameter in defaults)
 			{
 				// Skip parameters we already checked.
 				if (checkedParameters.Contains(defaultParameter.Key))
@@ -152,7 +153,7 @@ namespace Castle.MonoRail.Framework.Routing
 				object value = parameters[defaultParameter.Key];
 				string valAsString = value != null ? value.ToString() : null;
 				if (!string.IsNullOrEmpty(valAsString) &&
-				    !defaultParameter.Value.Equals(valAsString, StringComparison.OrdinalIgnoreCase))
+					!defaultParameter.Value.Equals(valAsString, StringComparison.OrdinalIgnoreCase))
 				{
 					return null;
 				}
@@ -176,23 +177,13 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		public int Matches(string url, IRouteContext context, RouteMatch match)
 		{
-			string[] parts = url.Split(new char[] {'/', '.'}, StringSplitOptions.RemoveEmptyEntries);
-			int index = 0;
+			string[] parts = url.Split(new char[] { '/', '.' }, StringSplitOptions.RemoveEmptyEntries);
 			int points = 0;
 
-			foreach(DefaultNode node in nodes)
-			{
-				string part = index < parts.Length ? parts[index] : null;
+			if (TryMatchPathPoints(url, parts, match, ref points) == false)
+				return 0;
 
-				if (!node.Matches(part, match, ref points))
-				{
-					return 0;
-				}
-
-				index++;
-			}
-
-			foreach(KeyValuePair<string, string> pair in defaults)
+			foreach (KeyValuePair<string, string> pair in defaults)
 			{
 				if (!match.Parameters.ContainsKey(pair.Key))
 				{
@@ -203,19 +194,43 @@ namespace Castle.MonoRail.Framework.Routing
 			return points;
 		}
 
+		private bool TryMatchPathPoints(string url, string[] parts, RouteMatch match, ref int points)
+		{
+			int index = 0;
+			bool isRootPatternAndRootUrl = url == "/" && pattern == "/";
+			if (isRootPatternAndRootUrl)
+			{
+				points = 2;
+				return true;
+			}
+
+			foreach (DefaultNode node in nodes)
+			{
+				string part = index < parts.Length ? parts[index] : null;
+
+				if (!node.Matches(part, match, ref points))
+				{
+					return false;
+				}
+
+				index++;
+			}
+			return true;
+		}
+
 		private void CreatePatternNodes()
 		{
-			string[] parts = pattern.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
+			string[] parts = pattern.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-			foreach(string part in parts)
+			foreach (string part in parts)
 			{
-				string[] subparts = part.Split(new char[] {'.'}, 2, StringSplitOptions.RemoveEmptyEntries);
+				string[] subparts = part.Split(new char[] { '.' }, 2, StringSplitOptions.RemoveEmptyEntries);
 
 				if (subparts.Length == 2)
 				{
 					bool afterDot = false;
 
-					foreach(string subpart in subparts)
+					foreach (string subpart in subparts)
 					{
 						if (subpart.Contains("["))
 						{
@@ -334,12 +349,12 @@ namespace Castle.MonoRail.Framework.Routing
 			{
 				this.optional = optional;
 				this.afterDot = afterDot;
-				int indexStart = part.IndexOfAny(new char[] {'<', '['});
+				int indexStart = part.IndexOfAny(new char[] { '<', '[' });
 				int indexEndStart = -1;
 
 				if (indexStart != -1)
 				{
-					indexEndStart = part.IndexOfAny(new char[] {'>', ']'}, indexStart);
+					indexEndStart = part.IndexOfAny(new char[] { '>', ']' }, indexStart);
 					name = part.Substring(indexStart + 1, indexEndStart - indexStart - 1);
 				}
 
@@ -393,7 +408,7 @@ namespace Castle.MonoRail.Framework.Routing
 				{
 					StringBuilder text = new StringBuilder();
 
-					foreach(string token in acceptedTokens)
+					foreach (string token in acceptedTokens)
 					{
 						if (text.Length != 0)
 						{
@@ -484,8 +499,8 @@ namespace Castle.MonoRail.Framework.Routing
 				set
 				{
 					AcceptsRegex("[A-Fa-f0-9]{32}|" +
-					             "({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?|" +
-					             "({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})");
+								 "({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?|" +
+								 "({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})");
 				}
 			}
 
@@ -705,7 +720,7 @@ namespace Castle.MonoRail.Framework.Routing
 
 			StringBuilder builder = new StringBuilder();
 
-			foreach(char c in content)
+			foreach (char c in content)
 			{
 				if (char.IsLetter(c))
 				{
