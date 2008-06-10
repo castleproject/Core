@@ -187,9 +187,9 @@
     <None Include="Views\usingcomponents\dynamicComponents.brail" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Boo.Lang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+    <Reference Include="Boo.Lang, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\debug\Boo.Lang.dll</HintPath>
+      <HintPath>..\..\SharedLibs\net\2.0\Boo.Lang.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
