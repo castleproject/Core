@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.Web;
+	using System.Text;
 
 	/// <summary>
 	/// Represents the response data and operations
@@ -49,7 +50,12 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sets the Cache-Control HTTP header to Public or Private.
 		/// </summary>
-		string CacheControlHeader { get; set; } 
+		string CacheControlHeader { get; set; }
+
+		/// <summary>
+		/// Gets or sets the HTTP character set of the output stream.
+		/// </summary>
+		Encoding ContentEncoding { get; set; }
 
 		/// <summary>
 		/// Gets or sets the HTTP character set of the output stream.

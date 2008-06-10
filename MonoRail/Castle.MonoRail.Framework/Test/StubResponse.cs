@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Test
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
+	using System.Text;
 	using System.IO;
 	using System.Web;
 	using Internal;
@@ -33,6 +34,7 @@ namespace Castle.MonoRail.Framework.Test
 		private string statusDescription = "OK";
 		private string contentType = "text/html";
 		private string cacheControlHeader;
+		private Encoding contentEncoding = Encoding.GetEncoding("ISO-8859-1");
 		private string charset = "ISO-8859-1";
 		private string redirectedTo;
 		private bool wasRedirected = false;
@@ -311,6 +313,16 @@ namespace Castle.MonoRail.Framework.Test
 		{
 			get { return cacheControlHeader; }
 			set { cacheControlHeader = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the HTTP character set of the output stream.
+		/// </summary>
+		/// <value></value>
+		public override Encoding ContentEncoding
+		{
+			get { return contentEncoding; }
+			set { contentEncoding = value; }
 		}
 
 		/// <summary>

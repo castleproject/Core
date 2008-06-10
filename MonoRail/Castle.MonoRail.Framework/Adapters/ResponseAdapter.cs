@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Adapters
 {
 	using System;
+	using System.Text;
 	using System.IO;
 	using System.Web;
 	using Castle.MonoRail.Framework;
@@ -67,6 +68,15 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			get { return response.CacheControl; }
 			set { response.CacheControl = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the HTTP character set of the output stream.
+		/// </summary>
+		public override Encoding ContentEncoding
+		{
+			get { return response.ContentEncoding; }
+			set { response.ContentEncoding = value; }
 		}
 
 		/// <summary>

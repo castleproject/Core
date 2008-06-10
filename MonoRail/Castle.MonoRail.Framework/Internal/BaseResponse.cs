@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Internal
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Text;
 	using System.IO;
 	using System.Web;
 	using Core;
@@ -90,6 +91,12 @@ namespace Castle.MonoRail.Framework.Internal
 		/// </summary>
 		/// <value></value>
 		public abstract string CacheControlHeader { get; set; }
+
+		/// <summary>
+		/// Gets or sets the HTTP character set of the output stream.
+		/// </summary>
+		/// <value></value>
+		public abstract Encoding ContentEncoding { get; set; }
 
 		/// <summary>
 		/// Gets or sets the HTTP character set of the output stream.
