@@ -20,12 +20,15 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 	[TestFixture]
 	public class PatternRouteMatchTestCase : BaseRuleTestFixture
 	{
-		[Test, Ignore("Should pass!")]
+		[Test]
 		public void ShouldMatchSimplesSlash()
 		{
 			PatternRoute route = new PatternRoute("/");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(8, route.Matches("/", CreateGetContext(), match)); 
+			Assert.AreEqual(1, route.Matches("/", CreateGetContext(), match));
+			Assert.AreEqual(1, route.Matches("", CreateGetContext(), match));
+			Assert.AreEqual(0, route.Matches("some", CreateGetContext(), match));
+			Assert.AreEqual(0, route.Matches("/some", CreateGetContext(), match));
 		}
 
 		[Test]

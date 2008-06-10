@@ -51,8 +51,7 @@ namespace Castle.MonoRail.Framework.Routing
 		/// </summary>
 		/// <param name="name">The route name.</param>
 		/// <param name="pattern">The pattern.</param>
-		public PatternRoute(string name, string pattern)
-			: this(pattern)
+		public PatternRoute(string name, string pattern) : this(pattern)
 		{
 			this.name = name;
 		}
@@ -97,7 +96,7 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 			}
 
-			foreach (DefaultNode node in nodes)
+			foreach(UrlPartSubRule node in nodes)
 			{
 				AppendSlashOrDot(text, node);
 
@@ -142,7 +141,7 @@ namespace Castle.MonoRail.Framework.Routing
 			}
 
 			// Validate that default parameters match parameters passed into to create url.
-			foreach (KeyValuePair<string, string> defaultParameter in defaults)
+			foreach(KeyValuePair<string, string> defaultParameter in defaults)
 			{
 				// Skip parameters we already checked.
 				if (checkedParameters.Contains(defaultParameter.Key))
@@ -179,80 +178,78 @@ namespace Castle.MonoRail.Framework.Routing
 		{
 			string[] parts = url.Split(new char[] { '/', '.' }, StringSplitOptions.RemoveEmptyEntries);
 			int points = 0;
+			int index = 0;
 
-			if (TryMatchPathPoints(url, parts, match, ref points) == false)
-				return 0;
-
-			foreach (KeyValuePair<string, string> pair in defaults)
+			foreach(UrlPartSubRule node in nodes)
 			{
-				if (!match.Parameters.ContainsKey(pair.Key))
+				string part = index < parts.Length ? parts[index] : null;
+
+				if (!node.Matches(part, match, ref points))
 				{
-					match.Parameters.Add(pair.Key, pair.Value);
+					points = 0;
+					break;
+				}
+
+				index++;
+			}
+
+			if (points != 0)
+			{
+				// Fills parameters set on the route that cannot be fulfilled by the url
+				foreach (KeyValuePair<string, string> pair in defaults)
+				{
+					if (!match.Parameters.ContainsKey(pair.Key))
+					{
+						match.Parameters.Add(pair.Key, pair.Value);
+					}
 				}
 			}
 
 			return points;
 		}
 
-		private bool TryMatchPathPoints(string url, string[] parts, RouteMatch match, ref int points)
-		{
-			int index = 0;
-			bool isRootPatternAndRootUrl = url == "/" && pattern == "/";
-			if (isRootPatternAndRootUrl)
-			{
-				points = 2;
-				return true;
-			}
-
-			foreach (DefaultNode node in nodes)
-			{
-				string part = index < parts.Length ? parts[index] : null;
-
-				if (!node.Matches(part, match, ref points))
-				{
-					return false;
-				}
-
-				index++;
-			}
-			return true;
-		}
-
 		private void CreatePatternNodes()
 		{
 			string[] parts = pattern.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-			foreach (string part in parts)
+			if (pattern == "/")
 			{
-				string[] subparts = part.Split(new char[] { '.' }, 2, StringSplitOptions.RemoveEmptyEntries);
-
-				if (subparts.Length == 2)
+				nodes.Add(new EmptyUrlPartSubRule());
+			}
+			else
+			{
+				foreach(string part in parts)
 				{
-					bool afterDot = false;
+					string[] subparts = part.Split(new char[] { '.' }, 2, StringSplitOptions.RemoveEmptyEntries);
 
-					foreach (string subpart in subparts)
+					if (subparts.Length == 2)
 					{
-						if (subpart.Contains("["))
-						{
-							nodes.Add(CreateNamedOptionalNode(subpart, afterDot));
-						}
-						else
-						{
-							nodes.Add(CreateRequiredNode(subpart, afterDot));
-						}
+						bool afterDot = false;
 
-						afterDot = true;
-					}
-				}
-				else
-				{
-					if (part.Contains("["))
-					{
-						nodes.Add(CreateNamedOptionalNode(part, false));
+						foreach(string subpart in subparts)
+						{
+							if (subpart.Contains("["))
+							{
+								nodes.Add(CreateNamedOptionalNode(subpart, afterDot));
+							}
+							else
+							{
+								nodes.Add(CreateRequiredNode(subpart, afterDot));
+							}
+
+							afterDot = true;
+						}
 					}
 					else
 					{
-						nodes.Add(CreateRequiredNode(part, false));
+						if (part.Contains("["))
+						{
+							nodes.Add(CreateNamedOptionalNode(part, false));
+						}
+						else
+						{
+							nodes.Add(CreateRequiredNode(part, false));
+						}
 					}
 				}
 			}
@@ -268,21 +265,21 @@ namespace Castle.MonoRail.Framework.Routing
 			defaults[key] = value;
 		}
 
-		private DefaultNode CreateNamedOptionalNode(string part, bool afterDot)
+		private UrlPartSubRule CreateNamedOptionalNode(string part, bool afterDot)
 		{
-			return new DefaultNode(part, true, afterDot);
+			return new UrlPartSubRule(part, true, afterDot);
 		}
 
-		private DefaultNode CreateRequiredNode(string part, bool afterDot)
+		private UrlPartSubRule CreateRequiredNode(string part, bool afterDot)
 		{
-			return new DefaultNode(part, false, afterDot);
+			return new UrlPartSubRule(part, false, afterDot);
 		}
 
-		private static void AppendSlashOrDot(StringBuilder text, DefaultNode node)
+		private static void AppendSlashOrDot(StringBuilder text, UrlPartSubRule partSubRule)
 		{
 			if (text.Length == 0 || text[text.Length - 1] != '/')
 			{
-				if (node.afterDot)
+				if (partSubRule.afterDot)
 				{
 					text.Append('.');
 				}
@@ -296,23 +293,23 @@ namespace Castle.MonoRail.Framework.Routing
 		#region NodeCollection
 
 		[DebuggerDisplay("Nodes {Length}")]
-		private class NodeCollection : System.Collections.ObjectModel.Collection<DefaultNode>
+		private class NodeCollection : System.Collections.ObjectModel.Collection<UrlPartSubRule>
 		{
-			private readonly Dictionary<string, DefaultNode> nameToNode = new Dictionary<string, DefaultNode>(StringComparer.OrdinalIgnoreCase);
+			private readonly Dictionary<string, UrlPartSubRule> nameToNode = new Dictionary<string, UrlPartSubRule>(StringComparer.OrdinalIgnoreCase);
 
-			protected override void InsertItem(int index, DefaultNode item)
+			protected override void InsertItem(int index, UrlPartSubRule item)
 			{
 				AddToDictionary(item);
 				base.InsertItem(index, item);
 			}
 
-			protected override void SetItem(int index, DefaultNode item)
+			protected override void SetItem(int index, UrlPartSubRule item)
 			{
 				AddToDictionary(item);
 				base.SetItem(index, item);
 			}
 
-			private void AddToDictionary(DefaultNode item)
+			private void AddToDictionary(UrlPartSubRule item)
 			{
 				if (item.name != null)
 				{
@@ -320,20 +317,38 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 			}
 
-			public DefaultNode FindByName(string name)
+			public UrlPartSubRule FindByName(string name)
 			{
-				DefaultNode node;
-				nameToNode.TryGetValue(name, out node);
-				return node;
+				UrlPartSubRule partSubRule;
+				nameToNode.TryGetValue(name, out partSubRule);
+				return partSubRule;
 			}
 		}
 
 		#endregion
 
-		#region DefaultNode
+		#region UrlPartSubRule
+
+		private class EmptyUrlPartSubRule : UrlPartSubRule
+		{
+			public EmptyUrlPartSubRule() : base(string.Empty, false, false)
+			{
+			}
+
+			public override bool Matches(string part, RouteMatch match, ref int points)
+			{
+				if (part == null)
+				{
+					points = 1;
+					return true;
+				}
+
+				return false;
+			}
+		}
 
 		[DebuggerDisplay("Node {name} Opt: {optional} default: {defaultVal} Regular exp: {exp}")]
-		private class DefaultNode
+		private class UrlPartSubRule
 		{
 			public readonly string name, start, end;
 			public readonly bool optional;
@@ -345,7 +360,7 @@ namespace Castle.MonoRail.Framework.Routing
 			private Regex exp;
 			private string acceptedRegex;
 
-			public DefaultNode(string part, bool optional, bool afterDot)
+			public UrlPartSubRule(string part, bool optional, bool afterDot)
 			{
 				this.optional = optional;
 				this.afterDot = afterDot;
@@ -427,7 +442,7 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 			}
 
-			public bool Matches(string part, RouteMatch match, ref int points)
+			public virtual bool Matches(string part, RouteMatch match, ref int points)
 			{
 				if (part == null)
 				{
@@ -574,7 +589,7 @@ namespace Castle.MonoRail.Framework.Routing
 		public class RestrictionConfigurer
 		{
 			private readonly PatternRoute route;
-			private readonly DefaultNode targetNode;
+			private readonly UrlPartSubRule targetPartSubRule;
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="RestrictionConfigurer"/> class.
@@ -584,7 +599,7 @@ namespace Castle.MonoRail.Framework.Routing
 			public RestrictionConfigurer(PatternRoute route, string namedPatternPart)
 			{
 				this.route = route;
-				targetNode = route.GetNamedNode(namedPatternPart, true);
+				targetPartSubRule = route.GetNamedNode(namedPatternPart, true);
 			}
 
 			/// <summary>
@@ -595,7 +610,7 @@ namespace Castle.MonoRail.Framework.Routing
 			/// <returns></returns>
 			public PatternRoute AnyOf(params string[] validNames)
 			{
-				targetNode.AcceptsAnyOf(validNames);
+				targetPartSubRule.AcceptsAnyOf(validNames);
 				return route;
 			}
 
@@ -607,7 +622,7 @@ namespace Castle.MonoRail.Framework.Routing
 			/// <returns></returns>
 			public PatternRoute AnythingBut(string name)
 			{
-				targetNode.DoesNotAccept(name);
+				targetPartSubRule.DoesNotAccept(name);
 				return route;
 			}
 
@@ -619,7 +634,7 @@ namespace Castle.MonoRail.Framework.Routing
 			{
 				get
 				{
-					targetNode.AcceptsIntOnly = true;
+					targetPartSubRule.AcceptsIntOnly = true;
 					return route;
 				}
 			}
@@ -631,7 +646,7 @@ namespace Castle.MonoRail.Framework.Routing
 			{
 				get
 				{
-					targetNode.AcceptsGuidsOnly = true;
+					targetPartSubRule.AcceptsGuidsOnly = true;
 					return route;
 				}
 			}
@@ -644,7 +659,7 @@ namespace Castle.MonoRail.Framework.Routing
 			/// <returns></returns>
 			public PatternRoute ValidRegex(string regex)
 			{
-				targetNode.AcceptsRegex(regex);
+				targetPartSubRule.AcceptsRegex(regex);
 				return route;
 			}
 		}
@@ -656,7 +671,7 @@ namespace Castle.MonoRail.Framework.Routing
 		{
 			private readonly PatternRoute route;
 			private readonly string namedPatternPart;
-			private readonly DefaultNode targetNode;
+			private readonly UrlPartSubRule targetPartSubRule;
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="DefaultConfigurer"/> class.
@@ -667,7 +682,7 @@ namespace Castle.MonoRail.Framework.Routing
 			{
 				route = patternRoute;
 				this.namedPatternPart = namedPatternPart;
-				targetNode = route.GetNamedNode(namedPatternPart, false);
+				targetPartSubRule = route.GetNamedNode(namedPatternPart, false);
 			}
 
 			/// <summary>
@@ -677,9 +692,9 @@ namespace Castle.MonoRail.Framework.Routing
 			public PatternRoute Is<T>() where T : class, IController
 			{
 				ControllerDescriptor desc = ControllerInspectionUtil.Inspect(typeof(T));
-				if (targetNode != null)
+				if (targetPartSubRule != null)
 				{
-					targetNode.DefaultVal = desc.Name;
+					targetPartSubRule.DefaultVal = desc.Name;
 				}
 				route.AddDefault(namedPatternPart, desc.Name);
 				return route;
@@ -692,9 +707,9 @@ namespace Castle.MonoRail.Framework.Routing
 			/// <returns></returns>
 			public PatternRoute Is(string value)
 			{
-				if (targetNode != null)
+				if (targetPartSubRule != null)
 				{
-					targetNode.DefaultVal = value;
+					targetPartSubRule.DefaultVal = value;
 				}
 				route.AddDefault(namedPatternPart, value);
 				return route;
@@ -741,9 +756,9 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="part">The part.</param>
 		/// <param name="mustFind">if set to <c>true</c> [must find].</param>
 		/// <returns></returns>
-		private DefaultNode GetNamedNode(string part, bool mustFind)
+		private UrlPartSubRule GetNamedNode(string part, bool mustFind)
 		{
-			DefaultNode found = nodes.FindByName(part); // (delegate(DefaultNode node) { return node.name == part; });
+			UrlPartSubRule found = nodes.FindByName(part); // (delegate(UrlPartSubRule node) { return node.name == part; });
 
 			if (found == null && mustFind)
 			{
