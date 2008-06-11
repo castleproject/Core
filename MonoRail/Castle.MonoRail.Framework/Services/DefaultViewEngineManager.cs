@@ -260,7 +260,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="engine">The engine.</param>
 		private void ContextualizeViewEngine(IViewEngine engine)
 		{
-			if (MonoRailHttpHandlerFactory.CurrentEngineContext!=null)//required for tests
+			if (MonoRailHttpHandlerFactory.CurrentEngineContext != null)//required for tests
 			{
 				MonoRailHttpHandlerFactory.CurrentEngineContext.AddService(typeof(IViewEngine), engine);
 			}

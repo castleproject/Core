@@ -139,7 +139,7 @@ namespace Castle.MonoRail.Framework
 		/// <returns><c>true</c> if it exists</returns>
 		public virtual bool HasJsGenerationTemplate(String templateName)
 		{
-			return ViewSourceLoader.HasSource(templateName);
+			return ViewSourceLoader.HasSource(ResolveJSTemplateName(templateName));
 		}
 
 		/// <summary>

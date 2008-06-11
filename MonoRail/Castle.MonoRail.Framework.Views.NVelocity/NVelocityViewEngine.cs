@@ -65,7 +65,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			InitializeVelocityProperties(props);
 
-			velocity.SetApplicationAttribute("service.provider", provider);
+			velocity.SetApplicationAttribute(ServiceProvider, provider);
 
 			velocity.Init(props);
 		}
@@ -320,7 +320,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// <summary>
 		/// Resolves the layout template name into a velocity template file name.
 		/// </summary>
-		protected string ResolveLayoutTemplateName(string templateName)
+		protected virtual string ResolveLayoutTemplateName(string templateName)
 		{
 			if (templateName.StartsWith("/"))
 			{
