@@ -378,6 +378,11 @@ namespace Castle.MonoRail.Framework.Services
 				{
 					parameters = (IDictionary) routeParams;
 				}
+				else if (typeof(string) == routeParams.GetType())
+				{
+					throw new Exception("Route parameters cannot be a string, we expect a dictionary (IDictionary), " + 
+						"an anonymous type or a class from which we can extract the parameters. You have specified '" + routeParams + "'");
+				}
 				else
 				{
 					parameters = new ReflectionBasedDictionaryAdapter(routeParams);
