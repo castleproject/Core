@@ -137,10 +137,13 @@ namespace Castle.Facilities.WcfIntegration
 				{
 					locker.UpgradeToWriterLock(Timeout.Infinite);
 
-					createChannel = (CreateChannelDelegate)
-						Delegate.CreateDelegate(typeof(CreateChannelDelegate),
-							createChannelMethod.MakeGenericMethod(clientModelType));
-					createChannelCache.Add(clientModelType, createChannel);
+					if (!createChannelCache.TryGetValue(clientModelType, out createChannel))
+					{
+						createChannel = (CreateChannelDelegate)
+							Delegate.CreateDelegate(typeof(CreateChannelDelegate),
+								createChannelMethod.MakeGenericMethod(clientModelType));
+						createChannelCache.Add(clientModelType, createChannel);
+					}
 				}
 			}
 			finally

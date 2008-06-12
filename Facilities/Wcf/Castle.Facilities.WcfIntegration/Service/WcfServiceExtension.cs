@@ -161,10 +161,13 @@ namespace Castle.Facilities.WcfIntegration
 				{
 					locker.UpgradeToWriterLock(Timeout.Infinite);
 
-					createServiceHost = (CreateServiceHostDelegate)
-						Delegate.CreateDelegate(typeof(CreateServiceHostDelegate),
-							createServiceHostMethod.MakeGenericMethod(serviceModelType));
-					createServiceHostCache.Add(serviceModelType, createServiceHost);
+					if (!createServiceHostCache.TryGetValue(serviceModelType, out createServiceHost))
+					{
+						createServiceHost = (CreateServiceHostDelegate)
+							Delegate.CreateDelegate(typeof(CreateServiceHostDelegate),
+								createServiceHostMethod.MakeGenericMethod(serviceModelType));
+						createServiceHostCache.Add(serviceModelType, createServiceHost);
+					}
 				}
 			}
 			finally
