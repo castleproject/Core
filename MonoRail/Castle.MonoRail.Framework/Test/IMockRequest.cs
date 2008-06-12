@@ -49,6 +49,12 @@ namespace Castle.MonoRail.Framework.Test
 		new string PathInfo { set; }
 
 		/// <summary>
+		/// Sets the size of the input stream.
+		/// </summary>
+		/// <value>The size of the input stream.</value>
+		new int InputStreamSize { set; }
+
+		/// <summary>
 		/// Sets a value indicating whether this 
 		/// requeest is from a local address.
 		/// </summary>

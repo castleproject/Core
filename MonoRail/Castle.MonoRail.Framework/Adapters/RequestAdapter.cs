@@ -124,7 +124,16 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			get { return request.InputStream; }
 		}
-		
+
+		/// <summary>
+		/// Gets the size of the input stream (if you plan to read it directly as a byte[]).
+		/// </summary>
+		/// <value>The size of the input stream.</value>
+		public int InputStreamSize
+		{
+			get { return request.TotalBytes; }
+		}
+
 		/// <summary>
 		/// Gets or sets the MIME content type of the incoming request.
 		/// </summary>

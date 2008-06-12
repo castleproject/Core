@@ -44,6 +44,7 @@ namespace Castle.MonoRail.Framework.Test
 		private string pathInfo;
 		private string contentType;
 		private Stream inputStream = null;
+		private int inputStreamSize;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StubRequest"/> class.
@@ -334,6 +335,16 @@ namespace Castle.MonoRail.Framework.Test
 		public Stream InputStream
 		{
 			get { return inputStream; }
+		}
+
+		/// <summary>
+		/// Gets or sets the size of the input stream.
+		/// </summary>
+		/// <value>The size of the input stream.</value>
+		public int InputStreamSize
+		{
+			get { return inputStreamSize; }
+			set { inputStreamSize = value; }
 		}
 
 		/// <summary>

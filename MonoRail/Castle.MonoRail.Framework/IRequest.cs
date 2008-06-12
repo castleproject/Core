@@ -211,6 +211,12 @@ namespace Castle.MonoRail.Framework
 		CompositeNode ObtainParamsNode(ParamStore from);
 
 		/// <summary>
+		/// Gets the size of the input stream (if you plan to read it directly as a byte[]).
+		/// </summary>
+		/// <value>The size of the input stream.</value>
+		int InputStreamSize { get; }
+
+		/// <summary>
 		/// Validates the input.
 		/// </summary>
 		void ValidateInput();
