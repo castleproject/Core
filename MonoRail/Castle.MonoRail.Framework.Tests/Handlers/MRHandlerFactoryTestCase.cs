@@ -82,9 +82,9 @@ namespace Castle.MonoRail.Framework.Tests.Handlers
 
 				Expect.Call(controllerFactoryMock.CreateController("", "home")).IgnoreArguments().Return(controllerMock);
 				Expect.Call(controllerDescriptorProviderMock.BuildDescriptor(controllerMock)).Return(controllerDesc);
-			    ControllerContext controllerContext = new ControllerContext();
-                controllerContext.ControllerDescriptor = new ControllerMetaDescriptor();
-			    Expect.Call(controllerContextFactoryMock.Create("", "home", "something", controllerDesc, routeMatch)).
+				ControllerContext controllerContext = new ControllerContext();
+				controllerContext.ControllerDescriptor = new ControllerMetaDescriptor();
+				Expect.Call(controllerContextFactoryMock.Create("", "home", "something", controllerDesc, routeMatch)).
 					Return(controllerContext);
 			}
 
@@ -97,41 +97,41 @@ namespace Castle.MonoRail.Framework.Tests.Handlers
 			}
 		}
 
-        [Test]
-        public void Request_CreatesSessionfulHandler_Async()
-        {
-            StringWriter writer = new StringWriter();
+		[Test]
+		public void Request_CreatesSessionfulHandler_Async()
+		{
+			StringWriter writer = new StringWriter();
 
-            HttpResponse res = new HttpResponse(writer);
-            HttpRequest req = new HttpRequest(Path.Combine(
-                                                AppDomain.CurrentDomain.BaseDirectory, "Handlers/Files/simplerequest.txt"),
-                                              "http://localhost:1333/home/something", "");
-            RouteMatch routeMatch = new RouteMatch();
-            HttpContext httpCtx = new HttpContext(req, res);
-            httpCtx.Items[RouteMatch.RouteMatchKey] = routeMatch;
+			HttpResponse res = new HttpResponse(writer);
+			HttpRequest req = new HttpRequest(Path.Combine(
+			                                  AppDomain.CurrentDomain.BaseDirectory, "Handlers/Files/simplerequest.txt"),
+			                                  "http://localhost:1333/home/something", "");
+			RouteMatch routeMatch = new RouteMatch();
+			HttpContext httpCtx = new HttpContext(req, res);
+			httpCtx.Items[RouteMatch.RouteMatchKey] = routeMatch;
 
-            using (mockRepository.Record())
-            {
-                ControllerMetaDescriptor controllerDesc = new ControllerMetaDescriptor();
-                controllerDesc.ControllerDescriptor = new ControllerDescriptor(typeof(Controller), "home", "", false);
+			using(mockRepository.Record())
+			{
+				ControllerMetaDescriptor controllerDesc = new ControllerMetaDescriptor();
+				controllerDesc.ControllerDescriptor = new ControllerDescriptor(typeof(Controller), "home", "", false);
 
-                Expect.Call(controllerFactoryMock.CreateController("", "home")).IgnoreArguments().Return(controllerMock);
-                Expect.Call(controllerDescriptorProviderMock.BuildDescriptor(controllerMock)).Return(controllerDesc);
-                ControllerContext controllerContext = new ControllerContext();
-                controllerContext.ControllerDescriptor = new ControllerMetaDescriptor();
-                controllerContext.Action = "something";
-                controllerContext.ControllerDescriptor.Actions["something"] = new AsyncActionPair(null, null, null);
-                Expect.Call(controllerContextFactoryMock.Create("", "home", "something", controllerDesc, routeMatch)).
-                    Return(controllerContext);
-            }
+				Expect.Call(controllerFactoryMock.CreateController("", "home")).IgnoreArguments().Return(controllerMock);
+				Expect.Call(controllerDescriptorProviderMock.BuildDescriptor(controllerMock)).Return(controllerDesc);
+				ControllerContext controllerContext = new ControllerContext();
+				controllerContext.ControllerDescriptor = new ControllerMetaDescriptor();
+				controllerContext.Action = "something";
+				controllerContext.ControllerDescriptor.Actions["something"] = new AsyncActionPair(null, null, null);
+				Expect.Call(controllerContextFactoryMock.Create("", "home", "something", controllerDesc, routeMatch)).
+					Return(controllerContext);
+			}
 
-            using (mockRepository.Playback())
-            {
-                IHttpHandler handler = handlerFactory.GetHandler(httpCtx, "GET", "", "");
+			using(mockRepository.Playback())
+			{
+				IHttpHandler handler = handlerFactory.GetHandler(httpCtx, "GET", "", "");
 
-                Assert.IsNotNull(handler);
-                Assert.IsInstanceOfType(typeof(AsyncMonoRailHttpHandler), handler);
-            }
+				Assert.IsNotNull(handler);
+				Assert.IsInstanceOfType(typeof(AsyncMonoRailHttpHandler), handler);
+			}
         }
 
 		[Test]
