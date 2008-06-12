@@ -63,12 +63,12 @@ namespace Castle.MonoRail.Framework.Tests.Services
 
 				"action1: function(callback)\r\n\t" + 
 				"{\r\n\t\t" +
-				"var r=new Ajax.Request('//controller2/Action1.', " +
+				"var r=new Ajax.Request('/controller2/Action1.', " +
 				"{method: 'get', asynchronous: !!callback, onComplete: callback, parameters: '_='}); \r\n\t\t" +
 				"if(!callback) return r.transport.responseText;\r\n\t}\r\n,\r\n\t" +
 				
 				"action2: function(name, age, callback)\r\n\t{\r\n\t\t" +
-				"var r=new Ajax.Request('//controller2/Action2.', {method: 'post', asynchronous: !!callback, onComplete: callback, " +
+				"var r=new Ajax.Request('/controller2/Action2.', {method: 'post', asynchronous: !!callback, onComplete: callback, " +
 				"parameters: '_=&name='+name+'&age='+age+''}); \r\n\t\t" + 
 				"if(!callback) return r.transport.responseText;\r\n\t}\r\n" + 
 				"};\r\n</script>", js);
