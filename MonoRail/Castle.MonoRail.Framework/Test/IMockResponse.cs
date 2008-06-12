@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Test
 {
+	using System.Collections.Specialized;
 	using System.IO;
 	using System.Web;
 	using Services;
@@ -40,6 +41,12 @@ namespace Castle.MonoRail.Framework.Test
 		/// <param name="name">The cookie name.</param>
 		/// <returns></returns>
 		HttpCookie GetCookie(string name);
+
+		/// <summary>
+		/// Exposes the headers on the response. 
+		/// </summary>
+		/// <value>The headers.</value>
+		NameValueCollection Headers { get; }
 
 		/// <summary>
 		/// Gets the urls the request was redirected to.

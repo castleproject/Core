@@ -87,6 +87,12 @@ namespace Castle.MonoRail.Framework.Internal
 		public abstract HttpCachePolicy CachePolicy { get; set; }
 
 		/// <summary>
+		/// Exposes the headers on the response.
+		/// </summary>
+		/// <value>The headers.</value>
+		public abstract NameValueCollection Headers { get; }
+		
+		/// <summary>
 		/// Sets the Cache-Control HTTP header to Public or Private.
 		/// </summary>
 		/// <value></value>

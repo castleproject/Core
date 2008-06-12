@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Adapters
 {
 	using System;
+	using System.Collections.Specialized;
 	using System.Text;
 	using System.IO;
 	using System.Web;
@@ -136,6 +137,15 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			get { return response.Output; }
 			set { throw new NotImplementedException(); }
+		}
+
+		/// <summary>
+		/// Exposes the headers on the response.
+		/// </summary>
+		/// <value>The headers.</value>
+		public override NameValueCollection Headers
+		{
+			get { throw new NotImplementedException(); }
 		}
 
 		/// <summary>

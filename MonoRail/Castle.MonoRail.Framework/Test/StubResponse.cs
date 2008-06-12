@@ -110,7 +110,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// Gets the http headers.
 		/// </summary>
 		/// <value>The headers.</value>
-		public NameValueCollection Headers
+		public override NameValueCollection Headers
 		{
 			get { return headers; }
 		}
