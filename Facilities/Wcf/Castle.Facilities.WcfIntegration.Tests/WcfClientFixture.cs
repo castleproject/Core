@@ -42,7 +42,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					new DefaultClientModel()
 					{
 						Endpoint = WcfEndpoint.ForContract<IOperations>()
-							.BoundTo(new NetTcpBinding())
+							.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 							.At("net.tcp://localhost/Operations")
 					}))
 				.Register(
@@ -56,10 +56,10 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.DependsOn(new { number = 42 })
 						.ActAs(new DefaultServiceModel().AddEndpoints(
 							WcfEndpoint.ForContract<IOperations>()
-								.BoundTo(new NetTcpBinding())
+								.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 								.At("net.tcp://localhost/Operations"),
 							WcfEndpoint.ForContract<IOperationsEx>()
-								.BoundTo(new NetTcpBinding())
+								.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 								.At("net.tcp://localhost/Operations/Ex")
 								)
 						),
@@ -89,7 +89,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					.ActAs(new DefaultClientModel()
 					{
 						Endpoint = WcfEndpoint
-							.BoundTo(new NetTcpBinding())
+							.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 							.At("net.tcp://localhost/Operations")
 					})
 				);
@@ -132,7 +132,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					.ActAs(new DefaultServiceModel()
 						.AddBaseAddresses("net.tcp://localhost/Operations")
 						.AddEndpoints(WcfEndpoint.ForContract<IOperations>()
-							.BoundTo(new NetTcpBinding())
+							.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 							.At("Extended")
 							)	
 				)))
@@ -144,7 +144,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.ActAs(new DefaultClientModel()
 						{
 							Endpoint = WcfEndpoint
-								.BoundTo(new NetTcpBinding())
+								.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 								.At("net.tcp://localhost/Operations/Extended")
 						
 						})
@@ -166,7 +166,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.ImplementedBy<Operations>()
 						.DependsOn(new { number = 22 })
 						.ActAs(new DefaultServiceModel().AddEndpoints(
-							WcfEndpoint.BoundTo(new NetTcpBinding())
+							WcfEndpoint.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 								.At("urn:castle:operations")
 								.Via("net.tcp://localhost/OperationsVia")
 								)
@@ -176,7 +176,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.ActAs(new DefaultClientModel()
 						{
 							Endpoint = WcfEndpoint
-								.BoundTo(new NetTcpBinding())
+								.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 								.At("urn:castle:operations")
 								.Via("net.tcp://localhost/OperationsVia")
 						})
@@ -196,13 +196,61 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					.ActAs(new DefaultClientModel()
 					{
 						Endpoint = WcfEndpoint
-							.BoundTo(new NetTcpBinding())
+							.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 							.At("net.tcp://localhost/Operations/Ex")
 					})
 				);
 
 			IOperationsEx client = windsorContainer.Resolve<IOperationsEx>("operations");
 			client.Backup(new Dictionary<string, object>());
+		}
+
+		[Test]
+		public void WillApplyExlpicitScopedKeyEndpointBehaviors()
+		{
+			CallCountEndpointBehavior.CallCount = 0;
+			windsorContainer.Register(
+				Component.For<CallCountEndpointBehavior>()
+					.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+					.Named("specialBehavior")
+					.LifeStyle.Transient,
+				Component.For<IOperationsEx>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					       {
+					       	Endpoint = WcfEndpoint
+					       		.BoundTo(new NetTcpBinding {PortSharingEnabled = true})
+					       		.At("net.tcp://localhost/Operations/Ex")
+					       		.AddBehaviors("specialBehavior")
+					       })
+				);
+			IOperationsEx client = windsorContainer.Resolve<IOperationsEx>("operations");
+			client.Backup(new Dictionary<string, object>());
+			Assert.AreEqual(1, CallCountEndpointBehavior.CallCount);
+		}
+
+		[Test]
+		public void WillApplyExlpicitScopedServiceEndpointBehaviors()
+		{
+			CallCountEndpointBehavior.CallCount = 0;
+			windsorContainer.Register(
+				Component.For<CallCountEndpointBehavior>()
+					.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+					.Named("specialBehavior")
+					.LifeStyle.Transient,
+				Component.For<IOperationsEx>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations/Ex")
+							.AddBehaviors(typeof(CallCountEndpointBehavior))
+					})
+				);
+			IOperationsEx client = windsorContainer.Resolve<IOperationsEx>("operations");
+			client.Backup(new Dictionary<string, object>());
+			Assert.AreEqual(1, CallCountEndpointBehavior.CallCount);
 		}
 
 		[Test]
@@ -214,7 +262,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					.ActAs(new DefaultClientModel()
 					{
 						Endpoint = WcfEndpoint
-							.BoundTo(new NetTcpBinding())
+							.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 							.At("net.tcp://localhost/Operations/Ex")
 					
 					})

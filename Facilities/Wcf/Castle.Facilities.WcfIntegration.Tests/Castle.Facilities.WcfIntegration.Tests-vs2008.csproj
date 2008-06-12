@@ -84,6 +84,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Behaviors\NetDataContractFormatBehavior.cs" />
+    <Compile Include="Behaviors\CallCountEndpointBehavior.cs" />
     <Compile Include="Behaviors\UnitOfworkEndPointBehavior.cs" />
     <Compile Include="Components\Calculator.cs" />
     <Compile Include="Components\ClassNeedingService.cs" />

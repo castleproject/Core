@@ -48,7 +48,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.Interceptors(InterceptorReference.ForType<LoggingInterceptor>()).Anywhere
 						.DependsOn(new { number = 42 })
 						.ActAs(new DefaultServiceModel().AddEndpoints(
-							WcfEndpoint.BoundTo(new NetTcpBinding())
+							WcfEndpoint.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 								.At("net.tcp://localhost/Operations")
 								)
 						)
@@ -58,7 +58,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			CallCountServiceBehavior.CallCount = 0;
 
 			client = ChannelFactory<IOperations>.CreateChannel(
-					new NetTcpBinding(), new EndpointAddress("net.tcp://localhost/Operations"));
+					new NetTcpBinding{PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
 		}
 
 		[TearDown]

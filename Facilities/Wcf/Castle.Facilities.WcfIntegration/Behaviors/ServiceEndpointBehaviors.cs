@@ -48,7 +48,6 @@ namespace Castle.Facilities.WcfIntegration
 
 		void IWcfBehaviorVisitor.VisitServiceBehavior(IWcfServiceBehavior behavior)
 		{
-			throw new InvalidOperationException("Service behaviors cannot be installed on a client endpoint.");
 		}
 
 		void IWcfBehaviorVisitor.VisitEndpointBehavior(IWcfEndpointBehavior behavior)

@@ -134,6 +134,7 @@ namespace Castle.Facilities.WcfIntegration
 			if (clientModel != null)
 			{
 				behaviors.Install(clientModel.Behaviors);
+				behaviors.Install(clientModel.Endpoint.Behaviors);
 			}
 		}
 
