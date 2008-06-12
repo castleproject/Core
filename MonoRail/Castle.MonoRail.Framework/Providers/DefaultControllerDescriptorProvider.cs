@@ -295,6 +295,7 @@ namespace Castle.MonoRail.Framework.Providers
 				string actionName = name.Substring("Begin".Length);
 
 				ArrayList list = desc.Actions[name] as ArrayList;
+
 				if (list != null)
 				{
 					foreach(MethodInfo info in list)
@@ -365,6 +366,7 @@ namespace Castle.MonoRail.Framework.Providers
 				}
 
 				MethodInfo methodInfo = action as MethodInfo;
+
 				if (methodInfo != null)
 				{
 					CollectActionAttributes(methodInfo, descriptor);

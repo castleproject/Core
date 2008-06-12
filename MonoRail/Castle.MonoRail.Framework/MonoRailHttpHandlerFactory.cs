@@ -191,7 +191,6 @@ namespace Castle.MonoRail.Framework
 			return new AsyncMonoRailHttpHandler(engineContext, controller, controllerContext);
 		}
 
-
 		/// <summary>
 		/// Enables a factory to reuse an existing handler instance.
 		/// </summary>

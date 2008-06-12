@@ -95,6 +95,7 @@
 		                                                ActionType actionType)
 		{
 			object action = context.ControllerDescriptor.Actions[name];
+
 			if (actionType == ActionType.Sync)
 			{
 				MethodInfo methodInfo = action as MethodInfo;
@@ -108,11 +109,14 @@
 				                                      BindingFlags.Public | BindingFlags.Instance |
 				                                      BindingFlags.IgnoreCase);
 			}
+
 			AsyncActionPair actionPair = (AsyncActionPair) action;
+			
 			if (actionPair == null)
 			{
 				return null;
 			}
+			
 			return actionType == ActionType.AsyncBegin ? actionPair.BeginActionInfo : actionPair.EndActionInfo;
 		}
 

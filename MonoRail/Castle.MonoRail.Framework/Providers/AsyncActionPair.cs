@@ -16,48 +16,48 @@ namespace Castle.MonoRail.Framework.Providers
 {
 	using System.Reflection;
 
-    /// <summary>
-    /// Contains the method pair for an async action
-    /// </summary>
+	/// <summary>
+	/// Contains the method pair for an async action
+	/// </summary>
 	public class AsyncActionPair
 	{
 		private readonly string name;
 		private readonly MethodInfo beginActionInfo;
 		private readonly MethodInfo endActionInfo;
 
-        /// <summary>
-        /// Gets the begin action info.
-        /// </summary>
-        /// <value>The begin action info.</value>
+		/// <summary>
+		/// Gets the begin action info.
+		/// </summary>
+		/// <value>The begin action info.</value>
 		public MethodInfo BeginActionInfo
 		{
 			get { return beginActionInfo; }
 		}
 
-        /// <summary>
-        /// Gets the end action info.
-        /// </summary>
-        /// <value>The end action info.</value>
+		/// <summary>
+		/// Gets the end action info.
+		/// </summary>
+		/// <value>The end action info.</value>
 		public MethodInfo EndActionInfo
 		{
 			get { return endActionInfo; }
 		}
 
-        /// <summary>
-        /// Gets the name of this action
-        /// </summary>
-        /// <value>The name.</value>
+		/// <summary>
+		/// Gets the name of this action
+		/// </summary>
+		/// <value>The name.</value>
 		public string Name
 		{
 			get { return name; }
 		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AsyncActionPair"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="beginActionInfo">The begin action info.</param>
-        /// <param name="endActionInfo">The end action info.</param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AsyncActionPair"/> class.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="beginActionInfo">The begin action info.</param>
+		/// <param name="endActionInfo">The end action info.</param>
 		public AsyncActionPair(string name, MethodInfo beginActionInfo, MethodInfo endActionInfo)
 		{
 			this.name = name;
@@ -66,12 +66,12 @@ namespace Castle.MonoRail.Framework.Providers
 		}
 
 
-        /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </returns>
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
 		public override string ToString()
 		{
 			return Name;
