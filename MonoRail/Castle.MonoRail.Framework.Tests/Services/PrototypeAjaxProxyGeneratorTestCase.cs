@@ -70,8 +70,15 @@ namespace Castle.MonoRail.Framework.Tests.Services
 				"action2: function(name, age, callback)\r\n\t{\r\n\t\t" +
 				"var r=new Ajax.Request('/controller2/Action2.', {method: 'post', asynchronous: !!callback, onComplete: callback, " +
 				"parameters: '_=&name='+name+'&age='+age+''}); \r\n\t\t" + 
-				"if(!callback) return r.transport.responseText;\r\n\t}\r\n" + 
-				"};\r\n</script>", js);
+				"if(!callback) return r.transport.responseText;\r\n\t}\r\n" +
+				",\r\n" +
+				"\tactionReturnJSON: function(, callback)\r\n" +
+				"\t{\r\n" +
+				"\t\tvar r=new Ajax.Request('/controller2/ActionReturnJSON.', {method: 'get', asynchronous: !!callback, onComplete: callback, parameters: '_=&='+Object.toJSON(test)+''}); \r\n" +
+				"\t\tif(!callback) return r.transport.responseText;\r\n" +
+				"\t}\r\n" +
+				"};\r\n" +
+				"</script>", js);
 		}
 
 		#region Controllers
@@ -98,6 +105,11 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			public void Action2(string name, int age)
 			{
 			}
+
+			[AjaxAction]
+			public void ActionReturnJSON([JSONBinder]string test) {
+			}
+
 		}
 
 		#endregion

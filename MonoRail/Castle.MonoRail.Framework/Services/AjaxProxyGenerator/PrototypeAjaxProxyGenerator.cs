@@ -251,7 +251,7 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 		/// <param name="obj">The obj.</param>
 		/// <param name="propName">Name of the prop.</param>
 		/// <returns></returns>
-		private object GetPropertyValue(object obj, string propName)
+		private static object GetPropertyValue(object obj, string propName)
 		{
 			if (obj == null)
 				return null;

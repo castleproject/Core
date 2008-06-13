@@ -88,6 +88,17 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Gets the entry key.
+		/// </summary>
+		/// <remarks>
+		/// The entry key, which is the form or querystring key that identifies the JSON persisted content.
+		/// </remarks>
+		/// <value>The entry key.</value>
+		public string EntryKey {
+			get { return entryKey; }
+		}
+
+		/// <summary>
 		/// Calculates the param points. Implementors should return value equals or greater than
 		/// zero indicating whether the parameter can be bound successfully. The greater the value (points)
 		/// the more successful the implementation indicates to the framework
