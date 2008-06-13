@@ -82,12 +82,30 @@ namespace Castle.Components.Validator
 			if (setdata == null)
 				return false;
 
+			Type fieldType = fieldValue.GetType();
+			if (fieldType.IsEnum)
+			{
+				fieldValue = fieldValue.ToString();
+
+				string[] fieldValues = ((string)fieldValue).Split(new string[] {", "}, StringSplitOptions.RemoveEmptyEntries);
+				if (fieldValues.Length > 1)
+				{
+					foreach (string value in fieldValues)
+					{
+						if (IsValid(instance, value))
+							return true;
+					}
+
+					return false;
+				}
+			}
+
 			try
 			{
 				bool found = false;
 				for(int i = 0; i < setdata.Length; i++)
 				{
-					if (String.Equals(fieldValue, setdata[i]))
+					if (String.Equals(fieldValue.ToString(), setdata[i]))
 					{
 						found = true;
 						break;

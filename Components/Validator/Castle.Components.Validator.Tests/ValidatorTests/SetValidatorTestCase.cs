@@ -22,7 +22,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 	[TestFixture]
 	public class SetValidatorTestCase
 	{
-		private SetValidator validatorStringArray, validatorStrings, validatorEnum;
+		private SetValidator validatorStringArray, validatorStrings, validatorEnum, validatorFlagsEnum;
 		private TestTarget target;
 
 		[SetUp]
@@ -42,6 +42,10 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			// set from enum
 			validatorEnum = new SetValidator(typeof(System.DayOfWeek));
 			validatorEnum.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
+
+			// set from flags enum
+			validatorFlagsEnum = new SetValidator(typeof(System.AttributeTargets));
+			validatorFlagsEnum.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
 
 			target = new TestTarget();
 		}
@@ -85,9 +89,22 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			//fail when string not in set
 			Assert.IsFalse(validatorEnum.IsValid(target, "Doomsday"));
 			//pass when string is in set
-			Assert.IsTrue(validatorEnum.IsValid(target, DayOfWeek.Thursday.ToString()));
+			Assert.IsTrue(validatorEnum.IsValid(target, DayOfWeek.Thursday));
 			//pass when string is null
 			Assert.IsTrue(validatorEnum.IsValid(target, String.Empty));
+		}
+
+		[Test]
+		public void FlagsEnumSetValidator()
+		{
+			//fail when string not in set
+			Assert.IsFalse(validatorFlagsEnum.IsValid(target, "Doomsday"));
+			//pass when enum is in set
+			Assert.IsTrue(validatorFlagsEnum.IsValid(target, AttributeTargets.Assembly));
+			//pass when enum is in set
+			Assert.IsTrue(validatorFlagsEnum.IsValid(target, AttributeTargets.Assembly | AttributeTargets.Class));
+			//pass when string is null
+			Assert.IsTrue(validatorFlagsEnum.IsValid(target, String.Empty));
 		}
 	}
 }
