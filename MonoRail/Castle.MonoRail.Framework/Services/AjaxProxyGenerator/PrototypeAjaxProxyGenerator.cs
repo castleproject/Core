@@ -152,8 +152,10 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 					AjaxActionAttribute ajaxActionAtt = GetSingleAttribute<AjaxActionAttribute>(ajaxActionMethod, true);
 					AccessibleThroughAttribute accessibleThroughAtt = GetSingleAttribute<AccessibleThroughAttribute>(ajaxActionMethod, true);
 
-					string url = baseUrl + methodName + "." + context.UrlInfo.Extension;
-					string functionName = ToCamelCase(ajaxActionAtt.Name != null ? ajaxActionAtt.Name : methodName);
+					string extension = string.IsNullOrEmpty(context.UrlInfo.Extension) ? string.Empty : "." + context.UrlInfo.Extension;
+					string url = baseUrl + methodName + extension;
+
+					string functionName = ToCamelCase(ajaxActionAtt.Name ?? methodName);
 
 					functions.AppendFormat(nl + "\t{0}: function(", functionName);
 
