@@ -142,25 +142,24 @@
 			</fileset>
 		</copy>
 
+		<!-- Copy libraries for this CLR version -->
+		<copy todir="${build.dir}" overwrite="true"> 
+			<fileset basedir="${lib.framework.clr.dir}">
+				<include name="*.dll" />
+				<include name="*.xml" />
+				<include name="*.license.txt" />
+			</fileset>
+		</copy>
+
 		<!-- Copy framework-specific libraries -->
-		<copy todir="${build.dir}" overwrite="true">
+		<copy todir="${build.dir}" overwrite="true"
+            if="${lib.framework.dir != lib.framework.clr.dir}">
 			<fileset basedir="${lib.framework.dir}">
 				<include name="*.dll" />
 				<include name="*.xml" />
 				<include name="*.license.txt" />
 			</fileset>
 		</copy>
-
-		<!-- Copy framework-specific extension libraries -->
-		<copy todir="${build.dir}" overwrite="true" 
-            if="${lib.framework.dir != lib.framework.ext.dir}">
-			<fileset basedir="${lib.framework.ext.dir}">
-				<include name="*.dll" />
-				<include name="*.xml" />
-				<include name="*.license.txt" />
-			</fileset>
-		</copy>
-
 	</target>
 
 	<target name="generate-assemblyinfo"

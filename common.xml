@@ -30,8 +30,8 @@
 	<property name="lib.dir" value="SharedLibs" dynamic="true" />
 	<property name="lib.family.dir" value="${path::combine(lib.dir, framework::get-family(framework::get-target-framework()))}" dynamic="true" />
 	<property name="lib.framework.dir" value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}" dynamic="true" />
-	<property name="lib.framework.ext.dir" value="${path::combine(lib.family.dir, string::replace(framework::get-target-framework(), framework::get-family(framework::get-target-framework()) + '-', ''))}" dynamic="true" />
-
+	<property name="lib.framework.clr.dir" value="${path::combine(lib.family.dir, string::substring(clr-version, 0, 3))}" dynamic="true" />
+	
 	<if test="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
 		<property name="registry.dotnet.v3.0.Installed" value="0" overwrite="false"/>
 
@@ -121,6 +121,8 @@
 		<if test="${not(target::exists('set-'+framework::get-target-framework()+'-framework-configuration'))}">
 			<fail message="The '${framework::get-target-framework()}' framework is not supported by this version of Castle." />
 		</if>
+		<property name="clr-version" value="${framework::get-clr-version(framework::get-runtime-framework())}" />
+
 		<property name="csc.keyfile" 	value="" />
 		<property name="csc.args" 		value="" />
 		<if test="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
