@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cassini, Version=1.0.40305.0, Culture=neutral, PublicKeyToken=132a282791bfaeb7">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\net\Cassini.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.ActiveRecord, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-3.5\debug\Castle.ActiveRecord.dll</HintPath>
@@ -62,6 +66,7 @@
   <ItemGroup>
     <Compile Include="ARDataBinderTests\AccountControllerTestCase.cs" />
     <Compile Include="ARDataBinderTests\MR296.cs" />
+    <Compile Include="ARFetcherTestCase.cs" />
     <Compile Include="BaseAcceptanceTestCase.cs" />
     <Compile Include="BaseARTestCase.cs" />
     <Compile Include="ScaffoldingTests\UserScaffoldTestCase.cs" />
@@ -71,9 +76,17 @@
     <None Include="Castle.MonoRail.ActiveRecordSupport.Tests.build" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2008.csproj">
+      <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
+      <Name>Castle.Components.Binder-vs2008</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.ActiveRecordSupport\Castle.MonoRail.ActiveRecordSupport-vs2008.csproj">
       <Project>{2409063E-BE05-4596-A677-758096D1C759}</Project>
       <Name>Castle.MonoRail.ActiveRecordSupport-vs2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2008.csproj">
+      <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
+      <Name>Castle.MonoRail.Framework-vs2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.TestSupport\Castle.MonoRail.TestSupport-vs2008.csproj">
       <Project>{E572DC59-2A96-482F-BE39-E938AB47EA9D}</Project>
@@ -86,6 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

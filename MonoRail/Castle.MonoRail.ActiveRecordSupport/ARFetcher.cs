@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Reflection;
 
 	using NHibernate;
@@ -37,7 +38,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			this.converter = converter;
 		}
 
-		public object FetchActiveRecord(ParameterInfo param, ARFetchAttribute attr, IRequest request)
+		public object FetchActiveRecord(ParameterInfo param, 
+			ARFetchAttribute attr, 
+			IRequest request, 
+			IDictionary<string, object> customActionParameters)
 		{
 			Type type = param.ParameterType;
 
@@ -58,19 +62,15 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				throw new MonoRailException("ARFetch only supports single-attribute primary keys");
 			}
 
-			String webParamName = attr.RequestParameterName != null ? attr.RequestParameterName : param.Name;
+			String webParamName = attr.RequestParameterName ?? param.Name;
 
 			if (!isArray)
 			{
-				return LoadActiveRecord(type, request.Params[webParamName], attr, model);
+				string value = GetParameterValue(webParamName, customActionParameters, request);
+				return LoadActiveRecord(type, value, attr, model);
 			}
 
-			object[] pks = request.Params.GetValues(webParamName);
-
-			if (pks == null)
-			{
-				pks = new object[0];
-			}
+			object[] pks = GetParameterValues(webParamName, customActionParameters, request);
 
 			Array objs = Array.CreateInstance(type, pks.Length);
 
@@ -80,6 +80,33 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 
 			return objs;
+		}
+
+		private object[] GetParameterValues(string webParamName, IDictionary<string, object> customActionParameters, IRequest request)
+		{
+			object tmp;
+			object[] pks;
+			if(customActionParameters.TryGetValue(webParamName, out tmp) == false || (tmp is Array)==false)
+				pks = request.Params.GetValues(webParamName);
+			else
+				pks = (object[]) tmp;
+
+			if (pks == null)
+			{
+				pks = new object[0];
+			}
+			return pks;
+		}
+
+		private string GetParameterValue(string webParamName, IDictionary<string, object> customActionParameters, IRequest request)
+		{
+			string value;
+			object tmp;
+			if (customActionParameters.TryGetValue(webParamName, out tmp) == false || tmp == null)
+				value = request.Params[webParamName];
+			else
+				value = tmp.ToString();
+			return value;
 		}
 
 		private object LoadActiveRecord(Type type, object pk, ARFetchAttribute attr, ActiveRecordModel model)
@@ -100,7 +127,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					throw new MonoRailException("ARFetcher could not convert PK {0} to type {1}", pk, pkType);
 				}
 
-				if (attr.Eager == null || attr.Eager.Length == 0)
+				if (string.IsNullOrEmpty(attr.Eager))
 				{
 					// simple load
 					instance = ActiveRecordMediator.FindByPrimaryKey(type, convertedPk, attr.Required);

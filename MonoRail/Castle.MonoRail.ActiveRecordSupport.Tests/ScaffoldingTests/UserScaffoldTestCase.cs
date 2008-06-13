@@ -22,7 +22,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 	using WatiN.Core;
 	using WatiN.Core.Interfaces;
 
-	[TestFixture]
+	[TestFixture, Ignore("can't run successfully under cassini")]
 	public class UserScaffoldTestCase : BaseAcceptanceTestCase
 	{
 		private Account account1, account2, account3;

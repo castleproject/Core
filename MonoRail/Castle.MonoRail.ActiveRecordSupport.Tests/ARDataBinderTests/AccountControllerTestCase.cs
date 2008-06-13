@@ -20,7 +20,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ARDataBinderTests
 	using TestSiteARSupport.Model;
 	using WatiN.Core;
 
-	[TestFixture]
+	[TestFixture, Ignore("can't run successfully under cassini")]
 	public class AccountControllerTestCase : BaseAcceptanceTestCase
 	{
 		private ProductLicense lic1, lic2;

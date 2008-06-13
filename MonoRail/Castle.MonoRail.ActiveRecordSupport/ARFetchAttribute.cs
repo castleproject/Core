@@ -147,7 +147,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			ARFetcher fetcher = new ARFetcher(binder.Converter);
 
-			return fetcher.FetchActiveRecord(parameterInfo, this, context.Request);
+			return fetcher.FetchActiveRecord(parameterInfo, this, context.Request, controllerContext.CustomActionParameters);
 		}
 
 		private void EnsureBinderExists()

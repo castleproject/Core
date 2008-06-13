@@ -42,6 +42,7 @@ namespace TestSiteARSupport.Model
 			this.name = name;
 			this.email = email;
 			this.password = password;
+			this.confirmationpassword = password;
 		}
 
 		[PrimaryKey]

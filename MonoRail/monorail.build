@@ -30,13 +30,13 @@
 		<include name="TestSite/TestSite.build" if="${common.testrunner.enabled}"/>
 		<include name="TestSiteWindsor/TestSiteWindsor.build" if="${common.testrunner.enabled}"/>
 		<include name="TestSiteNVelocity/TestSiteNVelocity.build" if="${common.testrunner.enabled}"/>
-		<include name="TestSiteARSupport/TestSiteARSupport.build" if="${common.testrunner.enabled}"/>
 		-->
+		<include name="TestSiteARSupport/TestSiteARSupport.build" if="${common.testrunner.enabled}"/>
 		
 		<include name="Castle.MonoRail.Framework.Tests/Castle.MonoRail.Framework.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" if="${common.testrunner.enabled}"/>
-		<!--
 		<include name="Castle.MonoRail.ActiveRecordSupport.Tests.build" if="${common.testrunner.enabled}"/>
+		<!--
 		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.TestSupport.Tests/Castle.MonoRail.TestSupport.Tests.build" if="${common.testrunner.enabled}"/>

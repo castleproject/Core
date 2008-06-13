@@ -7,13 +7,27 @@
 >
 
 	<property name="root.dir" value="../.." />
+	<property name="assembly.is-cls-compliant" value="false" />
+	<property name="sign" value="false" />
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
+		<copy todir="${build.dir}" >
+			<fileset basedir="${lib.dir}">
+				<include name="${src.dir}/../TestSiteARSupport/bin/TestSiteARSupport.dll" />
+			</fileset>
+		</copy>
+		
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
+			<include name="${src.dir}/../TestSiteARSupport/bin/TestSiteARSupport.dll" />
 			<include name="Castle.Core.dll" />
+			<include name="Castle.Components.Binder.dll" />
+			<include name="Castle.ActiveRecord.dll" />
+			<include name="WatiN.Core.dll" />
+			<include name="Iesi.Collections.dll" />
 			<include name="Castle.MonoRail.TestSupport.dll" />
+			<include name="Castle.MonoRail.ActiveRecordSupport.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Castle.DynamicProxy.dll" />
 			<include name="Castle.Components.Validator.dll" />
