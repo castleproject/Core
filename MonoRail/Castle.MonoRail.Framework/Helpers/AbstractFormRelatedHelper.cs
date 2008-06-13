@@ -353,11 +353,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				rootInstance = ControllerContext.PropertyBag[target];
 			}
-			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Flash))
+			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Flash) && Context.Flash != null)
 			{
 				rootInstance = Context.Flash[target];
 			}
-			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Session))
+			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Session) && Context.Session != null)
 			{
 				rootInstance = Context.Session[target];
 			}

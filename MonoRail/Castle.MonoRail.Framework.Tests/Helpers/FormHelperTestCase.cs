@@ -27,6 +27,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Tests.Controllers;
 	using NUnit.Framework;
+	using Test;
 
 	[TestFixture]
 	public class FormHelperTestCase
@@ -440,6 +441,23 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		}
 
 		[Test]
+		public void SessionAndFlashLessController() {
+			FormHelper sut = new FormHelper();
+			HomeController homeController = new HomeController();
+			StubEngineContext context = new StubEngineContext();
+			context.Session = null;
+			context.Flash = null;
+			ControllerContext controllerContext = new ControllerContext();
+			
+			homeController.Contextualize(context, controllerContext );
+			sut.SetController(homeController, controllerContext);
+			sut.SetContext(context);
+           
+			string area = sut.TextArea("item.Name");
+			Assert.AreEqual(@"<textarea id=""item_Name"" name=""item.Name"" ></textarea>",area);
+		}
+
+		[Test]
 		public void ShouldFailToDiscoverRootTypeOnCollectionWhenNoTypeInPropertyBag()
 		{
 			FormHelperEx sut = new FormHelperEx();
@@ -487,7 +505,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				return ObtainTargetProperty(context, target, null);
 			}
 		}
-
+        
 	}
 
 	#region Classes skeletons
