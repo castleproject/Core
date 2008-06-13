@@ -17,6 +17,7 @@ namespace Castle.Windsor.Tests.Proxy
 	using System;
 	using Castle.Core.Interceptor;
 	using Castle.Windsor.Tests.Components;
+	using Castle.MicroKernel.ComponentActivator;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -108,6 +109,23 @@ namespace Castle.Windsor.Tests.Proxy
 			Assert.IsFalse(calcService is CalculatorServiceWithMarshalByRefProxyBehavior, "Service proxy should not expose CalculatorServiceWithMarshalByRefProxyBehavior");
 			Assert.IsTrue(calcService is MarshalByRefObject, "Service proxy should expose MarshalByRefObject");
 			Assert.IsTrue(calcService is IDisposable, "Service proxy should expose the IDisposable interface");
+		}
+
+		[Test]
+		public void InternalInterfaceIgnoredByProxy()
+		{
+			IWindsorContainer container;
+
+			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Proxy/proxyBehavior.xml"));
+
+			try
+			{
+				ICalcService calcService = (ICalcService)container["hasInternalInterface"];
+			}
+			catch (ComponentActivatorException)
+			{
+				Assert.Fail("Internal interface should be ignored by proxy factory.");
+			}
 		}
 	}
 }

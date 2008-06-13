@@ -158,6 +158,7 @@
     <Compile Include="Components\CalculatorServiceWithAttributes.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\CalculatorServiceWithInternalInterface.cs" />
     <Compile Include="Components\CalculatorServiceWithLifecycle.cs">
       <SubType>Code</SubType>
     </Compile>

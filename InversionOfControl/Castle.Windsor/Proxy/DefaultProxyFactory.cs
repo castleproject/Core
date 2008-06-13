@@ -167,7 +167,7 @@ namespace Castle.Windsor.Proxy
 		{
 			Type mainInterface = (Type) criteria;
 
-			return !type.IsAssignableFrom(mainInterface);
+			return !type.IsAssignableFrom(mainInterface) && type.IsPublic;
 		}
 
 		#region IDeserializationCallback

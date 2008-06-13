@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Applied Daniel Jins patch to not proxy internal interfaces.
+
 - Fixed IOC-126
   "PoolableLifestyleManager creates pool in constructor" 
 

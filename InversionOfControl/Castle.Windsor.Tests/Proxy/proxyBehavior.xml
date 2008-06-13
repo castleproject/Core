@@ -28,6 +28,11 @@
         service="Castle.Windsor.Tests.Components.ICalcService, Castle.Windsor.Tests">
     </component>
 
+    <component id="hasInternalInterface"
+        type="Castle.Windsor.Tests.Components.CalculatorServiceWithInternalInterface, Castle.Windsor.Tests"
+        service="Castle.Windsor.Tests.Components.ICalcService, Castle.Windsor.Tests">
+    </component>
+
   </components>
 
 </configuration>
