@@ -14,8 +14,9 @@
 	<property name="common.testrunner.failonerror" value="true" overwrite="false" /> <!--  Whether to keep building when tests are failing -->
 
 	<!-- Check which nant version we're using - fail if it's not the minium  -->
-	<property name="current.nant-version" value="${assemblyname::get-version(assembly::get-name(nant::get-assembly()))}" />
-	<property name="required.nant-version" value="0.85.2478.0" /> <!-- Nant 0.85 release version -->
+	<property name="nant-version.current" value="${assemblyname::get-version(assembly::get-name(nant::get-assembly()))}" />
+	<property name="nant-version.required" value="0.85.2478.0" /> <!-- Nant 0.85 release version -->
+	<property name="nant-version.beta1_086" value="0.86.2898.0" /> <!-- Nant 0.86 Beta 1 -->
 
 	<!-- properties used to connect to database for testing -->
 	<property name="ar.dialect" value="NHibernate.Dialect.MsSql2000Dialect" overwrite="false" />
@@ -29,7 +30,15 @@
 	-->
 	<property name="lib.dir" value="SharedLibs" dynamic="true" />
 	<property name="lib.family.dir" value="${path::combine(lib.dir, framework::get-family(framework::get-target-framework()))}" dynamic="true" />
-	<property name="lib.framework.dir" value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}" dynamic="true" />
+
+	<if test="${nant-version.current != nant-version.beta1_086 or framework::get-target-framework() != 'net-3.5'}">
+		<property name="lib.framework.dir" value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}" dynamic="true" />
+	</if>
+	<if test="${nant-version.current == nant-version.beta1_086 and framework::get-target-framework() == 'net-3.5'}">
+		<echo>Detected NAnt 0.86 Beta 1, consider upgrading to a newer version when building for .NET 3.5</echo>
+		<property name="lib.framework.dir" value="${path::combine(lib.family.dir, string::substring(framework::get-target-framework(), 4, 3))}" dynamic="true" />
+	</if>
+
 	<property name="lib.framework.clr.dir" value="${path::combine(lib.family.dir, string::substring(clr-version, 0, 3))}" dynamic="true" />
 	
 	<if test="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
@@ -276,7 +285,7 @@
 	</target>
 
 	<target name="common.check-nant-version">
-		<fail if="${current.nant-version&lt;required.nant-version}" message="Not using minimum required Nant version: ${required.nant-version} (current version: ${current.nant-version}). Please upgrade your copy of nant." />
+		<fail if="${nant-version.current&lt;nant-version.required}" message="Not using minimum required Nant version: ${nant-version.required} (current version: ${nant-version.current}). Please upgrade your copy of nant." />
 	</target>
 
 	<target name="common.find-tools">
