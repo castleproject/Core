@@ -320,7 +320,7 @@ namespace Castle.Services.Transaction
 					logger.Error("Synchronization failed", ex);
 
 					// Exceptions should not be threw by syncs.
-					// They will be swalled
+					// They will be swallowed
 				}
 			}
 		}
