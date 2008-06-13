@@ -129,6 +129,27 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
+		public void AddComponent_Instance_UsesInstanceWithParameters()
+		{
+			CustomerImpl2 customer = new CustomerImpl2("ernst","delft", 29);
+
+			kernel.Register(
+				Component.For<ICustomer>()
+					.Named("key")
+					.Instance(customer)
+					);
+			Assert.IsTrue(kernel.HasComponent("key"));
+			IHandler handler = kernel.GetHandler("key");
+			Assert.AreEqual(customer.GetType(), handler.ComponentModel.Implementation);
+
+			CustomerImpl2 customer2 = kernel["key"] as CustomerImpl2;
+			Assert.AreSame(customer, customer2);
+
+			customer2 = kernel[typeof(ICustomer)] as CustomerImpl2;
+			Assert.AreSame(customer, customer2);
+		}
+
+		[Test]
 		public void AddComponent_WithExplicitLifestyle_WorksFine()
 		{
 			kernel.Register(
