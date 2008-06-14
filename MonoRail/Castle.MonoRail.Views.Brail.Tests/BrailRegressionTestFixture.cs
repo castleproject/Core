@@ -27,6 +27,16 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		}
 
 		[Test]
+		public void WillPassRoutingInfoToView()
+		{
+			PropertyBag["myVariable"] = "Hello";
+			ControllerContext.CustomActionParameters["id"] = 5;
+			ProcessView("regressions/routingInfo");
+			AssertReplyEqualTo("id = 5");
+		}
+
+
+		[Test]
 		public void CanCompareToNullableParameter()
 		{
             PropertyBag["myVariable"] = "Hello";

@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Views.Brail
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Web;
 	using Framework;
@@ -445,6 +446,14 @@ namespace Castle.MonoRail.Views.Brail
 			if (controllerContext.PropertyBag != null)
 			{
 				foreach(DictionaryEntry entry in controllerContext.PropertyBag)
+				{
+					properties[entry.Key] = entry.Value;
+				}
+			}
+
+			if (controllerContext.CustomActionParameters != null)
+			{
+				foreach (KeyValuePair<string,object> entry in controllerContext.CustomActionParameters)
 				{
 					properties[entry.Key] = entry.Value;
 				}
