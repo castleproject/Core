@@ -624,5 +624,38 @@ namespace Castle.MicroKernel.Tests.Registration
 			IGenericClassWithParameter<int> instance = kernel.Resolve<IGenericClassWithParameter<int>>();
 			Assert.AreEqual("NewName", instance.Name);
 		}
+
+		[Test]
+		public void AddComponent_UnlessCondition_SkipsRegistration()
+		{
+			kernel.Register(Component.For<ICustomer>()
+				.ImplementedBy<CustomerImpl>()
+				);
+
+			kernel.Register(Component.For<ICustomer>()
+				.ImplementedBy<CustomerChain1>()
+				.Unless(Component.ServiceAlreadyRegistred)
+				);
+
+			IHandler[] handlers = kernel.GetHandlers(typeof(ICustomer));
+			Assert.AreEqual(1, handlers.Length);
+		}
+
+
+		[Test]
+		public void AddComponent_IfCondition_RegistersComponent()
+		{
+			kernel.Register(Component.For<ICustomer>()
+				.ImplementedBy<CustomerImpl>()
+				);
+
+			kernel.Register(Component.For<ICustomer>()
+				.ImplementedBy<CustomerChain1>()
+				.If(Component.ServiceAlreadyRegistred)
+				);
+
+			IHandler[] handlers = kernel.GetHandlers(typeof(ICustomer));
+			Assert.AreEqual(2, handlers.Length);
+		}
 	}
 }

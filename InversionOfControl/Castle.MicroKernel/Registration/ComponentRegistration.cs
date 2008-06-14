@@ -22,6 +22,14 @@ namespace Castle.MicroKernel.Registration
 	using MicroKernel;
 
 	/// <summary>
+	/// Delegate to filter component registration.
+	/// </summary>
+	/// <param name="kernel">The kernel.</param>
+	/// <param name="model">The component model.</param>
+	/// <returns>true if accepted.</returns>
+	public delegate bool ComponentFilter(IKernel kernel, ComponentModel model);
+
+	/// <summary>
 	/// Registration for a single component with the kernel.
 	/// </summary>
 	/// <typeparam name="S">The service type</typeparam>
@@ -31,6 +39,8 @@ namespace Castle.MicroKernel.Registration
 		private bool overwrite;
 		private Type serviceType;
 		private Type implementation;
+		private ComponentFilter unlessFilter;
+		private ComponentFilter ifFilter;
 		private readonly List<ComponentDescriptor<S>> descriptors;
 		private ComponentModel componentModel;
 		private bool registered;
@@ -325,7 +335,7 @@ namespace Castle.MicroKernel.Registration
 		public ComponentRegistration<S> Startable()
 		{
 			return AddDescriptor(new ExtendedPropertiesDescriptor<S>(
-			                     	Property.ForKey("startable").Eq(true)));
+			                     Property.ForKey("startable").Eq(true)));
 		}
 
 		/// <summary>
@@ -342,6 +352,28 @@ namespace Castle.MicroKernel.Registration
 					DependsOn(Property.ForKey(Guid.NewGuid().ToString()).Eq(actor));
 				}
 			}
+			return this;
+		}
+
+		/// <summary>
+		/// Assigns a conditional predication which must be satisfied.
+		/// </summary>
+		/// <param name="ifFilter">The predicate to satisfy.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> If(ComponentFilter ifFilter)
+		{
+			this.ifFilter = ifFilter;
+			return this;
+		}
+
+		/// <summary>
+		/// Assigns a conditional predication which must not be satisfied. 
+		/// </summary>
+		/// <param name="unlessFilter">The predicate not to satisify.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> Unless(ComponentFilter unlessFilter)
+		{
+			this.unlessFilter = unlessFilter;
 			return this;
 		}
 
@@ -373,7 +405,9 @@ namespace Castle.MicroKernel.Registration
 					descriptor.ApplyToModel(kernel, componentModel);
 				}
 
-				if (!kernel.HasComponent(name))
+				if (!kernel.HasComponent(name)
+					&& (ifFilter == null || ifFilter(kernel, componentModel))
+					&& (unlessFilter == null || !unlessFilter(kernel, componentModel)))
 				{
 					kernel.AddCustomComponent(componentModel);
 				}	

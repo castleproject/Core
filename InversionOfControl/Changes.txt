@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Add if/unless support for ComponentRegistration.
+
 - Applied Daniel Jins patch to not proxy internal interfaces.
 
 - Fixed IOC-126
