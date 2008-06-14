@@ -438,7 +438,7 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 				else
 				{
-					return "[a-zA-Z,_,0-9,-]+";
+					return "[-,\\w,_, ]+";
 				}
 			}
 

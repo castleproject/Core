@@ -93,7 +93,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/<action>");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(4000, route.Matches("/some/act_name", CreateGetContext(), match));
+			route.Matches("/some/act_name", CreateGetContext(), match);
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act_name", match.Parameters["action"]);
 		}
@@ -103,9 +103,19 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 		{
 			PatternRoute route = new PatternRoute("/<controller>/<action>");
 			RouteMatch match = new RouteMatch();
-			Assert.AreEqual(4000, route.Matches("/some/act-name", CreateGetContext(), match));
+			route.Matches("/some/act-name", CreateGetContext(), match);
 			Assert.AreEqual("some", match.Parameters["controller"]);
 			Assert.AreEqual("act-name", match.Parameters["action"]);
+		}
+
+		[Test]
+		public void NamedParametersCanHaveSpaces()
+		{
+			PatternRoute route = new PatternRoute("/<controller>/<action>");
+			RouteMatch match = new RouteMatch();
+			route.Matches("/some/act name", CreateGetContext(), match);
+			Assert.AreEqual("some", match.Parameters["controller"]);
+			Assert.AreEqual("act name", match.Parameters["action"]);
 		}
 
 		[Test]
