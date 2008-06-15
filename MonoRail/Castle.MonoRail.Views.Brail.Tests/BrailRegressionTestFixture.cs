@@ -124,7 +124,23 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			Assert.AreEqual(2, CountOccurancesOf("<div class=\"tooltip_content\">SOS</div>", view));
 		}
 
-		private int CountOccurancesOf(string stringOccuring, string view)
+		[Test]
+		public void CanUseIgnoreNullInsideCaptureFor()
+		{
+			string view = ProcessView("regressions/UsingIgnoreNullWithinCaptureFor");
+			Assert.AreEqual(@"
+
+	<h2 id=""H1"">Create new webcast</h2>
+
+
+Hibernating Rhinos 
+	
+		- Create new webcast
+	
+", view);
+		}
+
+		private static int CountOccurancesOf(string stringOccuring, string view)
 		{
 			int count = 0;
 			int index = 0;

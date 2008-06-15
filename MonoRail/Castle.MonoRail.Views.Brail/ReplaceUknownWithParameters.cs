@@ -20,7 +20,7 @@ namespace Castle.MonoRail.Views.Brail
 
 	///<summary>
 	/// Replace any uknown identifier with a call to GetParameter('unknown')
-	/// this mean that unknonw identifier in scripts will only fail in run time if they
+	/// this mean that unknonwn identifier in scripts will only fail in run time if they
 	/// were not defined by the controller.
 	/// </summary>
 	public class ReplaceUknownWithParameters : ProcessMethodBodiesWithDuckTyping
