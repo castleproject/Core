@@ -1169,7 +1169,7 @@ namespace Castle.MicroKernel
 			set { releaserPolicy = value; }
 		}
 
-		public virtual void AddFacility(String key, IFacility facility)
+		public virtual IKernel AddFacility(String key, IFacility facility)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (facility == null) throw new ArgumentNullException("facility");
@@ -1177,16 +1177,17 @@ namespace Castle.MicroKernel
 			facility.Init(this, ConfigurationStore.GetFacilityConfiguration(key));
 
 			facilities.Add(facility);
+			return this;
 		}
 
-		public void AddFacility<T>(String key) where T : IFacility, new()
+		public IKernel AddFacility<T>(String key) where T : IFacility, new()
 		{
-			AddFacility(key, new T());
+			return AddFacility(key, new T());
 		}
 
-		public void AddFacility<T>() where T : IFacility, new()
+		public IKernel AddFacility<T>() where T : IFacility, new()
 		{
-			AddFacility<T>(typeof(T).FullName);
+			return AddFacility<T>(typeof(T).FullName);
 		}
 
 		/// <summary>

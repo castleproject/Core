@@ -587,20 +587,22 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="facility"></param>
-		void AddFacility(String key, IFacility facility);
+		/// <returns></returns>
+		IKernel AddFacility(String key, IFacility facility);
 
 		/// <summary>
 		/// Creates and adds an <see cref="IFacility"/> facility to the kernel.
 		/// </summary>
 		/// <typeparam name="T">The facility type.</typeparam>
 		/// <param name="key"></param>
-		void AddFacility<T>(String key) where T : IFacility, new();
+		IKernel AddFacility<T>(String key) where T : IFacility, new();
 
 		/// <summary>
 		/// Creates and adds an <see cref="IFacility"/> facility to the kernel.
 		/// </summary>
 		/// <typeparam name="T">The facility type.</typeparam>
-		void AddFacility<T>() where T : IFacility, new();
+		/// <returns></returns>
+		IKernel AddFacility<T>() where T : IFacility, new();
 
 		/// <summary>
 		/// Returns the facilities registered on the kernel.

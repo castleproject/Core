@@ -17,6 +17,8 @@ namespace Castle.MicroKernel.Tests.Registration
 	using System.Collections;
 	using Castle.Core;
 	using Castle.Core.Configuration;
+	using Castle.Facilities.Startable;
+	using Castle.Facilities.Startable.Tests.Components;
 	using Castle.MicroKernel.Registration;
 	using Castle.MicroKernel.Tests.Lifestyle.Components;
 	using Castle.MicroKernel.Tests.Configuration.Components;
@@ -641,7 +643,6 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreEqual(1, handlers.Length);
 		}
 
-
 		[Test]
 		public void AddComponent_IfCondition_RegistersComponent()
 		{
@@ -656,6 +657,41 @@ namespace Castle.MicroKernel.Tests.Registration
 
 			IHandler[] handlers = kernel.GetHandlers(typeof(ICustomer));
 			Assert.AreEqual(2, handlers.Length);
+		}
+
+		[Test]
+		public void AddComponent_StartableWithInterface_StartsComponent()
+		{
+			kernel.AddFacility<StartableFacility>()
+				.Register(Component.For<StartableComponent>());
+
+			StartableComponent component = kernel.Resolve<StartableComponent>();
+
+			Assert.IsNotNull(component);
+			Assert.IsTrue(component.Started);
+			Assert.IsFalse(component.Stopped);
+
+			kernel.ReleaseComponent(component);
+			Assert.IsTrue(component.Stopped);
+		}
+
+		[Test]
+		public void AddComponent_StartableWithoutInterface_StartsComponent()
+		{
+			kernel.AddFacility<StartableFacility>()
+				.Register(Component.For<NoInterfaceStartableComponent>()
+					.StartUsingMethod("Start")
+					.StopUsingMethod("Stop")
+					);
+
+			NoInterfaceStartableComponent component = kernel.Resolve<NoInterfaceStartableComponent>();
+
+			Assert.IsNotNull(component);
+			Assert.IsTrue(component.Started);
+			Assert.IsFalse(component.Stopped);
+
+			kernel.ReleaseComponent(component);
+			Assert.IsTrue(component.Stopped);
 		}
 	}
 }

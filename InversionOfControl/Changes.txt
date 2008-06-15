@@ -1,6 +1,13 @@
 RC 4
 ====
 
+- Removed sealed qualifier from CreationContext and made ISubDependencyResolver
+  methods virtual so they can be overriden.
+
+- Made IKernel.AddFacility fluent.
+
+- Added StartMethod/StartMethod to ComponentRegistration.
+
 - Add if/unless support for ComponentRegistration.
 
 - Applied Daniel Jins patch to not proxy internal interfaces.

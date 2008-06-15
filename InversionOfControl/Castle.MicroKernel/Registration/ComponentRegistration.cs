@@ -329,13 +329,34 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// Ases the startable.
+		/// Makrs component as startable.
 		/// </summary>
 		/// <returns></returns>
 		public ComponentRegistration<S> Startable()
 		{
-			return AddDescriptor(new ExtendedPropertiesDescriptor<S>(
-			                     Property.ForKey("startable").Eq(true)));
+			return AddAttributeDescriptor("startable", "true");	
+		}
+
+		/// <summary>
+		/// Assigns the start method for the startable.
+		/// </summary>
+		/// <param name="startMethod">The start method.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> StartUsingMethod(string startMethod)
+		{
+			return Startable()
+				.AddAttributeDescriptor("startMethod", startMethod);	
+		}
+
+		/// <summary>
+		/// Assigns the stop method for the startable.
+		/// </summary>
+		/// <param name="stopMethod">The stop method.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> StopUsingMethod(string stopMethod)
+		{
+			return Startable()
+				.AddAttributeDescriptor("stopMethod", stopMethod);
 		}
 
 		/// <summary>

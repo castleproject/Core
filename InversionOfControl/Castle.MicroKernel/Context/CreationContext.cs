@@ -29,7 +29,7 @@ namespace Castle.MicroKernel
 	/// to provide arguments to components.
 	/// </summary>
 	[Serializable]
-	public sealed class CreationContext : MarshalByRefObject, ISubDependencyResolver
+	public class CreationContext : MarshalByRefObject, ISubDependencyResolver
 	{
 		/// <summary>Creates a new, empty <see cref="CreationContext" /> instance.</summary>
 		/// <remarks>A new CreationContext should be created every time, as the contexts keeps some state related to dependency resolution.</remarks>
@@ -97,7 +97,7 @@ namespace Castle.MicroKernel
 
 		#region ISubDependencyResolver
 
-		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver,
+		public virtual object Resolve(CreationContext context, ISubDependencyResolver parentResolver,
 							  ComponentModel model, DependencyModel dependency)
 		{
 			if (additionalArguments != null)
@@ -108,7 +108,7 @@ namespace Castle.MicroKernel
 			return null;
 		}
 
-		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver,
+		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver,
 							   ComponentModel model, DependencyModel dependency)
 		{
 			if (dependency.DependencyKey == null) return false;
