@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="Castle.Components.Scheduler.Tests"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
+>
+
+	<property name="root.dir" value="../../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<property name="assembly.is-cls-compliant" value="false" />
+
+	<target name="init" depends="common.init">
+		<property name="csc.args" value="/nowarn:618" />
+
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="Castle.Core.dll" />
+			<include name="Castle.MicroKernel.dll" />
+			<include name="Castle.Windsor.dll" />
+			<include name="Castle.Components.Scheduler.dll" />
+			<include name="MbUnit.Framework.dll" />
+			<include name="Rhino.Mocks.dll" />
+			<include name="System.Data.dll" />
+			<include name="System.Web.dll" />
+		</assemblyfileset>
+	</target>
+
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+
+	<target name="build" description="Build ${project::get-name()}" depends="generate-assemblyinfo common.compile-dll" />
+
+</project>
