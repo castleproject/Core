@@ -78,5 +78,27 @@ namespace Castle.DynamicProxy.Tests
 			Type t = emitter.BuildType ();
 			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t.Assembly));
 		}
+
+		[Test]
+		public void CreateFieldWithAttributes ()
+		{
+			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
+			emitter.CreateField ("myField", typeof (string), FieldAttributes.FamANDAssem | FieldAttributes.InitOnly);
+			Type t = emitter.BuildType ();
+			FieldInfo field = t.GetField ("myField", BindingFlags.NonPublic | BindingFlags.Instance);
+			Assert.IsNotNull (field);
+			Assert.AreEqual (FieldAttributes.FamANDAssem | FieldAttributes.InitOnly, field.Attributes);
+		}
+
+		[Test]
+		public void CreateStaticFieldWithAttributes ()
+		{
+			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
+			emitter.CreateStaticField ("myField", typeof (string), FieldAttributes.FamANDAssem | FieldAttributes.InitOnly);
+			Type t = emitter.BuildType ();
+			FieldInfo field = t.GetField ("myField", BindingFlags.NonPublic | BindingFlags.Static);
+			Assert.IsNotNull (field);
+			Assert.AreEqual (FieldAttributes.Static | FieldAttributes.FamANDAssem | FieldAttributes.InitOnly, field.Attributes);
+		}
 	}
 }

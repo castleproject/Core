@@ -135,16 +135,19 @@ namespace Castle.Facilities.Cache.Tests
 			IServiceC serviceC = _container[typeof(IServiceC)] as IServiceC;
 
 			serviceA.MyMethod(2, 5.5M);
-			string consoleContents = _outWriter.GetStringBuilder().ToString();
+			string consoleContents = _outWriter.ToString ();
+			int tickCountBeforeReset = Environment.TickCount;
 
 			serviceC.MyMethod(2, 5.5M);
 
 			ResetConsoleOut();
-
-		    Thread.Sleep(10);
+			// wait for the tick count to change.
+			while (Environment.TickCount == tickCountBeforeReset)
+				;
 
 			serviceA.MyMethod(2, 5.5M);
-			Assert.AreNotEqual( consoleContents , _outWriter.GetStringBuilder().ToString() );
+			string consoleContents2 = _outWriter.ToString ();
+			Assert.AreNotEqual (consoleContents, consoleContents2);
 		}
 	}
 }

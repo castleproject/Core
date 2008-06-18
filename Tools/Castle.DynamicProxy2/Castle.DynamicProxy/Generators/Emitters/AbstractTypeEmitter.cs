@@ -141,10 +141,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public FieldReference CreateStaticField(string name, Type fieldType)
 		{
-			FieldAttributes atts = FieldAttributes.Public | FieldAttributes.Static;
+			FieldAttributes atts = FieldAttributes.Public;
 
+			return CreateStaticField(name, fieldType, atts);
+		}
+
+		public FieldReference CreateStaticField (string name, Type fieldType, FieldAttributes atts)
+		{
+			atts |= FieldAttributes.Static;
 			FieldBuilder fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
-
 			return new FieldReference(fieldBuilder);
 		}
 
@@ -162,8 +167,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				atts |= FieldAttributes.NotSerialized;
 			}
 
-			FieldBuilder fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
+			return CreateField(name, fieldType, atts);
+		}
 
+		public FieldReference CreateField (string name, Type fieldType, FieldAttributes atts)
+		{
+			FieldBuilder fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
 			return new FieldReference(fieldBuilder);
 		}
 
