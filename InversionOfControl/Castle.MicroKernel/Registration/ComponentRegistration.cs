@@ -316,7 +316,17 @@ namespace Castle.MicroKernel.Registration
 		{
 			return AddDescriptor( new ConfigurationDescriptor<S>(configNodes));
 		}
-		
+
+		/// <summary>
+		/// With the configuration.
+		/// </summary>
+		/// <param name="configuration">The configuration <see cref="MutableConfiguration"/>.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> Configuration(IConfiguration configuration)
+		{
+			return AddDescriptor(new ConfigurationDescriptor<S>(configuration));
+		}
+
 		/// <summary>
 		/// With the interceptors.
 		/// </summary>

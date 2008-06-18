@@ -18,6 +18,7 @@ namespace Castle.MicroKernel.Registration
 
 	public class ConfigurationDescriptor<S> : ComponentDescriptor<S>
 	{
+		private readonly IConfiguration configuration;
 		private readonly Node[] configNodes;
 
 		public ConfigurationDescriptor(params Node[] configNodes)
@@ -25,11 +26,23 @@ namespace Castle.MicroKernel.Registration
 			this.configNodes = configNodes;
 		}
 
-		protected internal override void ApplyToConfiguration(IKernel kernel, IConfiguration configuration)
+		public ConfigurationDescriptor(IConfiguration configuration)
 		{
-			foreach (Node configNode in configNodes)
+			this.configuration = configuration;
+		}
+
+		protected internal override void ApplyToConfiguration(IKernel kernel, IConfiguration compConfig)
+		{
+			if (configuration != null)
 			{
-				configNode.ApplyTo(configuration);
+				compConfig.Children.Add(configuration);
+			}
+			else
+			{
+				foreach(Node configNode in configNodes)
+				{
+					configNode.ApplyTo(compConfig);
+				}
 			}
 		}
 	}
