@@ -522,8 +522,6 @@ namespace Castle.MonoRail.Framework.Container
 			{
 				AddService<IAjaxProxyGenerator>(CreateService<PrototypeAjaxProxyGenerator>());
 			}
-			
-
 		}
 
 		/// <summary>

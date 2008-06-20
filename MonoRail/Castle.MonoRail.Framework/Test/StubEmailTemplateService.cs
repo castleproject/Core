@@ -37,6 +37,19 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
+		/// Determines whether the specified template exists in the e-mail
+		/// template folder (<c>views/mail</c>).
+		/// </summary>
+		/// <param name="templateName">Name of the e-mail template.</param>
+		/// <returns>
+		/// 	<c>true</c> if the template exists; otherwise, <c>false</c>.
+		/// </returns>
+		public bool HasMailTemplate(string templateName)
+		{
+			return true;
+		}
+
+		/// <summary>
 		/// Creates an instance of <see cref="Message"/>
 		/// using the specified template for the body
 		/// </summary>

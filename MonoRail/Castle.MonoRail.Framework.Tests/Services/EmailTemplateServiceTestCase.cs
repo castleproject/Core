@@ -48,10 +48,12 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		[Test]
 		public void RenderMailMessage_BackwardCompatibility_PassOnControllerContext()
 		{
-			string templateName = "welcome";
+			const string templateName = "welcome";
 
 			using(mockRepository.Record())
 			{
+				Expect.Call(viewEngineManagerMock.HasTemplate("mail\\" + templateName)).Return(true);
+
 				viewEngineManagerMock.Process(templateName, null, engineContext, controller, controllerContext);
 				LastCall.Constraints(
 					Is.Equal("mail\\" + templateName),
@@ -70,10 +72,12 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		[Test]
 		public void RenderMailMessage_BackwardCompatibility_UsesTemplateNameAsItIsIfStartsWithSlash()
 		{
-			string templateName = "/emailtemplates/welcome";
+			const string templateName = "/emailtemplates/welcome";
 
 			using(mockRepository.Record())
 			{
+				Expect.Call(viewEngineManagerMock.HasTemplate(templateName)).Return(true);
+
 				viewEngineManagerMock.Process(templateName, null, engineContext, controller, controllerContext);
 				LastCall.Constraints(
 					Is.Equal(templateName),
@@ -92,11 +96,13 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		[Test]
 		public void RenderMailMessage_InvokesViewEngineManager()
 		{
-			string templateName = "welcome";
+			const string templateName = "welcome";
 			Hashtable parameters = new Hashtable();
 
 			using(mockRepository.Record())
 			{
+				Expect.Call(viewEngineManagerMock.HasTemplate("mail\\" + templateName)).Return(true);
+
 				viewEngineManagerMock.Process(templateName, "layout", null, null);
 				LastCall.Constraints(
 					Is.Equal("mail\\" + templateName),
@@ -114,11 +120,13 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		[Test]
 		public void RenderMailMessage_MessageIsConstructedCorrectly()
 		{
-			string templateName = "welcome";
+			const string templateName = "welcome";
 			Hashtable parameters = new Hashtable();
 
 			using(mockRepository.Record())
 			{
+				Expect.Call(viewEngineManagerMock.HasTemplate("mail\\" + templateName)).Return(true);
+
 				Expect.Call(delegate() { viewEngineManagerMock.Process(templateName, "layout", null, null); })
 					.Constraints(
 						Is.Equal("mail\\" + templateName),
@@ -142,8 +150,8 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			}
 		}
 
-		public delegate void Render(
-			string templateName, string layoutName, TextWriter output, IDictionary<string, object> parameters);
+		public delegate void Render(string templateName, string layoutName,
+		                            TextWriter output, IDictionary<string, object> parameters);
 
 		public static void RendersEmail(string templateName, string layoutName, TextWriter output,
 		                                IDictionary<string, object> parameters)

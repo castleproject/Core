@@ -24,6 +24,16 @@ namespace Castle.MonoRail.Framework
 	public interface IEmailTemplateService
 	{
 		/// <summary>
+		/// Determines whether the specified template exists in the e-mail 
+		/// template folder (<c>views/mail</c>).
+		/// </summary>
+		/// <param name="templateName">Name of the e-mail template.</param>
+		/// <returns>
+		/// 	<c>true</c> if the template exists; otherwise, <c>false</c>.
+		/// </returns>
+		bool HasMailTemplate(string templateName);
+
+		/// <summary>
 		/// Creates an instance of <see cref="Message"/>
 		/// using the specified template for the body
 		/// </summary>

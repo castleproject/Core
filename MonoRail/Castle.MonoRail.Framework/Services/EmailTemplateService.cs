@@ -81,6 +81,21 @@ namespace Castle.MonoRail.Framework
 		#endregion
 
 		/// <summary>
+		/// Determines whether the specified template exists in the e-mail
+		/// template folder (<c>views/mail</c>).
+		/// </summary>
+		/// <param name="templateName">Name of the e-mail template.</param>
+		/// <returns>
+		/// 	<c>true</c> if the template exists; otherwise, <c>false</c>.
+		/// </returns>
+		public bool HasMailTemplate(string templateName)
+		{
+			string normalized = NormalizeTemplatePath(templateName);
+
+			return viewEngineManager.HasTemplate(normalized);
+		}
+
+		/// <summary>
 		/// Creates an instance of <see cref="Message"/>
 		/// using the specified template for the body
 		/// </summary>
@@ -112,10 +127,12 @@ namespace Castle.MonoRail.Framework
 				logger.DebugFormat("Rendering email message. Template name {0}", templateName);
 			}
 
-			if (!templateName.StartsWith("/"))
+			if (!HasMailTemplate(templateName))
 			{
-				templateName = Path.Combine(EmailTemplatePath, templateName);
+				throw new MonoRailException("Template for e-mail doesn't exist: " + templateName);
 			}
+
+			templateName = NormalizeTemplatePath(templateName);
 
 			// use the template engine to generate the body of the message
 			StringWriter writer = new StringWriter();
@@ -149,16 +166,27 @@ namespace Castle.MonoRail.Framework
 				controllerContext.LayoutNames = null;
 			}
 
-			if (!templateName.StartsWith("/"))
+			if (!HasMailTemplate(templateName))
 			{
-				templateName = Path.Combine(EmailTemplatePath, templateName);
+				throw new MonoRailException("Template for e-mail doesn't exist: " + templateName);
 			}
+
+			templateName = NormalizeTemplatePath(templateName);
 
 			viewEngineManager.Process(templateName, writer, engineContext, controller, controllerContext);
 
 			controllerContext.LayoutNames = oldLayout;
 
 			return CreateMessage(writer);
+		}
+
+		private string NormalizeTemplatePath(string templateName)
+		{
+			if (!templateName.StartsWith("/"))
+			{
+				templateName = Path.Combine(EmailTemplatePath, templateName);
+			}
+			return templateName;
 		}
 
 		private Message CreateMessage(StringWriter writer)
