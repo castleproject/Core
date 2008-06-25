@@ -360,9 +360,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			static string GetPrefixedFieldld( string target, string field )
 			{
-				string[] parts = target.Split( '.' );
+				string[] parts = target.Split('_');
 
-				return string.Join( "_", parts, 0, parts.Length - 1 ) + "_" + field;
+				return string.Join("_", parts, 0, parts.Length - 1) + "_" + field;
 			}
 
 			void AddClass( string className )
@@ -618,8 +618,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsSameAs( string target, string comparisonFieldName, string violationMessage )
 			{
+				string prefixedComparisonFieldName = GetPrefixedFieldld(target, comparisonFieldName);
+
 				AddClass( "equalTo" );
-				AddParameter( "equalTo", comparisonFieldName );
+				AddParameter("equalTo", prefixedComparisonFieldName);
 				AddTitle( violationMessage );
 			}
 

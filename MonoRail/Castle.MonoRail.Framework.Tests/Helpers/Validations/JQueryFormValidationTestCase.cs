@@ -101,6 +101,25 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		}
 
 		[Test]
+		public void SameAsUsingScopes()
+		{
+			helper.FormTag( DictHelper.Create( "noaction=true" ) );
+			helper.Push( "model" );
+
+			Assert.AreEqual( "<input type=\"text\" id=\"model_emailfield\" " +
+				"name=\"model.emailfield\" value=\"\" class=\"email\" " +
+				"title=\"Email doesnt look right.\" />", helper.TextField( "emailfield" ) );
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_ConfirmedEmailField\" " +
+				"name=\"model.ConfirmedEmailField\" value=\"\" class=\"equalTo\" " +
+				"equalto=\"model_EmailField\" " +
+				"title=\"Fields do not match.\" />", helper.TextField("ConfirmedEmailField"));
+            
+			helper.Pop();
+			helper.EndFormTag();
+		}
+
+		[Test]
 		public void ValidationForSelects()
 		{
 			helper.FormTag( DictHelper.Create( "noaction=true" ) );
