@@ -112,8 +112,46 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 
 			Assert.AreEqual("<input type=\"text\" id=\"model_ConfirmedEmailField\" " +
 				"name=\"model.ConfirmedEmailField\" value=\"\" class=\"equalTo\" " +
-				"equalto=\"model_EmailField\" " +
+				"equalto=\"#model_emailField\" " +
 				"title=\"Fields do not match.\" />", helper.TextField("ConfirmedEmailField"));
+            
+			helper.Pop();
+			helper.EndFormTag();
+		}
+
+		[Test]
+		public void LessThenUsingScopes()
+		{
+			helper.FormTag( DictHelper.Create( "noaction=true" ) );
+			helper.Push( "model" );
+
+			Assert.AreEqual( "<input type=\"text\" id=\"model_firstValue\" " +
+				"name=\"model.firstValue\" value=\"0\" class=\"digits\" " +
+				"title=\"Please enter a valid integer in this field.\" />", helper.TextField( "firstValue" ) );
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_secondValue\" " +
+				"name=\"model.secondValue\" value=\"0\" class=\"lesserThan\" " +
+				"lesserthan=\"#model_firstValue\" " +
+				"title=\"This field value must be lesser than the other field value.\" />", helper.TextField("secondValue"));
+            
+			helper.Pop();
+			helper.EndFormTag();
+		}
+
+		[Test]
+		public void GreaterThenUsingScopes()
+		{
+			helper.FormTag( DictHelper.Create( "noaction=true" ) );
+			helper.Push( "model" );
+
+			Assert.AreEqual( "<input type=\"text\" id=\"model_thirdValue\" " +
+				"name=\"model.thirdValue\" value=\"0\" class=\"digits\" " +
+				"title=\"Please enter a valid integer in this field.\" />", helper.TextField( "thirdValue" ) );
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_forthValue\" " +
+				"name=\"model.forthValue\" value=\"0\" class=\"greaterThan\" " +
+				"greaterthan=\"#model_thirdValue\" " +
+				"title=\"This field value must be greater than the other field value.\" />", helper.TextField("forthValue"));
             
 			helper.Pop();
 			helper.EndFormTag();

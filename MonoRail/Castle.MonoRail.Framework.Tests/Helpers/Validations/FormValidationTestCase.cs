@@ -159,6 +159,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		private string name;
 		private string city;
 		private Country country;
+		private int firstValue;
+		private int secondValue;
+		private int thirdValue;
+		private int forthValue;
 
 		[ValidateNonEmpty]
 		public Country Country
@@ -206,6 +210,34 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		{
 			get { return name; }
 			set { name = value; }
+		}
+
+		[ValidateInteger]
+		public int FirstValue
+		{
+			get { return firstValue; }
+			set { firstValue = value; }
+		}
+
+		[ValidateIsLesser(IsGreaterValidationType.Integer, "FirstValue")]
+		public int SecondValue
+		{
+			get { return secondValue; }
+			set { secondValue = value; }
+		}
+
+		[ValidateInteger]
+		public int ThirdValue
+		{
+			get { return thirdValue; }
+			set { thirdValue = value; }
+		}
+
+		[ValidateIsGreater(IsGreaterValidationType.Integer, "ThirdValue")]
+		public int ForthValue
+		{
+			get { return forthValue; }
+			set { forthValue = value; }
 		}
 	}
 

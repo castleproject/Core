@@ -362,7 +362,21 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				string[] parts = target.Split('_');
 
-				return string.Join("_", parts, 0, parts.Length - 1) + "_" + field;
+				return string.Join("_", parts, 0, parts.Length - 1) + "_" + ToCamelCase(field);
+			}
+
+			static string ToCamelCase(string value)
+			{
+				if (value.Length == 1)
+					return value.ToLower();
+
+				return value[0].ToString().ToLower() + value.Substring(1);
+			}
+
+			static string GetWithJQHashPrefix(string value)
+			{
+				if (value.StartsWith("#")) return value;
+				return string.Format("#{0}", value);
 			}
 
 			void AddClass( string className )
@@ -621,7 +635,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				string prefixedComparisonFieldName = GetPrefixedFieldld(target, comparisonFieldName);
 
 				AddClass( "equalTo" );
-				AddParameter("equalTo", prefixedComparisonFieldName);
+				AddParameter("equalTo", GetWithJQHashPrefix(prefixedComparisonFieldName));
 				AddTitle( violationMessage );
 			}
 
@@ -662,8 +676,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				if( validationType == IsGreaterValidationType.Decimal || validationType == IsGreaterValidationType.Integer )
 				{
+					string prefixedComparisonFieldName = GetPrefixedFieldld(target, comparisonFieldName);
+
 					AddClass( "greaterThan" );
-					AddParameter( "greaterThan", comparisonFieldName );
+					AddParameter("greaterThan", GetWithJQHashPrefix(prefixedComparisonFieldName));
 					AddTitle( violationMessage );
 				}
 			}
@@ -680,8 +696,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				if( validationType == IsGreaterValidationType.Decimal || validationType == IsGreaterValidationType.Integer )
 				{
+					string prefixedComparisonFieldName = GetPrefixedFieldld(target, comparisonFieldName);
+
 					AddClass( "lesserThan" );
-					AddParameter( "lesserThan", comparisonFieldName );
+					AddParameter("lesserThan", GetWithJQHashPrefix(prefixedComparisonFieldName));
 					AddTitle( violationMessage );
 				}
 			}
