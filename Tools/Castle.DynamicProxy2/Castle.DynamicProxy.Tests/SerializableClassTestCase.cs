@@ -504,7 +504,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore ("Checks serialization with mixins, un-ignore when these are implemented.")]
 		public void MixinsAppliedOnDeserialization ()
 		{
 			ProxyGenerationOptions options = new ProxyGenerationOptions ();

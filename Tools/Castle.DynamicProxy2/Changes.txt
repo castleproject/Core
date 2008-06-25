@@ -1,5 +1,9 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Readded mixin support
+
+- ClassEmitter now supports emitting fields with specific attributes
+
 - Added a load API to ModuleScope
 - SaveAssembly now serializes the cache keys together with the generated types
 

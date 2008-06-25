@@ -39,6 +39,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SharedLibs\net\2.0\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks.CPP.Interfaces, Version=1.0.3078.4206, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\debug\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -112,6 +116,7 @@
     <Compile Include="Classes\ClassWithConstructors.cs" />
     <Compile Include="Classes\MySerializableClass.cs" />
     <Compile Include="Classes\ProtectedInternalConstructorClass.cs" />
+    <Compile Include="Classes\SimpleClass.cs" />
     <Compile Include="CrossAppDomainCaller.cs" />
     <Compile Include="MethodComparerTestCase.cs" />
     <Compile Include="GenericTestUtility.cs" />
@@ -131,6 +136,9 @@
     <Compile Include="InterClasses\IService2.cs" />
     <Compile Include="InvocationTestCase.cs" />
     <Compile Include="MethodFinderTestCase.cs" />
+    <Compile Include="Mixins\ComplexMixin.cs" />
+    <Compile Include="Mixins\OtherMixin.cs" />
+    <Compile Include="Mixins\SimpleMixin.cs" />
     <Compile Include="ModuleScopeTestCase.cs" />
     <Compile Include="OutRefParams.cs" />
     <Compile Include="PersistentProxyBuilderTestCase.cs" />
@@ -142,7 +150,6 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mixins\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

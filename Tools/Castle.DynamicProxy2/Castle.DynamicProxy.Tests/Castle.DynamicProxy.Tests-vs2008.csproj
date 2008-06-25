@@ -125,6 +125,7 @@
     <Compile Include="Classes\ClassWithConstructors.cs" />
     <Compile Include="Classes\MySerializableClass.cs" />
     <Compile Include="Classes\ProtectedInternalConstructorClass.cs" />
+    <Compile Include="Classes\SimpleClass.cs" />
     <Compile Include="CrossAppDomainCaller.cs" />
     <Compile Include="MethodComparerTestCase.cs" />
     <Compile Include="GenericTestUtility.cs" />
@@ -144,6 +145,9 @@
     <Compile Include="InterClasses\IService2.cs" />
     <Compile Include="InvocationTestCase.cs" />
     <Compile Include="MethodFinderTestCase.cs" />
+    <Compile Include="Mixins\ComplexMixin.cs" />
+    <Compile Include="Mixins\OtherMixin.cs" />
+    <Compile Include="Mixins\SimpleMixin.cs" />
     <Compile Include="ModuleScopeTestCase.cs" />
     <Compile Include="OutRefParams.cs" />
     <Compile Include="PersistentProxyBuilderTestCase.cs" />

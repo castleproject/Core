@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 
 	[Serializable]
@@ -26,9 +27,12 @@ namespace Castle.DynamicProxy
 		private IProxyGenerationHook hook;
 		private IInterceptorSelector selector;
 		private ArrayList mixins;
+		private List<Type> mixinsTypes;
+		private Dictionary<Type, int> mixinPositions;
+		private ArrayList mixinsImpl;
 		private Type baseTypeForInterfaceProxy = typeof(object);
 		private bool useSingleInterfaceProxy;
-		private bool useSelector;
+		private bool useSelector;		
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
@@ -55,6 +59,69 @@ namespace Castle.DynamicProxy
 			baseTypeForInterfaceProxy = Type.GetType (info.GetString ("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
 			useSingleInterfaceProxy = info.GetBoolean ("useSingleInterfaceProxy");
 			useSelector = info.GetBoolean ("useSelector");
+		}
+
+		internal void Initialize()
+		{
+			InspectAndRegisterMixinInterfaces();
+		}
+
+		/// <summary>
+		/// Because we need to cache the types based on the mixed in mixins, we do the following here:
+		///  - Get all the mixin interfaces
+		///  - Sort them by full name
+		///  - Return them by position
+		/// 
+		/// The idea is to have reproducable behavior for the case that mixins are registered in different orders.
+		/// This method is here because it is required 
+		/// </summary>
+		/// <returns></returns>
+		private void InspectAndRegisterMixinInterfaces()
+		{
+			// re-initiate all internal structures
+			mixinsTypes = new List<Type>();
+			Dictionary<Type, object> interface2Mixin = new Dictionary<Type, object>();
+			mixinPositions = new Dictionary<Type, int>();
+			mixinsImpl = new ArrayList();
+
+			if (HasMixins == false)
+				return;
+
+			foreach (object mixin in MixinsAsArray())
+			{
+				Type[] mixinInterfaces = mixin.GetType().GetInterfaces();
+
+				foreach (Type inter in mixinInterfaces)
+				{
+					mixinsTypes.Add(inter);
+					interface2Mixin[inter] = mixin;
+				}
+			}
+			mixinsTypes.Sort(delegate(Type x, Type y)
+			{
+				return x.FullName.CompareTo(y.FullName);
+			});			
+			for (int i = 0; i < mixinsTypes.Count; i++)
+			{
+				Type mixinType = mixinsTypes[i];
+				object mixin = interface2Mixin[mixinType];
+				mixinPositions[mixinType] = i;
+				mixinsImpl.Add(mixin);
+			}
+		}
+
+		internal object[] MixinInterfaceImplementationsAsArray()
+		{
+			if (mixinsImpl == null)
+				return new object[0];
+			return mixinsImpl.ToArray();
+		}
+
+		public Dictionary<Type, int> GetMixinInterfacesAndPositions()
+		{
+			if (mixinPositions == null)
+				return new Dictionary<Type, int>();
+			return mixinPositions;
 		}
 
 		public void GetObjectData (SerializationInfo info, StreamingContext context)

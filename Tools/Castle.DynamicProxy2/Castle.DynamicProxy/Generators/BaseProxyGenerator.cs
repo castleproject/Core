@@ -57,9 +57,11 @@ namespace Castle.DynamicProxy.Generators
 		protected IList methodsToSkip = new ArrayList();
 		private ProxyGenerationOptions proxyGenerationOptions;
 		private FieldReference proxyGenerationOptionsField;
-
 		protected readonly Type targetType;
 		protected ConstructorInfo serializationConstructor;
+		protected Dictionary<Type, int> mixinInterface2MixinIndex = new Dictionary<Type, int>();
+		protected Dictionary<MethodInfo, Type> method2MixinType = new Dictionary<MethodInfo, Type>();
+		protected Dictionary<Type, FieldReference> interface2MixinFieldReference = new Dictionary<Type, FieldReference>();
 
 		protected BaseProxyGenerator(ModuleScope scope, Type targetType)
 		{
@@ -820,6 +822,11 @@ namespace Castle.DynamicProxy.Generators
 				ParameterInfo[] parameters = methodInfo.GetParameters();
 
 				CreateIInvocationInvokeOnTarget(emitter, nested, parameters, targetRef, callbackMethod);
+			}
+			else if (IsMixinMethod(methodInfo))
+			{
+				ParameterInfo[] parameters = methodInfo.GetParameters();
+				CreateIInvocationInvokeOnTarget(emitter, nested, parameters, targetRef, methodInfo);
 			}
 			else
 			{
@@ -1656,6 +1663,103 @@ namespace Castle.DynamicProxy.Generators
 		private static bool SpecialCaseAttributThatShouldNotBeReplicated(Attribute attribute)
 		{
 			return AttributesToAvoidReplicating.Contains(attribute.GetType());
+		}
+
+		protected void RegisterMixinMethodsAndProperties(ClassEmitter emitter, ProxyGenerationOptions options,
+																 ref MethodInfo[] methods,
+																 ref PropertyToGenerate[] propsToGenerate,
+																 ref EventToGenerate[] eventsToGenerate)
+		{
+			List<MethodInfo> withMixinMethods = new List<MethodInfo>(methods);
+			List<PropertyToGenerate> withMixinProperties = null;
+			List<EventToGenerate> withMixinEvents = null;
+
+			foreach (Type mixinInterface in mixinInterface2MixinIndex.Keys)
+			{
+				PropertyToGenerate[] mixinPropsToGenerate;
+				EventToGenerate[] mixinEventsToGenerate;
+				MethodInfo[] mixinMethods = CollectMethodsAndProperties(emitter, mixinInterface, false,
+																		out mixinPropsToGenerate, out mixinEventsToGenerate);
+				foreach (MethodInfo mixinMethod in mixinMethods)
+				{
+					if (!method2MixinType.ContainsKey(mixinMethod))
+					{
+						method2MixinType[mixinMethod] = mixinInterface;
+						withMixinMethods.Add(mixinMethod);
+					}
+				}
+
+				if (mixinPropsToGenerate.Length > 0)
+				{
+					if (withMixinProperties == null)
+					{
+						withMixinProperties = new List<PropertyToGenerate>(propsToGenerate);
+					}
+					withMixinProperties.AddRange(mixinPropsToGenerate);
+				}
+
+				if (mixinEventsToGenerate.Length > 0)
+				{
+					if (withMixinEvents == null)
+					{
+						withMixinEvents = new List<EventToGenerate>(eventsToGenerate);
+					}
+					withMixinEvents.AddRange(mixinEventsToGenerate);
+				}
+			}
+
+			if (withMixinMethods != null)
+			{
+				methods = withMixinMethods.ToArray();
+			}
+
+			if (withMixinProperties != null)
+			{
+				propsToGenerate = withMixinProperties.ToArray();
+			}
+
+			if (withMixinEvents != null)
+			{
+				eventsToGenerate = withMixinEvents.ToArray();
+			}
+		}
+
+		protected FieldReference[] AddMixinFields(ProxyGenerationOptions options, ClassEmitter emitter)
+		{
+			if (options.HasMixins == false)
+				return new FieldReference[0];
+			List<FieldReference> mixins = new List<FieldReference>();
+			foreach (Type type in mixinInterface2MixinIndex.Keys)
+			{
+				FieldReference fieldReference = emitter.CreateField("__mixin_" + type.FullName.Replace(".", "_"), type);
+				interface2MixinFieldReference[type] = fieldReference;
+				mixins.Add(fieldReference);
+			}
+			return mixins.ToArray();
+		}
+
+		protected void AddMixinInterfaces(ProxyGenerationOptions options, ArrayList interfaceList)
+		{
+			if (options.HasMixins == false)
+				return;
+			mixinInterface2MixinIndex = options.GetMixinInterfacesAndPositions();
+			interfaceList.AddRange(mixinInterface2MixinIndex.Keys);
+		}
+
+		protected Reference GetTargetRef(MethodInfo method, FieldReference[] mixinFields, Reference targetRef)
+		{
+			if (IsMixinMethod(method))
+			{
+				Type interfaceType = method2MixinType[method];
+				int mixinIndex = mixinInterface2MixinIndex[interfaceType];
+				targetRef = mixinFields[mixinIndex];
+			}
+			return targetRef;
+		}
+
+		protected bool IsMixinMethod(MethodInfo methodInfo)
+		{
+			return method2MixinType.ContainsKey(methodInfo);
 		}
 	}
 }

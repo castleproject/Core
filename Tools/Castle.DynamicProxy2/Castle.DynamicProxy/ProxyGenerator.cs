@@ -136,8 +136,13 @@ namespace Castle.DynamicProxy
 
 			Type targetType = target.GetType();
 			Type generatedType = CreateInterfaceProxyTypeWithTarget(theInterface, interfaces, targetType, options);
+			
+			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
+			ArrayList arguments = new ArrayList(options.MixinInterfaceImplementationsAsArray());
+			arguments.Add(interceptors);
+			arguments.Add(target);
 
-			return Activator.CreateInstance(generatedType, new object[] {interceptors, target});
+			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 
 		#endregion
@@ -331,45 +336,43 @@ namespace Castle.DynamicProxy
 
 			Type proxyType = CreateClassProxyType(targetType, interfaces, options);
 
-			object[] args;
-
+			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
+			ArrayList arguments = new ArrayList(options.MixinInterfaceImplementationsAsArray());
+			arguments.Add(interceptors);
 			if (constructorArgs != null && constructorArgs.Length != 0)
 			{
-				args = new object[constructorArgs.Length + 1];
-				args[0] = interceptors;
-
-				Array.Copy(constructorArgs, 0, args, 1, constructorArgs.Length);
+				arguments.AddRange(constructorArgs);
 			}
-			else
-			{
-				args = new object[] {interceptors};
-			}
-
-			return Activator.CreateInstance(proxyType, args);
+			// create instance
+			return Activator.CreateInstance(proxyType, arguments.ToArray());
 		}
 
 		#endregion
 
 		protected Type CreateClassProxyType(Type baseClass, Type[] interfaces, ProxyGenerationOptions options)
 		{
+			// create proxy
 			return ProxyBuilder.CreateClassProxy(baseClass, interfaces, options);
 		}
 
 		protected Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type[] interfaces, Type targetType,
 		                                                  ProxyGenerationOptions options)
 		{
+			// create proxy
 			return ProxyBuilder.CreateInterfaceProxyTypeWithTarget(theInterface, interfaces, targetType, options);
 		}
 
 		protected Type CreateInterfaceProxyTypeWithTargetInterface(Type theInterface, Type[] interfaces, Type targetType,
 		                                                           ProxyGenerationOptions options)
 		{
+			// create proxy
 			return ProxyBuilder.CreateInterfaceProxyTypeWithTargetInterface(theInterface, options);
 		}
 
 		protected Type CreateInterfaceProxyTypeWithoutTarget(Type theInterface, Type[] interfaces,
 		                                                     ProxyGenerationOptions options)
 		{
+			// create proxy
 			return ProxyBuilder.CreateInterfaceProxyTypeWithoutTarget(theInterface, interfaces, options);
 		}
 	}
