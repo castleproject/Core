@@ -393,6 +393,7 @@
     <Compile Include="Helpers\ValidationStrategy\ZebdaWebValidator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\ValueBehaviour.cs" />
     <Compile Include="Helpers\WizardHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -565,6 +566,7 @@
     </Compile>
     <Compile Include="Routing\IRoutingRuleContainer.cs" />
     <Compile Include="Routing\PatternRoute.cs" />
+    <Compile Include="Routing\RedirectRoute.cs" />
     <Compile Include="Routing\RouteContext.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -577,7 +579,6 @@
     <Compile Include="Routing\RoutingModuleEx.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Routing\RoutingRuleWithActionDecorator.cs" />
     <Compile Include="ServiceProviderLocator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -669,37 +670,19 @@
     <Compile Include="Test\IMockViewComponentContext.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\MockCacheProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\MockEmailTemplateService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\MockEngineContext.cs" />
-    <Compile Include="Test\MockRequest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\MockResponse.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\MockRoutingEngine.cs" />
-    <Compile Include="Test\MockScaffoldingSupport.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\MockServerUtility.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\MockServices.cs" />
-    <Compile Include="Test\MockSmtpSender.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\MockTrace.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\MockViewComponentContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Test\ViewEngineManagerStub.cs" />
+    <Compile Include="Test\StubCacheProvider.cs" />
+    <Compile Include="Test\StubEmailTemplateService.cs" />
+    <Compile Include="Test\StubEngineContext.cs" />
+    <Compile Include="Test\StubMonoRailServices.cs" />
+    <Compile Include="Test\StubRequest.cs" />
+    <Compile Include="Test\StubResponse.cs" />
+    <Compile Include="Test\StubRoutingEngine.cs" />
+    <Compile Include="Test\StubScaffoldingSupport.cs" />
+    <Compile Include="Test\StubServerUtility.cs" />
+    <Compile Include="Test\StubSmtpSender.cs" />
+    <Compile Include="Test\StubTrace.cs" />
+    <Compile Include="Test\StubViewComponentContext.cs" />
+    <Compile Include="Test\StubViewEngineManager.cs" />
     <Compile Include="Test\ViewEngineStub.cs" />
     <Compile Include="TransformFilter.cs">
       <SubType>Code</SubType>

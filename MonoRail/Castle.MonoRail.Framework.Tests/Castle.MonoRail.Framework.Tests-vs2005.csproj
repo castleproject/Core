@@ -148,6 +148,16 @@
     <Compile Include="Actions\ActionMethodExecutorTestCase.cs" />
     <Compile Include="Actions\DefaultActionSelectorTestCase.cs" />
     <Compile Include="Actions\DynamicActionExecutorTestCase.cs" />
+    <Compile Include="Async\AsyncControllerTestCase.cs" />
+    <Compile Include="Async\AsyncIntegrationTestCase.cs" />
+    <Compile Include="Async\ControllerWithAsyncAction.cs" />
+    <Compile Include="Async\ControllerWithAsyncActionThrowOnAsync.cs" />
+    <Compile Include="Async\ControllerWithAsyncActionThrowOnBegin.cs" />
+    <Compile Include="Async\ControllerWithAsyncActionThrowOnEnd.cs" />
+    <Compile Include="Async\ControllerWithBeginIndexAndIndex.cs" />
+    <Compile Include="Async\ControllerWithBeginIndexWithoutEndIndex.cs" />
+    <Compile Include="Async\ControllerWithTwoBeginIndex.cs" />
+    <Compile Include="Async\ControllerWithTwoEndActions.cs" />
     <Compile Include="Configuration\ViewEngineConfigTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -235,9 +245,7 @@
     <Compile Include="JSGeneration\PrototypeGeneratorTestCase.cs" />
     <Compile Include="JSON\JsonDataBinderTestCase.cs" />
     <Compile Include="JSON\JsonHelperTestCase.cs" />
-    <Compile Include="MockObjectTests\MockRailsEngineContextTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="MockObjectTests\StubEngineContextTest.cs" />
     <Compile Include="Providers\DefaultControllerDescriptorProviderTestCase.cs" />
     <Compile Include="Providers\DefaultFilterDescriptorProviderTestCase.cs" />
     <Compile Include="Providers\DefaultHelperDescriptorProviderTestCase.cs" />
@@ -245,6 +253,7 @@
     <Compile Include="Providers\DefaultRescueDescriptorProviderTestCase.cs" />
     <Compile Include="Providers\DefaultResourceDescriptorProviderTestCase.cs" />
     <Compile Include="Providers\DefaultTransformFilterDescriptorProviderTestCase.cs" />
+    <Compile Include="RedirectSupportTestCase.cs" />
     <Compile Include="Rescues\ActionLevelRescuesTestCase.cs" />
     <Compile Include="Rescues\ControllerLevelRescuesTestCase.cs" />
     <Compile Include="Rescues\CustomRescueControllerTestCase.cs" />
@@ -255,7 +264,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Routing\PatternRouteCreateUrlTestCase.cs" />
-    <Compile Include="Routing\PatternRouteTestCase.cs" />
+    <Compile Include="Routing\PatternRouteMatchTestCase.cs" />
+    <Compile Include="Routing\RoutingEngineCreateUrlTestCase.cs" />
     <Compile Include="Routing\RoutingEngineTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -268,6 +278,7 @@
     <Compile Include="Services\FileAssemblyViewSourceLoaderTestCase.cs" />
     <Compile Include="Services\PrototypeAjaxProxyGeneratorTestCase.cs" />
     <Compile Include="Services\StaticResourceRegistry\DefaultStaticResourceRegistryTestCase.cs" />
+    <Compile Include="TransformFilters\TransformFilterTestCase.cs" />
     <Compile Include="UrlPartsBuilderTestCase.cs" />
     <Compile Include="ViewComponents\AuthenticatedContentTestCase.cs">
       <SubType>Code</SubType>
