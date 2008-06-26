@@ -274,11 +274,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemailstringtrue\" name=\"sendemailstringtrue\" value=\"true\" checked=\"checked\" />" +
 				"<input type=\"hidden\" id=\"sendemailstringtrueH\" name=\"sendemailstringtrue\" value=\"false\" />",
 				helper.CheckboxField("sendemailstringtrue"));
-
 			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemailstringfalse\" name=\"sendemailstringfalse\" value=\"true\" />" +
 				"<input type=\"hidden\" id=\"sendemailstringfalseH\" name=\"sendemailstringfalse\" value=\"false\" />",
 				helper.CheckboxField("sendemailstringfalse"));
 
+			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemailstringfalse\" name=\"sendemailstringfalse\" value=\"true\" />",
+			helper.CheckboxField("sendemailstringfalse", DictHelper.CreateN("suppressHiddenField","true")));
 		}
 
 		[Test]

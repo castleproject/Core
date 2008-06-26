@@ -1819,7 +1819,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// The checked and unchecked values sent to the server defaults
 		/// to true and false. You can override them using the 
 		/// parameters <c>trueValue</c> and <c>falseValue</c>, but the DataBinder is prepared only
-		/// to treat boolean arrays. 
+		/// to treat boolean arrays. By setting <c>suppressHiddenField</c> to true you can suppress 
+		/// the hidden field generation.
 		/// </para>
 		/// 
 		/// </summary>
@@ -1836,6 +1837,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			object value = ObtainValue(target, attributes);
 
 			string trueValue = CommonUtils.ObtainEntryAndRemove(attributes, "trueValue", "true");
+			string suppressHiddenField = CommonUtils.ObtainEntryAndRemove(attributes, "suppressHiddenField", "false");
 
 			bool isChecked;
 
@@ -1868,7 +1870,10 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			string result = CreateInputElement("checkbox", id, target, trueValue, attributes);
 
-			result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
+			if (suppressHiddenField == "false")
+			{
+				result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
+			}
 
 			return result;
 		}
