@@ -1,6 +1,9 @@
 Beta 1 Version 1.0.0.0
 ======================
-- Readded mixin support
+- Fixed ProxyGenerationOptions equality issues with ordering and different instances of the same mixin types (thanks for finding
+  the bug, Rogelio)
+
+- Readded mixin support (via Rogelio J. Baucells)
 
 - ClassEmitter now supports emitting fields with specific attributes
 

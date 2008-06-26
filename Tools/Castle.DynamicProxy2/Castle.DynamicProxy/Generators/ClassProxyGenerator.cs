@@ -73,6 +73,8 @@ namespace Castle.DynamicProxy.Generators
 					return cacheType;
 				}
 
+				SetGenerationOptions (options);
+
 				String newName = targetType.Name + "Proxy" + Guid.NewGuid().ToString("N");
 
 				// Add Interfaces that the proxy implements 
@@ -84,7 +86,7 @@ namespace Castle.DynamicProxy.Generators
 					interfaceList.AddRange(interfaces);
 				}
 
-				AddMixinInterfaces(options, interfaceList);
+				AddMixinInterfaces(interfaceList);
 
 				AddDefaultInterfaces(interfaceList);
 
@@ -99,7 +101,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
-				SetGenerationOptions (options, emitter);
+				CreateOptionsField (emitter);
 				
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
 
@@ -123,7 +125,7 @@ namespace Castle.DynamicProxy.Generators
 				EventToGenerate[] eventToGenerates;
 				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventToGenerates);
 
-				RegisterMixinMethodsAndProperties(emitter, options, ref methods, ref propsToGenerate, ref eventToGenerates);
+				RegisterMixinMethodsAndProperties(emitter, ref methods, ref propsToGenerate, ref eventToGenerates);
 
 				options.Hook.MethodsInspected();
 
@@ -131,7 +133,7 @@ namespace Castle.DynamicProxy.Generators
 
 				ConstructorEmitter typeInitializer = GenerateStaticConstructor(emitter);
 
-				FieldReference[] mixinFields = AddMixinFields(options, emitter);
+				FieldReference[] mixinFields = AddMixinFields(emitter);
 
 				// constructor arguments
 				List<FieldReference> constructorArguments = new List<FieldReference>(mixinFields);
@@ -143,7 +145,7 @@ namespace Castle.DynamicProxy.Generators
 
 				if (delegateToBaseGetObjectData)
 				{
-					GenerateSerializationConstructor(emitter, interceptorsField, delegateToBaseGetObjectData);
+					GenerateSerializationConstructor(emitter, interceptorsField);
 				}
 
 				// Implement interfaces
@@ -304,8 +306,7 @@ namespace Castle.DynamicProxy.Generators
 			return true;
 		}
 
-		protected void GenerateSerializationConstructor(ClassEmitter emitter, FieldReference interceptorField,
-		                                                bool delegateToBaseGetObjectData)
+		protected void GenerateSerializationConstructor(ClassEmitter emitter, FieldReference interceptorField)
 		{
 			ArgumentReference arg1 = new ArgumentReference(typeof(SerializationInfo));
 			ArgumentReference arg2 = new ArgumentReference(typeof(StreamingContext));

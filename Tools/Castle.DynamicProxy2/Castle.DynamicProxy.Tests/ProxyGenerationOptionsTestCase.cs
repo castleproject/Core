@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.DynamicProxy.Tests.Mixins;
+
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -31,6 +33,59 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		[ExpectedException(typeof (InvalidOperationException))]
+		public void MixinData_NeedsInitialize ()
+		{
+			MixinData data = _options1.MixinData;
+		}
+
+		[Test]
+		public void MixinData ()
+		{
+			_options1.Initialize ();
+			MixinData data = _options1.MixinData;
+			Assert.AreEqual (0, data.GetMixinInterfaceImplementationsAsArray ().Length);
+		}
+
+		[Test]
+		public void MixinData_WithMixins ()
+		{
+			_options1.AddMixinInstance (new SimpleMixin ());
+			_options1.Initialize ();
+			MixinData data = _options1.MixinData;
+			Assert.AreEqual (1, data.GetMixinInterfaceImplementationsAsArray ().Length);
+		}
+
+		[Test]
+		public void MixinData_NoReInitializeWhenNothingChanged ()
+		{
+			_options1.AddMixinInstance (new SimpleMixin ());
+			_options1.Initialize ();
+
+			MixinData data1 = _options1.MixinData;
+			_options1.Initialize ();
+			MixinData data2 = _options1.MixinData;
+			Assert.AreSame (data1, data2);
+		}
+
+		[Test]
+		public void MixinData_ReInitializeWhenMixinsChanged ()
+		{
+			_options1.AddMixinInstance (new SimpleMixin ());
+			_options1.Initialize ();
+
+			MixinData data1 = _options1.MixinData;
+
+			_options1.AddMixinInstance (new SimpleMixin ());
+			_options1.Initialize ();
+			MixinData data2 = _options1.MixinData;
+			Assert.AreNotSame (data1, data2);
+
+			Assert.AreEqual (1, data1.GetMixinInterfaceImplementationsAsArray ().Length);
+			Assert.AreEqual (2, data2.GetMixinInterfaceImplementationsAsArray ().Length);
+		}
+
+		[Test]
 		public void Equals_EmptyOptions ()
 		{
 			Assert.AreEqual (_options1, _options2);
@@ -45,7 +100,7 @@ namespace Castle.DynamicProxy.Tests
 			_options1.BaseTypeForInterfaceProxy = typeof (IConvertible);
 			_options2.BaseTypeForInterfaceProxy = typeof (IConvertible);
 
-			object mixin = new object ();
+			SimpleMixin mixin = new SimpleMixin ();
 			_options1.AddMixinInstance (mixin);
 			_options2.AddMixinInstance (mixin);
 
@@ -78,7 +133,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Equals_DifferentOptions_AddMixinInstance ()
 		{
-			object mixin = new object ();
+			SimpleMixin mixin = new SimpleMixin ();
 			_options1.AddMixinInstance (mixin);
 
 			Assert.AreNotEqual (_options1, _options2);
@@ -121,6 +176,25 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void Equals_ComparesMixinTypesNotInstances ()
+		{
+			_options1.AddMixinInstance (new SimpleMixin ());
+			_options2.AddMixinInstance (new SimpleMixin ());
+			Assert.AreEqual (_options1, _options2);
+		}
+
+		[Test]
+		public void Equals_ComparesSortedMixinTypes ()
+		{
+			_options1.AddMixinInstance (new SimpleMixin ());
+			_options1.AddMixinInstance (new ComplexMixin ());
+
+			_options2.AddMixinInstance (new ComplexMixin ());
+			_options2.AddMixinInstance (new SimpleMixin ());
+			Assert.AreEqual (_options1, _options2);
+		}
+
+		[Test]
 		public void GetHashCode_EmptyOptions ()
 		{
 			Assert.AreEqual (_options1.GetHashCode(), _options2.GetHashCode());
@@ -135,7 +209,7 @@ namespace Castle.DynamicProxy.Tests
 			_options1.BaseTypeForInterfaceProxy = typeof (IConvertible);
 			_options2.BaseTypeForInterfaceProxy = typeof (IConvertible);
 
-			object mixin = new object ();
+			SimpleMixin mixin = new SimpleMixin ();
 			_options1.AddMixinInstance (mixin);
 			_options2.AddMixinInstance (mixin);
 
@@ -157,6 +231,15 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void GetHashCode_EqualOptions_DifferentMixinInstances ()
+		{
+			_options1.AddMixinInstance (new SimpleMixin ());
+			_options2.AddMixinInstance (new SimpleMixin ());
+			Assert.AreEqual (_options1.GetHashCode (), _options2.GetHashCode ());
+		}
+
+
+		[Test]
 		public void GetHashCode_DifferentOptions_BaseTypeForInterfaceProxy ()
 		{
 			_options1.BaseTypeForInterfaceProxy = typeof (IConvertible);
@@ -168,7 +251,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void GetHashCode_DifferentOptions_AddMixinInstance ()
 		{
-			object mixin = new object ();
+			SimpleMixin mixin = new SimpleMixin ();
 			_options1.AddMixinInstance (mixin);
 
 			Assert.AreNotEqual (_options1.GetHashCode(), _options2.GetHashCode());

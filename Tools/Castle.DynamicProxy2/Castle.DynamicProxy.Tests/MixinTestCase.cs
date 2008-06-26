@@ -240,5 +240,53 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(proxy, interceptor.proxy);
 			Assert.AreSame(mixin_instance, interceptor.mixin);
 		}
+
+		[Test]
+		public void TestTypeCachingWithMixins ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			SimpleMixin mixin_instance = new SimpleMixin ();
+			options.AddMixinInstance (mixin_instance);
+
+			AssertInvocationInterceptor interceptor = new AssertInvocationInterceptor ();
+
+			object proxy1 = generator.CreateClassProxy (typeof (SimpleClass), options, interceptor);
+
+			options = new ProxyGenerationOptions ();
+			mixin_instance = new SimpleMixin ();
+			options.AddMixinInstance (mixin_instance);
+
+			interceptor = new AssertInvocationInterceptor ();
+
+			object proxy2 = generator.CreateClassProxy (typeof (SimpleClass), options, interceptor);
+
+			Assert.IsTrue (proxy1.GetType ().Equals (proxy2.GetType ()));
+		}
+
+		[Test]
+		public void TestTypeCachingWithMultipleMixins ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			SimpleMixin mixin_instance1 = new SimpleMixin ();
+			ComplexMixin mixin_instance2 = new ComplexMixin ();
+			options.AddMixinInstance (mixin_instance1);
+			options.AddMixinInstance (mixin_instance2);
+
+			AssertInvocationInterceptor interceptor = new AssertInvocationInterceptor ();
+
+			object proxy1 = generator.CreateClassProxy (typeof (SimpleClass), options, interceptor);
+
+			options = new ProxyGenerationOptions ();
+			mixin_instance1 = new SimpleMixin ();
+			mixin_instance2 = new ComplexMixin ();
+			options.AddMixinInstance (mixin_instance2);
+			options.AddMixinInstance (mixin_instance1);
+
+			interceptor = new AssertInvocationInterceptor ();
+
+			object proxy2 = generator.CreateClassProxy (typeof (SimpleClass), options, interceptor);
+
+			Assert.IsTrue (proxy1.GetType ().Equals (proxy2.GetType ()));
+		}
 	}
 }

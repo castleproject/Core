@@ -269,6 +269,7 @@
     <Compile Include="IProxyGenerationHook.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MixinData.cs" />
     <Compile Include="ModuleScope.cs">
       <SubType>Code</SubType>
     </Compile>

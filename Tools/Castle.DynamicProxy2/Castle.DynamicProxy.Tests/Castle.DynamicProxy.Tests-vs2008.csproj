@@ -126,6 +126,7 @@
     <Compile Include="Classes\MySerializableClass.cs" />
     <Compile Include="Classes\ProtectedInternalConstructorClass.cs" />
     <Compile Include="Classes\SimpleClass.cs" />
+    <Compile Include="MixinDataTestCase.cs" />
     <Compile Include="CrossAppDomainCaller.cs" />
     <Compile Include="MethodComparerTestCase.cs" />
     <Compile Include="GenericTestUtility.cs" />

@@ -138,7 +138,7 @@ namespace Castle.DynamicProxy
 			Type generatedType = CreateInterfaceProxyTypeWithTarget(theInterface, interfaces, targetType, options);
 			
 			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
-			ArrayList arguments = new ArrayList(options.MixinInterfaceImplementationsAsArray());
+			ArrayList arguments = new ArrayList(options.MixinData.GetMixinInterfaceImplementationsAsArray());
 			arguments.Add(interceptors);
 			arguments.Add(target);
 
@@ -337,7 +337,7 @@ namespace Castle.DynamicProxy
 			Type proxyType = CreateClassProxyType(targetType, interfaces, options);
 
 			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
-			ArrayList arguments = new ArrayList(options.MixinInterfaceImplementationsAsArray());
+			ArrayList arguments = new ArrayList (options.MixinData.GetMixinInterfaceImplementationsAsArray ());
 			arguments.Add(interceptors);
 			if (constructorArgs != null && constructorArgs.Length != 0)
 			{

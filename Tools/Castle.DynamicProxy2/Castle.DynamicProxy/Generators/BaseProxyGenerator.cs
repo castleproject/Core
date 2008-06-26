@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using System.Runtime.InteropServices;
 	using System.Runtime.Serialization;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -42,7 +41,6 @@ namespace Castle.DynamicProxy.Generators
 	/// TODO: 
 	/// - Use the interceptor selector if provided
 	/// - Add tests and fixes for 'leaking this' problem
-	/// - Mixin support
 	/// </remarks>
 	public abstract class BaseProxyGenerator
 	{
@@ -54,12 +52,12 @@ namespace Castle.DynamicProxy.Generators
 		private FieldReference typeTokenField;
 		private Hashtable method2TokenField = new Hashtable();
 		private IList generateNewSlot = new ArrayList();
-		protected IList methodsToSkip = new ArrayList();
 		private ProxyGenerationOptions proxyGenerationOptions;
 		private FieldReference proxyGenerationOptionsField;
+
 		protected readonly Type targetType;
 		protected ConstructorInfo serializationConstructor;
-		protected Dictionary<Type, int> mixinInterface2MixinIndex = new Dictionary<Type, int>();
+		protected IList methodsToSkip = new ArrayList();
 		protected Dictionary<MethodInfo, Type> method2MixinType = new Dictionary<MethodInfo, Type>();
 		protected Dictionary<Type, FieldReference> interface2MixinFieldReference = new Dictionary<Type, FieldReference>();
 
@@ -81,13 +79,17 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected void SetGenerationOptions(ProxyGenerationOptions options, ClassEmitter emitter)
+		protected void SetGenerationOptions (ProxyGenerationOptions options)
 		{
 			if (proxyGenerationOptions != null)
 			{
-				throw new InvalidOperationException("ProxyGenerationOptions can only be set once.");
+				throw new InvalidOperationException ("ProxyGenerationOptions can only be set once.");
 			}
 			proxyGenerationOptions = options;
+		}
+
+		protected void CreateOptionsField(ClassEmitter emitter)
+		{
 			proxyGenerationOptionsField = emitter.CreateStaticField("proxyGenerationOptions", typeof(ProxyGenerationOptions));
 		}
 
@@ -1665,16 +1667,13 @@ namespace Castle.DynamicProxy.Generators
 			return AttributesToAvoidReplicating.Contains(attribute.GetType());
 		}
 
-		protected void RegisterMixinMethodsAndProperties(ClassEmitter emitter, ProxyGenerationOptions options,
-																 ref MethodInfo[] methods,
-																 ref PropertyToGenerate[] propsToGenerate,
-																 ref EventToGenerate[] eventsToGenerate)
+		protected void RegisterMixinMethodsAndProperties(ClassEmitter emitter, ref MethodInfo[] methods, ref PropertyToGenerate[] propsToGenerate, ref EventToGenerate[] eventsToGenerate)
 		{
 			List<MethodInfo> withMixinMethods = new List<MethodInfo>(methods);
 			List<PropertyToGenerate> withMixinProperties = null;
 			List<EventToGenerate> withMixinEvents = null;
 
-			foreach (Type mixinInterface in mixinInterface2MixinIndex.Keys)
+			foreach (Type mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfacesAndPositions.Keys)
 			{
 				PropertyToGenerate[] mixinPropsToGenerate;
 				EventToGenerate[] mixinEventsToGenerate;
@@ -1724,12 +1723,10 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected FieldReference[] AddMixinFields(ProxyGenerationOptions options, ClassEmitter emitter)
+		protected FieldReference[] AddMixinFields(ClassEmitter emitter)
 		{
-			if (options.HasMixins == false)
-				return new FieldReference[0];
 			List<FieldReference> mixins = new List<FieldReference>();
-			foreach (Type type in mixinInterface2MixinIndex.Keys)
+			foreach (Type type in ProxyGenerationOptions.MixinData.MixinInterfacesAndPositions.Keys)
 			{
 				FieldReference fieldReference = emitter.CreateField("__mixin_" + type.FullName.Replace(".", "_"), type);
 				interface2MixinFieldReference[type] = fieldReference;
@@ -1738,12 +1735,9 @@ namespace Castle.DynamicProxy.Generators
 			return mixins.ToArray();
 		}
 
-		protected void AddMixinInterfaces(ProxyGenerationOptions options, ArrayList interfaceList)
+		protected void AddMixinInterfaces(ArrayList interfaceList)
 		{
-			if (options.HasMixins == false)
-				return;
-			mixinInterface2MixinIndex = options.GetMixinInterfacesAndPositions();
-			interfaceList.AddRange(mixinInterface2MixinIndex.Keys);
+			interfaceList.AddRange (ProxyGenerationOptions.MixinData.MixinInterfacesAndPositions.Keys);
 		}
 
 		protected Reference GetTargetRef(MethodInfo method, FieldReference[] mixinFields, Reference targetRef)
@@ -1751,7 +1745,7 @@ namespace Castle.DynamicProxy.Generators
 			if (IsMixinMethod(method))
 			{
 				Type interfaceType = method2MixinType[method];
-				int mixinIndex = mixinInterface2MixinIndex[interfaceType];
+				int mixinIndex = ProxyGenerationOptions.MixinData.MixinInterfacesAndPositions[interfaceType];
 				targetRef = mixinFields[mixinIndex];
 			}
 			return targetRef;

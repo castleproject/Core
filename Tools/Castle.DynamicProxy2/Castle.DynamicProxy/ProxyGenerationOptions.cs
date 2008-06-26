@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 
@@ -26,13 +25,13 @@ namespace Castle.DynamicProxy
 
 		private IProxyGenerationHook hook;
 		private IInterceptorSelector selector;
-		private ArrayList mixins;
-		private List<Type> mixinsTypes;
-		private Dictionary<Type, int> mixinPositions;
-		private ArrayList mixinsImpl;
+		private List<object> mixins;
 		private Type baseTypeForInterfaceProxy = typeof(object);
 		private bool useSingleInterfaceProxy;
-		private bool useSelector;		
+		private bool useSelector;
+
+		[NonSerialized]
+		private MixinData mixinData; // this is calculated dynamically on proxy type creation
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
@@ -55,73 +54,16 @@ namespace Castle.DynamicProxy
 		{
 			hook = (IProxyGenerationHook) info.GetValue ("hook", typeof (IProxyGenerationHook));
 			selector = (IInterceptorSelector) info.GetValue ("selector", typeof (IInterceptorSelector));
-			mixins = (ArrayList) info.GetValue ("mixins", typeof (ArrayList));
+			mixins = (List<object>) info.GetValue ("mixins", typeof (List<object>));
 			baseTypeForInterfaceProxy = Type.GetType (info.GetString ("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
 			useSingleInterfaceProxy = info.GetBoolean ("useSingleInterfaceProxy");
 			useSelector = info.GetBoolean ("useSelector");
 		}
 
-		internal void Initialize()
+		public void Initialize ()
 		{
-			InspectAndRegisterMixinInterfaces();
-		}
-
-		/// <summary>
-		/// Because we need to cache the types based on the mixed in mixins, we do the following here:
-		///  - Get all the mixin interfaces
-		///  - Sort them by full name
-		///  - Return them by position
-		/// 
-		/// The idea is to have reproducable behavior for the case that mixins are registered in different orders.
-		/// This method is here because it is required 
-		/// </summary>
-		/// <returns></returns>
-		private void InspectAndRegisterMixinInterfaces()
-		{
-			// re-initiate all internal structures
-			mixinsTypes = new List<Type>();
-			Dictionary<Type, object> interface2Mixin = new Dictionary<Type, object>();
-			mixinPositions = new Dictionary<Type, int>();
-			mixinsImpl = new ArrayList();
-
-			if (HasMixins == false)
-				return;
-
-			foreach (object mixin in MixinsAsArray())
-			{
-				Type[] mixinInterfaces = mixin.GetType().GetInterfaces();
-
-				foreach (Type inter in mixinInterfaces)
-				{
-					mixinsTypes.Add(inter);
-					interface2Mixin[inter] = mixin;
-				}
-			}
-			mixinsTypes.Sort(delegate(Type x, Type y)
-			{
-				return x.FullName.CompareTo(y.FullName);
-			});			
-			for (int i = 0; i < mixinsTypes.Count; i++)
-			{
-				Type mixinType = mixinsTypes[i];
-				object mixin = interface2Mixin[mixinType];
-				mixinPositions[mixinType] = i;
-				mixinsImpl.Add(mixin);
-			}
-		}
-
-		internal object[] MixinInterfaceImplementationsAsArray()
-		{
-			if (mixinsImpl == null)
-				return new object[0];
-			return mixinsImpl.ToArray();
-		}
-
-		public Dictionary<Type, int> GetMixinInterfacesAndPositions()
-		{
-			if (mixinPositions == null)
-				return new Dictionary<Type, int>();
-			return mixinPositions;
+			if (mixinData == null)
+				mixinData = new MixinData (mixins);
 		}
 
 		public void GetObjectData (SerializationInfo info, StreamingContext context)
@@ -158,6 +100,16 @@ namespace Castle.DynamicProxy
 			set { useSingleInterfaceProxy = value; }
 		}
 
+		public MixinData MixinData
+		{
+			get
+			{
+				if (mixinData == null)
+					throw new InvalidOperationException ("Call Initialize before accessing the MixinData property.");
+				return mixinData; 
+			}
+		}
+
 		public void AddMixinInstance(object instance)
 		{
 			if (instance == null)
@@ -167,10 +119,11 @@ namespace Castle.DynamicProxy
 
 			if (mixins == null)
 			{
-				mixins = new ArrayList();
+				mixins = new List<object> ();
 			}
 
 			mixins.Add(instance);
+			mixinData = null;
 		}
 
 		public object[] MixinsAsArray()
@@ -194,12 +147,17 @@ namespace Castle.DynamicProxy
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals (this, obj)) return true;
+			
 			ProxyGenerationOptions proxyGenerationOptions = obj as ProxyGenerationOptions;
 			if (ReferenceEquals (proxyGenerationOptions, null)) return false;
+
+			// ensure initialization before accessing MixinData
+			Initialize ();
+			proxyGenerationOptions.Initialize ();
 			
 			if (!Equals(hook, proxyGenerationOptions.hook)) return false;
 			if (!Equals(selector, proxyGenerationOptions.selector)) return false;
-			if (!ListEquals(mixins, proxyGenerationOptions.mixins)) return false;
+			if (!Equals (MixinData, proxyGenerationOptions.MixinData)) return false;
 			if (!Equals(baseTypeForInterfaceProxy, proxyGenerationOptions.baseTypeForInterfaceProxy)) return false;
 			if (!Equals(useSingleInterfaceProxy, proxyGenerationOptions.useSingleInterfaceProxy)) return false;
 			if (!Equals (useSelector, proxyGenerationOptions.useSelector))
@@ -209,44 +167,16 @@ namespace Castle.DynamicProxy
 
 		public override int GetHashCode ()
 		{
+			// ensure initialization before accessing MixinData
+			Initialize ();
+
 			int result = hook != null ? hook.GetType().GetHashCode() : 0;
 			result = 29 * result + (selector != null ? selector.GetHashCode() : 0);
-			result = 29 * result + (mixins != null ? GetListHashCode (mixins) : 0);
+			result = 29 * result + MixinData.GetHashCode();
 			result = 29 * result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
 			result = 29 * result + useSingleInterfaceProxy.GetHashCode();
 			result = 29 * result + useSelector.GetHashCode ();
 			return result;
-		}
-
-		private static bool ListEquals (IList one, IList two)
-		{
-			if (one == two)
-				return true;
-			if (one == null || two == null)
-				return false;
-
-			if (one.Count != two.Count)
-				return false;
-
-			for (int i = 0; i < one.Count; ++i)
-			{
-				if (!object.Equals (one[i], two[i]))
-					return false;
-			}
-
-			return true;
-		}
-
-		private static int GetListHashCode (IList list)
-		{
-			if (list == null)
-				return 0;
-
-			int hashCode = 0;
-			foreach (object o in list)
-				hashCode = 29 * hashCode + (o != null ? o.GetHashCode () : 0);
-
-			return hashCode;
 		}
 	}
 }
