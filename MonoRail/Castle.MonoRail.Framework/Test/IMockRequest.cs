@@ -96,5 +96,10 @@ namespace Castle.MonoRail.Framework.Test
 		/// </summary>
 		/// <value>The IP address of the remote client.</value>
 		new string UserHostAddress { set; }
+
+		/// <summary>
+		/// Sets the referring URL.
+		/// </summary>
+		new String UrlReferrer { set; }
 	}
 }
