@@ -133,12 +133,7 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		public RouteMatch FindMatch(string url, IRouteContext context)
 		{
-			if (IsExcludedUrl(url)) 
-			{
-				return null;
-			}
-
-			// lock for reading
+			// TODO: lock for reading
 
 			int winnerPoints = 0;
 			RouteMatch winner = null;

@@ -32,6 +32,7 @@ namespace Castle.MonoRail.Framework.Routing
 		private readonly string name;
 		private readonly string pattern;
 		private readonly NodeCollection nodes = new NodeCollection();
+		private bool performDefaultsCheck = true;
 
 		private readonly Dictionary<string, string> defaults =
 			new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
@@ -140,21 +141,24 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 			}
 
-			// Validate that default parameters match parameters passed into to create url.
-			foreach(KeyValuePair<string, string> defaultParameter in defaults)
+			if (performDefaultsCheck)
 			{
-				// Skip parameters we already checked.
-				if (checkedParameters.Contains(defaultParameter.Key))
+				// Validate that default parameters match parameters passed into to create url.
+				foreach(KeyValuePair<string, string> defaultParameter in defaults)
 				{
-					continue;
-				}
+					// Skip parameters we already checked.
+					if (checkedParameters.Contains(defaultParameter.Key))
+					{
+						continue;
+					}
 
-				object value = parameters[defaultParameter.Key];
-				string valAsString = value != null ? value.ToString() : null;
-				if (!string.IsNullOrEmpty(valAsString) &&
-					!defaultParameter.Value.Equals(valAsString, StringComparison.OrdinalIgnoreCase))
-				{
-					return null;
+					object value = parameters[defaultParameter.Key];
+					string valAsString = value != null ? value.ToString() : null;
+					if (!string.IsNullOrEmpty(valAsString) &&
+						!defaultParameter.Value.Equals(valAsString, StringComparison.OrdinalIgnoreCase))
+					{
+						return null;
+					}
 				}
 			}
 
@@ -571,6 +575,17 @@ namespace Castle.MonoRail.Framework.Routing
 		public DefaultConfigurer DefaultForArea()
 		{
 			return new DefaultConfigurer(this, "area");
+		}
+
+		/// <summary>
+		/// Tells the PatternRoute to not validate the defaults set when creating
+		/// an url representation of this route.
+		/// </summary>
+		/// <returns></returns>
+		public PatternRoute NoDefaultCheck()
+		{
+			performDefaultsCheck = false;
+			return this;
 		}
 
 		/// <summary>

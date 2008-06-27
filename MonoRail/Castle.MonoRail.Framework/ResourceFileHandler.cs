@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Globalization;
 	using System.Web;
 	using Services;
 
@@ -43,7 +44,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">An <see cref="T:System.Web.HttpContext"/> object that provides references to the intrinsic server objects (for example, Request, Response, Session, and Server) used to service HTTP requests.</param>
 		public void ProcessRequest(HttpContext context)
 		{
-			string name = context.Request.QueryString["name"];
+			string name = context.Request.QueryString["name"] ?? urlInfo.Action;
 			string location = context.Request.QueryString["location"];
 			string version = context.Request.QueryString["version"];
 
@@ -61,13 +62,26 @@ namespace Castle.MonoRail.Framework
 					return;
 				}
 
+				DateTime? lastModified;
 				string mimeType;
-				string content = staticResourceRegistry.GetResource(name, location, version, out mimeType);
-				
-				SetContentCache(context);
+				string content = staticResourceRegistry.GetResource(name, location, version, out mimeType, out lastModified);
+
+				SetContentCache(context, lastModified);
+
+				if (lastModified.HasValue)
+				{
+					// Desired format: Wed, 25 Jun 2008 15:09:25 GMT
+					context.Response.AppendHeader("Last-Modified", 
+						lastModified.Value.ToUniversalTime().
+						ToString("ddd, d MMM yyyy hh:mm:ss GMT", CultureInfo.InvariantCulture));
+				}
 
 				context.Response.ContentType = mimeType;
-				context.Response.Write(content);
+
+				if (context.Request.HttpMethod == "GET")
+				{
+					context.Response.Write(content);
+				}
 			}
 			catch(Exception)
 			{
@@ -91,7 +105,8 @@ namespace Castle.MonoRail.Framework
 		/// Configures the cache policy for the static content
 		/// </summary>
 		/// <param name="context">The context.</param>
-		protected virtual void SetContentCache(HttpContext context)
+		/// <param name="lastModified">The last modified.</param>
+		protected virtual void SetContentCache(HttpContext context, DateTime? lastModified)
 		{
 			HttpCachePolicy cache = context.Response.Cache;
 
@@ -102,6 +117,11 @@ namespace Castle.MonoRail.Framework
 			cache.SetMaxAge(TimeSpan.FromDays(3));
 			cache.SetCacheability(HttpCacheability.Public);
 			cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+
+			if (lastModified.HasValue)
+			{
+				cache.SetETag(lastModified.Value.Ticks.ToString());
+			}
 
 			cache.SetValidUntilExpires(true);
 		}

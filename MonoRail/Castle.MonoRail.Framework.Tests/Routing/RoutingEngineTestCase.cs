@@ -55,7 +55,7 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.AreEqual("movies", match.Parameters["category"]);
 		}
 
-		[Test]
+		[Test, Ignore("Not sure they should be skipped")]
 		public void FindMatch_IgnoresMonoRailResourceUrls()
 		{
 			engine.Add(new PatternRoute("/<area>/<controller>/<action>"));
