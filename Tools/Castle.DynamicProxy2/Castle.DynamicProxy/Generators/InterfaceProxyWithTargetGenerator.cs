@@ -301,7 +301,7 @@ namespace Castle.DynamicProxy.Generators
 					ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);
 				}
 
-				ImplementGetObjectData(emitter, interceptorsField, interfaces);
+				ImplementGetObjectData(emitter, interceptorsField, mixinFields, interfaces);
 
 				// Complete Initialize 
 

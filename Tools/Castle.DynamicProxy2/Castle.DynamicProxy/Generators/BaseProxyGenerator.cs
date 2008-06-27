@@ -811,7 +811,7 @@ namespace Castle.DynamicProxy.Generators
 										typeof(void), argument1);
 				methodEmitter.CodeBuilder.AddStatement(
 					new AssignStatement(targetRef,
-										new ConvertExpression(targetType, argument1.ToExpression())
+										new ConvertExpression (targetForInvocation, argument1.ToExpression ())
 						)
 					);
 				methodEmitter.CodeBuilder.AddStatement(new ReturnStatement());
@@ -1534,7 +1534,7 @@ namespace Castle.DynamicProxy.Generators
 			return false;
 		}
 
-		protected virtual void ImplementGetObjectData(ClassEmitter emitter, FieldReference interceptorsField,
+		protected virtual void ImplementGetObjectData(ClassEmitter emitter, FieldReference interceptorsField, FieldReference[] mixinFields,
 													  Type[] interfaces)
 		{
 			if (interfaces == null)
@@ -1574,6 +1574,14 @@ namespace Castle.DynamicProxy.Generators
 																				   new ConstReference("__interceptors").
 																					ToExpression(),
 																				   interceptorsField.ToExpression())));
+
+			foreach(FieldReference mixinFieldReference in mixinFields)
+			{
+				getObjectData.CodeBuilder.AddStatement(new ExpressionStatement(
+													new MethodInvocationExpression(arg1, addValueMethod,
+																					new ConstReference(mixinFieldReference.Reference.Name).ToExpression(),
+																					mixinFieldReference.ToExpression())));
+			}
 
 			LocalReference interfacesLocal =
 				getObjectData.CodeBuilder.DeclareLocal(typeof(String[]));

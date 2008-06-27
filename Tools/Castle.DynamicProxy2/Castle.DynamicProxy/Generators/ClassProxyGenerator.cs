@@ -145,7 +145,7 @@ namespace Castle.DynamicProxy.Generators
 
 				if (delegateToBaseGetObjectData)
 				{
-					GenerateSerializationConstructor(emitter, interceptorsField);
+					GenerateSerializationConstructor(emitter, interceptorsField, mixinFields);
 				}
 
 				// Implement interfaces
@@ -275,7 +275,7 @@ namespace Castle.DynamicProxy.Generators
 					ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);
 				}
 
-				ImplementGetObjectData(emitter, interceptorsField, interfaces);
+				ImplementGetObjectData(emitter, interceptorsField, mixinFields, interfaces);
 
 				// Complete type initializer code body
 
@@ -306,7 +306,7 @@ namespace Castle.DynamicProxy.Generators
 			return true;
 		}
 
-		protected void GenerateSerializationConstructor(ClassEmitter emitter, FieldReference interceptorField)
+		protected void GenerateSerializationConstructor(ClassEmitter emitter, FieldReference interceptorField, FieldReference[] mixinFields)
 		{
 			ArgumentReference arg1 = new ArgumentReference(typeof(SerializationInfo));
 			ArgumentReference arg2 = new ArgumentReference(typeof(StreamingContext));
@@ -329,6 +329,20 @@ namespace Castle.DynamicProxy.Generators
 			                                	interceptorField,
 			                                	new ConvertExpression(typeof(IInterceptor[]), typeof(object),
 			                                	                      getInterceptorInvocation)));
+
+			// mixins
+			foreach (FieldReference mixinFieldReference in mixinFields)
+			{
+				MethodInvocationExpression getMixinInvocation =
+					new MethodInvocationExpression(arg1, getValueMethod,
+											   new ConstReference(mixinFieldReference.Reference.Name).ToExpression(),
+											   new TypeTokenExpression(mixinFieldReference.Reference.FieldType));
+
+				constr.CodeBuilder.AddStatement(new AssignStatement(
+													mixinFieldReference,
+													new ConvertExpression(mixinFieldReference.Reference.FieldType, typeof(object),
+													getMixinInvocation)));
+			}
 
 			constr.CodeBuilder.AddStatement(new ReturnStatement());
 		}

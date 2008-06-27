@@ -457,11 +457,16 @@ namespace Castle.DynamicProxy.Tests
 
 		public interface IMixedInterface
 		{
+			object GetExecutingObject ();
 		}
 
 		[Serializable]
 		public class SerializableMixin : IMixedInterface
 		{
+			public object GetExecutingObject ()
+			{
+				return this;
+			}
 		}
 
 		[Serializable]
@@ -476,7 +481,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyGenerationOptionsRespectedOnDeserialization ()
 		{
-			MethodFilterHook hook = new MethodFilterHook ("get_Current");
+			MethodFilterHook hook = new MethodFilterHook ("(get_Current)|(GetExecutingObject)");
 			ProxyGenerationOptions options = new ProxyGenerationOptions (hook);
 			options.AddMixinInstance (new SerializableMixin());
 			options.Selector = new SerializableInterceptorSelector ();
@@ -521,6 +526,94 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue (otherProxy is IMixedInterface);
 		}
 
+		[Test]
+		public void MixinFieldsSetOnDeserialization_ClassProxy ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			options.AddMixinInstance (new SerializableMixin ());
+
+			MySerializableClass proxy = (MySerializableClass) generator.CreateClassProxy (
+					typeof (MySerializableClass),
+					new Type[0],
+					options,
+					new StandardInterceptor ());
+
+			Assert.IsTrue (proxy is IMixedInterface);
+			Assert.IsNotNull (((IMixedInterface) proxy).GetExecutingObject ());
+			Assert.IsTrue (((IMixedInterface) proxy).GetExecutingObject () is SerializableMixin);
+
+			MySerializableClass otherProxy = SerializeAndDeserialize (proxy);
+			Assert.IsTrue (otherProxy is IMixedInterface);
+			Assert.IsNotNull (((IMixedInterface) otherProxy).GetExecutingObject ());
+			Assert.IsTrue (((IMixedInterface) otherProxy).GetExecutingObject () is SerializableMixin);
+		}
+
+		[Test]
+		public void MixinFieldsSetOnDeserialization_InterfaceProxy_WithTarget ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			options.AddMixinInstance (new SerializableMixin ());
+
+			IService proxy = (IService) generator.CreateInterfaceProxyWithTarget (
+					typeof (IService),
+					new ServiceImpl(),
+					options,
+					new StandardInterceptor ());
+
+			Assert.IsTrue (proxy is IMixedInterface);
+			Assert.IsNotNull (((IMixedInterface) proxy).GetExecutingObject ());
+			Assert.IsTrue (((IMixedInterface) proxy).GetExecutingObject () is SerializableMixin);
+
+			IService otherProxy = SerializeAndDeserialize (proxy);
+			Assert.IsTrue (otherProxy is IMixedInterface);
+			Assert.IsNotNull (((IMixedInterface) otherProxy).GetExecutingObject ());
+			Assert.IsTrue (((IMixedInterface) otherProxy).GetExecutingObject () is SerializableMixin);
+		}
+
+		[Test]
+		public void MixinFieldsSetOnDeserialization_InterfaceProxy_WithTargetInterface ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			options.AddMixinInstance (new SerializableMixin ());
+
+			IService proxy = (IService) generator.CreateInterfaceProxyWithTargetInterface (
+					typeof (IService),
+					new ServiceImpl (),
+					options,
+					new StandardInterceptor ());
+
+			Assert.IsTrue (proxy is IMixedInterface);
+			Assert.IsNotNull (((IMixedInterface) proxy).GetExecutingObject ());
+			Assert.IsTrue (((IMixedInterface) proxy).GetExecutingObject () is SerializableMixin);
+
+			IService otherProxy = SerializeAndDeserialize (proxy);
+			Assert.IsTrue (otherProxy is IMixedInterface);
+			Assert.IsNotNull (((IMixedInterface) otherProxy).GetExecutingObject ());
+			Assert.IsTrue (((IMixedInterface) otherProxy).GetExecutingObject () is SerializableMixin);
+		}
+
+		[Test]
+		public void MixinFieldsSetOnDeserialization_InterfaceProxy_WithoutTarget ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			options.AddMixinInstance (new SerializableMixin ());
+
+			IService proxy = (IService) generator.CreateInterfaceProxyWithoutTarget(
+					typeof (IService),
+					new Type[0],
+					options,
+					new StandardInterceptor ());
+
+			Assert.IsTrue (proxy is IMixedInterface);
+			Assert.IsNotNull (((IMixedInterface) proxy).GetExecutingObject ());
+			Assert.IsTrue (((IMixedInterface) proxy).GetExecutingObject () is SerializableMixin);
+
+			IService otherProxy = SerializeAndDeserialize (proxy);
+			Assert.IsTrue (otherProxy is IMixedInterface);
+			Assert.IsNotNull (((IMixedInterface) otherProxy).GetExecutingObject ());
+			Assert.IsTrue (((IMixedInterface) otherProxy).GetExecutingObject () is SerializableMixin);
+		}
+
 		[Serializable]
 		class ComplexHolder
 		{
@@ -534,7 +627,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyGenerationOptionsRespectedOnDeserializationComplex ()
 		{
-			MethodFilterHook hook = new MethodFilterHook ("get_Current");
+			MethodFilterHook hook = new MethodFilterHook ("(get_Current)|(GetExecutingObject)");
 			ProxyGenerationOptions options = new ProxyGenerationOptions (hook);
 			options.AddMixinInstance (new SerializableMixin());
 			options.Selector = new SerializableInterceptorSelector ();

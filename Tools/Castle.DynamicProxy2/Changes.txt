@@ -1,5 +1,8 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Fixed mixin-related bug with serialization (per Rogelio again)
+- Made interface proxies without target and with target interface support mixins
+
 - Fixed ProxyGenerationOptions equality issues with ordering and different instances of the same mixin types (thanks for finding
   the bug, Rogelio)
 

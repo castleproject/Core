@@ -182,6 +182,24 @@ namespace Castle.DynamicProxy.Serialization
 			IInterceptor[] _interceptors = (IInterceptor[]) _info.GetValue ("__interceptors", typeof (IInterceptor[]));
 			SetInterceptors (_interceptors);
 			
+			// mixins
+			if (_proxyGenerationOptions.HasMixins)
+			{
+				foreach (Type type in _proxyGenerationOptions.MixinData.MixinInterfacesAndPositions.Keys)
+				{
+					string mixinFieldName = "__mixin_" + type.FullName.Replace(".", "_");
+
+					FieldInfo mixinField = _proxy.GetType().GetField(mixinFieldName);
+					if (mixinField == null)
+					{
+						throw new SerializationException(
+							"The SerializationInfo specifies an invalid proxy type, which has no " + mixinFieldName + " field.");
+					}
+
+					mixinField.SetValue(_proxy, _info.GetValue(mixinFieldName, type));
+				}
+			}
+
 			if (_isInterfaceProxy)
 			{
 				object target = _info.GetValue ("__target", typeof (object));
