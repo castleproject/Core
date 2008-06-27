@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Framework.Tests.Handlers
 		public void ReturnsResourceContentAndSetMimeType()
 		{
 			DefaultStaticResourceRegistry registry = new DefaultStaticResourceRegistry();
-			registry.RegisterCustomResource("key", null, null, new StaticContentResource("js"), "text/javascript");
+			registry.RegisterCustomResource("key", null, null, new StaticContentResource("js"), "text/javascript", null);
 
 			ResourceFileHandler handler = new ResourceFileHandler(new UrlInfo("", "controller", "key"), registry);
 

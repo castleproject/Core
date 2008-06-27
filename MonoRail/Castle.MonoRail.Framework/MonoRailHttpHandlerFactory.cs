@@ -92,7 +92,7 @@ namespace Castle.MonoRail.Framework
 
 			if (urlInfo.Area == "MonoRail" && urlInfo.Controller == "Files")
 			{
-				return new ResourceFileHandler(urlInfo, new DefaultStaticResourceRegistry());
+				return new ResourceFileHandler(urlInfo, staticResourceRegistry);
 			}
 
 			// TODO: Identify requests for files (js files) and serve them directly bypassing the flow
