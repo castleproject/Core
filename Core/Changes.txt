@@ -1,3 +1,5 @@
+- Added simple interface to ComponentModel to make optional properties required. 
+
 - Applied Mark's -- <mwatts42@gmail.com> -- patch that changes 
   the Core to support being compiled for Silverlight 2
 

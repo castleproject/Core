@@ -407,5 +407,36 @@ namespace Castle.Core
 				return customDependencies;
 			}
 		}
+
+		/// <summary>
+		/// Requires the selected property dependencies.
+		/// </summary>
+		/// <param name="selectors">The property selector.</param>
+		public void Requires(params Predicate<PropertySet>[] selectors)
+		{
+			foreach (PropertySet property in Properties)
+			{
+				foreach (Predicate<PropertySet> select in selectors)
+				{
+					if (select(property))
+					{
+						property.Dependency.IsOptional = false;
+						break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Requires the property dependencies of type <typeparamref name="D"/>.
+		/// </summary>
+		/// <typeparam name="D">The dependency type.</typeparam>
+		public void Requires<D>() where D : class
+		{
+			Requires(delegate(PropertySet p)
+			{
+				return p.Dependency.TargetType == typeof(D);
+			});
+		}
 	}
 }
