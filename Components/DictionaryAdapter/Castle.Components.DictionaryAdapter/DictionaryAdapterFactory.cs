@@ -15,6 +15,7 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
+	using System.Text;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
@@ -496,7 +497,8 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static String GetAdapterAssemblyName(Type type)
 		{
-			return type.Assembly.GetName().Name + "." + type.FullName + ".DictionaryAdapter";
+			return type.Assembly.GetName().Name + "." +
+				GetSafeTypeFullName(type) + ".DictionaryAdapter";
 		}
 
 		private static String GetAdapterFullTypeName(Type type)
@@ -506,7 +508,58 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static String GetAdapterTypeName(Type type)
 		{
-			return type.Name.Substring(1) + "DictionaryAdapter";
+			return GetSafeTypeName(type).Substring(1) + "DictionaryAdapter";
+		}
+
+		public static string GetSafeTypeFullName(Type type)
+		{
+			if (type.IsGenericTypeDefinition)
+			{
+				return type.FullName.Replace("`", "_");
+			}
+
+			if (type.IsGenericType)
+			{
+				StringBuilder sb = new StringBuilder();
+				if (!string.IsNullOrEmpty(type.Namespace))
+				{
+					sb.Append(type.Namespace).Append(".");
+				}
+
+				AppendGenericTypeName(type, sb);
+				return sb.ToString();
+			}
+
+			return type.FullName;
+		}
+
+		public static string GetSafeTypeName(Type type)
+		{
+			if (type.IsGenericTypeDefinition)
+			{
+				return type.Name.Replace("`", "_");
+			}
+
+			if (type.IsGenericType)
+			{
+				StringBuilder sb = new StringBuilder();
+				AppendGenericTypeName(type, sb);
+				return sb.ToString();
+			}
+
+			return type.Name;
+		}
+
+		private static void AppendGenericTypeName(Type type, StringBuilder sb)
+		{
+			// Replace back tick preceding parameter count with _ List`1 => List_1
+			sb.Append(type.Name.Replace("`", "_"));
+
+			// Append safe full name of each type argument, separated by _
+			foreach (Type argument in type.GetGenericArguments())
+			{
+				sb.Append("_").Append(GetSafeTypeFullName(argument).Replace(".", "_"));
+			}
 		}
 
 		private object GetExistingAdapter(Type type, Assembly assembly,
@@ -521,7 +574,10 @@ namespace Castle.Components.DictionaryAdapter
 		private static Assembly GetExistingAdapterAssembly(AppDomain appDomain, String assemblyName)
 		{
 			return Array.Find(appDomain.GetAssemblies(),
-			                  delegate(Assembly assembly) { return assembly.GetName().Name == assemblyName; });
+			                  delegate(Assembly assembly) 
+							  { 
+								  return assembly.GetName().Name == assemblyName; 
+							  });
 		}
 
 		#endregion

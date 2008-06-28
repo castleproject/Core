@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Reflection;
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
@@ -40,6 +41,30 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			IPerson person = factory.GetAdapter<IPerson>(dictionary);
 			Assert.IsNotNull(person);
+		}
+
+		[Test]
+		public void CreateAdapter_AdaptingGenericInterface_Works() 
+		{
+			IItemContainer<IPerson> container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			Assert.IsNotNull(container);
+			// create a fake person
+			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			container.Item = person;
+
+			Assert.AreSame(person, container.Item);
+		}
+
+		[Test]
+		public void CreateAdapter_AdaptingGenericInterfaceWithComponent_Works()
+		{
+			IItemContainerWithComponent<IPerson> container = factory.GetAdapter<IItemContainerWithComponent<IPerson>>(dictionary);
+			Assert.IsNotNull(container);
+			// create a fake person
+			container.Item.Age = 5;
+			container.Item.First_Name = "Andre";
+			Assert.AreEqual(5, container.Item.Age);
+			Assert.AreEqual("Andre", container.Item.First_Name);
 		}
 
 		[Test, ExpectedException(typeof(TypeLoadException))]
@@ -558,6 +583,99 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			Assert.AreEqual("37,36,5,3,1", dictionary["Ages"]);
 		}
+
+		#region Safe type names
+		[Test]
+		public void GetSafeTypeName_NonGenericType_ReturnsTypeName() 
+		{
+			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof (Version));
+			Assert.AreEqual(typeof(Version).Name, name);
+			AssemblyName asmName = new AssemblyName(name);
+			Assert.AreEqual(name, asmName.Name);
+		}
+
+		[Test]
+    public void GetSafeTypeName_GenericType_ReturnsSafeName() 
+		{
+			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof (List<int>));
+			Assert.AreEqual("List_1_System_Int32", name);
+			AssemblyName asmName = new AssemblyName(name);
+			Assert.AreEqual(name, asmName.Name);
+		}
+
+		[Test]
+		public void GetSafeTypeName_OpenGenericType_ReturnsSafeName()
+		{
+			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(List<>));
+			Assert.AreEqual("List_1", name);
+			AssemblyName asmName = new AssemblyName(name);
+			Assert.AreEqual(name, asmName.Name);
+		}
+
+		[Test]
+    public void GetSafeTypeName_GenericTypeWithMultipleParameters_ReturnsSafeName() 
+		{
+			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof (Dictionary<int, string>));
+			Assert.AreEqual("Dictionary_2_System_Int32_System_String", name);
+			AssemblyName asmName = new AssemblyName(name);
+			Assert.AreEqual(name, asmName.Name);
+		}
+
+		[Test]
+    public void GetSafeTypeName_OpenGenericTypeWithMultipleParameters_ReturnsSafeName()
+		{
+      string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(Dictionary<,>));
+      Assert.AreEqual("Dictionary_2", name);
+			AssemblyName asmName = new AssemblyName(name);
+			Assert.AreEqual(name, asmName.Name);
+		}
+
+		[Test]
+		public void GetSafeTypeFullName_NonGenericType_ReturnsFullName()
+		{
+			string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(Version));
+			Assert.AreEqual(typeof(Version).FullName, name);
+			AssemblyName asmName = new AssemblyName(name);
+			Assert.AreEqual(name, asmName.Name);
+		}
+
+		[Test]
+		public void GetSafeTypeFullName_GenericType_ReturnsSafeName()
+		{
+			string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(List<int>));
+			Assert.AreEqual("System.Collections.Generic.List_1_System_Int32", name);
+			AssemblyName asmName = new AssemblyName(name);
+			Assert.AreEqual(name, asmName.Name);
+		}
+
+		[Test]
+		public void GetSafeTypeFullName_OpenGenericType_ReturnsSafeName()
+		{
+			string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(List<>));
+			Assert.AreEqual("System.Collections.Generic.List_1", name);
+			AssemblyName asmName = new AssemblyName(name);
+			Assert.AreEqual(name, asmName.Name);
+		}
+    
+    [Test]
+    public void GetSafeTypeFullName_GenericTypeWithMultipleParameters_ReturnsSafeName()
+		{
+      string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(Dictionary<int,string>));
+      Assert.AreEqual("System.Collections.Generic.Dictionary_2_System_Int32_System_String", name);
+			AssemblyName asmName = new AssemblyName(name);
+			Assert.AreEqual(name, asmName.Name);
+		}
+
+		[Test]
+    public void GetSafeTypeFullName_OpenGenericTypeWithMultipleParameters_ReturnsSafeName()
+		{
+      string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(Dictionary<,>));
+      Assert.AreEqual("System.Collections.Generic.Dictionary_2", name);
+			AssemblyName asmName = new AssemblyName(name);
+			Assert.AreEqual(name, asmName.Name);
+		}
+		
+		#endregion
 	}
 
 	public interface IPhone
@@ -712,6 +830,16 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		[DictionaryComponent(Prefix = "Billing_")]
 		IAddress BillingAddress { get; set; }
+	}
+
+	public interface IItemContainer<TItem> {
+		TItem Item { get; set; }
+	}
+
+	public interface IItemContainerWithComponent<TItem>
+	{
+		[DictionaryComponent]
+		TItem Item { get; set; }
 	}
 
 	public interface IPersonWithoutPrefix : IPerson
