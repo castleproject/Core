@@ -20,6 +20,7 @@ namespace Castle.ActiveRecord
 	using System.Data;
 	using System.IO;
 	using System.Reflection;
+	using Iesi.Collections.Generic;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Config;
 	using Castle.ActiveRecord.Framework.Internal;
@@ -60,6 +61,7 @@ namespace Castle.ActiveRecord
 		private static bool isInitialized = false;
 
 		private static List<IModelBuilderExtension> extensions = new List<IModelBuilderExtension>();
+		private static List<Assembly> registeredAssemblies = new List<Assembly>();
 		private static IDictionary<Type, string> registeredTypes;
 
 		/// <summary>
@@ -146,8 +148,6 @@ namespace Castle.ActiveRecord
 
 				holder.ThreadScopeInfo = CreateThreadScopeInfoImplementation(source);
 
-				RaiseSessionFactoryHolderCreated(holder);
-
 				ActiveRecordBase.holder = holder;
 				ActiveRecordModel.type2Model.Clear();
 				ActiveRecordModel.isDebug = source.Debug;
@@ -170,6 +170,7 @@ namespace Castle.ActiveRecord
 		public static void Initialize(Assembly assembly, IConfigurationSource source)
 		{
 			List<Type> list = new List<Type>();
+			registeredAssemblies = new List<Assembly>();
 
 			CollectValidActiveRecordTypesFromAssembly(assembly, list, source);
 
@@ -183,6 +184,7 @@ namespace Castle.ActiveRecord
 		public static void Initialize(Assembly[] assemblies, IConfigurationSource source)
 		{
 			List<Type> list = new List<Type>();
+			ActiveRecordStarter.registeredAssemblies = new List<Assembly>();
 
 			foreach(Assembly assembly in assemblies)
 			{
@@ -671,8 +673,6 @@ namespace Castle.ActiveRecord
 		private static void AddXmlToNHibernateCfg(ISessionFactoryHolder holder, ActiveRecordModelCollection models)
 		{
 			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
-			AssemblyXmlGenerator assemblyXmlGenerator = new AssemblyXmlGenerator();
-			ISet assembliesGeneratedXmlFor = new HashedSet();
 			foreach(ActiveRecordModel model in models)
 			{
 				Configuration config = holder.GetConfiguration(holder.GetRootType(model.Type));
@@ -695,21 +695,6 @@ namespace Castle.ActiveRecord
 					if (xml != String.Empty)
 					{
 						AddXmlString(config, xml, model);
-					}
-				}
-
-				if (!assembliesGeneratedXmlFor.Contains(model.Type.Assembly))
-				{
-					assembliesGeneratedXmlFor.Add(model.Type.Assembly);
-
-					string[] configurations = assemblyXmlGenerator.CreateXmlConfigurations(model.Type.Assembly);
-
-					foreach(string xml in configurations)
-					{
-						if (xml != string.Empty)
-						{
-							config.AddXmlString(xml);
-						}
 					}
 				}
 			}
@@ -879,9 +864,62 @@ namespace Castle.ActiveRecord
 
 				AddXmlToNHibernateCfg(holder, models);
 
+				AddXmlToNHibernateFromAssmebliesAttributes(holder, models);
+
+				// we do it here, after we pushed all the models and before
+				// we need to check for the schema (and thereby generate the session
+				// factory and render and modification to the configuration obsolete.
+				RaiseSessionFactoryHolderCreated(holder);
+
 				if (source.VerifyModelsAgainstDBSchema)
 				{
 					VerifySchema(models);
+				}
+			}
+		}
+
+		private static void AddXmlToNHibernateFromAssmebliesAttributes(ISessionFactoryHolder holder, ActiveRecordModelCollection models)
+		{
+			ISet<Assembly> assembliesGeneratedXmlFor = new HashedSet<Assembly>();
+			AssemblyXmlGenerator assemblyXmlGenerator = new AssemblyXmlGenerator();
+
+			foreach (ActiveRecordModel model in models)
+			{
+				if (assembliesGeneratedXmlFor.Contains(model.Type.Assembly)) 
+					continue;
+
+				assembliesGeneratedXmlFor.Add(model.Type.Assembly);
+
+				Configuration config = holder.GetConfiguration(holder.GetRootType(model.Type));
+					
+				string[] configurations = assemblyXmlGenerator.CreateXmlConfigurations(model.Type.Assembly);
+
+				foreach (string xml in configurations)
+				{
+					if (xml != string.Empty)
+					{
+						config.AddXmlString(xml);
+					}
+				}
+			}
+
+			foreach (Assembly assembly in registeredAssemblies)
+			{
+				if (assembliesGeneratedXmlFor.Contains(assembly))
+					continue;
+
+				assembliesGeneratedXmlFor.Add(assembly);
+
+				Configuration config = holder.GetConfiguration(holder.GetRootType(typeof(ActiveRecordBase)));
+
+				string[] configurations = assemblyXmlGenerator.CreateXmlConfigurations(assembly);
+
+				foreach (string xml in configurations)
+				{
+					if (xml != string.Empty)
+					{
+						config.AddXmlString(xml);
+					}
 				}
 			}
 		}
@@ -937,6 +975,7 @@ namespace Castle.ActiveRecord
 		private static void CollectValidActiveRecordTypesFromAssembly(Assembly assembly, ICollection<Type> list,
 		                                                              IConfigurationSource source)
 		{
+			registeredAssemblies.Add(assembly);
 			Type[] types = GetExportedTypesFromAssembly(assembly);
 
 			foreach(Type type in types)

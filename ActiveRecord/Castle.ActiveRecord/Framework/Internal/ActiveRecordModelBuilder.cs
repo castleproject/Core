@@ -59,6 +59,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		/// <summary>
+		/// Creates the dummy model for the specified type.
+		/// This is required for integration with plain NHibernate entities
+		/// </summary>
+		/// <param name="type">The type.</param>
+		public void CreateDummyModelFor(Type type)
+		{
+			ActiveRecordBase.Register(type, new ActiveRecordModel(type));
+		}
+
+		/// <summary>
 		/// Sets the extension.
 		/// </summary>
 		/// <param name="extension">The extension.</param>
