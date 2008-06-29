@@ -50,7 +50,7 @@ namespace Castle.ActiveRecord
 	/// This is supplied for advanced sceanrios.
 	/// </remarks>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
-	public class AnyAttribute : WithAccessAttribute
+	public class AnyAttribute : WithAccessOptionalTableAttribute
 	{
 		private CascadeEnum cascade;
 		private Type idType;

@@ -150,5 +150,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		/// <param name="model">The model.</param>
 		void VisitCompositeUserType(CompositeUserTypeModel model);
+
+		/// <summary>
+		/// Visits the joined table configuration.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		void VisitJoinedTable(JoinedTableModel model);
 	}
 }

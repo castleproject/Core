@@ -589,7 +589,11 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void ReportedProblemOnForum()
 		{
-			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Company), typeof(Person));
+			ActiveRecordStarter.Initialize(GetConfigSource(), 
+				typeof(Company), 
+				typeof(Person),
+				typeof(Blog),
+				typeof(Post));
 			Recreate();
 
 			using(new TransactionScope())
@@ -605,7 +609,11 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void ExplicitFlushInsideSecondTransactionProblem()
 		{
-			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Company), typeof(Person));
+			ActiveRecordStarter.Initialize(GetConfigSource(), 
+				typeof(Company), 
+				typeof(Person),
+				typeof(Blog),
+				typeof(Post));
 			Recreate();
 
 			Company comp1 = new Company("comp1");

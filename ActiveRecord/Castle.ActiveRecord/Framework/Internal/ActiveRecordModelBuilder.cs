@@ -102,6 +102,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			ProcessJoinedBaseAttribute(type, model);
 
+			ProcessJoinedTables(type, model);
+
 			ProcessProperties(type, model);
 
 			ProcessFields(type, model);
@@ -189,6 +191,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 				{
 					extension.ProcessField(field, model);
 				}
+			}
+		}
+
+		private static void ProcessJoinedTables(Type type, ActiveRecordModel model)
+		{
+			object[] attrs = type.GetCustomAttributes(typeof(JoinedTableAttribute), false);
+
+			foreach (JoinedTableAttribute att in attrs)
+			{
+				JoinedTableModel jtm = new JoinedTableModel(att);
+				model.JoinedTables.Add(jtm);
 			}
 		}
 

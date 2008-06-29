@@ -264,6 +264,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <remarks>
 		/// Infer column name and whatever this propery can be null or not
 		/// Also catch common mistake of try to use [Property] on an entity, instead of [BelongsTo]
+		/// Ensure that joined properties have a joined table.
 		/// </remarks>
 		/// <param name="model">The model.</param>
 		public override void VisitProperty(PropertyModel model)
@@ -299,6 +300,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 				                                	"You can't use [Property] on {0}.{1} because {2} is an active record class, did you mean to use BelongTo?",
 				                                	model.Property.DeclaringType.Name, model.Property.Name, propertyType.FullName));
 			}
+
+			JoinedTableModel joinedTable = ObtainJoinedTableIfPresent(model.Property, model.PropertyAtt);
+			
+			if (joinedTable != null)
+			{
+				joinedTable.Properties.Add(model);
+			}
 		}
 
 		/// <summary>
@@ -332,6 +340,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				model.FieldAtt.NotNull = false;
 				model.FieldAtt.ColumnType = ObtainNullableTypeNameForCLRNullable(fieldType);
+			}
+
+			JoinedTableModel joinedTable = ObtainJoinedTableIfPresent(model.Field, model.FieldAtt);
+
+			if (joinedTable != null)
+			{
+				joinedTable.Fields.Add(model);
 			}
 		}
 
@@ -432,6 +447,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				model.BelongsToAtt.Type = model.Property.PropertyType;
 			}
+
+			JoinedTableModel joinedTable = ObtainJoinedTableIfPresent(model.Property, model.BelongsToAtt);
+
+			if (joinedTable != null)
+			{
+				joinedTable.BelongsTo.Add(model);
+			}
 		}
 
 		/// <summary>
@@ -458,9 +480,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				model.AnyAtt.TypeColumn = model.Property.Name + "AnyType";
 			}
+
 			if (model.AnyAtt.IdColumn == null)
 			{
 				model.AnyAtt.IdColumn = model.Property.Name + "AnyTypeId";
+			}
+
+			JoinedTableModel joinedTable = ObtainJoinedTableIfPresent(model.Property, model.AnyAtt);
+
+			if (joinedTable != null)
+			{
+				joinedTable.Anys.Add(model);
 			}
 		}
 
@@ -730,6 +760,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				columnPrefix.Length -= model.NestedAtt.ColumnPrefix.Length;
 			}
+
+			JoinedTableModel joinedTable = ObtainJoinedTableIfPresent(model.Property, model.NestedAtt);
+
+			if (joinedTable != null)
+			{
+				joinedTable.Components.Add(model);
+			}
 		}
 
 		/// <summary>
@@ -751,6 +788,21 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 
 			base.VisitCompositeUserType(model);
+		}
+
+		/// <summary>
+		/// Visits the joined table.
+		/// </summary>
+		/// <remarks>
+		/// Infer column name
+		/// </remarks>
+		/// <param name="model">The model.</param>
+		public override void VisitJoinedTable(JoinedTableModel model)
+		{
+			if (model.JoinedTableAttribute.Column == null)
+			{
+				model.JoinedTableAttribute.Column = currentModel.PrimaryKey.PrimaryKeyAtt.Column;
+			}
 		}
 
 		private static RelationType GuessRelation(PropertyInfo property, RelationType type)
@@ -829,6 +881,47 @@ namespace Castle.ActiveRecord.Framework.Internal
 				throw new ActiveRecordException(String.Format(
 				                                	"A type must declare a primary key. Check type {0}", model.Type.FullName));
 			}
+		}
+
+		private JoinedTableModel ObtainJoinedTableIfPresent(MemberInfo propertyOrField, WithAccessOptionalTableAttribute access)
+		{
+			String tableName = access.Table;
+
+			if (tableName == null)
+				return null;
+
+			if (currentModel.IsNestedType)
+			{
+				throw new ActiveRecordException(
+						String.Format("{0} {1} references table \"{2}\" which is not allowed on nested types.",
+									   propertyOrField is PropertyInfo ? "Property" : "Field", propertyOrField.Name, tableName));
+			}
+
+			if (tableName == String.Empty || tableName == currentModel.ActiveRecordAtt.Table)
+			{
+				access.Table = null;
+				return null;
+			}
+
+			JoinedTableModel joinedTable = null;
+
+			foreach (JoinedTableModel jtm in currentModel.JoinedTables)
+			{
+				if (jtm.JoinedTableAttribute.Table == tableName)
+				{
+					joinedTable = jtm;
+					break;
+				}
+			}
+
+			if (joinedTable == null)
+			{
+				throw new ActiveRecordException(
+						String.Format("{0} {1} references table \"{2}\", which does not have a corresponding [JoinedTable] on the class.",
+									   propertyOrField is PropertyInfo ? "Property" : "Field", propertyOrField.Name, tableName));
+			}
+
+			return joinedTable;
 		}
 
 		private static String ObtainNullableTypeNameForCLRNullable(Type type)

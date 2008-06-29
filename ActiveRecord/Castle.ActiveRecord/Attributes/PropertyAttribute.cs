@@ -45,7 +45,7 @@ namespace Castle.ActiveRecord
 	///	</code>
 	/// </example>
 	[AttributeUsage(AttributeTargets.Property), Serializable]
-	public class PropertyAttribute : WithAccessAttribute
+	public class PropertyAttribute : WithAccessOptionalTableAttribute
 	{
 		private string column, formula, @default;
 		private string type, uniqueKey, index;

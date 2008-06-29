@@ -1,3 +1,6 @@
+
+- Added support for multible table entities
+
 1.0
 ===
 

@@ -92,7 +92,7 @@ namespace Castle.ActiveRecord
 	/// </code>
 	/// </example>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
-	public class NestedAttribute : WithAccessAttribute
+	public class NestedAttribute : WithAccessOptionalTableAttribute
 	{
 		private bool update = true;
 		private bool insert = true;
@@ -151,7 +151,5 @@ namespace Castle.ActiveRecord
 			get { return this.columnPrefix; }
 			set { this.columnPrefix = value; }
 		}
-
-		
 	}
 }

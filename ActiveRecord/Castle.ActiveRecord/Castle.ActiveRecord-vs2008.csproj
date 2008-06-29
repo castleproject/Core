@@ -338,10 +338,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\WithAccessOptionalTableAttribute.cs" />
     <Compile Include="Attributes\CompositeUserTypeAttribute.cs" />
     <Compile Include="Attributes\Enums.cs" />
     <Compile Include="Attributes\HqlNamedQueryAttribute.cs" />
     <Compile Include="Attributes\ImportAttribute.cs" />
+    <Compile Include="Attributes\JoinedTableAttribute.cs" />
     <Compile Include="Attributes\NestedParentReferenceAttribute.cs" />
     <Compile Include="Attributes\RawXmlMappingAttribute.cs" />
     <Compile Include="Attributes\Validations\ValidateIsUniqueAttribute.cs" />
@@ -352,6 +354,7 @@
     <Compile Include="Framework\ActiveRecordValidator.cs" />
     <Compile Include="Framework\ActiveRecordHooksValidationBase.cs" />
     <Compile Include="Framework\ActiveRecordValidationException.cs" />
+    <Compile Include="Framework\Internal\Model\JoinedTableModel.cs" />
     <Compile Include="Framework\IValidationProvider.cs" />
     <Compile Include="Framework\CriteriaHelper.cs" />
     <Compile Include="Framework\InterceptorFactory.cs" />

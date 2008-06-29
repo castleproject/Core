@@ -69,6 +69,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitNode(model.Version);
 			VisitNode(model.Timestamp);
 			VisitNodes(model.JoinedClasses);
+			VisitNodes(model.JoinedTables);
 			VisitNodes(model.BelongsTo);
 			VisitNodes(model.Classes);
 			VisitNodes(model.Fields);
@@ -252,6 +253,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		/// <param name="model">The model.</param>
 		public virtual void VisitCompositeUserType(CompositeUserTypeModel model)
+		{
+		}
+
+		/// <summary>
+		/// Visits the joined table configuration.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		public virtual void VisitJoinedTable(JoinedTableModel model)
 		{
 		}
 

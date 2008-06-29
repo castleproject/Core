@@ -318,6 +318,7 @@
     <Compile Include="AnyRelationTestCase.cs" />
     <Compile Include="CompositeNestedClassTestCase.cs" />
     <Compile Include="CompositeUserTypeTestCase.cs" />
+    <Compile Include="JoinedTableTestCase.cs" />
     <Compile Include="CountQueryTestCase.cs" />
     <Compile Include="InvalidRootTypeTestCase.cs" />
     <Compile Include="Model\ClassWithBrokenField.cs" />

@@ -29,7 +29,8 @@ namespace Castle.ActiveRecord.Tests
 		public void CompanyFirmAndClient()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), 
-				typeof(Company), typeof(Client), typeof(Firm), typeof(Person) );
+				typeof(Company), typeof(Client), typeof(Firm), typeof(Person),
+				typeof(Blog), typeof(Post));
 			Recreate();
 
 			Client.DeleteAll();
@@ -60,7 +61,8 @@ namespace Castle.ActiveRecord.Tests
 		public void ManyToMany()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), 
-				typeof(Company), typeof(Client), typeof(Firm), typeof(Person) );
+				typeof(Company), typeof(Client), typeof(Firm), typeof(Person),
+				typeof(Blog), typeof(Post));
 			Recreate();
 
 			Company.DeleteAll();

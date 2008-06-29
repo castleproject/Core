@@ -17,12 +17,16 @@ namespace Castle.ActiveRecord.Tests.Model
 	using System;
 	using System.Collections;
 
-	[ActiveRecord("People")]
+	[ActiveRecord("People"), 
+	 JoinedTable("Addresses", Column = "person_id")]
 	public class Person : ActiveRecordBase
 	{
 		private int _id;
 		private String _name;
+		private FullName _fullName;
+		private String _address;
 		private IList _companies;
+		private Blog _blog;
 
 		public Person()
 		{
@@ -41,6 +45,30 @@ namespace Castle.ActiveRecord.Tests.Model
 		{
 			get { return _name; }
 			set { _name = value; }
+		}
+
+		[Nested("name_", Table = "Addresses")]
+		public FullName FullName
+		{
+			get { return _fullName; }
+			set { _fullName = value; }
+		}
+
+		[Property(Table = "Addresses")]
+		public string Address
+		{
+			get { return _address; }
+			set { _address = value; }
+		}
+
+		[Field(Table = "Addresses")]
+		public string City;
+
+		[BelongsTo("blogid", Table = "Addresses")]
+		public Blog Blog
+		{
+			get { return _blog; }
+			set { _blog = value; }
 		}
 
 		[HasAndBelongsToMany( typeof(Company), RelationType.Bag, Table="PeopleCompanies", ColumnRef="company_id", ColumnKey="person_id" )]
@@ -64,5 +92,28 @@ namespace Castle.ActiveRecord.Tests.Model
 		{
 			return (Person) ActiveRecordBase.FindByPrimaryKey( typeof(Person), id );
 		}
+	}
+
+	public class FullName
+	{
+		private String _first;
+		private String _middle;
+
+		[Property]
+		public String First
+		{
+			get { return _first; }
+			set { _first = value; }
+		}
+
+		[Property]
+		public String Middle
+		{
+			get { return _middle; }
+			set { _middle = value; }
+		}
+
+		[Field]
+		public String Last;
 	}
 }

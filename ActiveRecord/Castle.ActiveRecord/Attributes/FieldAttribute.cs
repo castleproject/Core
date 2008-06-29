@@ -32,7 +32,7 @@ namespace Castle.ActiveRecord
 	///	</code>
 	/// </example>
 	[AttributeUsage(AttributeTargets.Field), Serializable]
-	public class FieldAttribute : WithAccessAttribute
+	public class FieldAttribute : WithAccessOptionalTableAttribute
 	{
 		private String column;
 		private String formula;

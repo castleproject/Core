@@ -28,6 +28,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	{
 		private StringBuilder xmlBuilder = new StringBuilder();
 		private int identLevel = 0;
+		private String currentTable;
 
 		/// <summary>
 		/// Resets this instance.
@@ -59,7 +60,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Dedent();
 			EndMappingNode();
 
-			if (ActiveRecordModel.isDebug)
+			//if (ActiveRecordModel.isDebug)
 			{
 				String file = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, model.Type.Name + ".hbm.xml");
 
@@ -107,6 +108,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNodes(model.HasAndBelongsToMany);
 				VisitNodes(model.Components);
 				VisitNodes(model.OneToOnes);
+				VisitNodes(model.JoinedTables);
 				VisitNodes(model.JoinedClasses);
 				VisitNodes(model.Classes);
 				Dedent();
@@ -130,6 +132,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNodes(model.HasAndBelongsToMany);
 				VisitNodes(model.Components);
 				VisitNodes(model.OneToOnes);
+				VisitNodes(model.JoinedTables);
 				VisitNodes(model.JoinedClasses);
 				VisitNodes(model.Classes);
 				Dedent();
@@ -187,6 +190,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNodes(model.HasAndBelongsToMany);
 				VisitNodes(model.Components);
 				VisitNodes(model.OneToOnes);
+				VisitNodes(model.JoinedTables);
 				VisitNodes(model.CompositeUserType);
 				VisitNodes(model.JoinedClasses);
 				VisitNodes(model.Classes);
@@ -367,10 +371,44 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			PropertyAttribute att = model.PropertyAtt;
 
-			WriteProperty(model.Property.Name, model.Property.PropertyType, att.AccessString,
-			              att.ColumnType, att.Insert,
-			              att.Update, att.Formula, att.Column,
-						  att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check, att.Default);
+			if (AppliesToCurrentTable(att))
+			{
+				WriteProperty(model.Property.Name, model.Property.PropertyType, att.AccessString,
+							  att.ColumnType, att.Insert,
+							  att.Update, att.Formula, att.Column,
+							  att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check, att.Default);
+			}
+		}
+
+		/// <summary>
+		/// Visits the joined table.
+		/// </summary>
+		/// <remarks>
+		/// Infer column name
+		/// </remarks>
+		/// <param name="model">The model.</param>
+		public override void VisitJoinedTable(JoinedTableModel model)
+		{
+			JoinedTableAttribute att = model.JoinedTableAttribute;
+
+			using (new TableScope(this, att.Table))
+			{
+				AppendF("<join{0}{1}{2}{3}>",
+							MakeAtt("table", att.Table),
+							WriteIfNonNull("schema", att.Schema),
+							WriteIfNonNull("fetch", TranslateFetch(att.Fetch)),
+							WriteIfTrue("inverse", att.Inverse),
+							WriteIfTrue("optional", att.Optional));
+				Ident();
+				WriteKey(att.Column);
+				VisitNodes(model.Fields);
+				VisitNodes(model.Properties);
+				VisitNodes(model.BelongsTo);
+				VisitNodes(model.Anys);
+				VisitNodes(model.Components);
+				Dedent();
+				Append("</join>");
+			}
 		}
 
 		/// <summary>
@@ -381,10 +419,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			FieldAttribute att = model.FieldAtt;
 
-			WriteProperty(model.Field.Name, model.Field.FieldType, att.AccessString,
-			              att.ColumnType, att.Insert,
-			              att.Update, att.Formula, att.Column,
-			              att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check, att.Default);
+			if (AppliesToCurrentTable(att))
+			{
+				WriteProperty(model.Field.Name, model.Field.FieldType, att.AccessString,
+							  att.ColumnType, att.Insert,
+							  att.Update, att.Formula, att.Column,
+							  att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check, att.Default);
+			}
 		}
 
 		/// <summary>
@@ -402,35 +443,38 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="model">The model.</param>
 		public override void VisitAny(AnyModel model)
 		{
-			String cascade = TranslateCascadeEnum(model.AnyAtt.Cascade);
-
-			AppendF("<any{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
-			        MakeAtt("name", model.Property.Name),
-			        MakeAtt("access", model.AnyAtt.AccessString),
-			        MakeCustomTypeAtt("id-type", model.AnyAtt.IdType),
-			        MakeCustomTypeAttIfNotNull("meta-type", model.AnyAtt.MetaType),
-			        WriteIfFalse("insert", model.AnyAtt.Insert),
-			        WriteIfFalse("update", model.AnyAtt.Update),
-			        WriteIfNonNull("index", model.AnyAtt.Index),
-			        WriteIfNonNull("cascade", cascade),
-			        WriteIfTrue("not-null", model.AnyAtt.NotNull));
-			Ident();
-			foreach(Any.MetaValueAttribute meta in model.MetaValues)
+			if (AppliesToCurrentTable(model.AnyAtt))
 			{
-				AppendF("<meta-value{0}{1} />",
-				        MakeAtt("value", meta.Value),
-				        MakeCustomTypeAtt("class", meta.Class)
+				String cascade = TranslateCascadeEnum(model.AnyAtt.Cascade);
+
+				AppendF("<any{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
+						MakeAtt("name", model.Property.Name),
+						MakeAtt("access", model.AnyAtt.AccessString),
+						MakeCustomTypeAtt("id-type", model.AnyAtt.IdType),
+						MakeCustomTypeAttIfNotNull("meta-type", model.AnyAtt.MetaType),
+						WriteIfFalse("insert", model.AnyAtt.Insert),
+						WriteIfFalse("update", model.AnyAtt.Update),
+						WriteIfNonNull("index", model.AnyAtt.Index),
+						WriteIfNonNull("cascade", cascade),
+						WriteIfTrue("not-null", model.AnyAtt.NotNull));
+				Ident();
+				foreach (Any.MetaValueAttribute meta in model.MetaValues)
+				{
+					AppendF("<meta-value{0}{1} />",
+							MakeAtt("value", meta.Value),
+							MakeCustomTypeAtt("class", meta.Class)
+						);
+				}
+				//The ordering is important, apparently
+				AppendF("<column{0} />",
+						MakeAtt("name", model.AnyAtt.TypeColumn)
 					);
+				AppendF("<column{0} />",
+						MakeAtt("name", model.AnyAtt.IdColumn)
+					);
+				Dedent();
+				Append("</any>");
 			}
-			//The ordering is important, apparently
-			AppendF("<column{0} />",
-			        MakeAtt("name", model.AnyAtt.TypeColumn)
-				);
-			AppendF("<column{0} />",
-			        MakeAtt("name", model.AnyAtt.IdColumn)
-				);
-			Dedent();
-			Append("</any>");
 		}
 
 		/// <summary>
@@ -544,6 +588,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="model">The model.</param>
 		public override void VisitBelongsTo(BelongsToModel model)
 		{
+			if (!AppliesToCurrentTable(model.BelongsToAtt))
+			{
+				return;
+			}
+
 			String cascade = TranslateCascadeEnum(model.BelongsToAtt.Cascade);
 			String fetch = TranslateFetch(model.BelongsToAtt.Fetch);
 			String notFoundMode = TranslateNotFoundBehaviourEnum(model.BelongsToAtt.NotFoundBehaviour);
@@ -641,7 +690,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				Append("</nested-composite-element>");
 			}
-			else
+			else if (AppliesToCurrentTable(model.NestedAtt))
 			{
 				AppendF("<component{0}{1}{2}{3}{4}>",
 				        MakeAtt("name", model.Property.Name),
@@ -650,7 +699,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("class", MakeTypeName(model.NestedAtt.MapType)),
 						WriteIfNonNull("access", model.NestedAtt.AccessString));
 
-				base.VisitNested(model);
+				using (new TableScope(this, null))
+				{
+					base.VisitNested(model);
+				}
 
 				Append("</component>");
 			}
@@ -721,6 +773,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Dedent();
 
 			EndWriteProperty();
+		}
+
+		private bool AppliesToCurrentTable(WithAccessOptionalTableAttribute access)
+		{
+			return access.Table == currentTable;
 		}
 
 		private void WriteCollection(ManyRelationCascadeEnum cascadeEnum,
@@ -1286,6 +1343,28 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private void Dedent()
 		{
 			identLevel--;
+		}
+
+		#endregion
+
+		#region Nested Class: TableScope
+
+		private class TableScope : IDisposable
+		{
+			private readonly String currentTable;
+			private readonly XmlGenerationVisitor visitor;
+
+			public TableScope(XmlGenerationVisitor visitor, String newTable)
+			{
+				currentTable = visitor.currentTable;
+				visitor.currentTable = newTable;
+				this.visitor = visitor;
+			}
+
+			public void Dispose()
+			{
+				visitor.currentTable = currentTable;
+			}
 		}
 
 		#endregion

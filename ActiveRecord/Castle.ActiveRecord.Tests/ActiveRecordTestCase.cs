@@ -107,7 +107,12 @@ namespace Castle.ActiveRecord.Tests
 		public void ComponentAttribute()
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(),
-			                               typeof(Company), typeof(Client), typeof(Firm), typeof(Person));
+			                               typeof(Company),
+										   typeof(Client),
+										   typeof(Firm), 
+										   typeof(Person),
+										   typeof(Post),
+										   typeof(Blog));
 			Recreate();
 
 			Company.DeleteAll();

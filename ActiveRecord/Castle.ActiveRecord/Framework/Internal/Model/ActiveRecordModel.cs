@@ -72,6 +72,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private readonly IList<NestedParentReferenceModel> componentParent = new List<NestedParentReferenceModel>();
 		private readonly IList<ActiveRecordModel> classes = new List<ActiveRecordModel>();
 		private readonly IList<ActiveRecordModel> joinedclasses = new List<ActiveRecordModel>();
+		private readonly IList<JoinedTableModel> joinedTables = new List<JoinedTableModel>();
 		private readonly IList<NestedModel> components = new List<NestedModel>();
 		private readonly IList<BelongsToModel> belongsTo = new List<BelongsToModel>();
 		private readonly IList<HasManyModel> hasMany = new List<HasManyModel>();
@@ -320,6 +321,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public IList<ActiveRecordModel> JoinedClasses
 		{
 			get { return joinedclasses; }
+		}
+
+		/// <summary>
+		/// Gets the list of joined tables.
+		/// </summary>
+		/// <value>The joined tables.</value>
+		public IList<JoinedTableModel> JoinedTables
+		{
+			get { return joinedTables; }
 		}
 
 		/// <summary>
