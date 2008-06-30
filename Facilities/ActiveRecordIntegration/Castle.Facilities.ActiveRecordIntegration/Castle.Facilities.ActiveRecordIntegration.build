@@ -11,7 +11,6 @@
 	<target name="init" depends="common.init">
 		<property name="assembly.version" value="1.0.3.0" />
 		<property name="csc.args" value="/nowarn:618" />
-		<property name="assembly.is-cls-compliant" value="false" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="NHibernate.dll" />

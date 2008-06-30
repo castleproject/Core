@@ -11037,10 +11037,14 @@
             
             </summary>
         </member>
-        <member name="P:NHibernate.Dialect.SQLiteDialect.IdentitySelectString">
+        <member name="M:NHibernate.Dialect.SQLiteDialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Int32,System.Int32)">
             <summary>
-            
+            Add a LIMIT N clause to the given SQL <c>SELECT</c>
             </summary>
+            <param name="querySqlString">A Query in the form of a SqlString.</param>
+            <param name="limit">Maximum number of rows to be returned by the query</param>
+            <param name="offset">Offset of the first row to process in the result set</param>
+            <returns>A new SqlString that contains the <c>LIMIT</c> clause.</returns>
         </member>
         <member name="T:NHibernate.Dialect.Sybase11Dialect">
             <summary>
@@ -11123,14 +11127,14 @@
         </member>
         <member name="T:NHibernate.Dialect.SybaseAnywhereDialect">
             <summary>
-            An SQL dialect for Sybase Adaptive Server Anywhere 9.0
+            An SQL dialect for Sybase Adaptive Server Anywhere 10.0
             </summary>
             <remarks>
             <p>
             This dialect probably will not work with schema-export.  If anyone out there
             can fill in the ctor with DbTypes to Strings that would be helpful.
             </p>
-            The SybaseAnywhereDialect defaults the following configuration properties:
+            The SybaseAnywhere10Dialect defaults the following configuration properties:
             <list type="table">
             	<listheader>
             		<term>Property</term>
@@ -11413,18 +11417,18 @@
             Initializes a new instance of the <see cref="T:NHibernate.Driver.ASAClientDriver"/> class.
             </summary>
             <exception cref="T:NHibernate.HibernateException">
-            Thrown when the ASA.Data.AseClient assembly is not and can not be loaded.
+            Thrown when the iAnywhere.Data.SQLAnywhere assembly is not and can not be loaded.
             </exception>
         </member>
         <member name="P:NHibernate.Driver.ASAClientDriver.UseNamedPrefixInSql">
             <summary>
-            iAnywhere.Data.AsaClient uses named parameters in the sql.
+            iAnywhere.Data.SQLAnywhere uses named parameters in the sql.
             </summary>
             <value><see langword="true" /> - Sybase uses <c>String.Empty</c> in the sql.</value>
         </member>
         <member name="P:NHibernate.Driver.ASAClientDriver.NamedPrefix">
             <summary>
-            iAnywhere.Data.AsaClient use the <c>string.Empty</c> to locate parameters in sql.
+            iAnywhere.Data.SQLAnywhere use the <c>string.Empty</c> to locate parameters in sql.
             </summary>
         </member>
         <member name="T:NHibernate.Driver.DB2400Driver">
@@ -15678,6 +15682,7 @@
             <param name="obj"></param>
             <param name="persister"></param>
             <param name="id"></param>
+            <param name="entityMode"></param>
         </member>
         <member name="M:NHibernate.Event.Default.DefaultFlushEntityEventListener.IsUpdateNecessary(NHibernate.Event.FlushEntityEvent)">
             <summary> 
@@ -21987,6 +21992,14 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.String"/>.</param>
+        </member>
+        <member name="M:NHibernate.IMultiQuery.SetGuid(System.String,System.Guid)">
+            <summary>
+            Bind an instance of a <see cref="T:System.Guid"/> to a named parameter
+            using an NHibernate <see cref="T:NHibernate.Type.GuidType"/>.
+            </summary>
+            <param name="name">The name of the parameter</param>
+            <param name="val">An instance of a <see cref="T:System.Guid"/>.</param>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetTime(System.String,System.DateTime)">
             <summary>
@@ -29006,6 +29019,14 @@
             SqlTypeFactory provides Singleton access to the SqlTypes.
             </summary>
         </member>
+        <member name="T:NHibernate.SqlTypes.SqlXmlType">
+            <summary>
+            Describes the details of a <see cref="F:System.Data.DbType.Xml"/> that is stored in an XML column.
+            </summary>
+            <remarks>
+            Does not handle advanced concepts such as associating a schema to the XML column.
+            </remarks>
+        </member>
         <member name="T:NHibernate.SqlTypes.StringClobSqlType">
             <summary>
             Describes the details of a <see cref="F:System.Data.DbType.String"/> that is stored in
@@ -29572,6 +29593,12 @@
             It is okay for this to be a no op implementation.
             </remarks>
         </member>
+        <member name="M:NHibernate.ITransaction.RegisterSynchronization(NHibernate.Transaction.ISynchronization)">
+            <summary>
+            Register a user synchronization callback for this transaction.
+            </summary>
+            <param name="synchronization">The <see cref="T:NHibernate.Transaction.ISynchronization"/> callback to register.</param>
+        </member>
         <member name="P:NHibernate.ITransaction.IsActive">
             <summary>
             Is the transaction in progress
@@ -29686,6 +29713,11 @@
             <see langword="true"/> if the <see cref="T:System.Data.IDbTransaction"/> had <c>Commit</c> called
             without any exceptions.
             </value>
+        </member>
+        <member name="T:NHibernate.Transaction.ISynchronization">
+            <summary>
+            A mimic to the javax.transaction.Synchronization callback to enable <see cref="M:NHibernate.ITransaction.RegisterSynchronization(NHibernate.Transaction.ISynchronization)"/> 
+            </summary>
         </member>
         <member name="T:NHibernate.Transform.IResultTransformer">
             <summary>
@@ -31288,12 +31320,15 @@
             other unique key, in the case of property-ref
             </summary>
         </member>
-        <member name="M:NHibernate.Type.CollectionType.Instantiate">
+        <member name="M:NHibernate.Type.CollectionType.Instantiate(System.Int32)">
             <summary> 
             Instantiate an empty instance of the "underlying" collection (not a wrapper),
             but with the given anticipated size (i.e. accounting for initial capacity
             and perhaps load factor).
             </summary>
+            <param name="anticipatedSize">
+            The anticipated size of the instaniated collection after we are done populating it.
+            </param>
             <returns> A newly instantiated collection to be wrapped. </returns>
         </member>
         <member name="M:NHibernate.Type.CollectionType.GetElementsIterator(System.Object,NHibernate.Engine.ISessionImplementor)">
@@ -32589,20 +32624,6 @@
             PersistentEnumType
             </summary>
         </member>
-        <member name="M:NHibernate.Type.PersistentEnumType.#ctor(System.Type)">
-            <summary>
-            
-            </summary>
-            <param name="enumClass"></param>
-        </member>
-        <member name="M:NHibernate.Type.PersistentEnumType.GetUnderlyingSqlType(System.Type)">
-            <summary>
-            Determines what the NHibernate SqlType should be based on the 
-            values contain in the Enum
-            </summary>
-            <param name="enumClass">The Enumeration class to get the values from.</param>
-            <returns>The SqlType for this EnumClass</returns>
-        </member>
         <member name="M:NHibernate.Type.PersistentEnumType.GetInstance(System.Object)">
             <summary>
             Gets an instance of the Enum
@@ -32616,16 +32637,13 @@
             <summary>
             Gets the correct value for the Enum.
             </summary>
-            <param name="code">The value to convert.</param>
-            <returns>A boxed version of the code converted to the correct type.</returns>
+            <param name="code">The value to convert (an enum instance).</param>
+            <returns>A boxed version of the code, converted to the correct type.</returns>
             <remarks>
             This handles situations where the DataProvider returns the value of the Enum
             from the db in the wrong underlying type.  It uses <see cref="T:System.Convert"/> to 
             convert it to the correct type.
             </remarks>
-        </member>
-        <member name="P:NHibernate.Type.PersistentEnumType.Name">
-            <summary></summary> 
         </member>
         <member name="T:NHibernate.Type.SByteType">
             <summary>
@@ -33875,10 +33893,18 @@
             Replace the elements of a collection with the elements of another collection
             </summary>
         </member>
-        <member name="M:NHibernate.UserTypes.IUserCollectionType.Instantiate">
-            <summary>
-            Instantiate an empty instance of the "underlying" collection (not a wrapper)
-            </summary>
+        <member name="M:NHibernate.UserTypes.IUserCollectionType.Instantiate(System.Int32)">
+            <summary> 
+            Instantiate an empty instance of the "underlying" collection (not a wrapper),
+            but with the given anticipated size (i.e. accounting for initial size
+            and perhaps load factor).
+             </summary>
+            <param name="anticipatedSize">
+            The anticipated size of the instaniated collection
+            after we are done populating it.  Note, may be negative to indicate that
+            we not yet know anything about the anticipated size (i.e., when initializing
+            from a result set row by row).
+            </param>		
         </member>
         <member name="T:NHibernate.UserTypes.IUserVersionType">
             <summary>
