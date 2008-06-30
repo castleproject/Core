@@ -18,19 +18,11 @@ using Castle.DynamicProxy;
 namespace Castle.Facilities.ActiveRecordIntegration
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Generic;
 	using System.Data;
 
 	using NHibernate;
-	using NHibernate.Cfg;
-	using NHibernate.Connection;
-	using NHibernate.Dialect;
-	using NHibernate.Engine;
-	using NHibernate.Metadata;
 
 	using Castle.ActiveRecord.Framework;
-	using NHibernate.Stat;
 
 	/// <summary>
 	/// Implements <see cref="ISessionFactory"/> allowing 

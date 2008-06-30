@@ -37,7 +37,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	{
 		private ILogger log = NullLogger.Instance;
 		private int sessionFactoryCount, sessionFactoryHolderCount;
-		private bool skipARInitialization;
+		private readonly bool skipARInitialization;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordFacility"/> class.

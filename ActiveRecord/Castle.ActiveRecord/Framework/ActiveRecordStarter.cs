@@ -154,6 +154,11 @@ namespace Castle.ActiveRecord
 				ActiveRecordModel.isLazyByDefault = source.IsLazyByDefault;
 				ActiveRecordModel.pluralizeTableNames = source.PluralizeTableNames;
 
+				// this must be raised before SetUpConfiguration is called,
+				// because registrants to holder.OnRootTypeRegistered rely on
+				// it and we register those types in SetUpConfiguration 
+				RaiseSessionFactoryHolderCreated(holder);
+
 				// Sets up base configuration
 				SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
 
@@ -865,11 +870,6 @@ namespace Castle.ActiveRecord
 				AddXmlToNHibernateCfg(holder, models);
 
 				AddXmlToNHibernateFromAssmebliesAttributes(holder, models);
-
-				// we do it here, after we pushed all the models and before
-				// we need to check for the schema (and thereby generate the session
-				// factory and render and modification to the configuration obsolete.
-				RaiseSessionFactoryHolderCreated(holder);
 
 				if (source.VerifyModelsAgainstDBSchema)
 				{
