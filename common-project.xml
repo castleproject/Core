@@ -238,11 +238,6 @@
 				<attribute asis="true" type="AllowPartiallyTrustedCallersAttribute" if="${assembly.allow-partially-trusted-callers}" />
 			</attributes>
 		</asminfo>
-		<if test="${assembly.sign and not (nant.settings.currentframework == 'net-2.0')}" >
-			<echo append="true" file="${assemblyinfo.cs}">#if MONO</echo>
-			<echo append="true" file="${assemblyinfo.cs}">[assembly: AssemblyKeyFileAttribute(@"${path::get-full-path(assembly.keyfile)}")]</echo>
-			<echo append="true" file="${assemblyinfo.cs}">#endif</echo>
-		</if>
 	</target>
 	
 	<target name="common.assemblyinfo">
