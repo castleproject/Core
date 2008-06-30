@@ -16,9 +16,6 @@
 		<include name="Components/components.build" />
 		<include name="ActiveRecord/activerecord.build" />
 		<include name="MonoRail/monorail.build" />
-		<!--
-		<include name="AspectSharp/aspectsharp.build" />
-		-->
 		<include name="Facilities/facilities.build" />
 	</fileset>
 
