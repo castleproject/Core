@@ -20,7 +20,6 @@ namespace Castle.ActiveRecord
 	using System.Data;
 	using System.IO;
 	using System.Reflection;
-	using Iesi.Collections.Generic;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Config;
 	using Castle.ActiveRecord.Framework.Internal;
@@ -28,6 +27,7 @@ namespace Castle.ActiveRecord
 	using Castle.Core.Configuration;
 	using NHibernate.Cfg;
 	using Iesi.Collections;
+	using Iesi.Collections.Generic;
 	using NHibernate.Criterion;
 	using NHibernate.Tool.hbm2ddl;
 	using Environment=NHibernate.Cfg.Environment;
@@ -60,8 +60,8 @@ namespace Castle.ActiveRecord
 
 		private static bool isInitialized = false;
 
-		private static List<IModelBuilderExtension> extensions = new List<IModelBuilderExtension>();
-		private static List<Assembly> registeredAssemblies = new List<Assembly>();
+		private static readonly List<IModelBuilderExtension> extensions = new List<IModelBuilderExtension>();
+		private static readonly ISet<Assembly> registeredAssemblies = new HashedSet<Assembly>();
 		private static IDictionary<Type, string> registeredTypes;
 
 		/// <summary>
@@ -87,6 +87,14 @@ namespace Castle.ActiveRecord
 		/// creation and act on the holder instance
 		/// </summary>
 		public static event SessionFactoryHolderDelegate SessionFactoryHolderCreated;
+
+		/// <summary>
+		/// So others frameworks can intercept the 
+		/// creation and act on the holder instance after
+		/// the mapping was already loaded into the NHibernate 
+		/// </summary>
+		public static event SessionFactoryHolderDelegate MappingRegiseredInConfiguration;
+
 
 		/// <summary>
 		/// Allows other frameworks to modify the ActiveRecordModel
@@ -129,6 +137,11 @@ namespace Castle.ActiveRecord
 				{
 					throw new ActiveRecordInitializationException("You can't invoke ActiveRecordStarter.Initialize more than once");
 				}
+				
+				foreach (Type type in types)
+				{
+					registeredAssemblies.Add(type.Assembly);
+				}
 
 				if (source == null)
 				{
@@ -148,16 +161,13 @@ namespace Castle.ActiveRecord
 
 				holder.ThreadScopeInfo = CreateThreadScopeInfoImplementation(source);
 
+				RaiseSessionFactoryHolderCreated(holder);
+
 				ActiveRecordBase.holder = holder;
 				ActiveRecordModel.type2Model.Clear();
 				ActiveRecordModel.isDebug = source.Debug;
 				ActiveRecordModel.isLazyByDefault = source.IsLazyByDefault;
 				ActiveRecordModel.pluralizeTableNames = source.PluralizeTableNames;
-
-				// this must be raised before SetUpConfiguration is called,
-				// because registrants to holder.OnRootTypeRegistered rely on
-				// it and we register those types in SetUpConfiguration 
-				RaiseSessionFactoryHolderCreated(holder);
 
 				// Sets up base configuration
 				SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
@@ -175,7 +185,6 @@ namespace Castle.ActiveRecord
 		public static void Initialize(Assembly assembly, IConfigurationSource source)
 		{
 			List<Type> list = new List<Type>();
-			registeredAssemblies = new List<Assembly>();
 
 			CollectValidActiveRecordTypesFromAssembly(assembly, list, source);
 
@@ -189,7 +198,6 @@ namespace Castle.ActiveRecord
 		public static void Initialize(Assembly[] assemblies, IConfigurationSource source)
 		{
 			List<Type> list = new List<Type>();
-			ActiveRecordStarter.registeredAssemblies = new List<Assembly>();
 
 			foreach(Assembly assembly in assemblies)
 			{
@@ -520,6 +528,7 @@ namespace Castle.ActiveRecord
 		public static void ResetInitializationFlag()
 		{
 			isInitialized = false;
+			registeredAssemblies.Clear();
 		}
 
 		/// <summary>
@@ -678,6 +687,8 @@ namespace Castle.ActiveRecord
 		private static void AddXmlToNHibernateCfg(ISessionFactoryHolder holder, ActiveRecordModelCollection models)
 		{
 			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			AssemblyXmlGenerator assemblyXmlGenerator = new AssemblyXmlGenerator();
+			ISet assembliesGeneratedXmlFor = new HashedSet();
 			foreach(ActiveRecordModel model in models)
 			{
 				Configuration config = holder.GetConfiguration(holder.GetRootType(model.Type));
@@ -870,6 +881,12 @@ namespace Castle.ActiveRecord
 				AddXmlToNHibernateCfg(holder, models);
 
 				AddXmlToNHibernateFromAssmebliesAttributes(holder, models);
+
+				SessionFactoryHolderDelegate regiseredInConfigurationHandler = MappingRegiseredInConfiguration;
+				if(regiseredInConfigurationHandler!=null)
+				{
+					regiseredInConfigurationHandler(holder);
+				}
 
 				if (source.VerifyModelsAgainstDBSchema)
 				{

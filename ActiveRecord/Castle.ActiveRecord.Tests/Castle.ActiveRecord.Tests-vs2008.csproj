@@ -141,6 +141,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\Castle.ActiveRecord.Tests.Model\Castle.ActiveRecord.Tests.Model.csproj">
+      <Project>{DC2D80AC-4641-4798-B059-C90AA162D2AB}</Project>
+      <Name>Castle.ActiveRecord.Tests.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.ActiveRecord\Castle.ActiveRecord-vs2005.csproj">
       <Name>Castle.ActiveRecord</Name>
       <Project>{652F95D4-86E2-40B6-919D-CFC6E449386B}</Project>

@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.ActiveRecord.Framework.Config;
+using Castle.ActiveRecord.Tests.Model;
+using NHibernate;
+using NHibernate.Metadata;
+
 namespace Castle.ActiveRecord.Framework.Internal.Tests
 {
 	using NUnit.Framework;
@@ -47,7 +52,21 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			string[] xmlConfigurations = generator.CreateXmlConfigurations(typeof(AssemblyXmlGenerationTestCase).Assembly);
 			string actual = xmlConfigurations[1];
 			Assert.AreEqual(expected, actual);
-		
+		}
+
+		[Test]
+		public void WillUseRegisteredAssembliesToLookForRawMappingXmlEvenIfThereAreNoActiveRecordTypesInThatAssembly()
+		{
+			ActiveRecordStarter.ResetInitializationFlag();
+			ActiveRecordStarter.Initialize(
+				typeof(RegisterNHibernateClassMapping).Assembly,
+				InPlaceConfigurationSource.Build(DatabaseType.MSSQLServer2005, "dummy")
+				);
+			ISessionFactory factory = ActiveRecordMediator.GetSessionFactoryHolder()
+				.GetSessionFactory(typeof(ActiveRecordBase));
+			IClassMetadata metadata = factory
+				.GetClassMetadata(typeof(NHibernateClass));
+			Assert.IsNotNull(metadata);
 		}
 	}
 }

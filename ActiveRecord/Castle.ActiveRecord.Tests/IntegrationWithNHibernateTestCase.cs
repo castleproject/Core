@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-[assembly: Castle.ActiveRecord.Tests.RegisterNHibernateClassMapping]
+using System.Reflection;
+using Castle.ActiveRecord.Framework;
+using Castle.ActiveRecord.Tests.Model;
+using NHibernate.Cfg;
+
 namespace Castle.ActiveRecord.Tests
 {
 	using Castle.ActiveRecord.Framework.Internal;
@@ -24,16 +28,18 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void CanIntegrateNHibernateAndActiveRecord()
 		{
-			ActiveRecordStarter.ModelsValidated+=delegate {
-				new ActiveRecordModelBuilder().CreateDummyModelFor(typeof (NHibernateClass));
+			ActiveRecordStarter.ModelsValidated += delegate
+			{
+				new ActiveRecordModelBuilder().CreateDummyModelFor(typeof(NHibernateClass));
 			};
 			ActiveRecordStarter.Initialize(
 				GetConfigSource(),
-				typeof(ActiveRecordClass));
+				typeof(ActiveRecordClass),
+				typeof(NHibernateClass));
 
 			Recreate();
 
-			using(TransactionScope tx = new TransactionScope())
+			using (TransactionScope tx = new TransactionScope())
 			{
 				ActiveRecordClass ar = new ActiveRecordClass();
 				ar.Friend = new NHibernateClass();
@@ -49,16 +55,24 @@ namespace Castle.ActiveRecord.Tests
 				Assert.IsNotNull(first.Friend);
 			}
 		}
-	}
 
-	public class NHibernateClass
-	{
-		private int id;
-
-		public virtual int Id
+		[Test]
+		public void WhenMappingRegiseredInConfigurationCalledTheConfigurationHasClasses()
 		{
-			get { return id; }
-			set { id = value; }
+			ActiveRecordStarter.ModelsValidated += delegate
+			   {
+				   new ActiveRecordModelBuilder().CreateDummyModelFor(typeof(NHibernateClass));
+			   };
+			Configuration configuration = null;
+			ActiveRecordStarter.MappingRegiseredInConfiguration += delegate(ISessionFactoryHolder holder)
+			{
+				configuration = holder.GetAllConfigurations()[0];
+			};
+			ActiveRecordStarter.Initialize(
+				GetConfigSource(),
+				typeof(ActiveRecordClass),
+				typeof(NHibernateClass));
+			Assert.AreNotEqual(0, configuration.ClassMappings.Count);
 		}
 	}
 
@@ -78,25 +92,8 @@ namespace Castle.ActiveRecord.Tests
 		[BelongsTo]
 		public virtual NHibernateClass Friend
 		{
-			get{ return friend; }
-			set{ friend = value;}
-		}
-	}
-
-	public class RegisterNHibernateClassMapping : RawXmlMappingAttribute
-	{
-		public override string[] GetMappings()
-		{
-			return new string[]
-			{
-				@"<hibernate-mapping  xmlns='urn:nhibernate-mapping-2.2'>
-	<class name='Castle.ActiveRecord.Tests.NHibernateClass, Castle.ActiveRecord.Tests'>
-		<id name='Id'>
-			<generator class='native'/>
-		</id>
-	</class>
-</hibernate-mapping>"
-		};
+			get { return friend; }
+			set { friend = value; }
 		}
 	}
 }

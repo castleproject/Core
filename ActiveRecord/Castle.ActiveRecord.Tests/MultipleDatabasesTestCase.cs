@@ -14,7 +14,6 @@
 
 namespace Castle.ActiveRecord.Tests
 {
-	using Framework;
 	using Model;
 	using NUnit.Framework;
 
