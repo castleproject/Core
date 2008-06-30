@@ -57,14 +57,14 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
-		public void WhenMappingRegiseredInConfigurationCalledTheConfigurationHasClasses()
+		public void WhenMappingRegisteredInConfigurationCalledTheConfigurationHasClasses()
 		{
 			ActiveRecordStarter.ModelsValidated += delegate
 			   {
 				   new ActiveRecordModelBuilder().CreateDummyModelFor(typeof(NHibernateClass));
 			   };
 			Configuration configuration = null;
-			ActiveRecordStarter.MappingRegiseredInConfiguration += delegate(ISessionFactoryHolder holder)
+			ActiveRecordStarter.MappingRegisteredInConfiguration += delegate(ISessionFactoryHolder holder)
 			{
 				configuration = holder.GetAllConfigurations()[0];
 			};

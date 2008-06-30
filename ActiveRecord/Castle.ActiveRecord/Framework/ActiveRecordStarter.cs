@@ -93,7 +93,7 @@ namespace Castle.ActiveRecord
 		/// creation and act on the holder instance after
 		/// the mapping was already loaded into the NHibernate 
 		/// </summary>
-		public static event SessionFactoryHolderDelegate MappingRegiseredInConfiguration;
+		public static event SessionFactoryHolderDelegate MappingRegisteredInConfiguration;
 
 
 		/// <summary>
@@ -882,10 +882,10 @@ namespace Castle.ActiveRecord
 
 				AddXmlToNHibernateFromAssmebliesAttributes(holder, models);
 
-				SessionFactoryHolderDelegate regiseredInConfigurationHandler = MappingRegiseredInConfiguration;
-				if(regiseredInConfigurationHandler!=null)
+				SessionFactoryHolderDelegate registeredInConfigurationHandler = MappingRegisteredInConfiguration;
+				if(registeredInConfigurationHandler!=null)
 				{
-					regiseredInConfigurationHandler(holder);
+					registeredInConfigurationHandler(holder);
 				}
 
 				if (source.VerifyModelsAgainstDBSchema)
