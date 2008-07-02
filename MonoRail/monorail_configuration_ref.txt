@@ -33,6 +33,7 @@
 		<additionalSources>
 			<assembly name="" namespace="" />
 			<assembly name="" namespace="" />
+			<path location="" />			
 		</additionalSources>
 		
 	</viewEngine>

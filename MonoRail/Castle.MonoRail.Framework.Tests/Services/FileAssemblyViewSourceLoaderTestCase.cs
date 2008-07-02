@@ -53,6 +53,18 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			Assert.IsTrue(loader.HasSource("Content\\contentinassembly.vm"));
 			Assert.IsNotNull(loader.GetViewSource("Content\\contentinassembly.vm"));
 		}
+	
+		[Test]
+		public void LoadFromAdditionalPath()
+		{
+			loader.AddPathSource(loader.ViewRootDir);
+			loader.AssemblySources.Clear();
+			loader.ViewRootDir = string.Empty;
+
+			Assert.IsFalse(loader.HasSource("contentinfs2.vm"));
+			Assert.IsTrue(loader.HasSource("contentinfs.vm"));
+			Assert.IsNotNull(loader.GetViewSource("contentinfs.vm"));
+		}
 
 		[Test]
 		public void ListViews()
@@ -65,9 +77,9 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			Assert.AreEqual(4, views.Length);
 			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
 			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "notinassembly.vm", views[1]);
-            Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "zdonotlist.bad", views[2]);
+			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "zdonotlist.bad", views[2]);
 			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[3]);
-            
+			
 
 			foreach(string view in views)
 			{
@@ -75,26 +87,27 @@ namespace Castle.MonoRail.Framework.Tests.Services
 				Assert.IsNotNull(loader.GetViewSource(view));
 			}
 		}
-        [Test]
-        public void ListViewsWithOptionalFileExtensions()
-        {
-            loader.AddAssemblySource(new AssemblySourceInfo("Castle.MonoRail.Framework.Tests", "Castle.MonoRail.Framework.Tests"));
 
-            string[] views = loader.ListViews("Content",".vm");
+		[Test]
+		public void ListViewsWithOptionalFileExtensions()
+		{
+			loader.AddAssemblySource(new AssemblySourceInfo("Castle.MonoRail.Framework.Tests", "Castle.MonoRail.Framework.Tests"));
 
-            Assert.IsNotNull(views);
-            Assert.AreEqual(3, views.Length);
-            Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
-            Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "notinassembly.vm", views[1]);
-            Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[2]);
+			string[] views = loader.ListViews("Content",".vm");
+
+			Assert.IsNotNull(views);
+			Assert.AreEqual(3, views.Length);
+			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
+			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "notinassembly.vm", views[1]);
+			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[2]);
 
 
-            foreach (string view in views)
-            {
-                Assert.IsTrue(loader.HasSource(view));
-                Assert.IsNotNull(loader.GetViewSource(view));
-            }
-        }
+			foreach (string view in views)
+			{
+				Assert.IsTrue(loader.HasSource(view));
+				Assert.IsNotNull(loader.GetViewSource(view));
+			}
+		}
 	}
 
 	[TestFixture]
@@ -113,9 +126,9 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		public void DoesNotThrowException_IfSubscribingToViewSourceChangedEvent_AndViewFolderIsMissing()
 		{
 			loader.ViewChanged += delegate
-			                      {
-			                      	//do nothing
-			                      };
+								  {
+									//do nothing
+								  };
 		}
 
 		[Test]
