@@ -34,18 +34,18 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 			string configXml =
 				@"
 			<monorail>
-    <controllers>
-      <assembly>Castle.MonoRail.Framework.Tests</assembly>
-    </controllers>
+	<controllers>
+	  <assembly>Castle.MonoRail.Framework.Tests</assembly>
+	</controllers>
 
-    <viewEngine viewPathRoot=""" +
+	<viewEngine viewPathRoot=""" +
 				viewFolder +
 				@""">
 
-      <additionalSources>
-        <assembly name=""Castle.MonoRail.Framework.Tests"" namespace=""Castle.MonoRail.Framework.Tests.Content"" />
-      </additionalSources>
-    </viewEngine>
+	  <additionalSources>
+		<assembly name=""Castle.MonoRail.Framework.Tests"" namespace=""Castle.MonoRail.Framework.Tests.Content"" />
+	  </additionalSources>
+	</viewEngine>
   </monorail>";
 
 			XmlDocument doc = new XmlDocument();
@@ -53,7 +53,36 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 			ViewEngineConfig config = new ViewEngineConfig();
 			config.Deserialize(doc.DocumentElement);
 
-			Assert.IsTrue(config.Sources.Count > 0, "additonal sources not loaded");
+			Assert.IsTrue(config.AssemblySources.Count > 0, "additonal sources not loaded");
+		}
+	
+		[Test]
+		public void ShouldProcessAdditonalPathSourcesElement_IfConfiguringSingleViewEngine()
+		{
+			string configXml =
+				@"
+			<monorail>
+	<controllers>
+	  <assembly>Castle.MonoRail.Framework.Tests</assembly>
+	</controllers>
+
+	<viewEngine viewPathRoot=""" +
+				viewFolder +
+				@""">
+
+	  <additionalSources>
+		<path location=""" + viewFolder + @""" />
+	  </additionalSources>
+	</viewEngine>
+  </monorail>";
+
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml(configXml);
+			ViewEngineConfig config = new ViewEngineConfig();
+			config.Deserialize(doc.DocumentElement);
+
+			Assert.IsTrue(config.PathSources.Count > 0, "additonal path sources not loaded");
+			Assert.AreEqual(viewFolder, config.PathSources[0]);
 		}
 
 		[Test]
@@ -62,18 +91,18 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 			string configXml =
 				@"
 			<monorail>
-    <controllers>
-      <assembly>Castle.MonoRail.Framework.Tests</assembly>
-    </controllers>
+	<controllers>
+	  <assembly>Castle.MonoRail.Framework.Tests</assembly>
+	</controllers>
 
-    <viewEngines viewPathRoot=""" +
+	<viewEngines viewPathRoot=""" +
 				viewFolder +
 				@""">
 		<add type=""Castle.MonoRail.Framework.Tests.Configuration.TestViewEngine, Castle.MonoRail.Framework.Tests"" />
-      <additionalSources>
-        <assembly name=""Castle.MonoRail.Framework.Tests"" namespace=""Castle.MonoRail.Framework.Tests.Content"" />
-      </additionalSources>
-    </viewEngines>
+	  <additionalSources>
+		<assembly name=""Castle.MonoRail.Framework.Tests"" namespace=""Castle.MonoRail.Framework.Tests.Content"" />
+	  </additionalSources>
+	</viewEngines>
   </monorail>";
 
 			XmlDocument doc = new XmlDocument();
@@ -81,7 +110,7 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 			ViewEngineConfig config = new ViewEngineConfig();
 			config.Deserialize(doc.DocumentElement);
 
-			Assert.IsTrue(config.Sources.Count > 0, "Additional sources not loaded");
+			Assert.IsTrue(config.AssemblySources.Count > 0, "Additional sources not loaded");
 		}
 		
 		[Test]
@@ -173,38 +202,38 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 		}
 
 		public override object CreateJSGenerator(JSCodeGeneratorInfo generatorInfo,
-		                                         IEngineContext context, IController controller,
-		                                         IControllerContext controllerContext)
+												 IEngineContext context, IController controller,
+												 IControllerContext controllerContext)
 		{
 			throw new NotImplementedException();
 		}
 
 		public override void GenerateJS(string templateName, TextWriter output, JSCodeGeneratorInfo generatorInfo,
-		                                IEngineContext context, IController controller, IControllerContext controllerContext)
+										IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 			throw new NotImplementedException();
 		}
 
 		public override void Process(string templateName, TextWriter output, IEngineContext context, IController controller,
-		                             IControllerContext controllerContext)
+									 IControllerContext controllerContext)
 		{
 			throw new NotImplementedException();
 		}
 
 		public override void Process(string templateName, string layoutName, TextWriter output,
-		                             IDictionary<string, object> parameters)
+									 IDictionary<string, object> parameters)
 		{
 			throw new NotImplementedException();
 		}
 
 		public override void ProcessPartial(string partialName, TextWriter output, IEngineContext context,
-		                                    IController controller, IControllerContext controllerContext)
+											IController controller, IControllerContext controllerContext)
 		{
 			throw new NotImplementedException();
 		}
 
 		public override void RenderStaticWithinLayout(string contents, IEngineContext context, IController controller,
-		                                              IControllerContext controllerContext)
+													  IControllerContext controllerContext)
 		{
 			throw new NotImplementedException();
 		}
