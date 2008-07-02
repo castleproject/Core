@@ -145,10 +145,7 @@
     <value>La valeur du champ doit être plus grande que la valeur de l'autre champ.</value>
   </data>
   <data name="group_not_empty_invalid" xml:space="preserve">
-	<value>Au moins une des valeurs de ({0}) ne doit pas être vide.</value>
-  </data>
-  <data name="group_not_empty_seperator" xml:space="preserve">
-	<value>, </value>
+	<value>Au moins une des valeurs ne doit pas être vide.</value>
   </data>
   <data name="integer_invalid" xml:space="preserve">
 	<value>Veuillez entrer un nombre entier valide dans ce champs.</value>

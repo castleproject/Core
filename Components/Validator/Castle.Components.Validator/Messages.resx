@@ -139,10 +139,7 @@
     <value>Field has an invalid content</value>
   </data>
   <data name="group_not_empty_invalid" xml:space="preserve">
-    <value>At least one of the values in ({0}) should not be empty</value>
-  </data>
-  <data name="group_not_empty_seperator" xml:space="preserve">
-    <value>, </value>
+    <value>At least one of the values should not be empty</value>
   </data>
   <data name="integer_invalid" xml:space="preserve">
     <value>Please enter a valid integer in this field</value>

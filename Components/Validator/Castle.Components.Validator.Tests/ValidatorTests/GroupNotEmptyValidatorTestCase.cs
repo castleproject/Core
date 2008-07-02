@@ -76,8 +76,8 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsFalse(validator.IsValid(target));
 
 			Assert.IsTrue(
-				"At least one of the values in (Foo, BAR) should not be empty" == validator.ErrorMessage
-				|| "At least one of the values in (BAR, Foo) should not be empty" == validator.ErrorMessage);
+				"At least one of the values should not be empty" == validator.ErrorMessage
+				|| "At least one of the values should not be empty" == validator.ErrorMessage);
 		}
 
 		public class TestTarget

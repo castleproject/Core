@@ -77,9 +77,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			#region Instance Variables
 
-			Dictionary<String, CustomRule> _CustomRules = new Dictionary<String, CustomRule>();
-			Dictionary<string, string> _Rules = new Dictionary<string, string>();
-			IDictionary _Options = new Hashtable();
+			readonly Dictionary<String, CustomRule> _customRules = new Dictionary<String, CustomRule>();
+			readonly Dictionary<string, string> _rules = new Dictionary<string, string>();
+			readonly IDictionary _options = new Hashtable();
+			readonly Dictionary<string, Group> _groups = new Dictionary<string, Group>();
+			readonly IDictionary<string, IDictionary> _customClasses = new Dictionary<string, IDictionary>();
 
 			#endregion Instance Variables
 
@@ -113,7 +115,17 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </example>
 			public void AddCustomRule( string name, string violationMessage, string rule )
 			{
-				_CustomRules[ name ] = new CustomRule( name, rule, violationMessage );
+				_customRules[ name ] = new CustomRule( name, rule, violationMessage );
+			}
+
+			/// <summary>
+			/// Adds a custom class.
+			/// </summary>
+			/// <param name="name">The name of the class.</param>
+			/// <param name="options">The class options</param>
+			public void AddCustomClass( string name, IDictionary options )
+			{
+				_customClasses[ name ] = options;
 			}
 
 			/// <summary>
@@ -158,29 +170,33 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				StringBuilder stringBuilder = new StringBuilder();
 
-				if ( _Rules.Count > 0 )
+				if ( _rules.Count > 0 )
 				{
-					_Options[ JQueryOptions.Rules ] = AjaxHelper.JavascriptOptions( _Rules );
+					_options[ JQueryOptions.Rules ] = AbstractHelper.JavascriptOptions( _rules );
 				}
 
 				bool isAjax = false;
-				bool.TryParse( CommonUtils.ObtainEntryAndRemove( _Options, JQueryOptions.IsAjax, bool.FalseString ), out isAjax );
+				bool.TryParse( CommonUtils.ObtainEntryAndRemove( _options, JQueryOptions.IsAjax, bool.FalseString ), out isAjax );
 
 				if( isAjax )
 				{
-					string submitHandler = CommonUtils.ObtainEntryAndRemove( _Options, JQueryOptions.SubmitHandler );
+					string submitHandler = CommonUtils.ObtainEntryAndRemove( _options, JQueryOptions.SubmitHandler );
 
 					if( submitHandler == null )
 					{
-						_Options.Add( JQueryOptions.SubmitHandler, "function( form ) { jQuery( form ).ajaxSubmit(); }" );
+						_options.Add( JQueryOptions.SubmitHandler, "function( form ) { jQuery( form ).ajaxSubmit(); }" );
 					}
 				}
 
-				stringBuilder.AppendFormat( "jQuery(\"#{0}\").validate( {1} );", formId, AjaxHelper.JavascriptOptions( _Options ) );
+				MergeGroupDefinitionsWithOptions();
+				GenerateGroupNotEmptyValidatorCustomRule();
+				GenerateGroupNotEmptyValidatorCustomClass();
 
-				if ( _CustomRules.Count > 0 )
+				stringBuilder.AppendFormat("jQuery(\"#{0}\").validate( {1} );", formId, AbstractHelper.JavascriptOptions(_options));
+
+				if ( _customRules.Count > 0 )
 				{
-					foreach ( CustomRule rule in _CustomRules.Values )
+					foreach ( CustomRule rule in _customRules.Values )
 					{
 						stringBuilder.Append( Environment.NewLine );
 						stringBuilder.Append( "jQuery.validator.addMethod('" );
@@ -193,7 +209,64 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 					}
 				}
 
+				if(_customClasses.Count > 0)
+				{
+					foreach(KeyValuePair<string, IDictionary> pair in _customClasses)
+					{
+						stringBuilder.Append(Environment.NewLine);
+						stringBuilder.Append("jQuery.validator.addClassRules({");
+						stringBuilder.Append(string.Format("required{0}",pair.Key));
+						stringBuilder.Append(": ");
+						stringBuilder.Append(AbstractHelper.JavascriptOptions(pair.Value));
+						stringBuilder.Append("});");
+					}
+				}
+
 				return AbstractHelper.ScriptBlock( stringBuilder.ToString() );
+			}
+
+			/// <summary>
+			/// Generates the custom group not empty validator rule.
+			/// </summary>
+			private void GenerateGroupNotEmptyValidatorCustomRule()
+			{
+				foreach(KeyValuePair<string, Group> pair in _groups)
+				{
+					Group group = pair.Value;
+					AddCustomRule(group.GroupName, group.ViolationMessage, group.GetCustomRuleFunction());
+				}
+			}
+
+			/// <summary>
+			/// Merges the group definitions with options.
+			/// </summary>
+			private void MergeGroupDefinitionsWithOptions()
+			{
+				string groupValues = string.Empty;
+				foreach(KeyValuePair<string, Group> pair in _groups)
+				{
+					Group group = pair.Value;
+					groupValues += string.Format("{0},{1}", group.GetFormattedGroup(), Environment.NewLine);
+				}
+
+				if(groupValues != string.Empty)
+					_options.Add("groups", string.Format("{{{0}}}",groupValues));
+			}
+
+			/// <summary>
+			/// Generates the custom group not empty validator class rule.
+			/// </summary>
+			private void GenerateGroupNotEmptyValidatorCustomClass()
+			{
+				foreach(KeyValuePair<string, Group> pair in _groups)
+				{
+					Group group = pair.Value;
+
+					Hashtable options = new Hashtable();
+					options.Add(group.GroupName,"true");
+
+					AddCustomClass(group.GroupName, options);
+				}
 			}
 
 			#endregion Public Methods
@@ -202,19 +275,29 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			internal void AddRule( string target, string rule )
 			{
-				if ( _Rules.ContainsKey( target ) )
+				if ( _rules.ContainsKey( target ) )
 				{
-					string originalRule = _Rules[ target ];
+					string originalRule = _rules[ target ];
 
 					if ( originalRule.StartsWith( "{" ) )
 						originalRule = originalRule.Substring( 1, originalRule.LastIndexOf( "}" ) );
 
-					_Rules[ target ] = string.Concat( "{ ", originalRule, ", ", rule, " }" );
+					_rules[ target ] = string.Concat( "{ ", originalRule, ", ", rule, " }" );
 				}
 				else
 				{
-					_Rules.Add( target, string.Concat( "{ ", rule, " }" ) );
+					_rules.Add( target, string.Concat( "{ ", rule, " }" ) );
 				}
+			}
+
+			internal void AddValidateNotEmptyGroupItem(string groupName, string violationMessage, string target)
+			{
+				if (_groups.ContainsKey(groupName) == false)
+				{
+					Group group = new Group(groupName, violationMessage);
+					_groups.Add(groupName, group);
+				}
+				_groups[groupName].GroupItems.Add(target);
 			}
 
 			#endregion Internal Methods
@@ -236,11 +319,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				{
 					if( quote )
 						if( !parameterValue.StartsWith( "'" ) && !parameterValue.StartsWith( "\"" ) )
-							_Options.Add( parameterName, AbstractHelper.SQuote( parameterValue ) );
+							_options.Add( parameterName, AbstractHelper.SQuote( parameterValue ) );
 						else
-							_Options.Add( parameterName, parameterValue );
+							_options.Add( parameterName, parameterValue );
 					else
-						_Options.Add( parameterName, parameterValue );
+						_options.Add( parameterName, parameterValue );
 				}
 			}
 
@@ -252,17 +335,113 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				{
 					if( quote )
 						if( !parameterValue.StartsWith( "'" ) && !parameterValue.StartsWith( "\"" ) )
-							_Options.Add( parameterName, AbstractHelper.SQuote( parameterValue ) );
+							_options.Add( parameterName, AbstractHelper.SQuote( parameterValue ) );
 						else
-							_Options.Add( parameterName, parameterValue );
+							_options.Add( parameterName, parameterValue );
 					else
-						_Options.Add( parameterName, parameterValue );
+						_options.Add( parameterName, parameterValue );
 				}
 			}
 
 			#endregion Private Methods
 
 			#region Nested classes
+
+			/// <summary>
+			/// Group definition.
+			/// </summary>
+			class Group
+			{
+				private readonly string _groupName;
+				private readonly string _violationMessage;
+				private readonly List<string> _groupItems = new List<string>();
+
+				/// <summary>
+				/// Initializes a new instance of the <see cref="Group"/> class.
+				/// </summary>
+				/// <param name="groupName">Name of the group.</param>
+				/// <param name="violationMessage">The violation message.</param>
+				public Group(string groupName, string violationMessage)
+				{
+					_groupName = groupName;
+					_violationMessage = violationMessage;
+				}
+
+				/// <summary>
+				/// Gets the name of the group.
+				/// </summary>
+				/// <value>The name of the group.</value>
+				public string GroupName
+				{
+					get { return _groupName; }
+				}
+
+				/// <summary>
+				/// Gets the violation message.
+				/// </summary>
+				/// <value>The violation message.</value>
+				public string ViolationMessage
+				{
+					get { return _violationMessage; }
+				}
+
+				/// <summary>
+				/// Gets the group items.
+				/// </summary>
+				/// <value>The group items.</value>
+				public List<string> GroupItems
+				{
+					get { return _groupItems; }
+				}
+
+				/// <summary>
+				/// Gets the group items.
+				/// </summary>
+				/// <returns></returns>
+				public string GetFormattedGroupItems()
+				{
+					StringBuilder build = new StringBuilder();
+					foreach(string groupItem in _groupItems)
+					{
+						build.AppendFormat("{0} ", groupItem.Replace('_','.'));
+					}
+					return build.ToString();
+				}
+
+				/// <summary>
+				/// Gets the group items.
+				/// </summary>
+				/// <returns></returns>
+				public string GetFormattedGroup()
+				{
+					return string.Format("{0}: \"{1}\"", _groupName, GetFormattedGroupItems());
+				}
+
+				/// <summary>
+				/// Gets the custom rule.
+				/// </summary>
+				/// <returns></returns>
+				public string GetCustomRuleFunction()
+				{
+					StringBuilder builder = new StringBuilder();
+
+					builder.Append(" function() { if(");
+					for(int groupItem = 0; groupItem < _groupItems.Count; groupItem++)
+					{
+						string target = _groupItems[groupItem];
+
+						builder.Append(string.Format("$(\"#{0}\").val()!=''", target));
+
+						if(groupItem < _groupItems.Count - 1)
+						{
+							builder.Append(" || ");
+						}
+					}
+					builder.Append(") { return true } else { return false; } }");
+
+					return builder.ToString();
+				}
+			}
 
 			class CustomRule
 			{
@@ -330,12 +509,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// </summary>
 		public class JQueryValidationGenerator : IBrowserValidationGenerator
 		{
-
 			#region Instance Variables
 
 			readonly IDictionary _Attributes;
 			readonly InputElementType _InputElementType;
-			readonly JQueryConfiguration _Configuration;
+			readonly JQueryConfiguration _configuration;
 
 			#endregion Instance Variables
 
@@ -351,7 +529,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				_InputElementType = inputElementType;
 				_Attributes = attributes;
-				_Configuration = configuration;
+				_configuration = configuration;
 			}
 
 			#endregion Constructors
@@ -360,23 +538,15 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			static string GetPrefixedFieldld( string target, string field )
 			{
-				string[] parts = target.Split('_');
+				string[] parts = target.Split( '_' );
 
-				return string.Join("_", parts, 0, parts.Length - 1) + "_" + ToCamelCase(field);
-			}
+				return string.Join( "_", parts, 0, parts.Length - 1 ) + "_" + field;
+			}			
 
-			static string ToCamelCase(string value)
+			static string GetPrefixJQuerySelector(string target)
 			{
-				if (value.Length == 1)
-					return value.ToLower();
-
-				return value[0].ToString().ToLower() + value.Substring(1);
-			}
-
-			static string GetWithJQHashPrefix(string value)
-			{
-				if (value.StartsWith("#")) return value;
-				return string.Format("#{0}", value);
+				if (target.StartsWith("#")) return target;
+				return string.Format("#{0}", target);
 			}
 
 			void AddClass( string className )
@@ -485,7 +655,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="length">The length.</param>
 			public void SetExactLength( string target, int length )
 			{
-				_Configuration.AddRule( target, string.Format( "rangelength: [{0}, {0}]", length ) );
+				_configuration.AddRule( target, string.Format( "rangelength: [{0}, {0}]", length ) );
 			}
 
 			/// <summary>
@@ -496,7 +666,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetExactLength( string target, int length, string violationMessage )
 			{
-				_Configuration.AddRule( target, string.Format( "rangelength: [{0}, {0}]", length ) );
+				_configuration.AddRule( target, string.Format( "rangelength: [{0}, {0}]", length ) );
 				AddTitle( violationMessage );
 			}
 
@@ -556,7 +726,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="maxLength">The maximum length.</param>
 			public void SetLengthRange( string target, int minLength, int maxLength )
 			{
-				_Configuration.AddRule( target, string.Format( "rangelength: [{0}, {1}]", minLength, maxLength ) );
+				_configuration.AddRule( target, string.Format( "rangelength: [{0}, {1}]", minLength, maxLength ) );
 			}
 
 			/// <summary>
@@ -568,7 +738,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetLengthRange( string target, int minLength, int maxLength, string violationMessage )
 			{
-				_Configuration.AddRule( target, string.Format( "rangelength: [{0}, {1}]", minLength, maxLength ) );
+				_configuration.AddRule( target, string.Format( "rangelength: [{0}, {1}]", minLength, maxLength ) );
 				AddTitle( violationMessage );
 			}
 
@@ -581,7 +751,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange( string target, int minValue, int maxValue, string violationMessage )
 			{
-				_Configuration.AddRule( target, string.Format( "range: [{0}, {1}]", minValue, maxValue ) );
+				_configuration.AddRule( target, string.Format( "range: [{0}, {1}]", minValue, maxValue ) );
 				AddTitle( violationMessage );
 			}
 
@@ -594,7 +764,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange( string target, decimal minValue, decimal maxValue, string violationMessage )
 			{
-				_Configuration.AddRule( target, string.Format( "range: [{0}, {1}]", minValue, maxValue ) );
+				_configuration.AddRule( target, string.Format( "range: [{0}, {1}]", minValue, maxValue ) );
 				AddTitle( violationMessage );
 			}
 
@@ -620,7 +790,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange( string target, string minValue, string maxValue, string violationMessage )
 			{
-				_Configuration.AddRule( target, string.Format( "range: [{0}, {1}]", minValue, maxValue ) );
+				_configuration.AddRule( target, string.Format( "range: [{0}, {1}]", minValue, maxValue ) );
 				AddTitle( violationMessage );
 			}
 
@@ -632,10 +802,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsSameAs( string target, string comparisonFieldName, string violationMessage )
 			{
-				string prefixedComparisonFieldName = GetPrefixedFieldld(target, comparisonFieldName);
-
+				string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
 				AddClass( "equalTo" );
-				AddParameter("equalTo", GetWithJQHashPrefix(prefixedComparisonFieldName));
+				AddParameter("equalTo", prefixedComparisonFieldName);
 				AddTitle( violationMessage );
 			}
 
@@ -676,10 +845,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				if( validationType == IsGreaterValidationType.Decimal || validationType == IsGreaterValidationType.Integer )
 				{
-					string prefixedComparisonFieldName = GetPrefixedFieldld(target, comparisonFieldName);
+					string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
 
 					AddClass( "greaterThan" );
-					AddParameter("greaterThan", GetWithJQHashPrefix(prefixedComparisonFieldName));
+					AddParameter("greaterThan", prefixedComparisonFieldName);
 					AddTitle( violationMessage );
 				}
 			}
@@ -696,12 +865,26 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				if( validationType == IsGreaterValidationType.Decimal || validationType == IsGreaterValidationType.Integer )
 				{
-					string prefixedComparisonFieldName = GetPrefixedFieldld(target, comparisonFieldName);
+					string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
 
 					AddClass( "lesserThan" );
-					AddParameter("lesserThan", GetWithJQHashPrefix(prefixedComparisonFieldName));
+					AddParameter("lesserThan", prefixedComparisonFieldName);
 					AddTitle( violationMessage );
 				}
+			}
+
+			/// <summary>
+			/// Sets that a flied is part of a group validation.
+			/// </summary>
+			/// <remarks>Not implemented by the JQuery validate plugin. Done via a custom rule.</remarks>
+			/// <param name="target">The target.</param>
+			/// <param name="groupName">Name of the group.</param>
+			/// <param name="violationMessage">The violation message.</param>
+			public void SetAsGroupValidation(string target, string groupName, string violationMessage)
+			{
+				_configuration.AddValidateNotEmptyGroupItem(groupName, violationMessage, target);
+
+				AddClass(string.Format("required{0}",groupName));
 			}
 
 			#endregion IBrowserValidationGenerator Members

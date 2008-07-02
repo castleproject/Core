@@ -142,10 +142,7 @@
 		<value>Campo non valido</value>
 	</data>
 	<data name="group_not_empty_invalid" xml:space="preserve">
-		<value>Almeno uno dei valori in ({0}) non dovrebbe essere vuoto</value>
-	</data>
-	<data name="group_not_empty_seperator" xml:space="preserve">
-		<value>,</value>
+		<value>Almeno uno dei valori in non dovrebbe essere vuoto</value>
 	</data>
 	<data name="integer_invalid" xml:space="preserve">
 		<value>Campo non valido (numero intero)</value>

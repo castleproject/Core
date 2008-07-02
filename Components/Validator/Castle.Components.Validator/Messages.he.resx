@@ -142,10 +142,7 @@
     <value>השדה מכיל ערך לא חוקי</value>
   </data>
   <data name="group_not_empty_invalid" xml:space="preserve">
-    <value>לפחות אחד מהערכים ב-({0}) צריך להיות לא ריק</value>
-  </data>
-  <data name="group_not_empty_seperator" xml:space="preserve">
-    <value>, </value>
+    <value>לפחות אחד מהערכים ב- צריך להיות לא ריק</value>
   </data>
   <data name="integer_invalid" xml:space="preserve">
     <value>אנא הזן ערך שלם תקף</value>

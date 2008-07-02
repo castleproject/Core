@@ -139,10 +139,7 @@
     <value>Veld bevat een ongeldige waarde</value>
   </data>
   <data name="group_not_empty_invalid" xml:space="preserve">
-    <value>Minimaal een van de waarden in ({0}) moet gevuld zijn</value>
-  </data>
-  <data name="group_not_empty_seperator" xml:space="preserve">
-    <value>, </value>
+    <value>Minimaal een van de waarden moet gevuld zijn</value>
   </data>
   <data name="integer_invalid" xml:space="preserve">
     <value>Vul s.v.p. een geldig geheel getal in</value>

@@ -26,12 +26,12 @@ namespace Castle.Components.Validator
 	[Serializable]
 	public class GroupNotEmptyValidator : IValidator
 	{
-		private IDictionary properties = new Hashtable();
+		private readonly IDictionary properties = new Hashtable();
 		private RunWhen runWhen = RunWhen.Everytime;
 		private int executionOrder;
 		private string errorMessage;
 		private string friendlyName;
-		private string groupName;
+		private readonly string groupName;
 		private IValidatorRegistry validationRegistry;
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace Castle.Components.Validator
 		/// <summary>
 		/// Implementors should perform any initialization logic
 		/// </summary>
-		/// <param name="validationRegistry"></param>
+		/// <param name="validationRegistry">The validation registry.</param>
 		/// <param name="property">The target property</param>
 		public void Initialize(IValidatorRegistry validationRegistry, PropertyInfo property)
 		{
@@ -102,23 +102,7 @@ namespace Castle.Components.Validator
 
 		private string BuildErrorMessage()
 		{
-			StringBuilder sb = new StringBuilder();
-
-			string seperator =
-				validationRegistry.GetStringFromResource(MessageConstants.GroupNotEmptySeperator);
-
-			foreach(string name in properties.Values)
-			{
-				sb.Append(name).Append(seperator);
-			}
-
-			if (sb.Length > 0)
-			{
-				sb.Remove(sb.Length - seperator.Length, seperator.Length);
-			}
-			string messageFormat = validationRegistry.GetStringFromResource(MessageConstants.GroupNotEmpty);
-
-			return string.Format(messageFormat, sb);
+			return validationRegistry.GetStringFromResource(MessageConstants.GroupNotEmpty);
 		}
 
 		/// <summary>
@@ -171,7 +155,7 @@ namespace Castle.Components.Validator
 		/// </value>
 		public bool SupportsBrowserValidation
 		{
-			get { return false; }
+			get { return true; }
 		}
 
 		/// <summary>
@@ -187,6 +171,7 @@ namespace Castle.Components.Validator
 		                                   IBrowserValidationGenerator generator, IDictionary attributes,
 		                                   string name)
 		{
+			generator.SetAsGroupValidation(name, Name, BuildErrorMessage());
 		}
 
 		/// <summary>

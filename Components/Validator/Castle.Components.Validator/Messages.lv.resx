@@ -139,10 +139,7 @@
     <value>Jānorāda korekta lauka vērtība</value>
   </data>
   <data name="group_not_empty_invalid" xml:space="preserve">
-    <value>Vismaz vienā no laukiem ({0}) jānorāda vērtība</value>
-  </data>
-  <data name="group_not_empty_seperator" xml:space="preserve">
-    <value>, </value>
+    <value>Vismaz vienā no laukiem jānorāda vērtība</value>
   </data>
   <data name="integer_invalid" xml:space="preserve">
     <value>Vērtībai jābūt veselam skaitlim</value>

@@ -106,13 +106,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 			helper.FormTag( DictHelper.Create( "noaction=true" ) );
 			helper.Push( "model" );
 
-			Assert.AreEqual( "<input type=\"text\" id=\"model_emailfield\" " +
-				"name=\"model.emailfield\" value=\"\" class=\"email\" " +
-				"title=\"Email doesnt look right.\" />", helper.TextField( "emailfield" ) );
+			Assert.AreEqual( "<input type=\"text\" id=\"model_EmailField\" " +
+				"name=\"model.EmailField\" value=\"\" class=\"email\" " +
+				"title=\"Email doesnt look right.\" />", helper.TextField( "EmailField" ) );
 
 			Assert.AreEqual("<input type=\"text\" id=\"model_ConfirmedEmailField\" " +
 				"name=\"model.ConfirmedEmailField\" value=\"\" class=\"equalTo\" " +
-				"equalto=\"#model_emailField\" " +
+				"equalto=\"#model_EmailField\" " +
 				"title=\"Fields do not match.\" />", helper.TextField("ConfirmedEmailField"));
             
 			helper.Pop();
@@ -125,14 +125,14 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 			helper.FormTag( DictHelper.Create( "noaction=true" ) );
 			helper.Push( "model" );
 
-			Assert.AreEqual( "<input type=\"text\" id=\"model_firstValue\" " +
-				"name=\"model.firstValue\" value=\"0\" class=\"digits\" " +
-				"title=\"Please enter a valid integer in this field.\" />", helper.TextField( "firstValue" ) );
+			Assert.AreEqual( "<input type=\"text\" id=\"model_FirstValue\" " +
+				"name=\"model.FirstValue\" value=\"0\" class=\"digits\" " +
+				"title=\"Please enter a valid integer in this field.\" />", helper.TextField( "FirstValue" ) );
 
-			Assert.AreEqual("<input type=\"text\" id=\"model_secondValue\" " +
-				"name=\"model.secondValue\" value=\"0\" class=\"lesserThan\" " +
-				"lesserthan=\"#model_firstValue\" " +
-				"title=\"This field value must be lesser than the other field value.\" />", helper.TextField("secondValue"));
+			Assert.AreEqual("<input type=\"text\" id=\"model_SecondValue\" " +
+				"name=\"model.SecondValue\" value=\"0\" class=\"lesserThan\" " +
+				"lesserthan=\"#model_FirstValue\" " +
+				"title=\"This field value must be lesser than the other field value.\" />", helper.TextField("SecondValue"));
             
 			helper.Pop();
 			helper.EndFormTag();
@@ -144,19 +144,43 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 			helper.FormTag( DictHelper.Create( "noaction=true" ) );
 			helper.Push( "model" );
 
-			Assert.AreEqual( "<input type=\"text\" id=\"model_thirdValue\" " +
-				"name=\"model.thirdValue\" value=\"0\" class=\"digits\" " +
-				"title=\"Please enter a valid integer in this field.\" />", helper.TextField( "thirdValue" ) );
+			Assert.AreEqual( "<input type=\"text\" id=\"model_ThirdValue\" " +
+				"name=\"model.ThirdValue\" value=\"0\" class=\"digits\" " +
+				"title=\"Please enter a valid integer in this field.\" />", helper.TextField( "ThirdValue" ) );
 
-			Assert.AreEqual("<input type=\"text\" id=\"model_forthValue\" " +
-				"name=\"model.forthValue\" value=\"0\" class=\"greaterThan\" " +
-				"greaterthan=\"#model_thirdValue\" " +
-				"title=\"This field value must be greater than the other field value.\" />", helper.TextField("forthValue"));
+			Assert.AreEqual("<input type=\"text\" id=\"model_ForthValue\" " +
+				"name=\"model.ForthValue\" value=\"0\" class=\"greaterThan\" " +
+				"greaterthan=\"#model_ThirdValue\" " +
+				"title=\"This field value must be greater than the other field value.\" />", helper.TextField("ForthValue"));
             
 			helper.Pop();
 			helper.EndFormTag();
 		}
 
+		[Test]
+		public void GroupValidationUsingScopes()
+		{
+			helper.FormTag( DictHelper.Create( "noaction=true" ) );
+			helper.Push( "model" );
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_GroupValue1\" " +
+				"name=\"model.GroupValue1\" value=\"\" class=\"requiredmygroup1\" />", helper.TextField("GroupValue1"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_GroupValue2\" " +
+				"name=\"model.GroupValue2\" value=\"\" class=\"requiredmygroup1\" />", helper.TextField("GroupValue2"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_GroupValue3\" " +
+				"name=\"model.GroupValue3\" value=\"\" class=\"requiredmygroup2\" />", helper.TextField("GroupValue3"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_GroupValue4\" " +
+				"name=\"model.GroupValue4\" value=\"\" class=\"requiredmygroup2\" />", helper.TextField("GroupValue4"));
+            
+			helper.Pop();
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery(\"#form1\").validate( {groups:{mygroup1: \"model.GroupValue1 model.GroupValue2 \",\r\nmygroup2: \"model.GroupValue3 model.GroupValue4 \",\r\n}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );\r\njQuery.validator.addMethod('mygroup1',  function() { if($(\"#model_GroupValue1\").val()!='' || $(\"#model_GroupValue2\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addMethod('mygroup2',  function() { if($(\"#model_GroupValue3\").val()!='' || $(\"#model_GroupValue4\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});\r\njQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}});</script>\r\n</form>"
+                ,helper.EndFormTag());
+		}
+        
 		[Test]
 		public void ValidationForSelects()
 		{

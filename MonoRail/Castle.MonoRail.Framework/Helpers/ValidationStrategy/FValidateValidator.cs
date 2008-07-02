@@ -363,6 +363,17 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			}
 
 			/// <summary>
+			/// Sets that a flied is part of a group validation.
+			/// </summary>
+			/// <param name="target">The target.</param>
+			/// <param name="groupName">Name of the group.</param>
+			/// <param name="violationMessage">The violation message.</param>
+			public void SetAsGroupValidation(string target, string groupName, string violationMessage)
+			{
+				
+			}
+
+			/// <summary>
 			/// Adds the validator.
 			/// </summary>
 			/// <param name="target">The target.</param>

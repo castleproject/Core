@@ -70,7 +70,7 @@
     <Compile Include="Messages.es.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Messages.he.resx</DependentUpon>
+      <DependentUpon>Messages.es.resx</DependentUpon>
     </Compile>
     <Compile Include="Messages.fr.Designer.cs">
       <AutoGen>True</AutoGen>

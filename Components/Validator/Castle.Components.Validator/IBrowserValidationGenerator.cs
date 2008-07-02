@@ -156,7 +156,7 @@ namespace Castle.Components.Validator
 		/// <param name="maxValue">Maximum value.</param>
 		/// <param name="violationMessage">The violation message.</param>
 		void SetValueRange(string target, string minValue, string maxValue, string violationMessage);
-		
+
 		/// <summary>
 		/// Set that a field value must be the same as another field's value.
 		/// </summary>
@@ -188,7 +188,7 @@ namespace Castle.Components.Validator
 		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
 		/// <param name="validationType">The type of data to compare.</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetAsGreaterThan( string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage );
+		void SetAsGreaterThan(string target, string comparisonFieldName, IsGreaterValidationType validationType,string violationMessage);
 
 		/// <summary>
 		/// Sets that a field's value must be lesser than another field's value.
@@ -198,6 +198,15 @@ namespace Castle.Components.Validator
 		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
 		/// <param name="validationType">The type of data to compare.</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetAsLesserThan( string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage );
+		void SetAsLesserThan(string target, string comparisonFieldName, IsGreaterValidationType validationType,string violationMessage);
+
+		/// <summary>
+		/// Sets that a flied is part of a group validation.
+		/// </summary>
+		/// <remarks>Not implemented by the JQuery validate plugin. Done via a custom rule.</remarks>
+		/// <param name="target">The target.</param>
+		/// <param name="groupName">Name of the group.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetAsGroupValidation(string target, string groupName, string violationMessage);
 	}
 }

@@ -163,6 +163,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		private int secondValue;
 		private int thirdValue;
 		private int forthValue;
+		private string groupValue1;
+		private string groupValue2;
 
 		[ValidateNonEmpty]
 		public Country Country
@@ -205,6 +207,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 			get { return confirmedEmailField; }
 			set { confirmedEmailField = value; }
 		}
+
 		[ValidateNotSameAs("EmailField")]
 		public string Name
 		{
@@ -238,6 +241,34 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		{
 			get { return forthValue; }
 			set { forthValue = value; }
+		}
+
+		[ValidateGroupNotEmpty("mygroup1")]
+		public string GroupValue1
+		{
+			get { return groupValue1; }
+			set { groupValue1 = value; }
+		}
+
+		[ValidateGroupNotEmpty("mygroup1")]
+		public string GroupValue2
+		{
+			get { return groupValue2; }
+			set { groupValue2 = value; }
+		}
+
+		[ValidateGroupNotEmpty("mygroup2")]
+		public string GroupValue3
+		{
+			get { return groupValue1; }
+			set { groupValue1 = value; }
+		}
+
+		[ValidateGroupNotEmpty("mygroup2")]
+		public string GroupValue4
+		{
+			get { return groupValue2; }
+			set { groupValue2 = value; }
 		}
 	}
 

@@ -142,20 +142,11 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to At least one of the values in ({0}) should not be empty.
+        ///   Looks up a localized string similar to At least one of the values should not be empty.
         /// </summary>
         internal static string group_not_empty_invalid {
             get {
                 return ResourceManager.GetString("group_not_empty_invalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to , .
-        /// </summary>
-        internal static string group_not_empty_seperator {
-            get {
-                return ResourceManager.GetString("group_not_empty_seperator", resourceCulture);
             }
         }
         
