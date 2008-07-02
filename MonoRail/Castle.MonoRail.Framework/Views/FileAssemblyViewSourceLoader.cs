@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text;
+
 namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Generic;
 	using System.IO;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Views;
@@ -27,14 +28,11 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class FileAssemblyViewSourceLoader : IViewSourceLoader, IMRServiceEnabled
 	{
-		private readonly IList additionalAssemblySources = ArrayList.Synchronized(new ArrayList());
-		private readonly IList additionalPathSources = ArrayList.Synchronized(new ArrayList());
+		private readonly IList additionalSources = ArrayList.Synchronized(new ArrayList());
 		private bool enableCache = true;
 		private string viewRootDir;
 		private string virtualViewDir;
-		private readonly List<FileSystemWatcher> viewFolderWatchers = new List<FileSystemWatcher>();
-
-		private object locker = new object();
+		private FileSystemWatcher viewFolderWatcher;
 
 		/// <summary>
 		/// Creates a new instance
@@ -57,7 +55,7 @@ namespace Castle.MonoRail.Framework
 		/// Services the specified provider.
 		/// </summary>
 		/// <param name="provider">The provider.</param>
-		public virtual void Service(IMonoRailServices provider)
+		public void Service(IMonoRailServices provider)
 		{
 			IMonoRailConfiguration config = (IMonoRailConfiguration) provider.GetService(typeof(IMonoRailConfiguration));
 
@@ -66,14 +64,9 @@ namespace Castle.MonoRail.Framework
 				viewRootDir = config.ViewEngineConfig.ViewPathRoot;
 				virtualViewDir = config.ViewEngineConfig.VirtualPathRoot;
 
-				foreach(AssemblySourceInfo sourceInfo in config.ViewEngineConfig.AssemblySources)
+				foreach(AssemblySourceInfo sourceInfo in config.ViewEngineConfig.Sources)
 				{
 					AddAssemblySource(sourceInfo);
-				}
-
-				foreach(string pathSource in config.ViewEngineConfig.PathSources)
-				{
-					AddPathSource(pathSource);
 				}
 			}
 		}
@@ -104,20 +97,22 @@ namespace Castle.MonoRail.Framework
 		{
 			FileInfo fileInfo = CreateFileInfo(templateName);
 
-			if (fileInfo != null && fileInfo.Exists)
+			if (fileInfo.Exists)
 			{
 				return new FileViewSource(fileInfo, enableCache);
 			}
-			
-			return GetStreamFromAdditionalSources(templateName);
+			else
+			{
+				return GetStreamFromAdditionalSources(templateName);
+			}
 		}
 
-		/// <summary>
-		/// Gets a list of views on the specified directory
-		/// </summary>
-		/// <param name="dirName">Directory name</param>
-		/// <param name="fileExtensionsToInclude">Optional fileExtensions to include in listing.</param>
-		/// <returns></returns>
+        /// <summary>
+        /// Gets a list of views on the specified directory
+        /// </summary>
+        /// <param name="dirName">Directory name</param>
+        /// <param name="fileExtensionsToInclude">Optional fileExtensions to include in listing.</param>
+        /// <returns></returns>
 		public String[] ListViews(String dirName,params string[] fileExtensionsToInclude)
 		{
 			ArrayList views = new ArrayList();
@@ -164,24 +159,16 @@ namespace Castle.MonoRail.Framework
 		/// <value></value>
 		public IList AssemblySources
 		{
-			get { return additionalAssemblySources; }
+			get { return additionalSources; }
 		}
 
-		/// <summary>
-		/// Adds the path source.
-		/// </summary>
-		/// <param name="pathSource">The path source.</param>
-		public void AddPathSource(string pathSource) {
-			additionalPathSources.Add(pathSource);
-		}
-		
 		/// <summary>
 		/// Adds the assembly source.
 		/// </summary>
 		/// <param name="assemblySourceInfo">The assembly source info.</param>
 		public void AddAssemblySource(AssemblySourceInfo assemblySourceInfo)
 		{
-			additionalAssemblySources.Add(assemblySourceInfo);
+			additionalSources.Add(assemblySourceInfo);
 		}
 
 		#region Handle File System Changes To Views
@@ -195,10 +182,10 @@ namespace Castle.MonoRail.Framework
 			{
 				//avoid concurrency problems with creating/removing the watcher
 				//in two threads in parallel. Unlikely, but better to be safe.
-				lock (locker)
+				lock(this)
 				{
 					//create the watcher if it doesn't exists
-					if (viewFolderWatchers == null)
+					if (viewFolderWatcher == null)
 					{
 						InitViewFolderWatch();
 					}
@@ -209,7 +196,7 @@ namespace Castle.MonoRail.Framework
 			{
 				//avoid concurrency problems with creating/removing the watcher
 				//in two threads in parallel. Unlikely, but better to be safe.
-				lock (locker)
+				lock(this)
 				{
 					ViewChangedImpl -= value;
 					if (ViewChangedImpl == null) //no more subscribers.
@@ -225,9 +212,9 @@ namespace Castle.MonoRail.Framework
 		private void DisposeViewFolderWatch()
 		{
 			ViewChangedImpl -= (viewFolderWatcher_Changed);
-			foreach(FileSystemWatcher watcher in viewFolderWatchers)
+			if (viewFolderWatcher != null)
 			{
-				watcher.Dispose();
+				viewFolderWatcher.Dispose();
 			}
 		}
 
@@ -235,30 +222,14 @@ namespace Castle.MonoRail.Framework
 		{
 			if (Directory.Exists(ViewRootDir))
 			{
-				FileSystemWatcher viewFolderWatcher = GetViewFolderWatcher(ViewRootDir);
-				viewFolderWatchers.Add(viewFolderWatcher);
+				viewFolderWatcher = new FileSystemWatcher(ViewRootDir);
+				viewFolderWatcher.IncludeSubdirectories = true;
+				viewFolderWatcher.Changed += (viewFolderWatcher_Changed);
+				viewFolderWatcher.Created += (viewFolderWatcher_Changed);
+				viewFolderWatcher.Deleted += (viewFolderWatcher_Changed);
+				viewFolderWatcher.Renamed += (viewFolderWatcher_Renamed);
+				viewFolderWatcher.EnableRaisingEvents = true;
 			}
-
-			foreach(string path in additionalPathSources)
-			{
-				if (Directory.Exists(path))
-				{
-					FileSystemWatcher viewFolderWatcher = GetViewFolderWatcher(path);
-					viewFolderWatchers.Add(viewFolderWatcher);
-				}
-			}
-		}
-
-		private FileSystemWatcher GetViewFolderWatcher(string path)
-		{
-			FileSystemWatcher viewFolderWatcher = new FileSystemWatcher(path);
-			viewFolderWatcher.IncludeSubdirectories = true;
-			viewFolderWatcher.Changed += (viewFolderWatcher_Changed);
-			viewFolderWatcher.Created += (viewFolderWatcher_Changed);
-			viewFolderWatcher.Deleted += (viewFolderWatcher_Changed);
-			viewFolderWatcher.Renamed += (viewFolderWatcher_Renamed);
-			viewFolderWatcher.EnableRaisingEvents = true;
-			return viewFolderWatcher;
 		}
 
 		private void viewFolderWatcher_Renamed(object sender, RenamedEventArgs e)
@@ -275,49 +246,22 @@ namespace Castle.MonoRail.Framework
 
 		private bool HasTemplateOnFileSystem(string templateName)
 		{
-			FileInfo fileInfo = CreateFileInfo(viewRootDir, templateName);
-
-			if (fileInfo.Exists)
-				return true;
-
-			foreach (string pathSource in additionalPathSources) {
-				fileInfo = CreateFileInfo(pathSource, templateName);
-				if (fileInfo.Exists)
-					return true;
-			}
-
-			return false;
+			return CreateFileInfo(templateName).Exists;
 		}
 
-		private FileInfo CreateFileInfo(string templateName) {
-
-			FileInfo fileInfo = CreateFileInfo(viewRootDir, templateName);
-
-			if(fileInfo.Exists)
-				return fileInfo;
-
-			foreach (string pathSource in additionalPathSources) {
-				fileInfo = CreateFileInfo(pathSource, templateName);
-				if (fileInfo.Exists)
-					return fileInfo;
-			}
-			
-			return null;
-		}
-
-		private static FileInfo CreateFileInfo(string viewRoot,string templateName)
+		private FileInfo CreateFileInfo(string templateName)
 		{
 			if (Path.IsPathRooted(templateName))
 			{
 				templateName = templateName.Substring(Path.GetPathRoot(templateName).Length);
 			}
 
-			return new FileInfo(Path.Combine(viewRoot, templateName));
+			return new FileInfo(Path.Combine(viewRootDir, templateName));
 		}
 
 		private bool HasTemplateOnAssemblies(string templateName)
 		{
-			foreach(AssemblySourceInfo sourceInfo in additionalAssemblySources)
+			foreach(AssemblySourceInfo sourceInfo in additionalSources)
 			{
 				if (sourceInfo.HasTemplate(templateName))
 				{
@@ -330,7 +274,7 @@ namespace Castle.MonoRail.Framework
 
 		private IViewSource GetStreamFromAdditionalSources(string templateName)
 		{
-			foreach(AssemblySourceInfo sourceInfo in additionalAssemblySources)
+			foreach(AssemblySourceInfo sourceInfo in additionalSources)
 			{
 				if (sourceInfo.HasTemplate(templateName))
 				{
@@ -344,29 +288,30 @@ namespace Castle.MonoRail.Framework
 		private void CollectViewsOnFileSystem(string dirName, ArrayList views,params string[] fileExtensionsToInclude)
 		{
 			DirectoryInfo dir = new DirectoryInfo(Path.Combine(ViewRootDir, dirName));
-			if(!dir.Exists)
-			{
-				return; //early return
-			}
+            if(!dir.Exists)
+            {
+                return; //early return
+            }
 
-			
-			if(fileExtensionsToInclude ==null || fileExtensionsToInclude.Length==0)
-			{
-				fileExtensionsToInclude = new string[] {".*"};
-			}
-			
-			foreach (string ext in fileExtensionsToInclude)
-			{
-				foreach (FileInfo file in dir.GetFiles("*" + ext))
-				{
-					views.Add(Path.Combine(dirName, file.Name));
-				}
-			}
+		    
+            if(fileExtensionsToInclude ==null || fileExtensionsToInclude.Length==0)
+            {
+                fileExtensionsToInclude = new string[] {".*"};
+            }
+		    
+		    foreach (string ext in fileExtensionsToInclude)
+		    {
+                foreach (FileInfo file in dir.GetFiles("*" + ext))
+                {
+                    views.Add(Path.Combine(dirName, file.Name));
+                }
+		    }
+		    
 		}
 
 		private void CollectViewsOnAssemblies(string dirName, ArrayList views)
 		{
-			foreach(AssemblySourceInfo sourceInfo in additionalAssemblySources)
+			foreach(AssemblySourceInfo sourceInfo in additionalSources)
 			{
 				sourceInfo.CollectViews(dirName, views);
 			}

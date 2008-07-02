@@ -117,13 +117,13 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 				return;
 			}
 
-			message.AppendFormat("{0}: \r\n", title);
+			message.AppendFormat("\r\n{0}: \r\n", title);
 
 			try
 			{
-				foreach(DictionaryEntry entry in dict)
+				foreach(string key in dict.Keys)
 				{
-					message.AppendFormat("\r\n\t{0}:{1}", entry.Key, entry.Value);
+					message.AppendFormat("\r\n\t{0}: {1}", key, dict[key]);
 				}
 			}
 			catch(Exception)
@@ -139,13 +139,13 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 				return;
 			}
 
-			message.AppendFormat("{0}: \r\n", title);
+			message.AppendFormat("\r\n{0}: \r\n", title);
 
 			try
 			{
 				foreach(String key in dict.Keys)
 				{
-					message.AppendFormat("\r\n\t{0}:{1} \r\n", key, dict[key]);
+					message.AppendFormat("\r\n\t{0}: {1} \r\n", key, dict[key]);
 				}
 			}
 			catch(Exception)
@@ -163,7 +163,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 
 			String space = new String(spaceBuff);
 
-			message.AppendFormat("{0}Exception: {1}\r\n", space, exception.Message);
+			message.AppendFormat("\r\n{0}Exception: {1}\r\n", space, exception.Message);
 			message.AppendFormat("{0}Stack Trace:\r\n{0}{1}\r\n", space, exception.StackTrace);
 
 			RecursiveDumpException(exception.InnerException, message, nested + 1);

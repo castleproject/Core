@@ -28,8 +28,7 @@ namespace Castle.MonoRail.Framework.Configuration
 	{
 		private string viewPathRoot;
 		private string virtualPathRoot;
-		private List<String> pathSources = new List<String>();
-		private List<AssemblySourceInfo> assemblySources = new List<AssemblySourceInfo>();
+		private List<AssemblySourceInfo> sources = new List<AssemblySourceInfo>();
 		private readonly List<ViewEngineInfo> viewEngines = new List<ViewEngineInfo>();
 
 		/// <summary>
@@ -100,20 +99,10 @@ namespace Castle.MonoRail.Framework.Configuration
 		/// Gets or sets the additional assembly sources.
 		/// </summary>
 		/// <value>The sources.</value>
-		public List<AssemblySourceInfo> AssemblySources
+		public List<AssemblySourceInfo> Sources
 		{
-			get { return assemblySources; }
-			set { assemblySources = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the path sources.
-		/// </summary>
-		/// <value>The path sources.</value>
-		public List<string> PathSources
-		{
-			get { return pathSources; }
-			set { pathSources = value; }
+			get { return sources; }
+			set { sources = value; }
 		}
 
 		private void ConfigureMultipleViewEngines(XmlElement engines)
@@ -130,9 +119,9 @@ namespace Castle.MonoRail.Framework.Configuration
 				string typeName = addNode.GetAttribute("type");
 				string xhtmlVal = addNode.GetAttribute("xhtml");
 
-				if (string.IsNullOrEmpty(typeName))
+				if (typeName == null || typeName.Length == 0)
 				{
-					const string message = "The attribute 'type' is required for the element 'add' under 'viewEngines'";
+					String message = "The attribute 'type' is required for the element 'add' under 'viewEngines'";
 					throw new ConfigurationErrorsException(message);
 				}
 
@@ -212,7 +201,7 @@ namespace Castle.MonoRail.Framework.Configuration
 				}
 				catch(FormatException ex)
 				{
-					const string message = "The xhtmlRendering attribute of the views node must be a boolean value.";
+					String message = "The xhtmlRendering attribute of the views node must be a boolean value.";
 					throw new ConfigurationErrorsException(message, ex);
 				}
 			}
@@ -236,14 +225,7 @@ namespace Castle.MonoRail.Framework.Configuration
 				String assemblyName = assemblyNode.GetAttribute("name");
 				String ns = assemblyNode.GetAttribute("namespace");
 
-				assemblySources.Add(new AssemblySourceInfo(assemblyName, ns));
-			}
-	
-			foreach(XmlElement pathNode in section.SelectNodes("/monorail/*/additionalSources/path"))
-			{
-				String pathName = pathNode.GetAttribute("location");
-
-				pathSources.Add(pathName);
+				sources.Add(new AssemblySourceInfo(assemblyName, ns));
 			}
 		}
 	}

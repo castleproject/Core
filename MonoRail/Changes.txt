@@ -1,22 +1,6 @@
 1.0
 ===
 
-- Added additional path support to the view engine configuration
-
-   <viewEngine 
-      viewPathRoot="views" 
-      customEngine="ViewEngine.Type.Name, Assembly">
-
-      <additionalSources>
-         <assembly name="" namespace="" />
-         <path location="" />         
-      </additionalSources>
-      
-   </viewEngine>
-
-	Breaking change; the additional assemlby sources property on FileAssemblyViewSourceLoader is now named 'AssemblySources'.
-				     the paths are loaded into 'PathSources'
-   
 - Applied Robert Ream's patch fixing MR-438
   "FormHelper element methods "defaultValue" attribute."
   From description: This patch adds the "defaultValue" attribute to most of the FormHelper element generator methods.

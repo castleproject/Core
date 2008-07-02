@@ -72,14 +72,10 @@ namespace Castle.MonoRail.Framework
 		void AddAssemblySource(AssemblySourceInfo assemblySourceInfo);
 
 		/// <summary>
-		/// Adds the path source.
-		/// </summary>
-		/// <param name="pathSource">The path source.</param>
-		void AddPathSource(string pathSource);
-
-		/// <summary>
 		/// Raised when the view is changed.
 		/// </summary>
 		event FileSystemEventHandler ViewChanged;
+
+	   
 	}
 }
