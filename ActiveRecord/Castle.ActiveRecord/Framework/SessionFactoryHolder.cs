@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Framework
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Threading;
 	using System.Collections;
 	using System.Runtime.CompilerServices;
@@ -76,6 +77,22 @@ namespace Castle.ActiveRecord.Framework
 			set.CopyTo(confs, 0);
 
 			return confs;
+		}
+
+		/// <summary>
+		/// Gets the all the session factories.
+		/// </summary>
+		/// <returns></returns>
+		public ISessionFactory[] GetSessionFactories()
+		{
+			List<ISessionFactory> factories = new List<ISessionFactory>();
+
+			foreach(ISessionFactory factory in type2SessFactory.Values)
+			{
+				factories.Add(factory);
+			}
+
+			return factories.ToArray();
 		}
 
 		/// <summary>

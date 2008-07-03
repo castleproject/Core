@@ -66,6 +66,12 @@ namespace Castle.ActiveRecord.Framework
 		ISessionFactory GetSessionFactory(Type type);
 
 		/// <summary>
+		/// Gets the all the session factories.
+		/// </summary>
+		/// <returns></returns>
+		ISessionFactory[] GetSessionFactories();
+
+		/// <summary>
 		/// Creates a session for the associated type
 		/// </summary>
 		/// <param name="type"></param>

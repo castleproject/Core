@@ -598,6 +598,85 @@ namespace Castle.ActiveRecord
 			factory.Evict(type, id);
 		}
 
+		/// <summary> 
+		/// From NH docs: Evict all entries from the second-level cache. This method occurs outside
+		/// of any transaction; it performs an immediate "hard" remove, so does not respect
+		/// any transaction isolation semantics of the usage strategy. Use with care.
+		/// </summary>
+		public static void EvictEntity(string entityName)
+		{
+			ISessionFactory[] factories = ActiveRecordBase.holder.GetSessionFactories();
+
+			foreach(ISessionFactory factory in factories)
+			{
+				factory.EvictEntity(entityName);
+			}
+		}
+
+		/// <summary>
+		/// From NH docs: Evict an entry from the second-level  cache. This method occurs outside
+		/// of any transaction; it performs an immediate "hard" remove, so does not respect
+		/// any transaction isolation semantics of the usage strategy. Use with care.
+		/// </summary>
+		/// <param name="entityName">Name of the entity.</param>
+		/// <param name="id">The id.</param>
+		public static void EvictEntity(string entityName, object id)
+		{
+			ISessionFactory[] factories = ActiveRecordBase.holder.GetSessionFactories();
+
+			foreach(ISessionFactory factory in factories)
+			{
+				factory.EvictEntity(entityName, id);
+			}
+		}
+
+		/// <summary>
+		/// From NH docs: Evict all entries from the process-level cache.  This method occurs outside
+		/// of any transaction; it performs an immediate "hard" remove, so does not respect
+		/// any transaction isolation semantics of the usage strategy.  Use with care.
+		/// </summary>
+		/// <param name="roleName">Name of the role.</param>
+		public static void EvictCollection(string roleName)
+		{
+			ISessionFactory[] factories = ActiveRecordBase.holder.GetSessionFactories();
+
+			foreach(ISessionFactory factory in factories)
+			{
+				factory.EvictCollection(roleName);
+			}
+		}
+
+		/// <summary>
+		/// From NH docs: Evict an entry from the process-level cache.  This method occurs outside
+		/// of any transaction; it performs an immediate "hard" remove, so does not respect
+		/// any transaction isolation semantics of the usage strategy.  Use with care.
+		/// </summary>
+		/// <param name="roleName">Name of the role.</param>
+		/// <param name="id">The id.</param>
+		public static void EvictCollection(string roleName, object id)
+		{
+			ISessionFactory[] factories = ActiveRecordBase.holder.GetSessionFactories();
+
+			foreach(ISessionFactory factory in factories)
+			{
+				factory.EvictCollection(roleName, id);
+			}
+		}
+
+		/// <summary>
+		/// From NH docs: Evict any query result sets cached in the named query cache region.
+		/// </summary>
+		/// <param name="cacheRegion">The cache region.</param>
+		public static void EvictQueries(string cacheRegion)
+		{
+			ISessionFactory[] factories = ActiveRecordBase.holder.GetSessionFactories();
+
+			foreach(ISessionFactory factory in factories)
+			{
+				factory.EvictQueries(cacheRegion);
+			}
+		}
+
 		private static ISessionFactory GetFactory(Type type)
 		{
 			ISessionFactory factory = ActiveRecordBase.holder.GetSessionFactory(type);
