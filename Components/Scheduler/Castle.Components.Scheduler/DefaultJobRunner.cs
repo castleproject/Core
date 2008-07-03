@@ -61,8 +61,8 @@ namespace Castle.Components.Scheduler
             }
 
             ExecuteDelegate executeDelegate = job.Execute;
-            CompositeAsyncResult result = new CompositeAsyncResult(executeDelegate, asyncCallback);
-            result.Inner = executeDelegate.BeginInvoke(context, result.Callback, asyncState);
+			CompositeAsyncResult result = new CompositeAsyncResult(executeDelegate, asyncCallback, context, asyncState);
+            // result.Inner = executeDelegate.BeginInvoke(context, result.Callback, asyncState);
             return result;
         }
 
@@ -79,16 +79,16 @@ namespace Castle.Components.Scheduler
             private ExecuteDelegate executeDelegate;
             private AsyncCallback asyncCallback;
 
-            public CompositeAsyncResult(ExecuteDelegate executeDelegate, AsyncCallback asyncCallback)
+			public CompositeAsyncResult(ExecuteDelegate executeDelegate, AsyncCallback asyncCallback, JobExecutionContext context, object asyncState)
             {
                 this.executeDelegate = executeDelegate;
                 this.asyncCallback = asyncCallback;
+				inner = executeDelegate.BeginInvoke(context, Callback, asyncState);
             }
 
             public IAsyncResult Inner
             {
                 get { return inner; }
-                set { inner = value; }
             }
 
             public ExecuteDelegate ExecuteDelegate
