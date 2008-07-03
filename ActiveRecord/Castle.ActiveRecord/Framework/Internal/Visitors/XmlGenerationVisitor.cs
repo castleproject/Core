@@ -60,7 +60,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Dedent();
 			EndMappingNode();
 
-			//if (ActiveRecordModel.isDebug)
+			if (ActiveRecordModel.isDebug)
 			{
 				String file = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, model.Type.Name + ".hbm.xml");
 
