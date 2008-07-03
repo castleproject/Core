@@ -83,7 +83,7 @@ namespace Castle.Services.Transaction
 					catch (Exception e)
 					{
 						// Log exception & swallow it
-						Logger.Warn("An error occured while notifying caller about transaction commit failure.", e);
+						Logger.Warn("An error occurred while notifying caller about transaction commit failure.", e);
 					}
 				}
 				throw;
@@ -109,7 +109,7 @@ namespace Castle.Services.Transaction
 					catch (Exception e)
 					{
 						// Log exception & swallow it
-						Logger.Warn("An error occured while notifying caller about transaction rollback failure.", e);
+						Logger.Warn("An error occurred while notifying caller about transaction rollback failure.", e);
 					}
 				}
 				throw;
