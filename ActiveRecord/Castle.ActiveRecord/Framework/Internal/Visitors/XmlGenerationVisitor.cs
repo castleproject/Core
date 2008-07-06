@@ -86,7 +86,38 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public override void VisitModel(ActiveRecordModel model)
 		{
 			VisitNodes(model.Imports);
-			if (model.IsJoinedSubClass)
+			if (model.IsJoinedSubClass && model.IsDiscriminatorSubClass)
+			{
+				AppendF("<subclass{0}{1}{2}{3}{4}{5}>",
+						MakeAtt("name", MakeTypeName(model.Type)),
+						MakeAtt("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
+						WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
+						MakeAtt("lazy", model.ActiveRecordAtt.Lazy, model.ActiveRecordAtt.LazySpecified),
+						WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
+						WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
+				Ident();
+				AppendF("<join{0}>",
+					MakeAtt("table", model.ActiveRecordAtt.Table),
+					WriteIfNonNull("schema", model.ActiveRecordAtt.Schema));
+				Ident();
+				VisitNode(model.Key);
+				VisitNodes(model.Fields);
+				VisitNodes(model.Properties);
+				VisitNodes(model.BelongsTo);
+				VisitNodes(model.HasMany);
+				VisitNodes(model.HasManyToAny);
+				VisitNodes(model.HasAndBelongsToMany);
+				VisitNodes(model.Components);
+				VisitNodes(model.OneToOnes);
+				Dedent();
+				Append("</join>");
+				VisitNodes(model.JoinedTables);
+				VisitNodes(model.JoinedClasses);
+				VisitNodes(model.Classes);
+				Dedent();
+				Append("</subclass>");
+			}
+			else if (model.IsJoinedSubClass)
 			{
 				AppendF("<joined-subclass{0}{1}{2}{3}{4}{5}{6}{7}>",
 				        MakeAtt("name", MakeTypeName(model.Type)),

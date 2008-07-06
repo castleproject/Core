@@ -67,12 +67,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				currentModel = model;
 
-				if (model.IsDiscriminatorBase && model.IsJoinedSubClassBase)
-				{
-					throw new ActiveRecordException(String.Format(
-					                                	"Unfortunatelly you can't have a discriminator class " +
-					                                	"and a joined subclass at the same time - check type {0}", model.Type.FullName));
-				}
+				//if (model.IsDiscriminatorBase && model.IsJoinedSubClassBase)
+				//{
+				//    throw new ActiveRecordException(String.Format(
+				//                                        "Unfortunatelly you can't have a discriminator class " +
+				//                                        "and a joined subclass at the same time - check type {0}", model.Type.FullName));
+				//}
 
 				if (model.Version != null && model.Timestamp != null)
 				{

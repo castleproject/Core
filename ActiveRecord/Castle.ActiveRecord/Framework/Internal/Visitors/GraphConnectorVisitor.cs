@@ -55,26 +55,26 @@ namespace Castle.ActiveRecord.Framework.Internal
 					{
 						if (IsChildClass(model, child))
 						{
-							child.IsDiscriminatorSubClass = child.Key == null;
+							child.IsDiscriminatorSubClass = model.ActiveRecordAtt.DiscriminatorValue != null;
 							child.IsJoinedSubClass = child.Key != null;
 							child.Parent = model;
 
-							if (child.Key != null)
-							{
-								// Needed for deep hierarchies
-								if (model.JoinedClasses.Contains(child) == false)
-								{
-									// Joined subclass
-									model.JoinedClasses.Add(child);
-								}
-							}
-							else
+							if (child.IsDiscriminatorSubClass)
 							{
 								// Needed for deep hierarchies
 								if (model.Classes.Contains(child) == false)
 								{
 									// Discriminator subclass
 									model.Classes.Add(child);
+								}
+							} 
+							else if (child.IsJoinedSubClass)
+							{
+								// Needed for deep hierarchies
+								if (model.JoinedClasses.Contains(child) == false)
+								{
+									// Joined subclass
+									model.JoinedClasses.Add(child);
 								}
 							}
 						}

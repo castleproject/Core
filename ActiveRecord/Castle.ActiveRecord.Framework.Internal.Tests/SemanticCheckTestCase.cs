@@ -37,13 +37,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ActiveRecordException), ExpectedMessage = "Unfortunatelly you can't have a discriminator class and a joined subclass at the same time - check type Castle.ActiveRecord.Framework.Internal.Tests.Model.Company")]
-		public void JoinedAndDiscriminatorClass()
-		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Company) );
-		}
-
-		[Test]
 		[ExpectedException( typeof(ActiveRecordException) )]
 		public void VersionedTimestampedClass()
 		{

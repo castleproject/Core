@@ -94,15 +94,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Castle.DynamicProxy.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.0.1, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+    <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\debug\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\build\net-3.5\debug\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\debug\log4net.dll</HintPath>
+      <HintPath>..\..\build\net-3.5\debug\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=2.0.0.1001, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+    <Reference Include="NHibernate, Version=2.0.0.2001, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-3.5\debug\NHibernate.dll</HintPath>
     </Reference>
