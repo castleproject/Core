@@ -598,7 +598,6 @@ namespace Castle.ActiveRecord
 			factory.Evict(type, id);
 		}
 
-		/*
 		/// <summary> 
 		/// From NH docs: Evict all entries from the second-level cache. This method occurs outside
 		/// of any transaction; it performs an immediate "hard" remove, so does not respect
@@ -613,6 +612,8 @@ namespace Castle.ActiveRecord
 				factory.EvictEntity(entityName);
 			}
 		}
+
+		/* NOT AVAILABLE ON NH 2.0.x
 
 		/// <summary>
 		/// From NH docs: Evict an entry from the second-level  cache. This method occurs outside
