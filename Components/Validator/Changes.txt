@@ -1,5 +1,6 @@
 Beta 1
 ======
+- Added interface for ValidatorRunner as validation entry point.
 
 - Fixed COMP-36
   "Misleading validation error messages in english language"
