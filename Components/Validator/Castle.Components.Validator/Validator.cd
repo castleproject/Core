@@ -5,9 +5,14 @@
     <Position X="8.75" Y="8.75" Width="2.75" />
     <TypeIdentifier>
       <FileName>ValidatorRunner.cs</FileName>
-      <HashCode>AAAAAAAAgAAEAAiAAAgAAAAAAAAAEAAIAAAAAAAABAA=</HashCode>
+      <HashCode>AAAAAAQAgAAEAAiAAEgAAAAAAAAAEAQIAAAAAAACBAA=</HashCode>
     </TypeIdentifier>
     <NestedTypes>
+      <Class Name="Castle.Components.Validator.ValidatorRunner.DefaultSettings" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ValidatorRunner.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
       <Class Name="Castle.Components.Validator.ValidatorRunner.ValidatorComparer" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>ValidatorRunner.cs</NewMemberFileName>
@@ -15,6 +20,7 @@
         <Lollipop Position="0.2" />
       </Class>
     </NestedTypes>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Castle.Components.Validator.AbstractValidationAttribute" Collapsed="true">
     <Position X="9.5" Y="2.5" Width="1.5" />
@@ -49,7 +55,7 @@
     <Position X="14" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>Attributes\ValidateNonEmptyAttribute.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.ValidateRegExpAttribute" Collapsed="true">
@@ -63,7 +69,7 @@
     <Position X="9.5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\AbstractValidator.cs</FileName>
-      <HashCode>AQCAAAEAICAIAQAAAAgABAQAABIAABAAAAEQJQAAAQE=</HashCode>
+      <HashCode>AQAAAAEBKCAAAQAAAAgABAQAAAIEABAAAAAQJQAAAQE=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -71,77 +77,77 @@
     <Position X="5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\SingleValidator.cs</FileName>
-      <HashCode>AACAAAAAAAAIAAAAAAgAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAABAAAAAAAAAAgAAAAAAAIEAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.DateTimeValidator" Collapsed="true">
     <Position X="9.5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\DateTimeValidator.cs</FileName>
-      <HashCode>AACAAAAAAAAIAAAAAAgAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAABAAAAAAAAAAgAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.DecimalValidator" Collapsed="true">
     <Position X="16.25" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\DecimalValidator.cs</FileName>
-      <HashCode>AACAAAAAAAAIAAAAAAgAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAABAAAAAAAAAAgAAAAAAAIEAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.DoubleValidator" Collapsed="true">
     <Position X="0.5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\DoubleValidator.cs</FileName>
-      <HashCode>AACAAAAAAAAIAAAAAAgAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAABAAAAAAAAAAgAAAAAAAIEAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.EmailValidator" Collapsed="true">
     <Position X="7.25" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\EmailValidator.cs</FileName>
-      <HashCode>AACAABAAAAAIAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAABABAAAAAAAAAAAAAAAAAAIEAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.IntegerValidator" Collapsed="true">
     <Position X="11.75" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\IntegerValidator.cs</FileName>
-      <HashCode>AACAAAAAAAAIAAAAAAgAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAABAAAAAAAAAAgAAAAAAAIEAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.LengthValidator" Collapsed="true">
     <Position X="18.5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\LengthValidator.cs</FileName>
-      <HashCode>AACAAAAAAAAIABAAAAgQAAgAAAAIABAAAAAQAAAAAQA=</HashCode>
+      <HashCode>AAAAAAABAAAAABAAAAgQAAgAAAAMABAAAAAQAAAAAQA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.NonEmptyValidator" Collapsed="true">
     <Position X="2.75" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\NonEmptyValidator.cs</FileName>
-      <HashCode>AACAAAAAAAAIAAAAAAgAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAABAAAAAAAAAAgAAAAAAAIEAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.RegularExpressionValidator" Collapsed="true">
     <Position X="7.25" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\RegularExpressionValidator.cs</FileName>
-      <HashCode>AACAAAAAAAAIAAAAAAgAAAAAABAAAAAQAAAgAAAAIAA=</HashCode>
+      <HashCode>AAAAAAABAAAAAAAAAAgAAAAAABAEAAAQAAAgAAAAIAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.SameAsValidator" Collapsed="true">
     <Position X="14" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Validators\SameAsValidator.cs</FileName>
-      <HashCode>AACAAABAAAAIQAAAAAgAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAABBAAAAQAAAAAgAAAAAAAIEAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Castle.Components.Validator.CachedValidationRegistry">
     <Position X="15.5" Y="10.5" Width="2.75" />
     <TypeIdentifier>
       <FileName>CachedValidationRegistry.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAgEAAAAAAAAAQAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAFRAAAAAAABAgEAAAAAAAAAQAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -149,21 +155,21 @@
     <Position X="12" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>ErrorSummary.cs</FileName>
-      <HashCode>AIAAAAAECAEAAAgAAAAAAAACAAEAAAAAAAAAAAIAAAA=</HashCode>
+      <HashCode>AIAAAAAECAEAAAgAAAAAAAACAAEAAAAIAAAAAAIAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Interface Name="Castle.Components.Validator.IValidator">
-    <Position X="2" Y="2.5" Width="1.5" />
+    <Position X="2" Y="2.5" Width="2.75" />
     <TypeIdentifier>
       <FileName>IValidator.cs</FileName>
-      <HashCode>AQCAAAAAAAAIAQAAAAgABAAAAAAAAAAAAAAQIQAAAAA=</HashCode>
+      <HashCode>AQAAAAABAAAAAQAAAAgABAQAAAAEAAAAAAAQIQAAAAA=</HashCode>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Castle.Components.Validator.IValidatorRegistry">
     <Position X="15.5" Y="8.75" Width="2.75" />
     <TypeIdentifier>
       <FileName>IValidatorRegistry.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Castle.Components.Validator.IValidatorBuilder">

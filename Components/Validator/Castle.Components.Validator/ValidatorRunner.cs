@@ -35,7 +35,7 @@ namespace Castle.Components.Validator
 	///		// do something as the Customer instance is not valid
 	/// }
 	/// </example>
-	public class ValidatorRunner
+	public class ValidatorRunner : IValidatorRunner
 	{
 
 		/// <summary>

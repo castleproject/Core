@@ -1,3 +1,5 @@
+- Added interface for ValidatorRunner as validation entry point.
+
 - Added simple interface to ComponentModel to make optional properties required. 
 
 - Applied Mark's -- <mwatts42@gmail.com> -- patch that changes 
