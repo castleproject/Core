@@ -189,6 +189,7 @@
     <Compile Include="Handlers\AbstractHandler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Handlers\ForwardingHandler.cs" />
     <Compile Include="Handlers\ParentHandlerWithChildResolver.cs" />
     <Compile Include="Handlers\DefaultGenericHandler.cs" />
     <Compile Include="Handlers\DefaultHandler.cs">

@@ -14,6 +14,7 @@
 
 namespace Castle.MicroKernel.Registration.Lifestyle
 {
+	using System;
 	using Castle.Core;
 
 	public class LifestyleGroup<S> : RegistrationGroup<S>
@@ -53,15 +54,27 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 			get { return AddDescriptor(new Pooled<S>()); }
 		}
 
-		public ComponentRegistration<S> PooledWithSize(int initialSize, int maxSize)
+		public ComponentRegistration<S> PooledWithSize(int? initialSize, int? maxSize)
 		{
 			return AddDescriptor(new Pooled<S>(initialSize, maxSize));			
+		}
+
+		public ComponentRegistration<S> Custom(Type customLifestyleType)
+		{
+			if (!typeof(ILifestyleManager).IsAssignableFrom(customLifestyleType))
+			{
+				throw new ComponentRegistrationException(String.Format(
+					"The type {0} must implement ILifestyleManager to " +
+					"be used as a custom lifestyle", customLifestyleType.FullName));
+			}
+
+			return AddDescriptor(new Custom<S>(customLifestyleType));
 		}
 
 		public ComponentRegistration<S> Custom<L>()
 			where L : ILifestyleManager, new()
 		{
-			return AddDescriptor(new Custom<S,L>());
+			return Custom(typeof(L));
 		}
 	}
 }

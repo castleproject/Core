@@ -14,19 +14,23 @@
 
 namespace Castle.MicroKernel.Registration.Lifestyle
 {
+	using System;
 	using Castle.Core;
 	using Castle.Core.Configuration;
 
-	public class Custom<S,L> : LifestyleDescriptor<S> where L : ILifestyleManager
+	public class Custom<S> : LifestyleDescriptor<S>
 	{
-		public Custom()
+		private readonly Type customLifestyleType;
+
+		public Custom(Type customLifestyleType)
 			: base(LifestyleType.Custom)
 		{
+			this.customLifestyleType = customLifestyleType;
 		}
 
 		protected override void ApplyLifestyleDetails(IConfiguration configuration)
 		{
-			configuration.Attributes["customLifestyleType"] = typeof(L).AssemblyQualifiedName;
+			configuration.Attributes["customLifestyleType"] = customLifestyleType.AssemblyQualifiedName;
 		}
 	}
 }

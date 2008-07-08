@@ -39,6 +39,7 @@ namespace Castle.MicroKernel.Registration
 		private bool overwrite;
 		private Type serviceType;
 		private Type implementation;
+		private List<Type> forwardedTypes = new List<Type>();
 		private ComponentFilter unlessFilter;
 		private ComponentFilter ifFilter;
 		private readonly List<ComponentDescriptor<S>> descriptors;
@@ -82,6 +83,11 @@ namespace Castle.MicroKernel.Registration
 		{
 			get { return serviceType; }
 			protected set { serviceType = value; }	
+		}
+
+		public Type[] ForwardedTypes
+		{
+			get { return forwardedTypes.ToArray(); }
 		}
 
 		public Type Implementation
@@ -155,6 +161,79 @@ namespace Castle.MicroKernel.Registration
 
 			ImplementedBy(instance.GetType());
 			return AddDescriptor(new ComponentInstanceDescriptior<S>(instance));
+		}
+
+		/// <summary>
+		/// Registers the service types on behalf of this component.
+		/// </summary>
+		/// <param name="types">The types to forward.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> Forward(params Type[] types)
+		{
+			return Forward((IEnumerable<Type>)types);
+		}
+
+		/// <summary>
+		/// Registers the service types on behalf of this component.
+		/// </summary>
+		/// <typeparam name="F">The forwarded type.</typeparam>
+		/// <returns>The component registration.</returns>
+		public ComponentRegistration<S> Forward<F>()
+		{
+			return Forward(new Type[] { typeof(F) });
+		}
+
+		/// <summary>
+		/// Registers the service types on behalf of this component.
+		/// </summary>
+		/// <typeparam name="F1">The first forwarded type.</typeparam>
+		/// <typeparam name="F2">The second forwarded type.</typeparam>
+		/// <returns>The component registration.</returns>
+		public ComponentRegistration<S> Forward<F1, F2>()
+		{
+			return Forward(new Type[] { typeof(F1), typeof(F2) });
+		}
+
+		/// <summary>
+		/// Registers the service types on behalf of this component.
+		/// </summary>
+		/// <typeparam name="F1">The first forwarded type.</typeparam>
+		/// <typeparam name="F2">The second forwarded type.</typeparam>
+		/// <typeparam name="F3">The third forwarded type.</typeparam>
+		/// <returns>The component registration.</returns>
+		public ComponentRegistration<S> Forward<F1, F2, F3>()
+		{
+			return Forward(new Type[] { typeof(F1), typeof(F2), typeof(F3) });
+		}
+
+		/// <summary>
+		/// Registers the service types on behalf of this component.
+		/// </summary>
+		/// <typeparam name="F1">The first forwarded type.</typeparam>
+		/// <typeparam name="F2">The second forwarded type.</typeparam>
+		/// <typeparam name="F3">The third forwarded type.</typeparam>
+		/// <typeparam name="F4">The fourth forwarded type.</typeparam>
+		/// <returns>The component registration.</returns>
+		public ComponentRegistration<S> Forward<F1, F2, F3, F4>()
+		{
+			return Forward(new Type[] { typeof(F1), typeof(F2), typeof(F3), typeof(F4) });
+		}
+
+		/// <summary>
+		/// Registers the service types on behalf of this component.
+		/// </summary>
+		/// <param name="types">The types to forward.</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> Forward(IEnumerable<Type> types)
+		{
+			foreach (Type type in types)
+			{
+				if (!forwardedTypes.Contains(type))
+				{
+					forwardedTypes.Add(type);
+				}
+			}
+			return this;
 		}
 
 		/// <summary>
@@ -441,6 +520,11 @@ namespace Castle.MicroKernel.Registration
 					&& (unlessFilter == null || !unlessFilter(kernel, componentModel)))
 				{
 					kernel.AddCustomComponent(componentModel);
+
+					foreach (Type type in forwardedTypes)
+					{
+						kernel.RegisterHandlerForwarding(type, name);
+					}
 				}	
 			}
 		}
@@ -531,17 +615,18 @@ namespace Castle.MicroKernel.Registration
 		{
 		}
 
-		public ComponentRegistration(Type serviceType)
+		public ComponentRegistration(Type serviceType, params Type[] forwaredTypes)
 		{
 			ServiceType = serviceType;
+			Forward(forwaredTypes);
 		}
 
 		public ComponentRegistration(ComponentModel componentModel)
 			: base(componentModel)
 		{
 		}
-		
-		public ComponentRegistration For(Type serviceType)
+
+		public ComponentRegistration For(Type serviceType, params Type[] forwaredTypes)
 		{
 			if (ServiceType != null)
 			{
@@ -551,6 +636,7 @@ namespace Castle.MicroKernel.Registration
 			}
 
 			ServiceType = serviceType;
+			Forward(forwaredTypes);
 			return this;
 		}
 	}

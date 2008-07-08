@@ -32,12 +32,67 @@ namespace Castle.MicroKernel.Registration
 		/// <summary>
 		/// Creates a component registration for the service type.
 		/// </summary>
+		/// <typeparam name="S">The service type.</typeparam>
 		/// <returns>The component registration.</returns>
 		public static ComponentRegistration<S> For<S>()
 		{
 			return new ComponentRegistration<S>();
 		}
-		
+
+		#region Forwarded Service Types
+
+		/// <summary>
+		/// Creates a component registration for the service types.
+		/// </summary>
+		/// <typeparam name="S">The primary service type.</typeparam>
+		/// <typeparam name="F">The forwarded type.</typeparam>
+		/// <returns>The component registration.</returns>
+		public static ComponentRegistration<S> For<S, F>()
+		{
+			return new ComponentRegistration<S>().Forward<F>();
+		}
+
+		/// <summary>
+		/// Creates a component registration for the service types.
+		/// </summary>
+		/// <typeparam name="S">The primary service type.</typeparam>
+		/// <typeparam name="F1">The first forwarded type.</typeparam>
+		/// <typeparam name="F2">The second forwarded type.</typeparam>
+		/// <returns>The component registration.</returns>
+		public static ComponentRegistration<S> For<S, F1, F2>()
+		{
+			return new ComponentRegistration<S>().Forward<F1, F2>();
+		}
+
+		/// <summary>
+		/// Creates a component registration for the service types.
+		/// </summary>
+		/// <typeparam name="S">The primary service type.</typeparam>
+		/// <typeparam name="F1">The first forwarded type.</typeparam>
+		/// <typeparam name="F2">The second forwarded type.</typeparam>
+		/// <typeparam name="F3">The third forwarded type.</typeparam>
+		/// <returns>The component registration.</returns>
+		public static ComponentRegistration<S> For<S, F1, F2, F3>()
+		{
+			return new ComponentRegistration<S>().Forward<F1, F2, F3>();
+		}
+
+		/// <summary>
+		/// Creates a component registration for the service types.
+		/// </summary>
+		/// <typeparam name="S">The primary service type.</typeparam>
+		/// <typeparam name="F1">The first forwarded type.</typeparam>
+		/// <typeparam name="F2">The second forwarded type.</typeparam>
+		/// <typeparam name="F3">The third forwarded type.</typeparam>
+		/// <typeparam name="F4">The fourth forwarded type.</typeparam>
+		/// <returns>The component registration.</returns>
+		public static ComponentRegistration<S> For<S, F1, F2, F3, F4>()
+		{
+			return new ComponentRegistration<S>().Forward<F1, F2, F3, F4>();
+		}
+
+		#endregion
+
 		/// <summary>
 		/// Create a component registration for an exisiting <see cref="ComponentModel"/>
 		/// </summary>

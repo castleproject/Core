@@ -1,6 +1,10 @@
 RC 4
 ====
 
+- Applied Ayendes patch to introduce component service type forwarding to
+  support multiple service interfaces for a component.
+  Extended the Component Registration interface to support service forwarding.
+
 - Removed sealed qualifier from CreationContext and made ISubDependencyResolver
   methods virtual so they can be overriden.
 

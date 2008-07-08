@@ -693,5 +693,11 @@ namespace Castle.MicroKernel.Tests.Registration
 			kernel.ReleaseComponent(component);
 			Assert.IsTrue(component.Stopped);
 		}
+
+
+		[Test]
+		public void AddComponent_WithForwardedTypes_ForwardsHandlers()
+		{
+		}
 	}
 }

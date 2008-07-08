@@ -97,6 +97,11 @@ namespace Castle.MicroKernel.Handlers
 			get { return parentHandler.ComponentModel; }
 		}
 
+		public Type Service
+		{
+			get { return ComponentModel.Service; }
+		}
+
 		public event HandlerStateDelegate OnHandlerStateChanged;
 
 		protected virtual void RaiseHandlerStateChanged(object s, EventArgs e)

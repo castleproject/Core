@@ -81,9 +81,16 @@ namespace Castle.MicroKernel
 		/// managed by this handler.
 		/// </summary>
 		ComponentModel ComponentModel { get; }
-		
+
 		/// <summary>
-		/// TODO: Document this
+		/// The serivce that this handler handles
+		/// </summary>
+		Type Service { get;  }
+
+		/// <summary>
+		/// Allow to track state changes of a handler that is modified directly.
+		/// This can happen if the client calls AddCustomDependencyValue or 
+		/// RemoveCustomDependencyValue
 		/// </summary>
 		event HandlerStateDelegate OnHandlerStateChanged;
 

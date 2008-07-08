@@ -27,7 +27,7 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 		{
 		}
 
-		public Pooled(int initialSize, int maxSize)
+		public Pooled(int? initialSize, int? maxSize)
 			: this()
 		{
 			this.initialSize = initialSize;

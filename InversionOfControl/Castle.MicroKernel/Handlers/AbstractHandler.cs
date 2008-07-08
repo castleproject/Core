@@ -117,6 +117,11 @@ namespace Castle.MicroKernel.Handlers
 			get { return model; }
 		}
 
+		public Type Service
+		{
+			get { return ComponentModel.Service; }
+		}
+
 		/// <summary>
 		/// TODO: Pendent
 		/// </summary>

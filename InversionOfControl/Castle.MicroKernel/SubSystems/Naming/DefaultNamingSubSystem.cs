@@ -60,7 +60,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public virtual void Register(String key, IHandler handler)
 		{
-			Type service = handler.ComponentModel.Service;
+			Type service = handler.Service;
 
 			try
 			{
@@ -215,7 +215,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 			foreach (IHandler handler in GetHandlers())
 			{
-				if (service == handler.ComponentModel.Service)
+				if (service == handler.Service)
 				{
 					list.Add(handler);
 				}
@@ -232,7 +232,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 			foreach (IHandler handler in GetHandlers())
 			{
-				Type handlerService = handler.ComponentModel.Service;
+				Type handlerService = handler.Service;
 				if (service.IsAssignableFrom(handlerService))
 				{
 					list.Add(handler);

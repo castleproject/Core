@@ -48,5 +48,10 @@ namespace Castle.MicroKernel.Handlers
 			
 			return handler;
 		}
+
+		public IHandler CreateForwarding(IHandler target, Type forwardedType)
+		{
+			return new ForwardingHandler(target, forwardedType);
+		}
 	}
 }

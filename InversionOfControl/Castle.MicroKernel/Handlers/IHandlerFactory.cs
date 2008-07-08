@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace Castle.MicroKernel
 {
 	using Castle.Core;
@@ -23,5 +25,7 @@ namespace Castle.MicroKernel
 	public interface IHandlerFactory
 	{
 		IHandler Create(ComponentModel model);
+
+		IHandler CreateForwarding(IHandler target, Type forwardedType);
 	}
 }

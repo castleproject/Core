@@ -661,5 +661,7 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="handler"></param>
 		void RaiseHandlerRegistered(IHandler handler);
+
+		void RegisterHandlerForwarding(Type forwardedType, string name);
 	}
 }
