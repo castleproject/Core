@@ -30,11 +30,6 @@ namespace Castle.MicroKernel.Registration
 		{
 			model.CustomComponentActivator = typeof(ExternalInstanceActivator);
 			model.ExtendedProperties["instance"] = instance;
-
-			// The constructor collection is filled because the instance gets inspected 
-			// by the kernel when added. The kernel doesn't need to resolve any 
-			// dependencies since we pass an instance.
-			model.Constructors.Clear();
 		}
 	}
 }

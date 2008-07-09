@@ -37,6 +37,7 @@ namespace Castle.MicroKernel.Registration
 	{
 		private String name;
 		private bool overwrite;
+		private bool isInstanceRegistration;
 		private Type serviceType;
 		private Type implementation;
 		private List<Type> forwardedTypes = new List<Type>();
@@ -159,6 +160,7 @@ namespace Castle.MicroKernel.Registration
 				throw new ArgumentNullException("instance");
 			}
 
+			isInstanceRegistration = true;
 			ImplementedBy(instance.GetType());
 			return AddDescriptor(new ComponentInstanceDescriptior<S>(instance));
 		}
@@ -504,12 +506,15 @@ namespace Castle.MicroKernel.Registration
 					descriptor.ApplyToConfiguration(kernel, configuration);
 				}
 
-				if (componentModel == null)
+				if (componentModel == null && isInstanceRegistration == false)
 				{
-					componentModel = kernel.ComponentModelBuilder.BuildModel(
-						name, serviceType, implementation, null);
+                    componentModel = kernel.ComponentModelBuilder.BuildModel(name, serviceType, implementation, null);
+				} 
+				else if (componentModel == null && isInstanceRegistration)
+				{
+					componentModel = new ComponentModel(name, serviceType, implementation);
 				}
-
+                
 				foreach (ComponentDescriptor<S> descriptor in descriptors)
 				{
 					descriptor.ApplyToModel(kernel, componentModel);
