@@ -182,21 +182,17 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Adds the key builder.
 		/// </summary>
-		/// <param name="builder">The builder.</param>
-		public void AddKeyBuilder(IDictionaryKeyBuilder builder)
+		/// <param name="builders">The builder.</param>
+		public PropertyDescriptor AddKeyBuilder(params IDictionaryKeyBuilder[] builders)
 		{
-			if (keyBuilders == null)
-			{
-				keyBuilders = new List<IDictionaryKeyBuilder>();
-			}
-			keyBuilders.Add(builder);
+			return AddKeyBuilders((ICollection<IDictionaryKeyBuilder>)builders);
 		}
 
 		/// <summary>
 		/// Adds the key builders.
 		/// </summary>
 		/// <param name="builders">The builders.</param>
-		public void AddKeyBuilders(ICollection<IDictionaryKeyBuilder> builders)
+		public PropertyDescriptor AddKeyBuilders(ICollection<IDictionaryKeyBuilder> builders)
 		{
 			if (builders != null)
 			{
@@ -209,6 +205,7 @@ namespace Castle.Components.DictionaryAdapter
 					keyBuilders.AddRange(builders);
 				}
 			}
+			return this;
 		}
 
 		#endregion
@@ -252,21 +249,17 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Adds the dictionary getter.
 		/// </summary>
-		/// <param name="getter">The getter.</param>
-		public void AddGetter(IDictionaryPropertyGetter getter)
+		/// <param name="getters">The getter.</param>
+		public PropertyDescriptor AddGetter(params IDictionaryPropertyGetter[] getters)
 		{
-			if (getters == null)
-			{
-				getters = new List<IDictionaryPropertyGetter>();
-			}
-			getters.Add(getter);
+			return AddGetters((ICollection<IDictionaryPropertyGetter>)getters);
 		}
 
 		/// <summary>
 		/// Adds the dictionary getters.
 		/// </summary>
 		/// <param name="gets">The getters.</param>
-		public void AddGetters(ICollection<IDictionaryPropertyGetter> gets)
+		public PropertyDescriptor AddGetters(ICollection<IDictionaryPropertyGetter> gets)
 		{
 			if (gets != null)
 			{
@@ -279,6 +272,7 @@ namespace Castle.Components.DictionaryAdapter
 					getters.AddRange(gets);
 				}
 			}
+			return this;
 		}
 
 		#endregion
@@ -330,21 +324,17 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Adds the dictionary setter.
 		/// </summary>
-		/// <param name="setter">The setter.</param>
-		public void AddSetter(IDictionaryPropertySetter setter)
+		/// <param name="setters">The setter.</param>
+		public PropertyDescriptor AddSetter(params IDictionaryPropertySetter[] setters)
 		{
-			if (setters == null)
-			{
-				setters = new List<IDictionaryPropertySetter>();
-			}
-			setters.Add(setter);
+			return AddSetters((ICollection<IDictionaryPropertySetter>)setters);
 		}
 
 		/// <summary>
 		/// Adds the dictionary setters.
 		/// </summary>
 		/// <param name="sets">The setters.</param>
-		public void AddSetters(ICollection<IDictionaryPropertySetter> sets)
+		public PropertyDescriptor AddSetters(ICollection<IDictionaryPropertySetter> sets)
 		{
 			if (sets != null)
 			{
@@ -357,6 +347,7 @@ namespace Castle.Components.DictionaryAdapter
 					setters.AddRange(sets);
 				}
 			}
+			return this;
 		}
 
 		#endregion
