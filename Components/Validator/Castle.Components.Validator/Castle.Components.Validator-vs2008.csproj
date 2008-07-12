@@ -67,6 +67,7 @@
     <Compile Include="Attributes\ValidateNotSameAsAttribute.cs" />
     <Compile Include="Attributes\ValidateSetAttribute.cs" />
     <Compile Include="Attributes\ValidateSingleAttribute.cs" />
+    <Compile Include="IValidatorRunner.cs" />
     <Compile Include="Messages.es.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
