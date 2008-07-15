@@ -189,8 +189,12 @@ namespace Castle.ActiveRecord
 				object propval = propinfo.GetValue(instance, null);
 				if (propval != null)
 				{
-					errorMessages.AddRange(
-						runner.GetErrorSummary(propval).ErrorMessages);
+					ErrorSummary summary = runner.GetErrorSummary(propval);
+					
+					if (summary != null)
+					{
+						errorMessages.AddRange(summary.ErrorMessages);
+					}
 				}
 			}
 		}
