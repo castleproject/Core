@@ -19,6 +19,8 @@
 		<include name="Castle.MonoRail.WindsorExtension/Castle.MonoRail.WindsorExtension.build" />
 		<include name="Castle.MonoRail.Framework.Views.NVelocity/Castle.MonoRail.Framework.Views.NVelocity.build" />
 		<include name="Castle.MonoRail.Views.Brail/Castle.MonoRail.Views.Brail.build" />
+		<include name="Castle.MonoRail.Views.AspView/Castle.MonoRail.Views.AspView.build" />
+		<include name="Castle.MonoRail.Views.AspView.VCompile/Castle.MonoRail.Views.AspView.VCompile.build" />
 		<include name="Castle.MonoRail.ActiveRecordSupport/Castle.MonoRail.ActiveRecordSupport.build" />
 		<include name="Castle.MonoRail.ActiveRecordScaffold/Castle.MonoRail.ActiveRecordScaffold.build" />
 		<include name="Castle.MonoRail.TransformFilters/Castle.MonoRail.TransformFilters.build " />
@@ -35,6 +37,7 @@
 		
 		<include name="Castle.MonoRail.Framework.Tests/Castle.MonoRail.Framework.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" if="${common.testrunner.enabled}"/>
+		<include name="Castle.MonoRail.Views.AspView.Tests/Castle.MonoRail.Views.AspView.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.ActiveRecordSupport.Tests.build" if="${common.testrunner.enabled}"/>
 		<!--
 		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" if="${common.testrunner.enabled}"/>

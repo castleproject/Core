@@ -170,6 +170,8 @@
 
 	<target name="common.compile-exe"
 		description="Compile sources into a console executable">
+		
+		<property name="output-file" overwrite="false" value="${project::get-name()}" />
 
 		<csc
 			target="exe"
@@ -177,7 +179,7 @@
 			debug="${build.debug}"
 			optimize="${build.optimize}"
 			warnaserror="${build.warnaserrors}"
-			output="${build.dir}/${project::get-name()}.exe" 
+			output="${build.dir}/${output-file}.exe" 
 		>
 			<nowarn>
 				<warning number="1591" unless="${build.warnmissingdocs}" /> <!-- No XML comment for publicly visible member -->
