@@ -21392,6 +21392,76 @@
             <param name="cacheMode">The cache mode to use. </param>
             <returns> this (for method chaining) </returns>
         </member>
+        <member name="T:NHibernate.Impl.DbCommandSet`2">
+            <summary>
+            Expose the batch functionality in ADO.Net 2.0
+            Microsoft in its wisdom decided to make my life hard and mark it internal.
+            Through the use of Reflection and some delegates magic, I opened up the functionality.
+            
+            Observable performance benefits are 50%+ when used, so it is really worth it.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Impl.IDbCommandSet.Append(System.Data.IDbCommand)">
+            <summary>
+            Append a command to the batch
+            </summary>
+            <param name="command"></param>
+        </member>
+        <member name="M:NHibernate.Impl.IDbCommandSet.ExecuteNonQuery">
+            <summary>
+            Executes the batch
+            </summary>
+            <returns>
+            This seems to be returning the total number of affected rows in all queries
+            </returns>
+        </member>
+        <member name="P:NHibernate.Impl.IDbCommandSet.BatchCommand">
+            <summary>
+            Return the batch command to be executed
+            </summary>
+        </member>
+        <member name="P:NHibernate.Impl.IDbCommandSet.CountOfCommands">
+            <summary>
+            The number of commands batched in this instance
+            </summary>
+        </member>
+        <member name="M:NHibernate.Impl.DbCommandSet`2.Append(System.Data.IDbCommand)">
+            <summary>
+            Append a command to the batch
+            </summary>
+            <param name="command"></param>
+        </member>
+        <member name="M:NHibernate.Impl.DbCommandSet`2.AssertHasParameters(System.Data.IDbCommand)">
+            <summary>
+            This is required because SqlClient.SqlCommandSet will throw if 
+            the command has no parameters.
+            </summary>
+            <param name="command"></param>
+        </member>
+        <member name="M:NHibernate.Impl.DbCommandSet`2.ExecuteNonQuery">
+            <summary>
+            Executes the batch
+            </summary>
+            <returns>
+            This seems to be returning the total number of affected rows in all queries
+            </returns>
+        </member>
+        <member name="M:NHibernate.Impl.DbCommandSet`2.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="P:NHibernate.Impl.DbCommandSet`2.BatchCommand">
+            <summary>
+            Return the batch command to be executed
+            </summary>
+        </member>
+        <member name="P:NHibernate.Impl.DbCommandSet`2.CountOfCommands">
+            <summary>
+            The number of commands batched in this instance
+            </summary>
+        </member>
         <member name="T:NHibernate.Impl.DetachedNamedQuery">
             <summary>
             Named query in "detached mode" where the NHibernate session is not available.
