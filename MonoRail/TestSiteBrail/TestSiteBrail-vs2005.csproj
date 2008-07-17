@@ -92,8 +92,10 @@
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Components\BlockViewComponent1.cs" />
     <Compile Include="Components\BlockViewComponent2.cs" />
+    <Compile Include="Components\ComponentUsingCaptureFor.cs" />
     <Compile Include="Components\GridComponent.cs" />
     <Compile Include="Components\InlineComponentWithParam1.cs" />
     <Compile Include="Components\ModifyViewProperyBagComponent.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="Components\WithParamsComponent.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\AppPathController.cs" />
+    <Compile Include="Controllers\AsyncController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\CookiesController.cs" />
     <Compile Include="Controllers\BugsController.cs" />
@@ -180,6 +183,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Boo.Lang.dll</HintPath>
     </Reference>
+    <Reference Include="Boo.Lang.Compiler, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Boo.Lang.Compiler.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
@@ -210,10 +217,17 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="TestSiteBrail.build" />
+    <None Include="Views\Async\WithActionLayout.brail" />
+    <None Include="Views\Async\WithParams.brail" />
+    <None Include="Views\Async\WithView.brail" />
+    <None Include="Views\Async\WithViewAndLayout.brail" />
     <None Include="Views\bugs\add.brail" />
+    <None Include="Views\bugs\MR_371.brail" />
     <None Include="Views\bugs\mr_378.brail" />
     <None Include="Views\bugs\InlineSubView.brail" />
     <None Include="Views\bugs\MR_294_CaptureForInSubViewDoesNotPropogateUpward.brail" />
+    <None Include="Views\bugs\no_code.brail" />
     <None Include="Views\bugs\UseCaptureFor.brail" />
     <None Include="Views\dsl\testXml.brail" />
     <None Include="Views\dsl\testSubViewWithComponents.brail" />

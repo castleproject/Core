@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BaseViewOnlyTestFixture.cs" />
     <Compile Include="BrailBasicFunctionality.cs" />
     <Compile Include="BrailHelperTestCase.cs" />
@@ -88,7 +89,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ResourcedViews\Login\Welcome.brail" />
+    <None Include="Castle.MonoRail.Views.Brail.Tests.build" />
+    <None Include="Views\Bugs\MR_415.brail" />
     <None Include="Views\CommonScripts\extentions.brail" />
+    <None Include="Views\components\ComponentUsingCaptureFor\ComponentUsingCaptureFor.brail" />
     <None Include="Views\components\SimpleInlineViewComponent2\mycompview1.brail" />
     <None Include="Views\components\SimpleInlineViewComponent3\default.brail" />
     <None Include="Views\dsl\attributeOutput.brail" />
@@ -100,18 +104,23 @@
     <None Include="Views\home\index.brail" />
     <None Include="Views\home\resource.brail" />
     <None Include="Views\layouts\general.brail" />
+    <None Include="Views\layouts\master.brail" />
     <None Include="Views\layouts\printable.brail" />
+    <None Include="Views\layouts\secondary.brail" />
     <None Include="Views\layout\index.brail" />
     <None Include="Views\layout\save.brail" />
     <None Include="Views\layout\update.brail" />
     <None Include="App.config" />
     <None Include="Views\regressions\CanCompareToNullableParameter.brail" />
+    <None Include="Views\regressions\questionMarkOp_if.brail" />
     <None Include="Views\regressions\questionMarkOp_if_when_exists.brail" />
     <None Include="Views\regressions\questionMarkOp_if_when_missing.brail" />
     <None Include="Views\regressions\questionMarkOp_unless_whenPassed.brail" />
     <None Include="Views\regressions\HtmlEncodingStringInterpolation.brail" />
     <None Include="Views\regressions\questionMarkOp_unless.brail" />
+    <None Include="Views\regressions\RoutingInfo.brail" />
     <None Include="Views\regressions\StringInterpolationInCodeBlockWillNotBeEscaped.brail" />
+    <None Include="Views\regressions\UsingIgnoreNullWithinCaptureFor.brail" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
