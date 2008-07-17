@@ -207,9 +207,6 @@
 		<copy file="ActiveRecord/License.txt" tofile="${releasenotes.dir}/License.txt" />
 		<copy file="MonoRail/Changes.txt" tofile="${releasenotes.dir}/MonoRail Release Notes.txt" />
 		<copy file="InversionOfControl/Changes.txt" tofile="${releasenotes.dir}/InversionOfControl Release Notes.txt" />
-		<!--
-		<copy file="AspectSharp/Changes.txt" tofile="${releasenotes.dir}/AspectSharp Release Notes.txt" />
-		-->
 		<copy file="Tools/DynamicProxy/Changes.txt" tofile="${releasenotes.dir}/DynamicProxy Release Notes.txt" />
 		<copy file="Core/Changes.txt" tofile="${releasenotes.dir}/Core Release Notes.txt" />
 
@@ -288,9 +285,6 @@
 		<zip zipfile="${build.zip.fullpath}">
 			<fileset basedir="${build.dir}" prefix="bin" >
 				<include name="**/Castle*.*" />
-				<!--
-				<include name="AspectSharp*.*" />
-				-->
 				<include name="external-dependencies.zip" />
 				<exclude name="*Tests.*" />
 				<exclude name="test-results/**" />
@@ -314,7 +308,6 @@
 			<fileset basedir="${build.dir}">
 				<include name="*.*" />
 				<exclude name="**/Castle*" />
-				<exclude name="**/AspectSharp*" />
 				<exclude name="**/db4o.dll" />
 				<exclude name="**/EULA.rtf" />
 				<exclude name="**/*.zip" />

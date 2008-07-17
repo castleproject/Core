@@ -13,7 +13,6 @@
 		<include name="AutomaticTransactionManagement/AutomaticTransactionManagement.build" />
 		<include name="ActiveRecordIntegration/ActiveRecordIntegration.build" />
 		<!--
-		<include name="AspectSharp/AspectSharp.build" />
 		<include name="IBatisNet/IBatisNet.build" /> 
 		<include name="Prevalence/Prevalence.build" />
 		<include name="DynamicLoader/DynamicLoader.build" />
