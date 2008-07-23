@@ -58,7 +58,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 		public void Invoked()
 		{
 			ISession session = container.Resolve<ISessionManager>().OpenSession();
-			var configurationBuilder = (CustomConfigurationBuilder) container.Resolve<IConfigurationBuilder>();
+			CustomConfigurationBuilder configurationBuilder = (CustomConfigurationBuilder) container.Resolve<IConfigurationBuilder>();
 			Assert.AreEqual(1, configurationBuilder.ConfigurationsCreated);
 			session.Close();
 		}
