@@ -16,7 +16,7 @@ namespace MoreComplexSample
 {
 	using System;
 	using Castle.ActiveRecord;
-	using NHibernate.Expression;
+	using NHibernate.Criterion;
 
 	[ActiveRecord("LineItem")]
 	public class LineItem : ActiveRecordBase<LineItem>

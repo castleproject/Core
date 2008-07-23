@@ -57,7 +57,7 @@ namespace MoreComplexSample
 
 		public static Customer FindByEmail(String email)
 		{
-			return FindOne(NHibernate.Expression.Expression.Eq("Email", email));
+			return FindOne(NHibernate.Criterion.Expression.Eq("Email", email));
 		}
 	}
 }

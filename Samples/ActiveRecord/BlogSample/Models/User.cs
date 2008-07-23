@@ -16,7 +16,7 @@ namespace BlogSample
 {
 	using Castle.ActiveRecord;
 
-	using NHibernate.Expression;
+	using NHibernate.Criterion;
 
 	[ActiveRecord("`User`")]
 	public class User : ActiveRecordBase<User>
