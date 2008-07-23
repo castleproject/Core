@@ -106,6 +106,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// </summary>
 		protected virtual void RegisterComponents()
 		{
+			RegisterConfigurationBuilder();
 			RegisterSessionFactoryResolver();
 			RegisterSessionStore();
 			RegisterSessionManager();
@@ -113,12 +114,26 @@ namespace Castle.Facilities.NHibernateIntegration
 		}
 
 		/// <summary>
+		/// Register <see cref="IConfigurationBuilder"/> the default ConfigurationBuilder or (if present) the one 
+		/// specified via "configurationBuilder" attribute.
+		/// </summary>
+		private void RegisterConfigurationBuilder()
+		{
+			if (!string.IsNullOrEmpty(FacilityConfig.Attributes["configurationBuilder"]))
+				Kernel.AddComponent("nhfacility.configuration.builder", typeof(IConfigurationBuilder),
+									Type.GetType(FacilityConfig.Attributes["configurationBuilder"]));
+			else
+				Kernel.AddComponentInstance("nhfacility.configuration.builder", typeof(IConfigurationBuilder),
+											configurationBuilder);
+		}
+
+		/// <summary>
 		/// Registers <see cref="SessionFactoryResolver"/> as the session factory resolver.
 		/// </summary>
 		protected void RegisterSessionFactoryResolver()
 		{
-			Kernel.AddComponent( "nhfacility.sessionfactory.resolver", 
-				typeof(ISessionFactoryResolver), typeof(SessionFactoryResolver) );
+			Kernel.AddComponent("nhfacility.sessionfactory.resolver",
+				typeof(ISessionFactoryResolver), typeof(SessionFactoryResolver));
 		}
 
 		/// <summary>
@@ -285,6 +300,7 @@ namespace Castle.Facilities.NHibernateIntegration
 				alias = Constants.DefaultAlias;
 			}
 
+			IConfigurationBuilder configurationBuilder = Kernel.Resolve<IConfigurationBuilder>();
 			Configuration cfg = configurationBuilder.GetConfiguration(config);
 
 			// Registers the Configuration object

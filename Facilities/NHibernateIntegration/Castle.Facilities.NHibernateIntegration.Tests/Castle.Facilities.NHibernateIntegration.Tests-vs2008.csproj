@@ -172,6 +172,7 @@
     <Compile Include="Common\TestInterceptor.cs" />
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Internals\ConfigurationBuilderTestCase.cs" />
+    <Compile Include="Internals\CustomConfigurationBuilderTestCase.cs" />
     <Compile Include="Internals\SessionManagerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -245,6 +246,10 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="configurationBuilderRegression.xml" />
+    <EmbeddedResource Include="customConfigurationBuilder.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
