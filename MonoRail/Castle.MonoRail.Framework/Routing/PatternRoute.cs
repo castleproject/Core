@@ -178,12 +178,12 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <param name="context">The context</param>
 		/// <param name="match">The match.</param>
 		/// <returns></returns>
-		public int Matches(string url, IRouteContext context, RouteMatch match)
+		public virtual int Matches(string url, IRouteContext context, RouteMatch match)
 		{
 			string[] parts = url.Split(new char[] { '/', '.' }, StringSplitOptions.RemoveEmptyEntries);
 			int points = 0;
 			int index = 0;
-
+			
 			foreach(UrlPartSubRule node in nodes)
 			{
 				string part = index < parts.Length ? parts[index] : null;
