@@ -25,11 +25,11 @@ namespace Castle.Components.Common.EmailSender.Smtp
 	/// </summary>
 	public class SmtpSender : IEmailSender
 	{
-		private SmtpClient smtpClient;
-		private bool asyncSend = false;
-		private bool configured;
+		// private SmtpClient smtpClient;
+		private bool asyncSend;
 		private string hostname;
 		private int port = 25;
+		private int? timeout;
 		private NetworkCredential credentials = new NetworkCredential();
 
 		/// <summary>
@@ -40,8 +40,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		public SmtpSender(string hostname)
 		{
 			this.hostname = hostname;
-
-			smtpClient = new SmtpClient(hostname);
 		}
 
 		/// <summary>
@@ -79,8 +77,8 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		/// </summary>
 		public int Timeout
 		{
-			get { return smtpClient.Timeout; }
-			set { smtpClient.Timeout = value; }
+			get { return timeout.HasValue ? timeout.Value : 0; }
+			set { timeout = value; }
 		}
 
 		/// <summary>
@@ -110,8 +108,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		{
 			if (message == null) throw new ArgumentNullException("message");
 
-			ConfigureSender(message);
-
 			if (asyncSend)
 			{
 				// The MailMessage must be diposed after sending the email.
@@ -119,6 +115,9 @@ namespace Castle.Components.Common.EmailSender.Smtp
 				// it to the smtpClient.
 				// After the mail is sent, the message is disposed and the
 				// eventHandler removed from the smtpClient.
+				SmtpClient smtpClient = new SmtpClient(hostname, port);
+				Configure(smtpClient);
+
 				MailMessage msg = CreateMailMessage(message);
 				Guid msgGuid = new Guid();
 				SendCompletedEventHandler sceh = null;
@@ -134,8 +133,11 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			}
 			else
 			{
-				using (MailMessage msg = CreateMailMessage(message))
+				using(MailMessage msg = CreateMailMessage(message))
 				{
+					SmtpClient smtpClient = new SmtpClient(hostname, port);
+					Configure(smtpClient);
+
 					smtpClient.Send(msg);
 				}
 			}
@@ -246,23 +248,21 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		}
 
 		/// <summary>
-		/// Configures the message or the sender
+		/// Configures the sender
 		/// with port information and eventual credential
 		/// informed
 		/// </summary>
-		/// <param name="message">Message instance</param>
-		private void ConfigureSender(Message message)
+		/// <param name="smtpClient">Message instance</param>
+		private void Configure(SmtpClient smtpClient)
 		{
-			if (!configured)
+			if (HasCredentials)
 			{
-				if (HasCredentials)
-				{
-					smtpClient.Credentials = credentials;
-				}
+				smtpClient.Credentials = credentials;
+			}
 
-				smtpClient.Port = port;
-
-				configured = true;
+			if (timeout.HasValue)
+			{
+				smtpClient.Timeout = timeout.Value;
 			}
 		}
 
