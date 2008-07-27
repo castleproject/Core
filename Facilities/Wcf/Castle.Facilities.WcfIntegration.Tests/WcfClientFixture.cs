@@ -19,6 +19,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
+    using Castle.Core.Resource;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 	using Castle.Windsor.Installer;
@@ -283,13 +284,29 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanResolveClientAssociatedWithChannelFromXmlConfiguration()
 		{
 			using (IWindsorContainer container = new WindsorContainer()
-					.Install(Configuration.FromXmlFile("..\\..\\ConfigureClients.xml"))
-					)
+					.Install(Configuration.FromXml(new StaticContentResource(xmlConfiguration))))
 			{
 				IAmUsingWindsor client = container.Resolve<IAmUsingWindsor>("usingWindsor");
 				Assert.AreEqual(42, client.GetValueFromWindsorConfig());
 			}
 		}
+
+        private static string xmlConfiguration = @"<?xml version='1.0' encoding='utf-8' ?>
+<configuration>
+	<facilities>
+		<facility id='wcf' 
+				  type='Castle.Facilities.WcfIntegration.WcfFacility,
+				        Castle.Facilities.WcfIntegration' />
+	</facilities>
+
+	<components>
+		<component id='usingWindsor'
+			       type='Castle.Facilities.WcfIntegration.Demo.IAmUsingWindsor, 
+				         Castle.Facilities.WcfIntegration.Demo'
+			       wcfEndpointConfiguration='WSHttpBinding_IAmUsingWindsor'>
+		</component>
+	</components>
+</configuration>";
 	}
 #endif // DOTNET35
 }

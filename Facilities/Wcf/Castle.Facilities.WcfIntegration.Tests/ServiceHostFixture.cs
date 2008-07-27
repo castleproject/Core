@@ -17,6 +17,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
+    using Castle.Core.Resource;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 	using Castle.Windsor.Installer;
@@ -149,7 +150,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanCreateServiceHostAndOpenHostFromXmlConfiguration()
 		{
 			using (new WindsorContainer()
-					.Install(Configuration.FromXmlFile("..\\..\\ConfigureServices.xml")))
+                    .Install(Configuration.FromXml(new StaticContentResource(xmlConfiguration))))
 			{
 				IAmUsingWindsor client = ChannelFactory<IAmUsingWindsor>.CreateChannel(
 					new BasicHttpBinding(), new EndpointAddress("http://localhost:27198/UsingWindsor.svc"));
@@ -303,6 +304,28 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				Assert.AreEqual(1, CallCountServiceBehavior.CallCount);
 			}
 		}
+
+        private static string xmlConfiguration = @"<?xml version='1.0' encoding='utf-8' ?>
+<configuration>
+	<facilities>
+		<facility id='wcf' 
+				  type='Castle.Facilities.WcfIntegration.WcfFacility,
+				        Castle.Facilities.WcfIntegration' />
+	</facilities>
+
+	<components>
+		<component id='usingwindsor_svc'
+			       service='Castle.Facilities.WcfIntegration.Demo.IAmUsingWindsor, 
+				            Castle.Facilities.WcfIntegration.Demo'
+			       type='Castle.Facilities.WcfIntegration.Demo.UsingWindsor, 
+				         Castle.Facilities.WcfIntegration.Demo'
+			       wcfServiceHost='true'>
+			<parameters>
+				<number>42</number>
+			</parameters>
+		</component>
+	</components>
+</configuration>";
 	}
 
 #endif // DOTNET35
