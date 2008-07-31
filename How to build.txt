@@ -1,6 +1,10 @@
 Everything should compile fine using NAnt 0.85 final. 
 You can find the latest version at http://nant.sourceforge.net/ 
 
+for targeting 3.5, it's recommended you use NAnt 0.68b2 nightly build (current version is 0.86.3075.0 from 02/06/2008 and can be downloaded from the said location).
+
+
+
 Anyway, the following are some useful tips if things go wrong for some reason.
 
 Where to start the build?
@@ -43,7 +47,19 @@ The basic NHibernate settings can be set as NAnt arguments:
 
     > -D:ar.connection.connection_string.1="Data Source=.;Initial Catalog=test;Integrated Security=SSPI;"
     > -D:ar.connection.connection_string.2="Data Source=.;Initial Catalog=test2;Integrated Security=SSPI;"
-  
+
+
+MSDTC
+=====
+The Distributed Transaction Coordinator (msdtc) is required for some of the tests.
+If the service is not running by default on your machine, you'd need to start it to make tests pass
+so, simply start it before running nant, and stop it afterwards:
+
+    > net start msdtc
+    > nant ...
+    > net stop msdtc
+
+
 Build options
 =============
 
