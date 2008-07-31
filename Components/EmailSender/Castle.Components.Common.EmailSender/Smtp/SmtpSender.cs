@@ -253,7 +253,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		/// informed
 		/// </summary>
 		/// <param name="smtpClient">Message instance</param>
-		private void Configure(SmtpClient smtpClient)
+		protected virtual void Configure(SmtpClient smtpClient)
 		{
 			if (HasCredentials)
 			{
