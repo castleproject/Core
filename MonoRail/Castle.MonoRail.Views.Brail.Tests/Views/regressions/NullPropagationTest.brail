@@ -1,0 +1,4 @@
+<% for item in items:
+        output ?item.SubItem.Name
+   end %>
+

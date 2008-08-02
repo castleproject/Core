@@ -265,6 +265,16 @@ namespace Castle.MonoRail.Views.Brail
 		}
 
 		/// <summary>
+		/// Wraps the possilbe null value in an ignore value object
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		public object WrapPossilbeNullValue(object value)
+		{
+			return new IgnoreNull(value);
+		}
+
+		/// <summary>
 		/// Gets the parameter - implements the logic for searching parameters.
 		/// </summary>
 		/// <param name="name">The name.</param>

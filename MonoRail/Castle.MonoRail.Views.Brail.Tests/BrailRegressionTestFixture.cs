@@ -26,6 +26,31 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
 		}
 
+	    [Test]
+	    public void WillPropagateNullParameter()
+	    {
+	        PropertyBag["items"] = new Item[]
+	                                   {
+	                                       new Item("Item 1", null),
+	                                       new Item("Item 1", new Item("SubItem 2.1", null)),
+	                                   };
+			ProcessView("regressions/NullPropagationTest");
+            AssertReplyContains("SubItem 2.1");
+	    }
+
+		[Test]
+		public void WillPropagateNullParameter_WithNullInArrayMiddle()
+		{
+			PropertyBag["items"] = new Item[]
+	                                   {
+	                                       new Item("Item 1", null),
+										   null,
+	                                       new Item("Item 1", new Item("SubItem 2.1", null)),
+	                                   };
+			ProcessView("regressions/NullPropagationTest");
+			AssertReplyContains("SubItem 2.1");
+		}
+
 		[Test]
 		public void WillPassRoutingInfoToView()
 		{
@@ -151,5 +176,18 @@ Hibernating Rhinos
 			}
 			return count;
 		}
+
+        private class Item
+        {
+            public string Name;
+            public Item SubItem;
+
+            public Item(string name, Item subItem)
+            {
+                this.Name = name;
+                this.SubItem = subItem;
+            }
+        }
+
 	}
 }

@@ -27,13 +27,30 @@ namespace Castle.MonoRail.Views.Brail
 	{
 		private IMethod getParam;
 		private IMethod tryGetParam;
+		private IMethod wrapNullValue;
 
 		public override void OnReferenceExpression(ReferenceExpression node)
 		{
-			IEntity entity = NameResolutionService.Resolve(node.Name);
+			string nodeName = node.Name;
+			bool isTryGetValue = nodeName.StartsWith("?");
+			if (isTryGetValue)
+				nodeName = nodeName.Substring(1);
+			IEntity entity = NameResolutionService.Resolve(nodeName);
 			if (entity != null)
 			{
+				if (isTryGetValue == false)
+				{
+					base.OnReferenceExpression(node);
+					return;
+				}
+				node.Name = nodeName;
 				base.OnReferenceExpression(node);
+				Node parentNode = node.ParentNode;
+				MethodInvocationExpression mie = CodeBuilder.CreateMethodInvocation(
+					CodeBuilder.CreateSelfReference(_currentMethod.DeclaringType),
+					wrapNullValue);
+				mie.Arguments.Add(node.CloneNode());
+				parentNode.Replace(node, mie);
 			}
 			else
 			{
@@ -50,6 +67,7 @@ namespace Castle.MonoRail.Views.Brail
 			base.InitializeMemberCache();
 			getParam = TypeSystemServices.Map(typeof(BrailBase).GetMethod("GetParameter"));
 			tryGetParam = TypeSystemServices.Map(typeof(BrailBase).GetMethod("TryGetParameter"));
+			wrapNullValue = TypeSystemServices.Map(typeof(BrailBase).GetMethod("WrapPossilbeNullValue"));
 		}
 
 		public IMethod GetMethod(string name)
