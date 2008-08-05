@@ -90,7 +90,7 @@ namespace Castle.MonoRail.Framework
 
 			UrlInfo urlInfo = urlTokenizer.TokenizeUrl(req.FilePath, req.PathInfo, req.Url, req.IsLocal, req.ApplicationPath);
 
-			if (urlInfo.Area == "MonoRail" && urlInfo.Controller == "Files")
+			if (IsResourceFileUrl(urlInfo))
 			{
 				return new ResourceFileHandler(urlInfo, staticResourceRegistry);
 			}
@@ -306,6 +306,16 @@ namespace Castle.MonoRail.Framework
 				return false;
 			}
 			return controllerContext.ControllerDescriptor.Actions[controllerContext.Action] is AsyncActionPair;
+		}
+
+		/// <summary>
+		/// Checks whether the target url is a resource file url.
+		/// </summary>
+		/// <param name="urlInfo">The url info.</param>
+		/// <returns></returns>
+		protected virtual bool IsResourceFileUrl(UrlInfo urlInfo)
+		{
+			return urlInfo.Area == "MonoRail" && urlInfo.Controller == "Files";
 		}
 
 		/// <summary>
