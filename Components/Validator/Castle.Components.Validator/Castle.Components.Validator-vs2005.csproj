@@ -38,7 +38,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessorUtil.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Attributes\AbstractCrossReferenceValidationAttribute.cs" />
     <Compile Include="Attributes\ValidateIsLesserAttribute.cs" />
     <Compile Include="Attributes\ValidateCreditCardAttribute.cs" />
     <Compile Include="Attributes\ValidateDateAttribute.cs" />
@@ -58,6 +60,8 @@
     <Compile Include="Attributes\ValidateNotSameAsAttribute.cs" />
     <Compile Include="Attributes\ValidateSetAttribute.cs" />
     <Compile Include="Attributes\ValidateSingleAttribute.cs" />
+    <Compile Include="IPropertyAccessAware.cs" />
+    <Compile Include="IReferenceAccessAware.cs" />
     <Compile Include="IValidatorRunner.cs" />
     <Compile Include="Messages.fr.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -114,6 +118,7 @@
     <Compile Include="ValidationException.cs" />
     <Compile Include="ValidationInternalError.cs" />
     <Compile Include="ValidatorRunner.cs" />
+    <Compile Include="Validators\AbstractCrossReferenceValidator.cs" />
     <Compile Include="Validators\AbstractValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
     <Compile Include="Validators\CollectionNotEmptyValidator.cs" />
