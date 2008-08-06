@@ -14,27 +14,14 @@
 
 namespace Castle.Components.Validator
 {
-	using System;
-	using System.Reflection;
-
 	/// <summary>
-	/// Constructs an <see cref="IValidator"/> implementation.
+	/// Implemented by validators who want to delegate access to the property value.
 	/// </summary>
-	public interface IValidatorBuilder
+	public interface IPropertyAccessAware
 	{
 		/// <summary>
-		/// Implementors should perform any initialization logic
+		/// Sets the property accessor.
 		/// </summary>
-		/// <param name="validationRegistry">The validation registry.</param>
-		/// <param name="property">The target property</param>
-		void Initialize(IValidatorRegistry validationRegistry, PropertyInfo property);
-
-		/// <summary>
-		/// Builds this instance.
-		/// </summary>
-		/// <param name="validatorRunner">The validator runner.</param>
-		/// <param name="type">The type that this validator is built for</param>
-		/// <returns></returns>
-		IValidator Build(ValidatorRunner validatorRunner, Type type);
+		Accessor PropertyAccessor { set; }
 	}
 }

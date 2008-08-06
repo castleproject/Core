@@ -22,13 +22,14 @@ namespace Castle.Components.Validator
 	/// Abstract <see cref="IValidator"/> implementation
 	/// </summary>
 	[Serializable]
-	public abstract class AbstractValidator : IValidator
+	public abstract class AbstractValidator : IValidator, IPropertyAccessAware
 	{
 		private int executionOrder;
 		private string errorMessage, friendlyName;
 		private PropertyInfo property;
 		private RunWhen runWhen;
 		private IValidatorRegistry validationRegistry;
+		private Accessor propertyAccessor;
 
 		/// <summary>
 		/// Implementors should perform any initialization logic
@@ -43,37 +44,6 @@ namespace Castle.Components.Validator
 			{
 				errorMessage = BuildErrorMessage();
 			}
-		}
-
-		/// <summary>
-		/// Obtains the value of a property or field on a specific instance.
-		/// </summary>
-		/// <param name="instance">The instance to inspect.</param>
-		/// <param name="fieldOrPropertyName">The name of the field or property to inspect.</param>
-		/// <returns></returns>
-		public object GetFieldOrPropertyValue(object instance, string fieldOrPropertyName)
-		{
-			const BindingFlags flags = BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public;
-			Type targetType = instance.GetType();
-
-			PropertyInfo pi = targetType.GetProperty(fieldOrPropertyName, flags);
-
-			if (pi == null)
-			{
-				FieldInfo fi = targetType.GetField(fieldOrPropertyName, flags);
-
-				if (fi != null)
-				{
-					return fi.GetValue(instance);
-				}
-			}
-			else
-			{
-				return pi.GetValue(instance, null);
-			}
-
-			throw new ValidationException("No public instance field or property named " + fieldOrPropertyName + " for type " +
-			                              targetType.FullName);
 		}
 
 		/// <summary>
@@ -124,6 +94,14 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
+		/// Sets the property accessor.
+		/// </summary>
+		public Accessor PropertyAccessor
+		{
+			set { propertyAccessor = value; }
+		}
+
+		/// <summary>
 		/// Gets a value indicating whether this validator supports browser validation.
 		/// </summary>
 		/// <value>
@@ -154,7 +132,18 @@ namespace Castle.Components.Validator
 		/// <returns><c>true</c> if the field is OK</returns>
 		public bool IsValid(object instance)
 		{
-			return IsValid(instance, Property.GetValue(instance, null));
+			object value;
+
+			if (propertyAccessor != null)
+			{
+				value = propertyAccessor(instance);
+			}
+			else
+			{
+				value = AccessorUtil.GetPropertyValue(instance, Property);
+			}
+
+			return IsValid(instance, value);
 		}
 
 		/// <summary>

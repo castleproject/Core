@@ -48,6 +48,21 @@ namespace Castle.Components.Validator
 		IValidator[] GetValidators(ValidatorRunner validatorRunner, Type targetType, PropertyInfo property, RunWhen runWhen);
 
 		/// <summary>
+		/// Gets the property value accessor.
+		/// </summary>
+		/// <param name="property">The property.</param>
+		/// <returns>The property value accessor.</returns>
+		Accessor GetPropertyAccessor(PropertyInfo property);
+
+		/// <summary>
+		/// Gets the expression value accessor.
+		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="path">The expression path.</param>
+		/// <returns>The expression accessor.</returns>
+		Accessor GetFieldOrPropertyAccessor(Type targetType, string path);
+
+		/// <summary>
 		/// Gets the string from resource by key
 		/// </summary>
 		/// <param name="key">The key.</param>

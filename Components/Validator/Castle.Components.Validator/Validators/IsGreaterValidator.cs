@@ -46,11 +46,10 @@ namespace Castle.Components.Validator
 	/// <summary>
 	/// Comparing properties value and make sure it greater than one another.
 	/// </summary>
-	public class IsGreaterValidator : AbstractValidator
+	public class IsGreaterValidator : AbstractCrossReferenceValidator
 	{
 		#region Private variables
 
-		private readonly string propertyToCompare;
 		private readonly IsGreaterValidationType validationType;
 
 		#endregion
@@ -63,22 +62,14 @@ namespace Castle.Components.Validator
 		/// <param name="type"></param>
 		/// <param name="propertyToCompare"></param>
 		public IsGreaterValidator(IsGreaterValidationType type, string propertyToCompare)
+			: base(propertyToCompare)
 		{
 			this.validationType = type;
-			this.propertyToCompare = propertyToCompare;
 		}
 
 		#endregion
 
 		#region Properties
-
-		/// <summary>
-		/// Target Property to compare
-		/// </summary>
-		public string PropertyToCompare
-		{
-			get { return propertyToCompare; }
-		}
 
 		/// <summary>
 		/// Gets or sets the validation type for this validator. 
@@ -100,7 +91,7 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		public override bool IsValid(object instance, object fieldValue)
 		{
-			object refValue = GetFieldOrPropertyValue(instance, propertyToCompare);
+			object refValue = GetReferenceValue(instance);
 
 			bool valid = false;
 
@@ -171,7 +162,7 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyBrowserValidation( config, inputType, generator, attributes, target );
 
-			generator.SetAsGreaterThan( target, propertyToCompare, validationType, BuildErrorMessage() );
+			generator.SetAsGreaterThan( target, PropertyToCompare, validationType, BuildErrorMessage() );
 		}
 
 		/// <summary>

@@ -15,6 +15,7 @@
 namespace Castle.Components.Validator
 {
 	using System;
+	using System.Reflection;
 
 	/// <summary>
 	/// Represents "phases" in which you can group 
@@ -53,6 +54,7 @@ namespace Castle.Components.Validator
 		private string friendlyName;
 		private int executionOrder = 0;
 		private RunWhen runWhen = RunWhen.Everytime;
+		private Accessor propertyAccessor;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AbstractValidationAttribute"/> class.
@@ -68,6 +70,16 @@ namespace Castle.Components.Validator
 		protected AbstractValidationAttribute(string errorMessage)
 		{
 			this.errorMessage = errorMessage;
+		}
+
+		/// <summary>
+		/// Implementors should perform any initialization logic
+		/// </summary>
+		/// <param name="validationRegistry">The validation registry.</param>
+		/// <param name="property">The target property</param>
+		public virtual void Initialize(IValidatorRegistry validationRegistry, PropertyInfo property)
+		{
+			propertyAccessor = validationRegistry.GetPropertyAccessor(property);
 		}
 
 		/// <summary>
@@ -110,12 +122,19 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
+		/// Gets the property accessor;
+		/// </summary>
+		protected Accessor PropertyAccessor
+		{
+			get { return propertyAccessor; }
+		}
+
+		/// <summary>
 		/// Constructs and configures an <see cref="IValidator"/>
 		/// instance based on the properties set on the attribute instance.
 		/// </summary>
 		/// <returns></returns>
 		public abstract IValidator Build();
-
 
 		/// <summary>
 		/// Constructs and configures an <see cref="IValidator"/>
@@ -123,7 +142,14 @@ namespace Castle.Components.Validator
 		/// </summary>
 		public virtual IValidator Build(ValidatorRunner validatorRunner, Type type)
 		{
-			return Build();
+			IValidator validator = Build();
+			
+			if (validator is IPropertyAccessAware)
+			{
+				((IPropertyAccessAware)validator).PropertyAccessor = propertyAccessor;
+			}
+
+			return validator;
 		}
 
 		/// <summary>

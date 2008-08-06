@@ -18,7 +18,7 @@ namespace Castle.Components.Validator
 	/// Validates that the content has a different
 	/// value from the property informed.
 	/// </summary>
-	public class ValidateNotSameAsAttribute : AbstractValidationAttribute
+	public class ValidateNotSameAsAttribute : AbstractCrossReferenceValidationAttributre
 	{
 		private readonly string propertyToCompare;
 
@@ -27,6 +27,7 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <param name="propertyToCompare">The property to compare.</param>
 		public ValidateNotSameAsAttribute(string propertyToCompare)
+			: base(propertyToCompare)
 		{
 			this.propertyToCompare = propertyToCompare;
 		}
@@ -36,7 +37,8 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <param name="propertyToCompare">The property to compare.</param>
 		/// <param name="errorMessage">The error message.</param>
-		public ValidateNotSameAsAttribute(string propertyToCompare, string errorMessage) : base(errorMessage)
+		public ValidateNotSameAsAttribute(string propertyToCompare, string errorMessage) 
+			: base(propertyToCompare, errorMessage)
 		{
 			this.propertyToCompare = propertyToCompare;
 		}

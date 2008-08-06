@@ -1,5 +1,7 @@
 Beta 1
 ======
+- Use DynamicMethod for performance when available
+
 - Added interface for ValidatorRunner as validation entry point.
 
 - Fixed COMP-36

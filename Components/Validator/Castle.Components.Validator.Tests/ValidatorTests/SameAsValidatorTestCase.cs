@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+using System;
 
 namespace Castle.Components.Validator.Tests.ValidatorTests
 {
@@ -21,7 +22,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 	[TestFixture]
 	public class SameAsValidatorTestCase
 	{
-		private SameAsValidator validator1, validator2, validator3;
+		private SameAsValidator validator1, validator2, validator3, validator4;
 		private TestTarget target;
 
 		[SetUp]
@@ -40,7 +41,11 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			validator3 = new SameAsValidator("ComparableField3");
 			validator3.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField1"));
 
+			validator4 = new SameAsValidator("NestedField.ComparableField1");
+			validator4.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField1"));
+
 			target = new TestTarget();
+			target.NestedField = new NestedTargetClass();
 		}
 
 		[Test]
@@ -80,12 +85,20 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsTrue(validator2.IsValid(target, 100));
 		}
 
+		[Test]
+		public void ValidForNestedTarget()
+		{
+			target.NestedField.ComparableField1 = "craig";
+			Assert.IsTrue(validator4.IsValid(target, "craig"));	
+		}
+
 		public class TestTarget
 		{
 			private string targetField1;
 			private string comparableField1;
 			private int targetField2;
 			private int comparableField2;
+			private NestedTargetClass nestedField;
 
 			public string TargetField1
 			{
@@ -112,6 +125,27 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			}
 
 			public string ComparableField3;
+
+			public NestedTargetClass NestedField
+			{
+				get { return nestedField; }
+				set { nestedField = value; }
+			}
+		}
+	}
+
+	public class NestedTargetClass
+	{
+		private string comparableField1;
+
+		public NestedTargetClass()
+		{
+		}
+
+		public string ComparableField1
+		{
+			get { return comparableField1; }
+			set { comparableField1 = value; }
 		}
 	}
 }

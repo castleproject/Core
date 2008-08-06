@@ -49,7 +49,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		public void NonEmptyStrings()
 		{
 			Assert.IsTrue(validator.IsValid(target, "abc"));
-			Assert.IsTrue(validator.IsValid(target, "  "));
+			Assert.IsTrue(validator.IsValid(target, "  "));	
 		}
 
 		[Test]

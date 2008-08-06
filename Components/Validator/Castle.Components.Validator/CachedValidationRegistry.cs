@@ -111,6 +111,11 @@ namespace Castle.Components.Validator
 			{
 				builders = property.GetCustomAttributes(typeof (IValidatorBuilder), true);
 				attrsPerProperty[property] = builders;
+
+				foreach (IValidatorBuilder builder in builders)
+				{
+					builder.Initialize(this, property);
+				}
 			}
 
 			ArrayList validators = new ArrayList();
@@ -126,6 +131,27 @@ namespace Castle.Components.Validator
 			}
 
 			return (IValidator[]) validators.ToArray(typeof (IValidator));
+		}
+
+		/// <summary>
+		/// Gets the property value accessor.
+		/// </summary>
+		/// <param name="property">The property.</param>
+		/// <returns>The property value accessor.</returns>
+		public Accessor GetPropertyAccessor(PropertyInfo property)
+		{
+			return AccessorUtil.GetAccessor(property);
+		}
+
+		/// <summary>
+		/// Gets the expression value accessor.
+		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="path">The expression path.</param>
+		/// <returns>The expression accessor.</returns>
+		public Accessor GetFieldOrPropertyAccessor(Type targetType, string path)
+		{
+			return AccessorUtil.GetAccessor(targetType, path);
 		}
 
 		/// <summary>

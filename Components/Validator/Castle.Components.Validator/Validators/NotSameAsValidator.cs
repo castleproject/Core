@@ -20,27 +20,15 @@ namespace Castle.Components.Validator
 	/// Validates that the content has a different
 	/// value from the value of the property informed.
 	/// </summary>
-	public class NotSameAsValidator : AbstractValidator
+	public class NotSameAsValidator : AbstractCrossReferenceValidator
 	{
-		private readonly string propertyToCompare;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NotSameAsValidator"/> class.
 		/// </summary>
 		/// <param name="propertyToCompare">The property to compare.</param>
 		public NotSameAsValidator(string propertyToCompare)
+			: base(propertyToCompare)
 		{
-			this.propertyToCompare = propertyToCompare;
-		}
-
-
-		/// <summary>
-		/// Gets the property to compare.
-		/// </summary>
-		/// <value>The property to compare.</value>
-		public string PropertyToCompare
-		{
-			get { return propertyToCompare; }
 		}
 
 		/// <summary>
@@ -54,7 +42,7 @@ namespace Castle.Components.Validator
 		/// </returns>
 		public override bool IsValid(object instance, object fieldValue)
 		{
-			object referenceValue = GetFieldOrPropertyValue(instance, propertyToCompare);
+			object referenceValue = GetReferenceValue(instance);
 
 			if (fieldValue is string && string.IsNullOrEmpty((string) fieldValue))
 			{
@@ -105,7 +93,7 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyBrowserValidation(config, inputType, generator, attributes, target);
 
-			generator.SetAsNotSameAs(target, propertyToCompare, BuildErrorMessage());
+			generator.SetAsNotSameAs(target, PropertyToCompare, BuildErrorMessage());
 		}
 
 		/// <summary>

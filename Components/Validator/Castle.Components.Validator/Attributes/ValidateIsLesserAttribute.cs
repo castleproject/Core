@@ -20,7 +20,7 @@ namespace Castle.Components.Validator
 	/// Validate a field value is greater than another one.
 	/// </summary>
 	[Serializable, CLSCompliant(false)]
-	public class ValidateIsLesserAttribute : AbstractValidationAttribute
+	public class ValidateIsLesserAttribute : AbstractCrossReferenceValidationAttributre
 	{
 		private readonly IValidator validator;
 
@@ -32,6 +32,7 @@ namespace Castle.Components.Validator
 		/// <param name="type"></param>
 		/// <param name="propertyToCompare">Target property to compare</param>
 		public ValidateIsLesserAttribute(IsGreaterValidationType type, string propertyToCompare)
+			: base(propertyToCompare)
 		{
 			validator = new IsLesserValidator(type, propertyToCompare);
 		}
@@ -43,7 +44,7 @@ namespace Castle.Components.Validator
 		/// <param name="propertyToCompare">Target property to compare</param>
 		/// <param name="errorMessage">The error message.</param>
 		public ValidateIsLesserAttribute( IsGreaterValidationType type, string propertyToCompare, string errorMessage )
-			: base(errorMessage)
+			: base(propertyToCompare, errorMessage)
 		{
 			validator = new IsLesserValidator( type, propertyToCompare );
 		}
