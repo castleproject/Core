@@ -161,7 +161,7 @@ namespace Castle.Facilities.Remoting
 			    model.LifestyleType != LifestyleType.Undefined)
 			{
 				throw new FacilityException(String.Format("Component {0} is marked as a 'RecoverableComponent' but is using a lifestyle " + 
-					"different than Singleton. Unfortunatelly Singleton is the only lifestyle supported for this of remoting component configuration", model.Name));
+					"different than Singleton. Unfortunately Singleton is the only lifestyle supported for this of remoting component configuration", model.Name));
 			}
 		}
 

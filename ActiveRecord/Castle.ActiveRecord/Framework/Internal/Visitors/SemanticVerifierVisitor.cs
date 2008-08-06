@@ -70,7 +70,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				//if (model.IsDiscriminatorBase && model.IsJoinedSubClassBase)
 				//{
 				//    throw new ActiveRecordException(String.Format(
-				//                                        "Unfortunatelly you can't have a discriminator class " +
+				//                                        "Unfortunately you can't have a discriminator class " +
 				//                                        "and a joined subclass at the same time - check type {0}", model.Type.FullName));
 				//}
 
