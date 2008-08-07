@@ -280,7 +280,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 					string originalRule = _rules[ target ];
 
 					if ( originalRule.StartsWith( "{" ) )
-						originalRule = originalRule.Substring( 1, originalRule.LastIndexOf( "}" ) );
+						originalRule = originalRule.Substring( 1, originalRule.LastIndexOf( "}" ) - 1 );
 
 					_rules[ target ] = string.Concat( "{ ", originalRule, ", ", rule, " }" );
 				}
