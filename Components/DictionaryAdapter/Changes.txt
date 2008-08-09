@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Added IDictionaryAdapterMeta mixin to all generated adapters to expose meta
+  data information.
+
 - Added DictionaryTypeKeyPrefixAttribute to use the interface type for scoping
 
 - Added DictionaryStringListAttribute to support delimited string conversion

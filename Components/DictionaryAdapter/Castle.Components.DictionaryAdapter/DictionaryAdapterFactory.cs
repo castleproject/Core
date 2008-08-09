@@ -144,6 +144,7 @@ namespace Castle.Components.DictionaryAdapter
 				moduleBuilder.DefineType(GetAdapterFullTypeName(type),
 				                         TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.BeforeFieldInit);
 			typeBuilder.AddInterfaceImplementation(type);
+			typeBuilder.AddInterfaceImplementation(typeof(IDictionaryAdapterMeta));
 
 			return typeBuilder;
 		}
@@ -164,6 +165,8 @@ namespace Castle.Components.DictionaryAdapter
 			                         descriptorField);
 
 			Dictionary<String, PropertyDescriptor> propertyMap = GetPropertyDescriptors(type);
+
+			CreateDictionaryAdapterMeta(typeBuilder, dictionaryField, propertyMapField, propertyMap);
 
 			foreach(KeyValuePair<String, PropertyDescriptor> descriptor in propertyMap)
 			{
@@ -219,6 +222,66 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		#endregion
+
+		private static void CreateDictionaryAdapterMeta(
+			TypeBuilder typeBuilder, FieldInfo dictionaryField,
+			FieldInfo propertyMapField, IDictionary<String, PropertyDescriptor> propertyMap)
+		{
+			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaDictionaryProp, dictionaryField);
+			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaPropertiesProp, propertyMapField);
+
+			MethodAttributes methodAttribs =
+				MethodAttributes.Private | MethodAttributes.HideBySig |
+				MethodAttributes.NewSlot | MethodAttributes.Virtual | MethodAttributes.Final;
+
+			MethodBuilder methodBuilder = typeBuilder.DefineMethod(
+				MetaFetchProperties.DeclaringType.FullName + "." + MetaFetchProperties.Name,
+				methodAttribs, MetaFetchProperties.ReturnType, null);
+
+			ILGenerator iLGenerator = methodBuilder.GetILGenerator();
+			foreach (PropertyDescriptor descriptor in propertyMap.Values)
+			{
+				iLGenerator.Emit(OpCodes.Ldarg_0);
+				iLGenerator.Emit(OpCodes.Call, descriptor.Property.GetGetMethod());
+				iLGenerator.Emit(OpCodes.Pop);
+			}
+			iLGenerator.Emit(OpCodes.Ret);
+
+			typeBuilder.DefineMethodOverride(methodBuilder, MetaFetchProperties);
+		}
+
+		private static void CreateDictionaryAdapterMetaProperty(
+			TypeBuilder typeBuilder, PropertyInfo metaProp, FieldInfo metaField)
+		{
+			MethodAttributes propAttribs =
+				MethodAttributes.Private | MethodAttributes.SpecialName |
+				MethodAttributes.HideBySig | MethodAttributes.NewSlot |
+				MethodAttributes.Virtual | MethodAttributes.Final;
+
+			PropertyBuilder propertyBuilder =
+				typeBuilder.DefineProperty(metaProp.Name,
+					metaProp.Attributes, metaProp.PropertyType, null);
+
+			MethodBuilder getMethodBuilder = typeBuilder.DefineMethod(
+				metaProp.DeclaringType.FullName + "." + metaProp.Name,
+				propAttribs, metaProp.PropertyType, null);
+
+			ILGenerator getILGenerator = getMethodBuilder.GetILGenerator();
+			if (metaField.IsStatic)
+			{
+				getILGenerator.Emit(OpCodes.Ldsfld, metaField);
+			}
+			else
+			{
+				getILGenerator.Emit(OpCodes.Ldarg_0);
+				getILGenerator.Emit(OpCodes.Ldfld, metaField);
+			}
+			getILGenerator.Emit(OpCodes.Ret);
+
+			typeBuilder.DefineMethodOverride(getMethodBuilder, metaProp.GetGetMethod());
+
+			propertyBuilder.SetGetMethod(getMethodBuilder);
+		}
 
 		#region CreateAdapterProperty
 
@@ -582,7 +645,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		#endregion
 
-		#region MethodInfo Cache
+		#region Reflection Cache
 
 		private static readonly MethodInfo DictionaryGetItem =
 			typeof(IDictionary).GetMethod("get_Item", new Type[] {typeof(Object)});
@@ -601,6 +664,15 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static readonly MethodInfo DescriptorSetValue =
 			typeof(PropertyDescriptor).GetMethod("SetPropertyValue");
+
+		private static readonly PropertyInfo MetaDictionaryProp =
+			typeof(IDictionaryAdapterMeta).GetProperty("Dictionary");
+
+		private static readonly PropertyInfo MetaPropertiesProp =
+			typeof(IDictionaryAdapterMeta).GetProperty("Properties");
+
+		private static readonly MethodInfo MetaFetchProperties =
+			typeof(IDictionaryAdapterMeta).GetMethod("FetchProperties");
 
 		#endregion
 	}

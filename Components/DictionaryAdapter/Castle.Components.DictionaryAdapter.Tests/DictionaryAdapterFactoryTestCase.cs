@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reflection;
-
 namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System;
@@ -21,7 +19,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Globalization;
+	using System.Reflection;
 	using NUnit.Framework;
+	using PropertyDescriptor = Castle.Components.DictionaryAdapter.PropertyDescriptor;
 
 	[TestFixture]
 	public class DictionaryAdapterFactoryTestCase
@@ -44,7 +44,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
-		public void CreateAdapter_AdaptingGenericInterface_Works() 
+		public void CreateAdapter_AdaptingGenericInterface_Works()
 		{
 			IItemContainer<IPerson> container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
 			Assert.IsNotNull(container);
@@ -92,7 +92,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("Craig", dictionary["Name"]);
 			Assert.AreEqual(37, dictionary["Age"]);
 			Assert.AreEqual(new DateTime(1970, 7, 19), dictionary["DOB"]);
-			Assert.AreEqual(0, ((IList<IPerson>) dictionary["Friends"]).Count);
+			Assert.AreEqual(0, ((IList<IPerson>)dictionary["Friends"]).Count);
 		}
 
 		[Test]
@@ -106,7 +106,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("Craig", dictionary["Name"]);
 			Assert.AreEqual(37, dictionary["Age"]);
 			Assert.AreEqual(new DateTime(1970, 7, 19), dictionary["DOB"]);
-			Assert.AreEqual(0, ((IList<IPerson>) dictionary["Friends"]).Count);
+			Assert.AreEqual(0, ((IList<IPerson>)dictionary["Friends"]).Count);
 		}
 
 		[Test]
@@ -151,7 +151,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapterAndRead_TypePrefix_Matches()
 		{
-			IPersonWithTypePrefixOverride person = 
+			IPersonWithTypePrefixOverride person =
 				factory.GetAdapter<IPersonWithTypePrefixOverride>(dictionary);
 			person.Height = 72;
 
@@ -585,19 +585,20 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		#region Safe type names
+
 		[Test]
-		public void GetSafeTypeName_NonGenericType_ReturnsTypeName() 
+		public void GetSafeTypeName_NonGenericType_ReturnsTypeName()
 		{
-			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof (Version));
+			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(Version));
 			Assert.AreEqual(typeof(Version).Name, name);
 			AssemblyName asmName = new AssemblyName(name);
 			Assert.AreEqual(name, asmName.Name);
 		}
 
 		[Test]
-    public void GetSafeTypeName_GenericType_ReturnsSafeName() 
+		public void GetSafeTypeName_GenericType_ReturnsSafeName()
 		{
-			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof (List<int>));
+			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(List<int>));
 			Assert.AreEqual("List_1_System_Int32", name);
 			AssemblyName asmName = new AssemblyName(name);
 			Assert.AreEqual(name, asmName.Name);
@@ -613,19 +614,19 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
-    public void GetSafeTypeName_GenericTypeWithMultipleParameters_ReturnsSafeName() 
+		public void GetSafeTypeName_GenericTypeWithMultipleParameters_ReturnsSafeName()
 		{
-			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof (Dictionary<int, string>));
+			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(Dictionary<int, string>));
 			Assert.AreEqual("Dictionary_2_System_Int32_System_String", name);
 			AssemblyName asmName = new AssemblyName(name);
 			Assert.AreEqual(name, asmName.Name);
 		}
 
 		[Test]
-    public void GetSafeTypeName_OpenGenericTypeWithMultipleParameters_ReturnsSafeName()
+		public void GetSafeTypeName_OpenGenericTypeWithMultipleParameters_ReturnsSafeName()
 		{
-      string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(Dictionary<,>));
-      Assert.AreEqual("Dictionary_2", name);
+			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(Dictionary<,>));
+			Assert.AreEqual("Dictionary_2", name);
 			AssemblyName asmName = new AssemblyName(name);
 			Assert.AreEqual(name, asmName.Name);
 		}
@@ -656,26 +657,66 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			AssemblyName asmName = new AssemblyName(name);
 			Assert.AreEqual(name, asmName.Name);
 		}
-    
-    [Test]
-    public void GetSafeTypeFullName_GenericTypeWithMultipleParameters_ReturnsSafeName()
+
+		[Test]
+		public void GetSafeTypeFullName_GenericTypeWithMultipleParameters_ReturnsSafeName()
 		{
-      string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(Dictionary<int,string>));
-      Assert.AreEqual("System.Collections.Generic.Dictionary_2_System_Int32_System_String", name);
+			string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(Dictionary<int, string>));
+			Assert.AreEqual("System.Collections.Generic.Dictionary_2_System_Int32_System_String", name);
 			AssemblyName asmName = new AssemblyName(name);
 			Assert.AreEqual(name, asmName.Name);
 		}
 
 		[Test]
-    public void GetSafeTypeFullName_OpenGenericTypeWithMultipleParameters_ReturnsSafeName()
+		public void GetSafeTypeFullName_OpenGenericTypeWithMultipleParameters_ReturnsSafeName()
 		{
-      string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(Dictionary<,>));
-      Assert.AreEqual("System.Collections.Generic.Dictionary_2", name);
+			string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(Dictionary<,>));
+			Assert.AreEqual("System.Collections.Generic.Dictionary_2", name);
 			AssemblyName asmName = new AssemblyName(name);
 			Assert.AreEqual(name, asmName.Name);
 		}
-		
+
 		#endregion
+
+		[Test]
+		public void CanObtainDictionaryAdapterMeta()
+		{
+			IDictionaryAdapterMeta meta = factory.GetAdapter<IPerson>(dictionary) as IDictionaryAdapterMeta;
+			Assert.AreSame(dictionary, meta.Dictionary);
+			Assert.AreEqual(8, meta.Properties.Count);
+		}
+
+		[Test]
+		public void DictionaryAdapterMetaIsExplicitImplementation()
+		{
+			IEnsureMetaDoesNotConflict i = factory.GetAdapter<IEnsureMetaDoesNotConflict>(dictionary);
+
+			i.Dictionary = "Hello";
+			i.Properties = 1;
+
+			Assert.AreEqual("Hello", dictionary["Dictionary"]);
+			Assert.AreEqual(1, dictionary["Properties"]);
+
+			IDictionaryAdapterMeta meta = i as IDictionaryAdapterMeta;
+			Assert.AreSame(dictionary, meta.Dictionary);
+			Assert.AreEqual(3, meta.Properties.Count);
+		}
+
+		[Test]
+		public void CanFetchPropertiesUsingDictionaryAdapterMeta()
+		{
+			CustomGetter getter = new CustomGetter();
+			PropertyDescriptor custom = new PropertyDescriptor().AddGetter(getter);
+			IDictionaryAdapterMeta meta = factory.GetAdapter(typeof(IPhone), dictionary, custom) as IDictionaryAdapterMeta;
+
+			Assert.AreEqual(0, getter.PropertiesFetched.Count);
+
+			meta.FetchProperties();
+
+			Assert.AreEqual(2, getter.PropertiesFetched.Count);
+			Assert.IsTrue(getter.PropertiesFetched.Contains("Number"));
+			Assert.IsTrue(getter.PropertiesFetched.Contains("Extension"));
+		}
 	}
 
 	public interface IPhone
@@ -690,7 +731,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		private string extension;
 
 		public Phone()
-		{	
+		{
 		}
 
 		public Phone(string number, string extension)
@@ -832,7 +873,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		IAddress BillingAddress { get; set; }
 	}
 
-	public interface IItemContainer<TItem> {
+	public interface IItemContainer<TItem>
+	{
 		TItem Item { get; set; }
 	}
 
@@ -921,7 +963,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	public class PhoneConverter : TypeConverter
 	{
 		public override bool CanConvertFrom(ITypeDescriptorContext context,
-		                                    Type sourceType)
+											Type sourceType)
 		{
 			if (sourceType == typeof(string))
 			{
@@ -931,24 +973,55 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		public override object ConvertFrom(ITypeDescriptorContext context,
-		                                   CultureInfo culture, object value)
+										   CultureInfo culture, object value)
 		{
 			if (value is string)
 			{
-				string[] fields = ((string) value).Split(new char[] {','});
+				string[] fields = ((string)value).Split(new char[] { ',' });
 				return new Phone(fields[0], fields[1]);
 			}
 			return base.ConvertFrom(context, culture, value);
 		}
 
 		public override object ConvertTo(ITypeDescriptorContext context,
-		                                 CultureInfo culture, object value, Type destinationType)
+										 CultureInfo culture, object value, Type destinationType)
 		{
 			if (destinationType == typeof(string))
 			{
-				return ((Phone) value).Number + "," + ((Phone) value).Extension;
+				return ((Phone)value).Number + "," + ((Phone)value).Extension;
 			}
 			return base.ConvertTo(context, culture, value, destinationType);
+		}
+	}
+
+	public interface IEnsureMetaDoesNotConflict
+	{
+		string Dictionary { get; set; }
+
+		object Properties { get; set; }
+
+		int FetchProperties { get; set; }
+	}
+
+	public class CustomGetter : DictionaryBehaviorAttribute, IDictionaryPropertyGetter
+	{
+		private List<string> propertiesFetched = new List<string>();
+
+		public IList<string> PropertiesFetched
+		{
+			get { return propertiesFetched; }
+		}
+
+		public void Reset()
+		{
+			propertiesFetched.Clear();
+		}
+
+		public object GetPropertyValue(IDictionaryAdapterFactory factory, IDictionary dictionary, string key,
+									   object storedValue, PropertyDescriptor property)
+		{
+			propertiesFetched.Add(key);
+			return storedValue;
 		}
 	}
 }
