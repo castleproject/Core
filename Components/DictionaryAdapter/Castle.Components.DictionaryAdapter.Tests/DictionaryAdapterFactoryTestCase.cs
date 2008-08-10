@@ -681,7 +681,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void CanObtainDictionaryAdapterMeta()
 		{
-			IDictionaryAdapterMeta meta = factory.GetAdapter<IPerson>(dictionary) as IDictionaryAdapterMeta;
+			IDictionaryAdapter meta = factory.GetAdapter<IPerson>(dictionary) as IDictionaryAdapter;
 			Assert.AreSame(dictionary, meta.Dictionary);
 			Assert.AreEqual(8, meta.Properties.Count);
 		}
@@ -697,7 +697,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("Hello", dictionary["Dictionary"]);
 			Assert.AreEqual(1, dictionary["Properties"]);
 
-			IDictionaryAdapterMeta meta = i as IDictionaryAdapterMeta;
+			IDictionaryAdapter meta = i as IDictionaryAdapter;
 			Assert.AreSame(dictionary, meta.Dictionary);
 			Assert.AreEqual(3, meta.Properties.Count);
 		}
@@ -707,7 +707,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			CustomGetter getter = new CustomGetter();
 			PropertyDescriptor custom = new PropertyDescriptor().AddGetter(getter);
-			IDictionaryAdapterMeta meta = factory.GetAdapter(typeof(IPhone), dictionary, custom) as IDictionaryAdapterMeta;
+			IDictionaryAdapter meta = factory.GetAdapter(typeof(IPhone), dictionary, custom) as IDictionaryAdapter;
 
 			Assert.AreEqual(0, getter.PropertiesFetched.Count);
 

@@ -80,7 +80,7 @@
     <Compile Include="Attributes\DictionaryKeyPrefixAttribute.cs" />
     <Compile Include="IDictionaryAdapterFactory.cs" />
     <Compile Include="IDictionaryPropertyGetter.cs" />
-    <Compile Include="IDictionaryAdapterMeta.cs" />
+    <Compile Include="IDictionaryAdapter.cs" />
     <Compile Include="NameValueCollectionAdapter.cs" />
     <Compile Include="PropertyDescriptor.cs" />
   </ItemGroup>

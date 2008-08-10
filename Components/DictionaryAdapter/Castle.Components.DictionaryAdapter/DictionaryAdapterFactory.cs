@@ -144,7 +144,7 @@ namespace Castle.Components.DictionaryAdapter
 				moduleBuilder.DefineType(GetAdapterFullTypeName(type),
 				                         TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.BeforeFieldInit);
 			typeBuilder.AddInterfaceImplementation(type);
-			typeBuilder.AddInterfaceImplementation(typeof(IDictionaryAdapterMeta));
+			typeBuilder.AddInterfaceImplementation(typeof(IDictionaryAdapter));
 
 			return typeBuilder;
 		}
@@ -666,13 +666,13 @@ namespace Castle.Components.DictionaryAdapter
 			typeof(PropertyDescriptor).GetMethod("SetPropertyValue");
 
 		private static readonly PropertyInfo MetaDictionaryProp =
-			typeof(IDictionaryAdapterMeta).GetProperty("Dictionary");
+			typeof(IDictionaryAdapter).GetProperty("Dictionary");
 
 		private static readonly PropertyInfo MetaPropertiesProp =
-			typeof(IDictionaryAdapterMeta).GetProperty("Properties");
+			typeof(IDictionaryAdapter).GetProperty("Properties");
 
 		private static readonly MethodInfo MetaFetchProperties =
-			typeof(IDictionaryAdapterMeta).GetMethod("FetchProperties");
+			typeof(IDictionaryAdapter).GetMethod("FetchProperties");
 
 		#endregion
 	}

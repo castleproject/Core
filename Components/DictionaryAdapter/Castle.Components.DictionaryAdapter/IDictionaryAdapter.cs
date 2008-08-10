@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Castle.Components.DictionaryAdapter
 {
-	public interface IDictionaryAdapterMeta
+	public interface IDictionaryAdapter
 	{
 		IDictionary Dictionary { get; }
 
