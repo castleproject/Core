@@ -29,6 +29,10 @@ namespace Castle.MonoRail.Views.AspView.Tests.Compiler.PreCompilationSteps
 		{
 			if (Internal.RegularExpressions.PageDirective.IsMatch(viewSource))
 				Assert.Fail("Page directive was not removed from view source");
+
+			if (Internal.RegularExpressions.MasterPageDirective.IsMatch(viewSource))
+				Assert.Fail("Master directive was not removed from view source");
+
 		}
 
 		[Test]
@@ -85,6 +89,18 @@ view content";
       AssertPageDirectiveHasBeenRemoved(file.RenderBody);
     }
 
+		[Test]
+		public void Process_WhenUsingDefaultAndGenericTypedView_SetsDefaultAndGenericView_EvenForMasterDirective() {
+			file.RenderBody = @"
+<%@ Master Language=""C#"" Inherits=""Castle.MonoRail.Views.AspView.ViewAtDesignTime<IView<Item>>"" %>
+view content";
+			step.Process(file);
+
+			Assert.AreEqual(DetermineBaseClassStep.DefaultBaseClassName + "<IView<Item>>", file.BaseClassName);
+			Assert.AreEqual("IView<Item>", file.TypedViewName);
+
+			AssertPageDirectiveHasBeenRemoved(file.RenderBody);
+		}
 
 		[Test]
 		public void Process_WhenUsingClassName_SetsClassName()
@@ -146,6 +162,35 @@ view content";
 		{
 			file.RenderBody = @"
 <%@ Page Language=""C#"" Inherits=""SomeClassAtDesignTime<IView>"" %>
+view content";
+			step.Process(file);
+
+			Assert.AreEqual("SomeClass<IView>", file.BaseClassName);
+			Assert.AreEqual("IView", file.TypedViewName);
+
+			AssertPageDirectiveHasBeenRemoved(file.RenderBody);
+		}
+		
+		[Test]
+		public void Process_IsInsensitiveToMasterPageFileAttributePresence()
+		{
+			file.RenderBody = @"
+<%@ page language=""c#"" Inherits=""SomeClassAtDesignTime<IView>"" masterpagefile=""~/layouts/default.master""%>
+view content
+";
+			step.Process(file);
+
+			Assert.AreEqual("SomeClass<IView>", file.BaseClassName);
+			Assert.AreEqual("IView", file.TypedViewName);
+
+			AssertPageDirectiveHasBeenRemoved(file.RenderBody);
+		}
+
+		[Test]
+		public void ProcessWhenUsingClassNameAtDesignTimeAndTypedView_SetsClassNameAndView_WithMasterDirective() 
+		{
+			file.RenderBody = @"
+<%@ master Language=""C#"" Inherits=""SomeClassAtDesignTime<IView>"" %>
 view content";
 			step.Process(file);
 

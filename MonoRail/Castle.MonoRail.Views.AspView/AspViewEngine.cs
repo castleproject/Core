@@ -159,6 +159,11 @@ namespace Castle.MonoRail.Views.AspView
 			get { return "aspx"; }
 		}
 
+		private string LayoutFileExtension
+		{
+			get { return "master"; }
+		}
+
 		#region NJS
 		public override string JSGeneratorFileExtension
 		{
@@ -216,7 +221,7 @@ namespace Castle.MonoRail.Views.AspView
 			string layoutTemplate = "layouts\\" + layoutName;
 			if (layoutName.StartsWith("\\"))
 				layoutTemplate = layoutName;
-			string layoutFileName = GetFileName(layoutTemplate);
+			string layoutFileName = GetLayoutFileName(layoutTemplate);
 			return GetView(layoutFileName, output, context, controller, controllerContext);
 		}
 
@@ -236,6 +241,11 @@ namespace Castle.MonoRail.Views.AspView
 		private string GetFileName(string templateName)
 		{
 			return templateName + "." + ViewFileExtension;
+		}
+
+		private string GetLayoutFileName(string layoutTemplateName)
+		{
+			return layoutTemplateName + "." + LayoutFileExtension;
 		}
 
 		private void CacheViewType(Type viewType)

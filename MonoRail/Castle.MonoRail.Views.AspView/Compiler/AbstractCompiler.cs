@@ -31,6 +31,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 		protected IPreProcessor preProcessor;
 		protected ICodeProviderAdapter codeProvider;
 		const string AssemblyAttributeAllowPartiallyTrustedCallers = "[assembly: System.Security.AllowPartiallyTrustedCallers]";
+		internal const string ViewSourceFileExtension = ".aspview.cs";
 
 		protected AbstractCompiler(ICodeProviderAdapterFactory codeProviderAdapterFactory, IPreProcessor preProcessor, ICompilationContext context, AspViewCompilerOptions options)
 		{

@@ -76,7 +76,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 
 		public string FileName
 		{
-			get { return ClassName + ".cs"; }
+			get { return ClassName + AbstractCompiler.ViewSourceFileExtension; }
 		}
 
 		public StringSet Imports

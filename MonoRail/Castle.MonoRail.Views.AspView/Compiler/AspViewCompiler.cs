@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 		private static readonly string defaultSiteRoot = AppDomain.CurrentDomain.BaseDirectory;
 		const string AssemblyAttributeAllowPartiallyTrustedCallers = "[assembly: System.Security.AllowPartiallyTrustedCallers]";
 		const string AllowPartiallyTrustedCallersFileName = "AllowPartiallyTrustedCallers.generated.cs";
-
+		internal const string ViewSourceFileExtension = ".aspview.csharp";
 		private string pathToAssembly = null;
 		private Assembly assembly = null;
 
@@ -131,7 +131,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 
 			if (options.KeepTemporarySourceFiles)
 			{
-				results = codeProvider.CompileAssemblyFromFile(parameters, Directory.GetFiles(targetTemporarySourceFilesDirectory, "*.cs", SearchOption.TopDirectoryOnly));
+				results = codeProvider.CompileAssemblyFromFile(parameters, Directory.GetFiles(targetTemporarySourceFilesDirectory, String.Format("*{0}",AspViewCompiler.ViewSourceFileExtension), SearchOption.TopDirectoryOnly));
 			}
 			else
 			{
@@ -153,11 +153,16 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 		{
 			List<SourceFile> files = new List<SourceFile>();
 			string viewsDirectory = Path.Combine(siteRoot, "Views");
+			string layoutsDirectory = Path.Combine(viewsDirectory, "layouts");
 
 			if (!Directory.Exists(viewsDirectory))
 				throw new Exception(string.Format("Could not find views folder [{0}]", viewsDirectory));
 
-			string[] fileNames = Directory.GetFiles(viewsDirectory, "*.aspx", SearchOption.AllDirectories);
+			List<string> fileNames = new List<string>();
+
+			fileNames.AddRange(Directory.GetFiles(viewsDirectory, "*.aspx", SearchOption.AllDirectories));
+			fileNames.AddRange(Directory.GetFiles(layoutsDirectory, "*.master", SearchOption.AllDirectories));
+		
 			foreach (string fileName in fileNames)
 			{
 				SourceFile file = new SourceFile();
@@ -210,7 +215,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 
 		private static void DeleteFilesIn(string directory)
 		{
-			foreach (string fileName in Directory.GetFiles(directory, "*.cs", SearchOption.TopDirectoryOnly))
+			foreach (string fileName in Directory.GetFiles(directory, String.Format("*{0}", ViewSourceFileExtension), SearchOption.TopDirectoryOnly))
 			{
 				File.Delete(fileName);
 			}

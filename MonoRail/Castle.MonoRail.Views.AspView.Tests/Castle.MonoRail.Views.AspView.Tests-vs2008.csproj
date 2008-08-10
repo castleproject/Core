@@ -58,10 +58,12 @@
     <Compile Include="Compiler\MarkupTransformers\InlineOutputDirectiveMarkupTransformerTestFixture.cs" />
     <Compile Include="Compiler\MarkupTransformers\SiteRootMarkupTransformerTestFixture.cs" />
     <Compile Include="Compiler\PreCompilationSteps\AbstractPreCompilationStepTestFixture.cs" />
+    <Compile Include="Compiler\PreCompilationSteps\ContentSubstitutionStepTestFixture.cs" />
     <Compile Include="Compiler\PreCompilationSteps\DefaultStepsProviderIntegrationTestFixture.cs" />
     <Compile Include="Compiler\PreCompilationSteps\DetermineBaseClassStepTestFixture.cs" />
     <Compile Include="Compiler\PreCompilationSteps\EmbededServerScriptStepTestFixture.cs" />
     <Compile Include="Compiler\PreCompilationSteps\ImportStatementsStepTestFixture.cs" />
+    <Compile Include="Compiler\PreCompilationSteps\LayoutContentPlaceHolderSubstitutionStepTestFixture.cs" />
     <Compile Include="Compiler\PreCompilationSteps\MarkupTransformationsStepTestFixture.cs" />
     <Compile Include="Compiler\PreCompilationSteps\ProcessPropertiesStepTestFixture.cs" />
     <Compile Include="Compiler\PreCompilationSteps\ProcessServerScriptPropertiesStepTestFixture.cs" />

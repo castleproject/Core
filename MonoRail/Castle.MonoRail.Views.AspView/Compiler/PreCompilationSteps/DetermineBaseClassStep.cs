@@ -32,6 +32,15 @@ namespace Castle.MonoRail.Views.AspView.Compiler.PreCompilationSteps
 					file.BaseClassName += "<" + file.TypedViewName + ">";
 				return string.Empty;
 			}, 1);
+
+			file.RenderBody = Internal.RegularExpressions.MasterPageDirective.Replace(file.RenderBody, delegate(Match match)
+			{
+				file.BaseClassName = GetBaseClass(match.Groups["base"]);
+				file.TypedViewName = GetTypedViewName(match.Groups["view"]);
+				if (file.TypedViewName != null)
+					file.BaseClassName += "<" + file.TypedViewName + ">";
+				return string.Empty;
+			}, 1);
 		}
 
 		private static string GetTypedViewName(Capture view)

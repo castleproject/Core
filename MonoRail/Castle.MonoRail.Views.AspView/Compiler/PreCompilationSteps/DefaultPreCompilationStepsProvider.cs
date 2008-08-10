@@ -35,6 +35,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler.PreCompilationSteps
 				new MarkupTransformationsStep(),
 				new SubViewTagsStep(),
 				new ViewFilterTagsStep(),
+				new FakeMasterPageDesignSupportStep(),
 				new ViewComponentTagsStep(),
 				new EmbededServerScriptStep(),
 				new ProcessViewBodyStep(),

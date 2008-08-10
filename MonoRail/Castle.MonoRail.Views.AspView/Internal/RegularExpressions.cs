@@ -20,6 +20,8 @@ namespace Castle.MonoRail.Views.AspView.Internal
 	{
 		public static readonly Regex PageDirective = new Regex(
 @"<%@\s*Page\s+Language\s*=\s*""c#""(?:\s+Inherits\s*=\s*""(?<base>[\w.]+)(?:<(?<view>[\w.<>]+)>)?\s*"")?.*%>\s*\n", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		public static readonly Regex MasterPageDirective = new Regex(
+@"<%@\s*Master\s+Language\s*=\s*""c#""(?:\s+Inherits\s*=\s*""(?<base>[\w.]+)(?:<(?<view>[\w.<>]+)>)?\s*"")?.*%>\s*\n", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		public static readonly Regex ImportDirective = new Regex(
 @"<%@\s*Import\s+Namespace\s*=\s*""(?<namespace>[\w.]+)""\s*%>\s*\n", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -71,6 +73,10 @@ namespace Castle.MonoRail.Views.AspView.Internal
 
 		public static readonly Regex ServerSideComment = new Regex(
 @"<%--(?<content>((?!--%>).)*)--%>", RegexOptions.Compiled | RegexOptions.Singleline);
+
+		public static readonly Regex LayoutContentPlaceHolder = new Regex(@"<asp:contentplaceholder(\s)*" + attributesBlock + @"(/>|>(\s)*</asp:contentplaceholder>)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+		public static readonly Regex ContentTag = new Regex(@"<asp:content(\s)+" + attributesBlock + @"(\s)*>(?<content>((?!</asp:content>)(\s|.))*)</asp:content>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 	}
 
 }

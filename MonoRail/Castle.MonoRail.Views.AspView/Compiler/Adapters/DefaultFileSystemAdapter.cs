@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler.Adapters
 		public void Delete(string fileName)
 		{
 			if (File.Exists(fileName))
-                File.Delete(fileName);
+				File.Delete(fileName);
 		}
 
 		public void Create(DirectoryInfo directory)
@@ -37,7 +37,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler.Adapters
 
 		public void ClearSourceFilesFrom(DirectoryInfo directory)
 		{
-			foreach (FileInfo file in directory.GetFiles("*.cs"))
+			foreach (FileInfo file in directory.GetFiles("*"+AbstractCompiler.ViewSourceFileExtension))
 			{
 				file.Delete();
 			}
@@ -50,7 +50,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler.Adapters
 
 		public string[] GetSourceFilesFrom(DirectoryInfo directory)
 		{
-			return Directory.GetFiles(directory.FullName, "*.cs", SearchOption.TopDirectoryOnly);
+			return Directory.GetFiles(directory.FullName, "*" + AbstractCompiler.ViewSourceFileExtension, SearchOption.TopDirectoryOnly);
 		}
 	}
 }
