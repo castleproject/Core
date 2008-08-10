@@ -10,6 +10,8 @@ namespace Castle.Components.DictionaryAdapter
 
 		IDictionary<String, PropertyDescriptor> Properties { get; }
 
+		IDictionaryAdapterFactory Factory { get; }
+
 		void FetchProperties();
 	}
 }

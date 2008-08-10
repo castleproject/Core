@@ -166,7 +166,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			Dictionary<String, PropertyDescriptor> propertyMap = GetPropertyDescriptors(type);
 
-			CreateDictionaryAdapterMeta(typeBuilder, dictionaryField, propertyMapField, propertyMap);
+			CreateDictionaryAdapterMeta(typeBuilder, dictionaryField, propertyMapField, factoryField, propertyMap);
 
 			foreach(KeyValuePair<String, PropertyDescriptor> descriptor in propertyMap)
 			{
@@ -225,10 +225,12 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static void CreateDictionaryAdapterMeta(
 			TypeBuilder typeBuilder, FieldInfo dictionaryField,
-			FieldInfo propertyMapField, IDictionary<String, PropertyDescriptor> propertyMap)
+			FieldInfo propertyMapField, FieldInfo factoryField, 
+			IDictionary<String, PropertyDescriptor> propertyMap)
 		{
 			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaDictionaryProp, dictionaryField);
 			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaPropertiesProp, propertyMapField);
+			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaFactoryProp, factoryField);
 
 			MethodAttributes methodAttribs =
 				MethodAttributes.Private | MethodAttributes.HideBySig |
@@ -670,6 +672,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static readonly PropertyInfo MetaPropertiesProp =
 			typeof(IDictionaryAdapter).GetProperty("Properties");
+
+		private static readonly PropertyInfo MetaFactoryProp =
+			typeof(IDictionaryAdapter).GetProperty("Factory");
 
 		private static readonly MethodInfo MetaFetchProperties =
 			typeof(IDictionaryAdapter).GetMethod("FetchProperties");

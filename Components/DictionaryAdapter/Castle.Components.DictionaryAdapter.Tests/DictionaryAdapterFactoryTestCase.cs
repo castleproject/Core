@@ -683,6 +683,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			IDictionaryAdapter meta = factory.GetAdapter<IPerson>(dictionary) as IDictionaryAdapter;
 			Assert.AreSame(dictionary, meta.Dictionary);
+			Assert.AreSame(factory, meta.Factory);
 			Assert.AreEqual(8, meta.Properties.Count);
 		}
 
