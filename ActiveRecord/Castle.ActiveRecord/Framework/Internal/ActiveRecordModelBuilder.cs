@@ -190,11 +190,21 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			foreach (FieldInfo field in fields)
 			{
-				if (field.IsDefined(typeof(FieldAttribute), false))
+				foreach (object attribute in field.GetCustomAttributes(false))
 				{
-					FieldAttribute fieldAtt = field.GetCustomAttributes(typeof(FieldAttribute), false)[0] as FieldAttribute;
+					if (attribute is FieldAttribute)
+					{
+						FieldAttribute fieldAtt = (FieldAttribute)attribute;
 
-					model.Fields.Add(new FieldModel(field, fieldAtt));
+						model.Fields.Add(new FieldModel(field, fieldAtt));
+					}
+					else if (attribute is CompositeUserTypeAttribute)
+					{
+						CompositeUserTypeAttribute fieldAtt = attribute as CompositeUserTypeAttribute;
+						fieldAtt.Access = PropertyAccess.Field;
+
+						model.CompositeUserType.Add(new CompositeUserTypeModel(field, field.FieldType, fieldAtt));
+					}
 				}
 
 				if (extension != null)
@@ -475,7 +485,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						CompositeUserTypeAttribute propAtt = attribute as CompositeUserTypeAttribute;
 						isArProperty = true;
 
-						model.CompositeUserType.Add(new CompositeUserTypeModel(prop, propAtt));
+						model.CompositeUserType.Add(new CompositeUserTypeModel(prop, prop.PropertyType, propAtt));
 					}
 
 					if (attribute is CollectionIDAttribute)

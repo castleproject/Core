@@ -34,7 +34,8 @@ namespace Castle.ActiveRecord.Tests
 
 			c.Name = new string[] {"Jonh", "Doe"};
 			c.ManufacturerName = new string[] {"Acme", "Inc"};
-			c.InventorsName = new string[]{"Emmet", "Brown"};
+			c.InventorsName = new string[] {"Emmet", "Brown"};
+			c.SellersName = new string[] { "Big", "Tex"};
 
 			c.Create();
 
@@ -46,6 +47,8 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual("Acme", loaded.ManufacturerName[0]);
 			Assert.AreEqual("Emmet", loaded.InventorsName[0]);
 			Assert.AreEqual("Brown", loaded.InventorsName[1]);
+			Assert.AreEqual("Big", loaded.SellersName[0]);
+			Assert.AreEqual("Tex", loaded.SellersName[1]);
 		}
 
 		[Test]

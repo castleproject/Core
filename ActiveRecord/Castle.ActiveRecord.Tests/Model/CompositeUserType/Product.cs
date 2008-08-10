@@ -28,6 +28,9 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeUserType
 		private string[] name;
 		private string[] manufacturerName;
 		private string[] inventorsName;
+		[CompositeUserType(typeof(DoubleStringType), 
+			new string[] { "Seller_FirstName", "Seller_LastName" })]
+		public string[] SellersName;
 		
 		[PrimaryKey()]
 		public int Id

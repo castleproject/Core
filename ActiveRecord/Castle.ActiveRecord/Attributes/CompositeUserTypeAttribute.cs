@@ -45,7 +45,7 @@ namespace Castle.ActiveRecord
 	///		}
 	/// </code>
 	/// </example>
-	[AttributeUsage(AttributeTargets.Property), Serializable]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field), Serializable]
 	public class CompositeUserTypeAttribute : WithAccessAttribute
 	{
 		private Type compositeType;

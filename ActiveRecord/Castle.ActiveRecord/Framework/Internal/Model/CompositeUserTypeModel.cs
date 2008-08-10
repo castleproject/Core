@@ -14,6 +14,7 @@
 
 namespace Castle.ActiveRecord.Framework.Internal
 {
+	using System;
 	using System.Reflection;
 
 	/// <summary>
@@ -21,27 +22,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// </summary>
 	public class CompositeUserTypeModel : IVisitable
 	{
-		private readonly PropertyInfo prop;
+		private readonly MemberInfo member;
+		private readonly Type memberType;
 		private readonly CompositeUserTypeAttribute attribute;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CompositeUserTypeModel"/> class.
 		/// </summary>
-		/// <param name="prop">The property marked with the attribute.</param>
+		/// <param name="member">The member marked with the attribute.</param>
+		/// <param name="memberType">The type of member marked with the attribute.</param>
 		/// <param name="attribute">The metadata attribute.</param>
-		public CompositeUserTypeModel(PropertyInfo prop, CompositeUserTypeAttribute attribute)
+		public CompositeUserTypeModel(MemberInfo member, Type memberType, CompositeUserTypeAttribute attribute)
 		{
-			this.prop = prop;
+			this.member = member;
+			this.memberType = memberType;
 			this.attribute = attribute;
 		}
 
 		/// <summary>
-		/// Gets the property marked with the attribute.
+		/// Gets the member marked with the attribute.
 		/// </summary>
-		/// <value>The property.</value>
-		public PropertyInfo Property
+		/// <value>The member.</value>
+		public MemberInfo Member
 		{
-			get { return prop; }
+			get { return member; }
+		}
+
+		/// <summary>
+		/// Gets the type of member marked with the attribute.
+		/// </summary>
+		/// <value>The member.</value>
+		public Type MemberType
+		{
+			get { return memberType; }
 		}
 
 		/// <summary>

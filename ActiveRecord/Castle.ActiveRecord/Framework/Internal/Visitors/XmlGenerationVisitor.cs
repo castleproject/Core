@@ -792,7 +792,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			CompositeUserTypeAttribute attribute = model.Attribute;
 			BeginWriteProperty(attribute.AccessString, MakeTypeName(attribute.CompositeType), null, attribute.Insert,
-			                   model.Property.Name, model.Property.PropertyType, attribute.Update);
+			                   model.Member.Name, model.MemberType, attribute.Update);
 
 			Ident();
 
