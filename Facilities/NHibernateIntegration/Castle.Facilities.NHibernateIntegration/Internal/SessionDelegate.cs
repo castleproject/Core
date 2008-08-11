@@ -1178,6 +1178,15 @@ namespace Castle.Facilities.NHibernateIntegration
 			get { return inner.Statistics; }
 		}
 
+		/// <summary>
+		/// Gets the active entity mode.
+		/// </summary>
+		/// <value>The active entity mode.</value>
+		public EntityMode ActiveEntityMode
+		{
+			get { return inner.ActiveEntityMode; }
+		}
+
 		#endregion
 
 		#region Dispose delegation

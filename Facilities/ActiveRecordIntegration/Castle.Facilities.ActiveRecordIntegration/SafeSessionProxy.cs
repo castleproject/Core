@@ -1125,6 +1125,15 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		}
 
 		/// <summary>
+		/// Gets the active entity mode.
+		/// </summary>
+		/// <value>The active entity mode.</value>
+		public EntityMode ActiveEntityMode
+		{
+			get { return innerSession.ActiveEntityMode; }
+		}
+
+		/// <summary>
 		/// Completely clear the session. Evict all loaded instances and cancel all pending
 		/// saves, updates and deletions. Do not close open enumerables or instances of
 		/// <c>ScrollableResults</c>.
