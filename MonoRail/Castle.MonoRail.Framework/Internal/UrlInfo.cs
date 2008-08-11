@@ -125,6 +125,21 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Gets the subdomain.
+		/// </summary>
+		/// <value>The subdomain.</value>
+		public string FullDomain
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(subdomain))
+					return subdomain + "." + domain;
+				else
+					return domain;
+			}
+		}
+
+		/// <summary>
 		/// Gets the URL raw.
 		/// </summary>
 		/// <value>The URL raw.</value>

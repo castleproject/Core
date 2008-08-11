@@ -85,7 +85,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public UrlInfo TokenizeUrl(string rawUrl, string pathInfo, Uri uri, bool isLocal, string appVirtualDir)
 		{
-			if (rawUrl == null || rawUrl.Length == 0)
+			if (string.IsNullOrEmpty(rawUrl))
 			{
 				throw new ArgumentNullException("rawUrl", "rawUrl cannot be null or empty");
 			}

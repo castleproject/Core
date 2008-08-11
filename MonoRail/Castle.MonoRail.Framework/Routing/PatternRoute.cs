@@ -162,7 +162,7 @@ namespace Castle.MonoRail.Framework.Routing
 				}
 			}
 
-			if (text.Length == 0 || text[text.Length - 1] == '/' || text[text.Length - 1] == '.')
+			if (text.Length > 1 && (text[text.Length - 1] == '/' || text[text.Length - 1] == '.'))
 			{
 				text.Length = text.Length - 1;
 			}
