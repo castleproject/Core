@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,40 +14,23 @@
 
 namespace Castle.Facilities.EventWiring.Tests.Model
 {
-	using System;
-	using Castle.Core;
+	using Castle.Core.Interceptor;
+	using Core;
 
-	public class SimplePublisher : IStartable
+	[Singleton]
+	public class MyInterceptor : IInterceptor
 	{
-		public event PublishEventHandler Event;
+		private int intercepted = 0;
 
-		public static event PublishEventHandler StaticEvent;
-
-		public virtual void Trigger()
+		public void Intercept(IInvocation invocation)
 		{
-			if (Event != null)
-			{
-				Event(this, new EventArgs()); 
-			}
+			intercepted++;
+			invocation.Proceed();
 		}
 
-		public virtual void StaticTrigger()
+		public int Intercepted
 		{
-			if (StaticEvent != null)
-			{
-				StaticEvent(this, new EventArgs()); 
-			}
-		}
-
-
-		public virtual void Start()
-		{
-			
-		}
-
-		public virtual void Stop()
-		{
-			
+			get { return intercepted; }
 		}
 	}
 }
