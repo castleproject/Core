@@ -252,11 +252,11 @@ namespace Castle.Facilities.EventWiring
 
 		private void StartAndWirePublisherSubscribers(ComponentModel model, object publisher)
 		{
-			IDictionary subscribers = (IDictionary)model.ExtendedProperties[SubscriberList];
+			IDictionary subscribers = (IDictionary) model.ExtendedProperties[SubscriberList];
 
 			if (subscribers == null) return;
 
-			foreach (DictionaryEntry subscriberInfo in subscribers)
+			foreach(DictionaryEntry subscriberInfo in subscribers)
 			{
 				string subscriberKey = (string) subscriberInfo.Key;
 				
@@ -278,9 +278,9 @@ namespace Castle.Facilities.EventWiring
 					throw new EventWiringException("Failed to start subscriber " + subscriberKey, ex);
 				}
 
-				Type publisherType = model.Implementation;
+				Type publisherType = publisher.GetType();
 				
-				foreach (WireInfo wireInfo in wireInfoList)
+				foreach(WireInfo wireInfo in wireInfoList)
 				{
 					String eventName = wireInfo.EventName;
 
