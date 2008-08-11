@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied Gauthier Segay's patch fixing CONTRIB-ISSUE-116
+  (AspView) allow the use of .master files in the layouts viewtemplate's folder
+
 - Added additional path support to the view engine configuration
 
    <viewEngine 
