@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Views.AspView.Tests.RenderingTests
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
 	using Core.Logging;
@@ -103,7 +104,10 @@ namespace Castle.MonoRail.Views.AspView.Tests.RenderingTests
 					new DirectoryInfo(siteRoot),
 					new DirectoryInfo(Path.Combine(siteRoot, "RenderingTests\\Views")),
 					new DirectoryInfo(siteRoot));
-			viewEngine.Initialize(context, options);
+
+			List<ICompilationContext> compilationContexts = new List<ICompilationContext>();
+			compilationContexts.Add(context);
+			viewEngine.Initialize(compilationContexts, options);
 		}
 
 		public string ProcessView(string templatePath)

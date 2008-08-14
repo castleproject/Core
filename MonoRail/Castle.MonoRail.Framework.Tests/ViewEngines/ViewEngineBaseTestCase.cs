@@ -151,6 +151,14 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 
 		/// <summary>
+		/// Gets a list of assembly sources
+		/// </summary>
+		public IList PathSources
+		{
+			get { throw new System.NotImplementedException(); }
+		}
+
+		/// <summary>
 		/// Adds the assembly source.
 		/// </summary>
 		/// <param name="assemblySourceInfo">The assembly source info.</param>

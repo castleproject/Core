@@ -168,11 +168,21 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Gets a list of path sources
+		/// </summary>
+		/// <value></value>
+		public IList PathSources
+		{
+			get { return additionalPathSources; }
+		}
+
+		/// <summary>
 		/// Adds the path source.
 		/// </summary>
 		/// <param name="pathSource">The path source.</param>
+		/// <remarks>The path is assumed to be relative to the AppDoamin BaseDirectory.</remarks>
 		public void AddPathSource(string pathSource) {
-			additionalPathSources.Add(pathSource);
+			additionalPathSources.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathSource));
 		}
 		
 		/// <summary>

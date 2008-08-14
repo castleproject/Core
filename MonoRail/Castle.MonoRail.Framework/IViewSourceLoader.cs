@@ -66,6 +66,11 @@ namespace Castle.MonoRail.Framework
 		IList AssemblySources { get; }
 
 		/// <summary>
+		/// Gets a list of assembly sources
+		/// </summary>
+		IList PathSources { get; }
+
+		/// <summary>
 		/// Adds the assembly source.
 		/// </summary>
 		/// <param name="assemblySourceInfo">The assembly source info.</param>

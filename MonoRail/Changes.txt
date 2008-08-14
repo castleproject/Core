@@ -1,9 +1,12 @@
 1.0
 ===
 
+- The path supplied in <path location="" /> is now relative to the site root.
+  ASPView engine supports loading and recompiling views from different view locations	
+
 - Applied Gauthier Segay's patch fixing CONTRIB-ISSUE-116
   (AspView) allow the use of .master files in the layouts viewtemplate's folder
-
+  
 - Added additional path support to the view engine configuration
 
    <viewEngine 

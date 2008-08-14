@@ -30,7 +30,8 @@ namespace Castle.MonoRail.Views.AspView
 
 	public class AspViewEngine : ViewEngineBase, IInitializable, IAspViewEngineTestAccess
 	{
-		ICompilationContext compilationContext;
+		private List<ICompilationContext> compilationContexts = new List<ICompilationContext>();
+	
 		private IMonoRailConfiguration monoRailConfiguration;
 		static bool needsRecompiling;
 		static AspViewEngineOptions options;
@@ -47,19 +48,19 @@ namespace Castle.MonoRail.Views.AspView
 		{
 			ViewSourceLoader = viewSourceLoader;
 		}
-		void IAspViewEngineTestAccess.SetCompilationContext(ICompilationContext context)
+		void IAspViewEngineTestAccess.SetCompilationContext(List<ICompilationContext> contexts)
 		{
-			compilationContext = context;
+			compilationContexts = contexts;
 		}
 
 		#endregion
 
 		#region IInitializable Members
 
-		public void Initialize(ICompilationContext context, AspViewEngineOptions newOptions)
+		public void Initialize(List<ICompilationContext> contexts, AspViewEngineOptions newOptions)
 		{
 			options = newOptions;
-			compilationContext = context;
+			compilationContexts = contexts;
 			Initialize();
 		}
 
@@ -68,13 +69,24 @@ namespace Castle.MonoRail.Views.AspView
 			if (options == null)
 				InitializeConfig();
 
-			if (compilationContext == null)
+			if (compilationContexts.Count == 0)
 			{
 				string siteRoot = AppDomain.CurrentDomain.BaseDirectory;
-				compilationContext = new WebCompilationContext(
-					monoRailConfiguration,
-					new DirectoryInfo(siteRoot), 
-					new DirectoryInfo(options.CompilerOptions.TemporarySourceFilesDirectory));
+				
+				compilationContexts.Add(
+					new WebCompilationContext(
+						monoRailConfiguration.ViewEngineConfig.ViewPathRoot,
+						new DirectoryInfo(siteRoot), 
+						new DirectoryInfo(options.CompilerOptions.TemporarySourceFilesDirectory)));
+
+				foreach (string path in monoRailConfiguration.ViewEngineConfig.PathSources) 
+				{
+					compilationContexts.Add(
+						new WebCompilationContext(
+							path,
+							new DirectoryInfo(siteRoot),
+							new DirectoryInfo(options.CompilerOptions.TemporarySourceFilesDirectory)));
+				}
 			}
 
 			LoadCompiledViews();
@@ -227,15 +239,18 @@ namespace Castle.MonoRail.Views.AspView
 
 		protected virtual void CompileViewsInMemory()
 		{
-			OnlineCompiler compiler = new OnlineCompiler(
-				new CSharpCodeProviderAdapterFactory(),
-				new PreProcessor(), 
-				compilationContext,
-                options.CompilerOptions);
-
 			compilations.Clear();
 
-			LoadCompiledViewsFrom(compiler.Execute());
+			foreach (ICompilationContext compilationContext in compilationContexts) 
+			{
+				OnlineCompiler compiler = new OnlineCompiler(
+					new CSharpCodeProviderAdapterFactory(),
+					new PreProcessor(),
+					compilationContext,
+					options.CompilerOptions);
+
+				LoadCompiledViewsFrom(compiler.Execute());
+			}
 		}
 
 		private string GetFileName(string templateName)
@@ -262,7 +277,14 @@ namespace Castle.MonoRail.Views.AspView
 			}
 			compilations.Clear();
 
-			string[] viewAssemblies = Directory.GetFiles(Path.Combine(compilationContext.SiteRoot.FullName, "bin"), "*CompiledViews.dll", SearchOption.TopDirectoryOnly);
+			List<string> viewAssemblies = new List<string>();
+
+			foreach (ICompilationContext compilationContext in compilationContexts) {
+				viewAssemblies.AddRange(
+					Directory.GetFiles(Path.Combine(compilationContext.SiteRoot.FullName, "bin"), "*CompiledViews.dll",
+									   SearchOption.TopDirectoryOnly)
+					);
+			}
 
 			foreach (string assembly in viewAssemblies)
 			{

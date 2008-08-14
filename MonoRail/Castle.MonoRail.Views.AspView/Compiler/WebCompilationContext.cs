@@ -16,14 +16,18 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 {
 	using System.IO;
 	
-	using Framework.Configuration;
-
 	public class WebCompilationContext : CompilationContext
 	{
-		public WebCompilationContext(IMonoRailConfiguration monoRailConfiguration, DirectoryInfo siteRoot, DirectoryInfo temporarySourceFilesDirectory) : base(
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WebCompilationContext"/> class.
+		/// </summary>
+		/// <param name="viewPathRoot">The view path root.</param>
+		/// <param name="siteRoot">The site root.</param>
+		/// <param name="temporarySourceFilesDirectory">The temporary source files directory.</param>
+		public WebCompilationContext(string viewPathRoot, DirectoryInfo siteRoot, DirectoryInfo temporarySourceFilesDirectory) : base(
 			siteRoot.GetDirectories("bin")[0], 
 			siteRoot,
-			new DirectoryInfo(Path.Combine(siteRoot.FullName, monoRailConfiguration.ViewEngineConfig.ViewPathRoot)),
+			new DirectoryInfo(Path.Combine(siteRoot.FullName, viewPathRoot)),
 			temporarySourceFilesDirectory)
 		{
 		}

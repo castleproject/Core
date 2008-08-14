@@ -15,13 +15,14 @@
 namespace Castle.MonoRail.Views.AspView
 {
 	using System.Collections;
-    using Framework;
+	using System.Collections.Generic;
+	using Framework;
     using Compiler;
 
 	public interface IAspViewEngineTestAccess
 	{
 		Hashtable Compilations { get; }
 		void SetViewSourceLoader(IViewSourceLoader viewSourceLoader);
-		void SetCompilationContext(ICompilationContext context);
+		void SetCompilationContext(List<ICompilationContext> context);
 	}
 }

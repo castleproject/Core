@@ -51,7 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AspViewBaseTestFixture.cs" />
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Compiler\AspViewCompilerTests.cs" />
     <Compile Include="Compiler\MarkupTransformers\AbstractMarkupTransformerTestFixture.cs" />
     <Compile Include="Compiler\MarkupTransformers\FullSiteRootMarkupTransformerTestFixture.cs" />
