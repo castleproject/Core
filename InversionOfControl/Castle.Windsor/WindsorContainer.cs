@@ -525,16 +525,18 @@ namespace Castle.Windsor
 				throw new ArgumentNullException("installers");
 			}
 
+			IComponentsInstaller scope = new Installer.DefaultComponentInstaller();
+
 			using (PartialConfigurationStore store = new PartialConfigurationStore(kernel))
-            {
+			{
 				foreach (IWindsorInstaller windsorInstaller in installers)
 				{
 					windsorInstaller.Install(this, store);
 				}
 
-				installer.SetUp(this, store);            	
-            }
-		
+				scope.SetUp(this, store);
+			}
+
 			return this;
 		}
 		
