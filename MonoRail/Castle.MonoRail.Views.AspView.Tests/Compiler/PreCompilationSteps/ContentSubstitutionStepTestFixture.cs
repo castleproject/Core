@@ -24,14 +24,14 @@ namespace Castle.MonoRail.Views.AspView.Tests.Compiler.PreCompilationSteps {
 			step = new ContentSubstitutionStep();
 		}
 
-		[Test, ExpectedException(typeof(AspViewException), ContentSubstitutionStep.ExceptionMessages.ContentPlaceHolderIdAttributeNotFound)]
+		[Test, ExpectedException(typeof(AspViewException), ExpectedMessage = ContentSubstitutionStep.ExceptionMessages.ContentPlaceHolderIdAttributeNotFound)]
 		public void ThrowsWhen_ContentTagRunatServerAttributeFound_ButNoContentIdAttributeFound()
 		{
 			file.RenderBody = @"<asp:Content runat=""server""></asp:content>";
 			step.Process(file);
 		}
 
-		[Test, ExpectedException(typeof(AspViewException), ContentSubstitutionStep.ExceptionMessages.ContentPlaceHolderIdAttributeEmpty)]
+		[Test, ExpectedException(typeof(AspViewException), ExpectedMessage = ContentSubstitutionStep.ExceptionMessages.ContentPlaceHolderIdAttributeEmpty)]
 		public void ThrowsWhen_ContentTagRunatServerAttributeFound_ButContentIdAttributeValueIsEmpty()
 		{
 			file.RenderBody = @"<asp:Content runat=""server"" contentplaceholderid=""""></asp:content>";

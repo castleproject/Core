@@ -43,14 +43,14 @@ namespace Castle.MonoRail.Views.AspView.Tests.Compiler.PreCompilationSteps {
 			}
 		}
 
-		[Test, ExpectedException(typeof(AspViewException), LayoutContentPlaceHolderSubstitutionStep.ExceptionMessages.IdAttributeNotFound)]
+		[Test, ExpectedException(typeof(AspViewException), ExpectedMessage = LayoutContentPlaceHolderSubstitutionStep.ExceptionMessages.IdAttributeNotFound)]
 		public void Throws_When_RunatAtServerAttributeFound_But_NoIdAttributeFound()
 		{
 			file.RenderBody = @"<asp:ContentplaceHoLDer rUNaT=""serVer""/>";
 			step.Process(file);
 		}
 
-		[Test, ExpectedException(typeof(AspViewException), LayoutContentPlaceHolderSubstitutionStep.ExceptionMessages.IdAttributeEmpty)]
+		[Test, ExpectedException(typeof(AspViewException), ExpectedMessage = LayoutContentPlaceHolderSubstitutionStep.ExceptionMessages.IdAttributeEmpty)]
 		public void Throws_When_RunatServerAttributeFound_But_IdAttributeEmpty()
 		{
 			file.RenderBody = @"<asp:contentplaceholder runat=""server"" id=""""></asp:contentplaceholder>";
