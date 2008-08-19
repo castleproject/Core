@@ -95,7 +95,6 @@
     <Compile Include="ComponentActivator\ComponentActivatorException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ComponentActivator\DecomissioningResponsibility.cs" />
     <Compile Include="ComponentActivator\DefaultComponentActivator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -340,6 +339,7 @@
     <Compile Include="Registration\Parameter.cs" />
     <Compile Include="Registration\ParametersDescriptor.cs" />
     <Compile Include="Registration\Property.cs" />
+    <Compile Include="Registration\Proxy\ProxyMixIns.cs" />
     <Compile Include="Registration\Proxy\ProxyGroup.cs" />
     <Compile Include="Registration\Proxy\ProxyInterfaces.cs" />
     <Compile Include="Registration\RegistrationGroup.cs" />

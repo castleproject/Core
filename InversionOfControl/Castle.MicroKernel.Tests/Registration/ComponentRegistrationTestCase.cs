@@ -84,6 +84,19 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
+		[ExpectedException(typeof(ComponentRegistrationException),
+			ExpectedMessage = "There is a component already registered for the given key customer")]
+		public void AddComponent_WithSameName_ThrowsException()
+		{
+			kernel.Register(
+				Component.For<CustomerImpl>()
+					.Named("customer"),
+				Component.For<CustomerImpl>()
+					.Named("customer")
+				);
+		}
+
+		[Test]
 		public void AddComponent_WithServiceAndClass_RegisteredWithClassTypeName()
 		{
 			kernel.Register(
@@ -692,12 +705,6 @@ namespace Castle.MicroKernel.Tests.Registration
 
 			kernel.ReleaseComponent(component);
 			Assert.IsTrue(component.Stopped);
-		}
-
-
-		[Test]
-		public void AddComponent_WithForwardedTypes_ForwardsHandlers()
-		{
 		}
 	}
 }

@@ -16,6 +16,7 @@ namespace Castle.MicroKernel.Proxy
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Represents options to configure proxies.
@@ -23,7 +24,8 @@ namespace Castle.MicroKernel.Proxy
 	public class ProxyOptions
 	{
 		private IProxyHook hook;
-		private ArrayList interfaceList;
+		private List<Type> interfaceList;
+		private List<object> mixInList;
 		private bool useSingleInterfaceProxy;
 		private bool useMarshalByRefAsBaseClass;
 		private bool allowChangeTarget;
@@ -95,10 +97,27 @@ namespace Castle.MicroKernel.Proxy
 			{
 				if (interfaceList != null)
 				{
-					return (Type[]) interfaceList.ToArray(typeof(Type));
+					return (Type[]) interfaceList.ToArray();
 				}
 
 				return new Type[0];
+			}
+		}
+
+		/// <summary>
+		/// Gets the mix ins to integrate.
+		/// </summary>
+		/// <value>The interfaces.</value>
+		public object[] MixIns
+		{
+			get
+			{
+				if (mixInList != null)
+				{
+					return (object[])mixInList.ToArray();
+				}
+
+				return new object[0];
 			}
 		}
 
@@ -115,10 +134,29 @@ namespace Castle.MicroKernel.Proxy
 
 			if (interfaceList == null)
 			{
-				interfaceList = new ArrayList();
+				interfaceList = new List<Type>();
 			}
 
 			interfaceList.AddRange(interfaces);
+		}
+
+		/// <summary>
+		/// Adds the additional mix ins to integrate.
+		/// </summary>
+		/// <param name="mixIns">The mix ins.</param>
+		public void AddMixIns(params object[] mixIns)
+		{
+			if (mixIns == null)
+			{
+				throw new ArgumentNullException("mixIns");
+			}
+
+			if (mixInList == null)
+			{
+				mixInList = new List<object>();
+			}
+
+			mixInList.AddRange(mixIns);
 		}
 
 		/// <summary>
@@ -134,7 +172,8 @@ namespace Castle.MicroKernel.Proxy
 			if (!Equals(hook, proxyOptions.hook)) return false;
 			if (!Equals(useSingleInterfaceProxy, proxyOptions.useSingleInterfaceProxy)) return false;
 			if (!Equals(omitTarget, proxyOptions.omitTarget)) return false;
-			return AdditionalInterfacesAreEquals(proxyOptions);
+			if (!AdditionalInterfacesAreEquals(proxyOptions)) return false;
+			return MixInsAreEquals(proxyOptions);
 		}
 
 		/// <summary>
@@ -143,7 +182,9 @@ namespace Castle.MicroKernel.Proxy
 		/// <returns></returns>
 		public override int GetHashCode()
 		{
-			return 29 * base.GetHashCode() + GetAdditionalInterfacesHashCode();
+			return 29 * base.GetHashCode()
+				+ GetCollectionHashCode(interfaceList)
+				+ GetCollectionHashCode(mixInList);
 		}
 
 		private bool AdditionalInterfacesAreEquals(ProxyOptions proxyOptions)
@@ -158,15 +199,27 @@ namespace Castle.MicroKernel.Proxy
 			return true;
 		}
 
-		private int GetAdditionalInterfacesHashCode()
+		private bool MixInsAreEquals(ProxyOptions proxyOptions)
+		{
+			if (!Equals(mixInList == null, proxyOptions.mixInList == null)) return false;
+			if (mixInList == null) return true; //both are null, nothing more to check
+			if (mixInList.Count != proxyOptions.mixInList.Count) return false;
+			for (int i = 0; i < mixInList.Count; ++i)
+			{
+				if (!proxyOptions.mixInList.Contains(mixInList[0])) return false;
+			}
+			return true;
+		}
+
+		private int GetCollectionHashCode(IEnumerable items)
 		{
 			int result = 0;
 
-			if (interfaceList == null) return result;
+			if (items == null) return result;
 
-			foreach(object type in interfaceList)
+			foreach(object item in items)
 			{
-				result = 29 * result + type.GetHashCode();
+				result = 29 * result + item.GetHashCode();
 			}
 
 			return result;

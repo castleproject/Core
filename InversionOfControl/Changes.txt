@@ -1,6 +1,10 @@
 RC 4
 ====
 
+- Add registration support for mixins.
+
+- Do not allow registering components with the same name in fluent interface.
+
 - Applied Ayendes patch to introduce component service type forwarding to
   support multiple service interfaces for a component.
   Extended the Component Registration interface to support service forwarding.

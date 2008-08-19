@@ -501,6 +501,7 @@ namespace Castle.MicroKernel.Registration
 				InitializeDefaults();
 
 				IConfiguration configuration = EnsureComponentConfiguration(kernel);
+
 				foreach(ComponentDescriptor<S> descriptor in descriptors)
 				{
 					descriptor.ApplyToConfiguration(kernel, configuration);
@@ -520,9 +521,8 @@ namespace Castle.MicroKernel.Registration
 					descriptor.ApplyToModel(kernel, componentModel);
 				}
 
-				if (!kernel.HasComponent(name)
-					&& (ifFilter == null || ifFilter(kernel, componentModel))
-					&& (unlessFilter == null || !unlessFilter(kernel, componentModel)))
+				if ((ifFilter == null || ifFilter(kernel, componentModel)) && 
+					(unlessFilter == null || !unlessFilter(kernel, componentModel)))
 				{
 					kernel.AddCustomComponent(componentModel);
 

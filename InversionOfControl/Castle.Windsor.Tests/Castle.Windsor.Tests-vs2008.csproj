@@ -197,6 +197,7 @@
     <Compile Include="Components\Robot.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\SimpleMixIn.cs" />
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Configuration2\ConfigurationEnvTestCase.cs" />
     <Compile Include="Configuration2\ConfigWithStatementsTestCase.cs">
@@ -245,6 +246,7 @@
     </Compile>
     <Compile Include="MultiResolveTests.cs" />
     <Compile Include="PropertiesInspectionBehaviorTestCase.cs" />
+    <Compile Include="Proxy\MixInTestCase.cs" />
     <Compile Include="Proxy\FactorySupportTestCase.cs" />
     <Compile Include="Proxy\TypedFactoryFacilityTestCase.cs" />
     <Compile Include="Proxy\ProxyBehaviorInvalidTestCase.cs" />
