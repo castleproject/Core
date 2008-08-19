@@ -208,7 +208,26 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(2, logging.Invocations.Count);
 		}
 
-        [Test]
+		[Test]
+		public void CanSetOutputParameterForDecimal()
+		{
+			IDecimalOutParam target = generator.CreateInterfaceProxyWithoutTarget<IDecimalOutParam>(new SetOutputParameter(1.234M));
+			decimal fuel;
+			target.Dance(out fuel);
+			Assert.AreEqual(1.234M, fuel);
+		}
+
+		[Test]
+		public void CanSetOutputParameterForDecimal_UsingGenericMethods()
+		{
+			IDecimalOutParam target = generator.CreateInterfaceProxyWithoutTarget<IDecimalOutParam>(new SetOutputParameter(1.234M));
+			decimal fuel;
+			target.Run(out fuel);
+			Assert.AreEqual(1.234M, fuel);
+		}
+
+
+		[Test]
         public void CanProxyMethodWithOutIntPtrParamter()
         {
             IFooWithOutIntPtr o =
@@ -272,6 +291,27 @@ namespace Castle.DynamicProxy.Tests
 		public interface IWithGuid
 		{
 		}
+	}
+
+	internal class SetOutputParameter : IInterceptor
+	{
+		private readonly decimal x;
+
+		public SetOutputParameter(decimal x)
+		{
+			this.x = x;
+		}
+
+		public void Intercept(IInvocation invocation)
+		{
+			invocation.Arguments[0] = x;
+		}
+	}
+
+	public interface IDecimalOutParam
+	{
+		void Dance(out decimal fuel);
+		void Run<T>(out T fuel);
 	}
 
 	public class WithInternalMethod

@@ -97,6 +97,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
             {
                 gen.Emit(OpCodes.Ldobj, type);
             }
+            else if(type.IsGenericParameter)
+            {
+                gen.Emit(OpCodes.Ldobj, type);
+            }
             else
             {
                 gen.Emit(OpCodes.Ldind_Ref);
@@ -137,6 +141,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
             {
                 gen.Emit(OpCodes.Stobj, type);
             }
+			else if(type.IsGenericParameter)
+			{
+				gen.Emit(OpCodes.Stobj, type);
+			}
             else
             {
                 gen.Emit(OpCodes.Stind_Ref);
