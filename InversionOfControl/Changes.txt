@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Updated registration to support providing multiple service types.
+
 - Add registration support for mixins.
 
 - Do not allow registering components with the same name in fluent interface.

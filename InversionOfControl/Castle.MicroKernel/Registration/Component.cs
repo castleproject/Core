@@ -15,6 +15,7 @@
 namespace Castle.MicroKernel.Registration
 {
 	using System;
+	using System.Collections.Generic;
 	using Castle.Core;
 
 	public static class Component
@@ -27,6 +28,55 @@ namespace Castle.MicroKernel.Registration
 		public static ComponentRegistration For(Type serviceType)
 		{
 			return new ComponentRegistration(serviceType);
+		}
+
+		/// <summary>
+		/// Creates a component registration for the <paramref name="serviceTypes"/>
+		/// </summary>
+		/// <param name="serviceTypes">Types of the service.</param>
+		/// <returns>The component registration.</returns>B
+		public static ComponentRegistration For(params Type[] serviceTypes)
+		{
+			if (serviceTypes.Length == 0)
+			{
+				throw new ArgumentException("At least one service type must be supplied");
+			}
+
+			Type[] forwardTypes = new Type[serviceTypes.Length - 1];
+			Array.Copy(serviceTypes, 1, forwardTypes, 0, serviceTypes.Length - 1);
+
+			ComponentRegistration registration = For(serviceTypes[0]);
+			registration.Forward(forwardTypes);
+			return registration;
+		}
+
+		/// <summary>
+		/// Creates a component registration for the <paramref name="serviceTypes"/>
+		/// </summary>
+		/// <param name="serviceTypes">Types of the service.</param>
+		/// <returns>The component registration.</returns>B
+		public static ComponentRegistration For(IEnumerable<Type> serviceTypes)
+		{
+			ComponentRegistration registration = null;
+
+			foreach (Type serviceType in serviceTypes)
+			{
+				if (registration == null)
+				{
+					registration = For(serviceType);
+				}
+				else
+				{
+					registration.Forward(serviceType);
+				}
+			}
+
+			if (registration == null)
+			{
+				throw new ArgumentException("At least one service type must be supplied");
+			}
+
+			return registration;
 		}
 
 		/// <summary>

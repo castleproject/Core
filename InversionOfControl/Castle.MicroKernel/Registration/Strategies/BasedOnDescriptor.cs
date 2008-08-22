@@ -15,6 +15,7 @@
 namespace Castle.MicroKernel.Registration
 {
 	using System;
+	using System.Collections.Generic;
 	
 	/// <summary>
 	/// Describes how to register a group of related types.
@@ -62,7 +63,7 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="unlessFilter">The predicate not to satisify.</param>
 		/// <returns></returns>
-		public BasedOnDescriptor Unless( Predicate<Type> unlessFilter )
+		public BasedOnDescriptor Unless(Predicate<Type> unlessFilter)
 		{
 			this.unlessFilter = unlessFilter;
 			return this;
@@ -121,8 +122,8 @@ namespace Castle.MicroKernel.Registration
 
 			if (Accepts(type, out baseType))
 			{
-				Type serviceType = service.GetService(type, baseType);
-				ComponentRegistration registration = Component.For(serviceType);
+				IEnumerable<Type> serviceTypes = service.GetServices(type, baseType);
+				ComponentRegistration registration = Component.For(serviceTypes);
 				registration.ImplementedBy(type);
 
 				if (configurer != null)

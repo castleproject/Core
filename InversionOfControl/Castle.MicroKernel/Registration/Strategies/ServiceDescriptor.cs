@@ -15,13 +15,14 @@
 namespace Castle.MicroKernel.Registration
 {
 	using System;
+	using System.Collections.Generic;
 	
 	/// <summary>
 	/// Describes how to select a types service.
 	/// </summary>
 	public class ServiceDescriptor
 	{
-		public delegate Type ServiceSelector(Type type);
+		public delegate IEnumerable<Type> ServiceSelector(Type type, Type baseType);
 
 		private bool useBaseType;
 		private readonly BasedOnDescriptor basedOnDescriptor;
@@ -49,7 +50,7 @@ namespace Castle.MicroKernel.Registration
 		public BasedOnDescriptor FirstInterface()
 		{
 			useBaseType = false;
-			return Select(delegate(Type type)
+			return Select(delegate(Type type, Type baseType)
 			{
 				Type first = null;
 				Type[] interfaces = type.GetInterfaces();
@@ -65,7 +66,7 @@ namespace Castle.MicroKernel.Registration
 						first = first.GetGenericTypeDefinition();
 					}
 				}
-				return first;
+				return new Type[] { first };
 			});
 		}
 		
@@ -81,17 +82,30 @@ namespace Castle.MicroKernel.Registration
 			return basedOnDescriptor;
 		}
 		
-		internal Type GetService(Type type, Type baseType)
+		/// <summary>
+		/// Assigns the supplied service types.
+		/// </summary>
+		/// <param name="types"></param>
+		/// <returns></returns>
+		public BasedOnDescriptor Select(IEnumerable<Type> types)
 		{
+			return Select(delegate { return types; });
+		}
+
+		internal IEnumerable<Type> GetServices(Type type, Type baseType)
+		{
+			IEnumerable<Type> services = null;
+
 			if (useBaseType)
 			{
-				return baseType;
+				type = baseType;
 			}
 			else if (serviceSelector != null)
 			{
-				return serviceSelector(type) ?? type;
+				services = serviceSelector(type, baseType);
 			}
-			return type;
+
+			return services ?? new Type[] { type };
 		}
 	}
 }
