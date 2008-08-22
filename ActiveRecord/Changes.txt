@@ -1,6 +1,8 @@
 1.0
 ===
 
+- Search parent models when trying to infer BelongsTo relationship information.
+
 - Allow CompositeUserType to be applied to fields too.
 
 - Adding support for integrating NH models and AR models.

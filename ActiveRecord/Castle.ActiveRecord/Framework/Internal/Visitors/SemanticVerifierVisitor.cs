@@ -562,18 +562,21 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 
 			BelongsToModel targetBtModel = null;
+			ActiveRecordModel tmpModel = target;
 
-			if (target != null)
+			while (tmpModel != null && targetBtModel == null)
 			{
-				foreach(BelongsToModel btModel in target.BelongsTo)
+				foreach (BelongsToModel btModel in tmpModel.BelongsTo)
 				{
 					if (btModel.BelongsToAtt.Type == model.Property.DeclaringType ||
-					    btModel.Property.PropertyType == model.Property.DeclaringType)
+						btModel.Property.PropertyType == model.Property.DeclaringType)
 					{
 						targetBtModel = btModel;
 						break;
 					}
 				}
+
+				tmpModel = tmpModel.Parent;
 			}
 
 			if ((table == null || (keyColumn == null && compositeKeyColumnKeys == null)) && targetBtModel == null)
