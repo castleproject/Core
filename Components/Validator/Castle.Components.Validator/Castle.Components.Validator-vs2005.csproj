@@ -20,9 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\Castle.Components.Validator.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +30,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Castle.Components.Validator.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -58,10 +59,14 @@
     <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
     <Compile Include="Attributes\ValidateSameAsAttribute.cs" />
     <Compile Include="Attributes\ValidateNotSameAsAttribute.cs" />
+    <Compile Include="Attributes\ValidateSelfAttribute.cs" />
     <Compile Include="Attributes\ValidateSetAttribute.cs" />
     <Compile Include="Attributes\ValidateSingleAttribute.cs" />
+    <Compile Include="Contibutors\AbstractValidationContributor.cs" />
+    <Compile Include="Contibutors\SelfValidationContributor.cs" />
     <Compile Include="IPropertyAccessAware.cs" />
     <Compile Include="IReferenceAccessAware.cs" />
+    <Compile Include="IValidationContributor.cs" />
     <Compile Include="IValidatorRunner.cs" />
     <Compile Include="Messages.fr.Designer.cs">
       <AutoGen>True</AutoGen>

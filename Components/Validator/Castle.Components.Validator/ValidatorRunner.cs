@@ -52,6 +52,7 @@ namespace Castle.Components.Validator
 		private readonly IDictionary<object, ErrorSummary> errorPerInstance;
 		private readonly bool inferValidators;
 		private readonly IValidatorRegistry registry;
+		private readonly List<IValidationContributor> contributors = new List<IValidationContributor>();
 
 		static ValidatorRunner()
 		{
@@ -78,6 +79,29 @@ namespace Castle.Components.Validator
 		/// <param name="registry">The registry.</param>
 		public ValidatorRunner(IValidatorRegistry registry) : this(DefaultSettings.InferValidators, registry)
 		{
+			contributors.Add(new SelfValidationContributor());
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
+		/// </summary>
+		/// <param name="contributors">The contributors.</param>
+		/// <param name="registry">The registry.</param>
+		public ValidatorRunner(IValidationContributor[] contributors, IValidatorRegistry registry) :
+			this(DefaultSettings.InferValidators, registry, contributors)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
+		/// </summary>
+		/// <param name="inferValidators">If true, the runner will try to infer the validators based on data types</param>
+		/// <param name="registry">The registry.</param>
+		/// <param name="contributors">The contributors.</param>
+		public ValidatorRunner(bool inferValidators, IValidatorRegistry registry, IValidationContributor[] contributors) : 
+			this(inferValidators, registry)
+		{
+			this.contributors.AddRange(contributors);
 		}
 
 		/// <summary>
@@ -132,7 +156,7 @@ namespace Castle.Components.Validator
 
 			IEnumerable<IValidator> validators = GetValidators(objectInstance, runWhen);
 			
-			isValid = PerformValidation(objectInstance, validators, summary);
+			isValid = PerformValidation(objectInstance, validators, runWhen, summary);
 
 			return isValid;
 		}
@@ -218,24 +242,40 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <param name="objectInstance">object instance to be validated</param>
 		/// <param name="validators">the validators to run</param>
-		/// <param name="summaryToPopulate"></param>
-		protected virtual bool PerformValidation(object objectInstance, IEnumerable<IValidator> validators, ErrorSummary summaryToPopulate) 
+		/// <param name="runWhen">The run when.</param>
+		/// <param name="summaryToPopulate">The summary to populate.</param>
+		/// <returns></returns>
+		protected virtual bool PerformValidation(object objectInstance, IEnumerable<IValidator> validators, RunWhen runWhen, ErrorSummary summaryToPopulate) 
 		{
-			bool isValid = true;
-
-			foreach (IValidator validator in validators) {
+			foreach (IValidator validator in validators) 
+			{
 				if (!validator.IsValid(objectInstance)) {
 					string name = validator.FriendlyName ?? validator.Name;
-
 					summaryToPopulate.RegisterErrorMessage(name, validator.ErrorMessage);
-
-					isValid = false;
 				}
 			}
 
+			ExecuteContributors(objectInstance, summaryToPopulate, runWhen);
+
 			SetErrorSummaryForInstance(objectInstance, summaryToPopulate);
 
+			bool isValid = !summaryToPopulate.HasError;
 			return isValid;
+		}
+
+		/// <summary>
+		/// Executes the validation contributors.
+		/// </summary>
+		/// <param name="objectInstance">The object instance.</param>
+		/// <param name="summaryToPopulate">The summary to populate.</param>
+		/// <param name="runWhen">The run when.</param>
+		private void ExecuteContributors(object objectInstance, ErrorSummary summaryToPopulate, RunWhen runWhen)
+		{
+			foreach (IValidationContributor contributor in contributors)
+			{
+				ErrorSummary errors = contributor.IsValid(objectInstance, runWhen);
+				summaryToPopulate.RegisterErrorsFrom(errors);
+			}
 		}
 
 		/// <summary>

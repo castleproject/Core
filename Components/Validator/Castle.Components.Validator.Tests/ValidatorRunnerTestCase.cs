@@ -77,5 +77,54 @@ namespace Castle.Components.Validator.Tests
 			Assert.AreEqual(0, runner.GetErrorSummary(client).GetErrorsForProperty("Email").Length);
 			Assert.AreEqual(0, runner.GetErrorSummary(client).GetErrorsForProperty("Password").Length);
 		}
+
+		[Test]
+		public void ExecutesCustomContributors()
+		{
+			ValidatorRunner runnerWithContributor = new ValidatorRunner(true, new CachedValidationRegistry(),
+				new IValidationContributor[] {new AlwaysErrorContributor()});
+
+			object target = new object();
+			Assert.IsFalse(runnerWithContributor.IsValid(target));
+			ErrorSummary errors = runnerWithContributor.GetErrorSummary(target);
+			Assert.IsTrue(errors.HasError);
+			Assert.AreEqual(1, errors.ErrorsCount);
+			string[] errorsForKey = errors.GetErrorsForProperty("someKey");
+			Assert.AreEqual(1, errorsForKey.Length);
+			Assert.AreEqual("error", errorsForKey[0]);
+		}
+
+		[Test]
+		public void ExecutesSelfValidationByDefault()
+		{
+			SelfValidationTestTarget target = new SelfValidationTestTarget();
+			Assert.IsFalse(runner.IsValid(target));
+			ErrorSummary errors = runner.GetErrorSummary(target);
+			Assert.IsTrue(errors.HasError);
+			Assert.AreEqual(1, errors.ErrorsCount);
+			string[] errorsForKey = errors.GetErrorsForProperty("errorKey");
+			Assert.AreEqual(1, errorsForKey.Length);
+			Assert.AreEqual("errorMessage", errorsForKey[0]);
+		}
+
+		private class SelfValidationTestTarget
+		{
+			[ValidateSelf]
+			public void Validate(ErrorSummary errors)
+			{
+				errors.RegisterErrorMessage("errorKey", "errorMessage");
+			}
+		}
+
+		private class AlwaysErrorContributor : IValidationContributor
+		{
+			public ErrorSummary IsValid(object instance, RunWhen runWhen)
+			{
+				ErrorSummary errors =  new ErrorSummary();
+				errors.RegisterErrorMessage("someKey", "error");
+				return errors;
+			}
+		}
+
 	}
 }

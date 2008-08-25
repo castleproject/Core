@@ -84,6 +84,7 @@
     <Compile Include="ValidatorTests\RegularExpressionValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\SameAsValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\NotSameAsValidatorTestCase.cs" />
+    <Compile Include="ContributorsTests\SelfValidationContributorTestCase.cs" />
     <Compile Include="ValidatorTests\SetValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\SingleValidatorTestCase.cs" />
   </ItemGroup>

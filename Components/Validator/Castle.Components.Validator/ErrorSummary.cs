@@ -153,5 +153,20 @@ namespace Castle.Components.Validator
 			errorsCount++;
 			invalidPropertiesCount = property2Messages.Count;
 		}
+
+		/// <summary>
+		/// Registers the errors from another error summary instance.
+		/// </summary>
+		/// <param name="errorSummary">The error summary.</param>
+		public void RegisterErrorsFrom(ErrorSummary errorSummary)
+		{
+			foreach (string property in errorSummary.InvalidProperties)
+			{
+				foreach (string errorMessage in errorSummary.GetErrorsForProperty(property))
+				{
+					RegisterErrorMessage(property, errorMessage);
+				}
+			}
+		}
 	}
 }

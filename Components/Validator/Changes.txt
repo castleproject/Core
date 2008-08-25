@@ -1,3 +1,8 @@
+- Applied Eric Hauser's patch (with changes) fixing COMP-ISSUE-68
+  "Support for external validations"
+  The patch includes a contributor that allows for classes to decorate a method 
+  with a [ValidateSelf] attribute so the class can provide validation logic in code.
+
 Beta 1
 ======
 - Use DynamicMethod for performance when available
