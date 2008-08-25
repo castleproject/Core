@@ -141,7 +141,7 @@
 				<sources refid="project.sources" />
 				<references refid="project.references" />
 				<resources refid="project.resources" />
-				<arg line="${csc.keyfile}" if="${assembly.sign}" />
+				<arg line="&quot;${csc.keyfile}&quot;" if="${assembly.sign}" />
 				<arg line="${csc.args}" />
 			</csc>
 		</if>
@@ -187,7 +187,7 @@
 			<sources refid="project.sources" />
 			<references refid="project.references" />
 			<resources refid="project.resources" />
-			<arg line="${csc.keyfile}" if="${assembly.sign}" />
+			<arg line="&quot;${csc.keyfile}&quot;" if="${assembly.sign}" />
 			<arg line="${csc.args}" />
 		</csc>
 	</target>
@@ -204,7 +204,7 @@
 		<property overwrite="false" name="assembly.version" value="${project.major}.${project.minor}.${project.build}.0" />
 		<property overwrite="false" name="assembly.version.informational" value="${assembly.major}.${assembly.minor}.${assembly.build}.${svn.revision}" />
 		<property overwrite="false" name="assembly.copyright" value="Castle Project, original author or authors" />
-		<property overwrite="false" name="assembly.keyfile" value="${key.file}" />
+		<property overwrite="false" name="assembly.keyfile" value="&quot;${key.file}&quot;" />
 		<property overwrite="false" name="assembly.sign" value="${sign}" />
 	</target>
 
