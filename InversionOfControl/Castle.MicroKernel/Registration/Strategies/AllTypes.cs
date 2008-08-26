@@ -93,7 +93,7 @@ namespace Castle.MicroKernel.Registration
 			{
 				throw new ArgumentNullException("assembly");
 			}
-			return From(assembly.GetExportedTypes());
+			return From(assembly.GetTypes());
 		}
 
 		/// <summary>

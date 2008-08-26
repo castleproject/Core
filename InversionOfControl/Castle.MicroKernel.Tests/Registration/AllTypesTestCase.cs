@@ -181,7 +181,7 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void RegisterTypes_WithLinq_RegisteredInContainer()
 		{
 			kernel.Register(AllTypes.Of<CustomerChain1>()
-				.Pick(from type in Assembly.GetExecutingAssembly().GetExportedTypes()
+				.Pick(from type in Assembly.GetExecutingAssembly().GetTypes()
 					  where type.IsDefined(typeof(SerializableAttribute), true)
 					  select type
 					));
