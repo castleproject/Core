@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
 	using System.ServiceModel.Description;
 	using Castle.MicroKernel;
 
-	internal abstract class WcfExplcitBehavior : IWcfServiceBehavior, IWcfEndpointBehavior
+	internal abstract class WcfExplcitBehavior : AbstractWcfBehaviors, IWcfServiceBehavior, IWcfEndpointBehavior
 	{
 		
 		#region IWcfServiceBehavior
@@ -78,7 +80,7 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
-		public void Accept(IWcfBehaviorVisitor visitor)
+		override public void Accept(IWcfBehaviorVisitor visitor)
 		{
 			visitor.VisitServiceBehavior(this);
 			visitor.VisitEndpointBehavior(this);
@@ -100,6 +102,12 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			return kernel[key];
 		}
+
+		public override ICollection<IHandler> GetHandlers(IKernel kernel)
+		{
+			return new List<IHandler>(new IHandler[] { kernel.GetHandler(key) });
+
+		}
 	}
 
 	#endregion
@@ -117,7 +125,12 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected override object GetBehaviorInstance(IKernel kernel)
 		{
-			return kernel.Resolve(service);
+			return kernel.Resolve(service); 
+		}
+
+		public override ICollection<IHandler> GetHandlers(IKernel kernel)
+		{
+			return new List<IHandler>(new IHandler[] {kernel.GetHandler(service)});
 		}
 	}
 
@@ -137,6 +150,11 @@ namespace Castle.Facilities.WcfIntegration
 		protected override object GetBehaviorInstance(IKernel kernel)
 		{
 			return instance;
+		}
+
+		public override ICollection<IHandler> GetHandlers(IKernel kernel)
+		{
+			return new List<IHandler>();
 		}
 	}
 

@@ -68,6 +68,9 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.ServiceModel.Web">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -76,9 +79,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Behaviors\AbstractWcfBehaviors.cs" />
+    <Compile Include="Behaviors\LogMessageEndpointBehavior.cs" />
     <Compile Include="Client\AbstractChannelBuilder.Generic.cs" />
     <Compile Include="Behaviors\ServiceEndpointBehaviors.cs" />
     <Compile Include="Client\Default\DefaultClientModel.cs" />
+    <Compile Include="Behaviors\LogMessageInspector.cs" />
+    <Compile Include="Internal\CommunicationObjectWrapper.cs" />
     <Compile Include="IWcfBehaviorVisitor.cs" />
     <Compile Include="IWcfBehavior.cs" />
     <Compile Include="Behaviors\WcfEndpointBehaviors.cs" />

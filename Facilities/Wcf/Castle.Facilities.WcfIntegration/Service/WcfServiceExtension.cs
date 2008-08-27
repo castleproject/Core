@@ -15,6 +15,7 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.Collections;
 	using System.Threading;
 	using System.Reflection;
 	using System.Collections.Generic;
@@ -23,12 +24,16 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.MicroKernel;
 	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.Facilities.WcfIntegration.Rest;
+	using System.ServiceModel.Description;
 
 	public class WcfServiceExtension : IDisposable
 	{
 		private readonly IKernel kernel;
 
 		internal static IKernel GlobalKernel;
+
+		private readonly IDictionary<ServiceHost, ICollection<IHandler>> waitingOn =
+			new Dictionary<ServiceHost, ICollection<IHandler>>();
 
 		#region ServiceHostBuilder Delegate Fields 
 	
@@ -81,7 +86,11 @@ namespace Castle.Facilities.WcfIntegration
 					serviceHosts = serviceHosts ?? new List<ServiceHost>();
 					ServiceHost serviceHost = CreateServiceHost(kernel, serviceModel, model);
 					serviceHosts.Add(serviceHost);
-					serviceHost.Open();
+
+					if (ServiceModelIsValid(serviceModel, serviceHost))
+					{
+						serviceHost.Open();
+					}
 				}
 			}
 
@@ -89,6 +98,8 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				model.ExtendedProperties[WcfConstants.ServiceHostsKey] = serviceHosts;
 			}
+
+			CheckWaitingList();
 		}
 
 		private void Kernel_ComponentUnregistered(string key, IHandler handler)
@@ -197,5 +208,90 @@ namespace Castle.Facilities.WcfIntegration
 		}
 
 		#endregion
+
+		private bool ServiceModelIsValid(IWcfServiceModel serviceModel, ServiceHost serviceHost)
+		{
+			List<IWcfBehavior> behaviors = new List<IWcfBehavior>();
+			behaviors.AddRange(serviceModel.Behaviors);
+			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
+			{
+				behaviors.AddRange(endpoint.Behaviors);
+			}
+
+			List<IHandler> behaviorHandlers = new List<IHandler>();
+
+			foreach (IWcfBehavior behavior in behaviors)
+			{
+				behaviorHandlers.AddRange(behavior.GetHandlers(kernel));
+			}
+
+			behaviorHandlers.AddRange(WcfUtils.FindBehaviors<IOperationBehavior>(kernel, WcfBehaviorScope.Services));
+			behaviorHandlers.AddRange(WcfUtils.FindBehaviors<IEndpointBehavior>(kernel, WcfBehaviorScope.Services));
+			behaviorHandlers.AddRange(WcfUtils.FindBehaviors<IServiceBehavior>(kernel, WcfBehaviorScope.Services));
+			behaviorHandlers.AddRange(WcfUtils.FindBehaviors<IContractBehavior>(kernel, WcfBehaviorScope.Services));
+
+			bool isValid = true;
+
+			foreach (IHandler behaviorHandler in behaviorHandlers)
+			{
+				if (behaviorHandler.CurrentState == HandlerState.WaitingDependency)
+				{
+					isValid = false;
+					AddHandlerToWaitingList(serviceHost, behaviorHandler);
+				}
+			}
+
+			return isValid;
+		}
+
+		private void OnHandlerStateChanged(object source, EventArgs args)
+		{
+			CheckWaitingList();
+		}
+
+		private void AddHandlerToWaitingList(ServiceHost serviceHost, IHandler behaviorHandler)
+		{
+			ICollection<IHandler> behaviorHandlers = null;
+			if (!waitingOn.TryGetValue(serviceHost, out behaviorHandlers))
+			{
+				behaviorHandlers = new List<IHandler>();
+				behaviorHandlers.Add(behaviorHandler);
+				waitingOn.Add(serviceHost, behaviorHandlers);
+			}
+			behaviorHandler.OnHandlerStateChanged += new HandlerStateDelegate(OnHandlerStateChanged);
+		}
+
+		/// <summary>
+		/// For each new component registered,
+		/// some components in the WaitingDependency
+		/// state may have became valid, so we check them
+		/// </summary>
+		private void CheckWaitingList()
+		{
+			List<ServiceHost> validServiceHosts = new List<ServiceHost>();
+
+			foreach (ServiceHost serviceHost in new List<ServiceHost>(waitingOn.Keys))
+			{
+				List<IHandler> behaviorHandlers = new List<IHandler>(waitingOn[serviceHost]);
+
+				if (behaviorHandlers.TrueForAll(delegate(IHandler match)
+				                                {
+				                                	return match.CurrentState == HandlerState.Valid;
+				                                }))
+				{
+					validServiceHosts.Add(serviceHost);
+					waitingOn.Remove(serviceHost);
+					behaviorHandlers.ForEach(delegate(IHandler target)
+					{
+						target.OnHandlerStateChanged -= new HandlerStateDelegate(OnHandlerStateChanged);
+					});
+				}
+
+			}
+			foreach (ServiceHost serviceHost in validServiceHosts)
+			{
+				serviceHost.Open();
+			}
+		}
 	}
 }

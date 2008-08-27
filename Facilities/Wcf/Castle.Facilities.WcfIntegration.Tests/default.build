@@ -16,6 +16,9 @@
 			<include name="nunit.framework.dll"/>
 			<include name="Castle.Facilities.WcfIntegration.dll" />
 			<include name="Castle.Facilities.WcfIntegration.Demo.dll" />
+			<include name="Castle.Services.Logging.Log4netIntegration.dll" />
+			<include name="Castle.Facilities.Logging.dll" />
+			<include name="log4net.dll" />
 			<include name="Castle.Core.dll" />
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />

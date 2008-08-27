@@ -34,8 +34,11 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			ValidateServiceModelInternal(model, serviceModel);
 			ServiceHost serviceHost = CreateServiceHost(model, serviceModel, baseAddresses);
-			serviceHost.Opening += delegate { OnOpening(serviceHost, serviceModel, model); };
-			ConfigureServiceHost(serviceHost, serviceModel);
+			serviceHost.Opening += delegate
+			                       {
+								   ConfigureServiceHost(serviceHost, serviceModel); 
+								   OnOpening(serviceHost, serviceModel, model);
+			                       };
 			return serviceHost;
 		}
 

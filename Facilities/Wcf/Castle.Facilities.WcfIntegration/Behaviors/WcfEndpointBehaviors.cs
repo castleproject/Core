@@ -19,7 +19,7 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.MicroKernel;
 	using Castle.Facilities.WcfIntegration.Internal;
 
-	internal class WcfEndpointBehaviors : IWcfEndpointBehavior
+	internal class WcfEndpointBehaviors : AbstractWcfBehaviors, IWcfEndpointBehavior
 	{
 		private readonly WcfBehaviorScope scope;
 
@@ -47,9 +47,18 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
-		public void Accept(IWcfBehaviorVisitor visitor)
+		override public void Accept(IWcfBehaviorVisitor visitor)
 		{
 			visitor.VisitEndpointBehavior(this);
+		}
+
+		public override ICollection<IHandler> GetHandlers(IKernel kernel)
+		{
+			ICollection<IHandler> endpointBehaviors = WcfUtils.FindBehaviors<IEndpointBehavior>(kernel, scope);
+			ICollection<IHandler> operationBehaviors = WcfUtils.FindBehaviors<IOperationBehavior>(kernel, scope);
+			List<IHandler> handlers = new List<IHandler>(endpointBehaviors);
+			handlers.AddRange(operationBehaviors);
+			return handlers;
 		}
 	}
 }

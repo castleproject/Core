@@ -17,14 +17,18 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
-	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
-    using Castle.Core.Resource;
+	using Castle.Core.Configuration;
+	using Castle.Core.Resource;
+	using Castle.Facilities.Logging;
+	using Castle.Facilities.WcfIntegration.Behaviors;
+	using Castle.Facilities.WcfIntegration.Demo;
+	using Castle.Facilities.WcfIntegration.Tests.Behaviors;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 	using Castle.Windsor.Installer;
-	using Castle.Facilities.WcfIntegration.Demo;
-	using Castle.Facilities.WcfIntegration.Tests.Behaviors;
+	using log4net.Appender;
+	using log4net.Config;
 	using NUnit.Framework;
 
 #if DOTNET35
@@ -32,6 +36,8 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	[TestFixture]
 	public class WcfClientFixture
 	{
+		private MemoryAppender memoryAppender;
+
 		#region Setup/Teardown
 
 		[SetUp]
@@ -69,6 +75,8 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.ActAs(new DefaultServiceModel()
 						)
 				);
+
+			RegisterLoggingFacility(windsorContainer);
 		}
 
 		[TearDown]
@@ -290,6 +298,62 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				Assert.AreEqual(42, client.GetValueFromWindsorConfig());
 			}
 		}
+
+		[Test]
+		public void CanAccessCommunicationObjectInterface()
+		{
+			windsorContainer.Register(
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			ICommunicationObject commObject = client as ICommunicationObject;
+			Assert.IsNotNull(commObject);
+			Assert.AreEqual(CommunicationState.Created, commObject.State);
+		}
+
+		[Test]
+		public void CanCaptureRequestsAndResponses()
+		{
+			windsorContainer.Register(
+				Component.For<LogMessageEndpointBehavior>()
+					.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+					.Named("logMessageBehavior"),
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+							.AddBehaviors(typeof(LogMessageEndpointBehavior))
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			Assert.AreEqual(42, client.GetValueFromConstructor());
+			Assert.AreEqual(4, memoryAppender.GetEvents().Length);
+		}
+
+        protected void RegisterLoggingFacility(IWindsorContainer container)
+        {
+            MutableConfiguration facNode = new MutableConfiguration("facility" );
+            facNode.Attributes["id"] = "logging";
+            facNode.Attributes["loggingApi"] = "Log4net";
+			facNode.Attributes["configFile"] = "";
+            container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", facNode);
+            container.AddFacility("logging", new LoggingFacility());
+
+			memoryAppender = new MemoryAppender();
+			BasicConfigurator.Configure(memoryAppender);
+        }
 
         private static string xmlConfiguration = @"<?xml version='1.0' encoding='utf-8' ?>
 <configuration>

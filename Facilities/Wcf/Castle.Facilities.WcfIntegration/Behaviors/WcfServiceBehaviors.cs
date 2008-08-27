@@ -19,7 +19,7 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.MicroKernel;
 	using Castle.Facilities.WcfIntegration.Internal;
 
-	internal class WcfServiceBehaviors : IWcfServiceBehavior
+	internal class WcfServiceBehaviors : AbstractWcfBehaviors, IWcfServiceBehavior
 	{
 		public void Install(ServiceDescription description, IKernel kernel)
 		{
@@ -32,13 +32,20 @@ namespace Castle.Facilities.WcfIntegration
 				{
 					description.Behaviors.Remove<ServiceDebugBehavior>();
 				}
+
 				description.Behaviors.Add((IServiceBehavior)handler.Resolve(CreationContext.Empty));
 			}
 		}
 
-		public void Accept(IWcfBehaviorVisitor visitor)
+		override public void Accept(IWcfBehaviorVisitor visitor)
 		{
 			visitor.VisitServiceBehavior(this);
+		}
+
+		public override ICollection<IHandler> GetHandlers(IKernel kernel)
+		{
+			return WcfUtils.FindBehaviors<IServiceBehavior>(
+				kernel, WcfBehaviorScope.Services);
 		}
 	}
 }

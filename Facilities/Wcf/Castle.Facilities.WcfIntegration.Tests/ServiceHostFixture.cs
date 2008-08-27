@@ -17,19 +17,26 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
-    using Castle.Core.Resource;
+	using Castle.Core.Configuration;
+	using Castle.Core.Resource;
+	using Castle.Facilities.Logging;
+	using Castle.Facilities.WcfIntegration.Behaviors;
+	using Castle.Facilities.WcfIntegration.Demo;
+	using Castle.Facilities.WcfIntegration.Tests.Behaviors;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 	using Castle.Windsor.Installer;
-	using Castle.Facilities.WcfIntegration.Demo;
+	using log4net.Appender;
+	using log4net.Config;
 	using NUnit.Framework;
-	using Castle.Facilities.WcfIntegration.Tests.Behaviors;
 
 #if DOTNET35
 
 	[TestFixture]
 	public class ServiceHostFixture
 	{
+		private MemoryAppender memoryAppender;
+
 		[Test]
 		public void CanCreateServiceHostAndOpenHost()
 		{
@@ -193,6 +200,65 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
+		public void ServiceHostWillNotOpenUntilExplicitScopedBehaviorDependenciesAreSatisfied()
+		{
+			CalculatorEndpointBehavior.Number = 0;
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(
+					Component.For<CalculatorEndpointBehavior.CalculatorMessageInspector>(),
+					Component.For<CalculatorEndpointBehavior>()
+						.Named("CalculatorEndpointBehavior")
+						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit)),
+					Component.For<IOperations>()
+						.ImplementedBy<Operations>()
+						.DependsOn(new { number = 42 })
+						.ActAs(new DefaultServiceModel().AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations")
+									.AddBehaviors("CalculatorEndpointBehavior"))
+							),
+					Component.For<ICalculator>()
+						.ImplementedBy<Calculator>()
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+				Assert.AreEqual(45, CalculatorEndpointBehavior.Number);
+			}
+		}
+
+		[Test]
+		public void ServiceHostWillNotOpenUntilServiceScopedBehaviorDependenciesAreSatisfied()
+		{
+			CalculatorEndpointBehavior.Number = 0;
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(
+					Component.For<CalculatorEndpointBehavior.CalculatorMessageInspector>(),
+					Component.For<CalculatorEndpointBehavior>()
+						.Named("CalculatorEndpointBehavior")
+						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Services)),
+					Component.For<IOperations>()
+						.ImplementedBy<Operations>()
+						.DependsOn(new { number = 42 })
+						.ActAs(new DefaultServiceModel().AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations"))
+							),
+					Component.For<ICalculator>()
+						.ImplementedBy<Calculator>()
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+				Assert.AreEqual(45, CalculatorEndpointBehavior.Number);
+			}
+		}
+
+		[Test]
 		public void WillApplyServiceScopedBehaviors()
 		{
 			CallCountServiceBehavior.CallCount = 0;
@@ -303,6 +369,47 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				Assert.IsFalse(UnitOfWork.initialized, "Should be false after call");
 				Assert.AreEqual(1, CallCountServiceBehavior.CallCount);
 			}
+		}
+
+		[Test]
+		public void CanCaptureRequestsAndResponses()
+		{
+			using (IWindsorContainer container = new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(
+					Component.For<LogMessageEndpointBehavior>()
+						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+						.Named("logMessageBehavior"),
+					Component.For<IOperations>()
+						.ImplementedBy<Operations>()
+						.DependsOn(new { number = 42 })
+						.ActAs(new DefaultServiceModel().AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations"))
+								.AddBehaviors(typeof(LogMessageEndpointBehavior))
+							)
+				))
+			{
+				RegisterLoggingFacility(container);
+
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+				Assert.AreEqual(4, memoryAppender.GetEvents().Length);
+			}
+		}
+
+		protected void RegisterLoggingFacility(IWindsorContainer container)
+		{
+			MutableConfiguration facNode = new MutableConfiguration("facility");
+			facNode.Attributes["id"] = "logging";
+			facNode.Attributes["loggingApi"] = "Log4net";
+			facNode.Attributes["configFile"] = "";
+			container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", facNode);
+			container.AddFacility("logging", new LoggingFacility());
+
+			memoryAppender = new MemoryAppender();
+			BasicConfigurator.Configure(memoryAppender);
 		}
 
         private static string xmlConfiguration = @"<?xml version='1.0' encoding='utf-8' ?>

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+
 namespace Castle.Facilities.WcfIntegration
 {
 	using System.ServiceModel.Description;
@@ -20,6 +22,7 @@ namespace Castle.Facilities.WcfIntegration
 	public interface IWcfBehavior
 	{
 		void Accept(IWcfBehaviorVisitor visitor);
+		ICollection<IHandler> GetHandlers(IKernel kernel);
 	}
 
 	public interface IWcfServiceBehavior : IWcfBehavior
