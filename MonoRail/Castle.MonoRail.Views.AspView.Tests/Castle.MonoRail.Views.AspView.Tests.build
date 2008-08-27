@@ -10,6 +10,13 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="copy-view-templates-to-build-folder">
+		<copy todir="${build.dir}/AspView_TestViews_SiteRoot/RenderingTests/Views/Layouts" >
+			<fileset basedir="${lib.dir}">
+				<include name="${src.dir}/RenderingTests/Views/Layouts/*.aspx" />
+				<include name="${src.dir}/RenderingTests/Views/Layouts/*.master" />
+			</fileset>
+		</copy>
+
 		<copy todir="${build.dir}/AspView_TestViews_SiteRoot/RenderingTests/Views/Sanity" >
 			<fileset basedir="${lib.dir}">
 				<include name="${src.dir}/RenderingTests/Views/Sanity/*.aspx" />

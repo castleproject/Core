@@ -291,8 +291,7 @@ namespace Castle.MonoRail.Views.AspView
 		/// <param name="writer">The writer that will be used for the sub view's output</param>
 		protected void OutputSubView(string subViewName, TextWriter writer, IDictionary parameters)
 		{
-			string subViewFileName = GetSubViewFileName(subViewName);
-			AspViewBase subView = viewEngine.GetView(subViewFileName, writer, context, controller, controllerContext);
+			AspViewBase subView = viewEngine.GetView(GetRootedSubViewTemplate(subViewName), writer, context, controller, controllerContext);
 			if (parameters != null)
 				foreach (string key in parameters.Keys)
 					if (parameters[key] != null)
@@ -365,16 +364,16 @@ namespace Castle.MonoRail.Views.AspView
 		}
 
 		/// <summary>
-		/// Gets a quallified path and filename to a sub view given it's name
+		/// Gets a qualified template name
 		/// </summary>
 		/// <param name="subViewName">The sub view's name</param>
 		/// <returns>Relative or absolute path and filename to the sub view</returns>
-		private string GetSubViewFileName(string subViewName)
+		private string GetRootedSubViewTemplate(string subViewName)
 		{
 			if (subViewName[0] == '/' || subViewName[0] == '\\')
-				return subViewName + "." + viewEngine.ViewFileExtension;
+				return subViewName;
 
-            return Path.Combine(ViewDirectory, subViewName + "." + viewEngine.ViewFileExtension);
+            return Path.Combine(ViewDirectory, subViewName);
 		}
 
 		private void InitProperties()

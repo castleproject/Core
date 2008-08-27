@@ -78,6 +78,7 @@
     <Compile Include="Compiler\StatementProcessors\OutputMethodGenerators\OutputMethodGeneratorFixture.cs" />
     <Compile Include="Compiler\StatementProcessors\SharpStatementProcessorFixture.cs" />
     <Compile Include="Engine\ViewEngineTestCase.cs" />
+    <Compile Include="RenderingTests\LayoutExtensionOptions.cs" />
     <Compile Include="RenderingTests\IntegrationViewTestFixture.cs" />
     <Compile Include="RenderingTests\SanityTests.cs" />
     <Compile Include="RenderingTests\SubViewTests.cs" />
@@ -117,6 +118,12 @@
     <Compile Include="ViewTests\Views\WithTypedProperties.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="RenderingTests\Views\layouts\master.master">
+      <SubType>ASPXCodeBehind</SubType>
+    </None>
+    <Content Include="RenderingTests\Views\layouts\regular.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="RenderingTests\Views\Sanity\sanity.aspx" />
     <Content Include="RenderingTests\Views\SubViews\view1.aspx" />
     <Content Include="RenderingTests\Views\SubViews\view2.aspx" />

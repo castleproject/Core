@@ -114,7 +114,7 @@ namespace Castle.MonoRail.Views.AspView.Tests.RenderingTests
 		{
 			StringWriter sw = new StringWriter();
 			if (string.IsNullOrEmpty(Layout) == false)
-				ControllerContext.LayoutNames = new string[] { Layout };
+				ControllerContext.LayoutNames = Layout.Split(',');
 			StubEngineContext.CurrentControllerContext = ControllerContext;
 			viewEngine.Process(templatePath, sw, StubEngineContext, null, ControllerContext);
 			lastOutput = sw.ToString();

@@ -136,9 +136,7 @@ namespace Castle.MonoRail.Views.AspView
 
 		public override void Process(string templateName, TextWriter output, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
-			string fileName = GetFileName(templateName);
-			IViewBaseInternal view;
-			view = GetView(fileName, output, context, controller, controllerContext);
+			IViewBaseInternal view = GetView(templateName, output, context, controller, controllerContext);
 			if (controllerContext.LayoutNames != null)
 			{
 				string[] layoutNames = controllerContext.LayoutNames;
@@ -197,10 +195,10 @@ namespace Castle.MonoRail.Views.AspView
 			return view;
 		}
 
-		public virtual AspViewBase GetView(string fileName, TextWriter output, IEngineContext context, IController controller, IControllerContext controllerContext)
+		public virtual AspViewBase GetView(string templateName, TextWriter output, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
-			fileName = NormalizeFileName(fileName);
-			string className = GetClassName(fileName);
+			templateName = NormalizeFileName(templateName);
+			string className = GetClassName(templateName);
 			if (needsRecompiling)
 			{
 				CompileViewsInMemory();
@@ -211,7 +209,7 @@ namespace Castle.MonoRail.Views.AspView
 
 			if (viewType == null)
 				throw new AspViewException("Cannot find view type for {0}.",
-					fileName);
+					templateName);
 			// create a view instance
 			AspViewBase theView;
 			try
@@ -220,11 +218,11 @@ namespace Castle.MonoRail.Views.AspView
 			}
 			catch (Exception ex)
 			{
-				throw new AspViewException(ex, "Cannot create view instance from '{0}'.", fileName);
+				throw new AspViewException(ex, "Cannot create view instance from '{0}'.", templateName);
 			}
 			if (theView == null)
 				throw new AspViewException(string.Format(
-					"Cannot find view '{0}'", fileName));
+					"Cannot find view '{0}'", templateName));
 			return theView;
 		}
 
@@ -233,8 +231,7 @@ namespace Castle.MonoRail.Views.AspView
 			string layoutTemplate = "layouts\\" + layoutName;
 			if (layoutName.StartsWith("\\"))
 				layoutTemplate = layoutName;
-			string layoutFileName = GetLayoutFileName(layoutTemplate);
-			return GetView(layoutFileName, output, context, controller, controllerContext);
+			return GetView(layoutTemplate, output, context, controller, controllerContext);
 		}
 
 		protected virtual void CompileViewsInMemory()
@@ -251,16 +248,6 @@ namespace Castle.MonoRail.Views.AspView
 
 				LoadCompiledViewsFrom(compiler.Execute());
 			}
-		}
-
-		private string GetFileName(string templateName)
-		{
-			return templateName + "." + ViewFileExtension;
-		}
-
-		private string GetLayoutFileName(string layoutTemplateName)
-		{
-			return layoutTemplateName + "." + LayoutFileExtension;
 		}
 
 		private void CacheViewType(Type viewType)
@@ -332,8 +319,11 @@ namespace Castle.MonoRail.Views.AspView
 		public static string GetClassName(string fileName)
 		{
 			fileName = fileName.ToLower();
-			if (fileName.EndsWith(".aspx"))
-				fileName = fileName.Substring(0, fileName.Length - 5);
+			if (Path.HasExtension(fileName))
+			{
+				int lastDotIndex = fileName.LastIndexOf('.');
+				fileName = fileName.Substring(0, lastDotIndex);
+			}
 
 			fileName = invalidClassNameCharacters.Replace(fileName, "_");
 

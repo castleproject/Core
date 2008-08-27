@@ -1,0 +1,4 @@
+﻿<%@ Master Language="C#" %>
+master layout
+<asp:ContentPlaceHolder runat="server" id="ViewContents"></asp:ContentPlaceHolder>
+master layout again
