@@ -347,6 +347,8 @@
     <Compile Include="Registration\ServiceOverrideDescriptor.cs" />
     <Compile Include="Registration\Strategies\AllTypes.cs" />
     <Compile Include="Registration\Strategies\AllTypesOf.cs" />
+    <Compile Include="Registration\Strategies\FromAssemblyDescriptor.cs" />
+    <Compile Include="Registration\Strategies\FromTypesDescriptor.cs" />
     <Compile Include="Registration\Strategies\FromDescriptor.cs" />
     <Compile Include="Registration\Strategies\ServiceDescriptor.cs" />
     <Compile Include="Registration\Strategies\BasedOnDescriptor.cs" />

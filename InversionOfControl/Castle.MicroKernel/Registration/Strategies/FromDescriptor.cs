@@ -20,15 +20,13 @@ namespace Castle.MicroKernel.Registration
 	/// <summary>
 	/// Describes the source of types to register.
 	/// </summary>
-	public class FromDescriptor : IRegistration
+	public abstract class FromDescriptor : IRegistration
 	{
 		private bool allowMultipleMatches;
-		private readonly IEnumerable<Type> types;
 		private IList<BasedOnDescriptor> criterias;
 		
-		internal FromDescriptor(IEnumerable<Type> types)
+		internal FromDescriptor()
 		{
-			this.types = types;
 			allowMultipleMatches = false;
 			criterias = new List<BasedOnDescriptor>();
 		}
@@ -68,7 +66,7 @@ namespace Castle.MicroKernel.Registration
 
 		void IRegistration.Register(IKernel kernel)
 		{
-			foreach (Type type in types)
+			foreach (Type type in SelectedTypes(kernel))
 			{
 				foreach (BasedOnDescriptor criteria in criterias)
 				{
@@ -81,5 +79,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		#endregion
+
+		protected abstract IEnumerable<Type> SelectedTypes(IKernel kernel);
 	}
 }

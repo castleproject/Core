@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Added ability to include non-public types in registration.
+
 - Updated registration to support providing multiple service types.
 
 - Add registration support for mixins.
