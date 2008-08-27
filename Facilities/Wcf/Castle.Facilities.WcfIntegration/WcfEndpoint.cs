@@ -19,6 +19,7 @@ namespace Castle.Facilities.WcfIntegration
     using System.ServiceModel;
     using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
+	using Castle.Facilities.WcfIntegration.Behaviors;
 
 	public static class WcfEndpoint
 	{
@@ -120,6 +121,12 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				Behaviors.Add(WcfExplcitBehavior.CreateFrom(behavior));
 			}
+			return (T)this;
+		}
+
+		public T LogMessages()
+		{
+			AddBehaviors(typeof(LogMessageEndpointBehavior));
 			return (T)this;
 		}
 	}

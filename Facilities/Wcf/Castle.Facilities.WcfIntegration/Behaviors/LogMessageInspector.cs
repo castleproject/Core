@@ -49,10 +49,15 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		/// <returns></returns>
 		public object BeforeSendRequest(ref Message request, IClientChannel channel)
 		{
-			string msgId = ObtainMessageId(request);
-			logger.Info("Sending request {0} to {1}", msgId, channel.RemoteAddress);
-			LogMessageContents(ref request);
-			return msgId;
+			if (logger.IsInfoEnabled)
+			{
+				string correlationId = ObtainCorrelationId(request);
+				logger.Info("Sending request {0} to {1}", correlationId, channel.RemoteAddress);
+				LogMessageContents(ref request);
+				return correlationId;
+			}
+
+			return null;
 		}
 
 		/// <summary>
@@ -62,8 +67,11 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		/// <param name="correlationState"></param>
 		public void AfterReceiveReply(ref Message reply, object correlationState)
 		{
-			logger.Info("Received response for request {0}", correlationState);
-			LogMessageContents(ref reply);
+			if (logger.IsInfoEnabled)
+			{
+				logger.Info("Received response for request {0}", correlationState);
+				LogMessageContents(ref reply);
+			}
 		}
 
 		#endregion
@@ -79,10 +87,15 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		/// <returns></returns>
 		public object AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
 		{
-			string msgId = ObtainMessageId(request);
-			logger.Info("Received request {0} from {1}", msgId, channel.RemoteAddress);
-			LogMessageContents(ref request);
-			return msgId;
+			if (logger.IsInfoEnabled)
+			{
+				string correlationId = ObtainCorrelationId(request);
+				logger.Info("Received request {0} from {1}", correlationId, channel.RemoteAddress);
+				LogMessageContents(ref request);
+				return correlationId;
+			}
+
+			return null;
 		}
 
 		/// <summary>
@@ -92,16 +105,19 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		/// <param name="correlationState"></param>
 		public void BeforeSendReply(ref Message reply, object correlationState)
 		{
-			logger.Info("Sending response for request {0}", correlationState);
-			LogMessageContents(ref reply);
+			if (logger.IsInfoEnabled)
+			{
+				logger.Info("Sending response for request {0}", correlationState);
+				LogMessageContents(ref reply);
+			}
 		}
 
 		#endregion
 
-		private string ObtainMessageId(Message message)
+		private string ObtainCorrelationId(Message message)
 		{
-			UniqueId msgId = message.Headers.MessageId;
-			return (msgId != null) ? msgId.ToString() : Guid.NewGuid().ToString();
+			UniqueId correlationId = message.Headers.MessageId;
+			return (correlationId != null) ? correlationId.ToString() : Guid.NewGuid().ToString();
 		}
 
 		private void LogMessageContents(ref Message message)

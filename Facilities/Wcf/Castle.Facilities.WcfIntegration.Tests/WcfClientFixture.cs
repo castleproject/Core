@@ -333,7 +333,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						Endpoint = WcfEndpoint
 							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
 							.At("net.tcp://localhost/Operations")
-							.AddBehaviors(typeof(LogMessageEndpointBehavior))
+							.LogMessages()
 					})
 				);
 

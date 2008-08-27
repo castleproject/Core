@@ -385,9 +385,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.DependsOn(new { number = 42 })
 						.ActAs(new DefaultServiceModel().AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
-								.At("net.tcp://localhost/Operations"))
-								.AddBehaviors(typeof(LogMessageEndpointBehavior))
-							)
+								.At("net.tcp://localhost/Operations")
+								.LogMessages()
+							))
 				))
 			{
 				RegisterLoggingFacility(container);
