@@ -16,6 +16,7 @@ namespace Castle.Facilities.WcfIntegration
 {
     using System;
     using System.Collections.Generic;
+	using Castle.Facilities.WcfIntegration.Behaviors;
 
     public abstract class WcfServiceModelBase : IWcfServiceModel
     {
@@ -116,6 +117,11 @@ namespace Castle.Facilities.WcfIntegration
 				Behaviors.Add(WcfExplcitBehavior.CreateFrom(behavior));
 			}
 			return (T)this;
+		}
+
+		public T LogMessages()
+		{
+			return AddBehaviors(typeof(LogMessageEndpointBehavior));
 		}
 	}
 }

@@ -126,8 +126,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		public T LogMessages()
 		{
-			AddBehaviors(typeof(LogMessageEndpointBehavior));
-			return (T)this;
+			return AddBehaviors(typeof(LogMessageEndpointBehavior));
 		}
 	}
 

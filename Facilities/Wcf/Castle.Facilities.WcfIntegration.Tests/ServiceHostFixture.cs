@@ -372,7 +372,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
-		public void CanCaptureRequestsAndResponses()
+		public void CanCaptureRequestsAndResponsesAtEndpointLevel()
 		{
 			using (IWindsorContainer container = new WindsorContainer()
 				.AddFacility<WcfFacility>()
@@ -388,6 +388,34 @@ namespace Castle.Facilities.WcfIntegration.Tests
 								.At("net.tcp://localhost/Operations")
 								.LogMessages()
 							))
+				))
+			{
+				RegisterLoggingFacility(container);
+
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+				Assert.AreEqual(4, memoryAppender.GetEvents().Length);
+			}
+		}
+
+		[Test]
+		public void CanCaptureRequestsAndResponsesAtServiceLevel()
+		{
+			using (IWindsorContainer container = new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(
+					Component.For<LogMessageEndpointBehavior>()
+						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+						.Named("logMessageBehavior"),
+					Component.For<IOperations>()
+						.ImplementedBy<Operations>()
+						.DependsOn(new { number = 42 })
+						.ActAs(new DefaultServiceModel().AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations"))
+							.LogMessages()
+							)
 				))
 			{
 				RegisterLoggingFacility(container);
