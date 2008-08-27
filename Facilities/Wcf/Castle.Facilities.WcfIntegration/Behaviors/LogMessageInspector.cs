@@ -15,9 +15,11 @@
 namespace Castle.Facilities.WcfIntegration.Behaviors
 {
 	using System;
+	using System.IO;
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Dispatcher;
+	using System.Xml;
 	using Castle.Core.Logging;
 
 	/// <summary>
@@ -47,9 +49,10 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		/// <returns></returns>
 		public object BeforeSendRequest(ref Message request, IClientChannel channel)
 		{
-			logger.Info("Sending request {0} to {1}", request.Headers.MessageId, channel.RemoteAddress);
+			string msgId = ObtainMessageId(request);
+			logger.Info("Sending request {0} to {1}", msgId, channel.RemoteAddress);
 			LogMessageContents(ref request);
-			return request.Headers.MessageId;
+			return msgId;
 		}
 
 		/// <summary>
@@ -76,9 +79,10 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		/// <returns></returns>
 		public object AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
 		{
-			logger.Info("Received request {0} from {1}", request.Headers.MessageId, channel.RemoteAddress);
+			string msgId = ObtainMessageId(request);
+			logger.Info("Received request {0} from {1}", msgId, channel.RemoteAddress);
 			LogMessageContents(ref request);
-			return request.Headers.MessageId;
+			return msgId;
 		}
 
 		/// <summary>
@@ -94,11 +98,26 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 		#endregion
 
+		private string ObtainMessageId(Message message)
+		{
+			UniqueId msgId = message.Headers.MessageId;
+			return (msgId != null) ? msgId.ToString() : Guid.NewGuid().ToString();
+		}
+
 		private void LogMessageContents(ref Message message)
 		{
 			MessageBuffer buffer = message.CreateBufferedCopy(int.MaxValue);
+			Message forWriting = buffer.CreateMessage();
 			message = buffer.CreateMessage();
-			logger.Info(message.ToString());
+
+			StringWriter writer = new StringWriter();
+
+			using (XmlTextWriter xmlWriter = new XmlTextWriter(writer))
+            {
+				forWriting.WriteMessage(xmlWriter);
+            }
+
+			logger.Info(writer.ToString());
 		}
 	}
 }

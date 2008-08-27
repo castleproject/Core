@@ -16,6 +16,7 @@
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />
 			<include name="${path::combine(dotnet.v3.0.ReferenceInstallPath, 'System.ServiceModel.dll')}" />
+			<include name="${path::combine(dotnet.v3.0.ReferenceInstallPath, 'System.Runtime.Serialization.dll')}" />
 			<include name="System.Configuration.dll" />
 		</assemblyfileset>
 	</target>
