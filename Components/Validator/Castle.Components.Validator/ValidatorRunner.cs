@@ -58,19 +58,19 @@ namespace Castle.Components.Validator
 		{
 			type2Validator = new Dictionary<Type, Type>();
 			type2Validator[typeof(Int16)] = typeof(IntegerValidator);
-			type2Validator[typeof(Nullable<Int16>)] = typeof(NullableIntegerValidator);
+			type2Validator[typeof(Nullable<Int16>)] = typeof(IntegerValidator);
 			type2Validator[typeof(Int32)] = typeof(IntegerValidator);
-			type2Validator[typeof(Nullable<Int32>)] = typeof(NullableIntegerValidator);
+			type2Validator[typeof(Nullable<Int32>)] = typeof(IntegerValidator);
 			type2Validator[typeof(Int64)] = typeof(IntegerValidator);
-			type2Validator[typeof(Nullable<Int64>)] = typeof(NullableIntegerValidator);
+			type2Validator[typeof(Nullable<Int64>)] = typeof(IntegerValidator);
 			type2Validator[typeof(Decimal)] = typeof(DecimalValidator);
-			type2Validator[typeof(Nullable<Decimal>)] = typeof(NullableDecimalValidator);
+			type2Validator[typeof(Nullable<Decimal>)] = typeof(DecimalValidator);
 			type2Validator[typeof(Single)] = typeof(SingleValidator);
-			type2Validator[typeof(Nullable<Single>)] = typeof(NullableSingleValidator);
+			type2Validator[typeof(Nullable<Single>)] = typeof(SingleValidator);
 			type2Validator[typeof(Double)] = typeof(DoubleValidator);
-			type2Validator[typeof(Nullable<Double>)] = typeof(NullableDoubleValidator);
+			type2Validator[typeof(Nullable<Double>)] = typeof(DoubleValidator);
 			type2Validator[typeof(DateTime)] = typeof(DateTimeValidator);
-			type2Validator[typeof(Nullable<DateTime>)] = typeof(NullableDateTimeValidator);
+			type2Validator[typeof(Nullable<DateTime>)] = typeof(DateTimeValidator);
 		}
 
 		/// <summary>

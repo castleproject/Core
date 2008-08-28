@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{50BE4C5D-4535-4449-AB5B-8DF92F005386}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -67,12 +67,6 @@
     <Compile Include="ValidatorTests\IsGreaterValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\NotSameValueValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableDateTimeValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableDateValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableDecimalValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableDoubleValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableIntegerValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableSingleValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\RangeValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateTimeValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DecimalValidatorTestCase.cs" />

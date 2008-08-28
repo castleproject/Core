@@ -144,12 +144,6 @@
     <Compile Include="Attributes\ValidateNonEmptyAttribute.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="Validators\NotSameValueValidator.cs" />
-    <Compile Include="Validators\NullableDateTimeValidator.cs" />
-    <Compile Include="Validators\NullableDateValidator.cs" />
-    <Compile Include="Validators\NullableDecimalValidator.cs" />
-    <Compile Include="Validators\NullableDoubleValidator.cs" />
-    <Compile Include="Validators\NullableIntegerValidator.cs" />
-    <Compile Include="Validators\NullableSingleValidator.cs" />
     <Compile Include="Validators\RangeValidator.cs" />
     <Compile Include="Validators\RegularExpressionValidator.cs" />
     <Compile Include="Validators\SameAsValidator.cs" />

@@ -59,12 +59,6 @@
     <Compile Include="ValidatorTests\IsGreaterValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\NotSameValueValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableDateTimeValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableDateValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableDecimalValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableDoubleValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableIntegerValidatorTestCase.cs" />
-    <Compile Include="ValidatorTests\NullableSingleValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\RangeValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateTimeValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DecimalValidatorTestCase.cs" />
