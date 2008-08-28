@@ -31,13 +31,14 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 				Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
 
 			validator = new IntegerValidator();
-			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
 			target = new TestTarget();
 		}
 
 		[Test]
 		public void InvalidInteger()
 		{
+			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
+
 			Assert.IsFalse(validator.IsValid(target, "abc"));
 			Assert.IsFalse(validator.IsValid(target, "100.11"));
 			Assert.IsFalse(validator.IsValid(target, "-99.8"));
@@ -46,20 +47,106 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		[Test]
 		public void ValidInteger()
 		{
+			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
+
 			Assert.IsTrue(validator.IsValid(target, "100"));
 			Assert.IsTrue(validator.IsValid(target, "-99"));
 			Assert.IsTrue(validator.IsValid(target, null));
 			Assert.IsTrue(validator.IsValid(target, ""));
 		}
 
+		[Test]
+		public void ValidInt16()
+		{
+			validator = new IntegerValidator();
+			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField16"));
+
+			Assert.IsTrue(validator.IsValid(target, "100"));
+			Assert.IsTrue(validator.IsValid(target, "-99"));
+			Assert.IsTrue(validator.IsValid(target, null));
+			Assert.IsTrue(validator.IsValid(target, ""));
+			Assert.IsTrue(validator.IsValid(target, short.MinValue));
+			Assert.IsTrue(validator.IsValid(target, short.MaxValue));
+		}
+
+		[Test]
+		public void ValidNullableInt16()
+		{
+			validator = new IntegerValidator();
+			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField16Nullable"));
+
+			Assert.IsTrue(validator.IsValid(target, "100"));
+			Assert.IsTrue(validator.IsValid(target, "-99"));
+			Assert.IsTrue(validator.IsValid(target, null));
+			Assert.IsTrue(validator.IsValid(target, ""));
+			Assert.IsTrue(validator.IsValid(target, short.MinValue));
+			Assert.IsTrue(validator.IsValid(target, short.MaxValue));
+		}
+
+		[Test]
+		public void ValidInt64()
+		{
+			validator = new IntegerValidator();
+			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField64"));
+
+			Assert.IsTrue(validator.IsValid(target, "100"));
+			Assert.IsTrue(validator.IsValid(target, "-99"));
+			Assert.IsTrue(validator.IsValid(target, null));
+			Assert.IsTrue(validator.IsValid(target, ""));
+			Assert.IsTrue(validator.IsValid(target, long.MinValue));
+			Assert.IsTrue(validator.IsValid(target, long.MaxValue));
+		}
+
+		[Test]
+		public void ValidNullableInt64()
+		{
+			validator = new IntegerValidator();
+			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField64Nullable"));
+
+			Assert.IsTrue(validator.IsValid(target, "100"));
+			Assert.IsTrue(validator.IsValid(target, "-99"));
+			Assert.IsTrue(validator.IsValid(target, null));
+			Assert.IsTrue(validator.IsValid(target, ""));
+			Assert.IsTrue(validator.IsValid(target, long.MinValue));
+			Assert.IsTrue(validator.IsValid(target, long.MaxValue));
+		}
+
 		public class TestTarget
 		{
 			private int targetField;
+			private long targetField64;
+			private long? targetField64Nullable;
+			private short targetField16;
+			private short? targetField16Nullable;
 
 			public int TargetField
 			{
 				get { return targetField; }
 				set { targetField = value; }
+			}
+
+			public long TargetField64
+			{
+				get { return targetField64; }
+				set { targetField64 = value; }
+			}
+
+			public long? TargetField64Nullable
+			{
+				get { return targetField64Nullable; }
+				set { targetField64Nullable = value; }
+			}
+
+			public short TargetField16
+			{
+				get { return targetField16; }
+				set { targetField16 = value; }
+			}
+
+			public short? TargetField16Nullable
+			{
+				get { return targetField16Nullable; }
+				set { targetField16Nullable = value; }
 			}
 		}
 	}

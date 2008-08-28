@@ -39,12 +39,12 @@ namespace Castle.Components.Validator
 
 			string stringValue = fieldValue.ToString();
 
-			if (Property != null && Property.PropertyType == typeof(Nullable<short>))
+			if (Property != null && (Property.PropertyType == typeof(short) || Property.PropertyType == typeof(short?)))
 			{
 				Int16 intValue;
 				return Int16.TryParse(stringValue, out intValue);
 			}
-			else if (Property != null && Property.PropertyType == typeof(Nullable<Int64>))
+			if (Property != null && (Property.PropertyType == typeof(long) || Property.PropertyType == typeof(long?)))
 			{
 				Int64 intValue;
 				return Int64.TryParse(stringValue, out intValue);
