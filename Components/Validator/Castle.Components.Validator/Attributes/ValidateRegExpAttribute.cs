@@ -20,6 +20,7 @@ namespace Castle.Components.Validator
 	/// Validate that the property match the given regular expression
 	/// </summary>
 	[Serializable, CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.ReturnValue | AttributeTargets.Parameter, AllowMultiple = true)]
 	public class ValidateRegExpAttribute : AbstractValidationAttribute
 	{
 		private readonly string pattern;

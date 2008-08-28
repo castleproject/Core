@@ -41,12 +41,12 @@ namespace Castle.Components.Validator
 
 			if (stringValue == String.Empty) return true;
 
-			if (Property.PropertyType == typeof(Nullable<Int16>))
+			if (Property != null && Property.PropertyType == typeof(Nullable<Int16>))
 			{
 				Int16 intValue;
 				return Int16.TryParse(stringValue, out intValue);
 			}
-			else if (Property.PropertyType == typeof(Nullable<Int64>))
+			else if (Property != null && Property.PropertyType == typeof(Nullable<Int64>))
 			{
 				Int64 intValue;
 				return Int64.TryParse(stringValue, out intValue);

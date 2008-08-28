@@ -23,6 +23,7 @@ namespace Castle.Components.Validator
 	/// This only check the format of the email, not if it really exists.
 	/// </remarks>
 	[Serializable, CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.ReturnValue | AttributeTargets.Parameter, AllowMultiple = true)]
 	public class ValidateEmailAttribute : AbstractValidationAttribute
 	{
 		/// <summary>

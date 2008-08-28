@@ -14,9 +14,13 @@
 
 namespace Castle.Components.Validator
 {
+
+	using System;
+
 	/// <summary>
 	/// Validates that the collection is not empty
 	/// </summary>
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.ReturnValue | AttributeTargets.Parameter, AllowMultiple = true)]
 	public class ValidateCollectionNotEmptyAttribute : AbstractValidationAttribute
 	{
 		/// <summary>

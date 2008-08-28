@@ -22,6 +22,7 @@ namespace Castle.Components.Validator
 	/// Validate that the property is not null or empty (for strings)
 	/// </summary>
 	[Serializable]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.ReturnValue | AttributeTargets.Parameter, AllowMultiple = true)]
 	public class ValidateNonEmptyAttribute : AbstractValidationAttribute
 	{
 		private readonly IDictionary validatorPerGroup = Hashtable.Synchronized(new Hashtable());

@@ -22,6 +22,7 @@ namespace Castle.Components.Validator
 	/// This checks the format of the date
 	/// </remarks>
 	[Serializable, CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.ReturnValue | AttributeTargets.Parameter, AllowMultiple = true)]
 	public class ValidateSingleAttribute : AbstractValidationAttribute
 	{
 		/// <summary>

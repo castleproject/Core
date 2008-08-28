@@ -22,6 +22,7 @@ namespace Castle.Components.Validator
 	/// <see ref="CreditCardValidator"/> for more details.
 	/// </summary>
 	[Serializable, CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.ReturnValue | AttributeTargets.Parameter, AllowMultiple = true)]
 	public class ValidateCreditCardAttribute : AbstractValidationAttribute
 	{
 		private readonly IValidator validator;

@@ -22,6 +22,7 @@ namespace Castle.Components.Validator
 	/// Validate that the field has a value in a set of values.
 	/// </summary>
 	[Serializable, CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.ReturnValue | AttributeTargets.Parameter, AllowMultiple = true)]
 	public class ValidateSetAttribute : AbstractValidationAttribute
 	{
 		private readonly IValidator validator;

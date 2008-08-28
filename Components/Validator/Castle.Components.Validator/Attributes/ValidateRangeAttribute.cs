@@ -20,6 +20,7 @@ namespace Castle.Components.Validator
 	/// Validate that this property has the required length (either exact or in a range)
 	/// </summary>
 	[Serializable, CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.ReturnValue | AttributeTargets.Parameter, AllowMultiple = true)]
 	public class ValidateRangeAttribute : AbstractValidationAttribute
 	{
 		private readonly IValidator validator;
