@@ -133,7 +133,13 @@ namespace Castle.DynamicProxy
 
 		public void Proceed()
 		{
-			execIndex++;
+			if (interceptors == null) // not yet fully initialized? probably, an intercepted method is called while we are being deserialized
+			{
+				InvokeMethodOnTarget ();
+				return;
+			}
+
+		  execIndex++;
 
 			if (execIndex == interceptors.Length)
 			{

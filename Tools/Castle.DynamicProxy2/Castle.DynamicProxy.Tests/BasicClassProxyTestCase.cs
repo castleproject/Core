@@ -356,5 +356,13 @@ namespace Castle.DynamicProxy.Tests
 			object proxy = generator.CreateClassProxy (t1, new Type[] { t2 }, new StandardInterceptor ());
 			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
 		}
+
+		[Test]
+		public void VirtualCallFromCtor ()
+		{
+			StandardInterceptor interceptor = new StandardInterceptor();
+			ClassCallingVirtualMethodFromCtor proxy = generator.CreateClassProxy<ClassCallingVirtualMethodFromCtor> (interceptor);
+			Assert.AreEqual (7, proxy.Result);
+		}
 	}
 }

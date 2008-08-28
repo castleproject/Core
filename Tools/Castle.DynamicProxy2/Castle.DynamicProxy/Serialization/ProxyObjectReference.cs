@@ -88,6 +88,10 @@ namespace Castle.DynamicProxy.Serialization
 
 			_proxyGenerationOptions = (ProxyGenerationOptions) info.GetValue ("__proxyGenerationOptions", typeof (ProxyGenerationOptions));
 			_proxy = RecreateProxy ();
+
+			// We'll try to deserialize as much of the proxy state as possible here. This is just best effort; due to deserialization dependency reasons,
+			// we need to repeat this in OnDeserialization to guarantee correct state deserialization.
+			DeserializeProxyState ();
 		}
 
 		private Type DeserializeTypeFromString (string key)
@@ -200,6 +204,13 @@ namespace Castle.DynamicProxy.Serialization
 				}
 			}
 
+			// Get the proxy state again, to get all those members we couldn't get in the constructor due to deserialization ordering.
+			DeserializeProxyState();
+			InvokeCallback (_proxy);
+		}
+
+		private void DeserializeProxyState ()
+		{
 			if (_isInterfaceProxy)
 			{
 				object target = _info.GetValue ("__target", typeof (object));
@@ -211,8 +222,6 @@ namespace Castle.DynamicProxy.Serialization
 				MemberInfo[] members = FormatterServices.GetSerializableMembers (_baseType);
 				FormatterServices.PopulateObjectMembers (_proxy, members, baseMemberData);
 			}
-
-			InvokeCallback (_proxy);
 		}
 
 		private void SetTarget (object target)
