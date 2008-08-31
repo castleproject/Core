@@ -180,7 +180,7 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		public virtual int Matches(string url, IRouteContext context, RouteMatch match)
 		{
-			string[] parts = url.Split(new char[] { '/', '.' }, StringSplitOptions.RemoveEmptyEntries);
+			string[] parts = GetUrlParts(url);
 			int points = 0;
 			int index = 0;
 			
@@ -211,6 +211,17 @@ namespace Castle.MonoRail.Framework.Routing
 
 			return points;
 		}
+
+		/// <summary>
+		/// Return url parts for given url
+		/// </summary>
+		/// <param name="url">url to get parts from</param>
+		/// <returns>url parts array</returns>
+		protected virtual string[] GetUrlParts(string url)
+		{
+			return url.Split(new char[] { '/', '.' }, StringSplitOptions.RemoveEmptyEntries);
+		}
+
 
 		private void CreatePatternNodes()
 		{
