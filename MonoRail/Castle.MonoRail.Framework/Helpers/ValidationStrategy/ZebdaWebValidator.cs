@@ -387,7 +387,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
 		/// <param name="validationType">The type of data to compare.</param>
 		/// <param name="violationMessage">The violation message.</param>
-		public void SetAsLesserThan( string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage )
+		public void SetAsLesserThan( string target, string comparisonFieldName, IsLesserValidationType validationType, string violationMessage )
 		{
 		}
 

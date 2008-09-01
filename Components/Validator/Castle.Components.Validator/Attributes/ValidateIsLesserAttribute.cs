@@ -29,9 +29,9 @@ namespace Castle.Components.Validator
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidateIsLesserAttribute"/> class.
 		/// </summary>
-		/// <param name="type"></param>
+		/// <param name="type"><see cref="IsLesserValidationType"/>The data type to compare.</param>
 		/// <param name="propertyToCompare">Target property to compare</param>
-		public ValidateIsLesserAttribute(IsGreaterValidationType type, string propertyToCompare)
+		public ValidateIsLesserAttribute( IsLesserValidationType type, string propertyToCompare )
 			: base(propertyToCompare)
 		{
 			validator = new IsLesserValidator(type, propertyToCompare);
@@ -40,10 +40,10 @@ namespace Castle.Components.Validator
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidateIsLesserAttribute"/> class.
 		/// </summary>
-		/// <param name="type"><see cref="IsGreaterValidationType"/>type</param>
+		/// <param name="type"><see cref="IsLesserValidationType"/>The data type to compare.</param>
 		/// <param name="propertyToCompare">Target property to compare</param>
 		/// <param name="errorMessage">The error message.</param>
-		public ValidateIsLesserAttribute( IsGreaterValidationType type, string propertyToCompare, string errorMessage )
+		public ValidateIsLesserAttribute( IsLesserValidationType type, string propertyToCompare, string errorMessage )
 			: base(propertyToCompare, errorMessage)
 		{
 			validator = new IsLesserValidator( type, propertyToCompare );

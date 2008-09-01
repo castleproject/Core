@@ -74,12 +74,18 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// </summary>
 		public class JQueryConfiguration : BrowserValidationConfiguration
 		{
+			#region Constants
+
+			const string AjaxOptionsPrefix = "ajax-";
+
+			#endregion Constants
 
 			#region Instance Variables
 
 			readonly Dictionary<String, CustomRule> _customRules = new Dictionary<String, CustomRule>();
 			readonly Dictionary<string, string> _rules = new Dictionary<string, string>();
 			readonly IDictionary _options = new Hashtable();
+			readonly IDictionary _ajaxOptions = new Hashtable();
 			readonly Dictionary<string, Group> _groups = new Dictionary<string, Group>();
 			readonly IDictionary<string, IDictionary> _customClasses = new Dictionary<string, IDictionary>();
 
@@ -134,28 +140,38 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="parameters">The parameters.</param>
 			public override void Configure( IDictionary parameters )
 			{
-				AddParameterToOptions( parameters, JQueryOptions.Debug, false );
-				AddParameterToOptions( parameters, JQueryOptions.ErrorClass, true );
-				AddParameterToOptions( parameters, JQueryOptions.ErrorContainer, true );
-				AddParameterToOptions( parameters, JQueryOptions.ErrorElement, true );
-				AddParameterToOptions( parameters, JQueryOptions.ErrorLabelContainer, true );
-				AddParameterToOptions( parameters, JQueryOptions.ErrorPlacement, false );
-				AddParameterToOptions( parameters, JQueryOptions.FocusCleanup, false );
-				AddParameterToOptions( parameters, JQueryOptions.FocusInvalid, false );
-				AddParameterToOptions( parameters, JQueryOptions.Highlight, false );
-				AddParameterToOptions( parameters, JQueryOptions.Ignore, true );
-				AddParameterToOptions( parameters, JQueryOptions.Messages, false );
-				AddParameterToOptions( parameters, JQueryOptions.Meta, true );
-				AddParameterToOptions( parameters, JQueryOptions.OnClick, false );
-				AddParameterToOptions( parameters, JQueryOptions.OnFocusOut, false );
-				AddParameterToOptions( parameters, JQueryOptions.OnKeyUp, false );
-				AddParameterToOptions( parameters, JQueryOptions.OnSubmit, false );
-				AddParameterToOptions( parameters, JQueryOptions.ShowErrors, false );
-				AddParameterToOptions( parameters, JQueryOptions.SubmitHandler, false );
-				AddParameterToOptions( parameters, JQueryOptions.Success, false );
-				AddParameterToOptions( parameters, JQueryOptions.Unhighlight, false );
-				AddParameterToOptions( parameters, JQueryOptions.Wrapper, true );
-				AddParameterToOptions( parameters, JQueryOptions.IsAjax, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.Debug, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.ErrorClass, true );
+				AddParameterToOptions( parameters, _options, JQueryOptions.ErrorContainer, true );
+				AddParameterToOptions( parameters, _options, JQueryOptions.ErrorElement, true );
+				AddParameterToOptions( parameters, _options, JQueryOptions.ErrorLabelContainer, true );
+				AddParameterToOptions( parameters, _options, JQueryOptions.ErrorPlacement, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.FocusCleanup, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.FocusInvalid, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.Highlight, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.Ignore, true );
+				AddParameterToOptions( parameters, _options, JQueryOptions.Messages, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.Meta, true );
+				AddParameterToOptions( parameters, _options, JQueryOptions.OnClick, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.OnFocusOut, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.OnKeyUp, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.OnSubmit, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.ShowErrors, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.SubmitHandler, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.Success, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.Unhighlight, false );
+				AddParameterToOptions( parameters, _options, JQueryOptions.Wrapper, true );
+				AddParameterToOptions( parameters, _options, JQueryOptions.IsAjax, false );
+
+				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxBeforeSubmit, false, AjaxOptionsPrefix );
+				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxClearForm, false, AjaxOptionsPrefix );
+				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxDataType, true, AjaxOptionsPrefix );
+				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxResetForm, false, AjaxOptionsPrefix );
+				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxSemantic, false, AjaxOptionsPrefix );
+				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxSuccess, false, AjaxOptionsPrefix );
+				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxTarget, true, AjaxOptionsPrefix );
+				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxType, true, AjaxOptionsPrefix );
+				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxUrl, true, AjaxOptionsPrefix );
 
 				AddCustomRules();
 			}
@@ -176,7 +192,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				}
 
 				bool isAjax = false;
-				bool.TryParse( CommonUtils.ObtainEntryAndRemove( _options, JQueryOptions.IsAjax, bool.FalseString ), out isAjax );
+				bool.TryParse( CommonUtils.ObtainEntryAndRemove(
+					_options,
+					JQueryOptions.IsAjax,
+					bool.FalseString ), out isAjax );
 
 				if( isAjax )
 				{
@@ -184,7 +203,21 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 					if( submitHandler == null )
 					{
-						_options.Add( JQueryOptions.SubmitHandler, "function( form ) { jQuery( form ).ajaxSubmit(); }" );
+						if( _ajaxOptions.Count > 0 )
+						{
+							_options.Add(
+								JQueryOptions.SubmitHandler,
+								string.Concat(
+									"function( form ) { jQuery( form ).ajaxSubmit( ",
+									AjaxHelper.JavascriptOptions( _ajaxOptions ),
+									"); }" ) );
+						}
+						else
+						{
+							_options.Add(
+								JQueryOptions.SubmitHandler,
+								"function( form ) { jQuery( form ).ajaxSubmit(); }" );
+						}
 					}
 				}
 
@@ -192,6 +225,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				GenerateGroupNotEmptyValidatorCustomRule();
 				GenerateGroupNotEmptyValidatorCustomClass();
 
+				stringBuilder.Append( "jQuery( document ).ready( function() { " );
 				stringBuilder.AppendFormat("jQuery(\"#{0}\").validate( {1} );", formId, AbstractHelper.JavascriptOptions(_options));
 
 				if ( _customRules.Count > 0 )
@@ -221,6 +255,8 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 						stringBuilder.Append("});");
 					}
 				}
+
+				stringBuilder.Append(" });");
 
 				return AbstractHelper.ScriptBlock( stringBuilder.ToString() );
 			}
@@ -311,36 +347,29 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddCustomRule( "lesserThan", "Must be lesser than {0}.", "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }" );
 			}
 
-			void AddParameterToOptions( IDictionary parameters, string parameterName, bool quote )
+			static void AddParameterToOptions( IDictionary parameters, IDictionary options, string parameterName, bool quote )
 			{
-				string parameterValue = CommonUtils.ObtainEntryAndRemove( parameters, parameterName, null );
-
-				if( parameterValue != null )
-				{
-					if( quote )
-						if( !parameterValue.StartsWith( "'" ) && !parameterValue.StartsWith( "\"" ) )
-							_options.Add( parameterName, AbstractHelper.SQuote( parameterValue ) );
-						else
-							_options.Add( parameterName, parameterValue );
-					else
-						_options.Add( parameterName, parameterValue );
-				}
+				AddParameterToOptions( parameters, options, parameterName, quote, string.Empty );
 			}
 
-			void AddParameterToOptions( IDictionary parameters, string parameterName, bool quote, string defaultValue )
+			static void AddParameterToOptions( IDictionary parameters, IDictionary options, string parameterName, bool quote, string prefixToRemove )
 			{
-				string parameterValue = CommonUtils.ObtainEntryAndRemove( parameters, parameterName, defaultValue );
+				string parameterValue = CommonUtils.ObtainEntryAndRemove( parameters, parameterName, null );
+				string parameterNameToInsert = parameterName;
+
+				if( !string.IsNullOrEmpty( prefixToRemove ) )
+				{
+					parameterNameToInsert = parameterName.Replace( prefixToRemove, string.Empty );
+				}
 
 				if( parameterValue != null )
 				{
-					if( quote )
-						if( !parameterValue.StartsWith( "'" ) && !parameterValue.StartsWith( "\"" ) )
-							_options.Add( parameterName, AbstractHelper.SQuote( parameterValue ) );
-						else
-							_options.Add( parameterName, parameterValue );
+					if( quote && !parameterValue.StartsWith( "'" ) && !parameterValue.StartsWith( "\"" ) )
+						options.Add( parameterNameToInsert, AbstractHelper.SQuote( parameterValue ) );
 					else
-						_options.Add( parameterName, parameterValue );
+						options.Add( parameterNameToInsert, parameterValue );
 				}
+
 			}
 
 			#endregion Private Methods
@@ -494,6 +523,15 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				public const string Wrapper = "wrapper";
 				public const string IsAjax = "isAjax";
 
+				public const string AjaxTarget = "ajax-target";
+				public const string AjaxUrl = "ajax-url";
+				public const string AjaxType = "ajax-type";
+				public const string AjaxBeforeSubmit = "ajax-beforeSubmit";
+				public const string AjaxSuccess = "ajax-success";
+				public const string AjaxDataType = "ajax-dataType";
+				public const string AjaxSemantic = "ajax-semantic";
+				public const string AjaxResetForm = "ajax-resetForm";
+				public const string AjaxClearForm = "ajax-clearForm";
 			}
 
 			#endregion Nested classes
@@ -861,14 +899,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="comparisonFieldName">The name of the field to compare with.</param>
 			/// <param name="validationType">The type of data to compare.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetAsLesserThan( string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage )
+			public void SetAsLesserThan( string target, string comparisonFieldName, IsLesserValidationType validationType, string violationMessage )
 			{
-				if( validationType == IsGreaterValidationType.Decimal || validationType == IsGreaterValidationType.Integer )
+				if( validationType == IsLesserValidationType.Decimal || validationType == IsLesserValidationType.Integer )
 				{
-					string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
+					string prefixedComparisonFieldName = GetPrefixJQuerySelector( GetPrefixedFieldld( target, comparisonFieldName ) );
 
 					AddClass( "lesserThan" );
-					AddParameter("lesserThan", prefixedComparisonFieldName);
+					AddParameter( "lesserThan", prefixedComparisonFieldName );
 					AddTitle( violationMessage );
 				}
 			}

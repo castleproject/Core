@@ -222,7 +222,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 			set { firstValue = value; }
 		}
 
-		[ValidateIsLesser(IsGreaterValidationType.Integer, "FirstValue")]
+		[ValidateIsLesser(IsLesserValidationType.Integer, "FirstValue")]
 		public int SecondValue
 		{
 			get { return secondValue; }

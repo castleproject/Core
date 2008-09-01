@@ -198,7 +198,7 @@ namespace Castle.Components.Validator
 		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
 		/// <param name="validationType">The type of data to compare.</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetAsLesserThan(string target, string comparisonFieldName, IsGreaterValidationType validationType,string violationMessage);
+		void SetAsLesserThan( string target, string comparisonFieldName, IsLesserValidationType validationType, string violationMessage );
 
 		/// <summary>
 		/// Sets that a flied is part of a group validation.

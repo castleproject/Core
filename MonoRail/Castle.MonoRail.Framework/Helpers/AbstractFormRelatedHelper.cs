@@ -743,14 +743,25 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			bool validList = false;
 
-			if (list == null && instanceType.IsGenericType)
+			if (list == null )
 			{
-				Type[] genArgs = instanceType.GetGenericArguments();
+				Type genericType = instanceType;
 
-				Type genList = typeof(System.Collections.Generic.IList<>).MakeGenericType(genArgs);
-				Type genTypeDef = instanceType.GetGenericTypeDefinition().MakeGenericType(genArgs);
+				do
+				{
+					if ( genericType.IsGenericType )
+					{
+						Type[] genArgs = instanceType.GetGenericArguments();
 
-				validList = genList.IsAssignableFrom(genTypeDef);
+						Type genList = typeof( System.Collections.Generic.IList<> ).MakeGenericType( genArgs );
+						Type genTypeDef = instanceType.GetGenericTypeDefinition().MakeGenericType( genArgs );
+
+						validList = genList.IsAssignableFrom( genTypeDef );
+					}
+					else
+						genericType = genericType.BaseType;
+				}while ( genericType.BaseType != typeof( object ) );
+
 			}
 
 			if (!validList && list == null)

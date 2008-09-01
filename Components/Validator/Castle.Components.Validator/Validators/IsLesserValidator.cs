@@ -50,7 +50,7 @@ namespace Castle.Components.Validator
 	{
 		#region Private variables
 
-		private readonly IsGreaterValidationType validationType;
+		private readonly IsLesserValidationType validationType;
 
 		#endregion
 
@@ -61,7 +61,7 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <param name="type">The type of data to compare.</param>
 		/// <param name="propertyToCompare">The name of the property to compare.</param>
-		public IsLesserValidator( IsGreaterValidationType type, string propertyToCompare )
+		public IsLesserValidator( IsLesserValidationType type, string propertyToCompare )
 			: base(propertyToCompare)
 		{
 			this.validationType = type;
@@ -74,7 +74,7 @@ namespace Castle.Components.Validator
 		/// <summary>
 		/// Gets or sets the validation type for this validator. 
 		/// </summary>
-		public IsGreaterValidationType ValidationType
+		public IsLesserValidationType ValidationType
 		{
 			get { return validationType; }
 		}
@@ -99,7 +99,7 @@ namespace Castle.Components.Validator
 
 			switch (validationType)
 			{
-				case IsGreaterValidationType.Integer:
+				case IsLesserValidationType.Integer:
 					int intRefVal;
 					int intFieldValue;
 
@@ -110,7 +110,7 @@ namespace Castle.Components.Validator
 
 					break;
 
-				case IsGreaterValidationType.Decimal:
+				case IsLesserValidationType.Decimal:
 					decimal decRefVal;
 					decimal decFieldVal;
 
@@ -121,8 +121,8 @@ namespace Castle.Components.Validator
 
 					break;
 
-				case IsGreaterValidationType.DateTime:
-				case IsGreaterValidationType.Date:
+				case IsLesserValidationType.DateTime:
+				case IsLesserValidationType.Date:
 
 					DateTime dateRefVal;
 					DateTime dateFieldVal;
@@ -130,12 +130,12 @@ namespace Castle.Components.Validator
 					DateTime.TryParse(refValue.ToString(), out dateRefVal);
 					DateTime.TryParse(fieldValue.ToString(), out dateFieldVal);
 
-					if (validationType == IsGreaterValidationType.DateTime)
+					if (validationType == IsLesserValidationType.DateTime)
 					{
 						valid = dateFieldVal < dateRefVal;
 					}
 
-					if (validationType == IsGreaterValidationType.Date)
+					if (validationType == IsLesserValidationType.Date)
 					{
 						valid = dateFieldVal < dateRefVal;
 					}
