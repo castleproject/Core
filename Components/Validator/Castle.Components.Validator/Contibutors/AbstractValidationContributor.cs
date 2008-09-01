@@ -25,7 +25,7 @@ namespace Castle.Components.Validator
 	/// </summary>
 	public abstract class AbstractValidationContributor : IValidationContributor
 	{
-		private static readonly IList initialized = ArrayList.Synchronized(new ArrayList());
+		private static readonly IDictionary initializedTypesByContributorType = Hashtable.Synchronized(new Hashtable());
 
 		/// <summary>
 		/// Determines whether the specified instance is valid.  Returns an
@@ -39,9 +39,16 @@ namespace Castle.Components.Validator
 		{
 			if (instance == null)
 				throw new ArgumentNullException("instance");
-
+			
+			Type contributorType = this.GetType();
 			Type instanceType = instance.GetType();
 
+			if(!initializedTypesByContributorType.Contains(contributorType))
+			{
+				initializedTypesByContributorType[contributorType] = ArrayList.Synchronized(new ArrayList());
+			}
+			
+			ArrayList initialized = initializedTypesByContributorType[contributorType] as ArrayList;
 			if (!initialized.Contains(instanceType))
 			{
 				Initialize(instanceType);
