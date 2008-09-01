@@ -18,6 +18,7 @@ namespace Castle.Components.Validator
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
+	using Castle.Components.Validator.Contibutors;
 
 	/// <summary>
 	/// Coordinates the gathering and execution of validators.
@@ -46,13 +47,29 @@ namespace Castle.Components.Validator
 			/// Default setting is false: the validation runner will not infer validators based on data types
 			/// </summary>
 			public const bool InferValidators = false;
+			/// <summary>
+			/// 
+			/// </summary>
+			public static readonly IValidationPerformer DefaultValidationPerformer = new DefaultValidationPerformer();
+
+			/// <summary>
+			/// 
+			/// </summary>
+			public static IValidationContributor[] DefaultContributors =
+				new IValidationContributor[]
+					{
+						new SelfValidationContributor(),
+						new ValidatorContainerInterfaceValidationContributor()
+					};
 		}
+
 		private readonly static IDictionary<Type, Type> type2Validator;
 		private readonly IDictionary extendedProperties = new Hashtable();
 		private readonly IDictionary<object, ErrorSummary> errorPerInstance;
 		private readonly bool inferValidators;
 		private readonly IValidatorRegistry registry;
 		private readonly List<IValidationContributor> contributors = new List<IValidationContributor>();
+		private readonly IValidationPerformer validationPerformer;
 
 		static ValidatorRunner()
 		{
@@ -77,32 +94,9 @@ namespace Castle.Components.Validator
 		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
 		/// </summary>
 		/// <param name="registry">The registry.</param>
-		public ValidatorRunner(IValidatorRegistry registry) : this(DefaultSettings.InferValidators, registry)
-		{
-			contributors.Add(new SelfValidationContributor());
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
-		/// </summary>
-		/// <param name="contributors">The contributors.</param>
-		/// <param name="registry">The registry.</param>
-		public ValidatorRunner(IValidationContributor[] contributors, IValidatorRegistry registry) :
-			this(DefaultSettings.InferValidators, registry, contributors)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
-		/// </summary>
-		/// <param name="inferValidators">If true, the runner will try to infer the validators based on data types</param>
-		/// <param name="registry">The registry.</param>
-		/// <param name="contributors">The contributors.</param>
-		public ValidatorRunner(bool inferValidators, IValidatorRegistry registry, IValidationContributor[] contributors) : 
-			this(inferValidators, registry)
-		{
-			this.contributors.AddRange(contributors);
-		}
+		public ValidatorRunner(IValidatorRegistry registry) 
+			: this(DefaultSettings.InferValidators, registry)
+		{}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
@@ -110,15 +104,54 @@ namespace Castle.Components.Validator
 		/// <param name="inferValidators">If true, the runner will try to infer the validators based on data types</param>
 		/// <param name="registry">The registry.</param>
 		public ValidatorRunner(bool inferValidators, IValidatorRegistry registry)
-		{
+			: this(inferValidators, registry, DefaultSettings.DefaultContributors)
+		{}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
+		/// </summary>
+		/// <param name="contributors">The contributors.</param>
+		/// <param name="registry">The registry.</param>
+		public ValidatorRunner(IValidationContributor[] contributors, IValidatorRegistry registry)
+			: this(DefaultSettings.InferValidators, registry, contributors)
+		{}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
+		/// </summary>
+		/// <param name="inferValidators">If true, the runner will try to infer the validators based on data types</param>
+		/// <param name="registry">The registry.</param>
+		/// <param name="contributors">The contributors.</param>
+		public ValidatorRunner(bool inferValidators, IValidatorRegistry registry, IValidationContributor[] contributors) {
 			if (registry == null) throw new ArgumentNullException("registry");
 
 			this.inferValidators = inferValidators;
 
+			validationPerformer = DefaultSettings.DefaultValidationPerformer;
+
 			errorPerInstance = new Dictionary<object, ErrorSummary>();
 
 			this.registry = registry;
+			this.contributors.AddRange(contributors);
+
+			// resolve contributor dependencies if needed
+			foreach(IValidationContributor contributor in this.contributors)
+			{
+				IHasValidationPerformerDependency hasPerformerDependency = (contributor as IHasValidationPerformerDependency);
+				if (hasPerformerDependency != null)
+					hasPerformerDependency.ValidationPerformer = this.validationPerformer;
+				
+				IHasValidatorRunnerDependency hasValidatorRunnerDependency = contributor as IHasValidatorRunnerDependency;
+				if (hasValidatorRunnerDependency != null)
+					hasValidatorRunnerDependency.ValidatorRunner = this;
+				
+				IHasValidatorRegistryDependency hasValidatorRegistryDependency = (contributor as IHasValidatorRegistryDependency);
+				if (hasValidatorRegistryDependency != null) 
+					hasValidatorRegistryDependency.ValidatorRegistry = registry;
+			}
+
 		}
+
 
 		/// <summary>
 		/// Determines whether the specified instance is valid.
@@ -151,12 +184,21 @@ namespace Castle.Components.Validator
 			if (objectInstance == null) throw new ArgumentNullException("objectInstance");
 
 			bool isValid;
-
+			
 			ErrorSummary summary = new ErrorSummary();
 
-			IEnumerable<IValidator> validators = GetValidators(objectInstance, runWhen);
+			IValidator[] validators = GetValidators(objectInstance, runWhen);
 			
-			isValid = PerformValidation(objectInstance, validators, runWhen, summary);
+			SortValidators(validators);
+
+			isValid = validationPerformer.PerformValidation(
+				objectInstance,
+				validators,
+				contributors,
+				runWhen,
+				summary);
+
+			SetErrorSummaryForInstance(objectInstance, summary);
 
 			return isValid;
 		}
@@ -203,6 +245,7 @@ namespace Castle.Components.Validator
 			return validators;
 		}
 
+
 		/// <summary>
 		/// Gets the error list per instance.
 		/// </summary>
@@ -238,47 +281,6 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// main validation logic happens here
-		/// </summary>
-		/// <param name="objectInstance">object instance to be validated</param>
-		/// <param name="validators">the validators to run</param>
-		/// <param name="runWhen">The run when.</param>
-		/// <param name="summaryToPopulate">The summary to populate.</param>
-		/// <returns></returns>
-		protected virtual bool PerformValidation(object objectInstance, IEnumerable<IValidator> validators, RunWhen runWhen, ErrorSummary summaryToPopulate) 
-		{
-			foreach (IValidator validator in validators) 
-			{
-				if (!validator.IsValid(objectInstance)) {
-					string name = validator.FriendlyName ?? validator.Name;
-					summaryToPopulate.RegisterErrorMessage(name, validator.ErrorMessage);
-				}
-			}
-
-			ExecuteContributors(objectInstance, summaryToPopulate, runWhen);
-
-			SetErrorSummaryForInstance(objectInstance, summaryToPopulate);
-
-			bool isValid = !summaryToPopulate.HasError;
-			return isValid;
-		}
-
-		/// <summary>
-		/// Executes the validation contributors.
-		/// </summary>
-		/// <param name="objectInstance">The object instance.</param>
-		/// <param name="summaryToPopulate">The summary to populate.</param>
-		/// <param name="runWhen">The run when.</param>
-		private void ExecuteContributors(object objectInstance, ErrorSummary summaryToPopulate, RunWhen runWhen)
-		{
-			foreach (IValidationContributor contributor in contributors)
-			{
-				ErrorSummary errors = contributor.IsValid(objectInstance, runWhen);
-				summaryToPopulate.RegisterErrorsFrom(errors);
-			}
-		}
-
-		/// <summary>
 		/// associate error summary to the object instance
 		/// </summary>
 		/// <param name="objectInstance">object instance to associate validation error summary with</param>
@@ -302,12 +304,25 @@ namespace Castle.Components.Validator
 			Array.Sort(validators, ValidatorComparer.Instance);
 		}
 
-
 		private IValidator[] GetValidators(object objectInstance, RunWhen runWhen) 
 		{
 			if (objectInstance == null) throw new ArgumentNullException("objectInstance");
 
-			IValidator[] validators = registry.GetValidators(this, objectInstance.GetType(), runWhen);
+			IValidator[] validators = GetValidatorsForDeclaringType(objectInstance.GetType(), runWhen);
+
+			return validators;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="declaringType"></param>
+		/// <param name="runWhen"></param>
+		/// <returns></returns>
+		protected IValidator[] GetValidatorsForDeclaringType(Type declaringType, RunWhen runWhen) 
+		{
+
+			IValidator[] validators = registry.GetValidators(this, declaringType, runWhen);
 
 			SortValidators(validators);
 

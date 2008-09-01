@@ -14,27 +14,14 @@
 
 namespace Castle.Components.Validator
 {
-	using System;
-	using System.Reflection;
-
 	/// <summary>
-	/// Constructs an <see cref="IValidator"/> implementation.
+	/// For class having dependency on <see cref="IValidationPerformer"/> instance
 	/// </summary>
-	public interface IValidatorBuilder
+	public interface IHasValidationPerformerDependency
 	{
 		/// <summary>
-		/// Implementors should perform any initialization logic
+		/// <see cref="IValidationPerformer"/> instance dependency setter
 		/// </summary>
-		/// <param name="validationRegistry">The validation registry.</param>
-		/// <param name="property">The target property</param>
-		void Initialize(IValidatorRegistry validationRegistry, PropertyInfo property);
-
-		/// <summary>
-		/// Builds this instance.
-		/// </summary>
-		/// <param name="validatorRunner">The validator runner.</param>
-		/// <param name="type">The type that this validator is built for</param>
-		/// <returns></returns>
-		IValidator Build(IValidatorRunner validatorRunner, Type type);
+		IValidationPerformer ValidationPerformer { set; }
 	}
 }

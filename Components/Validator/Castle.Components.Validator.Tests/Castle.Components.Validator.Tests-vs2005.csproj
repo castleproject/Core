@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContributorsTests\SelfValidationContributorTestCase.cs" />
+    <Compile Include="ContributorsTests\ValidatorContainerInterfaceContributorTestCase.cs" />
     <Compile Include="ErrorSummaryTestCase.cs" />
     <Compile Include="Messages.Designer.cs">
       <DependentUpon>Messages.resx</DependentUpon>

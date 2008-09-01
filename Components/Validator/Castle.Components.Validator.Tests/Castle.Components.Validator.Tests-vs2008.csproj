@@ -81,6 +81,7 @@
     <Compile Include="ContributorsTests\SelfValidationContributorTestCase.cs" />
     <Compile Include="ValidatorTests\SetValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\SingleValidatorTestCase.cs" />
+    <Compile Include="ContributorsTests\ValidatorContainerInterfaceContributorTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Components.Validator\Castle.Components.Validator-vs2008.csproj">

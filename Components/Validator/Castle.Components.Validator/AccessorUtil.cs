@@ -39,8 +39,9 @@ namespace Castle.Components.Validator
 		/// <returns>The property accessor.</returns>
 		public static Accessor GetAccessor(PropertyInfo property)
 		{
-			if (IsReflectionEmitAllowed())
+			if (IsReflectionEmitAllowed() && !property.DeclaringType.IsInterface)
 			{
+				// this doesn't seem to work when declaring type is an interface
 				ILGenerator il;
 				DynamicMethod method = CreateAccessorMethod(property.DeclaringType, out il);
 				return CreateAccessor(GeneratePropertyIL(property, il), method, il);
@@ -62,8 +63,9 @@ namespace Castle.Components.Validator
 		{
 			string[] parts = path.Split('.');
 			
-			if (IsReflectionEmitAllowed())
+			if (IsReflectionEmitAllowed() && !type.IsInterface)
 			{
+				// this doesn't seem to work when declaring type is an interface
 				ILGenerator il;
 				DynamicMethod method = CreateAccessorMethod(type, out il);
 				return CreateAccessor(GeneratePathIL(type, il, parts), method, il);

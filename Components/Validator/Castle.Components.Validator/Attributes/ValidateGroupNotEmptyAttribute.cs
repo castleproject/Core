@@ -62,7 +62,7 @@ namespace Castle.Components.Validator
 		/// <param name="validatorRunner"></param>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		public override IValidator Build(ValidatorRunner validatorRunner, Type type)
+		public override IValidator Build(IValidatorRunner validatorRunner, Type type)
 		{
 			GroupNotEmptyValidator validator = (GroupNotEmptyValidator)
 			                                   validatorRunner.ExtendedProperties[group];

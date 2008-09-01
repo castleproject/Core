@@ -62,11 +62,19 @@
     <Compile Include="Attributes\ValidateSelfAttribute.cs" />
     <Compile Include="Attributes\ValidateSetAttribute.cs" />
     <Compile Include="Attributes\ValidateSingleAttribute.cs" />
+    <Compile Include="Attributes\ValidatorContainerInterfaceFlagAttribute.cs" />
     <Compile Include="Contibutors\AbstractValidationContributor.cs" />
     <Compile Include="Contibutors\SelfValidationContributor.cs" />
+    <Compile Include="Contibutors\ValidatorContainerInterfaceValidationContributor.cs" />
+    <Compile Include="DefaultValidationPerformer.cs" />
+    <Compile Include="IHasValidationPerformerDependency.cs" />
+    <Compile Include="IHasValidatorRegistryDependency.cs" />
+    <Compile Include="IHasValidatorRunnerDependency.cs" />
     <Compile Include="IPropertyAccessAware.cs" />
     <Compile Include="IReferenceAccessAware.cs" />
     <Compile Include="IValidationContributor.cs" />
+    <Compile Include="IValidationPerformer.cs" />
+    <Compile Include="IValidatorContainerInterface.cs" />
     <Compile Include="IValidatorRunner.cs" />
     <Compile Include="Messages.fr.Designer.cs">
       <AutoGen>True</AutoGen>

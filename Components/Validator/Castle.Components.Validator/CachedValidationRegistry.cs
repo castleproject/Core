@@ -71,7 +71,7 @@ namespace Castle.Components.Validator
 		/// <param name="targetType">Target type.</param>
 		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
 		/// <returns>A Validator array</returns>
-		public IValidator[] GetValidators(ValidatorRunner validatorRunner, Type targetType, RunWhen runWhen)
+		public IValidator[] GetValidators(IValidatorRunner validatorRunner, Type targetType, RunWhen runWhen)
 		{
 			PropertyInfo[] properties = (PropertyInfo[]) propertiesPerType[targetType];
 
@@ -102,7 +102,7 @@ namespace Castle.Components.Validator
 		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
 		/// <returns>A Validator array</returns>
 		public IValidator[] GetValidators(
-			ValidatorRunner validatorRunner, Type targetType, PropertyInfo property,
+			IValidatorRunner validatorRunner, Type targetType, PropertyInfo property,
 			RunWhen runWhen)
 		{
 			object[] builders = (object[]) attrsPerProperty[property];

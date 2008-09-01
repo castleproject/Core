@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -72,9 +72,15 @@
     <Compile Include="Attributes\ValidateSetAttribute.cs" />
     <Compile Include="Attributes\ValidateSingleAttribute.cs" />
     <Compile Include="Contibutors\SelfValidationContributor.cs" />
+    <Compile Include="DefaultValidationPerformer.cs" />
+    <Compile Include="IHasValidationPerformerDependency.cs" />
+    <Compile Include="IHasValidatorRegistryDependency.cs" />
+    <Compile Include="IHasValidatorRunnerDependency.cs" />
     <Compile Include="IValidationContributor.cs" />
     <Compile Include="IReferenceAccessAware.cs" />
     <Compile Include="IPropertyAccessAware.cs" />
+    <Compile Include="IValidationPerformer.cs" />
+    <Compile Include="IValidatorContainerInterface.cs" />
     <Compile Include="IValidatorRunner.cs" />
     <Compile Include="Messages.es.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -136,6 +142,8 @@
     <Compile Include="AccessorUtil.cs" />
     <Compile Include="ValidationException.cs" />
     <Compile Include="ValidationInternalError.cs" />
+    <Compile Include="Attributes\ValidatorContainerInterfaceFlagAttribute.cs" />
+    <Compile Include="Contibutors\ValidatorContainerInterfaceValidationContributor.cs" />
     <Compile Include="ValidatorRunner.cs" />
     <Compile Include="Validators\AbstractValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
