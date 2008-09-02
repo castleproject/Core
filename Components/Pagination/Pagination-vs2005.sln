@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Pagination-vs2005", "Castle.Components.Pagination\Castle.Components.Pagination-vs2005.csproj", "{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Pagination.Tests-vs2005", "Castle.Components.Pagination.Tests\Castle.Components.Pagination.Tests-vs2005.csproj", "{DFC2E14D-0351-4C27-A445-256AA98C4A34}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFC2E14D-0351-4C27-A445-256AA98C4A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFC2E14D-0351-4C27-A445-256AA98C4A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFC2E14D-0351-4C27-A445-256AA98C4A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFC2E14D-0351-4C27-A445-256AA98C4A34}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

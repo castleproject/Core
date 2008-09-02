@@ -17,7 +17,8 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	using System;
 	using System.Collections;
 	using System.IO;
-	using Castle.MonoRail.Framework.Helpers;
+	using Castle.Components.Pagination;
+	using Helpers;
 
 	/// <summary>
 	/// Creates a digg style pagination.
@@ -90,39 +91,39 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		public override void Render()
 		{
-			if (renderIfOnlyOnePage || Page.LastIndex > 1)
+			if (renderIfOnlyOnePage || Page.TotalPages > 1)
 			{
 				StringWriter writer = new StringWriter();
 
 				StartBlock(writer);
 				WritePrev(writer);
 
-				if (Page.LastIndex < (4 + (adjacents * 2))) // not enough links to make it worth breaking up
+				if (Page.TotalPages < (4 + (adjacents * 2))) // not enough links to make it worth breaking up
 				{
-					WriteNumberedLinks(writer, 1, Page.LastIndex);
+					WriteNumberedLinks(writer, 1, Page.TotalPages);
 				}
 				else
 				{
-					if ((Page.LastIndex - (adjacents * 2) > Page.CurrentIndex) && // in the middle
-						(Page.CurrentIndex > (adjacents * 2)))
+					if ((Page.TotalPages - (adjacents * 2) > Page.CurrentPageIndex) && // in the middle
+						(Page.CurrentPageIndex > (adjacents * 2)))
 					{
 						WriteNumberedLinks(writer, 1, 2);
 						WriteElipsis(writer);
-						WriteNumberedLinks(writer, Page.CurrentIndex - adjacents, Page.CurrentIndex + adjacents);
+						WriteNumberedLinks(writer, Page.CurrentPageIndex - adjacents, Page.CurrentPageIndex + adjacents);
 						WriteElipsis(writer);
-						WriteNumberedLinks(writer, Page.LastIndex - 1, Page.LastIndex);
+						WriteNumberedLinks(writer, Page.TotalPages - 1, Page.TotalPages);
 					}
-					else if (Page.CurrentIndex < (Page.LastIndex / 2))
+					else if (Page.CurrentPageIndex < (Page.TotalPages / 2))
 					{
 						WriteNumberedLinks(writer, 1, 2 + (adjacents * 2));
 						WriteElipsis(writer);
-						WriteNumberedLinks(writer, Page.LastIndex - 1, Page.LastIndex);
+						WriteNumberedLinks(writer, Page.TotalPages - 1, Page.TotalPages);
 					}
 					else // at the end
 					{
 						WriteNumberedLinks(writer, 1, 2);
 						WriteElipsis(writer);
-						WriteNumberedLinks(writer, Page.LastIndex - (2 + (adjacents * 2)), Page.LastIndex);
+						WriteNumberedLinks(writer, Page.TotalPages - (2 + (adjacents * 2)), Page.TotalPages);
 					}
 				}
 
@@ -141,7 +142,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				Context.RenderSection(PrevSection, capWriter);
 				caption = capWriter.ToString().Trim();
 			}
-			WriteLink(writer, Page.PreviousIndex, caption, !Page.HasPrevious);
+			WriteLink(writer, Page.PreviousPageIndex, caption, !Page.HasPreviousPage);
 		}
 
 		private void WriteNext(StringWriter writer)
@@ -153,7 +154,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				Context.RenderSection(NextSection, capWriter);
 				caption = capWriter.ToString().Trim();
 			}
-			WriteLink(writer, Page.NextIndex, caption, !Page.HasNext);
+			WriteLink(writer, Page.NextPageIndex, caption, !Page.HasNextPage);
 		}
 
 		private void WriteElipsis(TextWriter writer)
@@ -190,7 +191,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		private void WriteNumberedLink(TextWriter writer, int index)
 		{
-			if (index == Page.CurrentIndex)
+			if (index == Page.CurrentPageIndex)
 			{
 				if (UseInlineStyle)
 				{

@@ -16,7 +16,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 {
 	using System.Collections;
 	using System.IO;
-	using Helpers;
+	using Castle.Components.Pagination;
 	using Services;
 
 	/// <summary>

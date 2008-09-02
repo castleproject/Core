@@ -195,6 +195,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Views.AspVi
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Pagination-vs2005", "..\Components\Pagination\Castle.Components.Pagination\Castle.Components.Pagination-vs2005.csproj", "{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -273,6 +279,10 @@ Global
 		{40D9D74D-E44A-48A9-9639-92D56D43DF24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40D9D74D-E44A-48A9-9639-92D56D43DF24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40D9D74D-E44A-48A9-9639-92D56D43DF24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -295,6 +305,7 @@ Global
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D} = {9264F1C2-88DA-497B-AD12-99AC46B0292B}
 		{4C945D49-02E9-43F2-9202-E7A6E7C56E77} = {9264F1C2-88DA-497B-AD12-99AC46B0292B}
 		{E4FA5B53-7D36-429E-8E5C-53D5479242BA} = {9264F1C2-88DA-497B-AD12-99AC46B0292B}
+		{EE726D6A-9970-466E-8F2B-7C791FD6FD8B} = {9264F1C2-88DA-497B-AD12-99AC46B0292B}
 		{2FB2D09E-1B88-4151-B8A1-B0CEDA50D7B7} = {2584D60C-40ED-4BBD-B4FB-7546959F8434}
 		{40D9D74D-E44A-48A9-9639-92D56D43DF24} = {2584D60C-40ED-4BBD-B4FB-7546959F8434}
 	EndGlobalSection

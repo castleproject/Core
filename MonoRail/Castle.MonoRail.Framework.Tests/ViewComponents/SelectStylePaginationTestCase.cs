@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.Framework.Tests.ViewComponents
 {
 	using System.Collections.Generic;
-	using Castle.MonoRail.Framework.Helpers;
+	using Castle.Components.Pagination;
 	using Castle.MonoRail.Framework.ViewComponents;
 	using NUnit.Framework;
 	using Castle.MonoRail.TestSupport;

@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 
-<project 
-	name="Castle.MonoRail.Framework.Tests" 
-	default="test" 
+<project
+	name="Castle.MonoRail.Framework.Tests"
+	default="test"
 	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
 >
 
@@ -20,7 +20,7 @@
 			<include name="Castle.Components.Common.EmailSender.dll" />
 			<include name="Castle.Components.Validator.dll" />
 			<include name="Castle.Components.Binder.dll" />
-
+			<include name="Castle.Components.Pagination.dll" />
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />
 			<include name="Castle.MonoRail.WindsorExtension.dll" />

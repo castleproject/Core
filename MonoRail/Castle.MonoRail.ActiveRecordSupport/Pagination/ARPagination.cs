@@ -19,6 +19,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	using System.Text.RegularExpressions;
 	
 	using Castle.ActiveRecord.Queries;
+	using Castle.Components.Pagination;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 	
@@ -99,9 +100,13 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 			CalculatePaginationInfo(startIndex, endIndex, count, pageSize, currentPage);
 		}
 
-		public override IEnumerator GetEnumerator()
+		protected override IEnumerator GetEnumeratorImplementation()
 		{
 			return enumerable.GetEnumerator();
+		}
+
+		protected override object GetItemAtIndex(int itemIndex) {
+			return Castle.Components.Pagination.PaginationSupport.GetItemAtIndex(this.enumerable, itemIndex);
 		}
 	}
 }

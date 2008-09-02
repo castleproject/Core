@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System.Collections;
 	using System.Collections.Generic;
+	using Castle.Components.Pagination;
 	using NUnit.Framework;
 
 	using Castle.MonoRail.Framework.Helpers;
@@ -31,15 +32,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			IPaginatedPage page = PaginationHelper.CreatePagination(items, 10, 1);
 			
 			Assert.IsNotNull(page);
-			
-			Assert.AreEqual(0, page.FirstItem);
-			Assert.AreEqual(0, page.LastItem);
+
+			Assert.AreEqual(0, page.FirstItemIndex);
+			Assert.AreEqual(0, page.LastItemIndex);
 			Assert.AreEqual(0, page.TotalItems);
 			
-			Assert.IsFalse(page.HasFirst);
-			Assert.IsFalse(page.HasLast);
-			Assert.IsFalse(page.HasNext);
-			Assert.IsFalse(page.HasPrevious);
+			Assert.IsFalse(page.HasNextPage);
+			Assert.IsFalse(page.HasPreviousPage);
 		}
 
 		[Test]
@@ -56,15 +55,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			IPaginatedPage page = PaginationHelper.CreatePagination(items, 10, 1);
 			
 			Assert.IsNotNull(page);
-			
-			Assert.AreEqual(1, page.FirstItem);
-			Assert.AreEqual(5, page.LastItem);
+
+			Assert.AreEqual(1, page.FirstItemIndex);
+			Assert.AreEqual(5, page.LastItemIndex);
 			Assert.AreEqual(5, page.TotalItems);
-			
-			Assert.IsFalse(page.HasFirst);
-			Assert.IsFalse(page.HasLast);
-			Assert.IsFalse(page.HasNext);
-			Assert.IsFalse(page.HasPrevious);
+			Assert.IsFalse(page.HasNextPage);
+			Assert.IsFalse(page.HasPreviousPage);
 		}
 
 		[Test]
@@ -77,15 +73,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			IPaginatedPage page = PaginationHelper.CreatePagination(items, 10, 1);
 			
 			Assert.IsNotNull(page);
-			
-			Assert.AreEqual(1, page.FirstItem);
-			Assert.AreEqual(1, page.LastItem);
+
+			Assert.AreEqual(1, page.FirstItemIndex);
+			Assert.AreEqual(1, page.LastItemIndex);
 			Assert.AreEqual(1, page.TotalItems);
 			
-			Assert.IsFalse(page.HasFirst);
-			Assert.IsFalse(page.HasLast);
-			Assert.IsFalse(page.HasNext);
-			Assert.IsFalse(page.HasPrevious);
+			Assert.IsFalse(page.HasNextPage);
+			Assert.IsFalse(page.HasPreviousPage);
 		}
 
 		[Test]
@@ -100,15 +94,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			IPaginatedPage page = PaginationHelper.CreatePagination(items, 3, 1);
 			
 			Assert.IsNotNull(page);
-			
-			Assert.AreEqual(1, page.FirstItem);
-			Assert.AreEqual(3, page.LastItem);
+
+			Assert.AreEqual(1, page.FirstItemIndex);
+			Assert.AreEqual(3, page.LastItemIndex);
 			Assert.AreEqual(3, page.TotalItems);
 			
-			Assert.IsFalse(page.HasFirst);
-			Assert.IsFalse(page.HasLast);
-			Assert.IsFalse(page.HasNext);
-			Assert.IsFalse(page.HasPrevious);
+			Assert.IsFalse(page.HasNextPage);
+			Assert.IsFalse(page.HasPreviousPage);
 		}
 
 		[Test]
@@ -126,45 +118,39 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			IPaginatedPage page = PaginationHelper.CreatePagination(items, 5, 1);
 			
 			Assert.IsNotNull(page);
-			
-			Assert.AreEqual(1, page.FirstItem);
-			Assert.AreEqual(5, page.LastItem);
+
+			Assert.AreEqual(1, page.FirstItemIndex);
+			Assert.AreEqual(5, page.LastItemIndex);
 			Assert.AreEqual(15, page.TotalItems);
 			
-			Assert.IsFalse(page.HasFirst);
-			Assert.IsTrue(page.HasLast);
-			Assert.IsTrue(page.HasNext);
-			Assert.IsFalse(page.HasPrevious);
+			Assert.IsTrue(page.HasNextPage);
+			Assert.IsFalse(page.HasPreviousPage);
 
 			// Second page
 
 			page = PaginationHelper.CreatePagination( items, 5, 2 );
 			
 			Assert.IsNotNull(page);
-			
-			Assert.AreEqual(6, page.FirstItem);
-			Assert.AreEqual(10, page.LastItem);
+
+			Assert.AreEqual(6, page.FirstItemIndex);
+			Assert.AreEqual(10, page.LastItemIndex);
 			Assert.AreEqual(15, page.TotalItems);
 			
-			Assert.IsTrue(page.HasFirst);
-			Assert.IsTrue(page.HasLast);
-			Assert.IsTrue(page.HasNext);
-			Assert.IsTrue(page.HasPrevious);
+			Assert.IsTrue(page.HasNextPage);
+			Assert.IsTrue(page.HasPreviousPage);
 
 			// Last page
 
 			page = PaginationHelper.CreatePagination( items, 5, 3 );
 			
 			Assert.IsNotNull(page);
-			
-			Assert.AreEqual(11, page.FirstItem);
-			Assert.AreEqual(15, page.LastItem);
+
+			Assert.AreEqual(11, page.FirstItemIndex);
+			Assert.AreEqual(15, page.LastItemIndex);
 			Assert.AreEqual(15, page.TotalItems);
 			
-			Assert.IsTrue(page.HasFirst);
-			Assert.IsFalse(page.HasLast);
-			Assert.IsFalse(page.HasNext);
-			Assert.IsTrue(page.HasPrevious);
+			Assert.IsFalse(page.HasNextPage);
+			Assert.IsTrue(page.HasPreviousPage);
 		}
 
 		[Test]
@@ -183,14 +169,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.IsNotNull(page);
 
-			Assert.AreEqual(1, page.FirstItem);
-			Assert.AreEqual(5, page.LastItem);
+			Assert.AreEqual(1, page.FirstItemIndex);
+			Assert.AreEqual(5, page.LastItemIndex);
 			Assert.AreEqual(15, page.TotalItems);
 
-			Assert.IsFalse(page.HasFirst);
-			Assert.IsTrue(page.HasLast);
-			Assert.IsTrue(page.HasNext);
-			Assert.IsFalse(page.HasPrevious);
+			Assert.IsTrue(page.HasNextPage);
+			Assert.IsFalse(page.HasPreviousPage);
 
 			// Second page
 
@@ -198,14 +182,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.IsNotNull(page);
 
-			Assert.AreEqual(6, page.FirstItem);
-			Assert.AreEqual(10, page.LastItem);
+			Assert.AreEqual(6, page.FirstItemIndex);
+			Assert.AreEqual(10, page.LastItemIndex);
 			Assert.AreEqual(15, page.TotalItems);
 
-			Assert.IsTrue(page.HasFirst);
-			Assert.IsTrue(page.HasLast);
-			Assert.IsTrue(page.HasNext);
-			Assert.IsTrue(page.HasPrevious);
+			Assert.IsTrue(page.HasNextPage);
+			Assert.IsTrue(page.HasPreviousPage);
 
 			// Last page
 
@@ -213,14 +195,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.IsNotNull(page);
 
-			Assert.AreEqual(11, page.FirstItem);
-			Assert.AreEqual(15, page.LastItem);
+			Assert.AreEqual(11, page.FirstItemIndex);
+			Assert.AreEqual(15, page.LastItemIndex);
 			Assert.AreEqual(15, page.TotalItems);
-
-			Assert.IsTrue(page.HasFirst);
-			Assert.IsFalse(page.HasLast);
-			Assert.IsFalse(page.HasNext);
-			Assert.IsTrue(page.HasPrevious);
+			Assert.IsFalse(page.HasNextPage);
+			Assert.IsTrue(page.HasPreviousPage);
 		}
 
 
@@ -238,14 +217,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.IsNotNull(page);
 
-			Assert.AreEqual(1, page.FirstItem);
-			Assert.AreEqual(3, page.LastItem);
+			Assert.AreEqual(1, page.FirstItemIndex);
+			Assert.AreEqual(3, page.LastItemIndex);
 			Assert.AreEqual(8, page.TotalItems);
 
-			Assert.IsFalse(page.HasFirst);
-			Assert.IsTrue(page.HasLast);
-			Assert.IsTrue(page.HasNext);
-			Assert.IsFalse(page.HasPrevious);
+			Assert.IsTrue(page.HasNextPage);
+			Assert.IsFalse(page.HasPreviousPage);
 
 			/* Second page */
 			items.Clear();
@@ -257,14 +234,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.IsNotNull(page);
 
-			Assert.AreEqual(4, page.FirstItem);
-			Assert.AreEqual(6, page.LastItem);
+			Assert.AreEqual(4, page.FirstItemIndex);
+			Assert.AreEqual(6, page.LastItemIndex);
 			Assert.AreEqual(8, page.TotalItems);
 
-			Assert.IsTrue(page.HasFirst);
-			Assert.IsTrue(page.HasLast);
-			Assert.IsTrue(page.HasNext);
-			Assert.IsTrue(page.HasPrevious);
+			Assert.IsTrue(page.HasNextPage);
+			Assert.IsTrue(page.HasPreviousPage);
 
 			/* Third page, partial */
 			items.Clear();
@@ -275,14 +250,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.IsNotNull(page);
 
-			Assert.AreEqual(7, page.FirstItem);
-			Assert.AreEqual(8, page.LastItem);
+			Assert.AreEqual(7, page.FirstItemIndex);
+			Assert.AreEqual(8, page.LastItemIndex);
 			Assert.AreEqual(8, page.TotalItems);
 
-			Assert.IsTrue(page.HasFirst);
-			Assert.IsFalse(page.HasLast);
-			Assert.IsFalse(page.HasNext);
-			Assert.IsTrue(page.HasPrevious);
+			Assert.IsFalse(page.HasNextPage);
+			Assert.IsTrue(page.HasPreviousPage);
 		}
 
 		[Test]
@@ -299,14 +272,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.IsNotNull(page);
 
-			Assert.AreEqual(1, page.FirstItem);
-			Assert.AreEqual(3, page.LastItem);
+			Assert.AreEqual(1, page.FirstItemIndex);
+			Assert.AreEqual(3, page.LastItemIndex);
 			Assert.AreEqual(8, page.TotalItems);
 
-			Assert.IsFalse(page.HasFirst);
-			Assert.IsTrue(page.HasLast);
-			Assert.IsTrue(page.HasNext);
-			Assert.IsFalse(page.HasPrevious);
+			Assert.IsTrue(page.HasNextPage);
+			Assert.IsFalse(page.HasPreviousPage);
 
 			/* Second page */
 			items.Clear();
@@ -318,14 +289,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.IsNotNull(page);
 
-			Assert.AreEqual(4, page.FirstItem);
-			Assert.AreEqual(6, page.LastItem);
+			Assert.AreEqual(4, page.FirstItemIndex);
+			Assert.AreEqual(6, page.LastItemIndex);
 			Assert.AreEqual(8, page.TotalItems);
 
-			Assert.IsTrue(page.HasFirst);
-			Assert.IsTrue(page.HasLast);
-			Assert.IsTrue(page.HasNext);
-			Assert.IsTrue(page.HasPrevious);
+			Assert.IsTrue(page.HasNextPage);
+			Assert.IsTrue(page.HasPreviousPage);
 
 			/* Third page, partial */
 			items.Clear();
@@ -336,14 +305,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.IsNotNull(page);
 
-			Assert.AreEqual(7, page.FirstItem);
-			Assert.AreEqual(8, page.LastItem);
+			Assert.AreEqual(7, page.FirstItemIndex);
+			Assert.AreEqual(8, page.LastItemIndex);
 			Assert.AreEqual(8, page.TotalItems);
 
-			Assert.IsTrue(page.HasFirst);
-			Assert.IsFalse(page.HasLast);
-			Assert.IsFalse(page.HasNext);
-			Assert.IsTrue(page.HasPrevious);
+			Assert.IsFalse(page.HasNextPage);
+			Assert.IsTrue(page.HasPreviousPage);
 		}
 
 

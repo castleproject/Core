@@ -358,9 +358,6 @@
     <Compile Include="Helpers\HtmlHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\IPaginatedPage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Helpers\JSONHelper.cs" />
     <Compile Include="Helpers\PaginationHelper.cs">
       <SubType>Code</SubType>
@@ -786,6 +783,10 @@
     <ProjectReference Include="..\..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
       <Name>Castle.Components.Binder-vs2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Components\Pagination\Castle.Components.Pagination\Castle.Components.Pagination-vs2005.csproj">
+      <Project>{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}</Project>
+      <Name>Castle.Components.Pagination-vs2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Components\Validator\Castle.Components.Validator\Castle.Components.Validator-vs2005.csproj">
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>

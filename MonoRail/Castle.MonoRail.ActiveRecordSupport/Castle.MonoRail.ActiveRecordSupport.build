@@ -17,6 +17,7 @@
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Castle.Components.Binder.dll" />
 			<include name="Castle.Components.Validator.dll" />
+			<include name="Castle.Components.Pagination.dll" />
 			<include name="NHibernate.dll" />
 			<include name="Castle.Components.Common.TemplateEngine.dll" />
 			<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />

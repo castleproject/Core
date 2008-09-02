@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
-	using Castle.MonoRail.Framework.Helpers;
+	using Castle.Components.Pagination;
 	using Castle.MonoRail.Framework.ViewComponents;
 	using Castle.MonoRail.TestSupport;
 	using NUnit.Framework;
@@ -81,7 +81,7 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 			SectionRender["startblock"] = delegate { actions.Add("started"); };
 			SectionRender["endblock"] = delegate { actions.Add("ended"); };
 			SectionRender["link"] = delegate { actions.Add("link"); };
-
+			
 			diggComponent.Page = secondPageOfThree;
 			Request.FilePath = "/something";
 			PrepareViewComponent(diggComponent);

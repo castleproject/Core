@@ -15,10 +15,11 @@
 		<include name="EmailSender/EmailSender.build" />
 		<include name="DictionaryAdapter/DictionaryAdapter.build" />
 		<include name="Scheduler/Scheduler.build" />
+		<include name="Pagination/Pagination.build" />
 	</fileset>
 
 	<target name="build" depends="common.build" />
-	
+
 	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

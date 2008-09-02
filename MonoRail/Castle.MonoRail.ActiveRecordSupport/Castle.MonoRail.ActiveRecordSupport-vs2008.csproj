@@ -105,6 +105,10 @@
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
       <Name>Castle.Components.Binder-vs2008</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Components\Pagination\Castle.Components.Pagination\Castle.Components.Pagination-vs2008.csproj">
+      <Project>{03FF90E2-1DDC-4E60-BDEA-86BF9B31130C}</Project>
+      <Name>Castle.Components.Pagination-vs2008</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Components\TemplateEngine\Castle.Components.Common.TemplateEngine\Castle.Components.Common.TemplateEngine-vs2008.csproj">
       <Project>{9698FE03-CD65-4FBC-B734-7326674A4894}</Project>
       <Name>Castle.Components.Common.TemplateEngine-vs2008</Name>

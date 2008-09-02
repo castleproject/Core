@@ -40,17 +40,17 @@ $PresentationHelper.LinkToConfirm( $model, $useModelName, "remove", $rowid, "%{c
 <div class="pagination">
 <table width="100%" border="0">
   <tr>
-  <td>Showing $items.FirstItem - $items.LastItem of $items.TotalItems</td>
+  <td>Showing $items.FirstItemIndex - $items.LastItemIndex of $items.TotalItems</td>
   <td align="right">
-#if($items.HasFirst) $PaginationHelper.CreatePageLink( 1, "first" ) #end
-#if(!$items.HasFirst) first #end
-#if($items.HasPrevious) | $PaginationHelper.CreatePageLink( $items.PreviousIndex, "prev" ) #end
-#if(!$items.HasPrevious) | prev #end
-#if($items.HasNext) | $PaginationHelper.CreatePageLink( $items.NextIndex, "next" ) #end
-#if(!$items.HasNext) | next #end
-#if($items.HasLast) | $PaginationHelper.CreatePageLink( $items.LastIndex, "last" ) #end
-#if(!$items.HasLast) | last #end
-  </td>
+		#if($items.HasPreviousPage) $PaginationHelper.CreatePageLink( 1, "first" ) #end
+		#if(!$items.HasPreviousPage) first #end
+		#if($items.HasPreviousPage) | $PaginationHelper.CreatePageLink( $items.PreviousPageIndex, "prev" ) #end
+		#if(!$items.HasPreviousPage) | prev #end
+		#if($items.HasNextPage) | $PaginationHelper.CreatePageLink( $items.NextPageIndex, "next" ) #end
+		#if(!$items.HasNextPage) | next #end
+		#if($items.HasNextPage) | $PaginationHelper.CreatePageLink( $items.TotalPages, "last" ) #end
+		#if(!$items.HasNextPage) | last #end
+	</td>
   </tr>
 </table>
 </div>

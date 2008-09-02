@@ -118,6 +118,10 @@
       <Project>{CFF1D57F-9FEB-4941-B8FE-8E28F4A8AAC7}</Project>
       <Name>Castle.Components.Common.EmailSender-vs2008</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Components\Pagination\Castle.Components.Pagination\Castle.Components.Pagination-vs2008.csproj">
+      <Project>{03FF90E2-1DDC-4E60-BDEA-86BF9B31130C}</Project>
+      <Name>Castle.Components.Pagination-vs2008</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Components\Validator\Castle.Components.Validator\Castle.Components.Validator-vs2008.csproj">
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
       <Name>Castle.Components.Validator-vs2008</Name>

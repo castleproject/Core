@@ -20,12 +20,13 @@
 			<include name="Castle.Components.Binder.dll" />
 			<include name="Castle.Components.Validator.dll" />
 			<include name="Castle.Components.Common.EmailSender.dll" />
+			<include name="Castle.Components.Pagination.dll" />
 			<include name="System.Data.dll" />
 			<include name="System.Web.dll" />
 			<include name="System.Configuration.dll" />
 			<include name="Newtonsoft.Json.dll" />
 		</assemblyfileset>
-		
+
 		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">
 			<include name="**/*.resx" />
 			<include name="**/*.gif" />

@@ -68,14 +68,17 @@
     <Compile Include="Compiler\OnlineCompiler.cs" />
     <Compile Include="Compiler\PreCompilationSteps\ChainingStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\ConfigurationImportStatementsStep.cs" />
+    <Compile Include="Compiler\PreCompilationSteps\ContentSubstitutionStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\DefaultImportStatementsStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\DefaultPreCompilationStepsProvider.cs" />
     <Compile Include="Compiler\PreCompilationSteps\DetermineBaseClassStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\EmbededServerScriptStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\ExtractImportStatementsStep.cs" />
+    <Compile Include="Compiler\PreCompilationSteps\FakeMasterPageDesignSupportStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\ImportStatementsStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\IPreCompilationStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\IPreCompilationStepsProvider.cs" />
+    <Compile Include="Compiler\PreCompilationSteps\LayoutContentPlaceHolderSubstitutionStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\MarkupTransformationsStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\ProcessPropertiesStep.cs" />
     <Compile Include="Compiler\PreCompilationSteps\ProcessViewBodyStep.cs" />

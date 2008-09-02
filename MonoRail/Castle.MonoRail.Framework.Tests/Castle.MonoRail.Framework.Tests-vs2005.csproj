@@ -120,6 +120,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\..\Components\Pagination\Castle.Components.Pagination\Castle.Components.Pagination-vs2005.csproj">
+      <Project>{EE726D6A-9970-466E-8F2B-7C791FD6FD8B}</Project>
+      <Name>Castle.Components.Pagination-vs2005</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Components\Validator\Castle.Components.Validator\Castle.Components.Validator-vs2005.csproj">
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
       <Name>Castle.Components.Validator-vs2005</Name>

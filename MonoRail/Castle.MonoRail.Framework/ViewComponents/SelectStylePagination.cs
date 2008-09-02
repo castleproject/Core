@@ -62,9 +62,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			{
 				writer.WriteLine("<select onchange=\"window.location.href = this.options[this.selectedIndex].value;\">");
 
-				for (int i = 1; i <= Page.LastIndex; i++)
+				for (int i = 1; i <= Page.TotalPages; i++)
 				{
-					string addition = Page.CurrentIndex == i ? " selected=\"true\"" : "";
+					string addition = Page.CurrentPageIndex == i ? " selected=\"true\"" : "";
 					writer.WriteLine("\t<option value=\"" + CreateUrlForPage(i) + "\"" + addition +">Page " + i + "</option>");
 				}
 				
@@ -83,7 +83,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				caption = capWriter.ToString().Trim();
 			}
 
-			WriteLink(writer, Page.FirstIndex, caption, !Page.HasFirst);
+			WriteLink(writer, 1, caption, !Page.HasPreviousPage);
 		}
 
 		private void WriteLast(StringWriter writer)
@@ -97,7 +97,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				caption = capWriter.ToString().Trim();
 			}
 
-			WriteLink(writer, Page.LastIndex, caption, !Page.HasLast);
+			WriteLink(writer, Page.TotalPages, caption, !Page.HasNextPage);
 		}
 
 		private void WritePrev(StringWriter writer)
@@ -111,7 +111,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				caption = capWriter.ToString().Trim();
 			}
 			
-			WriteLink(writer, Page.PreviousIndex, caption, !Page.HasPrevious);
+			WriteLink(writer, Page.PreviousPageIndex, caption, !Page.HasPreviousPage);
 		}
 
 		private void WriteNext(StringWriter writer)
@@ -125,7 +125,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				caption = capWriter.ToString().Trim();
 			}
 			
-			WriteLink(writer, Page.NextIndex, caption, !Page.HasNext);
+			WriteLink(writer, Page.NextPageIndex, caption, !Page.HasNextPage);
 		}
 
 		private void WriteLink(TextWriter writer, int index, string text, bool disabled)
