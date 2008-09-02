@@ -117,7 +117,7 @@
 				<arg value='/t:Rebuild' if="${build.rebuild}" />
 				<arg value="/p:DocumentationFile=${build.dir}/${project::get-name()}.xml" />
 				<arg value="/p:NoWarn=1591" unless="${build.warnmissingdocs}" />
-				<arg line="/p:SignAssembly=${assembly.sign} /p:AssemblyOriginatorKeyFile=${key.file}" />
+				<arg line="/p:SignAssembly=${assembly.sign} /p:AssemblyOriginatorKeyFile=&quot;${key.file}&quot;" />
 				<arg value="${msbuildlogger}" />
 			</exec>
 		</if>
