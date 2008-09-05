@@ -16,7 +16,15 @@ namespace Castle.MicroKernel.Registration
 {
 	using System;
 	using System.Collections.Generic;
-	
+
+	/// <summary>
+	/// Delegate for custom registration configuration.
+	/// </summary>
+	/// <typeparam name="T">The return type.</typeparam>
+	/// <param name="registration">The component registration.</param>
+	/// <returns>Not uaed.</returns>
+	public delegate T ConfigureDelegate<T>(ComponentRegistration registration);
+
 	/// <summary>
 	/// Describes how to register a group of related types.
 	/// </summary>
@@ -28,7 +36,7 @@ namespace Castle.MicroKernel.Registration
 		private Action<ComponentRegistration> configurer;
 		private Predicate<Type> unlessFilter;
 		private Predicate<Type> ifFilter;
-		
+
 		/// <summary>
 		/// Initializes a new instance of the BasedOnDescriptor.
 		/// </summary>
@@ -85,6 +93,17 @@ namespace Castle.MicroKernel.Registration
 		public BasedOnDescriptor Configure(Action<ComponentRegistration> configurer)
 		{
 			this.configurer = configurer;
+			return this;
+		}
+
+		/// <summary>
+		/// Allows customized configurations of each matching type.
+		/// </summary>
+		/// <param name="configurer">The configuration action.</param>
+		/// <returns></returns>
+		public BasedOnDescriptor Configure<T>(ConfigureDelegate<T> configurer)
+		{
+			this.configurer = delegate(ComponentRegistration registration) { configurer(registration); };
 			return this;
 		}
 

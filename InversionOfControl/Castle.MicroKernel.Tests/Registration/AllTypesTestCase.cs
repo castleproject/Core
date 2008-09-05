@@ -208,6 +208,20 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
+		public void RegisterAssemblyTypes_WithLinqConfigurationReturningValue_RegisteredInContainer()
+		{
+			kernel.Register(AllTypes.Of<ICommon>()
+				.FromAssembly(Assembly.GetExecutingAssembly())
+				.Configure(component => component.LifeStyle.Transient)
+				);
+
+			foreach (IHandler handler in kernel.GetAssignableHandlers(typeof(ICommon)))
+			{
+				Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+			}
+		}
+
+		[Test]
 		public void RegisterMultipleAssemblyTypes_BasedOn_RegisteredInContainer()
 		{
 			kernel.Register(
