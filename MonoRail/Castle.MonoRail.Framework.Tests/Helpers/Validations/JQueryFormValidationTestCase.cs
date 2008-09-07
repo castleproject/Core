@@ -16,17 +16,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 {
 	#region Using Directives
 
-	using System;
-	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Text;
 	using System.Threading;
-
 	using NUnit.Framework;
-
-	using Castle.MonoRail.Framework.Helpers;
-	using Castle.MonoRail.Framework.Helpers.ValidationStrategy;
-	using Castle.MonoRail.Framework.Tests.Controllers;
+	using Framework.Helpers;
+	using Framework.Helpers.ValidationStrategy;
+	using Controllers;
 
 	#endregion Using Directives
 
@@ -39,57 +34,49 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		[SetUp]
 		public void Init()
 		{
-			CultureInfo en = CultureInfo.CreateSpecificCulture( "en" );
+			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
 
 			Thread.CurrentThread.CurrentCulture = en;
 			Thread.CurrentThread.CurrentUICulture = en;
 
 			helper = new FormHelper();
-			helper.UseWebValidatorProvider( new JQueryValidator() );
+			helper.UseWebValidatorProvider(new JQueryValidator());
 			model = new ModelWithValidation();
 
 			HomeController controller = new HomeController();
 			ControllerContext controllerContext = new ControllerContext();
 
-			controllerContext.PropertyBag.Add( "model", model );
+			controllerContext.PropertyBag.Add("model", model);
 
-			helper.SetController( controller, controllerContext );
+			helper.SetController(controller, controllerContext);
 		}
 
 		[Test]
 		public void ValidationIsGeneratedForModel()
 		{
-			helper.FormTag( DictHelper.Create( "noaction=true" ) );
+			helper.FormTag(DictHelper.Create("noaction=true"));
 
-			Assert.AreEqual( "<input type=\"text\" id=\"model_nonemptyfield\" " +
-				"name=\"model.nonemptyfield\" value=\"\" class=\"required\" " +
-				"title=\"This is a required field.\" />", helper.TextField( "model.nonemptyfield" ) );
-
-			Assert.AreEqual( "<input type=\"text\" id=\"model_emailfield\" " +
-				"name=\"model.emailfield\" value=\"\" class=\"email\" " +
-				"title=\"Email doesnt look right.\" />", helper.TextField( "model.emailfield" ) );
+			helper.TextField("model.nonemptyfield");
+			helper.TextField("model.emailfield");
 
 			// Attribute order cannot be guaranted, so this test may fail ocasionally
 			// Assert.AreEqual("<input type=\"text\" id=\"model_nonemptyemailfield\" " +
 			//	"name=\"model.nonemptyemailfield\" value=\"\" class=\"validate-email required\" " +
 			//	"title=\"Please enter a valid email address. For example fred@domain.com, This is a required field\" />", helper.TextField("model.nonemptyemailfield"));
 
-			helper.EndFormTag();
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {rules:{\"model.nonemptyfield\":{ required: true }, \"model.emailfield\":{ email: true }}, messages:{\"model.nonemptyfield\":{ required: \"This is a required field\" }, \"model.emailfield\":{ email: \"Email doesnt look right\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' ); });</script>\r\n</form>",
+				helper.EndFormTag());
 		}
 
 		[Test]
 		public void UsingScopes()
 		{
-			helper.FormTag( DictHelper.Create( "noaction=true" ) );
-			helper.Push( "model" );
+			helper.FormTag(DictHelper.Create("noaction=true"));
+			helper.Push("model");
 
-			Assert.AreEqual( "<input type=\"text\" id=\"model_nonemptyfield\" " +
-				"name=\"model.nonemptyfield\" value=\"\" class=\"required\" " +
-				"title=\"This is a required field.\" />", helper.TextField( "nonemptyfield" ) );
-
-			Assert.AreEqual( "<input type=\"text\" id=\"model_emailfield\" " +
-				"name=\"model.emailfield\" value=\"\" class=\"email\" " +
-				"title=\"Email doesnt look right.\" />", helper.TextField( "emailfield" ) );
+			helper.TextField("nonemptyfield");
+			helper.TextField("emailfield");
 
 			// Attribute order cannot be guaranted, so this test may fail ocasionally
 			// Assert.AreEqual("<input type=\"text\" id=\"model_nonemptyemailfield\" " +
@@ -97,132 +84,218 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 			//	"title=\"Please enter a valid email address. For example fred@domain.com, This is a required field\" />", helper.TextField("nonemptyemailfield"));
 
 			helper.Pop();
-			helper.EndFormTag();
+
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {rules:{\"model.nonemptyfield\":{ required: true }, \"model.emailfield\":{ email: true }}, messages:{\"model.nonemptyfield\":{ required: \"This is a required field\" }, \"model.emailfield\":{ email: \"Email doesnt look right\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' ); });</script>\r\n</form>",
+				helper.EndFormTag());
 		}
 
 		[Test]
 		public void SameAsUsingScopes()
 		{
-			helper.FormTag( DictHelper.Create( "noaction=true" ) );
-			helper.Push( "model" );
+			helper.FormTag(DictHelper.Create("noaction=true"));
+			helper.Push("model");
 
-			Assert.AreEqual( "<input type=\"text\" id=\"model_EmailField\" " +
-				"name=\"model.EmailField\" value=\"\" class=\"email\" " +
-				"title=\"Email doesnt look right.\" />", helper.TextField( "EmailField" ) );
+			helper.TextField("EmailField");
+			helper.TextField("ConfirmedEmailField");
 
-			Assert.AreEqual("<input type=\"text\" id=\"model_ConfirmedEmailField\" " +
-				"name=\"model.ConfirmedEmailField\" value=\"\" class=\"equalTo\" " +
-				"equalto=\"#model_EmailField\" " +
-				"title=\"Fields do not match.\" />", helper.TextField("ConfirmedEmailField"));
-            
 			helper.Pop();
-			helper.EndFormTag();
+
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {rules:{\"model.EmailField\":{ email: true }, \"model.ConfirmedEmailField\":{ equalTo: \"#model_EmailField\" }}, messages:{\"model.EmailField\":{ email: \"Email doesnt look right\" }, \"model.ConfirmedEmailField\":{ equalTo: \"Fields do not match\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' ); });</script>\r\n</form>",
+				helper.EndFormTag());
 		}
 
 		[Test]
 		public void LessThenUsingScopes()
 		{
-			helper.FormTag( DictHelper.Create( "noaction=true" ) );
-			helper.Push( "model" );
+			helper.FormTag(DictHelper.Create("noaction=true"));
+			helper.Push("model");
 
-			Assert.AreEqual( "<input type=\"text\" id=\"model_FirstValue\" " +
-				"name=\"model.FirstValue\" value=\"0\" class=\"digits\" " +
-				"title=\"Please enter a valid integer in this field.\" />", helper.TextField( "FirstValue" ) );
+			helper.TextField("FirstValue");
+			helper.TextField("SecondValue");
 
-			Assert.AreEqual("<input type=\"text\" id=\"model_SecondValue\" " +
-				"name=\"model.SecondValue\" value=\"0\" class=\"lesserThan\" " +
-				"lesserthan=\"#model_FirstValue\" " +
-				"title=\"This field value must be lesser than the other field value.\" />", helper.TextField("SecondValue"));
-            
 			helper.Pop();
-			helper.EndFormTag();
+
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {rules:{\"model.FirstValue\":{ digits: true }, \"model.SecondValue\":{ lesserThan: \"#model_FirstValue\" }}, messages:{\"model.FirstValue\":{ digits: \"Please enter a valid integer in this field\" }, \"model.SecondValue\":{ lesserThan: \"This field value must be lesser than the other field value.\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' ); });</script>\r\n</form>",
+				helper.EndFormTag());
 		}
 
 		[Test]
 		public void GreaterThenUsingScopes()
 		{
-			helper.FormTag( DictHelper.Create( "noaction=true" ) );
-			helper.Push( "model" );
+			helper.FormTag(DictHelper.Create("noaction=true"));
+			helper.Push("model");
 
-			Assert.AreEqual( "<input type=\"text\" id=\"model_ThirdValue\" " +
-				"name=\"model.ThirdValue\" value=\"0\" class=\"digits\" " +
-				"title=\"Please enter a valid integer in this field.\" />", helper.TextField( "ThirdValue" ) );
+			helper.TextField("ThirdValue");
+			helper.TextField("ForthValue");
 
-			Assert.AreEqual("<input type=\"text\" id=\"model_ForthValue\" " +
-				"name=\"model.ForthValue\" value=\"0\" class=\"greaterThan\" " +
-				"greaterthan=\"#model_ThirdValue\" " +
-				"title=\"This field value must be greater than the other field value.\" />", helper.TextField("ForthValue"));
-            
 			helper.Pop();
-			helper.EndFormTag();
+
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {rules:{\"model.ThirdValue\":{ digits: true }, \"model.ForthValue\":{ greaterThan: \"#model_ThirdValue\" }}, messages:{\"model.ThirdValue\":{ digits: \"Please enter a valid integer in this field\" }, \"model.ForthValue\":{ greaterThan: \"This field value must be greater than the other field value.\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' ); });</script>\r\n</form>",
+				helper.EndFormTag());
 		}
 
 		[Test]
 		public void GroupValidationUsingScopes()
 		{
-			helper.FormTag( DictHelper.Create( "noaction=true" ) );
-			helper.Push( "model" );
+			helper.FormTag(DictHelper.Create("noaction=true"));
+			helper.Push("model");
 
-			Assert.AreEqual("<input type=\"text\" id=\"model_GroupValue1\" " +
-				"name=\"model.GroupValue1\" value=\"\" class=\"requiredmygroup1\" />", helper.TextField("GroupValue1"));
+			helper.TextField("GroupValue1");
+			helper.TextField("GroupValue2");
+			helper.TextField("GroupValue3");
+			helper.TextField("GroupValue4");
 
-			Assert.AreEqual("<input type=\"text\" id=\"model_GroupValue2\" " +
-				"name=\"model.GroupValue2\" value=\"\" class=\"requiredmygroup1\" />", helper.TextField("GroupValue2"));
-
-			Assert.AreEqual("<input type=\"text\" id=\"model_GroupValue3\" " +
-				"name=\"model.GroupValue3\" value=\"\" class=\"requiredmygroup2\" />", helper.TextField("GroupValue3"));
-
-			Assert.AreEqual("<input type=\"text\" id=\"model_GroupValue4\" " +
-				"name=\"model.GroupValue4\" value=\"\" class=\"requiredmygroup2\" />", helper.TextField("GroupValue4"));
-            
 			helper.Pop();
+
 			Assert.AreEqual(
-				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {groups:{mygroup1: \"model.GroupValue1 model.GroupValue2 \",\r\nmygroup2: \"model.GroupValue3 model.GroupValue4 \",\r\n}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );\r\njQuery.validator.addMethod('mygroup1',  function() { if($(\"#model_GroupValue1\").val()!='' || $(\"#model_GroupValue2\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addMethod('mygroup2',  function() { if($(\"#model_GroupValue3\").val()!='' || $(\"#model_GroupValue4\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});\r\njQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>\r\n</form>"
-                ,helper.EndFormTag());
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {groups:{mygroup1: \"model.GroupValue1 model.GroupValue2 \",\r\nmygroup2: \"model.GroupValue3 model.GroupValue4 \",\r\n}, rules:{\"model.GroupValue1\":{ requiredmygroup1: true }, \"model.GroupValue2\":{ requiredmygroup1: true }, \"model.GroupValue3\":{ requiredmygroup2: true }, \"model.GroupValue4\":{ requiredmygroup2: true }}, messages:{\"model.GroupValue1\":{ requiredmygroup1: \"At least one of the values should not be empty\" }, \"model.GroupValue2\":{ requiredmygroup1: \"At least one of the values should not be empty\" }, \"model.GroupValue3\":{ requiredmygroup2: \"At least one of the values should not be empty\" }, \"model.GroupValue4\":{ requiredmygroup2: \"At least one of the values should not be empty\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );\r\njQuery.validator.addMethod('mygroup1',  function() { if($(\"#model_GroupValue1\").val()!='' || $(\"#model_GroupValue2\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addMethod('mygroup2',  function() { if($(\"#model_GroupValue3\").val()!='' || $(\"#model_GroupValue4\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});\r\njQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>\r\n</form>",
+				helper.EndFormTag());
 		}
-        
+
 		[Test]
 		public void ValidationForSelects()
 		{
-			helper.FormTag( DictHelper.Create( "noaction=true" ) );
+			helper.FormTag(DictHelper.Create("noaction=true"));
 
-			Assert.AreEqual( "<select id=\"model_city\" " +
-				"name=\"model.city\" class=\"required\" " +
-				"title=\"This is a required field.\" >\r\n" +
-				"<option value=\"0\">---</option>\r\n" +
-				"<option value=\"Sao Paulo\">Sao Paulo</option>\r\n" +
-				"<option value=\"Sao Carlos\">Sao Carlos</option>\r\n" +
-				"</select>",
-				helper.Select( "model.city",
-					new string[] { "Sao Paulo", "Sao Carlos" }, DictHelper.Create( "firstoption=---" ) ) );
 
-			helper.EndFormTag();
+			helper.Select("model.city",
+			              new string[] {"Sao Paulo", "Sao Carlos"}, DictHelper.Create("firstoption=---"));
+
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {rules:{\"model.city\":{ required: true }}, messages:{\"model.city\":{ required: \"This is a required field\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' ); });</script>\r\n</form>",
+				helper.EndFormTag());
 		}
 
 		[Test]
 		public void ValidationAreInherited()
 		{
-			helper.FormTag( DictHelper.Create( "noaction=true" ) );
+			helper.FormTag(DictHelper.Create("noaction=true"));
 
-			Assert.AreEqual( "<select id=\"model_city_id\" " +
-				"name=\"model.city.id\" class=\"required\" " +
-				"title=\"This is a required field.\" >\r\n" +
-				"<option value=\"0\">---</option>\r\n" +
-				"<option value=\"1\">1</option>\r\n" +
-				"<option value=\"2\">2</option>\r\n" +
-				"</select>",
-				helper.Select( "model.city.id",
-					new string[] { "1", "2" }, DictHelper.Create( "firstoption=---" ) ) );
+			helper.Select("model.city.id",
+			              new string[] {"1", "2"}, DictHelper.Create("firstoption=---"));
 
-			helper.EndFormTag();
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {rules:{\"model.city.id\":{ required: true }}, messages:{\"model.city.id\":{ required: \"This is a required field\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' ); });</script>\r\n</form>",
+				helper.EndFormTag());
+		}
+
+		[Test]
+		public void FullValidationSameAsUsingScopes()
+		{
+			helper.FormTag(DictHelper.Create("noaction=true"));
+			helper.Push("model");
+
+			helper.TextField("NonEmptyField");
+			helper.TextField("EmailField");
+			helper.TextField("NonEmptyEmailField");
+			helper.TextField("FirstValue");
+			helper.TextField("SecondValue");
+			helper.TextField("ThirdValue");
+			helper.TextField("ForthValue");
+			helper.TextField("GroupValue1");
+			helper.TextField("GroupValue2");
+			helper.TextField("GroupValue3");
+			helper.TextField("GroupValue4");
+			helper.Select("City", new string[] {"Sao Paulo", "Sao Carlos"}, DictHelper.Create("firstoption=---"));
+			helper.Select("Country.Id", new string[] {"1", "2"}, DictHelper.Create("firstoption=---"));
+
+			helper.Pop();
+
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {groups:{mygroup1: \"model.GroupValue1 model.GroupValue2 \",\r\nmygroup2: \"model.GroupValue3 model.GroupValue4 \",\r\n}, rules:{\"model.NonEmptyField\":{ required: true }, \"model.EmailField\":{ email: true }, \"model.NonEmptyEmailField\":{  required: true , email: true }, \"model.FirstValue\":{ digits: true }, \"model.SecondValue\":{ lesserThan: \"#model_FirstValue\" }, \"model.ThirdValue\":{ digits: true }, \"model.ForthValue\":{ greaterThan: \"#model_ThirdValue\" }, \"model.GroupValue1\":{ requiredmygroup1: true }, \"model.GroupValue2\":{ requiredmygroup1: true }, \"model.GroupValue3\":{ requiredmygroup2: true }, \"model.GroupValue4\":{ requiredmygroup2: true }, \"model.City\":{ required: true }, \"model.Country.Id\":{ required: true }}, messages:{\"model.NonEmptyField\":{ required: \"This is a required field\" }, \"model.EmailField\":{ email: \"Email doesnt look right\" }, \"model.NonEmptyEmailField\":{  required: \"This is a required field\" , email: \"Please enter a valid email address. For example fred@domain.com\" }, \"model.FirstValue\":{ digits: \"Please enter a valid integer in this field\" }, \"model.SecondValue\":{ lesserThan: \"This field value must be lesser than the other field value.\" }, \"model.ThirdValue\":{ digits: \"Please enter a valid integer in this field\" }, \"model.ForthValue\":{ greaterThan: \"This field value must be greater than the other field value.\" }, \"model.GroupValue1\":{ requiredmygroup1: \"At least one of the values should not be empty\" }, \"model.GroupValue2\":{ requiredmygroup1: \"At least one of the values should not be empty\" }, \"model.GroupValue3\":{ requiredmygroup2: \"At least one of the values should not be empty\" }, \"model.GroupValue4\":{ requiredmygroup2: \"At least one of the values should not be empty\" }, \"model.City\":{ required: \"This is a required field\" }, \"model.Country.Id\":{ required: \"This is a required field\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );\r\njQuery.validator.addMethod('mygroup1',  function() { if($(\"#model_GroupValue1\").val()!='' || $(\"#model_GroupValue2\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addMethod('mygroup2',  function() { if($(\"#model_GroupValue3\").val()!='' || $(\"#model_GroupValue4\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});\r\njQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>\r\n</form>"
+				, helper.EndFormTag());
+		}
+
+		[Test]
+		public void FullValidationUsingScopes()
+		{
+			helper.FormTag(DictHelper.Create("noaction=true"));
+			helper.Push("model");
+
+			helper.TextField("nonemptyfield");
+			helper.TextField("emailfield");
+			helper.TextField("nonemptyemailfield");
+			helper.TextField("firstvalue");
+			helper.TextField("secondvalue");
+			helper.TextField("thirdvalue");
+			helper.TextField("forthvalue");
+			helper.TextField("groupvalue1");
+			helper.TextField("groupvalue2");
+			helper.TextField("groupvalue3");
+			helper.TextField("groupvalue4");
+			helper.Select("city", new string[] {"Sao Paulo", "Sao Carlos"}, DictHelper.Create("firstoption=---"));
+			helper.Select("country.id", new string[] {"1", "2"}, DictHelper.Create("firstoption=---"));
+
+			helper.Pop();
+
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {groups:{mygroup1: \"model.groupvalue1 model.groupvalue2 \",\r\nmygroup2: \"model.groupvalue3 model.groupvalue4 \",\r\n}, rules:{\"model.nonemptyfield\":{ required: true }, \"model.emailfield\":{ email: true }, \"model.nonemptyemailfield\":{  required: true , email: true }, \"model.firstvalue\":{ digits: true }, \"model.secondvalue\":{ lesserThan: \"#model_FirstValue\" }, \"model.thirdvalue\":{ digits: true }, \"model.forthvalue\":{ greaterThan: \"#model_ThirdValue\" }, \"model.groupvalue1\":{ requiredmygroup1: true }, \"model.groupvalue2\":{ requiredmygroup1: true }, \"model.groupvalue3\":{ requiredmygroup2: true }, \"model.groupvalue4\":{ requiredmygroup2: true }, \"model.city\":{ required: true }, \"model.country.id\":{ required: true }}, messages:{\"model.nonemptyfield\":{ required: \"This is a required field\" }, \"model.emailfield\":{ email: \"Email doesnt look right\" }, \"model.nonemptyemailfield\":{  required: \"This is a required field\" , email: \"Please enter a valid email address. For example fred@domain.com\" }, \"model.firstvalue\":{ digits: \"Please enter a valid integer in this field\" }, \"model.secondvalue\":{ lesserThan: \"This field value must be lesser than the other field value.\" }, \"model.thirdvalue\":{ digits: \"Please enter a valid integer in this field\" }, \"model.forthvalue\":{ greaterThan: \"This field value must be greater than the other field value.\" }, \"model.groupvalue1\":{ requiredmygroup1: \"At least one of the values should not be empty\" }, \"model.groupvalue2\":{ requiredmygroup1: \"At least one of the values should not be empty\" }, \"model.groupvalue3\":{ requiredmygroup2: \"At least one of the values should not be empty\" }, \"model.groupvalue4\":{ requiredmygroup2: \"At least one of the values should not be empty\" }, \"model.city\":{ required: \"This is a required field\" }, \"model.country.id\":{ required: \"This is a required field\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );\r\njQuery.validator.addMethod('mygroup1',  function() { if($(\"#model_groupvalue1\").val()!='' || $(\"#model_groupvalue2\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addMethod('mygroup2',  function() { if($(\"#model_groupvalue3\").val()!='' || $(\"#model_groupvalue4\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});\r\njQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>\r\n</form>"
+				, helper.EndFormTag());
+		}
+
+		[Test]
+		public void FullValidationNotUsingScopes()
+		{
+			helper.FormTag(DictHelper.Create("noaction=true"));
+
+			helper.TextField("model.nonemptyfield");
+			helper.TextField("model.emailfield");
+			helper.TextField("model.nonemptyemailfield");
+			helper.TextField("model.firstvalue");
+			helper.TextField("model.secondvalue");
+			helper.TextField("model.thirdvalue");
+			helper.TextField("model.forthvalue");
+			helper.TextField("model.groupvalue1");
+			helper.TextField("model.groupvalue2");
+			helper.TextField("model.groupvalue3");
+			helper.TextField("model.groupvalue4");
+			helper.Select("model.city", new string[] {"Sao Paulo", "Sao Carlos"}, DictHelper.Create("firstoption=---"));
+			helper.Select("model.country.id", new string[] {"1", "2"}, DictHelper.Create("firstoption=---"));
+
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {groups:{mygroup1: \"model.groupvalue1 model.groupvalue2 \",\r\nmygroup2: \"model.groupvalue3 model.groupvalue4 \",\r\n}, rules:{\"model.nonemptyfield\":{ required: true }, \"model.emailfield\":{ email: true }, \"model.nonemptyemailfield\":{  required: true , email: true }, \"model.firstvalue\":{ digits: true }, \"model.secondvalue\":{ lesserThan: \"#model_FirstValue\" }, \"model.thirdvalue\":{ digits: true }, \"model.forthvalue\":{ greaterThan: \"#model_ThirdValue\" }, \"model.groupvalue1\":{ requiredmygroup1: true }, \"model.groupvalue2\":{ requiredmygroup1: true }, \"model.groupvalue3\":{ requiredmygroup2: true }, \"model.groupvalue4\":{ requiredmygroup2: true }, \"model.city\":{ required: true }, \"model.country.id\":{ required: true }}, messages:{\"model.nonemptyfield\":{ required: \"This is a required field\" }, \"model.emailfield\":{ email: \"Email doesnt look right\" }, \"model.nonemptyemailfield\":{  required: \"This is a required field\" , email: \"Please enter a valid email address. For example fred@domain.com\" }, \"model.firstvalue\":{ digits: \"Please enter a valid integer in this field\" }, \"model.secondvalue\":{ lesserThan: \"This field value must be lesser than the other field value.\" }, \"model.thirdvalue\":{ digits: \"Please enter a valid integer in this field\" }, \"model.forthvalue\":{ greaterThan: \"This field value must be greater than the other field value.\" }, \"model.groupvalue1\":{ requiredmygroup1: \"At least one of the values should not be empty\" }, \"model.groupvalue2\":{ requiredmygroup1: \"At least one of the values should not be empty\" }, \"model.groupvalue3\":{ requiredmygroup2: \"At least one of the values should not be empty\" }, \"model.groupvalue4\":{ requiredmygroup2: \"At least one of the values should not be empty\" }, \"model.city\":{ required: \"This is a required field\" }, \"model.country.id\":{ required: \"This is a required field\" }}} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );\r\njQuery.validator.addMethod('mygroup1',  function() { if($(\"#model_groupvalue1\").val()!='' || $(\"#model_groupvalue2\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addMethod('mygroup2',  function() { if($(\"#model_groupvalue3\").val()!='' || $(\"#model_groupvalue4\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});\r\njQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>\r\n</form>"
+				, helper.EndFormTag());
 		}
 
 		[Test]
 		public void TestIsAjaxOption()
 		{
-			helper.FormTag( DictHelper.CreateN( "isAjax", true ).N( "noaction", true ) );
+			helper.FormTag(DictHelper.CreateN("isAjax", true).N("noaction", true));
 
-			Assert.AreEqual( "\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {submitHandler:function( form ) { jQuery( form ).ajaxSubmit(); }} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' ); });</script>\r\n</form>", helper.EndFormTag() );
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {submitHandler:function( form ) { jQuery( form ).ajaxSubmit(); }} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' ); });</script>\r\n</form>",
+				helper.EndFormTag());
+		}
+
+		[Test]
+		public void TestIsAjaxOptionAndValidation()
+		{
+			helper.FormTag(DictHelper.CreateN("isAjax", true).N("noaction", true));
+			helper.Push("model");
+
+			helper.TextField("NonEmptyField");
+			helper.TextField("EmailField");
+			helper.TextField("NonEmptyEmailField");
+			helper.TextField("FirstValue");
+			helper.TextField("SecondValue");
+			helper.TextField("ThirdValue");
+			helper.TextField("ForthValue");
+			helper.TextField("GroupValue1");
+			helper.TextField("GroupValue2");
+			helper.TextField("GroupValue3");
+			helper.TextField("GroupValue4");
+			helper.Select("City", new string[] {"Sao Paulo", "Sao Carlos"}, DictHelper.Create("firstoption=---"));
+			helper.Select("Country.Id", new string[] {"1", "2"}, DictHelper.Create("firstoption=---"));
+
+			helper.Pop();
+
+			Assert.AreEqual(
+				"\r\n<script type=\"text/javascript\">\r\njQuery( document ).ready( function() { jQuery(\"#form1\").validate( {messages:{\"model.NonEmptyField\":{ required: \"This is a required field\" }, \"model.EmailField\":{ email: \"Email doesnt look right\" }, \"model.NonEmptyEmailField\":{  required: \"This is a required field\" , email: \"Please enter a valid email address. For example fred@domain.com\" }, \"model.FirstValue\":{ digits: \"Please enter a valid integer in this field\" }, \"model.SecondValue\":{ lesserThan: \"This field value must be lesser than the other field value.\" }, \"model.ThirdValue\":{ digits: \"Please enter a valid integer in this field\" }, \"model.ForthValue\":{ greaterThan: \"This field value must be greater than the other field value.\" }, \"model.GroupValue1\":{ requiredmygroup1: \"At least one of the values should not be empty\" }, \"model.GroupValue2\":{ requiredmygroup1: \"At least one of the values should not be empty\" }, \"model.GroupValue3\":{ requiredmygroup2: \"At least one of the values should not be empty\" }, \"model.GroupValue4\":{ requiredmygroup2: \"At least one of the values should not be empty\" }, \"model.City\":{ required: \"This is a required field\" }, \"model.Country.Id\":{ required: \"This is a required field\" }}, groups:{mygroup1: \"model.GroupValue1 model.GroupValue2 \",\r\nmygroup2: \"model.GroupValue3 model.GroupValue4 \",\r\n}, rules:{\"model.NonEmptyField\":{ required: true }, \"model.EmailField\":{ email: true }, \"model.NonEmptyEmailField\":{  required: true , email: true }, \"model.FirstValue\":{ digits: true }, \"model.SecondValue\":{ lesserThan: \"#model_FirstValue\" }, \"model.ThirdValue\":{ digits: true }, \"model.ForthValue\":{ greaterThan: \"#model_ThirdValue\" }, \"model.GroupValue1\":{ requiredmygroup1: true }, \"model.GroupValue2\":{ requiredmygroup1: true }, \"model.GroupValue3\":{ requiredmygroup2: true }, \"model.GroupValue4\":{ requiredmygroup2: true }, \"model.City\":{ required: true }, \"model.Country.Id\":{ required: true }}, submitHandler:function( form ) { jQuery( form ).ajaxSubmit(); }} );\r\njQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );\r\njQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );\r\njQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );\r\njQuery.validator.addMethod('mygroup1',  function() { if($(\"#model_GroupValue1\").val()!='' || $(\"#model_GroupValue2\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addMethod('mygroup2',  function() { if($(\"#model_GroupValue3\").val()!='' || $(\"#model_GroupValue4\").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );\r\njQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});\r\njQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>\r\n</form>",
+				helper.EndFormTag());
 		}
 	}
 }

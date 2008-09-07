@@ -19,13 +19,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	using System;
 	using System.Collections.Generic;
 	using System.Text;
-
-	using Castle.Components.Validator;
+	using Components.Validator;
 	using System.Collections;
-	using Castle.MonoRail.Framework.Internal;
+	using Internal;
 
 	#endregion Using Directives
-
 
 	/// <summary>
 	/// Implementation of a browser validator that uses the <c>JQuery.validate</c> 
@@ -34,7 +32,6 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	/// </summary>
 	public class JQueryValidator : IBrowserValidatorProvider
 	{
-
 		#region IBrowserValidatorProvider Members
 
 		/// <summary>
@@ -46,10 +43,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// <returns>
 		/// An instance that extends from <see cref="BrowserValidationConfiguration"/>
 		/// </returns>
-		public BrowserValidationConfiguration CreateConfiguration( IDictionary parameters )
+		public BrowserValidationConfiguration CreateConfiguration(IDictionary parameters)
 		{
 			JQueryConfiguration config = new JQueryConfiguration();
-			config.Configure( parameters );
+			config.Configure(parameters);
 			return config;
 		}
 
@@ -60,9 +57,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// <param name="inputType"></param>
 		/// <param name="attributes"></param>
 		/// <returns>A generator instance</returns>
-		public IBrowserValidationGenerator CreateGenerator( BrowserValidationConfiguration configuration, InputElementType inputType, IDictionary attributes )
+		public IBrowserValidationGenerator CreateGenerator(BrowserValidationConfiguration configuration,
+		                                                   InputElementType inputType, IDictionary attributes)
 		{
-			return new JQueryValidationGenerator( ( JQueryConfiguration )configuration, inputType, attributes );
+			return new JQueryValidationGenerator((JQueryConfiguration) configuration);
 		}
 
 		#endregion IBrowserValidatorProvider Members
@@ -76,22 +74,23 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		{
 			#region Constants
 
-			const string AjaxOptionsPrefix = "ajax-";
+			private const string AjaxOptionsPrefix = "ajax-";
 
 			#endregion Constants
 
-			#region Instance Variables
+			#region Instance Variables
 
-			readonly Dictionary<String, CustomRule> _customRules = new Dictionary<String, CustomRule>();
-			readonly Dictionary<string, string> _rules = new Dictionary<string, string>();
-			readonly IDictionary _options = new Hashtable();
-			readonly IDictionary _ajaxOptions = new Hashtable();
-			readonly Dictionary<string, Group> _groups = new Dictionary<string, Group>();
-			readonly IDictionary<string, IDictionary> _customClasses = new Dictionary<string, IDictionary>();
+			private readonly Dictionary<String, CustomRule> _customRules = new Dictionary<String, CustomRule>();
+			private readonly Dictionary<string, string> _rules = new Dictionary<string, string>();
+			private readonly IDictionary _options = new Hashtable();
+			private readonly IDictionary _ajaxOptions = new Hashtable();
+			private readonly Dictionary<string, Group> _groups = new Dictionary<string, Group>();
+			private readonly IDictionary<string, IDictionary> _customClasses = new Dictionary<string, IDictionary>();
+			private readonly Dictionary<string, string> _messages = new Dictionary<string, string>();
 
-			#endregion Instance Variables
+			#endregion Instance Variables
 
-			#region Public Methods
+			#region Public Methods
 
 			/// <summary>
 			/// Adds a custom rule.
@@ -119,9 +118,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			///		"validateMaxWords" );
 			/// </code>
 			/// </example>
-			public void AddCustomRule( string name, string violationMessage, string rule )
+			public void AddCustomRule(string name, string violationMessage, string rule)
 			{
-				_customRules[ name ] = new CustomRule( name, rule, violationMessage );
+				_customRules[name] = new CustomRule(name, rule, violationMessage);
 			}
 
 			/// <summary>
@@ -129,49 +128,48 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			/// <param name="name">The name of the class.</param>
 			/// <param name="options">The class options</param>
-			public void AddCustomClass( string name, IDictionary options )
+			public void AddCustomClass(string name, IDictionary options)
 			{
-				_customClasses[ name ] = options;
+				_customClasses[name] = options;
 			}
 
 			/// <summary>
 			/// Configures the JQuery Validate plugin based on the supplied parameters.
 			/// </summary>
 			/// <param name="parameters">The parameters.</param>
-			public override void Configure( IDictionary parameters )
+			public override void Configure(IDictionary parameters)
 			{
-				AddParameterToOptions( parameters, _options, JQueryOptions.Debug, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.ErrorClass, true );
-				AddParameterToOptions( parameters, _options, JQueryOptions.ErrorContainer, true );
-				AddParameterToOptions( parameters, _options, JQueryOptions.ErrorElement, true );
-				AddParameterToOptions( parameters, _options, JQueryOptions.ErrorLabelContainer, true );
-				AddParameterToOptions( parameters, _options, JQueryOptions.ErrorPlacement, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.FocusCleanup, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.FocusInvalid, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.Highlight, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.Ignore, true );
-				AddParameterToOptions( parameters, _options, JQueryOptions.Messages, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.Meta, true );
-				AddParameterToOptions( parameters, _options, JQueryOptions.OnClick, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.OnFocusOut, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.OnKeyUp, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.OnSubmit, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.ShowErrors, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.SubmitHandler, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.Success, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.Unhighlight, false );
-				AddParameterToOptions( parameters, _options, JQueryOptions.Wrapper, true );
-				AddParameterToOptions( parameters, _options, JQueryOptions.IsAjax, false );
+				AddParameterToOptions(parameters, _options, JQueryOptions.Debug, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.ErrorClass, true);
+				AddParameterToOptions(parameters, _options, JQueryOptions.ErrorContainer, true);
+				AddParameterToOptions(parameters, _options, JQueryOptions.ErrorElement, true);
+				AddParameterToOptions(parameters, _options, JQueryOptions.ErrorLabelContainer, true);
+				AddParameterToOptions(parameters, _options, JQueryOptions.ErrorPlacement, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.FocusCleanup, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.FocusInvalid, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.Highlight, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.Ignore, true);
+				AddParameterToOptions(parameters, _options, JQueryOptions.Meta, true);
+				AddParameterToOptions(parameters, _options, JQueryOptions.OnClick, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.OnFocusOut, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.OnKeyUp, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.OnSubmit, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.ShowErrors, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.SubmitHandler, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.Success, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.Unhighlight, false);
+				AddParameterToOptions(parameters, _options, JQueryOptions.Wrapper, true);
+				AddParameterToOptions(parameters, _options, JQueryOptions.IsAjax, false);
 
-				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxBeforeSubmit, false, AjaxOptionsPrefix );
-				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxClearForm, false, AjaxOptionsPrefix );
-				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxDataType, true, AjaxOptionsPrefix );
-				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxResetForm, false, AjaxOptionsPrefix );
-				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxSemantic, false, AjaxOptionsPrefix );
-				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxSuccess, false, AjaxOptionsPrefix );
-				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxTarget, true, AjaxOptionsPrefix );
-				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxType, true, AjaxOptionsPrefix );
-				AddParameterToOptions( parameters, _ajaxOptions, JQueryOptions.AjaxUrl, true, AjaxOptionsPrefix );
+				AddParameterToOptions(parameters, _ajaxOptions, JQueryOptions.AjaxBeforeSubmit, false, AjaxOptionsPrefix);
+				AddParameterToOptions(parameters, _ajaxOptions, JQueryOptions.AjaxClearForm, false, AjaxOptionsPrefix);
+				AddParameterToOptions(parameters, _ajaxOptions, JQueryOptions.AjaxDataType, true, AjaxOptionsPrefix);
+				AddParameterToOptions(parameters, _ajaxOptions, JQueryOptions.AjaxResetForm, false, AjaxOptionsPrefix);
+				AddParameterToOptions(parameters, _ajaxOptions, JQueryOptions.AjaxSemantic, false, AjaxOptionsPrefix);
+				AddParameterToOptions(parameters, _ajaxOptions, JQueryOptions.AjaxSuccess, false, AjaxOptionsPrefix);
+				AddParameterToOptions(parameters, _ajaxOptions, JQueryOptions.AjaxTarget, true, AjaxOptionsPrefix);
+				AddParameterToOptions(parameters, _ajaxOptions, JQueryOptions.AjaxType, true, AjaxOptionsPrefix);
+				AddParameterToOptions(parameters, _ajaxOptions, JQueryOptions.AjaxUrl, true, AjaxOptionsPrefix);
 
 				AddCustomRules();
 			}
@@ -182,41 +180,46 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			/// <param name="formId">The form id.</param>
 			/// <returns></returns>
-			public override string CreateBeforeFormClosed( string formId )
+			public override string CreateBeforeFormClosed(string formId)
 			{
 				StringBuilder stringBuilder = new StringBuilder();
 
-				if ( _rules.Count > 0 )
+				if (_rules.Count > 0)
 				{
-					_options[ JQueryOptions.Rules ] = AbstractHelper.JavascriptOptions( _rules );
+					_options[JQueryOptions.Rules] = AbstractHelper.JavascriptOptions(_rules);
 				}
 
-				bool isAjax = false;
-				bool.TryParse( CommonUtils.ObtainEntryAndRemove(
-					_options,
-					JQueryOptions.IsAjax,
-					bool.FalseString ), out isAjax );
-
-				if( isAjax )
+				if (_messages.Count > 0)
 				{
-					string submitHandler = CommonUtils.ObtainEntryAndRemove( _options, JQueryOptions.SubmitHandler );
+					_options[JQueryOptions.Messages] = AbstractHelper.JavascriptOptions(_messages);
+				}
 
-					if( submitHandler == null )
+				bool isAjax;
+				bool.TryParse(CommonUtils.ObtainEntryAndRemove(
+				              	_options,
+				              	JQueryOptions.IsAjax,
+				              	bool.FalseString), out isAjax);
+
+				if (isAjax)
+				{
+					string submitHandler = CommonUtils.ObtainEntryAndRemove(_options, JQueryOptions.SubmitHandler);
+
+					if (submitHandler == null)
 					{
-						if( _ajaxOptions.Count > 0 )
+						if (_ajaxOptions.Count > 0)
 						{
 							_options.Add(
 								JQueryOptions.SubmitHandler,
 								string.Concat(
 									"function( form ) { jQuery( form ).ajaxSubmit( ",
-									AjaxHelper.JavascriptOptions( _ajaxOptions ),
-									"); }" ) );
+									AbstractHelper.JavascriptOptions(_ajaxOptions),
+									"); }"));
 						}
 						else
 						{
 							_options.Add(
 								JQueryOptions.SubmitHandler,
-								"function( form ) { jQuery( form ).ajaxSubmit(); }" );
+								"function( form ) { jQuery( form ).ajaxSubmit(); }");
 						}
 					}
 				}
@@ -225,31 +228,31 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				GenerateGroupNotEmptyValidatorCustomRule();
 				GenerateGroupNotEmptyValidatorCustomClass();
 
-				stringBuilder.Append( "jQuery( document ).ready( function() { " );
+				stringBuilder.Append("jQuery( document ).ready( function() { ");
 				stringBuilder.AppendFormat("jQuery(\"#{0}\").validate( {1} );", formId, AbstractHelper.JavascriptOptions(_options));
 
-				if ( _customRules.Count > 0 )
+				if (_customRules.Count > 0)
 				{
-					foreach ( CustomRule rule in _customRules.Values )
+					foreach(CustomRule rule in _customRules.Values)
 					{
-						stringBuilder.Append( Environment.NewLine );
-						stringBuilder.Append( "jQuery.validator.addMethod('" );
-						stringBuilder.Append( rule.Name );
-						stringBuilder.Append( "', " );
-						stringBuilder.Append( rule.Rule );
-						stringBuilder.Append( ", '" );
-						stringBuilder.Append( rule.ViolationMessage );
-						stringBuilder.Append( "' );" );
+						stringBuilder.Append(Environment.NewLine);
+						stringBuilder.Append("jQuery.validator.addMethod('");
+						stringBuilder.Append(rule.Name);
+						stringBuilder.Append("', ");
+						stringBuilder.Append(rule.Rule);
+						stringBuilder.Append(", '");
+						stringBuilder.Append(rule.ViolationMessage);
+						stringBuilder.Append("' );");
 					}
 				}
 
-				if(_customClasses.Count > 0)
+				if (_customClasses.Count > 0)
 				{
 					foreach(KeyValuePair<string, IDictionary> pair in _customClasses)
 					{
 						stringBuilder.Append(Environment.NewLine);
 						stringBuilder.Append("jQuery.validator.addClassRules({");
-						stringBuilder.Append(string.Format("required{0}",pair.Key));
+						stringBuilder.Append(string.Format("required{0}", pair.Key));
 						stringBuilder.Append(": ");
 						stringBuilder.Append(AbstractHelper.JavascriptOptions(pair.Value));
 						stringBuilder.Append("});");
@@ -258,7 +261,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 				stringBuilder.Append(" });");
 
-				return AbstractHelper.ScriptBlock( stringBuilder.ToString() );
+				return AbstractHelper.ScriptBlock(stringBuilder.ToString());
 			}
 
 			/// <summary>
@@ -285,8 +288,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 					groupValues += string.Format("{0},{1}", group.GetFormattedGroup(), Environment.NewLine);
 				}
 
-				if(groupValues != string.Empty)
-					_options.Add("groups", string.Format("{{{0}}}",groupValues));
+				if (groupValues != string.Empty)
+				{
+					_options.Add("groups", string.Format("{{{0}}}", groupValues));
+				}
 			}
 
 			/// <summary>
@@ -299,30 +304,58 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 					Group group = pair.Value;
 
 					Hashtable options = new Hashtable();
-					options.Add(group.GroupName,"true");
+					options.Add(group.GroupName, "true");
 
 					AddCustomClass(group.GroupName, options);
 				}
 			}
 
-			#endregion Public Methods
+			#endregion Public Methods
 
-			#region Internal Methods
+			#region Internal Methods
 
-			internal void AddRule( string target, string rule )
+			internal void AddMessage(string target, string rule, string message)
 			{
-				if ( _rules.ContainsKey( target ) )
+				string formattedMessage = String.Format("{0}: \"{1}\"", rule, message);
+				if (_messages.ContainsKey(target))
 				{
-					string originalRule = _rules[ target ];
+					string originalMessage = _messages[target];
 
-					if ( originalRule.StartsWith( "{" ) )
-						originalRule = originalRule.Substring( 1, originalRule.LastIndexOf( "}" ) - 1 );
+					if (originalMessage.StartsWith("{"))
+					{
+						originalMessage = originalMessage.Substring(1, originalMessage.LastIndexOf("}") - 1);
+					}
 
-					_rules[ target ] = string.Concat( "{ ", originalRule, ", ", rule, " }" );
+					if (!originalMessage.Contains(message))
+					{
+						_messages[target] = string.Concat("{ ", originalMessage, ", ", formattedMessage, " }");
+					}
 				}
 				else
 				{
-					_rules.Add( target, string.Concat( "{ ", rule, " }" ) );
+					_messages.Add(target, string.Concat("{ ", formattedMessage, " }"));
+				}
+			}
+
+			internal void AddRule(string target, string rule)
+			{
+				if (_rules.ContainsKey(target))
+				{
+					string originalRule = _rules[target];
+
+					if (originalRule.StartsWith("{"))
+					{
+						originalRule = originalRule.Substring(1, originalRule.LastIndexOf("}") - 1);
+					}
+
+					if (!originalRule.Contains(rule))
+					{
+						_rules[target] = string.Concat("{ ", originalRule, ", ", rule, " }");
+					}
+				}
+				else
+				{
+					_rules.Add(target, string.Concat("{ ", rule, " }"));
 				}
 			}
 
@@ -336,50 +369,58 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				_groups[groupName].GroupItems.Add(target);
 			}
 
-			#endregion Internal Methods
+			#endregion Internal Methods
 
-			#region Private Methods
+			#region Private Methods
 
-			void AddCustomRules()
+			private void AddCustomRules()
 			{
-				AddCustomRule( "notEqualTo", "Must not be equal to {0}.", "function(value, element, param) { return value != jQuery(param).val(); }" );
-				AddCustomRule( "greaterThan", "Must be greater than {0}.", "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }" );
-				AddCustomRule( "lesserThan", "Must be lesser than {0}.", "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }" );
+				AddCustomRule("notEqualTo", "Must not be equal to {0}.",
+				              "function(value, element, param) { return value != jQuery(param).val(); }");
+				AddCustomRule("greaterThan", "Must be greater than {0}.",
+				              "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }");
+				AddCustomRule("lesserThan", "Must be lesser than {0}.",
+				              "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }");
 			}
 
-			static void AddParameterToOptions( IDictionary parameters, IDictionary options, string parameterName, bool quote )
+			private static void AddParameterToOptions(IDictionary parameters, IDictionary options, string parameterName,
+			                                          bool quote)
 			{
-				AddParameterToOptions( parameters, options, parameterName, quote, string.Empty );
+				AddParameterToOptions(parameters, options, parameterName, quote, string.Empty);
 			}
 
-			static void AddParameterToOptions( IDictionary parameters, IDictionary options, string parameterName, bool quote, string prefixToRemove )
+			private static void AddParameterToOptions(IDictionary parameters, IDictionary options, string parameterName,
+			                                          bool quote, string prefixToRemove)
 			{
-				string parameterValue = CommonUtils.ObtainEntryAndRemove( parameters, parameterName, null );
+				string parameterValue = CommonUtils.ObtainEntryAndRemove(parameters, parameterName, null);
 				string parameterNameToInsert = parameterName;
 
-				if( !string.IsNullOrEmpty( prefixToRemove ) )
+				if (!string.IsNullOrEmpty(prefixToRemove))
 				{
-					parameterNameToInsert = parameterName.Replace( prefixToRemove, string.Empty );
+					parameterNameToInsert = parameterName.Replace(prefixToRemove, string.Empty);
 				}
 
-				if( parameterValue != null )
+				if (parameterValue != null)
 				{
-					if( quote && !parameterValue.StartsWith( "'" ) && !parameterValue.StartsWith( "\"" ) )
-						options.Add( parameterNameToInsert, AbstractHelper.SQuote( parameterValue ) );
+					if (quote && !parameterValue.StartsWith("'") && !parameterValue.StartsWith("\""))
+					{
+						options.Add(parameterNameToInsert, AbstractHelper.SQuote(parameterValue));
+					}
 					else
-						options.Add( parameterNameToInsert, parameterValue );
+					{
+						options.Add(parameterNameToInsert, parameterValue);
+					}
 				}
-
 			}
 
-			#endregion Private Methods
+			#endregion Private Methods
 
-			#region Nested classes
+			#region Nested classes
 
 			/// <summary>
 			/// Group definition.
 			/// </summary>
-			class Group
+			private class Group
 			{
 				private readonly string _groupName;
 				private readonly string _violationMessage;
@@ -432,7 +473,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 					StringBuilder build = new StringBuilder();
 					foreach(string groupItem in _groupItems)
 					{
-						build.AppendFormat("{0} ", groupItem.Replace('_','.'));
+						build.AppendFormat("{0} ", groupItem.Replace('_', '.'));
 					}
 					return build.ToString();
 				}
@@ -461,7 +502,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 						builder.Append(string.Format("$(\"#{0}\").val()!=''", target));
 
-						if(groupItem < _groupItems.Count - 1)
+						if (groupItem < _groupItems.Count - 1)
 						{
 							builder.Append(" || ");
 						}
@@ -472,33 +513,30 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				}
 			}
 
-			class CustomRule
+			private class CustomRule
 			{
-
-				#region Instance Variables
+				#region Instance Variables
 
 				public readonly string Name;
 				public readonly string Rule;
 				public readonly string ViolationMessage;
 
-				#endregion Instance Variables
+				#endregion Instance Variables
 
-				#region Constructors
+				#region Constructors
 
-				public CustomRule( string name, string rule, string violationMessage )
+				public CustomRule(string name, string rule, string violationMessage)
 				{
 					Name = name;
 					Rule = rule;
 					ViolationMessage = violationMessage;
 				}
 
-				#endregion Constructors
-
+				#endregion Constructors
 			}
 
-			static class JQueryOptions
+			private static class JQueryOptions
 			{
-
 				public const string Debug = "debug";
 				public const string ErrorClass = "errorClass";
 				public const string ErrorContainer = "errorContainer";
@@ -534,8 +572,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				public const string AjaxClearForm = "ajax-clearForm";
 			}
 
-			#endregion Nested classes
-
+			#endregion Nested classes
 		}
 
 		#endregion Configuration
@@ -547,88 +584,65 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// </summary>
 		public class JQueryValidationGenerator : IBrowserValidationGenerator
 		{
-			#region Instance Variables
+			#region Instance Variables
 
-			readonly IDictionary _Attributes;
-			readonly InputElementType _InputElementType;
-			readonly JQueryConfiguration _configuration;
+			private readonly JQueryConfiguration configuration;
 
-			#endregion Instance Variables
+			#endregion Instance Variables
 
-			#region Constructors
+			#region Constructors
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="JQueryValidationGenerator"/> class.
 			/// </summary>
 			/// <param name="configuration">The configuration.</param>
-			/// <param name="inputElementType">Type of the input element.</param>
-			/// <param name="attributes">The attributes.</param>
-			public JQueryValidationGenerator( JQueryConfiguration configuration, InputElementType inputElementType, IDictionary attributes )
+			public JQueryValidationGenerator(JQueryConfiguration configuration)
 			{
-				_InputElementType = inputElementType;
-				_Attributes = attributes;
-				_configuration = configuration;
+				this.configuration = configuration;
 			}
 
-			#endregion Constructors
+			#endregion Constructors
 
-			#region Private Methods
+			#region Private Methods
 
-			static string GetPrefixedFieldld( string target, string field )
+			private void ConfigureTarget(string target, string rule, object data, string violationMessage)
 			{
-				string[] parts = target.Split( '_' );
+				string targetFormatted = ChangeTargetNameForId(target);
 
-				return string.Join( "_", parts, 0, parts.Length - 1 ) + "_" + field;
-			}			
-
-			static string GetPrefixJQuerySelector(string target)
-			{
-				if (target.StartsWith("#")) return target;
-				return string.Format("#{0}", target);
-			}
-
-			void AddClass( string className )
-			{
-				string existingClass = ( string )_Attributes[ "class" ];
-
-				if ( existingClass != null )
+				if (targetFormatted.IndexOfAny(new char[] {'.', '[', ']'}) >= 0)
 				{
-					_Attributes[ "class" ] = existingClass + " " + className;
+					targetFormatted = String.Format("\"{0}\"", targetFormatted);
 				}
-				else
+
+				configuration.AddRule(targetFormatted, String.Format("{0}: {1}", rule, data));
+				if (violationMessage != null)
 				{
-					_Attributes[ "class" ] = className;
+					configuration.AddMessage(targetFormatted, rule, violationMessage);
 				}
 			}
 
-			void AddTitle( string message )
+			private static string ChangeTargetNameForId(string targetName)
 			{
-				if ( !string.IsNullOrEmpty( message ) )
+				return targetName.Replace('_', '.');
+			}
+
+			private static string GetPrefixedFieldld(string target, string field)
+			{
+				string[] parts = target.Split('_');
+
+				return String.Join("_", parts, 0, parts.Length - 1) + "_" + field;
+			}
+
+			private static string GetPrefixJQuerySelector(string target)
+			{
+				if (target.StartsWith("#"))
 				{
-					string existingTitle = ( string )_Attributes[ "title" ];
-
-					if ( !message.EndsWith( "." ) )
-					{
-						message += ".";
-					}
-
-					if ( existingTitle != null )
-					{
-						_Attributes[ "title" ] = existingTitle + " " + message;
-					}
-					else
-					{
-						_Attributes[ "title" ] = message;
-					}
+					return target;
 				}
+				return String.Format("#{0}", target);
 			}
 
-			void AddParameter( string parameterName, object parameterValue )
-			{
-				_Attributes[ parameterName ] = parameterValue;
-			}
-
-			#endregion Private Methods
+			#endregion Private Methods
 
 			#region IBrowserValidationGenerator Members
 
@@ -637,10 +651,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetDigitsOnly( string target, string violationMessage )
+			public void SetDigitsOnly(string target, string violationMessage)
 			{
-				AddClass( "digits" );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "digits", "true", violationMessage);
 			}
 
 			/// <summary>
@@ -648,10 +661,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetNumberOnly( string target, string violationMessage )
+			public void SetNumberOnly(string target, string violationMessage)
 			{
-				AddClass( "number" );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "number", "true", violationMessage);
 			}
 
 			/// <summary>
@@ -659,10 +671,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetAsRequired( string target, string violationMessage )
+			public void SetAsRequired(string target, string violationMessage)
 			{
-				AddClass( "required" );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "required", "true", violationMessage);
 			}
 
 			/// <summary>
@@ -671,7 +682,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="regExp">The reg exp.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetRegExp( string target, string regExp, string violationMessage )
+			public void SetRegExp(string target, string regExp, string violationMessage)
 			{
 			}
 
@@ -680,10 +691,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetEmail( string target, string violationMessage )
+			public void SetEmail(string target, string violationMessage)
 			{
-				AddClass( "email" );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "email", "true", violationMessage);
 			}
 
 			/// <summary>
@@ -691,9 +701,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="length">The length.</param>
-			public void SetExactLength( string target, int length )
+			public void SetExactLength(string target, int length)
 			{
-				_configuration.AddRule( target, string.Format( "rangelength: [{0}, {0}]", length ) );
+				ConfigureTarget(target, "rangelength", String.Format("[{0}, {0}]", length), null);
 			}
 
 			/// <summary>
@@ -702,10 +712,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="length">The length.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetExactLength( string target, int length, string violationMessage )
+			public void SetExactLength(string target, int length, string violationMessage)
 			{
-				_configuration.AddRule( target, string.Format( "rangelength: [{0}, {0}]", length ) );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "rangelength", String.Format("[{0}, {0}]", length), violationMessage);
 			}
 
 			/// <summary>
@@ -713,10 +722,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="minLength">The minimum length.</param>
-			public void SetMinLength( string target, int minLength )
+			public void SetMinLength(string target, int minLength)
 			{
-				AddClass( "minlength" );
-				AddParameter( "minlength", minLength );
+				ConfigureTarget(target, "minlength", minLength, null);
 			}
 
 			/// <summary>
@@ -725,11 +733,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="minLength">The minimum length.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetMinLength( string target, int minLength, string violationMessage )
+			public void SetMinLength(string target, int minLength, string violationMessage)
 			{
-				AddClass( "minlength" );
-				AddParameter( "minlength", minLength );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "minlength", minLength, violationMessage);
 			}
 
 			/// <summary>
@@ -737,10 +743,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="maxLength">The maximum length.</param>
-			public void SetMaxLength( string target, int maxLength )
+			public void SetMaxLength(string target, int maxLength)
 			{
-				AddClass( "maxlength" );
-				AddParameter( "maxlength", maxLength );
+				ConfigureTarget(target, "maxLength", maxLength, null);
 			}
 
 			/// <summary>
@@ -749,11 +754,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="maxLength">The maximum length.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetMaxLength( string target, int maxLength, string violationMessage )
+			public void SetMaxLength(string target, int maxLength, string violationMessage)
 			{
-				AddClass( "maxlength" );
-				AddParameter( "maxlength", maxLength );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "maxLength", maxLength, violationMessage);
 			}
 
 			/// <summary>
@@ -762,9 +765,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="minLength">The minimum length.</param>
 			/// <param name="maxLength">The maximum length.</param>
-			public void SetLengthRange( string target, int minLength, int maxLength )
+			public void SetLengthRange(string target, int minLength, int maxLength)
 			{
-				_configuration.AddRule( target, string.Format( "rangelength: [{0}, {1}]", minLength, maxLength ) );
+				ConfigureTarget(target, "rangelength", String.Format("[{0}, {1}]", minLength, maxLength), null);
 			}
 
 			/// <summary>
@@ -774,10 +777,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="minLength">The minimum length.</param>
 			/// <param name="maxLength">The maximum length.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetLengthRange( string target, int minLength, int maxLength, string violationMessage )
+			public void SetLengthRange(string target, int minLength, int maxLength, string violationMessage)
 			{
-				_configuration.AddRule( target, string.Format( "rangelength: [{0}, {1}]", minLength, maxLength ) );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "rangelength", String.Format("[{0}, {1}]", minLength, maxLength), violationMessage);
 			}
 
 			/// <summary>
@@ -787,10 +789,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="minValue">Minimum value.</param>
 			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetValueRange( string target, int minValue, int maxValue, string violationMessage )
+			public void SetValueRange(string target, int minValue, int maxValue, string violationMessage)
 			{
-				_configuration.AddRule( target, string.Format( "range: [{0}, {1}]", minValue, maxValue ) );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "range", String.Format("[{0}, {1}]", minValue, maxValue), violationMessage);
 			}
 
 			/// <summary>
@@ -800,10 +801,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="minValue">Minimum value.</param>
 			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetValueRange( string target, decimal minValue, decimal maxValue, string violationMessage )
+			public void SetValueRange(string target, decimal minValue, decimal maxValue, string violationMessage)
 			{
-				_configuration.AddRule( target, string.Format( "range: [{0}, {1}]", minValue, maxValue ) );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "range", String.Format("[{0}, {1}]", minValue, maxValue), violationMessage);
 			}
 
 			/// <summary>
@@ -814,7 +814,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="minValue">Minimum value.</param>
 			/// <param name="maxValue">Maximum value.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetValueRange( string target, DateTime minValue, DateTime maxValue, string violationMessage )
+			public void SetValueRange(string target, DateTime minValue, DateTime maxValue, string violationMessage)
 			{
 			}
 
@@ -826,10 +826,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="minValue">Minimum value: a number as a string.</param>
 			/// <param name="maxValue">Maximum value: a number as a string.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetValueRange( string target, string minValue, string maxValue, string violationMessage )
+			public void SetValueRange(string target, string minValue, string maxValue, string violationMessage)
 			{
-				_configuration.AddRule( target, string.Format( "range: [{0}, {1}]", minValue, maxValue ) );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "range", String.Format("[{0}, {1}]", minValue, maxValue), violationMessage);
 			}
 
 			/// <summary>
@@ -838,12 +837,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="comparisonFieldName">The name of the field to compare with.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetAsSameAs( string target, string comparisonFieldName, string violationMessage )
+			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
 				string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
-				AddClass( "equalTo" );
-				AddParameter("equalTo", prefixedComparisonFieldName);
-				AddTitle( violationMessage );
+
+				ConfigureTarget(target, "equalTo", String.Format("\"{0}\"", prefixedComparisonFieldName), violationMessage);
 			}
 
 			/// <summary>
@@ -853,7 +851,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="comparisonFieldName">The name of the field to compare with.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetAsNotSameAs( string target, string comparisonFieldName, string violationMessage )
+			public void SetAsNotSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
 			}
 
@@ -862,10 +860,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetDate( string target, string violationMessage )
+			public void SetDate(string target, string violationMessage)
 			{
-				AddClass( "date" );
-				AddTitle( violationMessage );
+				ConfigureTarget(target, "date", "true", violationMessage);
 			}
 
 			/// <summary>
@@ -879,15 +876,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="validationType">The type of data to compare.</param>
 			/// <param name="violationMessage">The violation message.</param>
 			/// <remarks>Not implemented by the JQuery validate plugin. Done via a custom rule.</remarks>
-			public void SetAsGreaterThan( string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage )
+			public void SetAsGreaterThan(string target, string comparisonFieldName, IsGreaterValidationType validationType,
+			                             string violationMessage)
 			{
-				if( validationType == IsGreaterValidationType.Decimal || validationType == IsGreaterValidationType.Integer )
+				if (validationType == IsGreaterValidationType.Decimal || validationType == IsGreaterValidationType.Integer)
 				{
 					string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
 
-					AddClass( "greaterThan" );
-					AddParameter("greaterThan", prefixedComparisonFieldName);
-					AddTitle( violationMessage );
+					ConfigureTarget(target, "greaterThan", String.Format("\"{0}\"", prefixedComparisonFieldName), violationMessage);
 				}
 			}
 
@@ -899,15 +895,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="comparisonFieldName">The name of the field to compare with.</param>
 			/// <param name="validationType">The type of data to compare.</param>
 			/// <param name="violationMessage">The violation message.</param>
-			public void SetAsLesserThan( string target, string comparisonFieldName, IsLesserValidationType validationType, string violationMessage )
+			public void SetAsLesserThan(string target, string comparisonFieldName, IsLesserValidationType validationType,
+			                            string violationMessage)
 			{
-				if( validationType == IsLesserValidationType.Decimal || validationType == IsLesserValidationType.Integer )
+				if (validationType == IsLesserValidationType.Decimal || validationType == IsLesserValidationType.Integer)
 				{
-					string prefixedComparisonFieldName = GetPrefixJQuerySelector( GetPrefixedFieldld( target, comparisonFieldName ) );
+					string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
 
-					AddClass( "lesserThan" );
-					AddParameter( "lesserThan", prefixedComparisonFieldName );
-					AddTitle( violationMessage );
+					ConfigureTarget(target, "lesserThan", String.Format("\"{0}\"", prefixedComparisonFieldName), violationMessage);
 				}
 			}
 
@@ -920,17 +915,13 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetAsGroupValidation(string target, string groupName, string violationMessage)
 			{
-				_configuration.AddValidateNotEmptyGroupItem(groupName, violationMessage, target);
-
-				AddClass(string.Format("required{0}",groupName));
+				configuration.AddValidateNotEmptyGroupItem(groupName, violationMessage, target);
+				ConfigureTarget(target, String.Format("required{0}", groupName), "true", violationMessage);
 			}
 
 			#endregion IBrowserValidationGenerator Members
-
 		}
 
 		#endregion Generator
-
 	}
-
 }
