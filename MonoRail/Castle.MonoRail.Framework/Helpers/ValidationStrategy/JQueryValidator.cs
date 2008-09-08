@@ -281,16 +281,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// </summary>
 			private void MergeGroupDefinitionsWithOptions()
 			{
-				string groupValues = string.Empty;
-				foreach(KeyValuePair<string, Group> pair in _groups)
+				if (_groups.Count > 0)
 				{
-					Group group = pair.Value;
-					groupValues += string.Format("{0},{1}", group.GetFormattedGroup(), Environment.NewLine);
-				}
-
-				if (groupValues != string.Empty)
-				{
-					_options.Add("groups", string.Format("{{{0}}}", groupValues));
+					List<string> groupDefinitions = new List<string>(_groups.Count);
+					foreach(Group group in _groups.Values)
+					{
+						groupDefinitions.Add(group.GetFormattedGroup());
+					}
+					_options.Add("groups", string.Format("{{{0}}}", String.Join(", ", groupDefinitions.ToArray())));
 				}
 			}
 
