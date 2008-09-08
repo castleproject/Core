@@ -161,6 +161,12 @@ namespace Castle.MonoRail.Framework
 		String ReadCookie(String name);
 
 		/// <summary>
+		/// Gets the user agent string of the client browser.
+		/// </summary>
+		/// <value>The agent string of the client browser.</value>
+		String UserAgent { get; }
+
+		/// <summary>
 		/// Gets the user languages.
 		/// </summary>
 		/// <value>The user languages.</value>

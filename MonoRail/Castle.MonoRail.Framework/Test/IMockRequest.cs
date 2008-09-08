@@ -86,6 +86,12 @@ namespace Castle.MonoRail.Framework.Test
 		new string FilePath { set; }
 
 		/// <summary>
+		/// Sets the user agent string.
+		/// </summary>
+		/// <value>The user agent string.</value>
+		new string UserAgent { set; }
+
+		/// <summary>
 		/// Sets the user languages.
 		/// </summary>
 		/// <value>The user languages.</value>

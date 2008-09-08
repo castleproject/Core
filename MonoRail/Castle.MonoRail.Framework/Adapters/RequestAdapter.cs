@@ -244,17 +244,6 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return request[name]; }
 		}
 
-//		/// <summary>
-//		/// Reads the request data as a byte array.
-//		/// </summary>
-//		/// <param name="count">How many bytes.</param>
-//		/// <returns></returns>
-//		public byte[] BinaryRead(int count)
-//		{
-//			return request.BinaryRead(count);
-//		}
-
-
 		/// <summary>
 		/// Gets the <see cref="HttpPostedFile"/> per key.
 		/// </summary>
@@ -269,6 +258,15 @@ namespace Castle.MonoRail.Framework.Adapters
 				}
 				return files;
 			}
+		}
+
+		/// <summary>
+		/// Gets the user agent string of the client browser.
+		/// </summary>
+		/// <value>The agent string of the client browser.</value>
+		public String UserAgent
+		{
+			get { return request.UserAgent; }
 		}
 
 		/// <summary>

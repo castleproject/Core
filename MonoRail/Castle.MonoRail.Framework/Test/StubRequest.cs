@@ -27,19 +27,20 @@ namespace Castle.MonoRail.Framework.Test
 	/// </summary>
 	public class StubRequest : IMockRequest
 	{
-		private NameValueCollection form = new NameValueCollection();
-		private NameValueCollection headers = new NameValueCollection();
-		private NameValueCollection queryString = new NameValueCollection();
-		private NameValueCollection @params = new NameValueCollection();
+		private readonly NameValueCollection form = new NameValueCollection();
+		private readonly NameValueCollection headers = new NameValueCollection();
+		private readonly NameValueCollection queryString = new NameValueCollection();
+		private readonly NameValueCollection @params = new NameValueCollection();
+		private readonly IDictionary<string, HttpCookie> cookies;
+		private readonly IDictionary files = new Hashtable();
 		private string urlReferrer;
-		private IDictionary<string, HttpCookie> cookies;
-		private IDictionary files = new Hashtable();
 		private bool isLocal = true;
 		private string httpMethod = "GET";
 		private string[] userLanguages = new string[] {"en-ES", "pt-BR"};
 		private string rawUrl = null;
 		private string filePath = null;
 		private Uri uri = null;
+		private string userAgent = "";
 		private string userHostAddress = "127.0.0.1";
 		private string pathInfo;
 		private string contentType;
@@ -147,6 +148,16 @@ namespace Castle.MonoRail.Framework.Test
 				return cookie.Value;
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// Gets the user agent string of the client browser.
+		/// </summary>
+		/// <value>The agent string of the client browser.</value>
+		public string UserAgent
+		{
+			get { return userAgent; }
+			set { userAgent = value; }
 		}
 
 		/// <summary>
