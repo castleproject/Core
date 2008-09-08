@@ -135,6 +135,16 @@ namespace Castle.MicroKernel.Registration
 			return from.BasedOn(basedOn);
 		}
 
+		/// <summary>
+		/// Returns the descriptor for accepting a type based on a condition.
+		/// </summary>
+		/// <param name="accepted">The accepting condition.</param>
+		/// <returns>The descriptor for the type.</returns>
+		public BasedOnDescriptor Where(Predicate<Type> accepted)
+		{
+			return from.Where(accepted);
+		}
+
 		internal bool TryRegister(Type type, IKernel kernel)
 		{
 			Type baseType;

@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Added shortcut to AllTypes to accept a where.
+
 - Added ability to include non-public types in registration.
 
 - Updated registration to support providing multiple service types.

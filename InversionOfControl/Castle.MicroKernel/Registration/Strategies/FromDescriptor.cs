@@ -62,6 +62,19 @@ namespace Castle.MicroKernel.Registration
 			return descriptor;
 		}
 
+		/// <summary>
+		/// Returns the descriptor for accepting a type based on a condition.
+		/// </summary>
+		/// <param name="accepted">The accepting condition.</param>
+		/// <returns>The descriptor for the type.</returns>
+		public BasedOnDescriptor Where(Predicate<Type> accepted)
+		{
+			BasedOnDescriptor descriptor = new BasedOnDescriptor(typeof(object), this)
+				.If(accepted);
+			criterias.Add(descriptor);
+			return descriptor;
+		}
+
 		#region IRegistration Members
 
 		void IRegistration.Register(IKernel kernel)
@@ -72,7 +85,7 @@ namespace Castle.MicroKernel.Registration
 				{
 					if (criteria.TryRegister(type, kernel) && !allowMultipleMatches)
 					{
-						continue;
+						break;
 					}
 				}
 			}
