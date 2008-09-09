@@ -66,7 +66,8 @@ namespace Castle.MicroKernel.Registration
 						first = first.GetGenericTypeDefinition();
 					}
 				}
-				return new Type[] { first };
+
+				return (first != null) ? new Type[] { first } : null;
 			});
 		}
 		

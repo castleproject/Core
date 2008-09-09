@@ -253,7 +253,6 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreEqual(1, handlers.Length);		
 		}
 
-
 		[Test]
 		public void RegisterAssemblyTypes_WhereConditionSatisifed_RegisteredInContainer()
 		{
@@ -291,6 +290,44 @@ namespace Castle.MicroKernel.Tests.Registration
 
 			IHandler[] handlers = kernel.GetHandlers(typeof(NonPublicComponent));
 			Assert.AreEqual(1, handlers.Length);
+		}
+
+		[Test]
+		public void RegisterAssemblyTypes_WhenTypeInNamespace_RegisteredInContainer()
+		{
+			kernel.Register(
+				AllTypes.FromAssembly(Assembly.GetExecutingAssembly())
+					.Where(Component.IsInNamespace("Castle.MicroKernel.Tests.ClassComponents"))
+					.WithService.FirstInterface()
+					);
+
+			IHandler[] handlers = kernel.GetHandlers(typeof(ICustomer));
+			Assert.IsTrue(handlers.Length > 0);
+		}
+
+		[Test]
+		public void RegisterAssemblyTypes_WhenTypeInMissingNamespace_NotRegisteredInContainer()
+		{
+			kernel.Register(
+				AllTypes.FromAssembly(Assembly.GetExecutingAssembly())
+					.Where(Component.IsInNamespace("Castle.MicroKernel.Tests.FooBar"))
+					.WithService.FirstInterface()
+					);
+
+			Assert.AreEqual(0, kernel.GetAssignableHandlers(typeof(object)).Length);
+		}
+
+		[Test]
+		public void RegisterAssemblyTypes_WhenTypeInSameNamespaceAsComponent_RegisteredInContainer()
+		{
+			kernel.Register(
+				AllTypes.FromAssembly(Assembly.GetExecutingAssembly())
+					.Where(Component.IsInSameNamespaceAs<CustomerImpl2>())
+					.WithService.FirstInterface()
+					);
+
+			IHandler[] handlers = kernel.GetHandlers(typeof(ICustomer));
+			Assert.IsTrue(handlers.Length > 0);
 		}
 	}
 }

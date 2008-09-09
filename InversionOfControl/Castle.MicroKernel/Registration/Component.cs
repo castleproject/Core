@@ -163,5 +163,35 @@ namespace Castle.MicroKernel.Registration
 		{
 			return kernel.HasComponent(model.Service);
 		}
+
+		/// <summary>
+		/// Creates a predicate to check if a component is in a namespace.
+		/// </summary>
+		/// <param name="namespace">The namespace.</param>
+		/// <returns>true if the component type is in the namespace.</returns>
+		public static Predicate<Type> IsInNamespace(string @namespace)
+		{
+			return delegate(Type type) { return type.Namespace == @namespace; };
+		}
+
+		/// <summary>
+		/// Creates a predicate to check if a component shares a namespace with another.
+		/// </summary>
+		/// <param name="type">The component type to test namespace against.</param>
+		/// <returns>true if the component is in the same namespace.</returns>
+		public static Predicate<Type> IsInSameNamespaceAs(Type type)
+		{
+			return IsInNamespace(type.Namespace);
+		}
+
+		/// <summary>
+		/// Creates a predicate to check if a component shares a namespace with another.
+		/// </summary>
+		/// <typeparam name="T">The component type to test namespace against.</typeparam>
+		/// <returns>true if the component is in the same namespace.</returns>
+		public static Predicate<Type> IsInSameNamespaceAs<T>() where T : class
+		{
+			return IsInSameNamespaceAs(typeof(T));
+		}
 	}
 }
