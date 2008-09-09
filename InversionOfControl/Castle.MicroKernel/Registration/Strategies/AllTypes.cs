@@ -97,6 +97,30 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
+		/// Prepares to register types from an assembly containing the type.
+		/// </summary>
+		/// <param name="type">The type belonging to the assembly.</param>
+		/// <returns>The corresponding <see cref="FromDescriptor"/></returns>
+		public static FromAssemblyDescriptor FromAssemblyContaining(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+			return new FromAssemblyDescriptor(type.Assembly);
+		}
+
+		/// <summary>
+		/// Prepares to register types from an assembly containing the type.
+		/// </summary>
+		/// <typeparam name="T">The type belonging to the assembly.</typeparam>
+		/// <returns>The corresponding <see cref="FromDescriptor"/></returns>
+		public static FromAssemblyDescriptor FromAssemblyContaining<T>()
+		{
+			return FromAssemblyContaining(typeof(T));
+		}
+
+		/// <summary>
 		/// Prepares to register types from a list of types.
 		/// </summary>
 		/// <param name="types">The list of types.</param>
