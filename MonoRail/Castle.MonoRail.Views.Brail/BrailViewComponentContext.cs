@@ -107,7 +107,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// <param name="writer"></param>
 		public void RenderView(string name, TextWriter writer)
 		{
-			parent.OutputSubView(name, writer, new Hashtable());
+			parent.OutputSubView(name, writer, ContextVars);
 		}
 
 		public bool HasSection(string sectionName)
