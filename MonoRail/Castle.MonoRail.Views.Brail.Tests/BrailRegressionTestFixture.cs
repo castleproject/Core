@@ -60,6 +60,18 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			AssertReplyEqualTo("id = 5");
 		}
 
+		[Test]
+		public void UnlessWithIsDefine()
+		{
+			PropertyBag["isWeb"] = true;
+			ProcessView("regressions/UnlessWithIsDefine");
+			AssertReplyEqualTo("");
+
+			PropertyBag.Remove("isWeb");
+			ProcessView("regressions/UnlessWithIsDefine");
+			AssertReplyEqualTo("isWeb is defined");
+
+		}
 
 		[Test]
 		public void CanCompareToNullableParameter()
