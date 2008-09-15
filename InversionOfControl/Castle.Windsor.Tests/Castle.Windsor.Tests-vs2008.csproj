@@ -122,13 +122,13 @@
       <Project>{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}</Project>
       <Name>Castle.MicroKernel.Tests-vs2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-vs2005.csproj">
-      <Name>Castle.MicroKernel</Name>
+    <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-vs2008.csproj">
+      <Name>Castle.MicroKernel-vs2008</Name>
       <Project>{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.Windsor\Castle.Windsor-vs2005.csproj">
-      <Name>Castle.Windsor</Name>
+    <ProjectReference Include="..\Castle.Windsor\Castle.Windsor-vs2008.csproj">
+      <Name>Castle.Windsor-vs2008</Name>
       <Project>{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
       <Private>True</Private>

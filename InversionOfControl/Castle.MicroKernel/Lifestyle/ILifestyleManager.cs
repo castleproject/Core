@@ -52,6 +52,8 @@ namespace Castle.MicroKernel
 		/// release them when disposed is invoked.
 		/// </summary>
 		/// <param name="instance"></param>
-		void Release(object instance);
+		bool Release(object instance);
+
+		bool ContainerShouldTrackForDisposal { get; }
 	}
 }

@@ -58,7 +58,7 @@ namespace Castle.MicroKernel.Lifestyle
 			return current.Items[PerRequestObjectID];
 		}
 
-		public override void Release(object instance)
+		public override bool Release(object instance)
 		{
 			// Since this method is called by the kernel when an external
 			// request to release the component is made, it must do nothing
@@ -66,6 +66,12 @@ namespace Castle.MicroKernel.Lifestyle
 			// the web request.  An internal Evict method is provided to
 			// allow the actual releasing of the component at the end of
 			// the web request.
+			return false;
+		}
+
+		public override bool ContainerShouldTrackForDisposal
+		{
+			get { return false; }
 		}
 
 		internal void Evict(object instance)

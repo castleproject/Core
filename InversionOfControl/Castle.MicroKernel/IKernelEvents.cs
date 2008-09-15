@@ -108,7 +108,7 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// Event fired when a dependency is being resolved,
 		/// it allows the dependency to be changed,
-		/// but the client ComponentModel must not be altered.
+		/// but the client ComponentModel must not be changed.
 		/// </summary>
 		event DependencyDelegate DependencyResolving;
 	}

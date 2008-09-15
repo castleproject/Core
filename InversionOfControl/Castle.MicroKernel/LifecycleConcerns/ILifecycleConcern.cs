@@ -17,10 +17,17 @@ namespace Castle.MicroKernel.LifecycleConcerns
 	using Castle.Core;
 
 	/// <summary>
-	/// Summary description for ILifecycleConcern.
+	/// Represents a concern that will be applied to a component instance
+	/// during commission or decomission phase. 
 	/// </summary>
 	public interface ILifecycleConcern
 	{
+		/// <summary>
+		/// Implementors should act on the instance in response to 
+		/// a decomission or commission phase. 
+		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <param name="component">The component.</param>
 		void Apply(ComponentModel model, object component);
 	}
 }

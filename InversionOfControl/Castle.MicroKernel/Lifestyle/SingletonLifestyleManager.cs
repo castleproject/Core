@@ -45,9 +45,15 @@ namespace Castle.MicroKernel.Lifestyle
 			return instance;
 		}
 
-		public override void Release( object instance )
+		public override bool Release(object instance)
 		{
 			// Do nothing
+			return false;
+		}
+
+		public override bool ContainerShouldTrackForDisposal
+		{
+			get { return false; }
 		}
 	}
 }

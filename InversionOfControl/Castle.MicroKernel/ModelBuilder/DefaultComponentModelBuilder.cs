@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.ModelBuilder
 {
 	using System;
 	using System.Collections;
-
+	using System.Collections.Generic;
 	using Castle.Core;
 	using Castle.MicroKernel.ModelBuilder.Inspectors;
 
@@ -27,7 +27,7 @@ namespace Castle.MicroKernel.ModelBuilder
 	public class DefaultComponentModelBuilder : IComponentModelBuilder
 	{
 		private readonly IKernel kernel;
-		private readonly ArrayList contributors;
+		private readonly List<IContributeComponentModelConstruction> contributors;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultComponentModelBuilder"/> class.
@@ -36,7 +36,7 @@ namespace Castle.MicroKernel.ModelBuilder
 		public DefaultComponentModelBuilder(IKernel kernel)
 		{
 			this.kernel = kernel;
-			contributors = new ArrayList();
+			contributors = new List<IContributeComponentModelConstruction>();
 
 			InitializeContributors();
 		}
@@ -73,11 +73,7 @@ namespace Castle.MicroKernel.ModelBuilder
 		/// <value>The contributors.</value>
 		public IContributeComponentModelConstruction[] Contributors
 		{
-			get
-			{
-				return (IContributeComponentModelConstruction[])
-					contributors.ToArray(typeof(IContributeComponentModelConstruction));
-			}
+			get { return contributors.ToArray(); }
 		}
 
 		/// <summary>

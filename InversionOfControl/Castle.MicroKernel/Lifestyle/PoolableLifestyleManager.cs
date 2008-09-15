@@ -34,11 +34,6 @@ namespace Castle.MicroKernel.Lifestyle
 			this.maxSize = maxSize;
 		}
 
-		public override void Init(IComponentActivator componentActivator, IKernel kernel, ComponentModel model)
-		{
-			base.Init(componentActivator, kernel, model);
-		}
-
 		public override object Resolve(CreationContext context)
 		{
 			if (pool == null)
@@ -55,12 +50,18 @@ namespace Castle.MicroKernel.Lifestyle
 			return pool.Request(context);
 		}
 
-		public override void Release(object instance)
+		public override bool Release(object instance)
 		{
 			if (pool != null)
 			{
-				pool.Release(instance);
+				return pool.Release(instance);
 			}
+			return false;
+		}
+
+		public override bool ContainerShouldTrackForDisposal
+		{
+			get { return true; }
 		}
 
 		public override void Dispose()

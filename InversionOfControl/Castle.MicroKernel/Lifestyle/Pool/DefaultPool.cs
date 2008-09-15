@@ -83,7 +83,7 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 			return instance;
 		}
 
-		public virtual void Release(object instance)
+		public virtual bool Release(object instance)
 		{
 			rwlock.AcquireWriterLock(-1);
 
@@ -104,11 +104,15 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 					}
 
 					available.Push(instance);
+					
+					return false;
 				}
 				else
 				{
 					// Pool is full
 					componentActivator.Destroy(instance);
+					
+					return true;
 				}
 			}
 			finally

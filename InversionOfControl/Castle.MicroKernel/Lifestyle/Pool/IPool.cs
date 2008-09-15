@@ -32,6 +32,6 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 		/// on the pool
 		/// </summary>
 		/// <param name="instance"></param>
-		void Release(object instance);
+		bool Release(object instance);
 	}
 }

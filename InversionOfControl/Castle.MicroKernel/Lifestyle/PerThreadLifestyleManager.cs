@@ -43,10 +43,9 @@ namespace Castle.MicroKernel.Lifestyle
 
 			instances.Clear();
 
+			// This doesn't seem right. it will collapse if there are multiple instances of the container
 			Thread.FreeNamedDataSlot( "CastlePerThread" );
 		}
-
-		#region IResolver Members
 
 		public override object Resolve(CreationContext context)
 		{
@@ -74,12 +73,16 @@ namespace Castle.MicroKernel.Lifestyle
 			}
 		}
 
-		public override void Release(object instance)
+		public override bool Release(object instance)
 		{
 			// Do nothing.
+			return false;
 		}
 
-		#endregion
+		public override bool ContainerShouldTrackForDisposal
+		{
+			get { return false; }
+		}
 
 		public void OnDeserialization(object sender)
 		{

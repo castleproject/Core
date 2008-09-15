@@ -16,13 +16,15 @@ namespace Castle.MicroKernel.Tests.Lifestyle.Components
 {
 	using Castle.MicroKernel.Lifestyle;
 
-	/// <summary>
-	/// Summary description for MyLifestyleHandler.
-	/// </summary>
 	public class MyLifestyleHandler : AbstractLifestyleManager
 	{
 		public override void Dispose()
 		{
+		}
+
+		public override bool ContainerShouldTrackForDisposal
+		{
+			get { return false; }
 		}
 	}
 }

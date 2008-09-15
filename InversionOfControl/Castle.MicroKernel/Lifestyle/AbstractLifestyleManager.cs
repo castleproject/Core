@@ -39,10 +39,13 @@ namespace Castle.MicroKernel.Lifestyle
 			return componentActivator.Create(context);
 		}
 
-		public virtual void Release(object instance)
+		public virtual bool Release(object instance)
 		{
 			componentActivator.Destroy(instance);
+			return true;
 		}
+
+		public abstract bool ContainerShouldTrackForDisposal { get; }
 
 		public abstract void Dispose();
 
