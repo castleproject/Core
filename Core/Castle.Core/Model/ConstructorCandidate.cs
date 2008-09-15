@@ -26,8 +26,8 @@ namespace Castle.Core
 #endif
 	public class ConstructorCandidate
 	{
-		private ConstructorInfo constructorInfo;
-		private DependencyModel[] dependencies;
+		private readonly ConstructorInfo constructorInfo;
+		private readonly DependencyModel[] dependencies;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConstructorCandidate"/> class.
