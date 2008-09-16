@@ -25,10 +25,12 @@ namespace Castle.ActiveRecord.Tests
 		[Test(Description = "Fails when NHibernate.Cfg.Environment.UseReflectionOptimizer = true")]
 		public void Entities()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(),
+			Assert.IsTrue(NHibernate.Cfg.Environment.UseReflectionOptimizer);
+			ActiveRecordStarter.Initialize(GetConfigSource(),
 				typeof(Model.GenericModel.Entity<>), 
 				typeof(CompanyEntity), 
 				typeof(PersonEntity));
+			Assert.IsFalse(NHibernate.Cfg.Environment.UseReflectionOptimizer);
 			Recreate();
 
 			CompanyEntity.DeleteAll();

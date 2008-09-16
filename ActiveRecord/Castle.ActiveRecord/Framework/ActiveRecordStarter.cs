@@ -527,6 +527,8 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void ResetInitializationFlag()
 		{
+			// Make sure we start with it enabled
+			Environment.UseReflectionOptimizer = true;
 			isInitialized = false;
 			registeredAssemblies.Clear();
 		}
@@ -626,6 +628,13 @@ namespace Castle.ActiveRecord
 						throw new ActiveRecordException(
 							String.Format("Type `{0}` is not an ActiveRecord type. Use ActiveRecordAttributes to define one", type.FullName));
 					}
+				}
+
+				if (type.ContainsGenericParameters)
+				{
+					// Owing to a restriction in NHibernate the reflection optimiser will not work
+					// if we have generic types so turn it off. Do we have anywhere we could log this?
+					Environment.UseReflectionOptimizer = false;
 				}
 
 				ActiveRecordModel model = builder.Create(type);
@@ -782,7 +791,8 @@ namespace Castle.ActiveRecord
 			// hammett comments: I'm gonna test this off for a while
 			// ayende comments:	removing this means that tests that using generic entities as base class will break
 			//					NH do not support generic entities at the moemnt
-			Environment.UseReflectionOptimizer = false;
+			// daveg comments: I have added a test in BuildModels to only turn it off if we find a generic entity
+			//Environment.UseReflectionOptimizer = false;
 
 			Configuration cfg = new Configuration();
 

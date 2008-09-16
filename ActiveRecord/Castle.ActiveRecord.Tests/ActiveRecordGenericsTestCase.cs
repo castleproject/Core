@@ -48,6 +48,8 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void SimpleOperations()
 		{
+			Assert.IsTrue(NHibernate.Cfg.Environment.UseReflectionOptimizer);
+
 			Blog[] blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
@@ -463,10 +465,13 @@ namespace Castle.ActiveRecord.Tests
 		public void AbstractClassTableName()
 		{
 			ActiveRecordStarter.ResetInitializationFlag();
+			Assert.IsTrue(NHibernate.Cfg.Environment.UseReflectionOptimizer);
 
 			ActiveRecordStarter.Initialize(GetConfigSource(),
 										   typeof(AbstractClass<>),
 										   typeof(ConcreteClass));
+			Assert.IsFalse(NHibernate.Cfg.Environment.UseReflectionOptimizer);
+
 			Recreate();
 
 			ConcreteClass c = new ConcreteClass();

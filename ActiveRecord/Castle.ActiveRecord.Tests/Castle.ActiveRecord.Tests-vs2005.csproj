@@ -299,6 +299,8 @@
     <Compile Include="CompositeUserTypeTestCase.cs" />
     <Compile Include="CountQueryTestCase.cs" />
     <Compile Include="InvalidRootTypeTestCase.cs" />
+    <Compile Include="JoinedSubClassWithDiscriminatorTestCase.cs" />
+    <Compile Include="Model\Animal.cs" />
     <Compile Include="Model\ClassWithBrokenField.cs" />
     <Compile Include="Model\CompositeNested\CompositeNestedParent.cs" />
     <Compile Include="Model\CompositeUserType\DoubleStringType.cs" />

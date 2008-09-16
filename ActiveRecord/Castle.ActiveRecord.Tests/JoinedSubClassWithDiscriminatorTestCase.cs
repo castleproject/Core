@@ -23,10 +23,12 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void Animals()
 		{
+			Assert.IsTrue(NHibernate.Cfg.Environment.UseReflectionOptimizer);
 			ActiveRecordStarter.Initialize(GetConfigSource(),
 				typeof(Animal<>),
 				typeof(Cat),
 				typeof(Dog));
+			Assert.IsFalse(NHibernate.Cfg.Environment.UseReflectionOptimizer);
 			Recreate();
 
 			Cat.DeleteAll();
