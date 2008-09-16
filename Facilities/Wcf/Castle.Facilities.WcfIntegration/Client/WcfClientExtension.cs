@@ -60,10 +60,11 @@ namespace Castle.Facilities.WcfIntegration
 		private void AddDefaultChannelBuilders()
 		{
 			AddChannelBuilder<DefaultChannelBuilder, DefaultClientModel>(false);
+			AddChannelBuilder<DuplexChannelBuilder, DuplexClientModel>(false);
 #if DOTNET35
 			AddChannelBuilder<RestChannelBuilder, RestClientModel>(false);
 #endif
-		}
+        }
 
 		internal void AddChannelBuilder<T, M>(bool force)
 			where T : IClientChannelBuilder<M>

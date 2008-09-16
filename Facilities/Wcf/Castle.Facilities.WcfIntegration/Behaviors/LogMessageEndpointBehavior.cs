@@ -14,6 +14,8 @@
 
 namespace Castle.Facilities.WcfIntegration.Behaviors
 {
+	using System;
+	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
 	using System.ServiceModel.Dispatcher;
@@ -21,9 +23,9 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 	public class LogMessageEndpointBehavior : IEndpointBehavior
 	{
-		private readonly ILoggerFactory loggerFactory;
+		private readonly IExtendedLoggerFactory loggerFactory;
 
-		public LogMessageEndpointBehavior(ILoggerFactory loggerFactory)
+		public LogMessageEndpointBehavior(IExtendedLoggerFactory loggerFactory)
 		{
 			this.loggerFactory = loggerFactory;
 		}
@@ -34,21 +36,23 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 		public void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
 		{
-			clientRuntime.MessageInspectors.Add(CreateLogMessageInspector(endpoint));
+			clientRuntime.MessageInspectors.Add(CreateLogMessageInspector(endpoint.Contract.ContractType));
 		}
 
 		public void ApplyDispatchBehavior(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
 		{
-			endpointDispatcher.DispatchRuntime.MessageInspectors.Add(CreateLogMessageInspector(endpoint));
+			Type serviceType = endpointDispatcher.ChannelDispatcher.Host.Description.ServiceType;
+			endpointDispatcher.DispatchRuntime.MessageInspectors.Add(CreateLogMessageInspector(serviceType));
 		}
 
 		public void Validate(ServiceEndpoint endpoint)
 		{
 		}
 
-		private LogMessageInspector CreateLogMessageInspector(ServiceEndpoint endpoint)
+		private LogMessageInspector CreateLogMessageInspector(Type serviceType)
 		{
-			return new LogMessageInspector(endpoint.Contract.ContractType, loggerFactory);
+			IExtendedLogger logger = loggerFactory.Create(serviceType);
+			return new LogMessageInspector(logger);
 		}
 	}
 }

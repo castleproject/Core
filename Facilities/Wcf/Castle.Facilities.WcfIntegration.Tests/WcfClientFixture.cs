@@ -29,6 +29,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using Castle.Windsor.Installer;
 	using log4net.Appender;
 	using log4net.Config;
+	using log4net.Core;
 	using NUnit.Framework;
 
 #if DOTNET35
@@ -340,13 +341,19 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			IOperations client = windsorContainer.Resolve<IOperations>("operations");
 			Assert.AreEqual(42, client.GetValueFromConstructor());
 			Assert.AreEqual(4, memoryAppender.GetEvents().Length);
+
+			foreach (LoggingEvent log in memoryAppender.GetEvents())
+			{
+				Assert.AreEqual(typeof(IOperations).FullName, log.LoggerName);
+				Assert.IsTrue(log.Properties.Contains("NDC"));
+			}
 		}
 
         protected void RegisterLoggingFacility(IWindsorContainer container)
         {
             MutableConfiguration facNode = new MutableConfiguration("facility" );
             facNode.Attributes["id"] = "logging";
-            facNode.Attributes["loggingApi"] = "Log4net";
+            facNode.Attributes["loggingApi"] = "ExtendedLog4net";
 			facNode.Attributes["configFile"] = "";
             container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", facNode);
             container.AddFacility("logging", new LoggingFacility());

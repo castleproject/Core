@@ -27,16 +27,15 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 	/// </summary>
 	public class LogMessageInspector : IClientMessageInspector, IDispatchMessageInspector
 	{
-		private readonly ILogger logger;
+		private readonly IExtendedLogger logger;
 
 		/// <summary>
 		/// Constructs a new <see cref="LogMessageInspector"/>
 		/// </summary>
-		/// <param name="contract">The service contract.</param>
-		/// <param name="factory">The logger factory.</param>
-		public LogMessageInspector(Type contract, ILoggerFactory factory)
+		/// <param name="logger">The logger.</param>
+		public LogMessageInspector(IExtendedLogger logger)
 		{
-			logger = factory.Create(contract);
+			this.logger = logger;
 		}
 
 		#region IClientMessageInspector
@@ -52,8 +51,13 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 			if (logger.IsInfoEnabled)
 			{
 				string correlationId = ObtainCorrelationId(request);
-				logger.Info("Sending request {0} to {1}", correlationId, channel.RemoteAddress);
-				LogMessageContents(ref request);
+
+				using (logger.ThreadStacks["NDC"].Push(correlationId))
+                {
+					logger.Info("Sending request to {0}", channel.RemoteAddress);
+					LogMessageContents(ref request);                	
+                }
+
 				return correlationId;
 			}
 
@@ -69,8 +73,13 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		{
 			if (logger.IsInfoEnabled)
 			{
-				logger.Info("Received response for request {0}", correlationState);
-				LogMessageContents(ref reply);
+				object correlationId = correlationState ?? string.Empty;
+
+				using (logger.ThreadStacks["NDC"].Push(correlationId.ToString()))
+				{
+					logger.Info("Received response for request {0}", correlationId);
+					LogMessageContents(ref reply);
+				}
 			}
 		}
 
@@ -90,8 +99,13 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 			if (logger.IsInfoEnabled)
 			{
 				string correlationId = ObtainCorrelationId(request);
-				logger.Info("Received request {0} from {1}", correlationId, channel.RemoteAddress);
-				LogMessageContents(ref request);
+
+				using (logger.ThreadStacks["NDC"].Push(correlationId))
+				{
+					logger.Info("Received request from {0}", channel.RemoteAddress);
+					LogMessageContents(ref request);
+				}
+
 				return correlationId;
 			}
 
@@ -107,8 +121,13 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		{
 			if (logger.IsInfoEnabled)
 			{
-				logger.Info("Sending response for request {0}", correlationState);
-				LogMessageContents(ref reply);
+				object correlationId = correlationState ?? string.Empty;
+
+				using (logger.ThreadStacks["NDC"].Push(correlationId.ToString()))
+				{
+					logger.Info("Sending response for request {0}", correlationId);
+					LogMessageContents(ref reply);
+				}
 			}
 		}
 

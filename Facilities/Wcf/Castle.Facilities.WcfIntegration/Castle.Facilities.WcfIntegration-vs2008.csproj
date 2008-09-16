@@ -86,6 +86,8 @@
     <Compile Include="Behaviors\ServiceEndpointBehaviors.cs" />
     <Compile Include="Client\Default\DefaultClientModel.cs" />
     <Compile Include="Behaviors\LogMessageInspector.cs" />
+    <Compile Include="Client\Duplex\DuplexChannelBuilder.cs" />
+    <Compile Include="Client\Duplex\DuplexClientModel.cs" />
     <Compile Include="Internal\CommunicationObjectWrapper.cs" />
     <Compile Include="IWcfBehaviorVisitor.cs" />
     <Compile Include="IWcfBehavior.cs" />

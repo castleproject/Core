@@ -28,6 +28,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using Castle.Windsor.Installer;
 	using log4net.Appender;
 	using log4net.Config;
+	using log4net.Core;
 	using NUnit.Framework;
 
 #if DOTNET35
@@ -199,6 +200,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			}
 		}
 
+        /*
 		[Test]
 		public void ServiceHostWillNotOpenUntilExplicitScopedBehaviorDependenciesAreSatisfied()
 		{
@@ -257,6 +259,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				Assert.AreEqual(45, CalculatorEndpointBehavior.Number);
 			}
 		}
+        */
 
 		[Test]
 		public void WillApplyServiceScopedBehaviors()
@@ -396,6 +399,12 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
 				Assert.AreEqual(42, client.GetValueFromConstructor());
 				Assert.AreEqual(4, memoryAppender.GetEvents().Length);
+
+				foreach (LoggingEvent log in memoryAppender.GetEvents())
+				{
+					Assert.AreEqual(typeof(Operations).FullName, log.LoggerName);
+					Assert.IsTrue(log.Properties.Contains("NDC"));
+				}
 			}
 		}
 
@@ -431,7 +440,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			MutableConfiguration facNode = new MutableConfiguration("facility");
 			facNode.Attributes["id"] = "logging";
-			facNode.Attributes["loggingApi"] = "Log4net";
+			facNode.Attributes["loggingApi"] = "ExtendedLog4net";
 			facNode.Attributes["configFile"] = "";
 			container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", facNode);
 			container.AddFacility("logging", new LoggingFacility());

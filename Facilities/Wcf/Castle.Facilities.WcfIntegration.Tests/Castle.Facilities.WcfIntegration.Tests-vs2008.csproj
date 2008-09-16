@@ -92,7 +92,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviors\CalculatorBehavior.cs" />
     <Compile Include="Behaviors\CallCountServiceBehavior.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -100,8 +99,10 @@
     <Compile Include="Behaviors\CallCountEndpointBehavior.cs" />
     <Compile Include="Behaviors\UnitOfworkEndPointBehavior.cs" />
     <Compile Include="Components\Calculator.cs" />
+    <Compile Include="Components\Callback.cs" />
     <Compile Include="Components\ClassNeedingService.cs" />
     <Compile Include="Components\ICalculator.cs" />
+    <Compile Include="Duplex\DuplexClientFixture.cs" />
     <Compile Include="Rest\RestClientFixture.cs" />
     <Compile Include="Rest\RestServiceFixture.cs" />
     <Compile Include="WcfClientFixture.cs" />
