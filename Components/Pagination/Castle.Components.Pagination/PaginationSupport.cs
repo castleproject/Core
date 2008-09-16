@@ -32,28 +32,41 @@ namespace Castle.Components.Pagination
 		/// <returns></returns>
 		public static object GetItemAtIndex(IEnumerable enumerable, int itemIndex)
 		{
+			EnsureItemIndexIsInRange(itemIndex);
+
 			object item;
+			
 			IList list = enumerable as IList;
+			
 			if (list != null)
 			{
 				item = list[itemIndex];
 			}
-			else if (itemIndex < 0)
-			{
-				throw new ArgumentException("itemIndex");
-			}
 			else
 			{
-				IEnumerator enumerator = enumerable.GetEnumerator();
 				int currentIndex = 0;
+
+				IEnumerator enumerator = enumerable.GetEnumerator();
+	
 				do
 				{
 					enumerator.MoveNext();
 					currentIndex++;
-				} while(currentIndex < itemIndex);
+				} 
+				while (currentIndex < itemIndex);
+
 				item = enumerator.Current;
 			}
+
 			return item;
+		}
+
+		private static void EnsureItemIndexIsInRange(int itemIndex)
+		{
+			if (itemIndex < 0)
+			{
+				throw new ArgumentOutOfRangeException("itemIndex");
+			}
 		}
 
 		/// <summary>
@@ -64,29 +77,33 @@ namespace Castle.Components.Pagination
 		/// <returns></returns>
 		public static T GetItemAtIndex<T>(IEnumerable<T> enumerable, int itemIndex)
 		{
+			EnsureItemIndexIsInRange(itemIndex);
+
 			T item;
+			
 			IList<T> list = enumerable as IList<T>;
+			
 			if (list != null)
 			{
 				item = list[itemIndex];
 			}
-			else if (itemIndex < 0)
-			{
-				throw new ArgumentException("itemIndex");
-			}
 			else
 			{
-				using(IEnumerator<T> enumerator = enumerable.GetEnumerator())
+				using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
 				{
 					int currentIndex = 0;
+
 					do
 					{
 						enumerator.MoveNext();
 						currentIndex++;
-					} while(currentIndex < itemIndex);
+					} 
+					while (currentIndex < itemIndex);
+					
 					item = enumerator.Current;
 				}
 			}
+
 			return item;
 		}
 	}

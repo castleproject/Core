@@ -18,16 +18,19 @@ namespace Castle.Components.Pagination.Tests
 	using System.Collections.Generic;
 	using NUnit.Framework;
 
-	public abstract class BasePaginatedPageTestCase<TClassToTest> where TClassToTest : IPaginatedPage
+	public abstract class BasePaginatedPageTestCase
 	{
 		[Test]
 		public void TestExpectedResultForFirstPageWithSingleItemPage()
 		{
-			IList sampleData = getSampleListData();
+			IList sampleData = GetSampleListData();
+			
 			int currentPageIndex = 1;
 			int pageSize = 1;
+			
 			IPaginatedPage page = CreateAbstractPageWithSampleData(sampleData, currentPageIndex, pageSize);
-			assertIsOnFirstPageHavingMultiplePages(page);
+
+			AssertIsOnFirstPageHavingMultiplePages(page);
 			Assert.AreEqual(sampleData.Count, page.TotalPages);
 			Assert.AreEqual(currentPageIndex + 1, page.NextPageIndex);
 			Assert.AreEqual(currentPageIndex - 1, page.PreviousPageIndex);
@@ -38,17 +41,20 @@ namespace Castle.Components.Pagination.Tests
 			Assert.AreEqual(page.FirstItem, page.LastItem);
 			Assert.AreEqual("one", page.FirstItem);
 			Assert.AreEqual(1, page.CurrentPageSize);
-			assertHasPageIsTrueBetween(page, 1, sampleData.Count, -1, sampleData.Count + 2);
-			assertGetEnumeratorItterateOverExpectedValues(page, "one");
+			AssertHasPageIsTrueBetween(page, 1, sampleData.Count, -1, sampleData.Count + 2);
+			AssertGetEnumeratorItterateOverExpectedValues(page, "one");
 		}
 
 		[Test]
 		public void TestExpectedResultForMiddlePageWithSingleItemPage()
 		{
-			IList sampleData = getSampleListData();
+			IList sampleData = GetSampleListData();
+			
 			int currentPageIndex = 3;
 			int pageSize = 1;
+
 			IPaginatedPage page = CreateAbstractPageWithSampleData(sampleData, currentPageIndex, pageSize);
+			
 			Assert.AreEqual(currentPageIndex, page.CurrentPageIndex);
 			Assert.AreEqual(sampleData.Count, page.TotalPages);
 			Assert.IsTrue(page.HasPreviousPage);
@@ -62,18 +68,22 @@ namespace Castle.Components.Pagination.Tests
 			Assert.AreEqual(page.FirstItem, page.LastItem);
 			Assert.AreEqual("three", page.FirstItem);
 			Assert.AreEqual(1, page.CurrentPageSize);
-			assertHasPageIsTrueBetween(page, 1, sampleData.Count, -1, sampleData.Count + 2);
-			assertGetEnumeratorItterateOverExpectedValues(page, "three");
+			
+			AssertHasPageIsTrueBetween(page, 1, sampleData.Count, -1, sampleData.Count + 2);
+			AssertGetEnumeratorItterateOverExpectedValues(page, "three");
 		}
 
 		[Test]
 		public void TestExpectedResultForLastPageWithSingleItemPage()
 		{
-			IList sampleData = getSampleListData();
+			IList sampleData = GetSampleListData();
+			
 			int currentPageIndex = sampleData.Count;
 			int pageSize = 1;
-			IPaginatedPage page = CreateAbstractPageWithSampleData(getSampleListData(), currentPageIndex, pageSize);
-			assertIsOnLastPageHavingMultiplePages(page);
+			
+			IPaginatedPage page = CreateAbstractPageWithSampleData(GetSampleListData(), currentPageIndex, pageSize);
+			
+			AssertIsOnLastPageHavingMultiplePages(page);
 			Assert.AreEqual(currentPageIndex, page.CurrentPageIndex);
 			Assert.AreEqual(currentPageIndex + 1, page.NextPageIndex);
 			Assert.AreEqual(currentPageIndex - 1, page.PreviousPageIndex);
@@ -84,67 +94,86 @@ namespace Castle.Components.Pagination.Tests
 			Assert.AreEqual(page.FirstItem, page.LastItem);
 			Assert.AreEqual("five", page.FirstItem);
 			Assert.AreEqual(1, page.CurrentPageSize);
-			assertHasPageIsTrueBetween(page, 1, sampleData.Count, -1, sampleData.Count + 2);
-			assertGetEnumeratorItterateOverExpectedValues(page, "five");
+			AssertHasPageIsTrueBetween(page, 1, sampleData.Count, -1, sampleData.Count + 2);
+			AssertGetEnumeratorItterateOverExpectedValues(page, "five");
 		}
 
 		[Test]
 		public void TestExpectedResultForFirstPageWithTwoItemPerPage()
 		{
-			IList sampleData = getSampleListData();
+			IList sampleData = GetSampleListData();
+			
 			int currentPageIndex = 1;
 			int pageSize = 2;
+			
 			IPaginatedPage page = CreateAbstractPageWithSampleData(sampleData, currentPageIndex, pageSize);
-			assertIsOnFirstPageHavingMultiplePages(page);
+			
+			AssertIsOnFirstPageHavingMultiplePages(page);
 			Assert.AreEqual(currentPageIndex + 1, page.NextPageIndex);
 			Assert.AreEqual(currentPageIndex - 1, page.PreviousPageIndex);
 			Assert.AreEqual(2, page.CurrentPageSize);
-			assertGetEnumeratorItterateOverExpectedValues(page, "one", "two");
+			AssertGetEnumeratorItterateOverExpectedValues(page, "one", "two");
+
+			Assert.IsNotNull(page.FirstItem);
+			Assert.IsNotNull(page.LastItem);
 		}
 
 		[Test]
 		public void TestExpectedResultForMiddlePageWithTwoItemPerPage()
 		{
-			IList sampleData = getSampleListData();
+			IList sampleData = GetSampleListData();
+			
 			int currentPageIndex = 2;
 			int pageSize = 2;
+			
 			IPaginatedPage page = CreateAbstractPageWithSampleData(sampleData, currentPageIndex, pageSize);
+
 			Assert.AreEqual(4, page.LastItemIndex);
 			Assert.AreEqual(currentPageIndex + 1, page.NextPageIndex);
 			Assert.AreEqual(currentPageIndex - 1, page.PreviousPageIndex);
 			Assert.AreEqual(2, page.CurrentPageSize);
-			assertGetEnumeratorItterateOverExpectedValues(page, "three", "four");
+			AssertGetEnumeratorItterateOverExpectedValues(page, "three", "four");
+
+			Assert.IsNotNull(page.FirstItem);
+			Assert.IsNotNull(page.LastItem);
 		}
 
 		[Test]
 		public void TestExpectedResultForLastPageWithTwoItemPerPage()
 		{
-			IList sampleData = getSampleListData();
+			IList sampleData = GetSampleListData();
+			
 			int currentPageIndex = 3;
 			int pageSize = 2;
+			
 			IPaginatedPage page = CreateAbstractPageWithSampleData(sampleData, currentPageIndex, pageSize);
-			assertIsOnLastPageHavingMultiplePages(page);
+
+			AssertIsOnLastPageHavingMultiplePages(page);
 			Assert.AreEqual(sampleData.Count, page.LastItemIndex);
 			Assert.AreEqual(currentPageIndex + 1, page.NextPageIndex);
 			Assert.AreEqual(currentPageIndex - 1, page.PreviousPageIndex);
 			Assert.AreEqual(1, page.CurrentPageSize);
-			assertGetEnumeratorItterateOverExpectedValues(page, "five");
+			AssertGetEnumeratorItterateOverExpectedValues(page, "five");
+
+			Assert.IsNotNull(page.FirstItem);
+			Assert.IsNotNull(page.LastItem);
 		}
 
-		private void assertGetEnumeratorItterateOverExpectedValues(IPaginatedPage page, params string[] values)
+		private static void AssertGetEnumeratorItterateOverExpectedValues(IPaginatedPage page, params string[] values)
 		{
 			int CurrentPageIndex = 0;
-			foreach(string value in page)
+
+			foreach (string value in page)
 			{
 				Assert.AreEqual(values[CurrentPageIndex], value);
 				++CurrentPageIndex;
 			}
 		}
 
-		private void assertHasPageIsTrueBetween(IPaginatedPage page, int firstPageIndex, int lastPageIndex,
+		private static void AssertHasPageIsTrueBetween(IPaginatedPage page, int firstPageIndex, int lastPageIndex,
 		                                        int rangeLowerBound, int rangeUpperBound)
 		{
-			for(int i = rangeLowerBound, max = rangeUpperBound; i < max; ++i)
+			for (int i = rangeLowerBound, max = rangeUpperBound; i < max; ++i)
 			{
 				if (i < firstPageIndex || i > lastPageIndex)
 				{
@@ -157,21 +186,21 @@ namespace Castle.Components.Pagination.Tests
 			}
 		}
 
-		private void assertIsOnFirstPageHavingMultiplePages(IPaginatedPage page)
+		private static void AssertIsOnFirstPageHavingMultiplePages(IPaginatedPage page)
 		{
 			Assert.IsFalse(page.HasPreviousPage);
 			Assert.IsTrue(page.HasNextPage);
 			Assert.AreEqual(1, page.CurrentPageIndex);
 		}
 
-		private void assertIsOnLastPageHavingMultiplePages(IPaginatedPage page)
+		private static void AssertIsOnLastPageHavingMultiplePages(IPaginatedPage page)
 		{
 			Assert.IsTrue(page.HasPreviousPage);
 			Assert.IsFalse(page.HasNextPage);
 			Assert.AreEqual(page.TotalPages, page.CurrentPageIndex);
 		}
 
-		private IList getSampleListData()
+		private static IList GetSampleListData()
 		{
 			return new ArrayList(new string[] {"one", "two", "three", "four", "five"});
 		}
@@ -180,7 +209,7 @@ namespace Castle.Components.Pagination.Tests
 	}
 
 	[TestFixture]
-	public class PageTestCase : BasePaginatedPageTestCase<Page>
+	public class PageTestCase : BasePaginatedPageTestCase
 	{
 		protected override IPaginatedPage CreateAbstractPageWithSampleData(IList sampleData, int currentPage, int pageSize)
 		{
@@ -189,7 +218,7 @@ namespace Castle.Components.Pagination.Tests
 	}
 
 	[TestFixture]
-	public class GenericPageTestCase : BasePaginatedPageTestCase<GenericPage<string>>
+	public class GenericPageTestCase : BasePaginatedPageTestCase
 	{
 		protected override IPaginatedPage CreateAbstractPageWithSampleData(IList sampleData, int currentPage, int pageSize)
 		{
@@ -203,26 +232,31 @@ namespace Castle.Components.Pagination.Tests
 	}
 
 	[TestFixture]
-	public class GenericCustomPageTestCase : BasePaginatedPageTestCase<GenericPage<string>>
+	public class GenericCustomPageTestCase : BasePaginatedPageTestCase
 	{
 		protected override IPaginatedPage CreateAbstractPageWithSampleData(IList sampleData, int currentPage, int pageSize)
 		{
 			IList<string> genericData = new List<string>(pageSize);
-			int firstindex, lastindex;
-			firstindex = (currentPage - 1) * pageSize;
-			lastindex = firstindex + pageSize - 1;
-			for(int i = 0; i < sampleData.Count; ++i)
+			
+			int firstindex = (currentPage - 1) * pageSize;
+			
+			int lastindex = firstindex + pageSize - 1;
+			
+			for (int i = 0; i < sampleData.Count; ++i)
 			{
 				if (i < firstindex)
 				{
 					continue;
 				}
+
 				if (i > lastindex)
 				{
 					break;
 				}
+
 				genericData.Add(sampleData[i] as string);
 			}
+
 			return new GenericCustomPage<string>(genericData, currentPage, pageSize, sampleData.Count);
 		}
 	}

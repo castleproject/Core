@@ -50,7 +50,7 @@ namespace Castle.Components.Pagination
 		/// <returns>Enumerator instance</returns>
 		protected override IEnumerator<T> GetGenericEnumeratorImplementation()
 		{
-			foreach(T item in sourceList)
+			foreach (T item in sourceList)
 			{
 				yield return item;
 			}
@@ -64,7 +64,7 @@ namespace Castle.Components.Pagination
 		/// </returns>
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
-			foreach(T item in sourceList)
+			foreach (T item in sourceList)
 			{
 				yield return item;
 			}
@@ -73,9 +73,8 @@ namespace Castle.Components.Pagination
 
 		protected override T GetGenericItemAtIndex(int itemIndex)
 		{
-			return PaginationSupport.GetItemAtIndex(sourceList, (this as IPaginatedPage).FirstItemIndex - itemIndex - 1);
+			return PaginationSupport.GetItemAtIndex(sourceList, itemIndex - ((this as IPaginatedPage).FirstItemIndex - 1));
 		}
-
 
 		protected override object GetItemAtIndex(int itemIndex)
 		{

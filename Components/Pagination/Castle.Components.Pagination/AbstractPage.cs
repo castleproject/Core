@@ -57,65 +57,66 @@ namespace Castle.Components.Pagination
 			{
 				lastPageIndex++;
 			}
+
 			hasNextPage = count == -1 || currentPageIndex < lastPageIndex;
 		}
 
-		int IPaginatedPage.CurrentPageIndex
+		public int CurrentPageIndex
 		{
 			get { return currentPageIndex; }
 		}
 
-		int IPaginatedPage.PreviousPageIndex
+		public int PreviousPageIndex
 		{
 			get { return previousPageIndex; }
 		}
 
-		int IPaginatedPage.NextPageIndex
+		public int NextPageIndex
 		{
 			get { return nextPageIndex; }
 		}
 
-		int IPaginatedPage.FirstItemIndex
+		public int FirstItemIndex
 		{
 			get { return firstItemIndex; }
 		}
 
-		int IPaginatedPage.LastItemIndex
+		public int LastItemIndex
 		{
 			get { return lastItemIndex; }
 		}
 
-		int IPaginatedPage.TotalItems
+		public int TotalItems
 		{
 			get { return totalItems; }
 		}
 
-		int IPaginatedPage.PageSize
+		public int PageSize
 		{
 			get { return pageSize; }
 		}
 
-		bool IPaginatedPage.HasPreviousPage
+		public bool HasPreviousPage
 		{
 			get { return hasPreviousPage; }
 		}
 
-		bool IPaginatedPage.HasNextPage
+		public bool HasNextPage
 		{
 			get { return hasNextPage; }
 		}
 
-		bool IPaginatedPage.HasPage(int pageNumber)
+		public bool HasPage(int pageNumber)
 		{
 			return pageNumber <= lastPageIndex && pageNumber >= 1;
 		}
 
-		int IPaginatedPage.TotalPages
+		public int TotalPages
 		{
 			get { return lastPageIndex; }
 		}
 
-		int IPaginatedPage.CurrentPageSize
+		public int CurrentPageSize
 		{
 			get { return currentPageSize; }
 		}
@@ -129,7 +130,6 @@ namespace Castle.Components.Pagination
 		{
 			return GetEnumeratorImplementation();
 		}
-
 
 		object IPaginatedPage.FirstItem
 		{
