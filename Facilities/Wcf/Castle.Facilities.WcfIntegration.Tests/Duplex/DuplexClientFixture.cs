@@ -18,6 +18,7 @@ namespace Castle.Facilities.WcfIntegration.Tests.Duplex
 	using System.ServiceModel;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
+	using Castle.Facilities.WcfIntegration.Tests.Components;
 	using NUnit.Framework;
 
 	[TestFixture]
