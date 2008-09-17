@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Generators
 					return cacheType;
 				}
 
-				SetGenerationOptions (options);
+				SetGenerationOptions(options);
 
 				String newName = targetType.Name + "Proxy" + Guid.NewGuid().ToString("N");
 
@@ -90,8 +90,8 @@ namespace Castle.DynamicProxy.Generators
 				{
 					interfaceList.AddRange(interfaces);
 				}
-				if (!interfaceList.Contains(typeof(ISerializable)))
-					interfaceList.Add(typeof(ISerializable));
+				if (!interfaceList.Contains(typeof (ISerializable)))
+					interfaceList.Add(typeof (ISerializable));
 
 				AddMixinInterfaces(interfaceList);
 				AddDefaultInterfaces(interfaceList);
@@ -99,7 +99,7 @@ namespace Castle.DynamicProxy.Generators
 				Type baseType = options.BaseTypeForInterfaceProxy;
 
 				ClassEmitter emitter = BuildClassEmitter(newName, baseType, interfaceList);
-				CreateOptionsField (emitter);
+				CreateOptionsField(emitter);
 
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
 				emitter.DefineCustomAttribute(new SerializableAttribute());
@@ -109,15 +109,15 @@ namespace Castle.DynamicProxy.Generators
 
 				// Fields generations
 
-				FieldReference interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
+				FieldReference interceptorsField = emitter.CreateField("__interceptors", typeof (IInterceptor[]));
 				targetField = emitter.CreateField("__target", proxyTargetType);
 
 				emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
 				emitter.DefineCustomAttributeFor(targetField, new XmlIgnoreAttribute());
 
 				// Implement builtin Interfaces
-				ImplementProxyTargetAccessor(targetType, emitter,interceptorsField);
-				
+				ImplementProxyTargetAccessor(targetType, emitter, interceptorsField);
+
 				// Collect methods
 
 				PropertyToGenerate[] propsToGenerate;
@@ -128,7 +128,7 @@ namespace Castle.DynamicProxy.Generators
 				{
 					ArrayList tmpInterfaces = new ArrayList(interfaces);
 
-					foreach(Type inter in interfaces)
+					foreach (Type inter in interfaces)
 					{
 						if (inter.IsAssignableFrom(proxyTargetType))
 						{
@@ -159,7 +159,7 @@ namespace Castle.DynamicProxy.Generators
 						}
 					}
 
-					interfaces = (Type[]) tmpInterfaces.ToArray(typeof(Type));
+					interfaces = (Type[]) tmpInterfaces.ToArray(typeof (Type));
 				}
 
 				RegisterMixinMethodsAndProperties(emitter, ref methods, ref propsToGenerate, ref eventToGenerates);
@@ -189,7 +189,7 @@ namespace Castle.DynamicProxy.Generators
 
 				if (interfaces != null && interfaces.Length != 0)
 				{
-					foreach(Type inter in interfaces)
+					foreach (Type inter in interfaces)
 					{
 						ImplementBlankInterface(targetType, inter, emitter, interceptorsField, typeInitializer);
 					}
@@ -197,7 +197,7 @@ namespace Castle.DynamicProxy.Generators
 
 				// Create invocation types
 
-				foreach(MethodInfo method in methods)
+				foreach (MethodInfo method in methods)
 				{
 					CreateInvocationForMethod(emitter, method, proxyTargetType);
 				}
@@ -206,7 +206,7 @@ namespace Castle.DynamicProxy.Generators
 
 				Dictionary<MethodInfo, MethodEmitter> method2Emitter = new Dictionary<MethodInfo, MethodEmitter>();
 
-				foreach(MethodInfo method in methods)
+				foreach (MethodInfo method in methods)
 				{
 					if (method.IsSpecialName &&
 					    (method.Name.StartsWith("get_") || method.Name.StartsWith("set_") ||
@@ -227,7 +227,7 @@ namespace Castle.DynamicProxy.Generators
 					method2Emitter[method] = newProxiedMethod;
 				}
 
-				foreach(PropertyToGenerate propToGen in propsToGenerate)
+				foreach (PropertyToGenerate propToGen in propsToGenerate)
 				{
 					if (propToGen.CanRead)
 					{
@@ -239,7 +239,7 @@ namespace Castle.DynamicProxy.Generators
 
 						ImplementProxiedMethod(targetType, getEmitter,
 						                       propToGen.GetMethod, emitter,
-											   nestedClass, interceptorsField, GetTargetRef(propToGen.GetMethod, mixinFields, targetField),
+						                       nestedClass, interceptorsField, GetTargetRef(propToGen.GetMethod, mixinFields, targetField),
 						                       ConstructorVersion.WithTargetMethod,
 						                       (MethodInfo) method2methodOnTarget[propToGen.GetMethod]);
 
@@ -258,7 +258,7 @@ namespace Castle.DynamicProxy.Generators
 
 						ImplementProxiedMethod(targetType, setEmitter,
 						                       propToGen.SetMethod, emitter,
-											   nestedClass, interceptorsField, GetTargetRef(propToGen.SetMethod, mixinFields, targetField),
+						                       nestedClass, interceptorsField, GetTargetRef(propToGen.SetMethod, mixinFields, targetField),
 						                       ConstructorVersion.WithTargetMethod,
 						                       (MethodInfo) method2methodOnTarget[propToGen.SetMethod]);
 
@@ -269,7 +269,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 
-				foreach(EventToGenerate eventToGenerate in eventToGenerates)
+				foreach (EventToGenerate eventToGenerate in eventToGenerates)
 				{
 					NestedClassEmitter add_nestedClass = (NestedClassEmitter) method2Invocation[eventToGenerate.AddMethod];
 
@@ -279,7 +279,8 @@ namespace Castle.DynamicProxy.Generators
 
 					ImplementProxiedMethod(targetType, addEmitter,
 					                       eventToGenerate.AddMethod, emitter,
-										   add_nestedClass, interceptorsField, GetTargetRef(eventToGenerate.AddMethod, mixinFields, targetField),
+					                       add_nestedClass, interceptorsField,
+					                       GetTargetRef(eventToGenerate.AddMethod, mixinFields, targetField),
 					                       ConstructorVersion.WithTargetMethod,
 					                       (MethodInfo) method2methodOnTarget[eventToGenerate.AddMethod]);
 
@@ -294,7 +295,8 @@ namespace Castle.DynamicProxy.Generators
 
 					ImplementProxiedMethod(targetType, removeEmitter,
 					                       eventToGenerate.RemoveMethod, emitter,
-										   remove_nestedClass, interceptorsField, GetTargetRef(eventToGenerate.RemoveMethod, mixinFields, targetField),
+					                       remove_nestedClass, interceptorsField,
+					                       GetTargetRef(eventToGenerate.RemoveMethod, mixinFields, targetField),
 					                       ConstructorVersion.WithTargetMethod,
 					                       (MethodInfo) method2methodOnTarget[eventToGenerate.RemoveMethod]);
 
@@ -310,7 +312,7 @@ namespace Castle.DynamicProxy.Generators
 				// Crosses fingers and build type
 
 				generatedType = emitter.BuildType();
-				InitializeStaticFields (generatedType);
+				InitializeStaticFields(generatedType);
 
 				/*foreach (MethodInfo m in TypeFinder.GetMethods(generatedType, BindingFlags.Instance | BindingFlags.Public))
 				{
@@ -345,7 +347,7 @@ namespace Castle.DynamicProxy.Generators
 			method2methodOnTarget[method] = methodOnTarget;
 
 			method2Invocation[method] = BuildInvocationNestedType(emitter, proxyTargetType,
-																  IsMixinMethod(method) ? method.DeclaringType : proxyTargetType,
+			                                                      IsMixinMethod(method) ? method.DeclaringType : proxyTargetType,
 			                                                      method, methodOnTarget,
 			                                                      ConstructorVersion.WithTargetMethod);
 		}
@@ -383,7 +385,7 @@ namespace Castle.DynamicProxy.Generators
 				MethodInfo[] privateMethods =
 					MethodFinder.GetAllInstanceMethods(proxyTargetType, BindingFlags.NonPublic | BindingFlags.Instance);
 
-				foreach(MethodInfo methodInfo in privateMethods)
+				foreach (MethodInfo methodInfo in privateMethods)
 				{
 					// We make sure it is a method used for explicit implementation
 
@@ -414,7 +416,8 @@ namespace Castle.DynamicProxy.Generators
 				{
 					return FindMethodOnTargetType(methodOnInterface, method2MixinType[methodOnInterface], false);
 				}
-				throw new GeneratorException("Could not find a matching method on " + proxyTargetType.FullName + ". Method " + methodOnInterface.Name);
+				throw new GeneratorException("Could not find a matching method on " + proxyTargetType.FullName + ". Method " +
+				                             methodOnInterface.Name);
 			}
 
 			return (MethodInfo) members[0];
@@ -459,7 +462,7 @@ namespace Castle.DynamicProxy.Generators
 					Type[] sourceGenArgs = sourceType.GetGenericArguments();
 					Type[] targetGenArgs = targetType.GetGenericArguments();
 
-					for(int i = 0; i < sourceGenArgs.Length; i++)
+					for (int i = 0; i < sourceGenArgs.Length; i++)
 					{
 						if (!IsTypeEquivalent(sourceGenArgs[i], targetGenArgs[i]))
 						{
@@ -523,7 +526,7 @@ namespace Castle.DynamicProxy.Generators
 				return false;
 			}
 
-			for(int i = 0; i < sourceParams.Length; i++)
+			for (int i = 0; i < sourceParams.Length; i++)
 			{
 				Type sourceParamType = sourceParams[i].ParameterType;
 				Type targetParamType = targetParams[i].ParameterType;
@@ -540,22 +543,24 @@ namespace Castle.DynamicProxy.Generators
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference arg1,
 		                                               ArgumentReference arg2)
 		{
-			Type[] key_and_object = new Type[] {typeof(String), typeof(Object)};
-			Type[] key_and_int = new Type[] {typeof(String), typeof(int)};
-			Type[] key_and_string = new Type[] {typeof(String), typeof(string)};
-			MethodInfo addValueMethod = typeof(SerializationInfo).GetMethod("AddValue", key_and_object);
-			MethodInfo addIntMethod = typeof(SerializationInfo).GetMethod("AddValue", key_and_int);
-			MethodInfo addStringMethod = typeof(SerializationInfo).GetMethod("AddValue", key_and_string);
+			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
+			Type[] key_and_int = new Type[] {typeof (String), typeof (int)};
+			Type[] key_and_string = new Type[] {typeof (String), typeof (string)};
+			MethodInfo addValueMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_object);
+			MethodInfo addIntMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_int);
+			MethodInfo addStringMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_string);
 
 			codebuilder.AddStatement(new ExpressionStatement(
 			                         	new MethodInvocationExpression(arg1, addValueMethod,
 			                         	                               new ConstReference("__target").ToExpression(),
 			                         	                               targetField.ToExpression())));
 
-			codebuilder.AddStatement (new ExpressionStatement (
-			                         	new MethodInvocationExpression (arg1, addValueMethod,
-			                         	                               new ConstReference ("__targetFieldType").ToExpression (),
-			                         	                               new ConstReference (targetField.Reference.FieldType.AssemblyQualifiedName).ToExpression())));
+			codebuilder.AddStatement(new ExpressionStatement(
+			                         	new MethodInvocationExpression(arg1, addValueMethod,
+			                         	                               new ConstReference("__targetFieldType").ToExpression(),
+			                         	                               new ConstReference(
+			                         	                               	targetField.Reference.FieldType.AssemblyQualifiedName).
+			                         	                               	ToExpression())));
 
 			codebuilder.AddStatement(new ExpressionStatement(
 			                         	new MethodInvocationExpression(arg1, addIntMethod,

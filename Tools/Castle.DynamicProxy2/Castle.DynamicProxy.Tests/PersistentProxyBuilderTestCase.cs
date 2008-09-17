@@ -22,23 +22,23 @@ namespace Castle.DynamicProxy.Tests
 	public class PersistentProxyBuilderTestCase
 	{
 		[Test]
-		public void PersistentProxyBuilder_NullIfNothingSaved ()
+		public void PersistentProxyBuilder_NullIfNothingSaved()
 		{
 			PersistentProxyBuilder builder = new PersistentProxyBuilder();
 			string path = builder.SaveAssembly();
-			Assert.IsNull (path);
+			Assert.IsNull(path);
 		}
 
 		[Test]
-		public void PersistentProxyBuilder_SavesSignedFile ()
+		public void PersistentProxyBuilder_SavesSignedFile()
 		{
-			PersistentProxyBuilder builder = new PersistentProxyBuilder ();
-			builder.CreateClassProxy (typeof (object), ProxyGenerationOptions.Default);
-			string path = builder.SaveAssembly ();
-			Assert.IsNotNull (path);
-			Assert.IsNotEmpty (path);
-			Assert.IsTrue (Path.IsPathRooted (path));
-			Assert.IsTrue (path.EndsWith (ModuleScope.DEFAULT_FILE_NAME));
+			PersistentProxyBuilder builder = new PersistentProxyBuilder();
+			builder.CreateClassProxy(typeof (object), ProxyGenerationOptions.Default);
+			string path = builder.SaveAssembly();
+			Assert.IsNotNull(path);
+			Assert.IsNotEmpty(path);
+			Assert.IsTrue(Path.IsPathRooted(path));
+			Assert.IsTrue(path.EndsWith(ModuleScope.DEFAULT_FILE_NAME));
 		}
 	}
 }

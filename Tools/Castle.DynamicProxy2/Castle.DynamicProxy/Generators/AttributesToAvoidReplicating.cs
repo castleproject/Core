@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators
 
 	public static class AttributesToAvoidReplicating
 	{
-		internal readonly static List<Type> attributes = new List<Type>();
+		internal static readonly List<Type> attributes = new List<Type>();
 
 		static AttributesToAvoidReplicating()
 		{
@@ -29,13 +29,13 @@ namespace Castle.DynamicProxy.Generators
 
 		public static void Add(Type attribute)
 		{
-			if (attributes.Contains(attribute)==false)
+			if (attributes.Contains(attribute) == false)
 				attributes.Add(attribute);
 		}
 
 		public static void Add<T>()
 		{
-			Add(typeof(T));
+			Add(typeof (T));
 		}
 
 		public static bool Contains(Type type)

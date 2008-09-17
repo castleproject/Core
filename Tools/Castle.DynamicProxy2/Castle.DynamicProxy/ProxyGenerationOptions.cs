@@ -26,12 +26,11 @@ namespace Castle.DynamicProxy
 		private IProxyGenerationHook hook;
 		private IInterceptorSelector selector;
 		private List<object> mixins;
-		private Type baseTypeForInterfaceProxy = typeof(object);
+		private Type baseTypeForInterfaceProxy = typeof (object);
 		private bool useSingleInterfaceProxy;
 		private bool useSelector;
 
-		[NonSerialized]
-		private MixinData mixinData; // this is calculated dynamically on proxy type creation
+		[NonSerialized] private MixinData mixinData; // this is calculated dynamically on proxy type creation
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
@@ -50,30 +49,30 @@ namespace Castle.DynamicProxy
 		{
 		}
 
-		private ProxyGenerationOptions (SerializationInfo info, StreamingContext context)
+		private ProxyGenerationOptions(SerializationInfo info, StreamingContext context)
 		{
-			hook = (IProxyGenerationHook) info.GetValue ("hook", typeof (IProxyGenerationHook));
-			selector = (IInterceptorSelector) info.GetValue ("selector", typeof (IInterceptorSelector));
-			mixins = (List<object>) info.GetValue ("mixins", typeof (List<object>));
-			baseTypeForInterfaceProxy = Type.GetType (info.GetString ("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
-			useSingleInterfaceProxy = info.GetBoolean ("useSingleInterfaceProxy");
-			useSelector = info.GetBoolean ("useSelector");
+			hook = (IProxyGenerationHook) info.GetValue("hook", typeof (IProxyGenerationHook));
+			selector = (IInterceptorSelector) info.GetValue("selector", typeof (IInterceptorSelector));
+			mixins = (List<object>) info.GetValue("mixins", typeof (List<object>));
+			baseTypeForInterfaceProxy = Type.GetType(info.GetString("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
+			useSingleInterfaceProxy = info.GetBoolean("useSingleInterfaceProxy");
+			useSelector = info.GetBoolean("useSelector");
 		}
 
-		public void Initialize ()
+		public void Initialize()
 		{
 			if (mixinData == null)
-				mixinData = new MixinData (mixins);
+				mixinData = new MixinData(mixins);
 		}
 
-		public void GetObjectData (SerializationInfo info, StreamingContext context)
+		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.AddValue ("hook", hook);
-			info.AddValue ("selector", selector);
-			info.AddValue ("mixins", mixins);
-			info.AddValue ("baseTypeForInterfaceProxy.AssemblyQualifiedName", baseTypeForInterfaceProxy.AssemblyQualifiedName);
-			info.AddValue ("useSingleInterfaceProxy", useSingleInterfaceProxy);
-			info.AddValue ("useSelector", useSelector);
+			info.AddValue("hook", hook);
+			info.AddValue("selector", selector);
+			info.AddValue("mixins", mixins);
+			info.AddValue("baseTypeForInterfaceProxy.AssemblyQualifiedName", baseTypeForInterfaceProxy.AssemblyQualifiedName);
+			info.AddValue("useSingleInterfaceProxy", useSingleInterfaceProxy);
+			info.AddValue("useSelector", useSelector);
 		}
 
 		public IProxyGenerationHook Hook
@@ -105,8 +104,8 @@ namespace Castle.DynamicProxy
 			get
 			{
 				if (mixinData == null)
-					throw new InvalidOperationException ("Call Initialize before accessing the MixinData property.");
-				return mixinData; 
+					throw new InvalidOperationException("Call Initialize before accessing the MixinData property.");
+				return mixinData;
 			}
 		}
 
@@ -119,7 +118,7 @@ namespace Castle.DynamicProxy
 
 			if (mixins == null)
 			{
-				mixins = new List<object> ();
+				mixins = new List<object>();
 			}
 
 			mixins.Add(instance);
@@ -146,36 +145,36 @@ namespace Castle.DynamicProxy
 
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals (this, obj)) return true;
-			
+			if (ReferenceEquals(this, obj)) return true;
+
 			ProxyGenerationOptions proxyGenerationOptions = obj as ProxyGenerationOptions;
-			if (ReferenceEquals (proxyGenerationOptions, null)) return false;
+			if (ReferenceEquals(proxyGenerationOptions, null)) return false;
 
 			// ensure initialization before accessing MixinData
-			Initialize ();
-			proxyGenerationOptions.Initialize ();
-			
+			Initialize();
+			proxyGenerationOptions.Initialize();
+
 			if (!Equals(hook, proxyGenerationOptions.hook)) return false;
 			if (!Equals(selector, proxyGenerationOptions.selector)) return false;
-			if (!Equals (MixinData, proxyGenerationOptions.MixinData)) return false;
+			if (!Equals(MixinData, proxyGenerationOptions.MixinData)) return false;
 			if (!Equals(baseTypeForInterfaceProxy, proxyGenerationOptions.baseTypeForInterfaceProxy)) return false;
 			if (!Equals(useSingleInterfaceProxy, proxyGenerationOptions.useSingleInterfaceProxy)) return false;
-			if (!Equals (useSelector, proxyGenerationOptions.useSelector))
+			if (!Equals(useSelector, proxyGenerationOptions.useSelector))
 				return false;
 			return true;
 		}
 
-		public override int GetHashCode ()
+		public override int GetHashCode()
 		{
 			// ensure initialization before accessing MixinData
-			Initialize ();
+			Initialize();
 
 			int result = hook != null ? hook.GetType().GetHashCode() : 0;
-			result = 29 * result + (selector != null ? selector.GetHashCode() : 0);
-			result = 29 * result + MixinData.GetHashCode();
-			result = 29 * result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
-			result = 29 * result + useSingleInterfaceProxy.GetHashCode();
-			result = 29 * result + useSelector.GetHashCode ();
+			result = 29*result + (selector != null ? selector.GetHashCode() : 0);
+			result = 29*result + MixinData.GetHashCode();
+			result = 29*result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
+			result = 29*result + useSingleInterfaceProxy.GetHashCode();
+			result = 29*result + useSelector.GetHashCode();
 			return result;
 		}
 	}

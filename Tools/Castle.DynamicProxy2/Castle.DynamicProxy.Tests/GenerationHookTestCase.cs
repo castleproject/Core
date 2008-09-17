@@ -29,12 +29,12 @@ namespace Castle.DynamicProxy.Tests
 		public void HookIsUsedForConcreteClassProxy()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			LogHook hook = new LogHook(typeof(ServiceClass), true);
+			LogHook hook = new LogHook(typeof (ServiceClass), true);
 
 			ProxyGenerationOptions options = new ProxyGenerationOptions(hook);
 
 			ServiceClass proxy = (ServiceClass) generator.CreateClassProxy(
-			                                    	typeof(ServiceClass), options, logger);
+			                                    	typeof (ServiceClass), options, logger);
 
 			Assert.IsTrue(hook.Completed);
 			Assert.AreEqual(10, hook.AskedMembers.Count);
@@ -50,13 +50,13 @@ namespace Castle.DynamicProxy.Tests
 		public void HookIsUsedForInterfaceProxy()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			LogHook hook = new LogHook(typeof(IService), false);
+			LogHook hook = new LogHook(typeof (IService), false);
 
 			ProxyGenerationOptions options = new ProxyGenerationOptions(hook);
 
 			IService proxy = (IService)
 			                 generator.CreateInterfaceProxyWithTarget(
-			                 	typeof(IService), new ServiceImpl(), options, logger);
+			                 	typeof (IService), new ServiceImpl(), options, logger);
 
 			Assert.IsTrue(hook.Completed);
 			Assert.AreEqual(10, hook.AskedMembers.Count);

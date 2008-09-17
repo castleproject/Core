@@ -43,7 +43,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			TypeReference[] result = new TypeReference[references.Length];
 
-			for(int i = 0; i < references.Length; i++)
+			for (int i = 0; i < references.Length; i++)
 			{
 				result[i] = WrapIfByRef(references[i]);
 			}

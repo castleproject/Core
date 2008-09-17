@@ -26,8 +26,8 @@ namespace Castle.DynamicProxy.Generators
 		public bool Equals(MethodInfo x, MethodInfo y)
 		{
 			if (x == null && y == null)
-			{ 
-				return true; 
+			{
+				return true;
 			}
 			else if (x == null || y == null)
 			{
@@ -35,10 +35,10 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else
 			{
-				return x.Name == y.Name && 
-					EqualGenericParameters(x, y) && 
-					EqualSignatureTypes(x.ReturnType, y.ReturnType) && 
-					EqualParameters(x, y);
+				return x.Name == y.Name &&
+				       EqualGenericParameters(x, y) &&
+				       EqualSignatureTypes(x.ReturnType, y.ReturnType) &&
+				       EqualParameters(x, y);
 			}
 		}
 
@@ -51,22 +51,22 @@ namespace Castle.DynamicProxy.Generators
 
 			if (x.IsGenericMethod)
 			{
-				Type[] xArgs = x.GetGenericArguments ();
-				Type[] yArgs = y.GetGenericArguments ();
+				Type[] xArgs = x.GetGenericArguments();
+				Type[] yArgs = y.GetGenericArguments();
 
 				if (xArgs.Length != yArgs.Length)
 				{
 					return false;
 				}
 
-				for(int i = 0; i < xArgs.Length; ++i)
+				for (int i = 0; i < xArgs.Length; ++i)
 				{
 					if (xArgs[i].IsGenericParameter != yArgs[i].IsGenericParameter)
 					{
 						return false;
 					}
 
-					if (!xArgs[i].IsGenericParameter && !xArgs[i].Equals (yArgs[i]))
+					if (!xArgs[i].IsGenericParameter && !xArgs[i].Equals(yArgs[i]))
 					{
 						return false;
 					}
@@ -78,15 +78,15 @@ namespace Castle.DynamicProxy.Generators
 
 		private bool EqualParameters(MethodInfo x, MethodInfo y)
 		{
-			ParameterInfo[] xArgs = x.GetParameters ();
-			ParameterInfo[] yArgs = y.GetParameters ();
+			ParameterInfo[] xArgs = x.GetParameters();
+			ParameterInfo[] yArgs = y.GetParameters();
 
 			if (xArgs.Length != yArgs.Length)
 			{
 				return false;
 			}
 
-			for(int i = 0; i < xArgs.Length; ++i)
+			for (int i = 0; i < xArgs.Length; ++i)
 			{
 				if (!EqualSignatureTypes(xArgs[i].ParameterType, yArgs[i].ParameterType))
 				{
@@ -123,7 +123,7 @@ namespace Castle.DynamicProxy.Generators
 
 		public int GetHashCode(MethodInfo obj)
 		{
-			return obj.Name.GetHashCode () ^ obj.GetParameters ().Length; // everything else would be too cumbersome
+			return obj.Name.GetHashCode() ^ obj.GetParameters().Length; // everything else would be too cumbersome
 		}
 	}
 }

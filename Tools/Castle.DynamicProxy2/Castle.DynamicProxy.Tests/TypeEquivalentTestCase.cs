@@ -25,18 +25,18 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void SimpleCases()
 		{
-			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(string), typeof(string)));
-			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(int), typeof(int)));
-			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(long), typeof(long)));
+			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof (string), typeof (string)));
+			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof (int), typeof (int)));
+			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof (long), typeof (long)));
 
-			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(string), typeof(int)));
-			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(int), typeof(string)));
+			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof (string), typeof (int)));
+			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof (int), typeof (string)));
 		}
 
 		[Test]
 		public void GenericTypeParameter()
 		{
-			Type[] genericArgs = typeof(Nested<,>).GetGenericArguments();
+			Type[] genericArgs = typeof (Nested<,>).GetGenericArguments();
 
 			Type T = genericArgs[0];
 			Type Z = genericArgs[1];
@@ -44,22 +44,22 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(T, T));
 			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(T, Z));
 			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(Z, T));
-			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(int), genericArgs[0]));
+			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof (int), genericArgs[0]));
 		}
 
 		[Test]
 		public void GenericTypesWithGenericParameter()
 		{
-			Type[] genericArgs = typeof(Nested<,>).GetGenericArguments();
+			Type[] genericArgs = typeof (Nested<,>).GetGenericArguments();
 
 			Type T = genericArgs[0];
 			Type Z = genericArgs[1];
 
-			Type listOfT = typeof(List<>).MakeGenericType(T);
-			Type listOfZ = typeof(List<>).MakeGenericType(Z);
+			Type listOfT = typeof (List<>).MakeGenericType(T);
+			Type listOfZ = typeof (List<>).MakeGenericType(Z);
 
-			Type listOfString = typeof(List<>).MakeGenericType(typeof(String));
-			Type listOfInt = typeof(List<>).MakeGenericType(typeof(int));
+			Type listOfString = typeof (List<>).MakeGenericType(typeof (String));
+			Type listOfInt = typeof (List<>).MakeGenericType(typeof (int));
 
 			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(listOfString, listOfString));
 			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(listOfInt, listOfInt));
@@ -74,9 +74,9 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ArrayTypes()
 		{
-			Array arrayOfInt1 = Array.CreateInstance(typeof(int), 1);
-			Array arrayOfInt2 = Array.CreateInstance(typeof(int), 2);
-			Array arrayOfStr = Array.CreateInstance(typeof(string), 2);
+			Array arrayOfInt1 = Array.CreateInstance(typeof (int), 1);
+			Array arrayOfInt2 = Array.CreateInstance(typeof (int), 2);
+			Array arrayOfStr = Array.CreateInstance(typeof (string), 2);
 
 			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfInt1.GetType(), arrayOfInt1.GetType()));
 			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfInt1.GetType(), arrayOfInt2.GetType()));
@@ -87,7 +87,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void GenericArrayTypes()
 		{
-			Type[] genericArgs = typeof(Nested<,>).GetGenericArguments();
+			Type[] genericArgs = typeof (Nested<,>).GetGenericArguments();
 
 			Type T = genericArgs[0];
 			Type Z = genericArgs[1];

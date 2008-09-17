@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public static void InitializeArgumentsByPosition(ArgumentReference[] args, bool isStatic)
 		{
 			int offset = isStatic ? 0 : 1;
-			for(int i = 0; i < args.Length; ++i)
+			for (int i = 0; i < args.Length; ++i)
 			{
 				args[i].Position = i + offset;
 			}
@@ -43,7 +43,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			Type[] types = new Type[args.Length];
 
-			for(int i = 0; i < args.Length; ++i)
+			for (int i = 0; i < args.Length; ++i)
 			{
 				args[i].Position = i + 1;
 				types[i] = args[i].Type;
@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			ArgumentReference[] arguments = new ArgumentReference[args.Length];
 
-			for(int i = 0; i < args.Length; ++i)
+			for (int i = 0; i < args.Length; ++i)
 			{
 				arguments[i] = new ArgumentReference(args[i]);
 			}
@@ -68,7 +68,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			ArgumentReference[] arguments = new ArgumentReference[args.Length];
 
-			for(int i = 0; i < args.Length; ++i)
+			for (int i = 0; i < args.Length; ++i)
 			{
 				arguments[i] = new ArgumentReference(args[i].ParameterType);
 			}
@@ -80,7 +80,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			Expression[] expressions = new Expression[args.Length];
 
-			for(int i = 0; i < args.Length; ++i)
+			for (int i = 0; i < args.Length; ++i)
 			{
 				expressions[i] = args[i].ToExpression();
 			}

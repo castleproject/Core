@@ -30,18 +30,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private StindOpCodesDictionary() : base()
 		{
-			Dictionary[typeof(bool)] = OpCodes.Stind_I1;
-			Dictionary[typeof(char)] = OpCodes.Stind_I2;
-			Dictionary[typeof(SByte)] = OpCodes.Stind_I1;
-			Dictionary[typeof(Int16)] = OpCodes.Stind_I2;
-			Dictionary[typeof(Int32)] = OpCodes.Stind_I4;
-			Dictionary[typeof(Int64)] = OpCodes.Stind_I8;
-			Dictionary[typeof(float)] = OpCodes.Stind_R4;
-			Dictionary[typeof(double)] = OpCodes.Stind_R8;
-			Dictionary[typeof(byte)] = OpCodes.Stind_I1;
-			Dictionary[typeof(UInt16)] = OpCodes.Stind_I2;
-			Dictionary[typeof(UInt32)] = OpCodes.Stind_I4;
-			Dictionary[typeof(UInt64)] = OpCodes.Stind_I8;
+			Dictionary[typeof (bool)] = OpCodes.Stind_I1;
+			Dictionary[typeof (char)] = OpCodes.Stind_I2;
+			Dictionary[typeof (SByte)] = OpCodes.Stind_I1;
+			Dictionary[typeof (Int16)] = OpCodes.Stind_I2;
+			Dictionary[typeof (Int32)] = OpCodes.Stind_I4;
+			Dictionary[typeof (Int64)] = OpCodes.Stind_I8;
+			Dictionary[typeof (float)] = OpCodes.Stind_R4;
+			Dictionary[typeof (double)] = OpCodes.Stind_R8;
+			Dictionary[typeof (byte)] = OpCodes.Stind_I1;
+			Dictionary[typeof (UInt16)] = OpCodes.Stind_I2;
+			Dictionary[typeof (UInt32)] = OpCodes.Stind_I4;
+			Dictionary[typeof (UInt64)] = OpCodes.Stind_I8;
 		}
 
 		public OpCode this[Type type]

@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private GenericTypeParameterBuilder[] genericTypeParams;
 
-		public AbstractTypeEmitter (TypeBuilder typeBuilder)
+		public AbstractTypeEmitter(TypeBuilder typeBuilder)
 		{
 			this.typebuilder = typeBuilder;
 			nested = new NestedClassCollection();
@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			ArrayList types = new ArrayList();
 
-			foreach(Type genType in genericType.GetGenericArguments())
+			foreach (Type genType in genericType.GetGenericArguments())
 			{
 				if (genType.IsGenericParameter)
 				{
@@ -70,13 +70,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 			}
 
-			return (Type[]) types.ToArray(typeof(Type));
+			return (Type[]) types.ToArray(typeof (Type));
 		}
 
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
 		{
 			List<Type> types = new List<Type>();
-			foreach(Type genType in genericMethod.GetGenericArguments())
+			foreach (Type genType in genericMethod.GetGenericArguments())
 			{
 				types.Add(name2GenericType[genType.Name]);
 			}
@@ -112,14 +112,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public MethodEmitter CreateMethod(String name, MethodAttributes attrs, Type returnType)
 		{
-			return CreateMethod (name, attrs, returnType, new Type[0]);
+			return CreateMethod(name, attrs, returnType, new Type[0]);
 		}
 
 		public MethodEmitter CreateMethod(String name, MethodAttributes attrs, Type returnType,
 		                                  params Type[] argumentTypes)
 		{
 			MethodEmitter member =
-				new MethodEmitter (this, name, attrs, returnType, argumentTypes);
+				new MethodEmitter(this, name, attrs, returnType, argumentTypes);
 			methods.Add(member);
 			return member;
 		}
@@ -127,16 +127,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public MethodEmitter CreateMethod(String name, Type returnType,
 		                                  params ArgumentReference[] argumentReferences)
 		{
-			Type[] argumentTypes = ArgumentsUtil.InitializeAndConvert (argumentReferences);
-			const MethodAttributes defaultAttributes = MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public;
-			return CreateMethod (name, defaultAttributes, returnType, argumentTypes);
+			Type[] argumentTypes = ArgumentsUtil.InitializeAndConvert(argumentReferences);
+			const MethodAttributes defaultAttributes =
+				MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public;
+			return CreateMethod(name, defaultAttributes, returnType, argumentTypes);
 		}
 
 		public MethodEmitter CreateMethod(String name, MethodAttributes attrs, Type returnType,
 		                                  params ArgumentReference[] argumentReferences)
 		{
-			Type[] argumentTypes = ArgumentsUtil.InitializeAndConvert (argumentReferences);
-			return CreateMethod (name, attrs, returnType, argumentTypes);
+			Type[] argumentTypes = ArgumentsUtil.InitializeAndConvert(argumentReferences);
+			return CreateMethod(name, attrs, returnType, argumentTypes);
 		}
 
 		public FieldReference CreateStaticField(string name, Type fieldType)
@@ -146,7 +147,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return CreateStaticField(name, fieldType, atts);
 		}
 
-		public FieldReference CreateStaticField (string name, Type fieldType, FieldAttributes atts)
+		public FieldReference CreateStaticField(string name, Type fieldType, FieldAttributes atts)
 		{
 			atts |= FieldAttributes.Static;
 			FieldBuilder fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
@@ -170,7 +171,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return CreateField(name, fieldType, atts);
 		}
 
-		public FieldReference CreateField (string name, Type fieldType, FieldAttributes atts)
+		public FieldReference CreateField(string name, Type fieldType, FieldAttributes atts)
 		{
 			FieldBuilder fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
 			return new FieldReference(fieldBuilder);
@@ -247,7 +248,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return genericTypeParams; }
 		}
 
-		public void SetGenericTypeParameters (GenericTypeParameterBuilder[] genericTypeParameterBuilders)
+		public void SetGenericTypeParameters(GenericTypeParameterBuilder[] genericTypeParameterBuilders)
 		{
 			this.genericTypeParams = genericTypeParameterBuilders;
 		}
@@ -260,7 +261,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new ApplicationException("CreateGenericParameters: cannot invoke me twice");
 			}
 
-			SetGenericTypeParameters (GenericUtil.DefineGenericArguments(genericArguments, typebuilder, name2GenericType));
+			SetGenericTypeParameters(GenericUtil.DefineGenericArguments(genericArguments, typebuilder, name2GenericType));
 		}
 
 		public virtual Type BuildType()
@@ -269,7 +270,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			Type type = typebuilder.CreateType();
 
-			foreach(NestedClassEmitter builder in nested)
+			foreach (NestedClassEmitter builder in nested)
 			{
 				builder.BuildType();
 			}
@@ -284,22 +285,22 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				CreateDefaultConstructor();
 			}
 
-			foreach(IMemberEmitter builder in properties)
+			foreach (IMemberEmitter builder in properties)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach(IMemberEmitter builder in events)
+			foreach (IMemberEmitter builder in events)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach(IMemberEmitter builder in constructors)
+			foreach (IMemberEmitter builder in constructors)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach(IMemberEmitter builder in methods)
+			foreach (IMemberEmitter builder in methods)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();

@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyIsXmlSerializable()
 		{
 			ClassToSerialize proxy = (ClassToSerialize)
-			                         generator.CreateClassProxy(typeof(ClassToSerialize), new StandardInterceptor());
+			                         generator.CreateClassProxy(typeof (ClassToSerialize), new StandardInterceptor());
 
 			XmlSerializer serializer = new XmlSerializer(proxy.GetType());
 
@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Tests
 			object newObj = serializer.Deserialize(reader);
 
 			Assert.IsNotNull(newObj);
-			Assert.IsInstanceOfType(typeof(ClassToSerialize), newObj);
+			Assert.IsInstanceOfType(typeof (ClassToSerialize), newObj);
 		}
 	}
 }

@@ -21,24 +21,26 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public class ClassEmitter : AbstractTypeEmitter
 	{
-		public ClassEmitter (ModuleScope modulescope, String name, Type baseType, Type[] interfaces)
-			: this (modulescope, name, baseType, interfaces, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable)
+		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, Type[] interfaces)
+			: this(
+				modulescope, name, baseType, interfaces, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable)
 		{
 		}
 
-		public ClassEmitter (ModuleScope modulescope, String name, Type baseType, Type[] interfaces, TypeAttributes flags)
-			: this (modulescope, name, baseType, interfaces, flags, false)
+		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, Type[] interfaces, TypeAttributes flags)
+			: this(modulescope, name, baseType, interfaces, flags, false)
 		{
 		}
 
-		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, Type[] interfaces, TypeAttributes flags, bool forceUnsigned)
-			: base (CreateTypeBuilder (modulescope, name, baseType, interfaces, flags, forceUnsigned))
+		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, Type[] interfaces, TypeAttributes flags,
+		                    bool forceUnsigned)
+			: base(CreateTypeBuilder(modulescope, name, baseType, interfaces, flags, forceUnsigned))
 		{
 			InitializeGenericArgumentsFromBases(ref baseType, ref interfaces);
 
 			if (interfaces != null)
 			{
-				foreach(Type inter in interfaces)
+				foreach (Type inter in interfaces)
 				{
 					TypeBuilder.AddInterfaceImplementation(inter);
 				}
@@ -47,15 +49,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			TypeBuilder.SetParent(baseType);
 		}
 
-		private static TypeBuilder CreateTypeBuilder (ModuleScope modulescope, string name, Type baseType, Type[] interfaces,
-				TypeAttributes flags, bool forceUnsigned)
+		private static TypeBuilder CreateTypeBuilder(ModuleScope modulescope, string name, Type baseType, Type[] interfaces,
+		                                             TypeAttributes flags, bool forceUnsigned)
 		{
-			bool isAssemblySigned = !forceUnsigned && !StrongNameUtil.IsAnyTypeFromUnsignedAssembly (baseType, interfaces);
-			return modulescope.ObtainDynamicModule (isAssemblySigned).DefineType (name, flags);
+			bool isAssemblySigned = !forceUnsigned && !StrongNameUtil.IsAnyTypeFromUnsignedAssembly(baseType, interfaces);
+			return modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(name, flags);
 		}
 
-		public ClassEmitter (TypeBuilder typeBuilder)
-			: base (typeBuilder)
+		public ClassEmitter(TypeBuilder typeBuilder)
+			: base(typeBuilder)
 		{
 		}
 
@@ -68,7 +70,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				throw new NotSupportedException("ClassEmitter does not support open generic base types. Type: " + baseType.FullName);
 			}
-			foreach(Type inter in interfaces)
+			foreach (Type inter in interfaces)
 			{
 				if (inter.IsGenericTypeDefinition)
 				{

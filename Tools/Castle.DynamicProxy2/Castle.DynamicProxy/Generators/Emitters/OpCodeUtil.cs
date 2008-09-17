@@ -14,169 +14,169 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters
 {
-    using System;
-    using System.Reflection.Emit;
+	using System;
+	using System.Reflection.Emit;
 
-    internal abstract class OpCodeUtil
-    {
-        /// <summary>
-        /// Emits a load opcode of the appropriate kind for a constant string or
-        /// primitive value.
-        /// </summary>
-        /// <param name="gen"></param>
-        /// <param name="value"></param>
-        public static void EmitLoadOpCodeForConstantValue(ILGenerator gen, object value)
-        {
-            if (value is String)
-            {
-                gen.Emit(OpCodes.Ldstr, value.ToString());
-            }
-            else if (value is Int32)
-            {
-                OpCode code = LdcOpCodesDictionary.Instance[value.GetType()];
-                gen.Emit(code, (int)value);
-            }
-            else if (value is bool)
-            {
-                OpCode code = LdcOpCodesDictionary.Instance[value.GetType()];
-                gen.Emit(code, Convert.ToInt32(value));
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
-        }
+	internal abstract class OpCodeUtil
+	{
+		/// <summary>
+		/// Emits a load opcode of the appropriate kind for a constant string or
+		/// primitive value.
+		/// </summary>
+		/// <param name="gen"></param>
+		/// <param name="value"></param>
+		public static void EmitLoadOpCodeForConstantValue(ILGenerator gen, object value)
+		{
+			if (value is String)
+			{
+				gen.Emit(OpCodes.Ldstr, value.ToString());
+			}
+			else if (value is Int32)
+			{
+				OpCode code = LdcOpCodesDictionary.Instance[value.GetType()];
+				gen.Emit(code, (int) value);
+			}
+			else if (value is bool)
+			{
+				OpCode code = LdcOpCodesDictionary.Instance[value.GetType()];
+				gen.Emit(code, Convert.ToInt32(value));
+			}
+			else
+			{
+				throw new NotSupportedException();
+			}
+		}
 
-        /// <summary>
-        /// Emits a load opcode of the appropriate kind for the constant default value of a
-        /// type, such as 0 for value types and null for reference types.
-        /// </summary>
-        public static void EmitLoadOpCodeForDefaultValueOfType(ILGenerator gen, Type type)
-        {
-            if (type.IsPrimitive)
-            {
-                gen.Emit(LdcOpCodesDictionary.Instance[type], 0);
-            }
-            else
-            {
-                gen.Emit(OpCodes.Ldnull);
-            }
-        }
+		/// <summary>
+		/// Emits a load opcode of the appropriate kind for the constant default value of a
+		/// type, such as 0 for value types and null for reference types.
+		/// </summary>
+		public static void EmitLoadOpCodeForDefaultValueOfType(ILGenerator gen, Type type)
+		{
+			if (type.IsPrimitive)
+			{
+				gen.Emit(LdcOpCodesDictionary.Instance[type], 0);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Ldnull);
+			}
+		}
 
-        /// <summary>
-        /// Emits a load indirect opcode of the appropriate type for a value or object reference.
-        /// Pops a pointer off the evaluation stack, dereferences it and loads
-        /// a value of the specified type.
-        /// </summary>
-        /// <param name="gen"></param>
-        /// <param name="type"></param>
-        public static void EmitLoadIndirectOpCodeForType(ILGenerator gen, Type type)
-        {
-            if (type.IsEnum)
-            {
-                EmitLoadIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
-                return;
-            }
+		/// <summary>
+		/// Emits a load indirect opcode of the appropriate type for a value or object reference.
+		/// Pops a pointer off the evaluation stack, dereferences it and loads
+		/// a value of the specified type.
+		/// </summary>
+		/// <param name="gen"></param>
+		/// <param name="type"></param>
+		public static void EmitLoadIndirectOpCodeForType(ILGenerator gen, Type type)
+		{
+			if (type.IsEnum)
+			{
+				EmitLoadIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
+				return;
+			}
 
-            if (type.IsByRef)
-            {
-                throw new NotSupportedException("Cannot load ByRef values");
-            }
-            else if (type.IsPrimitive && type != typeof(IntPtr))
-            {
-                OpCode opCode = LdindOpCodesDictionary.Instance[type];
+			if (type.IsByRef)
+			{
+				throw new NotSupportedException("Cannot load ByRef values");
+			}
+			else if (type.IsPrimitive && type != typeof (IntPtr))
+			{
+				OpCode opCode = LdindOpCodesDictionary.Instance[type];
 
-                if (opCode == LdindOpCodesDictionary.EmptyOpCode)
-                {
-                    throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
-                }
+				if (opCode == LdindOpCodesDictionary.EmptyOpCode)
+				{
+					throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
+				}
 
-                gen.Emit(opCode);
-            }
-            else if (type.IsValueType)
-            {
-                gen.Emit(OpCodes.Ldobj, type);
-            }
-            else if(type.IsGenericParameter)
-            {
-                gen.Emit(OpCodes.Ldobj, type);
-            }
-            else
-            {
-                gen.Emit(OpCodes.Ldind_Ref);
-            }
-        }
+				gen.Emit(opCode);
+			}
+			else if (type.IsValueType)
+			{
+				gen.Emit(OpCodes.Ldobj, type);
+			}
+			else if (type.IsGenericParameter)
+			{
+				gen.Emit(OpCodes.Ldobj, type);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Ldind_Ref);
+			}
+		}
 
-        /// <summary>
-        /// Emits a store indirectopcode of the appropriate type for a value or object reference.
-        /// Pops a value of the specified type and a pointer off the evaluation stack, and
-        /// stores the value.
-        /// </summary>
-        /// <param name="gen"></param>
-        /// <param name="type"></param>
-        public static void EmitStoreIndirectOpCodeForType(ILGenerator gen, Type type)
-        {
-            if (type.IsEnum)
-            {
-                EmitStoreIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
-                return;
-            }
+		/// <summary>
+		/// Emits a store indirectopcode of the appropriate type for a value or object reference.
+		/// Pops a value of the specified type and a pointer off the evaluation stack, and
+		/// stores the value.
+		/// </summary>
+		/// <param name="gen"></param>
+		/// <param name="type"></param>
+		public static void EmitStoreIndirectOpCodeForType(ILGenerator gen, Type type)
+		{
+			if (type.IsEnum)
+			{
+				EmitStoreIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
+				return;
+			}
 
-            if (type.IsByRef)
-            {
-                throw new NotSupportedException("Cannot store ByRef values");
-            }
-            else if (type.IsPrimitive && type != typeof(IntPtr))
-            {
-                OpCode opCode = StindOpCodesDictionary.Instance[type];
+			if (type.IsByRef)
+			{
+				throw new NotSupportedException("Cannot store ByRef values");
+			}
+			else if (type.IsPrimitive && type != typeof (IntPtr))
+			{
+				OpCode opCode = StindOpCodesDictionary.Instance[type];
 
-                if (Equals(opCode, StindOpCodesDictionary.EmptyOpCode))
-                {
-                    throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
-                }
+				if (Equals(opCode, StindOpCodesDictionary.EmptyOpCode))
+				{
+					throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
+				}
 
-                gen.Emit(opCode);
-            }
-            else if (type.IsValueType)
-            {
-                gen.Emit(OpCodes.Stobj, type);
-            }
-			else if(type.IsGenericParameter)
+				gen.Emit(opCode);
+			}
+			else if (type.IsValueType)
 			{
 				gen.Emit(OpCodes.Stobj, type);
 			}
-            else
-            {
-                gen.Emit(OpCodes.Stind_Ref);
-            }
-        }
+			else if (type.IsGenericParameter)
+			{
+				gen.Emit(OpCodes.Stobj, type);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Stind_Ref);
+			}
+		}
 
-        private static Type GetUnderlyingTypeOfEnum(Type enumType)
-        {
-            Enum baseType = (Enum)Activator.CreateInstance(enumType);
-            TypeCode code = baseType.GetTypeCode();
+		private static Type GetUnderlyingTypeOfEnum(Type enumType)
+		{
+			Enum baseType = (Enum) Activator.CreateInstance(enumType);
+			TypeCode code = baseType.GetTypeCode();
 
-            switch (code)
-            {
-                case TypeCode.SByte:
-                    return typeof(SByte);
-                case TypeCode.Byte:
-                    return typeof(Byte);
-                case TypeCode.Int16:
-                    return typeof(Int16);
-                case TypeCode.Int32:
-                    return typeof(Int32);
-                case TypeCode.Int64:
-                    return typeof(Int64);
-                case TypeCode.UInt16:
-                    return typeof(UInt16);
-                case TypeCode.UInt32:
-                    return typeof(UInt32);
-                case TypeCode.UInt64:
-                    return typeof(UInt64);
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-    }
+			switch (code)
+			{
+				case TypeCode.SByte:
+					return typeof (SByte);
+				case TypeCode.Byte:
+					return typeof (Byte);
+				case TypeCode.Int16:
+					return typeof (Int16);
+				case TypeCode.Int32:
+					return typeof (Int32);
+				case TypeCode.Int64:
+					return typeof (Int64);
+				case TypeCode.UInt16:
+					return typeof (UInt16);
+				case TypeCode.UInt32:
+					return typeof (UInt32);
+				case TypeCode.UInt64:
+					return typeof (UInt64);
+				default:
+					throw new NotSupportedException();
+			}
+		}
+	}
 }

@@ -31,13 +31,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			LocalBuilder local = gen.DeclareLocal(typeof(object[]));
+			LocalBuilder local = gen.DeclareLocal(typeof (object[]));
 
 			gen.Emit(OpCodes.Ldc_I4, args.Length);
-			gen.Emit(OpCodes.Newarr, typeof(object));
+			gen.Emit(OpCodes.Newarr, typeof (object));
 			gen.Emit(OpCodes.Stloc, local);
 
-			for(int i = 0; i < args.Length; i++)
+			for (int i = 0; i < args.Length; i++)
 			{
 				gen.Emit(OpCodes.Ldloc, local);
 				gen.Emit(OpCodes.Ldc_I4, i);

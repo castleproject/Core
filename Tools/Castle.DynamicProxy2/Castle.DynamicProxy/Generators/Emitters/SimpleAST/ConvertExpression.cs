@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		private Type target;
 
 		public ConvertExpression(Type targetType, Expression right)
-			: this(targetType, typeof(object), right)
+			: this(targetType, typeof (object), right)
 		{
 		}
 
@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				{
 					// Box conversion
 					gen.Emit(OpCodes.Box, fromType);
-					EmitCastIfNeeded(typeof(object), target, gen);
+					EmitCastIfNeeded(typeof (object), target, gen);
 				}
 				else
 				{

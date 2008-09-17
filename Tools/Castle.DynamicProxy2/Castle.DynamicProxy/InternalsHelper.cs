@@ -49,11 +49,11 @@ namespace Castle.DynamicProxy
 				}
 
 				InternalsVisibleToAttribute[] atts = (InternalsVisibleToAttribute[])
-				                                     asm.GetCustomAttributes(typeof(InternalsVisibleToAttribute), false);
+				                                     asm.GetCustomAttributes(typeof (InternalsVisibleToAttribute), false);
 
 				bool found = false;
 
-				foreach(InternalsVisibleToAttribute internals in atts)
+				foreach (InternalsVisibleToAttribute internals in atts)
 				{
 					if (internals.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME))
 					{

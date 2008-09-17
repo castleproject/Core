@@ -172,8 +172,8 @@ namespace Castle.DynamicProxy.Tests
 			object ret1 = proxy.DoSomethingT();
 			object ret2 = proxy.DoSomethingZ();
 
-			Assert.IsInstanceOfType(typeof(ArrayList), ret1);
-			Assert.IsInstanceOfType(typeof(Hashtable), ret2);
+			Assert.IsInstanceOfType(typeof (ArrayList), ret1);
+			Assert.IsInstanceOfType(typeof (Hashtable), ret2);
 			Assert.AreEqual("DoSomethingT DoSomethingZ ", logger.LogContents);
 		}
 
@@ -214,13 +214,14 @@ namespace Castle.DynamicProxy.Tests
 			GenClassWithGenMethods<ArrayList> proxy = generator.CreateClassProxy<GenClassWithGenMethods<ArrayList>>(interceptor);
 
 			proxy.DoSomething(1);
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(ArrayList), typeof(int));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (ArrayList),
+			                                           typeof (int));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomething(new Hashtable());
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(ArrayList),
-			                                           typeof(Hashtable));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (ArrayList),
+			                                           typeof (Hashtable));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
@@ -232,12 +233,13 @@ namespace Castle.DynamicProxy.Tests
 			GenClassWithGenMethods<int> proxy = generator.CreateClassProxy<GenClassWithGenMethods<int>>(interceptor);
 
 			proxy.DoSomething(1);
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(int), typeof(int));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int), typeof (int));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomething(new Hashtable());
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(int), typeof(Hashtable));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int),
+			                                           typeof (Hashtable));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
@@ -250,12 +252,12 @@ namespace Castle.DynamicProxy.Tests
 				generator.CreateClassProxy<GenClassWithGenReturn<ArrayList, ArrayList>>(interceptor);
 
 			proxy.DoSomethingT();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(ArrayList));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (ArrayList));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomethingZ();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(ArrayList));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (ArrayList));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
@@ -267,12 +269,12 @@ namespace Castle.DynamicProxy.Tests
 			GenClassWithGenReturn<int, int> proxy = generator.CreateClassProxy<GenClassWithGenReturn<int, int>>(interceptor);
 
 			proxy.DoSomethingT();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(int));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomethingZ();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(int));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
@@ -285,12 +287,12 @@ namespace Castle.DynamicProxy.Tests
 				generator.CreateClassProxy<GenClassWithGenReturn<int, ArrayList>>(interceptor);
 
 			proxy.DoSomethingT();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(int));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomethingZ();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(ArrayList));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (ArrayList));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
@@ -302,23 +304,23 @@ namespace Castle.DynamicProxy.Tests
 			OnlyGenMethodsClass proxy = generator.CreateClassProxy<OnlyGenMethodsClass>(interceptor);
 
 			proxy.DoSomething(1);
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(int), typeof(int));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int), typeof (int));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomething(new Hashtable());
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(Hashtable),
-			                                           typeof(Hashtable));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (Hashtable),
+			                                           typeof (Hashtable));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
 			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
+		[ExpectedException(typeof (ArgumentException))]
 		public void ThrowsWhenProxyingGenericTypeDefNoTarget()
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			object o = generator.CreateClassProxy(typeof(GenClassWithGenReturn<,>), interceptor);
+			object o = generator.CreateClassProxy(typeof (GenClassWithGenReturn<,>), interceptor);
 		}
 
 #endif

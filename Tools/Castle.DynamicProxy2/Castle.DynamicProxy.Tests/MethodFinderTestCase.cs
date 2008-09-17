@@ -27,11 +27,11 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Assert.AreEqual(expected.Length, actual.Length);
 			ArrayList actualAsList = new ArrayList(actual);
-			foreach(object expectedElement in expected)
+			foreach (object expectedElement in expected)
 			{
 				Assert.Contains(expectedElement, actualAsList);
 				actualAsList.Remove(expectedElement);
-					// need to remove the element after it has been found to guarantee that duplicate elements are handled correctly
+				// need to remove the element after it has been found to guarantee that duplicate elements are handled correctly
 			}
 		}
 
@@ -48,7 +48,7 @@ namespace Castle.DynamicProxy.Tests
 				AssertArraysAreEqualUnsorted(new object[] {null, "one", null}, new object[] {"one", "one", null});
 				Assert.Fail();
 			}
-			catch(AssertionException)
+			catch (AssertionException)
 			{
 				// ok
 			}
@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Tests
 				AssertArraysAreEqualUnsorted(new object[] {null, "one"}, new object[] {"one", null, null});
 				Assert.Fail();
 			}
-			catch(AssertionException)
+			catch (AssertionException)
 			{
 				// ok
 			}
@@ -66,7 +66,7 @@ namespace Castle.DynamicProxy.Tests
 				AssertArraysAreEqualUnsorted(new object[] {null, "one", null}, new object[] {"one", null});
 				Assert.Fail();
 			}
-			catch(AssertionException)
+			catch (AssertionException)
 			{
 				// ok
 			}
@@ -76,8 +76,8 @@ namespace Castle.DynamicProxy.Tests
 		public void GetMethodsForPublic()
 		{
 			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof(object), BindingFlags.Instance | BindingFlags.Public);
-			MethodInfo[] realMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.Public);
+				MethodFinder.GetAllInstanceMethods(typeof (object), BindingFlags.Instance | BindingFlags.Public);
+			MethodInfo[] realMethods = typeof (object).GetMethods(BindingFlags.Instance | BindingFlags.Public);
 			AssertArraysAreEqualUnsorted(realMethods, methods);
 		}
 
@@ -85,8 +85,8 @@ namespace Castle.DynamicProxy.Tests
 		public void GetMethodsForNonPublic()
 		{
 			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof(object), BindingFlags.Instance | BindingFlags.NonPublic);
-			MethodInfo[] realMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
+				MethodFinder.GetAllInstanceMethods(typeof (object), BindingFlags.Instance | BindingFlags.NonPublic);
+			MethodInfo[] realMethods = typeof (object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
 			AssertArraysAreEqualUnsorted(realMethods, methods);
 		}
 
@@ -94,25 +94,26 @@ namespace Castle.DynamicProxy.Tests
 		public void GetMethodsForPublicAndNonPublic()
 		{
 			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof(object),
+				MethodFinder.GetAllInstanceMethods(typeof (object),
 				                                   BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 			MethodInfo[] realMethods =
-				typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+				typeof (object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 			AssertArraysAreEqualUnsorted(realMethods, methods);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
+		[ExpectedException(typeof (ArgumentException))]
 		public void GetMethodsThrowsOnStatic()
 		{
-			MethodFinder.GetAllInstanceMethods(typeof(object), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+			MethodFinder.GetAllInstanceMethods(typeof (object),
+			                                   BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
+		[ExpectedException(typeof (ArgumentException))]
 		public void GetMethodsThrowsOnOtherFlags()
 		{
-			MethodFinder.GetAllInstanceMethods(typeof(object),
+			MethodFinder.GetAllInstanceMethods(typeof (object),
 			                                   BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public |
 			                                   BindingFlags.DeclaredOnly);
 		}

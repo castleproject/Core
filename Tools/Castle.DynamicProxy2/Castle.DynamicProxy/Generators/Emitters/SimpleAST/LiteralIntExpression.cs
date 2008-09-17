@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			switch(value)
+			switch (value)
 			{
 				case -1:
 					gen.Emit(OpCodes.Ldc_I4_M1);

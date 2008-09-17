@@ -21,12 +21,12 @@ namespace Castle.DynamicProxy.Tests.Mixins
 		void DoFirst();
 	}
 
-	public interface ISecond: IFirst
+	public interface ISecond : IFirst
 	{
 		void DoSecond();
 	}
 
-	public interface IThird: ISecond
+	public interface IThird : ISecond
 	{
 		void DoThird();
 	}
@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Tests.Mixins
 	/// Summary description for ComplexMixin.
 	/// </summary>
 	[Serializable]
-	public class ComplexMixin: IThird
+	public class ComplexMixin : IThird
 	{
 		public ComplexMixin()
 		{

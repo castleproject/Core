@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			foreach(Expression exp in arguments)
+			foreach (Expression exp in arguments)
 			{
 				exp.Emit(member, gen);
 			}

@@ -22,9 +22,9 @@ namespace Castle.DynamicProxy
 	{
 		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{
-			return methodInfo.DeclaringType != typeof(Object) &&
-			       methodInfo.DeclaringType != typeof(MarshalByRefObject) &&
-			       methodInfo.DeclaringType != typeof(ContextBoundObject);
+			return methodInfo.DeclaringType != typeof (Object) &&
+			       methodInfo.DeclaringType != typeof (MarshalByRefObject) &&
+			       methodInfo.DeclaringType != typeof (ContextBoundObject);
 		}
 
 		public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
@@ -35,14 +35,14 @@ namespace Castle.DynamicProxy
 		{
 		}
 
-		public override bool Equals (object obj)
+		public override bool Equals(object obj)
 		{
-			return obj != null && obj.GetType () == typeof (AllMethodsHook);
+			return obj != null && obj.GetType() == typeof (AllMethodsHook);
 		}
 
-		public override int GetHashCode ()
+		public override int GetHashCode()
 		{
-			return GetType ().GetHashCode ();
+			return GetType().GetHashCode();
 		}
 	}
 }

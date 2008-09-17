@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(owner, gen);
 
-			foreach(Expression exp in args)
+			foreach (Expression exp in args)
 			{
 				exp.Emit(member, gen);
 			}

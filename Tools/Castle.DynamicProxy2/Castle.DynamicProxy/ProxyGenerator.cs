@@ -60,7 +60,7 @@ namespace Castle.DynamicProxy
 		{
 			if (type != null && type.IsGenericTypeDefinition)
 			{
-				throw new ArgumentException ("You can't specify a generic type definition.", argumentName);
+				throw new ArgumentException("You can't specify a generic type definition.", argumentName);
 			}
 		}
 
@@ -70,7 +70,7 @@ namespace Castle.DynamicProxy
 			{
 				foreach (Type t in types)
 				{
-					CheckNotGenericTypeDefinition (t, argumentName);
+					CheckNotGenericTypeDefinition(t, argumentName);
 				}
 			}
 		}
@@ -79,13 +79,13 @@ namespace Castle.DynamicProxy
 
 		public T CreateInterfaceProxyWithTarget<T>(object target, params IInterceptor[] interceptors)
 		{
-			return (T) CreateInterfaceProxyWithTarget(typeof(T), target, ProxyGenerationOptions.Default, interceptors);
+			return (T) CreateInterfaceProxyWithTarget(typeof (T), target, ProxyGenerationOptions.Default, interceptors);
 		}
 
 		public T CreateInterfaceProxyWithTarget<T>(object target, ProxyGenerationOptions options,
 		                                           params IInterceptor[] interceptors)
 		{
-			return (T) CreateInterfaceProxyWithTarget(typeof(T), target, options, interceptors);
+			return (T) CreateInterfaceProxyWithTarget(typeof (T), target, options, interceptors);
 		}
 
 		public object CreateInterfaceProxyWithTarget(Type theInterface, object target, params IInterceptor[] interceptors)
@@ -136,12 +136,12 @@ namespace Castle.DynamicProxy
 
 			Type targetType = target.GetType();
 			Type generatedType = CreateInterfaceProxyTypeWithTarget(theInterface, interfaces, targetType, options);
-			
+
 			ArrayList arguments = GetConstructorArguments(target, interceptors, options);
 			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 
-		private ArrayList GetConstructorArguments (object target, IInterceptor[] interceptors, ProxyGenerationOptions options)
+		private ArrayList GetConstructorArguments(object target, IInterceptor[] interceptors, ProxyGenerationOptions options)
 		{
 			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
 			ArrayList arguments = new ArrayList(options.MixinData.GetMixinInterfaceImplementationsAsArray());
@@ -204,12 +204,12 @@ namespace Castle.DynamicProxy
 
 		public T CreateInterfaceProxyWithoutTarget<T>(IInterceptor interceptor)
 		{
-			return (T) CreateInterfaceProxyWithoutTarget(typeof(T), interceptor);
+			return (T) CreateInterfaceProxyWithoutTarget(typeof (T), interceptor);
 		}
 
 		public T CreateInterfaceProxyWithoutTarget<T>(params IInterceptor[] interceptors)
 		{
-			return (T) CreateInterfaceProxyWithoutTarget(typeof(T), interceptors);
+			return (T) CreateInterfaceProxyWithoutTarget(typeof (T), interceptors);
 		}
 
 		public object CreateInterfaceProxyWithoutTarget(Type theInterface, IInterceptor interceptor)
@@ -251,7 +251,7 @@ namespace Castle.DynamicProxy
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 
 			Type generatedType = CreateInterfaceProxyTypeWithoutTarget(theInterface, interfaces, options);
-			ArrayList arguments = GetConstructorArguments (new object(), interceptors, options);
+			ArrayList arguments = GetConstructorArguments(new object(), interceptors, options);
 			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 
@@ -261,7 +261,7 @@ namespace Castle.DynamicProxy
 
 		public T CreateClassProxy<T>(params IInterceptor[] interceptors)
 		{
-			return (T) CreateClassProxy(typeof(T), ProxyGenerationOptions.Default, interceptors);
+			return (T) CreateClassProxy(typeof (T), ProxyGenerationOptions.Default, interceptors);
 		}
 
 		public object CreateClassProxy(Type targetType, params IInterceptor[] interceptors)
@@ -344,7 +344,7 @@ namespace Castle.DynamicProxy
 			Type proxyType = CreateClassProxyType(targetType, interfaces, options);
 
 			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
-			ArrayList arguments = new ArrayList (options.MixinData.GetMixinInterfaceImplementationsAsArray ());
+			ArrayList arguments = new ArrayList(options.MixinData.GetMixinInterfaceImplementationsAsArray());
 			arguments.Add(interceptors);
 			if (constructorArgs != null && constructorArgs.Length != 0)
 			{

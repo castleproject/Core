@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy
 		/// <returns>The path of the generated assembly file, or null if no assembly has been generated.</returns>
 		/// <remarks>This method does not support saving multiple files. If both a signed and an unsigned module have been generated, use the 
 		/// respective methods of the <see cref="ModuleScope"/>.</remarks>
-		public string SaveAssembly ()
+		public string SaveAssembly()
 		{
 			return ModuleScope.SaveAssembly();
 		}

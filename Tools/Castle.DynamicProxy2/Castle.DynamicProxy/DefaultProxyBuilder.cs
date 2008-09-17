@@ -63,7 +63,7 @@ namespace Castle.DynamicProxy
 			InterfaceProxyWithoutTargetGenerator generatorWithoutTarget =
 				new InterfaceProxyWithoutTargetGenerator(scope, theInterface);
 
-			return generatorWithoutTarget.GenerateCode(typeof(object), interfaces, options);
+			return generatorWithoutTarget.GenerateCode(typeof (object), interfaces, options);
 		}
 
 		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type[] interfaces, Type targetType,
@@ -99,7 +99,8 @@ namespace Castle.DynamicProxy
 			}
 			if (target.IsGenericTypeDefinition)
 			{
-				throw new GeneratorException ("Type is a generic tyspe definition, so a proxy cannot be generated. Type: " + target.FullName);
+				throw new GeneratorException("Type is a generic tyspe definition, so a proxy cannot be generated. Type: " +
+				                             target.FullName);
 			}
 		}
 
@@ -107,7 +108,7 @@ namespace Castle.DynamicProxy
 		{
 			if (targetTypes != null)
 			{
-				foreach(Type t in targetTypes)
+				foreach (Type t in targetTypes)
 				{
 					AssertValidType(t);
 				}

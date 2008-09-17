@@ -34,14 +34,14 @@ namespace Castle.DynamicProxy.Tests.Classes
 		{
 		}
 
-		[ComplexNonInheritableAttribute(3, 4, "Do2", IsSomething=true)]
+		[ComplexNonInheritableAttribute(3, 4, "Do2", IsSomething = true)]
 		public virtual void Do2()
 		{
 		}
 	}
 
 	[Serializable]
-	[AttributeUsage(AttributeTargets.All, Inherited=false)]
+	[AttributeUsage(AttributeTargets.All, Inherited = false)]
 	public class NonInheritableAttribute : Attribute
 	{
 	}

@@ -21,34 +21,34 @@ namespace Castle.DynamicProxy.Generators
 	public abstract class Constants
 	{
 		public static ConstructorInfo AbstractInvocationConstructorWithTargetMethod =
-			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic,
-			                                          null, new Type[]
-			                                                	{
-			                                                		typeof(object), typeof(object), typeof(IInterceptor[]),
-			                                                		typeof(Type), typeof(MethodInfo),
-			                                                		typeof(MethodInfo), typeof(object[])
-			                                                	}, null);
+			typeof (AbstractInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic,
+			                                           null, new Type[]
+			                                                 	{
+			                                                 		typeof (object), typeof (object), typeof (IInterceptor[]),
+			                                                 		typeof (Type), typeof (MethodInfo),
+			                                                 		typeof (MethodInfo), typeof (object[])
+			                                                 	}, null);
 
 		public static ConstructorInfo AbstractInvocationConstructorWithoutTargetMethod =
-			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic,
-			                                          null, new Type[]
-			                                                	{
-			                                                		typeof(object), typeof(object), typeof(IInterceptor[]),
-			                                                		typeof(Type), typeof(MethodInfo),
-			                                                		typeof(object[])
-			                                                	}, null);
+			typeof (AbstractInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic,
+			                                           null, new Type[]
+			                                                 	{
+			                                                 		typeof (object), typeof (object), typeof (IInterceptor[]),
+			                                                 		typeof (Type), typeof (MethodInfo),
+			                                                 		typeof (object[])
+			                                                 	}, null);
 
 		public static MethodInfo AbstractInvocationProceed =
-			typeof(AbstractInvocation).GetMethod("Proceed", BindingFlags.Instance | BindingFlags.Public);
+			typeof (AbstractInvocation).GetMethod("Proceed", BindingFlags.Instance | BindingFlags.Public);
 
 		public static MethodInfo GetMethodFromHandle1 =
-			typeof(MethodBase).GetMethod(
+			typeof (MethodBase).GetMethod(
 				"GetMethodFromHandle", BindingFlags.Static | BindingFlags.Public, null,
-				new Type[] {typeof(RuntimeMethodHandle)}, null);
+				new Type[] {typeof (RuntimeMethodHandle)}, null);
 
 		public static MethodInfo GetMethodFromHandle2 =
-			typeof(MethodBase).GetMethod(
+			typeof (MethodBase).GetMethod(
 				"GetMethodFromHandle", BindingFlags.Static | BindingFlags.Public, null,
-				new Type[] {typeof(RuntimeMethodHandle), typeof(RuntimeTypeHandle)}, null);
+				new Type[] {typeof (RuntimeMethodHandle), typeof (RuntimeTypeHandle)}, null);
 	}
 }

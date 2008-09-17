@@ -14,178 +14,189 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters
 {
-    using System;
-    using System.Reflection;
-    using System.Reflection.Emit;
+	using System;
+	using System.Reflection;
+	using System.Reflection.Emit;
 
-    public class PropertyEmitter : IMemberEmitter
-    {
-        private PropertyBuilder builder;
-        private AbstractTypeEmitter parentTypeEmitter;
-        private MethodEmitter getMethod;
-        private MethodEmitter setMethod;
+	public class PropertyEmitter : IMemberEmitter
+	{
+		private PropertyBuilder builder;
+		private AbstractTypeEmitter parentTypeEmitter;
+		private MethodEmitter getMethod;
+		private MethodEmitter setMethod;
 
-        private static readonly MethodInfo newDefinePropertyMethodInfo = typeof (TypeBuilder).GetMethod("DefineProperty", new Type[]
-                                                                                                              {
-                                                                                                                  typeof (string), typeof (PropertyAttributes),
-                                                                                                                  typeof (CallingConventions), typeof (Type),
-                                                                                                                  typeof (Type[]), typeof (Type[]), typeof (Type[]),
-                                                                                                                  typeof (Type[][]), typeof (Type[][])
-                                                                                                              });
+		private static readonly MethodInfo newDefinePropertyMethodInfo = typeof (TypeBuilder).GetMethod("DefineProperty",
+		                                                                                                new Type[]
+		                                                                                                	{
+		                                                                                                		typeof (string),
+		                                                                                                		typeof (
+		                                                                                                			PropertyAttributes)
+		                                                                                                		,
+		                                                                                                		typeof (
+		                                                                                                			CallingConventions)
+		                                                                                                		, typeof (Type),
+		                                                                                                		typeof (Type[]),
+		                                                                                                		typeof (Type[]),
+		                                                                                                		typeof (Type[]),
+		                                                                                                		typeof (Type[][]),
+		                                                                                                		typeof (Type[][])
+		                                                                                                	});
 
-        // private ParameterInfo[] indexParameters;
+		// private ParameterInfo[] indexParameters;
 
-        private delegate PropertyBuilder DefineProperty_Clr2_0(
-            string name, PropertyAttributes attributes, Type propertyType, Type[] parameters);
+		private delegate PropertyBuilder DefineProperty_Clr2_0(
+			string name, PropertyAttributes attributes, Type propertyType, Type[] parameters);
 
-        public delegate PropertyBuilder DefineProperty_Clr_2_0_SP1(string name,
-                                                                   PropertyAttributes attributes,
-                                                                   CallingConventions callingConvention,
-                                                                   Type returnType,
-                                                                   Type[] returnTypeRequiredCustomModifiers,
-                                                                   Type[] returnTypeOptionalCustomModifiers,
-                                                                   Type[] parameterTypes,
-                                                                   Type[][] parameterTypeRequiredCustomModifiers,
-                                                                   Type[][] parameterTypeOptionalCustomModifiers);
+		public delegate PropertyBuilder DefineProperty_Clr_2_0_SP1(string name,
+		                                                           PropertyAttributes attributes,
+		                                                           CallingConventions callingConvention,
+		                                                           Type returnType,
+		                                                           Type[] returnTypeRequiredCustomModifiers,
+		                                                           Type[] returnTypeOptionalCustomModifiers,
+		                                                           Type[] parameterTypes,
+		                                                           Type[][] parameterTypeRequiredCustomModifiers,
+		                                                           Type[][] parameterTypeOptionalCustomModifiers);
 
-        public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, String name, PropertyAttributes attributes,
-                               Type propertyType)
-        {
-            this.parentTypeEmitter = parentTypeEmitter;
+		public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, String name, PropertyAttributes attributes,
+		                       Type propertyType)
+		{
+			this.parentTypeEmitter = parentTypeEmitter;
 
-            // DYNPROXY-73 - AmbiguousMatchException for properties
-            // This is a workaround for a framework limitation in CLR 2.0 
-            // This limitation was removed in CLR 2.0 SP1, but we don't want to 
-            // tie ourselves to that version. This perform the lookup for the new overload
-            // dynamically, so we have a nice fallback on vanilla CLR 2.0
+			// DYNPROXY-73 - AmbiguousMatchException for properties
+			// This is a workaround for a framework limitation in CLR 2.0 
+			// This limitation was removed in CLR 2.0 SP1, but we don't want to 
+			// tie ourselves to that version. This perform the lookup for the new overload
+			// dynamically, so we have a nice fallback on vanilla CLR 2.0
 
 			if (newDefinePropertyMethodInfo == null)
 			{
 				DefineProperty_Clr2_0 oldDefineProperty = parentTypeEmitter.TypeBuilder.DefineProperty;
 				builder = oldDefineProperty(name, attributes, propertyType, new Type[0]);
 			}
-			else 
+			else
 			{
 				DefineProperty_Clr_2_0_SP1 newDefinedProperty = (DefineProperty_Clr_2_0_SP1)
-					Delegate.CreateDelegate(typeof(DefineProperty_Clr_2_0_SP1), parentTypeEmitter.TypeBuilder, newDefinePropertyMethodInfo);
-                builder = newDefinedProperty(
+				                                                Delegate.CreateDelegate(typeof (DefineProperty_Clr_2_0_SP1),
+				                                                                        parentTypeEmitter.TypeBuilder,
+				                                                                        newDefinePropertyMethodInfo);
+				builder = newDefinedProperty(
 					name, attributes, CallingConventions.HasThis, propertyType,
 					null, null, new Type[0], null, null);
-            }
-        }
+			}
+		}
 
-        public MethodEmitter GetMethod
-        {
-            get { return getMethod; }
-            set { getMethod = value; }
-        }
+		public MethodEmitter GetMethod
+		{
+			get { return getMethod; }
+			set { getMethod = value; }
+		}
 
-        public MethodEmitter SetMethod
-        {
-            get { return setMethod; }
-            set { setMethod = value; }
-        }
+		public MethodEmitter SetMethod
+		{
+			get { return setMethod; }
+			set { setMethod = value; }
+		}
 
-        public MethodEmitter CreateGetMethod()
-        {
-            return CreateGetMethod(MethodAttributes.Public |
-                                   MethodAttributes.Virtual |
-                                   MethodAttributes.SpecialName);
-        }
+		public MethodEmitter CreateGetMethod()
+		{
+			return CreateGetMethod(MethodAttributes.Public |
+			                       MethodAttributes.Virtual |
+			                       MethodAttributes.SpecialName);
+		}
 
-        public MethodEmitter CreateGetMethod(MethodAttributes attrs, params Type[] parameters)
-        {
-            if (getMethod != null)
-            {
-                throw new InvalidOperationException("A getMethod exists");
-            }
+		public MethodEmitter CreateGetMethod(MethodAttributes attrs, params Type[] parameters)
+		{
+			if (getMethod != null)
+			{
+				throw new InvalidOperationException("A getMethod exists");
+			}
 
-            if (parameters.Length == 0)
-            {
-                getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name, attrs);
-            }
-            else
-            {
-                getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name,
-                                              attrs,
-                                              ReturnType,
-                                              parameters);
-            }
+			if (parameters.Length == 0)
+			{
+				getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name, attrs);
+			}
+			else
+			{
+				getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name,
+				                              attrs,
+				                              ReturnType,
+				                              parameters);
+			}
 
-            return getMethod;
-        }
+			return getMethod;
+		}
 
-        public MethodEmitter CreateSetMethod()
-        {
-            return CreateSetMethod(MethodAttributes.Public |
-                                   MethodAttributes.Virtual |
-                                   MethodAttributes.SpecialName);
-        }
+		public MethodEmitter CreateSetMethod()
+		{
+			return CreateSetMethod(MethodAttributes.Public |
+			                       MethodAttributes.Virtual |
+			                       MethodAttributes.SpecialName);
+		}
 
-        public MethodEmitter CreateSetMethod(Type arg)
-        {
-            return CreateSetMethod(MethodAttributes.Public |
-                                   MethodAttributes.Virtual |
-                                   MethodAttributes.SpecialName, arg);
-        }
+		public MethodEmitter CreateSetMethod(Type arg)
+		{
+			return CreateSetMethod(MethodAttributes.Public |
+			                       MethodAttributes.Virtual |
+			                       MethodAttributes.SpecialName, arg);
+		}
 
-        public MethodEmitter CreateSetMethod(MethodAttributes attrs, params Type[] parameters)
-        {
-            if (setMethod != null)
-            {
-                throw new InvalidOperationException("A setMethod exists");
-            }
+		public MethodEmitter CreateSetMethod(MethodAttributes attrs, params Type[] parameters)
+		{
+			if (setMethod != null)
+			{
+				throw new InvalidOperationException("A setMethod exists");
+			}
 
-            if (parameters.Length == 0)
-            {
-                setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name, attrs);
-            }
-            else
-            {
-                setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name,
-                                              attrs, typeof (void),
-                                              parameters);
-            }
+			if (parameters.Length == 0)
+			{
+				setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name, attrs);
+			}
+			else
+			{
+				setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name,
+				                              attrs, typeof (void),
+				                              parameters);
+			}
 
-            return setMethod;
-        }
+			return setMethod;
+		}
 
-        public MemberInfo Member
-        {
-            get { return null; }
-        }
+		public MemberInfo Member
+		{
+			get { return null; }
+		}
 
-        public Type ReturnType
-        {
-            get { return builder.PropertyType; }
-        }
+		public Type ReturnType
+		{
+			get { return builder.PropertyType; }
+		}
 
-        public void Generate()
-        {
-            if (setMethod != null)
-            {
-                setMethod.Generate();
-                builder.SetSetMethod(setMethod.MethodBuilder);
-            }
+		public void Generate()
+		{
+			if (setMethod != null)
+			{
+				setMethod.Generate();
+				builder.SetSetMethod(setMethod.MethodBuilder);
+			}
 
-            if (getMethod != null)
-            {
-                getMethod.Generate();
-                builder.SetGetMethod(getMethod.MethodBuilder);
-            }
-        }
+			if (getMethod != null)
+			{
+				getMethod.Generate();
+				builder.SetGetMethod(getMethod.MethodBuilder);
+			}
+		}
 
-        public void EnsureValidCodeBlock()
-        {
-            if (setMethod != null)
-            {
-                setMethod.EnsureValidCodeBlock();
-            }
+		public void EnsureValidCodeBlock()
+		{
+			if (setMethod != null)
+			{
+				setMethod.EnsureValidCodeBlock();
+			}
 
-            if (getMethod != null)
-            {
-                getMethod.EnsureValidCodeBlock();
-            }
-        }
-    }
+			if (getMethod != null)
+			{
+				getMethod.EnsureValidCodeBlock();
+			}
+		}
+	}
 }

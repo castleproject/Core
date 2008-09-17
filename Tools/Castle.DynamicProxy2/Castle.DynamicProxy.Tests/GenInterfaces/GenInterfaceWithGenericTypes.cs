@@ -71,14 +71,14 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		public void Populate<T>(IList<T> list)
 		{
-			Find3Invo<T> inv = new Find3Invo<T>(target, interceptors, typeof(Proxy),
+			Find3Invo<T> inv = new Find3Invo<T>(target, interceptors, typeof (Proxy),
 			                                    null, null, new object[] {list});
 			inv.Proceed();
 		}
 
 		public IList Find(string[,] query)
 		{
-			Find1Invo inv = new Find1Invo(target, interceptors, typeof(Proxy),
+			Find1Invo inv = new Find1Invo(target, interceptors, typeof (Proxy),
 			                              null, null, new object[] {query});
 			inv.Proceed();
 
@@ -87,7 +87,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		public IList Find(string query)
 		{
-			Find1InvoA inv = new Find1InvoA(target, interceptors, typeof(Proxy),
+			Find1InvoA inv = new Find1InvoA(target, interceptors, typeof (Proxy),
 			                                null, null, new object[] {query});
 			inv.Proceed();
 
@@ -96,7 +96,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		public IList<T> Find<T>(string query)
 		{
-			Find2Invo<T> inv = new Find2Invo<T>(target, interceptors, typeof(Proxy),
+			Find2Invo<T> inv = new Find2Invo<T>(target, interceptors, typeof (Proxy),
 			                                    null, null, new object[] {query});
 			inv.Proceed();
 

@@ -26,8 +26,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 		}
 
-		public ArgumentReference (Type argumentType, int position)
-			: base (argumentType)
+		public ArgumentReference(Type argumentType, int position)
+			: base(argumentType)
 		{
 			Position = position;
 		}
@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				throw new ApplicationException("ArgumentReference unitialized");
 			}
-			switch(Position)
+			switch (Position)
 			{
 				case 0:
 					gen.Emit(OpCodes.Ldarg_0);

@@ -36,7 +36,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			gen.Emit(OpCodes.Ldarg_0);
 
-			foreach(Expression exp in args)
+			foreach (Expression exp in args)
 			{
 				exp.Emit(member, gen);
 			}

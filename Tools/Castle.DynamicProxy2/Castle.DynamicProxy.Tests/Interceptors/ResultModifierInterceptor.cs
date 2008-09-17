@@ -22,13 +22,13 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 		{
 			object returnValue = invocation.ReturnValue;
 
-			if (returnValue != null && returnValue.GetType() == typeof(int))
+			if (returnValue != null && returnValue.GetType() == typeof (int))
 			{
 				int value = (int) returnValue;
 
 				invocation.ReturnValue = --value;
 			}
-			if (returnValue != null && returnValue.GetType() == typeof(bool))
+			if (returnValue != null && returnValue.GetType() == typeof (bool))
 			{
 				invocation.ReturnValue = true;
 			}

@@ -20,8 +20,8 @@ namespace Castle.DynamicProxy
 	public class MixinData
 	{
 		private readonly List<Type> mixedInterfaceTypes = new List<Type>();
-		private readonly List<object> mixinsImpl = new List<object> ();
-		private readonly Dictionary<Type, int> mixinPositions = new Dictionary<Type, int> ();
+		private readonly List<object> mixinsImpl = new List<object>();
+		private readonly Dictionary<Type, int> mixinPositions = new Dictionary<Type, int>();
 
 		/// <summary>
 		/// Because we need to cache the types based on the mixed in mixins, we do the following here:
@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy
 		/// The idea is to have reproducable behavior for the case that mixins are registered in different orders.
 		/// This method is here because it is required 
 		/// </summary>
-		public MixinData (IEnumerable<object> mixinInstances)
+		public MixinData(IEnumerable<object> mixinInstances)
 		{
 			if (mixinInstances != null)
 			{
@@ -44,29 +44,26 @@ namespace Castle.DynamicProxy
 
 					foreach (Type inter in mixinInterfaces)
 					{
-						mixedInterfaceTypes.Add (inter);
+						mixedInterfaceTypes.Add(inter);
 						interface2Mixin[inter] = mixin;
 					}
 				}
-				mixedInterfaceTypes.Sort (
-						delegate (Type x, Type y)
-						{
-							return x.FullName.CompareTo (y.FullName);
-						});
+				mixedInterfaceTypes.Sort(
+					delegate(Type x, Type y) { return x.FullName.CompareTo(y.FullName); });
 
 				for (int i = 0; i < mixedInterfaceTypes.Count; i++)
 				{
 					Type mixinType = mixedInterfaceTypes[i];
 					object mixin = interface2Mixin[mixinType];
 					mixinPositions[mixinType] = i;
-					mixinsImpl.Add (mixin);
+					mixinsImpl.Add(mixin);
 				}
 			}
 		}
 
-		public object[] GetMixinInterfaceImplementationsAsArray ()
+		public object[] GetMixinInterfaceImplementationsAsArray()
 		{
-			return mixinsImpl.ToArray ();
+			return mixinsImpl.ToArray();
 		}
 
 		public Dictionary<Type, int> MixinInterfacesAndPositions
@@ -75,13 +72,13 @@ namespace Castle.DynamicProxy
 		}
 
 		// For two MixinData objects being regarded equal, only the sorted mixin types are considered, not the actual instances.
-		public override bool Equals (object obj)
+		public override bool Equals(object obj)
 		{
-			if (object.ReferenceEquals (this, obj))
+			if (object.ReferenceEquals(this, obj))
 				return true;
 
 			MixinData other = obj as MixinData;
-			if (object.ReferenceEquals (other, null))
+			if (object.ReferenceEquals(other, null))
 				return false;
 
 			if (mixinsImpl.Count != other.mixinsImpl.Count)
@@ -89,7 +86,7 @@ namespace Castle.DynamicProxy
 
 			for (int i = 0; i < mixinsImpl.Count; ++i)
 			{
-				if (mixinsImpl[i].GetType() != other.mixinsImpl[i].GetType ())
+				if (mixinsImpl[i].GetType() != other.mixinsImpl[i].GetType())
 					return false;
 			}
 
@@ -97,11 +94,11 @@ namespace Castle.DynamicProxy
 		}
 
 		// For two MixinData objects being regarded equal, only the mixin types are considered, not the actual instances.
-		public override int GetHashCode ()
+		public override int GetHashCode()
 		{
 			int hashCode = 0;
 			foreach (object mixinImplementation in mixinsImpl)
-				hashCode = 29 * hashCode + mixinImplementation.GetType ().GetHashCode ();
+				hashCode = 29*hashCode + mixinImplementation.GetType().GetHashCode();
 
 			return hashCode;
 		}

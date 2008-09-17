@@ -17,12 +17,12 @@ namespace Castle.DynamicProxy.Tests.Classes
 	{
 		public int Result;
 
-		public ClassCallingVirtualMethodFromCtor ()
+		public ClassCallingVirtualMethodFromCtor()
 		{
 			Result = VirtualMethod();
 		}
 
-		public virtual int VirtualMethod ()
+		public virtual int VirtualMethod()
 		{
 			return 7;
 		}

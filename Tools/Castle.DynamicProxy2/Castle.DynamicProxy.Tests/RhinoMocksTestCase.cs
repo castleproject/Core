@@ -15,7 +15,7 @@
 using System.Runtime.CompilerServices;
 using RhinoMocksCPPInterfaces;
 
-[assembly :
+[assembly:
 	InternalsVisibleTo(
 		"DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7"
 		)]
@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 			IDoubleGeneric<int> proxy =
-				(IDoubleGeneric<int>) generator.CreateInterfaceProxyWithTarget(typeof(IDoubleGeneric<int>),
+				(IDoubleGeneric<int>) generator.CreateInterfaceProxyWithTarget(typeof (IDoubleGeneric<int>),
 				                                                               new DoubleGenericImpl<int>(), logger);
 			proxy.Call<string>(1, "");
 			Assert.AreEqual("Call", logger.Invocations[0]);
@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy.Tests
 			BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor interceptor =
 				new BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor();
 			IDoubleGeneric<int> proxy =
-				(IDoubleGeneric<int>) generator.CreateInterfaceProxyWithoutTarget(typeof(IDoubleGeneric<int>),
+				(IDoubleGeneric<int>) generator.CreateInterfaceProxyWithoutTarget(typeof (IDoubleGeneric<int>),
 				                                                                  interceptor);
 			object o = proxy.Call<string>(1, "");
 			Assert.AreEqual(3, o);
@@ -64,7 +64,7 @@ namespace Castle.DynamicProxy.Tests
 			SkipCallingMethodInterceptor interceptor =
 				new SkipCallingMethodInterceptor();
 			IHaveMethodWithModOpts proxy =
-				(IHaveMethodWithModOpts)generator.CreateInterfaceProxyWithoutTarget(typeof(IHaveMethodWithModOpts),interceptor);
+				(IHaveMethodWithModOpts) generator.CreateInterfaceProxyWithoutTarget(typeof (IHaveMethodWithModOpts), interceptor);
 			proxy.StartLiveOnSlot(4);
 		}
 
@@ -72,7 +72,7 @@ namespace Castle.DynamicProxy.Tests
 		public void GenericMethodReturningGenericArray()
 		{
 			generator.CreateInterfaceProxyWithoutTarget(
-				typeof(IStore1), 
+				typeof (IStore1),
 				new SkipCallingMethodInterceptor());
 		}
 
@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 
-			IWithEvents proxy = (IWithEvents) generator.CreateInterfaceProxyWithTarget(typeof(IWithEvents),
+			IWithEvents proxy = (IWithEvents) generator.CreateInterfaceProxyWithTarget(typeof (IWithEvents),
 			                                                                           new FakeWithEvents(),
 			                                                                           logger);
 
@@ -99,7 +99,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 			FakeWithEvents proxy = (FakeWithEvents) generator.CreateClassProxy(
-			                                        	typeof(FakeWithEvents),
+			                                        	typeof (FakeWithEvents),
 			                                        	ProxyGenerationOptions.Default,
 			                                        	logger);
 
@@ -114,34 +114,34 @@ namespace Castle.DynamicProxy.Tests
 		[Test, Ignore("I dont think the effort to fix this edge case is worthwhile")]
 		public void NeedingToCreateNewMethodTableSlot()
 		{
-			generator.CreateClassProxy(typeof(MultiClass), new Type[] {typeof(ISpecialMulti)});
+			generator.CreateClassProxy(typeof (MultiClass), new Type[] {typeof (ISpecialMulti)});
 		}
 
 		[Test]
 		public void ProxyingInterfaceWithGuid()
 		{
-			object o = generator.CreateInterfaceProxyWithoutTarget(typeof(IWithGuid), new StandardInterceptor());
+			object o = generator.CreateInterfaceProxyWithoutTarget(typeof (IWithGuid), new StandardInterceptor());
 			Assert.IsNotNull(o);
 		}
 
 		[Test]
 		public void ProxyingInternalInterface()
 		{
-			object o = generator.CreateInterfaceProxyWithoutTarget(typeof(IFoo), new StandardInterceptor());
+			object o = generator.CreateInterfaceProxyWithoutTarget(typeof (IFoo), new StandardInterceptor());
 			Assert.IsNotNull(o);
 		}
 
 		[Test]
 		public void CanProxyDataSet()
 		{
-			generator.CreateClassProxy(typeof(DataSet), new Type[0], new StandardInterceptor());
+			generator.CreateClassProxy(typeof (DataSet), new Type[0], new StandardInterceptor());
 		}
 
 		[Test]
 		public void ProxyingComInteraces()
 		{
 			object o = generator
-				.CreateInterfaceProxyWithoutTarget(typeof(IComServiceProvider), new StandardInterceptor());
+				.CreateInterfaceProxyWithoutTarget(typeof (IComServiceProvider), new StandardInterceptor());
 			Assert.IsNotNull(o);
 		}
 
@@ -149,7 +149,7 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyingGenericClassWithGenericClassConstraint()
 		{
 			object o = generator
-				.CreateInterfaceProxyWithoutTarget(typeof(IFactory2), new StandardInterceptor());
+				.CreateInterfaceProxyWithoutTarget(typeof (IFactory2), new StandardInterceptor());
 			Assert.IsNotNull(o);
 		}
 
@@ -157,8 +157,9 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void CanGetCorrectValuesFromIntPtr()
 		{
-			IFooWithIntPtr o = (IFooWithIntPtr)generator
-				.CreateInterfaceProxyWithoutTarget(typeof(IFooWithIntPtr), new IntPtrInterceptor());
+			IFooWithIntPtr o = (IFooWithIntPtr) generator
+			                                    	.CreateInterfaceProxyWithoutTarget(typeof (IFooWithIntPtr),
+			                                    	                                   new IntPtrInterceptor());
 			IntPtr buffer = o.Buffer(15);
 			Assert.AreEqual(IntPtr.Zero, buffer);
 		}
@@ -167,7 +168,7 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyInternalMethod()
 		{
 			LogInvocationInterceptor logging = new LogInvocationInterceptor();
-			WithInternalMethod o = (WithInternalMethod) generator.CreateClassProxy(typeof(WithInternalMethod),
+			WithInternalMethod o = (WithInternalMethod) generator.CreateClassProxy(typeof (WithInternalMethod),
 			                                                                       new Type[0], logging);
 			o.Foo();
 			Assert.AreEqual("Foo ", logging.LogContents);
@@ -179,7 +180,7 @@ namespace Castle.DynamicProxy.Tests
 			LogInvocationInterceptor logging = new LogInvocationInterceptor();
 			SomeClassWithProtectedInternalAbstractClass o =
 				(SomeClassWithProtectedInternalAbstractClass)
-				generator.CreateClassProxy(typeof(SomeClassWithProtectedInternalAbstractClass),
+				generator.CreateClassProxy(typeof (SomeClassWithProtectedInternalAbstractClass),
 				                           new Type[0], logging);
 			Assert.IsNotNull(o);
 		}
@@ -188,7 +189,7 @@ namespace Castle.DynamicProxy.Tests
 		public void VirtualMethodCallsFromTheConstructor()
 		{
 			LogInvocationInterceptor logging = new LogInvocationInterceptor();
-			MakeVirtualCallFromCtor o = (MakeVirtualCallFromCtor) generator.CreateClassProxy(typeof(MakeVirtualCallFromCtor),
+			MakeVirtualCallFromCtor o = (MakeVirtualCallFromCtor) generator.CreateClassProxy(typeof (MakeVirtualCallFromCtor),
 			                                                                                 new Type[0], logging);
 			Assert.AreEqual(1, logging.Invocations.Count);
 			Assert.IsNotNull(o);
@@ -199,7 +200,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			LogInvocationInterceptor logging = new LogInvocationInterceptor();
 			InternalClassWithInternalMembers o =
-				(InternalClassWithInternalMembers) generator.CreateClassProxy(typeof(InternalClassWithInternalMembers),
+				(InternalClassWithInternalMembers) generator.CreateClassProxy(typeof (InternalClassWithInternalMembers),
 				                                                              new Type[0], logging);
 			Assert.IsNotNull(o);
 			o.TestMethod();
@@ -211,7 +212,8 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void CanSetOutputParameterForDecimal()
 		{
-			IDecimalOutParam target = generator.CreateInterfaceProxyWithoutTarget<IDecimalOutParam>(new SetOutputParameter(1.234M));
+			IDecimalOutParam target =
+				generator.CreateInterfaceProxyWithoutTarget<IDecimalOutParam>(new SetOutputParameter(1.234M));
 			decimal fuel;
 			target.Dance(out fuel);
 			Assert.AreEqual(1.234M, fuel);
@@ -220,7 +222,8 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void CanSetOutputParameterForDecimal_UsingGenericMethods()
 		{
-			IDecimalOutParam target = generator.CreateInterfaceProxyWithoutTarget<IDecimalOutParam>(new SetOutputParameter(1.234M));
+			IDecimalOutParam target =
+				generator.CreateInterfaceProxyWithoutTarget<IDecimalOutParam>(new SetOutputParameter(1.234M));
 			decimal fuel;
 			target.Run(out fuel);
 			Assert.AreEqual(1.234M, fuel);
@@ -228,25 +231,26 @@ namespace Castle.DynamicProxy.Tests
 
 
 		[Test]
-        public void CanProxyMethodWithOutIntPtrParamter()
-        {
-            IFooWithOutIntPtr o =
-                (IFooWithOutIntPtr)generator.CreateInterfaceProxyWithoutTarget(typeof(IFooWithOutIntPtr),
-                                                                              new Type[0], new SkipCallingMethodInterceptorWithOutputParams());
-            Assert.IsNotNull(o);
-            IntPtr i;
-            o.Bar(out i);
-        }
+		public void CanProxyMethodWithOutIntPtrParamter()
+		{
+			IFooWithOutIntPtr o =
+				(IFooWithOutIntPtr) generator.CreateInterfaceProxyWithoutTarget(typeof (IFooWithOutIntPtr),
+				                                                                new Type[0],
+				                                                                new SkipCallingMethodInterceptorWithOutputParams());
+			Assert.IsNotNull(o);
+			IntPtr i;
+			o.Bar(out i);
+		}
 
 
-        public class SkipCallingMethodInterceptorWithOutputParams : IInterceptor
-        {
-            public void Intercept(IInvocation invocation)
-            {
-                invocation.Arguments[0] = IntPtr.Zero;
-                invocation.ReturnValue = 5;
-            }
-        }
+		public class SkipCallingMethodInterceptorWithOutputParams : IInterceptor
+		{
+			public void Intercept(IInvocation invocation)
+			{
+				invocation.Arguments[0] = IntPtr.Zero;
+				invocation.ReturnValue = 5;
+			}
+		}
 
 		public interface IWithEvents
 		{
@@ -343,7 +347,7 @@ namespace Castle.DynamicProxy.Tests
 	 InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 	public interface IComServiceProvider
 	{
-		[return : MarshalAs(UnmanagedType.IUnknown)]
+		[return: MarshalAs(UnmanagedType.IUnknown)]
 		object QueryService([In] ref Guid guidService, [In] ref Guid riid);
 	}
 
@@ -400,24 +404,24 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
-    public interface IFooWithOutIntPtr
-    {
-        int Bar(out IntPtr i);
-    }
+	public interface IFooWithOutIntPtr
+	{
+		int Bar(out IntPtr i);
+	}
 
-    public class Foo : IFooWithOutIntPtr
-    {
-        public int Bar(out IntPtr i)
-        {
-            i = (IntPtr)Test();
-            return 5;
-        }
+	public class Foo : IFooWithOutIntPtr
+	{
+		public int Bar(out IntPtr i)
+		{
+			i = (IntPtr) Test();
+			return 5;
+		}
 
-        private object Test()
-        {
-            return new IntPtr(3);
-        }
-    }
+		private object Test()
+		{
+			return new IntPtr(3);
+		}
+	}
 
 	public interface IStore1
 	{

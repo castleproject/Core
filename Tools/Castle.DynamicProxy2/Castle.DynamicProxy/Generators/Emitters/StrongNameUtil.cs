@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static bool IsAssemblySigned(Assembly assembly)
 		{
-			lock(lockObject)
+			lock (lockObject)
 			{
 				if (signedAssemblyCache.Contains(assembly) == false)
 				{
@@ -45,7 +45,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static bool IsAnyTypeFromUnsignedAssembly(IEnumerable<Type> types)
 		{
-			foreach(Type t in types)
+			foreach (Type t in types)
 			{
 				if (!IsAssemblySigned(t.Assembly))
 				{

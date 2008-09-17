@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
+
 	[Serializable]
 	public class ClassOverridingEqualsAndGetHashCode
 	{
@@ -33,13 +34,13 @@ namespace Castle.DynamicProxy.Tests.Classes
 			set { _name = value; }
 		}
 
-		public virtual bool Equals (ClassOverridingEqualsAndGetHashCode other)
+		public virtual bool Equals(ClassOverridingEqualsAndGetHashCode other)
 		{
 			if (other == null)
 				return false;
 
 			// use this pattern to compare value members
-			if (!Id.Equals (other.Id))
+			if (!Id.Equals(other.Id))
 				return false;
 
 			// use this pattern to compare reference members
@@ -48,7 +49,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 			return true;
 		}
 
-		public override bool Equals (object obj)
+		public override bool Equals(object obj)
 		{
 			if (obj == null)
 				return false;
@@ -57,14 +58,14 @@ namespace Castle.DynamicProxy.Tests.Classes
 				return false;
 
 			// safe because of the GetType check
-			return Equals ((ClassOverridingEqualsAndGetHashCode) obj);
+			return Equals((ClassOverridingEqualsAndGetHashCode) obj);
 		}
 
-		public override int GetHashCode ()
+		public override int GetHashCode()
 		{
 			int hash = 7;
 
-			hash = 31 * hash + Id.GetHashCode ();
+			hash = 31*hash + Id.GetHashCode();
 
 			return hash;
 		}

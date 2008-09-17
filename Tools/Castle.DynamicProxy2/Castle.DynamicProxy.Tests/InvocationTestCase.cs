@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor();
 
-			object proxy = generator.CreateClassProxy(typeof(ServiceClass), interceptor);
+			object proxy = generator.CreateClassProxy(typeof (ServiceClass), interceptor);
 
 			ServiceClass instance = (ServiceClass) proxy;
 
@@ -44,12 +44,12 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(45, interceptor.Invocation.ReturnValue);
 
 			Assert.IsNotNull(interceptor.Invocation.Proxy);
-			Assert.IsInstanceOfType(typeof(ServiceClass), interceptor.Invocation.Proxy);
+			Assert.IsInstanceOfType(typeof (ServiceClass), interceptor.Invocation.Proxy);
 
 			Assert.IsNotNull(interceptor.Invocation.InvocationTarget);
-			Assert.IsInstanceOfType(typeof(ServiceClass), interceptor.Invocation.InvocationTarget);
+			Assert.IsInstanceOfType(typeof (ServiceClass), interceptor.Invocation.InvocationTarget);
 			Assert.IsNotNull(interceptor.Invocation.TargetType);
-			Assert.AreSame(typeof(ServiceClass), interceptor.Invocation.TargetType);
+			Assert.AreSame(typeof (ServiceClass), interceptor.Invocation.TargetType);
 
 			Assert.IsNotNull(interceptor.Invocation.Method);
 			Assert.IsNotNull(interceptor.Invocation.MethodInvocationTarget);
@@ -62,7 +62,7 @@ namespace Castle.DynamicProxy.Tests
 			KeepDataInterceptor interceptor = new KeepDataInterceptor();
 
 			object proxy = generator.CreateInterfaceProxyWithTarget(
-				typeof(IService), new ServiceImpl(), interceptor);
+				typeof (IService), new ServiceImpl(), interceptor);
 
 			IService instance = (IService) proxy;
 
@@ -79,12 +79,12 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(45, interceptor.Invocation.ReturnValue);
 
 			Assert.IsNotNull(interceptor.Invocation.Proxy);
-			Assert.IsNotInstanceOfType(typeof(ServiceImpl), interceptor.Invocation.Proxy);
+			Assert.IsNotInstanceOfType(typeof (ServiceImpl), interceptor.Invocation.Proxy);
 
 			Assert.IsNotNull(interceptor.Invocation.InvocationTarget);
-			Assert.IsInstanceOfType(typeof(ServiceImpl), interceptor.Invocation.InvocationTarget);
+			Assert.IsInstanceOfType(typeof (ServiceImpl), interceptor.Invocation.InvocationTarget);
 			Assert.IsNotNull(interceptor.Invocation.TargetType);
-			Assert.AreSame(typeof(ServiceImpl), interceptor.Invocation.TargetType);
+			Assert.AreSame(typeof (ServiceImpl), interceptor.Invocation.TargetType);
 
 			Assert.IsNotNull(interceptor.Invocation.Method);
 			Assert.IsNotNull(interceptor.Invocation.MethodInvocationTarget);

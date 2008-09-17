@@ -36,7 +36,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 			{
 				invocation.Proceed();
 			}
-			else if (concreteMethod.ReturnType.IsValueType && !concreteMethod.ReturnType.Equals(typeof(void)))
+			else if (concreteMethod.ReturnType.IsValueType && !concreteMethod.ReturnType.Equals(typeof (void)))
 				// ensure valid return value
 			{
 				invocation.ReturnValue = Activator.CreateInstance(concreteMethod.ReturnType);

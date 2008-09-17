@@ -48,12 +48,12 @@ namespace Castle.DynamicProxy.Generators
 			int result = targetType.GetHashCode();
 			if (interfaces != null)
 			{
-				foreach(Type inter in interfaces)
+				foreach (Type inter in interfaces)
 				{
 					result += 29 + inter.GetHashCode();
 				}
 			}
-			result = 29 * result + options.GetHashCode();
+			result = 29*result + options.GetHashCode();
 			if (proxyForType != null)
 				result = 29*result + proxyForType.GetHashCode();
 			return result;
@@ -69,7 +69,7 @@ namespace Castle.DynamicProxy.Generators
 			if (!Equals(proxyForType, cacheKey.proxyForType)) return false;
 			if (!Equals(targetType, cacheKey.targetType)) return false;
 			if (interfaces.Length != cacheKey.interfaces.Length) return false;
-			for(int i = 0; i < interfaces.Length; i++)
+			for (int i = 0; i < interfaces.Length; i++)
 			{
 				if (!Equals(interfaces[i], cacheKey.interfaces[i])) return false;
 			}

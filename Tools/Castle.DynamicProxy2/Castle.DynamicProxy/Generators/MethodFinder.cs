@@ -35,32 +35,32 @@ namespace Castle.DynamicProxy.Generators
 
 			MethodInfo[] methodsInCache;
 
-			lock(_lockObject)
+			lock (_lockObject)
 			{
 				if (!_cachedMethodInfosByType.ContainsKey(type))
 				{
 					// We always load all instance methods into the cache, we will filter them later
 					_cachedMethodInfosByType.Add(
 						type,
-						RemoveDuplicates (type.GetMethods(
-							BindingFlags.Public | BindingFlags.NonPublic
-							| BindingFlags.Instance)));
+						RemoveDuplicates(type.GetMethods(
+						                 	BindingFlags.Public | BindingFlags.NonPublic
+						                 	| BindingFlags.Instance)));
 				}
 				methodsInCache = (MethodInfo[]) _cachedMethodInfosByType[type];
 			}
 			return MakeFilteredCopy(methodsInCache, flags & (BindingFlags.Public | BindingFlags.NonPublic));
 		}
 
-		private static object RemoveDuplicates (MethodInfo[] infos)
+		private static object RemoveDuplicates(MethodInfo[] infos)
 		{
-			Dictionary<MethodInfo, object> uniqueInfos = new Dictionary<MethodInfo, object> (MethodSignatureComparer.Instance);
+			Dictionary<MethodInfo, object> uniqueInfos = new Dictionary<MethodInfo, object>(MethodSignatureComparer.Instance);
 			foreach (MethodInfo info in infos)
 			{
-				if (!uniqueInfos.ContainsKey (info))
-					uniqueInfos.Add (info, null);
+				if (!uniqueInfos.ContainsKey(info))
+					uniqueInfos.Add(info, null);
 			}
 			MethodInfo[] result = new MethodInfo[uniqueInfos.Count];
-			uniqueInfos.Keys.CopyTo (result, 0);
+			uniqueInfos.Keys.CopyTo(result, 0);
 			return result;
 		}
 
@@ -76,15 +76,15 @@ namespace Castle.DynamicProxy.Generators
 
 			// Return a copy of the cached array, only returning the public methods unless requested otherwise
 			List<MethodInfo> result = new List<MethodInfo>(methodsInCache.Length);
-			
-			foreach(MethodInfo method in methodsInCache)
+
+			foreach (MethodInfo method in methodsInCache)
 			{
 				if ((method.IsPublic && includePublic) || (!method.IsPublic && includeNonPublic))
 				{
 					result.Add(method);
 				}
 			}
-			
+
 			return result.ToArray();
 		}
 	}

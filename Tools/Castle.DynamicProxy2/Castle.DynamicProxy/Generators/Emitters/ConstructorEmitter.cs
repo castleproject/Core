@@ -73,7 +73,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public Type ReturnType
 		{
-			get { return typeof(void); }
+			get { return typeof (void); }
 		}
 
 		public virtual void Generate()

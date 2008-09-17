@@ -24,75 +24,75 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class BaseTestCaseTestCase : BasePEVerifyTestCase
 	{
-		public override void TearDown ()
+		public override void TearDown()
 		{
 			ResetGeneratorAndBuilder(); // we call TearDown ourselves in these test cases
-			base.TearDown ();
+			base.TearDown();
 		}
 
 		[Test]
-		public void TearDown_DoesNotSaveAnything_IfNoProxyGenerated ()
+		public void TearDown_DoesNotSaveAnything_IfNoProxyGenerated()
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
-			if (File.Exists (path))
-				File.Delete (path);
+			if (File.Exists(path))
+				File.Delete(path);
 
 			base.TearDown();
 
-			Assert.IsFalse (File.Exists (path));
+			Assert.IsFalse(File.Exists(path));
 		}
 
 		[Test]
-		public void TearDown_SavesAssembly_IfProxyGenerated ()
+		public void TearDown_SavesAssembly_IfProxyGenerated()
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
-			if (File.Exists (path))
-				File.Delete (path);
+			if (File.Exists(path))
+				File.Delete(path);
 
-			generator.CreateClassProxy (typeof (object), new StandardInterceptor());
+			generator.CreateClassProxy(typeof (object), new StandardInterceptor());
 
-			base.TearDown ();
-			Assert.IsTrue (File.Exists (path));
+			base.TearDown();
+			Assert.IsTrue(File.Exists(path));
 		}
 
 		[Test]
 		[ExpectedException(typeof (AssertionException))]
-		public void TearDown_FindsVerificationErrors ()
+		public void TearDown_FindsVerificationErrors()
 		{
-			ModuleBuilder moduleBuilder = generator.ProxyBuilder.ModuleScope.ObtainDynamicModule (true);
-			TypeBuilder invalidType = moduleBuilder.DefineType ("InvalidType");
-			MethodBuilder invalidMethod = invalidType.DefineMethod ("InvalidMethod", MethodAttributes.Public);
-			invalidMethod.GetILGenerator().Emit (OpCodes.Ldnull); // missing RET statement
+			ModuleBuilder moduleBuilder = generator.ProxyBuilder.ModuleScope.ObtainDynamicModule(true);
+			TypeBuilder invalidType = moduleBuilder.DefineType("InvalidType");
+			MethodBuilder invalidMethod = invalidType.DefineMethod("InvalidMethod", MethodAttributes.Public);
+			invalidMethod.GetILGenerator().Emit(OpCodes.Ldnull); // missing RET statement
 
 			invalidType.CreateType();
 
 			if (!IsVerificationDisabled)
-				Console.WriteLine ("This next test case is expected to yield a verification error.");
+				Console.WriteLine("This next test case is expected to yield a verification error.");
 
-			base.TearDown ();
+			base.TearDown();
 		}
 
 		[Test]
-		public void DisableVerification_DisablesVerificationForTestCase ()
+		public void DisableVerification_DisablesVerificationForTestCase()
 		{
 			DisableVerification();
 			TearDown_FindsVerificationErrors();
 		}
 
 		[Test]
-		public void DisableVerification_ResetInNextTestCase1 ()
+		public void DisableVerification_ResetInNextTestCase1()
 		{
-			Assert.IsFalse (IsVerificationDisabled);
+			Assert.IsFalse(IsVerificationDisabled);
 			DisableVerification();
-			Assert.IsTrue (IsVerificationDisabled);
+			Assert.IsTrue(IsVerificationDisabled);
 		}
 
 		[Test]
-		public void DisableVerification_ResetInNextTestCase2 ()
+		public void DisableVerification_ResetInNextTestCase2()
 		{
-			Assert.IsFalse (IsVerificationDisabled);
+			Assert.IsFalse(IsVerificationDisabled);
 			DisableVerification();
-			Assert.IsTrue (IsVerificationDisabled);
+			Assert.IsTrue(IsVerificationDisabled);
 		}
 	}
 }

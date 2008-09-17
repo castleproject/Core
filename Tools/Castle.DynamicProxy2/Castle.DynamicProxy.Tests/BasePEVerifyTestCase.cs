@@ -34,13 +34,13 @@ namespace Castle.DynamicProxy.Tests
 			verificationDisabled = false;
 		}
 
-		public void ResetGeneratorAndBuilder ()
+		public void ResetGeneratorAndBuilder()
 		{
 			builder = new PersistentProxyBuilder();
 			generator = new ProxyGenerator(builder);
 		}
 
-		public void DisableVerification ()
+		public void DisableVerification()
 		{
 			verificationDisabled = true;
 		}
@@ -53,14 +53,14 @@ namespace Castle.DynamicProxy.Tests
 #if !MONO // mono doesn't have PEVerify
 
 		[TearDown]
-		public virtual void TearDown ()
+		public virtual void TearDown()
 		{
 			if (!IsVerificationDisabled)
 			{
 				// Note: only supports one generated assembly at the moment
 				string path = builder.SaveAssembly();
 				if (path != null)
-					RunPEVerifyOnGeneratedAssembly (path);
+					RunPEVerifyOnGeneratedAssembly(path);
 			}
 		}
 
@@ -87,7 +87,7 @@ namespace Castle.DynamicProxy.Tests
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			process.StartInfo.Arguments = "\"" + assemblyPath + "\" /VERBOSE";
 			process.StartInfo.CreateNoWindow = true;
-			process.Start ();
+			process.Start();
 			string processOutput = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();
 

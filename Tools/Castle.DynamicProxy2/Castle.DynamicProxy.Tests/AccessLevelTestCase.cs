@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			NonPublicConstructorClass proxy =
 				generator.CreateClassProxy(
-					typeof(NonPublicConstructorClass), new StandardInterceptor())
+					typeof (NonPublicConstructorClass), new StandardInterceptor())
 				as NonPublicConstructorClass;
 
 			Assert.IsNotNull(proxy);
@@ -38,14 +38,14 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void ProtectedInternalConstructor ()
+		public void ProtectedInternalConstructor()
 		{
 			ProtectedInternalConstructorClass proxy =
-				generator.CreateClassProxy (
+				generator.CreateClassProxy(
 					typeof (ProtectedInternalConstructorClass), new StandardInterceptor())
 				as ProtectedInternalConstructorClass;
 
-			Assert.IsNotNull (proxy);
+			Assert.IsNotNull(proxy);
 
 			proxy.DoSomething();
 		}
@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Tests
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 
 			NonPublicMethodsClass proxy = (NonPublicMethodsClass)
-			                              generator.CreateClassProxy(typeof(NonPublicMethodsClass), logger);
+			                              generator.CreateClassProxy(typeof (NonPublicMethodsClass), logger);
 
 			proxy.DoSomething();
 
@@ -68,8 +68,8 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void InternalConstructorIsNotReplicated()
 		{
-			object proxy = generator.CreateClassProxy(typeof(Hashtable), new StandardInterceptor());
-			Assert.IsNull(proxy.GetType().GetConstructor(new Type[] {typeof(IInterceptor[]), typeof(bool)}));
+			object proxy = generator.CreateClassProxy(typeof (Hashtable), new StandardInterceptor());
+			Assert.IsNull(proxy.GetType().GetConstructor(new Type[] {typeof (IInterceptor[]), typeof (bool)}));
 		}
 
 		internal class InternalClass
@@ -78,16 +78,16 @@ namespace Castle.DynamicProxy.Tests
 			{
 			}
 		}
-		
+
 #if !MONO
 
 		[Test]
 		public void InternalConstructorIsReplicatedWhenInternalsVisibleTo()
 		{
-			object proxy = generator.CreateClassProxy(typeof(InternalClass), new StandardInterceptor());
-			Assert.IsNotNull(proxy.GetType().GetConstructor(new Type[] {typeof(IInterceptor[])}));
+			object proxy = generator.CreateClassProxy(typeof (InternalClass), new StandardInterceptor());
+			Assert.IsNotNull(proxy.GetType().GetConstructor(new Type[] {typeof (IInterceptor[])}));
 		}
-		
+
 #endif
 	}
 }

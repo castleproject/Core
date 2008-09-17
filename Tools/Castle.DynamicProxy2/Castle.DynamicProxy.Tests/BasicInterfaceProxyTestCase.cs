@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy.Tests
 
 			IService service = (IService)
 			                   generator.CreateInterfaceProxyWithTarget(
-			                   	typeof(IService), new ServiceImpl(), logger);
+			                   	typeof (IService), new ServiceImpl(), logger);
 
 			Assert.AreEqual(3, service.Sum(1, 2));
 
@@ -44,16 +44,16 @@ namespace Castle.DynamicProxy.Tests
 		{
 			IService service = (IService)
 			                   generator.CreateInterfaceProxyWithTarget(
-			                   	typeof(IService), new ServiceImpl(), new StandardInterceptor());
+			                   	typeof (IService), new ServiceImpl(), new StandardInterceptor());
 			service = (IService)
 			          generator.CreateInterfaceProxyWithTarget(
-			          	typeof(IService), new ServiceImpl(), new StandardInterceptor());
+			          	typeof (IService), new ServiceImpl(), new StandardInterceptor());
 			service = (IService)
 			          generator.CreateInterfaceProxyWithTarget(
-			          	typeof(IService), new ServiceImpl(), new StandardInterceptor());
+			          	typeof (IService), new ServiceImpl(), new StandardInterceptor());
 			service = (IService)
 			          generator.CreateInterfaceProxyWithTarget(
-			          	typeof(IService), new ServiceImpl(), new StandardInterceptor());
+			          	typeof (IService), new ServiceImpl(), new StandardInterceptor());
 		}
 
 		[Test]
@@ -63,7 +63,7 @@ namespace Castle.DynamicProxy.Tests
 
 			IService2 service = (IService2)
 			                    generator.CreateInterfaceProxyWithTarget(
-			                    	typeof(IService2), new Service2(), logger);
+			                    	typeof (IService2), new Service2(), logger);
 
 			service.DoOperation2();
 
@@ -77,7 +77,7 @@ namespace Castle.DynamicProxy.Tests
 
 			IService service = (IExtendedService)
 			                   generator.CreateInterfaceProxyWithTarget(
-			                   	typeof(IExtendedService), new ServiceImpl(), logger);
+			                   	typeof (IExtendedService), new ServiceImpl(), logger);
 
 			Assert.AreEqual(3, service.Sum(1, 2));
 
@@ -91,7 +91,7 @@ namespace Castle.DynamicProxy.Tests
 
 			InterfaceWithIndexer service = (InterfaceWithIndexer)
 			                               generator.CreateInterfaceProxyWithTarget(
-			                               	typeof(InterfaceWithIndexer), new ClassWithIndexer(), logger);
+			                               	typeof (InterfaceWithIndexer), new ClassWithIndexer(), logger);
 
 			Assert.AreEqual(1, service[1]);
 
@@ -107,12 +107,12 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
+		[ExpectedException(typeof (ArgumentException))]
 		public void CantCreateInterfaceTargetedProxyWithoutInterface()
 		{
 			IService2 service = (IService2)
 			                    generator.CreateInterfaceProxyWithTargetInterface(
-			                    	typeof(Service2), new Service2());
+			                    	typeof (Service2), new Service2());
 		}
 
 		[Test]
@@ -123,7 +123,7 @@ namespace Castle.DynamicProxy.Tests
 
 			IService2 service = (IService2)
 			                    generator.CreateInterfaceProxyWithTargetInterface(
-			                    	typeof(IService2), new Service2(), invocationChecker, logger);
+			                    	typeof (IService2), new Service2(), invocationChecker, logger);
 
 			service.DoOperation2();
 
@@ -137,7 +137,7 @@ namespace Castle.DynamicProxy.Tests
 
 			IService service = (IService)
 			                   generator.CreateInterfaceProxyWithTargetInterface(
-			                   	typeof(IService), new AlwaysThrowsServiceImpl(), new ChangeTargetInterceptor(new ServiceImpl()),
+			                   	typeof (IService), new AlwaysThrowsServiceImpl(), new ChangeTargetInterceptor(new ServiceImpl()),
 			                   	logger);
 
 			Assert.AreEqual(20, service.Sum(10, 10));
@@ -151,7 +151,7 @@ namespace Castle.DynamicProxy.Tests
 		public void MethodParamNamesAreReplicated()
 		{
 			// Try with interface proxy (with target)
-			IMyInterface i = generator.CreateInterfaceProxyWithTarget(typeof(IMyInterface), new MyClass(),
+			IMyInterface i = generator.CreateInterfaceProxyWithTarget(typeof (IMyInterface), new MyClass(),
 			                                                          new StandardInterceptor()) as IMyInterface;
 
 			ParameterInfo[] methodParams = GetMyTestMethodParams(i.GetType());

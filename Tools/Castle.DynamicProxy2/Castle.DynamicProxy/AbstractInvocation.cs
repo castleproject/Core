@@ -133,13 +133,14 @@ namespace Castle.DynamicProxy
 
 		public void Proceed()
 		{
-			if (interceptors == null) // not yet fully initialized? probably, an intercepted method is called while we are being deserialized
+			if (interceptors == null)
+				// not yet fully initialized? probably, an intercepted method is called while we are being deserialized
 			{
-				InvokeMethodOnTarget ();
+				InvokeMethodOnTarget();
 				return;
 			}
 
-		  execIndex++;
+			execIndex++;
 
 			if (execIndex == interceptors.Length)
 			{
@@ -158,7 +159,7 @@ namespace Castle.DynamicProxy
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.SetType(typeof(RemotableInvocation));
+			info.SetType(typeof (RemotableInvocation));
 			info.AddValue("invocation", new RemotableInvocation(this));
 		}
 

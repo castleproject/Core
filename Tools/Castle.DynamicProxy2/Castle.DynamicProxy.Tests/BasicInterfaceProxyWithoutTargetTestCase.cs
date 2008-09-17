@@ -26,14 +26,15 @@ namespace Castle.DynamicProxy.Tests
 	public class BasicInterfaceProxyWithoutTargetTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		[ExpectedException(typeof(NotImplementedException),
-			ExpectedMessage = "This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
+		[ExpectedException(typeof (NotImplementedException),
+			ExpectedMessage =
+				"This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
 			)]
 		public void BasicInterfaceProxyWithValidTarget_ThrowsIfInterceptorCallsProceed()
 		{
 			IService service = (IService)
 			                   generator.CreateInterfaceProxyWithoutTarget(
-			                   	typeof(IService), new StandardInterceptor());
+			                   	typeof (IService), new StandardInterceptor());
 
 			service.Sum(1, 2);
 		}
@@ -43,19 +44,19 @@ namespace Castle.DynamicProxy.Tests
 		{
 			IService service = (IService)
 			                   generator.CreateInterfaceProxyWithoutTarget(
-			                   	typeof(IService), new ReturnThreeInterceptor());
+			                   	typeof (IService), new ReturnThreeInterceptor());
 
 			int result = service.Sum(2, 2);
 			Assert.AreEqual(3, result);
 		}
 
 		[Test]
-		[ExpectedException(typeof(DBConcurrencyException), ExpectedMessage = "Because I feel like it")]
+		[ExpectedException(typeof (DBConcurrencyException), ExpectedMessage = "Because I feel like it")]
 		public void CanThrowExceptionFromInterceptorOfInterfaceMethod()
 		{
 			IService service = (IService)
 			                   generator.CreateInterfaceProxyWithoutTarget(
-			                   	typeof(IService), new ThrowingInterceptor());
+			                   	typeof (IService), new ThrowingInterceptor());
 
 			service.Sum(2, 2);
 		}
@@ -72,7 +73,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			IService service = (IService)
 			                   generator.CreateInterfaceProxyWithoutTarget(
-			                   	typeof(IService), new AssertCannotChangeTargetInterceptor(), new ReturnThreeInterceptor());
+			                   	typeof (IService), new AssertCannotChangeTargetInterceptor(), new ReturnThreeInterceptor());
 
 			int result = service.Sum(2, 2);
 			Assert.AreEqual(3, result);

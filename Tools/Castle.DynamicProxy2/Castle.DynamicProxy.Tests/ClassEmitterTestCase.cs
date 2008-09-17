@@ -25,80 +25,85 @@ namespace Castle.DynamicProxy.Tests
 	public class ClassEmitterTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		public void AutomaticDefaultConstructorGeneration ()
+		public void AutomaticDefaultConstructorGeneration()
 		{
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
 			Type t = emitter.BuildType();
-			Activator.CreateInstance (t);
+			Activator.CreateInstance(t);
 		}
 
 		[Test]
-		public void AutomaticDefaultConstructorGenerationWithClosedGenericType ()
+		public void AutomaticDefaultConstructorGenerationWithClosedGenericType()
 		{
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>), Type.EmptyTypes);
-			Type t = emitter.BuildType ();
-			Activator.CreateInstance (t);
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>),
+			                                        Type.EmptyTypes);
+			Type t = emitter.BuildType();
+			Activator.CreateInstance(t);
 		}
 
 		[Test]
-		public void StaticMethodArguments ()
+		public void StaticMethodArguments()
 		{
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>), Type.EmptyTypes);
-			MethodEmitter methodEmitter = emitter.CreateMethod ("StaticMethod", MethodAttributes.Public | MethodAttributes.Static,
-					typeof (string), typeof (string));
-			methodEmitter.CodeBuilder.AddStatement (new ReturnStatement (methodEmitter.Arguments[0]));
-			Type t = emitter.BuildType ();
-			Assert.AreEqual ("five", t.GetMethod ("StaticMethod").Invoke (null, new object[] { "five" }));
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>),
+			                                        Type.EmptyTypes);
+			MethodEmitter methodEmitter = emitter.CreateMethod("StaticMethod", MethodAttributes.Public | MethodAttributes.Static,
+			                                                   typeof (string), typeof (string));
+			methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(methodEmitter.Arguments[0]));
+			Type t = emitter.BuildType();
+			Assert.AreEqual("five", t.GetMethod("StaticMethod").Invoke(null, new object[] {"five"}));
 		}
 
 		[Test]
-		public void InstanceMethodArguments ()
+		public void InstanceMethodArguments()
 		{
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>), Type.EmptyTypes);
-			MethodEmitter methodEmitter = emitter.CreateMethod ("InstanceMethod", MethodAttributes.Public,
-					typeof (string), typeof (string));
-			methodEmitter.CodeBuilder.AddStatement (new ReturnStatement (methodEmitter.Arguments[0]));
-			Type t = emitter.BuildType ();
-			object instance = Activator.CreateInstance (t);
-			Assert.AreEqual ("six", t.GetMethod ("InstanceMethod").Invoke (instance, new object[] { "six" }));
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>),
+			                                        Type.EmptyTypes);
+			MethodEmitter methodEmitter = emitter.CreateMethod("InstanceMethod", MethodAttributes.Public,
+			                                                   typeof (string), typeof (string));
+			methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(methodEmitter.Arguments[0]));
+			Type t = emitter.BuildType();
+			object instance = Activator.CreateInstance(t);
+			Assert.AreEqual("six", t.GetMethod("InstanceMethod").Invoke(instance, new object[] {"six"}));
 		}
 
 		[Test]
-		public void ForceUnsignedFalseWithSignedTypes ()
+		public void ForceUnsignedFalseWithSignedTypes()
 		{
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes, TypeAttributes.Public, false);
-			Type t = emitter.BuildType ();
-			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t.Assembly));
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
+			                                        TypeAttributes.Public, false);
+			Type t = emitter.BuildType();
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t.Assembly));
 		}
 
 		[Test]
-		public void ForceUnsignedTrueWithSignedTypes ()
+		public void ForceUnsignedTrueWithSignedTypes()
 		{
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes, TypeAttributes.Public, true);
-			Type t = emitter.BuildType ();
-			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t.Assembly));
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
+			                                        TypeAttributes.Public, true);
+			Type t = emitter.BuildType();
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.Assembly));
 		}
 
 		[Test]
-		public void CreateFieldWithAttributes ()
+		public void CreateFieldWithAttributes()
 		{
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
-			emitter.CreateField ("myField", typeof (string), FieldAttributes.FamANDAssem | FieldAttributes.InitOnly);
-			Type t = emitter.BuildType ();
-			FieldInfo field = t.GetField ("myField", BindingFlags.NonPublic | BindingFlags.Instance);
-			Assert.IsNotNull (field);
-			Assert.AreEqual (FieldAttributes.FamANDAssem | FieldAttributes.InitOnly, field.Attributes);
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
+			emitter.CreateField("myField", typeof (string), FieldAttributes.FamANDAssem | FieldAttributes.InitOnly);
+			Type t = emitter.BuildType();
+			FieldInfo field = t.GetField("myField", BindingFlags.NonPublic | BindingFlags.Instance);
+			Assert.IsNotNull(field);
+			Assert.AreEqual(FieldAttributes.FamANDAssem | FieldAttributes.InitOnly, field.Attributes);
 		}
 
 		[Test]
-		public void CreateStaticFieldWithAttributes ()
+		public void CreateStaticFieldWithAttributes()
 		{
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
-			emitter.CreateStaticField ("myField", typeof (string), FieldAttributes.FamANDAssem | FieldAttributes.InitOnly);
-			Type t = emitter.BuildType ();
-			FieldInfo field = t.GetField ("myField", BindingFlags.NonPublic | BindingFlags.Static);
-			Assert.IsNotNull (field);
-			Assert.AreEqual (FieldAttributes.Static | FieldAttributes.FamANDAssem | FieldAttributes.InitOnly, field.Attributes);
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
+			emitter.CreateStaticField("myField", typeof (string), FieldAttributes.FamANDAssem | FieldAttributes.InitOnly);
+			Type t = emitter.BuildType();
+			FieldInfo field = t.GetField("myField", BindingFlags.NonPublic | BindingFlags.Static);
+			Assert.IsNotNull(field);
+			Assert.AreEqual(FieldAttributes.Static | FieldAttributes.FamANDAssem | FieldAttributes.InitOnly, field.Attributes);
 		}
 	}
 }

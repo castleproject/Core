@@ -48,8 +48,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 		internal ConstructorInfo ObtainDefaultConstructor()
 		{
 			Type type = baseType;
-      if (type.ContainsGenericParameters)
-        type = type.GetGenericTypeDefinition();
+			if (type.ContainsGenericParameters)
+				type = type.GetGenericTypeDefinition();
 
 			BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 

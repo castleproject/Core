@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy
 
 		protected RemotableInvocation(SerializationInfo info, StreamingContext context)
 		{
-			parent = (IInvocation) info.GetValue("invocation", typeof(IInvocation));
+			parent = (IInvocation) info.GetValue("invocation", typeof (IInvocation));
 		}
 
 
@@ -114,7 +114,7 @@ namespace Castle.DynamicProxy
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.SetType(typeof(RemotableInvocation));
+			info.SetType(typeof (RemotableInvocation));
 			info.AddValue("invocation", new RemotableInvocation(this));
 		}
 	}

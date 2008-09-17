@@ -31,8 +31,8 @@ namespace Castle.DynamicProxy.Generators
 			method2methodOnTarget[method] = methodOnTarget;
 
 			method2Invocation[method] = BuildInvocationNestedType(emitter, proxyTargetType,
-																														IsMixinMethod (method) ? method.DeclaringType : proxyTargetType,
-																														method, methodOnTarget,
+			                                                      IsMixinMethod(method) ? method.DeclaringType : proxyTargetType,
+			                                                      method, methodOnTarget,
 			                                                      ConstructorVersion.WithTargetMethod, true);
 		}
 

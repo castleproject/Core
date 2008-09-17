@@ -23,12 +23,12 @@ namespace Castle.DynamicProxy.Tests
 	public class MethodsWithAttributesOnParametersTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		[ExpectedException(typeof(ArgumentException), ExpectedMessage = "No default value for argument")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage = "No default value for argument")]
 		public void ParametersAreCopiedToProxiedObject()
 		{
 			ClassWithAttributesOnMethodParameters requiredObj = (ClassWithAttributesOnMethodParameters)
 			                                                    generator.CreateClassProxy(
-			                                                    	typeof(ClassWithAttributesOnMethodParameters),
+			                                                    	typeof (ClassWithAttributesOnMethodParameters),
 			                                                    	new RequiredParamInterceptor());
 
 			requiredObj.MethodOne(-1);
@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			ClassWithAttributesOnMethodParameters requiredObj = (ClassWithAttributesOnMethodParameters)
 			                                                    generator.CreateClassProxy(
-			                                                    	typeof(ClassWithAttributesOnMethodParameters),
+			                                                    	typeof (ClassWithAttributesOnMethodParameters),
 			                                                    	new RequiredParamInterceptor());
 
 			requiredObj.MethodTwo(null);
@@ -54,12 +54,12 @@ namespace Castle.DynamicProxy.Tests
 
 			object[] args = invocation.Arguments;
 
-			for(int i = 0; i < parameters.Length; i++)
+			for (int i = 0; i < parameters.Length; i++)
 			{
-				if (parameters[i].IsDefined(typeof(RequiredAttribute), false))
+				if (parameters[i].IsDefined(typeof (RequiredAttribute), false))
 				{
 					RequiredAttribute required =
-						parameters[i].GetCustomAttributes(typeof(RequiredAttribute), false)[0] as RequiredAttribute;
+						parameters[i].GetCustomAttributes(typeof (RequiredAttribute), false)[0] as RequiredAttribute;
 
 					if ((required.BadValue == null && args[i] == null) ||
 					    (required.BadValue != null && required.BadValue.Equals(args[i])))

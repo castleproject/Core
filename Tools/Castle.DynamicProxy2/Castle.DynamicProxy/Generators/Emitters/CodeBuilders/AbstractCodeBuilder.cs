@@ -72,12 +72,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 		internal void Generate(IMemberEmitter member, ILGenerator il)
 		{
-			foreach(Reference local in ilmarkers)
+			foreach (Reference local in ilmarkers)
 			{
 				local.Generate(il);
 			}
 
-			foreach(Statement stmt in stmts)
+			foreach (Statement stmt in stmts)
 			{
 				stmt.Emit(member, il);
 			}

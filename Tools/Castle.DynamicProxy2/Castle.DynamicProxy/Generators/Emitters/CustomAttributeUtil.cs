@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			ArrayList selectedProps = new ArrayList();
 
-			foreach(PropertyInfo pi in attType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+			foreach (PropertyInfo pi in attType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
 			{
 				if (pi.CanRead && pi.CanWrite)
 				{
@@ -84,11 +84,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 			}
 
-			properties = (PropertyInfo[]) selectedProps.ToArray(typeof(PropertyInfo));
+			properties = (PropertyInfo[]) selectedProps.ToArray(typeof (PropertyInfo));
 
 			object[] propertyValues = new object[properties.Length];
 
-			for(int i = 0; i < properties.Length; i++)
+			for (int i = 0; i < properties.Length; i++)
 			{
 				PropertyInfo propInfo = properties[i];
 				propertyValues[i] = propInfo.GetValue(attribute, null);
@@ -103,7 +103,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			object[] values = new object[fields.Length];
 
-			for(int i = 0; i < fields.Length; i++)
+			for (int i = 0; i < fields.Length; i++)
 			{
 				FieldInfo fieldInfo = fields[i];
 				values[i] = fieldInfo.GetValue(attribute);
@@ -121,7 +121,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private static void InitializeConstructorArgs(Type attType, Attribute attribute, object[] args,
 		                                              ParameterInfo[] parameterInfos)
 		{
-			for(int i = 0; i < args.Length; i++)
+			for (int i = 0; i < args.Length; i++)
 			{
 				args[i] = GetArgValue(attType, attribute, parameterInfos[i]);
 			}
@@ -133,7 +133,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			PropertyInfo[] propertyInfos = attType.GetProperties();
 			//first try to find a property with 
-			foreach(PropertyInfo propertyInfo in propertyInfos)
+			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
 				if (propertyInfo.CanRead == false && propertyInfo.GetIndexParameters().Length != 0)
 				{
@@ -149,7 +149,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			PropertyInfo bestMatch = null;
 			//now we try to find it by type
-			foreach(PropertyInfo propertyInfo in propertyInfos)
+			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
 				if (propertyInfo.CanRead == false && propertyInfo.GetIndexParameters().Length != 0)
 					continue;
@@ -173,7 +173,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			bool notBestMatch = bestMatch == null || bestMatch.PropertyType != parameterInfo.ParameterType;
 			if (propertyInfo.PropertyType == parameterInfo.ParameterType && notBestMatch)
 				return propertyInfo;
-			if (parameterInfo.ParameterType == typeof(string) && notBestMatch)
+			if (parameterInfo.ParameterType == typeof (string) && notBestMatch)
 				return propertyInfo;
 			return bestMatch;
 		}
@@ -187,14 +187,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (obj == null)
 				return null;
-			if (paramType == typeof(String))
+			if (paramType == typeof (String))
 				return obj.ToString();
 			return obj;
 		}
 
 		private static object GetDefaultValueFor(Type type)
 		{
-			if (type == typeof(bool))
+			if (type == typeof (bool))
 			{
 				return false;
 			}
@@ -202,7 +202,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				return Enum.GetValues(type).GetValue(0);
 			}
-			else if (type == typeof(char))
+			else if (type == typeof (char))
 			{
 				return char.MinValue;
 			}

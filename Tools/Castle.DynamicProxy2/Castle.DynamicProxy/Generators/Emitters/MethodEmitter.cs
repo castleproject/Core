@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		}
 
 		internal MethodEmitter(AbstractTypeEmitter maintype, String name, MethodAttributes attrs)
-			: this (maintype.TypeBuilder.DefineMethod(name, attrs))
+			: this(maintype.TypeBuilder.DefineMethod(name, attrs))
 		{
 			this.maintype = maintype;
 		}
@@ -71,11 +71,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// </summary>
 		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod, AbstractTypeEmitter parentEmitter)
 		{
-			GenericUtil.PopulateGenericArguments(parentEmitter, name2GenericType); 
+			GenericUtil.PopulateGenericArguments(parentEmitter, name2GenericType);
 			Type returnType = GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType);
 			ParameterInfo[] baseMethodParameters = baseMethod.GetParameters();
 			Type[] parameters = GenericUtil.ExtractParametersTypes
-		   (baseMethodParameters, name2GenericType);
+				(baseMethodParameters, name2GenericType);
 
 			// Disabled due to .Net 3.5 SP 1 bug
 //			List<Type[]> paramModReq = new List<Type[]>();
@@ -99,11 +99,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			SetReturnType(GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType));
 
 			builder.SetSignature(
-				 returnType,
-				 baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
-				 baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
-				 parameters,
-				 null, null
+				returnType,
+				baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
+				baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
+				parameters,
+				null, null
 //				 paramModReq.ToArray(),
 //				 paramModOpt.ToArray()
 				);
@@ -117,12 +117,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			arguments = new ArgumentReference[paramTypes.Length];
 
-			for(int i = 0; i < paramTypes.Length; i++)
+			for (int i = 0; i < paramTypes.Length; i++)
 			{
 				arguments[i] = new ArgumentReference(paramTypes[i]);
 			}
 
-			ArgumentsUtil.InitializeArgumentsByPosition (arguments, MethodBuilder.IsStatic);
+			ArgumentsUtil.InitializeArgumentsByPosition(arguments, MethodBuilder.IsStatic);
 		}
 
 		public virtual MethodCodeBuilder CodeBuilder
@@ -175,18 +175,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void DefineCustomAttribute(Attribute attribute)
 		{
 			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
-			
+
 			if (customAttributeBuilder == null)
 			{
 				return;
 			}
-			
+
 			builder.SetCustomAttribute(customAttributeBuilder);
 		}
 
 		private void DefineParameters(ParameterInfo[] info)
 		{
-			foreach(ParameterInfo parameterInfo in info)
+			foreach (ParameterInfo parameterInfo in info)
 			{
 				builder.DefineParameter(parameterInfo.Position + 1, parameterInfo.Attributes, parameterInfo.Name);
 			}

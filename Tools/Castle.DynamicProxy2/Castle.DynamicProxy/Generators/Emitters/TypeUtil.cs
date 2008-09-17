@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			if (set1 != null) types.AddRange(set1);
 			if (set2 != null) types.AddRange(set2);
 
-			return (Type[]) types.ToArray(typeof(Type));
+			return (Type[]) types.ToArray(typeof (Type));
 		}
 	}
 }

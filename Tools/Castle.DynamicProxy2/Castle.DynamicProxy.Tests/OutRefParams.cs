@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Tests
 		public void CanCreateProxyOfInterfaceWithOutParameter()
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			object proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut), interceptor);
+			object proxy = generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
 			Assert.IsNotNull(proxy);
 		}
 
@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			int i;
 			InvocatingInterceptor interceptor = new InvocatingInterceptor(delegate { });
-			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut), interceptor);
+			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
 			proxy.Do(out i);
 		}
 
@@ -45,7 +45,7 @@ namespace Castle.DynamicProxy.Tests
 			int i;
 			InvocatingInterceptor interceptor =
 				new InvocatingInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
-			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut), interceptor);
+			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
 			proxy.Do(out i);
 			Assert.AreEqual(5, i);
 		}
@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Tests
 			int i = 3;
 			InvocatingInterceptor interceptor =
 				new InvocatingInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
-			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut), interceptor);
+			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
 			proxy.Did(ref i);
 			Assert.AreEqual(5, i);
 		}
@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy.Tests
 			                                                              		invocation.Arguments[1] = "aaa";
 			                                                              		invocation.Arguments[3] = "bbb";
 			                                                              	});
-			MyClass proxy = (MyClass) generator.CreateClassProxy(typeof(MyClass), interceptor);
+			MyClass proxy = (MyClass) generator.CreateClassProxy(typeof (MyClass), interceptor);
 			proxy.MyMethod(out i, ref s1, 1, out s2);
 			Assert.AreEqual(5, i);
 			Assert.AreEqual(s1, "aaa");
@@ -85,7 +85,7 @@ namespace Castle.DynamicProxy.Tests
 		public void CanCreateProxyWithStructRefParam()
 		{
 			MyStruct s = new MyStruct(10);
-			MyClass proxy = (MyClass) generator.CreateClassProxy(typeof(MyClass), new StandardInterceptor());
+			MyClass proxy = (MyClass) generator.CreateClassProxy(typeof (MyClass), new StandardInterceptor());
 			proxy.MyMethodWithStruct(ref s);
 			Assert.AreEqual(20, s.Value);
 		}
@@ -116,7 +116,7 @@ namespace Castle.DynamicProxy.Tests
 
 			public virtual void MyMethodWithStruct(ref MyStruct s)
 			{
-				s.Value = 2 * s.Value;
+				s.Value = 2*s.Value;
 			}
 		}
 

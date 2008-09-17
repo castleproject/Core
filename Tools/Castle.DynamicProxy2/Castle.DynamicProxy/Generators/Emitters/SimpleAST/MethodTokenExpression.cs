@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 #endif
 
 			gen.Emit(OpCodes.Call, minfo);
-			gen.Emit(OpCodes.Castclass, typeof(MethodInfo));
+			gen.Emit(OpCodes.Castclass, typeof (MethodInfo));
 		}
 	}
 }

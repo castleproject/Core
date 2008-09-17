@@ -34,10 +34,10 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyForClass()
 		{
-			object proxy = generator.CreateClassProxy(typeof(ServiceClass), new ResultModifierInterceptor());
+			object proxy = generator.CreateClassProxy(typeof (ServiceClass), new ResultModifierInterceptor());
 
 			Assert.IsNotNull(proxy);
-			Assert.IsTrue(typeof(ServiceClass).IsAssignableFrom(proxy.GetType()));
+			Assert.IsTrue(typeof (ServiceClass).IsAssignableFrom(proxy.GetType()));
 
 			ServiceClass instance = (ServiceClass) proxy;
 
@@ -62,19 +62,20 @@ namespace Castle.DynamicProxy.Tests
 		public void Caching()
 		{
 			object proxy = generator.CreateClassProxy(
-				typeof(ServiceClass), new StandardInterceptor());
+				typeof (ServiceClass), new StandardInterceptor());
 			proxy = generator.CreateClassProxy(
-				typeof(ServiceClass), new StandardInterceptor());
+				typeof (ServiceClass), new StandardInterceptor());
 			proxy = generator.CreateClassProxy(
-				typeof(ServiceClass), new StandardInterceptor());
+				typeof (ServiceClass), new StandardInterceptor());
 			proxy = generator.CreateClassProxy(
-				typeof(ServiceClass), new StandardInterceptor());
+				typeof (ServiceClass), new StandardInterceptor());
 		}
 
 #if !MONO
 
-		[Test, ExpectedException(typeof(GeneratorException), ExpectedMessage = "Type is not public, so a proxy " +
-		                                                     "cannot be generated. Type: System.AppDomainInitializerInfo")]
+		[Test, ExpectedException(typeof (GeneratorException), ExpectedMessage = "Type is not public, so a proxy " +
+		                                                                        "cannot be generated. Type: System.AppDomainInitializerInfo"
+			)]
 		public void ProxyForNonPublicClass()
 		{
 			// have to use a type that is not from this assembly, because it is marked as internals visible to 
@@ -83,7 +84,7 @@ namespace Castle.DynamicProxy.Tests
 			object proxy = generator.CreateClassProxy(
 				Type.GetType("System.AppDomainInitializerInfo, mscorlib"), new StandardInterceptor());
 		}
-		
+
 #endif
 
 		[Test]
@@ -91,10 +92,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 
-			object proxy = generator.CreateClassProxy(typeof(ClassWithIndexer), logger);
+			object proxy = generator.CreateClassProxy(typeof (ClassWithIndexer), logger);
 
 			Assert.IsNotNull(proxy);
-			Assert.IsInstanceOfType(typeof(ClassWithIndexer), proxy);
+			Assert.IsInstanceOfType(typeof (ClassWithIndexer), proxy);
 
 			ClassWithIndexer type = (ClassWithIndexer) proxy;
 
@@ -111,10 +112,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 
-			object proxy = generator.CreateClassProxy(typeof(DiffAccessLevelOnProperties), logger);
+			object proxy = generator.CreateClassProxy(typeof (DiffAccessLevelOnProperties), logger);
 
 			Assert.IsNotNull(proxy);
-			Assert.IsInstanceOfType(typeof(DiffAccessLevelOnProperties), proxy);
+			Assert.IsInstanceOfType(typeof (DiffAccessLevelOnProperties), proxy);
 
 			DiffAccessLevelOnProperties type = (DiffAccessLevelOnProperties) proxy;
 
@@ -122,7 +123,7 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual("10 11 12 13 name", type.ToString());
 		}
-		
+
 #endif
 
 
@@ -143,19 +144,25 @@ namespace Castle.DynamicProxy.Tests
 				// have .NET 2.0 SP1 installed
 				// we'd try to grab a method info that in in .NET 2.0 SP1, and if it's
 				// not present then we'd ignore that exception
-				MethodInfo newDefinePropertyMethodInfo = typeof(TypeBuilder).GetMethod("DefineProperty", new Type[]
-				{
-					typeof (string), typeof (PropertyAttributes),
-					typeof (CallingConventions), typeof (Type),
-					typeof (Type[]), typeof (Type[]), typeof (Type[]),
-					typeof (Type[][]), typeof (Type[][])
-				});
+				MethodInfo newDefinePropertyMethodInfo = typeof (TypeBuilder).GetMethod("DefineProperty", new Type[]
+				                                                                                          	{
+				                                                                                          		typeof (string),
+				                                                                                          		typeof (
+				                                                                                          			PropertyAttributes),
+				                                                                                          		typeof (
+				                                                                                          			CallingConventions),
+				                                                                                          		typeof (Type),
+				                                                                                          		typeof (Type[]),
+				                                                                                          		typeof (Type[]),
+				                                                                                          		typeof (Type[]),
+				                                                                                          		typeof (Type[][]),
+				                                                                                          		typeof (Type[][])
+				                                                                                          	});
 
 				bool net20SP1IsInstalled = newDefinePropertyMethodInfo != null;
 
 				if (net20SP1IsInstalled)
 					throw;
-
 			}
 		}
 
@@ -164,7 +171,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 
-			object proxy = generator.CreateClassProxy(typeof(ExtendedServiceClass), logger);
+			object proxy = generator.CreateClassProxy(typeof (ExtendedServiceClass), logger);
 
 			Assert.IsNotNull(proxy);
 
@@ -179,7 +186,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyForNestedClass()
 		{
-			object proxy = generator.CreateClassProxy(typeof(ServiceClass.InernalClass), new Type[] {typeof(IDisposable)});
+			object proxy = generator.CreateClassProxy(typeof (ServiceClass.InernalClass), new Type[] {typeof (IDisposable)});
 			Assert.IsNotNull(proxy);
 			Assert.IsTrue(proxy is ServiceClass.InernalClass);
 		}
@@ -187,12 +194,12 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyForClassWithInterfaces()
 		{
-			object proxy = generator.CreateClassProxy(typeof(ServiceClass), new Type[] {typeof(IDisposable)},
+			object proxy = generator.CreateClassProxy(typeof (ServiceClass), new Type[] {typeof (IDisposable)},
 			                                          new ResultModifierInterceptor());
 
 			Assert.IsNotNull(proxy);
-			Assert.IsTrue(typeof(ServiceClass).IsAssignableFrom(proxy.GetType()));
-			Assert.IsTrue(typeof(IDisposable).IsAssignableFrom(proxy.GetType()));
+			Assert.IsTrue(typeof (ServiceClass).IsAssignableFrom(proxy.GetType()));
+			Assert.IsTrue(typeof (IDisposable).IsAssignableFrom(proxy.GetType()));
 
 			ServiceClass inter = (ServiceClass) proxy;
 
@@ -206,7 +213,7 @@ namespace Castle.DynamicProxy.Tests
 
 				Assert.Fail("Expected exception as Dispose has no implementation");
 			}
-			catch(NotImplementedException ex)
+			catch (NotImplementedException ex)
 			{
 				Assert.AreEqual("This is a DynamicProxy2 error: the interceptor attempted " +
 				                "to 'Proceed' for a method without a target, for example, an interface method or an abstract method",
@@ -218,7 +225,7 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyForCharReturnType()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			object proxy = generator.CreateClassProxy(typeof(ClassWithCharRetType), logger);
+			object proxy = generator.CreateClassProxy(typeof (ClassWithCharRetType), logger);
 			Assert.IsNotNull(proxy);
 			ClassWithCharRetType classProxy = (ClassWithCharRetType) proxy;
 			Assert.AreEqual('c', classProxy.DoSomething());
@@ -228,7 +235,7 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyForClassWithConstructors()
 		{
 			object proxy = generator.CreateClassProxy(
-				typeof(ClassWithConstructors), new IInterceptor[] {new StandardInterceptor()},
+				typeof (ClassWithConstructors), new IInterceptor[] {new StandardInterceptor()},
 				new object[] {"name"});
 
 			Assert.IsNotNull(proxy);
@@ -236,7 +243,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("name", classProxy.Name);
 
 			proxy = generator.CreateClassProxy(
-				typeof(ClassWithConstructors), new IInterceptor[] {new StandardInterceptor()},
+				typeof (ClassWithConstructors), new IInterceptor[] {new StandardInterceptor()},
 				new object[] {"name", 10});
 
 			Assert.IsNotNull(proxy);
@@ -260,7 +267,7 @@ namespace Castle.DynamicProxy.Tests
 		public void ProducesInvocationsThatCantChangeTarget()
 		{
 			AssertCannotChangeTargetInterceptor invocationChecker = new AssertCannotChangeTargetInterceptor();
-			object proxy = generator.CreateClassProxy(typeof(ClassWithCharRetType), invocationChecker);
+			object proxy = generator.CreateClassProxy(typeof (ClassWithCharRetType), invocationChecker);
 			Assert.IsNotNull(proxy);
 			ClassWithCharRetType classProxy = (ClassWithCharRetType) proxy;
 			Assert.AreEqual('c', classProxy.DoSomething());
@@ -291,77 +298,77 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void ProxyForBaseTypeFromSignedAssembly ()
+		public void ProxyForBaseTypeFromSignedAssembly()
 		{
 			Type t = typeof (Hashtable);
-			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t.Assembly));
-			object proxy = generator.CreateClassProxy (t, new StandardInterceptor ());
-			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t.Assembly));
+			object proxy = generator.CreateClassProxy(t, new StandardInterceptor());
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
-		public void ProxyForBaseTypeAndInterfaceFromSignedAssembly ()
+		public void ProxyForBaseTypeAndInterfaceFromSignedAssembly()
 		{
 			Type t1 = typeof (Hashtable);
 			Type t2 = typeof (IServiceProvider);
-			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t1.Assembly));
-			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t2.Assembly));
-			object proxy = generator.CreateClassProxy (t1, new Type[] {t2}, new StandardInterceptor ());
-			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.Assembly));
+			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
-		[Ignore ("To get this running, the Tests project must not be signed.")]
-		public void ProxyForBaseTypeFromUnsignedAssembly ()
+		[Ignore("To get this running, the Tests project must not be signed.")]
+		public void ProxyForBaseTypeFromUnsignedAssembly()
 		{
 			Type t = typeof (MyClass);
-			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t.Assembly));
-			object proxy = generator.CreateClassProxy (t, new StandardInterceptor ());
-			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.Assembly));
+			object proxy = generator.CreateClassProxy(t, new StandardInterceptor());
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
-		[Ignore ("To get this running, the Tests project must not be signed.")]
-		public void ProxyForBaseTypeAndInterfaceFromUnsignedAssembly ()
+		[Ignore("To get this running, the Tests project must not be signed.")]
+		public void ProxyForBaseTypeAndInterfaceFromUnsignedAssembly()
 		{
 			Type t1 = typeof (MyClass);
 			Type t2 = typeof (IService);
-			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t1.Assembly));
-			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t2.Assembly));
-			object proxy = generator.CreateClassProxy (t1, new Type[] { t2 }, new StandardInterceptor ());
-			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.Assembly));
+			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
-		[Ignore ("To get this running, the Tests project must not be signed.")]
-		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies1 ()
+		[Ignore("To get this running, the Tests project must not be signed.")]
+		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies1()
 		{
 			Type t1 = typeof (MyClass);
 			Type t2 = typeof (IServiceProvider);
-			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t1.Assembly));
-			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t2.Assembly));
-			object proxy = generator.CreateClassProxy (t1, new Type[] { t2 }, new StandardInterceptor ());
-			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.Assembly));
+			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
-		[Ignore ("To get this running, the Tests project must not be signed.")]
-		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies2 ()
+		[Ignore("To get this running, the Tests project must not be signed.")]
+		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies2()
 		{
 			Type t1 = typeof (Hashtable);
 			Type t2 = typeof (IService);
-			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t1.Assembly));
-			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t2.Assembly));
-			object proxy = generator.CreateClassProxy (t1, new Type[] { t2 }, new StandardInterceptor ());
-			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.Assembly));
+			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
-		public void VirtualCallFromCtor ()
+		public void VirtualCallFromCtor()
 		{
 			StandardInterceptor interceptor = new StandardInterceptor();
-			ClassCallingVirtualMethodFromCtor proxy = generator.CreateClassProxy<ClassCallingVirtualMethodFromCtor> (interceptor);
-			Assert.AreEqual (7, proxy.Result);
+			ClassCallingVirtualMethodFromCtor proxy = generator.CreateClassProxy<ClassCallingVirtualMethodFromCtor>(interceptor);
+			Assert.AreEqual(7, proxy.Result);
 		}
 	}
 }

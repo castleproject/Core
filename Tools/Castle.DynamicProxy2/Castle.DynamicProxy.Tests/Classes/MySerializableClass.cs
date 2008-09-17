@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 
 		public MySerializableClass2(SerializationInfo info, StreamingContext context)
 		{
-			current = (DateTime) info.GetValue("dt", typeof(DateTime));
+			current = (DateTime) info.GetValue("dt", typeof (DateTime));
 		}
 
 		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)

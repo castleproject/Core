@@ -48,7 +48,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				if (member.ReturnType != typeof(void))
+				if (member.ReturnType != typeof (void))
 				{
 					OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, member.ReturnType);
 				}
