@@ -77,13 +77,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			Type[] parameters = GenericUtil.ExtractParametersTypes
 		   (baseMethodParameters, name2GenericType);
 
-			List<Type[]> paramModReq = new List<Type[]>();
-			List<Type[]> paramModOpt = new List<Type[]>();
-			foreach (ParameterInfo parameterInfo in baseMethodParameters)
-			{
-				paramModOpt.Add(parameterInfo.GetOptionalCustomModifiers());
-				paramModReq.Add(parameterInfo.GetRequiredCustomModifiers());
-			} 
+			// Disabled due to .Net 3.5 SP 1 bug
+//			List<Type[]> paramModReq = new List<Type[]>();
+//			List<Type[]> paramModOpt = new List<Type[]>();
+//			foreach (ParameterInfo parameterInfo in baseMethodParameters)
+//			{
+//				paramModOpt.Add(parameterInfo.GetOptionalCustomModifiers());
+//				paramModReq.Add(parameterInfo.GetRequiredCustomModifiers());
+//			} 
 
 			Type[] genericArguments = baseMethod.GetGenericArguments();
 
@@ -102,8 +103,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				 baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
 				 baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
 				 parameters,
-				 paramModReq.ToArray(),
-				 paramModOpt.ToArray());
+				 null, null
+//				 paramModReq.ToArray(),
+//				 paramModOpt.ToArray()
+				);
 
 			DefineParameters(baseMethodParameters);
 		}

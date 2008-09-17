@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reflection.Emit;
-
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Reflection;
+	using System.Reflection.Emit;
 	using System.Collections;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
