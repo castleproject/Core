@@ -63,16 +63,14 @@ namespace Castle.Facilities.WcfIntegration.Tests.Duplex
 
 			localContainer.AddFacility<WcfFacility>();
 
-			localContainer.Register(
-				WcfClient.ForChannels(
-					new DuplexClientModel()
-					{
-						Endpoint = WcfEndpoint.ForContract<IServiceWithCallback>()
-							.BoundTo(new NetTcpBinding())
-							.At("net.tcp://localhost/ServiceWithCallback"),
-					}
-					.Callback(callbackService))
-				);
+		    DuplexClientModel model = new DuplexClientModel();
+		    model.Endpoint = WcfEndpoint.ForContract<IServiceWithCallback>()
+		        .BoundTo(new NetTcpBinding())
+		        .At("net.tcp://localhost/ServiceWithCallback");
+		    model.Callback(callbackService); 
+
+		    localContainer.Register(
+				WcfClient.ForChannels(model));
 
 			IServiceWithCallback proxy = localContainer.Resolve<IServiceWithCallback>();
 			proxy.DoSomething(21);
