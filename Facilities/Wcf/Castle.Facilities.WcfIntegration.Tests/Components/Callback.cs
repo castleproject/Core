@@ -27,10 +27,16 @@ namespace Castle.Facilities.WcfIntegration.Tests.Components
 	{
 		public void Callback(int valueFromTheOtherSide)
 		{
-			ValueFromTheOtherSide = valueFromTheOtherSide;
+			this.valueFromTheOtherSide = valueFromTheOtherSide;
 		}
 
-		public int ValueFromTheOtherSide { get; set; }
+		int valueFromTheOtherSide;
+		
+		public int ValueFromTheOtherSide 
+		{
+			get { return valueFromTheOtherSide; }
+			set { valueFromTheOtherSide = value; }
+		}
 	}
 
 	[ServiceContract(CallbackContract = typeof(ICallbackService))]
