@@ -624,7 +624,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			String code = String.Format("new PeriodicalExecuter(function() {{ {0} }}, {1} )", 
 				BuildRemoteFunction(url, options), options["frequency"]);
 
-			return String.Format( "<script>{0}</script>", code );
+			return String.Format( "<script type='text/javascript'>{0}</script>", code );
 		}
 
 		#endregion
@@ -632,7 +632,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		#region AutoCompletion
 		
 		/// <summary>
-		/// Rendes a input field with Google style autocomplete enabled.
+		/// Renders an input field with Google style autocomplete enabled.
 		/// The specified <c>url</c> is used to gather the contents 
 		/// for the auto complete panel, so 
 		/// and your action should return filtered and sorted results.
