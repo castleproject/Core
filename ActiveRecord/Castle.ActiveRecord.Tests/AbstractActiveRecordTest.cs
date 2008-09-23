@@ -23,18 +23,18 @@ namespace Castle.ActiveRecord.Tests
 
 	public abstract class AbstractActiveRecordTest
 	{
-		protected IConfigurationSource GetConfigSource()
+		protected static IConfigurationSource GetConfigSource()
 		{
             return System.Configuration.ConfigurationManager.GetSection("activerecord") as IConfigurationSource;
 		}
 
-		protected void Recreate()
+		protected static void Recreate()
 		{
 			ActiveRecordStarter.CreateSchema();
 		}
 		
 		[SetUp]
-		public void Init()
+		public virtual void Init()
 		{
 			ActiveRecordStarter.ResetInitializationFlag();
 		}

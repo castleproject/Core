@@ -12,28 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
+namespace Castle.ActiveRecord.Tests.Model
 {
-	using System.Collections;
+	using System.Collections.Generic;
+	using Castle.ActiveRecord;
+
+	public enum Role
+	{
+		User,
+		Admin
+	}
 
 	[ActiveRecord]
-    public class ClassWithElementList
-    {
-        int id;
-        IList elements;
+	public class EnumModel
+	{
+		private int _id;
+		private IList<Role> _roles = new List<Role>();
 
-        [PrimaryKey]
-        public int Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
+		[PrimaryKey]
+		public int Id {
+			get { return _id; }
+			set { _id = value; }
+		}
 
-        [HasMany(typeof(string), "ClassId", "Elements", Element = "Name")]
-        public IList Elements
-        {
-            get { return elements; }
-            set { elements = value; }
-        }
-    }
+		[HasMany(Table = "Roles")]
+		public IList<Role> Roles {
+			get { return _roles; }
+			set { _roles = value; }
+		}
+	}
 }

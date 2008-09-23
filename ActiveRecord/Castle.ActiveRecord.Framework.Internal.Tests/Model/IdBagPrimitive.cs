@@ -15,7 +15,7 @@
 			set { id = value; }
 		}
 
-		[HasAndBelongsToMany(RelationType = RelationType.IdBag, Table="IdToItems", ColumnKey="keyid", ElementType = "string")]
+		[HasAndBelongsToMany(RelationType = RelationType.IdBag, Table="IdToItems", ColumnKey="keyid", ElementType = typeof(string))]
 		[CollectionID(CollectionIDType.Sequence, "col", "Int32")]
 		public IList<string> Items
 		{

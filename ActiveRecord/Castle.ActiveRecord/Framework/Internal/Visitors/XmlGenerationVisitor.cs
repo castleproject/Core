@@ -815,7 +815,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		                             Type targetType, RelationType type, string name,
 		                             string accessString, string table, string schema, bool lazy,
 		                             bool inverse, string orderBy, string where, string sort,
-		                             string columnKey, string[] compositeKeyColumnKeys, string element, string elementType,
+		                             string columnKey, string[] compositeKeyColumnKeys, string element, Type elementType,
 		                             string columnRef, string[] compositeKeyColumnRefs,
 		                             IVisitable extraModel, string index, string indexType, CacheEnum cache, string cacheregion,
 		                             NotFoundBehaviour notFoundBehaviour, FetchEnum fetch, int batchSize, Type collectionType)
@@ -1129,7 +1129,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private void WriteElement(string element, string elementType, Type targetType)
+		private void WriteElement(string element, Type elementType, Type targetType)
 		{
 			if (element != null)
 			{
@@ -1140,7 +1140,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			else
 			{
 				AppendF("<element {0} />",
-						MakeAtt("type", elementType));
+						MakeAtt("type", elementType.FullName));
 			}
 		}
 

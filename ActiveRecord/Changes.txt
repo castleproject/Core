@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Added code that can guess an collection of mapped Enums without specifying the ColumnKey, Element or ElementType.
+  Breaking: changed the ElementType from a string to a type.
+
 - Search parent models when trying to infer BelongsTo relationship information.
 
 - Allow CompositeUserType to be applied to fields too.

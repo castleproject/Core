@@ -63,7 +63,8 @@ namespace Castle.ActiveRecord
 		internal String sort;
 		internal String index;
 		internal String indexType;
-		internal String element, elementType;
+		internal String element;
+		internal Type elementType;
 		internal bool lazy;
 		internal bool lazySpecified = false;
 		internal bool inverse;
@@ -208,7 +209,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Use for simple types.
 		/// </summary>
-		public string ElementType
+		public Type ElementType
 		{
 			get { return elementType; }
 			set { elementType = value; }

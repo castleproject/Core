@@ -318,6 +318,7 @@
     <Compile Include="AnyRelationTestCase.cs" />
     <Compile Include="CompositeNestedClassTestCase.cs" />
     <Compile Include="CompositeUserTypeTestCase.cs" />
+    <Compile Include="EnumModelTestCase.cs" />
     <Compile Include="JoinedSubClassWithDiscriminatorTestCase.cs" />
     <Compile Include="JoinedTableTestCase.cs" />
     <Compile Include="CountQueryTestCase.cs" />
@@ -328,6 +329,7 @@
     <Compile Include="Model\CompositeNested\CompositeNestedParent.cs" />
     <Compile Include="Model\CompositeUserType\DoubleStringType.cs" />
     <Compile Include="Model\CompositeUserType\ProductPropertyAccess.cs" />
+    <Compile Include="Model\EnumModel.cs" />
     <Compile Include="Model\Ship.cs" />
     <Compile Include="NestedModelValidation.cs" />
     <Compile Include="Model\NestedValidation\UserWithNestedAddress.cs" />
