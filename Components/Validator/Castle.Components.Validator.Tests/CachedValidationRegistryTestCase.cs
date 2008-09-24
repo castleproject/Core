@@ -18,6 +18,8 @@ using System.Threading;
 
 namespace Castle.Components.Validator.Tests
 {
+	using System;
+	using System.Reflection;
 	using Castle.Components.Validator.Tests.Models;
 	using NUnit.Framework;
 
@@ -58,6 +60,23 @@ namespace Castle.Components.Validator.Tests
 			{
 				Assert.IsTrue((val.RunWhen & RunWhen.Custom) != 0 || (val.RunWhen & RunWhen.Everytime) != 0);
 			}
+		}
+
+		/// <summary>
+		/// Tests the Array.Sort and <see cref="TypeNameComparer"/> in the cached validation registry
+		/// </summary>
+		[Test]
+		public void AttributeOrderTest() {
+
+			Type clientType = typeof (Client);
+			PropertyInfo propertyInfo = clientType.GetProperty("Email");
+
+			IValidator[] validators = registry.GetValidators(new ValidatorRunner(registry), clientType, propertyInfo, RunWhen.Everytime);
+
+			Assert.IsNotNull(validators);
+			Assert.AreEqual(2, validators.Length);
+			Assert.AreEqual("EmailValidator", validators[0].GetType().Name);
+			Assert.AreEqual("GroupNotEmptyValidator", validators[1].GetType().Name);
 		}
 
 		[Test]

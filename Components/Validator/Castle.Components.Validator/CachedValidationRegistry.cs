@@ -26,8 +26,8 @@ namespace Castle.Components.Validator
 	/// </summary>
 	public class CachedValidationRegistry : IValidatorRegistry
 	{
-		private static ResourceManager defaultResourceManager;
-		private ResourceManager resourceManager;
+		private static readonly ResourceManager defaultResourceManager;
+		private readonly ResourceManager resourceManager;
 
 		private readonly IDictionary propertiesPerType = Hashtable.Synchronized(new Hashtable());
 		private readonly IDictionary attrsPerProperty = Hashtable.Synchronized(new Hashtable());
@@ -110,6 +110,11 @@ namespace Castle.Components.Validator
 			if (builders == null)
 			{
 				builders = property.GetCustomAttributes(typeof (IValidatorBuilder), true);
+
+				// Attribute order cannot be guaranted in C#
+				// this way we assure there order by Type Name
+				Array.Sort(builders, new TypeNameComparer());
+				
 				attrsPerProperty[property] = builders;
 
 				foreach (IValidatorBuilder builder in builders)
@@ -189,6 +194,26 @@ namespace Castle.Components.Validator
 			if (validator.RunWhen == RunWhen.Everytime) return true;
 
 			return ((validator.RunWhen & when) != 0);
+		}
+	}
+
+	/// <summary>
+	/// Compares to objects by type name.
+	/// </summary>
+	internal class TypeNameComparer : IComparer
+	{
+		/// <summary>
+		/// Compares two objects by type name and returns a value indicating whether one is less than, equal to, or greater than the other.
+		/// </summary>
+		/// <param name="x">The first object to compare.</param>
+		/// <param name="y">The second object to compare.</param>
+		/// <returns>
+		/// Value Condition Less than zero <paramref name="x"/> is less than <paramref name="y"/>. Zero <paramref name="x"/> equals <paramref name="y"/>. Greater than zero <paramref name="x"/> is greater than <paramref name="y"/>.
+		/// </returns>
+		/// <exception cref="T:System.ArgumentException">Neither <paramref name="x"/> nor <paramref name="y"/> implements the <see cref="T:System.IComparable"/> interface.-or- <paramref name="x"/> and <paramref name="y"/> are of different types and neither one can handle comparisons with the other. </exception>
+		public int Compare(object x, object y)
+		{
+			return x.GetType().Name.CompareTo(y.GetType().Name);
 		}
 	}
 }
