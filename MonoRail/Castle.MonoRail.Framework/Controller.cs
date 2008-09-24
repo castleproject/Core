@@ -779,7 +779,7 @@ namespace Castle.MonoRail.Framework
 			filterFactory = engineContext.Services.FilterFactory; // should not be null
 			viewEngineManager = engineContext.Services.ViewEngineManager; // should not be null
 			actionSelector = engineContext.Services.ActionSelector; // should not be null
-			scaffoldSupport = engineContext.Services.ScaffoldSupport; // might be null
+			scaffoldSupport = engineContext.Services.ScaffoldingSupport; // might be null
 			dynamicActionProviderFactory = engineContext.Services.DynamicActionProviderFactory; // should not be null
 		}
 

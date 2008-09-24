@@ -226,6 +226,7 @@
     <Compile Include="Routing\RoutingEngineTestCase.cs" />
     <Compile Include="Services\ControllerTreeTestCase.cs" />
     <Compile Include="Services\DefaultControllerFactoryTestCase.cs" />
+    <Compile Include="Services\DefaultMonoRailContainerTestCase.cs" />
     <Compile Include="Services\DefaultUrlBuilderRouteIntegrationTestCase.cs" />
     <Compile Include="Services\DefaultUrlBuilderTestCase.cs">
       <SubType>Code</SubType>

@@ -183,7 +183,7 @@ namespace Castle.MonoRail.Framework.Container
 		private IViewEngineManager viewEngineManagerCached;
 		private IValidatorRegistry validatorRegistryCached;
 		private IActionSelector actionSelectorCached;
-		private IScaffoldingSupport scaffoldSupportCached;
+		private IScaffoldingSupport scaffoldingSupportCached;
 		private IJSONSerializer jsonSerializerCached;
 		private IStaticResourceRegistry staticResourceRegCached;
 		private IEmailTemplateService emailTemplateServiceCached;
@@ -192,8 +192,9 @@ namespace Castle.MonoRail.Framework.Container
 		private ITransformFilterFactory transformFilterFactoryCached;
 		private IHelperFactory helperFactoryCached;
 		private IServiceInitializer serviceInitializerCached;
-		private ExtensionManager extensionManager;
 		private IDynamicActionProviderFactory dynamicActionProviderFactoryCached;
+		private IAjaxProxyGenerator ajaxProxyGeneratorCached;
+		private ExtensionManager extensionManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultMonoRailContainer"/> class.
@@ -622,7 +623,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return urlTokenizerCached;
 			}
-			set { urlTokenizerCached = value; }
+			set
+			{
+				RemoveService(typeof(IUrlTokenizer));
+				AddService<IUrlTokenizer>(value);
+				urlTokenizerCached = value;
+			}
 		}
 
 		/// <summary>
@@ -639,7 +645,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return urlBuilderCached;
 			}
-			set { urlBuilderCached = value; }
+			set
+			{
+				RemoveService(typeof(IUrlBuilder));
+				AddService<IUrlBuilder>(value);
+				urlBuilderCached = value;
+			}
 		}
 
 		/// <summary>
@@ -656,7 +667,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return cacheProviderCached;
 			}
-			set { cacheProviderCached = value; }
+			set
+			{
+				RemoveService(typeof(ICacheProvider));
+				AddService<ICacheProvider>(value);
+				cacheProviderCached = value;
+			}
 		}
 
 		/// <summary>
@@ -673,7 +689,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return engContextFactoryCached;
 			}
-			set { engContextFactoryCached = value; }
+			set
+			{
+				RemoveService(typeof(IEngineContextFactory));
+				AddService<IEngineContextFactory>(value);
+				engContextFactoryCached = value;
+			}
 		}
 
 		/// <summary>
@@ -690,7 +711,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return controllerFactoryCached;
 			}
-			set { controllerFactoryCached = value; }
+			set
+			{
+				RemoveService(typeof(IControllerFactory));
+				AddService<IControllerFactory>(value);
+				controllerFactoryCached = value;
+			}
 		}
 
 		/// <summary>
@@ -707,7 +733,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return controllerContextFactoryCached;
 			}
-			set { controllerContextFactoryCached = value; }
+			set
+			{
+				RemoveService(typeof(IControllerContextFactory));
+				AddService<IControllerContextFactory>(value);
+				controllerContextFactoryCached = value;
+			}
 		}
 
 		/// <summary>
@@ -724,7 +755,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return controllerTreeCached;
 			}
-			set { controllerTreeCached = value; }
+			set
+			{
+				RemoveService(typeof(IControllerTree));
+				AddService<IControllerTree>(value);
+				controllerTreeCached = value;
+			}
 		}
 
 		/// <summary>
@@ -741,7 +777,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return viewSourceLoaderCached;
 			}
-			set { viewSourceLoaderCached = value; }
+			set
+			{
+				RemoveService(typeof(IViewSourceLoader));
+				AddService<IViewSourceLoader>(value);
+				viewSourceLoaderCached = value;
+			}
 		}
 
 		/// <summary>
@@ -758,7 +799,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return filterFactoryCached;
 			}
-			set { filterFactoryCached = value; }
+			set
+			{
+				RemoveService(typeof(IFilterFactory));
+				AddService<IFilterFactory>(value);
+				filterFactoryCached = value;
+			}
 		}
 
 		/// <summary>
@@ -775,7 +821,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return controllerDescriptorProviderCached;
 			}
-			set { controllerDescriptorProviderCached = value; }
+			set
+			{
+				RemoveService(typeof(IControllerDescriptorProvider));
+				AddService<IControllerDescriptorProvider>(value);
+				controllerDescriptorProviderCached = value;
+			}
 		}
 
 		/// <summary>
@@ -792,7 +843,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return viewEngineManagerCached;
 			}
-			set { viewEngineManagerCached = value; }
+			set
+			{
+				RemoveService(typeof(IViewEngineManager));
+				AddService<IViewEngineManager>(value);
+				viewEngineManagerCached = value;
+			}
 		}
 
 		/// <summary>
@@ -809,7 +865,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return validatorRegistryCached;
 			}
-			set { validatorRegistryCached = value; }
+			set
+			{
+				RemoveService(typeof(IValidatorRegistry));
+				AddService<IValidatorRegistry>(value);
+				validatorRegistryCached = value;
+			}
 		}
 
 		/// <summary>
@@ -826,24 +887,34 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return actionSelectorCached;
 			}
-			set { actionSelectorCached = value; }
+			set
+			{
+				RemoveService(typeof(IActionSelector));
+				AddService<IActionSelector>(value);
+				actionSelectorCached = value;
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the scaffold support.
 		/// </summary>
 		/// <value>The scaffold support.</value>
-		public IScaffoldingSupport ScaffoldSupport
+		public IScaffoldingSupport ScaffoldingSupport
 		{
 			get
 			{
-				if (scaffoldSupportCached == null)
+				if (scaffoldingSupportCached == null)
 				{
-					scaffoldSupportCached = GetService<IScaffoldingSupport>();
+					scaffoldingSupportCached = GetService<IScaffoldingSupport>();
 				}
-				return scaffoldSupportCached;
+				return scaffoldingSupportCached;
 			}
-			set { scaffoldSupportCached = value; }
+			set
+			{
+				RemoveService(typeof(IScaffoldingSupport));
+				AddService<IScaffoldingSupport>(value); 
+				scaffoldingSupportCached = value;
+			}
 		}
 
 		/// <summary>
@@ -860,7 +931,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return jsonSerializerCached;
 			}
-			set { jsonSerializerCached = value; }
+			set
+			{
+				RemoveService(typeof(IJSONSerializer));
+				AddService<IJSONSerializer>(value);
+				jsonSerializerCached = value;
+			}
 		}
 
 		/// <summary>
@@ -877,7 +953,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return staticResourceRegCached;
 			}
-			set { staticResourceRegCached = value; }
+			set
+			{
+				RemoveService(typeof(IStaticResourceRegistry));
+				AddService<IStaticResourceRegistry>(value);
+				staticResourceRegCached = value;
+			}
 		}
 
 		/// <summary>
@@ -894,7 +975,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return emailTemplateServiceCached;
 			}
-			set { emailTemplateServiceCached = value; }
+			set
+			{
+				RemoveService(typeof(IEmailTemplateService));
+				AddService<IEmailTemplateService>(value);
+				emailTemplateServiceCached = value;
+			}
 		}
 
 		/// <summary>
@@ -911,17 +997,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return emailSenderCached;
 			}
-			set { emailSenderCached = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the extension manager.
-		/// </summary>
-		/// <value>The extension manager.</value>
-		public ExtensionManager ExtensionManager
-		{
-			get { return extensionManager; }
-			set { extensionManager = value; }
+			set
+			{
+				RemoveService(typeof(IEmailSender));
+				AddService<IEmailSender>(value);
+				emailSenderCached = value;
+			}
 		}
 
 		/// <summary>
@@ -938,7 +1019,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return resourceFactoryCached;
 			}
-			set { resourceFactoryCached = value; }
+			set
+			{
+				RemoveService(typeof(IResourceFactory));
+				AddService<IResourceFactory>(value);
+				resourceFactoryCached = value;
+			}
 		}
 
 		/// <summary>
@@ -955,7 +1041,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return transformFilterFactoryCached;
 			}
-			set { transformFilterFactoryCached = value; }
+			set
+			{
+				RemoveService(typeof(ITransformFilterFactory));
+				AddService<ITransformFilterFactory>(value);
+				transformFilterFactoryCached = value;
+			}
 		}
 
 		/// <summary>
@@ -972,7 +1063,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return serviceInitializerCached;
 			}
-			set { serviceInitializerCached = value; }
+			set
+			{
+				RemoveService(typeof(IServiceInitializer));
+				AddService<IServiceInitializer>(value);
+				serviceInitializerCached = value;
+			}
 		}
 
 		/// <summary>
@@ -989,7 +1085,12 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return helperFactoryCached;
 			}
-			set { helperFactoryCached = value; }
+			set
+			{
+				RemoveService(typeof(IHelperFactory));
+				AddService<IHelperFactory>(value);
+				helperFactoryCached = value;
+			}
 		}
 
 		/// <summary>
@@ -1006,10 +1107,45 @@ namespace Castle.MonoRail.Framework.Container
 				}
 				return dynamicActionProviderFactoryCached;
 			}
-			set { dynamicActionProviderFactoryCached = value; }
+			set
+			{
+				RemoveService(typeof(IDynamicActionProviderFactory));
+				AddService<IDynamicActionProviderFactory>(value);
+				dynamicActionProviderFactoryCached = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the ajax proxy generator.
+		/// </summary>
+		/// <value>The ajax proxy generator.</value>
+		public IAjaxProxyGenerator AjaxProxyGenerator
+		{
+			get {
+				if (ajaxProxyGeneratorCached == null) {
+					ajaxProxyGeneratorCached = GetService<IAjaxProxyGenerator>();
+				}
+				return ajaxProxyGeneratorCached;
+			}
+			set
+			{
+				RemoveService(typeof(IAjaxProxyGenerator));
+				AddService<IAjaxProxyGenerator>(value);
+				ajaxProxyGeneratorCached = value;
+			}
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Gets or sets the extension manager.
+		/// </summary>
+		/// <value>The extension manager.</value>
+		public ExtensionManager ExtensionManager
+		{
+			get { return extensionManager; }
+			set { extensionManager = value; }
+		}
 
 		private void RegisterServiceOverrideFromConfigurationNode(IConfiguration serviceConfig)
 		{

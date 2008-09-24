@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework
 	using Castle.Core;
 	using Castle.MonoRail.Framework.Services;
 	using Resources;
+	using Services.AjaxProxyGenerator;
 
 	/// <summary>
 	/// Pendent
@@ -107,7 +108,7 @@ namespace Castle.MonoRail.Framework
 		/// Gets or sets the scaffold support.
 		/// </summary>
 		/// <value>The scaffold support.</value>
-		IScaffoldingSupport ScaffoldSupport { get; set; }
+		IScaffoldingSupport ScaffoldingSupport { get; set; }
 
 		/// <summary>
 		/// Gets or sets the JSON serializer.
@@ -169,5 +170,10 @@ namespace Castle.MonoRail.Framework
 		/// <value>The dynamic action provider factory.</value>
 		IDynamicActionProviderFactory DynamicActionProviderFactory { get; set; }
 
+		/// <summary>
+		/// Gets or sets the ajax proxy generator.
+		/// </summary>
+		/// <value>The ajax proxy generator.</value>
+		IAjaxProxyGenerator AjaxProxyGenerator { get; set; }
 	}
 }

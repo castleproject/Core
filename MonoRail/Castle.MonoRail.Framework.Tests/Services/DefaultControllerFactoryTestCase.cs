@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Tests.Services
 {
-	using System;
 	using System.Reflection;
 	using Castle.MonoRail.Framework.Services;
 	using NUnit.Framework;

@@ -22,6 +22,7 @@ namespace Castle.MonoRail.Framework.Test
 	using Providers;
 	using Resources;
 	using Services;
+	using Services.AjaxProxyGenerator;
 
 	/// <summary>
 	/// Pendent
@@ -41,7 +42,7 @@ namespace Castle.MonoRail.Framework.Test
 		private IViewEngineManager viewEngineManager;
 		private IValidatorRegistry validatorRegistry;
 		private IActionSelector actionSelector;
-		private IScaffoldingSupport scaffoldSupport;
+		private IScaffoldingSupport scaffoldingSupport;
 		private IJSONSerializer jsonSerializer;
 		private IStaticResourceRegistry staticResourceRegistry;
 		private IEmailTemplateService emailTemplateService;
@@ -53,6 +54,7 @@ namespace Castle.MonoRail.Framework.Test
 		private IServiceInitializer serviceInitializer;
 		private IHelperFactory helperFactory;
 		private IDynamicActionProviderFactory dynamicActionProviderFactory;
+		private IAjaxProxyGenerator ajaxProxyGenerator;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StubMonoRailServices"/> class with default mock services.
@@ -98,7 +100,7 @@ namespace Castle.MonoRail.Framework.Test
 				new DefaultDynamicActionProviderDescriptorProvider());
 
 			resourceFactory = new DefaultResourceFactory();
-			scaffoldSupport = new StubScaffoldingSupport();
+			scaffoldingSupport = new StubScaffoldingSupport();
 			cacheProvider = new StubCacheProvider();
 			helperFactory = new DefaultHelperFactory();
 			serviceInitializer = new DefaultServiceInitializer();
@@ -276,6 +278,16 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		/// <summary>
+		/// Gets or sets the ajax proxy generator.
+		/// </summary>
+		/// <value>The ajax proxy generator.</value>
+		public IAjaxProxyGenerator AjaxProxyGenerator
+		{
+			get { return ajaxProxyGenerator; }
+			set { ajaxProxyGenerator = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets the controller descriptor provider.
 		/// </summary>
 		/// <value>The controller descriptor provider.</value>
@@ -319,10 +331,10 @@ namespace Castle.MonoRail.Framework.Test
 		/// Gets or sets the scaffold support.
 		/// </summary>
 		/// <value>The scaffold support.</value>
-		public IScaffoldingSupport ScaffoldSupport
+		public IScaffoldingSupport ScaffoldingSupport
 		{
-			get { return scaffoldSupport; }
-			set { scaffoldSupport = value; }
+			get { return scaffoldingSupport; }
+			set { scaffoldingSupport = value; }
 		}
 
 		/// <summary>

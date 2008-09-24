@@ -25,12 +25,12 @@ namespace Castle.MonoRail.Framework.Container
 	public abstract class AbstractServiceContainer : IServiceContainer
 	{
 		private IServiceProvider parent;
-		private IDictionary type2Service;
+		private readonly IDictionary type2Service;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AbstractServiceContainer"/> class.
 		/// </summary>
-		public AbstractServiceContainer()
+		protected AbstractServiceContainer()
 		{
 			type2Service = new HybridDictionary();
 		}
@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework.Container
 		/// Initializes a new instance of the <see cref="AbstractServiceContainer"/> class.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
-		public AbstractServiceContainer(IServiceProvider parent) : this()
+		protected AbstractServiceContainer(IServiceProvider parent) : this()
 		{
 			this.parent = parent;
 		}
