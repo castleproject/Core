@@ -353,19 +353,19 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				rootInstance = ControllerContext.PropertyBag[target];
 			}
-			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Flash) && Context.Flash != null)
+			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Flash) && Context != null && Context.Flash != null)
 			{
 				rootInstance = Context.Flash[target];
 			}
-			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Session) && Context.Session != null)
+			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Session) && Context != null && Context.Session != null)
 			{
 				rootInstance = Context.Session[target];
 			}
-			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Params))
+			if (rootInstance == null &&  Context != null && (context == RequestContext.All || context == RequestContext.Params))
 			{
 				rootInstance = Context.Request.Params[target];
 			}
-			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Request))
+			if (rootInstance == null && Context != null && (context == RequestContext.All || context == RequestContext.Request))
 			{
 				rootInstance = Context.Items[target];
 			}
