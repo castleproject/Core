@@ -14,7 +14,9 @@
 
 namespace Castle.MonoRail.Framework.Tests.Services
 {
+	using ActiveRecordSupport;
 	using Castle.MonoRail.Framework.Services.AjaxProxyGenerator;
+	using JSON;
 	using NUnit.Framework;
 	using Test;
 
@@ -49,8 +51,8 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		{
 			string js = generator.GenerateJSProxy(engineContext, "proxyName", "area", "controller1");
 
-			Assert.AreEqual("<script type=\"text/javascript\">\r\n" +
-				"var proxyName =\r\n{};\r\n</script>", js);
+			Assert.AreEqual("\r\n<script type=\"text/javascript\">\r\n" +
+				"var proxyName =\r\n{\r\n};\r\n</script>\r\n", js);
 		}
 
 		[Test]
@@ -58,11 +60,10 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		{
 			string js = generator.GenerateJSProxy(engineContext, "proxyName", "", "controller2");
 
-			Assert.AreEqual("<script type=\"text/javascript\">\r\n" +
-				"var proxyName =\r\n{\r\n\t" + 
+			Assert.AreEqual("\r\n<script type=\"text/javascript\">\r\n" +
+				"var proxyName =\r\n{\r\n\t" +
 
-				"action1: function(callback)\r\n\t" + 
-				"{\r\n\t\t" +
+				"action1: function(callback)\r\n\t{\r\n\t\t" + 
 				"var r=new Ajax.Request('/controller2/Action1', " +
 				"{method: 'get', asynchronous: !!callback, onComplete: callback, parameters: '_='}); \r\n\t\t" +
 				"if(!callback) return r.transport.responseText;\r\n\t}\r\n,\r\n\t" +
@@ -70,27 +71,35 @@ namespace Castle.MonoRail.Framework.Tests.Services
 				"action2: function(name, age, callback)\r\n\t{\r\n\t\t" +
 				"var r=new Ajax.Request('/controller2/Action2', {method: 'post', asynchronous: !!callback, onComplete: callback, " +
 				"parameters: '_=&name='+name+'&age='+age+''}); \r\n\t\t" + 
-				"if(!callback) return r.transport.responseText;\r\n\t}\r\n" +
-				",\r\n" +
-				"\tactionReturnJSON: function(, callback)\r\n" +
-				"\t{\r\n" +
-				"\t\tvar r=new Ajax.Request('/controller2/ActionReturnJSON', {method: 'get', asynchronous: !!callback, onComplete: callback, parameters: '_=&='+Object.toJSON(test)+''}); \r\n" +
-				"\t\tif(!callback) return r.transport.responseText;\r\n" +
-				"\t}\r\n" +
-				"};\r\n" +
-				"</script>", js);
+				"if(!callback) return r.transport.responseText;\r\n\t}\r\n,\r\n\t" +
+
+				"actionWithARFetch: function(personId, age, callback)\r\n\t{\r\n\t\t" +
+				"var r=new Ajax.Request('/controller2/ActionWithARFetch', {method: 'post', asynchronous: !!callback, onComplete: callback, " +
+				"parameters: '_=&personId='+personId+'&age='+age+''}); \r\n\t\t" +
+				"if(!callback) return r.transport.responseText;\r\n\t}\r\n,\r\n\t" +
+
+				"actionReturnJSON: function(test, callback)\r\n\t{\r\n\t\t" +
+				"var r=new Ajax.Request('/controller2/ActionReturnJSON', {method: 'get', asynchronous: !!callback, onComplete: callback, parameters: '_=&test='+Object.toJSON(test)+''}); \r\n\t\t" +
+				"if(!callback) return r.transport.responseText;\r\n\t}\r\n,\r\n\t" +
+
+				"actionReturnJSONWithEntryKey: function(test, callback)\r\n\t{\r\n\t\t" +
+				"var r=new Ajax.Request('/controller2/ActionReturnJSONWithEntryKey', {method: 'get', asynchronous: !!callback, onComplete: callback, parameters: '_=&entryKey='+Object.toJSON(test)+''}); \r\n\t\t" +
+				"if(!callback) return r.transport.responseText;\r\n" +
+				"\t}\r\n};\r\n" +
+
+				"</script>\r\n", js);
 		}
 
 		#region Controllers
 
-		class NoAjaxController : Controller
+		internal class NoAjaxController : Controller
 		{
 			public void Index()
 			{
 			}
 		}
 
-		class AjaxController : Controller
+		internal class AjaxController : Controller
 		{
 			public void Index()
 			{
@@ -106,8 +115,17 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			{
 			}
 
+			[AjaxAction, AccessibleThrough(Verb.Post)]
+			public void ActionWithARFetch([ARFetch("personId")] Person person, int age)
+			{
+			}
+
 			[AjaxAction]
 			public void ActionReturnJSON([JSONBinder]string test) {
+			}
+
+			[AjaxAction]
+			public void ActionReturnJSONWithEntryKey([JSONBinder("entryKey")]string test) {
 			}
 
 		}

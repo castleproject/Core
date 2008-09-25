@@ -1,6 +1,11 @@
 1.0
 ===
 
+- Fixed missing parameter in function definition for JSON bound parameters.
+- JSONBinder EntryKey is now respected as a serverside parameter name when specified in the attribute.
+- Added JQuery proxy generator.
+- Refactored the proxy generator to an abstract class making it easier for clients to plugin.
+
 - The path supplied in <path location="" /> is now relative to the site root.
   ASPView engine supports loading and recompiling views from different view locations	
 

@@ -130,6 +130,10 @@
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core-vs2008</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Castle.MonoRail.ActiveRecordSupport\Castle.MonoRail.ActiveRecordSupport-vs2008.csproj">
+      <Project>{2409063E-BE05-4596-A677-758096D1C759}</Project>
+      <Name>Castle.MonoRail.ActiveRecordSupport-vs2008</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2008.csproj">
       <Name>Castle.MonoRail.Framework-vs2008</Name>
       <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
@@ -225,6 +229,7 @@
     <Compile Include="Routing\RoutingEngineCreateUrlTestCase.cs" />
     <Compile Include="Routing\RoutingEngineTestCase.cs" />
     <Compile Include="Services\ControllerTreeTestCase.cs" />
+    <Compile Include="Services\JQueryAjaxProxyGeneratorTestCase.cs" />
     <Compile Include="Services\DefaultControllerFactoryTestCase.cs" />
     <Compile Include="Services\DefaultMonoRailContainerTestCase.cs" />
     <Compile Include="Services\DefaultUrlBuilderRouteIntegrationTestCase.cs" />
