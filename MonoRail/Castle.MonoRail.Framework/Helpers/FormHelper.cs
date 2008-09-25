@@ -1557,12 +1557,32 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			string computedTarget = target;
 
-			if (suffix != null && suffix != String.Empty)
+			if (!string.IsNullOrEmpty(suffix))
 			{
 				computedTarget += "." + suffix;
 			}
 
 			return CreateInputElement("checkbox", elementId, computedTarget, item.Value, attributes);
+		}
+
+		/// <summary>
+		/// Outputs a hidden element with an index (for internal use)
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="suffix"></param>
+		/// <param name="item"></param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
+		internal string HiddenFieldItem(int index, string target, string suffix, SetItem item, IDictionary attributes)
+		{
+			target = String.Format("{0}[{1}]", target, index);
+
+			string elementId = CreateHtmlId(attributes, target, true);
+
+			string computedTarget = target;
+
+			return CreateInputElement("hidden", elementId, computedTarget, item.Value, attributes);
 		}
 
 		/// <summary>
@@ -1657,6 +1677,43 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 
 				return helper.CheckboxItem(index, target, operationState.TargetSuffix, CurrentSetItem, attributes);
+			}
+
+			/// <summary>
+			/// Outputs the Hidden field for list databinding based on the Set. 
+			/// <seealso cref="FormHelper.CreateCheckboxList(string,IEnumerable,IDictionary)"/>
+			/// </summary>
+			/// <returns>The generated input element</returns>
+			public string ItemAsHiddenField()
+			{
+				return ItemAsHiddenField(null);
+			}
+
+			/// <summary>
+			/// Outputs the Hidden field for list databinding based on the Set. 
+			/// <seealso cref="FormHelper.CreateCheckboxList(string,IEnumerable,IDictionary)"/>
+			/// </summary>
+			/// <param name="id">The element id</param>
+			/// <returns>The generated input element</returns>
+			public string ItemAsHiddenField(string id)
+			{
+				if (!hasMovedNext)
+				{
+					throw new InvalidOperationException("Before rendering a checkbox item, you must use MoveNext");
+				}
+
+				if (!hasItem)
+				{
+					// Nothing to render
+					return String.Empty;
+				}
+
+				if (id != null)
+				{
+					attributes["id"] = id;
+				}
+
+				return helper.HiddenFieldItem(index, target, operationState.TargetSuffix, CurrentSetItem, attributes);
 			}
 
 			/// <summary>

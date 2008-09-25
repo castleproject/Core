@@ -377,5 +377,27 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				Assert.AreEqual("Item " + item, labelContentMatch.Groups["value"].Value);
 			}
 		}
+
+		/// <summary>
+		/// Tests the subscription.Months2 as non null and using a <c>Month</c> array as data source
+		/// </summary>
+		[Test]
+		public void CheckboxFieldListWithHiddenField() {
+			subscription.Months2 = new Month[] { new Month(3, "March") };
+
+			FormHelper.CheckboxList list =
+				helper.CreateCheckboxList("subscription.Months2", months, DictHelper.Create("value=id"));
+
+			Assert.IsNotNull(list);
+
+			int index = 0;
+
+			foreach (Month item in list) {
+				String content = list.ItemAsHiddenField();
+				Assert.AreEqual("<input type=\"hidden\" id=\"subscription_Months2_" + index +
+					"_\" name=\"subscription.Months2[" + index + "]\" value=\"" + item.Id + "\" />", content);
+				index++;
+			}
+		}
 	}
 }
