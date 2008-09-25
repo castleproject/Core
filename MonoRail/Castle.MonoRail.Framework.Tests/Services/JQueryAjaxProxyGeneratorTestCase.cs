@@ -28,9 +28,9 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		[SetUp]
 		public void Init()
 		{
-			var request = new StubRequest();
+			StubRequest request = new StubRequest();
 			response = new StubResponse();
-			var services = new StubMonoRailServices();
+			StubMonoRailServices services = new StubMonoRailServices();
 			engStubViewEngineManager = new StubViewEngineManager();
 			services.ViewEngineManager = engStubViewEngineManager;
 			engineContext = new StubEngineContext(request, response, services, new UrlInfo("area", "controller", "action"));
