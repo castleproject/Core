@@ -16,8 +16,6 @@ namespace Castle.MonoRail.Views.Brail
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Generic;
-
 	using Boo.Lang;
 
 	public class IgnoreNull : IQuackFu
@@ -67,7 +65,7 @@ namespace Castle.MonoRail.Views.Brail
 			else
 			{
 				ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.SetSlice(target, name,
-				                                                                         GetParameterArray(parameters, obj));
+																						 GetParameterArray(parameters, obj));
 			}
 			return this;
 		}
@@ -91,7 +89,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		private static object[] GetParameterArray(object[] parameters, object obj)
 		{
-			List<object> args = new List<object>(parameters);
+			System.Collections.Generic.List<object> args = new System.Collections.Generic.List<object>(parameters);
 			args.Add(obj);
 			return args.ToArray();
 		}

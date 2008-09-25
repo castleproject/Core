@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Views.Brail
 {
 	using System.Collections;
-	using System.Collections.Generic;
 	using System.IO;
 	using Boo.Lang;
 
@@ -61,7 +60,7 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			Output.Write("<{0}", tag);
 
-			List<string> attributeValues = new List<string>();
+			System.Collections.Generic.List<string> attributeValues = new System.Collections.Generic.List<string>();
 
 			if (null != attributes)
 			{
