@@ -28,10 +28,10 @@ namespace Castle.MonoRail.Framework.JSGeneration
 	/// </summary>
 	public class JSCodeGenerator : IJSCodeGenerator
 	{
-		private Dictionary<string, object> extensions =
+		private readonly Dictionary<string, object> extensions =
 			new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
-		private StringBuilder lines = new StringBuilder();
+		private readonly StringBuilder lines = new StringBuilder();
 		private IJSGenerator generator;
 		private IServerUtility serverUtility;
 		private IViewEngineManager viewEngineManager;
@@ -187,7 +187,7 @@ namespace Castle.MonoRail.Framework.JSGeneration
 				throw new ArgumentNullException("renderOptions",
 				                                "renderOptions cannot be null. Must be a string or a dictionary");
 			}
-			else if (renderOptions is IDictionary)
+			if (renderOptions is IDictionary)
 			{
 				IDictionary options = (IDictionary) renderOptions;
 

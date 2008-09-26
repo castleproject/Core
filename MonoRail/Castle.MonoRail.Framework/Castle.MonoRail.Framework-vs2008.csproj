@@ -593,6 +593,8 @@
     <Compile Include="JSGeneration\IJSGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="JSGeneration\jQuery\JQueryElementGenerator.cs" />
+    <Compile Include="JSGeneration\jQuery\JQueryGenerator.cs" />
     <Compile Include="JSGeneration\JSCodeGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1037,7 +1039,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="JSGeneration\jQuery\" />
     <Folder Include="Views\Aspx\ControllerBinder\Design\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
