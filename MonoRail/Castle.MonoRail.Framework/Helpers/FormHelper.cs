@@ -2005,6 +2005,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			target = RewriteTargetIfWithinObjectScope(target);
 
+			ApplyValidation(InputElementType.Radio, target, ref attributes);
+
 			object value = ObtainValue(target, attributes);
 
 			bool isChecked = AreEqual(valueToSend, value);
