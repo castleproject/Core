@@ -178,8 +178,8 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{myg
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
-jQuery.validator.addMethod('mygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
-jQuery.validator.addMethod('mygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
+jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
+jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
 jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>
 </form>",
@@ -254,8 +254,8 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{myg
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
-jQuery.validator.addMethod('mygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
-jQuery.validator.addMethod('mygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
+jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
+jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
 jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>
 </form>"
@@ -291,8 +291,8 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{myg
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
-jQuery.validator.addMethod('mygroup1',  function() { if($(""#model_groupvalue1"").val()!='' || $(""#model_groupvalue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
-jQuery.validator.addMethod('mygroup2',  function() { if($(""#model_groupvalue3"").val()!='' || $(""#model_groupvalue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
+jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_groupvalue1"").val()!='' || $(""#model_groupvalue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
+jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_groupvalue3"").val()!='' || $(""#model_groupvalue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
 jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>
 </form>"
@@ -325,8 +325,8 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{myg
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
-jQuery.validator.addMethod('mygroup1',  function() { if($(""#model_groupvalue1"").val()!='' || $(""#model_groupvalue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
-jQuery.validator.addMethod('mygroup2',  function() { if($(""#model_groupvalue3"").val()!='' || $(""#model_groupvalue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
+jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_groupvalue1"").val()!='' || $(""#model_groupvalue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
+jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_groupvalue3"").val()!='' || $(""#model_groupvalue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
 jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>
 </form>"
@@ -377,8 +377,8 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
-jQuery.validator.addMethod('mygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
-jQuery.validator.addMethod('mygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
+jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
+jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
 jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>
 </form>",

@@ -272,7 +272,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				foreach(KeyValuePair<string, Group> pair in _groups)
 				{
 					Group group = pair.Value;
-					AddCustomRule(group.GroupName, group.ViolationMessage, group.GetCustomRuleFunction());
+					AddCustomRule(string.Format("required{0}", group.GroupName), group.ViolationMessage, group.GetCustomRuleFunction());
 				}
 			}
 
