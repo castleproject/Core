@@ -95,12 +95,15 @@ namespace Castle.MonoRail.Views.AspView
 			{
 				// invalidate compiled views cache on any change to the view sources
 				ViewSourceLoader.ViewChanged += delegate(object sender, FileSystemEventArgs e)
-				{
-					if (e.Name.EndsWith(".aspx", StringComparison.InvariantCultureIgnoreCase))
-					{
-						needsRecompiling = true;
-					}
-				};
+												{
+													foreach(string extension in AbstractCompiler.TemplateExtensions)
+													{
+														if (e.Name.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase))
+														{
+															needsRecompiling = true;
+														}
+													}
+												};
 			}
 		}
 		#endregion
