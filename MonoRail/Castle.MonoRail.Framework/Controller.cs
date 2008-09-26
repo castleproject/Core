@@ -2066,7 +2066,7 @@ namespace Castle.MonoRail.Framework
 			{
 				if (logger.IsErrorEnabled)
 				{
-					logger.ErrorFormat("Error processing filter " + desc.FilterType.FullName, ex);
+					logger.Error("Error processing filter " + desc.FilterType.FullName, ex);
 				}
 
 				throw;
@@ -2218,7 +2218,7 @@ namespace Castle.MonoRail.Framework
 
 					if (logger.IsFatalEnabled)
 					{
-						logger.FatalFormat("Failed to process rescue view. View name " +
+						logger.Fatal("Failed to process rescue view. View name " +
 						                   context.SelectedViewName, exception);
 					}
 				}
