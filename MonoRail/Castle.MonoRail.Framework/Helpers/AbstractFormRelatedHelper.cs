@@ -169,10 +169,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				return target;
 			}
-			else
-			{
-				return ((FormScopeInfo) objectStack.Peek()).RootTarget + "." + target;
-			}
+			return ((FormScopeInfo) objectStack.Peek()).RootTarget + "." + target;
 		}
 
 		/// <summary>

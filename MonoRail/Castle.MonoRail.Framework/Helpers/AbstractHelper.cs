@@ -228,7 +228,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <see cref="string.Empty"/> only attribute name is appended to the string.
 		/// </para>
 		/// </remarks>
-		protected string GetAttributes(IDictionary attributes)
+		protected static string GetAttributes(IDictionary attributes)
 		{
 			if (attributes == null || attributes.Count == 0) return string.Empty;
 

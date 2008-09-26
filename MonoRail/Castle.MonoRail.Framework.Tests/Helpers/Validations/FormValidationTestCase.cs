@@ -165,6 +165,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		private int forthValue;
 		private string groupValue1;
 		private string groupValue2;
+		private string regExEmailField;
 
 		[ValidateNonEmpty]
 		public Country Country
@@ -206,6 +207,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		{
 			get { return confirmedEmailField; }
 			set { confirmedEmailField = value; }
+		}
+
+		[ValidateRegExp(@"[\w-]+@([\w-]+\.)+[\w-]+")]
+		public string RegExEmailField
+		{
+			get { return regExEmailField; }
+			set { regExEmailField = value; }
 		}
 
 		[ValidateNotSameAs("EmailField")]

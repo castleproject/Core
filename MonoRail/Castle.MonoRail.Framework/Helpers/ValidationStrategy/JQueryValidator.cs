@@ -379,6 +379,8 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				              "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }");
 				AddCustomRule("lesserThan", "Must be lesser than {0}.",
 				              "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }");
+				AddCustomRule("regExp", "Must match expression.", 
+								"function(value, element, param) { return new RegExp(param).text(value); }"); 		
 			}
 
 			private static void AddParameterToOptions(IDictionary parameters, IDictionary options, string parameterName,
@@ -682,6 +684,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetRegExp(string target, string regExp, string violationMessage)
 			{
+				ConfigureTarget(target, "regExp", regExp, violationMessage);
 			}
 
 			/// <summary>
@@ -877,12 +880,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			public void SetAsGreaterThan(string target, string comparisonFieldName, IsGreaterValidationType validationType,
 			                             string violationMessage)
 			{
-				if (validationType == IsGreaterValidationType.Decimal || validationType == IsGreaterValidationType.Integer)
-				{
-					string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
+				if (validationType != IsGreaterValidationType.Decimal && validationType != IsGreaterValidationType.Integer)
+					return;
 
-					ConfigureTarget(target, "greaterThan", String.Format("\"{0}\"", prefixedComparisonFieldName), violationMessage);
-				}
+				string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
+				ConfigureTarget(target, "greaterThan", String.Format("\"{0}\"", prefixedComparisonFieldName), violationMessage);
 			}
 
 			/// <summary>
@@ -896,12 +898,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			public void SetAsLesserThan(string target, string comparisonFieldName, IsLesserValidationType validationType,
 			                            string violationMessage)
 			{
-				if (validationType == IsLesserValidationType.Decimal || validationType == IsLesserValidationType.Integer)
-				{
-					string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
+				if (validationType != IsLesserValidationType.Decimal && validationType != IsLesserValidationType.Integer)
+					return;
 
-					ConfigureTarget(target, "lesserThan", String.Format("\"{0}\"", prefixedComparisonFieldName), violationMessage);
-				}
+				string prefixedComparisonFieldName = GetPrefixJQuerySelector(GetPrefixedFieldld(target, comparisonFieldName));
+				ConfigureTarget(target, "lesserThan", String.Format("\"{0}\"", prefixedComparisonFieldName), violationMessage);
 			}
 
 			/// <summary>
