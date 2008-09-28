@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Views.Brail
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Text.RegularExpressions;
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.IO;
 	using Boo.Lang.Compiler.Steps;
@@ -29,6 +30,8 @@ namespace Castle.MonoRail.Views.Brail
 		private readonly static IDictionary separators = CreateSeparators();
 		private readonly BooViewEngine booViewEngine;
 		private readonly IDictionary inputToCode = new Hashtable();
+		private static readonly Regex escapeParemetersStartingWithQuestionMarkRegEx
+			= new Regex(@"(?<!<)\?([_\w][_\w\d]*)", RegexOptions.Compiled);
 
 		public BrailPreProcessor(BooViewEngine booViewEngine)
 		{
@@ -53,8 +56,6 @@ namespace Castle.MonoRail.Views.Brail
 			ArrayList processed = new ArrayList();
 			foreach(ICompilerInput input in Parameters.Input)
 			{
-				//if input.Name.Contains("empty"):
-				//	System.Diagnostics.Debugger.Break()
 				using(TextReader reader = input.Open())
 				{
 					string code = reader.ReadToEnd();
@@ -92,10 +93,9 @@ namespace Castle.MonoRail.Views.Brail
 			StringWriter buffer = new StringWriter();
 			int index = 0;
 			int lastIndex = 0;
-			string start, end;
 			DictionaryEntry seperators = GetSeperators(code);
-			start = seperators.Key.ToString();
-			end = seperators.Value.ToString();
+			string start = seperators.Key.ToString();
+			string end = seperators.Value.ToString();
 
 			while(index != -1)
 			{
@@ -118,10 +118,14 @@ namespace Castle.MonoRail.Views.Brail
 					}
 					++lastIndexOffset;
 				}
-				buffer.WriteLine(code.Substring(startReading, lastIndex - startReading));
+				string line = code.Substring(startReading, lastIndex - startReading);
+				line = EscapeParemetersStartingWithQuestionMark(line);
+				buffer.WriteLine(line);
 				lastIndex += lastIndexOffset;
 			}
-			Output(buffer, code.Substring(lastIndex));
+			string endingLine = code.Substring(lastIndex);
+			endingLine = EscapeParemetersStartingWithQuestionMark(endingLine);
+			Output(buffer, endingLine);
 			return buffer.ToString();
 		}
 
@@ -130,7 +134,7 @@ namespace Castle.MonoRail.Views.Brail
 			return code.Length > endIndex + 2 && code.Substring(endIndex + 1, 2) == "\r\n";
 		}
 
-		private static void Output(StringWriter buffer, string code)
+		private static void Output(TextWriter buffer, string code)
 		{
 			if (code.Length == 0)
 				return;
@@ -154,12 +158,17 @@ namespace Castle.MonoRail.Views.Brail
 			OutputText(buffer, remainingText);
 		}
 
-		private static void OutputText(StringWriter buffer, string code)
+		private static void OutputText(TextWriter buffer, string code)
 		{
 			code = EscapeInitialAndClosingDoubleQuotes(code);
 			buffer.Write("output \"\"\"");
 			buffer.Write(code);
 			buffer.WriteLine("\"\"\"");
+		}
+
+		private static string EscapeParemetersStartingWithQuestionMark(string code)
+		{
+			return escapeParemetersStartingWithQuestionMarkRegEx.Replace(code, "TryGetParameter('$1')");
 		}
 
 		private static void OutputExpression(TextWriter buffer, string code, bool shouldEscape)

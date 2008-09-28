@@ -8,11 +8,15 @@
 		TaskName="Boo.Microsoft.Build.Tasks.Booc"
 		AssemblyFile="Boo.Microsoft.Build.Tasks.dll"/>
 	
+	<UsingTask
+		TaskName="Boo.Microsoft.Build.Tasks.ExecBoo"
+		AssemblyFile="Boo.Microsoft.Build.Tasks.dll"/>
+	
 	<PropertyGroup>
-		<MSBuildAllProjects Condition="'$(BoocToolPath)' != ''">
-		$(MSBuildAllProjects);$(BoocToolPath)\Boo.Microsoft.Build.targets
+		<MSBuildAllProjects Condition="'$(BooBinPath)' != ''">
+		$(MSBuildAllProjects);$(BooBinPath)\Boo.Microsoft.Build.targets
 		</MSBuildAllProjects>
-		<MSBuildAllProjects Condition="'$(BoocToolPath)' == ''">
+		<MSBuildAllProjects Condition="'$(BooBinPath)' == ''">
 		$(MSBuildAllProjects);$(MSBuildBinPath)\Boo.Microsoft.Build.targets
 		</MSBuildAllProjects>
 		<DefaultLanguageSourceExtension>.boo</DefaultLanguageSourceExtension>
@@ -179,9 +183,7 @@
 		        @(ManifestNonResxWithNoCultureOnDisk);
 		        @(ReferencePath);
 		        @(CompiledLicenseFile)"
-		Outputs="@(DocFileItem);
-		         @(IntermediateAssembly);
-		         $(NonExistentFile)"
+		Outputs="@(IntermediateAssembly)"
 		DependsOnTargets="$(CoreCompileDependsOn)"
 	>
 		
@@ -206,6 +208,8 @@
 			EmitDebugInformation="$(DebugSymbols)"
 			DelaySign="$(DelaySign)"
 			NoStandardLib="$(NoStdLib)"
+			DefineSymbols="$(DefineConstants)"
+			GenerateFullPaths="$(GenerateFullPaths)"
 		/>
 		
 		<Copy

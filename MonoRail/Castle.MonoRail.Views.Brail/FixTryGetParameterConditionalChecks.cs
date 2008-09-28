@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
+	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.Ast;
 	using Boo.Lang.Compiler.Steps;
 
@@ -38,7 +39,7 @@ namespace Castle.MonoRail.Views.Brail
 				return;
 
 			if (IsTryGetParameterInvocation(node.Left) == false &&
-			    IsTryGetParameterInvocation(node.Right) == false)
+				IsTryGetParameterInvocation(node.Right) == false)
 				return;
 
 			MethodInvocationExpression mie = new MethodInvocationExpression();
@@ -68,25 +69,20 @@ namespace Castle.MonoRail.Views.Brail
 			if (IsTryGetParameterInvocation(condition) == false)
 				return condition;
 
-			string name = ((ReferenceExpression) condition).Name.Substring(1);
-			condition = new MethodInvocationExpression(
-				new MemberReferenceExpression(new SuperLiteralExpression(), "TryGetParameter"),
-				new StringLiteralExpression(name)
-				);
-
 			MemberReferenceExpression isNull =
 				new MemberReferenceExpression(condition, "_IsIgnoreNullReferencingNotNullObject_");
-
 			return isNull;
 		}
 
 		private static bool IsTryGetParameterInvocation(Expression condition)
 		{
-			ReferenceExpression expression = condition as ReferenceExpression;
+			MethodInvocationExpression mie = condition as MethodInvocationExpression;
+			if (mie == null)
+				return false;
+			ReferenceExpression expression = mie.Target as ReferenceExpression;
 			if (expression == null)
 				return false;
-
-			return expression.Name.StartsWith("?");
+			return expression.Name == "TryGetParameter";
 		}
 	}
 }

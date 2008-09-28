@@ -14,9 +14,11 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
+	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.Ast;
 	using Boo.Lang.Compiler.Steps;
 	using Boo.Lang.Compiler.TypeSystem;
+	using Boo.Lang.Parser;
 
 	///<summary>
 	/// Replace any uknown identifier with a call to GetParameter('unknown')
@@ -31,35 +33,48 @@ namespace Castle.MonoRail.Views.Brail
 
 		public override void OnReferenceExpression(ReferenceExpression node)
 		{
-			string nodeName = node.Name;
-			bool isTryGetValue = nodeName.StartsWith("?");
-			if (isTryGetValue)
-				nodeName = nodeName.Substring(1);
-			IEntity entity = NameResolutionService.Resolve(nodeName);
+			IEntity entity = NameResolutionService.Resolve(node.Name);
 			if (entity != null)
 			{
-				if (isTryGetValue == false)
-				{
-					base.OnReferenceExpression(node);
-					return;
-				}
-				node.Name = nodeName;
 				base.OnReferenceExpression(node);
-				Node parentNode = node.ParentNode;
-				MethodInvocationExpression mie = CodeBuilder.CreateMethodInvocation(
-					CodeBuilder.CreateSelfReference(_currentMethod.DeclaringType),
-					wrapNullValue);
-				mie.Arguments.Add(node.CloneNode());
-				parentNode.Replace(node, mie);
+				return;
 			}
-			else
+			MethodInvocationExpression mie = CodeBuilder.CreateMethodInvocation(
+				CodeBuilder.CreateSelfReference(_currentMethod.DeclaringType),
+				GetMethod(node.Name));
+			mie.Arguments.Add(GetNameLiteral(node.Name));
+			node.ParentNode.Replace(node, mie);
+		}
+
+		/// <summary>
+		/// This turn a call to TryGetParemeter('item') where item is a local variable
+		/// into a WrapIfNull(item) method call.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		public override void OnMethodInvocationExpression(MethodInvocationExpression node)
+		{
+			ReferenceExpression expression = node.Target as ReferenceExpression;
+			if (expression == null || expression.Name != "TryGetParameter")
 			{
-				MethodInvocationExpression mie = CodeBuilder.CreateMethodInvocation(
-					CodeBuilder.CreateSelfReference(_currentMethod.DeclaringType),
-					GetMethod(node.Name));
-				mie.Arguments.Add(GetNameLiteral(node.Name));
-				node.ParentNode.Replace(node, mie);
+				base.OnMethodInvocationExpression(node);
+				return;
 			}
+			string name = ((StringLiteralExpression)node.Arguments[0]).Value;
+			IEntity entity = NameResolutionService.Resolve(name);
+			if (entity == null)
+			{
+				base.OnMethodInvocationExpression(node);
+				return;
+			}
+			Node parentNode = node.ParentNode;
+			MethodInvocationExpression mie = CodeBuilder.CreateMethodInvocation(
+				CodeBuilder.CreateSelfReference(_currentMethod.DeclaringType),
+				wrapNullValue);
+
+			ReferenceExpression item = new ReferenceExpression(node.LexicalInfo, name);
+			Boo.Lang.Compiler.TypeSystem.TypeSystemServices.Bind(item, entity);
+			mie.Arguments.Add(item);
+			parentNode.Replace(node, mie);
 		}
 
 		protected override void InitializeMemberCache()

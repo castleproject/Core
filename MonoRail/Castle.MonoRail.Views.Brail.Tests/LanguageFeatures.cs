@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Views.Brail.Tests
 {
     using System;
+    using System.Reflection;
     using Castle.MonoRail.Views.Brail.TestSite.Controllers;
     using DynamicProxy;
     using NUnit.Framework;
@@ -32,7 +33,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
                 o.GetType().GetProperty("Text");
                 throw new InvalidOperationException("Should have gotten AmbiguousMatchException  here");
             }
-            catch
+            catch(AmbiguousMatchException)
             {
             }
             PropertyBag["src"] = o;
