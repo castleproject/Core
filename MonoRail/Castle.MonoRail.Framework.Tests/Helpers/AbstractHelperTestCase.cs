@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Collections.Generic;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Test;
 	using NUnit.Framework;
@@ -58,6 +59,15 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			string queryString = helper.BuildQueryString(parameters);
 
 			Assert.AreEqual("single=1&amp;multiple=2&amp;multiple=4&amp;multiple=99&amp;string=test", queryString);
+		}
+
+		[Test]
+		public void JavascriptAsGenericSortedListTestOptionsTest()
+		{
+			IDictionary<string, string> options = new SortedList<string, string>();
+			options.Add("key1","option1");
+			options.Add("key2","option2");
+			Assert.AreEqual("{key1:option1, key2:option2}",AbstractHelper.JavascriptOptions(options));
 		}
 
 		internal class DummyHelper : AbstractHelper

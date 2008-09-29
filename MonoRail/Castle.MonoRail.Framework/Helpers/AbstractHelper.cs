@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Text;
 	using Castle.MonoRail.Framework.Internal;
@@ -368,6 +369,19 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (string.IsNullOrEmpty(content)) return content;
 
 			return serverUtility.JavaScriptEscape(content);
+		}
+
+		/// <summary>
+		/// Builds a JS associative array based on the specified dictionary instance.
+		/// <para>
+		/// For example: <c>{name: value, other: 'another'}</c>
+		/// </para>
+		/// </summary>
+		/// <param name="jsOptions">The js options.</param>
+		/// <returns>An associative array in javascript</returns>
+		public static string JavascriptOptions(IDictionary<string, string> jsOptions)
+		{
+			return JavascriptOptions(jsOptions as IDictionary);
 		}
 
 		/// <summary>

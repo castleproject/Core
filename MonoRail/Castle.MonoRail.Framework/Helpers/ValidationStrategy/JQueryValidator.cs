@@ -80,13 +80,13 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			#region Instance Variables
 
-			private readonly Dictionary<String, CustomRule> _customRules = new Dictionary<String, CustomRule>();
-			private readonly Dictionary<string, string> _rules = new Dictionary<string, string>();
-			private readonly IDictionary _options = new Hashtable();
-			private readonly IDictionary _ajaxOptions = new Hashtable();
-			private readonly Dictionary<string, Group> _groups = new Dictionary<string, Group>();
-			private readonly IDictionary<string, IDictionary> _customClasses = new Dictionary<string, IDictionary>();
-			private readonly Dictionary<string, string> _messages = new Dictionary<string, string>();
+			private readonly IDictionary<string, CustomRule> _customRules = new SortedList<String, CustomRule>();
+			private readonly IDictionary<string, string> _rules = new SortedList<string, string>();
+			private readonly IDictionary _options = new SortedList();
+			private readonly IDictionary _ajaxOptions = new SortedList();
+			private readonly IDictionary<string, Group> _groups = new SortedList<string, Group>();
+			private readonly IDictionary<string, IDictionary> _customClasses = new SortedList<string, IDictionary>();
+			private readonly IDictionary<string, string> _messages = new SortedList<string, string>();
 
 			#endregion Instance Variables
 
