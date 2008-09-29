@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.Framework.JSGeneration.jQuery
 {
 	/// <summary>
-	/// JQuery element generator
+	/// Element generator for JQuery
 	/// </summary>
 	public class JQueryElementGenerator : IJSElementGenerator
 	{

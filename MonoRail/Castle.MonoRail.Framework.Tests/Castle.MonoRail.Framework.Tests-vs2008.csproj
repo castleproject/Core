@@ -202,6 +202,8 @@
     <Compile Include="Helpers\Validations\FormValidationTestCase.cs" />
     <Compile Include="Helpers\Validations\JQueryFormValidationTestCase.cs" />
     <Compile Include="JSGeneration\DynamicDispatcherTestCase.cs" />
+    <Compile Include="JSGeneration\JQueryElementGeneratorTestCase.cs" />
+    <Compile Include="JSGeneration\JQueryGeneratorTestCase.cs" />
     <Compile Include="JSGeneration\JSCodeGeneratorTestCase.cs" />
     <Compile Include="JSGeneration\JSGeneratorDispatcherBaseTestCase.cs" />
     <Compile Include="JSGeneration\PrototypeElementGeneratorTestCase.cs" />

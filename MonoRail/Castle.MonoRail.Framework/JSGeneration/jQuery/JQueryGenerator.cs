@@ -15,16 +15,12 @@
 namespace Castle.MonoRail.Framework.JSGeneration.jQuery
 {
 	using System;
-	using System.Collections.Generic;
-
+	using Helpers;
 	/// <summary>
-	/// JQuery JS generator
+	/// JQuery Generator implementation
 	/// </summary>
 	public class JQueryGenerator : AbstractJSGenerator
 	{
-		private static readonly IDictionary<string, string> positions =
-			new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JQueryGenerator"/> class.
 		/// </summary>
@@ -32,32 +28,6 @@ namespace Castle.MonoRail.Framework.JSGeneration.jQuery
 		public JQueryGenerator(IJSCodeGenerator codeGenerator)
 			: base(codeGenerator)
 		{
-			positions.Add("before", "before");
-			positions.Add("after", "after");
-			positions.Add("top", "prepend");
-			positions.Add("bottom", "append");
-			positions.Add("prepend", "prepend");
-			positions.Add("append", "append");
-		}
-
-		/// <summary>
-		/// Creates a generator for an element.
-		/// </summary>
-		/// <param name="root">The root expression.</param>
-		/// <returns></returns>
-		public override IJSElementGenerator CreateElementGenerator(string root)
-		{
-			return new JQueryElementGenerator(this, root);
-		}
-
-		/// <summary>
-		/// Pendent
-		/// </summary>
-		/// <param name="ids"></param>
-		public override void Hide(string[] ids)
-		{
-			SelectRelevantElements(ids);
-			CodeGenerator.Write(".hide();");
 		}
 
 		/// <summary>
@@ -67,19 +37,20 @@ namespace Castle.MonoRail.Framework.JSGeneration.jQuery
 		private void SelectRelevantElements(params string[] ids)
 		{
 			if (ids.Length == 0)
-			{
 				throw new InvalidOperationException("Must pass at least one id");
-			}
 
 			CodeGenerator.Write("jQuery(");
-			foreach(string id in ids)
-			{
-				CodeGenerator.Write("#" + id + ",");
-			}
-			CodeGenerator.RemoveTail();
+			CodeGenerator.Write(AbstractHelper.Quote(string.Join(",", ids)));
 			CodeGenerator.Write(")");
 		}
 
+		/// <summary>
+		/// Write a new line
+		/// </summary>
+		private void WriteNewLine()
+		{
+			CodeGenerator.Write("\r\n");
+		}
 		/// <summary>
 		/// Pendent
 		/// </summary>
@@ -88,25 +59,34 @@ namespace Castle.MonoRail.Framework.JSGeneration.jQuery
 		/// <param name="renderOptions"></param>
 		public override void InsertHtml(string position, string id, object renderOptions)
 		{
-			string realPosition;
-			if (positions.TryGetValue(position, out realPosition) == false)
+			Position pos = (Position)Enum.Parse(typeof(Position), position, true);
+			position = pos.ToString();
+			string selector = id;
+			object render = Render(renderOptions);
+			if (pos == Position.appendTo || pos == Position.prependTo)
 			{
-				throw new InvalidOperationException("Position " + position + " is invalid");
+				selector = render.ToString().Replace("\"", "");
+				render = AbstractHelper.Quote(id);
 			}
-			SelectRelevantElements(id);
-			CodeGenerator.Write(".");
-			CodeGenerator.Write(realPosition);
-			CodeGenerator.Write(");");
+			SelectRelevantElements(selector);
+
+			CodeGenerator.Write("." + position);
+			CodeGenerator.Write("(" + render + ");");
+			WriteNewLine();
 		}
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
-		/// <param name="ids"></param>
-		public override void Remove(string[] ids)
+		/// <param name="id"></param>
+		/// <param name="renderOptions"></param>
+		public override void ReplaceHtml(string id, object renderOptions)
 		{
-			SelectRelevantElements(ids);
-			CodeGenerator.Write(".remove();");
+			SelectRelevantElements(id);
+			CodeGenerator.Write(".html(");
+			CodeGenerator.Write(Render(renderOptions).ToString());
+			CodeGenerator.Write(");");
+			WriteNewLine();
 		}
 
 		/// <summary>
@@ -120,41 +100,116 @@ namespace Castle.MonoRail.Framework.JSGeneration.jQuery
 			CodeGenerator.Write(".replaceWith(");
 			CodeGenerator.Write(Render(renderOptions).ToString());
 			CodeGenerator.Write(");");
-		}
-
-		/// <summary>
-		/// Pendent
-		/// </summary>
-		/// <param name="id"></param>
-		/// <param name="renderOptions"></param>
-		public override void ReplaceHtml(string id, object renderOptions)
-		{
-			SelectRelevantElements(id);
-			CodeGenerator.Write(".empty();");
-			SelectRelevantElements(id);
-			CodeGenerator.Write(".append(");
-			CodeGenerator.Write(Render(renderOptions).ToString());
-			CodeGenerator.Write(");");
+			WriteNewLine();
 		}
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
 		/// <param name="ids"></param>
-		public override void Show(string[] ids)
+		public override void Show(params string[] ids)
 		{
 			SelectRelevantElements(ids);
 			CodeGenerator.Write(".show();");
+			WriteNewLine();
 		}
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
 		/// <param name="ids"></param>
-		public override void Toggle(string[] ids)
+		public override void Hide(params string[] ids)
+		{
+			SelectRelevantElements(ids);
+			CodeGenerator.Write(".hide();");
+			WriteNewLine();
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="ids"></param>
+		public override void Toggle(params string[] ids)
 		{
 			SelectRelevantElements(ids);
 			CodeGenerator.Write(".toggle();");
 		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="ids"></param>
+		public override void Remove(params string[] ids)
+		{
+			SelectRelevantElements(ids);
+			CodeGenerator.Write(".remove();");
+			WriteNewLine();
+		}
+
+		/// <summary>
+		/// Creates a generator for an element.
+		/// </summary>
+		/// <param name="root">The root expression.</param>
+		/// <returns></returns>
+		public override IJSElementGenerator CreateElementGenerator(string root)
+		{
+			return new JQueryElementGenerator(this, root);
+		}
+
+		#region Nested type: Position
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[Flags]
+		private enum Position
+		{
+			/// <summary>
+			/// Append content to the inside of every matched element.
+			/// </summary>
+			append = 0x1,
+			/// <summary>
+			/// Append all of the matched elements to another, specified, set of elements.
+			/// </summary>
+			appendTo = 0x2,
+			/// <summary>
+			/// 
+			/// </summary>
+			prepend = 0x4,
+			/// <summary>
+			/// Prepend content to the inside of every matched element.
+			/// </summary>
+			prependTo = 0x8,
+			/// <summary>
+			/// Insert content after each of the matched elements.
+			/// </summary>
+			after = 0x16,
+			/// <summary>
+			/// Insert content before each of the matched elements.
+			/// </summary>
+			before = 0x32,
+			/// <summary>
+			/// Insert all of the matched elements after another, specified, set of elements.
+			/// </summary>
+			insertAfter = 0x64,
+			/// <summary>
+			/// Insert all of the matched elements before another, specified, set of elements.
+			/// </summary>
+			insertBefore = 0x128,
+			/// <summary>
+			/// Wrap each matched element with the specified HTML content.
+			/// </summary>
+			wrap = 0x256,
+			/// <summary>
+			/// Wrap all the elements in the matched set into a single wrapper element.
+			/// </summary>
+			wrapInner = 0x512,
+			/// <summary>
+			/// Wrap all the elements in the matched set into a single wrapper element.
+			/// </summary>
+			wrapAll = 0x1024
+		}
+
+		#endregion
 	}
 }
