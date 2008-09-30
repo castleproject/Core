@@ -376,6 +376,7 @@ namespace Castle.MicroKernel
 			Type classType = instance.GetType();
 
 			ComponentModel model = new ComponentModel(key, classType, classType);
+			model.LifestyleType = LifestyleType.Singleton;
 			model.CustomComponentActivator = typeof(ExternalInstanceActivator);
 			model.ExtendedProperties["instance"] = instance;
 
@@ -404,6 +405,7 @@ namespace Castle.MicroKernel
 			if (classType == null) throw new ArgumentNullException("classType");
 
 			ComponentModel model = new ComponentModel(key, serviceType, classType);
+			model.LifestyleType = LifestyleType.Singleton;
 			model.CustomComponentActivator = typeof(ExternalInstanceActivator);
 			model.ExtendedProperties["instance"] = instance;
 
