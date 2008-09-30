@@ -70,6 +70,14 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.AreEqual("{key1:option1, key2:option2}",AbstractHelper.JavascriptOptions(options));
 		}
 
+		[Test]
+		public void ScriptBlockGeneratesValidatableXHTML()
+		{
+			const string script = "var i = 1;";
+			string scriptBlock = AbstractHelper.ScriptBlock(script);
+			Assert.AreEqual("\r\n<script type=\"text/javascript\">/*<![CDATA[*/\r\n" + script + "/*]]>*/</script>\r\n", scriptBlock);
+		}
+
 		internal class DummyHelper : AbstractHelper
 		{
 			public new string BuildQueryString(IDictionary parameters)

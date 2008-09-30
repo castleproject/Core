@@ -94,8 +94,8 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		{
 			string js = generator.GenerateJSProxy(engineContext, "proxyName", "area", "controller1");
 
-			Assert.AreEqual("\r\n<script type=\"text/javascript\">\r\n" +
-			                "var proxyName =\r\n{\r\n};\r\n</script>\r\n", js);
+			Assert.AreEqual("\r\n<script type=\"text/javascript\">/*<![CDATA[*/\r\n" +
+			                "var proxyName =\r\n{\r\n};\r\n/*]]>*/</script>\r\n", js);
 		}
 
 		[Test]
@@ -103,29 +103,29 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		{
 			string js = generator.GenerateJSProxy(engineContext, "proxyName", "", "controller2");
 
-			Assert.AreEqual("\r\n<script type=\"text/javascript\">\r\n" +
-			                "var proxyName =\r\n{\r\n\t" + "action1: function(callback)\r\n\t{\r\n\t\t" +
-			                "var r=$.ajax({type: 'get',url: '/controller2/Action1',data: '_=',async: !!callback,complete: callback});\r\n\t\t" +
-			                "if(!callback) return r.responseText;\r\n\t}\r\n,\r\n\t" +
-			                
+			Assert.AreEqual("\r\n<script type=\"text/javascript\">/*<![CDATA[*/\r\n" +
+											"var proxyName =\r\n{\r\n\t" + "action1: function(callback)\r\n\t{\r\n\t\t" +
+							"var r=$.ajax({type: 'get',url: '/controller2/Action1',data: '_=',async: !!callback,complete: callback});\r\n\t\t" +
+							"if(!callback) return r.responseText;\r\n\t}\r\n,\r\n\t" +
+							
 							"action2: function(name, age, callback)\r\n\t{\r\n\t\t" +
 							"var r=$.ajax({type: 'post',url: '/controller2/Action2',data: '_=&name='+name+'&age='+age+'',async: !!callback,complete: callback});\r\n\t\t" +
-			                "if(!callback) return r.responseText;\r\n\t}\r\n,\r\n\t" +
-			                
+							"if(!callback) return r.responseText;\r\n\t}\r\n,\r\n\t" +
+							
 							"actionWithARFetch: function(personId, age, callback)\r\n\t{\r\n\t\t" +
 							"var r=$.ajax({type: 'post',url: '/controller2/ActionWithARFetch',data: '_=&personId='+personId+'&age='+age+'',async: !!callback,complete: callback});\r\n\t\t" +
-			                "if(!callback) return r.responseText;\r\n\t}\r\n,\r\n\t" +
-			                
+							"if(!callback) return r.responseText;\r\n\t}\r\n,\r\n\t" +
+							
 							"actionReturnJSON: function(test, callback)\r\n\t{\r\n\t\t" +
 							"var r=$.ajax({type: 'get',url: '/controller2/ActionReturnJSON',data: '_=&test='+test+'',async: !!callback,complete: callback});\r\n\t\t" +
-			                "if(!callback) return r.responseText;\r\n\t}\r\n,\r\n\t" +
+							"if(!callback) return r.responseText;\r\n\t}\r\n,\r\n\t" +
 
 							"actionReturnJSONWithEntryKey: function(test, callback)\r\n\t{\r\n\t\t" +
 							"var r=$.ajax({type: 'get',url: '/controller2/ActionReturnJSONWithEntryKey',data: '_=&entryKey='+test+'',async: !!callback,complete: callback});\r\n\t\t" +
-			                "if(!callback) return r.responseText;\r\n" +
-			                
+							"if(!callback) return r.responseText;\r\n" +
+							
 							"\t}\r\n};\r\n" +
-			                "</script>\r\n", js);
+							"/*]]>*/</script>\r\n", js);
 		}
 	}
 }

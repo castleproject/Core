@@ -51,8 +51,8 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		{
 			string js = generator.GenerateJSProxy(engineContext, "proxyName", "area", "controller1");
 
-			Assert.AreEqual("\r\n<script type=\"text/javascript\">\r\n" +
-				"var proxyName =\r\n{\r\n};\r\n</script>\r\n", js);
+			Assert.AreEqual("\r\n<script type=\"text/javascript\">/*<![CDATA[*/\r\n" +
+				"var proxyName =\r\n{\r\n};\r\n/*]]>*/</script>\r\n", js);
 		}
 
 		[Test]
@@ -60,7 +60,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		{
 			string js = generator.GenerateJSProxy(engineContext, "proxyName", "", "controller2");
 
-			Assert.AreEqual("\r\n<script type=\"text/javascript\">\r\n" +
+			Assert.AreEqual("\r\n<script type=\"text/javascript\">/*<![CDATA[*/\r\n" +
 				"var proxyName =\r\n{\r\n\t" +
 
 				"action1: function(callback)\r\n\t{\r\n\t\t" + 
@@ -87,7 +87,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 				"if(!callback) return r.transport.responseText;\r\n" +
 				"\t}\r\n};\r\n" +
 
-				"</script>\r\n", js);
+				"/*]]>*/</script>\r\n", js);
 		}
 
 		#region Controllers

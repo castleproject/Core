@@ -62,12 +62,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{""model.emailfield"":{ email: ""Email doesnt look right"" }, ""model.nonemptyfield"":{ required: ""This is a required field"" }}, rules:{""model.emailfield"":{ email: true }, ""model.nonemptyfield"":{ required: true }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -85,12 +85,12 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{""model.emailfield"":{ email: ""Email doesnt look right"" }, ""model.nonemptyfield"":{ required: ""This is a required field"" }}, rules:{""model.emailfield"":{ email: true }, ""model.nonemptyfield"":{ required: true }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -108,12 +108,12 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{""model.ConfirmedEmailField"":{ equalTo: ""Fields do not match"" }, ""model.EmailField"":{ email: ""Email doesnt look right"" }}, rules:{""model.ConfirmedEmailField"":{ equalTo: ""#model_EmailField"" }, ""model.EmailField"":{ email: true }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -131,12 +131,12 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{""model.FirstValue"":{ digits: ""Please enter a valid integer in this field"" }, ""model.SecondValue"":{ lesserThan: ""This field value must be lesser than the other field value."" }}, rules:{""model.FirstValue"":{ digits: true }, ""model.SecondValue"":{ lesserThan: ""#model_FirstValue"" }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -154,12 +154,12 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{""model.ForthValue"":{ greaterThan: ""This field value must be greater than the other field value."" }, ""model.ThirdValue"":{ digits: ""Please enter a valid integer in this field"" }}, rules:{""model.ForthValue"":{ greaterThan: ""#model_ThirdValue"" }, ""model.ThirdValue"":{ digits: true }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -179,7 +179,7 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{mygroup1: ""model.GroupValue1 model.GroupValue2 "", mygroup2: ""model.GroupValue3 model.GroupValue4 ""}, messages:{""model.GroupValue1"":{ requiredmygroup1: ""At least one of the values should not be empty"" }, ""model.GroupValue2"":{ requiredmygroup1: ""At least one of the values should not be empty"" }, ""model.GroupValue3"":{ requiredmygroup2: ""At least one of the values should not be empty"" }, ""model.GroupValue4"":{ requiredmygroup2: ""At least one of the values should not be empty"" }}, rules:{""model.GroupValue1"":{ requiredmygroup1: true }, ""model.GroupValue2"":{ requiredmygroup1: true }, ""model.GroupValue3"":{ requiredmygroup2: true }, ""model.GroupValue4"":{ requiredmygroup2: true }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
@@ -188,7 +188,7 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
-jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>
+jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -204,12 +204,12 @@ jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script
 			helper.Pop();
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{""model.RegExEmailField"":{ regExp: ""Field has an invalid content"" }}, rules:{""model.RegExEmailField"":{ regExp: [\w-]+@([\w-]+\.)+[\w-]+ }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -226,12 +226,12 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{""model.city"":{ required: ""This is a required field"" }}, rules:{""model.city"":{ required: true }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -246,12 +246,12 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{""model.city.id"":{ required: ""This is a required field"" }}, rules:{""model.city.id"":{ required: true }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -280,7 +280,7 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{mygroup1: ""model.GroupValue1 model.GroupValue2 "", mygroup2: ""model.GroupValue3 model.GroupValue4 ""}, messages:{""model.City"":{ required: ""This is a required field"" }, ""model.Country.Id"":{ required: ""This is a required field"" }, ""model.EmailField"":{ email: ""Email doesnt look right"" }, ""model.FirstValue"":{ digits: ""Please enter a valid integer in this field"" }, ""model.ForthValue"":{ greaterThan: ""This field value must be greater than the other field value."" }, ""model.GroupValue1"":{ requiredmygroup1: ""At least one of the values should not be empty"" }, ""model.GroupValue2"":{ requiredmygroup1: ""At least one of the values should not be empty"" }, ""model.GroupValue3"":{ requiredmygroup2: ""At least one of the values should not be empty"" }, ""model.GroupValue4"":{ requiredmygroup2: ""At least one of the values should not be empty"" }, ""model.NonEmptyEmailField"":{  email: ""Please enter a valid email address. For example fred@domain.com"" , required: ""This is a required field"" }, ""model.NonEmptyField"":{ required: ""This is a required field"" }, ""model.SecondValue"":{ lesserThan: ""This field value must be lesser than the other field value."" }, ""model.ThirdValue"":{ digits: ""Please enter a valid integer in this field"" }}, rules:{""model.City"":{ required: true }, ""model.Country.Id"":{ required: true }, ""model.EmailField"":{ email: true }, ""model.FirstValue"":{ digits: true }, ""model.ForthValue"":{ greaterThan: ""#model_ThirdValue"" }, ""model.GroupValue1"":{ requiredmygroup1: true }, ""model.GroupValue2"":{ requiredmygroup1: true }, ""model.GroupValue3"":{ requiredmygroup2: true }, ""model.GroupValue4"":{ requiredmygroup2: true }, ""model.NonEmptyEmailField"":{  email: true , required: true }, ""model.NonEmptyField"":{ required: true }, ""model.SecondValue"":{ lesserThan: ""#model_FirstValue"" }, ""model.ThirdValue"":{ digits: true }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
@@ -289,7 +289,7 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
-jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>
+jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });/*]]>*/</script>
 </form>", helper.EndFormTag());
 		}
 
@@ -317,7 +317,7 @@ jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{mygroup1: ""model.groupvalue1 model.groupvalue2 "", mygroup2: ""model.groupvalue3 model.groupvalue4 ""}, messages:{""model.city"":{ required: ""This is a required field"" }, ""model.country.id"":{ required: ""This is a required field"" }, ""model.emailfield"":{ email: ""Email doesnt look right"" }, ""model.firstvalue"":{ digits: ""Please enter a valid integer in this field"" }, ""model.forthvalue"":{ greaterThan: ""This field value must be greater than the other field value."" }, ""model.groupvalue1"":{ requiredmygroup1: ""At least one of the values should not be empty"" }, ""model.groupvalue2"":{ requiredmygroup1: ""At least one of the values should not be empty"" }, ""model.groupvalue3"":{ requiredmygroup2: ""At least one of the values should not be empty"" }, ""model.groupvalue4"":{ requiredmygroup2: ""At least one of the values should not be empty"" }, ""model.nonemptyemailfield"":{  email: ""Please enter a valid email address. For example fred@domain.com"" , required: ""This is a required field"" }, ""model.nonemptyfield"":{ required: ""This is a required field"" }, ""model.secondvalue"":{ lesserThan: ""This field value must be lesser than the other field value."" }, ""model.thirdvalue"":{ digits: ""Please enter a valid integer in this field"" }}, rules:{""model.city"":{ required: true }, ""model.country.id"":{ required: true }, ""model.emailfield"":{ email: true }, ""model.firstvalue"":{ digits: true }, ""model.forthvalue"":{ greaterThan: ""#model_ThirdValue"" }, ""model.groupvalue1"":{ requiredmygroup1: true }, ""model.groupvalue2"":{ requiredmygroup1: true }, ""model.groupvalue3"":{ requiredmygroup2: true }, ""model.groupvalue4"":{ requiredmygroup2: true }, ""model.nonemptyemailfield"":{  email: true , required: true }, ""model.nonemptyfield"":{ required: true }, ""model.secondvalue"":{ lesserThan: ""#model_FirstValue"" }, ""model.thirdvalue"":{ digits: true }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
@@ -326,7 +326,7 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_groupvalue1"").val()!='' || $(""#model_groupvalue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_groupvalue3"").val()!='' || $(""#model_groupvalue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
-jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>
+jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });/*]]>*/</script>
 </form>"
 				, helper.EndFormTag());
 		}
@@ -352,7 +352,7 @@ jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{mygroup1: ""model.groupvalue1 model.groupvalue2 "", mygroup2: ""model.groupvalue3 model.groupvalue4 ""}, messages:{""model.city"":{ required: ""This is a required field"" }, ""model.country.id"":{ required: ""This is a required field"" }, ""model.emailfield"":{ email: ""Email doesnt look right"" }, ""model.firstvalue"":{ digits: ""Please enter a valid integer in this field"" }, ""model.forthvalue"":{ greaterThan: ""This field value must be greater than the other field value."" }, ""model.groupvalue1"":{ requiredmygroup1: ""At least one of the values should not be empty"" }, ""model.groupvalue2"":{ requiredmygroup1: ""At least one of the values should not be empty"" }, ""model.groupvalue3"":{ requiredmygroup2: ""At least one of the values should not be empty"" }, ""model.groupvalue4"":{ requiredmygroup2: ""At least one of the values should not be empty"" }, ""model.nonemptyemailfield"":{  email: ""Please enter a valid email address. For example fred@domain.com"" , required: ""This is a required field"" }, ""model.nonemptyfield"":{ required: ""This is a required field"" }, ""model.secondvalue"":{ lesserThan: ""This field value must be lesser than the other field value."" }, ""model.thirdvalue"":{ digits: ""Please enter a valid integer in this field"" }}, rules:{""model.city"":{ required: true }, ""model.country.id"":{ required: true }, ""model.emailfield"":{ email: true }, ""model.firstvalue"":{ digits: true }, ""model.forthvalue"":{ greaterThan: ""#model_ThirdValue"" }, ""model.groupvalue1"":{ requiredmygroup1: true }, ""model.groupvalue2"":{ requiredmygroup1: true }, ""model.groupvalue3"":{ requiredmygroup2: true }, ""model.groupvalue4"":{ requiredmygroup2: true }, ""model.nonemptyemailfield"":{  email: true , required: true }, ""model.nonemptyfield"":{ required: true }, ""model.secondvalue"":{ lesserThan: ""#model_FirstValue"" }, ""model.thirdvalue"":{ digits: true }}} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
@@ -361,7 +361,7 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_groupvalue1"").val()!='' || $(""#model_groupvalue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_groupvalue3"").val()!='' || $(""#model_groupvalue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
-jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>
+jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });/*]]>*/</script>
 </form>"
 				, helper.EndFormTag());
 		}
@@ -373,12 +373,12 @@ jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {submitHandler:function( form ) { jQuery( form ).ajaxSubmit(); }} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -407,7 +407,7 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 
 			Assert.AreEqual(
 				@"
-<script type=""text/javascript"">
+<script type=""text/javascript"">/*<![CDATA[*/
 jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{mygroup1: ""model.GroupValue1 model.GroupValue2 "", mygroup2: ""model.GroupValue3 model.GroupValue4 ""}, messages:{""model.City"":{ required: ""This is a required field"" }, ""model.Country.Id"":{ required: ""This is a required field"" }, ""model.EmailField"":{ email: ""Email doesnt look right"" }, ""model.FirstValue"":{ digits: ""Please enter a valid integer in this field"" }, ""model.ForthValue"":{ greaterThan: ""This field value must be greater than the other field value."" }, ""model.GroupValue1"":{ requiredmygroup1: ""At least one of the values should not be empty"" }, ""model.GroupValue2"":{ requiredmygroup1: ""At least one of the values should not be empty"" }, ""model.GroupValue3"":{ requiredmygroup2: ""At least one of the values should not be empty"" }, ""model.GroupValue4"":{ requiredmygroup2: ""At least one of the values should not be empty"" }, ""model.NonEmptyEmailField"":{  email: ""Please enter a valid email address. For example fred@domain.com"" , required: ""This is a required field"" }, ""model.NonEmptyField"":{ required: ""This is a required field"" }, ""model.SecondValue"":{ lesserThan: ""This field value must be lesser than the other field value."" }, ""model.ThirdValue"":{ digits: ""Please enter a valid integer in this field"" }}, rules:{""model.City"":{ required: true }, ""model.Country.Id"":{ required: true }, ""model.EmailField"":{ email: true }, ""model.FirstValue"":{ digits: true }, ""model.ForthValue"":{ greaterThan: ""#model_ThirdValue"" }, ""model.GroupValue1"":{ requiredmygroup1: true }, ""model.GroupValue2"":{ requiredmygroup1: true }, ""model.GroupValue3"":{ requiredmygroup2: true }, ""model.GroupValue4"":{ requiredmygroup2: true }, ""model.NonEmptyEmailField"":{  email: true , required: true }, ""model.NonEmptyField"":{ required: true }, ""model.SecondValue"":{ lesserThan: ""#model_FirstValue"" }, ""model.ThirdValue"":{ digits: true }}, submitHandler:function( form ) { jQuery( form ).ajaxSubmit(); }} );
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
@@ -416,7 +416,7 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
-jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });</script>
+jQuery.validator.addClassRules({requiredmygroup2: {mygroup2:true}}); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}

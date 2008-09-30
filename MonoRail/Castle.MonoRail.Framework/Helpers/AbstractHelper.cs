@@ -417,16 +417,16 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Generates script block.
 		/// <code>
-		/// &lt;script type=\"text/javascript\"&gt;
+		/// &lt;script type=\"text/javascript\"&gt;/*&lt;![CDATA[*/
 		/// scriptContents
-		/// &lt;/script&gt;
+		/// /*]]&gt;*/&lt;/script&gt;
 		/// </code>
 		/// </summary>
 		/// <param name="scriptContents">The script contents.</param>
 		/// <returns><paramref name="scriptContents"/> placed inside <b>script</b> tags.</returns>
 		public static string ScriptBlock(string scriptContents)
 		{
-			return "\r\n<script type=\"text/javascript\">\r\n" + scriptContents + "</script>\r\n";
+			return "\r\n<script type=\"text/javascript\">/*<![CDATA[*/\r\n" + scriptContents + "/*]]>*/</script>\r\n";
 		}
 
 		/// <summary>
