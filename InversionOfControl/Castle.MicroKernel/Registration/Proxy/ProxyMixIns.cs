@@ -33,7 +33,7 @@ namespace Castle.MicroKernel.Registration.Proxy
 			{
 				if (model.Interceptors.Count == 0)
 				{
-					kernel.Register(Component.For<StandardInterceptor>().Unless(Component.ServiceAlreadyRegistred));
+					kernel.Register(Component.For<StandardInterceptor>().Unless(Component.ServiceAlreadyRegistered));
 					model.Interceptors.Add(new InterceptorReference(typeof(StandardInterceptor)));
 				}
 				ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);

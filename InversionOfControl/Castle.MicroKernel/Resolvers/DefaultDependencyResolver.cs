@@ -354,7 +354,11 @@ namespace Castle.MicroKernel.Resolvers
 
 			context = RebuildContextForParameter(context, dependency.TargetType);
 
-			return handler.Resolve(context);
+			object instance = handler.Resolve(context);
+
+			kernel.ReleasePolicy.Track(instance, handler);
+
+			return instance;
 		}
 
 		private IHandler TryGetHandlerFromKernel(DependencyModel dependency, CreationContext context)

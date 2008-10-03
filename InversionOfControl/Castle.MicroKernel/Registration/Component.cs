@@ -159,7 +159,7 @@ namespace Castle.MicroKernel.Registration
 		/// <param name="kernel">The kernel.</param>
 		/// <param name="model">The component model.</param>
 		/// <returns>true if the service is already registered.</returns>
-		public static bool ServiceAlreadyRegistred(IKernel kernel, ComponentModel model)
+		public static bool ServiceAlreadyRegistered(IKernel kernel, ComponentModel model)
 		{
 			return kernel.HasComponent(model.Service);
 		}
