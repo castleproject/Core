@@ -54,5 +54,4 @@ namespace Castle.Facilities.WcfIntegration.Tests.Components
 			callbackService.Callback(value * 2);
 		}
 	}
-
 }

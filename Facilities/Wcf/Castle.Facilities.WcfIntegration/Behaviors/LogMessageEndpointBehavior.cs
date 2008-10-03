@@ -15,7 +15,6 @@
 namespace Castle.Facilities.WcfIntegration.Behaviors
 {
 	using System;
-	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
 	using System.ServiceModel.Dispatcher;
@@ -24,10 +23,24 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 	public class LogMessageEndpointBehavior : IEndpointBehavior
 	{
 		private readonly IExtendedLoggerFactory loggerFactory;
+		private IFormatProvider messageFormatter;
+		private string defaultMessageFormat;
 
 		public LogMessageEndpointBehavior(IExtendedLoggerFactory loggerFactory)
 		{
 			this.loggerFactory = loggerFactory;
+		}
+
+		public IFormatProvider MessageFormatter
+		{
+			get { return messageFormatter; }
+			set { messageFormatter = value; }
+		}
+
+		public string DefaultMessageFormat
+		{
+			get { return defaultMessageFormat; }
+			set { defaultMessageFormat = value; }
 		}
 
 		public void AddBindingParameters(ServiceEndpoint endpoint, BindingParameterCollection bindingParameters)
@@ -36,23 +49,36 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 		public void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
 		{
-			clientRuntime.MessageInspectors.Add(CreateLogMessageInspector(endpoint.Contract.ContractType));
+			clientRuntime.MessageInspectors.Add(CreateLogMessageInspector(endpoint.Contract.ContractType, endpoint));
 		}
 
 		public void ApplyDispatchBehavior(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
 		{
 			Type serviceType = endpointDispatcher.ChannelDispatcher.Host.Description.ServiceType;
-			endpointDispatcher.DispatchRuntime.MessageInspectors.Add(CreateLogMessageInspector(serviceType));
+			endpointDispatcher.DispatchRuntime.MessageInspectors.Add(CreateLogMessageInspector(serviceType, endpoint));
 		}
 
 		public void Validate(ServiceEndpoint endpoint)
 		{
 		}
 
-		private LogMessageInspector CreateLogMessageInspector(Type serviceType)
+		private LogMessageInspector CreateLogMessageInspector(Type serviceType, ServiceEndpoint endpoint)
 		{
+			string format = null;
+			IFormatProvider formatter = null;
 			IExtendedLogger logger = loggerFactory.Create(serviceType);
-			return new LogMessageInspector(logger);
+
+			LogMessageFormatBehavior formatBehavior = endpoint.Behaviors.Find<LogMessageFormatBehavior>();
+			if (formatBehavior != null)
+			{
+				format = formatBehavior.MessageFormat;
+				formatter = formatBehavior.FormatProvider;
+			}
+
+			format = format ?? defaultMessageFormat ?? string.Empty;
+			formatter = formatter ?? messageFormatter ?? CustomMessageFormatter.Instance;
+
+			return new LogMessageInspector(logger, formatter, format);
 		}
 	}
 }

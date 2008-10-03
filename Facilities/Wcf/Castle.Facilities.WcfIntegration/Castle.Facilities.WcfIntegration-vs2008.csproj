@@ -81,6 +81,9 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Behaviors\AbstractWcfBehaviors.cs" />
+    <Compile Include="Behaviors\AbstractMessageFormatter.cs" />
+    <Compile Include="Behaviors\LogMessageFormatBehavior.cs" />
+    <Compile Include="Behaviors\CustomMessageFormatter.cs" />
     <Compile Include="Behaviors\LogMessageEndpointBehavior.cs" />
     <Compile Include="Client\AbstractChannelBuilder.Generic.cs" />
     <Compile Include="Behaviors\ServiceEndpointBehaviors.cs" />

@@ -28,14 +28,20 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 	public class LogMessageInspector : IClientMessageInspector, IDispatchMessageInspector
 	{
 		private readonly IExtendedLogger logger;
+		private readonly IFormatProvider formatter;
+		private readonly string format;
 
 		/// <summary>
 		/// Constructs a new <see cref="LogMessageInspector"/>
 		/// </summary>
 		/// <param name="logger">The logger.</param>
-		public LogMessageInspector(IExtendedLogger logger)
+		/// <param name="formatter">The formatter.</param>
+		/// <param name="format">The format.</param>
+		public LogMessageInspector(IExtendedLogger logger, IFormatProvider formatter, string format)
 		{
 			this.logger = logger;
+			this.formatter = formatter;
+			this.format = format;
 		}
 
 		#region IClientMessageInspector
@@ -145,14 +151,7 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 			Message forWriting = buffer.CreateMessage();
 			message = buffer.CreateMessage();
 
-			StringWriter writer = new StringWriter();
-
-			using (XmlTextWriter xmlWriter = new XmlTextWriter(writer))
-            {
-				forWriting.WriteMessage(xmlWriter);
-            }
-
-			logger.Info(writer.ToString());
+			logger.InfoFormat(formatter, "{0:" + format + "}", forWriting);
 		}
 	}
 }

@@ -119,9 +119,35 @@ namespace Castle.Facilities.WcfIntegration
 			return (T)this;
 		}
 
+		#region Logging
+
+		public T LogMessages<F>()
+			where F : IFormatProvider, new()
+		{
+			return LogMessages<F>(null);
+		}
+
+		public T LogMessages<F>(string format)
+			where F : IFormatProvider, new()
+		{
+			return LogMessages(new F(), format);
+		}
+
+		public T LogMessages(IFormatProvider formatter, string format)
+		{
+			return LogMessages().AddBehaviors(new LogMessageFormatBehavior(formatter, format));
+		}
+
+		public T LogMessages(string format)
+		{
+			return LogMessages().AddBehaviors(new LogMessageFormatBehavior(format));
+		}
+
 		public T LogMessages()
 		{
 			return AddBehaviors(typeof(LogMessageEndpointBehavior));
 		}
+
+		#endregion
 	}
 }
