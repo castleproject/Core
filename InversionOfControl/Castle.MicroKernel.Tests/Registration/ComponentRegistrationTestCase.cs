@@ -649,7 +649,7 @@ namespace Castle.MicroKernel.Tests.Registration
 
 			kernel.Register(Component.For<ICustomer>()
 				.ImplementedBy<CustomerChain1>()
-				.Unless(Component.ServiceAlreadyRegistred)
+				.Unless(Component.ServiceAlreadyRegistered)
 				);
 
 			IHandler[] handlers = kernel.GetHandlers(typeof(ICustomer));
@@ -665,7 +665,7 @@ namespace Castle.MicroKernel.Tests.Registration
 
 			kernel.Register(Component.For<ICustomer>()
 				.ImplementedBy<CustomerChain1>()
-				.If(Component.ServiceAlreadyRegistred)
+				.If(Component.ServiceAlreadyRegistered)
 				);
 
 			IHandler[] handlers = kernel.GetHandlers(typeof(ICustomer));
