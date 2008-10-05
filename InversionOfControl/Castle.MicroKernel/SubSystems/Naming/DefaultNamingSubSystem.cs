@@ -158,7 +158,11 @@ namespace Castle.MicroKernel.SubSystems.Naming
         public virtual IHandler GetHandler(String key)
         {
             if (key == null) throw new ArgumentNullException("key");
-
+            
+            IHandler selectorsOpinion = GetSelectorsOpinion(key, null);
+            if(selectorsOpinion!=null)
+                return selectorsOpinion;
+            
             try
             {
                 locker.AcquireReaderLock(Timeout.Infinite);
@@ -179,6 +183,10 @@ namespace Castle.MicroKernel.SubSystems.Naming
         {
             if (service == null) throw new ArgumentNullException("service");
 
+            IHandler selectorsOpinion = GetSelectorsOpinion(null,service);
+            if (selectorsOpinion != null)
+                return selectorsOpinion;
+            
             try
             {
                 locker.AcquireReaderLock(Timeout.Infinite);
@@ -197,6 +205,10 @@ namespace Castle.MicroKernel.SubSystems.Naming
             if (key == null) throw new ArgumentNullException("key");
             if (service == null) throw new ArgumentNullException("service");
 
+            IHandler selectorsOpinion = GetSelectorsOpinion(key, service);
+            if (selectorsOpinion != null)
+                return selectorsOpinion;
+            
             try
             {
                 locker.AcquireReaderLock(Timeout.Infinite);
@@ -332,13 +344,12 @@ namespace Castle.MicroKernel.SubSystems.Naming
                     continue;
                 if (handlers == null)
                     handlers = GetAssignableHandlers(type);
-                var handler = selector.Select(key, type, handlers);
+                IHandler handler = selector.SelectHandler(key, type, handlers);
                 if (handler != null)
                     return handler;
             }
             return null;
         }
-
 
         #endregion
     }
