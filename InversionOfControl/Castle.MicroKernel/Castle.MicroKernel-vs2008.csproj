@@ -305,6 +305,7 @@
     <Compile Include="ModelBuilder\Inspectors\PropertiesDependenciesModelInspector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Proxy\IModelInterceptorsSelector.cs" />
     <Compile Include="Proxy\IProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>

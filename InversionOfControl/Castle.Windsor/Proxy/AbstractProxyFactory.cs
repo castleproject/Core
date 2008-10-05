@@ -12,80 +12,111 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
+using Castle.MicroKernel.Proxy;
+
 namespace Castle.Windsor.Proxy
 {
-	using System;
+    using System;
 
-	using Castle.Core;
-	using Castle.Core.Interceptor;
-	using Castle.MicroKernel;
+    using Castle.Core;
+    using Castle.Core.Interceptor;
+    using Castle.MicroKernel;
 
-	public abstract class AbstractProxyFactory : IProxyFactory
-	{
-		public abstract object Create(IKernel kernel, object instance, 
-		                              ComponentModel model, params object[] constructorArguments);
+    public abstract class AbstractProxyFactory : IProxyFactory
+    {
+        private readonly IList<IModelInterceptorsSelector> selectors = new List<IModelInterceptorsSelector>();
 
-		public abstract bool RequiresTargetInstance(IKernel kernel, ComponentModel model);
+        public abstract object Create(IKernel kernel, object instance,
+                                      ComponentModel model, params object[] constructorArguments);
 
-		/// <summary>
-		/// Obtains the interceptors associated with the component.
-		/// </summary>
-		/// <param name="kernel">The kernel instance</param>
-		/// <param name="model">The component model</param>
-		/// <returns>interceptors array</returns>
-		protected IInterceptor[] ObtainInterceptors(IKernel kernel, ComponentModel model)
-		{
-			IInterceptor[] interceptors = new IInterceptor[model.Interceptors.Count];
-			int index = 0;
+        public abstract bool RequiresTargetInstance(IKernel kernel, ComponentModel model);
+        
+        public void AddInterceptorSelector(IModelInterceptorsSelector selector)
+        {
+            selectors.Add(selector);
+        }
 
-			foreach(InterceptorReference interceptorRef in model.Interceptors)
-			{
-				IHandler handler;
+        public bool ShouldCreateProxy(ComponentModel model)
+        {
+            foreach (IModelInterceptorsSelector selector in selectors)
+            {
+                if(selector.HasInterceptors(model))
+                    return true;
+            }
+            return model.Interceptors.HasInterceptors;
+        }
 
-				if (interceptorRef.ReferenceType == InterceptorReferenceType.Interface)
-				{
-					handler = kernel.GetHandler(interceptorRef.ServiceType);
-				}
-				else
-				{
-					handler = kernel.GetHandler(interceptorRef.ComponentKey);
-				}
+        /// <summary>
+        /// Obtains the interceptors associated with the component.
+        /// </summary>
+        /// <param name="kernel">The kernel instance</param>
+        /// <param name="model">The component model</param>
+        /// <returns>interceptors array</returns>
+        protected IInterceptor[] ObtainInterceptors(IKernel kernel, ComponentModel model)
+        {
+            List<IInterceptor> interceptors = new List<IInterceptor>();
 
-				if (handler == null)
-				{
-					// This shoul be virtually impossible to happen
-					// Seriously!
-					throw new ApplicationException("The interceptor could not be resolved");
-				}
+            foreach (InterceptorReference interceptorRef in GetInterceptorsFor(model))
+            {
+                IHandler handler;
 
-				try
-				{
-					IInterceptor interceptor = (IInterceptor) handler.Resolve(CreationContext.Empty);
-					
-					interceptors[index++] = interceptor;
+                if (interceptorRef.ReferenceType == InterceptorReferenceType.Interface)
+                {
+                    handler = kernel.GetHandler(interceptorRef.ServiceType);
+                }
+                else
+                {
+                    handler = kernel.GetHandler(interceptorRef.ComponentKey);
+                }
 
-					SetOnBehalfAware(interceptor as IOnBehalfAware, model);
-				}
-				catch(InvalidCastException)
-				{
-					String message = String.Format(
-						"An interceptor registered for {0} doesnt implement " + 
-						"the IMethodInterceptor interface", 
-						model.Name);
+                if (handler == null)
+                {
+                    // This shoul be virtually impossible to happen
+                    // Seriously!
+                    throw new ApplicationException("The interceptor could not be resolved");
+                }
 
-					throw new ApplicationException(message);
-				}
-			}
+                try
+                {
+                    IInterceptor interceptor = (IInterceptor)handler.Resolve(CreationContext.Empty);
 
-			return interceptors;
-		}
+                    interceptors.Add(interceptor);
 
-		protected void SetOnBehalfAware(IOnBehalfAware onBehalfAware, ComponentModel target)
-		{
-			if (onBehalfAware != null)
-			{
-				onBehalfAware.SetInterceptedComponentModel(target);
-			}
-		}
-	}
+                    SetOnBehalfAware(interceptor as IOnBehalfAware, model);
+                }
+                catch (InvalidCastException)
+                {
+                    String message = String.Format(
+                        "An interceptor registered for {0} doesnt implement " +
+                        "the IMethodInterceptor interface",
+                        model.Name);
+
+                    throw new ApplicationException(message);
+                }
+            }
+
+            return interceptors.ToArray();
+        }
+
+        protected IEnumerable<InterceptorReference> GetInterceptorsFor(ComponentModel model)
+        {
+            foreach (IModelInterceptorsSelector selector in selectors)
+            {
+                InterceptorReference[] interceptors = selector.SelectInterceptors(model);
+                if(interceptors!=null)
+                    return interceptors;
+            }
+            return model.Interceptors;
+        }
+
+        protected static void SetOnBehalfAware(IOnBehalfAware onBehalfAware, ComponentModel target)
+        {
+            if (onBehalfAware != null)
+            {
+                onBehalfAware.SetInterceptedComponentModel(target);
+            }
+        }
+    }
 }

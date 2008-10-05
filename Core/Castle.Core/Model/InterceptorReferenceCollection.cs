@@ -183,7 +183,10 @@ namespace Castle.Core
 
 		IEnumerator<InterceptorReference> IEnumerable<InterceptorReference>.GetEnumerator()
 		{
-			return (IEnumerator<InterceptorReference>) list.GetEnumerator();
+		    foreach (InterceptorReference reference in list)
+		    {
+		        yield return reference;
+		    }
 		}
 	}
 }

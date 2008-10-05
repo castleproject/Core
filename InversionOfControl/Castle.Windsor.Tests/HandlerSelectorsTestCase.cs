@@ -25,17 +25,17 @@ namespace Castle.Windsor.Tests
     {
         public interface IWatcher
         {
-            event Action OnSomethingInterestingToWatch;
+            event Action<string> OnSomethingInterestingToWatch;
         }
 
         public class BirdWatcher : IWatcher
         {
-            public event Action OnSomethingInterestingToWatch = delegate { };
+            public event Action<string> OnSomethingInterestingToWatch = delegate { };
         }
 
         public class SatiWatcher : IWatcher
         {
-            public event Action OnSomethingInterestingToWatch = delegate { };
+            public event Action<string> OnSomethingInterestingToWatch = delegate { };
         }
 
         public class Person
@@ -82,7 +82,7 @@ namespace Castle.Windsor.Tests
             container
                 .AddComponent<IWatcher, BirdWatcher>("bird.watcher")
                 .AddComponent<IWatcher, SatiWatcher>("astronomy.watcher");
-            var selector = new WatcherSelector();
+            WatcherSelector selector = new WatcherSelector();
             container.Kernel.AddHandlerSelector(selector);
 
             Assert.IsInstanceOfType(typeof (BirdWatcher), container.Resolve<IWatcher>(), "default");
@@ -100,7 +100,7 @@ namespace Castle.Windsor.Tests
                 .AddComponentLifeStyle<Person>(LifestyleType.Transient)
                 .AddComponent<IWatcher, BirdWatcher>("bird.watcher")
                 .AddComponent<IWatcher, SatiWatcher>("astronomy.watcher");
-            var selector = new WatcherSelector();
+            WatcherSelector selector = new WatcherSelector();
             container.Kernel.AddHandlerSelector(selector);
 
             Assert.IsInstanceOfType(typeof(BirdWatcher), container.Resolve<Person>().Watcher, "default");

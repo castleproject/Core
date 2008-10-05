@@ -48,6 +48,16 @@ namespace Castle.MicroKernel.Proxy
 			return false;
 		}
 
-		#endregion
+	    public void AddInterceptorSelector(IModelInterceptorsSelector selector)
+	    {
+	        
+	    }
+
+	    public bool ShouldCreateProxy(ComponentModel model)
+	    {
+	        return false;
+	    }
+
+	    #endregion
 	}
 }

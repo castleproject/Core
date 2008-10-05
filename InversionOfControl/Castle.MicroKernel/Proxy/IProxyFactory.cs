@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Core.Interceptor;
+using Castle.MicroKernel.Proxy;
+
 namespace Castle.MicroKernel
 {
 	using Castle.Core;
@@ -44,5 +47,18 @@ namespace Castle.MicroKernel
 		/// <param name="model">The component model</param>
 		/// <returns><c>true</c> if an instance must be passed to <see cref="Create"/></returns>
 		bool RequiresTargetInstance(IKernel kernel, ComponentModel model);
+
+        /// <summary>
+        /// Add the selector to the list of selectors that can affect interecptors decisions
+        /// in the container.
+        /// </summary>
+	    void AddInterceptorSelector(IModelInterceptorsSelector selector);
+
+        /// <summary>
+        /// Determains whatever we need to create a proxy for this model
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+	    bool ShouldCreateProxy(ComponentModel model);
 	}
 }
