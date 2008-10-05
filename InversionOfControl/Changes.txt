@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied patch (with mods) from Martin Nllsson to select registration interface from
+  containing interface.
+
 - Added shortcut to AllTypes to accept a where.
 
 - Added ability to include non-public types in registration.

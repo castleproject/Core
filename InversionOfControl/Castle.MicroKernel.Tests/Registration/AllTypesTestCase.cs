@@ -80,6 +80,30 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreNotEqual(0, handlers.Length);
 		}
 
+        [Test]
+        public void RegisterAssemblyTypes_LookupInterfaceService_RegisteredInContainer()
+        {
+            kernel.Register(AllTypes.Of<ICommon>()
+                .FromAssembly(Assembly.GetExecutingAssembly())
+                .WithService.FromInterface()
+                );
+
+            IHandler[] handlers = kernel.GetHandlers(typeof(ICommon));
+            Assert.AreNotEqual(0, handlers.Length);
+
+            handlers = kernel.GetHandlers(typeof(ICommonSub1));
+            Assert.AreNotEqual(0, handlers.Length);
+
+            handlers = kernel.GetAssignableHandlers(typeof(ICommonSub1));
+            Assert.AreNotEqual(0, handlers.Length);
+
+            handlers = kernel.GetHandlers(typeof(ICommonSub2));
+            Assert.AreNotEqual(0, handlers.Length);
+
+            handlers = kernel.GetAssignableHandlers(typeof(ICommonSub2));
+            Assert.AreNotEqual(0, handlers.Length);
+        }
+
 		[Test]
 		public void RegisterAssemblyTypes_DefaultService_RegisteredInContainer()
 		{

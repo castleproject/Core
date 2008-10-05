@@ -54,6 +54,7 @@ namespace Castle.MicroKernel.Registration
 			{
 				Type first = null;
 				Type[] interfaces = type.GetInterfaces();
+
 				if (interfaces.Length > 0)
 				{
 					first = interfaces[0];
@@ -70,7 +71,53 @@ namespace Castle.MicroKernel.Registration
 				return (first != null) ? new Type[] { first } : null;
 			});
 		}
+
+        /// <summary>
+        /// Uses <paramref name="implements"/> to lookup the sub interface.
+        /// For example: if you have IService and 
+        /// IProductService : ISomeInterface, IService, ISomeOtherInterface.
+        /// When you call FromInterface(typeof(IService)) then IProductService
+        /// will be used. Useful when you want to register _all_ your services
+        /// and but not want to specify all of them.
+        /// </summary>
+        /// <param name="implements"></param>
+        /// <returns></returns>
+        public BasedOnDescriptor FromInterface(Type implements)
+        {
+            useBaseType = false;
+            return Select(delegate(Type type, Type baseType)
+            {
+                Type first = null;
+				implements = implements ?? baseType;
+
+				foreach (Type theInterface in type.GetInterfaces())
+                {
+                    if (theInterface.GetInterface(implements.FullName) != null)
+                    {
+                        first = theInterface;
+                        break;
+                    }
+                }
+
+				if (first == null && baseType.IsAssignableFrom(type))
+				{
+					first = baseType;
+				}
+
+                return (first != null) ? new Type[] { first } : null;
+            });
+        }
 		
+
+        /// <summary>
+        /// Uses base type to lookup the sub interface.
+		/// </summary>
+        /// <returns></returns>
+		public BasedOnDescriptor FromInterface()
+		{
+			return FromInterface(null);
+		}
+
 		/// <summary>
 		/// Assigns a custom service selection strategy.
 		/// </summary>
