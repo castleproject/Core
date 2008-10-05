@@ -1,6 +1,8 @@
 Change history
 --------------
 
+- Allow ability to skip transaction setup so other transaction mechanism can be used.
+
 Beta 3
 ======
 

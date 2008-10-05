@@ -38,6 +38,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		private ILogger log = NullLogger.Instance;
 		private int sessionFactoryCount, sessionFactoryHolderCount;
 		private readonly bool skipARInitialization;
+		private readonly bool skipATransactionSetup;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordFacility"/> class.
@@ -46,13 +47,21 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 		}
 
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordFacility"/> class.
 		/// </summary>
 		public ActiveRecordFacility(bool skipARInitialization)
 		{
 			this.skipARInitialization = skipARInitialization;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ActiveRecordFacility"/> class.
+		/// </summary>
+		public ActiveRecordFacility(bool skipARInitialization, bool skipATransactionSetup)
+			: this(skipARInitialization)
+		{
+			this.skipATransactionSetup = skipATransactionSetup;
 		}
 
 		/// <summary>
@@ -98,9 +107,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 				InitializeFramework(assemblies);
 			}
 
-			Kernel.ComponentCreated += Kernel_ComponentCreated;
-
-			SetUpTransactionManager();
+			if (!skipATransactionSetup)
+			{
+				Kernel.ComponentCreated += Kernel_ComponentCreated;
+				SetUpTransactionManager();
+			}
 		}
 
 		/// <summary>
