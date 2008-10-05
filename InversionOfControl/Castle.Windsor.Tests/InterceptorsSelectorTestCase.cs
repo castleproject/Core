@@ -129,7 +129,7 @@ namespace Castle.Windsor.Tests
             container.Kernel.ProxyFactory.AddInterceptorSelector(selector);
 
             DummyInterceptor.WasCalled = false;
-            var watcher = container.Resolve<IWatcher>();
+            IWatcher watcher = container.Resolve<IWatcher>();
             watcher.OnSomethingInterestingToWatch+=delegate {  };
             Assert.IsFalse(DummyInterceptor.WasCalled);
             
