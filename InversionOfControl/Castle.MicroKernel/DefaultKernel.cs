@@ -1320,7 +1320,12 @@ namespace Castle.MicroKernel
 			}
 		}
 
-		public void RegisterHandlerForwarding(Type forwardedType, string name)
+	    public void AddHandlerSelector(IHandlerSelector selector)
+	    {
+	        NamingSubSystem.AddHandlerSelector(selector);
+	    }
+
+	    public void RegisterHandlerForwarding(Type forwardedType, string name)
 		{
 			IHandler target = GetHandler(name);
 			if(target==null)

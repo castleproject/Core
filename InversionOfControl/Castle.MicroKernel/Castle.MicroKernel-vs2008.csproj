@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -447,6 +447,7 @@
     <Compile Include="SubSystems\Naming\DefaultNamingSubSystem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SubSystems\Naming\IHandlerSelector.cs" />
     <Compile Include="SubSystems\Naming\KeySearchNamingSubSystem.cs" />
     <Compile Include="SubSystems\Naming\INamingSubSystem.cs">
       <SubType>Code</SubType>

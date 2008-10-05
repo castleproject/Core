@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.MicroKernel.SubSystems.Naming;
+
 namespace Castle.MicroKernel
 {
 	using System;
@@ -140,5 +142,10 @@ namespace Castle.MicroKernel
 		/// </summary>
 		IDictionary GetService2Handler();
 
+        /// <summary>
+        /// Register a new component resolver that can take part in the decision
+        /// making about which handler to resolve
+        /// </summary>
+	    void AddHandlerSelector(IHandlerSelector selector);
 	}
 }
