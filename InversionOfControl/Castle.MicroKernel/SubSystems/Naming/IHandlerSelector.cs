@@ -21,7 +21,7 @@ namespace Castle.MicroKernel
     /// component resolution based on some application specific business logic.
     /// </summary>
     /// <remarks>
-    /// This is the siblig interface to <seealso cref="ISubDependencyResolver"/>.
+    /// This is the sibling interface to <seealso cref="ISubDependencyResolver"/>.
     /// This is dealing strictly with root components, while the <seealso cref="ISubDependencyResolver"/> is dealing with
     /// dependent components.
     /// </remarks>
