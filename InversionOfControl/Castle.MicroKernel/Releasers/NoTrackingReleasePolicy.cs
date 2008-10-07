@@ -29,9 +29,7 @@ namespace Castle.MicroKernel.Releasers
 		{
 		}
 
-		#region IReleasePolicy Members
-
-		public void Track(object instance, IHandler handler)
+		public void Track(object instance, Burden burden)
 		{
 		}
 
@@ -44,14 +42,8 @@ namespace Castle.MicroKernel.Releasers
 		{
 		}
 
-		#endregion
-
-		#region IDisposable Members
-
 		public void Dispose()
 		{
 		}
-
-		#endregion
 	}
 }

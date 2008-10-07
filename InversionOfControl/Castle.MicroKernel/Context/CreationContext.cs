@@ -16,11 +16,9 @@ namespace Castle.MicroKernel
 {
 	using System;
 	using System.Collections;
-	using System.Reflection;
-	using System.Text;
-
-	using Castle.MicroKernel.Exceptions;
+	using System.Collections.Generic;
 	using Castle.Core;
+	using Releasers;
 
 	/// <summary>
 	/// Used during a component request, passed along to the whole process.
@@ -35,23 +33,13 @@ namespace Castle.MicroKernel
 		/// <remarks>A new CreationContext should be created every time, as the contexts keeps some state related to dependency resolution.</remarks>
 		public static CreationContext Empty
 		{
-			get { return new CreationContext(new DependencyModel[0]); }
+			get { return new CreationContext(new DependencyModel[0], new NoTrackingReleasePolicy()); }
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
 		private readonly IHandler handler;
-
-		/// <summary>
-		/// The list of handlers that are used to resolve
-		/// the component.
-		/// We track that in order to try to avoid attempts to resolve a service
-		/// with itself.
-		/// </summary>
-        private readonly ArrayList handlersChain = new ArrayList();
-
+		private readonly IReleasePolicy releasePolicy;
 		private readonly IDictionary additionalArguments;
+		private readonly Type[] genericArguments;
 
 		/// <summary>
 		/// Holds the scoped dependencies being resolved. 
@@ -59,38 +47,87 @@ namespace Castle.MicroKernel
 		/// </summary>
 		private readonly DependencyModelCollection dependencies;
 
-		private readonly Type[] genericArguments;
+		/// <summary>
+		/// The list of handlers that are used to resolve
+		/// the component.
+		/// We track that in order to try to avoid attempts to resolve a service
+		/// with itself.
+		/// </summary>
+		private readonly Stack<IHandler> handlerStack = new Stack<IHandler>();
 
-		public CreationContext(IHandler handler, IDictionary additionalArguments)
+		private readonly Stack<ResolutionContext> resolutionStack = new Stack<ResolutionContext>();
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CreationContext"/> class.
+		/// </summary>
+		/// <param name="handler">The handler.</param>
+		/// <param name="releasePolicy">The release policy.</param>
+		/// <param name="additionalArguments">The additional arguments.</param>
+		public CreationContext(IHandler handler, IReleasePolicy releasePolicy, IDictionary additionalArguments)
 		{
 			this.handler = handler;
+			this.releasePolicy = releasePolicy;
 			this.additionalArguments = additionalArguments;
 			dependencies = new DependencyModelCollection();
 		}
 
-		public CreationContext(DependencyModel[] dependencies)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CreationContext"/> class.
+		/// </summary>
+		/// <param name="dependencies">The dependencies.</param>
+		/// <param name="releasePolicy">The release policy.</param>
+		public CreationContext(DependencyModel[] dependencies, IReleasePolicy releasePolicy)
 		{
 			handler = null;
+			this.releasePolicy = releasePolicy;
 			this.dependencies = new DependencyModelCollection(dependencies);
 		}
 
-		public CreationContext(IHandler handler, DependencyModelCollection dependencies, IList handlersChain)
-			: this(handler, (IDictionary)null)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CreationContext"/> class.
+		/// </summary>
+		/// <param name="handler">The handler.</param>
+		/// <param name="releasePolicy">The release policy.</param>
+		/// <param name="dependencies">The dependencies.</param>
+		/// <param name="handlersChain">The handlers chain.</param>
+		public CreationContext(IHandler handler, IReleasePolicy releasePolicy,
+		                       DependencyModelCollection dependencies, IEnumerable<IHandler> handlersChain)
+			: this(handler, releasePolicy, null)
 		{
 			this.dependencies = new DependencyModelCollection(dependencies);
-            this.handlersChain.AddRange(handlersChain);
+
+			foreach(var handlerItem in handlersChain)
+			{
+				this.handlerStack.Push(handlerItem);
+			}
 		}
 
-		public CreationContext(IHandler handler, Type typeToExtractGenericArguments, IDictionary additionalArguments)
-			: this(handler, additionalArguments)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CreationContext"/> class.
+		/// </summary>
+		/// <param name="handler">The handler.</param>
+		/// <param name="releasePolicy">The release policy.</param>
+		/// <param name="typeToExtractGenericArguments">The type to extract generic arguments.</param>
+		/// <param name="additionalArguments">The additional arguments.</param>
+		public CreationContext(IHandler handler, IReleasePolicy releasePolicy,
+		                       Type typeToExtractGenericArguments, IDictionary additionalArguments)
+			: this(handler, releasePolicy, additionalArguments)
 		{
 			genericArguments = ExtractGenericArguments(typeToExtractGenericArguments);
 		}
 
-		public CreationContext(IHandler handler, Type typeToExtractGenericArguments,
-							   CreationContext parentContext)
-			: this(handler, parentContext.Dependencies, parentContext.handlersChain)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CreationContext"/> class.
+		/// </summary>
+		/// <param name="handler">The handler.</param>
+		/// <param name="releasePolicy">The release policy.</param>
+		/// <param name="typeToExtractGenericArguments">The type to extract generic arguments.</param>
+		/// <param name="parentContext">The parent context.</param>
+		public CreationContext(IHandler handler, IReleasePolicy releasePolicy,
+		                       Type typeToExtractGenericArguments, CreationContext parentContext)
+			: this(handler, releasePolicy, parentContext.Dependencies, parentContext.handlerStack)
 		{
+			this.resolutionStack = parentContext.resolutionStack;
 			additionalArguments = parentContext.additionalArguments;
 			genericArguments = ExtractGenericArguments(typeToExtractGenericArguments);
 		}
@@ -98,7 +135,7 @@ namespace Castle.MicroKernel
 		#region ISubDependencyResolver
 
 		public virtual object Resolve(CreationContext context, ISubDependencyResolver parentResolver,
-							  ComponentModel model, DependencyModel dependency)
+		                              ComponentModel model, DependencyModel dependency)
 		{
 			if (additionalArguments != null)
 			{
@@ -109,7 +146,7 @@ namespace Castle.MicroKernel
 		}
 
 		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver,
-							   ComponentModel model, DependencyModel dependency)
+		                               ComponentModel model, DependencyModel dependency)
 		{
 			if (dependency.DependencyKey == null) return false;
 
@@ -122,6 +159,11 @@ namespace Castle.MicroKernel
 		}
 
 		#endregion
+
+		public IReleasePolicy ReleasePolicy
+		{
+			get { return releasePolicy; }
+		}
 
 		public IDictionary AdditionalParameters
 		{
@@ -166,29 +208,61 @@ namespace Castle.MicroKernel
 		/// </summary>
 		public bool HandlerIsCurrentlyBeingResolved(IHandler handlerToTest)
 		{
-			return handlersChain.Contains(handlerToTest);
+			return handlerStack.Contains(handlerToTest);
 		}
 
-		public IDisposable ResolvingHandler(IHandler handlerBeingResolved)
+		public ResolutionContext EnterResolutionContext(IHandler handlerBeingResolved)
 		{
-			handlersChain.Add(handlerBeingResolved);
-			return new RemoveHandlerFromCurrentlyResolving(this, handlerBeingResolved);
+			return EnterResolutionContext(handlerBeingResolved, true);
 		}
 
-		private class RemoveHandlerFromCurrentlyResolving : IDisposable
+		public ResolutionContext EnterResolutionContext(IHandler handlerBeingResolved, bool createBurden)
 		{
-			private readonly CreationContext parent;
-			private readonly IHandler handler;
-
-			public RemoveHandlerFromCurrentlyResolving(CreationContext parent, IHandler handler)
+			var resCtx = new ResolutionContext(this, createBurden ? new Burden() : null);
+			handlerStack.Push(handlerBeingResolved);
+			if (createBurden)
 			{
-				this.parent = parent;
-				this.handler = handler;
+				resolutionStack.Push(resCtx);
+			}
+			return resCtx;
+		}
+
+		private void ExitResolutionContext(Burden burden)
+		{
+			handlerStack.Pop();
+
+			if (burden == null)
+			{
+				return;
+			}
+
+			resolutionStack.Pop();
+
+			if (resolutionStack.Count != 0)
+			{
+				resolutionStack.Peek().Burden.AddChild(burden);
+			}
+		}
+
+		public class ResolutionContext : IDisposable
+		{
+			private readonly CreationContext context;
+			private readonly Burden burden;
+
+			public ResolutionContext(CreationContext context, Burden burden)
+			{
+				this.context = context;
+				this.burden = burden;
+			}
+
+			public Burden Burden
+			{
+				get { return burden; }
 			}
 
 			public void Dispose()
 			{
-				parent.handlersChain.Remove(handler);
+				context.ExitResolutionContext(burden);
 			}
 		}
 	}

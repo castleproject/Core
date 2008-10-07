@@ -354,11 +354,7 @@ namespace Castle.MicroKernel.Resolvers
 
 			context = RebuildContextForParameter(context, dependency.TargetType);
 
-			object instance = handler.Resolve(context);
-
-			kernel.ReleasePolicy.Track(instance, handler);
-
-			return instance;
+			return handler.Resolve(context);
 		}
 
 		private IHandler TryGetHandlerFromKernel(DependencyModel dependency, CreationContext context)
@@ -373,7 +369,7 @@ namespace Castle.MicroKernel.Resolvers
 
 			IHandler[] handlers = kernel.GetHandlers(dependency.TargetType);
 
-			foreach (IHandler maybeCorrectHandler in handlers)
+			foreach(IHandler maybeCorrectHandler in handlers)
 			{
 				if (context.HandlerIsCurrentlyBeingResolved(maybeCorrectHandler) == false)
 				{
@@ -489,7 +485,7 @@ namespace Castle.MicroKernel.Resolvers
 			}
 			else
 			{
-				return new CreationContext(current.Handler, parameterType, current);
+				return new CreationContext(current.Handler, current.ReleasePolicy, parameterType, current);
 			}
 		}
 	}

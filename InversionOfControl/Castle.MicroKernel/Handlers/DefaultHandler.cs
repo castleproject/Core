@@ -15,9 +15,8 @@
 namespace Castle.MicroKernel.Handlers
 {
 	using System;
-
-	using Castle.Core;
 	using System.Collections;
+	using Castle.Core;
 
 	/// <summary>
 	/// Summary description for DefaultHandler.
@@ -46,9 +45,15 @@ namespace Castle.MicroKernel.Handlers
 				AssertNotWaitingForDependency();
 			}
 
-			using (context.ResolvingHandler(this))
+			using(var resCtx = context.EnterResolutionContext(this))
 			{
-			    return lifestyleManager.Resolve(context);
+			    object instance = lifestyleManager.Resolve(context);
+
+				resCtx.Burden.SetRootInstance(instance, this);
+
+				context.ReleasePolicy.Track(instance, resCtx.Burden);
+
+				return instance;
 			}
 		}
 

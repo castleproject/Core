@@ -21,10 +21,10 @@ namespace Castle.MicroKernel
 	/// </summary>
 	public interface IReleasePolicy : IDisposable
 	{
-		void Track( object instance, IHandler handler );
+		void Track(object instance, Burden burden);
 
-		bool HasTrack( object instance );
+		bool HasTrack(object instance);
 
-		void Release( object instance );
+		void Release(object instance);
 	}
 }

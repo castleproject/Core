@@ -19,26 +19,19 @@ namespace Castle.MicroKernel.Releasers
 
 	/// <summary>
 	/// Only tracks components that have decommission steps
-	/// registered
+	/// registered or have pooled lifestyle.
 	/// </summary>
 	[Serializable]
 	public class LifecycledComponentsReleasePolicy : AllComponentsReleasePolicy
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LifecycledComponentsReleasePolicy"/> class.
-		/// </summary>
-		public LifecycledComponentsReleasePolicy()
+		public override void Track(object instance, Burden burden)
 		{
-		}
-
-		public override void Track(object instance, IHandler handler)
-		{
-			ComponentModel model = handler.ComponentModel;
+			ComponentModel model = burden.Model;
 
 			if (model.LifecycleSteps.HasDecommissionSteps || 
 				model.LifestyleType == LifestyleType.Pooled)
 			{
-				base.Track(instance, handler);
+				base.Track(instance, burden);
 			}
 		}
 	}

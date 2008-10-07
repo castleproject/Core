@@ -54,6 +54,6 @@ namespace Castle.MicroKernel
 		/// <param name="instance"></param>
 		bool Release(object instance);
 
-		bool ContainerShouldTrackForDisposal { get; }
+		//bool ContainerShouldTrackForDisposal { get; }
 	}
 }

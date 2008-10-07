@@ -1528,7 +1528,7 @@ namespace Castle.MicroKernel
 
 			object instance = handler.Resolve(context);
 
-			ReleasePolicy.Track(instance, handler);
+			// ReleasePolicy.Track(instance, handler);
 
 			return instance;
 		}
@@ -1536,7 +1536,7 @@ namespace Castle.MicroKernel
 		protected CreationContext CreateCreationContext(IHandler handler, Type typeToExtractGenericArguments,
 		                                                IDictionary additionalArguments)
 		{
-			return new CreationContext(handler, typeToExtractGenericArguments, additionalArguments);
+			return new CreationContext(handler, ReleasePolicy, typeToExtractGenericArguments, additionalArguments);
 		}
 
 		#endregion

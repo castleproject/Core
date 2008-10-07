@@ -17,59 +17,48 @@ namespace Castle.MicroKernel.Releasers
 	using System;
 	using System.Collections;
 
-	/// <summary>
-	/// Summary description for AllComponentsReleasePolicy.
-	/// </summary>
 	[Serializable]
 	public class AllComponentsReleasePolicy : IReleasePolicy
 	{
-		private IDictionary instance2Handler = Hashtable.Synchronized(
+		// TODO: Replace by Dictionary and ReadWritLockSlim
+		private readonly IDictionary instance2Burden = Hashtable.Synchronized(
 			new Hashtable(new Util.ReferenceEqualityComparer()));
 
-		public AllComponentsReleasePolicy()
+		public virtual void Track(object instance, Burden burden)
 		{
-		}
-
-		#region IReleasePolicy Members
-
-		public virtual void Track(object instance, IHandler handler)
-		{
-			instance2Handler[instance] = handler;
+			instance2Burden[instance] = burden;
 		}
 
 		public bool HasTrack(object instance)
 		{
-			return instance2Handler.Contains(instance);
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			return instance2Burden.Contains(instance);
 		}
 
 		public void Release(object instance)
 		{
-			IHandler handler = (IHandler) instance2Handler[instance];
+			if (instance == null) throw new ArgumentNullException("instance");
 			
-			if (handler != null)
-			{
-				instance2Handler.Remove(instance);
+			var burden = (Burden)instance2Burden[instance];
 
-				handler.Release(instance);
+			if (burden != null)
+			{
+				instance2Burden.Remove(instance);
+
+				burden.Release(this);
 			}
 		}
-
-		#endregion
-
-		#region IDisposable Members
 
 		public void Dispose()
 		{
-			foreach(DictionaryEntry entry in instance2Handler)
+			foreach(DictionaryEntry entry in instance2Burden)
 			{
-				object instance = entry.Key;
-				IHandler handler = (IHandler) entry.Value;
-				handler.Release(instance);
+				var burden = (Burden) entry.Value;
+				burden.Release(this);
 			}
 
-			instance2Handler.Clear();
+			instance2Burden.Clear();
 		}
-
-		#endregion
 	}
 }

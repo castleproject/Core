@@ -14,13 +14,24 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
-	/// <summary>
-	/// Summary description for DefaultMailSenderService.
-	/// </summary>
-	public class DefaultMailSenderService
+	using System;
+
+	public class DefaultMailSenderService : IDisposable
 	{
+		private bool isDisposed = false;
+
 		public DefaultMailSenderService()
 		{
+		}
+
+		public bool IsDisposed
+		{
+			get { return isDisposed; }
+		}
+
+		public void Dispose()
+		{
+			isDisposed = true;
 		}
 	}
 }

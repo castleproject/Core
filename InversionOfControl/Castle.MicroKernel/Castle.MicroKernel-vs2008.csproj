@@ -99,6 +99,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ComponentActivator\WebUserControlComponentActivator.cs" />
+    <Compile Include="Context\Burden.cs" />
     <Compile Include="Context\DependencyTrackingScope.cs" />
     <Compile Include="ComponentActivator\ExternalInstanceActivator.cs">
       <SubType>Code</SubType>

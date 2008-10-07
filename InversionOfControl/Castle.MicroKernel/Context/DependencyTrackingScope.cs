@@ -23,11 +23,12 @@ namespace Castle.MicroKernel
 	internal class DependencyTrackingScope : IDisposable
 	{
 		private readonly DependencyModel dependencyTrackingKey;
-		private DependencyModelCollection dependencies;
+		private readonly DependencyModelCollection dependencies;
 
-		public DependencyTrackingScope(CreationContext creationContext, ComponentModel model, MemberInfo info, DependencyModel dependencyModel)
+		public DependencyTrackingScope(CreationContext creationContext, ComponentModel model, MemberInfo info,
+		                               DependencyModel dependencyModel)
 		{
-			if (dependencyModel.TargetType != typeof (IKernel))
+			if (dependencyModel.TargetType != typeof(IKernel))
 			{
 				this.dependencies = creationContext.Dependencies;
 
@@ -57,7 +58,7 @@ namespace Castle.MicroKernel
 
 				sb.Append("The dependency graph that resulted in a cycle is:");
 
-				foreach (DependencyModel key in dependencies)
+				foreach(DependencyModel key in dependencies)
 				{
 					DependencyModelExtended extendedInfo = key as DependencyModelExtended;
 
@@ -121,9 +122,9 @@ namespace Castle.MicroKernel
 				DependencyModelExtended other = obj as DependencyModelExtended;
 				if (other == null)
 					return false;
-				return other.Info == this.Info  &&
-					other.model == model &&
-					base.Equals(other);
+				return other.Info == this.Info &&
+				       other.model == model &&
+				       base.Equals(other);
 			}
 
 			public override int GetHashCode()
