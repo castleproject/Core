@@ -161,6 +161,13 @@ namespace Castle.DynamicProxy
 		}
 
 		public object CreateInterfaceProxyWithTargetInterface(Type theInterface, object target,
+															  ProxyGenerationOptions options,
+			                                                  params IInterceptor[] interceptors)
+		{
+			return CreateInterfaceProxyWithTargetInterface(theInterface, null, target, options, interceptors);
+		}
+
+		public object CreateInterfaceProxyWithTargetInterface(Type theInterface, Type[] interfaces, object target,
 		                                                      ProxyGenerationOptions options,
 		                                                      params IInterceptor[] interceptors)
 		{
@@ -192,8 +199,9 @@ namespace Castle.DynamicProxy
 			}
 
 			CheckNotGenericTypeDefinition(theInterface, "theInterface");
+			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 
-			Type generatedType = CreateInterfaceProxyTypeWithTargetInterface(theInterface, null, theInterface, options);
+			Type generatedType = CreateInterfaceProxyTypeWithTargetInterface(theInterface, interfaces, theInterface, options);
 			ArrayList arguments = GetConstructorArguments(target, interceptors, options);
 			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
@@ -373,7 +381,7 @@ namespace Castle.DynamicProxy
 		                                                           ProxyGenerationOptions options)
 		{
 			// create proxy
-			return ProxyBuilder.CreateInterfaceProxyTypeWithTargetInterface(theInterface, options);
+			return ProxyBuilder.CreateInterfaceProxyTypeWithTargetInterface(theInterface, interfaces, options);
 		}
 
 		protected Type CreateInterfaceProxyTypeWithoutTarget(Type theInterface, Type[] interfaces,

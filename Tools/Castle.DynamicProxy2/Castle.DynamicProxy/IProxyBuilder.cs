@@ -71,14 +71,15 @@ namespace Castle.DynamicProxy
 
 		/// <summary>
 		/// Implementors should return a proxy for the specified
-		/// interface that delegate all executions to the
+		/// interface(s) that delegate all executions to the
 		/// specified interceptor(s) and uses an instance of the interface
 		/// as their targets, rather than a class. All IInvocation's
 		/// should then implement IChangeProxyTarget.
 		/// </summary>
 		/// <param name="theInterface"></param>
+		/// <param name="interfaces"></param>
 		/// <param name="options"></param>
 		/// <returns></returns>
-		Type CreateInterfaceProxyTypeWithTargetInterface(Type theInterface, ProxyGenerationOptions options);
+		Type CreateInterfaceProxyTypeWithTargetInterface(Type theInterface, Type[] interfaces, ProxyGenerationOptions options);
 	}
 }

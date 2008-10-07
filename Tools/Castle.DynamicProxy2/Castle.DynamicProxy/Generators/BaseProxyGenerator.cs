@@ -203,6 +203,17 @@ namespace Castle.DynamicProxy.Generators
 			FieldReference interceptorsField,
 			ConstructorEmitter typeInitializerConstructor)
 		{
+			ImplementBlankInterface(targetType, _interface, emitter, interceptorsField, typeInitializerConstructor, false);
+		}
+
+		protected void ImplementBlankInterface(
+			Type targetType,
+			Type _interface,
+			ClassEmitter emitter,
+			FieldReference interceptorsField,
+			ConstructorEmitter typeInitializerConstructor,
+			bool allowChangeTarget)
+		{
 			CheckNotGenericTypeDefinition(targetType, "targetType");
 			CheckNotGenericTypeDefinition(_interface, "_interface");
 
@@ -220,10 +231,11 @@ namespace Castle.DynamicProxy.Generators
 				method2Invocation[method] =
 					BuildInvocationNestedType(emitter,
 					                          targetType,
-					                          emitter.TypeBuilder,
+					                          allowChangeTarget ? _interface : emitter.TypeBuilder,
 					                          method,
-					                          null,
-					                          ConstructorVersion.WithoutTargetMethod);
+					                          allowChangeTarget ? method : null,
+					                          ConstructorVersion.WithoutTargetMethod,
+											  allowChangeTarget);
 			}
 
 			foreach (MethodInfo method in methods)

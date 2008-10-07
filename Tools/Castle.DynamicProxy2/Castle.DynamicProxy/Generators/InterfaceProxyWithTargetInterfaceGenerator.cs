@@ -15,8 +15,6 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Reflection;
-	using Castle.DynamicProxy.Generators.Emitters;
 
 	public class InterfaceProxyWithTargetInterfaceGenerator : InterfaceProxyWithTargetGenerator
 	{
@@ -24,16 +22,9 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override void CreateInvocationForMethod(ClassEmitter emitter, MethodInfo method, Type proxyTargetType)
+		protected override bool AllowChangeTarget
 		{
-			MethodInfo methodOnTarget = FindMethodOnTargetType(method, proxyTargetType, true);
-
-			method2methodOnTarget[method] = methodOnTarget;
-
-			method2Invocation[method] = BuildInvocationNestedType(emitter, proxyTargetType,
-			                                                      IsMixinMethod(method) ? method.DeclaringType : proxyTargetType,
-			                                                      method, methodOnTarget,
-			                                                      ConstructorVersion.WithTargetMethod, true);
+			get { return true; }
 		}
 
 		protected override InterfaceGeneratorType GeneratorType

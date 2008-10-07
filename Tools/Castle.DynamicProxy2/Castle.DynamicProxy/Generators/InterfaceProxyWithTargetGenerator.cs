@@ -191,7 +191,7 @@ namespace Castle.DynamicProxy.Generators
 				{
 					foreach (Type inter in interfaces)
 					{
-						ImplementBlankInterface(targetType, inter, emitter, interceptorsField, typeInitializer);
+						ImplementBlankInterface(targetType, inter, emitter, interceptorsField, typeInitializer, AllowChangeTarget);
 					}
 				}
 
@@ -340,6 +340,11 @@ namespace Castle.DynamicProxy.Generators
 			return generatedType;
 		}
 
+		protected virtual bool AllowChangeTarget
+		{
+			get { return false; }
+		}
+
 		protected virtual void CreateInvocationForMethod(ClassEmitter emitter, MethodInfo method, Type proxyTargetType)
 		{
 			MethodInfo methodOnTarget = FindMethodOnTargetType(method, proxyTargetType, true);
@@ -349,7 +354,8 @@ namespace Castle.DynamicProxy.Generators
 			method2Invocation[method] = BuildInvocationNestedType(emitter, proxyTargetType,
 			                                                      IsMixinMethod(method) ? method.DeclaringType : proxyTargetType,
 			                                                      method, methodOnTarget,
-			                                                      ConstructorVersion.WithTargetMethod);
+			                                                      ConstructorVersion.WithTargetMethod,
+																  AllowChangeTarget);
 		}
 
 		/// <summary>

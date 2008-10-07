@@ -407,7 +407,9 @@ namespace Castle.DynamicProxy.Tests
 		public void LoadAssemblyIntoCache_CreateInterfaceProxyTypeWithTargetInterface()
 		{
 			CheckLoadAssemblyIntoCache(
-				delegate(IProxyBuilder builder) { return builder.CreateInterfaceProxyTypeWithTargetInterface(typeof (IMyInterface2), ProxyGenerationOptions.Default); });
+				delegate(IProxyBuilder builder) { 
+					return builder.CreateInterfaceProxyTypeWithTargetInterface(typeof (IMyInterface2), null, ProxyGenerationOptions.Default); 
+				});
 		}
 
 		[Test]
