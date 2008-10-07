@@ -14,11 +14,12 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using Castle.Core;
 	using Castle.Core.Interceptor;
-	using Castle.MicroKernel;
 	using Castle.Facilities.WcfIntegration.Internal;
+	using Castle.MicroKernel;
 
 	[Transient]
 	internal class WcfManagedChannelInterceptor : IInterceptor, IOnBehalfAware
@@ -50,6 +51,7 @@ namespace Castle.Facilities.WcfIntegration
 		public void Intercept(IInvocation invocation)
 		{
 			EnsureOpenChannel(invocation);
+
 			invocation.Proceed();
 		}
 

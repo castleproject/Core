@@ -126,6 +126,11 @@ namespace Castle.Facilities.WcfIntegration
 
 		#region Logging
 
+		public T LogMessages()
+		{
+			return AddBehaviors(typeof(LogMessageEndpointBehavior));
+		}
+
 		public T LogMessages<F>()
 			where F : IFormatProvider, new()
 		{
@@ -138,6 +143,11 @@ namespace Castle.Facilities.WcfIntegration
 			return LogMessages(new F(), format);
 		}
 
+		public T LogMessages(IFormatProvider formatter)
+		{
+			return LogMessages(formatter, null);
+		}
+
 		public T LogMessages(IFormatProvider formatter, string format)
 		{
 			return LogMessages().AddBehaviors(new LogMessageFormatBehavior(formatter, format));
@@ -146,11 +156,6 @@ namespace Castle.Facilities.WcfIntegration
 		public T LogMessages(string format)
 		{
 			return LogMessages().AddBehaviors(new LogMessageFormatBehavior(format));
-		}
-
-		public T LogMessages()
-		{
-			return AddBehaviors(typeof(LogMessageEndpointBehavior));
 		}
 
 		#endregion

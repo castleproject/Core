@@ -301,7 +301,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			}
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void CanAccessCommunicationObjectInterface()
 		{
 			windsorContainer.Register(

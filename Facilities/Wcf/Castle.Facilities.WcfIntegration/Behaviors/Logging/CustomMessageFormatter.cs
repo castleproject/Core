@@ -1,6 +1,7 @@
 ﻿using System.ServiceModel.Channels;
 using System.Text;
 using System.Xml;
+using System;
 
 namespace Castle.Facilities.WcfIntegration.Behaviors
 {
@@ -50,36 +51,42 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 		private void FormattedMessage(Message message, char format, StringBuilder output)
 		{
-			XmlWriter writer = XmlWriter.Create(output);
-
-			using (XmlDictionaryWriter dictWriter = XmlDictionaryWriter.CreateDictionaryWriter(writer))
+			using (XmlDictionaryWriter writer = CreateWriter(message, format, output))
 			{
 				switch (format)
 				{
 					case 'b':
-						message.WriteBody(dictWriter);
+						message.WriteBody(writer);
 						break;
 					case 'B':
-						message.WriteBodyContents(dictWriter);
+						message.WriteBodyContents(writer);
 						break;
 					case 's':
-						message.WriteStartBody(dictWriter);
+						message.WriteStartBody(writer);
 						break;
 					case 'S':
-						message.WriteStartEnvelope(dictWriter);
+						message.WriteStartEnvelope(writer);
 						break;
 					case 'm':
 					case 'M':
-						message.WriteMessage(dictWriter);
+						message.WriteMessage(writer);
 						break;
 					default:
 						return;
 				}
 
-				dictWriter.Flush();
+				writer.Flush();
 			}
+		}
 
-			output.Append(writer.ToString());
+		protected virtual XmlWriter CreateWriter(StringBuilder output)
+		{
+			return XmlWriter.Create(output);
+		}
+
+		protected virtual XmlDictionaryWriter CreateWriter(Message message, char format, StringBuilder output)
+		{
+			return XmlDictionaryWriter.CreateDictionaryWriter(CreateWriter(output));
 		}
 	}
 }
