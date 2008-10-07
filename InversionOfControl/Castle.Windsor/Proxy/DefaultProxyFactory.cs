@@ -78,7 +78,7 @@ namespace Castle.Windsor.Proxy
 				}
 				else if (proxyOptions.AllowChangeTarget)
 				{
-					proxy = generator.CreateInterfaceProxyWithTargetInterface(model.Service, target, 
+					proxy = generator.CreateInterfaceProxyWithTargetInterface(model.Service, interfaces, target, 
 						                                                      proxyGenOptions, interceptors);
 				}
 				else
