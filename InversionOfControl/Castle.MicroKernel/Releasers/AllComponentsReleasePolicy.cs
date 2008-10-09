@@ -12,53 +12,100 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Threading;
+
 namespace Castle.MicroKernel.Releasers
 {
-	using System;
-	using System.Collections;
+    using System;
+    using System.Collections;
 
-	[Serializable]
-	public class AllComponentsReleasePolicy : IReleasePolicy
-	{
-		// TODO: Replace by Dictionary and ReadWritLockSlim
-		private readonly IDictionary instance2Burden = Hashtable.Synchronized(
-			new Hashtable(new Util.ReferenceEqualityComparer()));
+    [Serializable]
+    public class AllComponentsReleasePolicy : IReleasePolicy
+    {
+        private readonly IDictionary instance2Burden =
+            new Hashtable(new Util.ReferenceEqualityComparer());
 
-		public virtual void Track(object instance, Burden burden)
-		{
-			instance2Burden[instance] = burden;
-		}
+        readonly ReaderWriterLock rwLock = new ReaderWriterLock();
 
-		public bool HasTrack(object instance)
-		{
-			if (instance == null) throw new ArgumentNullException("instance");
+        public virtual void Track(object instance, Burden burden)
+        {
+            rwLock.AcquireWriterLock(Timeout.Infinite);
+            try
+            {
+                instance2Burden[instance] = burden;
+            }
+            finally
+            {
+                rwLock.ReleaseWriterLock();
+            }
+        }
 
-			return instance2Burden.Contains(instance);
-		}
+        public bool HasTrack(object instance)
+        {
+            if (instance == null) throw new ArgumentNullException("instance");
+            rwLock.AcquireReaderLock(Timeout.Infinite);
+            try
+            {
+                return instance2Burden.Contains(instance);
+            }
+            finally
+            {
+                rwLock.ReleaseReaderLock();
+            }
+        }
 
-		public void Release(object instance)
-		{
-			if (instance == null) throw new ArgumentNullException("instance");
-			
-			var burden = (Burden)instance2Burden[instance];
+        public void Release(object instance)
+        {
+            if (instance == null) throw new ArgumentNullException("instance");
+            rwLock.AcquireReaderLock(Timeout.Infinite);
+            try
+            {
+                var burden = (Burden)instance2Burden[instance];
 
-			if (burden != null)
-			{
-				instance2Burden.Remove(instance);
+                if (burden == null)
+                    return;
 
-				burden.Release(this);
-			}
-		}
+                LockCookie cookie = rwLock.UpgradeToWriterLock(Timeout.Infinite);
 
-		public void Dispose()
-		{
-			foreach(DictionaryEntry entry in instance2Burden)
-			{
-				var burden = (Burden) entry.Value;
-				burden.Release(this);
-			}
+                try
+                {
+                    burden = (Burden)instance2Burden[instance];
+                    if (burden == null)
+                        return;
 
-			instance2Burden.Clear();
-		}
-	}
+                    instance2Burden.Remove(instance);
+
+                    burden.Release(this);
+                }
+                finally
+                {
+                    rwLock.DowngradeFromWriterLock(ref cookie);
+                }
+            }
+            finally
+            {
+                rwLock.ReleaseReaderLock();
+            }
+        }
+
+        public void Dispose()
+        {
+            rwLock.AcquireWriterLock(Timeout.Infinite);
+            try
+            {
+                foreach (DictionaryEntry entry in instance2Burden)
+                {
+                    var burden = (Burden)entry.Value;
+                    burden.Release(this);
+                }
+
+                instance2Burden.Clear();
+
+            }
+            finally
+            {
+                rwLock.ReleaseWriterLock();
+            }
+        }
+    }
 }
