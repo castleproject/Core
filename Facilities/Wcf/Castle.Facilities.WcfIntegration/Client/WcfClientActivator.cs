@@ -73,7 +73,7 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				ProxyOptions options = ProxyUtil.ObtainProxyOptions(Model, true);
 				options.AddAdditionalInterfaces(typeof(ICommunicationObject));			
-				instance = Kernel.ProxyFactory.Create(Kernel, instance, Model);
+				instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context);
 			}
 			catch (Exception ex)
 			{

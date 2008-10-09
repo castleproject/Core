@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.MicroKernel.Handlers;
+using Castle.MicroKernel.Registration;
+
 namespace Castle.Windsor.Tests
 {
 	using System;
@@ -58,6 +61,19 @@ namespace Castle.Windsor.Tests
 			Assert.IsNotNull(service);
 			Assert.AreEqual(7, service.Sum(2, 2));
 		}
+
+        [Test]
+        public void Interface_that_depends_on_service_it_is_intercepting()
+        {
+            _container.AddComponent("interceptor", typeof(InterceptorThatCauseStackOverflow));
+            _container.Register(
+                Component.For<ICameraService>().ImplementedBy<CameraService>()
+                    .Interceptors(new InterceptorReference[]{new InterceptorReference(typeof(InterceptorThatCauseStackOverflow)), }).First,
+                //because it has no interceptors, it is okay to resolve it...
+                Component.For<ICameraService>().ImplementedBy<CameraService>().Named("okay to resolve")
+                    );
+            _container.Resolve<ICameraService>();
+        }
 
 		[Test]
 		public void InterfaceProxyWithLifecycle()
@@ -212,7 +228,20 @@ namespace Castle.Windsor.Tests
 		}
 	}
 
-	public class ResultModifierInterceptor : IInterceptor
+    public class InterceptorThatCauseStackOverflow : IInterceptor
+    {
+
+        public InterceptorThatCauseStackOverflow(ICameraService service)
+        {
+        }
+
+        public void Intercept(IInvocation invocation)
+        {
+            
+        }
+    }
+
+    public class ResultModifierInterceptor : IInterceptor
 	{
 		public void Intercept(IInvocation invocation)
 		{

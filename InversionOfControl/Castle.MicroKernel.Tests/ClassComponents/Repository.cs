@@ -31,6 +31,13 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 		}
 	}
 
+    public class DecoratedRepository2 : IRepository
+    {
+        public DecoratedRepository2(string name)
+        {
+        }
+    }
+
 	public class Repository1 : IRepository
 	{
 		private IRepository _inner;

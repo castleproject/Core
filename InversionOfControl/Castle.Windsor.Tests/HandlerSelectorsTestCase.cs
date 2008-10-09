@@ -28,6 +28,16 @@ namespace Castle.Windsor.Tests
             event Action<string> OnSomethingInterestingToWatch;
         }
 
+        public class PeopleWatcher
+        {
+            private Person p;
+
+            public PeopleWatcher(Person p)
+            {
+                this.p = p;
+            }
+        }
+
         public class BirdWatcher : IWatcher
         {
             public event Action<string> OnSomethingInterestingToWatch = delegate { };
@@ -75,6 +85,19 @@ namespace Castle.Windsor.Tests
             }
         }
 
+        public class WatchSubDependencySelector : ISubDependencyResolver
+        {
+            public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+            {
+                return new SatiWatcher();
+            }
+
+            public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+            {
+                return dependency.TargetType == typeof (IWatcher);
+            }
+        }
+
         [Test]
         public void SelectUsingBusinessLogic_DirectSelection()
         {
@@ -108,7 +131,24 @@ namespace Castle.Windsor.Tests
             Assert.IsInstanceOfType(typeof(SatiWatcher), container.Resolve<Person>().Watcher, "change-by-context");
             selector.Interest = Interest.Biology;
             Assert.IsInstanceOfType(typeof(BirdWatcher), container.Resolve<Person>().Watcher, "explicit");
-           
+        }
+
+
+        [Test]
+        public void SubDependencyResolverHasHigherPriorityThanHandlerSelector()
+        {
+            IWindsorContainer container = new WindsorContainer();
+            container
+                .AddComponentLifeStyle<Person>(LifestyleType.Transient)
+                .AddComponent<IWatcher, BirdWatcher>("bird.watcher")
+                .AddComponent<IWatcher, SatiWatcher>("astronomy.watcher");
+            WatcherSelector selector = new WatcherSelector();
+            container.Kernel.AddHandlerSelector(selector);
+            container.Kernel.Resolver.AddSubResolver(new WatchSubDependencySelector());
+
+            selector.Interest = Interest.Biology;
+            Assert.IsInstanceOfType(typeof(SatiWatcher), container.Resolve<Person>().Watcher, "sub dependency should resolve sati");
+            Assert.IsInstanceOfType(typeof(BirdWatcher), container.Resolve<IWatcher>(), "root dependency should resolve bird");
         }
     }
 }

@@ -250,6 +250,20 @@ namespace Castle.MicroKernel.Handlers
 						sb.AppendFormat("- {0}. \r\n  A dependency cannot be satisfied by itself, " +
 										"did you forget to add a parameter name to differentiate between the " +
 										"two dependencies? \r\n", type.FullName);
+                        foreach (IHandler maybeDecoratedHandler in kernel.GetHandlers(handler.Service))
+					    {
+					        if(maybeDecoratedHandler==this)
+                                continue;
+					        sb.AppendFormat(
+					            " \r\n{0} is registered and is matching the required service, but cannot be resolved.\r\n",
+                                maybeDecoratedHandler.ComponentModel.Name);
+                            IExposeDependencyInfo info = maybeDecoratedHandler as IExposeDependencyInfo;
+
+                            if (info != null)
+                            {
+                                sb.Append(info.ObtainDependencyDetails(dependenciesChecked));
+                            }
+					    }
 					}
 					else
 					{

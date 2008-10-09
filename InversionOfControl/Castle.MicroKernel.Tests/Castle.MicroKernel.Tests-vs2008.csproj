@@ -184,6 +184,7 @@
     <Compile Include="Configuration\ConfigurationTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DecoratorsTestCase.cs" />
     <Compile Include="DependencyResolvingTestCase.cs" />
     <Compile Include="EventTests.cs" />
     <Compile Include="Facilities\FactorySupport\FactorySupportProgrammaticTestCase.cs" />

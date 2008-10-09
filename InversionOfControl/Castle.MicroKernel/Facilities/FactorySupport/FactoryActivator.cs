@@ -152,7 +152,7 @@ namespace Castle.Facilities.FactorySupport
 			{
 				try
 				{
-					instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, methodArgs.ToArray());
+					instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context, methodArgs.ToArray());
 				}
 				catch ( Exception ex )
 				{

@@ -28,8 +28,7 @@ namespace Castle.Windsor.Proxy
     {
         private readonly IList<IModelInterceptorsSelector> selectors = new List<IModelInterceptorsSelector>();
 
-        public abstract object Create(IKernel kernel, object instance,
-                                      ComponentModel model, params object[] constructorArguments);
+        public abstract object Create(IKernel kernel, object instance, ComponentModel model, CreationContext context, params object[] constructorArguments);
 
         public abstract bool RequiresTargetInstance(IKernel kernel, ComponentModel model);
         
@@ -53,8 +52,9 @@ namespace Castle.Windsor.Proxy
         /// </summary>
         /// <param name="kernel">The kernel instance</param>
         /// <param name="model">The component model</param>
+        /// <param name="context">The creation context</param>
         /// <returns>interceptors array</returns>
-        protected IInterceptor[] ObtainInterceptors(IKernel kernel, ComponentModel model)
+        protected IInterceptor[] ObtainInterceptors(IKernel kernel, ComponentModel model, CreationContext context)
         {
             List<IInterceptor> interceptors = new List<IInterceptor>();
 
@@ -80,7 +80,7 @@ namespace Castle.Windsor.Proxy
 
                 try
                 {
-                    IInterceptor interceptor = (IInterceptor)handler.Resolve(CreationContext.Empty);
+                    IInterceptor interceptor = (IInterceptor)handler.Resolve(context);
 
                     interceptors.Add(interceptor);
 

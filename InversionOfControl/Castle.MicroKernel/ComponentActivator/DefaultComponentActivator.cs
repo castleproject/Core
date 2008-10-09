@@ -123,7 +123,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			{
 				try
 				{
-					instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, arguments);
+					instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context, arguments);
 				}
 				catch(Exception ex)
 				{

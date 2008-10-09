@@ -49,7 +49,7 @@ namespace Castle.MicroKernel
 
 			handler.Release(instance);
 
-			foreach(var child in children)
+			foreach(Burden child in children)
 			{
 				policy.Release(child.instance);
 			}

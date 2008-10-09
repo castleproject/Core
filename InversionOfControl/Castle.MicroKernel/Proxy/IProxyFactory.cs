@@ -35,8 +35,9 @@ namespace Castle.MicroKernel
 		/// <param name="model">The component model</param>
 		/// <param name="instance">The component instance to be proxy (only required in some cases)</param>
 		/// <param name="constructorArguments">array of parameters to the constructor (if any)</param>
+		/// <param name="context">The creation context</param>
 		/// <returns>proxy instance</returns>
-		object Create(IKernel kernel, object instance, ComponentModel model, params object[] constructorArguments);
+		object Create(IKernel kernel, object instance, ComponentModel model, CreationContext context, params object[] constructorArguments);
 
 		/// <summary>
 		/// Implementor should check the component model
