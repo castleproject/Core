@@ -89,7 +89,10 @@ namespace Castle.MicroKernel
 		/// </summary>
 		private IList childKernels;
 
-		#endregion
+        [ThreadStatic]
+	    private static CreationContext currentCreationContext;
+
+	    #endregion
 
 		#region Constructors
 
@@ -1524,19 +1527,29 @@ namespace Castle.MicroKernel
 
 		protected object ResolveComponent(IHandler handler, Type service, IDictionary additionalArguments)
 		{
-			CreationContext context = CreateCreationContext(handler, service, additionalArguments);
+		    bool createdContext = currentCreationContext == null;
+		    CreationContext context = currentCreationContext ??
+		                              CreateCreationContext(handler, service, additionalArguments);
+		    currentCreationContext = context;
+		    try
+		    {
+                object instance = handler.Resolve(context);
 
-			object instance = handler.Resolve(context);
+                // ReleasePolicy.Track(instance, handler);
 
-			// ReleasePolicy.Track(instance, handler);
-
-			return instance;
+                return instance;
+		    }
+			finally
+		    {
+		        if(createdContext)
+		            currentCreationContext = null;
+		    }
 		}
 
 		protected CreationContext CreateCreationContext(IHandler handler, Type typeToExtractGenericArguments,
 		                                                IDictionary additionalArguments)
 		{
-			return new CreationContext(handler, ReleasePolicy, typeToExtractGenericArguments, additionalArguments);
+            return new CreationContext(handler, ReleasePolicy, typeToExtractGenericArguments, additionalArguments);
 		}
 
 		#endregion
