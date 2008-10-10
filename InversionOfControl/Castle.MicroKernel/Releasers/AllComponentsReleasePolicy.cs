@@ -93,14 +93,17 @@ namespace Castle.MicroKernel.Releasers
             rwLock.AcquireWriterLock(Timeout.Infinite);
             try
             {
-                foreach (DictionaryEntry entry in instance2Burden)
+				Burden[] burdens = new Burden[instance2Burden.Count];
+				instance2Burden.Values.CopyTo(burdens, 0);
+
+                foreach (Burden burden in burdens)
                 {
-                    var burden = (Burden)entry.Value;
-                    burden.Release(this);
+					if (instance2Burden.Contains(burden))
+					{
+						burden.Release(this);
+						instance2Burden.Remove(burden);
+					}
                 }
-
-                instance2Burden.Clear();
-
             }
             finally
             {
