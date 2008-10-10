@@ -38,6 +38,11 @@ namespace Castle.MicroKernel
 			children.Add(burden);
 		}
 
+		public bool HasChildren
+		{
+			get { return children.Count != 0; }
+		}
+
 		public ComponentModel Model
 		{
 			get { return handler.ComponentModel; }

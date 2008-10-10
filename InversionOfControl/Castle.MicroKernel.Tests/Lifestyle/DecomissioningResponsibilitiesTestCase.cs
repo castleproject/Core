@@ -117,6 +117,41 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			Assert.IsFalse(instance1.MailSender.IsDisposed);
 		}
 
+		[Test]
+		public void WhenRootComponentIsNotDisposableButDependenciesAre_DependenciesShouldBeDisposed()
+		{
+			kernel.AddComponent("root", typeof(NonDiposableRoot), LifestyleType.Transient);
+			kernel.AddComponent("a", typeof(A), LifestyleType.Transient);
+			kernel.AddComponent("b", typeof(B), LifestyleType.Transient);
+
+			var instance1 = kernel.Resolve<NonDiposableRoot>();
+			Assert.IsFalse(instance1.A.IsDisposed);
+			Assert.IsFalse(instance1.B.IsDisposed);
+
+			kernel.ReleaseComponent(instance1);
+
+			Assert.IsTrue(instance1.A.IsDisposed);
+			Assert.IsTrue(instance1.B.IsDisposed);
+		}
+
+		[Test]
+		public void WhenRootComponentIsNotDisposableButThirdLevelDependenciesAre_DependenciesShouldBeDisposed()
+		{
+			kernel.AddComponent("root", typeof(Indirection), LifestyleType.Transient);
+			kernel.AddComponent("secroot", typeof(NonDiposableRoot), LifestyleType.Transient);
+			kernel.AddComponent("a", typeof(A), LifestyleType.Transient);
+			kernel.AddComponent("b", typeof(B), LifestyleType.Transient);
+
+			var instance1 = kernel.Resolve<Indirection>();
+			Assert.IsFalse(instance1.FakeRoot.A.IsDisposed);
+			Assert.IsFalse(instance1.FakeRoot.B.IsDisposed);
+
+			kernel.ReleaseComponent(instance1);
+
+			Assert.IsTrue(instance1.FakeRoot.A.IsDisposed);
+			Assert.IsTrue(instance1.FakeRoot.B.IsDisposed);
+		}
+
 //		[Test]
 //		public void PooledComponentIsReleasedWhenRootComponentIsReleased()
 //		{
@@ -135,6 +170,43 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 //
 //			// TODO: Assert that pool had its Release called
 //		}
+
+		public class Indirection
+		{
+			private NonDiposableRoot fakeRoot;
+
+			public Indirection(NonDiposableRoot fakeRoot)
+			{
+				this.fakeRoot = fakeRoot;
+			}
+
+			public NonDiposableRoot FakeRoot
+			{
+				get { return fakeRoot; }
+			}
+		}
+
+		public class NonDiposableRoot
+		{
+			private A a;
+			private B b;
+
+			public NonDiposableRoot(A a, B b)
+			{
+				this.a = a;
+				this.b = b;
+			}
+
+			public A A
+			{
+				get { return a; }
+			}
+
+			public B B
+			{
+				get { return b; }
+			}
+		}
 
 		public abstract class DisposableBase : IDisposable
 		{
