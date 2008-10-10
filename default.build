@@ -175,7 +175,7 @@
 		<property name="current.framework.saved" value="${nant.settings.currentframework}" />
 
 		<!-- Execute build for each framework -->
-		<foreach item="String" delim=" " property="framework" in="net-1.1 net-2.0">
+		<foreach item="String" delim=" " property="framework" in="net-3.5">
 			<call target="set-${framework}-framework-configuration" />
 			<call target="build" />
 		</foreach>
