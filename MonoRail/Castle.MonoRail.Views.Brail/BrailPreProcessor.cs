@@ -177,7 +177,7 @@ namespace Castle.MonoRail.Views.Brail
 				buffer.Write("OutputEscaped ");
 			else
 				buffer.Write("output ");
-			buffer.WriteLine(code);
+			buffer.WriteLine(EscapeParemetersStartingWithQuestionMark(code));
 		}
 
 		private static string EscapeInitialAndClosingDoubleQuotes(string code)

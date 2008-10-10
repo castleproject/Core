@@ -32,11 +32,23 @@ namespace Castle.MonoRail.Views.Brail.Tests
 	        PropertyBag["items"] = new Item[]
 	                                   {
 	                                       new Item("Item 1", null),
-	                                       new Item("Item 1", new Item("SubItem 2.1", null)),
+	                                       new Item("Item 2", new Item("SubItem 2.1", null)),
 	                                   };
 			ProcessView("regressions/NullPropagationTest");
             AssertReplyContains("SubItem 2.1");
 	    }
+
+		[Test]
+		public void WillPropagateNullParameterInBraces()
+		{
+			PropertyBag["items"] = new Item[]
+	                                   {
+	                                       new Item("Item 1", null),
+	                                       new Item("Item 2", new Item("SubItem 2.1", null)),
+	                                   };
+			ProcessView("regressions/NullPropagationWithBracesTest");
+			AssertReplyContains("SubItem 2.1");
+		}
 
 		[Test]
 		public void WillPropagateNullParameter_WithNullInArrayMiddle()
