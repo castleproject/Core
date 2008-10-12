@@ -360,9 +360,6 @@
     <Compile Include="Releasers\IReleasePolicy.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Releasers\LifecycledComponentsReleasePolicy.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Releasers\NoTrackingReleasePolicy.cs">
       <SubType>Code</SubType>
     </Compile>
