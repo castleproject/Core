@@ -100,13 +100,13 @@ namespace Castle.Windsor.Configuration.Interpreters
 			}
 			catch(XmlProcessorException)
 			{
-				string message = "Unable to process xml resource ";
+				const string message = "Unable to process xml resource ";
 
 				throw new ConfigurationErrorsException(message);
 			}
 		}
 
-		protected void Deserialize(XmlNode section, IConfigurationStore store)
+		protected static void Deserialize(XmlNode section, IConfigurationStore store)
 		{
 			foreach(XmlNode node in section)
 			{
@@ -116,14 +116,14 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 					throw new ConfigurationErrorsException(message);
 				}
-				else if (node.NodeType == XmlNodeType.Element)
+				if (node.NodeType == XmlNodeType.Element)
 				{
 					DeserializeElement(node, store);
 				}
 			}
 		}
 
-		private void DeserializeElement(XmlNode node, IConfigurationStore store)
+		private static void DeserializeElement(XmlNode node, IConfigurationStore store)
 		{
 			if (ContainersNodeName.Equals(node.Name))
 			{
@@ -152,23 +152,19 @@ namespace Castle.Windsor.Configuration.Interpreters
 			}
 		}
 
-		private void DeserializeContainers(XmlNodeList nodes, IConfigurationStore store)
+		private static void DeserializeContainers(XmlNodeList nodes, IConfigurationStore store)
 		{
 			foreach(XmlNode node in nodes)
 			{
-				if (node.NodeType == XmlNodeType.Element)
-				{
-					AssertNodeName(node, ContainerNodeName);
-
-					DeserializeContainer(node, store);
-				}
+				if (node.NodeType != XmlNodeType.Element) continue;
+				
+				AssertNodeName(node, ContainerNodeName);
+				DeserializeContainer(node, store);
 			}
 		}
 
-		private void DeserializeContainer(XmlNode node, IConfigurationStore store)
+		private static void DeserializeContainer(XmlNode node, IConfigurationStore store)
 		{
-			String name = GetRequiredAttributeValue(node, "name");
-
 			IConfiguration config = XmlConfigurationDeserializer.GetDeserializedNode(node);
 			IConfiguration newConfig = new MutableConfiguration(config.Name, node.InnerXml);
 
@@ -183,106 +179,90 @@ namespace Castle.Windsor.Configuration.Interpreters
 			// Copy all children
 			newConfig.Children.AddRange(config.Children);
 
+			string name = GetRequiredAttributeValue(config, "name");
 			AddChildContainerConfig(name, newConfig, store);
 		}
 
-		private void DeserializeFacilities(XmlNodeList nodes, IConfigurationStore store)
+		private static void DeserializeFacilities(XmlNodeList nodes, IConfigurationStore store)
 		{
 			foreach(XmlNode node in nodes)
 			{
-				if (node.NodeType == XmlNodeType.Element)
-				{
-					AssertNodeName(node, FacilityNodeName);
-
-					DeserializeFacility(node, store);
-				}
+				if (node.NodeType != XmlNodeType.Element) continue;
+				
+				AssertNodeName(node, FacilityNodeName);
+				DeserializeFacility(node, store);
 			}
 		}
 
-		private void DeserializeFacility(XmlNode node, IConfigurationStore store)
+		private static void DeserializeFacility(XmlNode node, IConfigurationStore store)
 		{
-			String id = GetRequiredAttributeValue(node, "id");
-
 			IConfiguration config = XmlConfigurationDeserializer.GetDeserializedNode(node);
 
+			string id = GetRequiredAttributeValue(config, "id");
 			AddFacilityConfig(id, config, store);
 		}
 
-		private void DeserializeComponents(XmlNodeList nodes, IConfigurationStore store)
+		private static void DeserializeComponents(XmlNodeList nodes, IConfigurationStore store)
 		{
 			foreach(XmlNode node in nodes)
 			{
-				if (node.NodeType == XmlNodeType.Element)
-				{
-					AssertNodeName(node, ComponentNodeName);
+				if (node.NodeType != XmlNodeType.Element) continue;
 
-					DeserializeComponent(node, store);
-				}
+				AssertNodeName(node, ComponentNodeName);
+				DeserializeComponent(node, store);
 			}
 		}
 
-		private void DeserializeBootstrapComponents(XmlNodeList nodes, IConfigurationStore store)
+		private static void DeserializeBootstrapComponents(XmlNodeList nodes, IConfigurationStore store)
 		{
 			foreach(XmlNode node in nodes)
 			{
-				if (node.NodeType == XmlNodeType.Element)
-				{
-					AssertNodeName(node, ComponentNodeName);
+				if (node.NodeType != XmlNodeType.Element) continue;
 
-					DeserializeBootstrapComponent(node, store);
-				}
+				AssertNodeName(node, ComponentNodeName);
+				DeserializeBootstrapComponent(node, store);
 			}
 		}
 
-		private void DeserializeComponent(XmlNode node, IConfigurationStore store)
+		private static void DeserializeComponent(XmlNode node, IConfigurationStore store)
 		{
-			String id = GetRequiredAttributeValue(node, "id");
-
 			IConfiguration config = XmlConfigurationDeserializer.GetDeserializedNode(node);
 
+			string id = GetRequiredAttributeValue(config, "id");
 			AddComponentConfig(id, config, store);
 		}
 
-		private void DeserializeBootstrapComponent(XmlNode node, IConfigurationStore store)
+		private static void DeserializeBootstrapComponent(XmlNode node, IConfigurationStore store)
 		{
-			String id = GetRequiredAttributeValue(node, "id");
-
 			IConfiguration config = XmlConfigurationDeserializer.GetDeserializedNode(node);
 
+			string id = GetRequiredAttributeValue(config, "id");
 			AddBootstrapComponentConfig(id, config, store);
 		}
 
-		private String GetRequiredAttributeValue(XmlNode node, String attName)
+		private static string GetRequiredAttributeValue(IConfiguration configuration, string attributeName)
 		{
-			String value = GetAttributeValue(node, attName);
+			String value = configuration.Attributes[attributeName];
 
-			if (value.Length == 0)
-			{
+			if (string.IsNullOrEmpty(value)) {
 				String message = String.Format("{0} elements expects required non blank attribute {1}",
-				                               node.Name, attName);
+											   configuration.Name, attributeName);
 
 				throw new ConfigurationErrorsException(message);
 			}
 
-			return value;
+			return value;			
 		}
 
-		private String GetAttributeValue(XmlNode node, String attName)
+		private static void AssertNodeName(XmlNode node, IEquatable<string> expectedName)
 		{
-			XmlAttribute att = node.Attributes[attName];
+			if (expectedName.Equals(node.Name))
+				return;
+			
+			String message = String.Format("Unexpected node under '{0}': Expected '{1}' but found '{2}'",
+										   expectedName, expectedName, node.Name);
 
-			return (att == null) ? String.Empty : att.Value.Trim();
-		}
-
-		private void AssertNodeName(XmlNode node, string expectedName)
-		{
-			if (!expectedName.Equals(node.Name))
-			{
-				String message = String.Format("Unexpected node under '{0}': Expected '{1}' but found '{2}'",
-				                               expectedName, expectedName, node.Name);
-
-				throw new ConfigurationErrorsException(message);
-			}
+			throw new ConfigurationErrorsException(message);
 		}
 	}
 }

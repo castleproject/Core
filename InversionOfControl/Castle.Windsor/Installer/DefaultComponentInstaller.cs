@@ -27,13 +27,6 @@ namespace Castle.Windsor.Installer
 	/// </summary>
 	public class DefaultComponentInstaller : IComponentsInstaller
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DefaultComponentInstaller"/> class.
-		/// </summary>
-		public DefaultComponentInstaller()
-		{
-		}
-
 		#region IComponentsInstaller Members
 
 		/// <summary>
@@ -57,7 +50,7 @@ namespace Castle.Windsor.Installer
 			{
 				String id = facility.Attributes["id"];
 				String typeName = facility.Attributes["type"];
-				if (typeName == null || typeName.Length == 0) continue;
+				if (string.IsNullOrEmpty(typeName)) continue;
 
 				Type type = ObtainType(typeName);
 
@@ -79,12 +72,12 @@ namespace Castle.Windsor.Installer
 				String typeName = component.Attributes["type"];
 				String serviceTypeName = component.Attributes["service"];
 				
-				if (typeName == null || typeName.Length == 0) continue;
+				if (string.IsNullOrEmpty(typeName)) continue;
 
 				Type type = ObtainType(typeName);
 				Type service = type;
 
-				if (serviceTypeName != null && serviceTypeName.Length != 0)
+				if (!string.IsNullOrEmpty(serviceTypeName))
 				{
 					service = ObtainType(serviceTypeName);
 				}
@@ -97,7 +90,7 @@ namespace Castle.Windsor.Installer
 			}
 		}
 
-		private void SetUpChildContainers(IConfiguration[] configurations, IWindsorContainer parentContainer)
+		private static void SetUpChildContainers(IConfiguration[] configurations, IWindsorContainer parentContainer)
 		{
 			foreach(IConfiguration childContainerConfig in configurations)
 			{
@@ -110,7 +103,7 @@ namespace Castle.Windsor.Installer
 			}
 		}
 
-		private Type ObtainType(String typeName)
+		private static Type ObtainType(String typeName)
 		{
 			Type type = Type.GetType(typeName, false, false);
 
@@ -124,7 +117,7 @@ namespace Castle.Windsor.Installer
 			return type;
 		}
 
-		private IFacility InstantiateFacility(Type facilityType)
+		private static IFacility InstantiateFacility(Type facilityType)
 		{
 			if (!typeof(IFacility).IsAssignableFrom( facilityType ))
 			{

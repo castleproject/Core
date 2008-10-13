@@ -127,17 +127,17 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 		#region Helpers to populate IConfigurationStore
 
-		protected void AddFacilityConfig(IConfiguration facility, IConfigurationStore store)
+		protected static void AddFacilityConfig(IConfiguration facility, IConfigurationStore store)
 		{
 			AddFacilityConfig( facility.Attributes["id"], facility, store );
 		}
 
-		protected void AddComponentConfig(IConfiguration component, IConfigurationStore store)
+		protected static void AddComponentConfig(IConfiguration component, IConfigurationStore store)
 		{
 			AddComponentConfig( component.Attributes["id"], component, store );
 		}
 
-		protected void AddChildContainerConfig(string name, IConfiguration childContainer, IConfigurationStore store)
+		protected static void AddChildContainerConfig(string name, IConfiguration childContainer, IConfigurationStore store)
 		{
 			AssertValidId(name);
 
@@ -146,7 +146,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			store.AddChildContainerConfiguration(name, childContainer);
 		}
 
-		protected void AddFacilityConfig(string id, IConfiguration facility, IConfigurationStore store)
+		protected static void AddFacilityConfig(string id, IConfiguration facility, IConfigurationStore store)
 		{
 			AssertValidId(id);
 
@@ -155,7 +155,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			store.AddFacilityConfiguration( id, facility );
 		}
 
-		protected void AddComponentConfig(string id, IConfiguration component, IConfigurationStore store)
+		protected static void AddComponentConfig(string id, IConfiguration component, IConfigurationStore store)
 		{
 			AssertValidId(id);
 
@@ -164,7 +164,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			store.AddComponentConfiguration( id, component );
 		}
 
-		protected void AddBootstrapComponentConfig(string id, IConfiguration component, IConfigurationStore store)
+		protected static void AddBootstrapComponentConfig(string id, IConfiguration component, IConfigurationStore store)
 		{
 			AssertValidId(id);
 
@@ -173,11 +173,11 @@ namespace Castle.Windsor.Configuration.Interpreters
 			store.AddBootstrapComponentConfiguration(id, component);
 		}
 
-		private void AssertValidId(string id)
+		private static void AssertValidId(string id)
 		{
-			if (id == null || id.Length == 0)
+			if (string.IsNullOrEmpty(id))
 			{
-				string message = "Component or Facility was declared without a proper 'id' attribute";
+				const string message = "Component or Facility was declared without a proper 'id' attribute";
 
 				throw new ConfigurationErrorsException(message);
 			}

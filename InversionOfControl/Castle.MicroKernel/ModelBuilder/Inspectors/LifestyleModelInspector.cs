@@ -91,7 +91,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 			return false;
 		}
 
-		private void ExtractPoolConfig(ComponentModel model)
+		private static void ExtractPoolConfig(ComponentModel model)
 		{
 			String initial = model.Configuration.Attributes["initialPoolSize"];
 			String maxSize = model.Configuration.Attributes["maxPoolSize"];
@@ -106,7 +106,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 			}
 		}
 
-		private void ExtractCustomConfig(ComponentModel model)
+		private static void ExtractCustomConfig(ComponentModel model)
 		{
 			String customLifestyleType = model.Configuration.Attributes["customLifestyleType"];
 
@@ -126,7 +126,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 			}
 			else
 			{
-				string message = @"The attribute 'customLifestyleType' must be specified in conjunction with the 'lifestyle' attribute set to ""custom"".";
+				const string message = @"The attribute 'customLifestyleType' must be specified in conjunction with the 'lifestyle' attribute set to ""custom"".";
 
 				throw new ConfigurationErrorsException(message);
 			}

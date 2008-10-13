@@ -14,33 +14,29 @@
 
 namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
-    using System;
-    using Castle.Core;
-    using Castle.Core.Configuration;
+	using System;
+	using Castle.Core;
+	using Castle.Core.Configuration;
 
-    /// <summary>
-    /// Uses the ConfigurationStore registered in the kernel to obtain
-    /// an <see cref="IConfiguration"/> associated with the component.
-    /// </summary>
-    [Serializable]
-    public class ConfigurationModelInspector : IContributeComponentModelConstruction
-    {
-        /// <summary>
-        /// Queries the kernel's ConfigurationStore for a configuration
-        /// associated with the component name.
-        /// </summary>
-        /// <param name="kernel"></param>
-        /// <param name="model"></param>
-        public virtual void ProcessModel(IKernel kernel, ComponentModel model)
-        {
-			IConfiguration config = kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
-
-			if (config == null)
-			{
-				config = kernel.ConfigurationStore.GetBootstrapComponentConfiguration(model.Name);
-			}
+	/// <summary>
+	/// Uses the ConfigurationStore registered in the kernel to obtain
+	/// an <see cref="IConfiguration"/> associated with the component.
+	/// </summary>
+	[Serializable]
+	public class ConfigurationModelInspector : IContributeComponentModelConstruction
+	{
+		/// <summary>
+		/// Queries the kernel's ConfigurationStore for a configuration
+		/// associated with the component name.
+		/// </summary>
+		/// <param name="kernel"></param>
+		/// <param name="model"></param>
+		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
+		{
+			IConfiguration config = kernel.ConfigurationStore.GetComponentConfiguration(model.Name) ??
+									kernel.ConfigurationStore.GetBootstrapComponentConfiguration(model.Name);
 
 			model.Configuration = config;
-        }
-    }
+		}
+	}
 }

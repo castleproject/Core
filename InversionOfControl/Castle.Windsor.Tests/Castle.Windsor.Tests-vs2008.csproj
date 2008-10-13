@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -348,7 +348,6 @@
     <EmbeddedResource Include="Configuration2\RelativeTest\rel_include1.xml" />
     <EmbeddedResource Include="Configuration2\RelativeTest\rel_include2.xml" />
     <EmbeddedResource Include="Configuration2\resource_config_with_include.xml" />
-    <EmbeddedResource Include="Configuration\sample_config.xml" />
     <EmbeddedResource Include="XmlProcessor\TestFiles\AssemblyInclude1.xml" />
     <EmbeddedResource Include="XmlProcessor\TestFiles\AssemblyInclude2.xml" />
     <EmbeddedResource Include="XmlProcessor\TestFiles\include1.xml" />
@@ -361,6 +360,8 @@
     <EmbeddedResource Include="Configuration2\env_config.xml" />
     <EmbeddedResource Include="Configuration2\eval_config.xml" />
     <Content Include="Configuration2\synchtest_config.xml" />
+    <EmbeddedResource Include="sample_config_with_spaces.xml" />
+    <EmbeddedResource Include="Configuration\sample_config.xml" />
     <Content Include="IOC-51.xml" />
     <Content Include="Proxy\typedFactory.xml" />
     <Content Include="Proxy\proxyBehaviorInvalidConfig.xml" />

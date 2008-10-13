@@ -129,16 +129,13 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 				nodeProcessors[type] = new Hashtable();
 			}
 
-			IDictionary typeProcessors = nodeProcessors[type] as IDictionary;
+			IDictionary typeProcessors = (IDictionary)nodeProcessors[type];
 
 			if (typeProcessors.Contains(processor.Name))
 			{
 				throw new XmlProcessorException("There is already a processor register for {0} with name {1} ", type, processor.Name);
 			}
-			else
-			{
-				typeProcessors.Add(processor.Name, processor);
-			}
+			typeProcessors.Add(processor.Name, processor);
 		}
 
 		public bool HasFlag(string flag)
@@ -180,14 +177,12 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 				return resource == null ? resourceSubSystem.CreateResource(uri) :
 					resourceSubSystem.CreateResource(uri, resource.FileBasePath);
 			}
-			else if (resourceStack.Count > 0)
+			if (resourceStack.Count > 0)
 			{
 				return resource.CreateRelative(uri);
 			}
-			else
-			{
-				throw new XmlProcessorException("Cannot get relative resource '" + uri + "', resource stack is empty");
-			}
+			
+			throw new XmlProcessorException("Cannot get relative resource '" + uri + "', resource stack is empty");		
 		}
 
 		public void AddProperty(XmlElement content)

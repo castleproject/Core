@@ -19,22 +19,23 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 
 	public class DefaultElementProcessor : AbstractXmlNodeProcessor
 	{
-		private static readonly String IncludeAttrName = "includeUri";
+		private const string IncludeAttrName = "includeUri";
 		private static readonly DefaultTextNodeProcessor textProcessor = new DefaultTextNodeProcessor();
 		private static readonly IncludeElementProcessor includeProcessor = new IncludeElementProcessor();
-
-		public DefaultElementProcessor()
-		{
-		}
 
 		public override String Name
 		{
 			get { return ""; }
 		}
 
+		/// <summary>
+		/// Processes the specified node list.
+		/// </summary>
+		/// <param name="nodeList">The node list.</param>
+		/// <param name="engine">The engine.</param>
 		public override void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine)
 		{
-			XmlElement element = nodeList.Current as XmlElement;
+			XmlElement element = (XmlElement)nodeList.Current;
 
 			ProcessAttributes(element, engine);
 
@@ -50,7 +51,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 		/// </summary>
 		/// <param name="element">The element.</param>
 		/// <param name="engine"></param>
-		private void ProcessAttributes(XmlElement element, IXmlProcessorEngine engine)
+		private static void ProcessAttributes(XmlElement element, IXmlProcessorEngine engine)
 		{
 			ProcessIncludeAttribute(element, engine);
 
@@ -60,21 +61,19 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 			}
 		}
 
-		private void ProcessIncludeAttribute(XmlElement element, IXmlProcessorEngine engine)
+		private static void ProcessIncludeAttribute(XmlElement element, IXmlProcessorEngine engine)
 		{
-			XmlAttribute include = element.Attributes[IncludeAttrName] as XmlAttribute;
+			XmlAttribute include = element.Attributes[IncludeAttrName];
 
-			if (include != null)
+			if (include == null) return;
+			// removing the include attribute from the element
+			element.Attributes.RemoveNamedItem(IncludeAttrName);
+
+			XmlNode includeContent = includeProcessor.ProcessInclude(element, include.Value, engine);
+
+			if (includeContent != null)
 			{
-				// removing the include attribute from the element
-				element.Attributes.RemoveNamedItem(IncludeAttrName);
-
-				XmlNode includeContent = includeProcessor.ProcessInclude(element, include.Value, engine);
-
-				if (includeContent != null)
-				{
-					element.PrependChild(includeContent);
-				}
+				element.PrependChild(includeContent);
 			}
 		}
 	}

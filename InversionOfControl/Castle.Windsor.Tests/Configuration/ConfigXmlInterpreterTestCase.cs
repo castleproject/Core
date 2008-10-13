@@ -20,6 +20,7 @@ namespace Castle.Windsor.Tests
 	using Castle.MicroKernel.SubSystems.Configuration;
 	using Castle.Windsor.Configuration.Interpreters;
 	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+	using Components;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -77,6 +78,19 @@ namespace Castle.Windsor.Tests
 			WindsorContainer container = new WindsorContainer(store);
 
 			container.AddFacility("testidengine", new DummyFacility());
+		}
+
+		[Test]
+		public void ComponentIdGetsLoadedFromTheParsedConfiguration() {
+			
+			DefaultConfigurationStore store = new DefaultConfigurationStore();
+			XmlInterpreter interpreter = new XmlInterpreter(ConfigHelper.ResolveConfigPath("sample_config_with_spaces.xml"));
+			interpreter.ProcessResource(interpreter.Source, store);
+
+			WindsorContainer container = new WindsorContainer(store);
+
+			IHandler handler = container.Kernel.GetHandler(typeof(ICalcService));
+			Assert.AreEqual(Core.LifestyleType.Transient, handler.ComponentModel.LifestyleType);
 		}
 
 		[Test]
