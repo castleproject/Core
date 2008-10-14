@@ -69,11 +69,6 @@ namespace Castle.MicroKernel.Lifestyle
 			return false;
 		}
 
-		public override bool ContainerShouldTrackForDisposal
-		{
-			get { return false; }
-		}
-
 		internal void Evict(object instance)
 		{
 			base.Release(instance);

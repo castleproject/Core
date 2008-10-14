@@ -14,8 +14,11 @@
 
 namespace Castle.Facilities.FactorySupport.Tests
 {
+	using System;
 	using System.Collections.Generic;
 	using Castle.MicroKernel;
+	using Core.Configuration;
+	using MicroKernel.Registration;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -29,13 +32,12 @@ namespace Castle.Facilities.FactorySupport.Tests
 		{
 			facility = new FactorySupportFacility();
 			kernel = new DefaultKernel();
+			kernel.AddFacility("factory.support", facility);
 		}
 
 		[Test]
 		public void FactoryResolveWithProposedFacilityPatch()
 		{
-			kernel.AddFacility("factory.support", facility);
-
 			string serviceKey = "someService";
 			facility.AddFactory<ISomeService, ServiceFactory>(serviceKey, "Create");
 
@@ -44,6 +46,43 @@ namespace Castle.Facilities.FactorySupport.Tests
 
 			Assert.IsTrue(ServiceFactory.CreateWasCalled);
 			Assert.IsInstanceOfType(typeof(ServiceImplementation), service);
+		}
+
+		[Test, Ignore("Kernel doesn't treat ${} as an special expression for config/primitives, not sure it should - leave this up for discussion")]
+		public void Factory_AsAPublisherOfValues_CanBeResolvedByDependents()
+		{
+			string serviceKey = "someService";
+			facility.AddFactory<TimeSpan, ServiceFactory>(serviceKey, "get_Something");
+
+			kernel.Register(Component.For<SettingsConsumer>().
+				Parameters(Parameter.ForKey("something").Eq("${serviceKey}")));
+
+			var consumer = kernel.Resolve<SettingsConsumer>();
+		}
+
+		class SettingsConsumer
+		{
+			private readonly int something;
+
+			public SettingsConsumer(int something)
+			{
+				this.something = something;
+			}
+
+			public int Something
+			{
+				get { return something; }
+			}
+		}
+
+		class Settings
+		{
+			private readonly int something = 1;
+
+			public int Something
+			{
+				get { return something; }
+			}
 		}
 	}
 

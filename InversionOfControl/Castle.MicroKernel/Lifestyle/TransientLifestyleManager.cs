@@ -25,10 +25,5 @@ namespace Castle.MicroKernel.Lifestyle
 		public override void Dispose()
 		{
 		}
-
-		public override bool ContainerShouldTrackForDisposal
-		{
-			get { return true; }
-		}
 	}
 }

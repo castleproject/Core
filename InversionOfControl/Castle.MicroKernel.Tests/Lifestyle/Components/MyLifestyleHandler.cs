@@ -21,10 +21,5 @@ namespace Castle.MicroKernel.Tests.Lifestyle.Components
 		public override void Dispose()
 		{
 		}
-
-		public override bool ContainerShouldTrackForDisposal
-		{
-			get { return false; }
-		}
 	}
 }

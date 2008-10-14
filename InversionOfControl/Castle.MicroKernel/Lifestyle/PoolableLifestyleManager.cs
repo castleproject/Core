@@ -15,7 +15,6 @@
 namespace Castle.MicroKernel.Lifestyle
 {
 	using System;
-	using Castle.Core;
 	using Castle.MicroKernel.Lifestyle.Pool;
 
 	/// <summary>
@@ -57,11 +56,6 @@ namespace Castle.MicroKernel.Lifestyle
 				return pool.Release(instance);
 			}
 			return false;
-		}
-
-		public override bool ContainerShouldTrackForDisposal
-		{
-			get { return true; }
 		}
 
 		public override void Dispose()

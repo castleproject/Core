@@ -45,8 +45,6 @@ namespace Castle.MicroKernel.Lifestyle
 			return true;
 		}
 
-		public abstract bool ContainerShouldTrackForDisposal { get; }
-
 		public abstract void Dispose();
 
 		protected IKernel Kernel

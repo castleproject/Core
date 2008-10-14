@@ -50,10 +50,5 @@ namespace Castle.MicroKernel.Lifestyle
 			// Do nothing
 			return false;
 		}
-
-		public override bool ContainerShouldTrackForDisposal
-		{
-			get { return false; }
-		}
 	}
 }

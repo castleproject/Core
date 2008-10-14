@@ -388,7 +388,7 @@ namespace Castle.MicroKernel.Handlers
 
 			// Property dependencies may not be optional
 
-			foreach (PropertySet property in ComponentModel.Properties)
+			foreach(PropertySet property in ComponentModel.Properties)
 			{
 				DependencyModel dependency = property.Dependency;
 
@@ -403,7 +403,7 @@ namespace Castle.MicroKernel.Handlers
 			// The following dependencies were added by - for example - 
 			// facilities, for some reason, and we need to satisfy the non-optional
 
-			foreach (DependencyModel dependency in ComponentModel.Dependencies)
+			foreach(DependencyModel dependency in ComponentModel.Dependencies)
 			{
 				if (!dependency.IsOptional &&
 					(dependency.DependencyType == DependencyType.Service ||
@@ -418,7 +418,7 @@ namespace Castle.MicroKernel.Handlers
 
 			ConstructorCandidate candidate = ComponentModel.Constructors.FewerArgumentsCandidate;
 
-			foreach (DependencyModel dependency in candidate.Dependencies)
+			foreach(DependencyModel dependency in candidate.Dependencies)
 			{
 				if (dependency.DependencyType == DependencyType.Service ||
 					dependency.DependencyType == DependencyType.ServiceOverride)

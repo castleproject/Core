@@ -131,7 +131,7 @@ namespace Castle.MicroKernel
 
 			RegisterSubSystems();
 
-			releaserPolicy = new LifecycledComponentsReleasePolicy();
+			releaserPolicy = new AllComponentsReleasePolicy();
 			handlerFactory = new DefaultHandlerFactory(this);
 			modelBuilder = new DefaultComponentModelBuilder(this);
 			resolver = new DefaultDependencyResolver(this);

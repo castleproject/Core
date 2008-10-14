@@ -79,11 +79,6 @@ namespace Castle.MicroKernel.Lifestyle
 			return false;
 		}
 
-		public override bool ContainerShouldTrackForDisposal
-		{
-			get { return false; }
-		}
-
 		public void OnDeserialization(object sender)
 		{
 			slot = Thread.AllocateNamedDataSlot("CastlePerThread");
