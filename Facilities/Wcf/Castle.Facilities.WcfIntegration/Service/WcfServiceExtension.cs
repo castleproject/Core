@@ -16,15 +16,14 @@ namespace Castle.Facilities.WcfIntegration
 {
 	using System;
 	using System.Collections;
-	using System.Threading;
-	using System.Reflection;
 	using System.Collections.Generic;
+	using System.Reflection;
 	using System.ServiceModel;
+	using System.Threading;
 	using Castle.Core;
-	using Castle.MicroKernel;
 	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.Facilities.WcfIntegration.Rest;
-	using System.ServiceModel.Description;
+	using Castle.MicroKernel;
 
 	public class WcfServiceExtension : IDisposable
 	{
@@ -62,6 +61,7 @@ namespace Castle.Facilities.WcfIntegration
 			AddDefaultServiceHostBuilders();
 			DefaultServiceHostFactory.RegisterContainer(kernel);
 
+			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
 			kernel.ComponentRegistered += Kernel_ComponentRegistered;
 			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
 		}
@@ -74,32 +74,43 @@ namespace Castle.Facilities.WcfIntegration
 			return this;
 		}
 
+		private void Kernel_ComponentModelCreated(ComponentModel model)
+		{
+			BehaviorDependencies dependencies = null;
+
+			foreach (IWcfServiceModel serviceModel in ResolveServiceModels(model))
+			{
+				if (dependencies == null)
+				{
+					dependencies = new BehaviorDependencies(model, kernel)
+						.Apply(new WcfServiceBehaviors())
+						.Apply(new WcfEndpointBehaviors(WcfBehaviorScope.Services)
+						);
+				}
+
+				if (serviceModel != null)
+				{
+					dependencies.Apply(serviceModel.Behaviors);
+					
+					foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
+					{
+						dependencies.Apply(endpoint.Behaviors);
+					}
+				}
+			}
+		}
+
 		private void Kernel_ComponentRegistered(string key, IHandler handler)
 		{
-			IList<ServiceHost> serviceHosts = null;
 			ComponentModel model = handler.ComponentModel;
 
 			foreach (IWcfServiceModel serviceModel in ResolveServiceModels(model))
 			{ 
 				if (!serviceModel.IsHosted)
 				{
-					serviceHosts = serviceHosts ?? new List<ServiceHost>();
-					ServiceHost serviceHost = CreateServiceHost(kernel, serviceModel, model);
-					serviceHosts.Add(serviceHost);
-
-					if (ServiceModelIsValid(serviceModel, serviceHost))
-					{
-						serviceHost.Open();
-					}
+					CreateServiceHostWhenHandlerIsValid(handler, serviceModel, model);
 				}
 			}
-
-			if (serviceHosts != null)
-			{
-				model.ExtendedProperties[WcfConstants.ServiceHostsKey] = serviceHosts;
-			}
-
-			CheckWaitingList();
 		}
 
 		private void Kernel_ComponentUnregistered(string key, IHandler handler)
@@ -209,89 +220,46 @@ namespace Castle.Facilities.WcfIntegration
 
 		#endregion
 
-		private bool ServiceModelIsValid(IWcfServiceModel serviceModel, ServiceHost serviceHost)
+		private void CreateServiceHostWhenHandlerIsValid(IHandler handler, IWcfServiceModel serviceModel,
+			                                             ComponentModel model)
 		{
-			List<IWcfBehavior> behaviors = new List<IWcfBehavior>();
-			behaviors.AddRange(serviceModel.Behaviors);
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
+			if (handler.CurrentState == HandlerState.Valid)
 			{
-				behaviors.AddRange(endpoint.Behaviors);
+				CreateAndOpenServiceHost(serviceModel, model);
 			}
-
-			List<IHandler> behaviorHandlers = new List<IHandler>();
-
-			foreach (IWcfBehavior behavior in behaviors)
+			else
 			{
-				behaviorHandlers.AddRange(behavior.GetHandlers(kernel));
-			}
-
-			behaviorHandlers.AddRange(WcfUtils.FindBehaviors<IOperationBehavior>(kernel, WcfBehaviorScope.Services));
-			behaviorHandlers.AddRange(WcfUtils.FindBehaviors<IEndpointBehavior>(kernel, WcfBehaviorScope.Services));
-			behaviorHandlers.AddRange(WcfUtils.FindBehaviors<IServiceBehavior>(kernel, WcfBehaviorScope.Services));
-			behaviorHandlers.AddRange(WcfUtils.FindBehaviors<IContractBehavior>(kernel, WcfBehaviorScope.Services));
-
-			bool isValid = true;
-
-			foreach (IHandler behaviorHandler in behaviorHandlers)
-			{
-				if (behaviorHandler.CurrentState == HandlerState.WaitingDependency)
+				HandlerDelegate onStateChanged = null;
+				onStateChanged = delegate(IHandler valid, ref bool stateChanged)
 				{
-					isValid = false;
-					AddHandlerToWaitingList(serviceHost, behaviorHandler);
-				}
-			}
-
-			return isValid;
-		}
-
-		private void OnHandlerStateChanged(object source, EventArgs args)
-		{
-			CheckWaitingList();
-		}
-
-		private void AddHandlerToWaitingList(ServiceHost serviceHost, IHandler behaviorHandler)
-		{
-			ICollection<IHandler> behaviorHandlers = null;
-			if (!waitingOn.TryGetValue(serviceHost, out behaviorHandlers))
-			{
-				behaviorHandlers = new List<IHandler>();
-				behaviorHandlers.Add(behaviorHandler);
-				waitingOn.Add(serviceHost, behaviorHandlers);
-			}
-			behaviorHandler.OnHandlerStateChanged += new HandlerStateDelegate(OnHandlerStateChanged);
-		}
-
-		/// <summary>
-		/// For each new component registered,
-		/// some components in the WaitingDependency
-		/// state may have became valid, so we check them
-		/// </summary>
-		private void CheckWaitingList()
-		{
-			List<ServiceHost> validServiceHosts = new List<ServiceHost>();
-
-			foreach (ServiceHost serviceHost in new List<ServiceHost>(waitingOn.Keys))
-			{
-				List<IHandler> behaviorHandlers = new List<IHandler>(waitingOn[serviceHost]);
-
-				if (behaviorHandlers.TrueForAll(delegate(IHandler match)
-				                                {
-				                                	return match.CurrentState == HandlerState.Valid;
-				                                }))
-				{
-					validServiceHosts.Add(serviceHost);
-					waitingOn.Remove(serviceHost);
-					behaviorHandlers.ForEach(delegate(IHandler target)
+					if (handler.CurrentState == HandlerState.Valid && onStateChanged != null)
 					{
-						target.OnHandlerStateChanged -= new HandlerStateDelegate(OnHandlerStateChanged);
-					});
-				}
+						kernel.HandlerRegistered -= onStateChanged;
+						onStateChanged = null;
 
+						CreateAndOpenServiceHost(serviceModel, model);
+					}
+				};
+				kernel.HandlerRegistered += onStateChanged;
 			}
-			foreach (ServiceHost serviceHost in validServiceHosts)
+		}
+
+		private void CreateAndOpenServiceHost(IWcfServiceModel serviceModel, ComponentModel model)
+		{
+			ServiceHost serviceHost = CreateServiceHost(kernel, serviceModel, model);
+		
+			IList<ServiceHost> serviceHosts = 
+				model.ExtendedProperties[WcfConstants.ServiceHostsKey] as IList<ServiceHost>;
+
+			if (serviceHosts == null)
 			{
-				serviceHost.Open();
+				serviceHosts = new List<ServiceHost>();
+				model.ExtendedProperties[WcfConstants.ServiceHostsKey] = serviceHosts;
 			}
+
+			serviceHosts.Add(serviceHost);
+
+			serviceHost.Open();
 		}
 	}
 }

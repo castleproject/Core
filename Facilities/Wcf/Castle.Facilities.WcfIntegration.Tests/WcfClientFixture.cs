@@ -60,7 +60,8 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						{
 							IncludeExceptionDetailInFaults = true
 						}),
-					Component.For<NetDataContractFormatBehavior>(),
+					Component.For<NetDataContractFormatBehavior>()
+						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit)),
 					Component.For<Operations>()
 						.DependsOn(new { number = 42 })
 						.ActAs(new DefaultServiceModel().AddEndpoints(
@@ -209,6 +210,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						Endpoint = WcfEndpoint
 							.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 							.At("net.tcp://localhost/Operations/Ex")
+							.AddBehaviors(typeof(NetDataContractFormatBehavior))
 					})
 				);
 

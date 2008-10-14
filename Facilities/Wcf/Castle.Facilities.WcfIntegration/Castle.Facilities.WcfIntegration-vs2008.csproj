@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Behaviors\AbstractWcfBehaviors.cs" />
+    <Compile Include="Behaviors\BehaviorDependencies.cs" />
     <Compile Include="Behaviors\Logging\AbstractMessageFormatter.cs" />
     <Compile Include="Behaviors\Logging\LogMessageFormatBehavior.cs" />
     <Compile Include="Behaviors\Logging\CustomMessageFormatter.cs" />

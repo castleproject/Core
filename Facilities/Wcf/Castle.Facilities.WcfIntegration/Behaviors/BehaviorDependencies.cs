@@ -14,23 +14,33 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System.ServiceModel.Description;
+	using System.Collections.Generic;
 	using Castle.Core;
 	using Castle.MicroKernel;
 
-	public interface IWcfBehavior
+	internal class BehaviorDependencies
 	{
-		void Accept(IWcfBehaviorVisitor visitor);
-		void AddDependencies(IKernel kernel, ComponentModel model);
-	}
+		private readonly ComponentModel model;
+		private readonly IKernel kernel;
 
-	public interface IWcfServiceBehavior : IWcfBehavior
-	{
-		void Install(ServiceDescription description, IKernel kernel);
-	}
+		public BehaviorDependencies(ComponentModel model, IKernel kernel)
+		{
+			this.model = model;
+			this.kernel = kernel;
+		}
 
-	public interface IWcfEndpointBehavior : IWcfBehavior
-	{
-		void Install(ServiceEndpoint endpoint, IKernel kernel);
+		public BehaviorDependencies Apply(ICollection<IWcfBehavior> behaviors)
+		{
+			foreach (IWcfBehavior behavior in behaviors)
+			{
+				behavior.AddDependencies(kernel, model);
+			}
+			return this;
+		}
+
+		public BehaviorDependencies Apply(params IWcfBehavior[] behaviors)
+		{
+			return Apply((ICollection<IWcfBehavior>)behaviors);
+		}
 	}
 }

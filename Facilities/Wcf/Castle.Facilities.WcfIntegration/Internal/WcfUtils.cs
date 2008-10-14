@@ -76,6 +76,19 @@ namespace Castle.Facilities.WcfIntegration.Internal
 			return handlers;
 		}
 
+		public static void AddBehaviorDependencies<T>(IKernel kernel, WcfBehaviorScope scope, ComponentModel model)
+		{
+			foreach (IHandler handler in FindBehaviors<T>(kernel, scope))
+			{
+				AddBehaviorDependency(null, handler.ComponentModel.Service, model);
+			}
+		}
+
+		public static void AddBehaviorDependency(string dependencyKey, Type serviceType, ComponentModel model)
+		{
+			model.Dependencies.Add(new DependencyModel(DependencyType.Service, dependencyKey, serviceType, false));
+		}
+
 		public static bool IsCommunicationObjectReady(ICommunicationObject comm)
 		{
 			switch (comm.State)
