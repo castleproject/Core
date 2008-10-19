@@ -34,5 +34,12 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
 		Type GetViewComponent(string name);
+
+		/// <summary>
+		/// Checks if the view component is registered.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns>True if registered or false if GetViewComponent would throw an exception.</returns>
+		bool HasViewComponent(string name);
 	}
 }

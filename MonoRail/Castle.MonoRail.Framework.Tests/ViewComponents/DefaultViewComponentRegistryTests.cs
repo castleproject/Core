@@ -88,6 +88,31 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 			registry.AddViewComponent("MyViewComponent", type);
 			Assert.AreEqual(type, registry.GetViewComponent("DifferentName"));
 		}
+
+		[Test]
+		public void HasViewComponent_ExistingComponent_Works()
+		{
+			Type type = typeof(ViewComponent);
+			registry.AddViewComponent("MyViewComponent", type);
+			Assert.IsTrue(registry.HasViewComponent("MyViewComponent"));
+		}
+
+		[Test]
+		public void HasViewComponent_ExistingComponentWithoutSuffixLookup_Works()
+		{
+			Type type = typeof(ViewComponent);
+			registry.AddViewComponent("MyViewComponent", type);
+			Assert.IsTrue(registry.HasViewComponent("My"));
+			Assert.IsTrue(registry.HasViewComponent("MyView"));
+		}
+
+		[Test]
+		public void HasViewComponent_MissingComponent_ReturnsFalse()
+		{
+			Type type = typeof(ViewComponent);
+			registry.AddViewComponent("MyViewComponent", type);
+			Assert.IsFalse(registry.HasViewComponent("DifferentName"));
+		}
 	}
 
 	[ViewComponentDetails("DifferentName")]

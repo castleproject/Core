@@ -83,7 +83,19 @@ namespace Castle.MonoRail.Framework.Services
 				"is the component id or the key passed to ViewComponentDetailsAttribute", name));
 		}
 
-		#endregion
+		/// <summary>
+		/// Checks if the view component is registered.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns>True if registered or false if GetViewComponent would throw an exception.</returns>
+		public bool HasViewComponent(string name)
+		{
+			return name2Type.ContainsKey(name) ||
+				   name2Type.ContainsKey(name + "component") ||
+				   name2Type.ContainsKey(name + "viewcomponent");
+		}
+
+	    #endregion
 
 		/// <summary>
 		/// Gets the details.
