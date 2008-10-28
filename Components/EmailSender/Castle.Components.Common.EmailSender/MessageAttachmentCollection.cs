@@ -17,13 +17,9 @@ namespace Castle.Components.Common.EmailSender
 	using System;
 	using System.Collections;
 
-
+	[Serializable]
 	public class MessageAttachmentCollection : CollectionBase
 	{
-		public MessageAttachmentCollection()
-		{
-		}
-
 		public void Add(MessageAttachment attachment)
 		{
 			InnerList.Add(attachment);

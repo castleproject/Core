@@ -16,8 +16,8 @@ namespace Castle.Components.Common.EmailSender
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Net;
 	using System.Net.Mail;
+	using System.Runtime.Serialization;
 	using System.Text;
 	using System.Collections;
 	using System.Collections.Specialized;
@@ -25,6 +25,7 @@ namespace Castle.Components.Common.EmailSender
 	/// <summary>
 	/// Message formats
 	/// </summary>
+	[Serializable]
 	public enum Format
 	{
 		/// <summary>
@@ -40,6 +41,7 @@ namespace Castle.Components.Common.EmailSender
 	/// <summary>
 	/// Message priority
 	/// </summary>
+	[Serializable]
 	public enum MessagePriority
 	{
 		Normal,
@@ -50,7 +52,8 @@ namespace Castle.Components.Common.EmailSender
 	/// <summary>
 	/// Abstracts an e-mail message
 	/// </summary>
-	public class Message
+	[Serializable]
+	public class Message : ISerializable
 	{
 		private String to;
 		private String from;
@@ -61,10 +64,10 @@ namespace Castle.Components.Common.EmailSender
 		private MailAddress replyTo;
 		private Format format = Format.Text;
 		private Encoding encoding = Encoding.ASCII;
-		private IDictionary headers = new HybridDictionary();
-		private IDictionary fields = new HybridDictionary();
 		private MessagePriority priority = MessagePriority.Normal;
-		private MessageAttachmentCollection attachments = new MessageAttachmentCollection();
+		private readonly IDictionary headers = new HybridDictionary();
+		private readonly IDictionary fields = new HybridDictionary();
+		private readonly MessageAttachmentCollection attachments = new MessageAttachmentCollection();
 		private readonly IDictionary<string, LinkedResource> linkedResources = new Dictionary<string, LinkedResource>();
 
 		/// <summary>
@@ -87,6 +90,34 @@ namespace Castle.Components.Common.EmailSender
 			this.from = from;
 			this.body = body;
 			this.subject = subject;
+		}
+
+		public Message(SerializationInfo info, StreamingContext context)
+		{
+			to = info.GetString("to");
+			from = info.GetString("from");
+			cc = info.GetString("cc");
+			bcc = info.GetString("bcc");
+			body = info.GetString("body");
+			subject = info.GetString("subject");
+
+			bool hasReplyTo = info.GetBoolean("hasReplyTo");
+
+			if (hasReplyTo)
+			{
+				replyTo = new MailAddress(info.GetString(replyTo.Address), info.GetString("replyTo.DisplayName"));
+			}
+
+			format = (Format) info.GetValue("format", typeof (Format));
+			encoding = (Encoding) info.GetValue("encoding", typeof (Encoding));
+			priority = (MessagePriority) info.GetValue("priority", typeof (MessagePriority));
+
+			headers = (IDictionary) info.GetValue("headers", typeof (IDictionary));
+			fields = (IDictionary) info.GetValue("fields", typeof (IDictionary));
+
+			attachments = (MessageAttachmentCollection) info.GetValue("attachments", typeof (MessageAttachmentCollection));
+			linkedResources =
+				(IDictionary<string, LinkedResource>) info.GetValue("linkedResources", typeof (IDictionary<string, LinkedResource>));
 		}
 
 		public String To
@@ -175,6 +206,35 @@ namespace Castle.Components.Common.EmailSender
 		public IDictionary<string, LinkedResource> Resources
 		{
 			get { return linkedResources; }
+		}
+
+		public void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+            info.AddValue("to", to);
+			info.AddValue("from", from);
+			info.AddValue("cc", cc);
+			info.AddValue("bcc", bcc);
+			info.AddValue("body", body);
+			info.AddValue("subject", subject);
+
+			bool hasReplyTo = replyTo != null;
+
+			info.AddValue("hasReplyTo", hasReplyTo);
+
+			if (hasReplyTo)
+			{
+				info.AddValue("replyTo.Address", replyTo.Address);
+				info.AddValue("replyTo.DisplayName", replyTo.DisplayName);			
+			}
+
+			info.AddValue("format", format);
+			info.AddValue("encoding", encoding);
+			info.AddValue("priority", priority);
+
+			info.AddValue("headers", headers);
+			info.AddValue("fields", fields);
+			info.AddValue("attachments", attachments);
+			info.AddValue("linkedResources", linkedResources);
 		}
 	}
 }

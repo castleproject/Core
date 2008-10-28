@@ -26,11 +26,19 @@ namespace Castle.Components.Common.EmailSender
 	/// <summary>
 	/// Represents a file attachment
 	/// </summary>
+	[Serializable]
 	public class MessageAttachment
 	{
 		private String fileName;
 		private readonly String mediaType;
 		private readonly Stream stream;
+
+		/// <summary>
+		/// Creates a new attachment
+		/// </summary>
+		public MessageAttachment()
+		{
+		}
 
 		/// <summary>
 		/// Creates a new attachment
