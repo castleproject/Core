@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,312 +12,314 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading;
-using Castle.Core;
-
 namespace Castle.Components.Scheduler.JobStores
 {
-    /// <summary>
-    /// The memory job store maintains all job state in-process in memory.
-    /// It does not support persistence or clustering.
-    /// </summary>
-    [Singleton]
-    public class MemoryJobStore : BaseJobStore
-    {
-        private Dictionary<string, VersionedJobDetails> jobs;
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Threading;
+	using Core;
 
-        /// <summary>
-        /// Creates an in-process memory job store initially without any jobs.
-        /// </summary>
-        public MemoryJobStore()
-        {
-            jobs = new Dictionary<string, VersionedJobDetails>();
-        }
+	/// <summary>
+	/// The memory job store maintains all job state in-process in memory.
+	/// It does not support persistence or clustering.
+	/// </summary>
+	[Singleton]
+	public class MemoryJobStore : BaseJobStore
+	{
+		private readonly Dictionary<string, VersionedJobDetails> jobs;
 
-        /// <inheritdoc />
-        public override void Dispose()
-        {
-            lock (jobs)
-            {
-                IsDisposed = true;
-                jobs.Clear();
+		/// <summary>
+		/// Creates an in-process memory job store initially without any jobs.
+		/// </summary>
+		public MemoryJobStore()
+		{
+			jobs = new Dictionary<string, VersionedJobDetails>();
+		}
 
-                Monitor.PulseAll(jobs);
-            }
-        }
+		/// <inheritdoc />
+		public override void Dispose()
+		{
+			lock (jobs)
+			{
+				IsDisposed = true;
+				jobs.Clear();
 
-        /// <inheritdoc />
-        public override void RegisterScheduler(Guid schedulerGuid, string schedulerName)
-        {
-            if (schedulerName == null)
-                throw new ArgumentNullException("schedulerName");
+				Monitor.PulseAll(jobs);
+			}
+		}
 
-            ThrowIfDisposed();
+		/// <inheritdoc />
+		public override void RegisterScheduler(Guid schedulerGuid, string schedulerName)
+		{
+			if (schedulerName == null)
+				throw new ArgumentNullException("schedulerName");
 
-            // The memory job store has no use for the registration information itself.
-        }
+			ThrowIfDisposed();
 
-        /// <inheritdoc />
-        public override void UnregisterScheduler(Guid schedulerGuid)
-        {
-            lock (jobs)
-            {
-                ThrowIfDisposed();
-                
-                // Orphan any jobs that are still running.
-                bool jobsWereOrphaned = false;
-                foreach (VersionedJobDetails job in jobs.Values)
-                {
-                    JobExecutionDetails execution = job.LastJobExecutionDetails;
-                    if (job.JobState == JobState.Running && execution.SchedulerGuid == schedulerGuid)
-                    {
-                        job.JobState = JobState.Orphaned;
-                        jobsWereOrphaned = true;
-                    }
-                }
+			// The memory job store has no use for the registration information itself.
+		}
 
-                if (jobsWereOrphaned)
-                    SignalBlockedThreads();
-            }
-        }
+		/// <inheritdoc />
+		public override void UnregisterScheduler(Guid schedulerGuid)
+		{
+			lock (jobs)
+			{
+				ThrowIfDisposed();
 
-        /// <inheritdoc />
-        public override IJobWatcher CreateJobWatcher(Guid schedulerGuid)
-        {
-            ThrowIfDisposed();
+				// Orphan any jobs that are still running.
+				bool jobsWereOrphaned = false;
+				foreach (VersionedJobDetails job in jobs.Values)
+				{
+					JobExecutionDetails execution = job.LastJobExecutionDetails;
+					if (job.JobState == JobState.Running && execution.SchedulerGuid == schedulerGuid)
+					{
+						job.JobState = JobState.Orphaned;
+						jobsWereOrphaned = true;
+					}
+				}
 
-            return new JobWatcher(this, schedulerGuid);
-        }
+				if (jobsWereOrphaned)
+					SignalBlockedThreads();
+			}
+		}
 
-        /// <inheritdoc />
-        public override JobDetails GetJobDetails(string jobName)
-        {
-            if (jobName == null)
-                throw new ArgumentNullException("jobName");
+		/// <inheritdoc />
+		public override IJobWatcher CreateJobWatcher(Guid schedulerGuid)
+		{
+			ThrowIfDisposed();
 
-            lock (jobs)
-            {
-                ThrowIfDisposed();
+			return new JobWatcher(this, schedulerGuid);
+		}
 
-                VersionedJobDetails jobDetails;
-                if (jobs.TryGetValue(jobName, out jobDetails))
-                    return jobDetails.Clone();
+		/// <inheritdoc />
+		public override JobDetails GetJobDetails(string jobName)
+		{
+			if (jobName == null)
+				throw new ArgumentNullException("jobName");
 
-                return null;
-            }
-        }
+			lock (jobs)
+			{
+				ThrowIfDisposed();
 
-        /// <inheritdoc />
-        public override void SaveJobDetails(JobDetails jobDetails)
-        {
-            if (jobDetails == null)
-                throw new ArgumentNullException("jobStatus");
+				VersionedJobDetails jobDetails;
+				if (jobs.TryGetValue(jobName, out jobDetails))
+					return jobDetails.Clone();
 
-            VersionedJobDetails versionedJobDetails = (VersionedJobDetails) jobDetails;
+				return null;
+			}
+		}
 
-            lock (jobs)
-            {
-                ThrowIfDisposed();
+		/// <inheritdoc />
+		public override void SaveJobDetails(JobDetails jobDetails)
+		{
+			if (jobDetails == null)
+				throw new ArgumentNullException("jobStatus");
 
-                string jobName = jobDetails.JobSpec.Name;
+			VersionedJobDetails versionedJobDetails = (VersionedJobDetails) jobDetails;
 
-                VersionedJobDetails existingJobDetails;
-                if (! jobs.TryGetValue(jobName, out existingJobDetails))
-                    throw new ConcurrentModificationException("The job details could not be saved because the job was concurrently deleted.");
+			lock (jobs)
+			{
+				ThrowIfDisposed();
 
-                if (existingJobDetails.Version != versionedJobDetails.Version)
-                    throw new ConcurrentModificationException("The job details could not be saved because the job was concurrently modified.");
+				string jobName = jobDetails.JobSpec.Name;
 
-                versionedJobDetails.Version += 1;
-                jobs[jobName] = (VersionedJobDetails) versionedJobDetails.Clone();
+				VersionedJobDetails existingJobDetails;
+				if (! jobs.TryGetValue(jobName, out existingJobDetails))
+					throw new ConcurrentModificationException(
+						"The job details could not be saved because the job was concurrently deleted.");
 
-                Monitor.PulseAll(jobs);
-            }
-        }
+				if (existingJobDetails.Version != versionedJobDetails.Version)
+					throw new ConcurrentModificationException(
+						"The job details could not be saved because the job was concurrently modified.");
 
-        /// <inheritdoc />
-        public override bool CreateJob(JobSpec jobSpec, DateTime creationTimeUtc, CreateJobConflictAction conflictAction)
-        {
-            if (jobSpec == null)
-                throw new ArgumentNullException("jobSpec");
-            if (!Enum.IsDefined(typeof(CreateJobConflictAction), conflictAction))
-                throw new ArgumentOutOfRangeException("conflictAction");
+				versionedJobDetails.Version += 1;
+				jobs[jobName] = (VersionedJobDetails) versionedJobDetails.Clone();
 
-            lock (jobs)
-            {
-                ThrowIfDisposed();
+				Monitor.PulseAll(jobs);
+			}
+		}
 
-                VersionedJobDetails existingJobDetails;
-                if (jobs.TryGetValue(jobSpec.Name, out existingJobDetails))
-                {
-                    switch (conflictAction)
-                    {
-                        case CreateJobConflictAction.Ignore:
-                            return false;
+		/// <inheritdoc />
+		public override bool CreateJob(JobSpec jobSpec, DateTime creationTimeUtc, CreateJobConflictAction conflictAction)
+		{
+			if (jobSpec == null)
+				throw new ArgumentNullException("jobSpec");
+			if (!Enum.IsDefined(typeof (CreateJobConflictAction), conflictAction))
+				throw new ArgumentOutOfRangeException("conflictAction");
 
-                        case CreateJobConflictAction.Update:
-                            InternalUpdateJob(existingJobDetails, jobSpec);
-                            return true;
+			lock (jobs)
+			{
+				ThrowIfDisposed();
 
-                        case CreateJobConflictAction.Replace:
-                            break;
+				VersionedJobDetails existingJobDetails;
+				if (jobs.TryGetValue(jobSpec.Name, out existingJobDetails))
+				{
+					switch (conflictAction)
+					{
+						case CreateJobConflictAction.Ignore:
+							return false;
 
-                        case CreateJobConflictAction.Throw:
-                            throw new SchedulerException(String.Format(CultureInfo.CurrentCulture,
-                                "There is already a job with name '{0}'.", jobSpec.Name));
-                    }
-                }
+						case CreateJobConflictAction.Update:
+							InternalUpdateJob(existingJobDetails, jobSpec);
+							return true;
 
-                VersionedJobDetails jobDetails = new VersionedJobDetails(jobSpec.Clone(), creationTimeUtc, 0);
+						case CreateJobConflictAction.Replace:
+							break;
 
-                jobs[jobSpec.Name] = jobDetails;
-                Monitor.PulseAll(jobs);
-                return true;
-            }
-        }
+						case CreateJobConflictAction.Throw:
+							throw new SchedulerException(String.Format(CultureInfo.CurrentCulture,
+							                                           "There is already a job with name '{0}'.", jobSpec.Name));
+					}
+				}
 
-        /// <inheritdoc />
-        public override void UpdateJob(string existingJobName, JobSpec updatedJobSpec)
-        {
-            if (existingJobName == null)
-                throw new ArgumentNullException("existingJobName");
-            if (existingJobName.Length == 0)
-                throw new ArgumentException("existingJobName");
-            if (updatedJobSpec == null)
-                throw new ArgumentNullException("jobSpec");
+				VersionedJobDetails jobDetails = new VersionedJobDetails(jobSpec.Clone(), creationTimeUtc, 0);
 
-            lock (jobs)
-            {
-                ThrowIfDisposed();
+				jobs[jobSpec.Name] = jobDetails;
+				Monitor.PulseAll(jobs);
+				return true;
+			}
+		}
 
-                VersionedJobDetails existingJobDetails;
-                if (! jobs.TryGetValue(existingJobName, out existingJobDetails))
-                    throw new SchedulerException(String.Format(CultureInfo.CurrentCulture,
-                        "There is no existing job named '{0}'.", existingJobName));
+		/// <inheritdoc />
+		public override void UpdateJob(string existingJobName, JobSpec updatedJobSpec)
+		{
+			if (existingJobName == null)
+				throw new ArgumentNullException("existingJobName");
+			if (existingJobName.Length == 0)
+				throw new ArgumentException("existingJobName");
+			if (updatedJobSpec == null)
+				throw new ArgumentNullException("jobSpec");
 
-                InternalUpdateJob(existingJobDetails, updatedJobSpec);
-            }
-        }
+			lock (jobs)
+			{
+				ThrowIfDisposed();
 
-        private void InternalUpdateJob(VersionedJobDetails existingJobDetails, JobSpec updatedJobSpec)
-        {
-            if (existingJobDetails.JobSpec.Name != updatedJobSpec.Name)
-            {
-                if (jobs.ContainsKey(updatedJobSpec.Name))
-                    throw new SchedulerException(String.Format(CultureInfo.CurrentCulture,
-                        "Cannot rename job '{0}' to '{1}' because there already exists another job with the new name.",
-                        existingJobDetails.JobSpec.Name, updatedJobSpec.Name));
+				VersionedJobDetails existingJobDetails;
+				if (! jobs.TryGetValue(existingJobName, out existingJobDetails))
+					throw new SchedulerException(String.Format(CultureInfo.CurrentCulture,
+					                                           "There is no existing job named '{0}'.", existingJobName));
 
-                jobs.Remove(existingJobDetails.JobSpec.Name);
-                jobs.Add(updatedJobSpec.Name, existingJobDetails);
-            }
+				InternalUpdateJob(existingJobDetails, updatedJobSpec);
+			}
+		}
 
-            existingJobDetails.Version += 1;
-            existingJobDetails.JobSpec = updatedJobSpec.Clone();
+		private void InternalUpdateJob(VersionedJobDetails existingJobDetails, JobSpec updatedJobSpec)
+		{
+			if (existingJobDetails.JobSpec.Name != updatedJobSpec.Name)
+			{
+				if (jobs.ContainsKey(updatedJobSpec.Name))
+					throw new SchedulerException(String.Format(CultureInfo.CurrentCulture,
+					                                           "Cannot rename job '{0}' to '{1}' because there already exists another job with the new name.",
+					                                           existingJobDetails.JobSpec.Name, updatedJobSpec.Name));
 
-            if (existingJobDetails.JobState == JobState.Scheduled)
-                existingJobDetails.JobState = JobState.Pending;
+				jobs.Remove(existingJobDetails.JobSpec.Name);
+				jobs.Add(updatedJobSpec.Name, existingJobDetails);
+			}
 
-            Monitor.PulseAll(jobs);
-        }
+			existingJobDetails.Version += 1;
+			existingJobDetails.JobSpec = updatedJobSpec.Clone();
 
-        /// <inheritdoc />
-        public override bool DeleteJob(string jobName)
-        {
-            if (jobName == null)
-                throw new ArgumentNullException("jobName");
+			if (existingJobDetails.JobState == JobState.Scheduled)
+				existingJobDetails.JobState = JobState.Pending;
 
-            lock (jobs)
-            {
-                ThrowIfDisposed();
+			Monitor.PulseAll(jobs);
+		}
 
-                if (!jobs.Remove(jobName))
-                    return false;
+		/// <inheritdoc />
+		public override bool DeleteJob(string jobName)
+		{
+			if (jobName == null)
+				throw new ArgumentNullException("jobName");
 
-                Monitor.PulseAll(jobs);
-                return true;
-            }
-        }
+			lock (jobs)
+			{
+				ThrowIfDisposed();
 
-        /// <inheritdoc />
-        public override string[] ListJobNames()
-        {
-            lock (jobs)
-            {
-                ThrowIfDisposed();
+				if (!jobs.Remove(jobName))
+					return false;
 
-                string[] jobNames = new string[jobs.Count];
-                jobs.Keys.CopyTo(jobNames, 0);
-                return jobNames;
-            }
-        }
+				Monitor.PulseAll(jobs);
+				return true;
+			}
+		}
 
-        /// <inheritdoc />
-        protected override void SignalBlockedThreads()
-        {
-            lock (jobs)
-                Monitor.PulseAll(jobs);
-        }
+		/// <inheritdoc />
+		public override string[] ListJobNames()
+		{
+			lock (jobs)
+			{
+				ThrowIfDisposed();
 
-        /// <inheritdoc />
-        protected override JobDetails GetNextJobToProcessOrWaitUntilSignaled(Guid schedulerGuid)
-        {
-            lock (jobs)
-            {
-                ThrowIfDisposed();
+				string[] jobNames = new string[jobs.Count];
+				jobs.Keys.CopyTo(jobNames, 0);
+				return jobNames;
+			}
+		}
 
-                DateTime timeBasis = DateTime.UtcNow;
-                DateTime? waitNextTriggerFireTime = null;
+		/// <inheritdoc />
+		protected override void SignalBlockedThreads()
+		{
+			lock (jobs)
+				Monitor.PulseAll(jobs);
+		}
 
-                foreach (VersionedJobDetails jobDetails in jobs.Values)
-                {
-                    switch (jobDetails.JobState)
-                    {
-                        case JobState.Scheduled:
-                            if (jobDetails.NextTriggerFireTimeUtc.HasValue)
-                            {
-                                DateTime jobNextTriggerFireTimeUtc = jobDetails.NextTriggerFireTimeUtc.Value;
+		/// <inheritdoc />
+		protected override JobDetails GetNextJobToProcessOrWaitUntilSignaled(Guid schedulerGuid)
+		{
+			lock (jobs)
+			{
+				ThrowIfDisposed();
 
-                                if (jobNextTriggerFireTimeUtc > timeBasis)
-                                {
-                                    if (!waitNextTriggerFireTime.HasValue || jobNextTriggerFireTimeUtc < waitNextTriggerFireTime.Value)
-                                        waitNextTriggerFireTime = jobNextTriggerFireTimeUtc;
-                                    break;
-                                }
-                            }
+				DateTime timeBasis = DateTime.UtcNow;
+				DateTime? waitNextTriggerFireTime = null;
 
-                            jobDetails.JobState = JobState.Triggered;
-                            return jobDetails.Clone();
+				foreach (VersionedJobDetails jobDetails in jobs.Values)
+				{
+					switch (jobDetails.JobState)
+					{
+						case JobState.Scheduled:
+							if (jobDetails.NextTriggerFireTimeUtc.HasValue)
+							{
+								DateTime jobNextTriggerFireTimeUtc = jobDetails.NextTriggerFireTimeUtc.Value;
 
-                        case JobState.Pending:
-                        case JobState.Triggered:
-                        case JobState.Orphaned:
-                        case JobState.Completed:
-                            return jobDetails.Clone();
-                    }
-                }
+								if (jobNextTriggerFireTimeUtc > timeBasis)
+								{
+									if (!waitNextTriggerFireTime.HasValue || jobNextTriggerFireTimeUtc < waitNextTriggerFireTime.Value)
+										waitNextTriggerFireTime = jobNextTriggerFireTimeUtc;
+									break;
+								}
+							}
 
-                // Otherwise wait for a signal or the next fire time whichever comes first.
-                if (waitNextTriggerFireTime.HasValue)
-                {
-                    // Need to ensure that wait time in millis will fit in a 32bit integer, otherwise the
-                    // Monitor.Wait will throw an ArgumentException (even when using the TimeSpan based overload).
-                    // This can happen when the next trigger fire time is very far out into the future like DateTime.MaxValue.
-                    TimeSpan waitTimeSpan = waitNextTriggerFireTime.Value - timeBasis;
-                    int waitMillis = (int) Math.Min(int.MaxValue, waitTimeSpan.TotalMilliseconds);
+							jobDetails.JobState = JobState.Triggered;
+							return jobDetails.Clone();
 
-                    Monitor.Wait(jobs, waitMillis);
-                }
-                else
-                {
-                    Monitor.Wait(jobs);
-                }
-            }
+						case JobState.Pending:
+						case JobState.Triggered:
+						case JobState.Orphaned:
+						case JobState.Completed:
+							return jobDetails.Clone();
+					}
+				}
 
-            return null;
-        }
-    }
+				// Otherwise wait for a signal or the next fire time whichever comes first.
+				if (waitNextTriggerFireTime.HasValue)
+				{
+					// Need to ensure that wait time in millis will fit in a 32bit integer, otherwise the
+					// Monitor.Wait will throw an ArgumentException (even when using the TimeSpan based overload).
+					// This can happen when the next trigger fire time is very far out into the future like DateTime.MaxValue.
+					TimeSpan waitTimeSpan = waitNextTriggerFireTime.Value - timeBasis;
+					int waitMillis = (int) Math.Min(int.MaxValue, waitTimeSpan.TotalMilliseconds);
+
+					Monitor.Wait(jobs, waitMillis);
+				}
+				else
+				{
+					Monitor.Wait(jobs);
+				}
+			}
+
+			return null;
+		}
+	}
 }

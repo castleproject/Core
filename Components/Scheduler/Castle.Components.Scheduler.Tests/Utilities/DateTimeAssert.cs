@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,40 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using MbUnit.Framework;
-
 namespace Castle.Components.Scheduler.Tests.Utilities
 {
-    /// <summary>
-    /// Assertions for dates and times.
-    /// </summary>
-    public static class DateTimeAssert
-    {
-        /// <summary>
-        /// Asserts that two dates are equal, including their <see cref="DateTime.Kind" /> properties.
-        /// </summary>
-        /// <param name="expected"></param>
-        /// <param name="actual"></param>
-        public static void AreEqualIncludingKind(DateTime expected, DateTime actual)
-        {
-            Assert.AreEqual(expected, actual);
-            Assert.AreEqual(expected.Kind, actual.Kind);
-        }
+	using System;
+	using MbUnit.Framework;
 
-        /// <summary>
-        /// Asserts that two nullable dates are equal, including their <see cref="DateTime.Kind" /> properties.
-        /// </summary>
-        /// <param name="expected"></param>
-        /// <param name="actual"></param>
-        public static void AreEqualIncludingKind(DateTime? expected, DateTime? actual)
-        {
-            Assert.AreEqual(expected, actual);
+	/// <summary>
+	/// Assertions for dates and times.
+	/// </summary>
+	public static class DateTimeAssert
+	{
+		/// <summary>
+		/// Asserts that two dates are equal, including their <see cref="DateTime.Kind" /> properties.
+		/// </summary>
+		/// <param name="expected"></param>
+		/// <param name="actual"></param>
+		public static void AreEqualIncludingKind(DateTime expected, DateTime actual)
+		{
+			Assert.AreEqual(expected, actual);
+			Assert.AreEqual(expected.Kind, actual.Kind);
+		}
 
-            if (expected.HasValue)
-                Assert.AreEqual(expected.Value.Kind, actual.Value.Kind);
-        }
-    }
+		/// <summary>
+		/// Asserts that two nullable dates are equal, including their <see cref="DateTime.Kind" /> properties.
+		/// </summary>
+		/// <param name="expected"></param>
+		/// <param name="actual"></param>
+		public static void AreEqualIncludingKind(DateTime? expected, DateTime? actual)
+		{
+			Assert.AreEqual(expected, actual);
+
+			if (expected.HasValue)
+				Assert.AreEqual(expected.Value.Kind, actual.Value.Kind);
+		}
+	}
 }

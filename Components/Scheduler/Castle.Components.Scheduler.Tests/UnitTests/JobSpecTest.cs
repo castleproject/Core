@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,176 +12,177 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using Castle.Components.Scheduler.Tests.Utilities;
-using MbUnit.Framework;
-
 namespace Castle.Components.Scheduler.Tests.UnitTests
 {
-    [TestFixture]
-    [TestsOn(typeof(JobSpec))]
-    [Author("Jeff Brown", "jeff@ingenio.com")]
-    public class JobSpecTest : BaseUnitTest
-    {
-        private Trigger trigger = PeriodicTrigger.CreateDailyTrigger(DateTime.UtcNow);
+	using System;
+	using MbUnit.Framework;
+	using Utilities;
 
-        [Test]
-        public void ConstructorSetsProperties()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
-            Assert.AreEqual("abc", spec.Name);
-            Assert.AreEqual("some job", spec.Description);
-            Assert.AreEqual("with this key", spec.JobKey);
-            Assert.AreSame(trigger, spec.Trigger);
-            Assert.IsNull(spec.JobData);
-        }
+	[TestFixture]
+	[TestsOn(typeof (JobSpec))]
+	[Author("Jeff Brown", "jeff@ingenio.com")]
+	public class JobSpecTest : BaseUnitTest
+	{
+		private readonly Trigger trigger = PeriodicTrigger.CreateDailyTrigger(DateTime.UtcNow);
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorThrowsWhenJobNameIsNull()
-        {
-            new JobSpec(null, "some job", "with this key", trigger);
-        }
+		[Test]
+		public void ConstructorSetsProperties()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			Assert.AreEqual("abc", spec.Name);
+			Assert.AreEqual("some job", spec.Description);
+			Assert.AreEqual("with this key", spec.JobKey);
+			Assert.AreSame(trigger, spec.Trigger);
+			Assert.IsNull(spec.JobData);
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ConstructorThrowsWhenJobNameIsEmpty()
-        {
-            new JobSpec("", "some job", "with this key", trigger);
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void ConstructorThrowsWhenJobNameIsNull()
+		{
+			new JobSpec(null, "some job", "with this key", trigger);
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorThrowsWhenJobDescriptionIsNull()
-        {
-            new JobSpec("abc", null, "with this key", trigger);
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentException))]
+		public void ConstructorThrowsWhenJobNameIsEmpty()
+		{
+			new JobSpec("", "some job", "with this key", trigger);
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorThrowsWhenJobKeyIsNull()
-        {
-            new JobSpec("abc", "some job", null, trigger);
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void ConstructorThrowsWhenJobDescriptionIsNull()
+		{
+			new JobSpec("abc", null, "with this key", trigger);
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorThrowsWhenTriggerIsNull()
-        {
-            new JobSpec("abc", "some job", "with this key", null);
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void ConstructorThrowsWhenJobKeyIsNull()
+		{
+			new JobSpec("abc", "some job", null, trigger);
+		}
 
-        [Test]
-        public void Name_GetterAndSetter()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void ConstructorThrowsWhenTriggerIsNull()
+		{
+			new JobSpec("abc", "some job", "with this key", null);
+		}
 
-            spec.Name = "new name";
-            Assert.AreEqual("new name", spec.Name);
-        }
+		[Test]
+		public void Name_GetterAndSetter()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Name_ThrowsIfValueIsNull()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			spec.Name = "new name";
+			Assert.AreEqual("new name", spec.Name);
+		}
 
-            spec.Name = null;
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void Name_ThrowsIfValueIsNull()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
 
-        [Test]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Name_ThrowsIfValueIsEmpty()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			spec.Name = null;
+		}
 
-            spec.Name = "";
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentException))]
+		public void Name_ThrowsIfValueIsEmpty()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
 
-        [Test]
-        public void Description_GetterAndSetter()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			spec.Name = "";
+		}
 
-            spec.Description = "new description";
-            Assert.AreEqual("new description", spec.Description);
-        }
+		[Test]
+		public void Description_GetterAndSetter()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Description_ThrowsIfValueIsNull()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			spec.Description = "new description";
+			Assert.AreEqual("new description", spec.Description);
+		}
 
-            spec.Description = null;
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void Description_ThrowsIfValueIsNull()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
 
-        [Test]
-        public void JobKey_GetterAndSetter()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			spec.Description = null;
+		}
 
-            spec.JobKey = "new key";
-            Assert.AreEqual("new key", spec.JobKey);
-        }
+		[Test]
+		public void JobKey_GetterAndSetter()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void JobKey_ThrowsIfValueIsNull()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			spec.JobKey = "new key";
+			Assert.AreEqual("new key", spec.JobKey);
+		}
 
-            spec.JobKey = null;
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void JobKey_ThrowsIfValueIsNull()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
 
-        [Test]
-        public void Trigger_GetterAndSetter()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			spec.JobKey = null;
+		}
 
-            Trigger newTrigger = PeriodicTrigger.CreateDailyTrigger(DateTime.UtcNow);
-            spec.Trigger = newTrigger;
-            Assert.AreSame(newTrigger, spec.Trigger);
-        }
+		[Test]
+		public void Trigger_GetterAndSetter()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Trigger_ThrowsIfValueIsNull()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			Trigger newTrigger = PeriodicTrigger.CreateDailyTrigger(DateTime.UtcNow);
+			spec.Trigger = newTrigger;
+			Assert.AreSame(newTrigger, spec.Trigger);
+		}
 
-            spec.Trigger = null;
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void Trigger_ThrowsIfValueIsNull()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
 
-        [Test]
-        public void JobData_GetterAndSetter()
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			spec.Trigger = null;
+		}
 
-            JobData jobData = new JobData();
-            spec.JobData = jobData;
-            Assert.AreSame(jobData, spec.JobData);
-        }
+		[Test]
+		public void JobData_GetterAndSetter()
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
 
-        [RowTest]
-        [Row(false, false)]
-        [Row(true, false)]
-        [Row(true, true)]
-        public void ClonePerformsADeepCopy(bool useGenericClonable, bool jobDataIsNull)
-        {
-            JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
-            spec.JobData = jobDataIsNull ? null : new JobData();
+			JobData jobData = new JobData();
+			spec.JobData = jobData;
+			Assert.AreSame(jobData, spec.JobData);
+		}
 
-            JobSpec clone = useGenericClonable ? spec.Clone()
-                : (JobSpec) ((ICloneable) spec).Clone();
+		[RowTest]
+		[Row(false, false)]
+		[Row(true, false)]
+		[Row(true, true)]
+		public void ClonePerformsADeepCopy(bool useGenericClonable, bool jobDataIsNull)
+		{
+			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);
+			spec.JobData = jobDataIsNull ? null : new JobData();
 
-            Assert.AreNotSame(spec, clone);
-            Assert.AreNotSame(trigger, clone.Trigger);
+			JobSpec clone = useGenericClonable
+			                	? spec.Clone()
+			                	: (JobSpec) ((ICloneable) spec).Clone();
 
-            if (! jobDataIsNull)
-                Assert.AreNotSame(spec.JobData, clone.JobData);
+			Assert.AreNotSame(spec, clone);
+			Assert.AreNotSame(trigger, clone.Trigger);
 
-            JobAssert.AreEqual(spec, clone);
-        }
-    }
+			if (! jobDataIsNull)
+				Assert.AreNotSame(spec.JobData, clone.JobData);
+
+			JobAssert.AreEqual(spec, clone);
+		}
+	}
 }

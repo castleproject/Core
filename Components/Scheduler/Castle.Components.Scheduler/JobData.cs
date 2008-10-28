@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,69 +12,68 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Castle.Components.Scheduler
 {
-    /// <summary>
-    /// Job data persists job parameters and state across job executions.
-    /// The contents of the job data must be serializable if they are to be
-    /// used with a persistent store.
-    /// </summary>
-    [Serializable]
-    public class JobData : ICloneable<JobData>
-    {
-        private IDictionary<string, object> state;
+	using System;
+	using System.Collections.Generic;
 
-        /// <summary>
-        /// Create an empty job data structure.
-        /// </summary>
-        public JobData()
-        {
-        }
+	/// <summary>
+	/// Job data persists job parameters and state across job executions.
+	/// The contents of the job data must be serializable if they are to be
+	/// used with a persistent store.
+	/// </summary>
+	[Serializable]
+	public class JobData : ICloneable<JobData>
+	{
+		private IDictionary<string, object> state;
 
-        /// <summary>
-        /// Creates a job data structure with the specified initial state.
-        /// </summary>
-        /// <param name="state">The initial state</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="state"/> is null</exception>
-        public JobData(IDictionary<string, object> state)
-        {
-            if (state == null)
-                throw new ArgumentNullException("state");
+		/// <summary>
+		/// Create an empty job data structure.
+		/// </summary>
+		public JobData()
+		{
+		}
 
-            this.state = state;
-        }
+		/// <summary>
+		/// Creates a job data structure with the specified initial state.
+		/// </summary>
+		/// <param name="state">The initial state</param>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="state"/> is null</exception>
+		public JobData(IDictionary<string, object> state)
+		{
+			if (state == null)
+				throw new ArgumentNullException("state");
 
-        /// <summary>
-        /// Gets a dictionary of state values.
-        /// </summary>
-        public IDictionary<string, object> State
-        {
-            get
-            {
-                if (state == null)
-                    state = new Dictionary<string, object>();
-                return state;
-            }
-        }
+			this.state = state;
+		}
 
-        /// <summary>
-        /// Clones the job data including a shallow copy of the state dictionary.
-        /// </summary>
-        /// <returns>The cloned job data</returns>
-        public virtual JobData Clone()
-        {
-            JobData clone = state != null ? new JobData(new Dictionary<string, object>(state)) : new JobData();
+		/// <summary>
+		/// Gets a dictionary of state values.
+		/// </summary>
+		public IDictionary<string, object> State
+		{
+			get
+			{
+				if (state == null)
+					state = new Dictionary<string, object>();
+				return state;
+			}
+		}
 
-            return clone;
-        }
+		/// <summary>
+		/// Clones the job data including a shallow copy of the state dictionary.
+		/// </summary>
+		/// <returns>The cloned job data</returns>
+		public virtual JobData Clone()
+		{
+			JobData clone = state != null ? new JobData(new Dictionary<string, object>(state)) : new JobData();
 
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
-    }
+			return clone;
+		}
+
+		object ICloneable.Clone()
+		{
+			return Clone();
+		}
+	}
 }

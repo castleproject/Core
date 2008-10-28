@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,55 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using Castle.Components.Scheduler.Tests.Utilities;
-using MbUnit.Framework;
-
 namespace Castle.Components.Scheduler.Tests.UnitTests
 {
-    [TestFixture]
-    [TestsOn(typeof(JobData))]
-    [Author("Jeff Brown", "jeff@ingenio.com")]
-    public class JobDataTest : BaseUnitTest
-    {
-        [Test]
-        public void DefaultConstructorCreatesEmptyDictionary()
-        {
-            JobData jobData = new JobData();
-            Assert.AreEqual(0, jobData.State.Count);
-        }
+	using System;
+	using System.Collections.Generic;
+	using MbUnit.Framework;
+	using Utilities;
 
-        [Test]
-        public void ConstructorWithDictionarySetsProperties()
-        {
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            JobData jobData = new JobData(dict);
-            Assert.AreSame(dict, jobData.State);
-        }
+	[TestFixture]
+	[TestsOn(typeof (JobData))]
+	[Author("Jeff Brown", "jeff@ingenio.com")]
+	public class JobDataTest : BaseUnitTest
+	{
+		[Test]
+		public void DefaultConstructorCreatesEmptyDictionary()
+		{
+			JobData jobData = new JobData();
+			Assert.AreEqual(0, jobData.State.Count);
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorWithDictionaryThrowsIfDictionaryIsNull()
-        {
-            new JobData(null);
-        }
+		[Test]
+		public void ConstructorWithDictionarySetsProperties()
+		{
+			Dictionary<string, object> dict = new Dictionary<string, object>();
+			JobData jobData = new JobData(dict);
+			Assert.AreSame(dict, jobData.State);
+		}
 
-        [RowTest]
-        [Row(false)]
-        [Row(true)]
-        public void ClonePerformsADeepCopy(bool useGenericClonable)
-        {
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            JobData jobData = new JobData(dict);
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void ConstructorWithDictionaryThrowsIfDictionaryIsNull()
+		{
+			new JobData(null);
+		}
 
-            JobData clone = useGenericClonable ? jobData.Clone() :
-                (JobData) ((ICloneable) jobData).Clone();
+		[RowTest]
+		[Row(false)]
+		[Row(true)]
+		public void ClonePerformsADeepCopy(bool useGenericClonable)
+		{
+			Dictionary<string, object> dict = new Dictionary<string, object>();
+			JobData jobData = new JobData(dict);
 
-            Assert.AreNotSame(jobData, clone);
-            Assert.AreNotSame(dict, clone.State);
+			JobData clone = useGenericClonable
+			                	? jobData.Clone()
+			                	:
+			                		(JobData) ((ICloneable) jobData).Clone();
 
-            JobAssert.AreEqual(jobData, clone);
-        }
-    }
+			Assert.AreNotSame(jobData, clone);
+			Assert.AreNotSame(dict, clone.State);
+
+			JobAssert.AreEqual(jobData, clone);
+		}
+	}
 }

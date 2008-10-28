@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,50 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using Castle.Components.Scheduler.Tests.Utilities;
-using Castle.Components.Scheduler.Utilities;
-using MbUnit.Framework;
-
 namespace Castle.Components.Scheduler.Tests.UnitTests
 {
-    [TestFixture]
-    [TestsOn(typeof(DateTimeUtils))]
-    [Author("Jeff Brown", "jeff@ingenio.com")]
-    public class DateTimeUtilsTest
-    {
-        [Test]
-        public void ToUniversalTime_Null()
-        {
-            Assert.IsNull(DateTimeUtils.ToUniversalTime(null));
-        }
+	using System;
+	using MbUnit.Framework;
+	using Scheduler.Utilities;
+	using Utilities;
 
-        [Test]
-        public void ToUniversalTime_NonNull()
-        {
-            DateTime value = new DateTime(2000, 3, 4);
-            DateTimeAssert.AreEqualIncludingKind(value.ToUniversalTime(), DateTimeUtils.ToUniversalTime(value));
-        }
+	[TestFixture]
+	[TestsOn(typeof (DateTimeUtils))]
+	[Author("Jeff Brown", "jeff@ingenio.com")]
+	public class DateTimeUtilsTest
+	{
+		[Test]
+		public void ToUniversalTime_Null()
+		{
+			Assert.IsNull(DateTimeUtils.ToUniversalTime(null));
+		}
 
-        [Test]
-        public void AssumeUniversalTime_NotNullable()
-        {
-            DateTimeAssert.AreEqualIncludingKind(new DateTime(2000, 3, 4, 0, 0, 0, DateTimeKind.Utc),
-                DateTimeUtils.AssumeUniversalTime(new DateTime(2000, 3, 4)));
-        }
+		[Test]
+		public void ToUniversalTime_NonNull()
+		{
+			DateTime value = new DateTime(2000, 3, 4);
+			DateTimeAssert.AreEqualIncludingKind(value.ToUniversalTime(), DateTimeUtils.ToUniversalTime(value));
+		}
 
-        [Test]
-        public void AssumeUniversalTime_NonNull()
-        {
-            DateTimeAssert.AreEqualIncludingKind(new DateTime(2000, 3, 4, 0, 0, 0, DateTimeKind.Utc),
-                DateTimeUtils.AssumeUniversalTime((DateTime?) new DateTime(2000, 3, 4)));
-        }
+		[Test]
+		public void AssumeUniversalTime_NotNullable()
+		{
+			DateTimeAssert.AreEqualIncludingKind(new DateTime(2000, 3, 4, 0, 0, 0, DateTimeKind.Utc),
+			                                     DateTimeUtils.AssumeUniversalTime(new DateTime(2000, 3, 4)));
+		}
 
-        [Test]
-        public void AssumeUniversalTime_Null()
-        {
-            Assert.IsNull(DateTimeUtils.AssumeUniversalTime(null));
-        }
-    }
+		[Test]
+		public void AssumeUniversalTime_NonNull()
+		{
+			DateTimeAssert.AreEqualIncludingKind(new DateTime(2000, 3, 4, 0, 0, 0, DateTimeKind.Utc),
+			                                     DateTimeUtils.AssumeUniversalTime((DateTime?) new DateTime(2000, 3, 4)));
+		}
+
+		[Test]
+		public void AssumeUniversalTime_Null()
+		{
+			Assert.IsNull(DateTimeUtils.AssumeUniversalTime(null));
+		}
+	}
 }

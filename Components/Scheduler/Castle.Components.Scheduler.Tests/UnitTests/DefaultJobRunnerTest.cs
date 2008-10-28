@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,108 +12,106 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using Castle.Core.Logging;
-using MbUnit.Framework;
-using Rhino.Mocks;
-
 namespace Castle.Components.Scheduler.Tests.UnitTests
 {
-    [TestFixture(TimeOut = 1)]
-    [TestsOn(typeof(DefaultJobRunner))]
-    [Author("Jeff Brown", "jeff@ingenio.com")]
-    public class DefaultJobRunnerTest : BaseUnitTest
-    {
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_ThrowsIfJobFactoryIsNull()
-        {
-            new DefaultJobRunner(null);
-        }
+	using System;
+	using System.Threading;
+	using Core.Logging;
+	using MbUnit.Framework;
+	using Rhino.Mocks;
 
-        [Test]
-        public void CreateRunnerAndExecuteJob_NoCallback()
-        {
-            JobExecutionContext context = new JobExecutionContext(
-                Mocks.CreateMock<IScheduler>(), Mocks.CreateMock<ILogger>(),
-                new JobSpec("job", "description", "key", Mocks.CreateMock<Trigger>()), null);
+	[TestFixture(TimeOut = 1)]
+	[TestsOn(typeof (DefaultJobRunner))]
+	[Author("Jeff Brown", "jeff@ingenio.com")]
+	public class DefaultJobRunnerTest : BaseUnitTest
+	{
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void Constructor_ThrowsIfJobFactoryIsNull()
+		{
+			new DefaultJobRunner(null);
+		}
 
-            IJobFactory jobFactory = Mocks.CreateMock<IJobFactory>();
-            IJob job = Mocks.CreateMock<IJob>();
+		[Test]
+		public void CreateRunnerAndExecuteJob_NoCallback()
+		{
+			JobExecutionContext context = new JobExecutionContext(
+				Mocks.CreateMock<IScheduler>(), Mocks.CreateMock<ILogger>(),
+				new JobSpec("job", "description", "key", Mocks.CreateMock<Trigger>()), null);
 
-            Expect.Call(jobFactory.GetJob("key")).Return(job);
-            Expect.Call(job.Execute(context)).Return(true);
+			IJobFactory jobFactory = Mocks.CreateMock<IJobFactory>();
+			IJob job = Mocks.CreateMock<IJob>();
 
-            Mocks.ReplayAll();
+			Expect.Call(jobFactory.GetJob("key")).Return(job);
+			Expect.Call(job.Execute(context)).Return(true);
 
-            DefaultJobRunner runner = new DefaultJobRunner(jobFactory);
-            IAsyncResult asyncResult = runner.BeginExecute(context, null, "state");
-            Assert.AreEqual("state", asyncResult.AsyncState);
-            Assert.IsNotNull(asyncResult.AsyncWaitHandle);
-            Assert.IsFalse(asyncResult.CompletedSynchronously);
-            Assert.IsTrue(runner.EndExecute(asyncResult));
-            Assert.IsTrue(asyncResult.IsCompleted);
-        }
+			Mocks.ReplayAll();
 
-        [Test]
-        public void CreateRunnerAndExecuteJob_WithCallback()
-        {
-            JobExecutionContext context = new JobExecutionContext(
-                Mocks.CreateMock<IScheduler>(), Mocks.CreateMock<ILogger>(),
-                new JobSpec("job", "description", "key", Mocks.CreateMock<Trigger>()), null);
+			DefaultJobRunner runner = new DefaultJobRunner(jobFactory);
+			IAsyncResult asyncResult = runner.BeginExecute(context, null, "state");
+			Assert.AreEqual("state", asyncResult.AsyncState);
+			Assert.IsNotNull(asyncResult.AsyncWaitHandle);
+			Assert.IsFalse(asyncResult.CompletedSynchronously);
+			Assert.IsTrue(runner.EndExecute(asyncResult));
+			Assert.IsTrue(asyncResult.IsCompleted);
+		}
 
-            IJobFactory jobFactory = Mocks.CreateMock<IJobFactory>();
-            IJob job = Mocks.CreateMock<IJob>();
+		[Test]
+		public void CreateRunnerAndExecuteJob_WithCallback()
+		{
+			JobExecutionContext context = new JobExecutionContext(
+				Mocks.CreateMock<IScheduler>(), Mocks.CreateMock<ILogger>(),
+				new JobSpec("job", "description", "key", Mocks.CreateMock<Trigger>()), null);
 
-            Expect.Call(jobFactory.GetJob("key")).Return(job);
-            Expect.Call(job.Execute(context)).Return(true);
+			IJobFactory jobFactory = Mocks.CreateMock<IJobFactory>();
+			IJob job = Mocks.CreateMock<IJob>();
 
-            Mocks.ReplayAll();
+			Expect.Call(jobFactory.GetJob("key")).Return(job);
+			Expect.Call(job.Execute(context)).Return(true);
 
-            DefaultJobRunner runner = new DefaultJobRunner(jobFactory);
+			Mocks.ReplayAll();
 
-            IAsyncResult resultPassedToCallback = null;
-            object barrier = new object();
+			DefaultJobRunner runner = new DefaultJobRunner(jobFactory);
 
-            IAsyncResult asyncResult = runner.BeginExecute(context, delegate(IAsyncResult r)
-            {
-                resultPassedToCallback = r;
+			IAsyncResult resultPassedToCallback = null;
+			object barrier = new object();
 
-                lock (barrier)
-                    Monitor.PulseAll(barrier);
-            }, "state");
+			IAsyncResult asyncResult = runner.BeginExecute(context, delegate(IAsyncResult r)
+			{
+				resultPassedToCallback = r;
 
-            lock (barrier)
-                if (resultPassedToCallback == null)
-                    Monitor.Wait(barrier, 10000);
+				lock (barrier)
+					Monitor.PulseAll(barrier);
+			}, "state");
 
-            Assert.AreEqual("state", asyncResult.AsyncState);
-            Assert.IsNotNull(asyncResult.AsyncWaitHandle);
-            Assert.IsFalse(asyncResult.CompletedSynchronously);
-            Assert.IsTrue(runner.EndExecute(asyncResult));
-            Assert.IsTrue(asyncResult.IsCompleted);
+			lock (barrier)
+				if (resultPassedToCallback == null)
+					Monitor.Wait(barrier, 10000);
 
-            Assert.AreSame(asyncResult, resultPassedToCallback);
-        }
+			Assert.AreEqual("state", asyncResult.AsyncState);
+			Assert.IsNotNull(asyncResult.AsyncWaitHandle);
+			Assert.IsFalse(asyncResult.CompletedSynchronously);
+			Assert.IsTrue(runner.EndExecute(asyncResult));
+			Assert.IsTrue(asyncResult.IsCompleted);
 
-        [Test]
-        [ExpectedException(typeof(SchedulerException))]
-        public void WrapsJobFactoryException()
-        {
-            JobExecutionContext context = new JobExecutionContext(
-                Mocks.CreateMock<IScheduler>(), Mocks.CreateMock<ILogger>(),
-                new JobSpec("job", "description", "key", Mocks.CreateMock<Trigger>()), null);
+			Assert.AreSame(asyncResult, resultPassedToCallback);
+		}
 
-            IJobFactory jobFactory = Mocks.CreateMock<IJobFactory>();
-            Expect.Call(jobFactory.GetJob("key")).Throw(new Exception("Ack!"));
-            Mocks.ReplayAll();
+		[Test]
+		[ExpectedException(typeof (SchedulerException))]
+		public void WrapsJobFactoryException()
+		{
+			JobExecutionContext context = new JobExecutionContext(
+				Mocks.CreateMock<IScheduler>(), Mocks.CreateMock<ILogger>(),
+				new JobSpec("job", "description", "key", Mocks.CreateMock<Trigger>()), null);
 
-            DefaultJobRunner jobRunner = new DefaultJobRunner(jobFactory);
+			IJobFactory jobFactory = Mocks.CreateMock<IJobFactory>();
+			Expect.Call(jobFactory.GetJob("key")).Throw(new Exception("Ack!"));
+			Mocks.ReplayAll();
 
-            jobRunner.BeginExecute(context, null, null);
-        }
-    }
+			DefaultJobRunner jobRunner = new DefaultJobRunner(jobFactory);
+
+			jobRunner.BeginExecute(context, null, null);
+		}
+	}
 }

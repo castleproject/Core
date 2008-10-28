@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,52 +12,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Castle.Components.Scheduler
 {
-    /// <summary>
-    /// Describes the state of a job.
-    /// </summary>
-    public enum JobState
-    {
-        /// <summary>
-        /// The job has just been created or updated and is waiting to be scheduled.
-        /// </summary>
-        Pending = 0,
+	/// <summary>
+	/// Describes the state of a job.
+	/// </summary>
+	public enum JobState
+	{
+		/// <summary>
+		/// The job has just been created or updated and is waiting to be scheduled.
+		/// </summary>
+		Pending = 0,
 
-        /// <summary>
-        /// The job has been scheduled and is waiting for its trigger to fire.
-        /// </summary>
-        Scheduled = 1,
+		/// <summary>
+		/// The job has been scheduled and is waiting for its trigger to fire.
+		/// </summary>
+		Scheduled = 1,
 
-        /// <summary>
-        /// The job's trigger has fired.
-        /// </summary>
-        Triggered = 2,
+		/// <summary>
+		/// The job's trigger has fired.
+		/// </summary>
+		Triggered = 2,
 
-        /// <summary>
-        /// The job is running.
-        /// </summary>
-        Running = 3,
+		/// <summary>
+		/// The job is running.
+		/// </summary>
+		Running = 3,
 
-        /// <summary>
-        /// The job completed.  Whether it suceeded or failed can be determined by examining
-        /// the last job execution details.
-        /// </summary>
-        Completed = 4,
+		/// <summary>
+		/// The job completed.  Whether it suceeded or failed can be determined by examining
+		/// the last job execution details.
+		/// </summary>
+		Completed = 4,
 
-        /// <summary>
-        /// The job was previously running but has been orphaned because the scheduler instance
-        /// that was previously managing its execution no longer exists.
-        /// </summary>
-        Orphaned = 5,
+		/// <summary>
+		/// The job was previously running but has been orphaned because the scheduler instance
+		/// that was previously managing its execution no longer exists.
+		/// </summary>
+		Orphaned = 5,
 
-        /// <summary>
-        /// The job has been stopped.  Its trigger will not fire again.
-        /// </summary>
-        Stopped = 6
-    }
+		/// <summary>
+		/// The job has been stopped.  Its trigger will not fire again.
+		/// </summary>
+		Stopped = 6
+	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,26 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Castle.Components.Scheduler
 {
-    /// <summary>
-    /// A factory that creates <see cref="IJob" /> instances associated
-    /// with a given job key prior to job execution.
-    /// </summary>
-    public interface IJobFactory
-    {
-        /// <summary>
-        /// Gets an instance of a job with the specified key.
-        /// </summary>
-        /// <param name="jobKey">A key which determines which implementation of
-        /// <see cref="IJob" /> is used and perhaps how it is initialized</param>
-        /// <returns>The new job</returns>
-        /// <exception cref="SchedulerException">Thrown if no such job key is known or if some other error
-        /// occurs while initializing the job</exception>
-        IJob GetJob(string jobKey);
-    }
+	/// <summary>
+	/// A factory that creates <see cref="IJob" /> instances associated
+	/// with a given job key prior to job execution.
+	/// </summary>
+	public interface IJobFactory
+	{
+		/// <summary>
+		/// Gets an instance of a job with the specified key.
+		/// </summary>
+		/// <param name="jobKey">A key which determines which implementation of
+		/// <see cref="IJob" /> is used and perhaps how it is initialized</param>
+		/// <returns>The new job</returns>
+		/// <exception cref="SchedulerException">Thrown if no such job key is known or if some other error
+		/// occurs while initializing the job</exception>
+		IJob GetJob(string jobKey);
+	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,25 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Castle.Components.Scheduler
 {
-    /// <summary>
-    /// A job provides an entry point for a task to be performed.
-    /// </summary>
-    public interface IJob
-    {
-        /// <summary>
-        /// Executes the job.
-        /// </summary>
-        /// <param name="context">The job's execution context</param>
-        /// <returns>True if the job succeeded, false otherwise</returns>
-        /// <exception cref="Exception">Any exception thrown by the job is interpreted
-        /// as an error by the scheduler.  Changes made to the job's state data
-        /// will be discarded when this occurs.</exception>
-        bool Execute(JobExecutionContext context);
-    }
+	using System;
+
+	/// <summary>
+	/// A job provides an entry point for a task to be performed.
+	/// </summary>
+	public interface IJob
+	{
+		/// <summary>
+		/// Executes the job.
+		/// </summary>
+		/// <param name="context">The job's execution context</param>
+		/// <returns>True if the job succeeded, false otherwise</returns>
+		/// <exception cref="Exception">Any exception thrown by the job is interpreted
+		/// as an error by the scheduler.  Changes made to the job's state data
+		/// will be discarded when this occurs.</exception>
+		bool Execute(JobExecutionContext context);
+	}
 }

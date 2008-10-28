@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,153 +12,151 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Globalization;
-using System.Threading;
-using Castle.Core;
-using Castle.Core.Logging;
-
 namespace Castle.Components.Scheduler.JobStores
 {
-    /// <summary>
-    /// Abstract base implementation of a <see cref="IJobStore" />.
-    /// Provides a common framework for implementing simple job stores.
-    /// </summary>
-    [Singleton]
-    public abstract class BaseJobStore : IJobStore
-    {
-        private bool isDisposed;
-        private ILogger logger;
+	using System;
+	using Core;
+	using Core.Logging;
 
-        /// <summary>
-        /// Creates a job store with a null logger.
-        /// </summary>
-        protected BaseJobStore()
-        {
-            logger = NullLogger.Instance;
-        }
+	/// <summary>
+	/// Abstract base implementation of a <see cref="IJobStore" />.
+	/// Provides a common framework for implementing simple job stores.
+	/// </summary>
+	[Singleton]
+	public abstract class BaseJobStore : IJobStore
+	{
+		private bool isDisposed;
+		private ILogger logger;
 
-        /// <summary>
-        /// Gets or sets whether the job store has been disposed.
-        /// </summary>
-        public bool IsDisposed
-        {
-            get { return isDisposed; }
-            protected set { isDisposed = value; }
-        }
+		/// <summary>
+		/// Creates a job store with a null logger.
+		/// </summary>
+		protected BaseJobStore()
+		{
+			logger = NullLogger.Instance;
+		}
 
-        /// <summary>
-        /// Gets or sets the logger used by the scheduler.
-        /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is null</exception>
-        public ILogger Logger
-        {
-            get { return logger; }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-                logger = value;
-            }
-        }
+		/// <summary>
+		/// Gets or sets whether the job store has been disposed.
+		/// </summary>
+		public bool IsDisposed
+		{
+			get { return isDisposed; }
+			protected set { isDisposed = value; }
+		}
 
-        /// <inheritdoc />
-        public abstract void Dispose();
+		/// <summary>
+		/// Gets or sets the logger used by the scheduler.
+		/// </summary>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is null</exception>
+		public ILogger Logger
+		{
+			get { return logger; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+				logger = value;
+			}
+		}
 
-        /// <inheritdoc />
-        public abstract void RegisterScheduler(Guid schedulerGuid, string schedulerName);
+		/// <inheritdoc />
+		public abstract void Dispose();
 
-        /// <inheritdoc />
-        public abstract void UnregisterScheduler(Guid schedulerGuid);
+		/// <inheritdoc />
+		public abstract void RegisterScheduler(Guid schedulerGuid, string schedulerName);
 
-        /// <inheritdoc />
-        public abstract IJobWatcher CreateJobWatcher(Guid schedulerGuid);
+		/// <inheritdoc />
+		public abstract void UnregisterScheduler(Guid schedulerGuid);
 
-        /// <inheritdoc />
-        public abstract JobDetails GetJobDetails(string jobName);
+		/// <inheritdoc />
+		public abstract IJobWatcher CreateJobWatcher(Guid schedulerGuid);
 
-        /// <inheritdoc />
-        public abstract void SaveJobDetails(JobDetails jobDetails);
+		/// <inheritdoc />
+		public abstract JobDetails GetJobDetails(string jobName);
 
-        /// <inheritdoc />
-        public abstract bool CreateJob(JobSpec jobSpec, DateTime creationTimeUtc, CreateJobConflictAction conflictAction);
+		/// <inheritdoc />
+		public abstract void SaveJobDetails(JobDetails jobDetails);
 
-        /// <inheritdoc />
-        public abstract void UpdateJob(string existingJobName, JobSpec updatedJobSpec);
+		/// <inheritdoc />
+		public abstract bool CreateJob(JobSpec jobSpec, DateTime creationTimeUtc, CreateJobConflictAction conflictAction);
 
-        /// <inheritdoc />
-        public abstract bool DeleteJob(string jobName);
+		/// <inheritdoc />
+		public abstract void UpdateJob(string existingJobName, JobSpec updatedJobSpec);
 
-        /// <inheritdoc />
-        public abstract string[] ListJobNames();
+		/// <inheritdoc />
+		public abstract bool DeleteJob(string jobName);
 
-        /// <summary>
-        /// Signals all threads blocked on <see cref="GetNextJobToProcessOrWaitUntilSignaled" />.
-        /// </summary>
-        protected abstract void SignalBlockedThreads();
+		/// <inheritdoc />
+		public abstract string[] ListJobNames();
 
-        /// <summary>
-        /// Gets the next job to process.
-        /// If none are available, waits until signaled by <see cref="SignalBlockedThreads" />.
-        /// </summary>
-        /// <param name="schedulerGuid">The GUID of the scheduler that is polling</param>
-        /// <returns>The next job to process or null if there were none</returns>
-        protected abstract JobDetails GetNextJobToProcessOrWaitUntilSignaled(Guid schedulerGuid);
+		/// <summary>
+		/// Signals all threads blocked on <see cref="GetNextJobToProcessOrWaitUntilSignaled" />.
+		/// </summary>
+		protected abstract void SignalBlockedThreads();
 
-        /// <summary>
-        /// Throws <see cref="ObjectDisposedException" /> if the job store has been disposed.
-        /// </summary>
-        protected void ThrowIfDisposed()
-        {
-            if (isDisposed)
-                throw new ObjectDisposedException(GetType().Name);
-        }
+		/// <summary>
+		/// Gets the next job to process.
+		/// If none are available, waits until signaled by <see cref="SignalBlockedThreads" />.
+		/// </summary>
+		/// <param name="schedulerGuid">The GUID of the scheduler that is polling</param>
+		/// <returns>The next job to process or null if there were none</returns>
+		protected abstract JobDetails GetNextJobToProcessOrWaitUntilSignaled(Guid schedulerGuid);
 
-        /// <summary>
-        /// A job watcher based on <see cref="BaseJobStore.GetNextJobToProcessOrWaitUntilSignaled" />
-        /// and <see cref="BaseJobStore.SignalBlockedThreads" />.
-        /// </summary>
-        protected class JobWatcher : IJobWatcher
-        {
-            private volatile BaseJobStore jobStore;
-            private Guid schedulerGuid;
+		/// <summary>
+		/// Throws <see cref="ObjectDisposedException" /> if the job store has been disposed.
+		/// </summary>
+		protected void ThrowIfDisposed()
+		{
+			if (isDisposed)
+				throw new ObjectDisposedException(GetType().Name);
+		}
 
-            /// <summary>
-            /// Creates a job watcher for the specified job store and scheduler.
-            /// </summary>
-            /// <param name="jobStore">The job store to which to delegate the watching operations</param>
-            /// <param name="schedulerGuid">The scheduler GUID</param>
-            public JobWatcher(BaseJobStore jobStore, Guid schedulerGuid)
-            {
-                this.jobStore = jobStore;
-                this.schedulerGuid = schedulerGuid;
-            }
+		/// <summary>
+		/// A job watcher based on <see cref="BaseJobStore.GetNextJobToProcessOrWaitUntilSignaled" />
+		/// and <see cref="BaseJobStore.SignalBlockedThreads" />.
+		/// </summary>
+		protected class JobWatcher : IJobWatcher
+		{
+			private volatile BaseJobStore jobStore;
+			private readonly Guid schedulerGuid;
 
-            /// <inheritdoc />
-            public void Dispose()
-            {
-                BaseJobStore cachedJobStore = jobStore;
-                if (cachedJobStore != null)
-                {
-                    jobStore = null;
-                    cachedJobStore.SignalBlockedThreads();
-                }
-            }
+			/// <summary>
+			/// Creates a job watcher for the specified job store and scheduler.
+			/// </summary>
+			/// <param name="jobStore">The job store to which to delegate the watching operations</param>
+			/// <param name="schedulerGuid">The scheduler GUID</param>
+			public JobWatcher(BaseJobStore jobStore, Guid schedulerGuid)
+			{
+				this.jobStore = jobStore;
+				this.schedulerGuid = schedulerGuid;
+			}
 
-            /// <inheritdoc />
-            public JobDetails GetNextJobToProcess()
-            {
-                for (;;)
-                {
-                    BaseJobStore cachedJobStore = jobStore;
-                    if (cachedJobStore == null)
-                        return null;
+			/// <inheritdoc />
+			public void Dispose()
+			{
+				BaseJobStore cachedJobStore = jobStore;
+				if (cachedJobStore != null)
+				{
+					jobStore = null;
+					cachedJobStore.SignalBlockedThreads();
+				}
+			}
 
-                    JobDetails jobDetails = jobStore.GetNextJobToProcessOrWaitUntilSignaled(schedulerGuid);
-                    if (jobDetails != null)
-                        return jobDetails;
-                }
-            }
-        }
-    }
+			/// <inheritdoc />
+			public JobDetails GetNextJobToProcess()
+			{
+				for (;;)
+				{
+					BaseJobStore cachedJobStore = jobStore;
+					if (cachedJobStore == null)
+						return null;
+
+					JobDetails jobDetails = jobStore.GetNextJobToProcessOrWaitUntilSignaled(schedulerGuid);
+					if (jobDetails != null)
+						return jobDetails;
+				}
+			}
+		}
+	}
 }

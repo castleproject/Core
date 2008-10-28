@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,46 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
-
 namespace Castle.Components.Scheduler
 {
-    /// <summary>
-    /// The type of exception used by the scheduler to report problems.
-    /// </summary>
-    [Serializable]
-    public class SchedulerException : Exception
-    {
-        /// <summary>
-        /// Creates a scheduler exception.
-        /// </summary>
-        /// <param name="message">The exception message</param>
-        public SchedulerException(string message)
-            : base(message)
-        {
-        }
+	using System;
+	using System.Runtime.Serialization;
 
-        /// <summary>
-        /// Creates a scheduler exception.
-        /// </summary>
-        /// <param name="message">The exception message</param>
-        /// <param name="innerException">The inner exception</param>
-        public SchedulerException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
+	/// <summary>
+	/// The type of exception used by the scheduler to report problems.
+	/// </summary>
+	[Serializable]
+	public class SchedulerException : Exception
+	{
+		/// <summary>
+		/// Creates a scheduler exception.
+		/// </summary>
+		/// <param name="message">The exception message</param>
+		public SchedulerException(string message)
+			: base(message)
+		{
+		}
 
-        /// <summary>
-        /// Creates a scheduler exception from its serialized form.
-        /// </summary>
-        /// <param name="info">The serialization info</param>
-        /// <param name="context">The streaming context</param>
-        protected SchedulerException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-    }
+		/// <summary>
+		/// Creates a scheduler exception.
+		/// </summary>
+		/// <param name="message">The exception message</param>
+		/// <param name="innerException">The inner exception</param>
+		public SchedulerException(string message, Exception innerException)
+			: base(message, innerException)
+		{
+		}
+
+		/// <summary>
+		/// Creates a scheduler exception from its serialized form.
+		/// </summary>
+		/// <param name="info">The serialization info</param>
+		/// <param name="context">The streaming context</param>
+		protected SchedulerException(SerializationInfo info, StreamingContext context)
+			: base(info, context)
+		{
+		}
+	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,44 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Globalization;
-using Castle.Core;
-using Castle.MicroKernel;
-
 namespace Castle.Components.Scheduler.WindsorExtension
 {
-    /// <summary>
-    /// The Windsor job factory constructs instances of <see cref="IJob" /> by
-    /// asking the Castle MicroKernel to resolve a component that implements the 
-    /// <see cref="IJob" /> service and whose component key equals the requested job key.
-    /// </summary>
-    [Singleton]
-    public class WindsorJobFactory : IJobFactory
-    {
-        private IKernel kernel;
+	using System;
+	using System.Globalization;
+	using Core;
+	using MicroKernel;
 
-        /// <summary>
-        /// Creates a component job factory based on the specified IoC kernel.
-        /// </summary>
-        /// <param name="kernel">The IoC kernel to use for component resolution</param>
-        public WindsorJobFactory(IKernel kernel)
-        {
-            this.kernel = kernel;
-        }
+	/// <summary>
+	/// The Windsor job factory constructs instances of <see cref="IJob" /> by
+	/// asking the Castle MicroKernel to resolve a component that implements the 
+	/// <see cref="IJob" /> service and whose component key equals the requested job key.
+	/// </summary>
+	[Singleton]
+	public class WindsorJobFactory : IJobFactory
+	{
+		private readonly IKernel kernel;
 
-        /// <inheritdoc />
-        public IJob GetJob(string jobKey)
-        {
-            try
-            {
-                return (IJob)kernel.Resolve(jobKey, typeof(IJob));
-            }
-            catch (Exception ex)
-            {
-                throw new SchedulerException(String.Format(CultureInfo.CurrentCulture,
-                                                           "Cannot create IJob component with key '{0}'.", jobKey), ex);
-            }
-        }
-    }
+		/// <summary>
+		/// Creates a component job factory based on the specified IoC kernel.
+		/// </summary>
+		/// <param name="kernel">The IoC kernel to use for component resolution</param>
+		public WindsorJobFactory(IKernel kernel)
+		{
+			this.kernel = kernel;
+		}
+
+		/// <inheritdoc />
+		public IJob GetJob(string jobKey)
+		{
+			try
+			{
+				return (IJob) kernel.Resolve(jobKey, typeof (IJob));
+			}
+			catch (Exception ex)
+			{
+				throw new SchedulerException(String.Format(CultureInfo.CurrentCulture,
+				                                           "Cannot create IJob component with key '{0}'.", jobKey), ex);
+			}
+		}
+	}
 }

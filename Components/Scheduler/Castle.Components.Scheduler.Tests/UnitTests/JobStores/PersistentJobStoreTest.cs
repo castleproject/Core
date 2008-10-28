@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,266 +12,267 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Threading;
-using Castle.Components.Scheduler.JobStores;
-using MbUnit.Framework;
-
 namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 {
-    [TestsOn(typeof(PersistentJobStore))]
-    [Author("Jeff Brown", "jeff@ingenio.com")]
-    public abstract class PersistentJobStoreTest : BaseJobStoreTest
-    {
-        new public PersistentJobStore JobStore
-        {
-            get { return (PersistentJobStore)base.JobStore; }
-        }
+	using System;
+	using System.Diagnostics;
+	using System.Threading;
+	using MbUnit.Framework;
+	using Scheduler.JobStores;
 
-        protected override BaseJobStore CreateJobStore()
-        {
-            PersistentJobStore jobStore = CreatePersistentJobStore();
-            Assert.AreEqual(15, jobStore.PollIntervalInSeconds);
-            Assert.AreEqual(120, jobStore.SchedulerExpirationTimeInSeconds);
+	[TestsOn(typeof (PersistentJobStore))]
+	[Author("Jeff Brown", "jeff@ingenio.com")]
+	public abstract class PersistentJobStoreTest : BaseJobStoreTest
+	{
+		public new PersistentJobStore JobStore
+		{
+			get { return (PersistentJobStore) base.JobStore; }
+		}
 
-            jobStore.PollIntervalInSeconds = 1;
-            jobStore.SchedulerExpirationTimeInSeconds = 5;
-            return jobStore;
-        }
+		protected override BaseJobStore CreateJobStore()
+		{
+			PersistentJobStore jobStore = CreatePersistentJobStore();
+			Assert.AreEqual(15, jobStore.PollIntervalInSeconds);
+			Assert.AreEqual(120, jobStore.SchedulerExpirationTimeInSeconds);
 
-        protected abstract PersistentJobStore CreatePersistentJobStore();
+			jobStore.PollIntervalInSeconds = 1;
+			jobStore.SchedulerExpirationTimeInSeconds = 5;
+			return jobStore;
+		}
 
-        /// <summary>
-        /// Sets whether subsequent Db connection requests for the specified job store
-        /// should be caused to fail.
-        /// </summary>
-        protected abstract void SetBrokenConnectionMocking(PersistentJobStore jobStore, bool brokenConnections);
+		protected abstract PersistentJobStore CreatePersistentJobStore();
 
-        [Test]
-        public void ClusterName_GetterAndSetter()
-        {
-            Assert.AreEqual("Default", JobStore.ClusterName);
+		/// <summary>
+		/// Sets whether subsequent Db connection requests for the specified job store
+		/// should be caused to fail.
+		/// </summary>
+		protected abstract void SetBrokenConnectionMocking(PersistentJobStore jobStore, bool brokenConnections);
 
-            JobStore.ClusterName = "Cluster";
-            Assert.AreEqual("Cluster", JobStore.ClusterName);
-        }
+		[Test]
+		public void ClusterName_GetterAndSetter()
+		{
+			Assert.AreEqual("Default", JobStore.ClusterName);
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ClusterName_ThrowsIfValueIsNull()
-        {
-            JobStore.ClusterName = null;
-        }
+			JobStore.ClusterName = "Cluster";
+			Assert.AreEqual("Cluster", JobStore.ClusterName);
+		}
 
-        [Test]
-        public void PollIntervalInSeconds_GetterAndSetter()
-        {
-            JobStore.PollIntervalInSeconds = 15;
-            Assert.AreEqual(15, JobStore.PollIntervalInSeconds);
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void ClusterName_ThrowsIfValueIsNull()
+		{
+			JobStore.ClusterName = null;
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void PollIntervalInSeconds_ThrowsIfValueIsZero()
-        {
-            JobStore.PollIntervalInSeconds = 0;
-        }
+		[Test]
+		public void PollIntervalInSeconds_GetterAndSetter()
+		{
+			JobStore.PollIntervalInSeconds = 15;
+			Assert.AreEqual(15, JobStore.PollIntervalInSeconds);
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void PollIntervalInSeconds_ThrowsIfValueIsNegative()
-        {
-            JobStore.PollIntervalInSeconds = -1;
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentOutOfRangeException))]
+		public void PollIntervalInSeconds_ThrowsIfValueIsZero()
+		{
+			JobStore.PollIntervalInSeconds = 0;
+		}
 
-        [Test]
-        public void SchedulerExpirationTimeInSeconds_GetterAndSetter()
-        {
-            JobStore.SchedulerExpirationTimeInSeconds = 15;
-            Assert.AreEqual(15, JobStore.SchedulerExpirationTimeInSeconds);
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentOutOfRangeException))]
+		public void PollIntervalInSeconds_ThrowsIfValueIsNegative()
+		{
+			JobStore.PollIntervalInSeconds = -1;
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void SchedulerExpirationTimeInSeconds_ThrowsIfValueIsZero()
-        {
-            JobStore.SchedulerExpirationTimeInSeconds = 0;
-        }
+		[Test]
+		public void SchedulerExpirationTimeInSeconds_GetterAndSetter()
+		{
+			JobStore.SchedulerExpirationTimeInSeconds = 15;
+			Assert.AreEqual(15, JobStore.SchedulerExpirationTimeInSeconds);
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void SchedulerExpirationTimeInSeconds_ThrowsIfValueIsNegative()
-        {
-            JobStore.SchedulerExpirationTimeInSeconds = -1;
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentOutOfRangeException))]
+		public void SchedulerExpirationTimeInSeconds_ThrowsIfValueIsZero()
+		{
+			JobStore.SchedulerExpirationTimeInSeconds = 0;
+		}
 
-        [Test]
-        [ExpectedException(typeof(SchedulerException))]
-        public void RegisterScheduler_WrapsExceptionIfDbConnectionFailureOccurs()
-        {
-            Mocks.ReplayAll();
+		[Test]
+		[ExpectedException(typeof (ArgumentOutOfRangeException))]
+		public void SchedulerExpirationTimeInSeconds_ThrowsIfValueIsNegative()
+		{
+			JobStore.SchedulerExpirationTimeInSeconds = -1;
+		}
 
-            SetBrokenConnectionMocking(JobStore, true);
-            JobStore.RegisterScheduler(SchedulerGuid, SchedulerName);
-        }
+		[Test]
+		[ExpectedException(typeof (SchedulerException))]
+		public void RegisterScheduler_WrapsExceptionIfDbConnectionFailureOccurs()
+		{
+			Mocks.ReplayAll();
 
-        [Test]
-        [ExpectedException(typeof(SchedulerException))]
-        public void UnregisterScheduler_WrapsExceptionIfDbConnectionFailureOccurs()
-        {
-            Mocks.ReplayAll();
+			SetBrokenConnectionMocking(JobStore, true);
+			JobStore.RegisterScheduler(SchedulerGuid, SchedulerName);
+		}
 
-            SetBrokenConnectionMocking(JobStore, true);
-            JobStore.UnregisterScheduler(SchedulerGuid);
-        }
+		[Test]
+		[ExpectedException(typeof (SchedulerException))]
+		public void UnregisterScheduler_WrapsExceptionIfDbConnectionFailureOccurs()
+		{
+			Mocks.ReplayAll();
 
-        [Test]
-        [ExpectedException(typeof(SchedulerException))]
-        public void CreateJob_WrapsExceptionIfDbConnectionFailureOccurs()
-        {
-            Mocks.ReplayAll();
+			SetBrokenConnectionMocking(JobStore, true);
+			JobStore.UnregisterScheduler(SchedulerGuid);
+		}
 
-            SetBrokenConnectionMocking(JobStore, true);
-            JobStore.CreateJob(dummyJobSpec, DateTime.UtcNow, CreateJobConflictAction.Ignore);
-        }
+		[Test]
+		[ExpectedException(typeof (SchedulerException))]
+		public void CreateJob_WrapsExceptionIfDbConnectionFailureOccurs()
+		{
+			Mocks.ReplayAll();
 
-        [Test]
-        [ExpectedException(typeof(SchedulerException))]
-        public void UpdateJob_WrapsExceptionIfDbConnectionFailureOccurs()
-        {
-            Mocks.ReplayAll();
+			SetBrokenConnectionMocking(JobStore, true);
+			JobStore.CreateJob(dummyJobSpec, DateTime.UtcNow, CreateJobConflictAction.Ignore);
+		}
 
-            SetBrokenConnectionMocking(JobStore, true);
-            JobStore.UpdateJob("foo", dummyJobSpec);
-        }
+		[Test]
+		[ExpectedException(typeof (SchedulerException))]
+		public void UpdateJob_WrapsExceptionIfDbConnectionFailureOccurs()
+		{
+			Mocks.ReplayAll();
 
-        [Test]
-        [ExpectedException(typeof(SchedulerException))]
-        public void DeleteJob_WrapsExceptionIfDbConnectionFailureOccurs()
-        {
-            Mocks.ReplayAll();
+			SetBrokenConnectionMocking(JobStore, true);
+			JobStore.UpdateJob("foo", dummyJobSpec);
+		}
 
-            SetBrokenConnectionMocking(JobStore, true);
-            JobStore.DeleteJob("foo");
-        }
+		[Test]
+		[ExpectedException(typeof (SchedulerException))]
+		public void DeleteJob_WrapsExceptionIfDbConnectionFailureOccurs()
+		{
+			Mocks.ReplayAll();
 
-        [Test]
-        [ExpectedException(typeof(SchedulerException))]
-        public void GetJobDetails_WrapsExceptionIfDbConnectionFailureOccurs()
-        {
-            Mocks.ReplayAll();
+			SetBrokenConnectionMocking(JobStore, true);
+			JobStore.DeleteJob("foo");
+		}
 
-            SetBrokenConnectionMocking(JobStore, true);
-            JobStore.GetJobDetails("foo");
-        }
+		[Test]
+		[ExpectedException(typeof (SchedulerException))]
+		public void GetJobDetails_WrapsExceptionIfDbConnectionFailureOccurs()
+		{
+			Mocks.ReplayAll();
 
-        [Test]
-        public void UpdateJob_IncrementsVersionNumber()
-        {
-            Mocks.ReplayAll();
+			SetBrokenConnectionMocking(JobStore, true);
+			JobStore.GetJobDetails("foo");
+		}
 
-            VersionedJobDetails jobDetails = (VersionedJobDetails)CreatePendingJob("job", DateTime.UtcNow);
-            int originalVersion = jobDetails.Version;
+		[Test]
+		public void UpdateJob_IncrementsVersionNumber()
+		{
+			Mocks.ReplayAll();
 
-            jobDetails.JobSpec.Name = "renamedJob";
-            JobStore.UpdateJob("job", jobDetails.JobSpec);
+			VersionedJobDetails jobDetails = (VersionedJobDetails) CreatePendingJob("job", DateTime.UtcNow);
+			int originalVersion = jobDetails.Version;
 
-            VersionedJobDetails updatedJobDetails = (VersionedJobDetails)JobStore.GetJobDetails("renamedJob");
-            Assert.AreEqual(originalVersion + 1, updatedJobDetails.Version, "Version number of saved object should be incremented in database.");
-        }
+			jobDetails.JobSpec.Name = "renamedJob";
+			JobStore.UpdateJob("job", jobDetails.JobSpec);
 
-        [Test]
-        public void SaveJobDetails_IncrementsVersionNumber()
-        {
-            Mocks.ReplayAll();
+			VersionedJobDetails updatedJobDetails = (VersionedJobDetails) JobStore.GetJobDetails("renamedJob");
+			Assert.AreEqual(originalVersion + 1, updatedJobDetails.Version,
+			                "Version number of saved object should be incremented in database.");
+		}
 
-            VersionedJobDetails jobDetails = (VersionedJobDetails) CreatePendingJob("job", DateTime.UtcNow);
-            int originalVersion = jobDetails.Version;
+		[Test]
+		public void SaveJobDetails_IncrementsVersionNumber()
+		{
+			Mocks.ReplayAll();
 
-            jobDetails.JobState = JobState.Stopped;
-            JobStore.SaveJobDetails(jobDetails);
+			VersionedJobDetails jobDetails = (VersionedJobDetails) CreatePendingJob("job", DateTime.UtcNow);
+			int originalVersion = jobDetails.Version;
 
-            Assert.AreEqual(originalVersion + 1, jobDetails.Version, "Version number of original object should be incremented in place.");
+			jobDetails.JobState = JobState.Stopped;
+			JobStore.SaveJobDetails(jobDetails);
 
-            VersionedJobDetails updatedJobDetails = (VersionedJobDetails)JobStore.GetJobDetails("job");
-            Assert.AreEqual(originalVersion + 1, updatedJobDetails.Version, "Version number of saved object should be incremented in database.");
-        }
+			Assert.AreEqual(originalVersion + 1, jobDetails.Version,
+			                "Version number of original object should be incremented in place.");
 
-        [Test]
-        [ExpectedException(typeof(SchedulerException))]
-        public void SaveJobDetails_WrapsExceptionIfDbConnectionFailureOccurs()
-        {
-            Mocks.ReplayAll();
+			VersionedJobDetails updatedJobDetails = (VersionedJobDetails) JobStore.GetJobDetails("job");
+			Assert.AreEqual(originalVersion + 1, updatedJobDetails.Version,
+			                "Version number of saved object should be incremented in database.");
+		}
 
-            JobDetails jobDetails = CreatePendingJob("job", DateTime.UtcNow);
+		[Test]
+		[ExpectedException(typeof (SchedulerException))]
+		public void SaveJobDetails_WrapsExceptionIfDbConnectionFailureOccurs()
+		{
+			Mocks.ReplayAll();
 
-            SetBrokenConnectionMocking(JobStore, true);
-            JobStore.SaveJobDetails(jobDetails);
-        }
+			JobDetails jobDetails = CreatePendingJob("job", DateTime.UtcNow);
 
-        [Test]
-        [ExpectedException(typeof(SchedulerException))]
-        public void ListJobNames_WrapsExceptionIfDbConnectionFailureOccurs()
-        {
-            Mocks.ReplayAll();
+			SetBrokenConnectionMocking(JobStore, true);
+			JobStore.SaveJobDetails(jobDetails);
+		}
 
-            SetBrokenConnectionMocking(JobStore, true);
-            JobStore.ListJobNames();
-        }
+		[Test]
+		[ExpectedException(typeof (SchedulerException))]
+		public void ListJobNames_WrapsExceptionIfDbConnectionFailureOccurs()
+		{
+			Mocks.ReplayAll();
 
-        [Test]
-        public void JobWatcher_IgnoresExceptionIfDbConnectionFailureOccurs()
-        {
-            Mocks.ReplayAll();
+			SetBrokenConnectionMocking(JobStore, true);
+			JobStore.ListJobNames();
+		}
 
-            SetBrokenConnectionMocking(JobStore, true);
+		[Test]
+		public void JobWatcher_IgnoresExceptionIfDbConnectionFailureOccurs()
+		{
+			Mocks.ReplayAll();
 
-            IJobWatcher jobWatcher = JobStore.CreateJobWatcher(SchedulerGuid);
+			SetBrokenConnectionMocking(JobStore, true);
 
-            // This could throw an exception but instead we catch and log it then keep going
-            // until we are disposed.
-            Stopwatch stopwatch = Stopwatch.StartNew();
+			IJobWatcher jobWatcher = JobStore.CreateJobWatcher(SchedulerGuid);
 
-            ThreadPool.QueueUserWorkItem(delegate
-            {
-                Thread.Sleep(2000);
-                jobWatcher.Dispose();
-            });
+			// This could throw an exception but instead we catch and log it then keep going
+			// until we are disposed.
+			Stopwatch stopwatch = Stopwatch.StartNew();
 
-            Assert.IsNull(jobWatcher.GetNextJobToProcess());
-            Assert.Between(stopwatch.ElapsedMilliseconds, 2000, 4000, "Check that the thread was blocked the whole time.");
-        }
+			ThreadPool.QueueUserWorkItem(delegate
+			{
+				Thread.Sleep(2000);
+				jobWatcher.Dispose();
+			});
 
-        [Test]
-        public void RunningJobsAreOrphanedWhenSchedulerRegistrationRefreshFails()
-        {
-            Mocks.ReplayAll();
+			Assert.IsNull(jobWatcher.GetNextJobToProcess());
+			Assert.Between(stopwatch.ElapsedMilliseconds, 2000, 4000, "Check that the thread was blocked the whole time.");
+		}
 
-            CreateRunningJob("running-job");
+		[Test]
+		public void RunningJobsAreOrphanedWhenSchedulerRegistrationRefreshFails()
+		{
+			Mocks.ReplayAll();
 
-            SetBrokenConnectionMocking(JobStore, true);
-            JobStore.SchedulerExpirationTimeInSeconds = 1;
+			CreateRunningJob("running-job");
 
-            // Allow some time for the expiration time to expire.
-            Thread.Sleep(3000);
+			SetBrokenConnectionMocking(JobStore, true);
+			JobStore.SchedulerExpirationTimeInSeconds = 1;
 
-            // Now get a new scheduler.
-            // Its next job up for processing should be the one that we created earlier
-            // but now it will be Orphaned.
-            PersistentJobStore newJobStore = CreatePersistentJobStore();
-            newJobStore.SchedulerExpirationTimeInSeconds = 1;
-            newJobStore.PollIntervalInSeconds = 1;
+			// Allow some time for the expiration time to expire.
+			Thread.Sleep(3000);
 
-            IJobWatcher jobWatcher = newJobStore.CreateJobWatcher(Guid.NewGuid());
-            JobDetails orphanedJob = jobWatcher.GetNextJobToProcess();
+			// Now get a new scheduler.
+			// Its next job up for processing should be the one that we created earlier
+			// but now it will be Orphaned.
+			PersistentJobStore newJobStore = CreatePersistentJobStore();
+			newJobStore.SchedulerExpirationTimeInSeconds = 1;
+			newJobStore.PollIntervalInSeconds = 1;
 
-            Assert.AreEqual("running-job", orphanedJob.JobSpec.Name);
-            Assert.AreEqual(JobState.Orphaned, orphanedJob.JobState);
-            Assert.AreEqual(false, orphanedJob.LastJobExecutionDetails.Succeeded);
-            Assert.IsNotNull(orphanedJob.LastJobExecutionDetails.EndTimeUtc);
-        }
-    }
+			IJobWatcher jobWatcher = newJobStore.CreateJobWatcher(Guid.NewGuid());
+			JobDetails orphanedJob = jobWatcher.GetNextJobToProcess();
+
+			Assert.AreEqual("running-job", orphanedJob.JobSpec.Name);
+			Assert.AreEqual(JobState.Orphaned, orphanedJob.JobState);
+			Assert.AreEqual(false, orphanedJob.LastJobExecutionDetails.Succeeded);
+			Assert.IsNotNull(orphanedJob.LastJobExecutionDetails.EndTimeUtc);
+		}
+	}
 }

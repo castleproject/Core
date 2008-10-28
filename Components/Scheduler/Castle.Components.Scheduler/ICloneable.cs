@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Castle.Components.Scheduler
 {
-    /// <summary>
-    /// Generic variant of <see cref="ICloneable" />.
-    /// </summary>
-    /// <typeparam name="T">The type of object that is cloned</typeparam>
-    public interface ICloneable<T> : ICloneable
-    {
-        /// <summary>
-        /// Clones the object.
-        /// </summary>
-        /// <returns>The cloned instance</returns>
-        new T Clone();
-    }
+	using System;
+
+	/// <summary>
+	/// Generic variant of <see cref="ICloneable" />.
+	/// </summary>
+	/// <typeparam name="T">The type of object that is cloned</typeparam>
+	public interface ICloneable<T> : ICloneable
+	{
+		/// <summary>
+		/// Clones the object.
+		/// </summary>
+		/// <returns>The cloned instance</returns>
+		new T Clone();
+	}
 }

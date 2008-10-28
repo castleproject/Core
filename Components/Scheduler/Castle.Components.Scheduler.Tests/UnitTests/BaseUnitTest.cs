@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,58 +12,55 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using MbUnit.Framework;
-using Rhino.Mocks;
-
 namespace Castle.Components.Scheduler.Tests.UnitTests
 {
-    /// <summary>
-    /// Base unit test.
-    /// All unit tests that require certain common facilities like Mock Objects
-    /// inherit from this class.
-    /// </summary>
-    [TestFixture]
-    public abstract class BaseUnitTest
-    {
-        private MockRepository mocks;
+	using MbUnit.Framework;
+	using Rhino.Mocks;
 
-        /// <summary>
-        /// Gets the mock object repository.
-        /// </summary>
-        public MockRepository Mocks
-        {
-            get
-            {
-                if (mocks == null)
-                    mocks = new MockRepository();
+	/// <summary>
+	/// Base unit test.
+	/// All unit tests that require certain common facilities like Mock Objects
+	/// inherit from this class.
+	/// </summary>
+	[TestFixture]
+	public abstract class BaseUnitTest
+	{
+		private MockRepository mocks;
 
-                return mocks;
-            }
-        }
+		/// <summary>
+		/// Gets the mock object repository.
+		/// </summary>
+		public MockRepository Mocks
+		{
+			get
+			{
+				if (mocks == null)
+					mocks = new MockRepository();
 
-        [SetUp]
-        public virtual void SetUp()
-        {
-        }
+				return mocks;
+			}
+		}
 
-        [TearDown]
-        public virtual void TearDown()
-        {
-            if (mocks != null)
-            {
-                try
-                {
-                    mocks.ReplayAll();
-                    mocks.VerifyAll();
-                }
-                finally
-                {
-                    mocks = null;
-                }
-            }
-        }
-    }
+		[SetUp]
+		public virtual void SetUp()
+		{
+		}
+
+		[TearDown]
+		public virtual void TearDown()
+		{
+			if (mocks != null)
+			{
+				try
+				{
+					mocks.ReplayAll();
+					mocks.VerifyAll();
+				}
+				finally
+				{
+					mocks = null;
+				}
+			}
+		}
+	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,33 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Text;
-
 namespace Castle.Components.Scheduler.JobStores
 {
-    /// <summary>
-    /// A job store DAO for SQL Server databases.
-    /// </summary>
-    public class SqlServerJobStoreDao : AdoNetJobStoreDao
-    {
-        /// <summary>
-        /// Creates a SQL Server job store.
-        /// </summary>
-        /// <param name="connectionString">The database connection string</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="connectionString"/> is null</exception>
-        public SqlServerJobStoreDao(string connectionString)
-            : base(connectionString, "@")
-        {
-        }
+	using System;
+	using System.Data;
+	using System.Data.SqlClient;
 
-        /// <inheritdoc />
-        protected override IDbConnection CreateConnection()
-        {
-            return new SqlConnection(ConnectionString);
-        }
-    }
+	/// <summary>
+	/// A job store DAO for SQL Server databases.
+	/// </summary>
+	public class SqlServerJobStoreDao : AdoNetJobStoreDao
+	{
+		/// <summary>
+		/// Creates a SQL Server job store.
+		/// </summary>
+		/// <param name="connectionString">The database connection string</param>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="connectionString"/> is null</exception>
+		public SqlServerJobStoreDao(string connectionString)
+			: base(connectionString, "@")
+		{
+		}
+
+		/// <inheritdoc />
+		protected override IDbConnection CreateConnection()
+		{
+			return new SqlConnection(ConnectionString);
+		}
+	}
 }

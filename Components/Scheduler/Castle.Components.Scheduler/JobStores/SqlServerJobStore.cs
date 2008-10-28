@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,42 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using Castle.Core;
-
 namespace Castle.Components.Scheduler.JobStores
 {
-    /// <summary>
-    /// The SQL Server job store maintains all job state in a SQL Server database.
-    /// </summary>
-    [Singleton]
-    public class SqlServerJobStore : PersistentJobStore
-    {
-        /// <summary>
-        /// Creates a SQL Server job store.
-        /// </summary>
-        /// <param name="connectionString">The database connection string</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="connectionString"/> is null</exception>
-        public SqlServerJobStore(string connectionString)
-            : this(new SqlServerJobStoreDao(connectionString))
-        {
-        }
+	using System;
+	using Core;
 
-        /// <summary>
-        /// Creates a SQL Server job store using the specified DAO.
-        /// </summary>
-        /// <param name="jobStoreDao"></param>
-        public SqlServerJobStore(SqlServerJobStoreDao jobStoreDao)
-            : base(jobStoreDao)
-        {
-        }
+	/// <summary>
+	/// The SQL Server job store maintains all job state in a SQL Server database.
+	/// </summary>
+	[Singleton]
+	public class SqlServerJobStore : PersistentJobStore
+	{
+		/// <summary>
+		/// Creates a SQL Server job store.
+		/// </summary>
+		/// <param name="connectionString">The database connection string</param>
+		/// <exception cref="ArgumentNullException">Thrown if <paramref name="connectionString"/> is null</exception>
+		public SqlServerJobStore(string connectionString)
+			: this(new SqlServerJobStoreDao(connectionString))
+		{
+		}
 
-        /// <summary>
-        /// Gets the connection string.
-        /// </summary>
-        public string ConnectionString
-        {
-            get { return ((SqlServerJobStoreDao) JobStoreDao).ConnectionString; }
-        }
-    }
+		/// <summary>
+		/// Creates a SQL Server job store using the specified DAO.
+		/// </summary>
+		/// <param name="jobStoreDao"></param>
+		public SqlServerJobStore(SqlServerJobStoreDao jobStoreDao)
+			: base(jobStoreDao)
+		{
+		}
+
+		/// <summary>
+		/// Gets the connection string.
+		/// </summary>
+		public string ConnectionString
+		{
+			get { return ((SqlServerJobStoreDao) JobStoreDao).ConnectionString; }
+		}
+	}
 }

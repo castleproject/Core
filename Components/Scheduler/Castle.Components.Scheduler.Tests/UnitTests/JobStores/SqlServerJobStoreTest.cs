@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,134 +12,136 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.IO;
-using Castle.Components.Scheduler.JobStores;
-using MbUnit.Framework;
-
 namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 {
-    [TestFixture(TimeOut = 1)]
-    [TestsOn(typeof(SqlServerJobStore))]
-    [Author("Jeff Brown", "jeff@ingenio.com")]
-    public class SqlServerJobStoreTest : PersistentJobStoreTest
-    {
-        private string connectionString;
+	using System;
+	using System.Data;
+	using System.Data.SqlClient;
+	using System.IO;
+	using MbUnit.Framework;
+	using Scheduler.JobStores;
 
-        public override void SetUp()
-        {
-            PurgeAllData();
+	[TestFixture(TimeOut = 1)]
+	[TestsOn(typeof (SqlServerJobStore))]
+	[Author("Jeff Brown", "jeff@ingenio.com")]
+	public class SqlServerJobStoreTest : PersistentJobStoreTest
+	{
+		private string connectionString;
 
-            base.SetUp();
-        }
+		public override void SetUp()
+		{
+			PurgeAllData();
 
-        [TestFixtureSetUp]
-        public void TestFixtureSetUp()
-        {
-            // Use the existing attached Db if there is one.
-            connectionString = "server=.; database=SchedulerTestDb; uid=SchedulerTestUser; pwd=test;";
+			base.SetUp();
+		}
 
-            try
-            {
-                PurgeAllData();
-            }
-            catch (Exception ex1)
-            {
-                string testProjectBinPath = Path.GetDirectoryName(typeof(SqlServerJobStoreTest).Assembly.Location);
-                string dbPath = Path.GetFullPath(Path.Combine(testProjectBinPath, @"..\..\Castle.Components.Scheduler.Db\SqlServer\Data\SchedulerTestDb.mdf"));
+		[TestFixtureSetUp]
+		public void TestFixtureSetUp()
+		{
+			// Use the existing attached Db if there is one.
+			connectionString = "server=.; database=SchedulerTestDb; uid=SchedulerTestUser; pwd=test;";
 
-                Console.WriteLine("Could not connect to the SchedulerTestDb.\n"
-                    + "Attempting to attach it from {0}.", dbPath);
+			try
+			{
+				PurgeAllData();
+			}
+			catch (Exception ex1)
+			{
+				string testProjectBinPath = Path.GetDirectoryName(typeof (SqlServerJobStoreTest).Assembly.Location);
+				string dbPath =
+					Path.GetFullPath(Path.Combine(testProjectBinPath,
+					                              @"..\..\Castle.Components.Scheduler.Db\SqlServer\Data\SchedulerTestDb.mdf"));
 
-                connectionString = "Data Source=.;AttachDbFilename=\"" + dbPath + "\";Initial Catalog=SchedulerTestDb;Integrated Security=True";
-                try
-                {
-                    PurgeAllData();
-                }
-                catch (Exception ex2)
-                {
-                    Assert.Fail("Could not connect to the SchedulerTestDb and could not attach it from {0}.\n\n"
-                        + "Initial connection attempt:\n{1}\n\n"
-                        + "Attached connection attempt:\n{2}", dbPath, ex1, ex2);
-                }
-            }
-        }
+				Console.WriteLine("Could not connect to the SchedulerTestDb.\n"
+				                  + "Attempting to attach it from {0}.", dbPath);
 
-        [Test]
-        public void StandardConstructorCreatesDaoWithExpectedConnectionString()
-        {
-            SqlServerJobStore jobStore = new SqlServerJobStore(connectionString);
-            Assert.AreEqual(connectionString, jobStore.ConnectionString);
-        }
+				connectionString = "Data Source=.;AttachDbFilename=\"" + dbPath +
+				                   "\";Initial Catalog=SchedulerTestDb;Integrated Security=True";
+				try
+				{
+					PurgeAllData();
+				}
+				catch (Exception ex2)
+				{
+					Assert.Fail("Could not connect to the SchedulerTestDb and could not attach it from {0}.\n\n"
+					            + "Initial connection attempt:\n{1}\n\n"
+					            + "Attached connection attempt:\n{2}", dbPath, ex1, ex2);
+				}
+			}
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void StandardConstructorThrowsIfConnectionStringIsNull()
-        {
-            new SqlServerJobStore((string) null);
-        }
+		[Test]
+		public void StandardConstructorCreatesDaoWithExpectedConnectionString()
+		{
+			SqlServerJobStore jobStore = new SqlServerJobStore(connectionString);
+			Assert.AreEqual(connectionString, jobStore.ConnectionString);
+		}
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void DaoConstructorThrowsIfDaoIsNull()
-        {
-            new SqlServerJobStore((SqlServerJobStoreDao)null);
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void StandardConstructorThrowsIfConnectionStringIsNull()
+		{
+			new SqlServerJobStore((string) null);
+		}
 
-        [Test]
-        public void ConnectionStringIsSameAsWasOriginallySpecified()
-        {
-            Assert.AreEqual(connectionString, ((SqlServerJobStore)JobStore).ConnectionString);
-        }
+		[Test]
+		[ExpectedException(typeof (ArgumentNullException))]
+		public void DaoConstructorThrowsIfDaoIsNull()
+		{
+			new SqlServerJobStore((SqlServerJobStoreDao) null);
+		}
 
-        protected override PersistentJobStore CreatePersistentJobStore()
-        {
-            return new SqlServerJobStore(new InstrumentedSqlServerJobStoreDao(connectionString));
-        }
+		[Test]
+		public void ConnectionStringIsSameAsWasOriginallySpecified()
+		{
+			Assert.AreEqual(connectionString, ((SqlServerJobStore) JobStore).ConnectionString);
+		}
 
-        protected override void SetBrokenConnectionMocking(PersistentJobStore jobStore, bool brokenConnections)
-        {
-            InstrumentedSqlServerJobStoreDao dao = (InstrumentedSqlServerJobStoreDao)jobStore.JobStoreDao;
-            dao.BrokenConnections = brokenConnections;
-        }
+		protected override PersistentJobStore CreatePersistentJobStore()
+		{
+			return new SqlServerJobStore(new InstrumentedSqlServerJobStoreDao(connectionString));
+		}
 
-        protected void PurgeAllData()
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand("spSCHED_TEST_PurgeAllData", connection);
-                command.CommandType = CommandType.StoredProcedure;
+		protected override void SetBrokenConnectionMocking(PersistentJobStore jobStore, bool brokenConnections)
+		{
+			InstrumentedSqlServerJobStoreDao dao = (InstrumentedSqlServerJobStoreDao) jobStore.JobStoreDao;
+			dao.BrokenConnections = brokenConnections;
+		}
 
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-        }
+		protected void PurgeAllData()
+		{
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				SqlCommand command = new SqlCommand("spSCHED_TEST_PurgeAllData", connection);
+				command.CommandType = CommandType.StoredProcedure;
 
-        private class InstrumentedSqlServerJobStoreDao : SqlServerJobStoreDao
-        {
-            private bool brokenConnections;
+				connection.Open();
+				command.ExecuteNonQuery();
+			}
+		}
 
-            public InstrumentedSqlServerJobStoreDao(string connectionString)
-                : base(connectionString)
-            {
-            }
+		private class InstrumentedSqlServerJobStoreDao : SqlServerJobStoreDao
+		{
+			private bool brokenConnections;
 
-            public bool BrokenConnections
-            {
-                get { return brokenConnections; }
-                set { brokenConnections = value; }
-            }
+			public InstrumentedSqlServerJobStoreDao(string connectionString)
+				: base(connectionString)
+			{
+			}
 
-            protected override IDbConnection CreateConnection()
-            {
-                if (brokenConnections)
-                    throw new Exception("Simulated Db connection failure.");
+			public bool BrokenConnections
+			{
+				get { return brokenConnections; }
+				set { brokenConnections = value; }
+			}
 
-                return base.CreateConnection();
-            }
-        }
-    }
+			protected override IDbConnection CreateConnection()
+			{
+				if (brokenConnections)
+					throw new Exception("Simulated Db connection failure.");
+
+				return base.CreateConnection();
+			}
+		}
+	}
 }

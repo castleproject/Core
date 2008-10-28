@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,38 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Castle.Components.Scheduler
 {
-    /// <summary>
-    /// Specifies how to handle the case where a job with the same name
-    /// has already been created.
-    /// </summary>
-    public enum CreateJobConflictAction
-    {
-        /// <summary>
-        /// Throws an exception.
-        /// </summary>
-        Throw,
+	/// <summary>
+	/// Specifies how to handle the case where a job with the same name
+	/// has already been created.
+	/// </summary>
+	public enum CreateJobConflictAction
+	{
+		/// <summary>
+		/// Throws an exception.
+		/// </summary>
+		Throw,
 
-        /// <summary>
-        /// Updates the existing job.
-        /// The job's history is preserved.
-        /// </summary>
-        Update,
+		/// <summary>
+		/// Updates the existing job.
+		/// The job's history is preserved.
+		/// </summary>
+		Update,
 
-        /// <summary>
-        /// Replaces the existing job.
-        /// The job's history is discarded as if it had been deleted before being recreated.
-        /// </summary>
-        Replace,
+		/// <summary>
+		/// Replaces the existing job.
+		/// The job's history is discarded as if it had been deleted before being recreated.
+		/// </summary>
+		Replace,
 
-        /// <summary>
-        /// Ignores the conflict and does not change the existing job.
-        /// </summary>
-        Ignore
-    }
+		/// <summary>
+		/// Ignores the conflict and does not change the existing job.
+		/// </summary>
+		Ignore
+	}
 }

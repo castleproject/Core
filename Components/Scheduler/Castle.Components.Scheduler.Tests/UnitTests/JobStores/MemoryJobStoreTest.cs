@@ -1,4 +1,4 @@
-// Copyright 2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,54 +12,55 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Castle.Components.Scheduler.JobStores;
-using MbUnit.Framework;
-
 namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 {
-    [TestFixture(TimeOut = 1)]
-    [TestsOn(typeof(MemoryJobStore))]
-    [Author("Jeff Brown", "jeff@ingenio.com")]
-    public class MemoryJobStoreTest : BaseJobStoreTest
-    {
-        protected override BaseJobStore CreateJobStore()
-        {
-            return new MemoryJobStore();
-        }
+	using System;
+	using MbUnit.Framework;
+	using Scheduler.JobStores;
 
-        [Test]
-        public void UpdateJob_IncrementsVersionNumber()
-        {
-            Mocks.ReplayAll();
+	[TestFixture(TimeOut = 1)]
+	[TestsOn(typeof (MemoryJobStore))]
+	[Author("Jeff Brown", "jeff@ingenio.com")]
+	public class MemoryJobStoreTest : BaseJobStoreTest
+	{
+		protected override BaseJobStore CreateJobStore()
+		{
+			return new MemoryJobStore();
+		}
 
-            VersionedJobDetails jobDetails = (VersionedJobDetails)CreatePendingJob("job", DateTime.UtcNow);
-            int originalVersion = jobDetails.Version;
+		[Test]
+		public void UpdateJob_IncrementsVersionNumber()
+		{
+			Mocks.ReplayAll();
 
-            jobDetails.JobSpec.Name = "renamedJob";
-            JobStore.UpdateJob("job", jobDetails.JobSpec);
+			VersionedJobDetails jobDetails = (VersionedJobDetails) CreatePendingJob("job", DateTime.UtcNow);
+			int originalVersion = jobDetails.Version;
 
-            VersionedJobDetails updatedJobDetails = (VersionedJobDetails)JobStore.GetJobDetails("renamedJob");
-            Assert.AreEqual(originalVersion + 1, updatedJobDetails.Version, "Version number of saved object should be incremented in database.");
-        }
+			jobDetails.JobSpec.Name = "renamedJob";
+			JobStore.UpdateJob("job", jobDetails.JobSpec);
 
-        [Test]
-        public void SaveJobDetails_IncrementsVersionNumber()
-        {
-            Mocks.ReplayAll();
+			VersionedJobDetails updatedJobDetails = (VersionedJobDetails) JobStore.GetJobDetails("renamedJob");
+			Assert.AreEqual(originalVersion + 1, updatedJobDetails.Version,
+			                "Version number of saved object should be incremented in database.");
+		}
 
-            VersionedJobDetails jobDetails = (VersionedJobDetails)CreatePendingJob("job", DateTime.UtcNow);
-            int originalVersion = jobDetails.Version;
+		[Test]
+		public void SaveJobDetails_IncrementsVersionNumber()
+		{
+			Mocks.ReplayAll();
 
-            jobDetails.JobState = JobState.Stopped;
-            JobStore.SaveJobDetails(jobDetails);
+			VersionedJobDetails jobDetails = (VersionedJobDetails) CreatePendingJob("job", DateTime.UtcNow);
+			int originalVersion = jobDetails.Version;
 
-            Assert.AreEqual(originalVersion + 1, jobDetails.Version, "Version number of original object should be incremented in place.");
+			jobDetails.JobState = JobState.Stopped;
+			JobStore.SaveJobDetails(jobDetails);
 
-            VersionedJobDetails updatedJobDetails = (VersionedJobDetails)JobStore.GetJobDetails("job");
-            Assert.AreEqual(originalVersion + 1, updatedJobDetails.Version, "Version number of saved object should be incremented in memory too.");
-        }
-    }
+			Assert.AreEqual(originalVersion + 1, jobDetails.Version,
+			                "Version number of original object should be incremented in place.");
+
+			VersionedJobDetails updatedJobDetails = (VersionedJobDetails) JobStore.GetJobDetails("job");
+			Assert.AreEqual(originalVersion + 1, updatedJobDetails.Version,
+			                "Version number of saved object should be incremented in memory too.");
+		}
+	}
 }
