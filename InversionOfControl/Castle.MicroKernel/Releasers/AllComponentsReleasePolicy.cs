@@ -12,107 +12,103 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Threading;
+
 namespace Castle.MicroKernel.Releasers
 {
-	using System;
-	using System.Collections;
-	using System.Threading;
+    using System;
+    using System.Collections;
 
-	[Serializable]
-	public class AllComponentsReleasePolicy : IReleasePolicy
-	{
-		private readonly IDictionary instance2Burden =
-			new Hashtable(new Util.ReferenceEqualityComparer());
+    [Serializable]
+    public class AllComponentsReleasePolicy : IReleasePolicy
+    {
+        private readonly IDictionary instance2Burden =
+            new Hashtable(new Util.ReferenceEqualityComparer());
 
-		private readonly ReaderWriterLockSlim rwLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        readonly ReaderWriterLock rwLock = new ReaderWriterLock();
 
-		public virtual void Track(object instance, Burden burden)
-		{
-			rwLock.EnterWriteLock();
+        public virtual void Track(object instance, Burden burden)
+        {
+            rwLock.AcquireWriterLock(Timeout.Infinite);
+            try
+            {
+                instance2Burden[instance] = burden;
+            }
+            finally
+            {
+                rwLock.ReleaseWriterLock();
+            }
+        }
 
-			try
-			{
-				instance2Burden[instance] = burden;
-			}
-			finally
-			{
-				rwLock.ExitWriteLock();
-			}
-		}
+        public bool HasTrack(object instance)
+        {
+            if (instance == null) throw new ArgumentNullException("instance");
+            rwLock.AcquireReaderLock(Timeout.Infinite);
+            try
+            {
+                return instance2Burden.Contains(instance);
+            }
+            finally
+            {
+                rwLock.ReleaseReaderLock();
+            }
+        }
 
-		public bool HasTrack(object instance)
-		{
-			if (instance == null) throw new ArgumentNullException("instance");
+        public void Release(object instance)
+        {
+            if (instance == null) throw new ArgumentNullException("instance");
+            rwLock.AcquireReaderLock(Timeout.Infinite);
+            try
+            {
+                var burden = (Burden)instance2Burden[instance];
 
-			rwLock.EnterReadLock();
-			try
-			{
-				return instance2Burden.Contains(instance);
-			}
-			finally
-			{
-				rwLock.ExitReadLock();
-			}
-		}
+                if (burden == null)
+                    return;
 
-		public void Release(object instance)
-		{
-			if (instance == null) throw new ArgumentNullException("instance");
+                LockCookie cookie = rwLock.UpgradeToWriterLock(Timeout.Infinite);
 
-			rwLock.EnterUpgradeableReadLock();
+                try
+                {
+                    burden = (Burden)instance2Burden[instance];
+                    if (burden == null)
+                        return;
 
-			try
-			{
-				var burden = (Burden) instance2Burden[instance];
+                    instance2Burden.Remove(instance);
 
-				if (burden == null)
-					return;
+                    burden.Release(this);
+                }
+                finally
+                {
+                    rwLock.DowngradeFromWriterLock(ref cookie);
+                }
+            }
+            finally
+            {
+                rwLock.ReleaseReaderLock();
+            }
+        }
 
-				rwLock.EnterWriteLock();
-
-				try
-				{
-					burden = (Burden) instance2Burden[instance];
-					if (burden == null)
-						return;
-
-					instance2Burden.Remove(instance);
-
-					burden.Release(this);
-				}
-				finally
-				{
-					rwLock.ExitWriteLock();
-				}
-			}
-			finally
-			{
-				rwLock.ExitUpgradeableReadLock();
-			}
-		}
-
-		public void Dispose()
-		{
-			rwLock.EnterWriteLock();
-
-			try
-			{
+        public void Dispose()
+        {
+            rwLock.AcquireWriterLock(Timeout.Infinite);
+            try
+            {
 				Burden[] burdens = new Burden[instance2Burden.Count];
 				instance2Burden.Values.CopyTo(burdens, 0);
 
-				foreach(Burden burden in burdens)
-				{
+                foreach (Burden burden in burdens)
+                {
 					if (instance2Burden.Contains(burden))
 					{
 						burden.Release(this);
 						instance2Burden.Remove(burden);
 					}
-				}
-			}
-			finally
-			{
-				rwLock.ExitWriteLock();
-			}
-		}
-	}
+                }
+            }
+            finally
+            {
+                rwLock.ReleaseWriterLock();
+            }
+        }
+    }
 }
