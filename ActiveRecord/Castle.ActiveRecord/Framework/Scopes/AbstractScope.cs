@@ -16,8 +16,9 @@ namespace Castle.ActiveRecord.Framework.Scopes
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using Castle.ActiveRecord;
-	
+
 	using NHibernate;
 
 	/// <summary>
@@ -26,13 +27,19 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	public abstract class AbstractScope : MarshalByRefObject, ISessionScope
 	{
 		private readonly SessionScopeType type;
-		
+
 		private readonly FlushAction flushAction;
 
 		/// <summary>
 		/// Map between a key to its session
 		/// </summary>
 		protected IDictionary<object, ISession> key2Session = new Dictionary<object, ISession>();
+
+		/// <summary>
+		/// Map between a key to its session
+		/// </summary>
+		protected IDictionary<ISession, ITransaction> session2DefaultTx = new Dictionary<ISession, ITransaction>();
+
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AbstractScope"/> class.
@@ -43,7 +50,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		{
 			this.flushAction = flushAction;
 			this.type = type;
-			
+
 			ThreadScopeAccessor.Instance.RegisterScope(this);
 		}
 
@@ -71,7 +78,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// </summary>
 		public virtual void Flush()
 		{
-			foreach(ISession session in GetSessions())
+			foreach (ISession session in GetSessions())
 			{
 				session.Flush();
 			}
@@ -85,7 +92,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
-			foreach(ISession session in GetSessions())
+			foreach (ISession session in GetSessions())
 			{
 				if (session.Contains(instance))
 				{
@@ -125,7 +132,6 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		public virtual void RegisterSession(object key, ISession session)
 		{
 			key2Session.Add(key, session);
-
 			Initialize(session);
 		}
 
@@ -138,6 +144,10 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// </returns>
 		public virtual ISession GetSession(object key)
 		{
+			ISession session = key2Session[key];
+			if (session != null && FlushAction == FlushAction.Auto)
+				if (session.Transaction == null || !session.Transaction.IsActive)
+					session.BeginTransaction();
 			return key2Session[key];
 		}
 
@@ -176,7 +186,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		{
 			ThreadScopeAccessor.Instance.UnRegisterScope(this);
 
-			PerformDisposal(key2Session.Values);			
+			PerformDisposal(key2Session.Values);
 		}
 
 		/// <summary>
@@ -203,9 +213,20 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// <param name="close">if set to <c>true</c> [close].</param>
 		protected internal void PerformDisposal(ICollection<ISession> sessions, bool flush, bool close)
 		{
-			foreach(ISession session in sessions)
+			foreach (ISession session in sessions)
 			{
 				if (flush) session.Flush();
+
+				ITransaction tx = session.Transaction;
+				if (session.IsConnected && session.Connection.State == ConnectionState.Open &&
+					tx != null && tx.IsActive && !(tx.WasCommitted || tx.WasRolledBack))
+				{
+					if (flush)
+						tx.Commit();
+					else
+						session.Transaction.Rollback();
+					tx.Dispose();
+				}
 				if (close) session.Close();
 			}
 		}
@@ -216,7 +237,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// <param name="sessions">The sessions.</param>
 		protected internal virtual void DiscardSessions(ICollection<ISession> sessions)
 		{
-			foreach(ISession session in sessions)
+			foreach (ISession session in sessions)
 			{
 				RemoveSession(session);
 			}
@@ -259,7 +280,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// <param name="session">The session.</param>
 		private void RemoveSession(ISession session)
 		{
-			foreach(KeyValuePair<object, ISession> entry in key2Session)
+			foreach (KeyValuePair<object, ISession> entry in key2Session)
 			{
 				if (ReferenceEquals(entry.Value, session))
 				{

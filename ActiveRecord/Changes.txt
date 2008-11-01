@@ -1,6 +1,8 @@
 1.0
 ===
 
+- Restored AutoFlush behaviour under NHibernate 2.0.
+
 - Added code that can guess an collection of mapped Enums without specifying the ColumnKey, Element or ElementType.
   Breaking: changed the ElementType from a string to a type.
 

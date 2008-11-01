@@ -333,6 +333,7 @@
     <Compile Include="Model\Ship.cs" />
     <Compile Include="NestedModelValidation.cs" />
     <Compile Include="Model\NestedValidation\UserWithNestedAddress.cs" />
+    <Compile Include="SessionScopeAutoflushTestCase.cs" />
     <Compile Include="Validation\ARValidatorTestCase.cs" />
     <Compile Include="VerifyModelsAgainstDBSchemaTestCase.cs" />
     <Compile Include="LazyTestCase.cs" />
@@ -368,6 +369,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy "$(ProjectDir)App-net-2.0.config" "$(TargetPath).config"</PostBuildEvent>
+    <!--    <PostBuildEvent>copy "$(ProjectDir)App-net-2.0.config" "$(TargetPath).config"</PostBuildEvent>-->
   </PropertyGroup>
 </Project>
