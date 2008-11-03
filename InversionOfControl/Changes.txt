@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Do not return forward handlers in ResolveAll since you will get duplicate services.
+
 - Applied patch (with mods) from Martin Nllsson to select registration interface from
   containing interface.
 

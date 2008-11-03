@@ -85,6 +85,19 @@ namespace Castle.MicroKernel.Tests
 				kernel.Resolve<ServiceUsingRepository>();
 		}
 
+		[Test]
+		public void Will_Ignore_ForwardHandlers_In_ResolveAll()
+		{
+			IKernel kernel = new DefaultKernel();
+			kernel.Register(
+				Component.For<IUserRepository, IRepository>()
+					.ImplementedBy<MyRepository>()
+				);
+
+			IRepository[] repos = kernel.ResolveAll<IRepository>();
+			Assert.AreEqual(1, repos.Length);
+		}
+
 		public interface IRepository
 		{
 

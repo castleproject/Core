@@ -781,7 +781,7 @@ namespace Castle.MicroKernel
 			IHandler[] handlers = GetAssignableHandlers(service);
 			foreach (IHandler handler in handlers)
 			{
-				if(handler.CurrentState!=HandlerState.Valid)
+				if (handler is ForwardingHandler || handler.CurrentState != HandlerState.Valid)
 					continue;
 
 				object component = ResolveComponent(handler, service, arguments);
