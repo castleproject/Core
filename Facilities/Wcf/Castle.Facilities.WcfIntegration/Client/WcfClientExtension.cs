@@ -54,6 +54,11 @@ namespace Castle.Facilities.WcfIntegration
 				model.LifecycleSteps.Add(LifecycleStepType.Decommission,
 					WcfCommunicationDecomissionConcern.Instance);
 				InstallManagedChannelInterceptor(model);
+
+				new BehaviorDependencies(model, kernel)
+					.Apply(new WcfEndpointBehaviors(WcfBehaviorScope.Clients))
+					.Apply(clientModel.Behaviors)
+					.Apply(clientModel.Endpoint.Behaviors);
 			}
 		}
 

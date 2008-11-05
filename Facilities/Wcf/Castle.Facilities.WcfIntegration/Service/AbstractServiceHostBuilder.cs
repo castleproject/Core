@@ -15,11 +15,12 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
-	using System.ServiceModel.Channels;
 	using System.Collections.Generic;
 	using System.ServiceModel;
+	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
 	using Castle.Core;
+	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 
 	public abstract class AbstractServiceHostBuilder : IWcfEndpointVisitor
@@ -63,7 +64,6 @@ namespace Castle.Facilities.WcfIntegration
 			return baseAddresses.ToArray();
 		}
 
-
 		protected virtual void OnOpening(ServiceHost serviceHost, IWcfServiceModel serviceModel,
 										 ComponentModel model)
 		{
@@ -78,6 +78,12 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				ApplyBehaviors(serviceHost, serviceModel, model);
 			}
+		}
+
+		protected virtual void OnClosed(ServiceHost serviceHost, IWcfServiceModel serviceModel,
+										ComponentModel model)
+		{
+			ReleaseBehaviors(serviceHost, serviceModel, model);
 		}
 
 		protected virtual void ApplyBehaviors(ServiceHost serviceHost, IWcfServiceModel serviceModel,
@@ -97,6 +103,12 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				behaviors.Install(serviceModel.Behaviors);
 			}
+		}
+
+		protected virtual void ReleaseBehaviors(ServiceHost serviceHost, IWcfServiceModel serviceModel,
+											    ComponentModel model)
+		{
+			WcfUtils.ReleaseBehaviors(kernel, serviceHost);
 		}
 
 		#region IWcfEndpointVisitor Members

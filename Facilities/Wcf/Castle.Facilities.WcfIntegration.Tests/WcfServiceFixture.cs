@@ -103,6 +103,21 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			client.GetValueFromConstructor();
 			Assert.AreEqual(1, CallCountServiceBehavior.CallCount);
 		}
+
+		[Test]
+		public void WillReleaseAllBehaviorsWhenUnregistered()
+		{
+			Component.For<IOperations>().ImplementedBy<Operations>()
+				.Named("Operations")
+				.Interceptors(InterceptorReference.ForType<LoggingInterceptor>()).Anywhere
+				.DependsOn(new { number = 42 })
+				.ActAs(new DefaultServiceModel().AddEndpoints(
+					WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+						.At("net.tcp://localhost/Operations")
+						)
+				);
+			windsorContainer.Kernel.RemoveComponent("Operations");
+		}
 	}
 
 	public class LoggingInterceptor : IInterceptor

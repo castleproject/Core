@@ -39,6 +39,7 @@ namespace Castle.Facilities.WcfIntegration
 								   ConfigureServiceHost(serviceHost, serviceModel); 
 								   OnOpening(serviceHost, serviceModel, model);
 			                       };
+			serviceHost.Closed += delegate { OnClosed(serviceHost, serviceModel, model); };
 			return serviceHost;
 		}
 
@@ -46,6 +47,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			ServiceHost serviceHost = CreateServiceHost(model, baseAddresses);
 			serviceHost.Opening += delegate { OnOpening(serviceHost, null, model); };
+			serviceHost.Closed += delegate { OnClosed(serviceHost, null, model); };
 			return serviceHost;
 		}
 
@@ -53,6 +55,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			ServiceHost serviceHost = CreateServiceHost(serviceType, baseAddresses);
 			serviceHost.Opening += delegate { OnOpening(serviceHost, null, null); };
+			serviceHost.Closed += delegate { OnClosed(serviceHost, null, null); };
 			return serviceHost;
 		}
 

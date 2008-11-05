@@ -20,6 +20,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 	using System.ServiceModel;
 	using Castle.Core;
 	using Castle.MicroKernel;
+	using System.ServiceModel.Description;
 
 	internal static class WcfUtils
 	{
@@ -87,6 +88,35 @@ namespace Castle.Facilities.WcfIntegration.Internal
 		public static void AddBehaviorDependency(string dependencyKey, Type serviceType, ComponentModel model)
 		{
 			model.Dependencies.Add(new DependencyModel(DependencyType.Service, dependencyKey, serviceType, false));
+		}
+
+		public static void ReleaseBehaviors(IKernel kernel, ServiceHost serviceHost)
+		{
+			foreach (IServiceBehavior behavior in serviceHost.Description.Behaviors)
+			{
+				kernel.ReleaseComponent(behavior);
+			}
+
+			foreach (ServiceEndpoint endpoint in serviceHost.Description.Endpoints)
+			{
+				ReleaseBehaviors(kernel, endpoint);
+			}
+		}
+
+		public static void ReleaseBehaviors(IKernel kernel, ServiceEndpoint endpoint)
+		{
+			foreach (IEndpointBehavior epBehavior in endpoint.Behaviors)
+			{
+				kernel.ReleaseComponent(epBehavior);
+
+				foreach (OperationDescription operation in endpoint.Contract.Operations)
+				{
+					foreach (IOperationBehavior opBehavior in operation.Behaviors)
+					{
+						kernel.ReleaseComponent(opBehavior);
+					}
+				}
+			}
 		}
 
 		public static bool IsCommunicationObjectReady(ICommunicationObject comm)
