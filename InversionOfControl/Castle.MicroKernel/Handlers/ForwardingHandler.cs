@@ -28,9 +28,14 @@ namespace Castle.MicroKernel.Handlers
 			this.forwardedType = forwardedType;
 		}
 
+		public IHandler Target
+		{
+			get { return target; }
+		}
+
 		public void Init(IKernel kernel)
 		{
-			target.Init(kernel);
+			Target.Init(kernel);
 		}
 
 		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver,

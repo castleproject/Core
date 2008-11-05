@@ -777,17 +777,30 @@ namespace Castle.MicroKernel
 		/// <param name="arguments">Arguments to resolve the services</param>
 		public Array ResolveAll(Type service, IDictionary arguments)
 		{
-			ArrayList list = new ArrayList();
-			IHandler[] handlers = GetAssignableHandlers(service);
-			foreach (IHandler handler in handlers)
+			Dictionary<IHandler, object> resolved = new Dictionary<IHandler, object>();
+
+			foreach (IHandler handler in GetAssignableHandlers(service))
 			{
-				if (handler is ForwardingHandler || handler.CurrentState != HandlerState.Valid)
+				if (handler.CurrentState != HandlerState.Valid)
 					continue;
 
-				object component = ResolveComponent(handler, service, arguments);
-				list.Add(component);
+				IHandler actualHandler = handler;
+
+				if (handler is ForwardingHandler)
+				{
+					actualHandler = ((ForwardingHandler)handler).Target;
+				}
+
+				if (!resolved.ContainsKey(actualHandler))
+				{
+					object component = ResolveComponent(actualHandler, service, arguments);
+					resolved.Add(actualHandler, component);
+				}
 			}
-			return list.ToArray(service);
+
+			Array components = Array.CreateInstance(service, resolved.Count);
+			((ICollection)resolved.Values).CopyTo(components, 0);
+			return components;
 		}
 
 		/// <summary>

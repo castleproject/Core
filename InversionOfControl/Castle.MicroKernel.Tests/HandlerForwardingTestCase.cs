@@ -86,7 +86,7 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
-		public void Will_Ignore_ForwardHandlers_In_ResolveAll()
+		public void ResolveAll_Will_Only_Resolve_Unique_Handlers()
 		{
 			IKernel kernel = new DefaultKernel();
 			kernel.Register(
