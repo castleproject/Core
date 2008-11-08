@@ -12,30 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using NHibernate.Cfg;
-
-namespace Castle.Facilities.NHibernateIntegration.Tests.Common
+namespace Castle.Facilities.NHibernateIntegration.Tests.Issues
 {
-	using System.Collections;
-
-	using NUnit.Framework;
-
-
-	[TestFixture]
-	public class DaoTestCase : AbstractNHibernateTestCase
+	public class IssueTestCase : AbstractNHibernateTestCase
 	{
-		[Test]
-		public void CommonUsage()
+		protected virtual string BugNumber
 		{
-			container.AddComponent("blogdao", typeof(BlogDao));
-			
-			BlogDao dao = (BlogDao) container["blogdao"];
-			dao.CreateBlog("my blog");
+			get
+			{
+				string ns = GetType().Namespace;
+				return ns.Substring(ns.LastIndexOf('.') + 1);
+			}
+		}
 
-			IList blogs = dao.ObtainBlogs();
-
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 1, blogs.Count );
+		protected override string ConfigurationFile
+		{
+			get
+			{
+				return "Issues/" + BugNumber + "/facility.config";
+			}
 		}
 	}
 }

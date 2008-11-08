@@ -12,27 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#region
+
+using System;
+using System.Collections;
+using System.Data;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Facilities;
+using Castle.Services.Transaction;
+using NHibernate;
+using ITransaction=Castle.Services.Transaction.ITransaction;
+
+#endregion
+
 namespace Castle.Facilities.NHibernateIntegration.Internal
 {
-	using System;
-	using System.Collections;
-	using System.Data;
-	using NHibernate;
-
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Facilities;
-
-	using Castle.Services.Transaction;
-	using ITransaction = Castle.Services.Transaction.ITransaction;
-
 	/// <summary>
 	/// 
 	/// </summary>
 	public class DefaultSessionManager : MarshalByRefObject, ISessionManager
 	{
+		private readonly ISessionFactoryResolver factoryResolver;
 		private readonly IKernel kernel;
 		private readonly ISessionStore sessionStore;
-		private readonly ISessionFactoryResolver factoryResolver;
 		private FlushMode defaultFlushMode = FlushMode.Auto;
 
 		/// <summary>
@@ -47,6 +49,8 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			this.sessionStore = sessionStore;
 			this.factoryResolver = factoryResolver;
 		}
+
+		#region ISessionManager Members
 
 		/// <summary>
 		/// The flushmode the created session gets
@@ -87,22 +91,34 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 			if (wrapped == null)
 			{
-				session = CreateSession(alias); weAreSessionOwner = true;
+				session = CreateSession(alias);
+				weAreSessionOwner = true;
 
 				wrapped = WrapSession(transaction != null, session);
 
 				sessionStore.Store(alias, wrapped);
 
-				EnlistIfNecessary(weAreSessionOwner, transaction, wrapped);
+				try
+				{
+					EnlistIfNecessary(weAreSessionOwner, transaction, wrapped);
+				}
+				catch
+				{
+					sessionStore.Remove(wrapped);
+					session.Dispose();
+					throw;
+				}
 			}
 			else
 			{
 				EnlistIfNecessary(weAreSessionOwner, transaction, wrapped);
 				wrapped = WrapSession(true, wrapped.InnerSession);
 			}
-			
+
 			return wrapped;
 		}
+
+		#endregion
 
 		/// <summary>
 		/// Enlists if necessary.
@@ -111,8 +127,8 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		/// <param name="transaction">The transaction.</param>
 		/// <param name="session">The session.</param>
 		/// <returns></returns>
-		protected bool EnlistIfNecessary(bool weAreSessionOwner, 
-		                                 ITransaction transaction, 
+		protected bool EnlistIfNecessary(bool weAreSessionOwner,
+		                                 ITransaction transaction,
 		                                 SessionDelegate session)
 		{
 			if (transaction == null) return false;
@@ -131,7 +147,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			{
 				shouldEnlist = true;
 
-				foreach(ISession sess in list)
+				foreach (ISession sess in list)
 				{
 					if (SessionDelegate.AreEqual(session, sess))
 					{
@@ -164,7 +180,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 		private static IsolationLevel TranslateIsolationLevel(IsolationMode mode)
 		{
-			switch(mode)
+			switch (mode)
 			{
 				case IsolationMode.Chaos:
 					return IsolationLevel.Chaos;
@@ -183,14 +199,14 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 		private ITransaction ObtainCurrentTransaction()
 		{
-			ITransactionManager transactionManager = kernel[ typeof(ITransactionManager) ] as ITransactionManager;
+			ITransactionManager transactionManager = kernel[typeof (ITransactionManager)] as ITransactionManager;
 
 			return transactionManager.CurrentTransaction;
 		}
 
 		private SessionDelegate WrapSession(bool hasTransaction, ISession session)
 		{
-			return new SessionDelegate( !hasTransaction, session, sessionStore );
+			return new SessionDelegate(!hasTransaction, session, sessionStore);
 		}
 
 		private ISession CreateSession(String alias)
@@ -199,35 +215,32 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 			if (sessionFactory == null)
 			{
-				throw new FacilityException("No ISessionFactory implementation " + 
-					"associated with the given alias: " + alias);
+				throw new FacilityException("No ISessionFactory implementation " +
+				                            "associated with the given alias: " + alias);
 			}
-			
+
 			ISession session;
 
 			string aliasedInterceptorId = string.Format("nhibernate.session.interceptor.{0}", alias);
-			
+
 			if (kernel.HasComponent(aliasedInterceptorId))
 			{
 				IInterceptor interceptor = (IInterceptor) kernel[aliasedInterceptorId];
-				
-				return sessionFactory.OpenSession(interceptor);
+				session = sessionFactory.OpenSession(interceptor);
 			}
 			else if (kernel.HasComponent("nhibernate.session.interceptor"))
 			{
 				IInterceptor interceptor = (IInterceptor) kernel["nhibernate.session.interceptor"];
-				
-				session =  sessionFactory.OpenSession(interceptor);
+				session = sessionFactory.OpenSession(interceptor);
 			}
 			else
 			{
-				session =  sessionFactory.OpenSession();
+				session = sessionFactory.OpenSession();
 			}
 
 			session.FlushMode = defaultFlushMode;
 
 			return session;
 		}
-
 	}
 }

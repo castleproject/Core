@@ -21,7 +21,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 	using NHibernate;
 	using NUnit.Framework;
 
-	[TestFixture, Ignore("Seems to hang on net 3.5")]
+	[TestFixture]
 	public class TransactionsTestCase : AbstractNHibernateTestCase
 	{
 		protected override void ConfigureContainer()

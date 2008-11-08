@@ -12,13 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#region
+
+using System.Collections;
+using System.Web;
+using Castle.MicroKernel.Facilities;
+
+#endregion
+
 namespace Castle.Facilities.NHibernateIntegration.Internal
 {
-	using System.Web;
-	using System.Collections;
-
-	using Castle.MicroKernel.Facilities;
-
 	/// <summary>
 	/// Provides an implementation of <see cref="ISessionStore"/>
 	/// which relies on <c>HttpContext</c>. Suitable for web projects.
@@ -50,7 +53,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		private static HttpContext ObtainSessionContext()
 		{
 			HttpContext curContext = HttpContext.Current;
-	
+
 			if (curContext == null)
 			{
 				throw new FacilityException("WebSessionStore: Could not obtain reference to HttpContext");

@@ -12,19 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#region
+
+using Castle.Core.Configuration;
+using NHibernate.Cfg;
+
+#endregion
+
 namespace Castle.Facilities.NHibernateIntegration.Internal
 {
-	using Castle.Core.Configuration;
-	using NHibernate.Cfg;
-
 	/// <summary>
-	/// Builds up the Configuration object
+	/// The configuration builder for NHibernate's own cfg.xml
 	/// </summary>
-	public interface IConfigurationBuilder
+	public class XmlConfigurationBuilder : IConfigurationBuilder
 	{
+		#region IConfigurationBuilder Members
+
 		/// <summary>
-		/// Builds the Configuration object from the specifed configuration
+		/// Returns the Configuration object for the given xml
 		/// </summary>
-		Configuration GetConfiguration(IConfiguration config);
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public Configuration GetConfiguration(IConfiguration config)
+		{
+			string cfgFile = config.Attributes["nhibernateConfigFile"];
+			Configuration cfg = new Configuration();
+			cfg.Configure(cfgFile);
+			return cfg;
+		}
+
+		#endregion
 	}
 }

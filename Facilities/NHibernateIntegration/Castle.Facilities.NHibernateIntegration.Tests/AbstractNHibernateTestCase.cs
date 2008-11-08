@@ -12,58 +12,85 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#region
+
+using System;
+using System.Collections.Generic;
+using Castle.Windsor;
+using Castle.Windsor.Configuration.Interpreters;
+using NHibernate.Cfg;
+using NHibernate.Tool.hbm2ddl;
+using NUnit.Framework;
+
+#endregion
+
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
-	using Castle.Core.Resource;
-	using Castle.Windsor;
-	using Castle.Windsor.Configuration.Interpreters;
-	using NHibernate.Cfg;
-	using NHibernate.Tool.hbm2ddl;
-	using NUnit.Framework;
-
 	public abstract class AbstractNHibernateTestCase
 	{
 		protected IWindsorContainer container;
 
-		[SetUp]
-		public void Init()
+		protected virtual string ConfigurationFile
 		{
-			container = new WindsorContainer(new XmlInterpreter(new ConfigResource()));
+			get { return "config.xml"; }
+		}
 
-			// Reset tables
+		protected virtual void ExportDatabaseSchema()
+		{
+			Configuration[] cfgs=container.ResolveAll<Configuration>();
+			foreach (Configuration cfg in cfgs)
+			{
+				SchemaExport export=new SchemaExport(cfg);
+				export.Create(false,true);
+			}
+		}
+		protected virtual void DropDatabaseSchema()
+		{
+			Configuration[] cfgs = container.ResolveAll<Configuration>();
+			foreach (Configuration cfg in cfgs)
+			{
+				SchemaExport export = new SchemaExport(cfg);
+				export.Drop(false, true);
+			}
+		}
 
-			Configuration cfg1 = (Configuration) container[ "sessionFactory1.cfg" ];
-			SchemaExport export1 = new SchemaExport(cfg1);
-
-			Configuration cfg2 = (Configuration) container[ "sessionFactory2.cfg" ];
-			SchemaExport export2 = new SchemaExport(cfg2);
-
-			export1.Create(false, true);
-			export2.Create(false, true);
-
+		[SetUp]
+		public void SetUp()
+		{
+			container = new WindsorContainer(new XmlInterpreter(GetContainerFile()));
 			ConfigureContainer();
+			ExportDatabaseSchema();
+			OnSetUp();
+		}
+
+		[TearDown]
+		public virtual void TearDown()
+		{
+
+			OnTearDown();
+			DropDatabaseSchema();
+			container.Dispose();
+			container = null;
 		}
 
 		protected virtual void ConfigureContainer()
 		{
-			
 		}
 
-		[TearDown]
-		public void Dispose()
+
+		public virtual void OnSetUp()
 		{
-			Configuration cfg1 = (Configuration) container[ "sessionFactory1.cfg" ];
-			SchemaExport export1 = new SchemaExport(cfg1);
+		}
+		public virtual void OnTearDown()
+		{
+		}
 
-			Configuration cfg2 = (Configuration) container[ "sessionFactory2.cfg" ];
-			SchemaExport export2 = new SchemaExport(cfg2);
 
-			export2.Drop(false, true);
-			export1.Drop(false, true);
 
-			container.Dispose();
 
-			container = null;
+		private string GetContainerFile()
+		{
+			return ConfigHelper.ResolvePath(ConfigurationFile);
 		}
 	}
 }
