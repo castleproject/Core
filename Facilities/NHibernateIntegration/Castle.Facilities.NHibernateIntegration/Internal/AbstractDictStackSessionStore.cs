@@ -12,38 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#region
-
-using System;
-using System.Collections;
-using System.Collections.Specialized;
-using System.Runtime.CompilerServices;
-using System.Runtime.Remoting.Messaging;
-
-#endregion
-
 namespace Castle.Facilities.NHibernateIntegration.Internal
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
+	using System.Runtime.CompilerServices;
+	using System.Runtime.Remoting.Messaging;
+
 	/// <summary>
 	/// 
 	/// </summary>
 	public abstract class AbstractDictStackSessionStore : AbstractSessionStore
 	{
-		private string slotKey;
-
 		/// <summary>
 		/// Name used for storage in <see cref="CallContext"/>
 		/// </summary>
-		//protected readonly String SlotKey = "nh.facility.stacks";
-		protected string SlotKey
-		{
-			get
-			{
-				if (string.IsNullOrEmpty(slotKey))
-					slotKey = string.Format("nh.facility.stacks.{0}", Guid.NewGuid());
-				return slotKey;
-			}
-		}
+		protected readonly String SlotKey = "nh.facility.stacks";
 
 		/// <summary>
 		/// Gets the stack of <see cref="SessionDelegate"/> objects for the specified <paramref name="alias"/>.
@@ -68,7 +53,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 			if (stack == null)
 			{
-				stack = Stack.Synchronized(new Stack());
+				stack = Stack.Synchronized( new Stack() );
 
 				alias2Stack[alias] = stack;
 			}

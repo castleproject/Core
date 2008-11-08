@@ -12,20 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#region
-
-using System;
-using System.Collections;
-using System.Data;
-using NHibernate;
-using NHibernate.Engine;
-using NHibernate.Stat;
-using NHibernate.Type;
-
-#endregion
-
 namespace Castle.Facilities.NHibernateIntegration
 {
+	using System;
+	using System.Data;
+	using System.Collections;
+
+	using NHibernate;
+	using NHibernate.Stat;
+	using NHibernate.Type;
+
 	/// <summary>
 	/// Proxies an ISession so the user cannot close a session which
 	/// is controlled by a transaction, or, when this is not the case, 
@@ -36,11 +32,11 @@ namespace Castle.Facilities.NHibernateIntegration
 	[Serializable]
 	public class SessionDelegate : MarshalByRefObject, ISession
 	{
-		private readonly bool canClose;
 		private readonly ISession inner;
 		private readonly ISessionStore sessionStore;
-		private object cookie;
+		private readonly bool canClose;
 		private bool disposed;
+		private object cookie;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SessionDelegate"/> class.
@@ -354,7 +350,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// This method is provided in order to get the <b>NHibernate</b> implementation of the session from wrapper implementions.
 		/// Implementors of the <seealso cref="T:NHibernate.ISession"/> interface should return the NHibernate implementation of this method.
 		/// </remarks>
-		public ISessionImplementor GetSessionImplementation()
+		public NHibernate.Engine.ISessionImplementor GetSessionImplementation()
 		{
 			return inner.GetSessionImplementation();
 		}
@@ -1225,7 +1221,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		internal IDbConnection InternalClose(bool closing)
 		{
 			IDbConnection conn = null;
-
+	
 			sessionStore.Remove(this);
 
 			if (closing)
@@ -1234,9 +1230,9 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 
 			inner.Dispose();
-
+	
 			disposed = true;
-
+	
 			return conn;
 		}
 
@@ -1253,12 +1249,12 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			if (sdLeft != null && sdRight != null)
 			{
-				return ReferenceEquals(sdLeft.inner, sdRight.inner);
+				return Object.ReferenceEquals( sdLeft.inner, sdRight.inner );
 			}
 			else
 			{
-				throw new NotSupportedException("AreEqual: left is " +
-				                                left.GetType().Name + " and right is " + right.GetType().Name);
+				throw new NotSupportedException("AreEqual: left is " + 
+					left.GetType().Name + " and right is " + right.GetType().Name);
 			}
 		}
 	}
