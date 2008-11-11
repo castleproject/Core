@@ -14,11 +14,13 @@
 
 namespace Castle.Facilities.WcfIntegration.Service
 {
+	using System;
 	using System.ServiceModel;
 
 	/// <summary>
 	/// Abstarct implementation of <see cref="IServiceHostAware"/>
 	/// </summary>
+	[CLSCompliant(true)]
 	public abstract class AbstractServiceHostAware : IServiceHostAware
 	{
 		/// <inheritdoc />
