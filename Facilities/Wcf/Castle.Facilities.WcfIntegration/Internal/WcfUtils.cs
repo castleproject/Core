@@ -58,7 +58,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 			}
 		}
 
-		public static ICollection<IHandler> FindBehaviors<T>(IKernel kernel, WcfBehaviorScope scope)
+		public static ICollection<IHandler> FindExtensions<T>(IKernel kernel, WcfExtensionScope scope)
 		{
 			List<IHandler> handlers = new List<IHandler>();
 			foreach (IHandler handler in kernel.GetAssignableHandlers(typeof(T)))
@@ -66,7 +66,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 				ComponentModel model = handler.ComponentModel;
 				if (model.Configuration != null)
 				{
-					string scopeAttrib = model.Configuration.Attributes[WcfConstants.BehaviorScopeKey];
+					string scopeAttrib = model.Configuration.Attributes[WcfConstants.ExtensionScopeKey];
 					if (string.IsNullOrEmpty(scopeAttrib) ||
 						scopeAttrib.Equals(scope.ToString(), StringComparison.InvariantCultureIgnoreCase))
 					{
@@ -77,9 +77,19 @@ namespace Castle.Facilities.WcfIntegration.Internal
 			return handlers;
 		}
 
-		public static void AddBehaviorDependencies<T>(IKernel kernel, WcfBehaviorScope scope, ComponentModel model)
+		public static void BindServiceHostAware(ServiceHost serviceHost, IServiceHostAware serviceHostAware, bool created)
 		{
-			foreach (IHandler handler in FindBehaviors<T>(kernel, scope))
+			if (created) serviceHostAware.Created(serviceHost);
+			serviceHost.Opening += delegate { serviceHostAware.Opening(serviceHost); };
+			serviceHost.Opened += delegate { serviceHostAware.Opened(serviceHost); };
+			serviceHost.Closing += delegate { serviceHostAware.Closing(serviceHost); };
+			serviceHost.Closed += delegate { serviceHostAware.Closed(serviceHost); };
+			serviceHost.Faulted += delegate { serviceHostAware.Faulted(serviceHost); };
+		}
+
+		public static void AddExtensionDependencies<T>(IKernel kernel, WcfExtensionScope scope, ComponentModel model)
+		{
+			foreach (IHandler handler in FindExtensions<T>(kernel, scope))
 			{
 				AddBehaviorDependency(null, handler.ComponentModel.Service, model);
 			}
@@ -88,35 +98,6 @@ namespace Castle.Facilities.WcfIntegration.Internal
 		public static void AddBehaviorDependency(string dependencyKey, Type serviceType, ComponentModel model)
 		{
 			model.Dependencies.Add(new DependencyModel(DependencyType.Service, dependencyKey, serviceType, false));
-		}
-
-		public static void ReleaseBehaviors(IKernel kernel, ServiceHost serviceHost)
-		{
-			foreach (IServiceBehavior behavior in serviceHost.Description.Behaviors)
-			{
-				kernel.ReleaseComponent(behavior);
-			}
-
-			foreach (ServiceEndpoint endpoint in serviceHost.Description.Endpoints)
-			{
-				ReleaseBehaviors(kernel, endpoint);
-			}
-		}
-
-		public static void ReleaseBehaviors(IKernel kernel, ServiceEndpoint endpoint)
-		{
-			foreach (IEndpointBehavior epBehavior in endpoint.Behaviors)
-			{
-				kernel.ReleaseComponent(epBehavior);
-
-				foreach (OperationDescription operation in endpoint.Contract.Operations)
-				{
-					foreach (IOperationBehavior opBehavior in operation.Behaviors)
-					{
-						kernel.ReleaseComponent(opBehavior);
-					}
-				}
-			}
 		}
 
 		public static bool IsCommunicationObjectReady(ICommunicationObject comm)

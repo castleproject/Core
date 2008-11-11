@@ -14,33 +14,22 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System.Collections.Generic;
-	using Castle.Core;
-	using Castle.MicroKernel;
-
-	internal class BehaviorDependencies
+	/// <summary>
+	/// Determines how a global extension will be applied.
+	/// </summary>
+	public enum WcfExtensionScope
 	{
-		private readonly ComponentModel model;
-		private readonly IKernel kernel;
-
-		public BehaviorDependencies(ComponentModel model, IKernel kernel)
-		{
-			this.model = model;
-			this.kernel = kernel;
-		}
-
-		public BehaviorDependencies Apply(ICollection<IWcfBehavior> behaviors)
-		{
-			foreach (IWcfBehavior behavior in behaviors)
-			{
-				behavior.AddDependencies(kernel, model);
-			}
-			return this;
-		}
-
-		public BehaviorDependencies Apply(params IWcfBehavior[] behaviors)
-		{
-			return Apply((ICollection<IWcfBehavior>)behaviors);
-		}
+		/// <summary>
+		/// Only apply to client endpoints.
+		/// </summary>
+		Clients,
+		/// <summary>
+		/// Only apply to service hosts.
+		/// </summary>
+		Services,
+		/// <summary>
+		/// Do not apply automatically.
+		/// </summary>
+		Explicit
 	}
 }

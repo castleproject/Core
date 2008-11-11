@@ -19,10 +19,8 @@ namespace Castle.Facilities.WcfIntegration.Rest
 	using System;
 	using System.ServiceModel.Web;
 
-	public class RestServiceHost : WebServiceHost, IWcfServiceHost
-	{
-        public event EventHandler OpeningComplete;
-        
+	public class RestServiceHost : WebServiceHost
+	{        
 		public RestServiceHost()
 		{
 		}
@@ -30,16 +28,6 @@ namespace Castle.Facilities.WcfIntegration.Rest
 		public RestServiceHost(Type serviceType, params Uri[] baseAddresses)
 			: base(serviceType, baseAddresses)
 		{
-		}
-
-		protected override void OnOpening()
-		{
-			base.OnOpening();
-
-			if (OpeningComplete != null)
-			{
-				OpeningComplete(this, EventArgs.Empty);
-			}
 		}
 	}
 

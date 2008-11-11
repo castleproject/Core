@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,23 +14,15 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System.ServiceModel.Description;
 	using Castle.Core;
 	using Castle.MicroKernel;
 
-	public interface IWcfBehavior
+	internal abstract class AbstractWcfExtension : IWcfExtension
 	{
-		void Accept(IWcfBehaviorVisitor visitor);
-		void AddDependencies(IKernel kernel, ComponentModel model);
-	}
+		public abstract void Accept(IWcfExtensionVisitor visitor);
 
-	public interface IWcfServiceBehavior : IWcfBehavior
-	{
-		void Install(ServiceDescription description, IKernel kernel);
-	}
-
-	public interface IWcfEndpointBehavior : IWcfBehavior
-	{
-		void Install(ServiceEndpoint endpoint, IKernel kernel);
+		public virtual void AddDependencies(IKernel kernel, ComponentModel model)
+		{
+		}
 	}
 }

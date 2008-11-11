@@ -34,40 +34,25 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			ValidateServiceModelInternal(model, serviceModel);
 			ServiceHost serviceHost = CreateServiceHost(model, serviceModel, baseAddresses);
-			serviceHost.Opening += delegate
-			                       {
-								   ConfigureServiceHost(serviceHost, serviceModel); 
-								   OnOpening(serviceHost, serviceModel, model);
-			                       };
-			serviceHost.Closed += delegate { OnClosed(serviceHost, serviceModel, model); };
+			ConfigureServiceHost(serviceHost, serviceModel, model); 
 			return serviceHost;
 		}
 
 		public ServiceHost Build(ComponentModel model, params Uri[] baseAddresses)
 		{
 			ServiceHost serviceHost = CreateServiceHost(model, baseAddresses);
-			serviceHost.Opening += delegate { OnOpening(serviceHost, null, model); };
-			serviceHost.Closed += delegate { OnClosed(serviceHost, null, model); };
+			ConfigureServiceHost(serviceHost, null, model); 
 			return serviceHost;
 		}
 
 		public ServiceHost Build(Type serviceType, params Uri[] baseAddresses)
 		{
 			ServiceHost serviceHost = CreateServiceHost(serviceType, baseAddresses);
-			serviceHost.Opening += delegate { OnOpening(serviceHost, null, null); };
-			serviceHost.Closed += delegate { OnClosed(serviceHost, null, null); };
+			ConfigureServiceHost(serviceHost, null, null); 
 			return serviceHost;
 		}
 
 		#endregion
-
-		protected virtual void ConfigureServiceHost(ServiceHost serviceHost, M serviceModel)
-		{
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
-			{
-				AddServiceEndpoint(serviceHost, endpoint);
-			}
-		}
 
 		private void ValidateServiceModelInternal(ComponentModel model, M serviceModel)
 		{

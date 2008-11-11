@@ -129,20 +129,19 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected virtual void OnOpening(ChannelFactory channelFactory, M clientModel)
 		{
-			ServiceEndpointBehaviors behaviors =
-				new ServiceEndpointBehaviors(channelFactory.Endpoint, Kernel)
-					.Install(new WcfEndpointBehaviors(WcfBehaviorScope.Clients));
+			ServiceEndpointExtensions extensions =
+				new ServiceEndpointExtensions(channelFactory.Endpoint, Kernel)
+					.Install(new WcfEndpointExtensions(WcfExtensionScope.Clients));
 
 			if (clientModel != null)
 			{
-				behaviors.Install(clientModel.Behaviors);
-				behaviors.Install(clientModel.Endpoint.Behaviors);
+				extensions.Install(clientModel.Extensions);
+				extensions.Install(clientModel.Endpoint.Extensions);
 			}
 		}
 
 		protected virtual void OnClosed(ChannelFactory channelFactory, M clientModel)
 		{
-			WcfUtils.ReleaseBehaviors(Kernel, channelFactory.Endpoint);
 		}
 
 		#endregion

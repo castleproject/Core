@@ -61,7 +61,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 							IncludeExceptionDetailInFaults = true
 						}),
 					Component.For<NetDataContractFormatBehavior>()
-						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit)),
+						.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit)),
 					Component.For<Operations>()
 						.DependsOn(new { number = 42 })
 						.ActAs(new DefaultServiceModel().AddEndpoints(
@@ -210,7 +210,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						Endpoint = WcfEndpoint
 							.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 							.At("net.tcp://localhost/Operations/Ex")
-							.AddBehaviors(typeof(NetDataContractFormatBehavior))
+							.AddExtensions(typeof(NetDataContractFormatBehavior))
 					})
 				);
 
@@ -224,7 +224,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			CallCountEndpointBehavior.CallCount = 0;
 			windsorContainer.Register(
 				Component.For<CallCountEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
 					.Named("specialBehavior")
 					.LifeStyle.Transient,
 				Component.For<IOperationsEx>()
@@ -234,7 +234,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					       	Endpoint = WcfEndpoint
 					       		.BoundTo(new NetTcpBinding {PortSharingEnabled = true})
 					       		.At("net.tcp://localhost/Operations/Ex")
-					       		.AddBehaviors("specialBehavior")
+					       		.AddExtensions("specialBehavior")
 					       })
 				);
 			IOperationsEx client = windsorContainer.Resolve<IOperationsEx>("operations");
@@ -243,12 +243,12 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
-		public void WillApplyExlpicitScopedServiceEndpointBehaviors()
+		public void WillApplyExlpicitScopedServiceEndpointExtensions()
 		{
 			CallCountEndpointBehavior.CallCount = 0;
 			windsorContainer.Register(
 				Component.For<CallCountEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
 					.Named("specialBehavior")
 					.LifeStyle.Transient,
 				Component.For<IOperationsEx>()
@@ -258,7 +258,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						Endpoint = WcfEndpoint
 							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
 							.At("net.tcp://localhost/Operations/Ex")
-							.AddBehaviors(typeof(CallCountEndpointBehavior))
+							.AddExtensions(typeof(CallCountEndpointBehavior))
 					})
 				);
 			IOperationsEx client = windsorContainer.Resolve<IOperationsEx>("operations");
@@ -328,7 +328,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			windsorContainer.Register(
 				Component.For<LogMessageEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
 					.Named("logMessageBehavior"),
 				Component.For<IOperations>()
 					.Named("operations")
@@ -357,7 +357,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			windsorContainer.Register(
 				Component.For<LogMessageEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
 					.Named("logMessageBehavior"),
 				Component.For<IOperations>()
 					.Named("operations")
@@ -387,7 +387,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer.Register(
 				Component.For<IFormatProvider>().ImplementedBy<HelloFormatter>(),
 				Component.For<LogMessageEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
 					.Named("logMessageBehavior"),
 				Component.For<IOperations>()
 					.Named("operations")
@@ -422,7 +422,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			windsorContainer.Register(
 				Component.For<LogMessageEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
 					.Named("logMessageBehavior"),
 				Component.For<IOperations>()
 					.Named("operations")

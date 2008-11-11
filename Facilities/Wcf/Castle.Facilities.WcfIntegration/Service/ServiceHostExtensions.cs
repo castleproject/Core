@@ -14,45 +14,49 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System;
 	using System.Collections.Generic;
+	using System.ServiceModel;
 	using System.ServiceModel.Description;
 	using Castle.MicroKernel;
 
-	internal class ServiceEndpointBehaviors : IWcfBehaviorVisitor
+	internal class ServiceHostExtensions : IWcfExtensionVisitor
 	{
-		private readonly ServiceEndpoint endpoint;
+		private readonly ServiceHost serviceHost;
 		private readonly IKernel kernel;
 
-		public ServiceEndpointBehaviors(ServiceEndpoint endpoint, IKernel kernel)
+		public ServiceHostExtensions(ServiceHost serviceHost, IKernel kernel)
 		{
-			this.endpoint = endpoint;
+			this.serviceHost = serviceHost;
 			this.kernel = kernel;
 		}
 
-		public ServiceEndpointBehaviors Install(ICollection<IWcfBehavior> behaviors)
+		public ServiceHostExtensions Install(ICollection<IWcfExtension> extensions)
 		{
-			foreach (IWcfBehavior behavior in behaviors)
+			foreach (IWcfExtension extension in extensions)
 			{
-				behavior.Accept(this);
+				extension.Accept(this);
 			}
 			return this;
 		}
 
-		public ServiceEndpointBehaviors Install(params IWcfBehavior[] behaviors)
+		public ServiceHostExtensions Install(params IWcfExtension[] extenions)
 		{
-			return Install((ICollection<IWcfBehavior>)behaviors);
+			return Install((ICollection<IWcfExtension>)extenions);
 		}
 
-		#region IWcfBehaviorVisitor Members
+		#region IWcfExtensionVisitor Members
 
-		void IWcfBehaviorVisitor.VisitServiceBehavior(IWcfServiceBehavior behavior)
+		void IWcfExtensionVisitor.VisitServiceExtension(IWcfServiceExtension extension)
 		{
+			extension.Install(serviceHost, kernel);
 		}
 
-		void IWcfBehaviorVisitor.VisitEndpointBehavior(IWcfEndpointBehavior behavior)
+		void IWcfExtensionVisitor.VisitEndpointExtension(IWcfEndpointExtension extension)
 		{
-			behavior.Install(endpoint, kernel);
+			foreach (ServiceEndpoint endpoint in serviceHost.Description.Endpoints)
+			{
+				extension.Install(endpoint, kernel);
+			}
 		}
 
 		#endregion

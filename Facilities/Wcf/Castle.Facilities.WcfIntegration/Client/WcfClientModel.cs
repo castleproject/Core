@@ -20,7 +20,7 @@ namespace Castle.Facilities.WcfIntegration
 	public abstract class WcfClientModelBase : IWcfClientModel
 	{
 		private IWcfEndpoint endpoint;
-		private ICollection<IWcfBehavior> behaviors;
+		private ICollection<IWcfExtension> extensions;
 
 		protected WcfClientModelBase()
 		{
@@ -51,15 +51,15 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
-		public ICollection<IWcfBehavior> Behaviors
+		public ICollection<IWcfExtension> Extensions
 		{
 			get
 			{
-				if (behaviors == null)
+				if (extensions == null)
 				{
-					behaviors = new List<IWcfBehavior>();
+					extensions = new List<IWcfExtension>();
 				}
-				return behaviors;
+				return extensions;
 			}
 		}
 
@@ -78,11 +78,11 @@ namespace Castle.Facilities.WcfIntegration
 		{
 		}
 
-		public T AddBehaviors(params object[] behaviors)
+		public T AddExtensions(params object[] extensions)
 		{
-			foreach (object behavior in behaviors)
+			foreach (object extension in extensions)
 			{
-				Behaviors.Add(WcfExplcitBehavior.CreateFrom(behavior));
+				Extensions.Add(WcfExplicitExtension.CreateFrom(extension));
 			}
 			return (T)this;
 		}

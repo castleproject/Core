@@ -38,8 +38,8 @@ namespace Castle.Facilities.WcfIntegration
 		ICollection<IWcfEndpoint> Endpoints { get; }
 
 		/// <summary>
-		/// Gets the service behaviors.
+		/// Gets the service extensions.
 		/// </summary>
-		ICollection<IWcfBehavior> Behaviors { get; }
+		ICollection<IWcfExtension> Extensions { get; }
 	}
 }

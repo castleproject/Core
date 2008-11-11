@@ -31,9 +31,6 @@ namespace Castle.Facilities.WcfIntegration
 
 		internal static IKernel GlobalKernel;
 
-		private readonly IDictionary<ServiceHost, ICollection<IHandler>> waitingOn =
-			new Dictionary<ServiceHost, ICollection<IHandler>>();
-
 		#region ServiceHostBuilder Delegate Fields 
 	
 		private delegate ServiceHost CreateServiceHostDelegate(
@@ -76,25 +73,25 @@ namespace Castle.Facilities.WcfIntegration
 
 		private void Kernel_ComponentModelCreated(ComponentModel model)
 		{
-			BehaviorDependencies dependencies = null;
+			ExtensionDependencies dependencies = null;
 
 			foreach (IWcfServiceModel serviceModel in ResolveServiceModels(model))
 			{
 				if (dependencies == null)
 				{
-					dependencies = new BehaviorDependencies(model, kernel)
-						.Apply(new WcfServiceBehaviors())
-						.Apply(new WcfEndpointBehaviors(WcfBehaviorScope.Services)
+					dependencies = new ExtensionDependencies(model, kernel)
+						.Apply(new WcfServiceExtensions())
+						.Apply(new WcfEndpointExtensions(WcfExtensionScope.Services)
 						);
 				}
 
 				if (serviceModel != null)
 				{
-					dependencies.Apply(serviceModel.Behaviors);
+					dependencies.Apply(serviceModel.Extensions);
 					
 					foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
 					{
-						dependencies.Apply(endpoint.Behaviors);
+						dependencies.Apply(endpoint.Extensions);
 					}
 				}
 			}

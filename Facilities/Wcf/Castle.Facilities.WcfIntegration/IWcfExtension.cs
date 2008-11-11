@@ -14,9 +14,24 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	public interface IWcfBehaviorVisitor
+	using System.ServiceModel;
+	using System.ServiceModel.Description;
+	using Castle.Core;
+	using Castle.MicroKernel;
+
+	public interface IWcfExtension
 	{
-		void VisitServiceBehavior(IWcfServiceBehavior behavior);
-		void VisitEndpointBehavior(IWcfEndpointBehavior behavior);
+		void Accept(IWcfExtensionVisitor visitor);
+		void AddDependencies(IKernel kernel, ComponentModel model);
+	}
+
+	public interface IWcfServiceExtension : IWcfExtension
+	{
+		void Install(ServiceHost serviceHost, IKernel kernel);
+	}
+
+	public interface IWcfEndpointExtension : IWcfExtension
+	{
+		void Install(ServiceEndpoint endpoint, IKernel kernel);
 	}
 }

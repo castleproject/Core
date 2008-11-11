@@ -16,7 +16,7 @@ namespace Castle.Facilities.WcfIntegration
 {
     internal static class WcfConstants
     {
-		public const string BehaviorScopeKey = "scope";
+		public const string ExtensionScopeKey = "scope";
 
         public const string ServiceHostsKey = "wcf.serviceHosts";
 		public const string ServiceHostEnabled = "wcfServiceHost";

@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Behaviors\NetDataContractFormatBehavior.cs" />
     <Compile Include="Behaviors\CallCountEndpointBehavior.cs" />
+    <Compile Include="Behaviors\ServiceHostListener.cs" />
     <Compile Include="Behaviors\UnitOfworkEndPointBehavior.cs" />
     <Compile Include="Components\Calculator.cs" />
     <Compile Include="Components\Callback.cs" />

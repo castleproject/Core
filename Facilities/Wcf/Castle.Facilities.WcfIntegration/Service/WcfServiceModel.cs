@@ -23,7 +23,7 @@ namespace Castle.Facilities.WcfIntegration
 		private bool hosted;
         private ICollection<Uri> baseAddresses;
 		private ICollection<IWcfEndpoint> endpoints;
-		private ICollection<IWcfBehavior> behaviors;
+		private ICollection<IWcfExtension> extensions;
 
 		#region IWcfServiceModel 
 
@@ -59,15 +59,15 @@ namespace Castle.Facilities.WcfIntegration
 			set { endpoints = value; }
 		}
 
-		public ICollection<IWcfBehavior> Behaviors
+		public ICollection<IWcfExtension> Extensions
 		{
 			get
 			{
-				if (behaviors == null)
+				if (extensions == null)
 				{
-					behaviors = new List<IWcfBehavior>();
+					extensions = new List<IWcfExtension>();
 				}
-				return behaviors;
+				return extensions;
 			}
 		}
 
@@ -110,11 +110,11 @@ namespace Castle.Facilities.WcfIntegration
 			return (T)this;
 		}
 
-		public T AddBehaviors(params object[] behaviors)
+		public T AddExtensions(params object[] extensions)
 		{
-			foreach (object behavior in behaviors)
+			foreach (object extension in extensions)
 			{
-				Behaviors.Add(WcfExplcitBehavior.CreateFrom(behavior));
+				Extensions.Add(WcfExplicitExtension.CreateFrom(extension));
 			}
 			return (T)this;
 		}
@@ -123,7 +123,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		public T LogMessages()
 		{
-			return AddBehaviors(typeof(LogMessageEndpointBehavior));
+			return AddExtensions(typeof(LogMessageEndpointBehavior));
 		}
 
 		public T LogMessages<F>()
@@ -145,12 +145,12 @@ namespace Castle.Facilities.WcfIntegration
 
 		public T LogMessages(IFormatProvider formatter, string format)
 		{
-			return LogMessages().AddBehaviors(new LogMessageFormatBehavior(formatter, format));
+			return LogMessages().AddExtensions(new LogMessageFormatBehavior(formatter, format));
 		}
 
 		public T LogMessages(string format)
 		{
-			return LogMessages().AddBehaviors(new LogMessageFormatBehavior(format));
+			return LogMessages().AddExtensions(new LogMessageFormatBehavior(format));
 		}
 
 		#endregion

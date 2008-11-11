@@ -16,12 +16,41 @@ namespace Castle.Facilities.WcfIntegration
 {
 	using System;
 	using System.ServiceModel;
+	using System.ServiceModel.Description;
+
+	/// <summary>
+	/// Event to indicate an endpoint was created.
+	/// </summary>
+	public class EndpointCreatedArgs : EventArgs
+	{
+		private readonly ServiceEndpoint endpoint;
+
+		/// <summary>
+		/// Creates a new <see cref="EndpointCreatedArgs"/>.
+		/// </summary>
+		/// <param name="endpoint">The created endpoint.</param>
+		public EndpointCreatedArgs(ServiceEndpoint endpoint)
+		{
+			this.endpoint = endpoint;
+		}
+
+		/// <summary>
+		/// Gets the newly created endpoint.
+		/// </summary>
+		public ServiceEndpoint Endpoint
+		{
+			get { return endpoint; }
+		}
+	}
 
 	/// <summary>
 	/// Contract extension for <see cref="ServiceHost"/>.
 	/// </summary>
 	public interface IWcfServiceHost
 	{
-		event EventHandler OpeningComplete;
+		/// <summary>
+		/// Raised when a service host creates an endpoint.
+		/// </summary>
+		event EventHandler<EndpointCreatedArgs> EndpointCreated;
 	}
 }

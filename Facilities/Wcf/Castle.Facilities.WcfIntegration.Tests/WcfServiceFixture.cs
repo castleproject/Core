@@ -40,11 +40,13 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer = new WindsorContainer()
 				.AddFacility<WcfFacility>()
 				.Register(
+					Component.For<ServiceHostListener>(),
 					Component.For<LoggingInterceptor>(),
 					Component.For<CallCountServiceBehavior>(),
 					Component.For<UnitOfworkEndPointBehavior>(),
 					Component.For<NetDataContractFormatBehavior>(),
 					Component.For<IOperations>().ImplementedBy<Operations>()
+						.Named("Operations")
 						.Interceptors(InterceptorReference.ForType<LoggingInterceptor>()).Anywhere
 						.DependsOn(new { number = 42 })
 						.ActAs(new DefaultServiceModel().AddEndpoints(
@@ -65,6 +67,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void TestCleanup()
 		{
 			windsorContainer.Dispose();
+			ServiceHostListener.Reset();
 		}
 
 		#endregion
@@ -105,17 +108,24 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
+		public void WillApplyServiceAwareExtensions()
+		{
+			Assert.IsTrue(ServiceHostListener.CreatedCalled);
+			Assert.IsTrue(ServiceHostListener.OpeningCalled);
+			Assert.IsTrue(ServiceHostListener.OpenedCalled);
+			client.GetValueFromConstructor();
+			Assert.IsFalse(ServiceHostListener.ClosingCalled);
+			Assert.IsFalse(ServiceHostListener.ClosedCalled);
+
+			windsorContainer.Kernel.RemoveComponent("Operations");
+			Assert.IsTrue(ServiceHostListener.ClosingCalled);
+			Assert.IsTrue(ServiceHostListener.ClosedCalled);
+		}
+
+		[Test]
 		public void WillReleaseAllBehaviorsWhenUnregistered()
 		{
-			Component.For<IOperations>().ImplementedBy<Operations>()
-				.Named("Operations")
-				.Interceptors(InterceptorReference.ForType<LoggingInterceptor>()).Anywhere
-				.DependsOn(new { number = 42 })
-				.ActAs(new DefaultServiceModel().AddEndpoints(
-					WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
-						.At("net.tcp://localhost/Operations")
-						)
-				);
+
 			windsorContainer.Kernel.RemoveComponent("Operations");
 		}
 	}

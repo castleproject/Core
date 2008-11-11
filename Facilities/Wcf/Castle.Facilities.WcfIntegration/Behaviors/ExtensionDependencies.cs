@@ -14,27 +14,33 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System;
 	using System.Collections.Generic;
+	using Castle.Core;
+	using Castle.MicroKernel;
 
-	/// <summary>
-	/// Contract for all WCF client models.
-	/// </summary>
-	public interface IWcfClientModel
+	internal class ExtensionDependencies
 	{
-		/// <summary>
-		/// Gets the endpoint contract.
-		/// </summary>
-		Type Contract { get; }
+		private readonly ComponentModel model;
+		private readonly IKernel kernel;
 
-		/// <summary>
-		/// Gets the endpoint of the service.
-		/// </summary>
-		IWcfEndpoint Endpoint { get; }
+		public ExtensionDependencies(ComponentModel model, IKernel kernel)
+		{
+			this.model = model;
+			this.kernel = kernel;
+		}
 
-		/// <summary>
-		/// Gets the service extensions.
-		/// </summary>
-		ICollection<IWcfExtension> Extensions { get; }
+		public ExtensionDependencies Apply(ICollection<IWcfExtension> extensions)
+		{
+			foreach (IWcfExtension extension in extensions)
+			{
+				extension.AddDependencies(kernel, model);
+			}
+			return this;
+		}
+
+		public ExtensionDependencies Apply(params IWcfExtension[] extensions)
+		{
+			return Apply((ICollection<IWcfExtension>)extensions);
+		}
 	}
 }

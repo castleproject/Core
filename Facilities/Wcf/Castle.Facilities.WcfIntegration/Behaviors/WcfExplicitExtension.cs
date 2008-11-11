@@ -15,80 +15,85 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.ServiceModel;
 	using System.ServiceModel.Description;
 	using Castle.Core;
 	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 
-	internal abstract class WcfExplcitBehavior : AbstractWcfBehaviors, IWcfServiceBehavior, IWcfEndpointBehavior
+	internal abstract class WcfExplicitExtension : AbstractWcfExtension, IWcfServiceExtension, IWcfEndpointExtension
 	{
-		#region IWcfServiceBehavior
+		#region IWcfServiceExtension
 
-		public void Install(ServiceDescription description, IKernel kernel)
+		public void Install(ServiceHost serviceHost, IKernel kernel)
 		{
-			object behavior = GetBehaviorInstance(kernel);
+			object extension = GetExtensionInstance(kernel);
 
-			if (behavior is IServiceBehavior)
+			if (extension is IServiceBehavior)
 			{
-				description.Behaviors.Add((IServiceBehavior)behavior);
+				serviceHost.Description.Behaviors.Add((IServiceBehavior)extension);
+			}
+			else if (extension is IServiceHostAware)
+			{
+				WcfUtils.BindServiceHostAware(serviceHost, (IServiceHostAware)extension, true);
 			}
 		}
 
 		#endregion
 
-		#region IWcfEndpointBehavior 
+		#region IWcfEndpointExtension 
 
 		public void Install(ServiceEndpoint endpoint, IKernel kernel)
 		{
-			object behavior = GetBehaviorInstance(kernel);
+			object extension = GetExtensionInstance(kernel);
 
-			if (behavior is IEndpointBehavior)
+			if (extension is IEndpointBehavior)
 			{
-				endpoint.Behaviors.Add((IEndpointBehavior)behavior);
+				endpoint.Behaviors.Add((IEndpointBehavior)extension);
 			}
-			else if (behavior is IOperationBehavior)
+			else if (extension is IOperationBehavior)
 			{
 				foreach (OperationDescription operation in endpoint.Contract.Operations)
 				{
-					operation.Behaviors.Add((IOperationBehavior)behavior);
+					operation.Behaviors.Add((IOperationBehavior)extension);
 				}
 			}
 		}
 
 		#endregion
 
-		protected abstract object GetBehaviorInstance(IKernel kernel);
+		protected abstract object GetExtensionInstance(IKernel kernel);
 
-		internal static IWcfBehavior CreateFrom(object behavior)
+		internal static IWcfExtension CreateFrom(object extension)
 		{
-			if (behavior is Type)
+			if (extension is Type)
 			{
-				return new WcfServiceTypeBehavior((Type)behavior);
+				return new WcfServiceTypeBehavior((Type)extension);
 			}
-			else if (behavior is string)
+			else if (extension is string)
 			{
-				return new WcfServiceKeyBehavior((string)behavior);
+				return new WcfServiceKeyBehavior((string)extension);
 			}
-			else if (behavior is IWcfBehavior)
+			else if (extension is IWcfExtension)
 			{
-				return (IWcfBehavior)behavior;
+				return (IWcfExtension)extension;
 			}
 			else
 			{
-				return new WcfInstanceBehavior(behavior);
+				return new WcfInstanceExtension(extension);
 			}
 		}
 
-		override public void Accept(IWcfBehaviorVisitor visitor)
+		override public void Accept(IWcfExtensionVisitor visitor)
 		{
-			visitor.VisitServiceBehavior(this);
-			visitor.VisitEndpointBehavior(this);
+			visitor.VisitServiceExtension(this);
+			visitor.VisitEndpointExtension(this);
 		}
 	}
 
 	#region Class: WcfServiceKeyBehavior
 
-	internal class WcfServiceKeyBehavior : WcfExplcitBehavior
+	internal class WcfServiceKeyBehavior : WcfExplicitExtension
 	{
 		private readonly string key;
 
@@ -97,7 +102,7 @@ namespace Castle.Facilities.WcfIntegration
 			this.key = key;
 		}
 
-		protected override object GetBehaviorInstance(IKernel kernel)
+		protected override object GetExtensionInstance(IKernel kernel)
 		{
 			return kernel[key];
 		}
@@ -112,7 +117,7 @@ namespace Castle.Facilities.WcfIntegration
 
 	#region Class: WcfServiceTypeBehavior
 
-	internal class WcfServiceTypeBehavior : WcfExplcitBehavior
+	internal class WcfServiceTypeBehavior : WcfExplicitExtension
 	{
 		private readonly Type service;
 
@@ -121,7 +126,7 @@ namespace Castle.Facilities.WcfIntegration
 			this.service = service;
 		}
 
-		protected override object GetBehaviorInstance(IKernel kernel)
+		protected override object GetExtensionInstance(IKernel kernel)
 		{
 			return kernel.Resolve(service); 
 		}
@@ -134,18 +139,18 @@ namespace Castle.Facilities.WcfIntegration
 
 	#endregion
 
-	#region Class: WcfInstanceBehavior
+	#region Class: WcfInstanceExtension
 
-	internal class WcfInstanceBehavior : WcfExplcitBehavior
+	internal class WcfInstanceExtension : WcfExplicitExtension
 	{
 		private readonly object instance;
 
-		internal WcfInstanceBehavior(object instance)
+		internal WcfInstanceExtension(object instance)
 		{
 			this.instance = instance;
 		}
 
-		protected override object GetBehaviorInstance(IKernel kernel)
+		protected override object GetExtensionInstance(IKernel kernel)
 		{
 			return instance;
 		}

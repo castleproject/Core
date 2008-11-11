@@ -24,7 +24,7 @@ namespace Castle.Facilities.WcfIntegration
 	{
 		private readonly ComponentModel model;
 
-		public event EventHandler OpeningComplete;
+		public event EventHandler<EndpointCreatedArgs> EndpointCreated;
         
 		public DefaultServiceHost(ComponentModel model, params Uri[] baseAddresses)
 			: base(model.Implementation, baseAddresses)
@@ -42,11 +42,6 @@ namespace Castle.Facilities.WcfIntegration
 			base.OnOpening();
 
 			AddDefaultEndpointIfNoneFound();
-
-			if (OpeningComplete != null)
-			{
-				OpeningComplete(this, EventArgs.Empty);
-			}
 		}
 
 		private void AddDefaultEndpointIfNoneFound()
@@ -76,7 +71,12 @@ namespace Castle.Facilities.WcfIntegration
 
 						if (binding != null)
 						{
-							AddServiceEndpoint(contract, binding, baseAddress);
+							ServiceEndpoint endpoint = AddServiceEndpoint(contract, binding, baseAddress);
+
+							if (EndpointCreated != null)
+							{
+								EndpointCreated(this, new EndpointCreatedArgs(endpoint));
+							}
 						}
 					}
 				}

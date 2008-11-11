@@ -14,22 +14,9 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	/// <summary>
-	/// Determines how a global behavior will be applied.
-	/// </summary>
-	public enum WcfBehaviorScope
+	public interface IWcfExtensionVisitor
 	{
-		/// <summary>
-		/// Only apply to client endpoints.
-		/// </summary>
-		Clients,
-		/// <summary>
-		/// Only apply to service hosts.
-		/// </summary>
-		Services,
-		/// <summary>
-		/// Do not apply automatically.
-		/// </summary>
-		Explicit
+		void VisitServiceExtension(IWcfServiceExtension extension);
+		void VisitEndpointExtension(IWcfEndpointExtension extension);
 	}
 }

@@ -80,23 +80,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Behaviors\AbstractWcfBehaviors.cs" />
-    <Compile Include="Behaviors\BehaviorDependencies.cs" />
+    <Compile Include="Behaviors\AbstractWcfExtension.cs" />
+    <Compile Include="Behaviors\ExtensionDependencies.cs" />
     <Compile Include="Behaviors\Logging\AbstractMessageFormatter.cs" />
     <Compile Include="Behaviors\Logging\LogMessageFormatBehavior.cs" />
     <Compile Include="Behaviors\Logging\CustomMessageFormatter.cs" />
     <Compile Include="Behaviors\Logging\LogMessageEndpointBehavior.cs" />
     <Compile Include="Client\AbstractChannelBuilder.Generic.cs" />
-    <Compile Include="Behaviors\ServiceEndpointBehaviors.cs" />
+    <Compile Include="Behaviors\ServiceEndpointExtensions.cs" />
     <Compile Include="Client\Default\DefaultClientModel.cs" />
     <Compile Include="Behaviors\Logging\LogMessageInspector.cs" />
     <Compile Include="Client\Duplex\DuplexChannelBuilder.cs" />
     <Compile Include="Client\Duplex\DuplexClientModel.cs" />
-    <Compile Include="Internal\CommunicationObjectWrapper.cs" />
-    <Compile Include="IWcfBehaviorVisitor.cs" />
-    <Compile Include="IWcfBehavior.cs" />
-    <Compile Include="Behaviors\WcfEndpointBehaviors.cs" />
-    <Compile Include="Behaviors\WcfBehaviorScope.cs" />
+    <Compile Include="IWcfExtensionVisitor.cs" />
+    <Compile Include="IWcfExtension.cs" />
+    <Compile Include="Behaviors\WcfEndpointExtensions.cs" />
+    <Compile Include="Behaviors\WcfExtensionScope.cs" />
     <Compile Include="Client\Rest\RestChannelBuilder.cs" />
     <Compile Include="Client\Rest\RestClientModel.cs" />
     <Compile Include="Internal\WcfCommunicationDecommisionConcern.cs" />
@@ -117,17 +116,19 @@
     <Compile Include="IWcfServiceModel.cs" />
     <Compile Include="Service\AbstractServiceHostBuilder.cs" />
     <Compile Include="Service\AbstractServiceHostBuilder.Generic.cs" />
+    <Compile Include="Service\AbstractServiceHostAware.cs" />
     <Compile Include="Service\Default\DefaultServiceHost.cs" />
     <Compile Include="Service\Default\DefaultServiceHostBuilder.cs" />
     <Compile Include="Service\Default\DefaultServiceModel.cs" />
     <Compile Include="Service\Default\DefaultServiceHostFactory.cs" />
+    <Compile Include="IServiceHostAware.cs" />
     <Compile Include="Service\IWcfServiceHost.cs" />
     <Compile Include="Service\Rest\RestServiceHost.cs" />
     <Compile Include="Service\Rest\RestServiceHostBuilder.cs" />
     <Compile Include="Service\Rest\RestServiceModel.cs" />
-    <Compile Include="Service\ServiceHostBehaviors.cs" />
+    <Compile Include="Service\ServiceHostExtensions.cs" />
     <Compile Include="Service\WindsorServiceHostFactory.cs" />
-    <Compile Include="Behaviors\WcfExplicitBehavior.cs" />
+    <Compile Include="Behaviors\WcfExplicitExtension.cs" />
     <Compile Include="WcfEndpoint.cs" />
     <Compile Include="WcfFacility.cs" />
     <Compile Include="Service\WcfServiceExtension.cs" />
@@ -135,7 +136,7 @@
     <Compile Include="Internal\WcfUtils.cs" />
     <Compile Include="Service\WindsorDependencyInjectionServiceBehavior.cs" />
     <Compile Include="Service\WindsorInstanceProvider.cs" />
-    <Compile Include="Behaviors\WcfServiceBehaviors.cs" />
+    <Compile Include="Behaviors\WcfServiceExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

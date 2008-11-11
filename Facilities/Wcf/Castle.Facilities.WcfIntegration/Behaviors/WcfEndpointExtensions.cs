@@ -20,19 +20,19 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 
-	internal class WcfEndpointBehaviors : AbstractWcfBehaviors, IWcfEndpointBehavior
+	internal class WcfEndpointExtensions : AbstractWcfExtension, IWcfEndpointExtension
 	{
-		private readonly WcfBehaviorScope scope;
+		private readonly WcfExtensionScope scope;
 
-		public WcfEndpointBehaviors(WcfBehaviorScope scope)
+		public WcfEndpointExtensions(WcfExtensionScope scope)
 		{
 			this.scope = scope;
 		}
 
 		public void Install(ServiceEndpoint endpoint, IKernel kernel)
 		{
-			ICollection<IHandler> endpointBehaviors = WcfUtils.FindBehaviors<IEndpointBehavior>(kernel, scope);
-			ICollection<IHandler> operationBehaviors = WcfUtils.FindBehaviors<IOperationBehavior>(kernel, scope);
+			ICollection<IHandler> endpointBehaviors = WcfUtils.FindExtensions<IEndpointBehavior>(kernel, scope);
+			ICollection<IHandler> operationBehaviors = WcfUtils.FindExtensions<IOperationBehavior>(kernel, scope);
 
 			foreach (IHandler handler in endpointBehaviors)
 			{
@@ -50,13 +50,13 @@ namespace Castle.Facilities.WcfIntegration
 
 		public override void AddDependencies(IKernel kernel, ComponentModel model)
 		{
-			WcfUtils.AddBehaviorDependencies<IEndpointBehavior>(kernel, scope, model);
-			WcfUtils.AddBehaviorDependencies<IOperationBehavior>(kernel, scope, model);
+			WcfUtils.AddExtensionDependencies<IEndpointBehavior>(kernel, scope, model);
+			WcfUtils.AddExtensionDependencies<IOperationBehavior>(kernel, scope, model);
 		}
 
-		override public void Accept(IWcfBehaviorVisitor visitor)
+		override public void Accept(IWcfExtensionVisitor visitor)
 		{
-			visitor.VisitEndpointBehavior(this);
+			visitor.VisitEndpointExtension(this);
 		}
 	}
 }

@@ -55,10 +55,10 @@ namespace Castle.Facilities.WcfIntegration
 					WcfCommunicationDecomissionConcern.Instance);
 				InstallManagedChannelInterceptor(model);
 
-				new BehaviorDependencies(model, kernel)
-					.Apply(new WcfEndpointBehaviors(WcfBehaviorScope.Clients))
-					.Apply(clientModel.Behaviors)
-					.Apply(clientModel.Endpoint.Behaviors);
+				new ExtensionDependencies(model, kernel)
+					.Apply(new WcfEndpointExtensions(WcfExtensionScope.Clients))
+					.Apply(clientModel.Extensions)
+					.Apply(clientModel.Endpoint.Extensions);
 			}
 		}
 

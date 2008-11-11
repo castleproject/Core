@@ -199,68 +199,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				clientEx.Backup(new Dictionary<string, object>());
 			}
 		}
-
-        /*
-		[Test]
-		public void ServiceHostWillNotOpenUntilExplicitScopedBehaviorDependenciesAreSatisfied()
-		{
-			CalculatorEndpointBehavior.Number = 0;
-			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
-				.Register(
-					Component.For<CalculatorEndpointBehavior.CalculatorMessageInspector>(),
-					Component.For<CalculatorEndpointBehavior>()
-						.Named("CalculatorEndpointBehavior")
-						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit)),
-					Component.For<IOperations>()
-						.ImplementedBy<Operations>()
-						.DependsOn(new { number = 42 })
-						.ActAs(new DefaultServiceModel().AddEndpoints(
-							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
-								.At("net.tcp://localhost/Operations")
-									.AddBehaviors("CalculatorEndpointBehavior"))
-							),
-					Component.For<ICalculator>()
-						.ImplementedBy<Calculator>()
-				))
-			{
-				IOperations client = ChannelFactory<IOperations>.CreateChannel(
-					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
-				Assert.AreEqual(42, client.GetValueFromConstructor());
-				Assert.AreEqual(45, CalculatorEndpointBehavior.Number);
-			}
-		}
-
-		[Test]
-		public void ServiceHostWillNotOpenUntilServiceScopedBehaviorDependenciesAreSatisfied()
-		{
-			CalculatorEndpointBehavior.Number = 0;
-			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
-				.Register(
-					Component.For<CalculatorEndpointBehavior.CalculatorMessageInspector>(),
-					Component.For<CalculatorEndpointBehavior>()
-						.Named("CalculatorEndpointBehavior")
-						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Services)),
-					Component.For<IOperations>()
-						.ImplementedBy<Operations>()
-						.DependsOn(new { number = 42 })
-						.ActAs(new DefaultServiceModel().AddEndpoints(
-							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
-								.At("net.tcp://localhost/Operations"))
-							),
-					Component.For<ICalculator>()
-						.ImplementedBy<Calculator>()
-				))
-			{
-				IOperations client = ChannelFactory<IOperations>.CreateChannel(
-					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
-				Assert.AreEqual(42, client.GetValueFromConstructor());
-				Assert.AreEqual(45, CalculatorEndpointBehavior.Number);
-			}
-		}
-        */
-
+ 
 		[Test]
 		public void WillApplyServiceScopedBehaviors()
 		{
@@ -271,9 +210,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.AddFacility<WcfFacility>()
 				.Register(
 					Component.For<CallCountServiceBehavior>()
-						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Clients)),
+						.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Clients)),
 					Component.For<UnitOfworkEndPointBehavior>()
-						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Services)),
+						.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Services)),
 					Component.For<IOperations>().ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
 					.ActAs(new DefaultServiceModel().AddEndpoints(
@@ -292,6 +231,35 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
+		public void WillApplyServiceScopedBehaviorsToDefaultEndpoint()
+		{
+			CallCountServiceBehavior.CallCount = 0;
+			Assert.IsFalse(UnitOfWork.initialized, "Should be false before starting");
+
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(
+					Component.For<CallCountServiceBehavior>()
+						.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Services)),
+					Component.For<UnitOfworkEndPointBehavior>()
+						.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Services)),
+					Component.For<IOperations>().ImplementedBy<Operations>()
+					.DependsOn(new { number = 42 })
+					.ActAs(new DefaultServiceModel().AddBaseAddresses(
+						"net.tcp://localhost/Operations"))
+					)
+				)
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
+				bool unitOfWorkIsInitialized_DuringCall = client.UnitOfWorkIsInitialized();
+				Assert.IsTrue(unitOfWorkIsInitialized_DuringCall);
+				Assert.IsFalse(UnitOfWork.initialized, "Should be false after call");
+				Assert.AreEqual(1, CallCountServiceBehavior.CallCount);
+			}
+		}
+
+		[Test]
 		public void WillApplyExplcitScopedKeyBehaviors()
 		{
 			CallCountServiceBehavior.CallCount = 0;
@@ -301,14 +269,14 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.Register(
 					Component.For<CallCountServiceBehavior>()
 						.Named("callcounts")
-						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit)),
+						.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit)),
 					Component.For<IOperations>().ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
 					.ActAs(new DefaultServiceModel()
 						.AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 								.At("net.tcp://localhost/Operations"))
-						.AddBehaviors("callcounts")
+						.AddExtensions("callcounts")
 						)
 				))
 			{
@@ -328,14 +296,14 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.AddFacility<WcfFacility>()
 				.Register(
 					Component.For<CallCountServiceBehavior>()
-						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit)),
+						.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit)),
 					Component.For<IOperations>().ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
 					.ActAs(new DefaultServiceModel()
 						.AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 								.At("net.tcp://localhost/Operations"))
-						.AddBehaviors(typeof(CallCountServiceBehavior))
+						.AddExtensions(typeof(CallCountServiceBehavior))
 						)
 				))
 			{
@@ -360,8 +328,8 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 								.At("net.tcp://localhost/Operations"))
-						.AddBehaviors(new CallCountServiceBehavior(),
-						              new UnitOfworkEndPointBehavior())
+						.AddExtensions(new CallCountServiceBehavior(),
+						               new UnitOfworkEndPointBehavior())
 						)
 				))
 			{
@@ -381,7 +349,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.AddFacility<WcfFacility>()
 				.Register(
 					Component.For<LogMessageEndpointBehavior>()
-						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+						.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
 						.Named("logMessageBehavior"),
 					Component.For<IOperations>()
 						.ImplementedBy<Operations>()
@@ -415,7 +383,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				.AddFacility<WcfFacility>()
 				.Register(
 					Component.For<LogMessageEndpointBehavior>()
-						.Configuration(Attrib.ForName("scope").Eq(WcfBehaviorScope.Explicit))
+						.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
 						.Named("logMessageBehavior"),
 					Component.For<IOperations>()
 						.ImplementedBy<Operations>()

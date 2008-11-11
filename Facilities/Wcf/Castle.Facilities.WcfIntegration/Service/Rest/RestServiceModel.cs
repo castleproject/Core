@@ -37,7 +37,7 @@ namespace Castle.Facilities.WcfIntegration.Rest
 
 		public RestServiceModel EnableWebScripting()
 		{
-			AddBehaviors(new WebScriptEnablingBehavior());
+			AddExtensions(new WebScriptEnablingBehavior());
 			return this;
 		}
 	}
