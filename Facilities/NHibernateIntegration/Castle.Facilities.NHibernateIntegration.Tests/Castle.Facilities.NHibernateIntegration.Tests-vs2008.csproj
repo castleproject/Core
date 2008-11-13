@@ -128,6 +128,10 @@
       <Name>nunit.framework</Name>
       <HintPath>..\..\..\build\net-3.5\debug\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.5.0.1, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharedLibs\net\2.0\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -180,6 +184,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Issues\Facilities102\Fixture.cs" />
+    <Compile Include="Issues\Facilities103\Fixture.cs" />
     <Compile Include="Issues\Facilities106\Fixture.cs" />
     <Compile Include="SessionCreation\DaoTestCase.cs">
       <SubType>Code</SubType>

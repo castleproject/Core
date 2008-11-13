@@ -17,6 +17,7 @@
 			<include name="Castle.Facilities.NHibernateIntegration.dll" />
 			<include name="NHibernate.dll" />
 			<include name="Iesi.Collections.dll" />
+			<include name="Rhino.Mocks.dll" />
 			<include name="Castle.Core.dll" />
 			<include name="Castle.Services.Transaction.dll" />
 			<include name="Castle.MicroKernel.dll" />

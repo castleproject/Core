@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using Rhino.Mocks;
 
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
@@ -25,8 +26,12 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 	public abstract class AbstractNHibernateTestCase
 	{
+		public AbstractNHibernateTestCase()
+		{
+			mockRepository=new MockRepository();
+		}
 		protected IWindsorContainer container;
-
+		protected MockRepository mockRepository;
 		protected virtual string ConfigurationFile
 		{
 			get { return "DefaultConfiguration.xml"; }

@@ -30,6 +30,18 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	/// </summary>
 	public class DefaultSessionManager : MarshalByRefObject, ISessionManager
 	{
+		#region constants
+		/// <summary>
+		/// Format string for NHibernate interceptor components
+		/// </summary>
+		public const string InterceptorFormatString = "nhibernate.session.interceptor.{0}";
+
+		/// <summary>
+		/// Name for NHibernate Interceptor componentInterceptorName
+		/// </summary>
+		public const string InterceptorName = "nhibernate.session.interceptor";
+		#endregion
+
 		private readonly IKernel kernel;
 		private readonly ISessionStore sessionStore;
 		private readonly ISessionFactoryResolver factoryResolver;
@@ -90,10 +102,8 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 				session = CreateSession(alias); weAreSessionOwner = true;
 
 				wrapped = WrapSession(transaction != null, session);
-
-				sessionStore.Store(alias, wrapped);
-
 				EnlistIfNecessary(weAreSessionOwner, transaction, wrapped);
+				sessionStore.Store(alias, wrapped);
 			}
 			else
 			{
@@ -205,7 +215,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			
 			ISession session;
 
-			string aliasedInterceptorId = string.Format("nhibernate.session.interceptor.{0}", alias);
+			string aliasedInterceptorId = string.Format(InterceptorFormatString, alias);
 			
 			if (kernel.HasComponent(aliasedInterceptorId))
 			{
@@ -213,9 +223,9 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 				
 				session = sessionFactory.OpenSession(interceptor);
 			}
-			else if (kernel.HasComponent("nhibernate.session.interceptor"))
+			else if (kernel.HasComponent(InterceptorName))
 			{
-				IInterceptor interceptor = (IInterceptor) kernel["nhibernate.session.interceptor"];
+				IInterceptor interceptor = (IInterceptor)kernel[InterceptorName];
 				
 				session =  sessionFactory.OpenSession(interceptor);
 			}
