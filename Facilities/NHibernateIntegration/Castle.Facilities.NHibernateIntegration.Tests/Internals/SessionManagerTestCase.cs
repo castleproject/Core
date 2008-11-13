@@ -32,6 +32,13 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 	[TestFixture]
 	public class SessionManagerTestCase : AbstractNHibernateTestCase
 	{
+		protected override string ConfigurationFile
+		{
+			get
+			{
+				return "Internals/TwoDatabaseConfiguration.xml";
+			}
+		}
 		[Test]
 		public void TwoDatabases()
 		{

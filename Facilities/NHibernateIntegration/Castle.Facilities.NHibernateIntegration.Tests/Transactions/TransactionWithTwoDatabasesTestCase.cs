@@ -18,9 +18,16 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 	using Castle.Facilities.AutomaticTransactionManagement;
 	using NUnit.Framework;
 
-	[TestFixture, Ignore("Seems to hang on net 3.5")]
+	[TestFixture]
 	public class TransactionWithTwoDatabasesTestCase : AbstractNHibernateTestCase
 	{
+		protected override string ConfigurationFile
+		{
+			get
+			{
+				return "Transactions/TwoDatabaseConfiguration.xml";
+			}
+		}
 		protected override void ConfigureContainer()
 		{
 			container.AddFacility("transactions", new TransactionFacility());

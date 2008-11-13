@@ -159,6 +159,7 @@
     <Compile Include="Internals\SessionStoreTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Issues\IssueTestCase.cs" />
     <Compile Include="SessionCreation\DaoTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -168,6 +169,7 @@
     <Compile Include="SessionCreation\MySecondDao.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestConfigurationBuilder.cs" />
     <Compile Include="Transactions\DistributedTransactionsTestCase.cs" />
     <Compile Include="Transactions\Model\FirstDao.cs">
       <SubType>Code</SubType>
@@ -213,6 +215,12 @@
   <ItemGroup>
     <EmbeddedResource Include="configurationBuilderRegression.xml" />
     <EmbeddedResource Include="customConfigurationBuilder.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultConfiguration.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EmptyConfiguration.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -8,6 +8,13 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 	[TestFixture]
 	public class ConfigurationBuilderTestCase : AbstractNHibernateTestCase
 	{
+		protected override string ConfigurationFile
+		{
+			get
+			{
+				return "Internals/TwoDatabaseConfiguration.xml";
+			}
+		}
 		[Test]
 		public void SaveUpdateListenerAdded()
 		{

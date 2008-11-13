@@ -47,12 +47,8 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 		}
 	}
 
-	public abstract class AbstractCusomConfigurationBuilderTestCase
+	public abstract class AbstractCusomConfigurationBuilderTestCase:AbstractNHibernateTestCase
 	{
-		protected WindsorContainer container;
-
-		[TestFixtureSetUp]
-		protected abstract void containerInit();
 
 		[Test]
 		public void Invoked()
@@ -67,26 +63,24 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 	[TestFixture]
 	public class CustomConfigurationBuilderTestCase : AbstractCusomConfigurationBuilderTestCase
 	{
-		protected override void containerInit()
+		protected override string ConfigurationFile
 		{
-			container =
-				new WindsorContainer(
-					new XmlInterpreter(
-						new AssemblyResource(
-							"Castle.Facilities.NHibernateIntegration.Tests/customConfigurationBuilder.xml")));
+			get
+			{
+				return "customConfigurationBuilder.xml";
+			}
 		}
 	}
 
 	[TestFixture]
 	public class CustomConfigurationBulderRegressionTestCase : AbstractCusomConfigurationBuilderTestCase
 	{
-		protected override void containerInit()
+		protected override string ConfigurationFile
 		{
-			container =
-				new WindsorContainer(
-					new XmlInterpreter(
-						new AssemblyResource(
-							"Castle.Facilities.NHibernateIntegration.Tests/configurationBuilderRegression.xml")));
+			get
+			{
+				return "configurationBuilderRegression.xml";
+			}
 		}
 	}
 }

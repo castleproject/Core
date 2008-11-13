@@ -15,7 +15,6 @@
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll"/>
 			<include name="Castle.Facilities.NHibernateIntegration.dll" />
-
 			<include name="NHibernate.dll" />
 			<include name="Iesi.Collections.dll" />
 			<include name="Castle.Core.dll" />
@@ -39,47 +38,17 @@
 
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='dialect']"
+			xpath="/configuration/appSettings/add[@key='ar.dialect']/@value"
 			value="${ar.dialect}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='dialect']"
-			value="${ar.dialect}" 
-		/>
-		<xmlpoke
-			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory3']/settings/item[@key='dialect']"
-			value="${ar.dialect}" 
-		/>
-		<xmlpoke
-			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='connection.driver_class']"
+			xpath="/configuration/appSettings/add[@key='ar.connection.driver_class']/@value"
 			value="${ar.connection.driver_class}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='connection.driver_class']"
-			value="${ar.connection.driver_class}" 
-		/>
-		<xmlpoke
-			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory3']/settings/item[@key='connection.driver_class']"
-			value="${ar.connection.driver_class}" 
-		/>
-		<xmlpoke
-			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='connection.connection_string']"
-			value="${ar.connection.connection_string.1}" 
-		/>
-		<xmlpoke
-			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='connection.connection_string']"
-			value="${ar.connection.connection_string.2}" 
-		/>
-		<xmlpoke
-			file="${app.config}"
-			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory3']/settings/item[@key='connection.connection_string']"
+			xpath="/configuration/appSettings/add[@key='ar.connection.connection_string']/@value"
 			value="${ar.connection.connection_string.1}" 
 		/>
 	</target>
