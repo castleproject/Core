@@ -211,7 +211,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			{
 				IInterceptor interceptor = (IInterceptor) kernel[aliasedInterceptorId];
 				
-				return sessionFactory.OpenSession(interceptor);
+				session = sessionFactory.OpenSession(interceptor);
 			}
 			else if (kernel.HasComponent("nhibernate.session.interceptor"))
 			{

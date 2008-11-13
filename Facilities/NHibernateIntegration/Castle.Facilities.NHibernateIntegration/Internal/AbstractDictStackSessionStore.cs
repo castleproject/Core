@@ -28,7 +28,16 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		/// <summary>
 		/// Name used for storage in <see cref="CallContext"/>
 		/// </summary>
-		protected readonly String SlotKey = "nh.facility.stacks";
+		protected String SlotKey
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(slotKey))
+					slotKey = string.Format("nh.facility.stacks.{0}", Guid.NewGuid());
+				return slotKey;
+			}
+		}
+		private string slotKey;
 
 		/// <summary>
 		/// Gets the stack of <see cref="SessionDelegate"/> objects for the specified <paramref name="alias"/>.

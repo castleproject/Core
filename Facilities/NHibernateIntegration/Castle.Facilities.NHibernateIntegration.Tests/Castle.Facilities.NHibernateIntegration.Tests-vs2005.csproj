@@ -159,6 +159,7 @@
     <Compile Include="Internals\SessionStoreTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Issues\Facilities102\Fixture.cs" />
     <Compile Include="Issues\IssueTestCase.cs" />
     <Compile Include="SessionCreation\DaoTestCase.cs">
       <SubType>Code</SubType>
@@ -221,6 +222,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmptyConfiguration.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Issues\Facilities102\facility.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

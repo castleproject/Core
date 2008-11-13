@@ -179,6 +179,7 @@
     <Compile Include="Internals\SessionStoreTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Issues\Facilities102\Fixture.cs" />
     <Compile Include="SessionCreation\DaoTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -228,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="Issues\Facilities102\facility.xml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
@@ -261,6 +263,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Transactions\TwoDatabaseConfiguration.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EmptyConfiguration.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
