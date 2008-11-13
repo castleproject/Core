@@ -180,6 +180,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Issues\Facilities102\Fixture.cs" />
+    <Compile Include="Issues\Facilities106\Fixture.cs" />
     <Compile Include="SessionCreation\DaoTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -266,6 +267,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="EmptyConfiguration.xml" />
+    <Content Include="Issues\Facilities106\factory1.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

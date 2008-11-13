@@ -182,6 +182,7 @@
     <Compile Include="Internal\WebSessionStore.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\XmlConfigurationBuilder.cs" />
     <Compile Include="NHibernateFacility.cs">
       <SubType>Code</SubType>
     </Compile>
