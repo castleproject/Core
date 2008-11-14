@@ -63,7 +63,13 @@ namespace Castle.MonoRail.Views.Brail
 					string code = reader.ReadToEnd();
 					if (booViewEngine.ConditionalPreProcessingOnly(input.Name) == false ||
 					    ShouldPreProcess(code))
-						code = Booify(code);
+					{
+					    code = Booify(code);
+					}
+                    else
+					{
+					    code = EscapeNullPropagationsInOutputExpression(code);
+					}
 					StringInput newInput = new StringInput(input.Name, code);
 					inputToCode.Add(input, code);
 					processed.Add(newInput);

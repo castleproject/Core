@@ -1,0 +1,5 @@
+if ?err:
+	page.Show('foobar')
+else:
+	page.Show('foobar' + ?id)
+end

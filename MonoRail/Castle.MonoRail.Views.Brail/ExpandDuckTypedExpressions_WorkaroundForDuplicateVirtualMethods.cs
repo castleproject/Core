@@ -85,6 +85,12 @@ namespace Castle.MonoRail.Views.Brail
 				throw new NullReferenceException("Could not invoke method "+name+" on null target");
 
 			Type targetType = target.GetType();
+            if (args.Length == 2 && 
+                args[0] is string && 
+                name == "op_Addition")
+            {
+                return ((string) args[0]) + args[1];
+            }
 			return targetType.InvokeMember(name,
 			                               ResolveFlagsToUse(targetType, InvokeBindingFlags),
 			                               null,

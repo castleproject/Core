@@ -38,6 +38,14 @@ namespace Castle.MonoRail.Views.Brail.Tests
             AssertReplyContains("SubItem 2.1");
 	    }
 
+        [Test]
+        public void WillPropagateNullParameterInJS()
+        {
+            PropertyBag["id"] = 5;
+            ProcessViewJS("regressions/NullPropagationTestWithJS");
+            AssertReplyEqualTo("try \n{\nElement.show(\"foobar5\");\r\n}\ncatch(e)\n{\nalert('JS error ' + e.toString());\n}\r\n");
+        }
+
 		[Test]
 		public void WillPropagateNullParameterInBraces()
 		{
