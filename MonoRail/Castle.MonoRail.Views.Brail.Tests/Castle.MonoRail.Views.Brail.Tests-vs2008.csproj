@@ -118,7 +118,10 @@
     <None Include="Views\layout\update.brail" />
     <None Include="App.config" />
     <None Include="Views\regressions\CanCompareToNullableParameter.brail" />
-    <None Include="Views\regressions\NullPropagationInBracesTest.brail" />
+    <None Include="Views\regressions\NullPropagationInQuotesWithBracesTest.brail" />
+    <None Include="Views\regressions\NullPropagationWithBracesTest.brail" />
+    <None Include="Views\regressions\NullPropagationWithEscapedStrings.brail" />
+    <None Include="Views\regressions\questionMarkOp_if.brail" />
     <None Include="Views\regressions\UnlessWithIsDefine.brail" />
     <None Include="Views\regressions\NullPropagationTest.brail" />
     <None Include="Views\regressions\UsingIgnoreNullWithinCaptureFor.brail" />

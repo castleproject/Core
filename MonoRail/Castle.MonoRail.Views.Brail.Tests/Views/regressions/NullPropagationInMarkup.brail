@@ -1,0 +1,3 @@
+<% for item in items: %>
+foo.rails?id=${item.SubItem.Name}
+<% end %>

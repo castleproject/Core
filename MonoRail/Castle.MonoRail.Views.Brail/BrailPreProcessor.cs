@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Views.Brail
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Text;
 	using System.Text.RegularExpressions;
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.IO;
@@ -27,10 +28,11 @@ namespace Castle.MonoRail.Views.Brail
 	{
 		public const string ClosingQuoteReplacement = "`^`";
 		public const string DoubleQuote = "\"";
+        const string TripleDoubleQuote = "\"\"\"";
 		private readonly static IDictionary separators = CreateSeparators();
 		private readonly BooViewEngine booViewEngine;
 		private readonly IDictionary inputToCode = new Hashtable();
-		private static readonly Regex escapeParemetersStartingWithQuestionMarkRegEx
+		private static readonly Regex escapeParametersStartingWithQuestionMarkRegEx
 			= new Regex(@"(?<!<)\?([_\w][_\w\d]*)", RegexOptions.Compiled);
 
 		public BrailPreProcessor(BooViewEngine booViewEngine)
@@ -119,12 +121,12 @@ namespace Castle.MonoRail.Views.Brail
 					++lastIndexOffset;
 				}
 				string line = code.Substring(startReading, lastIndex - startReading);
-				line = EscapeParemetersStartingWithQuestionMark(line);
+				line = EscapeNullPropagationsInCode(line);
 				buffer.WriteLine(line);
 				lastIndex += lastIndexOffset;
 			}
 			string endingLine = code.Substring(lastIndex);
-			endingLine = EscapeParemetersStartingWithQuestionMark(endingLine);
+
 			Output(buffer, endingLine);
 			return buffer.ToString();
 		}
@@ -166,20 +168,124 @@ namespace Castle.MonoRail.Views.Brail
 			buffer.WriteLine("\"\"\"");
 		}
 
-		private static string EscapeParemetersStartingWithQuestionMark(string code)
+        private static void OutputExpression(TextWriter buffer, string code, bool shouldEscape) {
+            if (shouldEscape)
+                buffer.Write("OutputEscaped ");
+            else
+                buffer.Write("output ");
+
+            buffer.WriteLine(EscapeNullPropagationsInOutputExpression(code));
+        }
+
+        private static string EscapeNullPropagationsInCode(string escapedCode) {
+            return escapeParametersStartingWithQuestionMarkRegEx.Replace(escapedCode, "TryGetParameter('$1')");
+        }
+
+        /// <summary>
+        /// Given a brail output expression: ${...}
+        /// replace any null propagations, while respecting quoted strings and escaped characters such as ("\"\"").
+        /// </summary>
+        private static string EscapeNullPropagationsInOutputExpression(string code)
 		{
-			return escapeParemetersStartingWithQuestionMarkRegEx.Replace(code, "TryGetParameter('$1')");
+            StringBuilder escapedCode = new StringBuilder();
+		    int position = 0;
+
+            while (position < code.Length)
+            {                
+                int nextOpeningQuotePosition = FindStartOfNextQuotedString(code, position);
+
+                // is there a quoted string in the remainder of the code fragment?
+                if (nextOpeningQuotePosition >= 0)
+                {
+                    // append text up to string
+                    int positionAfterEndOfClosingQuote = FindPositionAfterClosingQuote(code, nextOpeningQuotePosition);                    
+                    var textBeforeQuotedString = code.Substring(position, nextOpeningQuotePosition - position);
+                    escapedCode.Append(EscapeNullPropagationsInCode(textBeforeQuotedString));
+
+                    // append the quoted string
+                    escapedCode.Append(code.Substring(nextOpeningQuotePosition, positionAfterEndOfClosingQuote - nextOpeningQuotePosition));
+
+                    // advance our index
+                    position = positionAfterEndOfClosingQuote;
+                }
+                else
+                {                    
+                    escapedCode.Append(EscapeNullPropagationsInCode(code.Substring(position)));
+                    break;
+                }
+            }
+
+            return escapedCode.ToString();
 		}
 
-		private static void OutputExpression(TextWriter buffer, string code, bool shouldEscape)
-		{
-			if (shouldEscape)
-				buffer.Write("OutputEscaped ");
-			else
-				buffer.Write("output ");
-			buffer.WriteLine(EscapeParemetersStartingWithQuestionMark(code));
-		}
+        /// <summary>
+        /// Find the position after the end of the closing quote token for the quoted 
+        /// substring that started at the specified position        
+        /// 
+        /// for example, given the following string x:
+        ///  "abc" blah 
+        /// 01234567890
+        /// FindPositionAfterClosingQuote(x, 1) will return 6
+        /// 
+        /// handles triple-double-quotes, double, and single quotes, and escaped quotes within the string
+        /// </summary>
+        /// <param name="code">code fragment</param>
+        /// <param name="openingQuotePosition">index of opening quote within the code fragment</param>
+        /// <returns>position after closing quote, or -1 if not found</returns>
+	    private static int FindPositionAfterClosingQuote(string code, int openingQuotePosition)
+	    {          
+	        if (IsTripleQuote(code, openingQuotePosition))
+	            return code.IndexOf(TripleDoubleQuote, openingQuotePosition + 3) + 3;
 
+            char quote = code[openingQuotePosition];
+
+            // read each character, so we can ignore escapes
+            for (int position = openingQuotePosition + 1; position < code.Length; position++)
+            {
+                if (code[position] == '\\')
+                {
+                    // skip
+                    position++;
+                    continue;
+                }
+
+                if (code[position] == quote)
+                    return position + 1;
+
+            }
+            
+	        return -1;
+	    }
+
+	    private static bool IsTripleQuote(string code, int startOfString)
+	    {
+	        return code[startOfString] =='"' && code.IndexOf(TripleDoubleQuote, startOfString) == startOfString;
+	    }
+
+        /// <summary>
+        /// Returns the character position of the next instance of any boo string-quoting tokens: ', ", """
+        /// Note that this returns the position of the beginning of the quote token, not the text inside the quote       
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="position">position to start search</param>        
+	    private static int FindStartOfNextQuotedString(string code, int position)
+	    {
+	        int tripleDoubleQuotePosition = code.IndexOf(TripleDoubleQuote, position);
+            int doubleQuotePosition = code.IndexOf(DoubleQuote, position);
+            int singleQuotePosition = code.IndexOf("'", position);
+
+            if (singleQuotePosition >= 0 && (doubleQuotePosition == -1 || singleQuotePosition < doubleQuotePosition))
+                return singleQuotePosition;
+
+            if (tripleDoubleQuotePosition >= 0 && tripleDoubleQuotePosition < doubleQuotePosition)
+                return tripleDoubleQuotePosition;
+
+	        return doubleQuotePosition;
+	    }
+
+	    
+	   
+	  
 		private static string EscapeInitialAndClosingDoubleQuotes(string code)
 		{
 			if (code.StartsWith(DoubleQuote))
@@ -313,5 +419,5 @@ namespace Castle.MonoRail.Views.Brail
 		}
 
 		#endregion
-	}
+	}    
 }
