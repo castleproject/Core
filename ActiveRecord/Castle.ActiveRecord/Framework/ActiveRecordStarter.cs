@@ -806,7 +806,7 @@ namespace Castle.ActiveRecord
 
 			foreach(IConfiguration childConfig in config.Children)
 			{
-				cfg.Properties.Add(childConfig.Name, childConfig.Value);
+				cfg.Properties[childConfig.Name] = childConfig.Value;
 			}
 
 			return cfg;
