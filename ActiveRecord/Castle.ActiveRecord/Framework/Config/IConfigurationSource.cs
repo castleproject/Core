@@ -78,5 +78,9 @@ namespace Castle.ActiveRecord.Framework
 		/// </value>
 		bool VerifyModelsAgainstDBSchema { get; }
 
+		/// <summary>
+		/// Determines the default flushing behaviour of scopes.
+		/// </summary>
+		DefaultFlushType DefaultFlushType { get; }
 	}
 }

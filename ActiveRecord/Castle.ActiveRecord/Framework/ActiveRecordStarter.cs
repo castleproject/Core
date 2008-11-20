@@ -557,6 +557,14 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// The current <see cref="IConfigurationSource"/>.
+		/// </summary>
+		public static IConfigurationSource ConfigurationSource
+		{
+			get { return configSource; }
+		}
+
+		/// <summary>
 		/// Retrieves a copy of the types registered within ActiveRecord
 		/// </summary>
 		/// <returns></returns>

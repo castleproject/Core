@@ -43,7 +43,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SessionScope"/> class.
 		/// </summary>
-		public SessionScope() : this(FlushAction.Auto)
+		public SessionScope() : this(FlushAction.Config)
 		{
 		}
 
@@ -80,7 +80,7 @@ namespace Castle.ActiveRecord
 			{
 				PerformDisposal(sessions, false, true);
 			}
-			else if (FlushAction == FlushAction.Auto)
+			else
 			{
 				PerformDisposal(sessions, true, true);
 			}

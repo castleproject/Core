@@ -31,6 +31,10 @@ namespace Castle.ActiveRecord
 		/// Flush need to be controlled manually. Best choice
 		/// for readonly operations
 		/// </summary>
-		Never
+		Never,
+		/// <summary>
+		/// Determine the flushing behaviour from configuration.
+		/// </summary>
+		Config
 	}
 }

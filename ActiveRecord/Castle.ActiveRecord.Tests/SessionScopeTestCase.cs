@@ -15,7 +15,9 @@
 namespace Castle.ActiveRecord.Tests
 {
 	using System;
+	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Config;
 	using Castle.ActiveRecord.Framework.Scopes;
 	using Castle.ActiveRecord.Tests.Model;
 	using Castle.ActiveRecord.Tests.Model.LazyModel;
@@ -322,6 +324,54 @@ namespace Castle.ActiveRecord.Tests
 				blogs = Blog.FindAll();
 				Assert.AreEqual(0, blogs.Length);
 			}
+		}
+
+		[Test]
+		public void DifferentSessionScopesUseDifferentCaches()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			int blogId = 0;
+
+			using (new SessionScope())
+			{
+				Blog blog = new Blog();
+				blog.Author = "MZY";
+				blog.Name = "FooBar";
+				blog.Save(); // Flushes due to IDENTITY
+				blogId = blog.Id;
+			}
+
+			using (new SessionScope())
+			{
+				Blog blog = Blog.Find(blogId);
+				blog.Name = "FooBarBaz";
+
+				//Assert.AreEqual(FlushMode.Auto, blog.CurrentSession.FlushMode);
+				//Assert.IsTrue(blog.CurrentSession.Transaction.IsActive);
+				Assert.AreEqual(DefaultFlushType.Classic, ActiveRecordStarter.ConfigurationSource.DefaultFlushType);
+
+				// Flushes automatically
+				Assert.AreEqual(1, Blog.FindByProperty("Name", "FooBarBaz").Length);
+			}
+
+			using (new SessionScope())
+			{
+				Blog blog = Blog.Find(blogId);
+				blog.Name = "FooBar";
+
+				using (new SessionScope())
+				{
+					// Not flushed here
+					Assert.AreEqual(0, Blog.FindByProperty("Name", "FooBar").Length);
+				}
+			}
+			// Here it is flushed
+			Assert.AreEqual(1, Blog.FindByProperty("Name", "FooBar").Length);
 		}
 	}
 }

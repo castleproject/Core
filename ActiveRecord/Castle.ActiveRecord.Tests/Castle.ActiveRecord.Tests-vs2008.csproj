@@ -62,7 +62,7 @@
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
@@ -333,6 +333,7 @@
     <Compile Include="Model\Ship.cs" />
     <Compile Include="NestedModelValidation.cs" />
     <Compile Include="Model\NestedValidation\UserWithNestedAddress.cs" />
+    <Compile Include="ScopeDefaultFlushingBehaviourTestCase.cs" />
     <Compile Include="SessionScopeAutoflushTestCase.cs" />
     <Compile Include="Validation\ARValidatorTestCase.cs" />
     <Compile Include="VerifyModelsAgainstDBSchemaTestCase.cs" />

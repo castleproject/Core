@@ -227,6 +227,83 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
+		public void NestedTransactionScopesHaveCorrectTransactionContexts()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
+			Recreate();
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			using (TransactionScope t1 = new TransactionScope())
+			{
+				Blog blog1 = new Blog();
+				Blog.FindAll();
+
+				ISession s1 = blog1.CurrentSession;
+				ITransaction tx1 = s1.Transaction;
+				Assert.IsNotNull(tx1);
+
+				using (TransactionScope t2 = new TransactionScope())
+				{
+					Blog blog2 = new Blog();
+					Blog.FindAll();
+					ISession s2 = blog2.CurrentSession;
+					ITransaction tx2 = s2.Transaction;
+
+					Assert.IsNotNull(tx2);
+					Assert.AreNotSame(tx1, tx2);
+					
+					// TransactionScope uses a new session!
+					// Assert.AreSame(s1, s2);
+				}
+
+				using (TransactionScope t3 = new TransactionScope(TransactionMode.Inherits))
+				{
+					Blog blog3 = new Blog();
+					Blog.FindAll();
+					ITransaction tx3 = blog3.CurrentSession.Transaction;
+
+					Assert.IsNotNull(tx3);
+					Assert.AreSame(tx1, tx3);
+				}
+
+				Assert.IsTrue(tx1.IsActive);
+			}
+
+			using (new SessionScope())
+			{
+				Blog blog4 = new Blog();
+				Blog.FindAll();
+
+				using (new TransactionScope())
+				{
+					Blog blog5 = new Blog();
+
+					Assert.AreSame(blog4.CurrentSession.Transaction, blog5.CurrentSession.Transaction);
+				}
+			}
+
+			using (new SessionScope())
+			{
+				Blog blog6 = new Blog();
+				ISession session = blog6.CurrentSession;
+
+				Assert.IsNotNull(session.Transaction);
+				ITransaction tx4 = session.Transaction;
+				using (ITransaction tx5 = session.BeginTransaction())
+				{
+					Assert.AreSame(tx4, tx5);
+					Blog.FindAll();
+
+					using (ITransaction tx6 = session.BeginTransaction())
+					{
+						Assert.AreSame(tx5, tx6);
+					}
+				}
+			}
+		}
+
+		[Test]
 		public void LotsOfNestedTransactionWithDifferentConfigurations()
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));

@@ -20,6 +20,7 @@ namespace Castle.ActiveRecord
 	using System.Data;
 	using NHibernate;
 	using Castle.ActiveRecord.Framework.Scopes;
+	using Castle.ActiveRecord.Framework;
 
 	/// <summary>
 	/// Defines the transaction scope behavior
@@ -36,7 +37,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		New
 	}
-	
+
 	/// <summary>
 	/// Governs the <see cref="TransactionScope"/> behavior 
 	/// on dispose if neither <see cref="TransactionScope.VoteCommit"/>
@@ -76,7 +77,8 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TransactionScope"/> class.
 		/// </summary>
-		public TransactionScope() : this(TransactionMode.New)
+		public TransactionScope()
+			: this(TransactionMode.New)
 		{
 		}
 
@@ -84,7 +86,8 @@ namespace Castle.ActiveRecord
 		/// Initializes a new instance of the <see cref="TransactionScope"/> class.
 		/// </summary>
 		/// <param name="onDisposeBehavior">The on dispose behavior.</param>
-		public TransactionScope(OnDispose onDisposeBehavior) : this(TransactionMode.New, onDisposeBehavior)
+		public TransactionScope(OnDispose onDisposeBehavior)
+			: this(TransactionMode.New, onDisposeBehavior)
 		{
 		}
 
@@ -92,16 +95,18 @@ namespace Castle.ActiveRecord
 		/// Initializes a new instance of the <see cref="TransactionScope"/> class.
 		/// </summary>
 		/// <param name="mode">Whatever to create a new transaction or inherits an existing one</param>
-		public TransactionScope(TransactionMode mode) : this(mode, IsolationLevel.Unspecified, OnDispose.Commit)
+		public TransactionScope(TransactionMode mode)
+			: this(mode, IsolationLevel.Unspecified, OnDispose.Commit)
 		{
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TransactionScope"/> class.
 		/// </summary>
 		/// <param name="mode">Whatever to create a new transaction or inherits an existing one</param>
 		/// <param name="onDisposeBehavior">The on dispose behavior.</param>
-		public TransactionScope(TransactionMode mode, OnDispose onDisposeBehavior) : this(mode, IsolationLevel.Unspecified, onDisposeBehavior)
+		public TransactionScope(TransactionMode mode, OnDispose onDisposeBehavior)
+			: this(mode, IsolationLevel.Unspecified, onDisposeBehavior)
 		{
 		}
 
@@ -112,7 +117,7 @@ namespace Castle.ActiveRecord
 		/// <param name="isolationLevel">The transaction isolation level.</param>
 		/// <param name="onDisposeBehavior">The on dispose behavior.</param>
 		public TransactionScope(TransactionMode mode, IsolationLevel isolationLevel, OnDispose onDisposeBehavior)
-			: base(FlushAction.Auto, SessionScopeType.Transactional)
+			: base(FlushAction.Config, SessionScopeType.Transactional)
 		{
 			this.mode = mode;
 			this.isolationLevel = isolationLevel;
@@ -131,9 +136,9 @@ namespace Castle.ActiveRecord
 				else
 				{
 					// This is not a safe cast. Reconsider it
-					parentSimpleScope = (AbstractScope) previousScope;
+					parentSimpleScope = (AbstractScope)previousScope;
 
-					foreach(ISession session in parentSimpleScope.GetSessions())
+					foreach (ISession session in parentSimpleScope.GetSessions())
 					{
 						EnsureHasTransaction(session);
 					}
@@ -193,7 +198,7 @@ namespace Castle.ActiveRecord
 		{
 			if (rollbackOnly)
 			{
-				throw new TransactionException("The transaction was marked as rollback " + "only - by itself or one of the nested transactions");
+				throw new NHibernate.TransactionException("The transaction was marked as rollback " + "only - by itself or one of the nested transactions");
 			}
 			setForCommit = true;
 		}
@@ -307,7 +312,10 @@ namespace Castle.ActiveRecord
 		{
 			if (!transactions.ContainsKey(session))
 			{
-				session.FlushMode = FlushMode.Commit;
+				DefaultFlushType mode = ActiveRecordStarter.ConfigurationSource.DefaultFlushType;
+				session.FlushMode = (mode == DefaultFlushType.Auto || mode == DefaultFlushType.Transaction) ?
+					FlushMode.Auto :
+					FlushMode.Commit;
 
 				ITransaction transaction;
 
@@ -352,7 +360,7 @@ namespace Castle.ActiveRecord
 					VoteRollBack();
 				}
 			}
-			
+
 			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
 			{
 				// In this case it's not up to this instance to perform the clean up
@@ -361,7 +369,7 @@ namespace Castle.ActiveRecord
 
 			Exception transactionError = null;
 
-			foreach(ITransaction transaction in transactions.Values)
+			foreach (ITransaction transaction in transactions.Values)
 			{
 				try
 				{
@@ -374,7 +382,7 @@ namespace Castle.ActiveRecord
 						transaction.Commit();
 					}
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					transactionError = ex;
 
@@ -395,18 +403,20 @@ namespace Castle.ActiveRecord
 					// Cancel all pending changes 
 					// (not sure whether this is a good idea, it should be scoped
 
-					foreach(ISession session in parentSimpleScope.GetSessions())
+					foreach (ISession session in parentSimpleScope.GetSessions())
 					{
 						session.Clear();
 					}
 				}
+
+				parentSimpleScope.ResetFlushMode();
 			}
 
 			RaiseOnCompleted();
 
 			if (transactionError != null)
 			{
-				throw new TransactionException("An error occured when trying to dispose the transaction", transactionError);
+				throw new NHibernate.TransactionException("An error occured when trying to dispose the transaction", transactionError);
 			}
 		}
 
@@ -436,7 +446,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		private void RaiseOnCompleted()
 		{
-			EventHandler handler = (EventHandler) events[CompletedEvent];
+			EventHandler handler = (EventHandler)events[CompletedEvent];
 
 			if (handler != null)
 			{

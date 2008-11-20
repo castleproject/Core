@@ -20,6 +20,7 @@ namespace Castle.ActiveRecord.Tests.Config
 	using Castle.ActiveRecord.Framework.Config;
 	using Castle.ActiveRecord.Framework.Scopes;
 	using NUnit.Framework;
+	using System.Configuration;
 
 	[TestFixture]
 	public class ConfigurationSource
@@ -125,6 +126,52 @@ namespace Castle.ActiveRecord.Tests.Config
 			AssertConfig(xmlConfig3, null, null, false, false, false);
 		}
 
+		[Test]
+		public void TestDefaultFlushType()
+		{
+			string xmlConfig;
+			xmlConfig = @"<activerecord>"
+						+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
+
+			AssertConfig(xmlConfig, null, null, false, false, false, DefaultFlushType.Classic);
+
+			xmlConfig = @"<activerecord flush=""classic"">"
+			+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
+
+			AssertConfig(xmlConfig, null, null, false, false, false, DefaultFlushType.Classic);
+
+			xmlConfig = @"<activerecord flush=""auto"">"
+			+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
+
+			AssertConfig(xmlConfig, null, null, false, false, false, DefaultFlushType.Auto);
+
+			xmlConfig = @"<activerecord flush=""leave"">"
+			+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
+
+			AssertConfig(xmlConfig, null, null, false, false, false, DefaultFlushType.Leave);
+
+			xmlConfig = @"<activerecord flush=""transaction"">"
+			+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
+
+			AssertConfig(xmlConfig, null, null, false, false, false, DefaultFlushType.Transaction);
+
+			try
+			{
+				xmlConfig = @"<activerecord flush=""foo"">" + GetDefaultHibernateConfigAndCloseActiveRecordSection();
+				new XmlConfigurationSource(new StringReader(xmlConfig));
+				Assert.Fail("Expected exception not thrown for invalid flush attribute on config");
+			}
+			catch (Exception ex)
+			{
+				Assert.IsInstanceOfType(typeof(ConfigurationErrorsException), ex);
+				Assert.IsTrue(ex.Message.ToLower().Contains("flush"));
+				Assert.IsTrue(ex.Message.ToLower().Contains("foo"));
+				Assert.IsTrue(ex.Message.ToLower().Contains("classic"));
+				Assert.IsTrue(ex.Message.ToLower().Contains("auto"));
+				Assert.IsTrue(ex.Message.ToLower().Contains("leave"));
+				Assert.IsTrue(ex.Message.ToLower().Contains("transaction"));
+			}
+		}
 
 		private static void AssertConfig(string xmlConfig, Type webinfotype, Type sessionFactoryHolderType)
 		{
@@ -133,6 +180,12 @@ namespace Castle.ActiveRecord.Tests.Config
 
 		private static void AssertConfig(string xmlConfig, Type webinfotype, Type sessionFactoryHolderType, bool isDebug,
 										 bool pluralize, bool verifyModelsAgainstDBSchema)
+		{
+			AssertConfig(xmlConfig, webinfotype, sessionFactoryHolderType, isDebug, pluralize, verifyModelsAgainstDBSchema, DefaultFlushType.Classic);
+		}
+
+		private static void AssertConfig(string xmlConfig, Type webinfotype, Type sessionFactoryHolderType, bool isDebug,
+										 bool pluralize, bool verifyModelsAgainstDBSchema, DefaultFlushType defaultFlushType)
 		{
 			StringReader sr = new StringReader(xmlConfig);
 
@@ -153,6 +206,7 @@ namespace Castle.ActiveRecord.Tests.Config
 			Assert.IsTrue(c.Debug == isDebug);
 			Assert.IsTrue(c.PluralizeTableNames == pluralize);
 			Assert.IsTrue(c.VerifyModelsAgainstDBSchema == verifyModelsAgainstDBSchema);
+			Assert.IsTrue(c.DefaultFlushType == defaultFlushType);
 		}
 
 		private static string GetDefaultHibernateConfigAndCloseActiveRecordSection()

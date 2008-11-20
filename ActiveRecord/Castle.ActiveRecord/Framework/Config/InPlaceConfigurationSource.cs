@@ -50,6 +50,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		private bool isLazyByDefault;
 		private bool pluralizeTableNames;
 		private bool verifyModelsAgainstDBSchema;
+		private DefaultFlushType defaultFlushType = DefaultFlushType.Classic;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InPlaceConfigurationSource"/> class.
@@ -147,6 +148,15 @@ namespace Castle.ActiveRecord.Framework.Config
 		{
 			get { return verifyModelsAgainstDBSchema; }
 			set { verifyModelsAgainstDBSchema = value; }
+		}
+
+		/// <summary>
+		/// Determines the default flushing behaviour of scopes.
+		/// </summary>
+		public DefaultFlushType DefaultFlushType
+		{
+			get { return defaultFlushType; }
+			set { defaultFlushType = value; }
 		}
 
 		#endregion
@@ -362,6 +372,15 @@ namespace Castle.ActiveRecord.Framework.Config
 		protected void SetPluralizeTableNames(bool pluralize)
 		{
 			pluralizeTableNames = pluralize;
+		}
+
+		/// <summary>
+		/// Sets the value determining flush behaviour
+		/// </summary>
+		/// <param name="flushType">The chosen default behaviour.</param>
+		protected void SetDefaultFlushType(DefaultFlushType flushType)
+		{
+			defaultFlushType = flushType;
 		}
 
 		private static IConfiguration ConvertToConfiguration(IDictionary<string,string> properties)

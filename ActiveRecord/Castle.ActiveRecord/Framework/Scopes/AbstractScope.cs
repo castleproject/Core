@@ -36,12 +36,6 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		protected IDictionary<object, ISession> key2Session = new Dictionary<object, ISession>();
 
 		/// <summary>
-		/// Map between a key to its session
-		/// </summary>
-		protected IDictionary<ISession, ITransaction> session2DefaultTx = new Dictionary<ISession, ITransaction>();
-
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="AbstractScope"/> class.
 		/// </summary>
 		/// <param name="flushAction">The flush action.</param>
@@ -145,7 +139,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		public virtual ISession GetSession(object key)
 		{
 			ISession session = key2Session[key];
-			if (session != null && FlushAction == FlushAction.Auto)
+			if (session != null && FlushAction != FlushAction.Never)
 				if (session.Transaction == null || !session.Transaction.IsActive)
 					session.BeginTransaction();
 			return key2Session[key];
@@ -173,8 +167,10 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		public virtual ISession OpenSession(ISessionFactory sessionFactory, IInterceptor interceptor)
 		{
 			ISession session = sessionFactory.OpenSession(interceptor);
-
 			SetFlushMode(session);
+
+			if (FlushAction != FlushAction.Never)
+				session.BeginTransaction();
 
 			return session;
 		}
@@ -262,6 +258,25 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			else if (FlushAction == FlushAction.Never)
 			{
 				session.FlushMode = FlushMode.Never;
+			}
+			else if (FlushAction == FlushAction.Config)
+			{
+				DefaultFlushType behaviour = ActiveRecordStarter.ConfigurationSource.DefaultFlushType;
+				session.FlushMode = (behaviour == DefaultFlushType.Classic || behaviour == DefaultFlushType.Auto) ?
+					FlushMode.Auto :
+					FlushMode.Commit;
+			}
+		}
+
+		/// <summary>
+		/// Notifies the scope that an inner scope that changed the flush mode, was
+		/// disposed. The scope should reset the flush mode to its default.
+		/// </summary>
+		protected internal void ResetFlushMode()
+		{
+			foreach (ISession session in GetSessions())
+			{
+				SetFlushMode(session);
 			}
 		}
 
