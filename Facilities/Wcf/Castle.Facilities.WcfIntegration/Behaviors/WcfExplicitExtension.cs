@@ -58,6 +58,10 @@ namespace Castle.Facilities.WcfIntegration
 					operation.Behaviors.Add((IOperationBehavior)extension);
 				}
 			}
+			else if (extension is IContractBehavior)
+			{
+				endpoint.Contract.Behaviors.Add((IContractBehavior)extension);
+			}
 		}
 
 		#endregion

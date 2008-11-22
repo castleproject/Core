@@ -33,6 +33,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			ICollection<IHandler> endpointBehaviors = WcfUtils.FindExtensions<IEndpointBehavior>(kernel, scope);
 			ICollection<IHandler> operationBehaviors = WcfUtils.FindExtensions<IOperationBehavior>(kernel, scope);
+			ICollection<IHandler> contractBehaviors = WcfUtils.FindExtensions<IContractBehavior>(kernel, scope);
 
 			foreach (IHandler handler in endpointBehaviors)
 			{
@@ -46,12 +47,18 @@ namespace Castle.Facilities.WcfIntegration
 					operation.Behaviors.Add((IOperationBehavior)operationHandler.Resolve(CreationContext.Empty));
 				}
 			}
+
+			foreach (IHandler handler in contractBehaviors)
+			{
+				endpoint.Contract.Behaviors.Add((IContractBehavior)handler.Resolve(CreationContext.Empty));
+			}
 		}
 
 		public override void AddDependencies(IKernel kernel, ComponentModel model)
 		{
 			WcfUtils.AddExtensionDependencies<IEndpointBehavior>(kernel, scope, model);
 			WcfUtils.AddExtensionDependencies<IOperationBehavior>(kernel, scope, model);
+			WcfUtils.AddExtensionDependencies<IContractBehavior>(kernel, scope, model);
 		}
 
 		override public void Accept(IWcfExtensionVisitor visitor)

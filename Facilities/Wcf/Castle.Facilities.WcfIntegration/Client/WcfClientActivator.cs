@@ -28,7 +28,7 @@ namespace Castle.Facilities.WcfIntegration
 
 	public class WcfClientActivator : DefaultComponentActivator
 	{
-		private readonly ChannelCreator createChannel;
+		private ChannelCreator createChannel;
 
 		#region ClientChannelBuilder Delegate Fields
 
@@ -53,7 +53,6 @@ namespace Castle.Facilities.WcfIntegration
 			ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 			: base(model, kernel, onCreation, onDestruction)
 		{
-			createChannel = CreateChannelCreator(kernel, model);
 		}
 
 		protected override object InternalCreate(CreationContext context)
@@ -67,7 +66,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected override object Instantiate(CreationContext context)
 		{
-			object instance = createChannel();
+			object instance = CreateChannel();
 
 			try
 			{
@@ -126,9 +125,19 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
+		private object CreateChannel()
+		{
+			if (createChannel == null)
+			{
+				createChannel = CreateChannelCreator(Kernel, Model);
+			}
+
+			return createChannel();
+		}
+
 		private ChannelCreator CreateChannelCreator(IKernel kernel, ComponentModel model)
 		{
-			CreateChannelDelegate createChannel;
+			CreateChannelDelegate createChannelDelegate;
 
 			IWcfClientModel clientModel = ObtainClientModel(model);
 
@@ -138,16 +147,16 @@ namespace Castle.Facilities.WcfIntegration
 
 				Type clientModelType = clientModel.GetType();
 
-				if (!createChannelCache.TryGetValue(clientModelType, out createChannel))
+				if (!createChannelCache.TryGetValue(clientModelType, out createChannelDelegate))
 				{
 					locker.UpgradeToWriterLock(Timeout.Infinite);
 
-					if (!createChannelCache.TryGetValue(clientModelType, out createChannel))
+					if (!createChannelCache.TryGetValue(clientModelType, out createChannelDelegate))
 					{
-						createChannel = (CreateChannelDelegate)
+						createChannelDelegate = (CreateChannelDelegate)
 							Delegate.CreateDelegate(typeof(CreateChannelDelegate),
 								createChannelMethod.MakeGenericMethod(clientModelType));
-						createChannelCache.Add(clientModelType, createChannel);
+						createChannelCache.Add(clientModelType, createChannelDelegate);
 					}
 				}
 			}
@@ -156,7 +165,7 @@ namespace Castle.Facilities.WcfIntegration
 				locker.ReleaseLock();
 			}
 
-			ChannelCreator creator = createChannel(kernel, clientModel, model);
+			ChannelCreator creator = createChannelDelegate(kernel, clientModel, model);
 			model.ExtendedProperties[WcfConstants.ChannelCreatorKey] = creator;
 			return creator;
 		}

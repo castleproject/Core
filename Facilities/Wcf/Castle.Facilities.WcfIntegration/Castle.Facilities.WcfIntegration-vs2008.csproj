@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\AbstractChannelFactoryAware.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Behaviors\AbstractWcfExtension.cs" />
     <Compile Include="Behaviors\ExtensionDependencies.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Behaviors\Logging\LogMessageInspector.cs" />
     <Compile Include="Client\Duplex\DuplexChannelBuilder.cs" />
     <Compile Include="Client\Duplex\DuplexClientModel.cs" />
+    <Compile Include="IChannelFactoryAware.cs" />
     <Compile Include="IWcfExtensionVisitor.cs" />
     <Compile Include="IWcfExtension.cs" />
     <Compile Include="Behaviors\WcfEndpointExtensions.cs" />

@@ -19,7 +19,6 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
-	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 
 	public abstract class AbstractChannelBuilder<M> : AbstractChannelBuilder, IClientChannelBuilder<M>
@@ -119,29 +118,11 @@ namespace Castle.Facilities.WcfIntegration
 
 			ChannelFactory channelFactory = (ChannelFactory)
 				Activator.CreateInstance(type, channelFactoryArgs);
-			channelFactory.Opening += delegate { OnOpening(channelFactory, clientModel); };
-			channelFactory.Closed += delegate { OnClosed(channelFactory, clientModel); };
+			ConfigureChannelFactory(channelFactory, clientModel);
 
 			MethodInfo methodInfo = type.GetMethod("CreateChannel", new Type[0]);
 			return (ChannelCreator)Delegate.CreateDelegate(
 				typeof(ChannelCreator), channelFactory, methodInfo);
-		}
-
-		protected virtual void OnOpening(ChannelFactory channelFactory, M clientModel)
-		{
-			ServiceEndpointExtensions extensions =
-				new ServiceEndpointExtensions(channelFactory.Endpoint, Kernel)
-					.Install(new WcfEndpointExtensions(WcfExtensionScope.Clients));
-
-			if (clientModel != null)
-			{
-				extensions.Install(clientModel.Extensions);
-				extensions.Install(clientModel.Endpoint.Extensions);
-			}
-		}
-
-		protected virtual void OnClosed(ChannelFactory channelFactory, M clientModel)
-		{
 		}
 
 		#endregion

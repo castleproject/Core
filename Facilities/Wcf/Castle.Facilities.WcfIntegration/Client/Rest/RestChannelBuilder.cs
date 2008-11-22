@@ -56,7 +56,7 @@ namespace Castle.Facilities.WcfIntegration.Rest
 
 			ChannelFactory channelFactory = (ChannelFactory)
 				Activator.CreateInstance(type, channelFactoryArgs);
-			channelFactory.Opening += delegate { OnOpening(channelFactory, clientModel); };
+			ConfigureChannelFactory(channelFactory, clientModel);
 
 			MethodInfo methodInfo = type.GetMethod("CreateChannel", new Type[0]);
 			return (ChannelCreator)Delegate.CreateDelegate(

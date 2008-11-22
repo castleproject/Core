@@ -87,6 +87,16 @@ namespace Castle.Facilities.WcfIntegration.Internal
 			serviceHost.Faulted += delegate { serviceHostAware.Faulted(serviceHost); };
 		}
 
+		public static void BindChannelFactoryAware(ChannelFactory channelFactory, IChannelFactoryAware channelFactoryAware, bool created)
+		{
+			if (created) channelFactoryAware.Created(channelFactory);
+			channelFactory.Opening += delegate { channelFactoryAware.Opening(channelFactory); };
+			channelFactory.Opened += delegate { channelFactoryAware.Opened(channelFactory); };
+			channelFactory.Closing += delegate { channelFactoryAware.Closing(channelFactory); };
+			channelFactory.Closed += delegate { channelFactoryAware.Closed(channelFactory); };
+			channelFactory.Faulted += delegate { channelFactoryAware.Faulted(channelFactory); };
+		}
+
 		public static void AddExtensionDependencies<T>(IKernel kernel, WcfExtensionScope scope, ComponentModel model)
 		{
 			foreach (IHandler handler in FindExtensions<T>(kernel, scope))
