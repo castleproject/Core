@@ -262,7 +262,7 @@
 			<exec if="${nunit.found}"
 				program="${nunit-console}" 
 				workingdir="${build.dir}" 
-				commandline="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo"
+				commandline="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo /nothread"
 				failonerror="${common.testrunner.failonerror}"
 			/>
 		</if>

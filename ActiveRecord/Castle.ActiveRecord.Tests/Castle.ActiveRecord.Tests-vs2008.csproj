@@ -330,7 +330,11 @@
     <Compile Include="Model\CompositeUserType\DoubleStringType.cs" />
     <Compile Include="Model\CompositeUserType\ProductPropertyAccess.cs" />
     <Compile Include="Model\EnumModel.cs" />
+    <Compile Include="Model\MultipleDBWithMediator\Author.cs" />
+    <Compile Include="Model\MultipleDBWithMediator\Blog.cs" />
+    <Compile Include="Model\MultipleDBWithMediator\UserDB.cs" />
     <Compile Include="Model\Ship.cs" />
+    <Compile Include="MultipleDBMediatorTest.cs" />
     <Compile Include="NestedModelValidation.cs" />
     <Compile Include="Model\NestedValidation\UserWithNestedAddress.cs" />
     <Compile Include="ScopeDefaultFlushingBehaviourTestCase.cs" />
