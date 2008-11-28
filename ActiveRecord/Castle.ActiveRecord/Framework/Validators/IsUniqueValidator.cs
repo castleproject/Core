@@ -72,11 +72,16 @@ namespace Castle.ActiveRecord.Framework.Validators
 			IsUniqueValidator.fieldValue = fieldValue;
 
 			SessionScope scope = null;
-
+			FlushMode? originalMode = null;
 			if (SessionScope.Current == null ||
-			    SessionScope.Current.ScopeType != SessionScopeType.Transactional)
+				SessionScope.Current.ScopeType != SessionScopeType.Transactional)
 			{
 				scope = new SessionScope();
+			}
+			else
+			{
+				originalMode = ActiveRecordBase.holder.CreateSession(instanceType).FlushMode;
+				ActiveRecordBase.holder.CreateSession(instanceType).FlushMode = FlushMode.Never;
 			}
 
 			try
@@ -88,6 +93,11 @@ namespace Castle.ActiveRecord.Framework.Validators
 				if (scope != null)
 				{
 					scope.Dispose();
+				}
+
+				if (originalMode != null)
+				{
+					ActiveRecordBase.holder.CreateSession(instanceType).FlushMode = originalMode ?? FlushMode.Commit;
 				}
 			}
 		}

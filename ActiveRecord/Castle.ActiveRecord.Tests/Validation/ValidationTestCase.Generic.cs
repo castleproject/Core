@@ -19,6 +19,8 @@ namespace Castle.ActiveRecord.Tests.Validation
 	using System.Globalization;
 	using System.Reflection;
 	using System.Threading;
+	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Config;
 	using Castle.ActiveRecord.Tests.Validation.Model.GenericModel;
 	using NUnit.Framework;
 
@@ -185,6 +187,31 @@ namespace Castle.ActiveRecord.Tests.Validation
 			Assert.AreEqual("Name is currently in use. Please pick up a new Name.", messages[0]);
 
 			blog.Save();
+		}
+
+		[Test]
+		public void IsUniqueDoesNotDeadlockOnAutoflushTransaction()
+		{
+			InPlaceConfigurationSource source = (InPlaceConfigurationSource)GetConfigSource();
+			DefaultFlushType originalType = source.DefaultFlushType;
+			try
+			{
+				ActiveRecordStarter.Initialize(source, typeof(Blog2));
+				Recreate();
+				source.DefaultFlushType = DefaultFlushType.Auto;
+
+				using (new TransactionScope())
+				{
+					Blog2.DeleteAll();
+					Blog2 blog = new Blog2();
+					blog.Name = "FooBar";
+					blog.Save();
+				}
+			}
+			finally
+			{
+				source.DefaultFlushType = originalType;
+			}
 		}
 
 		[Test]
