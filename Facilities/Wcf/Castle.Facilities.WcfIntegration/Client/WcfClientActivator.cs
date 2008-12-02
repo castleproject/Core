@@ -165,17 +165,19 @@ namespace Castle.Facilities.WcfIntegration
 				locker.ReleaseLock();
 			}
 
-			ChannelCreator creator = createChannelDelegate(kernel, clientModel, model);
-			model.ExtendedProperties[WcfConstants.ChannelCreatorKey] = creator;
-			return creator;
+			return createChannelDelegate(kernel, clientModel, model);
 		}
 
-		internal static ChannelCreator CreateChannelCreatorInternal<M>(
+		private static ChannelCreator CreateChannelCreatorInternal<M>(
 			IKernel kernel, IWcfClientModel clientModel, ComponentModel model)
 			where M : IWcfClientModel
 		{
+			IWcfBurden burden;
 			IClientChannelBuilder<M> channelBuilder = kernel.Resolve<IClientChannelBuilder<M>>();
-			return channelBuilder.GetChannelCreator((M) clientModel, model.Service);
+			ChannelCreator creator = channelBuilder.GetChannelCreator((M) clientModel, model.Service, out burden);
+			model.ExtendedProperties[WcfConstants.ChannelCreatorKey] = creator;
+			model.ExtendedProperties[WcfConstants.ClientBurdenKey] = burden;
+			return creator;
 		}
 	}
 }

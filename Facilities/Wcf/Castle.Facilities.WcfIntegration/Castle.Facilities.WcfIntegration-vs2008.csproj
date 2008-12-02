@@ -64,6 +64,7 @@
       <HintPath>..\..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -79,12 +80,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\AbstractExtensibleObject.cs" />
+    <Compile Include="Behaviors\AbstractExtension.cs" />
+    <Compile Include="Behaviors\Lifecyle\AbstractMessageBodyAction.cs" />
+    <Compile Include="Behaviors\Lifecyle\IMessageLifecyleAction.cs" />
+    <Compile Include="Behaviors\Lifecyle\IMessageBodyAction.cs" />
+    <Compile Include="Behaviors\Lifecyle\IMessageAction.cs" />
+    <Compile Include="Behaviors\Lifecyle\MessageLifecycle.cs" />
+    <Compile Include="Behaviors\Lifecyle\MessageLifecycleBehavior.cs" />
+    <Compile Include="Behaviors\Lifecyle\AbstractMessageAction.cs" />
+    <Compile Include="Behaviors\WcfBehaviorActivator.cs" />
     <Compile Include="Client\AbstractChannelFactoryAware.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Behaviors\AbstractWcfExtension.cs" />
     <Compile Include="Behaviors\ExtensionDependencies.cs" />
     <Compile Include="Behaviors\Logging\AbstractMessageFormatter.cs" />
-    <Compile Include="Behaviors\Logging\LogMessageFormatBehavior.cs" />
+    <Compile Include="Behaviors\Logging\LogMessageFormat.cs" />
     <Compile Include="Behaviors\Logging\CustomMessageFormatter.cs" />
     <Compile Include="Behaviors\Logging\LogMessageEndpointBehavior.cs" />
     <Compile Include="Client\AbstractChannelBuilder.Generic.cs" />
@@ -94,13 +105,15 @@
     <Compile Include="Client\Duplex\DuplexChannelBuilder.cs" />
     <Compile Include="Client\Duplex\DuplexClientModel.cs" />
     <Compile Include="IChannelFactoryAware.cs" />
+    <Compile Include="Internal\WcfCommunicationDecommisionConcern.cs" />
+    <Compile Include="IWcfBurden.cs" />
+    <Compile Include="Internal\WcfExtensionHelper.cs" />
     <Compile Include="IWcfExtensionVisitor.cs" />
     <Compile Include="IWcfExtension.cs" />
     <Compile Include="Behaviors\WcfEndpointExtensions.cs" />
     <Compile Include="Behaviors\WcfExtensionScope.cs" />
     <Compile Include="Client\Rest\RestChannelBuilder.cs" />
     <Compile Include="Client\Rest\RestClientModel.cs" />
-    <Compile Include="Internal\WcfCommunicationDecommisionConcern.cs" />
     <Compile Include="Client\Default\DefaultChannelBuilder.cs" />
     <Compile Include="Client\WcfManagedChannelInterceptor.cs" />
     <Compile Include="Client\WcfClient.cs" />
@@ -128,6 +141,8 @@
     <Compile Include="Service\Rest\RestServiceHost.cs" />
     <Compile Include="Service\Rest\RestServiceHostBuilder.cs" />
     <Compile Include="Service\Rest\RestServiceModel.cs" />
+    <Compile Include="Internal\WcfBurden.cs" />
+    <Compile Include="Service\ServiceHostBurden.cs" />
     <Compile Include="Service\ServiceHostExtensions.cs" />
     <Compile Include="Service\WindsorServiceHostFactory.cs" />
     <Compile Include="Behaviors\WcfExplicitExtension.cs" />

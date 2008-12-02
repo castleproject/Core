@@ -150,12 +150,12 @@ namespace Castle.Facilities.WcfIntegration
 
 		public T LogMessages(IFormatProvider formatter, string format)
 		{
-			return LogMessages().AddExtensions(new LogMessageFormatBehavior(formatter, format));
+			return LogMessages().AddExtensions(new LogMessageFormat(formatter, format));
 		}
 
 		public T LogMessages(string format)
 		{
-			return LogMessages().AddExtensions(new LogMessageFormatBehavior(format));
+			return LogMessages().AddExtensions(new LogMessageFormat(format));
 		}
 
 		#endregion

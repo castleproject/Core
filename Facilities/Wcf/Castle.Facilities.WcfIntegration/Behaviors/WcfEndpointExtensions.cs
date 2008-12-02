@@ -14,7 +14,6 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System.Collections.Generic;
 	using System.ServiceModel.Description;
 	using Castle.Core;
 	using Castle.Facilities.WcfIntegration.Internal;
@@ -29,36 +28,22 @@ namespace Castle.Facilities.WcfIntegration
 			this.scope = scope;
 		}
 
-		public void Install(ServiceEndpoint endpoint, IKernel kernel)
+		public void Install(ServiceEndpoint endpoint, IKernel kernel, IWcfBurden burden)
 		{
-			ICollection<IHandler> endpointBehaviors = WcfUtils.FindExtensions<IEndpointBehavior>(kernel, scope);
-			ICollection<IHandler> operationBehaviors = WcfUtils.FindExtensions<IOperationBehavior>(kernel, scope);
-			ICollection<IHandler> contractBehaviors = WcfUtils.FindExtensions<IContractBehavior>(kernel, scope);
-
-			foreach (IHandler handler in endpointBehaviors)
-			{
-				endpoint.Behaviors.Add((IEndpointBehavior)handler.Resolve(CreationContext.Empty));
-			}
+			WcfUtils.AddBehaviors(kernel, scope, endpoint.Behaviors, burden);
+			WcfUtils.AddBehaviors(kernel, scope, endpoint.Contract.Behaviors, burden);
 
 			foreach (OperationDescription operation in endpoint.Contract.Operations)
 			{
-				foreach (IHandler operationHandler in operationBehaviors)
-				{
-					operation.Behaviors.Add((IOperationBehavior)operationHandler.Resolve(CreationContext.Empty));
-				}
-			}
-
-			foreach (IHandler handler in contractBehaviors)
-			{
-				endpoint.Contract.Behaviors.Add((IContractBehavior)handler.Resolve(CreationContext.Empty));
+                WcfUtils.AddBehaviors(kernel, scope, operation.Behaviors, burden);
 			}
 		}
 
 		public override void AddDependencies(IKernel kernel, ComponentModel model)
 		{
 			WcfUtils.AddExtensionDependencies<IEndpointBehavior>(kernel, scope, model);
-			WcfUtils.AddExtensionDependencies<IOperationBehavior>(kernel, scope, model);
 			WcfUtils.AddExtensionDependencies<IContractBehavior>(kernel, scope, model);
+			WcfUtils.AddExtensionDependencies<IOperationBehavior>(kernel, scope, model);
 		}
 
 		override public void Accept(IWcfExtensionVisitor visitor)

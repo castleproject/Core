@@ -12,28 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Behaviors
 {
-	/// <summary>
-	/// Determines how a global extension will be applied.
-	/// </summary>
-	public enum WcfExtensionScope
+	using System.ServiceModel;
+
+	public abstract class AbstractExtensibleObject<T> : IExtensibleObject<T>
+		where T : AbstractExtensibleObject<T>
 	{
-		/// <summary>
-		/// Undefined.
-		/// </summary>
-		Undefined,
-		/// <summary>
-		/// Only apply to client endpoints.
-		/// </summary>
-		Clients,
-		/// <summary>
-		/// Only apply to service hosts.
-		/// </summary>
-		Services,
-		/// <summary>
-		/// Do not apply automatically.
-		/// </summary>
-		Explicit
+		private readonly ExtensionCollection<T> extensions;
+		private readonly object guard = new object();
+
+		protected AbstractExtensibleObject()
+        {
+			extensions = new ExtensionCollection<T>((T)this, guard);
+        }
+
+		public IExtensionCollection<T> Extensions
+		{
+			get { return extensions; }
+		}
 	}
 }

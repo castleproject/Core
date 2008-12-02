@@ -12,28 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Behaviors
 {
 	/// <summary>
-	/// Determines how a global extension will be applied.
+	/// Basic contract for performing message lifecyle actions.
 	/// </summary>
-	public enum WcfExtensionScope
+	public interface IMessageLifecyleAction
 	{
 		/// <summary>
-		/// Undefined.
+		/// Gets the execution order.
 		/// </summary>
-		Undefined,
+		int ExecutionOrder { get; }
+
 		/// <summary>
-		/// Only apply to client endpoints.
+		/// Determines if the action should be performed.
 		/// </summary>
-		Clients,
-		/// <summary>
-		/// Only apply to service hosts.
-		/// </summary>
-		Services,
-		/// <summary>
-		/// Do not apply automatically.
-		/// </summary>
-		Explicit
+		/// <param name="lifecycle">The lifecycle stage.</param>
+		/// <returns>true if action should be performed.</returns>
+		bool ShouldPerform(MessageLifecycle lifecycle);
 	}
 }

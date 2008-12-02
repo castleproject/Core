@@ -14,7 +14,6 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System.Collections.Generic;
 	using System.ServiceModel;
 	using System.ServiceModel.Description;
 	using Castle.Core;
@@ -23,10 +22,10 @@ namespace Castle.Facilities.WcfIntegration
 
 	internal class WcfServiceExtensions : AbstractWcfExtension, IWcfServiceExtension
 	{
-		public void Install(ServiceHost serviceHost, IKernel kernel)
+		public void Install(ServiceHost serviceHost, IKernel kernel, IWcfBurden burden)
 		{
-			BindServiceHostAware(serviceHost, kernel);
-			AddServiceBehaviors(serviceHost, kernel);
+			BindServiceHostAware(serviceHost, kernel, burden);
+			AddServiceBehaviors(serviceHost, kernel, burden);
 		}
 
 		public override void AddDependencies(IKernel kernel, ComponentModel model)
@@ -39,34 +38,27 @@ namespace Castle.Facilities.WcfIntegration
 			visitor.VisitServiceExtension(this);
 		}
 
-		private void AddServiceBehaviors(ServiceHost serviceHost, IKernel kernel)
+		private void AddServiceBehaviors(ServiceHost serviceHost, IKernel kernel, IWcfBurden burden)
 		{
-			ICollection<IHandler> serviceBehaviors = WcfUtils.FindExtensions<IServiceBehavior>(
-				kernel, WcfExtensionScope.Services);
-
-			ServiceDescription description = serviceHost.Description;
-
-			foreach (IHandler handler in serviceBehaviors)
-			{
-				if (handler.ComponentModel.Implementation == typeof(ServiceDebugBehavior))
+			WcfUtils.AddBehaviors(kernel, WcfExtensionScope.Services,
+				serviceHost.Description.Behaviors, burden, delegate(IServiceBehavior behavior)
 				{
-					description.Behaviors.Remove<ServiceDebugBehavior>();
-				}
-
-				description.Behaviors.Add((IServiceBehavior)handler.Resolve(CreationContext.Empty));
-			}
+					if (behavior.GetType() == typeof(ServiceDebugBehavior))
+					{
+						serviceHost.Description.Behaviors.Remove<ServiceDebugBehavior>();
+					}
+					return true;
+				});
 		}
 
-		private void BindServiceHostAware(ServiceHost serviceHost, IKernel kernel)
+		private void BindServiceHostAware(ServiceHost serviceHost, IKernel kernel, IWcfBurden burden)
 		{
-			ICollection<IHandler> serviceHostAwares = WcfUtils.FindExtensions<IServiceHostAware>(
-				kernel, WcfExtensionScope.Services);
-
-			foreach (IHandler handler in serviceHostAwares)
-			{
-				IServiceHostAware serviceHostAware = (IServiceHostAware)handler.Resolve(CreationContext.Empty);
-				WcfUtils.BindServiceHostAware(serviceHost, serviceHostAware, true);
-			}
+            WcfUtils.AddBehaviors<IServiceHostAware>(kernel, WcfExtensionScope.Services, null, burden,
+				delegate(IServiceHostAware serviceHostAware)
+				{
+					WcfUtils.BindServiceHostAware(serviceHost, serviceHostAware, true);
+					return true;
+				});
 		}
 	}
 }

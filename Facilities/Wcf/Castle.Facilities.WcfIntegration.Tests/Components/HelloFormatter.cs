@@ -10,4 +10,11 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			return "Hello";
 		}
 	}
+
+	public class HelloMessageFormat : LogMessageFormat
+	{
+		public HelloMessageFormat() : base(new HelloFormatter(), "")
+		{
+		}
+	}
 }

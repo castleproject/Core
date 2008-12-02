@@ -23,6 +23,7 @@ namespace Castle.Facilities.WcfIntegration
 	{
 		private readonly ServiceEndpoint endpoint;
 		private readonly IKernel kernel;
+		private IWcfBurden burden;
 
 		public ServiceEndpointExtensions(ServiceEndpoint endpoint, IKernel kernel)
 		{
@@ -30,18 +31,22 @@ namespace Castle.Facilities.WcfIntegration
 			this.kernel = kernel;
 		}
 
-		public ServiceEndpointExtensions Install(ICollection<IWcfExtension> extensions)
+		public ServiceEndpointExtensions Install(ICollection<IWcfExtension> extensions, 
+			                                     IWcfBurden burden)
 		{
+			this.burden = burden;
+
 			foreach (IWcfExtension extension in extensions)
 			{
 				extension.Accept(this);
 			}
+
 			return this;
 		}
 
-		public ServiceEndpointExtensions Install(params IWcfExtension[] extensions)
+		public ServiceEndpointExtensions Install(IWcfBurden burden, params IWcfExtension[] extensions)
 		{
-			return Install((ICollection<IWcfExtension>)extensions);
+			return Install((ICollection<IWcfExtension>)extensions, burden);
 		}
 
 		#region IWcfExtensionVisitor Members
@@ -52,7 +57,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		void IWcfExtensionVisitor.VisitEndpointExtension(IWcfEndpointExtension extension)
 		{
-			extension.Install(endpoint, kernel);
+			extension.Install(endpoint, kernel, burden);
 		}
 
 		#endregion

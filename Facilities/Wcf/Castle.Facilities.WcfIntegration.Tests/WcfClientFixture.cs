@@ -418,6 +418,40 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
+		public void CanCaptureRequestsAndResponsesUsingFormatExtension()
+		{
+			windsorContainer.Register(
+				Component.For<HelloMessageFormat>(),
+				Component.For<LogMessageEndpointBehavior>()
+					.Named("logMessageBehavior"),
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			Assert.AreEqual(42, client.GetValueFromConstructor());
+			Assert.AreEqual(4, memoryAppender.GetEvents().Length);
+
+			int i = 0;
+			foreach (LoggingEvent log in memoryAppender.GetEvents())
+			{
+				Assert.AreEqual(typeof(IOperations).FullName, log.LoggerName);
+				Assert.IsTrue(log.Properties.Contains("NDC"));
+
+				if ((++i % 2) == 0)
+				{
+					Assert.AreEqual("Hello", log.RenderedMessage);
+				}
+			}
+		}
+
+		[Test]
 		public void CanCaptureRequestsAndResponsesUsingExplicitFormatter()
 		{
 			windsorContainer.Register(
@@ -450,6 +484,162 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					Assert.AreEqual("Hello", log.RenderedMessage);
 				}
 			}
+		}
+
+		[Test]
+		public void CanAddMessageHeader()
+		{
+			windsorContainer.Register(
+				Component.For<MessageLifecycleBehavior>(),
+				Component.For<LogMessageEndpointBehavior>()
+					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit)),
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+							.AddExtensions(new AddOperationsHeader("MyHeader", "Hello"))
+							.LogMessages()
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			Assert.AreEqual(42, client.GetValueFromConstructor());
+
+			int i = 0;
+			foreach (LoggingEvent log in memoryAppender.GetEvents())
+			{
+				if ((++i % 2) == 0)
+				{
+					Assert.IsTrue(log.RenderedMessage.Contains("<MyHeader>Hello</MyHeader>"));
+				}
+			}
+		}
+
+		[Test]
+		public void CanModifyRequestAndResponseBody()
+		{
+			windsorContainer.Register(
+				Component.For<MessageLifecycleBehavior>(),
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+							.AddExtensions(new ReplaceOperationsResult("100"))
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			Assert.AreEqual(100, client.GetValueFromConstructor());
+		}
+
+		[Test]
+		public void WillUseSameXmlDocumentForConsecutiveModifications()
+		{
+			StoreMessageBody start = new StoreMessageBody(MessageLifecycle.Requests);
+			StoreMessageBody end = new StoreMessageBody(MessageLifecycle.Requests);
+
+			windsorContainer.Register(
+				Component.For<MessageLifecycleBehavior>(),
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+							.AddExtensions(start, new ReplaceOperationsResult("100").ExecuteAt(1),
+										   new ReplaceOperationsResult("200").ExecuteAt(2),
+										   end)
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			Assert.AreEqual(200, client.GetValueFromConstructor());
+			Assert.IsNotNull(start.Body);
+			Assert.AreSame(start.Body, end.Body);
+		}
+
+		[Test]
+		public void CanModifyRequestAndResponseBodyAndAddHeaders()
+		{
+			windsorContainer.Register(
+				Component.For<MessageLifecycleBehavior>(),
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+							.AddExtensions(new ReplaceOperationsResult("100"),
+										   new AddOperationsHeader("MyHeader", "Hello"))
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			Assert.AreEqual(100, client.GetValueFromConstructor());
+
+			int i = 0;
+			foreach (LoggingEvent log in memoryAppender.GetEvents())
+			{
+				if ((++i % 2) == 0)
+				{
+					Assert.IsTrue(log.RenderedMessage.Contains("<MyHeader>Hello</MyHeader>"));
+				}
+			}
+		}
+
+		[Test]
+		public void WillCreateNewXmlDocumentForNormalActions()
+		{
+			StoreMessageBody start = new StoreMessageBody(MessageLifecycle.Requests);
+			StoreMessageBody end = new StoreMessageBody(MessageLifecycle.Requests);
+
+			windsorContainer.Register(
+				Component.For<MessageLifecycleBehavior>(),
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+							.AddExtensions(start, new ReplaceOperationsResult("100").ExecuteAt(1),
+										   new ReplaceOperationsResult("200").ExecuteAt(2), 
+										   new AddOperationsHeader("MyHeader", "Hello"),
+										   end)
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			Assert.AreEqual(200, client.GetValueFromConstructor());
+			Assert.IsNotNull(start.Body);
+			Assert.IsNotNull(end.Body);
+			Assert.AreNotSame(start.Body, end.Body);
+		}
+
+		[Test]
+		public void WillReleaseAllExtensionsWhenUnregistered()
+		{
+			windsorContainer.Register(
+				Component.For<MessageLifecycleBehavior>(),
+				Component.For<IOperations>()
+				.Named("operations")
+				.ActAs(new DefaultClientModel()
+				{
+					Endpoint = WcfEndpoint
+						.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+						.At("net.tcp://localhost/Operations")
+				})
+			);
+			windsorContainer.Resolve<IOperations>("operations");
+			windsorContainer.Kernel.RemoveComponent("operations");
 		}
 
         protected void RegisterLoggingFacility(IWindsorContainer container)

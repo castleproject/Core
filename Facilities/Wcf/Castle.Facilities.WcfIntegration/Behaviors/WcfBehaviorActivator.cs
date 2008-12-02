@@ -14,24 +14,29 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System.ServiceModel;
-	using System.ServiceModel.Description;
 	using Castle.Core;
+	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.ComponentActivator;
+	using Castle.MicroKernel.Proxy;
 
-	public interface IWcfExtension
+	public class WcfBehaviorActivator : DefaultComponentActivator
 	{
-		void Accept(IWcfExtensionVisitor visitor);
-		void AddDependencies(IKernel kernel, ComponentModel model);
-	}
+		public WcfBehaviorActivator(ComponentModel model, IKernel kernel,
+			ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
+			: base(model, kernel, onCreation, onDestruction)
+		{
+		}
 
-	public interface IWcfServiceExtension : IWcfExtension
-	{
-		void Install(ServiceHost serviceHost, IKernel kernel, IWcfBurden burden);
-	}
+		protected override object Instantiate(CreationContext context)
+		{
+			object instance = base.Instantiate(context);
 
-	public interface IWcfEndpointExtension : IWcfExtension
-	{
-		void Install(ServiceEndpoint endpoint, IKernel kernel, IWcfBurden burden);
+			object behavior = ProxyUtil.GetUnproxiedInstance(instance);
+			WcfExtensionScope scope = WcfUtils.GetScope(Model);
+			WcfUtils.ExtendBehavior(Kernel, scope, behavior);
+
+			return instance;
+		}
 	}
 }

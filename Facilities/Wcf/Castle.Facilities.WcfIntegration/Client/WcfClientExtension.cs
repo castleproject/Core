@@ -33,6 +33,7 @@ namespace Castle.Facilities.WcfIntegration
 
 			kernel.AddComponent<WcfManagedChannelInterceptor>();
 			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
+			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
 		}
 
 		public WcfClientExtension AddChannelBuilder<T, M>()
@@ -60,6 +61,13 @@ namespace Castle.Facilities.WcfIntegration
 					.Apply(clientModel.Extensions)
 					.Apply(clientModel.Endpoint.Extensions);
 			}
+		}
+
+		private void Kernel_ComponentUnregistered(string key, IHandler handler)
+		{
+			ComponentModel model = handler.ComponentModel;
+			IWcfBurden burden = model.ExtendedProperties[WcfConstants.ClientBurdenKey] as IWcfBurden;
+			if (burden != null) burden.Release(kernel);
 		}
 
 		private void AddDefaultChannelBuilders()

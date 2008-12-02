@@ -15,7 +15,6 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
@@ -38,18 +37,19 @@ namespace Castle.Facilities.WcfIntegration
 			get { return kernel; }
 		}
 
-		protected void ConfigureChannelFactory(ChannelFactory channelFactory, IWcfClientModel clientModel)
+		protected void ConfigureChannelFactory(ChannelFactory channelFactory, IWcfClientModel clientModel,
+											   IWcfBurden burden)
 		{
-			BindChannelFactoryAware(channelFactory, kernel);
+			BindChannelFactoryAware(channelFactory, kernel, burden);
 
 			ServiceEndpointExtensions extensions =
-				new ServiceEndpointExtensions(channelFactory.Endpoint, Kernel)
-			.Install(new WcfEndpointExtensions(WcfExtensionScope.Clients));
+				new ServiceEndpointExtensions(channelFactory.Endpoint, kernel)
+			.Install(burden, new WcfEndpointExtensions(WcfExtensionScope.Clients));
 
 			if (clientModel != null)
 			{
-				extensions.Install(clientModel.Extensions);
-				extensions.Install(clientModel.Endpoint.Extensions);
+				extensions.Install(clientModel.Extensions, burden);
+				extensions.Install(clientModel.Endpoint.Extensions, burden);
 			}
 		}
 
@@ -65,16 +65,14 @@ namespace Castle.Facilities.WcfIntegration
 			return channelCreator;
 		}
 
-		private void BindChannelFactoryAware(ChannelFactory channelFactory, IKernel kernel)
+		private void BindChannelFactoryAware(ChannelFactory channelFactory, IKernel kernel, IWcfBurden burden)
 		{
-			ICollection<IHandler> channelFactoryAwares = WcfUtils.FindExtensions<IChannelFactoryAware>(
-				kernel, WcfExtensionScope.Clients);
-
-			foreach (IHandler handler in channelFactoryAwares)
-			{
-				IChannelFactoryAware channelFactoryAware = (IChannelFactoryAware)handler.Resolve(CreationContext.Empty);
-				WcfUtils.BindChannelFactoryAware(channelFactory, channelFactoryAware, true);
-			}
+			WcfUtils.AddBehaviors<IChannelFactoryAware>(kernel, WcfExtensionScope.Clients, null, burden,
+				delegate(IChannelFactoryAware channelFactoryAware)
+				{
+					WcfUtils.BindChannelFactoryAware(channelFactory, channelFactoryAware, true);
+					return true;
+				});
 		}
 
 		protected abstract ChannelCreator GetChannel(Type contract);

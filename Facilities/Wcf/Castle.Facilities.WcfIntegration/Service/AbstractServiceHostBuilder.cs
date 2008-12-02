@@ -43,23 +43,40 @@ namespace Castle.Facilities.WcfIntegration
 				new WindsorDependencyInjectionServiceBehavior(kernel, model)
 				);
 
-			if (serviceModel != null)
+			ServiceHostBurden burden = new ServiceHostBurden();
+			serviceHost.Extensions.Add(burden);
+
+			Dictionary<IWcfEndpoint, ServiceEndpoint> endpoints = null;
+
+			if (serviceModel != null && serviceModel.Endpoints.Count > 0)
 			{
+				endpoints = new Dictionary<IWcfEndpoint, ServiceEndpoint>();
+				ServiceEndpointBuilder builder = new ServiceEndpointBuilder(this, serviceHost);
+
 				foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
 				{
-					AddServiceEndpoint(serviceHost, endpoint);
+					endpoints.Add(endpoint, builder.AddServiceEndpoint(endpoint));
 				}
 			}
 
 			ServiceHostExtensions extensions = new ServiceHostExtensions(serviceHost, kernel)
-				.Install(new WcfServiceExtensions());
+				.Install(burden, new WcfServiceExtensions());
 
 			if (serviceModel != null)
 			{
-				extensions.Install(serviceModel.Extensions);
+				extensions.Install(serviceModel.Extensions, burden);
 			}
 
-			extensions.Install(new WcfEndpointExtensions(WcfExtensionScope.Services));
+			extensions.Install(burden, new WcfEndpointExtensions(WcfExtensionScope.Services));
+
+			if (endpoints != null)
+			{
+				foreach (KeyValuePair<IWcfEndpoint, ServiceEndpoint> endpoint in endpoints)
+				{
+					new ServiceEndpointExtensions(endpoint.Value, kernel)
+						.Install(endpoint.Key.Extensions, burden);
+				}
+			}
 
 			if (serviceHost is IWcfServiceHost)
 			{
@@ -68,23 +85,14 @@ namespace Castle.Facilities.WcfIntegration
 				{
 					ServiceEndpointExtensions endpointExtensions =
 						new ServiceEndpointExtensions(e.Endpoint, kernel)
-						.Install(new WcfEndpointExtensions(WcfExtensionScope.Services));
+						.Install(burden, new WcfEndpointExtensions(WcfExtensionScope.Services));
 
 					if (serviceModel != null)
 					{
-						endpointExtensions.Install(serviceModel.Extensions);
+						endpointExtensions.Install(serviceModel.Extensions, burden);
 					}
 				};
 			}
-		}
-
-		protected ServiceEndpoint AddServiceEndpoint(ServiceHost service, IWcfEndpoint endpoint)
-		{
-			ServiceEndpoint serviceEndpoint = new ServiceEndpointBuilder(this, service)
-				.AddServiceEndpoint(endpoint);
-			new ServiceEndpointExtensions(serviceEndpoint, kernel)
-				.Install(endpoint.Extensions);
-			return serviceEndpoint;
 		}
 
 		protected Uri[] GetEffectiveBaseAddresses(IWcfServiceModel serviceModel, Uri[] defaultBaseAddresses)

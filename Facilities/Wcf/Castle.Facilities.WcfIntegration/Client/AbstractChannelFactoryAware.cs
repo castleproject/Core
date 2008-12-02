@@ -14,13 +14,11 @@
 
 namespace Castle.Facilities.WcfIntegration.Client
 {
-	using System;
 	using System.ServiceModel;
 
 	/// <summary>
 	/// Abstarct implementation of <see cref="IChannelFactoryAware"/>
 	/// </summary>
-	[CLSCompliant(true)]
 	public abstract class AbstractChannelFactoryAware : IChannelFactoryAware
 	{
 		/// <inheritdoc />

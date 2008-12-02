@@ -10,17 +10,17 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License.;
+// limitations under the License.
 
 namespace Castle.Facilities.WcfIntegration.Internal
 {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Configuration;
 	using System.ServiceModel;
 	using Castle.Core;
 	using Castle.MicroKernel;
-	using System.ServiceModel.Description;
 
 	internal static class WcfUtils
 	{
@@ -29,52 +29,156 @@ namespace Castle.Facilities.WcfIntegration.Internal
 			return serviceModel.IsHosted;
 		}
 
-		public static IEnumerable<T> FindDependencies<T>(IDictionary dependencies)
+		public static WcfExtensionScope GetScope(ComponentModel model)
+        {
+			string scopeAttrib = model.Configuration.Attributes[WcfConstants.ExtensionScopeKey];
+			if (!string.IsNullOrEmpty(scopeAttrib))
+			{
+				switch (scopeAttrib.ToLower())
+				{
+					case "clients":
+						return WcfExtensionScope.Clients;
+					case "services":
+						return WcfExtensionScope.Services;
+					case "explicit":
+						return WcfExtensionScope.Explicit;
+					default:
+						const string message = @"The attribute 'scope' must be 'clients', 'services' or 'explicit'";
+						throw new ConfigurationErrorsException(message);
+				}				
+			}
+			return WcfExtensionScope.Undefined;
+        }
+
+		public static void AddBehaviors<T>(IKernel kernel, WcfExtensionScope scope,
+										   KeyedByTypeCollection<T> behaviors, IWcfBurden burden)
 		{
-			return FindDependencies<T>(dependencies, null);
+			AddBehaviors(kernel, scope, behaviors, burden, null);
 		}
 
-		public static IEnumerable<T> FindDependencies<T>(IDictionary dependencies, 
-			                                             Predicate<T> test)
+		public static void AddBehaviors<T>(IKernel kernel, WcfExtensionScope scope,
+										   KeyedByTypeCollection<T> behaviors, IWcfBurden burden,
+										   Predicate<T> predicate)
 		{
-			foreach (object dependency in dependencies.Values)
+			foreach (IHandler handler in FindExtensions<T>(kernel, scope))
 			{
-				if (dependency is T)
+				T behavior = (T)handler.Resolve(CreationContext.Empty);
+				if (predicate == null || predicate(behavior))
 				{
-					T candidate = (T)dependency;
-
-					if (test == null || test(candidate))
-					{
-						yield return candidate;
-					}
-				}
-				else if (dependency is IEnumerable<T>)
-				{
-					foreach (T item in (IEnumerable<T>)dependency)
-					{
-						yield return item;
-					}
+					if (behaviors != null) behaviors.Add(behavior);
+					if (burden != null) burden.Add(behavior);
 				}
 			}
 		}
 
-		public static ICollection<IHandler> FindExtensions<T>(IKernel kernel, WcfExtensionScope scope)
+		public static void ExtendBehavior(IKernel kernel, WcfExtensionScope scope, object behavior)
 		{
-			List<IHandler> handlers = new List<IHandler>();
-			foreach (IHandler handler in kernel.GetAssignableHandlers(typeof(T)))
+			Type type = behavior.GetType();
+			Type extensibleType = type.GetInterface(typeof(IExtensibleObject<>).FullName);
+			if (extensibleType != null)
+			{
+				Type extensionType = typeof(IExtension<>).MakeGenericType(type);
+				foreach (IHandler extHandler in FindExtensions(kernel, scope, extensionType))
+				{
+					object extension = extHandler.Resolve(CreationContext.Empty);
+					AttachExtension(behavior, extension);
+				}
+			}
+		}
+
+		public static IEnumerable<IHandler> FindExtensions<T>(IKernel kernel, WcfExtensionScope scope)
+		{
+			return FindExtensions(kernel, scope, typeof(T));
+		}
+
+		public static IEnumerable<IHandler> FindExtensions(IKernel kernel, WcfExtensionScope scope, Type type)
+		{
+			foreach (IHandler handler in kernel.GetAssignableHandlers(type))
 			{
 				ComponentModel model = handler.ComponentModel;
 				if (model.Configuration != null)
 				{
-					string scopeAttrib = model.Configuration.Attributes[WcfConstants.ExtensionScopeKey];
-					if (string.IsNullOrEmpty(scopeAttrib) ||
-						scopeAttrib.Equals(scope.ToString(), StringComparison.InvariantCultureIgnoreCase))
+					WcfExtensionScope modelScope = GetScope(model);
+					if (scope == modelScope || scope == WcfExtensionScope.Undefined 
+						|| modelScope == WcfExtensionScope.Undefined) 
 					{
-						handlers.Add(handler);
+						yield return handler;
 					}
 				}
 			}
-			return handlers;
+		}
+
+		public static void AddExtensionDependencies<T>(IKernel kernel, WcfExtensionScope scope, ComponentModel model)
+		{
+			foreach (IHandler handler in FindExtensions<T>(kernel, scope))
+			{
+				AddExtensionDependency(null, handler.ComponentModel.Service, model);
+			}
+		}
+
+		public static void AddExtensionDependency(string dependencyKey, Type serviceType, ComponentModel model)
+		{
+			model.Dependencies.Add(new DependencyModel(DependencyType.Service, dependencyKey, serviceType, false));
+		}
+
+		public static bool IsExtension<T>(object extension)
+		{
+			Type owner = typeof(T);
+			return IsExtension(extension, ref owner);
+		}
+
+		public static bool IsExtension(object extension, ref Type owner)
+		{
+			if (extension != null)
+			{
+				Type extensionType = extension.GetType();
+				Type extensionInterface = extensionType.GetInterface(typeof(IExtension<>).FullName);
+
+				if (extensionInterface != null)
+				{
+					Type[] args = extensionInterface.GetGenericArguments();
+
+					if (args.Length == 1)
+					{
+						if (owner == null || owner == args[0])
+						{
+							owner = args[0];
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+
+		public static bool AttachExtension(object owner, object extension)
+		{
+			IWcfExtensionHelper helper = (IWcfExtensionHelper)
+				Activator.CreateInstance(typeof(WcfExtensionHelper<>)
+					.MakeGenericType(owner.GetType()), owner);
+			return helper.AddExtension(extension);
+		}
+
+		public static bool AttachExtension<T>(KeyedByTypeCollection<T> candidates, object extension)
+		{
+			Type owner = null;
+			if (IsExtension(extension, ref owner))
+			{
+				return AttachExtension(candidates, extension, owner);
+			}
+			return false;
+		}
+
+		public static bool AttachExtension<T>(KeyedByTypeCollection<T> candidates, object extension, Type owner)
+		{
+			if (typeof(T).IsAssignableFrom(owner))
+			{
+				IWcfExtensionHelper helper = (IWcfExtensionHelper)
+					Activator.CreateInstance(typeof(WcfExtensionHelper<,>)
+						.MakeGenericType(typeof(T), owner), candidates);
+				return helper.AddExtension(extension);
+			}
+			return false;
 		}
 
 		public static void BindServiceHostAware(ServiceHost serviceHost, IServiceHostAware serviceHostAware, bool created)
@@ -97,17 +201,33 @@ namespace Castle.Facilities.WcfIntegration.Internal
 			channelFactory.Faulted += delegate { channelFactoryAware.Faulted(channelFactory); };
 		}
 
-		public static void AddExtensionDependencies<T>(IKernel kernel, WcfExtensionScope scope, ComponentModel model)
+		public static IEnumerable<T> FindDependencies<T>(IDictionary dependencies)
 		{
-			foreach (IHandler handler in FindExtensions<T>(kernel, scope))
-			{
-				AddBehaviorDependency(null, handler.ComponentModel.Service, model);
-			}
+			return FindDependencies<T>(dependencies, null);
 		}
 
-		public static void AddBehaviorDependency(string dependencyKey, Type serviceType, ComponentModel model)
+		public static IEnumerable<T> FindDependencies<T>(IDictionary dependencies,
+														 Predicate<T> test)
 		{
-			model.Dependencies.Add(new DependencyModel(DependencyType.Service, dependencyKey, serviceType, false));
+			foreach (object dependency in dependencies.Values)
+			{
+				if (dependency is T)
+				{
+					T candidate = (T)dependency;
+
+					if (test == null || test(candidate))
+					{
+						yield return candidate;
+					}
+				}
+				else if (dependency is IEnumerable<T>)
+				{
+					foreach (T item in (IEnumerable<T>)dependency)
+					{
+						yield return item;
+					}
+				}
+			}
 		}
 
 		public static bool IsCommunicationObjectReady(ICommunicationObject comm)

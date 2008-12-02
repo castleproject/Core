@@ -12,28 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 {
-	/// <summary>
-	/// Determines how a global extension will be applied.
-	/// </summary>
-	public enum WcfExtensionScope
+	using System.ServiceModel.Channels;
+	using Castle.Facilities.WcfIntegration.Behaviors;
+
+	public class AddOperationsHeader : AbstractMessageAction
 	{
-		/// <summary>
-		/// Undefined.
-		/// </summary>
-		Undefined,
-		/// <summary>
-		/// Only apply to client endpoints.
-		/// </summary>
-		Clients,
-		/// <summary>
-		/// Only apply to service hosts.
-		/// </summary>
-		Services,
-		/// <summary>
-		/// Do not apply automatically.
-		/// </summary>
-		Explicit
+		private readonly string name;
+		private readonly object value;
+
+		public AddOperationsHeader(string name, object value) 
+			: base(MessageLifecycle.All)
+		{
+			this.name = name;
+			this.value = value;
+		}
+
+		public override bool Perform(ref Message message, MessageLifecycle lifecyle)
+		{
+			MessageHeader header = MessageHeader.CreateHeader(name, "", value, false);
+			message.Headers.Add(header);
+			return true;
+		}
 	}
 }

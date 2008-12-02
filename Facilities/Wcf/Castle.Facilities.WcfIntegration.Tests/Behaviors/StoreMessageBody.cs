@@ -12,28 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 {
-	/// <summary>
-	/// Determines how a global extension will be applied.
-	/// </summary>
-	public enum WcfExtensionScope
+	using System.ServiceModel.Channels;
+	using System.Xml;
+	using Castle.Facilities.WcfIntegration.Behaviors;
+
+	public class StoreMessageBody : AbstractMessageBodyAction
 	{
-		/// <summary>
-		/// Undefined.
-		/// </summary>
-		Undefined,
-		/// <summary>
-		/// Only apply to client endpoints.
-		/// </summary>
-		Clients,
-		/// <summary>
-		/// Only apply to service hosts.
-		/// </summary>
-		Services,
-		/// <summary>
-		/// Do not apply automatically.
-		/// </summary>
-		Explicit
+		private XmlDocument body;
+
+		public StoreMessageBody(MessageLifecycle lifecycle)
+			: base(lifecycle)
+		{
+		}
+
+		public XmlDocument Body
+		{
+			get { return body; }
+		}
+
+		public override bool Perform(Message message, XmlDocument body, MessageLifecycle lifecyle)
+		{
+			this.body = body;
+			return true;
+		}
 	}
 }

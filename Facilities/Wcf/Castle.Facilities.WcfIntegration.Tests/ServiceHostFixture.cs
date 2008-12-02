@@ -404,6 +404,29 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			}
 		}
 
+		[Test]
+		public void CanModifyRequestsAndResponses()
+		{
+			using (IWindsorContainer container = new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(
+					Component.For<MessageLifecycleBehavior>(),
+					Component.For<IOperations>()
+						.ImplementedBy<Operations>()
+						.DependsOn(new { number = 42 })
+						.ActAs(new DefaultServiceModel().AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations")
+								.AddExtensions(new ReplaceOperationsResult("100")))
+							)
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(100, client.GetValueFromConstructor());
+			}
+		}
+
 		protected void RegisterLoggingFacility(IWindsorContainer container)
 		{
 			MutableConfiguration facNode = new MutableConfiguration("facility");

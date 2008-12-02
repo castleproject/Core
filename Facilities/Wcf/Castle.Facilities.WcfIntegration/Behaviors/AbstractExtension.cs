@@ -12,42 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration.Service
+namespace Castle.Facilities.WcfIntegration.Behaviors
 {
 	using System.ServiceModel;
 
-	/// <summary>
-	/// Abstarct implementation of <see cref="IServiceHostAware"/>
-	/// </summary>
-	public abstract class AbstractServiceHostAware : IServiceHostAware
+	public abstract class AbstractExtension<T> : IExtension<T>
+		where T : IExtensibleObject<T>
 	{
-		/// <inheritdoc />
-		public virtual void Created(ServiceHost serviceHost)
+		private int executionOrder = int.MaxValue;
+
+		public int ExecutionOrder
+		{
+			get { return executionOrder; }
+			set { executionOrder = value; }
+		}
+
+		public AbstractExtension<T> ExecuteAt(int order)
+		{
+			executionOrder = order;
+			return this;
+		}
+
+		public virtual void Attach(T owner)
 		{
 		}
 
-		/// <inheritdoc />
-		public virtual void Opening(ServiceHost serviceHost)
-		{
-		}
-
-		/// <inheritdoc />
-		public virtual void Opened(ServiceHost serviceHost)
-		{
-		}
-
-		/// <inheritdoc />
-		public virtual void Closing(ServiceHost serviceHost)
-		{
-		}
-
-		/// <inheritdoc />
-		public virtual void Closed(ServiceHost serviceHost)
-		{
-		}
-
-		/// <inheritdoc />
-		public virtual void Faulted(ServiceHost serviceHost)
+		public virtual void Detach(T owner)
 		{
 		}
 	}

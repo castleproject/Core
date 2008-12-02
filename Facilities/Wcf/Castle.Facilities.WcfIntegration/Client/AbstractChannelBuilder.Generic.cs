@@ -19,12 +19,14 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
+	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 
 	public abstract class AbstractChannelBuilder<M> : AbstractChannelBuilder, IClientChannelBuilder<M>
 			where M : IWcfClientModel
 	{
-		private M clientModel;
+		[ThreadStatic] private static M ClientModel;
+		[ThreadStatic] private static IWcfBurden Burden;
 
 		public AbstractChannelBuilder(IKernel kernel)
 			: base(kernel)
@@ -35,10 +37,12 @@ namespace Castle.Facilities.WcfIntegration
 		/// Get a delegate capable of creating channels.
 		/// </summary>
 		/// <param name="clientModel">The client model.</param>
+		/// <param name="burden">Receives the client burden.</param>
 		/// <returns>The <see cref="ChannelCreator"/></returns>
-		public ChannelCreator GetChannelCreator(M clientModel)
+		public ChannelCreator GetChannelCreator(M clientModel, out IWcfBurden burden)
 		{
-			this.clientModel = clientModel;
+			ClientModel = clientModel;
+			burden = Burden = new WcfBurden();
 			return GetEndpointChannelCreator(clientModel.Endpoint);
 		}
 
@@ -47,38 +51,45 @@ namespace Castle.Facilities.WcfIntegration
 		/// </summary>
 		/// <param name="clientModel">The client model.</param>
 		/// <param name="contract">The contract override.</param>
+		/// <param name="burden">Receives the client burden.</param>
 		/// <returns>The <see cref="ChannelCreator"/></returns>
-		public ChannelCreator GetChannelCreator(M clientModel, Type contract)
+		public ChannelCreator GetChannelCreator(M clientModel, Type contract, out IWcfBurden burden)
 		{
-			this.clientModel = clientModel;
+			ClientModel = clientModel;
+			burden = Burden = new WcfBurden();
 			return GetEndpointChannelCreator(clientModel.Endpoint, contract);
+		}
+
+		protected void ConfigureChannelFactory(ChannelFactory channelFactory)
+		{
+			ConfigureChannelFactory(channelFactory, ClientModel, Burden);
 		}
 
 		#region AbstractChannelBuilder Members
 
 		protected override ChannelCreator GetChannel(Type contract)
 		{
-			return GetChannel(clientModel, contract);
+			return GetChannel(ClientModel, contract);
 		}
 
 		protected override ChannelCreator GetChannel(Type contract, ServiceEndpoint endpoint)
 		{
-			return GetChannel(clientModel, contract, endpoint);
+			return GetChannel(ClientModel, contract, endpoint);
 		}
 
 		protected override ChannelCreator GetChannel(Type contract, string configurationName)
 		{
-			return GetChannel(clientModel, contract, configurationName);
+			return GetChannel(ClientModel, contract, configurationName);
 		}
 
 		protected override ChannelCreator GetChannel(Type contract, Binding binding, string address)
 		{
-			return GetChannel(clientModel, contract, binding, address);
+			return GetChannel(ClientModel, contract, binding, address);
 		}
 
 		protected override ChannelCreator GetChannel(Type contract, Binding binding, EndpointAddress address)
 		{
-			return GetChannel(clientModel, contract, binding, address);
+			return GetChannel(ClientModel, contract, binding, address);
 		}
 
 		#endregion
@@ -111,6 +122,8 @@ namespace Castle.Facilities.WcfIntegration
 			return CreateChannelCreator(contract, clientModel, binding, address);
 		}
 
+		#endregion
+
 		protected virtual ChannelCreator CreateChannelCreator(Type contract, M clientModel, 
 			                                                  params object[] channelFactoryArgs)
 		{
@@ -118,13 +131,11 @@ namespace Castle.Facilities.WcfIntegration
 
 			ChannelFactory channelFactory = (ChannelFactory)
 				Activator.CreateInstance(type, channelFactoryArgs);
-			ConfigureChannelFactory(channelFactory, clientModel);
+			ConfigureChannelFactory(channelFactory);
 
 			MethodInfo methodInfo = type.GetMethod("CreateChannel", new Type[0]);
 			return (ChannelCreator)Delegate.CreateDelegate(
 				typeof(ChannelCreator), channelFactory, methodInfo);
 		}
-
-		#endregion
 	}
 }

@@ -15,6 +15,7 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.ServiceModel;
 
 	/// <summary>
 	/// Delegate for creating channels.
@@ -31,15 +32,17 @@ namespace Castle.Facilities.WcfIntegration
 		/// Get a delegate capable of creating channels.
 		/// </summary>
 		/// <param name="clientModel">The client model.</param>
+		/// <param name="burden">Receives the client burden.</param>
 		/// <returns>The <see cref="ChannelCreator"/></returns>
-		ChannelCreator GetChannelCreator(M clientModel);
+		ChannelCreator GetChannelCreator(M clientModel, out IWcfBurden burden);
 
 		/// <summary>
 		/// Get a delegate capable of creating channels.
 		/// </summary>
 		/// <param name="clientModel">The client model.</param>
 		/// <param name="contract">The contract override.</param>
+		/// <param name="burden">Receives the client burden.</param>
 		/// <returns>The <see cref="ChannelCreator"/></returns>
-		ChannelCreator GetChannelCreator(M clientModel, Type contract);
+		ChannelCreator GetChannelCreator(M clientModel, Type contract, out IWcfBurden burden);
 	}
 }

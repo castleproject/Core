@@ -123,9 +123,8 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
-		public void WillReleaseAllBehaviorsWhenUnregistered()
+		public void WillReleaseAllExtensionsWhenUnregistered()
 		{
-
 			windsorContainer.Kernel.RemoveComponent("Operations");
 		}
 	}

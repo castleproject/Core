@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,17 +14,10 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-    internal static class WcfConstants
-    {
-		public const string ExtensionScopeKey = "scope";
+	using System.ServiceModel;
+	using Castle.Facilities.WcfIntegration.Internal;
 
-        public const string ServiceHostsKey = "wcf.serviceHosts";
-		public const string ServiceHostEnabled = "wcfServiceHost";
-
-		public const string ClientModelKey = "wcf.clientModel";
-		public const string ClientBurdenKey = "wcf.clientBurden";
-		public const string ChannelCreatorKey = "wcf.channelCreator";
-		public const string EndpointConfiguration = "wcfEndpointConfiguration";
+	public class ServiceHostBurden : WcfBurdenExtension<ServiceHostBase>
+	{
 	}
 }
-

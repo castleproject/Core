@@ -55,6 +55,7 @@ namespace Castle.Facilities.WcfIntegration
 				typeof(IContractBehavior).IsAssignableFrom(implementation))
 			{
 				model.LifestyleType = LifestyleType.Transient;
+				model.CustomComponentActivator = typeof(WcfBehaviorActivator);
 			}
 		}
 

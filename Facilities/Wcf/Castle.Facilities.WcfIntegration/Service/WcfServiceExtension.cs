@@ -119,6 +119,8 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				foreach (ServiceHost serviceHost in serviceHosts)
 				{
+					IWcfBurden burden = serviceHost.Extensions.Find<IWcfBurden>();
+					if (burden != null) burden.Release(kernel);
 					WcfUtils.ReleaseCommunicationObject(serviceHost);
 				}
 			}

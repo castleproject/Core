@@ -15,21 +15,18 @@
 namespace Castle.Facilities.WcfIntegration.Behaviors
 {
 	using System;
-	using System.ServiceModel.Channels;
-	using System.ServiceModel.Description;
-	using System.ServiceModel.Dispatcher;
 
-	public class LogMessageFormatBehavior : IEndpointBehavior
+	public class LogMessageFormat : AbstractExtension<LogMessageEndpointBehavior>
 	{
 		private readonly string messageFormat;
 		private readonly IFormatProvider formatProvider;
 
-		public LogMessageFormatBehavior(string messageFormat)
+		public LogMessageFormat(string messageFormat)
 		{
 			this.messageFormat = messageFormat;
 		}
 
-		public LogMessageFormatBehavior(IFormatProvider formatProvider, string messageFormat)
+		public LogMessageFormat(IFormatProvider formatProvider, string messageFormat)
 			: this(messageFormat)
 		{
 			this.formatProvider = formatProvider;
@@ -43,22 +40,6 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		public IFormatProvider FormatProvider
 		{
 			get { return formatProvider; }
-		}
-
-		public void AddBindingParameters(ServiceEndpoint endpoint, BindingParameterCollection bindingParameters)
-		{
-		}
-
-		public void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
-		{
-		}
-
-		public void ApplyDispatchBehavior(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
-		{
-		}
-
-		public void Validate(ServiceEndpoint endpoint)
-		{
 		}
 	}
 }

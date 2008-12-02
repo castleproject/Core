@@ -3,7 +3,6 @@ using System.ServiceModel.Channels;
 
 namespace Castle.Facilities.WcfIntegration.Behaviors
 {
-	[CLSCompliant(true)]
 	public abstract class AbstractMessageFormatter : IFormatProvider, ICustomFormatter
 	{
 		public object GetFormat(Type formatType)
