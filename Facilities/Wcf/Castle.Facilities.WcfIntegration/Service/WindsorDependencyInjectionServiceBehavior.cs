@@ -61,6 +61,9 @@ namespace Castle.Facilities.WcfIntegration
 
 		public void ApplyDispatchBehavior(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase)
 		{
+			ServiceBehaviorAttribute serviceBehavior = 
+				serviceDescription.Behaviors.Find<ServiceBehaviorAttribute>();
+
 			Dictionary<string, Type> contractNameToContractType = new Dictionary<string, Type>();
 			foreach (ServiceEndpoint endpoint in serviceDescription.Endpoints)
 			{
@@ -75,6 +78,13 @@ namespace Castle.Facilities.WcfIntegration
 					{
 						if (contractNameToContractType.ContainsKey(ed.ContractName))
 						{
+							if (serviceBehavior != null && serviceBehavior.InstanceContextMode ==
+								InstanceContextMode.Single)
+							{
+								ed.DispatchRuntime.SingletonInstanceContext =
+									new InstanceContext(serviceHostBase);
+							}
+
 							ed.DispatchRuntime.InstanceProvider =
 								new WindsorInstanceProvider(kernel, model,
 									contractNameToContractType[ed.ContractName],
