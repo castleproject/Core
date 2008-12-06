@@ -18,7 +18,7 @@ namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 	using System.Xml;
 	using Castle.Facilities.WcfIntegration.Behaviors;
 
-	public class ReplaceOperationsResult : AbstractMessageBodyAction
+	public class ReplaceOperationsResult : AbstractMessageEnvelopeAction
 	{
 		private readonly string result;
 
@@ -28,11 +28,11 @@ namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 			this.result = result;
 		}
 
-		public override bool Perform(Message message, XmlDocument body, MessageLifecycle lifecyle)
+		public override bool Perform(Message message, XmlDocument envelope, MessageLifecycle lifecyle)
 		{
-			XmlNamespaceManager xmlns = new XmlNamespaceManager(body.NameTable);
+			XmlNamespaceManager xmlns = new XmlNamespaceManager(envelope.NameTable);
 			xmlns.AddNamespace("tns", "http://tempuri.org/");
-			XmlNode node = body.SelectSingleNode("//tns:GetValueFromConstructorResult", xmlns);
+			XmlNode node = envelope.SelectSingleNode("//tns:GetValueFromConstructorResult", xmlns);
 			node.InnerText = result;
 			return true;
 		}

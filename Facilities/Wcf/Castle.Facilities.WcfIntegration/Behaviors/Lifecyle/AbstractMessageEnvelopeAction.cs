@@ -17,12 +17,12 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 	using System.ServiceModel.Channels;
 	using System.Xml;
 
-	public abstract class AbstractMessageBodyAction<T> : AbstractExtension<T>, IMessageBodyAction
+	public abstract class AbstractMessageEnvelopeAction<T> : AbstractExtension<T>, IMessageEnvelopeAction
 		where T : MessageLifecycleBehavior<T>
 	{
 		private readonly MessageLifecycle lifecycle;
 
-		protected AbstractMessageBodyAction(MessageLifecycle lifecycle)
+		protected AbstractMessageEnvelopeAction(MessageLifecycle lifecycle)
 		{
 			this.lifecycle = lifecycle;
 		}
@@ -37,12 +37,12 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 			return (lifecycle & this.lifecycle) > 0;			
 		}
 
-		public abstract bool Perform(Message message, XmlDocument body, MessageLifecycle lifecycle);
+		public abstract bool Perform(Message message, XmlDocument envelope, MessageLifecycle lifecycle);
 	}
 
-	public abstract class AbstractMessageBodyAction : AbstractMessageBodyAction<MessageLifecycleBehavior>
+	public abstract class AbstractMessageEnvelopeAction : AbstractMessageEnvelopeAction<MessageLifecycleBehavior>
 	{
-		protected AbstractMessageBodyAction(MessageLifecycle lifecycle)
+		protected AbstractMessageEnvelopeAction(MessageLifecycle lifecycle)
 			: base(lifecycle)
 		{
 		}

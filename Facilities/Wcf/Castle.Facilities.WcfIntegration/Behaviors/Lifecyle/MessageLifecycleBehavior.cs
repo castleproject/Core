@@ -104,7 +104,7 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 		protected void ProcessMessage(ref Message message, MessageLifecycle lifecycle)
 		{
-			XmlDocument body = null;
+			XmlDocument envelope = null;
 
 			ICollection<IMessageLifecyleAction> actions = Extensions.FindAll<IMessageLifecyleAction>();
 
@@ -119,25 +119,25 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 					if (!action.ShouldPerform(lifecycle)) continue;
 
-					if (action is IMessageBodyAction)
+					if (action is IMessageEnvelopeAction)
 					{
-						IMessageBodyAction bodyAction = (IMessageBodyAction)action;
+						IMessageEnvelopeAction envelopeAction = (IMessageEnvelopeAction)action;
 
-						if (body == null)
+						if (envelope == null)
 						{
-							body = OpenMessage(message);
+							envelope = OpenMessage(message);
 						}
 
-						proceed = bodyAction.Perform(message, body, lifecycle);
+						proceed = envelopeAction.Perform(message, envelope, lifecycle);
 					}
 					else if (action is IMessageAction)
 					{
 						IMessageAction messageAction = (IMessageAction)action;
 
-						if (body != null)
+						if (envelope != null)
 						{
-							message = CloseMessage(message, body);
-							body = null;
+							message = CloseMessage(message, envelope);
+							envelope = null;
 						}
 
 						proceed = messageAction.Perform(ref message, lifecycle);
@@ -146,33 +146,38 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 					if (!proceed) break;
 				}
 
-				if (body != null)
+				if (envelope != null)
 				{
-					message = CloseMessage(message, body);
+					message = CloseMessage(message, envelope);
 				}
 			}
 		}
 
 		private XmlDocument OpenMessage(Message message)
 		{
-			XmlDocument body = new XmlDocument();
-			body.Load(message.GetReaderAtBodyContents());
-			return body;
-		}
-
-		private Message CloseMessage(Message message, XmlDocument body)
-		{
-			MemoryStream stream = new MemoryStream(); 
-			XmlWriter writer = XmlDictionaryWriter.CreateBinaryWriter(stream);
-			body.WriteTo(writer);
+			MemoryStream stream = new MemoryStream();
+			XmlWriter writer = XmlWriter.Create(stream);
+			message.WriteMessage(writer);
 			writer.Flush();
 			stream.Position = 0;
-			XmlDictionaryReader reader = XmlDictionaryReader.CreateBinaryReader(
-				stream, new XmlDictionaryReaderQuotas());
-			Message closed = Message.CreateMessage(message.Version, null, reader);
-			closed.Headers.CopyHeadersFrom(message.Headers);
-			closed.Properties.CopyProperties(message.Properties);
-			return closed;
+
+			XmlDocument envelope = new XmlDocument();
+			envelope.Load(stream);
+			return envelope;
+		}
+
+		private Message CloseMessage(Message message, XmlDocument envelope)
+		{
+			MemoryStream stream = new MemoryStream();
+			XmlWriter writer = XmlDictionaryWriter.CreateBinaryWriter(stream);
+			envelope.WriteTo(writer);
+			writer.Flush();
+			stream.Position = 0;
+
+			XmlReader reader = XmlDictionaryReader.CreateBinaryReader(stream,
+				new XmlDictionaryReaderQuotas());
+			message = Message.CreateMessage(reader, int.MaxValue, message.Version);
+			return message;
 		}
 
 		private class ActionComparer : IComparer<IMessageLifecyleAction>

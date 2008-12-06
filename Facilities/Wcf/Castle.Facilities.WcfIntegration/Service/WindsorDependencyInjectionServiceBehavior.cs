@@ -64,6 +64,9 @@ namespace Castle.Facilities.WcfIntegration
 			ServiceBehaviorAttribute serviceBehavior = 
 				serviceDescription.Behaviors.Find<ServiceBehaviorAttribute>();
 
+			bool singleInstance = (serviceBehavior != null && 
+				serviceBehavior.InstanceContextMode == InstanceContextMode.Single);
+
 			Dictionary<string, Type> contractNameToContractType = new Dictionary<string, Type>();
 			foreach (ServiceEndpoint endpoint in serviceDescription.Endpoints)
 			{
@@ -78,8 +81,7 @@ namespace Castle.Facilities.WcfIntegration
 					{
 						if (contractNameToContractType.ContainsKey(ed.ContractName))
 						{
-							if (serviceBehavior != null && serviceBehavior.InstanceContextMode ==
-								InstanceContextMode.Single)
+							if (singleInstance)
 							{
 								ed.DispatchRuntime.SingletonInstanceContext =
 									new InstanceContext(serviceHostBase);

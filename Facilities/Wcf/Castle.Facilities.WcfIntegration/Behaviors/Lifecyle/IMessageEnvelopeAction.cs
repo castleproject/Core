@@ -19,17 +19,17 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 	/// <summary>
 	/// Basic contract for performing message actions that require access
-	/// to the message body (i.e. modifications)
+	/// to the message envelope (i.e. modifications)
 	/// </summary>
-	public interface IMessageBodyAction : IMessageLifecyleAction
+	public interface IMessageEnvelopeAction : IMessageLifecyleAction
 	{
 		/// <summary>
 		/// Performs the action on the suppplied <paramref name="message"/>.
 		/// </summary>
 		/// <param name="message">The message.</param>
-		/// <param name="body">The message body.</param>
+		/// <param name="envelope">The message envelope.</param>
 		/// <param name="lifecyle">The lifecycle stage.</param>
 		/// <returns>true if further actions should be performed.</returns>
-		bool Perform(Message message, XmlDocument body, MessageLifecycle lifecyle);
+		bool Perform(Message message, XmlDocument envelope, MessageLifecycle lifecyle);
 	}
 }

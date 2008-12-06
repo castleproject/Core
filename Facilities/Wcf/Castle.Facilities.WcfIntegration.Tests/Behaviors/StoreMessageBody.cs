@@ -18,9 +18,9 @@ namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 	using System.Xml;
 	using Castle.Facilities.WcfIntegration.Behaviors;
 
-	public class StoreMessageBody : AbstractMessageBodyAction
+	public class StoreMessageBody : AbstractMessageEnvelopeAction
 	{
-		private XmlDocument body;
+		private XmlDocument envelope;
 
 		public StoreMessageBody(MessageLifecycle lifecycle)
 			: base(lifecycle)
@@ -29,12 +29,12 @@ namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 
 		public XmlDocument Body
 		{
-			get { return body; }
+			get { return envelope; }
 		}
 
-		public override bool Perform(Message message, XmlDocument body, MessageLifecycle lifecyle)
+		public override bool Perform(Message message, XmlDocument envelope, MessageLifecycle lifecyle)
 		{
-			this.body = body;
+			this.envelope = envelope;
 			return true;
 		}
 	}

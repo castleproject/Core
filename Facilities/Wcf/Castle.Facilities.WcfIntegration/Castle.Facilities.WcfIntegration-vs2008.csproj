@@ -82,9 +82,9 @@
   <ItemGroup>
     <Compile Include="Behaviors\AbstractExtensibleObject.cs" />
     <Compile Include="Behaviors\AbstractExtension.cs" />
-    <Compile Include="Behaviors\Lifecyle\AbstractMessageBodyAction.cs" />
+    <Compile Include="Behaviors\Lifecyle\AbstractMessageEnvelopeAction.cs" />
     <Compile Include="Behaviors\Lifecyle\IMessageLifecyleAction.cs" />
-    <Compile Include="Behaviors\Lifecyle\IMessageBodyAction.cs" />
+    <Compile Include="Behaviors\Lifecyle\IMessageEnvelopeAction.cs" />
     <Compile Include="Behaviors\Lifecyle\IMessageAction.cs" />
     <Compile Include="Behaviors\Lifecyle\MessageLifecycle.cs" />
     <Compile Include="Behaviors\Lifecyle\MessageLifecycleBehavior.cs" />

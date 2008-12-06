@@ -99,10 +99,14 @@ namespace Castle.Facilities.WcfIntegration.Internal
 				if (model.Configuration != null)
 				{
 					WcfExtensionScope modelScope = GetScope(model);
-					if (scope == modelScope || scope == WcfExtensionScope.Undefined 
-						|| modelScope == WcfExtensionScope.Undefined) 
+
+					if (modelScope != WcfExtensionScope.Explicit || scope == WcfExtensionScope.Explicit)
 					{
-						yield return handler;
+						if (scope == modelScope || scope == WcfExtensionScope.Undefined
+							|| modelScope == WcfExtensionScope.Undefined)
+						{
+							yield return handler;
+						}
 					}
 				}
 			}
