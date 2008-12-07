@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Add ability to use Configure components based on implementation type when
+  using AllTypesOf.
+
 - Do not return forward handlers in ResolveAll since you will get duplicate services.
 
 - Applied patch (with mods) from Martin Nllsson to select registration interface from

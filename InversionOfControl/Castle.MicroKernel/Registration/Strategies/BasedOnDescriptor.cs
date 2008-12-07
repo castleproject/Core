@@ -20,10 +20,9 @@ namespace Castle.MicroKernel.Registration
 	/// <summary>
 	/// Delegate for custom registration configuration.
 	/// </summary>
-	/// <typeparam name="T">The return type.</typeparam>
 	/// <param name="registration">The component registration.</param>
 	/// <returns>Not uaed.</returns>
-	public delegate T ConfigureDelegate<T>(ComponentRegistration registration);
+	public delegate object ConfigureDelegate(ComponentRegistration registration);
 
 	/// <summary>
 	/// Describes how to register a group of related types.
@@ -33,7 +32,7 @@ namespace Castle.MicroKernel.Registration
 		private readonly Type basedOn;
 		private readonly FromDescriptor from;
 		private readonly ServiceDescriptor service;
-		private Action<ComponentRegistration> configurer;
+		private List<ConfigureDescriptor> configurers;
 		private Predicate<Type> unlessFilter;
 		private Predicate<Type> ifFilter;
 
@@ -45,6 +44,7 @@ namespace Castle.MicroKernel.Registration
 			this.basedOn = basedOn;
 			this.from = from;
 			service = new ServiceDescriptor(this);
+			configurers = new List<ConfigureDescriptor>();
 		}
 
 		/// <summary>
@@ -92,7 +92,8 @@ namespace Castle.MicroKernel.Registration
 		/// <returns></returns>
 		public BasedOnDescriptor Configure(Action<ComponentRegistration> configurer)
 		{
-			this.configurer = configurer;
+			ConfigureDescriptor config = new ConfigureDescriptor(this, configurer);
+			configurers.Add(config);
 			return this;
 		}
 
@@ -101,10 +102,41 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="configurer">The configuration action.</param>
 		/// <returns></returns>
-		public BasedOnDescriptor Configure<T>(ConfigureDelegate<T> configurer)
+		public BasedOnDescriptor Configure(ConfigureDelegate configurer)
 		{
-			this.configurer = delegate(ComponentRegistration registration) { configurer(registration); };
+			return Configure(delegate(ComponentRegistration registration) 
+			{
+				configurer(registration); 
+			});
+		}
+
+		/// <summary>
+		/// Allows customized configurations of each matching type that is 
+		/// assignable to <typeparamref name="T"/>.
+		/// </summary>
+		/// <typeparam name="T">The type assignable from.</typeparam>
+		/// <param name="configurer">The configuration action.</param>
+		/// <returns></returns>
+		public BasedOnDescriptor ConfigureFor<T>(Action<ComponentRegistration> configurer)
+		{
+			ConfigureDescriptor config = new ConfigureDescriptor(this, typeof(T), configurer);
+			configurers.Add(config);
 			return this;
+		}
+
+		/// <summary>
+		/// Allows customized configurations of each matching type that is 
+		/// assignable to <typeparamref name="T"/>.
+		/// </summary>
+		/// <typeparam name="T">The type assignable from.</typeparam>
+		/// <param name="configurer">The configuration action.</param>
+		/// <returns></returns>
+		public BasedOnDescriptor ConfigureFor<T>(ConfigureDelegate configurer)
+		{
+			return ConfigureFor<T>(delegate(ComponentRegistration registration)
+			{
+				configurer(registration);
+			});
 		}
 
 		/// <summary>
@@ -155,9 +187,9 @@ namespace Castle.MicroKernel.Registration
 				ComponentRegistration registration = Component.For(serviceTypes);
 				registration.ImplementedBy(type);
 
-				if (configurer != null)
+				foreach (ConfigureDescriptor configurer in configurers)
 				{
-					configurer(registration);
+					configurer.Apply(registration);
 				}
 
 				if (String.IsNullOrEmpty(registration.Name))

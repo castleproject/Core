@@ -139,6 +139,44 @@ namespace Castle.MicroKernel.Tests.Registration
 		}
 
 		[Test]
+		public void RegisterAssemblyTypes_WithConfigurationBasedOnImplementation_RegisteredInContainer()
+		{
+			kernel.Register(AllTypes.Of<ICommon>()
+				.FromAssembly(Assembly.GetExecutingAssembly())
+				.Configure(delegate(ComponentRegistration component)
+				{
+					component.LifeStyle.Transient
+						.Named(component.Implementation.FullName + "XYZ");
+				})
+				.ConfigureFor<CommonImpl1>(delegate(ComponentRegistration component)
+				{
+					component.DependsOn(Property.ForKey("key1").Eq(1));
+				})
+				.ConfigureFor<CommonImpl2>(delegate(ComponentRegistration component)
+				{
+					component.DependsOn(Property.ForKey("key2").Eq(2));
+				})
+				);
+
+			foreach (IHandler handler in kernel.GetAssignableHandlers(typeof(ICommon)))
+			{
+				Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+				Assert.AreEqual(handler.ComponentModel.Implementation.FullName + "XYZ", handler.ComponentModel.Name);
+
+				if (handler.ComponentModel.Implementation == typeof(CommonImpl1))
+				{
+					Assert.AreEqual(1, handler.ComponentModel.CustomDependencies.Count);
+					Assert.IsTrue(handler.ComponentModel.CustomDependencies.Contains("key1"));
+				}
+				else if (handler.ComponentModel.Implementation == typeof(CommonImpl2))
+				{
+					Assert.AreEqual(1, handler.ComponentModel.CustomDependencies.Count);
+					Assert.IsTrue(handler.ComponentModel.CustomDependencies.Contains("key2"));
+				}
+			}
+		}
+
+		[Test]
 		public void RegisterGenericTypes_BasedOnGenericDefinition_RegisteredInContainer()
 		{
 			kernel.Register(AllTypes.Pick()
