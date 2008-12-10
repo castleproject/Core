@@ -289,7 +289,12 @@ namespace Castle.MicroKernel
 			if (classType == null) throw new ArgumentNullException("classType");
 			if (LifestyleType.Undefined == lifestyle)
 				throw new ArgumentException("The specified lifestyle must be Thread, Transient, or Singleton.", "lifestyle");
-
+			if (classType.IsAbstract)
+				throw new ComponentRegistrationException(
+					String.Format(
+						"Type {0} is abstract.\r\n As such, it should not be registered as implementation of {1} service"
+						, classType.FullName
+						, serviceType.FullName));
 			ComponentModel model = ComponentModelBuilder.BuildModel(key, serviceType, classType, null);
 
 			if (overwriteLifestyle || LifestyleType.Undefined == model.LifestyleType)

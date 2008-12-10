@@ -23,6 +23,8 @@ RC 4
   support multiple service interfaces for a component.
   Extended the Component Registration interface to support service forwarding.
 
+- Avoid to register abstract component via IKernel.AddComponent, now throws when trying to add instead of while resolving component
+
 - Removed sealed qualifier from CreationContext and made ISubDependencyResolver
   methods virtual so they can be overriden.
 
