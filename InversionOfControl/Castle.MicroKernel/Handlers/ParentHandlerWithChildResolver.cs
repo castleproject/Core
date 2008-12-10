@@ -46,6 +46,7 @@ namespace Castle.MicroKernel.Handlers
 
 		public virtual object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
 		{
+
 			object value = childResolver.Resolve(context, null, model, dependency);
 
 			if (value == null)
@@ -58,7 +59,12 @@ namespace Castle.MicroKernel.Handlers
 
 		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
 		{
-			bool canResolve = childResolver.CanResolve(context, null, model, dependency);
+			bool canResolve = false;
+
+			if (parentResolver != null)
+			{
+				canResolve = childResolver.CanResolve(context, null, model, dependency);
+			}
 
 			if (!canResolve)
 			{

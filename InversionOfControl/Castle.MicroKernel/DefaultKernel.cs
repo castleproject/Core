@@ -1501,10 +1501,7 @@ namespace Castle.MicroKernel
 		{
 			if (parentHandler == null) return null;
 
-			// This has a very destructive side-effect. While the goal is to resolve on same-level containers,
-			// the resolver will invoke GetHandler recursively, leading to stack overflows
-			// return new ParentHandlerWithChildResolver(parentHandler, Resolver);
-			return parentHandler;
+			return new ParentHandlerWithChildResolver(parentHandler, Resolver);
 		}
 
 		protected INamingSubSystem NamingSubSystem

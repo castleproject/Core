@@ -72,7 +72,7 @@ namespace Castle.MicroKernel.Tests.SubContainers
 			Component comp = (Component) childContainer[typeof(Component)];
 		}
 
-		[Test, Ignore("This need to be discussed")]
+		[Test]
 		public void SameLevelDependenciesSatisfied()
 		{
 			IKernel child = new DefaultKernel();
@@ -91,7 +91,7 @@ namespace Castle.MicroKernel.Tests.SubContainers
 			Assert.IsNotNull(spamservice.TemplateEngine);
 		}
 
-		[Test, Ignore("This is not passing, and anyway, the goal should be reviewed")]
+		[Test]
 		public void UseChildComponentsForParentDependenciesWhenRequestedFromChild()
 		{
 			IKernel subkernel = new DefaultKernel();
@@ -119,7 +119,7 @@ namespace Castle.MicroKernel.Tests.SubContainers
 			Assert.IsNull(spamservice.TemplateEngine);
 		}
 
-		[Test, Ignore("This is not passing, and anyway, the goal should be reviewed")]
+		[Test]
 		public void Singleton_WithNonSingletonDependencies_DoesNotReResolveDependencies()
 		{
 			kernel.AddComponent("spamservice", typeof(DefaultSpamService));
