@@ -1545,10 +1545,11 @@ namespace Castle.MicroKernel
 
 		protected object ResolveComponent(IHandler handler, Type service, IDictionary additionalArguments)
 		{
-		    bool createdContext = currentCreationContext == null;
-		    CreationContext context = currentCreationContext ??
-		                              CreateCreationContext(handler, service, additionalArguments);
+		    CreationContext prev = currentCreationContext;
+		    CreationContext context = 
+                CreateCreationContext(handler, service, additionalArguments);
 		    currentCreationContext = context;
+            using (context.ParentResolutionContext(prev))
 		    try
 		    {
                 object instance = handler.Resolve(context);
@@ -1559,18 +1560,17 @@ namespace Castle.MicroKernel
 		    }
 			finally
 		    {
-		        if(createdContext)
-		            currentCreationContext = null;
+		        currentCreationContext = prev;
 		    }
 		}
 
 		protected CreationContext CreateCreationContext(IHandler handler, Type typeToExtractGenericArguments,
 		                                                IDictionary additionalArguments)
 		{
-            return new CreationContext(handler, ReleasePolicy, typeToExtractGenericArguments, additionalArguments);
+		    return new CreationContext(handler, ReleasePolicy, typeToExtractGenericArguments, additionalArguments);
 		}
 
-		#endregion
+	    #endregion
 
 		#region Serialization and Deserialization
 

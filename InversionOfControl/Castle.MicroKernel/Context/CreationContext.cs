@@ -216,7 +216,38 @@ namespace Castle.MicroKernel
 			return EnterResolutionContext(handlerBeingResolved, true);
 		}
 
-		public ResolutionContext EnterResolutionContext(IHandler handlerBeingResolved, bool createBurden)
+        public IDisposable ParentResolutionContext(CreationContext parent)
+        {
+            if (parent == null)
+                return new RemoveDependencies(dependencies, null);
+            dependencies.AddRange(parent.Dependencies);
+            return new RemoveDependencies(dependencies, parent.Dependencies);
+        }
+
+	    internal class RemoveDependencies : IDisposable
+	    {
+	        private readonly DependencyModelCollection dependencies;
+	        private readonly DependencyModelCollection parentDependencies;
+
+	        public RemoveDependencies(DependencyModelCollection dependencies, 
+                DependencyModelCollection parentDependencies)
+	        {
+	            this.dependencies = dependencies;
+	            this.parentDependencies = parentDependencies;
+	        }
+
+	        public void Dispose()
+	        {
+                if(parentDependencies==null)
+                    return;
+	            foreach (DependencyModel model in parentDependencies)
+	            {
+	                dependencies.Remove(model);
+	            }
+	        }
+	    }
+
+	    public ResolutionContext EnterResolutionContext(IHandler handlerBeingResolved, bool createBurden)
 		{
 			var resCtx = new ResolutionContext(this, createBurden ? new Burden() : null);
 			handlerStack.Push(handlerBeingResolved);
