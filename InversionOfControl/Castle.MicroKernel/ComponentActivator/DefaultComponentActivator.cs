@@ -91,7 +91,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			Type implType = Model.Implementation;
 
-		    bool createProxy = Kernel.ProxyFactory.ShouldCreateProxy(Model);
+			bool createProxy = Kernel.ProxyFactory.ShouldCreateProxy(Model);
 			bool createInstance = true;
 
 			if (createProxy)
@@ -109,10 +109,10 @@ namespace Castle.MicroKernel.ComponentActivator
 					}
 					else
 					{
-						instance = Activator.CreateInstance(implType, arguments);
+						instance = ActivatorCreateInstance(implType, arguments);
 					}
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					throw new ComponentActivatorException(
 						"ComponentActivator: could not instantiate " + Model.Implementation.FullName, ex);
@@ -125,7 +125,7 @@ namespace Castle.MicroKernel.ComponentActivator
 				{
 					instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context, arguments);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					throw new ComponentActivatorException("ComponentActivator: could not proxy " + Model.Implementation.FullName, ex);
 				}
@@ -136,13 +136,37 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		private static object FastCreateInstance(Type implType, object[] arguments, Type[] signature)
 		{
+			// otherwise GetConstructor wil blow up instead of returning null
+			if (signature == null) signature = new Type[0];
+
 			ConstructorInfo cinfo = implType.GetConstructor(
 				BindingFlags.Public | BindingFlags.Instance, null, signature, null);
+
+			if (cinfo == null)
+			{
+				string message = "Could not find a public constructor for the type {0}";
+				message = string.Format(message, implType);
+				throw new ComponentActivatorException(message);
+			}
 
 			object instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
 
 			cinfo.Invoke(instance, arguments);
 			return instance;
+		}
+
+		private static object ActivatorCreateInstance(Type implType, object[] arguments)
+		{
+			try
+			{
+				return Activator.CreateInstance(implType, arguments);
+			}
+			catch (MissingMethodException missingMethodException)
+			{
+				string message = "Could not find a constructor for the type {0}. Make sure that it is there and that it is public.";
+				message = string.Format(message, implType);
+				throw new ComponentActivatorException(message, missingMethodException);
+			}
 		}
 
 		protected virtual void ApplyCommissionConcerns(object instance)
@@ -161,7 +185,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual void ApplyConcerns(object[] steps, object instance)
 		{
-			foreach(ILifecycleConcern concern in steps)
+			foreach (ILifecycleConcern concern in steps)
 			{
 				concern.Apply(Model, instance);
 			}
@@ -184,11 +208,11 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			int winnerPoints = 0;
 
-			foreach(ConstructorCandidate candidate in Model.Constructors)
+			foreach (ConstructorCandidate candidate in Model.Constructors)
 			{
 				int candidatePoints = 0;
 
-				foreach(DependencyModel dep in candidate.Dependencies)
+				foreach (DependencyModel dep in candidate.Dependencies)
 				{
 					if (CanSatisfyDependency(context, dep))
 					{
