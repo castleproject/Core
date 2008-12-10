@@ -219,6 +219,25 @@ namespace Castle.Windsor.Tests
 			Assert.IsFalse(ReferenceEquals(o1, o4));
 		}
 
+        [Test]
+        public void TestComponentLifestylePerGenericTypeNotMarkedAsTransient()
+        {
+            IWindsorContainer container = new WindsorContainer();
+
+            container.AddComponentLifeStyle("comp", typeof(IRepository<>), 
+                typeof(RepositoryNotMarkedAsTransient<>), LifestyleType.Transient);
+
+            object o1 = container.Resolve<IRepository<Employee>>();
+            object o2 = container.Resolve<IRepository<Employee>>();
+            object o3 = container.Resolve<IRepository<Reviewer>>();
+            object o4 = container.Resolve<IRepository<Reviewer>>();
+
+            Assert.IsFalse(Object.ReferenceEquals(o1, o2));
+            Assert.IsFalse(Object.ReferenceEquals(o1, o3));
+            Assert.IsFalse(Object.ReferenceEquals(o1, o4));
+        }
+
+
 		[Test]
 		public void CanCreateANormalTypeWithCtorDependencyOnGenericType()
 		{
@@ -338,6 +357,7 @@ namespace Castle.Windsor.Tests
 			bool isProxy = specification.Repository.GetType().FullName.Contains("Proxy");
 			Assert.IsFalse(isProxy);
 		}
+
 
 		public string GetFilePath(string fileName)
 		{

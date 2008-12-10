@@ -22,9 +22,18 @@ namespace Castle.Windsor.Tests
 	public interface IRepository<T>
 	{
 		T Get(int id);
-	}
+    }
 
-	public class DemoRepository<T> : IRepository<T>
+    //[Castle.Core.Transient] //Test passes if this attributed added
+    public class RepositoryNotMarkedAsTransient<T> : IRepository<T> where T : new()
+    {
+        public T Get(int id)
+        {
+            return new T();
+        }
+    }
+    
+    public class DemoRepository<T> : IRepository<T>
 	{
 		private string name;
 		private ICache<T> cache;
