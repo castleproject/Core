@@ -117,6 +117,9 @@
     <Compile Include="Bugs\IoC-117.cs" />
     <Compile Include="Bugs\IoC-83.cs" />
     <Compile Include="Bugs\IoC-95.cs" />
+    <Compile Include="Bugs\Ioc113\IoC_113.cs" />
+    <Compile Include="Bugs\Ioc113\SdiComponentMethods.cs" />
+    <Compile Include="Bugs\Ioc113\StartableDisposableAndInitializableComponent.cs" />
     <Compile Include="ClassComponents\BaseComponent.cs" />
     <Compile Include="ClassComponents\ClassWithArrayConstructor.cs" />
     <Compile Include="ClassComponents\ClassWithListConstructor.cs">

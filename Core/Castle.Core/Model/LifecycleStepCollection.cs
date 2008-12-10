@@ -109,6 +109,25 @@ namespace Castle.Core
 		}
 
 		/// <summary>
+		/// Adds a step as the first step to execute for the commission or decomission phase.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="stepImplementation"></param>
+		public void AddFirst(LifecycleStepType type, object stepImplementation)
+		{
+			if (stepImplementation == null) throw new ArgumentNullException("stepImplementation");
+
+			if (type == LifecycleStepType.Commission)
+			{
+				commissionSteps.Insert(0, stepImplementation);
+			}
+			else
+			{
+				decommissionSteps.Insert(0, stepImplementation);
+			}
+		}
+
+		/// <summary>
 		/// Copies the elements of
 		/// the <see cref="T:System.Collections.ICollection"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
 		/// </summary>

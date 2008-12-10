@@ -47,7 +47,7 @@ namespace Castle.Facilities.Startable
 			{
 				model.LifecycleSteps.Add(
 					LifecycleStepType.Commission, StartConcern.Instance);
-				model.LifecycleSteps.Add(
+				model.LifecycleSteps.AddFirst(
 					LifecycleStepType.Decommission, StopConcern.Instance);
 			}
 		}
