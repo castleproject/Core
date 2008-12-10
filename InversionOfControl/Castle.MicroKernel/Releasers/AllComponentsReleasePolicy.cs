@@ -60,7 +60,7 @@ namespace Castle.MicroKernel.Releasers
             rwLock.AcquireReaderLock(Timeout.Infinite);
             try
             {
-                var burden = (Burden)instance2Burden[instance];
+				Burden burden = (Burden)instance2Burden[instance];
 
                 if (burden == null)
                     return;

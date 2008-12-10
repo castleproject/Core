@@ -45,7 +45,7 @@ namespace Castle.MicroKernel.Handlers
 				AssertNotWaitingForDependency();
 			}
 
-			using(var resCtx = context.EnterResolutionContext(this))
+			using(CreationContext.ResolutionContext resCtx = context.EnterResolutionContext(this))
 			{
 			    object instance = lifestyleManager.Resolve(context);
 

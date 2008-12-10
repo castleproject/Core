@@ -205,7 +205,7 @@ namespace Castle.MonoRail.Views.Brail
                 {
                     // append text up to string
                     int positionAfterEndOfClosingQuote = FindPositionAfterClosingQuote(code, nextOpeningQuotePosition);                    
-                    var textBeforeQuotedString = code.Substring(position, nextOpeningQuotePosition - position);
+                    string textBeforeQuotedString = code.Substring(position, nextOpeningQuotePosition - position);
                     escapedCode.Append(EscapeNullPropagationsInCode(textBeforeQuotedString));
 
                     // append the quoted string

@@ -96,7 +96,7 @@ namespace Castle.MicroKernel
 		{
 			this.dependencies = new DependencyModelCollection(dependencies);
 
-			foreach(var handlerItem in handlersChain)
+			foreach(IHandler handlerItem in handlersChain)
 			{
 				this.handlerStack.Push(handlerItem);
 			}
@@ -249,7 +249,7 @@ namespace Castle.MicroKernel
 
 	    public ResolutionContext EnterResolutionContext(IHandler handlerBeingResolved, bool createBurden)
 		{
-			var resCtx = new ResolutionContext(this, createBurden ? new Burden() : null);
+			ResolutionContext resCtx = new ResolutionContext(this, createBurden ? new Burden() : null);
 			handlerStack.Push(handlerBeingResolved);
 			if (createBurden)
 			{
