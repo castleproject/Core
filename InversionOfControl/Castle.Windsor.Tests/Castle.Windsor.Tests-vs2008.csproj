@@ -142,6 +142,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Bugs\IoC-102.cs" />
+    <Compile Include="Bugs\IoC-115.cs" />
     <Compile Include="Bugs\IoC-127.cs" />
     <Compile Include="Bugs\IoC-138.cs" />
     <Compile Include="Bugs\IoC-73\ClassUser.cs" />
