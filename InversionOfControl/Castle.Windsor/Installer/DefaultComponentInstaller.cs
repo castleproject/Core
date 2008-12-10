@@ -105,16 +105,16 @@ namespace Castle.Windsor.Installer
 
 		private static Type ObtainType(String typeName)
 		{
-			Type type = Type.GetType(typeName, false, false);
+		    try
+		    {
+                return Type.GetType(typeName, true, false);
+		    }
+		    catch (Exception e)
+		    {
+                String message = String.Format("The type name {0} could not be located", typeName);
 
-			if (type == null)
-			{
-				String message = String.Format("The type name {0} could not be located", typeName);
-
-				throw new ConfigurationErrorsException(message);
-			}
-
-			return type;
+                throw new ConfigurationErrorsException(message,e);
+            }
 		}
 
 		private static IFacility InstantiateFacility(Type facilityType)
