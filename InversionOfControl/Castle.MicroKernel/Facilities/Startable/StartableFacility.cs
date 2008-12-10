@@ -54,7 +54,7 @@ namespace Castle.Facilities.Startable
 
 		private void OnComponentRegistered(String key, IHandler handler)
 		{
-			bool startable = (bool) handler.ComponentModel.ExtendedProperties["startable"];
+		    bool startable = (bool?) handler.ComponentModel.ExtendedProperties["startable"] ?? false;
 
 			if (startable)
 			{
