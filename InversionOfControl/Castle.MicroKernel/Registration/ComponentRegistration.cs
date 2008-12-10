@@ -30,7 +30,9 @@ namespace Castle.MicroKernel.Registration
 	public delegate bool ComponentFilter(IKernel kernel, ComponentModel model);
 
 	/// <summary>
-	/// Registration for a single component with the kernel.
+	/// Registration for a single type as a component with the kernel.
+	/// <para />
+	/// You can create a new registration with the <see cref="Component"/> factory.
 	/// </summary>
 	/// <typeparam name="S">The service type</typeparam>
 	public class ComponentRegistration<S> : IRegistration
@@ -74,23 +76,50 @@ namespace Castle.MicroKernel.Registration
 			serviceType = componentModel.Service;
 			implementation = componentModel.Implementation;			
 		}
-		
+
+		/// <summary>
+		/// The name of the component. Will become the key for the component in the kernel.
+		/// <para />
+		/// To set the name, use <see cref="Named"/>.
+		/// <para />
+		/// If not set, the <see cref="Type.FullName"/> of the <see cref="Implementation"/>
+		/// will be used as the key to register the component.
+		/// </summary>
+		/// <value>The name.</value>
 		public String Name
 		{
 			get { return name; }
 		}
-		
+
+		/// <summary>
+		/// The type of the service, the same as <typeparamref name="S"/>.
+		/// <para />
+		/// This is the first type passed to <see cref="Component.For(Type)"/>.
+		/// </summary>
+		/// <value>The type of the service.</value>
 		public Type ServiceType
 		{
 			get { return serviceType; }
 			protected set { serviceType = value; }	
 		}
 
+		/// <summary>
+		/// Gets the forwarded service types on behalf of this component.
+		/// <para />
+		/// Add more types to forward using <see cref="Forward(Type[])"/>.
+		/// </summary>
+		/// <value>The types of the forwarded services.</value>
 		public Type[] ForwardedTypes
 		{
 			get { return forwardedTypes.ToArray(); }
 		}
 
+		/// <summary>
+		/// The concrete type that implements the service.
+		/// <para />
+		/// To set the implementation, use <see cref="ImplementedBy"/>.
+		/// </summary>
+		/// <value>The implementation of the service.</value>
 		public Type Implementation
 		{
 			get { return implementation; }
@@ -112,9 +141,13 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the name.
+		/// Change the name of this registration. 
+		/// This will be the key for the component in the kernel.
+		/// <para />
+		/// If not set, the <see cref="Type.FullName"/> of the <see cref="Implementation"/>
+		/// will be used as the key to register the component.
 		/// </summary>
-		/// <param name="name">The name.</param>
+		/// <param name="name">The name of this registration.</param>
 		/// <returns></returns>
 		public ComponentRegistration<S> Named(String name)
 		{
@@ -130,11 +163,25 @@ namespace Castle.MicroKernel.Registration
 			return this;
 		}
 
-		public ComponentRegistration<S> ImplementedBy<C>() where C : S
-		{
+		/// <summary>
+		/// Sets the concrete type that implements the service to <typeparamref name="C"/>.
+		/// <para />
+		/// If not set, the <see cref="ServiceType"/> will be used as the implementation for this component.
+		/// </summary>
+		/// <typeparam name="C">The type that is the implementation for the service.</typeparam>
+		/// <returns></returns>
+        public ComponentRegistration<S> ImplementedBy<C>() where C : S
+        {
 			return ImplementedBy(typeof(C));
 		}
 
+		/// <summary>
+		/// Sets the concrete type that implements the service to <paramref name="type"/>.
+		/// <para />
+		/// If not set, the <see cref="ServiceType"/> will be used as the implementation for this component.
+		/// </summary>
+		/// <param name="type">The type that is the implementation for the service.</param>
+		/// <returns></returns>
 		public ComponentRegistration<S> ImplementedBy(Type type)
 		{
 			if (implementation != null)
@@ -149,9 +196,9 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the instance.
+		/// Assigns an existing instance as the component for this registration.
 		/// </summary>
-		/// <param name="instance">The instance.</param>
+		/// <param name="instance">The component instance.</param>
 		/// <returns></returns>
 		public ComponentRegistration<S> Instance(S instance)
 		{
@@ -239,7 +286,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// Gets the proxy.
+		/// Set proxy for this component.
 		/// </summary>
 		/// <value>The proxy.</value>
 		public Proxy.ProxyGroup<S> Proxy
@@ -248,7 +295,8 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// Gets the with lifestyle.
+		/// Set the lifestyle of this component.
+		/// For example singleton and transient (also known as 'factory').
 		/// </summary>
 		/// <value>The with lifestyle.</value>
 		public Lifestyle.LifestyleGroup<S> LifeStyle
@@ -257,7 +305,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the activator.
+		/// Set a custom <see cref="IComponentActivator"/> which creates and destroys the component.
 		/// </summary>
 		/// <returns></returns>
 		public ComponentRegistration<S> Activator<A>() where A : IComponentActivator
@@ -266,9 +314,9 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the extended properties.
+		/// Sets <see cref="ComponentModel.ExtendedProperties"/> for this component.
 		/// </summary>
-		/// <param name="properties">The properties.</param>
+		/// <param name="properties">The extended properties.</param>
 		/// <returns></returns>
 		public ComponentRegistration<S> ExtendedProperties(params Property[] properties)
 		{
@@ -276,9 +324,9 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the extended properties.
+		/// Sets <see cref="ComponentModel.ExtendedProperties"/> for this component.
 		/// </summary>
-		/// <param name="anonymous">The properties.</param>
+		/// <param name="anonymous">The extendend properties as key/value pairs.</param>
 		/// <returns></returns>
 		public ComponentRegistration<S> ExtendedProperties(object anonymous)
 		{
@@ -286,7 +334,10 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the custom dependencies.
+		/// Specify custom dependencies using <see cref="Property.ForKey"/>.
+		/// <para />
+		/// Use <see cref="ServiceOverrides(ServiceOverride[])"/> to specify the components
+		/// this component should be resolved with.
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
 		/// <returns></returns>
@@ -296,7 +347,10 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the custom dependencies.
+		/// Uses a dictionary of key/value pairs, to specify custom dependencies.
+		/// <para />
+		/// Use <see cref="ServiceOverrides(IDictionary)"/> to specify the components
+		/// this component should be resolved with.
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
 		/// <returns></returns>
@@ -306,7 +360,10 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the custom dependencies.
+		/// Uses an (anonymous) object as a dictionary, to specify custom dependencies.
+		/// <para />
+		/// Use <see cref="ServiceOverrides(object)"/> to specify the components
+		/// this component should be resolved with.
 		/// </summary>
 		/// <param name="anonymous">The dependencies.</param>
 		/// <returns></returns>
@@ -316,7 +373,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the custom dependencies.
+		/// Obsolete, use <see cref="DependsOn(Property[])"/> instead.
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
 		/// <returns></returns>
@@ -327,7 +384,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the custom dependencies.
+		/// Obsolete, use <see cref="DependsOn(IDictionary)"/> instead.
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
 		/// <returns></returns>
@@ -338,7 +395,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the custom dependencies.
+		/// Obsolete, use <see cref="DependsOn(object)"/> instead.
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
 		/// <returns></returns>
@@ -349,9 +406,15 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the service overrides.
+		/// Override (some of) the services that this component needs.
+		/// Use <see cref="ServiceOverride.ForKey"/> to create an override.
+		/// <para />
+		/// Each key represents the service dependency of this component, for example the name of a constructor argument or a property.
+		/// The corresponding value is the key of an other component registered to the kernel, and is used to resolve the dependency.
+		/// <para />
+		/// To specify dependencies which are not services, use <see cref="DependsOn(Property[])"/>
 		/// </summary>
-		/// <param name="overrides">The overrides.</param>
+		/// <param name="overrides">The service overrides.</param>
 		/// <returns></returns>
 		public ComponentRegistration<S> ServiceOverrides(params ServiceOverride[] overrides)
 		{
@@ -359,9 +422,14 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the service overrides.
+		/// Override (some of) the services that this component needs, using a dictionary.
+		/// <para />
+		/// Each key represents the service dependency of this component, for example the name of a constructor argument or a property.
+		/// The corresponding value is the key of an other component registered to the kernel, and is used to resolve the dependency.
+		/// <para />
+		/// To specify dependencies which are not services, use <see cref="DependsOn(IDictionary)"/>
 		/// </summary>
-		/// <param name="overrides">The overrides.</param>
+		/// <param name="overrides">The service overrides.</param>
 		/// <returns></returns>
 		public ComponentRegistration<S> ServiceOverrides(IDictionary overrides)
 		{
@@ -369,9 +437,14 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the service overrides.
+		/// Override (some of) the services that this component needs, using an (anonymous) object as a dictionary.
+		/// <para />
+		/// Each key represents the service dependency of this component, for example the name of a constructor argument or a property.
+		/// The corresponding value is the key of an other component registered to the kernel, and is used to resolve the dependency.
+		/// <para />
+		/// To specify dependencies which are not services, use <see cref="DependsOn(object)"/>
 		/// </summary>
-		/// <param name="anonymous">The overrides.</param>
+		/// <param name="anonymous">The service overrides.</param>
 		/// <returns></returns>
 		public ComponentRegistration<S> ServiceOverrides(object anonymous)
 		{
@@ -379,7 +452,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the configuration parameters.
+		/// Set configuration parameters with string or <see cref="IConfiguration"/> values.
 		/// </summary>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
@@ -389,7 +462,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the configuration.
+		/// Apply more complex configuration to this component registration.
 		/// </summary>
 		/// <param name="configNodes">The config nodes.</param>
 		/// <returns></returns>
@@ -399,7 +472,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the configuration.
+		/// Apply more complex configuration to this component registration.
 		/// </summary>
 		/// <param name="configuration">The configuration <see cref="MutableConfiguration"/>.</param>
 		/// <returns></returns>
@@ -409,7 +482,7 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// With the interceptors.
+		/// Set the interceptors for this component.
 		/// </summary>
 		/// <param name="interceptors">The interceptors.</param>
 		/// <returns></returns>
@@ -420,9 +493,11 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
-		/// Makrs component as startable.
+		/// Marks the component as startable.
 		/// </summary>
 		/// <returns></returns>
+		/// <remarks>Be sure that you first added the <see cref="Castle.Facilities.Startable.StartableFacility"/> 
+		/// to the kernel, before registering this component.</remarks>
 		public ComponentRegistration<S> Startable()
 		{
 			return AddAttributeDescriptor("startable", "true");	
@@ -433,6 +508,8 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="startMethod">The start method.</param>
 		/// <returns></returns>
+		/// <remarks>Be sure that you first added the <see cref="Castle.Facilities.Startable.StartableFacility"/> 
+		/// to the kernel, before registering this component.</remarks>
 		public ComponentRegistration<S> StartUsingMethod(string startMethod)
 		{
 			return Startable()
@@ -444,6 +521,8 @@ namespace Castle.MicroKernel.Registration
 		/// </summary>
 		/// <param name="stopMethod">The stop method.</param>
 		/// <returns></returns>
+		/// <remarks>Be sure that you first added the <see cref="Castle.Facilities.Startable.StartableFacility"/> 
+		/// to the kernel, before registering this component.</remarks>
 		public ComponentRegistration<S> StopUsingMethod(string stopMethod)
 		{
 			return Startable()
@@ -469,6 +548,9 @@ namespace Castle.MicroKernel.Registration
 
 		/// <summary>
 		/// Assigns a conditional predication which must be satisfied.
+		/// <para />
+		/// The component will only be registered into the kernel 
+		/// if this predicate is satisfied (or not assigned at all).
 		/// </summary>
 		/// <param name="ifFilter">The predicate to satisfy.</param>
 		/// <returns></returns>
@@ -480,6 +562,9 @@ namespace Castle.MicroKernel.Registration
 
 		/// <summary>
 		/// Assigns a conditional predication which must not be satisfied. 
+		/// <para />
+		/// The component will only be registered into the kernel 
+		/// if this predicate is not satisfied (or not assigned at all).
 		/// </summary>
 		/// <param name="unlessFilter">The predicate not to satisify.</param>
 		/// <returns></returns>
@@ -613,7 +698,12 @@ namespace Castle.MicroKernel.Registration
 	}
 
 	#region Nested Type: ComponentRegistration
-	
+
+	/// <summary>
+	/// A non-generic <see cref="ComponentRegistration{S}"/>.
+	/// <para />
+	/// You can create a new registration with the <see cref="Component"/> factory.
+	/// </summary>
 	public class ComponentRegistration : ComponentRegistration<object>
 	{
 		public ComponentRegistration()

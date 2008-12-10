@@ -216,9 +216,16 @@ namespace Castle.Windsor
 		/// <summary>
 		/// Registers the components provided by the <see cref="IRegistration"/>s
 		/// with the <see cref="IWindsorContainer"/>.
+		/// <para />
+		/// Create a new registration using <see cref="Component"/>.For() or <see cref="AllTypes"/>.
+		/// </summary>
+		/// <example>
+		/// <code>
+		/// container.Register(Component.For&lt;IService&gt;().ImplementedBy&lt;DefaultService&gt;());
+		/// </code>
+		/// </example>
 		/// <param name="registrations">The component registrations.</param>
 		/// <returns>The container.</returns>
-		/// </summary>
 		IWindsorContainer Register(params IRegistration[] registrations);
 
 		/// <summary>

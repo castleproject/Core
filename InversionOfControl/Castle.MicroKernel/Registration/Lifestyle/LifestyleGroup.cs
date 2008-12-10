@@ -24,6 +24,11 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 		{
 		}
 
+		/// <summary>
+		/// Sets the lifestyle to the specified <paramref name="type"/>.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		public ComponentRegistration<S> Is(LifestyleType type)
 		{
 			return AddDescriptor(new LifestyleDescriptor<S>(type));
@@ -59,6 +64,11 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 			return AddDescriptor(new Pooled<S>(initialSize, maxSize));			
 		}
 
+		/// <summary>
+		/// Assign a custom lifestyle type, that implements <see cref="ILifestyleManager"/>.
+		/// </summary>
+		/// <param name="customLifestyleType">Type of the custom lifestyle.</param>
+		/// <returns></returns>
 		public ComponentRegistration<S> Custom(Type customLifestyleType)
 		{
 			if (!typeof(ILifestyleManager).IsAssignableFrom(customLifestyleType))
@@ -71,6 +81,11 @@ namespace Castle.MicroKernel.Registration.Lifestyle
 			return AddDescriptor(new Custom<S>(customLifestyleType));
 		}
 
+		/// <summary>
+		/// Assign a custom lifestyle type, that implements <see cref="ILifestyleManager"/>.
+		/// </summary>
+		/// <typeparam name="L">The type of the custom lifestyle</typeparam>
+		/// <returns></returns>
 		public ComponentRegistration<S> Custom<L>()
 			where L : ILifestyleManager, new()
 		{

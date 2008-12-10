@@ -303,9 +303,16 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// Registers the components provided by the <see cref="IRegistration"/>s
 		/// with the <see cref="IKernel"/>.
+		/// <para />
+		/// Create a new registration using <see cref="Component"/>.For() or <see cref="AllTypes"/>.
+		/// </summary>
+		/// <example>
+		/// <code>
+		/// kernel.Register(Component.For&lt;IService&gt;().ImplementedBy&lt;DefaultService&gt;());
+		/// </code>
+		/// </example>
 		/// <param name="registrations">The component registrations.</param>
 		/// <returns>The kernel.</returns>
-		/// </summary>
 		IKernel Register(params IRegistration[] registrations);
 
 		/// <summary>
@@ -664,6 +671,12 @@ namespace Castle.MicroKernel
 		/// <param name="handler"></param>
 		void RaiseHandlerRegistered(IHandler handler);
 
+		/// <summary>
+		/// Registers the <paramref name="forwardedType"/> to be forwarded 
+		/// to the component registered with <paramref name="name"/>.
+		/// </summary>
+		/// <param name="forwardedType">The service type that gets forwarded.</param>
+		/// <param name="name">The name of the component to forward to.</param>
 		void RegisterHandlerForwarding(Type forwardedType, string name);
 
         /// <summary>

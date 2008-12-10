@@ -18,6 +18,9 @@ namespace Castle.MicroKernel.Registration
 	using System.Collections.Generic;
 	using Castle.Core;
 
+	/// <summary>
+	/// Factory for creating <see cref="ComponentRegistration"/> objects.
+	/// </summary>
 	public static class Component
 	{
 		/// <summary>
