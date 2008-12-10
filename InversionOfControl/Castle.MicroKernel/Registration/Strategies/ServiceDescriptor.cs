@@ -64,7 +64,13 @@ namespace Castle.MicroKernel.Registration
 					// with no implementations.
 					if (first.IsGenericType && first.ReflectedType == null)
 					{
-						first = first.GetGenericTypeDefinition();
+					    bool shouldUseGenericTypeDefinition = false;
+					    foreach (Type argument in first.GetGenericArguments())
+					    {
+					        shouldUseGenericTypeDefinition |= argument.IsGenericParameter;
+					    }
+                        if(shouldUseGenericTypeDefinition)
+                        first = first.GetGenericTypeDefinition();
 					}
 				}
 

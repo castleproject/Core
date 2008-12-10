@@ -91,4 +91,12 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 			return new T();
 		}
 	}
+
+	public class CustomerRepository : IRepository<ICustomer>
+	{
+		public ICustomer Find()
+		{
+			return new CustomerImpl();
+		}
+	}
 }
