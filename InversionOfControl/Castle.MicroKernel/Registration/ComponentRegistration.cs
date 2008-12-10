@@ -130,7 +130,7 @@ namespace Castle.MicroKernel.Registration
 			return this;
 		}
 
-		public ComponentRegistration<S> ImplementedBy<C>()
+		public ComponentRegistration<S> ImplementedBy<C>() where C : S
 		{
 			return ImplementedBy(typeof(C));
 		}
