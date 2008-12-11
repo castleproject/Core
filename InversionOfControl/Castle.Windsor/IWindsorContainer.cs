@@ -200,7 +200,7 @@ namespace Castle.Windsor
 		/// <typeparam name="I"></typeparam>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extendedProperties"></param>
-		IWindsorContainer AddComponentLifeStyle<I, T>(IDictionary extendedProperties) where T : class;
+		IWindsorContainer AddComponentProperties<I, T>(IDictionary extendedProperties) where T : class;
 
 		/// <summary>
 		/// Adds a concrete class and an interface 
@@ -211,7 +211,7 @@ namespace Castle.Windsor
 		/// <typeparam name="T"></typeparam>
 		/// <param name="key"></param>
 		/// <param name="extendedProperties"></param>
-		IWindsorContainer AddComponentLifeStyle<I, T>(String key, IDictionary extendedProperties) where T : class;
+		IWindsorContainer AddComponentProperties<I, T>(String key, IDictionary extendedProperties) where T : class;
 
 		/// <summary>
 		/// Registers the components provided by the <see cref="IRegistration"/>s

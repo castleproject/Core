@@ -478,7 +478,7 @@ namespace Castle.Windsor
 		/// <typeparam name="I"></typeparam>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extendedProperties"></param>
-		public IWindsorContainer AddComponentLifeStyle<I, T>(IDictionary extendedProperties) where T : class
+		public IWindsorContainer AddComponentProperties<I, T>(IDictionary extendedProperties) where T : class
 		{
 			Type t = typeof(T);
 			AddComponentWithProperties(t.FullName, typeof(I), t, extendedProperties);
@@ -494,7 +494,7 @@ namespace Castle.Windsor
 		/// <typeparam name="T"></typeparam>
 		/// <param name="key"></param>
 		/// <param name="extendedProperties"></param>
-		public IWindsorContainer AddComponentLifeStyle<I, T>(string key, IDictionary extendedProperties) where T : class
+		public IWindsorContainer AddComponentProperties<I, T>(string key, IDictionary extendedProperties) where T : class
 		{
 			AddComponentWithProperties(key, typeof(I), typeof(T), extendedProperties);
 			return this;
