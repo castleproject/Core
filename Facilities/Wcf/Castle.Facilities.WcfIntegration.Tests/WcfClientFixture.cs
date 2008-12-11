@@ -665,8 +665,8 @@ namespace Castle.Facilities.WcfIntegration.Tests
 
 	<components>
 		<component id='usingWindsor'
-			       service='Castle.Facilities.WcfIntegration.Demo.IAmUsingWindsor, Castle.Facilities.WcfIntegration.Demo'
-				   type='Castle.Facilities.WcfIntegration.Demo.UsingWindsor, Castle.Facilities.WcfIntegration.Demo'>
+			       type='Castle.Facilities.WcfIntegration.Demo.IAmUsingWindsor, 
+				         Castle.Facilities.WcfIntegration.Demo'
 			       wcfEndpointConfiguration='WSHttpBinding_IAmUsingWindsor'>
 		</component>
 	</components>
