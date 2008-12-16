@@ -4,13 +4,22 @@ You can find the latest version at http://nant.sourceforge.net/
 for targeting 3.5, it's recommended you use NAnt 0.68b2 nightly build (current version is 0.86.3075.0 from 02/06/2008 and can be downloaded from the said location).
 
 
-possible problem with 3.5
+Possible problem with 3.5
 =========================
 if you get the following error: 
 "The SDK for the 'net-3.5' framework is not available or not configured."
 then you probably need to fix the sdkInstallRoot in your nant.exe.config file to point to the correct location in the registry
 See the following article for more info:
 http://www.timbarcz.com/blog/NantSetupForVisualStudio2008AndNet35.aspx
+
+Possible problem with WCF facility build
+========================================
+
+If you bump into the following message "System.ServiceModel.CommunicationException : The TransportManager failed to listen on the supplied URI using the NetTcpPortSharing service: failed to start the service because it is disabled. An administrator can enable it by running 'sc.exe config NetTcpPortSharing start= demand'
+
+Run the following from the command line:
+
+> sc.exe config NetTcpPortSharing start= demand
 
 
 
