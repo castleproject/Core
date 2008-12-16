@@ -66,7 +66,7 @@ namespace Castle.Core.Tests
 			Assert.IsNull(dict["age"]);
 		}
 
-		[Test(Description = "Test case for patch supplied on the mailing list by Jan Limpens")]
+		[Test/*(Description = "Test case for patch supplied on the mailing list by Jan Limpens")*/]
 		public void ShouldNotAccessWriteOnlyProperties()
 		{
 			try
