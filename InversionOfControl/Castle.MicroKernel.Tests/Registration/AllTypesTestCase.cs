@@ -207,6 +207,21 @@ namespace Castle.MicroKernel.Tests.Registration
             Assert.IsNotNull(validator2);
         }
 
+		[Test]
+		public void RegisterAssemblyTypes_ClosedGenericTypes_RegisteredInContainer()
+		{
+			kernel.Register(AllTypes.FromAssembly(Assembly.GetExecutingAssembly())
+				.BasedOn(typeof(IMapper<>))
+				.WithService.FirstInterface()
+				);
+
+			IHandler[] handlers = kernel.GetHandlers(typeof(IMapper<CommonImpl1>));
+			Assert.AreEqual(1, handlers.Length);
+
+			handlers = kernel.GetAssignableHandlers(typeof(IMapper<CommonImpl2>));
+			Assert.AreEqual(1, handlers.Length);
+		}
+
 #if DOTNET35
 
         [Test]

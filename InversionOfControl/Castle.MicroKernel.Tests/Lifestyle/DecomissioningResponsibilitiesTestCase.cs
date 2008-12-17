@@ -89,7 +89,7 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			kernel.AddComponent("gena", typeof(GenA<>), LifestyleType.Transient);
 			kernel.AddComponent("genb", typeof(GenB<>), LifestyleType.Transient);
 
-			var instance1 = kernel.Resolve<GenA<string>>();
+			GenA<string> instance1 = kernel.Resolve<GenA<string>>();
 			Assert.IsFalse(instance1.IsDisposed);
 			Assert.IsFalse(instance1.GenBField.IsDisposed);
 
@@ -124,7 +124,7 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			kernel.AddComponent("a", typeof(A), LifestyleType.Transient);
 			kernel.AddComponent("b", typeof(B), LifestyleType.Transient);
 
-			var instance1 = kernel.Resolve<NonDiposableRoot>();
+			NonDiposableRoot instance1 = kernel.Resolve<NonDiposableRoot>();
 			Assert.IsFalse(instance1.A.IsDisposed);
 			Assert.IsFalse(instance1.B.IsDisposed);
 
@@ -142,7 +142,7 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			kernel.AddComponent("a", typeof(A), LifestyleType.Transient);
 			kernel.AddComponent("b", typeof(B), LifestyleType.Transient);
 
-			var instance1 = kernel.Resolve<Indirection>();
+			Indirection instance1 = kernel.Resolve<Indirection>();
 			Assert.IsFalse(instance1.FakeRoot.A.IsDisposed);
 			Assert.IsFalse(instance1.FakeRoot.B.IsDisposed);
 

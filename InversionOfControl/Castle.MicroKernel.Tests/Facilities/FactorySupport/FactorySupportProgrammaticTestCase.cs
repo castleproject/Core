@@ -57,7 +57,7 @@ namespace Castle.Facilities.FactorySupport.Tests
 			kernel.Register(Component.For<SettingsConsumer>().
 				Parameters(Parameter.ForKey("something").Eq("${serviceKey}")));
 
-			var consumer = kernel.Resolve<SettingsConsumer>();
+			SettingsConsumer consumer = kernel.Resolve<SettingsConsumer>();
 		}
 
 		class SettingsConsumer
