@@ -15,7 +15,7 @@
 namespace Castle.Core
 {
 	using System;
-	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 
 	/// <summary>
 	/// Collection of <see cref="ConstructorCandidate"/>
@@ -23,7 +23,7 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
-	public class ConstructorCandidateCollection : List<ConstructorCandidate>
+	public class ConstructorCandidateCollection : Collection<ConstructorCandidate>
 	{
 		private bool hasAmbiguousFewerArgumentsCandidate;
 		private ConstructorCandidate fewerArgumentsCandidate;

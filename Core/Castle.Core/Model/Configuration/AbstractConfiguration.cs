@@ -31,10 +31,10 @@ namespace Castle.Core.Configuration
 #endif
 	public abstract class AbstractConfiguration : IConfiguration
 	{
-		private String internalName;
-		private String internalValue;
-		private readonly NameValueCollection attributes = new NameValueCollection();
+		private readonly ConfigurationAttributeCollection attributes = new ConfigurationAttributeCollection();
 		private readonly ConfigurationCollection children = new ConfigurationCollection();
+		private string internalName;
+		private string internalValue;
 
 		/// <summary>
 		/// Gets the name of the <see cref="IConfiguration"/>.
@@ -42,7 +42,7 @@ namespace Castle.Core.Configuration
 		/// <value>
 		/// The Name of the <see cref="IConfiguration"/>.
 		/// </value>
-		public virtual String Name
+		public string Name
 		{
 			get { return internalName; }
 			protected set { internalName = value; }
@@ -54,7 +54,7 @@ namespace Castle.Core.Configuration
 		/// <value>
 		/// The Value of the <see cref="IConfiguration"/>.
 		/// </value>
-		public virtual String Value
+		public string Value
 		{
 			get { return internalValue; }
 			protected set { internalValue = value; }
@@ -75,7 +75,7 @@ namespace Castle.Core.Configuration
 		/// <value>
 		/// All attributes of the node.
 		/// </value>
-		public virtual NameValueCollection Attributes
+		public virtual ConfigurationAttributeCollection Attributes
 		{
 			get { return attributes; }
 		}

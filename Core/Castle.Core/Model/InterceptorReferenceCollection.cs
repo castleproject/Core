@@ -30,12 +30,12 @@ namespace Castle.Core
 		private readonly LinkedList list = new LinkedList();
 
 		/// <summary>
-		/// Adds the specified interceptor.
+		/// Adds the specified item.
 		/// </summary>
-		/// <param name="interceptor">The interceptor.</param>
-		public void Add(InterceptorReference interceptor)
+		/// <param name="item">The interceptor.</param>
+		public void Add(InterceptorReference item)
 		{
-			list.Add(interceptor);
+			list.AddLast(item);
 		}
 
 		public void Clear()
@@ -60,31 +60,31 @@ namespace Castle.Core
 		}
 
 		/// <summary>
-		/// Adds the the specified interceptor as the first.
+		/// Adds the specified interceptor as the first.
 		/// </summary>
-		/// <param name="interceptor">The interceptor.</param>
-		public void AddFirst(InterceptorReference interceptor)
+		/// <param name="item">The interceptor.</param>
+		public void AddFirst(InterceptorReference item)
 		{
-			list.AddFirst(interceptor);
+			list.AddFirst(item);
 		}
 
 		/// <summary>
-		/// Adds the the specified interceptor as the last.
+		/// Adds the specified interceptor as the last.
 		/// </summary>
-		/// <param name="interceptor">The interceptor.</param>
-		public void AddLast(InterceptorReference interceptor)
+		/// <param name="item">The interceptor.</param>
+		public void AddLast(InterceptorReference item)
 		{
-			list.AddLast(interceptor);
+			list.AddLast(item);
 		}
 
 		/// <summary>
 		/// Inserts the specified interceptor at the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		/// <param name="interceptor">The interceptor.</param>
-		public void Insert(int index, InterceptorReference interceptor)
+		/// <param name="item">The interceptor.</param>
+		public void Insert(int index, InterceptorReference item)
 		{
-			list.Insert(index, interceptor);
+			list.Insert(index, item);
 		}
 
 		/// <summary>

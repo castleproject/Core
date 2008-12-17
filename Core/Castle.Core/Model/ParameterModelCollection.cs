@@ -16,6 +16,7 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
+	using System.Collections.ObjectModel;
 	using Castle.Core.Configuration;
 	using System.Collections.Generic;
 
@@ -25,7 +26,7 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
-	public class ParameterModelCollection : IEnumerable
+	public class ParameterModelCollection : Collection<ParameterModel>
 	{
 		private readonly IDictionary<string, ParameterModel> dictionary;
 		private readonly object syncRoot = new object();
@@ -91,7 +92,7 @@ namespace Castle.Core
 		/// Not implemented
 		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		public void Clear()
+		public new void Clear()
 		{
 			throw new NotImplementedException();
 		}
@@ -190,7 +191,7 @@ namespace Castle.Core
 		/// Gets the count.
 		/// </summary>
 		/// <value>The count.</value>
-		public int Count
+		public new int Count
 		{
 			get { return dictionary.Count; }
 		}
@@ -222,7 +223,7 @@ namespace Castle.Core
 		/// An <see cref="T:System.Collections.IEnumerator"/>
 		/// that can be used to iterate through the collection.
 		/// </returns>
-		public IEnumerator GetEnumerator()
+		public new IEnumerator GetEnumerator()
 		{
 			return dictionary.Values.GetEnumerator();
 		}

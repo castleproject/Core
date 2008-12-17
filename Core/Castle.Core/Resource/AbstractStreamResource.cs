@@ -18,22 +18,28 @@ namespace Castle.Core.Resource
 	using System.IO;
 	using System.Text;
 
+	public delegate Stream StreamFactory();
+
 	/// <summary>
 	/// 
 	/// </summary>
 	public abstract class AbstractStreamResource : AbstractResource
 	{
-		public delegate Stream StreamFactory();
-
 		/// <summary>
 		/// This returns a new stream instance each time it is called.
 		/// It is the responsability of the caller to dispose of this stream
 		/// </summary>
-		protected StreamFactory CreateStream;
+		private StreamFactory createStream;
 
 		~AbstractStreamResource()
 		{
 			Dispose(false);
+		}
+
+		public StreamFactory CreateStream
+		{
+			get { return createStream; }
+			set { createStream = value; }
 		}
 
 		public override TextReader GetStreamReader()

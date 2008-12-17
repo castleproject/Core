@@ -14,6 +14,7 @@
 
 namespace Castle.Core.Internal
 {
+	using System.Collections.Generic;
 	using System.Diagnostics;
 
 	public abstract class TopologicalSortAlgo
@@ -23,7 +24,7 @@ namespace Castle.Core.Internal
 			ColorsSet colors = new ColorsSet(graphNodes);
 			TimestampSet discovery = new TimestampSet();
 			TimestampSet finish = new TimestampSet();
-			LinkedList list = new LinkedList();
+			LinkedList<IVertex> list = new LinkedList<IVertex>();
 
 			int time = 0;
 
@@ -35,11 +36,13 @@ namespace Castle.Core.Internal
 				}
 			}
 
-			return (IVertex[]) list.ToArray(typeof(IVertex));
+			IVertex[] vertices = new IVertex[list.Count];
+			list.CopyTo(vertices, 0);
+			return vertices;
 		}
 
 		private static void Visit(IVertex node, ColorsSet colors,
-		                          TimestampSet discovery, TimestampSet finish, LinkedList list, ref int time)
+								  TimestampSet discovery, TimestampSet finish, LinkedList<IVertex> list, ref int time)
 		{
 			colors.Set(node, VertexColor.Gray);
 

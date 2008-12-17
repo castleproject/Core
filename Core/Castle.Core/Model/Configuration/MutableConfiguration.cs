@@ -38,15 +38,21 @@ namespace Castle.Core.Configuration
 			Value = value;
 		}
 
-		public static MutableConfiguration Create(string name)
-		{
-			return new MutableConfiguration(name);
-		}
-
+		/// <summary>
+		/// Gets the value of <see cref="IConfiguration"/>.
+		/// </summary>
+		/// <value>
+		/// The Value of the <see cref="IConfiguration"/>.
+		/// </value>
 		public new string Value
 		{
 			get { return base.Value; }
 			set { base.Value = value; }
+		}
+
+		public static MutableConfiguration Create(string name)
+		{
+			return new MutableConfiguration(name);
 		}
 
 		public MutableConfiguration Attribute(string name, string value)

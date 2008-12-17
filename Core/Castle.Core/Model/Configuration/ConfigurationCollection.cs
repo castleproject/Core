@@ -35,8 +35,7 @@ namespace Castle.Core.Configuration
 		/// <summary>
 		/// Creates a new instance of <c>ConfigurationCollection</c>.
 		/// </summary>
-		public ConfigurationCollection(IList<IConfiguration> value)
-			:base(value)
+		public ConfigurationCollection(IEnumerable<IConfiguration> value) : base(value)
 		{
 		}
 
@@ -56,16 +55,16 @@ namespace Castle.Core.Configuration
 			}
 		}
 
-		/// <summary>
-		/// Adds an array of <see cref="IConfiguration"/>.
-		/// </summary>
-		/// <param name="value">The Array of <see cref="IConfiguration"/> to add.</param>
-		public void AddRange(IList<IConfiguration> value)
-		{
-			foreach(IConfiguration configuration in value)
-			{
-				Add(configuration);
-			}
-		}
+//		/// <summary>
+//		/// Adds an array of <see cref="IConfiguration"/>.
+//		/// </summary>
+//		/// <param name="value">The Array of <see cref="IConfiguration"/> to add.</param>
+//		public void AddRange(IEnumerable<IConfiguration> value)
+//		{
+//			foreach(IConfiguration configuration in value)
+//			{
+//				Add(configuration);
+//			}
+//		}
 	}
 }

@@ -59,6 +59,9 @@
     <Compile Include="Attributes\DoNotWireAttribute.cs" />
     <Compile Include="Attributes\InterceptorAttribute.cs" />
     <Compile Include="Attributes\LifestyleAttributes.cs" />
+    <Compile Include="Internal\LinkedList.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="IServiceProviderExAccessor.cs" />
     <Compile Include="Interceptor\IChangeProxyTarget.cs" />
     <Compile Include="Interceptor\IInterceptor.cs" />
@@ -69,7 +72,6 @@
     <Compile Include="Internal\GraphNode.cs" />
     <Compile Include="Internal\GraphSets.cs" />
     <Compile Include="Internal\IVertex.cs" />
-    <Compile Include="Internal\LinkedList.cs" />
     <Compile Include="Internal\TopologicalSortAlgo.cs" />
     <Compile Include="IServiceEnabledComponent.cs" />
     <Compile Include="IServiceProviderEx.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Logging\Loggers\WebLogger.cs" />
     <Compile Include="Model\ComponentModel.cs" />
     <Compile Include="Model\Configuration\AbstractConfiguration.cs" />
+    <Compile Include="Model\Configuration\ConfigurationAttributeCollection.cs" />
     <Compile Include="Model\Configuration\ConfigurationCollection.cs" />
     <Compile Include="Model\Configuration\IConfiguration.cs" />
     <Compile Include="Model\Configuration\MutableConfiguration.cs" />

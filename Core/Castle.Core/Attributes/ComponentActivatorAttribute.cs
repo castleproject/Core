@@ -20,7 +20,7 @@ namespace Castle.Core
 	/// Associates a custom component with a component
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public class ComponentActivatorAttribute : Attribute
+	public sealed class ComponentActivatorAttribute : Attribute
 	{
 		private readonly Type componentActivatorType;
 

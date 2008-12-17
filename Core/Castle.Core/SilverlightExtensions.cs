@@ -13,8 +13,9 @@
 // limitations under the License.
 
 #if SILVERLIGHT
+using System;
 
-namespace System
+namespace Castle.Core.Extensions
 {
 	using System.Collections.Generic;
 
@@ -69,59 +70,59 @@ namespace System.Collections.Specialized
 	}
 }
 
-namespace System.Threading
-{
-	public class ReaderWriterLock
-	{
-		private object _syncObject = new object();
-		
-		public ReaderWriterLock()
-		{
-		}
+//namespace System.Threading
+//{
+//	public class ReaderWriterLock
+//	{
+//		private object _syncObject = new object();
+//		
+//		public ReaderWriterLock()
+//		{
+//		}
+//
+//		public void AcquireWriterLock(int timeout)
+//		{
+//			Monitor.Enter(_syncObject);
+//		}
+//
+//		public void AcquireReaderLock(int timeout)
+//		{
+//			Monitor.Enter(_syncObject);
+//		}
+//
+//		public void ReleaseWriterLock()
+//		{
+//			Monitor.Exit(_syncObject);
+//		}
+//
+//		public void ReleaseLock()
+//		{
+//			Monitor.Exit(_syncObject);
+//		}
+//	}
+//}
 
-		public void AcquireWriterLock(int timeout)
-		{
-			Monitor.Enter(_syncObject);
-		}
+//namespace System.Configuration
+//{
+//	public class ConfigurationErrorsException : Exception
+//	{
+//		public ConfigurationErrorsException(string message) : base(message)
+//		{
+//		}
+//
+//		public ConfigurationErrorsException(string message, Exception inner) : base(message, inner)
+//		{
+//		}
+//	}
+//}
 
-		public void AcquireReaderLock(int timeout)
-		{
-			Monitor.Enter(_syncObject);
-		}
-
-		public void ReleaseWriterLock()
-		{
-			Monitor.Exit(_syncObject);
-		}
-
-		public void ReleaseLock()
-		{
-			Monitor.Exit(_syncObject);
-		}
-	}
-}
-
-namespace System.Configuration
-{
-	public class ConfigurationErrorsException : Exception
-	{
-		public ConfigurationErrorsException(string message) : base(message)
-		{
-		}
-
-		public ConfigurationErrorsException(string message, Exception inner) : base(message, inner)
-		{
-		}
-	}
-}
-
-namespace System.ComponentModel
-{
-	public interface ISupportInitialize
-	{
-		void BeginInit();
-		void EndInit();
-	}
-}
+//namespace System.ComponentModel
+//{
+//	public interface ISupportInitialize
+//	{
+//		void BeginInit();
+//		void EndInit();
+//	}
+//}
 
 #endif

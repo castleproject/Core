@@ -42,7 +42,7 @@ namespace Castle.Core
 		{
 			if (componentKey == null)
 			{
-				throw new ArgumentNullException("componentKey cannot be null");
+				throw new ArgumentNullException("componentKey");
 			}
 
 			refType = InterceptorReferenceType.Key;
@@ -57,7 +57,7 @@ namespace Castle.Core
 		{
 			if (serviceType == null)
 			{
-				throw new ArgumentNullException("'serviceType' cannot be null");
+				throw new ArgumentNullException("serviceType");
 			}
 
 			refType = InterceptorReferenceType.Interface;

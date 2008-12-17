@@ -18,7 +18,7 @@ namespace Castle.Core
 	using System.Collections;
 	using System.Collections.Generic;
 
-	public class StringObjectDictionaryAdapter : IDictionary<string,object>
+	public sealed class StringObjectDictionaryAdapter : IDictionary<string,object>
 	{
 		private readonly IDictionary dictionary;
 

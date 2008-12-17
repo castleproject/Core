@@ -22,7 +22,7 @@ namespace Castle.Core
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public class ReflectionBasedDictionaryAdapter : IDictionary
+	public sealed class ReflectionBasedDictionaryAdapter : IDictionary
 	{
 		private readonly Dictionary<string,object> properties = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 

@@ -31,8 +31,8 @@ namespace Castle.Core
 		/// </returns>
 		public static bool IsDynamicProxy(Type type)
 		{
-			return (type.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen") ||
-			        type.Assembly.FullName.StartsWith("DynamicProxyGenAssembly2"));
+			return (type.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen", StringComparison.Ordinal) ||
+					type.Assembly.FullName.StartsWith("DynamicProxyGenAssembly2", StringComparison.Ordinal));
 		}
 	}
 }

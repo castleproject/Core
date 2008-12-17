@@ -16,6 +16,7 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 
 	/// <summary>
 	/// Collection of <see cref="DependencyModel"/>.
@@ -23,7 +24,7 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
-	public class DependencyModelCollection : List<DependencyModel>
+	public class DependencyModelCollection : Collection<DependencyModel>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DependencyModelCollection"/> class.
@@ -39,6 +40,19 @@ namespace Castle.Core
 		public DependencyModelCollection(IList<DependencyModel> dependencies)
 			: base(dependencies)
 		{
+		}
+
+		public void AddRange(DependencyModelCollection dependencies)
+		{
+			if (dependencies == null)
+				return;
+
+			foreach(var model in dependencies)
+			{
+				if (model == null)
+					throw new ArgumentNullException("dependencies", "item in the collection is null");
+				Add(model);
+			}
 		}
 	}
 }

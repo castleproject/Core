@@ -21,6 +21,10 @@ namespace Castle.Core.Resource
 	using System.Resources;
 	using System.Text;
 
+#if SILVERLIGHT
+	using Castle.Core.Extensions;
+#endif
+
 	public class AssemblyBundleResource : AbstractResource
 	{
 		private readonly CustomUri resource;

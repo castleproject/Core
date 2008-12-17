@@ -15,7 +15,7 @@
 namespace Castle.Core
 {
 	using System;
-	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.Reflection;
 
 	/// <summary>
@@ -24,7 +24,7 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
-	public class PropertySetCollection : List<PropertySet>
+	public class PropertySetCollection : Collection<PropertySet>
 	{
 		/// <summary>
 		/// Finds a PropertySet the by PropertyInfo.

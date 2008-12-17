@@ -21,7 +21,7 @@ namespace Castle.Core
 	/// by the IoC container
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property)]
-	public class DoNotWireAttribute : Attribute
+	public sealed class DoNotWireAttribute : Attribute
 	{
 	}
 }

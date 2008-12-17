@@ -17,6 +17,7 @@ namespace Castle.Core
 	using System;
 	using System.Collections;
     using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 
 	/// <summary>
 	/// Collection of <see cref="MethodMetaModel"/>
@@ -24,7 +25,7 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
-	public class MethodMetaModelCollection : List<MethodMetaModel>
+	public class MethodMetaModelCollection : Collection<MethodMetaModel>
 	{
 		private IDictionary methodInfo2Model;
 
@@ -36,7 +37,8 @@ namespace Castle.Core
 		{
 			get
 			{
-				if (methodInfo2Model == null) methodInfo2Model = new Dictionary<object, object>();
+				if (methodInfo2Model == null) 
+					methodInfo2Model = new Dictionary<object, object>();
 
 				return methodInfo2Model;
 			}

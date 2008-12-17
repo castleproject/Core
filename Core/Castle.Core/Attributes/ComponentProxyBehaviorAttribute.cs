@@ -20,7 +20,7 @@ namespace Castle.Core
 	/// Specifies the proxying behavior for a component.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public class ComponentProxyBehaviorAttribute : Attribute
+	public sealed class ComponentProxyBehaviorAttribute : Attribute
 	{
 		private bool useSingleInterfaceProxy;
 		private bool useMarshalByRefProxy;

@@ -12,11 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
+
 namespace Castle.Core.Configuration.Xml
 {
 	using System;
 	using System.Text;
 	using System.Xml;
+	using System.Xml.XPath;
+
 
 	/// <summary>
 	/// Pendent
@@ -84,3 +88,5 @@ namespace Castle.Core.Configuration.Xml
 		}
 	}
 }
+
+#endif

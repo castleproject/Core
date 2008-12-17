@@ -16,11 +16,7 @@ namespace Castle.Core.Configuration
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 
-	/// <summary>
-	/// Summary description for IConfiguration.
-	/// </summary>
 	/// <summary>
 	/// <see cref="IConfiguration"/> is a interface encapsulating a configuration node
 	///	used to retrieve configuration values.
@@ -53,7 +49,7 @@ namespace Castle.Core.Configuration
 		/// <summary>
 		/// Gets an <see cref="IDictionary"/> of the configuration attributes.
 		/// </summary>
-		NameValueCollection Attributes { get; }
+		ConfigurationAttributeCollection Attributes { get; }
 
 		/// <summary>
 		/// Gets the value of the node and converts it 

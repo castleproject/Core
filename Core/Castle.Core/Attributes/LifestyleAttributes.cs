@@ -50,7 +50,7 @@ namespace Castle.Core
 	/// singleton lifestyle.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
-	public class SingletonAttribute : LifestyleAttribute
+	public sealed class SingletonAttribute : LifestyleAttribute
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SingletonAttribute"/> class.
@@ -65,7 +65,7 @@ namespace Castle.Core
 	/// transient lifestyle.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
-	public class TransientAttribute : LifestyleAttribute
+	public sealed class TransientAttribute : LifestyleAttribute
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TransientAttribute"/> class.
@@ -80,7 +80,7 @@ namespace Castle.Core
 	/// per thread lifestyle.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
-	public class PerThreadAttribute : LifestyleAttribute
+	public sealed class PerThreadAttribute : LifestyleAttribute
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PerThreadAttribute"/> class.
@@ -95,7 +95,7 @@ namespace Castle.Core
 	/// per web request lifestyle.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public class PerWebRequestAttribute : LifestyleAttribute
+	public sealed class PerWebRequestAttribute : LifestyleAttribute
 	{
 		public PerWebRequestAttribute() : base(LifestyleType.PerWebRequest)
 		{
@@ -107,7 +107,7 @@ namespace Castle.Core
 	/// pooled lifestyle.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
-	public class PooledAttribute : LifestyleAttribute
+	public sealed class PooledAttribute : LifestyleAttribute
 	{
 		private static readonly int Initial_PoolSize = 5;
 		private static readonly int Max_PoolSize = 15;
@@ -158,7 +158,7 @@ namespace Castle.Core
 	/// custom lifestyle.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
-	public class CustomLifestyleAttribute : LifestyleAttribute
+	public sealed class CustomLifestyleAttribute : LifestyleAttribute
 	{
 		private readonly Type lifestyleHandlerType;
 
