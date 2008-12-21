@@ -44,31 +44,31 @@ namespace Castle.Core.Extensions
 	}
 }
 
-namespace System.Collections.Specialized
-{
-	using Generic;
-
-	public class NameValueCollection : Dictionary<string, string>
-	{
-		public NameValueCollection() : base(StringComparer.InvariantCultureIgnoreCase)
-		{
-			
-		}
-		public new string this[string key]
-		{
-			get
-			{
-				string result;
-				TryGetValue(key, out result);
-				return result;
-			}
-			set
-			{
-				base[key] = value;
-			}
-		}
-	}
-}
+//namespace System.Collections.Specialized
+//{
+//	using Generic;
+//
+//	public class NameValueCollection : Dictionary<string, string>
+//	{
+//		public NameValueCollection() : base(StringComparer.InvariantCultureIgnoreCase)
+//		{
+//			
+//		}
+//		public new string this[string key]
+//		{
+//			get
+//			{
+//				string result;
+//				TryGetValue(key, out result);
+//				return result;
+//			}
+//			set
+//			{
+//				base[key] = value;
+//			}
+//		}
+//	}
+//}
 
 //namespace System.Threading
 //{

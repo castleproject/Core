@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
+
 namespace Castle.Core.Resource
 {
 	using System;
@@ -21,7 +23,6 @@ namespace Castle.Core.Resource
 	using System.Text;
 	using System.Xml;
 
-	#if !SILVERLIGHT
 
 	public class ConfigResource : AbstractResource
 	{
@@ -73,6 +74,6 @@ namespace Castle.Core.Resource
 			return String.Format(CultureInfo.CurrentCulture, "ConfigResource: [{0}]", sectionName);
 		}
 	}
-
-	#endif
 }
+
+#endif
