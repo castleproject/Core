@@ -44,13 +44,15 @@ namespace Castle.Core
 
 		public void AddRange(DependencyModelCollection dependencies)
 		{
-			if (dependencies == null)
-				return;
+			if (dependencies == null) return;
 
-			foreach(var model in dependencies)
+			foreach(DependencyModel model in dependencies)
 			{
 				if (model == null)
+				{
 					throw new ArgumentNullException("dependencies", "item in the collection is null");
+				}
+				
 				Add(model);
 			}
 		}
