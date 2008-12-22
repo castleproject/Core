@@ -2,6 +2,7 @@
 ---
 
 - Applied Jan Limpens' patch adding support for inline attachments
+- Added UseSSL to SmtpSender
 
 
 Nov 5th, 2006

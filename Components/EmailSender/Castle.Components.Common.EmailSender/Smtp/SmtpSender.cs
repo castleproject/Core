@@ -25,11 +25,11 @@ namespace Castle.Components.Common.EmailSender.Smtp
 	/// </summary>
 	public class SmtpSender : IEmailSender
 	{
-		// private SmtpClient smtpClient;
 		private bool asyncSend;
 		private string hostname;
 		private int port = 25;
 		private int? timeout;
+		private bool useSSL;
 		private NetworkCredential credentials = new NetworkCredential();
 
 		/// <summary>
@@ -79,6 +79,17 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		{
 			get { return timeout.HasValue ? timeout.Value : 0; }
 			set { timeout = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the email should be sent using 
+		/// a secure communication channel.
+		/// </summary>
+		/// <value><c>true</c> if should use SSL; otherwise, <c>false</c>.</value>
+		public bool UseSSL
+		{
+			get { return useSSL; }
+			set { useSSL = value; }
 		}
 
 		/// <summary>
@@ -263,6 +274,11 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			if (timeout.HasValue)
 			{
 				smtpClient.Timeout = timeout.Value;
+			}
+
+			if  (useSSL)
+			{
+				smtpClient.EnableSsl = useSSL;
 			}
 		}
 
