@@ -195,4 +195,10 @@
   <data name="lesser_than_invalid" xml:space="preserve">
     <value>This field value must be lesser than the other field value.</value>
   </data>
+  <data name="guid" xml:space="preserve">
+    <value>Please enter a valid GUID (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)</value>
+  </data>
+  <data name="timespan" xml:space="preserve">
+    <value>Please enter a valid time-span (ddd.hh:mm:ss.xxx)</value>
+  </data>
 </root>

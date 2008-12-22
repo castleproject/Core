@@ -149,6 +149,7 @@
     <Compile Include="IValidatorBuilder.cs" />
     <Compile Include="Validators\CollectionNotEmptyValidator.cs" />
     <Compile Include="Validators\AbstractCrossReferenceValidator.cs" />
+    <Compile Include="Validators\GuidValidator.cs" />
     <Compile Include="Validators\IsGreaterValidator.cs" />
     <Compile Include="Validators\IsLesserValidator.cs" />
     <Compile Include="Validators\NotSameAsValidator.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Validators\SetValidator.cs" />
     <Compile Include="Validators\SingleValidator.cs" />
     <Compile Include="BrowserValidationConfiguration.cs" />
+    <Compile Include="Validators\TimeSpanValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messages.es.resx">

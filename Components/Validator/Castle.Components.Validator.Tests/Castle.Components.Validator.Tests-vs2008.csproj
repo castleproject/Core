@@ -64,7 +64,9 @@
     <Compile Include="ValidatorTests\CollectionNotEmptyValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\CreditCardValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\GroupNotEmptyValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\GuidValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\IsGreaterValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\IsLesserValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\NotSameValueValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\RangeValidatorTestCase.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="ValidatorTests\SetValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\SingleValidatorTestCase.cs" />
     <Compile Include="ContributorsTests\ValidatorContainerInterfaceContributorTestCase.cs" />
+    <Compile Include="ValidatorTests\TimeSpanValidatorTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Components.Validator\Castle.Components.Validator-vs2008.csproj">

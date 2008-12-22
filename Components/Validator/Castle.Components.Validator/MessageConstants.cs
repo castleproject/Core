@@ -16,6 +16,7 @@ namespace Castle.Components.Validator
 {
 	internal class MessageConstants
 	{
+		public const string InvalidTimeSpanMessage = "timespan";
 		public const string GenericInvalidField = "generic_invalid";
 		public const string IsRequiredMessage = "isrequired";
 		public const string ExactLengthMessage = "exactlength";
@@ -23,6 +24,7 @@ namespace Castle.Components.Validator
 		public const string LengthTooShortMessage = "length_tooshort";
 		public const string LengthInRangeMessage = "length_invalidrange";
 		public const string InvalidEmailMessage = "email";
+		public const string InvalidGuidMessage = "guid";
 		public const string InvalidIntegerMessage = "integer_invalid";
 		public const string InvalidDateMessage = "date_invalid";
 		public const string InvalidDoubleMessage = "double_invalid";
