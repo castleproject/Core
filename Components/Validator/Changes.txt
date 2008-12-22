@@ -3,8 +3,11 @@
   The patch includes a contributor that allows for classes to decorate a method 
   with a [ValidateSelf] attribute so the class can provide validation logic in code.
 
+- Added Polish messages (contributed by kamil)
+
 Beta 1
 ======
+
 - Use DynamicMethod for performance when available
 
 - Added interface for ValidatorRunner as validation entry point.

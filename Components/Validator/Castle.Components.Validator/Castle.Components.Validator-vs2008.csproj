@@ -195,6 +195,7 @@
       <LastGenOutput>Messages.lt.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Messages.pl.resx" />
     <EmbeddedResource Include="Messages.ru.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
