@@ -46,6 +46,22 @@ namespace Castle.Components.Validator
 		/// <summary>
 		/// Initializes a set-based validator.
 		/// </summary>
+		/// <param name="set">The set of values to validate against.</param>
+		public SetValidator(params int[] set)
+		{
+			string[] stringset = new string[set.Length];
+
+			for (int i = 0; i < set.Length; i++)
+			{
+				stringset[i] = set[i].ToString();
+			}
+
+			setdata = stringset;
+		}
+
+		/// <summary>
+		/// Initializes a set-based validator.
+		/// </summary>
 		/// <param name="type">The <see cref="System.Type" /> of an <c>enum</c> class.
 		/// The enum names will be added to the contents of the set.</param>
 		public SetValidator(Type type)

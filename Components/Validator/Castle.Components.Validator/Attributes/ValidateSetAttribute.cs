@@ -56,9 +56,31 @@ namespace Castle.Components.Validator
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidateSetAttribute"/> class.
 		/// </summary>
+		/// <param name="set">The set of values to compare against.</param>
+		public ValidateSetAttribute(params int[] set)
+			: base()
+		{
+			validator = new SetValidator(set);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateSetAttribute"/> class.
+		/// </summary>
 		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
 		/// <param name="set">The set of values to compare against.</param>
-		public ValidateSetAttribute(string errorMessage, params string[] set) : base(errorMessage)
+		public ValidateSetAttribute(string errorMessage, params string[] set)
+			: base(errorMessage)
+		{
+			validator = new SetValidator(set);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateSetAttribute"/> class.
+		/// </summary>
+		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
+		/// <param name="set">The set of values to compare against.</param>
+		public ValidateSetAttribute(string errorMessage, params int[] set)
+			: base(errorMessage)
 		{
 			validator = new SetValidator(set);
 		}

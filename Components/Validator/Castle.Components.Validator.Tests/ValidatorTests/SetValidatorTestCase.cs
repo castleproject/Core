@@ -22,7 +22,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 	[TestFixture]
 	public class SetValidatorTestCase
 	{
-		private SetValidator validatorStringArray, validatorStrings, validatorEnum, validatorFlagsEnum;
+		private SetValidator validatorStringArray, validatorStrings, validatorEnum, validatorFlagsEnum, validatorNumbers;
 		private TestTarget target;
 
 		[SetUp]
@@ -47,17 +47,27 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			validatorFlagsEnum = new SetValidator(typeof(System.AttributeTargets));
 			validatorFlagsEnum.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
 
+			validatorNumbers = new SetValidator(0, 100, -1);
+			validatorNumbers.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("NumberField"));
+
 			target = new TestTarget();
 		}
 
 		public class TestTarget
 		{
 			private string targetField;
+			private int numberField;
 
 			public string TargetField
 			{
 				get { return targetField; }
 				set { targetField = value; }
+			}
+
+			public int NumberField
+			{
+				get { return numberField; }
+				set { numberField = value; }
 			}
 		}
 
@@ -105,6 +115,25 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsTrue(validatorFlagsEnum.IsValid(target, AttributeTargets.Assembly | AttributeTargets.Class));
 			//pass when string is null
 			Assert.IsTrue(validatorFlagsEnum.IsValid(target, String.Empty));
+		}
+
+		[Test]
+		public void NumberParamsSetValidator()
+		{
+			//test against zero in set
+			Assert.IsTrue(validatorNumbers.IsValid(target, 0));
+			//test against positive number in set
+			Assert.IsTrue(validatorNumbers.IsValid(target, 100));
+			//test against negative number in set
+			Assert.IsTrue(validatorNumbers.IsValid(target, -1));
+			//test against positive number not in set
+			Assert.IsFalse(validatorNumbers.IsValid(target, 200));
+			//test against negative number not in set
+			Assert.IsFalse(validatorNumbers.IsValid(target, -2));
+			//test against non-numeric value
+			Assert.IsFalse(validatorNumbers.IsValid(target, "hello"));
+			//test against null
+			Assert.IsTrue(validatorNumbers.IsValid(target, null));
 		}
 	}
 }
