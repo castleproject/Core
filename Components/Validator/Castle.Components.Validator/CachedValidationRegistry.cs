@@ -16,6 +16,7 @@ namespace Castle.Components.Validator
 {
 	using System;
 	using System.Collections;
+	using System.Globalization;
 	using System.Reflection;
 	using System.Resources;
 	using System.Threading;
@@ -47,7 +48,6 @@ namespace Castle.Components.Validator
 		/// </summary>
 		public CachedValidationRegistry()
 		{
-
 		}
 
 		/// <summary>
@@ -82,12 +82,12 @@ namespace Castle.Components.Validator
 
 			ArrayList list = new ArrayList();
 
-			foreach (PropertyInfo prop in properties)
+			foreach(PropertyInfo prop in properties)
 			{
 				list.AddRange(GetValidators(validatorRunner, targetType, prop, runWhen));
 			}
 
-			return (IValidator[]) list.ToArray(typeof (IValidator));
+			return (IValidator[]) list.ToArray(typeof(IValidator));
 		}
 
 		/// <summary>
@@ -109,15 +109,15 @@ namespace Castle.Components.Validator
 
 			if (builders == null)
 			{
-				builders = property.GetCustomAttributes(typeof (IValidatorBuilder), true);
+				builders = property.GetCustomAttributes(typeof(IValidatorBuilder), true);
 
 				// Attribute order cannot be guaranted in C#
 				// this way we assure there order by Type Name
 				Array.Sort(builders, new TypeNameComparer());
-				
+
 				attrsPerProperty[property] = builders;
 
-				foreach (IValidatorBuilder builder in builders)
+				foreach(IValidatorBuilder builder in builders)
 				{
 					builder.Initialize(this, property);
 				}
@@ -125,7 +125,7 @@ namespace Castle.Components.Validator
 
 			ArrayList validators = new ArrayList();
 
-			foreach (IValidatorBuilder builder in builders)
+			foreach(IValidatorBuilder builder in builders)
 			{
 				IValidator validator = builder.Build(validatorRunner, targetType);
 
@@ -135,7 +135,7 @@ namespace Castle.Components.Validator
 				validators.Add(validator);
 			}
 
-			return (IValidator[]) validators.ToArray(typeof (IValidator));
+			return (IValidator[]) validators.ToArray(typeof(IValidator));
 		}
 
 		/// <summary>
@@ -166,14 +166,17 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		public string GetStringFromResource(string key)
 		{
-			if(resourceManager!=null)
+			if (resourceManager != null)
 			{
 				ResourceSet resourceSet = resourceManager.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true);
 				string result = resourceSet.GetString(key);
 				if (result != null)
 					return result;
 			}
-			ResourceSet defaultResourceSetForCurrentThread = defaultResourceManager.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true);
+			
+			ResourceSet defaultResourceSetForCurrentThread =
+				defaultResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
+
 			return defaultResourceSetForCurrentThread.GetString(key);
 		}
 

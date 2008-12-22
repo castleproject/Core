@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Globalization;
+
 namespace Castle.Components.Validator.Tests
 {
 	using Castle.Components.Validator.Tests.Models;
@@ -23,7 +25,7 @@ namespace Castle.Components.Validator.Tests
 		private ValidatorRunner runner;
 
 		[SetUp]
-		public void Init()
+		public virtual void Init()
 		{
 			runner = new ValidatorRunner(new CachedValidationRegistry());
 		}
@@ -126,5 +128,32 @@ namespace Castle.Components.Validator.Tests
 			}
 		}
 
+	}
+
+	[TestFixture]
+	public class ValidatorRunnerTestCaseForComp58 : ValidatorRunnerTestCase 
+	{
+		private CultureInfo backupculture, backupuiculture;
+
+		[SetUp]
+		public override void Init() 
+		{
+			backupculture = System.Threading.Thread.CurrentThread.CurrentCulture;
+			backupuiculture = System.Threading.Thread.CurrentThread.CurrentUICulture;
+
+			// switch to a culture for which message resource is available but messages are not defined
+			System.Threading.Thread.CurrentThread.CurrentUICulture =
+				System.Threading.Thread.CurrentThread.CurrentCulture =
+				new CultureInfo("mk-MK");
+
+			base.Init();
+		}	
+
+		[TearDown]
+		public void DeInit() 
+		{
+			System.Threading.Thread.CurrentThread.CurrentCulture = backupculture;
+			System.Threading.Thread.CurrentThread.CurrentUICulture = backupuiculture;
+		}
 	}
 }
