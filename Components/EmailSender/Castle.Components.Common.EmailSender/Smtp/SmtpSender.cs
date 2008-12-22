@@ -157,7 +157,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		/// </summary>
 		/// <param name="message">The message to convert.</param>
 		/// <returns>The converted message .</returns>
-		private MailMessage CreateMailMessage(Message message)
+		public MailMessage CreateMailMessage(Message message)
 		{
 			MailMessage mailMessage = new MailMessage(message.From, message.To.Replace(';', ','));
 
@@ -189,7 +189,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 
 				if (attachment.Stream != null)
 				{
-					mailAttach = new Attachment(attachment.Stream, attachment.MediaType);
+					mailAttach = new Attachment(attachment.Stream, attachment.FileName, attachment.MediaType);
 				}
 				else
 				{
