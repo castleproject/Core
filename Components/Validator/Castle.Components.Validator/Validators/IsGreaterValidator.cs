@@ -93,6 +93,12 @@ namespace Castle.Components.Validator
 		{
 			object refValue = GetReferenceValue(instance);
 
+			if ((fieldValue == null || fieldValue.ToString() == "") || 
+				(refValue == null || refValue.ToString() == ""))
+			{
+				return true;
+			}
+
 			bool valid = false;
 
 			switch (validationType)

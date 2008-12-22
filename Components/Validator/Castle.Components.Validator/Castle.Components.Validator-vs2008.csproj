@@ -67,11 +67,11 @@
     <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
     <Compile Include="Attributes\ValidateSameAsAttribute.cs" />
     <Compile Include="Attributes\ValidateNotSameAsAttribute.cs" />
-    <Compile Include="Contibutors\AbstractValidationContributor.cs" />
+    <Compile Include="Contributors\AbstractValidationContributor.cs" />
     <Compile Include="Attributes\ValidateSelfAttribute.cs" />
     <Compile Include="Attributes\ValidateSetAttribute.cs" />
     <Compile Include="Attributes\ValidateSingleAttribute.cs" />
-    <Compile Include="Contibutors\SelfValidationContributor.cs" />
+    <Compile Include="Contributors\SelfValidationContributor.cs" />
     <Compile Include="DefaultValidationPerformer.cs" />
     <Compile Include="IHasValidationPerformerDependency.cs" />
     <Compile Include="IHasValidatorRegistryDependency.cs" />
@@ -143,7 +143,7 @@
     <Compile Include="ValidationException.cs" />
     <Compile Include="ValidationInternalError.cs" />
     <Compile Include="Attributes\ValidatorContainerInterfaceFlagAttribute.cs" />
-    <Compile Include="Contibutors\ValidatorContainerInterfaceValidationContributor.cs" />
+    <Compile Include="Contributors\ValidatorContainerInterfaceValidationContributor.cs" />
     <Compile Include="ValidatorRunner.cs" />
     <Compile Include="Validators\AbstractValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />

@@ -25,7 +25,7 @@ namespace ValidatorTutorial.Tests.Validators
 	{
 		private IsGreaterValidator greaterIntValidator;
 		private IsGreaterValidator greaterDateValidator;
-
+		private IsGreaterValidator nullableGreaterDateValidator;
 		private TestTarget target;
 
 		[SetUp]
@@ -39,6 +39,9 @@ namespace ValidatorTutorial.Tests.Validators
 
 			greaterDateValidator = new IsGreaterValidator(IsGreaterValidationType.Date, "DateCompareField");
 			greaterDateValidator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("DateTarget"));
+
+			nullableGreaterDateValidator = new IsGreaterValidator(IsGreaterValidationType.Date, "NullableDateCompareField");
+			nullableGreaterDateValidator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("NullableDateTarget"));
 
 			target = new TestTarget();
 		}
@@ -69,6 +72,19 @@ namespace ValidatorTutorial.Tests.Validators
 			Assert.IsFalse(greaterDateValidator.IsValid(target, DateTime.Today.AddDays(-5)));
 		}
 
+		[Test]
+		public void FieldValueNullIsValid()
+		{
+			Assert.IsTrue(nullableGreaterDateValidator.IsValid(target, null));
+			Assert.IsTrue(nullableGreaterDateValidator.IsValid(target, ""));
+		}
+
+		[Test]
+		public void ReferenceValueNullIsValid()
+		{
+			Assert.IsTrue(nullableGreaterDateValidator.IsValid(target, DateTime.Today));
+		}
+
 		public class TestTarget
 		{
 			private int intTarget;
@@ -76,6 +92,8 @@ namespace ValidatorTutorial.Tests.Validators
 
 			private DateTime dateTarget;
 			private DateTime dateCompareField;
+		  private DateTime? nullableDateCompareField;
+		  private DateTime? nullableDateTarget;
 
 			public int IntTarget
 			{
@@ -99,6 +117,18 @@ namespace ValidatorTutorial.Tests.Validators
 			{
 				get { return dateCompareField; }
 				set { dateCompareField = value; }
+			}
+
+			public DateTime? NullableDateTarget
+			{
+				get { return nullableDateTarget; }
+				set { nullableDateTarget = value; }
+			}
+
+			public DateTime? NullableDateCompareField
+			{
+				get { return nullableDateCompareField; }
+				set { nullableDateCompareField = value; }
 			}
 		}
 	}
