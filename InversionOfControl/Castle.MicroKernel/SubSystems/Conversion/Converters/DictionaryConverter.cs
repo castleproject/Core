@@ -34,8 +34,9 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override object PerformConversion(IConfiguration configuration, Type targetType)
 		{
+#if DEBUG
 			System.Diagnostics.Debug.Assert( targetType == typeof(IDictionary) || targetType == typeof(Hashtable) );
-
+#endif
 			Hashtable dict = new Hashtable();
 
 			String keyTypeName = configuration.Attributes["keyType"];

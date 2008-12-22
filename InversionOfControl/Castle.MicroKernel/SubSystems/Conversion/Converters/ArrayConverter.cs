@@ -32,8 +32,9 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override object PerformConversion(IConfiguration configuration, Type targetType)
 		{
+#if DEBUG
 			System.Diagnostics.Debug.Assert(targetType.IsArray);
-
+#endif
 			int count = configuration.Children.Count;
 			Type itemType = targetType.GetElementType();
 

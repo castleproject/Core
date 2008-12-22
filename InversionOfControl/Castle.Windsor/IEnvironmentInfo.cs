@@ -17,8 +17,6 @@ namespace Castle.Windsor
 	/// <summary>
 	/// Gets the environment information (name). Implementors should 
 	/// use to define their environments and how those affect the configuration.
-	/// It is also used by the <see cref="Castle.Windsor.Configuration.Interpreters.XmlInterpreter"/>
-	/// to define a flag with the environment name.
 	/// </summary>
 	public interface IEnvironmentInfo
 	{

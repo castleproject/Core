@@ -94,6 +94,7 @@ namespace Castle.Windsor
 			RunInstaller();
 		}
 
+#if !SILVERLIGHT
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WindsorContainer"/> class using a
 		/// xml file to configure it.
@@ -105,6 +106,7 @@ namespace Castle.Windsor
 		public WindsorContainer(String xmlFile) : this(new XmlInterpreter(xmlFile))
 		{
 		}
+#endif
 
 		/// <summary>
 		/// Constructs a container using the specified <see cref="IKernel"/>
@@ -112,7 +114,7 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <remarks>
 		/// This constructs sets the Kernel.ProxyFactory property to
-		/// <see cref="Proxy.DefaultProxyFactory"/>
+		/// <c>Proxy.DefaultProxyFactory</c>
 		/// </remarks>
 		/// <param name="kernel">Kernel instance</param>
 		/// <param name="installer">Installer instance</param>
@@ -126,7 +128,7 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <remarks>
 		/// This constructs sets the Kernel.ProxyFactory property to
-		/// <see cref="Proxy.DefaultProxyFactory"/>
+		/// <c>Proxy.DefaultProxyFactory</c>
 		/// </remarks>
 		/// <param name="name">Container's name</param>
 		/// <param name="kernel">Kernel instance</param>
@@ -139,7 +141,9 @@ namespace Castle.Windsor
 
 			this.name = name;
 			this.kernel = kernel;
+#if !SILVERLIGHT
 			this.kernel.ProxyFactory = new Proxy.DefaultProxyFactory();
+#endif
 			this.installer = installer;
 		}
 

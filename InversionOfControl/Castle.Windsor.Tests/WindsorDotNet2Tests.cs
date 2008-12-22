@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #if !MONO
+#if !SILVERLIGHT // we do not support xml config on SL
 
 namespace Castle.Windsor.Tests
 {
@@ -510,4 +511,5 @@ namespace Castle.Windsor.Tests
 	}
 }
 
+#endif
 #endif

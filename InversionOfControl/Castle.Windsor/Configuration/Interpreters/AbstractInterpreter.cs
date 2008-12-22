@@ -62,9 +62,11 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 		} 
 
+#if !SILVERLIGHT
 		public AbstractInterpreter() : this(new ConfigResource())
 		{
 		}
+#endif
 
 		#endregion
 

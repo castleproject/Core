@@ -39,8 +39,9 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override object PerformConversion(IConfiguration configuration, Type targetType)
 		{
+#if DEBUG
 			System.Diagnostics.Debug.Assert( targetType == typeof(IList) || targetType == typeof(ArrayList) );
-
+#endif
 			ArrayList list = new ArrayList();
 
 			String itemType = configuration.Attributes["type"];

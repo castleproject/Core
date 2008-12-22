@@ -39,7 +39,9 @@ namespace Castle.Windsor.Installer
 			SetUpComponents(store.GetBootstrapComponents(), container);
 			SetUpFacilities(store.GetFacilities(), container);
 			SetUpComponents(store.GetComponents(), container);
+#if !SILVERLIGHT
 			SetUpChildContainers(store.GetConfigurationForChildContainers(), container);
+#endif
 		}
 
 		#endregion
@@ -48,17 +50,18 @@ namespace Castle.Windsor.Installer
 		{
 			foreach(IConfiguration facility in configurations)
 			{
-				String id = facility.Attributes["id"];
-				String typeName = facility.Attributes["type"];
+				string id = facility.Attributes["id"];
+				string typeName = facility.Attributes["type"];
 				if (string.IsNullOrEmpty(typeName)) continue;
 
 				Type type = ObtainType(typeName);
 
 				IFacility facilityInstance = InstantiateFacility(type);
 
+#if DEBUG
 				System.Diagnostics.Debug.Assert( id != null );
 				System.Diagnostics.Debug.Assert( facilityInstance != null );
-
+#endif
 				container.AddFacility(id, facilityInstance);
 			}
 		}
@@ -67,10 +70,10 @@ namespace Castle.Windsor.Installer
 		{
 			foreach(IConfiguration component in configurations)
 			{
-				String id = component.Attributes["id"];
+				string id = component.Attributes["id"];
 				
-				String typeName = component.Attributes["type"];
-				String serviceTypeName = component.Attributes["service"];
+				string typeName = component.Attributes["type"];
+				string serviceTypeName = component.Attributes["service"];
 				
 				if (string.IsNullOrEmpty(typeName)) continue;
 
@@ -82,19 +85,21 @@ namespace Castle.Windsor.Installer
 					service = ObtainType(serviceTypeName);
 				}
 
+#if DEBUG
 				System.Diagnostics.Debug.Assert( id != null );
 				System.Diagnostics.Debug.Assert( type != null );
 				System.Diagnostics.Debug.Assert( service != null );
-
+#endif
 				container.AddComponent(id, service, type);
 			}
 		}
 
+#if !SILVERLIGHT
 		private static void SetUpChildContainers(IConfiguration[] configurations, IWindsorContainer parentContainer)
 		{
 			foreach(IConfiguration childContainerConfig in configurations)
 			{
-				String id = childContainerConfig.Attributes["name"];
+				string id = childContainerConfig.Attributes["name"];
 				
 				System.Diagnostics.Debug.Assert( id != null );
 
@@ -102,6 +107,7 @@ namespace Castle.Windsor.Installer
 					new XmlInterpreter(new StaticContentResource(childContainerConfig.Value)));
 			}
 		}
+#endif
 
 		private static Type ObtainType(String typeName)
 		{

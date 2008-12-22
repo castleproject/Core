@@ -1,8 +1,11 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
-    <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>false</ThrowErrorsInValidation>
     <ProjectGuid>{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -36,7 +39,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;DOTNET35</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT DOTNET35</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -60,7 +63,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DOTNET35</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT DOTNET35</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -78,9 +81,10 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SharedLibs\net\2.0\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <Name>nunit.framework</Name>
+      <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
+      <AssemblyFolderKey>hklm\dn\nunit.framework</AssemblyFolderKey>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -94,14 +98,13 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
-      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
-      <Name>Castle.Core-vs2008</Name>
+    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core.Silverlight.csproj">
+      <Project>{537D7B08-F0B6-49E6-A13D-AD905B7C9C27}</Project>
+      <Name>Castle.Core.Silverlight</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-vs2008.csproj">
-      <Name>Castle.MicroKernel-vs2008</Name>
+    <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-vs2008-SL.csproj">
       <Project>{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Name>Castle.MicroKernel-vs2008-SL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -143,9 +146,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassComponents\CommonImplWithDependancy.cs" />
-    <Compile Include="ClassComponents\IMapper.cs" />
     <Compile Include="ClassComponents\ICommonSub1.cs" />
     <Compile Include="ClassComponents\ICommonSub2.cs" />
+    <Compile Include="ClassComponents\IMapper.cs" />
     <Compile Include="ClassComponents\NonPublicComponent.cs" />
     <Compile Include="ClassComponents\CustomerValidator.cs" />
     <Compile Include="ClassComponents\IValidator.cs" />
@@ -298,4 +301,11 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
+
 namespace Castle.Windsor.Proxy
 {
 	using System;
@@ -190,3 +192,5 @@ namespace Castle.Windsor.Proxy
 		}
 	}
 }
+
+#endif

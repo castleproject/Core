@@ -44,8 +44,9 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override object PerformConversion(IConfiguration configuration, Type targetType)
 		{
+#if DEBUG
 			System.Diagnostics.Debug.Assert(CanHandleType(targetType), "Got a type we can't handle!");
-
+#endif
 			Type[] argTypes = targetType.GetGenericArguments();
 
 			if (argTypes.Length != 2)
