@@ -19,6 +19,8 @@ namespace Castle.Components.Common.EmailSender.Smtp
 	using System.ComponentModel;
 	using System.Net;
 	using System.Net.Mail;
+	using System.Security;
+	using System.Security.Permissions;
 
 	/// <summary>
 	/// Uses Smtp to send emails.
@@ -266,7 +268,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		/// <param name="smtpClient">Message instance</param>
 		protected virtual void Configure(SmtpClient smtpClient)
 		{
-			if (HasCredentials)
+			if (CanAccessCredentials && HasCredentials)
 			{
 				smtpClient.Credentials = credentials;
 			}
@@ -290,7 +292,15 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		/// </value>
 		private bool HasCredentials
 		{
-			get { return credentials.UserName != null && credentials.Password != null ? true : false; }
+			get { return !string.IsNullOrEmpty(credentials.UserName); }
+		}
+
+		private static bool CanAccessCredentials
+		{
+			get
+			{
+				return SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.UnmanagedCode));
+			}
 		}
 	}
 }
