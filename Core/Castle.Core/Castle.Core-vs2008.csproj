@@ -59,6 +59,7 @@
     <Compile Include="Attributes\DoNotWireAttribute.cs" />
     <Compile Include="Attributes\InterceptorAttribute.cs" />
     <Compile Include="Attributes\LifestyleAttributes.cs" />
+    <Compile Include="CollectionExtensions.cs" />
     <Compile Include="Internal\LinkedList.cs">
       <SubType>Code</SubType>
     </Compile>
