@@ -21,9 +21,9 @@ namespace Castle.MicroKernel
 	using Core;
 
 #if !SILVERLIGHT
-	public partial class DefaultKernel : KernelEventSupport, IKernel, IDeserializationCallback
+	public partial class DefaultKernel : MarshalByRefObject, IKernel, IKernelEvents, IDeserializationCallback
 #else
-	public partial class DefaultKernel : KernelEventSupport, IKernel
+	public partial class DefaultKernel : IKernel, IKernelEvents
 #endif
 	{
 		public virtual void AddComponent(String key, Type classType)

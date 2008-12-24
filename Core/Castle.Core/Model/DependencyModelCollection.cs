@@ -38,8 +38,18 @@ namespace Castle.Core
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
 		public DependencyModelCollection(IList<DependencyModel> dependencies)
-			: base(dependencies)
 		{
+			if (dependencies == null) return;
+
+			foreach(var depModel in dependencies)
+			{
+				if (depModel == null)
+				{
+					throw new ArgumentNullException("dependencies", "dependencies has null entry");
+				}
+
+				Add(depModel);
+			}
 		}
 
 		public void AddRange(DependencyModelCollection dependencies)

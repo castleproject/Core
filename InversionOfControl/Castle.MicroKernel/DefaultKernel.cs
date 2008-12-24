@@ -16,7 +16,6 @@ namespace Castle.MicroKernel
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using Castle.Core;
@@ -40,9 +39,9 @@ namespace Castle.MicroKernel
 	/// </summary>
 #if !SILVERLIGHT
 	[Serializable]
-	public partial class DefaultKernel : KernelEventSupport, IKernel, IDeserializationCallback
+	public partial class DefaultKernel : MarshalByRefObject, IKernel, IKernelEvents, IDeserializationCallback
 #else
-	public partial class DefaultKernel : KernelEventSupport, IKernel
+	public partial class DefaultKernel : IKernel, IKernelEvents
 #endif
 	{
 		#region Fields
@@ -143,13 +142,15 @@ namespace Castle.MicroKernel
 		}
 
 		public DefaultKernel(SerializationInfo info, StreamingContext context)
-			: base(info, context)
 		{
 			MemberInfo[] members = FormatterServices.GetSerializableMembers(GetType(), context);
 
 			object[] kernelmembers = (object[])info.GetValue("members", typeof(object[]));
 
 			FormatterServices.PopulateObjectMembers(this, members, kernelmembers);
+
+			events[HandlerRegisteredEvent] = (Delegate)
+				 info.GetValue("HandlerRegisteredEvent", typeof(Delegate));
 		}
 
 		#endregion
@@ -835,8 +836,8 @@ namespace Castle.MicroKernel
 				NamingSubSystem.Register(key, handler);
 			}
 
-			base.RaiseHandlerRegistered(handler);
-			base.RaiseComponentRegistered(key, handler);
+			RaiseHandlerRegistered(handler);
+			RaiseComponentRegistered(key, handler);
 		}
 
 		protected object ResolveComponent(IHandler handler)
@@ -886,15 +887,16 @@ namespace Castle.MicroKernel
 		#region Serialization and Deserialization
 
 #if !SILVERLIGHT
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			base.GetObjectData(info, context);
 
+		public void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
 			MemberInfo[] members = FormatterServices.GetSerializableMembers(GetType(), context);
 
 			object[] kernelmembers = FormatterServices.GetObjectData(this, members);
 
 			info.AddValue("members", kernelmembers, typeof(object[]));
+
+			info.AddValue("HandlerRegisteredEvent", events[HandlerRegisteredEvent]);
 		}
 
 		void IDeserializationCallback.OnDeserialization(object sender)
