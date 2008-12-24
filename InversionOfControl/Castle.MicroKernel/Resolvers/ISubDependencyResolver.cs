@@ -31,20 +31,20 @@ namespace Castle.MicroKernel
 		/// could not be resolved.
 		/// </summary>
 		/// <param name="context">Creation context, which is a resolver itself</param>
-		/// <param name="parentResolver">Parent resolver</param>
+		/// <param name="contextHandlerResolver">Parent resolver - normally the IHandler implementation</param>
 		/// <param name="model">Model of the component that is requesting the dependency</param>
 		/// <param name="dependency">The dependency model</param>
 		/// <returns>The dependency resolved value or null</returns>
-		object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency);
+		object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency);
 
 		/// <summary>
 		/// Returns true if the resolver is able to satisfy this dependency.
 		/// </summary>
 		/// <param name="context">Creation context, which is a resolver itself</param>
-		/// <param name="parentResolver">Parent resolver</param>
+		/// <param name="contextHandlerResolver">Parent resolver - normally the IHandler implementation</param>
 		/// <param name="model">Model of the component that is requesting the dependency</param>
 		/// <param name="dependency">The dependency model</param>
 		/// <returns><c>true</c> if the dependency can be satisfied</returns>
-		bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency);
+		bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency);
 	}
 }

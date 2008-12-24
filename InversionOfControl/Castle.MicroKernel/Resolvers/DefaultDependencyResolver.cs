@@ -15,10 +15,11 @@
 namespace Castle.MicroKernel.Resolvers
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using Castle.Core;
 	using Castle.MicroKernel.SubSystems.Conversion;
 	using Castle.MicroKernel.Util;
+	using SpecializedResolvers;
 
 	/// <summary>
 	/// Default implementation for <see cref="IDependencyResolver"/>.
@@ -28,10 +29,10 @@ namespace Castle.MicroKernel.Resolvers
 	[Serializable]
 	public class DefaultDependencyResolver : IDependencyResolver
 	{
+		private DependencyDelegate dependencyResolvingDelegate;
 		private readonly IKernel kernel;
 		private readonly ITypeConverter converter;
-		private DependencyDelegate dependencyResolvingDelegate;
-		private IList subResolvers = new ArrayList();
+		private readonly IList<ISubDependencyResolver> subResolvers = new List<ISubDependencyResolver>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultDependencyResolver"/> class.
@@ -41,7 +42,7 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			this.kernel = kernel;
 
-			converter = (ITypeConverter)kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
+			converter = (ITypeConverter) kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 		}
 
 		/// <summary>
@@ -79,18 +80,18 @@ namespace Castle.MicroKernel.Resolvers
 		/// Returns true if the resolver is able to satisfy the specified dependency.
 		/// </summary>
 		/// <param name="context">Creation context, which is a resolver itself</param>
-		/// <param name="parentResolver">Parent resolver</param>
+		/// <param name="contextHandlerResolver">Parent resolver</param>
 		/// <param name="model">Model of the component that is requesting the dependency</param>
 		/// <param name="dependency">The dependency model</param>
 		/// <returns><c>true</c> if the dependency can be satisfied</returns>
-		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 							   DependencyModel dependency)
 		{
 			// 1 - check for the dependency on CreationContext, if present
 
 			if (context != null)
 			{
-				if (context.CanResolve(context, parentResolver, model, dependency))
+				if (context.CanResolve(context, contextHandlerResolver, model, dependency))
 				{
 					return true;
 				}
@@ -100,9 +101,9 @@ namespace Castle.MicroKernel.Resolvers
 
 			IHandler handler = kernel.GetHandler(model.Name);
 
-			if (handler != null && handler != parentResolver)
+			if (handler != null && handler != contextHandlerResolver)
 			{
-				if (handler.CanResolve(context, parentResolver, model, dependency))
+				if (handler.CanResolve(context, contextHandlerResolver, model, dependency))
 				{
 					return true;
 				}
@@ -110,9 +111,9 @@ namespace Castle.MicroKernel.Resolvers
 
 			// 3 - check within parent resolver, if present
 
-			if (parentResolver != null)
+			if (contextHandlerResolver != null)
 			{
-				if (parentResolver.CanResolve(context, parentResolver, model, dependency))
+				if (contextHandlerResolver.CanResolve(context, contextHandlerResolver, model, dependency))
 				{
 					return true;
 				}
@@ -120,9 +121,9 @@ namespace Castle.MicroKernel.Resolvers
 
 			// 4 - check within subresolvers
 
-			foreach (ISubDependencyResolver subResolver in subResolvers)
+			foreach(ISubDependencyResolver subResolver in subResolvers)
 			{
-				if (subResolver.CanResolve(context, parentResolver, model, dependency))
+				if (subResolver.CanResolve(context, contextHandlerResolver, model, dependency))
 				{
 					return true;
 				}
@@ -165,11 +166,11 @@ namespace Castle.MicroKernel.Resolvers
 		/// </list>
 		/// </remarks>
 		/// <param name="context">Creation context, which is a resolver itself</param>
-		/// <param name="parentResolver">Parent resolver</param>
+		/// <param name="contextHandlerResolver">Parent resolver</param>
 		/// <param name="model">Model of the component that is requesting the dependency</param>
 		/// <param name="dependency">The dependency model</param>
 		/// <returns>The dependency resolved value or null</returns>
-		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 							  DependencyModel dependency)
 		{
 			object value = null;
@@ -180,9 +181,9 @@ namespace Castle.MicroKernel.Resolvers
 
 			if (context != null)
 			{
-				if (context.CanResolve(context, parentResolver, model, dependency))
+				if (context.CanResolve(context, contextHandlerResolver, model, dependency))
 				{
-					value = context.Resolve(context, parentResolver, model, dependency);
+					value = context.Resolve(context, contextHandlerResolver, model, dependency);
 					resolved = true;
 				}
 			}
@@ -191,22 +192,22 @@ namespace Castle.MicroKernel.Resolvers
 
 			IHandler handler = kernel.GetHandler(model.Name);
 
-			if (!resolved && handler != parentResolver)
+			if (!resolved && handler != contextHandlerResolver)
 			{
-				if (handler.CanResolve(context, parentResolver, model, dependency))
+				if (handler.CanResolve(context, contextHandlerResolver, model, dependency))
 				{
-					value = handler.Resolve(context, parentResolver, model, dependency);
+					value = handler.Resolve(context, contextHandlerResolver, model, dependency);
 					resolved = true;
 				}
 			}
 
 			// 3 - check within parent resolver, if present
 
-			if (!resolved && parentResolver != null)
+			if (!resolved && contextHandlerResolver != null)
 			{
-				if (parentResolver.CanResolve(context, parentResolver, model, dependency))
+				if (contextHandlerResolver.CanResolve(context, contextHandlerResolver, model, dependency))
 				{
-					value = parentResolver.Resolve(context, parentResolver, model, dependency);
+					value = contextHandlerResolver.Resolve(context, contextHandlerResolver, model, dependency);
 					resolved = true;
 				}
 			}
@@ -217,9 +218,9 @@ namespace Castle.MicroKernel.Resolvers
 			{
 				foreach (ISubDependencyResolver subResolver in subResolvers)
 				{
-					if (subResolver.CanResolve(context, parentResolver, model, dependency))
+					if (subResolver.CanResolve(context, contextHandlerResolver, model, dependency))
 					{
-						value = subResolver.Resolve(context, parentResolver, model, dependency);
+						value = subResolver.Resolve(context, contextHandlerResolver, model, dependency);
 						resolved = true;
 						break;
 					}
