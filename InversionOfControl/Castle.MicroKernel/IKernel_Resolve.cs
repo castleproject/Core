@@ -40,6 +40,13 @@ namespace Castle.MicroKernel
 		/// the service type
 		/// </summary>
 		/// <param name="service">The service type</param>
+		Array ResolveAll(Type service);
+
+		/// <summary>
+		/// Returns all the valid component instances by
+		/// the service type
+		/// </summary>
+		/// <param name="service">The service type</param>
 		/// <param name="arguments">Arguments to resolve the services</param>
 		Array ResolveAll(Type service, IDictionary arguments);
 

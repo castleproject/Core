@@ -38,16 +38,16 @@ namespace Castle.MicroKernel.Handlers
 			Target.Init(kernel);
 		}
 
-		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver,
+		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
 							  ComponentModel model, DependencyModel dependency)
 		{
-			return target.Resolve(context, parentResolver, model, dependency);
+			return target.Resolve(context, contextHandlerResolver, model, dependency);
 		}
 
-		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, 
+		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, 
 							   ComponentModel model, DependencyModel dependency)
 		{
-			return target.CanResolve(context, parentResolver, model, dependency);
+			return target.CanResolve(context, contextHandlerResolver, model, dependency);
 		}
 
 		public object Resolve(CreationContext context)

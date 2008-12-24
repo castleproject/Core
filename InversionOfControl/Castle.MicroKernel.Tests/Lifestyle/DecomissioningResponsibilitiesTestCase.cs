@@ -134,11 +134,11 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 		[Test]
 		public void WhenRootComponentIsNotDisposableButDependenciesAre_DependenciesShouldBeDisposed()
 		{
-			kernel.AddComponent("root", typeof(NonDiposableRoot), LifestyleType.Transient);
+			kernel.AddComponent("root", typeof(NonDisposableRoot), LifestyleType.Transient);
 			kernel.AddComponent("a", typeof(A), LifestyleType.Transient);
 			kernel.AddComponent("b", typeof(B), LifestyleType.Transient);
 
-			NonDiposableRoot instance1 = kernel.Resolve<NonDiposableRoot>();
+			NonDisposableRoot instance1 = kernel.Resolve<NonDisposableRoot>();
 			Assert.IsFalse(instance1.A.IsDisposed);
 			Assert.IsFalse(instance1.B.IsDisposed);
 
@@ -152,7 +152,7 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 		public void WhenRootComponentIsNotDisposableButThirdLevelDependenciesAre_DependenciesShouldBeDisposed()
 		{
 			kernel.AddComponent("root", typeof(Indirection), LifestyleType.Transient);
-			kernel.AddComponent("secroot", typeof(NonDiposableRoot), LifestyleType.Transient);
+			kernel.AddComponent("secroot", typeof(NonDisposableRoot), LifestyleType.Transient);
 			kernel.AddComponent("a", typeof(A), LifestyleType.Transient);
 			kernel.AddComponent("b", typeof(B), LifestyleType.Transient);
 
@@ -166,46 +166,46 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			Assert.IsTrue(instance1.FakeRoot.B.IsDisposed);
 		}
 
-		//		[Test]
-		//		public void PooledComponentIsReleasedWhenRootComponentIsReleased()
-		//		{
-		//			kernel.AddComponentInstance("pool.fac", typeof(IPoolFactory), mockedPool);
-		//
-		//			kernel.AddComponent("spamservice", typeof(DisposableSpamService), LifestyleType.Transient);
-		//			kernel.AddComponent("templateengine", typeof(DisposableTemplateEngine), LifestyleType.Transient);
-		//			kernel.AddComponent("poolable", typeof(PoolableComponent1));
-		//
-		//			DisposableSpamService instance1 = (DisposableSpamService)kernel["spamservice"];
-		//			Assert.IsFalse(instance1.IsDisposed);
-		//			Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
-		//			PoolableComponent1 poolable = instance1.Pool;
-		//
-		//			kernel.ReleaseComponent(instance1);
-		//
-		//			// TODO: Assert that pool had its Release called
-		//		}
+//		[Test]
+//		public void PooledComponentIsReleasedWhenRootComponentIsReleased()
+//		{
+//			kernel.AddComponentInstance("pool.fac", typeof(IPoolFactory), mockedPool);
+//
+//			kernel.AddComponent("spamservice", typeof(DisposableSpamService), LifestyleType.Transient);
+//			kernel.AddComponent("templateengine", typeof(DisposableTemplateEngine), LifestyleType.Transient);
+//			kernel.AddComponent("poolable", typeof(PoolableComponent1));
+//
+//			DisposableSpamService instance1 = (DisposableSpamService)kernel["spamservice"];
+//			Assert.IsFalse(instance1.IsDisposed);
+//			Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
+//			PoolableComponent1 poolable = instance1.Pool;
+//
+//			kernel.ReleaseComponent(instance1);
+//
+//			// TODO: Assert that pool had its Release called
+//		}
 
 		public class Indirection
 		{
-			private NonDiposableRoot fakeRoot;
+			private NonDisposableRoot fakeRoot;
 
-			public Indirection(NonDiposableRoot fakeRoot)
+			public Indirection(NonDisposableRoot fakeRoot)
 			{
 				this.fakeRoot = fakeRoot;
 			}
 
-			public NonDiposableRoot FakeRoot
+			public NonDisposableRoot FakeRoot
 			{
 				get { return fakeRoot; }
 			}
 		}
 
-		public class NonDiposableRoot
+		public class NonDisposableRoot
 		{
 			private A a;
 			private B b;
 
-			public NonDiposableRoot(A a, B b)
+			public NonDisposableRoot(A a, B b)
 			{
 				this.a = a;
 				this.b = b;
@@ -219,20 +219,6 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			public B B
 			{
 				get { return b; }
-			}
-		}
-
-		public abstract class DisposableBase : IDisposable
-		{
-			public bool IsDisposed { get; private set; }
-
-			public void Dispose()
-			{
-				if (IsDisposed)
-				{
-					throw new Exception("Already disposed");
-				}
-				IsDisposed = true;
 			}
 		}
 

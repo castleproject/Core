@@ -380,6 +380,8 @@
     <Compile Include="Resolvers\ISubDependencyResolver.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Resolvers\SpecializedResolvers\ArrayResolver.cs" />
+    <Compile Include="Resolvers\SpecializedResolvers\ListResolver.cs" />
     <Compile Include="SubSystems\AbstractSubSystem.cs">
       <SubType>Code</SubType>
     </Compile>

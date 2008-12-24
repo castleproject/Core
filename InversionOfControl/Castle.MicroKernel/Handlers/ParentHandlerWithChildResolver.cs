@@ -44,31 +44,31 @@ namespace Castle.MicroKernel.Handlers
 
 		#region ISubDependencyResolver Members
 
-		public virtual object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+		public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 		{
 
 			object value = childResolver.Resolve(context, null, model, dependency);
 
 			if (value == null)
 			{
-				value = parentHandler.Resolve(context, parentResolver, model, dependency);
+				value = parentHandler.Resolve(context, contextHandlerResolver, model, dependency);
 			}
 
 			return value;
 		}
 
-		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model, DependencyModel dependency)
 		{
 			bool canResolve = false;
 
-			if (parentResolver != null)
+			if (contextHandlerResolver != null)
 			{
 				canResolve = childResolver.CanResolve(context, null, model, dependency);
 			}
 
 			if (!canResolve)
 			{
-				canResolve = parentHandler.CanResolve(context, parentResolver, model, dependency);
+				canResolve = parentHandler.CanResolve(context, contextHandlerResolver, model, dependency);
 			}
 
 			return canResolve;

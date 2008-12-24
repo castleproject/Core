@@ -134,7 +134,7 @@ namespace Castle.MicroKernel
 
 		#region ISubDependencyResolver
 
-		public virtual object Resolve(CreationContext context, ISubDependencyResolver parentResolver,
+		public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
 		                              ComponentModel model, DependencyModel dependency)
 		{
 			if (additionalArguments != null)
@@ -145,7 +145,7 @@ namespace Castle.MicroKernel
 			return null;
 		}
 
-		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver,
+		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver,
 		                               ComponentModel model, DependencyModel dependency)
 		{
 			if (dependency.DependencyKey == null) return false;

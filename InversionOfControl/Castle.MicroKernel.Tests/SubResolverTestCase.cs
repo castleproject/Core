@@ -54,13 +54,13 @@ namespace Castle.MicroKernel.Tests
 	{
 		public int? Result;
 
-		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		public object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 		                      DependencyModel dependency)
 		{
 			return Result.Value;
 		}
 
-		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		public bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 		                       DependencyModel dependency)
 		{
 			return Result != null;

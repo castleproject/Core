@@ -134,12 +134,22 @@ namespace Castle.MicroKernel
 		/// the service type
 		/// </summary>
 		/// <param name="service">The service type</param>
+		public Array ResolveAll(Type service)
+		{
+			return ResolveAll(service, new Hashtable());
+		}
+
+		/// <summary>
+		/// Returns all the valid component instances by
+		/// the service type
+		/// </summary>
+		/// <param name="service">The service type</param>
 		/// <param name="arguments">Arguments to resolve the services</param>
 		public Array ResolveAll(Type service, IDictionary arguments)
 		{
 			Dictionary<IHandler, object> resolved = new Dictionary<IHandler, object>();
 
-			foreach (IHandler handler in GetAssignableHandlers(service))
+			foreach(IHandler handler in GetAssignableHandlers(service))
 			{
 				if (handler.CurrentState != HandlerState.Valid)
 					continue;

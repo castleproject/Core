@@ -180,13 +180,13 @@ namespace Castle.MicroKernel.Handlers
 
 		#region ISubDependencyResolver Members
 
-		public virtual object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		public virtual object Resolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 									  DependencyModel dependency)
 		{
 			return customParameters[dependency.DependencyKey];
 		}
 
-		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver contextHandlerResolver, ComponentModel model,
 									   DependencyModel dependency)
 		{
 			if (dependency.DependencyKey == null)
