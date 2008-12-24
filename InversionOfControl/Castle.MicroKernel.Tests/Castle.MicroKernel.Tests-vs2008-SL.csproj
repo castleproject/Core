@@ -230,6 +230,7 @@
     <Compile Include="Lifecycle\Components\HttpFakeServer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lifestyle\Components\DisposableBase.cs" />
     <Compile Include="Lifestyle\Components\MyCustomerActivator.cs" />
     <Compile Include="Lifestyle\DecomissioningResponsibilitiesTestCase.cs" />
     <Compile Include="Lifecycle\LifecycleTestCase.cs">

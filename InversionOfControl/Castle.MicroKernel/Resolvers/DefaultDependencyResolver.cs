@@ -19,7 +19,6 @@ namespace Castle.MicroKernel.Resolvers
 	using Castle.Core;
 	using Castle.MicroKernel.SubSystems.Conversion;
 	using Castle.MicroKernel.Util;
-	using SpecializedResolvers;
 
 	/// <summary>
 	/// Default implementation for <see cref="IDependencyResolver"/>.

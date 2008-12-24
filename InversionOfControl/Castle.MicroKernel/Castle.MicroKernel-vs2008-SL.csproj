@@ -115,6 +115,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DefaultKernel_AddComponent.cs" />
+    <Compile Include="DefaultKernel_Events.cs" />
     <Compile Include="DefaultKernel_Resolve.cs" />
     <Compile Include="Exceptions\CircularDependencyException.cs" />
     <Compile Include="Exceptions\ComponentNotFoundException.cs">
@@ -223,9 +224,6 @@
     </Compile>
     <Compile Include="IKernel_AddComponent.cs" />
     <Compile Include="IKernel_Resolve.cs" />
-    <Compile Include="KernelEventSupport.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="LifecycleConcerns\DisposalConcern.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -384,6 +382,8 @@
     <Compile Include="Resolvers\ISubDependencyResolver.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Resolvers\SpecializedResolvers\ArrayResolver.cs" />
+    <Compile Include="Resolvers\SpecializedResolvers\ListResolver.cs" />
     <Compile Include="SubSystems\AbstractSubSystem.cs">
       <SubType>Code</SubType>
     </Compile>
