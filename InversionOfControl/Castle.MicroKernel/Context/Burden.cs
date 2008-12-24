@@ -18,24 +18,42 @@ namespace Castle.MicroKernel
 	using System.Collections.Generic;
 	using Core;
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public class Burden
 	{
 		private object instance;
 		private IHandler handler;
+		private bool instanceRequiresDecommission, childRequiresDecommission;
 		private readonly List<Burden> children = new List<Burden>();
 
-		public void SetRootInstance(object instance, IHandler handler)
+		public void SetRootInstance(object instance, IHandler handler, bool hasDecomission)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 			if (handler == null) throw new ArgumentNullException("handler");
 
 			this.instance = instance;
 			this.handler = handler;
+			this.instanceRequiresDecommission = hasDecomission;
 		}
 
-		public void AddChild(Burden burden)
+		public void AddChild(Burden child)
 		{
-			children.Add(burden);
+			children.Add(child);
+
+			if (child.GraphRequiresDecommission)
+			{
+				childRequiresDecommission = true;
+			}
+		}
+
+		public bool GraphRequiresDecommission
+		{
+			get
+			{
+				return instanceRequiresDecommission || childRequiresDecommission;
+			}
 		}
 
 		public bool HasChildren

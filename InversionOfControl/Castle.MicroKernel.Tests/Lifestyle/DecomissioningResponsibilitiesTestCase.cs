@@ -19,7 +19,9 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 	using Castle.MicroKernel.Tests.ClassComponents;
 	using Castle.MicroKernel.Tests.Pools;
 	using MicroKernel.Lifestyle.Pool;
+	using MicroKernel.Registration;
 	using NUnit.Framework;
+	using Releasers;
 
 	[TestFixture]
 	public class DecomissioningResponsibilitiesTestCase
@@ -39,12 +41,24 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 		}
 
 		[Test]
+		public void TransientReferencesAreNotHeldByContainer()
+		{
+			kernel.Register( Component.For<EmptyClass>().LifeStyle.Transient ); 
+			var emptyClassWeakReference = new WeakReference(kernel.Resolve<EmptyClass>());
+			
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
+			
+			Assert.IsFalse(emptyClassWeakReference.IsAlive);
+		}
+
+		[Test]
 		public void TransientReferencedComponentsAreReleasedInChain()
 		{
 			kernel.AddComponent("spamservice", typeof(DisposableSpamService), LifestyleType.Transient);
 			kernel.AddComponent("templateengine", typeof(DisposableTemplateEngine), LifestyleType.Transient);
 
-			DisposableSpamService instance1 = (DisposableSpamService)kernel["spamservice"];
+			DisposableSpamService instance1 = (DisposableSpamService) kernel["spamservice"];
 			Assert.IsFalse(instance1.IsDisposed);
 			Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
 
@@ -152,24 +166,24 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			Assert.IsTrue(instance1.FakeRoot.B.IsDisposed);
 		}
 
-//		[Test]
-//		public void PooledComponentIsReleasedWhenRootComponentIsReleased()
-//		{
-//			kernel.AddComponentInstance("pool.fac", typeof(IPoolFactory), mockedPool);
-//
-//			kernel.AddComponent("spamservice", typeof(DisposableSpamService), LifestyleType.Transient);
-//			kernel.AddComponent("templateengine", typeof(DisposableTemplateEngine), LifestyleType.Transient);
-//			kernel.AddComponent("poolable", typeof(PoolableComponent1));
-//
-//			DisposableSpamService instance1 = (DisposableSpamService)kernel["spamservice"];
-//			Assert.IsFalse(instance1.IsDisposed);
-//			Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
-//			PoolableComponent1 poolable = instance1.Pool;
-//
-//			kernel.ReleaseComponent(instance1);
-//
-//			// TODO: Assert that pool had its Release called
-//		}
+		//		[Test]
+		//		public void PooledComponentIsReleasedWhenRootComponentIsReleased()
+		//		{
+		//			kernel.AddComponentInstance("pool.fac", typeof(IPoolFactory), mockedPool);
+		//
+		//			kernel.AddComponent("spamservice", typeof(DisposableSpamService), LifestyleType.Transient);
+		//			kernel.AddComponent("templateengine", typeof(DisposableTemplateEngine), LifestyleType.Transient);
+		//			kernel.AddComponent("poolable", typeof(PoolableComponent1));
+		//
+		//			DisposableSpamService instance1 = (DisposableSpamService)kernel["spamservice"];
+		//			Assert.IsFalse(instance1.IsDisposed);
+		//			Assert.IsFalse(instance1.TemplateEngine.IsDisposed);
+		//			PoolableComponent1 poolable = instance1.Pool;
+		//
+		//			kernel.ReleaseComponent(instance1);
+		//
+		//			// TODO: Assert that pool had its Release called
+		//		}
 
 		public class Indirection
 		{
@@ -294,6 +308,11 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 
 		public class DisposableTemplateEngine : DisposableBase
 		{
+		}
+
+		public class EmptyClass
+		{
+
 		}
 	}
 }

@@ -28,8 +28,7 @@ namespace Castle.MicroKernel.Releasers
 		{
 			ComponentModel model = burden.Model;
 
-			if (model.LifecycleSteps.HasDecommissionSteps || 
-				model.LifestyleType == LifestyleType.Pooled || burden.HasChildren)
+			if (burden.GraphRequiresDecommission || model.LifestyleType == LifestyleType.Pooled)
 			{
 				base.Track(instance, burden);
 			}

@@ -49,7 +49,7 @@ namespace Castle.MicroKernel.Handlers
 			{
 			    object instance = lifestyleManager.Resolve(context);
 
-				resCtx.Burden.SetRootInstance(instance, this);
+				resCtx.Burden.SetRootInstance(instance, this, ComponentModel.LifecycleSteps.HasDecommissionSteps);
 
 				context.ReleasePolicy.Track(instance, resCtx.Burden);
 
