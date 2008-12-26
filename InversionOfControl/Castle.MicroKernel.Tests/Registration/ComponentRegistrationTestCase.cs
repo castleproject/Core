@@ -310,8 +310,6 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreEqual("value2", handler.ComponentModel.ExtendedProperties["key2"]);
 		}
 
-#if DOTNET35
-
 		[Test]
 		public void AddComponent_ExtendedProperties_UsingAnonymousType()
 		{
@@ -324,8 +322,6 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreEqual("value1", handler.ComponentModel.ExtendedProperties["key1"]);
 			Assert.AreEqual("value2", handler.ComponentModel.ExtendedProperties["key2"]);
 		}
-
-#endif
 
 		[Test]
 		public void AddComponent_CustomDependencies_WorksFine()
@@ -346,8 +342,6 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreEqual(customer.Age, 45);
 		}
 
-#if DOTNET35
-
 		[Test]
 		public void AddComponent_CustomDependencies_UsingAnonymousType()
 		{
@@ -361,7 +355,6 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreEqual(customer.Address, "Fairyland");
 			Assert.AreEqual(customer.Age, 45);
 		}
-#endif
 
 		[Test]
 		public void AddComponent_CustomDependenciesDictionary_WorksFine()
@@ -464,8 +457,6 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreSame(common2, component.Services[1]);
 		}
 
-#if DOTNET35
-
 		[Test]
 		public void AddComponent_ServiceOverrides_UsingAnonymousType()
 		{
@@ -494,8 +485,6 @@ namespace Castle.MicroKernel.Tests.Registration
 			Assert.AreEqual(customer.CustomerBase.Address, "Fairyland");
 			Assert.AreEqual(customer.CustomerBase.Age, 45);
 		}
-
-#endif
 
 		[Test]
 		public void AddComponent_ServiceOverridesDictionary_WorksFine()

@@ -146,6 +146,7 @@
     <Compile Include="ClassComponents\IMapper.cs" />
     <Compile Include="ClassComponents\ICommonSub1.cs" />
     <Compile Include="ClassComponents\ICommonSub2.cs" />
+    <Compile Include="ClassComponents\ITask.cs" />
     <Compile Include="ClassComponents\NonPublicComponent.cs" />
     <Compile Include="ClassComponents\CustomerValidator.cs" />
     <Compile Include="ClassComponents\IValidator.cs" />
