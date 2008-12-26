@@ -58,20 +58,6 @@ namespace Castle.MicroKernel.Registration
 				if (interfaces.Length > 0)
 				{
 					first = interfaces[0];
-
-					// This is a workaround for a CLR bug in
-					// which GetInterfaces() returns interfaces
-					// with no implementations.
-					if (first.IsGenericType && first.ReflectedType == null)
-					{
-					    bool shouldUseGenericTypeDefinition = false;
-					    foreach (Type argument in first.GetGenericArguments())
-					    {
-					        shouldUseGenericTypeDefinition |= argument.IsGenericParameter;
-					    }
-                        if(shouldUseGenericTypeDefinition)
-                        first = first.GetGenericTypeDefinition();
-					}
 				}
 
 				return (first != null) ? new Type[] { first } : null;
@@ -157,9 +143,42 @@ namespace Castle.MicroKernel.Registration
 			else if (serviceSelector != null)
 			{
 				services = serviceSelector(type, baseType);
+				if(services!=null)
+				{
+					services = new List<Type>(services).ConvertAll<Type>(WorkaroundCLRBug);
+				}
 			}
 
 			return services ?? new Type[] { type };
+		}
+
+		/// <summary>
+		/// This is a workaround for a CLR bug in
+		/// which GetInterfaces() returns interfaces
+		/// with no implementations.
+		/// </summary>
+		/// <param name="serviceType">Type of the service.</param>
+		/// <returns></returns>
+		private static Type WorkaroundCLRBug(Type serviceType)
+		{
+			if(!serviceType.IsInterface)
+			{
+				return serviceType;
+			}
+			// This is a workaround for a CLR bug in
+			// which GetInterfaces() returns interfaces
+			// with no implementations.
+			if (serviceType.IsGenericType && serviceType.ReflectedType == null)
+			{
+				bool shouldUseGenericTypeDefinition = false;
+				foreach (Type argument in serviceType.GetGenericArguments())
+				{
+					shouldUseGenericTypeDefinition |= argument.IsGenericParameter;
+				}
+				if (shouldUseGenericTypeDefinition)
+					return serviceType.GetGenericTypeDefinition();
+			}
+			return serviceType;
 		}
 	}
 }

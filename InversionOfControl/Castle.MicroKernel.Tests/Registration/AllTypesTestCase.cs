@@ -418,6 +418,17 @@ namespace Castle.MicroKernel.Tests.Registration
             IRepository<ICustomer> repository = kernel.Resolve<IRepository<ICustomer>>();
             Assert.IsNotNull(repository);
         }
+		[Test]
+		public void RegisterGenericTypes_BasedOnGenericDefinitionUsingSelect_RegisteredInContainer()
+		{
+			kernel.Register(AllTypes.Of<ITask>().FromAssembly(Assembly.GetExecutingAssembly())
+								.WithService.Select((t, b) =>
+													from type in t.GetInterfaces()
+													where !type.Equals(typeof(ITask))
+													select type));
+			Assert.IsNotNull(kernel.Resolve<ITask<object>>());
+		}
+		
 
     }
 }
