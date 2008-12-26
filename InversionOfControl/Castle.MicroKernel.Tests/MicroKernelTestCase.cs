@@ -172,6 +172,15 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
+		public void ResolveAllAccountsForAssignableServices()
+		{
+			kernel.AddComponent("test", typeof(ICommon), typeof(CommonImpl2));
+			kernel.AddComponent("test2", typeof(ICommonSub1), typeof(CommonSub1Impl));
+			ICommon[] services = kernel.ResolveAll<ICommon>();
+			Assert.AreEqual(2, services.Length);
+		}
+
+		[Test]
 		public void ResolveAllWaitingOnDependencies()
 		{
 			kernel.AddComponent("test", typeof(ICommon), typeof(CommonImplWithDependancy));
