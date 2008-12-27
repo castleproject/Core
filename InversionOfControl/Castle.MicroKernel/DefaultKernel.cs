@@ -812,6 +812,11 @@ namespace Castle.MicroKernel
 
 		#region Protected members
 
+		protected IConversionManager ConversionSubSystem
+		{
+			get { return (IConversionManager) subsystems[SubSystemConstants.ConversionManagerKey]; }
+		}
+
 		protected virtual IHandler WrapParentHandler(IHandler parentHandler)
 		{
 			if (parentHandler == null) return null;
@@ -857,32 +862,30 @@ namespace Castle.MicroKernel
 
 		protected object ResolveComponent(IHandler handler, Type service, IDictionary additionalArguments)
 		{
-		    CreationContext prev = currentCreationContext;
-		    CreationContext context = 
-                CreateCreationContext(handler, service, additionalArguments);
-		    currentCreationContext = context;
-            using (context.ParentResolutionContext(prev))
-		    try
-		    {
-                object instance = handler.Resolve(context);
+			CreationContext prev = currentCreationContext;
+			CreationContext context = CreateCreationContext(handler, service, additionalArguments);
+			currentCreationContext = context;
 
-                // ReleasePolicy.Track(instance, handler);
-
-                return instance;
-		    }
-			finally
-		    {
-		        currentCreationContext = prev;
-		    }
+			using(context.ParentResolutionContext(prev))
+			{
+				try
+				{
+					return handler.Resolve(context);
+				}
+				finally
+				{
+					currentCreationContext = prev;
+				}
+			}
 		}
 
 		protected CreationContext CreateCreationContext(IHandler handler, Type typeToExtractGenericArguments,
 		                                                IDictionary additionalArguments)
 		{
-		    return new CreationContext(handler, ReleasePolicy, typeToExtractGenericArguments, additionalArguments);
+			return new CreationContext(handler, ReleasePolicy, typeToExtractGenericArguments, additionalArguments, ConversionSubSystem);
 		}
 
-	    #endregion
+		#endregion
 
 		#region Serialization and Deserialization
 

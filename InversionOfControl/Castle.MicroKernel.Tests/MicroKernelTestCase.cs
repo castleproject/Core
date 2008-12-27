@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-using Castle.Core;
-
 namespace Castle.MicroKernel.Tests
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
+	using Castle.Core;
 	using Castle.MicroKernel.Tests.ClassComponents;
 	using NUnit.Framework;
 
@@ -87,8 +86,8 @@ namespace Castle.MicroKernel.Tests
 		{
 			CustomerImpl customer = new CustomerImpl();
 
-			kernel.AddComponentInstance <ICustomer>(customer);
-			Assert.AreSame(kernel[typeof(ICustomer)],customer);
+			kernel.AddComponentInstance<ICustomer>(customer);
+			Assert.AreSame(kernel[typeof(ICustomer)], customer);
 		}
 
 		[Test]
@@ -205,55 +204,111 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual(customer2.GetType(), typeof(CustomerImpl2));
 		}
 
-		[Test,ExpectedException(typeof(ComponentRegistrationException),
-			ExpectedMessage = "Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.ICommon service")]
+		[Test, ExpectedException(typeof(ComponentRegistrationException),
+			ExpectedMessage =
+				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.ICommon service"
+			)]
 		public void ShouldNotRegisterAbstractClassAsComponentImplementation_With_Simple_Signature()
 		{
 			kernel.AddComponent("abstract", typeof(ICommon), typeof(BaseCommonComponent));
-		    kernel.Resolve<ICommon>("abstract");
+			kernel.Resolve<ICommon>("abstract");
 		}
 
-		[Test,ExpectedException(typeof(ComponentRegistrationException),
-			ExpectedMessage = "Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent service")]
+		[Test, ExpectedException(typeof(ComponentRegistrationException),
+			ExpectedMessage =
+				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent service"
+			)]
 		public void ShouldNotRegisterAbstractClass_With_Simple_Signature()
 		{
 			kernel.AddComponent("abstract", typeof(BaseCommonComponent));
-            kernel.Resolve<ICommon>("abstract");
+			kernel.Resolve<ICommon>("abstract");
 		}
 
-		[Test,ExpectedException(typeof(ComponentRegistrationException),
-			ExpectedMessage = "Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.ICommon service")]
+		[Test, ExpectedException(typeof(ComponentRegistrationException),
+			ExpectedMessage =
+				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.ICommon service"
+			)]
 		public void ShouldNotRegisterAbstractClassAsComponentImplementation_With_LifestyleType_Signature()
 		{
 			kernel.AddComponent("abstract", typeof(ICommon), typeof(BaseCommonComponent), LifestyleType.Pooled);
-            kernel.Resolve<ICommon>("abstract");
+			kernel.Resolve<ICommon>("abstract");
 		}
 
-		[Test,ExpectedException(typeof(ComponentRegistrationException),
-			ExpectedMessage = "Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent service")]
+		[Test, ExpectedException(typeof(ComponentRegistrationException),
+			ExpectedMessage =
+				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent service"
+			)]
 		public void ShouldNotRegisterAbstractClass_With_LifestyleType_Signature()
 		{
 			kernel.AddComponent("abstract", typeof(BaseCommonComponent), LifestyleType.Pooled);
-            kernel.Resolve<ICommon>("abstract");
+			kernel.Resolve<ICommon>("abstract");
 		}
 
 
-		[Test,ExpectedException(typeof(ComponentRegistrationException),
-			ExpectedMessage = "Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.ICommon service")]
+		[Test, ExpectedException(typeof(ComponentRegistrationException),
+			ExpectedMessage =
+				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.ICommon service"
+			)]
 		public void ShouldNotRegisterAbstractClassAsComponentImplementation_With_LifestyleType_And_Override_Signature()
 		{
 			kernel.AddComponent("abstract", typeof(ICommon), typeof(BaseCommonComponent), LifestyleType.Pooled, true);
-            kernel.Resolve<ICommon>("abstract");
+			kernel.Resolve<ICommon>("abstract");
 		}
 
 		[Test]
 		[ExpectedException(typeof(ComponentRegistrationException),
-			ExpectedMessage = "Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent service")]
+			ExpectedMessage =
+				"Type Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent is abstract.\r\n As such, it is not possible to instansiate it as implementation of Castle.MicroKernel.Tests.ClassComponents.BaseCommonComponent service"
+			)]
 		public void ShouldNotRegisterAbstractClass_With_LifestyleType_And_Override_Signature()
 		{
 			kernel.AddComponent("abstract", typeof(BaseCommonComponent), LifestyleType.Pooled, true);
-            kernel.Resolve<ICommon>("abstract");
+			kernel.Resolve<ICommon>("abstract");
 		}
 
+		[Test]
+		public void ResolveUsingAddionalParametersForConfigurationInsteadOfServices()
+		{
+			kernel.AddComponent("cust", typeof(ICustomer), typeof(CustomerImpl), LifestyleType.Transient);
+
+			var customer = kernel.Resolve<ICustomer>("cust");
+			Assert.IsNull(customer.Address);
+			Assert.IsNull(customer.Name);
+			Assert.AreEqual(0, customer.Age);
+
+			var dictionary = new Dictionary<string, object>();
+			dictionary.Add("Name", "name");
+			dictionary.Add("Address", "address");
+			dictionary.Add("Age", "18");
+			customer = kernel.Resolve<ICustomer>("cust", dictionary);
+
+			Assert.AreEqual("name", customer.Name);
+			Assert.AreEqual("address", customer.Address);
+			Assert.AreEqual(18, customer.Age);
+		}
+
+		[Test]
+		public void AdditionalParametersShouldNotBePropagatedInTheDependencyChain()
+		{
+			kernel.AddComponent("cust", typeof(ICustomer), typeof(CustomerImpl), LifestyleType.Transient);
+			kernel.AddComponent("custex", typeof(ExtendedCustomer), LifestyleType.Transient);
+
+			var dictionary = new Dictionary<string, object>();
+			dictionary.Add("Name", "name");
+			dictionary.Add("Address", "address");
+			dictionary.Add("Age", "18");
+			var customer = kernel.Resolve<ICustomer>("cust", dictionary);
+
+			Assert.AreEqual("name", customer.Name);
+			Assert.AreEqual("address", customer.Address);
+			Assert.AreEqual(18, customer.Age);
+
+			var custImpl = customer as CustomerImpl;
+
+			Assert.IsNotNull(custImpl.ExtendedCustomer);
+			Assert.IsNull(custImpl.ExtendedCustomer.Address);
+			Assert.IsNull(custImpl.ExtendedCustomer.Name);
+			Assert.AreEqual(0, custImpl.ExtendedCustomer.Age);
+		}
 	}
 }

@@ -37,7 +37,7 @@ namespace Castle.Core
 		/// Initializes a new instance of the <see cref="DependencyModelCollection"/> class.
 		/// </summary>
 		/// <param name="dependencies">The dependencies.</param>
-		public DependencyModelCollection(IList<DependencyModel> dependencies)
+		public DependencyModelCollection(IEnumerable<DependencyModel> dependencies)
 		{
 			if (dependencies == null) return;
 

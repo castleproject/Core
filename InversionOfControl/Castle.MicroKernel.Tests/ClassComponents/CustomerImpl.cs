@@ -16,10 +16,34 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for CustomerImpl.
-	/// </summary>
 	public class CustomerImpl : ICustomer
+	{
+		private String name;
+		private String address;
+		private int age;
+
+		public String Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public String Address
+		{
+			get { return address; }
+			set { address = value; }
+		}
+
+		public int Age
+		{
+			get { return age; }
+			set { age = value; }
+		}
+
+		public ExtendedCustomer ExtendedCustomer { get; set; }
+	}
+
+	public class ExtendedCustomer
 	{
 		private String name;
 		private String address;

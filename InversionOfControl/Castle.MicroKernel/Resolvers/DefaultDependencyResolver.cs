@@ -485,7 +485,7 @@ namespace Castle.MicroKernel.Resolvers
 			}
 			else
 			{
-				return new CreationContext(current.Handler, current.ReleasePolicy, parameterType, current);
+				return new CreationContext(parameterType, current);
 			}
 		}
 	}
