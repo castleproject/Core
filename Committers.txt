@@ -1,4 +1,4 @@
-This file names who's behind the Castle Team. You can find more about us at http://www.castleproject.org/index.php/Castle:Community
+This file names who's behind the Castle Team. You can find more about us at http://www.castleproject.org/community/team.html
  
 Committers
 ==========
@@ -28,6 +28,11 @@ Committers
 - Fabian Schmied
 - Dave Godfrey
 - Markus Zywitza
+- Lee Henson
+- Ken Egozi
+- Chris Ortman
+- Jonathon Rossi
+- Tuna Toksöz
 
 Managers 
 ========
@@ -55,6 +60,7 @@ PMC Members
 - Chad Humphries
 - Ayende Rahien
 - Fabio David Batista
+- Roelof Blom
 - Josh Robb
 
 Emeritus 
@@ -68,4 +74,3 @@ Emeritus
 - CobraLord
 - Tatham Oddie
 - Ahmed Ghandour 
-
