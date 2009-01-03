@@ -19,6 +19,8 @@ namespace Castle.DynamicProxy.Tests
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators;
 	using NUnit.Framework;
+	using System.Collections.Generic;
+
 
 	[TestFixture]
 	public class MethodFinderTestCase
@@ -26,7 +28,7 @@ namespace Castle.DynamicProxy.Tests
 		private static void AssertArraysAreEqualUnsorted(object[] expected, object[] actual)
 		{
 			Assert.AreEqual(expected.Length, actual.Length);
-			ArrayList actualAsList = new ArrayList(actual);
+			List<object> actualAsList = new List<object>(actual);
 			foreach (object expectedElement in expected)
 			{
 				Assert.Contains(expectedElement, actualAsList);
@@ -39,13 +41,13 @@ namespace Castle.DynamicProxy.Tests
 		public void AssertArrayAreEqualUnsorted()
 		{
 			AssertArraysAreEqualUnsorted(new object[0], new object[0]);
-			AssertArraysAreEqualUnsorted(new object[] {null}, new object[] {null});
-			AssertArraysAreEqualUnsorted(new object[] {null, "one", null}, new object[] {null, null, "one"});
-			AssertArraysAreEqualUnsorted(new object[] {null, "one", null}, new object[] {"one", null, null});
+			AssertArraysAreEqualUnsorted(new object[] { null }, new object[] { null });
+			AssertArraysAreEqualUnsorted(new object[] { null, "one", null }, new object[] { null, null, "one" });
+			AssertArraysAreEqualUnsorted(new object[] { null, "one", null }, new object[] { "one", null, null });
 
 			try
 			{
-				AssertArraysAreEqualUnsorted(new object[] {null, "one", null}, new object[] {"one", "one", null});
+				AssertArraysAreEqualUnsorted(new object[] { null, "one", null }, new object[] { "one", "one", null });
 				Assert.Fail();
 			}
 			catch (AssertionException)
@@ -54,7 +56,7 @@ namespace Castle.DynamicProxy.Tests
 			}
 			try
 			{
-				AssertArraysAreEqualUnsorted(new object[] {null, "one"}, new object[] {"one", null, null});
+				AssertArraysAreEqualUnsorted(new object[] { null, "one" }, new object[] { "one", null, null });
 				Assert.Fail();
 			}
 			catch (AssertionException)
@@ -63,7 +65,7 @@ namespace Castle.DynamicProxy.Tests
 			}
 			try
 			{
-				AssertArraysAreEqualUnsorted(new object[] {null, "one", null}, new object[] {"one", null});
+				AssertArraysAreEqualUnsorted(new object[] { null, "one", null }, new object[] { "one", null });
 				Assert.Fail();
 			}
 			catch (AssertionException)
@@ -76,8 +78,8 @@ namespace Castle.DynamicProxy.Tests
 		public void GetMethodsForPublic()
 		{
 			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof (object), BindingFlags.Instance | BindingFlags.Public);
-			MethodInfo[] realMethods = typeof (object).GetMethods(BindingFlags.Instance | BindingFlags.Public);
+				MethodFinder.GetAllInstanceMethods(typeof(object), BindingFlags.Instance | BindingFlags.Public);
+			MethodInfo[] realMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.Public);
 			AssertArraysAreEqualUnsorted(realMethods, methods);
 		}
 
@@ -85,8 +87,8 @@ namespace Castle.DynamicProxy.Tests
 		public void GetMethodsForNonPublic()
 		{
 			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof (object), BindingFlags.Instance | BindingFlags.NonPublic);
-			MethodInfo[] realMethods = typeof (object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
+				MethodFinder.GetAllInstanceMethods(typeof(object), BindingFlags.Instance | BindingFlags.NonPublic);
+			MethodInfo[] realMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
 			AssertArraysAreEqualUnsorted(realMethods, methods);
 		}
 
@@ -94,28 +96,28 @@ namespace Castle.DynamicProxy.Tests
 		public void GetMethodsForPublicAndNonPublic()
 		{
 			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof (object),
-				                                   BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+				MethodFinder.GetAllInstanceMethods(typeof(object),
+												   BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 			MethodInfo[] realMethods =
-				typeof (object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+				typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 			AssertArraysAreEqualUnsorted(realMethods, methods);
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
+		[ExpectedException(typeof(ArgumentException))]
 		public void GetMethodsThrowsOnStatic()
 		{
-			MethodFinder.GetAllInstanceMethods(typeof (object),
-			                                   BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+			MethodFinder.GetAllInstanceMethods(typeof(object),
+											   BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
+		[ExpectedException(typeof(ArgumentException))]
 		public void GetMethodsThrowsOnOtherFlags()
 		{
-			MethodFinder.GetAllInstanceMethods(typeof (object),
-			                                   BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public |
-			                                   BindingFlags.DeclaredOnly);
+			MethodFinder.GetAllInstanceMethods(typeof(object),
+											   BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public |
+											   BindingFlags.DeclaredOnly);
 		}
 	}
 }

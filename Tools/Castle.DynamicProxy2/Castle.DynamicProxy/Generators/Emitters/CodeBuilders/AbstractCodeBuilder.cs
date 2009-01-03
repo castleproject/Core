@@ -15,22 +15,22 @@
 namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 {
 	using System;
-	using System.Collections;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using System.Collections.Generic;
 
 	public abstract class AbstractCodeBuilder
 	{
 		private bool isEmpty;
 		private ILGenerator generator;
-		private ArrayList stmts;
-		private ArrayList ilmarkers;
+		private List<Statement> stmts;
+		private List<Reference> ilmarkers;
 
 		protected AbstractCodeBuilder(ILGenerator generator)
 		{
 			this.generator = generator;
-			stmts = new ArrayList();
-			ilmarkers = new ArrayList();
+			stmts = new List<Statement>();
+			ilmarkers = new List<Reference>();
 			isEmpty = true;
 		}
 

@@ -15,16 +15,12 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections;
+	using System.Collections.ObjectModel;
 
 	/// <summary>
 	/// Summary description for PropertiesCollection.
 	/// </summary>
-	public class PropertiesCollection : CollectionBase
+	public class PropertiesCollection : Collection<PropertyEmitter>
 	{
-		public void Add(PropertyEmitter property)
-		{
-			InnerList.Add(property);
-		}
 	}
 }

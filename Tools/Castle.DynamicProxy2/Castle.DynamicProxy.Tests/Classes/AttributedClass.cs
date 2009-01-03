@@ -40,13 +40,17 @@ namespace Castle.DynamicProxy.Tests.Classes
 		}
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	[AttributeUsage(AttributeTargets.All, Inherited = false)]
 	public class NonInheritableAttribute : Attribute
 	{
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	[AttributeUsage(AttributeTargets.All, Inherited = false)]
 	public class ComplexNonInheritableAttribute : Attribute
 	{

@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Tests
 			get { return verificationDisabled; }
 		}
 
-#if !MONO // mono doesn't have PEVerify
+#if !MONO && !SILVERLIGHT // mono doesn't have PEVerify
 
 		[TearDown]
 		public virtual void TearDown()
@@ -63,6 +63,7 @@ namespace Castle.DynamicProxy.Tests
 					RunPEVerifyOnGeneratedAssembly(path);
 			}
 		}
+
 
 		public void RunPEVerifyOnGeneratedAssembly(string assemblyPath)
 		{
@@ -104,7 +105,10 @@ namespace Castle.DynamicProxy.Tests
 
 #else
 
+
+#if !SILVERLIGHT
 		[TearDown]
+#endif
 		public virtual void TearDown ()
 		{
 		}

@@ -21,11 +21,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	{
 		private readonly object value;
 
-		public ConstReference(object value) : base(value.GetType())
+		public ConstReference(object value)
+			: base(value.GetType())
 		{
 			if (!value.GetType().IsPrimitive && !(value is String))
 			{
-				throw new ApplicationException("Invalid type to ConstReference");
+				throw new ProxyGenerationException("Invalid type to ConstReference");
 			}
 
 			this.value = value;

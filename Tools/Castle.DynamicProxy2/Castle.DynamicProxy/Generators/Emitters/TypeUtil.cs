@@ -16,17 +16,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	public abstract class TypeUtil
 	{
 		public static Type[] Union(Type[] set1, Type[] set2)
 		{
-			ArrayList types = new ArrayList();
+			List<Type> types = new List<Type>();
 
 			if (set1 != null) types.AddRange(set1);
 			if (set2 != null) types.AddRange(set2);
 
-			return (Type[]) types.ToArray(typeof (Type));
+			return types.ToArray();
 		}
 	}
 }

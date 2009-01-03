@@ -29,8 +29,10 @@ namespace Castle.DynamicProxy.Tests
 			ResetGeneratorAndBuilder(); // we call TearDown ourselves in these test cases
 			base.TearDown();
 		}
-
 		[Test]
+#if SILVERLIGHT
+		[Ignore("This passes in NUnit, but when run in a Browser test harness like UnitDriven this failed because of access to the disk???")]
+#endif
 		public void TearDown_DoesNotSaveAnything_IfNoProxyGenerated()
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
@@ -43,6 +45,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if SILVERLIGHT
+		[Ignore("Cannot do in Silverlight.")]
+#endif
 		public void TearDown_SavesAssembly_IfProxyGenerated()
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
@@ -56,6 +61,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if SILVERLIGHT
+		[Ignore("Cannot do in Silverlight.")]
+#endif
 		[ExpectedException(typeof (AssertionException))]
 		public void TearDown_FindsVerificationErrors()
 		{

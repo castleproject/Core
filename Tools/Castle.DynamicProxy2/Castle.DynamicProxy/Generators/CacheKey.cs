@@ -16,7 +16,10 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 
+#if SILVERLIGHT
+#else
 	[Serializable]
+#endif
 	public class CacheKey
 	{
 		private readonly Type targetType;

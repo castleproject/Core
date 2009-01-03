@@ -17,12 +17,16 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Collections;
 	using Castle.DynamicProxy.Generators;
+#if SILVERLIGHT
+	using Castle.DynamicProxy.SilverlightExtensions;
+#endif
 
 	public class DefaultProxyBuilder : IProxyBuilder
 	{
 		private readonly ModuleScope scope;
 
-		public DefaultProxyBuilder() : this(new ModuleScope())
+		public DefaultProxyBuilder()
+			: this(new ModuleScope())
 		{
 		}
 
@@ -63,11 +67,11 @@ namespace Castle.DynamicProxy
 			InterfaceProxyWithoutTargetGenerator generatorWithoutTarget =
 				new InterfaceProxyWithoutTargetGenerator(scope, theInterface);
 
-			return generatorWithoutTarget.GenerateCode(typeof (object), interfaces, options);
+			return generatorWithoutTarget.GenerateCode(typeof(object), interfaces, options);
 		}
 
 		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type[] interfaces, Type targetType,
-		                                               ProxyGenerationOptions options)
+													   ProxyGenerationOptions options)
 		{
 			AssertValidType(theInterface);
 			AssertValidTypes(interfaces);
@@ -78,7 +82,7 @@ namespace Castle.DynamicProxy
 		}
 
 		public Type CreateInterfaceProxyTypeWithTargetInterface(Type theInterface, Type[] interfaces,
-                                                                ProxyGenerationOptions options)
+																ProxyGenerationOptions options)
 		{
 			AssertValidType(theInterface);
 			AssertValidTypes(interfaces);
@@ -91,10 +95,17 @@ namespace Castle.DynamicProxy
 
 		private void AssertValidType(Type target)
 		{
-			bool isNestedAndInternal = target.IsNested && (target.IsNestedAssembly || target.IsNestedFamORAssem);
-			bool isInternalNotNested = target.IsVisible == false && target.IsNested == false;
+#if SILVERLIGHT
+			bool isTargetNested = target.IsNested();
+#else
+			bool isTargetNested = target.IsNested;
+#endif
+
+			bool isNestedAndInternal = isTargetNested && (target.IsNestedAssembly || target.IsNestedFamORAssem);
+			bool isInternalNotNested = target.IsVisible == false && isTargetNested == false;
+
 			bool internalAndVisibleToDynProxy = (isInternalNotNested || isNestedAndInternal) &&
-			                                    InternalsHelper.IsInternalToDynamicProxy(target.Assembly);
+												InternalsHelper.IsInternalToDynamicProxy(target.Assembly);
 			if (!target.IsPublic && !target.IsNestedPublic && !internalAndVisibleToDynProxy)
 			{
 				throw new GeneratorException("Type is not public, so a proxy cannot be generated. Type: " + target.FullName);
@@ -102,7 +113,7 @@ namespace Castle.DynamicProxy
 			if (target.IsGenericTypeDefinition)
 			{
 				throw new GeneratorException("Type is a generic tyspe definition, so a proxy cannot be generated. Type: " +
-				                             target.FullName);
+											 target.FullName);
 			}
 		}
 

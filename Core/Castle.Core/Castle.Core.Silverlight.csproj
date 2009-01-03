@@ -21,7 +21,7 @@
     <SccProvider>
     </SccProvider>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>CastleKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,6 +70,7 @@
     <Compile Include="Internal\GraphSets.cs" />
     <Compile Include="Internal\IVertex.cs" />
     <Compile Include="Internal\LinkedList.cs" />
+    <Compile Include="Internal\SlimReaderWriterLock.cs" />
     <Compile Include="Internal\TopologicalSortAlgo.cs" />
     <Compile Include="IServiceEnabledComponent.cs" />
     <Compile Include="IServiceProviderEx.cs" />
@@ -143,8 +144,10 @@
     <Compile Include="StringObjectDictionaryAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\CastleKey.snk">
+      <Link>CastleKey.snk</Link>
+    </None>
     <None Include="Castle.Core.build" />
-    <None Include="CastleKey.snk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

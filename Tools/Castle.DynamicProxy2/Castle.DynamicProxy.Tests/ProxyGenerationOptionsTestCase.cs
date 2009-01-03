@@ -91,6 +91,9 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(_options1, _options2);
 		}
 
+#if SILVERLIGHT
+#warning Removed SerializableClassTestCase so this test can't be run
+#else
 		[Test]
 		public void Equals_EqualNonEmptyOptions()
 		{
@@ -121,6 +124,7 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual(_options1, _options2);
 		}
+#endif
 
 		[Test]
 		public void Equals_DifferentOptions_BaseTypeForInterfaceProxy()
@@ -149,6 +153,9 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreNotEqual(_options1, _options2);
 		}
 
+#if SILVERLIGHT
+#warning Removed SerializableClassTestCase so this test can't be run
+#else
 		[Test]
 		public void Equals_DifferentOptions_Selector()
 		{
@@ -158,6 +165,7 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreNotEqual(_options1, _options2);
 		}
+#endif
 
 		[Test]
 		public void Equals_DifferentOptions_UseSelector()
@@ -202,6 +210,9 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}
 
+#if SILVERLIGHT
+#warning Removed SerializableClassTestCase so this test can't be run
+#else
 		[Test]
 		public void GetHashCode_EqualNonEmptyOptions()
 		{
@@ -232,6 +243,7 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}
+#endif
 
 		[Test]
 		public void GetHashCode_EqualOptions_DifferentMixinInstances()
@@ -269,6 +281,9 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreNotEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}
 
+#if SILVERLIGHT
+#warning Removed SerializableClassTestCase so this test can't be run
+#else
 		[Test]
 		public void GetHashCode_DifferentOptions_Selector()
 		{
@@ -278,6 +293,7 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreNotEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}
+#endif
 
 		[Test]
 		public void GetHashCode_DifferentOptions_UseSelector()

@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
@@ -68,13 +69,15 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Sum get_Valid ", logger.LogContents);
 		}
 
-		[Serializable]
+#if !SILVERLIGHT
+	[Serializable]
+#endif
 		public class LogHook : IProxyGenerationHook
 		{
 			private readonly Type targetTypeToAssert;
 			private readonly bool screeningEnabled;
-			private IList nonVirtualMembers = new ArrayList();
-			private IList askedMembers = new ArrayList();
+			private IList nonVirtualMembers = new List<MethodInfo>();
+			private IList askedMembers = new List<MethodInfo>();
 			private bool completed;
 
 			public LogHook(Type targetTypeToAssert, bool screeningEnabled)

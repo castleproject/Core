@@ -20,7 +20,9 @@ namespace Castle.DynamicProxy.Tests.Classes
 	/// <summary>
 	/// Summary description for MySerializableClass.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class MySerializableClass
 	{
 		protected DateTime current;
@@ -41,6 +43,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 		}
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
 	public class MySerializableClass2 : MySerializableClass, ISerializable
 	{
@@ -58,4 +61,5 @@ namespace Castle.DynamicProxy.Tests.Classes
 			info.AddValue("dt", current);
 		}
 	}
+#endif
 }

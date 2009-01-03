@@ -14,17 +14,8 @@
 
 namespace Castle.DynamicProxy.Tests.Classes
 {
-	using System;
-	using System.Collections;
+	using Castle.DynamicProxy.Tests.GenClasses;
 
-	public class ClassWithIndexer
-	{
-		private IDictionary map = new Hashtable();
-
-		public virtual int this[String key]
-		{
-			get { return (int) map[key]; }
-			set { map[key] = value; }
-		}
-	}
+	public class ClassWithIndexer : ClassWithIndexer<string, int>
+	{ }
 }

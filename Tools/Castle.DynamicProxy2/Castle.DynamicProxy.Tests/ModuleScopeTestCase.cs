@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 using System.Collections;
 using System.Collections.Generic;
 using Castle.DynamicProxy.Generators;
@@ -20,10 +21,10 @@ using Castle.DynamicProxy.Tests.InterClasses;
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-	using NUnit.Framework;
 	using System.Reflection.Emit;
 	using System.IO;
 	using System.Reflection;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class ModuleScopeTestCase
@@ -66,7 +67,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(two, four);
 		}
 
-#if !MONO
+#if !MONO && !SILVERLIGHT
 
 		[Test]
 		public void ImplicitModulePaths()
@@ -109,6 +110,7 @@ namespace Castle.DynamicProxy.Tests
 
 #endif
 
+#if !SILVERLIGHT
 		private static void CheckSignedSavedAssembly(string path)
 		{
 			Assert.IsTrue(File.Exists(path));
@@ -357,6 +359,7 @@ namespace Castle.DynamicProxy.Tests
 				scope.SaveAssembly(false); // this will throw if SaveAssembly tries to delete from the current directory
 			}
 		}
+#endif
 
 		[Test]
 		public void DefaultProxyBuilderWithSpecificScope()
@@ -366,6 +369,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(scope, builder.ModuleScope);
 		}
 
+#if !SILVERLIGHT
 		[Test]
 		[ExpectedException(typeof (ArgumentException))]
 		public void LoadAssemblyIntoCache_InvalidAssembly()
@@ -479,5 +483,7 @@ namespace Castle.DynamicProxy.Tests
 
 			File.Delete(path);
 		}
+
+#endif
 	}
 }

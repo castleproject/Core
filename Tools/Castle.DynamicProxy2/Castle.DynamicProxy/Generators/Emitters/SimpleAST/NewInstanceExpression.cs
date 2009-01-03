@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 			if (constructor == null)
 			{
-				throw new ApplicationException("Could not find constructor matching specified arguments");
+				throw new ProxyGenerationException("Could not find constructor matching specified arguments");
 			}
 
 			gen.Emit(OpCodes.Newobj, constructor);

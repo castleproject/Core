@@ -34,7 +34,9 @@ namespace Castle.DynamicProxy.Tests.Mixins
 	/// <summary>
 	/// Summary description for ComplexMixin.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class ComplexMixin : IThird
 	{
 		public ComplexMixin()

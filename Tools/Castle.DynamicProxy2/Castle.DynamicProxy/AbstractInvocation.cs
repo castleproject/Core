@@ -20,8 +20,12 @@ namespace Castle.DynamicProxy
 	using System.Runtime.Serialization;
 	using Castle.Core.Interceptor;
 
+#if SILVERLIGHT
+	public abstract class AbstractInvocation : IInvocation
+#else
 	[Serializable]
 	public abstract class AbstractInvocation : IInvocation, ISerializable
+#endif
 	{
 		private readonly object proxy;
 		private readonly object target;
@@ -157,12 +161,13 @@ namespace Castle.DynamicProxy
 			}
 		}
 
+#if !SILVERLIGHT
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.SetType(typeof (RemotableInvocation));
 			info.AddValue("invocation", new RemotableInvocation(this));
 		}
-
+#endif
 		protected abstract void InvokeMethodOnTarget();
 
 		private MethodInfo EnsureClosedMethod(MethodInfo method)

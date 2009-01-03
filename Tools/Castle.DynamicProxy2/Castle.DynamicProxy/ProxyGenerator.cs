@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Collections;
 	using Castle.Core.Interceptor;
+	using System.Collections.Generic;
 
 	[CLSCompliant(true)]
 	public class ProxyGenerator
@@ -137,14 +138,14 @@ namespace Castle.DynamicProxy
 			Type targetType = target.GetType();
 			Type generatedType = CreateInterfaceProxyTypeWithTarget(theInterface, interfaces, targetType, options);
 
-			ArrayList arguments = GetConstructorArguments(target, interceptors, options);
+			List<object> arguments = GetConstructorArguments(target, interceptors, options);
 			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 
-		private ArrayList GetConstructorArguments(object target, IInterceptor[] interceptors, ProxyGenerationOptions options)
+		private List<object> GetConstructorArguments(object target, IInterceptor[] interceptors, ProxyGenerationOptions options)
 		{
 			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
-			ArrayList arguments = new ArrayList(options.MixinData.GetMixinInterfaceImplementationsAsArray());
+			List<object> arguments = new List<object>(options.MixinData.GetMixinInterfaceImplementationsAsArray());
 			arguments.Add(interceptors);
 			arguments.Add(target);
 			return arguments;
@@ -202,7 +203,7 @@ namespace Castle.DynamicProxy
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 
 			Type generatedType = CreateInterfaceProxyTypeWithTargetInterface(theInterface, interfaces, theInterface, options);
-			ArrayList arguments = GetConstructorArguments(target, interceptors, options);
+			List<object> arguments = GetConstructorArguments(target, interceptors, options);
 			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 
@@ -259,7 +260,7 @@ namespace Castle.DynamicProxy
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 
 			Type generatedType = CreateInterfaceProxyTypeWithoutTarget(theInterface, interfaces, options);
-			ArrayList arguments = GetConstructorArguments(new object(), interceptors, options);
+			List<object> arguments = GetConstructorArguments(new object(), interceptors, options);
 			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 
@@ -352,7 +353,7 @@ namespace Castle.DynamicProxy
 			Type proxyType = CreateClassProxyType(targetType, interfaces, options);
 
 			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
-			ArrayList arguments = new ArrayList(options.MixinData.GetMixinInterfaceImplementationsAsArray());
+			List<object> arguments = new List<object>(options.MixinData.GetMixinInterfaceImplementationsAsArray());
 			arguments.Add(interceptors);
 			if (constructorArgs != null && constructorArgs.Length != 0)
 			{

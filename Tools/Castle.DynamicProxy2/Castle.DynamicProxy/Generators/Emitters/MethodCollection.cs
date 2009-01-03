@@ -15,13 +15,10 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 
-	public class MethodCollection : CollectionBase
+	public class MethodCollection : Collection<MethodEmitter>
 	{
-		public void Add(MethodEmitter method)
-		{
-			InnerList.Add(method);
-		}
 	}
 }

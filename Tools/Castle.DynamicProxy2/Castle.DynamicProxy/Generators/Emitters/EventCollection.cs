@@ -15,13 +15,9 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections;
+	using System.Collections.ObjectModel;
 
-	public class EventCollection : CollectionBase
+	public class EventCollection : Collection<EventEmitter>
 	{
-		public void Add(EventEmitter eventEmitter)
-		{
-			InnerList.Add(eventEmitter);
-		}
 	}
 }

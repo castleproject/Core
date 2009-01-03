@@ -51,7 +51,9 @@ namespace Castle.DynamicProxy.Tests
 			int Calc(int x, int y, int z, Single k);
 		}
 
-		[Serializable]
+#if !SILVERLIGHT
+	[Serializable]
+#endif
 		public class MyInterfaceImpl : IMyInterface
 		{
 			private String _name;

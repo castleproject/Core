@@ -15,13 +15,9 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections;
+	using System.Collections.ObjectModel;
 
-	public class NestedClassCollection : CollectionBase
+	public class NestedClassCollection : Collection<NestedClassEmitter>
 	{
-		public void Add(NestedClassEmitter nested)
-		{
-			InnerList.Add(nested);
-		}
 	}
 }

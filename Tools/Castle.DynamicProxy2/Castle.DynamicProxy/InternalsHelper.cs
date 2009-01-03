@@ -18,10 +18,11 @@ namespace Castle.DynamicProxy
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
 	using System.Threading;
+	using Castle.Core.Internal;
 
 	public class InternalsHelper
 	{
-		private static ReaderWriterLock internalsToDynProxyLock = new ReaderWriterLock();
+		private static SlimReaderWriterLock internalsToDynProxyLock = new SlimReaderWriterLock();
 		private static IDictionary<Assembly, bool> internalsToDynProxy = new Dictionary<Assembly, bool>();
 
 		/// <summary>
@@ -30,16 +31,16 @@ namespace Castle.DynamicProxy
 		/// <param name="asm">The asm.</param>
 		public static bool IsInternalToDynamicProxy(Assembly asm)
 		{
-			internalsToDynProxyLock.AcquireReaderLock(-1);
+			internalsToDynProxyLock.EnterReadLock();
 
 			if (internalsToDynProxy.ContainsKey(asm))
 			{
-				internalsToDynProxyLock.ReleaseReaderLock();
+				internalsToDynProxyLock.ExitReadLock();
 
 				return internalsToDynProxy[asm];
 			}
 
-			internalsToDynProxyLock.UpgradeToWriterLock(-1);
+			internalsToDynProxyLock.EnterWriteLock();
 
 			try
 			{
@@ -68,7 +69,7 @@ namespace Castle.DynamicProxy
 			}
 			finally
 			{
-				internalsToDynProxyLock.ReleaseWriterLock();
+				internalsToDynProxyLock.ExitWriteLock();
 			}
 		}
 

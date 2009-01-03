@@ -16,7 +16,9 @@ namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class ClassOverridingEqualsAndGetHashCode
 	{
 		private Guid _id;

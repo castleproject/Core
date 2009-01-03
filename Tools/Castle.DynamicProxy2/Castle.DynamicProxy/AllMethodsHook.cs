@@ -17,14 +17,22 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Reflection;
 
+#if SILVERLIGHT
+#else
 	[Serializable]
+#endif
 	public class AllMethodsHook : IProxyGenerationHook
 	{
 		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{
-			return methodInfo.DeclaringType != typeof (Object) &&
-			       methodInfo.DeclaringType != typeof (MarshalByRefObject) &&
-			       methodInfo.DeclaringType != typeof (ContextBoundObject);
+			return methodInfo.DeclaringType != typeof (Object)
+#if SILVERLIGHT
+#warning What to do?
+				;
+#else
+			        && methodInfo.DeclaringType != typeof (MarshalByRefObject)
+			        && methodInfo.DeclaringType != typeof (ContextBoundObject);
+#endif
 		}
 
 		public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)

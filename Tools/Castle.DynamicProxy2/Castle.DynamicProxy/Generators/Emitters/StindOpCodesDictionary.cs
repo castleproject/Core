@@ -15,14 +15,14 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections;
 	using System.Reflection.Emit;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Provides appropriate Stind.X opcode 
 	/// for the type of primitive value to be stored indirectly.
 	/// </summary>
-	public sealed class StindOpCodesDictionary : DictionaryBase
+	public sealed class StindOpCodesDictionary : Dictionary<Type,OpCode>
 	{
 		private static readonly StindOpCodesDictionary _dict = new StindOpCodesDictionary();
 
@@ -30,27 +30,27 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private StindOpCodesDictionary() : base()
 		{
-			Dictionary[typeof (bool)] = OpCodes.Stind_I1;
-			Dictionary[typeof (char)] = OpCodes.Stind_I2;
-			Dictionary[typeof (SByte)] = OpCodes.Stind_I1;
-			Dictionary[typeof (Int16)] = OpCodes.Stind_I2;
-			Dictionary[typeof (Int32)] = OpCodes.Stind_I4;
-			Dictionary[typeof (Int64)] = OpCodes.Stind_I8;
-			Dictionary[typeof (float)] = OpCodes.Stind_R4;
-			Dictionary[typeof (double)] = OpCodes.Stind_R8;
-			Dictionary[typeof (byte)] = OpCodes.Stind_I1;
-			Dictionary[typeof (UInt16)] = OpCodes.Stind_I2;
-			Dictionary[typeof (UInt32)] = OpCodes.Stind_I4;
-			Dictionary[typeof (UInt64)] = OpCodes.Stind_I8;
+			this.Add(typeof (bool), OpCodes.Stind_I1);
+			this.Add(typeof (char), OpCodes.Stind_I2);
+			this.Add(typeof (SByte), OpCodes.Stind_I1);
+			this.Add(typeof (Int16), OpCodes.Stind_I2);
+			this.Add(typeof (Int32), OpCodes.Stind_I4);
+			this.Add(typeof (Int64), OpCodes.Stind_I8);
+			this.Add(typeof (float), OpCodes.Stind_R4);
+			this.Add(typeof (double), OpCodes.Stind_R8);
+			this.Add(typeof (byte), OpCodes.Stind_I1);
+			this.Add(typeof (UInt16), OpCodes.Stind_I2);
+			this.Add(typeof (UInt32), OpCodes.Stind_I4);
+			this.Add(typeof (UInt64), OpCodes.Stind_I8);
 		}
 
-		public OpCode this[Type type]
+		public new OpCode this[Type type]
 		{
 			get
 			{
-				if (Dictionary.Contains(type))
+				if (this.ContainsKey(type))
 				{
-					return (OpCode) Dictionary[type];
+					return base[type];
 				}
 				return EmptyOpCode;
 			}

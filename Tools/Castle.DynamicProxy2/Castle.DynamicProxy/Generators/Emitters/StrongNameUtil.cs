@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public static class StrongNameUtil
 	{
-		private static readonly IDictionary signedAssemblyCache = new Hashtable();
+		private static readonly IDictionary signedAssemblyCache = new Dictionary<Assembly, bool>();
 		private static readonly object lockObject = new object();
 
 		public static bool IsAssemblySigned(Assembly assembly)
@@ -33,14 +33,19 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					bool isSigned = ContainsPublicKey(assembly);
 					signedAssemblyCache.Add(assembly, isSigned);
 				}
-				return (bool) signedAssemblyCache[assembly];
+				return (bool)signedAssemblyCache[assembly];
 			}
 		}
 
 		private static bool ContainsPublicKey(Assembly assembly)
 		{
+#if SILVERLIGHT
+			// Pulled from a comment on http://www.flawlesscode.com/post/2008/08/Mocking-and-IOC-in-Silverlight-2-Castle-Project-and-Moq-ports.aspx
+			return !assembly.FullName.Contains("PublicKeyToken=null");
+#else
 			byte[] key = assembly.GetName().GetPublicKey();
 			return key != null && key.Length != 0;
+#endif
 		}
 
 		public static bool IsAnyTypeFromUnsignedAssembly(IEnumerable<Type> types)

@@ -21,19 +21,23 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection.Emit;
 	using System.Runtime.Serialization;
 	using System.Threading;
+#if !SILVERLIGHT
 	using System.Xml.Serialization;
+#endif
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.Core.Internal;
 
 	/// <summary>
 	/// 
 	/// </summary>
 	public class ClassProxyGenerator : BaseProxyGenerator
 	{
+#if !SILVERLIGHT
 		private bool delegateToBaseGetObjectData = false;
-
+#endif
 		public ClassProxyGenerator(ModuleScope scope, Type targetType) : base(scope, targetType)
 		{
 			CheckNotGenericTypeDefinition(targetType, "targetType");
@@ -47,9 +51,9 @@ namespace Castle.DynamicProxy.Generators
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 			Type type;
 
-			ReaderWriterLock rwlock = Scope.RWLock;
+			SlimReaderWriterLock rwlock = Scope.RWLock;
 
-			rwlock.AcquireReaderLock(-1);
+			rwlock.EnterReadLock();
 
 			CacheKey cacheKey = new CacheKey(targetType, interfaces, options);
 
@@ -57,12 +61,12 @@ namespace Castle.DynamicProxy.Generators
 
 			if (cacheType != null)
 			{
-				rwlock.ReleaseReaderLock();
+				rwlock.ExitReadLock();
 
 				return cacheType;
 			}
 
-			rwlock.UpgradeToWriterLock(-1);
+			rwlock.EnterWriteLock();
 
 			try
 			{
@@ -79,7 +83,7 @@ namespace Castle.DynamicProxy.Generators
 
 				// Add Interfaces that the proxy implements 
 
-				ArrayList interfaceList = new ArrayList();
+				List<Type> interfaceList = new List<Type>();
 
 				if (interfaces != null)
 				{
@@ -90,21 +94,23 @@ namespace Castle.DynamicProxy.Generators
 
 				AddDefaultInterfaces(interfaceList);
 
+#if !SILVERLIGHT
 				if (targetType.IsSerializable)
 				{
 					delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType);
 
-					if (!interfaceList.Contains(typeof (ISerializable)))
+					if (!interfaceList.Contains(typeof(ISerializable)))
 					{
-						interfaceList.Add(typeof (ISerializable));
+						interfaceList.Add(typeof(ISerializable));
 					}
 				}
-
+#endif
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
 				CreateOptionsField(emitter);
 
+#if !SILVERLIGHT
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
-
+#endif
 				// Custom attributes
 
 				ReplicateNonInheritableAttributes(targetType, emitter);
@@ -117,8 +123,9 @@ namespace Castle.DynamicProxy.Generators
 				// Implement builtin Interfaces
 				ImplementProxyTargetAccessor(targetType, emitter, interceptorsField);
 
+#if !SILVERLIGHT
 				emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
-
+#endif
 				// Collect methods
 
 				PropertyToGenerate[] propsToGenerate;
@@ -143,11 +150,12 @@ namespace Castle.DynamicProxy.Generators
 				GenerateConstructors(emitter, targetType, constructorArguments.ToArray());
 				GenerateParameterlessConstructor(emitter, targetType, interceptorsField);
 
+#if !SILVERLIGHT
 				if (delegateToBaseGetObjectData)
 				{
 					GenerateSerializationConstructor(emitter, interceptorsField, mixinFields);
 				}
-
+#endif
 				// Implement interfaces
 
 				if (interfaces != null && interfaces.Length != 0)
@@ -279,7 +287,9 @@ namespace Castle.DynamicProxy.Generators
 					ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);
 				}
 
+#if !SILVERLIGHT
 				ImplementGetObjectData(emitter, interceptorsField, mixinFields, interfaces);
+#endif
 
 				// Complete type initializer code body
 
@@ -294,7 +304,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			finally
 			{
-				rwlock.ReleaseWriterLock();
+				rwlock.ExitWriteLock();
 			}
 
 			return type;
@@ -309,7 +319,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			return true;
 		}
-
+#if !SILVERLIGHT
 		protected void GenerateSerializationConstructor(ClassEmitter emitter, FieldReference interceptorField,
 		                                                FieldReference[] mixinFields)
 		{
@@ -401,5 +411,6 @@ namespace Castle.DynamicProxy.Generators
 				                         	                               data_ref.ToExpression())));
 			}
 		}
+#endif
 	}
 }

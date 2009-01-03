@@ -98,6 +98,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			SetReturnType(GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType));
 
+#if SILVERLIGHT
+#warning What to do?
+#else
 			builder.SetSignature(
 				returnType,
 				baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
@@ -107,6 +110,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 //				 paramModReq.ToArray(),
 //				 paramModOpt.ToArray()
 				);
+#endif
 
 			DefineParameters(baseMethodParameters);
 		}

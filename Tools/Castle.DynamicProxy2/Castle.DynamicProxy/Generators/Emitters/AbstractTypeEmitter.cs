@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public Type[] GetGenericArgumentsFor(Type genericType)
 		{
-			ArrayList types = new ArrayList();
+			List<Type> types = new List<Type>();
 
 			foreach (Type genType in genericType.GetGenericArguments())
 			{
@@ -70,7 +70,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 			}
 
-			return (Type[]) types.ToArray(typeof (Type));
+			return types.ToArray();
 		}
 
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
@@ -258,7 +258,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			// big sanity check
 			if (genericTypeParams != null)
 			{
-				throw new ApplicationException("CreateGenericParameters: cannot invoke me twice");
+				throw new ProxyGenerationException("CreateGenericParameters: cannot invoke me twice");
 			}
 
 			SetGenericTypeParameters(GenericUtil.DefineGenericArguments(genericArguments, typebuilder, name2GenericType));

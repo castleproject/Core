@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using System.Collections.Generic;
 
 	internal class CustomAttributeUtil
 	{
@@ -74,7 +75,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private static object[] GetPropertyValues(Type attType, out PropertyInfo[] properties, Attribute attribute)
 		{
-			ArrayList selectedProps = new ArrayList();
+			List<PropertyInfo> selectedProps = new List<PropertyInfo>();
 
 			foreach (PropertyInfo pi in attType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
 			{
@@ -84,7 +85,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 			}
 
-			properties = (PropertyInfo[]) selectedProps.ToArray(typeof (PropertyInfo));
+			properties = selectedProps.ToArray();
 
 			object[] propertyValues = new object[properties.Length];
 
@@ -140,7 +141,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					continue;
 				}
 
-				if (string.Compare(propertyInfo.Name, parameterInfo.Name, true) == 0)
+				if (string.Compare(propertyInfo.Name, parameterInfo.Name, StringComparison.CurrentCultureIgnoreCase) == 0)
 				{
 					return ConvertValue(propertyInfo.GetValue(attribute, null), paramType);
 				}
@@ -200,7 +201,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 			else if (type.IsEnum)
 			{
+#if SILVERLIGHT
+				return Castle.DynamicProxy.SilverlightExtensions.EnumHelper.GetValues(type).GetValue(0);
+#else
 				return Enum.GetValues(type).GetValue(0);
+#endif
+
 			}
 			else if (type == typeof (char))
 			{

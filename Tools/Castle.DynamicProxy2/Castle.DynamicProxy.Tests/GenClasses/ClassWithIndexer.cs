@@ -14,16 +14,23 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-	using System.Collections;
+	using System.Collections.Generic;
 
 	public class ClassWithIndexer<TKey, TVal>
 	{
-		private IDictionary map = new Hashtable();
+		private Dictionary<TKey, TVal> map = new Dictionary<TKey, TVal>();
 
 		public virtual TVal this[TKey key]
 		{
-			get { return (TVal) map[key]; }
-			set { map[key] = value; }
+			get { return map[key]; }
+			set
+			{
+				if (map.ContainsKey(key))
+					map[key] = value;
+				else
+					map.Add(key, value);
+			}
 		}
+
 	}
 }

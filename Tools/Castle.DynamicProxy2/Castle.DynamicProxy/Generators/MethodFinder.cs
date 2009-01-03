@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Generators
 	/// </summary>
 	public class MethodFinder
 	{
-		private static Hashtable _cachedMethodInfosByType = new Hashtable();
+		private static Dictionary<Type, object> _cachedMethodInfosByType = new Dictionary<Type, object>();
 		private static object _lockObject = new object();
 
 		public static MethodInfo[] GetAllInstanceMethods(Type type, BindingFlags flags)
@@ -43,10 +43,10 @@ namespace Castle.DynamicProxy.Generators
 					_cachedMethodInfosByType.Add(
 						type,
 						RemoveDuplicates(type.GetMethods(
-						                 	BindingFlags.Public | BindingFlags.NonPublic
-						                 	| BindingFlags.Instance)));
+											BindingFlags.Public | BindingFlags.NonPublic
+											| BindingFlags.Instance)));
 				}
-				methodsInCache = (MethodInfo[]) _cachedMethodInfosByType[type];
+				methodsInCache = (MethodInfo[])_cachedMethodInfosByType[type];
 			}
 			return MakeFilteredCopy(methodsInCache, flags & (BindingFlags.Public | BindingFlags.NonPublic));
 		}

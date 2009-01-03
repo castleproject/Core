@@ -15,7 +15,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+#if !SILVERLIGHT
 using System.Runtime.Serialization.Formatters.Binary;
+#endif
 using Castle.DynamicProxy.Tests.Classes;
 using NUnit.Framework;
 
@@ -24,6 +26,7 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class DictionarySerializationTestCase
 	{
+#if !SILVERLIGHT
 		[Test]
 		public void NullReferenceProxyDeserializationTest()
 		{
@@ -31,7 +34,7 @@ namespace Castle.DynamicProxy.Tests
 			Dictionary<ClassOverridingEqualsAndGetHashCode, string> theInstances =
 				new Dictionary<ClassOverridingEqualsAndGetHashCode, string>();
 			ClassOverridingEqualsAndGetHashCode c =
-				(ClassOverridingEqualsAndGetHashCode) generator.CreateClassProxy(typeof (ClassOverridingEqualsAndGetHashCode));
+				(ClassOverridingEqualsAndGetHashCode)generator.CreateClassProxy(typeof(ClassOverridingEqualsAndGetHashCode));
 			c.Id = Guid.NewGuid();
 			c.Name = DateTime.Now.ToString("yyyyMMddHHmmss");
 			theInstances.Add(c, c.Name);
@@ -70,7 +73,7 @@ namespace Castle.DynamicProxy.Tests
 			for (int i = 0; i < 50; i++)
 			{
 				ClassOverridingEqualsAndGetHashCode c =
-					(ClassOverridingEqualsAndGetHashCode) generator.CreateClassProxy(typeof (ClassOverridingEqualsAndGetHashCode));
+					(ClassOverridingEqualsAndGetHashCode)generator.CreateClassProxy(typeof(ClassOverridingEqualsAndGetHashCode));
 				c.Id = Guid.NewGuid();
 				c.Name = DateTime.Now.ToString("yyyyMMddHHmmss");
 				theInstances.Add(c, c.Name);
@@ -85,7 +88,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			ProxyGenerator generator = new ProxyGenerator();
 			ClassOverridingEqualsAndGetHashCode c =
-				(ClassOverridingEqualsAndGetHashCode) generator.CreateClassProxy(typeof (ClassOverridingEqualsAndGetHashCode));
+				(ClassOverridingEqualsAndGetHashCode)generator.CreateClassProxy(typeof(ClassOverridingEqualsAndGetHashCode));
 			c.Id = Guid.NewGuid();
 			c.Name = DateTime.Now.ToString("yyyyMMddHHmmss");
 
@@ -103,5 +106,17 @@ namespace Castle.DynamicProxy.Tests
 			stream.Position = 0;
 			return (T) formatter.Deserialize(stream);
 		}
+#endif
+#if SILVERLIGHT
+		[Test, Ignore("No serialization support...")]
+		public void NullReferenceProxyDeserializationTest() { }
+		[Test, Ignore("No serialization support...")]
+		public void DictionaryDeserializationWithoutProxyTest() { }
+		[Test, Ignore("No serialization support...")]
+		public void DictionaryDeserializationWithProxyTest() { }
+		[Test, Ignore("No serialization support...")]
+		public void BasicSerializationProxyTest() { }
+#endif
+
 	}
 }
