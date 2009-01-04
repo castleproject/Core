@@ -73,8 +73,8 @@ namespace Castle.ActiveRecord.Framework.Validators
 
 			SessionScope scope = null;
 			FlushMode? originalMode = null;
-			if (SessionScope.Current == null ||
-				SessionScope.Current.ScopeType != SessionScopeType.Transactional)
+			if (SessionScope.Current == null /*||
+				SessionScope.Current.ScopeType != SessionScopeType.Transactional*/)
 			{
 				scope = new SessionScope();
 			}
