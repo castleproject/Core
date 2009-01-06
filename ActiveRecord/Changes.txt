@@ -1,5 +1,6 @@
 1.0
 ===
+- Updated NHibernate to 2.1 Alpha. Please specify the byte code provider in your config files.
 
 - Restored AutoFlush behaviour under NHibernate 2.0.
 

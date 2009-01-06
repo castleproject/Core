@@ -20,8 +20,9 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 	using Castle.DynamicProxy;
 	using Castle.MonoRail.Framework;
     using System;
+	using Core.Interceptor;
 
-    [Serializable]
+	[Serializable]
     public class HomeController : Controller
     {
 		public void CanUseUrlHelperWithoutPrefix()
@@ -75,7 +76,7 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 		public void WithDynamicProxyObject()
 		{
 			ProxyGenerator generator = new ProxyGenerator();
-			object o = generator.CreateClassProxy(typeof(SimpleProxy),new StandardInterceptor());
+			object o = generator.CreateClassProxy(typeof(SimpleProxy), new Castle.DynamicProxy.StandardInterceptor());
 			try
 			{
 				o.GetType().GetProperty("Text");
@@ -90,7 +91,7 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 		public void WithNullableDynamicProxyObject()
 		{
 			ProxyGenerator generator = new ProxyGenerator();
-			SimpleProxy proxy = (SimpleProxy)generator.CreateClassProxy(typeof(SimpleProxy), new StandardInterceptor());
+			SimpleProxy proxy = (SimpleProxy)generator.CreateClassProxy(typeof(SimpleProxy), new Castle.DynamicProxy.StandardInterceptor());
 			PropertyBag["src"] = proxy;
 		}
 

@@ -23,6 +23,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 			nhConfig.Properties["connection.driver_class"] = ConfigurationManager.AppSettings["ar.connection.driver_class"];
 			nhConfig.Properties["connection.provider"] = ConfigurationManager.AppSettings["ar.connection.provider"];
 			nhConfig.Properties["connection.connection_string"] = ConfigurationManager.AppSettings["ar.connection.connection_string"];
+			nhConfig.Properties["proxyfactory.factory_class"] = ConfigurationManager.AppSettings["ar.proxyfactory.factory_class"];
 			return nhConfig;
 		}
 

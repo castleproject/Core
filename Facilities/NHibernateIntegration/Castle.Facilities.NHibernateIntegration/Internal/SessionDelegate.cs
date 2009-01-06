@@ -264,6 +264,19 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		/// <summary>
 		/// Return the persistent instance of the given entity class with the given identifier,
+		/// obtaining the specified lock mode.
+		/// </summary>
+		/// <param name="entityName">Name of the entity</param>
+		/// <param name="id">A valid identifier of an existing persistent instance of the class</param>
+		/// <param name="lockMode">The lock level</param>
+		/// <returns>the persistent instance</returns>
+		public object Load(string entityName, object id, LockMode lockMode)
+		{
+			return inner.Load(entityName, id, lockMode);
+		}
+
+		/// <summary>
+		/// Return the persistent instance of the given entity class with the given identifier,
 		/// assuming that the instance exists.
 		/// </summary>
 		/// <param name="theType">A persistent class</param>
@@ -300,6 +313,17 @@ namespace Castle.Facilities.NHibernateIntegration
 		public T Load<T>(object id)
 		{
 			return inner.Load<T>(id);
+		}
+
+		/// <summary>
+		/// Loads the specified id.
+		/// </summary>
+		/// <param name="entityName">Name of the entity</param>
+		/// <param name="id">The id.</param>
+		/// <returns></returns>
+		public object Load(string entityName, object id)
+		{
+			return inner.Load(entityName, id);
 		}
 
 		/// <summary>
@@ -700,6 +724,20 @@ namespace Castle.Facilities.NHibernateIntegration
 		}
 
 		/// <summary>
+		/// Remove a persistent instance from the datastore.
+		/// </summary>
+		/// <param name="entityName">Name of the entity</param>
+		/// <param name="obj">The instance to be removed</param>
+		/// <remarks>
+		/// The argument may be an instance associated with the receiving <c>ISession</c> or a
+		/// transient instance with an identifier associated with existing persistent state.
+		/// </remarks>
+		public void Delete(string entityName, object obj)
+		{
+			inner.Delete(entityName, obj);
+		}
+
+		/// <summary>
 		/// Execute a query
 		/// </summary>
 		/// <param name="query">A query expressed in Hibernate's query language</param>
@@ -1020,6 +1058,27 @@ namespace Castle.Facilities.NHibernateIntegration
 		public ICriteria CreateCriteria(Type persistentClass, string alias)
 		{
 			return inner.CreateCriteria(persistentClass, alias);
+		}
+
+		/// <summary>
+		/// Creates a new <c>Criteria</c> for the entity class with a specific alias
+		/// </summary>
+		/// <param name="entityName">Name of the entity</param>
+		/// <returns>An ICriteria object</returns>
+		public ICriteria CreateCriteria(string entityName)
+		{
+			return inner.CreateCriteria(entityName);
+		}
+
+		/// <summary>
+		/// Creates a new <c>Criteria</c> for the entity class with a specific alias
+		/// </summary>
+		/// <param name="entityName">Name of the entity</param>
+		/// <param name="alias">The alias of the entity</param>
+		/// <returns>An ICriteria object</returns>
+		public ICriteria CreateCriteria(string entityName, string alias)
+		{
+			return inner.CreateCriteria(entityName, alias);
 		}
 
 		/// <summary>

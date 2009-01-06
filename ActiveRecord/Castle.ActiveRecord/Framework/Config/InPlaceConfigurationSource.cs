@@ -208,6 +208,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			Dictionary<string,string> parameters = new Dictionary<string,string>();
 			parameters["connection.provider"] = "NHibernate.Connection.DriverConnectionProvider";
 			parameters["cache.use_second_level_cache"] = "false";
+			parameters["proxyfactory.factory_class"] = "NHibernate.ByteCode.Castle.ProxyFactoryFactory, NHibernate.ByteCode.Castle";
 
 			if (database == DatabaseType.MSSQLServer2000)
 			{

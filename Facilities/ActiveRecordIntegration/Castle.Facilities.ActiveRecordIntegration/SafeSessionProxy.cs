@@ -265,6 +265,19 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		/// <summary>
 		/// Return the persistent instance of the given entity class with the given identifier,
+		/// obtaining the specified lock mode.
+		/// </summary>
+		/// <param name="entityName">Name of the entity</param>
+		/// <param name="id">A valid identifier of an existing persistent instance of the class</param>
+		/// <param name="lockMode">The lock level</param>
+		/// <returns>the persistent instance</returns>
+		public object Load(string entityName, object id, LockMode lockMode)
+		{
+			return innerSession.Load(entityName, id, lockMode);
+		}
+
+		/// <summary>
+		/// Return the persistent instance of the given entity class with the given identifier,
 		/// assuming that the instance exists.
 		/// </summary>
 		/// <param name="theType">A persistent class</param>
@@ -301,6 +314,17 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public T Load<T>(object id)
 		{
 			return innerSession.Load<T>(id);
+		}
+
+		/// <summary>
+		/// Read the persistent state associated with the given identifier into the given transient
+		/// instance.
+		/// </summary>
+		/// <param name="entityName">Name of the entity</param>
+		/// <param name="id">A valid identifier of an existing persistent instance of the class</param>
+		public object Load(string entityName, object id)
+		{
+			return innerSession.Load(entityName, id);
 		}
 
 		/// <summary>
@@ -669,6 +693,20 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public void Delete(object obj)
 		{
 			innerSession.Delete(obj);
+		}
+
+		/// <summary>
+		/// Remove a persistent instance from the datastore.
+		/// </summary>
+		/// <param name="entityName">Name of the entity</param>
+		/// <param name="obj">The instance to be removed</param>
+		/// <remarks>
+		/// The argument may be an instance associated with the receiving <c>ISession</c> or a
+		/// transient instance with an identifier associated with existing persistent state.
+		/// </remarks>
+		public void Delete(string entityName, object obj)
+		{
+			innerSession.Delete(entityName, obj);
 		}
 
 		/// <summary>
@@ -1045,6 +1083,27 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public ICriteria CreateCriteria(Type persistentClass, string alias)
 		{
 			return innerSession.CreateCriteria(persistentClass, alias);
+		}
+
+		/// <summary>
+		/// Creates a new <c>Criteria</c> for the entity class with a specific alias
+		/// </summary>
+		/// <param name="entityName">Name of the entity</param>
+		/// <returns>An ICriteria object</returns>
+		public ICriteria CreateCriteria(string entityName)
+		{
+			return innerSession.CreateCriteria(entityName);
+		}
+
+		/// <summary>
+		/// Creates a new <c>Criteria</c> for the entity class with a specific alias
+		/// </summary>
+		/// <param name="entityName">Name of the entity</param>
+		/// <param name="alias">The alias of the entity</param>
+		/// <returns>An ICriteria object</returns>
+		public ICriteria CreateCriteria(string entityName, string alias)
+		{
+			return innerSession.CreateCriteria(entityName, alias);
 		}
 
 		/// <summary>
