@@ -58,7 +58,7 @@ namespace Castle.Components.Scheduler
 		/// <inheritdoc />
 		public IAsyncResult BeginExecute(JobExecutionContext context, AsyncCallback asyncCallback, object asyncState)
 		{
-			Logger.Debug("Beggining execute");
+			Logger.Debug("Beginning execute");
 
 			IJob job;
 			try
@@ -74,50 +74,50 @@ namespace Castle.Components.Scheduler
 				                                           + "associated with job '{1}'.",
 				                                           context.JobSpec.JobKey, context.JobSpec.Name), ex);
 			}
-
-			ExecuteDelegate executeDelegate = job.Execute;
 			
-			CompositeAsyncResult result = new CompositeAsyncResult(executeDelegate, asyncCallback, context, asyncState);
-			
-			return result;
+			return new JobAsyncResult(job, asyncCallback, context, asyncState);			
 		}
 
 		/// <inheritdoc />
 		public bool EndExecute(IAsyncResult asyncResult)
 		{
-			CompositeAsyncResult compositeResult = (CompositeAsyncResult) asyncResult;
+			JobAsyncResult jobResult = (JobAsyncResult)asyncResult;
+			bool executed = jobResult.End();
+			jobFactory.ReleaseJob(jobResult.Job);
+			return executed;
 
 			//TODO: Fix it.
 			//Something is not right. Sometimes (dunno why) it throws:
 			//System.Runtime.Remoting.RemotingException: The async result object is null or of an unexpected type.
-			return compositeResult.ExecuteDelegate.EndInvoke(compositeResult.Inner);
 		}
 
-		private class CompositeAsyncResult : IAsyncResult
+		private class JobAsyncResult : IAsyncResult
 		{
+			private readonly IJob job;
 			private IAsyncResult inner;
 			private readonly ExecuteDelegate executeDelegate;
 			private readonly AsyncCallback asyncCallback;
 			private readonly object asyncState;
 
-			public CompositeAsyncResult(ExecuteDelegate executeDelegate, AsyncCallback asyncCallback, JobExecutionContext context,
+			public JobAsyncResult(IJob job, AsyncCallback asyncCallback, JobExecutionContext context,
 			                            object asyncState)
 			{
-				this.executeDelegate = executeDelegate;
+				this.job = job;
+				this.executeDelegate = job.Execute;
 				this.asyncCallback = asyncCallback;
 				this.asyncState = asyncState;
 				inner = executeDelegate.BeginInvoke(context, Callback, asyncState);
+			}
+
+			public IJob Job
+			{
+				get { return job; }
 			}
 
 			public IAsyncResult Inner
 			{
 				get { return inner; }
 				set { inner = value; }
-			}
-
-			public ExecuteDelegate ExecuteDelegate
-			{
-				get { return executeDelegate; }
 			}
 
 			public bool IsCompleted
@@ -144,6 +144,14 @@ namespace Castle.Components.Scheduler
 			{
 				if (asyncCallback != null)
 					asyncCallback(this);
+			}
+
+			public bool End()
+			{
+				if (inner != null)
+					return executeDelegate.EndInvoke(inner);
+
+				return false;
 			}
 		}
 	}

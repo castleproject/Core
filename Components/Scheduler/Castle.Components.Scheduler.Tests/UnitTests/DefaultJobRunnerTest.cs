@@ -44,6 +44,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 
 			Expect.Call(jobFactory.GetJob("key")).Return(job);
 			Expect.Call(job.Execute(context)).Return(true);
+			Expect.Call(delegate { jobFactory.ReleaseJob(null); }).IgnoreArguments();
 
 			Mocks.ReplayAll();
 
@@ -68,6 +69,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 
 			Expect.Call(jobFactory.GetJob("key")).Return(job);
 			Expect.Call(job.Execute(context)).Return(true);
+			Expect.Call(delegate { jobFactory.ReleaseJob(null); }).IgnoreArguments();
 
 			Mocks.ReplayAll();
 

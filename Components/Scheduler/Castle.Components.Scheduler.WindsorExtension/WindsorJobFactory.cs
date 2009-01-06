@@ -51,5 +51,11 @@ namespace Castle.Components.Scheduler.WindsorExtension
 				                                           "Cannot create IJob component with key '{0}'.", jobKey), ex);
 			}
 		}
+
+		/// <inheritdoc />
+		public void ReleaseJob(IJob job)
+		{
+			kernel.ReleaseComponent(job);
+		}
 	}
 }

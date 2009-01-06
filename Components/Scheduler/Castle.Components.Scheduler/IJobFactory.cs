@@ -29,5 +29,11 @@ namespace Castle.Components.Scheduler
 		/// <exception cref="SchedulerException">Thrown if no such job key is known or if some other error
 		/// occurs while initializing the job</exception>
 		IJob GetJob(string jobKey);
+
+		/// <summary>
+		/// Releases the instance of the job.
+		/// </summary>
+		/// <param name="job">The <see cref="IJob"/> returned from <see cref="GetJob"/></param>
+		void ReleaseJob(IJob job);
 	}
 }
