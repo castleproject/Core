@@ -77,10 +77,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Nullables, Version=1.0.2.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SharedLibs\net\2.0\Nullables.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
       <HintPath>..\..\..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
@@ -104,7 +100,7 @@
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core-vs2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
+    <ProjectReference Include="..\Castle.Components.Binder\Castle.Components.Binder-vs2008.csproj">
       <Name>Castle.Components.Binder-vs2005</Name>
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>

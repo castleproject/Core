@@ -17,7 +17,6 @@ namespace Castle.Components.Binder.Tests
 	using System;
 	using System.Globalization;
 	using System.Threading;
-	using Nullables;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -37,10 +36,10 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void NullableIntConversion()
 		{
-			Assert.AreEqual(new NullableInt32(10), Convert(typeof(NullableInt32), "10"));
+			Assert.AreEqual(new int?(10), Convert(typeof(int?), "10"));
 			Assert.IsTrue(convSucceed);
 
-			NullableInt32 val = (NullableInt32) Convert(typeof(NullableInt32), "");
+			int? val = (int?) Convert(typeof(int?), "");
 			Assert.IsFalse(val.HasValue);
 			Assert.IsTrue(convSucceed);
 		}
