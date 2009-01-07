@@ -19,7 +19,7 @@ namespace Castle.Core.Internal
 	public class SlimReaderWriterLock
 	{
 #if SILVERLIGHT
-		object _lock = new object();
+		private readonly object locker = new object();
 
 		public SlimReaderWriterLock()
 		{
@@ -27,44 +27,44 @@ namespace Castle.Core.Internal
 
 		public void EnterReadLock()
 		{
-			Monitor.Enter(this._lock);
+			Monitor.Enter(locker);
 		}
 
 		public void EnterWriteLock()
 		{
-			Monitor.Enter(this._lock);
+			Monitor.Enter(locker);
 		}
 
 		public void ExitReadLock()
 		{
-			Monitor.Exit(this._lock);
+			Monitor.Exit(locker);
 		}
 
 		public void ExitWriteLock()
 		{
-			Monitor.Exit(this._lock);
+			Monitor.Exit(locker);
 		}
 #else
-		private ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(System.Threading.LockRecursionPolicy.SupportsRecursion);
+		private readonly ReaderWriterLockSlim locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
 		public void EnterReadLock()
 		{
-			this._lock.EnterUpgradeableReadLock();
+			locker.EnterUpgradeableReadLock();
 		}
 
 		public void EnterWriteLock()
 		{
-			this._lock.EnterWriteLock();
+			locker.EnterWriteLock();
 		}
 
 		public void ExitReadLock()
 		{
-			this._lock.ExitUpgradeableReadLock();
+			locker.ExitUpgradeableReadLock();
 		}
 
 		public void ExitWriteLock()
 		{
-			this._lock.ExitWriteLock();
+			locker.ExitWriteLock();
 		}
 #endif
 	}
