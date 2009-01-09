@@ -51,25 +51,19 @@ namespace Castle.DynamicProxy.Generators
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 			Type type;
 
-			SlimReaderWriterLock rwlock = Scope.RWLock;
-
-			rwlock.EnterReadLock();
-
 			CacheKey cacheKey = new CacheKey(targetType, interfaces, options);
 
-			Type cacheType = GetFromCache(cacheKey);
-
-			if (cacheType != null)
+			using(var locker = new UpgradableLock(Scope.RWLock))
 			{
-				rwlock.ExitReadLock();
+				Type cacheType = GetFromCache(cacheKey);
 
-				return cacheType;
-			}
+				if (cacheType != null)
+				{
+					return cacheType;
+				}
 
-			rwlock.EnterWriteLock();
+				locker.Upgrade();
 
-			try
-			{
 				cacheType = GetFromCache(cacheKey);
 
 				if (cacheType != null)
@@ -301,10 +295,6 @@ namespace Castle.DynamicProxy.Generators
 				InitializeStaticFields(type);
 
 				AddToCache(cacheKey, type);
-			}
-			finally
-			{
-				rwlock.ExitWriteLock();
 			}
 
 			return type;

@@ -31,19 +31,15 @@ namespace Castle.DynamicProxy
 		/// <param name="asm">The asm.</param>
 		public static bool IsInternalToDynamicProxy(Assembly asm)
 		{
-			internalsToDynProxyLock.EnterReadLock();
-
-			if (internalsToDynProxy.ContainsKey(asm))
+			using (var locker = new UpgradableLock(internalsToDynProxyLock))
 			{
-				internalsToDynProxyLock.ExitReadLock();
+				if (internalsToDynProxy.ContainsKey(asm))
+				{
+					return internalsToDynProxy[asm];
+				}
 
-				return internalsToDynProxy[asm];
-			}
+				locker.Upgrade();
 
-			internalsToDynProxyLock.EnterWriteLock();
-
-			try
-			{
 				if (internalsToDynProxy.ContainsKey(asm))
 				{
 					return internalsToDynProxy[asm];
@@ -66,10 +62,6 @@ namespace Castle.DynamicProxy
 				internalsToDynProxy.Add(asm, found);
 
 				return found;
-			}
-			finally
-			{
-				internalsToDynProxyLock.ExitWriteLock();
 			}
 		}
 

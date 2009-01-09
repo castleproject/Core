@@ -63,7 +63,10 @@
     <Compile Include="Internal\LinkedList.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\ReadLock.cs" />
     <Compile Include="Internal\SlimReaderWriterLock.cs" />
+    <Compile Include="Internal\UpgradableLock.cs" />
+    <Compile Include="Internal\WriteLock.cs" />
     <Compile Include="IServiceProviderExAccessor.cs" />
     <Compile Include="Interceptor\IChangeProxyTarget.cs" />
     <Compile Include="Interceptor\IInterceptor.cs" />
