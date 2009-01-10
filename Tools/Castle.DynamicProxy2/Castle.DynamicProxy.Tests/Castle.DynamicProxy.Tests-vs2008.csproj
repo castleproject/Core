@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FE432670-73A1-499D-A353-28FC902A43C8}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -128,6 +128,7 @@
     <Compile Include="Classes\ProtectedInternalConstructorClass.cs" />
     <Compile Include="Classes\SimpleClass.cs" />
     <Compile Include="Classes\ClassOverridingEqualsAndGetHashCode.cs" />
+    <Compile Include="GenericMethodsProxyTestCase.cs" />
     <Compile Include="DictionarySerializationTestCase.cs" />
     <Compile Include="MixinDataTestCase.cs" />
     <Compile Include="CrossAppDomainCaller.cs" />
