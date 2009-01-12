@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class GenericMethodsProxyTestCase : BasePEVerifyTestCase
 	{
-		[Test, Ignore("This is broken")]
+		[Test]
 		public void ProxyAdditionalInterfaceWithGenericMethods()
 		{
 			IService proxy = (IService)generator.CreateInterfaceProxyWithoutTarget(

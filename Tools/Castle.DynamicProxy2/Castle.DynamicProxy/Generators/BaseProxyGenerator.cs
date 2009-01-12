@@ -1135,9 +1135,6 @@ namespace Castle.DynamicProxy.Generators
 		{
 			foreach (MethodInfo method in methods)
 			{
-				// Aparently we cannot cache generic methods
-				if (method.IsGenericMethod) continue;
-
 				AddFieldToCacheMethodTokenAndStatementsToInitialize(method, typeInitializerConstructor, classEmitter);
 			}
 		}
@@ -1145,7 +1142,11 @@ namespace Castle.DynamicProxy.Generators
 		protected void AddFieldToCacheMethodTokenAndStatementsToInitialize(
 			MethodInfo method, ConstructorEmitter typeInitializerConstructor, ClassEmitter classEmitter)
 		{
-			if (!method2TokenField.ContainsKey(method))
+			// Aparently we cannot cache generic methods
+			if (method.IsGenericMethod)
+				return;
+
+			if (!method2TokenField.ContainsKey (method))
 			{
 				FieldReference fieldCache =
 					classEmitter.CreateStaticField("tokenCache" + fieldCount++, typeof(MethodInfo));

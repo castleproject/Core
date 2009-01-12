@@ -1,5 +1,7 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Added support for generic methods when specifying additional interfaces to CreateInterfaceProxyWithoutTarget (reported by Craig Neuwirth, cause
+  found by Krzysztof Kozmic)
 
 - Added support for provide additional interfaces for target interface proxies.
 
