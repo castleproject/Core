@@ -103,8 +103,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 #else
 			builder.SetSignature(
 				returnType,
-				baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
-				baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
+				// Disabled due to .Net 3.5 SP 1 bug
+				//baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
+				//baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
+				Type.EmptyTypes,
+				Type.EmptyTypes,
 				parameters,
 				null, null
 //				 paramModReq.ToArray(),
