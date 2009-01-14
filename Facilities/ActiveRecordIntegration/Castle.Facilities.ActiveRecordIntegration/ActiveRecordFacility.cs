@@ -244,6 +244,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			string isLazyByDefault = facilityConfig.Attributes["default-lazy"];
 			string pluralize = facilityConfig.Attributes["pluralizeTableNames"];
 			string verifyModelsAgainstDBSchema = facilityConfig.Attributes["verifyModelsAgainstDBSchema"];
+			string defaultFlushType = facilityConfig.Attributes["flush"];
 
 			SetUpThreadInfoType(ConvertBool(isWeb), threadinfotype);
 			SetDebugFlag(ConvertBool(isDebug));
@@ -251,6 +252,10 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			SetIsLazyByDefault(ConvertBool(isLazyByDefault));
 			PluralizeTableNames = ConvertBool(pluralize);
 			VerifyModelsAgainstDBSchema = ConvertBool(verifyModelsAgainstDBSchema);
+			if (string.IsNullOrEmpty(defaultFlushType))
+				SetDefaultFlushType(DefaultFlushType.Classic);
+			else
+				SetDefaultFlushType(defaultFlushType);
 
 			foreach(IConfiguration config in facilityConfig.Children)
 			{

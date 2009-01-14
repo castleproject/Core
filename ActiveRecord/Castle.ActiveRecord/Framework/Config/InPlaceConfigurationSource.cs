@@ -384,6 +384,28 @@ namespace Castle.ActiveRecord.Framework.Config
 			defaultFlushType = flushType;
 		}
 
+		/// <summary>
+		/// Sets the default flushing behaviour using the string value from the configuration
+		/// XML. This method has been moved from XmlConfigurationSource to avoid code
+		/// duplication in ActiveRecordIntegrationFacility.
+		/// </summary>
+		/// <param name="configurationValue">The configuration value</param>
+		protected void SetDefaultFlushType(string configurationValue)
+		{
+			try
+			{
+				SetDefaultFlushType((DefaultFlushType) Enum.Parse(typeof(DefaultFlushType), configurationValue, true));
+			}
+			catch (ArgumentException ex)
+			{
+				string msg = "Problem: The value of the flush-attribute in <activerecord> is not valid. " +
+					"The value was \"" + configurationValue + "\". ActiveRecord expects that value to be one of " +
+					string.Join(", ", Enum.GetNames(typeof(DefaultFlushType))) + ". ";
+
+				throw new ConfigurationErrorsException(msg, ex);
+			}
+		}
+
 		private static IConfiguration ConvertToConfiguration(IDictionary<string,string> properties)
 		{
 			MutableConfiguration conf = new MutableConfiguration("Config");

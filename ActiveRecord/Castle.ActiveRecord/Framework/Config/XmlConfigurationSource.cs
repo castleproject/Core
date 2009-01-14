@@ -102,7 +102,14 @@ namespace Castle.ActiveRecord.Framework.Config
 
 			SetVerifyModelsAgainstDBSchema(verifyModelsAgainstDBSchemaAtt != null && verifyModelsAgainstDBSchemaAtt.Value == "true");
 
-			SetDefaultFlushType(ConvertFlush(defaultFlushType));
+			if (defaultFlushType == null)
+			{
+				SetDefaultFlushType(DefaultFlushType.Classic);
+			}
+			else
+			{
+				SetDefaultFlushType(defaultFlushType.Value);
+			}
 
 			PopulateConfigNodes(section);
 		}
@@ -184,23 +191,6 @@ namespace Castle.ActiveRecord.Framework.Config
 		private static bool ConvertBool(XmlNode boolAttrib)
 		{
 			return boolAttrib != null && "true".Equals(boolAttrib.Value, StringComparison.OrdinalIgnoreCase);
-		}
-
-		private static DefaultFlushType ConvertFlush(XmlNode flushAttrib)
-		{
-			if (flushAttrib == null) return DefaultFlushType.Classic;
-			try
-			{
-				return (DefaultFlushType)Enum.Parse(typeof(DefaultFlushType), flushAttrib.Value, true);
-			}
-			catch (ArgumentException ex)
-			{
-				string msg = "Problem: The value of the flush-attribute in <activerecord> is not valid. " +
-					"The value was \"" + flushAttrib.Value + "\". ActiveRecord expects that value to be one of " +
-					string.Join(", ", Enum.GetNames(typeof(DefaultFlushType))) + ". ";
-				
-				throw new ConfigurationErrorsException(msg,ex);
-			}
 		}
 	}
 }
