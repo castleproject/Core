@@ -39,7 +39,6 @@ namespace Castle.Core.Configuration.Xml
 
 		public static IConfiguration GetDeserializedNode(XmlNode node)
 		{
-			MutableConfiguration config;
 			ConfigurationCollection configChilds = new ConfigurationCollection();
 
 			StringBuilder configValue = new StringBuilder();
@@ -59,7 +58,7 @@ namespace Castle.Core.Configuration.Xml
 				}
 			}
 
-			config = new MutableConfiguration(node.Name, GetConfigValue(configValue.ToString()));
+			MutableConfiguration config = new MutableConfiguration(node.Name, GetConfigValue(configValue.ToString()));
 
 			foreach(XmlAttribute attribute in node.Attributes)
 			{
@@ -77,9 +76,7 @@ namespace Castle.Core.Configuration.Xml
 		/// </summary>
 		public static string GetConfigValue(string value)
 		{
-			value = value.Trim();
-
-			return value == String.Empty ? null : value;
+			return string.IsNullOrEmpty(value) ? null : value.Trim();
 		}
 
 		public static bool IsTextNode(XmlNode node)
