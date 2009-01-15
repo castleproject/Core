@@ -45,14 +45,27 @@ namespace Castle.Components.Validator
 
 			if(!initializedTypesByContributorType.Contains(contributorType))
 			{
-				initializedTypesByContributorType[contributorType] = ArrayList.Synchronized(new ArrayList());
+				// Double checked lock so we don't get two threads adding the same type at the same time
+				lock (initializedTypesByContributorType.SyncRoot)
+				{
+					if (!initializedTypesByContributorType.Contains(contributorType))
+					{
+						initializedTypesByContributorType[contributorType] = ArrayList.Synchronized(new ArrayList());
+					}
+				}
 			}
 			
 			ArrayList initialized = initializedTypesByContributorType[contributorType] as ArrayList;
 			if (!initialized.Contains(instanceType))
 			{
-				Initialize(instanceType);
-				initialized.Add(instanceType);
+				lock (initialized.SyncRoot)
+				{
+					if (!initialized.Contains(instanceType))
+					{
+						Initialize(instanceType);
+						initialized.Add(instanceType);
+					}
+				}
 			}
 
 			return IsValidInternal(instance, runWhen);
