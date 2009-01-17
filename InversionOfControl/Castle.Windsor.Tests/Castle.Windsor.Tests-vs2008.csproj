@@ -152,6 +152,7 @@
     <Compile Include="Bugs\IoC-73\Proxy.cs" />
     <Compile Include="Bugs\IoC-78\IoC-78.cs" />
     <Compile Include="Bugs\IoC_103\IoC_103.cs" />
+    <Compile Include="Bugs\IoC_120.cs" />
     <Compile Include="ChildContainerSupportTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

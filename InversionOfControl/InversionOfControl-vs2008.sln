@@ -2,7 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F9A88F20-64E5-442C-8C20-10C69A39EF4C}"
 	ProjectSection(SolutionItems) = preProject
-		Know issues.txt = Know issues.txt
 		License.txt = License.txt
 		Readme.txt = Readme.txt
 	EndProjectSection
