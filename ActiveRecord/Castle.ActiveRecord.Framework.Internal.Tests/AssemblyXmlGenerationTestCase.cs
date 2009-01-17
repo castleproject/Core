@@ -30,13 +30,17 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			AssemblyXmlGenerator generator = new AssemblyXmlGenerator();
 			string[] xmlConfigurations = generator.CreateXmlConfigurations(typeof(AssemblyXmlGenerationTestCase).Assembly);
 			string actual = xmlConfigurations[0];
-			string expected = "<?xml version=\"1.0\" encoding=\"utf-16\"?>"+
-	"<hibernate-mapping  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\""+
-	" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">"+
-	"<import class=\"Castle.ActiveRecord.Framework.Internal.Tests.ImportClassRow, Castle.ActiveRecord.Framework.Internal.Tests\" rename=\"ImportClassRow\"/>\r\n"+
-	"	<query name='allAdultUsers'>\r\n"+
-	"		 <![CDATA[from User user where user.Age > 21]]>\r\n"+
-	"	 </query>\r\n"+
+			string expected = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" +
+	"<hibernate-mapping  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" +
+	" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">" +
+	"<import class=\"Castle.ActiveRecord.Framework.Internal.Tests.ImportClassRow, Castle.ActiveRecord.Framework.Internal.Tests\" rename=\"ImportClassRow\"/>\r\n" +
+	"	<query name='allAdultUsers'>\r\n" +
+	"		 <![CDATA[from User user where user.Age > 21]]>\r\n" +
+	"	 </query>\r\n" +
+	"\r\n" +
+	"	<sql-query name='allAdultUsersSql'>\r\n" +
+	"		 <![CDATA[select * from Users where Age > 21]]>\r\n"+
+	"	 </sql-query>\r\n"+
 	"</hibernate-mapping>\r\n" ;
 			Assert.AreEqual(expected, actual);
 		}

@@ -338,6 +338,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\SqlNamedQueryAttribute.cs" />
     <Compile Include="Attributes\WithAccessOptionalTableAttribute.cs" />
     <Compile Include="Attributes\CompositeUserTypeAttribute.cs" />
     <Compile Include="Attributes\Enums.cs" />

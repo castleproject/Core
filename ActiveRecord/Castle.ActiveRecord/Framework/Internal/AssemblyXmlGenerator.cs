@@ -48,14 +48,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public string[] CreateXmlConfigurations(Assembly assembly)
 		{
 			object[] atts = assembly.GetCustomAttributes(true);
-			ArrayList namedQueries = new ArrayList();
+			ArrayList namedHqlQueries = new ArrayList();
+			ArrayList namedSqlQueries = new ArrayList();
 			ArrayList imports = new ArrayList();
 			ArrayList rawXml = new ArrayList();
 			foreach (object attribute in atts)
 			{
 				if (attribute is HqlNamedQueryAttribute)
 				{
-					namedQueries.Add(attribute);
+					namedHqlQueries.Add(attribute);
+				}
+				else if (attribute is SqlNamedQueryAttribute)
+				{
+					namedSqlQueries.Add(attribute);
 				}
 				else if (attribute is ImportAttribute)
 				{
@@ -74,12 +79,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				AppendImport(attribute);
 			}
-			foreach (HqlNamedQueryAttribute attribute in namedQueries)
+			foreach (HqlNamedQueryAttribute attribute in namedHqlQueries)
 			{
-				AppendNamedQuery(attribute, assembly);
+				AppendNamedHqlQuery(attribute, assembly);
+			}
+			foreach (SqlNamedQueryAttribute attribute in namedSqlQueries)
+			{
+				AppendNamedSqlQuery(attribute, assembly);
 			}
 			xml.AppendLine(Constants.XmlFooter);
-			bool hasQueriesOrImportsToAdd = namedQueries.Count != 0 || imports.Count != 0;
+			bool hasQueriesOrImportsToAdd = namedHqlQueries.Count != 0 || namedSqlQueries.Count != 0 || imports.Count != 0;
 			if (hasQueriesOrImportsToAdd)
 			{
 				rawXml.Insert(0,xml.ToString());
@@ -93,7 +102,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			xml.AppendFormat("<import class=\"{0}\" rename=\"{1}\"/>", XmlGenerationVisitor.MakeTypeName(attribute.Type), attribute.Rename);
 		}
 
-		private void AppendNamedQuery(HqlNamedQueryAttribute attribute, Assembly assembly)
+		private void AppendNamedHqlQuery(HqlNamedQueryAttribute attribute, Assembly assembly)
 		{
 			if (attribute.Name == "" || attribute.Query == "")
 			{
@@ -105,6 +114,22 @@ namespace Castle.ActiveRecord.Framework.Internal
 	<query name='{0}'>
 		 <![CDATA[{1}]]>
 	 </query>
+", attribute.Name, attribute.Query);
+
+		}
+
+		private void AppendNamedSqlQuery(SqlNamedQueryAttribute attribute, Assembly assembly)
+		{
+			if (attribute.Name == "" || attribute.Query == "")
+			{
+				throw new ActiveRecordException("Error generating XML for SqlNamedQuery in " + assembly.FullName +
+												". Query must have both name and query.");
+			}
+
+			xml.AppendFormat(@"
+	<sql-query name='{0}'>
+		 <![CDATA[{1}]]>
+	 </sql-query>
 ", attribute.Name, attribute.Query);
 
 		}

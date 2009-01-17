@@ -18,6 +18,7 @@ using Castle.ActiveRecord.Framework.Internal.Tests;
 
 [assembly: Import(typeof(ImportClassRow), "ImportClassRow")]
 [assembly: HqlNamedQuery("allAdultUsers", "from User user where user.Age > 21")]
+[assembly: SqlNamedQuery("allAdultUsersSql", "select * from Users where Age > 21")]
 [assembly: ConstantMappingTestAttribute]
 
 [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false),Serializable]
