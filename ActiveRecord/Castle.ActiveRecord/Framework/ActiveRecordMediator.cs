@@ -129,7 +129,7 @@ namespace Castle.ActiveRecord
 		/// <param name="targetType">The target type</param>
 		/// <param name="criteria">The criteria</param>
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-		protected internal static object FindOne(Type targetType, DetachedCriteria criteria)
+		public static object FindOne(Type targetType, DetachedCriteria criteria)
 		{
 			return ActiveRecordBase.FindOne(targetType, criteria);
 		}
