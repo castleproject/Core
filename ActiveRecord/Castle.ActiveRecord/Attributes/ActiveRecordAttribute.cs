@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.ActiveRecord
 {
 	using System;
+	using NHibernate;
 	using NHibernate.Persister.Entity;
 
 	/// <summary>
@@ -45,6 +47,7 @@ namespace Castle.ActiveRecord
 		private String where;
 		private Type proxy;
 		private Type persister;
+		private Type tuplizer;
 		private bool lazy;
 		private bool dynamicUpdate;
 		private bool dynamicInsert;
@@ -280,6 +283,19 @@ namespace Castle.ActiveRecord
 		{
 			get { return useAutoImport; }
 			set { useAutoImport = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate documentation:
+		/// A tuplizer defines the contract for things which know how to manage
+		/// a particular representation of a piece of data, given that
+		/// representation's <see cref="EntityMode"/> (the entity-mode
+		/// essentially defining which representation).
+		/// </summary>
+		public Type Tuplizer
+		{
+			get { return tuplizer; }
+			set { tuplizer = value; }
 		}
 	}
 }

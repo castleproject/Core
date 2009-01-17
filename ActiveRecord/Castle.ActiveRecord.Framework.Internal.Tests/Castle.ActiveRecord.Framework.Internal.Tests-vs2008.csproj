@@ -177,6 +177,7 @@
     <Compile Include="Model\ClassWithCompositeKey.cs" />
     <Compile Include="Model\ClassWithMultiplePrimaryKeys.cs" />
     <Compile Include="Model\ClassWithOverride.cs" />
+    <Compile Include="Model\ClassWithTuplizer.cs" />
     <Compile Include="Model\Component.cs" />
     <Compile Include="Model\ComponentManyToClassA.cs" />
     <Compile Include="Model\CompositeKeyModels.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Model\TimestampedClass.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\Tuplizer.cs" />
     <Compile Include="Model\VersionedClass.cs">
       <SubType>Code</SubType>
     </Compile>

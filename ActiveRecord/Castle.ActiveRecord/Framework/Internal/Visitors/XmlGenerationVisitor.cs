@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
@@ -20,6 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Reflection;
 	using System.Text;
 	using Castle.ActiveRecord;
+	using NHibernate;
 
 	/// <summary>
 	/// Traverse the tree emitting proper xml configuration
@@ -100,6 +102,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					MakeAtt("table", model.ActiveRecordAtt.Table),
 					WriteIfNonNull("schema", model.ActiveRecordAtt.Schema));
 				Ident();
+				WriteTuplizer(model.ActiveRecordAtt.Tuplizer);
 				VisitNode(model.Key);
 				VisitNodes(model.Fields);
 				VisitNodes(model.Properties);
@@ -129,6 +132,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
 				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
+				WriteTuplizer(model.ActiveRecordAtt.Tuplizer);
 				VisitNode(model.Key);
 				VisitNodes(model.Fields);
 				VisitNodes(model.Properties);
@@ -155,6 +159,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
 				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
+				WriteTuplizer(model.ActiveRecordAtt.Tuplizer);
 				VisitNodes(model.Fields);
 				VisitNodes(model.Properties);
 				VisitNodes(model.BelongsTo);
@@ -207,6 +212,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy, model.ActiveRecordAtt.LazySpecified));
 				Ident();
 				WriteCache(model.ActiveRecordAtt.Cache, model.ActiveRecordAtt.CacheRegion);
+				WriteTuplizer(model.ActiveRecordAtt.Tuplizer);
 				VisitNode(model.PrimaryKey);
 				VisitNode(model.CompositeKey);
 				WriteDiscriminator(model);
@@ -1251,6 +1257,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        WriteIfFalse("insert", insert),
 			        WriteIfFalse("update", update),
 			        WriteIfNonNull("formula", formula));
+		}
+
+		private void WriteTuplizer(Type tuplizer)
+		{
+			if (tuplizer != null)
+			{
+				AppendF("<tuplizer class=\"{0}\" entity-mode=\"{1}\" />", MakeTypeName(tuplizer), EntityModeHelper.ToString(EntityMode.Poco));
+			}
 		}
 
 		#region Xml generations members
