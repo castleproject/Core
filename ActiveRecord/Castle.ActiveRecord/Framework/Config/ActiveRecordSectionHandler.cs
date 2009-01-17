@@ -63,5 +63,15 @@ namespace Castle.ActiveRecord.Framework.Config
 				return source;
 			}
 		}
+
+		/// <summary>
+		/// Returns the sole instance through a factory method for use with 
+		/// Spring.Net (see AR-ISSUE-213)
+		/// </summary>
+		/// <returns>the sole instance</returns>
+		public static IConfigurationSource GetInstance()
+		{
+			return Instance;
+		}
 	}
 }
