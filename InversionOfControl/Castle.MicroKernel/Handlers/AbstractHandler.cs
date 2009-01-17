@@ -243,7 +243,7 @@ namespace Castle.MicroKernel.Handlers
 
 					if (handler == null)
 					{
-						sb.AppendFormat("- {0} which was not registered. \r\n", type.FullName);
+						sb.AppendFormat("- {0} which was not registered. \r\n", type.FullName ?? type.Name);
 					}
 					else if (handler == this)
 					{
