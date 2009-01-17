@@ -95,11 +95,11 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			if (parentTransactionScope != null)
 			{
 				// parentTransactionalScope.EnsureHasTransaction(session);
-				parentTransactionScope.RegisterSession(new KeyHolder(key, connection.ConnectionString), session);
+				parentTransactionScope.RegisterSession(new KeyHolder(key, connection.ConnectionString, connection.GetHashCode()), session);
 			}
 			else if (parentSimpleScope != null)
 			{
-				parentSimpleScope.RegisterSession(new KeyHolder(key, connection.ConnectionString), session);
+				parentSimpleScope.RegisterSession(new KeyHolder(key, connection.ConnectionString, connection.GetHashCode()), session);
 			}
 
 			base.RegisterSession(key, session);
@@ -121,14 +121,14 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		{
 			if (parentTransactionScope != null)
 			{
-				return parentTransactionScope.IsKeyKnown(new KeyHolder(key, connection.ConnectionString));
+				return parentTransactionScope.IsKeyKnown(new KeyHolder(key, connection.ConnectionString, connection.GetHashCode()));
 			}
 			
 			bool keyKnown = false;
 
 			if (parentSimpleScope != null)
 			{
-				keyKnown = parentSimpleScope.IsKeyKnown(new KeyHolder(key, connection.ConnectionString));
+				keyKnown = parentSimpleScope.IsKeyKnown(new KeyHolder(key, connection.ConnectionString, connection.GetHashCode()));
 			}
 
 			return keyKnown ? true : base.IsKeyKnown(key);
@@ -145,14 +145,14 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		{
 			if (parentTransactionScope != null)
 			{
-				return parentTransactionScope.GetSession(new KeyHolder(key, connection.ConnectionString));
+				return parentTransactionScope.GetSession(new KeyHolder(key, connection.ConnectionString, connection.GetHashCode()));
 			}
 
 			ISession session = null;
 
 			if (parentSimpleScope != null)
 			{
-				session = parentSimpleScope.GetSession(new KeyHolder(key, connection.ConnectionString));
+				session = parentSimpleScope.GetSession(new KeyHolder(key, connection.ConnectionString, connection.GetHashCode()));
 			}
 
 			session = session ?? base.GetSession(key);
@@ -212,10 +212,12 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	{
 		private readonly object inner;
 		private readonly String connectionString;
+		private readonly int connectionHashCode;
 
-		public KeyHolder(object inner, String connectionString)
+		public KeyHolder(object inner, String connectionString, int connectionHashCode)
 		{
 			this.inner = inner;
+			this.connectionHashCode = connectionHashCode;
 			this.connectionString = connectionString;
 		}
 
@@ -226,7 +228,8 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			if (other != null)
 			{
 				return ReferenceEquals(inner, other.inner) && 
-				       connectionString == other.connectionString;
+				       connectionString == other.connectionString &&
+					   connectionHashCode == other.connectionHashCode;
 			}
 
 			return false;
@@ -234,7 +237,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		public override int GetHashCode()
 		{
-			return inner.GetHashCode() ^ connectionString.GetHashCode();
+			return inner.GetHashCode() ^ connectionString.GetHashCode() ^ connectionHashCode;
 		}
 	}
 }
