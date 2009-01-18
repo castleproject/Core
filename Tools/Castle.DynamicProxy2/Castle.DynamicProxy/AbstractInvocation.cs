@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace Castle.DynamicProxy
 		private object returnValue;
 		private object[] arguments;
 		private int execIndex = -1;
-		private Type[] genericMethodArguments = null;
+		private Type[] genericMethodArguments;
 
 		protected AbstractInvocation(
 			object target, object proxy, IInterceptor[] interceptors,
@@ -52,11 +52,56 @@ namespace Castle.DynamicProxy
 
 		protected AbstractInvocation(
 			object target, object proxy, IInterceptor[] interceptors,
+			Type targetType, MethodInfo targetMethod, object[] arguments,
+			IInterceptorSelector selector,
+			ref IInterceptor[] methodInterceptors)
+		{
+			this.proxy = proxy;
+			this.target = target;
+			this.interceptors = interceptors;
+			this.targetType = targetType;
+			this.targetMethod = targetMethod;
+			this.arguments = arguments;
+			methodInterceptors = SelectMethodInterceptors(selector, methodInterceptors);
+			this.interceptors = methodInterceptors;
+		}
+
+		protected AbstractInvocation(
+			object target, object proxy, IInterceptor[] interceptors,
 			Type targetType, MethodInfo targetMethod, MethodInfo interfMethod,
 			object[] arguments)
 			: this(target, proxy, interceptors, targetType, targetMethod, arguments)
 		{
 			this.interfMethod = interfMethod;
+		}
+
+		protected AbstractInvocation(
+			object target,
+			object proxy,
+			IInterceptor[] interceptors,
+			Type targetType,
+			MethodInfo targetMethod,
+			MethodInfo interfMethod,
+			object[] arguments,
+			IInterceptorSelector selector,
+			ref IInterceptor[] methodInterceptors)
+			: this(target, proxy, interceptors, targetType, targetMethod, arguments)
+		{
+			this.interfMethod = interfMethod;
+
+			methodInterceptors = SelectMethodInterceptors(selector, methodInterceptors);
+			this.interceptors = methodInterceptors;
+		}
+
+		private IInterceptor[] SelectMethodInterceptors(IInterceptorSelector selector, IInterceptor[] methodInterceptors)
+		{
+			if (methodInterceptors == null)
+			{
+				//NOTE: perhaps instead of passing this.Method we should call this.GetConcreteMethod()
+				methodInterceptors = selector.SelectInterceptors(targetType, Method, interceptors) ??
+				                     new IInterceptor[0];
+			}
+			return methodInterceptors;
 		}
 
 		public void SetGenericMethodArguments(Type[] arguments)
@@ -88,14 +133,11 @@ namespace Castle.DynamicProxy
 		{
 			get
 			{
-				if (interfMethod == null)
-				{
-					return targetMethod;
-				}
-				else
+				if (interfMethod != null)
 				{
 					return interfMethod;
 				}
+				return targetMethod;
 			}
 		}
 
@@ -168,6 +210,7 @@ namespace Castle.DynamicProxy
 			info.AddValue("invocation", new RemotableInvocation(this));
 		}
 #endif
+
 		protected abstract void InvokeMethodOnTarget();
 
 		private MethodInfo EnsureClosedMethod(MethodInfo method)
@@ -177,10 +220,7 @@ namespace Castle.DynamicProxy
 				Debug.Assert(genericMethodArguments != null);
 				return method.GetGenericMethodDefinition().MakeGenericMethod(genericMethodArguments);
 			}
-			else
-			{
-				return method;
-			}
+			return method;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ namespace Castle.DynamicProxy
 		private List<object> mixins;
 		private Type baseTypeForInterfaceProxy = typeof(object);
 		private bool useSingleInterfaceProxy;
-		private bool useSelector;
 
 #if SILVERLIGHT
 #else
@@ -47,7 +46,6 @@ namespace Castle.DynamicProxy
 		public ProxyGenerationOptions(IProxyGenerationHook hook)
 		{
 			this.hook = hook;
-			useSelector = false;
 		}
 
 		/// <summary>
@@ -68,7 +66,6 @@ namespace Castle.DynamicProxy
 			mixins = (List<object>)info.GetValue("mixins", typeof(List<object>));
 			baseTypeForInterfaceProxy = Type.GetType(info.GetString("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
 			useSingleInterfaceProxy = info.GetBoolean("useSingleInterfaceProxy");
-			useSelector = info.GetBoolean("useSelector");
 		}
 #endif
 
@@ -77,7 +74,6 @@ namespace Castle.DynamicProxy
 			if (mixinData == null)
 				mixinData = new MixinData(mixins);
 		}
-
 
 #if SILVERLIGHT
 #warning What to do?
@@ -89,7 +85,6 @@ namespace Castle.DynamicProxy
 			info.AddValue("mixins", mixins);
 			info.AddValue("baseTypeForInterfaceProxy.AssemblyQualifiedName", baseTypeForInterfaceProxy.AssemblyQualifiedName);
 			info.AddValue("useSingleInterfaceProxy", useSingleInterfaceProxy);
-			info.AddValue("useSelector", useSelector);
 		}
 #endif
 
@@ -103,12 +98,6 @@ namespace Castle.DynamicProxy
 		{
 			get { return selector; }
 			set { selector = value; }
-		}
-
-		public bool UseSelector
-		{
-			get { return useSelector; }
-			set { useSelector = value; }
 		}
 
 		public bool UseSingleInterfaceProxy
@@ -177,8 +166,7 @@ namespace Castle.DynamicProxy
 			if (!Equals(MixinData, proxyGenerationOptions.MixinData)) return false;
 			if (!Equals(baseTypeForInterfaceProxy, proxyGenerationOptions.baseTypeForInterfaceProxy)) return false;
 			if (!Equals(useSingleInterfaceProxy, proxyGenerationOptions.useSingleInterfaceProxy)) return false;
-			if (!Equals(useSelector, proxyGenerationOptions.useSelector))
-				return false;
+
 			return true;
 		}
 
@@ -192,7 +180,6 @@ namespace Castle.DynamicProxy
 			result = 29 * result + MixinData.GetHashCode();
 			result = 29 * result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
 			result = 29 * result + useSingleInterfaceProxy.GetHashCode();
-			result = 29 * result + useSelector.GetHashCode();
 			return result;
 		}
 	}

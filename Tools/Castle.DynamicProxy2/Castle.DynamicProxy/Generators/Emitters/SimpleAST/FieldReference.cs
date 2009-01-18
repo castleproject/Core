@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
@@ -65,7 +64,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void LoadAddressOfReference(ILGenerator gen)
 		{
-			throw new NotSupportedException();
+			if (isStatic)
+			{
+				gen.Emit(OpCodes.Ldsflda, Reference);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Ldflda, Reference);
+			}
 		}
 	}
 }

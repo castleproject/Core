@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ using Castle.DynamicProxy.Tests.Mixins;
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using Castle.DynamicProxy.Tests.InterceptorSelector;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -91,9 +92,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(_options1, _options2);
 		}
 
-#if SILVERLIGHT
-#warning Removed SerializableClassTestCase so this test can't be run
-#else
 		[Test]
 		public void Equals_EqualNonEmptyOptions()
 		{
@@ -111,20 +109,15 @@ namespace Castle.DynamicProxy.Tests
 			_options1.Hook = hook;
 			_options2.Hook = hook;
 
-			IInterceptorSelector selector =
-				new Castle.DynamicProxy.Tests.SerializableClassTestCase.SerializableInterceptorSelector();
+			IInterceptorSelector selector = new AllInterceptorSelector();
 			_options1.Selector = selector;
 			_options2.Selector = selector;
-
-			_options1.UseSelector = true;
-			_options2.UseSelector = true;
 
 			_options1.UseSingleInterfaceProxy = true;
 			_options2.UseSingleInterfaceProxy = true;
 
 			Assert.AreEqual(_options1, _options2);
 		}
-#endif
 
 		[Test]
 		public void Equals_DifferentOptions_BaseTypeForInterfaceProxy()
@@ -147,31 +140,16 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Equals_DifferentOptions_Hook()
 		{
-			IProxyGenerationHook hook = new GenerationHookTestCase.LogHook(typeof (object), true);
+			IProxyGenerationHook hook = new GenerationHookTestCase.LogHook(typeof(object), true);
 			_options1.Hook = hook;
 
 			Assert.AreNotEqual(_options1, _options2);
 		}
 
-#if SILVERLIGHT
-#warning Removed SerializableClassTestCase so this test can't be run
-#else
 		[Test]
 		public void Equals_DifferentOptions_Selector()
 		{
-			IInterceptorSelector selector =
-				new Castle.DynamicProxy.Tests.SerializableClassTestCase.SerializableInterceptorSelector();
-			_options1.Selector = selector;
-
-			Assert.AreNotEqual(_options1, _options2);
-		}
-#endif
-
-		[Test]
-		public void Equals_DifferentOptions_UseSelector()
-		{
-			_options1.UseSelector = true;
-			_options2.UseSelector = false;
+			_options1.Selector = new AllInterceptorSelector();
 
 			Assert.AreNotEqual(_options1, _options2);
 		}
@@ -190,6 +168,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			_options1.AddMixinInstance(new SimpleMixin());
 			_options2.AddMixinInstance(new SimpleMixin());
+
 			Assert.AreEqual(_options1, _options2);
 		}
 
@@ -201,6 +180,7 @@ namespace Castle.DynamicProxy.Tests
 
 			_options2.AddMixinInstance(new ComplexMixin());
 			_options2.AddMixinInstance(new SimpleMixin());
+
 			Assert.AreEqual(_options1, _options2);
 		}
 
@@ -210,9 +190,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}
 
-#if SILVERLIGHT
-#warning Removed SerializableClassTestCase so this test can't be run
-#else
 		[Test]
 		public void GetHashCode_EqualNonEmptyOptions()
 		{
@@ -230,29 +207,24 @@ namespace Castle.DynamicProxy.Tests
 			_options1.Hook = hook;
 			_options2.Hook = hook;
 
-			IInterceptorSelector selector =
-				new Castle.DynamicProxy.Tests.SerializableClassTestCase.SerializableInterceptorSelector();
+			IInterceptorSelector selector = new AllInterceptorSelector();
 			_options1.Selector = selector;
 			_options2.Selector = selector;
-
-			_options1.UseSelector = true;
-			_options2.UseSelector = true;
 
 			_options1.UseSingleInterfaceProxy = true;
 			_options2.UseSingleInterfaceProxy = true;
 
 			Assert.AreEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}
-#endif
 
 		[Test]
 		public void GetHashCode_EqualOptions_DifferentMixinInstances()
 		{
 			_options1.AddMixinInstance(new SimpleMixin());
 			_options2.AddMixinInstance(new SimpleMixin());
+
 			Assert.AreEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}
-
 
 		[Test]
 		public void GetHashCode_DifferentOptions_BaseTypeForInterfaceProxy()
@@ -281,25 +253,10 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreNotEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}
 
-#if SILVERLIGHT
-#warning Removed SerializableClassTestCase so this test can't be run
-#else
 		[Test]
 		public void GetHashCode_DifferentOptions_Selector()
 		{
-			IInterceptorSelector selector =
-				new Castle.DynamicProxy.Tests.SerializableClassTestCase.SerializableInterceptorSelector();
-			_options1.Selector = selector;
-
-			Assert.AreNotEqual(_options1.GetHashCode(), _options2.GetHashCode());
-		}
-#endif
-
-		[Test]
-		public void GetHashCode_DifferentOptions_UseSelector()
-		{
-			_options1.UseSelector = true;
-			_options2.UseSelector = false;
+			_options1.Selector = new AllInterceptorSelector();
 
 			Assert.AreNotEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}

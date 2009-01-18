@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.InterceptorSelector;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -87,7 +88,7 @@ namespace Castle.DynamicProxy.Tests
 
 			options1 = new ProxyGenerationOptions();
 			options2 = new ProxyGenerationOptions();
-			options2.UseSelector = true;
+			options2.Selector = new AllInterceptorSelector();
 			key1 = new CacheKey(typeof (NonPublicConstructorClass), null, options1);
 			key2 = new CacheKey(typeof (NonPublicConstructorClass), null, options2);
 

@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 					gen.Emit(OpCodes.Ldarg_3);
 					break;
 				default:
-					gen.Emit(OpCodes.Ldarg, Position);
+					gen.Emit(OpCodes.Ldarg_S, Position);
 					break;
 			}
 		}
