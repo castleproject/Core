@@ -21,7 +21,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Issues.Facilities106
 		public void CanReadNHConfigFileAsTheSourceOfSessionFactory()
 		{
 			IConfiguration castleConfiguration = new MutableConfiguration("myConfig");
-			castleConfiguration.Attributes["nhibernateConfigFile"] = ConfigHelper.ResolvePath("Issues/Facilities106/factory1.xml");
+			castleConfiguration.Attributes["nhibernateConfigFile"] =  "Issues/Facilities106/factory1.xml";
 			XmlConfigurationBuilder b = new XmlConfigurationBuilder();
 			NHibernate.Cfg.Configuration cfg = b.GetConfiguration(castleConfiguration);
 			Assert.IsNotNull(cfg);

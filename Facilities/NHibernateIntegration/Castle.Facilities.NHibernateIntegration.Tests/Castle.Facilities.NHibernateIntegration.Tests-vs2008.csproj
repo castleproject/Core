@@ -275,8 +275,10 @@
     <EmbeddedResource Include="Transactions\TwoDatabaseConfiguration.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="EmptyConfiguration.xml" />
-    <Content Include="Issues\Facilities106\factory1.xml" />
+    <EmbeddedResource Include="EmptyConfiguration.xml" />
+    <Content Include="Issues\Facilities106\factory1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

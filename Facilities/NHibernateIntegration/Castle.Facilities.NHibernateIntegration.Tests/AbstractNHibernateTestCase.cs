@@ -59,7 +59,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			container = new WindsorContainer(new XmlInterpreter(GetContainerFile()));
+			container = new WindsorContainer(new XmlInterpreter(new AssemblyResource(GetContainerFile())));
 			ConfigureContainer();
 			ExportDatabaseSchema();
 			OnSetUp();
@@ -91,7 +91,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 		private string GetContainerFile()
 		{
-			return ConfigHelper.ResolvePath(ConfigurationFile);
+			return ConfigHelper.ResolveResourcePath(ConfigurationFile);
 		}
 	}
 }

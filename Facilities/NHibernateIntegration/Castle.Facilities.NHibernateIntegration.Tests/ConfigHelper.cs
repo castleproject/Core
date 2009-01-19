@@ -19,9 +19,9 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 	sealed class ConfigHelper
 	{
-		public static string ResolvePath(string configFilePath)
+		public static string ResolveResourcePath(string configFilePath)
 		{
-			return Path.Combine(ConfigurationManager.AppSettings["tests.src"], configFilePath);
+			return "Castle.Facilities.NHibernateIntegration.Tests/" + configFilePath;
 		}
 	}
 }
