@@ -462,6 +462,16 @@ namespace Castle.MicroKernel.Registration
 		}
 
 		/// <summary>
+		/// Creates an attribute descriptor.
+		/// </summary>
+		/// <param name="key">The attribute key.</param>
+		/// <returns></returns>
+		public AttributeKeyDescriptor<S> Attribute(string key)
+		{
+			return new AttributeKeyDescriptor<S>(this, key);
+		}
+
+		/// <summary>
 		/// Apply more complex configuration to this component registration.
 		/// </summary>
 		/// <param name="configNodes">The config nodes.</param>
