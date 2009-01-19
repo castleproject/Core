@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E1B10210-6A42-4993-B383-0F6AAC255A24}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -98,7 +98,7 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\NVelocity\NVelocity-vs2005.csproj">
+    <ProjectReference Include="..\NVelocity\NVelocity-vs2008.csproj">
       <Name>NVelocity</Name>
       <Project>{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
@@ -118,6 +118,7 @@
     <Compile Include="Test\Commons\LRUMapTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Test\Commons\StringTokenizerTest.cs" />
     <Compile Include="Test\ComponentDirectiveTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

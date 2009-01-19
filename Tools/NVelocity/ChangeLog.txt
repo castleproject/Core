@@ -1,3 +1,6 @@
+- Applied Sean Carpenter's patch fixing NVELOCITY-ISSUE-32
+  "Bug in StringTokenizer for repeated tokens"
+
 - Applied Simon Cropp's patch fixing NVELOCITY-22
   "remove some unused code"
 

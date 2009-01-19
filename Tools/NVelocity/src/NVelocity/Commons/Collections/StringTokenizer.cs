@@ -15,76 +15,82 @@
 namespace Commons.Collections
 {
 	using System;
-	using System.Collections.Generic;
+	using System.Text;
 
 	public class StringTokenizer
 	{
-		private List<string> elements;
-		private string source;
 		//The tokenizer uses the default delimiter set: the space character, the tab character, the newline character, and the carriage-return character
-		private string delimiters = " \t\n\r";
+		private const string DefaultDelimiters = " \t\n\r";
 
-		public StringTokenizer(string source)
+		private readonly string source;
+		private string delimiters;
+		private int currentPosition;
+		private readonly int length;
+
+		public StringTokenizer(string source) : this(source, DefaultDelimiters)
 		{
-			elements = new List<string>();
-			elements.AddRange(source.Split(delimiters.ToCharArray()));
-			RemoveEmptyStrings();
-			this.source = source;
 		}
 
 		public StringTokenizer(string source, string delimiters)
 		{
-			elements = new List<string>();
 			this.delimiters = delimiters;
-			elements.AddRange(source.Split(this.delimiters.ToCharArray()));
-			RemoveEmptyStrings();
 			this.source = source;
+			this.length = this.source.Length;
 		}
 
 		public int Count
 		{
-			get { return (elements.Count); }
+			get
+			{
+				if (!HasMoreTokens())
+				{
+					return 0;
+				}
+
+				int savedPosition = currentPosition;
+				int count = 0;
+				while (HasMoreTokens())
+				{
+					NextToken();
+					count++;
+				}
+				currentPosition = savedPosition;
+				return count;
+			}
 		}
 
 		public virtual bool HasMoreTokens()
 		{
-			return (elements.Count > 0);
+			return (currentPosition < length);
 		}
 
 		public virtual string NextToken()
 		{
-			if (source == string.Empty)
+			if (currentPosition >= length)
 			{
 				throw new Exception();
 			}
-			else
+
+			StringBuilder result = new StringBuilder();
+			// Go through the current string, adding characters to the result until a delimiter is reached.
+			while (currentPosition < length && delimiters.IndexOf(source.Substring(currentPosition, 1)) < 0)
 			{
-				elements = new List<string>();
-				elements.AddRange(source.Split(delimiters.ToCharArray()));
-				RemoveEmptyStrings();
-				string result = elements[0];
-				elements.RemoveAt(0);
-				source = source.Replace(result, string.Empty);
-				source = source.TrimStart(delimiters.ToCharArray());
-				return result;
+				result.Append(source.Substring(currentPosition, 1));
+				currentPosition++;
 			}
+
+			// Now skip over the delimiters.
+			while (currentPosition < length && delimiters.IndexOf(source.Substring(currentPosition, 1)) >= 0)
+			{
+				currentPosition++;
+			}
+			return result.ToString();
 		}
 
 		public string NextToken(string delimiters)
 		{
 			this.delimiters = delimiters;
 			return NextToken();
-		}
-
-		private void RemoveEmptyStrings()
-		{
-			//VJ++ does not treat empty strings as tokens
-			for(int index = 0; index < elements.Count; index++)
-				if (elements[index] == string.Empty)
-				{
-					elements.RemoveAt(index);
-					index--;
-				}
 		}
 	}
 }
