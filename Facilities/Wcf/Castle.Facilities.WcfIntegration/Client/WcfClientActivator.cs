@@ -20,7 +20,6 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel;
 	using System.Threading;
 	using Castle.Core;
-	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Facilities;
@@ -71,7 +70,7 @@ namespace Castle.Facilities.WcfIntegration
 			try
 			{
 				ProxyOptions options = ProxyUtil.ObtainProxyOptions(Model, true);
-				options.AddAdditionalInterfaces(typeof(ICommunicationObject));			
+				options.AddAdditionalInterfaces(typeof(IContextChannel));			
 				instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context);
 			}
 			catch (Exception ex)

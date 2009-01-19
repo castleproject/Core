@@ -12,28 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration.Tests
+namespace Castle.Facilities.WcfIntegration
 {
-	public class Calculator : ICalculator
+	using System.ServiceModel;
+	using Castle.Core.Interceptor;
+
+	public static class WcfContextChannel
 	{
-		public long Add(long x, long y)
+		public static IContextChannel For(object target)
 		{
-			return x + y;
-		}
+			var proxyAccessor = target as IProxyTargetAccessor;
 
-		public long Subtract(long x, long y)
-		{
-			return x - y;
-		}
+			if (proxyAccessor != null)
+			{
+				target = proxyAccessor.DynProxyGetTarget();
+			}
 
-		public long Multiply(long x, long y)
-		{
-			return x * y;
+			return target as IContextChannel;
 		}
-
-		public long Divide(long x, long y)
-		{
-			return x / y;
-		}
-	}	
+	}
 }

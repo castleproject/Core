@@ -1,17 +1,4 @@
-﻿// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// 
-//     http://www.apache.org/licenses/LICENSE-2.0
-// 
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
+﻿
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
@@ -75,7 +62,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			ExtensionDependencies dependencies = null;
 
-			foreach (IWcfServiceModel serviceModel in ResolveServiceModels(model))
+			foreach (var serviceModel in ResolveServiceModels(model))
 			{
 				if (dependencies == null)
 				{
@@ -89,7 +76,7 @@ namespace Castle.Facilities.WcfIntegration
 				{
 					dependencies.Apply(serviceModel.Extensions);
 					
-					foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
+					foreach (var endpoint in serviceModel.Endpoints)
 					{
 						dependencies.Apply(endpoint.Extensions);
 					}
@@ -101,7 +88,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			ComponentModel model = handler.ComponentModel;
 
-			foreach (IWcfServiceModel serviceModel in ResolveServiceModels(model))
+			foreach (var serviceModel in ResolveServiceModels(model))
 			{ 
 				if (!serviceModel.IsHosted)
 				{
@@ -112,12 +99,12 @@ namespace Castle.Facilities.WcfIntegration
 
 		private void Kernel_ComponentUnregistered(string key, IHandler handler)
 		{
-			IList<ServiceHost> serviceHosts = handler.ComponentModel
+			var serviceHosts = handler.ComponentModel
 				.ExtendedProperties[WcfConstants.ServiceHostsKey] as IList<ServiceHost>;
 
 			if (serviceHosts != null)
 			{
-				foreach (ServiceHost serviceHost in serviceHosts)
+				foreach (var serviceHost in serviceHosts)
 				{
 					IWcfBurden burden = serviceHost.Extensions.Find<IWcfBurden>();
 					if (burden != null) burden.Release(kernel);
@@ -129,9 +116,7 @@ namespace Castle.Facilities.WcfIntegration
 		private void AddDefaultServiceHostBuilders()
 		{
 			AddServiceHostBuilder<DefaultServiceHostBuilder, DefaultServiceModel>(false);
-#if DOTNET35
 			AddServiceHostBuilder<RestServiceHostBuilder, RestServiceModel>(false);
-#endif
 		}
 
 		internal void AddServiceHostBuilder<T, M>(bool force)
@@ -150,7 +135,7 @@ namespace Castle.Facilities.WcfIntegration
 
 			if (model.Implementation.IsClass && !model.Implementation.IsAbstract)
 			{
-				foreach (IWcfServiceModel serviceModel in 
+				foreach (var serviceModel in 
 					WcfUtils.FindDependencies<IWcfServiceModel>(model.CustomDependencies))
 				{
 					foundOne = true;
@@ -205,7 +190,7 @@ namespace Castle.Facilities.WcfIntegration
 																 params Uri[] baseAddresses)
 			where M : IWcfServiceModel
 		{
-			IServiceHostBuilder<M> serviceHostBuilder = kernel.Resolve<IServiceHostBuilder<M>>();
+			var serviceHostBuilder = kernel.Resolve<IServiceHostBuilder<M>>();
 			return serviceHostBuilder.Build(model, (M)serviceModel, baseAddresses);
 		}
 
@@ -245,10 +230,8 @@ namespace Castle.Facilities.WcfIntegration
 
 		private void CreateAndOpenServiceHost(IWcfServiceModel serviceModel, ComponentModel model)
 		{
-			ServiceHost serviceHost = CreateServiceHost(kernel, serviceModel, model);
-		
-			IList<ServiceHost> serviceHosts = 
-				model.ExtendedProperties[WcfConstants.ServiceHostsKey] as IList<ServiceHost>;
+			var serviceHost = CreateServiceHost(kernel, serviceModel, model);
+			var serviceHosts = model.ExtendedProperties[WcfConstants.ServiceHostsKey] as IList<ServiceHost>;
 
 			if (serviceHosts == null)
 			{

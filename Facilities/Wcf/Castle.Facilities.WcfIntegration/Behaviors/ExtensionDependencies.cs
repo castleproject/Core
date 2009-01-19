@@ -31,7 +31,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		public ExtensionDependencies Apply(ICollection<IWcfExtension> extensions)
 		{
-			foreach (IWcfExtension extension in extensions)
+			foreach (var extension in extensions)
 			{
 				extension.AddDependencies(kernel, model);
 			}

@@ -14,8 +14,6 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests.Rest
 {
-#if DOTNET35
-
 	using System;
 	using System.ServiceModel.Web;
 	using Castle.MicroKernel.Registration;
@@ -67,5 +65,4 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 			}
 		}
 	}
-#endif // DOTNET35
 }

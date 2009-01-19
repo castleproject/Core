@@ -61,7 +61,7 @@ namespace Castle.Facilities.WcfIntegration
 			}
 			else if (extension is IOperationBehavior)
 			{
-				foreach (OperationDescription operation in endpoint.Contract.Operations)
+				foreach (var operation in endpoint.Contract.Operations)
 				{
 					operation.Behaviors.Add((IOperationBehavior)extension);
 				}
@@ -79,7 +79,7 @@ namespace Castle.Facilities.WcfIntegration
 				{
 					if (typeof(IOperationBehavior).IsAssignableFrom(owner))
 					{
-						foreach (OperationDescription operation in endpoint.Contract.Operations)
+						foreach (var operation in endpoint.Contract.Operations)
 						{
 							WcfUtils.AttachExtension(operation.Behaviors, extension, owner);
 						}

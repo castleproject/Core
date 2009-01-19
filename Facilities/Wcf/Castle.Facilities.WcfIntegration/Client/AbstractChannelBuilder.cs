@@ -42,8 +42,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			BindChannelFactoryAware(channelFactory, kernel, burden);
 
-			ServiceEndpointExtensions extensions =
-				new ServiceEndpointExtensions(channelFactory.Endpoint, kernel)
+			var extensions =new ServiceEndpointExtensions(channelFactory.Endpoint, kernel)
 			.Install(burden, new WcfEndpointExtensions(WcfExtensionScope.Clients));
 
 			if (clientModel != null)
@@ -107,9 +106,9 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			if (model.HasViaAddress)
 			{
-				EndpointAddress address = model.EndpointAddress ?? new EndpointAddress(model.Address);
-				ContractDescription description = ContractDescription.GetContract(contract);
-				ServiceEndpoint endpoint = new ServiceEndpoint(description, model.Binding, address);
+				var address = model.EndpointAddress ?? new EndpointAddress(model.Address);
+				var description = ContractDescription.GetContract(contract);
+				var endpoint = new ServiceEndpoint(description, model.Binding, address);
 				endpoint.Behaviors.Add(new ClientViaBehavior(model.ViaAddress));
 				channelCreator = GetChannel(contract, endpoint);
 			}

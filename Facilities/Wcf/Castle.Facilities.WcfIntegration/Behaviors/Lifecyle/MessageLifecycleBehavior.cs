@@ -16,6 +16,7 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 {
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Linq;
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
@@ -106,14 +107,11 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		{
 			XmlDocument envelope = null;
 
-			ICollection<IMessageLifecyleAction> actions = Extensions.FindAll<IMessageLifecyleAction>();
+			var actions = Extensions.FindAll<IMessageLifecyleAction>();
 
 			if (actions.Count > 0)
 			{
-				List<IMessageLifecyleAction> orderedActions = new List<IMessageLifecyleAction>(actions);
-				orderedActions.Sort(ActionComparer.Instance);
-
-				foreach (IMessageLifecyleAction action in orderedActions)
+				foreach (var action in actions.OrderBy(a => a.ExecutionOrder))
 				{
 					bool proceed = true;
 
@@ -121,7 +119,7 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 					if (action is IMessageEnvelopeAction)
 					{
-						IMessageEnvelopeAction envelopeAction = (IMessageEnvelopeAction)action;
+						var envelopeAction = (IMessageEnvelopeAction)action;
 
 						if (envelope == null)
 						{
@@ -132,7 +130,7 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 					}
 					else if (action is IMessageAction)
 					{
-						IMessageAction messageAction = (IMessageAction)action;
+						var messageAction = (IMessageAction)action;
 
 						if (envelope != null)
 						{
@@ -178,16 +176,6 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 				new XmlDictionaryReaderQuotas());
 			message = Message.CreateMessage(reader, int.MaxValue, message.Version);
 			return message;
-		}
-
-		private class ActionComparer : IComparer<IMessageLifecyleAction>
-		{
-			internal static readonly ActionComparer Instance = new ActionComparer();
-
-			public int Compare(IMessageLifecyleAction left, IMessageLifecyleAction right)
-			{
-				return left.ExecutionOrder - right.ExecutionOrder;
-			}
 		}
 	}
 

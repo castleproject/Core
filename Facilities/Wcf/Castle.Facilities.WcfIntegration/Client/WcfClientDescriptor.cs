@@ -50,7 +50,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			foreach (IWcfClientModel channel in channels)
 			{
-				ComponentRegistration registration = Component.For(channel.Contract);
+				var registration = Component.For(channel.Contract);
 				registration.DependsOn(Property.ForKey("channel").Eq(channel));
 
 				if (configurer != null)
@@ -74,7 +74,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		private void ValidateChannels(IEnumerable<IWcfClientModel> channels)
 		{
-			foreach (IWcfClientModel channel in channels)
+			foreach (var channel in channels)
 			{
 				if (channel.Contract == null)
 				{

@@ -66,7 +66,7 @@ namespace Castle.Facilities.WcfIntegration
 		private void Kernel_ComponentUnregistered(string key, IHandler handler)
 		{
 			ComponentModel model = handler.ComponentModel;
-			IWcfBurden burden = model.ExtendedProperties[WcfConstants.ClientBurdenKey] as IWcfBurden;
+			var burden = model.ExtendedProperties[WcfConstants.ClientBurdenKey] as IWcfBurden;
 			if (burden != null) burden.Release(kernel);
 		}
 
@@ -74,9 +74,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			AddChannelBuilder<DefaultChannelBuilder, DefaultClientModel>(false);
 			AddChannelBuilder<DuplexChannelBuilder, DuplexClientModel>(false);
-#if DOTNET35
 			AddChannelBuilder<RestChannelBuilder, RestClientModel>(false);
-#endif
         }
 
 		internal void AddChannelBuilder<T, M>(bool force)
@@ -103,8 +101,7 @@ namespace Castle.Facilities.WcfIntegration
 
 			if (model.Service.IsInterface)
 			{
-				foreach (IWcfClientModel clientModel in WcfUtils
-					.FindDependencies<IWcfClientModel>(model.CustomDependencies))
+				foreach (var clientModel in WcfUtils.FindDependencies<IWcfClientModel>(model.CustomDependencies))
 				{
 					return clientModel;
 				}

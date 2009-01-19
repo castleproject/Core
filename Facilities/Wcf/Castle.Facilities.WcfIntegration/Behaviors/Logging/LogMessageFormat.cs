@@ -18,28 +18,19 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 	public class LogMessageFormat : AbstractExtension<LogMessageEndpointBehavior>
 	{
-		private readonly string messageFormat;
-		private readonly IFormatProvider formatProvider;
-
 		public LogMessageFormat(string messageFormat)
 		{
-			this.messageFormat = messageFormat;
+			MessageFormat = messageFormat;
 		}
 
 		public LogMessageFormat(IFormatProvider formatProvider, string messageFormat)
 			: this(messageFormat)
 		{
-			this.formatProvider = formatProvider;
+			FormatProvider = formatProvider;
 		}
 
-		public string MessageFormat
-		{
-			get { return messageFormat; }
-		}
+		public string MessageFormat { get; private set; }
 
-		public IFormatProvider FormatProvider
-		{
-			get { return formatProvider; }
-		}
+		public IFormatProvider FormatProvider { get; private set; }
 	}
 }

@@ -60,7 +60,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 										   KeyedByTypeCollection<T> behaviors, IWcfBurden burden,
 										   Predicate<T> predicate)
 		{
-			foreach (IHandler handler in FindExtensions<T>(kernel, scope))
+			foreach (var handler in FindExtensions<T>(kernel, scope))
 			{
 				T behavior = (T)handler.Resolve(CreationContext.Empty);
 				if (predicate == null || predicate(behavior))
@@ -77,11 +77,15 @@ namespace Castle.Facilities.WcfIntegration.Internal
 			Type extensibleType = type.GetInterface(typeof(IExtensibleObject<>).FullName);
 			if (extensibleType != null)
 			{
-				Type extensionType = typeof(IExtension<>).MakeGenericType(type);
-				foreach (IHandler extHandler in FindExtensions(kernel, scope, extensionType))
+				Type[] args = extensibleType.GetGenericArguments();
+				if (args.Length == 1 && args[0] == type)
 				{
-					object extension = extHandler.Resolve(CreationContext.Empty);
-					AttachExtension(behavior, extension);
+					Type extensionType = typeof(IExtension<>).MakeGenericType(type);
+					foreach (var extHandler in FindExtensions(kernel, scope, extensionType))
+					{
+						object extension = extHandler.Resolve(CreationContext.Empty);
+						AttachExtension(behavior, extension);
+					}
 				}
 			}
 		}
@@ -114,7 +118,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 
 		public static void AddExtensionDependencies<T>(IKernel kernel, WcfExtensionScope scope, ComponentModel model)
 		{
-			foreach (IHandler handler in FindExtensions<T>(kernel, scope))
+			foreach (var handler in FindExtensions<T>(kernel, scope))
 			{
 				AddExtensionDependency(null, handler.ComponentModel.Service, model);
 			}
@@ -177,9 +181,8 @@ namespace Castle.Facilities.WcfIntegration.Internal
 		{
 			if (typeof(T).IsAssignableFrom(owner))
 			{
-				IWcfExtensionHelper helper = (IWcfExtensionHelper)
-					Activator.CreateInstance(typeof(WcfExtensionHelper<,>)
-						.MakeGenericType(typeof(T), owner), candidates);
+				var helper = (IWcfExtensionHelper)Activator.CreateInstance(typeof(WcfExtensionHelper<,>)
+					.MakeGenericType(typeof(T), owner), candidates);
 				return helper.AddExtension(extension);
 			}
 			return false;

@@ -42,8 +42,7 @@ namespace Castle.Facilities.WcfIntegration
         {
             Type type = typeof(DuplexChannelFactory<>).MakeGenericType(new Type[] { contract });
 
-            ChannelFactory channelFactory = (ChannelFactory)
-                Activator.CreateInstance(type, channelFactoryArgs);
+            var channelFactory = (ChannelFactory)Activator.CreateInstance(type, channelFactoryArgs);
 			ConfigureChannelFactory(channelFactory);
 
             MethodInfo methodInfo = type.GetMethod("CreateChannel", new Type[0]);

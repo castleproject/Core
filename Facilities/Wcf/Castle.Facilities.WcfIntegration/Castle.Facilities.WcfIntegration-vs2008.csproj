@@ -51,17 +51,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="Castle.Core, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.MicroKernel, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="Castle.MicroKernel, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\Castle.MicroKernel.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Windsor, Version=1.0.0.5, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="Castle.Windsor, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -104,6 +104,7 @@
     <Compile Include="Behaviors\Logging\LogMessageInspector.cs" />
     <Compile Include="Client\Duplex\DuplexChannelBuilder.cs" />
     <Compile Include="Client\Duplex\DuplexClientModel.cs" />
+    <Compile Include="WcfContextChannel.cs" />
     <Compile Include="IChannelFactoryAware.cs" />
     <Compile Include="Internal\WcfCommunicationDecommisionConcern.cs" />
     <Compile Include="IWcfBurden.cs" />

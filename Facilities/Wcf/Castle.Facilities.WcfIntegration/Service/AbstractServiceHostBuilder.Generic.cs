@@ -40,14 +40,14 @@ namespace Castle.Facilities.WcfIntegration
 
 		public ServiceHost Build(ComponentModel model, params Uri[] baseAddresses)
 		{
-			ServiceHost serviceHost = CreateServiceHost(model, baseAddresses);
+			var serviceHost = CreateServiceHost(model, baseAddresses);
 			ConfigureServiceHost(serviceHost, null, model); 
 			return serviceHost;
 		}
 
 		public ServiceHost Build(Type serviceType, params Uri[] baseAddresses)
 		{
-			ServiceHost serviceHost = CreateServiceHost(serviceType, baseAddresses);
+			var serviceHost = CreateServiceHost(serviceType, baseAddresses);
 			ConfigureServiceHost(serviceHost, null, null); 
 			return serviceHost;
 		}
@@ -58,7 +58,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			ValidateServiceModel(model, serviceModel);
 
-			foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
+			foreach (var endpoint in serviceModel.Endpoints)
 			{
 				Type contract = endpoint.Contract;
 

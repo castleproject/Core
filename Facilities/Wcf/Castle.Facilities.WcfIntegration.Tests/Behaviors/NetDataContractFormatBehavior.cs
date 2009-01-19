@@ -1,6 +1,4 @@
-﻿#if DOTNET35
-
-namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
+﻿namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 {
 	using System;
 	using System.Xml;
@@ -69,5 +67,3 @@ namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 		}
 	}
 }
-
-#endif

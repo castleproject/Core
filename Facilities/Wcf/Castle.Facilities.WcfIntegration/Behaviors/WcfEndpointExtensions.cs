@@ -33,7 +33,7 @@ namespace Castle.Facilities.WcfIntegration
 			WcfUtils.AddBehaviors(kernel, scope, endpoint.Behaviors, burden);
 			WcfUtils.AddBehaviors(kernel, scope, endpoint.Contract.Behaviors, burden);
 
-			foreach (OperationDescription operation in endpoint.Contract.Operations)
+			foreach (var operation in endpoint.Contract.Operations)
 			{
                 WcfUtils.AddBehaviors(kernel, scope, operation.Behaviors, burden);
 			}

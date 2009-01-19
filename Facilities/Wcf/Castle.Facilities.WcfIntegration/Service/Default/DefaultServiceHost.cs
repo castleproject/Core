@@ -71,7 +71,7 @@ namespace Castle.Facilities.WcfIntegration
 
 						if (binding != null)
 						{
-							ServiceEndpoint endpoint = AddServiceEndpoint(contract, binding, baseAddress);
+							var endpoint = AddServiceEndpoint(contract, binding, baseAddress);
 
 							if (EndpointCreated != null)
 							{
@@ -92,7 +92,7 @@ namespace Castle.Facilities.WcfIntegration
 
 			if (ImplementedContracts.Count == 1)
 			{
-				foreach (ContractDescription contract in ImplementedContracts.Values)
+				foreach (var contract in ImplementedContracts.Values)
 				{
 					return contract.ContractType;
 				}

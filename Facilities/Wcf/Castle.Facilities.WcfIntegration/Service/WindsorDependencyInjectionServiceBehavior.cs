@@ -61,23 +61,23 @@ namespace Castle.Facilities.WcfIntegration
 
 		public void ApplyDispatchBehavior(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase)
 		{
-			ServiceBehaviorAttribute serviceBehavior = 
-				serviceDescription.Behaviors.Find<ServiceBehaviorAttribute>();
+			var serviceBehavior = serviceDescription.Behaviors.Find<ServiceBehaviorAttribute>();
 
 			bool singleInstance = (serviceBehavior != null && 
 				serviceBehavior.InstanceContextMode == InstanceContextMode.Single);
 
-			Dictionary<string, Type> contractNameToContractType = new Dictionary<string, Type>();
-			foreach (ServiceEndpoint endpoint in serviceDescription.Endpoints)
+			var contractNameToContractType = new Dictionary<string, Type>();
+
+			foreach (var endpoint in serviceDescription.Endpoints)
 			{
 				contractNameToContractType[endpoint.Contract.Name] = endpoint.Contract.ContractType;
 			}
-			foreach (ChannelDispatcherBase cdb in serviceHostBase.ChannelDispatchers)
+			foreach (var cdb in serviceHostBase.ChannelDispatchers)
 			{
 				ChannelDispatcher cd = cdb as ChannelDispatcher;
 				if (cd != null)
 				{
-					foreach (EndpointDispatcher ed in cd.Endpoints)
+					foreach (var ed in cd.Endpoints)
 					{
 						if (contractNameToContractType.ContainsKey(ed.ContractName))
 						{

@@ -43,7 +43,7 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 		private void FormattedHeaders(Message message, StringBuilder output)
 		{
-			foreach (MessageHeader header in message.Headers)
+			foreach (var header in message.Headers)
 			{
 				output.AppendFormat("\n{0}\n", header);
 			}
@@ -51,7 +51,7 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 		private void FormattedMessage(Message message, char format, StringBuilder output)
 		{
-			using (XmlDictionaryWriter writer = CreateWriter(message, format, output))
+			using (var writer = CreateWriter(message, format, output))
 			{
 				switch (format)
 				{

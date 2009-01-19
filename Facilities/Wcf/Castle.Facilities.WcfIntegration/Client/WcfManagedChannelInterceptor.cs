@@ -14,7 +14,6 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using Castle.Core;
 	using Castle.Core.Interceptor;
@@ -59,7 +58,17 @@ namespace Castle.Facilities.WcfIntegration
 
 		private void EnsureOpenChannel(IInvocation invocation)
 		{
-			IChannel channel = invocation.InvocationTarget as IChannel;
+			object target = invocation.InvocationTarget;
+			var accessor = target as IProxyTargetAccessor;
+
+			if (accessor != null)
+			{
+				target = accessor.DynProxyGetTarget();
+				var changeTarget = (IChangeProxyTarget)invocation;
+				changeTarget.ChangeInvocationTarget(target);
+			}
+
+			IChannel channel = target as IChannel;
 
 			if (channel != null && !WcfUtils.IsCommunicationObjectReady(channel))
 			{
@@ -69,7 +78,7 @@ namespace Castle.Facilities.WcfIntegration
 
 			if (channel == null)
 			{
-				IChangeProxyTarget changeTarget = (IChangeProxyTarget) invocation;
+				var changeTarget = (IChangeProxyTarget) invocation;
 				changeTarget.ChangeInvocationTarget(createChannel());
 			}
 		}

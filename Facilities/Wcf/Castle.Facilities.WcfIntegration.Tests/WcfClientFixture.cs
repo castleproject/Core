@@ -17,14 +17,16 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
+	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
 	using Castle.Core.Configuration;
+	using Castle.Core.Interceptor;
 	using Castle.Core.Resource;
+	using Castle.DynamicProxy;
 	using Castle.Facilities.Logging;
 	using Castle.Facilities.WcfIntegration.Behaviors;
 	using Castle.Facilities.WcfIntegration.Demo;
 	using Castle.Facilities.WcfIntegration.Tests.Behaviors;
-	using Castle.MicroKernel.Proxy;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 	using Castle.Windsor.Installer;
@@ -32,8 +34,6 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using log4net.Config;
 	using log4net.Core;
 	using NUnit.Framework;
-
-#if DOTNET35
 
 	[TestFixture]
 	public class WcfClientFixture
@@ -61,7 +61,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 							IncludeExceptionDetailInFaults = true
 						}),
 					Component.For<NetDataContractFormatBehavior>()
-						.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit)),
+						.Attribute("scope").Eq(WcfExtensionScope.Explicit),
 					Component.For<Operations>()
 						.DependsOn(new { number = 42 })
 						.ActAs(new DefaultServiceModel().AddEndpoints(
@@ -224,7 +224,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			CallCountEndpointBehavior.CallCount = 0;
 			windsorContainer.Register(
 				Component.For<CallCountEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
+					.Attribute("scope").Eq(WcfExtensionScope.Explicit)
 					.Named("specialBehavior")
 					.LifeStyle.Transient,
 				Component.For<IOperationsEx>()
@@ -248,7 +248,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			CallCountEndpointBehavior.CallCount = 0;
 			windsorContainer.Register(
 				Component.For<CallCountEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
+					.Attribute("scope").Eq(WcfExtensionScope.Explicit)
 					.Named("specialBehavior")
 					.LifeStyle.Transient,
 				Component.For<IOperationsEx>()
@@ -304,7 +304,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
-		public void CanAccessCommunicationObjectInterface()
+		public void CanAccessIContextChannelInterface()
 		{
 			windsorContainer.Register(
 				Component.For<IOperations>()
@@ -318,9 +318,33 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				);
 
 			IOperations client = windsorContainer.Resolve<IOperations>("operations");
-			ICommunicationObject commObject = client as ICommunicationObject;
-			Assert.IsNotNull(commObject);
-			Assert.AreEqual(CommunicationState.Created, commObject.State);
+			IContextChannel channel = client as IContextChannel;
+			Assert.IsNotNull(channel);
+			Assert.AreEqual(0, channel.Extensions.Count);
+			Assert.AreEqual(CommunicationState.Created, channel.State);
+		}
+
+		[Test]
+		public void CanUseOperationContextWithClient()
+		{
+			windsorContainer.Register(
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			using (new OperationContextScope(WcfContextChannel.For(client)))
+            {
+				MessageHeader header = MessageHeader.CreateHeader("MyHeader", "", "MyValue", false);
+				OperationContext.Current.OutgoingMessageHeaders.Add(header);
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+            }
 		}
 
 		[Test]
@@ -328,7 +352,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			windsorContainer.Register(
 				Component.For<LogMessageEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
+					.Attribute("scope").Eq(WcfExtensionScope.Explicit)
 					.Named("logMessageBehavior"),
 				Component.For<IOperations>()
 					.Named("operations")
@@ -357,7 +381,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			windsorContainer.Register(
 				Component.For<LogMessageEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
+					.Attribute("scope").Eq(WcfExtensionScope.Explicit)
 					.Named("logMessageBehavior"),
 				Component.For<IOperations>()
 					.Named("operations")
@@ -387,7 +411,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer.Register(
 				Component.For<IFormatProvider>().ImplementedBy<HelloFormatter>(),
 				Component.For<LogMessageEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
+					.Attribute("scope").Eq(WcfExtensionScope.Explicit)
 					.Named("logMessageBehavior"),
 				Component.For<IOperations>()
 					.Named("operations")
@@ -456,7 +480,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			windsorContainer.Register(
 				Component.For<LogMessageEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit))
+					.Attribute("scope").Eq(WcfExtensionScope.Explicit)
 					.Named("logMessageBehavior"),
 				Component.For<IOperations>()
 					.Named("operations")
@@ -492,7 +516,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			windsorContainer.Register(
 				Component.For<MessageLifecycleBehavior>(),
 				Component.For<LogMessageEndpointBehavior>()
-					.Configuration(Attrib.ForName("scope").Eq(WcfExtensionScope.Explicit)),
+					.Attribute("scope").Eq(WcfExtensionScope.Explicit),
 				Component.For<IOperations>()
 					.Named("operations")
 					.ActAs(new DefaultClientModel()
@@ -672,5 +696,12 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	</components>
 </configuration>";
 	}
-#endif // DOTNET35
+
+	public class EmptyInterceptor : MarshalByRefObject, IInterceptor
+	{
+		public void Intercept(IInvocation invocation)
+		{
+		}
+	}
+
 }

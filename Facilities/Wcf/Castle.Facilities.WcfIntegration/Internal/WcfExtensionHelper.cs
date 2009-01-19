@@ -56,7 +56,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 
 		public bool AddExtension(object extension)
 		{
-			IExtension<T> extensionObject = (IExtension<T>)extension;
+			var extensionObject = (IExtension<T>)extension;
 			T owner = candidates.Find<T>();
 
 			if (owner != null)

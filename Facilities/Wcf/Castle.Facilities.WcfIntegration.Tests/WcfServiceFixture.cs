@@ -27,8 +27,6 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using Castle.Windsor;
 	using NUnit.Framework;
 
-#if DOTNET35
-
 	[TestFixture]
 	public class WcfServiceFixture
 	{
@@ -143,5 +141,4 @@ namespace Castle.Facilities.WcfIntegration.Tests
 
 		#endregion
 	}
-#endif // DOTNET35
 }

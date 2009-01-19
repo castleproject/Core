@@ -19,17 +19,16 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 	public abstract class AbstractExtension<T> : IExtension<T>
 		where T : IExtensibleObject<T>
 	{
-		private int executionOrder = int.MaxValue;
-
-		public int ExecutionOrder
+		public AbstractExtension()
 		{
-			get { return executionOrder; }
-			set { executionOrder = value; }
+			ExecutionOrder = int.MaxValue;
 		}
+
+		public int ExecutionOrder { get; set; }
 
 		public AbstractExtension<T> ExecuteAt(int order)
 		{
-			executionOrder = order;
+			ExecutionOrder = order;
 			return this;
 		}
 

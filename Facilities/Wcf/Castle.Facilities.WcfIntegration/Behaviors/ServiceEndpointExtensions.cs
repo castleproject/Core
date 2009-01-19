@@ -36,7 +36,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.burden = burden;
 
-			foreach (IWcfExtension extension in extensions)
+			foreach (var extension in extensions)
 			{
 				extension.Accept(this);
 			}

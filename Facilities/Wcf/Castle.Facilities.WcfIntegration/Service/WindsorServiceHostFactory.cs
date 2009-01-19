@@ -89,7 +89,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			IWcfServiceModel serviceModel = null;
 
-			foreach (IWcfServiceModel candidateServiceModel in WcfUtils
+			foreach (var candidateServiceModel in WcfUtils
 						.FindDependencies<IWcfServiceModel>(model.CustomDependencies,
 						WcfUtils.IsHosted))
 			{

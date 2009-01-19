@@ -14,8 +14,6 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests.Rest
 {
-#if DOTNET35
-
 	using System;
 	using System.ServiceModel;
 	using System.ServiceModel.Web;
@@ -93,6 +91,4 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 			}				
 		}
 	}
-
-#endif // DOTNET35
 }
