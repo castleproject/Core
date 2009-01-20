@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 using Castle.Core.Configuration;
+using Castle.Core.Resource;
 using NHibernate.Cfg;
 
 namespace Castle.Facilities.NHibernateIntegration.Internal
@@ -11,6 +13,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	/// </summary>
 	public class XmlConfigurationBuilder : IConfigurationBuilder
 	{
+
 		#region IConfigurationBuilder Members
 
 		/// <summary>
@@ -21,8 +24,14 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		public Configuration GetConfiguration(IConfiguration config)
 		{
 			string cfgFile = config.Attributes["nhibernateConfigFile"];
-			Configuration cfg = new Configuration();
-			cfg.Configure(cfgFile);
+			IResource configResource = new FileAssemblyResource(cfgFile);
+			Configuration cfg;
+			using(XmlReader reader=XmlReader.Create(configResource.GetStreamReader()))
+			{
+				cfg = new Configuration();
+				cfg.Configure(reader);
+			}
+			configResource.Dispose();
 			return cfg;
 		}
 

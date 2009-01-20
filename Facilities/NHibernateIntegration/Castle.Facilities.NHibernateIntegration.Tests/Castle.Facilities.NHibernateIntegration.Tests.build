@@ -29,8 +29,8 @@
 		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">
 			<include name="${src.dir}/**/*.hbm.xml" />
 			<exclude name="${src.dir}/obj/**" />
-			<include name="${src.dir}/customConfigurationBuilder.xml" />
-			<include name="${src.dir}/configurationBuilderRegression.xml" />
+			<include name="${src.dir}/**/*.xml" />
+			<include name="${src.dir}/*.xml" />
 		</resourcefileset>
 	</target>
 

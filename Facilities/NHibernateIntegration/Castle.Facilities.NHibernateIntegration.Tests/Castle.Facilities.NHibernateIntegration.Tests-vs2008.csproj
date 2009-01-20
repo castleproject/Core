@@ -276,9 +276,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmptyConfiguration.xml" />
-    <Content Include="Issues\Facilities106\factory1.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Issues\Facilities106\factory1.xml">
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
