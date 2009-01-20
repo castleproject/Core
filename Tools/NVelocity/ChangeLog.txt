@@ -1,3 +1,6 @@
+- Applied Anders Waglund's patch fixing NVELOCITY-ISSUE-30
+  "NVelocity foreach EventCartridge patch"
+
 - Applied Sean Carpenter's patch fixing NVELOCITY-ISSUE-32
   "Bug in StringTokenizer for repeated tokens"
 

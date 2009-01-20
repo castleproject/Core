@@ -84,6 +84,33 @@ namespace NVelocity.Test.Extensions
 			Assert.AreEqual(@"escape&amp;me don't &escape> me | normal>not<escapable", sw.ToString());
 		}
 
+		[Test]
+		public void ReplaceSingleItem()
+		{
+			velocityContext.Put("singleItem", "text");
+
+			StringWriter sw = new StringWriter();
+
+			bool ok = velocityEngine.Evaluate(velocityContext, sw, "", @"$singleItem");
+
+			Assert.IsTrue(ok, "Evaluation returned failure");
+			Assert.AreEqual(@"New single item", sw.ToString());
+		}
+
+		[Test]
+		public void ReplaceMultipleItems()
+		{
+			velocityContext.Put("multipleItems", new string[] {"text", "text"});
+
+			StringWriter sw = new StringWriter();
+
+			bool ok = velocityEngine.Evaluate(velocityContext, sw, "",
+				"#foreach($item in $multipleItems)\n$item\n#end");
+
+			Assert.IsTrue(ok, "Evaluation returned failure");
+			Assert.AreEqual("Item 1\nItem 2\n", sw.ToString());
+		}
+
 		/// <summary>
 		/// This is a sample of an ReferenceInsertion handler that escapes objects into
 		/// XML strings. What matters for this handler is the topmost "escapable" or
@@ -103,6 +130,15 @@ namespace NVelocity.Test.Extensions
 					e.NewValue = Regex.Replace(e.OriginalValue.ToString(), "[&<>\"]", new MatchEvaluator(Escaper));
 					return;
 				}
+			}
+
+			if (e.RootString == "$multipleItems")
+			{
+				e.NewValue = new string[] {"Item 1", "Item 2"};
+			}
+			else if (e.RootString == "$singleItem")
+			{
+				e.NewValue = "New single item";
 			}
 		}
 

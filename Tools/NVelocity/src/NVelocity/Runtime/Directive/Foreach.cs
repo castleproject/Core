@@ -172,6 +172,13 @@ namespace NVelocity.Runtime.Directive
 			// get our list object, and punt if it's null.
 			Object listObject = node.GetChild(2).Value(context);
 
+			// if we have an event cartridge, get a new value object
+			NVelocity.App.Events.EventCartridge eventCartridge = context.EventCartridge;
+			if (eventCartridge != null)
+			{
+				listObject = eventCartridge.ReferenceInsert(new Stack(), node.GetChild(2).Literal, listObject);
+			}
+
 			if (listObject == null)
 			{
 				return null;
