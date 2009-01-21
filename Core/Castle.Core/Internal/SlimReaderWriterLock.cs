@@ -18,7 +18,7 @@ namespace Castle.Core.Internal
 
 	public class SlimReaderWriterLock
 	{
-#if SILVERLIGHT
+#if SILVERLIGHT || !DOTNET35
 		private readonly object locker = new object();
 
 		public void EnterReadLock()

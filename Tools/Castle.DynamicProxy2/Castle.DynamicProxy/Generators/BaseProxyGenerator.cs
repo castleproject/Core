@@ -452,6 +452,10 @@ namespace Castle.DynamicProxy.Generators
 				}
 				else
 				{
+					MethodInvocationExpression methodInvocationExpression =
+						new MethodInvocationExpression(proxyGenerationOptionsField, proxyGenerationOptions_Selector);
+					methodInvocationExpression.VirtualCall = true;
+
 					newInvocImpl = //actual contructor call
 						new NewInstanceExpression(constructor,
 						                          targetRef.ToExpression(),
@@ -461,8 +465,7 @@ namespace Castle.DynamicProxy.Generators
 						                          methodInfoTokenExp,
 						                          new ReferencesToObjectArrayExpression(dereferencedArguments),
 						                          SelfReference.Self.ToExpression(),
-						                          new MethodInvocationExpression(proxyGenerationOptionsField,
-						                                                         proxyGenerationOptions_Selector) {VirtualCall = true},
+						                          methodInvocationExpression,
 						                          new AddressOfReferenceExpression(methodInterceptors));
 				}
 			}
@@ -481,6 +484,10 @@ namespace Castle.DynamicProxy.Generators
 				}
 				else
 				{
+					MethodInvocationExpression methodInvocationExpression =
+						new MethodInvocationExpression(proxyGenerationOptionsField, proxyGenerationOptions_Selector);
+					methodInvocationExpression.VirtualCall = true;
+
 					newInvocImpl =
 						new NewInstanceExpression(constructor,
 						                          targetRef.ToExpression(),
@@ -489,8 +496,7 @@ namespace Castle.DynamicProxy.Generators
 						                          methodInfoTokenExp,
 						                          new ReferencesToObjectArrayExpression(dereferencedArguments),
 						                          SelfReference.Self.ToExpression(),
-						                          new MethodInvocationExpression(proxyGenerationOptionsField,
-						                                                         proxyGenerationOptions_Selector) {VirtualCall = true},
+						                          methodInvocationExpression,
 						                          new AddressOfReferenceExpression(methodInterceptors));
 				}
 			}

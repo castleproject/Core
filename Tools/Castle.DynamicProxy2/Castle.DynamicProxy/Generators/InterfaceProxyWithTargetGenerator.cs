@@ -54,9 +54,8 @@ namespace Castle.DynamicProxy.Generators
 			Type generatedType;
 
 			CacheKey cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
-			
 
-			using(var locker = new UpgradableLock(Scope.RWLock))
+			using (UpgradableLock locker = new UpgradableLock(Scope.RWLock))
 			{
 				Type cacheType = GetFromCache(cacheKey);
 

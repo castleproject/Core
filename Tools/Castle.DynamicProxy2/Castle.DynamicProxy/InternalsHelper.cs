@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
-	using System.Threading;
 	using Castle.Core.Internal;
 
 	public class InternalsHelper
@@ -26,12 +25,12 @@ namespace Castle.DynamicProxy
 		private static IDictionary<Assembly, bool> internalsToDynProxy = new Dictionary<Assembly, bool>();
 
 		/// <summary>
-		/// Determines whether this assembly has internals visisble to dynamic proxy.
+		/// Determines whether this assembly has internals visible to dynamic proxy.
 		/// </summary>
-		/// <param name="asm">The asm.</param>
+		/// <param name="asm">The assembly to inspect.</param>
 		public static bool IsInternalToDynamicProxy(Assembly asm)
 		{
-			using (var locker = new UpgradableLock(internalsToDynProxyLock))
+			using (UpgradableLock locker = new UpgradableLock(internalsToDynProxyLock))
 			{
 				if (internalsToDynProxy.ContainsKey(asm))
 				{

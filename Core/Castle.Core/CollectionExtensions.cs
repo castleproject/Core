@@ -17,6 +17,8 @@ namespace Castle.Core
 	using System;
 	using System.Collections.Generic;
 
+#if DOTNET35
+
 	public static class CollectionExtensions
 	{
 		public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
@@ -29,4 +31,6 @@ namespace Castle.Core
 			}
 		}
 	}
+
+#endif
 }

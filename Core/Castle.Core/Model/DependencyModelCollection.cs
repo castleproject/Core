@@ -41,7 +41,7 @@ namespace Castle.Core
 		{
 			if (dependencies == null) return;
 
-			foreach(var depModel in dependencies)
+			foreach (DependencyModel depModel in dependencies)
 			{
 				if (depModel == null)
 				{

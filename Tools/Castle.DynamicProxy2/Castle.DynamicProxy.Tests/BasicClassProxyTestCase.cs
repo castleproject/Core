@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using System.Collections;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.BugsReported;
@@ -270,7 +269,7 @@ namespace Castle.DynamicProxy.Tests
 			object proxy = generator.CreateClassProxy(typeof(ClassWithCharRetType), invocationChecker);
 			Assert.IsNotNull(proxy);
 			ClassWithCharRetType classProxy = (ClassWithCharRetType)proxy;
-			var x = classProxy.DoSomething();
+			char x = classProxy.DoSomething();
 			Assert.AreEqual('c', x);
 		}
 
