@@ -523,9 +523,41 @@ namespace Castle.MicroKernel
 			return AddFacility(key, new T());
 		}
 
+		public IKernel AddFacility<T>(String key, Action<T> onCreate)
+			where T : IFacility, new()
+		{
+			T facility = new T();
+			if (onCreate != null) onCreate(facility);
+			return AddFacility(key, facility);
+		}
+
+		public IKernel AddFacility<T>(String key, Func<T, object> onCreate)
+			where T : IFacility, new()
+		{
+			T facility = new T();
+			if (onCreate != null) onCreate(facility);
+			return AddFacility(key, facility);
+		}
+
 		public IKernel AddFacility<T>() where T : IFacility, new()
 		{
 			return AddFacility<T>(typeof(T).FullName);
+		}
+
+		public IKernel AddFacility<T>(Action<T> onCreate)
+			where T : IFacility, new()
+		{
+			T facility = new T();
+			if (onCreate != null) onCreate(facility);
+			return AddFacility(typeof(T).FullName, facility);
+		}
+
+		public IKernel AddFacility<T>(Func<T, object> onCreate)
+			where T : IFacility, new()
+		{
+			T facility = new T();
+			if (onCreate != null) onCreate(facility);
+			return AddFacility(typeof(T).FullName, facility);
 		}
 
 		/// <summary>

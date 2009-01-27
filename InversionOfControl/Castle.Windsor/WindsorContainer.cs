@@ -278,10 +278,64 @@ namespace Castle.Windsor
 		/// Creates and adds an <see cref="IFacility"/> facility to the container.
 		/// </summary>
 		/// <typeparam name="T">The facility type.</typeparam>
+		/// <param name="key"></param>
+		/// <param name="onCreate">The callback for creation.</param>
+		/// <returns></returns>
+		public IWindsorContainer AddFacility<T>(String key, Action<T> onCreate)
+			where T : IFacility, new()
+		{
+			kernel.AddFacility<T>(key, onCreate);
+			return this;
+		}
+
+		/// <summary>
+		/// Creates and adds an <see cref="IFacility"/> facility to the container.
+		/// </summary>
+		/// <typeparam name="T">The facility type.</typeparam>
+		/// <param name="key"></param>
+		/// <param name="onCreate">The callback for creation.</param>
+		/// <returns></returns>
+		public IWindsorContainer AddFacility<T>(String key, Func<T, object> onCreate)
+			where T : IFacility, new()
+		{
+			kernel.AddFacility<T>(key, onCreate);
+			return this;
+		}
+
+		/// <summary>
+		/// Creates and adds an <see cref="IFacility"/> facility to the container.
+		/// </summary>
+		/// <typeparam name="T">The facility type.</typeparam>
 		/// <returns></returns>
 		public IWindsorContainer AddFacility<T>() where T : IFacility, new()
 		{
 			kernel.AddFacility<T>();
+			return this;
+		}
+
+		/// <summary>
+		/// Creates and adds an <see cref="IFacility"/> facility to the container.
+		/// </summary>
+		/// <typeparam name="T">The facility type.</typeparam>
+		/// <param name="onCreate">The callback for creation.</param>
+		/// <returns></returns>
+		public IWindsorContainer AddFacility<T>(Action<T> onCreate)
+			where T : IFacility, new()
+		{
+			kernel.AddFacility<T>(onCreate);
+			return this;
+		}
+
+		/// <summary>
+		/// Creates and adds an <see cref="IFacility"/> facility to the container.
+		/// </summary>
+		/// <typeparam name="T">The facility type.</typeparam>
+		/// <param name="onCreate">The callback for creation.</param>
+		/// <returns></returns>
+		public IWindsorContainer AddFacility<T>(Func<T, object> onCreate)
+			where T : IFacility, new()
+		{
+			kernel.AddFacility<T>(onCreate);
 			return this;
 		}
 

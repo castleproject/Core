@@ -15,6 +15,7 @@
 namespace Castle.MicroKernel.Tests
 {
 	using Castle.Core.Configuration;
+	using Castle.Facilities.Startable;
 	using Castle.MicroKernel.Tests.ClassComponents;
 	using NUnit.Framework;
 
@@ -68,6 +69,19 @@ namespace Castle.MicroKernel.Tests
 
 			Assert.IsTrue(_facility.Initialized);
 			Assert.IsTrue(_facility.Terminated);
+		}
+
+		[Test]
+		public void OnCreationCallback()
+		{
+			StartableFacility facility = null;
+
+			_kernel.AddFacility<StartableFacility>(delegate(StartableFacility f)
+			{
+				facility = f;
+			});
+
+			Assert.IsNotNull(facility);
 		}
 	}
 }
