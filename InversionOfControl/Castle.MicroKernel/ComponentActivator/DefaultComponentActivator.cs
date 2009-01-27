@@ -59,15 +59,6 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected override object InternalCreate(CreationContext context)
 		{
-			if (Model.Implementation.IsAbstract)
-			{
-				throw new ComponentRegistrationException(
-					string.Format(
-						"Type {0} is abstract.\r\n As such, it is not possible to instansiate it as implementation of {1} service", 
-						Model.Implementation.FullName, 
-						Model.Service.FullName));
-			}
-
 			object instance = Instantiate(context);
 
 			SetUpProperties(instance, context);
@@ -86,6 +77,15 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual object Instantiate(CreationContext context)
 		{
+			if (Model.Implementation.IsAbstract)
+			{
+				throw new ComponentRegistrationException(
+					string.Format(
+						"Type {0} is abstract.\r\n As such, it is not possible to instansiate it as implementation of {1} service",
+						Model.Implementation.FullName,
+						Model.Service.FullName));
+			}
+
 			ConstructorCandidate candidate = SelectEligibleConstructor(context);
 
 			Type[] signature;

@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Moved DefaultComponentActivator check for abstract so it can be better overriden.
+  
 - Added Attribute to Component Registration fluent interface.
 
 - Add ability to use Configure components based on implementation type when
