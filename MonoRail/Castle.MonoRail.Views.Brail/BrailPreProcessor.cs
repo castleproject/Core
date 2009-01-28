@@ -33,7 +33,7 @@ namespace Castle.MonoRail.Views.Brail
 		private readonly BooViewEngine booViewEngine;
 		private readonly IDictionary inputToCode = new Hashtable();
 		private static readonly Regex escapeParametersStartingWithQuestionMarkRegEx
-			= new Regex(@"(?<!<)\?([_\w][_\w\d]*)", RegexOptions.Compiled);
+			= new Regex(@"(?<![<\w\d])\?([_\w][_\w\d]*)", RegexOptions.Compiled);
 
 		public BrailPreProcessor(BooViewEngine booViewEngine)
 		{

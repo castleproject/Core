@@ -34,6 +34,18 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			Assert.AreEqual("Brail is wonderful", outpot);
 		}
 
+
+        [Test]
+        public void CanSafelyRenderWithQuestionMarks()
+        {
+            PropertyBag["file"] = new {Id = 1};
+            PropertyBag["filename"] = "abc";
+            string outpot = ProcessView("home/TryGetParameters");
+            Assert.AreEqual(
+                "<html>\r\n<body>\r\n\r\n<a  href=\"http://www.somedomain.com/DocumentSharing/get.rails?fileId=1\" target=\"_blank\">abc</a>\r\n</body>\r\n</html>\r\n\r\n"
+                , outpot);
+        }
+
 		[Test]
 		public void UsingExtentionMethods()
 		{
