@@ -15,6 +15,7 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using Castle.Core;
 	using Castle.Facilities.WcfIntegration.Internal;
@@ -62,6 +63,8 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				model.CustomComponentActivator = typeof(WcfClientActivator);
 				model.ExtendedProperties[WcfConstants.ClientModelKey] = clientModel;
+				ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
+				options.AddAdditionalInterfaces(typeof(IContextChannel));			
 				model.LifecycleSteps.Add(LifecycleStepType.Decommission,
 					WcfCommunicationDecomissionConcern.Instance);
 				InstallManagedChannelInterceptor(model);

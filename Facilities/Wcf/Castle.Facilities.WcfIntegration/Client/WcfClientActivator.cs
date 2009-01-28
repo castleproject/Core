@@ -17,13 +17,11 @@ namespace Castle.Facilities.WcfIntegration
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-	using System.ServiceModel;
 	using System.Threading;
 	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Facilities;
-	using Castle.MicroKernel.Proxy;
 
 	public class WcfClientActivator : DefaultComponentActivator
 	{
@@ -69,8 +67,6 @@ namespace Castle.Facilities.WcfIntegration
 
 			try
 			{
-				ProxyOptions options = ProxyUtil.ObtainProxyOptions(Model, true);
-				options.AddAdditionalInterfaces(typeof(IContextChannel));			
 				instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context);
 			}
 			catch (Exception ex)
