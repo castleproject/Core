@@ -27,7 +27,7 @@ namespace Castle.Facilities.WcfIntegration
 		private readonly IKernel kernel;
 		private ChannelCreator channelCreator;
 
-		public AbstractChannelBuilder(IKernel kernel)
+		protected AbstractChannelBuilder(IKernel kernel)
 		{
 			this.kernel = kernel;
 		}
@@ -37,13 +37,15 @@ namespace Castle.Facilities.WcfIntegration
 			get { return kernel; }
 		}
 
+		public WcfClientExtension Clients { get; set; }
+	
 		protected void ConfigureChannelFactory(ChannelFactory channelFactory, IWcfClientModel clientModel,
 											   IWcfBurden burden)
 		{
 			BindChannelFactoryAware(channelFactory, kernel, burden);
 
 			var extensions =new ServiceEndpointExtensions(channelFactory.Endpoint, kernel)
-			.Install(burden, new WcfEndpointExtensions(WcfExtensionScope.Clients));
+				.Install(burden, new WcfEndpointExtensions(WcfExtensionScope.Clients));
 
 			if (clientModel != null)
 			{
@@ -99,16 +101,18 @@ namespace Castle.Facilities.WcfIntegration
 
 		void IWcfEndpointVisitor.VisitBindingEndpoint(BindingEndpointModel model)
 		{
-			channelCreator = GetChannel(contract, model.Binding, string.Empty);
+			channelCreator = GetChannel(contract, GetEffectiveBinding(model.Binding), string.Empty);
 		}
 
 		void IWcfEndpointVisitor.VisitBindingAddressEndpoint(BindingAddressEndpointModel model)
 		{
+			Binding binding = GetEffectiveBinding(model.Binding);
+
 			if (model.HasViaAddress)
 			{
 				var address = model.EndpointAddress ?? new EndpointAddress(model.Address);
 				var description = ContractDescription.GetContract(contract);
-				var endpoint = new ServiceEndpoint(description, model.Binding, address);
+				var endpoint = new ServiceEndpoint(description, binding, address);
 				endpoint.Behaviors.Add(new ClientViaBehavior(model.ViaAddress));
 				channelCreator = GetChannel(contract, endpoint);
 			}
@@ -116,15 +120,24 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				if (model.EndpointAddress != null)
 				{
-					channelCreator = GetChannel(contract, model.Binding, model.EndpointAddress);
+					channelCreator = GetChannel(contract, binding, model.EndpointAddress);
 				}
 				else
 				{
-					channelCreator = GetChannel(contract, model.Binding, model.Address);
+					channelCreator = GetChannel(contract, binding, model.Address);
 				}
 			}
 		}
 
 		#endregion
+
+		private Binding GetEffectiveBinding(Binding binding)
+		{
+			if (binding == null && Clients != null)
+			{
+				binding = Clients.DefaultBinding;
+			}
+			return binding;
+		}
 	}
 }

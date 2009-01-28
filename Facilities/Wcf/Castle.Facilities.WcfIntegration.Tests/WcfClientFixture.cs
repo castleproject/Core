@@ -111,6 +111,38 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
+		public void CanResolveClientAssociatedWithChannelUsingDefaultBinding()
+		{
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(Component.For<Operations>()
+					.DependsOn(new { number = 28 })
+					.ActAs(new DefaultServiceModel()
+						.AddEndpoints(WcfEndpoint.ForContract<IOperations>()
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations2")
+							)
+				)))
+			{
+				using (IWindsorContainer clientContainer = new WindsorContainer()
+					.AddFacility<WcfFacility>(f => f.DefaultBinding = 
+						new NetTcpBinding { PortSharingEnabled = true }
+					)
+					.Register(Component.For<IOperations>()
+						.Named("operations")
+						.ActAs(new DefaultClientModel()
+						{
+							Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2")
+						})
+					))
+				{
+					IOperations client = clientContainer.Resolve<IOperations>("operations");
+					Assert.AreEqual(28, client.GetValueFromConstructor());
+				}
+			}
+		}
+
+		[Test]
 		public void CanResolveClientAssociatedWithChannelFromConfiguration()
 		{
 			windsorContainer.Register(Component.For<IAmUsingWindsor>()

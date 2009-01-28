@@ -2,10 +2,10 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.ServiceModel;
+	using System.ServiceModel.Channels;
 	using System.Threading;
 	using Castle.Core;
 	using Castle.Facilities.WcfIntegration.Internal;
@@ -14,14 +14,16 @@ namespace Castle.Facilities.WcfIntegration
 
 	public class WcfServiceExtension : IDisposable
 	{
+		private readonly WcfFacility facility;
 		private readonly IKernel kernel;
+		private Binding defaultBinding;
 
 		internal static IKernel GlobalKernel;
 
 		#region ServiceHostBuilder Delegate Fields 
 	
 		private delegate ServiceHost CreateServiceHostDelegate(
-			IKernel kernel, IWcfServiceModel serviceModel, ComponentModel model,
+			IKernel Kernel, IWcfServiceModel serviceModel, ComponentModel model,
 			Uri[] baseAddresses);
 
 		private static readonly MethodInfo createServiceHostMethod =
@@ -38,9 +40,10 @@ namespace Castle.Facilities.WcfIntegration
 
 		#endregion
 
-		public WcfServiceExtension(IKernel kernel)
+		public WcfServiceExtension(WcfFacility facility)
 		{
-			this.kernel = kernel;
+			this.facility = facility;
+			this.kernel = facility.Kernel;
 
 			AddDefaultServiceHostBuilders();
 			DefaultServiceHostFactory.RegisterContainer(kernel);
@@ -48,6 +51,12 @@ namespace Castle.Facilities.WcfIntegration
 			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
 			kernel.ComponentRegistered += Kernel_ComponentRegistered;
 			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
+		}
+
+		public Binding DefaultBinding
+		{
+			get { return defaultBinding ?? facility.DefaultBinding; }
+			set { defaultBinding = value; }
 		}
 
 		public WcfServiceExtension AddServiceHostBuilder<T, M>()
@@ -152,7 +161,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		#region CreateServiceHost Members
 
-		public static ServiceHost CreateServiceHost(IKernel kernel, IWcfServiceModel serviceModel,
+		public static ServiceHost CreateServiceHost(IKernel Kernel, IWcfServiceModel serviceModel,
 													ComponentModel model, params Uri[] baseAddresses)
 		{
 			CreateServiceHostDelegate createServiceHost;
@@ -181,7 +190,7 @@ namespace Castle.Facilities.WcfIntegration
 				locker.ReleaseLock();
 			}
 
-			return createServiceHost(kernel, serviceModel, model, baseAddresses);
+			return createServiceHost(Kernel, serviceModel, model, baseAddresses);
 		}
 
 		internal static ServiceHost CreateServiceHostInternal<M>(IKernel kernel, 

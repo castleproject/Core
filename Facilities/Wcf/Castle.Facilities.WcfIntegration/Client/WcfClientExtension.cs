@@ -15,25 +15,35 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.ServiceModel.Channels;
 	using Castle.Core;
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Proxy;
 	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.Facilities.WcfIntegration.Rest;
+	using Castle.MicroKernel;
+	using Castle.MicroKernel.Proxy;
 
 	public class WcfClientExtension : IDisposable
 	{
+		private readonly WcfFacility facility;
 		private readonly IKernel kernel;
+		private Binding defaultBinding;
  
-		public WcfClientExtension(IKernel kernel)
+		public WcfClientExtension(WcfFacility facility)
 		{
-			this.kernel = kernel;
+			this.facility = facility;
+			this.kernel = facility.Kernel;
 
 			AddDefaultChannelBuilders();
 
 			kernel.AddComponent<WcfManagedChannelInterceptor>();
 			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
 			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
+		}
+
+		public Binding DefaultBinding
+		{
+			get { return defaultBinding ?? facility.DefaultBinding; }
+			set { defaultBinding = value; }
 		}
 
 		public WcfClientExtension AddChannelBuilder<T, M>()

@@ -57,6 +57,27 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
+		public void CanCreateServiceHostAndOpenHostUsingDefaultBinding()
+		{
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>(f => f.DefaultBinding =
+					new NetTcpBinding { PortSharingEnabled = true }
+				)
+				.Register(Component.For<Operations>()
+					.DependsOn(new { number = 42 })
+					.ActAs(new DefaultServiceModel().AddEndpoints(
+						WcfEndpoint.ForContract<IOperations>()
+							.At("net.tcp://localhost/Operations")
+						)
+				)))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+			}
+		}
+
+		[Test]
 		public void CanCreateServiceHostAndOpenHostFromConfiguration()
 		{
 			using (new WindsorContainer()

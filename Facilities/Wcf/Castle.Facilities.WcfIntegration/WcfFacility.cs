@@ -15,6 +15,7 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
+	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
 	using Castle.Core;
 	using Castle.MicroKernel.Facilities;
@@ -29,9 +30,11 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected override void Init()
 		{
-			clientExtension = new WcfClientExtension(Kernel);
-			serviceExtension = new WcfServiceExtension(Kernel);
+			clientExtension = new WcfClientExtension(this);
+			serviceExtension = new WcfServiceExtension(this);
 
+			Kernel.AddComponentInstance(WcfConstants.ClientExtensionKey, clientExtension);
+			Kernel.AddComponentInstance(WcfConstants.ServiceExtensionKey, serviceExtension);
 			Kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
 		}
 
@@ -44,6 +47,8 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			get { return serviceExtension; }
 		}
+
+		public Binding DefaultBinding { get; set; }
 
 		private void Kernel_ComponentModelCreated(ComponentModel model)
 		{

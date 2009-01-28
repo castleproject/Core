@@ -36,6 +36,8 @@ namespace Castle.Facilities.WcfIntegration
 			get { return kernel; }
 		}
 
+		public WcfServiceExtension Services { get; set; }
+
 		protected void ConfigureServiceHost(ServiceHost serviceHost, IWcfServiceModel serviceModel,
 											ComponentModel model)
 		{
@@ -114,7 +116,7 @@ namespace Castle.Facilities.WcfIntegration
 		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
 															 ContractEndpointModel model)
 		{
-			Binding binding = GetDefaultBinding(serviceHost, string.Empty);
+			Binding binding = GetEffectiveBinding(null, serviceHost, string.Empty);
 			return serviceHost.AddServiceEndpoint(model.Contract, binding, string.Empty);
 		}
 
@@ -135,14 +137,14 @@ namespace Castle.Facilities.WcfIntegration
 		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
 															 BindingEndpointModel model)
 		{
-			Binding binding = model.Binding ?? GetDefaultBinding(serviceHost, string.Empty);
+			Binding binding = GetEffectiveBinding(model.Binding, serviceHost, string.Empty);
 			return serviceHost.AddServiceEndpoint(model.Contract, binding, string.Empty);
 		}
 
 		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
 															 BindingAddressEndpointModel model)
 		{
-			Binding binding = model.Binding ?? GetDefaultBinding(serviceHost, model.Address);
+			Binding binding = GetEffectiveBinding(model.Binding, serviceHost, model.Address);
 
 			if (model.HasViaAddress)
 			{
@@ -158,6 +160,15 @@ namespace Castle.Facilities.WcfIntegration
 		protected virtual Binding GetDefaultBinding(ServiceHost serviceHost, string address)
 		{
 			return null;
+		}
+
+		private Binding GetEffectiveBinding(Binding binding, ServiceHost serviceHost, string address)
+		{
+			if (binding == null && Services != null)
+			{
+				binding = Services.DefaultBinding;
+			}
+			return binding ?? GetDefaultBinding(serviceHost, address);
 		}
 
 		#region Nested Class: ServiceEndpointBuilder

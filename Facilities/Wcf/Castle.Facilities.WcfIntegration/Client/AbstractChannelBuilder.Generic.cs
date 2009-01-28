@@ -28,7 +28,7 @@ namespace Castle.Facilities.WcfIntegration
 		[ThreadStatic] private static M ClientModel;
 		[ThreadStatic] private static IWcfBurden Burden;
 
-		public AbstractChannelBuilder(IKernel kernel)
+		protected AbstractChannelBuilder(IKernel kernel)
 			: base(kernel)
 		{
 		}
