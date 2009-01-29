@@ -207,7 +207,11 @@ namespace Castle.Components.Binder
 
 			for(int i = 0; i < values.Length; i++)
 			{
-				result.Add(Convert(elemType, values.GetValue(i), out elementConversionSucceeded));
+				object val = Convert(elemType, values.GetValue(i), out elementConversionSucceeded);
+				if(val!=null)
+				{
+					result.Add(val);
+				}
 
 				// if at least one list element get converted 
 				// we consider the conversion a success

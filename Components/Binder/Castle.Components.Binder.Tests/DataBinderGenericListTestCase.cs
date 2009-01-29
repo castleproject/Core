@@ -90,6 +90,106 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(3, cust.Months[2]);
 			Assert.AreEqual(4, cust.Months[3]);
 		}
+
+		[Test]
+		public void ShouldBindPrimitiveListEvenWithEmptyParams()
+		{
+
+
+			NameValueCollection args = new NameValueCollection
+										{
+											{"months","1"},
+											{"months","2"},
+											{"months",""},
+											{"months",""}
+										};
+			object instance = binder.BindObject(typeof(List<int>), "months", builder.BuildSourceNode(args));
+
+			Assert.IsNotNull(instance);
+			List<int> list = instance as List<int>;
+			Assert.IsNotNull(list);
+
+			Assert.AreEqual(2, list.Count);
+
+			Assert.AreEqual(1, list[0]);
+			Assert.AreEqual(2, list[1]);
+		}
+
+		[Test]
+		public void ShouldBindNullableListEvenWithEmptyParams()
+		{
+
+
+			NameValueCollection args = new NameValueCollection
+										{
+											{"months","1"},
+											{"months","2"},
+											{"months",""},
+											{"months",""}
+										};
+			object instance = binder.BindObject(typeof(List<int?>), "months", builder.BuildSourceNode(args));
+
+			Assert.IsNotNull(instance);
+			List<int?> list = instance as List<int?>;
+			Assert.IsNotNull(list);
+
+			Assert.AreEqual(2, list.Count);
+
+			Assert.AreEqual(1, list[0]);
+			Assert.AreEqual(2, list[1]);
+		}
+
+		[Test]
+		public void ShouldBindNullablePrimitiveList()
+		{
+
+			NameValueCollection args = new NameValueCollection
+			                           	{
+			                           		{"months[0]","1"},
+			                           		{"months[1]","2"},
+			                           		{"months[2]",""},
+			                           		{"months[3]",""}
+			                           	};
+
+			object instance = binder.BindObject(typeof(List<int?>), "months", builder.BuildSourceNode(args));
+
+			Assert.IsNotNull(instance);
+			List<int?> result = instance as List<int?>;
+			Assert.IsNotNull(result);
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(2, result.Count);
+
+			Assert.AreEqual(1, result[0]);
+			Assert.AreEqual(2, result[1]);
+			
+		}
+
+		[Test]
+		public void ShouldBindPrimitiveListWithEmptyParams()
+		{
+
+			NameValueCollection args = new NameValueCollection
+										{
+											{"months[0]","1"},
+											{"months[1]","2"},
+											{"months[2]",""},
+											{"months[3]",""}
+										};
+
+			object instance = binder.BindObject(typeof(List<int>), "months", builder.BuildSourceNode(args));
+
+			Assert.IsNotNull(instance);
+			List<int> result = instance as List<int>;
+			Assert.IsNotNull(result);
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(2, result.Count);
+
+			Assert.AreEqual(1, result[0]);
+			Assert.AreEqual(2, result[1]);
+		}
+
 		
 		[Test]
 		public void NestedBind()

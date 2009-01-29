@@ -826,7 +826,8 @@ namespace Castle.Components.Binder
 
 				foreach(object elem in convertedNodes)
 				{
-					target.Add(elem);
+					if(elem!=null)
+						target.Add(elem);
 				}
 
 				return target;
