@@ -20,7 +20,7 @@ namespace Castle.Facilities.WcfIntegration
 	public abstract class WcfClientModelBase : IWcfClientModel
 	{
 		private IWcfEndpoint endpoint;
-		private ICollection<IWcfExtension> extensions;
+		private List<IWcfExtension> extensions;
 
 		protected WcfClientModelBase()
 		{
@@ -61,6 +61,14 @@ namespace Castle.Facilities.WcfIntegration
 				}
 				return extensions;
 			}
+		}
+
+		public virtual IWcfClientModel ForEndpoint(IWcfEndpoint endpoint)
+		{
+			WcfClientModelBase copy = (WcfClientModelBase)MemberwiseClone();
+			copy.endpoint = endpoint;
+			copy.extensions = new List<IWcfExtension>(extensions);
+			return copy;
 		}
 
 		#endregion

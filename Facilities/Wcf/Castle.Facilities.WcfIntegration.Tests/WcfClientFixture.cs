@@ -184,7 +184,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			}
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void CanResolveClientAssociatedWithChannelUsingSuppliedEndpoint()
 		{
 			using (new WindsorContainer()

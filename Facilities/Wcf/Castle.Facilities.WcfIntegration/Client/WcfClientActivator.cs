@@ -83,26 +83,55 @@ namespace Castle.Facilities.WcfIntegration
 			return instance;
 		}
 
-		private IWcfClientModel ObtainClientModel(ComponentModel model, CreationContext context)
+		private object CreateChannel(CreationContext context)
 		{
-			IWcfClientModel clientModel;
-
-			if (context != null)
-			{
-				clientModel = WcfUtils.FindDependencies<IWcfClientModel>(context.AdditionalParameters)
-					.FirstOrDefault();
-
-				IWcfEndpoint endpoint = WcfUtils.FindDependencies<IWcfEndpoint>(context.AdditionalParameters)
-					.FirstOrDefault();
-			}
-			else
-			{
-				clientModel = (IWcfClientModel)model.ExtendedProperties[WcfConstants.ClientModelKey];
-			}
+			IWcfBurden burden = null;
+			ChannelCreator create = createChannel;
+			IWcfClientModel clientModel = ObtainClientModel(Model, context);
 
 			if (clientModel != null)
 			{
-				ValidateClientModel(clientModel, model);
+				create = () =>
+				{
+					IContextChannel client = (IContextChannel)
+						CreateChannelCreator(Kernel, Model, clientModel, out burden)();
+					client.Extensions.Add(new WcfBurdenExtension<IContextChannel>(burden));
+					return client;
+				};
+			}
+			else if (createChannel == null)
+			{
+				clientModel = ObtainClientModel(Model);
+				create = createChannel = CreateChannelCreator(Kernel, Model, clientModel, out burden);
+				Model.ExtendedProperties[WcfConstants.ClientBurdenKey] = burden;
+			}
+
+			IContextChannel channel = (IContextChannel)create();
+			channel.Extensions.Add(new ChannelCreatorExtension(create));
+			return channel;
+		}
+
+		private IWcfClientModel ObtainClientModel(ComponentModel model)
+		{
+			return (IWcfClientModel)model.ExtendedProperties[WcfConstants.ClientModelKey];
+		}
+
+		private IWcfClientModel ObtainClientModel(ComponentModel model, CreationContext context)
+		{
+			IWcfClientModel clientModel = WcfUtils.FindDependencies<IWcfClientModel>(context.AdditionalParameters)
+				.FirstOrDefault();
+
+			IWcfEndpoint endpoint = WcfUtils.FindDependencies<IWcfEndpoint>(context.AdditionalParameters)
+				.FirstOrDefault();
+
+			if (endpoint != null)
+			{
+				if (clientModel == null)
+				{
+					clientModel = ObtainClientModel(model);
+				}
+
+				clientModel = clientModel.ForEndpoint(endpoint);
 			}
 
 			return clientModel;
@@ -140,37 +169,11 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
-		private object CreateChannel(CreationContext context)
-		{
-			IWcfBurden burden = null;
-			ChannelCreator create = createChannel;
-			IWcfClientModel clientModel = ObtainClientModel(Model, context);
-
-			if (clientModel != null)
-			{
-				create = () =>
-				{
-					IContextChannel client = (IContextChannel)
-						CreateChannelCreator(Kernel, Model, clientModel, out burden)();
-					client.Extensions.Add(new WcfBurdenExtension<IContextChannel>(burden));
-					return client;
-				};
-			}
-			else if (createChannel == null)
-			{
-				clientModel = ObtainClientModel(Model, null);
-				create = createChannel = CreateChannelCreator(Kernel, Model, clientModel, out burden);
-				Model.ExtendedProperties[WcfConstants.ClientBurdenKey] = burden;
-			}
-
-			IContextChannel channel = (IContextChannel)create();
-			channel.Extensions.Add(new ChannelCreatorExtension(create));
-			return channel;
-		}
-
 		private ChannelCreator CreateChannelCreator(IKernel kernel, ComponentModel model,
 													IWcfClientModel clientModel, out IWcfBurden burden)
 		{
+			ValidateClientModel(clientModel, model);
+
 			CreateChannelDelegate createChannelDelegate;
 
 			try
