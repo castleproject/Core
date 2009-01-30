@@ -142,6 +142,48 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			}
 		}
 
+		[Test]
+		public void CanResolveClientAssociatedWithChannelUsingSuppliedModel()
+		{
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(Component.For<Operations>()
+					.DependsOn(new { number = 28 })
+					.ActAs(new DefaultServiceModel()
+						.AddEndpoints(WcfEndpoint.ForContract<IOperations>()
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations2")
+							)
+				)))
+			{
+				using (IWindsorContainer clientContainer = new WindsorContainer()
+					.AddFacility<WcfFacility>()
+					.Register(Component.For<IOperations>()
+						.Named("operations")
+						.LifeStyle.Transient
+						.ActAs(new DefaultClientModel())
+					))
+				{
+					IOperations client1 = clientContainer.Resolve<IOperations>("operations",
+						new { Model = new DefaultClientModel
+						{
+							Endpoint = WcfEndpoint.BoundTo(new NetTcpBinding())
+								.At("net.tcp://localhost/Operations2")
+						}});
+					IOperations client2 = clientContainer.Resolve<IOperations>("operations",
+						new { Model = new DefaultClientModel() 
+						{
+							Endpoint = WcfEndpoint.BoundTo(new NetTcpBinding())
+								.At("net.tcp://localhost/Operations2")
+						}});
+					Assert.AreEqual(28, client1.GetValueFromConstructor());
+					Assert.AreEqual(28, client2.GetValueFromConstructor());
+					clientContainer.Release(client1);
+					clientContainer.Release(client2);
+				}
+			}
+		}
+
 		[Test, Ignore]
 		public void CanResolveClientAssociatedWithChannelUsingSuppliedEndpoint()
 		{
@@ -162,11 +204,18 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					)
 					.Register(Component.For<IOperations>()
 						.Named("operations")
+						.LifeStyle.Transient
 						.ActAs(new DefaultClientModel())
 					))
 				{
-					IOperations client = clientContainer.Resolve<IOperations>("operations");
-					Assert.AreEqual(28, client.GetValueFromConstructor());
+					IOperations client1 = clientContainer.Resolve<IOperations>("operations",
+						new { Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2") });
+					IOperations client2 = clientContainer.Resolve<IOperations>("operations",
+						new { Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2") });
+					Assert.AreEqual(28, client1.GetValueFromConstructor());
+					Assert.AreEqual(28, client2.GetValueFromConstructor());
+					clientContainer.Release(client1);
+					clientContainer.Release(client2);
 				}
 			}
 		}
@@ -381,7 +430,6 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			IOperations client = windsorContainer.Resolve<IOperations>("operations");
 			IContextChannel channel = client as IContextChannel;
 			Assert.IsNotNull(channel);
-			Assert.AreEqual(0, channel.Extensions.Count);
 			Assert.AreEqual(CommunicationState.Created, channel.State);
 		}
 

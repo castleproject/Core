@@ -64,15 +64,21 @@ namespace Castle.Facilities.WcfIntegration
 				model.CustomComponentActivator = typeof(WcfClientActivator);
 				model.ExtendedProperties[WcfConstants.ClientModelKey] = clientModel;
 				ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
-				options.AddAdditionalInterfaces(typeof(IContextChannel));			
+				options.AddAdditionalInterfaces(typeof(IContextChannel));	
+				model.LifecycleSteps.Add(LifecycleStepType.Decommission,
+					WcfClientCleanUpDecomissionConcern.Instance);
 				model.LifecycleSteps.Add(LifecycleStepType.Decommission,
 					WcfCommunicationDecomissionConcern.Instance);
 				InstallManagedChannelInterceptor(model);
 
-				new ExtensionDependencies(model, kernel)
+				var dependencies = new ExtensionDependencies(model, kernel)
 					.Apply(new WcfEndpointExtensions(WcfExtensionScope.Clients))
-					.Apply(clientModel.Extensions)
-					.Apply(clientModel.Endpoint.Extensions);
+					.Apply(clientModel.Extensions);
+
+				if (clientModel.Endpoint != null)
+				{
+					dependencies.Apply(clientModel.Endpoint.Extensions);
+				}
 			}
 		}
 
@@ -80,7 +86,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			ComponentModel model = handler.ComponentModel;
 			var burden = model.ExtendedProperties[WcfConstants.ClientBurdenKey] as IWcfBurden;
-			if (burden != null) burden.Release(kernel);
+			if (burden != null) burden.CleanUp();
 		}
 
 		private void AddDefaultChannelBuilders()

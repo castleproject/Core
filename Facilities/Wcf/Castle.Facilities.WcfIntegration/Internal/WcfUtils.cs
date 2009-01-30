@@ -216,22 +216,25 @@ namespace Castle.Facilities.WcfIntegration.Internal
 		public static IEnumerable<T> FindDependencies<T>(IDictionary dependencies,
 														 Predicate<T> test)
 		{
-			foreach (object dependency in dependencies.Values)
+			if (dependencies != null)
 			{
-				if (dependency is T)
+				foreach (object dependency in dependencies.Values)
 				{
-					T candidate = (T)dependency;
+					if (dependency is T)
+					{
+						T candidate = (T)dependency;
 
-					if (test == null || test(candidate))
-					{
-						yield return candidate;
+						if (test == null || test(candidate))
+						{
+							yield return candidate;
+						}
 					}
-				}
-				else if (dependency is IEnumerable<T>)
-				{
-					foreach (T item in (IEnumerable<T>)dependency)
+					else if (dependency is IEnumerable<T>)
 					{
-						yield return item;
+						foreach (T item in (IEnumerable<T>)dependency)
+						{
+							yield return item;
+						}
 					}
 				}
 			}

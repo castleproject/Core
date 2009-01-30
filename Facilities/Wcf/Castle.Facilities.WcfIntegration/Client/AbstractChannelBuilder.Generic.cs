@@ -42,7 +42,7 @@ namespace Castle.Facilities.WcfIntegration
 		public ChannelCreator GetChannelCreator(M clientModel, out IWcfBurden burden)
 		{
 			ClientModel = clientModel;
-			burden = Burden = new WcfBurden();
+			burden = Burden = new WcfBurden(Kernel);
 			return GetEndpointChannelCreator(clientModel.Endpoint);
 		}
 
@@ -56,7 +56,7 @@ namespace Castle.Facilities.WcfIntegration
 		public ChannelCreator GetChannelCreator(M clientModel, Type contract, out IWcfBurden burden)
 		{
 			ClientModel = clientModel;
-			burden = Burden = new WcfBurden();
+			burden = Burden = new WcfBurden(Kernel);
 			return GetEndpointChannelCreator(clientModel.Endpoint, contract);
 		}
 

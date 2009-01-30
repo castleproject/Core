@@ -14,17 +14,16 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System.ServiceModel.Channels;
+	using System.ServiceModel;
 	using Castle.Core;
 	using Castle.Core.Interceptor;
 	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 
 	[Transient]
-	internal class WcfManagedChannelInterceptor : IInterceptor, IOnBehalfAware
+	internal class WcfManagedChannelInterceptor : IInterceptor
 	{
 		private readonly IKernel kernel;
-		private ChannelCreator createChannel;
 
 		/// <summary>
 		/// Constructs a new <see cref="WcfManagedChannelInterceptor"/>.
@@ -34,16 +33,6 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.kernel = kernel;
 		}
-
-		#region IOnBehalfAware Members
-
-		public void SetInterceptedComponentModel(ComponentModel target)
-		{
-			createChannel = (ChannelCreator)
-				target.ExtendedProperties[WcfConstants.ChannelCreatorKey];
-		}
-
-		#endregion
 
 		#region IInterceptor Members
 
@@ -68,18 +57,14 @@ namespace Castle.Facilities.WcfIntegration
 				changeTarget.ChangeInvocationTarget(target);
 			}
 
-			IChannel channel = target as IChannel;
+			IContextChannel channel = target as IContextChannel;
 
 			if (channel != null && !WcfUtils.IsCommunicationObjectReady(channel))
 			{
 				WcfUtils.ReleaseCommunicationObject(channel);
-				channel = null;
-			}
-
-			if (channel == null)
-			{
-				var changeTarget = (IChangeProxyTarget) invocation;
-				changeTarget.ChangeInvocationTarget(createChannel());
+				var changeTarget = (IChangeProxyTarget)invocation;
+				var channelCreator = channel.Extensions.Find<ChannelCreatorExtension>();
+				changeTarget.ChangeInvocationTarget(channelCreator.Create());
 			}
 		}
 	}

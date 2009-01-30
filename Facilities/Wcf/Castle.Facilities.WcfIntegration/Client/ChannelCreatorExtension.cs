@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,10 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.ServiceModel;
+using Castle.Facilities.WcfIntegration.Behaviors;
+
 namespace Castle.Facilities.WcfIntegration
 {
-	public interface IWcfBurden : IWcfCleanUp
+	public class ChannelCreatorExtension : AbstractExtension<IContextChannel>
 	{
-		void Add(object instance);
+		private readonly ChannelCreator channelCreator;
+
+		public ChannelCreatorExtension(ChannelCreator channelCreator)
+		{
+			this.channelCreator = channelCreator;
+		}
+
+		public object Create()
+		{
+			return channelCreator();
+		}
 	}
 }

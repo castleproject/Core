@@ -13,18 +13,25 @@ namespace Castle.Facilities.WcfIntegration.Internal
 {
 	using System.Collections.Generic;
 	using System.ServiceModel;
+	using Castle.Facilities.WcfIntegration.Behaviors;
 	using Castle.MicroKernel;
 
 	public class WcfBurden : IWcfBurden
 	{
+		private readonly IKernel kernel;
 		private readonly List<object> instances = new List<object>();
+
+		public WcfBurden(IKernel kernel)
+		{
+			this.kernel = kernel;
+		}
 
 		public void Add(object instance)
 		{
 			instances.Add(instance);
 		}
 
-		public void Release(IKernel kernel)
+		public void CleanUp()
 		{
 			foreach (object instance in instances)
 			{
@@ -34,15 +41,24 @@ namespace Castle.Facilities.WcfIntegration.Internal
 		}
 	}
 
-	public class WcfBurdenExtension<T> : WcfBurden, IExtension<T>
-		where T : IExtensibleObject<T>
+	public class WcfBurdenExtension<T> : AbstractExtension<T>, IWcfCleanUp
+		where T : class, IExtensibleObject<T>
 	{
-		public void Attach(T owner)
+		private readonly IWcfBurden burden;
+
+		public WcfBurdenExtension(IWcfBurden burden)
 		{
+			this.burden = burden;
 		}
 
-		public void Detach(T owner)
+		public IWcfBurden Burden
 		{
+			get { return burden; }
+		}
+
+		public void CleanUp()
+		{
+			burden.CleanUp();
 		}
 	}
 }

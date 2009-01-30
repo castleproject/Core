@@ -17,8 +17,10 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 	using System.ServiceModel;
 
 	public abstract class AbstractExtension<T> : IExtension<T>
-		where T : IExtensibleObject<T>
+		where T : class, IExtensibleObject<T>
 	{
+		private T owner;
+
 		public AbstractExtension()
 		{
 			ExecutionOrder = int.MaxValue;
@@ -34,10 +36,17 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 		public virtual void Attach(T owner)
 		{
+			this.owner = owner;
 		}
 
 		public virtual void Detach(T owner)
 		{
+			this.owner = null;
+		}
+
+		protected T Owner
+		{
+			get { return owner; }
 		}
 	}
 }

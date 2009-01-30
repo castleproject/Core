@@ -25,7 +25,6 @@ namespace Castle.Facilities.WcfIntegration
 		public const string ClientExtensionKey = "wcf.clients";
 		public const string ClientModelKey = "wcf.clientModel";
 		public const string ClientBurdenKey = "wcf.clientBurden";
-		public const string ChannelCreatorKey = "wcf.channelCreator";
 		public const string EndpointConfiguration = "wcfEndpointConfiguration";
 	}
 }

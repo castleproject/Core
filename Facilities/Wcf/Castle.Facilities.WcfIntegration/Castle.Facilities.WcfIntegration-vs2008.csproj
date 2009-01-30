@@ -100,10 +100,13 @@
     <Compile Include="Behaviors\Logging\LogMessageEndpointBehavior.cs" />
     <Compile Include="Client\AbstractChannelBuilder.Generic.cs" />
     <Compile Include="Behaviors\ServiceEndpointExtensions.cs" />
+    <Compile Include="Client\ChannelCreatorExtension.cs" />
     <Compile Include="Client\Default\DefaultClientModel.cs" />
     <Compile Include="Behaviors\Logging\LogMessageInspector.cs" />
     <Compile Include="Client\Duplex\DuplexChannelBuilder.cs" />
     <Compile Include="Client\Duplex\DuplexClientModel.cs" />
+    <Compile Include="Client\WcfClientCleanUpDecommisionConcern.cs" />
+    <Compile Include="IWcfCleanUp.cs" />
     <Compile Include="WcfContextChannel.cs" />
     <Compile Include="IChannelFactoryAware.cs" />
     <Compile Include="Internal\WcfCommunicationDecommisionConcern.cs" />
@@ -143,7 +146,6 @@
     <Compile Include="Service\Rest\RestServiceHostBuilder.cs" />
     <Compile Include="Service\Rest\RestServiceModel.cs" />
     <Compile Include="Internal\WcfBurden.cs" />
-    <Compile Include="Service\ServiceHostBurden.cs" />
     <Compile Include="Service\ServiceHostExtensions.cs" />
     <Compile Include="Service\WindsorServiceHostFactory.cs" />
     <Compile Include="Behaviors\WcfExplicitExtension.cs" />

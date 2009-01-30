@@ -20,6 +20,7 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
 	using Castle.Core;
+	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 
 	public abstract class AbstractServiceHostBuilder
@@ -45,9 +46,7 @@ namespace Castle.Facilities.WcfIntegration
 				new WindsorDependencyInjectionServiceBehavior(kernel, model)
 				);
 
-			ServiceHostBurden burden = new ServiceHostBurden();
-			serviceHost.Extensions.Add(burden);
-
+			WcfBurden burden = new WcfBurden(kernel);
 			Dictionary<IWcfEndpoint, ServiceEndpoint> endpoints = null;
 
 			if (serviceModel != null && serviceModel.Endpoints.Count > 0)
@@ -61,7 +60,7 @@ namespace Castle.Facilities.WcfIntegration
 				}
 			}
 
-			ServiceHostExtensions extensions = new ServiceHostExtensions(serviceHost, kernel)
+			var extensions = new ServiceHostExtensions(serviceHost, kernel)
 				.Install(burden, new WcfServiceExtensions());
 
 			if (serviceModel != null)
@@ -85,8 +84,7 @@ namespace Castle.Facilities.WcfIntegration
 				IWcfServiceHost wcfServiceHost = (IWcfServiceHost)serviceHost;
 				wcfServiceHost.EndpointCreated += delegate(object source, EndpointCreatedArgs e)
 				{
-					ServiceEndpointExtensions endpointExtensions =
-						new ServiceEndpointExtensions(e.Endpoint, kernel)
+					var endpointExtensions = new ServiceEndpointExtensions(e.Endpoint, kernel)
 						.Install(burden, new WcfEndpointExtensions(WcfExtensionScope.Services));
 
 					if (serviceModel != null)
@@ -95,6 +93,9 @@ namespace Castle.Facilities.WcfIntegration
 					}
 				};
 			}
+
+			serviceHost.Extensions.Add(new WcfBurdenExtension<ServiceHostBase>(burden));
+
 		}
 
 		protected Uri[] GetEffectiveBaseAddresses(IWcfServiceModel serviceModel, Uri[] defaultBaseAddresses)
