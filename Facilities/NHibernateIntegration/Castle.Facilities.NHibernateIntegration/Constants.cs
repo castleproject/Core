@@ -26,5 +26,9 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// 
 		/// </summary>
 		public static readonly String DefaultAlias = "nh.facility.default";
+		/// <summary>
+		/// Key at which the configuration for a specific SessionFactory is stored
+		/// </summary>
+		public static readonly String SessionFactoryConfiguration = "Configuration";
 	}
 }

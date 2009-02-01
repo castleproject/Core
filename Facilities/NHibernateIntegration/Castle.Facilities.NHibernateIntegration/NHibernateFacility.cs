@@ -11,7 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
- 
+
+using Castle.Core;
+using Castle.MicroKernel.Proxy;
+
 namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
@@ -300,8 +303,8 @@ namespace Castle.Facilities.NHibernateIntegration
 				alias = Constants.DefaultAlias;
 			}
 
-			IConfigurationBuilder configurationBuilder = Kernel.Resolve<IConfigurationBuilder>();
-			Configuration cfg = configurationBuilder.GetConfiguration(config);
+			var configurationBuilder = Kernel.Resolve<IConfigurationBuilder>();
+			var cfg = configurationBuilder.GetConfiguration(config);
 
 			// Registers the Configuration object
 			Kernel.AddComponentInstance( String.Format("{0}.cfg", id), cfg );
@@ -312,18 +315,15 @@ namespace Castle.Facilities.NHibernateIntegration
 			{
 				cfg.Interceptor = (IInterceptor) Kernel["nhibernate.sessionfactory.interceptor"];
 			}
-
 			// Registers the ISessionFactory as a component
 
-			ISessionFactory sessionFactory = cfg.BuildSessionFactory();
-
-			Kernel.AddComponentInstance( id, typeof(ISessionFactory), sessionFactory );
-
-			// Registers the ISessionFactory within the ISessionFactoryResolver
-
+			var model = new ComponentModel(id, typeof(ISessionFactory), typeof(Empty));
+			model.LifestyleType = LifestyleType.Singleton;
+			model.ExtendedProperties[Constants.SessionFactoryConfiguration] = cfg;
+			model.CustomComponentActivator = typeof (SessionFactoryActivator);
+			Kernel.AddCustomComponent( model );
 			sessionFactoryResolver.RegisterAliasComponentIdMapping(alias, id);
 		}
-
 
 		#endregion
 
