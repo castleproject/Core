@@ -358,6 +358,11 @@ namespace Castle.DynamicProxy.Tests
 				scope.ObtainDynamicModuleWithWeakName();
 				scope.SaveAssembly(false); // this will throw if SaveAssembly tries to delete from the current directory
 			}
+
+			// Clean up the generated DLLs because the FileStreams are now closed
+			Directory.Delete(moduleDirectory, true);
+			File.Delete(Path.Combine(Environment.CurrentDirectory, "Strong.dll"));
+			File.Delete(Path.Combine(Environment.CurrentDirectory, "Weak.dll"));
 		}
 #endif
 
