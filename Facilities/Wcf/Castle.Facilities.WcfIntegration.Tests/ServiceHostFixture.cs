@@ -17,6 +17,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
+	using System.ServiceModel.Description;
 	using Castle.Core.Configuration;
 	using Castle.Core.Resource;
 	using Castle.Facilities.Logging;
@@ -447,16 +448,22 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			}
 		}
 
-		[Test, Ignore]
-		public void ShouldGiveFriendlyErrorMessageForUunresolvedServiceDependencies()
+		[Test, ExpectedException(typeof(FaultException<ExceptionDetail>))]
+		public void CanGiveFriendlyErrorMessageForUunresolvedServiceDependenciesIfOpenEagerly()
 		{
 			using (IWindsorContainer container = new WindsorContainer()
 				.AddFacility<WcfFacility>()
 				.Register(
+					Component.For<IServiceBehavior>()
+						.Instance(new ServiceDebugBehavior()
+						{
+							IncludeExceptionDetailInFaults = true
+						}),
 					Component.For<IOperations>()
 						.ImplementedBy<Operations>()
-						.ActAs(new DefaultServiceModel().AddEndpoints(
-							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+						.ActAs(new DefaultServiceModel()
+							.OpenEagerly()
+							.AddEndpoints(WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
 								.At("net.tcp://localhost/Operations"))
 						)
 				))

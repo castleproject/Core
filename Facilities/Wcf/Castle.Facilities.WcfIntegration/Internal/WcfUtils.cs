@@ -31,21 +31,24 @@ namespace Castle.Facilities.WcfIntegration.Internal
 
 		public static WcfExtensionScope GetScope(ComponentModel model)
         {
-			string scopeAttrib = model.Configuration.Attributes[WcfConstants.ExtensionScopeKey];
-			if (!string.IsNullOrEmpty(scopeAttrib))
+			if (model.Configuration != null)
 			{
-				switch (scopeAttrib.ToLower())
+				string scopeAttrib = model.Configuration.Attributes[WcfConstants.ExtensionScopeKey];
+				if (!string.IsNullOrEmpty(scopeAttrib))
 				{
-					case "clients":
-						return WcfExtensionScope.Clients;
-					case "services":
-						return WcfExtensionScope.Services;
-					case "explicit":
-						return WcfExtensionScope.Explicit;
-					default:
-						const string message = @"The attribute 'scope' must be 'clients', 'services' or 'explicit'";
-						throw new ConfigurationErrorsException(message);
-				}				
+					switch (scopeAttrib.ToLower())
+					{
+						case "clients":
+							return WcfExtensionScope.Clients;
+						case "services":
+							return WcfExtensionScope.Services;
+						case "explicit":
+							return WcfExtensionScope.Explicit;
+						default:
+							const string message = @"The attribute 'scope' must be 'clients', 'services' or 'explicit'";
+							throw new ConfigurationErrorsException(message);
+					}
+				}
 			}
 			return WcfExtensionScope.Undefined;
         }
@@ -100,17 +103,15 @@ namespace Castle.Facilities.WcfIntegration.Internal
 			foreach (IHandler handler in kernel.GetAssignableHandlers(type))
 			{
 				ComponentModel model = handler.ComponentModel;
-				if (model.Configuration != null)
-				{
-					WcfExtensionScope modelScope = GetScope(model);
 
-					if (modelScope != WcfExtensionScope.Explicit || scope == WcfExtensionScope.Explicit)
+				WcfExtensionScope modelScope = GetScope(model);
+
+				if (modelScope != WcfExtensionScope.Explicit || scope == WcfExtensionScope.Explicit)
+				{
+					if (scope == modelScope || scope == WcfExtensionScope.Undefined
+						|| modelScope == WcfExtensionScope.Undefined)
 					{
-						if (scope == modelScope || scope == WcfExtensionScope.Undefined
-							|| modelScope == WcfExtensionScope.Undefined)
-						{
-							yield return handler;
-						}
+						yield return handler;
 					}
 				}
 			}

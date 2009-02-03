@@ -20,18 +20,15 @@ namespace Castle.Facilities.WcfIntegration
 
     public abstract class WcfServiceModelBase : IWcfServiceModel
     {
-		private bool hosted;
         private ICollection<Uri> baseAddresses;
 		private ICollection<IWcfEndpoint> endpoints;
 		private ICollection<IWcfExtension> extensions;
 
 		#region IWcfServiceModel 
 
-		public bool IsHosted
-		{
-			get { return hosted; }
-			protected set { hosted = value; }
-		}
+		public bool IsHosted { get; protected set; }
+
+		public bool? ShouldOpenEagerly { get; protected set; }
 
 		public ICollection<Uri> BaseAddresses
 		{
@@ -80,6 +77,12 @@ namespace Castle.Facilities.WcfIntegration
 		public T Hosted()
 		{
 			IsHosted = true;
+			return (T)this;
+		}
+
+		public T OpenEagerly()
+		{
+			ShouldOpenEagerly = true;
 			return (T)this;
 		}
 

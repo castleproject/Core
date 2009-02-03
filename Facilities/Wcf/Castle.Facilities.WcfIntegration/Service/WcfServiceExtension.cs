@@ -59,6 +59,8 @@ namespace Castle.Facilities.WcfIntegration
 			set { defaultBinding = value; }
 		}
 
+		public bool OpenServiceHostsEagerly { get; set; }
+
 		public WcfServiceExtension AddServiceHostBuilder<T, M>()
 			where T : IServiceHostBuilder<M>
 			where M : IWcfServiceModel
@@ -218,7 +220,8 @@ namespace Castle.Facilities.WcfIntegration
 		private void CreateServiceHostWhenHandlerIsValid(IHandler handler, IWcfServiceModel serviceModel,
 			                                             ComponentModel model)
 		{
-			if (handler.CurrentState == HandlerState.Valid)
+			if (serviceModel.ShouldOpenEagerly.GetValueOrDefault(OpenServiceHostsEagerly) ||
+				handler.CurrentState == HandlerState.Valid)
 			{
 				CreateAndOpenServiceHost(serviceModel, model);
 			}

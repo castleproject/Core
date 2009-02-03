@@ -28,6 +28,12 @@ namespace Castle.Facilities.WcfIntegration
 		bool IsHosted { get; }
 
 		/// <summary>
+		/// Determines if the service will be opened immediately
+		/// regardless of unsatisifed dependencies.
+		/// </summary>
+		bool? ShouldOpenEagerly { get; }
+
+		/// <summary>
 		/// Gets the service base addresses.
 		/// </summary>
 		ICollection<Uri> BaseAddresses { get; }
