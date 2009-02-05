@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 {
+	using System.Collections;
 	using System.ServiceModel.Channels;
 	using System.Xml;
 	using Castle.Facilities.WcfIntegration.Behaviors;
@@ -32,7 +33,8 @@ namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 			get { return envelope; }
 		}
 
-		public override bool Perform(Message message, XmlDocument envelope, MessageLifecycle lifecyle)
+		public override bool Perform(Message message, XmlDocument envelope, MessageLifecycle lifecyle,
+								     IDictionary state)
 		{
 			this.envelope = envelope;
 			return true;

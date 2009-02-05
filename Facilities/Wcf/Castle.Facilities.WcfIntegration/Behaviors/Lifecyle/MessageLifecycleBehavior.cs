@@ -14,7 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration.Behaviors
 {
-	using System.Collections.Generic;
+	using System.Collections;
 	using System.IO;
 	using System.Linq;
 	using System.ServiceModel;
@@ -58,7 +58,7 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		/// <param name="correlationState"></param>
 		public virtual void AfterReceiveReply(ref Message reply, object correlationState)
 		{
-			ProcessMessage(ref reply, MessageLifecycle.IncomingResponse);
+			ProcessMessage(ref reply, MessageLifecycle.IncomingResponse, (IDictionary)correlationState);
 		}
 
 		/// <summary>
@@ -69,8 +69,9 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		/// <returns></returns>
 		public virtual object BeforeSendRequest(ref Message request, IClientChannel channel)
 		{
-			ProcessMessage(ref request, MessageLifecycle.OutgoingRequest);
-			return null;
+			Hashtable state = new Hashtable();
+			ProcessMessage(ref request, MessageLifecycle.OutgoingRequest, state);
+			return state;
 		}
 
 		#endregion
@@ -87,8 +88,9 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		public virtual object AfterReceiveRequest(ref Message request, IClientChannel channel,
 												  InstanceContext instanceContext)
 		{
-			ProcessMessage(ref request, MessageLifecycle.IncomingRequest);
-			return null;
+			Hashtable state = new Hashtable();
+			ProcessMessage(ref request, MessageLifecycle.IncomingRequest, state);
+			return state;
 		}
 
 		/// <summary>
@@ -98,12 +100,12 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		/// <param name="correlationState"></param>
 		public virtual void BeforeSendReply(ref Message reply, object correlationState)
 		{
-			ProcessMessage(ref reply, MessageLifecycle.OutgoingResponse);
+			ProcessMessage(ref reply, MessageLifecycle.OutgoingResponse, (IDictionary)correlationState);
 		}
 
 		#endregion
 
-		protected void ProcessMessage(ref Message message, MessageLifecycle lifecycle)
+		protected void ProcessMessage(ref Message message, MessageLifecycle lifecycle, IDictionary state)
 		{
 			XmlDocument envelope = null;
 
@@ -126,7 +128,7 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 							envelope = OpenMessage(message);
 						}
 
-						proceed = envelopeAction.Perform(message, envelope, lifecycle);
+						proceed = envelopeAction.Perform(message, envelope, lifecycle, state);
 					}
 					else if (action is IMessageAction)
 					{
@@ -138,7 +140,7 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 							envelope = null;
 						}
 
-						proceed = messageAction.Perform(ref message, lifecycle);
+						proceed = messageAction.Perform(ref message, lifecycle, state);
 					}
 
 					if (!proceed) break;

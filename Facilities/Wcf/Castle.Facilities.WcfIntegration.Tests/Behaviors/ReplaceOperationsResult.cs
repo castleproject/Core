@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 {
+	using System.Collections;
 	using System.ServiceModel.Channels;
 	using System.Xml;
 	using Castle.Facilities.WcfIntegration.Behaviors;
@@ -28,7 +29,8 @@ namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 			this.result = result;
 		}
 
-		public override bool Perform(Message message, XmlDocument envelope, MessageLifecycle lifecyle)
+		public override bool Perform(Message message, XmlDocument envelope, MessageLifecycle lifecyle,
+									 IDictionary state)
 		{
 			XmlNamespaceManager xmlns = new XmlNamespaceManager(envelope.NameTable);
 			xmlns.AddNamespace("tns", "http://tempuri.org/");

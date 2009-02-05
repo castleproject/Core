@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 {
+	using System.Collections;
 	using System.ServiceModel.Channels;
 	using Castle.Facilities.WcfIntegration.Behaviors;
 
@@ -29,7 +30,7 @@ namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 			this.value = value;
 		}
 
-		public override bool Perform(ref Message message, MessageLifecycle lifecyle)
+		public override bool Perform(ref Message message, MessageLifecycle lifecyle, IDictionary state)
 		{
 			MessageHeader header = MessageHeader.CreateHeader(name, "", value, false);
 			message.Headers.Add(header);

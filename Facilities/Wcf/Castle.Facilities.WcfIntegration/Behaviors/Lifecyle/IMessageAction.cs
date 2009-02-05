@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration.Behaviors
 {
+	using System.Collections;
 	using System.ServiceModel.Channels;
 
 	/// <summary>
@@ -26,7 +27,8 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 		/// </summary>
 		/// <param name="message">The message.</param>
 		/// <param name="lifecycle">The lifecycle stage.</param>
+		/// <param name="state">Optional state.</param>
 		/// <returns>true if further actions should be performed.</returns>
-		bool Perform(ref Message message, MessageLifecycle lifecycle);
+		bool Perform(ref Message message, MessageLifecycle lifecycle, IDictionary state);
 	}
 }

@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration.Behaviors
 {
+	using System.Collections;
 	using System.ServiceModel.Channels;
 	using System.Xml;
 
@@ -37,7 +38,8 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 			return (lifecycle & this.lifecycle) > 0;			
 		}
 
-		public abstract bool Perform(Message message, XmlDocument envelope, MessageLifecycle lifecycle);
+		public abstract bool Perform(Message message, XmlDocument envelope, MessageLifecycle lifecycle,
+									 IDictionary state);
 	}
 
 	public abstract class AbstractMessageEnvelopeAction : AbstractMessageEnvelopeAction<MessageLifecycleBehavior>

@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration.Behaviors
 {
+	using System.Collections;
 	using System.ServiceModel.Channels;
 
 	public abstract class AbstractMessageAction<T> : AbstractExtension<T>, IMessageAction
@@ -36,7 +37,8 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 			return (lifecycle & this.lifecycle) > 0;			
 		}
 
-		public abstract bool Perform(ref Message message, MessageLifecycle lifecycle);
+		public abstract bool Perform(ref Message message, MessageLifecycle lifecycle,
+									 IDictionary state);
 	}
 
 	public abstract class AbstractMessageAction : AbstractMessageAction<MessageLifecycleBehavior>
