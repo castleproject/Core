@@ -77,15 +77,6 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual object Instantiate(CreationContext context)
 		{
-			if (Model.Implementation.IsAbstract)
-			{
-				throw new ComponentRegistrationException(
-					string.Format(
-						"Type {0} is abstract.\r\n As such, it is not possible to instansiate it as implementation of {1} service",
-						Model.Implementation.FullName,
-						Model.Service.FullName));
-			}
-
 			ConstructorCandidate candidate = SelectEligibleConstructor(context);
 
 			Type[] signature;
@@ -102,6 +93,16 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			bool createProxy = Kernel.ProxyFactory.ShouldCreateProxy(Model);
 			bool createInstance = true;
+
+			if (createProxy == false && Model.Implementation.IsAbstract)
+			{
+				throw new ComponentRegistrationException(
+					string.Format(
+						"Type {0} is abstract.\r\n As such, it is not possible to instansiate it as implementation of {1} service",
+						Model.Implementation.FullName,
+						Model.Service.FullName));
+			}
+
 
 			if (createProxy)
 			{

@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Applied patch from Joao Braganca to allow abstract types in DefaultComponentActivator if proxied.
+
 - Added additional AddFacility overrides to improve fluent configuration of facilities.
 
 - Moved DefaultComponentActivator check for abstract so it can be better overriden.
