@@ -17,6 +17,7 @@ namespace Castle.Facilities.WcfIntegration
 		private readonly WcfFacility facility;
 		private readonly IKernel kernel;
 		private Binding defaultBinding;
+		private TimeSpan? closeTimeout;
 
 		internal static IKernel GlobalKernel;
 
@@ -57,6 +58,12 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			get { return defaultBinding ?? facility.DefaultBinding; }
 			set { defaultBinding = value; }
+		}
+
+		public TimeSpan? CloseTimeout
+		{
+			get { return closeTimeout ?? facility.CloseTimeout; }
+			set { closeTimeout = value; }
 		}
 
 		public bool OpenServiceHostsEagerly { get; set; }
@@ -121,7 +128,7 @@ namespace Castle.Facilities.WcfIntegration
 					{
 						cleanUp.CleanUp();
 					}
-					WcfUtils.ReleaseCommunicationObject(serviceHost);
+					WcfUtils.ReleaseCommunicationObject(serviceHost, CloseTimeout);
 				}
 			}
 		}

@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System;
 	using System.ServiceModel;
 	using Castle.Core;
 	using Castle.Core.Interceptor;
@@ -61,7 +62,7 @@ namespace Castle.Facilities.WcfIntegration
 
 			if (channel != null && !WcfUtils.IsCommunicationObjectReady(channel))
 			{
-				WcfUtils.ReleaseCommunicationObject(channel);
+				WcfUtils.ReleaseCommunicationObject(channel, TimeSpan.Zero);
 				var changeTarget = (IChangeProxyTarget)invocation;
 				var channelCreator = channel.Extensions.Find<ChannelCreatorExtension>();
 				changeTarget.ChangeInvocationTarget(channelCreator.Create());

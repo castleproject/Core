@@ -21,6 +21,15 @@ namespace Castle.Facilities.WcfIntegration
     {
         private InstanceContext callbackContext;
 
+		public DuplexClientModel()
+		{
+		}
+
+		public DuplexClientModel(IWcfEndpoint endpoint)
+			: base(endpoint)
+		{
+		}
+
         public InstanceContext CallbackContext
         {
 			get { return callbackContext; }
@@ -38,6 +47,11 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			CallbackContext = new InstanceContext(callback);
 			return this;
+		}
+
+		public static DuplexClientModel On(IWcfEndpoint endpoint)
+		{
+			return new DuplexClientModel(endpoint);
 		}
     }
 }

@@ -25,11 +25,11 @@ namespace Castle.Facilities.WcfIntegration.Internal
 	[Serializable]
 	internal class WcfCommunicationDecomissionConcern : ILifecycleConcern
 	{
-		public static readonly WcfCommunicationDecomissionConcern 
-			Instance = new WcfCommunicationDecomissionConcern();
+		private readonly WcfClientExtension clients;
 
-		protected WcfCommunicationDecomissionConcern()
+		public WcfCommunicationDecomissionConcern(WcfClientExtension clients)
 		{
+			this.clients = clients;
 		}
 
 		/// <summary>
@@ -39,7 +39,8 @@ namespace Castle.Facilities.WcfIntegration.Internal
 		/// <param name="component">The component instance.</param>
 		public void Apply(ComponentModel model, object component)
 		{
-			WcfUtils.ReleaseCommunicationObject(component as ICommunicationObject);
+			var comm = component as ICommunicationObject;
+			WcfUtils.ReleaseCommunicationObject(comm, clients.CloseTimeout);
 		}
 	}
 }

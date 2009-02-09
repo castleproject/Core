@@ -15,10 +15,15 @@
 namespace Castle.Facilities.WcfIntegration.Tests.Rest
 {
 	using System;
+	using System.IO;
+	using System.Net;
+	using System.ServiceModel;
+	using System.ServiceModel.Channels;
+	using System.ServiceModel.Description;
 	using System.ServiceModel.Web;
+	using Castle.Facilities.WcfIntegration.Rest;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
-	using Castle.Facilities.WcfIntegration.Rest;
 	using NUnit.Framework;
 
 
@@ -62,6 +67,24 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 					ICalculator calculator = factory.CreateChannel();
 					Assert.AreEqual(8, calculator.Divide(56, 7));
 				}
+			}
+		}
+
+		[Test]
+		public void CanCreateRestServiceWithoutInterfaceAndOpenHost()
+		{
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>()
+				.Register(Component.For<Inventory>()
+					.ActAs(new RestServiceModel("http://localhost/Inventory")
+				)))
+			{
+				var request = WebRequest.Create("http://localhost/Inventory/quantity/1234");
+				WebResponse response = request.GetResponse();
+				using (var reader = new BinaryReader(response.GetResponseStream()))
+                {
+					Assert.AreEqual(10, reader.ReadInt32());
+                }
 			}
 		}
 	}

@@ -36,5 +36,20 @@ namespace Castle.Facilities.WcfIntegration.Rest
 			: base(endpoint)
 		{
 		}
+
+		public static RestClientModel On(string remoteAddress)
+		{
+			return new RestClientModel(remoteAddress);
+		}
+
+		public static RestClientModel On(Uri remoteAddress)
+		{
+			return new RestClientModel(remoteAddress);
+		}
+
+		public static RestClientModel On(IWcfEndpoint endpoint)
+		{
+			return new RestClientModel(endpoint);
+		}
 	}
 }

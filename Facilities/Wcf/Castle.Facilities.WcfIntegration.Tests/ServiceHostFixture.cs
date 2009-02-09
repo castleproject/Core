@@ -41,7 +41,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanCreateServiceHostAndOpenHost()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(Component.For<IOperations>()
 					.ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
@@ -61,8 +61,11 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanCreateServiceHostAndOpenHostUsingDefaultBinding()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>(f => f.DefaultBinding =
-					new NetTcpBinding { PortSharingEnabled = true }
+				.AddFacility<WcfFacility>(f => 
+					{ 
+						f.DefaultBinding = new NetTcpBinding { PortSharingEnabled = true };
+						f.CloseTimeout = TimeSpan.Zero;
+					}
 				)
 				.Register(Component.For<Operations>()
 					.DependsOn(new { number = 42 })
@@ -82,7 +85,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanCreateServiceHostAndOpenHostFromConfiguration()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(Component.For<UsingWindsor>()
 					.DependsOn(new { number = 42 })
 					.ActAs(new DefaultServiceModel())
@@ -98,7 +101,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanCreateServiceHostAndOpenHostWithMultipleEndpoints()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(Component.For<Operations>()
 					.DependsOn(new { number = 42 })
 					.ActAs(new DefaultServiceModel().AddEndpoints(
@@ -125,7 +128,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanCreateServiceHostAndOpenHostWithRelativeEndpoints()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(Component.For<Operations>()
 					.DependsOn(new { number = 42 })
 					.ActAs(new DefaultServiceModel()
@@ -156,7 +159,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanCreateServiceHostAndOpenHostWithListenAddress()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(Component.For<IOperations>()
 					.ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
@@ -190,7 +193,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanCreateServiceHostAndOpenHostWithMultipleServiceModels()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(Component.For<IOperations>()
 					.ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
@@ -227,7 +230,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			Assert.IsFalse(UnitOfWork.initialized, "Should be false before starting");
 
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<CallCountServiceBehavior>()
 						.Attribute("scope").Eq(WcfExtensionScope.Clients),
@@ -257,7 +260,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			Assert.IsFalse(UnitOfWork.initialized, "Should be false before starting");
 
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<CallCountServiceBehavior>()
 						.Attribute("scope").Eq(WcfExtensionScope.Services),
@@ -285,7 +288,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			CallCountServiceBehavior.CallCount = 0;
 
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<CallCountServiceBehavior>()
 						.Named("callcounts")
@@ -313,7 +316,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			CallCountServiceBehavior.CallCount = 0;
 
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<CallCountServiceBehavior>()
 						.Attribute("scope").Eq(WcfExtensionScope.Explicit),
@@ -340,7 +343,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			CallCountServiceBehavior.CallCount = 0;
 
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<IOperations>().ImplementedBy<Operations>()
 					.DependsOn(new { number = 42 })
@@ -366,7 +369,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanCaptureRequestsAndResponsesAtEndpointLevel()
 		{
 			using (IWindsorContainer container = new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<LogMessageEndpointBehavior>()
 						.Attribute("scope").Eq(WcfExtensionScope.Explicit)
@@ -400,7 +403,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanCaptureRequestsAndResponsesAtServiceLevel()
 		{
 			using (IWindsorContainer container = new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<LogMessageEndpointBehavior>()
 						.Attribute("scope").Eq(WcfExtensionScope.Explicit)
@@ -428,7 +431,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanModifyRequestsAndResponses()
 		{
 			using (IWindsorContainer container = new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<MessageLifecycleBehavior>(),
 					Component.For<IOperations>()
@@ -452,7 +455,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanGiveFriendlyErrorMessageForUunresolvedServiceDependenciesIfOpenEagerly()
 		{
 			using (IWindsorContainer container = new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<IServiceBehavior>()
 						.Instance(new ServiceDebugBehavior()

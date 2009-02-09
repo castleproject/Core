@@ -12,22 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Tests
 {
-	public class DefaultClientModel : WcfClientModel<DefaultClientModel>
+	using System.IO;
+	using System.ServiceModel;
+	using System.ServiceModel.Web;
+
+	[ServiceContract]
+	public class Inventory
 	{
-		public DefaultClientModel()
+		[OperationContract,
+		 WebGet(UriTemplate = "quantity/{product}")]
+		public Stream Quantity(string product)
 		{
-		}
-
-		public DefaultClientModel(IWcfEndpoint endpoint)
-			: base(endpoint)
-		{
-		}
-
-		public static DefaultClientModel On(IWcfEndpoint endpoint)
-		{
-			return new DefaultClientModel(endpoint);
+			MemoryStream stream = new MemoryStream();
+			BinaryWriter writer = new BinaryWriter(stream);
+			writer.Write(10);
+			stream.Position = 0L;
+			return stream;
 		}
 	}
 }

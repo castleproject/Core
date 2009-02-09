@@ -50,6 +50,8 @@ namespace Castle.Facilities.WcfIntegration
 
 		public Binding DefaultBinding { get; set; }
 
+		public TimeSpan? CloseTimeout { get; set; }
+
 		private void Kernel_ComponentModelCreated(ComponentModel model)
 		{
 			Type implementation = model.Implementation;

@@ -46,15 +46,14 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void TestInitialize()
 		{
 			windsorContainer = new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(WcfClient.ForChannels(
 					new DefaultClientModel()
 					{
 						Endpoint = WcfEndpoint.ForContract<IOperations>()
 							.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
 							.At("net.tcp://localhost/Operations")
-					}))
-				.Register(
+					}),
 					Component.For<IServiceBehavior>()
 						.Instance(new ServiceDebugBehavior()
 						{
@@ -93,7 +92,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		private IWindsorContainer windsorContainer;
 
 		[Test]
-		public void CanResolveClientAssociatedWithChannel()
+		public void CanResolveClientInterfaceAssociatedWithChannel()
 		{
 			windsorContainer.Register(
 				Component.For<IOperations>()
@@ -114,7 +113,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanResolveClientAssociatedWithChannelUsingDefaultBinding()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(Component.For<Operations>()
 					.DependsOn(new { number = 28 })
 					.ActAs(new DefaultServiceModel()
@@ -146,7 +145,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanResolveClientAssociatedWithChannelUsingSuppliedModel()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(Component.For<Operations>()
 					.DependsOn(new { number = 28 })
 					.ActAs(new DefaultServiceModel()
@@ -157,7 +156,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				)))
 			{
 				using (IWindsorContainer clientContainer = new WindsorContainer()
-					.AddFacility<WcfFacility>()
+					.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 					.Register(Component.For<IOperations>()
 						.Named("operations")
 						.LifeStyle.Transient
@@ -188,7 +187,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanResolveClientAssociatedWithChannelUsingSuppliedEndpoint()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(Component.For<Operations>()
 					.DependsOn(new { number = 28 })
 					.ActAs(new DefaultServiceModel()
@@ -248,7 +247,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanResolveClientAssociatedWithChannelUsingRelativeAddress()
 		{
 			using (new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(Component.For<Operations>()
 					.DependsOn(new { number = 28 })
 					.ActAs(new DefaultServiceModel()
@@ -260,7 +259,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				)))
 			{
 				using (IWindsorContainer clientContainer = new WindsorContainer()
-					.AddFacility<WcfFacility>()
+					.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 					.Register(Component.For<IOperations>()
 						.Named("operations")
 						.ActAs(new DefaultClientModel()
@@ -282,7 +281,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void CanResolveClientAssociatedWithChannelUsingViaAddress()
 		{
 			using (IWindsorContainer localContainer = new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<IOperations>()
 						.ImplementedBy<Operations>()

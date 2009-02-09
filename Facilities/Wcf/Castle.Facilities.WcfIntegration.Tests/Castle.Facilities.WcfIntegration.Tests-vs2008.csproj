@@ -109,6 +109,7 @@
     <Compile Include="Components\Calculator.cs" />
     <Compile Include="Components\Callback.cs" />
     <Compile Include="Components\ClassNeedingService.cs" />
+    <Compile Include="Components\Inventory.cs" />
     <Compile Include="Components\HelloFormatter.cs" />
     <Compile Include="Components\ICalculator.cs" />
     <Compile Include="Duplex\DuplexClientFixture.cs" />

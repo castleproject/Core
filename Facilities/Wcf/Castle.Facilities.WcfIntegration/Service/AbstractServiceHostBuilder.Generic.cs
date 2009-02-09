@@ -62,21 +62,13 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				Type contract = endpoint.Contract;
 
-				if (contract != null)
+				if (contract == null)
 				{
-					if (!contract.IsInterface)
+					if (model == null)
 					{
-						throw new FacilityException("The service endpoint contract " +
-							contract.FullName + " does not represent an interface.");
+						throw new FacilityException(
+							"No service endpoint contract can be implied from the component.");
 					}
-				}
-				else if (model == null || !model.Service.IsInterface)
-				{
-					throw new FacilityException(
-						"No service endpoint contract can be implied from the component.");
-				}
-				else
-				{
 					endpoint.Contract = model.Service;
 				}
 			}

@@ -28,7 +28,8 @@ namespace Castle.Facilities.WcfIntegration
 		private readonly WcfFacility facility;
 		private readonly IKernel kernel;
 		private Binding defaultBinding;
- 
+		private TimeSpan? closeTimeout;
+
 		public WcfClientExtension(WcfFacility facility)
 		{
 			this.facility = facility;
@@ -45,6 +46,12 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			get { return defaultBinding ?? facility.DefaultBinding; }
 			set { defaultBinding = value; }
+		}
+
+		public TimeSpan? CloseTimeout
+		{
+			get { return closeTimeout ?? facility.CloseTimeout; }
+			set { closeTimeout = value; }
 		}
 
 		public WcfClientExtension AddChannelBuilder<T, M>()
@@ -68,7 +75,7 @@ namespace Castle.Facilities.WcfIntegration
 				model.LifecycleSteps.Add(LifecycleStepType.Decommission,
 					WcfClientCleanUpDecomissionConcern.Instance);
 				model.LifecycleSteps.Add(LifecycleStepType.Decommission,
-					WcfCommunicationDecomissionConcern.Instance);
+					new WcfCommunicationDecomissionConcern(this));
 				InstallManagedChannelInterceptor(model);
 
 				var dependencies = new ExtensionDependencies(model, kernel)

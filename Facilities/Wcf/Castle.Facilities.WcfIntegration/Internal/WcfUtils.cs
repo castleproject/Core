@@ -253,7 +253,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 			return true;
 		}
 
-		public static void ReleaseCommunicationObject(ICommunicationObject comm)
+		public static void ReleaseCommunicationObject(ICommunicationObject comm, TimeSpan? timeout)
 		{
 			if (comm != null)
 			{
@@ -261,7 +261,14 @@ namespace Castle.Facilities.WcfIntegration.Internal
 				{
 					try
 					{
-						comm.Close();
+						if (timeout.HasValue)
+						{
+							comm.Close(timeout.Value);
+						}
+						else
+						{
+							comm.Close();
+						}
 					}
 					catch (CommunicationException)
 					{

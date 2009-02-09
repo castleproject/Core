@@ -36,7 +36,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void TestInitialize()
 		{
 			windsorContainer = new WindsorContainer()
-				.AddFacility<WcfFacility>()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
 				.Register(
 					Component.For<ServiceHostListener>(),
 					Component.For<LoggingInterceptor>(),
