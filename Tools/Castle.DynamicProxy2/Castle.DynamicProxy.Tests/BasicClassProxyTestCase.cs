@@ -125,7 +125,6 @@ namespace Castle.DynamicProxy.Tests
 
 #endif
 
-
 		[Test]
 		public void GetPropertyByReflectionTest()
 		{
@@ -369,6 +368,51 @@ namespace Castle.DynamicProxy.Tests
 			StandardInterceptor interceptor = new StandardInterceptor();
 			ClassCallingVirtualMethodFromCtor proxy = generator.CreateClassProxy<ClassCallingVirtualMethodFromCtor>(interceptor);
 			Assert.AreEqual(7, proxy.Result);
+		}
+
+		[Test]
+		public void ClassProxyShouldHaveDefaultConstructor()
+		{
+			object proxy = generator.CreateClassProxy<ClassWithDefaultConstructor>();
+			Assert.IsNotNull(Activator.CreateInstance(proxy.GetType()));
+		}
+
+		[Test]
+		public void ClassProxyShouldCallBaseClassDefaultConstructor()
+		{
+			object proxy = generator.CreateClassProxy<ClassWithDefaultConstructor>();
+			object proxy2 = Activator.CreateInstance(proxy.GetType());
+			Assert.AreEqual("Something", ((ClassWithDefaultConstructor)proxy2).SomeString);
+		}
+
+		[Test]
+		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasInternal()
+		{
+			object proxy = generator.CreateClassProxy<ClassWithInternalDefaultConstructor>();
+			Assert.IsNotNull(Activator.CreateInstance(proxy.GetType()));
+		}
+
+		[Test]
+		public void ClassProxyShouldCallInternalDefaultConstructor()
+		{
+			object proxy = generator.CreateClassProxy<ClassWithInternalDefaultConstructor>();
+			object proxy2 = Activator.CreateInstance(proxy.GetType());
+			Assert.AreEqual("Something", ((ClassWithInternalDefaultConstructor)proxy2).SomeString);
+		}
+
+		[Test]
+		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasProtected()
+		{
+			object proxy = generator.CreateClassProxy<ClassWithProtectedDefaultConstructor>();
+			Assert.IsNotNull(Activator.CreateInstance(proxy.GetType()));
+		}
+
+		[Test]
+		public void ClassProxyShouldCallProtectedDefaultConstructor()
+		{
+			object proxy = generator.CreateClassProxy<ClassWithProtectedDefaultConstructor>();
+			object proxy2 = Activator.CreateInstance(proxy.GetType());
+			Assert.AreEqual("Something", ((ClassWithProtectedDefaultConstructor)proxy2).SomeString);
 		}
 	}
 }

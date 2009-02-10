@@ -1,5 +1,8 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Applied Craig Vermeer's patch fixing an issue with generating default constructors for DYNPROXY-ISSUE-81
+  "No Default Constructor in generated Class Proxy"
+
 - Added support for IInterceptorSelector (patch provided by Krzysztof Kozmic).
 - Removed ProxyGenerationOptions.UseSelector.
 

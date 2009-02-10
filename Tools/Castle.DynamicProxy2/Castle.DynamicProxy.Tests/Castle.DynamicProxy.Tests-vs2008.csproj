@@ -124,10 +124,13 @@
     <Compile Include="Classes\ClassCallingVirtualMethodFromCtor.cs" />
     <Compile Include="Classes\ClassWithCharRetType.cs" />
     <Compile Include="Classes\ClassWithConstructors.cs" />
+    <Compile Include="Classes\ClassWithInternalDefaultConstructor.cs" />
+    <Compile Include="Classes\ClassWithProtectedDefaultConstructor.cs" />
     <Compile Include="Classes\MySerializableClass.cs" />
     <Compile Include="Classes\ProtectedInternalConstructorClass.cs" />
     <Compile Include="Classes\SimpleClass.cs" />
     <Compile Include="Classes\ClassOverridingEqualsAndGetHashCode.cs" />
+    <Compile Include="Classes\ClassWithDefaultConstructor.cs" />
     <Compile Include="GenericMethodsProxyTestCase.cs" />
     <Compile Include="DictionarySerializationTestCase.cs" />
     <Compile Include="Interceptors\InterceptorSelectorTestCase.cs" />

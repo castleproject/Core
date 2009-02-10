@@ -668,11 +668,11 @@ namespace Castle.DynamicProxy.Generators
 		{
 			// Check if the type actually has a default constructor
 
-			ConstructorInfo defaultConstructor = baseClass.GetConstructor(BindingFlags.Public, null, Type.EmptyTypes, null);
+			ConstructorInfo defaultConstructor = baseClass.GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, Type.EmptyTypes, null);
 
 			if (defaultConstructor == null)
 			{
-				defaultConstructor = baseClass.GetConstructor(BindingFlags.NonPublic, null, Type.EmptyTypes, null);
+				defaultConstructor = baseClass.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null);
 
 				if (defaultConstructor == null || defaultConstructor.IsPrivate)
 				{
