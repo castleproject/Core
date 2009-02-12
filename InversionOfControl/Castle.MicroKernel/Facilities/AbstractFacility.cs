@@ -70,7 +70,7 @@ namespace Castle.MicroKernel.Facilities
 		}
 
 		/// <summary>
-		/// Terminates the Facility, invokind the <see cref="Dispose"/> and setting 
+		/// Terminates the Facility, invokes the <see cref="Dispose"/> method and sets 
 		/// the Kernel to a null reference.
 		/// </summary>
 		public void Terminate()
