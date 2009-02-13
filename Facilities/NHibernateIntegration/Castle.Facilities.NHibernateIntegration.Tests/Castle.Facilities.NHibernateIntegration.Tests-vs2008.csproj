@@ -281,9 +281,6 @@
     <EmbeddedResource Include="Issues\Facilities106\factory1.xml">
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Issues\Facilities113\FourFactoryConfiguration.xml" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
