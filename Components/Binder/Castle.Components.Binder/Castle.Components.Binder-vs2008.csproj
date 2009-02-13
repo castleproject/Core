@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -89,12 +89,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayConverter.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BindingException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ConverterUtil.cs" />
     <Compile Include="DataBinder.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -102,10 +104,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataReaderTreeBuilder.cs" />
+    <Compile Include="DateTimeConverter.cs" />
+    <Compile Include="DecimalConverter.cs" />
     <Compile Include="DefaultConverter.cs" />
+    <Compile Include="EnumConverter.cs" />
     <Compile Include="ErrorList.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GenericListConverter.cs" />
+    <Compile Include="GuidConverter.cs" />
+    <Compile Include="HttpPostedFileConverter.cs" />
     <Compile Include="IBinderTranslator.cs" />
     <Compile Include="IConverter.cs" />
     <Compile Include="IDataBinder.cs">
@@ -115,7 +123,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node.cs" />
+    <Compile Include="NullableConverter.cs" />
+    <Compile Include="ExactMatchConverter.cs" />
+    <Compile Include="StringConverter.cs" />
+    <Compile Include="TypeConverterAdapter.cs" />
+    <Compile Include="PrimitiveConverter.cs" />
     <Compile Include="TreeBuilder.cs" />
+    <Compile Include="TypeConverterBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Castle.Components.Binder.build" />
