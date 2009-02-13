@@ -69,7 +69,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// </example>
 	public class NHibernateFacility : AbstractFacility
 	{
-		private IConfigurationBuilder configurationBuilder;
+		private readonly IConfigurationBuilder configurationBuilder;
 
 		/// <summary>
 		/// Instantiates the facility with the specified configuration builder.
@@ -94,11 +94,8 @@ namespace Castle.Facilities.NHibernateIntegration
 		protected override void Init()
 		{
 			AssertHasConfig();
-
 			AssertHasAtLeastOneFactoryConfigured();
-
 			RegisterComponents();
-
 			ConfigureFacility();
 		}
 
@@ -115,6 +112,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			RegisterSessionManager();
 			RegisterTransactionManager();
 		}
+
 
 		/// <summary>
 		/// Register <see cref="IConfigurationBuilder"/> the default ConfigurationBuilder or (if present) the one 
@@ -151,9 +149,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			Type sessionStoreType = typeof(CallContextSessionStore);
 
 			if ("true".Equals(isWeb))
-			{
 				sessionStoreType = typeof(WebSessionStore);
-			}
 
 			if (customStore != null)
 			{
@@ -167,12 +163,11 @@ namespace Castle.Facilities.NHibernateIntegration
 				{
 					String message = "The specified customStore does " + 
 						"not implement the interface ISessionStore. Type " + customStore;
-
-						throw new ConfigurationErrorsException(message);
+					throw new ConfigurationErrorsException(message);
 				}
 			}
 
-			Kernel.AddComponent( "nhfacility.sessionstore", 
+			Kernel.AddComponent("nhfacility.sessionstore", 
 				typeof(ISessionStore), sessionStoreType );
 		}
 
@@ -217,8 +212,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// </summary>
 		protected void ConfigureFacility()
 		{
-			ISessionFactoryResolver sessionFactoryResolver = (ISessionFactoryResolver) 
-				Kernel[typeof(ISessionFactoryResolver)];
+			ISessionFactoryResolver sessionFactoryResolver = Kernel.Resolve <ISessionFactoryResolver>();
 
 			ConfigureReflectionOptimizer(FacilityConfig);
 
@@ -229,12 +223,10 @@ namespace Castle.Facilities.NHibernateIntegration
 				if (!"factory".Equals(factoryConfig.Name))
 				{
 					String message = "Unexpected node " + factoryConfig.Name;
-
 					throw new ConfigurationErrorsException(message);
 				}
 
 				ConfigureFactories(factoryConfig, sessionFactoryResolver, firstFactory);
-
 				firstFactory = false;
 			}
 		}
@@ -321,7 +313,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			model.LifestyleType = LifestyleType.Singleton;
 			model.ExtendedProperties[Constants.SessionFactoryConfiguration] = cfg;
 			model.CustomComponentActivator = typeof (SessionFactoryActivator);
-			Kernel.AddCustomComponent( model );
+			Kernel.AddCustomComponent(model);
 			sessionFactoryResolver.RegisterAliasComponentIdMapping(alias, id);
 		}
 

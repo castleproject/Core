@@ -180,6 +180,7 @@
     <Compile Include="Internal\Empty.cs" />
     <Compile Include="Internal\FileAssemblyResource.cs" />
     <Compile Include="Internal\IConfigurationBuilder.cs" />
+    <Compile Include="IConfigurationContributor.cs" />
     <Compile Include="Internal\ISessionFactoryResolver.cs">
       <SubType>Code</SubType>
     </Compile>
