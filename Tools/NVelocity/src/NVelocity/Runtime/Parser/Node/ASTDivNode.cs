@@ -1,9 +1,24 @@
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
 	using Context;
 
-	/// <summary> Handles integer division of nodes
+	/// <summary>
+    /// Handles integer division of nodes
 	/// 
 	/// Please look at the Parser.jjt file which is
 	/// what controls the generation of this class.
@@ -50,33 +65,21 @@ namespace NVelocity.Runtime.Parser.Node
 				return null;
 			}
 
-			// if not an Integer, not much we can do either
-//			if (!(left is Int32) || !(right is Int32))
-//			{
-//				runtimeServices.Error((!(left is Int32) ? "Left" : "Right") + " side of division operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
-//
-//				return null;
-//			}
-
 			Type maxType = MathUtil.ToMaxType(left.GetType(), right.GetType());
-
 			if (maxType == null)
 			{
 				return null;
 			}
 
-			return MathUtil.Div(maxType, left, right);
-
-
-			// check for divide by 0
-//			if (((Int32) right) == 0)
-//			{
-//				runtimeServices.Error("Right side of division operation is zero. Must be non-zero. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
-//
-//				return null;
-//			}
-//
-//			return ((Int32) left)/((Int32) right);
+			try
+			{
+				return MathUtil.Div(maxType, left, right);
+			}
+			catch (DivideByZeroException)
+			{
+				runtimeServices.Error("Right side of division operation is zero. Must be non-zero. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+			}
+			return null;
 		}
 	}
 }

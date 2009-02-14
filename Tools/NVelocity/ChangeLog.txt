@@ -1,3 +1,7 @@
+- Applied Ashish Kulkarni's patch fixing NVELOCITY-ISSUE-28
+  "handle divide-by-zero exception when performing arithmetic operations"
+- Added ArithmeticExpressionTestCase.
+
 - Applied Matthew Robinson's patch fixing NVELOCITY-ISSUE-33
   "uberinspectimp nullref exception"
 
