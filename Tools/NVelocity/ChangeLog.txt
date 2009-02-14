@@ -1,3 +1,6 @@
+- Applied Matthew Robinson's patch fixing NVELOCITY-ISSUE-33
+  "uberinspectimp nullref exception"
+
 - Applied Anders Waglund's patch fixing NVELOCITY-ISSUE-30
   "NVelocity foreach EventCartridge patch"
 

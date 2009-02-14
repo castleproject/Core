@@ -19,6 +19,7 @@ namespace NVelocity.Test
 	using System.Globalization;
 	using System.IO;
 	using App;
+	using NVelocity.Exception;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -83,6 +84,20 @@ namespace NVelocity.Test
 		}
 
 		[Test]
+		public void CorrectExceptionThrownOnInvocationException()
+		{
+			try
+			{
+				Eval("$test.ThrowException");
+				Assert.Fail();
+			}
+			catch (MethodInvocationException miex)
+			{
+				Assert.AreEqual("From ThrowException", miex.InnerException.Message);
+			}
+		}
+
+		[Test]
 		[Ignore("mono issues")]
 		public void HasRelaxedSignature()
 		{
@@ -132,6 +147,11 @@ namespace NVelocity.Test
 			public string Amb(IDictionary obj)
 			{
 				return obj.GetType().Name;
+			}
+
+			public string ThrowException()
+			{
+				throw new Exception("From ThrowException");
 			}
 		}
 

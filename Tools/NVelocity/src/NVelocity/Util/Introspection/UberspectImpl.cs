@@ -235,7 +235,7 @@ namespace NVelocity.Util.Introspection
 			{
 				get
 				{
-					if (abstractExecutor.Property.Name != null)
+					if (abstractExecutor.Property != null)
 					{
 						return abstractExecutor.Property.Name;
 					}
