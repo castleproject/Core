@@ -112,6 +112,11 @@ namespace Castle.Components.Binder
 		/// </remarks>
 		public object Convert(Type desiredType, object input, out bool conversionSucceeded)
 		{
+			if (desiredType.IsInstanceOfType(input))
+			{
+				conversionSucceeded = true;
+				return input;
+			}
 			return Convert(desiredType, null, input, out conversionSucceeded);
 		}
 		private static void ThrowInformativeException(Type desiredType, object input, Exception inner)
