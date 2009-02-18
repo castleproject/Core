@@ -223,7 +223,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 						session.Transaction.Rollback();
 					tx.Dispose();
 				}
-				if (close) session.Close();
+				if (close) session.Dispose();
 			}
 		}
 
