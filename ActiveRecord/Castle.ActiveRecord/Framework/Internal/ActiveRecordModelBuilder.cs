@@ -439,7 +439,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						HasManyAttribute propAtt = attribute as HasManyAttribute;
 						isArProperty = true;
 
-						HasManyModel hasManyModel = new HasManyModel(prop, propAtt);
+						HasManyModel hasManyModel = new HasManyModel(prop, propAtt, model);
 						if (propAtt.DependentObjects)
 						{
 							ActiveRecordModel dependentObjectModel = new ActiveRecordModel(propAtt.MapType);

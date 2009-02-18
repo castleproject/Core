@@ -25,6 +25,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly HasManyAttribute hasManyAtt;
+        private readonly ActiveRecordModel containingTypeModel;
 		private DependentObjectModel dependentObjectModel;
 
 		/// <summary>
@@ -32,10 +33,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		/// <param name="propInfo">The prop info.</param>
 		/// <param name="hasManyAtt">The has many att.</param>
-		public HasManyModel(PropertyInfo propInfo, HasManyAttribute hasManyAtt)
+        /// <param name="containingTypeModel">The model for the type that contains the HasMany reference.</param>
+		public HasManyModel(PropertyInfo propInfo, HasManyAttribute hasManyAtt, ActiveRecordModel containingTypeModel)
 		{
 			this.hasManyAtt = hasManyAtt;
 			this.propInfo = propInfo;
+            this.containingTypeModel = containingTypeModel;
 		}
 
 		/// <summary>
@@ -55,6 +58,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			get { return hasManyAtt; }
 		}
+
+        /// <summary>
+        /// This is a reference to the model (the ActiveRecord type) that defined the HasMany relationship.
+        /// </summary>
+        public ActiveRecordModel ContainingTypeModel
+        {
+            get { return containingTypeModel; }
+        }
 
 		/// <summary>
 		/// Gets/Sets the the dependent object model

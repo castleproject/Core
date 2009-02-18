@@ -578,7 +578,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				foreach (BelongsToModel btModel in tmpModel.BelongsTo)
 				{
 					if (btModel.BelongsToAtt.Type != model.Property.DeclaringType &&
-					    btModel.Property.PropertyType != model.Property.DeclaringType) continue;
+					    btModel.Property.PropertyType != model.Property.DeclaringType &&
+                        btModel.Property.PropertyType != model.ContainingTypeModel.Type) continue;
 					targetBtModel = btModel;
 					break;
 				}
