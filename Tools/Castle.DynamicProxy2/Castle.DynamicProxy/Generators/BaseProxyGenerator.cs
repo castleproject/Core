@@ -743,9 +743,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private PropertyAttributes ObtainPropertyAttributes(PropertyInfo property)
 		{
-			PropertyAttributes atts = PropertyAttributes.None;
-
-			return atts;
+			return PropertyAttributes.None;
 		}
 
 		#endregion
@@ -1149,6 +1147,18 @@ namespace Castle.DynamicProxy.Generators
 		protected void ReplicateNonInheritableAttributes(MethodInfo method, MethodEmitter emitter)
 		{
 			object[] attrs = method.GetCustomAttributes(false);
+
+			foreach (Attribute attribute in attrs)
+			{
+				if (ShouldSkipAttributeReplication(attribute)) continue;
+
+				emitter.DefineCustomAttribute(attribute);
+			}
+		}
+
+		protected void ReplicateNonInheritableAttributes(PropertyInfo propertyInfo, PropertyEmitter emitter)
+		{
+			object[] attrs = propertyInfo.GetCustomAttributes(false);
 
 			foreach (Attribute attribute in attrs)
 			{
@@ -1573,6 +1583,8 @@ namespace Castle.DynamicProxy.Generators
 				PropertyAttributes atts = ObtainPropertyAttributes(propInfo);
 
 				PropertyEmitter propEmitter = emitter.CreateProperty(propInfo.Name, atts, propInfo.PropertyType);
+
+			    ReplicateNonInheritableAttributes(propInfo, propEmitter);
 
 				PropertyToGenerate propToGenerate =
 					new PropertyToGenerate(generateReadable, generateWritable, propEmitter, getMethod, setMethod);

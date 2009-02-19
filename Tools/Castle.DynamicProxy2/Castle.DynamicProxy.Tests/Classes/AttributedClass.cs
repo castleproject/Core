@@ -20,9 +20,18 @@ namespace Castle.DynamicProxy.Tests.Classes
 	[NonInheritableAttribute]
 	public class AttributedClass
 	{
+		private string _name;
+
 		[NonInheritableAttribute]
 		public virtual void Do1()
 		{
+		}
+
+		[NonInheritableAttribute]
+		public virtual string Name
+		{
+			get { return _name; }
+			set { _name = value; }
 		}
 	}
 

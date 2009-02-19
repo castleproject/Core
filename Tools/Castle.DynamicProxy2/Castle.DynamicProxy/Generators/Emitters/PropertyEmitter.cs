@@ -198,5 +198,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				getMethod.EnsureValidCodeBlock();
 			}
 		}
+
+		public void DefineCustomAttribute(Attribute attribute)
+		{
+			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
+
+			if (customAttributeBuilder == null)
+			{
+				return;
+			}
+
+			builder.SetCustomAttribute(customAttributeBuilder);
+		}
 	}
 }

@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System.IO;
+	using System.Reflection;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Classes;
 	using NUnit.Framework;
@@ -74,6 +75,14 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(4, att.Num);
 			Assert.AreEqual(true, att.IsSomething);
 			Assert.AreEqual("Do2", att.Name);
+		}
+
+		[Test]
+		public void EnsureProxyHasAttributesOnProperties()
+		{
+			AttributedClass proxy = generator.CreateClassProxy<AttributedClass>();
+			PropertyInfo nameProperty = proxy.GetType().GetProperty("Name");
+			Assert.IsTrue(nameProperty.IsDefined(typeof(NonInheritableAttribute), false));
 		}
 	}
 }
