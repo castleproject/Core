@@ -18,7 +18,8 @@ namespace NVelocity.Util.Introspection
 	using System.Reflection;
 	using Runtime;
 
-	/// <summary> This basic function of this class is to return a Method
+	/// <summary>
+	/// This basic function of this class is to return a Method
 	/// object for a particular class given the name of a method
 	/// and the parameters to the method in the form of an Object[]
 	///
@@ -63,27 +64,30 @@ namespace NVelocity.Util.Introspection
 		/// <returns>The desired Method object.</returns>
 		public override MethodInfo GetMethod(Type c, String name, Object[] parameters)
 		{
-			/*
-			*  just delegate to the base class
-			*/
-
+			// Just delegate to the base class
 			try
 			{
 				return base.GetMethod(c, name, parameters);
 			}
-			catch(AmbiguousException)
+			catch (AmbiguousException)
 			{
 				// whoops.  Ambiguous.  Make a nice log message and return null...
 				String msg = string.Format("Introspection Error : Ambiguous method invocation {0}( ", name);
 
-				for(int i = 0; i < parameters.Length; i++)
+				for (int i = 0; i < parameters.Length; i++)
 				{
 					if (i > 0)
 					{
 						msg = string.Format("{0}, ", msg);
 					}
-
-					msg = msg + parameters[i].GetType().FullName;
+					if (parameters[i] != null)
+					{
+						msg = msg + parameters[i].GetType().FullName;
+					}
+					else
+					{
+						msg = msg + "null";
+					}
 				}
 
 				msg = string.Format("{0}) for class {1}", msg, c);
@@ -103,12 +107,12 @@ namespace NVelocity.Util.Introspection
 		/// <returns>The desired <see cref="PropertyInfo"/> object.</returns>
 		public override PropertyInfo GetProperty(Type c, String name)
 		{
-			//  just delegate to the base class
+			// Just delegate to the base class
 			try
 			{
 				return base.GetProperty(c, name);
 			}
-			catch(AmbiguousException)
+			catch (AmbiguousException)
 			{
 				// whoops.  Ambiguous.  Make a nice log message and return null...
 				String msg = string.Format("Introspection Error : Ambiguous property invocation {0} for class {1}", name, c);

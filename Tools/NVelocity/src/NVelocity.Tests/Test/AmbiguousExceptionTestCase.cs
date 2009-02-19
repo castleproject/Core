@@ -18,9 +18,8 @@ namespace NVelocity.Test
 	using System.Globalization;
 	using System.IO;
 	using System.Threading;
-	using App;
 	using NUnit.Framework;
-	using Runtime;
+	using NVelocity.App;
 
 	[TestFixture]
 	public class AmbiguousExceptionTestCase
@@ -30,23 +29,6 @@ namespace NVelocity.Test
 		{
 			Thread.CurrentThread.CurrentCulture =
 				CultureInfo.CreateSpecificCulture("en-us");
-		}
-
-		[Test, ExpectedException(typeof(RuntimeException))]
-		public void ExceptionForAmbiguousMatches()
-		{
-			StringWriter sw = new StringWriter();
-
-			VelocityContext c = new VelocityContext();
-			c.Put("x", (decimal) 1.2);
-			c.Put("model", new ModelClass());
-
-			VelocityEngine ve = new VelocityEngine();
-			ve.Init();
-
-			ve.Evaluate(c, sw,
-			            "ContextTest.CaseInsensitive",
-			            "$model.Amount.ToString(null)");
 		}
 
 		[Test]

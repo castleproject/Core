@@ -107,6 +107,7 @@
   <ItemGroup>
     <Compile Include="DuckTestCase.cs" />
     <Compile Include="MultiThreadTestCase.cs" />
+    <Compile Include="Bugs\NVelocity11.cs" />
     <Compile Include="Test\AjaxHelper2.cs" />
     <Compile Include="Test\AmbiguousExceptionTestCase.cs" />
     <Compile Include="Test\BaseTestCase.cs">
