@@ -337,6 +337,7 @@
     <Compile Include="MultipleDBMediatorTest.cs" />
     <Compile Include="NestedModelValidation.cs" />
     <Compile Include="Model\NestedValidation\UserWithNestedAddress.cs" />
+    <Compile Include="ScalarQueryTestCase.cs" />
     <Compile Include="ScopeDefaultFlushingBehaviourTestCase.cs" />
     <Compile Include="SessionScopeAutoflushTestCase.cs" />
     <Compile Include="Validation\ARValidatorTestCase.cs" />

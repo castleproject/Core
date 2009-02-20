@@ -178,7 +178,13 @@ namespace Castle.ActiveRecord
 		/// <returns>The query result.</returns>
 		protected internal static R ExecuteQuery2<R>(IActiveRecordQuery<R> query)
 		{
-			return (R) ExecuteQuery(query);
+			object result = ExecuteQuery(query);
+			if (result == null) return default(R);
+
+			if (!typeof(R).IsAssignableFrom(result.GetType()))
+				throw new NHibernate.QueryException(
+					string.Format("Problem: A query was executed requesting {0} as result, but the query returned an object of type {1}.", typeof(R).Name, result.GetType().Name));
+			return (R)result;
 		}
 
 		#endregion

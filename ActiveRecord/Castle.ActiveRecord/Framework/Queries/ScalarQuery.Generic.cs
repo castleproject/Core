@@ -95,7 +95,12 @@ namespace Castle.ActiveRecord.Queries
 		public T Execute()
 		{
 			object result = ActiveRecordMediator.ExecuteQuery(this);
-			return result == null ? default(T) : (T) result;
+			if (result == null) return default(T);
+
+			if (!typeof(T).IsAssignableFrom(result.GetType()))
+				throw new NHibernate.QueryException(
+					string.Format("Problem: A query was executed requesting {0} as result, but the query returned an object of type {1}.", typeof(T).Name, result.GetType().Name)); 
+			return (T) result;
 		}
 	}
 }
