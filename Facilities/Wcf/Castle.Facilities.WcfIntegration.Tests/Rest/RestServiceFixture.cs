@@ -76,10 +76,10 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 			using (new WindsorContainer()
 				.AddFacility<WcfFacility>()
 				.Register(Component.For<Inventory>()
-					.ActAs(new RestServiceModel("http://localhost/Inventory")
+					.ActAs(new RestServiceModel("http://localhost:8008/Inventory")
 				)))
 			{
-				var request = WebRequest.Create("http://localhost/Inventory/quantity/1234");
+				var request = WebRequest.Create("http://localhost:8008/Inventory/quantity/1234");
 				WebResponse response = request.GetResponse();
 				using (var reader = new BinaryReader(response.GetResponseStream()))
                 {
