@@ -32,6 +32,7 @@ namespace Castle.DynamicProxy
 		private List<object> mixins;
 		private Type baseTypeForInterfaceProxy = typeof(object);
 		private bool useSingleInterfaceProxy;
+        private IList<Attribute> attributesToAddToGeneratedTypes = new List<Attribute>();
 
 #if SILVERLIGHT
 #else
@@ -99,6 +100,11 @@ namespace Castle.DynamicProxy
 			get { return selector; }
 			set { selector = value; }
 		}
+
+        public IList<Attribute> AttributesToAddToGeneratedTypes
+        {
+            get { return attributesToAddToGeneratedTypes; }
+        }
 
 		public bool UseSingleInterfaceProxy
 		{

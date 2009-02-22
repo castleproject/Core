@@ -101,6 +101,7 @@ namespace Castle.DynamicProxy.Generators
 #endif
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
 				CreateOptionsField(emitter);
+                emitter.AddCustomAttributes(options);
 
 #if !SILVERLIGHT
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));

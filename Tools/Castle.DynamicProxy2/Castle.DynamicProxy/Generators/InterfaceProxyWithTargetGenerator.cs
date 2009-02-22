@@ -101,7 +101,7 @@ namespace Castle.DynamicProxy.Generators
 
 				ClassEmitter emitter = BuildClassEmitter(newName, baseType, interfaceList);
 				CreateOptionsField(emitter);
-
+                emitter.AddCustomAttributes(options);
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
 #else
