@@ -52,9 +52,9 @@ namespace Castle.Facilities.WcfIntegration
 			if (serviceModel != null && serviceModel.Endpoints.Count > 0)
 			{
 				endpoints = new Dictionary<IWcfEndpoint, ServiceEndpoint>();
-				ServiceEndpointBuilder builder = new ServiceEndpointBuilder(this, serviceHost);
+				var builder = new ServiceEndpointBuilder(this, serviceHost);
 
-				foreach (IWcfEndpoint endpoint in serviceModel.Endpoints)
+				foreach (var endpoint in serviceModel.Endpoints)
 				{
 					endpoints.Add(endpoint, builder.AddServiceEndpoint(endpoint));
 				}
@@ -72,7 +72,7 @@ namespace Castle.Facilities.WcfIntegration
 
 			if (endpoints != null)
 			{
-				foreach (KeyValuePair<IWcfEndpoint, ServiceEndpoint> endpoint in endpoints)
+				foreach (var endpoint in endpoints)
 				{
 					new ServiceEndpointExtensions(endpoint.Value, kernel)
 						.Install(endpoint.Key.Extensions, burden);
@@ -81,7 +81,7 @@ namespace Castle.Facilities.WcfIntegration
 
 			if (serviceHost is IWcfServiceHost)
 			{
-				IWcfServiceHost wcfServiceHost = (IWcfServiceHost)serviceHost;
+				var wcfServiceHost = (IWcfServiceHost)serviceHost;
 				wcfServiceHost.EndpointCreated += delegate(object source, EndpointCreatedArgs e)
 				{
 					var endpointExtensions = new ServiceEndpointExtensions(e.Endpoint, kernel)
@@ -100,7 +100,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected Uri[] GetEffectiveBaseAddresses(IWcfServiceModel serviceModel, Uri[] defaultBaseAddresses)
 		{
-			List<Uri> baseAddresses = new List<Uri>(serviceModel.BaseAddresses);
+			var baseAddresses = new List<Uri>(serviceModel.BaseAddresses);
 			foreach (Uri defaultBaseAddress in defaultBaseAddresses)
 			{
 				if (!baseAddresses.Exists(delegate(Uri uri)
@@ -117,7 +117,7 @@ namespace Castle.Facilities.WcfIntegration
 		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
 															 ContractEndpointModel model)
 		{
-			Binding binding = GetEffectiveBinding(null, serviceHost, string.Empty);
+			var binding = GetEffectiveBinding(null, serviceHost, string.Empty);
 			return serviceHost.AddServiceEndpoint(model.Contract, binding, string.Empty);
 		}
 
@@ -138,14 +138,14 @@ namespace Castle.Facilities.WcfIntegration
 		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
 															 BindingEndpointModel model)
 		{
-			Binding binding = GetEffectiveBinding(model.Binding, serviceHost, string.Empty);
+			var binding = GetEffectiveBinding(model.Binding, serviceHost, string.Empty);
 			return serviceHost.AddServiceEndpoint(model.Contract, binding, string.Empty);
 		}
 
 		protected virtual ServiceEndpoint AddServiceEndpoint(ServiceHost serviceHost,
 															 BindingAddressEndpointModel model)
 		{
-			Binding binding = GetEffectiveBinding(model.Binding, serviceHost, model.Address);
+			var binding = GetEffectiveBinding(model.Binding, serviceHost, model.Address);
 
 			if (model.HasViaAddress)
 			{

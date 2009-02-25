@@ -17,6 +17,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
+	using System.ServiceModel.Activation;
 	using System.ServiceModel.Description;
 	using Castle.Core.Configuration;
 	using Castle.Core.Resource;
@@ -475,6 +476,39 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					new NetTcpBinding { PortSharingEnabled = true }, 
 					new EndpointAddress("net.tcp://localhost/Operations"));
 				Assert.AreEqual(42, client.GetValueFromConstructor());
+			}
+		}
+
+		[Test]
+		public void CanCreateServiceHostWithAspNetCompatibility()
+		{
+			var captureServiceHost = new CaptureServiceHost();
+
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>(f => 
+					{
+						f.CloseTimeout = TimeSpan.Zero;
+						f.Services.AspNetCompatibility = AspNetCompatibilityRequirementsMode.Allowed;
+					})
+				.Register(
+					Component.For<CaptureServiceHost>().Instance(captureServiceHost),
+					Component.For<IOperations>()
+						.ImplementedBy<Operations>()
+						.DependsOn(new { number = 42 })
+						.ActAs(new DefaultServiceModel().AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations"))
+							)
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+
+				AspNetCompatibilityRequirementsAttribute aspNetCompat =
+					captureServiceHost.ServiceHost.Description.Behaviors.Find<AspNetCompatibilityRequirementsAttribute>();
+				Assert.IsNotNull(aspNetCompat);
+				Assert.AreEqual(AspNetCompatibilityRequirementsMode.Allowed, aspNetCompat.RequirementsMode);
 			}
 		}
 

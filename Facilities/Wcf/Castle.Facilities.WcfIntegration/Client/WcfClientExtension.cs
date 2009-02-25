@@ -25,22 +25,11 @@ namespace Castle.Facilities.WcfIntegration
 
 	public class WcfClientExtension : IDisposable
 	{
-		private readonly WcfFacility facility;
-		private readonly IKernel kernel;
+		private IKernel kernel;
+		private WcfFacility facility;
+		private WcfCommunicationDecomissionConcern decomission;
 		private Binding defaultBinding;
 		private TimeSpan? closeTimeout;
-
-		public WcfClientExtension(WcfFacility facility)
-		{
-			this.facility = facility;
-			this.kernel = facility.Kernel;
-
-			AddDefaultChannelBuilders();
-
-			kernel.AddComponent<WcfManagedChannelInterceptor>();
-			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
-			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
-		}
 
 		public Binding DefaultBinding
 		{
@@ -62,6 +51,19 @@ namespace Castle.Facilities.WcfIntegration
 			return this;
 		}
 
+		internal void Init(WcfFacility facility)
+		{
+			this.facility = facility;
+			kernel = facility.Kernel;
+			decomission = new WcfCommunicationDecomissionConcern(this);
+
+			AddDefaultChannelBuilders();
+
+			kernel.AddComponent<WcfManagedChannelInterceptor>();
+			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
+			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
+		}
+
 		private void Kernel_ComponentModelCreated(ComponentModel model)
 		{
 			IWcfClientModel clientModel = ResolveClientModel(model);
@@ -74,8 +76,7 @@ namespace Castle.Facilities.WcfIntegration
 				options.AddAdditionalInterfaces(typeof(IContextChannel));	
 				model.LifecycleSteps.Add(LifecycleStepType.Decommission,
 					WcfClientCleanUpDecomissionConcern.Instance);
-				model.LifecycleSteps.Add(LifecycleStepType.Decommission,
-					new WcfCommunicationDecomissionConcern(this));
+				model.LifecycleSteps.Add(LifecycleStepType.Decommission, decomission);
 				InstallManagedChannelInterceptor(model);
 
 				var dependencies = new ExtensionDependencies(model, kernel)

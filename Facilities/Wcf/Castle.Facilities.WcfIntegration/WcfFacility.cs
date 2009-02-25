@@ -28,10 +28,16 @@ namespace Castle.Facilities.WcfIntegration
 		private WcfClientExtension clientExtension;
 		private WcfServiceExtension serviceExtension;
 
+		public WcfFacility()
+		{
+			clientExtension = new WcfClientExtension();
+			serviceExtension = new WcfServiceExtension();
+		}
+
 		protected override void Init()
 		{
-			clientExtension = new WcfClientExtension(this);
-			serviceExtension = new WcfServiceExtension(this);
+			clientExtension.Init(this);
+			serviceExtension.Init(this);
 
 			Kernel.AddComponentInstance(WcfConstants.ClientExtensionKey, clientExtension);
 			Kernel.AddComponentInstance(WcfConstants.ServiceExtensionKey, serviceExtension);

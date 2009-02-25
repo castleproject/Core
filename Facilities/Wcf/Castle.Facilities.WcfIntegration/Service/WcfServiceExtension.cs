@@ -5,19 +5,22 @@ namespace Castle.Facilities.WcfIntegration
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.ServiceModel;
+	using System.ServiceModel.Activation;
 	using System.ServiceModel.Channels;
 	using System.Threading;
 	using Castle.Core;
 	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.Facilities.WcfIntegration.Rest;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Registration;
 
 	public class WcfServiceExtension : IDisposable
 	{
-		private readonly WcfFacility facility;
-		private readonly IKernel kernel;
+		private IKernel kernel;
+		private WcfFacility facility;
 		private Binding defaultBinding;
 		private TimeSpan? closeTimeout;
+		private AspNetCompatibilityRequirementsMode? aspNetCompat;
 
 		internal static IKernel GlobalKernel;
 
@@ -41,19 +44,6 @@ namespace Castle.Facilities.WcfIntegration
 
 		#endregion
 
-		public WcfServiceExtension(WcfFacility facility)
-		{
-			this.facility = facility;
-			this.kernel = facility.Kernel;
-
-			AddDefaultServiceHostBuilders();
-			DefaultServiceHostFactory.RegisterContainer(kernel);
-
-			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
-			kernel.ComponentRegistered += Kernel_ComponentRegistered;
-			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
-		}
-
 		public Binding DefaultBinding
 		{
 			get { return defaultBinding ?? facility.DefaultBinding; }
@@ -67,6 +57,26 @@ namespace Castle.Facilities.WcfIntegration
 		}
 
 		public bool OpenServiceHostsEagerly { get; set; }
+
+		public AspNetCompatibilityRequirementsMode? AspNetCompatibility
+		{
+			get { return aspNetCompat; }
+			set { aspNetCompat = value; }
+		}
+
+		internal void Init(WcfFacility facility)
+		{
+			this.facility = facility;
+			kernel = facility.Kernel;
+
+			ConfigureAspNetCompatibility();
+			AddDefaultServiceHostBuilders();
+			DefaultServiceHostFactory.RegisterContainer(kernel);
+
+			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
+			kernel.ComponentRegistered += Kernel_ComponentRegistered;
+			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
+		}
 
 		public WcfServiceExtension AddServiceHostBuilder<T, M>()
 			where T : IServiceHostBuilder<M>
@@ -133,6 +143,20 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
+		private void ConfigureAspNetCompatibility()
+		{
+			if (aspNetCompat.HasValue)
+			{
+				facility.Kernel.Register(
+					Component.For<AspNetCompatibilityRequirementsAttribute>()
+						.Instance(new AspNetCompatibilityRequirementsAttribute
+						{
+							RequirementsMode = aspNetCompat.Value
+						})
+					);
+			}
+		}
+
 		private void AddDefaultServiceHostBuilders()
 		{
 			AddServiceHostBuilder<DefaultServiceHostBuilder, DefaultServiceModel>(false);
@@ -155,8 +179,7 @@ namespace Castle.Facilities.WcfIntegration
 
 			if (model.Implementation.IsClass && !model.Implementation.IsAbstract)
 			{
-				foreach (var serviceModel in 
-					WcfUtils.FindDependencies<IWcfServiceModel>(model.CustomDependencies))
+				foreach (var serviceModel in WcfUtils.FindDependencies<IWcfServiceModel>(model.CustomDependencies))
 				{
 					foundOne = true;
 					yield return serviceModel;

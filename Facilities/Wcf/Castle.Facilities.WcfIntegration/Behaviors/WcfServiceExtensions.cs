@@ -15,6 +15,7 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System.ServiceModel;
+	using System.ServiceModel.Activation;
 	using System.ServiceModel.Description;
 	using Castle.Core;
 	using Castle.Facilities.WcfIntegration.Internal;
@@ -46,6 +47,10 @@ namespace Castle.Facilities.WcfIntegration
 					if (behavior.GetType() == typeof(ServiceDebugBehavior))
 					{
 						serviceHost.Description.Behaviors.Remove<ServiceDebugBehavior>();
+					}
+					else if (behavior.GetType() == typeof(AspNetCompatibilityRequirementsAttribute))
+					{
+						serviceHost.Description.Behaviors.Remove<AspNetCompatibilityRequirementsAttribute>();
 					}
 					return true;
 				});

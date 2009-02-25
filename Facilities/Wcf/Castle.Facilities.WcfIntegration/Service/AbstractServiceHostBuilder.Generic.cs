@@ -33,7 +33,7 @@ namespace Castle.Facilities.WcfIntegration
 		public ServiceHost Build(ComponentModel model, M serviceModel, params Uri[] baseAddresses)
 		{
 			ValidateServiceModelInternal(model, serviceModel);
-			ServiceHost serviceHost = CreateServiceHost(model, serviceModel, baseAddresses);
+			var serviceHost = CreateServiceHost(model, serviceModel, baseAddresses);
 			ConfigureServiceHost(serviceHost, serviceModel, model); 
 			return serviceHost;
 		}
