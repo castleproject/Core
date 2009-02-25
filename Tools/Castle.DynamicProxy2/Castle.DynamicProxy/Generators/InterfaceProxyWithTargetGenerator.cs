@@ -387,7 +387,7 @@ namespace Castle.DynamicProxy.Generators
 
 																   MethodInfo methodInfo = (MethodInfo)mi;
 
-																   return IsEquivalentMethod(methodInfo, methodOnInterface);
+																   return IsMethodEquivalent(methodInfo, methodOnInterface);
 															   }, methodOnInterface.Name);
 
 
@@ -408,7 +408,7 @@ namespace Castle.DynamicProxy.Generators
 						continue;
 					}
 
-					if (IsEquivalentMethod(methodInfo, methodOnInterface))
+					if (IsMethodEquivalent(methodInfo, methodOnInterface))
 					{
 						throw new GeneratorException(String.Format("DynamicProxy cannot create an interface (with target) " +
 																   "proxy for '{0}' as the target '{1}' has an explicit implementation of one of the methods exposed by the interface. " +
@@ -521,25 +521,27 @@ namespace Castle.DynamicProxy.Generators
 			return false;
 		}
 
-		private static bool IsEquivalentMethod(MethodInfo methodInfo, MethodInfo methodOnInterface)
+		/// <summary>
+		/// Checks whether the given methods are the same.
+		/// </summary>
+		/// <param name="methodInfo"></param>
+		/// <param name="methodOnInterface"></param>
+		/// <returns>True if the methods are the same.</returns>
+		private static bool IsMethodEquivalent(MethodInfo methodInfo, MethodInfo methodOnInterface)
 		{
 			// Check return type equivalence
-
 			if (!IsTypeEquivalent(methodInfo.ReturnType, methodOnInterface.ReturnType))
 			{
 				return false;
 			}
 
 			// Check parameters equivalence
-
 			ParameterInfo[] sourceParams = methodOnInterface.GetParameters();
 			ParameterInfo[] targetParams = methodInfo.GetParameters();
-
 			if (sourceParams.Length != targetParams.Length)
 			{
 				return false;
 			}
-
 			for (int i = 0; i < sourceParams.Length; i++)
 			{
 				Type sourceParamType = sourceParams[i].ParameterType;
@@ -551,6 +553,24 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
+			// Check generic arguments equivalence
+			Type[] sourceGenericArguments = methodOnInterface.GetGenericArguments();
+			Type[] targetGenericArguments = methodInfo.GetGenericArguments();
+			if (sourceGenericArguments.Length != targetGenericArguments.Length)
+			{
+				return false;
+			}
+			for (int i = 0; i < sourceGenericArguments.Length; i++)
+			{
+				Type sourceGenericArgument = sourceGenericArguments[i];
+				Type targetGenericArgument = targetGenericArguments[i];
+				if (!IsTypeEquivalent(sourceGenericArgument, targetGenericArgument))
+				{
+					return false;
+				}
+			}
+
+			// They are equivalent
 			return true;
 		}
 

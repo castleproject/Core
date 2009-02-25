@@ -1,5 +1,8 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Fixed DYNPROXY-ISSUE-82: "Not allow generics & NoGeneric methods with same signature"
+  using Fabio Maulo's test case and Krzysztof Kozmic patch.
+
 - Applied Neil Bourgeois's patch fixing DYNPROXY-ISSUE-78
   "Custom attributes of virtual properties absent on proxy"
 
