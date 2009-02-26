@@ -878,12 +878,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</idbag>";
 
-				AppendF("<idbag{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}>",
+				AppendF("<idbag{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
 				        WriteIfNonNull("schema", schema),
 				        MakeAtt("lazy", lazy),
+						WriteIfTrue("inverse", inverse),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
 				        WriteIfNonNull("where", where),
