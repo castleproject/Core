@@ -165,6 +165,47 @@ jQuery.validator.addMethod('regExp', function(value, element, param) { return ne
 		}
 
 		[Test]
+		public void MinLengthUsingScopes()
+		{
+			helper.FormTag(DictHelper.Create("noaction=true"));
+			helper.Push("model");
+
+			helper.TextField("MinLength");
+
+			helper.Pop();
+			Assert.AreEqual(
+				@"
+<script type=""text/javascript"">/*<![CDATA[*/
+jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{""model.MinLength"":{  minlength: ""Field must be at least 10 characters long"" , required: ""This is a required field"" }}, rules:{""model.MinLength"":{  minlength: 10 , required: true }}} );
+jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
+jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
+jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+</form>",
+				helper.EndFormTag());
+		}
+
+		[Test]
+		public void MaxLengthUsingScopes()
+		{
+			helper.FormTag(DictHelper.Create("noaction=true"));
+			helper.Push("model");
+
+			helper.TextField("MaxLength");
+
+			helper.Pop();
+			Assert.AreEqual(
+				@"
+<script type=""text/javascript"">/*<![CDATA[*/
+jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{""model.MaxLength"":{  maxlength: ""Field must be less than 10 characters long"" , required: ""This is a required field"" }}, rules:{""model.MaxLength"":{  maxlength: 10 , required: true }}} );
+jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
+jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
+jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+</form>", helper.EndFormTag());
+		}
+
+		[Test]
 		public void GroupValidationUsingScopes()
 		{
 			helper.FormTag(DictHelper.Create("noaction=true"));

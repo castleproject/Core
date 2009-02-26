@@ -746,7 +746,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="maxLength">The maximum length.</param>
 			public void SetMaxLength(string target, int maxLength)
 			{
-				ConfigureTarget(target, "maxLength", maxLength, null);
+				ConfigureTarget(target, "maxlength", maxLength, null);
 			}
 
 			/// <summary>
@@ -757,7 +757,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetMaxLength(string target, int maxLength, string violationMessage)
 			{
-				ConfigureTarget(target, "maxLength", maxLength, violationMessage);
+				ConfigureTarget(target, "maxlength", maxLength, violationMessage);
 			}
 
 			/// <summary>

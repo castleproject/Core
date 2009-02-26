@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 {
+	using System;
 	using System.Globalization;
 	using System.Threading;
 	using Components.Validator;
@@ -166,6 +167,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		private string groupValue1;
 		private string groupValue2;
 		private string regExEmailField;
+		private string maxLength;
+		private string minLength;
 
 		[ValidateNonEmpty]
 		public Country Country
@@ -249,6 +252,20 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		{
 			get { return forthValue; }
 			set { forthValue = value; }
+		}
+
+		[ValidateNonEmpty, ValidateLength(Int32.MinValue, 10)]
+		public string MaxLength
+		{
+			get { return maxLength; }
+			set { maxLength = value; }
+		}
+
+		[ValidateNonEmpty, ValidateLength(10, Int32.MaxValue)]
+		public string MinLength
+		{
+			get { return minLength; }
+			set { minLength = value; }
 		}
 
 		[ValidateGroupNotEmpty("mygroup1")]
