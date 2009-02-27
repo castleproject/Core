@@ -29,6 +29,20 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public class DictionaryAdapterFactory : IDictionaryAdapterFactory
 	{
+		private readonly IDictionary<Assembly, string> assembliesNames;
+
+		#region Constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DictionaryAdapterFactory"/> class.
+		/// </summary>
+		public DictionaryAdapterFactory()
+		{
+			assembliesNames = new Dictionary<Assembly, string>();
+		}
+
+		#endregion
+
 		#region IDictionaryAdapterFactory
 
 		/// <summary>
@@ -560,10 +574,22 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Assembly Support 
 
-		private static String GetAdapterAssemblyName(Type type)
+		private string GetAdapterAssemblyName(Type type)
 		{
-			return type.Assembly.GetName().Name + "." +
-				GetSafeTypeFullName(type) + ".DictionaryAdapter";
+			return string.Concat(GetAssemblyName( type.Assembly ), ".",
+				GetSafeTypeFullName(type), ".DictionaryAdapter" );
+		}
+
+		private string GetAssemblyName(Assembly assembly)
+		{
+			string assemblyName;
+			if (!assembliesNames.TryGetValue(assembly, out assemblyName))
+			{
+				assemblyName = assembly.GetName().Name;
+				assembliesNames[assembly] = assemblyName;
+			}
+
+			return assemblyName;
 		}
 
 		private static String GetAdapterFullTypeName(Type type)
@@ -636,13 +662,11 @@ namespace Castle.Components.DictionaryAdapter
 			                                this, dictionary, descriptor);
 		}
 
-		private static Assembly GetExistingAdapterAssembly(AppDomain appDomain, String assemblyName)
+		private Assembly GetExistingAdapterAssembly( AppDomain appDomain, string assemblyName )
 		{
-			return Array.Find(appDomain.GetAssemblies(),
-			                  delegate(Assembly assembly) 
-							  { 
-								  return assembly.GetName().Name == assemblyName; 
-							  });
+			return Array.Find(
+				appDomain.GetAssemblies(),
+				assembly => GetAssemblyName( assembly ) == assemblyName );
 		}
 
 		#endregion
