@@ -1,45 +1,17 @@
-Everything should compile fine using NAnt 0.85 final. 
-You can find the latest version at http://nant.sourceforge.net/ 
-
-for targeting 3.5, it's recommended you use NAnt 0.68b2 nightly build (current version is 0.86.3075.0 from 02/06/2008 and can be downloaded from the said location).
-
-
-Possible problem with 3.5
-=========================
-if you get the following error: 
-"The SDK for the 'net-3.5' framework is not available or not configured."
-then you probably need to fix the sdkInstallRoot in your nant.exe.config file to point to the correct location in the registry
-See the following article for more info:
-http://www.timbarcz.com/blog/NantSetupForVisualStudio2008AndNet35.aspx
-
-Possible problem with WCF facility build
-========================================
-
-If you bump into the following message "System.ServiceModel.CommunicationException : The TransportManager failed to listen on the supplied URI using the NetTcpPortSharing service: failed to start the service because it is disabled. An administrator can enable it by running 'sc.exe config NetTcpPortSharing start= demand'
-
-Run the following from the command line:
-
-> sc.exe config NetTcpPortSharing start= demand
-
-
-
-
-The following are some useful tips if things go wrong for some reason.
-
 Where to start the build?
 =========================
 
-Use the default.build in the root directory. It compiles everything in the right order, copies dependencies and so on.
+Use the build.cmd, which drives default.build, in the root directory. It compiles everything in the right order, copies dependencies and so on.
 
 Simply type
 
-  > nant
+  > build
 This will create a Debug build of the project
 
 Use the following to build the trunk before attempting to load any solutions in your IDE for the first time, otherwise you may have reference problems:
 
-  > nant rebuild, or
-  > nant quick rebuild
+  > build rebuild, or
+  > build quick rebuild
 
 
 Database tests
@@ -68,14 +40,33 @@ The basic NHibernate settings can be set as NAnt arguments:
     > -D:ar.connection.connection_string.2="Data Source=.;Initial Catalog=test2;Integrated Security=SSPI;"
 
 
+Possible problem with 3.5
+=========================
+if you get the following error: 
+"The SDK for the 'net-3.5' framework is not available or not configured."
+then you probably need to fix the sdkInstallRoot in your nant.exe.config file to point to the correct location in the registry
+See the following article for more info:
+http://www.timbarcz.com/blog/NantSetupForVisualStudio2008AndNet35.aspx
+
+
+Possible problem with WCF facility build
+========================================
+
+If you bump into the following message "System.ServiceModel.CommunicationException : The TransportManager failed to listen on the supplied URI using the NetTcpPortSharing service: failed to start the service because it is disabled. An administrator can enable it by running 'sc.exe config NetTcpPortSharing start= demand'
+
+Run the following from the command line:
+
+> sc.exe config NetTcpPortSharing start= demand
+
+
 MSDTC
 =====
 The Distributed Transaction Coordinator (msdtc) is required for some of the tests.
 If the service is not running by default on your machine, you'd need to start it to make tests pass
-so, simply start it before running nant, and stop it afterwards:
+so, simply start it before running the build, and stop it afterwards:
 
     > net start msdtc
-    > nant ...
+    > build ...
     > net stop msdtc
 
 
@@ -88,9 +79,9 @@ Build option selectors
 Selectors are pseudo-targets, used to configure some part of the build.
 They need to be put before real build targets.
 
-debug:		"nant debug build" will build the project in debug configuration"
-release:	"nant release rebuild" will rebuild the entire project in release configuration
-quick: 		"nant quick build" will run the build without tests and generally will try to skip as much as possible to speed up the build.
+debug:		"build debug build" will build the project in debug configuration"
+release:	"build release rebuild" will rebuild the entire project in release configuration
+quick: 		"build quick build" will run the build without tests and generally will try to skip as much as possible to speed up the build.
 
 
 Running the tests
@@ -103,25 +94,24 @@ setting the NAnt property -D:nunit-console=<full path to nunit-console.exe>.
 Building without running the tests
 -------------------
 
-  > nant -D:common.testrunner.enabled=false
-
+  > build -D:common.testrunner.enabled=false
 
 Compiling a version not strongly signed
 ---------------------------------------
 
-  > nant -D:sign=false
+  > build -D:sign=false
 
  
 Allowing partial trust
 ----------------------
 
-  > nant -D:assembly.allow-partially-trusted-callers=true
+  > build -D:assembly.allow-partially-trusted-callers=true
 
 
 Building the Castle MSI installer
 ----------------------
 
-  > nant installer
+  > build installer
   
 You need to have installed the tools following for running this task:
 - Sandcastle
