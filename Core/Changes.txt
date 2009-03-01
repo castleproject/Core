@@ -1,3 +1,6 @@
+- Applied Gauthier Segay's patch fixing CORE-ISSUE-20
+  "Castle.Core.Tests won't build via nant because it use TraceContext without referencing System.Web.dll"
+
 - Added simple interface to ComponentModel to make optional properties required. 
 
 - Applied Mark's -- <mwatts42@gmail.com> -- patch that changes 

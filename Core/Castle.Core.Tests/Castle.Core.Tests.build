@@ -12,6 +12,7 @@
 	<target name="init" depends="common.init">
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="System.dll" />
+			<include name="System.Web.dll" />
 			<include name="log4net.dll" />
 			<include name="nunit.framework.dll"/>
 			<include name="Castle.Core.dll" />
