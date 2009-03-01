@@ -255,6 +255,7 @@
 			<exec
 				program="${nunit-console2}" 
 				resultproperty="nunit.found"
+				output="_nunit.txt"
 				failonerror="false" />
 
 			<property name="nunit-console" value="${nunit-console2}" if="${nunit.found == '0'}" />
