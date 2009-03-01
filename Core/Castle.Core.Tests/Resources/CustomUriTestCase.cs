@@ -58,6 +58,21 @@ namespace Castle.Core.Tests.Resources
 		}
 
 		[Test]
+		public void UriWithEnvironmentVariable()
+		{
+			string path = Environment.GetEnvironmentVariable("path");
+			Assert.IsNotEmpty(path);
+
+			CustomUri uri1 = new CustomUri("file://%path%");
+
+			Assert.AreEqual(path, uri1.Path);
+			Assert.AreEqual(null, uri1.Host);
+			Assert.AreEqual("file", uri1.Scheme);
+			Assert.AreEqual(true, uri1.IsFile);
+			Assert.AreEqual(false, uri1.IsUnc);
+		}
+
+		[Test]
 		public void AssemblyUri()
 		{
 			CustomUri uri1 = new CustomUri("assembly://Assembly.Name/properties.config");

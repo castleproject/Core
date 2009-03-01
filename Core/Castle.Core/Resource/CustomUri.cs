@@ -130,7 +130,7 @@ namespace Castle.Core.Resource
 				}
 			}
 
-			path = sb.ToString();
+			path = Environment.ExpandEnvironmentVariables(sb.ToString());
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength")]
