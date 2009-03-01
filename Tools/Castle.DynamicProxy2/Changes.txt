@@ -1,5 +1,8 @@
-Beta 1 Version 1.0.0.0
-======================
+Unreleased Changes
+==================
+- Fixed DYNPROXY-ISSUE-58/DYNPROXY-ISSUE-77: "Inherited interface seems not to work"
+  using Dimitri Goethals' test case and Ayende Rahien/Andrey Shchekin's patch.
+
 - Fixed DYNPROXY-ISSUE-52: "DynamicProxy 1.1.5 doesn't work on Medium Trust"
   uses the assembly's fullname instead of calling GetName()
 

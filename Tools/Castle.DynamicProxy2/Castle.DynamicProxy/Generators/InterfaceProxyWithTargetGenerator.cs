@@ -379,19 +379,9 @@ namespace Castle.DynamicProxy.Generators
 			// class uses the same generic arguments
 			// as the interface generic arguments
 
-			MemberInfo[] members = proxyTargetType.FindMembers(MemberTypes.Method,
-															   BindingFlags.Public | BindingFlags.Instance,
-															   delegate(MemberInfo mi, object criteria)
-															   {
-																   if (mi.Name != criteria.ToString()) return false;
+			List<MethodInfo> members = GetMembers(methodOnInterface, proxyTargetType);
 
-																   MethodInfo methodInfo = (MethodInfo)mi;
-
-																   return IsMethodEquivalent(methodInfo, methodOnInterface);
-															   }, methodOnInterface.Name);
-
-
-			if (members.Length == 0)
+			if (members.Count == 0)
 			{
 				// Before throwing an exception, we look for an explicit
 				// interface method implementation
@@ -419,12 +409,12 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-			if (members.Length > 1)
+			if (members.Count > 1)
 			{
 				throw new GeneratorException("Found more than one method on target " + proxyTargetType.FullName + " matching " +
 											 methodOnInterface.Name);
 			}
-			else if (members.Length == 0)
+			else if (members.Count == 0)
 			{
 				if (checkMixins && IsMixinMethod(methodOnInterface))
 				{
@@ -434,7 +424,38 @@ namespace Castle.DynamicProxy.Generators
 											 methodOnInterface.Name);
 			}
 
-			return (MethodInfo)members[0];
+			return members[0];
+		}
+
+		private static List<MethodInfo> GetMembers(MethodInfo methodOnInterface, Type proxyTargetType)
+		{
+			List<MethodInfo> members = new List<MethodInfo>();
+			foreach (MethodInfo method in proxyTargetType.GetMethods(BindingFlags.Public | BindingFlags.Instance))
+			{
+				if (method.Name != methodOnInterface.Name) continue;
+
+				if (IsMethodEquivalent(method, methodOnInterface))
+				{
+					members.Add(method);
+				}
+			}
+			if (members.Count > 0 || proxyTargetType.IsClass)
+			{
+				return members;
+			}
+
+			// Didn't find it here, and we are looking at an interface, so we want to try the
+			// base interfaces as well
+			foreach (Type type in proxyTargetType.GetInterfaces())
+			{
+				members.AddRange(GetMembers(methodOnInterface, type));
+				if (members.Count > 0)
+				{
+					return members;
+				}
+			}
+
+			return members;
 		}
 
 		/// <summary>
