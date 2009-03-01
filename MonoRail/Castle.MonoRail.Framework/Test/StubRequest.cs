@@ -44,6 +44,7 @@ namespace Castle.MonoRail.Framework.Test
 		private string userHostAddress = "127.0.0.1";
 		private string pathInfo;
 		private string contentType;
+		private string applicationPath;
 		private Stream inputStream = null;
 		private int inputStreamSize;
 
@@ -165,6 +166,15 @@ namespace Castle.MonoRail.Framework.Test
 		/// </summary>
 		public virtual void ValidateInput()
 		{
+		}
+
+		/// <summary>
+		/// Gets the ASP.Net application's virtual application root path on the server.
+		/// </summary>
+		public string ApplicationPath
+		{
+			get { return applicationPath; }
+			set { applicationPath = value; }
 		}
 
 		/// <summary>

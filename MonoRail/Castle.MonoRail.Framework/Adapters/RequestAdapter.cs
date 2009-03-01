@@ -381,5 +381,13 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			request.ValidateInput();
 		}
+
+		/// <summary>
+		/// Gets the ASP.Net application's virtual application root path on the server.
+		/// </summary>
+		public string ApplicationPath
+		{
+			get { return request.ApplicationPath; }
+		}
 	}
 }

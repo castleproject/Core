@@ -226,5 +226,10 @@ namespace Castle.MonoRail.Framework
 		/// Validates the input.
 		/// </summary>
 		void ValidateInput();
+
+		/// <summary>
+		/// Gets the ASP.Net application's virtual application root path on the server.
+		/// </summary>
+		string ApplicationPath { get; }
 	}
 }

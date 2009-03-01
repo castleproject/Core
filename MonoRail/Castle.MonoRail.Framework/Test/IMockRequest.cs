@@ -107,5 +107,10 @@ namespace Castle.MonoRail.Framework.Test
 		/// Sets the referring URL.
 		/// </summary>
 		new String UrlReferrer { set; }
+
+		/// <summary>
+		/// Sets the ASP.Net application's virtual application root path on the server.
+		/// </summary>
+		new string ApplicationPath { set; }
 	}
 }
