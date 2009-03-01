@@ -101,10 +101,10 @@ namespace Castle.DynamicProxy
 			set { selector = value; }
 		}
 
-        public IList<Attribute> AttributesToAddToGeneratedTypes
-        {
-            get { return attributesToAddToGeneratedTypes; }
-        }
+		public IList<Attribute> AttributesToAddToGeneratedTypes
+		{
+			get { return attributesToAddToGeneratedTypes; }
+		}
 
 		public bool UseSingleInterfaceProxy
 		{
