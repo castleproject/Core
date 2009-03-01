@@ -39,13 +39,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private static bool ContainsPublicKey(Assembly assembly)
 		{
-#if SILVERLIGHT
 			// Pulled from a comment on http://www.flawlesscode.com/post/2008/08/Mocking-and-IOC-in-Silverlight-2-Castle-Project-and-Moq-ports.aspx
-			return !assembly.FullName.Contains("PublicKeyToken=null");
-#else
-			byte[] key = assembly.GetName().GetPublicKey();
-			return key != null && key.Length != 0;
-#endif
+			if (assembly.FullName != null)
+				return !assembly.FullName.Contains("PublicKeyToken=null");
+			return false;
 		}
 
 		public static bool IsAnyTypeFromUnsignedAssembly(IEnumerable<Type> types)
