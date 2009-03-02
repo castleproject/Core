@@ -31,8 +31,7 @@ namespace Castle.DynamicProxy
 		private IInterceptorSelector selector;
 		private List<object> mixins;
 		private Type baseTypeForInterfaceProxy = typeof(object);
-		private bool useSingleInterfaceProxy;
-        private IList<Attribute> attributesToAddToGeneratedTypes = new List<Attribute>();
+		private readonly IList<Attribute> attributesToAddToGeneratedTypes = new List<Attribute>();
 
 #if SILVERLIGHT
 #else
@@ -66,7 +65,6 @@ namespace Castle.DynamicProxy
 			selector = (IInterceptorSelector)info.GetValue("selector", typeof(IInterceptorSelector));
 			mixins = (List<object>)info.GetValue("mixins", typeof(List<object>));
 			baseTypeForInterfaceProxy = Type.GetType(info.GetString("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
-			useSingleInterfaceProxy = info.GetBoolean("useSingleInterfaceProxy");
 		}
 #endif
 
@@ -85,7 +83,6 @@ namespace Castle.DynamicProxy
 			info.AddValue("selector", selector);
 			info.AddValue("mixins", mixins);
 			info.AddValue("baseTypeForInterfaceProxy.AssemblyQualifiedName", baseTypeForInterfaceProxy.AssemblyQualifiedName);
-			info.AddValue("useSingleInterfaceProxy", useSingleInterfaceProxy);
 		}
 #endif
 
@@ -104,12 +101,6 @@ namespace Castle.DynamicProxy
 		public IList<Attribute> AttributesToAddToGeneratedTypes
 		{
 			get { return attributesToAddToGeneratedTypes; }
-		}
-
-		public bool UseSingleInterfaceProxy
-		{
-			get { return useSingleInterfaceProxy; }
-			set { useSingleInterfaceProxy = value; }
 		}
 
 		public MixinData MixinData
@@ -171,7 +162,6 @@ namespace Castle.DynamicProxy
 			if (!Equals(selector, proxyGenerationOptions.selector)) return false;
 			if (!Equals(MixinData, proxyGenerationOptions.MixinData)) return false;
 			if (!Equals(baseTypeForInterfaceProxy, proxyGenerationOptions.baseTypeForInterfaceProxy)) return false;
-			if (!Equals(useSingleInterfaceProxy, proxyGenerationOptions.useSingleInterfaceProxy)) return false;
 
 			return true;
 		}
@@ -185,7 +175,6 @@ namespace Castle.DynamicProxy
 			result = 29 * result + (selector != null ? selector.GetHashCode() : 0);
 			result = 29 * result + MixinData.GetHashCode();
 			result = 29 * result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
-			result = 29 * result + useSingleInterfaceProxy.GetHashCode();
 			return result;
 		}
 	}

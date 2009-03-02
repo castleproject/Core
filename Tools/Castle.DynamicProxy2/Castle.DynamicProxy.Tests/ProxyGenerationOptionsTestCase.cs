@@ -113,9 +113,6 @@ namespace Castle.DynamicProxy.Tests
 			_options1.Selector = selector;
 			_options2.Selector = selector;
 
-			_options1.UseSingleInterfaceProxy = true;
-			_options2.UseSingleInterfaceProxy = true;
-
 			Assert.AreEqual(_options1, _options2);
 		}
 
@@ -150,15 +147,6 @@ namespace Castle.DynamicProxy.Tests
 		public void Equals_DifferentOptions_Selector()
 		{
 			_options1.Selector = new AllInterceptorSelector();
-
-			Assert.AreNotEqual(_options1, _options2);
-		}
-
-		[Test]
-		public void Equals_DifferentOptions_UseSingleInterfaceProxy()
-		{
-			_options1.UseSingleInterfaceProxy = true;
-			_options2.UseSingleInterfaceProxy = false;
 
 			Assert.AreNotEqual(_options1, _options2);
 		}
@@ -211,9 +199,6 @@ namespace Castle.DynamicProxy.Tests
 			_options1.Selector = selector;
 			_options2.Selector = selector;
 
-			_options1.UseSingleInterfaceProxy = true;
-			_options2.UseSingleInterfaceProxy = true;
-
 			Assert.AreEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}
 
@@ -257,15 +242,6 @@ namespace Castle.DynamicProxy.Tests
 		public void GetHashCode_DifferentOptions_Selector()
 		{
 			_options1.Selector = new AllInterceptorSelector();
-
-			Assert.AreNotEqual(_options1.GetHashCode(), _options2.GetHashCode());
-		}
-
-		[Test]
-		public void GetHashCode_DifferentOptions_UseSingleInterfaceProxy()
-		{
-			_options1.UseSingleInterfaceProxy = true;
-			_options2.UseSingleInterfaceProxy = false;
 
 			Assert.AreNotEqual(_options1.GetHashCode(), _options2.GetHashCode());
 		}
