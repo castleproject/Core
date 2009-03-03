@@ -836,7 +836,20 @@ namespace Castle.ActiveRecord
 					nconf.SetNamingStrategy((INamingStrategy) Activator.CreateInstance(namingStrategyType));
 				}
 
+				AddContributorsToConfig(type, nconf);
 				holder.Register(type, nconf);
+			}
+		}
+
+		private static void AddContributorsToConfig(Type type, Configuration nconf)
+		{
+			lock (contributors)
+			{
+				foreach (var contributor in contributors)
+				{
+					if (contributor.AppliesToRootType(type))
+						contributor.Contribute(nconf);
+				}
 			}
 		}
 
@@ -1037,5 +1050,20 @@ namespace Castle.ActiveRecord
 
 			return Path.Combine(path, string.Format("{0}_{1}{2}", fileName, fileCount, extension));
 		}
+
+		/// <summary>
+		/// Adds a contributor instance that will be called when a configuration is
+		/// prepared for creating a session factory 
+		/// </summary>
+		/// <param name="contributor">The contributor to add.</param>
+		public static void AddContributor(INHContributor contributor)
+		{
+			lock (contributors)
+			{
+				contributors.Add(contributor);
+			}
+		}
+
+		private static List<INHContributor> contributors = new List<INHContributor>();
 	}
 }

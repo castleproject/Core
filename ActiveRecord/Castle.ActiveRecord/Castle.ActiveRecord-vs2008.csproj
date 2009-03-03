@@ -356,6 +356,9 @@
     <Compile Include="Framework\ActiveRecordHooksValidationBase.cs" />
     <Compile Include="Framework\ActiveRecordValidationException.cs" />
     <Compile Include="Framework\Config\DefaultFlushType.cs" />
+    <Compile Include="Framework\AbstractNHContributor.cs" />
+    <Compile Include="Framework\INHContributor.cs" />
+    <Compile Include="Framework\NHEventListeners.cs" />
     <Compile Include="Framework\Internal\Model\JoinedTableModel.cs" />
     <Compile Include="Framework\IValidationProvider.cs" />
     <Compile Include="Framework\CriteriaHelper.cs" />

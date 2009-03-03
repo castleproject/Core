@@ -319,6 +319,9 @@
     <Compile Include="CompositeNestedClassTestCase.cs" />
     <Compile Include="CompositeUserTypeTestCase.cs" />
     <Compile Include="EnumModelTestCase.cs" />
+    <Compile Include="Event\ContributorTest.cs" />
+    <Compile Include="Event\EventListenerContributionTest.cs" />
+    <Compile Include="Event\NHEventListenersTest.cs" />
     <Compile Include="JoinedSubClassWithDiscriminatorTestCase.cs" />
     <Compile Include="JoinedTableTestCase.cs" />
     <Compile Include="CountQueryTestCase.cs" />
