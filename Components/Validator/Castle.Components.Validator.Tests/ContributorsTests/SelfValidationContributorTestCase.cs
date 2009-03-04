@@ -62,7 +62,7 @@ namespace Castle.Components.Validator.Tests.ContributorsTests
 			target = new TestTarget();
 			target.ItemSKUs = new string[] { "ITEM-1" };
 			target.Total = 10000.00;
-			Assert.IsFalse(contributor.IsValid(target, RunWhen.Custom).HasError);
+			Assert.IsTrue(contributor.IsValid(target, RunWhen.Custom).HasError);
 			Assert.IsFalse(target.ValidateOnUpdateRan);
 		}
 

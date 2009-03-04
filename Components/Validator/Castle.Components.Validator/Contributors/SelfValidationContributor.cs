@@ -113,8 +113,8 @@ namespace Castle.Components.Validator
 
 		private static bool IsMetaOnPhase(SelfValidationMeta meta, RunWhen when)
 		{
-			if (when == RunWhen.Everytime) return true;
-			return ((meta.RunWhen & when) != 0);
+			return (when == RunWhen.Everytime || meta.RunWhen == RunWhen.Everytime
+				|| ((meta.RunWhen & when) != 0));
 		}
 
 		private class SelfValidationMeta
