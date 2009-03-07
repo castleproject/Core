@@ -226,6 +226,8 @@ namespace Castle.ActiveRecord.Queries
 			///</summary>
 			public object TransformTuple(object[] tuple, string[] aliases)
 			{
+				if (tuple.Length == 1 && typeof(T).IsAssignableFrom(tuple[0].GetType()))
+					return tuple[0];
 				return Activator.CreateInstance(typeof(T), tuple);
 			}
 
