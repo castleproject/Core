@@ -1,5 +1,7 @@
 Unreleased Changes
 ==================
+- Applied Krzysztof Kozmic's patch heavily improving the XML documentation of ProxyGenerator.
+
 - Fixed DYNPROXY-ISSUE-84: "UseSingleInterfaceProxy on ProxyGenerationOptions is never used and should be removed"
 
 - Fixed DYNPROXY-ISSUE-58/DYNPROXY-ISSUE-77: "Inherited interface seems not to work"
