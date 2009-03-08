@@ -770,7 +770,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        MakeAtt("column", model.CollectionIDAtt.Column));
 			Ident();
 			AppendF("<generator{0}>",
-			        MakeAtt("class", model.CollectionIDAtt.Generator.ToString().ToLower()));
+			        MakeAtt("class", GetCollectionIDGeneratorName(model.CollectionIDAtt.Generator)));
 			Ident();
 			base.VisitCollectionID(model);
 			Dedent();
@@ -778,6 +778,21 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Dedent();
 			Append("</collection-id>");
 		}
+
+        private string GetCollectionIDGeneratorName(CollectionIDType idType)
+        {
+            switch(idType)
+            {
+                case CollectionIDType.GuidComb:
+                    return "guid.comb";
+                case CollectionIDType.UuidHex:
+                    return "uuid.hex";
+                case CollectionIDType.UuidString:
+                    return "uuid.string";
+                default:
+                    return idType.ToString().ToLower();
+            }
+        }
 
 		/// <summary>
 		/// Visits the hilo.
