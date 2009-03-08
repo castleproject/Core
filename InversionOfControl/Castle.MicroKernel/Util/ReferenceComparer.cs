@@ -16,6 +16,7 @@ namespace Castle.MicroKernel.Util
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Compares if the reference of two objects are equals.
@@ -34,7 +35,7 @@ namespace Castle.MicroKernel.Util
 	}
 
 	[Serializable]
-	public class ReferenceEqualityComparer : IEqualityComparer
+	public class ReferenceEqualityComparer : IEqualityComparer, IEqualityComparer<object>
 	{
 		public new bool Equals(object x, object y)
 		{
@@ -48,6 +49,16 @@ namespace Castle.MicroKernel.Util
 				throw new ArgumentNullException("obj");
 			}
 			return obj.GetHashCode();
+		}
+
+		bool IEqualityComparer<object>.Equals(object x, object y)
+		{
+			return Equals(x, y);
+		}
+
+		int IEqualityComparer<object>.GetHashCode(object obj)
+		{
+			return GetHashCode(obj);
 		}
 	}
 }

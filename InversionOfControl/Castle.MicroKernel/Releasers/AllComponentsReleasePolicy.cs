@@ -15,14 +15,14 @@
 namespace Castle.MicroKernel.Releasers
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Threading;
 
 	[Serializable]
 	public class AllComponentsReleasePolicy : IReleasePolicy
 	{
-		private readonly IDictionary instance2Burden =
-			new Hashtable(new Util.ReferenceEqualityComparer());
+		private readonly IDictionary<object, Burden> instance2Burden =
+			new Dictionary<object, Burden>(new Util.ReferenceEqualityComparer());
 
 		private readonly ReaderWriterLock rwLock = new ReaderWriterLock();
 
@@ -43,9 +43,10 @@ namespace Castle.MicroKernel.Releasers
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 			rwLock.AcquireReaderLock(Timeout.Infinite);
+
 			try
 			{
-				return instance2Burden.Contains(instance);
+				return instance2Burden.ContainsKey(instance);
 			}
 			finally
 			{
@@ -57,19 +58,19 @@ namespace Castle.MicroKernel.Releasers
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 			rwLock.AcquireReaderLock(Timeout.Infinite);
+
 			try
 			{
-				Burden burden = (Burden) instance2Burden[instance];
+				Burden burden;
 
-				if (burden == null)
+				if (!instance2Burden.TryGetValue(instance, out burden))
 					return;
 
 				LockCookie cookie = rwLock.UpgradeToWriterLock(Timeout.Infinite);
 
 				try
 				{
-					burden = (Burden) instance2Burden[instance];
-					if (burden == null)
+					if (!instance2Burden.TryGetValue(instance, out burden))
 						return;
 
 					instance2Burden.Remove(instance);
@@ -90,17 +91,19 @@ namespace Castle.MicroKernel.Releasers
 		public void Dispose()
 		{
 			rwLock.AcquireWriterLock(Timeout.Infinite);
+
 			try
 			{
-				Burden[] burdens = new Burden[instance2Burden.Count];
-				instance2Burden.Values.CopyTo(burdens, 0);
+				KeyValuePair<object, Burden>[] burdens = 
+					new KeyValuePair<object, Burden>[instance2Burden.Count];
+				instance2Burden.CopyTo(burdens, 0);
 
-				foreach(Burden burden in burdens)
+				foreach (KeyValuePair<object, Burden> burden in burdens)
 				{
-					if (instance2Burden.Contains(burden))
+					if (instance2Burden.ContainsKey(burden.Key))
 					{
-						burden.Release(this);
-						instance2Burden.Remove(burden);
+						burden.Value.Release(this);
+						instance2Burden.Remove(burden.Key);
 					}
 				}
 			}

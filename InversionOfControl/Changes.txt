@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed bug in AllComponentsReleasePolicy in which burden not properly handled
+  on dispose.
+
 - Applied patch from Joao Braganca to allow abstract types in DefaultComponentActivator if proxied.
 
 - Added additional AddFacility overrides to improve fluent configuration of facilities.
