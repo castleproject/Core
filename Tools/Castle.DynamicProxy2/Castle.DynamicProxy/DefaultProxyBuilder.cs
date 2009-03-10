@@ -15,21 +15,31 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using Castle.DynamicProxy.Generators;
 #if SILVERLIGHT
 	using Castle.DynamicProxy.SilverlightExtensions;
 #endif
 
+	/// <summary>
+	/// Default implementation of <see cref="IProxyBuilder"/> interface producing in-memory proxy assemblies.
+	/// </summary>
 	public class DefaultProxyBuilder : IProxyBuilder
 	{
 		private readonly ModuleScope scope;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultProxyBuilder"/> class with new <see cref="DynamicProxy.ModuleScope"/>.
+		/// </summary>
 		public DefaultProxyBuilder()
 			: this(new ModuleScope())
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultProxyBuilder"/> class.
+		/// </summary>
+		/// <param name="scope">The module scope for generated proxy types.</param>
 		public DefaultProxyBuilder(ModuleScope scope)
 		{
 			this.scope = scope;
@@ -40,57 +50,57 @@ namespace Castle.DynamicProxy
 			get { return scope; }
 		}
 
-		public virtual Type CreateClassProxy(Type theClass, ProxyGenerationOptions options)
+		public virtual Type CreateClassProxy(Type classToProxy, ProxyGenerationOptions options)
 		{
-			AssertValidType(theClass);
+			AssertValidType(classToProxy);
 
-			ClassProxyGenerator generator = new ClassProxyGenerator(scope, theClass);
+			ClassProxyGenerator generator = new ClassProxyGenerator(scope, classToProxy);
 
 			return generator.GenerateCode(null, options);
 		}
 
-		public Type CreateClassProxy(Type theClass, Type[] interfaces, ProxyGenerationOptions options)
+		public Type CreateClassProxy(Type classToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options)
 		{
-			AssertValidType(theClass);
-			AssertValidTypes(interfaces);
+			AssertValidType(classToProxy);
+			AssertValidTypes(additionalInterfacesToProxy);
 
-			ClassProxyGenerator generator = new ClassProxyGenerator(scope, theClass);
+			ClassProxyGenerator generator = new ClassProxyGenerator(scope, classToProxy);
 
-			return generator.GenerateCode(interfaces, options);
+			return generator.GenerateCode(additionalInterfacesToProxy, options);
 		}
 
-		public Type CreateInterfaceProxyTypeWithoutTarget(Type theInterface, Type[] interfaces, ProxyGenerationOptions options)
+		public Type CreateInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options)
 		{
-			AssertValidType(theInterface);
-			AssertValidTypes(interfaces);
+			AssertValidType(interfaceToProxy);
+			AssertValidTypes(additionalInterfacesToProxy);
 
 			InterfaceProxyWithoutTargetGenerator generatorWithoutTarget =
-				new InterfaceProxyWithoutTargetGenerator(scope, theInterface);
+				new InterfaceProxyWithoutTargetGenerator(scope, interfaceToProxy);
 
-			return generatorWithoutTarget.GenerateCode(typeof(object), interfaces, options);
+			return generatorWithoutTarget.GenerateCode(typeof(object), additionalInterfacesToProxy, options);
 		}
 
-		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type[] interfaces, Type targetType,
+		public Type CreateInterfaceProxyTypeWithTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy, Type targetType,
 													   ProxyGenerationOptions options)
 		{
-			AssertValidType(theInterface);
-			AssertValidTypes(interfaces);
+			AssertValidType(interfaceToProxy);
+			AssertValidTypes(additionalInterfacesToProxy);
 
-			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope, theInterface);
+			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope, interfaceToProxy);
 
-			return generator.GenerateCode(targetType, interfaces, options);
+			return generator.GenerateCode(targetType, additionalInterfacesToProxy, options);
 		}
 
-		public Type CreateInterfaceProxyTypeWithTargetInterface(Type theInterface, Type[] interfaces,
+		public Type CreateInterfaceProxyTypeWithTargetInterface(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
 																ProxyGenerationOptions options)
 		{
-			AssertValidType(theInterface);
-			AssertValidTypes(interfaces);
+			AssertValidType(interfaceToProxy);
+			AssertValidTypes(additionalInterfacesToProxy);
 
 			InterfaceProxyWithTargetInterfaceGenerator generator =
-				new InterfaceProxyWithTargetInterfaceGenerator(scope, theInterface);
+				new InterfaceProxyWithTargetInterfaceGenerator(scope, interfaceToProxy);
 
-			return generator.GenerateCode(theInterface, interfaces, options);
+			return generator.GenerateCode(interfaceToProxy, additionalInterfacesToProxy, options);
 		}
 
 		private void AssertValidType(Type target)
@@ -112,12 +122,12 @@ namespace Castle.DynamicProxy
 			}
 			if (target.IsGenericTypeDefinition)
 			{
-				throw new GeneratorException("Type is a generic tyspe definition, so a proxy cannot be generated. Type: " +
+				throw new GeneratorException("Type is a generic type definition, so a proxy cannot be generated. Type: " +
 											 target.FullName);
 			}
 		}
 
-		private void AssertValidTypes(IEnumerable targetTypes)
+		private void AssertValidTypes(IEnumerable<Type> targetTypes)
 		{
 			if (targetTypes != null)
 			{

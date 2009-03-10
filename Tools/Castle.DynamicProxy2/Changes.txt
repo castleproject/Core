@@ -1,5 +1,7 @@
 Unreleased Changes
 ==================
+- Applied Krzysztof Kozmic's patch improving the XML documentation and parameter names of IProxyBuilder, DefaultProxyBuilder and ProxyGenerator.
+
 - Applied Krzysztof Kozmic's patch heavily improving the XML documentation of ProxyGenerator.
 
 - Fixed DYNPROXY-ISSUE-84: "UseSingleInterfaceProxy on ProxyGenerationOptions is never used and should be removed"
