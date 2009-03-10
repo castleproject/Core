@@ -105,7 +105,7 @@ namespace Castle.Facilities.Remoting
 		{
 			if (server == RemotingStrategy.None) return;
 
-			String uri = ConstructServerURI(server, model.Name, model);
+			String uri = ConstructServerURI(server, model);
 			
 			switch (server)
 			{
@@ -171,7 +171,7 @@ namespace Castle.Facilities.Remoting
 
 			ResetDependencies(model);
 
-			String uri = ConstructClientURI(client, model.Name, model);
+			String uri = ConstructClientURI(client, model);
 
 			bool skipRemotingRegistration = Convert.ToBoolean(model.Configuration.Attributes["skipRemotingRegistration"]);
 			
@@ -253,7 +253,7 @@ namespace Castle.Facilities.Remoting
 			}
 		}
 
-		private String ConstructClientURI(RemotingStrategy client, String componentId, ComponentModel model)
+		private String ConstructClientURI(RemotingStrategy client, ComponentModel model)
 		{
 			if (client == RemotingStrategy.ClientActivated) return null;
 
@@ -263,7 +263,7 @@ namespace Castle.Facilities.Remoting
 
 			if (client != RemotingStrategy.None && baseUri != null && value == null)
 			{
-				uriText = BuildUri(componentId);
+				uriText = BuildUri(model);
 			}
 			else
 			{
@@ -273,19 +273,43 @@ namespace Castle.Facilities.Remoting
 			return uriText;
 		}
 
-		private String BuildUri(String cpntUri)
+		private String BuildUri(ComponentModel model)
 		{
-			String uriText;
-			
-			if (baseUri.EndsWith("/"))
+			String cpntUri;
+
+			// if the remoted component is a generic component then ensure a unique uri is built 
+			// for the requested service
+			if (model.Service.IsGenericType)
 			{
-				uriText = SetUriExtensionIfNeeded(String.Format("{0}{1}", baseUri, cpntUri));
+				cpntUri = model.Service.Name;
+				foreach (Type genericArgument in model.Service.GetGenericArguments())
+				{
+					cpntUri += genericArgument.FullName;
+				}
 			}
 			else
 			{
-				uriText = SetUriExtensionIfNeeded(String.Format("{0}/{1}", baseUri, cpntUri));
+				cpntUri = model.Name; //default;
 			}
-			
+
+			String uriText;
+
+			if (baseUri != null)
+			{
+				if (baseUri.EndsWith("/"))
+				{
+					uriText = SetUriExtensionIfNeeded(String.Format("{0}{1}", baseUri, cpntUri));
+				}
+				else
+				{
+					uriText = SetUriExtensionIfNeeded(String.Format("{0}/{1}", baseUri, cpntUri));
+				}
+			}
+			else
+			{
+				uriText = SetUriExtensionIfNeeded(cpntUri);
+			}
+
 			return uriText;
 		}
 
@@ -299,7 +323,7 @@ namespace Castle.Facilities.Remoting
 			return uri;
 		}
 
-		private String ConstructServerURI(RemotingStrategy server, String componentId, ComponentModel model)
+		private String ConstructServerURI(RemotingStrategy server, ComponentModel model)
 		{
 			if (server == RemotingStrategy.ClientActivated) return null;
 
@@ -309,7 +333,7 @@ namespace Castle.Facilities.Remoting
 
 			if (value == null)
 			{
-				uriText = SetUriExtensionIfNeeded(componentId);
+				uriText = BuildUri(model);
 			}
 			else
 			{
