@@ -200,6 +200,7 @@
     <Compile Include="Facilities\FactorySupport\FactorySupportFluentTestCase.cs" />
     <Compile Include="Facilities\FactorySupport\FactorySupportProgrammaticTestCase.cs" />
     <Compile Include="Facilities\FactorySupport\FactorySupportTestCase.cs" />
+    <Compile Include="Facilities\Startable\Components\StartableChainWithGenerics.cs" />
     <Compile Include="Facilities\Startable\Components\StartableComponentWithCustomDependencies.cs" />
     <Compile Include="HandlerForwardingTestCase.cs" />
     <Compile Include="KeySearchNamingSubSystemTestCase.cs" />

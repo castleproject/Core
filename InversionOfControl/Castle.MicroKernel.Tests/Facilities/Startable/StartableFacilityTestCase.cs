@@ -155,5 +155,39 @@ namespace Castle.Facilities.Startable.Tests
 
 			startableCreatedBeforeResolved = true;
 		}
+
+		/// <summary>
+		/// This test has one startable component dependent on another, and both are dependent
+		/// on a third generic component - all are singletons. We need to make sure we only get
+		/// one instance of each component created.
+		/// </summary>
+		[Test]
+		public void TestStartableChainWithGenerics()
+		{
+			IKernel kernel = new DefaultKernel();
+
+			kernel.AddFacility("startable", new StartableFacility());
+
+			// Add parent. This has a dependency so won't be started yet.
+			kernel.AddComponent("chainparent", typeof(StartableChainParent));
+
+			Assert.AreEqual(0, StartableChainDependency.startcount);
+			Assert.AreEqual(0, StartableChainDependency.createcount);
+
+			// Add generic dependency. This is not startable so won't get created. 
+			kernel.AddComponent("chaingeneric", typeof(StartableChainGeneric<>));
+
+			Assert.AreEqual(0, StartableChainDependency.startcount);
+			Assert.AreEqual(0, StartableChainDependency.createcount);
+
+			// Add dependency. This will satisfy the dependency so everything will start.
+			kernel.AddComponent("chaindependency", typeof(StartableChainDependency));
+
+			Assert.AreEqual(1, StartableChainParent.startcount);
+			Assert.AreEqual(1, StartableChainParent.createcount);
+			Assert.AreEqual(1, StartableChainDependency.startcount);
+			Assert.AreEqual(1, StartableChainDependency.createcount);
+			Assert.AreEqual(1, StartableChainGeneric<string>.createcount);
+		}
 	}
 }

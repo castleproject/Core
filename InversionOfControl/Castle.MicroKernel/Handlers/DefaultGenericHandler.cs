@@ -80,14 +80,15 @@ namespace Castle.MicroKernel.Handlers
 						ComponentModel.Name, service, genericType, null);
 
 					newModel.ExtendedProperties[ComponentModel.SkipRegistration] = true;
-
 					CloneParentProperties(newModel);
 
-					Kernel.AddCustomComponent(newModel);
-
+					// Create the handler and add to type2SubHandler before we add to the kernel.
+					// Adding to the kernel could satisfy other dependencies and cause this method
+					// to be called again which would result in extra instances being created.
 					handler = Kernel.HandlerFactory.Create(newModel);
-
 					type2SubHandler[genericType] = handler;
+
+					Kernel.AddCustomComponent(newModel);
 				}
 
 				return handler;
