@@ -3,7 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{105EBF2F-B040-4BAA-8D74-115F7735E465}"
 	ProjectSection(SolutionItems) = preProject
 		Changes.txt = Changes.txt
-		Decisions and to dos.txt = Decisions and to dos.txt
 	EndProjectSection
 	ProjectSection(FolderStartupServices) = postProject
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
