@@ -15,7 +15,6 @@
 namespace NVelocity.Runtime.Resource.Loader
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
@@ -27,24 +26,33 @@ namespace NVelocity.Runtime.Resource.Loader
 	{
 		private List<string> assemblyNames;
 
-
 		/// <summary> 
-		/// Initialize the template loader with a
-		/// a resources class.
+		/// Initialize the template loader with a resources class.
 		/// </summary>
 		public override void Init(ExtendedProperties configuration)
 		{
-			assemblyNames = configuration.GetStringList("assembly");
+			object value = configuration["assembly"];
+			if (value is string)
+			{
+				assemblyNames = new List<string> { (string)configuration["assembly"] };
+			}
+			else if (value is List<string>)
+			{
+				assemblyNames = configuration.GetStringList("assembly");
+			}
+			else
+			{
+				throw new VelocityException("Expected property 'assembly' to be of type string or List<string>.");
+			}
 		}
 
-		///
 		/// <summary> Get the InputStream that the Runtime will parse
 		/// to create a template.
 		/// </summary>
 		public override Stream GetResourceStream(String templateName)
 		{
 			// Make sure we have a valid templateName.
-			if (templateName == null || templateName.Length == 0)
+			if (string.IsNullOrEmpty(templateName))
 			{
 				// If we don't get a properly formed templateName
 				// then there's not much we can do. So
@@ -60,7 +68,7 @@ namespace NVelocity.Runtime.Resource.Loader
 				template = template.Substring(1);
 			}
 
-			if (template == null || template.Length == 0)
+			if (string.IsNullOrEmpty(template))
 			{
 				String msg =
 					string.Format(

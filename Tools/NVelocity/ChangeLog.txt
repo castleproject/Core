@@ -1,3 +1,6 @@
+- Fixed the AssemblyResourceLoader so that it allows the loader assembly to be passed as a string
+  instead of a List<string> to match the previous behaviour.
+
 - Applied Chris Ortman's patch fixing NVELOCITY-ISSUE-11
   "NVelocity swallows Ambiguous matches"
 

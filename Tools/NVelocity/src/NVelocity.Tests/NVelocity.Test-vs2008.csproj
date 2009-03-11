@@ -105,6 +105,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyResourceLoaderTestCase.cs" />
     <Compile Include="DuckTestCase.cs" />
     <Compile Include="MultiThreadTestCase.cs" />
     <Compile Include="Bugs\NVelocity11.cs" />
