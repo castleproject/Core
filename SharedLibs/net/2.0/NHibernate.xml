@@ -5634,7 +5634,6 @@
             <summary>
             Get the query language imports (entityName/className -> AssemblyQualifiedName)
             </summary>
-            <returns></returns>
         </member>
         <member name="P:NHibernate.Cfg.Configuration.NamedSQLQueries">
             <summary>
@@ -7321,11 +7320,6 @@
         <member name="T:NHibernate.Connection.DriverConnectionProvider">
             <summary>
             A ConnectionProvider that uses an IDriver to create connections.
-            </summary>
-        </member>
-        <member name="M:NHibernate.Connection.DriverConnectionProvider.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:NHibernate.Connection.DriverConnectionProvider"/> class.
             </summary>
         </member>
         <member name="M:NHibernate.Connection.DriverConnectionProvider.CloseConnection(System.Data.IDbConnection)">
@@ -11189,6 +11183,16 @@
             </summary>
             <returns> True if the database supports accepting bind params as args; false otherwise. </returns>
         </member>
+        <member name="P:NHibernate.Dialect.Dialect.IdentityStyleIdentifierGeneratorClass">
+            <summary> 
+            The class (which implements <see cref="T:NHibernate.Id.IIdentifierGenerator"/>)
+            which acts as this dialects identity-style generation strategy.
+            </summary>
+            <returns> The native generator class. </returns>
+            <remarks>
+            Comes into play whenever the user specifies the "identity" generator.
+            </remarks>
+        </member>
         <member name="T:NHibernate.Exceptions.IViolatedConstraintNameExtracter">
             <summary> 
             Defines a contract for implementations that can extract the name of a violated
@@ -11381,7 +11385,8 @@
         <member name="M:NHibernate.Dialect.InformixDialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Int32,System.Int32)">
             <summary> Apply s limit clause to the query. </summary>
             <param name="querySqlString">The query to which to apply the limit. </param>
-            <param name="hasOffset">Is the query requesting an offset? </param>
+            <param name="offset">Offset of the first row to be returned by the query (zero-based)</param>
+            <param name="limit">Maximum number of rows to be returned by the query</param>
             <returns> the modified SQL </returns>
             <remarks>
             Typically dialects utilize <see cref="P:NHibernate.Dialect.InformixDialect.SupportsVariableLimit"/>
@@ -11929,6 +11934,41 @@
         <member name="P:NHibernate.Dialect.MySQLDialect.SupportsLimit">
             <summary></summary>
         </member>
+        <member name="T:NHibernate.Dialect.Oracle10gDialect">
+            <summary> 
+            A dialect specifically for use with Oracle 10g.
+            </summary>
+            <remarks>
+            The main difference between this dialect and <see cref="T:NHibernate.Dialect.Oracle9iDialect"/>
+            is the use of "ANSI join syntax" here...
+            </remarks>
+        </member>
+        <member name="T:NHibernate.Dialect.Oracle8iDialect">
+            <summary>
+            A dialect for Oracle 8i. 
+            </summary>
+        </member>
+        <member name="M:NHibernate.Dialect.Oracle8iDialect.CreateOuterJoinFragment">
+            <summary> 
+            Support for the oracle proprietary join syntax... 
+            </summary>
+            <returns> The orqacle join fragment </returns>
+        </member>
+        <member name="M:NHibernate.Dialect.Oracle8iDialect.CreateCaseFragment">
+            <summary> 
+            Map case support to the Oracle DECODE function.  Oracle did not
+            add support for CASE until 9i. 
+            </summary>
+            <returns> The oracle CASE -> DECODE fragment </returns>
+        </member>
+        <member name="M:NHibernate.Dialect.Oracle8iDialect.GetBasicSelectClauseNullString(NHibernate.SqlTypes.SqlType)">
+            <summary> 
+            Allows access to the basic <see cref="M:NHibernate.Dialect.Dialect.GetSelectClauseNullString(NHibernate.SqlTypes.SqlType)"/>
+            implementation... 
+            </summary>
+            <param name="sqlType">The <see cref="T:NHibernate.SqlTypes.SqlType"/> mapping type</param>
+            <returns> The appropriate select cluse fragment </returns>
+        </member>
         <member name="T:NHibernate.Dialect.Oracle9Dialect">
             <summary>
             It's a immature version, it just work.
@@ -11991,6 +12031,35 @@
             <summary></summary>
         </member>
         <member name="M:NHibernate.Dialect.OracleDialect.CreateCaseFragment">
+            <summary></summary>
+        </member>
+        <member name="T:NHibernate.Dialect.OracleLiteDialect">
+            <summary>
+            It's a immature version, it just work.
+            An SQL dialect for Oracle Lite
+            </summary>
+            <remarks>
+            The OracleLiteDialect defaults the following configuration properties:
+            <list type="table">
+            	<listheader>
+            		<term>Property</term>
+            		<description>Default Value</description>
+            	</listheader>
+            	<item>
+            		<term>use_outer_join</term>
+            		<description><see langword="true"/></description>
+            	</item>
+            	<item>
+            		<term>connection.driver_class</term>
+            		<description><see cref="T:NHibernate.Driver.OracleLiteDataClientDriver"/></description>
+            	</item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:NHibernate.Dialect.OracleLiteDialect.#ctor">
+            <summary></summary>
+        </member>
+        <member name="M:NHibernate.Dialect.OracleLiteDialect.GetCreateSequenceString(System.String)">
             <summary></summary>
         </member>
         <member name="T:NHibernate.Dialect.PostgreSQL81Dialect">
@@ -12468,6 +12537,16 @@
             </summary>
             <param name="command"></param>
         </member>
+        <member name="M:NHibernate.Driver.IDriver.GenerateParameter(System.Data.IDbCommand,System.String,NHibernate.SqlTypes.SqlType)">
+            <summary>
+            Generates an IDbDataParameter for the IDbCommand.  It does not add the IDbDataParameter to the IDbCommand's
+            Parameter collection.
+            </summary>
+            <param name="command">The IDbCommand to use to create the IDbDataParameter.</param>
+            <param name="name">The name to set for IDbDataParameter.Name</param>
+            <param name="sqlType">The SqlType to set for IDbDataParameter.</param>
+            <returns>An IDbDataParameter ready to be added to an IDbCommand.</returns>
+        </member>
         <member name="P:NHibernate.Driver.IDriver.SupportsMultipleOpenReaders">
             <summary>
             Does this Driver support having more than 1 open IDataReader with
@@ -12699,18 +12778,6 @@
             </summary>
             <remarks>
             </remarks>
-        </member>
-        <member name="M:NHibernate.Driver.IngresDriver.#ctor">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Driver.IngresDriver.UseNamedPrefixInSql">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Driver.IngresDriver.UseNamedPrefixInParameter">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Driver.IngresDriver.NamedPrefix">
-            <summary></summary>
         </member>
         <member name="T:NHibernate.Driver.MySqlDataDriver">
             <summary>
@@ -13434,6 +13501,25 @@
         </member>
         <member name="P:NHibernate.Driver.OracleDataClientDriver.NamedPrefix">
             <summary></summary>
+        </member>
+        <member name="T:NHibernate.Driver.OracleLiteDataClientDriver">
+            <summary>
+            A NHibernate Driver for using the Oracle.DataAccess.Lite DataProvider
+            </summary>
+        </member>
+        <member name="M:NHibernate.Driver.OracleLiteDataClientDriver.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:NHibernate.Driver.OracleLiteDataClientDriver"/>.
+            </summary>
+            <exception cref="T:NHibernate.HibernateException">
+            Thrown when the <c>Oracle.DataAccess.Lite_w32</c> assembly can not be loaded.
+            </exception>
+        </member>
+        <member name="M:NHibernate.Driver.OracleLiteDataClientDriver.InitializeParameter(System.Data.IDbDataParameter,System.String,NHibernate.SqlTypes.SqlType)">
+            <remarks>
+            This adds logic to ensure that a DbType.Boolean parameter is not created since
+            ODP.NET doesn't support it.
+            </remarks>
         </member>
         <member name="T:NHibernate.Driver.SqlClientDriver">
             <summary>
@@ -17486,6 +17572,17 @@
         <member name="T:NHibernate.Event.EvictEvent">
             <summary>  Defines an event class for the evicting of an entity. </summary>
         </member>
+        <member name="T:NHibernate.Event.IDestructible">
+            <summary> 
+            Contract for listeners which require notification of SessionFactory closing,
+            presumably to destroy internal state.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Event.IDestructible.Cleanup">
+            <summary>
+            Notification of <see cref="T:NHibernate.ISessionFactory"/> shutdown.
+            </summary>
+        </member>
         <member name="T:NHibernate.ISession">
             <summary>
             The main runtime interface between a Java application and Hibernate. This is the central
@@ -18157,6 +18254,21 @@
             </summary>
             <param name="isolationLevel">Isolation level for the new transaction</param>
             <returns>A transaction instance having the specified isolation level</returns>
+        </member>
+        <member name="M:NHibernate.ISession.CreateCriteria``1">
+            <summary>
+            Creates a new <c>Criteria</c> for the entity class.
+            </summary>
+            <typeparam name="T">The entity class</typeparam>
+            <returns>An ICriteria object</returns>
+        </member>
+        <member name="M:NHibernate.ISession.CreateCriteria``1(System.String)">
+            <summary>
+            Creates a new <c>Criteria</c> for the entity class with a specific alias
+            </summary>
+            <typeparam name="T">The entity class</typeparam>
+            <param name="alias">The alias of the entity</param>
+            <returns>An ICriteria object</returns>
         </member>
         <member name="M:NHibernate.ISession.CreateCriteria(System.Type)">
             <summary>
@@ -20199,6 +20311,28 @@
             to the end of the insert statement. 
             </summary>
         </member>
+        <member name="T:NHibernate.Id.Insert.NoCommentsInsert">
+            <summary>
+            Disable comments on insert.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Id.Insert.OutputParamReturningDelegate">
+            <summary> 
+            <see cref="T:NHibernate.Id.Insert.IInsertGeneratedIdentifierDelegate"/> implementation where the
+            underlying strategy causes the generated identitifer to be returned, as an
+            effect of performing the insert statement, in a Output parameter.
+            Thus, there is no need for an additional sql statement to determine the generated identitifer. 
+            </summary>
+        </member>
+        <member name="T:NHibernate.Id.Insert.ReturningIdentifierInsert">
+            <summary> 
+            Specialized IdentifierGeneratingInsert which appends the database
+            specific clause which signifies to return generated identifier values
+            to the end of the insert statement. 
+            </summary>
+            <remarks>
+            </remarks>
+        </member>
         <member name="M:NHibernate.Id.AbstractPostInsertGenerator.Generate(NHibernate.Engine.ISessionImplementor,System.Object)">
             <summary>
             The IdentityGenerator for autoincrement/identity key generation. 
@@ -20406,6 +20540,10 @@
             	<item>
             		<term>guid.comb</term>
             		<description><see cref="T:NHibernate.Id.GuidCombGenerator"/></description>
+            	</item>
+            	<item>
+            		<term>guid.native</term>
+            		<description><see cref="T:NHibernate.Id.NativeGuidGenerator"/></description>
             	</item>
             	<item>
             		<term>hilo</term>
@@ -20642,6 +20780,11 @@
             Get the identifier type
             </summary>
         </member>
+        <member name="T:NHibernate.Id.NativeGuidGenerator">
+            <summary>
+            Generates Guid values using the server side Guid function.
+            </summary>
+        </member>
         <member name="T:NHibernate.Id.SelectGenerator">
             <summary> 
             A generator that selects the just inserted row to determine the identifier
@@ -20777,6 +20920,13 @@
             <param name="session">The <see cref="T:NHibernate.Engine.ISessionImplementor"/> this id is being generated in.</param>
             <param name="obj">The entity for which the id is being generated.</param>
             <returns>The new identifier as a <see cref="T:System.Int16"/>, <see cref="T:System.Int32"/>, or <see cref="T:System.Int64"/>.</returns>
+        </member>
+        <member name="T:NHibernate.Id.SequenceIdentityGenerator">
+            <summary>
+            A generator which combines sequence generation with immediate retrieval
+            by attaching a output parameter to the SQL command
+            In this respect it works much like ANSI-SQL IDENTITY generation.
+            </summary>
         </member>
         <member name="T:NHibernate.Id.TableGenerator">
             <summary>
@@ -22093,6 +22243,24 @@
             "shape" of the query result.
             </summary>
         </member>
+        <member name="M:NHibernate.IQuery.Future``1">
+            <summary>
+            Get a enumerable that when enumerated will execute
+            a batch of queries in a single database roundtrip
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IQuery.FutureValue``1">
+            <summary>
+            Get an IFutureValue instance, whose value can be retrieved through
+            its Value property. The query is not executed until the Value property
+            is retrieved, which will execute other Future queries as well in a
+            single roundtrip
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
         <member name="P:NHibernate.IQuery.QueryString">
             <summary>
             The query string
@@ -22411,6 +22579,24 @@
             <exception cref="T:NHibernate.HibernateException">
             If there is more than one matching result
             </exception>
+        </member>
+        <member name="M:NHibernate.ICriteria.Future``1">
+            <summary>
+            Get a enumerable that when enumerated will execute
+            a batch of queries in a single database roundtrip
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.ICriteria.FutureValue``1">
+            <summary>
+            Get an IFutureValue instance, whose value can be retrieved through
+            its Value property. The query is not executed until the Value property
+            is retrieved, which will execute other Future queries as well in a
+            single roundtrip
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
         </member>
         <member name="M:NHibernate.ICriteria.List(System.Collections.IList)">
             <summary>
@@ -23937,6 +24123,25 @@
             or a superclass of an entity class, with the given alias. 
             </summary>
             <typeparam name="T">A class, which is persistent, or has persistent subclasses</typeparam>
+            <param name="alias">The alias of the entity</param>
+            <returns> The <see cref="T:NHibernate.ICriteria"/>. </returns>
+            <remarks>Entities returned by the query are detached.</remarks>
+        </member>
+        <member name="M:NHibernate.IStatelessSession.CreateCriteria(System.Type)">
+            <summary>
+            Create a new <see cref="T:NHibernate.ICriteria"/> instance, for the given entity class,
+            or a superclass of an entity class. 
+            </summary>
+            <param name="entityType">A class, which is persistent, or has persistent subclasses</param>
+            <returns> The <see cref="T:NHibernate.ICriteria"/>. </returns>
+            <remarks>Entities returned by the query are detached.</remarks>
+        </member>
+        <member name="M:NHibernate.IStatelessSession.CreateCriteria(System.Type,System.String)">
+            <summary>
+            Create a new <see cref="T:NHibernate.ICriteria"/> instance, for the given entity class,
+            or a superclass of an entity class, with the given alias. 
+            </summary>
+            <param name="entityType">A class, which is persistent, or has persistent subclasses</param>
             <param name="alias">The alias of the entity</param>
             <returns> The <see cref="T:NHibernate.ICriteria"/>. </returns>
             <remarks>Entities returned by the query are detached.</remarks>
@@ -33759,6 +33964,11 @@
         <member name="P:NHibernate.Type.CustomType.IsMutable">
             <summary></summary>
         </member>
+        <member name="T:NHibernate.Type.DateTime2Type">
+            <summary>
+            Maps a <see cref="T:System.DateTime"/> Property to a <see cref="F:System.Data.DbType.DateTime"/>
+            </summary>
+        </member>
         <member name="T:NHibernate.Type.DateTimeType">
             <summary>
             Maps a <see cref="T:System.DateTime"/> Property to a <see cref="F:System.Data.DbType.DateTime"/> column that 
@@ -33774,6 +33984,17 @@
             <summary></summary>
         </member>
         <member name="P:NHibernate.Type.DateTimeType.Name">
+            <summary></summary>
+        </member>
+        <member name="M:NHibernate.Type.DateTime2Type.#ctor">
+            <summary></summary>
+        </member>
+        <member name="T:NHibernate.Type.DateTimeOffsetType">
+            <summary>
+            Maps a <see cref="T:System.DateTimeOffset"/> Property to a <see cref="F:System.Data.DbType.DateTimeOffset"/>
+            </summary>
+        </member>
+        <member name="M:NHibernate.Type.DateTimeOffsetType.#ctor">
             <summary></summary>
         </member>
         <member name="T:NHibernate.Type.DateType">
@@ -34847,15 +35068,15 @@
         <member name="P:NHibernate.Type.TicksType.Name">
             <summary></summary>
         </member>
-        <member name="T:NHibernate.Type.TimeSpanType">
+        <member name="T:NHibernate.Type.TimeSpanInt64Type">
             <summary>
             Maps a <see cref="T:System.TimeSpan"/> Property to an <see cref="F:System.Data.DbType.Int64"/> column 
             </summary>
         </member>
-        <member name="M:NHibernate.Type.TimeSpanType.#ctor">
+        <member name="M:NHibernate.Type.TimeSpanInt64Type.#ctor">
             <summary></summary>
         </member>
-        <member name="M:NHibernate.Type.TimeSpanType.Set(System.Data.IDbCommand,System.Object,System.Int32)">
+        <member name="M:NHibernate.Type.TimeSpanInt64Type.Set(System.Data.IDbCommand,System.Object,System.Int32)">
             <summary>
             
             </summary>
@@ -34863,14 +35084,19 @@
             <param name="value"></param>
             <param name="index"></param>
         </member>
-        <member name="M:NHibernate.Type.TimeSpanType.Seed(NHibernate.Engine.ISessionImplementor)">
+        <member name="M:NHibernate.Type.TimeSpanInt64Type.Seed(NHibernate.Engine.ISessionImplementor)">
             <summary></summary>
         </member>
-        <member name="P:NHibernate.Type.TimeSpanType.Name">
+        <member name="P:NHibernate.Type.TimeSpanInt64Type.Name">
             <summary></summary>
         </member>
-        <member name="P:NHibernate.Type.TimeSpanType.ReturnedClass">
+        <member name="P:NHibernate.Type.TimeSpanInt64Type.ReturnedClass">
             <summary></summary>
+        </member>
+        <member name="T:NHibernate.Type.TimeSpanType">
+            <summary>
+            Maps a <see cref="T:System.TimeSpan"/> Property to an <see cref="F:System.Data.DbType.Time"/> column 
+            </summary>
         </member>
         <member name="T:NHibernate.Type.TimestampType">
             <summary>
@@ -34917,7 +35143,7 @@
             using this Type indicates that you don't care about the Date portion of the DateTime.
             </para>
             <para>
-            A more appropriate choice to store the duration/time is the <see cref="T:NHibernate.Type.TimeSpanType"/>.
+            A more appropriate choice to store the duration/time is the <see cref="T:NHibernate.Type.TimeSpanInt64Type"/>.
             The underlying <see cref="F:System.Data.DbType.Time"/> tends to be handled differently by different
             DataProviders.
             </para>
@@ -37732,6 +37958,16 @@
             NHibernate date type
             </summary>
         </member>
+        <member name="F:NHibernate.NHibernateUtil.DateTime2">
+            <summary>
+            NHibernate date type
+            </summary>
+        </member>
+        <member name="F:NHibernate.NHibernateUtil.DateTimeOffset">
+            <summary>
+            NHibernate date type
+            </summary>
+        </member>
         <member name="F:NHibernate.NHibernateUtil.Date">
             <summary>
             NHibernate date type
@@ -37813,6 +38049,11 @@
             </summary>
         </member>
         <member name="F:NHibernate.NHibernateUtil.TimeSpan">
+            <summary>
+            NHibernate Ticks type
+            </summary>
+        </member>
+        <member name="F:NHibernate.NHibernateUtil.TimeSpanInt64">
             <summary>
             NHibernate Ticks type
             </summary>

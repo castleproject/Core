@@ -1042,6 +1042,27 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <summary>
 		/// Creates a new <c>Criteria</c> for the entity class.
 		/// </summary>
+		/// <typeparam name="T">The class to Query</typeparam>
+		/// <returns>An ICriteria object</returns>
+		public ICriteria CreateCriteria<T>() where T : class
+		{
+			return inner.CreateCriteria(typeof(T));
+		}
+
+		/// <summary>
+		/// Creates a new <c>Criteria</c> for the entity class with a specific alias
+		/// </summary>
+		/// <typeparam name="T">The class to Query</typeparam>
+		/// <param name="alias">The alias of the entity</param>
+		/// <returns>An ICriteria object</returns>
+		public ICriteria CreateCriteria<T>(string alias) where T : class
+		{
+			return inner.CreateCriteria(typeof(T), alias);
+		}
+
+		/// <summary>
+		/// Creates a new <c>Criteria</c> for the entity class.
+		/// </summary>
 		/// <param name="persistentClass">The class to Query</param>
 		/// <returns>An ICriteria object</returns>
 		public ICriteria CreateCriteria(Type persistentClass)
