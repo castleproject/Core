@@ -1,13 +1,12 @@
-
+using System;
+using System.Configuration;
+using System.IO;
+using System.Reflection;
+using Castle.Core.Configuration;
+using NHibernate.Event;
+using Configuration = NHibernate.Cfg.Configuration;
 namespace Castle.Facilities.NHibernateIntegration.Internal
 {
-	using System;
-	using System.Configuration;
-	using System.IO;
-	using System.Reflection;
-	using Castle.Core.Configuration;
-	using NHibernate.Event;
-	using Configuration=NHibernate.Cfg.Configuration;
 
 	/// <summary>
 	/// Default imlementation of <see cref="IConfigurationBuilder"/>
@@ -21,7 +20,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		/// </summary>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		public Configuration GetConfiguration(IConfiguration config)
+		public virtual Configuration GetConfiguration(IConfiguration config)
 		{
 			Configuration cfg = new Configuration();
 

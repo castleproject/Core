@@ -115,10 +115,6 @@
       <Name>NHibernate</Name>
       <HintPath>..\..\..\build\net-3.5\debug\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Mapping.Attributes">
-      <Name>NHibernate.Mapping.Attributes</Name>
-      <HintPath>..\..\..\build\net-3.5\debug\NHibernate.Mapping.Attributes.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -193,6 +189,7 @@
     <Compile Include="Internal\ResourceAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\PersistentConfigurationBuilder.cs" />
     <Compile Include="Internal\SessionDelegate.cs">
       <SubType>Code</SubType>
     </Compile>

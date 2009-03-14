@@ -14,6 +14,7 @@
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="NHibernate.dll" />
+			<include name="log4net.dll" />
 			<include name="NHibernate.Mapping.Attributes.dll" />
 			<include name="Castle.Core.dll" />
 			<include name="Castle.Services.Transaction.dll" />
