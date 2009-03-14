@@ -39,7 +39,7 @@ namespace Castle.ActiveRecord.Tests.Event
 			var listeners = Blog.Holder.GetConfiguration(typeof(ActiveRecordBase)).EventListeners.PostInsertEventListeners;
 			Assert.Greater(Array.IndexOf(listeners, listener),-1);
 		}
-
+	
 		[Test]
 		public void Listener_is_called()
 		{
@@ -69,5 +69,6 @@ namespace Castle.ActiveRecord.Tests.Event
 
 			#endregion
 		}
+
 	}
 }

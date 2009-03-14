@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.ActiveRecord.Framework.Internal.EventListener;
+
 namespace Castle.ActiveRecord
 {
 	using System;
@@ -168,6 +170,8 @@ namespace Castle.ActiveRecord
 				ActiveRecordModel.isDebug = source.Debug;
 				ActiveRecordModel.isLazyByDefault = source.IsLazyByDefault;
 				ActiveRecordModel.pluralizeTableNames = source.PluralizeTableNames;
+
+				RegisterEventListeners(types);
 
 				// Sets up base configuration
 				SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
@@ -926,6 +930,32 @@ namespace Castle.ActiveRecord
 			}
 		}
 
+		private static void RegisterEventListeners(IEnumerable<Type> types)
+		{
+			var contributor = new EventListenerContributor();
+			foreach (var type in types)
+			{
+				var eventListenerAttributes = type.GetCustomAttributes(typeof(EventListenerAttribute), false);
+				if (eventListenerAttributes.Length == 1)
+				{
+					var attribute = (EventListenerAttribute) eventListenerAttributes[0];
+					var config = new EventListenerConfig(type)
+					             	{
+					             		ReplaceExisting = attribute.ReplaceExisting,
+										Ignore=attribute.Ignore,
+										SkipEvent=attribute.SkipEvent,
+										Singleton = attribute.Singleton,
+										Include = attribute.Include,
+										Exclude = attribute.Exclude
+					             	};
+
+					contributor.Add(config);
+				}
+			}
+			AddContributor(contributor);
+		}
+
+
 		private static void AddXmlToNHibernateFromAssmebliesAttributes(ISessionFactoryHolder holder, ActiveRecordModelCollection models)
 		{
 			ISet<Assembly> assembliesGeneratedXmlFor = new HashedSet<Assembly>();
@@ -1062,6 +1092,14 @@ namespace Castle.ActiveRecord
 			{
 				contributors.Add(contributor);
 			}
+		}
+
+		/// <summary>
+		/// Clears the contributor registry. Mainly used for tests.
+		/// </summary>
+		public static void ClearContributors()
+		{
+			contributors.Clear();
 		}
 
 		private static List<INHContributor> contributors = new List<INHContributor>();

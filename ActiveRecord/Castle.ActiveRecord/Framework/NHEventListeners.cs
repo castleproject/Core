@@ -34,13 +34,18 @@ namespace Castle.ActiveRecord.Framework
 		private Dictionary<Type, ArrayList> listeners = new Dictionary<Type, ArrayList>();
 
 		/// <summary>
+		/// Replaces existing listeners instead of adding them if set to <code>true</code>.
+		/// </summary>
+		public bool ReplaceExistingListeners { get; set; }
+
+		/// <summary>
 		/// Adds an event listener that will be added to all configurations served.
 		/// </summary>
 		/// <typeparam name="TListener">the event listener type to add</typeparam>
 		/// <param name="listenerInstance">the listener instance to add</param>
 		public void Add<TListener>(TListener listenerInstance)
 		{
-			var eventTypes = GetEventTypes<TListener>();
+			var eventTypes = GetEventTypes<TListener>(listenerInstance);
 			if (listenerInstance == null) throw new ArgumentNullException("listenerInstance");
 			if (eventTypes.Length == 0) throw new ArgumentException("listenerInstance is not an instance of a recognized NHibernate event listener type", "listenerInstance");
 
@@ -62,7 +67,7 @@ namespace Castle.ActiveRecord.Framework
 		/// <param name="listenerInstance">the instance to remove</param>
 		public void Remove<TListener>(TListener listenerInstance)
 		{
-			var eventTypes = GetEventTypes<TListener>();
+			var eventTypes = GetEventTypes<TListener>(listenerInstance);
 			if (eventTypes.Length == 0) throw new ArgumentException("listenerInstance is not an instance of a recognized NHibernate event listener type", "listenerInstance");
 
 			lock (listeners)
@@ -84,7 +89,7 @@ namespace Castle.ActiveRecord.Framework
 		/// <param name="listenerInstance">the instance to test for</param>
 		public bool Contains<TListener>(TListener listenerInstance)
 		{
-			var eventTypes = GetEventTypes<TListener>();
+			var eventTypes = GetEventTypes<TListener>(listenerInstance);
 			if (eventTypes.Length==0) throw new ArgumentException("listenerInstance is not an instance of a recognized NHibernate event listener type", "listenerInstance");
 
 			if (listenerInstance == null) return false;
@@ -170,7 +175,13 @@ namespace Castle.ActiveRecord.Framework
 
 		private static List<Type> cachedListenerTypes;
 
-		private static PropertyInfo GetProperty(Type listenerType)
+		/// <summary>
+		/// Returns the PropertyInfo of the <see cref="EventListeners"/>-class for
+		/// a given EventListener-interface.
+		/// </summary>
+		/// <param name="listenerType">The listener interface</param>
+		/// <returns>the property info object</returns>
+		public static PropertyInfo GetProperty(Type listenerType)
 		{
 			foreach (var propertyInfo in typeof(EventListeners).GetProperties())
 			{
@@ -180,12 +191,15 @@ namespace Castle.ActiveRecord.Framework
 			return null;
 		}
 
-		private Type[] GetEventTypes<TListenerType>()
+		private static Type[] GetEventTypes<TListenerType>(object listener)
 		{
 			if (cachedListenerTypes == null)
 				GetEventListenerTypes();
+
+			Type typeToInspect = (listener != null) ? listener.GetType() : typeof(TListenerType);
+
 			return Array.FindAll(
-				typeof(TListenerType).GetInterfaces(), 
+				typeToInspect.GetInterfaces(), 
 				type=>cachedListenerTypes.Contains(type));
 		}
 	}

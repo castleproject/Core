@@ -338,6 +338,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\EventListenerAttribute.cs" />
     <Compile Include="Attributes\SqlNamedQueryAttribute.cs" />
     <Compile Include="Attributes\WithAccessOptionalTableAttribute.cs" />
     <Compile Include="Attributes\CompositeUserTypeAttribute.cs" />
@@ -358,6 +359,8 @@
     <Compile Include="Framework\Config\DefaultFlushType.cs" />
     <Compile Include="Framework\AbstractNHContributor.cs" />
     <Compile Include="Framework\INHContributor.cs" />
+    <Compile Include="Framework\Internal\EventListener\EventListenerConfig.cs" />
+    <Compile Include="Framework\Internal\EventListener\EventListenerContributor.cs" />
     <Compile Include="Framework\NHEventListeners.cs" />
     <Compile Include="Framework\Internal\Model\JoinedTableModel.cs" />
     <Compile Include="Framework\IValidationProvider.cs" />

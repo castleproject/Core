@@ -40,7 +40,7 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[TearDown]
-		public void Drop()
+		public virtual void Drop()
 		{
 			try
 			{
