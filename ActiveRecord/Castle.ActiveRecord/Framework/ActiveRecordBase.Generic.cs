@@ -292,6 +292,8 @@ namespace Castle.ActiveRecord
 		/// <returns><c>true</c> if the ID exists; otherwise <c>false</c>.</returns>
 		public static bool Exists<PkType>(PkType id)
 		{
+			if (typeof(ICriterion).IsAssignableFrom(typeof(PkType)))
+				return Exists(new ICriterion[] {(ICriterion) id});
 			return Exists(typeof(T), id);
 		}
 

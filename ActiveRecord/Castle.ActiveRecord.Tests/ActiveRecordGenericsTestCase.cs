@@ -131,6 +131,22 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
+		public void BlogExistsCriterionOverload()
+		{
+			var blogs = Blog.FindAll();
+			Assert.AreEqual(0, blogs.Length);
+
+			var blog = new Blog()
+			           	{
+			           		Author = "Dr. Who",
+			           		Name = "Exaggerated Murmuring"
+			           	};
+			blog.SaveAndFlush();
+
+			Assert.IsTrue(Blog.Exists(Expression.Like("Author","Who",MatchMode.Anywhere)));
+		}
+
+		[Test]
 		public void SlicedOperation()
 		{
 			Blog blog = new Blog();
