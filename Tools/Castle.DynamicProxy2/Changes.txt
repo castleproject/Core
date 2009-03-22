@@ -1,5 +1,10 @@
 Unreleased Changes
 ==================
+- Applied Krzysztof Kozmic's patch improving the XML documentation of IInterceptorSelector
+  and IProxyGenerationHook.
+
+2.1.0 RC1 (2009-03-10)
+======================
 - Applied Krzysztof Kozmic's patch improving the XML documentation and parameter names of IProxyBuilder, DefaultProxyBuilder and ProxyGenerator.
 
 - Applied Krzysztof Kozmic's patch heavily improving the XML documentation of ProxyGenerator.
@@ -146,14 +151,6 @@ Unreleased Changes
 - Fixed DYNPROXY-34
   "Cant proxy generic interfaces"
 
-
 Alpha Version 1.0.0.0
 =====================
-
 - First release
-
-
-
-
-
-

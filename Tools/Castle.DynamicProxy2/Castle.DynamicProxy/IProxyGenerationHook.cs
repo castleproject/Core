@@ -18,32 +18,33 @@ namespace Castle.DynamicProxy
 	using System.Reflection;
 
 	/// <summary>
-	/// Used during the target type inspection process.
-	/// Implementors have a chance to interfere in the
-	/// proxy generation process
+	/// Used during the target type inspection process. Implementors have a chance to customize the
+	/// proxy generation process.
 	/// </summary>
 	public interface IProxyGenerationHook
 	{
 		/// <summary>
-		/// Invoked by the generation process to know if
-		/// the specified member should be proxied
+		/// Invoked by the generation process to determine if the specified method should be proxied.
 		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="memberInfo"></param>
-		/// <returns></returns>
-		bool ShouldInterceptMethod(Type type, MethodInfo memberInfo);
+		/// <param name="type">The type which declares the given method.</param>
+		/// <param name="methodInfo">The method to inspect.</param>
+		/// <returns>True if the given method should be proxied; false otherwise.</returns>
+		bool ShouldInterceptMethod(Type type, MethodInfo methodInfo);
 
 		/// <summary>
-		/// Invoked by the generation process to notify that a
-		/// member wasn't marked as virtual.
+		/// Invoked by the generation process to notify that a member was not marked as virtual.
 		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="memberInfo"></param>
+		/// <param name="type">The type which declares the non-virtual member.</param>
+		/// <param name="memberInfo">The non-virtual member.</param>
+		/// <remarks>
+		/// Non-virtual members cannot be proxied. This method gives an opportunity to inspect
+		/// any non-virtual member of a type that has been requested to be proxied, and if
+		/// appropriate - throw an exception to notify the caller.
+		/// </remarks>
 		void NonVirtualMemberNotification(Type type, MemberInfo memberInfo);
 
 		/// <summary>
-		/// Invoked by the generation process to notify 
-		/// that the whole process is completed.
+		/// Invoked by the generation process to notify that the whole process has completed.
 		/// </summary>
 		void MethodsInspected();
 	}
