@@ -193,6 +193,7 @@
     <Compile Include="Issues\Facilities112\Fixture.cs" />
     <Compile Include="Issues\Facilities113\Fixture.cs" />
     <Compile Include="Issues\Facilities116\Fixture.cs" />
+    <Compile Include="Issues\Facilities117\PersistentConfigurationBuilderConventionsFixture.cs" />
     <Compile Include="SessionCreation\DaoTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -284,6 +285,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Issues\Facilities116\facility.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Issues\Facilities117\facility.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
