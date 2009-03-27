@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Update FromInterface Registration policy to only consider toplevel interfaces
+  and allow multiple services.
+
 - Fixed bug in AllComponentsReleasePolicy in which burden not properly handled
   on dispose.
 

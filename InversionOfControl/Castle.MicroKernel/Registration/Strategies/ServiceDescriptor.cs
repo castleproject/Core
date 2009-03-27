@@ -79,28 +79,26 @@ namespace Castle.MicroKernel.Registration
             useBaseType = false;
             return Select(delegate(Type type, Type baseType)
             {
-                Type first = null;
+				List<Type> matches = new List<Type>();
 				implements = implements ?? baseType;
 
-				foreach (Type theInterface in type.GetInterfaces())
+				foreach (Type theInterface in GetTopLevelInterfaces(type))
                 {
                     if (theInterface.GetInterface(implements.FullName) != null)
                     {
-                        first = theInterface;
-                        break;
+                        matches.Add(theInterface);
                     }
                 }
 
-				if (first == null && baseType.IsAssignableFrom(type))
+				if (matches.Count == 0 && baseType.IsAssignableFrom(type))
 				{
-					first = baseType;
+					matches.Add(baseType);
 				}
 
-                return (first != null) ? new Type[] { first } : null;
+                return matches;
             });
         }
 		
-
         /// <summary>
         /// Uses base type to lookup the sub interface.
 		/// </summary>
@@ -150,6 +148,22 @@ namespace Castle.MicroKernel.Registration
 			}
 
 			return services ?? new Type[] { type };
+		}
+
+		private IEnumerable<Type> GetTopLevelInterfaces(Type type)
+		{
+			Type[] interfaces = type.GetInterfaces();
+			List<Type> topLevel = new List<Type>(interfaces);
+
+			foreach (Type @interface in interfaces)
+			{
+				foreach (Type parent in @interface.GetInterfaces())
+				{
+					topLevel.Remove(parent);
+				}
+			}
+
+			return topLevel;
 		}
 
 		/// <summary>
