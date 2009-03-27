@@ -1,4 +1,16 @@
-Where to start the build?
+Where to start the build if you are an end-user?
+=========================
+
+Use the enduser.cmd script, which drives default.build, in the root directory. It compiles everything in the right order, copies dependencies and so on.
+It is necessary to build the trunk in this way before attempting to load any solutions in your IDE for the first time, otherwise you may have reference problems:
+
+Simply type
+
+  > enduser
+This will create a Debug build of the project, without running the tests/hitting databases or accessing the GAC.
+
+
+Where to start the build if you consider yourself a poweruser?
 =========================
 
 Use the build.cmd, which drives default.build, in the root directory. It compiles everything in the right order, copies dependencies and so on.
@@ -7,11 +19,15 @@ Simply type
 
   > build
 This will create a Debug build of the project
+******
+****** Please note that for this script to succeed you need to have the necessary databases set up, and be allowed to put assemblies in the GAC. 
+****** Please, please read this whole file carefully.
+******
 
 Use the following to build the trunk before attempting to load any solutions in your IDE for the first time, otherwise you may have reference problems:
 
-  > build rebuild, or
   > build quick rebuild
+This will create a Debug build of the project, without running the tests/hitting databases or accessing the GAC.
 
 
 Database tests
