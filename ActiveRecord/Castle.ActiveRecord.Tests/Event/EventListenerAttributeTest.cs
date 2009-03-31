@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Reflection;
+
 namespace Castle.ActiveRecord.Tests.Event
 {
 	using Iesi.Collections;
@@ -22,13 +24,20 @@ namespace Castle.ActiveRecord.Tests.Event
 	using NHibernate.Event;
 
 	[TestFixture]
-	public class EventListenerAttributeTest : AbstractActiveRecordTest
+	public class EventListenerAttributeTest : AbstractEventListenerTest
 	{
 		[Test]
 		public void C1_ListenerMustBeAddedWhenInitialized()
 		{
 			InitializeSingleBase(typeof(SamplePreInsertListener));
 			AssertListenerWasRegistered<SamplePreInsertListener>(e => e.PreInsertEventListeners);
+		}
+
+		[Test]
+		public void C1_Listener_must_be_added_when_initialized_with_assembly()
+		{
+			ActiveRecordStarter.Initialize(Assembly.GetAssembly(typeof(AttributedPreLoadListener)), GetConfigSource());
+			AssertListenerWasRegistered<AttributedPreLoadListener>(e=>e.PreLoadEventListeners);
 		}
 
 		[Test]
@@ -157,65 +166,6 @@ namespace Castle.ActiveRecord.Tests.Event
 			AssertListenerWasNotRegistered<NHibernate.Event.Default.DefaultLoadEventListener, Test2ARBase>(e => e.LoadEventListeners);
 		}
 
-		#region Assertions
-
-		private static void AssertListenerWasRegistered<TEventListener>(Func<EventListeners, object[]> listenerTypeSelector)
-		{
-			AssertListenerWasRegistered<TEventListener, ActiveRecordBase>(listenerTypeSelector);
-		}
-
-		private static void AssertListenerWasRegistered<TEventListener, TBaseClass>(
-			Func<EventListeners, object[]> listenerTypeSelector)
-		{
-			Assert.IsTrue(
-				ListenerWasRegistered<TEventListener, TBaseClass>(listenerTypeSelector),
-				"Event listener class {0} was not registered", typeof (TEventListener).FullName);
-		}
-
-		private static void AssertListenerWasNotRegistered<TEventListener>(Func<EventListeners, object[]> listenerTypeSelector)
-		{
-			AssertListenerWasNotRegistered<TEventListener, ActiveRecordBase>(listenerTypeSelector);
-		}
-
-		private static void AssertListenerWasNotRegistered<TEventListener, TBaseClass>(
-			Func<EventListeners, object[]> listenerTypeSelector)
-		{
-			Assert.IsFalse(
-				ListenerWasRegistered<TEventListener, TBaseClass>(listenerTypeSelector),
-				"Event listener class {0} was registered, but should not be", typeof (TEventListener).FullName);
-		}
-
-		private bool ListenerWasRegistered<TEventListener>(Func<EventListeners, object[]> listenerTypeSelector)
-		{
-			return ListenerWasRegistered<TEventListener, ActiveRecordBase>(listenerTypeSelector);
-		}
-
-		private static bool ListenerWasRegistered<TEventListener, TBaseClass>(Func<EventListeners, object[]> listenerTypeSelector)
-		{
-			object[] registeredListeners = GetRegisteredListeners<TBaseClass>(listenerTypeSelector);
-			var found = false;
-			foreach (var listener in registeredListeners)
-			{
-				if (typeof (TEventListener).Equals(listener.GetType()))
-					found = true;
-			}
-			return found;
-		}
-
-		private static object[] GetRegisteredListeners(Func<EventListeners, object[]> listenerTypeSelector)
-		{
-			return listenerTypeSelector(
-				ActiveRecordMediator.GetSessionFactoryHolder().GetConfiguration(typeof (ActiveRecordBase)).EventListeners);
-		}
-
-		private static object[] GetRegisteredListeners<TBaseClass>(Func<EventListeners, object[]> listenerTypeSelector)
-		{
-			return listenerTypeSelector(
-				ActiveRecordMediator.GetSessionFactoryHolder().GetConfiguration(typeof (TBaseClass)).EventListeners);
-		}
-
-		#endregion
-
 		#region Listeners
 
 		[EventListener]
@@ -308,18 +258,6 @@ namespace Castle.ActiveRecord.Tests.Event
 		}
 
 		#endregion
-
-		public override void Init()
-		{
-			base.Init();
-			ActiveRecordStarter.ClearContributors();
-		}
-
-		public override void Drop()
-		{
-			ActiveRecordStarter.ClearContributors();
-			base.Drop();
-		}
 
 		protected static void InitializeSingleBase(params Type[] listenerTypes)
 		{

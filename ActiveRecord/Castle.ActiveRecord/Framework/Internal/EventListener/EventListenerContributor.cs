@@ -174,7 +174,7 @@ Please open an issue at support.castleproject.org using this text.");
 			};
 		}
 		
-		private static Type[] GetEventTypes(Type listenerType)
+		internal static Type[] GetEventTypes(Type listenerType)
 		{
 			return Array.FindAll(
 				listenerType.GetInterfaces(),

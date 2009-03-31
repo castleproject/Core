@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{652F95D4-86E2-40B6-919D-CFC6E449386B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -338,7 +338,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\AddEventListenerAttribute.cs" />
+    <Compile Include="Attributes\EventListenerAssemblyAttribute.cs" />
     <Compile Include="Attributes\EventListenerAttribute.cs" />
+    <Compile Include="Attributes\IgnoreEventListenerAttribute.cs" />
     <Compile Include="Attributes\SqlNamedQueryAttribute.cs" />
     <Compile Include="Attributes\WithAccessOptionalTableAttribute.cs" />
     <Compile Include="Attributes\CompositeUserTypeAttribute.cs" />

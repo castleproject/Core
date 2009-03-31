@@ -22,6 +22,7 @@ namespace Castle.ActiveRecord
 	using System.Data;
 	using System.IO;
 	using System.Reflection;
+	using Attributes;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Config;
 	using Castle.ActiveRecord.Framework.Internal;
@@ -188,20 +189,16 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void Initialize(Assembly assembly, IConfigurationSource source)
 		{
-			List<Type> list = new List<Type>();
-
-			CollectValidActiveRecordTypesFromAssembly(assembly, list, source);
-
-			Initialize(source, list.ToArray());
+			Initialize(new Assembly[] {assembly}, source);
 		}
 
 		/// <summary>
 		/// Initialize the mappings using the configuration and 
 		/// checking all the types on the specified Assemblies
 		/// </summary>
-		public static void Initialize(Assembly[] assemblies, IConfigurationSource source)
+		public static void Initialize(Assembly[] assemblies, IConfigurationSource source, params Type[] additionalTypes)
 		{
-			List<Type> list = new List<Type>();
+			List<Type> list = new List<Type>(additionalTypes);
 
 			foreach(Assembly assembly in assemblies)
 			{
@@ -952,7 +949,64 @@ namespace Castle.ActiveRecord
 					contributor.Add(config);
 				}
 			}
+
+			var addEventListenerAttributes = new List<EventListenerAssemblyAttribute>();
+			var ignoreEventListenerAttributes = new List<EventListenerAssemblyAttribute>();
+			foreach (var assembly in registeredAssemblies)
+			{
+				addEventListenerAttributes.AddRange(
+					(AddEventListenerAttribute[]) assembly.GetCustomAttributes(typeof (AddEventListenerAttribute), false));
+				ignoreEventListenerAttributes.AddRange((IgnoreEventListenerAttribute[]) assembly.GetCustomAttributes(typeof(IgnoreEventListenerAttribute), false));
+			}
+
+			ProcessEventListenerAssemblyAttributes(contributor, ignoreEventListenerAttributes);
+			ProcessEventListenerAssemblyAttributes(contributor, addEventListenerAttributes);
+
 			AddContributor(contributor);
+		}
+
+		private static void ProcessEventListenerAssemblyAttributes(EventListenerContributor contributor, IEnumerable<EventListenerAssemblyAttribute> attributes)
+		{
+			foreach (var attribute in attributes)
+			{
+				if (attribute.Assembly != null)
+				{
+					foreach (var type in GetExportedTypesFromAssembly(attribute.Assembly))
+					{
+						if (EventListenerContributor.GetEventTypes(type).Length > 0)
+						{
+							var config = contributor.Get(type) ?? contributor.Add(new EventListenerConfig(type));
+							ConfigureEventListener(attribute, config);
+						}
+					}
+				}
+				if (attribute.Type != null)
+				{
+					var config = contributor.Get(attribute.Type) ?? contributor.Add(new EventListenerConfig(attribute.Type));
+					ConfigureEventListener(attribute, config);
+				}
+			}
+		}
+
+		private static void ConfigureEventListener(EventListenerAssemblyAttribute attribute, EventListenerConfig config)
+		{
+			if (attribute is IgnoreEventListenerAttribute)
+				config.Ignore = true;
+			else
+			{
+				config.Ignore = false;
+				var addAttribute = (AddEventListenerAttribute) attribute;
+				config.Exclude = addAttribute.Exclude;
+				config.Include = addAttribute.Include;
+				config.SkipEvent = addAttribute.ExcludeEvent;
+				if (addAttribute.IncludeEvent != null)
+				{
+					Type[] eventtypes = EventListenerContributor.GetEventTypes(config.ListenerType);
+					config.SkipEvent = Array.FindAll(eventtypes, type => Array.IndexOf(addAttribute.IncludeEvent, type) < 0);
+				}
+				config.Singleton = addAttribute.Singleton;
+				config.ReplaceExisting = addAttribute.ReplaceExisting;
+			}
 		}
 
 
@@ -1058,11 +1112,16 @@ namespace Castle.ActiveRecord
 
 			foreach(Type type in types)
 			{
-				if (IsActiveRecordType(type) || source.GetConfiguration(type) != null)
+				if (IsActiveRecordType(type) || IsEventListener(type) || source.GetConfiguration(type) != null)
 				{
 					list.Add(type);
 				}
 			}
+		}
+
+		private static bool IsEventListener(Type type)
+		{
+			return type.IsDefined(typeof (EventListenerAttribute), false);
 		}
 
 		/// <summary>
