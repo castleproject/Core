@@ -1,37 +1,24 @@
-Where to start the build if you are an end-user?
+Where to start the build?
 =========================
 
-Use the enduser.cmd script, which drives default.build, in the root directory. It compiles everything in the right order, copies dependencies and so on.
-It is necessary to build the trunk in this way before attempting to load any solutions in your IDE for the first time, otherwise you may have reference problems:
-
-Simply type
-
-  > enduser
-This will create a Debug build of the project, without running the tests/hitting databases or accessing the GAC.
-
-
-Where to start the build if you consider yourself a poweruser?
-=========================
-
-Use the build.cmd, which drives default.build, in the root directory. It compiles everything in the right order, copies dependencies and so on.
+Use the build.cmd script, which drives default.build NAnt script, in the root directory. It compiles everything in the right order, copies dependencies and so on.
+It is necessary to build the trunk in this way before attempting to load any solutions in your IDE for the first time, otherwise the Visual Studio projects will 
+have assembly reference problems:
 
 Simply type
 
   > build
-This will create a Debug build of the project
-******
-****** Please note that for this script to succeed you need to have the necessary databases set up, and be allowed to put assemblies in the GAC. 
-****** Please, please read this whole file carefully.
-******
-
-Use the following to build the trunk before attempting to load any solutions in your IDE for the first time, otherwise you may have reference problems:
-
-  > build quick rebuild
-This will create a Debug build of the project, without running the tests/hitting databases or accessing the GAC.
+This will create a Release build of the project, without running the tests/hitting databases or accessing the GAC.
 
 
-Database tests
-==============
+Specifying additional parameters to the build
+=============================================
+
+When specifying additonal parameters be careful to check if your system is configured to allow the tests to pass; please study this entire file carefully.
+
+
+Running the database tests
+==========================
 
 If you have MS SQL Server installed (default instance) just create two databases:
 
@@ -54,10 +41,32 @@ The basic NHibernate settings can be set as NAnt arguments:
 
     > -D:ar.connection.connection_string.1="Data Source=.;Initial Catalog=test;Integrated Security=SSPI;"
     > -D:ar.connection.connection_string.2="Data Source=.;Initial Catalog=test2;Integrated Security=SSPI;"
+	
+	
+Skipping the databases tests
+============================
+
+If you want to run all tests except the database tests type
+
+  > build -D:nhibernate.test=false -D:activerecord.test=false
 
 
-Possible problem with 3.5
+Running MonoRail's tests
+========================
+
+The user account running the tests must be allowed to add and remove assemblies from the GAC. For instance, the administrator account has these privileges.
+
+
+Skipping MonoRail's tests
 =========================
+
+If you want to run all tests except the MonoRail tests type
+
+  > build -D:monorail.test=false
+
+
+Possible problem with .NET 3.5
+==============================
 if you get the following error: 
 "The SDK for the 'net-3.5' framework is not available or not configured."
 then you probably need to fix the sdkInstallRoot in your nant.exe.config file to point to the correct location in the registry
@@ -102,15 +111,16 @@ quick: 		"build quick build" will run the build without tests and generally will
 
 Running the tests
 -------------------
-It's strongly advised to use the NUnit console test runner (nunit-console.exe) for running the tests.
-If you do not have NUnit installed the build script will fall back to using NAnt's <nunit2> task, which may or may not work for you.
-The build will search for nunit-console.exe on the path, in case you don't have it on the path you can specify it's location by
-setting the NAnt property -D:nunit-console=<full path to nunit-console.exe>.
+It's strongly advised to use the supplied build.cmd script, as this will use the NUnit from SharedLibs\build\NUnit, a version that's known
+to be working our tests.
+
 
 Building without running the tests
 -------------------
 
   > build -D:common.testrunner.enabled=false
+or
+  > build quick build
 
 Compiling a version not strongly signed
 ---------------------------------------
