@@ -15,13 +15,22 @@ REM See the License for the specific language governing permissions and
 REM limitations under the License.
 REM ****************************************************************************
 
+IF "%~dp0"=="%CD%\" goto checkargs
+goto normal
+
+:checkargs
 IF "%~1"=="" goto quick
 
 :normal
-%~dp0SharedLibs\build\NAnt\bin\NAnt.exe -t:net-3.5 -D:nunit-console=%~dp0SharedLibs\build\NUnit\bin\nunit-console.exe -buildfile:default.build %*
+%~dp0SharedLibs\build\NAnt\bin\NAnt.exe -t:net-3.5 -D:nunit-console=%~dp0SharedLibs\build\NUnit\bin\nunit-console.exe %*
 goto end
 
 :quick
-%~dp0SharedLibs\build\NAnt\bin\NAnt.exe -t:net-3.5 -D:nunit-console=%~dp0SharedLibs\build\NUnit\bin\nunit-console.exe -buildfile:default.build quick release clean build
+%~dp0SharedLibs\build\NAnt\bin\NAnt.exe -t:net-3.5 -D:nunit-console=%~dp0SharedLibs\build\NUnit\bin\nunit-console.exe quick release clean build
+goto end
+
+:test
+ECHO test!
 
 :end
+
