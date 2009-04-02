@@ -243,7 +243,7 @@ namespace Castle.MonoRail.Framework
 		/// </remarks>
 		public void EndProcess()
 		{
-			PrepareToExecuteAction(engineContext, context);
+//			PrepareToExecuteAction(engineContext, context);
 
 			IExecutableAction action = null;
 			Exception actionException = null;
