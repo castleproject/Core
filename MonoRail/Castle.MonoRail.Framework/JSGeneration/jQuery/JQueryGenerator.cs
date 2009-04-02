@@ -161,7 +161,6 @@ namespace Castle.MonoRail.Framework.JSGeneration.jQuery
 		/// <summary>
 		/// 
 		/// </summary>
-		[Flags]
 		private enum Position
 		{
 			/// <summary>
@@ -183,31 +182,31 @@ namespace Castle.MonoRail.Framework.JSGeneration.jQuery
 			/// <summary>
 			/// Insert content after each of the matched elements.
 			/// </summary>
-			after = 0x16,
+			after = 0x10,
 			/// <summary>
 			/// Insert content before each of the matched elements.
 			/// </summary>
-			before = 0x32,
+			before = 0x20,
 			/// <summary>
 			/// Insert all of the matched elements after another, specified, set of elements.
 			/// </summary>
-			insertAfter = 0x64,
+			insertAfter = 0x40,
 			/// <summary>
 			/// Insert all of the matched elements before another, specified, set of elements.
 			/// </summary>
-			insertBefore = 0x128,
+			insertBefore = 0x80,
 			/// <summary>
 			/// Wrap each matched element with the specified HTML content.
 			/// </summary>
-			wrap = 0x256,
+			wrap = 0x100,
 			/// <summary>
 			/// Wrap all the elements in the matched set into a single wrapper element.
 			/// </summary>
-			wrapInner = 0x512,
+			wrapInner = 0x200,
 			/// <summary>
 			/// Wrap all the elements in the matched set into a single wrapper element.
 			/// </summary>
-			wrapAll = 0x1024
+			wrapAll = 0x400
 		}
 
 		#endregion
