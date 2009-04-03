@@ -10806,6 +10806,11 @@
             Completely optional cascading drop clause
             </summary>
         </member>
+        <member name="P:NHibernate.Dialect.Dialect.PrimaryKeyString">
+            <summary>
+            The keyword used to create a primary key constraint
+            </summary>
+        </member>
         <member name="P:NHibernate.Dialect.Dialect.HasAlterTable">
             <summary>
             Does this dialect support the <c>ALTER TABLE</c> syntax?
@@ -14032,19 +14037,6 @@
         <member name="T:NHibernate.Engine.Query.NativeSQLQueryPlan">
             <summary> Defines a query execution plan for a native-SQL query. </summary>
         </member>
-        <member name="M:NHibernate.Engine.Query.NativeSQLQueryPlan.BindPositionalParameters(System.Data.IDbCommand,NHibernate.Engine.QueryParameters,System.Int32,NHibernate.Engine.ISessionImplementor)">
-            <summary> 
-            Bind positional parameter values to the <tt>PreparedStatement</tt>
-            (these are parameters specified by a JDBC-style ?).
-            </summary>
-        </member>
-        <member name="M:NHibernate.Engine.Query.NativeSQLQueryPlan.BindNamedParameters(System.Data.IDbCommand,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,NHibernate.Engine.TypedValue}},System.Int32,NHibernate.Engine.ISessionImplementor)">
-            <summary> 
-            Bind named parameters to the <tt>PreparedStatement</tt>. This has an
-            empty implementation on this superclass and should be implemented by
-            subclasses (queries) which allow named parameters.
-            </summary>
-        </member>
         <member name="T:NHibernate.Engine.Query.ParameterMetadata">
             <summary> Encapsulates metadata about parameters encountered within a query. </summary>
         </member>
@@ -14882,7 +14874,7 @@
             <summary>
             To use in deserialization callback
             </summary>
-            <param name="factory"></param>
+            <param name="sessionFactory"></param>
         </member>
         <member name="T:NHibernate.Engine.EntityUniqueKey">
             <summary> 
@@ -19514,26 +19506,6 @@
             <param name="startIndex">The position from which to start binding parameter values. </param>
             <param name="session">The originating session. </param>
             <returns> The number of ADO bind positions actually bound during this method execution. </returns>
-        </member>
-        <member name="M:NHibernate.Loader.Loader.BindPositionalParameters(System.Data.IDbCommand,NHibernate.Engine.QueryParameters,System.Int32,NHibernate.Engine.ISessionImplementor)">
-            <summary>
-            Bind positional parameter values to the <c>IDbCommand</c>
-            (these are parameters specified by ?).
-            </summary>
-            <param name="st">The ADO prepared statement </param>
-            <param name="queryParameters">The encapsulation of the parameter values to be bound. </param>
-            <param name="start">The position from which to start binding parameter values. </param>
-            <param name="session">The originating session. </param>
-            <returns> The number of ADO bind positions actually bound during this method execution. </returns>
-        </member>
-        <member name="M:NHibernate.Loader.Loader.BindNamedParameters(System.Data.IDbCommand,System.Collections.Generic.IDictionary{System.String,NHibernate.Engine.TypedValue},System.Int32,NHibernate.Engine.ISessionImplementor)">
-            <summary>
-            Bind named parameters to the <c>IDbCommand</c>
-            </summary>
-            <param name="st">The <see cref="T:System.Data.IDbCommand"/> that contains the parameters.</param>
-            <param name="namedParams">The named parameters (key) and the values to set.</param>
-            <param name="session">The <see cref="T:NHibernate.ISession"/> this Loader is using.</param>
-            <param name="start"></param>
         </member>
         <member name="M:NHibernate.Loader.Loader.GetResultSet(System.Data.IDbCommand,System.Boolean,System.Boolean,NHibernate.Engine.RowSelection,NHibernate.Engine.ISessionImplementor)">
             <summary>
@@ -33916,6 +33888,12 @@
         <member name="P:NHibernate.Type.CultureInfoType.Name">
             <summary></summary>
         </member>
+        <member name="T:NHibernate.Type.DecimalType">
+            <summary>
+            Maps a <see cref="T:System.Decimal"/> Property 
+            to a <see cref="F:System.Data.DbType.Decimal"/> column.
+            </summary>
+        </member>
         <member name="T:NHibernate.Type.CustomCollectionType">
             <summary>
             A custom type for mapping user-written classes that implement
@@ -34008,12 +33986,6 @@
         </member>
         <member name="P:NHibernate.Type.DateType.Name">
             <summary></summary>
-        </member>
-        <member name="T:NHibernate.Type.DecimalType">
-            <summary>
-            Maps a <see cref="T:System.Decimal"/> Property 
-            to a <see cref="F:System.Data.DbType.Decimal"/> column.
-            </summary>
         </member>
         <member name="T:NHibernate.Type.DoubleType">
             <summary>
@@ -35068,15 +35040,22 @@
         <member name="P:NHibernate.Type.TicksType.Name">
             <summary></summary>
         </member>
-        <member name="T:NHibernate.Type.TimeSpanInt64Type">
+        <member name="T:NHibernate.Type.TimeAsTimeSpanType">
+            <summary>
+            Maps a <see cref="T:System.TimeSpan"/> Property to an <see cref="F:System.Data.DbType.Time"/> column 
+            This is an extra way to map a <see cref="F:System.Data.DbType.Time"/>. You already have <see cref="T:NHibernate.Type.TimeType"/>
+            but mapping against a <see cref="T:System.DateTime"/>.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Type.TimeSpanType">
             <summary>
             Maps a <see cref="T:System.TimeSpan"/> Property to an <see cref="F:System.Data.DbType.Int64"/> column 
             </summary>
         </member>
-        <member name="M:NHibernate.Type.TimeSpanInt64Type.#ctor">
+        <member name="M:NHibernate.Type.TimeSpanType.#ctor">
             <summary></summary>
         </member>
-        <member name="M:NHibernate.Type.TimeSpanInt64Type.Set(System.Data.IDbCommand,System.Object,System.Int32)">
+        <member name="M:NHibernate.Type.TimeSpanType.Set(System.Data.IDbCommand,System.Object,System.Int32)">
             <summary>
             
             </summary>
@@ -35084,19 +35063,14 @@
             <param name="value"></param>
             <param name="index"></param>
         </member>
-        <member name="M:NHibernate.Type.TimeSpanInt64Type.Seed(NHibernate.Engine.ISessionImplementor)">
+        <member name="M:NHibernate.Type.TimeSpanType.Seed(NHibernate.Engine.ISessionImplementor)">
             <summary></summary>
         </member>
-        <member name="P:NHibernate.Type.TimeSpanInt64Type.Name">
+        <member name="P:NHibernate.Type.TimeSpanType.Name">
             <summary></summary>
         </member>
-        <member name="P:NHibernate.Type.TimeSpanInt64Type.ReturnedClass">
+        <member name="P:NHibernate.Type.TimeSpanType.ReturnedClass">
             <summary></summary>
-        </member>
-        <member name="T:NHibernate.Type.TimeSpanType">
-            <summary>
-            Maps a <see cref="T:System.TimeSpan"/> Property to an <see cref="F:System.Data.DbType.Time"/> column 
-            </summary>
         </member>
         <member name="T:NHibernate.Type.TimestampType">
             <summary>
@@ -35136,6 +35110,8 @@
             <summary>
             Maps a <see cref="T:System.DateTime"/> Property to an DateTime column that only stores the 
             Hours, Minutes, and Seconds of the DateTime as significant.
+            Also you have for <see cref="F:System.Data.DbType.Time"/> handling, the NHibernate Type <see cref="T:NHibernate.Type.TimeAsTimeSpanType"/>,
+            the which maps to a <see cref="T:System.TimeSpan"/>.
             </summary>
             <remarks>
             <para>
@@ -35143,7 +35119,7 @@
             using this Type indicates that you don't care about the Date portion of the DateTime.
             </para>
             <para>
-            A more appropriate choice to store the duration/time is the <see cref="T:NHibernate.Type.TimeSpanInt64Type"/>.
+            A more appropriate choice to store the duration/time is the <see cref="T:NHibernate.Type.TimeSpanType"/>.
             The underlying <see cref="F:System.Data.DbType.Time"/> tends to be handled differently by different
             DataProviders.
             </para>
@@ -37983,6 +37959,11 @@
             NHibernate double type
             </summary>
         </member>
+        <member name="F:NHibernate.NHibernateUtil.Currency">
+            <summary>
+            NHibernate Currency type (System.Decimal - DbType.Currency)
+            </summary>
+        </member>
         <member name="F:NHibernate.NHibernateUtil.Guid">
             <summary>
             NHibernate Guid type.
@@ -38048,12 +38029,12 @@
             NHibernate Ticks type
             </summary>
         </member>
-        <member name="F:NHibernate.NHibernateUtil.TimeSpan">
+        <member name="F:NHibernate.NHibernateUtil.TimeAsTimeSpan">
             <summary>
             NHibernate Ticks type
             </summary>
         </member>
-        <member name="F:NHibernate.NHibernateUtil.TimeSpanInt64">
+        <member name="F:NHibernate.NHibernateUtil.TimeSpan">
             <summary>
             NHibernate Ticks type
             </summary>
