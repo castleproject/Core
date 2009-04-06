@@ -94,15 +94,15 @@
   <ItemGroup>
     <Reference Include="Castle.Components.Validator, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Validator.dll</HintPath>
+      <HintPath>..\..\build\net-3.5\debug\Castle.Components.Validator.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
+      <HintPath>..\..\build\net-3.5\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.DynamicProxy">
       <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\..\build\net-2.0\debug\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\..\build\net-3.5\debug\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -112,17 +112,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-3.5\debug\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="Nullables, Version=1.2.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-3.5\debug\Nullables.dll</HintPath>
-    </Reference>
-    <Reference Include="Nullables.NHibernate, Version=1.2.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-3.5\debug\Nullables.NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
+      <HintPath>..\..\build\net-3.5\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
