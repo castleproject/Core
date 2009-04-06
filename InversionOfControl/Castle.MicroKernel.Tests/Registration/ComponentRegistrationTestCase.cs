@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.MicroKernel.Tests.Registration
 {
+	using System;
 	using System.Collections;
 	using Castle.Core;
 	using Castle.Core.Configuration;
@@ -34,6 +36,13 @@ namespace Castle.MicroKernel.Tests.Registration
 		public void Init()
 		{
 			kernel = new DefaultKernel();
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void AddComponent_WhichIsNull_ThrowsNullArgumentException()
+		{
+			// Previously the kernel assummed everything was OK, and null reffed instead.
+			kernel.Register(Component.For(Type.GetType("NonExistentType, WohooAssembly")));
 		}
 
 		[Test]

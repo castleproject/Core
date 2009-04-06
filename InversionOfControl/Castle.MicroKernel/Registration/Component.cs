@@ -30,6 +30,11 @@ namespace Castle.MicroKernel.Registration
 		/// <returns>The component registration.</returns>
 		public static ComponentRegistration For(Type serviceType)
 		{
+			if (serviceType == null)
+				throw new ArgumentNullException("serviceType",
+				                                "The argument was null. Check that the assembly " 
+												+ "is referenced and the type available to your application.");
+
 			return new ComponentRegistration(serviceType);
 		}
 

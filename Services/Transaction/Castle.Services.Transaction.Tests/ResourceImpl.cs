@@ -17,11 +17,12 @@ namespace Castle.Services.Transaction.Tests
 	using System;
 
 
-	public class ResourceImpl : IResource
+	public class ResourceImpl : IResource, IDisposable
 	{
 		private bool _started;
 		private bool _rolledback;
 		private bool _committed;
+		public bool wasDisposed;
 
 		public ResourceImpl()
 		{
@@ -66,5 +67,10 @@ namespace Castle.Services.Transaction.Tests
 		}
 
 		#endregion
+
+		public void Dispose()
+		{
+			wasDisposed = true;
+		}
 	}
 }

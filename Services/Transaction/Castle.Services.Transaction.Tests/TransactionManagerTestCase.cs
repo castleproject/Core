@@ -352,5 +352,22 @@ namespace Castle.Services.Transaction.Tests
 			Assert.IsNotNull(exception);
 			Assert.IsInstanceOfType(typeof(RollbackResourceException), exception);
 		}
+
+		[Test]
+		public void TransactionResources_AreDisposed()
+		{
+			var t = tm.CreateTransaction(TransactionMode.Requires, IsolationMode.Unspecified);
+			var resource = new ResourceImpl();
+
+			t.Enlist(resource);
+			t.Begin();
+
+			// lalala
+
+			t.Rollback();
+			tm.Dispose(t);
+
+			Assert.IsTrue(resource.wasDisposed);
+		}
 	}
 }

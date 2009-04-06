@@ -279,6 +279,12 @@ namespace Castle.Services.Transaction
 
 		public virtual void Dispose()
 		{
+			foreach (var resource in resources)
+			{
+				if (resource is IDisposable)
+					(resource as IDisposable).Dispose();
+			}
+
 			resources.Clear();
 			synchronizations.Clear();
 		}
