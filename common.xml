@@ -35,7 +35,8 @@
 		<property name="lib.framework.dir" value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}" dynamic="true" />
 	</if>
 	<if test="${nant-version.current == nant-version.beta1_086 and framework::get-target-framework() == 'net-3.5'}">
-		<echo>Detected NAnt 0.86 Beta 1, consider upgrading to a newer version when building for .NET 3.5</echo>
+		<echo>Detected NAnt 0.86 Beta 1, consider upgrading to a newer version (a nightly build) when building for .NET 3.5</echo>
+		<echo>The latest NAnt nightly can be downloaded from http://nant.sourceforge.net/nightly/latest/nant-bin.zip</echo>
 		<property name="lib.framework.dir" value="${path::combine(lib.family.dir, string::substring(framework::get-target-framework(), 4, 3))}" dynamic="true" />
 	</if>
 
@@ -280,7 +281,7 @@
 					<property name="nunit_version" value="${string::trim(string::substring(nunit_txt, string::index-of( nunit_txt, nunit_findtxt) + string::get-length(nunit_findtxt),6 ))}" />
 				</if>
 				<echo if="${string::get-length(nunit_version) == 0}">WARNING: Unable to determine NUnit version, unit tests may fail unpredictably with your version of NUnit</echo>
-				<echo if="${string::get-length(nunit_version) > 0}">INFO: Found NUnit ${nunit_version}</echo>
+				<echo if="${string::get-length(nunit_version) > 0}">INFO: Found NUnit ${nunit_version} in ${nunit-console}</echo>
 			</if>
 		</if>
 	</target>
@@ -292,7 +293,7 @@
 	<target name="common.find-tools">
 		<!-- Where is nunit-console executable(win/mono) ? -->
 		<property name="nunit-console2" value="nunit-console2" overwrite="false" />
-		<property name="nunit-console" value="nunit-console" overwrite="false" />
+		<property name="nunit-console" value="${root.dir}/SharedLibs/build/NUnit/bin/nunit-console.exe" overwrite="false" />
 
 		<!-- Where is WiX? -->
 		<property name="wix.dir" value="${environment::get-folder-path('ProgramFiles')}\Windows Installer XML v3\bin" overwrite="false" />
