@@ -287,8 +287,8 @@ namespace Castle.Services.Transaction
 
 			if (CurrentTransaction != transaction)
 			{
-				throw new ArgumentException("transaction",
-				                            "Tried to dispose a transaction that is not on the current active transaction");
+				throw new ArgumentException("Tried to dispose a transaction that is not on the current active transaction", 
+					"transaction");
 			}
 
 			activityManager.CurrentActivity.Pop();

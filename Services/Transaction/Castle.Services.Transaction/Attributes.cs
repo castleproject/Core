@@ -40,8 +40,9 @@ namespace Castle.Services.Transaction
 		/// </summary>
 		RequiresNew,
 		/// <summary>
-		/// an existing appropriate transaction context 
-		/// will be joined if present
+		/// An existing appropriate transaction context 
+		/// will be joined if present, but if if there is no current
+		/// transaction on the thread, no transaction will be created.
 		/// </summary>
 		Supported
 	}
