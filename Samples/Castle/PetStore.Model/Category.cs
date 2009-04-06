@@ -19,8 +19,7 @@ namespace PetStore.Model
 	using Castle.ActiveRecord;
 	
 	using Iesi.Collections;
-	
-	using NHibernate.Expression;
+	using NHibernate.Criterion;
 
 
 	[ActiveRecord]

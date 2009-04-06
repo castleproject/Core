@@ -43,7 +43,7 @@ namespace AuthenticationUsingFilters.Controllers
 				
 				Session["user"] = user;
 				
-				Redirect(ReturnUrl);
+				RedirectToUrl(ReturnUrl);
 			}
 			else
 			{

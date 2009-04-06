@@ -14,14 +14,12 @@
 
 namespace PetStore.Web.Controllers
 {
-	using System;
-
 	using Castle.MonoRail.Framework;
 
 
 	public sealed class AuthenticationFilter : IFilter
 	{
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public bool Perform(ExecuteWhen exec, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 			if (context.CurrentUser == null || !context.CurrentUser.Identity.IsAuthenticated)
 			{

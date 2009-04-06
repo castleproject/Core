@@ -77,24 +77,24 @@
   <ItemGroup>
     <Reference Include="Castle.ActiveRecord">
       <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\..\build\net-1.1\debug\Castle.ActiveRecord.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\Castle.ActiveRecord.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Components.Validator, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
-      <HintPath>..\..\..\build\net-1.1\debug\Castle.Core.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <Name>Iesi.Collections</Name>
-      <HintPath>..\..\..\build\net-1.1\debug\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
-      <HintPath>..\..\..\build\net-1.1\debug\log4net.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\..\build\net-1.1\debug\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

@@ -54,7 +54,7 @@ namespace GettingStartedSample.Controllers
 			PropertyBag["suppliers"] = Supplier.FindAll();
 		}
 
-		public void Edit(int id, [FlashBinder] Product product)
+		public void Edit(int id, Product product)
 		{
 			PropertyBag["suppliers"] = Supplier.FindAll();
 		}

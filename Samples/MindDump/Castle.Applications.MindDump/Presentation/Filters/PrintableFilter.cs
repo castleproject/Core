@@ -21,11 +21,11 @@ namespace Castle.Applications.MindDump.Presentation.Filters
 
 	public class PrintableFilter : IFilter
 	{
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public bool Perform(ExecuteWhen exec, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
-			if (context.Params["printable"] != null)
+			if (context.Request.Params["printable"] != null)
 			{
-				controller.LayoutName = "printabletheme";
+				controllerContext.LayoutNames = new string[] {"printabletheme"};
 			}
 
 			return true;

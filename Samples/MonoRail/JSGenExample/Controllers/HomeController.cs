@@ -11,7 +11,7 @@ namespace JSGenExample.Controllers
 
 		public void Index()
 		{
-			PropertyBag["customers"] = PaginationHelper.CreatePagination<Customer>(this, Customers, PageSize); 
+			PropertyBag["customers"] = PaginationHelper.CreatePagination<Customer>(Context, Customers, PageSize); 
 		}
 
 		/// <summary>

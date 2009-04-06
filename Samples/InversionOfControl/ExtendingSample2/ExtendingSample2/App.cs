@@ -25,7 +25,7 @@ namespace ExtendingSample2
 		{
 			IKernel kernel = new DefaultKernel();
 			
-			kernel.AddFacility("non.opt.props", new NonOptionalPropertiesFacility());
+			kernel.AddFacility<NonOptionalPropertiesFacility>();
 			
 			kernel.AddComponent("sql.connmng", typeof(SqlConnectionManager));
 			

@@ -31,8 +31,8 @@ namespace Extending2
 
 			// Facilities
 
-			container.AddFacility( "transaction", new TransactionFacility() );
-			container.AddFacility( "startable", new StartableFacility() );
+			container.AddFacility<TransactionFacility>();
+			container.AddFacility<StartableFacility>();
 
 			// Forms
 			container.AddComponent( "form", typeof(MainForm) );

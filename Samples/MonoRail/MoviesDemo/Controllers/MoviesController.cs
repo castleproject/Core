@@ -18,7 +18,7 @@ namespace MoviesDemo.Controllers
 	using Castle.MonoRail.Framework;
 	using MoviesDemo.Model;
 
-	[Resource("text", "MoviesDemo.Resources.Movies")]
+	[Resource("loc", "MoviesDemo.Resources.Movies")]
 	public class MoviesController : AbstractHtmlPageController
 	{
 		public void List()
@@ -28,7 +28,7 @@ namespace MoviesDemo.Controllers
 
 		public void Edit(int movieId)
 		{
-			Movie movie = Movie.Find(movieId);
+			Movie movie = movieId == 0 ? new Movie() : Movie.Find(movieId);
 
 			PropertyBag["movie"] = movie;
 		}
@@ -56,7 +56,7 @@ namespace MoviesDemo.Controllers
 			}
 
 			//Redirect so a refresh doesn't post again
-			Response.Redirect("~/Movies/View.castle?movieId=" + movie.Id);
+			Response.RedirectToUrl("~/Movies/View.castle?movieId=" + movie.Id);
 
 			CancelView();
 		}

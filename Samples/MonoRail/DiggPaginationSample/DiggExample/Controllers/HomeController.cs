@@ -20,7 +20,7 @@ namespace DiggExample.Controllers
 	using Castle.MonoRail.Framework.Helpers;
 
 	using DiggExample.Model;
-	using NHibernate.Expression;
+	using NHibernate.Criterion;
 
 	[Layout("default"), Rescue("generalerror")]
 	public class HomeController : SmartDispatcherController
@@ -86,7 +86,7 @@ namespace DiggExample.Controllers
 		public void Index8(bool desc)
 		{
 			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
-				this,
+				Context,
 				MyEntity.FindAll(new Order("Index", (!desc))),
 				10
 			);
@@ -101,7 +101,7 @@ namespace DiggExample.Controllers
 		private void CreatePageWith10()
 		{
 			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
-				this,
+				Context,
 				MyEntity.FindAll(new Order("Index", true)),
 				10
 				);
@@ -112,7 +112,7 @@ namespace DiggExample.Controllers
 			List<MyEntity> el = new List<MyEntity>(MyEntity.FindAll(new Order("Index", true)));
 
 			PropertyBag["items"] = PaginationHelper.CreatePagination<MyEntity>(
-				this,
+				Context,
 				el.GetRange(0, 5),
 				10
 				);

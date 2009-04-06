@@ -20,7 +20,7 @@ namespace Yournamespace
 {
   public class SecurityFilter : IFilter
   {
-    public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+    public bool Perform(ExecuteWhen exec, IEngineContext context, Controller controller)
     {
       if (context.Session.Contains("user"))
       {
@@ -43,7 +43,7 @@ filter is supposed to run (before of after the action):
 </p>
 
 <pre><code>
-  [Filter(ExecuteEnum.Before, typeof(SecurityFilter))]
+  [Filter(ExecuteWhen.Before, typeof(SecurityFilter))]
   public class HomeController : Controller
   {
 	public void MyAction()
@@ -68,7 +68,7 @@ You must return true to allow the flow to continue.
   be intercepted by the filter. In these cases, use the SkipFilter attribute:
 
 <pre><code>
-  [Filter(ExecuteEnum.Before, typeof(SecurityFilter))]
+  [Filter(ExecuteWhen.Before, typeof(SecurityFilter))]
   public class HomeController : Controller
   {
 	public void SecuredAction()

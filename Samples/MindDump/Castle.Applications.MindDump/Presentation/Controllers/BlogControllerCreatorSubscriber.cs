@@ -48,7 +48,7 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 
 		public void OnBlogAdded(Blog blog)
 		{
-			_controllerTree.AddController(String.Empty, blog.Author.Login, "blogs.controller");
+			_controllerTree.AddController(String.Empty, blog.Author.Login, typeof(BlogController));
 		}
 
 		public void OnBlogRemoved(Blog blog)

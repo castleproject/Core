@@ -29,7 +29,7 @@ namespace ExtendingSample
 		{
 			IWindsorContainer container = new WindsorContainer( new XmlInterpreter("../AppConfig.config") );
 
-			container.AddFacility( "startable", new StartableFacility() );
+			container.AddFacility<StartableFacility>();
 
 			container.AddComponent( "appRunner", 
 				typeof(WinformApplicationRunner) );

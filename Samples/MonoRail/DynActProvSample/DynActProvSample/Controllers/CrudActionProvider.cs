@@ -41,7 +41,7 @@ namespace DynActProvSample.Controllers
 	/// </summary>
 	public class CrudActionProvider : IDynamicActionProvider
 	{
-		public void IncludeActions(Controller controller)
+		public void IncludeActions(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
 			Type controllerType = controller.GetType();
 
@@ -57,13 +57,13 @@ namespace DynActProvSample.Controllers
 			Type arType = crudAtt.ActiveRecordType;
 			String prefix = arType.Name.ToLower();
 
-			controller.DynamicActions["list"] = new ListAction(arType);
-			controller.DynamicActions["new"] = new NewAction();
-			controller.DynamicActions["create"] = new CreateAction(arType, prefix);
-			controller.DynamicActions["edit"] = new EditAction(arType, prefix);
-			controller.DynamicActions["update"] = new UpdateAction(arType, prefix);
-			controller.DynamicActions["confirmdelete"] = new ConfirmDeleteAction(arType, prefix);
-			controller.DynamicActions["delete"] = new DeleteAction(arType, prefix);
+			controllerContext.DynamicActions["list"] = new ListAction(arType);
+			controllerContext.DynamicActions["new"] = new NewAction();
+			controllerContext.DynamicActions["create"] = new CreateAction(arType, prefix);
+			controllerContext.DynamicActions["edit"] = new EditAction(arType, prefix);
+			controllerContext.DynamicActions["update"] = new UpdateAction(arType, prefix);
+			controllerContext.DynamicActions["confirmdelete"] = new ConfirmDeleteAction(arType, prefix);
+			controllerContext.DynamicActions["delete"] = new DeleteAction(arType, prefix);
 		}
 	}
 
@@ -76,19 +76,23 @@ namespace DynActProvSample.Controllers
 			this.arType = arType;
 		}
 
-		public void Execute(Controller controller)
+		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
-			controller.PropertyBag["items"] = ActiveRecordMediator.FindAll(arType);
+			controllerContext.PropertyBag["items"] = ActiveRecordMediator.FindAll(arType);
 
-			controller.RenderView("list");
+			new RenderingSupport(controllerContext, engineContext).RenderView("list");
+
+			return null;
 		}
 	}
 
 	public class NewAction : IDynamicAction
 	{
-		public void Execute(Controller controller)
+		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
-			controller.RenderView("new");
+			new RenderingSupport(controllerContext, engineContext).RenderView("new");
+			
+			return null;
 		}
 	}
 
@@ -103,7 +107,7 @@ namespace DynActProvSample.Controllers
 			this.prefix = prefix;
 		}
 
-		public void Execute(Controller controller)
+		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
 			object instance = null;
 
@@ -119,19 +123,21 @@ namespace DynActProvSample.Controllers
 
 				instance = binder.BindObject(
 					arType, prefix,
-					builder.BuildSourceNode(controller.Form));
+					builder.BuildSourceNode(engineContext.Request.Form));
 
 				ActiveRecordMediator.Create(instance);
 
-				controller.Redirect(controller.Name, "list");
+				engineContext.Response.Redirect(controllerContext.Name, "list");
 			}
 			catch(Exception ex)
 			{
-				controller.Flash["errormessage"] = ex.Message;
-				controller.Flash[prefix] = instance;
+				engineContext.Flash["errormessage"] = ex.Message;
+				engineContext.Flash[prefix] = instance;
 
-				controller.Redirect(controller.Name, "new");
+				engineContext.Response.Redirect(controllerContext.Name, "new");
 			}
+
+			return null;
 		}
 	}
 
@@ -146,14 +152,16 @@ namespace DynActProvSample.Controllers
 			this.prefix = prefix;
 		}
 
-		public void Execute(Controller controller)
+		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
-			int id = Convert.ToInt32(controller.Query["id"]);
+			int id = Convert.ToInt32(engineContext.Request.QueryString["id"]);
 
-			controller.PropertyBag[prefix] =
+			controllerContext.PropertyBag[prefix] =
 				ActiveRecordMediator.FindByPrimaryKey(arType, id);
 
-			controller.RenderView("edit");
+			new RenderingSupport(controllerContext, engineContext).RenderView("edit");
+
+			return null;
 		}
 	}
 
@@ -168,7 +176,7 @@ namespace DynActProvSample.Controllers
 			this.prefix = prefix;
 		}
 
-		public void Execute(Controller controller)
+		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
 			object instance = null;
 
@@ -184,19 +192,21 @@ namespace DynActProvSample.Controllers
 
 				instance = binder.BindObject(
 					arType, prefix,
-					builder.BuildSourceNode(controller.Form));
+					builder.BuildSourceNode(engineContext.Request.Form));
 
 				ActiveRecordMediator.Update(instance);
 
-				controller.Redirect(controller.Name, "list");
+				engineContext.Response.Redirect(controllerContext.Name, "list");
 			}
 			catch(Exception ex)
 			{
-				controller.Flash["errormessage"] = ex.Message;
-				controller.Flash[prefix] = instance;
+				engineContext.Flash["errormessage"] = ex.Message;
+				engineContext.Flash[prefix] = instance;
 
-				controller.Redirect(controller.Name, "edit", controller.Query);
+				engineContext.Response.Redirect(controllerContext.Name, "edit", engineContext.Request.QueryString);
 			}
+
+			return null;
 		}
 	}
 
@@ -211,14 +221,16 @@ namespace DynActProvSample.Controllers
 			this.prefix = prefix;
 		}
 
-		public void Execute(Controller controller)
+		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
-			int id = Convert.ToInt32(controller.Query["id"]);
+			int id = Convert.ToInt32(engineContext.Request.QueryString["id"]);
 
-			controller.PropertyBag[prefix] =
+			controllerContext.PropertyBag[prefix] =
 				ActiveRecordMediator.FindByPrimaryKey(arType, id);
 
-			controller.RenderView("confirmdelete");
+			new RenderingSupport(controllerContext, engineContext).RenderView("confirmdelete");
+
+			return null;
 		}
 	}
 
@@ -233,27 +245,29 @@ namespace DynActProvSample.Controllers
 			this.prefix = prefix;
 		}
 
-		public void Execute(Controller controller)
+		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
 		{
 			object instance = null;
 
 			try
 			{
-				int id = Convert.ToInt32(controller.Form[prefix + ".id"]);
+				int id = Convert.ToInt32(engineContext.Request.Form[prefix + ".id"]);
 
 				instance = ActiveRecordMediator.FindByPrimaryKey(arType, id);
 
 				ActiveRecordMediator.Delete(instance);
 
-				controller.Redirect(controller.Name, "list");
+				engineContext.Response.Redirect(controllerContext.Name, "list");
 			}
 			catch(Exception ex)
 			{
-				controller.Flash["errormessage"] = ex.Message;
-				controller.Flash[prefix] = instance;
+				engineContext.Flash["errormessage"] = ex.Message;
+				engineContext.Flash[prefix] = instance;
 
-				controller.Redirect(controller.Name, "confirmdelete", controller.Query);
+				engineContext.Response.Redirect(controllerContext.Name, "confirmdelete", engineContext.Request.QueryString);
 			}
+
+			return null;
 		}
 	}
 }

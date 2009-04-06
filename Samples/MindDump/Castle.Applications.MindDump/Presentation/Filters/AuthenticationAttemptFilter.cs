@@ -32,7 +32,7 @@ namespace Castle.Applications.MindDump.Presentation.Filters
 		{
 		}
 
-		public override bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public override bool Perform(ExecuteWhen exec, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 			if (context.CurrentUser.Identity.IsAuthenticated)
 			{

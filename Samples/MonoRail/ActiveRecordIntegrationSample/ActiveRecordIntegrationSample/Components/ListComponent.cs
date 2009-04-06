@@ -16,6 +16,7 @@ namespace ActiveRecordIntegrationSample.Components
 {
 	using System;
 	using System.Collections;
+	using Castle.Components.Pagination;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 
@@ -35,7 +36,7 @@ namespace ActiveRecordIntegrationSample.Components
 		public override void Render()
 		{
 			int currentPage = 1;
-			Int32.TryParse(RailsContext.Request.Params[PaginationHelper.PageParameterName] as string, out currentPage);
+			Int32.TryParse(EngineContext.Request.Params[PaginationHelper.PageParameterName] as string, out currentPage);
 			IPaginatedPage page = PaginationHelper.CreatePagination(elements, 5, currentPage);
 			
 			PropertyBag["page"] = page;

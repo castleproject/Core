@@ -22,7 +22,7 @@ namespace AuthenticationUsingFilters.Filters
 	
 	public class AuthenticationFilter : IFilter
 	{
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public bool Perform(ExecuteWhen exec, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 			// Read previous authenticated principal from session 
 			// (could be from cookie although with more work)
@@ -37,8 +37,8 @@ namespace AuthenticationUsingFilters.Filters
 			{
 				// Not authenticated, redirect to login
 				NameValueCollection parameters = new NameValueCollection();
-				parameters.Add("ReturnUrl", context.Url);
-				controller.Redirect("login", "index", parameters);
+				parameters.Add("ReturnUrl", context.UrlInfo.UrlRaw);
+				context.Response.Redirect("login", "index", parameters);
 				
 				// Prevent request from continue
 				return false;

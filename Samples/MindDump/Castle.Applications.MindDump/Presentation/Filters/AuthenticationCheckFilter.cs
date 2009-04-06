@@ -39,7 +39,7 @@ namespace Castle.Applications.MindDump.Presentation.Filters
 			_encryptionService = encryptionService;
 		}
 
-		public virtual bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public virtual bool Perform(ExecuteWhen exec, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 			if (!PerformAuthentication(context))
 			{
@@ -50,7 +50,7 @@ namespace Castle.Applications.MindDump.Presentation.Filters
 			return true;
 		}
 
-		protected bool PerformAuthentication(IRailsEngineContext context)
+		protected bool PerformAuthentication(IEngineContext context)
 		{
 			String contents = context.Request.ReadCookie("authenticationticket"); 
 	

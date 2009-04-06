@@ -1,18 +1,18 @@
-<h3>$text.movieList:</h3>
+<h3>$loc.movieList:</h3>
 
 <table border="1" cellpadding="4">
     <tr>
-        <th>$text.title</th>
-        <th>$text.dateAddedShort</th>
-        <th>$text.scoreShort</th>
+        <th>$loc.title</th>
+        <th>$loc.dateAddedShort</th>
+        <th>$loc.scoreShort</th>
     </tr>
     #foreach ( $movie in $movies)
         <tr>
             <td>$movie.Title</td>
             <td>$movie.Added.ToString( "d" )</td>
             <td align="center">$movie.Score</td>
-            <td><a href="$siteRoot/Movies/View.castle?movieId=$movie.Id">$text.actionView</a></td>
-            <td><a href="$siteRoot/Movies/Edit.castle?movieId=$movie.Id">$text.actionEdit</a></td>
+            <td><a href="$siteRoot/Movies/View.castle?movieId=$movie.Id">$loc.actionView</a></td>
+            <td><a href="$siteRoot/Movies/Edit.castle?movieId=$movie.Id">$loc.actionEdit</a></td>
         </tr>
     #end
 </table>

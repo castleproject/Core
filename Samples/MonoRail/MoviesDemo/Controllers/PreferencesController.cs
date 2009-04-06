@@ -25,7 +25,7 @@ namespace MoviesDemo.Controllers
 			Response.CreateCookie("locale", localeId);
 
 			// Go back to where you came from
-			Response.Redirect(refUrl);
+			Response.RedirectToUrl(refUrl);
 
 			// Don't render anything
 			CancelView();

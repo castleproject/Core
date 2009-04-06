@@ -25,7 +25,7 @@ namespace WizardSampleSite.Controllers
 	[DynamicActionProvider( typeof(WizardActionProvider) )]
 	public class SimpleWizardController : Controller, IWizardController
 	{
-		public WizardStepPage[] GetSteps(IRailsEngineContext context)
+		public IWizardStepPage[] GetSteps(IEngineContext context)
 		{
 			return new WizardStepPage[]
 				{
@@ -41,12 +41,12 @@ namespace WizardSampleSite.Controllers
 		{
 		}
 
-		public bool OnBeforeStep(string wizardName, string stepName, WizardStepPage step)
+		public bool OnBeforeStep(string wizardName, string stepName, IWizardStepPage step)
 		{
 			return true;
 		}
 
-		public void OnAfterStep(string wizardName, string stepName, WizardStepPage step)
+		public void OnAfterStep(string wizardName, string stepName, IWizardStepPage step)
 		{
 		}
 	}
@@ -63,9 +63,8 @@ namespace WizardSampleSite.Controllers
 
 	class MainInfoStep : WizardStepPage
 	{
-		protected override void Reset()
+		public override void Reset()
 		{
-			Session.Remove("account");
 		}
 
 		public void Save([DataBind("account")] Account accountFromForm)
@@ -168,7 +167,7 @@ namespace WizardSampleSite.Controllers
 		/// <summary>
 		/// This is an example of a pre-condition check.
 		/// </summary>
-		protected override bool IsPreConditionSatisfied(IRailsEngineContext context)
+		public override bool IsPreConditionSatisfied(IEngineContext context)
 		{
 			Account account = WizSessionUtil.GetAccountFromSession(Session);
 			

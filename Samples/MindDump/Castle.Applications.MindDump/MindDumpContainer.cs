@@ -23,6 +23,7 @@ namespace Castle.Applications.MindDump
 	using Castle.Applications.MindDump.Presentation.Controllers;
 	using Castle.Applications.MindDump.Presentation.Filters;
 	using Castle.MonoRail.WindsorExtension;
+	using MicroKernel;
 
 	public class MindDumpContainer : WindsorContainer
 	{
@@ -44,9 +45,9 @@ namespace Castle.Applications.MindDump
 
 		private void RegisterFacilities()
 		{
-			AddFacility("rails", new RailsFacility());
-			AddFacility("nhibernate", new NHibernateFacility());
-			AddFacility("transaction", new TransactionFacility());
+			AddFacility<MonoRailFacility>();
+			AddFacility<NHibernateFacility>();
+			AddFacility<TransactionFacility>();
 		}
 
 		protected void RegisterComponents()

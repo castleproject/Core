@@ -16,7 +16,7 @@ namespace GettingStartedSample.Models
 {
 	using System;
 	using Castle.ActiveRecord;
-	using NHibernate.Expression;
+	using NHibernate.Criterion;
 
 	[ActiveRecord]
 	public class Supplier : ActiveRecordBase

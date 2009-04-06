@@ -17,16 +17,16 @@ namespace GettingStartedSample.Tests
 	using System;
 
 	using Castle.MonoRail.TestSupport;
-	
+	using Controllers;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class HomeControllerTestCase : AbstractMRTestCase
+	public class HomeControllerTestCase : BaseControllerTest
 	{
 		[Test]
 		public void IndexAction()
 		{
-			DoGet("home/index.rails");
+			PrepareController(new HomeController(), "home", "index");
 
 			// Use the assert family of methods available in the base class
 			// for example:

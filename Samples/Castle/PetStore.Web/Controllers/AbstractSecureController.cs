@@ -18,7 +18,7 @@ namespace PetStore.Web.Controllers
 
 	using Castle.MonoRail.Framework;
 
-	[Filter(ExecuteEnum.BeforeAction, typeof(AuthenticationFilter))]
+	[Filter(ExecuteWhen.BeforeAction, typeof(AuthenticationFilter))]
 	public abstract class AbstractSecureController : SmartDispatcherController
 	{
 

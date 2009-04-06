@@ -49,7 +49,7 @@ namespace PetStore.Web.Controllers.Admin
 		{
 			IList products = Product.FindAll();
 
-			PropertyBag.Add("list", PaginationHelper.CreatePagination(products, 10));
+			PropertyBag.Add("list", PaginationHelper.CreatePagination(Context, products, 10));
 		}
 
 		public void New()

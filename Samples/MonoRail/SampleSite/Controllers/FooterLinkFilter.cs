@@ -21,7 +21,7 @@ namespace SampleSite.Controllers
 
 	public class FooterLinkFilter : IFilter
 	{
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public bool Perform(ExecuteWhen exec, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
 			String className = controller.GetType().FullName.Replace('.', '/');
 			
@@ -30,7 +30,7 @@ namespace SampleSite.Controllers
 				className = className.Substring( "SampleSite/".Length );
 			}
 
-			controller.PropertyBag.Add("controllerfile", className + ".cs");
+			controllerContext.PropertyBag.Add("controllerfile", className + ".cs");
 
 			return true;
 		}

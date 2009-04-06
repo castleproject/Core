@@ -17,7 +17,7 @@ namespace PetStore.Model
 	using System;
 
 	using Castle.ActiveRecord;
-	using NHibernate.Expression;
+	using NHibernate.Criterion;
 
 	[ActiveRecord]
 	public class Product : ActiveRecordBase

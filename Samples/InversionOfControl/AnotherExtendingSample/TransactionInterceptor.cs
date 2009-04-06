@@ -21,7 +21,7 @@ namespace Extending2
 	/// <summary>
 	/// Summary description for TransactionInterceptor.
 	/// </summary>
-	public class TransactionInterceptor : IMethodInterceptor
+	public class TransactionInterceptor : IInterceptor
 	{
 		private ITransactionManager _transactionManager;
 		private TransactionConfigHolder _transactionConfHolder;
@@ -33,13 +33,14 @@ namespace Extending2
 			_transactionConfHolder = transactionConfHolder;
 		}
 
-		public object Intercept(IMethodInvocation invocation, params object[] args)
+		public void Intercept(IInvocation invocation)
 		{
 			if (_transactionManager.CurrentTransaction != null)
 			{
 				// No support for nested transactions
 				// is necessary
-				return invocation.Proceed(args);
+				invocation.Proceed();
+				return;
 			}
 
 			TransactionConfig config = 
@@ -51,11 +52,9 @@ namespace Extending2
 				ITransaction transaction = 
 					_transactionManager.CreateTransaction();
 
-				object value = null;
-
 				try
 				{
-					value = invocation.Proceed(args);
+					invocation.Proceed();
 					
 					transaction.Commit();
 				}
@@ -69,12 +68,10 @@ namespace Extending2
 				{
 					_transactionManager.Release(transaction);
 				}
-
-				return value;
 			}
 			else
 			{
-				return invocation.Proceed(args);
+				invocation.Proceed();
 			}
 		}
 	}

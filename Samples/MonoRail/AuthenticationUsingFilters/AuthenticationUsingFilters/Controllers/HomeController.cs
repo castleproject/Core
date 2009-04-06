@@ -18,7 +18,7 @@ namespace AuthenticationUsingFilters.Controllers
 	using Filters;
 
 	[Layout("default")]
-	[Filter(ExecuteEnum.BeforeAction, typeof(AuthenticationFilter))]
+	[Filter(ExecuteWhen.BeforeAction, typeof(AuthenticationFilter))]
 	public class HomeController : SmartDispatcherController
 	{
 		public void Index()
