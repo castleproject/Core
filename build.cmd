@@ -22,11 +22,11 @@ goto normal
 IF "%~1"=="" goto quick
 
 :normal
-%~dp0SharedLibs\build\NAnt\bin\NAnt.exe -t:net-3.5 -D:nunit-console=%~dp0SharedLibs\build\NUnit\bin\nunit-console.exe %*
+"%~dp0SharedLibs\build\NAnt\bin\NAnt.exe" -t:net-3.5 -D:nunit-console="%~dp0SharedLibs\build\NUnit\bin\nunit-console.exe" %*
 goto end
 
 :quick
-%~dp0SharedLibs\build\NAnt\bin\NAnt.exe -t:net-3.5 -D:nunit-console=%~dp0SharedLibs\build\NUnit\bin\nunit-console.exe quick release clean build
+"%~dp0SharedLibs\build\NAnt\bin\NAnt.exe" -t:net-3.5 -D:nunit-console="%~dp0SharedLibs\build\NUnit\bin\nunit-console.exe" quick release clean build
 goto end
 
 :test
