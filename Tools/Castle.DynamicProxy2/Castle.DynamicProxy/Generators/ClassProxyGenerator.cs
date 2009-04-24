@@ -85,6 +85,9 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				ValidateMixinInterfaces (targetType.GetInterfaces (), "target type " + targetType.Name);
+				if (interfaces != null)
+					ValidateMixinInterfaces (interfaces, "additional interfaces");
+
 				AddMixinInterfaces(interfaceList);
 
 				AddDefaultInterfaces(interfaceList);

@@ -386,6 +386,18 @@ namespace Castle.DynamicProxy.Tests
 
 		[Test]
 		[ExpectedException (typeof (InvalidMixinConfigurationException))]
+		public void MixinWithSameInterface_Class_AdditionalInterfaces ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions();
+			SimpleMixin mixin1 = new SimpleMixin();
+			options.AddMixinInstance (mixin1);
+
+			StandardInterceptor interceptor = new StandardInterceptor();
+			generator.CreateClassProxy (typeof (object), new Type[] { typeof (ISimpleMixin) }, options, interceptor);
+		}
+
+		[Test]
+		[ExpectedException (typeof (InvalidMixinConfigurationException))]
 		public void MixinWithSameInterface_InterfaceWithTarget_TargetType ()
 		{
 			ProxyGenerationOptions options = new ProxyGenerationOptions ();
