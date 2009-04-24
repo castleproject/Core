@@ -157,8 +157,12 @@
     <Compile Include="InterClasses\IService2.cs" />
     <Compile Include="InvocationTestCase.cs" />
     <Compile Include="MethodFinderTestCase.cs" />
+    <Compile Include="Mixins\ClassImplementingIDerivedSImpleMixin.cs" />
+    <Compile Include="Mixins\ClassImplementingISimpleMixin.cs" />
     <Compile Include="Mixins\ComplexMixin.cs" />
+    <Compile Include="Mixins\IDerivedSimpleMixin.cs" />
     <Compile Include="Mixins\OtherMixin.cs" />
+    <Compile Include="Mixins\OtherMixinImplementingISimpleMixin.cs" />
     <Compile Include="Mixins\SimpleMixin.cs" />
     <Compile Include="ModuleScopeTestCase.cs" />
     <Compile Include="OutRefParams.cs" />

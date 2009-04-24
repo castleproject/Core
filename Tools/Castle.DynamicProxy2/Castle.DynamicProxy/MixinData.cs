@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy
 {
 	public class MixinData
 	{
-		private readonly List<Type> mixedInterfaceTypes = new List<Type>();
 		private readonly List<object> mixinsImpl = new List<object>();
 		private readonly Dictionary<Type, int> mixinPositions = new Dictionary<Type, int>();
 
@@ -32,10 +31,11 @@ namespace Castle.DynamicProxy
 		/// The idea is to have reproducable behavior for the case that mixins are registered in different orders.
 		/// This method is here because it is required 
 		/// </summary>
-		public MixinData(IEnumerable<object> mixinInstances)
+		public MixinData (IEnumerable<object> mixinInstances)
 		{
 			if (mixinInstances != null)
 			{
+				List<Type> sortedMixedInterfaceTypes = new List<Type>();
 				Dictionary<Type, object> interface2Mixin = new Dictionary<Type, object>();
 
 				foreach (object mixin in mixinInstances)
@@ -44,31 +44,58 @@ namespace Castle.DynamicProxy
 
 					foreach (Type inter in mixinInterfaces)
 					{
-						mixedInterfaceTypes.Add(inter);
+						sortedMixedInterfaceTypes.Add (inter);
+
+						if (interface2Mixin.ContainsKey (inter))
+						{
+							string message = string.Format (
+									"The list of mixins contains two mixins implementing the same interface '{0}': {1} and {2}. An interface cannot be added by more than one mixin.",
+									inter.FullName,
+									interface2Mixin[inter].GetType ().Name,
+									mixin.GetType ().Name);
+							throw new ArgumentException (message, "mixinInstances");
+						}
+
 						interface2Mixin[inter] = mixin;
 					}
 				}
-				mixedInterfaceTypes.Sort(
-					delegate(Type x, Type y) { return x.FullName.CompareTo(y.FullName); });
+				sortedMixedInterfaceTypes.Sort (
+						delegate (Type x, Type y) { return x.FullName.CompareTo (y.FullName); });
 
-				for (int i = 0; i < mixedInterfaceTypes.Count; i++)
+				for (int i = 0; i < sortedMixedInterfaceTypes.Count; i++)
 				{
-					Type mixinType = mixedInterfaceTypes[i];
-					object mixin = interface2Mixin[mixinType];
-					mixinPositions[mixinType] = i;
-					mixinsImpl.Add(mixin);
+					Type mixinInterface = sortedMixedInterfaceTypes[i];
+					object mixin = interface2Mixin[mixinInterface];
+
+					mixinPositions[mixinInterface] = i;
+					mixinsImpl.Add (mixin);
 				}
 			}
 		}
 
-		public object[] GetMixinInterfaceImplementationsAsArray()
+		public IEnumerable<object> Mixins
 		{
-			return mixinsImpl.ToArray();
+			get { return mixinsImpl; }
 		}
 
-		public Dictionary<Type, int> MixinInterfacesAndPositions
+		public IEnumerable<Type> MixinInterfaces
 		{
-			get { return mixinPositions; }
+			get { return mixinPositions.Keys; }
+		}
+
+		public int GetMixinPosition (Type mixinInterfaceType)
+		{
+			return mixinPositions[mixinInterfaceType];
+		}
+
+		public bool ContainsMixin (Type mixinInterfaceType)
+		{
+			return mixinPositions.ContainsKey (mixinInterfaceType);
+		}
+
+		public object GetMixinInstance (Type mixinInterfaceType)
+		{
+			return mixinsImpl[mixinPositions[mixinInterfaceType]];
 		}
 
 		// For two MixinData objects being regarded equal, only the sorted mixin types are considered, not the actual instances.

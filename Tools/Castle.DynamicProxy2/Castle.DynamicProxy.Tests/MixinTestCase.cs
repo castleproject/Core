@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.DynamicProxy.Tests.InterClasses;
-
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Mixins;
+	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -357,6 +356,80 @@ namespace Castle.DynamicProxy.Tests
 			object proxy2 = generator.CreateClassProxy(typeof (SimpleClass), options, interceptor);
 
 			Assert.IsTrue(proxy1.GetType().Equals(proxy2.GetType()));
+		}
+
+		[Test]
+		[ExpectedException (typeof (InvalidMixinConfigurationException))]
+		public void TwoMixinsWithSameInterface()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			SimpleMixin mixin1 = new SimpleMixin ();
+			OtherMixinImplementingISimpleMixin mixin2 = new OtherMixinImplementingISimpleMixin ();
+			options.AddMixinInstance (mixin1);
+			options.AddMixinInstance (mixin2);
+
+			StandardInterceptor interceptor = new StandardInterceptor ();
+			generator.CreateClassProxy (typeof (SimpleClass), options, interceptor);
+		}
+
+		[Test]
+		[ExpectedException (typeof (InvalidMixinConfigurationException))]
+		public void MixinWithSameInterface_Class ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			SimpleMixin mixin1 = new SimpleMixin ();
+			options.AddMixinInstance (mixin1);
+
+			StandardInterceptor interceptor = new StandardInterceptor ();
+			generator.CreateClassProxy (typeof (ClassImplementingISimpleMixin), options, interceptor);
+		}
+
+		[Test]
+		[ExpectedException (typeof (InvalidMixinConfigurationException))]
+		public void MixinWithSameInterface_InterfaceWithTarget_TargetType ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			SimpleMixin mixin1 = new SimpleMixin ();
+			options.AddMixinInstance (mixin1);
+
+			StandardInterceptor interceptor = new StandardInterceptor ();
+			generator.CreateInterfaceProxyWithTarget(typeof (ISimpleMixin), new ClassImplementingISimpleMixin(), options, interceptor);
+		}
+
+		[Test]
+		[ExpectedException (typeof (InvalidMixinConfigurationException))]
+		public void MixinWithSameInterface_InterfaceWithTarget_TargetType_Derived ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			SimpleMixin mixin1 = new SimpleMixin ();
+			options.AddMixinInstance (mixin1);
+
+			StandardInterceptor interceptor = new StandardInterceptor ();
+			generator.CreateInterfaceProxyWithTarget (typeof (IDerivedSimpleMixin), new ClassImplementingIDerivedSimpleMixin(), options, interceptor);
+		}
+
+		[Test]
+		[ExpectedException (typeof (InvalidMixinConfigurationException))]
+		public void MixinWithSameInterface_InterfaceWithTarget_AdditionalInterfaces ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			SimpleMixin mixin1 = new SimpleMixin ();
+			options.AddMixinInstance (mixin1);
+
+			StandardInterceptor interceptor = new StandardInterceptor ();
+			generator.CreateInterfaceProxyWithTarget (typeof (IService), new Type[] {typeof (ISimpleMixin)}, new ServiceImpl(), options, interceptor);
+		}
+
+		[Test]
+		[ExpectedException (typeof (InvalidMixinConfigurationException))]
+		public void MixinWithSameInterface_InterfaceWithTarget_AdditionalInterfaces_Derived ()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions ();
+			SimpleMixin mixin1 = new SimpleMixin ();
+			options.AddMixinInstance (mixin1);
+
+			StandardInterceptor interceptor = new StandardInterceptor ();
+			generator.CreateInterfaceProxyWithTarget (typeof (IService), new Type[] { typeof (IDerivedSimpleMixin) }, new ServiceImpl (), options, interceptor);
 		}
 	}
 }

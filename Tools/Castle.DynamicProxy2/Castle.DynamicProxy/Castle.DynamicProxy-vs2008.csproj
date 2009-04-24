@@ -263,6 +263,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InternalsHelper.cs" />
+    <Compile Include="InvalidMixinConfigurationException.cs" />
     <Compile Include="IProxyBuilder.cs">
       <SubType>Code</SubType>
     </Compile>

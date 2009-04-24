@@ -190,7 +190,7 @@ namespace Castle.DynamicProxy.Serialization
 			// mixins
 			if (_proxyGenerationOptions.HasMixins)
 			{
-				foreach (Type type in _proxyGenerationOptions.MixinData.MixinInterfacesAndPositions.Keys)
+				foreach (Type type in _proxyGenerationOptions.MixinData.MixinInterfaces)
 				{
 					string mixinFieldName = "__mixin_" + type.FullName.Replace(".", "_");
 
