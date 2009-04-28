@@ -39,5 +39,11 @@ namespace Castle.MonoRail.Framework
 		/// </remarks>
 		/// <value>The registry.</value>
 		IViewComponentRegistry Registry { get; }
+
+		/// <summary>
+		/// Releasess the view component.
+		/// </summary>
+		/// <param name="instance">The view component instance</param>
+		void Release(ViewComponent instance);
 	}
 }

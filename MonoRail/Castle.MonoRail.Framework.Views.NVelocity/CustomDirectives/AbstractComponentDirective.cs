@@ -140,64 +140,71 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				                            "Please investigate the implementation: " + viewComponentFactory.GetType().FullName);
 			}
 
-			ASTDirective directiveNode = (ASTDirective) node;
-			IViewRenderer renderer = (IViewRenderer) directiveNode.Directive;
-
-			NVelocityViewContextAdapter contextAdapter = new NVelocityViewContextAdapter(componentName, node, viewEngine, renderer);
-			contextAdapter.Context = isOutputtingToCache ? new CacheAwareContext(context, bag) : context;
-
-			ProcessSubSections(component, contextAdapter);
-
-			INode bodyNode = null;
-
-			if (node.ChildrenCount > 0)
-			{
-				bodyNode = node.GetChild(node.ChildrenCount - 1);
-			}
-
-			TextWriter output = isOutputtingToCache ? bag.CacheWriter : writer;
-
-			contextAdapter.BodyNode = bodyNode;
-			contextAdapter.ComponentParams = componentParams;
-			contextAdapter.TextWriter = output;
-
-			const string ViewComponentContextKey = "viewcomponent";
-			object previousComp = context[ViewComponentContextKey];
-
 			try
 			{
-				context[ViewComponentContextKey] = component;
+				ASTDirective directiveNode = (ASTDirective) node;
+				IViewRenderer renderer = (IViewRenderer) directiveNode.Directive;
 
-				component.Init(railsContext, contextAdapter);
+				NVelocityViewContextAdapter contextAdapter = new NVelocityViewContextAdapter(componentName, node, viewEngine, renderer);
+				contextAdapter.Context = isOutputtingToCache ? new CacheAwareContext(context, bag) : context;
 
-				component.Render();
+				ProcessSubSections(component, contextAdapter);
 
-				if (contextAdapter.ViewToRender != null)
+				INode bodyNode = null;
+
+				if (node.ChildrenCount > 0)
 				{
-					RenderComponentView(context, contextAdapter.ViewToRender, output, contextAdapter);
+					bodyNode = node.GetChild(node.ChildrenCount - 1);
 				}
 
-				if (isOutputtingToCache)
+				TextWriter output = isOutputtingToCache ? bag.CacheWriter : writer;
+
+				contextAdapter.BodyNode = bodyNode;
+				contextAdapter.ComponentParams = componentParams;
+				contextAdapter.TextWriter = output;
+
+				const string ViewComponentContextKey = "viewcomponent";
+				object previousComp = context[ViewComponentContextKey];
+
+				try
 				{
-					// Save output
+					context[ViewComponentContextKey] = component;
 
-					cacheProvider.Store(key.ToString(), bag);
+					component.Init(railsContext, contextAdapter);
 
-					// Output to correct writer
+					component.Render();
 
-					writer.Write(bag.Content);
+					if (contextAdapter.ViewToRender != null)
+					{
+						RenderComponentView(context, contextAdapter.ViewToRender, output, contextAdapter);
+					}
+
+					if (isOutputtingToCache)
+					{
+						// Save output
+
+						cacheProvider.Store(key.ToString(), bag);
+
+						// Output to correct writer
+
+						writer.Write(bag.Content);
+					}
+				}
+				finally
+				{
+					if (previousComp != null)
+					{
+						context[ViewComponentContextKey] = previousComp;
+					}
+					else
+					{
+						context.Remove(ViewComponentContextKey);
+					}
 				}
 			}
 			finally
 			{
-				if (previousComp != null)
-				{
-					context[ViewComponentContextKey] = previousComp;
-				}
-				else
-				{
-					context.Remove(ViewComponentContextKey);
-				}
+				viewComponentFactory.Release(component);
 			}
 
 			return true;

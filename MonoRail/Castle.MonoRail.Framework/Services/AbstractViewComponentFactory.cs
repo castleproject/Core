@@ -127,6 +127,11 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				logger.Debug("Releasing view component instance " + instance);
 			}
+
+			if (instance is IDisposable)
+			{
+				((IDisposable) instance).Dispose();
+			}
 		}
 
 		/// <summary>

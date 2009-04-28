@@ -53,5 +53,17 @@ namespace Castle.MonoRail.WindsorExtension
 		{
 			return viewCompRegistry;
 		}
+
+		public override void Release(ViewComponent instance)
+		{
+			if (kernel.HasComponent(instance.GetType()))
+			{
+				kernel.ReleaseComponent(instance);
+			}
+			else
+			{
+				base.Release(instance);
+			}
+		}
 	}
 }
