@@ -71,8 +71,9 @@ namespace Castle.Facilities.NHibernateIntegration
 	public class NHibernateFacility : AbstractFacility
 	{
 		private const string DefaultConfigurationBuilderKey = "nhfacility.configuration.builder";
-		private const string DefaultConfigurationBuilderConfigurationKey = "configurationBuilder";
+		private const string ConfigurationBuilderConfigurationKey = "configurationBuilder";
 		private const string SessionFactoryResolverKey = "nhfacility.sessionfactory.resolver";
+		private const string SessionInterceptorKey = "nhibernate.sessionfactory.interceptor";
 		private const string IsWebConfigurationKey = "isWeb";
 		private const string CustomStoreConfigurationKey = "customStore";
 		private const string DefaultFlushModeConfigurationKey = "defaultFlushMode";
@@ -81,6 +82,9 @@ namespace Castle.Facilities.NHibernateIntegration
 		private const string SessionFactoryIdConfigurationKey = "id";
 		private const string SessionFactoryAliasConfigurationKey = "alias";
 		private const string SessionStoreKey = "nhfacility.sessionstore";
+		private const string ConfigurationBuilderForFactoryFormat = "{0}.configurationBuilder";
+
+
 		private readonly IConfigurationBuilder configurationBuilder;
 		
 		/// <summary>
@@ -132,7 +136,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// </summary>
 		private void RegisterDefaultConfigurationBuilder()
 		{
-			string defaultConfigurationBuilder = FacilityConfig.Attributes[DefaultConfigurationBuilderConfigurationKey];
+			string defaultConfigurationBuilder = FacilityConfig.Attributes[ConfigurationBuilderConfigurationKey];
 			if (!string.IsNullOrEmpty(defaultConfigurationBuilder))
 				Kernel.AddComponent(DefaultConfigurationBuilderKey, typeof(IConfigurationBuilder), Type.GetType(defaultConfigurationBuilder));
 			else
@@ -307,8 +311,21 @@ namespace Castle.Facilities.NHibernateIntegration
 			{
 				alias = Constants.DefaultAlias;
 			}
-
-			var configurationBuilder = Kernel.Resolve<IConfigurationBuilder>();
+			string configurationBuilderType = config.Attributes[ConfigurationBuilderConfigurationKey];
+			string configurationbuilderKey = string.Format(ConfigurationBuilderForFactoryFormat, id);
+			IConfigurationBuilder configurationBuilder;
+			if (string.IsNullOrEmpty(configurationBuilderType))
+			{
+				configurationBuilder = Kernel.Resolve<IConfigurationBuilder>();
+			}
+			else
+			{
+				Kernel.AddComponent(configurationbuilderKey,
+				                    typeof (IConfigurationBuilder),
+				                    Type.GetType(configurationBuilderType));
+				configurationBuilder = Kernel.Resolve<IConfigurationBuilder>(configurationbuilderKey);
+			}
+			
 			var cfg = configurationBuilder.GetConfiguration(config);
 
 			// Registers the Configuration object
@@ -316,9 +333,9 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			// If a Session Factory level interceptor was provided, we use it
 
-			if (Kernel.HasComponent("nhibernate.sessionfactory.interceptor"))
+			if (Kernel.HasComponent(SessionInterceptorKey))
 			{
-				cfg.Interceptor = (IInterceptor) Kernel["nhibernate.sessionfactory.interceptor"];
+				cfg.Interceptor = (IInterceptor)Kernel[SessionInterceptorKey];
 			}
 			// Registers the ISessionFactory as a component
 

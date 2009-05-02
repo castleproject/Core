@@ -5,7 +5,7 @@
 			id="nhibernatefacility"
 			type="Castle.Facilities.NHibernateIntegration.NHibernateFacility, Castle.Facilities.NHibernateIntegration"
 			configurationBuilder="Castle.Facilities.NHibernateIntegration.Internal.PersistentConfigurationBuilder, Castle.Facilities.NHibernateIntegration">
-			<factory id="ses/si\on*Fac:tor?y1">
+			<factory id="sessionFactory1">
 				<settings>
 					<item key="connection.provider">NHibernate.Connection.DriverConnectionProvider</item>
 					<item key="connection.driver_class">NHibernate.Driver.SqlClientDriver</item>
