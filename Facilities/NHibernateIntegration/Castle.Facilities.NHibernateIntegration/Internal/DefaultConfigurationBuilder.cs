@@ -13,7 +13,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	/// </summary>
 	public class DefaultConfigurationBuilder : IConfigurationBuilder
 	{
-		private const String nHMappingAttributesAssemblyName = "NHibernate.Mapping.Attributes";
+		private const String NHMappingAttributesAssemblyName = "NHibernate.Mapping.Attributes";
 
 		/// <summary>
 		/// Builds the Configuration object from the specifed configuration
@@ -138,10 +138,10 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			AssemblyName[] refAssemblies = Assembly.Load(targetAssembly).GetReferencedAssemblies();
 
 			//If assembly "NHibernate.Mapping.Attributes" is referenced in targetAssembly
-			if (Array.Exists<AssemblyName>(refAssemblies, delegate(AssemblyName an) { return an.Name.Equals(nHMappingAttributesAssemblyName); }))
+			if (Array.Exists<AssemblyName>(refAssemblies, delegate(AssemblyName an) { return an.Name.Equals(NHMappingAttributesAssemblyName); }))
 			{
 				//Obtains, by reflexion, the necessary tools to generate NH mapping from attributes
-				Type HbmSerializerType = Type.GetType(String.Concat(nHMappingAttributesAssemblyName, ".HbmSerializer, ", nHMappingAttributesAssemblyName));
+				Type HbmSerializerType = Type.GetType(String.Concat(NHMappingAttributesAssemblyName, ".HbmSerializer, ", NHMappingAttributesAssemblyName));
 				Object hbmSerializer = Activator.CreateInstance(HbmSerializerType);
 				PropertyInfo validate = HbmSerializerType.GetProperty("Validate");
 				MethodInfo serialize = HbmSerializerType.GetMethod("Serialize", new Type[] { typeof(Assembly) });

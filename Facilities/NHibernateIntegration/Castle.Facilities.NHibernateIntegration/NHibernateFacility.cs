@@ -25,6 +25,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	using Castle.Services.Transaction;
 	using Internal;
 	using MicroKernel;
+	using MicroKernel.Registration;
 	using NHibernate;
 	using Configuration=NHibernate.Cfg.Configuration;
 
@@ -69,8 +70,19 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// </example>
 	public class NHibernateFacility : AbstractFacility
 	{
+		private const string DefaultConfigurationBuilderKey = "nhfacility.configuration.builder";
+		private const string DefaultConfigurationBuilderConfigurationKey = "configurationBuilder";
+		private const string SessionFactoryResolverKey = "nhfacility.sessionfactory.resolver";
+		private const string IsWebConfigurationKey = "isWeb";
+		private const string CustomStoreConfigurationKey = "customStore";
+		private const string DefaultFlushModeConfigurationKey = "defaultFlushMode";
+		private const string SessionManagerKey = "nhfacility.sessionmanager";
+		private const string TransactionManagerKey = "nhibernate.transaction.manager";
+		private const string SessionFactoryIdConfigurationKey = "id";
+		private const string SessionFactoryAliasConfigurationKey = "alias";
+		private const string SessionStoreKey = "nhfacility.sessionstore";
 		private readonly IConfigurationBuilder configurationBuilder;
-
+		
 		/// <summary>
 		/// Instantiates the facility with the specified configuration builder.
 		/// </summary>
@@ -106,7 +118,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// </summary>
 		protected virtual void RegisterComponents()
 		{
-			RegisterConfigurationBuilder();
+			RegisterDefaultConfigurationBuilder();
 			RegisterSessionFactoryResolver();
 			RegisterSessionStore();
 			RegisterSessionManager();
@@ -118,23 +130,24 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// Register <see cref="IConfigurationBuilder"/> the default ConfigurationBuilder or (if present) the one 
 		/// specified via "configurationBuilder" attribute.
 		/// </summary>
-		private void RegisterConfigurationBuilder()
+		private void RegisterDefaultConfigurationBuilder()
 		{
-			if (!string.IsNullOrEmpty(FacilityConfig.Attributes["configurationBuilder"]))
-				Kernel.AddComponent("nhfacility.configuration.builder", typeof(IConfigurationBuilder),
-									Type.GetType(FacilityConfig.Attributes["configurationBuilder"]));
+			string defaultConfigurationBuilder = FacilityConfig.Attributes[DefaultConfigurationBuilderConfigurationKey];
+			if (!string.IsNullOrEmpty(defaultConfigurationBuilder))
+				Kernel.AddComponent(DefaultConfigurationBuilderKey, typeof(IConfigurationBuilder), Type.GetType(defaultConfigurationBuilder));
 			else
-				Kernel.AddComponentInstance("nhfacility.configuration.builder", typeof(IConfigurationBuilder),
-											configurationBuilder);
+				Kernel.AddComponentInstance(DefaultConfigurationBuilderKey, typeof(IConfigurationBuilder),this.configurationBuilder);
 		}
+
 
 		/// <summary>
 		/// Registers <see cref="SessionFactoryResolver"/> as the session factory resolver.
 		/// </summary>
 		protected void RegisterSessionFactoryResolver()
 		{
-			Kernel.AddComponent("nhfacility.sessionfactory.resolver",
-				typeof(ISessionFactoryResolver), typeof(SessionFactoryResolver));
+			Kernel.AddComponent(SessionFactoryResolverKey,
+			                    typeof (ISessionFactoryResolver),
+			                    typeof (SessionFactoryResolver));
 		}
 
 		/// <summary>
@@ -142,8 +155,8 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// </summary>
 		protected void RegisterSessionStore()
 		{
-			String isWeb = FacilityConfig.Attributes["isWeb"];
-			String customStore = FacilityConfig.Attributes["customStore"];
+			String isWeb = FacilityConfig.Attributes[IsWebConfigurationKey];
+			String customStore = FacilityConfig.Attributes[CustomStoreConfigurationKey];
 
 			// Default implementation
 			Type sessionStoreType = typeof(CallContextSessionStore);
@@ -167,7 +180,7 @@ namespace Castle.Facilities.NHibernateIntegration
 				}
 			}
 
-			Kernel.AddComponent("nhfacility.sessionstore", 
+			Kernel.AddComponent(SessionStoreKey, 
 				typeof(ISessionStore), sessionStoreType );
 		}
 
@@ -176,21 +189,21 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// </summary>
 		protected void RegisterSessionManager()
 		{
-			string defaultFlushMode = FacilityConfig.Attributes["defaultFlushMode"];
+			string defaultFlushMode = FacilityConfig.Attributes[DefaultFlushModeConfigurationKey];
 
-			if (defaultFlushMode != null && defaultFlushMode != string.Empty)
+			if (!string.IsNullOrEmpty(defaultFlushMode))
 			{
-				MutableConfiguration confignode = new MutableConfiguration("nhfacility.sessionmanager");
+				MutableConfiguration confignode = new MutableConfiguration(SessionManagerKey);
 
 				IConfiguration properties = new MutableConfiguration("parameters");
 				confignode.Children.Add(properties);
 
 				properties.Children.Add(new MutableConfiguration("DefaultFlushMode", defaultFlushMode));
 
-				Kernel.ConfigurationStore.AddComponentConfiguration("nhfacility.sessionmanager", confignode);
+				Kernel.ConfigurationStore.AddComponentConfiguration(SessionManagerKey, confignode);
 			}
 
-			Kernel.AddComponent( "nhfacility.sessionmanager", 
+			Kernel.AddComponent(SessionManagerKey, 
 				typeof(ISessionManager), typeof(DefaultSessionManager) );
 		}
 
@@ -199,7 +212,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// </summary>
 		protected void RegisterTransactionManager()
 		{
-			Kernel.AddComponent( "nhibernate.transaction.manager",
+			Kernel.AddComponent(TransactionManagerKey,
 			   typeof(ITransactionManager), typeof(DefaultTransactionManager));
 		}
 
@@ -269,7 +282,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		protected void ConfigureFactories(IConfiguration config, 
 			ISessionFactoryResolver sessionFactoryResolver, bool firstFactory)
 		{
-			String id = config.Attributes["id"];
+			String id = config.Attributes[SessionFactoryIdConfigurationKey];
 
 			if (string.IsNullOrEmpty(id))
 			{
@@ -280,7 +293,7 @@ namespace Castle.Facilities.NHibernateIntegration
 				throw new ConfigurationErrorsException(message);
 			}
 
-			String alias = config.Attributes["alias"];
+			String alias = config.Attributes[SessionFactoryAliasConfigurationKey];
 
 			if (!firstFactory && (string.IsNullOrEmpty(alias)))
 			{

@@ -2,7 +2,7 @@
 	<facilities>
 		<facility
           id="nhibernatefacility"
-          type="Castle.Facilities.NHibernateIntegration.Tests.Internals.CustomNHibernateFacility, Castle.Facilities.NHibernateIntegration.Tests">
+          type="Castle.Facilities.NHibernateIntegration.Tests.Internals.CustomNHibernateFacility, Castle.Facilities.NHibernateIntegration.Tests"					>
 
 			<factory id="sessionFactory1">
 				<settings>
