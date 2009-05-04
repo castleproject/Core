@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Castle.Core;
+using Castle.MicroKernel.Handlers;
 using NUnit.Framework;
 
 namespace Castle.Windsor.Tests.Bugs.IoC_78
@@ -43,6 +44,16 @@ namespace Castle.Windsor.Tests.Bugs.IoC_78
 
             IChain resolve = container.Resolve<IChain>("chain");
             Assert.IsNotNull(resolve);
+        }
+
+        [Test]
+        [ExpectedException(typeof(HandlerException))]
+        public void WillNotTryToResolveAComponentToItself()
+        {
+            IWindsorContainer container = new WindsorContainer();
+            container.AddComponent("chain", typeof(IChain), typeof(MyChain4));
+
+            container.Resolve<IChain>("chain");
         }
     }
 
@@ -76,6 +87,15 @@ namespace Castle.Windsor.Tests.Bugs.IoC_78
 
         }
     }
+
+    public class MyChain4 : IChain
+    {
+        public MyChain4(IChain chain)
+        {
+
+        }
+    }
+
 
     public class MyChain3 : IChain
     {

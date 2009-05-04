@@ -155,7 +155,6 @@
     <Compile Include="Bugs\IoC_120.cs" />
     <Compile Include="Bugs\IoC_142.cs" />
     <Compile Include="Bugs\IoC_147.cs" />
-    <Compile Include="Bugs\IoC_150.cs" />
     <Compile Include="Bugs\IoC_92.cs" />
     <Compile Include="ChildContainerSupportTestCase.cs">
       <SubType>Code</SubType>
