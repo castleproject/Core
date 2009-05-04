@@ -1,3 +1,16 @@
+2.0
+====
+
+- Fluent interface for factory support
+
+- Fixed an issue with of not considering unregistered service dependencies in arrays
+
+- Will not try to convert values that are already a match to the parameter type
+
+- XmlProcessor now properly dispose of the stream reader
+
+- The kernel will now check if trying to register null types
+
 RC 4
 ====
 
