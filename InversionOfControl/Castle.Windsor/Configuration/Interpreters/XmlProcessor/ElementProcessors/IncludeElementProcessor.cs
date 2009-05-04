@@ -75,7 +75,10 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 
 					try
 					{
-						doc.Load(resource.GetStreamReader());
+						using (var stream = resource.GetStreamReader())
+						{
+							doc.Load(stream);
+						}
 					}
 					catch(Exception ex)
 					{

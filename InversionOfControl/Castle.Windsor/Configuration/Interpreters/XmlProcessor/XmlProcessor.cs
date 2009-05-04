@@ -109,8 +109,10 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 				using(resource)
 				{
 					XmlDocument doc = new XmlDocument();
-
-					doc.Load(resource.GetStreamReader());
+					using (var stream = resource.GetStreamReader())
+					{
+						doc.Load(stream);
+					}
 
 					engine.PushResource(resource);
 
