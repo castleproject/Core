@@ -88,5 +88,43 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
 					.Attribute("factoryCreate").Eq("Create")
 				);
 		}
+
+        [Test]
+        public void RegisterWithFluentFactory() 
+        {
+            var user = new User {FiscalStability = FiscalStability.DirtFarmer};
+            kernel.Register(
+                Component.For<User>().Instance(user),
+                Component.For<AbstractCarProviderFactory>(),
+                Component.For<ICarProvider>()
+                    .UsingFactory((AbstractCarProviderFactory f) => f.Create(kernel.Resolve<User>()))
+                );
+            Assert.IsInstanceOfType(typeof(HondaProvider), kernel.Resolve<ICarProvider>());
+        }
+
+        [Test]
+        public void RegisterWithFactoryMethod() 
+        {
+            var user = new User { FiscalStability = FiscalStability.DirtFarmer };
+            kernel.Register(
+                Component.For<AbstractCarProviderFactory>(),
+                Component.For<ICarProvider>()
+                    .UsingFactoryMethod(() => new AbstractCarProviderFactory().Create(user))
+                );
+            Assert.IsInstanceOfType(typeof(HondaProvider), kernel.Resolve<ICarProvider>());
+        }
+
+        [Test]
+        public void RegisterWithFactoryMethodAndKernel() 
+        {
+            var user = new User { FiscalStability = FiscalStability.MrMoneyBags };
+            kernel.Register(
+                Component.For<User>().Instance(user),
+                Component.For<AbstractCarProviderFactory>(),
+                Component.For<ICarProvider>()
+                    .UsingFactoryMethod(k => new AbstractCarProviderFactory().Create(k.Resolve<User>()))
+                );
+            Assert.IsInstanceOfType(typeof(FerrariProvider), kernel.Resolve<ICarProvider>());
+        }
 	}
 }

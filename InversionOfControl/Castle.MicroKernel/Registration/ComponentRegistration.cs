@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Facilities.FactorySupport;
+
 namespace Castle.MicroKernel.Registration
 {
 	using System;
@@ -28,6 +30,8 @@ namespace Castle.MicroKernel.Registration
 	/// <param name="model">The component model.</param>
 	/// <returns>true if accepted.</returns>
 	public delegate bool ComponentFilter(IKernel kernel, ComponentModel model);
+
+    public delegate T Function<T>();
 
 	/// <summary>
 	/// Registration for a single type as a component with the kernel.
@@ -48,6 +52,7 @@ namespace Castle.MicroKernel.Registration
 		private readonly List<ComponentDescriptor<S>> descriptors;
 		private ComponentModel componentModel;
 		private bool registered;
+	    private readonly List<IRegistration> additionalRegistrations;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ComponentRegistration{S}"/> class.
@@ -58,6 +63,7 @@ namespace Castle.MicroKernel.Registration
 			registered = false;
 			serviceType = typeof(S);
 			descriptors = new List<ComponentDescriptor<S>>();
+            additionalRegistrations = new List<IRegistration>();
 		}
 
 		/// <summary>
@@ -625,6 +631,11 @@ namespace Castle.MicroKernel.Registration
 					{
 						kernel.RegisterHandlerForwarding(type, name);
 					}
+
+                    foreach (IRegistration r in additionalRegistrations) 
+                    {
+                        r.Register(kernel);
+                    }
 				}	
 			}
 		}
@@ -705,7 +716,121 @@ namespace Castle.MicroKernel.Registration
 			}
 			return configuration;
 		}
+
+        /// <summary>
+        /// Uses a factory method to instantiate the component.
+        /// Requires the <see cref="FactorySupportFacility"/> to be installed.
+        /// </summary>
+        /// <typeparam name="T">Implementation type</typeparam>
+        /// <param name="factoryMethod">Factory method</param>
+        /// <returns></returns>
+        public ComponentRegistration<S> UsingFactoryMethod<T>(Function<T> factoryMethod) where T: S
+        {
+            string factoryName = typeof(GenericFactory<T>).FullName;
+            additionalRegistrations.Add(Component.For<GenericFactory<T>>().Named(factoryName)
+                .Instance(new GenericFactory<T>(factoryMethod)));
+            ConfigureFactoryWithId(factoryName);
+            return this;
+        }
+
+        /// <summary>
+        /// Uses a factory method to instantiate the component.
+        /// Requires the <see cref="FactorySupportFacility"/> to be installed.
+        /// </summary>
+        /// <typeparam name="T">Implementation type</typeparam>
+        /// <param name="factoryMethod">Factory method</param>
+        /// <returns></returns>
+        public ComponentRegistration<S> UsingFactoryMethod<T>(Converter<IKernel, T> factoryMethod) where T : S 
+        {
+            string factoryName = typeof(GenericFactory<T>).FullName;
+            string factoryMethodName = Guid.NewGuid().ToString();
+            additionalRegistrations.Add(Component.For<KernelToT<T>>().Named(factoryMethodName)
+                .Instance(new KernelToT<T>(factoryMethod)));
+            additionalRegistrations.Add(Component.For<GenericFactoryWithKernel<T>>().Named(factoryName)
+                .ServiceOverrides(ServiceOverride.ForKey("factoryMethod").Eq(factoryMethodName)));
+            ConfigureFactoryWithId(factoryName);
+            return this;
+        }
+
+        private void ConfigureFactoryWithId(string factoryId) 
+        {
+            Configuration(
+                Attrib.ForName("factoryId").Eq(factoryId),
+                Attrib.ForName("factoryCreate").Eq("Create")
+                );
+        }
+
+        /// <summary>
+        /// Uses a factory to instantiate the component
+        /// </summary>
+        /// <typeparam name="U">Factory type. This factory has to be registered in the kernel.</typeparam>
+        /// <typeparam name="V">Implementation type.</typeparam>
+        /// <param name="factory">Factory invocation</param>
+        /// <returns></returns>
+        public ComponentRegistration<S> UsingFactory<U, V>(Converter<U, V> factory) where V : S 
+        {
+            return UsingFactoryMethod(kernel => factory.Invoke(kernel.Resolve<U>()));
+	    }
 	}
+
+    /// <summary>
+    /// Helper wrapper around Converter
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class KernelToT<T> 
+    {
+        private readonly Converter<IKernel, T> fun;
+
+        public KernelToT(Converter<IKernel, T> fun) 
+        {
+            this.fun = fun;
+        }
+
+        public T Call(IKernel kernel) 
+        {
+            return fun(kernel);
+        }
+    }
+
+    /// <summary>
+    /// Helper factory class
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class GenericFactoryWithKernel<T>
+    {
+        private readonly KernelToT<T> factoryMethod;
+        private readonly IKernel kernel;
+
+        public GenericFactoryWithKernel(KernelToT<T> factoryMethod, IKernel kernel)
+        {
+            this.factoryMethod = factoryMethod;
+            this.kernel = kernel;
+        }
+
+        public T Create()
+        {
+            return factoryMethod.Call(kernel);
+        }
+    }
+
+    /// <summary>
+    /// Helper factory class
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class GenericFactory<T>
+    {
+        private readonly Function<T> factoryMethod;
+
+        public GenericFactory(Function<T> factoryMethod)
+        {
+            this.factoryMethod = factoryMethod;
+        }
+
+        public T Create()
+        {
+            return factoryMethod();
+        }
+    }
 
 	#region Nested Type: ComponentRegistration
 
