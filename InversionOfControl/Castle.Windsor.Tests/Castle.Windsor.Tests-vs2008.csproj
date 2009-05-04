@@ -141,6 +141,11 @@
     <Compile Include="Adapters\ComponentModel\TestComponent.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Bugs\FACILITIES-ISSUE-111\Components\A_Facilities_Issue_111.cs" />
+    <Compile Include="Bugs\FACILITIES-ISSUE-111\Components\B_Facilities_Issue_111.cs" />
+    <Compile Include="Bugs\FACILITIES-ISSUE-111\Components\IA_Facilities_Issue_111.cs" />
+    <Compile Include="Bugs\FACILITIES-ISSUE-111\Components\IB_Facilities_Issue_111.cs" />
+    <Compile Include="Bugs\FACILITIES-ISSUE-111\FACILITIES_ISSUE_111.cs" />
     <Compile Include="Bugs\IoC-102.cs" />
     <Compile Include="Bugs\IoC-115.cs" />
     <Compile Include="Bugs\IoC-127.cs" />

@@ -61,6 +61,15 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 			
 			foreach(ParameterModel parameter in model.Parameters)
 			{
+
+				if(parameter.ConfigValue != null)
+				{
+					if(parameter.ConfigValue.Name == "array" || parameter.ConfigValue.Name == "list")
+					{
+						AddAnyServiceOverrides(model, parameter.ConfigValue);
+					}
+				}
+				
 				if (parameter.Value == null || !ReferenceExpressionUtil.IsReference(parameter.Value))
 				{
 					continue;
@@ -72,6 +81,27 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				
 				model.Dependencies.Add(new DependencyModel(DependencyType.ServiceOverride, newKey, null, false));
 			}
+		}
+
+		private void AddAnyServiceOverrides(ComponentModel model, IConfiguration config)
+		{
+			foreach(var item in config.Children)
+			{
+				if (item.Children.Count > 0)
+				{
+					AddAnyServiceOverrides(model, item);
+				}
+
+				if (item.Value == null || !ReferenceExpressionUtil.IsReference(item.Value))
+				{
+					continue;
+				}
+
+				var newKey = ReferenceExpressionUtil.ExtractComponentKey(item.Value);
+				model.Dependencies.Add(new DependencyModel(DependencyType.ServiceOverride, newKey, null, false));
+			}
+
+
 		}
 	}
 }
