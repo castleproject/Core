@@ -1,10 +1,10 @@
 Unreleased Changes
 ==================
+- Fixed DYNPROXY-87: "Mixin takes precedence over target object"
+  changed DP to throw exceptions when two mixins implement the same interface or a mixin implements the same interface as its target class/object
+
 - Applied Krzysztof Kozmic's patch improving the XML documentation of IInterceptorSelector
   and IProxyGenerationHook.
-  
-- Fixed DYNPROXY-87: "Mixin takes precedence over target object "
-  changed DP to throw exceptions when two mixins implement the same interface or a mixin implements the same interface as its target class/object
 
 2.1.0 RC1 (2009-03-10)
 ======================

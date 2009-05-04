@@ -74,15 +74,14 @@ namespace Castle.DynamicProxy
 			{
 				try
 				{
-					mixinData = new MixinData (mixins);
+					mixinData = new MixinData(mixins);
 				}
 				catch (ArgumentException ex)
 				{
-					throw new InvalidMixinConfigurationException ("There is a problem with the mixins added to this ProxyGenerationOptions: " + ex.Message, ex);
+					throw new InvalidMixinConfigurationException("There is a problem with the mixins added to this ProxyGenerationOptions: " + ex.Message, ex);
 				}
 			}
 		}
-
 
 #if SILVERLIGHT
 #warning What to do?

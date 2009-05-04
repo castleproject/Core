@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-using Castle.DynamicProxy.Tests.Mixins;
-
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using System.Collections.Generic;
 	using Castle.DynamicProxy.Tests.InterceptorSelector;
+	using Castle.DynamicProxy.Tests.Mixins;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -35,7 +34,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidOperationException))]
+		[ExpectedException(typeof(InvalidOperationException))]
 		public void MixinData_NeedsInitialize()
 		{
 			MixinData data = _options1.MixinData;
@@ -46,7 +45,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			_options1.Initialize();
 			MixinData data = _options1.MixinData;
-			Assert.AreEqual(0, new List<object> (data.Mixins).Count);
+			Assert.AreEqual(0, new List<object>(data.Mixins).Count);
 		}
 
 		[Test]
@@ -55,7 +54,7 @@ namespace Castle.DynamicProxy.Tests
 			_options1.AddMixinInstance(new SimpleMixin());
 			_options1.Initialize();
 			MixinData data = _options1.MixinData;
-			Assert.AreEqual (1, new List<object> (data.Mixins).Count);
+			Assert.AreEqual(1, new List<object>(data.Mixins).Count);
 		}
 
 		[Test]
@@ -83,8 +82,8 @@ namespace Castle.DynamicProxy.Tests
 			MixinData data2 = _options1.MixinData;
 			Assert.AreNotSame(data1, data2);
 
-			Assert.AreEqual (1, new List<object> (data1.Mixins).Count);
-			Assert.AreEqual (2, new List<object> (data2.Mixins).Count);
+			Assert.AreEqual (1, new List<object>(data1.Mixins).Count);
+			Assert.AreEqual (2, new List<object>(data2.Mixins).Count);
 		}
 
 		[Test]

@@ -84,9 +84,11 @@ namespace Castle.DynamicProxy.Generators
 					interfaceList.AddRange(interfaces);
 				}
 
-				ValidateMixinInterfaces (targetType.GetInterfaces (), "target type " + targetType.Name);
+				ValidateMixinInterfaces(targetType.GetInterfaces(), "target type " + targetType.Name);
 				if (interfaces != null)
-					ValidateMixinInterfaces (interfaces, "additional interfaces");
+				{
+					ValidateMixinInterfaces(interfaces, "additional interfaces");
+				}
 
 				AddMixinInterfaces(interfaceList);
 
@@ -105,7 +107,7 @@ namespace Castle.DynamicProxy.Generators
 #endif
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
 				CreateOptionsField(emitter);
-                emitter.AddCustomAttributes(options);
+				emitter.AddCustomAttributes(options);
 
 #if !SILVERLIGHT
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));

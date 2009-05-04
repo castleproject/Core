@@ -20,12 +20,12 @@ namespace Castle.DynamicProxy
 	[Serializable]
 	public class InvalidMixinConfigurationException : Exception
 	{
-		public InvalidMixinConfigurationException (string message)
+		public InvalidMixinConfigurationException(string message)
 			: base (message)
 		{
 		}
 
-		public InvalidMixinConfigurationException (string message, Exception innerException) : base (message, innerException)
+		public InvalidMixinConfigurationException(string message, Exception innerException) : base (message, innerException)
 		{
 		}
 

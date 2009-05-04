@@ -1870,33 +1870,35 @@ namespace Castle.DynamicProxy.Generators
 			return mixins.ToArray();
 		}
 
-		protected void ValidateMixinInterfaces (IEnumerable<Type> interfacesToCheckAgainst, string roleOfCheckedInterfaces)
+		protected void ValidateMixinInterfaces(IEnumerable<Type> interfacesToCheckAgainst, string roleOfCheckedInterfaces)
 		{
 			foreach (Type interfaceType in interfacesToCheckAgainst)
+			{
 				ValidateMixinInterface(interfaceType, roleOfCheckedInterfaces);
+			}
 		}
 
-		protected void ValidateMixinInterface (Type interfaceType, string roleOfCheckedInterface)
+		protected void ValidateMixinInterface(Type interfaceType, string roleOfCheckedInterface)
 		{
-			if (ProxyGenerationOptions.MixinData.ContainsMixin (interfaceType))
+			if (ProxyGenerationOptions.MixinData.ContainsMixin(interfaceType))
 			{
-				object mixinWithSameInterface = ProxyGenerationOptions.MixinData.GetMixinInstance (interfaceType);
-				string message = string.Format (
-						"The mixin {0} adds the interface '{1}' to the generated proxy, but the interface already exists in the proxy's {2}. "
-						+ "A mixin cannot add an interface already implemented in another way.",
-						mixinWithSameInterface.GetType ().Name,
+				object mixinWithSameInterface = ProxyGenerationOptions.MixinData.GetMixinInstance(interfaceType);
+				string message = string.Format(
+						"The mixin {0} adds the interface '{1}' to the generated proxy, but the interface already exists in the proxy's {2}. " +
+						"A mixin cannot add an interface already implemented in another way.",
+						mixinWithSameInterface.GetType().Name,
 						interfaceType.FullName,
 						roleOfCheckedInterface);
-				throw new InvalidMixinConfigurationException (message);
+				throw new InvalidMixinConfigurationException(message);
 			}
 
 			// since interfaces have to form an inheritance graph without cycles, this recursion should be safe
-			ValidateMixinInterfaces (interfaceType.GetInterfaces (), roleOfCheckedInterface);
+			ValidateMixinInterfaces(interfaceType.GetInterfaces(), roleOfCheckedInterface);
 		}
 
 		protected void AddMixinInterfaces(List<Type> interfaceList)
 		{
-			interfaceList.AddRange (ProxyGenerationOptions.MixinData.MixinInterfaces);
+			interfaceList.AddRange(ProxyGenerationOptions.MixinData.MixinInterfaces);
 		}
 
 		protected Reference GetTargetRef(MethodInfo method, FieldReference[] mixinFields, Reference targetRef)
@@ -1904,7 +1906,7 @@ namespace Castle.DynamicProxy.Generators
 			if (IsMixinMethod(method))
 			{
 				Type interfaceType = method2MixinType[method];
-				int mixinIndex = ProxyGenerationOptions.MixinData.GetMixinPosition (interfaceType);
+				int mixinIndex = ProxyGenerationOptions.MixinData.GetMixinPosition(interfaceType);
 				targetRef = mixinFields[mixinIndex];
 			}
 			return targetRef;

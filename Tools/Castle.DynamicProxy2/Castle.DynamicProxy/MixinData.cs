@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy
 		/// The idea is to have reproducable behavior for the case that mixins are registered in different orders.
 		/// This method is here because it is required 
 		/// </summary>
-		public MixinData (IEnumerable<object> mixinInstances)
+		public MixinData(IEnumerable<object> mixinInstances)
 		{
 			if (mixinInstances != null)
 			{
@@ -44,22 +44,22 @@ namespace Castle.DynamicProxy
 
 					foreach (Type inter in mixinInterfaces)
 					{
-						sortedMixedInterfaceTypes.Add (inter);
+						sortedMixedInterfaceTypes.Add(inter);
 
-						if (interface2Mixin.ContainsKey (inter))
+						if (interface2Mixin.ContainsKey(inter))
 						{
-							string message = string.Format (
+							string message = string.Format(
 									"The list of mixins contains two mixins implementing the same interface '{0}': {1} and {2}. An interface cannot be added by more than one mixin.",
 									inter.FullName,
-									interface2Mixin[inter].GetType ().Name,
-									mixin.GetType ().Name);
-							throw new ArgumentException (message, "mixinInstances");
+									interface2Mixin[inter].GetType().Name,
+									mixin.GetType().Name);
+							throw new ArgumentException(message, "mixinInstances");
 						}
 
 						interface2Mixin[inter] = mixin;
 					}
 				}
-				sortedMixedInterfaceTypes.Sort (
+				sortedMixedInterfaceTypes.Sort(
 						delegate (Type x, Type y) { return x.FullName.CompareTo (y.FullName); });
 
 				for (int i = 0; i < sortedMixedInterfaceTypes.Count; i++)
@@ -83,17 +83,17 @@ namespace Castle.DynamicProxy
 			get { return mixinPositions.Keys; }
 		}
 
-		public int GetMixinPosition (Type mixinInterfaceType)
+		public int GetMixinPosition(Type mixinInterfaceType)
 		{
 			return mixinPositions[mixinInterfaceType];
 		}
 
-		public bool ContainsMixin (Type mixinInterfaceType)
+		public bool ContainsMixin(Type mixinInterfaceType)
 		{
-			return mixinPositions.ContainsKey (mixinInterfaceType);
+			return mixinPositions.ContainsKey(mixinInterfaceType);
 		}
 
-		public object GetMixinInstance (Type mixinInterfaceType)
+		public object GetMixinInstance(Type mixinInterfaceType)
 		{
 			return mixinsImpl[mixinPositions[mixinInterfaceType]];
 		}

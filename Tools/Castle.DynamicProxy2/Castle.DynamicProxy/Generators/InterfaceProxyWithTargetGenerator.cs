@@ -91,12 +91,17 @@ namespace Castle.DynamicProxy.Generators
 #warning What to do?
 #else
 				if (!interfaceList.Contains(typeof(ISerializable)))
+				{
 					interfaceList.Add(typeof(ISerializable));
+				}
 #endif
 
-				ValidateMixinInterface (targetType, "target type " + targetType.Name);
+				ValidateMixinInterface(targetType, "target type " + targetType.Name);
 				if (interfaces != null)
-					ValidateMixinInterfaces (interfaces, "additional interfaces");
+				{
+					ValidateMixinInterfaces(interfaces, "additional interfaces");
+				}
+
 				AddMixinInterfaces(interfaceList);
 				AddDefaultInterfaces(interfaceList);
 
@@ -104,7 +109,7 @@ namespace Castle.DynamicProxy.Generators
 
 				ClassEmitter emitter = BuildClassEmitter(newName, baseType, interfaceList);
 				CreateOptionsField(emitter);
-                emitter.AddCustomAttributes(options);
+				emitter.AddCustomAttributes(options);
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
 #else
