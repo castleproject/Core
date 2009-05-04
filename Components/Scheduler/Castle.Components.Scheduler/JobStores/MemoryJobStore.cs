@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -114,7 +114,7 @@ namespace Castle.Components.Scheduler.JobStores
 		public override void SaveJobDetails(JobDetails jobDetails)
 		{
 			if (jobDetails == null)
-				throw new ArgumentNullException("jobStatus");
+				throw new ArgumentNullException("jobDetails");
 
 			VersionedJobDetails versionedJobDetails = (VersionedJobDetails) jobDetails;
 
@@ -189,7 +189,7 @@ namespace Castle.Components.Scheduler.JobStores
 			if (existingJobName.Length == 0)
 				throw new ArgumentException("existingJobName");
 			if (updatedJobSpec == null)
-				throw new ArgumentNullException("jobSpec");
+				throw new ArgumentNullException("updatedJobSpec");
 
 			lock (jobs)
 			{
