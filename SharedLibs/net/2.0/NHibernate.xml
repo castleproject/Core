@@ -169,6 +169,39 @@
             The entity persister.
             </summary>
         </member>
+        <member name="M:NHibernate.AdoNet.Util.DdlFormatter.Format(System.String)">
+            <summary> Format an SQL statement using simple rules:
+            a) Insert newline after each comma;
+            b) Indent three spaces after each inserted newline;
+            If the statement contains single/double quotes return unchanged,
+            it is too complex and could be broken by simple formatting.
+            </summary>
+        </member>
+        <member name="T:NHibernate.AdoNet.Util.FormatStyle">
+            <summary> Represents the the understood types or styles of formatting.  </summary>
+        </member>
+        <member name="T:NHibernate.AdoNet.Util.SqlStatementLogger">
+            <summary> Centralize logging handling for SQL statements. </summary>
+        </member>
+        <member name="M:NHibernate.AdoNet.Util.SqlStatementLogger.#ctor">
+            <summary> Constructs a new SqlStatementLogger instance.</summary>
+        </member>
+        <member name="M:NHibernate.AdoNet.Util.SqlStatementLogger.#ctor(System.Boolean,System.Boolean)">
+            <summary> Constructs a new SqlStatementLogger instance. </summary>
+            <param name="logToStdout">Should we log to STDOUT in addition to our internal logger. </param>
+            <param name="formatSql">Should we format SQL ('prettify') prior to logging. </param>
+        </member>
+        <member name="M:NHibernate.AdoNet.Util.SqlStatementLogger.LogCommand(System.String,System.Data.IDbCommand,NHibernate.AdoNet.Util.FormatStyle)">
+            <summary> Log a IDbCommand. </summary>
+            <param name="message">Title</param>
+            <param name="command">The SQL statement. </param>
+            <param name="style">The requested formatting style. </param>
+        </member>
+        <member name="M:NHibernate.AdoNet.Util.SqlStatementLogger.LogCommand(System.Data.IDbCommand,NHibernate.AdoNet.Util.FormatStyle)">
+            <summary> Log a IDbCommand. </summary>
+            <param name="command">The SQL statement. </param>
+            <param name="style">The requested formatting style. </param>
+        </member>
         <member name="T:NHibernate.AdoNet.AbstractBatcher">
             <summary>
             Manages prepared statements and batching. Class exists to enforce separation of concerns
@@ -5796,6 +5829,9 @@
         <member name="F:NHibernate.Cfg.Environment.DefaultEntityMode">
             <summary>The EntityMode in which set the Session opened from the SessionFactory.</summary>
         </member>
+        <member name="F:NHibernate.Cfg.Environment.FormatSql">
+            <summary> Enable formatting of SQL logged to the console</summary>
+        </member>
         <member name="F:NHibernate.Cfg.Environment.QueryStartupChecking">
             <summary> Should named queries be checked during startup (the default is enabled). </summary>
             <remarks>Mainly intended for test environments.</remarks>
@@ -9738,6 +9774,288 @@
             <summary>
             ANSI-SQL style cast(foo as type) where the type is a NHibernate type
             </summary>
+        </member>
+        <member name="T:NHibernate.Dialect.Function.CastFunction.LazyType">
+            <summary>
+            Delegate the values to a real type
+            </summary>
+            <remarks>
+            The real return type of Cast is know only after the Cast is parsed.
+            This class was created in NH to remove the responsibility of the parser about know the
+            real return type.
+            </remarks>
+        </member>
+        <member name="T:NHibernate.Type.IType">
+            <summary>
+			Defines a mapping from a .NET <see cref="T:System.Type"/> to a SQL datatype.
+			This interface is intended to be implemented by applications that need custom types.
+		</summary><remarks>
+			Implementors should usually be immutable and MUST definately be threadsafe.
+		</remarks>
+        </member>
+        <member name="M:NHibernate.Type.ICacheAssembler.Disassemble(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
+            <summary> Return a cacheable "disassembled" representation of the object.</summary>
+            <param name="value">the value to cache </param>
+            <param name="session">the session </param>
+            <param name="owner">optional parent entity object (needed for collections) </param>
+            <returns> the disassembled, deep cloned state </returns>		
+        </member>
+        <member name="M:NHibernate.Type.ICacheAssembler.Assemble(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
+            <summary> Reconstruct the object from its cached "disassembled" state.</summary>
+            <param name="cached">the disassembled state from the cache </param>
+            <param name="session">the session </param>
+            <param name="owner">the parent entity object </param>
+            <returns> the the object </returns>
+        </member>
+        <member name="M:NHibernate.Type.ICacheAssembler.BeforeAssemble(System.Object,NHibernate.Engine.ISessionImplementor)">
+            <summary>
+            Called before assembling a query result set from the query cache, to allow batch fetching
+            of entities missing from the second-level cache.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Type.IType.SqlTypes(NHibernate.Engine.IMapping)">
+            <summary>
+		When implemented by a class, returns the SqlTypes for the columns mapped by this IType.
+		</summary><param name="mapping">The <see cref="T:NHibernate.Engine.IMapping"/> that uses this IType.</param><returns>An array of <see cref="T:NHibernate.SqlTypes.SqlType"/>s.</returns> 
+        </member>
+        <member name="M:NHibernate.Type.IType.GetColumnSpan(NHibernate.Engine.IMapping)">
+            <summary>
+		When implemented by a class, returns how many columns are used to persist this type.
+		</summary><param name="mapping">The <see cref="T:NHibernate.Engine.IMapping"/> that uses this IType.</param><returns>The number of columns this IType spans.</returns><exception cref="T:NHibernate.MappingException">MappingException</exception> 
+        </member>
+        <member name="M:NHibernate.Type.IType.IsDirty(System.Object,System.Object,NHibernate.Engine.ISessionImplementor)">
+            <summary>
+		When implemented by a class, should the parent be considered dirty, 
+		given both the old and current field or element value?
+		</summary><param name="old">The old value</param><param name="current">The current value</param><param name="session">The <see cref="T:NHibernate.Engine.ISessionImplementor"/> </param><returns>true if the field is dirty</returns> 
+        </member>
+        <member name="M:NHibernate.Type.IType.NullSafeGet(System.Data.IDataReader,System.String[],NHibernate.Engine.ISessionImplementor,System.Object)">
+            <summary>
+		When implemented by a class, gets an instance of the object mapped by 
+		this IType from the <see cref="T:System.Data.IDataReader"/>.
+		</summary><param name="rs">The <see cref="T:System.Data.IDataReader"/> that contains the values</param><param name="names">
+		The names of the columns in the <see cref="T:System.Data.IDataReader"/> that contain the 
+		value to populate the IType with.
+		</param><param name="session"></param><param name="owner"></param><returns>The object mapped by this IType.</returns><remarks>
+		Implementors should handle possibility of null values.
+		</remarks> 
+        </member>
+        <member name="M:NHibernate.Type.IType.NullSafeGet(System.Data.IDataReader,System.String,NHibernate.Engine.ISessionImplementor,System.Object)">
+            <summary>
+		When implemented by a class, gets an instance of the object 
+		mapped by this IType from the <see cref="T:System.Data.IDataReader"/>.
+		</summary><param name="rs">The <see cref="T:System.Data.IDataReader"/> that contains the values</param><param name="name">The name of the column in the <see cref="T:System.Data.IDataReader"/> that contains the 
+		value to populate the IType with.</param><param name="session"></param><param name="owner"></param><returns>The object mapped by this IType.</returns><remarks>
+		Implementations should handle possibility of null values.
+		This method might be called if the IType is known to be a single-column type.
+		</remarks> 
+        </member>
+        <member name="M:NHibernate.Type.IType.NullSafeSet(System.Data.IDbCommand,System.Object,System.Int32,System.Boolean[],NHibernate.Engine.ISessionImplementor)">
+            <summary>
+		When implemented by a class, puts the value/values from the mapped 
+		class into the <see cref="T:System.Data.IDbCommand"/>.
+		</summary><param name="st">The <see cref="T:System.Data.IDbCommand"/> to put the values into.</param><param name="value">The object that contains the values.</param><param name="index">The index of the <see cref="T:System.Data.IDbDataParameter"/> to start writing the values to.</param><param name="session"></param><param name="settable">Indicates which columns are to be set.</param><remarks>
+		Implementors should handle possibility of null values.
+		A multi-column type should be written to parameters starting from <paramref name="index"/>.
+		</remarks> 
+        </member>
+        <member name="M:NHibernate.Type.IType.NullSafeSet(System.Data.IDbCommand,System.Object,System.Int32,NHibernate.Engine.ISessionImplementor)">
+            <summary>
+			When implemented by a class, puts the value/values from the mapped
+			class into the <see cref="T:System.Data.IDbCommand"/>.
+		</summary><param name="st">
+			The <see cref="T:System.Data.IDbCommand"/> to put the values into.
+		</param><param name="value">The object that contains the values.</param><param name="index">
+			The index of the <see cref="T:System.Data.IDbDataParameter"/> to start writing the values to.
+		</param><param name="session"></param><remarks>
+			Implementors should handle possibility of null values.
+			A multi-column type should be written to parameters starting from <paramref name="index"/>.
+		</remarks> 
+        </member>
+        <member name="M:NHibernate.Type.IType.ToLoggableString(System.Object,NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary>
+		When implemented by a class, a representation of the value to be 
+		embedded in an XML element
+		</summary><param name="value">The object that contains the values.</param><param name="factory"></param><returns>An Xml formatted string.</returns> 
+        </member>
+        <member name="M:NHibernate.Type.IType.DeepCopy(System.Object,NHibernate.EntityMode,NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary>
+		When implemented by a class, returns a deep copy of the persistent 
+		state, stopping at entities and at collections.
+		</summary><param name="val">A Collection element or Entity field</param><param name="entityMode">The entityMode.</param><param name="factory">The session factory.</param><returns>A deep copy of the object.</returns> 
+        </member>
+        <member name="M:NHibernate.Type.IType.Hydrate(System.Data.IDataReader,System.String[],NHibernate.Engine.ISessionImplementor,System.Object)">
+            <summary>
+		When implemented by a class, retrieves an instance of the mapped class, 
+		or the identifier of an entity or collection from a <see cref="T:System.Data.IDataReader"/>.
+		</summary><param name="rs">The <see cref="T:System.Data.IDataReader"/> that contains the values.</param><param name="names">
+		The names of the columns in the <see cref="T:System.Data.IDataReader"/> that contain the 
+		value to populate the IType with.
+		</param><param name="session">the session</param><param name="owner">The parent Entity</param><returns>An identifier or actual object mapped by this IType.</returns><remarks>
+		<para>
+		This is useful for 2-phase property initialization - the second phase is a call to
+		<c>ResolveIdentifier()</c>
+		</para>
+		<para>
+		Most implementors of this method will just pass the call to <c>NullSafeGet()</c>.
+		</para>
+		</remarks> 
+        </member>
+        <member name="M:NHibernate.Type.IType.ResolveIdentifier(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
+            <summary>
+		When implemented by a class, maps identifiers to Entities or Collections. 
+		</summary><param name="value">An identifier or value returned by <c>Hydrate()</c></param><param name="session">The session</param><param name="owner">The parent Entity</param><returns>The Entity or Collection referenced by this Identifier.</returns><remarks>
+		This is the second phase of 2-phase property initialization.
+		</remarks> 
+        </member>
+        <member name="M:NHibernate.Type.IType.SemiResolve(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
+            <summary>
+            Given a hydrated, but unresolved value, return a value that may be used to
+            reconstruct property-ref associations.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Type.IType.Replace(System.Object,System.Object,NHibernate.Engine.ISessionImplementor,System.Object,System.Collections.IDictionary)">
+            <!-- No matching elements were found for the following include tag --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;M:IType.Copy&quot;]/*"/> 
+        </member>
+        <member name="M:NHibernate.Type.IType.Replace(System.Object,System.Object,NHibernate.Engine.ISessionImplementor,System.Object,System.Collections.IDictionary,NHibernate.Type.ForeignKeyDirection)">
+            <summary> 
+            During merge, replace the existing (target) value in the entity we are merging to
+            with a new (original) value from the detached entity we are merging. For immutable
+            objects, or null values, it is safe to simply return the first parameter. For
+            mutable objects, it is safe to return a copy of the first parameter. For objects
+            with component values, it might make sense to recursively replace component values. 
+            </summary>
+            <param name="original">the value from the detached entity being merged </param>
+            <param name="target">the value in the managed entity </param>
+            <param name="session"></param>
+            <param name="owner"></param>
+            <param name="copyCache"></param>
+            <param name="foreignKeyDirection"></param>
+            <returns> the value to be merged </returns>
+        </member>
+        <member name="M:NHibernate.Type.IType.IsSame(System.Object,System.Object,NHibernate.EntityMode)">
+            <summary> 
+            Compare two instances of the class mapped by this type for persistence
+            "equality" - equality of persistent state - taking a shortcut for
+            entity references.
+            </summary>
+            <param name="x"> </param>
+            <param name="y"> </param>
+            <param name="entityMode"> </param>
+            <returns> boolean </returns>
+        </member>
+        <member name="M:NHibernate.Type.IType.IsEqual(System.Object,System.Object,NHibernate.EntityMode)">
+            <summary> 
+            Compare two instances of the class mapped by this type for persistence
+            "equality" - equality of persistent state.
+            </summary>
+            <param name="x"> </param>
+            <param name="y"> </param>
+            <param name="entityMode"> </param>
+            <returns> boolean </returns>
+        </member>
+        <member name="M:NHibernate.Type.IType.IsEqual(System.Object,System.Object,NHibernate.EntityMode,NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary> 
+            Compare two instances of the class mapped by this type for persistence
+            "equality" - equality of persistent state.
+            </summary>
+            <param name="x"> </param>
+            <param name="y"> </param>
+            <param name="entityMode"> </param>
+            <param name="factory"></param>
+            <returns> boolean </returns>
+        </member>
+        <member name="M:NHibernate.Type.IType.GetHashCode(System.Object,NHibernate.EntityMode)">
+            <summary> Get a hashcode, consistent with persistence "equality"</summary>
+            <param name="x"> </param>
+            <param name="entityMode"> </param>
+        </member>
+        <member name="M:NHibernate.Type.IType.GetHashCode(System.Object,NHibernate.EntityMode,NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary> Get a hashcode, consistent with persistence "equality"</summary>
+            <param name="x"> </param>
+            <param name="entityMode"> </param>
+            <param name="factory"> </param>
+        </member>
+        <member name="M:NHibernate.Type.IType.Compare(System.Object,System.Object,System.Nullable{NHibernate.EntityMode})">
+            <summary> compare two instances of the type</summary>
+            <param name="x"> </param>
+            <param name="y"> </param>
+            <param name="entityMode"> </param>
+        </member>
+        <member name="M:NHibernate.Type.IType.GetSemiResolvedType(NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary> Get the type of a semi-resolved value.</summary>
+        </member>
+        <member name="M:NHibernate.Type.IType.SetToXMLNode(System.Xml.XmlNode,System.Object,NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary> A representation of the value to be embedded in an XML element. </summary>
+            <param name="node"></param>
+            <param name="value"> </param>
+            <param name="factory"> </param>
+        </member>
+        <member name="M:NHibernate.Type.IType.FromXMLNode(System.Xml.XmlNode,NHibernate.Engine.IMapping)">
+            <summary> Parse the XML representation of an instance.</summary>
+            <param name="xml"> </param>
+            <param name="factory"> </param>
+            <returns> an instance of the type </returns>
+        </member>
+        <member name="M:NHibernate.Type.IType.ToColumnNullness(System.Object,NHibernate.Engine.IMapping)">
+            <summary> 
+            Given an instance of the type, return an array of boolean, indicating
+            which mapped columns would be null. 
+            </summary>
+            <param name="value">an instance of the type </param>
+            <param name="mapping"></param>
+        </member>
+        <member name="P:NHibernate.Type.IType.Name">
+            <summary>
+		When implemented by a class, gets the abbreviated name of the type.
+		</summary><value>The NHibernate type name.</value> 
+        </member>
+        <member name="P:NHibernate.Type.IType.ReturnedClass">
+            <summary>
+		When implemented by a class, gets the <see cref="T:System.Type"/> returned 
+		by the <c>NullSafeGet()</c> methods.
+		</summary><value>
+		The <see cref="T:System.Type"/> from the .NET framework.
+		</value><remarks>
+		This is used to establish the class of an array of this Itype
+		</remarks> 
+        </member>
+        <member name="P:NHibernate.Type.IType.IsMutable">
+            <summary>
+		When implemented by a class, gets the value indicating if the objects 
+		of this IType are mutable.
+		</summary><value>true if the objects mapped by this IType are mutable.</value><remarks>
+		With respect to the referencing object...
+		Entities and Collections are considered immutable because they manage their own internal state.
+		</remarks> 
+        </member>
+        <member name="P:NHibernate.Type.IType.IsAssociationType">
+            <summary>
+			When implemented by a class, gets a value indicating if the implementor is castable to an an <see cref="T:NHibernate.Type.IAssociationType"/>
+		</summary><value>true if this is an Association</value><remarks>This does not necessarily imply that the type actually represents an association.</remarks> 
+        </member>
+        <member name="P:NHibernate.Type.IType.IsCollectionType">
+            <summary>
+			When implemented by a class, gets a value indicating if the implementor is a collection type
+		</summary><value>true if this is a <see cref="T:NHibernate.Type.CollectionType"/>.</value> 
+        </member>
+        <member name="P:NHibernate.Type.IType.IsComponentType">
+            <summary>
+		When implemented by a class, gets a value indicating if the implementor 
+		is an <see cref="T:NHibernate.Type.IAbstractComponentType"/>.
+		</summary><value>true if this is an <see cref="T:NHibernate.Type.IAbstractComponentType"/></value><remarks>
+		If true, the implementation must be castable to <see cref="T:NHibernate.Type.IAbstractComponentType"/>.
+		A component type may own collections or associations and hence must provide certain extra functionality.
+		</remarks> 
+        </member>
+        <member name="P:NHibernate.Type.IType.IsEntityType">
+            <summary>
+		When implemented by a class, gets a value indicating if the implementor 
+		extends <see cref="T:NHibernate.Type.EntityType"/>
+		</summary><value>true if this is an <see cref="T:NHibernate.Type.EntityType"/></value> 
+        </member>
+        <member name="P:NHibernate.Type.IType.IsAnyType">
+            <!-- No matching elements were found for the following include tag --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;P:IType.IsAnyType&quot;]/*"/> 
         </member>
         <member name="T:NHibernate.Dialect.Function.CharIndexFunction">
             <summary>
@@ -19001,305 +19319,68 @@
             <param name="sql">Optionally, the sql being performed when the exception occurred. </param>
             <returns> The converted exception; should <b>never</b> be null. </returns>
         </member>
-        <member name="T:NHibernate.Hql.Classic.ClassicQueryTranslatorFactory">
-            <summary>
-            Generates translators which uses the older hand-written parser to perform the translation.
-            </summary>
-        </member>
-        <member name="T:NHibernate.Hql.IQueryTranslatorFactory">
-            <summary>
-            Facade for generation of <see cref="T:NHibernate.Hql.IQueryTranslator"/> 
-            and <see cref="T:NHibernate.Hql.IFilterTranslator"/> instances.
-            </summary>
-        </member>
-        <member name="M:NHibernate.Hql.IQueryTranslatorFactory.CreateQueryTranslator(System.String,System.String,System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter},NHibernate.Engine.ISessionFactoryImplementor)">
-            <summary>
-            Construct a <see cref="T:NHibernate.Hql.IQueryTranslator"/> instance 
-            capable of translating an HQL query string.
-            </summary>
-            <param name="queryIdentifier">
-            The query-identifier (used in <see cref="T:NHibernate.Stat.QueryStatistics"/> collection). 
-            This is typically the same as the queryString parameter except for the case of
-            split polymorphic queries which result in multiple physical sql queries.
-            </param>
-            <param name="queryString">The query string to be translated</param>
-            <param name="filters">Currently enabled filters</param>
-            <param name="factory">The session factory</param>
-            <returns>An appropriate translator.</returns>
-        </member>
-        <member name="M:NHibernate.Hql.IQueryTranslatorFactory.CreateFilterTranslator(System.String,System.String,System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter},NHibernate.Engine.ISessionFactoryImplementor)">
-            <summary>
-            Construct a <see cref="T:NHibernate.Hql.IFilterTranslator"/> instance capable of 
-            translating an HQL filter string.
-            </summary>
-            <param name="queryIdentifier">
-            The query-identifier (used in <see cref="T:NHibernate.Stat.QueryStatistics"/> collection). 
-            This is typically the same as the queryString parameter except for the case of
-            split polymorphic queries which result in multiple physical sql queries.
-            </param>
-            <param name="queryString">The query string to be translated</param>
-            <param name="filters">Currently enabled filters</param>
-            <param name="factory">The session factory</param>
-            <returns>An appropriate translator.</returns>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.ClauseParser">
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Exec.IStatementExecutor">
             <summary> 
-            Parses the hibernate query into its constituent clauses.
+            Encapsulates the strategy required to execute various types of update, delete,
+            and insert statements issued through HQL. 
             </summary>
         </member>
-        <member name="T:NHibernate.Hql.Classic.IParser">
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Exec.IStatementExecutor.Execute(NHibernate.Engine.QueryParameters,NHibernate.Engine.ISessionImplementor)">
             <summary> 
-            A parser is a state machine that accepts a string of tokens,
-            bounded by start() and end() and modifies a QueryTranslator. Parsers
-            are NOT intended to be threadsafe. They SHOULD be reuseable
-            for more than one token stream.
+            Execute the sql managed by this executor using the given parameters. 
+            </summary>
+            <param name="parameters">Essentially bind information for this processing. </param>
+            <param name="session">The session originating the request. </param>
+            <returns> The number of entities updated/deleted. </returns>
+            <exception cref="T:NHibernate.HibernateException"/>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.HqlParser.filter">
+            True if this is a filter query (allow no FROM clause). *
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.HqlSqlWalker.PopFromClause">
+            <summary>
+            Returns to the previous 'FROM' context.
             </summary>
         </member>
-        <member name="M:NHibernate.Hql.Classic.IParser.Token(System.String,NHibernate.Hql.Classic.QueryTranslator)">
+        <!-- Badly formed XML comment ignored for member "T:NHibernate.Hql.Ast.ANTLR.SqlGenerator" -->
+        <member name="T:NHibernate.Hql.Ast.ANTLR.IErrorReporter">
             <summary>
+            Implementations will report or handle errors invoked by an ANTLR base parser.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.SqlGenerator._parseErrorHandler">
+            <summary>
+            Handles parser errors.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.SqlGenerator._writer">
+            all append invocations on the buf should go through this Output instance variable.
+            The value of this variable may be temporarily substitued by sql function processing code
+            to catch generated arguments.
+            This is because sql function templates need arguments as seperate string chunks
+            that will be assembled into the target dialect-specific function call.
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SqlGenerator.OptionalSpace">
+            Add a aspace if the previous token was not a space or a parenthesis.
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.SqlGenerator.ISqlWriter">
+            Writes SQL fragments.
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SqlGenerator.ISqlWriter.CommaBetweenParameters(System.String)">
+             todo remove this hack
+             The parameter is either ", " or " , ". This is needed to pass sql generating tests as the old
+             sql generator uses " , " in the WHERE and ", " in SELECT.
             
-            </summary>
-            <param name="token"></param>
-            <param name="q"></param>
+             @param comma either " , " or ", "
         </member>
-        <member name="M:NHibernate.Hql.Classic.IParser.Start(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.SqlGenerator.FunctionArguments">
+            SQL function processing code redirects generated SQL output to an instance of this class
+            which catches function arguments.
         </member>
-        <member name="M:NHibernate.Hql.Classic.IParser.End(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.FromParser">
-            <summary> 
-            Parses the from clause of a hibernate query, looking for tables and
-            aliases for the SQL query.
-            </summary>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.FromParser.#cctor">
-            <summary></summary>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.FromPathExpressionParser">
-            <summary>
-            FromPathExpressionParser
-            </summary>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.PathExpressionParser">
-            <summary> 
-            Parses an expression of the form foo.bar.baz and builds up an expression
-            involving two less table joins than there are path components.
-            </summary>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.DereferenceEntity(System.String,NHibernate.Type.EntityType,NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="propertyName"></param>
-            <param name="propertyType"></param>
-            <param name="q"></param>
-            <remarks>NOTE: we avoid joining to the next table if the named property is just the foreign key value</remarks>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.CurrentColumns">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.Start(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.End(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.LastCollectionElement">
-            <summary></summary>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.SetLastCollectionElementIndexValue(NHibernate.SqlCommand.SqlString)">
-            <summary></summary>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.SetExpectingCollectionIndex">
-            <summary></summary>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.GetCollectionSubquery(System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter})">
-            <summary></summary>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.AddAssociation(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.AddFromAssociation(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-            <returns></returns>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.AddFromCollection(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-            <returns></returns>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.Fetch(NHibernate.Hql.Classic.QueryTranslator,System.String)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-            <param name="entityName"></param>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.PropertyType">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.IsExpectingCollectionIndex">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.WhereColumn">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.WhereColumns">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.WhereColumnType">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.Name">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.IsCollectionValued">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.CollectionName">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.CollectionRole">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.CollectionOwnerName">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.CurrentName">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.CurrentProperty">
-            <summary></summary>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement">
-            <summary></summary>
-        </member>
-        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.Type">
-            <summary></summary>
-        </member>
-        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.IsOneToMany">
-            <summary></summary>
-        </member>
-        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.Alias">
-            <summary></summary>
-        </member>
-        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.ElementColumns">
-            <summary></summary>
-        </member>
-        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.JoinSequence">
-            <summary></summary>
-        </member>
-        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.IndexValue">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Hql.Classic.FunctionStack.FunctionHolder.FirstValidColumnType">
-            <summary>
-            Used to hold column type in nested functions.
-            </summary>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.GroupByParser">
-            <summary> 
-            Parses the GROUP BY clause of an aggregate query
-            </summary>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.HavingParser">
-            <summary> 
-            Parses the having clause of a hibernate query and translates it to an
-            SQL having clause.
-            </summary>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.WhereParser">
-            <summary> Parses the where clause of a hibernate query and translates it to an
-            SQL where clause.
-            </summary>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.WhereParser.Token(System.String,NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="token"></param>
-            <param name="q"></param>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.WhereParser.Start(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.WhereParser.End(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.OrderByParser">
-            <summary> 
-            Parses the ORDER BY clause of a query
-            </summary>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.ParserHelper">
-            <summary></summary>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.PreprocessingParser">
-            <summary>HQL lexical analyzer (not really a parser)</summary>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PreprocessingParser.#ctor(System.Collections.Generic.IDictionary{System.String,System.String})">
-            <summary>
-            
-            </summary>
-            <param name="replacements"></param>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PreprocessingParser.Token(System.String,NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="token"></param>
-            <param name="q"></param>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PreprocessingParser.Start(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-        </member>
-        <member name="M:NHibernate.Hql.Classic.PreprocessingParser.End(NHibernate.Hql.Classic.QueryTranslator)">
-            <summary>
-            
-            </summary>
-            <param name="q"></param>
-        </member>
-        <member name="T:NHibernate.Hql.Classic.QueryTranslator">
-            <summary> 
-            An instance of <c>QueryTranslator</c> translates a Hibernate query string to SQL.
-            </summary>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.SqlGenerator.DefaultWriter">
+            The default SQL writer.
         </member>
         <member name="T:NHibernate.Loader.Loader">
             <summary>
@@ -19664,6 +19745,1185 @@
             they will in most cases.
             </summary>
         </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Loader.QueryLoader.GetNamedParameterLocs(System.String)">
+            <summary>
+            Returns the locations of all occurrences of the named parameter.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Loader.QueryLoader.GetLockModes(System.Collections.Generic.IDictionary{System.String,NHibernate.LockMode})">
+            <summary>
+            
+            </summary>
+            <param name="lockModes">a collection of lock modes specified dynamically via the Query interface</param>
+            <returns></returns>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.AbstractNullnessCheckNode">
+            <summary>
+            Base class for nodes dealing 'is null' and 'is not null' operators.
+            todo : a good deal of this is copied from BinaryLogicOperatorNode; look at consolidating these code fragments
+            
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.UnaryLogicOperatorNode">
+            <summary>
+            Represents a unary operator node.
+            
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.HqlSqlWalkerNode">
+            <summary>
+            A semantic analysis node, that points back to the main analyzer.
+            Authoer: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.SqlNode">
+            <summary>
+            A base AST node for the intermediate tree.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.SqlNode._originalText">
+            The original text for the node, mostly for debugging.
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.SqlNode._dataType">
+            The data type of this node.  Null for 'no type'.
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.SqlNode.RenderText(NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary>
+            Retrieve the text to be used for rendering this particular node.
+            </summary>
+            <param name="sessionFactory">The session factory</param>
+            <returns>The text to use for rendering</returns>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IInitializableNode">
+            <summary>
+            An interface for initializeable AST nodes.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IInitializableNode.Initialize(System.Object)">
+            <summary>
+            Initializes the node with the parameter.
+            </summary>
+            <param name="param">the initialization parameter.</param>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.HqlSqlWalkerNode._walker">
+            A pointer back to the phase 2 processor.
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IUnaryOperatorNode">
+            <summary>
+            Contract for nodes representing unary operators.
+            
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IOperatorNode">
+            <summary>
+            Contract for nodes representing operators (logic or arithmetic).
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IOperatorNode.Initialize">
+            <summary>
+            Called by the tree walker during hql-sql semantic analysis
+            after the operator sub-tree is completely built.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IOperatorNode.DataType">
+            <summary>
+            Retrieves the data type for the overall operator expression.
+            </summary>
+            <returns>The expression's data type.</returns>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IUnaryOperatorNode.Operand">
+            <summary>
+            Retrieves the node representing the operator's single operand.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.AbstractNullnessCheckNode.ExpansionConnectorType">
+            <summary>
+            When (if) we need to expand a row value constructor, what is the type of connector to use between the
+            expansion fragments.
+            </summary>
+            <returns>The expansion connector type.</returns>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.AbstractNullnessCheckNode.ExpansionConnectorText">
+            <summary>
+            When (if) we need to expand a row value constructor, what is the text of connector to use between the
+            expansion fragments.
+            </summary>
+            <returns>The expansion connector text.</returns>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.AbstractStatement">
+            <summary>
+            Convenience implementation of Statement to centralize common functionality.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IDisplayableNode">
+            <summary>
+            Implementors will return additional display text, which will be used
+            by the ASTPrinter to display information (besides the node type and node
+            text).
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IDisplayableNode.GetDisplayText">
+            <summary>
+            Returns additional display text for the AST node.
+            </summary>
+            <returns>The additional display text.</returns>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IStatement">
+            <summary>
+            Common interface modeling the different HQL statements (i.e., INSERT, UPDATE, DELETE, SELECT).
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IStatement.Walker">
+            <summary>
+            The "phase 2" walker which generated this statement tree.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IStatement.StatementType">
+            <summary>
+            The main token type representing the type of this statement.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IStatement.NeedsExecutor">
+            <summary>
+            Does this statement require the StatementExecutor?
+            Essentially, at the JDBC level, does this require an executeUpdate()?
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.AbstractStatement.GetDisplayText">
+            <summary>
+            Returns additional display text for the AST node.
+            </summary>
+            <returns>The additional display text.</returns>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IRestrictableStatement">
+            <summary>
+            Type definition for Statements which are restrictable via a where-clause (and
+            thus also having a from-clause).
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IRestrictableStatement.FromClause">
+            <summary>
+            Retreives the from-clause in effect for this statement; could be null if the from-clause
+            has not yet been parsed/generated.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IRestrictableStatement.HasWhereClause">
+            <summary>
+            Does this statement tree currently contain a where clause?
+            Returns True if a where-clause is found in the statement tree and
+            that where clause actually defines restrictions; false otherwise.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IRestrictableStatement.WhereClause">
+            <summary>
+            Retreives the where-clause defining the restriction(s) in effect for
+            this statement.
+            Note that this will generate a where-clause if one was not found, so caution
+            needs to taken prior to calling this that restrictions will actually exist
+            in the resulting statement tree (otherwise "unexpected end of subtree" errors
+            might occur during rendering).
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.ISelectExpression">
+            <summary>
+            Represents an element of a projection list, i.e. a select expression.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.ISelectExpression.SetScalarColumnText(System.Int32)">
+            <summary>
+            Appends AST nodes that represent the columns after the current AST node.
+            (e.g. 'as col0_O_')
+            </summary>
+            <param name="i">The index of the select expression in the projection list.</param>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.ISelectExpression.DataType">
+            <summary>
+            Returns the data type of the select expression.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.ISelectExpression.FromElement">
+            <summary>
+            Returns the FROM element that this expression refers to.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.ISelectExpression.IsConstructor">
+            <summary>
+            Returns true if the element is a constructor (e.g. new Foo).
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.ISelectExpression.IsReturnableEntity">
+            <summary>
+            Returns true if this select expression represents an entity that can be returned.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.ISelectExpression.Text">
+            <summary>
+            Sets the text of the node.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.AggregateNode">
+            <summary>
+            Represents an aggregate function i.e. min, max, sum, avg.
+            
+            Author: Joshua Davis
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.BetweenOperatorNode">
+            <summary>
+            Contract for nodes representing logcial BETWEEN (ternary) operators.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.BinaryArithmeticOperatorNode">
+            <summary>
+            Nodes which represent binary arithmetic operators.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IBinaryOperatorNode">
+            <summary>
+            Contract for nodes representing binary operators.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IBinaryOperatorNode.LeftHandOperand">
+            <summary>
+            The left-hand operand of the operator.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IBinaryOperatorNode.RightHandOperand">
+            <summary>
+            The right-hand operand of the operator.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.BinaryArithmeticOperatorNode.LeftHandOperand">
+             Retrieves the left-hand operand of the operator.
+            
+             @return The left-hand operand
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.BinaryArithmeticOperatorNode.RightHandOperand">
+             Retrieves the right-hand operand of the operator.
+            
+             @return The right-hand operand
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.BinaryLogicOperatorNode">
+            <summary>
+            Contract for nodes representing binary operators.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.BinaryLogicOperatorNode.Initialize">
+            <summary>
+            Performs the operator node initialization by seeking out any parameter
+            nodes and setting their expected type, if possible.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.BinaryLogicOperatorNode.MutateRowValueConstructorSyntax(System.Int32)">
+             Mutate the subtree relating to a row-value-constructor to instead use
+             a series of ANDed predicates.  This allows multi-column type comparisons
+             and explicit row-value-constructor syntax even on databases which do
+             not support row-value-constructor.
+             <p/>
+             For example, here we'd mutate "... where (col1, col2) = ('val1', 'val2) ..." to
+             "... where col1 = 'val1' and col2 = 'val2' ..."
+            
+             @param valueElements The number of elements in the row value constructor list.
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.BooleanLiteralNode">
+            <summary>
+             Represents a boolean literal within a query.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.LiteralNode">
+            <summary>
+            Represents a literal.
+            
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IExpectedTypeAwareNode">
+            <summary>
+            Interface for nodes which wish to be made aware of any determined "expected
+            type" based on the context within they appear in the query.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.BooleanLiteralNode.ExpectedType">
+             Expected-types really only pertinent here for boolean literals...
+            
+             @param expectedType
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.Case2Node">
+            <summary>
+            Represents a case ... when .. then ... else ... end expression in a select.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.CaseNode">
+            <summary>
+            Represents a case ... when .. then ... else ... end expression in a select.
+            
+            Author: Gavin King
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.CollectionFunction">
+            <summary>
+            Represents 'elements()' or 'indices()'.
+            Author: josh
+            Ported by: Steve strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.MethodNode">
+            <summary>
+            Represents a method call
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.SelectExpressionList">
+            <summary>
+            Common behavior - a node that contains a list of select expressions.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.SelectExpressionList.CollectSelectExpressions">
+            <summary>
+            Returns an array of SelectExpressions gathered from the children of the given parent AST node.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.SelectExpressionList.GetFirstSelectExpression">
+            <summary>
+            Returns the first select expression node that should be considered when building the array of select
+            expressions.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.CountNode">
+            <summary>
+            Represents a COUNT expression in a select.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.DeleteStatement">
+            <summary>
+            Defines a top-level AST node representing an HQL delete statement. 
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.DotNode">
+            <summary>
+            Represents a reference to a property or alias expression.  This should duplicate the relevant behaviors in
+            PathExpressionParser.
+            Author: Joshua Davis
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IResolvableNode">
+            <summary>
+            The contract for expression sub-trees that can resolve themselves.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IResolvableNode.Resolve(System.Boolean,System.Boolean,System.String,NHibernate.Hql.Ast.ANTLR.Tree.IASTNode)">
+            <summary>
+            Does the work of resolving an identifier or a dot
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IResolvableNode.Resolve(System.Boolean,System.Boolean,System.String)">
+            <summary>
+            Does the work of resolving an identifier or a dot, but without a parent node
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IResolvableNode.Resolve(System.Boolean,System.Boolean)">
+            <summary>
+            Does the work of resolving an identifier or a dot, but without a parent node or alias
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IResolvableNode.ResolveInFunctionCall(System.Boolean,System.Boolean)">
+            <summary>
+            Does the work of resolving inside of the scope of a function call
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IResolvableNode.ResolveIndex(NHibernate.Hql.Ast.ANTLR.Tree.IASTNode)">
+            <summary>
+            Does the work of resolving an an index [].
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IPathNode">
+            <summary>
+            An AST node with a path property.  This path property will be the fully qualified name.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IPathNode.Path">
+            <summary>
+            Returns the full path name represented by the node.
+            </summary>
+            <returns>the full path name represented by the node.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromReferenceNode.GetImpliedJoin">
+            <summary>
+            Sub-classes can override this method if they produce implied joins (e.g. DotNode).
+            </summary>
+            <returns>an implied join created by this from reference.</returns>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.DotNode._path">
+            <summary>
+            The full path, to the root alias of this dot node.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.DotNode._dereferenceType">
+            <summary>
+            The type of dereference that hapened (DEREF_xxx).
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.DotNode._propertyName">
+            <summary>
+            The identifier that is the name of the property.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.DotNode._propertyPath">
+            <summary>
+            The unresolved property path relative to this dot node.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.DotNode._columns">
+            <summary>
+            The column names that this resolves to.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.DotNode._fetch">
+            <summary>
+            Fetch join or not.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.DotNode._joinType">
+            <summary>
+            The type of join to create.   Default is an inner join.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.DotNode.IsReferenceToPrimaryKey(System.String,NHibernate.Type.EntityType)">
+            <summary>
+            Is the given property name a reference to the primary key of the associated
+            entity construed by the given entity type?
+            For example, consider a fragment like order.customer.id
+            (where order is a from-element alias).  Here, we'd have:
+            propertyName = "id" AND
+            owningType = ManyToOneType(Customer)
+            and are being asked to determine whether "customer.id" is a reference
+            to customer's PK...
+            </summary>
+            <param name="propertyName">The name of the property to check.</param>
+            <param name="owningType">The type represeting the entity "owning" the property</param>
+            <returns>True if propertyName references the entity's (owningType->associatedEntity) primary key; false otherwise.</returns>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.DotNode.JoinType">
+            <summary>
+            Sets the join type for this '.' node structure.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.DotNode.Path">
+            <summary>
+            Returns the full path of the node.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.FromClause">
+            <summary>
+            Represents the 'FROM' part of a query or subquery, containing all mapped class references.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.FromClause._fromElementCounter">
+            <summary>
+            Counts the from elements as they are added.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.FromClause._collectionJoinFromElementsByPath">
+            <summary>
+            All of the implicit FROM xxx JOIN yyy elements that are the destination of a collection.  These are created from
+            index operators on collection property references.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.FromClause._parentFromClause">
+            <summary>
+            Pointer to the parent FROM clause, if there is one.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Tree.FromClause._childFromClauses">
+            <summary>
+            Collection of FROM clauses of which this is the parent.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromClause.IsFromElementAlias(System.String)">
+            <summary>
+            Convenience method to check whether a given token represents a from-element alias.
+            </summary>
+            <param name="possibleAlias">The potential from-element alias to check.</param>
+            <returns>True if the possibleAlias is an alias to a from-element visible from this point in the query graph.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromClause.ContainsClassAlias(System.String)">
+            <summary>
+            Returns true if the from node contains the class alias name.
+            </summary>
+            <param name="alias">The HQL class alias name.</param>
+            <returns>true if the from node contains the class alias name.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromClause.ContainsTableAlias(System.String)">
+            <summary>
+            Returns true if the from node contains the table alias name.
+            </summary>
+            <param name="alias">The SQL table alias name.</param>
+            <returns>true if the from node contains the table alias name.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromClause.AddFromElement(System.String,NHibernate.Hql.Ast.ANTLR.Tree.IASTNode)">
+            <summary>
+            Adds a new from element to the from node.
+            </summary>
+            <param name="path">The reference to the class.</param>
+            <param name="alias">The alias AST.</param>
+            <returns>The new FROM element.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromClause.GetFromElement(System.String)">
+            <summary>
+            Retreives the from-element represented by the given alias.
+            </summary>
+            <param name="aliasOrClassName">The alias by which to locate the from-element.</param>
+            <returns>The from-element assigned the given alias, or null if none.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromClause.GetFromElements">
+            <summary>
+            Returns the list of from elements in order.
+            </summary>
+            <returns>The list of from elements (instances of FromElement).</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromClause.GetProjectionList">
+            <summary>
+            Returns the list of from elements that will be part of the result set.
+            </summary>
+            <returns>the list of from elements that will be part of the result set.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromClause.FindJoinByPath(System.String)">
+            <summary>
+            Look for an existing implicit or explicit join by the given path.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IParameterContainer">
+            <summary>
+            Currently this is needed in order to deal with {@link FromElement FromElements} which
+            contain "hidden" JDBC parameters from applying filters.
+            Would love for this to go away, but that would require that Hibernate's
+            internal {@link org.hibernate.engine.JoinSequence join handling} be able to either:<ul>
+            <li>render the same AST structures</li>
+            <li>render structures capable of being converted to these AST structures</li>
+            </ul>
+            In the interim, this allows us to at least treat these "hidden" parameters properly which is
+            the most pressing need.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IParameterContainer.AddEmbeddedParameter(NHibernate.Param.IParameterSpecification)">
+            <summary>
+            Adds a parameter specification for a parameter encountered within this node.  We use the term 'embedded' here
+            because of the fact that the parameter was simply encountered as part of the node's text; it does not exist
+            as part of a subtree as it might in a true AST.
+            </summary>
+            <param name="specification">The generated specification.</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IParameterContainer.GetEmbeddedParameters">
+            <summary>
+            Retrieve all embedded parameter specifications.
+            </summary>
+            <returns>All embedded parameter specifications; may return null.</returns>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IParameterContainer.Text">
+            <summary>
+            Set the renderable text of this node.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.IParameterContainer.HasEmbeddedParameters">
+            <summary>
+            Determine whether this node contans embedded parameters.  The implication is that
+            {@link #getEmbeddedParameters()} is allowed to return null if this method returns false.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromElement.RenderIdentifierSelect(System.Int32,System.Int32)">
+            <summary>
+            Returns the identifier select SQL fragment.
+            </summary>
+            <param name="size">The total number of returned types.</param>
+            <param name="k">The sequence of the current returned type.</param>
+            <returns>the identifier select SQL fragment.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromElement.RenderPropertySelect(System.Int32,System.Int32)">
+            <summary>
+            Returns the property select SQL fragment.
+            </summary>
+            <param name="size">The total number of returned types.</param>
+            <param name="k">The sequence of the current returned type.</param>
+            <returns>the property select SQL fragment.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromElement.RenderScalarIdentifierSelect(System.Int32)">
+            <summary>
+            Render the identifier select, but in a 'scalar' context (i.e. generate the column alias).
+            </summary>
+            <param name="i">the sequence of the returned type</param>
+            <returns>the identifier select with the column alias.</returns>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.FromElement.IsImplied">
+            <summary>
+            Returns true if this FromElement was implied by a path, or false if this FROM element is explicitly declared in
+            the FROM clause.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromElementFactory.#ctor(NHibernate.Hql.Ast.ANTLR.Tree.FromClause,NHibernate.Hql.Ast.ANTLR.Tree.FromElement,System.String)">
+            <summary>
+            Creates entity from elements.
+            </summary>
+            <param name="fromClause"></param>
+            <param name="origin"></param>
+            <param name="path"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromElementFactory.#ctor(NHibernate.Hql.Ast.ANTLR.Tree.FromClause,NHibernate.Hql.Ast.ANTLR.Tree.FromElement,System.String,System.String,System.String[],System.Boolean)">
+            <summary>
+            Creates collection from elements.
+            </summary>
+            <param name="fromClause"></param>
+            <param name="origin"></param>
+            <param name="path"></param>
+            <param name="classAlias"></param>
+            <param name="columns"></param>
+            <param name="implied"></param>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.FromElementType">
+            <summary>
+            Delegate that handles the type and join sequence information for a FromElement.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromElementType.RenderIdentifierSelect(System.Int32,System.Int32)">
+            <summary>
+            Returns the identifier select SQL fragment.
+            </summary>
+            <param name="size">The total number of returned types.</param>
+            <param name="k">The sequence of the current returned type.</param>
+            <returns>the identifier select SQL fragment.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromElementType.RenderScalarIdentifierSelect(System.Int32)">
+            <summary>
+            Render the identifier select, but in a 'scalar' context (i.e. generate the column alias).
+            </summary>
+            <param name="i">the sequence of the returned type</param>
+            <returns>the identifier select with the column alias.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromElementType.RenderPropertySelect(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Returns the property select SQL fragment.
+            </summary>
+            <param name="size">The total number of returned types.</param>
+            <param name="k">The sequence of the current returned type.</param>
+            <param name="allProperties"></param>
+            <returns>the property select SQL fragment.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromElementType.GetPropertyType(System.String,System.String)">
+            <summary>
+            Returns the type of a property, given it's name (the last part) and the full path.
+            </summary>
+            <param name="propertyName">The last part of the full path to the property.</param>
+            <param name="propertyPath">The full property path.</param>
+            <returns>The type</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.FromElementType.TrimLeadingCommaAndSpaces(System.String)">
+            <summary>
+            This accounts for a quirk in Queryable, where it sometimes generates ',  ' in front of the
+            SQL fragment.  :-P
+            </summary>
+            <param name="fragment">A SQL fragment.</param>
+            <returns>The fragment, without the leading comma and spaces.</returns>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.FromElementType.Queryable">
+            <summary>
+            Returns the Hibernate queryable implementation for the HQL class.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IndexNode">
+            <summary>
+            Represents the [] operator and provides it's semantics.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.InLogicOperatorNode">
+            <summary>
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IntoClause">
+            <summary>
+            Represents an entity referenced in the INTO clause of an HQL
+            INSERT statement.
+            
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IntoClause.GetDisplayText">
+            <summary>
+            Returns additional display text for the AST node.
+            </summary>
+            <returns>The additional display text.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.IntoClause.AreCompatible(NHibernate.Type.IType,NHibernate.Type.IType)">
+            <summary>
+            Determine whether the two types are "assignment compatible".
+            </summary>
+            <param name="target">The type defined in the into-clause.</param>
+            <param name="source">The type defined in the select clause.</param>
+            <returns>True if they are assignment compatible.</returns>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.ISessionFactoryAwareNode">
+            <summary>
+            Interface for nodes which require access to the SessionFactory
+            
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IsNotNullLogicOperatorNode">
+            <summary>
+            IsNotNullLogicOperatorNode implementation
+            
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IsNullLogicOperatorNode">
+            <summary>
+            Represents a 'is null' check.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.JavaConstantNode">
+            <summary>
+            A node representing a static Java constant.
+            
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.OrderByClause">
+            <summary>
+            Implementation of OrderByClause.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.ParameterNode">
+            <summary>
+            Implementation of ParameterNode.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.QueryNode.GetSelectClause">
+            <summary>
+            Locate the select clause that is part of this select statement.
+            Note, that this might return null as derived select clauses (i.e., no
+            select clause at the HQL-level) get generated much later than when we
+            get created; thus it depends upon lifecycle.
+            </summary>
+            <returns>Our select clause, or null.</returns>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.SelectClause">
+            <summary>
+            Represents the list of expressions in a SELECT clause.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.SelectClause.InitializeDerivedSelectClause(NHibernate.Hql.Ast.ANTLR.Tree.FromClause)">
+             Prepares a derived (i.e., not explicitly defined in the query) select clause.
+            
+             @param fromClause The from clause to which this select clause is linked.
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.SelectClause.InitializeExplicitSelectClause(NHibernate.Hql.Ast.ANTLR.Tree.FromClause)">
+             Prepares an explicitly defined select clause.
+            
+             @param fromClause The from clause linked to this select clause.
+             @throws SemanticException
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.SelectClause.FromElementsForLoad">
+            <summary>
+            FromElements which need to be accounted for in the load phase (either for return or for fetch).
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.SelectClause.ColumnNames">
+            <summary>
+            The column alias names being used in the generated SQL.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.SelectClause.Constructor">
+            <summary>
+            The constructor to use for dynamic instantiation queries.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.SelectClause.QueryReturnAliases">
+            <summary>
+            The HQL aliases, or generated aliases
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.SelectClause.QueryReturnTypes">
+            <summary>
+            The types actually being returned from this query at the "object level".
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.SelectExpressionImpl">
+            <summary>
+            A select expression that was generated by a FROM element.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.SqlFragment">
+            <summary>
+            Represents an SQL fragment in the AST.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Util.AliasGenerator">
+            <summary>
+            Generates class/table/column aliases during semantic analysis and SQL rendering.
+            Its essential purpose is to keep an internal counter to ensure that the
+            generated aliases are unique.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Util.ASTAppender">
+            <summary>
+            Appends child nodes to a parent efficiently.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Util.ASTIterator">
+            <summary>
+            Depth first iteration of an ANTLR AST.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Util.ASTUtil.GetDebugstring(NHibernate.Hql.Ast.ANTLR.Tree.IASTNode)">
+            <summary>
+            Returns the 'list' representation with some brackets around it for debugging.
+            </summary>
+            <param name="n">The tree.</param>
+            <returns>The list representation of the tree.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Util.ASTUtil.IsSubtreeChild(NHibernate.Hql.Ast.ANTLR.Tree.IASTNode,NHibernate.Hql.Ast.ANTLR.Tree.IASTNode)">
+            <summary>
+            Determine if a given node (test) is contained anywhere in the subtree
+            of another given node (fixture).
+            </summary>
+            <param name="fixture">The node against which to be checked for children.</param>
+            <param name="test">The node to be tested as being a subtree child of the parent.</param>
+            <returns>True if child is contained in the parent's collection of children.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Util.ASTUtil.FindTypeInChildren(NHibernate.Hql.Ast.ANTLR.Tree.IASTNode,System.Int32)">
+            <summary>
+            Finds the first node of the specified type in the chain of children.
+            </summary>
+            <param name="parent">The parent</param>
+            <param name="type">The type to find.</param>
+            <returns>The first node of the specified type, or null if not found.</returns>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Util.FilterPredicate">
+            <summary>
+            Filters nodes in/out of a tree.
+            </summary>
+            <param name="node">The node to check.</param>
+            <returns>true to keep the node, false if the node should be filtered out.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Util.ColumnHelper.GenerateScalarColumns(NHibernate.Hql.Ast.ANTLR.Tree.IASTFactory,NHibernate.Hql.Ast.ANTLR.Tree.IASTNode,System.String[],System.Int32)">
+            <summary>
+            Generates the scalar column AST nodes for a given array of SQL columns
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Util.JoinProcessor">
+            <summary>
+            Performs the post-processing of the join information gathered during semantic analysis.
+            The join generating classes are complex, this encapsulates some of the JoinSequence-related
+            code.
+            Author: Joshua Davis
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Util.JoinProcessor.#ctor(NHibernate.Hql.Ast.ANTLR.HqlSqlWalker)">
+            <summary>
+            Constructs a new JoinProcessor.
+            </summary>
+            <param name="walker">The walker to which we are bound, giving us access to needed resources.</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Util.JoinProcessor.ToHibernateJoinType(System.Int32)">
+            <summary>
+            Translates an AST join type (i.e., the token type) into a JoinFragment.XXX join type.
+            </summary>
+            <param name="astJoinType">The AST join type (from HqlSqlWalker)</param>
+            <returns>a JoinType.XXX join type.</returns>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Util.LiteralProcessor.EXACT">
+            <summary>
+             Indicates that Float and Double literal values should
+            be treated using the SQL "exact" format (i.e., '.001')
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Util.LiteralProcessor.APPROXIMATE">
+            <summary>
+            Indicates that Float and Double literal values should
+            be treated using the SQL "approximate" format (i.e., '1E-3')
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.Util.LiteralProcessor.DECIMAL_LITERAL_FORMAT">
+            <summary>
+            In what format should Float and Double literal values be sent
+            to the database?
+            See #EXACT, #APPROXIMATE
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Util.NodeTraverser.TraverseDepthFirst(NHibernate.Hql.Ast.ANTLR.Tree.IASTNode)">
+            <summary>
+            Traverse the AST tree depth first. Note that the AST passed in is not visited itself.  Visitation starts
+            with its children.
+            </summary>
+            <param name="ast">ast</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Util.PathHelper.ParsePath(System.String,NHibernate.Hql.Ast.ANTLR.Tree.IASTFactory)">
+            <summary>
+            Turns a path into an AST.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="factory">The AST factory to use.</param>
+            <returns>An HQL AST representing the path.</returns>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Util.SyntheticAndFactory">
+            <summary>
+            Creates synthetic and nodes based on the where fragment part of a JoinSequence.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.ASTQueryTranslatorFactory">
+            <summary>
+            Generates translators which uses the Antlr-based parser to perform
+            the translation.
+            
+            Author: Gavin King
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.IQueryTranslatorFactory">
+            <summary>
+            Facade for generation of <see cref="T:NHibernate.Hql.IQueryTranslator"/> 
+            and <see cref="T:NHibernate.Hql.IFilterTranslator"/> instances.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.IQueryTranslatorFactory.CreateQueryTranslator(System.String,System.String,System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter},NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary>
+            Construct a <see cref="T:NHibernate.Hql.IQueryTranslator"/> instance 
+            capable of translating an HQL query string.
+            </summary>
+            <param name="queryIdentifier">
+            The query-identifier (used in <see cref="T:NHibernate.Stat.QueryStatistics"/> collection). 
+            This is typically the same as the queryString parameter except for the case of
+            split polymorphic queries which result in multiple physical sql queries.
+            </param>
+            <param name="queryString">The query string to be translated</param>
+            <param name="filters">Currently enabled filters</param>
+            <param name="factory">The session factory</param>
+            <returns>An appropriate translator.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.IQueryTranslatorFactory.CreateFilterTranslator(System.String,System.String,System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter},NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary>
+            Construct a <see cref="T:NHibernate.Hql.IFilterTranslator"/> instance capable of 
+            translating an HQL filter string.
+            </summary>
+            <param name="queryIdentifier">
+            The query-identifier (used in <see cref="T:NHibernate.Stat.QueryStatistics"/> collection). 
+            This is typically the same as the queryString parameter except for the case of
+            split polymorphic queries which result in multiple physical sql queries.
+            </param>
+            <param name="queryString">The query string to be translated</param>
+            <param name="filters">Currently enabled filters</param>
+            <param name="factory">The session factory</param>
+            <returns>An appropriate translator.</returns>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.CaseInsensitiveStringStream">
+             <summary>
+             Look ahead for tokenizing is all lowercase, whereas the original case of an input stream is preserved.
+             Copied from http://www.antlr.org/wiki/pages/viewpage.action?pageId=1782
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.CollectionProperties">
+            <summary>
+            Provides a map of collection function names to the corresponding property names.
+            Authoer: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.QueryException">
+            <summary>
+            A problem occurred translating a Hibernate query to SQL due to invalid query syntax, etc.
+            </summary>
+        </member>
+        <member name="M:NHibernate.QueryException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.QueryException"/> class.
+            </summary>
+            <param name="message">The message that describes the error. </param>
+        </member>
+        <member name="M:NHibernate.QueryException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.QueryException"/> class.
+            </summary>
+            <param name="message">The message that describes the error. </param>
+            <param name="innerException">
+            The exception that is the cause of the current exception. If the innerException parameter 
+            is not a null reference, the current exception is raised in a catch block that handles 
+            the inner exception.
+            </param>
+        </member>
+        <member name="M:NHibernate.QueryException.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.QueryException"/> class.
+            </summary>
+            <param name="message">The message that describes the error. </param>
+            <param name="queryString">The query that contains the error.</param>
+        </member>
+        <member name="M:NHibernate.QueryException.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.QueryException"/> class.
+            </summary>
+            <param name="innerException">
+            The exception that is the cause of the current exception. If the innerException parameter 
+            is not a null reference, the current exception is raised in a catch block that handles 
+            the inner exception.
+            </param>
+        </member>
+        <member name="M:NHibernate.QueryException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.QueryException"/> class
+            with serialized data.
+            </summary>
+            <param name="info">
+            The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object 
+            data about the exception being thrown.
+            </param>
+            <param name="context">
+            The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.
+            </param>
+        </member>
+        <member name="M:NHibernate.QueryException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the serialization info for <see cref="T:NHibernate.QueryException"/> after 
+            getting the info from the base Exception.
+            </summary>
+            <param name="info">
+            The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object 
+            data about the exception being thrown.
+            </param>
+            <param name="context">
+            The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.
+            </param>
+        </member>
+        <member name="P:NHibernate.QueryException.QueryString">
+            <summary>
+            Gets or sets the <see cref="T:System.String"/> of HQL that caused the Exception.
+            </summary>
+        </member>
+        <member name="P:NHibernate.QueryException.Message">
+            <summary>
+            Gets a message that describes the current <see cref="T:NHibernate.QueryException"/>.
+            </summary>
+            <value>The error message that explains the reason for this exception including the HQL.</value>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.ErrorCounter">
+            <summary>
+            An error handler that counts parsing errors and warnings.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.IParseErrorHandler">
+            <summary>
+            Defines the behavior of an error handler for the HQL parsers.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.HqlToken">
+            <summary>
+            A custom token class for the HQL grammar.
+            </summary>
+        </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.HqlToken._previousTokenType">
+            <summary>
+            The previous token type.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.HqlToken.#ctor(Antlr.Runtime.ICharStream,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Public constructor
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.HqlToken.ToString">
+            <summary>
+            Returns a string representation of the object.
+            </summary>
+            <returns>The debug string</returns>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.HqlToken.PossibleId">
+            <summary>
+            Indicates if the token could be an identifier.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.HqlToken.Type">
+            <summary>
+            Gets or Sets the type of the token, remembering the previous type on Sets.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.HqlToken.PreviousType">
+            <summary>
+            Returns the previous token type.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.InvalidPathException">
+            <summary>
+            Exception thrown when an invalid path is found in a query.
+            Author: josh
+            Ported by: Steve Strong
+            </summary>
+        </member>
         <member name="T:NHibernate.Hql.IFilterTranslator">
             <summary> 
             Specialized interface for filters.
@@ -19759,6 +21019,466 @@
             <param name="collectionRole">the role name of the collection used as the basis for the filter.</param>
             <param name="replacements">Defined query substitutions.</param>
             <param name="shallow">Does this represent a shallow (scalar or entity-id) select?</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.QueryTranslatorImpl.#ctor(System.String,NHibernate.Hql.Ast.ANTLR.Tree.IASTNode,System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter},NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary>
+            Creates a new AST-based query translator.
+            </summary>
+            <param name="queryIdentifier">The query-identifier (used in stats collection)</param>
+            <param name="query">The hql query to translate</param>
+            <param name="enabledFilters">Currently enabled filters</param>
+            <param name="factory">The session factory constructing this translator instance.</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.QueryTranslatorImpl.#ctor(System.String,System.String,System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter},NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary>
+            Creates a new AST-based query translator.
+            </summary>
+            <param name="queryIdentifier">The query-identifier (used in stats collection)</param>
+            <param name="query">The hql query to translate</param>
+            <param name="enabledFilters">Currently enabled filters</param>
+            <param name="factory">The session factory constructing this translator instance.</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.QueryTranslatorImpl.Compile(System.Collections.Generic.IDictionary{System.String,System.String},System.Boolean)">
+            <summary>
+            Compile a "normal" query. This method may be called multiple
+            times. Subsequent invocations are no-ops.
+            </summary>
+            <param name="replacements">Defined query substitutions.</param>
+            <param name="shallow">Does this represent a shallow (scalar or entity-id) select?</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.QueryTranslatorImpl.Compile(System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.Boolean)">
+            <summary>
+            Compile a filter. This method may be called multiple
+            times. Subsequent invocations are no-ops.
+            </summary>
+            <param name="collectionRole">the role name of the collection used as the basis for the filter.</param>
+            <param name="replacements">Defined query substitutions.</param>
+            <param name="shallow">Does this represent a shallow (scalar or entity-id) select?</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.QueryTranslatorImpl.DoCompile(System.Collections.Generic.IDictionary{System.String,System.String},System.Boolean,System.String)">
+            <summary>
+            Performs both filter and non-filter compiling.
+            </summary>
+            <param name="replacements">Defined query substitutions.</param>
+            <param name="shallow">Does this represent a shallow (scalar or entity-id) select?</param>
+            <param name="collectionRole">the role name of the collection used as the basis for the filter, NULL if this is not a filter.</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.#ctor(NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary>
+            Construct a new SessionFactoryHelperExtensions instance.
+            </summary>
+            <param name="sfi">The SessionFactory impl to be encapsulated.</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.FindSQLFunction(System.String)">
+            <summary>
+            Locate a registered sql function by name.
+            </summary>
+            <param name="functionName">The name of the function to locate</param>
+            <returns>The sql function, or null if not found.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.RequireSQLFunction(System.String)">
+            <summary>
+            Locate a registered sql function by name.
+            </summary>
+            <param name="functionName">The name of the function to locate</param>
+            <returns>The sql function, or throws QueryException if no matching sql functions could be found.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.FindFunctionReturnType(System.String,NHibernate.Hql.Ast.ANTLR.Tree.IASTNode)">
+            <summary>
+            Find the function return type given the function name and the first argument expression node.
+            </summary>
+            <param name="functionName">The function name.</param>
+            <param name="first">The first argument expression.</param>
+            <returns>the function return type given the function name and the first argument expression node.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.GetImportedClassName(System.String)">
+            <summary>
+            Given a (potentially unqualified) class name, locate its imported qualified name.
+            </summary>
+            <param name="className">The potentially unqualified class name</param>
+            <returns>The qualified class name.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.HasPhysicalDiscriminatorColumn(NHibernate.Persister.Entity.IQueryable)">
+            <summary>
+            Does the given persister define a physical discriminator column
+            for the purpose of inheritence discrimination?
+            </summary>
+            <param name="persister">The persister to be checked.</param>
+            <returns>True if the persister does define an actual discriminator column.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.GetCollectionPersister(System.String)">
+            <summary>
+            Locate the collection persister by the collection role.
+            </summary>
+            <param name="collectionFilterRole">The collection role name.</param>
+            <returns>The defined CollectionPersister for this collection role, or null.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.GetIdentifierOrUniqueKeyPropertyName(NHibernate.Type.EntityType)">
+            <summary>
+            Determine the name of the property for the entity encapsulated by the
+            given type which represents the id or unique-key.
+            </summary>
+            <param name="entityType">The type representing the entity.</param>
+            <returns>The corresponding property name</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.GetCollectionElementColumns(System.String,System.String)">
+            <summary>
+            Retrieves the column names corresponding to the collection elements for the given
+            collection role.
+            </summary>
+            <param name="role">The collection role</param>
+            <param name="roleAlias">The sql column-qualification alias (i.e., the table alias)</param>
+            <returns>the collection element columns</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.GetElementAssociationType(NHibernate.Type.CollectionType)">
+            <summary>
+            Essentially the same as GetElementType, but requiring that the
+            element type be an association type.
+            </summary>
+            <param name="collectionType">The collection type to be checked.</param>
+            <returns>The AssociationType of the elements of the collection.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.RequireQueryableCollection(System.String)">
+            <summary>
+            Locate the collection persister by the collection role, requiring that
+            such a persister exist.
+            </summary>
+            <param name="role">The collection role name.</param>
+            <returns>The defined CollectionPersister for this collection role.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.RequireClassPersister(System.String)">
+            <summary>
+            Locate the persister by class or entity name, requiring that such a persister
+            exist.
+            </summary>
+            <param name="name">The class or entity name</param>
+            <returns>The defined persister for this entity</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.FindQueryableUsingImports(System.String)">
+            <summary>
+            Given a (potentially unqualified) class name, locate its persister.
+            </summary>
+            <param name="className">The (potentially unqualified) class name.</param>
+            <returns>The defined persister for this class, or null if none found.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.FindQueryableUsingImports(NHibernate.Engine.ISessionFactoryImplementor,System.String)">
+            <summary>
+            Given a (potentially unqualified) class name, locate its persister.
+            </summary>
+            <param name="sfi">The session factory implementor.</param>
+            <param name="className">The (potentially unqualified) class name.</param>
+            <returns>The defined persister for this class, or null if none found.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.FindEntityPersisterByName(System.String)">
+            <summary>
+            Locate the persister by class or entity name.
+            </summary>
+            <param name="name">The class or entity name</param>
+            <returns>The defined persister for this entity, or null if none found.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.CreateCollectionJoinSequence(NHibernate.Persister.Collection.IQueryableCollection,System.String)">
+            <summary>
+            Create a join sequence rooted at the given collection.
+            </summary>
+            <param name="collPersister">The persister for the collection at which the join should be rooted.</param>
+            <param name="collectionName">The alias to use for qualifying column references.</param>
+            <returns>The generated join sequence.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.CreateJoinSequence">
+            <summary>
+            Generate an empty join sequence instance.
+            </summary>
+            <returns>The generated join sequence.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.CreateJoinSequence(System.Boolean,NHibernate.Type.IAssociationType,System.String,NHibernate.SqlCommand.JoinType,System.String[])">
+            <summary>
+            Generate a join sequence representing the given association type.
+            </summary>
+            <param name="implicitJoin">Should implicit joins (theta-style) or explicit joins (ANSI-style) be rendered</param>
+            <param name="associationType">The type representing the thing to be joined into.</param>
+            <param name="tableAlias">The table alias to use in qualifing the join conditions</param>
+            <param name="joinType">The type of join to render (inner, outer, etc)</param>
+            <param name="columns">The columns making up the condition of the join.</param>
+            <returns>The generated join sequence.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.GetCollectionPropertyMapping(System.String)">
+            <summary>
+            Retreive a PropertyMapping describing the given collection role.
+            </summary>
+            <param name="role">The collection role for whcih to retrieve the property mapping.</param>
+            <returns>The property mapping.</returns>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.SessionFactoryHelperExtensions.GetElementType(NHibernate.Type.CollectionType)">
+            <summary>
+            Given a collection type, determine the Type representing elements
+            within instances of that collection.
+            </summary>
+            <param name="collectionType">The collection type to be checked.</param>
+            <returns>The Type of the elements of the collection.</returns>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.ClassicQueryTranslatorFactory">
+            <summary>
+            Generates translators which uses the older hand-written parser to perform the translation.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.ClauseParser">
+            <summary> 
+            Parses the hibernate query into its constituent clauses.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.IParser">
+            <summary> 
+            A parser is a state machine that accepts a string of tokens,
+            bounded by start() and end() and modifies a QueryTranslator. Parsers
+            are NOT intended to be threadsafe. They SHOULD be reuseable
+            for more than one token stream.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.IParser.Token(System.String,NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.IParser.Start(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.IParser.End(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.FromParser">
+            <summary> 
+            Parses the from clause of a hibernate query, looking for tables and
+            aliases for the SQL query.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.FromParser.#cctor">
+            <summary></summary>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.FromPathExpressionParser">
+            <summary>
+            FromPathExpressionParser
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.PathExpressionParser">
+            <summary> 
+            Parses an expression of the form foo.bar.baz and builds up an expression
+            involving two less table joins than there are path components.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.DereferenceEntity(System.String,NHibernate.Type.EntityType,NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="propertyName"></param>
+            <param name="propertyType"></param>
+            <param name="q"></param>
+            <remarks>NOTE: we avoid joining to the next table if the named property is just the foreign key value</remarks>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.CurrentColumns">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.Start(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.End(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.LastCollectionElement">
+            <summary></summary>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.SetLastCollectionElementIndexValue(NHibernate.SqlCommand.SqlString)">
+            <summary></summary>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.SetExpectingCollectionIndex">
+            <summary></summary>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.GetCollectionSubquery(System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter})">
+            <summary></summary>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.AddAssociation(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.AddFromAssociation(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.AddFromCollection(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PathExpressionParser.Fetch(NHibernate.Hql.Classic.QueryTranslator,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+            <param name="entityName"></param>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.PropertyType">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.IsExpectingCollectionIndex">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.WhereColumn">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.WhereColumns">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.WhereColumnType">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.Name">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.IsCollectionValued">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.CollectionName">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.CollectionRole">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.CollectionOwnerName">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.CurrentName">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.PathExpressionParser.CurrentProperty">
+            <summary></summary>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement">
+            <summary></summary>
+        </member>
+        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.Type">
+            <summary></summary>
+        </member>
+        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.IsOneToMany">
+            <summary></summary>
+        </member>
+        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.Alias">
+            <summary></summary>
+        </member>
+        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.ElementColumns">
+            <summary></summary>
+        </member>
+        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.JoinSequence">
+            <summary></summary>
+        </member>
+        <member name="F:NHibernate.Hql.Classic.PathExpressionParser.CollectionElement.IndexValue">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Hql.Classic.FunctionStack.FunctionHolder.FirstValidColumnType">
+            <summary>
+            Used to hold column type in nested functions.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.GroupByParser">
+            <summary> 
+            Parses the GROUP BY clause of an aggregate query
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.HavingParser">
+            <summary> 
+            Parses the having clause of a hibernate query and translates it to an
+            SQL having clause.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.WhereParser">
+            <summary> Parses the where clause of a hibernate query and translates it to an
+            SQL where clause.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.WhereParser.Token(System.String,NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.WhereParser.Start(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.WhereParser.End(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.OrderByParser">
+            <summary> 
+            Parses the ORDER BY clause of a query
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.ParserHelper">
+            <summary></summary>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.PreprocessingParser">
+            <summary>HQL lexical analyzer (not really a parser)</summary>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PreprocessingParser.#ctor(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            
+            </summary>
+            <param name="replacements"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PreprocessingParser.Token(System.String,NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PreprocessingParser.Start(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.PreprocessingParser.End(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="T:NHibernate.Hql.Classic.QueryTranslator">
+            <summary> 
+            An instance of <c>QueryTranslator</c> translates a Hibernate query string to SQL.
+            </summary>
         </member>
         <member name="M:NHibernate.Hql.Classic.QueryTranslator.#ctor(System.String,System.String,System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter},NHibernate.Engine.ISessionFactoryImplementor)">
             <summary> Construct a query translator </summary>
@@ -19886,82 +21606,6 @@
             Provides utility methods for generating HQL / SQL names.
             Shared by both the 'classic' and 'new' query translators.
             </summary>
-        </member>
-        <member name="T:NHibernate.QueryException">
-            <summary>
-            A problem occurred translating a Hibernate query to SQL due to invalid query syntax, etc.
-            </summary>
-        </member>
-        <member name="M:NHibernate.QueryException.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:NHibernate.QueryException"/> class.
-            </summary>
-            <param name="message">The message that describes the error. </param>
-        </member>
-        <member name="M:NHibernate.QueryException.#ctor(System.String,System.Exception)">
-            <summary>
-            Initializes a new instance of the <see cref="T:NHibernate.QueryException"/> class.
-            </summary>
-            <param name="message">The message that describes the error. </param>
-            <param name="innerException">
-            The exception that is the cause of the current exception. If the innerException parameter 
-            is not a null reference, the current exception is raised in a catch block that handles 
-            the inner exception.
-            </param>
-        </member>
-        <member name="M:NHibernate.QueryException.#ctor(System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:NHibernate.QueryException"/> class.
-            </summary>
-            <param name="message">The message that describes the error. </param>
-            <param name="queryString">The query that contains the error.</param>
-        </member>
-        <member name="M:NHibernate.QueryException.#ctor(System.Exception)">
-            <summary>
-            Initializes a new instance of the <see cref="T:NHibernate.QueryException"/> class.
-            </summary>
-            <param name="innerException">
-            The exception that is the cause of the current exception. If the innerException parameter 
-            is not a null reference, the current exception is raised in a catch block that handles 
-            the inner exception.
-            </param>
-        </member>
-        <member name="M:NHibernate.QueryException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:NHibernate.QueryException"/> class
-            with serialized data.
-            </summary>
-            <param name="info">
-            The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object 
-            data about the exception being thrown.
-            </param>
-            <param name="context">
-            The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.
-            </param>
-        </member>
-        <member name="M:NHibernate.QueryException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            Sets the serialization info for <see cref="T:NHibernate.QueryException"/> after 
-            getting the info from the base Exception.
-            </summary>
-            <param name="info">
-            The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object 
-            data about the exception being thrown.
-            </param>
-            <param name="context">
-            The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.
-            </param>
-        </member>
-        <member name="P:NHibernate.QueryException.QueryString">
-            <summary>
-            Gets or sets the <see cref="T:System.String"/> of HQL that caused the Exception.
-            </summary>
-        </member>
-        <member name="P:NHibernate.QueryException.Message">
-            <summary>
-            Gets a message that describes the current <see cref="T:NHibernate.QueryException"/>.
-            </summary>
-            <value>The error message that explains the reason for this exception including the HQL.</value>
         </member>
         <member name="M:NHibernate.Hql.QuerySplitter.ConcreteQueries(System.String,NHibernate.Engine.ISessionFactoryImplementor)">
             <summary>
@@ -21196,6 +22840,10 @@
             </summary>
             <param name="timeout"></param>
         </member>
+        <member name="M:NHibernate.IDetachedQuery.SetFetchSize(System.Int32)">
+            <summary> Set a fetch size for the underlying ADO query.</summary>
+            <param name="fetchSize">the fetch size </param>
+        </member>
         <member name="M:NHibernate.IDetachedQuery.SetLockMode(System.String,NHibernate.LockMode)">
             <summary>
             Set the lockmode for the objects idententified by the
@@ -21203,6 +22851,10 @@
             </summary>
             <param name="alias">alias a query alias, or <c>this</c> for a collection filter</param>
             <param name="lockMode"></param>
+        </member>
+        <member name="M:NHibernate.IDetachedQuery.SetComment(System.String)">
+            <summary> Add a comment to the generated SQL.</summary>
+            <param name="comment">a human-readable string </param>
         </member>
         <member name="M:NHibernate.IDetachedQuery.SetParameter(System.Int32,System.Object,NHibernate.Type.IType)">
             <summary>
@@ -23040,8 +24692,46 @@
         </member>
         <member name="M:NHibernate.IMultiCriteria.List">
             <summary>
-            Get all the 
+            Get all the results
             </summary>
+        </member>
+        <member name="M:NHibernate.IMultiCriteria.Add(System.Type,NHibernate.ICriteria)">
+            <summary>
+            Adds the specified criteria to the query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="resultGenericListType">Return results in a <see cref="T:System.Collections.Generic.List`1"/></param>
+            <param name="criteria">The criteria.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiCriteria.Add``1(NHibernate.ICriteria)">
+            <summary>
+            Adds the specified criteria to the query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="criteria">The criteria.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiCriteria.Add``1(System.String,NHibernate.ICriteria)">
+            <summary>
+            Adds the specified criteria to the query, and associates it with the given key. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="key">The key</param>
+            <param name="criteria">The criteria</param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiCriteria.Add``1(NHibernate.Criterion.DetachedCriteria)">
+            <summary>
+            Adds the specified detached criteria. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="detachedCriteria">The detached criteria.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiCriteria.Add``1(System.String,NHibernate.Criterion.DetachedCriteria)">
+            <summary>
+            Adds the specified detached criteria, and associates it with the given key. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="key">The key</param>
+            <param name="detachedCriteria">The detached criteria</param>
+            <returns></returns>
         </member>
         <member name="M:NHibernate.IMultiCriteria.Add(NHibernate.ICriteria)">
             <summary>
@@ -23114,26 +24804,6 @@
             <param name="session">The session.</param>
             <param name="factory">The factory.</param>
         </member>
-        <member name="M:NHibernate.Type.ICacheAssembler.Disassemble(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
-            <summary> Return a cacheable "disassembled" representation of the object.</summary>
-            <param name="value">the value to cache </param>
-            <param name="session">the session </param>
-            <param name="owner">optional parent entity object (needed for collections) </param>
-            <returns> the disassembled, deep cloned state </returns>		
-        </member>
-        <member name="M:NHibernate.Type.ICacheAssembler.Assemble(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
-            <summary> Reconstruct the object from its cached "disassembled" state.</summary>
-            <param name="cached">the disassembled state from the cache </param>
-            <param name="session">the session </param>
-            <param name="owner">the parent entity object </param>
-            <returns> the the object </returns>
-        </member>
-        <member name="M:NHibernate.Type.ICacheAssembler.BeforeAssemble(System.Object,NHibernate.Engine.ISessionImplementor)">
-            <summary>
-            Called before assembling a query result set from the query cache, to allow batch fetching
-            of entities missing from the second-level cache.
-            </summary>
-        </member>
         <member name="T:NHibernate.IMultiQuery">
             <summary>
             Combines sevaral queries into a single database call
@@ -23141,8 +24811,55 @@
         </member>
         <member name="M:NHibernate.IMultiQuery.List">
             <summary>
-            Get all the 
+            Get all the results
             </summary>
+        </member>
+        <member name="M:NHibernate.IMultiQuery.Add(System.Type,NHibernate.IQuery)">
+            <summary>
+            Adds the specified criteria to the query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="resultGenericListType">Return results in a <see cref="T:System.Collections.Generic.List`1"/></param>
+            <param name="criteria">The criteria.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiQuery.Add``1(NHibernate.IQuery)">
+            <summary>
+            Add the specified HQL query to the multi query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+        </member>
+        <member name="M:NHibernate.IMultiQuery.Add``1(System.String,NHibernate.IQuery)">
+            <summary>
+            Add the specified HQL query to the multi query, and associate it with the given key. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="key"></param>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiQuery.Add``1(System.String,System.String)">
+            <summary>
+            Add the specified HQL Query to the multi query, and associate it with the given key. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="key"></param>
+            <param name="hql"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiQuery.Add``1(System.String)">
+            <summary>
+            Add the specified HQL query to the multi query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+        </member>
+        <member name="M:NHibernate.IMultiQuery.AddNamedQuery``1(System.String)">
+            <summary>
+            Add a named query to the multi query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+        </member>
+        <member name="M:NHibernate.IMultiQuery.AddNamedQuery``1(System.String,System.String)">
+            <summary>
+            Add a named query to the multi query, and associate it with the given key. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="key"></param>
+            <param name="namedKey"></param>
+            <returns></returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.Add(System.String,NHibernate.IQuery)">
             <summary>
@@ -27273,6 +28990,145 @@
         <member name="P:NHibernate.Metadata.ICollectionMetadata.IsLazy">
             <summary>
             Is the collection lazily initialized?
+            </summary>
+        </member>
+        <member name="T:NHibernate.Param.IExplicitParameterSpecification">
+            <summary>
+            An additional contract for parameters which originate from parameters explicitly encountered in the source statement
+            (HQL or native-SQL).
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Param.IParameterSpecification">
+            <summary>
+            Maintains information relating to parameters which need to get bound into a
+            JDBC {@link PreparedStatement}.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Param.IParameterSpecification.Bind(System.Data.IDbCommand,NHibernate.Engine.QueryParameters,NHibernate.Engine.ISessionImplementor,System.Int32)">
+            <summary>
+            Bind the appropriate value into the given statement at the specified position.
+            </summary>
+            <param name="statement">The statement into which the value should be bound.</param>
+            <param name="qp">The defined values for the current query execution.</param>
+            <param name="session">The session against which the current execution is occuring.</param>
+            <param name="position">The position from which to start binding value(s).</param>
+            <returns>The number of sql bind positions "eaten" by this bind operation.</returns>
+        </member>
+        <member name="M:NHibernate.Param.IParameterSpecification.RenderDisplayInfo">
+            <summary>
+            Render this parameter into displayable info (for logging, etc).
+            </summary>
+            <returns>The displayable info</returns>
+        </member>
+        <member name="P:NHibernate.Param.IParameterSpecification.ExpectedType">
+            <summary>
+            Get or set the type which we are expeting for a bind into this parameter based
+            on translated contextual information.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Param.IExplicitParameterSpecification.SourceLine">
+            <summary>
+            Retrieves the line number on which this parameter occurs in the source query.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Param.IExplicitParameterSpecification.SourceColumn">
+            <summary>
+            Retrieves the column number (within the {@link #getSourceLine()}) where this parameter occurs.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Param.AbstractExplicitParameterSpecification.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Constructs an AbstractExplicitParameterSpecification.
+            </summary>
+            <param name="sourceLine">sourceLine</param>
+            <param name="sourceColumn">sourceColumn</param>
+        </member>
+        <member name="M:NHibernate.Param.CollectionFilterKeyParameterSpecification.#ctor(System.String,NHibernate.Type.IType,System.Int32)">
+            <summary>
+            Creates a specialized collection-filter collection-key parameter spec.
+            </summary>
+            <param name="collectionRole">The collection role being filtered.</param>
+            <param name="keyType">The mapped collection-key type.</param>
+            <param name="queryParameterPosition">The position within QueryParameters where we can find the appropriate param value to bind.</param>
+        </member>
+        <member name="M:NHibernate.Param.DynamicFilterParameterSpecification.#ctor(System.String,System.String,NHibernate.Type.IType)">
+            <summary>
+            Constructs a parameter specification for a particular filter parameter.
+            </summary>
+            <param name="filterName">The name of the filter</param>
+            <param name="parameterName">The name of the parameter</param>
+            <param name="definedParameterType">The paremeter type specified on the filter metadata</param>
+        </member>
+        <member name="T:NHibernate.Param.NamedParameterSpecification">
+            <summary>
+            Parameter bind specification for an explicit named parameter.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Param.NamedParameterSpecification.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            Constructs a named parameter bind specification.
+            </summary>
+            <param name="sourceLine">sourceLine</param>
+            <param name="sourceColumn">sourceColumn</param>
+            <param name="name">The named parameter name.</param>
+        </member>
+        <member name="M:NHibernate.Param.NamedParameterSpecification.Bind(System.Data.IDbCommand,NHibernate.Engine.QueryParameters,NHibernate.Engine.ISessionImplementor,System.Int32)">
+            <summary>
+            Bind the appropriate value into the given statement at the specified position.
+            </summary>
+            <param name="statement">The statement into which the value should be bound.</param>
+            <param name="qp">The defined values for the current query execution.</param>
+            <param name="session">The session against which the current execution is occuring.</param>
+            <param name="position">The position from which to start binding value(s).</param>
+            <returns>The number of sql bind positions "eaten" by this bind operation.</returns>
+        </member>
+        <member name="P:NHibernate.Param.NamedParameterSpecification.Name">
+            <summary>
+            Getter for property 'name'.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Param.ParameterTranslationsImpl">
+            <summary>
+            Defines the information available for parameters encountered during
+            query translation through the antlr-based parser.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Param.PositionalParameterSpecification">
+            <summary>
+            Parameter bind specification for an explicit  positional (or ordinal) parameter.
+            Author: Steve Ebersole
+            Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="M:NHibernate.Param.PositionalParameterSpecification.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Constructs a position/ordinal parameter bind specification.
+            </summary>
+            <param name="sourceLine">sourceLine</param>
+            <param name="sourceColumn">sourceColumn</param>
+            <param name="hqlPosition">The position in the source query, relative to the other source positional parameters.</param>
+        </member>
+        <member name="M:NHibernate.Param.PositionalParameterSpecification.Bind(System.Data.IDbCommand,NHibernate.Engine.QueryParameters,NHibernate.Engine.ISessionImplementor,System.Int32)">
+            <summary>
+            Bind the appropriate value into the given statement at the specified position.
+            </summary>
+            <param name="statement">The statement into which the value should be bound.</param>
+            <param name="qp">The defined values for the current query execution.</param>
+            <param name="session">The session against which the current execution is occuring.</param>
+            <param name="position">The position from which to start binding value(s).</param>
+            <returns>The number of sql bind positions "eaten" by this bind operation.</returns>
+        </member>
+        <member name="P:NHibernate.Param.PositionalParameterSpecification.HqlPosition">
+            <summary>
+            Getter for property 'hqlPosition'.
             </summary>
         </member>
         <member name="T:NHibernate.Persister.Collection.AbstractCollectionPersister">
@@ -31505,7 +33361,7 @@
             database connection properties
             </summary>
             <param name="cfg">The NHibernate Configuration to generate the schema from.</param>
-            <param name="connectionProperties">The Properties to use when connecting to the Database.</param>
+            <param name="configProperties">The Properties to use when connecting to the Database.</param>
         </member>
         <member name="M:NHibernate.Tool.hbm2ddl.SchemaExport.SetOutputFile(System.String)">
             <summary>
@@ -31528,8 +33384,8 @@
             <param name="script"><see langword="true"/> if the ddl should be outputted in the Console.</param>
             <param name="export"><see langword="true"/> if the ddl should be executed against the Database.</param>
             <remarks>
-            This is a convenience method that calls <see cref="M:NHibernate.Tool.hbm2ddl.SchemaExport.Execute(System.Boolean,System.Boolean,System.Boolean,System.Boolean)"/> and sets
-            the justDrop parameter to false and the format parameter to true.
+            This is a convenience method that calls <see cref="M:NHibernate.Tool.hbm2ddl.SchemaExport.Execute(System.Boolean,System.Boolean,System.Boolean)"/> and sets
+            the justDrop parameter to false.
             </remarks>
         </member>
         <member name="M:NHibernate.Tool.hbm2ddl.SchemaExport.Drop(System.Boolean,System.Boolean)">
@@ -31539,18 +33395,17 @@
             <param name="script"><see langword="true"/> if the ddl should be outputted in the Console.</param>
             <param name="export"><see langword="true"/> if the ddl should be executed against the Database.</param>
             <remarks>
-            This is a convenience method that calls <see cref="M:NHibernate.Tool.hbm2ddl.SchemaExport.Execute(System.Boolean,System.Boolean,System.Boolean,System.Boolean)"/> and sets
-            the justDrop and format parameter to true.
+            This is a convenience method that calls <see cref="M:NHibernate.Tool.hbm2ddl.SchemaExport.Execute(System.Boolean,System.Boolean,System.Boolean)"/> and sets
+            the justDrop parameter to true.
             </remarks>
         </member>
-        <member name="M:NHibernate.Tool.hbm2ddl.SchemaExport.Execute(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Data.IDbConnection,System.IO.TextWriter)">
+        <member name="M:NHibernate.Tool.hbm2ddl.SchemaExport.Execute(System.Boolean,System.Boolean,System.Boolean,System.Data.IDbConnection,System.IO.TextWriter)">
             <summary>
             Executes the Export of the Schema in the given connection
             </summary>
             <param name="script"><see langword="true" /> if the ddl should be outputted in the Console.</param>
             <param name="export"><see langword="true" /> if the ddl should be executed against the Database.</param>
             <param name="justDrop"><see langword="true" /> if only the ddl to drop the Database objects should be executed.</param>
-            <param name="format"><see langword="true" /> if the ddl should be nicely formatted instead of one statement per line.</param>
             <param name="connection">
             The connection to use when executing the commands when export is <see langword="true" />.
             Must be an opened connection. The method doesn't close the connection.
@@ -31562,40 +33417,15 @@
             It does NOT close the given connection!
             </remarks>
         </member>
-        <member name="M:NHibernate.Tool.hbm2ddl.SchemaExport.Execute(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+        <member name="M:NHibernate.Tool.hbm2ddl.SchemaExport.Execute(System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             Executes the Export of the Schema.
             </summary>
             <param name="script"><see langword="true" /> if the ddl should be outputted in the Console.</param>
             <param name="export"><see langword="true" /> if the ddl should be executed against the Database.</param>
             <param name="justDrop"><see langword="true" /> if only the ddl to drop the Database objects should be executed.</param>
-            <param name="format"><see langword="true" /> if the ddl should be nicely formatted instead of one statement per line.</param>
             <remarks>
             This method allows for both the drop and create ddl script to be executed.
-            </remarks>
-        </member>
-        <member name="M:NHibernate.Tool.hbm2ddl.SchemaExport.Format(System.String)">
-            <summary>
-            Format an SQL statement using simple rules
-            </summary>
-            <param name="sql">The string containing the sql to format.</param>
-            <returns>A string that contains formatted sql.</returns>
-            <remarks>
-            The simple rules to used when formatting are:
-            <list type="number">
-            	<item>
-            		<description>Insert a newline after each comma</description>
-            	</item>
-            	<item>
-            		<description>Indent three spaces after each inserted newline</description>
-            	</item>
-            	<item>
-            		<description>
-            		If the statement contains single/double quotes return unchanged because
-            		it is too complex and could be broken by simple formatting.
-            		</description>
-            	</item>
-            </list>
             </remarks>
         </member>
         <member name="M:NHibernate.Tool.hbm2ddl.SchemaUpdate.Execute(System.Boolean,System.Boolean)">
@@ -32424,258 +34254,6 @@
             The base implementation of the <see cref="T:NHibernate.Type.IType"/> interface.
             Mapping of the built in Type hierarchy.
             </summary>
-        </member>
-        <member name="T:NHibernate.Type.IType">
-            <summary>
-			Defines a mapping from a .NET <see cref="T:System.Type"/> to a SQL datatype.
-			This interface is intended to be implemented by applications that need custom types.
-		</summary><remarks>
-			Implementors should usually be immutable and MUST definately be threadsafe.
-		</remarks>
-        </member>
-        <member name="M:NHibernate.Type.IType.SqlTypes(NHibernate.Engine.IMapping)">
-            <summary>
-		When implemented by a class, returns the SqlTypes for the columns mapped by this IType.
-		</summary><param name="mapping">The <see cref="T:NHibernate.Engine.IMapping"/> that uses this IType.</param><returns>An array of <see cref="T:NHibernate.SqlTypes.SqlType"/>s.</returns> 
-        </member>
-        <member name="M:NHibernate.Type.IType.GetColumnSpan(NHibernate.Engine.IMapping)">
-            <summary>
-		When implemented by a class, returns how many columns are used to persist this type.
-		</summary><param name="mapping">The <see cref="T:NHibernate.Engine.IMapping"/> that uses this IType.</param><returns>The number of columns this IType spans.</returns><exception cref="T:NHibernate.MappingException">MappingException</exception> 
-        </member>
-        <member name="M:NHibernate.Type.IType.IsDirty(System.Object,System.Object,NHibernate.Engine.ISessionImplementor)">
-            <summary>
-		When implemented by a class, should the parent be considered dirty, 
-		given both the old and current field or element value?
-		</summary><param name="old">The old value</param><param name="current">The current value</param><param name="session">The <see cref="T:NHibernate.Engine.ISessionImplementor"/> </param><returns>true if the field is dirty</returns> 
-        </member>
-        <member name="M:NHibernate.Type.IType.NullSafeGet(System.Data.IDataReader,System.String[],NHibernate.Engine.ISessionImplementor,System.Object)">
-            <summary>
-		When implemented by a class, gets an instance of the object mapped by 
-		this IType from the <see cref="T:System.Data.IDataReader"/>.
-		</summary><param name="rs">The <see cref="T:System.Data.IDataReader"/> that contains the values</param><param name="names">
-		The names of the columns in the <see cref="T:System.Data.IDataReader"/> that contain the 
-		value to populate the IType with.
-		</param><param name="session"></param><param name="owner"></param><returns>The object mapped by this IType.</returns><remarks>
-		Implementors should handle possibility of null values.
-		</remarks> 
-        </member>
-        <member name="M:NHibernate.Type.IType.NullSafeGet(System.Data.IDataReader,System.String,NHibernate.Engine.ISessionImplementor,System.Object)">
-            <summary>
-		When implemented by a class, gets an instance of the object 
-		mapped by this IType from the <see cref="T:System.Data.IDataReader"/>.
-		</summary><param name="rs">The <see cref="T:System.Data.IDataReader"/> that contains the values</param><param name="name">The name of the column in the <see cref="T:System.Data.IDataReader"/> that contains the 
-		value to populate the IType with.</param><param name="session"></param><param name="owner"></param><returns>The object mapped by this IType.</returns><remarks>
-		Implementations should handle possibility of null values.
-		This method might be called if the IType is known to be a single-column type.
-		</remarks> 
-        </member>
-        <member name="M:NHibernate.Type.IType.NullSafeSet(System.Data.IDbCommand,System.Object,System.Int32,System.Boolean[],NHibernate.Engine.ISessionImplementor)">
-            <summary>
-		When implemented by a class, puts the value/values from the mapped 
-		class into the <see cref="T:System.Data.IDbCommand"/>.
-		</summary><param name="st">The <see cref="T:System.Data.IDbCommand"/> to put the values into.</param><param name="value">The object that contains the values.</param><param name="index">The index of the <see cref="T:System.Data.IDbDataParameter"/> to start writing the values to.</param><param name="session"></param><param name="settable">Indicates which columns are to be set.</param><remarks>
-		Implementors should handle possibility of null values.
-		A multi-column type should be written to parameters starting from <paramref name="index"/>.
-		</remarks> 
-        </member>
-        <member name="M:NHibernate.Type.IType.NullSafeSet(System.Data.IDbCommand,System.Object,System.Int32,NHibernate.Engine.ISessionImplementor)">
-            <summary>
-			When implemented by a class, puts the value/values from the mapped
-			class into the <see cref="T:System.Data.IDbCommand"/>.
-		</summary><param name="st">
-			The <see cref="T:System.Data.IDbCommand"/> to put the values into.
-		</param><param name="value">The object that contains the values.</param><param name="index">
-			The index of the <see cref="T:System.Data.IDbDataParameter"/> to start writing the values to.
-		</param><param name="session"></param><remarks>
-			Implementors should handle possibility of null values.
-			A multi-column type should be written to parameters starting from <paramref name="index"/>.
-		</remarks> 
-        </member>
-        <member name="M:NHibernate.Type.IType.ToLoggableString(System.Object,NHibernate.Engine.ISessionFactoryImplementor)">
-            <summary>
-		When implemented by a class, a representation of the value to be 
-		embedded in an XML element
-		</summary><param name="value">The object that contains the values.</param><param name="factory"></param><returns>An Xml formatted string.</returns> 
-        </member>
-        <member name="M:NHibernate.Type.IType.DeepCopy(System.Object,NHibernate.EntityMode,NHibernate.Engine.ISessionFactoryImplementor)">
-            <summary>
-		When implemented by a class, returns a deep copy of the persistent 
-		state, stopping at entities and at collections.
-		</summary><param name="val">A Collection element or Entity field</param><param name="entityMode">The entityMode.</param><param name="factory">The session factory.</param><returns>A deep copy of the object.</returns> 
-        </member>
-        <member name="M:NHibernate.Type.IType.Hydrate(System.Data.IDataReader,System.String[],NHibernate.Engine.ISessionImplementor,System.Object)">
-            <summary>
-		When implemented by a class, retrieves an instance of the mapped class, 
-		or the identifier of an entity or collection from a <see cref="T:System.Data.IDataReader"/>.
-		</summary><param name="rs">The <see cref="T:System.Data.IDataReader"/> that contains the values.</param><param name="names">
-		The names of the columns in the <see cref="T:System.Data.IDataReader"/> that contain the 
-		value to populate the IType with.
-		</param><param name="session">the session</param><param name="owner">The parent Entity</param><returns>An identifier or actual object mapped by this IType.</returns><remarks>
-		<para>
-		This is useful for 2-phase property initialization - the second phase is a call to
-		<c>ResolveIdentifier()</c>
-		</para>
-		<para>
-		Most implementors of this method will just pass the call to <c>NullSafeGet()</c>.
-		</para>
-		</remarks> 
-        </member>
-        <member name="M:NHibernate.Type.IType.ResolveIdentifier(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
-            <summary>
-		When implemented by a class, maps identifiers to Entities or Collections. 
-		</summary><param name="value">An identifier or value returned by <c>Hydrate()</c></param><param name="session">The session</param><param name="owner">The parent Entity</param><returns>The Entity or Collection referenced by this Identifier.</returns><remarks>
-		This is the second phase of 2-phase property initialization.
-		</remarks> 
-        </member>
-        <member name="M:NHibernate.Type.IType.SemiResolve(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
-            <summary>
-            Given a hydrated, but unresolved value, return a value that may be used to
-            reconstruct property-ref associations.
-            </summary>
-        </member>
-        <member name="M:NHibernate.Type.IType.Replace(System.Object,System.Object,NHibernate.Engine.ISessionImplementor,System.Object,System.Collections.IDictionary)">
-            <!-- No matching elements were found for the following include tag --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;M:IType.Copy&quot;]/*"/> 
-        </member>
-        <member name="M:NHibernate.Type.IType.Replace(System.Object,System.Object,NHibernate.Engine.ISessionImplementor,System.Object,System.Collections.IDictionary,NHibernate.Type.ForeignKeyDirection)">
-            <summary> 
-            During merge, replace the existing (target) value in the entity we are merging to
-            with a new (original) value from the detached entity we are merging. For immutable
-            objects, or null values, it is safe to simply return the first parameter. For
-            mutable objects, it is safe to return a copy of the first parameter. For objects
-            with component values, it might make sense to recursively replace component values. 
-            </summary>
-            <param name="original">the value from the detached entity being merged </param>
-            <param name="target">the value in the managed entity </param>
-            <param name="session"></param>
-            <param name="owner"></param>
-            <param name="copyCache"></param>
-            <param name="foreignKeyDirection"></param>
-            <returns> the value to be merged </returns>
-        </member>
-        <member name="M:NHibernate.Type.IType.IsSame(System.Object,System.Object,NHibernate.EntityMode)">
-            <summary> 
-            Compare two instances of the class mapped by this type for persistence
-            "equality" - equality of persistent state - taking a shortcut for
-            entity references.
-            </summary>
-            <param name="x"> </param>
-            <param name="y"> </param>
-            <param name="entityMode"> </param>
-            <returns> boolean </returns>
-        </member>
-        <member name="M:NHibernate.Type.IType.IsEqual(System.Object,System.Object,NHibernate.EntityMode)">
-            <summary> 
-            Compare two instances of the class mapped by this type for persistence
-            "equality" - equality of persistent state.
-            </summary>
-            <param name="x"> </param>
-            <param name="y"> </param>
-            <param name="entityMode"> </param>
-            <returns> boolean </returns>
-        </member>
-        <member name="M:NHibernate.Type.IType.IsEqual(System.Object,System.Object,NHibernate.EntityMode,NHibernate.Engine.ISessionFactoryImplementor)">
-            <summary> 
-            Compare two instances of the class mapped by this type for persistence
-            "equality" - equality of persistent state.
-            </summary>
-            <param name="x"> </param>
-            <param name="y"> </param>
-            <param name="entityMode"> </param>
-            <param name="factory"></param>
-            <returns> boolean </returns>
-        </member>
-        <member name="M:NHibernate.Type.IType.GetHashCode(System.Object,NHibernate.EntityMode)">
-            <summary> Get a hashcode, consistent with persistence "equality"</summary>
-            <param name="x"> </param>
-            <param name="entityMode"> </param>
-        </member>
-        <member name="M:NHibernate.Type.IType.GetHashCode(System.Object,NHibernate.EntityMode,NHibernate.Engine.ISessionFactoryImplementor)">
-            <summary> Get a hashcode, consistent with persistence "equality"</summary>
-            <param name="x"> </param>
-            <param name="entityMode"> </param>
-            <param name="factory"> </param>
-        </member>
-        <member name="M:NHibernate.Type.IType.Compare(System.Object,System.Object,System.Nullable{NHibernate.EntityMode})">
-            <summary> compare two instances of the type</summary>
-            <param name="x"> </param>
-            <param name="y"> </param>
-            <param name="entityMode"> </param>
-        </member>
-        <member name="M:NHibernate.Type.IType.GetSemiResolvedType(NHibernate.Engine.ISessionFactoryImplementor)">
-            <summary> Get the type of a semi-resolved value.</summary>
-        </member>
-        <member name="M:NHibernate.Type.IType.SetToXMLNode(System.Xml.XmlNode,System.Object,NHibernate.Engine.ISessionFactoryImplementor)">
-            <summary> A representation of the value to be embedded in an XML element. </summary>
-            <param name="node"></param>
-            <param name="value"> </param>
-            <param name="factory"> </param>
-        </member>
-        <member name="M:NHibernate.Type.IType.FromXMLNode(System.Xml.XmlNode,NHibernate.Engine.IMapping)">
-            <summary> Parse the XML representation of an instance.</summary>
-            <param name="xml"> </param>
-            <param name="factory"> </param>
-            <returns> an instance of the type </returns>
-        </member>
-        <member name="M:NHibernate.Type.IType.ToColumnNullness(System.Object,NHibernate.Engine.IMapping)">
-            <summary> 
-            Given an instance of the type, return an array of boolean, indicating
-            which mapped columns would be null. 
-            </summary>
-            <param name="value">an instance of the type </param>
-            <param name="mapping"></param>
-        </member>
-        <member name="P:NHibernate.Type.IType.Name">
-            <summary>
-		When implemented by a class, gets the abbreviated name of the type.
-		</summary><value>The NHibernate type name.</value> 
-        </member>
-        <member name="P:NHibernate.Type.IType.ReturnedClass">
-            <summary>
-		When implemented by a class, gets the <see cref="T:System.Type"/> returned 
-		by the <c>NullSafeGet()</c> methods.
-		</summary><value>
-		The <see cref="T:System.Type"/> from the .NET framework.
-		</value><remarks>
-		This is used to establish the class of an array of this Itype
-		</remarks> 
-        </member>
-        <member name="P:NHibernate.Type.IType.IsMutable">
-            <summary>
-		When implemented by a class, gets the value indicating if the objects 
-		of this IType are mutable.
-		</summary><value>true if the objects mapped by this IType are mutable.</value><remarks>
-		With respect to the referencing object...
-		Entities and Collections are considered immutable because they manage their own internal state.
-		</remarks> 
-        </member>
-        <member name="P:NHibernate.Type.IType.IsAssociationType">
-            <summary>
-			When implemented by a class, gets a value indicating if the implementor is castable to an an <see cref="T:NHibernate.Type.IAssociationType"/>
-		</summary><value>true if this is an Association</value><remarks>This does not necessarily imply that the type actually represents an association.</remarks> 
-        </member>
-        <member name="P:NHibernate.Type.IType.IsCollectionType">
-            <summary>
-			When implemented by a class, gets a value indicating if the implementor is a collection type
-		</summary><value>true if this is a <see cref="T:NHibernate.Type.CollectionType"/>.</value> 
-        </member>
-        <member name="P:NHibernate.Type.IType.IsComponentType">
-            <summary>
-		When implemented by a class, gets a value indicating if the implementor 
-		is an <see cref="T:NHibernate.Type.IAbstractComponentType"/>.
-		</summary><value>true if this is an <see cref="T:NHibernate.Type.IAbstractComponentType"/></value><remarks>
-		If true, the implementation must be castable to <see cref="T:NHibernate.Type.IAbstractComponentType"/>.
-		A component type may own collections or associations and hence must provide certain extra functionality.
-		</remarks> 
-        </member>
-        <member name="P:NHibernate.Type.IType.IsEntityType">
-            <summary>
-		When implemented by a class, gets a value indicating if the implementor 
-		extends <see cref="T:NHibernate.Type.EntityType"/>
-		</summary><value>true if this is an <see cref="T:NHibernate.Type.EntityType"/></value> 
-        </member>
-        <member name="P:NHibernate.Type.IType.IsAnyType">
-            <!-- No matching elements were found for the following include tag --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;P:IType.IsAnyType&quot;]/*"/> 
         </member>
         <member name="M:NHibernate.Type.AbstractType.Disassemble(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
             <summary>
@@ -34329,12 +35907,9 @@
             Represents directionality of the foreign key constraint
             </summary>
         </member>
-        <member name="M:NHibernate.Type.ForeignKeyDirection.#ctor">
-            <summary></summary>
-        </member>
-        <member name="M:NHibernate.Type.ForeignKeyDirection.CascadeNow(NHibernate.Engine.CascadePoint)">
+        <member name="F:NHibernate.Type.ForeignKeyDirection.ForeignKeyFromParent">
             <summary>
-            Should we cascade at this cascade point?
+            A foreign key from parent to child
             </summary>
         </member>
         <member name="F:NHibernate.Type.ForeignKeyDirection.ForeignKeyToParent">
@@ -34342,9 +35917,9 @@
             A foreign key from child to parent
             </summary>
         </member>
-        <member name="F:NHibernate.Type.ForeignKeyDirection.ForeignKeyFromParent">
+        <member name="M:NHibernate.Type.ForeignKeyDirection.CascadeNow(NHibernate.Engine.CascadePoint)">
             <summary>
-            A foreign key from parent to child
+            Should we cascade at this cascade point?
             </summary>
         </member>
         <member name="T:NHibernate.Type.GenericBagType`1">
