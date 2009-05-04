@@ -114,6 +114,7 @@ namespace Castle.MicroKernel
 				var inlineArgument = additionalArguments[dependency.DependencyKey];
 
 				if (inlineArgument != null && converter != null && 
+					!dependency.TargetType.IsInstanceOfType(inlineArgument) &&
 					dependency.DependencyType == DependencyType.Parameter)
 				{
 					return converter.PerformConversion(inlineArgument.ToString(), dependency.TargetType);
@@ -135,6 +136,7 @@ namespace Castle.MicroKernel
 				var inlineArgument = additionalArguments[dependency.DependencyKey];
 
 				if (inlineArgument != null && converter != null && 
+					!dependency.TargetType.IsInstanceOfType(inlineArgument) &&
 					dependency.DependencyType == DependencyType.Parameter && 
 					converter.CanHandleType(dependency.TargetType))
 				{
