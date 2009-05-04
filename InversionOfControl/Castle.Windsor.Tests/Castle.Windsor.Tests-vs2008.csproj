@@ -153,6 +153,7 @@
     <Compile Include="Bugs\IoC-78\IoC-78.cs" />
     <Compile Include="Bugs\IoC_103\IoC_103.cs" />
     <Compile Include="Bugs\IoC_120.cs" />
+    <Compile Include="Bugs\IoC_142.cs" />
     <Compile Include="Bugs\IoC_147.cs" />
     <Compile Include="Bugs\IoC_92.cs" />
     <Compile Include="ChildContainerSupportTestCase.cs">
