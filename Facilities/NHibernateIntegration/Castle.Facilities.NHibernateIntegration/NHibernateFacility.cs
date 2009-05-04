@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Core;
-using Castle.MicroKernel.Proxy;
-
 namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
@@ -23,11 +20,11 @@ namespace Castle.Facilities.NHibernateIntegration
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.SubSystems.Conversion;
 	using Castle.Services.Transaction;
+	using Castle.Core;
+	using Core.Logging;
 	using Internal;
 	using MicroKernel;
-	using MicroKernel.Registration;
 	using NHibernate;
-	using Configuration=NHibernate.Cfg.Configuration;
 
 	/// <summary>
 	/// Provides a basic level of integration with the NHibernate project
@@ -86,7 +83,9 @@ namespace Castle.Facilities.NHibernateIntegration
 
 
 		private readonly IConfigurationBuilder configurationBuilder;
-		
+
+		private ILogger log = NullLogger.Instance;
+
 		/// <summary>
 		/// Instantiates the facility with the specified configuration builder.
 		/// </summary>
@@ -109,6 +108,10 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <remarks>It must be overriden.</remarks>
 		protected override void Init()
 		{
+			if (Kernel.HasComponent(typeof(ILoggerFactory)))
+			{
+				log = ((ILoggerFactory)Kernel[typeof(ILoggerFactory)]).Create(GetType());
+			}
 			AssertHasConfig();
 			AssertHasAtLeastOneFactoryConfigured();
 			RegisterComponents();
@@ -216,8 +219,13 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// </summary>
 		protected void RegisterTransactionManager()
 		{
-			Kernel.AddComponent(TransactionManagerKey,
-			   typeof(ITransactionManager), typeof(DefaultTransactionManager));
+			if (!Kernel.HasComponent(typeof(ITransactionManager)))
+			{
+				log.Info("No Transaction Manager registered on Kernel, registering default Transaction Manager");
+
+				Kernel.AddComponent(TransactionManagerKey,
+									typeof (ITransactionManager), typeof (DefaultTransactionManager));
+			}
 		}
 
 		#endregion
