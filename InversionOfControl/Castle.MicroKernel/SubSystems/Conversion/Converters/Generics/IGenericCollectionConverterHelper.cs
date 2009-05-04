@@ -21,7 +21,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	/// the generic parameters, so we can work type safe inside the implementations,
 	/// and still call from non generic types outside.
 	/// </summary>
-	internal interface IGenericCollectionConverterHelper
+	public interface IGenericCollectionConverterHelper
 	{
 		object ConvertConfigurationToCollection(IConfiguration configuration);
 	}
