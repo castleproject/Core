@@ -14,7 +14,8 @@
 
 namespace Castle.Components.Pagination.Tests
 {
-	using System.Collections;
+    using System;
+    using System.Collections;
 	using System.Collections.Generic;
 	using NUnit.Framework;
 
@@ -134,9 +135,11 @@ namespace Castle.Components.Pagination.Tests
 			Assert.AreEqual(2, page.CurrentPageSize);
 			AssertGetEnumeratorItterateOverExpectedValues(page, "three", "four");
 
-			Assert.IsNotNull(page.FirstItem);
-			Assert.IsNotNull(page.LastItem);
-		}
+            Assert.IsNotNull(page.FirstItem);
+            Assert.IsNotNull(page.LastItem);
+            Assert.AreEqual("three", page.FirstItem);
+            Assert.AreEqual("four", page.LastItem);
+        }
 
 		[Test]
 		public void TestExpectedResultForLastPageWithTwoItemPerPage()
@@ -159,7 +162,7 @@ namespace Castle.Components.Pagination.Tests
 			Assert.IsNotNull(page.LastItem);
 		}
 
-		private static void AssertGetEnumeratorItterateOverExpectedValues(IPaginatedPage page, params string[] values)
+	    protected static void AssertGetEnumeratorItterateOverExpectedValues(IPaginatedPage page, params string[] values)
 		{
 			int CurrentPageIndex = 0;
 
@@ -200,7 +203,7 @@ namespace Castle.Components.Pagination.Tests
 			Assert.AreEqual(page.TotalPages, page.CurrentPageIndex);
 		}
 
-		private static IList GetSampleListData()
+	    protected static IList GetSampleListData()
 		{
 			return new ArrayList(new string[] {"one", "two", "three", "four", "five"});
 		}
@@ -234,7 +237,12 @@ namespace Castle.Components.Pagination.Tests
 	[TestFixture]
 	public class GenericCustomPageTestCase : BasePaginatedPageTestCase
 	{
-		protected override IPaginatedPage CreateAbstractPageWithSampleData(IList sampleData, int currentPage, int pageSize)
+        protected override IPaginatedPage CreateAbstractPageWithSampleData(IList sampleData, int currentPage, int pageSize)
+        {
+            return CreateGenericCustomPageWithSampleData(sampleData, currentPage, pageSize);
+        }
+        
+        private IPaginatedPage<string> CreateGenericCustomPageWithSampleData(IList sampleData, int currentPage, int pageSize)
 		{
 			IList<string> genericData = new List<string>(pageSize);
 			
@@ -259,5 +267,27 @@ namespace Castle.Components.Pagination.Tests
 
 			return new GenericCustomPage<string>(genericData, currentPage, pageSize, sampleData.Count);
 		}
+
+        [Test]
+        public void TestExpectedResultForMiddlePageWithTwoItemPerPageForGenericPage()
+        {
+            IList sampleData = GetSampleListData();
+
+            int currentPageIndex = 2;
+            int pageSize = 2;
+
+            IPaginatedPage<string> page = CreateGenericCustomPageWithSampleData(sampleData, currentPageIndex, pageSize);
+
+            Assert.AreEqual(4, page.LastItemIndex);
+            Assert.AreEqual(currentPageIndex + 1, page.NextPageIndex);
+            Assert.AreEqual(currentPageIndex - 1, page.PreviousPageIndex);
+            Assert.AreEqual(2, page.CurrentPageSize);
+            AssertGetEnumeratorItterateOverExpectedValues(page, "three", "four");
+
+            Assert.IsNotNull(page.FirstItem);
+            Assert.IsNotNull(page.LastItem);
+            Assert.AreEqual("three", page.FirstItem);
+            Assert.AreEqual("four", page.LastItem);
+        }
 	}
 }

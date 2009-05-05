@@ -161,13 +161,15 @@ namespace Castle.Components.Pagination
 	public abstract class AbstractPage<T> : AbstractPage, IPaginatedPage<T>
 	{
 
-		T IPaginatedPage<T>.FirstItem {
-			get { return GetGenericItemAtIndex((this as IPaginatedPage).FirstItemIndex); }
-		}
+        T IPaginatedPage<T>.FirstItem
+        {
+			get { return (T) ((IPaginatedPage)this).FirstItem; }
+        }
 
 
-		T IPaginatedPage<T>.LastItem {
-			get { return GetGenericItemAtIndex((this as IPaginatedPage).LastItemIndex); }
+        T IPaginatedPage<T>.LastItem
+        {
+			get { return (T)((IPaginatedPage)this).LastItem; }
 		}
 
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
