@@ -52,6 +52,12 @@ namespace Castle.ActiveRecord
 	public delegate void ModelDelegate(ActiveRecordModel model, IConfigurationSource source);
 
 	/// <summary>
+	/// Delegate for AR Facility registration hooks.
+	/// </summary>
+	/// <param name="contributor"></param>
+	public delegate void EventListenerRegistrationDelegate(EventListenerContributor contributor);
+
+	/// <summary>
 	/// Performs the framework initialization.
 	/// </summary>
 	/// <remarks>
@@ -127,6 +133,15 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static event ModelDelegate ModelCreated;
 
+		/// <summary>
+		/// Allows the ActiveRecordFacility to register components as event listeners;
+		/// </summary>
+		public static event EventListenerRegistrationDelegate EventListenerComponentRegistrationHook;
+
+		/// <summary>
+		/// Allows the ActiveRecordFacility to reconfigure registered listeners.
+		/// </summary>
+		public static event EventListenerRegistrationDelegate EventListenerFacilityConfigurationHook;
 
 		/// <summary>
 		/// Initialize the mappings using the configuration and 
@@ -950,6 +965,11 @@ namespace Castle.ActiveRecord
 				}
 			}
 
+			if (EventListenerComponentRegistrationHook != null)
+			{
+				EventListenerComponentRegistrationHook(contributor);
+			}
+
 			var addEventListenerAttributes = new List<EventListenerAssemblyAttribute>();
 			var ignoreEventListenerAttributes = new List<EventListenerAssemblyAttribute>();
 			foreach (var assembly in registeredAssemblies)
@@ -961,6 +981,11 @@ namespace Castle.ActiveRecord
 
 			ProcessEventListenerAssemblyAttributes(contributor, ignoreEventListenerAttributes);
 			ProcessEventListenerAssemblyAttributes(contributor, addEventListenerAttributes);
+
+			if (EventListenerFacilityConfigurationHook != null)
+			{
+				EventListenerFacilityConfigurationHook(contributor);
+			}
 
 			AddContributor(contributor);
 		}
