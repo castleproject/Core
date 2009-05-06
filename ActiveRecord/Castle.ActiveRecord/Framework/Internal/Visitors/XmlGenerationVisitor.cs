@@ -633,10 +633,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 			String cascade = TranslateCascadeEnum(model.BelongsToAtt.Cascade);
 			String fetch = TranslateFetch(model.BelongsToAtt.Fetch);
 			String notFoundMode = TranslateNotFoundBehaviourEnum(model.BelongsToAtt.NotFoundBehaviour);
+			String lazy = TranslateLazy(model.BelongsToAtt.Lazy);
 
 			if (model.BelongsToAtt.Column == null)
 			{
-				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}>",
+				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}>",
 				        MakeAtt("name", model.Property.Name),
 				        MakeAtt("access", model.BelongsToAtt.AccessString),
 				        MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
@@ -645,6 +646,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("unique-key", model.BelongsToAtt.UniqueKey),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("fetch", fetch),
+						WriteIfNonNull("lazy", lazy),
 				        WriteIfFalse("update", model.BelongsToAtt.Update),
 				        WriteIfFalse("insert", model.BelongsToAtt.Insert),
 						WriteIfNonNull("property-ref", model.BelongsToAtt.PropertyRef),
@@ -657,7 +659,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13} />",
+				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}{14} />",
 				        MakeAtt("name", model.Property.Name),
 				        MakeAtt("access", model.BelongsToAtt.AccessString),
 				        MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
@@ -671,7 +673,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("foreign-key", model.BelongsToAtt.ForeignKey),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("fetch", fetch),
-				        WriteIfNonNull("not-found", notFoundMode));
+						WriteIfNonNull("lazy", lazy),
+						WriteIfNonNull("not-found", notFoundMode));
 			}
 		}
 
@@ -1083,6 +1086,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 					return "join";
 				case FetchEnum.SubSelect:
 					return "subselect";
+				default:
+					return null;
+			}
+		}
+
+		private static string TranslateLazy(LazyEnum lazy)
+		{
+			switch(lazy)
+			{
+				case LazyEnum.Proxy:
+					return "proxy";
+				case LazyEnum.False:
+					return "false";
 				default:
 					return null;
 			}

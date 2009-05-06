@@ -375,7 +375,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <many-to-one name=\"Clazz\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithAnyAttribute, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"Clazz\" />\r\n" +
+				"    <many-to-one name=\"Clazz\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithAnyAttribute, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"Clazz\" lazy=\"proxy\" />\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
@@ -835,7 +835,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <many-to-one name=\"ClassA\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"classa_id\" foreign-key=\"FK_FOREIGN_KEY_A\" />\r\n" +
+				"    <many-to-one name=\"ClassA\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"classa_id\" foreign-key=\"FK_FOREIGN_KEY_A\" lazy=\"proxy\" />\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
@@ -859,7 +859,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <many-to-one name=\"ClassA\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"classa_id\" insert=\"false\" update=\"false\" not-null=\"true\" unique=\"true\" foreign-key=\"FK_FOREIGN_KEY_B\" cascade=\"save-update\" />\r\n" +
+				"    <many-to-one name=\"ClassA\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"classa_id\" insert=\"false\" update=\"false\" not-null=\"true\" unique=\"true\" foreign-key=\"FK_FOREIGN_KEY_B\" cascade=\"save-update\" lazy=\"proxy\" />\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
@@ -883,7 +883,32 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <many-to-one name=\"ClassA\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"classa_id\" fetch=\"join\" />\r\n" +
+				"    <many-to-one name=\"ClassA\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"classa_id\" fetch=\"join\" lazy=\"proxy\" />\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
+		public void BelongsToWithLazy()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(BelongsToWithLazy));
+			Assert.IsNotNull(model);
+
+			String xml = Process(builder, model);
+
+			const string expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.BelongsToWithLazy, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"BelongsToWithLazy\" lazy=\"false\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <many-to-one name=\"ClassA\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"classa_id\" lazy=\"false\" />\r\n" +
+				"    <many-to-one name=\"ClassA2\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"classa2_id\" lazy=\"proxy\" />\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
@@ -991,7 +1016,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
 				"      <column name=\"Name\"/>\r\n" +
 				"    </property>\r\n" +
-				"    <many-to-one name=\"Parent\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Category, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"parent_id\" />\r\n" +
+				"    <many-to-one name=\"Parent\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Category, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"parent_id\" lazy=\"proxy\" />\r\n" +
 				"    <bag name=\"SubCategories\" access=\"property\" table=\"Category\" lazy=\"false\">\r\n" +
 				"      <key column=\"parent_id\" />\r\n" +
 				"      <one-to-many class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Category, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
@@ -1098,7 +1123,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
 				"      <column name=\"Name\"/>\r\n" +
 				"    </property>\r\n" +
-				"    <many-to-one name=\"Parent\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CacheClass, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"parent_id\" />\r\n" +
+				"    <many-to-one name=\"Parent\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CacheClass, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"parent_id\" lazy=\"proxy\" />\r\n" +
 				"    <bag name=\"SubClasses\" access=\"property\" table=\"CacheClass\" lazy=\"false\">\r\n" +
 				"      <cache usage=\"read-write\" />\r\n" +
 				"      <key column=\"parent_id\" />\r\n" +
@@ -1152,7 +1177,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <many-to-one name=\"NotFoundBehaviourClass\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.NotFoundBehaviourClass, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"NotFoundBehaviourClass\" not-found=\"ignore\" />\r\n" +
+				"    <many-to-one name=\"NotFoundBehaviourClass\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.NotFoundBehaviourClass, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"NotFoundBehaviourClass\" lazy=\"proxy\" not-found=\"ignore\" />\r\n" +
 				"    <bag name=\"NotFoundBehaviourClassList\" access=\"property\" table=\"ManySubClasses\" lazy=\"false\">\r\n" +
 				"      <key column=\"id\" />\r\n" +
 				"      <many-to-many class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.NotFoundBehaviourClass, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"ref_id\" not-found=\"ignore\"/>\r\n" +
@@ -1359,7 +1384,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"        <property name=\"Value\" access=\"property\" type=\"String\">\r\n" +
 				"          <column name=\"Value\"/>\r\n" +
 				"        </property>\r\n" +
-				"        <many-to-one name=\"A\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"aId\" />\r\n" +
+				"        <many-to-one name=\"A\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"aId\" lazy=\"proxy\" />\r\n" +
 				"      </composite-element>\r\n" +
 				"    </list>\r\n" +
 				"  </class>\r\n" +

@@ -128,6 +128,22 @@ namespace Castle.ActiveRecord
 	}
 
 	/// <summary>
+	/// Defines the possible lazy option values
+	/// </summary>
+	public enum LazyEnum
+	{
+		/// <summary>
+		/// Specifies that the property should be fetched lazily when the instance variable is first accessed.
+		/// </summary>
+		Proxy,
+
+		/// <summary>
+		/// Specifies that the association will always be eagerly fetched.
+		/// </summary>
+		False
+	}
+
+	/// <summary>
 	/// Defines the cascading behaviour of this association.
 	/// </summary>
 	/// <remarks>

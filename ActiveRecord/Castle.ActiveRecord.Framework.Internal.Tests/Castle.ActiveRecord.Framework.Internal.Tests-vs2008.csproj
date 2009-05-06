@@ -153,6 +153,7 @@
     <Compile Include="Model\BadCompositeKey.cs" />
     <Compile Include="Model\BaseJoinedClass.cs" />
     <Compile Include="Model\BelongsToWithFetch.cs" />
+    <Compile Include="Model\BelongsToWithLazy.cs" />
     <Compile Include="Model\CacheClass.cs" />
     <Compile Include="Model\ClassDiscriminatorLengthParent.cs" />
     <Compile Include="Model\ClassKeyAssigned.cs" />
