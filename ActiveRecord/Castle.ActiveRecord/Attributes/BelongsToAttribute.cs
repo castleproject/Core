@@ -74,7 +74,7 @@ namespace Castle.ActiveRecord
 		private bool unique;
 		private String propertyRef;
 		private FetchEnum fetchMethod = FetchEnum.Unspecified;
-		private LazyEnum lazy = LazyEnum.Proxy;
+		private FetchWhen lazy = FetchWhen.OnInvoke;
 		private CascadeEnum cascade = CascadeEnum.None;
 		private NotFoundBehaviour notFoundBehaviour = NotFoundBehaviour.Default;
 
@@ -187,7 +187,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Chooses between proxy or eager fetching.
 		/// </summary>
-		public LazyEnum Lazy
+		public FetchWhen Lazy
 		{
 			get { return lazy; }
 			set { lazy = value; }

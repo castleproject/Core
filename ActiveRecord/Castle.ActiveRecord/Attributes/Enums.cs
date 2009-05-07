@@ -128,19 +128,20 @@ namespace Castle.ActiveRecord
 	}
 
 	/// <summary>
-	/// Defines the possible lazy option values
+	/// Defines the possible lazy option values.
+	/// See http://nhforge.org/doc/nh/en/index.html#performance-fetching
 	/// </summary>
-	public enum LazyEnum
+	public enum FetchWhen
 	{
 		/// <summary>
 		/// Specifies that the property should be fetched lazily when the instance variable is first accessed.
 		/// </summary>
-		Proxy,
+		OnInvoke,
 
 		/// <summary>
 		/// Specifies that the association will always be eagerly fetched.
 		/// </summary>
-		False
+		Immediate
 	}
 
 	/// <summary>

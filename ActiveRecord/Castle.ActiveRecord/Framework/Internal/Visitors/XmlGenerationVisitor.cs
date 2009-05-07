@@ -1091,13 +1091,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private static string TranslateLazy(LazyEnum lazy)
+		private static string TranslateLazy(FetchWhen fetchWhen)
 		{
-			switch(lazy)
+			switch (fetchWhen)
 			{
-				case LazyEnum.Proxy:
+				case FetchWhen.OnInvoke:
 					return "proxy";
-				case LazyEnum.False:
+				case FetchWhen.Immediate:
 					return "false";
 				default:
 					return null;

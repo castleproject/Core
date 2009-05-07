@@ -28,7 +28,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			set { id = value; }
 		}
 
-		[BelongsTo("classa_id", Lazy = LazyEnum.False)]
+		[BelongsTo("classa_id", Lazy = FetchWhen.Immediate)]
 		public ClassA ClassA
 		{
 			get { return classA; }
