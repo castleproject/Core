@@ -253,13 +253,15 @@
 	<target name="common.find-nunit">
 		<if test="${not property::exists('nunit.found')}">
 			<property name="nunit.found" value="-1" />
-			<exec
-				program="${nunit-console2}" 
-				resultproperty="nunit.found"
-				output="_nunit.txt"
-				failonerror="false" />
+			<if test="${(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
+				<exec
+					program="${nunit-console2}" 
+					resultproperty="nunit.found"
+					output="_nunit.txt"
+					failonerror="false" />
 
-			<property name="nunit-console" value="${nunit-console2}" if="${nunit.found == '0'}" />
+				<property name="nunit-console" value="${nunit-console2}" if="${nunit.found == '0'}" />
+			</if>
 
 			<exec unless="${nunit.found == '0'}"
 				program="${nunit-console}" 
