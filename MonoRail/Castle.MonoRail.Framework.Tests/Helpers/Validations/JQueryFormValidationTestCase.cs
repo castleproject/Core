@@ -67,7 +67,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -90,7 +90,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -113,7 +113,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -136,7 +136,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -159,7 +159,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -180,7 +180,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -201,7 +201,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>", helper.EndFormTag());
 		}
 
@@ -225,7 +225,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{myg
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' );
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' );
 jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
@@ -250,7 +250,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -272,7 +272,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -292,7 +292,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {messages:{"
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -326,7 +326,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{myg
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' );
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' );
 jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
@@ -363,7 +363,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{myg
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' );
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' );
 jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_groupvalue1"").val()!='' || $(""#model_groupvalue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_groupvalue3"").val()!='' || $(""#model_groupvalue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
@@ -398,7 +398,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{myg
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' );
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' );
 jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_groupvalue1"").val()!='' || $(""#model_groupvalue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_groupvalue3"").val()!='' || $(""#model_groupvalue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});
@@ -419,7 +419,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {submitHandl
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' ); });/*]]>*/</script>
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' ); });/*]]>*/</script>
 </form>",
 				helper.EndFormTag());
 		}
@@ -453,7 +453,7 @@ jQuery( document ).ready( function() { jQuery(""#form1"").validate( {groups:{myg
 jQuery.validator.addMethod('greaterThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value > jQuery(param).val() ); }, 'Must be greater than {0}.' );
 jQuery.validator.addMethod('lesserThan', function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }, 'Must be lesser than {0}.' );
 jQuery.validator.addMethod('notEqualTo', function(value, element, param) { return value != jQuery(param).val(); }, 'Must not be equal to {0}.' );
-jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).text(value); }, 'Must match expression.' );
+jQuery.validator.addMethod('regExp', function(value, element, param) { return new RegExp(param).test(value); }, 'Must match expression.' );
 jQuery.validator.addMethod('requiredmygroup1',  function() { if($(""#model_GroupValue1"").val()!='' || $(""#model_GroupValue2"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addMethod('requiredmygroup2',  function() { if($(""#model_GroupValue3"").val()!='' || $(""#model_GroupValue4"").val()!='') { return true } else { return false; } }, 'At least one of the values should not be empty' );
 jQuery.validator.addClassRules({requiredmygroup1: {mygroup1:true}});

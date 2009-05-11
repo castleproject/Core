@@ -380,7 +380,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddCustomRule("lesserThan", "Must be lesser than {0}.",
 				              "function(value, element, param) { return ( IsNaN( value ) && IsNaN( jQuery(param).val() ) ) || ( value < jQuery(param).val() ); }");
 				AddCustomRule("regExp", "Must match expression.", 
-								"function(value, element, param) { return new RegExp(param).text(value); }"); 		
+								"function(value, element, param) { return new RegExp(param).test(value); }"); 		
 			}
 
 			private static void AddParameterToOptions(IDictionary parameters, IDictionary options, string parameterName,
