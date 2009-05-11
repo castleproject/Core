@@ -18,9 +18,9 @@ namespace Castle.MonoRail.Framework
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
-	using Castle.Components.Binder;
-	using Castle.MonoRail.Framework.Helpers;
-	using Castle.MonoRail.Framework.Internal;
+	using Components.Binder;
+	using Helpers;
+	using Internal;
 	using Services;
 
 	/// <summary>
@@ -67,8 +67,8 @@ namespace Castle.MonoRail.Framework
 	{
 		#region Fields
 
-		private IWizardController wizardParentController;
 		private IControllerContext wizardcontrollerContext;
+		private IWizardController wizardParentController;
 
 		#endregion
 
@@ -148,14 +148,6 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Used to decide on which view to render.
-		/// </summary>
-		protected internal virtual void RenderWizardView()
-		{
-			RenderView(ActionName);
-		}
-
-		/// <summary>
 		/// Allow the step to assert some condition 
 		/// before being accessed. Returning <c>false</c>
 		/// prevents the step from being processed but 
@@ -168,6 +160,14 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Used to decide on which view to render.
+		/// </summary>
+		protected internal virtual void RenderWizardView()
+		{
+			RenderView(ActionName);
+		}
+
+		/// <summary>
 		/// Uses a simple heuristic to select the best method -- especially in the
 		/// case of method overloads.
 		/// </summary>
@@ -177,7 +177,8 @@ namespace Castle.MonoRail.Framework
 		/// <param name="actionArgs">The custom arguments for the action</param>
 		/// <param name="actionType">Type of the action.</param>
 		/// <returns></returns>
-		protected override MethodInfo SelectMethod(string action, IDictionary actions, IRequest request, IDictionary<string, object> actionArgs, ActionType actionType)
+		protected override MethodInfo SelectMethod(string action, IDictionary actions, IRequest request,
+		                                           IDictionary<string, object> actionArgs, ActionType actionType)
 		{
 			if (action == "RenderWizardView")
 			{
@@ -475,20 +476,51 @@ namespace Castle.MonoRail.Framework
 
 			// Does this support areas?
 
+			IUrlBuilder urlBuilder = engineContext.Services.GetService<IUrlBuilder>();
+
 			if (queryStringParameters != null && queryStringParameters.Count != 0)
 			{
-				Redirect(WizardControllerContext.AreaName, wizardcontrollerContext.Name, step, queryStringParameters);
+				if (WizardController.UseCurrentRouteForRedirects)
+				{
+					UrlBuilderParameters parameters = UrlBuilderParameters.From(queryStringParameters,
+					                                                            wizardcontrollerContext.RouteMatch.Parameters);
+					RedirectToUrl(urlBuilder.BuildUrl(engineContext.UrlInfo, parameters));
+				}
+				else
+				{
+					Redirect(WizardControllerContext.AreaName, wizardcontrollerContext.Name, step, queryStringParameters);
+				}
 			}
 			else if (Context.Request.QueryString.HasKeys())
 			{
 				// We need to preserve any attribute from the QueryString
 				// for example in case the url has an Id
-
-				Redirect(WizardControllerContext.AreaName, wizardcontrollerContext.Name, step, Query);
+				if (WizardController.UseCurrentRouteForRedirects)
+				{
+					Dictionary<string, string> queryParameters = new Dictionary<string, string>();
+					foreach(string key in Query.AllKeys)
+					{
+						queryParameters.Add(key, Query[key]);
+					}
+					UrlBuilderParameters parameters = UrlBuilderParameters.From(queryParameters,
+					                                                            wizardcontrollerContext.RouteMatch.Parameters);
+					RedirectToUrl(urlBuilder.BuildUrl(engineContext.UrlInfo, parameters));
+				}
+				else
+				{
+					Redirect(WizardControllerContext.AreaName, wizardcontrollerContext.Name, step, Query);
+				}
 			}
 			else
 			{
-				Redirect(WizardControllerContext.AreaName, wizardcontrollerContext.Name, step);
+				if (WizardController.UseCurrentRouteForRedirects)
+				{
+					RedirectUsingRoute(step, true);
+				}
+				else
+				{
+					Redirect(WizardControllerContext.AreaName, wizardcontrollerContext.Name, step);
+				}
 			}
 		}
 

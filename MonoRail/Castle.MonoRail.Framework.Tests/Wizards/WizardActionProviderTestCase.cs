@@ -14,18 +14,14 @@
 
 namespace Castle.MonoRail.Framework.Tests.Wizards
 {
+	using System;
 	using NUnit.Framework;
 	using Test;
 
 	[TestFixture]
 	public class WizardActionProviderTestCase
 	{
-		private StubEngineContext engineContext;
-		private StubViewEngineManager engStubViewEngineManager;
-		private StubMonoRailServices services;
-		private StubRequest request;
-		private StubResponse response;
-		private WizardActionProvider actionProvider;
+		#region Setup/Teardown
 
 		[SetUp]
 		public void Init()
@@ -39,7 +35,54 @@ namespace Castle.MonoRail.Framework.Tests.Wizards
 			actionProvider = new WizardActionProvider();
 		}
 
-		[Test, ExpectedException(typeof(MonoRailException), ExpectedMessage = "The controller home must implement the interface IWizardController to be used as a wizard")]
+		#endregion
+
+		private StubEngineContext engineContext;
+		private StubViewEngineManager engStubViewEngineManager;
+		private StubMonoRailServices services;
+		private StubRequest request;
+		private StubResponse response;
+		private WizardActionProvider actionProvider;
+
+		private class NotAWizardController : Controller
+		{
+		}
+
+		private class WizardWithNoSteps : Controller, IWizardController
+		{
+			#region IWizardController Members
+
+			public void OnWizardStart()
+			{
+				throw new NotImplementedException();
+			}
+
+			public bool OnBeforeStep(string wizardName, string stepName, IWizardStepPage step)
+			{
+				throw new NotImplementedException();
+			}
+
+			public void OnAfterStep(string wizardName, string stepName, IWizardStepPage step)
+			{
+				throw new NotImplementedException();
+			}
+
+			public IWizardStepPage[] GetSteps(IEngineContext context)
+			{
+				return null;
+			}
+
+			public bool UseCurrentRouteForRedirects
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			#endregion
+		}
+
+		[Test,
+		 ExpectedException(typeof(MonoRailException),
+		 	ExpectedMessage = "The controller home must implement the interface IWizardController to be used as a wizard")]
 		public void RejectsControllerThatDoesNotImplementIWizardController()
 		{
 			NotAWizardController controller = new NotAWizardController();
@@ -50,7 +93,8 @@ namespace Castle.MonoRail.Framework.Tests.Wizards
 			actionProvider.IncludeActions(engineContext, controller, context);
 		}
 
-		[Test, ExpectedException(typeof(MonoRailException), ExpectedMessage = "The controller home returned no WizardStepPage")]
+		[Test,
+		 ExpectedException(typeof(MonoRailException), ExpectedMessage = "The controller home returned no WizardStepPage")]
 		public void ThrowsExceptionIfNoStepsAreReturned()
 		{
 			WizardWithNoSteps controller = new WizardWithNoSteps();
@@ -60,36 +104,5 @@ namespace Castle.MonoRail.Framework.Tests.Wizards
 
 			actionProvider.IncludeActions(engineContext, controller, context);
 		}
-
-		#region Controllers
-
-		class NotAWizardController : Controller
-		{
-		}
-
-		class WizardWithNoSteps : Controller, IWizardController
-		{
-			public void OnWizardStart()
-			{
-				throw new System.NotImplementedException();
-			}
-
-			public bool OnBeforeStep(string wizardName, string stepName, IWizardStepPage step)
-			{
-				throw new System.NotImplementedException();
-			}
-
-			public void OnAfterStep(string wizardName, string stepName, IWizardStepPage step)
-			{
-				throw new System.NotImplementedException();
-			}
-
-			public IWizardStepPage[] GetSteps(IEngineContext context)
-			{
-				return null;
-			}
-		}
-
-		#endregion
 	}
 }

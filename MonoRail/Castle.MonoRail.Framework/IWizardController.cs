@@ -14,8 +14,6 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using System;
-
 	/// <summary>
 	/// Depicts the contract for wizard controllers. 
 	/// </summary>
@@ -37,12 +35,17 @@ namespace Castle.MonoRail.Framework
 	///			returtn true; 
 	///		}
 	///	
-	/// 	public void OnAfterStep(String wizardName, String stepName, WizardStepPage step)
+	///		public void OnAfterStep(String wizardName, String stepName, WizardStepPage step)
 	///		{ }
 	///		
 	///		public WizardStepPage[] GetSteps(IHandlerContext context)
 	///		{
 	///			return new WizardStepPage[] { new MyPage1(), new MyPage2() }; 
+	///		}
+	///
+	///		public bool UseCurrentRouteForRedirects
+	///		{
+	///			get { return true; }
 	///		}
 	/// }
 	/// </code>
@@ -55,6 +58,11 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public interface IWizardController : IController
 	{
+		/// <summary>
+		/// True if the implementer want to use the current routing to navigate between wizard steps.
+		/// </summary>
+		bool UseCurrentRouteForRedirects { get; }
+
 		/// <summary>
 		/// Called when the wizard starts. 
 		/// </summary>

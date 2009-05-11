@@ -17,9 +17,9 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using Castle.MonoRail.Framework.Helpers;
-	using Castle.MonoRail.Framework.Internal;
-	using Castle.MonoRail.Framework.Descriptors;
+	using Descriptors;
+	using Helpers;
+	using Internal;
 
 	/// <summary>
 	/// Provide easy to use Wizard-like support.
@@ -37,12 +37,28 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public class WizardActionProvider : IDynamicActionProvider, IDynamicAction
 	{
-		private IWizardStepPage[] steps;
 		private IWizardStepPage currentStepInstance;
-		private String rawAction;
 		private String innerAction;
+		private String rawAction;
 		private String requestedAction;
+		private IWizardStepPage[] steps;
 		private UrlInfo urlInfo;
+
+		#region IDynamicAction Members
+
+		/// <summary>
+		/// Invoked as "start" action
+		/// </summary>
+		/// <returns></returns>
+		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
+		{
+			StartWizard(engineContext, controller, controllerContext, true);
+			return null;
+		}
+
+		#endregion
+
+		#region IDynamicActionProvider Members
 
 		/// <summary>
 		/// Implementation of IDynamicActionProvider.
@@ -63,9 +79,9 @@ namespace Castle.MonoRail.Framework
 			if (wizardController == null)
 			{
 				throw new MonoRailException("The controller {0} must implement the interface " +
-					"IWizardController to be used as a wizard", controllerContext.Name);
+				                            "IWizardController to be used as a wizard", controllerContext.Name);
 			}
-			
+
 			// Grab all Wizard Steps
 
 			steps = wizardController.GetSteps(engineContext);
@@ -76,14 +92,14 @@ namespace Castle.MonoRail.Framework
 			}
 
 			List<string> stepList = new List<string>();
-			
+
 			// Include the "start" dynamic action, which resets the wizard state
 
 			controllerContext.DynamicActions["start"] = this;
 
 			// Find out the action request (and possible inner action)
 			//   Each action will be a step name, or maybe the step name + action (ie Page1-Save)
-			
+
 			urlInfo = engineContext.UrlInfo;
 
 			rawAction = urlInfo.Action;
@@ -99,18 +115,18 @@ namespace Castle.MonoRail.Framework
 
 			engineContext.Items["wizard.step.list"] = stepList;
 
-			SetUpWizardHelper(engineContext, controller, controllerContext);
+			SetUpWizardHelper(engineContext, wizardController, controller, controllerContext);
 
 			// Initialize all steps and while we are at it, 
 			// discover the current step
-			
+
 			foreach(IWizardStepPage step in steps)
 			{
 				string actionName = step.ActionName;
 
 				step.WizardController = wizardController;
 				step.WizardControllerContext = controllerContext;
-				
+
 				if (string.Compare(requestedAction, actionName, true) == 0)
 				{
 					currentStepInstance = step;
@@ -120,7 +136,7 @@ namespace Castle.MonoRail.Framework
 						// If there's an inner action, we invoke it as a step too
 						controllerContext.DynamicActions[rawAction] = new DelegateDynamicAction(OnStepActionRequested);
 					}
-					
+
 					engineContext.CurrentController = step;
 				}
 				else
@@ -131,18 +147,10 @@ namespace Castle.MonoRail.Framework
 				stepList.Add(actionName);
 			}
 
-			SetUpWizardHelper(engineContext, controller, controllerContext);
+			SetUpWizardHelper(engineContext, wizardController, controller, controllerContext);
 		}
 
-		/// <summary>
-		/// Invoked as "start" action
-		/// </summary>
-		/// <returns></returns>
-		public object Execute(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
-		{
-			StartWizard(engineContext, controller, controllerContext, true);
-			return null;
-		}
+		#endregion
 
 		/// <summary>
 		/// Invoked when a step is accessed on the url,
@@ -182,18 +190,18 @@ namespace Castle.MonoRail.Framework
 			{
 				IControllerContext stepContext =
 					engineContext.Services.ControllerContextFactory.Create(
-						controllerContext.AreaName, controllerContext.Name, innerAction, 
+						controllerContext.AreaName, controllerContext.Name, innerAction,
 						stepMetaDescriptor, controllerContext.RouteMatch);
 				stepContext.PropertyBag = controllerContext.PropertyBag;
 
-				SetUpWizardHelper(engineContext, currentStepInstance, stepContext);
-				
+				SetUpWizardHelper(engineContext, wizController, currentStepInstance, stepContext);
+
 				// IsPreConditionSatisfied might need the controller's context
 				if (currentStepInstance is Controller)
 				{
-					((Controller)currentStepInstance).Contextualize(engineContext, stepContext);
+					((Controller) currentStepInstance).Contextualize(engineContext, stepContext);
 				}
-				
+
 				// The step cannot be accessed in the current state of matters
 				if (!currentStepInstance.IsPreConditionSatisfied(engineContext))
 				{
@@ -233,7 +241,7 @@ namespace Castle.MonoRail.Framework
 			String wizardName = WizardUtils.ConstructWizardNamespace(controllerContext);
 
 			return (engineContext.Session.Contains(wizardName + "currentstepindex") &&
-					engineContext.Session.Contains(wizardName + "currentstep"));
+			        engineContext.Session.Contains(wizardName + "currentstep"));
 		}
 
 		/// <summary>
@@ -265,7 +273,14 @@ namespace Castle.MonoRail.Framework
 
 			if (redirect)
 			{
-				engineContext.Response.Redirect(controllerContext.AreaName, controllerContext.Name, firstStep);
+				if (wizardController.UseCurrentRouteForRedirects)
+				{
+					engineContext.Response.RedirectUsingRoute(controllerContext.Name, firstStep, true);
+				}
+				else
+				{
+					engineContext.Response.Redirect(controllerContext.AreaName, controllerContext.Name, firstStep);
+				}
 			}
 		}
 
@@ -303,12 +318,16 @@ namespace Castle.MonoRail.Framework
 			return action;
 		}
 
-		private void SetUpWizardHelper(IEngineContext engineContext, IController controller, IControllerContext controllerContext)
+		private void SetUpWizardHelper(IEngineContext engineContext, IWizardController wizController, IController controller, IControllerContext controllerContext)
 		{
-			if (controller == null) return;
+			if (controller == null)
+			{
+				return;
+			}
 
 			WizardHelper helper = new WizardHelper();
 
+			helper.WizardController = wizController;
 			helper.SetContext(engineContext);
 			helper.SetController(controller, controllerContext);
 

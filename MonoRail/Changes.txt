@@ -1,6 +1,8 @@
 1.0
 ===
 
+- Applied John Simons' patch fixing MR-ISSUE-531
+  "update Monorail Wizard framework to support routing"
 - Fixed missing parameter in function definition for JSON bound parameters.
 - JSONBinder EntryKey is now respected as a serverside parameter name when specified in the attribute.
 - Added JQuery proxy generator.

@@ -77,7 +77,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.DynamicProxy2, Version=2.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" >
+    <Reference Include="Castle.DynamicProxy2, Version=2.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-3.5\debug\Castle.DynamicProxy2.dll</HintPath>
     </Reference>
@@ -93,7 +93,7 @@
       <Name>nunit.framework</Name>
       <HintPath>..\..\SharedLibs\net\2.0\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.Mocks, Version=3.3.0.906, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+    <Reference Include="Rhino.Mocks, Version=3.5.0.1, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\net\2.0\Rhino.Mocks.dll</HintPath>
     </Reference>
@@ -206,6 +206,7 @@
     <Compile Include="Helpers\ValidationHelperTestCase.cs" />
     <Compile Include="Helpers\Validations\FormValidationTestCase.cs" />
     <Compile Include="Helpers\Validations\JQueryFormValidationTestCase.cs" />
+    <Compile Include="Helpers\WizardHelperTestCase.cs" />
     <Compile Include="JSGeneration\DynamicDispatcherTestCase.cs" />
     <Compile Include="JSGeneration\JQueryElementGeneratorTestCase.cs" />
     <Compile Include="JSGeneration\JQueryGeneratorTestCase.cs" />

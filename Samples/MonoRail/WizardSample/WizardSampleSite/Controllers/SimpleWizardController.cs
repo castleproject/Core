@@ -37,6 +37,11 @@ namespace WizardSampleSite.Controllers
 				};
 		}
 
+		public bool UseCurrentRouteForRedirects
+		{
+			get { return false; }
+		}
+
 		public void OnWizardStart()
 		{
 		}
