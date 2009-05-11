@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied patch by Martin Nilsson fixing MR-ISSUE-515
+  "Priorize view engines."
+  MR now guarantees that the view engines are resolved in the order of engine registrations.
 - Applied John Simons' patch fixing MR-ISSUE-531
   "update Monorail Wizard framework to support routing"
 - Fixed missing parameter in function definition for JSON bound parameters.

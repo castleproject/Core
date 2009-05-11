@@ -237,6 +237,7 @@
     <Compile Include="Routing\RoutingEngineCreateUrlTestCase.cs" />
     <Compile Include="Routing\RoutingEngineTestCase.cs" />
     <Compile Include="Services\ControllerTreeTestCase.cs" />
+    <Compile Include="Services\DefaultViewEngineManagerPriorityTestCase.cs" />
     <Compile Include="Services\JQueryAjaxProxyGeneratorTestCase.cs" />
     <Compile Include="Services\DefaultControllerFactoryTestCase.cs" />
     <Compile Include="Services\DefaultMonoRailContainerTestCase.cs" />

@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework.Services
 		private IMonoRailConfiguration config;
 		private IServiceProvider provider;
 		private IDictionary ext2ViewEngine;
-		private IDictionary viewEnginesFastLookup;
+		private readonly IList<IViewEngine> viewEnginesFastLookup;
 		private IDictionary jsgFastLookup;
 
 		/// <summary>
@@ -44,7 +44,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			ext2ViewEngine = new HybridDictionary(true);
 			jsgFastLookup = new HybridDictionary(true);
-			viewEnginesFastLookup = new Hashtable();
+			viewEnginesFastLookup = new List<IViewEngine>();
 		}
 
 		#region IInitializable
@@ -99,7 +99,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="engine">The engine.</param>
 		public void RegisterEngineForExtesionLookup(IViewEngine engine)
 		{
-			viewEnginesFastLookup.Add(engine, null);
+			viewEnginesFastLookup.Add(engine);
 		}
 
 		#endregion
@@ -291,7 +291,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// </summary>
 		/// <param name="templateName">View name</param>
 		/// <returns>A view engine instance</returns>
-		private IViewEngine ResolveEngine(String templateName)
+		public virtual IViewEngine ResolveEngine(String templateName)
 		{
 			return ResolveEngine(templateName, true);
 		}
@@ -305,7 +305,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="throwIfNotFound">If true and no suitable view engine is found, an exception would be thrown</param>
 		/// <param name="templateName">View name</param>
 		/// <returns>A view engine instance</returns>
-		private IViewEngine ResolveEngine(String templateName, bool throwIfNotFound)
+		public virtual IViewEngine ResolveEngine(String templateName, bool throwIfNotFound)
 		{
 			if (Path.HasExtension(templateName))
 			{
@@ -314,7 +314,7 @@ namespace Castle.MonoRail.Framework.Services
 				return engine;
 			}
 
-			foreach(IViewEngine engine in viewEnginesFastLookup.Keys)
+			foreach(IViewEngine engine in viewEnginesFastLookup)
 			{
 				if (engine.HasTemplate(templateName)) return engine;
 			}
