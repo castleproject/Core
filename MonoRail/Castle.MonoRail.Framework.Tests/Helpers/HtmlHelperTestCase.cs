@@ -63,5 +63,31 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.AreEqual( "<ul class=\"style1\">" + Environment.NewLine + "<li class=\"style2\">arg1</li>" + Environment.NewLine + "</ul>" + Environment.NewLine, 
 				helper.BuildUnorderedList(args, "style1", "style2") );
 		}
+
+		[Test]
+		public void BuildDateTime()
+		{
+			HtmlHelper helper = new HtmlHelper();
+			string result = helper.DateTime("dt", new DateTime(2010, 10, 1), DictHelper.Create("startYear=2008", "endYear=2009"));
+			Assert.IsTrue(result.Contains("2009"), "Not generate year properly");
+		}
+
+		[Test]
+		public void BuildDateTimeWithMonthFriendlyName()
+		{
+			HtmlHelper helper = new HtmlHelper();
+			string result = helper.DateTime("dt", new DateTime(2010, 10, 1), DictHelper.Create("startYear=2008", "endYear=2009"));
+			Assert.IsTrue(result.Contains("Jan"), "Month friendly doesn't seem to work");			
+		}
+
+		[Test]
+		public void BuildDateTimeWithCustomMonthFriendlyName()
+		{
+			HtmlHelper helper = new HtmlHelper();
+			string result = helper.DateTime("dt", new DateTime(2010, 10, 1),
+				DictHelper.Create("startYear=2008", "endYear=2009", "monthFriendly=m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12"));
+			Assert.IsTrue(result.Contains("m12"), "Month friendly doesn't seem to work");			
+			
+		}
 	}
 }

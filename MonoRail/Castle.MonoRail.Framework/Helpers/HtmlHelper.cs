@@ -934,28 +934,61 @@ namespace Castle.MonoRail.Framework.Helpers
 			int index = 0;
 			for(int i = 1; i < 32; i++)
 				days[index++] = i.ToString();
-
+			var monthFriendlyNames = CommonUtils.ObtainEntryAndRemove(attributes, "monthFriendly",
+			                                                          "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sept,Oct,Nov,Dec").Split(',');
+			if( monthFriendlyNames.Length != 12)
+			{
+				throw new MonoRailException("The monthFriendly parameter must specify exactly 12 month names. It currently specifies {0} name(s).", monthFriendlyNames.Length);
+			}
 			String[] months = new String[12];
 			index = 0;
-			for(int i = 1; i < 13; i++)
+			for (int i = 1; i < 13; i++)
 				months[index++] = i.ToString();
 
-			String[] years = new String[100];
+			for (int i = 1; i < 13; i++)
+				monthFriendlyNames[i - 1] = monthFriendlyNames[i - 1].Trim();
+
+			int startYear = int.Parse(CommonUtils.ObtainEntryAndRemove(attributes, "startYear", "1930"));
+			int finishYear = int.Parse(CommonUtils.ObtainEntryAndRemove(attributes, "endYear", "2030"));
+			int tmp = 2000;
+			if(startYear > finishYear) {
+				tmp = finishYear;
+				finishYear = startYear;
+				startYear = tmp;
+			}
+			String[] years = new String[finishYear - startYear + 1];
 			index = 0;
-			for(int i = 1930; i < 2030; i++)
+			for(int i = startYear; i <= finishYear; i++)
 				years[index++] = i.ToString();
 
 			StringBuilder sb = new StringBuilder(1024);
 
 			sb.Append(Select(name + "day", attributes));
+			sb.Append(CreateOption("--", "1"));
 			sb.Append(CreateOptionsFromPrimitiveArray(days, value.Day.ToString()));
 			sb.Append(EndSelect());
 			sb.Append(' ');
 			sb.Append(Select(name + "month", attributes));
-			sb.Append(CreateOptionsFromPrimitiveArray(months, value.Month.ToString()));
+			sb.Append(CreateOption("--", "1"));		
+	
+			if(monthFriendlyNames.Length == 12)
+			{
+				index = 0;
+				foreach (string monthName in monthFriendlyNames)
+				{
+					sb.AppendFormat("\t<option{0} value={1}>{2}</option>\r\n",
+													++index == value.Month ? " selected=\"selected\"" : "", index, monthName);
+				}
+			}
+			else
+			{
+				sb.Append(CreateOptionsFromPrimitiveArray(months, value.Month.ToString()));	
+			}
+			
 			sb.Append(EndSelect());
 			sb.Append(' ');
 			sb.Append(Select(name + "year", attributes));
+			sb.Append(CreateOption("----", "1"));
 			sb.Append(CreateOptionsFromPrimitiveArray(years, value.Year.ToString()));
 			sb.Append(EndSelect());
 
