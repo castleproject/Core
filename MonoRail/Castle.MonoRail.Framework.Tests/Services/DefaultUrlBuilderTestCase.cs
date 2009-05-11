@@ -224,6 +224,38 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		}
 
 		[Test]
+		public void ParameterPortOverridesCurrentPort()
+		{
+			UrlInfo url = new UrlInfo("localhost", "", "", "http", 80, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://localhost/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true", "protocol=https", "port=443")));
+
+			url = new UrlInfo("localhost", "", "", "http", 80, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://localhost:441/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true", "protocol=https", "port=441")));
+
+			url = new UrlInfo("localhost", "", "", "https", 443, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://localhost/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true", "protocol=https")));
+
+			url = new UrlInfo("localhost", "", "", "https", 443, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://localhost:441/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true", "protocol=https", "port=441")));
+
+			url = new UrlInfo("localhost", "", "", "https", 443, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("https://localhost/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true")));
+
+			url = new UrlInfo("localhost", "", "", "https", 443, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("http://localhost/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true", "protocol=http", "port=80")));
+
+			url = new UrlInfo("localhost", "", "", "https", 443, "", "", "controller", "action", ".castle", "");
+			Assert.AreEqual("http://localhost:8080/controller/new.castle",
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "absolute=true", "protocol=http", "port=8080")));
+		}
+
+		[Test]
 		public void UseBasePathMustDiscardTheAppVirtualDirInfo()
 		{
 			UrlInfo url = new UrlInfo("area", "controller", "action", "/app", ".castle");

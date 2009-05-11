@@ -454,7 +454,7 @@ namespace Castle.MonoRail.Framework.Services
 				string domain = parameters.Domain ?? current.Domain;
 				string subdomain = parameters.Subdomain ?? current.Subdomain;
 				string protocol = parameters.Protocol ?? current.Protocol;
-				int port = parameters.Port == 0 ? current.Port : 0;
+				int port = parameters.Port == 0 ? current.Port : parameters.Port;
 
 				bool includePort =
 					(protocol == "http" && port != 80) ||
