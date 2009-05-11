@@ -173,6 +173,7 @@
     <Compile Include="Async\ControllerWithBeginIndexWithoutEndIndex.cs" />
     <Compile Include="Async\ControllerWithTwoBeginIndex.cs" />
     <Compile Include="Async\ControllerWithTwoEndActions.cs" />
+    <Compile Include="Bugs\MR-ISSUE-532.cs" />
     <Compile Include="Configuration\ViewEngineConfigTestCase.cs" />
     <Compile Include="Controllers\AccessibleThroughTestCase.cs" />
     <Compile Include="Controllers\Clients\ClientCartController.cs" />

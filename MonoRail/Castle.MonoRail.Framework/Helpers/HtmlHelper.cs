@@ -358,7 +358,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public virtual String Link(String target, String linkText)
 		{
-			return LinkTo(target, linkText);
+			return Link(target, linkText, null);
 		}
 
 		/// <summary>
