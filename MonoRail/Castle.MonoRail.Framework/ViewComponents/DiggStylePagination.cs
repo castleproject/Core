@@ -107,10 +107,19 @@ namespace Castle.MonoRail.Framework.ViewComponents
 					if ((Page.TotalPages - (adjacents * 2) > Page.CurrentPageIndex) && // in the middle
 						(Page.CurrentPageIndex > (adjacents * 2)))
 					{
+						int
+							lowerAdjacentIndex = Page.CurrentPageIndex - adjacents,
+							upperAdjacentIndex = Page.CurrentPageIndex + adjacents;
+						bool
+							requireElipsisBetweenBeginAndLowerAdjacentIndex = (lowerAdjacentIndex - 2) > 1, // elipsis at begin is only required if there is more than one page between lower adjacent and ever displayed begin pages
+							requireElipsisBetweenUpperAdjacentIndexAndEnd = (Page.TotalPages - upperAdjacentIndex) > 1; // elipsis at end is only required if there is more than one page between upper adjacent and ever displayed end pages
+
 						WriteNumberedLinks(writer, 1, 2);
-						WriteElipsis(writer);
-						WriteNumberedLinks(writer, Page.CurrentPageIndex - adjacents, Page.CurrentPageIndex + adjacents);
-						WriteElipsis(writer);
+						if(requireElipsisBetweenBeginAndLowerAdjacentIndex)
+							WriteElipsis(writer);
+						WriteNumberedLinks(writer, lowerAdjacentIndex, upperAdjacentIndex);
+						if(requireElipsisBetweenUpperAdjacentIndexAndEnd)
+							WriteElipsis(writer);
 						WriteNumberedLinks(writer, Page.TotalPages - 1, Page.TotalPages);
 					}
 					else if (Page.CurrentPageIndex < (Page.TotalPages / 2))

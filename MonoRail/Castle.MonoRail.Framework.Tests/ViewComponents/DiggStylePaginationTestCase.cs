@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 	public class DiggStylePaginationTestCase : BaseViewComponentTest
 	{
 		private DiggStylePagination diggComponent;
-		private IPaginatedPage singlePage, secondPageOfThree;
+		private IPaginatedPage singlePage, secondPageOfThree, fifthPageOfTwelve;
 
 		[SetUp]
 		public void Init()
@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 
 			singlePage = new Page(new string[] {"a", "b", "c"}, 1, 4, 1);
 			secondPageOfThree = new Page(new string[] {"a", "b", "c", "d"}, 2, 4, 10);
-
+			fifthPageOfTwelve = new Page(new string[] {"e"}, 5, 1, 12);
 			BuildEngineContext("area", "controller", "action");
 		}
 
@@ -160,6 +160,27 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 			Assert.IsTrue(diggComponent.SupportsSection("endblock"), "Supports endblock Section");
 			Assert.IsTrue(diggComponent.SupportsSection("link"), "Supports Links Section");
 			Assert.IsFalse(diggComponent.SupportsSection("NotSupported"), "Unsupported section");
+		}
+
+
+		[Test]
+		public void ShouldNotRenderElipsisBetweenTwoAndThreeWhenAtPageFiveAndAdjacentsSetToTwo()
+		{
+			string newlinesymbol = "\r\n";
+			string outputThatIsNotExpected = string.Format(
+				@"<a href=""/something?page=2"">2</a>{0}&#8230;<a href=""/something?page=3"">3</a>", 
+				newlinesymbol
+				);
+			diggComponent.Page = fifthPageOfTwelve;
+			diggComponent.UseInlineStyle = false;
+			diggComponent.Adjacents = 2;
+			Request.FilePath = "/something";
+			PrepareViewComponent(diggComponent);
+			
+			diggComponent.Render();
+
+			Assert.IsFalse(Output.Contains(outputThatIsNotExpected));
+			System.Console.WriteLine(Output);
 		}
 	}
 }
