@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Providers
 {
 	using System;
+	using System.Threading;
 	using System.Collections.Generic;
 	using Castle.MonoRail.Framework;
 	using Descriptors;
@@ -28,6 +29,8 @@ namespace Castle.MonoRail.Framework.Providers
 	{
 		private readonly IDictionary<Type, ViewComponentDescriptor> type2Desc =
 			new Dictionary<Type, ViewComponentDescriptor>();
+
+		private static readonly ReaderWriterLock locker = new ReaderWriterLock();
 
 		/// <summary>
 		/// Services the specified provider.
@@ -47,12 +50,20 @@ namespace Castle.MonoRail.Framework.Providers
 		{
 			if (viewComponentType == null) throw new ArgumentNullException("viewComponentType");
 
-			if (type2Desc.ContainsKey(viewComponentType))
+			locker.AcquireReaderLock(-1);
+			try
 			{
-				return type2Desc[viewComponentType];
+				if (type2Desc.ContainsKey(viewComponentType))
+				{
+					return type2Desc[viewComponentType];
+				}
+			}
+			finally
+			{
+				locker.ReleaseReaderLock();
 			}
 
-			object[] attrs = viewComponentType.GetCustomAttributes(typeof(ViewComponentDetailsAttribute), true);
+			object[] attrs = viewComponentType.GetCustomAttributes(typeof (ViewComponentDetailsAttribute), true);
 
 			ViewComponentDescriptor descriptor;
 
@@ -77,7 +88,7 @@ namespace Castle.MonoRail.Framework.Providers
 						generator = (IViewComponentCacheKeyGenerator)
 						            Activator.CreateInstance(details.CacheKeyFactory);
 					}
-					catch(Exception ex)
+					catch (Exception ex)
 					{
 						throw new MonoRailException(
 							"Could not instantiate IViewComponentCacheKeyGenerator implementation or " +
@@ -88,7 +99,15 @@ namespace Castle.MonoRail.Framework.Providers
 				descriptor = new ViewComponentDescriptor(details.Cache != ViewComponentCache.Disabled, details.Cache, generator);
 			}
 
-			type2Desc[viewComponentType] = descriptor;
+			locker.UpgradeToWriterLock(-1);
+			try
+			{
+				type2Desc[viewComponentType] = descriptor;
+			}
+			finally
+			{
+				locker.ReleaseWriterLock();
+			}
 
 			return descriptor;
 		}
