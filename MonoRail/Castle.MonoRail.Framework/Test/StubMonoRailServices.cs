@@ -448,7 +448,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// <returns></returns>
 		public T GetService<T>() where T : class
 		{
-			return (T) service2Impl[typeof(T)];
+			return (T) GetService(typeof(T));
 		}
 
 		/// <summary>
