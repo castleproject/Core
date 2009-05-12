@@ -36,7 +36,7 @@ namespace Castle.MonoRail.Framework.Test
 		private string urlReferrer;
 		private bool isLocal = true;
 		private string httpMethod = "GET";
-		private string[] userLanguages = new string[] {"en-ES", "pt-BR"};
+		private string[] userLanguages = new string[] {"en-US", "pt-BR"};
 		private string rawUrl = null;
 		private string filePath = null;
 		private Uri uri = null;
