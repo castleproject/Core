@@ -25,6 +25,7 @@ namespace Castle.MonoRail.Framework.Container
 	using Castle.MonoRail.Framework.Providers;
 	using Castle.MonoRail.Framework.Resources;
 	using Castle.MonoRail.Framework.Services.AjaxProxyGenerator;
+	using Components.DictionaryAdapter;
 
 	/// <summary>
 	/// Pendent
@@ -138,10 +139,10 @@ namespace Castle.MonoRail.Framework.Container
 			/// The <see cref="ITransformFilterDescriptorProvider"/> service
 			/// </summary>
 			TransformFilterDescriptorProvider,
-//			/// <summary>
-//			/// The <see cref="ITransformFilterFactory"/> service
-//			/// </summary>
-//			TransformationFilterFactory,
+			//			/// <summary>
+			//			/// The <see cref="ITransformFilterFactory"/> service
+			//			/// </summary>
+			//			TransformationFilterFactory,
 			/// <summary>
 			/// The <see cref="IViewEngineManager"/> service
 			/// </summary>
@@ -165,7 +166,12 @@ namespace Castle.MonoRail.Framework.Container
 			/// <summary>
 			/// The <see cref="IDynamicActionProviderDescriptorProvider"/> service.
 			/// </summary>
-			DynamicActionProviderDescriptorProvider
+			DynamicActionProviderDescriptorProvider,
+
+			/// <summary>
+			/// The <see cref="IDictionaryAdapterFactory"/> service.
+			/// </summary>
+			DictionaryAdapterFactory
 		}
 
 		#endregion
@@ -195,12 +201,14 @@ namespace Castle.MonoRail.Framework.Container
 		private IDynamicActionProviderFactory dynamicActionProviderFactoryCached;
 		private IAjaxProxyGenerator ajaxProxyGeneratorCached;
 		private ExtensionManager extensionManager;
+		private IDictionaryAdapterFactory dictionaryAdapterFactoryCached;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultMonoRailContainer"/> class.
 		/// </summary>
 		/// <param name="parentContainer">The parent container.</param>
-		public DefaultMonoRailContainer(IServiceProvider parentContainer) : base(parentContainer)
+		public DefaultMonoRailContainer( IServiceProvider parentContainer )
+			: base( parentContainer )
 		{
 		}
 
@@ -216,162 +224,169 @@ namespace Castle.MonoRail.Framework.Container
 		/// </summary>
 		public void UseServicesFromParent()
 		{
-			if (Parent == null)
+			if( Parent == null )
 			{
 				return;
 			}
 
-			IServiceInitializer serviceInitializer = (IServiceInitializer) Parent.GetService(typeof(IServiceInitializer));
-			if (serviceInitializer != null)
+			IServiceInitializer serviceInitializer = ( IServiceInitializer )Parent.GetService( typeof( IServiceInitializer ) );
+			if( serviceInitializer != null )
 			{
-				AddService(typeof(IServiceInitializer), serviceInitializer);
+				AddService( typeof( IServiceInitializer ), serviceInitializer );
 			}
 
-			IHelperFactory helperFactory = (IHelperFactory) Parent.GetService(typeof(IHelperFactory));
-			if (helperFactory != null)
+			IHelperFactory helperFactory = ( IHelperFactory )Parent.GetService( typeof( IHelperFactory ) );
+			if( helperFactory != null )
 			{
-				AddService(typeof(IHelperFactory), helperFactory);
+				AddService( typeof( IHelperFactory ), helperFactory );
 			}
 
-			IUrlTokenizer urlTokenizer = (IUrlTokenizer) Parent.GetService(typeof(IUrlTokenizer));
-			if (urlTokenizer != null)
+			IUrlTokenizer urlTokenizer = ( IUrlTokenizer )Parent.GetService( typeof( IUrlTokenizer ) );
+			if( urlTokenizer != null )
 			{
-				AddService(typeof(IUrlTokenizer), urlTokenizer);
+				AddService( typeof( IUrlTokenizer ), urlTokenizer );
 			}
 
-			IUrlBuilder urlBuilder = (IUrlBuilder) Parent.GetService(typeof(IUrlBuilder));
-			if (urlBuilder != null)
+			IUrlBuilder urlBuilder = ( IUrlBuilder )Parent.GetService( typeof( IUrlBuilder ) );
+			if( urlBuilder != null )
 			{
-				AddService(typeof(IUrlBuilder), urlBuilder);
+				AddService( typeof( IUrlBuilder ), urlBuilder );
 			}
 
-			ICacheProvider cacheProvider = (ICacheProvider) Parent.GetService(typeof(ICacheProvider));
-			if (cacheProvider != null)
+			ICacheProvider cacheProvider = ( ICacheProvider )Parent.GetService( typeof( ICacheProvider ) );
+			if( cacheProvider != null )
 			{
-				AddService(typeof(ICacheProvider), cacheProvider);
+				AddService( typeof( ICacheProvider ), cacheProvider );
 			}
 
-			IEngineContextFactory engContextFactory = (IEngineContextFactory) Parent.GetService(typeof(IEngineContextFactory));
-			if (engContextFactory != null)
+			IEngineContextFactory engContextFactory = ( IEngineContextFactory )Parent.GetService( typeof( IEngineContextFactory ) );
+			if( engContextFactory != null )
 			{
-				AddService(typeof(IEngineContextFactory), engContextFactory);
+				AddService( typeof( IEngineContextFactory ), engContextFactory );
 			}
 
-			IControllerFactory controllerFactory = (IControllerFactory) Parent.GetService(typeof(IControllerFactory));
-			if (controllerFactory != null)
+			IControllerFactory controllerFactory = ( IControllerFactory )Parent.GetService( typeof( IControllerFactory ) );
+			if( controllerFactory != null )
 			{
-				AddService(typeof(IControllerFactory), controllerFactory);
+				AddService( typeof( IControllerFactory ), controllerFactory );
 			}
 
 			IControllerContextFactory controllerCtxFactory =
-				(IControllerContextFactory) Parent.GetService(typeof(IControllerContextFactory));
-			if (controllerCtxFactory != null)
+				( IControllerContextFactory )Parent.GetService( typeof( IControllerContextFactory ) );
+			if( controllerCtxFactory != null )
 			{
-				AddService(typeof(IControllerContextFactory), controllerCtxFactory);
+				AddService( typeof( IControllerContextFactory ), controllerCtxFactory );
 			}
 
-			IControllerTree controllerTree = (IControllerTree) Parent.GetService(typeof(IControllerTree));
-			if (controllerTree != null)
+			IControllerTree controllerTree = ( IControllerTree )Parent.GetService( typeof( IControllerTree ) );
+			if( controllerTree != null )
 			{
-				AddService(typeof(IControllerTree), controllerTree);
+				AddService( typeof( IControllerTree ), controllerTree );
 			}
 
-			IViewSourceLoader viewSourceLoader = (IViewSourceLoader) Parent.GetService(typeof(IViewSourceLoader));
-			if (viewSourceLoader != null)
+			IViewSourceLoader viewSourceLoader = ( IViewSourceLoader )Parent.GetService( typeof( IViewSourceLoader ) );
+			if( viewSourceLoader != null )
 			{
-				AddService(typeof(IViewSourceLoader), viewSourceLoader);
+				AddService( typeof( IViewSourceLoader ), viewSourceLoader );
 			}
 
-			IFilterFactory filterFactory = (IFilterFactory) Parent.GetService(typeof(IFilterFactory));
-			if (filterFactory != null)
+			IFilterFactory filterFactory = ( IFilterFactory )Parent.GetService( typeof( IFilterFactory ) );
+			if( filterFactory != null )
 			{
-				AddService(typeof(IFilterFactory), filterFactory);
+				AddService( typeof( IFilterFactory ), filterFactory );
 			}
 
 			IDynamicActionProviderFactory dynamicActionProviderFactory =
-				(IDynamicActionProviderFactory)Parent.GetService(typeof(IDynamicActionProviderFactory));
-			if (dynamicActionProviderFactory != null)
+				( IDynamicActionProviderFactory )Parent.GetService( typeof( IDynamicActionProviderFactory ) );
+			if( dynamicActionProviderFactory != null )
 			{
-				AddService(typeof(IDynamicActionProviderFactory), dynamicActionProviderFactory);
+				AddService( typeof( IDynamicActionProviderFactory ), dynamicActionProviderFactory );
 			}
 
 			IControllerDescriptorProvider controllerDescriptorProvider =
-				(IControllerDescriptorProvider) Parent.GetService(typeof(IControllerDescriptorProvider));
-			if (controllerDescriptorProvider != null)
+				( IControllerDescriptorProvider )Parent.GetService( typeof( IControllerDescriptorProvider ) );
+			if( controllerDescriptorProvider != null )
 			{
-				AddService(typeof(IControllerDescriptorProvider), controllerDescriptorProvider);
+				AddService( typeof( IControllerDescriptorProvider ), controllerDescriptorProvider );
 			}
 
 			ITransformFilterDescriptorProvider transformFilterDescriptorProvider =
-				(ITransformFilterDescriptorProvider) Parent.GetService(typeof(ITransformFilterDescriptorProvider));
-			if (transformFilterDescriptorProvider != null)
+				( ITransformFilterDescriptorProvider )Parent.GetService( typeof( ITransformFilterDescriptorProvider ) );
+			if( transformFilterDescriptorProvider != null )
 			{
-				AddService(typeof(ITransformFilterDescriptorProvider), transformFilterDescriptorProvider);
+				AddService( typeof( ITransformFilterDescriptorProvider ), transformFilterDescriptorProvider );
 			}
 
 			IReturnBinderDescriptorProvider returnBinderDescriptorProvider =
-				(IReturnBinderDescriptorProvider) Parent.GetService(typeof(IReturnBinderDescriptorProvider));
-			if (returnBinderDescriptorProvider != null)
+				( IReturnBinderDescriptorProvider )Parent.GetService( typeof( IReturnBinderDescriptorProvider ) );
+			if( returnBinderDescriptorProvider != null )
 			{
-				AddService(typeof(IReturnBinderDescriptorProvider), returnBinderDescriptorProvider);
+				AddService( typeof( IReturnBinderDescriptorProvider ), returnBinderDescriptorProvider );
 			}
 
-			IViewEngineManager viewEngManager = (IViewEngineManager) Parent.GetService(typeof(IViewEngineManager));
-			if (viewEngManager != null)
+			IViewEngineManager viewEngManager = ( IViewEngineManager )Parent.GetService( typeof( IViewEngineManager ) );
+			if( viewEngManager != null )
 			{
-				AddService(typeof(IViewEngineManager), viewEngManager);
+				AddService( typeof( IViewEngineManager ), viewEngManager );
 			}
 
-			IViewComponentFactory viewComponentFactory = (IViewComponentFactory) Parent.GetService(typeof(IViewComponentFactory));
-			if (viewComponentFactory != null)
+			IViewComponentFactory viewComponentFactory = ( IViewComponentFactory )Parent.GetService( typeof( IViewComponentFactory ) );
+			if( viewComponentFactory != null )
 			{
-				AddService(typeof(IViewComponentFactory), viewComponentFactory);
+				AddService( typeof( IViewComponentFactory ), viewComponentFactory );
 			}
 
-			IViewComponentRegistry viewComponentRegistry = (IViewComponentRegistry) Parent.GetService(typeof(IViewComponentRegistry));
-			if (viewComponentRegistry != null)
+			IViewComponentRegistry viewComponentRegistry = ( IViewComponentRegistry )Parent.GetService( typeof( IViewComponentRegistry ) );
+			if( viewComponentRegistry != null )
 			{
-				AddService(typeof(IViewComponentRegistry), viewComponentRegistry);
+				AddService( typeof( IViewComponentRegistry ), viewComponentRegistry );
 			}
 
-			IValidatorRegistry validatorRegistry = (IValidatorRegistry) Parent.GetService(typeof(IValidatorRegistry));
-			if (validatorRegistry != null)
+			IValidatorRegistry validatorRegistry = ( IValidatorRegistry )Parent.GetService( typeof( IValidatorRegistry ) );
+			if( validatorRegistry != null )
 			{
-				AddService(typeof(IValidatorRegistry), validatorRegistry);
+				AddService( typeof( IValidatorRegistry ), validatorRegistry );
 			}
 
-			IJSONSerializer jsonSerializer = (IJSONSerializer) Parent.GetService(typeof(IJSONSerializer));
-			if (jsonSerializer != null)
+			IJSONSerializer jsonSerializer = ( IJSONSerializer )Parent.GetService( typeof( IJSONSerializer ) );
+			if( jsonSerializer != null )
 			{
-				AddService(typeof(IJSONSerializer), jsonSerializer);
+				AddService( typeof( IJSONSerializer ), jsonSerializer );
 			}
 
 			IStaticResourceRegistry staticResourceRegistry =
-				(IStaticResourceRegistry) Parent.GetService(typeof(IStaticResourceRegistry));
-			if (staticResourceRegistry != null)
+				( IStaticResourceRegistry )Parent.GetService( typeof( IStaticResourceRegistry ) );
+			if( staticResourceRegistry != null )
 			{
-				AddService(typeof(IStaticResourceRegistry), staticResourceRegistry);
+				AddService( typeof( IStaticResourceRegistry ), staticResourceRegistry );
 			}
 
 			IEmailTemplateService emailTemplateService =
-				(IEmailTemplateService) Parent.GetService(typeof(IEmailTemplateService));
-			if (emailTemplateService != null)
+				( IEmailTemplateService )Parent.GetService( typeof( IEmailTemplateService ) );
+			if( emailTemplateService != null )
 			{
-				AddService(typeof(IEmailTemplateService), emailTemplateService);
+				AddService( typeof( IEmailTemplateService ), emailTemplateService );
 			}
 
 			IEmailSender emailSender =
-				(IEmailSender) Parent.GetService(typeof(IEmailSender));
-			if (emailSender != null)
+				( IEmailSender )Parent.GetService( typeof( IEmailSender ) );
+			if( emailSender != null )
 			{
-				AddService(typeof(IEmailSender), emailSender);
+				AddService( typeof( IEmailSender ), emailSender );
 			}
 
 			IResourceFactory resourceFactory =
-				(IResourceFactory) Parent.GetService(typeof(IResourceFactory));
-			if (resourceFactory != null)
+				( IResourceFactory )Parent.GetService( typeof( IResourceFactory ) );
+			if( resourceFactory != null )
 			{
-				AddService(typeof(IResourceFactory), resourceFactory);
+				AddService( typeof( IResourceFactory ), resourceFactory );
+			}
+
+			IDictionaryAdapterFactory dictionaryAdapterFactory =
+			( IDictionaryAdapterFactory )Parent.GetService( typeof( IDictionaryAdapterFactory ) );
+			if( dictionaryAdapterFactory != null )
+			{
+				AddService( typeof( IDictionaryAdapterFactory ), dictionaryAdapterFactory );
 			}
 		}
 
@@ -380,9 +395,9 @@ namespace Castle.MonoRail.Framework.Container
 		/// </summary>
 		public void InstallPrimordialServices()
 		{
-			if (!HasService<IServiceInitializer>())
+			if( !HasService<IServiceInitializer>() )
 			{
-				AddService<IServiceInitializer>(new DefaultServiceInitializer());
+				AddService<IServiceInitializer>( new DefaultServiceInitializer() );
 			}
 		}
 
@@ -391,137 +406,141 @@ namespace Castle.MonoRail.Framework.Container
 		/// </summary>
 		public void InstallMissingServices()
 		{
-			if (!HasService<IHelperFactory>())
+			if( !HasService<IHelperFactory>() )
 			{
-				AddService<IHelperFactory>(new DefaultHelperFactory());
+				AddService<IHelperFactory>( new DefaultHelperFactory() );
 			}
-			if (!HasService<IControllerTree>())
+			if( !HasService<IControllerTree>() )
 			{
-				AddService<IControllerTree>(CreateService<DefaultControllerTree>());
+				AddService<IControllerTree>( CreateService<DefaultControllerTree>() );
 			}
-			if (!HasService<IUrlTokenizer>())
+			if( !HasService<IUrlTokenizer>() )
 			{
-				AddService<IUrlTokenizer>(CreateService<DefaultUrlTokenizer>());
+				AddService<IUrlTokenizer>( CreateService<DefaultUrlTokenizer>() );
 			}
-			if (!HasService<IUrlBuilder>())
+			if( !HasService<IUrlBuilder>() )
 			{
-				AddService<IUrlBuilder>(CreateService<DefaultUrlBuilder>());
+				AddService<IUrlBuilder>( CreateService<DefaultUrlBuilder>() );
 			}
-			if (!HasService<ICacheProvider>())
+			if( !HasService<ICacheProvider>() )
 			{
-				AddService<ICacheProvider>(CreateService<DefaultCacheProvider>());
+				AddService<ICacheProvider>( CreateService<DefaultCacheProvider>() );
 			}
-			if (!HasService<IEngineContextFactory>())
+			if( !HasService<IEngineContextFactory>() )
 			{
-				AddService<IEngineContextFactory>(CreateService<DefaultEngineContextFactory>());
+				AddService<IEngineContextFactory>( CreateService<DefaultEngineContextFactory>() );
 			}
-			if (!HasService<IControllerContextFactory>())
+			if( !HasService<IControllerContextFactory>() )
 			{
-				AddService<IControllerContextFactory>(CreateService<DefaultControllerContextFactory>());
+				AddService<IControllerContextFactory>( CreateService<DefaultControllerContextFactory>() );
 			}
-			if (!HasService<IControllerFactory>())
+			if( !HasService<IControllerFactory>() )
 			{
-				AddService<IControllerFactory>(CreateService<DefaultControllerFactory>());
+				AddService<IControllerFactory>( CreateService<DefaultControllerFactory>() );
 			}
-			if (!HasService<IViewSourceLoader>())
+			if( !HasService<IViewSourceLoader>() )
 			{
-				AddService<IViewSourceLoader>(CreateService<FileAssemblyViewSourceLoader>());
+				AddService<IViewSourceLoader>( CreateService<FileAssemblyViewSourceLoader>() );
 			}
-			if (!HasService<IFilterFactory>())
+			if( !HasService<IFilterFactory>() )
 			{
-				AddService<IFilterFactory>(CreateService<DefaultFilterFactory>());
+				AddService<IFilterFactory>( CreateService<DefaultFilterFactory>() );
 			}
-			if (!HasService<IResourceDescriptorProvider>())
+			if( !HasService<IResourceDescriptorProvider>() )
 			{
-				AddService<IResourceDescriptorProvider>(CreateService<DefaultResourceDescriptorProvider>());
+				AddService<IResourceDescriptorProvider>( CreateService<DefaultResourceDescriptorProvider>() );
 			}
-			if (!HasService<IRescueDescriptorProvider>())
+			if( !HasService<IRescueDescriptorProvider>() )
 			{
-				AddService<IRescueDescriptorProvider>(CreateService<DefaultRescueDescriptorProvider>());
+				AddService<IRescueDescriptorProvider>( CreateService<DefaultRescueDescriptorProvider>() );
 			}
-			if (!HasService<IResourceFactory>())
+			if( !HasService<IResourceFactory>() )
 			{
-				AddService<IResourceFactory>(CreateService<DefaultResourceFactory>());
+				AddService<IResourceFactory>( CreateService<DefaultResourceFactory>() );
 			}
-			if (!HasService<ITransformFilterFactory>())
+			if( !HasService<ITransformFilterFactory>() )
 			{
-				AddService<ITransformFilterFactory>(CreateService<DefaultTransformFilterFactory>());
+				AddService<ITransformFilterFactory>( CreateService<DefaultTransformFilterFactory>() );
 			}
-			if (!HasService<IFilterDescriptorProvider>())
+			if( !HasService<IFilterDescriptorProvider>() )
 			{
-				AddService<IFilterDescriptorProvider>(CreateService<DefaultFilterDescriptorProvider>());
+				AddService<IFilterDescriptorProvider>( CreateService<DefaultFilterDescriptorProvider>() );
 			}
-			if (!HasService<IHelperDescriptorProvider>())
+			if( !HasService<IHelperDescriptorProvider>() )
 			{
-				AddService<IHelperDescriptorProvider>(CreateService<DefaultHelperDescriptorProvider>());
+				AddService<IHelperDescriptorProvider>( CreateService<DefaultHelperDescriptorProvider>() );
 			}
-			if (!HasService<ILayoutDescriptorProvider>())
+			if( !HasService<ILayoutDescriptorProvider>() )
 			{
-				AddService<ILayoutDescriptorProvider>(CreateService<DefaultLayoutDescriptorProvider>());
+				AddService<ILayoutDescriptorProvider>( CreateService<DefaultLayoutDescriptorProvider>() );
 			}
-			if (!HasService<ITransformFilterDescriptorProvider>())
+			if( !HasService<ITransformFilterDescriptorProvider>() )
 			{
-				AddService<ITransformFilterDescriptorProvider>(CreateService<DefaultTransformFilterDescriptorProvider>());
+				AddService<ITransformFilterDescriptorProvider>( CreateService<DefaultTransformFilterDescriptorProvider>() );
 			}
-			if (!HasService<IReturnBinderDescriptorProvider>())
+			if( !HasService<IReturnBinderDescriptorProvider>() )
 			{
-				AddService<IReturnBinderDescriptorProvider>(CreateService<DefaultReturnBinderDescriptorProvider>());
+				AddService<IReturnBinderDescriptorProvider>( CreateService<DefaultReturnBinderDescriptorProvider>() );
 			}
-			if (!HasService<IDynamicActionProviderFactory>())
+			if( !HasService<IDynamicActionProviderFactory>() )
 			{
-				AddService<IDynamicActionProviderFactory>(CreateService<DefaultDynamicActionProviderFactory>());
+				AddService<IDynamicActionProviderFactory>( CreateService<DefaultDynamicActionProviderFactory>() );
 			}
-			if (!HasService<IDynamicActionProviderDescriptorProvider>())
+			if( !HasService<IDynamicActionProviderDescriptorProvider>() )
 			{
-				AddService<IDynamicActionProviderDescriptorProvider>(CreateService<DefaultDynamicActionProviderDescriptorProvider>());
+				AddService<IDynamicActionProviderDescriptorProvider>( CreateService<DefaultDynamicActionProviderDescriptorProvider>() );
 			}
-			if (!HasService<IControllerDescriptorProvider>())
+			if( !HasService<IControllerDescriptorProvider>() )
 			{
-				AddService<IControllerDescriptorProvider>(CreateService<DefaultControllerDescriptorProvider>());
+				AddService<IControllerDescriptorProvider>( CreateService<DefaultControllerDescriptorProvider>() );
 			}
-			if (!HasService<IViewEngineManager>())
+			if( !HasService<IViewEngineManager>() )
 			{
-				AddService<IViewEngineManager>(CreateService<DefaultViewEngineManager>());
+				AddService<IViewEngineManager>( CreateService<DefaultViewEngineManager>() );
 			}
-			if (!HasService<IValidatorRegistry>())
+			if( !HasService<IValidatorRegistry>() )
 			{
-				AddService<IValidatorRegistry>(CreateService<CachedValidationRegistry>());
+				AddService<IValidatorRegistry>( CreateService<CachedValidationRegistry>() );
 			}
-			if (!HasService<IActionSelector>())
+			if( !HasService<IActionSelector>() )
 			{
-				AddService<IActionSelector>(CreateService<DefaultActionSelector>());
+				AddService<IActionSelector>( CreateService<DefaultActionSelector>() );
 			}
-			if (!HasService<IJSONSerializer>())
+			if( !HasService<IJSONSerializer>() )
 			{
-				AddService<IJSONSerializer>(CreateService<NewtonsoftJSONSerializer>());
+				AddService<IJSONSerializer>( CreateService<NewtonsoftJSONSerializer>() );
 			}
-			if (!HasService<IStaticResourceRegistry>())
+			if( !HasService<IStaticResourceRegistry>() )
 			{
-				AddService<IStaticResourceRegistry>(CreateService<DefaultStaticResourceRegistry>());
+				AddService<IStaticResourceRegistry>( CreateService<DefaultStaticResourceRegistry>() );
 			}
-			if (!HasService<IViewComponentRegistry>())
+			if( !HasService<IViewComponentRegistry>() )
 			{
-				AddService<IViewComponentRegistry>(CreateService<DefaultViewComponentRegistry>());
+				AddService<IViewComponentRegistry>( CreateService<DefaultViewComponentRegistry>() );
 			}
-			if (!HasService<IViewComponentFactory>())
+			if( !HasService<IViewComponentFactory>() )
 			{
-				AddService<IViewComponentFactory>(CreateService<DefaultViewComponentFactory>());
+				AddService<IViewComponentFactory>( CreateService<DefaultViewComponentFactory>() );
 			}
-			if (!HasService<IViewComponentDescriptorProvider>())
+			if( !HasService<IViewComponentDescriptorProvider>() )
 			{
-				AddService<IViewComponentDescriptorProvider>(CreateService<DefaultViewComponentDescriptorProvider>());
+				AddService<IViewComponentDescriptorProvider>( CreateService<DefaultViewComponentDescriptorProvider>() );
 			}
-			if (!HasService<IEmailTemplateService>())
+			if( !HasService<IEmailTemplateService>() )
 			{
-				AddService<IEmailTemplateService>(CreateService<EmailTemplateService>());
+				AddService<IEmailTemplateService>( CreateService<EmailTemplateService>() );
 			}
-			if (!HasService<IEmailSender>())
+			if( !HasService<IEmailSender>() )
 			{
-				AddService<IEmailSender>(CreateService<MonoRailSmtpSender>());
+				AddService<IEmailSender>( CreateService<MonoRailSmtpSender>() );
 			}
-			if (!HasService<IAjaxProxyGenerator>())
+			if( !HasService<IAjaxProxyGenerator>() )
 			{
-				AddService<IAjaxProxyGenerator>(CreateService<PrototypeAjaxProxyGenerator>());
+				AddService<IAjaxProxyGenerator>( CreateService<PrototypeAjaxProxyGenerator>() );
+			}
+			if( !HasService<IDictionaryAdapterFactory>() )
+			{
+				AddService<IDictionaryAdapterFactory>( CreateService<DictionaryAdapterFactory>() );
 			}
 		}
 
@@ -530,21 +549,21 @@ namespace Castle.MonoRail.Framework.Container
 		/// </summary>
 		public void StartExtensionManager()
 		{
-			extensionManager = new ExtensionManager(this);
+			extensionManager = new ExtensionManager( this );
 
-			AddService(typeof(ExtensionManager), extensionManager);
+			AddService( typeof( ExtensionManager ), extensionManager );
 
 			IMonoRailConfiguration config = GetService<IMonoRailConfiguration>();
 
-			foreach(ExtensionEntry entry in config.ExtensionEntries)
+			foreach( ExtensionEntry entry in config.ExtensionEntries )
 			{
-				AssertImplementsService(typeof(IMonoRailExtension), entry.ExtensionType);
+				AssertImplementsService( typeof( IMonoRailExtension ), entry.ExtensionType );
 
-				IMonoRailExtension extension = (IMonoRailExtension) CreateService(entry.ExtensionType);
+				IMonoRailExtension extension = ( IMonoRailExtension )CreateService( entry.ExtensionType );
 
-				extension.SetExtensionConfigNode(entry.ExtensionNode);
+				extension.SetExtensionConfigNode( entry.ExtensionNode );
 
-				extensionManager.Extensions.Add(extension);
+				extensionManager.Extensions.Add( extension );
 			}
 		}
 
@@ -552,23 +571,23 @@ namespace Castle.MonoRail.Framework.Container
 		/// Configures the specified config.
 		/// </summary>
 		/// <param name="config">The config.</param>
-		public void Configure(IMonoRailConfiguration config)
+		public void Configure( IMonoRailConfiguration config )
 		{
-			if (config == null) throw new ArgumentNullException("config");
+			if( config == null ) throw new ArgumentNullException( "config" );
 
-			AddService<IMonoRailConfiguration>(config);
+			AddService<IMonoRailConfiguration>( config );
 
-			if (config.ServicesConfig != null)
+			if( config.ServicesConfig != null )
 			{
-				foreach(IConfiguration serviceConfig in config.ServicesConfig.Children)
+				foreach( IConfiguration serviceConfig in config.ServicesConfig.Children )
 				{
-					RegisterServiceOverrideFromConfigurationNode(serviceConfig);
+					RegisterServiceOverrideFromConfigurationNode( serviceConfig );
 				}
 			}
 
-			if (!HasService<IScaffoldingSupport>() && config.ScaffoldConfig.ScaffoldImplType != null)
+			if( !HasService<IScaffoldingSupport>() && config.ScaffoldConfig.ScaffoldImplType != null )
 			{
-				AddService<IScaffoldingSupport>(Activator.CreateInstance(config.ScaffoldConfig.ScaffoldImplType));
+				AddService<IScaffoldingSupport>( Activator.CreateInstance( config.ScaffoldConfig.ScaffoldImplType ) );
 			}
 		}
 
@@ -577,31 +596,31 @@ namespace Castle.MonoRail.Framework.Container
 		/// </summary>
 		/// <param name="type">The service type.</param>
 		/// <returns></returns>
-		protected override object CreateService(Type type)
+		protected override object CreateService( Type type )
 		{
-			if (type == null)
+			if( type == null )
 			{
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException( "type" );
 			}
 
 			object instance;
 
 			try
 			{
-				instance = Activator.CreateInstance(type);
+				instance = Activator.CreateInstance( type );
 			}
-			catch(Exception ex)
+			catch( Exception ex )
 			{
-				throw new MonoRailException("Error trying to instantiate service " + type.FullName, ex);
+				throw new MonoRailException( "Error trying to instantiate service " + type.FullName, ex );
 			}
 
 			try
 			{
-				ServiceInitializer.Initialize(instance, this);
+				ServiceInitializer.Initialize( instance, this );
 			}
-			catch(Exception ex)
+			catch( Exception ex )
 			{
-				throw new MonoRailException("Error running lifecycle steps for MonoRail service " + type.FullName, ex);
+				throw new MonoRailException( "Error running lifecycle steps for MonoRail service " + type.FullName, ex );
 			}
 
 			return instance;
@@ -617,7 +636,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (urlTokenizerCached == null)
+				if( urlTokenizerCached == null )
 				{
 					urlTokenizerCached = GetService<IUrlTokenizer>();
 				}
@@ -625,8 +644,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IUrlTokenizer));
-				AddService<IUrlTokenizer>(value);
+				RemoveService( typeof( IUrlTokenizer ) );
+				AddService<IUrlTokenizer>( value );
 				urlTokenizerCached = value;
 			}
 		}
@@ -639,7 +658,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (urlBuilderCached == null)
+				if( urlBuilderCached == null )
 				{
 					urlBuilderCached = GetService<IUrlBuilder>();
 				}
@@ -647,8 +666,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IUrlBuilder));
-				AddService<IUrlBuilder>(value);
+				RemoveService( typeof( IUrlBuilder ) );
+				AddService<IUrlBuilder>( value );
 				urlBuilderCached = value;
 			}
 		}
@@ -661,7 +680,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (cacheProviderCached == null)
+				if( cacheProviderCached == null )
 				{
 					cacheProviderCached = GetService<ICacheProvider>();
 				}
@@ -669,8 +688,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(ICacheProvider));
-				AddService<ICacheProvider>(value);
+				RemoveService( typeof( ICacheProvider ) );
+				AddService<ICacheProvider>( value );
 				cacheProviderCached = value;
 			}
 		}
@@ -683,7 +702,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (engContextFactoryCached == null)
+				if( engContextFactoryCached == null )
 				{
 					engContextFactoryCached = GetService<IEngineContextFactory>();
 				}
@@ -691,8 +710,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IEngineContextFactory));
-				AddService<IEngineContextFactory>(value);
+				RemoveService( typeof( IEngineContextFactory ) );
+				AddService<IEngineContextFactory>( value );
 				engContextFactoryCached = value;
 			}
 		}
@@ -705,7 +724,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (controllerFactoryCached == null)
+				if( controllerFactoryCached == null )
 				{
 					controllerFactoryCached = GetService<IControllerFactory>();
 				}
@@ -713,8 +732,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IControllerFactory));
-				AddService<IControllerFactory>(value);
+				RemoveService( typeof( IControllerFactory ) );
+				AddService<IControllerFactory>( value );
 				controllerFactoryCached = value;
 			}
 		}
@@ -727,7 +746,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (controllerContextFactoryCached == null)
+				if( controllerContextFactoryCached == null )
 				{
 					controllerContextFactoryCached = GetService<IControllerContextFactory>();
 				}
@@ -735,8 +754,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IControllerContextFactory));
-				AddService<IControllerContextFactory>(value);
+				RemoveService( typeof( IControllerContextFactory ) );
+				AddService<IControllerContextFactory>( value );
 				controllerContextFactoryCached = value;
 			}
 		}
@@ -749,7 +768,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (controllerTreeCached == null)
+				if( controllerTreeCached == null )
 				{
 					controllerTreeCached = GetService<IControllerTree>();
 				}
@@ -757,8 +776,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IControllerTree));
-				AddService<IControllerTree>(value);
+				RemoveService( typeof( IControllerTree ) );
+				AddService<IControllerTree>( value );
 				controllerTreeCached = value;
 			}
 		}
@@ -771,7 +790,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (viewSourceLoaderCached == null)
+				if( viewSourceLoaderCached == null )
 				{
 					viewSourceLoaderCached = GetService<IViewSourceLoader>();
 				}
@@ -779,8 +798,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IViewSourceLoader));
-				AddService<IViewSourceLoader>(value);
+				RemoveService( typeof( IViewSourceLoader ) );
+				AddService<IViewSourceLoader>( value );
 				viewSourceLoaderCached = value;
 			}
 		}
@@ -793,7 +812,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (filterFactoryCached == null)
+				if( filterFactoryCached == null )
 				{
 					filterFactoryCached = GetService<IFilterFactory>();
 				}
@@ -801,8 +820,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IFilterFactory));
-				AddService<IFilterFactory>(value);
+				RemoveService( typeof( IFilterFactory ) );
+				AddService<IFilterFactory>( value );
 				filterFactoryCached = value;
 			}
 		}
@@ -815,7 +834,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (controllerDescriptorProviderCached == null)
+				if( controllerDescriptorProviderCached == null )
 				{
 					controllerDescriptorProviderCached = GetService<IControllerDescriptorProvider>();
 				}
@@ -823,8 +842,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IControllerDescriptorProvider));
-				AddService<IControllerDescriptorProvider>(value);
+				RemoveService( typeof( IControllerDescriptorProvider ) );
+				AddService<IControllerDescriptorProvider>( value );
 				controllerDescriptorProviderCached = value;
 			}
 		}
@@ -837,7 +856,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (viewEngineManagerCached == null)
+				if( viewEngineManagerCached == null )
 				{
 					viewEngineManagerCached = GetService<IViewEngineManager>();
 				}
@@ -845,8 +864,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IViewEngineManager));
-				AddService<IViewEngineManager>(value);
+				RemoveService( typeof( IViewEngineManager ) );
+				AddService<IViewEngineManager>( value );
 				viewEngineManagerCached = value;
 			}
 		}
@@ -859,7 +878,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (validatorRegistryCached == null)
+				if( validatorRegistryCached == null )
 				{
 					validatorRegistryCached = GetService<IValidatorRegistry>();
 				}
@@ -867,8 +886,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IValidatorRegistry));
-				AddService<IValidatorRegistry>(value);
+				RemoveService( typeof( IValidatorRegistry ) );
+				AddService<IValidatorRegistry>( value );
 				validatorRegistryCached = value;
 			}
 		}
@@ -881,7 +900,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (actionSelectorCached == null)
+				if( actionSelectorCached == null )
 				{
 					actionSelectorCached = GetService<IActionSelector>();
 				}
@@ -889,8 +908,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IActionSelector));
-				AddService<IActionSelector>(value);
+				RemoveService( typeof( IActionSelector ) );
+				AddService<IActionSelector>( value );
 				actionSelectorCached = value;
 			}
 		}
@@ -903,7 +922,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (scaffoldingSupportCached == null)
+				if( scaffoldingSupportCached == null )
 				{
 					scaffoldingSupportCached = GetService<IScaffoldingSupport>();
 				}
@@ -911,8 +930,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IScaffoldingSupport));
-				AddService<IScaffoldingSupport>(value); 
+				RemoveService( typeof( IScaffoldingSupport ) );
+				AddService<IScaffoldingSupport>( value );
 				scaffoldingSupportCached = value;
 			}
 		}
@@ -925,7 +944,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (jsonSerializerCached == null)
+				if( jsonSerializerCached == null )
 				{
 					jsonSerializerCached = GetService<IJSONSerializer>();
 				}
@@ -933,8 +952,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IJSONSerializer));
-				AddService<IJSONSerializer>(value);
+				RemoveService( typeof( IJSONSerializer ) );
+				AddService<IJSONSerializer>( value );
 				jsonSerializerCached = value;
 			}
 		}
@@ -947,7 +966,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (staticResourceRegCached == null)
+				if( staticResourceRegCached == null )
 				{
 					staticResourceRegCached = GetService<IStaticResourceRegistry>();
 				}
@@ -955,8 +974,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IStaticResourceRegistry));
-				AddService<IStaticResourceRegistry>(value);
+				RemoveService( typeof( IStaticResourceRegistry ) );
+				AddService<IStaticResourceRegistry>( value );
 				staticResourceRegCached = value;
 			}
 		}
@@ -969,7 +988,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (emailTemplateServiceCached == null)
+				if( emailTemplateServiceCached == null )
 				{
 					emailTemplateServiceCached = GetService<IEmailTemplateService>();
 				}
@@ -977,8 +996,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IEmailTemplateService));
-				AddService<IEmailTemplateService>(value);
+				RemoveService( typeof( IEmailTemplateService ) );
+				AddService<IEmailTemplateService>( value );
 				emailTemplateServiceCached = value;
 			}
 		}
@@ -991,7 +1010,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (emailSenderCached == null)
+				if( emailSenderCached == null )
 				{
 					emailSenderCached = GetService<IEmailSender>();
 				}
@@ -999,8 +1018,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IEmailSender));
-				AddService<IEmailSender>(value);
+				RemoveService( typeof( IEmailSender ) );
+				AddService<IEmailSender>( value );
 				emailSenderCached = value;
 			}
 		}
@@ -1013,7 +1032,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (resourceFactoryCached == null)
+				if( resourceFactoryCached == null )
 				{
 					resourceFactoryCached = GetService<IResourceFactory>();
 				}
@@ -1021,8 +1040,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IResourceFactory));
-				AddService<IResourceFactory>(value);
+				RemoveService( typeof( IResourceFactory ) );
+				AddService<IResourceFactory>( value );
 				resourceFactoryCached = value;
 			}
 		}
@@ -1034,8 +1053,8 @@ namespace Castle.MonoRail.Framework.Container
 		public ITransformFilterFactory TransformFilterFactory
 		{
 			get
-			{ 
-				if( transformFilterFactoryCached == null)
+			{
+				if( transformFilterFactoryCached == null )
 				{
 					transformFilterFactoryCached = GetService<ITransformFilterFactory>();
 				}
@@ -1043,8 +1062,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(ITransformFilterFactory));
-				AddService<ITransformFilterFactory>(value);
+				RemoveService( typeof( ITransformFilterFactory ) );
+				AddService<ITransformFilterFactory>( value );
 				transformFilterFactoryCached = value;
 			}
 		}
@@ -1057,7 +1076,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (serviceInitializerCached == null)
+				if( serviceInitializerCached == null )
 				{
 					serviceInitializerCached = GetService<IServiceInitializer>();
 				}
@@ -1065,8 +1084,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IServiceInitializer));
-				AddService<IServiceInitializer>(value);
+				RemoveService( typeof( IServiceInitializer ) );
+				AddService<IServiceInitializer>( value );
 				serviceInitializerCached = value;
 			}
 		}
@@ -1079,7 +1098,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (helperFactoryCached == null)
+				if( helperFactoryCached == null )
 				{
 					helperFactoryCached = GetService<IHelperFactory>();
 				}
@@ -1087,8 +1106,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IHelperFactory));
-				AddService<IHelperFactory>(value);
+				RemoveService( typeof( IHelperFactory ) );
+				AddService<IHelperFactory>( value );
 				helperFactoryCached = value;
 			}
 		}
@@ -1101,7 +1120,7 @@ namespace Castle.MonoRail.Framework.Container
 		{
 			get
 			{
-				if (dynamicActionProviderFactoryCached == null)
+				if( dynamicActionProviderFactoryCached == null )
 				{
 					dynamicActionProviderFactoryCached = GetService<IDynamicActionProviderFactory>();
 				}
@@ -1109,8 +1128,8 @@ namespace Castle.MonoRail.Framework.Container
 			}
 			set
 			{
-				RemoveService(typeof(IDynamicActionProviderFactory));
-				AddService<IDynamicActionProviderFactory>(value);
+				RemoveService( typeof( IDynamicActionProviderFactory ) );
+				AddService<IDynamicActionProviderFactory>( value );
 				dynamicActionProviderFactoryCached = value;
 			}
 		}
@@ -1121,17 +1140,41 @@ namespace Castle.MonoRail.Framework.Container
 		/// <value>The ajax proxy generator.</value>
 		public IAjaxProxyGenerator AjaxProxyGenerator
 		{
-			get {
-				if (ajaxProxyGeneratorCached == null) {
+			get
+			{
+				if( ajaxProxyGeneratorCached == null )
+				{
 					ajaxProxyGeneratorCached = GetService<IAjaxProxyGenerator>();
 				}
 				return ajaxProxyGeneratorCached;
 			}
 			set
 			{
-				RemoveService(typeof(IAjaxProxyGenerator));
-				AddService<IAjaxProxyGenerator>(value);
+				RemoveService( typeof( IAjaxProxyGenerator ) );
+				AddService<IAjaxProxyGenerator>( value );
 				ajaxProxyGeneratorCached = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the dictionary adapter factory.
+		/// </summary>
+		/// <value>The dictionary adapter factory.</value>
+		public IDictionaryAdapterFactory DictionaryAdapterFactory
+		{
+			get
+			{
+				if( dictionaryAdapterFactoryCached == null )
+				{
+					dictionaryAdapterFactoryCached = GetService<IDictionaryAdapterFactory>();
+				}
+				return dictionaryAdapterFactoryCached;
+			}
+			set
+			{
+				RemoveService( typeof( IDictionaryAdapterFactory ) );
+				AddService<IDictionaryAdapterFactory>( value );
+				dictionaryAdapterFactoryCached = value;
 			}
 		}
 
@@ -1147,140 +1190,142 @@ namespace Castle.MonoRail.Framework.Container
 			set { extensionManager = value; }
 		}
 
-		private void RegisterServiceOverrideFromConfigurationNode(IConfiguration serviceConfig)
+		private void RegisterServiceOverrideFromConfigurationNode( IConfiguration serviceConfig )
 		{
-			if (serviceConfig == null) throw new ArgumentNullException("serviceConfig");
+			if( serviceConfig == null ) throw new ArgumentNullException( "serviceConfig" );
 
-			string id = serviceConfig.Attributes["id"];
-			string _interface = serviceConfig.Attributes["interface"];
-			string type = serviceConfig.Attributes["type"];
+			string id = serviceConfig.Attributes[ "id" ];
+			string _interface = serviceConfig.Attributes[ "interface" ];
+			string type = serviceConfig.Attributes[ "type" ];
 
-			ServiceIdentification servId = (ServiceIdentification) Enum.Parse(typeof(ServiceIdentification), id, true);
+			ServiceIdentification servId = ( ServiceIdentification )Enum.Parse( typeof( ServiceIdentification ), id, true );
 
-			if (servId == ServiceIdentification.Undefined)
+			if( servId == ServiceIdentification.Undefined )
 			{
-				throw new MonoRailException("Invalid service id: '" + id + "'. " +
-				                            "Check your configuration file, services node under MonoRail configuration.");
+				throw new MonoRailException( "Invalid service id: '" + id + "'. " +
+											"Check your configuration file, services node under MonoRail configuration." );
 			}
-			if (string.IsNullOrEmpty(type))
+			if( string.IsNullOrEmpty( type ) )
 			{
-				throw new MonoRailException("No type specified for service: '" + id + "'. You must add a 'type' attribute. " +
-				                            "Check your configuration file, services node under MonoRail configuration.");
+				throw new MonoRailException( "No type specified for service: '" + id + "'. You must add a 'type' attribute. " +
+											"Check your configuration file, services node under MonoRail configuration." );
 			}
 
 			Type service;
 
-			if (!string.IsNullOrEmpty(_interface))
+			if( !string.IsNullOrEmpty( _interface ) )
 			{
-				service = Type.GetType(_interface, false, false);
+				service = Type.GetType( _interface, false, false );
 
-				if (service == null)
+				if( service == null )
 				{
-					throw new MonoRailException("Could not load service type: '" + _interface + "'.");
+					throw new MonoRailException( "Could not load service type: '" + _interface + "'." );
 				}
 			}
 			else
 			{
-				service = InferServiceFromId(servId);
+				service = InferServiceFromId( servId );
 			}
 
-			Type impl = Type.GetType(type, false, false);
+			Type impl = Type.GetType( type, false, false );
 
-			if (impl == null)
+			if( impl == null )
 			{
-				throw new MonoRailException("Could not load service implementation: '" + type + "'.");
+				throw new MonoRailException( "Could not load service implementation: '" + type + "'." );
 			}
 
 			object instance;
 
 			try
 			{
-				instance = CreateService(impl);
+				instance = CreateService( impl );
 			}
-			catch(Exception ex)
+			catch( Exception ex )
 			{
-				throw new MonoRailException("Could not create implementation: '" + impl + "'.", ex);
+				throw new MonoRailException( "Could not create implementation: '" + impl + "'.", ex );
 			}
 
-			AddService(service, instance);
+			AddService( service, instance );
 		}
 
-		private static Type InferServiceFromId(ServiceIdentification id)
+		private static Type InferServiceFromId( ServiceIdentification id )
 		{
-			switch(id)
+			switch( id )
 			{
 				case ServiceIdentification.ControllerFactory:
-					return typeof(IControllerFactory);
+					return typeof( IControllerFactory );
 				case ServiceIdentification.ControllerContextFactory:
-					return typeof(IControllerContextFactory);
+					return typeof( IControllerContextFactory );
 				case ServiceIdentification.ControllerTree:
-					return typeof(IControllerTree);
+					return typeof( IControllerTree );
 				case ServiceIdentification.CacheProvider:
-					return typeof(ICacheProvider);
+					return typeof( ICacheProvider );
 				case ServiceIdentification.UrlBuilder:
-					return typeof(IUrlBuilder);
+					return typeof( IUrlBuilder );
 				case ServiceIdentification.UrlTokenizer:
-					return typeof(IUrlTokenizer);
+					return typeof( IUrlTokenizer );
 				case ServiceIdentification.ServerUtility:
-					return typeof(IServerUtility);
+					return typeof( IServerUtility );
 				case ServiceIdentification.FilterFactory:
-					return typeof(IFilterFactory);
+					return typeof( IFilterFactory );
 				case ServiceIdentification.ControllerDescriptorProvider:
-					return typeof(IControllerDescriptorProvider);
+					return typeof( IControllerDescriptorProvider );
 				case ServiceIdentification.ResourceDescriptorProvider:
-					return typeof(IResourceDescriptorProvider);
+					return typeof( IResourceDescriptorProvider );
 				case ServiceIdentification.RescueDescriptorProvider:
-					return typeof(IRescueDescriptorProvider);
+					return typeof( IRescueDescriptorProvider );
 				case ServiceIdentification.LayoutDescriptorProvider:
-					return typeof(ILayoutDescriptorProvider);
+					return typeof( ILayoutDescriptorProvider );
 				case ServiceIdentification.HelperDescriptorProvider:
-					return typeof(IHelperDescriptorProvider);
+					return typeof( IHelperDescriptorProvider );
 				case ServiceIdentification.FilterDescriptorProvider:
-					return typeof(IFilterDescriptorProvider);
+					return typeof( IFilterDescriptorProvider );
 				case ServiceIdentification.ViewSourceLoader:
-					return typeof(IViewSourceLoader);
+					return typeof( IViewSourceLoader );
 				case ServiceIdentification.ResourceFactory:
-					return typeof(IResourceFactory);
+					return typeof( IResourceFactory );
 				case ServiceIdentification.ViewEngineManager:
-					return typeof(IViewEngineManager);
+					return typeof( IViewEngineManager );
 				case ServiceIdentification.TransformFilterDescriptorProvider:
-					return typeof(ITransformFilterDescriptorProvider);
+					return typeof( ITransformFilterDescriptorProvider );
 				case ServiceIdentification.ValidatorRegistry:
-					return typeof(IValidatorRegistry);
+					return typeof( IValidatorRegistry );
 				case ServiceIdentification.EmailSender:
-					return typeof(IEmailSender);
+					return typeof( IEmailSender );
 				case ServiceIdentification.ViewComponentFactory:
-					return typeof(IViewComponentFactory);
+					return typeof( IViewComponentFactory );
 				case ServiceIdentification.ScaffoldingSupport:
-					return typeof(IScaffoldingSupport);
+					return typeof( IScaffoldingSupport );
 				case ServiceIdentification.EmailTemplateService:
-					return typeof(IEmailTemplateService);
+					return typeof( IEmailTemplateService );
 				case ServiceIdentification.ReturnBinderDescriptorProvider:
-					return typeof(IReturnBinderDescriptorProvider);
-//				case ServiceIdentification.TransformationFilterFactory:
-//					return typeof(ITransformFilterFactory);
+					return typeof( IReturnBinderDescriptorProvider );
+				//				case ServiceIdentification.TransformationFilterFactory:
+				//					return typeof(ITransformFilterFactory);
 				case ServiceIdentification.AjaxProxyGenerator:
-					return typeof(IAjaxProxyGenerator);
+					return typeof( IAjaxProxyGenerator );
 				case ServiceIdentification.ViewComponentDescriptorProvider:
-					return typeof(IViewComponentDescriptorProvider);
+					return typeof( IViewComponentDescriptorProvider );
 				case ServiceIdentification.EngineContextFactory:
-					return typeof(IEngineContextFactory);
+					return typeof( IEngineContextFactory );
 				case ServiceIdentification.DynamicActionProviderFactory:
-					return typeof(IDynamicActionProviderFactory);
+					return typeof( IDynamicActionProviderFactory );
 				case ServiceIdentification.DynamicActionProviderDescriptorProvider:
-					return typeof(IDynamicActionProviderDescriptorProvider);
+					return typeof( IDynamicActionProviderDescriptorProvider );
+				case ServiceIdentification.DictionaryAdapterFactory:
+					return typeof( IDictionaryAdapterFactory );
 				default:
-					throw new NotSupportedException("Id not supported " + id);
+					throw new NotSupportedException( "Id not supported " + id );
 			}
 		}
 
-		private static void AssertImplementsService(Type service, Type impl)
+		private static void AssertImplementsService( Type service, Type impl )
 		{
-			if (!service.IsAssignableFrom(impl))
+			if( !service.IsAssignableFrom( impl ) )
 			{
-				String message = String.Format("Initialization Exception: " +
-											   "Service {0} does not implement or extend {1}", impl.FullName, service.FullName);
-				throw new ConfigurationErrorsException(message);
+				String message = String.Format( "Initialization Exception: " +
+											   "Service {0} does not implement or extend {1}", impl.FullName, service.FullName );
+				throw new ConfigurationErrorsException( message );
 			}
 		}
 	}

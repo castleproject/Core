@@ -22,6 +22,7 @@
 			<include name="Castle.Components.Validator.dll" />
 			<include name="Castle.Components.Binder.dll" />
 			<include name="Castle.Components.Pagination.dll" />
+			<include name="Castle.Components.DictionaryAdapter.dll" />
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />
 			<include name="Castle.MonoRail.WindsorExtension.dll" />

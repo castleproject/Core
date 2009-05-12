@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework
 {
 	using Castle.Components.Common.EmailSender;
 	using Castle.Components.Validator;
+	using Castle.Components.DictionaryAdapter;
 	using Castle.Core;
 	using Castle.MonoRail.Framework.Services;
 	using Resources;
@@ -175,5 +176,11 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <value>The ajax proxy generator.</value>
 		IAjaxProxyGenerator AjaxProxyGenerator { get; set; }
+
+		/// <summary>
+		/// Gets or sets the dictionary adapter factory.
+		/// </summary>
+		/// <value>The dictionary adapter factory.</value>
+		IDictionaryAdapterFactory DictionaryAdapterFactory { get; set; }
 	}
 }

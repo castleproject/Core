@@ -117,6 +117,10 @@
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
       <Name>Castle.Components.Binder-vs2008</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Components\DictionaryAdapter\Castle.Components.DictionaryAdapter\Castle.Components.DictionaryAdapter-vs2008.csproj">
+      <Project>{B92EA46A-CD01-4717-ABE8-AA73C4F17AAB}</Project>
+      <Name>Castle.Components.DictionaryAdapter-vs2008</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Components\EmailSender\Castle.Components.Common.EmailSender\Castle.Components.Common.EmailSender-vs2008.csproj">
       <Project>{CFF1D57F-9FEB-4941-B8FE-8E28F4A8AAC7}</Project>
       <Name>Castle.Components.Common.EmailSender-vs2008</Name>

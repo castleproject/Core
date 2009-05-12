@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework.Test
 	using System.ComponentModel.Design;
 	using Castle.Components.Common.EmailSender;
 	using Castle.Components.Validator;
+	using Components.DictionaryAdapter;
 	using Providers;
 	using Resources;
 	using Services;
@@ -55,6 +56,7 @@ namespace Castle.MonoRail.Framework.Test
 		private IHelperFactory helperFactory;
 		private IDynamicActionProviderFactory dynamicActionProviderFactory;
 		private IAjaxProxyGenerator ajaxProxyGenerator;
+		private IDictionaryAdapterFactory dictionaryAdapterFactory;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StubMonoRailServices"/> class with default mock services.
@@ -110,6 +112,8 @@ namespace Castle.MonoRail.Framework.Test
 			validatorRegistry = new CachedValidationRegistry();
 
 			jsonSerializer = new NewtonsoftJSONSerializer();
+
+			dictionaryAdapterFactory = new DictionaryAdapterFactory();
 		}
 
 		#region IServiceContainer
@@ -285,6 +289,16 @@ namespace Castle.MonoRail.Framework.Test
 		{
 			get { return ajaxProxyGenerator; }
 			set { ajaxProxyGenerator = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the dictionary adapter factory.
+		/// </summary>
+		/// <value>The dictionary adapter factory.</value>
+		public IDictionaryAdapterFactory DictionaryAdapterFactory
+		{
+			get { return dictionaryAdapterFactory; }
+			set { dictionaryAdapterFactory = value; }
 		}
 
 		/// <summary>

@@ -21,6 +21,7 @@
 			<include name="Castle.Components.Validator.dll" />
 			<include name="Castle.Components.Common.EmailSender.dll" />
 			<include name="Castle.Components.Pagination.dll" />
+			<include name="Castle.Components.DictionaryAdapter.dll" />
 			<include name="System.Data.dll" />
 			<include name="System.Web.dll" />
 			<include name="System.Configuration.dll" />

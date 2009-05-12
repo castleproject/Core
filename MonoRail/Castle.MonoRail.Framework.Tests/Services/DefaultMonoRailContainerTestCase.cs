@@ -5,6 +5,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 	using System.Reflection;
 	using Components.Common.EmailSender;
 	using Components.Common.EmailSender.Mock;
+	using Components.DictionaryAdapter;
 	using Components.Validator;
 	using Container;
 	using Framework.Providers;
@@ -49,6 +50,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			_defaultMonoRailContainer.AddService<IServiceInitializer>(new DefaultServiceInitializer());
 			_defaultMonoRailContainer.AddService<IDynamicActionProviderFactory>(new DefaultDynamicActionProviderFactory());
 			_defaultMonoRailContainer.AddService<IAjaxProxyGenerator>(new PrototypeAjaxProxyGenerator());
+			_defaultMonoRailContainer.AddService<IDictionaryAdapterFactory>(new DictionaryAdapterFactory());
             
 			_serviceTypes.Add(typeof(IUrlTokenizer));
 			_serviceTypes.Add(typeof(IUrlBuilder));
@@ -74,6 +76,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			_serviceTypes.Add(typeof(IServiceInitializer));
 			_serviceTypes.Add(typeof(IDynamicActionProviderFactory));
 			_serviceTypes.Add(typeof(IAjaxProxyGenerator));
+			_serviceTypes.Add(typeof(IDictionaryAdapterFactory));
 		}
 
 		[Test]

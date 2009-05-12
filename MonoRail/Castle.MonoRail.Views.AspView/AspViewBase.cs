@@ -484,7 +484,7 @@ namespace Castle.MonoRail.Views.AspView
 			controller = newController;
 			controllerContext = newControllerContext;
 			InitProperties();
-			dictionaryAdapterFactory = new DictionaryAdapterFactory();
+			dictionaryAdapterFactory = newContext.Services.DictionaryAdapterFactory;
 			outputWriters = new Stack<TextWriter>();
 			viewFilters = new Stack<IViewFilter>();
 		}

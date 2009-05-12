@@ -1,6 +1,9 @@
 1.0
 ===
 
+- Applied patch by Gildas fixing MR-ISSUE-522
+  "AspView and the IDictionaryAdapterFactory"
+  This patch integrate the IDictionaryAdapterFactory into the IMonoRailServices interface and its implementations.
 - Applied patch by Martin Nilsson fixing MR-ISSUE-515
   "Priorize view engines."
   MR now guarantees that the view engines are resolved in the order of engine registrations.
