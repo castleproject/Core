@@ -77,7 +77,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				StringBuilder sb = new StringBuilder();
 
-				sb.Append("if (!window.prototypeValidators) prototypeValidators = $A([]);\n");
+				sb.Append("if (!window.prototypeValidators) prototypeValidators = new Object();\n");
 				sb.AppendFormat("var validator = new Validation('{0}', {1});\n", formId, AjaxHelper.JavascriptOptions(jsOptions));
 				sb.AppendFormat("prototypeValidators['{0}'] = validator;\n", formId);
 
