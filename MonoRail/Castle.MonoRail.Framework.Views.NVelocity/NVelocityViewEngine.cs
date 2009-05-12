@@ -360,7 +360,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		private void ProcessLayout(String contents, string layoutName, IContext ctx, TextWriter output)
 		{
-			RenderLayout(layoutName, contents, ctx, output);
+			RenderLayout(ResolveLayoutTemplateName(layoutName), contents, ctx, output);
 		}
 
 		private void ProcessLayout(String contents, IController controller, IControllerContext controllerContext, IContext ctx,
