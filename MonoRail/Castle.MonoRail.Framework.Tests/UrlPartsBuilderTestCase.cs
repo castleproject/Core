@@ -218,6 +218,27 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 
 		[Test]
+		public void ParseCanHandleRelativePathsWithoutExtension()
+		{
+			UrlParts builder = UrlParts.Parse("home/index/state");
+
+			Assert.AreEqual("home/index/state", builder.BuildPath());
+		}
+
+		[Test]
+		public void ParseCanHandleRelativePathsWithoutExtensionAndQueryString()
+		{
+			UrlParts builder = UrlParts.Parse("home/index/state?id=1");
+
+			Assert.AreEqual(0, builder.PathInfoDict.Count);
+			Assert.AreEqual("id=1", builder.QueryStringAsString());
+			Assert.AreEqual("1", builder.QueryString["id"]);
+
+			Assert.AreEqual("home/index/state?id=1", builder.BuildPath());
+		}
+
+
+		[Test]
 		public void QueryStringParsesStringCorrectly()
 		{
 			UrlParts builder = new UrlParts("home/index.ext");
