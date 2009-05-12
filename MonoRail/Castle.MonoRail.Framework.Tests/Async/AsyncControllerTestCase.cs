@@ -192,5 +192,21 @@ namespace Castle.MonoRail.Framework.Tests.Async
 
 			Assert.AreEqual("foo", response.OutputContent);
 		}
+
+		[Test]
+		public void SupportsDefaultActionClassAttribute()
+		{
+			IAsyncController controller = new ControllerWithAsyncActionAndHelpers();
+
+			IControllerContext context = services.ControllerContextFactory.
+				Create("", "ControllerWithAsyncAction", "NonExistingAction", services.ControllerDescriptorProvider.BuildDescriptor(controller));
+
+			IAsyncResult ar = controller.BeginProcess(engineContext, context);
+			context.Async.Result = ar;
+			ar.AsyncWaitHandle.WaitOne();
+			controller.EndProcess();
+
+			Assert.AreEqual("foo", response.OutputContent);
+		}
 	}
 }

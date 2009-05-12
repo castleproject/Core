@@ -18,7 +18,8 @@ namespace Castle.MonoRail.Framework.Tests.Async
 	using System.Threading;
 
 	[Helper(typeof(SomeHelper),"SM")]
-	public class ControllerWithAsyncActionAndHelpers:Controller
+	[DefaultAction("Index")]
+	public class ControllerWithAsyncActionAndHelpers : Controller
 	{
 		private readonly Output output;
 
