@@ -14,12 +14,11 @@
 
 namespace WizardSampleSite.Controllers
 {
-	using System;
 	using System.Collections;
 
 	using Castle.MonoRail.Framework;
 
-	using WizardSampleSite.Model;
+	using Model;
 
 
 	[DynamicActionProvider( typeof(WizardActionProvider) )]
@@ -68,8 +67,9 @@ namespace WizardSampleSite.Controllers
 
 	class MainInfoStep : WizardStepPage
 	{
-		public override void Reset()
+		public override void Reset(IEngineContext context)
 		{
+			Session.Remove("account");
 		}
 
 		public void Save([DataBind("account")] Account accountFromForm)
@@ -104,19 +104,19 @@ namespace WizardSampleSite.Controllers
 			}
 		}
 
-		private IList ValidateAccount(Account account)
+		private static IList ValidateAccount(Account account)
 		{
 			IList errors = new ArrayList();
 	
-			if (account.Name == null || account.Name.Length == 0)
+			if (string.IsNullOrEmpty(account.Name))
 			{
 				errors.Add("Full name field must be filled");
 			}
-			if (account.Username == null || account.Username.Length == 0)
+			if (string.IsNullOrEmpty(account.Username))
 			{
 				errors.Add("User name field must be filled");
 			}
-			if (account.Email == null || account.Email.Length == 0)
+			if (string.IsNullOrEmpty(account.Email))
 			{
 				errors.Add("E-mail field must be filled");
 			}
@@ -150,7 +150,7 @@ namespace WizardSampleSite.Controllers
 		/// </summary>
 		protected override void RenderWizardView()
 		{
-			PropertyBag.Add("source", new String[] { "Sports", "Science", "Nature", "History" });
+			PropertyBag.Add("source", new[] { "Sports", "Science", "Nature", "History" });
 			
 			PropertyBag.Add("account", WizSessionUtil.GetAccountFromSession(Session));
 			
@@ -214,7 +214,7 @@ namespace WizardSampleSite.Controllers
 	{
 		internal static Account GetAccountFromSession(IDictionary session)
 		{
-			Account account = session["stored.account"] as Account;
+			var account = session["stored.account"] as Account;
 
 			if (account == null)
 			{

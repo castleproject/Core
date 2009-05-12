@@ -28,7 +28,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkSubset>
     </TargetFrameworkSubset>
   </PropertyGroup>
@@ -79,26 +79,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Components.Binder">
-      <Name>Castle.Components.Binder</Name>
-      <HintPath>..\..\..\..\build\net-3.5\debug\Castle.Components.Binder.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Components.Common.EmailSender">
-      <Name>Castle.Components.Common.EmailSender</Name>
-      <HintPath>..\..\..\..\build\net-3.5\debug\Castle.Components.Common.EmailSender.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core">
-      <Name>Castle.Core</Name>
-      <HintPath>..\..\..\..\build\net-3.5\debug\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.MonoRail.Framework">
-      <Name>Castle.MonoRail.Framework</Name>
-      <HintPath>..\..\..\..\build\net-3.5\debug\Castle.MonoRail.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.MonoRail.Framework.Views.NVelocity">
-      <Name>Castle.MonoRail.Framework.Views.NVelocity</Name>
-      <HintPath>..\..\..\..\build\net-3.5\debug\Castle.MonoRail.Framework.Views.NVelocity.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\SharedLibs\net\2.0\log4net.dll</HintPath>
@@ -106,8 +86,14 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
@@ -115,8 +101,17 @@
     <Reference Include="System.Web">
       <Name>System.Web</Name>
     </Reference>
+    <Reference Include="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Extensions.Design, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +136,28 @@
     <None Include="views\simplewizard\ResultStep.vm" />
     <None Include="views\simplewizard\SubscribeStep.vm" />
     <None Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2008.csproj">
+      <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
+      <Name>Castle.Components.Binder-vs2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Components\EmailSender\Castle.Components.Common.EmailSender\Castle.Components.Common.EmailSender-vs2008.csproj">
+      <Project>{CFF1D57F-9FEB-4941-B8FE-8E28F4A8AAC7}</Project>
+      <Name>Castle.Components.Common.EmailSender-vs2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core-vs2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\MonoRail\Castle.MonoRail.Framework.Views.NVelocity\Castle.MonoRail.Framework.Views.NVelocity-vs2008.csproj">
+      <Project>{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}</Project>
+      <Name>Castle.MonoRail.Framework.Views.NVelocity-vs2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\MonoRail\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2008.csproj">
+      <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
+      <Name>Castle.MonoRail.Framework-vs2008</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
