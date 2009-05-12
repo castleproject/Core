@@ -111,7 +111,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Renders a Javascript library inside a single script tag.
 		/// </summary>
-		public String InstallScripts()
+		public virtual String InstallScripts()
 		{
 			return RenderScriptBlockToSource("/MonoRail/Files/AjaxScripts");
 		}
@@ -303,7 +303,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>The handcrafted element</returns>
 		public String LinkToRemote(String innerContent, String url, IDictionary options)
 		{
-			return LinkToFunction(innerContent, BuildRemoteFunction(url, options));
+            return LinkToFunction(innerContent, BuildRemoteFunction(url, options));
 		}
 
 		/// <summary>
@@ -804,7 +804,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="options">the options for the Ajax invocation</param>
 		/// <returns>javascript code</returns>
-		public String RemoteFunction(IDictionary options)
+		public virtual String RemoteFunction(IDictionary options)
 		{
 			IDictionary jsOptions = new HybridDictionary();
 
@@ -939,7 +939,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="jsOptions">Options that will be used on the js side</param>
 		/// <param name="options">Options passed to the helper method</param>
 		/// <returns></returns>
-		protected String BuildAjaxOptions(IDictionary jsOptions, IDictionary options)
+		protected virtual String BuildAjaxOptions(IDictionary jsOptions, IDictionary options)
 		{
 			BuildCallbacks(jsOptions, options);
 
@@ -976,7 +976,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			return JavascriptOptions(jsOptions);
 		}
 
-		private string ProcessWith(object with)
+        /// <summary>
+        /// Process With
+        /// </summary>
+        /// <param name="with"></param>
+        /// <returns></returns>
+		protected string ProcessWith(object with)
 		{
 			if (with == null) return null;
 
@@ -987,8 +992,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return with.ToString();
 		}
-
-		private void BuildCallbacks(IDictionary jsOptions, IDictionary options)
+        /// <summary>
+        /// Build Call Backs
+        /// </summary>
+        /// <param name="jsOptions"></param>
+        /// <param name="options"></param>
+        protected void BuildCallbacks(IDictionary jsOptions, IDictionary options)
 		{
 			String[] names = CallbackEnum.GetNames( typeof(CallbackEnum) );
 			

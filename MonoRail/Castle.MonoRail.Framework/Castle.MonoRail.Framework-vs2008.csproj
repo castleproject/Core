@@ -395,6 +395,7 @@
     <Compile Include="Helpers\HtmlHelper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\JQueryHelper.cs" />
     <Compile Include="Helpers\JSONHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1026,6 +1027,7 @@
     <EmbeddedResource Include="JSResources\FormHelper.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="JSResources\JQuery.resx" />
     <EmbeddedResource Include="JSResources\Validation.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
