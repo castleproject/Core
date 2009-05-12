@@ -406,7 +406,7 @@ namespace Castle.MonoRail.TestSupport
 		{
 			return new UrlInfo(domain, domainPrefix, virtualDir, "http", port,
 			                   Path.Combine(Path.Combine(areaName, controllerName), actionName),
-			                   areaName, controllerName, actionName, ".castle", null);
+			                   areaName, controllerName, actionName, "castle", null);
 		}
 
 		/// <summary>
