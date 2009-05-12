@@ -298,7 +298,21 @@ namespace Castle.MonoRail.Framework
 
 			foreach(IWizardStepPage step in steps)
 			{
-				step.Reset();
+				// Reset might need the controller's context
+				if (step is Controller)
+				{
+					ControllerMetaDescriptor stepMetaDescriptor =
+						engineContext.Services.ControllerDescriptorProvider.BuildDescriptor(step);
+
+					IControllerContext stepContext =
+						engineContext.Services.ControllerContextFactory.Create(
+							engineContext.CurrentControllerContext.AreaName, engineContext.CurrentControllerContext.Name, innerAction,
+							stepMetaDescriptor, engineContext.CurrentControllerContext.RouteMatch);
+
+					((Controller)step).Contextualize(engineContext, stepContext);
+				}
+
+				step.Reset(engineContext);
 			}
 		}
 

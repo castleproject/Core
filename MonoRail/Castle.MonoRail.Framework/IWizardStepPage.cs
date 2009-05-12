@@ -34,7 +34,8 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Resets this instance.
 		/// </summary>
-		void Reset();
+		/// <param name="context">The context.</param>
+		void Reset(IEngineContext context);
 
 		/// <summary>
 		/// Gets the name of the step.

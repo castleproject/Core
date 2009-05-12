@@ -122,7 +122,8 @@ namespace Castle.MonoRail.Framework
 		/// action. Implementors should perform session clean up (if 
 		/// they actually use the session) to avoid stale data on forms.
 		/// </summary>
-		public virtual void Reset()
+		/// <param name="context">The context.</param>
+		public virtual void Reset(IEngineContext context)
 		{
 		}
 
