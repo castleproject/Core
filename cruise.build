@@ -7,7 +7,10 @@
 		Run the package-* targets one by one (separate nant task blocks in ccnet.config) so they do not interfere with each other (like for instance loadtask commands do).
 	-->
 
-	<fail if="${not property::exists('CCNetLabel')}">This build file is for use with CruiseControl.NET</fail>
+	<if test="${not property::exists('CCNetLabel') and not property::exists('build.number')}">
+		<fail>This build file is for use with CruiseControl.NET or TeamCity</fail>
+	</if>
+	<property name="build.number" value="${CCNetLabel}" if="${property::exists('CCNetLabel')}" />
 	
 	<target name="package-net-3.5">
 		<!--
@@ -19,8 +22,8 @@
 				<property name="build.rebuild" value="true" />
 				<property name="nant.settings.currentframework" value="net-3.5" />
 				<property name="project.config" value="debug" />
-				<property name="build.zip.file" value="castleproject-${project.major}.${project.minor}-build_${CCNetLabel}-${framework::get-target-framework()}-${project.config}.zip" dynamic="true" />
-				<property name="build.msi.file" value="castleproject-${project.major}.${project.minor}-build_${CCNetLabel}-${framework::get-target-framework()}-${project.config}.msi" dynamic="true" />
+				<property name="build.zip.file" value="castleproject-${project.major}.${project.minor}-build_${build.number}-${framework::get-target-framework()}-${project.config}.zip" dynamic="true" />
+				<property name="build.msi.file" value="castleproject-${project.major}.${project.minor}-build_${build.number}-${framework::get-target-framework()}-${project.config}.msi" dynamic="true" />
 			</properties>
 		</nant>
 	</target>
