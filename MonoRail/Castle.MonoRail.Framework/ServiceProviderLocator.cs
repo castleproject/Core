@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -97,6 +97,10 @@ namespace Castle.MonoRail.Framework
 			/// <returns></returns>
 			public IServiceProviderEx LocateProvider()
 			{
+				if (HttpContext.Current == null)
+				{
+					return null;
+				}
 				IServiceProviderExAccessor containerAccessor =
 					HttpContext.Current.ApplicationInstance as IServiceProviderExAccessor;
 

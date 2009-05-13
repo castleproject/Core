@@ -1,4 +1,4 @@
-// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
 
 namespace WizardSampleSite.Controllers
 {
+	using System.Collections;
 	using Castle.MonoRail.Framework;
 
 	public class HomeController : Controller
 	{
 		public void Index()
 		{
+			RenderMailMessage("email", "simplewizard", new Hashtable());
 		}
 	}
 }
