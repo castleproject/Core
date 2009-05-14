@@ -264,7 +264,9 @@ namespace Castle.ActiveRecord.Framework.Scopes
 				DefaultFlushType behaviour = ActiveRecordStarter.ConfigurationSource.DefaultFlushType;
 				session.FlushMode = (behaviour == DefaultFlushType.Classic || behaviour == DefaultFlushType.Auto) ?
 					FlushMode.Auto :
-					FlushMode.Commit;
+                    (behaviour == DefaultFlushType.Leave) ?
+					FlushMode.Commit :
+                    FlushMode.Never;
 			}
 		}
 

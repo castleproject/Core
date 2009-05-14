@@ -34,7 +34,7 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void TestLeaveBehaviour() { TestBehaviour(DefaultFlushType.Leave, FlushMode.Commit, FlushMode.Commit); }
 		[Test]
-		public void TestTransactionBehaviour() { TestBehaviour(DefaultFlushType.Transaction, FlushMode.Commit, FlushMode.Auto); }
+		public void TestTransactionBehaviour() { TestBehaviour(DefaultFlushType.Transaction, FlushMode.Never, FlushMode.Auto); }
 		
 		private void TestBehaviour(DefaultFlushType flushType, FlushMode sessionScopeMode, FlushMode transactionScopeMode)
 		{
