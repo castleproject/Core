@@ -312,13 +312,14 @@ namespace Castle.MonoRail.Framework.Services
 			string pathInfo = null;
 
 			int queryStringStartIndex = url.IndexOf('?');
-			int fileExtIndex = url.IndexOf('.');
 
 			if (queryStringStartIndex != -1)
 			{
 				qs = url.Substring(queryStringStartIndex);
 				path = url.Substring(0, queryStringStartIndex);
 			}
+
+			int fileExtIndex = path.IndexOf('.');
 
 			if (fileExtIndex != -1)
 			{

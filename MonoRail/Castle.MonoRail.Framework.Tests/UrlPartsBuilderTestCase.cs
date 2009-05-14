@@ -237,6 +237,17 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.AreEqual("home/index/state?id=1", builder.BuildPath());
 		}
 
+		[Test]
+		public void ParseCanHandleRelativePathsWithoutExtensionAndQueryStringContainingDot()
+		{
+			UrlParts builder = UrlParts.Parse("home/index/state?file=index.pdf");
+
+			Assert.AreEqual(0, builder.PathInfoDict.Count);
+			Assert.AreEqual("file=index.pdf", builder.QueryStringAsString());
+			Assert.AreEqual("index.pdf", builder.QueryString["file"]);
+
+			Assert.AreEqual("home/index/state?file=index.pdf", builder.BuildPath());
+		}
 
 		[Test]
 		public void QueryStringParsesStringCorrectly()
