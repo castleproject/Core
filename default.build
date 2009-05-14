@@ -1006,6 +1006,8 @@
 	<target name="zip-source">
 		<zip zipfile="${build.base.dir}/castle-sourcecode.zip">
 			<fileset basedir="${root.dir}">
+				<include name="**/*.sln" />
+				<include name="**/*.csproj" />
 				<include name="**/*.cs" />
 				<include name="**/*.cd" />
 				<include name="**/*.snk" />
@@ -1036,6 +1038,8 @@
 				<include name="**/*.shfb" />
 				<exclude name="common.xml" />
 				<exclude name="common-project.xml" />
+				<exclude name="How to build.txt" />
+				<exclude name="VSNET.Readme.txt" />
 				<exclude name="**/obj/" />
 				<exclude name="**/obj/**/*.*" />
 				<exclude name="**/bin/**/*.*" />
