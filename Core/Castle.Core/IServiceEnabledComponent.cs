@@ -1,4 +1,8 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright company="Castle Project" file="IServiceEnabledComponent.cs">
+//   Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// </copyright>
+// <summary>
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +15,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+// 
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Castle.Core
 {
@@ -29,6 +36,10 @@ namespace Castle.Core
 	/// </remarks>
 	public interface IServiceEnabledComponent
 	{
+		/// <summary>
+		/// Services the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
 		void Service(IServiceProvider provider);
 	}
 }
