@@ -14,14 +14,12 @@
 
 namespace WizardSampleSite.Controllers
 {
-	using System.Collections;
 	using Castle.MonoRail.Framework;
 
 	public class HomeController : Controller
 	{
 		public void Index()
 		{
-			RenderMailMessage("email", "simplewizard", new Hashtable());
 		}
 	}
 }
