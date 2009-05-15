@@ -273,6 +273,8 @@
     <Compile Include="ControllerNotFoundException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IEngineContextLocator.cs" />
+    <Compile Include="EngineContextLocator.cs" />
     <Compile Include="DelegateDynamicAction.cs">
       <SubType>Code</SubType>
     </Compile>

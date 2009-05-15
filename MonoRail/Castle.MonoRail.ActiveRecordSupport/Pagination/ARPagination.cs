@@ -75,8 +75,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 		private static int ObtainCurrentPage()
 		{
-			// Tight coupling that makes difficult to test. Review this!
-			String page = MonoRailHttpHandlerFactory.CurrentEngineContext.Request.Params["page"];
+			String page = EngineContextLocator.Instance.LocateCurrentContext().Request.Params["page"];
 			return page == null || Regex.IsMatch(page, "\\D")
 				? 1 : Convert.ToInt32(page);
 		}

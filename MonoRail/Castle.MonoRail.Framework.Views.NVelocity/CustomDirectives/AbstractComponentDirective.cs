@@ -57,7 +57,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
-			IEngineContext railsContext = MonoRailHttpHandlerFactory.CurrentEngineContext;
+			IEngineContext railsContext = EngineContextLocator.Instance.LocateCurrentContext();
 			IViewComponentRegistry registry = railsContext.Services.GetService<IViewComponentFactory>().Registry;
 			IViewComponentDescriptorProvider viewDescProvider =
 				railsContext.Services.GetService<IViewComponentDescriptorProvider>();
