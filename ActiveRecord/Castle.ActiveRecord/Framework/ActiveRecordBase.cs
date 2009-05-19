@@ -899,7 +899,7 @@ namespace Castle.ActiveRecord
 			}
 			catch(Exception ex)
 			{
-				throw new ActiveRecordException("Could not perform Exists for " + targetType.Name + ". Id: " + id, ex);
+					throw new ActiveRecordException("Could not perform Exists for " + targetType.Name + ". Id: " + id, ex);
 			}
 			finally
 			{

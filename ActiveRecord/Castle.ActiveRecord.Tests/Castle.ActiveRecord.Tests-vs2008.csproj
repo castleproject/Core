@@ -314,6 +314,7 @@
     <Compile Include="AnyRelationTestCase.cs" />
     <Compile Include="CompositeNestedClassTestCase.cs" />
     <Compile Include="CompositeUserTypeTestCase.cs" />
+    <Compile Include="StatelessSessionScopeTestCase.cs" />
     <Compile Include="EnumModelTestCase.cs" />
     <Compile Include="Event\AbstractEventListenerTest.cs" />
     <Compile Include="Event\AssemblyAttributesTest.cs" />

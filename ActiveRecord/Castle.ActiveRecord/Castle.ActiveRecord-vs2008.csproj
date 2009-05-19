@@ -361,6 +361,7 @@
     <Compile Include="Framework\ActiveRecordValidationException.cs" />
     <Compile Include="Framework\Config\DefaultFlushType.cs" />
     <Compile Include="Framework\AbstractNHContributor.cs" />
+    <Compile Include="Framework\StatelessSessionWrapper.cs" />
     <Compile Include="Framework\INHContributor.cs" />
     <Compile Include="Framework\Internal\EventListener\EventListenerConfig.cs" />
     <Compile Include="Framework\Internal\EventListener\EventListenerContributor.cs" />
@@ -397,6 +398,7 @@
     <Compile Include="Framework\Queries\Modifiers\SqlQueryReturnDefinition.cs" />
     <Compile Include="Framework\Queries\ScalarQuery.Generic.cs" />
     <Compile Include="Framework\Queries\SimpleQuery.Generic.cs" />
+    <Compile Include="Framework\Scopes\StatelessSessionScope.cs" />
     <Compile Include="Framework\Scopes\DifferentDatabaseScope.cs" />
     <Compile Include="Framework\Scopes\FlushAction.cs" />
     <Compile Include="Framework\Scopes\HybridWebThreadScopeInfo.cs" />

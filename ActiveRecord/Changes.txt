@@ -1,4 +1,4 @@
-1.0
+2.0 Alpha1
 ===
 - Updated NHibernate to 2.1 Alpha. Please specify the byte code provider in your config files.
 
