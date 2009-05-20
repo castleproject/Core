@@ -96,7 +96,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public object Deserialize(string jsonString, Type expectedType)
 		{
-			return JsonConvert.DeserializeObject(jsonString, expectedType);
+			return JavaScriptConvert.DeserializeObject(jsonString, expectedType);
 		}
 
 		/// <summary>
@@ -107,7 +107,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public T Deserialize<T>(string jsonString)
 		{
-			return (T) JsonConvert.DeserializeObject(jsonString, typeof(T));
+			return (T) JavaScriptConvert.DeserializeObject(jsonString, typeof(T));
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public T[] DeserializeArray<T>(string jsonString)
 		{
-			return (T[]) JsonConvert.DeserializeObject(jsonString, typeof(T));
+			return (T[]) JavaScriptConvert.DeserializeObject(jsonString, typeof(T));
 		}
 
 		class JsonConverterAdapter : JsonConverter
