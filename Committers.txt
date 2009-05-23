@@ -33,6 +33,7 @@ Committers
 - Chris Ortman
 - Jonathon Rossi
 - Tuna Toksöz
+- Krzysztof Kozmic
 
 Managers 
 ========
@@ -62,6 +63,7 @@ PMC Members
 - Fabio David Batista
 - Roelof Blom
 - Josh Robb
+- Jonathon Rossi
 
 Emeritus 
 ========
