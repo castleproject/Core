@@ -1,4 +1,0 @@
-- Action doesnt need to be present (can fallback to view directly if the view is not a partial)
-
-- View rendering
-
