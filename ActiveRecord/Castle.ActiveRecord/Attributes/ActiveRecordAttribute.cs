@@ -55,6 +55,7 @@ namespace Castle.ActiveRecord
 		private bool mutable = true;
 		private bool useAutoImport = true;
 		private int batchSize = 1;
+		private string schemaAction = null;
 		private Polymorphism polymorphism = Polymorphism.Implicit;
 		private OptimisticLocking locking = OptimisticLocking.Version;
 		private bool lazySpecified;
@@ -296,6 +297,15 @@ namespace Castle.ActiveRecord
 		{
 			get { return tuplizer; }
 			set { tuplizer = value; }
+		}
+
+		/// <summary>
+		/// Determines the action of CreateSchema, DropSchema or UpdateSchema for this table.
+		/// </summary>
+		public string SchemaAction
+		{
+			get { return schemaAction; }
+			set { schemaAction = value.ToLower(); }
 		}
 	}
 }

@@ -98,9 +98,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 						WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
 						WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
-				AppendF("<join{0}>",
+				AppendF("<join{0}{1}{2}>",
 					MakeAtt("table", model.ActiveRecordAtt.Table),
-					WriteIfNonNull("schema", model.ActiveRecordAtt.Schema));
+					WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
+					WriteIfNonNull("schema-action", model.ActiveRecordAtt.SchemaAction));
 				Ident();
 				WriteTuplizer(model.ActiveRecordAtt.Tuplizer);
 				VisitNode(model.Key);
@@ -122,10 +123,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else if (model.IsJoinedSubClass)
 			{
-				AppendF("<joined-subclass{0}{1}{2}{3}{4}{5}{6}{7}>",
+				AppendF("<joined-subclass{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
 				        MakeAtt("name", MakeTypeName(model.Type)),
 				        MakeAtt("table", model.ActiveRecordAtt.Table),
 				        WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
+								WriteIfNonNull("schema-action", model.ActiveRecordAtt.SchemaAction),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
 				        WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
 				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy, model.ActiveRecordAtt.LazySpecified),
@@ -191,12 +193,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				AppendF("<class{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}{14}>",
+				AppendF("<class{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}{14}{15}>",
 				        MakeAtt("name", MakeTypeName(model.Type)),
 				        MakeAtt("table", model.ActiveRecordAtt.Table),
 				        WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
 				        WriteIfFalse("mutable", model.ActiveRecordAtt.Mutable),
 				        WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
+				        WriteIfNonNull("schema-action", model.ActiveRecordAtt.SchemaAction),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
 				        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
 				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert),

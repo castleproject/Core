@@ -178,6 +178,7 @@
     <Compile Include="Model\ClassWithCompositeKey.cs" />
     <Compile Include="Model\ClassWithMultiplePrimaryKeys.cs" />
     <Compile Include="Model\ClassWithOverride.cs" />
+    <Compile Include="Model\ClassWithSchemaAction.cs" />
     <Compile Include="Model\ClassWithTuplizer.cs" />
     <Compile Include="Model\Component.cs" />
     <Compile Include="Model\ComponentManyToClassA.cs" />
