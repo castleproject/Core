@@ -1,3 +1,15 @@
+2.0 Alpha2
+===
+- (AR-ISSUE-236) Added schema-action, so that behaviour for create/drop/update schema can be defined per class.
+
+- (AR-ISSUE-254) Added StatelessSessionScope for higher performance. Functionality is restricted, see test cases for
+  StatelessSessionScope.
+
+- (AR-ISSUE-253) Added support for lazily loading many-to-one-relations (BelongsTo) via proxies.
+
+- Bugs fixed:
+  AR-ISSUE-249
+  
 2.0 Alpha1
 ===
 - Updated NHibernate to 2.1 Alpha. Please specify the byte code provider in your config files.
