@@ -85,7 +85,7 @@ namespace Castle.ActiveRecord.Queries
 				Int32 count = Convert.ToInt32(criteria.UniqueResult());
 
 				// clear the projection, so our caller can re-use the DetachedCriteria
-				criteria.SetProjection(null);
+				criteria.SetProjection(new IProjection[] { null });
 
 				return count;
 			}

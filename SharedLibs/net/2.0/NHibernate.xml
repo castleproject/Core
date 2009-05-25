@@ -452,6 +452,9 @@
             Gets the <see cref="P:NHibernate.AdoNet.AbstractBatcher.ConnectionManager"/> for this batcher.
             </summary>
         </member>
+        <member name="T:NHibernate.AdoNet.ColumnNameCache">
+            <summary> Implementation of ColumnNameCache. </summary>
+        </member>
         <member name="T:NHibernate.AdoNet.ConnectionManager">
             <summary>
             Manages the database connection and transaction for an <see cref="T:NHibernate.ISession"/>.
@@ -463,18 +466,6 @@
         </member>
         <member name="P:NHibernate.AdoNet.ConnectionManager.Batcher">
             <summary> The batcher managed by this ConnectionManager. </summary>
-        </member>
-        <member name="P:NHibernate.Transaction.ITransactionContext.Factory">
-            Since C# doesn't support interfaces into interfaces ITransactionContext
-            represent the inner interface at 
-            org.hibernate.transaction.TransactionFactory.Context
-        </member>
-        <member name="P:NHibernate.AdoNet.AdoNetContext.IContext.ConnectionReleaseMode">
-            We cannot rely upon this method being called! It is only
-            called if we are using Hibernate Transaction API.
-        </member>
-        <member name="T:NHibernate.AdoNet.ColumnNameCache">
-            <summary> Implementation of ColumnNameCache. </summary>
         </member>
         <member name="P:NHibernate.AdoNet.IExpectation.ExpectedRowCount">
             <summary>
@@ -782,6 +773,30 @@
             Generates a dynamic method on the given type.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.IObjectsFactory.CreateInstance(System.Type)">
+            <summary>
+            Creates an instance of the specified type.
+            </summary>
+            <param name="type">The type of object to create.</param>
+            <returns>A reference to the created object.</returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.IObjectsFactory.CreateInstance(System.Type,System.Boolean)">
+            <summary>
+            Creates an instance of the specified type.
+            </summary>
+            <param name="type">The type of object to create.</param>
+            <param name="nonPublic">true if a public or nonpublic default constructor can match; false if only a public default constructor can match.</param>
+            <returns>A reference to the created object.</returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.IObjectsFactory.CreateInstance(System.Type,System.Object[])">
+            <summary>
+            Creates an instance of the specified type using the constructor 
+            that best matches the specified parameters.
+            </summary>
+            <param name="type">The type of object to create.</param>
+            <param name="ctorArgs">An array of constructor arguments.</param>
+            <returns>A reference to the created object.</returns>
         </member>
         <member name="M:NHibernate.Bytecode.EmitUtil.EmitFastInt(System.Reflection.Emit.ILGenerator,System.Int32)">
             <summary>
@@ -1231,9 +1246,9 @@
             Yes, this is a lock
             </summary>
         </member>
-        <member name="T:NHibernate.Cache.HashtableCache">
+        <member name="T:NHibernate.Cache.FakeCache">
             <summary>
-            A simple <see cref="T:System.Collections.Hashtable"/>-based cache
+            Used by <see cref="T:NHibernate.Cache.NoCacheProvider"/>
             </summary>
         </member>
         <member name="T:NHibernate.Cache.ICache">
@@ -1312,6 +1327,11 @@
         <member name="P:NHibernate.Cache.ICache.RegionName">
             <summary>
             Gets the name of the cache region
+            </summary>
+        </member>
+        <member name="T:NHibernate.Cache.HashtableCache">
+            <summary>
+            A simple <see cref="T:System.Collections.Hashtable"/>-based cache
             </summary>
         </member>
         <member name="M:NHibernate.Cache.HashtableCache.Get(System.Object)">
@@ -5150,26 +5170,23 @@
             <param name="errorMessage"></param>
             <returns></returns>
         </member>
-        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindCollection(System.Xml.XmlNode,NHibernate.Mapping.Collection,System.String,System.String,System.Type)">
+        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindCollection(System.Xml.XmlNode,NHibernate.Mapping.Collection,System.String,System.String,System.Type,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
             <remarks>
             Called for all collections. <paramref name="containingType" /> parameter
             was added in NH to allow for reflection related to generic types.
             </remarks>
         </member>
-        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindArray(System.Xml.XmlNode,NHibernate.Mapping.Array,System.String,System.String,System.Type)">
+        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindArray(System.Xml.XmlNode,NHibernate.Mapping.Array,System.String,System.String,System.Type,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
             <remarks>
             Called for arrays and primitive arrays
             </remarks>
         </member>
-        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindMapSecondPass(System.Xml.XmlNode,NHibernate.Mapping.Map,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.PersistentClass})">
+        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindMapSecondPass(System.Xml.XmlNode,NHibernate.Mapping.Map,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.PersistentClass},System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
             <summary>
             Called for Maps
             </summary>
-            <param name="node"></param>
-            <param name="model"></param>
-            <param name="persistentClasses"></param>
         </member>
-        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindCollectionSecondPass(System.Xml.XmlNode,NHibernate.Mapping.Collection,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.PersistentClass})">
+        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindCollectionSecondPass(System.Xml.XmlNode,NHibernate.Mapping.Collection,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.PersistentClass},System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
             <remarks>
             Called for all collections
             </remarks>
@@ -7939,7 +7956,7 @@
             <summary> Each row of results is a distinct instance of the root entity</summary>
         </member>
         <member name="F:NHibernate.Criterion.CriteriaSpecification.Projection">
-            <summary> This result transformer is selected implicitly by calling <see cref="M:NHibernate.ICriteria.SetProjection(NHibernate.Criterion.IProjection)"/> </summary>
+            <summary> This result transformer is selected implicitly by calling <see cref="M:NHibernate.ICriteria.SetProjection(NHibernate.Criterion.IProjection[])"/> </summary>
         </member>
         <member name="F:NHibernate.Criterion.CriteriaSpecification.InnerJoin">
             <summary> Specifies joining to an entity based on an inner join.</summary>
@@ -12127,6 +12144,14 @@
             in a paged subselect. NH-1155
             </remarks>
         </member>
+        <member name="M:NHibernate.Dialect.MsSql2005Dialect.HasMatchingParens(System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
+            Indicates whether the string fragment contains matching parenthesis
+            </summary>
+            <param name="statement"> the statement to evaluate</param>
+            <returns>true if the statment contains no parenthesis or an equal number of
+             opening and closing parenthesis;otherwise false </returns>
+        </member>
         <member name="P:NHibernate.Dialect.MsSql2005Dialect.SupportsLimit">
             <summary>
             Sql Server 2005 supports a query statement that provides <c>LIMIT</c>
@@ -12291,70 +12316,6 @@
             </summary>
             <param name="sqlType">The <see cref="T:NHibernate.SqlTypes.SqlType"/> mapping type</param>
             <returns> The appropriate select cluse fragment </returns>
-        </member>
-        <member name="T:NHibernate.Dialect.Oracle9Dialect">
-            <summary>
-            It's a immature version, it just work.
-            An SQL dialect for Oracle 9
-            </summary>
-            <remarks>
-            The Oracle9Dialect defaults the following configuration properties:
-            <list type="table">
-            	<listheader>
-            		<term>Property</term>
-            		<description>Default Value</description>
-            	</listheader>
-            	<item>
-            		<term>use_outer_join</term>
-            		<description><see langword="true"/></description>
-            	</item>
-            	<item>
-            		<term>connection.driver_class</term>
-            		<description><see cref="T:NHibernate.Driver.OracleClientDriver"/></description>
-            	</item>
-            </list>
-            </remarks>
-        </member>
-        <member name="M:NHibernate.Dialect.Oracle9Dialect.#ctor">
-            <summary></summary>
-        </member>
-        <member name="M:NHibernate.Dialect.Oracle9Dialect.GetSequenceNextValString(System.String)">
-            <summary></summary>
-        </member>
-        <member name="M:NHibernate.Dialect.Oracle9Dialect.GetCreateSequenceString(System.String)">
-            <summary></summary>
-        </member>
-        <member name="M:NHibernate.Dialect.Oracle9Dialect.GetDropSequenceString(System.String)">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Dialect.Oracle9Dialect.AddColumnString">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Dialect.Oracle9Dialect.CascadeConstraintsString">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Dialect.Oracle9Dialect.SupportsSequences">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Dialect.Oracle9Dialect.SupportsLimit">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Dialect.Oracle9Dialect.BindLimitParametersInReverseOrder">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Dialect.Oracle9Dialect.UseMaxForLimit">
-            <summary></summary>
-        </member>
-        <member name="T:NHibernate.Dialect.OracleDialect">
-            <summary>
-            An SQL dialect for Oracle, compatible with Oracle 8.
-            </summary>
-        </member>
-        <member name="M:NHibernate.Dialect.OracleDialect.CreateOuterJoinFragment">
-            <summary></summary>
-        </member>
-        <member name="M:NHibernate.Dialect.OracleDialect.CreateCaseFragment">
-            <summary></summary>
         </member>
         <member name="T:NHibernate.Dialect.OracleLiteDialect">
             <summary>
@@ -14434,11 +14395,11 @@
             work transaction.
             </summary>
         </member>
-        <member name="M:NHibernate.Engine.Transaction.IIsolatedWork.DoWork(System.Data.IDbConnection)">
+        <member name="M:NHibernate.Engine.Transaction.IIsolatedWork.DoWork(System.Data.IDbConnection,System.Data.IDbTransaction)">
             <summary>
             Perform the actual work to be done.
             </summary>
-            <param name="connection">The ADP cpnnection to use.</param>
+            <param name="connection">The ADP connection to use.</param>
         </member>
         <member name="T:NHibernate.Engine.Transaction.Isolater">
             <summary>
@@ -16803,7 +16764,7 @@
             and performing work in a new transaction
             </summary>
         </member>
-        <member name="M:NHibernate.Engine.TransactionHelper.DoWorkInCurrentTransaction(System.Data.IDbConnection,System.String)">
+        <member name="M:NHibernate.Engine.TransactionHelper.DoWorkInCurrentTransaction(NHibernate.Engine.ISessionImplementor,System.Data.IDbConnection,System.Data.IDbTransaction)">
             <summary> The work to be done</summary>
         </member>
         <member name="M:NHibernate.Engine.TransactionHelper.DoWorkInNewTransaction(NHibernate.Engine.ISessionImplementor)">
@@ -17843,6 +17804,29 @@
             from the collection's loaded key (e.g., a property-ref is used for the
             collection and does not include the entity's ID)
             </value>
+        </member>
+        <member name="T:NHibernate.Event.AbstractPreDatabaseOperationEvent">
+            <summary> 
+            Represents an operation we are about to perform against the database. 
+            </summary>
+        </member>
+        <member name="M:NHibernate.Event.AbstractPreDatabaseOperationEvent.#ctor(NHibernate.Event.IEventSource,System.Object,System.Object,NHibernate.Persister.Entity.IEntityPersister)">
+            <summary> Constructs an event containing the pertinent information. </summary>
+            <param name="source">The session from which the event originated. </param>
+            <param name="entity">The entity to be invloved in the database operation. </param>
+            <param name="id">The entity id to be invloved in the database operation. </param>
+            <param name="persister">The entity's persister. </param>
+        </member>
+        <member name="P:NHibernate.Event.AbstractPreDatabaseOperationEvent.Entity">
+            <summary> The entity involved in the database operation. </summary>
+        </member>
+        <member name="P:NHibernate.Event.AbstractPreDatabaseOperationEvent.Id">
+            <summary> The id to be used in the database operation. </summary>
+        </member>
+        <member name="P:NHibernate.Event.AbstractPreDatabaseOperationEvent.Persister">
+            <summary> 
+            The persister for the <see cref="P:NHibernate.Event.AbstractPreDatabaseOperationEvent.Entity"/>. 
+            </summary>
         </member>
         <member name="T:NHibernate.Event.AutoFlushEvent">
             <summary>Defines an event class for the auto-flushing of a session. </summary>
@@ -19117,12 +19101,35 @@
         </member>
         <member name="T:NHibernate.Event.PreDeleteEvent">
             <summary>
-            Occurs before deleting an item from the datastore
+            Represents a <tt>pre-delete</tt> event, which occurs just prior to
+            performing the deletion of an entity from the database.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Event.PreDeleteEvent.#ctor(System.Object,System.Object,System.Object[],NHibernate.Persister.Entity.IEntityPersister,NHibernate.Event.IEventSource)">
+            <summary> 
+            Constructs an event containing the pertinent information. 
+            </summary>
+            <param name="entity">The entity to be deleted. </param>
+            <param name="id">The id to use in the deletion. </param>
+            <param name="deletedState">The entity's state at deletion time. </param>
+            <param name="persister">The entity's persister. </param>
+            <param name="source">The session from which the event originated. </param>
+        </member>
+        <member name="P:NHibernate.Event.PreDeleteEvent.DeletedState">
+            <summary> 
+            This is the entity state at the
+            time of deletion (useful for optomistic locking and such). 
             </summary>
         </member>
         <member name="T:NHibernate.Event.PreInsertEvent">
             <summary> 
-            Occurs before inserting an item in the datastore
+            Represents a <tt>pre-insert</tt> event, which occurs just prior to
+            performing the insert of an entity into the database.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Event.PreInsertEvent.State">
+            <summary> 
+            These are the values to be inserted. 
             </summary>
         </member>
         <member name="T:NHibernate.Event.PreLoadEvent">
@@ -19132,7 +19139,19 @@
         </member>
         <member name="T:NHibernate.Event.PreUpdateEvent">
             <summary> 
-            Occurs before updating the datastore
+            Represents a <tt>pre-update</tt> event, which occurs just prior to
+            performing the update of an entity in the database.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Event.PreUpdateEvent.State">
+            <summary>
+            Retrieves the state to be used in the update.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Event.PreUpdateEvent.OldState">
+            <summary>
+            The old state of the entity at the time it was last loaded from the
+            database; can be null in the case of detached entities.
             </summary>
         </member>
         <member name="T:NHibernate.Event.RefreshEvent">
@@ -19189,9 +19208,39 @@
             The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.
             </param>
         </member>
+        <member name="T:NHibernate.Exceptions.AdoExceptionContextInfo">
+            <summary>
+            Collect data of an <see cref="T:NHibernate.ADOException"/> to be converted.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Exceptions.AdoExceptionContextInfo.SqlException">
+            <summary>
+            The <see cref="T:System.Data.Common.DbException"/> to be converted.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Exceptions.AdoExceptionContextInfo.Message">
+            <summary>
+            An optional error message.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Exceptions.AdoExceptionContextInfo.Sql">
+            <summary>
+            The SQL that generate the exception
+            </summary>
+        </member>
+        <member name="P:NHibernate.Exceptions.AdoExceptionContextInfo.EntityName">
+            <summary>
+            Optional EntityName where available in the original exception context.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Exceptions.AdoExceptionContextInfo.EntityId">
+            <summary>
+            Optional EntityId where available in the original exception context.
+            </summary>
+        </member>
         <member name="M:NHibernate.Exceptions.ADOExceptionHelper.Convert(NHibernate.Exceptions.ISQLExceptionConverter,System.Exception,System.String,NHibernate.SqlCommand.SqlString)">
             <summary> 
-            Converts the given SQLException into NHibernate's ADOException hierarchy, as well as performing
+            Converts the given SQLException into Exception hierarchy, as well as performing
             appropriate logging. 
             </summary>
             <param name="converter">The converter to use.</param>
@@ -19202,7 +19251,7 @@
         </member>
         <member name="M:NHibernate.Exceptions.ADOExceptionHelper.Convert(NHibernate.Exceptions.ISQLExceptionConverter,System.Exception,System.String)">
             <summary> 
-            Converts the given SQLException into NHibernate's ADOException hierarchy, as well as performing
+            Converts the given SQLException into Exception hierarchy, as well as performing
             appropriate logging. 
             </summary>
             <param name="converter">The converter to use.</param>
@@ -19260,14 +19309,12 @@
             </remarks>
             <seealso cref="T:NHibernate.Exceptions.SQLExceptionConverterFactory"/>
         </member>
-        <member name="M:NHibernate.Exceptions.ISQLExceptionConverter.Convert(System.Exception,System.String,NHibernate.SqlCommand.SqlString)">
+        <member name="M:NHibernate.Exceptions.ISQLExceptionConverter.Convert(NHibernate.Exceptions.AdoExceptionContextInfo)">
             <summary> 
-            Convert the given <see cref="T:System.Data.Common.DbException"/> into NHibernate's ADOException hierarchy. 
+            Convert the given <see cref="T:System.Data.Common.DbException"/> into custom Exception. 
             </summary>
-            <param name="sqlException">The <see cref="T:System.Data.Common.DbException"/> to be converted. </param>
-            <param name="message"> An optional error message. </param>
-            <param name="sql">The SQL that generate the exception</param>
-            <returns> The resulting ADOException. </returns>
+            <param name="adoExceptionContextInfo">Available information during exception throw.</param>
+            <returns> The resulting Exception to throw. </returns>
         </member>
         <member name="T:NHibernate.Exceptions.LockAcquisitionException">
             <summary> 
@@ -19312,7 +19359,7 @@
             for converting/interpreting SQLExceptions. 
             </summary>
         </member>
-        <member name="M:NHibernate.Exceptions.SQLStateConverter.HandledNonSpecificException(System.Exception,System.String,NHibernate.SqlCommand.SqlString)">
+        <member name="M:NHibernate.Exceptions.SQLStateConverter.HandledNonSpecificException(System.Exception,System.String,System.String)">
             <summary> Handle an exception not converted to a specific type based on the SQLState. </summary>
             <param name="sqlException">The exception to be handled. </param>
             <param name="message">An optional message </param>
@@ -19350,23 +19397,32 @@
             Ported by: Steve Strong
             </summary>
         </member>
-        <member name="F:NHibernate.Hql.Ast.ANTLR.SqlGenerator._parseErrorHandler">
-            <summary>
-            Handles parser errors.
-            </summary>
-        </member>
-        <member name="F:NHibernate.Hql.Ast.ANTLR.SqlGenerator._writer">
+        <member name="F:NHibernate.Hql.Ast.ANTLR.SqlGenerator.outputStack">
             all append invocations on the buf should go through this Output instance variable.
             The value of this variable may be temporarily substitued by sql function processing code
             to catch generated arguments.
             This is because sql function templates need arguments as seperate string chunks
             that will be assembled into the target dialect-specific function call.
         </member>
+        <member name="F:NHibernate.Hql.Ast.ANTLR.SqlGenerator.parseErrorHandler">
+            <summary>
+            Handles parser errors.
+            </summary>
+        </member>
         <member name="M:NHibernate.Hql.Ast.ANTLR.SqlGenerator.OptionalSpace">
+            <summary>
             Add a aspace if the previous token was not a space or a parenthesis.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.SqlGenerator.DefaultWriter">
+            <summary>
+            The default SQL writer.
+            </summary>
         </member>
         <member name="T:NHibernate.Hql.Ast.ANTLR.SqlGenerator.ISqlWriter">
+            <summary>
             Writes SQL fragments.
+            </summary>
         </member>
         <member name="M:NHibernate.Hql.Ast.ANTLR.SqlGenerator.ISqlWriter.CommaBetweenParameters(System.String)">
              todo remove this hack
@@ -19374,13 +19430,6 @@
              sql generator uses " , " in the WHERE and ", " in SELECT.
             
              @param comma either " , " or ", "
-        </member>
-        <member name="T:NHibernate.Hql.Ast.ANTLR.SqlGenerator.FunctionArguments">
-            SQL function processing code redirects generated SQL output to an instance of this class
-            which catches function arguments.
-        </member>
-        <member name="T:NHibernate.Hql.Ast.ANTLR.SqlGenerator.DefaultWriter">
-            The default SQL writer.
         </member>
         <member name="T:NHibernate.Loader.Loader">
             <summary>
@@ -19988,6 +20037,13 @@
             Ported by: Steve Strong
             </summary>
         </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.AssignmentSpecification">
+            <summary> 
+            Encapsulates the information relating to an individual assignment within the
+            set clause of an HQL update statement.  This information is used during execution
+            of the update statements when the updates occur against "multi-table" stuff. 
+            </summary>
+        </member>
         <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.BetweenOperatorNode">
             <summary>
             Contract for nodes representing logcial BETWEEN (ternary) operators.
@@ -20110,6 +20166,11 @@
             </summary>
         </member>
         <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.SelectExpressionList.CollectSelectExpressions">
+            <summary>
+            Returns an array of SelectExpressions gathered from the children of the given parent AST node.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.SelectExpressionList.CollectSelectExpressions(System.Boolean)">
             <summary>
             Returns an array of SelectExpressions gathered from the children of the given parent AST node.
             </summary>
@@ -20472,6 +20533,20 @@
             Returns the Hibernate queryable implementation for the HQL class.
             </summary>
         </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.HqlSqlWalkerTreeNodeStream.InsertChild(NHibernate.Hql.Ast.ANTLR.Tree.IASTNode,NHibernate.Hql.Ast.ANTLR.Tree.IASTNode)">
+            <summary>
+            Insert a new node into both the Tree and the Node Array. Add DOWN and UP nodes if needed.
+            </summary>
+            <param name="parent">The parent node</param>
+            <param name="child">The child node</param>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.HqlSqlWalkerTreeNodeStream.NumberOfChildNodes(System.Int32)">
+            <summary>
+            Count the number of child nodes (including DOWNs and UPs) of a parent node
+            </summary>
+            <param name="parentIndex">The index of the parent in the node array</param>
+            <returns>The number of child nodes</returns>
+        </member>
         <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IndexNode">
             <summary>
             Represents the [] operator and provides it's semantics.
@@ -20484,6 +20559,23 @@
             Author: Steve Ebersole
             Ported by: Steve Strong
             </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.InsertStatement">
+            <summary> 
+            Defines a top-level AST node representing an HQL "insert select" statement. 
+            </summary>
+        </member>
+        <member name="M:NHibernate.Hql.Ast.ANTLR.Tree.InsertStatement.Validate">
+            <summary> Performs detailed semantic validation on this insert statement tree. </summary>
+            <exception cref="T:NHibernate.QueryException">Indicates validation failure.</exception>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.InsertStatement.IntoClause">
+            <summary> Retreive this insert statement's into-clause. </summary>
+            <returns> The into-clause </returns>
+        </member>
+        <member name="P:NHibernate.Hql.Ast.ANTLR.Tree.InsertStatement.SelectClause">
+            <summary> Retreive this insert statement's select-clause.</summary>
+            <returns> The select-clause. </returns>
         </member>
         <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.IntoClause">
             <summary>
@@ -20615,6 +20707,11 @@
             Represents an SQL fragment in the AST.
             Author: josh
             Ported by: Steve Strong
+            </summary>
+        </member>
+        <member name="T:NHibernate.Hql.Ast.ANTLR.Tree.UpdateStatement">
+            <summary> 
+            Defines a top-level AST node representing an HQL update statement. 
             </summary>
         </member>
         <member name="T:NHibernate.Hql.Ast.ANTLR.Util.AliasGenerator">
@@ -21019,15 +21116,6 @@
             <param name="collectionRole">the role name of the collection used as the basis for the filter.</param>
             <param name="replacements">Defined query substitutions.</param>
             <param name="shallow">Does this represent a shallow (scalar or entity-id) select?</param>
-        </member>
-        <member name="M:NHibernate.Hql.Ast.ANTLR.QueryTranslatorImpl.#ctor(System.String,NHibernate.Hql.Ast.ANTLR.Tree.IASTNode,System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter},NHibernate.Engine.ISessionFactoryImplementor)">
-            <summary>
-            Creates a new AST-based query translator.
-            </summary>
-            <param name="queryIdentifier">The query-identifier (used in stats collection)</param>
-            <param name="query">The hql query to translate</param>
-            <param name="enabledFilters">Currently enabled filters</param>
-            <param name="factory">The session factory constructing this translator instance.</param>
         </member>
         <member name="M:NHibernate.Hql.Ast.ANTLR.QueryTranslatorImpl.#ctor(System.String,System.String,System.Collections.Generic.IDictionary{System.String,NHibernate.IFilter},NHibernate.Engine.ISessionFactoryImplementor)">
             <summary>
@@ -24018,7 +24106,7 @@
             </para>
             </remarks>
         </member>
-        <member name="M:NHibernate.ICriteria.SetProjection(NHibernate.Criterion.IProjection)">
+        <member name="M:NHibernate.ICriteria.SetProjection(NHibernate.Criterion.IProjection[])">
             <summary>
             Used to specify that the query results will be a projection (scalar in
             nature).  Implicitly specifies the projection result transformer.
@@ -25301,6 +25389,13 @@
             <param name="uid">The identifier of the ISessionFactory.</param>
             <returns>An instantiated ISessionFactory.</returns>
         </member>
+        <member name="P:NHibernate.Impl.SessionIdLoggingContext.SessionId">
+            <summary>
+            Error handling in this case will only kick in if we cannot set values on the TLS
+            this is usally the case if we are called from the finalizer, since this is something
+            that we do only for logging, we ignore the error.
+            </summary>
+        </member>
         <member name="T:NHibernate.Impl.SessionImpl">
             <summary>
             Concrete implementation of a Session, also the central, organizing component
@@ -25366,7 +25461,13 @@
             <param name="entityMode">The entity mode</param>
         </member>
         <member name="M:NHibernate.Impl.SessionImpl.Close">
-            <summary></summary>
+            <summary>
+            Close the session and release all resources
+            <remarks>
+            Do not call this method inside a transaction scope, use <c>Dispose</c> instead, since
+            Close() is not aware of distributed transactions
+            </remarks>
+            </summary>
         </member>
         <member name="M:NHibernate.Impl.SessionImpl.AfterTransactionCompletion(System.Boolean,NHibernate.ITransaction)">
             <summary>
@@ -25547,7 +25648,7 @@
         </member>
         <member name="M:NHibernate.Impl.SessionImpl.Dispose">
             <summary>
-            Just in case the user forgot to Commit() or Close()
+            Perform a soft (distributed transaction aware) close of the session
             </summary>
         </member>
         <member name="M:NHibernate.Impl.SessionImpl.Dispose(System.Boolean)">
@@ -26934,7 +27035,7 @@
             <summary>
             Retrieve the <see cref="T:NHibernate.Mapping.MetaAttribute"/>
             </summary>
-            <param name="name">The attribute name</param>
+            <param name="attributeName">The attribute name</param>
             <returns>The <see cref="T:NHibernate.Mapping.MetaAttribute"/> if exists; null otherwise</returns>
         </member>
         <member name="P:NHibernate.Mapping.IMetaAttributable.MetaAttributes">
@@ -29152,6 +29253,14 @@
             </summary>
             <param name="propertyName"></param>
             <returns></returns>
+        </member>
+        <member name="M:NHibernate.Persister.Entity.IPropertyMapping.TryToType(System.String,NHibernate.Type.IType@)">
+            <summary>
+            Given a component path expression, get the type of the property. 
+            </summary>
+            <param name="propertyName"></param>
+            <param name="type"></param>
+            <returns>true if a type was found, false if not</returns>
         </member>
         <member name="M:NHibernate.Persister.Entity.IPropertyMapping.ToColumns(System.String,System.String)">
             <summary>
@@ -33484,19 +33593,10 @@
             Create a new transaction and return it without starting it.
             </summary>
         </member>
-        <member name="M:NHibernate.Transaction.ITransactionFactory.IsTransactionInProgress(NHibernate.AdoNet.AdoNetContext,NHibernate.Transaction.ITransactionContext,NHibernate.ITransaction)">
-             <summary>
-             Determine whether an underlying transaction is in progress.
-            
-             Mainly this is used in determining whether to register a
-             synchronization as well as whether or not to circumvent
-             auto flushing outside transactions. 
-             </summary>
-             <returns>true if an underlying transaction is know to be in effect.</returns>
-        </member>
-        <member name="P:NHibernate.Transaction.ITransactionFactory.DefaultReleaseMode">
+        <member name="T:NHibernate.Transaction.ITransactionContext">
             <summary>
-            Get the default connection release mode
+            This is used as a marker interface for the different 
+            transaction context required for each session
             </summary>
         </member>
         <member name="T:NHibernate.Transaction.AdoTransaction">
@@ -33722,10 +33822,19 @@
             </code>
             </example>
         </member>
+        <member name="T:NHibernate.Transform.ToListResultTransformer">
+            <summary> 
+            Tranforms each result row from a tuple into a <see cref="T:System.Collections.IList"/>, such that what
+            you end up with is a <see cref="T:System.Collections.IList"/> of <see cref="T:System.Collections.IList"/>.
+            </summary>
+        </member>
         <member name="F:NHibernate.Transform.Transformers.AliasToEntityMap">
             <summary>
             Each row of results is a map (<see cref="T:System.Collections.IDictionary"/>) from alias to values/entities
             </summary>
+        </member>
+        <member name="F:NHibernate.Transform.Transformers.ToList">
+            <summary> Each row of results is a <see cref="T:System.Collections.IList"/></summary>
         </member>
         <member name="M:NHibernate.Transform.Transformers.AliasToBean(System.Type)">
             <summary>
