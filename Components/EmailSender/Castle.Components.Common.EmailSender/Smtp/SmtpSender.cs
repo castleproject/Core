@@ -28,11 +28,11 @@ namespace Castle.Components.Common.EmailSender.Smtp
 	public class SmtpSender : IEmailSender
 	{
 		private bool asyncSend;
-		private string hostname;
+		private readonly string hostname;
 		private int port = 25;
 		private int? timeout;
 		private bool useSSL;
-		private NetworkCredential credentials = new NetworkCredential();
+		private readonly NetworkCredential credentials = new NetworkCredential();
 
 		/// <summary>
 		/// This service implementation
@@ -146,7 +146,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			}
 			else
 			{
-				using(MailMessage msg = CreateMailMessage(message))
+				using (MailMessage msg = CreateMailMessage(message))
 				{
 					SmtpClient smtpClient = new SmtpClient(hostname, port);
 					Configure(smtpClient);
@@ -176,12 +176,12 @@ namespace Castle.Components.Common.EmailSender.Smtp
 
 			if (!String.IsNullOrEmpty(message.Cc))
 			{
-				mailMessage.CC.Add(message.Cc);
+				mailMessage.CC.Add(message.Cc.Replace(';', ','));
 			}
 
 			if (!String.IsNullOrEmpty(message.Bcc))
 			{
-				mailMessage.Bcc.Add(message.Bcc);
+				mailMessage.Bcc.Add(message.Bcc.Replace(';', ','));
 			}
 
 			mailMessage.Subject = message.Subject;
@@ -228,7 +228,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			}
 			return mailMessage;
 		}
-
 
 		/// <summary>
 		/// Gets or sets the domain.
@@ -278,7 +277,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 				smtpClient.Timeout = timeout.Value;
 			}
 
-			if  (useSSL)
+			if (useSSL)
 			{
 				smtpClient.EnableSsl = useSSL;
 			}
