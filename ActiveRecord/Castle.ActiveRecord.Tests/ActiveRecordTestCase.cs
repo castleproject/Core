@@ -542,8 +542,9 @@ namespace Castle.ActiveRecord.Tests
 			blog2.Save();
 
 			Assert.AreEqual(2, Blog.FetchCount());
-			Assert.AreEqual(1, Blog.FetchCount("name=?", "hammett's blog"));
-			Assert.IsTrue(Blog.Exists("name=?", "hammett's blog"));
+			Assert.AreEqual(1, Blog.FetchCount("Name=?", "hammett's blog"), "Try to fetch the number of blogs with the specified name, " 
+				+ "having in mind the capatalization of column \"Name\" (not \"name\").");
+			Assert.IsTrue(Blog.Exists("Name=?", "hammett's blog"));
 
 			Blog retrieved = blogs[0];
 			Assert.IsNotNull(retrieved);

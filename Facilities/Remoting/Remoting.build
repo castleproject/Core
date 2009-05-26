@@ -8,6 +8,11 @@
 	<property name="root.dir" value="../.." />
 	<include buildfile="${root.dir}/common-project.xml" />
 
+	<if test="${not property::exists('remoting.test')}">
+		<property name="remoting.test" value="${common.testrunner.enabled}" />
+	</if>
+	<property name="common.testrunner.enabled" value="${remoting.test}" />
+	
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
 		<include name="Castle.Facilities.Remoting.TestsComponents/Castle.Facilities.Remoting.TestsComponents.build" />

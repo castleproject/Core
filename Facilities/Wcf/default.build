@@ -8,6 +8,11 @@
 	<property name="root.dir" value="../.." />
 	<include buildfile="${root.dir}/common-project.xml" />
 
+	<if test="${not property::exists('wcfintegration.test')}">
+		<property name="wcfintegration.test" value="${common.testrunner.enabled}" />
+	</if>
+	<property name="common.testrunner.enabled" value="${wcfintegration.test}" />
+	
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
 		<include name="Castle.Facilities.WcfIntegration/default.build" />
