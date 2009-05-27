@@ -176,8 +176,16 @@ namespace Castle.Facilities.WcfIntegration.Behaviors
 
 			XmlReader reader = XmlDictionaryReader.CreateBinaryReader(stream,
 				new XmlDictionaryReaderQuotas());
-			message = Message.CreateMessage(reader, int.MaxValue, message.Version);
-			return message;
+			var newMessage = Message.CreateMessage(reader, int.MaxValue, message.Version);
+			newMessage.Headers.Clear();
+			newMessage.Headers.CopyHeadersFrom(message);
+			newMessage.Properties.Clear();
+			foreach (var property in message.Properties)
+			{
+				newMessage.Properties.Add(property.Key, property.Value);
+			}
+
+			return newMessage;
 		}
 	}
 
