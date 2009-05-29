@@ -16,9 +16,11 @@
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
 		<include name="Castle.ActiveRecord/Castle.ActiveRecord.build" />
-		<include name="Castle.ActiveRecord.Tests.Model/Castle.ActiveRecord.Tests.Model.build" />
+		<include name="Castle.ActiveRecord.Linq/Castle.ActiveRecord.Linq.build" />
+		<include name="Castle.ActiveRecord.Tests.Model/Castle.ActiveRecord.Tests.Model.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.ActiveRecord.Framework.Internal.Tests/Castle.ActiveRecord.Framework.Internal.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.ActiveRecord.Tests/Castle.ActiveRecord.Tests.build" if="${common.testrunner.enabled}" />
+		<include name="Castle.ActiveRecord.Linq.Tests/Castle.ActiveRecord.Linq.Tests.build" if="${common.testrunner.enabled}" />
 	</fileset>
 
 	<target name="build" depends="common.build" />
