@@ -33,12 +33,14 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		                       validatorDateTimeLowOrHigh,
 		                       validatorStringLow,
 		                       validatorStringHigh,
-		                       validatorStringLowOrHigh;
+		                       validatorStringLowOrHigh,
+							   validatorIntMessage;
 
 		private TestTargetInt intTarget;
 		private TestTargetDecimal decimalTarget;
 		private TestTargetDateTime dateTimeTarget;
 		private TestTargetString stringTarget;
+		private const string CustomErrorMessage = "Custom Error Message";
 
 		[SetUp]
 		public void Init()
@@ -92,6 +94,10 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			validatorStringLowOrHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetString).GetProperty("TargetField"));
 
 			stringTarget = new TestTargetString();
+
+			// Message validation
+			validatorIntMessage = new RangeValidator(0, 1) { ErrorMessage = CustomErrorMessage };
+			validatorIntMessage.Initialize(new CachedValidationRegistry(), typeof(TestTargetInt).GetProperty("TargetField"));
 		}
 
 		public class TestTargetInt
@@ -287,6 +293,15 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsTrue(validatorStringLowOrHigh.IsValid(stringTarget, "m"));
 		}
 
+		#endregion
+
+		#region Error message tests
+		[Test]
+		public void CustomMessageIsReturned()
+		{
+			Assert.IsFalse(validatorIntMessage.IsValid(intTarget, -2));
+			Assert.AreEqual(CustomErrorMessage, validatorIntMessage.ErrorMessage);
+		}
 		#endregion
 	}
 }
