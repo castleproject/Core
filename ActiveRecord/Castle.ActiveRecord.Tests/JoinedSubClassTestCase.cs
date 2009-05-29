@@ -17,6 +17,7 @@ namespace Castle.ActiveRecord.Tests
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Tests.Model;
+using Castle.ActiveRecord.Framework;
 
 	[TestFixture]
 	public class JoinedSubClassTestCase : AbstractActiveRecordTest
@@ -79,6 +80,14 @@ namespace Castle.ActiveRecord.Tests
 			PersonEntity[] people = PersonEntity.FindAll();
 			Assert.AreEqual(1, people.Length);
 			Assert.IsNotNull(people[0].Manager);
+		}
+
+		[Test][ExpectedException(typeof(ActiveRecordException),"A type must declare a primary key. Check type Castle.ActiveRecord.Tests.Model.PersonEntity")]
+		public void Subclasses_must_be_registered_with_parent()
+		{
+			// Todo: When refactoring initialization for AR3, consider supporting this functionality.
+			ActiveRecordStarter.Initialize(GetConfigSource(),typeof(Entity), typeof(CompanyEntity));
+			ActiveRecordStarter.RegisterTypes(typeof(PersonEntity));
 		}
 	}
 }
