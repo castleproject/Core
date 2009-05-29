@@ -198,6 +198,42 @@ namespace Castle.ActiveRecord
 			}
 
 			/// <summary>
+			/// Initializes a new instance of the <see cref="MetaValueAttribute"/> class.
+			/// Allows a byte to be used as a meta-value
+			/// </summary>
+			/// <param name="value">The value.</param>
+			/// <param name="clazz">The clazz.</param>
+			public MetaValueAttribute(byte value, Type clazz)
+			{
+				this.value = value.ToString();
+				this.clazz = clazz;
+			}
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="MetaValueAttribute"/> class.
+			/// Allows a short to be used as a meta-value
+			/// </summary>
+			/// <param name="value">The value.</param>
+			/// <param name="clazz">The clazz.</param>
+			public MetaValueAttribute(short value, Type clazz)
+			{
+				this.value = value.ToString();
+				this.clazz = clazz;
+			}
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="MetaValueAttribute"/> class.
+			/// Allows a int to be used as a meta-value
+			/// </summary>
+			/// <param name="value">The value.</param>
+			/// <param name="clazz">The clazz.</param>
+			public MetaValueAttribute(int value, Type clazz)
+			{
+				this.value = value.ToString();
+				this.clazz = clazz;
+			}
+
+			/// <summary>
 			/// Gets or sets the value for this class
 			/// </summary>
 			/// <value>The value.</value>
