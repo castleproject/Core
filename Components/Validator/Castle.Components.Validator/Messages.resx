@@ -201,4 +201,7 @@
   <data name="timespan" xml:space="preserve">
     <value>Please enter a valid time-span (ddd.hh:mm:ss.xxx)</value>
   </data>
+  <data name="ipaddress" xml:space="preserve">
+    <value>Please enter a valid IP address.</value>
+  </data>
 </root>

@@ -65,6 +65,7 @@
     <Compile Include="ValidatorTests\CreditCardValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\GroupNotEmptyValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\GuidValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\IPAddressValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\IsGreaterValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\IsLesserValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\NotSameValueValidatorTestCase.cs" />

@@ -59,6 +59,7 @@
     <Compile Include="Attributes\ValidateEmailAttribute.cs" />
     <Compile Include="Attributes\ValidateGroupNotEmptyAttribute.cs" />
     <Compile Include="Attributes\ValidateIntegerAttribute.cs" />
+    <Compile Include="Attributes\ValidateIPAddressAttribute.cs" />
     <Compile Include="Attributes\ValidateIsGreaterAttribute.cs" />
     <Compile Include="Attributes\ValidateIsLesserAttribute.cs" />
     <Compile Include="Attributes\ValidateLengthAttribute.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Validators\CollectionNotEmptyValidator.cs" />
     <Compile Include="Validators\AbstractCrossReferenceValidator.cs" />
     <Compile Include="Validators\GuidValidator.cs" />
+    <Compile Include="Validators\IPAddressValidator.cs" />
     <Compile Include="Validators\IsGreaterValidator.cs" />
     <Compile Include="Validators\IsLesserValidator.cs" />
     <Compile Include="Validators\NotSameAsValidator.cs" />

@@ -18,7 +18,7 @@ namespace Castle.Components.Validator
 	using System.Reflection;
 
 	/// <summary>
-	/// The base class for all the validation attributes that reference a property or feild.
+	/// The base class for all the validation attributes that reference a property or field.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=true), Serializable]
 	public abstract class AbstractCrossReferenceValidationAttributre : AbstractValidationAttribute

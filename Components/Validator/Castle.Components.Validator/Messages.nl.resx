@@ -189,4 +189,10 @@
   <data name="not_same_value_invalid" xml:space="preserve">
     <value>Veld mag niet gelijk zijn aan '{0}'</value>
   </data>
+  <data name="ipaddress" xml:space="preserve">
+    <value>Vul s.v.p. een geldig IP adres in.</value>
+  </data>
+  <data name="timespan" xml:space="preserve">
+    <value>Vul s.v.p. een geldige tijdsduur in (ddd.hh:mm:ss.xxx)</value>
+  </data>
 </root>
