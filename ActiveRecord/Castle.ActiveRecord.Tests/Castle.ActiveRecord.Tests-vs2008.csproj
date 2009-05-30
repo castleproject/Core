@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -138,7 +138,7 @@
       <Name>Castle.ActiveRecord.Tests.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.ActiveRecord\Castle.ActiveRecord-vs2008.csproj">
-      <Name>Castle.ActiveRecord</Name>
+      <Name>Castle.ActiveRecord-vs2008</Name>
       <Project>{652F95D4-86E2-40B6-919D-CFC6E449386B}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>

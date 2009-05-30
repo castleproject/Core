@@ -90,6 +90,10 @@
     <None Include="Castle.ActiveRecord.Linq.Tests.build" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Components\Validator\Castle.Components.Validator\Castle.Components.Validator-vs2008.csproj">
+      <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
+      <Name>Castle.Components.Validator-vs2008</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.ActiveRecord.Linq\Castle.ActiveRecord.Linq-vs2008.csproj">
       <Project>{50D39615-29A3-4545-908B-8929EC0853C3}</Project>
       <Name>Castle.ActiveRecord.Linq-vs2008</Name>

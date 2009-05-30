@@ -128,12 +128,12 @@
       <Name>Castle.ActiveRecord.Tests.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.ActiveRecord.Tests\Castle.ActiveRecord.Tests-vs2008.csproj">
-      <Name>Castle.ActiveRecord.Tests</Name>
+      <Name>Castle.ActiveRecord.Tests-vs2008</Name>
       <Project>{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
     <ProjectReference Include="..\Castle.ActiveRecord\Castle.ActiveRecord-vs2008.csproj">
-      <Name>Castle.ActiveRecord</Name>
+      <Name>Castle.ActiveRecord-vs2008</Name>
       <Project>{652F95D4-86E2-40B6-919D-CFC6E449386B}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
