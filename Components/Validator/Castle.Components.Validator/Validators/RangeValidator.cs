@@ -28,6 +28,10 @@ namespace Castle.Components.Validator
 		/// </summary>
 		Integer,
 		/// <summary>
+		/// <see cref="RangeValidator"/> is dealing with a range of longs
+		/// </summary>
+		Long,
+		/// <summary>
 		/// <see cref="RangeValidator"/> is dealing with a range of decimals
 		/// </summary>
 		Decimal,
@@ -61,6 +65,20 @@ namespace Castle.Components.Validator
 			AssertValid(max, min);
 
 			type = RangeValidationType.Integer;
+			this.min = min;
+			this.max = max;
+		}
+
+		/// <summary>
+		/// Initializes an long-based (<see cref="long"/>) range validator.
+		/// </summary>
+		/// <param name="min">The minimum value, or <c>long.MinValue</c> if this should not be tested.</param>
+		/// <param name="max">The maximum value, or <c>long.MaxValue</c> if this should not be tested.</param>
+		public RangeValidator(long min, long max)
+		{
+			AssertValid(max, min);
+
+			type = RangeValidationType.Long;
 			this.min = min;
 			this.max = max;
 		}
@@ -155,6 +173,8 @@ namespace Castle.Components.Validator
 				{
 					case RangeValidationType.Integer:
 						return GetIntValue(max, int.MaxValue);
+					case RangeValidationType.Long:
+						return GetLongValue(max, int.MaxValue);
 					case RangeValidationType.Decimal:
 						return GetDecimalValue(max, decimal.MaxValue);
 					case RangeValidationType.DateTime:
@@ -203,6 +223,21 @@ namespace Castle.Components.Validator
 							if (int.TryParse(fieldValue.ToString(), out intValue))
 							{
 								valid = intValue >= (int) min && intValue <= (int) max;
+							}
+						}
+						break;
+					case RangeValidationType.Long:
+						long longValue;
+						try
+						{
+							longValue = (long)fieldValue;
+							valid = longValue >= (long)min && longValue <= (long)max;
+						}
+						catch
+						{
+							if (long.TryParse(fieldValue.ToString(), out longValue))
+							{
+								valid = longValue >= (long)min && longValue <= (long)max;
 							}
 						}
 						break;
@@ -291,6 +326,9 @@ namespace Castle.Components.Validator
 				case RangeValidationType.Integer:
 					generator.SetValueRange(target, (int) min, (int) max, BuildErrorMessage());
 					break;
+				case RangeValidationType.Long:
+					generator.SetValueRange(target, (long)min, (long)max, BuildErrorMessage());
+					break;
 				case RangeValidationType.Decimal:
 					generator.SetValueRange(target, (decimal) min, (decimal) max, BuildErrorMessage());
 					break;
@@ -326,6 +364,11 @@ namespace Castle.Components.Validator
 				return BuildIntegerErrorMessage((int) min, (int) max);
 			}
 
+			if (type == RangeValidationType.Long)
+			{
+				return BuildLongErrorMessage((long)min, (long)max);
+			}
+
 			if (type == RangeValidationType.Decimal)
 			{
 				return BuildDecimalErrorMessage((decimal) min, (decimal) max);
@@ -351,6 +394,32 @@ namespace Castle.Components.Validator
 				return string.Format(GetString(MessageConstants.RangeTooLowMessage), min);
 			}
 			else if (min != int.MinValue || max != int.MaxValue)
+			{
+				return string.Format(GetString(MessageConstants.RangeTooHighOrLowMessage), min, max);
+			}
+			else
+			{
+				throw new InvalidOperationException();
+			}
+		}
+
+		/// <summary>
+		/// Gets the error message string for long validation
+		/// </summary>
+		/// <returns>an error message</returns>
+		protected string BuildLongErrorMessage(long min, long max)
+		{
+			if (min == long.MinValue && max != long.MaxValue)
+			{
+				// range against max value only
+				return string.Format(GetString(MessageConstants.RangeTooHighMessage), max);
+			}
+			else if (min != long.MinValue && max == long.MaxValue)
+			{
+				// range against min value only
+				return string.Format(GetString(MessageConstants.RangeTooLowMessage), min);
+			}
+			else if (min != long.MinValue || max != long.MaxValue)
 			{
 				return string.Format(GetString(MessageConstants.RangeTooHighOrLowMessage), min, max);
 			}
@@ -474,6 +543,23 @@ namespace Castle.Components.Validator
 			}
 		}
 
+		private static void AssertValid(long max, long min)
+		{
+			if (min == long.MinValue && max == long.MaxValue)
+			{
+				throw new ArgumentException(
+					"Both min and max were set in such as way that neither would be tested. At least one must be tested.");
+			}
+			if (min > max)
+			{
+				throw new ArgumentException("The min parameter must be less than or equal to the max parameter.");
+			}
+			if (max < min)
+			{
+				throw new ArgumentException("The max parameter must be greater than or equal to the min parameter.");
+			}
+		}
+
 		private static void AssertValid(decimal max, decimal min)
 		{
 			if (min == decimal.MinValue && max == decimal.MaxValue)
@@ -523,6 +609,8 @@ namespace Castle.Components.Validator
 				{
 					case RangeValidationType.Integer:
 						return GetIntValue(min, int.MinValue);
+					case RangeValidationType.Long:
+						return GetLongValue(min, long.MinValue);
 					case RangeValidationType.Decimal:
 						return GetDecimalValue(min, decimal.MinValue);
 					case RangeValidationType.DateTime:
@@ -553,6 +641,21 @@ namespace Castle.Components.Validator
 					value = defaultValue;
 			}
 			return intValue;
+		}
+
+		private long GetLongValue(object value, long defaultValue)
+		{
+			long longValue = defaultValue;
+			try
+			{
+				longValue = (long)value;
+			}
+			catch
+			{
+				if (value == null || !long.TryParse(value.ToString(), out longValue))
+					value = defaultValue;
+			}
+			return longValue;
 		}
 
 		private decimal GetDecimalValue(object value, decimal defaultValue)

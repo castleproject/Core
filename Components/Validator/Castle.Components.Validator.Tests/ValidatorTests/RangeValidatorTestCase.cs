@@ -25,6 +25,9 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		private RangeValidator validatorIntLow,
 		                       validatorIntHigh,
 		                       validatorIntLowOrHigh,
+							   validatorLongLow,
+							   validatorLongHigh,
+							   validatorLongLowOrHigh,
 							   validatorDecimalLow,
 							   validatorDecimalHigh,
 							   validatorDecimalLowOrHigh,
@@ -37,6 +40,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 							   validatorIntMessage;
 
 		private TestTargetInt intTarget;
+		private TestTargetLong longTarget;
 		private TestTargetDecimal decimalTarget;
 		private TestTargetDateTime dateTimeTarget;
 		private TestTargetString stringTarget;
@@ -58,6 +62,18 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			validatorIntLowOrHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetInt).GetProperty("TargetField"));
 
 			intTarget = new TestTargetInt();
+
+			// Long validation
+			validatorLongLow = new RangeValidator(0, long.MaxValue);
+			validatorLongLow.Initialize(new CachedValidationRegistry(), typeof(TestTargetLong).GetProperty("TargetField"));
+
+			validatorLongHigh = new RangeValidator(long.MinValue, 0);
+			validatorLongHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetLong).GetProperty("TargetField"));
+
+			validatorLongLowOrHigh = new RangeValidator(RangeValidationType.Long, "-1", "1");
+			validatorLongLowOrHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetLong).GetProperty("TargetField"));
+
+			longTarget = new TestTargetLong();
 
 			// decimal validation
 			validatorDecimalLow = new RangeValidator(0, decimal.MaxValue);
@@ -105,6 +121,17 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			private int targetField;
 
 			public int TargetField
+			{
+				get { return targetField; }
+				set { targetField = value; }
+			}
+		}
+
+		public class TestTargetLong
+		{
+			private long targetField;
+
+			public long TargetField
 			{
 				get { return targetField; }
 				set { targetField = value; }
@@ -180,6 +207,45 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsFalse(validatorIntLowOrHigh.IsValid(intTarget, 2));
 			//pass when compare to number not too high
 			Assert.IsTrue(validatorIntLowOrHigh.IsValid(intTarget, 0));
+		}
+
+		#endregion
+
+		#region Long range tests
+
+		[Test]
+		public void RangeLongTooLowValidator()
+		{
+			//fail when compare to non-number
+			Assert.IsFalse(validatorLongLow.IsValid(longTarget, "abc"));
+			//fail when compare to number too low
+			Assert.IsFalse(validatorLongLow.IsValid(longTarget, -1));
+			//pass when compare to number not too low
+			Assert.IsTrue(validatorLongLow.IsValid(longTarget, 1));
+		}
+
+		[Test]
+		public void RangeLongTooHighValidator()
+		{
+			//fail when compare to non-number
+			Assert.IsFalse(validatorLongHigh.IsValid(longTarget, "abc"));
+			//fail when compare to number too high
+			Assert.IsFalse(validatorLongHigh.IsValid(longTarget, 1));
+			//pass when compare to number not too high
+			Assert.IsTrue(validatorLongHigh.IsValid(longTarget, -1));
+		}
+
+		[Test]
+		public void RangeLongTooLowOrHighValidator()
+		{
+			//fail when compare to non-number
+			Assert.IsFalse(validatorLongLowOrHigh.IsValid(longTarget, "abc"));
+			//fail when compare to number too low
+			Assert.IsFalse(validatorLongLowOrHigh.IsValid(longTarget, -2));
+			//fail when compare to number too high
+			Assert.IsFalse(validatorLongLowOrHigh.IsValid(longTarget, 2));
+			//pass when compare to number not too high
+			Assert.IsTrue(validatorLongLowOrHigh.IsValid(longTarget, 0));
 		}
 
 		#endregion
