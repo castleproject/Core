@@ -21,6 +21,7 @@ namespace Castle.Components.Validator
 	/// This is a meta validator. 
 	/// It is only useful to test a source content before setting it on the 
 	/// target instance.
+	/// It can validate short (Int16), int (Int32), and long (Int64).
 	/// </summary>
 	public class IntegerValidator : AbstractValidator
 	{

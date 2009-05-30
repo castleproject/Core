@@ -11,15 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 namespace Castle.Components.Validator
 {
 	using System;
 
 	/// <summary>
-	/// Validate that this date is a valid one.
+	/// Validate that this integer is a valid one.
+	/// It can be used to validate short (Int16), int (Int32), and long (Int64) integers.
 	/// </summary>
 	/// <remarks>
-	/// This checks the format of the date
+	/// This checks the format of the integer
 	/// </remarks>
 	[Serializable, CLSCompliant(false)]
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.ReturnValue | AttributeTargets.Parameter, AllowMultiple = true)]
