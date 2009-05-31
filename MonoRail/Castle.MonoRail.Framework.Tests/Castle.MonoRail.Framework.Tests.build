@@ -26,8 +26,9 @@
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />
 			<include name="Castle.MonoRail.WindsorExtension.dll" />
-
+			<include name="System.Configuration.dll" />
 			<include name="System.Data.dll" />
+			<include name="System.Web.dll" />
 			<include name="Rhino.Mocks.dll" />
 		</assemblyfileset>
 

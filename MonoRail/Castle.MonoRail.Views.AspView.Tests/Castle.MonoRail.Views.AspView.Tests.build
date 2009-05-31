@@ -39,6 +39,7 @@
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Castle.MonoRail.Views.AspView.dll" />
 			<include name="Castle.MonoRail.Framework.Tests.dll" />
+			<include name="System.Web.dll" />
 		</assemblyfileset>
 	</target>
 

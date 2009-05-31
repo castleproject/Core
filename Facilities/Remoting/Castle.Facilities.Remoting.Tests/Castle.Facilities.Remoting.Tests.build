@@ -15,7 +15,7 @@
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll"/>
 			<include name="Castle.Facilities.Remoting.TestComponents.dll" />
-			
+			<include name="System.Configuration.dll" />
 			<include name="Castle.Core.dll" />
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />			

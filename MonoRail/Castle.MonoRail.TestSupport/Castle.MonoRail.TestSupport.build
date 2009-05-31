@@ -37,10 +37,15 @@
 			<echo>Could not find "gacutil" to install Castle.MonoRail.TestSupport server to GAC.</echo>
 			<echo>To run the tests you have to install it manually: gacutil /i Castle.MonoRail.TestSupport</echo>
 		</if>
+
+		<property name="gacutil.args" value="/f /i"/>
+		<if test="${(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
+			<property name="gacutil.args" value="-i" />
+		</if>
+
 		<if test="${property::exists( 'gacutil.file' )}">
-			<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${build.dir}">
-				<arg value="/f" />
-				<arg value="/i" />
+			<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${build.dir}">
+				<arg value="${gacutil.args}" />
 				<arg value="Castle.MonoRail.TestSupport.dll" />
 			</exec>
 		</if>

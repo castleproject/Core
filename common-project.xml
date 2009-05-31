@@ -258,12 +258,18 @@
 
 			<echo message="Running tests in '${project::get-name()}'" />
 
+			<property name="nunitcommandline" value="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo" />
+			<if test="${(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
+				<property name="nunitcommandline" value="${project::get-name()}.dll -xml:${testresults.dir}/${project::get-name()}.dll-results.xml -config:${build.dir}/${project::get-name()}.dll.config -nologo" />
+			</if>
+
 			<!-- Use nunit-console.exe if found, otherwise fall back to nunit2 task -->
 			<exec if="${nunit.found}"
 				program="${nunit-console}" 
 				workingdir="${build.dir}" 
-				commandline="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo"
+				commandline="${nunitcommandline}"
 				failonerror="${common.testrunner.failonerror}"
+				timeout="105000"
 			/>
 		</if>
 		<if test="${not common.testrunner.enabled}">

@@ -25,6 +25,7 @@
 			<include name="Castle.Facilities.AutomaticTransactionManagement.dll" />
 			<include name="System.Configuration.dll" />
 			<include name="log4net.dll" />
+			<include name="System.Data.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">

@@ -206,6 +206,17 @@
 		<property name="build.warnaserrors" value="false" />
 	</target>
 
+	<target name="set-mono-3.5-framework-configuration">
+		<property name="nant.settings.currentframework" value="mono-3.5" />
+		<property name="current.build.defines" value="${build.defines},MONO,MONO2,DOTNET35" />
+		<property name="link.sdkdoc.version" value="MsdnOnline" />
+		<property name="gacutil.file" value="gacutil" />
+		<property name="build.warnaserrors" value="false" />
+		<property name="csc.keyfile" value="-keyfile:${key.file}" />
+
+		<property name="build.msbuild"	value="false" overwrite="false" />
+	</target>
+
 	<target name="display-current-runtime">
 		<echo message="" />
 		<echo message="----------------------------------------------------------" />
@@ -241,6 +252,12 @@
 			commandline='info "${project::get-base-directory()}" --xml'
 			output="_revision.xml"
 			failonerror="false"/>
+		<if test="${(framework::get-family(framework::get-runtime-framework()) == 'mono')}"> <!-- Should check unix not mono -->
+			<exec
+				program="svn"
+				commandline='info "${project::get-base-directory()}" --xml > _revision.xml'
+				failonerror="false"/>
+		</if>
 		<xmlpeek
 			file="_revision.xml"
 			xpath="/info/entry/@revision"

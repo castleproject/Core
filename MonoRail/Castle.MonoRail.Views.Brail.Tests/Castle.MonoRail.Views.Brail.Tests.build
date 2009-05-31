@@ -14,7 +14,7 @@
 		
 		<copy todir="${build.dir}" >
 			<fileset basedir="${lib.dir}">
-				<include name="${src.dir}/../TestSiteBrail/Bin/TestSiteBrail.dll" />
+				<include name="${src.dir}/../TestSiteBrail/bin/TestSiteBrail.dll" />
 			</fileset>
 		</copy>
 		
