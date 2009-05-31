@@ -267,6 +267,8 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		/// <param name="smtpClient">Message instance</param>
 		protected virtual void Configure(SmtpClient smtpClient)
 		{
+			smtpClient.Credentials = null;
+
 			if (CanAccessCredentials && HasCredentials)
 			{
 				smtpClient.Credentials = credentials;
