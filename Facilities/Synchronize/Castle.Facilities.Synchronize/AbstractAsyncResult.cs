@@ -25,7 +25,7 @@ namespace Castle.Facilities.Synchronize
 		private int cleanUp;
 		private int completed;
 		private int invokedCallback;
-		private readonly object asyncState;
+		private object asyncState;
 		private readonly AsyncCallback _asyncCallback;
 		private bool completedSynchronously;
 		private bool endCalled;
@@ -54,6 +54,7 @@ namespace Castle.Facilities.Synchronize
 		public object AsyncState
 		{
 			get { return asyncState; }
+			protected set { asyncState = value; }
 		}
 
 		/// <summary>

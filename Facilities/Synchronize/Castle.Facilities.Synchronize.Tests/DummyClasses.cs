@@ -18,6 +18,9 @@ namespace Castle.Facilities.Synchronize.Tests
 	using System.Reflection;
 	using System.Threading;
 	using System.Windows.Forms;
+	using Castle.Core;
+	using Castle.MicroKernel;
+	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Proxy;
 
 	public interface IDummyForm
@@ -45,6 +48,13 @@ namespace Castle.Facilities.Synchronize.Tests
 		int DoWork(int work);
 	}
 
+
+	public interface IWorkerWithOuts : IWorker
+	{
+		[Synchronize]
+		int DoWork(int work, out int passed);
+	}
+
 	public class AsynchronousContext : SynchronizationContext
 	{
 		public override void Send(SendOrPostCallback d, object state)
@@ -64,11 +74,17 @@ namespace Castle.Facilities.Synchronize.Tests
 	}
 
 	[Synchronize(typeof(AsynchronousContext))]
-	public class AsynchronousWorker : SimpleWorker
+	public class AsynchronousWorker : SimpleWorker, IWorkerWithOuts
 	{
+		[Synchronize]
+		public virtual int DoWork(int work, out int passed)
+		{
+			passed = work / 2;
+			return work * 2;
+		}
 	}
 
-	public class ManualWorker : AsynchronousWorker
+	public class ManualWorker : AsynchronousWorker, IWorkerWithOuts
 	{
 		private Exception exception;
 		private ManualResetEvent ready = new ManualResetEvent(false);
@@ -85,7 +101,7 @@ namespace Castle.Facilities.Synchronize.Tests
 				}
 				return remaining;
 			}
-			return 0;
+			return work * 2;
 		}
 
 		public void Ready()
@@ -164,6 +180,21 @@ namespace Castle.Facilities.Synchronize.Tests
 		{
 			work.Controls.Add(new Button());
 			return work;
+		}
+	}
+
+	public class DummyFormActivator : DefaultComponentActivator
+	{
+		public DummyFormActivator(ComponentModel model, IKernel kernel,
+		                          ComponentInstanceDelegate onCreation,
+		                          ComponentInstanceDelegate onDestruction)
+			: base(model, kernel, onCreation, onDestruction)
+		{
+		}
+
+		protected override object Instantiate(CreationContext context)
+		{
+			return base.Instantiate(context);
 		}
 	}
 

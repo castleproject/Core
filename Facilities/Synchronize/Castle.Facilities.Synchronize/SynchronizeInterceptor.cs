@@ -132,7 +132,14 @@ namespace Castle.Facilities.Synchronize
 						Result result = CreateResult(invocation);
 						SynchronizationContext.SetSynchronizationContext(syncContext);
 
-						syncContext.Send(delegate {
+						if (syncContext.GetType() == typeof(SynchronizationContext))
+						{
+							InvokeSynchronously(invocation, result);
+						}
+						else
+						{
+							syncContext.Send(delegate
+							{
 								activeSyncContext = syncContext;
 
 								try
@@ -144,6 +151,7 @@ namespace Castle.Facilities.Synchronize
 									activeSyncContext = null;
 								}
 							}, null);
+						}
 					}
 					finally
 					{

@@ -23,6 +23,7 @@ namespace Castle.Facilities.Synchronize.Tests
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.Handlers;
 	using Castle.MicroKernel.Proxy;
+	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
 	using NUnit.Framework;
 
@@ -38,17 +39,20 @@ namespace Castle.Facilities.Synchronize.Tests
 			uncaughtException = null;
 			container = new WindsorContainer();
 
-			container.AddFacility("sync.facility", new SynchronizeFacility());
-			container.AddComponent("sync.context", typeof(SynchronizationContext));
-			container.AddComponent("async.context", typeof(AsynchronousContext));
-			container.AddComponent("dummy.form.class", typeof(DummyForm));
-			container.AddComponent("dummy.form.service", typeof(IDummyForm), typeof(DummyForm));
-			container.AddComponent("class.in.windows.context", typeof(ClassUsingFormInWindowsContext));
-			container.AddComponent("sync.class.no.context", typeof(SyncClassWithoutContext));
-			container.AddComponent("sync.class.override.context", typeof(SyncClassOverrideContext));
-			container.AddComponent("simple.worker", typeof(IWorker), typeof(SimpleWorker));
-			container.AddComponent("async.worker", typeof(IWorker), typeof(AsynchronousWorker));
-			container.AddComponent("manual.worker", typeof(ManualWorker));
+			container.AddFacility<SynchronizeFacility>()
+				.Register(Component.For<SynchronizationContext>(),
+						  Component.For<AsynchronousContext>(),
+						  Component.For<DummyForm>().Named("Dummy")
+							.Activator<DummyFormActivator>(),
+						  Component.For<IDummyForm>().ImplementedBy<DummyForm>(),
+						  Component.For<ClassUsingFormInWindowsContext>(),
+						  Component.For<SyncClassWithoutContext>(),
+						  Component.For<SyncClassOverrideContext>(),
+						  Component.For(typeof(IClassUsingContext<>)).ImplementedBy(typeof(ClassUsingContext<>)),
+						  Component.For<IWorker>().ImplementedBy<SimpleWorker>(),
+						  Component.For<IWorkerWithOuts>().ImplementedBy<AsynchronousWorker>(),
+						  Component.For<ManualWorker>()
+						  );
 
 			MutableConfiguration componentNode = new MutableConfiguration("component");
 			componentNode.Attributes[Constants.SynchronizedAttrib] = "true";
@@ -59,9 +63,6 @@ namespace Castle.Facilities.Synchronize.Tests
 			doWorkMethod.Attributes["contextType"] = typeof(WindowsFormsSynchronizationContext).AssemblyQualifiedName;
 			synchronizeNode.Children.Add(doWorkMethod);
 			componentNode.Children.Add(synchronizeNode);
-
-			container.AddComponent("generic.class.in.context", typeof(IClassUsingContext<>),
-			                       typeof(ClassUsingContext<>));
 
 			container.Kernel.ConfigurationStore.AddComponentConfiguration("class.needing.context", componentNode);
 			container.AddComponent("class.needing.context", typeof(ClassUsingForm));
@@ -189,15 +190,30 @@ namespace Castle.Facilities.Synchronize.Tests
 		[Test]
 		public void GetResultOf_UsingSynchronousContext_WorksFine()
 		{
-			IWorker worker = container.Resolve<IWorker>("simple.worker");
+			IWorker worker = container.Resolve<IWorker>();
 			Result<int> remaining = Result.Of(worker.DoWork(2));
 			Assert.AreEqual(4, remaining);
 		}
 
 		[Test]
+		public void GetResultOf_UsingSynchronousContext_CallsCallback()
+		{
+			bool called = false;
+			IWorker worker = container.Resolve<IWorker>();
+			Result.Of(worker.DoWork(2), remaining =>
+			{
+				Assert.AreEqual(4, remaining);
+				Assert.AreSame(worker, remaining.AsyncState);
+				Assert.IsTrue(remaining.CompletedSynchronously);
+				called = true;
+			}, worker);
+			Assert.IsTrue(called);
+		}
+
+		[Test]
 		public void GetResultOf_UsingAsynchronousContext_WorksFine()
 		{
-			IWorker worker = container.Resolve<IWorker>("async.worker");
+			IWorkerWithOuts worker = container.Resolve<IWorkerWithOuts>();
 			Result<int> remaining = Result.Of(worker.DoWork(5));
 			Assert.AreEqual(10, remaining);
 			Assert.IsFalse(remaining.CompletedSynchronously);
@@ -215,6 +231,23 @@ namespace Castle.Facilities.Synchronize.Tests
 			});
 			Assert.AreEqual(10, remaining);
 			Assert.IsFalse(remaining.CompletedSynchronously);
+		}
+
+		[Test, Ignore]
+		public void GetResultOf_UsingAsyncSynchronousContextWithOuts_CallsCallback()
+		{
+			int passed;
+			var called = new ManualResetEvent(false);
+			ManualWorker worker = container.Resolve<ManualWorker>();
+			Result<int> result = Result.Of(worker.DoWork(20, out passed), remaining =>
+			{
+				Assert.AreEqual(40, remaining);
+				Assert.AreEqual(10, passed);
+				Assert.AreSame(worker, remaining.AsyncState);
+				Assert.IsFalse(remaining.CompletedSynchronously);
+				called.Set();
+			}, worker);
+			Assert.IsTrue(called.WaitOne());
 		}
 
 		[Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Bad Bad Bad...")]

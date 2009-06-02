@@ -42,7 +42,8 @@ namespace Castle.Facilities.Synchronize
 		/// </summary>
 		public static readonly String ControlProxyHookAttrib = "controlProxyHook";
 
-		internal static readonly String WinFormsSyncContext = "winforms.sync.ctx";
-		internal static readonly String MarshalControl = "marshal.control";
+		internal static readonly String WinFormsSyncContext = "sync.winforms.ctx";
+		internal static readonly String MarshalControl = "sync.marshal.control";
+		internal static readonly String CustomActivator = "sync.custom.activator";
 	}
 }

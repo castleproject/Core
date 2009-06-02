@@ -16,12 +16,17 @@ namespace Castle.Facilities.Synchronize
 {
 	using System;
 	using System.Threading;
+using System.Collections.Generic;
 
 	/// <summary>
 	/// Represents the result of an asynchronous operation.
 	/// </summary>
 	public class Result : AbstractAsyncResult
 	{
+		private object value;
+		private ResultDelegate resultCallback;
+		private object guard = new object();
+
 		[ThreadStatic]
 		internal static Result Last = null;
 
@@ -30,6 +35,7 @@ namespace Castle.Facilities.Synchronize
 		/// </summary>
 		internal Result() : base(null, null)
 		{
+			value = guard;
 		}
 
 		/// <summary>
@@ -46,7 +52,11 @@ namespace Castle.Facilities.Synchronize
 		/// </summary>
 		public object Value
 		{
-			get { return End(this); }
+			get 
+			{
+				Interlocked.CompareExchange(ref value, End(this) , guard);
+				return value;
+			}
 		}
 
 		/// <summary>
@@ -56,7 +66,15 @@ namespace Castle.Facilities.Synchronize
 		/// <param name="result">The result.</param>
 		internal void SetValue(bool synchronously, object result)
 		{
-			Complete(synchronously, result);
+			lock (guard)
+			{
+				Complete(synchronously, result);
+
+				if (resultCallback != null)
+				{
+					resultCallback(this);
+				}
+			}
 		}
 
 		/// <summary>
@@ -66,7 +84,65 @@ namespace Castle.Facilities.Synchronize
 		/// <param name="exception">The exception.</param>
 		internal void SetException(bool synchronously, Exception exception)
 		{
-			Complete(synchronously, exception);
+			lock (guard)
+			{
+				Complete(synchronously, exception);
+
+				if (resultCallback != null)
+				{
+					resultCallback(this);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Set the asynchronous callback information.
+		/// </summary>
+		/// <param name="callback">The callback.</param>
+		/// <param name="state">The async state.</param>
+		internal void SetCallbackInfo(ResultDelegate callback, object state)
+		{
+			if (callback != null) lock (guard)
+			{
+				AsyncState = state;
+				resultCallback = callback;
+
+				if (IsCompleted)
+				{
+					callback(this);
+				}
+			}
+		}
+
+		private IEnumerable<object> GetValue()
+		{
+			object value = End(this);
+			while (true) yield return value;
+		}
+
+		/// <summary>
+		/// Gets the result of the last called made.
+		/// </summary>
+		/// <param name="action">The action to execute.</param>
+		/// <returns>The result handle.</returns>
+		public static Result Of(Action action)
+		{
+			action();
+			return ResetLastResult();
+		}
+
+		/// <summary>
+		/// Gets the result of the last called made.
+		/// </summary>
+		/// <param name="action">The action to execute.</param>
+		/// <param name="callback">The callback.</param>
+		/// <param name="state">The async state.</param>
+		/// <returns>The result handle.</returns>
+		public static Result Of(Action action, ResultDelegate callback, object state)
+		{
+			Result result = Result.Of(action);
+			result.SetCallbackInfo(callback, state);
+			return result;
 		}
 
 		/// <summary>
@@ -77,6 +153,26 @@ namespace Castle.Facilities.Synchronize
 		/// <returns>The result handle.</returns>
 		public static Result<T> Of<T>(T ignored)
 		{
+			return new Result<T>(ResetLastResult());
+		}
+
+		/// <summary>
+		/// Gets the result of the last called made.
+		/// </summary>
+		/// <typeparam name="T">The result type.</typeparam>
+		/// <param name="ignored"></param>
+		/// <param name="callback">The callback.</param>
+		/// <param name="state">The async state.</param>
+		/// <returns>The result handle.</returns>
+		public static Result<T> Of<T>(T ignored, ResultDelegate<T> callback, object state)
+		{
+			Result<T> result = Result.Of(ignored);
+			result.SetCallbackInfo(callback, state);
+			return result;
+		}
+
+		private static Result ResetLastResult()
+		{
 			Result last = Result.Last;
 
 			if (last == null)
@@ -86,9 +182,22 @@ namespace Castle.Facilities.Synchronize
 			}
 
 			Result.Last = null;
-			return new Result<T>(last);
+			return last;
 		}
 	}
+
+	/// <summary>
+	/// Delegate called when results are available.
+	/// </summary>
+	/// <param name="result">The result.</param>
+	public delegate void ResultDelegate(Result result);
+
+	/// <summary>
+	/// Delegate called when typed results are available.
+	/// </summary>
+	/// <typeparam name="T">The result type.</typeparam>
+	/// <param name="result">The result.</param>
+	public delegate void ResultDelegate<T>(Result<T> result);
 
 	#region Typed Result
 
@@ -111,6 +220,19 @@ namespace Castle.Facilities.Synchronize
 		public T Value
 		{
 			get { return (T) result.Value; }
+		}
+
+		/// <summary>
+		/// Set the asynchronous callback information.
+		/// </summary>
+		/// <param name="callback">The callback.</param>
+		/// <param name="state">The async state.</param>
+		internal void SetCallbackInfo(ResultDelegate<T> callback, object state)
+		{
+			if (callback != null)
+			{
+				result.SetCallbackInfo(delegate { callback(this); }, state);
+			}
 		}
 
 		/// <summary>

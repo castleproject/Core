@@ -43,8 +43,8 @@ namespace Castle.Facilities.Synchronize
 		{
 			marshalingControl = new MarshalingControl();
 			controlProxyHook = ObtainProxyHook(kernel, config);
-
 			RegisterWindowsFormsSynchronizationContext(kernel);
+			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
 		}
 
 		/// <summary>
@@ -77,6 +77,15 @@ namespace Castle.Facilities.Synchronize
 			{
 				ConfigureProxyOptions(model);
 				model.ExtendedProperties[Constants.MarshalControl] = marshalingControl;
+			}
+		}
+
+		public void Kernel_ComponentModelCreated(ComponentModel model)
+		{
+			if (model.ExtendedProperties.Contains(Constants.MarshalControl))
+			{
+				if (model.CustomComponentActivator != null)
+					model.ExtendedProperties[Constants.CustomActivator] = model.CustomComponentActivator;
 				model.CustomComponentActivator = typeof(ControlComponentActivator);
 			}
 		}

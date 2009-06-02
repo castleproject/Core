@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.Synchronize
 {
+	using System;
 	using System.Runtime.Remoting;
 	using System.Windows.Forms;
 	using Castle.Core;
@@ -23,9 +24,13 @@ namespace Castle.Facilities.Synchronize
 
 	internal class ControlComponentActivator : DefaultComponentActivator
 	{
-		private readonly InstantiationDelegate instantiateInMainThread;
+		private readonly IComponentActivator activator;
+		private readonly CreationDelegate createInMainThread;
 
-		private delegate object InstantiationDelegate(CreationContext context);
+		static readonly ComponentInstanceDelegate emptyCreation = delegate { };
+		static readonly ComponentInstanceDelegate emptyDestruction = delegate { };
+
+		private delegate object CreationDelegate(CreationContext context);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ControlComponentActivator"/> class.
@@ -39,10 +44,11 @@ namespace Castle.Facilities.Synchronize
 		                                 ComponentInstanceDelegate onDestruction)
 			: base(model, kernel, onCreation, onDestruction)
 		{
-			instantiateInMainThread = InstantiateInMainThread;
+			createInMainThread = CreateInMainThread;
+			activator = CreateCustomActivator(model, kernel);
 		}
 
-		protected override object Instantiate(CreationContext context)
+		protected override object InternalCreate(CreationContext context)
 		{
 			// The marshal control is used to ensure that all controls
 			// are created in the main UI thread context.
@@ -51,21 +57,47 @@ namespace Castle.Facilities.Synchronize
 
 			if (marshalingControl != null && marshalingControl.InvokeRequired)
 			{
-				return marshalingControl.Invoke(instantiateInMainThread, new object[] {context});
+				return marshalingControl.Invoke(createInMainThread, new object[] { context });
 			}
 
-			return InstantiateInMainThread(context);
+			return CreateInMainThread(context);
 		}
 
-		private object InstantiateInMainThread(CreationContext context)
+		private object CreateInMainThread(CreationContext context)
 		{
 			// The thread associated with the control is the thread in
 			// which its windows handle was created, so ensure that the
 			// handle is initialized in the context of the main UI thread.
 
-			object component = base.Instantiate(context);
+			object component;
+			if (activator != null)
+				component = activator.Create(context);
+			else
+				component = base.InternalCreate(context);
+	
 			EnsureHandleCreated(component);
 			return component;
+		}
+
+		private static IComponentActivator CreateCustomActivator(ComponentModel model, IKernel kernel)
+		{
+			Type customActivator = (Type)model.ExtendedProperties[Constants.CustomActivator];
+			if (customActivator != null)
+			{
+				try
+				{
+					return (IComponentActivator)
+						Activator.CreateInstance(customActivator, new object[] 
+						{ 
+							model, kernel, emptyCreation, emptyDestruction
+						});
+				}
+				catch (Exception e)
+				{
+					throw new KernelException("Could not instantiate custom activator", e);
+				}
+			}
+			return null;
 		}
 
 		private static void EnsureHandleCreated(object component)
