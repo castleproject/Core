@@ -292,11 +292,20 @@ namespace Castle.MonoRail.Views.AspView
 		protected void OutputSubView(string subViewName, TextWriter writer, IDictionary parameters)
 		{
 			AspViewBase subView = viewEngine.GetView(GetRootedSubViewTemplate(subViewName), writer, context, controller, controllerContext);
+			
+			// copy all properties to the subview
+			foreach (string key in Properties.Keys)
+				subView.Properties[key] = Properties[key];
+
+			// bring parameters to the subview
 			if (parameters != null)
 				foreach (string key in parameters.Keys)
 					if (parameters[key] != null)
 						subView.Properties[key] = parameters[key];
+
 			subView.Render();
+
+			// allow CaptureFor generated content to bubble back up 
 			GatherBubblingPropertiesFrom(subView);
 		}
 

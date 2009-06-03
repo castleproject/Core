@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Views.AspView.Tests.ViewTests
 		protected IMonoRailServices monoRailServices;
 		protected string expected;
 
-		public AbstractViewTestFixture()
+		protected AbstractViewTestFixture()
 		{
 			SetUp();
 		}
@@ -60,6 +60,12 @@ namespace Castle.MonoRail.Views.AspView.Tests.ViewTests
 			CreateStubsAndMocks();
 
 			CreateDefaultStubsAndMocks();
+
+			ExtraSetUp();
+		}
+
+		protected virtual void ExtraSetUp()
+		{
 		}
 
 		/// <summary>

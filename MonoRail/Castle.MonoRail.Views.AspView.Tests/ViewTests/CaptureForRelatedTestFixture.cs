@@ -21,10 +21,15 @@ namespace Castle.MonoRail.Views.AspView.Tests.ViewTests
 	[TestFixture]	
 	public class CaptureForRelatedTestFixture : AbstractViewComponentsTestFixture
 	{
+		protected override void  ExtraSetUp()
+		{
+			base.ExtraSetUp();
+			RegisterComponent("CaptureFor", typeof(CaptureFor));
+		}
+
 		[Test]
 		public void CaptureForInView_VisibleInLayout()
 		{
-			RegisterComponent("CaptureFor", typeof(CaptureFor));
 			InitializeView(typeof(WithCaptureFor));
 			SetLayout(typeof(LayoutUsesCaptureFor));
 			view.Process();
@@ -40,7 +45,6 @@ From CaptureFor: The captured content";
 		[Test]
 		public void CaptureForInSubView_VisibleInLayout()
 		{
-			RegisterComponent("CaptureFor", typeof(CaptureFor));
 			AddCompilation("subview", typeof(WithCaptureFor));
 			InitializeView(typeof(WithSubView));
 			SetLayout(typeof(LayoutUsesCaptureFor));
@@ -59,7 +63,6 @@ From CaptureFor: The captured content";
 		[Test]
 		public void CaptureForInSubView_VisibleInView()
 		{
-			RegisterComponent("CaptureFor", typeof(CaptureFor));
 			AddCompilation("subview", typeof(WithCaptureFor));
 			InitializeView(typeof(UsingBubbledCaptureFromSubView));
 			view.Process();
@@ -70,6 +73,23 @@ From subview: Parent
 Parent
 From CaptureFor: The captured content";
 
+			AssertViewOutputEqualsToExpected();
+		}
+		
+		[Test]
+		public void TwoCaptureForInSubViewsWithAppend_AllGetsAppended()
+		{
+			AddCompilation("subview", typeof(WithCaptureForAppendAfter));
+			InitializeView(typeof(UsingTwoBubbledCaptureFromSubViews));
+			view.Process();
+
+			expected = @"Starting UsingTwoBubbledCaptureFromSubViews
+From subview: Starting WithCaptureForAppendAfter
+End of WithCaptureForAppendAfter
+From subview, again: Starting WithCaptureForAppendAfter
+End of WithCaptureForAppendAfter
+From CaptureFor: The captured contentThe captured content
+End of UsingTwoBubbledCaptureFromSubViews";
 			AssertViewOutputEqualsToExpected();
 		}
 	}
