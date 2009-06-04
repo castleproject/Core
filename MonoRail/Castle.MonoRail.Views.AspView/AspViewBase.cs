@@ -235,7 +235,7 @@ namespace Castle.MonoRail.Views.AspView
 		/// Output a fragment to the current output writer, Html Encoded
 		/// </summary>
 		/// <param name="fragment">string to output</param>
-		protected void OutputEncoded(string fragment)
+		protected virtual void OutputEncoded(string fragment)
 		{
 			if (string.IsNullOrEmpty(fragment))
 				return;
