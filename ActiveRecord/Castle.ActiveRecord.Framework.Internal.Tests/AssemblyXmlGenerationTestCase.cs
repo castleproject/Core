@@ -64,7 +64,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			ActiveRecordStarter.ResetInitializationFlag();
 			ActiveRecordStarter.Initialize(
 				typeof(RegisterNHibernateClassMapping).Assembly,
-				InPlaceConfigurationSource.Build(DatabaseType.MSSQLServer2005, "dummy")
+				GetConfigSource()
 				);
 			ISessionFactory factory = ActiveRecordMediator.GetSessionFactoryHolder()
 				.GetSessionFactory(typeof(ActiveRecordBase));
