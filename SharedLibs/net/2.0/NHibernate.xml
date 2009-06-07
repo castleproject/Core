@@ -4082,99 +4082,6 @@
         <member name="F:NHibernate.Cfg.MappingSchema.HbmSet.sort">
             <remarks/>
         </member>
-        <member name="T:NHibernate.Cfg.MappingSchema.HbmTimestamp">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.meta">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.name">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.node">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.column">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.access">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.unsavedvalue">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.unsavedvalueSpecified">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.source">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.generated">
-            <remarks/>
-        </member>
-        <member name="T:NHibernate.Cfg.MappingSchema.HbmTimestampUnsavedvalue">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestampUnsavedvalue.Null">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestampUnsavedvalue.Undefined">
-            <remarks/>
-        </member>
-        <member name="T:NHibernate.Cfg.MappingSchema.HbmTimestampSource">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestampSource.Vm">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestampSource.Db">
-            <remarks/>
-        </member>
-        <member name="T:NHibernate.Cfg.MappingSchema.HbmVersionGeneration">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersionGeneration.Never">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersionGeneration.Always">
-            <remarks/>
-        </member>
-        <member name="T:NHibernate.Cfg.MappingSchema.HbmVersion">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.meta">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.column">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.name">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.node">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.access">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.column1">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.type">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.unsavedvalue">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.generated">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.insert">
-            <remarks/>
-        </member>
-        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.insertSpecified">
-            <remarks/>
-        </member>
         <member name="T:NHibernate.Cfg.MappingSchema.HbmIdbag">
             <remarks/>
         </member>
@@ -4320,6 +4227,99 @@
             <remarks/>
         </member>
         <member name="F:NHibernate.Cfg.MappingSchema.HbmCollectionId.length">
+            <remarks/>
+        </member>
+        <member name="T:NHibernate.Cfg.MappingSchema.HbmTimestamp">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.meta">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.name">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.node">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.column">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.access">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.unsavedvalue">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.unsavedvalueSpecified">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.source">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestamp.generated">
+            <remarks/>
+        </member>
+        <member name="T:NHibernate.Cfg.MappingSchema.HbmTimestampUnsavedvalue">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestampUnsavedvalue.Null">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestampUnsavedvalue.Undefined">
+            <remarks/>
+        </member>
+        <member name="T:NHibernate.Cfg.MappingSchema.HbmTimestampSource">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestampSource.Vm">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmTimestampSource.Db">
+            <remarks/>
+        </member>
+        <member name="T:NHibernate.Cfg.MappingSchema.HbmVersionGeneration">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersionGeneration.Never">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersionGeneration.Always">
+            <remarks/>
+        </member>
+        <member name="T:NHibernate.Cfg.MappingSchema.HbmVersion">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.meta">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.column">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.name">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.node">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.access">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.column1">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.type">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.unsavedvalue">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.generated">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.insert">
+            <remarks/>
+        </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmVersion.insertSpecified">
             <remarks/>
         </member>
         <member name="T:NHibernate.Cfg.MappingSchema.HbmProperties">
@@ -10304,6 +10304,12 @@
             <param name="table">A table name</param>
             <returns>A description of the foreign keys available</returns>
         </member>
+        <member name="M:NHibernate.Dialect.Schema.IDataBaseSchema.GetReservedWords">
+            <summary>
+            Get all reserved words
+            </summary>
+            <returns>A set of reserved words</returns>
+        </member>
         <member name="P:NHibernate.Dialect.Schema.IDataBaseSchema.StoresMixedCaseQuotedIdentifiers">
             <summary>
             In the Java language, this field indicates that the database treats mixed-case, 
@@ -14347,7 +14353,7 @@
             of journaling parameter locations. 
             </summary>
         </member>
-        <member name="M:NHibernate.Engine.Query.ParamLocationRecognizer.parseLocations(System.String)">
+        <member name="M:NHibernate.Engine.Query.ParamLocationRecognizer.ParseLocations(System.String)">
             <summary> 
             Convenience method for creating a param location recognizer and
             initiating the parse. 
@@ -16130,13 +16136,6 @@
         </member>
         <member name="M:NHibernate.Engine.ISessionImplementor.GuessEntityName(System.Object)">
             <summary> The guessed entity name for an entity not in an association</summary>
-        </member>
-        <member name="M:NHibernate.Engine.ISessionImplementor.GetSession">
-            <summary>
-            Allow to get the ISession instance without having to 
-            down cast
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:NHibernate.Engine.ISessionImplementor.ExecuteNativeUpdate(NHibernate.Engine.Query.Sql.NativeSQLQuerySpecification,NHibernate.Engine.QueryParameters)">
             <summary> Execute a native SQL update or delete query</summary>
@@ -31947,6 +31946,11 @@
             underlying proxied object is needed then it returns the result <see cref="F:NHibernate.Proxy.AbstractLazyInitializer.InvokeImplementation"/>
             which indicates that the Proxy will need to forward to the real implementation.
             </returns>
+        </member>
+        <member name="T:NHibernate.Proxy.AbstractProxyFactory">
+            <summary>
+            Convenient common implementation for ProxyFactory
+            </summary>
         </member>
         <member name="T:NHibernate.Proxy.IProxyValidator">
             <summary>
