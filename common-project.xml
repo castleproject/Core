@@ -258,19 +258,31 @@
 
 			<echo message="Running tests in '${project::get-name()}'" />
 
-			<property name="nunitcommandline" value="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo" />
+			<property name="nunitcommandline" value="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo /noshadow" />
 			<if test="${(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
-				<property name="nunitcommandline" value="${project::get-name()}.dll -xml:${testresults.dir}/${project::get-name()}.dll-results.xml -config:${build.dir}/${project::get-name()}.dll.config -nologo" />
+				<property name="nunitcommandline" value="${project::get-name()}.dll -xml:${testresults.dir}/${project::get-name()}.dll-results.xml -config:${build.dir}/${project::get-name()}.dll.config -nologo -noshadow" />
 			</if>
 
 			<!-- Use nunit-console.exe if found, otherwise fall back to nunit2 task -->
-			<exec if="${nunit.found}"
+			<exec if="${nunit.found and not common.coverage.enabled}"
 				program="${nunit-console}" 
 				workingdir="${build.dir}" 
 				commandline="${nunitcommandline}"
 				failonerror="${common.testrunner.failonerror}"
 				timeout="105000"
 			/>
+
+			<!-- Run NCover if coverage is enabled -->
+			<if test="${common.coverage.enabled}">
+				<property name="assembly.under.test" value="${string::replace(project::get-name(), '.Tests', '')}" />
+				<exec
+					program="${ncover.dir}\NCover.Console.exe" 
+					workingdir="${build.dir}"
+					commandline="${root.dir.absolute}/${nunit-console} ${nunitcommandline} //ias ${assembly.under.test} //x ${coverageresults.dir}/${assembly.under.test}.xml //ll Normal //l ${coverageresults.dir}/${assembly.under.test}.log"
+					failonerror="${common.testrunner.failonerror}"
+					timeout="240000"
+				/>
+			</if>
 		</if>
 		<if test="${not common.testrunner.enabled}">
 			<echo message="Tests are disabled for '${project::get-name()}'" />

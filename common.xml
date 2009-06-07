@@ -12,6 +12,7 @@
 	<property name="common.run-tests" value="true" overwrite="false" />
 	<property name="common.testrunner.enabled" value="${common.run-tests}" overwrite="false" />
 	<property name="common.testrunner.failonerror" value="true" overwrite="false" /> <!--  Whether to keep building when tests are failing -->
+	<property name="common.coverage.enabled" value="false" overwrite="false" /><!-- Controls whether tests will be run under NCover to generate coverage logs -->
 
 	<!-- Check which nant version we're using - fail if it's not the minium  -->
 	<property name="nant-version.current" value="${assemblyname::get-version(assembly::get-name(nant::get-assembly()))}" />
@@ -122,6 +123,8 @@
 		<property name="build.family.dir"	value="${build.base.dir}/${nant.settings.currentframework}" />
 		<property name="build.dir" 			value="${path::get-full-path(path::combine(build.family.dir,project.config))}" dynamic="true" />
 		<property name="testresults.dir" 	value="${build.dir}/test-results" />
+		<property name="coverageresults.dir" 	value="${build.dir}/coverage-results" />
+		<property name="coveragereports.dir" 	value="${build.dir}/coverage-reports" />
 		<property name="releasenotes.dir"	value="${build.dir}/ReleaseNotes" />
 		<property name="docs.dir" 			value="${build.base.dir}/docs" />
 		<property name="build.rebuild"		value="false" overwrite="false" />
@@ -313,6 +316,9 @@
 		<!-- Where is nunit-console executable(win/mono) ? -->
 		<property name="nunit-console2" value="nunit-console2" overwrite="false" />
 		<property name="nunit-console" value="${root.dir}/SharedLibs/build/NUnit/bin/nunit-console.exe" overwrite="false" />
+
+		<!-- Where is NCover? (on 64-bit Windows NAnt's get-folder-path() returns the x86 directory which is not what we want) -->
+		<property name="ncover.dir" value="C:\Program Files\NCover" overwrite="false" />
 
 		<!-- Where is WiX? -->
 		<property name="wix.dir" value="${environment::get-folder-path('ProgramFiles')}\Windows Installer XML v3\bin" overwrite="false" />
