@@ -320,6 +320,9 @@
 		<!-- Where is NCover? (on 64-bit Windows NAnt's get-folder-path() returns the x86 directory which is not what we want) -->
 		<property name="ncover.dir" value="C:\Program Files\NCover" overwrite="false" />
 
+		<!-- Where is NDepend -->
+		<property name="ndepend.dir" value="C:\Program Files\NDepend" overwrite="false" />
+
 		<!-- Where is WiX? -->
 		<property name="wix.dir" value="${environment::get-folder-path('ProgramFiles')}\Windows Installer XML v3\bin" overwrite="false" />
 

@@ -202,6 +202,14 @@
 		/>
 	</target>
 
+	<target name="ndepend" depends="build">
+		<exec
+			program="${ndepend.dir}\NDepend.Console.exe"
+			commandline="${path::get-full-path('NDependProject.xml')}"
+			timeout="300000"
+		/>
+	</target>
+
 	<!-- Packaging related tasks -->
 	
 	<target name="package" depends="zip-build"
