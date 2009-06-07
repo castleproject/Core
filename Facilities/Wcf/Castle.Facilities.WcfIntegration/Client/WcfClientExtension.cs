@@ -27,7 +27,6 @@ namespace Castle.Facilities.WcfIntegration
 	{
 		private IKernel kernel;
 		private WcfFacility facility;
-		private WcfCommunicationDecomissionConcern decomission;
 		private Binding defaultBinding;
 		private TimeSpan? closeTimeout;
 
@@ -55,11 +54,10 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.facility = facility;
 			kernel = facility.Kernel;
-			decomission = new WcfCommunicationDecomissionConcern(this);
 
 			AddDefaultChannelBuilders();
 
-			kernel.AddComponent<WcfManagedChannelInterceptor>();
+			kernel.AddComponent<WcfManagedChannelInterceptor>(LifestyleType.Transient);
 			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
 			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
 		}
@@ -72,11 +70,9 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				model.CustomComponentActivator = typeof(WcfClientActivator);
 				model.ExtendedProperties[WcfConstants.ClientModelKey] = clientModel;
-				ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
-				options.AddAdditionalInterfaces(typeof(IContextChannel));	
-				model.LifecycleSteps.Add(LifecycleStepType.Decommission,
-					WcfClientCleanUpDecomissionConcern.Instance);
-				model.LifecycleSteps.Add(LifecycleStepType.Decommission, decomission);
+				var proxyOptions = ProxyUtil.ObtainProxyOptions(model, true);
+				proxyOptions.AddAdditionalInterfaces(typeof(IManagedChannel),
+					typeof(IClientChannel), typeof(IServiceChannel));	
 				InstallManagedChannelInterceptor(model);
 
 				var dependencies = new ExtensionDependencies(model, kernel)
@@ -84,9 +80,7 @@ namespace Castle.Facilities.WcfIntegration
 					.Apply(clientModel.Extensions);
 
 				if (clientModel.Endpoint != null)
-				{
 					dependencies.Apply(clientModel.Endpoint.Extensions);
-				}
 			}
 		}
 
@@ -119,7 +113,7 @@ namespace Castle.Facilities.WcfIntegration
 			model.Dependencies.Add(new DependencyModel(DependencyType.Service, null,
 													   typeof(WcfManagedChannelInterceptor), false));
 			model.Interceptors.Add(new InterceptorReference(typeof(WcfManagedChannelInterceptor)));
-			ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
+			var options = ProxyUtil.ObtainProxyOptions(model, true);
 			options.AllowChangeTarget = true;
 		}
 

@@ -12,23 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.ServiceModel;
-using Castle.Facilities.WcfIntegration.Behaviors;
-
 namespace Castle.Facilities.WcfIntegration
 {
-	public class ChannelCreatorExtension : AbstractExtension<IContextChannel>
+	using System.ServiceModel;
+
+	public interface IManagedChannel
 	{
-		private readonly ChannelCreator channelCreator;
-
-		public ChannelCreatorExtension(ChannelCreator channelCreator)
-		{
-			this.channelCreator = channelCreator;
-		}
-
-		public object Create()
-		{
-			return channelCreator();
-		}
+		void Init(IClientChannel channel, ChannelCreator channelCreator);
 	}
 }

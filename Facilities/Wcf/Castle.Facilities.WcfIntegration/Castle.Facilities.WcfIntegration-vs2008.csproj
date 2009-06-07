@@ -55,6 +55,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-3.5\debug\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.DynamicProxy2, Version=2.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-3.5\debug\Castle.DynamicProxy2.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.MicroKernel, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-3.5\debug\Castle.MicroKernel.dll</HintPath>
@@ -100,16 +104,15 @@
     <Compile Include="Behaviors\Logging\LogMessageEndpointBehavior.cs" />
     <Compile Include="Client\AbstractChannelBuilder.Generic.cs" />
     <Compile Include="Behaviors\ServiceEndpointExtensions.cs" />
-    <Compile Include="Client\ChannelCreatorExtension.cs" />
     <Compile Include="Client\Default\DefaultClientModel.cs" />
     <Compile Include="Behaviors\Logging\LogMessageInspector.cs" />
     <Compile Include="Client\Duplex\DuplexChannelBuilder.cs" />
     <Compile Include="Client\Duplex\DuplexClientModel.cs" />
-    <Compile Include="Client\WcfClientCleanUpDecommisionConcern.cs" />
+    <Compile Include="Client\Proxy\IManagedChannel.cs" />
+    <Compile Include="Internal\WcfPool.cs" />
     <Compile Include="IWcfCleanUp.cs" />
     <Compile Include="WcfContextChannel.cs" />
     <Compile Include="IChannelFactoryAware.cs" />
-    <Compile Include="Internal\WcfCommunicationDecommisionConcern.cs" />
     <Compile Include="IWcfBurden.cs" />
     <Compile Include="Internal\WcfExtensionHelper.cs" />
     <Compile Include="IWcfExtensionVisitor.cs" />
@@ -119,7 +122,7 @@
     <Compile Include="Client\Rest\RestChannelBuilder.cs" />
     <Compile Include="Client\Rest\RestClientModel.cs" />
     <Compile Include="Client\Default\DefaultChannelBuilder.cs" />
-    <Compile Include="Client\WcfManagedChannelInterceptor.cs" />
+    <Compile Include="Client\Proxy\WcfManagedChannelInterceptor.cs" />
     <Compile Include="Client\WcfClient.cs" />
     <Compile Include="Client\WcfClientDescriptor.cs" />
     <Compile Include="IClientChannelBuilder.cs" />

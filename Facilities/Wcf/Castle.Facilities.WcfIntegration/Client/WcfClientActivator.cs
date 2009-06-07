@@ -60,41 +60,41 @@ namespace Castle.Facilities.WcfIntegration
 		protected override object InternalCreate(CreationContext context)
 		{
 			object instance = Instantiate(context);
-
 			ApplyCommissionConcerns(instance);
-
 			return instance;
 		}
 
 		protected override object Instantiate(CreationContext context)
 		{
-			object instance = CreateChannel(context);
+			var channelCreator = GetChannelCreator(context);
 
 			try
 			{
-				instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, context);
+				var channel = (IClientChannel)channelCreator();
+				var managedChannel = (IManagedChannel)Kernel.ProxyFactory.Create(Kernel, channel, Model, context);
+				managedChannel.Init(channel, channelCreator);
+				return managedChannel;
 			}
 			catch (Exception ex)
 			{
 				throw new ComponentActivatorException("WcfClientActivator: could not proxy service " +
-					Model.Service.FullName, ex);
+													  Model.Service.FullName, ex);
 			}
-
-			return instance;
 		}
 
-		private object CreateChannel(CreationContext context)
+		private ChannelCreator GetChannelCreator(CreationContext context)
 		{
 			IWcfBurden burden = null;
-			ChannelCreator create = createChannel;
+			ChannelCreator creator = createChannel;
 			IWcfClientModel clientModel = ObtainClientModel(Model, context);
 
 			if (clientModel != null)
 			{
-				create = () =>
+				var inner = CreateChannelCreator(Kernel, Model, clientModel, out burden);
+
+				creator = () =>
 				{
-					IContextChannel client = (IContextChannel)
-						CreateChannelCreator(Kernel, Model, clientModel, out burden)();
+					IContextChannel client = (IContextChannel)inner();
 					client.Extensions.Add(new WcfBurdenExtension<IContextChannel>(burden));
 					return client;
 				};
@@ -102,13 +102,11 @@ namespace Castle.Facilities.WcfIntegration
 			else if (createChannel == null)
 			{
 				clientModel = ObtainClientModel(Model);
-				create = createChannel = CreateChannelCreator(Kernel, Model, clientModel, out burden);
+				creator = createChannel = CreateChannelCreator(Kernel, Model, clientModel, out burden);
 				Model.ExtendedProperties[WcfConstants.ClientBurdenKey] = burden;
 			}
 
-			IContextChannel channel = (IContextChannel)create();
-			channel.Extensions.Add(new ChannelCreatorExtension(create));
-			return channel;
+			return creator;
 		}
 
 		private IWcfClientModel ObtainClientModel(ComponentModel model)
@@ -118,18 +116,16 @@ namespace Castle.Facilities.WcfIntegration
 
 		private IWcfClientModel ObtainClientModel(ComponentModel model, CreationContext context)
 		{
-			IWcfClientModel clientModel = WcfUtils.FindDependencies<IWcfClientModel>(context.AdditionalParameters)
+			var clientModel = WcfUtils.FindDependencies<IWcfClientModel>(context.AdditionalParameters)
 				.FirstOrDefault();
 
-			IWcfEndpoint endpoint = WcfUtils.FindDependencies<IWcfEndpoint>(context.AdditionalParameters)
+			var endpoint = WcfUtils.FindDependencies<IWcfEndpoint>(context.AdditionalParameters)
 				.FirstOrDefault();
 
 			if (endpoint != null)
 			{
 				if (clientModel == null)
-				{
 					clientModel = ObtainClientModel(model);
-				}
 
 				clientModel = clientModel.ForEndpoint(endpoint);
 			}

@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+using System.Threading;
 
 namespace Castle.Facilities.WcfIntegration.Tests
 {
@@ -34,6 +35,13 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			return number;
 		}
 
+		public int GetValueFromConstructorAsRefAndOut(ref int refValue, out int outValue)
+		{
+			Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
+			Thread.Sleep(2000);
+			return (refValue = outValue = number);
+		}
+        
 		public bool UnitOfWorkIsInitialized()
 		{
 			return UnitOfWork.initialized;

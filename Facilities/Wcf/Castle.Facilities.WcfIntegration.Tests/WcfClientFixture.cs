@@ -22,7 +22,6 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using Castle.Core.Configuration;
 	using Castle.Core.Interceptor;
 	using Castle.Core.Resource;
-	using Castle.DynamicProxy;
 	using Castle.Facilities.Logging;
 	using Castle.Facilities.WcfIntegration.Behaviors;
 	using Castle.Facilities.WcfIntegration.Demo;
@@ -90,6 +89,27 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		#endregion
 
 		private IWindsorContainer windsorContainer;
+
+		[Test]
+		public void CanResolveClientInterfaceWithOutAndRefArguments()
+		{
+			windsorContainer.Register(
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			int refValue = 0, outValue;
+			Assert.AreEqual(42, client.GetValueFromConstructorAsRefAndOut(ref refValue, out outValue));
+			Assert.AreEqual(42, refValue);
+			Assert.AreEqual(42, outValue);
+		}
 
 		[Test]
 		public void CanResolveClientInterfaceAssociatedWithChannel()
@@ -215,6 +235,51 @@ namespace Castle.Facilities.WcfIntegration.Tests
 					Assert.AreEqual(28, client2.GetValueFromConstructor());
 					clientContainer.Release(client1);
 					clientContainer.Release(client2);
+				}
+			}
+		}
+
+		[Test]
+		public void WillRecoverFromAnUnhandledExceptionWithChannelUsingSuppliedModel()
+		{
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
+				.Register(Component.For<Operations>()
+					.DependsOn(new { number = 28 })
+					.ActAs(new DefaultServiceModel()
+						.AddEndpoints(WcfEndpoint.ForContract<IOperationsEx>()
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations2")
+							)
+				)))
+			{
+				using (IWindsorContainer clientContainer = new WindsorContainer()
+					.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
+					.Register(Component.For<IOperationsEx>()
+						.Named("operations")
+						.LifeStyle.Transient
+						.ActAs(new DefaultClientModel())
+					))
+				{
+					IOperationsEx client = clientContainer.Resolve<IOperationsEx>("operations",
+						new
+						{
+							Model = new DefaultClientModel
+							{
+								Endpoint = WcfEndpoint.BoundTo(new NetTcpBinding())
+									.At("net.tcp://localhost/Operations2")
+							}
+						});
+					try
+					{
+						client.ThrowException();
+					}
+					catch (Exception)
+					{
+						client.Backup(new Dictionary<string, object>());
+						client.Backup(new Dictionary<string, object>());
+					}
+					clientContainer.Release(client);
 				}
 			}
 		}
@@ -413,7 +478,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
-		public void CanAccessIContextChannelInterface()
+		public void CanAccessIClientChannelChannelInterface()
 		{
 			windsorContainer.Register(
 				Component.For<IOperations>()
@@ -427,7 +492,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				);
 
 			IOperations client = windsorContainer.Resolve<IOperations>("operations");
-			IContextChannel channel = client as IContextChannel;
+			IClientChannel channel = client as IClientChannel;
 			Assert.IsNotNull(channel);
 			Assert.AreEqual(CommunicationState.Created, channel.State);
 		}

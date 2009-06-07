@@ -44,7 +44,11 @@ namespace Castle.Facilities.WcfIntegration
 			WcfUtils.AddBehaviors(kernel, WcfExtensionScope.Services,
 				serviceHost.Description.Behaviors, burden, delegate(IServiceBehavior behavior)
 				{
-					if (behavior.GetType() == typeof(ServiceDebugBehavior))
+					if (behavior.GetType() == typeof(ServiceBehaviorAttribute))
+					{
+						serviceHost.Description.Behaviors.Remove<ServiceBehaviorAttribute>();
+					}
+					else if (behavior.GetType() == typeof(ServiceDebugBehavior))
 					{
 						serviceHost.Description.Behaviors.Remove<ServiceDebugBehavior>();
 					}

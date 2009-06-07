@@ -14,8 +14,9 @@
 
 namespace Castle.Facilities.WcfIntegration.Tests
 {
-	using System.ServiceModel;
+	using System;
 	using System.Collections.Generic;
+	using System.ServiceModel;
 
 	[ServiceContract]
 	public interface IOperations
@@ -24,7 +25,18 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		int GetValueFromConstructor();
 
 		[OperationContract]
+		int GetValueFromConstructorAsRefAndOut(ref int refValue, out int outValue);
+
+		[OperationContract]
 		bool UnitOfWorkIsInitialized();
+	}
+
+	[ServiceContract(Name = "IOperations")]
+	public interface IAsyncOperations
+	{
+		[OperationContract(AsyncPattern = true)]
+		IAsyncResult BeginGetValueFromConstructorAsRefAndOut(ref int refValue, AsyncCallback callback, object asyncState);
+		int EndGetValueFromConstructorAsRefAndOut(ref int refValue, out int outValue, IAsyncResult result);
 	}
 
 	[ServiceContract]

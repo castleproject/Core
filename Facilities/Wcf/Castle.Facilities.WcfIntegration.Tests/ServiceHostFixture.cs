@@ -58,6 +58,46 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			}
 		}
 
+		[Test, Ignore]
+		public void CanCreateServiceHostPerCallAndOpenHost()
+		{
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
+				.Register(
+					Component.For<IServiceBehavior>()
+					.Instance(new ServiceBehaviorAttribute()
+					{
+						InstanceContextMode = InstanceContextMode.PerCall,
+						ConcurrencyMode = ConcurrencyMode.Multiple
+					}),
+					Component.For<IOperations>()
+					.ImplementedBy<Operations>()
+					.DependsOn(new { number = 42 })
+					.ActAs(new DefaultServiceModel().AddEndpoints(
+						WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations"))
+						)
+				))
+			{
+				IAsyncOperations client = ChannelFactory<IAsyncOperations>.CreateChannel(
+					new NetTcpBinding { PortSharingEnabled = true },
+					new EndpointAddress("net.tcp://localhost/Operations"));
+
+				for (int i = 0; i < 10; i++)
+				{
+					new System.Threading.Thread(() =>
+					{
+						int refValue = 0, outValue;
+						//Assert.AreEqual(42, client.GetValueFromConstructorAsRefAndOut(ref refValue, out outValue));
+						var result = client.BeginGetValueFromConstructorAsRefAndOut(ref refValue, null, null);
+						Assert.AreEqual(42, client.EndGetValueFromConstructorAsRefAndOut(ref refValue, out outValue, result));
+					}).Start();
+				}
+				System.Threading.Thread.CurrentThread.Join();
+				//((ICommunicationObject)client).Close();
+			}
+		}
+
 		[Test]
 		public void CanCreateServiceHostAndOpenHostUsingDefaultBinding()
 		{

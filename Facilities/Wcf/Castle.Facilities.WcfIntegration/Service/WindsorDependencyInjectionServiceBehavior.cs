@@ -72,6 +72,7 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				contractNameToContractType[endpoint.Contract.Name] = endpoint.Contract.ContractType;
 			}
+
 			foreach (var cdb in serviceHostBase.ChannelDispatchers)
 			{
 				ChannelDispatcher cd = cdb as ChannelDispatcher;
