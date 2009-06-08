@@ -136,8 +136,9 @@
 		</if>
 		<property name="clr-version" value="${framework::get-clr-version(framework::get-runtime-framework())}" />
 
-		<property name="csc.keyfile" 	value="" />
-		<property name="csc.args" 		value="" />
+		<property name="csc.keyfile" 				value="" />
+		<property name="csc.args" 					value="" />
+		<property name="common.testrunner.args" 	value="" overwrite="false" />
 		<if test="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
 			<readregistry property="dotnet.SPlevel" 
 						  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v${framework::get-clr-version(framework::get-runtime-framework())}\SP"

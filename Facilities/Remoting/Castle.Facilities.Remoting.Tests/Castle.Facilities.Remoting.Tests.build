@@ -7,10 +7,11 @@
 >
 
 	<property name="root.dir" value="../../.." />
+
+	<property name="common.testrunner.args" value="/process:Separate" />
+
 	<include buildfile="${root.dir}/common-project.xml" />
 	
-	<property name="common.testrunner.enabled" value="false" /> <!-- Disable tests with NUnit 2.5 for the time begin -->
-
 	<target name="init" depends="common.init">
 		<property name="assembly.version" value="1.0.3.0" />
 
