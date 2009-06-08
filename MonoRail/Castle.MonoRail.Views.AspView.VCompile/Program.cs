@@ -34,7 +34,6 @@ namespace Castle.MonoRail.Views.AspView.VCompile
 				ParseCommandLineArguments();
 				SetDefaultsForArguments();
 				ValidateEnvironment();
-				Console.ReadLine();
 				Console.WriteLine("Compiling [" + arguments.SiteRoot + "] ...");
 
 				AspViewEngineOptions options = InitializeConfig();
