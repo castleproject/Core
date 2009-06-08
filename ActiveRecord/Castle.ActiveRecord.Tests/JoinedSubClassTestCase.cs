@@ -82,7 +82,7 @@ using Castle.ActiveRecord.Framework;
 			Assert.IsNotNull(people[0].Manager);
 		}
 
-		[Test][ExpectedException(typeof(ActiveRecordException),"A type must declare a primary key. Check type Castle.ActiveRecord.Tests.Model.PersonEntity")]
+		[Test][ExpectedException(typeof(ActiveRecordException), ExpectedMessage = "A type must declare a primary key. Check type Castle.ActiveRecord.Tests.Model.PersonEntity")]
 		public void Subclasses_must_be_registered_with_parent()
 		{
 			// Todo: When refactoring initialization for AR3, consider supporting this functionality.

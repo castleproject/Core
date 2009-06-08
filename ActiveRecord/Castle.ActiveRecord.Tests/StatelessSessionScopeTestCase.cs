@@ -26,7 +26,6 @@ namespace Castle.ActiveRecord.Tests
 	using NUnit.Framework;
 	using System.Collections;
 	using Castle.ActiveRecord.Queries;
-using System.Collections.Generic;
 
 	[TestFixture]
 	public class StatelessSessionScopeTestCase : AbstractActiveRecordTest
@@ -361,30 +360,5 @@ Please check the stacktrace and change your code accordingly.", ex.Message);
 		{
 			new BlogLazy { Author = "Mort", Name = "Hourglass" }.Create();
 		}
-	}
-
-	[ActiveRecord]
-	class SimpleBlog : ActiveRecordBase<SimpleBlog>
-	{
-		[PrimaryKey]
-		public int Id { get; set; }
-		
-		[Property]
-		public string Name { get; set; }
-
-		private IList<SimplePost> posts = new List<SimplePost>();
-		[HasMany]
-		public IList<SimplePost> Posts { get { return posts; } set { posts = value; } }
-	}
-
-	[ActiveRecord]
-	class SimplePost : ActiveRecordBase<SimplePost>
-	{
-		[PrimaryKey]
-		public int Id { get; set; }
-		[Property]
-		public string Title { get; set; }
-		[BelongsTo]
-		public SimpleBlog Blog { get; set; }
 	}
 }

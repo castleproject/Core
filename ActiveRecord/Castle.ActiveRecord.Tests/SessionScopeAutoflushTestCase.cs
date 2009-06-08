@@ -14,9 +14,9 @@
 
 namespace Castle.ActiveRecord.Tests
 {
-	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using Model;
 	using NUnit.Framework;
 	using Castle.ActiveRecord;
 	using NHibernate;
@@ -184,33 +184,6 @@ namespace Castle.ActiveRecord.Tests
 	}
 
 	#region Model
-
-	[ActiveRecord]
-	class SSAFEntity : ActiveRecordBase<SSAFEntity>
-	{
-		private Guid id;
-		[PrimaryKey(PrimaryKeyType.GuidComb)]
-		public Guid Id
-		{
-			get { return id; }
-			set { id = value; }
-		}
-
-		private string content;
-
-		[Property]
-		public virtual string Content
-		{
-			get { return content; }
-			set { content = value; }
-		}
-
-		public SSAFEntity() { }
-		public SSAFEntity(string content)
-		{
-			this.content = content;
-		}
-	}
 
 	#endregion
 }

@@ -31,13 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.ActiveRecord, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="NHibernate, Version=2.1.0.2001, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Castle.ActiveRecord.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate, Version=2.0.0.1002, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\NHibernate.dll</HintPath>
+      <HintPath>..\..\SharedLibs\net\2.0\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate.Linq, Version=1.0.0.0, Culture=neutral, PublicKeyToken=444cf6a87fdab271, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,6 +65,10 @@
     <ProjectReference Include="..\..\Components\Validator\Castle.Components.Validator\Castle.Components.Validator-vs2008.csproj">
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
       <Name>Castle.Components.Validator-vs2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.ActiveRecord\Castle.ActiveRecord-vs2008.csproj">
+      <Project>{652F95D4-86E2-40B6-919D-CFC6E449386B}</Project>
+      <Name>Castle.ActiveRecord-vs2008</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
