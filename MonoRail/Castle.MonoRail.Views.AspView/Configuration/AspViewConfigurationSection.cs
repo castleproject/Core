@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// the namespace mismatch is intentional - to avoid breaking existing web.configs
 namespace Castle.MonoRail.Views.AspView
 {
 	using System;
@@ -20,40 +21,62 @@ namespace Castle.MonoRail.Views.AspView
 	using System.Reflection;
 	using System.Xml;
 
-	using Compiler;
-
 	public class AspViewConfigurationSection : IConfigurationSectionHandler
 	{
+		public class Model
+		{
+			public class Options
+			{
+				public bool? Debug;
+				public bool? AutoRecompilation;
+				public bool? AllowPartiallyTrustedCallers;
+				public bool? SaveFiles;
+				public string TemporarySourceFilesDirectory;
+			}
+			public Options CompilerOptions { get; private set; }
+			public IDictionary<Type, Type> Providers { get; private set; }
+			public IEnumerable<ReferencedAssembly> References { get; private set; }
+
+			public Model(Options options, IDictionary<Type, Type> providers, IEnumerable<ReferencedAssembly> assemblies)
+			{
+				CompilerOptions = options;
+				Providers = providers;
+				References = assemblies;
+			}
+
+			internal void AddReferences(IEnumerable<ReferencedAssembly> referencedAssemblies)
+			{
+				((List<ReferencedAssembly>)References).AddRange(referencedAssemblies);
+			}
+		}
+
 		#region IConfigurationSectionHandler Members
 
 		public object Create(object parent, object configContext, XmlNode section)
 		{
 			if (section == null)
-				throw new AspViewException("AspView config section is missing or not found");
+			{
+				return new Model(new Model.Options(), new Dictionary<Type, Type>(), new ReferencedAssembly[0]);
+			}
 
-			IEnumerable<ReferencedAssembly> references = GetReferencesFrom(section);
-
-			IDictionary<Type, Type> providers = GetProviders(section);
-
-			AspViewCompilerOptions compilerOptions = GetCompilerOptionsFrom(section, references, providers);
-
-			AspViewEngineOptions options = new AspViewEngineOptions(compilerOptions);
-
-			return options;
+			return new Model(
+				GetCompilerOptionsFrom(section),
+				GetProviders(section),
+				GetReferencesFrom(section)
+				);
 		}
 
 		#endregion
 
 		private static IEnumerable<ReferencedAssembly> GetReferencesFrom(XmlNode section)
 		{
-			List<ReferencedAssembly> references = new List<ReferencedAssembly>();
+			var references = new List<ReferencedAssembly>();
 			XmlNodeList referenceNodes = section.SelectNodes("reference");
 			if (referenceNodes == null || referenceNodes.Count == 0)
 				return references;
 
 			foreach (XmlNode reference in referenceNodes)
 			{
-				ReferencedAssembly.AssemblySource source;
 				string name = null;
 				bool isFromGac = false;
 				foreach (XmlAttribute attribute in reference.Attributes)
@@ -74,51 +97,43 @@ namespace Castle.MonoRail.Views.AspView
 				if (string.IsNullOrEmpty(name))
 					throw new ConfigurationErrorsException("Config error: reference must have an assembly name");
 
-				if (isFromGac)
-					source = ReferencedAssembly.AssemblySource.GlobalAssemblyCache;
-				else
-					source = ReferencedAssembly.AssemblySource.BinDirectory;
+				var source = isFromGac
+				             	? ReferencedAssembly.AssemblySource.GlobalAssemblyCache
+				             	: ReferencedAssembly.AssemblySource.BinDirectory;
 
 				references.Add(new ReferencedAssembly(name, source));
 			}
 			return references;
 		}
-
-		private static AspViewCompilerOptions GetCompilerOptionsFrom(XmlNode section, IEnumerable<ReferencedAssembly> references, IDictionary<Type, Type> providers)
+		private static Model.Options GetCompilerOptionsFrom(XmlNode section)
 		{
-			bool? debug = null;
-			bool? autoRecompilation = null;
-			bool? allowPartiallyTrustedCallers = null;
-			string temporarySourceFilesDirectory = null;
-			bool? saveFiles = null;
+			var options = new Model.Options();
 
 			foreach (XmlAttribute attribute in section.Attributes)
 			{
 				switch (attribute.Name.ToLower())
 				{
 					case "debug":
-						debug = bool.Parse(attribute.Value);
+						options.Debug = bool.Parse(attribute.Value);
 						break;
 					case "autorecompilation":
-						autoRecompilation = bool.Parse(attribute.Value);
+						options.AutoRecompilation = bool.Parse(attribute.Value);
 						break;
 					case "allowpartiallytrustedcallers":
-						allowPartiallyTrustedCallers = bool.Parse(attribute.Value);
+						options.AllowPartiallyTrustedCallers = bool.Parse(attribute.Value);
 						break;
 					case "temporarysourcefilesdirectory":
-						temporarySourceFilesDirectory = attribute.Value;
+						options.TemporarySourceFilesDirectory = attribute.Value;
 						break;
 					case "savefiles":
-						saveFiles = bool.Parse(attribute.Value);
+						options.SaveFiles = bool.Parse(attribute.Value);
 						break;
 					default:
 						throw new ConfigurationErrorsException(string.Format("Config error: Unknown attribute [{0}] in aspview config section", attribute.Name));
 				}
 			}
 
-			return new AspViewCompilerOptions(
-				debug, autoRecompilation, allowPartiallyTrustedCallers, temporarySourceFilesDirectory, saveFiles, references, providers);
-
+			return options;
 		}
 
 		private static IDictionary<Type, Type> GetProviders(XmlNode section)
@@ -166,13 +181,17 @@ namespace Castle.MonoRail.Views.AspView
 				{
 					serviceAssembly = Assembly.Load(serviceAssemblyName);
 					isServiceAssemblyLoaded = true;
+					if (implementationAssemblyName == null)
+						throw new ConfigurationErrorsException("Missing implementation assembly name");
 					implementationAssembly = Assembly.Load(implementationAssemblyName);
+					if (implementationAssembly == null)
+						throw new Exception(string.Format("Could not load assembly [{0}]", implementationAssembly));
 				}
 				catch (Exception ex)
 				{
 					string unloadedAssembly = isServiceAssemblyLoaded ?
-						implementationAssemblyName :
-						serviceAssemblyName;
+					                                                  	implementationAssemblyName :
+					                                                  	                           	serviceAssemblyName;
 					throw new ConfigurationErrorsException(string.Format("Could not load assembly [{0}]", unloadedAssembly), ex);
 				}
 

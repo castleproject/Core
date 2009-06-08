@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Views.AspView.Tests.Engine
 {
 	using System.Collections;
+	using Configuration;
 	using NUnit.Framework;
 	using AspView.Compiler;
 

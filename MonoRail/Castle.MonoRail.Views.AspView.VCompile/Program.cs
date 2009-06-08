@@ -18,11 +18,10 @@ namespace Castle.MonoRail.Views.AspView.VCompile
 	using System.Configuration;
 	using System.IO;
 	using System.Xml;
-
-	using AspView;
 	using Compiler;
 	using Compiler.Adapters;
 	using Compiler.Factories;
+	using Configuration;
 
 	public class VCompile
 	{
@@ -35,7 +34,7 @@ namespace Castle.MonoRail.Views.AspView.VCompile
 				ParseCommandLineArguments();
 				SetDefaultsForArguments();
 				ValidateEnvironment();
-
+				Console.ReadLine();
 				Console.WriteLine("Compiling [" + arguments.SiteRoot + "] ...");
 
 				AspViewEngineOptions options = InitializeConfig();
@@ -206,17 +205,23 @@ examples:
 
 		private static AspViewEngineOptions InitializeConfig()
 		{
-			AspViewEngineOptions options =
-				InitializeConfig("aspView") ??
-				InitializeConfig("aspview") ??
-				new AspViewEngineOptions();
+			var config = GetConfigFromAppSettings("aspView")
+			             ?? GetConfigFromAppSettings("aspview")
+			                ?? GetConfigFromWebConfig("aspView")
+			                   ?? GetConfigFromWebConfig("aspview");
+
+			var optionsBuilder = new CompilerOptionsBuilder();
+			if (config != null)
+				optionsBuilder.ApplyConfigurableOverrides(config);
+
+			var options = new AspViewEngineOptions(optionsBuilder.BuildOptions());
 
 			Console.WriteLine(options.CompilerOptions.Debug ? "Compiling in DEBUG mode" : "");
 
 			return options;
 		}
 
-		private static AspViewEngineOptions InitializeConfig(string configName)
+		private static AspViewConfigurationSection.Model GetConfigFromWebConfig(string configName)
 		{
 			string path = Path.Combine(arguments.SiteRoot, "web.config");
 			if (!File.Exists(path))
@@ -239,8 +244,14 @@ examples:
 				return null;
 			}
 
-			AspViewConfigurationSection section = new AspViewConfigurationSection();
-			return (AspViewEngineOptions)section.Create(null, null, aspViewNode);
+			var section = new AspViewConfigurationSection();
+			return (AspViewConfigurationSection.Model)section.Create(null, null, aspViewNode);
+		}
+
+		private static AspViewConfigurationSection.Model GetConfigFromAppSettings(string configName)
+		{
+			return ConfigurationManager.GetSection(configName) as AspViewConfigurationSection.Model;
+
 		}
 	}
 }

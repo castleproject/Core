@@ -18,10 +18,16 @@ namespace Castle.MonoRail.Views.AspView
 	using System.Collections;
 	using System.IO;
 	using System.Configuration;
+	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Text.RegularExpressions;
 	using System.Collections.Generic;
+	using System.Threading;
+	using System.Web;
+	using Compiler.MarkupTransformers;
+	using Compiler.PreCompilationSteps;
+	using Configuration;
 	using Framework.Configuration;
 	using Compiler;
 	using Compiler.Factories;
@@ -30,8 +36,10 @@ namespace Castle.MonoRail.Views.AspView
 
 	public class AspViewEngine : ViewEngineBase, IInitializable, IAspViewEngineTestAccess
 	{
+		static readonly ReaderWriterLock OptionsLocker = new ReaderWriterLock();
+
 		private List<ICompilationContext> compilationContexts = new List<ICompilationContext>();
-	
+
 		private IMonoRailConfiguration monoRailConfiguration;
 		static bool needsRecompiling;
 		static AspViewEngineOptions options;
@@ -66,20 +74,19 @@ namespace Castle.MonoRail.Views.AspView
 
 		public void Initialize()
 		{
-			if (options == null)
-				InitializeConfig();
+			InitializeOptionsIfNeeded();
 
 			if (compilationContexts.Count == 0)
 			{
 				string siteRoot = AppDomain.CurrentDomain.BaseDirectory;
-				
+
 				compilationContexts.Add(
 					new WebCompilationContext(
 						monoRailConfiguration.ViewEngineConfig.ViewPathRoot,
-						new DirectoryInfo(siteRoot), 
+						new DirectoryInfo(siteRoot),
 						new DirectoryInfo(options.CompilerOptions.TemporarySourceFilesDirectory)));
 
-				foreach (string path in monoRailConfiguration.ViewEngineConfig.PathSources) 
+				foreach (string path in monoRailConfiguration.ViewEngineConfig.PathSources)
 				{
 					compilationContexts.Add(
 						new WebCompilationContext(
@@ -96,7 +103,7 @@ namespace Castle.MonoRail.Views.AspView
 				// invalidate compiled views cache on any change to the view sources
 				ViewSourceLoader.ViewChanged += delegate(object sender, FileSystemEventArgs e)
 												{
-													foreach(string extension in AbstractCompiler.TemplateExtensions)
+													foreach (string extension in AbstractCompiler.TemplateExtensions)
 													{
 														if (e.Name.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase))
 														{
@@ -114,7 +121,7 @@ namespace Castle.MonoRail.Views.AspView
 		{
 			base.Service(provider);
 
-			monoRailConfiguration = (IMonoRailConfiguration) provider.GetService(typeof (IMonoRailConfiguration));
+			monoRailConfiguration = (IMonoRailConfiguration)provider.GetService(typeof(IMonoRailConfiguration));
 		}
 		public override bool HasTemplate(string templateName)
 		{
@@ -124,16 +131,16 @@ namespace Castle.MonoRail.Views.AspView
 
 		public override void Process(string templateName, string layoutName, TextWriter output, IDictionary<string, object> parameters)
 		{
-			ControllerContext controllerContext = new ControllerContext();
+			var controllerContext = new ControllerContext();
 			if (layoutName != null)
 			{
-				controllerContext.LayoutNames = new string[] { layoutName };
+				controllerContext.LayoutNames = new[] { layoutName };
 			}
 			foreach (KeyValuePair<string, object> pair in parameters)
 			{
 				controllerContext.PropertyBag[pair.Key] = pair.Value;
 			}
-			
+
 			Process(templateName, output, null, null, controllerContext);
 		}
 
@@ -172,11 +179,6 @@ namespace Castle.MonoRail.Views.AspView
 			get { return "aspx"; }
 		}
 
-		private string LayoutFileExtension
-		{
-			get { return "master"; }
-		}
-
 		#region NJS
 		public override string JSGeneratorFileExtension
 		{
@@ -193,7 +195,7 @@ namespace Castle.MonoRail.Views.AspView
 
 		public AspViewBase CreateView(Type type, TextWriter output, IEngineContext context, IController controller, IControllerContext controllerContext)
 		{
-			AspViewBase view = (AspViewBase)FormatterServices.GetUninitializedObject(type);
+			var view = (AspViewBase)FormatterServices.GetUninitializedObject(type);
 			view.Initialize(this, output, context, controller, controllerContext);
 			return view;
 		}
@@ -208,7 +210,7 @@ namespace Castle.MonoRail.Views.AspView
 				needsRecompiling = false;
 			}
 
-			Type viewType = compilations[className] as Type;
+			var viewType = compilations[className] as Type;
 
 			if (viewType == null)
 				throw new AspViewException("Cannot find view type for {0}.",
@@ -241,9 +243,9 @@ namespace Castle.MonoRail.Views.AspView
 		{
 			compilations.Clear();
 
-			foreach (ICompilationContext compilationContext in compilationContexts) 
+			foreach (ICompilationContext compilationContext in compilationContexts)
 			{
-				OnlineCompiler compiler = new OnlineCompiler(
+				var compiler = new OnlineCompiler(
 					new CSharpCodeProviderAdapterFactory(),
 					new PreProcessor(),
 					compilationContext,
@@ -267,9 +269,10 @@ namespace Castle.MonoRail.Views.AspView
 			}
 			compilations.Clear();
 
-			List<string> viewAssemblies = new List<string>();
+			var viewAssemblies = new List<string>();
 
-			foreach (ICompilationContext compilationContext in compilationContexts) {
+			foreach (ICompilationContext compilationContext in compilationContexts)
+			{
 				viewAssemblies.AddRange(
 					Directory.GetFiles(Path.Combine(compilationContext.SiteRoot.FullName, "bin"), "*CompiledViews.dll",
 									   SearchOption.TopDirectoryOnly)
@@ -315,7 +318,7 @@ namespace Castle.MonoRail.Views.AspView
 				}
 
 				Logger.Error(loaderErrors);
-				throw new InvalidOperationException("Could not load type from views assembly because: "+ Environment.NewLine + loaderErrors, rtle);
+				throw new InvalidOperationException("Could not load type from views assembly because: " + Environment.NewLine + loaderErrors, rtle);
 			}
 		}
 
@@ -349,18 +352,62 @@ namespace Castle.MonoRail.Views.AspView
 			return fileName.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
 		}
 
-		private static void InitializeConfig()
+		private static void InitializeOptionsIfNeeded()
 		{
-			InitializeConfig("aspView");
-			if (options == null)
-				InitializeConfig("aspview");
-			if (options == null)
-				options = new AspViewEngineOptions();
+			OptionsLocker.AcquireReaderLock(Timeout.Infinite);
+			if (options != null)
+			{
+				OptionsLocker.ReleaseReaderLock();
+				return;
+			}
+
+			OptionsLocker.UpgradeToWriterLock(Timeout.Infinite);
+			if (options != null)
+			{
+				OptionsLocker.ReleaseWriterLock();
+				return;
+			}
+
+			try
+			{
+				var optionsBuilder = new CompilerOptionsBuilder();
+				InitializeProgrammaticConfig(optionsBuilder);
+
+				var appSettingsOptions = GetAppSettingsOptions();
+				if (appSettingsOptions != null)
+					optionsBuilder.ApplyConfigurableOverrides(appSettingsOptions);
+
+				options = new AspViewEngineOptions(optionsBuilder.BuildOptions());
+			}
+			finally
+			{
+				OptionsLocker.ReleaseWriterLock();
+			}
 		}
 
-		private static void InitializeConfig(string configName)
+		private static void InitializeProgrammaticConfig(CompilerOptionsBuilder optionsBuilder)
 		{
-			options = (AspViewEngineOptions)ConfigurationManager.GetSection(configName);
+			var app = GetApplicationInstance();
+			if (app == null)
+				return;
+
+			var configEvents = app as IAspViewConfigurationEvents;
+			if (configEvents == null)
+				return;
+
+			configEvents.Configure(optionsBuilder);
+		}
+
+		private static AspViewConfigurationSection.Model GetAppSettingsOptions()
+		{
+			var sectionNames = new[] { "aspView", "aspview" };
+			foreach (var sectionName in sectionNames)
+			{
+				var xmlOptions = ConfigurationManager.GetSection(sectionName) as AspViewConfigurationSection.Model;
+				if (xmlOptions != null)
+					return xmlOptions;
+			}
+			return null;
 		}
 
 		///<summary>
@@ -409,5 +456,8 @@ namespace Castle.MonoRail.Views.AspView
 		{
 			throw new NotImplementedException();
 		}
+
+		public static Func<HttpApplication> GetApplicationInstance =
+			(() => HttpContext.Current == null ? null : HttpContext.Current.ApplicationInstance);
 	}
 }

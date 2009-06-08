@@ -13,7 +13,7 @@
 // limitations under the License.
 
 
-namespace Castle.MonoRail.Views.AspView
+namespace Castle.MonoRail.Views.AspView.Configuration
 {
 	using Compiler;
 

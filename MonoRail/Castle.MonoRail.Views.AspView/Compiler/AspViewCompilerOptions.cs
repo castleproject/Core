@@ -20,15 +20,15 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 	public class AspViewCompilerOptions
 	{
 		#region members
-		private bool debug = false;
-		private bool autoRecompilation = false;
-		private bool allowPartiallyTrustedCallers = false;
-		private bool keepTemporarySourceFiles = false;
+		private bool debug;
+		private bool autoRecompilation;
+		private bool allowPartiallyTrustedCallers;
+		private bool keepTemporarySourceFiles;
 		private string temporarySourceFilesDirectory = "temporarySourceFiles";
 		readonly List<ReferencedAssembly> assembliesToReference = new List<ReferencedAssembly>();
 		readonly IDictionary<Type, Type> providers = new Dictionary<Type, Type>();
 
-		static readonly ReferencedAssembly[] defaultAssemblies = new ReferencedAssembly[4]
+		static readonly ReferencedAssembly[] defaultAssemblies = new[]
 			{
 				new ReferencedAssembly("System.dll", ReferencedAssembly.AssemblySource.GlobalAssemblyCache),
 				new ReferencedAssembly("Castle.Core.dll", ReferencedAssembly.AssemblySource.BinDirectory),
@@ -102,7 +102,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 		}
 		/// <summary>
 		/// Location of the generated concrete classes, if saved.
-		/// Note that the user who runs the application must have Modify permissions on this path.
+		/// Important: the user who runs the application must have Modify permissions on this path.
 		/// </summary>
 		public string TemporarySourceFilesDirectory
 		{
@@ -117,7 +117,7 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 			get { return assembliesToReference.ToArray(); }
 		}
 		/// <summary>
-		/// Gets list of assemblies that'll be referenced during the compile process by CompiledViews.dll
+		/// Gets list of custom providers, implementing IPreCompilationStepsProvider and IMarkupTransformersProvider
 		/// </summary>
 		public IDictionary<Type, Type> CustomProviders
 		{
@@ -129,7 +129,5 @@ namespace Castle.MonoRail.Views.AspView.Compiler
 		{
 			assembliesToReference.AddRange(referencesToAdd);
 		}
-
-
 	}
 }

@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Views.AspView.Tests.RenderingTests
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
+	using Configuration;
 	using Core.Logging;
 	using AspView.Compiler;
 	using Framework.Descriptors;
