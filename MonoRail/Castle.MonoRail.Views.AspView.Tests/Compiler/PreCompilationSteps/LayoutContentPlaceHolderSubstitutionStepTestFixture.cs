@@ -74,7 +74,7 @@ namespace Castle.MonoRail.Views.AspView.Tests.Compiler.PreCompilationSteps {
 			}
 			catch(AspViewException e)
 			{
-				Assert.AreEqual(expected, e.Message);
+				Assert.AreEqual(expectedexceptionmessage, e.Message);
 			}
 		}
 

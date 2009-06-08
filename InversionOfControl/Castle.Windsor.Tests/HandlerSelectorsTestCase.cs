@@ -110,11 +110,11 @@ namespace Castle.Windsor.Tests
 			WatcherSelector selector = new WatcherSelector();
 			container.Kernel.AddHandlerSelector(selector);
 
-			Assert.IsInstanceOfType(typeof(BirdWatcher), container.Resolve<IWatcher>(), "default");
+			Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<IWatcher>(), "default");
 			selector.Interest = Interest.Astronomy;
-			Assert.IsInstanceOfType(typeof(SatiWatcher), container.Resolve<IWatcher>(), "change-by-context");
+			Assert.IsInstanceOf(typeof(SatiWatcher), container.Resolve<IWatcher>(), "change-by-context");
 			selector.Interest = Interest.Biology;
-			Assert.IsInstanceOfType(typeof(BirdWatcher), container.Resolve<IWatcher>(), "explicit");
+			Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<IWatcher>(), "explicit");
 		}
 
 		[Test]
@@ -128,11 +128,11 @@ namespace Castle.Windsor.Tests
 			WatcherSelector selector = new WatcherSelector();
 			container.Kernel.AddHandlerSelector(selector);
 
-			Assert.IsInstanceOfType(typeof(BirdWatcher), container.Resolve<Person>().Watcher, "default");
+			Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<Person>().Watcher, "default");
 			selector.Interest = Interest.Astronomy;
-			Assert.IsInstanceOfType(typeof(SatiWatcher), container.Resolve<Person>().Watcher, "change-by-context");
+			Assert.IsInstanceOf(typeof(SatiWatcher), container.Resolve<Person>().Watcher, "change-by-context");
 			selector.Interest = Interest.Biology;
-			Assert.IsInstanceOfType(typeof(BirdWatcher), container.Resolve<Person>().Watcher, "explicit");
+			Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<Person>().Watcher, "explicit");
 		}
 
 
@@ -149,9 +149,9 @@ namespace Castle.Windsor.Tests
 			container.Kernel.Resolver.AddSubResolver(new WatchSubDependencySelector());
 
 			selector.Interest = Interest.Biology;
-			Assert.IsInstanceOfType(typeof(SatiWatcher), container.Resolve<Person>().Watcher,
+			Assert.IsInstanceOf(typeof(SatiWatcher), container.Resolve<Person>().Watcher,
 			                        "sub dependency should resolve sati");
-			Assert.IsInstanceOfType(typeof(BirdWatcher), container.Resolve<IWatcher>(), "root dependency should resolve bird");
+			Assert.IsInstanceOf(typeof(BirdWatcher), container.Resolve<IWatcher>(), "root dependency should resolve bird");
 		}
 	}
 }

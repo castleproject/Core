@@ -9,6 +9,9 @@ using Rhino.Mocks.Constraints;
 
 namespace Castle.Facilities.NHibernateIntegration.Tests.Issues.Facilities117
 {
+	using Is=Rhino.Mocks.Constraints.Is;
+	using List=Rhino.Mocks.Constraints.List;
+
 	[TestFixture]
 	public class PersistentConfigurationBuilderConventionsFixture
 	{

@@ -45,7 +45,7 @@ namespace Castle.Facilities.FactorySupport.Tests
 			                                      typeof(ISomeService)) as ISomeService;
 
 			Assert.IsTrue(ServiceFactory.CreateWasCalled);
-			Assert.IsInstanceOfType(typeof(ServiceImplementation), service);
+			Assert.IsInstanceOf(typeof(ServiceImplementation), service);
 		}
 
 		[Test, Ignore("Kernel doesn't treat ${} as an special expression for config/primitives, not sure it should - leave this up for discussion")]

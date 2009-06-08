@@ -44,10 +44,10 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(45, interceptor.Invocation.ReturnValue);
 
 			Assert.IsNotNull(interceptor.Invocation.Proxy);
-			Assert.IsInstanceOfType(typeof (ServiceClass), interceptor.Invocation.Proxy);
+			Assert.IsInstanceOf(typeof (ServiceClass), interceptor.Invocation.Proxy);
 
 			Assert.IsNotNull(interceptor.Invocation.InvocationTarget);
-			Assert.IsInstanceOfType(typeof (ServiceClass), interceptor.Invocation.InvocationTarget);
+			Assert.IsInstanceOf(typeof (ServiceClass), interceptor.Invocation.InvocationTarget);
 			Assert.IsNotNull(interceptor.Invocation.TargetType);
 			Assert.AreSame(typeof (ServiceClass), interceptor.Invocation.TargetType);
 
@@ -79,10 +79,10 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(45, interceptor.Invocation.ReturnValue);
 
 			Assert.IsNotNull(interceptor.Invocation.Proxy);
-			Assert.IsNotInstanceOfType(typeof (ServiceImpl), interceptor.Invocation.Proxy);
+			Assert.IsNotInstanceOf(typeof (ServiceImpl), interceptor.Invocation.Proxy);
 
 			Assert.IsNotNull(interceptor.Invocation.InvocationTarget);
-			Assert.IsInstanceOfType(typeof (ServiceImpl), interceptor.Invocation.InvocationTarget);
+			Assert.IsInstanceOf(typeof (ServiceImpl), interceptor.Invocation.InvocationTarget);
 			Assert.IsNotNull(interceptor.Invocation.TargetType);
 			Assert.AreSame(typeof (ServiceImpl), interceptor.Invocation.TargetType);
 

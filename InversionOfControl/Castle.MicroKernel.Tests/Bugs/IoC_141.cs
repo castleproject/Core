@@ -12,7 +12,7 @@ namespace Castle.MicroKernel.Tests.Bugs
 			var kernel = new DefaultKernel();
 			kernel.AddComponent("processor", typeof(IProcessor<>), typeof(DefaultProcessor<>));
 			kernel.AddComponent("assembler", typeof(IAssembler<object>), typeof(ObjectAssembler));
-			Assert.IsInstanceOfType(typeof(DefaultProcessor<object>), kernel.Resolve<IProcessor<object>>());
+			Assert.IsInstanceOf(typeof(DefaultProcessor<object>), kernel.Resolve<IProcessor<object>>());
 		}
 
 		[Test]
@@ -22,7 +22,7 @@ namespace Castle.MicroKernel.Tests.Bugs
 			kernel.AddComponent("service1", typeof(IService), typeof(Service1));
 			kernel.AddComponent("processor", typeof(IProcessor<>), typeof(DefaultProcessor<>));
 			kernel.AddComponent("assembler", typeof(IAssembler<object>), typeof(ObjectAssembler));
-			Assert.IsInstanceOfType(typeof(Service1), kernel.Resolve<IService>());
+			Assert.IsInstanceOf(typeof(Service1), kernel.Resolve<IService>());
 		}
 
 		[Test]

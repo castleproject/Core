@@ -157,11 +157,11 @@ namespace Castle.MicroKernel.Tests
 			IRepository instance = (Repository1) kernel[typeof(IRepository)];
 
 			Assert.IsNotNull(instance);
-			Assert.IsInstanceOfType(typeof(Repository1), instance);
-			Assert.IsInstanceOfType(typeof(Repository2), ((Repository1) instance).InnerRepository);
-			Assert.IsInstanceOfType(typeof(Repository3),
+			Assert.IsInstanceOf(typeof(Repository1), instance);
+			Assert.IsInstanceOf(typeof(Repository2), ((Repository1) instance).InnerRepository);
+			Assert.IsInstanceOf(typeof(Repository3),
 			                        ((Repository2) (((Repository1) instance).InnerRepository)).InnerRepository);
-			Assert.IsInstanceOfType(typeof(DecoratedRepository),
+			Assert.IsInstanceOf(typeof(DecoratedRepository),
 			                        ((Repository3) (((Repository2) (((Repository1) instance).InnerRepository)).InnerRepository)).
 			                        	InnerRepository);
 		}

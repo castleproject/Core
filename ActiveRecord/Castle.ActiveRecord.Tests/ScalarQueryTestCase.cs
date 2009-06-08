@@ -103,7 +103,7 @@ namespace Castle.ActiveRecord.Tests
 			}
 			catch (Exception ex)
 			{
-				Assert.IsInstanceOfType(typeof(NHibernate.QueryException), ex);
+				Assert.IsInstanceOf(typeof(NHibernate.QueryException), ex);
 				Assert.IsTrue(ex.Message.Contains("Int32"));
 				Assert.IsTrue(ex.Message.Contains("Int64"));
 			}
@@ -120,7 +120,7 @@ namespace Castle.ActiveRecord.Tests
 			}
 			catch (Exception ex)
 			{
-				Assert.IsInstanceOfType(typeof(NHibernate.QueryException), ex);
+				Assert.IsInstanceOf(typeof(NHibernate.QueryException), ex);
 				Assert.IsTrue(ex.Message.Contains("Int32"));
 				Assert.IsTrue(ex.Message.Contains("Int64"));
 			}

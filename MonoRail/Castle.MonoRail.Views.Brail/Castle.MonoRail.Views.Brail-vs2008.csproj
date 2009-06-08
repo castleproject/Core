@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attributes\HtmlAttribte.cs" />
     <Compile Include="Attributes\MarkdownAttribute.cs" />
     <Compile Include="Attributes\RawAttribute.cs" />

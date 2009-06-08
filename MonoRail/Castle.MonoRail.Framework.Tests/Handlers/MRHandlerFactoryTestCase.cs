@@ -93,7 +93,7 @@ namespace Castle.MonoRail.Framework.Tests.Handlers
 				IHttpHandler handler = handlerFactory.GetHandler(httpCtx, "GET", "", "");
 
 				Assert.IsNotNull(handler);
-				Assert.IsInstanceOfType(typeof(MonoRailHttpHandler), handler);
+				Assert.IsInstanceOf(typeof(MonoRailHttpHandler), handler);
 			}
 		}
 
@@ -130,7 +130,7 @@ namespace Castle.MonoRail.Framework.Tests.Handlers
 				IHttpHandler handler = handlerFactory.GetHandler(httpCtx, "GET", "", "");
 
 				Assert.IsNotNull(handler);
-				Assert.IsInstanceOfType(typeof(AsyncMonoRailHttpHandler), handler);
+				Assert.IsInstanceOf(typeof(AsyncMonoRailHttpHandler), handler);
 			}
         }
 
@@ -165,7 +165,7 @@ namespace Castle.MonoRail.Framework.Tests.Handlers
 				IHttpHandler handler = handlerFactory.GetHandler(httpCtx, "GET", "", "");
 
 				Assert.IsNotNull(handler);
-				Assert.IsInstanceOfType(typeof(SessionlessMonoRailHttpHandler), handler);
+				Assert.IsInstanceOf(typeof(SessionlessMonoRailHttpHandler), handler);
 			}
 		}
 
@@ -202,7 +202,7 @@ namespace Castle.MonoRail.Framework.Tests.Handlers
                 IHttpHandler handler = handlerFactory.GetHandler(httpCtx, "GET", "", "");
 
                 Assert.IsNotNull(handler);
-                Assert.IsInstanceOfType(typeof(AsyncSessionlessMonoRailHttpHandler), handler);
+                Assert.IsInstanceOf(typeof(AsyncSessionlessMonoRailHttpHandler), handler);
             }
         }
 	}

@@ -138,25 +138,25 @@ namespace Castle.MicroKernel.Tests
 			kernel.AddComponent("Customer", typeof(ICustomer), typeof(CustomerImpl));
 
 			CustomerChain1 customer = (CustomerChain1) kernel[typeof(ICustomer)];
-			Assert.IsInstanceOfType(typeof(CustomerChain9), customer);
+			Assert.IsInstanceOf(typeof(CustomerChain9), customer);
 			customer = (CustomerChain1)customer.CustomerBase;
-			Assert.IsInstanceOfType(typeof(CustomerChain8), customer);
+			Assert.IsInstanceOf(typeof(CustomerChain8), customer);
 			customer = (CustomerChain1)customer.CustomerBase;
-			Assert.IsInstanceOfType(typeof(CustomerChain7), customer);
+			Assert.IsInstanceOf(typeof(CustomerChain7), customer);
 			customer = (CustomerChain1)customer.CustomerBase;
-			Assert.IsInstanceOfType(typeof(CustomerChain6), customer);
+			Assert.IsInstanceOf(typeof(CustomerChain6), customer);
 			customer = (CustomerChain1)customer.CustomerBase;
-			Assert.IsInstanceOfType(typeof(CustomerChain5), customer);
+			Assert.IsInstanceOf(typeof(CustomerChain5), customer);
 			customer = (CustomerChain1)customer.CustomerBase;
-			Assert.IsInstanceOfType(typeof(CustomerChain4), customer);
+			Assert.IsInstanceOf(typeof(CustomerChain4), customer);
 			customer = (CustomerChain1)customer.CustomerBase;
-			Assert.IsInstanceOfType(typeof(CustomerChain3), customer);
+			Assert.IsInstanceOf(typeof(CustomerChain3), customer);
 			customer = (CustomerChain1)customer.CustomerBase;
-			Assert.IsInstanceOfType(typeof(CustomerChain2), customer);
+			Assert.IsInstanceOf(typeof(CustomerChain2), customer);
 			customer = (CustomerChain1)customer.CustomerBase;
-			Assert.IsInstanceOfType(typeof(CustomerChain1), customer);
+			Assert.IsInstanceOf(typeof(CustomerChain1), customer);
 			ICustomer lastCustomer = customer.CustomerBase;
-			Assert.IsInstanceOfType(typeof(CustomerImpl), lastCustomer);
+			Assert.IsInstanceOf(typeof(CustomerImpl), lastCustomer);
 		}
 	}
 }

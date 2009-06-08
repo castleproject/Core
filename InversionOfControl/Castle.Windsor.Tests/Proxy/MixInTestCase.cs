@@ -38,7 +38,7 @@ namespace Castle.Windsor.Tests.Proxy
 				);
 
 			ICalcService calculator = container.Resolve<ICalcService>();
-			Assert.IsInstanceOfType(typeof(ISimpleMixIn), calculator);
+			Assert.IsInstanceOf(typeof(ISimpleMixIn), calculator);
 
 			ISimpleMixIn mixin = (ISimpleMixIn)calculator;
 			mixin.DoSomething();

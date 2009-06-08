@@ -163,7 +163,7 @@ namespace Castle.ActiveRecord.Tests.Config
 			}
 			catch (Exception ex)
 			{
-				Assert.IsInstanceOfType(typeof(ConfigurationErrorsException), ex);
+				Assert.IsInstanceOf(typeof(ConfigurationErrorsException), ex);
 				Assert.IsTrue(ex.Message.ToLower().Contains("flush"));
 				Assert.IsTrue(ex.Message.ToLower().Contains("foo"));
 				Assert.IsTrue(ex.Message.ToLower().Contains("classic"));

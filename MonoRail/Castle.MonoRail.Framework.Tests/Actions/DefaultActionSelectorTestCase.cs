@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Framework.Tests.Actions
 
 			IExecutableAction action = selector.Select(engine, controller, context,ActionType.Sync);
 			Assert.IsNotNull(action);
-			Assert.IsInstanceOfType(typeof(ActionMethodExecutor), action);
+			Assert.IsInstanceOf(typeof(ActionMethodExecutor), action);
 		}
 
 		[Test]
@@ -61,7 +61,7 @@ namespace Castle.MonoRail.Framework.Tests.Actions
 
 			IExecutableAction action = selector.Select(engine, controller, context,ActionType.Sync);
 			Assert.IsNotNull(action);
-			Assert.IsInstanceOfType(typeof(DynamicActionExecutor), action);
+			Assert.IsInstanceOf(typeof(DynamicActionExecutor), action);
 		}
 
 		public class BaseClassController : Controller

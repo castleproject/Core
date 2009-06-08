@@ -303,7 +303,7 @@ namespace Castle.Services.Transaction.Tests
 			Assert.IsTrue(transactionFailedEventTriggered);
 
 			Assert.IsNotNull(exception);
-			Assert.IsInstanceOfType(typeof(CommitResourceException), exception);
+			Assert.IsInstanceOf(typeof(CommitResourceException), exception);
 		}
 
 		[Test]
@@ -350,7 +350,7 @@ namespace Castle.Services.Transaction.Tests
 			Assert.IsTrue(transactionFailedEventTriggered);
 
 			Assert.IsNotNull(exception);
-			Assert.IsInstanceOfType(typeof(RollbackResourceException), exception);
+			Assert.IsInstanceOf(typeof(RollbackResourceException), exception);
 		}
 
 		[Test]

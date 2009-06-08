@@ -32,7 +32,7 @@ namespace Castle.MicroKernel.Tests
                 Component.For<IRepository>().ImplementedBy<DecoratedRepository>()
                 );
             Repository1 repos = (Repository1)kernel.Resolve<IRepository>();
-            Assert.IsInstanceOfType(typeof(DecoratedRepository), repos.InnerRepository);
+            Assert.IsInstanceOf(typeof(DecoratedRepository), repos.InnerRepository);
         }
 
         [Test]

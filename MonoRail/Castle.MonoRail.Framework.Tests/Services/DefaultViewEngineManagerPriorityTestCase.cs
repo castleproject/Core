@@ -42,7 +42,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		{
 			var resolvedEngine = viewEngineManager.ResolveEngine("templateName", true);
 			Assert.IsNotNull(resolvedEngine);
-			Assert.IsInstanceOfType(typeof(FirstEngine), resolvedEngine);
+			Assert.IsInstanceOf(typeof(FirstEngine), resolvedEngine);
 		}
 	}
 

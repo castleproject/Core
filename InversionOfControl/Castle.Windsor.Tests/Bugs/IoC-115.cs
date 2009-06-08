@@ -50,7 +50,7 @@ namespace Castle.Windsor.Tests.Bugs
             child.AddComponent("service2", typeof(IParentService), typeof(AnotherParentService));
 
 			IChildService2 resolve = child.Resolve<IChildService2>();
-            Assert.IsInstanceOfType(typeof(AnotherParentService),resolve.Parent);
+            Assert.IsInstanceOf(typeof(AnotherParentService),resolve.Parent);
         }
 
         public interface IParentService

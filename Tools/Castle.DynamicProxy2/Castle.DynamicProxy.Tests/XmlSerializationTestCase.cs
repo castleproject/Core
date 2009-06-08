@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Tests
 			object newObj = serializer.Deserialize(reader);
 
 			Assert.IsNotNull(newObj);
-			Assert.IsInstanceOfType(typeof (ClassToSerialize), newObj);
+			Assert.IsInstanceOf(typeof (ClassToSerialize), newObj);
 		}
 	}
 }

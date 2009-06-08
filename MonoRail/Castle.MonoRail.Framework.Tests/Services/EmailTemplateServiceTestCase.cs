@@ -22,6 +22,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 	using Rhino.Mocks;
 	using Rhino.Mocks.Constraints;
 	using Test;
+	using Is=Rhino.Mocks.Constraints.Is;
 
 	[TestFixture]
 	public class EmailTemplateServiceTestCase

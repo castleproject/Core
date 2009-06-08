@@ -112,7 +112,7 @@ namespace Castle.MonoRail.Framework.Tests.JSGeneration
 		public void CreateElementGenerator_CreatesPrototypeElementGenerator()
 		{
 			object elementGen = generator.CreateElementGenerator("my.root");
-			Assert.IsInstanceOfType(typeof(PrototypeElementGenerator), elementGen);
+			Assert.IsInstanceOf(typeof(PrototypeElementGenerator), elementGen);
 		}
 	}
 }

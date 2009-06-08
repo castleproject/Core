@@ -94,7 +94,7 @@ namespace Castle.DynamicProxy.Tests
 			object proxy = generator.CreateClassProxy(typeof(ClassWithIndexer), logger);
 
 			Assert.IsNotNull(proxy);
-			Assert.IsInstanceOfType(typeof(ClassWithIndexer), proxy);
+			Assert.IsInstanceOf(typeof(ClassWithIndexer), proxy);
 
 			ClassWithIndexer type = (ClassWithIndexer)proxy;
 
@@ -114,7 +114,7 @@ namespace Castle.DynamicProxy.Tests
 			object proxy = generator.CreateClassProxy(typeof(DiffAccessLevelOnProperties), logger);
 
 			Assert.IsNotNull(proxy);
-			Assert.IsInstanceOfType(typeof(DiffAccessLevelOnProperties), proxy);
+			Assert.IsInstanceOf(typeof(DiffAccessLevelOnProperties), proxy);
 
 			DiffAccessLevelOnProperties type = (DiffAccessLevelOnProperties)proxy;
 

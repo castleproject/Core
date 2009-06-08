@@ -53,14 +53,14 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
 		public void register_ferrari_implementation_get_ferrari_instance()
 		{
 			RegisterComponentsImplemtedByFerrari(new User() { FiscalStability = FiscalStability.MrMoneyBags });
-			Assert.IsInstanceOfType(typeof(FerrariProvider), kernel.Resolve<ICarProvider>());
+			Assert.IsInstanceOf(typeof(FerrariProvider), kernel.Resolve<ICarProvider>());
 		}
 
 		[Test]
 		public void register_ferrari_implementation_get_honda_instance()
 		{
 			RegisterComponentsImplemtedByFerrari(new User() { FiscalStability = FiscalStability.DirtFarmer });
-			Assert.IsInstanceOfType(typeof(HondaProvider), kernel.Resolve<ICarProvider>());
+			Assert.IsInstanceOf(typeof(HondaProvider), kernel.Resolve<ICarProvider>());
 		}
 
 		[Test]
@@ -74,7 +74,7 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
 					.Attribute("factoryId").Eq("AbstractCarProviderFactory")
 					.Attribute("factoryCreate").Eq("Create")
 				);
-			Assert.IsInstanceOfType(typeof(HondaProvider), kernel.Resolve<ICarProvider>());
+			Assert.IsInstanceOf(typeof(HondaProvider), kernel.Resolve<ICarProvider>());
 		}
 
 		private void RegisterComponentsImplemtedByFerrari(User user)
@@ -99,7 +99,7 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
                 Component.For<ICarProvider>()
                     .UsingFactory((AbstractCarProviderFactory f) => f.Create(kernel.Resolve<User>()))
                 );
-            Assert.IsInstanceOfType(typeof(HondaProvider), kernel.Resolve<ICarProvider>());
+            Assert.IsInstanceOf(typeof(HondaProvider), kernel.Resolve<ICarProvider>());
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
                 Component.For<ICarProvider>()
                     .UsingFactoryMethod(() => new AbstractCarProviderFactory().Create(user))
                 );
-            Assert.IsInstanceOfType(typeof(HondaProvider), kernel.Resolve<ICarProvider>());
+            Assert.IsInstanceOf(typeof(HondaProvider), kernel.Resolve<ICarProvider>());
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
                 Component.For<ICarProvider>()
                     .UsingFactoryMethod(k => new AbstractCarProviderFactory().Create(k.Resolve<User>()))
                 );
-            Assert.IsInstanceOfType(typeof(FerrariProvider), kernel.Resolve<ICarProvider>());
+            Assert.IsInstanceOf(typeof(FerrariProvider), kernel.Resolve<ICarProvider>());
         }
 	}
 }
