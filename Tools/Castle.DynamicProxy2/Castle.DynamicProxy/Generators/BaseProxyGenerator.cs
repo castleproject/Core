@@ -857,7 +857,7 @@ namespace Castle.DynamicProxy.Generators
 
 			// invocation only needs to mirror the generic parameters of the MethodInfo
 			// targetType cannot be a generic type definition
-			nested.CreateGenericParameters(methodInfo.GetGenericArguments());
+			nested.CopyGenericParametersFromMethod(methodInfo);
 
 			// Create the invocation fields
 

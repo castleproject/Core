@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using System.Reflection;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.GenInterfaces;
 	using Castle.DynamicProxy.Tests.InterClasses;
+	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
-
 
 	[TestFixture]
 	public class GenericMethodsProxyTestCase : BasePEVerifyTestCase
@@ -33,6 +33,40 @@ namespace Castle.DynamicProxy.Tests
 				new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
+		}
+
+		[Test]
+		public void GenericMethod_WithConstraintOnOtherParameter()
+		{
+			Type type = typeof(IInterfaceWithGenericMethodWithDependentConstraint);
+
+			KeepDataInterceptor interceptor = new KeepDataInterceptor();
+			IInterfaceWithGenericMethodWithDependentConstraint proxy = (IInterfaceWithGenericMethodWithDependentConstraint) 
+					generator.CreateInterfaceProxyWithoutTarget(type, new Type[] {}, interceptor);
+
+			proxy.RegisterType<object, string>();
+
+			MethodInfo expectedMethod = 
+					typeof(IInterfaceWithGenericMethodWithDependentConstraint).GetMethod("RegisterType").MakeGenericMethod(typeof(object), typeof(string));
+			
+			Assert.AreEqual (expectedMethod, interceptor.Invocation.Method);
+		}
+
+		[Test]
+		public void GenericMethod_WithConstraintOnSurroundingTypeParameter ()
+		{
+			Type type = typeof (IGenericInterfaceWithGenericMethodWithDependentConstraint<object>);
+
+			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
+			IGenericInterfaceWithGenericMethodWithDependentConstraint<object> proxy = (IGenericInterfaceWithGenericMethodWithDependentConstraint<object>)
+					generator.CreateInterfaceProxyWithoutTarget(type, new Type[] { }, interceptor);
+
+			proxy.RegisterType<string> ();
+
+			MethodInfo expectedMethod =
+					typeof (IGenericInterfaceWithGenericMethodWithDependentConstraint<object>).GetMethod ("RegisterType").MakeGenericMethod (typeof (string));
+
+			Assert.AreEqual (expectedMethod, interceptor.Invocation.Method);
 		}
 	}
 }

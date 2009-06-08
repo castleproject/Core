@@ -134,6 +134,7 @@
     <Compile Include="Classes\ClassWithDefaultConstructor.cs" />
     <Compile Include="GenericMethodsProxyTestCase.cs" />
     <Compile Include="DictionarySerializationTestCase.cs" />
+    <Compile Include="InterClasses\IInterfaceWithGenericMethodWithDependentConstraint.cs" />
     <Compile Include="InheritedInterfacesTestCase.cs" />
     <Compile Include="Interceptors\InterceptorSelectorTestCase.cs" />
     <Compile Include="MethodEquivalenceTestCase.cs" />

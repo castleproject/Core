@@ -86,9 +86,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 //				paramModReq.Add(parameterInfo.GetRequiredCustomModifiers());
 //			} 
 
-			Type[] genericArguments = baseMethod.GetGenericArguments();
-
-			genericTypeParams = GenericUtil.DefineGenericArguments(genericArguments, builder, name2GenericType);
+			genericTypeParams = GenericUtil.CopyGenericArguments(baseMethod, builder, name2GenericType);
 			// Bind parameter types
 
 			SetParameters(GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType));

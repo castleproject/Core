@@ -261,15 +261,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			this.genericTypeParams = genericTypeParameterBuilders;
 		}
 
-		public void CreateGenericParameters(Type[] genericArguments)
+		public void CopyGenericParametersFromMethod (MethodInfo methodToCopyGenericsFrom)
 		{
 			// big sanity check
 			if (genericTypeParams != null)
 			{
-				throw new ProxyGenerationException("CreateGenericParameters: cannot invoke me twice");
+				throw new ProxyGenerationException("CopyGenericParametersFromMethod: cannot invoke me twice");
 			}
 
-			SetGenericTypeParameters(GenericUtil.DefineGenericArguments(genericArguments, typebuilder, name2GenericType));
+			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder, name2GenericType));
 		}
 
 		public virtual Type BuildType()

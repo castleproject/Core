@@ -1,6 +1,8 @@
 Unreleased Changes
 ==================
-- N/A
+- Fixed DYNPROX-92: "Proxy fails when creating a Proxy for certain Generic signatures"
+  The problem was that GenericUtil.cs wrongfully copied generic arguments whose constraints referenced the proxied method without adjusting those
+  consttraints.
 
 2.1.0 (2009-05-04)
 ==================

@@ -63,7 +63,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		// The ambivalent generic parameter handling of base type and interfaces has been removed from the ClassEmitter, it isn't used by the proxy
 		// generators anyway. If a concrete user needs to support generic bases, a subclass can override this method (and not call this base
-		// implementation), call CreateGenericParameters and replace baseType and interfaces by versions bound to the newly created GenericTypeParams.
+		// implementation), call CopyGenericParametersFromMethod and replace baseType and interfaces by versions bound to the newly created GenericTypeParams.
 		protected virtual void InitializeGenericArgumentsFromBases(ref Type baseType, ref Type[] interfaces)
 		{
 			if (baseType.IsGenericTypeDefinition)
