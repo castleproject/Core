@@ -35,7 +35,14 @@ namespace Castle.Facilities.WcfIntegration.Internal
 		{
 			foreach (object instance in instances)
 			{
-				kernel.ReleaseComponent(instance);
+				if (instance is IWcfCleanUp)
+				{
+					((IWcfCleanUp)instance).CleanUp();
+				}
+				else
+				{
+					kernel.ReleaseComponent(instance);
+				}
 			}
 			instances.Clear();
 		}

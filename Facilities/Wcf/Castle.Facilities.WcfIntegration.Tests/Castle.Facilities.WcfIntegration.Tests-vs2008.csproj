@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="Behaviors\AddOperationsHeader.cs" />
     <Compile Include="Behaviors\CaptureServiceHost.cs" />
+    <Compile Include="Behaviors\ChannelFactoryListener.cs" />
     <Compile Include="Behaviors\StoreMessageBody.cs" />
     <Compile Include="Behaviors\NetDataContractFormatBehavior.cs" />
     <Compile Include="Behaviors\CallCountEndpointBehavior.cs" />

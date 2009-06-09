@@ -84,6 +84,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		public void TestCleanup()
 		{
 			windsorContainer.Dispose();
+			ChannelFactoryListener.Reset();
 		}
 
 		#endregion
@@ -438,6 +439,63 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			IOperationsEx client = windsorContainer.Resolve<IOperationsEx>("operations");
 			client.Backup(new Dictionary<string, object>());
 			Assert.AreEqual(1, CallCountEndpointBehavior.CallCount);
+		}
+
+		[Test]
+		public void WillApplyChannelFactoryAwareExtensions()
+		{
+			windsorContainer.Register(
+				Component.For<ChannelFactoryListener>(),
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+
+			Assert.IsTrue(ChannelFactoryListener.CreatedCalled);
+			Assert.IsTrue(ChannelFactoryListener.OpeningCalled);
+			Assert.IsTrue(ChannelFactoryListener.OpenedCalled);
+			client.GetValueFromConstructor();
+			Assert.IsFalse(ChannelFactoryListener.ClosingCalled);
+			Assert.IsFalse(ChannelFactoryListener.ClosedCalled);
+
+			windsorContainer.Kernel.RemoveComponent("operations");
+			Assert.IsTrue(ChannelFactoryListener.ClosingCalled);
+			Assert.IsTrue(ChannelFactoryListener.ClosedCalled);
+		}
+
+		[Test]
+		public void WillApplyChannelFactoryAwareExtensionsOnModel()
+		{
+			windsorContainer.Register(
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+					}.AddExtensions(new ChannelFactoryListener()))
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+
+			Assert.IsTrue(ChannelFactoryListener.CreatedCalled);
+			Assert.IsTrue(ChannelFactoryListener.OpeningCalled);
+			Assert.IsTrue(ChannelFactoryListener.OpenedCalled);
+			client.GetValueFromConstructor();
+			Assert.IsFalse(ChannelFactoryListener.ClosingCalled);
+			Assert.IsFalse(ChannelFactoryListener.ClosedCalled);
+
+			windsorContainer.Kernel.RemoveComponent("operations");
+			Assert.IsTrue(ChannelFactoryListener.ClosingCalled);
+			Assert.IsTrue(ChannelFactoryListener.ClosedCalled);
 		}
 
 		[Test]

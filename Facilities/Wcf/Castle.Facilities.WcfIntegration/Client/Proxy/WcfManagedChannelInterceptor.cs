@@ -66,7 +66,12 @@ namespace Castle.Facilities.WcfIntegration
 			foreach (var cleanUp in channel.Extensions.FindAll<IWcfCleanUp>())
 			{
 				cleanUp.CleanUp();
-			}			
+			}
+
+			if (channel != null)
+			{
+				WcfUtils.ReleaseCommunicationObject(channel, TimeSpan.Zero);
+			}
 		}
 	}
 }

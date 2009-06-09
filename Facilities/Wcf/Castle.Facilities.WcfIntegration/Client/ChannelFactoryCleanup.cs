@@ -14,10 +14,21 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	public interface IWcfExtensionVisitor
+	using System;
+	using System.ServiceModel;
+
+	internal class ChannelFactoryCleanup : IWcfCleanUp
 	{
-		void VisitServiceExtension(IWcfServiceExtension extension);
-		void VisitChannelExtension(IWcfChannelExtension extension);
-		void VisitEndpointExtension(IWcfEndpointExtension extension);
+		private readonly ChannelFactory channelFactory;
+
+		public ChannelFactoryCleanup(ChannelFactory channelFactory)
+		{
+			this.channelFactory = channelFactory;
+		}
+
+		public void CleanUp()
+		{
+			channelFactory.Close();
+		}
 	}
 }

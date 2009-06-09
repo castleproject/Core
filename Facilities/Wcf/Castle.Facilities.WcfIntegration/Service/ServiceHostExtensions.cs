@@ -55,6 +55,10 @@ namespace Castle.Facilities.WcfIntegration
 			extension.Install(serviceHost, kernel, burden);
 		}
 
+		void IWcfExtensionVisitor.VisitChannelExtension(IWcfChannelExtension extension)
+		{
+		}
+
 		void IWcfExtensionVisitor.VisitEndpointExtension(IWcfEndpointExtension extension)
 		{
 			foreach (ServiceEndpoint endpoint in serviceHost.Description.Endpoints)

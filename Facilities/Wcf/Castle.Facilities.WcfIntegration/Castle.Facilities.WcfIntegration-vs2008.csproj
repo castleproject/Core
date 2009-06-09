@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="Behaviors\AbstractExtensibleObject.cs" />
     <Compile Include="Behaviors\AbstractExtension.cs" />
+    <Compile Include="Behaviors\WcfChannelExtensions.cs" />
     <Compile Include="Behaviors\Lifecyle\AbstractMessageEnvelopeAction.cs" />
     <Compile Include="Behaviors\Lifecyle\IMessageLifecyleAction.cs" />
     <Compile Include="Behaviors\Lifecyle\IMessageEnvelopeAction.cs" />
@@ -104,12 +105,13 @@
     <Compile Include="Behaviors\Logging\LogMessageEndpointBehavior.cs" />
     <Compile Include="Client\AbstractChannelBuilder.Generic.cs" />
     <Compile Include="Behaviors\ServiceEndpointExtensions.cs" />
+    <Compile Include="Client\ChannelFactoryCleanup.cs" />
     <Compile Include="Client\Default\DefaultClientModel.cs" />
     <Compile Include="Behaviors\Logging\LogMessageInspector.cs" />
     <Compile Include="Client\Duplex\DuplexChannelBuilder.cs" />
     <Compile Include="Client\Duplex\DuplexClientModel.cs" />
     <Compile Include="Client\Proxy\IManagedChannel.cs" />
-    <Compile Include="Internal\WcfPool.cs" />
+    <Compile Include="Client\ChannelFactoryExtensions.cs" />
     <Compile Include="IWcfCleanUp.cs" />
     <Compile Include="WcfContextChannel.cs" />
     <Compile Include="IChannelFactoryAware.cs" />

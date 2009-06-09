@@ -32,6 +32,7 @@ namespace Castle.Facilities.WcfIntegration
 		public override void AddDependencies(IKernel kernel, ComponentModel model)
 		{
 			WcfUtils.AddExtensionDependencies<IServiceBehavior>(kernel, WcfExtensionScope.Services, model);
+			WcfUtils.AddExtensionDependencies<IServiceHostAware>(kernel, WcfExtensionScope.Services, model);
 		}
 
 		public override void Accept(IWcfExtensionVisitor visitor)

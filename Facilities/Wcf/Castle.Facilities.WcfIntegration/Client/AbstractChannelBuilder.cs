@@ -18,7 +18,6 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
-	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 
 	public abstract class AbstractChannelBuilder : IWcfEndpointVisitor
@@ -42,16 +41,20 @@ namespace Castle.Facilities.WcfIntegration
 		protected void ConfigureChannelFactory(ChannelFactory channelFactory, IWcfClientModel clientModel,
 											   IWcfBurden burden)
 		{
-			BindChannelFactoryAware(channelFactory, kernel, burden);
+			var extensions = new ChannelFactoryExtensions(channelFactory, kernel)
+				.Install(burden, new WcfChannelExtensions());
 
-			var extensions =new ServiceEndpointExtensions(channelFactory.Endpoint, kernel)
+			var endpointExtensions = new ServiceEndpointExtensions(channelFactory.Endpoint, kernel)
 				.Install(burden, new WcfEndpointExtensions(WcfExtensionScope.Clients));
 
 			if (clientModel != null)
 			{
 				extensions.Install(clientModel.Extensions, burden);
-				extensions.Install(clientModel.Endpoint.Extensions, burden);
+				endpointExtensions.Install(clientModel.Extensions, burden);
+				endpointExtensions.Install(clientModel.Endpoint.Extensions, burden);
 			}
+
+			burden.Add(new ChannelFactoryCleanup(channelFactory));
 		}
 
 		protected ChannelCreator GetEndpointChannelCreator(IWcfEndpoint endpoint)
@@ -64,16 +67,6 @@ namespace Castle.Facilities.WcfIntegration
 			this.contract = contract ?? endpoint.Contract;
 			endpoint.Accept(this);
 			return channelCreator;
-		}
-
-		private void BindChannelFactoryAware(ChannelFactory channelFactory, IKernel kernel, IWcfBurden burden)
-		{
-			WcfUtils.AddBehaviors<IChannelFactoryAware>(kernel, WcfExtensionScope.Clients, null, burden,
-				delegate(IChannelFactoryAware channelFactoryAware)
-				{
-					WcfUtils.BindChannelFactoryAware(channelFactory, channelFactoryAware, true);
-					return true;
-				});
 		}
 
 		protected abstract ChannelCreator GetChannel(Type contract);

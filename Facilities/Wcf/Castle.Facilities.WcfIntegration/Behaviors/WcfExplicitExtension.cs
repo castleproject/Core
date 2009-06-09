@@ -21,7 +21,8 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 
-	internal abstract class WcfExplicitExtension : AbstractWcfExtension, IWcfServiceExtension, IWcfEndpointExtension
+	internal abstract class WcfExplicitExtension : AbstractWcfExtension, 
+		IWcfServiceExtension, IWcfChannelExtension, IWcfEndpointExtension
 	{
 		#region IWcfServiceExtension
 
@@ -44,6 +45,20 @@ namespace Castle.Facilities.WcfIntegration
 			else
 			{
 				WcfUtils.AttachExtension(serviceHost.Description.Behaviors, extension);
+			}
+		}
+
+		#endregion
+
+		#region IWcfChannelExtension Members
+
+		public void Install(ChannelFactory channelFactory, IKernel kernel, IWcfBurden burden)
+		{
+			object extension = GetExtensionInstance(kernel, burden);
+
+			if (extension is IChannelFactoryAware)
+			{
+				WcfUtils.BindChannelFactoryAware(channelFactory, (IChannelFactoryAware)extension, true);
 			}
 		}
 
@@ -115,6 +130,7 @@ namespace Castle.Facilities.WcfIntegration
 		override public void Accept(IWcfExtensionVisitor visitor)
 		{
 			visitor.VisitServiceExtension(this);
+			visitor.VisitChannelExtension(this);
 			visitor.VisitEndpointExtension(this);
 		}
 	}

@@ -270,18 +270,9 @@ namespace Castle.Facilities.WcfIntegration.Internal
 							comm.Close();
 						}
 					}
-					catch (CommunicationException)
-					{
-						comm.Abort();
-					}
-					catch (TimeoutException)
-					{
-						comm.Abort();
-					}
 					catch
 					{
 						comm.Abort();
-						throw;
 					}
 				}
 				else

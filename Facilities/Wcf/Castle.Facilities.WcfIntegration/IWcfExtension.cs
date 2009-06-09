@@ -30,6 +30,11 @@ namespace Castle.Facilities.WcfIntegration
 		void Install(ServiceHost serviceHost, IKernel kernel, IWcfBurden burden);
 	}
 
+	public interface IWcfChannelExtension : IWcfExtension
+	{
+		void Install(ChannelFactory channelFactory, IKernel kernel, IWcfBurden burden);
+	}
+
 	public interface IWcfEndpointExtension : IWcfExtension
 	{
 		void Install(ServiceEndpoint endpoint, IKernel kernel, IWcfBurden burden);

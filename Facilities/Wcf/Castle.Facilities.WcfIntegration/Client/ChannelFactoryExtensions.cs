@@ -14,29 +14,27 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System;
 	using System.Collections.Generic;
-	using System.ServiceModel.Description;
+	using System.ServiceModel;
 	using Castle.MicroKernel;
 
-	internal class ServiceEndpointExtensions : IWcfExtensionVisitor
+	internal class ChannelFactoryExtensions : IWcfExtensionVisitor
 	{
-		private readonly ServiceEndpoint endpoint;
+		private readonly ChannelFactory channelFactory;
 		private readonly IKernel kernel;
 		private IWcfBurden burden;
 
-		public ServiceEndpointExtensions(ServiceEndpoint endpoint, IKernel kernel)
+		public ChannelFactoryExtensions(ChannelFactory channelFactory, IKernel kernel)
 		{
-			this.endpoint = endpoint;
+			this.channelFactory = channelFactory;
 			this.kernel = kernel;
 		}
 
-		public ServiceEndpointExtensions Install(ICollection<IWcfExtension> extensions, 
-			                                     IWcfBurden burden)
+		public ChannelFactoryExtensions Install(ICollection<IWcfExtension> extensions, IWcfBurden burden)
 		{
 			this.burden = burden;
 
-			foreach (var extension in extensions)
+			foreach (IWcfExtension extension in extensions)
 			{
 				extension.Accept(this);
 			}
@@ -44,9 +42,9 @@ namespace Castle.Facilities.WcfIntegration
 			return this;
 		}
 
-		public ServiceEndpointExtensions Install(IWcfBurden burden, params IWcfExtension[] extensions)
+		public ChannelFactoryExtensions Install(IWcfBurden burden, params IWcfExtension[] extenions)
 		{
-			return Install((ICollection<IWcfExtension>)extensions, burden);
+			return Install((ICollection<IWcfExtension>)extenions, burden);
 		}
 
 		#region IWcfExtensionVisitor Members
@@ -57,11 +55,12 @@ namespace Castle.Facilities.WcfIntegration
 
 		void IWcfExtensionVisitor.VisitChannelExtension(IWcfChannelExtension extension)
 		{
+			extension.Install(channelFactory, kernel, burden);
 		}
 
 		void IWcfExtensionVisitor.VisitEndpointExtension(IWcfEndpointExtension extension)
 		{
-			extension.Install(endpoint, kernel, burden);
+			extension.Install(channelFactory.Endpoint, kernel, burden);
 		}
 
 		#endregion
