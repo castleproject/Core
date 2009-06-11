@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AttributedPreLoadListener.cs" />
+    <Compile Include="ActiveRecordClass.cs" />
     <Compile Include="NHibernateClass.cs" />
     <Compile Include="NonAttributedPreLoadListener.cs" />
     <Compile Include="RegisterNHibernateClassMapping.cs" />

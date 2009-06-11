@@ -130,6 +130,10 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.60.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\net\System.Data.SQLite.DLL</HintPath>
+    </Reference>
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -346,6 +350,9 @@
     <Compile Include="ScalarQueryTestCase.cs" />
     <Compile Include="ScopeDefaultFlushingBehaviourTestCase.cs" />
     <Compile Include="SessionScopeAutoflushTestCase.cs" />
+    <Compile Include="Testing\CustomizationTest.cs" />
+    <Compile Include="Testing\InitializationTest.cs" />
+    <Compile Include="Testing\NUnitInMemoryTest.cs" />
     <Compile Include="Validation\ARValidatorTestCase.cs" />
     <Compile Include="VerifyModelsAgainstDBSchemaTestCase.cs" />
     <Compile Include="LazyTestCase.cs" />

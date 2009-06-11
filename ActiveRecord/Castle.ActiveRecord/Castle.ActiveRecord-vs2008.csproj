@@ -405,6 +405,8 @@
     <Compile Include="Framework\Scopes\ScopeUtil.cs" />
     <Compile Include="Framework\SessionScopeWebModule.cs" />
     <Compile Include="Framework\Validators\IsUniqueValidator.cs" />
+    <Compile Include="Testing\InMemoryConnectionProvider.cs" />
+    <Compile Include="Testing\InMemoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\CastleKey.snk">
