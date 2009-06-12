@@ -164,7 +164,7 @@ namespace Castle.ActiveRecord.Framework
 		{
 			if (cachedListenerTypes == null)
 			{
-				cachedListenerTypes = new List<Type>();
+				cachedListenerTypes = new HashSet<Type>();//List<Type>();
 				foreach (var propertyInfo in typeof(EventListeners).GetProperties())
 				{
 					cachedListenerTypes.Add(propertyInfo.PropertyType.GetElementType());
@@ -173,7 +173,7 @@ namespace Castle.ActiveRecord.Framework
 			return cachedListenerTypes;
 		}
 
-		private static List<Type> cachedListenerTypes;
+		private static HashSet<Type> cachedListenerTypes;
 
 		/// <summary>
 		/// Returns the PropertyInfo of the <see cref="EventListeners"/>-class for

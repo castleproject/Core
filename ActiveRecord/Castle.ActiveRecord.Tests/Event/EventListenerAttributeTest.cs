@@ -128,6 +128,15 @@ namespace Castle.ActiveRecord.Tests.Event
 							  Array.Find(GetRegisteredListeners(e => e.PostLoadEventListeners), l => (l is MultipleSingletonListener)));
 		}
 
+        [Test]
+        public void Event_listeners_are_registered_only_once()
+        {
+            InitializeSingleBase(typeof(SamplePostInsertListener), typeof(SamplePostUpdateListener), typeof(SamplePostDeleteListener));
+            Assert.AreEqual(1, Array.FindAll(GetRegisteredListeners(e => e.PostInsertEventListeners), l => (l is SamplePostInsertListener)).Length);
+            Assert.AreEqual(1, Array.FindAll(GetRegisteredListeners(e => e.PostUpdateEventListeners), l => (l is SamplePostUpdateListener)).Length);
+            Assert.AreEqual(1, Array.FindAll(GetRegisteredListeners(e => e.PostDeleteEventListeners), l => (l is SamplePostDeleteListener)).Length);
+        }
+
 		[Test]
 		public void U1_Listeners_are_registered_for_all_configurations()
 		{
@@ -173,6 +182,24 @@ namespace Castle.ActiveRecord.Tests.Event
 		{
 			public bool OnPreInsert(PreInsertEvent @event) {return true; }
 		}
+
+        [EventListener]
+        private class SamplePostInsertListener : IPostInsertEventListener
+        {
+            public void OnPostInsert(PostInsertEvent @event) { }
+        }
+
+        [EventListener]
+        private class SamplePostUpdateListener : IPostUpdateEventListener
+        {
+            public void OnPostUpdate(PostUpdateEvent @event) { }
+        }
+
+        [EventListener]
+        private class SamplePostDeleteListener : IPostDeleteEventListener
+        {
+            public void OnPostDelete(PostDeleteEvent @event) { }
+        }
 
 		[EventListener]
 		private class AdditionalLoadListener : ILoadEventListener
