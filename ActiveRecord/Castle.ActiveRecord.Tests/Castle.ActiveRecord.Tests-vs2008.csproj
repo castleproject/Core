@@ -130,9 +130,9 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
-    <Reference Include="System.Data.SQLite, Version=1.0.60.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+    <Reference Include="System.Data.SQLite, Version=1.0.61.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SharedLibs\net\System.Data.SQLite.DLL</HintPath>
+      <HintPath>..\..\build\net-3.5\debug\System.Data.SQLite.DLL</HintPath>
     </Reference>
     <Reference Include="System.Xml">
       <Name>System.XML</Name>

@@ -43,6 +43,11 @@
 
 	<property name="lib.framework.clr.dir" value="${path::combine(lib.family.dir, string::substring(clr-version, 0, 3))}" dynamic="true" />
 	
+	<!-- x64 support -->
+	<property name="lib.family-x64.dir" value="${path::combine(lib.family.dir, 'x64')}" dynamic="true" />
+	<property name="lib.framework-x64.dir" value="${path::combine(lib.framework.dir, 'x64')}" dynamic="true" />	
+	<property name="lib.framework.clr-x64.dir" value="${path::combine(lib.framework.clr.dir, 'x64')}" dynamic="true" />	
+
 	<if test="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
 		<property name="registry.dotnet.v3.0.Installed" value="0" overwrite="false"/>
 
@@ -146,6 +151,23 @@
 			 />
 		</if>
 		<property name="dotnet.SPlevel" value="0" if="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
+
+		<script language="C#">
+			<code>
+				<![CDATA[
+					public static void ScriptMain(Project project)
+					{
+						// Detect Process Bitness - http://blogs.msdn.com/david.wang/archive/2006/03/26/HOWTO-Detect-Process-Bitness.aspx
+						if( System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") == "x86" && string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))) {
+							project.Properties["os.x64"] = false.ToString();
+						} else {
+							project.Properties["os.x64"] = true.ToString();
+						}
+					}
+				]]>
+			</code>
+		</script>
+
 		<call target="set-${framework::get-target-framework()}-framework-configuration" />
 
 		<property name="build.msbuild" 	value="false" overwrite="false" />
