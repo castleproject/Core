@@ -1,0 +1,10 @@
+#blockcomponent(GridComponent with "source=$contacts")
+  #header
+    <th>EMail</th>
+    <th>Phone</th>
+  #end
+  #item
+    <td>$item.Email</td>
+    <td>$item.phone</td>
+  #end
+#end

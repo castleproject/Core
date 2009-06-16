@@ -1,0 +1,1 @@
+$page.ReplaceHtml('aa', "%{partial='jsgeneration/_partial1.vm'}")

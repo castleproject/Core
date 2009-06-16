@@ -1,0 +1,7 @@
+$FormHelper.InstallScripts()
+
+$FormHelper.NumberField("age")
+
+$FormHelper.NumberField("amount", "%{exceptions='1,2,3'}")
+
+$FormHelper.NumberField("amount", "%{exceptions='1,2,3'}")

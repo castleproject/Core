@@ -1,0 +1,1 @@
+default component view picked up automatically

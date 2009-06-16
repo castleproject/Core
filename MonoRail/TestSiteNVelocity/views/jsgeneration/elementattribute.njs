@@ -1,0 +1,1 @@
+$page.el('aa').className.set('"newclass"')

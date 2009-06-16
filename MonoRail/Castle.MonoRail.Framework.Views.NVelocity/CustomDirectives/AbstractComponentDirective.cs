@@ -148,8 +148,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				NVelocityViewContextAdapter contextAdapter = new NVelocityViewContextAdapter(componentName, node, viewEngine, renderer);
 				contextAdapter.Context = isOutputtingToCache ? new CacheAwareContext(context, bag) : context;
 
-				ProcessSubSections(component, contextAdapter);
-
 				INode bodyNode = null;
 
 				if (node.ChildrenCount > 0)
@@ -163,14 +161,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				contextAdapter.ComponentParams = componentParams;
 				contextAdapter.TextWriter = output;
 
+				component.Init(railsContext, contextAdapter);
+
+				ProcessSubSections(component, contextAdapter);
+
 				const string ViewComponentContextKey = "viewcomponent";
 				object previousComp = context[ViewComponentContextKey];
 
 				try
 				{
 					context[ViewComponentContextKey] = component;
-
-					component.Init(railsContext, contextAdapter);
 
 					component.Render();
 

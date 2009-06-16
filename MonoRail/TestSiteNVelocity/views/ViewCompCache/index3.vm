@@ -1,0 +1,10 @@
+#blockcomponent(CachedComponent3)
+#blockcomponent(CaptureFor with "id=scripts" "append=after")
+Something
+#end
+hello from body
+#blockcomponent(CaptureFor with "id=scripts" "append=after")
+Something else
+#end
+#end
+$scripts
