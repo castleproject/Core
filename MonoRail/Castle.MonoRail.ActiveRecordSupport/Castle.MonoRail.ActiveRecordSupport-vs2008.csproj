@@ -82,11 +82,11 @@
     </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SharedLibs\net\2.0\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\SharedLibs\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=2.1.0.1002, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SharedLibs\net\2.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\SharedLibs\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
