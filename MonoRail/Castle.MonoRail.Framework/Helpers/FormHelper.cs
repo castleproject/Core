@@ -620,7 +620,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Generates an input button element.
 		/// </summary>
-		/// <param name="value">The value.</param>
+		/// <param name="value">The value of the button, which also is what displays as the text.</param>
 		/// <returns>The element tag</returns>
 		public virtual string Button(string value)
 		{
@@ -630,7 +630,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Generates an input button element.
 		/// </summary>
-		/// <param name="value">The value.</param>
+		/// <param name="value">The value, which also is what displays as the text.</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The element tag</returns>
 		public virtual string Button(string value, IDictionary attributes)
