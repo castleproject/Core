@@ -229,12 +229,7 @@ namespace Castle.MonoRail.Framework
 				}
 				else
 				{
-					if (!isInBody)
-					{
-						body.AppendLine(string.Empty);
-						isInBody = true;
-					}
-
+					isInBody = true;
 					body.AppendLine(line);
 				}
 			}

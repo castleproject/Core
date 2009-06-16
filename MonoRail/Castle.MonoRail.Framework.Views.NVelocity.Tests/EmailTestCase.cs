@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertSuccess();
 			AssertReplyEqualTo("Castle.Components.Common.EmailSender.Message\r\n" + 
 				"hammett@gmail.com\r\nhammett@apache.org\r\nhammett@uol.com.br" + 
-				"\r\nSome subject\r\nNormal\r\n0\r\nHtml\r\n\r\n\r\n<html>\r\nThis is the message content\r\n</html>\r\n");
+				"\r\nSome subject\r\nNormal\r\n0\r\nHtml\r\n\r\n<html>\r\nThis is the message content\r\n</html>\r\n");
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertSuccess();
 			AssertReplyEqualTo("Castle.Components.Common.EmailSender.Message\r\n" + 
 				"hammett@gmail.com\r\n\r\n" + 
-				"\r\nSome subject\r\nNormal\r\n0\r\nText\r\n\r\n\r\nThis is the message content\r\n");
+				"\r\nSome subject\r\nNormal\r\n0\r\nText\r\n\r\nThis is the message content\r\n");
 		}
 	}
 }
