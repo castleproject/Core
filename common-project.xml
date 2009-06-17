@@ -269,7 +269,7 @@
 				workingdir="${build.dir}" 
 				commandline="${nunitcommandline}"
 				failonerror="${common.testrunner.failonerror}"
-				timeout="105000"
+				timeout="180000"
 			/>
 
 			<!-- Run NCover if coverage is enabled -->
