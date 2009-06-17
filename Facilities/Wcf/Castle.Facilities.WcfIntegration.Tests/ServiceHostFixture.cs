@@ -58,7 +58,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			}
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void CanCreateServiceHostPerCallAndOpenHost()
 		{
 			using (new WindsorContainer()
@@ -79,18 +79,19 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						)
 				))
 			{
-				IAsyncOperations client = ChannelFactory<IAsyncOperations>.CreateChannel(
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
 					new NetTcpBinding { PortSharingEnabled = true },
 					new EndpointAddress("net.tcp://localhost/Operations"));
+				((IClientChannel)client).Open();
 
 				for (int i = 0; i < 10; i++)
 				{
 					new System.Threading.Thread(() =>
 					{
 						int refValue = 0, outValue;
-						//Assert.AreEqual(42, client.GetValueFromConstructorAsRefAndOut(ref refValue, out outValue));
-						var result = client.BeginGetValueFromConstructorAsRefAndOut(ref refValue, null, null);
-						Assert.AreEqual(42, client.EndGetValueFromConstructorAsRefAndOut(ref refValue, out outValue, result));
+						Assert.AreEqual(42, client.GetValueFromConstructorAsRefAndOut(ref refValue, out outValue));
+						//var result = client.BeginGetValueFromConstructorAsRefAndOut(ref refValue, null, null);
+						//Assert.AreEqual(42, client.EndGetValueFromConstructorAsRefAndOut(ref refValue, out outValue, result));
 					}).Start();
 				}
 				System.Threading.Thread.CurrentThread.Join();

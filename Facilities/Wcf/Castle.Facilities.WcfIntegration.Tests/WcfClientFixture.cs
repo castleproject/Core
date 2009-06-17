@@ -552,7 +552,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			IOperations client = windsorContainer.Resolve<IOperations>("operations");
 			IClientChannel channel = client as IClientChannel;
 			Assert.IsNotNull(channel);
-			Assert.AreEqual(CommunicationState.Created, channel.State);
+			Assert.AreEqual(CommunicationState.Opened, channel.State);
 		}
 
 		[Test]
@@ -695,7 +695,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 
 			int i = 0;
 			foreach (LoggingEvent log in memoryAppender.GetEvents())
-			{
+			{				
 				Assert.AreEqual(typeof(IOperations).FullName, log.LoggerName);
 				Assert.IsTrue(log.Properties.Contains("NDC"));
 

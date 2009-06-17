@@ -82,6 +82,9 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
+		// Always Open the channel before being used to prevent serialization of requests.
+		// http://blogs.msdn.com/wenlong/archive/2007/10/26/best-practice-always-open-wcf-client-proxy-explicitly-when-it-is-shared.aspx
+		//
 		private ChannelCreator GetChannelCreator(CreationContext context)
 		{
 			IWcfBurden burden = null;
@@ -94,7 +97,8 @@ namespace Castle.Facilities.WcfIntegration
 
 				creator = () =>
 				{
-					IContextChannel client = (IContextChannel)inner();
+					var client = (IClientChannel)inner();
+					client.Open();
 					client.Extensions.Add(new WcfBurdenExtension<IContextChannel>(burden));
 					return client;
 				};
@@ -102,7 +106,13 @@ namespace Castle.Facilities.WcfIntegration
 			else if (createChannel == null)
 			{
 				clientModel = ObtainClientModel(Model);
-				creator = createChannel = CreateChannelCreator(Kernel, Model, clientModel, out burden);
+				var inner = CreateChannelCreator(Kernel, Model, clientModel, out burden);
+				creator = createChannel = () =>
+				{
+					var client = (IClientChannel)inner();
+					client.Open();
+					return client;
+				};
 				Model.ExtendedProperties[WcfConstants.ClientBurdenKey] = burden;
 			}
 
