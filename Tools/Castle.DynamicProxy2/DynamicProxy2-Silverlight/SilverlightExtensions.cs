@@ -20,7 +20,15 @@ namespace Castle.DynamicProxy.SilverlightExtensions
 	using System.Reflection;
 
 	public class SilverlightAssertException : Exception
-	{ }
+	{
+		public SilverlightAssertException(string message) : base(message)
+		{
+		}
+
+		public SilverlightAssertException()
+		{
+		}
+	}
 
 	public static class Extensions
 	{
@@ -140,6 +148,15 @@ namespace System.Diagnostics
 			{
 				//TODO:???
 				throw new Castle.DynamicProxy.SilverlightExtensions.SilverlightAssertException();
+			}
+		}
+
+		public static void Assert(bool condition, string message)
+		{
+			if (!condition)
+			{
+				//TODO:???
+				throw new Castle.DynamicProxy.SilverlightExtensions.SilverlightAssertException(message);
 			}
 		}
 	}
