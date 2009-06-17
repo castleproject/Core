@@ -130,7 +130,12 @@ namespace Castle.Core.Resource
 				}
 			}
 
+#if !SILVERLIGHT
 			path = Environment.ExpandEnvironmentVariables(sb.ToString());
+#endif
+#if SILVERLIGHT
+            path = sb.ToString();
+#endif
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength")]
