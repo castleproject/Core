@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,19 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="time_invalid" xml:space="preserve">
-    <value>This is a test value</value>
-  </data>
-  <data name="CorrectlyLocalized_Description" xml:space="preserve">
-    <value>description field</value>
-  </data>
-  <data name="CorrectlyLocalized_DescriptionValidateNonEmpty" xml:space="preserve">
-    <value>description cannot be empty</value>
-  </data>
   <data name="Bar_Baz" xml:space="preserve">
-    <value>Bar_Baz</value>
+    <value>lt-Bar_Baz</value>
   </data>
   <data name="Bar_BazNonEmpty" xml:space="preserve">
-    <value>Bar_BazNonEmpty</value>
+    <value>lt-Bar_BazNonEmpty</value>
   </data>
 </root>

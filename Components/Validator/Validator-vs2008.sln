@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Validator
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Validator.Tests-vs2008", "Castle.Components.Validator.Tests\Castle.Components.Validator.Tests-vs2008.csproj", "{50BE4C5D-4535-4449-AB5B-8DF92F005386}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2008", "..\..\Core\Castle.Core\Castle.Core-vs2008.csproj", "{E4FA5B53-7D36-429E-8E5C-53D5479242BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{50BE4C5D-4535-4449-AB5B-8DF92F005386}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50BE4C5D-4535-4449-AB5B-8DF92F005386}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50BE4C5D-4535-4449-AB5B-8DF92F005386}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

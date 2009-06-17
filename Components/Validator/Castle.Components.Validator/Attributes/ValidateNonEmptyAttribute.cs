@@ -25,7 +25,8 @@ namespace Castle.Components.Validator
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.ReturnValue | AttributeTargets.Parameter, AllowMultiple = true)]
 	public class ValidateNonEmptyAttribute : AbstractValidationAttribute
 	{
-		private readonly IDictionary validatorPerGroup = Hashtable.Synchronized(new Hashtable());
+		// warning not used
+		//private readonly IDictionary validatorPerGroup = Hashtable.Synchronized(new Hashtable());
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidateNonEmptyAttribute"/> class.

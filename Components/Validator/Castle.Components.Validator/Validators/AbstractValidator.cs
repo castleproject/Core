@@ -162,7 +162,7 @@ namespace Castle.Components.Validator
 		{
 			if (!String.IsNullOrEmpty(ErrorMessage))
 			{
-				// No localization for now
+				// Could be localized by AbstractValidationAttribute.ConfigureValidatorMessage
 				return ErrorMessage;
 			}
 			return String.Format(GetString(MessageKey), Name);

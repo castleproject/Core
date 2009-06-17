@@ -1,4 +1,5 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -36,9 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SharedLibs\net\2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\SharedLibs\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -48,12 +49,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ErrorSummaryTestCase.cs" />
     <Compile Include="Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Messages.lt.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.lt.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Messages.ru.Designer.cs">
+      <DependentUpon>Messages.ru.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="ErrorSummaryTestCase.cs" />
+    <Compile Include="LocalizationTests\LocalizationTestFixture.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="CachedValidationRegistryTestCase.cs" />
     <Compile Include="Models\InsertUpdateClass.cs" />
@@ -90,15 +102,25 @@
   <ItemGroup>
     <ProjectReference Include="..\Castle.Components.Validator\Castle.Components.Validator-vs2008.csproj">
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
-      <Name>Castle.Components.Validator</Name>
+      <Name>Castle.Components.Validator-vs2008</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Messages.lt.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.lt.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Messages.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.ru.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Messages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -24,7 +24,8 @@ namespace Castle.Components.Validator
 	public class ValidateGroupNotEmptyAttribute : AbstractValidationAttribute
 	{
 		private string group;
-		private static IDictionary groupsPerType = Hashtable.Synchronized(new Hashtable());
+		// warning not used
+		//private static IDictionary groupsPerType = Hashtable.Synchronized(new Hashtable());
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidateGroupNotEmptyAttribute"/> class.

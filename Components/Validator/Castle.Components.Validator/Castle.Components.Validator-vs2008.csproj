@@ -1,4 +1,5 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -84,60 +85,40 @@
     <Compile Include="IValidatorContainerInterface.cs" />
     <Compile Include="IValidatorRunner.cs" />
     <Compile Include="Messages.es.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Messages.es.resx</DependentUpon>
     </Compile>
     <Compile Include="Messages.fr.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Messages.fr.resx</DependentUpon>
     </Compile>
     <Compile Include="Messages.it.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Messages.it.resx</DependentUpon>
     </Compile>
     <Compile Include="Messages.lt.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Messages.lt.resx</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Messages.lv.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Messages.lv.resx</DependentUpon>
     </Compile>
     <Compile Include="Messages.nl.Designer.cs">
       <DependentUpon>Messages.nl.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="ErrorSummary.cs" />
     <Compile Include="Messages.pt.Designer.cs">
       <DependentUpon>Messages.pt.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="InputElementType.cs" />
     <Compile Include="IValidatorRegistry.cs" />
     <Compile Include="IBrowserValidationGenerator.cs" />
     <Compile Include="MessageConstants.cs" />
     <Compile Include="Messages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
     <Compile Include="CachedValidationRegistry.cs" />
     <Compile Include="Messages.ru.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Messages.ru.resx</DependentUpon>
     </Compile>
     <Compile Include="Messages.sv.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Messages.sv.resx</DependentUpon>
     </Compile>
     <Compile Include="AccessorUtil.cs" />
@@ -176,27 +157,24 @@
     <Compile Include="Validators\SingleValidator.cs" />
     <Compile Include="BrowserValidationConfiguration.cs" />
     <Compile Include="Validators\TimeSpanValidator.cs" />
+    <Compile Include="Attributes\ValidateGuidAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messages.es.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.es.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.fr.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.fr.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.it.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.it.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.lt.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.lt.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.mk.resx" />
@@ -204,33 +182,27 @@
     <EmbeddedResource Include="Messages.ru.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.ru.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.lv.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.lv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.nl.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.nl.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.pt.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.pt.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.sv.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -239,6 +211,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core-vs2008</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

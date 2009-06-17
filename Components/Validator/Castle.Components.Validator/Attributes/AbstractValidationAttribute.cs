@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.Components.Validator
 {
 	using System;
+	using System.Globalization;
 	using System.Reflection;
 
 	/// <summary>
@@ -51,7 +53,8 @@ namespace Castle.Components.Validator
 	public abstract class AbstractValidationAttribute : Attribute, IValidatorBuilder
 	{
 		private readonly string errorMessage;
-		private string friendlyName;
+		private string friendlyName, friendlyNameKey, errorMessageKey;
+		private Type resourceType;
 		private int executionOrder = 0;
 		private RunWhen runWhen = RunWhen.Everytime;
 		private Accessor propertyAccessor;
@@ -61,6 +64,7 @@ namespace Castle.Components.Validator
 		/// </summary>
 		protected AbstractValidationAttribute()
 		{
+
 		}
 
 		/// <summary>
@@ -121,6 +125,52 @@ namespace Castle.Components.Validator
 			get { return errorMessage; }
 		}
 
+		///<summary>
+		/// Must be set when using FriendlyNameKey or ErrorMessageKey with default resource localization support.
+		///</summary>
+		/// <value>the ressource type (generated type from .resx)</value>
+		public Type ResourceType {
+			get { return resourceType; }
+			set
+			{
+				if (value == null)
+				{
+					throw new ArgumentNullException("value");
+				}
+				resourceType = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the resource name of the friendly name for the target property.
+		/// </summary>
+		public string FriendlyNameKey {
+			get { return friendlyNameKey; }
+			set
+			{
+				if (string.IsNullOrEmpty(value))
+				{
+					throw new ArgumentException("Value cannot be null or empty.", "value");
+				}
+				friendlyNameKey = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the error message resource name to use as lookup for the <see cref="ResourceType"/> if a validation fails. 
+		/// </summary>
+		public string ErrorMessageKey {
+			get { return errorMessageKey; }
+			set
+			{
+				if (string.IsNullOrEmpty(value))
+				{
+					throw new ArgumentException("Value cannot be null or empty.", "value");
+				}
+				errorMessageKey = value;
+			}
+		}
+
 		/// <summary>
 		/// Gets the property accessor;
 		/// </summary>
@@ -161,14 +211,51 @@ namespace Castle.Components.Validator
 			validator.RunWhen = runWhen;
 			validator.ExecutionOrder = executionOrder;
 
-			if (errorMessage != null)
+			string solvedErrorMessage = errorMessage;
+			string solvedFriendlyName = friendlyName;
+
+			if (ResourceType != null)
 			{
-				validator.ErrorMessage = errorMessage;
+				if (!String.IsNullOrEmpty(ErrorMessageKey))
+				{
+					solvedErrorMessage = GetLocalizedMessageByKey(ErrorMessageKey);
+				}
+				if (!String.IsNullOrEmpty(FriendlyNameKey))
+				{
+					solvedFriendlyName = GetLocalizedMessageByKey(FriendlyNameKey);
+				}
 			}
-			if (friendlyName != null)
+			else if (ResourceType == null && (!String.IsNullOrEmpty(ErrorMessageKey) || !String.IsNullOrEmpty(FriendlyNameKey)))
 			{
-				validator.FriendlyName = friendlyName;
+				throw new ArgumentException(
+					"You have set ErrorMessageKey and/or FriendlyNameKey but have not specified the ResourceType to use for lookup.");
 			}
+
+			// default message resolution: use validator attribute properties
+			if (solvedErrorMessage != null)
+			{
+				validator.ErrorMessage = solvedErrorMessage;
+			}
+			if (solvedFriendlyName != null)
+			{
+				validator.FriendlyName = solvedFriendlyName;
+			}
+		}
+
+		// this may be refactored with something more abstract when supporting other localization schemes
+		string GetLocalizedMessageByKey(string key)
+		{
+			PropertyInfo property = ResourceType.GetProperty(key, BindingFlags.Public | BindingFlags.Static);
+			if (property == null)
+			{
+				throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "The resource type '{0}' does not have a publicly visible static property named '{1}'. You probably marked the resources as internal, to fix this change the 'Access modifier' dropdown to 'Public' in the VS resources editor.", new object[] { ResourceType.FullName, this.ErrorMessageKey}));
+			}
+			if (property.PropertyType != typeof(string))
+			{
+				throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "The property '{0}' on resource type '{1}' is not a string type.", new object[] { property.Name, ResourceType.FullName }));
+			}
+
+			return (string) property.GetValue(null, null);
 		}
 	}
 }
