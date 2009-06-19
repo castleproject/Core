@@ -186,7 +186,9 @@ namespace Castle.DynamicProxy.Tests.InterceptorSelector
 		#endregion
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	internal class TypeInterceptorSelector<TInterceptor> : IInterceptorSelector where TInterceptor : IInterceptor
 	{
 		#region IInterceptorSelector Members
@@ -207,7 +209,9 @@ namespace Castle.DynamicProxy.Tests.InterceptorSelector
 		#endregion
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class CallCountingInterceptor : IInterceptor
 	{
 		private int _count;
@@ -228,7 +232,9 @@ namespace Castle.DynamicProxy.Tests.InterceptorSelector
 		#endregion
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class AddTwoInterceptor : IInterceptor
 	{
 		#region IInterceptor Members
@@ -244,7 +250,9 @@ namespace Castle.DynamicProxy.Tests.InterceptorSelector
 		#endregion
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	internal class NoopInterceptor : IInterceptor
 	{
 		#region IInterceptor Members
@@ -257,7 +265,9 @@ namespace Castle.DynamicProxy.Tests.InterceptorSelector
 		#endregion
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class AllInterceptorSelector : IInterceptorSelector
 	{
 		#region IInterceptorSelector Members
@@ -270,7 +280,9 @@ namespace Castle.DynamicProxy.Tests.InterceptorSelector
 		#endregion
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class SimpleClass : ISimpleInterface
 	{
 		#region ISimpleInterface Members
