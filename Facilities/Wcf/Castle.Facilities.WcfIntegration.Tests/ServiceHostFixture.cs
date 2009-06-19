@@ -58,7 +58,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			}
 		}
 
-		[Test]
+		[Test, Explicit]
 		public void CanCreateServiceHostPerCallAndOpenHost()
 		{
 			using (new WindsorContainer()
