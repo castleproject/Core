@@ -1,3 +1,7 @@
+- Fixed COMP-ISSUE-91: Add basic support for ErrorMessage and FriendlyName with .net resource backed localization
+
+- Added IPAddressValidator
+
 - minor fix for self validation not getting called
 
 - Applied Eric Hauser's patch (with changes) fixing COMP-ISSUE-68

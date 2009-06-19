@@ -95,7 +95,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsTrue(validator.IsValid(target, IPAddress.Parse("67.199.26.208")));
 		}
 
-		[Test, Ignore("Currently does not work when building from the command line.")]
+		[Test, Ignore("Doesn't pass when run from command line - anyone?")]
 		public void Localized_Error_Messages_Can_Be_Obtained()
 		{
 			ChangeCultureAndTest("en-us", (messageValidator) => Assert.AreEqual("Please enter a valid IP address.", messageValidator.ErrorMessage));
