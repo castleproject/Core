@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.IO;
+	using System.Net.Mail;
 	using System.Text;
 	using System.Text.RegularExpressions;
 	using Castle.Components.Common.EmailSender;
@@ -32,7 +33,7 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public class EmailTemplateService : IMRServiceEnabled, IEmailTemplateService
 	{
-		private static readonly String HeaderPattern = @"[ \t]*(?<header>(to|from|cc|bcc|subject|X-\w+)):[ \t]*(?<value>(.)+)(\r*\n*)?";
+		private static readonly String HeaderPattern = @"[ \t]*(?<header>(to|from|cc|bcc|subject|reply-to|X-\w+)):[ \t]*(?<value>(.)+)(\r*\n*)?";
 		private static readonly Regex HeaderRegEx = new Regex(HeaderPattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		private static readonly string EmailTemplatePath = "mail";
 
@@ -221,6 +222,9 @@ namespace Castle.MonoRail.Framework
 							break;
 						case "from":
 							message.From = value;
+							break;
+						case "reply-to":
+							message.ReplyTo = new MailAddress(value);
 							break;
 						default:
 							message.Headers[header] = value;

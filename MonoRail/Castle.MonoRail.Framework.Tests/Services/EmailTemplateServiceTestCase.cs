@@ -148,6 +148,8 @@ namespace Castle.MonoRail.Framework.Tests.Services
 				Assert.AreEqual("Hello!", message.Subject);
 				Assert.AreEqual("This is the\r\nbody\r\n", message.Body);
 				Assert.AreEqual(1, message.Headers.Count);
+				Assert.AreEqual("Test Reply", message.ReplyTo.DisplayName);
+				Assert.AreEqual("replyto@noemail.com", message.ReplyTo.Address);
 			}
 		}
 
@@ -161,6 +163,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			output.WriteLine("cc: copied@noemail.com");
 			output.WriteLine("bcc: bcopied@noemail.com");
 			output.WriteLine("from: contact@noemail.com");
+			output.WriteLine("reply-to: Test Reply <replyto@noemail.com>");
 			output.WriteLine("subject: Hello!");
 			output.WriteLine("X-something: Mime-super-content");
 			output.WriteLine("This is the");
