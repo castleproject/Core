@@ -72,6 +72,7 @@
     <Compile Include="Internal\LinkedList.cs" />
     <Compile Include="Internal\SlimReaderWriterLock.cs" />
     <Compile Include="Internal\TopologicalSortAlgo.cs" />
+    <Compile Include="Internal\UpgradableLock.cs" />
     <Compile Include="IServiceEnabledComponent.cs" />
     <Compile Include="IServiceProviderEx.cs" />
     <Compile Include="IServiceProviderExAccessor.cs" />
