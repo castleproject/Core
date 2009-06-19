@@ -146,6 +146,14 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		}
 
 		[Test]
+		public void LoadFromAssemblyWithAssemblyObject()
+		{
+			loader.AddAssemblySource(new AssemblySourceInfo(GetType().Assembly, "Castle.MonoRail.Framework.Tests"));
+
+			Assert.IsNotNull(loader.GetViewSource("Content/contentinassembly.vm"));
+		}
+
+		[Test]
 		public void ListViews()
 		{
 			loader.AddAssemblySource(new AssemblySourceInfo("Castle.MonoRail.Framework.Tests", "Castle.MonoRail.Framework.Tests"));

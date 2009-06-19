@@ -45,6 +45,21 @@ namespace Castle.MonoRail.Framework
 			RegisterEntries();
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssemblySourceInfo"/> class.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <param name="_namespace">The namespace.</param>
+	    public AssemblySourceInfo(Assembly assembly, string _namespace)
+	    {
+	        this.assemblyName = assembly.FullName;
+	        this._namespace = _namespace;
+
+	        loadedAssembly = assembly;
+
+            RegisterEntries();
+	    }
+
 		/// <summary>
 		/// Gets the name of the assembly.
 		/// </summary>
