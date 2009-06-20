@@ -31,7 +31,6 @@ namespace Castle.MonoRail.Views.Brail.Tests
             try
             {
                 o.GetType().GetProperty("Text");
-                throw new InvalidOperationException("Should have gotten AmbiguousMatchException  here");
             }
             catch(AmbiguousMatchException)
             {
