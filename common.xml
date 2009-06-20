@@ -14,7 +14,8 @@
 	<property name="common.testrunner.failonerror" value="true" overwrite="false" /> <!--  Whether to keep building when tests are failing -->
 	<property name="common.coverage.enabled" value="false" overwrite="false" /><!-- Controls whether tests will be run under NCover to generate coverage logs -->
 
-	<!-- Silverlight -->
+	<!-- Build platforms (used to conditionally disable specific projects for specific platforms) -->
+	<property name="common.net-2.0" value="${nant.settings.currentframework == 'net-2.0'}" />
 	<property name="common.silverlight" value="${nant.settings.currentframework == 'silverlight-2.0'}" />
 
 	<!-- Check which nant version we're using - fail if it's not the minium  -->

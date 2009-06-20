@@ -11,13 +11,13 @@
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
 		<include name="Core/core.build" />
-		<include name="Services/services.build" unless="${common.silverlight}" />
+		<include name="Services/services.build" unless="${common.net-2.0 or common.silverlight}" />
 		<include name="Tools/Tools.build" />
-		<include name="InversionOfControl/InversionOfControl.build" unless="${common.silverlight}" />
-		<include name="Components/components.build" unless="${common.silverlight}" />
-		<include name="ActiveRecord/activerecord.build" unless="${common.silverlight}" />
-		<include name="MonoRail/monorail.build" unless="${common.silverlight}" />
-		<include name="Facilities/facilities.build" unless="${common.silverlight}" />
+		<include name="InversionOfControl/InversionOfControl.build" unless="${common.net-2.0 or common.silverlight}" />
+		<include name="Components/components.build" unless="${common.net-2.0 or common.silverlight}" />
+		<include name="ActiveRecord/activerecord.build" unless="${common.net-2.0 or common.silverlight}" />
+		<include name="MonoRail/monorail.build" unless="${common.net-2.0 or common.silverlight}" />
+		<include name="Facilities/facilities.build" unless="${common.net-2.0 or common.silverlight}" />
 	</fileset>
 
 	<target name="debug" description="Selects the debug build configuration">
@@ -331,7 +331,8 @@
 		<!-- Create the master zip file with all files included -->
 		<zip zipfile="${build.zip.fullpath}">
 			<fileset basedir="${build.dir}" prefix="bin" >
-				<include name="**/Castle*.*" />
+				<include name="**/Castle.*" />
+				<include name="**/NVelocity.*" />
 				<include name="external-dependencies.zip" />
 				<exclude name="*Tests.*" />
 				<exclude name="test-results/**" />
@@ -354,9 +355,8 @@
 		<zip zipfile="${build.dir}/external-dependencies.zip">
 			<fileset basedir="${build.dir}">
 				<include name="*.*" />
-				<exclude name="**/Castle*" />
-				<exclude name="**/db4o.dll" />
-				<exclude name="**/EULA.rtf" />
+				<exclude name="**/Castle.*" />
+				<exclude name="**/NVelocity.*" />
 				<exclude name="**/*.zip" />
 			</fileset>
 		</zip>
