@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// the namespace mismatch is intentional - to avoid breaking existing web.configs
-namespace Castle.MonoRail.Views.AspView
+namespace Castle.MonoRail.Views.AspView.Configuration
 {
 	using System;
 	using System.Collections.Generic;

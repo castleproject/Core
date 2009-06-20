@@ -40,9 +40,7 @@ namespace Castle.MonoRail.Views.AspView.Tests.Engine.Config
 			AspViewEngine.GetApplicationInstance = () => testInstance;
 			var basePath = Environment.CurrentDirectory;
 			engine = new AspViewEngine();
-			engineWithTestAccess = engine;
-
-			
+			engineWithTestAccess = engine;			
 
 			engineWithTestAccess.SetViewSourceLoader(new StubViewSourceLoader());
 			engineWithTestAccess.SetCompilationContext(
@@ -93,9 +91,13 @@ namespace Castle.MonoRail.Views.AspView.Tests.Engine.Config
 
 	internal class StubViewSourceLoader : IViewSourceLoader
 	{
+		void Dummy()
+		{
+			ViewChanged(null, new FileSystemEventArgs(WatcherChangeTypes.All, "", ""));
+		}
+
 		public bool HasSource(string sourceName)
 		{
-			ViewChanged(null, new FileSystemEventArgs(WatcherChangeTypes.All, "j", "j"));
 			throw new NotImplementedException();
 		}
 
