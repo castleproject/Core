@@ -10,10 +10,10 @@
 
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
-		<include name="DynamicProxy/DynamicProxy.build" />
+		<include name="DynamicProxy/DynamicProxy.build" unless="${common.silverlight}" />
 		<include name="Castle.DynamicProxy2/Castle.DynamicProxy2.build" />
-		<include name="NVelocity/nvelocity.build" />
-		<include name="VSNetWizards/VsNetIntegration.build" />
+		<include name="NVelocity/nvelocity.build" unless="${common.silverlight}" />
+		<include name="VSNetWizards/VsNetIntegration.build" unless="${common.silverlight}" />
 	</fileset>
 
 	<target name="build" depends="common.build" />

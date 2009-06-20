@@ -280,6 +280,9 @@
     <Compile Include="..\Castle.DynamicProxy\InternalsHelper.cs">
       <Link>InternalsHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Castle.DynamicProxy\InvalidMixinConfigurationException.cs">
+      <Link>InvalidMixinConfigurationException.cs</Link>
+    </Compile>
     <Compile Include="..\Castle.DynamicProxy\IProxyBuilder.cs">
       <Link>IProxyBuilder.cs</Link>
     </Compile>
@@ -304,14 +307,9 @@
     <Compile Include="..\Castle.DynamicProxy\ProxyGenerator.cs">
       <Link>ProxyGenerator.cs</Link>
     </Compile>
-    <Compile Include="InvalidMixinConfigurationException.cs" />
-    <Compile Include="SilverlightExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Castle.Core\Castle.Core.Silverlight.csproj">
-      <Project>{537D7B08-F0B6-49E6-A13D-AD905B7C9C27}</Project>
-      <Name>Castle.Core.Silverlight</Name>
-    </ProjectReference>
+    <Compile Include="..\Castle.DynamicProxy\SilverlightExtensions.cs">
+      <Link>SilverlightExtensions.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\CastleKey.snk">
@@ -320,6 +318,12 @@
     <EmbeddedResource Include="..\Castle.DynamicProxy\DynProxy.snk">
       <Link>DynProxy.snk</Link>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Castle.Core\Castle.Core.Silverlight.csproj">
+      <Project>{537D7B08-F0B6-49E6-A13D-AD905B7C9C27}</Project>
+      <Name>Castle.Core.Silverlight</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

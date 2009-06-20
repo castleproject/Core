@@ -133,7 +133,6 @@
 				output="${build.dir}/${project::get-name()}.dll" 
 				doc="${build.dir}/${project::get-name()}.xml"
 				rebuild="${build.rebuild}"
-				unless="${build.msbuild}"
 			>
 				<nowarn>
 					<warning number="1591" unless="${build.warnmissingdocs}" /> <!-- No XML comment for publicly visible member -->

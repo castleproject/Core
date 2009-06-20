@@ -14,6 +14,9 @@
 	<property name="common.testrunner.failonerror" value="true" overwrite="false" /> <!--  Whether to keep building when tests are failing -->
 	<property name="common.coverage.enabled" value="false" overwrite="false" /><!-- Controls whether tests will be run under NCover to generate coverage logs -->
 
+	<!-- Silverlight -->
+	<property name="common.silverlight" value="${nant.settings.currentframework == 'silverlight-2.0'}" />
+
 	<!-- Check which nant version we're using - fail if it's not the minium  -->
 	<property name="nant-version.current" value="${assemblyname::get-version(assembly::get-name(nant::get-assembly()))}" />
 	<property name="nant-version.required" value="0.85.2478.0" /> <!-- Nant 0.85 release version -->
@@ -212,6 +215,15 @@
 		</if>
 		<property name="build.msbuild"	value="false" overwrite="false" />
 		<property name="project.vsproj" value="${project::get-name()}-vs2008.csproj" />
+	</target>
+
+	<target name="set-silverlight-2.0-framework-configuration">
+		<property name="nant.settings.currentframework" value="silverlight-2.0" />
+		<property name="current.build.defines" value="${build.defines},SILVERLIGHT" />
+		<property name="link.sdkdoc.version" value="MsdnOnline" />
+		<property name="build.warnaserrors" value="false" />
+		<property name="csc.keyfile" value="/keyfile:${key.file}" />
+		<property name="build.msbuild" value="false" overwrite="false" />
 	</target>
 
 	<target name="set-mono-1.0-framework-configuration">

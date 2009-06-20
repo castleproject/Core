@@ -11,13 +11,13 @@
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
 		<include name="Core/core.build" />
-		<include name="Services/services.build" />
+		<include name="Services/services.build" unless="${common.silverlight}" />
 		<include name="Tools/Tools.build" />
-		<include name="InversionOfControl/InversionOfControl.build" />
-		<include name="Components/components.build" />
-		<include name="ActiveRecord/activerecord.build" />
-		<include name="MonoRail/monorail.build" />
-		<include name="Facilities/facilities.build" />
+		<include name="InversionOfControl/InversionOfControl.build" unless="${common.silverlight}" />
+		<include name="Components/components.build" unless="${common.silverlight}" />
+		<include name="ActiveRecord/activerecord.build" unless="${common.silverlight}" />
+		<include name="MonoRail/monorail.build" unless="${common.silverlight}" />
+		<include name="Facilities/facilities.build" unless="${common.silverlight}" />
 	</fileset>
 
 	<target name="debug" description="Selects the debug build configuration">
