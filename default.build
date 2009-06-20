@@ -126,7 +126,7 @@
 		</copy>
 		
 		<!-- Copy family-specific libraries installed on the system-->
-		<copy file="${path::combine(nant::get-base-directory(), 'NAnt.Core.dll')}" todir="${lib.family.dir}" />
+		<copy file="${path::combine(nant::get-base-directory(), 'NAnt.Core.dll')}" todir="${build.dir}" />
 
 		<!-- Copy family-specific libraries -->
 		<!-- 
