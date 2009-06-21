@@ -39,7 +39,7 @@
 		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.Views.AspView.Tests/Castle.MonoRail.Views.AspView.Tests.build" if="${common.testrunner.enabled}"/>
-		<include name="Castle.MonoRail.ActiveRecordSupport.Tests/Castle.MonoRail.ActiveRecordSupport.Tests.build" if="${common.testrunner.enabled}"/>
+		<include name="Castle.MonoRail.ActiveRecordSupport.Tests/Castle.MonoRail.ActiveRecordSupport.Tests.build" if="${common.testrunner.enabled and not common.mono}"/>
 		<!--
 		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" if="${common.testrunner.enabled}"/>
