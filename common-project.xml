@@ -259,7 +259,7 @@
 
 			<property name="nunitcommandline" value="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo /noshadow ${common.testrunner.args}" />
 			<if test="${(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
-				<property name="nunitcommandline" value="${project::get-name()}.dll -xml:${testresults.dir}/${project::get-name()}.dll-results.xml -config:${build.dir}/${project::get-name()}.dll.config -nologo -noshadow" />
+				<property name="nunitcommandline" value="${project::get-name()}.dll -xml:${testresults.dir}/${project::get-name()}.dll-results.xml -config:${build.dir}/${project::get-name()}.dll.config -nologo -noshadow -labels" />
 			</if>
 
 			<!-- Use nunit-console.exe if found, otherwise fall back to nunit2 task -->
