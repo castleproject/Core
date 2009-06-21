@@ -73,11 +73,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cassini, Version=1.0.40305.0, Culture=neutral, PublicKeyToken=132a282791bfaeb7">
-      <HintPath>..\..\SharedLibs\net\Cassini.dll</HintPath>
+      <HintPath>..\..\SharedLibs\Cassini.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\build\net-3.5\debug\nunit.framework.dll</HintPath>
+      <HintPath>..\..\SharedLibs\net\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
