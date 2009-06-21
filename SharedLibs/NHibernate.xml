@@ -668,6 +668,19 @@
             generating run-time proxies for lazy-loading purposes.
              </summary>
         </member>
+        <member name="P:NHibernate.Bytecode.IBytecodeProvider.ObjectsFactory">
+            <summary>
+            NHibernate's object instaciator.
+            </summary>
+            <remarks>
+            For entities <see cref="T:NHibernate.Bytecode.IReflectionOptimizer"/> and its implementations.
+            </remarks>
+        </member>
+        <member name="P:NHibernate.Bytecode.IBytecodeProvider.CollectionTypeFactory">
+            <summary>
+            Instanciator of NHibernate's collections default types.
+            </summary>
+        </member>
         <member name="M:NHibernate.Bytecode.CodeDom.BytecodeProviderImpl.Generator.#ctor(System.Type,NHibernate.Properties.IGetter[],NHibernate.Properties.ISetter[])">
             <summary>
             ctor
@@ -774,6 +787,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:NHibernate.Bytecode.IObjectsFactory">
+            <summary>
+            Interface for instanciate all NHibernate objects.
+            </summary>
+        </member>
         <member name="M:NHibernate.Bytecode.IObjectsFactory.CreateInstance(System.Type)">
             <summary>
             Creates an instance of the specified type.
@@ -816,6 +834,243 @@
             <summary>
             Defines a new delegate type.
             </summary>
+        </member>
+        <member name="T:NHibernate.Bytecode.ICollectionTypeFactory">
+            <summary>
+            Type factory for collections types.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.Array(System.String,System.String,System.Boolean,System.Type)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Array"/>.
+            </summary>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="elementClass">The <see cref="T:System.Type"/> to use to create the array.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            An <see cref="T:NHibernate.Type.ArrayType"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.Bag(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IList"/>
+            with bag semantics.
+            </summary>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.BagType"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.Bag``1(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an 
+            <see cref="T:System.Collections.Generic.IList`1"/> with bag semantics.
+            </summary>
+            <typeparam name="T">The type of elements in the list.</typeparam>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">
+            The name of the property in the owner object containing the collection ID, 
+            or <see langword="null"/> if it is the primary key.
+            </param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.GenericBagType`1"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.List(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IList"/>.
+            </summary>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.ListType"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.List``1(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an 
+            <see cref="T:System.Collections.Generic.IList`1"/> with list 
+            semantics.
+            </summary>
+            <typeparam name="T">The type of elements in the list.</typeparam>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">
+            The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.
+            </param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.ListType"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.IdBag(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IList"/>
+            with id-bag semantics.
+            </summary>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.IdentifierBagType"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.IdBag``1(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an 
+            <see cref="T:System.Collections.Generic.IList`1"/> with identifier
+            bag semantics.
+            </summary>
+            <typeparam name="T">The type of elements in the list.</typeparam>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.
+            </param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.GenericIdentifierBagType`1"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.Set(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:Iesi.Collections.ISet"/>.
+            </summary>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.SetType"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.SortedSet(System.String,System.String,System.Boolean,System.Collections.IComparer)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:Iesi.Collections.ISet"/>
+            that is sorted by an <see cref="T:System.Collections.IComparer"/>.
+            </summary>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="comparer">The <see cref="T:System.Collections.IComparer"/> that does the sorting.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.SortedSetType"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.Set``1(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:Iesi.Collections.Generic.ISet`1"/>.
+            </summary>
+            <typeparam name="T">The type of elements in the collection.</typeparam>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>A <see cref="T:NHibernate.Type.GenericSetType`1"/> for the specified role.</returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.SortedSet``1(System.String,System.String,System.Boolean,System.Collections.Generic.IComparer{``0})">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for a sorted <see cref="T:Iesi.Collections.Generic.ISet`1"/>.
+            </summary>
+            <typeparam name="T">The type of elements in the collection.</typeparam>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <param name="comparer">The <see cref="T:System.Collections.Generic.IComparer`1"/> to use for the set.</param>
+            <returns>A <see cref="T:NHibernate.Type.GenericSetType`1"/> for the specified role.</returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.OrderedSet``1(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an ordered <see cref="T:Iesi.Collections.Generic.ISet`1"/>.
+            </summary>
+            <typeparam name="T">The type of elements in the collection.</typeparam>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">
+            The name of the property in the owner object containing the collection ID, 
+            or <see langword="null"/> if it is the primary key.
+            </param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>A <see cref="T:NHibernate.Type.GenericSetType`1"/> for the specified role.</returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.Map(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IDictionary"/>.
+            </summary>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">
+            The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.MapType"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.OrderedMap(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IDictionary"/>
+            that maintains insertion order of elements.
+            </summary>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.OrderedMapType"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.SortedMap(System.String,System.String,System.Boolean,System.Collections.IComparer)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IDictionary"/>
+            that is sorted by an <see cref="T:System.Collections.IComparer"/>.
+            </summary>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.</param>
+            <param name="comparer">The <see cref="T:System.Collections.IComparer"/> that does the sorting.</param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.SortedMapType"/> for the specified role.
+            </returns>
+        </member>
+        <member name="M:NHibernate.Bytecode.ICollectionTypeFactory.Map``2(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an 
+            <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </summary>
+            <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
+            <typeparam name="TValue">The type of values in the dictionary.</typeparam>
+            <param name="role">The role the collection is in.</param>
+            <param name="propertyRef">The name of the property in the
+            owner object containing the collection ID, or <see langword="null"/> if it is
+            the primary key.
+            </param>
+            <param name="embedded">Is embedded in XML (not supported yet)</param>
+            <returns>
+            A <see cref="T:NHibernate.Type.MapType"/> for the specified role.
+            </returns>
         </member>
         <member name="T:NHibernate.Bytecode.IProxyFactoryFactory">
             <summary> 
@@ -14406,6 +14661,7 @@
             Perform the actual work to be done.
             </summary>
             <param name="connection">The ADP connection to use.</param>
+            <param name="transaction">The active transaction of the connection.</param>
         </member>
         <member name="T:NHibernate.Engine.Transaction.Isolater">
             <summary>
@@ -33135,11 +33391,6 @@
             </summary>
             <param name="length">The length of the binary data the <see cref="T:System.Data.IDbDataParameter"/> should hold</param>
         </member>
-        <member name="M:NHibernate.SqlTypes.BinaryBlobSqlType.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:NHibernate.SqlTypes.BinaryBlobSqlType"/> class.
-            </summary>
-        </member>
         <member name="T:NHibernate.SqlTypes.SqlTypeFactory">
             <summary>
             SqlTypeFactory provides Singleton access to the SqlTypes.
@@ -35678,6 +35929,50 @@
         <member name="P:NHibernate.Type.DateType.Name">
             <summary></summary>
         </member>
+        <member name="T:NHibernate.Type.DbTimestampType">
+            <summary> An extension of <see cref="T:NHibernate.Type.TimestampType"/> which
+            maps to the database's current timestamp, rather than the vm's
+            current timestamp.
+            </summary>
+            <remarks>
+            Note: May/may-not cause issues on dialects which do not properly support
+            a true notion of timestamp
+            </remarks>
+        </member>
+        <member name="T:NHibernate.Type.TimestampType">
+            <summary>
+            This is almost the exact same type as the DateTime except it can be used
+            in the version column, stores it to the accuracy the database supports, 
+            and will default to the value of DateTime.Now if the value is null.
+            </summary>
+            <remarks>
+            <p>
+            The value stored in the database depends on what your data provider is capable
+            of storing.  So there is a possibility that the DateTime you save will not be
+            the same DateTime you get back when you check DateTime.Equals(DateTime) because
+            they will have their milliseconds off.
+            </p>  
+            <p>
+            For example - SQL Server 2000 is only accurate to 3.33 milliseconds.  So if 
+            NHibernate writes a value of <c>01/01/98 23:59:59.995</c> to the Prepared Command, MsSql
+            will store it as <c>1998-01-01 23:59:59.997</c>.
+            </p>
+            <p>
+            Please review the documentation of your Database server.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:NHibernate.Type.TimestampType.Set(System.Data.IDbCommand,System.Object,System.Int32)">
+            <summary>
+            Sets the value of this Type in the IDbCommand.
+            </summary>
+            <param name="st">The IDbCommand to add the Type's value to.</param>
+            <param name="value">The value of the Type.</param>
+            <param name="index">The index of the IDataParameter in the IDbCommand.</param>
+            <remarks>
+            No null values will be written to the IDbCommand for this Type. 
+            </remarks>
+        </member>
         <member name="T:NHibernate.Type.DoubleType">
             <summary>
             Maps a <see cref="T:System.Double"/> Property 
@@ -36760,40 +37055,6 @@
         <member name="P:NHibernate.Type.TimeSpanType.ReturnedClass">
             <summary></summary>
         </member>
-        <member name="T:NHibernate.Type.TimestampType">
-            <summary>
-            This is almost the exact same type as the DateTime except it can be used
-            in the version column, stores it to the accuracy the database supports, 
-            and will default to the value of DateTime.Now if the value is null.
-            </summary>
-            <remarks>
-            <p>
-            The value stored in the database depends on what your data provider is capable
-            of storing.  So there is a possibility that the DateTime you save will not be
-            the same DateTime you get back when you check DateTime.Equals(DateTime) because
-            they will have their milliseconds off.
-            </p>  
-            <p>
-            For example - SQL Server 2000 is only accurate to 3.33 milliseconds.  So if 
-            NHibernate writes a value of <c>01/01/98 23:59:59.995</c> to the Prepared Command, MsSql
-            will store it as <c>1998-01-01 23:59:59.997</c>.
-            </p>
-            <p>
-            Please review the documentation of your Database server.
-            </p>
-            </remarks>
-        </member>
-        <member name="M:NHibernate.Type.TimestampType.Set(System.Data.IDbCommand,System.Object,System.Int32)">
-            <summary>
-            Sets the value of this Type in the IDbCommand.
-            </summary>
-            <param name="st">The IDbCommand to add the Type's value to.</param>
-            <param name="value">The value of the Type.</param>
-            <param name="index">The index of the IDataParameter in the IDbCommand.</param>
-            <remarks>
-            No null values will be written to the IDbCommand for this Type. 
-            </remarks>
-        </member>
         <member name="T:NHibernate.Type.TimeType">
             <summary>
             Maps a <see cref="T:System.DateTime"/> Property to an DateTime column that only stores the 
@@ -36854,6 +37115,23 @@
         <member name="M:NHibernate.Type.TypeFactory.#cctor">
             <summary></summary>
         </member>
+        <member name="M:NHibernate.Type.TypeFactory.RegisterDefaultNetTypes">
+            <summary>
+            Register other Default .NET type
+            </summary>
+            <remarks>
+            These type will be used, as default, even when the "type" attribute was NOT specified in the mapping
+            </remarks>
+        </member>
+        <member name="M:NHibernate.Type.TypeFactory.RegisterBuiltInTypes">
+            <summary>
+            Register other NO Default .NET type
+            </summary>
+            <remarks>
+            These type will be used only when the "type" attribute was is specified in the mapping.
+            These are in here because needed to NO override default CLR types and be available in mappings
+            </remarks>
+        </member>
         <member name="M:NHibernate.Type.TypeFactory.GetTypeClassification(System.String)">
             <summary>
             Gets the classification of the Type based on the string.
@@ -36907,7 +37185,7 @@
             database using NHibernate.Type.SerializableType(typeName)  
             </remarks>
         </member>
-        <member name="M:NHibernate.Type.TypeFactory.HeuristicType(System.String,System.Collections.IDictionary)">
+        <member name="M:NHibernate.Type.TypeFactory.HeuristicType(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
             <summary>
             Uses heuristics to deduce a NHibernate type given a string naming the 
             type. 
@@ -36970,239 +37248,6 @@
             <summary>
             A many-to-one association type for the given class and cascade style.
             </summary>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.Array(System.String,System.String,System.Boolean,System.Type)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Array"/>.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="elementClass">The <see cref="T:System.Type"/> to use to create the array.</param>
-            <param name="embedded"></param>
-            <returns>
-            An <see cref="T:NHibernate.Type.ArrayType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.List(System.String,System.String,System.Boolean)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IList"/>.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="embedded"></param>
-            <returns>
-            A <see cref="T:NHibernate.Type.ListType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.Bag(System.String,System.String,System.Boolean)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IList"/>
-            with bag semantics.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="embedded"></param>
-            <returns>
-            A <see cref="T:NHibernate.Type.BagType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.IdBag(System.String,System.String,System.Boolean)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IList"/>
-            with id-bag semantics.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="embedded"></param>
-            <returns>
-            A <see cref="T:NHibernate.Type.IdentifierBagType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.Map(System.String,System.String,System.Boolean)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IDictionary"/>.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="embedded"></param>
-            <returns>
-            A <see cref="T:NHibernate.Type.MapType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.Set(System.String,System.String,System.Boolean)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:Iesi.Collections.ISet"/>.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="embedded"></param>
-            <returns>
-            A <see cref="T:NHibernate.Type.SetType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.SortedMap(System.String,System.String,System.Boolean,System.Collections.IComparer)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IDictionary"/>
-            that is sorted by an <see cref="T:System.Collections.IComparer"/>.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="comparer">The <see cref="T:System.Collections.IComparer"/> that does the sorting.</param>
-            <param name="embedded"></param>
-            <returns>
-            A <see cref="T:NHibernate.Type.SortedMapType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.OrderedMap(System.String,System.String,System.Boolean)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:System.Collections.IDictionary"/>
-            that maintains insertion order of elements.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="embedded"></param>
-            <returns>
-            A <see cref="T:NHibernate.Type.OrderedMapType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.SortedSet(System.String,System.String,System.Boolean,System.Collections.IComparer)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:Iesi.Collections.ISet"/>
-            that is sorted by an <see cref="T:System.Collections.IComparer"/>.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="comparer">The <see cref="T:System.Collections.IComparer"/> that does the sorting.</param>
-            <param name="embedded"></param>
-            <returns>
-            A <see cref="T:NHibernate.Type.SortedSetType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.GenericBag(System.String,System.String,System.Type)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an 
-            <see cref="T:System.Collections.Generic.IList`1"/> with bag semantics.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="elementClass">
-            The <see cref="T:System.Type"/> to use to create the 
-            <see cref="T:System.Collections.Generic.IList`1"/> with.
-            </param>
-            <returns>
-            A <see cref="T:NHibernate.Type.GenericBagType`1"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.GenericIdBag(System.String,System.String,System.Type)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an 
-            <see cref="T:System.Collections.Generic.IList`1"/> with identifier
-            bag semantics.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="elementClass">
-            The <see cref="T:System.Type"/> to use to create the 
-            <see cref="T:System.Collections.Generic.IList`1"/> with.
-            </param>
-            <returns>
-            A <see cref="T:NHibernate.Type.GenericIdentifierBagType`1"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.GenericList(System.String,System.String,System.Type)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an 
-            <see cref="T:System.Collections.Generic.IList`1"/> with list 
-            semantics.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="elementClass">
-            The <see cref="T:System.Type"/> to use to create the 
-            <see cref="T:System.Collections.Generic.IList`1"/> with.
-            </param>
-            <returns>
-            A <see cref="T:NHibernate.Type.ListType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.GenericMap(System.String,System.String,System.Type,System.Type)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an 
-            <see cref="T:System.Collections.Generic.IDictionary`2"/>.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="indexClass">
-            The <see cref="T:System.Type"/> to use as the <c>TKey</c> to create the
-            <see cref="T:System.Collections.Generic.IDictionary`2"/> with.
-            </param>
-            <param name="elementClass">
-            The <see cref="T:System.Type"/> to use as the <c>TValue</c> to create the 
-             <see cref="T:System.Collections.Generic.IDictionary`2"/> with.
-            </param>
-            <returns>
-            A <see cref="T:NHibernate.Type.MapType"/> for the specified role.
-            </returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.GenericSet(System.String,System.String,System.Type)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an <see cref="T:Iesi.Collections.Generic.ISet`1"/>.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="elementClass">The type of the set elements.</param>
-            <returns>A <see cref="T:NHibernate.Type.GenericSetType`1"/> for the specified role.</returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.GenericSortedSet(System.String,System.String,System.Object,System.Type)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for a sorted <see cref="T:Iesi.Collections.Generic.ISet`1"/>.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="comparer">The <see cref="T:System.Collections.Generic.IComparer`1"/> to use for the set.</param>
-            <param name="elementType">The type of the elements in the set.</param>
-            <returns>A <see cref="T:NHibernate.Type.GenericSetType`1"/> for the specified role.</returns>
-        </member>
-        <member name="M:NHibernate.Type.TypeFactory.GenericOrderedSet(System.String,System.String,System.Type)">
-            <summary>
-            Creates a new <see cref="T:NHibernate.Type.CollectionType"/> for an ordered <see cref="T:Iesi.Collections.Generic.ISet`1"/>.
-            </summary>
-            <param name="role">The role the collection is in.</param>
-            <param name="propertyRef">The name of the property in the
-            owner object containing the collection ID, or <see langword="null"/> if it is
-            the primary key.</param>
-            <param name="elementType">The type of the elements in the set.</param>
-            <returns>A <see cref="T:NHibernate.Type.GenericSetType`1"/> for the specified role.</returns>
         </member>
         <member name="M:NHibernate.Type.TypeFactory.DeepCopy(System.Object[],NHibernate.Type.IType[],System.Boolean[],System.Object[],NHibernate.Engine.ISessionImplementor)">
             <summary> Deep copy a series of values from one array to another... </summary>
@@ -37716,7 +37761,7 @@
             type may be set by using a nested type element for the property element
             </summary>
         </member>
-        <member name="M:NHibernate.UserTypes.IParameterizedType.SetParameterValues(System.Collections.IDictionary)">
+        <member name="M:NHibernate.UserTypes.IParameterizedType.SetParameterValues(System.Collections.Generic.IDictionary{System.String,System.String})">
             <summary>
             Gets called by Hibernate to pass the configured type parameters to 
             the implementation.
@@ -39439,6 +39484,14 @@
             A problem occurred trying to lazily initialize a collection or proxy (for example the session
             was closed) or iterate query results.
             </summary>
+        </member>
+        <member name="M:NHibernate.LazyInitializationException.#ctor(System.String,System.Object,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.LazyInitializationException"/> class.
+            </summary>
+            <param name="entityName">The name of the entity where the exception was thrown</param>
+            <param name="entityId">The id of the entity where the exception was thrown</param>
+            <param name="message">The message that describes the error. </param>
         </member>
         <member name="M:NHibernate.LazyInitializationException.#ctor(System.String)">
             <summary>
