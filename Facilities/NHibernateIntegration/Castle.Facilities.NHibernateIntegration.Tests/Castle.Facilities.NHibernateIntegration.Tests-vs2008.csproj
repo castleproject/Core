@@ -134,7 +134,7 @@
     </Reference>
     <Reference Include="Rhino.Mocks, Version=3.5.0.1, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SharedLibs\net\2.0\Rhino.Mocks.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -178,6 +178,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Common\TestInterceptor.cs" />
+    <Compile Include="Components\NHibernateGenericDaoTestCase.cs" />
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Internals\ConfigurationBuilderTestCase.cs" />
     <Compile Include="Internals\CustomConfigurationBuilderTestCase.cs" />

@@ -321,7 +321,6 @@ namespace Castle.Facilities.NHibernateIntegration
 					if (firstRow != int.MinValue) criteria.SetFirstResult(firstRow);
 					if (maxRows != int.MinValue) criteria.SetMaxResults(maxRows);
 					IList result = criteria.List();
-					if (result == null || result.Count == 0) return null;
 
 					Array array = Array.CreateInstance(type, result.Count);
 					result.CopyTo(array, 0);

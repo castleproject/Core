@@ -110,13 +110,11 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 		}
 
 		[Test]
-		[ExpectedException(typeof(FacilityException))]
 		public void NonExistentAlias()
 		{
 			ISessionManager manager = (ISessionManager) 
 				container[typeof(ISessionManager)];
-
-			manager.OpenSession("something in the way she moves");
+			Assert.Throws<FacilityException>(() => manager.OpenSession("something in the way she moves"));
 		}
 
 		[Test]

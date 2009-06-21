@@ -29,12 +29,10 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 		private AutoResetEvent arEvent = new AutoResetEvent(false);
 
 		[Test]
-		[ExpectedException( typeof(ArgumentNullException) )]
 		public void NullAlias()
 		{
 			ISessionStore store = (ISessionStore) container[typeof(ISessionStore)];
-
-			store.FindCompatibleSession(null);
+			Assert.Throws<ArgumentNullException>(() => store.FindCompatibleSession(null));
 		}
 
 		[Test]
