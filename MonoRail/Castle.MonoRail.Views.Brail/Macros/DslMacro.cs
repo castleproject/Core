@@ -64,7 +64,7 @@ namespace Castle.MonoRail.Views.Brail
 
 			// rewrite the remaining code to invoke methods on
 			// the dsl reference
-			Block macroBlock = macro.Block;
+			Block macroBlock = macro.Body;
 			(new NameExpander(dslReference)).Visit(macroBlock);
 			codeBlock.Add(macroBlock);
 			// dsl.Flush();

@@ -75,15 +75,20 @@
 	
 	<Target
 		Name="CreateManifestResourceNames"
+		DependsOnTargets="$(CreateManifestResourceNamesDependsOn)"
+	>
+		<CallTarget Targets="CreateManifestResourceNames_35" Condition="'$(MSBuildToolsVersion)' == '3.5'"/>
+		<CallTarget Targets="CreateManifestResourceNames_20" Condition="'$(MSBuildToolsVersion)' != '3.5'"/>
+	</Target>
+	
+	<Target
+		Name="CreateManifestResourceNames_20"
 		Condition="'
 		@(ResxWithNoCulture)
 		@(ResxWithCulture)
 		@(NonResxWithNoCulture)
 		@(NonResxWithCulture)'!=''"
-		
-		DependsOnTargets="$(CreateManifestResourceNamesDependsOn)"
 	>
-		
 		<!-- Create the target resource names for non-culture resx files -->
 		<CreateBooManifestResourceName
 			Condition="'@(ResxWithNoCulture)'!=''"
@@ -132,6 +137,31 @@
 		
 		</CreateBooManifestResourceName>
 	</Target>
+	
+	<Target
+		Name="CreateManifestResourceNames_35"
+		Condition="'@(EmbeddedResource)' != ''"
+	>
+		<ItemGroup>
+			<_Temporary Remove="@(_Temporary)" />
+		</ItemGroup>
+		
+		<CreateBooManifestResourceName
+			ResourceFiles="@(EmbeddedResource)"
+			RootNamespace="$(RootNamespace)"
+			Condition="'%(EmbeddedResource.ManifestResourceName)' == ''">
+			
+			<Output TaskParameter="ResourceFilesWithManifestResourceNames" ItemName="_Temporary" />
+		
+		</CreateBooManifestResourceName>
+		
+		<ItemGroup>
+			<EmbeddedResource Remove="@(EmbeddedResource)" Condition="'%(EmbeddedResource.ManifestResourceName)' == ''"/>
+			<EmbeddedResource Include="@(_Temporary)" />
+			<_Temporary Remove="@(_Temporary)" />
+		</ItemGroup>
+	</Target>
+	
 	
 	<PropertyGroup>
 		
@@ -188,28 +218,35 @@
 	>
 		
 		<Booc
+			CheckForOverflowUnderflow="$(CheckForOverflowUnderflow)"
+			Culture="$(AssemblyCulture)"
+			DefineSymbols="$(DefineConstants)"
+			DelaySign="$(DelaySign)"
+			DisabledWarnings="$(NoWarn)"
+			Ducky="$(Ducky)"
+			EmitDebugInformation="$(DebugSymbols)"
+			GenerateFullPaths="$(GenerateFullPaths)"
+			KeyContainer="$(AssemblyKeyContainerName)"
+			KeyFile="$(AssemblyOriginatorKeyFile)"
+			NoConfig="$(NoConfig)"
+			NoStandardLib="$(NoStdLib)"
 			OutputAssembly="@(IntermediateAssembly)"
+			Pipeline="$(Pipeline)"
 			References="@(ReferencePath)"
-			Resources= "@(ManifestResourceWithNoCulture);
-			            @(ManifestNonResxWithNoCultureOnDisk);
-			            @(CompiledLicenseFile)"
+			Resources="@(ManifestResourceWithNoCulture);
+			           @(ManifestNonResxWithNoCultureOnDisk);
+			           @(CompiledLicenseFile)"
 			ResponseFiles="$(CompilerResponseFile)"
+			SourceDirectory="$(SourceDirectory)"
 			Sources="@(Compile)"
+			Strict="$(Strict)"
 			TargetType="$(OutputType)"
 			ToolPath="$(BoocToolPath)"
-			Pipeline="$(Pipeline)"
-			WhiteSpaceAgnostic="$(WhiteSpaceAgnostic)"
-			Ducky="$(Ducky)"
+			TreatWarningsAsErrors="$(TreatWarningsAsErrors)"
+			Utf8Output="$(Utf8Output)"
 			Verbosity="$(BoocVerbosity)"
-			Culture="$(AssemblyCulture)"
-			SourceDirectory="$(SourceDirectory)"
-			KeyFile="$(AssemblyOriginatorKeyFile)"
-			KeyContainer="$(AssemblyKeyContainerName)"
-			EmitDebugInformation="$(DebugSymbols)"
-			DelaySign="$(DelaySign)"
-			NoStandardLib="$(NoStdLib)"
-			DefineSymbols="$(DefineConstants)"
-			GenerateFullPaths="$(GenerateFullPaths)"
+			WarningsAsErrors="$(WarningsAsErrors)"
+			WhiteSpaceAgnostic="$(WhiteSpaceAgnostic)"
 		/>
 		
 		<Copy
