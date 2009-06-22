@@ -179,6 +179,7 @@
     </Compile>
     <Compile Include="Common\TestInterceptor.cs" />
     <Compile Include="Components\NHibernateGenericDaoTestCase.cs" />
+    <Compile Include="Components\ReflectionUtilityTests.cs" />
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Internals\ConfigurationBuilderTestCase.cs" />
     <Compile Include="Internals\CustomConfigurationBuilderTestCase.cs" />

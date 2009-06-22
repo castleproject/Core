@@ -16,6 +16,7 @@ namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
 	using System.Collections;
+	using Components.Util;
 	using NHibernate;
 	using NHibernate.Collection;
 	using NHibernate.Criterion;
@@ -434,7 +435,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			using(ISession session = GetSession())
 			{
-				foreach(object val in ReflectionUtil.GetPropertiesDictionary(instance).Values)
+				foreach(object val in ReflectionUtility.GetPropertiesDictionary(instance).Values)
 				{
 					if (val is INHibernateProxy || val is IPersistentCollection)
 					{
@@ -458,8 +459,8 @@ namespace Castle.Facilities.NHibernateIntegration
 			if (instance == null) throw new ArgumentNullException("instance");
 			if (string.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");
 
-			IDictionary properties = ReflectionUtil.GetPropertiesDictionary(instance);
-			if (! properties.Contains(propertyName))
+			var properties = ReflectionUtility.GetPropertiesDictionary(instance);
+			if (! properties.ContainsKey(propertyName))
 				throw new ArgumentOutOfRangeException("propertyName", "Property "
 				                                                                + propertyName + " doest not exist for type "
 				                                                                + instance.GetType().ToString() + ".");

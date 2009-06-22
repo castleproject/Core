@@ -21,6 +21,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 	/// <summary>
 	/// Summary description for ReflectionUtil.
 	/// </summary>
+	[Obsolete("This class will be removed with the next release. Please use ReflectionUtility instead.")]
 	public sealed class ReflectionUtil
 	{
 		/// <summary>

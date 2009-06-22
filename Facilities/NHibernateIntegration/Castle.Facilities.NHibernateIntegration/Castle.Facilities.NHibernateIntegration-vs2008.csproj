@@ -157,6 +157,7 @@
     <Compile Include="Components\Util\ReflectionUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\Util\ReflectionUtility.cs" />
     <Compile Include="Constants.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -29,6 +29,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 	/// provides an <see cref="ICollection"/> that is strongly typed for 
 	/// <see cref="FieldInfo"/> elements.
 	/// </remarks>
+	[Obsolete("This interface is will be removed with the next release")]
 	public interface IFieldInfoCollection
 	{
 		#region Properties
@@ -161,6 +162,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 	/// provides an <see cref="IList"/> that is strongly typed for 
 	/// <see cref="FieldInfo"/> elements.
 	/// </remarks>
+	[Obsolete("This interface is will be removed with the next release")]
 	public interface IFieldInfoList : IFieldInfoCollection
 	{
 		#region Properties
@@ -419,6 +421,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 	/// provides an <see cref="IEnumerator"/> that is strongly typed for 
 	/// <see cref="FieldInfo"/> elements.
 	/// </remarks>
+	[Obsolete("This interface will be removed with the next release")]
 	public interface IFieldInfoEnumerator
 	{
 		#region Properties
@@ -513,6 +516,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 	/// current value of the <see cref="FieldInfoCollection.Count"/> property.
 	/// </para></remarks>
 	[Serializable]
+	[Obsolete("This class will be removed with the next release")]
 	public class FieldInfoCollection : IFieldInfoList, IList, ICloneable
 	{
 		private readonly Data _data;
