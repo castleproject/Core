@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Castle.Core;
-using Castle.MicroKernel;
-using Castle.MicroKernel.ComponentActivator;
-using NHibernate;
-using NHibernate.Cfg;
-
-namespace Castle.Facilities.NHibernateIntegration.Internal
+﻿namespace Castle.Facilities.NHibernateIntegration.Internal
 {
+	using Core;
+	using MicroKernel;
+	using MicroKernel.ComponentActivator;
+	using NHibernate;
+	using NHibernate.Cfg;
+
 	/// <summary>
 	/// Postpones the initiation of SessionFactory until Resolve
 	/// </summary>

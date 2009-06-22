@@ -17,12 +17,10 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	using System;
 	using System.Collections;
 	using System.Data;
+	using MicroKernel;
+	using MicroKernel.Facilities;
 	using NHibernate;
-
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Facilities;
-
-	using Castle.Services.Transaction;
+	using Services.Transaction;
 	using ITransaction = Castle.Services.Transaction.ITransaction;
 
 	/// <summary>
