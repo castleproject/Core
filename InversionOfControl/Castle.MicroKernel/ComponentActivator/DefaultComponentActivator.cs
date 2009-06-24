@@ -259,9 +259,14 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			signature = null;
 
-			if (constructor == null) return new object[0];
+			if (constructor == null) return null;
 
 			object[] arguments = new object[constructor.Constructor.GetParameters().Length];
+			if(arguments.Length==0)
+			{
+				return null;
+			}
+
 			signature = new Type[arguments.Length];
 
 			int index = 0;
