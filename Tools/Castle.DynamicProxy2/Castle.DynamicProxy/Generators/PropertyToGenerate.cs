@@ -15,23 +15,32 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators.Emitters;
 
 	public class PropertyToGenerate
 	{
-		private readonly bool canRead, canWrite;
-		private readonly PropertyEmitter emitter;
-		private readonly MethodInfo getMethod, setMethod;
+		private readonly string name;
+		private readonly Type type;
+		private readonly bool canRead;
+		private readonly bool canWrite;
+		private PropertyEmitter emitter;
+		private readonly MethodInfo getMethod;
+		private readonly MethodInfo setMethod;
+		private readonly PropertyAttributes attributes;
+		private readonly IEnumerable<Attribute> customAttributes;
 
-		public PropertyToGenerate(bool canRead, bool canWrite, PropertyEmitter emitter, MethodInfo getMethod,
-		                          MethodInfo setMethod)
+		public PropertyToGenerate(string name, Type type, bool canRead, bool canWrite, MethodInfo getMethod, MethodInfo setMethod, PropertyAttributes attributes, IEnumerable<Attribute> customAttributes)
 		{
+			this.name = name;
+			this.type = type;
 			this.canRead = canRead;
 			this.canWrite = canWrite;
-			this.emitter = emitter;
 			this.getMethod = getMethod;
 			this.setMethod = setMethod;
+			this.attributes = attributes;
+			this.customAttributes = customAttributes;
 		}
 
 		public bool CanRead
@@ -44,11 +53,6 @@ namespace Castle.DynamicProxy.Generators
 			get { return canWrite; }
 		}
 
-		public PropertyEmitter Emitter
-		{
-			get { return emitter; }
-		}
-
 		public MethodInfo GetMethod
 		{
 			get { return getMethod; }
@@ -57,6 +61,64 @@ namespace Castle.DynamicProxy.Generators
 		public MethodInfo SetMethod
 		{
 			get { return setMethod; }
+		}
+
+		public PropertyEmitter Emitter
+		{
+			get {
+				if (emitter == null)
+					throw new InvalidOperationException(
+						"Emitter is not initialized. You have to initialize it first using 'BuildPropertyEmitter' method");
+				return emitter;
+			}
+		}
+
+		public bool Equals(PropertyToGenerate other)
+		{
+			if (ReferenceEquals(null, other))
+			{
+				return false;
+			}
+			if (ReferenceEquals(this, other))
+			{
+				return true;
+			}
+			return Equals(other.getMethod, getMethod) && Equals(other.setMethod, setMethod);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj))
+			{
+				return false;
+			}
+			if (ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+			if (obj.GetType() != typeof(PropertyToGenerate))
+			{
+				return false;
+			}
+			return Equals((PropertyToGenerate) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return ((getMethod != null ? getMethod.GetHashCode() : 0) * 397) ^ (setMethod != null ? setMethod.GetHashCode() : 0);
+			}
+		}
+
+		public void BuildPropertyEmitter(ClassEmitter classEmitter)
+		{
+			if(emitter!=null)
+				throw new InvalidOperationException();
+
+			emitter = classEmitter.CreateProperty(name, attributes, type);
+			foreach(var attribute in customAttributes)
+				emitter.DefineCustomAttribute(attribute);
 		}
 	}
 }

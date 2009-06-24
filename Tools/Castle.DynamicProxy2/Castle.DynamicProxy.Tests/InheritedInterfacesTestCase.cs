@@ -14,43 +14,192 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+	using System.Reflection;
 	using Core.Interceptor;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class InheritedInterfacesTestCase
+	public class InheritedInterfacesTestCase : BasePEVerifyTestCase
 	{
 		/// <summary>
 		/// See DYNPROXY-ISSUE-58 and DYNPROXY-ISSUE-77.
 		/// </summary>
 		[Test]
-		public void CreateInterfaceProxyWithTargetInterface()
+		public void InheritedInterfaceWithTarget()
 		{
-			ProxyGenerator generator = new ProxyGenerator();
-			IFooExtended proxiedFoo = (IFooExtended)generator.CreateInterfaceProxyWithTargetInterface(
-				typeof(IFooExtended), new ImplementedFoo(), new StandardInterceptor());
+			var proxiedFoo = (IFooExtended) generator.CreateInterfaceProxyWithTargetInterface(
+			                                	typeof(IFooExtended), new ImplementedFooExtended(), new StandardInterceptor());
 			proxiedFoo.FooExtended();
 		}
 
-		public interface IFoo
+		[Test]
+		public void
+			Should_not_have_duplicated_events_for_interface_proxy_with_inherited_target_and_two_inherited_additional_interfaces()
 		{
-			void Foo();
+			var target = new HasEventBar();
+			object o = generator.CreateInterfaceProxyWithTarget(typeof(IHasEvent),
+			                                                    new[] {typeof(IHasEventBar), typeof(IHasEventFoo)}, target,
+			                                                    new StandardInterceptor());
+			EventInfo[] events = o.GetType().GetEvents();
+			Assert.AreEqual(3, events.Length);
 		}
 
-		public interface IFooExtended : IFoo
+		[Test]
+		public void
+			Should_not_have_duplicated_properties_for_interface_proxy_with_inherited_target_and_two_inherited_additional_interfaces
+			()
 		{
-			void FooExtended();
+			var target = new HasPropertyBar();
+			object o = generator.CreateInterfaceProxyWithTarget(typeof(IHasProperty),
+			                                                    new[] {typeof(IHasPropertyBar), typeof(IHasPropertyFoo)}, target,
+			                                                    new StandardInterceptor());
+			PropertyInfo[] properties = o.GetType().GetProperties();
+			Assert.AreEqual(3, properties.Length);
 		}
 
-		public class ImplementedFoo : IFooExtended
+		[Test]
+		public void ShouldGenerateProxyWithoutTargetAndWithDuplicatedBaseInterface()
 		{
-			public void FooExtended()
+			var foo =
+				(IHasMethod)
+				generator.CreateInterfaceProxyWithoutTarget(typeof(IHasMethod), new[] {typeof(IFooExtended), typeof(IBarFoo)},
+				                                            new BuryAllInterceptor());
+
+			foo.Foo();
+			((IFooExtended) foo).FooExtended();
+			((IBarFoo) foo).Bar();
+		}
+
+		[Test]
+		public void TargetImplementsOneInterfaceThatHasDuplicatedBaseInterfaceWithAdditionalProxiedInterfaces()
+		{
+			var target = new ImplementedFooExtended();
+
+			var foo =
+				(IHasMethod)
+				generator.CreateInterfaceProxyWithTarget(typeof(IHasMethod), new[] {typeof(IFooExtended), typeof(IBarFoo)}, target,
+				                                         new BuryBarFooInterceptor());
+
+			foo.Foo();
+			((IFooExtended) foo).FooExtended();
+			((IBarFoo) foo).Bar();
+		}
+	}
+
+	public class HasPropertyBar : IHasPropertyBar
+	{
+		#region IHasPropertyBar Members
+
+		public int Prop { get; set; }
+		public string Bar { get; set; }
+
+		#endregion
+	}
+
+	public interface IHasPropertyBar : IHasProperty
+	{
+		string Bar { get; set; }
+	}
+
+	public interface IHasPropertyFoo : IHasProperty
+	{
+		DateTime Foo { get; set; }
+	}
+
+	public interface IHasProperty
+	{
+		int Prop { get; set; }
+	}
+
+	public interface IHasEvent
+	{
+		event EventHandler MyEvent;
+	}
+
+	public interface IHasEventFoo : IHasEvent
+	{
+		event EventHandler EventFoo;
+	}
+
+	public interface IHasEventBar : IHasEvent
+	{
+		event EventHandler Bar;
+	}
+
+	public class HasEventBar : IHasEventBar
+	{
+		#region IHasEventBar Members
+
+		public event EventHandler MyEvent;
+		public event EventHandler Bar;
+
+		#endregion
+
+		public void RaiseMyEvent()
+		{
+			MyEvent(null, EventArgs.Empty);
+		}
+
+		public void RaiseBar()
+		{
+			Bar(null, EventArgs.Empty);
+		}
+	}
+
+	public interface IHasMethod
+	{
+		void Foo();
+	}
+
+	public interface IFooExtended : IHasMethod
+	{
+		void FooExtended();
+	}
+
+	public interface IBarFoo : IHasMethod
+	{
+		void Bar();
+	}
+
+	public class ImplementedFooExtended : IFooExtended
+	{
+		#region IFooExtended Members
+
+		public void FooExtended()
+		{
+		}
+
+		public void Foo()
+		{
+		}
+
+		#endregion
+	}
+
+	public class BuryAllInterceptor : IInterceptor
+	{
+		#region IInterceptor Members
+
+		public void Intercept(IInvocation invocation)
+		{
+		}
+
+		#endregion
+	}
+
+	public class BuryBarFooInterceptor : IInterceptor
+	{
+		#region IInterceptor Members
+
+		public void Intercept(IInvocation invocation)
+		{
+			if (invocation.Method.DeclaringType != typeof(IBarFoo))
 			{
-			}
-
-			public void Foo()
-			{
+				invocation.Proceed();
 			}
 		}
+
+		#endregion
 	}
 }

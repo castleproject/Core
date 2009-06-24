@@ -201,31 +201,25 @@ namespace Castle.DynamicProxy.Generators
 									   methodOnTarget);
 		}
 
-		protected void ImplementBlankInterface(
-			Type targetType,
-			Type _interface,
-			ClassEmitter emitter,
-			FieldReference interceptorsField,
-			ConstructorEmitter typeInitializerConstructor)
-		{
-			ImplementBlankInterface(targetType, _interface, emitter, interceptorsField, typeInitializerConstructor, false);
-		}
-
-		protected void ImplementBlankInterface(
-			Type targetType,
-			Type _interface,
-			ClassEmitter emitter,
-			FieldReference interceptorsField,
-			ConstructorEmitter typeInitializerConstructor,
-			bool allowChangeTarget)
+		protected void ImplementBlankInterfaces(Type targetType, Type[] _interfaces, ClassEmitter emitter, FieldReference interceptorsField, ConstructorEmitter typeInitializerConstructor, bool allowChangeTarget, MethodInfo[] targetMethods, PropertyToGenerate[] targetProperties, EventToGenerate[] targetEvents)
 		{
 			CheckNotGenericTypeDefinition(targetType, "targetType");
-			CheckNotGenericTypeDefinition(_interface, "_interface");
+			List<PropertyToGenerate> properties = new List<PropertyToGenerate>();
+			List<EventToGenerate> events = new List<EventToGenerate>();
+			List<MethodInfo> methods = new List<MethodInfo>();
+			foreach(var type in _interfaces)
+			{
+				CheckNotGenericTypeDefinition(type, "_interfaces");
 
-			PropertyToGenerate[] propsToGenerate;
-			EventToGenerate[] eventsToGenerate;
-			MethodInfo[] methods =
-				CollectMethodsAndProperties(emitter, _interface, false, out propsToGenerate, out eventsToGenerate);
+				PropertyToGenerate[] propsToGenerate;
+				EventToGenerate[] eventsToGenerate;
+				MethodInfo[] methodsToGenerate = CollectMethodsAndProperties(emitter, type, false, out propsToGenerate, out eventsToGenerate);
+				AddIfNew(methods,targetMethods, methodsToGenerate);
+				AddIfNew(properties,targetProperties, propsToGenerate);
+				AddIfNew(events, targetEvents, eventsToGenerate);
+
+			}
+
 
 			Dictionary<MethodInfo, NestedClassEmitter> method2Invocation = new Dictionary<MethodInfo, NestedClassEmitter>();
 
@@ -236,7 +230,7 @@ namespace Castle.DynamicProxy.Generators
 				method2Invocation[method] =
 					BuildInvocationNestedType(emitter,
 											  targetType,
-											  allowChangeTarget ? _interface : emitter.TypeBuilder,
+											  allowChangeTarget ? method.DeclaringType : emitter.TypeBuilder,
 											  method,
 											  allowChangeTarget ? method : null,
 											  ConstructorVersion.WithoutTargetMethod,
@@ -245,7 +239,11 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (MethodInfo method in methods)
 			{
-				if (method.IsSpecialName && (method.Name.StartsWith("get_") || method.Name.StartsWith("set_")))
+				if (method.IsSpecialName && (
+					method.Name.StartsWith("get_") || 
+					method.Name.StartsWith("set_") ||
+					method.Name.StartsWith("add_") || 
+					method.Name.StartsWith("remove_")))
 				{
 					continue;
 				}
@@ -265,8 +263,9 @@ namespace Castle.DynamicProxy.Generators
 				ReplicateNonInheritableAttributes(method, newProxiedMethod);
 			}
 
-			foreach (PropertyToGenerate propToGen in propsToGenerate)
+			foreach (PropertyToGenerate propToGen in properties)
 			{
+				propToGen.BuildPropertyEmitter(emitter);
 				if (propToGen.CanRead)
 				{
 					NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
@@ -310,8 +309,10 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-			foreach (EventToGenerate eventToGenerate in eventsToGenerate)
+			foreach (EventToGenerate eventToGenerate in events)
 			{
+
+				eventToGenerate.BuildEventEmitter(emitter);
 				NestedClassEmitter add_nestedClass = method2Invocation[eventToGenerate.AddMethod];
 
 				MethodAttributes add_atts = ObtainMethodAttributes(eventToGenerate.AddMethod);
@@ -347,6 +348,28 @@ namespace Castle.DynamicProxy.Generators
 									   null);
 
 				ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);
+			}
+		}
+
+		protected void AddIfNew<T>(ICollection<T> list, ICollection<T> existingItems, IEnumerable<T> newItems)
+		{
+			foreach(var item in newItems)
+			{
+				if (!list.Contains(item)&&!existingItems.Contains(item))
+				{
+					list.Add(item);
+				}
+			}
+		}
+
+		protected void AddIfNew<T>(IList<T> list,  IEnumerable<T> newItems)
+		{
+			foreach (var item in newItems)
+			{
+				if (!list.Contains(item))
+				{
+					list.Add(item);
+				}
 			}
 		}
 
@@ -1156,7 +1179,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected void ReplicateNonInheritableAttributes(PropertyInfo propertyInfo, PropertyEmitter emitter)
+		protected IEnumerable<Attribute> GetNonInheritableAttributes(PropertyInfo propertyInfo)
 		{
 			object[] attrs = propertyInfo.GetCustomAttributes(false);
 
@@ -1164,7 +1187,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if (ShouldSkipAttributeReplication(attribute)) continue;
 
-				emitter.DefineCustomAttribute(attribute);
+				yield return attribute;
 			}
 		}
 
@@ -1396,20 +1419,20 @@ namespace Castle.DynamicProxy.Generators
 			{
 				List<EventToGenerate> toGenerateList = new List<EventToGenerate>();
 
-				toGenerateList.AddRange(CollectEvents(methodList, type, onlyVirtuals, emitter));
+				toGenerateList.AddRange(CollectEvents(methodList, type, onlyVirtuals));
 
 				Type[] typeChain = type.FindInterfaces(new TypeFilter(NoFilter), null);
 
 				foreach (Type interType in typeChain)
 				{
-					toGenerateList.AddRange(CollectEvents(methodList, interType, onlyVirtuals, emitter));
+					toGenerateList.AddRange(CollectEvents(methodList, interType, onlyVirtuals));
 				}
 
 				eventsToGenerates = toGenerateList.ToArray();
 			}
 			else
 			{
-				eventsToGenerates = CollectEvents(methodList, type, onlyVirtuals, emitter);
+				eventsToGenerates = CollectEvents(methodList, type, onlyVirtuals);
 			}
 		}
 
@@ -1489,7 +1512,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		private EventToGenerate[] CollectEvents(List<MethodInfo> methodList, Type type, bool onlyVirtuals, ClassEmitter emitter)
+		private EventToGenerate[] CollectEvents(List<MethodInfo> methodList, Type type, bool onlyVirtuals)
 		{
 			List<EventToGenerate> toGenerateList = new List<EventToGenerate>();
 
@@ -1520,9 +1543,8 @@ namespace Castle.DynamicProxy.Generators
 
 				EventAttributes atts = ObtainEventAttributes(eventInfo);
 
-				EventEmitter eventEmitter = emitter.CreateEvent(eventInfo.Name, atts, eventInfo.EventHandlerType);
-
-				EventToGenerate eventToGenerate = new EventToGenerate(eventEmitter, addMethod, removeMethod, atts);
+				EventToGenerate eventToGenerate = new EventToGenerate(eventInfo.Name,
+				                                                      eventInfo.EventHandlerType, addMethod, removeMethod, atts);
 
 				toGenerateList.Add(eventToGenerate);
 			}
@@ -1581,13 +1603,10 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				PropertyAttributes atts = ObtainPropertyAttributes(propInfo);
-
-				PropertyEmitter propEmitter = emitter.CreateProperty(propInfo.Name, atts, propInfo.PropertyType);
-
-			    ReplicateNonInheritableAttributes(propInfo, propEmitter);
-
+				IEnumerable<Attribute> nonInheritableAttributes = GetNonInheritableAttributes(propInfo);
 				PropertyToGenerate propToGenerate =
-					new PropertyToGenerate(generateReadable, generateWritable, propEmitter, getMethod, setMethod);
+					new PropertyToGenerate(propInfo.Name, propInfo.PropertyType, generateReadable, generateWritable, getMethod,
+					                       setMethod, atts, nonInheritableAttributes);
 
 				toGenerateList.Add(propToGenerate);
 			}

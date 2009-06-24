@@ -1,6 +1,10 @@
 Unreleased Changes
 ==================
-- Fixed DYNPROX-92: "Proxy fails when creating a Proxy for certain Generic signatures"
+- Fixed DYNPROXY-90: "DP2: Inherited interfaces w/ target does not to work"
+- Fixed DYNPROXY-88: "proxy generation fail when multiple interfaces have common base interface"
+  They both were actually special cases of one issue with invalid collection of interface members.
+
+- Fixed DYNPROXY-92: "Proxy fails when creating a Proxy for certain Generic signatures"
   The problem was that GenericUtil.cs wrongfully copied generic arguments whose constraints referenced the proxied method without adjusting those
   consttraints.
 

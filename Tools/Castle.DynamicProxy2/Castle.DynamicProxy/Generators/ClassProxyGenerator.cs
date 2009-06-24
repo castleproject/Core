@@ -130,10 +130,10 @@ namespace Castle.DynamicProxy.Generators
 				// Collect methods
 
 				PropertyToGenerate[] propsToGenerate;
-				EventToGenerate[] eventToGenerates;
-				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventToGenerates);
+				EventToGenerate[] eventsToGenerate;
+				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventsToGenerate);
 
-				RegisterMixinMethodsAndProperties(emitter, ref methods, ref propsToGenerate, ref eventToGenerates);
+				RegisterMixinMethodsAndProperties(emitter, ref methods, ref propsToGenerate, ref eventsToGenerate);
 
 				options.Hook.MethodsInspected();
 
@@ -161,10 +161,7 @@ namespace Castle.DynamicProxy.Generators
 
 				if (interfaces != null && interfaces.Length != 0)
 				{
-					foreach (Type inter in interfaces)
-					{
-						ImplementBlankInterface(targetType, inter, emitter, interceptorsField, typeInitializer);
-					}
+					ImplementBlankInterfaces(targetType, interfaces, emitter, interceptorsField, typeInitializer, false, methods,propsToGenerate,eventsToGenerate);
 				}
 
 				// Create callback methods
@@ -220,6 +217,7 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach (PropertyToGenerate propToGen in propsToGenerate)
 				{
+					propToGen.BuildPropertyEmitter(emitter);
 					if (propToGen.CanRead)
 					{
 						NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
@@ -257,8 +255,9 @@ namespace Castle.DynamicProxy.Generators
 					}
 				}
 
-				foreach (EventToGenerate eventToGenerate in eventToGenerates)
+				foreach (EventToGenerate eventToGenerate in eventsToGenerate)
 				{
+					eventToGenerate.BuildEventEmitter(emitter);
 					NestedClassEmitter add_nestedClass = method2Invocation[eventToGenerate.AddMethod];
 
 					MethodAttributes add_atts = ObtainMethodAttributes(eventToGenerate.AddMethod);

@@ -119,6 +119,7 @@
     <Compile Include="BugsReported\Camera.cs" />
     <Compile Include="BugsReported\ConstraintViolationInDebuggerTestCase.cs" />
     <Compile Include="BugsReported\DynProxy46.cs" />
+    <Compile Include="BugsReported\DynProxy88.cs" />
     <Compile Include="CacheKeyTestCase.cs" />
     <Compile Include="CanDefineAdditionalCustomAttributes.cs" />
     <Compile Include="ClassEmitterTestCase.cs" />

@@ -20,46 +20,89 @@ namespace Castle.DynamicProxy.Generators
 
 	public class EventToGenerate
 	{
-		private MethodInfo addMethod, removeMethod;
+		private readonly string name;
+		private readonly Type type;
 		private EventEmitter emitter;
-		private EventAttributes attributes;
+
+		public bool Equals(EventToGenerate other)
+		{
+			if (ReferenceEquals(null, other))
+			{
+				return false;
+			}
+			if (ReferenceEquals(this, other))
+			{
+				return true;
+			}
+			return Equals(other.AddMethod, AddMethod) && Equals(other.RemoveMethod, RemoveMethod) && Equals(other.Attributes, Attributes);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj))
+			{
+				return false;
+			}
+			if (ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+			if (obj.GetType() != typeof(EventToGenerate))
+			{
+				return false;
+			}
+			return Equals((EventToGenerate) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int result = (AddMethod != null ? AddMethod.GetHashCode() : 0);
+				result = (result * 397) ^ (RemoveMethod != null ? RemoveMethod.GetHashCode() : 0);
+				result = (result * 397) ^ Attributes.GetHashCode();
+				return result;
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EventToGenerate"/> class.
 		/// </summary>
-		/// <param name="emitter">The emitter.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="addMethod">The add method.</param>
 		/// <param name="removeMethod">The remove method.</param>
 		/// <param name="attributes">The attributes.</param>
-		public EventToGenerate(EventEmitter emitter, MethodInfo addMethod, MethodInfo removeMethod, EventAttributes attributes)
+		public EventToGenerate(string name, Type type, MethodInfo addMethod, MethodInfo removeMethod, EventAttributes attributes)
 		{
-			this.addMethod = addMethod;
-			this.removeMethod = removeMethod;
-			this.emitter = emitter;
-			this.attributes = attributes;
+			this.name = name;
+			this.type = type;
+			this.AddMethod = addMethod;
+			this.RemoveMethod = removeMethod;
+			this.Attributes = attributes;
 		}
+
+		public MethodInfo AddMethod { get; set; }
+
+		public MethodInfo RemoveMethod { get; set; }
+
+		public EventAttributes Attributes { get; set; }
 
 		public EventEmitter Emitter
 		{
-			get { return emitter; }
+			get {
+				if(emitter==null)
+					throw new InvalidOperationException("Emitter is not initialized. You have to initialize it first using 'BuildEventEmitter' method");
+				return emitter;
+			}
 		}
 
-		public MethodInfo AddMethod
+		public void BuildEventEmitter(ClassEmitter classEmitter)
 		{
-			get { return addMethod; }
-			set { addMethod = value; }
-		}
+			if(emitter!=null)
+				throw new InvalidOperationException();
 
-		public MethodInfo RemoveMethod
-		{
-			get { return removeMethod; }
-			set { removeMethod = value; }
-		}
-
-		public EventAttributes Attributes
-		{
-			get { return attributes; }
-			set { attributes = value; }
+			emitter = classEmitter.CreateEvent(name, Attributes, type);
 		}
 	}
 }

@@ -139,10 +139,13 @@ namespace Castle.DynamicProxy.Generators
 				PropertyToGenerate[] propsToGenerate;
 				EventToGenerate[] eventToGenerates;
 				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventToGenerates);
-
+				
 				if (interfaces != null && interfaces.Length != 0)
 				{
 					List<Type> tmpInterfaces = new List<Type>(interfaces);
+					List<PropertyToGenerate> actualProperties = new List<PropertyToGenerate>(propsToGenerate);
+					List<EventToGenerate> actualEvents = new List<EventToGenerate>(eventToGenerates);
+					List<MethodInfo> actualMethods = new List<MethodInfo>(methods);
 
 					foreach (Type inter in interfaces)
 					{
@@ -153,29 +156,18 @@ namespace Castle.DynamicProxy.Generators
 							MethodInfo[] methodsTemp =
 								CollectMethodsAndProperties(emitter, inter, out tempPropsToGenerate, out tempEventToGenerates);
 
-							PropertyToGenerate[] newPropsToGenerate =
-								new PropertyToGenerate[tempPropsToGenerate.Length + propsToGenerate.Length];
-							MethodInfo[] newMethods = new MethodInfo[methodsTemp.Length + methods.Length];
-							EventToGenerate[] newEvents = new EventToGenerate[eventToGenerates.Length + tempEventToGenerates.Length];
-
-							Array.Copy(methods, newMethods, methods.Length);
-							Array.Copy(methodsTemp, 0, newMethods, methods.Length, methodsTemp.Length);
-
-							Array.Copy(propsToGenerate, newPropsToGenerate, propsToGenerate.Length);
-							Array.Copy(tempPropsToGenerate, 0, newPropsToGenerate, propsToGenerate.Length, tempPropsToGenerate.Length);
-
-							Array.Copy(eventToGenerates, newEvents, eventToGenerates.Length);
-							Array.Copy(tempEventToGenerates, 0, newEvents, eventToGenerates.Length, tempEventToGenerates.Length);
-
-							methods = newMethods;
-							propsToGenerate = newPropsToGenerate;
-							eventToGenerates = newEvents;
+							AddIfNew(actualMethods, methodsTemp);
+							AddIfNew(actualProperties, tempPropsToGenerate);
+							AddIfNew(actualEvents, tempEventToGenerates);
 
 							tmpInterfaces.Remove(inter);
 						}
 					}
 
 					interfaces = tmpInterfaces.ToArray();
+					propsToGenerate = actualProperties.ToArray();
+					eventToGenerates = actualEvents.ToArray();
+					methods = actualMethods.ToArray();
 				}
 
 				RegisterMixinMethodsAndProperties(emitter, ref methods, ref propsToGenerate, ref eventToGenerates);
@@ -200,16 +192,6 @@ namespace Castle.DynamicProxy.Generators
 				fields.Add(targetField);
 				GenerateConstructors(emitter, baseType, fields.ToArray());
 				// GenerateParameterlessConstructor(emitter, interceptorsField, baseType);
-
-				// Implement interfaces
-
-				if (interfaces != null && interfaces.Length != 0)
-				{
-					foreach (Type inter in interfaces)
-					{
-						ImplementBlankInterface(targetType, inter, emitter, interceptorsField, typeInitializer, AllowChangeTarget);
-					}
-				}
 
 				// Create invocation types
 
@@ -245,6 +227,7 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach (PropertyToGenerate propToGen in propsToGenerate)
 				{
+					propToGen.BuildPropertyEmitter(emitter);
 					if (propToGen.CanRead)
 					{
 						NestedClassEmitter nestedClass = (NestedClassEmitter)method2Invocation[propToGen.GetMethod];
@@ -287,6 +270,7 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach (EventToGenerate eventToGenerate in eventToGenerates)
 				{
+					eventToGenerate.BuildEventEmitter(emitter);
 					NestedClassEmitter add_nestedClass = (NestedClassEmitter)method2Invocation[eventToGenerate.AddMethod];
 
 					MethodAttributes add_atts = ObtainMethodAttributes(eventToGenerate.AddMethod);
@@ -319,6 +303,14 @@ namespace Castle.DynamicProxy.Generators
 					ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);
 				}
 
+                // Implement interfaces
+
+                if (interfaces != null && interfaces.Length != 0)
+                {
+                	ImplementBlankInterfaces(targetType, interfaces, emitter, interceptorsField, typeInitializer,
+                	                         AllowChangeTarget, methods, propsToGenerate, eventToGenerates);
+                }
+
 #if SILVERLIGHT
 #warning What to do?
 #else
@@ -333,22 +325,6 @@ namespace Castle.DynamicProxy.Generators
 
 				generatedType = emitter.BuildType();
 				InitializeStaticFields(generatedType);
-
-				/*foreach (MethodInfo m in TypeFinder.GetMethods(generatedType, BindingFlags.Instance | BindingFlags.Public))
-				{
-					ParameterInfo[] parameters = m.GetParameters();
-
-					// Console.WriteLine(m.Name);
-
-					for (int i = 0; i < parameters.Length; i++)
-					{
-						ParameterInfo paramInfo = parameters[i];
-
-						// Console.WriteLine("{0} {1} {2} {3}", paramInfo.Name, paramInfo.ParameterType, paramInfo.Attributes, paramInfo.Position);
-						// Console.WriteLine("{0} {1} {2} {3}", paramInfo2.Name, paramInfo2.ParameterType, paramInfo2.Attributes, paramInfo2.Position);
-					}
-				}
-				*/
 
 				AddToCache(cacheKey, generatedType);
 			}

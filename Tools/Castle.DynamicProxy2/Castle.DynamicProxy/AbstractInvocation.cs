@@ -56,6 +56,7 @@ namespace Castle.DynamicProxy
 			IInterceptorSelector selector,
 			ref IInterceptor[] methodInterceptors)
 		{
+			// TODO: nobody uses this .ctor - remove it
 			this.proxy = proxy;
 			this.target = target;
 			this.interceptors = interceptors;
