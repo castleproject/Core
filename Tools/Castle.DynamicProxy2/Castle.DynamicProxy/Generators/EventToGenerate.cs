@@ -23,6 +23,9 @@ namespace Castle.DynamicProxy.Generators
 		private readonly string name;
 		private readonly Type type;
 		private EventEmitter emitter;
+		private EventAttributes attributes;
+		private MethodInfo removeMethod;
+		private MethodInfo addMethod;
 
 		public bool Equals(EventToGenerate other)
 		{
@@ -77,16 +80,28 @@ namespace Castle.DynamicProxy.Generators
 		{
 			this.name = name;
 			this.type = type;
-			this.AddMethod = addMethod;
-			this.RemoveMethod = removeMethod;
-			this.Attributes = attributes;
+			this.addMethod = addMethod;
+			this.removeMethod = removeMethod;
+			this.attributes = attributes;
 		}
 
-		public MethodInfo AddMethod { get; set; }
+		public MethodInfo AddMethod
+		{
+			get { return addMethod; }
+			set { addMethod = value; }
+		}
 
-		public MethodInfo RemoveMethod { get; set; }
+		public MethodInfo RemoveMethod
+		{
+			get { return removeMethod; }
+			set { removeMethod = value; }
+		}
 
-		public EventAttributes Attributes { get; set; }
+		public EventAttributes Attributes
+		{
+			get { return attributes; }
+			set { attributes = value; }
+		}
 
 		public EventEmitter Emitter
 		{

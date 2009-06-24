@@ -317,6 +317,14 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void TypeWithGenericMethodHavingArgumentBeingGenericArrayOfT()
+		{
+			var proxy = generator.CreateClassProxy<MethodWithArgumentBeingArrayOfGenericTypeOfT>();
+			Assert.IsNotNull(proxy);
+			proxy.Method(new Action<string>[0]);
+		}
+
+		[Test]
 		[ExpectedException(typeof (ArgumentException))]
 		public void ThrowsWhenProxyingGenericTypeDefNoTarget()
 		{

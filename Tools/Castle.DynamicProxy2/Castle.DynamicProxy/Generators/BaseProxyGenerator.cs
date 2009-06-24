@@ -961,7 +961,20 @@ namespace Castle.DynamicProxy.Generators
 				{
 					paramType = nested.GetGenericArgument(paramType.Name);
 				}
-
+				if (paramType.IsArray)
+				{
+					var elementType = paramType.GetElementType();
+					if (HasGenericParameters(elementType))
+					{
+						elementType = elementType.GetGenericTypeDefinition().MakeGenericType(nested.GetGenericArgumentsFor(elementType));
+						paramType = elementType.MakeArrayType();
+					}
+					else if (elementType.IsGenericParameter)
+					{
+						elementType = nested.GetGenericArgument(paramType.Name);
+						paramType = elementType.MakeArrayType();
+					}
+				}
 				if (paramType.IsByRef)
 				{
 					LocalReference localReference = method.CodeBuilder.DeclareLocal(paramType.GetElementType());

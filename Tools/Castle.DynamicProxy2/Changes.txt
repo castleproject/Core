@@ -1,5 +1,9 @@
 Unreleased Changes
 ==================
+- Fixed DYNPROXY-97: This issue are actually three separate bugs:
+  First relates to the improper handling of types with generic methods having parameters being an array of generic type of T
+  Second was related to improper handing of hierarchy of generic constraints, but it seems Fabian's fix to GenericUtil fixed that earlier.
+  Third issue was related to improper handing of certain kinds of constructor arguments passed to class proxy generator.
 - Fixed DYNPROXY-90: "DP2: Inherited interfaces w/ target does not to work"
 - Fixed DYNPROXY-88: "proxy generation fail when multiple interfaces have common base interface"
   They both were actually special cases of one issue with invalid collection of interface members.
