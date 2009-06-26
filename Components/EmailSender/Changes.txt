@@ -1,3 +1,9 @@
+1.1
+---
+- Applied patch by Steve Bering, with changes by John Simons. COMP-ISSUE-88 - Patch for SmtpSender to enable multiple CC and BCC recipients
+- Applied patch by Bryan Brown, with changes by John Simons. COMP-ISSUE-34 - Error sending mail when using Mono 2.0
+
+
 1.0
 ---
 
