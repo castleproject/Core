@@ -33,7 +33,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <OldToolsVersion>2.0</OldToolsVersion>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -105,6 +105,10 @@
     <Reference Include="NHibernate, Version=2.1.0.2002, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.Search, Version=2.0.0.1001, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\NHibernate.Search.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -361,6 +365,7 @@
     <Compile Include="Framework\ActiveRecordValidationException.cs" />
     <Compile Include="Framework\Config\DefaultFlushType.cs" />
     <Compile Include="Framework\AbstractNHContributor.cs" />
+    <Compile Include="Framework\NHSearchContributor.cs" />
     <Compile Include="Framework\StatelessSessionWrapper.cs" />
     <Compile Include="Framework\INHContributor.cs" />
     <Compile Include="Framework\Internal\EventListener\EventListenerConfig.cs" />

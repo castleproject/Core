@@ -159,6 +159,11 @@ namespace Castle.ActiveRecord.Framework.Config
 			set { defaultFlushType = value; }
 		}
 
+		/// <summary>
+		/// When <c>true</c>, NHibernate.Search event listeners are added. 
+		/// </summary>
+		public virtual bool Searchable { get; set; }
+
 		#endregion
 
 		/// <summary>

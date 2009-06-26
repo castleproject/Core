@@ -82,5 +82,10 @@ namespace Castle.ActiveRecord.Framework
 		/// Determines the default flushing behaviour of scopes.
 		/// </summary>
 		DefaultFlushType DefaultFlushType { get; }
+
+		/// <summary>
+		/// When <c>true</c>, NHibernate.Search event listeners are added. 
+		/// </summary>
+		bool Searchable { get; }
 	}
 }

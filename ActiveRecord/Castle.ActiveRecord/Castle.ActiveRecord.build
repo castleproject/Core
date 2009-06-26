@@ -14,8 +14,7 @@
 		<property name="assembly.description" value="An implementation of the ActiveRecord pattern for .NET" />		
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="NHibernate.dll" />
-			<include name="Nullables.dll"  />
-			<include name="Nullables.NHibernate.dll"/>
+			<include name="NHibernate.Search.dll" />
 			<include name="log4net.dll" />
 			<include name="Iesi.Collections.dll" />
 			<include name="HashCodeProvider.dll" />

@@ -189,6 +189,11 @@ namespace Castle.ActiveRecord
 
 				RegisterEventListeners(types);
 
+				if (configSource.Searchable)
+				{
+					contributors.Add(new NHSearchContributor());
+				}
+
 				// Sets up base configuration
 				SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
 

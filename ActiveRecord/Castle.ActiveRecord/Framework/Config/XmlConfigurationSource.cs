@@ -78,6 +78,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			XmlAttribute pluralize = section.Attributes["pluralizeTableNames"];
 			XmlAttribute verifyModelsAgainstDBSchemaAtt = section.Attributes["verifyModelsAgainstDBSchema"];
 			XmlAttribute defaultFlushType = section.Attributes["flush"];
+			XmlAttribute searchable = section.Attributes["searchable"];
 
 			SetUpThreadInfoType(isWebAtt != null && "true" == isWebAtt.Value,
 			                    threadInfoAtt != null ? threadInfoAtt.Value : String.Empty);
@@ -110,6 +111,8 @@ namespace Castle.ActiveRecord.Framework.Config
 			{
 				SetDefaultFlushType(defaultFlushType.Value);
 			}
+
+			Searchable = ConvertBool(searchable);
 
 			PopulateConfigNodes(section);
 		}

@@ -83,6 +83,17 @@ namespace Castle.ActiveRecord.Tests.Config
 		}
 
 		[Test]
+		public void TestSearchable()
+		{
+			String xmlConfig =
+				@"<activerecord searchable=""true"">"
+						+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
+
+			AssertConfig(xmlConfig, null, null, false, false, false, DefaultFlushType.Classic, true);
+		}
+
+
+		[Test]
 		public void TestPluralizeTableNames()
 		{
 			String xmlConfig1 =
@@ -187,6 +198,13 @@ namespace Castle.ActiveRecord.Tests.Config
 		private static void AssertConfig(string xmlConfig, Type webinfotype, Type sessionFactoryHolderType, bool isDebug,
 										 bool pluralize, bool verifyModelsAgainstDBSchema, DefaultFlushType defaultFlushType)
 		{
+			AssertConfig(xmlConfig, webinfotype, sessionFactoryHolderType, isDebug, pluralize, verifyModelsAgainstDBSchema, defaultFlushType, false);
+		}
+
+
+		private static void AssertConfig(string xmlConfig, Type webinfotype, Type sessionFactoryHolderType, bool isDebug,
+										 bool pluralize, bool verifyModelsAgainstDBSchema, DefaultFlushType defaultFlushType, bool searchable)
+		{
 			StringReader sr = new StringReader(xmlConfig);
 
 			XmlConfigurationSource c = new XmlConfigurationSource(sr);
@@ -207,6 +225,7 @@ namespace Castle.ActiveRecord.Tests.Config
 			Assert.IsTrue(c.PluralizeTableNames == pluralize);
 			Assert.IsTrue(c.VerifyModelsAgainstDBSchema == verifyModelsAgainstDBSchema);
 			Assert.IsTrue(c.DefaultFlushType == defaultFlushType);
+			Assert.IsTrue(c.Searchable == searchable);
 		}
 
 		private static string GetDefaultHibernateConfigAndCloseActiveRecordSection()
