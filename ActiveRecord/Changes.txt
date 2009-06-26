@@ -1,5 +1,8 @@
 2.0 Alpha2
 ===
+- (AR-ISSUE-258) Added Castle.ActiveRecord.Testing.InMemoryTest base class for in memory SQLite testing.
+- (AR-ISSUE-257) Added NHibernate Search integration.
+- (AR-ISSUE-256) Integrated ActiveRecordLinq from contrib without changes
 - (AR-ISSUE-236) Added schema-action, so that behaviour for create/drop/update schema can be defined per class.
 
 - (AR-ISSUE-254) Added StatelessSessionScope for higher performance. Functionality is restricted, see test cases for
@@ -9,6 +12,7 @@
 
 - Bugs fixed:
   AR-ISSUE-249
+  AR-ISSUE-261
   
 2.0 Alpha1
 ===
