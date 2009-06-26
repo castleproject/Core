@@ -13,8 +13,6 @@
 		<property name="assembly.description" value="Castle Email Service" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
-			<include name="Castle.Core.dll" />
-			<include name="System.Web.dll" />
 		</assemblyfileset>
 	</target>
 
