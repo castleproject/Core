@@ -14,12 +14,13 @@
 
 using System.Text.RegularExpressions;
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Facilities.NHibernateIntegration.Builders
 {
 	using System.Collections.Generic;
-	using Castle.Core.Configuration;
-	using NHibernate.Cfg;
+	using Core.Configuration;
 	using log4net;
+	using NHibernate.Cfg;
+	using Persisters;
 
 	/// <summary>
 	/// Serializes the Configuration for subsequent initializations.
@@ -59,19 +60,19 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		{
 			log.Debug("Building the Configuration");
 
-			string filename = GetFilenameFrom(config);
-			IList<string> dependentFilenames = GetDependentFilenamesFrom(config);
+			string filename = this.GetFilenameFrom(config);
+			IList<string> dependentFilenames = this.GetDependentFilenamesFrom(config);
 
 			Configuration cfg;
-			if (configurationPersister.IsNewConfigurationRequired(filename, dependentFilenames))
+			if (this.configurationPersister.IsNewConfigurationRequired(filename, dependentFilenames))
 			{
 				log.Debug("Configuration is either old or some of the dependencies have changed");
 				cfg = base.GetConfiguration(config);
-				configurationPersister.WriteConfiguration(filename, cfg);
+				this.configurationPersister.WriteConfiguration(filename, cfg);
 			}
 			else
 			{
-				cfg = configurationPersister.ReadConfiguration(filename);
+				cfg = this.configurationPersister.ReadConfiguration(filename);
 			}
 			return cfg;
 		}
@@ -79,7 +80,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		private string GetFilenameFrom(IConfiguration config)
 		{
 			var filename = config.Attributes["fileName"] ?? config.Attributes["id"] + "." + DEFAULT_EXTENSION;
-			return StripInvalidCharacters(filename);
+			return this.StripInvalidCharacters(filename);
 		}
 
 		private string StripInvalidCharacters(string input)

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Facilities.NHibernateIntegration.SessionStores
 {
 	using System.Collections;
 	using System.Runtime.Remoting.Messaging;
@@ -29,7 +29,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		/// <returns></returns>
 		protected override IDictionary GetDictionary()
 		{
-			return CallContext.GetData(SlotKey) as IDictionary;
+			return CallContext.GetData(this.SlotKey) as IDictionary;
 		}
 
 		/// <summary>
@@ -38,7 +38,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		/// <param name="dictionary">The dictionary.</param>
 		protected override void StoreDictionary(IDictionary dictionary)
 		{
-			CallContext.SetData(SlotKey, dictionary);
+			CallContext.SetData(this.SlotKey, dictionary);
 		}
 	}
 }

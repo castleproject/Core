@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Facilities.NHibernateIntegration.Builders
 {
 	using System;
 	using System.Configuration;
@@ -38,10 +38,10 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		{
 			Configuration cfg = new Configuration();
 
-			ApplyConfigurationSettings(cfg, config.Children["settings"]);
-			RegisterAssemblies(cfg, config.Children["assemblies"]);
-			RegisterResources(cfg, config.Children["resources"]);
-			RegisterListeners(cfg, config.Children["listeners"]);
+			this.ApplyConfigurationSettings(cfg, config.Children["settings"]);
+			this.RegisterAssemblies(cfg, config.Children["assemblies"]);
+			this.RegisterResources(cfg, config.Children["resources"]);
+			this.RegisterListeners(cfg, config.Children["listeners"]);
 			return cfg;
 		}
 
@@ -78,7 +78,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 				if (assembly != null)
 				{
-					cfg.AddResource(name, ObtainAssembly(assembly));
+					cfg.AddResource(name, this.ObtainAssembly(assembly));
 				}
 				else
 				{
@@ -128,7 +128,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 				cfg.AddAssembly(assembly);
 
-				GenerateMappingFromAttributesIfNeeded(cfg, assembly);
+				this.GenerateMappingFromAttributesIfNeeded(cfg, assembly);
 			}
 		}
 

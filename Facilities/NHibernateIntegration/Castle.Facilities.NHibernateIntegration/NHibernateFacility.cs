@@ -16,6 +16,7 @@ namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
 	using System.Configuration;
+	using Builders;
 	using Castle.Core.Configuration;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.SubSystems.Conversion;
@@ -25,6 +26,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	using Internal;
 	using MicroKernel;
 	using NHibernate;
+	using SessionStores;
 
 	/// <summary>
 	/// Provides a basic level of integration with the NHibernate project

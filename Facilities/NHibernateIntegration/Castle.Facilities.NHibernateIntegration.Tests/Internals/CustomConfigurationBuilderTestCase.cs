@@ -14,10 +14,10 @@
 
 namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 {
+	using Builders;
 	using Castle.Core.Configuration;
 	using Castle.Core.Resource;
 	using Castle.Windsor.Configuration.Interpreters;
-	using Internal;
 	using NHibernate;
 	using NHibernate.Cfg;
 	using NUnit.Framework;

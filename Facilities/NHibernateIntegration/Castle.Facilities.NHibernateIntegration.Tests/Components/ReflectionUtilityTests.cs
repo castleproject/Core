@@ -1,9 +1,9 @@
 ﻿namespace Castle.Facilities.NHibernateIntegration.Tests.Components
 {
 	using System;
-	using NHibernateIntegration.Components.Util;
 	using NUnit.Framework;
 	using System.Collections.Generic;
+	using Util;
 
 	[TestFixture]
 	public class ReflectionUtilityTests

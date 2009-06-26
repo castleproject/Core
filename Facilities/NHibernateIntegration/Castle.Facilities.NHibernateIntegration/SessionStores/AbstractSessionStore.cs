@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Facilities.NHibernateIntegration.SessionStores
 {
 	using System;
 	using System.Collections;
-
 	using NHibernate;
 
 	/// <summary>
@@ -39,7 +38,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		/// <returns></returns>
 		public SessionDelegate FindCompatibleSession(String alias)
 		{
-			Stack stack = GetStackFor(alias);
+			Stack stack = this.GetStackFor(alias);
 
 			if (stack.Count == 0) return null;
 
@@ -53,7 +52,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		/// <param name="session"></param>
 		public void Store(String alias, SessionDelegate session)
 		{
-			Stack stack = GetStackFor(alias);
+			Stack stack = this.GetStackFor(alias);
 
 			stack.Push(session);
 
@@ -72,13 +71,13 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			if (stack == null)
 			{
 				throw new InvalidProgramException("AbstractSessionStore.Remove called " + 
-					"with no cookie - no pun intended");
+				                                  "with no cookie - no pun intended");
 			}
 
 			if (stack.Count == 0)
 			{
 				throw new InvalidProgramException("AbstractSessionStore.Remove called " + 
-					"for an empty stack");
+				                                  "for an empty stack");
 			}
 
 			ISession current = stack.Peek() as ISession;
@@ -86,7 +85,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			if (session != current)
 			{
 				throw new InvalidProgramException("AbstractSessionStore.Remove tried to " + 
-					"remove a session which is not on the top or not in the stack at all");
+				                                  "remove a session which is not on the top or not in the stack at all");
 			}
 
 			stack.Pop();
@@ -101,7 +100,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		/// <returns></returns>
 		public bool IsCurrentActivityEmptyFor(String alias)
 		{
-			Stack stack = GetStackFor(alias);
+			Stack stack = this.GetStackFor(alias);
 
 			return stack.Count == 0;
 		}

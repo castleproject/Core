@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Castle.Core.Configuration;
-using Castle.Facilities.NHibernateIntegration.Internal;
 using NUnit.Framework;
 
 namespace Castle.Facilities.NHibernateIntegration.Tests.Issues.Facilities106
 {
+	using Builders;
+
 	[TestFixture]
 	public class Fixture : IssueTestCase
 	{

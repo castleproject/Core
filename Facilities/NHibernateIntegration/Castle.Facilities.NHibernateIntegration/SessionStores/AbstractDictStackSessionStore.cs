@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Facilities.NHibernateIntegration.SessionStores
 {
 	using System;
 	using System.Collections;
@@ -32,9 +32,9 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(slotKey))
-					slotKey = string.Format("nh.facility.stacks.{0}", Guid.NewGuid());
-				return slotKey;
+				if (string.IsNullOrEmpty(this.slotKey))
+					this.slotKey = string.Format("nh.facility.stacks.{0}", Guid.NewGuid());
+				return this.slotKey;
 			}
 		}
 		private string slotKey;
@@ -49,13 +49,13 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		{
 			if (alias == null) throw new ArgumentNullException("alias");
 
-			IDictionary alias2Stack = GetDictionary();
+			IDictionary alias2Stack = this.GetDictionary();
 
 			if (alias2Stack == null)
 			{
 				alias2Stack = new HybridDictionary(true);
 
-				StoreDictionary(alias2Stack);
+				this.StoreDictionary(alias2Stack);
 			}
 
 			Stack stack = alias2Stack[alias] as Stack;

@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Components.Util
+namespace Castle.Facilities.NHibernateIntegration.Util
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
-	using NHibernateIntegration.Util;
+
 	/// <summary>
 	/// Utility classes for NHibernate. Contains methods to get properties of an entity etc.
 	/// </summary>
@@ -34,8 +33,8 @@ namespace Castle.Facilities.NHibernateIntegration.Components.Util
 			IDictionary<string,object> ht =new Dictionary<string, object>();
 			foreach (PropertyInfo property in obj.GetType().
 				GetProperties(BindingFlags.Instance |
-				BindingFlags.GetProperty | BindingFlags.Public |
-				BindingFlags.NonPublic))
+				              BindingFlags.GetProperty | BindingFlags.Public |
+				              BindingFlags.NonPublic))
 			{
 				if (property.CanRead && property.GetIndexParameters().Length == 0)
 				{
@@ -55,7 +54,7 @@ namespace Castle.Facilities.NHibernateIntegration.Components.Util
 		public static bool IsSimpleType(Type type)
 		{
 			if (type.IsEnum || type.IsPrimitive || type == typeof(string)
-				|| type == typeof(DateTime))
+			    || type == typeof(DateTime))
 				return true;
 			else
 				return false;

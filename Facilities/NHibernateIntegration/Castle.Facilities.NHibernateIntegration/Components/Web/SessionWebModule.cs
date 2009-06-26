@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Components
+namespace Castle.Facilities.NHibernateIntegration.Components.Web
 {
 	using System;
 	using System.Web;
-	
-	using Castle.Windsor;
-	using Castle.MicroKernel.Facilities;
-
+	using MicroKernel.Facilities;
 	using NHibernate;
+	using Windsor;
 
 	/// <summary>
 	/// HttpModule to set up a session for the request lifetime.
@@ -65,8 +63,8 @@ namespace Castle.Facilities.NHibernateIntegration.Components
 		/// <param name="app">The app.</param>
 		public void Init(HttpApplication app)
 		{
-			app.BeginRequest += new EventHandler(OnBeginRequest);
-			app.EndRequest += new EventHandler(OnEndRequest);
+			app.BeginRequest += new EventHandler(this.OnBeginRequest);
+			app.EndRequest += new EventHandler(this.OnEndRequest);
 		}
 
 		/// <summary>
@@ -103,7 +101,7 @@ namespace Castle.Facilities.NHibernateIntegration.Components
 			if (containerAccessor == null)
 			{
 				throw new FacilityException("You must extend the HttpApplication in your web project " + 
-					"and implement the IContainerAccessor to properly expose your container instance");
+				                            "and implement the IContainerAccessor to properly expose your container instance");
 			}
 	
 			IWindsorContainer container = containerAccessor.Container;
@@ -111,7 +109,7 @@ namespace Castle.Facilities.NHibernateIntegration.Components
 			if (container == null)
 			{
 				throw new FacilityException("The container seems to be unavailable (null) in " + 
-					"your HttpApplication subclass");
+				                            "your HttpApplication subclass");
 			}
 			return container;
 		}

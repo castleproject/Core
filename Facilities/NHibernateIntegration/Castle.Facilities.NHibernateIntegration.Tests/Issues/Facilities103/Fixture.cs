@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using Castle.Facilities.NHibernateIntegration.Internal;
 using Castle.MicroKernel;
 using Castle.Services.Transaction;
 using NHibernate;
@@ -12,6 +11,8 @@ using Rhino.Mocks;
 using ITransaction = Castle.Services.Transaction.ITransaction;
 namespace Castle.Facilities.NHibernateIntegration.Tests.Issues.Facilities103
 {
+	using SessionStores;
+
 	[TestFixture]
 	public class DefaultSessionManagerTestCase : IssueTestCase
 	{

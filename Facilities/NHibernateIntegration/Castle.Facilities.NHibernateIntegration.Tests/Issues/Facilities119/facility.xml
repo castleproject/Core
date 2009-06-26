@@ -5,7 +5,7 @@
 			id="nhibernatefacility"
 			type="Castle.Facilities.NHibernateIntegration.NHibernateFacility, Castle.Facilities.NHibernateIntegration"
 			 alias="sessionFactory3"
-			configurationBuilder="Castle.Facilities.NHibernateIntegration.Internal.DefaultConfigurationBuilder, Castle.Facilities.NHibernateIntegration">
+			configurationBuilder="Castle.Facilities.NHibernateIntegration.Builders.DefaultConfigurationBuilder, Castle.Facilities.NHibernateIntegration">
 			<factory id="sessionFactory1">
 				<settings>
 					<item key="a">NHibernate.Connection.DriverConnectionProvider</item>

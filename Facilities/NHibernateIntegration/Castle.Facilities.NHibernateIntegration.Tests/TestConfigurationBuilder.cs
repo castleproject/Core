@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Text;
-using Castle.Facilities.NHibernateIntegration.Internal;
 
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
+	using Builders;
+
 	public class TestConfigurationBuilder : IConfigurationBuilder
 	{
 		public TestConfigurationBuilder()

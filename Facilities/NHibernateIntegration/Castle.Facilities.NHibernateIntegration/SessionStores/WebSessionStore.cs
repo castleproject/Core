@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Facilities.NHibernateIntegration.SessionStores
 {
-	using System.Web;
 	using System.Collections;
-
-	using Castle.MicroKernel.Facilities;
+	using System.Web;
+	using MicroKernel.Facilities;
 
 	/// <summary>
 	/// Provides an implementation of <see cref="ISessionStore"/>
@@ -33,7 +32,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		{
 			HttpContext curContext = ObtainSessionContext();
 
-			return curContext.Items[SlotKey] as IDictionary;
+			return curContext.Items[this.SlotKey] as IDictionary;
 		}
 
 		/// <summary>
@@ -44,7 +43,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		{
 			HttpContext curContext = ObtainSessionContext();
 
-			curContext.Items[SlotKey] = dictionary;
+			curContext.Items[this.SlotKey] = dictionary;
 		}
 
 		private static HttpContext ObtainSessionContext()

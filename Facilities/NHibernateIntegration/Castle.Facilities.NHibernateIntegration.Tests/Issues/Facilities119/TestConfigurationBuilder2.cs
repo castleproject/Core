@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Castle.Facilities.NHibernateIntegration.Internal;
 using Castle.Core.Configuration;
 namespace Castle.Facilities.NHibernateIntegration.Tests.Issues.Facilities119
 {

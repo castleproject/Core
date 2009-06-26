@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using Castle.Core.Configuration;
 using Castle.Core.Resource;
-using Castle.Facilities.NHibernateIntegration.Internal;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Configuration.Interpreters;
 using Rhino.Mocks;
@@ -9,6 +8,7 @@ using Rhino.Mocks.Constraints;
 
 namespace Castle.Facilities.NHibernateIntegration.Tests.Issues.Facilities117
 {
+	using Builders;
 	using Is=Rhino.Mocks.Constraints.Is;
 	using List=Rhino.Mocks.Constraints.List;
 

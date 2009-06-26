@@ -5,7 +5,6 @@ using System.Xml;
 using Castle.Core.Configuration.Xml;
 using System.Runtime.Serialization.Formatters.Binary;
 using Castle.Core.Resource;
-using Castle.Facilities.NHibernateIntegration.Internal;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor.Configuration.Interpreters;
 using NHibernate.Cfg;
@@ -14,6 +13,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Issues.Facilities116
 {
 	using System;
 	using System.Threading;
+	using Builders;
 
 
 	[TestFixture]

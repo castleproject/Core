@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration
+namespace Castle.Facilities.NHibernateIntegration.Components.Dao
 {
 	using System;
 	using System.Collections;
-	using Components.Util;
 	using NHibernate;
 	using NHibernate.Collection;
 	using NHibernate.Criterion;
 	using NHibernate.Proxy;
-	using Castle.Facilities.NHibernateIntegration.Util;
+	using Util;
 
 	/// <summary>
 	/// Summary description for GenericDao.
@@ -59,7 +58,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <value>The session manager.</value>
 		protected ISessionManager SessionManager
 		{
-			get { return sessionManager; }
+			get { return this.sessionManager; }
 		}
 
 		/// <summary>
@@ -68,8 +67,8 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <value>The session factory alias.</value>
 		public string SessionFactoryAlias
 		{
-			get { return sessionFactoryAlias; }
-			set { sessionFactoryAlias = value; }
+			get { return this.sessionFactoryAlias; }
+			set { this.sessionFactoryAlias = value; }
 		}
 
 		#region IGenericDAO Members
@@ -81,7 +80,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns>The <see cref="Array"/> of results</returns>
 		public virtual Array FindAll(Type type)
 		{
-			return FindAll(type, int.MinValue, int.MinValue);
+			return this.FindAll(type, int.MinValue, int.MinValue);
 		}
 
 		/// <summary>
@@ -93,7 +92,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns>The <see cref="Array"/> of results</returns>
 		public virtual Array FindAll(Type type, int firstRow, int maxRows)
 		{
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				try
 				{
@@ -123,7 +122,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns>The object instance.</returns>
 		public virtual object FindById(Type type, object id)
 		{
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				try
 				{
@@ -147,7 +146,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns>The instance</returns>
 		public virtual object Create(object instance)
 		{
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				try
 				{
@@ -166,7 +165,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <param name="instance">The instance to be deleted from the database</param>
 		public virtual void Delete(object instance)
 		{
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				try
 				{
@@ -186,7 +185,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <param name="instance">The instance to be updated on the database</param>
 		public virtual void Update(object instance)
 		{
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				try
 				{
@@ -205,7 +204,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <param name="type">type on which the rows on the database should be deleted</param>
 		public virtual void DeleteAll(Type type)
 		{
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				try
 				{
@@ -229,7 +228,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <param name="instance">The instance to be saved</param>
 		public virtual void Save(object instance)
 		{
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				try
 				{
@@ -255,7 +254,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns>The <see cref="Array"/> of results.</returns>
 		public virtual Array FindAll(Type type, ICriterion[] criterias)
 		{
-			return FindAll(type, criterias, null, int.MinValue, int.MinValue);
+			return this.FindAll(type, criterias, null, int.MinValue, int.MinValue);
 		}
 
 		/// <summary>
@@ -269,7 +268,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns>The <see cref="Array"/> of results.</returns>
 		public virtual Array FindAll(Type type, ICriterion[] criterias, int firstRow, int maxRows)
 		{
-			return FindAll(type, criterias, null, firstRow, maxRows);
+			return this.FindAll(type, criterias, null, firstRow, maxRows);
 		}
 
 		/// <summary>
@@ -282,7 +281,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns>The <see cref="Array"/> of results.</returns>
 		public virtual Array FindAll(Type type, ICriterion[] criterias, Order[] sortItems)
 		{
-			return FindAll(type, criterias, sortItems, int.MinValue, int.MinValue);
+			return this.FindAll(type, criterias, sortItems, int.MinValue, int.MinValue);
 		}
 
 		/// <summary>
@@ -297,7 +296,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns>The <see cref="Array"/> of results.</returns>
 		public virtual Array FindAll(Type type, ICriterion[] criterias, Order[] sortItems, int firstRow, int maxRows)
 		{
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				try
 				{
@@ -342,7 +341,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns></returns>
 		public virtual Array FindAllWithCustomQuery(string queryString)
 		{
-			return FindAllWithCustomQuery(queryString, int.MinValue, int.MinValue);
+			return this.FindAllWithCustomQuery(queryString, int.MinValue, int.MinValue);
 		}
 
 		/// <summary>
@@ -356,7 +355,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			if (string.IsNullOrEmpty(queryString)) throw new ArgumentNullException("queryString");
 
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				try
 				{
@@ -387,7 +386,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// <returns></returns>
 		public virtual Array FindAllWithNamedQuery(string namedQuery)
 		{
-			return FindAllWithNamedQuery(namedQuery, int.MinValue, int.MinValue);
+			return this.FindAllWithNamedQuery(namedQuery, int.MinValue, int.MinValue);
 		}
 
 		/// <summary>
@@ -401,7 +400,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			if (string.IsNullOrEmpty(namedQuery)) throw new ArgumentNullException("namedQuery");
 
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				try
 				{
@@ -433,7 +432,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				foreach(object val in ReflectionUtility.GetPropertiesDictionary(instance).Values)
 				{
@@ -462,10 +461,10 @@ namespace Castle.Facilities.NHibernateIntegration
 			var properties = ReflectionUtility.GetPropertiesDictionary(instance);
 			if (! properties.ContainsKey(propertyName))
 				throw new ArgumentOutOfRangeException("propertyName", "Property "
-				                                                                + propertyName + " doest not exist for type "
-				                                                                + instance.GetType().ToString() + ".");
+				                                                      + propertyName + " doest not exist for type "
+				                                                      + instance.GetType().ToString() + ".");
 
-			using(ISession session = GetSession())
+			using(ISession session = this.GetSession())
 			{
 				object val = properties[propertyName];
 
@@ -486,13 +485,13 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		private ISession GetSession()
 		{
-			if (string.IsNullOrEmpty(sessionFactoryAlias))
+			if (string.IsNullOrEmpty(this.sessionFactoryAlias))
 			{
-				return sessionManager.OpenSession();
+				return this.sessionManager.OpenSession();
 			}
 			else
 			{
-				return sessionManager.OpenSession(sessionFactoryAlias);
+				return this.sessionManager.OpenSession(this.sessionFactoryAlias);
 			}
 		}
 

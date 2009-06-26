@@ -16,6 +16,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 {
 	using Castle.Services.Transaction;
 	using NHibernate;
+	using NHibernateIntegration.Components.Dao;
 
 	[Transactional]
 	public class OrderDao : NHibernateGenericDao

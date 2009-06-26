@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
 	using System.Collections;
 	using System.Data;
+	using Internal;
 	using MicroKernel;
 	using MicroKernel.Facilities;
 	using NHibernate;
 	using Services.Transaction;
-	using ITransaction = Castle.Services.Transaction.ITransaction;
+	using ITransaction=Castle.Services.Transaction.ITransaction;
 
 	/// <summary>
 	/// 
@@ -64,8 +65,8 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		/// <value></value>
 		public FlushMode DefaultFlushMode
 		{
-			get { return defaultFlushMode; }
-			set { defaultFlushMode = value; }
+			get { return this.defaultFlushMode; }
+			set { this.defaultFlushMode = value; }
 		}
 
 		/// <summary>
@@ -74,7 +75,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		/// <returns></returns>
 		public ISession OpenSession()
 		{
-			return OpenSession(Constants.DefaultAlias);
+			return this.OpenSession(Constants.DefaultAlias);
 		}
 
 		/// <summary>
@@ -87,26 +88,26 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		{
 			if (alias == null) throw new ArgumentNullException("alias");
 
-			ITransaction transaction = ObtainCurrentTransaction();
+			ITransaction transaction = this.ObtainCurrentTransaction();
 
 			bool weAreSessionOwner = false;
 
-			SessionDelegate wrapped = sessionStore.FindCompatibleSession(alias);
+			SessionDelegate wrapped = this.sessionStore.FindCompatibleSession(alias);
 
 			ISession session;
 
 			if (wrapped == null)
 			{
-				session = CreateSession(alias); weAreSessionOwner = true;
+				session = this.CreateSession(alias); weAreSessionOwner = true;
 
-				wrapped = WrapSession(transaction != null, session);
-				EnlistIfNecessary(weAreSessionOwner, transaction, wrapped);
-				sessionStore.Store(alias, wrapped);
+				wrapped = this.WrapSession(transaction != null, session);
+				this.EnlistIfNecessary(weAreSessionOwner, transaction, wrapped);
+				this.sessionStore.Store(alias, wrapped);
 			}
 			else
 			{
-				EnlistIfNecessary(weAreSessionOwner, transaction, wrapped);
-				wrapped = WrapSession(true, wrapped.InnerSession);
+				this.EnlistIfNecessary(weAreSessionOwner, transaction, wrapped);
+				wrapped = this.WrapSession(true, wrapped.InnerSession);
 			}
 			
 			return wrapped;
@@ -191,39 +192,39 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 		private ITransaction ObtainCurrentTransaction()
 		{
-			ITransactionManager transactionManager = kernel[ typeof(ITransactionManager) ] as ITransactionManager;
+			ITransactionManager transactionManager = this.kernel[ typeof(ITransactionManager) ] as ITransactionManager;
 
 			return transactionManager.CurrentTransaction;
 		}
 
 		private SessionDelegate WrapSession(bool hasTransaction, ISession session)
 		{
-			return new SessionDelegate( !hasTransaction, session, sessionStore );
+			return new SessionDelegate( !hasTransaction, session, this.sessionStore );
 		}
 
 		private ISession CreateSession(String alias)
 		{
-			ISessionFactory sessionFactory = factoryResolver.GetSessionFactory(alias);
+			ISessionFactory sessionFactory = this.factoryResolver.GetSessionFactory(alias);
 
 			if (sessionFactory == null)
 			{
 				throw new FacilityException("No ISessionFactory implementation " + 
-					"associated with the given alias: " + alias);
+				                            "associated with the given alias: " + alias);
 			}
 			
 			ISession session;
 
 			string aliasedInterceptorId = string.Format(InterceptorFormatString, alias);
 			
-			if (kernel.HasComponent(aliasedInterceptorId))
+			if (this.kernel.HasComponent(aliasedInterceptorId))
 			{
-				IInterceptor interceptor = (IInterceptor) kernel[aliasedInterceptorId];
+				IInterceptor interceptor = (IInterceptor) this.kernel[aliasedInterceptorId];
 				
 				session = sessionFactory.OpenSession(interceptor);
 			}
-			else if (kernel.HasComponent(InterceptorName))
+			else if (this.kernel.HasComponent(InterceptorName))
 			{
-				IInterceptor interceptor = (IInterceptor)kernel[InterceptorName];
+				IInterceptor interceptor = (IInterceptor)this.kernel[InterceptorName];
 				
 				session =  sessionFactory.OpenSession(interceptor);
 			}
@@ -232,7 +233,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 				session =  sessionFactory.OpenSession();
 			}
 
-			session.FlushMode = defaultFlushMode;
+			session.FlushMode = this.defaultFlushMode;
 
 			return session;
 		}

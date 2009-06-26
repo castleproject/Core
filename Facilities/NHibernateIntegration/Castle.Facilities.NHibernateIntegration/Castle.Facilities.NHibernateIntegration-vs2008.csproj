@@ -136,63 +136,63 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\DataException.cs">
+    <Compile Include="Components\Dao\DataException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\IGenericDao.cs">
+    <Compile Include="Components\Dao\IGenericDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\INHibernateGenericDao.cs">
+    <Compile Include="Components\Dao\INHibernateGenericDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\NHibernateGenericDao.cs">
+    <Compile Include="Components\Dao\NHibernateGenericDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\SessionWebModule.cs">
+    <Compile Include="Components\Web\SessionWebModule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\Util\FieldInfoCollection.cs">
+    <Compile Include="Util\FieldInfoCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\Util\ReflectionUtil.cs">
+    <Compile Include="Util\ReflectionUtil.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\Util\ReflectionUtility.cs" />
+    <Compile Include="Util\ReflectionUtility.cs" />
     <Compile Include="Constants.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\AbstractDictStackSessionStore.cs">
+    <Compile Include="SessionStores\AbstractDictStackSessionStore.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\AbstractSessionStore.cs">
+    <Compile Include="SessionStores\AbstractSessionStore.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\CallContextSessionStore.cs">
+    <Compile Include="SessionStores\CallContextSessionStore.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\DefaultConfigurationBuilder.cs" />
-    <Compile Include="Internal\DefaultConfigurationPersister.cs" />
-    <Compile Include="Internal\DefaultSessionManager.cs">
+    <Compile Include="Builders\DefaultConfigurationBuilder.cs" />
+    <Compile Include="Persisters\DefaultConfigurationPersister.cs" />
+    <Compile Include="DefaultSessionManager.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\Empty.cs" />
     <Compile Include="Internal\FileAssemblyResource.cs" />
-    <Compile Include="Internal\IConfigurationBuilder.cs" />
+    <Compile Include="IConfigurationBuilder.cs" />
     <Compile Include="IConfigurationContributor.cs" />
-    <Compile Include="Internal\IConfigurationPersister.cs" />
-    <Compile Include="Internal\ISessionFactoryResolver.cs">
+    <Compile Include="IConfigurationPersister.cs" />
+    <Compile Include="ISessionFactoryResolver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\ISessionManager.cs">
+    <Compile Include="ISessionManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\ISessionStore.cs">
+    <Compile Include="ISessionStore.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\ResourceAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\PersistentConfigurationBuilder.cs" />
+    <Compile Include="Builders\PersistentConfigurationBuilder.cs" />
     <Compile Include="Internal\SessionDelegate.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -203,10 +203,10 @@
     <Compile Include="Internal\SessionFactoryResolver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\WebSessionStore.cs">
+    <Compile Include="SessionStores\WebSessionStore.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\XmlConfigurationBuilder.cs" />
+    <Compile Include="Builders\XmlConfigurationBuilder.cs" />
     <Compile Include="NHibernateFacility.cs">
       <SubType>Code</SubType>
     </Compile>

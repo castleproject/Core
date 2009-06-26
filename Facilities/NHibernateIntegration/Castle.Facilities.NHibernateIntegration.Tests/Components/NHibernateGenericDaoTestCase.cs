@@ -17,6 +17,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Components
 	using MicroKernel.Registration;
 	using NHibernate;
 	using NHibernate.Criterion;
+	using NHibernateIntegration.Components.Dao;
 	using NUnit.Framework;
 	using System;
 

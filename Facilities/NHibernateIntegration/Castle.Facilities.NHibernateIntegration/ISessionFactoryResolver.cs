@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
-
-	using Castle.MicroKernel.Facilities;
-	
+	using MicroKernel.Facilities;
 	using NHibernate;
 
 	/// <summary>
