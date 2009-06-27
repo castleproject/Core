@@ -90,9 +90,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAnt.Core, Version=0.85.2478.0, Culture=neutral">
+    <Reference Include="NAnt.Core, Version=0.86.3317.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SharedLibs\net\NAnt.Core.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\NAnt.Core.dll</HintPath>
     </Reference>
     <Reference Include="NVelocity, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
