@@ -8,10 +8,16 @@
 	<property name="root.dir" value=".." />
 	<include buildfile="${root.dir}/common-project.xml" />
 
+	<!-- Check if MonoRail tests have been disabled -->
 	<if test="${not property::exists('monorail.test')}">
 		<property name="monorail.test" value="${common.testrunner.enabled}" />
 	</if>
 	<property name="common.testrunner.enabled" value="${monorail.test}" />
+
+	<!-- Check if ActiveRecord tests have been disabled -->
+	<if test="${not property::exists('activerecord.test')}">
+		<property name="activerecord.test" value="${common.testrunner.enabled}" />
+	</if>
 
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
@@ -39,7 +45,7 @@
 		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.Views.AspView.Tests/Castle.MonoRail.Views.AspView.Tests.build" if="${common.testrunner.enabled}"/>
-		<include name="Castle.MonoRail.ActiveRecordSupport.Tests/Castle.MonoRail.ActiveRecordSupport.Tests.build" if="${common.testrunner.enabled and not common.mono}"/>
+		<include name="Castle.MonoRail.ActiveRecordSupport.Tests/Castle.MonoRail.ActiveRecordSupport.Tests.build" if="${activerecord.test and not common.mono}"/>
 		<!--
 		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" if="${common.testrunner.enabled}"/>
 		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" if="${common.testrunner.enabled}"/>
