@@ -38,12 +38,19 @@
 			<echo>To run the tests you have to install it manually: gacutil /i Castle.MonoRail.TestSupport</echo>
 		</if>
 
-		<property name="gacutil.args" value="/f /i"/>
-		<if test="${(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
-			<property name="gacutil.args" value="-i" />
-		</if>
-
 		<if test="${property::exists( 'gacutil.file' )}">
+			<!-- Uninstall the assembly (forced) -->
+			<property name="gacutil.args" value="/uf"/>
+			<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${build.dir}">
+				<arg value="${gacutil.args}" />
+				<arg value="Castle.MonoRail.TestSupport" />
+			</exec>
+
+			<!-- Install the assembly -->
+			<property name="gacutil.args" value="/f /i"/>
+			<if test="${(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
+				<property name="gacutil.args" value="-i" />
+			</if>
 			<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${build.dir}">
 				<arg value="${gacutil.args}" />
 				<arg value="Castle.MonoRail.TestSupport.dll" />
