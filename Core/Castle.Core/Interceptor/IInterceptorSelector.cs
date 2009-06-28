@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.Core.Interceptor
 {
 	using System;
 	using System.Reflection;
-	using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// Provides an extension point that allows proxies to choose specific interceptors on
@@ -36,13 +35,8 @@ namespace Castle.DynamicProxy
 		/// <paramref name="method"/>. Either an empty array or null are valid return values to indicate
 		/// that no interceptor should intercept calls to the method. Although it is not advised, it is
 		/// legal to return other <see cref="IInterceptor"/> implementations than these provided in
-		/// <paramref name="interceptors"/>. A better way to do this, is by passing all the required
-		/// interceptors to the appropriate method of <see cref="ProxyGenerator"/>. You can use this
-		/// method to influence the order in which interceptors will be called, by reordering the array.
-		/// Returning an array containing null references (Nothing in Visual Basic) is not legal,
-		/// and will result in a runtime exception.
+		/// <paramref name="interceptors"/>.
 		/// </remarks>
-		/// <seealso cref="ProxyGenerationOptions"/>
 		IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors);
 	}
 }

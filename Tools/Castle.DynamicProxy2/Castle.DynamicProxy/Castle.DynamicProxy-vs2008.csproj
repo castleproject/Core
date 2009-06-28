@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -259,9 +259,6 @@
     <Compile Include="Generators\MethodSignatureComparer.cs" />
     <Compile Include="Generators\MethodFinder.cs" />
     <Compile Include="Generators\PropertyToGenerate.cs" />
-    <Compile Include="IInterceptorSelector.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="InternalsHelper.cs" />
     <Compile Include="InvalidMixinConfigurationException.cs" />
     <Compile Include="IProxyBuilder.cs">

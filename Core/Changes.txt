@@ -1,6 +1,8 @@
 1.1.0 (2009-05-04)
 ==================
 
+- Moved IInterceptorSelector from Dynamic Proxy to Core (IOC-ISSUE-156)
+
 - Applied Eric Hauser's patch fixing CORE-ISSUE-22
   "Support for environment variables in resource URI"
 

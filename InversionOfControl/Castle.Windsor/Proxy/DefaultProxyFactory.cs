@@ -114,6 +114,11 @@ namespace Castle.Windsor.Proxy
 				proxyGenOptions.Hook = new ProxyGenerationHookAdapter(proxyOptions.Hook);
 			}
 
+			if (proxyOptions.Selector != null)
+			{
+				proxyGenOptions.Selector = proxyOptions.Selector;
+			}
+
 			if (proxyOptions.UseMarshalByRefAsBaseClass)
 			{
 				proxyGenOptions.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);

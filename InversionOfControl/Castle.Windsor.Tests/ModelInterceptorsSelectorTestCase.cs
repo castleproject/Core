@@ -26,7 +26,7 @@ using NUnit.Framework;
 namespace Castle.Windsor.Tests
 {
     [TestFixture]
-    public class InterceptorsSelectorTestCase
+    public class ModelInterceptorsSelectorTestCase
     {
         public interface IWatcher
         {

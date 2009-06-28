@@ -17,6 +17,7 @@ namespace Castle.MicroKernel.Proxy
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// Represents options to configure proxies.
@@ -24,6 +25,7 @@ namespace Castle.MicroKernel.Proxy
 	public class ProxyOptions
 	{
 		private IProxyHook hook;
+		private IInterceptorSelector selector;
 		private List<Type> interfaceList;
 		private List<object> mixInList;
 		private bool useSingleInterfaceProxy;
@@ -47,6 +49,15 @@ namespace Castle.MicroKernel.Proxy
 		{
 			get { return hook; }
 			set { hook = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the interceptor selector.
+		/// </summary>
+		public IInterceptorSelector Selector
+		{
+			get { return selector; }
+			set { selector = value; }
 		}
 
 		/// <summary>
@@ -170,6 +181,7 @@ namespace Castle.MicroKernel.Proxy
 			ProxyOptions proxyOptions = obj as ProxyOptions;
 			if (proxyOptions == null) return false;
 			if (!Equals(hook, proxyOptions.hook)) return false;
+			if (!Equals(selector, proxyOptions.selector)) return false;
 			if (!Equals(useSingleInterfaceProxy, proxyOptions.useSingleInterfaceProxy)) return false;
 			if (!Equals(omitTarget, proxyOptions.omitTarget)) return false;
 			if (!AdditionalInterfacesAreEquals(proxyOptions)) return false;

@@ -14,6 +14,7 @@
 
 namespace Castle.MicroKernel.Registration.Interceptor
 {
+	using Castle.Core.Interceptor;
 	using Core;
 
 	public class InterceptorGroup<S> : RegistrationGroup<S>
@@ -60,6 +61,12 @@ namespace Castle.MicroKernel.Registration.Interceptor
 		{
 			AddDescriptor(new InterceptorDescriptor<S>(interceptors, index));
 			return Registration;
+		}
+
+		public InterceptorGroup<S> SelectedWith(IInterceptorSelector selector)
+		{
+			Registration.SelectInterceptorsWith(selector);
+			return this;
 		}
 	}
 }

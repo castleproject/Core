@@ -21,7 +21,8 @@ namespace Castle.MicroKernel.Registration
 	using System.Collections.Generic;
 	using Castle.Core;
 	using Castle.Core.Configuration;
-	using MicroKernel;
+	using Castle.Core.Interceptor;
+	using Castle.MicroKernel;
 
 	/// <summary>
 	/// Delegate to filter component registration.
@@ -506,6 +507,16 @@ namespace Castle.MicroKernel.Registration
 				params InterceptorReference[] interceptors)
 		{
 			return new Interceptor.InterceptorGroup<S>(this, interceptors);
+		}
+
+		/// <summary>
+		/// Sets the interceptor selector for this component.
+		/// </summary>
+		/// <param name="selector"></param>
+		/// <returns></returns>
+		public ComponentRegistration<S> SelectInterceptorsWith(IInterceptorSelector selector)
+		{
+			return AddDescriptor(new Interceptor.InterceptorSelectorDescriptor<S>(selector));
 		}
 
 		/// <summary>
