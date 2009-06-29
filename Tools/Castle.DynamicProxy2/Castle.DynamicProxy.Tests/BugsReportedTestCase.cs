@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.BugsReported;
+	using InterClasses;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -81,6 +82,37 @@ namespace Castle.DynamicProxy.Tests
 			WithMixin p =
 				(WithMixin) generator.CreateClassProxy(typeof (WithMixin), new Type[] {typeof (Marker<int>)}, new IInterceptor[0]);
 			p.Method();
+		}
+
+		[Test]
+		public void DYNPROXY_99_ClassProxyHasNamespace()
+		{
+			Type type = generator.CreateClassProxy(typeof(ServiceImpl)).GetType();
+			Assert.IsNotNull(type.Namespace);
+			Assert.AreEqual("Castle.Proxies", type.Namespace);
+		}
+
+		[Test]
+		public void DYNPROXY_99_InterfaceProxyWithTargetHasNamespace()
+		{
+			Type type = generator.CreateInterfaceProxyWithTarget(typeof(IService),new ServiceImpl()).GetType();
+			Assert.IsNotNull(type.Namespace);
+			Assert.AreEqual("Castle.Proxies", type.Namespace);
+		}
+
+		[Test]
+		public void DYNPROXY_99_InterfaceProxyWithTargetInterfaceHasNamespace()
+		{
+			Type type = generator.CreateInterfaceProxyWithTargetInterface(typeof(IService), new ServiceImpl()).GetType();
+			Assert.IsNotNull(type.Namespace);
+			Assert.AreEqual("Castle.Proxies", type.Namespace);
+		}
+		[Test]
+		public void DYNPROXY_99_InterfaceProxyWithoutTargetHasNamespace()
+		{
+			Type type = generator.CreateInterfaceProxyWithoutTarget(typeof(IService)).GetType();
+			Assert.IsNotNull(type.Namespace);
+			Assert.AreEqual("Castle.Proxies", type.Namespace);
 		}
 	}
 

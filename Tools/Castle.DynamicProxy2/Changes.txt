@@ -1,5 +1,6 @@
 Unreleased Changes
 ==================
+- Fixed DYNPROXY-ISSUE-99: "Generated proxy class has no namespace", which due to a bug in WPF caused issues with databinding. Now proxies are in namespace Castle.Proxies
 - Fixed DYNPROXY-97: This issue are actually three separate bugs:
   First relates to the improper handling of types with generic methods having parameters being an array of generic type of T
   Second was related to improper handing of hierarchy of generic constraints, but it seems Fabian's fix to GenericUtil fixed that earlier.
