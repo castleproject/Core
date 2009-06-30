@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
+	using System.Text;
 	using Castle.Core.Interceptor;
 
 	/// <summary>
@@ -637,11 +638,35 @@ namespace Castle.DynamicProxy
 		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
 		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
 		/// </remarks>
+		[Obsolete("This method has been made obsolete due to issues with passing constructor arguments as 'params' array. Use other overload that passes constructor arguments as an explicit array.")]
 		public object CreateClassProxy(Type classToProxy, IInterceptor[] interceptors,
 									   params object[] constructorArguments)
 		{
 			return CreateClassProxy(classToProxy, null, ProxyGenerationOptions.Default,
-			                        constructorArguments ?? new[] {constructorArguments}, interceptors);
+			                        constructorArguments, interceptors);
+		}
+
+		/// <summary>
+		/// Creates proxy object intercepting calls to virtual members of type <paramref name="classToProxy"/> on newly created instance of that type with given <paramref name="interceptors"/>.
+		/// </summary>
+		/// <param name="classToProxy">Type of class which will be proxied.</param>
+		/// <param name="constructorArguments">Arguments of constructor of type <paramref name="classToProxy"/> which should be used to create a new instance of that type.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// New object of type <paramref name="classToProxy"/> proxying calls to virtual members of <paramref name="classToProxy"/> type.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="classToProxy"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is a generic type definition.</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is not a class type.</exception>
+		/// <exception cref="MissingMethodException">Thrown when no constructor exists on type <paramref name="classToProxy"/> with parameters matching <paramref name="constructorArguments"/>.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when constructor of type <paramref name="classToProxy"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public object CreateClassProxy(Type classToProxy, object[] constructorArguments, params IInterceptor[] interceptors)
+		{
+			return CreateClassProxy(classToProxy, null, ProxyGenerationOptions.Default, constructorArguments, interceptors);
 		}
 
 		/// <summary>
@@ -761,19 +786,33 @@ namespace Castle.DynamicProxy
 			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
 			List<object> arguments = new List<object>(options.MixinData.Mixins);
 			arguments.Add(interceptors);
-			if (constructorArguments != null)
+			if (constructorArguments != null && constructorArguments.Length != 0)
 			{
-				if (constructorArguments.Length != 0)
+				arguments.AddRange(constructorArguments);
+			}
+			// create instance
+			try
+			{
+				return Activator.CreateInstance(proxyType, arguments.ToArray());
+			}
+			catch (MissingMethodException)
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendFormat("Can not instantiate proxy of class: {0}.", classToProxy.FullName);
+				if (constructorArguments == null || constructorArguments.Length == 0)
 				{
-					arguments.AddRange(constructorArguments);
+					sb.Append("Could not find a parameterless constructor.");
 				}
 				else
 				{
-					arguments.Add(constructorArguments);
+					sb.Append("Could not find a constructor that would match given arguments:");
+					foreach(var argument in constructorArguments)
+					{
+						sb.AppendLine(argument.GetType().ToString());
+					}
 				}
+				throw new ArgumentException(sb.ToString(), "constructorArguments");
 			}
-			// create instance
-			return Activator.CreateInstance(proxyType, arguments.ToArray());
 		}
 
 		#endregion

@@ -233,16 +233,14 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyForClassWithConstructors()
 		{
 			object proxy = generator.CreateClassProxy(
-				typeof(ClassWithConstructors), new IInterceptor[] { new StandardInterceptor() },
-				new object[] { "name" });
+				typeof(ClassWithConstructors), new object[] {"name"}, new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
 			ClassWithConstructors classProxy = (ClassWithConstructors)proxy;
 			Assert.AreEqual("name", classProxy.Name);
 
-			proxy = generator.CreateClassProxy(
-				typeof(ClassWithConstructors), new IInterceptor[] { new StandardInterceptor() },
-				new object[] { "name", 10 });
+			proxy = generator.CreateClassProxy(typeof(ClassWithConstructors), new object[] {"name", 10},
+			                                   new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
 			classProxy = (ClassWithConstructors)proxy;

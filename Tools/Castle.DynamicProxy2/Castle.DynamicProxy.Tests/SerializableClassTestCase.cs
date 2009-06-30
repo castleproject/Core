@@ -185,7 +185,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void SerializatingObjectsWithoutDefaultConstructor()
 		{
-			C proxy = (C) generator.CreateClassProxy(typeof (C), new IInterceptor[] {new StandardInterceptor()}, 1);
+			C proxy = (C) generator.CreateClassProxy(typeof(C), new object[] {1}, new StandardInterceptor());
 			C otherProxy = (C) SerializeAndDeserialize(proxy);
 
 			Assert.AreEqual(proxy.I, otherProxy.I);

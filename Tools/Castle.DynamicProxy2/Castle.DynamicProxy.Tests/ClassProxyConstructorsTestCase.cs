@@ -14,6 +14,8 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+	using System.Collections.Generic;
 	using Classes;
 	using Core.Interceptor;
 	using NUnit.Framework;
@@ -24,18 +26,75 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Should_properly_interpret_empty_array_as_ctor_argument()
 		{
-			var strings = new string[] { };
-			var proxy = (ClassWithCtorTakingArray) generator.CreateClassProxy(typeof(ClassWithCtorTakingArray), new IInterceptor[0], strings);
-			Assert.IsNotNull(proxy.Strings);
-			Assert.AreSame(strings, proxy.Strings);
+			var proxy =
+				(ClassWithVariousConstructors)
+				generator.CreateClassProxy(typeof(ClassWithVariousConstructors), new object[] {new string[] {}});
+			Assert.AreEqual(Constructor.ArrayOfStrings, proxy.ConstructorCalled);
 		}
 
 		[Test]
+		[Ignore("I don't see any simple way of doing this...")]
 		public void Should_properly_interpret_null_as_ctor_argument()
 		{
-			string[] strings = null;
-			var proxy = (ClassWithCtorTakingArray)generator.CreateClassProxy(typeof(ClassWithCtorTakingArray), new IInterceptor[0], strings);
-			Assert.IsNull(proxy.Strings);
+			var proxy =
+				(ClassWithVariousConstructors)
+				generator.CreateClassProxy(typeof(ClassWithVariousConstructors), new[] { default(object)});
+			Assert.AreEqual(Constructor.Object, proxy.ConstructorCalled);
 		}
+
+		[Test]
+		[Ignore("I don't see any simple way of doing this...")]
+		public void Should_properly_interpret_array_of_objects()
+		{
+			var proxy =
+				(ClassWithVariousConstructors)
+				generator.CreateClassProxy(typeof(ClassWithVariousConstructors), new object[] {new object[] {null}});
+			Assert.AreEqual(Constructor.ArrayOfObjects, proxy.ConstructorCalled);
+		}
+
+		[Test]
+		public void Should_properly_interpret_array_of_objects_and_string()
+		{
+			var proxy =
+				(ClassWithVariousConstructors)
+				generator.CreateClassProxy(typeof(ClassWithVariousConstructors), new object[] {new object[] {null}, "foo"});
+			Assert.AreEqual(Constructor.ArrayOfObjectsAndSingleString, proxy.ConstructorCalled);
+		}
+
+		[Test]
+		public void Should_properly_interpret_array_of_strings_and_string()
+		{
+			var proxy =
+				(ClassWithVariousConstructors)
+				generator.CreateClassProxy(typeof(ClassWithVariousConstructors), new object[] {new string[] {null}, "foo"});
+			Assert.AreEqual(Constructor.ArrayAndSingleString, proxy.ConstructorCalled);
+		}
+
+		[Test]
+		public void Should_properly_interpret_nothing_as_lack_of_ctor_arguments()
+		{
+			var proxy = (ClassWithVariousConstructors)generator.CreateClassProxy(typeof(ClassWithVariousConstructors), new IInterceptor[0]);
+			Assert.AreEqual(Constructor.Default, proxy.ConstructorCalled);
+		}
+
+		[Test]
+		public void ShouldGenerateTypeWithDuplicatedBaseInterfacesClassProxy()
+		{
+			generator.CreateClassProxy(
+				typeof(MyOwnClass),
+				new Type[] {},
+				ProxyGenerationOptions.Default,
+				new object[] {},
+				new StandardInterceptor());
+
+		}
+
 	}
+	public abstract class MyOwnClass
+	{
+		public virtual void Foo<T>(List<T>[] action) { }
+
+		/* ... */
+	}
+
 }
