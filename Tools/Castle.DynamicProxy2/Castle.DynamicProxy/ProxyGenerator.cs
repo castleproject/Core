@@ -799,6 +799,7 @@ namespace Castle.DynamicProxy
 			{
 				StringBuilder sb = new StringBuilder();
 				sb.AppendFormat("Can not instantiate proxy of class: {0}.", classToProxy.FullName);
+				sb.AppendLine();
 				if (constructorArguments == null || constructorArguments.Length == 0)
 				{
 					sb.Append("Could not find a parameterless constructor.");
