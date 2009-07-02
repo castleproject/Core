@@ -951,30 +951,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ParameterInfo param = parameters[i];
 
-				Type paramType = param.ParameterType;
-
-				if (HasGenericParameters(paramType))
-				{
-					paramType = paramType.GetGenericTypeDefinition().MakeGenericType(nested.GetGenericArgumentsFor(paramType));
-				}
-				else if (paramType.IsGenericParameter)
-				{
-					paramType = nested.GetGenericArgument(paramType.Name);
-				}
-				if (paramType.IsArray)
-				{
-					var elementType = paramType.GetElementType();
-					if (HasGenericParameters(elementType))
-					{
-						elementType = elementType.GetGenericTypeDefinition().MakeGenericType(nested.GetGenericArgumentsFor(elementType));
-						paramType = elementType.MakeArrayType();
-					}
-					else if (elementType.IsGenericParameter)
-					{
-						elementType = nested.GetGenericArgument(paramType.Name);
-						paramType = elementType.MakeArrayType();
-					}
-				}
+				Type paramType = GetParamType(nested, param.ParameterType);
 				if (paramType.IsByRef)
 				{
 					LocalReference localReference = method.CodeBuilder.DeclareLocal(paramType.GetElementType());
@@ -1059,6 +1036,45 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			method.CodeBuilder.AddStatement(new ReturnStatement());
+		}
+
+		private Type GetParamType(NestedClassEmitter nested, Type paramType)
+		{
+			if (HasGenericParameters(paramType))
+			{
+				return paramType.GetGenericTypeDefinition().MakeGenericType(nested.GetGenericArgumentsFor(paramType));
+			}
+			if(paramType.IsGenericType)
+			{
+				Type[] arguments = paramType.GetGenericArguments();
+				if (HasAnyGenericParameters(nested, arguments))
+					return paramType.GetGenericTypeDefinition().MakeGenericType(arguments);
+			}
+			if (paramType.IsGenericParameter)
+			{
+				return nested.GetGenericArgument(paramType.Name);
+			}
+			if (paramType.IsArray)
+			{
+				var elementType = GetParamType(nested, paramType.GetElementType());
+				return elementType.MakeArrayType();
+			}
+			return paramType;
+		}
+
+		private bool HasAnyGenericParameters(NestedClassEmitter emitter, Type[] arguments)
+		{
+			bool hasAnyGenericParameters = false;
+			for(int i = 0; i < arguments.Length; i++)
+			{
+				var newType = GetParamType(emitter, arguments[i]);
+				if(!ReferenceEquals(newType,arguments[i]))
+				{
+					arguments[i] = newType;
+					hasAnyGenericParameters = true;
+				}
+			}
+			return hasAnyGenericParameters;
 		}
 
 		protected void CreateEmptyIInvocationInvokeOnTarget(NestedClassEmitter nested)

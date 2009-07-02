@@ -221,22 +221,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					{
 						return genericType.MakeArrayType();
 					}
-					else
-					{
-						return genericType.MakeArrayType(rank);
-					}
+					return genericType.MakeArrayType(rank);
 				}
-				else
+				if (rank == 1)
 				{
-					if (rank == 1)
-					{
-						return underlyingType.MakeArrayType();
-					}
-					else
-					{
-						return underlyingType.MakeArrayType(rank);
-					}
+					return underlyingType.MakeArrayType();
 				}
+				return underlyingType.MakeArrayType(rank);
 			}
 
 			if (paramType.IsGenericParameter)

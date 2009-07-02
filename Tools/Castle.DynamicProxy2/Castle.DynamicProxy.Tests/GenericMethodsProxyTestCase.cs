@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.GenInterfaces;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using Castle.DynamicProxy.Tests.Interceptors;
+	using GenClasses;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -73,6 +74,20 @@ namespace Castle.DynamicProxy.Tests
 					typeof (IGenericInterfaceWithGenericMethodWithDependentConstraint<object>).GetMethod ("RegisterType").MakeGenericMethod (typeof (string));
 
 			Assert.AreEqual (expectedMethod, interceptor.Invocation.Method);
+		}
+
+		[Test]
+		public void GenericMethod_WithGenericOfGenericArgument()
+		{
+			var proxy = generator.CreateClassProxy<ClassWithMethodWithGenericOfGenericOfT>();
+			proxy.GenericMethodWithGenericOfGenericArgument<string>(null);
+		}
+
+		[Test]
+		public void GenericMethod_WithArrayOfGenericOfGenericArgument()
+		{
+			var proxy = generator.CreateClassProxy<ClassWithMethodWithArrayOfListOfT>();
+			proxy.GenericMethodWithListArrayArgument<string>(null);
 		}
 	}
 }

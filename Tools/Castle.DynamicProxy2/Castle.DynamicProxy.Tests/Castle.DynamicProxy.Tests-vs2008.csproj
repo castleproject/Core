@@ -135,6 +135,8 @@
     <Compile Include="Classes\ClassOverridingEqualsAndGetHashCode.cs" />
     <Compile Include="Classes\ClassWithDefaultConstructor.cs" />
     <Compile Include="ClassProxyConstructorsTestCase.cs" />
+    <Compile Include="GenClasses\ClassWithMethodWithArrayOfListOfT.cs" />
+    <Compile Include="GenClasses\ClassWithMethodWithGenericOfGenericOfT.cs" />
     <Compile Include="GenClasses\MethodWithArgumentBeingArrayOfGenericTypeOfT.cs" />
     <Compile Include="GenericMethodsProxyTestCase.cs" />
     <Compile Include="DictionarySerializationTestCase.cs" />
