@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 
 namespace Castle.Windsor.Tests
@@ -164,6 +163,19 @@ namespace Castle.Windsor.Tests
 			_stopEvent.Set();
 		}
 
+		[Test]
+		public void AutomaticallyOmitTarget()
+		{
+			_container.Register(
+				Component.For<ICalcService>()
+					.Interceptors(InterceptorReference.ForType<ReturnDefaultInterceptor>()).Last,
+				Component.For<ReturnDefaultInterceptor>()
+				);
+
+			ICalcService calcService = _container.Resolve<ICalcService>();
+			Assert.AreEqual(0, calcService.Sum(1, 2));
+		}
+
 		public void ExecuteMethodUntilSignal()
 		{
 			_startEvent.WaitOne(int.MaxValue, false);
@@ -278,6 +290,17 @@ namespace Castle.Windsor.Tests
 		public static ComponentModel Model
 		{
 			get { return _model; }
+		}
+	}
+
+	public class ReturnDefaultInterceptor : IInterceptor
+	{
+		public void Intercept(IInvocation invocation)
+		{
+			if (invocation.Method.ReturnType.IsValueType)
+			{
+				invocation.ReturnValue = Activator.CreateInstance(invocation.Method.ReturnType);
+			}
 		}
 	}
 }

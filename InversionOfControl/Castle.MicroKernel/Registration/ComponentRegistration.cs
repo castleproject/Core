@@ -23,6 +23,7 @@ namespace Castle.MicroKernel.Registration
 	using Castle.Core.Configuration;
 	using Castle.Core.Interceptor;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Proxy;
 
 	/// <summary>
 	/// Delegate to filter component registration.
@@ -631,6 +632,12 @@ namespace Castle.MicroKernel.Registration
 				foreach (ComponentDescriptor<S> descriptor in descriptors)
 				{
 					descriptor.ApplyToModel(kernel, componentModel);
+				}
+
+				if (componentModel.Implementation.IsInterface && componentModel.Interceptors.Count > 0)
+				{
+					ProxyOptions options = ProxyUtil.ObtainProxyOptions(componentModel, true);
+					options.OmitTarget = true;
 				}
 
 				if ((ifFilter == null || ifFilter(kernel, componentModel)) && 

@@ -1,6 +1,8 @@
 2.0
 ====
 
+- Automatically configure proxy to omit target if no implementation
+
 - Fluent interface for factory support
 
 - Fixed an issue with of not considering unregistered service dependencies in arrays
