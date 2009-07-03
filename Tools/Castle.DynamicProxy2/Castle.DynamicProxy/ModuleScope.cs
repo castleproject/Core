@@ -288,7 +288,7 @@ namespace Castle.DynamicProxy
 				AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
 					assemblyName, AssemblyBuilderAccess.RunAndSave, moduleDirectory);
 
-				return assemblyBuilder.DefineDynamicModule(moduleName, moduleName, true);
+				return assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
 			}
 			else
 #endif
@@ -297,7 +297,7 @@ namespace Castle.DynamicProxy
 					assemblyName,
 					AssemblyBuilderAccess.Run);
 
-				return assemblyBuilder.DefineDynamicModule(moduleName, true);
+				return assemblyBuilder.DefineDynamicModule(moduleName, false);
 			}
 		}
 
