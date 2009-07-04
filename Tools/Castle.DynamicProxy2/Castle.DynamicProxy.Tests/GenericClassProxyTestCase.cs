@@ -113,6 +113,14 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("set_Item get_Item ", logger.LogContents);
 		}
 
+		[Test]
+		public void ProxyWithMethodReturningGenericOfGenericOfT()
+		{
+			var proxy = generator.CreateClassProxy<ClassWithMethodWithReturnArrayOfListOfT>();
+			proxy.GenericMethodReturnsListArray<string>();
+			proxy.GenericMethodReturnsGenericOfGenericType<int>();
+		}
+
 #if !MONO
 
 		[Test]

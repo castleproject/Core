@@ -984,27 +984,12 @@ namespace Castle.DynamicProxy.Generators
 			MethodInvocationExpression baseMethodInvExp = new MethodInvocationExpression(targetField, callbackMethod, args);
 			baseMethodInvExp.VirtualCall = true;
 
-			LocalReference ret_local = null;
-
+			LocalReference returnValue = null;
 			if (callbackMethod.ReturnType != typeof(void))
 			{
-				if (callbackMethod.ReturnType.IsGenericParameter)
-				{
-					ret_local = method.CodeBuilder.DeclareLocal(nested.GetGenericArgument(callbackMethod.ReturnType.Name));
-				}
-				else if (HasGenericParameters(callbackMethod.ReturnType))
-				{
-					ret_local =
-						method.CodeBuilder.DeclareLocal(
-							callbackMethod.ReturnType.GetGenericTypeDefinition().MakeGenericType(
-								nested.GetGenericArgumentsFor(callbackMethod.ReturnType)));
-				}
-				else
-				{
-					ret_local = method.CodeBuilder.DeclareLocal(callbackMethod.ReturnType);
-				}
-
-				method.CodeBuilder.AddStatement(new AssignStatement(ret_local, baseMethodInvExp));
+				Type returnType = GetParamType(nested, callbackMethod.ReturnType);
+				returnValue = method.CodeBuilder.DeclareLocal(returnType);
+				method.CodeBuilder.AddStatement(new AssignStatement(returnValue, baseMethodInvExp));
 			}
 			else
 			{
@@ -1030,7 +1015,7 @@ namespace Castle.DynamicProxy.Generators
 				MethodInvocationExpression setRetVal =
 					new MethodInvocationExpression(SelfReference.Self,
 												   typeof(AbstractInvocation).GetMethod("set_ReturnValue"),
-												   new ConvertExpression(typeof(object), ret_local.Type, ret_local.ToExpression()));
+												   new ConvertExpression(typeof(object), returnValue.Type, returnValue.ToExpression()));
 
 				method.CodeBuilder.AddStatement(new ExpressionStatement(setRetVal));
 			}
