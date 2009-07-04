@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
 namespace Castle.Core.Tests
 {
 	using System.Web;
@@ -36,3 +37,4 @@ namespace Castle.Core.Tests
 		}
 	}
 }
+#endif

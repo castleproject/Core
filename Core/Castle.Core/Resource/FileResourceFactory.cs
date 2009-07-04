@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
 namespace Castle.Core.Resource
 {
 	using System;
@@ -44,3 +45,4 @@ namespace Castle.Core.Resource
 		}
 	}
 }
+#endif

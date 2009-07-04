@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !MONO && !SILVERLIGHT
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -28,8 +29,6 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
-
-#if !MONO
 
 	[TestFixture]
 	public class SerializableClassTestCase : BasePEVerifyTestCase
@@ -705,6 +704,5 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(first.GetType(), second.GetType());
 		}
 	}
-
-#endif
 }
+#endif

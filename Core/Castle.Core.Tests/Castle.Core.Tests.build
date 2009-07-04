@@ -17,6 +17,8 @@
 			<include name="nunit.framework.dll"/>
 			<include name="Castle.Core.dll" />
 			<include name="System.Configuration.dll" />
+
+			<include name="mscorlib.dll" if="${common.silverlight}" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="Resources" dynamicprefix="false" basedir="${src.dir}">

@@ -134,7 +134,7 @@ namespace Castle.Core.Resource
 			path = Environment.ExpandEnvironmentVariables(sb.ToString());
 #endif
 #if SILVERLIGHT
-            path = sb.ToString();
+			path = sb.ToString();
 #endif
 		}
 

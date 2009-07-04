@@ -24,6 +24,8 @@
 			<include name="Rhino.Mocks.CPP.Interfaces.dll"/>
 			<include name="System.Configuration.dll" />
 			<include name="System.Data.dll" />
+
+			<include name="mscorlib.dll" if="${common.silverlight}" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="Resources" dynamicprefix="false">

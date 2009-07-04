@@ -124,7 +124,16 @@
 				<include name="*.license.txt" />
 			</fileset>
 		</copy>
-		
+
+		<!-- Copy Silverlight 2.0 CoreCLR libraries -->
+		<if test="${common.silverlight}">
+			<copy todir="${build.dir}" overwrite="true">
+				<fileset basedir="${environment::get-folder-path('ProgramFiles')}/Microsoft Silverlight/2.0.40115.0">
+					<include name="System.dll" />
+				</fileset>
+			</copy>
+		</if>
+
 		<!-- Copy family-specific libraries installed on the system-->
 		<copy file="${path::combine(nant::get-base-directory(), 'NAnt.Core.dll')}" todir="${build.dir}" />
 
