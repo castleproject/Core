@@ -1,4 +1,4 @@
-2.0 Alpha2
+2.0 Beta1
 ===
 - (AR-ISSUE-258) Added Castle.ActiveRecord.Testing.InMemoryTest base class for in memory SQLite testing.
 - (AR-ISSUE-257) Added NHibernate Search integration.
