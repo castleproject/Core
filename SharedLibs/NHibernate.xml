@@ -5616,6 +5616,14 @@
             <param name="assembly">The assembly that contains the resource file.</param>
             <returns>This configuration object.</returns>
         </member>
+        <member name="M:NHibernate.Cfg.Configuration.AddResources(System.Collections.Generic.IEnumerable{System.String},System.Reflection.Assembly)">
+            <summary>
+            Adds the mappings from ebedded resources of the assembly.
+            </summary>
+            <param name="paths">Paths to the resource files in the assembly.</param>
+            <param name="assembly">The assembly that contains the resource files.</param>
+            <returns>This configuration object.</returns>
+        </member>
         <member name="M:NHibernate.Cfg.Configuration.AddClass(System.Type)">
             <summary>
             Read a mapping from an embedded resource, using a convention.
@@ -10187,7 +10195,7 @@
             </summary>
         </member>
         <member name="M:NHibernate.Type.IType.Replace(System.Object,System.Object,NHibernate.Engine.ISessionImplementor,System.Object,System.Collections.IDictionary)">
-            <!-- No matching elements were found for the following include tag --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;M:IType.Copy&quot;]/*"/> 
+            <!-- Für folgendes Include-Tag wurden keine übereinstimmenden Elemente gefunden. --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;M:IType.Copy&quot;]/*"/> 
         </member>
         <member name="M:NHibernate.Type.IType.Replace(System.Object,System.Object,NHibernate.Engine.ISessionImplementor,System.Object,System.Collections.IDictionary,NHibernate.Type.ForeignKeyDirection)">
             <summary> 
@@ -10327,7 +10335,7 @@
 		</summary><value>true if this is an <see cref="T:NHibernate.Type.EntityType"/></value> 
         </member>
         <member name="P:NHibernate.Type.IType.IsAnyType">
-            <!-- No matching elements were found for the following include tag --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;P:IType.IsAnyType&quot;]/*"/> 
+            <!-- Für folgendes Include-Tag wurden keine übereinstimmenden Elemente gefunden. --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;P:IType.IsAnyType&quot;]/*"/> 
         </member>
         <member name="T:NHibernate.Dialect.Function.CharIndexFunction">
             <summary>
@@ -19644,7 +19652,7 @@
             Returns to the previous 'FROM' context.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:NHibernate.Hql.Ast.ANTLR.SqlGenerator" -->
+        <!-- Ungültiger XML-Kommentar wurde für den Member "T:NHibernate.Hql.Ast.ANTLR.SqlGenerator" ignoriert -->
         <member name="T:NHibernate.Hql.Ast.ANTLR.IErrorReporter">
             <summary>
             Implementations will report or handle errors invoked by an ANTLR base parser.
@@ -34706,10 +34714,10 @@
 		</summary><param name="mapping">The <see cref="T:NHibernate.Engine.IMapping"/> that uses this IType.</param><returns>The number of columns this IType spans.</returns><exception cref="T:NHibernate.MappingException">MappingException</exception> 
         </member>
         <member name="M:NHibernate.Type.AbstractType.NullSafeGet(System.Data.IDataReader,System.String[],NHibernate.Engine.ISessionImplementor,System.Object)">
-            <!-- No matching elements were found for the following include tag --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;M:IType.NullSafeGet(IDataReader, string[], ISessionImplementor, object)&quot;]/*"/> 
+            <!-- Für folgendes Include-Tag wurden keine übereinstimmenden Elemente gefunden. --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;M:IType.NullSafeGet(IDataReader, string[], ISessionImplementor, object)&quot;]/*"/> 
         </member>
         <member name="M:NHibernate.Type.AbstractType.NullSafeGet(System.Data.IDataReader,System.String,NHibernate.Engine.ISessionImplementor,System.Object)">
-            <!-- No matching elements were found for the following include tag --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;M:IType.NullSafeGet(IDataReader, string, ISessionImplementor, object)&quot;]/*"/> 
+            <!-- Für folgendes Include-Tag wurden keine übereinstimmenden Elemente gefunden. --><include file="IType.cs.xmldoc" path="//members[@type=&quot;IType&quot;]/member[@name=&quot;M:IType.NullSafeGet(IDataReader, string, ISessionImplementor, object)&quot;]/*"/> 
         </member>
         <member name="M:NHibernate.Type.AbstractType.NullSafeSet(System.Data.IDbCommand,System.Object,System.Int32,System.Boolean[],NHibernate.Engine.ISessionImplementor)">
             <summary>

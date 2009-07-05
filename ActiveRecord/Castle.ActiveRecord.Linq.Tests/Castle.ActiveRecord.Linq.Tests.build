@@ -10,7 +10,7 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<property name="assembly.version" value="1.9.101.0" />
+		<property name="assembly.version" value="1.9.201.0" />
 		<property name="assembly.sign" value="false" />
 		<property name="assembly.is-cls-compliant" value="false" />
 
