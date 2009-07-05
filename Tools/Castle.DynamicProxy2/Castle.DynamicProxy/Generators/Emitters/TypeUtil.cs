@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 
 	public abstract class TypeUtil

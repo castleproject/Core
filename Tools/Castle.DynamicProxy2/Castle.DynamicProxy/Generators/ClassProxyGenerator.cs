@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
@@ -25,10 +24,11 @@ namespace Castle.DynamicProxy.Generators
 	using System.Xml.Serialization;
 #endif
 	using Castle.Core.Interceptor;
+	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.Core.Internal;
+	using Castle.DynamicProxy.Tokens;
 
 	/// <summary>
 	/// 
@@ -36,8 +36,9 @@ namespace Castle.DynamicProxy.Generators
 	public class ClassProxyGenerator : BaseProxyGenerator
 	{
 #if !SILVERLIGHT
-		private bool delegateToBaseGetObjectData = false;
+		private bool delegateToBaseGetObjectData;
 #endif
+
 		public ClassProxyGenerator(ModuleScope scope, Type targetType) : base(scope, targetType)
 		{
 			CheckNotGenericTypeDefinition(targetType, "targetType");
@@ -328,11 +329,8 @@ namespace Castle.DynamicProxy.Generators
 				new ConstructorInvocationStatement(serializationConstructor,
 				                                   arg1.ToExpression(), arg2.ToExpression()));
 
-			Type[] object_arg = new Type[] {typeof (String), typeof (Type)};
-			MethodInfo getValueMethod = typeof (SerializationInfo).GetMethod("GetValue", object_arg);
-
 			MethodInvocationExpression getInterceptorInvocation =
-				new MethodInvocationExpression(arg1, getValueMethod,
+				new MethodInvocationExpression(arg1, SerializationInfoMethods.GetValue,
 				                               new ConstReference("__interceptors").ToExpression(),
 				                               new TypeTokenExpression(typeof (IInterceptor[])));
 
@@ -345,7 +343,7 @@ namespace Castle.DynamicProxy.Generators
 			foreach (FieldReference mixinFieldReference in mixinFields)
 			{
 				MethodInvocationExpression getMixinInvocation =
-					new MethodInvocationExpression(arg1, getValueMethod,
+					new MethodInvocationExpression(arg1, SerializationInfoMethods.GetValue,
 					                               new ConstReference(mixinFieldReference.Reference.Name).ToExpression(),
 					                               new TypeTokenExpression(mixinFieldReference.Reference.FieldType));
 
@@ -361,13 +359,8 @@ namespace Castle.DynamicProxy.Generators
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder,
 		                                               ArgumentReference arg1, ArgumentReference arg2)
 		{
-			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
-			Type[] key_and_bool = new Type[] {typeof (String), typeof (bool)};
-			MethodInfo addValueMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_object);
-			MethodInfo addValueBoolMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_bool);
-
 			codebuilder.AddStatement(new ExpressionStatement(
-			                         	new MethodInvocationExpression(arg1, addValueBoolMethod,
+			                         	new MethodInvocationExpression(arg1, SerializationInfoMethods.AddValue_Bool,
 			                         	                               new ConstReference("__delegateToBase").ToExpression(),
 			                         	                               new ConstReference(delegateToBaseGetObjectData ? 1 : 0).
 			                         	                               	ToExpression())));
@@ -375,8 +368,7 @@ namespace Castle.DynamicProxy.Generators
 			if (delegateToBaseGetObjectData)
 			{
 				MethodInfo baseGetObjectData = targetType.GetMethod("GetObjectData",
-				                                                    new Type[]
-				                                                    	{typeof (SerializationInfo), typeof (StreamingContext)});
+					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
 
 				codebuilder.AddStatement(new ExpressionStatement(
 				                         	new MethodInvocationExpression(baseGetObjectData,
@@ -387,22 +379,17 @@ namespace Castle.DynamicProxy.Generators
 				LocalReference members_ref = codebuilder.DeclareLocal(typeof (MemberInfo[]));
 				LocalReference data_ref = codebuilder.DeclareLocal(typeof (object[]));
 
-				MethodInfo getSerMembers = typeof (FormatterServices).GetMethod("GetSerializableMembers",
-				                                                                new Type[] {typeof (Type)});
-				MethodInfo getObjData = typeof (FormatterServices).GetMethod("GetObjectData",
-				                                                             new Type[] {typeof (object), typeof (MemberInfo[])});
-
 				codebuilder.AddStatement(new AssignStatement(members_ref,
-				                                             new MethodInvocationExpression(null, getSerMembers,
+				                                             new MethodInvocationExpression(null, FormatterServicesMethods.GetSerializableMembers,
 				                                                                            new TypeTokenExpression(targetType))));
 
 				codebuilder.AddStatement(new AssignStatement(data_ref,
-				                                             new MethodInvocationExpression(null, getObjData,
+				                                             new MethodInvocationExpression(null, FormatterServicesMethods.GetObjectData,
 				                                                                            SelfReference.Self.ToExpression(),
 				                                                                            members_ref.ToExpression())));
 
 				codebuilder.AddStatement(new ExpressionStatement(
-				                         	new MethodInvocationExpression(arg1, addValueMethod,
+				                         	new MethodInvocationExpression(arg1, SerializationInfoMethods.AddValue_Object,
 				                         	                               new ConstReference("__data").ToExpression(),
 				                         	                               data_ref.ToExpression())));
 			}

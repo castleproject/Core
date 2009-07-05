@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #if !MONO && !SILVERLIGHT
-
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -68,7 +67,6 @@ namespace Castle.DynamicProxy.Tests
 				typeof (IStore1),
 				new SkipCallingMethodInterceptor());
 		}
-
 
 		[Test]
 		public void UsingEvents_Interface()
@@ -146,7 +144,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsNotNull(o);
 		}
 
-
 		[Test]
 		public void CanGetCorrectValuesFromIntPtr()
 		{
@@ -222,19 +219,15 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(1.234M, fuel);
 		}
 
-
 		[Test]
-		public void CanProxyMethodWithOutIntPtrParamter()
+		public void CanProxyMethodWithOutIntPtrParameter()
 		{
-			IFooWithOutIntPtr o =
-				(IFooWithOutIntPtr) generator.CreateInterfaceProxyWithoutTarget(typeof (IFooWithOutIntPtr),
-				                                                                new Type[0],
-				                                                                new SkipCallingMethodInterceptorWithOutputParams());
+			IFooWithOutIntPtr o = (IFooWithOutIntPtr)generator.CreateInterfaceProxyWithoutTarget(
+				typeof(IFooWithOutIntPtr), new Type[0], new SkipCallingMethodInterceptorWithOutputParams());
 			Assert.IsNotNull(o);
 			IntPtr i;
 			o.Bar(out i);
 		}
-
 
 		public class SkipCallingMethodInterceptorWithOutputParams : IInterceptor
 		{
@@ -336,8 +329,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
-	[ComImport, Guid("6D5140C1-7436-11CE-8034-00AA006009FA"),
-	 InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	[ComImport]
+	[Guid("6D5140C1-7436-11CE-8034-00AA006009FA")]
+	[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 	public interface IComServiceProvider
 	{
 		[return: MarshalAs(UnmanagedType.IUnknown)]
@@ -354,8 +348,7 @@ namespace Castle.DynamicProxy.Tests
 		IntPtr Buffer(UInt32 index);
 	}
 
-	public abstract class
-		SomeClassWithProtectedInternalAbstractClass
+	public abstract class SomeClassWithProtectedInternalAbstractClass
 	{
 		protected internal abstract void Quack();
 	}

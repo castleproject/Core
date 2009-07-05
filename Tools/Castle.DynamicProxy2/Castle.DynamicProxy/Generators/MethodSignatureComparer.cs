@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Collections;
 	using System.Reflection;
 	using System.Collections.Generic;
 

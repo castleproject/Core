@@ -15,25 +15,24 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
 
 	public static class StrongNameUtil
 	{
-		private static readonly IDictionary signedAssemblyCache = new Dictionary<Assembly, bool>();
+		private static readonly IDictionary<Assembly, bool> signedAssemblyCache = new Dictionary<Assembly, bool>();
 		private static readonly object lockObject = new object();
 
 		public static bool IsAssemblySigned(Assembly assembly)
 		{
 			lock (lockObject)
 			{
-				if (signedAssemblyCache.Contains(assembly) == false)
+				if (signedAssemblyCache.ContainsKey(assembly) == false)
 				{
 					bool isSigned = ContainsPublicKey(assembly);
 					signedAssemblyCache.Add(assembly, isSigned);
 				}
-				return (bool)signedAssemblyCache[assembly];
+				return signedAssemblyCache[assembly];
 			}
 		}
 
@@ -57,7 +56,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return false;
 		}
 
-		public static bool IsAnyTypeFromUnsignedAssembly(Type baseType, Type[] interfaces)
+		public static bool IsAnyTypeFromUnsignedAssembly(Type baseType, IEnumerable<Type> interfaces)
 		{
 			return !IsAssemblySigned(baseType.Assembly) || IsAnyTypeFromUnsignedAssembly(interfaces);
 		}

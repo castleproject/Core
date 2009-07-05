@@ -1,5 +1,18 @@
 Unreleased Changes
 ==================
+- Applied Krzysztof Kozmic's clean up patch with some minor changes
+  (http://groups.google.com/group/castle-project-devel/browse_thread/thread/853fa870326f7f71/9237bb890ca6dab7)
+  - Moved MethodInfos of AbstractInvocation methods to InvocationMethods class, where all the other methods are.
+  - Extracted MethodInfos obtained inline to their own classes in Castle.DynamicProxy.Tokens namespace. This should
+    improve performance a little bit.
+  - Removed two ctors from AbstractInvocation (that didn't have interfMethod parameter).
+  - Updated generated proxies to call other two Invocation ctors.
+  - Some tidying up in BaseProxyGenerator to remove duplication after updating calls to Invocation ctors.
+  - Removed collecting and generating tokenCaches for System.Object methods, since we never use these anyway.
+  - Removed redundant casts in code.
+  - Changed code using non-generic collections to use their generic conterparts.
+  - Some more minor tidying up.
+
 - Improved exception message when can not instantiate class proxy due to invalid arguments.
 - Reverted changes introduced in fix for DYNPROXY-ISSUE-97 for the constructor issue. It actually is an issue with params object[] which is confusing and can lead to errors like the one reported, and the fix was inconsistent with the other overload that had arguments passed as explicit object[] and could break the other overload in some scenarios.
 - Marked the overload of CreateClassProxy having params object[] as obsolete

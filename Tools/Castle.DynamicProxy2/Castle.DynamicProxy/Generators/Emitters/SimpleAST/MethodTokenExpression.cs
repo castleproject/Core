@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using Castle.DynamicProxy.Tokens;
 
 	public class MethodTokenExpression : Expression
 	{
@@ -40,10 +41,10 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			gen.Emit(OpCodes.Ldtoken, declaringType);
 #endif
 
-			MethodInfo minfo = Constants.GetMethodFromHandle1;
+			MethodInfo minfo = MethodBaseMethods.GetMethodFromHandle1;
 
 #if !MONO
-			minfo = Constants.GetMethodFromHandle2;
+			minfo = MethodBaseMethods.GetMethodFromHandle2;
 #endif
 
 			gen.Emit(OpCodes.Call, minfo);

@@ -442,7 +442,7 @@ namespace Castle.DynamicProxy
 				mappings = new Dictionary<CacheKey, string>();
 				foreach (KeyValuePair<CacheKey, Type> cacheEntry in typeCache)
 				{
-					mappings.Add((CacheKey)cacheEntry.Key, ((Type)cacheEntry.Value).FullName);
+					mappings.Add(cacheEntry.Key, cacheEntry.Value.FullName);
 				}
 			}
 

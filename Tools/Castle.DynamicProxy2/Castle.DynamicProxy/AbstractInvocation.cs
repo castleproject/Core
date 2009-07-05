@@ -39,41 +39,21 @@ namespace Castle.DynamicProxy
 		private Type[] genericMethodArguments;
 
 		protected AbstractInvocation(
-			object target, object proxy, IInterceptor[] interceptors,
-			Type targetType, MethodInfo targetMethod, object[] arguments)
-		{
-			this.proxy = proxy;
-			this.target = target;
-			this.interceptors = interceptors;
-			this.targetType = targetType;
-			this.targetMethod = targetMethod;
-			this.arguments = arguments;
-		}
-
-		protected AbstractInvocation(
-			object target, object proxy, IInterceptor[] interceptors,
-			Type targetType, MethodInfo targetMethod, object[] arguments,
-			IInterceptorSelector selector,
-			ref IInterceptor[] methodInterceptors)
-		{
-			// TODO: nobody uses this .ctor - remove it
-			this.proxy = proxy;
-			this.target = target;
-			this.interceptors = interceptors;
-			this.targetType = targetType;
-			this.targetMethod = targetMethod;
-			this.arguments = arguments;
-			methodInterceptors = SelectMethodInterceptors(selector, methodInterceptors);
-			this.interceptors = methodInterceptors;
-		}
-
-		protected AbstractInvocation(
-			object target, object proxy, IInterceptor[] interceptors,
-			Type targetType, MethodInfo targetMethod, MethodInfo interfMethod,
+			object target,
+			object proxy,
+			IInterceptor[] interceptors,
+			Type targetType,
+			MethodInfo targetMethod,
+			MethodInfo interfMethod,
 			object[] arguments)
-			: this(target, proxy, interceptors, targetType, targetMethod, arguments)
 		{
+			this.target = target;
+			this.proxy = proxy;
+			this.interceptors = interceptors;
+			this.targetType = targetType;
+			this.targetMethod = targetMethod;
 			this.interfMethod = interfMethod;
+			this.arguments = arguments;
 		}
 
 		protected AbstractInvocation(
@@ -86,10 +66,8 @@ namespace Castle.DynamicProxy
 			object[] arguments,
 			IInterceptorSelector selector,
 			ref IInterceptor[] methodInterceptors)
-			: this(target, proxy, interceptors, targetType, targetMethod, arguments)
+			: this(target, proxy, interceptors, targetType, targetMethod, interfMethod, arguments)
 		{
-			this.interfMethod = interfMethod;
-
 			methodInterceptors = SelectMethodInterceptors(selector, methodInterceptors);
 			this.interceptors = methodInterceptors;
 		}

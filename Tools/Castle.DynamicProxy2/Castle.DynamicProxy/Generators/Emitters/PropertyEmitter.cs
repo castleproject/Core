@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using Castle.DynamicProxy.Tokens;
 
 	public class PropertyEmitter : IMemberEmitter
 	{
@@ -24,23 +25,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private AbstractTypeEmitter parentTypeEmitter;
 		private MethodEmitter getMethod;
 		private MethodEmitter setMethod;
-
-		private static readonly MethodInfo newDefinePropertyMethodInfo = typeof (TypeBuilder).GetMethod("DefineProperty",
-		                                                                                                new Type[]
-		                                                                                                	{
-		                                                                                                		typeof (string),
-		                                                                                                		typeof (
-		                                                                                                			PropertyAttributes)
-		                                                                                                		,
-		                                                                                                		typeof (
-		                                                                                                			CallingConventions)
-		                                                                                                		, typeof (Type),
-		                                                                                                		typeof (Type[]),
-		                                                                                                		typeof (Type[]),
-		                                                                                                		typeof (Type[]),
-		                                                                                                		typeof (Type[][]),
-		                                                                                                		typeof (Type[][])
-		                                                                                                	});
 
 		// private ParameterInfo[] indexParameters;
 
@@ -68,7 +52,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			// tie ourselves to that version. This perform the lookup for the new overload
 			// dynamically, so we have a nice fallback on vanilla CLR 2.0
 
-			if (newDefinePropertyMethodInfo == null)
+			if (TypeBuilderMethods.DefineProperty == null)
 			{
 				DefineProperty_Clr2_0 oldDefineProperty = parentTypeEmitter.TypeBuilder.DefineProperty;
 				builder = oldDefineProperty(name, attributes, propertyType, new Type[0]);
@@ -78,7 +62,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				DefineProperty_Clr_2_0_SP1 newDefinedProperty = (DefineProperty_Clr_2_0_SP1)
 				                                                Delegate.CreateDelegate(typeof (DefineProperty_Clr_2_0_SP1),
 				                                                                        parentTypeEmitter.TypeBuilder,
-				                                                                        newDefinePropertyMethodInfo);
+				                                                                        TypeBuilderMethods.DefineProperty);
 				builder = newDefinedProperty(
 					name, attributes, CallingConventions.HasThis, propertyType,
 					null, null, new Type[0], null, null);

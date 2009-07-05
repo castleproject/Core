@@ -15,11 +15,10 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using Castle.DynamicProxy.Tests.GenClasses;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
-	using System.Collections.Generic;
 
 	[TestFixture]
 	public class GenericClassProxyTestCase : BasePEVerifyTestCase

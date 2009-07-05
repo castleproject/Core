@@ -12,25 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
+namespace Castle.DynamicProxy.Tokens
 {
 	using System;
-	using System.Reflection.Emit;
-	using Castle.DynamicProxy.Tokens;
+	using System.Reflection;
 
-	public class TypeTokenExpression : Expression
+	public static class MethodBaseMethods
 	{
-		private readonly Type type;
+		public static readonly MethodInfo GetMethodFromHandle1 =
+			typeof(MethodBase).GetMethod("GetMethodFromHandle", BindingFlags.Static | BindingFlags.Public, null,
+			new Type[] { typeof(RuntimeMethodHandle) }, null);
 
-		public TypeTokenExpression(Type type)
-		{
-			this.type = type;
-		}
-
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
-		{
-			gen.Emit(OpCodes.Ldtoken, type);
-			gen.Emit(OpCodes.Call, TypeMethods.GetTypeFromHandle);
-		}
+		public static readonly MethodInfo GetMethodFromHandle2 =
+			typeof(MethodBase).GetMethod("GetMethodFromHandle", BindingFlags.Static | BindingFlags.Public, null,
+			new Type[] { typeof(RuntimeMethodHandle), typeof(RuntimeTypeHandle) }, null);
 	}
 }

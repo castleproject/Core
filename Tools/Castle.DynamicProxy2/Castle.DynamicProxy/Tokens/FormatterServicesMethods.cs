@@ -12,25 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
+#if !SILVERLIGHT
+namespace Castle.DynamicProxy.Tokens
 {
 	using System;
-	using System.Reflection.Emit;
-	using Castle.DynamicProxy.Tokens;
+	using System.Reflection;
+	using System.Runtime.Serialization;
 
-	public class TypeTokenExpression : Expression
+	public static class FormatterServicesMethods
 	{
-		private readonly Type type;
+		public static readonly MethodInfo GetObjectData =
+			typeof(FormatterServices).GetMethod("GetObjectData",
+			new Type[] { typeof(object), typeof(MemberInfo[]) });
 
-		public TypeTokenExpression(Type type)
-		{
-			this.type = type;
-		}
-
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
-		{
-			gen.Emit(OpCodes.Ldtoken, type);
-			gen.Emit(OpCodes.Call, TypeMethods.GetTypeFromHandle);
-		}
+		public static readonly MethodInfo GetSerializableMembers =
+			typeof(FormatterServices).GetMethod("GetSerializableMembers", new Type[] { typeof(Type) });
 	}
 }
+#endif

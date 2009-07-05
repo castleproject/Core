@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -101,9 +101,6 @@
     <Compile Include="Generators\BaseProxyGenerator.cs" />
     <Compile Include="Generators\CacheKey.cs" />
     <Compile Include="Generators\ClassProxyGenerator.cs" />
-    <Compile Include="Generators\Constants.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Generators\Emitters\AbstractTypeEmitter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -280,6 +277,13 @@
     <Compile Include="RemotableInvocation.cs" />
     <Compile Include="Serialization\ProxyObjectReference.cs" />
     <Compile Include="SilverlightExtensions.cs" />
+    <Compile Include="Tokens\FormatterServicesMethods.cs" />
+    <Compile Include="Tokens\InvocationMethods.cs" />
+    <Compile Include="Tokens\MethodBaseMethods.cs" />
+    <Compile Include="Tokens\ProxyGenerationOptionsMethods.cs" />
+    <Compile Include="Tokens\SerializationInfoMethods.cs" />
+    <Compile Include="Tokens\TypeBuilderMethods.cs" />
+    <Compile Include="Tokens\TypeMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\CastleKey.snk">
