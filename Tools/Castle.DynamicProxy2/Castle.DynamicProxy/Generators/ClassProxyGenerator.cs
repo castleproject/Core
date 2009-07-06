@@ -182,7 +182,7 @@ namespace Castle.DynamicProxy.Generators
 				{
 					MethodBuilder callbackMethod = method2Callback[method];
 
-					method2Invocation[method] = BuildInvocationNestedType(emitter, targetType,
+					method2Invocation[method] = BuildInvocationNestedType(emitter,
 					                                                      IsMixinMethod(method)
 					                                                      	? method.DeclaringType
 					                                                      	: emitter.TypeBuilder,

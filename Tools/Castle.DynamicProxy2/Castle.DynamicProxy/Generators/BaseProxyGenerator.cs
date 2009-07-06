@@ -208,8 +208,7 @@ namespace Castle.DynamicProxy.Generators
 
 				method2Invocation[method] =
 					BuildInvocationNestedType(emitter,
-											  targetType,
-											  allowChangeTarget ? method.DeclaringType : emitter.TypeBuilder,
+											  method.DeclaringType,//allowChangeTarget ? method.DeclaringType : emitter.TypeBuilder,
 											  method,
 											  allowChangeTarget ? method : null,
 											  ConstructorVersion.WithoutTargetMethod,
@@ -760,28 +759,18 @@ namespace Castle.DynamicProxy.Generators
 		#region IInvocation related
 
 		/// <summary>
-		/// If callbackMethod is null the InvokeOnTarget implementation 
+		/// If callbackMethod is null the InvokeOnTarget implementation
 		/// is just the code to throw an exception
 		/// </summary>
-		/// <param name="emitter"></param>
-		/// <param name="targetType"></param>
-		/// <param name="targetForInvocation"></param>
-		/// <param name="methodInfo"></param>
-		/// <param name="callbackMethod"></param>
-		/// <param name="version"></param>
+		/// <param name="emitter">The emitter.</param>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="methodInfo">The method info.</param>
+		/// <param name="callbackMethod">The callback method.</param>
+		/// <param name="version">The version.</param>
 		/// <returns></returns>
-		protected NestedClassEmitter BuildInvocationNestedType(
-			ClassEmitter emitter,
-			Type targetType,
-			Type targetForInvocation,
-			MethodInfo methodInfo,
-			MethodInfo callbackMethod,
-			ConstructorVersion version)
+		protected NestedClassEmitter BuildInvocationNestedType(ClassEmitter emitter, Type targetType, MethodInfo methodInfo, MethodInfo callbackMethod, ConstructorVersion version)
 		{
-			CheckNotGenericTypeDefinition(targetType, "targetType");
-			CheckNotGenericTypeDefinition(targetForInvocation, "targetForInvocation");
-			return
-				BuildInvocationNestedType(emitter, targetType, targetForInvocation, methodInfo, callbackMethod, version, false);
+			return BuildInvocationNestedType(emitter, targetType, methodInfo, callbackMethod, version, false);
 		}
 
 		/// <summary>
@@ -789,23 +778,14 @@ namespace Castle.DynamicProxy.Generators
 		/// is just the code to throw an exception
 		/// </summary>
 		/// <param name="emitter"></param>
-		/// <param name="targetType"></param>
 		/// <param name="targetForInvocation"></param>
 		/// <param name="methodInfo"></param>
 		/// <param name="callbackMethod"></param>
 		/// <param name="version"></param>
 		/// <param name="allowChangeTarget">If true the invocation will implement the IChangeProxyTarget interface</param>
 		/// <returns></returns>
-		protected NestedClassEmitter BuildInvocationNestedType(
-			ClassEmitter emitter,
-			Type targetType,
-			Type targetForInvocation,
-			MethodInfo methodInfo,
-			MethodInfo callbackMethod,
-			ConstructorVersion version,
-			bool allowChangeTarget)
+		protected NestedClassEmitter BuildInvocationNestedType(ClassEmitter emitter, Type targetForInvocation, MethodInfo methodInfo, MethodInfo callbackMethod, ConstructorVersion version, bool allowChangeTarget)
 		{
-			CheckNotGenericTypeDefinition(targetType, "targetType");
 			CheckNotGenericTypeDefinition(targetForInvocation, "targetForInvocation");
 
 			nestedCounter++;

@@ -28,10 +28,8 @@ namespace Castle.DynamicProxy.Generators
 		{
 			method2methodOnTarget[method] = method;
 
-			method2Invocation[method] = BuildInvocationNestedType(emitter, targetType,
-			                                                      IsMixinMethod(method) ? method.DeclaringType : proxyTargetType,
-			                                                      method, null,
-			                                                      ConstructorVersion.WithTargetMethod);
+			Type targetForInvocation = IsMixinMethod(method) ? method.DeclaringType : proxyTargetType;
+			method2Invocation[method] = BuildInvocationNestedType(emitter, targetForInvocation, method, null, ConstructorVersion.WithTargetMethod);
 		}
 
 		protected override InterfaceGeneratorType GeneratorType

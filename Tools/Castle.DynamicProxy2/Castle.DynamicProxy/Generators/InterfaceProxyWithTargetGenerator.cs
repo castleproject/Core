@@ -340,9 +340,9 @@ namespace Castle.DynamicProxy.Generators
 
 			method2methodOnTarget[method] = methodOnTarget;
 
-			method2Invocation[method] = BuildInvocationNestedType(emitter, proxyTargetType,
-																  IsMixinMethod(method) ? method.DeclaringType : proxyTargetType,
-																  method, methodOnTarget,
+			method2Invocation[method] = BuildInvocationNestedType(emitter,
+																  method.DeclaringType,//IsMixinMethod(method) ? method.DeclaringType : proxyTargetType,
+																  method, method,
 																  ConstructorVersion.WithTargetMethod,
 																  AllowChangeTarget);
 		}
