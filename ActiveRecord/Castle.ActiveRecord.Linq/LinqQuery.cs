@@ -27,10 +27,15 @@ namespace Castle.ActiveRecord.Linq
     /// </summary>
     /// <typeparam name="T">The type of the active record class the Linq collection 
     /// is being bound against.</typeparam>
-    class LinqQuery<T> : IActiveRecordQuery<IOrderedQueryable<T>>
+    public class LinqQuery<T> : IActiveRecordQuery<IOrderedQueryable<T>>
     {
         #region IActiveRecordQuery<IOrderedQueryable<T>> Members
 
+		/// <summary>
+		/// Executes the query using specified session.
+		/// </summary>
+		/// <param name="session">The session.</param>
+		/// <returns></returns>
         public IOrderedQueryable<T> Execute(ISession session)
         {
 			QueryOptions options = new QueryOptions();
@@ -42,16 +47,31 @@ namespace Castle.ActiveRecord.Linq
 
         #region IActiveRecordQuery Members
 
+		/// <summary>
+		/// Enumerates over the result of the query.
+		/// Note: Only use if you expect most of your values to already exist in the second level cache!
+		/// </summary>
+		/// <param name="session"></param>
+		/// <returns></returns>
         System.Collections.IEnumerable IActiveRecordQuery.Enumerate(ISession session)
         {
             return Execute(session);
         }
 
+		/// <summary>
+		/// Executes the specified query and return the results
+		/// </summary>
+		/// <param name="session">The session to execute the query in.</param>
+		/// <returns></returns>
         object IActiveRecordQuery.Execute(ISession session)
         {
             return Execute(session);
         }
 
+		/// <summary>
+		/// Gets the target type of this query
+		/// </summary>
+		/// <value></value>
         Type IActiveRecordQuery.RootType
         {
             get { return typeof(T); }
