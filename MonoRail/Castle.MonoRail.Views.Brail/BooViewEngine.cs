@@ -22,6 +22,8 @@ namespace Castle.MonoRail.Views.Brail
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
 	using System.Runtime.Serialization;
+	using System.Security;
+	using System.Security.Permissions;
 	using System.Text;
 	using System.Threading;
 	using System.Web;
@@ -67,6 +69,7 @@ namespace Castle.MonoRail.Views.Brail
 		private Assembly common;
 
 		private ILogger logger;
+		private readonly bool useFastCreateInstance;
 
 		public override bool SupportsJSGeneration
 		{
@@ -92,6 +95,11 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			get { return options; }
 			set { options = value; }
+		}
+
+		public BooViewEngine()
+		{
+			useFastCreateInstance = SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.SerializationFormatter));
 		}
 
 		#region IInitializable Members
@@ -477,9 +485,22 @@ namespace Castle.MonoRail.Views.Brail
 
 				throw new MonoRailException(message);
 			}
+			return useFastCreateInstance 
+				? FastCreateInstance(type, constructor, output, context, controller, controllerContext) 
+				: ActivatorCreateInstance(type, output, context, controller, controllerContext);
+		}
+
+		private BrailBase FastCreateInstance(Type type, ConstructorInfo constructor, TextWriter output, IEngineContext context, IController controller, IControllerContext controllerContext)
+		{
 			BrailBase self = (BrailBase)FormatterServices.GetUninitializedObject(type);
 			constructor.Invoke(self, new object[] { this, output, context, controller, controllerContext });
 			return self;
+		}
+
+
+		private BrailBase ActivatorCreateInstance(Type type, TextWriter output, IEngineContext context, IController controller, IControllerContext controllerContext)
+		{
+			return (BrailBase)Activator.CreateInstance(type, this, output, context, controller, controllerContext);
 		}
 
 		// Compile a script (or all scripts in a directory), save the compiled result
