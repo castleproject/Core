@@ -14,6 +14,7 @@
 - Bugs fixed:
   AR-ISSUE-249
   AR-ISSUE-261
+  AR-ISSUE-264
   AR-ISSUE-265
   
 2.0 Alpha1
