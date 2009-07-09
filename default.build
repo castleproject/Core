@@ -332,7 +332,7 @@
 		<call target="createreleasenotes" />
 
 		<!-- Include a zip file with all source code -->
-		<call target="zip-source" if="${build.debug}" />
+		<call target="zip-source" if="${project.config=='debug'}" />
 
 		<!-- Include a zip file with all dependencies -->
 		<call target="zip-dependencies" />
