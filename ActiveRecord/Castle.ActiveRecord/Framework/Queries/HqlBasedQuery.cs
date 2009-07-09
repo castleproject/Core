@@ -96,7 +96,8 @@ namespace Castle.ActiveRecord.Queries
 				int i = 0;
 				foreach (object value in positionalParameters)
 				{
-					AddModifier(new QueryParameter(i++, value));
+					ValueAndTypeTuple valueAndTypeTuple = ValueAndTypeTuple.Wrap(value);
+					AddModifier(new QueryParameter(i++, valueAndTypeTuple.Value, valueAndTypeTuple.Type));
 				}
 			}
 		}

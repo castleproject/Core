@@ -1,5 +1,6 @@
 2.0 Beta1
 ===
+- Updated NHibernate to 2.1.0 CR1. Please specify the byte code provider in your config files.
 - (AR-ISSUE-258) Added Castle.ActiveRecord.Testing.InMemoryTest base class for in memory SQLite testing.
 - (AR-ISSUE-257) Added NHibernate Search integration.
 - (AR-ISSUE-256) Integrated ActiveRecordLinq from contrib without changes
@@ -13,6 +14,7 @@
 - Bugs fixed:
   AR-ISSUE-249
   AR-ISSUE-261
+  AR-ISSUE-265
   
 2.0 Alpha1
 ===

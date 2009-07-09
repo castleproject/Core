@@ -109,10 +109,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=2.1.0.2001, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SharedLibs\NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="NHibernate, Version=2.1.0.2002, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\NHibernate.dll</HintPath>
@@ -120,6 +116,10 @@
     <Reference Include="NHibernate.ByteCode.Castle, Version=2.1.0.2002, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\NHibernate.ByteCode.Castle.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.Search, Version=2.0.0.1001, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\NHibernate.Search.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
@@ -331,10 +331,12 @@
     <Compile Include="AnyRelationTestCase.cs" />
     <Compile Include="CompositeNestedClassTestCase.cs" />
     <Compile Include="CompositeUserTypeTestCase.cs" />
+    <Compile Include="Model\ProductWithGuid.cs" />
     <Compile Include="NHSearchTestCase.cs" />
     <Compile Include="Model\SimpleBlog.cs" />
     <Compile Include="Model\SimplePost.cs" />
     <Compile Include="Model\SSAFEntity.cs" />
+    <Compile Include="SimpleQueryWithParameterTypesTestCase.cs" />
     <Compile Include="StatelessSessionScopeTestCase.cs" />
     <Compile Include="EnumModelTestCase.cs" />
     <Compile Include="Event\AbstractEventListenerTest.cs" />
