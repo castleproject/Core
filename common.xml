@@ -110,13 +110,13 @@
 
 	<!-- named project configurations -->
 	<target name="set-debug-project-configuration" description="Perform a 'debug' build">
-		<property name="build.debug"	value="true" />
-		<property name="build.optimize"	value="false" overwrite="false" />
+		<property name="build.debugoutput"		value="Enable" />
+		<property name="build.optimize"		value="false" overwrite="false" />
 	</target>
 	
 	<target name="set-release-project-configuration" description="Perform a 'release' build">
-		<property name="build.debug"	value="false" />
-		<property name="build.optimize" value="true" overwrite="false" />
+		<property name="build.debugoutput"		value="Enable" />
+		<property name="build.optimize" 	value="true" overwrite="false" />
 	</target>
 
 	<target name="set-project-configuration">

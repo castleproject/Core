@@ -127,7 +127,7 @@
 			<csc
 				target="library" 
 				define="${current.build.defines}" 
-				debug="${build.debug}" 
+				debug="${build.debugoutput}" 
 				optimize="${build.optimize}"
 				warnaserror="${warnaserror}"
 				output="${build.dir}/${project::get-name()}.dll" 
@@ -175,7 +175,7 @@
 		<csc
 			target="exe"
 			define="${current.build.defines}" 
-			debug="${build.debug}"
+			debug="${build.debugoutput}" 
 			optimize="${build.optimize}"
 			warnaserror="${build.warnaserrors}"
 			output="${build.dir}/${output-file}.exe" 
