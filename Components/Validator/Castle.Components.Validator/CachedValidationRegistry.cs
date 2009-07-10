@@ -175,7 +175,7 @@ namespace Castle.Components.Validator
 			}
 			
 			ResourceSet defaultResourceSetForCurrentThread =
-				defaultResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
+				defaultResourceManager.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true);
 
 			return defaultResourceSetForCurrentThread.GetString(key);
 		}
