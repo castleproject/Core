@@ -58,5 +58,8 @@ namespace Castle.DynamicProxy.Tokens
 
 		public static readonly MethodInfo Proceed =
 			typeof(AbstractInvocation).GetMethod("Proceed", BindingFlags.Instance | BindingFlags.Public);
+
+		public static readonly MethodInfo EnsureValidTarget =
+			typeof (AbstractInvocation).GetMethod("EnsureValidTarget", BindingFlags.Instance | BindingFlags.NonPublic);
 	}
 }

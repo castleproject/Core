@@ -215,8 +215,7 @@ namespace Castle.DynamicProxy.Generators
 
 					NestedClassEmitter nestedClass = method2Invocation[method];
 
-					MethodEmitter newProxiedMethod = CreateProxiedMethod(
-						targetType, method, emitter, nestedClass, interceptorsField, GetTargetRef(method, mixinFields, targetField),
+					MethodEmitter newProxiedMethod = CreateProxiedMethod(method, emitter, nestedClass, interceptorsField, GetTargetRef(method, mixinFields, targetField),
 						ConstructorVersion.WithTargetMethod, method2methodOnTarget[method]);
 
 					ReplicateNonInheritableAttributes(method, newProxiedMethod);
@@ -235,7 +234,7 @@ namespace Castle.DynamicProxy.Generators
 
 						MethodEmitter getEmitter = propToGen.Emitter.CreateGetMethod(atts);
 
-						ImplementProxiedMethod(targetType, getEmitter,
+						ImplementProxiedMethod(getEmitter,
 											   propToGen.GetMethod, emitter,
 											   nestedClass, interceptorsField, GetTargetRef(propToGen.GetMethod, mixinFields, targetField),
 											   ConstructorVersion.WithTargetMethod,
@@ -254,7 +253,7 @@ namespace Castle.DynamicProxy.Generators
 
 						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(atts);
 
-						ImplementProxiedMethod(targetType, setEmitter,
+						ImplementProxiedMethod(setEmitter,
 											   propToGen.SetMethod, emitter,
 											   nestedClass, interceptorsField, GetTargetRef(propToGen.SetMethod, mixinFields, targetField),
 											   ConstructorVersion.WithTargetMethod,
@@ -274,7 +273,7 @@ namespace Castle.DynamicProxy.Generators
 
 					MethodEmitter addEmitter = eventToGenerate.Emitter.CreateAddMethod(add_atts);
 
-					ImplementProxiedMethod(targetType, addEmitter,
+					ImplementProxiedMethod(addEmitter,
 										   eventToGenerate.AddMethod, emitter,
 										   add_nestedClass, interceptorsField,
 										   GetTargetRef(eventToGenerate.AddMethod, mixinFields, targetField),
@@ -290,7 +289,7 @@ namespace Castle.DynamicProxy.Generators
 
 					MethodEmitter removeEmitter = eventToGenerate.Emitter.CreateRemoveMethod(remove_atts);
 
-					ImplementProxiedMethod(targetType, removeEmitter,
+					ImplementProxiedMethod(removeEmitter,
 										   eventToGenerate.RemoveMethod, emitter,
 										   remove_nestedClass, interceptorsField,
 										   GetTargetRef(eventToGenerate.RemoveMethod, mixinFields, targetField),
@@ -304,7 +303,7 @@ namespace Castle.DynamicProxy.Generators
 
                 if (interfaces != null && interfaces.Length != 0)
                 {
-                	ImplementBlankInterfaces(targetType, interfaces, emitter, interceptorsField, typeInitializer,
+                	ImplementBlankInterfaces(interfaces, emitter, interceptorsField, typeInitializer,
                 	                         AllowChangeTarget, methods, propsToGenerate, eventToGenerates);
                 }
 
@@ -439,6 +438,14 @@ namespace Castle.DynamicProxy.Generators
 			return members;
 		}
 
+		protected override void ImplementInvokeMethodOnTarget(NestedClassEmitter nested, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
+		{
+			method.CodeBuilder.AddStatement(
+				new ExpressionStatement(
+					new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
+			base.ImplementInvokeMethodOnTarget(nested, parameters, method, callbackMethod, targetField);
+		}
+
 		/// <summary>
 		/// Checks whether the given types are the same. This is 
 		/// more complicated than it looks.
@@ -523,7 +530,12 @@ namespace Castle.DynamicProxy.Generators
 			return false;
 		}
 
-		/// <summary>
+	    protected override Reference GetMethodTargetReference(MethodInfo method)
+	    {
+	        return new AsTypeReference(targetField, method.DeclaringType);
+	    }
+
+	    /// <summary>
 		/// Checks whether the given methods are the same.
 		/// </summary>
 		/// <param name="methodInfo"></param>

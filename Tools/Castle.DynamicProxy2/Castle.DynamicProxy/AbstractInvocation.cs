@@ -72,6 +72,22 @@ namespace Castle.DynamicProxy
 			this.interceptors = methodInterceptors;
 		}
 
+		protected void EnsureValidTarget()
+		{
+			if(target==null)
+			{
+				string message = "This is a DynamicProxy2 error: the interceptor attempted " +
+				                 "to 'Proceed' for a method without a target, for example, an interface method or an abstract method";
+				throw new NotImplementedException(message);
+			}
+			if(ReferenceEquals( target , proxy))
+			{
+				string message =
+					"This is a DynamicProxy2 error: target of invocation has been set to the proxy itself. This usually signify a bug in the calling code.";
+				throw new InvalidOperationException(message);
+			}
+		}
+
 		private IInterceptor[] SelectMethodInterceptors(IInterceptorSelector selector, IInterceptor[] methodInterceptors)
 		{
 			if (methodInterceptors == null)
