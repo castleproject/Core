@@ -230,16 +230,20 @@ namespace Castle.DynamicProxy.Generators
 					{
 						NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
 
-						MethodAttributes atts = ObtainMethodAttributes(propToGen.GetMethod);
+						string name;
+						MethodAttributes atts = ObtainMethodAttributes(propToGen.GetMethod,out name);
 
-						MethodEmitter getEmitter = propToGen.Emitter.CreateGetMethod(atts);
+						MethodEmitter getEmitter = propToGen.Emitter.CreateGetMethod(name, atts);
 
-						ImplementProxiedMethod(getEmitter,
-											   propToGen.GetMethod, emitter,
-											   nestedClass, interceptorsField, GetTargetRef(propToGen.GetMethod, mixinFields, targetField),
-											   ConstructorVersion.WithTargetMethod,
-											   method2methodOnTarget[propToGen.GetMethod]);
-
+						MethodEmitter method = ImplementProxiedMethod(getEmitter,
+						                                              propToGen.GetMethod, emitter,
+						                                              nestedClass, interceptorsField, GetTargetRef(propToGen.GetMethod, mixinFields, targetField),
+						                                              ConstructorVersion.WithTargetMethod,
+						                                              method2methodOnTarget[propToGen.GetMethod]);
+						if (propToGen.GetMethod.DeclaringType.IsInterface)
+						{
+							emitter.TypeBuilder.DefineMethodOverride(method.MethodBuilder, propToGen.GetMethod);
+						}
 						ReplicateNonInheritableAttributes(propToGen.GetMethod, getEmitter);
 
 						// emitter.TypeBuilder.DefineMethodOverride(getEmitter.MethodBuilder, propToGen.GetMethod);
@@ -249,16 +253,20 @@ namespace Castle.DynamicProxy.Generators
 					{
 						NestedClassEmitter nestedClass = method2Invocation[propToGen.SetMethod];
 
-						MethodAttributes atts = ObtainMethodAttributes(propToGen.SetMethod);
+						string name;
+						MethodAttributes atts = ObtainMethodAttributes(propToGen.SetMethod,out name);
 
-						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(atts);
+						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(name, atts);
 
-						ImplementProxiedMethod(setEmitter,
-											   propToGen.SetMethod, emitter,
-											   nestedClass, interceptorsField, GetTargetRef(propToGen.SetMethod, mixinFields, targetField),
-											   ConstructorVersion.WithTargetMethod,
-											   method2methodOnTarget[propToGen.SetMethod]);
-
+						MethodEmitter method = ImplementProxiedMethod(setEmitter,
+						                                              propToGen.SetMethod, emitter,
+						                                              nestedClass, interceptorsField, GetTargetRef(propToGen.SetMethod, mixinFields, targetField),
+						                                              ConstructorVersion.WithTargetMethod,
+						                                              method2methodOnTarget[propToGen.SetMethod]);
+						if (propToGen.SetMethod.DeclaringType.IsInterface)
+						{
+							emitter.TypeBuilder.DefineMethodOverride(method.MethodBuilder, propToGen.SetMethod);
+						}
 						ReplicateNonInheritableAttributes(propToGen.SetMethod, setEmitter);
 
 						// emitter.TypeBuilder.DefineMethodOverride(setEmitter.MethodBuilder, propToGen.SetMethod);
@@ -269,33 +277,40 @@ namespace Castle.DynamicProxy.Generators
 				{
 					eventToGenerate.BuildEventEmitter(emitter);
 					NestedClassEmitter add_nestedClass = method2Invocation[eventToGenerate.AddMethod];
-					MethodAttributes add_atts = ObtainMethodAttributes(eventToGenerate.AddMethod);
+					string name;
+					MethodAttributes add_atts = ObtainMethodAttributes(eventToGenerate.AddMethod,out name);
 
-					MethodEmitter addEmitter = eventToGenerate.Emitter.CreateAddMethod(add_atts);
+					MethodEmitter addEmitter = eventToGenerate.Emitter.CreateAddMethod(name, add_atts);
 
-					ImplementProxiedMethod(addEmitter,
-										   eventToGenerate.AddMethod, emitter,
-										   add_nestedClass, interceptorsField,
-										   GetTargetRef(eventToGenerate.AddMethod, mixinFields, targetField),
-										   ConstructorVersion.WithTargetMethod,
-										   method2methodOnTarget[eventToGenerate.AddMethod]);
-
+					MethodEmitter method = ImplementProxiedMethod(addEmitter,
+					                                              eventToGenerate.AddMethod, emitter,
+					                                              add_nestedClass, interceptorsField,
+					                                              GetTargetRef(eventToGenerate.AddMethod, mixinFields, targetField),
+					                                              ConstructorVersion.WithTargetMethod,
+					                                              method2methodOnTarget[eventToGenerate.AddMethod]);
+					if (eventToGenerate.AddMethod.DeclaringType.IsInterface)
+					{
+						emitter.TypeBuilder.DefineMethodOverride(method.MethodBuilder, eventToGenerate.AddMethod);
+					}
 					ReplicateNonInheritableAttributes(eventToGenerate.AddMethod, addEmitter);
 
 
 					NestedClassEmitter remove_nestedClass = method2Invocation[eventToGenerate.RemoveMethod];
 
-					MethodAttributes remove_atts = ObtainMethodAttributes(eventToGenerate.RemoveMethod);
+					MethodAttributes remove_atts = ObtainMethodAttributes(eventToGenerate.RemoveMethod,out name);
 
-					MethodEmitter removeEmitter = eventToGenerate.Emitter.CreateRemoveMethod(remove_atts);
+					MethodEmitter removeEmitter = eventToGenerate.Emitter.CreateRemoveMethod(name, remove_atts);
 
-					ImplementProxiedMethod(removeEmitter,
-										   eventToGenerate.RemoveMethod, emitter,
-										   remove_nestedClass, interceptorsField,
-										   GetTargetRef(eventToGenerate.RemoveMethod, mixinFields, targetField),
-										   ConstructorVersion.WithTargetMethod,
-										   method2methodOnTarget[eventToGenerate.RemoveMethod]);
-
+					MethodEmitter methodEmitter = ImplementProxiedMethod(removeEmitter,
+					                                                     eventToGenerate.RemoveMethod, emitter,
+					                                                     remove_nestedClass, interceptorsField,
+					                                                     GetTargetRef(eventToGenerate.RemoveMethod, mixinFields, targetField),
+					                                                     ConstructorVersion.WithTargetMethod,
+					                                                     method2methodOnTarget[eventToGenerate.RemoveMethod]);
+					if (eventToGenerate.RemoveMethod.DeclaringType.IsInterface)
+					{
+						emitter.TypeBuilder.DefineMethodOverride(methodEmitter.MethodBuilder, eventToGenerate.RemoveMethod);
+					}
 					ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);
 				}
 
@@ -440,10 +455,89 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override void ImplementInvokeMethodOnTarget(NestedClassEmitter nested, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
 		{
+			MethodInfo callbackMethod1 = callbackMethod;
 			method.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
-			base.ImplementInvokeMethodOnTarget(nested, parameters, method, callbackMethod, targetField);
+			Expression[] args = new Expression[parameters.Length];
+
+			// Idea: instead of grab parameters one by one
+			// we should grab an array
+			Dictionary<int, LocalReference> byRefArguments = new Dictionary<int, LocalReference>();
+
+			for (int i = 0; i < parameters.Length; i++)
+			{
+				ParameterInfo param = parameters[i];
+
+				Type paramType = GetParamType(nested, param.ParameterType);
+				if (paramType.IsByRef)
+				{
+					LocalReference localReference = method.CodeBuilder.DeclareLocal(paramType.GetElementType());
+					method.CodeBuilder.AddStatement(
+						new AssignStatement(localReference,
+						                    new ConvertExpression(paramType.GetElementType(),
+						                                          new MethodInvocationExpression(SelfReference.Self,
+						                                                                         InvocationMethods.GetArgumentValue,
+						                                                                         new LiteralIntExpression(i)))));
+					ByRefReference byRefReference = new ByRefReference(localReference);
+					args[i] = new ReferenceExpression(byRefReference);
+					byRefArguments[i] = localReference;
+				}
+				else
+				{
+					args[i] =
+						new ConvertExpression(paramType,
+						                      new MethodInvocationExpression(SelfReference.Self,
+						                                                     InvocationMethods.GetArgumentValue,
+						                                                     new LiteralIntExpression(i)));
+				}
+			}
+
+			if (callbackMethod1.IsGenericMethod)
+			{
+				callbackMethod1 = callbackMethod1.MakeGenericMethod(nested.GetGenericArgumentsFor(callbackMethod1));
+			}
+
+			MethodInvocationExpression baseMethodInvExp = new MethodInvocationExpression(targetField, callbackMethod1, args);
+			baseMethodInvExp.VirtualCall = true;
+
+			LocalReference returnValue = null;
+			if (callbackMethod1.ReturnType != typeof(void))
+			{
+				Type returnType = this.GetParamType(nested, callbackMethod1.ReturnType);
+				returnValue = method.CodeBuilder.DeclareLocal(returnType);
+				method.CodeBuilder.AddStatement(new AssignStatement(returnValue, baseMethodInvExp));
+			}
+			else
+			{
+				method.CodeBuilder.AddStatement(new ExpressionStatement(baseMethodInvExp));
+			}
+
+			foreach (KeyValuePair<int, LocalReference> byRefArgument in byRefArguments)
+			{
+				int index = byRefArgument.Key;
+				LocalReference localReference = byRefArgument.Value;
+				method.CodeBuilder.AddStatement(
+					new ExpressionStatement(
+						new MethodInvocationExpression(SelfReference.Self,
+						                               InvocationMethods.SetArgumentValue,
+						                               new LiteralIntExpression(index),
+						                               new ConvertExpression(typeof(object), localReference.Type,
+						                                                     new ReferenceExpression(localReference)))
+						));
+			}
+
+			if (callbackMethod1.ReturnType != typeof(void))
+			{
+				MethodInvocationExpression setRetVal =
+					new MethodInvocationExpression(SelfReference.Self,
+					                               InvocationMethods.SetReturnValue,
+					                               new ConvertExpression(typeof(object), returnValue.Type, returnValue.ToExpression()));
+
+				method.CodeBuilder.AddStatement(new ExpressionStatement(setRetVal));
+			}
+
+			method.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
 		/// <summary>
@@ -530,7 +624,12 @@ namespace Castle.DynamicProxy.Generators
 			return false;
 		}
 
-	    protected override Reference GetMethodTargetReference(MethodInfo method)
+		protected override MethodInfo GetCallbackForMethod(MethodInfo method)
+		{
+			return method;
+		}
+
+		protected override Reference GetMethodTargetReference(MethodInfo method)
 	    {
 	        return new AsTypeReference(targetField, method.DeclaringType);
 	    }

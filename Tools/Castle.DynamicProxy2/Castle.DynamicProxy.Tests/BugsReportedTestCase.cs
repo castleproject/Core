@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.BugsReported;
+	using Interceptors;
 	using InterClasses;
 	using NUnit.Framework;
 
@@ -43,7 +44,7 @@ namespace Castle.DynamicProxy.Tests
 			IHaveOnlySetter proxy = (IHaveOnlySetter)
 			                        generator.CreateInterfaceProxyWithTarget(typeof (IHaveOnlySetter),
 			                                                                 new HaveOnlySetter(),
-			                                                                 new SkipCallingMethodInterceptor());
+			                                                                 new DoNothingInterceptor());
 
 			Assert.IsNotNull(proxy);
 
@@ -71,7 +72,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			IUserRepository proxy = (IUserRepository)
 			                        generator.CreateInterfaceProxyWithoutTarget(typeof (IUserRepository),
-			                                                                    new SkipCallingMethodInterceptor());
+                                                                                new DoNothingInterceptor());
 
 			Assert.IsNotNull(proxy);
 		}
@@ -132,13 +133,6 @@ namespace Castle.DynamicProxy.Tests
 	public abstract class AbstractClass
 	{
 		public abstract string Foo();
-	}
-
-	public class SkipCallingMethodInterceptor : IInterceptor
-	{
-		public void Intercept(IInvocation invocation)
-		{
-		}
 	}
 
 	public interface IHaveOnlySetter

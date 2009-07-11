@@ -90,6 +90,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public MethodEmitter CreateGetMethod(MethodAttributes attrs, params Type[] parameters)
 		{
+			return CreateGetMethod("get_" + builder.Name, attrs, parameters);
+		}
+
+		public MethodEmitter CreateGetMethod(string name, MethodAttributes attrs, params Type[] parameters)
+		{
 			if (getMethod != null)
 			{
 				throw new InvalidOperationException("A getMethod exists");
@@ -97,11 +102,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			if (parameters.Length == 0)
 			{
-				getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name, attrs);
+				getMethod = new MethodEmitter(parentTypeEmitter, name, attrs);
 			}
 			else
 			{
-				getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name,
+				getMethod = new MethodEmitter(parentTypeEmitter, name,
 				                              attrs,
 				                              ReturnType,
 				                              parameters);
@@ -126,6 +131,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public MethodEmitter CreateSetMethod(MethodAttributes attrs, params Type[] parameters)
 		{
+			return CreateSetMethod("set_" + builder.Name, attrs, parameters);
+		}
+
+		public MethodEmitter CreateSetMethod(string name, MethodAttributes attrs, params Type[] parameters)
+		{
 			if (setMethod != null)
 			{
 				throw new InvalidOperationException("A setMethod exists");
@@ -133,11 +143,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			if (parameters.Length == 0)
 			{
-				setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name, attrs);
+				setMethod = new MethodEmitter(parentTypeEmitter, name, attrs);
 			}
 			else
 			{
-				setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name,
+				setMethod = new MethodEmitter(parentTypeEmitter, name,
 				                              attrs, typeof (void),
 				                              parameters);
 			}

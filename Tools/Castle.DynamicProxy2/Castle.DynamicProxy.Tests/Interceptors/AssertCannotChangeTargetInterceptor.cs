@@ -14,22 +14,15 @@
 
 namespace Castle.DynamicProxy.Tests.Interceptors
 {
-	using Castle.Core.Interceptor;
+    using Core.Interceptor;
+    using NUnit.Framework;
 
-    public class ChangeTargetInterceptor : IInterceptor
-	{
-		private object target;
-
-		public ChangeTargetInterceptor(object target)
-		{
-			this.target = target;
-		}
-
-		public void Intercept(IInvocation invocation)
-		{
-			IChangeProxyTarget changeTarget = (IChangeProxyTarget) invocation;
-			changeTarget.ChangeInvocationTarget(target);
-			invocation.Proceed();
-		}
-	}
+    public class AssertCannotChangeTargetInterceptor : IInterceptor
+    {
+        public void Intercept(IInvocation invocation)
+        {
+            Assert.IsNotInstanceOf(typeof (IChangeProxyTarget), invocation);
+            invocation.Proceed();
+        }
+    }
 }

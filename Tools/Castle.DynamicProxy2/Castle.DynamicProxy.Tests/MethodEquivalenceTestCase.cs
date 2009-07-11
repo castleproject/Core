@@ -27,11 +27,11 @@ namespace Castle.DynamicProxy.Tests
 			ProxyGenerator generator = new ProxyGenerator();
 
 			IMyService target1 = (IMyService)generator.CreateInterfaceProxyWithTarget(
-				typeof(IMyService), new MyServiceImpl(), new NoOpInterceptor());
+				typeof(IMyService), new MyServiceImpl(), new StandardInterceptor());
 			Assert.IsNotNull(target1.CreateSomething<int>("aa"));
 
 			IMyService target2 = (IMyService)generator.CreateClassProxy(
-				typeof(MyServiceImpl), new NoOpInterceptor());
+                typeof(MyServiceImpl), new StandardInterceptor());
 			Assert.IsNotNull(target2.CreateSomething<int>("aa"));
 		}
 	}
@@ -62,14 +62,6 @@ namespace Castle.DynamicProxy.Tests
 		public ISomething CreateSomething(string somethingKey)
 		{
 			return new NoOpSomething();
-		}
-	}
-
-	public class NoOpInterceptor : IInterceptor
-	{
-		public void Intercept(IInvocation invocation)
-		{
-			invocation.Proceed();
 		}
 	}
 }
