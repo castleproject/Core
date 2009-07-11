@@ -14,42 +14,38 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	using System;
-	using System.Reflection.Emit;
+    using System;
+    using System.Reflection.Emit;
 
-	public class AsTypeReference : Reference
-	{
-		private readonly Reference reference;
-		private readonly Type type;
+    public class AsTypeReference : Reference
+    {
+        private readonly Reference reference;
+        private readonly Type type;
 
-		public AsTypeReference(Reference reference, Type type)
-		{
-			if (reference == null) throw new ArgumentNullException("reference");
-			if (type == null) throw new ArgumentNullException("type");
-			this.reference = reference;
-			this.type = type;
-			if(reference == OwnerReference)
-			{
-				OwnerReference = null;
-			}
-		}
+        public AsTypeReference(Reference reference, Type type)
+        {
+            if (reference == null) throw new ArgumentNullException("reference");
+            if (type == null) throw new ArgumentNullException("type");
+            this.reference = reference;
+            this.type = type;
+        }
 
-		public override void LoadAddressOfReference(ILGenerator gen)
-		{
-			// NOTE: Or maybe throw new NotSupportedException() ?
-			reference.LoadAddressOfReference(gen);
-		}
+        public override void LoadAddressOfReference(ILGenerator gen)
+        {
+            // NOTE: Or maybe throw new NotSupportedException() ?
+            reference.LoadAddressOfReference(gen);
+        }
 
-		public override void LoadReference(ILGenerator gen)
-		{
-			reference.LoadReference(gen);
-			gen.Emit(OpCodes.Isinst, type);
-		}
+        public override void LoadReference(ILGenerator gen)
+        {
+            reference.LoadReference(gen);
+            gen.Emit(OpCodes.Isinst, type);
+        }
 
-		public override void StoreReference(ILGenerator gen)
-		{
-			// NOTE: Or maybe throw new NotSupportedException() ?
-			reference.StoreReference(gen);
-		}
-	}
+        public override void StoreReference(ILGenerator gen)
+        {
+            // NOTE: Or maybe throw new NotSupportedException() ?
+            reference.StoreReference(gen);
+        }
+    }
 }

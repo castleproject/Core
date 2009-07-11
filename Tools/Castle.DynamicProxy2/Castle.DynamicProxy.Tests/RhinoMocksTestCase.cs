@@ -41,19 +41,22 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void GenericClassWithGenericMethodWitoutTarget()
 		{
-		    var interceptor = new SetReturnValueInterceptor(3);
-		    IDoubleGeneric<int> proxy =
+			BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor interceptor =
+				new BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor();
+			IDoubleGeneric<int> proxy =
 				(IDoubleGeneric<int>) generator.CreateInterfaceProxyWithoutTarget(typeof (IDoubleGeneric<int>),
 				                                                                  interceptor);
-			object o = proxy.Call(1, "");
+			object o = proxy.Call<string>(1, "");
 			Assert.AreEqual(3, o);
 		}
 
 		[Test, Ignore(".Net 3.5 SP 1 broke this one")]
 		public void CanProxyMethodWithModOpt()
 		{
-		    IHaveMethodWithModOpts proxy =
-				(IHaveMethodWithModOpts) generator.CreateInterfaceProxyWithoutTarget(typeof (IHaveMethodWithModOpts), new DoNothingInterceptor());
+			SkipCallingMethodInterceptor interceptor =
+				new SkipCallingMethodInterceptor();
+			IHaveMethodWithModOpts proxy =
+				(IHaveMethodWithModOpts) generator.CreateInterfaceProxyWithoutTarget(typeof (IHaveMethodWithModOpts), interceptor);
 			proxy.StartLiveOnSlot(4);
 		}
 
@@ -62,7 +65,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			generator.CreateInterfaceProxyWithoutTarget(
 				typeof (IStore1),
-                new DoNothingInterceptor());
+				new SkipCallingMethodInterceptor());
 		}
 
 		[Test]
@@ -146,7 +149,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			IFooWithIntPtr o = (IFooWithIntPtr) generator
 			                                    	.CreateInterfaceProxyWithoutTarget(typeof (IFooWithIntPtr),
-			                                    	                                   new SetReturnValueInterceptor(IntPtr.Zero));
+			                                    	                                   new IntPtrInterceptor());
 			IntPtr buffer = o.Buffer(15);
 			Assert.AreEqual(IntPtr.Zero, buffer);
 		}
@@ -379,7 +382,15 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
-    public interface IFooWithOutIntPtr
+	public class IntPtrInterceptor : IInterceptor
+	{
+		public void Intercept(IInvocation invocation)
+		{
+			invocation.ReturnValue = IntPtr.Zero;
+		}
+	}
+
+	public interface IFooWithOutIntPtr
 	{
 		int Bar(out IntPtr i);
 	}

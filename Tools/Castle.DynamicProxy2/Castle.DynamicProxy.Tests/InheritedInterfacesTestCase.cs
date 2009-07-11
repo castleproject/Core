@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Reflection;
 	using Core.Interceptor;
-	using Interceptors;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -42,18 +41,20 @@ namespace Castle.DynamicProxy.Tests
 			object o = generator.CreateInterfaceProxyWithTarget(typeof(IHasEvent),
 			                                                    new[] {typeof(IHasEventBar), typeof(IHasEventFoo)}, target,
 			                                                    new StandardInterceptor());
-			EventInfo[] events = o.GetType().GetEvents(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			EventInfo[] events = o.GetType().GetEvents();
 			Assert.AreEqual(3, events.Length);
 		}
 
 		[Test]
-		public void Should_not_have_duplicated_properties_for_interface_proxy_with_inherited_target_and_two_inherited_additional_interfaces()
+		public void
+			Should_not_have_duplicated_properties_for_interface_proxy_with_inherited_target_and_two_inherited_additional_interfaces
+			()
 		{
 			var target = new HasPropertyBar();
 			object o = generator.CreateInterfaceProxyWithTarget(typeof(IHasProperty),
 			                                                    new[] {typeof(IHasPropertyBar), typeof(IHasPropertyFoo)}, target,
 			                                                    new StandardInterceptor());
-			PropertyInfo[] properties = o.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			PropertyInfo[] properties = o.GetType().GetProperties();
 			Assert.AreEqual(3, properties.Length);
 		}
 
@@ -63,7 +64,7 @@ namespace Castle.DynamicProxy.Tests
 			var foo =
 				(IHasMethod)
 				generator.CreateInterfaceProxyWithoutTarget(typeof(IHasMethod), new[] {typeof(IFooExtended), typeof(IBarFoo)},
-				                                            new DoNothingInterceptor());
+				                                            new BuryAllInterceptor());
 
 			foo.Foo();
 			((IFooExtended) foo).FooExtended();
@@ -75,11 +76,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var target = new ImplementedFooExtended();
 
-		    var foo =
-		        (IHasMethod)
-		        generator.CreateInterfaceProxyWithTarget(typeof (IHasMethod), new[] {typeof (IFooExtended), typeof (IBarFoo)},
-		                                                 target,
-		                                                 new ProceedOnTypeInterceptor(typeof (IBarFoo)));
+			var foo =
+				(IHasMethod)
+				generator.CreateInterfaceProxyWithTarget(typeof(IHasMethod), new[] {typeof(IFooExtended), typeof(IBarFoo)}, target,
+				                                         new BuryBarFooInterceptor());
 
 			foo.Foo();
 			((IFooExtended) foo).FooExtended();
@@ -172,6 +172,32 @@ namespace Castle.DynamicProxy.Tests
 
 		public void Foo()
 		{
+		}
+
+		#endregion
+	}
+
+	public class BuryAllInterceptor : IInterceptor
+	{
+		#region IInterceptor Members
+
+		public void Intercept(IInvocation invocation)
+		{
+		}
+
+		#endregion
+	}
+
+	public class BuryBarFooInterceptor : IInterceptor
+	{
+		#region IInterceptor Members
+
+		public void Intercept(IInvocation invocation)
+		{
+			if (invocation.Method.DeclaringType != typeof(IBarFoo))
+			{
+				invocation.Proceed();
+			}
 		}
 
 		#endregion

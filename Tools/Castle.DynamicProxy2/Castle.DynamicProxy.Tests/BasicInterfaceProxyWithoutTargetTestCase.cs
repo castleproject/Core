@@ -24,8 +24,7 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class BasicInterfaceProxyWithoutTargetTestCase : BasePEVerifyTestCase
 	{
-
-	    [Test]
+		[Test]
 		[ExpectedException(typeof (NotImplementedException),
 			ExpectedMessage =
 				"This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
@@ -44,7 +43,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			IService service = (IService)
 							   generator.CreateInterfaceProxyWithoutTarget(
-                                typeof(IService), new SetReturnValueInterceptor(3));
+								typeof(IService), new ReturnThreeInterceptor());
 
 			int result = service.Sum(2, 2);
 			Assert.AreEqual(3, result);
@@ -73,12 +72,20 @@ namespace Castle.DynamicProxy.Tests
 		{
 			IService service = (IService)
 							   generator.CreateInterfaceProxyWithoutTarget(
-								typeof(IService), new AssertCannotChangeTargetInterceptor(), new SetReturnValueInterceptor(3));
+								typeof(IService), new AssertCannotChangeTargetInterceptor(), new ReturnThreeInterceptor());
 
 			int result = service.Sum(2, 2);
 			Assert.AreEqual(3, result);
 		}
-        
+
+		public class ReturnThreeInterceptor : IInterceptor
+		{
+			public void Intercept(IInvocation invocation)
+			{
+				invocation.ReturnValue = 3;
+			}
+		}
+
 		public class ThrowingInterceptorException : Exception
 		{
 			public ThrowingInterceptorException(string message)

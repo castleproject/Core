@@ -23,7 +23,6 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
-	using InterceptorSelector;
 	using ClassWithIndexer = Castle.DynamicProxy.Tests.Classes.ClassWithIndexer;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using NUnit.Framework;
@@ -193,7 +192,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyForClassWithInterfaces()
 		{
-			object proxy = generator.CreateClassProxy(typeof(ServiceClass), new[] { typeof(IDisposable) },
+			object proxy = generator.CreateClassProxy(typeof(ServiceClass), new Type[] { typeof(IDisposable) },
 													  new ResultModifierInterceptor());
 
 			Assert.IsNotNull(proxy);
@@ -234,14 +233,14 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyForClassWithConstructors()
 		{
 			object proxy = generator.CreateClassProxy(
-				typeof(ClassWithConstructors), new object[] { "name" }, new StandardInterceptor());
+				typeof(ClassWithConstructors), new object[] {"name"}, new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
 			ClassWithConstructors classProxy = (ClassWithConstructors)proxy;
 			Assert.AreEqual("name", classProxy.Name);
 
-			proxy = generator.CreateClassProxy(typeof(ClassWithConstructors), new object[] { "name", 10 },
-											   new StandardInterceptor());
+			proxy = generator.CreateClassProxy(typeof(ClassWithConstructors), new object[] {"name", 10},
+			                                   new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
 			classProxy = (ClassWithConstructors)proxy;
@@ -280,11 +279,11 @@ namespace Castle.DynamicProxy.Tests
 			ClassWithMultiDimentionalArray proxy =
 				generator.CreateClassProxy<ClassWithMultiDimentionalArray>(log);
 
-			int[,] x = new int[1, 2];
+			int[,] x = new int[1,2];
 
-			proxy.Do(new int[] { 1 });
+			proxy.Do(new int[] {1});
 			proxy.Do2(x);
-			proxy.Do3(new string[] { "1", "2" });
+			proxy.Do3(new string[] {"1", "2"});
 
 			Assert.AreEqual("Do Do2 Do3 ", log.LogContents);
 		}
@@ -319,7 +318,7 @@ namespace Castle.DynamicProxy.Tests
 		[Ignore("To get this running, the Tests project must not be signed.")]
 		public void ProxyForBaseTypeFromUnsignedAssembly()
 		{
-			Type t = typeof(MyClass);
+			Type t = typeof (MyClass);
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.Assembly));
 			object proxy = generator.CreateClassProxy(t, new StandardInterceptor());
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
@@ -329,11 +328,11 @@ namespace Castle.DynamicProxy.Tests
 		[Ignore("To get this running, the Tests project must not be signed.")]
 		public void ProxyForBaseTypeAndInterfaceFromUnsignedAssembly()
 		{
-			Type t1 = typeof(MyClass);
-			Type t2 = typeof(IService);
+			Type t1 = typeof (MyClass);
+			Type t2 = typeof (IService);
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.Assembly));
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.Assembly));
-			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
+			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
@@ -341,11 +340,11 @@ namespace Castle.DynamicProxy.Tests
 		[Ignore("To get this running, the Tests project must not be signed.")]
 		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies1()
 		{
-			Type t1 = typeof(MyClass);
-			Type t2 = typeof(IServiceProvider);
+			Type t1 = typeof (MyClass);
+			Type t2 = typeof (IServiceProvider);
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.Assembly));
 			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.Assembly));
-			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
+			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
@@ -353,11 +352,11 @@ namespace Castle.DynamicProxy.Tests
 		[Ignore("To get this running, the Tests project must not be signed.")]
 		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies2()
 		{
-			Type t1 = typeof(List<int>);
-			Type t2 = typeof(IService);
+			Type t1 = typeof (List<int>);
+			Type t2 = typeof (IService);
 			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.Assembly));
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.Assembly));
-			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
+			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
@@ -412,54 +411,6 @@ namespace Castle.DynamicProxy.Tests
 			object proxy = generator.CreateClassProxy<ClassWithProtectedDefaultConstructor>();
 			object proxy2 = Activator.CreateInstance(proxy.GetType());
 			Assert.AreEqual("Something", ((ClassWithProtectedDefaultConstructor)proxy2).SomeString);
-		}
-		[Test]
-		public void Should_proxy_interface_members_implemented_explicitly_by_baseType_without_target()
-		{
-			var proxy = generator.CreateClassProxy(typeof(ClassWithExplicitInterface),
-												   new[] { typeof(ISimpleInterface) }) as ISimpleInterface;
-			Assert.Throws<NotImplementedException>(() => proxy.Do());
-			
-		}
-
-		[Test]
-		public void Should_proxy_interface_members_implemented_explicitly_by_baseType()
-		{
-			var interceptor = new CallCountingInterceptor();
-			var proxy = generator.CreateClassProxy(typeof (ClassWithExplicitInterface),
-												   new[] { typeof(ISimpleInterface) }, interceptor, new SetReturnValueInterceptor(3)) as ISimpleInterface;
-			var result = proxy.Do();
-			Assert.AreEqual(1, interceptor.Count);
-			Assert.AreEqual(3, result);
-		}
-
-		[Test]
-		public void Should_proxy_members_of_interfaces_implemented_by_baseType()
-		{
-			var interceptor = new CallCountingInterceptor();
-			var proxy = generator.CreateClassProxy(typeof (ClassWithInterface), new[] {typeof (ISimpleInterface)},
-			                                       interceptor) as ClassWithInterface ;
-			(proxy as ISimpleInterface).Do();
-			Assert.AreEqual(1, interceptor.Count);
-		}
-
-		public class ResultModifierInterceptor : StandardInterceptor
-		{
-			protected override void PostProceed(IInvocation invocation)
-			{
-				object returnValue = invocation.ReturnValue;
-
-				if (returnValue != null && returnValue.GetType() == typeof(int))
-				{
-					int value = (int)returnValue;
-
-					invocation.ReturnValue = --value;
-				}
-				if (returnValue != null && returnValue.GetType() == typeof(bool))
-				{
-					invocation.ReturnValue = true;
-				}
-			}
 		}
 	}
 }

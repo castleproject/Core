@@ -34,7 +34,7 @@ namespace Castle.DynamicProxy.Tests
 		public void CanCallMethodWithOutParameter()
 		{
 			int i;
-			WithCallbackInterceptor interceptor = new WithCallbackInterceptor(delegate { });
+			InvocatingInterceptor interceptor = new InvocatingInterceptor(delegate { });
 			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
 			proxy.Do(out i);
 		}
@@ -43,8 +43,8 @@ namespace Castle.DynamicProxy.Tests
 		public void CanAffectValueOfOutParameter()
 		{
 			int i;
-			WithCallbackInterceptor interceptor =
-				new WithCallbackInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
+			InvocatingInterceptor interceptor =
+				new InvocatingInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
 			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
 			proxy.Do(out i);
 			Assert.AreEqual(5, i);
@@ -54,8 +54,8 @@ namespace Castle.DynamicProxy.Tests
 		public void CanCreateProxyWithRefParam()
 		{
 			int i = 3;
-			WithCallbackInterceptor interceptor =
-				new WithCallbackInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
+			InvocatingInterceptor interceptor =
+				new InvocatingInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
 			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
 			proxy.Did(ref i);
 			Assert.AreEqual(5, i);
@@ -68,7 +68,7 @@ namespace Castle.DynamicProxy.Tests
 			int i = 3;
 			string s1 = "2";
 			string s2;
-			WithCallbackInterceptor interceptor = new WithCallbackInterceptor(delegate(IInvocation invocation)
+			InvocatingInterceptor interceptor = new InvocatingInterceptor(delegate(IInvocation invocation)
 			                                                              	{
 			                                                              		invocation.Arguments[0] = 5;
 			                                                              		invocation.Arguments[1] = "aaa";
@@ -117,6 +117,24 @@ namespace Castle.DynamicProxy.Tests
 			public virtual void MyMethodWithStruct(ref MyStruct s)
 			{
 				s.Value = 2*s.Value;
+			}
+		}
+
+		public class InvocatingInterceptor : IInterceptor
+		{
+			public delegate void Invoked(IInvocation invocation);
+
+			private Invoked invoked;
+
+			public InvocatingInterceptor(Invoked invoked)
+			{
+				this.invoked = invoked;
+			}
+
+
+			public void Intercept(IInvocation invocation)
+			{
+				invoked(invocation);
 			}
 		}
 	}

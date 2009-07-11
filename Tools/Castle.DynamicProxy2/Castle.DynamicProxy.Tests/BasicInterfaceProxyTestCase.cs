@@ -20,8 +20,6 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
-	using InterceptorSelector;
-	using Interfaces;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -160,28 +158,9 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("myParam", methodParams[0].Name);
 		}
 
-		[Test]
-		public void Should_properly_implement_two_interfaces_with_methods_with_identical_signatures()
+		private ParameterInfo[] GetMyTestMethodParams(Type type)
 		{
-			object proxy = generator.CreateInterfaceProxyWithoutTarget(typeof (IIdenticalOne), new[] {typeof (IIdenticalTwo)},
-			                                                            new DoNothingInterceptor());
-			(proxy as IIdenticalOne).Foo();
-			(proxy as IIdenticalTwo).Foo();
-		}
-
-        [Test]
-        public void Should_implement_target_interface_implicitly_additional_interfaces_explicitly()
-        {
-            Type type = generator.CreateInterfaceProxyWithoutTarget(typeof (IIdenticalOne), new[] {typeof (IIdenticalTwo)}).GetType();
-            MethodInfo method = type.GetMethod("Foo",BindingFlags.Instance|BindingFlags.Public);
-            Assert.IsNotNull(method);
-            MethodInfo method2 = type.GetMethod("IIdenticalTwo.Foo", BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.IsNotNull(method2);
-        }
-
-	    private ParameterInfo[] GetMyTestMethodParams(Type type)
-		{
-			MethodInfo methodInfo = type.GetMethod("MyTestMethod", BindingFlags.Instance | BindingFlags.Public);
+			MethodInfo methodInfo = type.GetMethod("MyTestMethod");
 			return methodInfo.GetParameters();
 		}
 	}
