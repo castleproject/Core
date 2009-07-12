@@ -150,6 +150,7 @@
     <Compile Include="InterClasses\IInterfaceWithGenericMethodWithDependentConstraint.cs" />
     <Compile Include="InheritedInterfacesTestCase.cs" />
     <Compile Include="InterceptorSelectorTestCase.cs" />
+    <Compile Include="InterfaceProxyWithTargetInterfaceTestCase.cs" />
     <Compile Include="Interfaces\IdenticalInterfaces.cs" />
     <Compile Include="MethodEquivalenceTestCase.cs" />
     <Compile Include="MixinDataTestCase.cs" />

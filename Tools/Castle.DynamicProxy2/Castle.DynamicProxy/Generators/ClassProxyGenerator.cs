@@ -133,6 +133,36 @@ namespace Castle.DynamicProxy.Generators
 				PropertyToGenerate[] propsToGenerate;
 				EventToGenerate[] eventsToGenerate;
 				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventsToGenerate);
+				if (interfaces != null && interfaces.Length != 0)
+				{
+					List<Type> tmpInterfaces = new List<Type>(interfaces);
+					List<PropertyToGenerate> actualProperties = new List<PropertyToGenerate>(propsToGenerate);
+					List<EventToGenerate> actualEvents = new List<EventToGenerate>(eventsToGenerate);
+					List<MethodInfo> actualMethods = new List<MethodInfo>(methods);
+
+					foreach (Type inter in interfaces)
+					{
+						if (inter.IsAssignableFrom(targetType))
+						{
+							PropertyToGenerate[] tempPropsToGenerate;
+							EventToGenerate[] tempEventToGenerates;
+							MethodInfo[] methodsTemp =
+								CollectMethodsAndProperties(emitter, inter, out tempPropsToGenerate, out tempEventToGenerates);
+
+							AddIfNew(actualMethods, methodsTemp);
+							AddIfNew(actualProperties, tempPropsToGenerate);
+							AddIfNew(actualEvents, tempEventToGenerates);
+
+							tmpInterfaces.Remove(inter);
+						}
+					}
+
+					interfaces = tmpInterfaces.ToArray();
+					propsToGenerate = actualProperties.ToArray();
+					eventsToGenerate = actualEvents.ToArray();
+					methods = actualMethods.ToArray();
+				}
+
 
 				RegisterMixinMethodsAndProperties(emitter, ref methods, ref propsToGenerate, ref eventsToGenerate);
 
@@ -158,8 +188,6 @@ namespace Castle.DynamicProxy.Generators
 					GenerateSerializationConstructor(emitter, interceptorsField, mixinFields);
 				}
 #endif
-				// Implement interfaces
-
 				if (interfaces != null && interfaces.Length != 0)
 				{
 					ImplementBlankInterfaces(interfaces, emitter, interceptorsField, typeInitializer, false, methods,propsToGenerate,eventsToGenerate);
@@ -171,7 +199,11 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach (MethodInfo method in methods)
 				{
-					method2Callback[method] = CreateCallbackMethod(emitter, method, method);
+					var methodOnTarget = GetMethodOnTarget(method);
+
+					if(methodOnTarget== null) continue;
+
+					method2Callback[method] = CreateCallbackMethod(emitter, method, methodOnTarget);
 				}
 
 				// Create invocation types
@@ -180,7 +212,8 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach (MethodInfo method in methods)
 				{
-					MethodBuilder callbackMethod = method2Callback[method];
+					MethodBuilder callbackMethod;
+					method2Callback.TryGetValue(method, out callbackMethod);
 
 					method2Invocation[method] = BuildInvocationNestedType(emitter,
 					                                                      IsMixinMethod(method)
@@ -222,17 +255,21 @@ namespace Castle.DynamicProxy.Generators
 					{
 						NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
 
-						MethodAttributes atts = ObtainMethodAttributes(propToGen.GetMethod);
+						string name;
+						MethodAttributes atts = ObtainMethodAttributes(propToGen.GetMethod, out name);
 
-						MethodEmitter getEmitter = propToGen.Emitter.CreateGetMethod(atts);
+						MethodEmitter getEmitter = propToGen.Emitter.CreateGetMethod(name, atts);
 
 						Reference targetRef = GetTargetRef(propToGen.GetMethod, mixinFields, SelfReference.Self);
 
-						ImplementProxiedMethod(getEmitter,
-						                       propToGen.GetMethod, emitter,
-						                       nestedClass, interceptorsField, targetRef,
-						                       ConstructorVersion.WithoutTargetMethod, null);
-
+						MethodEmitter proxiedMethod = ImplementProxiedMethod(getEmitter,
+						                                              propToGen.GetMethod, emitter,
+						                                              nestedClass, interceptorsField, targetRef,
+						                                              ConstructorVersion.WithoutTargetMethod, null);
+						if (propToGen.GetMethod.DeclaringType.IsInterface)
+						{
+							emitter.TypeBuilder.DefineMethodOverride(proxiedMethod.MethodBuilder, propToGen.GetMethod);
+						}
 						ReplicateNonInheritableAttributes(propToGen.GetMethod, getEmitter);
 					}
 
@@ -240,17 +277,21 @@ namespace Castle.DynamicProxy.Generators
 					{
 						NestedClassEmitter nestedClass = method2Invocation[propToGen.SetMethod];
 
-						MethodAttributes atts = ObtainMethodAttributes(propToGen.SetMethod);
+						string name;
+						MethodAttributes atts = ObtainMethodAttributes(propToGen.SetMethod,out name);
 
-						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(atts);
+						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(name, atts);
 
 						Reference targetRef = GetTargetRef(propToGen.SetMethod, mixinFields, SelfReference.Self);
 
-						ImplementProxiedMethod(setEmitter,
-						                       propToGen.SetMethod, emitter,
-						                       nestedClass, interceptorsField, targetRef,
-						                       ConstructorVersion.WithoutTargetMethod, null);
-
+						MethodEmitter proxiedMethod = ImplementProxiedMethod(setEmitter,
+						                                              propToGen.SetMethod, emitter,
+						                                              nestedClass, interceptorsField, targetRef,
+						                                              ConstructorVersion.WithoutTargetMethod, null);
+						if (propToGen.SetMethod.DeclaringType.IsInterface)
+						{
+							emitter.TypeBuilder.DefineMethodOverride(proxiedMethod.MethodBuilder, propToGen.SetMethod);
+						}
 						ReplicateNonInheritableAttributes(propToGen.SetMethod, setEmitter);
 					}
 				}
@@ -260,30 +301,37 @@ namespace Castle.DynamicProxy.Generators
 					eventToGenerate.BuildEventEmitter(emitter);
 					NestedClassEmitter add_nestedClass = method2Invocation[eventToGenerate.AddMethod];
 
-					MethodAttributes add_atts = ObtainMethodAttributes(eventToGenerate.AddMethod);
+					string name;
+					MethodAttributes add_atts = ObtainMethodAttributes(eventToGenerate.AddMethod,out name);
 
-					MethodEmitter addEmitter = eventToGenerate.Emitter.CreateAddMethod(add_atts);
+					MethodEmitter addEmitter = eventToGenerate.Emitter.CreateAddMethod(name, add_atts);
 
-					ImplementProxiedMethod(addEmitter,
-					                       eventToGenerate.AddMethod, emitter,
-					                       add_nestedClass, interceptorsField,
-					                       GetTargetRef(eventToGenerate.AddMethod, mixinFields, SelfReference.Self),
-					                       ConstructorVersion.WithoutTargetMethod, null);
-
+					MethodEmitter proxiedMethod = ImplementProxiedMethod(addEmitter,
+					                                              eventToGenerate.AddMethod, emitter,
+					                                              add_nestedClass, interceptorsField,
+					                                              GetTargetRef(eventToGenerate.AddMethod, mixinFields, SelfReference.Self),
+					                                              ConstructorVersion.WithoutTargetMethod, null);
+					if (eventToGenerate.AddMethod.DeclaringType.IsInterface)
+					{
+						emitter.TypeBuilder.DefineMethodOverride(proxiedMethod.MethodBuilder, eventToGenerate.AddMethod);
+					}
 					ReplicateNonInheritableAttributes(eventToGenerate.AddMethod, addEmitter);
 
 					NestedClassEmitter remove_nestedClass = method2Invocation[eventToGenerate.RemoveMethod];
 
-					MethodAttributes remove_atts = ObtainMethodAttributes(eventToGenerate.RemoveMethod);
+					MethodAttributes remove_atts = ObtainMethodAttributes(eventToGenerate.RemoveMethod,out name);
 
-					MethodEmitter removeEmitter = eventToGenerate.Emitter.CreateRemoveMethod(remove_atts);
+					MethodEmitter removeEmitter = eventToGenerate.Emitter.CreateRemoveMethod(name, remove_atts);
 
-					ImplementProxiedMethod(removeEmitter,
-					                       eventToGenerate.RemoveMethod, emitter,
-					                       remove_nestedClass, interceptorsField,
-					                       GetTargetRef(eventToGenerate.RemoveMethod, mixinFields, SelfReference.Self),
-					                       ConstructorVersion.WithoutTargetMethod, null);
-
+					MethodEmitter method = ImplementProxiedMethod(removeEmitter,
+					                                              eventToGenerate.RemoveMethod, emitter,
+					                                              remove_nestedClass, interceptorsField,
+					                                              GetTargetRef(eventToGenerate.RemoveMethod, mixinFields, SelfReference.Self),
+					                                              ConstructorVersion.WithoutTargetMethod, null);
+					if (eventToGenerate.RemoveMethod.DeclaringType.IsInterface)
+					{
+						emitter.TypeBuilder.DefineMethodOverride(method.MethodBuilder, eventToGenerate.RemoveMethod);
+					}
 					ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);
 				}
 
@@ -306,6 +354,38 @@ namespace Castle.DynamicProxy.Generators
 			return type;
 		}
 
+		private MethodInfo GetMethodOnTarget(MethodInfo interfaceMethod)
+		{
+			if (interfaceMethod.DeclaringType.IsClass)
+			{
+				return interfaceMethod;
+			}
+			if(!interfaceMethod.DeclaringType.IsAssignableFrom(targetType))
+			{
+				return null;
+			}
+
+			var map = targetType.GetInterfaceMap(interfaceMethod.DeclaringType);
+			var index = Array.IndexOf(map.InterfaceMethods, interfaceMethod);
+			if (index == -1)
+			{
+				throw new ProxyGenerationException("Could not find interfaceMethod which implements '" + interfaceMethod + "' on target type.");
+			}
+			var method = map.TargetMethods[index];
+			if (!IsExplicitInterfaceMethodImplementation(method))
+			{
+				return method;
+			}
+
+			//it seems there's no way to invoke base explicit implementation. we can't call (base as IFoo).Bar();
+			return null;
+		}
+
+		private bool IsExplicitInterfaceMethodImplementation(MethodInfo method)
+		{
+			return method.IsFinal && method.IsPrivate;
+		}
+
 		protected override Reference GetProxyTargetReference()
 		{
 			return SelfReference.Self;
@@ -316,9 +396,19 @@ namespace Castle.DynamicProxy.Generators
 			return true;
 		}
 
-	    protected override Reference GetMethodTargetReference(MethodInfo method)
+		protected override MethodInfo GetCallbackForMethod(MethodInfo method)
+		{
+			if (method.DeclaringType.IsAssignableFrom(targetType))
+			{
+				return method;
+			}
+
+			return null;
+		}
+
+		protected override Reference GetMethodTargetReference(MethodInfo method)
 	    {
-	        return SelfReference.Self;
+	    	return new AsTypeReference(SelfReference.Self, method.DeclaringType);
 	    }
 
 #if !SILVERLIGHT

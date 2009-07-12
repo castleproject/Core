@@ -42,20 +42,18 @@ namespace Castle.DynamicProxy.Tests
 			object o = generator.CreateInterfaceProxyWithTarget(typeof(IHasEvent),
 			                                                    new[] {typeof(IHasEventBar), typeof(IHasEventFoo)}, target,
 			                                                    new StandardInterceptor());
-			EventInfo[] events = o.GetType().GetEvents();
+			EventInfo[] events = o.GetType().GetEvents(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 			Assert.AreEqual(3, events.Length);
 		}
 
 		[Test]
-		public void
-			Should_not_have_duplicated_properties_for_interface_proxy_with_inherited_target_and_two_inherited_additional_interfaces
-			()
+		public void Should_not_have_duplicated_properties_for_interface_proxy_with_inherited_target_and_two_inherited_additional_interfaces()
 		{
 			var target = new HasPropertyBar();
 			object o = generator.CreateInterfaceProxyWithTarget(typeof(IHasProperty),
 			                                                    new[] {typeof(IHasPropertyBar), typeof(IHasPropertyFoo)}, target,
 			                                                    new StandardInterceptor());
-			PropertyInfo[] properties = o.GetType().GetProperties();
+			PropertyInfo[] properties = o.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 			Assert.AreEqual(3, properties.Length);
 		}
 
