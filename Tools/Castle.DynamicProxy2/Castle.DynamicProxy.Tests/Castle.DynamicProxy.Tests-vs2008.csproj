@@ -144,8 +144,7 @@
     <Compile Include="GenInterfaces\GenericMethodWhereOneGenParamInheritsTheOther.cs" />
     <Compile Include="InterClasses\IInterfaceWithGenericMethodWithDependentConstraint.cs" />
     <Compile Include="InheritedInterfacesTestCase.cs" />
-    <Compile Include="Interceptors\InterceptorSelectorTestCase.cs" />
-    <Compile Include="InterfaceProxyWithTargetInterfaceTestCase.cs" />
+    <Compile Include="InterceptorSelectorTestCase.cs" />
     <Compile Include="MethodEquivalenceTestCase.cs" />
     <Compile Include="MixinDataTestCase.cs" />
     <Compile Include="CrossAppDomainCaller.cs" />
