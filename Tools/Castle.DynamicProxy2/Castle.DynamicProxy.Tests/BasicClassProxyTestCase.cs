@@ -412,5 +412,23 @@ namespace Castle.DynamicProxy.Tests
 			object proxy2 = Activator.CreateInstance(proxy.GetType());
 			Assert.AreEqual("Something", ((ClassWithProtectedDefaultConstructor)proxy2).SomeString);
 		}
+		public class ResultModifierInterceptor : StandardInterceptor
+		{
+			protected override void PostProceed(IInvocation invocation)
+			{
+				object returnValue = invocation.ReturnValue;
+
+				if (returnValue != null && returnValue.GetType() == typeof(int))
+				{
+					int value = (int)returnValue;
+
+					invocation.ReturnValue = --value;
+				}
+				if (returnValue != null && returnValue.GetType() == typeof(bool))
+				{
+					invocation.ReturnValue = true;
+				}
+			}
+		}
 	}
 }

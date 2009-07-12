@@ -15,8 +15,7 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-	using System.Reflection;
-	using Castle.Core.Interceptor;
+	using Interceptors;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -46,34 +45,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
-	public class RequiredParamInterceptor : IInterceptor
-	{
-		public void Intercept(IInvocation invocation)
-		{
-			ParameterInfo[] parameters = invocation.Method.GetParameters();
-
-			object[] args = invocation.Arguments;
-
-			for (int i = 0; i < parameters.Length; i++)
-			{
-				if (parameters[i].IsDefined(typeof (RequiredAttribute), false))
-				{
-					RequiredAttribute required =
-						parameters[i].GetCustomAttributes(typeof (RequiredAttribute), false)[0] as RequiredAttribute;
-
-					if ((required.BadValue == null && args[i] == null) ||
-					    (required.BadValue != null && required.BadValue.Equals(args[i])))
-					{
-						args[i] = required.DefaultValue;
-					}
-				}
-			}
-
-			invocation.Proceed();
-		}
-	}
-
-	public class ClassWithAttributesOnMethodParameters
+    public class ClassWithAttributesOnMethodParameters
 	{
 		public virtual void MethodOne([Required(BadValue = -1)] int val)
 		{

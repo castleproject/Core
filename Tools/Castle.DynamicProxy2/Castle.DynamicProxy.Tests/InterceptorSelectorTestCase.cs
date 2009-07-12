@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Collections.Generic;
 	using System.Reflection;
 	using Core.Interceptor;
+	using Interceptors;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -30,7 +31,7 @@ namespace Castle.DynamicProxy.Tests
 			options.Selector = new AllInterceptorSelector();
 			ISimpleInterface target =
 				generator.CreateInterfaceProxyWithTarget(typeof(ISimpleInterface), new SimpleClass(), options,
-				                                         new NoopInterceptor()) as ISimpleInterface;
+				                                         new StandardInterceptor()) as ISimpleInterface;
 			Assert.IsNotNull(target);
 			target.Do();
 		}
@@ -204,62 +205,6 @@ namespace Castle.DynamicProxy.Tests
 				}
 			}
 			return interceptorsOfT.ToArray();
-		}
-
-		#endregion
-	}
-
-#if !SILVERLIGHT
-	[Serializable]
-#endif
-	public class CallCountingInterceptor : IInterceptor
-	{
-		private int _count;
-
-		public int Count
-		{
-			get { return _count; }
-		}
-
-		#region IInterceptor Members
-
-		public void Intercept(IInvocation invocation)
-		{
-			_count++;
-			invocation.Proceed();
-		}
-
-		#endregion
-	}
-
-#if !SILVERLIGHT
-	[Serializable]
-#endif
-	public class AddTwoInterceptor : IInterceptor
-	{
-		#region IInterceptor Members
-
-		public void Intercept(IInvocation invocation)
-		{
-			invocation.Proceed();
-			int ret = (int)invocation.ReturnValue;
-			ret += 2;
-			invocation.ReturnValue = ret;
-		}
-
-		#endregion
-	}
-
-#if !SILVERLIGHT
-	[Serializable]
-#endif
-	internal class NoopInterceptor : IInterceptor
-	{
-		#region IInterceptor Members
-
-		public void Intercept(IInvocation invocation)
-		{
-			invocation.Proceed();
 		}
 
 		#endregion

@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Reflection;
 	using Core.Interceptor;
+	using Interceptors;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -64,7 +65,7 @@ namespace Castle.DynamicProxy.Tests
 			var foo =
 				(IHasMethod)
 				generator.CreateInterfaceProxyWithoutTarget(typeof(IHasMethod), new[] {typeof(IFooExtended), typeof(IBarFoo)},
-				                                            new BuryAllInterceptor());
+				                                            new DoNothingInterceptor());
 
 			foo.Foo();
 			((IFooExtended) foo).FooExtended();
@@ -76,10 +77,11 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var target = new ImplementedFooExtended();
 
-			var foo =
-				(IHasMethod)
-				generator.CreateInterfaceProxyWithTarget(typeof(IHasMethod), new[] {typeof(IFooExtended), typeof(IBarFoo)}, target,
-				                                         new BuryBarFooInterceptor());
+		    var foo =
+		        (IHasMethod)
+		        generator.CreateInterfaceProxyWithTarget(typeof (IHasMethod), new[] {typeof (IFooExtended), typeof (IBarFoo)},
+		                                                 target,
+		                                                 new ProceedOnTypeInterceptor(typeof (IBarFoo)));
 
 			foo.Foo();
 			((IFooExtended) foo).FooExtended();
@@ -172,32 +174,6 @@ namespace Castle.DynamicProxy.Tests
 
 		public void Foo()
 		{
-		}
-
-		#endregion
-	}
-
-	public class BuryAllInterceptor : IInterceptor
-	{
-		#region IInterceptor Members
-
-		public void Intercept(IInvocation invocation)
-		{
-		}
-
-		#endregion
-	}
-
-	public class BuryBarFooInterceptor : IInterceptor
-	{
-		#region IInterceptor Members
-
-		public void Intercept(IInvocation invocation)
-		{
-			if (invocation.Method.DeclaringType != typeof(IBarFoo))
-			{
-				invocation.Proceed();
-			}
 		}
 
 		#endregion

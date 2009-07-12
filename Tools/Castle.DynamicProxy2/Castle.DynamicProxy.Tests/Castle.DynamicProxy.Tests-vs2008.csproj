@@ -91,7 +91,6 @@
     <Compile Include="InterClasses\ServiceImpl.cs" />
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="MixinTestCase.cs" />
-    <Compile Include="Interceptors\ResultModifierInterceptor.cs" />
     <Compile Include="TypeEquivalentTestCase.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
@@ -112,6 +111,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ClassWithExplicitInterface.cs" />
+    <Compile Include="Interceptors\AssertCanChangeTargetInterceptor.cs" />
+    <Compile Include="Interceptors\AssertCannotChangeTargetInterceptor.cs" />
+    <Compile Include="Interceptors\CallCountingInterceptor.cs" />
+    <Compile Include="Interceptors\AddTwoInterceptor.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BaseTestCaseTestCase.cs" />
     <Compile Include="BasicInterfaceProxyWithoutTargetTestCase.cs" />
@@ -135,6 +139,7 @@
     <Compile Include="Classes\ClassOverridingEqualsAndGetHashCode.cs" />
     <Compile Include="Classes\ClassWithDefaultConstructor.cs" />
     <Compile Include="ClassProxyConstructorsTestCase.cs" />
+    <Compile Include="Interceptors\DoNothingInterceptor.cs" />
     <Compile Include="GenClasses\ClassWithMethodWithArrayOfListOfT.cs" />
     <Compile Include="GenClasses\ClassWithMethodWithGenericOfGenericOfT.cs" />
     <Compile Include="GenClasses\ClassWithMethodWithReturnArrayOfListOfT.cs" />
@@ -145,6 +150,7 @@
     <Compile Include="InterClasses\IInterfaceWithGenericMethodWithDependentConstraint.cs" />
     <Compile Include="InheritedInterfacesTestCase.cs" />
     <Compile Include="InterceptorSelectorTestCase.cs" />
+    <Compile Include="Interfaces\IdenticalInterfaces.cs" />
     <Compile Include="MethodEquivalenceTestCase.cs" />
     <Compile Include="MixinDataTestCase.cs" />
     <Compile Include="CrossAppDomainCaller.cs" />
@@ -176,10 +182,14 @@
     <Compile Include="ModuleScopeTestCase.cs" />
     <Compile Include="OutRefParams.cs" />
     <Compile Include="PersistentProxyBuilderTestCase.cs" />
+    <Compile Include="Interceptors\ProceedOnTypeInterceptor.cs" />
     <Compile Include="ProxyGenerationOptionsTestCase.cs" />
+    <Compile Include="Interceptors\RequiredParamInterceptor.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
     <Compile Include="SerializableClassTestCase.cs" />
     <Compile Include="InternalsVisibleTo.cs" />
+    <Compile Include="Interceptors\SetReturnValueInterceptor.cs" />
+    <Compile Include="Interceptors\WithCallbackInterceptor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
