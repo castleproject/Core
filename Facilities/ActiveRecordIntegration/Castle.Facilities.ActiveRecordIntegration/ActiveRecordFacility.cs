@@ -245,6 +245,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			string pluralize = facilityConfig.Attributes["pluralizeTableNames"];
 			string verifyModelsAgainstDBSchema = facilityConfig.Attributes["verifyModelsAgainstDBSchema"];
 			string defaultFlushType = facilityConfig.Attributes["flush"];
+			string namingstrategytype = facilityConfig.Attributes["namingstrategytype"];
 
 			SetUpThreadInfoType(ConvertBool(isWeb), threadinfotype);
 			SetDebugFlag(ConvertBool(isDebug));
@@ -256,6 +257,8 @@ namespace Castle.Facilities.ActiveRecordIntegration
 				SetDefaultFlushType(DefaultFlushType.Classic);
 			else
 				SetDefaultFlushType(defaultFlushType);
+			if (!string.IsNullOrEmpty(namingstrategytype))
+				SetUpNamingStrategyType(namingstrategytype);
 
 			foreach(IConfiguration config in facilityConfig.Children)
 			{
