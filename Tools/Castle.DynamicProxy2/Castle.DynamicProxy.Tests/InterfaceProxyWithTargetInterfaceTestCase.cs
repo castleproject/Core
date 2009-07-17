@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Tests
 																		  new[] {typeof (ITwo)},
 																		  new One(),
 																		  ProxyGenerationOptions.Default,new StandardInterceptor());
-			Assert.Throws<NotImplementedException>(() => (proxy as ITwo).TwoMethod());
+			Assert.Throws(typeof(NotImplementedException),() => (proxy as ITwo).TwoMethod());
 		}
 
 		[Test]
