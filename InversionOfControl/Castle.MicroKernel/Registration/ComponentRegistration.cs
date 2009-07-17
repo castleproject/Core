@@ -24,6 +24,8 @@ namespace Castle.MicroKernel.Registration
 	using Castle.Core.Interceptor;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Proxy;
+	using Castle.MicroKernel.Facilities.OnCreate;
+	using Facilities;
 
 	/// <summary>
 	/// Delegate to filter component registration.
@@ -557,6 +559,18 @@ namespace Castle.MicroKernel.Registration
 				.AddAttributeDescriptor("stopMethod", stopMethod);
 		}
 
+		/// <summary>
+		/// Stores a set of <see cref="OnCreateActionDelegate{T}"/> which will be invoked when the component
+		/// is created
+		/// </summary>
+		/// <param name="actions">A setof actions</param>
+		/// <remarks>Be sure that you first added the <see cref="OnCreateFacility"/> 
+		/// to the kernel, before registering this component.</remarks>
+		public ComponentRegistration<S> OnCreate(params OnCreateActionDelegate<S>[] actions)
+		{ 
+			this.AddDescriptor(new OnCreateComponentDescriptor<S>(actions));
+			return this;
+		}
 		/// <summary>
 		/// Marks the components with one or more actors.
 		/// </summary>
