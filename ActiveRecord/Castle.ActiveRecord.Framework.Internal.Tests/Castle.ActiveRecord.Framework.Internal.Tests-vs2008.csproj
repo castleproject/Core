@@ -187,6 +187,9 @@
     </Compile>
     <Compile Include="Model\CompositeKeyForClassWithCompositeKey.cs" />
     <Compile Include="Model\ClassADynamicInsertUpdate.cs" />
+    <Compile Include="Model\HasManyToAnyWithBadList.cs" />
+    <Compile Include="Model\HasAndBelongsToManyWithBadList.cs" />
+    <Compile Include="Model\HasManyWithBadList.cs" />
     <Compile Include="Model\EnumModel.cs" />
     <Compile Include="Model\HasManyWithBatch.cs" />
     <Compile Include="Model\ComponentWithNested.cs" />

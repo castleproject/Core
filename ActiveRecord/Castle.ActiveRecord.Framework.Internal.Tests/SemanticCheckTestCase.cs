@@ -84,5 +84,23 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(BaseJoinedClass), typeof(ClassWithMultiplePrimaryKeys));
 		}
+
+		[Test]
+		public void ListWithoutIndexColumn()
+		{
+			Assert.Throws<ActiveRecordException>(() => { ActiveRecordStarter.Initialize(GetConfigSource(), typeof(HasManyWithBadList)); });
+		}
+
+		[Test]
+		public void ListWithoutIndexColumnManyToMany()
+		{
+			Assert.Throws<ActiveRecordException>(() => { ActiveRecordStarter.Initialize(GetConfigSource(), typeof(HasAndBelongsToManyWithBadList)); });
+		}
+
+		[Test]
+		public void ListWithoutIndexColumnManyToAny()
+		{
+			Assert.Throws<ActiveRecordException>(() => { ActiveRecordStarter.Initialize(GetConfigSource(), typeof(HasManyToAnyWithBadList)); });
+		}
 	}
 }

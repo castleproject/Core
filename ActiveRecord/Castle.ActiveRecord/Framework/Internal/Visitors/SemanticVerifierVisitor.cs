@@ -470,6 +470,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			model.HasManyToAnyAtt.RelationType = GuessRelation(model.Property, model.HasManyToAnyAtt.RelationType);
 
+			if (model.HasManyToAnyAtt.RelationType == RelationType.List && model.HasManyToAnyAtt.Index == null)
+			{
+				throw new ActiveRecordException(String.Format(
+													"A HasMany with type List requires that you specify an 'Index', use the Index property {0}.{1}  ",
+													model.Property.DeclaringType.Name, model.Property.Name));
+			}
+
+
 			base.VisitHasManyToAny(model);
 		}
 
@@ -543,6 +551,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 				throw new ActiveRecordException(String.Format(
 				                                	"A HasMany with type Map requires that you specify an 'Index', use the Index property {0}.{1}  ",
 				                                	model.Property.DeclaringType.Name, model.Property.Name));
+			}
+
+			if (model.HasManyAtt.RelationType == RelationType.List && model.HasManyAtt.Index == null)
+			{
+				throw new ActiveRecordException(String.Format(
+													"A HasMany with type List requires that you specify an 'Index', use the Index property {0}.{1}  ",
+													model.Property.DeclaringType.Name, model.Property.Name));
 			}
 
 			// try to guess an <element> mapping if none of the mapping properties was set
@@ -735,6 +750,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 				throw new ActiveRecordException(String.Format(
 				                                	"A HasAndBelongsToMany with type Map requires that you specify an 'Index', use the Index property {0}.{1}  ",
 				                                	model.Property.DeclaringType.Name, model.Property.Name));
+			}
+
+			if (model.HasManyAtt.RelationType == RelationType.List && model.HasManyAtt.Index == null)
+			{
+				throw new ActiveRecordException(String.Format(
+													"A HasAndBelongsToMany with type List requires that you specify an 'Index', use the Index property {0}.{1}  ",
+													model.Property.DeclaringType.Name, model.Property.Name));
 			}
 
 			base.VisitHasAndBelongsToMany(model);
