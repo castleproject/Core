@@ -60,7 +60,7 @@ namespace Castle.MicroKernel.Tests.Facilities.OnCreate
 		[Test]
 		public void CanModify_when_transient()
 		{
-			MyService2.name = "";
+			MyService2.staticname = "";
 			container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
 									.LifeStyle.Transient.OnCreate((kernel, instance) => instance.Name+="a"));
 			var service = container.Resolve<IService2>();
@@ -72,7 +72,7 @@ namespace Castle.MicroKernel.Tests.Facilities.OnCreate
 		[Test]
 		public void CanModify_when_transient_multiple_ordered()
 		{
-			MyService2.name = "";
+			MyService2.staticname = "";
 			container.Register(Component.For<IService2>().ImplementedBy<MyService2>()
 			                   	.LifeStyle.Transient.OnCreate((kernel, instance) => instance.Name+="a",
 			                   	                              (kernel, instance) => instance.Name+="b"));
@@ -113,17 +113,17 @@ namespace Castle.MicroKernel.Tests.Facilities.OnCreate
 	{
 		static MyService2()
 		{
-			name = "";
+			staticname = "";
 		}
 
-		public static string name;
+		public static string staticname;
 
 		#region IService2 Members
 
 		public string Name
 		{
-			get { return name; }
-			set { name = value; }
+			get { return staticname; }
+			set { staticname = value; }
 		}
 
 		#endregion
