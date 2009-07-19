@@ -1,3 +1,6 @@
+- Applied Enzo Lombardi's patch fixing NVELOCITY-ISSUE-36
+  "LRUMap Collection is not correctly synchronized"
+
 - Fixed the AssemblyResourceLoader so that it allows the loader assembly to be passed as a string
   instead of a List<string> to match the previous behaviour.
 

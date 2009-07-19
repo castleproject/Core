@@ -289,10 +289,16 @@ namespace Commons.Collections
 
 			public override Object this[Object key]
 			{
-				get { return _table[key]; }
+				get
+				{
+					lock (_table.SyncRoot)
+					{
+						return _table[key];
+					}
+				}
 				set
 				{
-					lock(_table.SyncRoot)
+					lock (_table.SyncRoot)
 					{
 						_table[key] = value;
 					}
