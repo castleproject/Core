@@ -9074,6 +9074,14 @@
             </summary>
             <value>The string "<c> &lt; </c>"</value>
         </member>
+        <member name="M:NHibernate.Criterion.GroupedProjection.GetTypedValues(NHibernate.ICriteria,NHibernate.Criterion.ICriteriaQuery)">
+            <summary>
+            Gets the typed values for parameters in this projection
+            </summary>
+            <param name="criteria">The criteria.</param>
+            <param name="criteriaQuery">The criteria query.</param>
+            <returns></returns>
+        </member>
         <member name="T:NHibernate.Criterion.GtPropertyExpression">
             <summary>
             An <see cref="T:NHibernate.Criterion.ICriterion"/> that represents an "greater than" constraint 
@@ -9726,6 +9734,13 @@
             A grouping property value
             </summary>
             <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.Criterion.Projections.GroupProperty(NHibernate.Criterion.IProjection)">
+            <summary>
+            A grouping projection value
+            </summary>
+            <param name="projection"></param>
             <returns></returns>
         </member>
         <member name="M:NHibernate.Criterion.Projections.Property(System.String)">
@@ -18142,7 +18157,7 @@
         </member>
         <member name="T:NHibernate.ISession">
             <summary>
-            The main runtime interface between a Java application and Hibernate. This is the central
+            The main runtime interface between a .NET application and NHibernate. This is the central
             API class abstracting the notion of a persistence service.
             </summary>
             <remarks>
