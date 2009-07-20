@@ -118,7 +118,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 					}
 					else
 					{
-						logger.DebugFormat("Committing back transaction {0}", transaction.GetHashCode());
+						logger.DebugFormat("Committing transaction {0}", transaction.GetHashCode());
 
 						transaction.Commit();
 					}
