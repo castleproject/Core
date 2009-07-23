@@ -363,8 +363,10 @@
     <Compile Include="Framework\ActiveRecordValidator.cs" />
     <Compile Include="Framework\ActiveRecordHooksValidationBase.cs" />
     <Compile Include="Framework\ActiveRecordValidationException.cs" />
+    <Compile Include="Framework\Config\DefaultActiveRecordConfiguration.cs" />
     <Compile Include="Framework\Config\DefaultFlushType.cs" />
     <Compile Include="Framework\AbstractNHContributor.cs" />
+    <Compile Include="Framework\Config\IActiveRecordConfiguration.cs" />
     <Compile Include="Framework\NHSearchContributor.cs" />
     <Compile Include="Framework\Queries\ValueAndTypeTuple.cs" />
     <Compile Include="Framework\StatelessSessionWrapper.cs" />

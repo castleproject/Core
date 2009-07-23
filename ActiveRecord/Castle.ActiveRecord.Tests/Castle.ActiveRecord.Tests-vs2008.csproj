@@ -331,6 +331,7 @@
     <Compile Include="AnyRelationTestCase.cs" />
     <Compile Include="CompositeNestedClassTestCase.cs" />
     <Compile Include="CompositeUserTypeTestCase.cs" />
+    <Compile Include="Config\ConfigureTests.cs" />
     <Compile Include="Model\ProductWithGuid.cs" />
     <Compile Include="NHSearchTestCase.cs" />
     <Compile Include="Model\SimpleBlog.cs" />
