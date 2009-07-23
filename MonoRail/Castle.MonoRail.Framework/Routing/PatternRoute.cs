@@ -33,9 +33,11 @@ namespace Castle.MonoRail.Framework.Routing
 		private readonly string pattern;
 		private readonly NodeCollection nodes = new NodeCollection();
 		private bool performDefaultsCheck = true;
+		private Verb? verbs;
 
 		private readonly Dictionary<string, string> defaults =
 			new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PatternRoute"/> class.
@@ -180,6 +182,13 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		public virtual int Matches(string url, IRouteContext context, RouteMatch match)
 		{
+			if (verbs.HasValue)
+			{
+				var requestVerb = (Verb) Enum.Parse(typeof(Verb), context.Request.HttpMethod, true);
+				if ((verbs.Value & requestVerb) == 0)
+					return 0;
+			}
+
 			string[] parts = GetUrlParts(url);
 			int points = 0;
 			int index = 0;
@@ -607,6 +616,18 @@ namespace Castle.MonoRail.Framework.Routing
 		public RestrictionConfigurer Restrict(string namedPatternPart)
 		{
 			return new RestrictionConfigurer(this, namedPatternPart);
+		}
+
+		/// <summary>
+		/// Restricts the PatternRoute to only match requests that
+		/// uses one of the stated Verbs
+		/// </summary>
+		/// <param name="allowedVerbs">The Verbs to match</param>
+		/// <returns></returns>
+		public PatternRoute RestrictTo(Verb allowedVerbs)
+		{
+			verbs = allowedVerbs;
+			return this;
 		}
 
 		/// <summary>

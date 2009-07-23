@@ -225,5 +225,44 @@ namespace Castle.MonoRail.Framework.Tests.Routing
 			Assert.AreEqual(0, route.Matches("/", CreateGetContext(), match));
 		}
 
+		[Test]
+		public void ShouldNotMatchWhenRestrictingVerbs()
+		{
+			PatternRoute route = new PatternRoute("/simple")
+				.RestrictTo(Verb.Post);
+
+			RouteMatch match = new RouteMatch();
+			Assert.AreEqual(0, route.Matches("/simple", CreateGetContext(), match));
+		}
+
+		[Test]
+		public void ShouldNotMatchWhenRestrictingMultipleVerbs()
+		{
+			PatternRoute route = new PatternRoute("/simple")
+				.RestrictTo(Verb.Post | Verb.Put);
+
+			RouteMatch match = new RouteMatch();
+			Assert.AreEqual(0, route.Matches("/simple", CreateGetContext(), match));
+		}
+
+		[Test]
+		public void ShouldMatchWhenRestrictingWithMatchingVerb()
+		{
+			PatternRoute route = new PatternRoute("/simple")
+				.RestrictTo(Verb.Get);
+
+			RouteMatch match = new RouteMatch();
+			Assert.Less(0, route.Matches("/simple", CreateGetContext(), match));
+		}
+
+		[Test]
+		public void ShouldMatchWhenRestrictingWithMatchingMultipleVerb()
+		{
+			PatternRoute route = new PatternRoute("/simple")
+				.RestrictTo(Verb.Get | Verb.Post);
+
+			RouteMatch match = new RouteMatch();
+			Assert.Less(0, route.Matches("/simple", CreateGetContext(), match));
+		}
 	}
 }
