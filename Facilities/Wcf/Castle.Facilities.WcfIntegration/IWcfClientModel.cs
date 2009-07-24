@@ -33,6 +33,11 @@ namespace Castle.Facilities.WcfIntegration
 		IWcfEndpoint Endpoint { get; }
 
 		/// <summary>
+		/// Determines if async capability is desired.
+		/// </summary>
+		bool WantsAsyncCapability { get; }
+
+		/// <summary>
 		/// Gets the service extensions.
 		/// </summary>
 		ICollection<IWcfExtension> Extensions { get; }

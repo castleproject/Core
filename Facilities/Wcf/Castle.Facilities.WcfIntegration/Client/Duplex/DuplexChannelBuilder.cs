@@ -22,7 +22,8 @@ namespace Castle.Facilities.WcfIntegration
 
     public class DuplexChannelBuilder : AbstractChannelBuilder<DuplexClientModel>
     {
-        public DuplexChannelBuilder(IKernel kernel) : base(kernel)
+		public DuplexChannelBuilder(IKernel kernel, IChannelFactoryBuilder<DuplexClientModel> channelFactoryBuilder) 
+			: base(kernel, channelFactoryBuilder)
         {
         }
 
@@ -41,13 +42,11 @@ namespace Castle.Facilities.WcfIntegration
                                                                 params object[] channelFactoryArgs)
         {
             Type type = typeof(DuplexChannelFactory<>).MakeGenericType(new Type[] { contract });
-
-            var channelFactory = (ChannelFactory)Activator.CreateInstance(type, channelFactoryArgs);
+			var channelFactory = ChannelFactoryBuilder.CreateChannelFactory(type, clientModel, channelFactoryArgs);
 			ConfigureChannelFactory(channelFactory);
 
             MethodInfo methodInfo = type.GetMethod("CreateChannel", new Type[0]);
-            return (ChannelCreator)Delegate.CreateDelegate(
-                typeof(ChannelCreator), channelFactory, methodInfo);
+            return (ChannelCreator)Delegate.CreateDelegate(typeof(ChannelCreator), channelFactory, methodInfo);
         }
     }
 }

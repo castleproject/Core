@@ -14,15 +14,27 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System;
 	using System.ServiceModel;
-	using Castle.Facilities.WcfIntegration.Proxy;
 
-	public static class WcfContextChannel
+	public abstract class AbstractChannelFactoryBuilder<M> : IChannelFactoryBuilder<M>
+		where M : IWcfClientModel
 	{
-		public static IContextChannel For(object target)
+		public T CreateChannelFactory<T>(M clientModel, params object[] constructorArgs)
+			where T : ChannelFactory
 		{
-			var channelHolder = target as IWcfChannelHolder;
-			return (channelHolder != null) ? channelHolder.Channel : null;
+			return (T)CreateChannelFactory(typeof(T), clientModel, constructorArgs);
+		}
+
+		public abstract ChannelFactory CreateChannelFactory(Type channelFactoryType, M clientModel,
+															params object[] constructorArgs);
+
+		protected void EnsureValidChannelFactoryType(Type channelFactoryType)
+		{
+			if (!typeof(ChannelFactory).IsAssignableFrom(channelFactoryType))
+			{
+				throw new ArgumentException("The channelFactoryType does not represent a ChannelFactory");
+			}
 		}
 	}
 }

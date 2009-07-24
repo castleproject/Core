@@ -12,19 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Tests.Behaviors
 {
-	using System;
-	using Castle.MicroKernel;
+	using System.Reflection;
 
-	/// <summary>
-	/// The default implementation of <see cref="IClientChannelBuilder{M}"/>.
-	/// </summary>
-	public class DefaultChannelBuilder : AbstractChannelBuilder<DefaultClientModel>
+	public class RefreshChannelPolicy : AbstractWcfPolicy, IRefreshChannelPolicy
 	{
-		public DefaultChannelBuilder(IKernel kernel, IChannelFactoryBuilder<DefaultClientModel> channelFactoryBuilder)
-			: base(kernel, channelFactoryBuilder)
+		public bool Refresh { get; set; }
+
+		public void WantsToUseUnusableChannel(IWcfChannelHolder channelHolder, MethodInfo method)
 		{
+			if (Refresh)
+			{
+				channelHolder.RefreshChannel();
+			}
 		}
 	}
 }

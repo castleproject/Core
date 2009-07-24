@@ -12,18 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Async.TypeSystem
 {
-    internal static class WcfConstants
-    {
-		public const string ExtensionScopeKey = "scope";
+	using System;
+	using System.Reflection;
 
-        public const string ServiceHostsKey = "wcf.serviceHosts";
-		public const string ServiceHostEnabled = "wcfServiceHost";
+	[Serializable]
+	public class AsyncMethodParameter : ParameterInfo
+	{
+		private readonly Type type;
+		private readonly AsyncMethod method;
 
-		public const string ClientModelKey = "wcf.clientModel";
-		public const string ClientBurdenKey = "wcf.clientBurden";
-		public const string EndpointConfiguration = "wcfEndpointConfiguration";
+		public AsyncMethodParameter(Type type, AsyncMethod method)
+		{
+			this.type = type;
+			this.method = method;
+		}
+
+		public override MemberInfo Member
+		{
+			get { return method; }
+		}
+
+		public override Type ParameterType
+		{
+			get { return type; }
+		}
+
+		public override object[] GetCustomAttributes(Type attributeType, bool inherit)
+		{
+			return new object[0];
+		}
 	}
 }
-

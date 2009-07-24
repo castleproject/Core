@@ -50,5 +50,12 @@ namespace Castle.Facilities.WcfIntegration.Client
 		public virtual void Faulted(ChannelFactory channelFactory)
 		{
 		}
+
+		/// <inheritdoc />
+		public virtual bool ShouldCreateNewChannelWhenInvalid(ChannelFactory channelFactory, 
+															   IClientChannel channel)
+		{
+			return true;
+		}
 	}
 }

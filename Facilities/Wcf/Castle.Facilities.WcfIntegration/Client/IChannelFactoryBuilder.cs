@@ -14,10 +14,17 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System;
 	using System.ServiceModel;
+	using System.ServiceModel.Channels;
 
-	public interface IManagedChannel
+	public interface IChannelFactoryBuilder<M>
+		where M : IWcfClientModel
 	{
-		void Init(IClientChannel channel, ChannelCreator channelCreator);
+		T CreateChannelFactory<T>(M clientModel, params object[] constructorArgs)
+			where T : ChannelFactory;
+
+		ChannelFactory CreateChannelFactory(Type channelFactoryType, M clientModel,
+											params object[] constructorArgs);
 	}
 }

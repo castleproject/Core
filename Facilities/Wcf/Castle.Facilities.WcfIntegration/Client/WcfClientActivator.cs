@@ -21,14 +21,18 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel;
 	using System.Threading;
 	using Castle.Core;
+	using Castle.DynamicProxy;
 	using Castle.Facilities.WcfIntegration.Internal;
+	using Castle.Facilities.WcfIntegration.Proxy;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Facilities;
 
 	public class WcfClientActivator : DefaultComponentActivator
 	{
+		private WcfProxyFactory proxyFactory;
 		private ChannelCreator createChannel;
+		private IWcfBurden channelBurden;
 
 		#region ClientChannelBuilder Delegate Fields
 
@@ -55,6 +59,7 @@ namespace Castle.Facilities.WcfIntegration
 			ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 			: base(model, kernel, onCreation, onDestruction)
 		{
+			proxyFactory = new WcfProxyFactory(new ProxyGenerator());
 		}
 
 		protected override object InternalCreate(CreationContext context)
@@ -66,14 +71,13 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected override object Instantiate(CreationContext context)
 		{
-			var channelCreator = GetChannelCreator(context);
+			IWcfBurden burden;
+			var channelCreator = GetChannelCreator(context, out burden);
 
 			try
 			{
-				var channel = (IClientChannel)channelCreator();
-				var managedChannel = (IManagedChannel)Kernel.ProxyFactory.Create(Kernel, channel, Model, context);
-				managedChannel.Init(channel, channelCreator);
-				return managedChannel;
+				var channelHolder = Kernel.Resolve<IWcfChannelHolder>(new { channelCreator, burden });
+				return proxyFactory.Create(Kernel, channelHolder, Model, context);
 			}
 			catch (Exception ex)
 			{
@@ -82,38 +86,46 @@ namespace Castle.Facilities.WcfIntegration
 			}
 		}
 
-		// Always Open the channel before being used to prevent serialization of requests.
-		// http://blogs.msdn.com/wenlong/archive/2007/10/26/best-practice-always-open-wcf-client-proxy-explicitly-when-it-is-shared.aspx
-		//
-		private ChannelCreator GetChannelCreator(CreationContext context)
+		/// <summary>
+		/// Creates the channel creator.
+		/// </summary>
+		/// <param name="context">The context for the creator.</param>
+		/// <param name="burden">Receives the channel burden.</param>
+		/// <returns>The channel creator.</returns>
+		/// <remarks>
+		/// Always Open the channel before being used to prevent serialization of requests.
+		/// http://blogs.msdn.com/wenlong/archive/2007/10/26/best-practice-always-open-wcf-client-proxy-explicitly-when-it-is-shared.aspx 
+		/// </remarks>
+		private ChannelCreator GetChannelCreator(CreationContext context, out IWcfBurden burden)
 		{
-			IWcfBurden burden = null;
+			burden = channelBurden;
 			ChannelCreator creator = createChannel;
 			IWcfClientModel clientModel = ObtainClientModel(Model, context);
 
 			if (clientModel != null)
 			{
 				var inner = CreateChannelCreator(Kernel, Model, clientModel, out burden);
+				var scopedBurden = burden;
 
 				creator = () =>
 				{
 					var client = (IClientChannel)inner();
 					client.Open();
-					client.Extensions.Add(new WcfBurdenExtension<IContextChannel>(burden));
+					client.Extensions.Add(new WcfBurdenExtension<IContextChannel>(scopedBurden));
 					return client;
 				};
 			}
 			else if (createChannel == null)
 			{
 				clientModel = ObtainClientModel(Model);
-				var inner = CreateChannelCreator(Kernel, Model, clientModel, out burden);
+				var inner = CreateChannelCreator(Kernel, Model, clientModel, out channelBurden);
 				creator = createChannel = () =>
 				{
 					var client = (IClientChannel)inner();
 					client.Open();
 					return client;
 				};
-				Model.ExtendedProperties[WcfConstants.ClientBurdenKey] = burden;
+				Model.ExtendedProperties[WcfConstants.ClientBurdenKey] = burden = channelBurden;
 			}
 
 			return creator;

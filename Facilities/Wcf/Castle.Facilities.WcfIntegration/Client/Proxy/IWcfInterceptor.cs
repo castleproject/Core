@@ -10,20 +10,15 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License.
+// limitations under the License
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Proxy
 {
-    internal static class WcfConstants
-    {
-		public const string ExtensionScopeKey = "scope";
+	using System.Reflection;
+	using Castle.Core.Interceptor;
 
-        public const string ServiceHostsKey = "wcf.serviceHosts";
-		public const string ServiceHostEnabled = "wcfServiceHost";
-
-		public const string ClientModelKey = "wcf.clientModel";
-		public const string ClientBurdenKey = "wcf.clientBurden";
-		public const string EndpointConfiguration = "wcfEndpointConfiguration";
+	public interface IWcfInterceptor : IInterceptor
+	{
+		bool Handles(MethodInfo method);
 	}
 }
-

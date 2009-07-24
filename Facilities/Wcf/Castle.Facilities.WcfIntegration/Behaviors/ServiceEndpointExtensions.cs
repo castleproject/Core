@@ -31,8 +31,7 @@ namespace Castle.Facilities.WcfIntegration
 			this.kernel = kernel;
 		}
 
-		public ServiceEndpointExtensions Install(ICollection<IWcfExtension> extensions, 
-			                                     IWcfBurden burden)
+		public ServiceEndpointExtensions Install(ICollection<IWcfExtension> extensions, IWcfBurden burden)
 		{
 			this.burden = burden;
 

@@ -14,8 +14,12 @@
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System.Collections.Generic;
+
 	public interface IWcfBurden : IWcfCleanUp
 	{
-		void Add(object instance);
+		void Add(object dependency);
+
+		IEnumerable<object> Dependencies { get; }
 	}
 }

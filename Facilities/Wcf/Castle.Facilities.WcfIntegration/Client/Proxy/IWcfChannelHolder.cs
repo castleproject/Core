@@ -15,16 +15,21 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
-	using Castle.MicroKernel;
+	using System.Runtime.Remoting.Proxies;
+	using System.ServiceModel;
 
-	/// <summary>
-	/// The default implementation of <see cref="IClientChannelBuilder{M}"/>.
-	/// </summary>
-	public class DefaultChannelBuilder : AbstractChannelBuilder<DefaultClientModel>
+	public interface IWcfChannelHolder : IDisposable
 	{
-		public DefaultChannelBuilder(IKernel kernel, IChannelFactoryBuilder<DefaultClientModel> channelFactoryBuilder)
-			: base(kernel, channelFactoryBuilder)
-		{
-		}
+		IClientChannel Channel { get; }
+
+		RealProxy RealProxy { get; }
+
+		ChannelFactory ChannelFactory { get; }
+
+		IWcfBurden ChannelBurden { get; }
+
+		bool IsChannelUsable { get; }
+
+		void RefreshChannel();
 	}
 }

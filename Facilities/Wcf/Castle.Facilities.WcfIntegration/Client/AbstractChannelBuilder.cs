@@ -54,7 +54,7 @@ namespace Castle.Facilities.WcfIntegration
 				endpointExtensions.Install(clientModel.Endpoint.Extensions, burden);
 			}
 
-			burden.Add(new ChannelFactoryCleanup(channelFactory));
+			burden.Add(new ChannelFactoryHolder(channelFactory));
 		}
 
 		protected ChannelCreator GetEndpointChannelCreator(IWcfEndpoint endpoint)

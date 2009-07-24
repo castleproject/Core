@@ -28,6 +28,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		public override void AddDependencies(IKernel kernel, ComponentModel model)
 		{
+			WcfUtils.AddExtensionDependencies<IWcfChannelPolicy>(kernel, WcfExtensionScope.Undefined, model);
 			WcfUtils.AddExtensionDependencies<IChannelFactoryAware>(kernel, WcfExtensionScope.Clients, model);
 		}
 
@@ -38,6 +39,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		private void BindChannelFactoryAware(ChannelFactory channelFactory, IKernel kernel, IWcfBurden burden)
 		{
+			WcfUtils.AddBehaviors<IWcfChannelPolicy>(kernel, WcfExtensionScope.Undefined, null, burden, null);
 			WcfUtils.AddBehaviors<IChannelFactoryAware>(kernel, WcfExtensionScope.Clients, null, burden,
 				delegate(IChannelFactoryAware channelFactoryAware)
 				{

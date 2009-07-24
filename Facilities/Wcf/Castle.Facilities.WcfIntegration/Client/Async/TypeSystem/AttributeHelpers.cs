@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,19 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.WcfIntegration
+namespace Castle.Facilities.WcfIntegration.Async.TypeSystem
 {
 	using System;
-	using Castle.MicroKernel;
+	using System.Linq;
+	using System.Reflection;
 
-	/// <summary>
-	/// The default implementation of <see cref="IClientChannelBuilder{M}"/>.
-	/// </summary>
-	public class DefaultChannelBuilder : AbstractChannelBuilder<DefaultClientModel>
+	public static class AttributeHelpers
 	{
-		public DefaultChannelBuilder(IKernel kernel, IChannelFactoryBuilder<DefaultClientModel> channelFactoryBuilder)
-			: base(kernel, channelFactoryBuilder)
+		public static TAttribute GetAttribute<TAttribute>(this ICustomAttributeProvider provider) where TAttribute:Attribute
 		{
+			return (TAttribute) provider.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault();
 		}
 	}
 }

@@ -13,6 +13,7 @@
 		<property name="assembly.version" value="1.0.3.0" />
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
+			<include name="Castle.DynamicProxy2.dll" />
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />
 			<include name="${path::combine(dotnet.v3.0.ReferenceInstallPath, 'System.ServiceModel.dll')}" />

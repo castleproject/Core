@@ -19,32 +19,37 @@ namespace Castle.Facilities.WcfIntegration.Internal
 	public class WcfBurden : IWcfBurden
 	{
 		private readonly IKernel kernel;
-		private readonly List<object> instances = new List<object>();
+		private readonly List<object> dependencies = new List<object>();
 
 		public WcfBurden(IKernel kernel)
 		{
 			this.kernel = kernel;
 		}
 
-		public void Add(object instance)
+		public void Add(object dependency)
 		{
-			instances.Add(instance);
+			dependencies.Add(dependency);
+		}
+
+		public IEnumerable<object> Dependencies
+		{
+			get { return dependencies; }
 		}
 
 		public void CleanUp()
 		{
-			foreach (object instance in instances)
+			foreach (object dependency in dependencies)
 			{
-				if (instance is IWcfCleanUp)
+				if (dependency is IWcfCleanUp)
 				{
-					((IWcfCleanUp)instance).CleanUp();
+					((IWcfCleanUp)dependency).CleanUp();
 				}
 				else
 				{
-					kernel.ReleaseComponent(instance);
+					kernel.ReleaseComponent(dependency);
 				}
 			}
-			instances.Clear();
+			dependencies.Clear();
 		}
 	}
 

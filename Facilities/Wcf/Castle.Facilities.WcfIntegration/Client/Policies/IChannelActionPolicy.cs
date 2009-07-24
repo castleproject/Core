@@ -10,21 +10,26 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License.
+// limitations under the License
 
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
-	using Castle.MicroKernel;
+	using System.Reflection;
 
 	/// <summary>
-	/// The default implementation of <see cref="IClientChannelBuilder{M}"/>.
+	/// Policy for controlling how actions are applied on a channel.
+	///  i.e. recovery, retry, circuit-breaker, etc...
 	/// </summary>
-	public class DefaultChannelBuilder : AbstractChannelBuilder<DefaultClientModel>
+	public interface IChannelActionPolicy : IWcfChannelPolicy
 	{
-		public DefaultChannelBuilder(IKernel kernel, IChannelFactoryBuilder<DefaultClientModel> channelFactoryBuilder)
-			: base(kernel, channelFactoryBuilder)
-		{
-		}
+		/// <summary>
+		/// Performs the action using the policies quality of service.
+		/// </summary>
+		/// <param name="channelHolder">The channel holder.</param>
+		/// <param name="method">The method executing.</param>
+		/// <param name="action">The action to perform.</param>
+		/// <returns>true if the policy was applied.</returns>
+		bool Perform(IWcfChannelHolder channelHolder, MethodInfo method, Action action);
 	}
 }

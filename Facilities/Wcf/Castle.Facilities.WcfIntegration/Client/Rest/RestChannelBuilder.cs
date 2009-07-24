@@ -23,8 +23,8 @@ namespace Castle.Facilities.WcfIntegration.Rest
 
 	public class RestChannelBuilder : AbstractChannelBuilder<RestClientModel>
 	{
-		public RestChannelBuilder(IKernel kernel)
-			: base(kernel)
+		public RestChannelBuilder(IKernel kernel, IChannelFactoryBuilder<RestClientModel> channelFactoryBuilder)
+			: base(kernel, channelFactoryBuilder)
 		{
 		}
 
@@ -51,14 +51,11 @@ namespace Castle.Facilities.WcfIntegration.Rest
 			                                                   params object[] channelFactoryArgs)
 		{
 			Type type = typeof(WebChannelFactory<>).MakeGenericType(new Type[] { contract });
-
-			ChannelFactory channelFactory = (ChannelFactory)
-				Activator.CreateInstance(type, channelFactoryArgs);
+			var channelFactory = ChannelFactoryBuilder.CreateChannelFactory(type, clientModel, channelFactoryArgs);
 			ConfigureChannelFactory(channelFactory);
 
 			MethodInfo methodInfo = type.GetMethod("CreateChannel", new Type[0]);
-			return (ChannelCreator)Delegate.CreateDelegate(
-				typeof(ChannelCreator), channelFactory, methodInfo);
+			return (ChannelCreator)Delegate.CreateDelegate(typeof(ChannelCreator), channelFactory, methodInfo);
 		}
 	}
 }

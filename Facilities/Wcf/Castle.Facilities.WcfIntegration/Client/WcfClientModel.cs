@@ -21,14 +21,21 @@ namespace Castle.Facilities.WcfIntegration
 	{
 		private IWcfEndpoint endpoint;
 		private List<IWcfExtension> extensions;
+		protected bool wantsAsync;
 
 		protected WcfClientModelBase()
 		{
+			wantsAsync = true;
 		}
 
-		protected WcfClientModelBase(IWcfEndpoint endpoint)
+		protected WcfClientModelBase(IWcfEndpoint endpoint) : this()
 		{
 			Endpoint = endpoint;
+		}
+
+		public bool WantsAsyncCapability
+		{
+			get { return wantsAsync; }
 		}
 
 		#region IWcfClientModel Members
@@ -84,6 +91,12 @@ namespace Castle.Facilities.WcfIntegration
 		protected WcfClientModel(IWcfEndpoint endpoint)
 			: base(endpoint)
 		{
+		}
+
+		public T WithoutAsyncCapability()
+		{
+			wantsAsync = false;
+			return (T)this;
 		}
 
 		public T AddExtensions(params object[] extensions)

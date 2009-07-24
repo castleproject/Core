@@ -17,11 +17,11 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 	using System;
 	using System.ServiceModel;
 	using System.ServiceModel.Web;
+	using Castle.Facilities.WcfIntegration.Demo;
+	using Castle.Facilities.WcfIntegration.Rest;
 	using Castle.MicroKernel.Registration;
 	using Castle.Windsor;
-	using Castle.Facilities.WcfIntegration.Rest;
 	using NUnit.Framework;
-	using Castle.Facilities.WcfIntegration.Demo;
 
 	[TestFixture]
 	public class RestClientFixture
@@ -79,6 +79,20 @@ namespace Castle.Facilities.WcfIntegration.Tests.Rest
 
 			ICalculator calculator = windsorContainer.Resolve<ICalculator>("calculator");
 			Assert.AreEqual(75, calculator.Subtract(100, 25));
+		}
+
+		[Test]
+		public void CanCallRestServiceAsynchronously()
+		{
+			windsorContainer.Register(
+				Component.For<ICalculator>()
+					.Named("calculator")
+					.ActAs(new RestClientModel("http://localhost:27198"))
+				);
+
+			ICalculator calculator = windsorContainer.Resolve<ICalculator>("calculator");
+			var call = calculator.BeginWcfCall(p => p.Multiply(3, 7));
+			Assert.AreEqual(21, call.End());
 		}
 
 		[Test, Ignore("This test requires the Castle.Facilities.WcfIntegration.Demo running")]

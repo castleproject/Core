@@ -15,16 +15,25 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
-	using Castle.MicroKernel;
+	using System.ServiceModel;
 
-	/// <summary>
-	/// The default implementation of <see cref="IClientChannelBuilder{M}"/>.
-	/// </summary>
-	public class DefaultChannelBuilder : AbstractChannelBuilder<DefaultClientModel>
+	internal class ChannelFactoryHolder : IWcfCleanUp
 	{
-		public DefaultChannelBuilder(IKernel kernel, IChannelFactoryBuilder<DefaultClientModel> channelFactoryBuilder)
-			: base(kernel, channelFactoryBuilder)
+		private readonly ChannelFactory channelFactory;
+
+		public ChannelFactoryHolder(ChannelFactory channelFactory)
 		{
+			this.channelFactory = channelFactory;
+		}
+
+		public ChannelFactory ChannelFactory
+		{
+			get { return channelFactory; }
+		}
+
+		public void CleanUp()
+		{
+			channelFactory.Close();
 		}
 	}
 }

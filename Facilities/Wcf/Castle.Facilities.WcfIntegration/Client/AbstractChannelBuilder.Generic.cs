@@ -28,10 +28,13 @@ namespace Castle.Facilities.WcfIntegration
 		[ThreadStatic] private static M ClientModel;
 		[ThreadStatic] private static IWcfBurden Burden;
 
-		protected AbstractChannelBuilder(IKernel kernel)
+		protected AbstractChannelBuilder(IKernel kernel, IChannelFactoryBuilder<M> channelFactoryBuilder)
 			: base(kernel)
 		{
+			ChannelFactoryBuilder = channelFactoryBuilder;
 		}
+
+		protected IChannelFactoryBuilder<M> ChannelFactoryBuilder { get; private set; }
 
 		/// <summary>
 		/// Get a delegate capable of creating channels.
@@ -128,13 +131,11 @@ namespace Castle.Facilities.WcfIntegration
 			                                                  params object[] channelFactoryArgs)
 		{
 			Type type = typeof(ChannelFactory<>).MakeGenericType(new Type[] { contract });
-
-			var channelFactory = (ChannelFactory)Activator.CreateInstance(type, channelFactoryArgs);
+			var channelFactory = ChannelFactoryBuilder.CreateChannelFactory(type, clientModel, channelFactoryArgs);
 			ConfigureChannelFactory(channelFactory);
 
 			MethodInfo methodInfo = type.GetMethod("CreateChannel", new Type[0]);
-			return (ChannelCreator)Delegate.CreateDelegate(
-				typeof(ChannelCreator), channelFactory, methodInfo);
+			return (ChannelCreator)Delegate.CreateDelegate(typeof(ChannelCreator), channelFactory, methodInfo);
 		}
 	}
 }

@@ -10,21 +10,14 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License.
+// limitations under the License
 
 namespace Castle.Facilities.WcfIntegration
 {
-	using System;
-	using Castle.MicroKernel;
-
 	/// <summary>
-	/// The default implementation of <see cref="IClientChannelBuilder{M}"/>.
+	/// Marker interface to annotate wcf channel policies.
 	/// </summary>
-	public class DefaultChannelBuilder : AbstractChannelBuilder<DefaultClientModel>
+	public interface IWcfChannelPolicy : IWcfPolicy 
 	{
-		public DefaultChannelBuilder(IKernel kernel, IChannelFactoryBuilder<DefaultClientModel> channelFactoryBuilder)
-			: base(kernel, channelFactoryBuilder)
-		{
-		}
 	}
 }

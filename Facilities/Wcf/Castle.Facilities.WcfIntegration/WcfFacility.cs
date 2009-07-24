@@ -19,6 +19,7 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Description;
 	using Castle.Core;
 	using Castle.MicroKernel.Facilities;
+	using Castle.MicroKernel.Registration;
 
 	/// <summary>
 	/// Facility to simplify the management of WCF clients and services. 
@@ -39,8 +40,11 @@ namespace Castle.Facilities.WcfIntegration
 			clientExtension.Init(this);
 			serviceExtension.Init(this);
 
-			Kernel.AddComponentInstance(WcfConstants.ClientExtensionKey, clientExtension);
-			Kernel.AddComponentInstance(WcfConstants.ServiceExtensionKey, serviceExtension);
+			Kernel.Register(
+				Component.For<WcfClientExtension>().Instance(clientExtension),
+				Component.For<WcfServiceExtension>().Instance(serviceExtension)
+				);
+
 			Kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
 		}
 

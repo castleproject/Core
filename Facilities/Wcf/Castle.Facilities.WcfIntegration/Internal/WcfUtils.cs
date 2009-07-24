@@ -19,6 +19,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 	using System.Collections.Generic;
 	using System.Configuration;
 	using System.ServiceModel;
+	using System.Threading;
 	using Castle.Core;
 	using Castle.MicroKernel;
 
@@ -280,6 +281,16 @@ namespace Castle.Facilities.WcfIntegration.Internal
 					comm.Abort();
 				}
 			}
+		}
+
+		public static T LazyInitialize<T>(ref T cache, Func<T> source) where T : class
+		{
+			T getCache = Interlocked.CompareExchange(ref cache, null, null);
+			if (getCache != null) return getCache;
+
+			getCache = source();
+			T updatedCache = Interlocked.CompareExchange(ref cache, getCache, null);
+			return updatedCache ?? getCache;
 		}
 	}
 }

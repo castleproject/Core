@@ -23,6 +23,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	using Castle.Core.Interceptor;
 	using Castle.Core.Resource;
 	using Castle.Facilities.Logging;
+	using Castle.Facilities.WcfIntegration.Async;
 	using Castle.Facilities.WcfIntegration.Behaviors;
 	using Castle.Facilities.WcfIntegration.Demo;
 	using Castle.Facilities.WcfIntegration.Tests.Behaviors;
@@ -92,6 +93,24 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		private IWindsorContainer windsorContainer;
 
 		[Test]
+		public void CanResolveClientInterfaceAssociatedWithChannel()
+		{
+			windsorContainer.Register(
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			Assert.AreEqual(42, client.GetValueFromConstructor());
+		}
+
+		[Test]
 		public void CanResolveClientInterfaceWithOutAndRefArguments()
 		{
 			windsorContainer.Register(
@@ -110,24 +129,6 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			Assert.AreEqual(42, client.GetValueFromConstructorAsRefAndOut(ref refValue, out outValue));
 			Assert.AreEqual(42, refValue);
 			Assert.AreEqual(42, outValue);
-		}
-
-		[Test]
-		public void CanResolveClientInterfaceAssociatedWithChannel()
-		{
-			windsorContainer.Register(
-				Component.For<IOperations>()
-					.Named("operations")
-					.ActAs(new DefaultClientModel()
-					{
-						Endpoint = WcfEndpoint
-							.BoundTo(new NetTcpBinding{PortSharingEnabled = true })
-							.At("net.tcp://localhost/Operations")
-					})
-				);
-
-			IOperations client = windsorContainer.Resolve<IOperations>("operations");
-			Assert.AreEqual(42, client.GetValueFromConstructor());
 		}
 
 		[Test]
@@ -523,7 +524,152 @@ namespace Castle.Facilities.WcfIntegration.Tests
 				client.Backup(new Dictionary<string, object>());
 			}
 		}
-			
+
+		[Test]
+		public void WillRecoverFromAnUnhandledExceptionAsynchronously()
+		{
+			windsorContainer.Register(
+				Component.For<IOperationsEx>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations/Ex")
+
+					})
+				);
+
+			IOperationsEx client = windsorContainer.Resolve<IOperationsEx>("operations");
+			try
+			{
+				client.BeginWcfCall(p => p.ThrowException()).End();
+			}
+			catch (Exception)
+			{
+				client.BeginWcfCall(p => p.Backup(new Dictionary<string, object>())).End();
+			}
+		}
+
+		[Test, ExpectedException(typeof(CommunicationObjectFaultedException))]
+		public void CanInhibitRecoveryFromAnUnhandledException()
+		{
+			windsorContainer.Register(
+				Component.For<RefreshChannelPolicy>()
+					.DependsOn(new { Reconnect = false }),
+				Component.For<IOperationsEx>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations/Ex")
+					})
+				);
+
+			IOperationsEx client = windsorContainer.Resolve<IOperationsEx>("operations");
+			try
+			{
+				client.ThrowException();
+			}
+			catch (Exception)
+			{
+				client.Backup(new Dictionary<string, object>());
+			}
+		}
+
+		[Test]
+		public void CanRecoverFromCommunicationException()
+		{
+			Func<IWindsorContainer> createLocalContainer = () =>
+				new WindsorContainer()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
+				.Register(
+					Component.For<Operations>()
+						.DependsOn(new { number = 42 })
+						.ActAs(new DefaultServiceModel().AddEndpoints(
+							WcfEndpoint.ForContract<IOperations>()
+								.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations1"),
+							WcfEndpoint.ForContract<IOperationsEx>()
+								.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations1/Ex")
+								)
+						)
+					);
+
+			windsorContainer.Register(
+				Component.For<ChannelReconnectPolicy>(),
+				Component.For<IOperationsEx>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations1/Ex")
+					})
+				);
+
+			IOperationsEx client = null;
+
+			using (createLocalContainer())
+            {
+				client = windsorContainer.Resolve<IOperationsEx>("operations");
+				client.Backup(new Dictionary<string, object>());
+            }
+
+			using (createLocalContainer())
+			{
+				client.Backup(new Dictionary<string, object>());
+			}
+		}
+
+		[Test]
+		public void CanRecoverFromCommunicationExceptionAsynchronously()
+		{
+			Func<IWindsorContainer> createLocalContainer = () =>
+				new WindsorContainer()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
+				.Register(
+					Component.For<Operations>()
+						.DependsOn(new { number = 42 })
+						.ActAs(new DefaultServiceModel().AddEndpoints(
+							WcfEndpoint.ForContract<IOperations>()
+								.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations1"),
+							WcfEndpoint.ForContract<IOperationsEx>()
+								.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations1/Ex")
+								)
+						)
+					);
+
+			windsorContainer.Register(
+				Component.For<ChannelReconnectPolicy>(),
+				Component.For<IOperationsEx>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations1/Ex")
+					})
+				);
+
+			IOperationsEx client = null;
+
+			using (createLocalContainer())
+			{
+				client = windsorContainer.Resolve<IOperationsEx>("operations");
+				client.BeginWcfCall(p => p.Backup(new Dictionary<string, object>())).End();
+			}
+
+			using (createLocalContainer())
+			{
+				client.BeginWcfCall(p => p.Backup(new Dictionary<string, object>())).End();
+			}
+		}
+
 		[Test]
 		public void CanResolveClientAssociatedWithChannelFromXmlConfiguration()
 		{
@@ -895,6 +1041,108 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			);
 			windsorContainer.Resolve<IOperations>("operations");
 			windsorContainer.Kernel.RemoveComponent("operations");
+		}
+
+		[Test]
+		public void CanProxyChannelFactoriesForAsyncSupport()
+		{
+			var model = new DefaultClientModel()
+				{
+					Endpoint = WcfEndpoint
+						.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+						.At("net.tcp://localhost/Operations")
+				};
+			var asyncBuilder = new AsynChannelFactoryBuilder<DefaultClientModel>();
+			var channelFactory = asyncBuilder.CreateChannelFactory<ChannelFactory<IOperations>>(
+				model, new NetTcpBinding(), "net.tcp://localhost/Operations");
+
+			var client = channelFactory.CreateChannel();
+			Assert.AreEqual(42, client.GetValueFromConstructor());
+			((ICommunicationObject)client).Close();
+		}
+
+		[Test]
+		public void CanCallChannelOperationsAsynchronously()
+		{
+			windsorContainer.Register(
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			var call = client.BeginWcfCall(p => p.GetValueFromConstructor());
+			Assert.AreEqual(42, call.End());
+		}
+
+		[Test]
+		public void CanCallChannelOperationsWithOutAndRefArgumentsAsynchronously()
+		{
+			windsorContainer.Register(
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			int refValue = 0, outValue;
+			var call = client.BeginWcfCall(p => p.GetValueFromConstructorAsRefAndOut(ref refValue, out outValue));
+			Assert.AreEqual(42, call.End(out refValue, out outValue));
+			Assert.AreEqual(42, refValue);
+			Assert.AreEqual(42, outValue);
+		}
+
+
+		[Test]
+		public void CanCallChannelOperationsAsynchronouslyUsingServiceEndpoint()
+		{
+			windsorContainer.Register(
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.FromEndpoint(new ServiceEndpoint(
+								ContractDescription.GetContract(typeof(IOperations)),
+								new NetTcpBinding { PortSharingEnabled = true }, 
+								new EndpointAddress("net.tcp://localhost/Operations")
+								))
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			var call = client.BeginWcfCall(p => p.GetValueFromConstructor());
+			Assert.AreEqual(42, call.End());
+		}
+
+		[Test]
+		public void WillCallBackWhenAsynchronousOperationCompletes()
+		{
+			windsorContainer.Register(
+				Component.For<IOperations>()
+					.Named("operations")
+					.ActAs(new DefaultClientModel()
+					{
+						Endpoint = WcfEndpoint
+							.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+							.At("net.tcp://localhost/Operations")
+					})
+				);
+
+			IOperations client = windsorContainer.Resolve<IOperations>("operations");
+			IAsyncResult result = client.BeginWcfCall(p => p.GetValueFromConstructor(),
+				call => Assert.AreEqual(42, call.End()), null);
+			result.AsyncWaitHandle.WaitOne(5000);
 		}
 
         protected void RegisterLoggingFacility(IWindsorContainer container)

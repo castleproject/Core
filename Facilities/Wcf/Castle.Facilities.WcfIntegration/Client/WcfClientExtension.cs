@@ -15,13 +15,14 @@
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
-	using System.ServiceModel;
 	using System.ServiceModel.Channels;
 	using Castle.Core;
+	using Castle.Facilities.WcfIntegration.Async;
 	using Castle.Facilities.WcfIntegration.Internal;
+	using Castle.Facilities.WcfIntegration.Proxy;
 	using Castle.Facilities.WcfIntegration.Rest;
 	using Castle.MicroKernel;
-	using Castle.MicroKernel.Proxy;
+	using Castle.MicroKernel.Registration;
 
 	public class WcfClientExtension : IDisposable
 	{
@@ -57,23 +58,27 @@ namespace Castle.Facilities.WcfIntegration
 
 			AddDefaultChannelBuilders();
 
-			kernel.AddComponent<WcfManagedChannelInterceptor>(LifestyleType.Transient);
+			kernel.Register(
+				Component.For<IWcfChannelHolder>()
+					.ImplementedBy<WcfChannelHolder>()
+					.LifeStyle.Transient,
+				Component.For(typeof(IChannelFactoryBuilder<>))
+					.ImplementedBy(typeof(AsynChannelFactoryBuilder<>))
+					.Unless(Component.ServiceAlreadyRegistered)
+					);
+
 			kernel.ComponentModelCreated += Kernel_ComponentModelCreated;
 			kernel.ComponentUnregistered += Kernel_ComponentUnregistered;
 		}
 
 		private void Kernel_ComponentModelCreated(ComponentModel model)
 		{
-			IWcfClientModel clientModel = ResolveClientModel(model);
+			var clientModel = ResolveClientModel(model);
 
 			if (clientModel != null)
 			{
 				model.CustomComponentActivator = typeof(WcfClientActivator);
 				model.ExtendedProperties[WcfConstants.ClientModelKey] = clientModel;
-				var proxyOptions = ProxyUtil.ObtainProxyOptions(model, true);
-				proxyOptions.AddAdditionalInterfaces(typeof(IManagedChannel),
-					typeof(IClientChannel), typeof(IServiceChannel));	
-				InstallManagedChannelInterceptor(model);
 
 				var dependencies = new ExtensionDependencies(model, kernel)
 					.Apply(new WcfEndpointExtensions(WcfExtensionScope.Clients))
@@ -106,15 +111,6 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				kernel.AddComponent<T>(typeof(IClientChannelBuilder<M>));
 			}
-		}
-
-		private void InstallManagedChannelInterceptor(ComponentModel model)
-		{
-			model.Dependencies.Add(new DependencyModel(DependencyType.Service, null,
-													   typeof(WcfManagedChannelInterceptor), false));
-			model.Interceptors.Add(new InterceptorReference(typeof(WcfManagedChannelInterceptor)));
-			var options = ProxyUtil.ObtainProxyOptions(model, true);
-			options.AllowChangeTarget = true;
 		}
 
 		private IWcfClientModel ResolveClientModel(ComponentModel model)
