@@ -108,6 +108,15 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void BaseTypeForInterfaceProxyHonored()
+		{
+			var options = new ProxyGenerationOptions();
+			options.BaseTypeForInterfaceProxy = typeof (SimpleClass);
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof (IService), Type.EmptyTypes, options);
+			Assert.NotNull(proxy as SimpleClass);
+		}
+
+		[Test]
 		[ExpectedException(typeof (ArgumentException))]
 		public void CantCreateInterfaceTargetedProxyWithoutInterface()
 		{

@@ -16,5 +16,6 @@ namespace Castle.DynamicProxy.Tests.Mixins
 {
 	public interface IDerivedSimpleMixin : ISimpleMixin
 	{
+		int DoSomethingDerived();
 	}
 }

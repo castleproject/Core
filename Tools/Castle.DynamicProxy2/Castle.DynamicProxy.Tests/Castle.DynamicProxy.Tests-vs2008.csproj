@@ -181,6 +181,7 @@
     <Compile Include="Mixins\OtherMixinImplementingISimpleMixin.cs" />
     <Compile Include="Mixins\SimpleMixin.cs" />
     <Compile Include="ModuleScopeTestCase.cs" />
+    <Compile Include="OrderOfInterfacePrecedenceTestCase.cs" />
     <Compile Include="OutRefParams.cs" />
     <Compile Include="PersistentProxyBuilderTestCase.cs" />
     <Compile Include="Interceptors\ProceedOnTypeInterceptor.cs" />

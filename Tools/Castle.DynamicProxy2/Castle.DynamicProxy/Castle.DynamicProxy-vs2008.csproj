@@ -254,9 +254,12 @@
     <Compile Include="Generators\InterfaceProxyWithoutTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetInterfaceGenerator.cs" />
+    <Compile Include="Generators\IProxyMethod.cs" />
     <Compile Include="Generators\MethodSignatureComparer.cs" />
     <Compile Include="Generators\MethodFinder.cs" />
+    <Compile Include="Generators\MethodToGenerate.cs" />
     <Compile Include="Generators\PropertyToGenerate.cs" />
+    <Compile Include="Generators\ProxyElementTarget.cs" />
     <Compile Include="InternalsHelper.cs" />
     <Compile Include="InvalidMixinConfigurationException.cs" />
     <Compile Include="IProxyBuilder.cs">

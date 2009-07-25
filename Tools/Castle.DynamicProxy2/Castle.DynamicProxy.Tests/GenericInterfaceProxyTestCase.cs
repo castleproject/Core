@@ -115,15 +115,12 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(GeneratorException),
-			ExpectedMessage =
-				"DynamicProxy cannot create an interface (with target) proxy for 'InterfaceWithExplicitImpl`1' as the target 'GenExplicitImplementation`1' has an explicit implementation of one of the methods exposed by the interface. The runtime prevents use from invoking the private method on the target. Method Castle.DynamicProxy.Tests.GenInterfaces.InterfaceWithExplicitImpl<T>.GetEnum1"
-			)]
 		public void ProxyWithGenExplicitImplementation()
 		{
-			DisableVerification();
-			generator.CreateInterfaceProxyWithTarget<InterfaceWithExplicitImpl<int>>(
+			var target = generator.CreateInterfaceProxyWithTarget<InterfaceWithExplicitImpl<int>>(
 				new GenExplicitImplementation<int>(), logger);
+			IEnumerator<int> enumerator = target.GetEnum1();
+			Assert.IsNotNull(enumerator);
 		}
 
 		[Test]

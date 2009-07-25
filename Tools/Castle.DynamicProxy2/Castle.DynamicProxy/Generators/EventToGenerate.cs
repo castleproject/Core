@@ -24,8 +24,8 @@ namespace Castle.DynamicProxy.Generators
 		private readonly Type type;
 		private EventEmitter emitter;
 		private EventAttributes attributes;
-		private MethodInfo removeMethod;
-		private MethodInfo addMethod;
+		private readonly IProxyMethod adder;
+		private readonly IProxyMethod remover;
 
 		public bool Equals(EventToGenerate other)
 		{
@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return true;
 			}
-			return Equals(other.AddMethod, AddMethod) && Equals(other.RemoveMethod, RemoveMethod) && Equals(other.Attributes, Attributes);
+			return Equals(other.adder.Method, adder.Method) && Equals(other.remover.Method, remover.Method) && Equals(other.Attributes, Attributes);
 		}
 
 		public override bool Equals(object obj)
@@ -61,8 +61,8 @@ namespace Castle.DynamicProxy.Generators
 		{
 			unchecked
 			{
-				int result = (AddMethod != null ? AddMethod.GetHashCode() : 0);
-				result = (result * 397) ^ (RemoveMethod != null ? RemoveMethod.GetHashCode() : 0);
+				int result = (adder.Method != null ? adder.Method.GetHashCode() : 0);
+				result = (result * 397) ^ (remover.Method != null ? remover.Method.GetHashCode() : 0);
 				result = (result * 397) ^ Attributes.GetHashCode();
 				return result;
 			}
@@ -76,25 +76,14 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name="addMethod">The add method.</param>
 		/// <param name="removeMethod">The remove method.</param>
 		/// <param name="attributes">The attributes.</param>
-		public EventToGenerate(string name, Type type, MethodInfo addMethod, MethodInfo removeMethod, EventAttributes attributes)
+		/// <param name="hasTarget"></param>
+		public EventToGenerate(string name, Type type, MethodInfo addMethod, MethodInfo removeMethod, EventAttributes attributes, bool hasTarget)
 		{
 			this.name = name;
 			this.type = type;
-			this.addMethod = addMethod;
-			this.removeMethod = removeMethod;
+			this.adder = new ProxyMethod(addMethod, hasTarget);
+			this.remover = new ProxyMethod(removeMethod, hasTarget);
 			this.attributes = attributes;
-		}
-
-		public MethodInfo AddMethod
-		{
-			get { return addMethod; }
-			set { addMethod = value; }
-		}
-
-		public MethodInfo RemoveMethod
-		{
-			get { return removeMethod; }
-			set { removeMethod = value; }
 		}
 
 		public EventAttributes Attributes
@@ -109,6 +98,31 @@ namespace Castle.DynamicProxy.Generators
 				if(emitter==null)
 					throw new InvalidOperationException("Emitter is not initialized. You have to initialize it first using 'BuildEventEmitter' method");
 				return emitter;
+			}
+		}
+
+		public MethodInfo AddMethod
+		{
+			get { return adder.Method; }
+
+		}
+
+		public MethodInfo RemoveMethod
+		{
+			get { return remover.Method; }
+
+		}
+		public IProxyMethod Adder
+		{
+			get {
+				return adder;
+			}
+		}
+
+		public IProxyMethod Remover
+		{
+			get {
+				return remover;
 			}
 		}
 

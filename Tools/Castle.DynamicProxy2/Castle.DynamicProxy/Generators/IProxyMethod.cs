@@ -12,20 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.GenInterfaces
+namespace Castle.DynamicProxy.Generators
 {
-	using System.Collections.Generic;
+	using System.Reflection;
 
-	public class GenExplicitImplementation<T> : InterfaceWithExplicitImpl<T>
+	public interface IProxyMethod
 	{
-		IEnumerator<T> InterfaceWithExplicitImpl<T>.GetEnum1()
-		{
-			return new List<T>.Enumerator();
-		}
-	}
-
-	public interface InterfaceWithExplicitImpl<T>
-	{
-		IEnumerator<T> GetEnum1();
+		MethodInfo Method { get; }
+		bool HasTarget { get; }
 	}
 }

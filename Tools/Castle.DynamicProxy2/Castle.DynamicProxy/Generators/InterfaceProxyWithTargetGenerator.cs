@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 #if !SILVERLIGHT
@@ -36,6 +37,7 @@ namespace Castle.DynamicProxy.Generators
 		private FieldReference targetField;
 		protected Dictionary<MethodInfo, NestedClassEmitter> method2Invocation = new Dictionary<MethodInfo, NestedClassEmitter>();
 		protected Dictionary<MethodInfo, MethodInfo> method2methodOnTarget = new Dictionary<MethodInfo, MethodInfo>();
+
 
 		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type theInterface)
 			: base(scope, theInterface)
@@ -75,267 +77,7 @@ namespace Castle.DynamicProxy.Generators
 				SetGenerationOptions(options);
 
 				String newName = "Castle.Proxies." + targetType.Name + "Proxy" + Guid.NewGuid().ToString("N");
-
-				// Add Interfaces that the proxy implements 
-
-				List<Type> interfaceList = new List<Type>();
-
-				interfaceList.Add(targetType);
-
-				if (interfaces != null)
-				{
-					interfaceList.AddRange(interfaces);
-				}
-#if SILVERLIGHT
-#warning What to do?
-#else
-				if (!interfaceList.Contains(typeof(ISerializable)))
-				{
-					interfaceList.Add(typeof(ISerializable));
-				}
-#endif
-
-				ValidateMixinInterface(targetType, "target type " + targetType.Name);
-				if (interfaces != null)
-				{
-					ValidateMixinInterfaces(interfaces, "additional interfaces");
-				}
-
-				AddMixinInterfaces(interfaceList);
-				AddDefaultInterfaces(interfaceList);
-
-				Type baseType = options.BaseTypeForInterfaceProxy;
-
-				ClassEmitter emitter = BuildClassEmitter(newName, baseType, interfaceList);
-				CreateOptionsField(emitter);
-				emitter.AddCustomAttributes(options);
-#if SILVERLIGHT
-#warning XmlIncludeAttribute is in silverlight, do we want to explore this?
-#else
-				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
-				emitter.DefineCustomAttribute(new SerializableAttribute());
-#endif
-
-				// Custom attributes
-				ReplicateNonInheritableAttributes(targetType, emitter);
-
-				// Fields generations
-
-				FieldReference interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
-				targetField = emitter.CreateField("__target", proxyTargetType);
-
-#if SILVERLIGHT
-#warning XmlIncludeAttribute is in silverlight, do we want to explore this?
-#else
-				emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
-				emitter.DefineCustomAttributeFor(targetField, new XmlIgnoreAttribute());
-#endif
-				// Implement builtin Interfaces
-				ImplementProxyTargetAccessor(targetType, emitter, interceptorsField);
-
-				// Collect methods
-
-				PropertyToGenerate[] propsToGenerate;
-				EventToGenerate[] eventToGenerates;
-				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventToGenerates);
-				
-				if (interfaces != null && interfaces.Length != 0)
-				{
-					List<Type> tmpInterfaces = new List<Type>(interfaces);
-					List<PropertyToGenerate> actualProperties = new List<PropertyToGenerate>(propsToGenerate);
-					List<EventToGenerate> actualEvents = new List<EventToGenerate>(eventToGenerates);
-					List<MethodInfo> actualMethods = new List<MethodInfo>(methods);
-
-					foreach (Type inter in interfaces)
-					{
-						if (inter.IsAssignableFrom(proxyTargetType))
-						{
-							PropertyToGenerate[] tempPropsToGenerate;
-							EventToGenerate[] tempEventToGenerates;
-							MethodInfo[] methodsTemp =
-								CollectMethodsAndProperties(emitter, inter, out tempPropsToGenerate, out tempEventToGenerates);
-
-							AddIfNew(actualMethods, methodsTemp);
-							AddIfNew(actualProperties, tempPropsToGenerate);
-							AddIfNew(actualEvents, tempEventToGenerates);
-
-							tmpInterfaces.Remove(inter);
-						}
-					}
-
-					interfaces = tmpInterfaces.ToArray();
-					propsToGenerate = actualProperties.ToArray();
-					eventToGenerates = actualEvents.ToArray();
-					methods = actualMethods.ToArray();
-				}
-
-				RegisterMixinMethodsAndProperties(emitter, ref methods, ref propsToGenerate, ref eventToGenerates);
-
-				options.Hook.MethodsInspected();
-
-				// Constructor
-
-				ConstructorEmitter typeInitializer = GenerateStaticConstructor(emitter);
-
-				if (!proxyTargetType.IsInterface)
-				{
-					CacheMethodTokens(emitter, MethodFinder.GetAllInstanceMethods(proxyTargetType,
-																				  BindingFlags.Public | BindingFlags.Instance),
-									  typeInitializer);
-				}
-
-				CreateInitializeCacheMethodBody(proxyTargetType, methods, emitter, typeInitializer);
-				FieldReference[] mixinFields = AddMixinFields(emitter);
-				List<FieldReference> fields = new List<FieldReference>(mixinFields);
-				fields.Add(interceptorsField);
-				fields.Add(targetField);
-				GenerateConstructors(emitter, baseType, fields.ToArray());
-				// GenerateParameterlessConstructor(emitter, interceptorsField, baseType);
-
-				// Create invocation types
-
-				foreach (MethodInfo method in methods)
-				{
-					CreateInvocationForMethod(emitter, method, proxyTargetType);
-				}
-
-				// Create methods overrides
-
-				Dictionary<MethodInfo, MethodEmitter> method2Emitter = new Dictionary<MethodInfo, MethodEmitter>();
-
-				foreach (MethodInfo method in methods)
-				{
-					if (method.IsSpecialName &&
-						(method.Name.StartsWith("get_") || method.Name.StartsWith("set_") ||
-						 method.Name.StartsWith("add_") || method.Name.StartsWith("remove_")) ||
-						methodsToSkip.Contains(method))
-					{
-						continue;
-					}
-
-					NestedClassEmitter nestedClass = method2Invocation[method];
-
-					MethodEmitter newProxiedMethod = CreateProxiedMethod(method, emitter, nestedClass, interceptorsField, GetTargetRef(method, mixinFields, targetField),
-						ConstructorVersion.WithTargetMethod, method2methodOnTarget[method]);
-
-					ReplicateNonInheritableAttributes(method, newProxiedMethod);
-
-					method2Emitter[method] = newProxiedMethod;
-				}
-
-				foreach (PropertyToGenerate propToGen in propsToGenerate)
-				{
-					propToGen.BuildPropertyEmitter(emitter);
-					if (propToGen.CanRead)
-					{
-						NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
-
-						string name;
-						MethodAttributes atts = ObtainMethodAttributes(propToGen.GetMethod,out name);
-
-						MethodEmitter getEmitter = propToGen.Emitter.CreateGetMethod(name, atts);
-
-						MethodEmitter method = ImplementProxiedMethod(getEmitter,
-						                                              propToGen.GetMethod, emitter,
-						                                              nestedClass, interceptorsField, GetTargetRef(propToGen.GetMethod, mixinFields, targetField),
-						                                              ConstructorVersion.WithTargetMethod,
-						                                              method2methodOnTarget[propToGen.GetMethod]);
-						if (propToGen.GetMethod.DeclaringType.IsInterface)
-						{
-							emitter.TypeBuilder.DefineMethodOverride(method.MethodBuilder, propToGen.GetMethod);
-						}
-						ReplicateNonInheritableAttributes(propToGen.GetMethod, getEmitter);
-
-						// emitter.TypeBuilder.DefineMethodOverride(getEmitter.MethodBuilder, propToGen.GetMethod);
-					}
-
-					if (propToGen.CanWrite)
-					{
-						NestedClassEmitter nestedClass = method2Invocation[propToGen.SetMethod];
-
-						string name;
-						MethodAttributes atts = ObtainMethodAttributes(propToGen.SetMethod,out name);
-
-						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(name, atts);
-
-						MethodEmitter method = ImplementProxiedMethod(setEmitter,
-						                                              propToGen.SetMethod, emitter,
-						                                              nestedClass, interceptorsField, GetTargetRef(propToGen.SetMethod, mixinFields, targetField),
-						                                              ConstructorVersion.WithTargetMethod,
-						                                              method2methodOnTarget[propToGen.SetMethod]);
-						if (propToGen.SetMethod.DeclaringType.IsInterface)
-						{
-							emitter.TypeBuilder.DefineMethodOverride(method.MethodBuilder, propToGen.SetMethod);
-						}
-						ReplicateNonInheritableAttributes(propToGen.SetMethod, setEmitter);
-
-						// emitter.TypeBuilder.DefineMethodOverride(setEmitter.MethodBuilder, propToGen.SetMethod);
-					}
-				}
-
-				foreach (EventToGenerate eventToGenerate in eventToGenerates)
-				{
-					eventToGenerate.BuildEventEmitter(emitter);
-					NestedClassEmitter add_nestedClass = method2Invocation[eventToGenerate.AddMethod];
-					string name;
-					MethodAttributes add_atts = ObtainMethodAttributes(eventToGenerate.AddMethod,out name);
-
-					MethodEmitter addEmitter = eventToGenerate.Emitter.CreateAddMethod(name, add_atts);
-
-					MethodEmitter method = ImplementProxiedMethod(addEmitter,
-					                                              eventToGenerate.AddMethod, emitter,
-					                                              add_nestedClass, interceptorsField,
-					                                              GetTargetRef(eventToGenerate.AddMethod, mixinFields, targetField),
-					                                              ConstructorVersion.WithTargetMethod,
-					                                              method2methodOnTarget[eventToGenerate.AddMethod]);
-					if (eventToGenerate.AddMethod.DeclaringType.IsInterface)
-					{
-						emitter.TypeBuilder.DefineMethodOverride(method.MethodBuilder, eventToGenerate.AddMethod);
-					}
-					ReplicateNonInheritableAttributes(eventToGenerate.AddMethod, addEmitter);
-
-
-					NestedClassEmitter remove_nestedClass = method2Invocation[eventToGenerate.RemoveMethod];
-
-					MethodAttributes remove_atts = ObtainMethodAttributes(eventToGenerate.RemoveMethod,out name);
-
-					MethodEmitter removeEmitter = eventToGenerate.Emitter.CreateRemoveMethod(name, remove_atts);
-
-					MethodEmitter methodEmitter = ImplementProxiedMethod(removeEmitter,
-					                                                     eventToGenerate.RemoveMethod, emitter,
-					                                                     remove_nestedClass, interceptorsField,
-					                                                     GetTargetRef(eventToGenerate.RemoveMethod, mixinFields, targetField),
-					                                                     ConstructorVersion.WithTargetMethod,
-					                                                     method2methodOnTarget[eventToGenerate.RemoveMethod]);
-					if (eventToGenerate.RemoveMethod.DeclaringType.IsInterface)
-					{
-						emitter.TypeBuilder.DefineMethodOverride(methodEmitter.MethodBuilder, eventToGenerate.RemoveMethod);
-					}
-					ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);
-				}
-
-                // Implement interfaces
-
-                if (interfaces != null && interfaces.Length != 0)
-                {
-                	ImplementBlankInterfaces(interfaces, emitter, interceptorsField, typeInitializer,
-                	                         AllowChangeTarget, methods, propsToGenerate, eventToGenerates);
-                }
-
-#if SILVERLIGHT
-#warning What to do?
-#else
-				ImplementGetObjectData(emitter, interceptorsField, mixinFields, interfaces);
-#endif
-
-				// Complete Initialize 
-
-				CompleteInitCacheMethod(typeInitializer.CodeBuilder);
-
-				// Crosses fingers and build type
-
-				generatedType = emitter.BuildType();
-				InitializeStaticFields(generatedType);
+				generatedType = GenerateType(newName, proxyTargetType, interfaces);
 
 				AddToCache(cacheKey, generatedType);
 			}
@@ -343,22 +85,390 @@ namespace Castle.DynamicProxy.Generators
 			return generatedType;
 		}
 
+		private Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces)
+		{
+			// TODO: this anemic dictionary should be made into a real object
+			IDictionary<Type, object> interfaceTypeImplementerMapping = new Dictionary<Type, object>();
+
+			// Order of interface precedence:
+			// 1. first target
+			AddTargetInterfaceMapping(interfaceTypeImplementerMapping);
+
+			// 2. then mixins
+			if(ProxyGenerationOptions.HasMixins)
+			{
+				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
+				{
+					object mixinInstance = ProxyGenerationOptions.MixinData.GetMixinInstance(mixinInterface);
+					AddInterfaceMapping(mixinInterface, mixinInstance, interfaceTypeImplementerMapping);
+				}
+			}
+
+			// 3. then additional interfaces
+			if (interfaces != null)
+			{
+				foreach (var @interface in interfaces)
+				{
+					AddInterfaceMapping(@interface, null /*because there is no target*/, interfaceTypeImplementerMapping);
+				}
+			}
+
+			// 4. plus special interfaces
+#if SILVERLIGHT
+#warning What to do?
+#else
+			AddInterfaceMapping(typeof (ISerializable), Proxy.Instance, interfaceTypeImplementerMapping);
+#endif
+			AddInterfaceMapping(typeof (IProxyTargetAccessor), Proxy.Instance, interfaceTypeImplementerMapping);
+
+			// This is flawed. We allow any type to be a base type but we don't realy handle it properly.
+			// What if the type implements interfaces? What if it implements target interface?
+			// What if it implement mixin interface? What if it implements any additional interface?
+			// What if it has no default constructor?
+			// We handle none of these cases.
+			Type baseType = ProxyGenerationOptions.BaseTypeForInterfaceProxy;
+
+			ClassEmitter emitter = BuildClassEmitter(typeName, baseType, interfaceTypeImplementerMapping.Keys);
+			CreateOptionsField(emitter);
+			emitter.AddCustomAttributes(ProxyGenerationOptions);
+#if SILVERLIGHT
+#warning XmlIncludeAttribute is in silverlight, do we want to explore this?
+#else
+			emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
+			emitter.DefineCustomAttribute(new SerializableAttribute());
+#endif
+
+			// Custom attributes
+			ReplicateNonInheritableAttributes(targetType, emitter);
+
+			// Fields generations
+
+			FieldReference interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
+			targetField = emitter.CreateField("__target", proxyTargetType);
+
+#if SILVERLIGHT
+#warning XmlIncludeAttribute is in silverlight, do we want to explore this?
+#else
+			emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
+			emitter.DefineCustomAttributeFor(targetField, new XmlIgnoreAttribute());
+#endif
+			// Implement builtin Interfaces
+			ImplementProxyTargetAccessor(targetType, emitter, interceptorsField);
+
+			// Collect methods
+			IList<ProxyElementTarget> targets = new List<ProxyElementTarget>();
+			foreach (var mapping in interfaceTypeImplementerMapping)
+			{
+				// NOTE: make sure this is what it should be
+				if (ReferenceEquals(mapping.Value, Proxy.Instance)) continue;
+
+				targets.Add(CollectElementsToProxy(mapping));
+
+			}
+
+			ProxyGenerationOptions.Hook.MethodsInspected();
+
+			// Constructor
+
+			ConstructorEmitter typeInitializer = GenerateStaticConstructor(emitter);
+
+			// TODO: this affects caching. is it required?
+			if (!proxyTargetType.IsInterface)
+			{
+				var methods = MethodFinder.GetAllInstanceMethods(proxyTargetType, BindingFlags.Public | BindingFlags.Instance);
+				CacheMethodTokens(emitter, methods, typeInitializer);
+			}
+
+			CreateInitializeCacheMethodBody(proxyTargetType, GetMethods(targets), emitter, typeInitializer);
+
+			FieldReference[] mixinFields = AddMixinFields(emitter);
+			List<FieldReference> fields = new List<FieldReference>(mixinFields);
+			fields.Add(interceptorsField);
+			fields.Add(targetField);
+			GenerateConstructors(emitter, baseType, fields.ToArray());
+			// GenerateParameterlessConstructor(emitter, interceptorsField, baseType);
+
+
+
+
+			// Create invocation types
+			// NOTE: does this have to happen separately from the generation of below implementation methods?
+			foreach (var target in targets)
+			{
+				foreach (var method in target.Methods)
+				{
+					CreateInvocationForMethod(emitter, method, proxyTargetType);
+					AddFieldToCacheMethodTokenAndStatementsToInitialize(method.Method, typeInitializer, emitter);
+					MethodInfo methodOnTarget;
+					if(method2methodOnTarget.TryGetValue(method.Method,out methodOnTarget))
+					{
+						AddFieldToCacheMethodTokenAndStatementsToInitialize(methodOnTarget, typeInitializer, emitter);
+					}
+				}
+			}
+
+			// Create methods overrides
+			var method2Emitter = new Dictionary<MethodInfo, MethodEmitter>();
+			foreach (var target in targets)
+			{
+				foreach (var method in target.Methods)
+				{
+					ImplementMethod(emitter, interceptorsField, mixinFields, method, method2Emitter);
+				}
+
+				foreach (PropertyToGenerate property in target.Properties)
+				{
+					ImplementProperty(emitter, interceptorsField, mixinFields, property);
+				}
+
+				foreach (EventToGenerate @event in target.Events)
+				{
+					ImplementEvent(emitter, interceptorsField, mixinFields, @event);
+				}
+			}
+
+#if SILVERLIGHT
+#warning What to do?
+#else
+			ImplementGetObjectData(emitter, interceptorsField, mixinFields, interfaces);
+#endif
+
+			// Complete Initialize 
+
+			CompleteInitCacheMethod(typeInitializer.CodeBuilder);
+
+			// Crosses fingers and build type
+
+			Type generatedType = emitter.BuildType();
+			InitializeStaticFields(generatedType);
+			return generatedType;
+		}
+
+		protected virtual void AddTargetInterfaceMapping(IDictionary<Type, object> interfaceTypeImplementerMapping)
+		{
+			AddInterfaceMapping(targetType, Proxy.Target, interfaceTypeImplementerMapping);
+		}
+
+		private void ImplementEvent(ClassEmitter emitter, FieldReference interceptorsField, FieldReference[] mixinFields, EventToGenerate @event)
+		{
+			@event.BuildEventEmitter(emitter);
+			NestedClassEmitter add_nestedClass = method2Invocation[@event.AddMethod];
+			string name;
+			MethodAttributes add_attributes = ObtainMethodAttributes(@event.AddMethod, out name);
+
+			MethodEmitter addEmitter = @event.Emitter.CreateAddMethod(name, add_attributes);
+
+			MethodEmitter method = ImplementProxiedMethod(addEmitter,
+			                                              @event.AddMethod, emitter,
+			                                              add_nestedClass, interceptorsField,
+			                                              GetTargetReference(@event.Adder, mixinFields, targetField),
+			                                              ConstructorVersion.WithTargetMethod,
+			                                              method2methodOnTarget[@event.AddMethod]);
+			if (@event.AddMethod.DeclaringType.IsInterface)
+			{
+				emitter.TypeBuilder.DefineMethodOverride(method.MethodBuilder, @event.AddMethod);
+			}
+			ReplicateNonInheritableAttributes(@event.AddMethod, addEmitter);
+
+
+			NestedClassEmitter remove_nestedClass = method2Invocation[@event.RemoveMethod];
+
+			MethodAttributes remove_attributes = ObtainMethodAttributes(@event.RemoveMethod, out name);
+
+			MethodEmitter removeEmitter = @event.Emitter.CreateRemoveMethod(name, remove_attributes);
+
+			MethodEmitter methodEmitter = ImplementProxiedMethod(removeEmitter,
+			                                                     @event.RemoveMethod, emitter,
+			                                                     remove_nestedClass, interceptorsField,
+			                                                     GetTargetReference(@event.Remover, mixinFields, targetField),
+			                                                     ConstructorVersion.WithTargetMethod,
+			                                                     method2methodOnTarget[@event.RemoveMethod]);
+			if (@event.RemoveMethod.DeclaringType.IsInterface)
+			{
+				emitter.TypeBuilder.DefineMethodOverride(methodEmitter.MethodBuilder, @event.RemoveMethod);
+			}
+			ReplicateNonInheritableAttributes(@event.RemoveMethod, removeEmitter);
+		}
+
+		private void ImplementProperty(ClassEmitter emitter, FieldReference interceptorsField, FieldReference[] mixinFields, PropertyToGenerate property)
+		{
+			property.BuildPropertyEmitter(emitter);
+			if (property.CanRead)
+			{
+				NestedClassEmitter nestedClass = method2Invocation[property.GetMethod];
+
+				string name;
+				MethodAttributes attributes = ObtainMethodAttributes(property.GetMethod, out name);
+				MethodEmitter getEmitter = property.Emitter.CreateGetMethod(name, attributes);
+				Reference targetReference = GetTargetReference(property.Getter, mixinFields, targetField);
+
+				MethodEmitter method = ImplementProxiedMethod(getEmitter,
+				                                              property.GetMethod,
+				                                              emitter,
+				                                              nestedClass,
+				                                              interceptorsField,
+				                                              targetReference,
+				                                              ConstructorVersion.WithTargetMethod,
+				                                              method2methodOnTarget[property.GetMethod]);
+				if (property.GetMethod.DeclaringType.IsInterface)
+				{
+					emitter.TypeBuilder.DefineMethodOverride(method.MethodBuilder, property.GetMethod);
+				}
+				ReplicateNonInheritableAttributes(property.GetMethod, getEmitter);
+
+				// emitter.TypeBuilder.DefineMethodOverride(getEmitter.MethodBuilder, propToGen.GetMethod);
+			}
+
+			if (property.CanWrite)
+			{
+				NestedClassEmitter nestedClass = method2Invocation[property.SetMethod];
+
+				string name;
+				MethodAttributes attributes = ObtainMethodAttributes(property.SetMethod, out name);
+
+				MethodEmitter setEmitter = property.Emitter.CreateSetMethod(name, attributes);
+
+				MethodEmitter method = ImplementProxiedMethod(setEmitter,
+				                                              property.SetMethod, emitter,
+				                                              nestedClass, interceptorsField, GetTargetReference(property.Setter, mixinFields, targetField),
+				                                              ConstructorVersion.WithTargetMethod,
+				                                              method2methodOnTarget[property.SetMethod]);
+				if (property.SetMethod.DeclaringType.IsInterface)
+				{
+					emitter.TypeBuilder.DefineMethodOverride(method.MethodBuilder, property.SetMethod);
+				}
+				ReplicateNonInheritableAttributes(property.SetMethod, setEmitter);
+
+				// emitter.TypeBuilder.DefineMethodOverride(setEmitter.MethodBuilder, propToGen.SetMethod);
+			}
+		}
+
+		private void ImplementMethod(ClassEmitter emitter, FieldReference interceptorsField, FieldReference[] mixinFields, MethodToGenerate method, Dictionary<MethodInfo, MethodEmitter> method2Emitter)
+		{
+			var methodInfo = method.Method;
+			if (!method.Standalone || methodsToSkip.Contains(methodInfo))
+			{
+				return;
+			}
+
+			NestedClassEmitter nestedClass = method2Invocation[methodInfo];
+
+			MethodEmitter newProxiedMethod = CreateProxiedMethod(methodInfo,
+			                                                     emitter,
+			                                                     nestedClass,
+			                                                     interceptorsField,
+			                                                     GetTargetReference(method, mixinFields, targetField),
+			                                                     ConstructorVersion.WithTargetMethod,
+			                                                     method2methodOnTarget[methodInfo]);
+
+			ReplicateNonInheritableAttributes(methodInfo, newProxiedMethod);
+
+			method2Emitter[methodInfo] = newProxiedMethod;
+		}
+
+		private IEnumerable<MethodInfo> GetMethods(IEnumerable<ProxyElementTarget> targets)
+		{
+			foreach (var target in targets)
+			{
+				foreach (var method in target.MethodInfos)
+				{
+					yield return method;
+				}
+			}
+		}
+
+		private ProxyElementTarget CollectElementsToProxy(KeyValuePair<Type, object> mapping)
+		{
+			var elementsToProxy = new ProxyElementTarget(mapping, CanOnlyProxyVirtual());
+			elementsToProxy.Collect(ProxyGenerationOptions.Hook);
+
+			// HACK: This is a temporary hack until it gets implemented properly in the class proxy as well
+			if (mapping.Value != null && mapping.Value != Proxy.Target && mapping.Value != Proxy.Instance) // mixin, yes I know it's ugly as hell
+			{
+				foreach (var method in elementsToProxy.MethodInfos)
+				{
+					method2MixinType[method] = mapping.Key;
+				}
+			}
+
+			return elementsToProxy;
+		}
+
+		protected void AddInterfaceMapping(Type @interface, object implementer, IDictionary<Type, object> mapping)
+		{
+			Debug.Assert(@interface.IsInterface, "@interface.IsInterface");
+		
+			if (!mapping.ContainsKey(@interface))
+			{
+				mapping.Add(@interface, implementer);
+			}
+
+			foreach (var baseInterface in @interface.GetInterfaces())
+			{
+				AddInterfaceMapping(baseInterface, implementer, mapping);
+			}
+		}
+
 		protected virtual bool AllowChangeTarget
 		{
 			get { return false; }
 		}
 
-		protected virtual void CreateInvocationForMethod(ClassEmitter emitter, MethodInfo method, Type proxyTargetType)
+		protected virtual void CreateInvocationForMethod(ClassEmitter emitter, MethodToGenerate method, Type proxyTargetType)
 		{
-			MethodInfo methodOnTarget = FindMethodOnTargetType(method, proxyTargetType, true);
+			var methodInfo = method.Method;
+			object target = method.Target;
+			MethodInfo methodOnTarget = methodInfo;
+			// TODO: this is a temporary workaround
+			if (target == Proxy.Target)
+			{
+				if(!proxyTargetType.IsInterface)
+				{
+					var foundCandidate = FindImplementingMethod(methodInfo, proxyTargetType);
+					if (foundCandidate != null)
+					{
+						methodOnTarget = foundCandidate;
+					}
+				}
+			}
+			else if (method.HasTarget) // then it must be a mixin
+			{
+				var foundCandidate = FindImplementingMethod(methodInfo, method.Target.GetType());
+				if (foundCandidate != null)
+				{
+					methodOnTarget = foundCandidate;
+				}
+			}
 
-			method2methodOnTarget[method] = methodOnTarget;
+			method2methodOnTarget[methodInfo] = methodOnTarget;
 
-			method2Invocation[method] = BuildInvocationNestedType(emitter,
-																  method.DeclaringType,//IsMixinMethod(method) ? method.DeclaringType : proxyTargetType,
-																  method, method,
-																  ConstructorVersion.WithTargetMethod,
-																  AllowChangeTarget);
+			method2Invocation[methodInfo] = BuildInvocationNestedType(emitter,
+			                                                          methodInfo.DeclaringType,
+			                                                          methodInfo,
+			                                                          GetCallbackForMethod(methodInfo),
+			                                                          GetConstructorVersion(method),
+			                                                          AllowChangeTarget);
+		}
+
+		private MethodInfo FindImplementingMethod(MethodInfo interfaceMethod, Type implementingType)
+		{
+			Type interfaceType = interfaceMethod.DeclaringType;
+			Debug.Assert(interfaceType.IsAssignableFrom(implementingType),
+			             "interfaceMethod.DeclaringType.IsAssignableFrom(implementingType)");
+			Debug.Assert(interfaceType.IsInterface, "interfaceType.IsInterface");
+			InterfaceMapping map = implementingType.GetInterfaceMap(interfaceType);
+			int index = Array.IndexOf(map.InterfaceMethods,interfaceMethod);
+			if (index == -1)
+			{
+				// can this ever happen?
+				return null;
+			}
+			return map.TargetMethods[index];
+		}
+
+		private ConstructorVersion GetConstructorVersion(MethodToGenerate method)
+		{
+			return method.HasTarget ? ConstructorVersion.WithTargetMethod : ConstructorVersion.WithoutTargetMethod;
 		}
 
 		/// <summary>
@@ -409,14 +519,14 @@ namespace Castle.DynamicProxy.Generators
 				throw new GeneratorException("Found more than one method on target " + proxyTargetType.FullName + " matching " +
 											 methodOnInterface.Name);
 			}
-			else if (members.Count == 0)
+			if (members.Count == 0)
 			{
 				if (checkMixins && IsMixinMethod(methodOnInterface))
 				{
 					return FindMethodOnTargetType(methodOnInterface, method2MixinType[methodOnInterface], false);
 				}
 				throw new GeneratorException("Could not find a matching method on " + proxyTargetType.FullName + ". Method " +
-											 methodOnInterface.Name);
+				                             methodOnInterface.Name);
 			}
 
 			return members[0];
@@ -722,6 +832,19 @@ namespace Castle.DynamicProxy.Generators
 		protected virtual InterfaceGeneratorType GeneratorType
 		{
 			get { return InterfaceGeneratorType.WithTarget; }
+		}
+
+		private static class Proxy
+		{
+			/// <summary>
+			/// Used to mark interface target as proxy instance. Used for special interfaces <see cref="ISerializable"/> and <see cref="IProxyTargetAccessor"/>.
+			/// </summary>
+			public static readonly object Instance = new object();
+
+			/// <summary>
+			/// Used to mark interface target as proxy target.
+			/// </summary>
+			public static readonly object Target = new object();
 		}
 	}
 

@@ -396,32 +396,9 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxy(typeof(object), new Type[] { typeof (ISimpleMixin) }, options, interceptor);
 		}
 
-		[Test]
-		[ExpectedException(typeof(InvalidMixinConfigurationException))]
-		public void MixinWithSameInterface_InterfaceWithTarget_TargetType()
-		{
-			ProxyGenerationOptions options = new ProxyGenerationOptions();
-			SimpleMixin mixin1 = new SimpleMixin();
-			options.AddMixinInstance(mixin1);
 
-			StandardInterceptor interceptor = new StandardInterceptor();
-			generator.CreateInterfaceProxyWithTarget(typeof(ISimpleMixin), new ClassImplementingISimpleMixin(), options, interceptor);
-		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidMixinConfigurationException))]
-		public void MixinWithSameInterface_InterfaceWithTarget_TargetType_Derived()
-		{
-			ProxyGenerationOptions options = new ProxyGenerationOptions();
-			SimpleMixin mixin1 = new SimpleMixin();
-			options.AddMixinInstance(mixin1);
-
-			StandardInterceptor interceptor = new StandardInterceptor();
-			generator.CreateInterfaceProxyWithTarget(typeof(IDerivedSimpleMixin), new ClassImplementingIDerivedSimpleMixin(), options, interceptor);
-		}
-
-		[Test]
-		[ExpectedException(typeof(InvalidMixinConfigurationException))]
 		public void MixinWithSameInterface_InterfaceWithTarget_AdditionalInterfaces()
 		{
 			ProxyGenerationOptions options = new ProxyGenerationOptions();
@@ -429,11 +406,11 @@ namespace Castle.DynamicProxy.Tests
 			options.AddMixinInstance(mixin1);
 
 			StandardInterceptor interceptor = new StandardInterceptor();
-			generator.CreateInterfaceProxyWithTarget(typeof(IService), new Type[] {typeof (ISimpleMixin)}, new ServiceImpl(), options, interceptor);
+			var proxy = generator.CreateInterfaceProxyWithTarget(typeof(IService), new Type[] {typeof (ISimpleMixin)}, new ServiceImpl(), options, interceptor);
+			Assert.AreEqual(1, (proxy as ISimpleMixin).DoSomething());
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidMixinConfigurationException))]
 		public void MixinWithSameInterface_InterfaceWithTarget_AdditionalInterfaces_Derived()
 		{
 			ProxyGenerationOptions options = new ProxyGenerationOptions();
@@ -441,7 +418,8 @@ namespace Castle.DynamicProxy.Tests
 			options.AddMixinInstance(mixin1);
 
 			StandardInterceptor interceptor = new StandardInterceptor();
-			generator.CreateInterfaceProxyWithTarget(typeof(IService), new Type[] { typeof (IDerivedSimpleMixin) }, new ServiceImpl(), options, interceptor);
+			var proxy = generator.CreateInterfaceProxyWithTarget(typeof(IService), new Type[] { typeof(IDerivedSimpleMixin) }, new ServiceImpl(), options, interceptor);
+			Assert.AreEqual(1, (proxy as ISimpleMixin).DoSomething());
 		}
 	}
 }

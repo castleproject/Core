@@ -132,7 +132,7 @@ namespace Castle.DynamicProxy.Generators
 
 				PropertyToGenerate[] propsToGenerate;
 				EventToGenerate[] eventsToGenerate;
-				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventsToGenerate);
+				MethodInfo[] methods = CollectMethodsAndProperties(targetType, out propsToGenerate, out eventsToGenerate, true);
 				if (interfaces != null && interfaces.Length != 0)
 				{
 					List<Type> tmpInterfaces = new List<Type>(interfaces);
@@ -147,7 +147,7 @@ namespace Castle.DynamicProxy.Generators
 							PropertyToGenerate[] tempPropsToGenerate;
 							EventToGenerate[] tempEventToGenerates;
 							MethodInfo[] methodsTemp =
-								CollectMethodsAndProperties(emitter, inter, out tempPropsToGenerate, out tempEventToGenerates);
+								CollectMethodsAndProperties(inter, out tempPropsToGenerate, out tempEventToGenerates, true);
 
 							AddIfNew(actualMethods, methodsTemp);
 							AddIfNew(actualProperties, tempPropsToGenerate);
@@ -164,7 +164,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 
-				RegisterMixinMethodsAndProperties(emitter, ref methods, ref propsToGenerate, ref eventsToGenerate);
+				RegisterMixinMethodsAndProperties(ref methods, ref propsToGenerate, ref eventsToGenerate);
 
 				options.Hook.MethodsInspected();
 
@@ -239,7 +239,10 @@ namespace Castle.DynamicProxy.Generators
 
 					NestedClassEmitter nestedClass = method2Invocation[method];
 
-					Reference targetRef = GetTargetRef(method, mixinFields, SelfReference.Self);
+					//TODO: this is very temporary, until I refactor class generator similarily to interface generator
+					var HACK = new MethodToGenerate(method, false, false, new object());
+
+					Reference targetRef = GetTargetReference(HACK, mixinFields, SelfReference.Self);
 					MethodEmitter newProxiedMethod = CreateProxiedMethod(method, emitter, nestedClass, interceptorsField, targetRef,
 						ConstructorVersion.WithoutTargetMethod, null);
 
@@ -259,8 +262,8 @@ namespace Castle.DynamicProxy.Generators
 						MethodAttributes atts = ObtainMethodAttributes(propToGen.GetMethod, out name);
 
 						MethodEmitter getEmitter = propToGen.Emitter.CreateGetMethod(name, atts);
-
-						Reference targetRef = GetTargetRef(propToGen.GetMethod, mixinFields, SelfReference.Self);
+						var HACK = new MethodToGenerate(propToGen.GetMethod, false, false,new object());
+						Reference targetRef = GetTargetReference(HACK, mixinFields, SelfReference.Self);
 
 						MethodEmitter proxiedMethod = ImplementProxiedMethod(getEmitter,
 						                                              propToGen.GetMethod, emitter,
@@ -282,7 +285,8 @@ namespace Castle.DynamicProxy.Generators
 
 						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(name, atts);
 
-						Reference targetRef = GetTargetRef(propToGen.SetMethod, mixinFields, SelfReference.Self);
+						var HACK = new MethodToGenerate(propToGen.SetMethod, false, false, new object());
+						Reference targetRef = GetTargetReference(HACK, mixinFields, SelfReference.Self);
 
 						MethodEmitter proxiedMethod = ImplementProxiedMethod(setEmitter,
 						                                              propToGen.SetMethod, emitter,
@@ -306,10 +310,11 @@ namespace Castle.DynamicProxy.Generators
 
 					MethodEmitter addEmitter = eventToGenerate.Emitter.CreateAddMethod(name, add_atts);
 
+					var HACK = new MethodToGenerate(eventToGenerate.AddMethod, false, false, new object());
 					MethodEmitter proxiedMethod = ImplementProxiedMethod(addEmitter,
 					                                              eventToGenerate.AddMethod, emitter,
 					                                              add_nestedClass, interceptorsField,
-					                                              GetTargetRef(eventToGenerate.AddMethod, mixinFields, SelfReference.Self),
+					                                              GetTargetReference(HACK, mixinFields, SelfReference.Self),
 					                                              ConstructorVersion.WithoutTargetMethod, null);
 					if (eventToGenerate.AddMethod.DeclaringType.IsInterface)
 					{
@@ -323,10 +328,11 @@ namespace Castle.DynamicProxy.Generators
 
 					MethodEmitter removeEmitter = eventToGenerate.Emitter.CreateRemoveMethod(name, remove_atts);
 
+					HACK = new MethodToGenerate(eventToGenerate.RemoveMethod, false, false, new object());
 					MethodEmitter method = ImplementProxiedMethod(removeEmitter,
 					                                              eventToGenerate.RemoveMethod, emitter,
 					                                              remove_nestedClass, interceptorsField,
-					                                              GetTargetRef(eventToGenerate.RemoveMethod, mixinFields, SelfReference.Self),
+					                                              GetTargetReference(HACK, mixinFields, SelfReference.Self),
 					                                              ConstructorVersion.WithoutTargetMethod, null);
 					if (eventToGenerate.RemoveMethod.DeclaringType.IsInterface)
 					{

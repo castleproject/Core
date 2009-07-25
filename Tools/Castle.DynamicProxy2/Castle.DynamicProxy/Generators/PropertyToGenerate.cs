@@ -26,19 +26,19 @@ namespace Castle.DynamicProxy.Generators
 		private readonly bool canRead;
 		private readonly bool canWrite;
 		private PropertyEmitter emitter;
-		private readonly MethodInfo getMethod;
-		private readonly MethodInfo setMethod;
 		private readonly PropertyAttributes attributes;
 		private readonly IEnumerable<Attribute> customAttributes;
+		private IProxyMethod getter;
+		private ProxyMethod setter;
 
-		public PropertyToGenerate(string name, Type type, bool canRead, bool canWrite, MethodInfo getMethod, MethodInfo setMethod, PropertyAttributes attributes, IEnumerable<Attribute> customAttributes)
+		public PropertyToGenerate(string name, Type type, bool canRead, bool canWrite, MethodInfo getMethod, MethodInfo setMethod, PropertyAttributes attributes, IEnumerable<Attribute> customAttributes, bool hasTarget)
 		{
 			this.name = name;
 			this.type = type;
 			this.canRead = canRead;
 			this.canWrite = canWrite;
-			this.getMethod = getMethod;
-			this.setMethod = setMethod;
+			this.getter = new ProxyMethod(getMethod, hasTarget);
+			this.setter = new ProxyMethod(setMethod, hasTarget);
 			this.attributes = attributes;
 			this.customAttributes = customAttributes;
 		}
@@ -55,12 +55,12 @@ namespace Castle.DynamicProxy.Generators
 
 		public MethodInfo GetMethod
 		{
-			get { return getMethod; }
+			get { return getter.Method; }
 		}
 
 		public MethodInfo SetMethod
 		{
-			get { return setMethod; }
+			get { return setter.Method; }
 		}
 
 		public PropertyEmitter Emitter
@@ -70,6 +70,18 @@ namespace Castle.DynamicProxy.Generators
 					throw new InvalidOperationException(
 						"Emitter is not initialized. You have to initialize it first using 'BuildPropertyEmitter' method");
 				return emitter;
+			}
+		}
+
+		public IProxyMethod Getter
+		{
+			get { return getter; }
+		}
+
+		public IProxyMethod Setter
+		{
+			get {
+				return setter;
 			}
 		}
 
@@ -83,7 +95,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return true;
 			}
-			return Equals(other.getMethod, getMethod) && Equals(other.setMethod, setMethod);
+			return Equals(other.GetMethod, GetMethod) && Equals(other.SetMethod, SetMethod);
 		}
 
 		public override bool Equals(object obj)
@@ -107,7 +119,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			unchecked
 			{
-				return ((getMethod != null ? getMethod.GetHashCode() : 0) * 397) ^ (setMethod != null ? setMethod.GetHashCode() : 0);
+				return ((GetMethod != null ? GetMethod.GetHashCode() : 0) * 397) ^ (SetMethod != null ? SetMethod.GetHashCode() : 0);
 			}
 		}
 

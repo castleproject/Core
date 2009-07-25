@@ -16,11 +16,19 @@ namespace Castle.DynamicProxy.Tests.Mixins
 {
 	using System;
 
+#if !SILVERLIGHT
+	[Serializable]
+#endif
 	public class ClassImplementingIDerivedSimpleMixin : IDerivedSimpleMixin
 	{
 		public int DoSomething()
 		{
-			throw new NotImplementedException();
+			return 3;
+		}
+
+		public int DoSomethingDerived()
+		{
+			return 2;
 		}
 	}
 }
