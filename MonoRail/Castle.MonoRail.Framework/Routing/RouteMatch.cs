@@ -37,6 +37,11 @@ namespace Castle.MonoRail.Framework.Routing
 		}
 
 		/// <summary>
+		/// Name of the route.
+		/// </summary>
+		public string Name { get; set; }
+
+		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
 		/// <value>The parameters.</value>

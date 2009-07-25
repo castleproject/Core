@@ -42,7 +42,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
 
 			Assert.AreEqual("/controller/new.castle",
-			                urlBuilder.BuildUrl(url, DictHelper.Create("action=new")));
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new")));
 		}
 
 		[Test]
@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
 
 			Assert.AreEqual("/cars/new.castle",
-			                urlBuilder.BuildUrl(url, DictHelper.Create("controller=cars", "action=new")));
+							urlBuilder.BuildUrl(url, DictHelper.Create("controller=cars", "action=new")));
 		}
 
 		[Test]
@@ -60,7 +60,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
 
 			Assert.AreEqual("/admin/cars/new.castle",
-			                urlBuilder.BuildUrl(url, DictHelper.Create("area=admin", "controller=cars", "action=new")));
+							urlBuilder.BuildUrl(url, DictHelper.Create("area=admin", "controller=cars", "action=new")));
 		}
 
 		[Test]
@@ -69,7 +69,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			UrlInfo url = new UrlInfo("", "controller", "action", "/app", ".castle");
 
 			Assert.AreEqual("/app/controller/new.castle",
-			                urlBuilder.BuildUrl(url, DictHelper.Create("action=new")));
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new")));
 		}
 
 		[Test]
@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			UrlInfo url = new UrlInfo("", "controller", "action", "/app/some", ".castle");
 
 			Assert.AreEqual("/app/some/controller/new.castle",
-			                urlBuilder.BuildUrl(url, DictHelper.Create("action=new")));
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new")));
 		}
 
 		[Test]
@@ -87,7 +87,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
 
 			Assert.AreEqual("/controller/edit.castle",
-			                urlBuilder.BuildUrl(url, DictHelper.Create("action=edit")));
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=edit")));
 		}
 
 		[Test]
@@ -98,7 +98,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
 
 			Assert.AreEqual("/controller/edit",
-			                urlBuilder.BuildUrl(url, DictHelper.Create("action=edit")));
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=edit")));
 		}
 
 		[Test]
@@ -107,7 +107,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			UrlInfo url = new UrlInfo("", "controller", "action", "", ".castle");
 
 			Assert.AreEqual("/controller/new.castle?something=1",
-			                urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "querystring=something=1")));
+							urlBuilder.BuildUrl(url, DictHelper.Create("action=new", "querystring=something=1")));
 		}
 
 		[Test]
@@ -120,7 +120,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			parameters["querystring"] = DictHelper.Create("id=1", "name=john doe");
 
 			Assert.AreEqual("/controller/new.castle?id=1&name=john+doe",
-			                urlBuilder.BuildUrl(url, parameters));
+							urlBuilder.BuildUrl(url, parameters));
 		}
 
 		[Test]
@@ -137,7 +137,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			parameters["querystring"] = namedParams;
 
 			Assert.AreEqual("/controller/new.castle?id=1&name=john+doe",
-			                urlBuilder.BuildUrl(url, parameters));
+							urlBuilder.BuildUrl(url, parameters));
 		}
 
 		[Test]
@@ -199,7 +199,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 							urlBuilder.BuildUrl(url, parameters));
 
 			Assert.AreEqual("/controller/new.castle?id=1&amp;name=john+doe",
-							urlBuilder.BuildUrl(url, 
+							urlBuilder.BuildUrl(url,
 								DictHelper.Create("encode=true", "action=new", "querystring=id=1&name=john doe")));
 		}
 
@@ -262,15 +262,15 @@ namespace Castle.MonoRail.Framework.Tests.Services
 
 			Assert.AreEqual("http://localhost/theArea/home/index.castle",
 							urlBuilder.BuildUrl(url, DictHelper.Create("basepath=http://localhost/",
-			                                                               "area=theArea", "controller=home",
-			                                                               "action=index")));
+																		   "area=theArea", "controller=home",
+																		   "action=index")));
 
 			Assert.AreEqual("http://localhost/theArea/home/index.castle",
 							urlBuilder.BuildUrl(url,
-			                                    DictHelper.Create(
-			                                    	"basepath=http://localhost",
-			                                    	"area=theArea", "controller=home",
-			                                    	"action=index")));
+												DictHelper.Create(
+													"basepath=http://localhost",
+													"area=theArea", "controller=home",
+													"action=index")));
 		}
 
 		[Test]
@@ -280,17 +280,17 @@ namespace Castle.MonoRail.Framework.Tests.Services
 
 			Assert.AreEqual("http://localhost/theArea/home/index.castle",
 							urlBuilder.BuildUrl(url,
-			                                    DictHelper.Create(
-			                                    	"basepath=http://localhost/theArea",
-			                                    	"area=theArea", "controller=home",
-			                                    	"action=index")));
+												DictHelper.Create(
+													"basepath=http://localhost/theArea",
+													"area=theArea", "controller=home",
+													"action=index")));
 
 			Assert.AreEqual("http://localhost/theArea/home/index.castle",
 							urlBuilder.BuildUrl(url,
-			                                    DictHelper.Create(
-			                                    	"basepath=http://localhost/theArea/",
-			                                    	"area=theArea", "controller=home",
-			                                    	"action=index")));
+												DictHelper.Create(
+													"basepath=http://localhost/theArea/",
+													"area=theArea", "controller=home",
+													"action=index")));
 		}
 
 		[Test]
@@ -300,12 +300,12 @@ namespace Castle.MonoRail.Framework.Tests.Services
 
 			Assert.AreEqual("http://localhost/theArea/home/index.castle?key=value",
 							urlBuilder.BuildUrl(url,
-			                                    DictHelper.Create(
-			                                    	"basepath=http://localhost/theArea",
-			                                    	"area=theArea",
-			                                    	"controller=home",
-			                                    	"action=index",
-			                                    	"querystring=key=value")));
+												DictHelper.Create(
+													"basepath=http://localhost/theArea",
+													"area=theArea",
+													"controller=home",
+													"action=index",
+													"querystring=key=value")));
 		}
 
 		[Test]
@@ -313,7 +313,7 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		{
 			DefaultUrlTokenizer tokenizer = new DefaultUrlTokenizer();
 			UrlInfo urlinfo = tokenizer.TokenizeUrl("/area/home/index.castle", null,
-			                      new Uri("http://www.castleproject.org"), true, string.Empty);
+								  new Uri("http://www.castleproject.org"), true, string.Empty);
 
 
 			UrlBuilderParameters parameters = new UrlBuilderParameters("test", "action");
@@ -327,20 +327,92 @@ namespace Castle.MonoRail.Framework.Tests.Services
 		public void RouteParametersShouldBePersistedDuringCreateUrlPartsWhenNoneSpecifiedInParameters()
 		{
 			UrlInfo urlInfo = new UrlInfo("i", "shouldbe", "overridden", "/", ".castle");
-			
+
 			UrlBuilderParameters parameters = new UrlBuilderParameters();//empty collection
 			IDictionary routeParameters = new HybridDictionary();
-			routeParameters.Add("area","routearea");
-			routeParameters.Add("controller","routecontroller");
-			routeParameters.Add("action","routeaction");
+			routeParameters.Add("area", "routearea");
+			routeParameters.Add("controller", "routecontroller");
+			routeParameters.Add("action", "routeaction");
 
 			IRoutingEngine routingEngine = new StubRoutingEngine();
-			routingEngine.Add(new PatternRoute("default","<area>/<controller>/<action>"));//keep routing engine from being empty
+			routingEngine.Add(new PatternRoute("default", "<area>/<controller>/<action>"));//keep routing engine from being empty
 			urlBuilder.RoutingEngine = routingEngine;
 
 			Assert.AreEqual("/routearea/routecontroller/routeaction",
-				urlBuilder.BuildUrl(urlInfo,parameters,routeParameters));
+				urlBuilder.BuildUrl(urlInfo, parameters, routeParameters));
 
+		}
+
+		[Test]
+		public void UseCurrentRouteParamsShouldBeHonored()
+		{
+			UrlInfo urlInfo = new UrlInfo("Services", "CreateServiceWizard", "Step1", String.Empty, String.Empty);
+
+			UrlBuilderParameters parameters = new UrlBuilderParameters();
+			parameters.RouteMatch = new RouteMatch();
+			parameters.RouteMatch.AddNamed("serviceArea", "Marketing");
+			parameters.RouteMatch.AddNamed("action", "Step1");
+			parameters.RouteMatch.AddNamed("controller", "CreateServiceWizard");
+			parameters.RouteMatch.AddNamed("area", "Services");
+			parameters.UseCurrentRouteParams = true;
+
+			IDictionary routeParameters = new HybridDictionary();
+			routeParameters.Add("action", "Step2");
+
+			IRoutingEngine routingEngine = new StubRoutingEngine();
+			routingEngine.Add(
+				new PatternRoute("ServiceWizardCreate", "/Services/<serviceArea>/AddWizard/[action]")
+					.DefaultForController().Is("CreateServiceWizard")
+					.DefaultForArea().Is("Services")
+					.DefaultForAction().Is("start")
+				);
+
+			routingEngine.Add(
+				new PatternRoute("ServiceWizardModify", "/Services/<serviceArea>/ModifyWizard/[action]")
+					.DefaultForController().Is("ModifyServiceWizard")
+					.DefaultForArea().Is("Services")
+					.DefaultForAction().Is("start")
+				);
+			urlBuilder.RoutingEngine = routingEngine;
+
+			Assert.AreEqual("/Services/Marketing/AddWizard/Step2",
+				urlBuilder.BuildUrl(urlInfo, parameters, routeParameters));
+		}
+
+		[Test]
+		public void UseCurrentRouteParamsShouldBeHonoredRegardlessOfTheRoutingOrder()
+		{
+			UrlInfo urlInfo = new UrlInfo("Services", "ModifyServiceWizard", "Step1", String.Empty, String.Empty);
+
+			UrlBuilderParameters parameters = new UrlBuilderParameters();
+			parameters.RouteMatch = new RouteMatch { Name = "ServiceWizardModify" };
+			parameters.RouteMatch.AddNamed("serviceArea", "Marketing");
+			parameters.RouteMatch.AddNamed("action", "Step1");
+			parameters.RouteMatch.AddNamed("controller", "ModifyServiceWizard");
+			parameters.RouteMatch.AddNamed("area", "Services");
+			parameters.UseCurrentRouteParams = true;
+
+			IDictionary routeParameters = new HybridDictionary();
+			routeParameters.Add("action", "Step2");
+
+			IRoutingEngine routingEngine = new StubRoutingEngine();
+			routingEngine.Add(
+				new PatternRoute("ServiceWizardCreate", "/Services/<serviceArea>/AddWizard/[action]")
+					.DefaultForController().Is("CreateServiceWizard")
+					.DefaultForArea().Is("Services")
+					.DefaultForAction().Is("start")
+				);
+
+			routingEngine.Add(
+				new PatternRoute("ServiceWizardModify", "/Services/<serviceArea>/ModifyWizard/[action]")
+					.DefaultForController().Is("ModifyServiceWizard")
+					.DefaultForArea().Is("Services")
+					.DefaultForAction().Is("start")
+				);
+			urlBuilder.RoutingEngine = routingEngine;
+
+			Assert.AreEqual("/Services/Marketing/ModifyWizard/Step2",
+				urlBuilder.BuildUrl(urlInfo, parameters, routeParameters));
 		}
 	}
 }

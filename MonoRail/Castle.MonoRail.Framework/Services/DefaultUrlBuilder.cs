@@ -96,11 +96,11 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="provider">The provider.</param>
 		public void Service(IServiceProvider provider)
 		{
-			IMonoRailConfiguration config = (IMonoRailConfiguration) provider.GetService(typeof(IMonoRailConfiguration));
+			IMonoRailConfiguration config = (IMonoRailConfiguration)provider.GetService(typeof(IMonoRailConfiguration));
 			useExtensions = config.UrlConfig.UseExtensions;
 
-			serverUtil = (IServerUtility) provider.GetService(typeof(IServerUtility));
-			routingEng = (IRoutingEngine) provider.GetService(typeof(IRoutingEngine));
+			serverUtil = (IServerUtility)provider.GetService(typeof(IServerUtility));
+			routingEng = (IRoutingEngine)provider.GetService(typeof(IRoutingEngine));
 		}
 
 		#endregion
@@ -266,7 +266,7 @@ namespace Castle.MonoRail.Framework.Services
 			string area = parameters.Area ?? current.Area;
 			string controller = parameters.Controller ?? current.Controller;
 			string action = parameters.Action ?? current.Action;
-			
+
 			if (appVirtualDir.Length > 1 && !(appVirtualDir[0] == '/'))
 			{
 				appVirtualDir = "/" + appVirtualDir;
@@ -282,7 +282,7 @@ namespace Castle.MonoRail.Framework.Services
 				parts = new UrlParts(path, controller, action + (useExtensions ? SafeExt(current.Extension) : ""));
 				AppendPathInfo(parts, parameters);
 			}
-			else 
+			else
 			{
 				if (parameters.CreateAbsolutePath)
 				{
@@ -293,7 +293,7 @@ namespace Castle.MonoRail.Framework.Services
 					parts.InsertFrontPath(appVirtualDir);
 				}
 			}
-			
+
 			AppendQueryString(parts, parameters);
 
 			return parts;
@@ -310,8 +310,8 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="routeParameters">The route parameters.</param>
 		/// <returns></returns>
 		protected UrlParts TryCreateUrlUsingRegisteredRoutes(string domain, UrlBuilderParameters parameters,
-		                                                     string appVirtualDir,
-		                                                     IDictionary routeParameters)
+															 string appVirtualDir,
+															 IDictionary routeParameters)
 		{
 			if (routingEng != null && !routingEng.IsEmpty)
 			{
@@ -332,7 +332,12 @@ namespace Castle.MonoRail.Framework.Services
 
 				string url;
 
-				if (parameters.RouteName != null)
+				//If we want to UseCurrentRouteParams and the current RouteMatch has a name than we should create the url using the current route name
+				if (parameters.UseCurrentRouteParams && parameters.RouteMatch != null && !String.IsNullOrEmpty(parameters.RouteMatch.Name))
+				{
+					url = routingEng.CreateUrl(parameters.RouteMatch.Name, routeParameters);
+				}
+				else if (parameters.RouteName != null)
 				{
 					url = routingEng.CreateUrl(parameters.RouteName, routeParameters);
 				}
@@ -376,11 +381,11 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				if (typeof(IDictionary).IsAssignableFrom(routeParams.GetType()))
 				{
-					parameters = (IDictionary) routeParams;
+					parameters = (IDictionary)routeParams;
 				}
 				else if (typeof(string) == routeParams.GetType())
 				{
-					throw new Exception("Route parameters cannot be a string, we expect a dictionary (IDictionary), " + 
+					throw new Exception("Route parameters cannot be a string, we expect a dictionary (IDictionary), " +
 						"an anonymous type or a class from which we can extract the parameters. You have specified '" + routeParams + "'");
 				}
 				else
@@ -497,13 +502,13 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				if (queryString is IDictionary)
 				{
-					IDictionary qsDictionary = (IDictionary) queryString;
+					IDictionary qsDictionary = (IDictionary)queryString;
 
 					suffix = CommonUtils.BuildQueryString(serverUtil, qsDictionary, false);
 				}
 				else if (queryString is NameValueCollection)
 				{
-					suffix = CommonUtils.BuildQueryString(serverUtil, (NameValueCollection) queryString, false);
+					suffix = CommonUtils.BuildQueryString(serverUtil, (NameValueCollection)queryString, false);
 				}
 				else if (queryString is string && ((string)queryString).Length > 0)
 				{
@@ -511,10 +516,10 @@ namespace Castle.MonoRail.Framework.Services
 
 					suffix = string.Empty;
 
-					foreach(string pair in pairs)
+					foreach (string pair in pairs)
 					{
 						string[] keyvalues = pair.Split(new char[] { '=' }, 2);
-						
+
 						if (keyvalues.Length < 2) continue;
 
 						if (suffix.Length != 0)

@@ -91,7 +91,7 @@ namespace Castle.MonoRail.Framework.Routing
 		/// <returns></returns>
 		public string CreateUrl(IDictionary parameters)
 		{
-			foreach(IRoutingRule rule in rules)
+			foreach (IRoutingRule rule in rules)
 			{
 				string url = rule.CreateUrl(parameters);
 
@@ -139,10 +139,9 @@ namespace Castle.MonoRail.Framework.Routing
 			RouteMatch winner = null;
 			DecoratedRule winnerule = null;
 
-			foreach(DecoratedRule rule in rules)
+			foreach (DecoratedRule rule in rules)
 			{
-				RouteMatch match = new RouteMatch();
-
+				RouteMatch match = new RouteMatch { Name = rule.RouteName };
 				int points = rule.Matches(url, context, match);
 
 				if (points != 0 && points > winnerPoints)
@@ -227,7 +226,8 @@ namespace Castle.MonoRail.Framework.Routing
 				this.inner = inner;
 			}
 
-			public DecoratedRule(IRoutingRule inner, RouteAction selectionAction) : this(inner)
+			public DecoratedRule(IRoutingRule inner, RouteAction selectionAction)
+				: this(inner)
 			{
 				this.selectionAction = selectionAction;
 			}
