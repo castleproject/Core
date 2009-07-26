@@ -16,6 +16,8 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using Core.Interceptor;
+	using Interceptors;
 	using InterClasses;
 	using Mixins;
 	using NUnit.Framework;
@@ -33,6 +35,42 @@ namespace Castle.DynamicProxy.Tests
 			var mixin = new AlwaysThrowsServiceImpl();
 			var proxy = generator.CreateInterfaceProxyWithTarget(typeof (IService), Type.EmptyTypes, target, MixIn(mixin)) as IService;
 			Assert.DoesNotThrow(() => proxy.Sum(1, 2));
+		}
+
+		[Test]
+		public void Same_Interface_on_proxy_withouth_target_and_mixin_should_forward_to_null_target()
+		{
+			var interceptor = new WithCallbackInterceptor(i =>
+			                                              	{
+			                                              		Assert.IsNull(i.InvocationTarget);
+			                                              		i.ReturnValue = 0;
+			                                              	});
+			var mixin = new AlwaysThrowsServiceImpl();
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof (IService), Type.EmptyTypes, MixIn(mixin), interceptor);
+			Assert.DoesNotThrow(() => (proxy as IService).Sum(2, 2));
+		}
+
+		[Test]
+		public void Same_Interface_on_proxy_with_target_interface_and_mixin_should_forward_to_target()
+		{
+			var target = new ServiceImpl();
+			var mixin = new AlwaysThrowsServiceImpl();
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface(typeof (IService), target, MixIn(mixin));
+			Assert.DoesNotThrow(() => (proxy as IService).Sum(2, 2));
+		}
+
+		[Test]
+		public void Same_Interface_on_target_of_proxy_with_target_interface_and_mixin_should_forward_to_target()
+		{
+			var target = new ServiceImpl();
+			var mixin = new ServiceImpl();
+			IInterceptor interceptor = new WithCallbackInterceptor(i=>
+			                                                       	{
+			                                                       		Assert.AreSame(target,i.InvocationTarget);
+			                                                       		i.ReturnValue = 0;
+			                                                       	});
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface(typeof(IService), target, MixIn(mixin),interceptor);
+			Assert.DoesNotThrow(() => (proxy as IService).Sum(2, 2));
 		}
 
 		[Test]
