@@ -60,7 +60,6 @@ namespace Castle.Facilities.WcfIntegration
 
 		void IWcfExtensionVisitor.VisitEndpointExtension(IWcfEndpointExtension extension)
 		{
-			extension.Install(channelFactory.Endpoint, kernel, burden);
 		}
 
 		#endregion
