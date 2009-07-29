@@ -12,29 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.ActiveRecord.Framework.Config
 {
 	/// <summary>
-	/// Enables the fluent configuration of ActiveRecord.
+	/// Defines the defaults for Sql Server 2000
 	/// </summary>
-	public static class Configure
+	public class MsSqlServer2000Configuration : IDatabaseConfiguration
 	{
-		/// <summary>
-		/// Builds a fluent configuration for general ActiveRecord settings.
-		/// </summary>
-		public static FluentActiveRecordConfiguration ActiveRecord
-		{
-			get { return new FluentActiveRecordConfiguration(); }
-		}
-
-		/// <summary>
-		/// Builds an ActiveRecord storage specifiaction fluently.
-		/// </summary>
-		public static FluentStorageConfiguration Storage	
-		{
-			get { return new FluentStorageConfiguration(); }
-		}
 	}
 }

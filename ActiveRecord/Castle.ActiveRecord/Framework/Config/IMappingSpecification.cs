@@ -12,29 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.ActiveRecord.Framework.Config
 {
 	/// <summary>
-	/// Enables the fluent configuration of ActiveRecord.
+	/// Extension points for adding types mapped by different ways to ActiveRecord.
 	/// </summary>
-	public static class Configure
+	public interface IMappingSpecification
 	{
-		/// <summary>
-		/// Builds a fluent configuration for general ActiveRecord settings.
-		/// </summary>
-		public static FluentActiveRecordConfiguration ActiveRecord
-		{
-			get { return new FluentActiveRecordConfiguration(); }
-		}
-
-		/// <summary>
-		/// Builds an ActiveRecord storage specifiaction fluently.
-		/// </summary>
-		public static FluentStorageConfiguration Storage	
-		{
-			get { return new FluentStorageConfiguration(); }
-		}
 	}
 }

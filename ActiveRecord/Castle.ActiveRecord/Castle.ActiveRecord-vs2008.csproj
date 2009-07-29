@@ -106,6 +106,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate.ByteCode.Castle, Version=2.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\NHibernate.ByteCode.Castle.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate.Search, Version=2.0.0.1001, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\NHibernate.Search.dll</HintPath>
@@ -363,10 +367,23 @@
     <Compile Include="Framework\ActiveRecordValidator.cs" />
     <Compile Include="Framework\ActiveRecordHooksValidationBase.cs" />
     <Compile Include="Framework\ActiveRecordValidationException.cs" />
+    <Compile Include="Framework\Config\Configure.cs" />
     <Compile Include="Framework\Config\DefaultActiveRecordConfiguration.cs" />
     <Compile Include="Framework\Config\DefaultFlushType.cs" />
     <Compile Include="Framework\AbstractNHContributor.cs" />
+    <Compile Include="Framework\Config\DefaultStorageConfiguration.cs" />
+    <Compile Include="Framework\Config\FluentActiveRecordConfiguration.cs" />
+    <Compile Include="Framework\Config\FluentNHibernateMapping.cs" />
+    <Compile Include="Framework\Config\FluentStorageConfiguration.cs" />
+    <Compile Include="Framework\Config\FluentStorageTypeSelection.cs" />
     <Compile Include="Framework\Config\IActiveRecordConfiguration.cs" />
+    <Compile Include="Framework\Config\IDatabaseConfiguration.cs" />
+    <Compile Include="Framework\Config\IMappingSpecification.cs" />
+    <Compile Include="Framework\Config\IStorageConfiguration.cs" />
+    <Compile Include="Framework\Config\MsSqlServer2000Configuration.cs" />
+    <Compile Include="Framework\Config\MsSqlServer2005Configuration.cs" />
+    <Compile Include="Framework\Config\StorageTypeSelection.cs" />
+    <Compile Include="Framework\Config\XmlNhibernateMapping.cs" />
     <Compile Include="Framework\NHSearchContributor.cs" />
     <Compile Include="Framework\Queries\ValueAndTypeTuple.cs" />
     <Compile Include="Framework\StatelessSessionWrapper.cs" />

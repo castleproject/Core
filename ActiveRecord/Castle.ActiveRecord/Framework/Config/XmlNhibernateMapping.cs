@@ -12,29 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.ActiveRecord.Framework.Config
 {
 	/// <summary>
-	/// Enables the fluent configuration of ActiveRecord.
+	/// Extension of <see cref="IMappingSpecification"/> to add classically XML-mapped
+	/// NHibernate types.
 	/// </summary>
-	public static class Configure
+	public class XmlNhibernateMapping : IMappingSpecification
 	{
 		/// <summary>
-		/// Builds a fluent configuration for general ActiveRecord settings.
+		/// Searches for the XML files in the assembly of the specified type.
 		/// </summary>
-		public static FluentActiveRecordConfiguration ActiveRecord
+		/// <typeparam name="T">The type whose assembly will be searched.</typeparam>
+		/// <returns>The mapping object itself.</returns>
+		public XmlNhibernateMapping InAssemblyOf<T>()
 		{
-			get { return new FluentActiveRecordConfiguration(); }
-		}
-
-		/// <summary>
-		/// Builds an ActiveRecord storage specifiaction fluently.
-		/// </summary>
-		public static FluentStorageConfiguration Storage	
-		{
-			get { return new FluentStorageConfiguration(); }
+			return this;
 		}
 	}
 }

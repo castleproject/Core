@@ -12,29 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.ActiveRecord.Framework.Config
 {
 	/// <summary>
-	/// Enables the fluent configuration of ActiveRecord.
+	/// Configuration of the types that will use a storage.
 	/// </summary>
-	public static class Configure
+	public class StorageTypeSelection
 	{
 		/// <summary>
-		/// Builds a fluent configuration for general ActiveRecord settings.
+		/// Determines whether the selection contains all types are not
+		/// specified elsewhere. Only one storage configuration may have
+		/// a type selection with this property being true.
 		/// </summary>
-		public static FluentActiveRecordConfiguration ActiveRecord
-		{
-			get { return new FluentActiveRecordConfiguration(); }
-		}
-
-		/// <summary>
-		/// Builds an ActiveRecord storage specifiaction fluently.
-		/// </summary>
-		public static FluentStorageConfiguration Storage	
-		{
-			get { return new FluentStorageConfiguration(); }
-		}
+		public virtual bool Default { get; set; }
 	}
 }

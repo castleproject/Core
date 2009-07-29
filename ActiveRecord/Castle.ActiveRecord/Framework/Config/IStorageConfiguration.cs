@@ -12,29 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.ActiveRecord.Framework.Config
 {
+	using System.Collections.Generic;
+
 	/// <summary>
-	/// Enables the fluent configuration of ActiveRecord.
+	/// Interface for configuration of a database storage.
 	/// </summary>
-	public static class Configure
+	/// <remarks>
+	/// This interface is subject to further modification. If you need to implement
+	/// this interface, please inherit from <see cref="DefaultStorageConfiguration"/>.
+	/// </remarks>
+	public interface IStorageConfiguration
 	{
 		/// <summary>
-		/// Builds a fluent configuration for general ActiveRecord settings.
+		/// The type selections for that storage.
 		/// </summary>
-		public static FluentActiveRecordConfiguration ActiveRecord
-		{
-			get { return new FluentActiveRecordConfiguration(); }
-		}
+		IEnumerable<StorageTypeSelection> TypeSelections { get; }
 
 		/// <summary>
-		/// Builds an ActiveRecord storage specifiaction fluently.
+		/// Contains the name-value-pairs for the NHibernate configuration
 		/// </summary>
-		public static FluentStorageConfiguration Storage	
-		{
-			get { return new FluentStorageConfiguration(); }
-		}
+		IDictionary<string, string> ConfigurationValues { get; }
 	}
 }
