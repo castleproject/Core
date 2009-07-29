@@ -15,6 +15,7 @@
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="NHibernate.dll" />
 			<include name="NHibernate.Search.dll" />
+			<include name="NHibernate.ByteCode.Castle.dll" />
 			<include name="log4net.dll" />
 			<include name="Iesi.Collections.dll" />
 			<include name="HashCodeProvider.dll" />

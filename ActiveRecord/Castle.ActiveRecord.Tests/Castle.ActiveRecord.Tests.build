@@ -17,6 +17,7 @@
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll"/>
 			<include name="NHibernate.dll" />
+			<include name="NHibernate.ByteCode.Castle.dll" />
 			<include name="NHibernate.Search.dll" />
 			<include name="Castle.ActiveRecord.Tests.Model.dll"/>
 			<include name="Iesi.Collections.dll" />
