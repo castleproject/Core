@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators
 		private readonly IDictionary<PropertyInfo, PropertyToGenerate> properties = new Dictionary<PropertyInfo, PropertyToGenerate>();
 		private readonly IDictionary<EventInfo, EventToGenerate> events = new Dictionary<EventInfo, EventToGenerate>();
 		private readonly IDictionary<MethodInfo, MethodToGenerate> methods = new Dictionary<MethodInfo, MethodToGenerate>();
-
+		
 		public ProxyElementTarget(KeyValuePair<Type, object> mapping, bool onlyProxyVirtual)
 		{
 			this.mapping = mapping;
@@ -124,7 +124,8 @@ namespace Castle.DynamicProxy.Generators
 			                                              getMethod,
 			                                              setMethod,
 			                                              PropertyAttributes.None,
-			                                              nonInheritableAttributes, target != null);
+			                                              nonInheritableAttributes,
+			                                              target);
 		}
 
 		private void AddEvent(EventInfo @event, IProxyGenerationHook hook)
@@ -150,7 +151,7 @@ namespace Castle.DynamicProxy.Generators
 			                                     addMethod,
 			                                     removeMethod,
 			                                     EventAttributes.None,
-			                                     mapping.Value != null);
+			                                     mapping.Value);
 		}
 
 		private bool AddMethod(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
@@ -165,15 +166,14 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return false;
 			}
-
-			bool requiresNewSlot = method.IsFinal;
-			if (!requiresNewSlot && !AcceptMethod(method, onlyProxyVirtual, hook))
+			
+			if(!(AcceptMethod(method, onlyProxyVirtual, hook)))
 			{
 				return false;
 			}
 
 			object target = mapping.Value;
-			methods[method] = new MethodToGenerate(method, requiresNewSlot, isStandalone, target);
+			methods[method] = new MethodToGenerate(method, isStandalone, target);
 			return true;
 		}
 
@@ -253,7 +253,6 @@ namespace Castle.DynamicProxy.Generators
 				return false;
 			}
 #endif
-
 			return hook.ShouldInterceptMethod(mapping.Key, method);
 		}
 

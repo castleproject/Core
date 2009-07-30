@@ -76,13 +76,13 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name="addMethod">The add method.</param>
 		/// <param name="removeMethod">The remove method.</param>
 		/// <param name="attributes">The attributes.</param>
-		/// <param name="hasTarget"></param>
-		public EventToGenerate(string name, Type type, MethodInfo addMethod, MethodInfo removeMethod, EventAttributes attributes, bool hasTarget)
+		/// <param name="target"></param>
+		public EventToGenerate(string name, Type type, MethodInfo addMethod, MethodInfo removeMethod, EventAttributes attributes, object target)
 		{
 			this.name = name;
 			this.type = type;
-			this.adder = new ProxyMethod(addMethod, hasTarget);
-			this.remover = new ProxyMethod(removeMethod, hasTarget);
+			this.adder = new ProxyMethod(addMethod, target);
+			this.remover = new ProxyMethod(removeMethod, target);
 			this.attributes = attributes;
 		}
 

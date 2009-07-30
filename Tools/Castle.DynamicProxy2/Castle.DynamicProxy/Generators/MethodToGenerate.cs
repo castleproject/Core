@@ -14,19 +14,20 @@
 
 namespace Castle.DynamicProxy.Generators
 {
+	using System;
 	using System.Reflection;
 
 	public class ProxyMethod : IProxyMethod
 	{
 		private readonly MethodInfo method;
 
-		public ProxyMethod(MethodInfo method, bool hasTarget)
+		public ProxyMethod(MethodInfo method, object target)
 		{
 			this.method = method;
-			this.hasTarget = hasTarget;
+			this.target = target;
 		}
 
-		private readonly bool hasTarget;
+		private readonly object target;
 
 		public MethodInfo Method
 		{
@@ -35,37 +36,28 @@ namespace Castle.DynamicProxy.Generators
 
 		public bool HasTarget
 		{
-			get { return hasTarget; }
-		}
-	}
-
-	public class MethodToGenerate : ProxyMethod
-	{
-		private readonly bool requiresNewSlot;
-		private readonly bool standalone;
-		private object target;
-
-		public MethodToGenerate(MethodInfo method, bool requiresNewSlot, bool standalone, object target)
-			: base(method, target!=null)
-		{
-			this.requiresNewSlot = requiresNewSlot;
-			this.standalone = standalone;
-			this.target = target;
-		}
-
-		public bool RequiresNewSlot
-		{
-			get { return requiresNewSlot; }
-		}
-
-		public bool Standalone
-		{
-			get { return standalone; }
+			get { return target != null; }
 		}
 
 		public object Target
 		{
 			get { return target;}
+		}
+	}
+
+	public class MethodToGenerate : ProxyMethod
+	{
+		private readonly bool standalone;
+
+		public MethodToGenerate(MethodInfo method, bool standalone, object target)
+			: base(method,target)
+		{
+			this.standalone = standalone;
+		}
+
+		public bool Standalone
+		{
+			get { return standalone; }
 		}
 	}
 }

@@ -19,14 +19,33 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public abstract class TypeUtil
 	{
-		public static Type[] Union(Type[] set1, Type[] set2)
+		/// <summary>
+		/// Returns list of all unique interfaces implemented given types, including their base interfaces.
+		/// </summary>
+		/// <param name="types"></param>
+		/// <returns></returns>
+		public static ICollection<Type> GetAllInterfaces(params Type[] types)
 		{
-			List<Type> types = new List<Type>();
+			if (types == null)
+			{
+				return Type.EmptyTypes;
+			}
 
-			if (set1 != null) types.AddRange(set1);
-			if (set2 != null) types.AddRange(set2);
-
-			return types.ToArray();
+			var dummy = new object();
+			// we should move this to HashSet once we no longer support .NET 2.0
+			IDictionary<Type, object> interfaces = new Dictionary<Type, object>();
+			foreach (var type in types)
+			{
+				if (type.IsInterface)
+				{
+					interfaces[type] = dummy;
+				}
+				foreach (var @interface in type.GetInterfaces())
+				{
+					interfaces[@interface] = dummy;
+				}
+			}
+			return interfaces.Keys;
 		}
 	}
 }

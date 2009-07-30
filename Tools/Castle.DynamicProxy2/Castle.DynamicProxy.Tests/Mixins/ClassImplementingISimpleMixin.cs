@@ -15,7 +15,9 @@
 namespace Castle.DynamicProxy.Tests.Mixins
 {
 	using System;
-
+#if !SILVERLIGHT
+	[Serializable]
+#endif
 	public class ClassImplementingISimpleMixin : ISimpleMixin
 	{
 		public int DoSomething()

@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.BugsReported
 {
+	using System;
 	using Core.Interceptor;
 	using NUnit.Framework;
 
@@ -52,5 +53,23 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 	public interface ISub2 : IBase
 	{
 		void Baz();
+	}
+
+	class MyFoo:Inherited,ISub1,ISub2
+	{
+		void ISub1.Bar()
+		{
+			throw new NotImplementedException();
+		}
+
+		public virtual void Baz()
+		{
+			throw new NotImplementedException();
+		}
+
+		void IBase.Foo()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

@@ -177,11 +177,26 @@ namespace Castle.DynamicProxy.Tests
 			(proxy as IIdenticalTwo).Foo();
 		}
 
-        [Test]
-        public void Should_implement_target_interface_implicitly_additional_interfaces_explicitly()
+		[Test]
+		public void Should_properly_proxy_class_that_implements_interface_virtually_non_interceptable()
+		{
+			var proxy = generator.CreateClassProxy(typeof(IdenticalOneVirtual));
+			(proxy as IIdenticalOne).Foo();
+		}
+
+		[Test]
+		public void Should_properly_proxy_class_that_implements_interface_virtually_interceptable()
+		{
+			var proxy = generator.CreateClassProxy(typeof (IdenticalOneVirtual), new Type[] {typeof (IIdenticalOne)},
+			                                       ProxyGenerationOptions.Default);
+			(proxy as IIdenticalOne).Foo();
+		}
+
+		[Test]
+        public void Should_implement_all_interfaces_explicitly()
         {
             Type type = generator.CreateInterfaceProxyWithoutTarget(typeof (IIdenticalOne), new[] {typeof (IIdenticalTwo)}).GetType();
-            MethodInfo method = type.GetMethod("Foo",BindingFlags.Instance|BindingFlags.Public);
+			MethodInfo method = type.GetMethod("IIdenticalOne.Foo", BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.IsNotNull(method);
             MethodInfo method2 = type.GetMethod("IIdenticalTwo.Foo", BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.IsNotNull(method2);
@@ -189,8 +204,15 @@ namespace Castle.DynamicProxy.Tests
 
 	    private ParameterInfo[] GetMyTestMethodParams(Type type)
 		{
-			MethodInfo methodInfo = type.GetMethod("MyTestMethod", BindingFlags.Instance | BindingFlags.Public);
+			MethodInfo methodInfo = type.GetMethod("IMyInterface.MyTestMethod", BindingFlags.Instance | BindingFlags.NonPublic);
 			return methodInfo.GetParameters();
+		}
+	}
+	public class IdenticalOneVirtual:IIdenticalOne
+	{
+		public virtual string Foo()
+		{
+			return "Foo";
 		}
 	}
 }

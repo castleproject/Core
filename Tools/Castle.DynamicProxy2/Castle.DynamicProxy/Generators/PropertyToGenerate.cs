@@ -31,14 +31,14 @@ namespace Castle.DynamicProxy.Generators
 		private IProxyMethod getter;
 		private ProxyMethod setter;
 
-		public PropertyToGenerate(string name, Type type, bool canRead, bool canWrite, MethodInfo getMethod, MethodInfo setMethod, PropertyAttributes attributes, IEnumerable<Attribute> customAttributes, bool hasTarget)
+		public PropertyToGenerate(string name, Type type, bool canRead, bool canWrite, MethodInfo getMethod, MethodInfo setMethod, PropertyAttributes attributes, IEnumerable<Attribute> customAttributes, object target)
 		{
 			this.name = name;
 			this.type = type;
 			this.canRead = canRead;
 			this.canWrite = canWrite;
-			this.getter = new ProxyMethod(getMethod, hasTarget);
-			this.setter = new ProxyMethod(setMethod, hasTarget);
+			this.getter = new ProxyMethod(getMethod, target);
+			this.setter = new ProxyMethod(setMethod, target);
 			this.attributes = attributes;
 			this.customAttributes = customAttributes;
 		}

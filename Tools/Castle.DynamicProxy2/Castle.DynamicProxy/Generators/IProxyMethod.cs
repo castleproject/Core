@@ -20,5 +20,6 @@ namespace Castle.DynamicProxy.Generators
 	{
 		MethodInfo Method { get; }
 		bool HasTarget { get; }
+		object Target { get; }
 	}
 }

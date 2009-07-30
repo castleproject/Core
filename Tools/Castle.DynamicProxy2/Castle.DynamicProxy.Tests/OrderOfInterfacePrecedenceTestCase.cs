@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -113,6 +112,39 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(1, (proxy as ISimpleMixin).DoSomething());
 			Assert.AreEqual(2, (proxy as IDerivedSimpleMixin).DoSomethingDerived());
 		}
+
+		[Test]
+		public void Mixin_same_as_proxied_class_forwards_to_base()
+		{
+			var interceptor = new LogInvocationInterceptor();
+			var mixin = new ClassImplementingISimpleMixin();
+			object proxy = generator.CreateClassProxy(typeof(SimpleMixin), MixIn(mixin), interceptor);
+			Assert.AreEqual(1, (proxy as ISimpleMixin).DoSomething());
+			Assert.IsEmpty(interceptor.Invocations);
+		}
+
+		[Test]
+		public void Mixin_same_as_proxied_class_and_additional_interface_forwards_to_base_interceptable()
+		{
+			var interceptor = new LogInvocationInterceptor();
+			var mixin = new ClassImplementingISimpleMixin();
+			object proxy = generator.CreateClassProxy(typeof (SimpleMixin), new[] {typeof (ISimpleMixin)}, MixIn(mixin),
+			                                          interceptor);
+			Assert.AreEqual(1, (proxy as ISimpleMixin).DoSomething());
+			Assert.IsNotEmpty(interceptor.Invocations);
+		}
+
+		[Test]
+		public void Mixin_with_derived_base_forwards_to_mixin()
+		{
+			var interceptor = new LogInvocationInterceptor();
+			var mixin = new ClassImplementingIDerivedSimpleMixin();
+			object proxy = generator.CreateClassProxy(typeof(SimpleMixin), new[] { typeof(IDerivedSimpleMixin) }, MixIn(mixin),
+													  interceptor);
+			Assert.AreEqual(2, (proxy as IDerivedSimpleMixin).DoSomethingDerived());
+			Assert.IsNotEmpty(interceptor.Invocations);
+		}
+
 
 		private ProxyGenerationOptions MixIn(Object mixin)
 		{

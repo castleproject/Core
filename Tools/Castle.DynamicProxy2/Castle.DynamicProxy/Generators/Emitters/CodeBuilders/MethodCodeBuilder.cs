@@ -27,24 +27,5 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			this.baseType = baseType;
 			this.methodbuilder = methodbuilder;
 		}
-
-		private MethodBuilder Builder
-		{
-			get { return methodbuilder; }
-		}
-
-//		public void Nop()
-//		{
-//			SetNonEmpty();
-//
-//			if (Builder.ReturnType == typeof(void))
-//			{
-//				Generator.Emit( OpCodes.Nop );
-//			}
-//			else
-//			{
-//				Generator.Emit( LdcOpCodesDictionary.Instance[Builder.ReturnType], 0 );
-//			}
-//		}
 	}
 }

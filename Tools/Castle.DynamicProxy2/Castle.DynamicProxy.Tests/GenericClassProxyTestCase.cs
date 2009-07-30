@@ -260,14 +260,14 @@ namespace Castle.DynamicProxy.Tests
 				generator.CreateClassProxy<GenClassWithGenReturn<List<object>, List<object>>>(interceptor);
 
 			proxy.DoSomethingT();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (List<object>));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(List<object>));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
+							interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomethingZ();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (List<object>));
+			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(List<object>));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
+							interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
 
 		[Test]

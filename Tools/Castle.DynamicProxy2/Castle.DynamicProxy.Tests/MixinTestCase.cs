@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Mixins;
 	using Castle.DynamicProxy.Tests.InterClasses;
+	using Interceptors;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -371,32 +372,6 @@ namespace Castle.DynamicProxy.Tests
 			StandardInterceptor interceptor = new StandardInterceptor();
 			generator.CreateClassProxy(typeof(SimpleClass), options, interceptor);
 		}
-
-		[Test]
-		[ExpectedException(typeof(InvalidMixinConfigurationException))]
-		public void MixinWithSameInterface_Class()
-		{
-			ProxyGenerationOptions options = new ProxyGenerationOptions();
-			SimpleMixin mixin1 = new SimpleMixin();
-			options.AddMixinInstance(mixin1);
-
-			StandardInterceptor interceptor = new StandardInterceptor();
-			generator.CreateClassProxy(typeof(ClassImplementingISimpleMixin), options, interceptor);
-		}
-
-		[Test]
-		[ExpectedException(typeof(InvalidMixinConfigurationException))]
-		public void MixinWithSameInterface_Class_AdditionalInterfaces()
-		{
-			ProxyGenerationOptions options = new ProxyGenerationOptions();
-			SimpleMixin mixin1 = new SimpleMixin();
-			options.AddMixinInstance(mixin1);
-
-			StandardInterceptor interceptor = new StandardInterceptor();
-			generator.CreateClassProxy(typeof(object), new Type[] { typeof (ISimpleMixin) }, options, interceptor);
-		}
-
-
 
 		[Test]
 		public void MixinWithSameInterface_InterfaceWithTarget_AdditionalInterfaces()

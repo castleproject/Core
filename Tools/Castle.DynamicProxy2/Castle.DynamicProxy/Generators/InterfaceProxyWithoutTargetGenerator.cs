@@ -24,9 +24,9 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override void AddTargetInterfaceMapping(IDictionary<Type, object> interfaceTypeImplementerMapping)
+		protected override void AddMappingForTargetType(IDictionary<Type, object> interfaceTypeImplementerMapping)
 		{
-			AddInterfaceMapping(targetType, null /*because we're in proxy withOUT target*/, interfaceTypeImplementerMapping);
+			AddInterfaceHierarchyMapping(targetType, null /*because we're in proxy withOUT target*/, interfaceTypeImplementerMapping);
 		}
 
 		protected override void CreateInvocationForMethod(ClassEmitter emitter, MethodToGenerate method, Type proxyTargetType)
@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators
 			method2methodOnTarget[methodInfo] = methodInfo;
 
 			Type targetForInvocation = methodInfo.DeclaringType;
-			method2Invocation[methodInfo] = BuildInvocationNestedType(emitter, targetForInvocation, methodInfo, null, ConstructorVersion.WithTargetMethod);
+			method2Invocation[methodInfo] = BuildInvocationNestedType(emitter, targetForInvocation, method, null, ConstructorVersion);
 		}
 
 		protected override InterfaceGeneratorType GeneratorType
