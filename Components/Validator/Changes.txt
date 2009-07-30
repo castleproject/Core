@@ -1,3 +1,6 @@
+- Applied Bill Ataras' patch (with a test case) fixing COMP-ISSUE-99
+  "EmailValidator fails on gmail "+" addresses"
+
 - Fixed COMP-ISSUE-91: Add basic support for ErrorMessage and FriendlyName with .net resource backed localization
 
 - Added IPAddressValidator

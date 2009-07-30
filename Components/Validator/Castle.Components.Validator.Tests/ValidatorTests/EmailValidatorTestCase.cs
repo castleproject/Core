@@ -59,6 +59,12 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsTrue(validator.IsValid(target, "hammett'@gmail.com"));
 		}
 
+		[Test]
+		public void COMP99_PlusShouldBeAllowed()
+		{
+			Assert.IsTrue(validator.IsValid(target, "test+flowers@gmail.com"));
+		}
+
 		public class TestTarget
 		{
 			private string targetField;

@@ -26,7 +26,7 @@ namespace Castle.Components.Validator
 		/// <summary>
 		/// From http://www.codeproject.com/aspnet/Valid_Email_Addresses.asp
 		/// </summary>
-		private static readonly String emailRule = @"^([a-zA-Z0-9_\-\.\']+)@((\[[0-9]{1,3}" +
+		private static readonly String emailRule = @"^([a-zA-Z0-9_\-\.\'\+]+)@((\[[0-9]{1,3}" +
 		                                           @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
 		                                           @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
 
