@@ -457,12 +457,12 @@ namespace Castle.DynamicProxy.Generators
 																	   new ConstReference(targetType.AssemblyQualifiedName).
 																		ToExpression())));
 		}
+#endif
 
 		protected override MethodInfo GetMethodOnTarget(IProxyMethod proxyMethod)
 		{
 			return method2methodOnTarget[proxyMethod.Method];
 		}
-#endif
 
 		protected virtual InterfaceGeneratorType GeneratorType
 		{
