@@ -414,5 +414,36 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			Assert.AreEqual("/Services/Marketing/ModifyWizard/Step2",
 				urlBuilder.BuildUrl(urlInfo, parameters, routeParameters));
 		}
+
+		[Test]
+		public void If_Route_Name_Is_Specified_It_Should_Be_Used_Even_If_UseCurrentRouteParams_Is_True()
+		{
+			UrlInfo urlInfo = new UrlInfo("", "Car", "View", String.Empty, String.Empty);
+
+			UrlBuilderParameters parameters = new UrlBuilderParameters();
+			parameters.RouteMatch = new RouteMatch { Name = "CarRoute" };
+			parameters.RouteMatch.AddNamed("carName", "Ford");
+			parameters.RouteMatch.AddNamed("action", "View");
+			parameters.RouteMatch.AddNamed("controller", "Car");
+			parameters.UseCurrentRouteParams = true;
+			parameters.RouteName = "CarAddOptionWizard";
+
+			IRoutingEngine routingEngine = new StubRoutingEngine();
+			routingEngine.Add(
+				new PatternRoute("CarRoute", "/Car/<carName>/[action]")
+					.DefaultForController().Is("Car")
+					.DefaultForAction().Is("VIew")
+				);
+
+			routingEngine.Add(
+				new PatternRoute("CarAddOptionWizard", "/Car/<carName>/AddOption/[action]")
+					.DefaultForController().Is("CarAddOptionWizard")
+					.DefaultForAction().Is("start")
+				);
+			urlBuilder.RoutingEngine = routingEngine;
+
+			Assert.AreEqual("/Car/Ford/AddOption",
+				urlBuilder.BuildUrl(urlInfo, parameters));
+		}
 	}
 }

@@ -332,14 +332,14 @@ namespace Castle.MonoRail.Framework.Services
 
 				string url;
 
-				//If we want to UseCurrentRouteParams and the current RouteMatch has a name than we should create the url using the current route name
-				if (parameters.UseCurrentRouteParams && parameters.RouteMatch != null && !String.IsNullOrEmpty(parameters.RouteMatch.Name))
-				{
-					url = routingEng.CreateUrl(parameters.RouteMatch.Name, routeParameters);
-				}
-				else if (parameters.RouteName != null)
+				if (parameters.RouteName != null)
 				{
 					url = routingEng.CreateUrl(parameters.RouteName, routeParameters);
+				}
+				//If we want to UseCurrentRouteParams and the current RouteMatch has a name than we should create the url using the current route name
+				else if (parameters.UseCurrentRouteParams && parameters.RouteMatch != null && !String.IsNullOrEmpty(parameters.RouteMatch.Name))
+				{
+					url = routingEng.CreateUrl(parameters.RouteMatch.Name, routeParameters);
 				}
 				else
 				{
