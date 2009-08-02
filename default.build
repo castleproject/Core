@@ -264,7 +264,7 @@
 		<copy file="ActiveRecord/License.txt" tofile="${releasenotes.dir}/License.txt" />
 		<copy file="MonoRail/Changes.txt" tofile="${releasenotes.dir}/MonoRail Release Notes.txt" />
 		<copy file="InversionOfControl/Changes.txt" tofile="${releasenotes.dir}/InversionOfControl Release Notes.txt" />
-		<copy file="Tools/DynamicProxy/Changes.txt" tofile="${releasenotes.dir}/DynamicProxy Release Notes.txt" />
+		<copy file="Tools/Castle.DynamicProxy2/Changes.txt" tofile="${releasenotes.dir}/DynamicProxy Release Notes.txt" />
 		<copy file="Core/Changes.txt" tofile="${releasenotes.dir}/Core Release Notes.txt" />
 
 		<echo message="Components Release notes" />
