@@ -1,5 +1,7 @@
 1.0
 ===
+- Applied John Simons' patch fixing MR-ISSUE-545
+  "UrlHelper.ButtonLink produces wrong HTML"
 
 - Applied patch by Gildas fixing MR-ISSUE-522
   "AspView and the IDictionaryAdapterFactory"

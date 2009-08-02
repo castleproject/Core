@@ -234,7 +234,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public string ButtonLink(string innerContent, IDictionary parameters, IDictionary buttonAttributes)
 		{
-			return "<button type=\"button\"" + GetAttributes(buttonAttributes) + " onclick=\"javascript:window.location.href = '" + For(parameters) + "'\">" + innerContent + "</button>";
+			return "<button type=\"button\" " + GetAttributes(buttonAttributes) + "onclick=\"javascript:window.location.href = '" + For(parameters) + "'\">" + innerContent + "</button>";
 		}
 
 		private static void SetEncodeDefault(IDictionary parameters)

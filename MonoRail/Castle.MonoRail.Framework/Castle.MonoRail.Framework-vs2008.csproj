@@ -73,9 +73,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=3.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SharedLibs\net\3.5\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\build\net-3.5\debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

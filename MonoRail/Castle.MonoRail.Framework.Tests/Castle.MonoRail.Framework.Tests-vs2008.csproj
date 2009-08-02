@@ -208,6 +208,7 @@
     <Compile Include="Helpers\PaginationHelperTestCase.cs" />
     <Compile Include="Helpers\ScriptaculousHelperTestCase.cs" />
     <Compile Include="Helpers\TextHelperTestCase.cs" />
+    <Compile Include="Helpers\UrlHelperTestCase.cs" />
     <Compile Include="Helpers\ValidationHelperTestCase.cs" />
     <Compile Include="Helpers\Validations\FormValidationTestCase.cs" />
     <Compile Include="Helpers\Validations\JQueryFormValidationTestCase.cs" />
