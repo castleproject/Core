@@ -29,4 +29,12 @@ namespace Castle.DynamicProxy.Tests.Classes
 			return 5;
 		}
 	}
+
+	public class ClassWithVirtualInterface : ISimpleInterface
+	{
+		public virtual int Do()
+		{
+			return 5;
+		}
+	}
 }

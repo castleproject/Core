@@ -23,15 +23,17 @@ namespace Castle.DynamicProxy.Generators
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		private readonly KeyValuePair<Type, object> mapping;
 		private readonly bool onlyProxyVirtual;
+		private readonly InterfaceMapping map;
 
 		private readonly IDictionary<PropertyInfo, PropertyToGenerate> properties = new Dictionary<PropertyInfo, PropertyToGenerate>();
 		private readonly IDictionary<EventInfo, EventToGenerate> events = new Dictionary<EventInfo, EventToGenerate>();
 		private readonly IDictionary<MethodInfo, MethodToGenerate> methods = new Dictionary<MethodInfo, MethodToGenerate>();
-		
-		public ProxyElementTarget(KeyValuePair<Type, object> mapping, bool onlyProxyVirtual)
+
+		public ProxyElementTarget(KeyValuePair<Type, object> mapping, bool onlyProxyVirtual, InterfaceMapping map)
 		{
 			this.mapping = mapping;
 			this.onlyProxyVirtual = onlyProxyVirtual;
+			this.map = map;
 		}
 
 		public IEnumerable<MethodToGenerate> Methods
@@ -166,7 +168,12 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return false;
 			}
-			
+
+			if (IsVirtuallyImplementedInterfaceMethod(method))
+			{
+				return false;
+			}
+
 			if(!(AcceptMethod(method, onlyProxyVirtual, hook)))
 			{
 				return false;
@@ -175,6 +182,12 @@ namespace Castle.DynamicProxy.Generators
 			object target = mapping.Value;
 			methods[method] = new MethodToGenerate(method, isStandalone, target);
 			return true;
+		}
+
+		private bool IsVirtuallyImplementedInterfaceMethod(MethodInfo method)
+		{
+			var index = Array.IndexOf(map.InterfaceMethods, method);
+			return index != -1 && map.TargetMethods[index].IsFinal == false;
 		}
 
 		/// <summary>

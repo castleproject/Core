@@ -60,6 +60,7 @@ namespace Castle.DynamicProxy.Generators
 		protected IList<MethodInfo> methodsToSkip = new List<MethodInfo>();
 		protected Dictionary<Type, FieldReference> interface2MixinFieldReference = new Dictionary<Type, FieldReference>();
 		protected Dictionary<MethodInfo, NestedClassEmitter> method2Invocation = new Dictionary<MethodInfo, NestedClassEmitter>();
+		protected readonly InterfaceMapping emptyInterfaceMapping = new InterfaceMapping {InterfaceMethods = new MethodInfo[0]};
 
 		protected BaseProxyGenerator(ModuleScope scope, Type targetType)
 		{
@@ -1280,9 +1281,9 @@ namespace Castle.DynamicProxy.Generators
 #endif
 		}
 
-		protected ProxyElementTarget CollectElementsToProxy(KeyValuePair<Type, object> mapping)
+		protected ProxyElementTarget CollectElementsToProxy(KeyValuePair<Type, object> mapping, InterfaceMapping map)
 		{
-			var elementsToProxy = new ProxyElementTarget(mapping, CanOnlyProxyVirtual());
+			var elementsToProxy = new ProxyElementTarget(mapping, CanOnlyProxyVirtual(), map);
 			elementsToProxy.Collect(ProxyGenerationOptions.Hook);
 			return elementsToProxy;
 		}

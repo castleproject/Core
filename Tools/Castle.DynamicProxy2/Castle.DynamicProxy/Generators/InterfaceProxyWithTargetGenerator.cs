@@ -129,7 +129,7 @@ namespace Castle.DynamicProxy.Generators
 				// NOTE: make sure this is what it should be
 				if (ReferenceEquals(mapping.Value, Proxy.Instance)) continue;
 
-				targets.Add(CollectElementsToProxy(mapping));
+				targets.Add(CollectElementsToProxy(mapping, emptyInterfaceMapping));
 			}
 
 			ProxyGenerationOptions.Hook.MethodsInspected();

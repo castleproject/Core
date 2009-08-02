@@ -132,17 +132,24 @@ namespace Castle.DynamicProxy.Generators
 #endif
 			// Collect methods
 			IList<ProxyElementTarget> targets = new List<ProxyElementTarget>();
-			
+
 			// 1.first for the class we're proxying
-			targets.Add(CollectElementsToProxy(new KeyValuePair<Type, object>(targetType, Proxy.Target)));
+			targets.Add(CollectElementsToProxy(new KeyValuePair<Type, object>(targetType, Proxy.Target), emptyInterfaceMapping));
 
 			// 2. then for interfaces
 			foreach (var mapping in typeImplementerMapping)
 			{
 				// NOTE: make sure this is what it should be
 				if (ReferenceEquals(mapping.Value, Proxy.Instance)) continue;
-
-				targets.Add(CollectElementsToProxy(mapping));
+				if (ReferenceEquals(mapping.Value, Proxy.Target))
+				{
+					var map = targetType.GetInterfaceMap(mapping.Key);
+					targets.Add(CollectElementsToProxy(mapping, map));
+				}
+				else
+				{
+					targets.Add(CollectElementsToProxy(mapping, emptyInterfaceMapping));
+				}
 			}
 
 			ProxyGenerationOptions.Hook.MethodsInspected();
@@ -400,7 +407,6 @@ namespace Castle.DynamicProxy.Generators
 		{
 			IDictionary<Type, object> typeImplementerMapping = new Dictionary<Type, object>();
 			
-
 			// Order of interface precedence:
 			// 1. first target
 			// target is not an interface so we do nothing
@@ -464,7 +470,18 @@ namespace Castle.DynamicProxy.Generators
 		protected override bool IsInterfaceMethodForExplicitImplementation(IProxyMethod method)
 		{
 			var baseSays = base.IsInterfaceMethodForExplicitImplementation(method);
-			return baseSays && ReferenceEquals(Proxy.Target, method.Target) && !method.Method.IsFinal;
+			return baseSays && ReferenceEquals(Proxy.Target, method.Target) && !IsInterfaceMethodImplementedVirtually(method);
+		}
+
+		private bool IsInterfaceMethodImplementedVirtually(IProxyMethod method)
+		{
+			// TODO: this is not very optimal, that we obtain InterfaceMap anew each time. This should be cached somewhere probably.
+			var @interface = method.Method.DeclaringType;
+			var mapping = targetType.GetInterfaceMap(@interface);
+			var index = Array.IndexOf(mapping.InterfaceMethods,method.Method);
+			Debug.Assert(index >= 0);
+			var classMethod = mapping.TargetMethods[index];
+			return classMethod.IsFinal == false;
 		}
 	}
 }
