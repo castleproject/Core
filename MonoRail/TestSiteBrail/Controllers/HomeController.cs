@@ -14,20 +14,19 @@
 
 namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 {
+	using System;
 	using System.Collections;
 	using System.Reflection;
 	using Boo.Lang;
+	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy;
 	using Castle.MonoRail.Framework;
-    using System;
-	using Core.Interceptor;
 
 	[Serializable]
     public class HomeController : Controller
     {
 		public void CanUseUrlHelperWithoutPrefix()
 		{
-
 		}
 
         public void Bag()
@@ -70,13 +69,12 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 
         public void WithNothingAfterTheLastSeperator()
         {
-            
         }
 
 		public void WithDynamicProxyObject()
 		{
 			ProxyGenerator generator = new ProxyGenerator();
-			object o = generator.CreateClassProxy(typeof(SimpleProxy), new Castle.DynamicProxy.StandardInterceptor());
+			object o = generator.CreateClassProxy(typeof(SimpleProxy), new StandardInterceptor());
 			try
 			{
 				o.GetType().GetProperty("Text");
@@ -91,7 +89,7 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 		public void WithNullableDynamicProxyObject()
 		{
 			ProxyGenerator generator = new ProxyGenerator();
-			SimpleProxy proxy = (SimpleProxy)generator.CreateClassProxy(typeof(SimpleProxy), new Castle.DynamicProxy.StandardInterceptor());
+			SimpleProxy proxy = (SimpleProxy)generator.CreateClassProxy(typeof(SimpleProxy), new StandardInterceptor());
 			PropertyBag["src"] = proxy;
 		}
 
@@ -165,32 +163,26 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 
 		public void Repeater()
 		{
-			
 		}
 
 		public void NamespacesInConfig()
 		{
-			
 		}
 
 		public void SubView()
 		{
-			
 		}
 
 		public void Javascript()
 		{
-			
 		}
 
 		public void Javascript2()
 		{
-			
 		}
 
 		public void UsingQuotes()
 		{
-			
 		}
 
         public void DuckOverloadToString()
@@ -200,8 +192,6 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 
         public void NullPropagation()
         {
-            
         }
     }
 }
-

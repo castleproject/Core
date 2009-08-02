@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
     using System;
     using System.Reflection;
     using Castle.MonoRail.Views.Brail.TestSite.Controllers;
+	using Castle.Core.Interceptor;
     using DynamicProxy;
     using NUnit.Framework;
 
