@@ -429,6 +429,34 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(123, (proxy as ISimpleInterface).Do());
 		}
 
+
+		[Test]
+		public void ClassImplementingInterfacePropertyVirtuallyWithInterface()
+		{
+			generator.CreateClassProxy(typeof (VirtuallyImplementsInterfaceWithProperty), new[] {typeof (IHasProperty)});
+		}
+
+		[Test]
+		public void ClassImplementingInterfacePropertyVirtuallyWithoutInterface()
+		{
+			generator.CreateClassProxy(typeof(VirtuallyImplementsInterfaceWithProperty));
+		}
+
+		[Test]
+		public void ClassImplementingInterfaceEventVirtuallyWithInterface()
+		{
+			var proxy = generator.CreateClassProxy(typeof (VirtuallyImplementsInterfaceWithEvent), new[] {typeof (IHasEvent)});
+			(proxy as VirtuallyImplementsInterfaceWithEvent).MyEvent += null;
+			(proxy as IHasEvent).MyEvent += null;
+		}
+
+		[Test]
+		public void ClassImplementingInterfaceEventVirtuallyWithoutInterface()
+		{
+			var proxy = generator.CreateClassProxy(typeof(VirtuallyImplementsInterfaceWithEvent));
+			(proxy as VirtuallyImplementsInterfaceWithEvent).MyEvent += null;
+			(proxy as IHasEvent).MyEvent += null;
+		}
 		public class ResultModifierInterceptor : StandardInterceptor
 		{
 			protected override void PostProceed(IInvocation invocation)

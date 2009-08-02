@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.Diagnostics;
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators.Emitters;
 
@@ -73,17 +74,36 @@ namespace Castle.DynamicProxy.Generators
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <param name="type">The type.</param>
-		/// <param name="addMethod">The add method.</param>
-		/// <param name="removeMethod">The remove method.</param>
+		/// <param name="adder">The add method.</param>
+		/// <param name="remover">The remove method.</param>
 		/// <param name="attributes">The attributes.</param>
-		/// <param name="target"></param>
-		public EventToGenerate(string name, Type type, MethodInfo addMethod, MethodInfo removeMethod, EventAttributes attributes, object target)
+		public EventToGenerate(string name, Type type, IProxyMethod adder, IProxyMethod remover, EventAttributes attributes)
 		{
-			this.name = name;
+			this.name = GetName(name, adder, remover);
 			this.type = type;
-			this.adder = new ProxyMethod(addMethod, target);
-			this.remover = new ProxyMethod(removeMethod, target);
+			this.adder = adder;
+			this.remover = remover;
 			this.attributes = attributes;
+		}
+
+		private string GetName(string name, IProxyMethod adder, IProxyMethod remover)
+		{
+			Type declaringType = null;
+			if (adder != null)
+			{
+				declaringType = adder.Method.DeclaringType;
+			}
+			else if (remover != null)
+			{
+				declaringType = remover.Method.DeclaringType;
+			}
+
+			Debug.Assert(declaringType != null);
+			if (!declaringType.IsInterface)
+			{
+				return name;
+			}
+			return string.Format("{0}.{1}", declaringType, name);
 		}
 
 		public EventAttributes Attributes

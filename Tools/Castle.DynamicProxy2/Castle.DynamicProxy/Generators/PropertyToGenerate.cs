@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators.Emitters;
 
@@ -23,44 +24,74 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private readonly string name;
 		private readonly Type type;
-		private readonly bool canRead;
-		private readonly bool canWrite;
-		private PropertyEmitter emitter;
+		private readonly IProxyMethod getter;
+		private readonly IProxyMethod setter;
 		private readonly PropertyAttributes attributes;
 		private readonly IEnumerable<Attribute> customAttributes;
-		private IProxyMethod getter;
-		private ProxyMethod setter;
+		private PropertyEmitter emitter;
 
-		public PropertyToGenerate(string name, Type type, bool canRead, bool canWrite, MethodInfo getMethod, MethodInfo setMethod, PropertyAttributes attributes, IEnumerable<Attribute> customAttributes, object target)
+		public PropertyToGenerate(string name, Type type, IProxyMethod getter, IProxyMethod setter, PropertyAttributes attributes, IEnumerable<Attribute> customAttributes)
 		{
-			this.name = name;
+			this.name = GetName(name,getter,setter);
 			this.type = type;
-			this.canRead = canRead;
-			this.canWrite = canWrite;
-			this.getter = new ProxyMethod(getMethod, target);
-			this.setter = new ProxyMethod(setMethod, target);
+			this.getter = getter;
+			this.setter = setter;
 			this.attributes = attributes;
 			this.customAttributes = customAttributes;
 		}
 
+		private string GetName(string name, IProxyMethod getter, IProxyMethod setter)
+		{
+			Type declaringType = null;
+			if(getter!=null)
+			{
+				declaringType = getter.Method.DeclaringType;
+			}
+			else if(setter!=null)
+			{
+				declaringType = setter.Method.DeclaringType;
+			}
+
+			Debug.Assert(declaringType != null);
+			if (!declaringType.IsInterface)
+			{
+				return name;
+			}
+			return string.Format("{0}.{1}", declaringType, name);
+		}
+
 		public bool CanRead
 		{
-			get { return canRead; }
+			get { return getter != null; }
 		}
 
 		public bool CanWrite
 		{
-			get { return canWrite; }
+			get { return setter != null; }
 		}
 
 		public MethodInfo GetMethod
 		{
-			get { return getter.Method; }
+			get
+			{
+				if(!CanRead)
+				{
+					throw new InvalidOperationException();
+				}
+				return getter.Method;
+			}
 		}
 
 		public MethodInfo SetMethod
 		{
-			get { return setter.Method; }
+			get
+			{
+				if(!CanWrite)
+				{
+					throw new InvalidOperationException();
+				}
+				return setter.Method;
+			}
 		}
 
 		public PropertyEmitter Emitter
@@ -80,9 +111,7 @@ namespace Castle.DynamicProxy.Generators
 
 		public IProxyMethod Setter
 		{
-			get {
-				return setter;
-			}
+			get { return setter; }
 		}
 
 		public bool Equals(PropertyToGenerate other)

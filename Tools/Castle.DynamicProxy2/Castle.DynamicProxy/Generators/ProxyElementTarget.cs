@@ -95,24 +95,22 @@ namespace Castle.DynamicProxy.Generators
 
 		private void AddProperty(PropertyInfo property, IProxyGenerationHook hook)
 		{
-			bool generateReadable = false;
-			bool generateWritable = false;
-			MethodInfo setMethod = null;
-			MethodInfo getMethod = null;
+			MethodToGenerate getter = null;
+			MethodToGenerate setter = null;
 
 			if (property.CanRead)
 			{
-				getMethod = property.GetGetMethod(true);
-				generateReadable = AddMethod(getMethod, hook, false);
+				MethodInfo getMethod = property.GetGetMethod(true);
+				getter = AddMethod(getMethod, hook, false);
 			}
 
 			if (property.CanWrite)
 			{
-				setMethod = property.GetSetMethod(true);
-				generateWritable = AddMethod(setMethod, hook, false);
+				MethodInfo setMethod = property.GetSetMethod(true);
+				setter = AddMethod(setMethod, hook, false);
 			}
 
-			if (!generateWritable && !generateReadable)
+			if (setter==null && getter == null)
 			{
 				return;
 			}
@@ -121,67 +119,65 @@ namespace Castle.DynamicProxy.Generators
 			object target = mapping.Value;
 			properties[property] = new PropertyToGenerate(property.Name,
 			                                              property.PropertyType,
-			                                              generateReadable,
-			                                              generateWritable,
-			                                              getMethod,
-			                                              setMethod,
+			                                              getter,
+			                                              setter,
 			                                              PropertyAttributes.None,
-			                                              nonInheritableAttributes,
-			                                              target);
+			                                              nonInheritableAttributes);
 		}
 
 		private void AddEvent(EventInfo @event, IProxyGenerationHook hook)
 		{
 			MethodInfo addMethod = @event.GetAddMethod(true);
 			MethodInfo removeMethod = @event.GetRemoveMethod(true);
-			bool shouldGenerate = false;
+			MethodToGenerate adder = null;
+			MethodToGenerate remover = null;
 
 			if (addMethod != null)
 			{
-				shouldGenerate = AddMethod(addMethod, hook, false);
+				adder = AddMethod(addMethod, hook, false);
 			}
 
 			if (removeMethod != null)
 			{
-				shouldGenerate = AddMethod(removeMethod, hook, false);
+				remover = AddMethod(removeMethod, hook, false);
 			}
 
-			if (shouldGenerate == false) return;
+			if (adder == null && remover == null) return;
 
 			events[@event] = new EventToGenerate(@event.Name,
 			                                     @event.EventHandlerType,
-			                                     addMethod,
-			                                     removeMethod,
-			                                     EventAttributes.None,
-			                                     mapping.Value);
+												 adder,
+												 remover,
+			                                     EventAttributes.None);
 		}
 
-		private bool AddMethod(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
+		private MethodToGenerate AddMethod(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
 			// This is here, so that we don't add multiple times property getters/setters and event add/remove methods
 			if (methods.ContainsKey(method))
 			{
-				return false;
+				return null;
 			}
 
 			if (!IsAccessible(method))
 			{
-				return false;
+				return null;
 			}
 
 			if (IsVirtuallyImplementedInterfaceMethod(method))
 			{
-				return false;
+				return null;
 			}
 
 			if(!(AcceptMethod(method, onlyProxyVirtual, hook)))
 			{
-				return false;
+				return null;
 			}
 
 			object target = mapping.Value;
-			methods[method] = new MethodToGenerate(method, isStandalone, target);
-			return true;
+			var methodToGenerate = new MethodToGenerate(method, isStandalone, target);
+			methods[method] = methodToGenerate;
+			return methodToGenerate;
 		}
 
 		private bool IsVirtuallyImplementedInterfaceMethod(MethodInfo method)
@@ -291,8 +287,7 @@ namespace Castle.DynamicProxy.Generators
 			if (SpecialCaseAttributThatShouldNotBeReplicated(attribute))
 				return true;
 
-			object[] attrs = attribute.GetType()
-				.GetCustomAttributes(typeof (AttributeUsageAttribute), true);
+			object[] attrs = attribute.GetType().GetCustomAttributes(typeof (AttributeUsageAttribute), true);
 
 			if (attrs.Length != 0)
 			{
