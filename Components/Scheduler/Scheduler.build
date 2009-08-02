@@ -12,8 +12,8 @@
 		<!-- Files have to be in dependency order -->
 		<include name="Castle.Components.Scheduler/Castle.Components.Scheduler.build" />
 		<include name="Castle.Components.Scheduler.WindsorExtension/Castle.Components.Scheduler.WindsorExtension.build" />
-		<include name="Castle.Components.Scheduler.Tests/Castle.Components.Scheduler.Tests.build" if="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}" />
-		<include name="Castle.Components.Scheduler.WindsorExtension.Tests/Castle.Components.Scheduler.WindsorExtension.Tests.build" if="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}" />
+		<include name="Castle.Components.Scheduler.Tests/Castle.Components.Scheduler.Tests.build" if="${common.testrunner.enabled and not(framework::get-family(framework::get-runtime-framework()) == 'mono')}" />
+		<include name="Castle.Components.Scheduler.WindsorExtension.Tests/Castle.Components.Scheduler.WindsorExtension.Tests.build" if="${common.testrunner.enabled and not(framework::get-family(framework::get-runtime-framework()) == 'mono')}" />
 	</fileset>
 
 	<target name="build" depends="common.build" />
