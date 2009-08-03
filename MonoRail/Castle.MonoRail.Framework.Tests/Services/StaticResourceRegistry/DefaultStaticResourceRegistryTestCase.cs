@@ -89,8 +89,8 @@ namespace Castle.MonoRail.Framework.Tests.Services.StaticResourceRegistry
 		{
 			string mime;
 			DateTime? lastMod;
-			Assert.AreEqual("\r\n/*  Prototype JavaScript framework, version 1.5.1\r\n *  (c)",
-				registry.GetResource("AjaxScripts", null, null, out mime, out lastMod).Substring(0, 60));
+			Assert.AreEqual("\r\n/*  Prototype JavaScript framework, version 1.6.0.3\r\n *  (c)",
+				registry.GetResource("AjaxScripts", null, null, out mime, out lastMod).Substring(0, 62));
 			Assert.AreEqual("text/javascript", mime);
 		}
 
@@ -141,7 +141,7 @@ namespace Castle.MonoRail.Framework.Tests.Services.StaticResourceRegistry
 		{
 			string mime;
 			DateTime? lastMod;
-			Assert.AreEqual("\r\n\r\n// script.aculo.us scriptaculous.js v1.7.1_beta3, Fri May 25 17:19:41 +0200 ",
+			Assert.AreEqual("\r\n\r\n// script.aculo.us scriptaculous.js v1.8.2, Tue Nov 18 18:30:58 +0100 2008\r\n",
 				registry.GetResource("Effects2", null, null, out mime, out lastMod).Substring(0, 80));
 			Assert.AreEqual("text/javascript", mime);
 		}
