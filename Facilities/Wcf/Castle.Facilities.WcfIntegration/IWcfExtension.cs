@@ -37,6 +37,6 @@ namespace Castle.Facilities.WcfIntegration
 
 	public interface IWcfEndpointExtension : IWcfExtension
 	{
-		void Install(ServiceEndpoint endpoint, IKernel kernel, IWcfBurden burden);
+		void Install(ServiceEndpoint endpoint, bool withContract, IKernel kernel, IWcfBurden burden);
 	}
 }

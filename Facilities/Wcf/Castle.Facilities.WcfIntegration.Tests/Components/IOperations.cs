@@ -35,12 +35,20 @@ namespace Castle.Facilities.WcfIntegration.Tests
 	public interface IAsyncOperations
 	{
 		[OperationContract(AsyncPattern = true)]
+		IAsyncResult BeginGetValueFromConstructor(AsyncCallback callback, object asyncState);
+		int EndGetValueFromConstructor(IAsyncResult result);
+
+		[OperationContract(AsyncPattern = true)]
 		IAsyncResult BeginGetValueFromConstructorAsRefAndOut(ref int refValue, AsyncCallback callback, object asyncState);
 		int EndGetValueFromConstructorAsRefAndOut(ref int refValue, out int outValue, IAsyncResult result);
+
+		[OperationContract(AsyncPattern = true)]
+		IAsyncResult BeginUnitOfWorkIsInitialized(AsyncCallback callback, object asyncState);
+		bool EndUnitOfWorkIsInitialized(IAsyncResult result);
 	}
 
 	[ServiceContract]
-	public interface IOperationsEx
+	public interface IOperationsEx : IOperations
 	{
 		[OperationContract]
 		void Backup(IDictionary<string, object> context);
@@ -48,4 +56,30 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		[OperationContract]
 		void ThrowException();
 	}
+
+	[ServiceContract(Name = "IOperations")]
+	public interface IOperationsAll
+	{
+		[OperationContract]
+		int GetValueFromConstructor();
+
+		[OperationContract]
+		int GetValueFromConstructorAsRefAndOut(ref int refValue, out int outValue);
+
+		[OperationContract]
+		bool UnitOfWorkIsInitialized();
+
+		[OperationContract(AsyncPattern = true)]
+		IAsyncResult BeginGetValueFromConstructor(AsyncCallback callback, object asyncState);
+		int EndGetValueFromConstructor(IAsyncResult result);
+
+		[OperationContract(AsyncPattern = true)]
+		IAsyncResult BeginGetValueFromConstructorAsRefAndOut(ref int refValue, AsyncCallback callback, object asyncState);
+		int EndGetValueFromConstructorAsRefAndOut(ref int refValue, out int outValue, IAsyncResult result);
+
+		[OperationContract(AsyncPattern = true)]
+		IAsyncResult BeginUnitOfWorkIsInitialized(AsyncCallback callback, object asyncState);
+		bool EndUnitOfWorkIsInitialized(IAsyncResult result);
+	}
+
 }

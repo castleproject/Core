@@ -283,7 +283,7 @@ namespace Castle.Facilities.WcfIntegration.Internal
 			}
 		}
 
-		public static T LazyInitialize<T>(ref T cache, Func<T> source) where T : class
+		public static T SafeInitialize<T>(ref T cache, Func<T> source) where T : class
 		{
 			T getCache = Interlocked.CompareExchange(ref cache, null, null);
 			if (getCache != null) return getCache;

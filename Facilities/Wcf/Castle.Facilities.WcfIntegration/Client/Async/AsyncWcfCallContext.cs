@@ -19,65 +19,46 @@ namespace Castle.Facilities.WcfIntegration.Async
 	using System.Runtime.Remoting.Messaging;
 	using Castle.Facilities.WcfIntegration.Async.TypeSystem;
 	using Castle.Facilities.WcfIntegration.Proxy;
-
+	
 	public class AsyncWcfCallContext
 	{
 		private readonly AsyncCallback callback;
 		private readonly object state;
 		private readonly AsyncType asyncType;
-		private readonly IWcfChannelHolder channelHolder;
-		private readonly object result;
-		private BeginMethod beginMethod;
-		private EndMethod endMethod;
+		private readonly object defaultReturn;
+		private volatile IAsyncResult result;
+		private MethodInfo beginMethod;
 		private object[] syncArguments;
-		private IAsyncResult asyncResult;
-		private bool initCalled;
-
-		public IAsyncResult AsyncResult
-		{
-			get { return asyncResult; }
-		}
 
 		public AsyncWcfCallContext(AsyncCallback callback, object state,  AsyncType asyncType,
-								   IWcfChannelHolder proxyHolder, object result)
+								   IWcfChannelHolder channelHolder, object defaultReturn)
 		{
 			this.callback = callback;
 			this.state = state;
 			this.asyncType = asyncType;
-			this.channelHolder = proxyHolder;
-			this.result = result;
+			ChannelHolder = channelHolder;
+			this.defaultReturn = defaultReturn;
 		}
 
-		public IWcfChannelHolder ChannelHolder
+		public IAsyncResult AsyncResult
 		{
-			get { return channelHolder; }
+			get { return result; }
+			set { result = value; }
 		}
 
-		public EndMethod EndMethod
-		{
-			get { return endMethod; }
-		}
+		public IWcfChannelHolder ChannelHolder { get; private set; }
+
+		public MethodInfo EndMethod { get; private set; }
 
 		public void Init(MethodInfo method, object[] arguments)
 		{
-			if (initCalled)
-			{
-				throw new InvalidOperationException("Init can only be called once.");
-			}
-
-			initCalled = true;
 			beginMethod = asyncType.GetBeginMethod(method);
-			endMethod = asyncType.GetEndMethod(method);
+			EndMethod = asyncType.GetEndMethod(method);
 			syncArguments = arguments;
 		}
 
 		public MethodCallMessage CreateBeginMessage()
 		{
-			if (initCalled == false)
-			{
-				throw new InvalidOperationException("Context not initialized.  Call Init first.");
-			}
-
 			var arguments = BuildAsyncBeginArgumentsList();
 			return new MethodCallMessage(beginMethod, arguments);
 		}
@@ -93,29 +74,19 @@ namespace Castle.Facilities.WcfIntegration.Async
 
 		public MethodCallMessage CreateEndMessage()
 		{
-			if (initCalled == false)
-			{
-				throw new InvalidOperationException("Context not initialized. Call Init first.");
-			}
-
 			var arguments = BuildAsyncEndArgumentsList();
-			return new MethodCallMessage(endMethod, arguments);
+			return new MethodCallMessage(EndMethod, arguments);
 		}
 
 		private object[] BuildAsyncEndArgumentsList()
 		{
-			object[] arguments = new object[endMethod.GetParameters().Length];
-			arguments[arguments.Length - 1] = asyncResult;
+			object[] arguments = new object[EndMethod.GetParameters().Length];
+			arguments[arguments.Length - 1] = AsyncResult;
 			return arguments;
 		}
 
 		public object PostProcess(IMethodReturnMessage message)
 		{
-			if (initCalled == false)
-			{
-				throw new InvalidOperationException("Context not initialized. Call Init first.");
-			}
-
 			if (message != null)
 			{
 				if (message.Exception != null)
@@ -131,10 +102,10 @@ namespace Castle.Facilities.WcfIntegration.Async
 						"This indicate it's not a result of async operation. This may also be a bug, so if you think it is, please report it.");
 				}
 
-				asyncResult = returnValue;
+				AsyncResult = returnValue;
 			}
 
-			return result;
+			return defaultReturn;
 		}
 	}
 }

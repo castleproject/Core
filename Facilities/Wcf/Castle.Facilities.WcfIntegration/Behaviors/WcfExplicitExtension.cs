@@ -66,7 +66,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		#region IWcfEndpointExtension 
 
-		public void Install(ServiceEndpoint endpoint, IKernel kernel, IWcfBurden burden)
+		public void Install(ServiceEndpoint endpoint, bool withContract, IKernel kernel, IWcfBurden burden)
 		{
 			object extension = GetExtensionInstance(kernel, burden);
 
@@ -76,27 +76,35 @@ namespace Castle.Facilities.WcfIntegration
 			}
 			else if (extension is IOperationBehavior)
 			{
-				foreach (var operation in endpoint.Contract.Operations)
+				if (withContract)
 				{
-					operation.Behaviors.Add((IOperationBehavior)extension);
+					foreach (var operation in endpoint.Contract.Operations)
+					{
+						operation.Behaviors.Add((IOperationBehavior)extension);
+					}
 				}
 			}
 			else if (extension is IContractBehavior)
 			{
-				endpoint.Contract.Behaviors.Add((IContractBehavior)extension);
-			}
-			else if (!WcfUtils.AttachExtension(endpoint.Behaviors, extension) &&
-					 !WcfUtils.AttachExtension(endpoint.Contract.Behaviors, extension))
-			{
-				Type owner = null;
-
-				if (WcfUtils.IsExtension(extension, ref owner))
+				if (withContract)
 				{
-					if (typeof(IOperationBehavior).IsAssignableFrom(owner))
+					endpoint.Contract.Behaviors.Add((IContractBehavior)extension);
+				}
+			}
+			else if (!WcfUtils.AttachExtension(endpoint.Behaviors, extension))
+			{
+				if (withContract && !WcfUtils.AttachExtension(endpoint.Contract.Behaviors, extension))
+				{
+					Type owner = null;
+
+					if (WcfUtils.IsExtension(extension, ref owner))
 					{
-						foreach (var operation in endpoint.Contract.Operations)
+						if (typeof(IOperationBehavior).IsAssignableFrom(owner))
 						{
-							WcfUtils.AttachExtension(operation.Behaviors, extension, owner);
+							foreach (var operation in endpoint.Contract.Operations)
+							{
+								WcfUtils.AttachExtension(operation.Behaviors, extension, owner);
+							}
 						}
 					}
 				}

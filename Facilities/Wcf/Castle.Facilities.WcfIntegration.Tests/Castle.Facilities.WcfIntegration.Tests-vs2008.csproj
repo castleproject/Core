@@ -102,6 +102,7 @@
     <Compile Include="Behaviors\AddOperationsHeader.cs" />
     <Compile Include="Behaviors\CaptureServiceHost.cs" />
     <Compile Include="Behaviors\ChannelFactoryListener.cs" />
+    <Compile Include="Behaviors\DummyContractBehavior.cs" />
     <Compile Include="Behaviors\RefreshChannelPolicy.cs" />
     <Compile Include="Behaviors\StoreMessageBody.cs" />
     <Compile Include="Behaviors\NetDataContractFormatBehavior.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Components\Inventory.cs" />
     <Compile Include="Components\HelloFormatter.cs" />
     <Compile Include="Components\ICalculator.cs" />
+    <Compile Include="Components\TraceInterceptor.cs" />
     <Compile Include="Duplex\DuplexClientFixture.cs" />
     <Compile Include="Rest\RestClientFixture.cs" />
     <Compile Include="Rest\RestServiceFixture.cs" />

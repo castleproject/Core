@@ -44,7 +44,7 @@ namespace Castle.Facilities.WcfIntegration
 			var extensions = new ChannelFactoryExtensions(channelFactory, kernel)
 				.Install(burden, new WcfChannelExtensions());
 
-			var endpointExtensions = new ServiceEndpointExtensions(channelFactory.Endpoint, kernel)
+			var endpointExtensions = new ServiceEndpointExtensions(channelFactory.Endpoint, true, kernel)
 				.Install(burden, new WcfEndpointExtensions(WcfExtensionScope.Clients));
 
 			if (clientModel != null)

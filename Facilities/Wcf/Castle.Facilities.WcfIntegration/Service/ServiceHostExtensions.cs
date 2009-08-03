@@ -35,7 +35,7 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.burden = burden;
 
-			foreach (IWcfExtension extension in extensions)
+			foreach (var extension in extensions)
 			{
 				extension.Accept(this);
 			}
@@ -61,9 +61,11 @@ namespace Castle.Facilities.WcfIntegration
 
 		void IWcfExtensionVisitor.VisitEndpointExtension(IWcfEndpointExtension extension)
 		{
-			foreach (ServiceEndpoint endpoint in serviceHost.Description.Endpoints)
+			var contracts = new HashSet<ContractDescription>();
+
+			foreach (var endpoint in serviceHost.Description.Endpoints)
 			{
-				extension.Install(endpoint, kernel, burden);
+				extension.Install(endpoint, contracts.Add(endpoint.Contract), kernel, burden);
 			}
 		}
 

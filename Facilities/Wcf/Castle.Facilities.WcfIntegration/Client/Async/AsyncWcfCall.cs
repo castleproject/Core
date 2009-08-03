@@ -16,7 +16,7 @@ namespace Castle.Facilities.WcfIntegration.Async
 {
 	using System;
 
-	public class AsyncWcfCall<TProxy, TResult> : AsyncWcfCallBase<TProxy>, IWcfAsyncCall<TResult>
+	public class AsyncWcfCall<TProxy, TResult> : AsyncWcfCallBase<TProxy>, IWcfAsyncCall<TResult>, IWcfAsyncCall
 	{
 		public AsyncWcfCall(TProxy proxy, Func<TProxy, TResult> func)
 			: base(proxy, p => func(p))
@@ -67,6 +67,35 @@ namespace Castle.Facilities.WcfIntegration.Async
 			CreateUnusedOutArgs(4);
 			return result;
 		}
+
+		#region IWcfAsyncCall Members
+
+		void IWcfAsyncCall.End()
+		{
+			End();
+		}
+
+		void IWcfAsyncCall.End<TOut1>(out TOut1 out1)
+		{
+			End(out out1);
+		}
+
+		void IWcfAsyncCall.End<TOut1, TOut2>(out TOut1 out1, out TOut2 out2)
+		{
+			End(out out1, out out2);
+		}
+
+		void IWcfAsyncCall.End<TOut1, TOut2, TOut3>(out TOut1 out1, out TOut2 out2, out TOut3 out3)
+		{
+			End(out out1, out out2, out out3);
+		}
+
+		void IWcfAsyncCall.End<TOut1, TOut2, TOut3, TOut4>(out TOut1 out1, out TOut2 out2, out TOut3 out3, out TOut4 out4)
+		{
+			End(out out1, out out2, out out3, out out4);
+		}
+
+		#endregion
 
 		private TResult InternalEnd()
 		{

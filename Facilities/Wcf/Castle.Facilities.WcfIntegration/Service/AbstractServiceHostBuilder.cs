@@ -46,7 +46,8 @@ namespace Castle.Facilities.WcfIntegration
 				new WindsorDependencyInjectionServiceBehavior(kernel, model)
 				);
 
-			WcfBurden burden = new WcfBurden(kernel);
+			var burden = new WcfBurden(kernel);
+			var contracts = new HashSet<ContractDescription>();
 			Dictionary<IWcfEndpoint, ServiceEndpoint> endpoints = null;
 
 			if (serviceModel != null && serviceModel.Endpoints.Count > 0)
@@ -74,7 +75,8 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				foreach (var endpoint in endpoints)
 				{
-					new ServiceEndpointExtensions(endpoint.Value, kernel)
+					var addContract = contracts.Add(endpoint.Value.Contract);
+					new ServiceEndpointExtensions(endpoint.Value, addContract, kernel)
 						.Install(endpoint.Key.Extensions, burden);
 				}
 			}
@@ -84,7 +86,8 @@ namespace Castle.Facilities.WcfIntegration
 				var wcfServiceHost = (IWcfServiceHost)serviceHost;
 				wcfServiceHost.EndpointCreated += delegate(object source, EndpointCreatedArgs e)
 				{
-					var endpointExtensions = new ServiceEndpointExtensions(e.Endpoint, kernel)
+					var addContract = contracts.Add(e.Endpoint.Contract);
+					var endpointExtensions = new ServiceEndpointExtensions(e.Endpoint, addContract, kernel)
 						.Install(burden, new WcfEndpointExtensions(WcfExtensionScope.Services));
 
 					if (serviceModel != null)
@@ -95,7 +98,6 @@ namespace Castle.Facilities.WcfIntegration
 			}
 
 			serviceHost.Extensions.Add(new WcfBurdenExtension<ServiceHostBase>(burden));
-
 		}
 
 		protected Uri[] GetEffectiveBaseAddresses(IWcfServiceModel serviceModel, Uri[] defaultBaseAddresses)

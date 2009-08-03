@@ -40,8 +40,8 @@ namespace Castle.Facilities.WcfIntegration.Async
 			if (channelHolder == null)
 			{
 				throw new ArgumentException(
-					"The given proxy is not supported. Did you create it using the WcfFacility? " +
-					"If the answer is yes, this is probably a bug. Please report it.");
+					"The given proxy is not supported.  Did you create it using the WcfFacility? " +
+					"If the answer is yes, this is probably a bug so please report it.");
 			}
 
 			var context = new AsyncWcfCallContext(callback, state, asyncType, channelHolder, result);
@@ -51,7 +51,7 @@ namespace Castle.Facilities.WcfIntegration.Async
 
 		protected override bool Handles(MethodInfo method)
 		{
-			return asyncType.SyncType.IsAssignableFrom(method.DeclaringType);
+			return method.DeclaringType.IsAssignableFrom(asyncType.SyncType);
 		}
 
 		protected override void PerformInvocation(IInvocation invocation, IWcfChannelHolder channelHolder)
@@ -64,13 +64,6 @@ namespace Castle.Facilities.WcfIntegration.Async
 
 			var context = callContext;
 			callContext = null;
-
-			if (!ReferenceEquals(context.ChannelHolder, invocation.Proxy))
-			{
-				throw new InvalidOperationException(
-					"There was an async call prepared on this thread but for different proxy. " +
-					"This is probably a bug. Please report it.");
-			}
 
 			CallBeginMethod(invocation, context);
 		}

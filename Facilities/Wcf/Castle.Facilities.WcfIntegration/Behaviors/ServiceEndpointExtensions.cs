@@ -22,12 +22,14 @@ namespace Castle.Facilities.WcfIntegration
 	internal class ServiceEndpointExtensions : IWcfExtensionVisitor
 	{
 		private readonly ServiceEndpoint endpoint;
+		private readonly bool withContract;
 		private readonly IKernel kernel;
 		private IWcfBurden burden;
 
-		public ServiceEndpointExtensions(ServiceEndpoint endpoint, IKernel kernel)
+		public ServiceEndpointExtensions(ServiceEndpoint endpoint, bool withContract, IKernel kernel)
 		{
 			this.endpoint = endpoint;
+			this.withContract = withContract;
 			this.kernel = kernel;
 		}
 
@@ -60,7 +62,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		void IWcfExtensionVisitor.VisitEndpointExtension(IWcfEndpointExtension extension)
 		{
-			extension.Install(endpoint, kernel, burden);
+			extension.Install(endpoint, withContract, kernel, burden);
 		}
 
 		#endregion

@@ -20,9 +20,16 @@ namespace Castle.Facilities.WcfIntegration.Async.TypeSystem
 
 	public static class AttributeHelpers
 	{
-		public static TAttribute GetAttribute<TAttribute>(this ICustomAttributeProvider provider) where TAttribute:Attribute
+		public static TAttribute GetAttribute<TAttribute>(this ICustomAttributeProvider provider)
+			where TAttribute:Attribute
 		{
-			return (TAttribute) provider.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault();
+			return GetAttribute<TAttribute>(provider, true);
+		}
+
+		public static TAttribute GetAttribute<TAttribute>(this ICustomAttributeProvider provider, bool inherit) 
+			where TAttribute : Attribute
+		{
+			return (TAttribute)provider.GetCustomAttributes(typeof(TAttribute), inherit).FirstOrDefault();
 		}
 	}
 }

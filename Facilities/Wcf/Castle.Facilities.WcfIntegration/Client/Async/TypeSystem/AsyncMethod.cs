@@ -38,7 +38,7 @@ namespace Castle.Facilities.WcfIntegration.Async.TypeSystem
 
 			if (type.SyncType != syncMethod.DeclaringType)
 			{
-				throw new ArgumentException("Given method is not defined on given type", "syncMethod");
+				throw new ArgumentException("The given method is not defined on given type", "syncMethod");
 			}
 
 			VerifyContract(syncMethod);
@@ -84,18 +84,20 @@ namespace Castle.Facilities.WcfIntegration.Async.TypeSystem
 		protected void VerifyContract(MethodInfo syncMethod)
 		{
 			var attribute = syncMethod.GetAttribute<OperationContractAttribute>();
+
 			if (attribute == null)
 			{
 				throw new ArgumentException(
-					"Given method does not have OperationContractAttribute defined. " +
-					"Can create BeginMethod only for methods that have OperationContractAttribute",
+					"The given method does not have OperationContractAttribute defined and " +
+					"cannot be used with the asynchronous pattern.",
 					"syncMethod");
 			}
+
 			if (attribute.AsyncPattern)
 			{
 				throw new ArgumentException(
-					"Given method has OperationContractAttribute with AsyncPattern property set to true, " +
-					"which suggests it already is a begin method, thuse it can not be used as a basis for new BeginMethod",
+					"The given method has OperationContractAttribute with AsyncPattern property set to true, " +
+					"which suggests it already participating in an asynchronous pattern",
 					"syncMethod");
 			}
 		}

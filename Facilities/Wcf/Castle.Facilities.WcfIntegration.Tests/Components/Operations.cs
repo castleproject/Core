@@ -61,4 +61,56 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 		#endregion
 	}
+
+	delegate int GetValueFromConstructor();
+	delegate int GetValueFromConstructorAsRefAndOut(ref int refValue, out int outValue);
+	delegate bool UnitOfWorkIsInitialized();
+ 
+	public class AsyncOperations : IAsyncOperations
+	{
+		private readonly Operations operations;
+		private GetValueFromConstructor getValueCtor;
+		private GetValueFromConstructorAsRefAndOut getValueCtorRefOut;
+		private UnitOfWorkIsInitialized uow;
+
+		public AsyncOperations(int number)
+		{
+			operations = new Operations(number);
+			getValueCtor = operations.GetValueFromConstructor;
+			getValueCtorRefOut = operations.GetValueFromConstructorAsRefAndOut;
+			uow = operations.UnitOfWorkIsInitialized;
+		}
+
+		public IAsyncResult BeginGetValueFromConstructor(AsyncCallback callback, object asyncState)
+		{
+			return getValueCtor.BeginInvoke(callback, asyncState);
+		}
+
+		public int EndGetValueFromConstructor(IAsyncResult result)
+		{
+			return getValueCtor.EndInvoke(result);
+		}
+        
+		public IAsyncResult BeginGetValueFromConstructorAsRefAndOut(
+			ref int refValue, AsyncCallback callback, object asyncState)
+		{
+			int outValue;
+			return getValueCtorRefOut.BeginInvoke(ref refValue, out outValue, callback, asyncState);
+		}
+
+		public int EndGetValueFromConstructorAsRefAndOut(ref int refValue, out int outValue, IAsyncResult result)
+		{
+			return getValueCtorRefOut.EndInvoke(ref refValue, out outValue, result);
+		}
+
+		public IAsyncResult BeginUnitOfWorkIsInitialized(AsyncCallback callback, object asyncState)
+		{
+			return uow.BeginInvoke(callback, asyncState);			
+		}
+
+		public bool EndUnitOfWorkIsInitialized(IAsyncResult result)
+		{
+			return uow.EndInvoke(result);
+		}
+	}
 }

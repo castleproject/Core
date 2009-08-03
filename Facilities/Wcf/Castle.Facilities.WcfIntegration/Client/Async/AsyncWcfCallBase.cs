@@ -124,6 +124,14 @@ namespace Castle.Facilities.WcfIntegration.Async
 
 		private AsyncCallback WrapCallback(AsyncCallback callback)
 		{
+			var cb = callback;
+			callback = ar => 
+			{
+				if (context != null)
+					context.AsyncResult = ar;
+				cb(ar);
+			};
+
 			var useSynchronizationContext = UseSynchronizationContext;
 			var currentSynchronizationContext = SynchronizationContext.Current;
 			if (callback == null || useSynchronizationContext == false || currentSynchronizationContext == null)
@@ -140,7 +148,7 @@ namespace Castle.Facilities.WcfIntegration.Async
 			if (context == null)
 			{
 				throw new InvalidOperationException(
-					"Something is wrong. Either Begin threw an exception, or we have a bug here. Please report it.");
+					"Something is wrong.  Either Begin threw an exception, or we have a bug here.  Please report it.");
 			}
 
 			if (context.AsyncResult == null)

@@ -96,7 +96,7 @@ namespace Castle.Facilities.WcfIntegration.Proxy
 
 			if (clientModel.WantsAsyncCapability)
 			{
-				var getAsyncType = WcfUtils.LazyInitialize(ref asyncType,
+				var getAsyncType = WcfUtils.SafeInitialize(ref asyncType,
 					() => AsyncType.GetAsyncType(model.Service));
 				interceptors[--index] = new WcfRemotingAsyncInterceptor(getAsyncType);
 			}

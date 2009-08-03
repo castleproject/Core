@@ -44,6 +44,9 @@ namespace Castle.Facilities.WcfIntegration.Tests.Components
 	{
 		[OperationContract]
 		void DoSomething(int value);
+
+		[OperationContract]
+		void DoSomethingElse(int value);
 	}
 
 	public class ServiceWithCallback : IServiceWithCallback
@@ -52,6 +55,12 @@ namespace Castle.Facilities.WcfIntegration.Tests.Components
 		{
 			ICallbackService callbackService = OperationContext.Current.GetCallbackChannel<ICallbackService>();
 			callbackService.Callback(value * 2);
+		}
+
+		public void DoSomethingElse(int value)
+		{
+			ICallbackService callbackService = OperationContext.Current.GetCallbackChannel<ICallbackService>();
+			callbackService.BeginWcfCall(p => p.Callback(value * 4));
 		}
 	}
 }

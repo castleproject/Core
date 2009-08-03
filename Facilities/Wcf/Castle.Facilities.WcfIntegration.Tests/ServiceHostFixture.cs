@@ -325,6 +325,32 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		}
 
 		[Test]
+		public void WillApplyServiceScopedBehaviorsToMultipleEndpoints()
+		{
+			using (new WindsorContainer()
+				.AddFacility<WcfFacility>(f => f.CloseTimeout = TimeSpan.Zero)
+				.Register(
+					Component.For<DummyContractBehavior>()
+						.Attribute("scope").Eq(WcfExtensionScope.Services),
+					Component.For<IOperations>().ImplementedBy<Operations>()
+					.DependsOn(new { number = 42 })
+					.ActAs(new DefaultServiceModel()
+						.AddEndpoints(
+							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
+								.At("net.tcp://localhost/Operations"),
+							WcfEndpoint.BoundTo(new BasicHttpBinding())
+								.At("http://localhost/Operations")
+							)
+						)
+				))
+			{
+				IOperations client = ChannelFactory<IOperations>.CreateChannel(
+					new NetTcpBinding { PortSharingEnabled = true }, new EndpointAddress("net.tcp://localhost/Operations"));
+				Assert.AreEqual(42, client.GetValueFromConstructor());
+			}
+		}
+
+		[Test]
 		public void WillApplyExplcitScopedKeyBehaviors()
 		{
 			CallCountServiceBehavior.CallCount = 0;
@@ -341,6 +367,9 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.AddEndpoints(
 							WcfEndpoint.BoundTo(new NetTcpBinding { PortSharingEnabled = true })
 								.At("net.tcp://localhost/Operations"))
+						.AddEndpoints(
+							WcfEndpoint.BoundTo(new BasicHttpBinding())
+								.At("http://localhost/Operations"))
 						.AddExtensions("callcounts")
 						)
 				))

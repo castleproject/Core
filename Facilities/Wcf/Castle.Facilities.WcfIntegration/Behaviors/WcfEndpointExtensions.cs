@@ -28,14 +28,18 @@ namespace Castle.Facilities.WcfIntegration
 			this.scope = scope;
 		}
 
-		public void Install(ServiceEndpoint endpoint, IKernel kernel, IWcfBurden burden)
+		public void Install(ServiceEndpoint endpoint, bool withContract, IKernel kernel, IWcfBurden burden)
 		{
 			WcfUtils.AddBehaviors(kernel, scope, endpoint.Behaviors, burden);
-			WcfUtils.AddBehaviors(kernel, scope, endpoint.Contract.Behaviors, burden);
 
-			foreach (var operation in endpoint.Contract.Operations)
+			if (withContract)
 			{
-                WcfUtils.AddBehaviors(kernel, scope, operation.Behaviors, burden);
+				WcfUtils.AddBehaviors(kernel, scope, endpoint.Contract.Behaviors, burden);
+
+				foreach (var operation in endpoint.Contract.Operations)
+				{
+					WcfUtils.AddBehaviors(kernel, scope, operation.Behaviors, burden);
+				}
 			}
 		}
 
