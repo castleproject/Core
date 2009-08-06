@@ -90,7 +90,7 @@ namespace Castle.Windsor.Proxy
 				{
 					String message = String.Format(
 						"An interceptor registered for {0} doesnt implement " +
-						"the IMethodInterceptor interface",
+						"the IInterceptor interface",
 						model.Name);
 
 					throw new ApplicationException(message);
