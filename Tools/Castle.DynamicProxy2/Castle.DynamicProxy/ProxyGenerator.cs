@@ -806,7 +806,7 @@ namespace Castle.DynamicProxy
 				}
 				else
 				{
-					sb.Append("Could not find a constructor that would match given arguments:");
+					sb.AppendLine("Could not find a constructor that would match given arguments:");
 					foreach(var argument in constructorArguments)
 					{
 						sb.AppendLine(argument.GetType().ToString());

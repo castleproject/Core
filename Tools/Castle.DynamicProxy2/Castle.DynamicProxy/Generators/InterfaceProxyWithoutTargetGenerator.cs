@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators
 			method2methodOnTarget[methodInfo] = methodInfo;
 
 			Type targetForInvocation = methodInfo.DeclaringType;
-			method2Invocation[methodInfo] = BuildInvocationNestedType(emitter, targetForInvocation, method, null, ConstructorVersion);
+			method2Invocation[methodInfo] = BuildInvocationNestedType(emitter, targetForInvocation, method, null);
 		}
 
 		protected override InterfaceGeneratorType GeneratorType

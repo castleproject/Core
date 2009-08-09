@@ -43,11 +43,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			this.builder = builder;
 		}
 
-		public AbstractTypeEmitter MainType
-		{
-			get { return maintype; }
-		}
-
 		public virtual ConstructorCodeBuilder CodeBuilder
 		{
 			get

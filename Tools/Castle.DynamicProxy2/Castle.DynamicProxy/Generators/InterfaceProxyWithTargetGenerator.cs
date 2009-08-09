@@ -34,7 +34,7 @@ namespace Castle.DynamicProxy.Generators
 	public class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
 		private FieldReference targetField;
-		protected Dictionary<MethodInfo, MethodInfo> method2methodOnTarget = new Dictionary<MethodInfo, MethodInfo>();
+		protected readonly Dictionary<MethodInfo, MethodInfo> method2methodOnTarget = new Dictionary<MethodInfo, MethodInfo>();
 
 
 		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type theInterface)
@@ -129,7 +129,7 @@ namespace Castle.DynamicProxy.Generators
 				// NOTE: make sure this is what it should be
 				if (ReferenceEquals(mapping.Value, Proxy.Instance)) continue;
 
-				targets.Add(CollectElementsToProxy(mapping, emptyInterfaceMapping));
+				targets.Add(CollectElementsToProxy(mapping, EmptyInterfaceMapping));
 			}
 
 			ProxyGenerationOptions.Hook.MethodsInspected();
@@ -221,7 +221,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if(!proxyTargetType.IsInterface)
 				{
-					var foundCandidate = FindImplementingMethod(methodInfo, proxyTargetType);
+					var foundCandidate = TypeUtil.FindImplementingMethod(methodInfo, proxyTargetType);
 					if (foundCandidate != null)
 					{
 						methodOnTarget = foundCandidate;
@@ -233,7 +233,7 @@ namespace Castle.DynamicProxy.Generators
 				var mixin = method.Target as Mixin;
 				if (mixin != null)
 				{
-					var foundCandidate = FindImplementingMethod(methodInfo, mixin.ClassUnderMixinInterface);
+					var foundCandidate = TypeUtil.FindImplementingMethod(methodInfo, mixin.ClassUnderMixinInterface);
 					if (foundCandidate != null)
 					{
 						methodOnTarget = foundCandidate;
@@ -247,7 +247,6 @@ namespace Castle.DynamicProxy.Generators
 			                                                          methodInfo.DeclaringType,
 			                                                          method,
 			                                                          methodInfo,
-			                                                          GetConstructorVersion(method),
 			                                                          AllowChangeTarget);
 		}
 
@@ -267,7 +266,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ParameterInfo param = parameters[i];
 
-				Type paramType = GetParamType(nested, param.ParameterType);
+				Type paramType = TypeUtil.GetClosedParameterType(nested, param.ParameterType);
 				if (paramType.IsByRef)
 				{
 					LocalReference localReference = method.CodeBuilder.DeclareLocal(paramType.GetElementType());
@@ -302,7 +301,7 @@ namespace Castle.DynamicProxy.Generators
 			LocalReference returnValue = null;
 			if (callbackMethod1.ReturnType != typeof(void))
 			{
-				Type returnType = this.GetParamType(nested, callbackMethod1.ReturnType);
+				Type returnType = TypeUtil.GetClosedParameterType(nested, callbackMethod1.ReturnType);
 				returnValue = method.CodeBuilder.DeclareLocal(returnType);
 				method.CodeBuilder.AddStatement(new AssignStatement(returnValue, baseMethodInvExp));
 			}
@@ -338,80 +337,6 @@ namespace Castle.DynamicProxy.Generators
 			method.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		/// <summary>
-		/// Checks whether the given types are the same. This is 
-		/// more complicated than it looks.
-		/// </summary>
-		/// <param name="sourceType"></param>
-		/// <param name="targetType"></param>
-		/// <returns></returns>
-		public static bool IsTypeEquivalent(Type sourceType, Type targetType)
-		{
-			if (sourceType.IsGenericParameter)
-			{
-				if (sourceType.Name != targetType.Name)
-				{
-					return false;
-				}
-			}
-			else
-			{
-				if (sourceType.IsGenericType != targetType.IsGenericType)
-				{
-					return false;
-				}
-				if (sourceType.IsArray != targetType.IsArray)
-				{
-					return false;
-				}
-
-				if (sourceType.IsGenericType)
-				{
-					if (sourceType.GetGenericTypeDefinition() != targetType.GetGenericTypeDefinition())
-					{
-						return false;
-					}
-
-					// Compare generic arguments
-
-					Type[] sourceGenArgs = sourceType.GetGenericArguments();
-					Type[] targetGenArgs = targetType.GetGenericArguments();
-
-					for (int i = 0; i < sourceGenArgs.Length; i++)
-					{
-						if (!IsTypeEquivalent(sourceGenArgs[i], targetGenArgs[i]))
-						{
-							return false;
-						}
-					}
-				}
-				else if (sourceType.IsArray)
-				{
-					Type sourceArrayType = sourceType.GetElementType();
-					Type targetArrayType = targetType.GetElementType();
-
-					if (!IsTypeEquivalent(sourceArrayType, targetArrayType))
-					{
-						return false;
-					}
-
-					int sourceRank = sourceType.GetArrayRank();
-					int targetRank = targetType.GetArrayRank();
-
-					if (sourceRank != targetRank)
-					{
-						return false;
-					}
-				}
-				else if (sourceType != targetType)
-				{
-					return false;
-				}
-			}
-
-			return true;
-		}
-
 		protected override Reference GetProxyTargetReference()
 		{
 			return targetField;
@@ -430,29 +355,29 @@ namespace Castle.DynamicProxy.Generators
 #if SILVERLIGHT
 #warning What to do?
 #else
-		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference arg1,
-													   ArgumentReference arg2)
+		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
+													   ArgumentReference streamingContext)
 		{
 			codebuilder.AddStatement(new ExpressionStatement(
-										new MethodInvocationExpression(arg1, SerializationInfoMethods.AddValue_Object,
+										new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
 																	   new ConstReference("__target").ToExpression(),
 																	   targetField.ToExpression())));
 
 			codebuilder.AddStatement(new ExpressionStatement(
-										new MethodInvocationExpression(arg1, SerializationInfoMethods.AddValue_Object,
+										new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
 																	   new ConstReference("__targetFieldType").ToExpression(),
 																	   new ConstReference(
 																		targetField.Reference.FieldType.AssemblyQualifiedName).
 																		ToExpression())));
 
 			codebuilder.AddStatement(new ExpressionStatement(
-										new MethodInvocationExpression(arg1, SerializationInfoMethods.AddValue_Int32,
+										new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Int32,
 																	   new ConstReference("__interface_generator_type").
 																		ToExpression(),
 																	   new ConstReference((int)GeneratorType).ToExpression())));
 
 			codebuilder.AddStatement(new ExpressionStatement(
-										new MethodInvocationExpression(arg1, SerializationInfoMethods.AddValue_Object,
+										new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
 																	   new ConstReference("__theInterface").ToExpression(),
 																	   new ConstReference(targetType.AssemblyQualifiedName).
 																		ToExpression())));

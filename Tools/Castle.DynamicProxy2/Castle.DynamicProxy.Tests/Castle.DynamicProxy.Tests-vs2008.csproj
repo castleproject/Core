@@ -95,7 +95,6 @@
     <Compile Include="InterClasses\ServiceImpl.cs" />
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="MixinTestCase.cs" />
-    <Compile Include="TypeEquivalentTestCase.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +117,9 @@
     <Compile Include="Classes\ClassWithExplicitInterface.cs" />
     <Compile Include="Classes\VirtuallyImplementsInterfaceWithEvent.cs" />
     <Compile Include="ComInterfacesTests.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameter.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameterByRef.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericReturn.cs" />
     <Compile Include="Interceptors\AssertCanChangeTargetInterceptor.cs" />
     <Compile Include="Interceptors\AssertCannotChangeTargetInterceptor.cs" />
     <Compile Include="Interceptors\CallCountingInterceptor.cs" />

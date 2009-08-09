@@ -32,9 +32,9 @@ namespace Castle.DynamicProxy
 		private readonly IInterceptor[] interceptors;
 		private readonly Type targetType;
 		private readonly MethodInfo targetMethod;
-		private readonly MethodInfo interfMethod;
+		private readonly MethodInfo interfaceMethod;
+		private readonly object[] arguments;
 		private object returnValue;
-		private object[] arguments;
 		private int execIndex = -1;
 		private Type[] genericMethodArguments;
 
@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy
 			IInterceptor[] interceptors,
 			Type targetType,
 			MethodInfo targetMethod,
-			MethodInfo interfMethod,
+			MethodInfo interfaceMethod,
 			object[] arguments)
 		{
 			this.target = target;
@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy
 			this.interceptors = interceptors;
 			this.targetType = targetType;
 			this.targetMethod = targetMethod;
-			this.interfMethod = interfMethod;
+			this.interfaceMethod = interfaceMethod;
 			this.arguments = arguments;
 		}
 
@@ -62,11 +62,11 @@ namespace Castle.DynamicProxy
 			IInterceptor[] interceptors,
 			Type targetType,
 			MethodInfo targetMethod,
-			MethodInfo interfMethod,
+			MethodInfo interfaceMethod,
 			object[] arguments,
 			IInterceptorSelector selector,
 			ref IInterceptor[] methodInterceptors)
-			: this(target, proxy, interceptors, targetType, targetMethod, interfMethod, arguments)
+			: this(target, proxy, interceptors, targetType, targetMethod, interfaceMethod, arguments)
 		{
 			methodInterceptors = SelectMethodInterceptors(selector, methodInterceptors);
 			this.interceptors = methodInterceptors;
@@ -128,9 +128,9 @@ namespace Castle.DynamicProxy
 		{
 			get
 			{
-				if (interfMethod != null)
+				if (interfaceMethod != null)
 				{
-					return interfMethod;
+					return interfaceMethod;
 				}
 				return targetMethod;
 			}

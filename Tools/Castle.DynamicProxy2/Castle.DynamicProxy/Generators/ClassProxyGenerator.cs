@@ -134,7 +134,7 @@ namespace Castle.DynamicProxy.Generators
 			IList<ProxyElementTarget> targets = new List<ProxyElementTarget>();
 
 			// 1.first for the class we're proxying
-			targets.Add(CollectElementsToProxy(new KeyValuePair<Type, object>(targetType, Proxy.Target), emptyInterfaceMapping));
+			targets.Add(CollectElementsToProxy(new KeyValuePair<Type, object>(targetType, Proxy.Target), EmptyInterfaceMapping));
 
 			// 2. then for interfaces
 			foreach (var mapping in typeImplementerMapping)
@@ -148,7 +148,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 				else
 				{
-					targets.Add(CollectElementsToProxy(mapping, emptyInterfaceMapping));
+					targets.Add(CollectElementsToProxy(mapping, EmptyInterfaceMapping));
 				}
 			}
 
@@ -196,8 +196,7 @@ namespace Castle.DynamicProxy.Generators
 					method2Invocation[methodInfo] = BuildInvocationNestedType(emitter,
 					                                                          targetForInvocation,
 					                                                          method,
-					                                                          callback,
-					                                                          GetConstructorVersion(method));
+					                                                          callback);
 					AddFieldToCacheMethodTokenAndStatementsToInitialize(methodInfo, typeInitializer, emitter);
 				}
 			}
@@ -273,7 +272,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return null;
 			}
-			var method = FindImplementingMethod(interfaceMethod, targetType);
+			var method = TypeUtil.FindImplementingMethod(interfaceMethod, targetType);
 			if (method == null)
 			{
 				throw new ProxyGenerationException("Could not find interfaceMethod which implements '" + interfaceMethod +
@@ -300,6 +299,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private bool IsExplicitInterfaceMethodImplementation(MethodBase method)
 		{
+			// NOTE: we assume that method is interface implementation, we only check if it's implemented explicitly
 			return method.IsFinal && method.IsPrivate;
 		}
 
@@ -364,10 +364,10 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder,
-		                                               ArgumentReference arg1, ArgumentReference arg2)
+		                                               ArgumentReference serializationInfo, ArgumentReference streamingContext)
 		{
 			codebuilder.AddStatement(new ExpressionStatement(
-			                         	new MethodInvocationExpression(arg1, SerializationInfoMethods.AddValue_Bool,
+			                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Bool,
 			                         	                               new ConstReference("__delegateToBase").ToExpression(),
 			                         	                               new ConstReference(delegateToBaseGetObjectData ? 1 : 0).
 			                         	                               	ToExpression())));
@@ -379,7 +379,7 @@ namespace Castle.DynamicProxy.Generators
 
 				codebuilder.AddStatement(new ExpressionStatement(
 				                         	new MethodInvocationExpression(baseGetObjectData,
-				                         	                               arg1.ToExpression(), arg2.ToExpression())));
+				                         	                               serializationInfo.ToExpression(), streamingContext.ToExpression())));
 			}
 			else
 			{
@@ -396,7 +396,7 @@ namespace Castle.DynamicProxy.Generators
 				                                                                            members_ref.ToExpression())));
 
 				codebuilder.AddStatement(new ExpressionStatement(
-				                         	new MethodInvocationExpression(arg1, SerializationInfoMethods.AddValue_Object,
+				                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
 				                         	                               new ConstReference("__data").ToExpression(),
 				                         	                               data_ref.ToExpression())));
 			}

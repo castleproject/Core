@@ -16,7 +16,6 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-	using System.Collections;
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.GenInterfaces;
@@ -48,6 +47,34 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(1, proxy.DoSomething(1));
 
 			Assert.AreEqual("DoSomething ", logger.LogContents);
+		}
+
+		[Test]
+		public void Proxy_with_method_with_nested_generic_parameter()
+		{
+			var interceptors = new SetReturnValueInterceptor(null);
+			var proxy =
+				generator.CreateInterfaceProxyWithoutTarget<GenInterfaceWithMethodWithNestedGenericParameter>(interceptors);
+			proxy.Foo<int>(null);
+		}
+
+		[Test]
+		public void Proxy_with_method_with_nested_generic_parameter_by_ref()
+		{
+			var interceptors = new SetReturnValueInterceptor(null);
+			var proxy =
+				generator.CreateInterfaceProxyWithoutTarget<GenInterfaceWithMethodWithNestedGenericParameterByRef>(interceptors);
+			IEnumerable<IComparable<int>> param = null;
+			proxy.Foo<int>(ref param);
+		}
+
+		[Test]
+		public void Proxy_with_method_with_nested_generic_return()
+		{
+			var interceptors = new SetReturnValueInterceptor(null);
+			var proxy =
+				generator.CreateInterfaceProxyWithoutTarget<GenInterfaceWithMethodWithNestedGenericReturn>(interceptors);
+			proxy.Foo<int>();
 		}
 
 #if !MONO

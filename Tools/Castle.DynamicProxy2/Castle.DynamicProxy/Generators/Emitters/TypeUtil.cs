@@ -16,6 +16,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Reflection;
 
 	public abstract class TypeUtil
 	{
@@ -46,6 +48,66 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 			}
 			return interfaces.Keys;
+		}
+
+		public static Type GetClosedParameterType(AbstractTypeEmitter type, Type parameter)
+		{
+			if (parameter.IsGenericTypeDefinition)
+			{
+				return parameter.GetGenericTypeDefinition().MakeGenericType(type.GetGenericArgumentsFor(parameter));
+			}
+
+			if (parameter.IsGenericType)
+			{
+				Type[] arguments = parameter.GetGenericArguments();
+				if (CloseGenericParametersIfAny(type, arguments))
+				{
+					return parameter.GetGenericTypeDefinition().MakeGenericType(arguments);
+				}
+			}
+			
+			if (parameter.IsGenericParameter)
+			{
+				return type.GetGenericArgument(parameter.Name);
+			}
+			if (parameter.IsArray)
+			{
+				var elementType = GetClosedParameterType(type, parameter.GetElementType());
+				return elementType.MakeArrayType();
+			}
+			
+			return parameter;
+		}
+
+		public static MethodInfo FindImplementingMethod(MethodInfo interfaceMethod, Type implementingType)
+		{
+			Type interfaceType = interfaceMethod.DeclaringType;
+			Debug.Assert(interfaceType.IsAssignableFrom(implementingType),
+						 "interfaceMethod.DeclaringType.IsAssignableFrom(implementingType)");
+			Debug.Assert(interfaceType.IsInterface, "interfaceType.IsInterface");
+			InterfaceMapping map = implementingType.GetInterfaceMap(interfaceType);
+			int index = Array.IndexOf(map.InterfaceMethods, interfaceMethod);
+			if (index == -1)
+			{
+				// can this ever happen?
+				return null;
+			}
+			return map.TargetMethods[index];
+		}
+
+		private static bool CloseGenericParametersIfAny(AbstractTypeEmitter emitter, Type[] arguments)
+		{
+			bool hasAnyGenericParameters = false;
+			for (int i = 0; i < arguments.Length; i++)
+			{
+				var newType = GetClosedParameterType(emitter, arguments[i]);
+				if (!ReferenceEquals(newType, arguments[i]))
+				{
+					arguments[i] = newType;
+					hasAnyGenericParameters = true;
+				}
+			}
+			return hasAnyGenericParameters;
 		}
 	}
 }
