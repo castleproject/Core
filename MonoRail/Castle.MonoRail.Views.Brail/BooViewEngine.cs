@@ -277,7 +277,10 @@ namespace Castle.MonoRail.Views.Brail
 			sb.Append("Last accessed variable: ").Append(view.LastVariableAccessed);
 			string msg = sb.ToString();
 			sb.Append("Exception: ").AppendLine(e.ToString());
-			Log(msg);
+			if (logger != null && logger.IsErrorEnabled)
+			{
+				logger.Error(msg, e);
+			}
 			throw new MonoRailException(msg, e);
 		}
 
@@ -321,7 +324,10 @@ namespace Castle.MonoRail.Views.Brail
 					// on another thread here, and exception would kill the application, so we log it 
 					// and continue on. CompileCommonScripts() will only change the global state if it has
 					// successfully compiled the commons scripts directory.
-					Log("Failed to recompile the commons scripts directory! {0}", ex);
+					if(logger != null && logger.IsErrorEnabled)
+					{
+						logger.Error("Failed to recompile the commons scripts directory!", ex);
+					}
 				}
 			}
 			else
