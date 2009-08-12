@@ -19,9 +19,9 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Core;
 	using Castle.Facilities.WcfIntegration.Async;
 	using Castle.Facilities.WcfIntegration.Internal;
-	using Castle.Facilities.WcfIntegration.Proxy;
 	using Castle.Facilities.WcfIntegration.Rest;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.LifecycleConcerns;
 	using Castle.MicroKernel.Registration;
 
 	public class WcfClientExtension : IDisposable
@@ -59,9 +59,6 @@ namespace Castle.Facilities.WcfIntegration
 			AddDefaultChannelBuilders();
 
 			kernel.Register(
-				Component.For<IWcfChannelHolder>()
-					.ImplementedBy<WcfChannelHolder>()
-					.LifeStyle.Transient,
 				Component.For(typeof(IChannelFactoryBuilder<>))
 					.ImplementedBy(typeof(AsynChannelFactoryBuilder<>))
 					.Unless(Component.ServiceAlreadyRegistered)
@@ -75,10 +72,11 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			var clientModel = ResolveClientModel(model);
 
-			if (clientModel != null)
+			if (clientModel != null && model.Implementation == model.Service)
 			{
 				model.CustomComponentActivator = typeof(WcfClientActivator);
 				model.ExtendedProperties[WcfConstants.ClientModelKey] = clientModel;
+				model.LifecycleSteps.Add(LifecycleStepType.Decommission, DisposalConcern.Instance);
 
 				var dependencies = new ExtensionDependencies(model, kernel)
 					.Apply(new WcfEndpointExtensions(WcfExtensionScope.Clients))

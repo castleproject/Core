@@ -33,7 +33,14 @@ namespace Castle.Facilities.WcfIntegration
 
 		public void CleanUp()
 		{
-			channelFactory.Close();
+			try
+			{
+				channelFactory.Close();
+			}
+			catch
+			{
+				// Can't do anything about failed channels.
+			}
 		}
 	}
 }

@@ -76,7 +76,7 @@ namespace Castle.Facilities.WcfIntegration
 
 			try
 			{
-				var channelHolder = Kernel.Resolve<IWcfChannelHolder>(new { channelCreator, burden });
+				var channelHolder = new WcfChannelHolder(channelCreator, burden);
 				return proxyFactory.Create(Kernel, channelHolder, Model, context);
 			}
 			catch (Exception ex)

@@ -230,14 +230,17 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.ActAs(new DefaultClientModel())
 					))
 				{
-					IOperations client1 = clientContainer.Resolve<IOperations>("operations",
-						new { Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2") });
-					IOperations client2 = clientContainer.Resolve<IOperations>("operations",
-						new { Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2") });
-					Assert.AreEqual(28, client1.GetValueFromConstructor());
-					Assert.AreEqual(28, client2.GetValueFromConstructor());
-					clientContainer.Release(client1);
-					clientContainer.Release(client2);
+					for (int i = 0; i < 10; i++)
+					{
+						IOperations client1 = clientContainer.Resolve<IOperations>("operations",
+							new { Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2") });
+						IOperations client2 = clientContainer.Resolve<IOperations>("operations",
+							new { Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2") });
+						Assert.AreEqual(28, client1.GetValueFromConstructor());
+						Assert.AreEqual(28, client2.GetValueFromConstructor());
+						clientContainer.Release(client1);
+						clientContainer.Release(client2);
+					}
 				}
 			}
 		}
