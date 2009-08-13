@@ -48,11 +48,10 @@ namespace Castle.Facilities.Synchronize.Tests
 		int DoWork(int work);
 	}
 
-
 	public interface IWorkerWithOuts : IWorker
 	{
 		[Synchronize]
-		int DoWork(int work, out int passed);
+		int DoWork(int work, ref string batch, out int passed);
 	}
 
 	public class AsynchronousContext : SynchronizationContext
@@ -77,8 +76,9 @@ namespace Castle.Facilities.Synchronize.Tests
 	public class AsynchronousWorker : SimpleWorker, IWorkerWithOuts
 	{
 		[Synchronize]
-		public virtual int DoWork(int work, out int passed)
+		public virtual int DoWork(int work, ref string batch, out int passed)
 		{
+			batch = "foo";
 			passed = work / 2;
 			return work * 2;
 		}
@@ -145,6 +145,17 @@ namespace Castle.Facilities.Synchronize.Tests
 	[Synchronize(typeof(WindowsFormsSynchronizationContext))]
 	public class ClassUsingFormInWindowsContext : ClassUsingForm
 	{
+	}
+
+	[Synchronize]
+	public class ClassUsingFormInAmbientContext
+	{
+		[Synchronize(UseAmbientContext = true)]
+		public virtual int DoWork(Form form)
+		{
+			form.Controls.Add(new Button());
+			return form.Controls.Count;
+		}
 	}
 
 	[Synchronize(typeof(WindowsFormsSynchronizationContext))]

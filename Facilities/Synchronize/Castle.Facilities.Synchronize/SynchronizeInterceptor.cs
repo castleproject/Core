@@ -15,6 +15,7 @@
 namespace Castle.Facilities.Synchronize
 {
 	using System;
+	using System.Linq;
 	using System.ComponentModel;
 	using System.Reflection;
 	using System.Threading;
@@ -34,7 +35,7 @@ namespace Castle.Facilities.Synchronize
 		private SynchronizeMetaInfo metaInfo;
 		private readonly SynchronizeMetaInfoStore metaStore;
 		private readonly InvocationDelegate safeInvokeDelegate = InvokeSafely;
-		[ThreadStatic] private SynchronizationContext activeSyncContext;
+		[ThreadStatic] private static SynchronizationContext activeSyncContext;
 
 		private delegate void InvocationDelegate(IInvocation invocation, Result result);
 
@@ -89,48 +90,54 @@ namespace Castle.Facilities.Synchronize
 			if (metaInfo != null)
 			{
 				IHandler handler = null;
-				MethodInfo methodInfo = invocation.MethodInvocationTarget;
-				SynchronizeContextReference syncContextRef = metaInfo.GetSynchronizedContextFor(methodInfo);
+				SynchronizationContext syncContext = null;
+				SynchronizationContext prevSyncContext = null;
+				var methodInfo = invocation.MethodInvocationTarget;
+				var syncContextRef = metaInfo.GetSynchronizedContextFor(methodInfo);
 
-				if (syncContextRef == null)
+				if (syncContextRef != null)
 				{
-					InvokeSynchronously(invocation);
-					return true;
+					switch (syncContextRef.ReferenceType)
+					{
+						case SynchronizeContextReferenceType.Key:
+							handler = kernel.GetHandler(syncContextRef.ComponentKey);
+							break;
+
+						case SynchronizeContextReferenceType.Interface:
+							handler = kernel.GetHandler(syncContextRef.ServiceType);
+							break;
+					}
+
+					if (handler == null)
+					{
+						throw new ApplicationException("The synchronization context could not be resolved.  Did you forget to register it in the container?");
+					}
+
+					syncContext = handler.Resolve(CreationContext.Empty) as SynchronizationContext;
+
+					if (syncContext == null)
+					{
+						throw new ApplicationException(string.Format("{0} does not implement {1}",
+							syncContextRef, typeof(SynchronizationContext).FullName));
+					}
+
+					prevSyncContext = SynchronizationContext.Current;
 				}
-
-				switch (syncContextRef.ReferenceType)
+				else
 				{
-					case SynchronizeContextReferenceType.Key:
-						handler = kernel.GetHandler(syncContextRef.ComponentKey);
-						break;
-
-					case SynchronizeContextReferenceType.Interface:
-						handler = kernel.GetHandler(syncContextRef.ServiceType);
-						break;
-				}
-
-				if (handler == null)
-				{
-					throw new ApplicationException("The synchronization context could not be resolved");
-				}
-
-				SynchronizationContext syncContext = handler.Resolve(CreationContext.Empty)
-													 as SynchronizationContext;
-
-				if (syncContext == null)
-				{
-					throw new ApplicationException(string.Format("{0} does not implement {1}",
-						syncContextRef, typeof(SynchronizationContext).FullName));
+					syncContext = SynchronizationContext.Current;
 				}
 
 				if (syncContext != activeSyncContext)
 				{
-					SynchronizationContext prevSyncContext = SynchronizationContext.Current;
-
 					try
 					{
-						Result result = CreateResult(invocation);
-						SynchronizationContext.SetSynchronizationContext(syncContext);
+						var result = CreateResult(invocation);
+
+						if (prevSyncContext != null)
+						{
+							SynchronizationContext.SetSynchronizationContext(syncContext);
+						}
 
 						if (syncContext.GetType() == typeof(SynchronizationContext))
 						{
@@ -155,7 +162,10 @@ namespace Castle.Facilities.Synchronize
 					}
 					finally
 					{
-						SynchronizationContext.SetSynchronizationContext(prevSyncContext);
+						if (prevSyncContext != null)
+						{
+							SynchronizationContext.SetSynchronizationContext(prevSyncContext);
+						}
 					}
 				}
 				else
@@ -183,7 +193,7 @@ namespace Castle.Facilities.Synchronize
 
 			if (syncTarget != null)
 			{
-				Result result = CreateResult(invocation);
+				var result = CreateResult(invocation);
 				
 				if (syncTarget.InvokeRequired)
 				{
@@ -221,7 +231,7 @@ namespace Castle.Facilities.Synchronize
 			result = result ?? CreateResult(invocation);
 			if (result != null)
 			{
-				result.SetValue(true, invocation.ReturnValue);
+				CompleteResult(result, true, invocation);
 			}
 		}
 		
@@ -241,7 +251,7 @@ namespace Castle.Facilities.Synchronize
 				try
 				{
 					invocation.Proceed();
-					result.SetValue(false, invocation.ReturnValue);
+					CompleteResult(result, false, invocation);
 				}
 				catch (Exception exception)
 				{
@@ -258,7 +268,8 @@ namespace Castle.Facilities.Synchronize
 		private static Result CreateResult(IInvocation invocation)
 		{
 			Result result = null;
-			Type returnType = invocation.Method.ReturnType;
+			var returnType = invocation.Method.ReturnType;
+			
 			if (returnType != typeof(void))
 			{
 				if (invocation.ReturnValue == null)
@@ -267,8 +278,23 @@ namespace Castle.Facilities.Synchronize
 				}
 				result = new Result();
 			}
+
 			Result.Last = result;
 			return result;
+		}
+
+		/// <summary>
+		/// Completes the result of the invocation.
+		/// </summary>
+		/// <param name="result">The result.</param>
+		/// <param name="synchronously">true if completeed synchronously.</param>
+		/// <param name="invocation">The invocation.</param>
+		private static void CompleteResult(Result result, bool synchronously, IInvocation invocation)
+		{
+			var parameters = invocation.Method.GetParameters();
+			var outs = invocation.Arguments.Where(
+				(a, i) => parameters[i].IsOut || parameters[i].ParameterType.IsByRef);
+			result.SetValues(synchronously, invocation.ReturnValue, outs.ToArray());
 		}
 
 		/// <summary>

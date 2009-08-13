@@ -38,6 +38,11 @@ namespace Castle.Facilities.Synchronize
 		public static readonly String ContextTypeAttribute = "contextType";
 
 		/// <summary>
+		/// Configuration attribute to specify ambient synchronization context.
+		/// </summary>
+		public static readonly String AmbientContextAttribute = "useAmbientContext";
+
+		/// <summary>
 		/// Configuration attribute to specify a custom control proxy hook.
 		/// </summary>
 		public static readonly String ControlProxyHookAttrib = "controlProxyHook";

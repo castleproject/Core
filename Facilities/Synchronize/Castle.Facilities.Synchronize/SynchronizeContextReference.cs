@@ -108,7 +108,7 @@ namespace Castle.Facilities.Synchronize
 		{
 			if (this == obj) return true;
 
-			SynchronizeContextReference other = obj as SynchronizeContextReference;
+			var other = obj as SynchronizeContextReference;
 			if (other == null) return false;
 
 			return refType == other.refType &&

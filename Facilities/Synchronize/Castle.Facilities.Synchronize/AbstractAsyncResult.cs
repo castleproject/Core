@@ -25,8 +25,7 @@ namespace Castle.Facilities.Synchronize
 		private int cleanUp;
 		private int completed;
 		private int invokedCallback;
-		private object asyncState;
-		private readonly AsyncCallback _asyncCallback;
+		private readonly AsyncCallback callback;
 		private bool completedSynchronously;
 		private bool endCalled;
 		private Timeout timeout;
@@ -41,8 +40,8 @@ namespace Castle.Facilities.Synchronize
 		/// <param name="state">The async state</param>
 		protected AbstractAsyncResult(AsyncCallback callback, object state)
 		{
-			asyncState = state;
-			_asyncCallback = callback;
+			AsyncState = state;
+			this.callback = callback;
 			invokedCallback = (callback != null) ? 0 : 1;
 		}
 
@@ -51,11 +50,7 @@ namespace Castle.Facilities.Synchronize
 		/// <summary>
 		/// Gets the asynchournous state.
 		/// </summary>
-		public object AsyncState
-		{
-			get { return asyncState; }
-			protected set { asyncState = value; }
-		}
+		public object AsyncState { get; protected set; }
 
 		/// <summary>
 		/// Determines if the result is available.
@@ -92,7 +87,7 @@ namespace Castle.Facilities.Synchronize
 						new ManualResetEvent(isCompleted != 0), (object)null);
 				}
 
-				ManualResetEvent ev = (ManualResetEvent)waitEvent;
+				var ev = (ManualResetEvent)waitEvent;
 
 				if ((isCompleted == 0) && (completed != 0))
 				{
@@ -134,7 +129,7 @@ namespace Castle.Facilities.Synchronize
 				throw new ArgumentNullException("asyncResult");
 			}
 
-			AbstractAsyncResult result = asyncResult as AbstractAsyncResult;
+			var result = asyncResult as AbstractAsyncResult;
 
 			if (result == null)
 			{
@@ -178,9 +173,9 @@ namespace Castle.Facilities.Synchronize
 				((ManualResetEvent)waitEvent).Set();
 			}
 
-			if ((_asyncCallback != null) && (Interlocked.Increment(ref invokedCallback) == 1))
+			if ((callback != null) && (Interlocked.Increment(ref invokedCallback) == 1))
 			{
-				_asyncCallback(this);
+				callback(this);
 			}
 
 			InternalCleanup();

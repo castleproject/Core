@@ -15,6 +15,7 @@
 namespace Castle.Facilities.Synchronize
 {
 	using System;
+	using System.Threading;
 
 	/// <summary>
 	/// Used to declare that a component wants synchronization.
@@ -48,6 +49,11 @@ namespace Castle.Facilities.Synchronize
 		{
 			interceptorRef = new SynchronizeContextReference(interceptorType);
 		}
+
+		/// <summary>
+		/// Determines if ambient <see cref="SynchronizationContext"/> is used.
+		/// </summary>
+		public bool UseAmbientContext { get; set; }
 
 		/// <summary>
 		/// Gets the synchronization context reference.

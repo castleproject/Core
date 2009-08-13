@@ -1,6 +1,12 @@
 Change history
 --------------
 
+- Support using ambient synchronization context.
+
+- Support out and ref signatures.
+
+- Support standard .NET Async Pattern
+
 - Added SynchrnonousResult
 
 - Added timeout capability

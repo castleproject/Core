@@ -22,7 +22,7 @@ namespace Castle.Facilities.Synchronize
 	/// <summary>
 	/// Maintains the synchronization meta-info for a component.
 	/// </summary>
-	internal class SynchronizeMetaInfo
+	public class SynchronizeMetaInfo
 	{
 		private readonly SynchronizeAttribute defaultSyncAttrib;
 		private readonly Dictionary<MethodInfo, SynchronizeAttribute> method2Att;
@@ -34,7 +34,17 @@ namespace Castle.Facilities.Synchronize
 		public SynchronizeMetaInfo(SynchronizeAttribute defaultSyncAttrib)
 		{
 			this.defaultSyncAttrib = defaultSyncAttrib;
-			method2Att = new Dictionary<MethodInfo, SynchronizeAttribute>();
+			method2Att = new Dictionary<MethodInfo, SynchronizeAttribute>(MatchByMethodHandle.Instance);
+		}
+
+		/// <summary>
+		/// Determines if the method is synchronized.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns>true if synchronized.</returns>
+		public bool Contains(MethodInfo method)
+		{
+			return method2Att.ContainsKey(method);
 		}
 
 		/// <summary>
@@ -48,7 +58,7 @@ namespace Castle.Facilities.Synchronize
 			{
 				throw new FacilityException(
 					String.Format("Method {0} did not specify a synchronization context" +
-					              " and no default was defined.", method));
+								  " and no default was defined.", method));
 			}
 
 			method2Att.Add(method, syncAttrib);
@@ -62,7 +72,7 @@ namespace Castle.Facilities.Synchronize
 		{
 			get
 			{
-				MethodInfo[] methods = new MethodInfo[method2Att.Count];
+				var methods = new MethodInfo[method2Att.Count];
 				method2Att.Keys.CopyTo(methods, 0);
 				return methods;
 			}
@@ -78,7 +88,7 @@ namespace Castle.Facilities.Synchronize
 		{
 			SynchronizeAttribute syncAttrib;
 
-			if (method2Att.TryGetValue(methodInfo, out syncAttrib))
+			if (method2Att.TryGetValue(methodInfo, out syncAttrib) && !syncAttrib.UseAmbientContext)
 			{
 				return syncAttrib.SynchronizeContext ?? defaultSyncAttrib.SynchronizeContext;
 			}
@@ -92,16 +102,16 @@ namespace Castle.Facilities.Synchronize
 		/// <returns>The list of unique synchronization context references.</returns>
 		public IList<SynchronizeContextReference> GetUniqueSynchContextReferences()
 		{
-			List<SynchronizeContextReference> references = new List<SynchronizeContextReference>();
+			var references = new List<SynchronizeContextReference>();
 
 			if (defaultSyncAttrib != null && defaultSyncAttrib.SynchronizeContext != null)
 			{
 				references.Add(defaultSyncAttrib.SynchronizeContext);
 			}
 
-			foreach(SynchronizeAttribute syncAttrib in method2Att.Values)
+			foreach (var syncAttrib in method2Att.Values)
 			{
-				SynchronizeContextReference reference = syncAttrib.SynchronizeContext;
+				var reference = syncAttrib.SynchronizeContext;
 
 				if (reference != null && !references.Contains(reference))
 				{
@@ -111,5 +121,28 @@ namespace Castle.Facilities.Synchronize
 
 			return references.AsReadOnly();
 		}
+
+		#region Nested Class: MatchByMethodHandle
+
+		private class MatchByMethodHandle : IEqualityComparer<MethodInfo>
+		{
+			public static readonly MatchByMethodHandle Instance = new MatchByMethodHandle();
+
+			private MatchByMethodHandle()
+			{
+			}
+
+			public bool Equals(MethodInfo x, MethodInfo y)
+			{
+				return x.MethodHandle.Equals(y.MethodHandle);
+			}
+
+			public int GetHashCode(MethodInfo obj)
+			{
+				return obj.MethodHandle.GetHashCode();
+			}
+		}
+
+		#endregion
 	}
 }

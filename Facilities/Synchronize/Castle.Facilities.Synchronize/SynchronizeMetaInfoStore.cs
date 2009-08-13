@@ -24,7 +24,7 @@ namespace Castle.Facilities.Synchronize
 	/// <summary>
 	/// Maintains the synchronization meta-info for all components.
 	/// </summary>
-	internal class SynchronizeMetaInfoStore
+	public class SynchronizeMetaInfoStore
 	{
 		private readonly IConversionManager converter;
 
@@ -53,10 +53,8 @@ namespace Castle.Facilities.Synchronize
 		/// <returns>The corresponding meta-info.</returns>
 		public SynchronizeMetaInfo CreateMetaFromType(Type implementation)
 		{
-			SynchronizeAttribute syncAttrib = (SynchronizeAttribute)
-			                                  implementation.GetCustomAttributes(true)[0];
-
-			SynchronizeMetaInfo metaInfo = new SynchronizeMetaInfo(syncAttrib);
+			var syncAttrib = (SynchronizeAttribute) implementation.GetCustomAttributes(true)[0];
+			var metaInfo = new SynchronizeMetaInfo(syncAttrib);
 
 			PopulateMetaInfoFromType(metaInfo, implementation);
 
@@ -79,9 +77,9 @@ namespace Castle.Facilities.Synchronize
 				return;
 			}
 
-			MethodInfo[] methods = implementation.GetMethods(MethodBindingFlags);
+			var methods = implementation.GetMethods(MethodBindingFlags);
 
-			foreach(MethodInfo method in methods)
+			foreach (MethodInfo method in methods)
 			{
 				object[] atts = method.GetCustomAttributes(typeof(SynchronizeAttribute), true);
 
@@ -102,9 +100,8 @@ namespace Castle.Facilities.Synchronize
 		/// <returns>The corresponding meta-info.</returns>
 		public SynchronizeMetaInfo CreateMetaInfoFromConfig(Type implementation, IConfiguration config)
 		{
-			SynchronizeAttribute syncAttrib = CreateAttributeFromConfig(config);
-
-			SynchronizeMetaInfo metaInfo = new SynchronizeMetaInfo(syncAttrib);
+			var syncAttrib = CreateAttributeFromConfig(config);
+			var metaInfo = new SynchronizeMetaInfo(syncAttrib);
 
 			Register(implementation, metaInfo);
 
@@ -119,13 +116,13 @@ namespace Castle.Facilities.Synchronize
 		/// <param name="config">The config.</param>
 		public void PopulateMetaFromConfig(Type implementation, MethodInfo[] methods, IConfiguration config)
 		{
-			SynchronizeMetaInfo metaInfo = GetMetaFor(implementation);
+			var metaInfo = GetMetaFor(implementation);
 
 			if (metaInfo != null)
 			{
-				foreach(MethodInfo method in methods)
+				foreach (MethodInfo method in methods)
 				{
-					SynchronizeAttribute syncAttrib = CreateAttributeFromConfig(config);
+					var syncAttrib = CreateAttributeFromConfig(config);
 					metaInfo.Add(method, syncAttrib);
 				}
 			}
@@ -164,7 +161,7 @@ namespace Castle.Facilities.Synchronize
 
 			if (config != null)
 			{
-				String contextRef = config.Attributes[Constants.ContextRefAttribute];
+				var contextRef = config.Attributes[Constants.ContextRefAttribute];
 
 				if (contextRef != null)
 				{
@@ -172,13 +169,21 @@ namespace Castle.Facilities.Synchronize
 				}
 				else
 				{
-					String contextType = config.Attributes[Constants.ContextTypeAttribute];
+					var contextType = config.Attributes[Constants.ContextTypeAttribute];
 
 					if (contextType != null)
 					{
-						Type type = (Type) converter.PerformConversion(contextType, typeof(Type));
+						Type type = (Type)converter.PerformConversion(contextType, typeof(Type));
 						syncAttrib = new SynchronizeAttribute(type);
 					}
+				}
+
+				var useAmbientContext = config.Attributes[Constants.AmbientContextAttribute];
+
+				if (useAmbientContext != null)
+				{
+					syncAttrib = syncAttrib ?? new SynchronizeAttribute();
+					syncAttrib.UseAmbientContext = (bool)converter.PerformConversion(useAmbientContext, typeof(bool));
 				}
 			}
 

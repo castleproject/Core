@@ -101,7 +101,7 @@ namespace Castle.Facilities.Synchronize
 			if (model.Configuration != null &&
 			    "true" == model.Configuration.Attributes[Constants.SynchronizedAttrib])
 			{
-				IConfiguration methodsNode = model.Configuration.Children[ObtainNodeName()];
+				var methodsNode = model.Configuration.Children[ObtainNodeName()];
 
 				metaStore.CreateMetaInfoFromConfig(model.Implementation, methodsNode);
 
@@ -154,7 +154,7 @@ namespace Castle.Facilities.Synchronize
 		/// <param name="model">The model.</param>
 		private void ApplySynchronization(ComponentModel model)
 		{
-			ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
+			var options = ProxyUtil.ObtainProxyOptions(model, true);
 			options.UseSingleInterfaceProxy = true;
 
 			model.Dependencies.Add(new DependencyModel(DependencyType.Service, null,
@@ -162,11 +162,13 @@ namespace Castle.Facilities.Synchronize
 
 			model.Interceptors.Add(new InterceptorReference(typeof(SynchronizeInterceptor)));
 
-			SynchronizeMetaInfo metaInfo = metaStore.GetMetaFor(model.Implementation);
+			var metaInfo = metaStore.GetMetaFor(model.Implementation);
 
 			if (metaInfo != null)
 			{
-				foreach(SynchronizeContextReference reference in metaInfo.GetUniqueSynchContextReferences())
+				options.Selector = new SynchronizeInterceptorSelector(metaInfo, options.Selector);
+
+				foreach(var reference in metaInfo.GetUniqueSynchContextReferences())
 				{
 					model.Dependencies.Add(new DependencyModel(DependencyType.Service, reference.ComponentKey,
 					                                           reference.ServiceType, false));
@@ -183,7 +185,7 @@ namespace Castle.Facilities.Synchronize
 		/// </returns>
 		private bool ValidateSynchronization(ComponentModel model)
 		{
-			SynchronizeMetaInfo meta = metaStore.GetMetaFor(model.Implementation);
+			var meta = metaStore.GetMetaFor(model.Implementation);
 
 			if (meta == null)
 			{
@@ -195,9 +197,9 @@ namespace Castle.Facilities.Synchronize
 				return true;
 			}
 
-			List<String> methodCulprits = new List<String>();
+			var methodCulprits = new List<String>();
 
-			foreach(MethodInfo method in meta.Methods)
+			foreach (MethodInfo method in meta.Methods)
 			{
 				if (!method.IsVirtual)
 				{
@@ -207,12 +209,12 @@ namespace Castle.Facilities.Synchronize
 
 			if (methodCulprits.Count != 0)
 			{
-				String[] methodNames = methodCulprits.ToArray();
+				var methodNames = methodCulprits.ToArray();
 
-				String message = String.Format("The class {0} wants to use synchronize interception, " +
-				                               "however the methods must be marked as virtual in order to do so. Please correct " +
-				                               "the following methods: {1}", model.Implementation.FullName,
-				                               String.Join(", ", methodNames));
+				var message = String.Format("The class {0} wants to use synchronize interception, " +
+				                            "however the methods must be marked as virtual in order to do so. Please correct " +
+				                            "the following methods: {1}", model.Implementation.FullName,
+				                            String.Join(", ", methodNames));
 
 				throw new FacilityException(message);
 			}

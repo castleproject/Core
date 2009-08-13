@@ -53,7 +53,7 @@ namespace Castle.Facilities.Synchronize
 			// The marshal control is used to ensure that all controls
 			// are created in the main UI thread context.
 
-			Control marshalingControl = Model.ExtendedProperties[Constants.MarshalControl] as Control;
+			var marshalingControl = Model.ExtendedProperties[Constants.MarshalControl] as Control;
 
 			if (marshalingControl != null && marshalingControl.InvokeRequired)
 			{
@@ -102,7 +102,7 @@ namespace Castle.Facilities.Synchronize
 
 		private static void EnsureHandleCreated(object component)
 		{
-			Control control = (Control)GetUnproxiedInstance(component);
+			var control = (Control)GetUnproxiedInstance(component);
 			ControlUtils.EnsureHandleCreated(control);			
 		}
 

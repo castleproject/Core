@@ -46,6 +46,7 @@ namespace Castle.Facilities.Synchronize.Tests
 							.Activator<DummyFormActivator>(),
 						  Component.For<IDummyForm>().ImplementedBy<DummyForm>(),
 						  Component.For<ClassUsingFormInWindowsContext>(),
+						  Component.For<ClassUsingFormInAmbientContext>(),
 						  Component.For<SyncClassWithoutContext>(),
 						  Component.For<SyncClassOverrideContext>(),
 						  Component.For(typeof(IClassUsingContext<>)).ImplementedBy(typeof(ClassUsingContext<>)),
@@ -188,11 +189,27 @@ namespace Castle.Facilities.Synchronize.Tests
 		}
 
 		[Test]
+		public void AddControl_DifferentThreadInContextUsingConfiguration_UsesAmbientContext()
+		{
+			DummyForm form = new DummyForm();
+			ClassUsingFormInAmbientContext client = container.Resolve<ClassUsingFormInAmbientContext>();
+			ExecuteInThread(delegate 
+			{
+				using (var winCtx = new WindowsFormsSynchronizationContext())
+				{
+					SynchronizationContext.SetSynchronizationContext(winCtx);
+					client.DoWork(form); 
+				}
+			});
+			Assert.IsNull(uncaughtException, "Expected no exception");
+		}
+
+		[Test]
 		public void GetResultOf_UsingSynchronousContext_WorksFine()
 		{
 			IWorker worker = container.Resolve<IWorker>();
 			Result<int> remaining = Result.Of(worker.DoWork(2));
-			Assert.AreEqual(4, remaining);
+			Assert.AreEqual(4, remaining.End());
 		}
 
 		[Test]
@@ -200,9 +217,9 @@ namespace Castle.Facilities.Synchronize.Tests
 		{
 			bool called = false;
 			IWorker worker = container.Resolve<IWorker>();
-			Result.Of(worker.DoWork(2), remaining =>
+			Result<int> result = Result.Of(worker.DoWork(2), (Result<int> remaining) =>
 			{
-				Assert.AreEqual(4, remaining);
+				Assert.AreEqual(4, remaining.End());
 				Assert.AreSame(worker, remaining.AsyncState);
 				Assert.IsTrue(remaining.CompletedSynchronously);
 				called = true;
@@ -215,7 +232,7 @@ namespace Castle.Facilities.Synchronize.Tests
 		{
 			IWorkerWithOuts worker = container.Resolve<IWorkerWithOuts>();
 			Result<int> remaining = Result.Of(worker.DoWork(5));
-			Assert.AreEqual(10, remaining);
+			Assert.AreEqual(10, remaining.End());
 			Assert.IsFalse(remaining.CompletedSynchronously);
 		}
 
@@ -226,28 +243,48 @@ namespace Castle.Facilities.Synchronize.Tests
 			Result<int> remaining = Result.Of(worker.DoWork(5));
 			ExecuteInThread(delegate
 			{
-				Thread.Sleep(3000);
+				Thread.Sleep(1000);
 				worker.Ready();
 			});
-			Assert.AreEqual(10, remaining);
+			Assert.AreEqual(10, remaining.End());
 			Assert.IsFalse(remaining.CompletedSynchronously);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void GetResultOf_UsingAsyncSynchronousContextWithOuts_CallsCallback()
 		{
 			int passed;
+			string batch = "bar";
 			var called = new ManualResetEvent(false);
 			ManualWorker worker = container.Resolve<ManualWorker>();
-			Result<int> result = Result.Of(worker.DoWork(20, out passed), remaining =>
+			Result<int> result = Result.Of(worker.DoWork(20, ref batch, out passed), 
+				(Result<int> remaining) =>
 			{
-				Assert.AreEqual(40, remaining);
+				Assert.AreEqual(40, remaining.End(out batch, out passed));
 				Assert.AreEqual(10, passed);
+				Assert.AreEqual("foo", batch);
 				Assert.AreSame(worker, remaining.AsyncState);
 				Assert.IsFalse(remaining.CompletedSynchronously);
 				called.Set();
 			}, worker);
-			Assert.IsTrue(called.WaitOne());
+			Assert.IsTrue(called.WaitOne(5000, false));
+		}
+
+		[Test]
+		public void GetResultOf_UsingAsyncSynchronousContextWithOuts_CanAccessOuts()
+		{
+			int passed;
+			string batch = "bar";
+			var called = new ManualResetEvent(false);
+			ManualWorker worker = container.Resolve<ManualWorker>();
+			Result<int> result = Result.Of(worker.DoWork(20, ref batch, out passed));
+			Assert.AreEqual(40, result.End(out batch));
+			Assert.AreEqual("foo", batch);
+			Assert.AreEqual(2, result.OutValues.Length);
+			Assert.AreEqual(1, result.UnboundOutValues.Length);
+			Assert.AreEqual("foo", result.GetOutArg<string>(0));
+			Assert.AreEqual(10, result.GetOutArg<int>(1));
+			Assert.AreEqual(10, result.GetUnboundOutArg<int>(0));
 		}
 
 		[Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Bad Bad Bad...")]
@@ -259,7 +296,7 @@ namespace Castle.Facilities.Synchronize.Tests
 			{
 				worker.Failed(new ArgumentException("Bad Bad Bad..."));
 			});
-			Assert.AreEqual(10, remaining);
+			Assert.AreEqual(10, remaining.End());
 		}
 
 		[Test, ExpectedException(typeof(InvalidOperationException))]

@@ -85,11 +85,13 @@
     <Compile Include="ControlComponentInspector.cs" />
     <Compile Include="ControlUtils.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="Result.Void.cs" />
     <Compile Include="SynchronizeAttribute.cs" />
     <Compile Include="SynchronizeComponentInspector.cs" />
     <Compile Include="SynchronizeContextReference.cs" />
     <Compile Include="SynchronizeFacility.cs" />
     <Compile Include="SynchronizeInterceptor.cs" />
+    <Compile Include="SynchronizeInterceptorSelector.cs" />
     <Compile Include="SynchronizeMetaInfo.cs" />
     <Compile Include="SynchronizeMetaInfoStore.cs" />
     <Compile Include="SynchronousResult.cs" />

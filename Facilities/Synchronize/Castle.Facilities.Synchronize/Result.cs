@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,191 +16,7 @@ namespace Castle.Facilities.Synchronize
 {
 	using System;
 	using System.Threading;
-using System.Collections.Generic;
-
-	/// <summary>
-	/// Represents the result of an asynchronous operation.
-	/// </summary>
-	public class Result : AbstractAsyncResult
-	{
-		private object value;
-		private ResultDelegate resultCallback;
-		private object guard = new object();
-
-		[ThreadStatic]
-		internal static Result Last = null;
-
-		/// <summary>
-		/// Initializes the <see cref="Result"/>.
-		/// </summary>
-		internal Result() : base(null, null)
-		{
-			value = guard;
-		}
-
-		/// <summary>
-		/// Initializes the <see cref="Result"/> with value.
-		/// </summary>
-		/// <param name="value">The result value.</param>
-		internal Result(object value) : this()
-		{
-			SetValue(true, value);
-		}
-
-		/// <summary>
-		/// Gets the result value, blocking if not available yet.
-		/// </summary>
-		public object Value
-		{
-			get 
-			{
-				Interlocked.CompareExchange(ref value, End(this) , guard);
-				return value;
-			}
-		}
-
-		/// <summary>
-		/// Completes the asynchronous request.
-		/// </summary>
-		/// <param name="synchronously">true if synchronously.</param>
-		/// <param name="result">The result.</param>
-		internal void SetValue(bool synchronously, object result)
-		{
-			lock (guard)
-			{
-				Complete(synchronously, result);
-
-				if (resultCallback != null)
-				{
-					resultCallback(this);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Completes the asynchronous request with exception.
-		/// </summary>
-		/// <param name="synchronously">true if synchronously.</param>
-		/// <param name="exception">The exception.</param>
-		internal void SetException(bool synchronously, Exception exception)
-		{
-			lock (guard)
-			{
-				Complete(synchronously, exception);
-
-				if (resultCallback != null)
-				{
-					resultCallback(this);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Set the asynchronous callback information.
-		/// </summary>
-		/// <param name="callback">The callback.</param>
-		/// <param name="state">The async state.</param>
-		internal void SetCallbackInfo(ResultDelegate callback, object state)
-		{
-			if (callback != null) lock (guard)
-			{
-				AsyncState = state;
-				resultCallback = callback;
-
-				if (IsCompleted)
-				{
-					callback(this);
-				}
-			}
-		}
-
-		private IEnumerable<object> GetValue()
-		{
-			object value = End(this);
-			while (true) yield return value;
-		}
-
-		/// <summary>
-		/// Gets the result of the last called made.
-		/// </summary>
-		/// <param name="action">The action to execute.</param>
-		/// <returns>The result handle.</returns>
-		public static Result Of(Action action)
-		{
-			action();
-			return ResetLastResult();
-		}
-
-		/// <summary>
-		/// Gets the result of the last called made.
-		/// </summary>
-		/// <param name="action">The action to execute.</param>
-		/// <param name="callback">The callback.</param>
-		/// <param name="state">The async state.</param>
-		/// <returns>The result handle.</returns>
-		public static Result Of(Action action, ResultDelegate callback, object state)
-		{
-			Result result = Result.Of(action);
-			result.SetCallbackInfo(callback, state);
-			return result;
-		}
-
-		/// <summary>
-		/// Gets the result of the last called made.
-		/// </summary>
-		/// <typeparam name="T">The result type.</typeparam>
-		/// <param name="ignored"></param>
-		/// <returns>The result handle.</returns>
-		public static Result<T> Of<T>(T ignored)
-		{
-			return new Result<T>(ResetLastResult());
-		}
-
-		/// <summary>
-		/// Gets the result of the last called made.
-		/// </summary>
-		/// <typeparam name="T">The result type.</typeparam>
-		/// <param name="ignored"></param>
-		/// <param name="callback">The callback.</param>
-		/// <param name="state">The async state.</param>
-		/// <returns>The result handle.</returns>
-		public static Result<T> Of<T>(T ignored, ResultDelegate<T> callback, object state)
-		{
-			Result<T> result = Result.Of(ignored);
-			result.SetCallbackInfo(callback, state);
-			return result;
-		}
-
-		private static Result ResetLastResult()
-		{
-			Result last = Result.Last;
-
-			if (last == null)
-			{
-				throw new InvalidOperationException(
-					"The result is only available for synchronized methods.");
-			}
-
-			Result.Last = null;
-			return last;
-		}
-	}
-
-	/// <summary>
-	/// Delegate called when results are available.
-	/// </summary>
-	/// <param name="result">The result.</param>
-	public delegate void ResultDelegate(Result result);
-
-	/// <summary>
-	/// Delegate called when typed results are available.
-	/// </summary>
-	/// <typeparam name="T">The result type.</typeparam>
-	/// <param name="result">The result.</param>
-	public delegate void ResultDelegate<T>(Result<T> result);
-
-	#region Typed Result
-
+	
 	/// <summary>
 	/// Represents the typed result of an asynchronous operation.
 	/// </summary>
@@ -215,34 +31,195 @@ using System.Collections.Generic;
 		}
 
 		/// <summary>
-		/// Gets the result value, blocking if not available yet.
+		/// Gets the output values.
 		/// </summary>
-		public T Value
+		public object[] OutValues
 		{
-			get { return (T) result.Value; }
+			get { return result.OutValues; }
 		}
 
 		/// <summary>
-		/// Set the asynchronous callback information.
+		/// Gets the unbound output values.
 		/// </summary>
-		/// <param name="callback">The callback.</param>
-		/// <param name="state">The async state.</param>
-		internal void SetCallbackInfo(ResultDelegate<T> callback, object state)
+		public object[] UnboundOutValues
 		{
-			if (callback != null)
-			{
-				result.SetCallbackInfo(delegate { callback(this); }, state);
-			}
+			get { return result.UnboundOutValues; }
 		}
 
 		/// <summary>
-		/// Provide implicit conversion to the actual value.
+		///  Waits for the result to complete.
 		/// </summary>
-		/// <param name="result">The result holder.</param>
-		/// <returns>The actual result value.</returns>
-		public static implicit operator T(Result<T> result)
+		/// <returns>The result value.</returns>
+		public T End()
 		{
-			return result != null ? result.Value : default(T);
+			return (T)AbstractAsyncResult.End(result);
+		}
+
+		/// <summary>
+		/// Waits for the result to complete.
+		/// </summary>
+		/// <param name="result">The asynchronous result.</param>
+		/// <returns>The result value.</returns>
+		public static T End(IAsyncResult result)
+		{
+			return new Result<T>(Result.EnsureResult(result)).End();
+		}
+
+		/// <summary>
+		/// Waits for the result to complete with output.
+		/// </summary>
+		/// <typeparam name="TOut1">The output type.</typeparam>
+		/// <param name="out1">The output value.</param>
+		/// <returns>The result value.</returns>
+		public T End<TOut1>(out TOut1 out1)
+		{
+			T returnValue = End();
+			out1 = (TOut1)result.ExtractOutOfType(typeof(TOut1), 0);
+			result.CreateUnboundOutValues(1);
+			return returnValue;
+		}
+
+		/// <summary>
+		/// Waits for the result to complete with outputs.
+		/// </summary>
+		/// <typeparam name="TOut1">The output type.</typeparam>
+		/// <param name="result">The asynchronous result.</param>
+		/// <param name="out1">The output value.</param>
+		/// <returns>The result value.</returns>
+		public static T End<TOut1>(IAsyncResult result, out TOut1 out1)
+		{
+			return new Result<T>(Result.EnsureResult(result)).End(out out1);
+		}
+
+		/// <summary>
+		///  Waits for the result to complete with outputs.
+		/// </summary>
+		/// <typeparam name="TOut1">The first output type.</typeparam>
+		/// <typeparam name="TOut2">The first output type.</typeparam>
+		/// <param name="out1">The first output type.</param>
+		/// <param name="out2">The second output value.</param>
+		/// <returns>The result value.</returns>
+		public T End<TOut1, TOut2>(out TOut1 out1, out TOut2 out2)
+		{
+			T returnValue = End();
+			out1 = (TOut1)result.ExtractOutOfType(typeof(TOut1), 0);
+			out2 = (TOut2)result.ExtractOutOfType(typeof(TOut2), 1);
+			result.CreateUnboundOutValues(2);
+			return returnValue;
+		}
+
+		/// <summary>
+		/// Waits for the result to complete with outputs.
+		/// </summary>
+		/// <typeparam name="TOut1">The first output type.</typeparam>
+		/// <typeparam name="TOut2">The first output type.</typeparam>
+		/// <param name="result">The asynchronous result.</param>
+		/// <param name="out1">The first output type.</param>
+		/// <param name="out2">The second output value.</param>
+		/// <returns>The result value.</returns>
+		public static T End<TOut1, TOut2>(IAsyncResult result, out TOut1 out1, out TOut2 out2)
+		{
+			return new Result<T>(Result.EnsureResult(result)).End(out out1, out out2);
+		}
+
+		/// <summary>
+		/// Waits for the result to complete with outputs.
+		/// </summary>
+		/// <typeparam name="TOut1">The first output type.</typeparam>
+		/// <typeparam name="TOut2">The second output type.</typeparam>
+		/// <typeparam name="TOut3">The third output type.</typeparam>
+		/// <param name="out1">The first output type.</param>
+		/// <param name="out2">The second output type.</param>
+		/// <param name="out3">The third output type.</param>
+		/// <returns>The result value.</returns>
+		public T End<TOut1, TOut2, TOut3>(out TOut1 out1, out TOut2 out2, out TOut3 out3)
+		{
+			T returnValue = End();
+			out1 = (TOut1)result.ExtractOutOfType(typeof(TOut1), 0);
+			out2 = (TOut2)result.ExtractOutOfType(typeof(TOut2), 1);
+			out3 = (TOut3)result.ExtractOutOfType(typeof(TOut3), 2);
+			result.CreateUnboundOutValues(3);
+			return returnValue;
+		}
+
+		/// <summary>
+		/// Waits for the result to complete with outputs.
+		/// </summary>
+		/// <typeparam name="TOut1">The first output type.</typeparam>
+		/// <typeparam name="TOut2">The second output type.</typeparam>
+		/// <typeparam name="TOut3">The third output type.</typeparam>
+		/// <param name="result">The asynchronous result.</param>
+		/// <param name="out1">The first output type.</param>
+		/// <param name="out2">The second output type.</param>
+		/// <param name="out3">The third output type.</param>
+		/// <returns>The result value.</returns>
+		public static T End<TOut1, TOut2, TOut3>(IAsyncResult result, out TOut1 out1, out TOut2 out2, out TOut3 out3)
+		{
+			return new Result<T>(Result.EnsureResult(result)).End(out out1, out out2, out out3);
+		}
+
+		/// <summary>
+		/// Waits for the result to complete with outputs.
+		/// </summary>
+		/// <typeparam name="TOut1">The first output type.</typeparam>
+		/// <typeparam name="TOut2">The second output type.</typeparam>
+		/// <typeparam name="TOut3">The third output type.</typeparam>
+		/// <typeparam name="TOut4">The fourth output type.</typeparam>
+		/// <param name="out1">The first output type.</param>
+		/// <param name="out2">The second output type.</param>
+		/// <param name="out3">The third output type.</param>
+		/// <param name="out4">The fourth output value</param>
+		/// <returns>The result value.</returns>
+		public T End<TOut1, TOut2, TOut3, TOut4>(out TOut1 out1, out TOut2 out2, out TOut3 out3, out TOut4 out4)
+		{
+			T returnValue = End();
+			out1 = (TOut1)result.ExtractOutOfType(typeof(TOut1), 0);
+			out2 = (TOut2)result.ExtractOutOfType(typeof(TOut2), 1);
+			out3 = (TOut3)result.ExtractOutOfType(typeof(TOut3), 2);
+			out4 = (TOut4)result.ExtractOutOfType(typeof(TOut4), 3);
+			result.CreateUnboundOutValues(4);
+			return returnValue;
+		}
+
+		/// <summary>
+		/// Waits for the result to complete with outputs.
+		/// </summary>
+		/// <typeparam name="TOut1">The first output type.</typeparam>
+		/// <typeparam name="TOut2">The second output type.</typeparam>
+		/// <typeparam name="TOut3">The third output type.</typeparam>
+		/// <typeparam name="TOut4">The fourth output type.</typeparam>
+		/// <param name="result">The asynchronous result.</param>
+		/// <param name="out1">The first output type.</param>
+		/// <param name="out2">The second output type.</param>
+		/// <param name="out3">The third output type.</param>
+		/// <param name="out4">The fourth output value</param>
+		/// <returns>The result value.</returns>
+		public T End<TOut1, TOut2, TOut3, TOut4>(IAsyncResult result, out TOut1 out1, out TOut2 out2, 
+												 out TOut3 out3, out TOut4 out4)
+		{
+			return new Result<T>(Result.EnsureResult(result)).End(out out1, out out2, out out3, out out4);
+		}
+
+		/// <summary>
+		/// Gets the output argument at index <paramref name="index"/>.
+		/// </summary>
+		/// <typeparam name="TOut">The output type..</typeparam>
+		/// <param name="index">The output index.</param>
+		/// <returns>The output value.</returns>
+		public TOut GetOutArg<TOut>(int index)
+		{
+			return result.GetOutArg<TOut>(index);
+		}
+
+		/// <summary>
+		/// Gets the unbound output argument at index <paramref name="index"/>.
+		/// </summary>
+		/// <typeparam name="TOut">The output type.</typeparam>
+		/// <param name="index">The output index.</param>
+		/// <returns>The output value.</returns>
+		public TOut GetUnboundOutArg<TOut>(int index)
+		{
+			return result.GetUnboundOutArg<TOut>(index);
 		}
 
 		#region IAsyncResult Members
@@ -280,7 +257,10 @@ using System.Collections.Generic;
 		}
 
 		#endregion
-	}
 
-	#endregion
+		internal void SetCallbackInfo(AsyncCallback callback, object state)
+		{
+			result.SetCallbackInfo(callback, state);
+		}
+	}
 }

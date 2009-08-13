@@ -92,14 +92,14 @@ namespace Castle.Facilities.Synchronize
 
 		private void ConfigureProxyOptions(ComponentModel model)
 		{
-			ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
+			var options = ProxyUtil.ObtainProxyOptions(model, true);
 			options.Hook = controlProxyHook;
 		}
 
 		private static void RegisterWindowsFormsSynchronizationContext(IKernel kernel)
 		{
-			WindowsFormsSynchronizationContext winFormsSyncCtx =
-				WindowsFormsSynchronizationContext.Current as WindowsFormsSynchronizationContext;
+			var winFormsSyncCtx = WindowsFormsSynchronizationContext.Current 
+				as WindowsFormsSynchronizationContext;
 
 			if (winFormsSyncCtx != null)
 			{
@@ -117,8 +117,7 @@ namespace Castle.Facilities.Synchronize
 
 				if (hookAttrib != null)
 				{
-					ITypeConverter converter = (ITypeConverter)
-					                           kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
+					var converter = (ITypeConverter)kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 
 					Type hookType = (Type) converter.PerformConversion(hookAttrib, typeof(Type));
 
