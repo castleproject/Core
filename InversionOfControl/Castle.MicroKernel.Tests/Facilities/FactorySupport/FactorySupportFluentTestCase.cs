@@ -126,5 +126,37 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
                 );
             Assert.IsInstanceOf(typeof(FerrariProvider), kernel.Resolve<ICarProvider>());
         }
+
+        [Test]
+        public void RegisterWithFactoryMethodNamed()
+        {
+            kernel.Register(
+                Component.For<ICarProvider>()
+                    .UsingFactoryMethod(() => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
+                    .Named("ferrariProvider"),
+                Component.For<ICarProvider>()
+                    .UsingFactoryMethod(() => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
+                    .Named("hondaProvider")
+                );
+
+            Assert.IsInstanceOf(typeof(HondaProvider), kernel.Resolve<ICarProvider>("hondaProvider"));
+            Assert.IsInstanceOf(typeof(FerrariProvider), kernel.Resolve<ICarProvider>("ferrariProvider"));
+        }
+
+        [Test]
+        public void RegisterWithFactoryMethodAndKernelNamed()
+        {
+            kernel.Register(
+                Component.For<ICarProvider>()
+                    .UsingFactoryMethod(k => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.MrMoneyBags }))
+                    .Named("ferrariProvider"),
+                Component.For<ICarProvider>()
+                    .UsingFactoryMethod(k => new AbstractCarProviderFactory().Create(new User { FiscalStability = FiscalStability.DirtFarmer }))
+                    .Named("hondaProvider")
+                );
+
+            Assert.IsInstanceOf(typeof(HondaProvider), kernel.Resolve<ICarProvider>("hondaProvider"));
+            Assert.IsInstanceOf(typeof(FerrariProvider), kernel.Resolve<ICarProvider>("ferrariProvider"));
+        }
 	}
 }

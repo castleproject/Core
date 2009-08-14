@@ -758,7 +758,7 @@ namespace Castle.MicroKernel.Registration
         /// <returns></returns>
         public ComponentRegistration<S> UsingFactoryMethod<T>(Function<T> factoryMethod) where T: S
         {
-            string factoryName = typeof(GenericFactory<T>).FullName;
+            string factoryName = Guid.NewGuid().ToString();
             additionalRegistrations.Add(Component.For<GenericFactory<T>>().Named(factoryName)
                 .Instance(new GenericFactory<T>(factoryMethod)));
             ConfigureFactoryWithId(factoryName);
@@ -774,7 +774,7 @@ namespace Castle.MicroKernel.Registration
         /// <returns></returns>
         public ComponentRegistration<S> UsingFactoryMethod<T>(Converter<IKernel, T> factoryMethod) where T : S 
         {
-            string factoryName = typeof(GenericFactory<T>).FullName;
+            string factoryName = Guid.NewGuid().ToString();
             string factoryMethodName = Guid.NewGuid().ToString();
             additionalRegistrations.Add(Component.For<KernelToT<T>>().Named(factoryMethodName)
                 .Instance(new KernelToT<T>(factoryMethod)));
