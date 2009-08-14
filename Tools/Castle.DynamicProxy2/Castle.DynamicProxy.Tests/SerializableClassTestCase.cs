@@ -84,7 +84,7 @@ namespace Castle.DynamicProxy.Tests
 
 			DateTime current = proxy.Current;
 
-			MySerializableClass2 otherProxy = (MySerializableClass2) SerializeAndDeserialize(proxy);
+			MySerializableClass2 otherProxy = SerializeAndDeserialize(proxy);
 
 			Assert.AreEqual(current, otherProxy.Current);
 		}
@@ -161,11 +161,13 @@ namespace Castle.DynamicProxy.Tests
 
 		public static T SerializeAndDeserialize<T>(T proxy)
 		{
-			MemoryStream stream = new MemoryStream();
-			BinaryFormatter formatter = new BinaryFormatter();
-			formatter.Serialize(stream, proxy);
-			stream.Position = 0;
-			return (T) formatter.Deserialize(stream);
+			using(var stream = new MemoryStream())
+			{
+				var formatter = new BinaryFormatter();
+				formatter.Serialize(stream, proxy);
+				stream.Position = 0;
+				return (T)formatter.Deserialize(stream);
+			}
 		}
 
 		[Serializable]

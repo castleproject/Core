@@ -46,7 +46,6 @@ namespace Castle.DynamicProxy.Generators
 		protected static readonly InterfaceMapping EmptyInterfaceMapping = new InterfaceMapping { InterfaceMethods = new MethodInfo[0] };
 
 		private readonly ModuleScope scope;
-		private readonly IList<MethodInfo> methodsToSkip = new List<MethodInfo>();
 		private readonly Dictionary<Type, FieldReference> interface2MixinFieldReference = new Dictionary<Type, FieldReference>();
 		private readonly Dictionary<MethodInfo, FieldReference> method2TokenField = new Dictionary<MethodInfo, FieldReference>();
 		private int nestedCounter, callbackCounter;
@@ -56,8 +55,8 @@ namespace Castle.DynamicProxy.Generators
 		private ProxyGenerationOptions proxyGenerationOptions;
 
 		protected readonly Type targetType;
+		protected readonly IList<MethodInfo> methodsToSkip = new List<MethodInfo>();
 		protected readonly Dictionary<MethodInfo, NestedClassEmitter> method2Invocation = new Dictionary<MethodInfo, NestedClassEmitter>();
-		protected ConstructorInfo serializationConstructor;
 
 		protected BaseProxyGenerator(ModuleScope scope, Type targetType)
 		{
@@ -86,9 +85,10 @@ namespace Castle.DynamicProxy.Generators
 			proxyGenerationOptions = options;
 		}
 
-		protected void CreateOptionsField(ClassEmitter emitter)
+		protected FieldReference CreateOptionsField(ClassEmitter emitter)
 		{
 			proxyGenerationOptionsField = emitter.CreateStaticField("proxyGenerationOptions", typeof(ProxyGenerationOptions));
+			return proxyGenerationOptionsField;
 		}
 
 		protected void InitializeStaticFields(Type builtType)
@@ -925,21 +925,6 @@ namespace Castle.DynamicProxy.Generators
 			constCodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected void ImplementProxyTargetAccessor(Type targetType, ClassEmitter emitter, FieldReference interceptorsField)
-		{
-			MethodAttributes attributes = MethodAttributes.Virtual | MethodAttributes.Public;
-
-			MethodEmitter dynProxyGetTarget = emitter.CreateMethod("DynProxyGetTarget", attributes, typeof (object));
-
-			dynProxyGetTarget.CodeBuilder.AddStatement(
-				new ReturnStatement(new ConvertExpression(typeof(object), targetType, GetProxyTargetReference().ToExpression())));
-
-			MethodEmitter getInterceptors = emitter.CreateMethod("GetInterceptors", attributes, typeof (IInterceptor[]));
-
-			getInterceptors.CodeBuilder.AddStatement(
-				new ReturnStatement(interceptorsField));
-		}
-
 		#endregion
 
 		#region Utility methods
@@ -970,157 +955,6 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		#endregion
-
-#if !SILVERLIGHT
-		protected virtual void ImplementGetObjectData(ClassEmitter emitter, FieldReference interceptorsField,
-													  FieldReference[] mixinFields,
-													  Type[] interfaces)
-		{
-			if (interfaces == null)
-			{
-				interfaces = new Type[0];
-			}
-
-			ArgumentReference serializationInfo = new ArgumentReference(typeof(SerializationInfo));
-			ArgumentReference streamingContext = new ArgumentReference(typeof(StreamingContext));
-			MethodEmitter getObjectData = emitter.CreateMethod("GetObjectData",
-															   typeof(void), serializationInfo, streamingContext);
-
-			LocalReference typeLocal = getObjectData.CodeBuilder.DeclareLocal(typeof(Type));
-
-			getObjectData.CodeBuilder.AddStatement(
-				new AssignStatement(
-					typeLocal,
-					new MethodInvocationExpression(
-						null,
-						TypeMethods.StaticGetType,
-						new ConstReference(typeof(ProxyObjectReference).AssemblyQualifiedName).ToExpression(),
-						new ConstReference(1).ToExpression(),
-						new ConstReference(0).ToExpression())));
-
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						serializationInfo,
-						SerializationInfoMethods.SetType,
-						typeLocal.ToExpression())));
-
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						serializationInfo,
-						SerializationInfoMethods.AddValue_Object,
-						new ConstReference("__interceptors").ToExpression(),
-						interceptorsField.ToExpression())));
-
-			foreach (FieldReference mixinFieldReference in mixinFields)
-			{
-				getObjectData.CodeBuilder.AddStatement(
-					new ExpressionStatement(
-						new MethodInvocationExpression(
-							serializationInfo,
-							SerializationInfoMethods.AddValue_Object,
-							new ConstReference(
-								mixinFieldReference.Reference.Name).ToExpression(),
-								mixinFieldReference.ToExpression())));
-			}
-
-			LocalReference interfacesLocal = getObjectData.CodeBuilder.DeclareLocal(typeof(string[]));
-
-			getObjectData.CodeBuilder.AddStatement(
-				new AssignStatement(
-					interfacesLocal,
-					new NewArrayExpression(interfaces.Length, typeof(string))));
-
-			for (int i = 0; i < interfaces.Length; i++)
-			{
-				getObjectData.CodeBuilder.AddStatement(
-					new AssignArrayStatement(
-						interfacesLocal,
-						i,
-						new ConstReference(interfaces[i].AssemblyQualifiedName).ToExpression()));
-			}
-
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						serializationInfo,
-						SerializationInfoMethods.AddValue_Object,
-						new ConstReference("__interfaces").ToExpression(),
-						interfacesLocal.ToExpression())));
-
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						serializationInfo,
-						SerializationInfoMethods.AddValue_Object,
-						new ConstReference("__baseType").ToExpression(),
-						new ConstReference(emitter.BaseType.AssemblyQualifiedName).ToExpression())));
-
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						serializationInfo,
-						SerializationInfoMethods.AddValue_Object,
-						new ConstReference("__proxyGenerationOptions").ToExpression(),
-						proxyGenerationOptionsField.ToExpression())));
-
-			CustomizeGetObjectData(getObjectData.CodeBuilder, serializationInfo, streamingContext);
-
-			getObjectData.CodeBuilder.AddStatement(new ReturnStatement());
-		}
-#endif
-
-		protected virtual void CustomizeGetObjectData(
-			AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
-			ArgumentReference streamingContext)
-		{
-		}
-
-		protected bool VerifyIfBaseImplementsGetObjectData(Type baseType)
-		{
-			// If base type implements ISerializable, we have to make sure
-			// the GetObjectData is marked as virtual
-#if !SILVERLIGHT
-
-			if (typeof(ISerializable).IsAssignableFrom(baseType))
-			{
-				MethodInfo getObjectDataMethod = baseType.GetMethod("GetObjectData",
-					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
-
-				if (getObjectDataMethod == null) //explicit interface implementation
-				{
-					return false;
-				}
-
-				if (!getObjectDataMethod.IsVirtual || getObjectDataMethod.IsFinal)
-				{
-					String message = String.Format("The type {0} implements ISerializable, but GetObjectData is not marked as virtual",
-												   baseType.FullName);
-					throw new ArgumentException(message);
-				}
-
-				methodsToSkip.Add(getObjectDataMethod);
-
-				serializationConstructor = baseType.GetConstructor(
-					BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-					null,
-					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) },
-					null);
-
-				if (serializationConstructor == null)
-				{
-					String message =
-						String.Format("The type {0} implements ISerializable, but failed to provide a deserialization constructor",
-									  baseType.FullName);
-					throw new ArgumentException(message);
-				}
-
-				return true;
-			}
-#endif
-			return false;
-		}
 
 		private static bool SpecialCaseAttributThatShouldNotBeReplicated(Attribute attribute)
 		{
@@ -1201,22 +1035,17 @@ namespace Castle.DynamicProxy.Generators
 		protected static class Proxy
 		{
 			/// <summary>
-			/// Used to mark interface target as proxy instance. Used for special interfaces <see cref="ISerializable"/> and <see cref="IProxyTargetAccessor"/>.
-			/// </summary>
-			public static readonly object Instance = new object();
-
-			/// <summary>
 			/// Used to mark interface target as proxy target.
 			/// </summary>
 			public static readonly object Target = new object();
 		}
 
-		protected virtual void AddMappingForISerializable(IDictionary<Type, object> typeImplementerMapping)
+		protected void AddMappingForISerializable(IDictionary<Type, object> typeImplementerMapping, ProxyInstanceElement instance)
 		{
 #if SILVERLIGHT
 #warning What to do?
 #else
-			AddInterfaceHierarchyMapping(typeof(ISerializable), Proxy.Instance, typeImplementerMapping);
+			AddInterfaceHierarchyMapping(typeof(ISerializable), instance, typeImplementerMapping);
 #endif
 		}
 

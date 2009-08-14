@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Reflection;
 #if !SILVERLIGHT
 	using System.Xml.Serialization;
@@ -24,7 +23,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.Core.Interceptor;
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
@@ -86,7 +84,8 @@ namespace Castle.DynamicProxy.Generators
 		private Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces)
 		{
 			// TODO: this anemic dictionary should be made into a real object
-			IDictionary<Type, object> typeImplementerMapping = GetTypeImplementerMapping(interfaces);
+			InterfaceProxyInstanceElement proxyElement;
+			IDictionary<Type, object> typeImplementerMapping = GetTypeImplementerMapping(interfaces,out proxyElement);
 
 			// This is flawed. We allow any type to be a base type but we don't realy handle it properly.
 			// What if the type implements interfaces? What if it implements target interface?
@@ -96,7 +95,7 @@ namespace Castle.DynamicProxy.Generators
 			Type baseType = ProxyGenerationOptions.BaseTypeForInterfaceProxy;
 
 			ClassEmitter emitter = BuildClassEmitter(typeName, baseType, typeImplementerMapping.Keys);
-			CreateOptionsField(emitter);
+			proxyElement.ProxyGenerationOptions = CreateOptionsField(emitter);
 			emitter.AddCustomAttributes(ProxyGenerationOptions);
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
@@ -112,6 +111,7 @@ namespace Castle.DynamicProxy.Generators
 
 			FieldReference interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
 			targetField = emitter.CreateField("__target", proxyTargetType);
+			proxyElement.TargetField = targetField;
 
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
@@ -119,15 +119,13 @@ namespace Castle.DynamicProxy.Generators
 			emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
 			emitter.DefineCustomAttributeFor(targetField, new XmlIgnoreAttribute());
 #endif
-			// Implement builtin Interfaces
-			ImplementProxyTargetAccessor(targetType, emitter, interceptorsField);
 
 			// Collect methods
 			IList<ProxyElementTarget> targets = new List<ProxyElementTarget>();
 			foreach (var mapping in typeImplementerMapping)
 			{
 				// NOTE: make sure this is what it should be
-				if (ReferenceEquals(mapping.Value, Proxy.Instance)) continue;
+				if (mapping.Value is ProxyInstanceElement) continue;
 
 				targets.Add(CollectElementsToProxy(mapping, EmptyInterfaceMapping));
 			}
@@ -189,11 +187,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-#if SILVERLIGHT
-#warning What to do?
-#else
-			ImplementGetObjectData(emitter, interceptorsField, mixinFields, interfaces);
-#endif
+			proxyElement.Generate(emitter, interceptorsField, mixinFields, interfaces);
 
 			// Complete type initializer code body
 
@@ -352,38 +346,6 @@ namespace Castle.DynamicProxy.Generators
 	        return new AsTypeReference(targetField, method.DeclaringType);
 	    }
 
-#if SILVERLIGHT
-#warning What to do?
-#else
-		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
-													   ArgumentReference streamingContext)
-		{
-			codebuilder.AddStatement(new ExpressionStatement(
-										new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
-																	   new ConstReference("__target").ToExpression(),
-																	   targetField.ToExpression())));
-
-			codebuilder.AddStatement(new ExpressionStatement(
-										new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
-																	   new ConstReference("__targetFieldType").ToExpression(),
-																	   new ConstReference(
-																		targetField.Reference.FieldType.AssemblyQualifiedName).
-																		ToExpression())));
-
-			codebuilder.AddStatement(new ExpressionStatement(
-										new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Int32,
-																	   new ConstReference("__interface_generator_type").
-																		ToExpression(),
-																	   new ConstReference((int)GeneratorType).ToExpression())));
-
-			codebuilder.AddStatement(new ExpressionStatement(
-										new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
-																	   new ConstReference("__theInterface").ToExpression(),
-																	   new ConstReference(targetType.AssemblyQualifiedName).
-																		ToExpression())));
-		}
-#endif
-
 		protected override MethodInfo GetMethodOnTarget(IProxyMethod proxyMethod)
 		{
 			return method2methodOnTarget[proxyMethod.Method];
@@ -399,7 +361,7 @@ namespace Castle.DynamicProxy.Generators
 			get { return false; }
 		}
 
-		protected IDictionary<Type, object> GetTypeImplementerMapping(Type[] interfaces)
+		protected IDictionary<Type, object> GetTypeImplementerMapping(Type[] interfaces, out InterfaceProxyInstanceElement instance)
 		{
 			IDictionary<Type, object> typeImplementerMapping = new Dictionary<Type, object>();
 
@@ -428,8 +390,9 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
-			AddMappingForISerializable(typeImplementerMapping);
-			AddInterfaceHierarchyMapping(typeof(IProxyTargetAccessor), Proxy.Instance, typeImplementerMapping);
+			instance = new InterfaceProxyInstanceElement(targetType, GeneratorType);
+			AddMappingForISerializable(typeImplementerMapping, instance);
+			AddInterfaceHierarchyMapping(typeof(IProxyTargetAccessor), instance, typeImplementerMapping);
 			return typeImplementerMapping;
 		}
 

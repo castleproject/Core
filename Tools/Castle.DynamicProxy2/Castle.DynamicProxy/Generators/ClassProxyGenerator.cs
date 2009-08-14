@@ -18,16 +18,13 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
-	using System.Runtime.Serialization;
 #if !SILVERLIGHT
 	using System.Xml.Serialization;
 #endif
 	using Castle.Core.Interceptor;
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Tokens;
 
 	/// <summary>
 	/// 
@@ -35,7 +32,6 @@ namespace Castle.DynamicProxy.Generators
 	public class ClassProxyGenerator : BaseProxyGenerator
 	{
 #if !SILVERLIGHT
-		private bool delegateToBaseGetObjectData;
 #endif
 
 		public ClassProxyGenerator(ModuleScope scope, Type targetType) : base(scope, targetType)
@@ -107,10 +103,11 @@ namespace Castle.DynamicProxy.Generators
 		private Type GenerateType(string newName, Type[] interfaces)
 		{
 			// TODO: this anemic dictionary should be made into a real object
-			IDictionary<Type, object> typeImplementerMapping = GetTypeImplementerMapping(interfaces);
+			ClassProxyInstanceElement proxyElement;
+			IDictionary<Type, object> typeImplementerMapping = GetTypeImplementerMapping(interfaces,out proxyElement);
 
 			ClassEmitter emitter = BuildClassEmitter(newName, targetType, typeImplementerMapping.Keys);
-			CreateOptionsField(emitter);
+			proxyElement.ProxyGenerationOptions = CreateOptionsField(emitter);
 			emitter.AddCustomAttributes(ProxyGenerationOptions);
 
 #if !SILVERLIGHT
@@ -123,9 +120,6 @@ namespace Castle.DynamicProxy.Generators
 			// Fields generations
 
 			FieldReference interceptorsField = emitter.CreateField("__interceptors", typeof (IInterceptor[]));
-
-			// Implement builtin Interfaces
-			ImplementProxyTargetAccessor(targetType, emitter, interceptorsField);
 
 #if !SILVERLIGHT
 			emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
@@ -140,7 +134,7 @@ namespace Castle.DynamicProxy.Generators
 			foreach (var mapping in typeImplementerMapping)
 			{
 				// NOTE: make sure this is what it should be
-				if (ReferenceEquals(mapping.Value, Proxy.Instance)) continue;
+				if (mapping.Value is ProxyInstanceElement) continue;
 				if (ReferenceEquals(mapping.Value, Proxy.Target))
 				{
 					var map = targetType.GetInterfaceMap(mapping.Key);
@@ -168,12 +162,6 @@ namespace Castle.DynamicProxy.Generators
 			GenerateConstructors(emitter, targetType, constructorArguments.ToArray());
 			GenerateParameterlessConstructor(emitter, targetType, interceptorsField);
 
-#if !SILVERLIGHT
-			if (delegateToBaseGetObjectData)
-			{
-				GenerateSerializationConstructor(emitter, interceptorsField, mixinFields);
-			}
-#endif
 			// Create callback methods and invocation types
 			foreach (var target in targets)
 			{
@@ -221,10 +209,8 @@ namespace Castle.DynamicProxy.Generators
 					ImplementEvent(emitter, interceptorsField, mixinFields, @event);
 				}
 			}
-
-#if !SILVERLIGHT
-			ImplementGetObjectData(emitter, interceptorsField, mixinFields, interfaces);
-#endif
+			// TODO: not use 'interfaces', but 'typeImplementerMapping.Keys'
+			proxyElement.Generate(emitter, interceptorsField, mixinFields, interfaces);
 
 			// Complete type initializer code body
 
@@ -235,19 +221,6 @@ namespace Castle.DynamicProxy.Generators
 			Type proxyType = emitter.BuildType();
 			InitializeStaticFields(proxyType);
 			return proxyType;
-		}
-
-		protected override void AddMappingForISerializable(IDictionary<Type, object> typeImplementerMapping)
-		{
-#if SILVERLIGHT
-#warning What to do?
-#else
-			if (targetType.IsSerializable)
-			{
-				delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType);
-				base.AddMappingForISerializable(typeImplementerMapping);
-			}
-#endif
 		}
 
 		protected override MethodInfo GetMethodOnTarget(IProxyMethod proxyMethod)
@@ -323,87 +296,7 @@ namespace Castle.DynamicProxy.Generators
 	    	return new AsTypeReference(SelfReference.Self, method.DeclaringType);
 	    }
 
-#if !SILVERLIGHT
-		protected void GenerateSerializationConstructor(ClassEmitter emitter, FieldReference interceptorField,
-		                                                FieldReference[] mixinFields)
-		{
-			ArgumentReference arg1 = new ArgumentReference(typeof (SerializationInfo));
-			ArgumentReference arg2 = new ArgumentReference(typeof (StreamingContext));
-
-			ConstructorEmitter constr = emitter.CreateConstructor(arg1, arg2);
-
-			constr.CodeBuilder.AddStatement(
-				new ConstructorInvocationStatement(serializationConstructor,
-				                                   arg1.ToExpression(), arg2.ToExpression()));
-
-			MethodInvocationExpression getInterceptorInvocation =
-				new MethodInvocationExpression(arg1, SerializationInfoMethods.GetValue,
-				                               new ConstReference("__interceptors").ToExpression(),
-				                               new TypeTokenExpression(typeof (IInterceptor[])));
-
-			constr.CodeBuilder.AddStatement(new AssignStatement(
-			                                	interceptorField,
-			                                	new ConvertExpression(typeof (IInterceptor[]), typeof (object),
-			                                	                      getInterceptorInvocation)));
-
-			// mixins
-			foreach (FieldReference mixinFieldReference in mixinFields)
-			{
-				MethodInvocationExpression getMixinInvocation =
-					new MethodInvocationExpression(arg1, SerializationInfoMethods.GetValue,
-					                               new ConstReference(mixinFieldReference.Reference.Name).ToExpression(),
-					                               new TypeTokenExpression(mixinFieldReference.Reference.FieldType));
-
-				constr.CodeBuilder.AddStatement(new AssignStatement(
-				                                	mixinFieldReference,
-				                                	new ConvertExpression(mixinFieldReference.Reference.FieldType, typeof (object),
-				                                	                      getMixinInvocation)));
-			}
-
-			constr.CodeBuilder.AddStatement(new ReturnStatement());
-		}
-
-		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder,
-		                                               ArgumentReference serializationInfo, ArgumentReference streamingContext)
-		{
-			codebuilder.AddStatement(new ExpressionStatement(
-			                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Bool,
-			                         	                               new ConstReference("__delegateToBase").ToExpression(),
-			                         	                               new ConstReference(delegateToBaseGetObjectData ? 1 : 0).
-			                         	                               	ToExpression())));
-
-			if (delegateToBaseGetObjectData)
-			{
-				MethodInfo baseGetObjectData = targetType.GetMethod("GetObjectData",
-					new[] { typeof(SerializationInfo), typeof(StreamingContext) });
-
-				codebuilder.AddStatement(new ExpressionStatement(
-				                         	new MethodInvocationExpression(baseGetObjectData,
-				                         	                               serializationInfo.ToExpression(), streamingContext.ToExpression())));
-			}
-			else
-			{
-				LocalReference members_ref = codebuilder.DeclareLocal(typeof (MemberInfo[]));
-				LocalReference data_ref = codebuilder.DeclareLocal(typeof (object[]));
-
-				codebuilder.AddStatement(new AssignStatement(members_ref,
-				                                             new MethodInvocationExpression(null, FormatterServicesMethods.GetSerializableMembers,
-				                                                                            new TypeTokenExpression(targetType))));
-
-				codebuilder.AddStatement(new AssignStatement(data_ref,
-				                                             new MethodInvocationExpression(null, FormatterServicesMethods.GetObjectData,
-				                                                                            SelfReference.Self.ToExpression(),
-				                                                                            members_ref.ToExpression())));
-
-				codebuilder.AddStatement(new ExpressionStatement(
-				                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
-				                         	                               new ConstReference("__data").ToExpression(),
-				                         	                               data_ref.ToExpression())));
-			}
-		}
-#endif
-
-		private IDictionary<Type, object> GetTypeImplementerMapping(Type[] interfaces)
+		private IDictionary<Type, object> GetTypeImplementerMapping(Type[] interfaces, out ClassProxyInstanceElement proxyInstance)
 		{
 			IDictionary<Type, object> typeImplementerMapping = new Dictionary<Type, object>();
 			
@@ -440,8 +333,13 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
-			AddMappingForISerializable(typeImplementerMapping);
-			AddInterfaceHierarchyMapping(typeof(IProxyTargetAccessor), Proxy.Instance, typeImplementerMapping);
+			proxyInstance = new ClassProxyInstanceElement(targetType, methodsToSkip);
+			if (targetType.IsSerializable)
+			{
+				AddMappingForISerializable(typeImplementerMapping, proxyInstance);
+			}
+
+			AddInterfaceHierarchyMapping(typeof(IProxyTargetAccessor), proxyInstance, typeImplementerMapping);
 			return typeImplementerMapping;
 		}
 
