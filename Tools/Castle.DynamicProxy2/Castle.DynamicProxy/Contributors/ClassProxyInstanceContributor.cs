@@ -12,28 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators
+namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-#if !SILVERLIGHT
 	using System.Runtime.Serialization;
-#endif
 	using Core.Interceptor;
-	using Emitters;
-	using Emitters.CodeBuilders;
-	using Emitters.SimpleAST;
+	using Generators.Emitters;
+	using Generators.Emitters.CodeBuilders;
+	using Generators.Emitters.SimpleAST;
 	using Tokens;
 
-	public class ClassProxyInstanceElement : ProxyInstanceElement
+	public class ClassProxyInstanceContributor : ProxyInstanceContributor
 	{
 		private readonly bool delegateToBaseGetObjectData;
 		// TODO:this maybe should be changed to polymorphism...
 		private readonly bool implementISerializable;
 		private ConstructorInfo serializationConstructor;
 
-		public ClassProxyInstanceElement(Type targetType, IList<MethodInfo> methodsToSkip)
+		public ClassProxyInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip)
 			: base(targetType)
 		{
 			// TODO: the methodsToSkip is temporary, until I refactor it further
@@ -60,8 +58,8 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ImplementGetObjectData(emitter, interceptors, mixins, interfaces);
 			}
-			ImplementProxyTargetAccessor(emitter, interceptors);
 #endif
+			ImplementProxyTargetAccessor(emitter, interceptors);
 		}
 #if !SILVERLIGHT
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo, ArgumentReference streamingContext)
@@ -131,9 +129,9 @@ namespace Castle.DynamicProxy.Generators
 				                               new TypeTokenExpression(typeof(IInterceptor[])));
 
 			ctor.CodeBuilder.AddStatement(new AssignStatement(
-			                                	interceptorField,
-			                                	new ConvertExpression(typeof(IInterceptor[]), typeof(object),
-			                                	                      getInterceptorInvocation)));
+			                              	interceptorField,
+			                              	new ConvertExpression(typeof(IInterceptor[]), typeof(object),
+			                              	                      getInterceptorInvocation)));
 
 			// mixins
 			foreach (FieldReference mixinFieldReference in mixinFields)
@@ -144,9 +142,9 @@ namespace Castle.DynamicProxy.Generators
 					                               new TypeTokenExpression(mixinFieldReference.Reference.FieldType));
 
 				ctor.CodeBuilder.AddStatement(new AssignStatement(
-				                                	mixinFieldReference,
-				                                	new ConvertExpression(mixinFieldReference.Reference.FieldType, typeof(object),
-				                                	                      getMixinInvocation)));
+				                              	mixinFieldReference,
+				                              	new ConvertExpression(mixinFieldReference.Reference.FieldType, typeof(object),
+				                              	                      getMixinInvocation)));
 			}
 			ctor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
@@ -158,7 +156,7 @@ namespace Castle.DynamicProxy.Generators
 			if (typeof(ISerializable).IsAssignableFrom(baseType))
 			{
 				MethodInfo getObjectDataMethod = baseType.GetMethod("GetObjectData",
-					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+				                                                    new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
 
 				if (getObjectDataMethod == null) //explicit interface implementation
 				{
@@ -168,7 +166,7 @@ namespace Castle.DynamicProxy.Generators
 				if (!getObjectDataMethod.IsVirtual || getObjectDataMethod.IsFinal)
 				{
 					String message = String.Format("The type {0} implements ISerializable, but GetObjectData is not marked as virtual",
-												   baseType.FullName);
+					                               baseType.FullName);
 					throw new ArgumentException(message);
 				}
 
@@ -185,7 +183,7 @@ namespace Castle.DynamicProxy.Generators
 				{
 					String message =
 						String.Format("The type {0} implements ISerializable, but failed to provide a deserialization constructor",
-									  baseType.FullName);
+						              baseType.FullName);
 					throw new ArgumentException(message);
 				}
 

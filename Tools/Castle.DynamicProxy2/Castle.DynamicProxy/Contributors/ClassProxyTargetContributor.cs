@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators
+namespace Castle.DynamicProxy.Contributors
 {
-	using System.Reflection;
-	using Contributors;
+	using System;
 
-	public interface IProxyMethod
+	public class ClassProxyTargetContributor:ITypeContributor
 	{
-		MethodInfo Method { get; }
+		private readonly Type targetType;
 
-		// TODO: this should be removed, outsourced to the target itself, since target is neved null anyway
-		bool HasTarget { get; }
-		ITypeContributor Target { get; }
+		public ClassProxyTargetContributor(Type targetType)
+		{
+			this.targetType = targetType;
+		}
 	}
 }

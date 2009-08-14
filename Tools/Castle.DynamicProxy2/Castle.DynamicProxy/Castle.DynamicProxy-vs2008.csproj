@@ -97,7 +97,8 @@
     </Compile>
     <Compile Include="CacheMappingsAttribute.cs" />
     <Compile Include="DefaultProxyBuilder.cs" />
-    <Compile Include="Generators\ClassProxyInstanceElement.cs" />
+    <Compile Include="Contributors\ClassProxyInstanceContributor.cs" />
+    <Compile Include="Contributors\ClassProxyTargetContributor.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\AsTypeReference.cs" />
     <Compile Include="Generators\AttributesToAvoidReplicating.cs" />
     <Compile Include="Generators\BaseProxyGenerator.cs" />
@@ -252,18 +253,21 @@
     <Compile Include="Generators\GeneratorException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Generators\InterfaceProxyInstanceElement.cs" />
+    <Compile Include="Contributors\InterfaceProxyInstanceContributor.cs" />
+    <Compile Include="Contributors\InterfaceProxyTargetContributor.cs" />
     <Compile Include="Generators\InterfaceProxyWithoutTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetInterfaceGenerator.cs" />
-    <Compile Include="Generators\IProxyElement.cs" />
+    <Compile Include="Contributors\ITypeContributor.cs" />
     <Compile Include="Generators\IProxyMethod.cs" />
     <Compile Include="Generators\MethodSignatureComparer.cs" />
     <Compile Include="Generators\MethodFinder.cs" />
     <Compile Include="Generators\MethodToGenerate.cs" />
+    <Compile Include="Contributors\MixinContributor.cs" />
     <Compile Include="Generators\PropertyToGenerate.cs" />
-    <Compile Include="Generators\ProxyElementTarget.cs" />
-    <Compile Include="Generators\ProxyInstanceElement.cs" />
+    <Compile Include="Contributors\ProxyContributor.cs" />
+    <Compile Include="Contributors\ProxyElementContributor.cs" />
+    <Compile Include="Contributors\ProxyInstanceContributor.cs" />
     <Compile Include="InternalsHelper.cs" />
     <Compile Include="InvalidMixinConfigurationException.cs" />
     <Compile Include="IProxyBuilder.cs">

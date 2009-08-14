@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators
+namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
+	using Generators;
 
-	public class ProxyElementTarget
+	public class ProxyElementContributor
 	{
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-		private readonly KeyValuePair<Type, object> mapping;
+		private readonly KeyValuePair<Type, ITypeContributor> mapping;
 		private readonly bool onlyProxyVirtual;
 		private readonly InterfaceMapping map;
 
@@ -29,7 +30,7 @@ namespace Castle.DynamicProxy.Generators
 		private readonly IDictionary<EventInfo, EventToGenerate> events = new Dictionary<EventInfo, EventToGenerate>();
 		private readonly IDictionary<MethodInfo, MethodToGenerate> methods = new Dictionary<MethodInfo, MethodToGenerate>();
 
-		public ProxyElementTarget(KeyValuePair<Type, object> mapping, bool onlyProxyVirtual, InterfaceMapping map)
+		public ProxyElementContributor(KeyValuePair<Type, ITypeContributor> mapping, bool onlyProxyVirtual, InterfaceMapping map)
 		{
 			this.mapping = mapping;
 			this.onlyProxyVirtual = onlyProxyVirtual;
@@ -116,7 +117,6 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			IEnumerable<Attribute> nonInheritableAttributes = GetNonInheritableAttributes(property);
-			object target = mapping.Value;
 			properties[property] = new PropertyToGenerate(property.Name,
 			                                              property.PropertyType,
 			                                              getter,
@@ -146,8 +146,8 @@ namespace Castle.DynamicProxy.Generators
 
 			events[@event] = new EventToGenerate(@event.Name,
 			                                     @event.EventHandlerType,
-												 adder,
-												 remover,
+			                                     adder,
+			                                     remover,
 			                                     EventAttributes.None);
 		}
 
@@ -174,7 +174,7 @@ namespace Castle.DynamicProxy.Generators
 				return null;
 			}
 
-			object target = mapping.Value;
+			ITypeContributor target = mapping.Value;
 			var methodToGenerate = new MethodToGenerate(method, isStandalone, target);
 			methods[method] = methodToGenerate;
 			return methodToGenerate;

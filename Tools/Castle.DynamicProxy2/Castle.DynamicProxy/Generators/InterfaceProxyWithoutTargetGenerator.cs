@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Collections.Generic;
 	using Castle.DynamicProxy.Generators.Emitters;
+	using Contributors;
 
 	public class InterfaceProxyWithoutTargetGenerator : InterfaceProxyWithTargetGenerator
 	{
@@ -24,9 +25,9 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override void AddMappingForTargetType(IDictionary<Type, object> interfaceTypeImplementerMapping)
+		protected override void AddMappingForTargetType(IDictionary<Type, ITypeContributor> interfaceTypeImplementerMapping)
 		{
-			AddInterfaceHierarchyMapping(targetType, null /*because we're in proxy withOUT target*/, interfaceTypeImplementerMapping);
+			AddInterfaceHierarchyMapping(targetType, ProxyContributor.Empty, interfaceTypeImplementerMapping);
 		}
 
 		protected override void CreateInvocationForMethod(ClassEmitter emitter, MethodToGenerate method, Type proxyTargetType)

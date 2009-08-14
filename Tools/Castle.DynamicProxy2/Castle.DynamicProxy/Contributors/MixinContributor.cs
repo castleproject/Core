@@ -12,17 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators
+namespace Castle.DynamicProxy.Contributors
 {
-	using System.Reflection;
-	using Contributors;
+	using System;
 
-	public interface IProxyMethod
+	public class MixinContributor : ITypeContributor
 	{
-		MethodInfo Method { get; }
+		public Type ClassUnderMixinInterface { get; set; }
+		public Type MixinInterface { get; set; }
 
-		// TODO: this should be removed, outsourced to the target itself, since target is neved null anyway
-		bool HasTarget { get; }
-		ITypeContributor Target { get; }
+		public MixinContributor(Type classUnderMixinInterface,Type mixinInterface)
+		{
+			ClassUnderMixinInterface = classUnderMixinInterface;
+			MixinInterface = mixinInterface;
+		}
 	}
 }

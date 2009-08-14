@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators
+namespace Castle.DynamicProxy.Contributors
 {
 	using System;
-	using Emitters.CodeBuilders;
-	using Emitters.SimpleAST;
+	using Generators;
+	using Generators.Emitters.CodeBuilders;
+	using Generators.Emitters.SimpleAST;
 	using Tokens;
 
-	public class InterfaceProxyInstanceElement : ProxyInstanceElement
+	public class InterfaceProxyInstanceContributor : ProxyInstanceContributor
 	{
 		private readonly InterfaceGeneratorType generatorType;
 
@@ -30,7 +31,7 @@ namespace Castle.DynamicProxy.Generators
 			get { return TargetField.ToExpression(); }
 		}
 
-		public InterfaceProxyInstanceElement(Type targetType, InterfaceGeneratorType generatorType) : base(targetType)
+		public InterfaceProxyInstanceContributor(Type targetType, InterfaceGeneratorType generatorType) : base(targetType)
 		{
 			this.generatorType = generatorType;
 		}

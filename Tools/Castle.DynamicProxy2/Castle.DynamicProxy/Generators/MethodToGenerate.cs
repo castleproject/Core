@@ -14,20 +14,19 @@
 
 namespace Castle.DynamicProxy.Generators
 {
-	using System;
 	using System.Reflection;
+	using Contributors;
 
 	public class ProxyMethod : IProxyMethod
 	{
 		private readonly MethodInfo method;
+		private readonly ITypeContributor target;
 
-		public ProxyMethod(MethodInfo method, object target)
+		protected ProxyMethod(MethodInfo method, ITypeContributor target)
 		{
 			this.method = method;
 			this.target = target;
 		}
-
-		private readonly object target;
 
 		public MethodInfo Method
 		{
@@ -36,10 +35,10 @@ namespace Castle.DynamicProxy.Generators
 
 		public bool HasTarget
 		{
-			get { return target != null; }
+			get { return (target is ProxyContributor) == false; }
 		}
 
-		public object Target
+		public ITypeContributor Target
 		{
 			get { return target;}
 		}
@@ -49,7 +48,7 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private readonly bool standalone;
 
-		public MethodToGenerate(MethodInfo method, bool standalone, object target)
+		public MethodToGenerate(MethodInfo method, bool standalone, ITypeContributor target)
 			: base(method,target)
 		{
 			this.standalone = standalone;

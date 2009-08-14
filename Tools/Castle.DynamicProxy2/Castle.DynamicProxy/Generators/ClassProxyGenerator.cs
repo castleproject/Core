@@ -25,6 +25,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Contributors;
 
 	/// <summary>
 	/// 
@@ -79,7 +80,7 @@ namespace Castle.DynamicProxy.Generators
 			return proxyType;
 		}
 
-		protected override void AddInterfaceHierarchyMapping(Type @interface, object implementer, IDictionary<Type, object> mapping)
+		protected override void AddInterfaceHierarchyMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
 		{
 			Debug.Assert(@interface.IsInterface, "@interface.IsInterface");
 
@@ -91,7 +92,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		private void AddInterfaceMapping(Type @interface, object implementer, IDictionary<Type, object> mapping)
+		private void AddInterfaceMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
 		{
 			Debug.Assert(@interface.IsInterface, "@interface.IsInterface");
 			if (!mapping.ContainsKey(@interface))
@@ -103,11 +104,12 @@ namespace Castle.DynamicProxy.Generators
 		private Type GenerateType(string newName, Type[] interfaces)
 		{
 			// TODO: this anemic dictionary should be made into a real object
-			ClassProxyInstanceElement proxyElement;
-			IDictionary<Type, object> typeImplementerMapping = GetTypeImplementerMapping(interfaces,out proxyElement);
+			ClassProxyInstanceContributor proxyContributor;
+			ClassProxyTargetContributor targetContributor;
+			IDictionary<Type, ITypeContributor> typeImplementerMapping = GetTypeImplementerMapping(interfaces,out proxyContributor,out targetContributor);
 
 			ClassEmitter emitter = BuildClassEmitter(newName, targetType, typeImplementerMapping.Keys);
-			proxyElement.ProxyGenerationOptions = CreateOptionsField(emitter);
+			proxyContributor.ProxyGenerationOptions = CreateOptionsField(emitter);
 			emitter.AddCustomAttributes(ProxyGenerationOptions);
 
 #if !SILVERLIGHT
@@ -125,17 +127,17 @@ namespace Castle.DynamicProxy.Generators
 			emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
 #endif
 			// Collect methods
-			IList<ProxyElementTarget> targets = new List<ProxyElementTarget>();
+			IList<ProxyElementContributor> targets = new List<ProxyElementContributor>();
 
 			// 1.first for the class we're proxying
-			targets.Add(CollectElementsToProxy(new KeyValuePair<Type, object>(targetType, Proxy.Target), EmptyInterfaceMapping));
+			targets.Add(CollectElementsToProxy(new KeyValuePair<Type, ITypeContributor>(targetType, targetContributor), EmptyInterfaceMapping));
 
 			// 2. then for interfaces
 			foreach (var mapping in typeImplementerMapping)
 			{
 				// NOTE: make sure this is what it should be
-				if (mapping.Value is ProxyInstanceElement) continue;
-				if (ReferenceEquals(mapping.Value, Proxy.Target))
+				if (mapping.Value is ProxyInstanceContributor) continue;
+				if (mapping.Value is ClassProxyTargetContributor)
 				{
 					var map = targetType.GetInterfaceMap(mapping.Key);
 					targets.Add(CollectElementsToProxy(mapping, map));
@@ -210,7 +212,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 			// TODO: not use 'interfaces', but 'typeImplementerMapping.Keys'
-			proxyElement.Generate(emitter, interceptorsField, mixinFields, interfaces);
+			proxyContributor.Generate(emitter, interceptorsField, mixinFields, interfaces);
 
 			// Complete type initializer code body
 
@@ -236,7 +238,7 @@ namespace Castle.DynamicProxy.Generators
 				return interfaceMethod;
 			}
 
-			if (proxyMethod.Target is Mixin)
+			if (proxyMethod.Target is MixinContributor)
 			{
 				return null;
 			}
@@ -296,10 +298,12 @@ namespace Castle.DynamicProxy.Generators
 	    	return new AsTypeReference(SelfReference.Self, method.DeclaringType);
 	    }
 
-		private IDictionary<Type, object> GetTypeImplementerMapping(Type[] interfaces, out ClassProxyInstanceElement proxyInstance)
+		private IDictionary<Type, ITypeContributor> GetTypeImplementerMapping(Type[] interfaces, out ClassProxyInstanceContributor proxyInstance, out ClassProxyTargetContributor proxyTarget)
 		{
-			IDictionary<Type, object> typeImplementerMapping = new Dictionary<Type, object>();
-			
+			proxyTarget = new ClassProxyTargetContributor(targetType);
+			proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip);
+			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
+
 			// Order of interface precedence:
 			// 1. first target
 			// target is not an interface so we do nothing
@@ -313,7 +317,7 @@ namespace Castle.DynamicProxy.Generators
 				{
 					object mixinInstance = ProxyGenerationOptions.MixinData.GetMixinInstance(mixinInterface);
 					AddMixinInterfaceMapping(mixinInterface, mixinInstance.GetType(),
-					                         targetInterfaces, additionalInterfaces, typeImplementerMapping);
+					                         targetInterfaces, additionalInterfaces, typeImplementerMapping, proxyTarget);
 				}
 			}
 
@@ -324,26 +328,25 @@ namespace Castle.DynamicProxy.Generators
 				if (targetInterfaces.Contains(@interface))
 				{
 					// we intercept the interface, and forward calls to the target type
-					AddInterfaceMapping(@interface, Proxy.Target, typeImplementerMapping);
+					AddInterfaceMapping(@interface, proxyTarget, typeImplementerMapping);
 				}
 				else
 				{
 					AddInterfaceMapping(@interface, null /*because there is no target*/, typeImplementerMapping);
 				}
 			}
-
+#if !SILVERLIGHT
 			// 4. plus special interfaces
-			proxyInstance = new ClassProxyInstanceElement(targetType, methodsToSkip);
 			if (targetType.IsSerializable)
 			{
 				AddMappingForISerializable(typeImplementerMapping, proxyInstance);
 			}
-
+#endif
 			AddInterfaceHierarchyMapping(typeof(IProxyTargetAccessor), proxyInstance, typeImplementerMapping);
 			return typeImplementerMapping;
 		}
 
-		private void AddMixinInterfaceMapping(Type mixinInterface, Type typeUnderMixin, ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces, IDictionary<Type, object> typeImplementerMapping)
+		private void AddMixinInterfaceMapping(Type mixinInterface, Type typeUnderMixin, ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces, IDictionary<Type, ITypeContributor> typeImplementerMapping, ITypeContributor proxyTarget)
 		{
 			if (targetInterfaces.Contains(mixinInterface))
 			{
@@ -351,7 +354,7 @@ namespace Castle.DynamicProxy.Generators
 				if(additionalInterfaces.Contains(mixinInterface))
 				{
 					// we intercept the interface, and forward calls to the target type
-					AddInterfaceHierarchyMapping(mixinInterface, Proxy.Target, typeImplementerMapping);
+					AddInterfaceHierarchyMapping(mixinInterface, proxyTarget, typeImplementerMapping);
 				}
 				// we do not intercept the interface
 			}
@@ -359,7 +362,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if (!typeImplementerMapping.ContainsKey(mixinInterface))
 				{
-					typeImplementerMapping.Add(mixinInterface, new Mixin(typeUnderMixin, mixinInterface));
+					typeImplementerMapping.Add(mixinInterface, new MixinContributor(typeUnderMixin, mixinInterface));
 				}
 
 			}
@@ -368,7 +371,7 @@ namespace Castle.DynamicProxy.Generators
 		protected override bool IsInterfaceMethodForExplicitImplementation(IProxyMethod method)
 		{
 			var baseSays = base.IsInterfaceMethodForExplicitImplementation(method);
-			return baseSays && ReferenceEquals(Proxy.Target, method.Target) && !IsInterfaceMethodImplementedVirtually(method);
+			return baseSays && (method.Target is ClassProxyTargetContributor) && !IsInterfaceMethodImplementedVirtually(method);
 		}
 
 		private bool IsInterfaceMethodImplementedVirtually(IProxyMethod method)

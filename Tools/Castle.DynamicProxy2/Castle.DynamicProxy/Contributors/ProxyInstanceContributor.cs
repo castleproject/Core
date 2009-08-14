@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators
+namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Reflection;
 #if !SILVERLIGHT
 	using System.Runtime.Serialization;
+	using Serialization;
 #endif
 	using Core.Interceptor;
-	using Emitters;
-	using Emitters.CodeBuilders;
-	using Emitters.SimpleAST;
-	using Serialization;
+	using Generators.Emitters;
+	using Generators.Emitters.CodeBuilders;
+	using Generators.Emitters.SimpleAST;
 	using Tokens;
 
-	public abstract class ProxyInstanceElement : IProxyElement
+	public abstract class ProxyInstanceContributor : ITypeContributor
 	{
 		// TODO: this whole type (and its descendants) should be #if !SILVERLIGHT... and empty type should be used instead for SL
 
 		protected readonly Type targetType;
 
-		protected ProxyInstanceElement(Type targetType)
+		protected ProxyInstanceContributor(Type targetType)
 		{
 			this.targetType = targetType;
 		}
@@ -46,11 +46,10 @@ namespace Castle.DynamicProxy.Generators
 		{
 #if !SILVERLIGHT
 			ImplementGetObjectData(emitter, interceptors, mixins, interfaces);
-			ImplementProxyTargetAccessor(emitter, interceptors);
 #endif
+			ImplementProxyTargetAccessor(emitter, interceptors);
 		}
 
-#if !SILVERLIGHT
 		protected void ImplementProxyTargetAccessor(ClassEmitter emitter, FieldReference interceptorsField)
 		{
 			MethodAttributes attributes = MethodAttributes.Virtual | MethodAttributes.Public;
@@ -65,6 +64,8 @@ namespace Castle.DynamicProxy.Generators
 			getInterceptors.CodeBuilder.AddStatement(
 				new ReturnStatement(interceptorsField));
 		}
+
+#if !SILVERLIGHT
 
 		protected void ImplementGetObjectData(ClassEmitter emitter, FieldReference interceptorsField, FieldReference[] mixinFields, Type[] interfaces)
 		{
@@ -163,6 +164,6 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		protected abstract void CustomizeGetObjectData(AbstractCodeBuilder builder, ArgumentReference serializationInfo, ArgumentReference streamingContext);
-	}
 #endif
+	}
 }

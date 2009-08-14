@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators
+namespace Castle.DynamicProxy.Contributors
 {
-	/// <summary>
-	/// Interface describing elements composing generated type
-	/// </summary>
-	public interface IProxyElement
+	public class ProxyContributor:ITypeContributor
 	{
+		private ProxyContributor(){}
+		public static ITypeContributor Empty = new ProxyContributor();
 	}
 }

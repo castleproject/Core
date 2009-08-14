@@ -24,7 +24,6 @@ namespace Castle.DynamicProxy.Generators
 		private readonly string name;
 		private readonly Type type;
 		private EventEmitter emitter;
-		private EventAttributes attributes;
 		private readonly IProxyMethod adder;
 		private readonly IProxyMethod remover;
 
@@ -83,7 +82,7 @@ namespace Castle.DynamicProxy.Generators
 			this.type = type;
 			this.adder = adder;
 			this.remover = remover;
-			this.attributes = attributes;
+			this.Attributes = attributes;
 		}
 
 		private string GetName(string name, IProxyMethod adder, IProxyMethod remover)
@@ -106,11 +105,7 @@ namespace Castle.DynamicProxy.Generators
 			return string.Format("{0}.{1}", declaringType, name);
 		}
 
-		public EventAttributes Attributes
-		{
-			get { return attributes; }
-			set { attributes = value; }
-		}
+		public EventAttributes Attributes { get; private set; }
 
 		public EventEmitter Emitter
 		{

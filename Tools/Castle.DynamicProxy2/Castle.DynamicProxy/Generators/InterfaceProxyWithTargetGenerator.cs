@@ -25,6 +25,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
+	using Contributors;
 
 	/// <summary>
 	/// 
@@ -35,10 +36,10 @@ namespace Castle.DynamicProxy.Generators
 		protected readonly Dictionary<MethodInfo, MethodInfo> method2methodOnTarget = new Dictionary<MethodInfo, MethodInfo>();
 
 
-		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type theInterface)
-			: base(scope, theInterface)
+		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type @interface)
+			: base(scope, @interface)
 		{
-			CheckNotGenericTypeDefinition(theInterface, "theInterface");
+			CheckNotGenericTypeDefinition(@interface, "@interface");
 		}
 
 		public Type GenerateCode(Type proxyTargetType, Type[] interfaces, ProxyGenerationOptions options)
@@ -84,8 +85,8 @@ namespace Castle.DynamicProxy.Generators
 		private Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces)
 		{
 			// TODO: this anemic dictionary should be made into a real object
-			InterfaceProxyInstanceElement proxyElement;
-			IDictionary<Type, object> typeImplementerMapping = GetTypeImplementerMapping(interfaces,out proxyElement);
+			InterfaceProxyInstanceContributor proxyContributor;
+			IDictionary<Type, ITypeContributor> typeImplementerMapping = GetTypeImplementerMapping(interfaces,out proxyContributor);
 
 			// This is flawed. We allow any type to be a base type but we don't realy handle it properly.
 			// What if the type implements interfaces? What if it implements target interface?
@@ -95,7 +96,7 @@ namespace Castle.DynamicProxy.Generators
 			Type baseType = ProxyGenerationOptions.BaseTypeForInterfaceProxy;
 
 			ClassEmitter emitter = BuildClassEmitter(typeName, baseType, typeImplementerMapping.Keys);
-			proxyElement.ProxyGenerationOptions = CreateOptionsField(emitter);
+			proxyContributor.ProxyGenerationOptions = CreateOptionsField(emitter);
 			emitter.AddCustomAttributes(ProxyGenerationOptions);
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
@@ -111,7 +112,7 @@ namespace Castle.DynamicProxy.Generators
 
 			FieldReference interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
 			targetField = emitter.CreateField("__target", proxyTargetType);
-			proxyElement.TargetField = targetField;
+			proxyContributor.TargetField = targetField;
 
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
@@ -121,11 +122,11 @@ namespace Castle.DynamicProxy.Generators
 #endif
 
 			// Collect methods
-			IList<ProxyElementTarget> targets = new List<ProxyElementTarget>();
+			IList<ProxyElementContributor> targets = new List<ProxyElementContributor>();
 			foreach (var mapping in typeImplementerMapping)
 			{
 				// NOTE: make sure this is what it should be
-				if (mapping.Value is ProxyInstanceElement) continue;
+				if (mapping.Value is ProxyInstanceContributor) continue;
 
 				targets.Add(CollectElementsToProxy(mapping, EmptyInterfaceMapping));
 			}
@@ -187,7 +188,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-			proxyElement.Generate(emitter, interceptorsField, mixinFields, interfaces);
+			proxyContributor.Generate(emitter, interceptorsField, mixinFields, interfaces);
 
 			// Complete type initializer code body
 
@@ -208,10 +209,9 @@ namespace Castle.DynamicProxy.Generators
 		protected virtual void CreateInvocationForMethod(ClassEmitter emitter, MethodToGenerate method, Type proxyTargetType)
 		{
 			var methodInfo = method.Method;
-			object target = method.Target;
 			MethodInfo methodOnTarget = methodInfo;
 			// TODO: this is a temporary workaround
-			if (target == Proxy.Target)
+			if (method.Target is InterfaceProxyTargetContributor)
 			{
 				if(!proxyTargetType.IsInterface)
 				{
@@ -224,7 +224,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else if (method.HasTarget)
 			{
-				var mixin = method.Target as Mixin;
+				var mixin = method.Target as MixinContributor;
 				if (mixin != null)
 				{
 					var foundCandidate = TypeUtil.FindImplementingMethod(methodInfo, mixin.ClassUnderMixinInterface);
@@ -361,9 +361,9 @@ namespace Castle.DynamicProxy.Generators
 			get { return false; }
 		}
 
-		protected IDictionary<Type, object> GetTypeImplementerMapping(Type[] interfaces, out InterfaceProxyInstanceElement instance)
+		protected IDictionary<Type, ITypeContributor> GetTypeImplementerMapping(Type[] interfaces, out InterfaceProxyInstanceContributor instance)
 		{
-			IDictionary<Type, object> typeImplementerMapping = new Dictionary<Type, object>();
+			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 
 			// Order of interface precedence:
 			// 1. first target
@@ -375,7 +375,7 @@ namespace Castle.DynamicProxy.Generators
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
 				{
 					object mixinInstance = ProxyGenerationOptions.MixinData.GetMixinInstance(mixinInterface);
-					AddInterfaceHierarchyMapping(mixinInterface, new Mixin(mixinInstance.GetType(), mixinInterface),
+					AddInterfaceHierarchyMapping(mixinInterface, new MixinContributor(mixinInstance.GetType(), mixinInterface),
 					                             typeImplementerMapping);
 				}
 			}
@@ -385,20 +385,20 @@ namespace Castle.DynamicProxy.Generators
 			{
 				foreach (var @interface in interfaces)
 				{
-					AddInterfaceHierarchyMapping(@interface, null /*because there is no target*/, typeImplementerMapping);
+					AddInterfaceHierarchyMapping(@interface, ProxyContributor.Empty, typeImplementerMapping);
 				}
 			}
 
 			// 4. plus special interfaces
-			instance = new InterfaceProxyInstanceElement(targetType, GeneratorType);
+			instance = new InterfaceProxyInstanceContributor(targetType, GeneratorType);
 			AddMappingForISerializable(typeImplementerMapping, instance);
 			AddInterfaceHierarchyMapping(typeof(IProxyTargetAccessor), instance, typeImplementerMapping);
 			return typeImplementerMapping;
 		}
 
-		protected virtual void AddMappingForTargetType(IDictionary<Type, object> typeImplementerMapping)
+		protected virtual void AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping)
 		{
-			AddInterfaceHierarchyMapping(targetType, Proxy.Target, typeImplementerMapping);
+			AddInterfaceHierarchyMapping(targetType, new InterfaceProxyTargetContributor(targetType), typeImplementerMapping);
 		}
 	}
 
