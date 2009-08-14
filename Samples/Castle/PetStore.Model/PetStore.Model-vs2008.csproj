@@ -27,6 +27,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -79,6 +80,8 @@
       <Name>Castle.ActiveRecord</Name>
       <HintPath>..\..\..\build\net-3.5\debug\Castle.ActiveRecord.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.ActiveRecord.Linq, Version=2.0.1000.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="Castle.Components.Validator, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Iesi.Collections">
       <Name>Iesi.Collections</Name>
       <HintPath>..\..\..\build\net-3.5\debug\Iesi.Collections.dll</HintPath>
@@ -90,6 +93,10 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+      <HintPath>..\..\..\..\..\..\Programme\Reference Assemblies\Microsoft\Framework\v3.5\System.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -98,7 +105,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Administrator.cs">
+    <Compile Include="GenericDao.cs" />
+    <Compile Include="IAggregateRoot.cs" />
+    <Compile Include="IDao.cs" />
+    <Compile Include="Staff.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs">
@@ -113,9 +123,15 @@
     <Compile Include="Product.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Storage.cs" />
+    <Compile Include="StorageExtensions.cs" />
     <Compile Include="User.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ValidationChecker.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Model.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

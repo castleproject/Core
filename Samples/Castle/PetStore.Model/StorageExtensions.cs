@@ -14,31 +14,26 @@
 
 namespace PetStore.Model
 {
-	using System;
-
-	using Castle.ActiveRecord;
-
-
-	[ActiveRecord(DiscriminatorValue="customer")]
-	public class Customer : User
+	public static class StorageExtensions
 	{
-		[Property]
-		public string Address { get; set; }
+		public static void Save<T>(this T t) where T:class, IAggregateRoot
+		{
+			Storage<T>.Save(t);
+		}
 
-		[Property]
-		public string City { get; set; }
+		public static void Update<T>(this T t) where T : class, IAggregateRoot
+		{
+			Storage<T>.Update(t);
+		}
 
-		[Property]
-		public string Country { get; set; }
+		public static void Create<T>(this T t) where T : class, IAggregateRoot
+		{
+			Storage<T>.Create(t);
+		}
 
-		[Property]
-		public string Zipcode { get; set; }
-	}
-
-	[ActiveRecord(DiscriminatorValue = "vipcustomer")]
-	public class VipCustomer : Customer
-	{
-		[BelongsTo]
-		public virtual Staff KeyAccountManager { get; set; }
+		public static void Delete<T>(this T t) where T : class, IAggregateRoot
+		{
+			Storage<T>.Delete(t);
+		}
 	}
 }

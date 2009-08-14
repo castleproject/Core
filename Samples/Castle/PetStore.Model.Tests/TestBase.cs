@@ -12,33 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace PetStore.Model
+namespace PetStore.Model.Tests
 {
-	using System;
-
+	using System.Reflection;
 	using Castle.ActiveRecord;
+	using Castle.ActiveRecord.Testing;
+	using NUnit.Framework;
 
-
-	[ActiveRecord(DiscriminatorValue="customer")]
-	public class Customer : User
+	public class TestBase : InMemoryTest
 	{
-		[Property]
-		public string Address { get; set; }
+		protected SessionScope scope;
 
-		[Property]
-		public string City { get; set; }
+		[SetUp]
+		public override void SetUp()
+		{
+			base.SetUp();
+			scope = new SessionScope();
+		}
 
-		[Property]
-		public string Country { get; set; }
+		[TearDown]
+		public override void TearDown()
+		{
+			if (scope != null)
+			{
+				scope.Dispose();
+				scope = null;
+			}
+			base.TearDown();
+		}
 
-		[Property]
-		public string Zipcode { get; set; }
-	}
-
-	[ActiveRecord(DiscriminatorValue = "vipcustomer")]
-	public class VipCustomer : Customer
-	{
-		[BelongsTo]
-		public virtual Staff KeyAccountManager { get; set; }
+		public override Assembly[] GetAssemblies()
+		{
+			return new[] {typeof (User).Assembly};
+		}
 	}
 }

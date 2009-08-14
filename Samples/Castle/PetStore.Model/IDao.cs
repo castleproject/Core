@@ -14,13 +14,21 @@
 
 namespace PetStore.Model
 {
-	using System;
-	
-	using Castle.ActiveRecord;
+	using System.Linq;
+	using NHibernate;
 
-	[ActiveRecord(DiscriminatorValue="admin")]
-	public class Administrator : User
+	public interface IDao<TClass> where TClass: class, IAggregateRoot
 	{
-		// We can use some specific administrator fields/columns
+		void Create(TClass t);
+		void Update(TClass t);
+		void Save(TClass t);
+		void Delete(TClass t);
+
+		TClass Find(object id);
+		IQueryable<TClass> Linq();
+		ICriteria GetCriteria();
+		ICriteria GetCriteria(string alias);
+		IQuery GetQuery(string query);
+		IQuery GetNamedQuery(string name);
 	}
 }

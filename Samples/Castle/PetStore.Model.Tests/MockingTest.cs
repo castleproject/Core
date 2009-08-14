@@ -12,33 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace PetStore.Model
+namespace PetStore.Model.Tests
 {
-	using System;
+	using System.Collections.Generic;
+	using NUnit.Framework;
+	using Rhino.Mocks;
 
-	using Castle.ActiveRecord;
-
-
-	[ActiveRecord(DiscriminatorValue="customer")]
-	public class Customer : User
+	[TestFixture]
+	public class MockingTest
 	{
-		[Property]
-		public string Address { get; set; }
+		[Test]
+		public void CanMockUserAccess()
+		{
+			var dao = MockRepository.GenerateMock<IDao<User>>();
+			var savedUsers = new List<User>();
+			
+			dao
+				.Expect(d => d.Save(null))
+				.IgnoreArguments()
+				.Repeat.AtLeastOnce();
+			Storage<User>.RegisterDao(dao);
 
-		[Property]
-		public string City { get; set; }
+			(new User()).Save();
 
-		[Property]
-		public string Country { get; set; }
-
-		[Property]
-		public string Zipcode { get; set; }
-	}
-
-	[ActiveRecord(DiscriminatorValue = "vipcustomer")]
-	public class VipCustomer : Customer
-	{
-		[BelongsTo]
-		public virtual Staff KeyAccountManager { get; set; }
+			dao.VerifyAllExpectations();
+		}
 	}
 }

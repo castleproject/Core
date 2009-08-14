@@ -15,67 +15,40 @@
 namespace PetStore.Model
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Security.Principal;
 
 	using Castle.ActiveRecord;
+	using Castle.Components.Validator;
 	using NHibernate.Criterion;
 
-
-	[ActiveRecord("`User`", DiscriminatorColumn="type", DiscriminatorType="String", DiscriminatorValue="user")]
-	public class User : ActiveRecordBase, IPrincipal
+	[ActiveRecord("`User`", 
+		DiscriminatorColumn = "type", 
+		DiscriminatorType = "String", 
+		DiscriminatorValue = "user")]
+	public class User : IPrincipal, IAggregateRoot
 	{
-		private int id;
-		private string login;
-		private string name;
-		private string email;
-		private string password;
-		private string userType;
+		[PrimaryKey(PrimaryKeyType.GuidComb)]
+		public virtual Guid Id { get; protected set; }
 
-		[PrimaryKey]
-		public int Id
-		{
-			get { return id; }
-			set { id = value; }
-		}
+		[Property(NotNull = true)]
+		[ValidateNonEmpty]
+		[ValidateIsUnique]
+		public virtual string Login { get; set; }
 
-		[Property]
-		public string Login
-		{
-			get { return login; }
-			set { login = value; }
-		}
+		[Property(NotNull = true)]
+		[ValidateNonEmpty]
+		public virtual string Name { get; set; }
 
-		[Property]
-		public string Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
+		[Property(NotNull = true)]
+		[ValidateNonEmpty]
+		[ValidateEmail]
+		public virtual string Email { get; set; }
 
-		[Property]
-		public string Email
-		{
-			get { return email; }
-			set { email = value; }
-		}
-
-		[Property]
-		public string Password
-		{
-			get { return password; }
-			set { password = value; }
-		}
-
-		/// <summary>
-		/// Exposing the discriminator column
-		/// has its restrictions
-		/// </summary>
-		[Property("type", Insert=false, Update=false)]
-		public string UserType
-		{
-			get { return userType; }
-			set { userType = value; }
-		}
+		[Property(NotNull = true)]
+		[ValidateNonEmpty]
+		[ValidateLength(8,20)]
+		public virtual string Password { get; set; }
 
 		public bool IsInRole(string role)
 		{
@@ -85,25 +58,7 @@ namespace PetStore.Model
 
 		public IIdentity Identity
 		{
-			get { return new GenericIdentity(name, "castle.authentication"); }
-		}
-
-		public static User Find(int id)
-		{
-			return (User) FindByPrimaryKey( typeof(User), id );
-		}
-
-		public static User FindByLogin(String login)
-		{
-			User[] users = (User[]) 
-				FindAll( typeof(User), Expression.Eq("Login", login) );
-
-			if (users.Length == 1)
-			{
-				return users[0];
-			}
-
-			return null;
+			get { return new GenericIdentity(Name, "castle.authentication"); }
 		}
 	}
 }

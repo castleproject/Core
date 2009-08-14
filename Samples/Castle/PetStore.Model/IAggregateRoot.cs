@@ -14,31 +14,7 @@
 
 namespace PetStore.Model
 {
-	using System;
-
-	using Castle.ActiveRecord;
-
-
-	[ActiveRecord(DiscriminatorValue="customer")]
-	public class Customer : User
+	public interface IAggregateRoot
 	{
-		[Property]
-		public string Address { get; set; }
-
-		[Property]
-		public string City { get; set; }
-
-		[Property]
-		public string Country { get; set; }
-
-		[Property]
-		public string Zipcode { get; set; }
-	}
-
-	[ActiveRecord(DiscriminatorValue = "vipcustomer")]
-	public class VipCustomer : Customer
-	{
-		[BelongsTo]
-		public virtual Staff KeyAccountManager { get; set; }
 	}
 }
