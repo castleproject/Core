@@ -128,7 +128,7 @@
 		<!-- Copy Silverlight 2.0 CoreCLR libraries -->
 		<if test="${common.silverlight}">
 			<copy todir="${build.dir}" overwrite="true">
-				<fileset basedir="${environment::get-folder-path('ProgramFiles')}/Microsoft Silverlight/2.0.40115.0">
+				<fileset basedir="${environment::get-folder-path('ProgramFiles')}/Microsoft SDKs/Silverlight/v2.0/Reference Assemblies">
 					<include name="System.dll" />
 				</fileset>
 			</copy>
