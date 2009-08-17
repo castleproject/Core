@@ -10,12 +10,12 @@
 
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
-		<include name="src/NVelocity/NVelocity.build" />
-		<include name="src/NVelocity.Tests/NVelocity.Tests.build" if="${common.testrunner.enabled}"/>
+		<include name="NVelocity/NVelocity.build" />
+		<include name="NVelocity.Tests/NVelocity.Tests.build" if="${common.testrunner.enabled}"/>
 	</fileset>
 
 	<target name="build" depends="common.build" />
-	
+
 	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>
