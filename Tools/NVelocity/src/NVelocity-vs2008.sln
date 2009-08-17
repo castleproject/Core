@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity-vs2008", "NVelocity\NVelocity-vs2008.csproj", "{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity.Test-vs2008", "NVelocity.Tests\NVelocity.Test-vs2008.csproj", "{E1B10210-6A42-4993-B383-0F6AAC255A24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity.Tests-vs2008", "NVelocity.Tests\NVelocity.Tests-vs2008.csproj", "{E1B10210-6A42-4993-B383-0F6AAC255A24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

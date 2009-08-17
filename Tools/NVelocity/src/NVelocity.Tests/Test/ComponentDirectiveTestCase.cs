@@ -1,5 +1,3 @@
-using ExtendedProperties=Commons.Collections.ExtendedProperties;
-
 // Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +18,7 @@ namespace NVelocity.Test
 	using App;
 	using NUnit.Framework;
 	using Runtime;
+	using ExtendedProperties = global::Commons.Collections.ExtendedProperties;
 
 	[TestFixture]
 	public class ComponentDirectiveTestCase : BaseTestCase

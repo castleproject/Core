@@ -2,6 +2,7 @@ namespace NVelocity.Test
 {
 	using System;
 	using System.Collections;
+	using System.Configuration;
 	using System.IO;
 	using System.Text;
 	using NUnit.Framework;
@@ -34,8 +35,7 @@ namespace NVelocity.Test
 		/// Path for templates. This property will override the
 		/// value in the default velocity properties file.
 		/// </summary>
-		public static readonly String FILE_RESOURCE_LOADER_PATH =
-			Path.Combine(System.Configuration.ConfigurationManager.AppSettings["tests.src"], "../../test/templates");
+		public static readonly String FILE_RESOURCE_LOADER_PATH;
 
 		/// <summary>
 		/// Properties file that lists which template tests to run.
@@ -54,12 +54,12 @@ namespace NVelocity.Test
 
 		static TemplateTest()
 		{
-			TEST_CASE_PROPERTIES = TemplateTest.FILE_RESOURCE_LOADER_PATH + "/templates.properties";
-			RESULT_DIR = TemplateTest.FILE_RESOURCE_LOADER_PATH + "/results";
-			COMPARE_DIR = TemplateTest.FILE_RESOURCE_LOADER_PATH + "/compare";
+			FILE_RESOURCE_LOADER_PATH = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "templates");
+			TEST_CASE_PROPERTIES = Path.Combine(FILE_RESOURCE_LOADER_PATH, "templates.properties");
+			RESULT_DIR = Path.Combine(FILE_RESOURCE_LOADER_PATH, "results");
+			COMPARE_DIR = Path.Combine(FILE_RESOURCE_LOADER_PATH, "compare");
 		}
 	}
-
 
 	/// <summary>
 	/// Base test case that provides a few utility methods for
