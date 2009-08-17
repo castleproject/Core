@@ -11,7 +11,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>NVelocity</AssemblyName>
-    <AssemblyOriginatorKeyFile>..\..\..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Flow</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -520,7 +520,7 @@
     <EmbeddedResource Include="Runtime\Defaults\nvelocity.properties" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\CastleKey.snk">
+    <None Include="..\..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
   </ItemGroup>
