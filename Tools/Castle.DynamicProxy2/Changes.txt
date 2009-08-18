@@ -1,5 +1,18 @@
 Unreleased Changes
 ==================
+- Fixed DYNPROXY-ISSUE-108 - Obtaining replicated custom attributes on proxy may fail when property setter throws exception on default value
+- Moved custom attribute replication from CustomAttributeUtil to new interface - IAttributeDisassembler
+- Exposed IAttributeDisassembler via ProxyGenerationOptions, so that users can plug their implementation for some convoluted scenarios. 
+- Fixed DYNPROXY-ISSUE-106 - Proxying COM interfaces produces invalid proxies
+- Change in behavior - interfaces are now implemented explicitly (except for class proxy, when class implements the member virtually)
+- Fixed DYNPROXY-ISSUE-96 - Implement order of precenence.
+- Interface proxy now can proxy explicit interface implementation
+- Fixed DYNPROXY-ISSUE-103: Proxy with interfaces having methods with identical signature is invalid
+- Fixed DYNPROXY-ISSUE-102: Intercept non-virtual interface implementation
+- Fixed DYNPROXY-ISSUE-100 : Additional interfaces on proxy with target interface can cause stack overflow. Now a check is performed and if proxy is the target of invocation, or the target is null an exception is thrown.
+- Changed behavior of interface proxies with target interface (all interface proxies actually, but the change in behavior is visible in proxies with target interface). Now the target is being casted using 'as' operator to the target interface of invocation, so if the type of target object implements additional interfaces invocation target will be set to the proxy target, and to null otherwise. This is consisted with how interface proxies with target work
+- Fixed bug reported by José F. Romaniello - can not assign new target to interface proxy with target interface, in certain scenarios: http://groups.google.com/group/castle-project-users/browse_thread/thread/2e507f47dbb831f1
+
 - Applied Krzysztof Kozmic's clean up patch with some minor changes
   (http://groups.google.com/group/castle-project-devel/browse_thread/thread/853fa870326f7f71/9237bb890ca6dab7)
   - Moved MethodInfos of AbstractInvocation methods to InvocationMethods class, where all the other methods are.

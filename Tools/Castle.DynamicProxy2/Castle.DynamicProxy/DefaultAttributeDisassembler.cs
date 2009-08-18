@@ -49,7 +49,7 @@ namespace Castle.DynamicProxy
 			{
 				// ouch...
 				var message = "There was an error trying to replicate non-inheritable attribute " + type.Name +
-				              " using default attribute replicatot. " +
+				              " using default attribute disassembler. " +
 				              "Use custom implementation of IAttributeDisassembler (passed as 'AttributeDisassembler' property of ProxyGenerationOptions) to replicate this attribute.";
 				throw new ProxyGenerationException(message);
 			}
