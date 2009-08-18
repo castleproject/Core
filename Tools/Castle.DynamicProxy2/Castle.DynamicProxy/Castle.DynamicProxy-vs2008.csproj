@@ -255,10 +255,12 @@
     </Compile>
     <Compile Include="Contributors\InterfaceProxyInstanceContributor.cs" />
     <Compile Include="Contributors\InterfaceProxyTargetContributor.cs" />
+    <Compile Include="Generators\InterfaceInvocationTypeGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithoutTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetInterfaceGenerator.cs" />
     <Compile Include="Contributors\ITypeContributor.cs" />
+    <Compile Include="Generators\InvocationTypeGenerator.cs" />
     <Compile Include="Generators\IProxyMethod.cs" />
     <Compile Include="Generators\MethodSignatureComparer.cs" />
     <Compile Include="Generators\MethodFinder.cs" />
