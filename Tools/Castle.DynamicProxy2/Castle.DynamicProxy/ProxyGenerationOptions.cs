@@ -28,10 +28,7 @@ namespace Castle.DynamicProxy
 	{
 		public static readonly ProxyGenerationOptions Default = new ProxyGenerationOptions();
 
-		private IProxyGenerationHook hook;
-		private IInterceptorSelector selector;
 		private List<object> mixins;
-		private Type baseTypeForInterfaceProxy = typeof(object);
 		private readonly IList<Attribute> attributesToAddToGeneratedTypes = new List<Attribute>();
 
 #if SILVERLIGHT
@@ -44,17 +41,30 @@ namespace Castle.DynamicProxy
 		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
 		/// </summary>
 		/// <param name="hook">The hook.</param>
-		public ProxyGenerationOptions(IProxyGenerationHook hook)
+		public ProxyGenerationOptions(IProxyGenerationHook hook):
+			this(hook,new DefaultAttributeDisassembler())
 		{
-			this.hook = hook;
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
 		/// </summary>
 		public ProxyGenerationOptions()
-			: this(new AllMethodsHook())
+			: this(new AllMethodsHook(), new DefaultAttributeDisassembler())
 		{
+		}
+
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
+		/// </summary>
+		/// <param name="hook">The hook.</param>
+		/// <param name="disassembler">The ttribute dissassembler</param>
+		public ProxyGenerationOptions(IProxyGenerationHook hook,IAttributeDisassembler disassembler)
+		{
+			BaseTypeForInterfaceProxy = typeof(object);
+			this.Hook = hook;
+			this.AttributeDisassembler = disassembler;
 		}
 
 #if SILVERLIGHT
@@ -62,10 +72,11 @@ namespace Castle.DynamicProxy
 #else
 		private ProxyGenerationOptions(SerializationInfo info, StreamingContext context)
 		{
-			hook = (IProxyGenerationHook)info.GetValue("hook", typeof(IProxyGenerationHook));
-			selector = (IInterceptorSelector)info.GetValue("selector", typeof(IInterceptorSelector));
+			Hook = (IProxyGenerationHook)info.GetValue("hook", typeof(IProxyGenerationHook));
+			Selector = (IInterceptorSelector)info.GetValue("selector", typeof(IInterceptorSelector));
+			AttributeDisassembler = (IAttributeDisassembler) info.GetValue("disassembler", typeof (IAttributeDisassembler));
 			mixins = (List<object>)info.GetValue("mixins", typeof(List<object>));
-			baseTypeForInterfaceProxy = Type.GetType(info.GetString("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
+			BaseTypeForInterfaceProxy = Type.GetType(info.GetString("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
 		}
 #endif
 
@@ -89,24 +100,21 @@ namespace Castle.DynamicProxy
 #else
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.AddValue("hook", hook);
-			info.AddValue("selector", selector);
+			info.AddValue("hook", Hook);
+			info.AddValue("selector", Selector);
+			info.AddValue("disassembler", AttributeDisassembler);
 			info.AddValue("mixins", mixins);
-			info.AddValue("baseTypeForInterfaceProxy.AssemblyQualifiedName", baseTypeForInterfaceProxy.AssemblyQualifiedName);
+			info.AddValue("baseTypeForInterfaceProxy.AssemblyQualifiedName", BaseTypeForInterfaceProxy.AssemblyQualifiedName);
 		}
 #endif
 
-		public IProxyGenerationHook Hook
-		{
-			get { return hook; }
-			set { hook = value; }
-		}
+		public IAttributeDisassembler AttributeDisassembler { get; set; }
 
-		public IInterceptorSelector Selector
-		{
-			get { return selector; }
-			set { selector = value; }
-		}
+		public IProxyGenerationHook Hook { get; set; }
+
+		public IInterceptorSelector Selector { get; set; }
+
+		public Type BaseTypeForInterfaceProxy { get; set; }
 
 		public IList<Attribute> AttributesToAddToGeneratedTypes
 		{
@@ -151,11 +159,6 @@ namespace Castle.DynamicProxy
 			get { return mixins == null ? false : mixins.Count != 0; }
 		}
 
-		public Type BaseTypeForInterfaceProxy
-		{
-			get { return baseTypeForInterfaceProxy; }
-			set { baseTypeForInterfaceProxy = value; }
-		}
 
 		public override bool Equals(object obj)
 		{
@@ -168,10 +171,11 @@ namespace Castle.DynamicProxy
 			Initialize();
 			proxyGenerationOptions.Initialize();
 
-			if (!Equals(hook, proxyGenerationOptions.hook)) return false;
-			if (!Equals(selector, proxyGenerationOptions.selector)) return false;
+			if (!Equals(Hook, proxyGenerationOptions.Hook)) return false;
+			if (!Equals(Selector, proxyGenerationOptions.Selector)) return false;
+			if (!Equals(AttributeDisassembler, proxyGenerationOptions.AttributeDisassembler)) return false;
 			if (!Equals(MixinData, proxyGenerationOptions.MixinData)) return false;
-			if (!Equals(baseTypeForInterfaceProxy, proxyGenerationOptions.baseTypeForInterfaceProxy)) return false;
+			if (!Equals(BaseTypeForInterfaceProxy, proxyGenerationOptions.BaseTypeForInterfaceProxy)) return false;
 
 			return true;
 		}
@@ -181,10 +185,11 @@ namespace Castle.DynamicProxy
 			// ensure initialization before accessing MixinData
 			Initialize();
 
-			int result = hook != null ? hook.GetType().GetHashCode() : 0;
-			result = 29 * result + (selector != null ? selector.GetHashCode() : 0);
+			int result = Hook != null ? Hook.GetType().GetHashCode() : 0;
+			result = 29 * result + (Selector != null ? Selector.GetHashCode() : 0);
+			result = 29 * result + (AttributeDisassembler != null ? AttributeDisassembler.GetHashCode() : 0);
 			result = 29 * result + MixinData.GetHashCode();
-			result = 29 * result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
+			result = 29 * result + (BaseTypeForInterfaceProxy != null ? BaseTypeForInterfaceProxy.GetHashCode() : 0);
 			return result;
 		}
 	}

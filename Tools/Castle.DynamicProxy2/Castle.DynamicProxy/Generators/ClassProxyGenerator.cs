@@ -113,7 +113,7 @@ namespace Castle.DynamicProxy.Generators
 			emitter.AddCustomAttributes(ProxyGenerationOptions);
 
 #if !SILVERLIGHT
-			emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
+			emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType), ProxyGenerationOptions.AttributeDisassembler);
 #endif
 			// Custom attributes
 
@@ -124,7 +124,8 @@ namespace Castle.DynamicProxy.Generators
 			FieldReference interceptorsField = emitter.CreateField("__interceptors", typeof (IInterceptor[]));
 
 #if !SILVERLIGHT
-			emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
+			emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute(),
+			                                 ProxyGenerationOptions.AttributeDisassembler);
 #endif
 			// Collect methods
 			IList<ProxyElementContributor> targets = new List<ProxyElementContributor>();

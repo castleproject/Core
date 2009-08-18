@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Tokens;
+	using Core.Interceptor;
 
 	public class PropertyEmitter : IMemberEmitter
 	{
@@ -193,9 +194,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public void DefineCustomAttribute(Attribute attribute)
+		public void DefineCustomAttribute(Attribute attribute, IAttributeDisassembler disassembler)
 		{
-			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
+			CustomAttributeBuilder customAttributeBuilder = disassembler.Disassemble(attribute);
 
 			if (customAttributeBuilder == null)
 			{

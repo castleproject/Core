@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Diagnostics;
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators.Emitters;
+	using Core.Interceptor;
 
 	public class PropertyToGenerate
 	{
@@ -152,14 +153,14 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		public void BuildPropertyEmitter(ClassEmitter classEmitter)
+		public void BuildPropertyEmitter(ClassEmitter classEmitter, IAttributeDisassembler disassembler)
 		{
 			if(emitter!=null)
 				throw new InvalidOperationException();
 
 			emitter = classEmitter.CreateProperty(name, attributes, type);
-			foreach(var attribute in customAttributes)
-				emitter.DefineCustomAttribute(attribute);
+			foreach (var attribute in customAttributes)
+				emitter.DefineCustomAttribute(attribute, disassembler);
 		}
 	}
 }

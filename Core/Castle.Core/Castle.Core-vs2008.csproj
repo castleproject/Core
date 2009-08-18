@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -60,6 +60,7 @@
     <Compile Include="Attributes\InterceptorAttribute.cs" />
     <Compile Include="Attributes\LifestyleAttributes.cs" />
     <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="Interceptor\IAttributeDisassembler.cs" />
     <Compile Include="Interceptor\IInterceptorSelector.cs" />
     <Compile Include="Internal\LinkedList.cs">
       <SubType>Code</SubType>

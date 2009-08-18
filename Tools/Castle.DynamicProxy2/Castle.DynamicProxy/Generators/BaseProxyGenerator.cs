@@ -665,7 +665,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 #if !SILVERLIGHT
-			nested.DefineCustomAttribute(new SerializableAttribute());
+			nested.DefineCustomAttribute(new SerializableAttribute(), ProxyGenerationOptions.AttributeDisassembler);
 #endif
 
 			return nested;
@@ -835,7 +835,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if (ShouldSkipAttributeReplication(attribute)) continue;
 
-				emitter.DefineCustomAttribute(attribute);
+				emitter.DefineCustomAttribute(attribute, ProxyGenerationOptions.AttributeDisassembler);
 			}
 		}
 
@@ -847,7 +847,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if (ShouldSkipAttributeReplication(attribute)) continue;
 
-				emitter.DefineCustomAttribute(attribute);
+				emitter.DefineCustomAttribute(attribute, ProxyGenerationOptions.AttributeDisassembler);
 			}
 		}
 
@@ -1128,7 +1128,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void ImplementProperty(ClassEmitter emitter, FieldReference interceptorsField, FieldReference[] mixinFields, PropertyToGenerate property)
 		{
-			property.BuildPropertyEmitter(emitter);
+			property.BuildPropertyEmitter(emitter, ProxyGenerationOptions.AttributeDisassembler);
 			if (property.CanRead)
 			{
 				NestedClassEmitter nestedClass = method2Invocation[property.GetMethod];

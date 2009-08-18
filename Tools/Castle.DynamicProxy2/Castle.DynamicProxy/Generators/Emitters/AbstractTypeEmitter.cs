@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Core.Interceptor;
 
 	public abstract class AbstractTypeEmitter
 	{
@@ -87,7 +88,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			foreach (Attribute attr in proxyGenerationOptions.AttributesToAddToGeneratedTypes)
 			{
-				DefineCustomAttribute(attr);
+				DefineCustomAttribute(attr, proxyGenerationOptions.AttributeDisassembler);
 			}
 		}
 
@@ -199,17 +200,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return eventEmitter;
 		}
 
-		public void DefineCustomAttribute(Attribute attribute)
+		public void DefineCustomAttribute(Attribute attribute,IAttributeDisassembler disassembler)
 		{
-			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
+			CustomAttributeBuilder customAttributeBuilder = disassembler.Disassemble(attribute);
 			if (customAttributeBuilder == null)
 				return;
 			typebuilder.SetCustomAttribute(customAttributeBuilder);
 		}
 
-		public void DefineCustomAttributeFor(FieldReference field, Attribute attribute)
+		public void DefineCustomAttributeFor(FieldReference field, Attribute attribute, IAttributeDisassembler disassembler)
 		{
-			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
+			CustomAttributeBuilder customAttributeBuilder = disassembler.Disassemble(attribute);
 			if (customAttributeBuilder == null)
 				return;
 			field.Reference.SetCustomAttribute(customAttributeBuilder);

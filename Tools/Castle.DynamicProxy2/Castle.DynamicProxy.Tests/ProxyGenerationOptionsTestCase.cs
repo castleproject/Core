@@ -109,6 +109,10 @@ namespace Castle.DynamicProxy.Tests
 			_options1.Hook = hook;
 			_options2.Hook = hook;
 
+			IAttributeDisassembler disassembler = new DefaultAttributeDisassembler();
+			_options1.AttributeDisassembler = disassembler;
+			_options2.AttributeDisassembler = disassembler;
+
 			IInterceptorSelector selector = new AllInterceptorSelector();
 			_options1.Selector = selector;
 			_options2.Selector = selector;
@@ -190,6 +194,10 @@ namespace Castle.DynamicProxy.Tests
 			SimpleMixin mixin = new SimpleMixin();
 			_options1.AddMixinInstance(mixin);
 			_options2.AddMixinInstance(mixin);
+
+			IAttributeDisassembler disassembler = new DefaultAttributeDisassembler();
+			_options1.AttributeDisassembler = disassembler;
+			_options2.AttributeDisassembler = disassembler;
 
 			IProxyGenerationHook hook = new AllMethodsHook();
 			_options1.Hook = hook;

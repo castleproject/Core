@@ -12,43 +12,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators.Emitters
+namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using System.Collections.Generic;
+	using Core.Interceptor;
 
-	internal class CustomAttributeUtil
+#if !SILVERLIGHT
+	[Serializable]
+#endif
+	public class DefaultAttributeDisassembler : IAttributeDisassembler
 	{
-		public static CustomAttributeBuilder CreateCustomAttribute(Attribute attribute)
+		public CustomAttributeBuilder Disassemble(Attribute attribute)
 		{
-			Type attType = attribute.GetType();
+			Type type = attribute.GetType();
 
-			ConstructorInfo ci;
-
-			object[] ctorArgs = GetConstructorAndArgs(attType, attribute, out ci);
+			ConstructorInfo ctor;
+			object[] ctorArgs = GetConstructorAndArgs(type, attribute, out ctor);
 
 			PropertyInfo[] properties;
-
-			object[] propertyValues = GetPropertyValues(attType, out properties, attribute);
+			object[] propertyValues;
 
 			FieldInfo[] fields;
-
-			object[] fieldValues = GetFieldValues(attType, out fields, attribute);
+			object[] fieldValues;
+			
+			try
+			{
+				var replicated = (Attribute) Activator.CreateInstance(type, ctorArgs);
+				propertyValues = GetPropertyValues(type, out properties, attribute, replicated);
+				fieldValues = GetFieldValues(type, out fields, attribute, replicated);
+			}
+			catch (Exception)
+			{
+				// ouch...
+				var message = "There was an error trying to replicate non-inheritable attribute " + type.Name +
+				              " using default attribute replicatot. " +
+				              "Use custom implementation of IAttributeDisassembler (passed as 'AttributeDisassembler' property of ProxyGenerationOptions) to replicate this attribute.";
+				throw new ProxyGenerationException(message);
+			}
 
 			// here we are going to try to initialize the attribute with the collected arguments
 			// if we are good (created successfuly) we return it, otherwise, it is ignored.
 			try
 			{
-				Activator.CreateInstance(attType, ctorArgs);
-				return new CustomAttributeBuilder(ci, ctorArgs, properties, propertyValues, fields, fieldValues);
+				return new CustomAttributeBuilder(ctor, ctorArgs, properties, propertyValues, fields, fieldValues);
 			}
 			catch
 			{
 				// there is no real way to log a warning here...
-				Trace.WriteLine(@"Dynamic Proxy 2: Unable to find matching parameters for replicating attribute " + attType.FullName +
+				Trace.WriteLine(@"Dynamic Proxy 2: Unable to find matching parameters for replicating attribute " + type.FullName +
 				                ".");
 				return null;
 			}
@@ -72,44 +87,52 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return ctorArgs;
 		}
 
-		private static object[] GetPropertyValues(Type attType, out PropertyInfo[] properties, Attribute attribute)
+		private static object[] GetPropertyValues(Type attType, out PropertyInfo[] properties, Attribute original, Attribute replicated)
 		{
-			List<PropertyInfo> selectedProps = new List<PropertyInfo>();
+			var propertyCandidates = GetPropertyCandidates(attType);
 
-			foreach (PropertyInfo pi in attType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+			var selectedValues = new List<object>(propertyCandidates.Count);
+			var selectedProperties = new List<PropertyInfo>(propertyCandidates.Count);
+			foreach (var property in propertyCandidates)
 			{
-				if (pi.CanRead && pi.CanWrite)
+				var originalValue = property.GetValue(original, null);
+				var replicatedValue = property.GetValue(replicated, null);
+				if(AreAttributeElementsEqual(originalValue,replicatedValue))
 				{
-					selectedProps.Add(pi);
+					//this property has default value so we skip it
+					continue;
 				}
+
+				selectedProperties.Add(property);
+				selectedValues.Add(originalValue);
 			}
 
-			properties = selectedProps.ToArray();
-
-			object[] propertyValues = new object[properties.Length];
-
-			for (int i = 0; i < properties.Length; i++)
-			{
-				PropertyInfo propInfo = properties[i];
-				propertyValues[i] = propInfo.GetValue(attribute, null);
-			}
-
-			return propertyValues;
+			properties = selectedProperties.ToArray();
+			return selectedValues.ToArray();
 		}
 
-		private static object[] GetFieldValues(Type attType, out FieldInfo[] fields, Attribute attribute)
+		private static object[] GetFieldValues(Type attType, out FieldInfo[] fields, Attribute original, Attribute replicated)
 		{
-			fields = attType.GetFields(BindingFlags.Public | BindingFlags.Instance);
+			var fieldsCandidates = attType.GetFields(BindingFlags.Public | BindingFlags.Instance);
 
-			object[] values = new object[fields.Length];
-
-			for (int i = 0; i < fields.Length; i++)
+			var selectedValues = new List<object>(fieldsCandidates.Length);
+			var selectedFields = new List<FieldInfo>(fieldsCandidates.Length);
+			foreach (var field in fieldsCandidates)
 			{
-				FieldInfo fieldInfo = fields[i];
-				values[i] = fieldInfo.GetValue(attribute);
+				var originalValue = field.GetValue(original);
+				var replicatedValue = field.GetValue(replicated);
+				if (AreAttributeElementsEqual(originalValue, replicatedValue))
+				{
+					//this field has default value so we skip it
+					continue;
+				}
+
+				selectedFields.Add(field);
+				selectedValues.Add(originalValue);
 			}
 
-			return values;
+			fields = selectedFields.ToArray();
+			return selectedValues.ToArray();
 		}
 
 		/// <summary>
@@ -198,7 +221,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				return false;
 			}
-			else if (type.IsEnum)
+			if (type.IsEnum)
 			{
 #if SILVERLIGHT
 				return Castle.DynamicProxy.SilverlightExtensions.EnumHelper.GetValues(type).GetValue(0);
@@ -207,16 +230,75 @@ namespace Castle.DynamicProxy.Generators.Emitters
 #endif
 
 			}
-			else if (type == typeof (char))
+			if (type == typeof (char))
 			{
 				return char.MinValue;
 			}
-			else if (type.IsPrimitive)
+			if (type.IsPrimitive)
 			{
 				return 0;
 			}
 
 			return null;
+		}
+        
+		private static List<PropertyInfo> GetPropertyCandidates(Type attributeType)
+		{
+			var propertyCandidates = new List<PropertyInfo>();
+
+			foreach (PropertyInfo pi in attributeType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+			{
+				if (pi.CanRead && pi.CanWrite)
+				{
+					propertyCandidates.Add(pi);
+				}
+			}
+
+			return propertyCandidates;
+		}
+
+		private static bool AreAttributeElementsEqual(object first, object second)
+		{
+
+			//we can have either System.Type, string or numeric type
+			if (first == null)
+			{
+				return second == null;
+			}
+
+			//let's try string
+			var firstString = first as string;
+			if (firstString != null)
+			{
+				return AreStringsEqual(firstString, second as string);
+			}
+
+			//by now we should only be left with numeric types
+			return first.Equals(second);
+		}
+
+		private static bool AreStringsEqual(string first, string second)
+		{
+			Debug.Assert(first != null, "first != null");
+			return first.Equals(second, StringComparison.Ordinal);
+		}
+
+		public bool Equals(DefaultAttributeDisassembler other)
+		{
+			return !ReferenceEquals(null, other);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != typeof (DefaultAttributeDisassembler)) return false;
+			return Equals((DefaultAttributeDisassembler) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return GetType().GetHashCode();
 		}
 	}
 }
