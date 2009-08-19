@@ -17,6 +17,7 @@ namespace Castle.Facilities.WcfIntegration
 	using System;
 	using System.Reflection;
 	using System.ServiceModel;
+	using System.ServiceModel.Security;
 
 	/// <summary>
 	/// Policy to recover from a <see cref="CommunicationException"/>
@@ -44,6 +45,10 @@ namespace Castle.Facilities.WcfIntegration
 				reconnect = true;
 			}
 			catch (CommunicationObjectAbortedException)
+			{
+				reconnect = true;
+			} 
+			catch (MessageSecurityException)
 			{
 				reconnect = true;
 			}

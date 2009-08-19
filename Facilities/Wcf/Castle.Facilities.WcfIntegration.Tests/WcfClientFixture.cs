@@ -230,17 +230,16 @@ namespace Castle.Facilities.WcfIntegration.Tests
 						.ActAs(new DefaultClientModel())
 					))
 				{
-					for (int i = 0; i < 10; i++)
-					{
-						IOperations client1 = clientContainer.Resolve<IOperations>("operations",
-							new { Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2") });
-						IOperations client2 = clientContainer.Resolve<IOperations>("operations",
-							new { Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2") });
-						Assert.AreEqual(28, client1.GetValueFromConstructor());
-						Assert.AreEqual(28, client2.GetValueFromConstructor());
-						clientContainer.Release(client1);
-						clientContainer.Release(client2);
-					}
+					var client1 = new WeakReference(clientContainer.Resolve<IOperations>("operations",
+						new { Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2") }));
+					var client2 = clientContainer.Resolve<IOperations>("operations",
+						new { Endpoint = WcfEndpoint.At("net.tcp://localhost/Operations2") });
+					Assert.AreEqual(28, ((IOperations)client1.Target).GetValueFromConstructor());
+					Assert.AreEqual(28, client2.GetValueFromConstructor());
+					clientContainer.Release(client1.Target);
+					clientContainer.Release(client2);
+					System.GC.Collect();
+					Assert.IsFalse(client1.IsAlive);
 				}
 			}
 		}
