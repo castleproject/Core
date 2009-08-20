@@ -1,4 +1,0 @@
-This is an example of chinese code encoding:
-
-#set ($ch = "上网")
-The chinese string is $ch, its length is $ch.length()

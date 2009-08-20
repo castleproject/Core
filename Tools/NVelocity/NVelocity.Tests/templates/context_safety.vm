@@ -1,3 +1,0 @@
-#foreach($a in $vector)
- $a
-#end
