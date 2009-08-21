@@ -45,6 +45,7 @@ namespace Castle.MonoRail.Framework.Test
 		private IActionSelector actionSelector;
 		private IScaffoldingSupport scaffoldingSupport;
 		private IJSONSerializer jsonSerializer;
+		private IScriptBuilder scriptBuilder;
 		private IStaticResourceRegistry staticResourceRegistry;
 		private IEmailTemplateService emailTemplateService;
 		private IEmailSender emailSender;
@@ -114,6 +115,8 @@ namespace Castle.MonoRail.Framework.Test
 			jsonSerializer = new NewtonsoftJSONSerializer();
 
 			dictionaryAdapterFactory = new DictionaryAdapterFactory();
+
+			scriptBuilder = new DefaultScriptBuilder();
 		}
 
 		#region IServiceContainer
@@ -359,6 +362,16 @@ namespace Castle.MonoRail.Framework.Test
 		{
 			get { return jsonSerializer; }
 			set { jsonSerializer = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the script builder.
+		/// </summary>
+		/// <value>The script builder.</value>
+		public IScriptBuilder ScriptBuilder
+		{
+			get { return scriptBuilder; }
+			set { scriptBuilder = value; }
 		}
 
 		/// <summary>

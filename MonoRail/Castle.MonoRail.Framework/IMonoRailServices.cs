@@ -118,6 +118,12 @@ namespace Castle.MonoRail.Framework
 		IJSONSerializer JSONSerializer { get; set; }
 
 		/// <summary>
+		/// Gets or sets the script builder.
+		/// </summary>
+		/// <value>The script builder.</value>
+		IScriptBuilder ScriptBuilder { get; set; }
+
+		/// <summary>
 		/// Gets or sets the static resource registry service.
 		/// </summary>
 		/// <value>The static resource registry.</value>

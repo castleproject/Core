@@ -158,6 +158,7 @@ namespace Castle.MonoRail.Framework.Services
 			RegisterComponent("ColumnRenderer", typeof(ColumnRenderer));
 			RegisterComponent("SiteMapComponent", typeof(SiteMapComponent));
 			RegisterComponent("TreeMakerComponent", typeof(TreeMakerComponent));
+            RegisterComponent("CombineJSViewComponent", typeof(CombineJSViewComponent));
 		}
 
 		/// <summary>

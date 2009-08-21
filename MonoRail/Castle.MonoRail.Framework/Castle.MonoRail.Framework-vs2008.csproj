@@ -706,6 +706,7 @@
     <Compile Include="Routing\BaseRoutingRuleContainer.cs" />
     <Compile Include="Routing\IRoutingRule.cs" />
     <Compile Include="Routing\IRoutingRuleContainer.cs" />
+    <Compile Include="Services\IScriptBuilder.cs" />
     <Compile Include="Routing\PatternRoute.cs" />
     <Compile Include="Routing\RedirectRoute.cs" />
     <Compile Include="Routing\RouteContext.cs" />
@@ -834,6 +835,7 @@
     <Compile Include="Services\Utils\ControllerInspectionUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\DefaultScriptBuilder.cs" />
     <Compile Include="SessionlessMonoRailHttpHandler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -930,6 +932,7 @@
     <Compile Include="ViewComponents\ColumnRenderer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewComponents\CombineJSViewComponent.cs" />
     <Compile Include="ViewComponents\DiggStylePagination.cs">
       <SubType>Code</SubType>
     </Compile>

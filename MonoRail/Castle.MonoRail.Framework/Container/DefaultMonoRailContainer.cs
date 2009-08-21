@@ -191,6 +191,7 @@ namespace Castle.MonoRail.Framework.Container
 		private IActionSelector actionSelectorCached;
 		private IScaffoldingSupport scaffoldingSupportCached;
 		private IJSONSerializer jsonSerializerCached;
+		private IScriptBuilder scriptBuilderCached;
 		private IStaticResourceRegistry staticResourceRegCached;
 		private IEmailTemplateService emailTemplateServiceCached;
 		private IEmailSender emailSenderCached;
@@ -354,6 +355,12 @@ namespace Castle.MonoRail.Framework.Container
 				AddService( typeof( IJSONSerializer ), jsonSerializer );
 			}
 
+			IScriptBuilder scriptBuilder = (IScriptBuilder) Parent.GetService(typeof(IScriptBuilder));
+			if (scriptBuilder != null)
+			{
+				AddService(typeof(IScriptBuilder), scriptBuilder);
+			}
+
 			IStaticResourceRegistry staticResourceRegistry =
 				( IStaticResourceRegistry )Parent.GetService( typeof( IStaticResourceRegistry ) );
 			if( staticResourceRegistry != null )
@@ -509,6 +516,10 @@ namespace Castle.MonoRail.Framework.Container
 			if( !HasService<IJSONSerializer>() )
 			{
 				AddService<IJSONSerializer>( CreateService<NewtonsoftJSONSerializer>() );
+			}
+			if( !HasService<IScriptBuilder>() )
+			{
+				AddService<IScriptBuilder>(CreateService<DefaultScriptBuilder>());
 			}
 			if( !HasService<IStaticResourceRegistry>() )
 			{
@@ -955,6 +966,28 @@ namespace Castle.MonoRail.Framework.Container
 				RemoveService( typeof( IJSONSerializer ) );
 				AddService<IJSONSerializer>( value );
 				jsonSerializerCached = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the script builder.
+		/// </summary>
+		/// <value>The script builder.</value>
+		public IScriptBuilder ScriptBuilder
+		{
+			get
+			{
+				if (scriptBuilderCached == null)
+				{
+					scriptBuilderCached = GetService<IScriptBuilder>();
+				}
+				return scriptBuilderCached;
+			}
+			set
+			{
+				RemoveService(typeof(IScriptBuilder));
+				AddService<IScriptBuilder>(value);
+				scriptBuilderCached = value;
 			}
 		}
 
