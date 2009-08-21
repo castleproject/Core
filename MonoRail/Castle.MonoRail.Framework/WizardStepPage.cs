@@ -483,8 +483,11 @@ namespace Castle.MonoRail.Framework
 			{
 				if (WizardController.UseCurrentRouteForRedirects)
 				{
-					UrlBuilderParameters parameters = UrlBuilderParameters.From(queryStringParameters,
-					                                                            wizardcontrollerContext.RouteMatch.Parameters);
+					var dictionary = new Dictionary<string, string>(wizardcontrollerContext.RouteMatch.Parameters);
+					dictionary["action"] = step;
+
+					UrlBuilderParameters parameters = UrlBuilderParameters.From(queryStringParameters, dictionary);
+
 					RedirectToUrl(urlBuilder.BuildUrl(engineContext.UrlInfo, parameters));
 				}
 				else
