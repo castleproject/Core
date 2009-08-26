@@ -54,7 +54,7 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				foreach(IJSONConverter converter in converters)
 				{
-					serializer.Converters.Add(new JsonConverterAdapter(serializer, converter));
+					serializer.Converters.Add(new JsonConverterAdapter(converter));
 				}
 			}
 
@@ -80,7 +80,7 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				foreach(IJSONConverter converter in converters)
 				{
-					serializer.Converters.Add(new JsonConverterAdapter(serializer, converter));
+					serializer.Converters.Add(new JsonConverterAdapter(converter));
 				}
 			}
 
@@ -96,7 +96,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public object Deserialize(string jsonString, Type expectedType)
 		{
-			return JavaScriptConvert.DeserializeObject(jsonString, expectedType);
+			return JsonConvert.DeserializeObject(jsonString, expectedType);
 		}
 
 		/// <summary>
@@ -107,7 +107,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public T Deserialize<T>(string jsonString)
 		{
-			return (T) JavaScriptConvert.DeserializeObject(jsonString, typeof(T));
+			return (T)JsonConvert.DeserializeObject(jsonString, typeof(T));
 		}
 
 		/// <summary>
@@ -118,21 +118,19 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns></returns>
 		public T[] DeserializeArray<T>(string jsonString)
 		{
-			return (T[]) JavaScriptConvert.DeserializeObject(jsonString, typeof(T));
+			return (T[])JsonConvert.DeserializeObject(jsonString, typeof(T));
 		}
 
 		class JsonConverterAdapter : JsonConverter
 		{
-			private readonly JsonSerializer serializer;
 			private readonly IJSONConverter converter;
 
-			public JsonConverterAdapter(JsonSerializer serializer, IJSONConverter converter)
+			public JsonConverterAdapter(IJSONConverter converter)
 			{
-				this.serializer = serializer;
 				this.converter = converter;
 			}
 
-			public override void WriteJson(JsonWriter writer, object value)
+			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 			{
 				converter.Write(new JSONWriterAdapter(serializer, writer), value);
 			}
@@ -143,7 +141,7 @@ namespace Castle.MonoRail.Framework.Services
 			}
 
 #if DOTNET35
-			public override object ReadJson(JsonReader reader, Type objectType)
+			public override object ReadJson(JsonReader reader, Type objectType, JsonSerializer serializer)
 			{
 				return converter.ReadJson(new JSONReaderAdapter(reader), objectType);
 			}

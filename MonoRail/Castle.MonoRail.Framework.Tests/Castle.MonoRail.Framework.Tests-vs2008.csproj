@@ -255,6 +255,7 @@
     <Compile Include="Services\DefaultUrlTokenizerTestCase.cs" />
     <Compile Include="Services\EmailTemplateServiceTestCase.cs" />
     <Compile Include="Services\FileAssemblyViewSourceLoaderTestCase.cs" />
+    <Compile Include="Services\NewtonsoftJSONSerializerTestCase.cs" />
     <Compile Include="Services\PrototypeAjaxProxyGeneratorTestCase.cs" />
     <Compile Include="Services\StaticResourceRegistry\DefaultStaticResourceRegistryTestCase.cs" />
     <Compile Include="TransformFilters\TransformFilterTestCase.cs" />
