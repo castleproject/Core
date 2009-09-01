@@ -324,7 +324,7 @@ namespace Castle.MonoRail.Views.AspView
 
 		public static string GetClassName(string fileName)
 		{
-			fileName = fileName.ToLower();
+			fileName = fileName.ToLowerInvariant();
 			if (Path.HasExtension(fileName))
 			{
 				int lastDotIndex = fileName.LastIndexOf('.');
