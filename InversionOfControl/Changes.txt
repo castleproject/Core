@@ -1,6 +1,9 @@
 2.0
 ====
 
+- Fixed Burden release issue in which children were being released if the
+  component was not destroyed
+
 - Automatically configure proxy to omit target if no implementation
 
 - Fluent interface for factory support

@@ -99,7 +99,8 @@ namespace Castle.MicroKernel.Handlers
 		/// disposes the component instance (or recycle it)
 		/// </summary>
 		/// <param name="instance"></param>
-		public abstract void Release(object instance);
+		/// <returns>true if destroyed.</returns>
+		public abstract bool Release(object instance);
 
 		/// <summary>
 		/// Gets the handler state.

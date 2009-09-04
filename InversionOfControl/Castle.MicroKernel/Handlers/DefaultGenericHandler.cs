@@ -53,13 +53,13 @@ namespace Castle.MicroKernel.Handlers
 			}
 		}
 
-		public override void Release(object instance)
+		public override bool Release(object instance)
 		{
 			Type genericType = ProxyUtil.GetUnproxiedType(instance);
 
 			IHandler handler = GetSubHandler(CreationContext.Empty, genericType);
 
-			handler.Release(instance);
+			return handler.Release(instance);
 		}
 
 		protected IHandler GetSubHandler(CreationContext context, Type genericType)

@@ -70,11 +70,12 @@ namespace Castle.MicroKernel
 		{
 			if (policy == null) throw new ArgumentNullException("policy");
 
-			handler.Release(instance);
-
-			foreach(Burden child in children)
+			if (handler.Release(instance))
 			{
-				policy.Release(child.instance);
+				foreach (Burden child in children)
+				{
+					policy.Release(child.instance);
+				}
 			}
 		}
 	}

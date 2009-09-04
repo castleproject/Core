@@ -69,7 +69,8 @@ namespace Castle.MicroKernel
 		/// Implementors should dispose the component instance
 		/// </summary>
 		/// <param name="instance"></param>
-		void Release(object instance);
+		/// <returns>true if destroyed.</returns>
+		bool Release(object instance);
 
 		/// <summary>
 		/// Gets the state of the handler

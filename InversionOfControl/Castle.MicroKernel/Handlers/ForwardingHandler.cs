@@ -55,9 +55,9 @@ namespace Castle.MicroKernel.Handlers
 			return target.Resolve(context);
 		}
 
-		public void Release(object instance)
+		public bool Release(object instance)
 		{
-			target.Release(instance);
+			return target.Release(instance);
 		}
 
 		public HandlerState CurrentState

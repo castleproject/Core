@@ -85,9 +85,10 @@ namespace Castle.MicroKernel.Handlers
 		/// disposes the component instance (or recycle it)
 		/// </summary>
 		/// <param name="instance"></param>
-		public override void Release(object instance)
+		/// <returns>true if destroyed</returns>
+		public override bool Release(object instance)
 		{
-			lifestyleManager.Release(instance);
+			return lifestyleManager.Release(instance);
 		}
 
 		protected void AssertNotWaitingForDependency()
