@@ -31,6 +31,11 @@ namespace Castle.Facilities.WcfIntegration
 		private Binding defaultBinding;
 		private TimeSpan? closeTimeout;
 
+		public WcfClientExtension()
+		{
+			DefaultChannelPolicy = new ChannelReconnectPolicy();
+		}
+
 		public Binding DefaultBinding
 		{
 			get { return defaultBinding ?? facility.DefaultBinding; }
@@ -42,6 +47,8 @@ namespace Castle.Facilities.WcfIntegration
 			get { return closeTimeout ?? facility.CloseTimeout; }
 			set { closeTimeout = value; }
 		}
+
+		public IChannelActionPolicy DefaultChannelPolicy { get; set; }
 
 		public WcfClientExtension AddChannelBuilder<T, M>()
 			where T : IClientChannelBuilder<M>

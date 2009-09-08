@@ -17,7 +17,7 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Core;
 	using Castle.MicroKernel;
 
-	internal abstract class AbstractWcfExtension : IWcfExtension
+	public abstract class AbstractWcfExtension : IWcfExtension
 	{
 		public abstract void Accept(IWcfExtensionVisitor visitor);
 

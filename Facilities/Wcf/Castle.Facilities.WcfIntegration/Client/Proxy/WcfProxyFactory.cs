@@ -30,11 +30,13 @@ namespace Castle.Facilities.WcfIntegration.Proxy
 	public class WcfProxyFactory : AbstractProxyFactory
 	{
 		private readonly ProxyGenerator generator;
+		private readonly WcfClientExtension clients;
 		private AsyncType asyncType;
 
-		public WcfProxyFactory(ProxyGenerator generator)
+		public WcfProxyFactory(ProxyGenerator generator, WcfClientExtension clients)
 		{
 			this.generator = generator;
+			this.clients = clients;
 		}
 
 		public override object Create(IKernel kernel, object instance, ComponentModel model, 
@@ -92,13 +94,13 @@ namespace Castle.Facilities.WcfIntegration.Proxy
 			Array.Resize(ref interceptors, interceptors.Length + (clientModel.WantsAsyncCapability ? 2 : 1));
 			int index = interceptors.Length;
 
-			interceptors[--index] = new WcfRemotingInterceptor();
+			interceptors[--index] = new WcfRemotingInterceptor(clients);
 
 			if (clientModel.WantsAsyncCapability)
 			{
 				var getAsyncType = WcfUtils.SafeInitialize(ref asyncType,
 					() => AsyncType.GetAsyncType(model.Service));
-				interceptors[--index] = new WcfRemotingAsyncInterceptor(getAsyncType);
+				interceptors[--index] = new WcfRemotingAsyncInterceptor(getAsyncType, clients);
 			}
 
 			return interceptors;

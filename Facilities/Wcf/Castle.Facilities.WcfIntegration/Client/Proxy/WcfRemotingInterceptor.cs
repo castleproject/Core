@@ -22,6 +22,18 @@ namespace Castle.Facilities.WcfIntegration.Proxy
 
 	public class WcfRemotingInterceptor : IWcfInterceptor
 	{
+		private readonly WcfClientExtension clients;
+
+		public WcfRemotingInterceptor(WcfClientExtension clients)
+		{
+			this.clients = clients;
+		}
+
+		public WcfClientExtension Clients
+		{
+			get { return clients; }
+		}
+
 		public void Intercept(IInvocation invocation)
 		{
 			var channelHolder = invocation.Proxy as IWcfChannelHolder;
@@ -103,7 +115,14 @@ namespace Castle.Facilities.WcfIntegration.Proxy
 
 			if (!actionPolicyApplied)
 			{
-				action();
+				if (clients.DefaultChannelPolicy != null)
+				{
+					clients.DefaultChannelPolicy.Perform(channelHolder, invocation.Method, action);
+				}
+				else
+				{
+					action();
+				}
 			}
 		}
 	}

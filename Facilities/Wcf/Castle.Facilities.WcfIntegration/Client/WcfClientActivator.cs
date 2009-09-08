@@ -59,7 +59,8 @@ namespace Castle.Facilities.WcfIntegration
 			ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 			: base(model, kernel, onCreation, onDestruction)
 		{
-			proxyFactory = new WcfProxyFactory(new ProxyGenerator());
+			var clients = kernel.Resolve<WcfClientExtension>();
+			proxyFactory = new WcfProxyFactory(new ProxyGenerator(), clients);
 		}
 
 		protected override object InternalCreate(CreationContext context)
@@ -78,6 +79,10 @@ namespace Castle.Facilities.WcfIntegration
 			{
 				var channelHolder = new WcfChannelHolder(channelCreator, burden);
 				return proxyFactory.Create(Kernel, channelHolder, Model, context);
+			}
+			catch (CommunicationException)
+			{
+				throw;
 			}
 			catch (Exception ex)
 			{

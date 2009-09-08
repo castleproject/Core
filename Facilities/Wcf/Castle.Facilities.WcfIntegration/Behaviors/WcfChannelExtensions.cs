@@ -19,7 +19,7 @@ namespace Castle.Facilities.WcfIntegration
 	using Castle.Facilities.WcfIntegration.Internal;
 	using Castle.MicroKernel;
 
-	internal class WcfChannelExtensions : AbstractWcfExtension, IWcfChannelExtension
+	public class WcfChannelExtensions : AbstractWcfExtension, IWcfChannelExtension
 	{
 		public void Install(ChannelFactory channelFactory, IKernel kernel, IWcfBurden burden)
 		{

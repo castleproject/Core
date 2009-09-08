@@ -28,7 +28,8 @@ namespace Castle.Facilities.WcfIntegration.Async
 		[ThreadStatic]
 		private static AsyncWcfCallContext callContext;
 
-		public WcfRemotingAsyncInterceptor(AsyncType asyncType)
+		public WcfRemotingAsyncInterceptor(AsyncType asyncType, WcfClientExtension clients)
+			: base(clients)
 		{
 			this.asyncType = asyncType;
 		}
