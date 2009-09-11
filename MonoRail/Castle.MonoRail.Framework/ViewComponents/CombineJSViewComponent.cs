@@ -30,33 +30,33 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// View component for concatenating and minifying Javascript
 	/// and CSS
 	/// </summary>
-    [ViewComponentDetails("CombineJS")]
+	[ViewComponentDetails("CombineJS")]
 	public class CombineJSViewComponent : ViewComponent
 	{
-        private delegate string PostProcessScript(string file, string script);
+		private delegate string PostProcessScript(string file, string script);
 
-	    private IScriptBuilder scriptBuilder;
+		private IScriptBuilder scriptBuilder;
 
-	    ///<summary>
-        /// The default ScriptBuilder can be replaced
-        ///</summary>
-        public IScriptBuilder ScriptBuilder
-	    {
-	        get { return scriptBuilder; }
-	        set { scriptBuilder = value; }
-	    }
+		///<summary>
+		/// The default ScriptBuilder can be replaced
+		///</summary>
+		public IScriptBuilder ScriptBuilder
+		{
+			get { return scriptBuilder; }
+			set { scriptBuilder = value; }
+		}
 
 		/// <summary>
 		/// Initiliaze it.
 		/// </summary>
-        public override void Initialize()
-        {
-            scriptBuilder = new DefaultScriptBuilder();
+		public override void Initialize()
+		{
+			scriptBuilder = new DefaultScriptBuilder();
 
-            base.Initialize();
-        }
+			base.Initialize();
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// Called by the framework so the component can
 		/// render its content
 		/// </summary>
@@ -68,14 +68,14 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			// Evaluate the component body, without output
 			RenderBody(new StringWriter());
 
-			string key = (string)ComponentParams["key"];
+			string key = (string) ComponentParams["key"];
 			string cssKey = key + "css";
 
-            if (!ScriptBuilder.Concatenate)
+			if (!ScriptBuilder.Concatenate)
 			{
-				foreach(string file in combiner.CssFiles)
+				foreach (string file in combiner.CssFiles)
 					RenderCSS(combiner.Relative(file));
-				foreach(string file in combiner.JavascriptFiles)
+				foreach (string file in combiner.JavascriptFiles)
 					RenderJavascript(combiner.Relative(file));
 			}
 			else
@@ -95,17 +95,23 @@ namespace Castle.MonoRail.Framework.ViewComponents
 					RegisterCss(combiner, resourceRegistry, cssKey, cssHash);
 				}
 
+				string extension = String.Empty;
+				if (EngineContext.Services.UrlBuilder.UseExtensions)
+				{
+					extension = "." + EngineContext.UrlInfo.Extension;
+				}
+
 				if (cssHash != 0)
 				{
-					string cssFullName = string.Format("{0}/MonoRail/Files/BuiltJS.{1}?name={2}&version={3}",
-													   EngineContext.ApplicationPath, EngineContext.UrlInfo.Extension, cssKey, cssHash);
+					string cssFullName = string.Format("{0}/MonoRail/Files/BuiltJS{1}?name={2}&version={3}",
+					                                   EngineContext.ApplicationPath, extension, cssKey, cssHash);
 					RenderCSS(cssFullName);
 				}
 
 				if (javascriptHash != 0)
 				{
-					string javascriptFullName = string.Format("{0}/MonoRail/Files/BuiltJS.{1}?name={2}&version={3}",
-															  EngineContext.ApplicationPath, EngineContext.UrlInfo.Extension, key, javascriptHash);
+					string javascriptFullName = string.Format("{0}/MonoRail/Files/BuiltJS{1}?name={2}&version={3}",
+					                                          EngineContext.ApplicationPath, extension, key, javascriptHash);
 					RenderJavascript(javascriptFullName);
 				}
 			}
@@ -117,7 +123,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// <param name="file">The file.</param>
 		private void RenderCSS(string file)
 		{
-			RenderText(string.Format("<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}\" />{1}", 
+			RenderText(string.Format("<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}\" />{1}",
 									 file, Environment.NewLine));
 		}
 
@@ -144,8 +150,8 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 			string css = CombineCssFileContent(combiner);
 
-            if (ScriptBuilder.Minify)
-                css = ScriptBuilder.CompressCSS(css);
+			if (ScriptBuilder.Minify)
+				css = ScriptBuilder.CompressCSS(css);
 
 			StaticContentResource cssResource = new StaticContentResource(css);
 
@@ -166,8 +172,8 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 			string script = CombineJSFileContent(combiner.JavascriptFiles);
 
-            if (ScriptBuilder.Minify)
-                script = ScriptBuilder.CompressJavascript(script);
+			if (ScriptBuilder.Minify)
+				script = ScriptBuilder.CompressJavascript(script);
 
 			StaticContentResource staticContentResource = new StaticContentResource(script);
 
@@ -182,9 +188,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// <returns></returns>
 		private string CombineCssFileContent(CombinerConfig combiner)
 		{
-			CssRelativeUrlResolver resolver = 
+			CssRelativeUrlResolver resolver =
 				new CssRelativeUrlResolver(AppDomain.CurrentDomain.BaseDirectory, new Uri(EngineContext.ApplicationPath + "/", UriKind.Relative));
-			
+
 			PostProcessScript postProcess = resolver.Resolve;
 
 			return CombineFileContent(combiner.CssFiles, postProcess);
@@ -198,7 +204,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// <returns></returns>
 		private static string CombineJSFileContent(ICollection<string> files)
 		{
-			return CombineFileContent(files, (file, line) => line);   
+			return CombineFileContent(files, (file, line) => line);
 		}
 
 		/// <summary>
