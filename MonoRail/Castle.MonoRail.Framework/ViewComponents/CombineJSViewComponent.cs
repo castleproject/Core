@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		public override void Initialize()
 		{
-			scriptBuilder = new DefaultScriptBuilder();
+			scriptBuilder = EngineContext.Services.ScriptBuilder;
 
 			base.Initialize();
 		}
