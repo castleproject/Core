@@ -797,6 +797,7 @@ namespace Castle.MicroKernel
 			if (parentKernel != null)
 			{
 				parentKernel.HandlerRegistered -= new HandlerDelegate(HandlerRegisteredOnParentKernel);
+				parentKernel.HandlersChanged -= HandlersChangedOnParentKernel;
 				parentKernel.ComponentRegistered -= new ComponentDataDelegate(RaiseComponentRegistered);
 				parentKernel.ComponentUnregistered -= new ComponentDataDelegate(RaiseComponentUnregistered);
 			}
@@ -807,9 +808,15 @@ namespace Castle.MicroKernel
 			if (parentKernel != null)
 			{
 				parentKernel.HandlerRegistered += new HandlerDelegate(HandlerRegisteredOnParentKernel);
+				parentKernel.HandlersChanged += HandlersChangedOnParentKernel;
 				parentKernel.ComponentRegistered += new ComponentDataDelegate(RaiseComponentRegistered);
 				parentKernel.ComponentUnregistered += new ComponentDataDelegate(RaiseComponentUnregistered);
 			}
+		}
+
+		private void HandlersChangedOnParentKernel(ref bool changed)
+		{
+			RaiseHandlersChanged();
 		}
 
 		private void HandlerRegisteredOnParentKernel(IHandler handler, ref bool stateChanged)
@@ -874,6 +881,7 @@ namespace Castle.MicroKernel
 			}
 
 			RaiseHandlerRegistered(handler);
+			RaiseHandlersChanged();
 			RaiseComponentRegistered(key, handler);
 		}
 

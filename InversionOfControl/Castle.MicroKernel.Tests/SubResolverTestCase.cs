@@ -34,7 +34,9 @@ namespace Castle.MicroKernel.Tests
 
 			resolver.Result = 15;
 
-			kernel.RaiseHandlerRegistered(null);//should force reevaluation of state
+			//should force reevaluation of state
+			kernel.RaiseHandlerRegistered(null);
+			kernel.RaiseHandlersChanged();
 
 			Assert.AreEqual(HandlerState.Valid, handler.CurrentState);
 		}

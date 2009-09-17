@@ -47,6 +47,9 @@ namespace Castle.MicroKernel.SubSystems.Naming
         /// </summary>
         protected IDictionary service2Handler;
 
+		private readonly IDictionary<Type, IHandler[]> handlerListsByType = new Dictionary<Type, IHandler[]>();
+		private readonly IDictionary<Type, IHandler[]> assignableHandlerListsByType = new Dictionary<Type, IHandler[]>();
+
         private readonly ReaderWriterLock locker = new ReaderWriterLock();
         private readonly IList<IHandlerSelector> selectors = new List<IHandlerSelector>();
 
@@ -80,6 +83,8 @@ namespace Castle.MicroKernel.SubSystems.Naming
                 }
 
                 this[key] = handler;
+				handlerListsByType.Clear();
+				assignableHandlerListsByType.Clear();
             }
             finally
             {
@@ -119,6 +124,8 @@ namespace Castle.MicroKernel.SubSystems.Naming
             {
                 locker.AcquireWriterLock(Timeout.Infinite);
                 key2Handler.Remove(key);
+				handlerListsByType.Clear();
+				assignableHandlerListsByType.Clear();
             }
             finally
             {
@@ -226,43 +233,92 @@ namespace Castle.MicroKernel.SubSystems.Naming
         {
             if (service == null) throw new ArgumentNullException("service");
 
-            ArrayList list = new ArrayList();
+			IHandler[] result;
+			locker.AcquireReaderLock(Timeout.Infinite);
+			try
+        	{
+        		if(handlerListsByType.TryGetValue(service, out result))
+        			return result;
+        	}
+        	finally
+        	{
+        		locker.ReleaseLock();
+        	}
 
-            foreach (IHandler handler in GetHandlers())
-            {
-                if (service == handler.Service)
-                {
-                    list.Add(handler);
-                }
-            }
 
-            return (IHandler[])list.ToArray(typeof(IHandler));
+			locker.AcquireWriterLock(Timeout.Infinite);
+        	try
+        	{
+				ArrayList list = new ArrayList();
+
+				foreach (IHandler handler in GetHandlers())
+				{
+					if (service == handler.Service)
+					{
+						list.Add(handler);
+					}
+				}
+
+				result = (IHandler[])list.ToArray(typeof(IHandler));
+
+        		handlerListsByType[service] = result;
+
+        	}
+        	finally
+        	{
+        		locker.ReleaseLock();
+        	}
+
+			return result;
         }
 
         public virtual IHandler[] GetAssignableHandlers(Type service)
         {
             if (service == null) throw new ArgumentNullException("service");
 
-            ArrayList list = new ArrayList();
+			IHandler[] result;
+			locker.AcquireReaderLock(Timeout.Infinite);
+			try
+			{
+				if (assignableHandlerListsByType.TryGetValue(service, out result))
+					return result;
+			}
+			finally
+			{
+				locker.ReleaseLock();
+			}
 
-            foreach (IHandler handler in GetHandlers())
-            {
-                Type handlerService = handler.Service;
-                if (service.IsAssignableFrom(handlerService))
-                {
-                    list.Add(handler);
-                }
-                else
-                {
-                    if (service.IsGenericType &&
-                        service.GetGenericTypeDefinition().IsAssignableFrom(handlerService))
-                    {
-                        list.Add(handler);
-                    }
-                }
-            }
+            locker.AcquireWriterLock(Timeout.Infinite);
+        	try
+        	{
+				ArrayList list = new ArrayList();
 
-            return (IHandler[])list.ToArray(typeof(IHandler));
+				foreach (IHandler handler in GetHandlers())
+				{
+					Type handlerService = handler.Service;
+					if (service.IsAssignableFrom(handlerService))
+					{
+						list.Add(handler);
+					}
+					else
+					{
+						if (service.IsGenericType &&
+							service.GetGenericTypeDefinition().IsAssignableFrom(handlerService))
+						{
+							list.Add(handler);
+						}
+					}
+				}
+
+				result = (IHandler[])list.ToArray(typeof(IHandler));
+				assignableHandlerListsByType[service] = result;
+        	}
+        	finally
+        	{
+        		locker.ReleaseLock();
+        	}
+
+        	return result;
         }
 
         public virtual IHandler[] GetHandlers()

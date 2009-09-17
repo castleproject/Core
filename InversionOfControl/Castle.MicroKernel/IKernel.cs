@@ -298,6 +298,8 @@ namespace Castle.MicroKernel
 		/// <param name="handler"></param>
 		void RaiseHandlerRegistered(IHandler handler);
 
+		void RaiseHandlersChanged();
+
 		/// <summary>
 		/// Registers the <paramref name="forwardedType"/> to be forwarded 
 		/// to the component registered with <paramref name="name"/>.

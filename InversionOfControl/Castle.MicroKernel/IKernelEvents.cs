@@ -49,6 +49,8 @@ namespace Castle.MicroKernel
 	/// <param name="stateChanged"></param>
 	public delegate void HandlerDelegate(IHandler handler, ref bool stateChanged);
 
+	public delegate void HandlersChangedDelegate(ref bool stateChanged);
+
 	/// <summary>
 	/// Represents a delegate which holds dependency
 	/// resolving information.
@@ -104,6 +106,12 @@ namespace Castle.MicroKernel
 		/// (it might be in a valid or waiting dependency state)
 		/// </summary>
 		event HandlerDelegate HandlerRegistered;
+
+		/// <summary>
+		/// Event fired when a new handler is registered 
+		/// (it might be in a valid or waiting dependency state)
+		/// </summary>
+		event HandlersChangedDelegate HandlersChanged;
 
 		/// <summary>
 		/// Event fired when a dependency is being resolved,

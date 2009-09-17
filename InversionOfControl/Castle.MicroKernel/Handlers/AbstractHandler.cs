@@ -499,7 +499,7 @@ namespace Castle.MicroKernel.Handlers
 
 				// Register itself on the kernel
 				// to be notified if the dependency is satified
-				Kernel.HandlerRegistered += new HandlerDelegate(DependencySatisfied);
+				Kernel.HandlersChanged += new HandlersChangedDelegate(DependencySatisfied);
 
 				// We also gonna pay attention for state
 				// changed within this very handler. The 
@@ -516,9 +516,8 @@ namespace Castle.MicroKernel.Handlers
 		/// <remarks>
 		/// Handler for the event <see cref="IKernelEvents.HandlerRegistered"/>
 		/// </remarks>
-		/// <param name="handler"></param>
 		/// <param name="stateChanged"></param>
-		protected void DependencySatisfied(IHandler handler, ref bool stateChanged)
+		protected void DependencySatisfied(ref bool stateChanged)
 		{
 			// Check within the handler
 
@@ -601,7 +600,7 @@ namespace Castle.MicroKernel.Handlers
 			{
 				return;
 			}
-
+			bool shouldExecuteDependencyChanged = false;
 			bool stateChanged = false;
 
 			Type[] services = new Type[DependenciesByService.Count];
@@ -612,8 +611,7 @@ namespace Castle.MicroKernel.Handlers
 			{
 				if (Kernel.Parent.HasComponent(service))
 				{
-					IHandler handler = Kernel.Parent.GetHandler(service);
-					DependencySatisfied(handler, ref stateChanged);
+					shouldExecuteDependencyChanged = true;
 				}
 			}
 
@@ -625,10 +623,12 @@ namespace Castle.MicroKernel.Handlers
 			{
 				if (Kernel.Parent.HasComponent(key))
 				{
-					IHandler handler = Kernel.Parent.GetHandler(key);
-					DependencySatisfied(handler, ref stateChanged);
+					shouldExecuteDependencyChanged = true;
 				}
 			}
+
+			if (shouldExecuteDependencyChanged)
+				DependencySatisfied(ref stateChanged);
 		}
 
 		protected IKernel Kernel
@@ -738,6 +738,7 @@ namespace Castle.MicroKernel.Handlers
 		private void HandlerStateChanged(object source, EventArgs args)
 		{
 			Kernel.RaiseHandlerRegistered(this);
+			Kernel.RaiseHandlersChanged();
 		}
 
 		private void RaiseHandlerStateChanged()
@@ -750,7 +751,7 @@ namespace Castle.MicroKernel.Handlers
 
 		private void DisconnectEvents()
 		{
-			Kernel.HandlerRegistered -= new HandlerDelegate(DependencySatisfied);
+			Kernel.HandlersChanged -= new HandlersChangedDelegate(DependencySatisfied);
 			Kernel.AddedAsChildKernel -= new EventHandler(OnAddedAsChildKernel);
 			this.OnHandlerStateChanged -= new HandlerStateDelegate(HandlerStateChanged);
 		}
