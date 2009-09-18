@@ -53,6 +53,8 @@ namespace Castle.MicroKernel.Handlers
 		/// </summary>
 		protected ILifestyleManager lifestyleManager;
 
+		private Type service;
+
 		/// <summary>
 		/// Constructs and initializes the handler
 		/// </summary>
@@ -120,7 +122,12 @@ namespace Castle.MicroKernel.Handlers
 
 		public Type Service
 		{
-			get { return ComponentModel.Service; }
+			get
+			{
+				if (service == null)
+					service = ComponentModel.Service;
+				return service;
+			}
 		}
 
 		/// <summary>
