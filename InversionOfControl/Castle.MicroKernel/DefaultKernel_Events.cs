@@ -240,6 +240,9 @@ namespace Castle.MicroKernel
 
 		public IDisposable OptimizeDependencyResolution()
 		{
+			if (handlersChangedDeferred)
+				return null;
+
 			handlersChangedDeferred = true;
 
 			return new OptimizeDependencyResolutionDisposable(this);

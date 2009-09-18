@@ -189,9 +189,12 @@ namespace Castle.MicroKernel
 				throw new ArgumentNullException("registrations");
 			}
 
-			foreach(IRegistration registration in registrations)
+			using (OptimizeDependencyResolution())
 			{
-				registration.Register(this);
+				foreach (IRegistration registration in registrations)
+				{
+					registration.Register(this);
+				}
 			}
 
 			return this;
