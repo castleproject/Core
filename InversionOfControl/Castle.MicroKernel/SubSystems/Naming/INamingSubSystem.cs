@@ -18,6 +18,7 @@ namespace Castle.MicroKernel
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Contract for SubSystem that wishes to keep and coordinate
@@ -135,12 +136,12 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// List of handler by key
 		/// </summary>
-		IDictionary GetKey2Handler();
+		IDictionary<string,IHandler> GetKey2Handler();
 
 		/// <summary>
 		/// List of handler by service
 		/// </summary>
-		IDictionary GetService2Handler();
+		IDictionary<Type, IHandler> GetService2Handler();
 
         /// <summary>
         /// Register a new component resolver that can take part in the decision
