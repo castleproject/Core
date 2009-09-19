@@ -107,7 +107,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this <see cref="IConfigurationSource"/> produce debug information
+		/// Gets a value indicating whether this <see cref="IConfigurationSource"/> produces debug information.
 		/// </summary>
 		/// <value><c>true</c> if debug; otherwise, <c>false</c>.</value>
 		public bool Debug
@@ -139,7 +139,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		}
 
 		/// <summary>
-		/// Gets or Sets a value indicating whether the models should be verified against the db schema on Initialisation.
+		/// Gets or sets a value indicating whether the models should be verified against the db schema on initialisation.
 		/// </summary>
 		/// <value>
 		/// 	<c>true</c> if models should be verified; otherwise, <c>false</c>.
@@ -160,7 +160,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		}
 
 		/// <summary>
-		/// When <c>true</c>, NHibernate.Search event listeners are added. 
+		/// When <c>true</c>, NHibernate.Search event listeners are added.
 		/// </summary>
 		public virtual bool Searchable { get; set; }
 
@@ -199,9 +199,9 @@ namespace Castle.ActiveRecord.Framework.Config
 		}
 
 		/// <summary>
-		/// Builds an InPlaceConfiguratioSource for the specified database.
+		/// Builds an <see cref="InPlaceConfigurationSource"/> for the specified database.
 		/// </summary>
-		/// <param name="database">The database.</param>
+		/// <param name="database">The database type.</param>
 		/// <param name="connectionString">The connection string.</param>
 		/// <returns></returns>
 		public static InPlaceConfigurationSource Build(DatabaseType database, string connectionString)
@@ -269,8 +269,8 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// <summary>
 		/// Sets the type of the thread info.
 		/// </summary>
-		/// <param name="isWeb">if we run in a web context or not</param>
-		/// <param name="customType">Type of the custom implementation</param>
+		/// <param name="isWeb">If we are running in a web context.</param>
+		/// <param name="customType">The type of the custom implementation.</param>
 		protected void SetUpThreadInfoType(bool isWeb, String customType)
 		{
 			Type threadInfoType = null;
@@ -280,7 +280,7 @@ namespace Castle.ActiveRecord.Framework.Config
 				threadInfoType = typeof(WebThreadScopeInfo);
 			}
 
-			if (customType != null && customType != String.Empty)
+			if (!string.IsNullOrEmpty(customType))
 			{
 				String typeName = customType;
 
@@ -305,7 +305,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		{
 			Type sessionFactoryHolderType = typeof(SessionFactoryHolder);
 
-			if (customType != null && customType != String.Empty)
+			if (!string.IsNullOrEmpty(customType))
 			{
 				String typeName = customType;
 
@@ -325,10 +325,10 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// <summary>
 		/// Sets the type of the naming strategy.
 		/// </summary>
-		/// <param name="customType">Custom implementation type name</param>
+		/// <param name="customType">Custom implementation type name.</param>
 		protected void SetUpNamingStrategyType(String customType)
 		{
-			if (customType != null && customType != String.Empty)
+			if (!string.IsNullOrEmpty(customType))
 			{
 				String typeName = customType;
 
@@ -348,8 +348,8 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// <summary>
 		/// Sets the debug flag.
 		/// </summary>
-		/// <param name="isDebug">if set to <c>true</c> Active Record will produce debug information.</param>
-		protected void SetDebugFlag(bool isDebug)
+		/// <param name="isDebug">If set to <c>true</c> ActiveRecord will produce debug information.</param>
+		public void SetDebugFlag(bool isDebug)
 		{
 			debug = isDebug;
 		}
@@ -363,9 +363,9 @@ namespace Castle.ActiveRecord.Framework.Config
 		}
 
 		/// <summary>
-		/// Sets the debug flag.
+		/// Sets the flag to indicate if ActiveRecord should verify models against the database schema on startup.
 		/// </summary>
-		/// <param name="verifyModelsAgainstDBSchema">if set to <c>true</c> Active Record will verify the models against the db schema on startup.</param>
+		/// <param name="verifyModelsAgainstDBSchema">If set to <c>true</c> ActiveRecord will verify the models against the db schema on startup.</param>
 		protected void SetVerifyModelsAgainstDBSchema(bool verifyModelsAgainstDBSchema)
 		{
 			this.verifyModelsAgainstDBSchema = verifyModelsAgainstDBSchema;
@@ -374,14 +374,14 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// <summary>
 		/// Sets the pluralizeTableNames flag.
 		/// </summary>
-		/// <param name="pluralize">if set to <c>true</c> Active Record will pluralize inferred table names.</param>
+		/// <param name="pluralize">If set to <c>true</c> ActiveRecord will pluralize inferred table names.</param>
 		protected void SetPluralizeTableNames(bool pluralize)
 		{
 			pluralizeTableNames = pluralize;
 		}
 
 		/// <summary>
-		/// Sets the value determining flush behaviour
+		/// Sets the value indicating the default flush behaviour.
 		/// </summary>
 		/// <param name="flushType">The chosen default behaviour.</param>
 		protected void SetDefaultFlushType(DefaultFlushType flushType)
@@ -394,7 +394,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// XML. This method has been moved from XmlConfigurationSource to avoid code
 		/// duplication in ActiveRecordIntegrationFacility.
 		/// </summary>
-		/// <param name="configurationValue">The configuration value</param>
+		/// <param name="configurationValue">The configuration value.</param>
 		protected void SetDefaultFlushType(string configurationValue)
 		{
 			try
@@ -426,7 +426,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// <summary>
 		/// Processes the configuration applying any substitutions.
 		/// </summary>
-		/// <param name="config">The configuration</param>
+		/// <param name="config">The configuration to process.</param>
 		private static void ProcessConfiguration(IConfiguration config)
 		{
 			const string ConnectionStringKey = "connection.connection_string";
