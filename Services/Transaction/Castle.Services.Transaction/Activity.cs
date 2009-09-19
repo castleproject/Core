@@ -19,7 +19,7 @@ namespace Castle.Services.Transaction
 	using System.Runtime.Remoting.Messaging;
 
 	[Serializable]
-	public class Activity : MarshalByRefObject, ILogicalThreadAffinative
+	public class Activity : MarshalByRefObject
 	{
 		private Guid id;
 		private Stack<ITransaction> transactionStack = new Stack<ITransaction>(2);
