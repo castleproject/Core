@@ -12,19 +12,13 @@
 		<property name="assembly.description" value="The Unit Tests for Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
-			<include name="nunit.framework.dll" />
-			<include name="NVelocity.dll" />
-			<include name="Castle.Core.dll" />
-			<include name="Castle.Components.Common.TemplateEngine.dll" />
-			<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR" dynamicprefix="true" basedir="${src.dir}">
 			<include name="**/*.vm" />
 			<exclude name="obj/**" />
 		</resourcefileset>
-
-		</target>
+	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
 

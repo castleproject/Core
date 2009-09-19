@@ -13,7 +13,7 @@
 		<include name="Castle.Components.Common.TemplateEngine/Castle.Components.Common.TemplateEngine.build" />
 		<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.build" />
 		<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR.build" if="${common.testrunner.enabled}"/>
-		<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests./Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.build" if="${common.testrunner.enabled}"/>
+		<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.build" if="${common.testrunner.enabled}"/>
 	</fileset>
 
 	<target name="build" depends="common.build" />
