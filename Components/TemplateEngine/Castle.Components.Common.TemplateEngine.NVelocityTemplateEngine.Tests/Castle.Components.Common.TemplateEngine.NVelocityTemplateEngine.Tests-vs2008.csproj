@@ -91,9 +91,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=2.5.2.9222, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SharedLibs\net\2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\build\net-3.5\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -108,10 +108,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\..\Tools\NVelocity\src\NVelocity\NVelocity-vs2008.csproj">
-      <Project>{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}</Project>
-      <Name>NVelocity-vs2008</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR-vs2008.csproj">
       <Project>{B1DEC754-7B3F-4F3F-A99E-CB475C1AAFA2}</Project>
       <Name>Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR-vs2008</Name>
