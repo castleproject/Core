@@ -803,7 +803,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			Assert.IsNull(jobDetails.JobSpec.JobData);
 		}
 
-		[Test, Explicit("Disabled because it looks like Stopwatch is very accurate on a VM.")]
+		[Test, Ignore("Disabled because it looks like Stopwatch is very accurate on a VM.")]
 		public void SchedulerHandlesJobWatcherExceptionByInsertingAnErrorRecoveryDelay()
 		{
 			// The mock job watcher will throw on the first GetNextJobToProcess.
