@@ -15,12 +15,10 @@
 namespace Castle.Components.Scheduler.Tests.UnitTests
 {
 	using System;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Utilities;
 
 	[TestFixture]
-	[TestsOn(typeof (JobExecutionDetails))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
 	public class JobExecutionDetailsTest : BaseUnitTest
 	{
 		private static readonly Guid SchedulerGuid = Guid.NewGuid();
@@ -72,9 +70,8 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			details.StatusMessage = null;
 		}
 
-		[RowTest]
-		[Row(false)]
-		[Row(true)]
+		[TestCase(false)]
+		[TestCase(true)]
 		public void ClonePerformsADeepCopy(bool useGenericClonable)
 		{
 			DateTime now = DateTime.UtcNow;

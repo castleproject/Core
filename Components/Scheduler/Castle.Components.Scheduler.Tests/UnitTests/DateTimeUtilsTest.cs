@@ -15,13 +15,11 @@
 namespace Castle.Components.Scheduler.Tests.UnitTests
 {
 	using System;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Scheduler.Utilities;
 	using Utilities;
 
 	[TestFixture]
-	[TestsOn(typeof (DateTimeUtils))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
 	public class DateTimeUtilsTest
 	{
 		[Test]

@@ -15,7 +15,7 @@
 namespace Castle.Components.Scheduler.Tests.Utilities
 {
 	using System;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Assertions for job objects.
@@ -31,7 +31,7 @@ namespace Castle.Components.Scheduler.Tests.Utilities
 		{
 			actual = actual.ToUniversalTime();
 			expected = expected.ToUniversalTime();
-			Assert.Between(actual, expected.AddMilliseconds(-500), expected.AddMilliseconds(500));
+			Assert.That(actual, Is.GreaterThanOrEqualTo(expected.AddMilliseconds(-500)).And.LessThanOrEqualTo(expected.AddMilliseconds(500)));
 		}
 
 		public static void AreEqualUpToErrorLimit(DateTime? expected, DateTime? actual)
@@ -50,7 +50,7 @@ namespace Castle.Components.Scheduler.Tests.Utilities
 			}
 
 			Assert.IsNotNull(actual);
-			Assert.IsInstanceOfType(expected.GetType(), actual);
+			Assert.IsInstanceOf(expected.GetType(), actual);
 			Assert.AreEqual(expected.IsActive, actual.IsActive);
 			AreEqualUpToErrorLimit(expected.NextFireTimeUtc, actual.NextFireTimeUtc);
 			Assert.AreEqual(expected.NextMisfireThreshold, actual.NextMisfireThreshold);
@@ -81,7 +81,7 @@ namespace Castle.Components.Scheduler.Tests.Utilities
 			}
 
 			Assert.IsNotNull(actual);
-			CollectionAssert.AreElementsEqual(expected.State, actual.State);
+			CollectionAssert.AreEqual(expected.State, actual.State);
 		}
 
 		public static void AreEqual(JobSpec expected, JobSpec actual)

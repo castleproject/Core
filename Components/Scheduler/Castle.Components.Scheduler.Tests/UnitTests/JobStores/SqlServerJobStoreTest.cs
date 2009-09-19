@@ -18,12 +18,10 @@ namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 	using System.Data;
 	using System.Data.SqlClient;
 	using System.IO;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Scheduler.JobStores;
 
-	[TestFixture(TimeOut = 1)]
-	[TestsOn(typeof (SqlServerJobStore))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
+	[TestFixture, Ignore("A new database needs to be setup in the build server. And tests need to be updated to be configurable from nant.")]
 	public class SqlServerJobStoreTest : PersistentJobStoreTest
 	{
 		private string connectionString;
@@ -39,7 +37,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 		public void TestFixtureSetUp()
 		{
 			// Use the existing attached Db if there is one.
-			connectionString = "server=.; database=SchedulerTestDb; uid=SchedulerTestUser; pwd=test;";
+			connectionString = "server=.; database=SchedulerTestDb;Integrated Security=True";
 
 			try
 			{

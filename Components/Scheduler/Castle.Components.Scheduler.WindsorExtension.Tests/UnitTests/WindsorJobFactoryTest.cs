@@ -15,14 +15,12 @@
 namespace Castle.Components.Scheduler.WindsorExtension.Tests.UnitTests
 {
 	using System;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using MicroKernel;
 	using Rhino.Mocks;
 	using Scheduler.Tests.UnitTests;
 
 	[TestFixture]
-	[TestsOn(typeof (WindsorJobFactory))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
 	public class WindsorJobFactoryTest : BaseUnitTest
 	{
 		private IKernel kernel;

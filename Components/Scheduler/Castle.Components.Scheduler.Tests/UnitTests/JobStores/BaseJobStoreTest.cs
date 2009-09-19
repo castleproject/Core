@@ -18,16 +18,14 @@ namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 	using System.Collections.Generic;
 	using System.Threading;
 	using Core.Logging;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Scheduler.JobStores;
 	using Utilities;
 
 	/// <summary>
 	/// Base tests for a job store.
 	/// </summary>
-	[TestFixture(TimeOut = 1)]
-	[TestsOn(typeof (BaseJobStore))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
+	[TestFixture]
 	public abstract class BaseJobStoreTest : BaseUnitTest
 	{
 		protected static readonly Guid SchedulerGuid = Guid.NewGuid();
@@ -143,21 +141,19 @@ namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 			Assert.AreEqual(JobState.Orphaned, jobDetails.JobState);
 		}
 
-		[RowTest]
-		[Row(CreateJobConflictAction.Ignore)]
-		[Row(CreateJobConflictAction.Update)]
-		[Row(CreateJobConflictAction.Replace)]
-		[Row(CreateJobConflictAction.Throw)]
+		[TestCase(CreateJobConflictAction.Ignore)]
+		[TestCase(CreateJobConflictAction.Update)]
+		[TestCase(CreateJobConflictAction.Replace)]
+		[TestCase(CreateJobConflictAction.Throw)]
 		public void CreateJob_ReturnsTrueIfCreated(CreateJobConflictAction conflictAction)
 		{
 			Assert.IsTrue(jobStore.CreateJob(dummyJobSpec, DateTime.UtcNow, conflictAction));
 		}
 
-		[RowTest]
-		[Row(CreateJobConflictAction.Ignore, false)]
-		[Row(CreateJobConflictAction.Update, true)]
-		[Row(CreateJobConflictAction.Replace, true)]
-		[Row(CreateJobConflictAction.Throw, false, ExpectedException = typeof (SchedulerException))]
+		[TestCase(CreateJobConflictAction.Ignore, false)]
+		[TestCase(CreateJobConflictAction.Update, true)]
+		[TestCase(CreateJobConflictAction.Replace, true)]
+		[TestCase(CreateJobConflictAction.Throw, false, ExpectedException = typeof (SchedulerException))]
 		public void CreateJob_HandlesDuplicatesAccordingToConflictAction(CreateJobConflictAction conflictAction,
 		                                                                 bool expectedResult)
 		{
@@ -228,14 +224,13 @@ namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 			JobAssert.AreEqual(expectedUpdatedJob, updatedJob);
 		}
 
-		[RowTest]
-		[Row(JobState.Pending, JobState.Pending)]
-		[Row(JobState.Scheduled, JobState.Pending)]
-		[Row(JobState.Triggered, JobState.Triggered)]
-		[Row(JobState.Running, JobState.Running)]
-		[Row(JobState.Completed, JobState.Completed)]
-		[Row(JobState.Orphaned, JobState.Orphaned)]
-		[Row(JobState.Stopped, JobState.Stopped)]
+		[TestCase(JobState.Pending, JobState.Pending)]
+		[TestCase(JobState.Scheduled, JobState.Pending)]
+		[TestCase(JobState.Triggered, JobState.Triggered)]
+		[TestCase(JobState.Running, JobState.Running)]
+		[TestCase(JobState.Completed, JobState.Completed)]
+		[TestCase(JobState.Orphaned, JobState.Orphaned)]
+		[TestCase(JobState.Stopped, JobState.Stopped)]
 		public void UpdateJob_ResetsTheJobStateAppropriately(JobState initialJobState, JobState expectedJobState)
 		{
 			Mocks.ReplayAll();
@@ -328,8 +323,8 @@ namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 
 			string[] jobNames = jobStore.ListJobNames();
 			Assert.AreEqual(2, jobNames.Length);
-			Assert.In("thisJob", jobNames);
-			Assert.In("thatJobRenamed", jobNames);
+			CollectionAssert.Contains(jobNames, "thisJob");
+			CollectionAssert.Contains(jobNames, "thatJobRenamed");
 		}
 
 		[Test]
@@ -513,9 +508,9 @@ namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 			CreateScheduledJob("scheduled", fireTime);
 
 			// Wait for job to become ready.
-			Assert.LowerThan(DateTime.UtcNow, fireTime);
+			Assert.Less(DateTime.UtcNow, fireTime);
 			JobDetails triggered = watcher.GetNextJobToProcess();
-			Assert.GreaterEqualThan(DateTime.UtcNow, fireTime.Subtract(new TimeSpan(0, 0, 0, 0, 500)));
+			Assert.GreaterOrEqual(DateTime.UtcNow, fireTime.Subtract(new TimeSpan(0, 0, 0, 0, 500)));
 				// allow a little imprecision
 
 			// Job should come back triggered.

@@ -17,11 +17,10 @@ namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 	using System;
 	using System.Diagnostics;
 	using System.Threading;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Scheduler.JobStores;
 
-	[TestsOn(typeof (PersistentJobStore))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
+	[TestFixture]
 	public abstract class PersistentJobStoreTest : BaseJobStoreTest
 	{
 		public new PersistentJobStore JobStore
@@ -243,7 +242,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 			});
 
 			Assert.IsNull(jobWatcher.GetNextJobToProcess());
-			Assert.Between(stopwatch.ElapsedMilliseconds, 2000, 4000, "Check that the thread was blocked the whole time.");
+			Assert.That(stopwatch.ElapsedMilliseconds, Is.GreaterThanOrEqualTo(2000).And.LessThanOrEqualTo(4000), "Check that the thread was blocked the whole time.");
 		}
 
 		[Test]

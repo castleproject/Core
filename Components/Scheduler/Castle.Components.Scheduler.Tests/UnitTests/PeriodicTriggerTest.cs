@@ -15,12 +15,10 @@
 namespace Castle.Components.Scheduler.Tests.UnitTests
 {
 	using System;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Utilities;
 
 	[TestFixture]
-	[TestsOn(typeof (PeriodicTrigger))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
 	public class PeriodicTriggerTest : BaseUnitTest
 	{
 		[Test]
@@ -181,9 +179,8 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			Assert.IsTrue(trigger.IsFirstTime);
 		}
 
-		[RowTest]
-		[Row(false)]
-		[Row(true)]
+		[TestCase(false)]
+		[TestCase(true)]
 		public void ClonePerformsADeepCopy(bool useGenericClonable)
 		{
 			DateTime now = DateTime.UtcNow;
@@ -211,116 +208,115 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			Assert.AreEqual(trigger.NextMisfireThreshold, clone.NextMisfireThreshold);
 		}
 
-		[RowTest]
 		// One-shot triggers
-		[Row(1, 0, 0, 1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, true,
+		[TestCase(1, 0, 0, 1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, true,
 			TriggerScheduleAction.Skip, 1, 1, true, true, Description = "One-shot latch first time.")]
-		[Row(1, 0, 0, 0, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, false,
+		[TestCase(1, 0, 0, 0, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, false,
 			TriggerScheduleAction.Stop, 0, 0, false, false, Description = "One-shot latch second time succeeded yields stop.")]
-		[Row(1, 0, 0, 1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 1, true,
+		[TestCase(1, 0, 0, 1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 1, true,
 			TriggerScheduleAction.ExecuteJob, 0, 0, false, true, Description = "One-shot fire.")]
-		[Row(1, 0, 0, 1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 0, 1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true, Description = "One-shot misfire skip yields stop.")]
-		[Row(1, 0, 0, 1, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 0, 1, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.ExecuteJob, 0, 0, false, true, Description = "One-shot misfire execute yields execute.")]
-		[Row(1, 0, 0, 1, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 0, 1, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.DeleteJob, 0, 0, false, true, Description = "One-shot misfire deletejob yields deletejob.")]
-		[Row(1, 0, 0, 1, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 0, 1, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true, Description = "One-shot misfire stop yields stop.")]
 		// One-shot triggers, fired before start time
-		[Row(3, 0, 0, 1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 1, true,
+		[TestCase(3, 0, 0, 1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 1, true,
 			TriggerScheduleAction.Skip, 3, 1, true, true, Description = "One-shot fire before start time.")]
 		// Periodic unlimited triggers
-		[Row(1, 0, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, true,
+		[TestCase(1, 0, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, true,
 			TriggerScheduleAction.Skip, 1, -1, true, true, Description = "Periodic latch first time.")]
-		[Row(1, 0, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, false,
+		[TestCase(1, 0, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, false,
 			TriggerScheduleAction.Skip, 2, -1, true, false, Description = "Periodic latch second time yields skip.")]
-		[Row(1, 0, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 1, true,
+		[TestCase(1, 0, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 1, true,
 			TriggerScheduleAction.ExecuteJob, 0, -1, true, true, Description = "Periodic fire.")]
-		[Row(1, 0, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.Skip, 3, -1, true, true, Description = "Periodic misfire skip yields skip.")]
-		[Row(1, 0, 1, -1, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, -1, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.ExecuteJob, 0, -1, true, true, Description = "Periodic misfire execute yields execute.")]
-		[Row(1, 0, 1, -1, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, -1, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.DeleteJob, 0, 0, false, true, Description = "Periodic misfire deletejob yields deletejob.")]
-		[Row(1, 0, 1, -1, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, -1, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true, Description = "Periodic misfire stop yields stop.")]
 		// Periodic execution count limited triggers, non-zero count
-		[Row(1, 0, 1, 10, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, true,
+		[TestCase(1, 0, 1, 10, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, true,
 			TriggerScheduleAction.Skip, 1, 10, true, true, Description = "Periodic non-zero execution count latch first time.")]
-		[Row(1, 0, 1, 10, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, false,
+		[TestCase(1, 0, 1, 10, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, false,
 			TriggerScheduleAction.Skip, 2, 10, true, false,
 			Description = "Periodic non-zero execution count latch second time yields skip.")]
-		[Row(1, 0, 1, 10, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 1, true,
+		[TestCase(1, 0, 1, 10, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 1, true,
 			TriggerScheduleAction.ExecuteJob, 0, 9, true, true, Description = "Periodic non-zero execution count fire.")]
-		[Row(1, 0, 1, 10, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, 10, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.Skip, 3, 10, true, true,
 			Description = "Periodic non-zero execution count misfire skip yields skip.")]
-		[Row(1, 0, 1, 10, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, 10, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.ExecuteJob, 0, 9, true, true,
 			Description = "Periodic non-zero execution count misfire execute yields execute.")]
-		[Row(1, 0, 1, 10, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, 10, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.DeleteJob, 0, 0, false, true,
 			Description = "Periodic non-zero execution count misfire deletejob yields deletejob.")]
-		[Row(1, 0, 1, 10, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, 10, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true,
 			Description = "Periodic non-zero execution count misfire stop yields stop.")]
 		// Periodic execution count limited triggers, zero count
-		[Row(1, 0, 1, 0, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, true,
+		[TestCase(1, 0, 1, 0, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true,
 			Description = "Periodic zero execution count latch first time yields stop.")]
-		[Row(1, 0, 1, 0, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, false,
+		[TestCase(1, 0, 1, 0, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 1, false,
 			TriggerScheduleAction.Stop, 0, 0, false, false,
 			Description = "Periodic zero execution count latch second time yields stop.")]
-		[Row(1, 0, 1, 0, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 1, true,
+		[TestCase(1, 0, 1, 0, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 1, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true, Description = "Periodic zero execution count fire yields stop.")]
-		[Row(1, 0, 1, 0, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, 0, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true,
 			Description = "Periodic zero execution count misfire skip yields stop.")]
-		[Row(1, 0, 1, 0, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, 0, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true,
 			Description = "Periodic zero execution count misfire execute yields stop.")]
-		[Row(1, 0, 1, 0, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, 0, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.DeleteJob, 0, 0, false, true,
 			Description = "Periodic zero execution count misfire deletejob yields deletejob.")]
-		[Row(1, 0, 1, 0, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 2, true,
+		[TestCase(1, 0, 1, 0, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 2, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true,
 			Description = "Periodic zero execution count misfire stop yields stop.")]
 		// Periodic time limited triggers, over time
-		[Row(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 4, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 4, true,
 			TriggerScheduleAction.Skip, 1, -1, true, true,
 			Description = "Periodic over-time latch first time yields skip (because we want to detect the misfire).")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 4, false,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 4, false,
 			TriggerScheduleAction.Stop, 0, 0, false, false, Description = "Periodic over-time latch second time yields stop.")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 4, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 4, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true, Description = "Periodic over-time fire yields stop.")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 4, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 4, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true, Description = "Periodic over-time misfire skip yields stop.")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 4, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 4, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true, Description = "Periodic over-time misfire execute yields stop.")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 4, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 4, true,
 			TriggerScheduleAction.DeleteJob, 0, 0, false, true,
 			Description = "Periodic over-time misfire deletejob yields deletejob.")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 4, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 4, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true, Description = "Periodic over-time misfire stop yields stop.")]
 		// Periodic time limited triggers, exactly at end time
-		[Row(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 3, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 3, true,
 			TriggerScheduleAction.Skip, 1, -1, true, true,
 			Description = "Periodic at end-time latch first time yields skip (because we want to detect the misfire).")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 3, false,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Latch, 3, false,
 			TriggerScheduleAction.Stop, 0, 0, false, false, Description = "Periodic at end-time latch second time yields stop.")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 3, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Fire, 3, true,
 			TriggerScheduleAction.ExecuteJob, 0, -1, true, true,
 			Description = "Periodic at end-time fire yields execute (because we're exactly on it).")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 3, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.Skip, TriggerScheduleCondition.Misfire, 3, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true, Description = "Periodic at end-time misfire skip yields stop.")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 3, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.ExecuteJob, TriggerScheduleCondition.Misfire, 3, true,
 			TriggerScheduleAction.ExecuteJob, 0, -1, true, true,
 			Description = "Periodic at end-time misfire execute yields stop.")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 3, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.DeleteJob, TriggerScheduleCondition.Misfire, 3, true,
 			TriggerScheduleAction.DeleteJob, 0, 0, false, true,
 			Description = "Periodic at end-time misfire deletejob yields deletejob.")]
-		[Row(1, 3, 1, -1, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 3, true,
+		[TestCase(1, 3, 1, -1, TriggerScheduleAction.Stop, TriggerScheduleCondition.Misfire, 3, true,
 			TriggerScheduleAction.Stop, 0, 0, false, true, Description = "Periodic at end-time misfire stop yields stop.")]
 		public void Schedule(int startDay, int endDay, int periodDays, int jobExecutionCount,
 		                     TriggerScheduleAction misfireAction,

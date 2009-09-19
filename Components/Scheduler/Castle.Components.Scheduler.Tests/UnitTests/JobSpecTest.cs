@@ -15,12 +15,10 @@
 namespace Castle.Components.Scheduler.Tests.UnitTests
 {
 	using System;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Utilities;
 
 	[TestFixture]
-	[TestsOn(typeof (JobSpec))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
 	public class JobSpecTest : BaseUnitTest
 	{
 		private readonly Trigger trigger = PeriodicTrigger.CreateDailyTrigger(DateTime.UtcNow);
@@ -163,10 +161,9 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			Assert.AreSame(jobData, spec.JobData);
 		}
 
-		[RowTest]
-		[Row(false, false)]
-		[Row(true, false)]
-		[Row(true, true)]
+		[TestCase(false, false)]
+		[TestCase(true, false)]
+		[TestCase(true, true)]
 		public void ClonePerformsADeepCopy(bool useGenericClonable, bool jobDataIsNull)
 		{
 			JobSpec spec = new JobSpec("abc", "some job", "with this key", trigger);

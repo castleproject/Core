@@ -15,7 +15,7 @@
 namespace Castle.Components.Scheduler.Tests.Utilities
 {
 	using System;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Assertions for dates and times.

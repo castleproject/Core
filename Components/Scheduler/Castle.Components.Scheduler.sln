@@ -3,8 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{61CC2E74-62F9-47E9-9967-8350C8211C35}"
 	ProjectSection(SolutionItems) = preProject
-		..\docs\Readme.txt = ..\docs\Readme.txt
-		..\docs\TODO.txt = ..\docs\TODO.txt
+		Readme.txt = Readme.txt
+		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Scheduler", "Castle.Components.Scheduler\Castle.Components.Scheduler.csproj", "{6BEC39FE-F478-46B2-ACC9-994618156844}"

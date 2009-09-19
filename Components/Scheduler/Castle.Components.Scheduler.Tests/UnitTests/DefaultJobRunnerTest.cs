@@ -17,12 +17,10 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 	using System;
 	using System.Threading;
 	using Core.Logging;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Rhino.Mocks;
 
-	[TestFixture(TimeOut = 1)]
-	[TestsOn(typeof (DefaultJobRunner))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
+	[TestFixture]
 	public class DefaultJobRunnerTest : BaseUnitTest
 	{
 		[Test]

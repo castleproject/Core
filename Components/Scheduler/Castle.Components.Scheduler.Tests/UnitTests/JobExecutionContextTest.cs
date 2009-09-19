@@ -16,11 +16,9 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 {
 	using System;
 	using Core.Logging;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 
 	[TestFixture]
-	[TestsOn(typeof (JobExecutionContext))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
 	public class JobExecutionContextTest : BaseUnitTest
 	{
 		private IScheduler scheduler;

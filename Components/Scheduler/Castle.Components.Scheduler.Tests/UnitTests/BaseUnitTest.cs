@@ -14,7 +14,7 @@
 
 namespace Castle.Components.Scheduler.Tests.UnitTests
 {
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Rhino.Mocks;
 
 	/// <summary>

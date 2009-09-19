@@ -16,12 +16,10 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 {
 	using System;
 	using System.Collections.Generic;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Utilities;
 
 	[TestFixture]
-	[TestsOn(typeof (JobData))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
 	public class JobDataTest : BaseUnitTest
 	{
 		[Test]
@@ -46,9 +44,8 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			new JobData(null);
 		}
 
-		[RowTest]
-		[Row(false)]
-		[Row(true)]
+		[TestCase(false)]
+		[TestCase(true)]
 		public void ClonePerformsADeepCopy(bool useGenericClonable)
 		{
 			Dictionary<string, object> dict = new Dictionary<string, object>();

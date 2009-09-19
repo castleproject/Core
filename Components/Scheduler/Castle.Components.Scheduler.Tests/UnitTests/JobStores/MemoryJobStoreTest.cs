@@ -15,12 +15,10 @@
 namespace Castle.Components.Scheduler.Tests.UnitTests.JobStores
 {
 	using System;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Scheduler.JobStores;
 
-	[TestFixture(TimeOut = 1)]
-	[TestsOn(typeof (MemoryJobStore))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
+	[TestFixture]
 	public class MemoryJobStoreTest : BaseJobStoreTest
 	{
 		protected override BaseJobStore CreateJobStore()

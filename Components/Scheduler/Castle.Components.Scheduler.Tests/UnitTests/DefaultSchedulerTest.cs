@@ -18,15 +18,13 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 	using System.Diagnostics;
 	using System.Threading;
 	using Core.Logging;
-	using MbUnit.Framework;
+	using NUnit.Framework;
 	using Rhino.Mocks;
 	using Rhino.Mocks.Constraints;
 	using Scheduler.JobStores;
 	using Utilities;
 
-	[TestFixture(TimeOut = 1)]
-	[TestsOn(typeof (DefaultScheduler))]
-	[Author("Jeff Brown", "jeff@ingenio.com")]
+	[TestFixture]
 	public class DefaultSchedulerTest : BaseUnitTest
 	{
 		private delegate void SaveJobDetailsDelegate(JobDetails jobDetails);
@@ -335,7 +333,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 
 			Mocks.ReplayAll();
 
-			CollectionAssert.AreElementsEqual(new string[] {"a", "b"}, scheduler.ListJobNames());
+			CollectionAssert.AreEqual(new [] { "a", "b" }, scheduler.ListJobNames());
 		}
 
 		[Test]
@@ -361,7 +359,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 		public void CreateJob_DelegatesToJobStore()
 		{
 			mockJobStore.CreateJob(dummyJobSpec, DateTime.UtcNow, CreateJobConflictAction.Update);
-			LastCall.Constraints(Is.Same(dummyJobSpec), Is.Anything(), Is.Equal(CreateJobConflictAction.Update)).Return(true);
+			LastCall.Constraints(Rhino.Mocks.Constraints.Is.Same(dummyJobSpec), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Equal(CreateJobConflictAction.Update)).Return(true);
 
 			Mocks.ReplayAll();
 
@@ -487,7 +485,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			PrepareMockJobWatcher(jobDetails);
 
 			Expect.Call(mockTrigger.Schedule(TriggerScheduleCondition.Latch, DateTime.UtcNow, null))
-				.Constraints(Is.Equal(TriggerScheduleCondition.Latch), Is.Anything(), Is.Null())
+				.Constraints(Rhino.Mocks.Constraints.Is.Equal(TriggerScheduleCondition.Latch), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Null())
 				.Return(TriggerScheduleAction.Skip);
 			Expect.Call(mockTrigger.NextFireTimeUtc).Return(new DateTime(1970, 1, 5, 0, 0, 0, DateTimeKind.Utc));
 			Expect.Call(mockTrigger.NextMisfireThreshold).Return(new TimeSpan(0, 1, 0));
@@ -507,10 +505,9 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			Assert.IsNull(jobDetails.LastJobExecutionDetails);
 		}
 
-		[RowTest]
-		[Row(false, false, false)]
-		[Row(true, false, false)]
-		[Row(true, true, true)]
+		[TestCase(false, false, false)]
+		[TestCase(true, false, false)]
+		[TestCase(true, true, true)]
 		public void ScheduleOrphanJob_WithStopAction(bool lastExecutionDetailsNotNull,
 		                                             bool lastExecutionSucceeded, bool lastEndTimeNotNull)
 		{
@@ -529,7 +526,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			PrepareMockJobWatcher(jobDetails);
 
 			Expect.Call(mockTrigger.Schedule(TriggerScheduleCondition.Latch, DateTime.UtcNow, null))
-				.Constraints(Is.Equal(TriggerScheduleCondition.Latch), Is.Anything(), Property.Value("Succeeded", false))
+				.Constraints(Rhino.Mocks.Constraints.Is.Equal(TriggerScheduleCondition.Latch), Rhino.Mocks.Constraints.Is.Anything(), Property.Value("Succeeded", false))
 				.Return(TriggerScheduleAction.DeleteJob);
 			Expect.Call(mockTrigger.NextFireTimeUtc).Return(null);
 			Expect.Call(mockTrigger.NextMisfireThreshold).Return(null);
@@ -551,10 +548,9 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			Assert.IsNotNull(jobDetails.LastJobExecutionDetails.EndTimeUtc);
 		}
 
-		[RowTest]
-		[Row(false, false, false)]
-		[Row(true, false, false)]
-		[Row(true, true, true)]
+		[TestCase(false, false, false)]
+		[TestCase(true, false, false)]
+		[TestCase(true, true, true)]
 		public void ScheduleCompletedJob_WithStopAction(bool lastExecutionDetailsNotNull,
 		                                                bool lastExecutionSucceeded, bool lastEndTimeNotNull)
 		{
@@ -573,7 +569,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			PrepareMockJobWatcher(jobDetails);
 
 			Expect.Call(mockTrigger.Schedule(TriggerScheduleCondition.Latch, DateTime.UtcNow, null))
-				.Constraints(Is.Equal(TriggerScheduleCondition.Latch), Is.Anything(),
+				.Constraints(Rhino.Mocks.Constraints.Is.Equal(TriggerScheduleCondition.Latch), Rhino.Mocks.Constraints.Is.Anything(),
 				             Property.Value("Succeeded", lastExecutionSucceeded))
 				.Return(TriggerScheduleAction.Stop);
 			Expect.Call(mockTrigger.NextFireTimeUtc).Return(null);
@@ -596,14 +592,13 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			Assert.IsNotNull(jobDetails.LastJobExecutionDetails.EndTimeUtc);
 		}
 
-		[RowTest]
-		[Row(false, true, true, Description = "Fire with trigger fire time & misfire threshold.")]
-		[Row(false, true, false, Description = "Fire with trigger fire time but not misfire threshold.")]
-		[Row(true, true, true, Description = "Misfire with trigger fire time & misfire threshold.")]
-		[Row(true, false, true, Description = "Misfire because of missing trigger fire time but have misfire threshold.")]
-		[Row(true, false, false,
+		[TestCase(false, true, true, Description = "Fire with trigger fire time & misfire threshold.")]
+		[TestCase(false, true, false, Description = "Fire with trigger fire time but not misfire threshold.")]
+		[TestCase(true, true, true, Description = "Misfire with trigger fire time & misfire threshold.")]
+		[TestCase(true, false, true, Description = "Misfire because of missing trigger fire time but have misfire threshold.")]
+		[TestCase(true, false, false,
 			Description = "Misfire because of missing trigger fire time but also missing misfire threshold.")]
-		[Row(true, true, true, Description = "Misfire assumed because last execution details missing.")]
+		[TestCase(true, true, true, Description = "Misfire assumed because last execution details missing.")]
 		public void SchedulerTriggeredJob_WithSkipAction(bool misfire,
 		                                                 bool nextTriggerFireTimeNotNull,
 		                                                 bool nextTriggerMisfireThresholdNotNull)
@@ -627,7 +622,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			                                             	: TriggerScheduleCondition.Fire;
 
 			Expect.Call(mockTrigger.Schedule(expectedCondition, DateTime.MinValue, null))
-				.Constraints(Is.Equal(expectedCondition), Is.Anything(), Is.Null())
+				.Constraints(Rhino.Mocks.Constraints.Is.Equal(expectedCondition), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Null())
 				.Return(TriggerScheduleAction.Skip);
 			Expect.Call(mockTrigger.NextFireTimeUtc).Return(new DateTime(1970, 1, 5, 0, 0, 0, DateTimeKind.Utc));
 			Expect.Call(mockTrigger.NextMisfireThreshold).Return(new TimeSpan(0, 2, 0));
@@ -647,10 +642,9 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			Assert.IsNull(jobDetails.LastJobExecutionDetails);
 		}
 
-		[RowTest]
-		[Row(true, false, false, Description = "Successful job execution.")]
-		[Row(false, false, false, Description = "Failed job execution with no exception.")]
-		[Row(false, true, false, Description = "Failed job executed without an exception.")]
+		[TestCase(true, false, false, Description = "Successful job execution.")]
+		[TestCase(false, false, false, Description = "Failed job execution with no exception.")]
+		[TestCase(false, true, false, Description = "Failed job executed without an exception.")]
 		public void SchedulerExecutesJobsAndHandlesSuccessFailureOrException(
 			bool jobSucceeds, bool jobThrows, bool savingCompletedJobThrows)
 		{
@@ -692,10 +686,10 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 
 				Assert.IsNotNull(completedJobDetails.LastJobExecutionDetails);
 				Assert.AreEqual(scheduler.Guid, completedJobDetails.LastJobExecutionDetails.SchedulerGuid);
-				Assert.GreaterEqualThan(completedJobDetails.LastJobExecutionDetails.StartTimeUtc,
+				Assert.GreaterOrEqual(completedJobDetails.LastJobExecutionDetails.StartTimeUtc,
 				                        completedJobDetails.CreationTimeUtc);
 				Assert.IsNotNull(completedJobDetails.LastJobExecutionDetails.EndTimeUtc);
-				Assert.GreaterEqualThan(completedJobDetails.LastJobExecutionDetails.EndTimeUtc,
+				Assert.GreaterOrEqual(completedJobDetails.LastJobExecutionDetails.EndTimeUtc,
 				                        completedJobDetails.LastJobExecutionDetails.StartTimeUtc);
 				Assert.AreEqual(jobSucceeds, completedJobDetails.LastJobExecutionDetails.Succeeded);
 
@@ -735,10 +729,10 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 
 				Assert.IsNotNull(completedJobDetails.LastJobExecutionDetails);
 				Assert.AreEqual(scheduler.Guid, completedJobDetails.LastJobExecutionDetails.SchedulerGuid);
-				Assert.GreaterEqualThan(completedJobDetails.LastJobExecutionDetails.StartTimeUtc,
+				Assert.GreaterOrEqual(completedJobDetails.LastJobExecutionDetails.StartTimeUtc,
 				                        completedJobDetails.CreationTimeUtc);
 				Assert.IsNotNull(completedJobDetails.LastJobExecutionDetails.EndTimeUtc);
-				Assert.GreaterEqualThan(completedJobDetails.LastJobExecutionDetails.EndTimeUtc,
+				Assert.GreaterOrEqual(completedJobDetails.LastJobExecutionDetails.EndTimeUtc,
 				                        completedJobDetails.LastJobExecutionDetails.StartTimeUtc);
 				Assert.AreEqual(false, completedJobDetails.LastJobExecutionDetails.Succeeded);
 				Assert.IsNull(completedJobDetails.JobSpec.JobData);
@@ -784,11 +778,10 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			RunSchedulerUntilWake();
 		}
 
-		[RowTest]
-		[Row(JobState.Scheduled)]
-		[Row(JobState.Running)]
-		[Row(JobState.Stopped)]
-		[Row((JobState) 9999)] // invalid job state
+		[TestCase(JobState.Scheduled)]
+		[TestCase(JobState.Running)]
+		[TestCase(JobState.Stopped)]
+		[TestCase((JobState) 9999)] // invalid job state
 		public void SchedulerHandlesUnexpectedJobStateReceivedFromWatcherByStoppingTheTrigger(JobState jobState)
 		{
 			JobDetails jobDetails = new JobDetails(dummyJobSpec, DateTime.UtcNow);
@@ -836,12 +829,11 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 
 			Stopwatch stopWatch = Stopwatch.StartNew();
 			RunSchedulerUntilWake();
-			Assert.Between(stopWatch.ElapsedMilliseconds, 2000, 10000);
+			Assert.That(stopWatch.ElapsedMilliseconds, NUnit.Framework.Is.GreaterThanOrEqualTo(2000).And.LessThanOrEqualTo(10000));
 		}
 
-		[RowTest]
-		[Row(false)]
-		[Row(true)]
+		[TestCase(false)]
+		[TestCase(true)]
 		public void SchedulerHandlesJobWatcherObjectDisposedExceptionByStopping(bool throwSecondExceptionInDispose)
 		{
 			// The mock job watcher will throw ObjectDisposedException on the first
@@ -884,7 +876,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			jobDetails.JobState = JobState.Pending;
 
 			Expect.Call(mockTrigger.Schedule(TriggerScheduleCondition.Latch, DateTime.UtcNow, null))
-				.Constraints(Is.Equal(TriggerScheduleCondition.Latch), Is.Anything(), Is.Null())
+				.Constraints(Rhino.Mocks.Constraints.Is.Equal(TriggerScheduleCondition.Latch), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Null())
 				.Return(TriggerScheduleAction.Stop);
 			Expect.Call(mockTrigger.NextFireTimeUtc).Return(new DateTime(1970, 1, 5, 0, 0, 0, DateTimeKind.Utc));
 			Expect.Call(mockTrigger.NextMisfireThreshold).Return(new TimeSpan(0, 1, 0));
@@ -912,7 +904,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 
 			Stopwatch stopWatch = Stopwatch.StartNew();
 			RunSchedulerUntilWake();
-			Assert.Between(stopWatch.ElapsedMilliseconds, 2000, 10000);
+			Assert.That(stopWatch.ElapsedMilliseconds, NUnit.Framework.Is.GreaterThanOrEqualTo(2000).And.LessThanOrEqualTo(10000));
 		}
 
 		[Test]
@@ -926,7 +918,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			jobDetails.JobState = JobState.Pending;
 
 			Expect.Call(mockTrigger.Schedule(TriggerScheduleCondition.Latch, DateTime.UtcNow, null))
-				.Constraints(Is.Equal(TriggerScheduleCondition.Latch), Is.Anything(), Is.Null())
+				.Constraints(Rhino.Mocks.Constraints.Is.Equal(TriggerScheduleCondition.Latch), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Null())
 				.Return(TriggerScheduleAction.Stop);
 			Expect.Call(mockTrigger.NextFireTimeUtc).Return(new DateTime(1970, 1, 5, 0, 0, 0, DateTimeKind.Utc));
 			Expect.Call(mockTrigger.NextMisfireThreshold).Return(new TimeSpan(0, 1, 0));
@@ -954,11 +946,10 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 
 			Stopwatch stopWatch = Stopwatch.StartNew();
 			RunSchedulerUntilWake();
-			Assert.LowerThan(stopWatch.ElapsedMilliseconds, 2000);
+			Assert.Less(stopWatch.ElapsedMilliseconds, 2000);
 		}
 
-		[RowTest]
-		[Row((TriggerScheduleAction) 9999)] // invalid trigger action
+		[TestCase((TriggerScheduleAction) 9999)] // invalid trigger action
 		public void ScheduleHandlesUnexpectedActionReceivedFromTriggerByStoppingTheTrigger(TriggerScheduleAction action)
 		{
 			JobDetails jobDetails = new JobDetails(dummyJobSpec, DateTime.UtcNow);
@@ -967,7 +958,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			PrepareMockJobWatcher(jobDetails);
 
 			Expect.Call(mockTrigger.Schedule(TriggerScheduleCondition.Latch, DateTime.UtcNow, null))
-				.Constraints(Is.Equal(TriggerScheduleCondition.Latch), Is.Anything(), Is.Null())
+				.Constraints(Rhino.Mocks.Constraints.Is.Equal(TriggerScheduleCondition.Latch), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Null())
 				.Return(action);
 			Expect.Call(mockTrigger.NextFireTimeUtc).Return(new DateTime(1970, 1, 5, 0, 0, 0, DateTimeKind.Utc));
 			Expect.Call(mockTrigger.NextMisfireThreshold).Return(new TimeSpan(0, 1, 0));
@@ -995,7 +986,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			PrepareMockJobWatcher(jobDetails);
 
 			Expect.Call(mockTrigger.Schedule(TriggerScheduleCondition.Latch, DateTime.UtcNow, null))
-				.Constraints(Is.Equal(TriggerScheduleCondition.Latch), Is.Anything(), Is.Null())
+				.Constraints(Rhino.Mocks.Constraints.Is.Equal(TriggerScheduleCondition.Latch), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Null())
 				.Throw(new Exception("Oh no!")); // throw an exception from the trigger
 
 			mockJobStore.SaveJobDetails(jobDetails);
@@ -1024,7 +1015,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			PrepareMockJobWatcher(jobDetails);
 
 			Expect.Call(mockTrigger.Schedule(TriggerScheduleCondition.Latch, DateTime.MinValue, null))
-				.Constraints(Is.Equal(TriggerScheduleCondition.Latch), Is.Anything(), Is.Null())
+				.Constraints(Rhino.Mocks.Constraints.Is.Equal(TriggerScheduleCondition.Latch), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Null())
 				.Return(TriggerScheduleAction.ExecuteJob);
 			Expect.Call(mockTrigger.NextFireTimeUtc).Return(null);
 			Expect.Call(mockTrigger.NextMisfireThreshold).Return(null);
@@ -1035,7 +1026,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 				Assert.AreEqual(JobState.Running, jobDetails.JobState);
 				Assert.IsNotNull(jobDetails.LastJobExecutionDetails);
 				Assert.AreEqual(scheduler.Guid, jobDetails.LastJobExecutionDetails.SchedulerGuid);
-				Assert.GreaterEqualThan(jobDetails.LastJobExecutionDetails.StartTimeUtc, jobDetails.CreationTimeUtc);
+				Assert.GreaterOrEqual(jobDetails.LastJobExecutionDetails.StartTimeUtc, jobDetails.CreationTimeUtc);
 				Assert.IsNull(jobDetails.LastJobExecutionDetails.EndTimeUtc);
 				Assert.IsFalse(jobDetails.LastJobExecutionDetails.Succeeded);
 			});
