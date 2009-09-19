@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="ErrorSummaryTestCase.cs" />
     <Compile Include="LocalizationTests\LocalizationTestFixture.cs" />
+    <Compile Include="Models\ClassWithVirtualProperty.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="CachedValidationRegistryTestCase.cs" />
     <Compile Include="Models\InsertUpdateClass.cs" />
@@ -100,6 +101,14 @@
     <Compile Include="ValidatorTests\TimeSpanValidatorTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core-vs2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-vs2008.csproj">
+      <Project>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</Project>
+      <Name>Castle.DynamicProxy-vs2008</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.Components.Validator\Castle.Components.Validator-vs2008.csproj">
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
       <Name>Castle.Components.Validator-vs2008</Name>

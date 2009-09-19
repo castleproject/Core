@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Globalization;
-using System.Resources;
-using System.Threading;
-
 namespace Castle.Components.Validator.Tests
 {
 	using System;
+	using System.Globalization;
 	using System.Reflection;
+	using System.Resources;
+	using System.Threading;
 	using Castle.Components.Validator.Tests.Models;
+	using Castle.DynamicProxy;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -122,6 +122,16 @@ namespace Castle.Components.Validator.Tests
 				Thread.CurrentThread.CurrentCulture = prev;
 				Thread.CurrentThread.CurrentUICulture = prevUI;
 			}
+		}
+
+		[Test]
+		public void GetValidators_in_a_DynamicProxy_virtual_Property()
+		{
+			ProxyGenerator proxyGenerator = new ProxyGenerator();
+			var obj = proxyGenerator.CreateClassProxy<ClassWithVirtualProperty>();
+			IValidator[] validators = registry.GetValidators(new ValidatorRunner(registry), obj.GetType(), RunWhen.Everytime);
+
+			Assert.IsNotEmpty(validators);
 		}
 	}
 }

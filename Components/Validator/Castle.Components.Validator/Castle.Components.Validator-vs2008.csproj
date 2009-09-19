@@ -213,12 +213,6 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
-      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
-      <Name>Castle.Core-vs2008</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

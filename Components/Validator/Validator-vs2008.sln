@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Validator
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2008", "..\..\Core\Castle.Core\Castle.Core-vs2008.csproj", "{E4FA5B53-7D36-429E-8E5C-53D5479242BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy-vs2008", "..\..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-vs2008.csproj", "{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

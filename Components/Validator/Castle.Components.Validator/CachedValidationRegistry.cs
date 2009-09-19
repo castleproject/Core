@@ -109,7 +109,7 @@ namespace Castle.Components.Validator
 
 			if (builders == null)
 			{
-				builders = property.GetCustomAttributes(typeof(IValidatorBuilder), true);
+				builders = GetValidatorBuildersForProperty(property);
 
 				// Attribute order cannot be guaranted in C#
 				// this way we assure there order by Type Name
@@ -181,6 +181,27 @@ namespace Castle.Components.Validator
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Gets IValidatorBuilders for the specified targetType and property.
+		/// </summary>
+		/// <param name="property">The property.</param>
+		/// <returns>Array of IValidatorBuilders.</returns>
+		protected virtual object[] GetValidatorBuildersForProperty(PropertyInfo property)
+		{
+			ArrayList result = new ArrayList();
+			Attribute[] attributes = Attribute.GetCustomAttributes(property, true);
+
+			foreach (Attribute attribute in attributes)
+			{
+				if (attribute is IValidatorBuilder)
+				{
+					result.Add(attribute);
+				}
+			}
+
+			return result.ToArray();
+		}
 
 		/// <summary>
 		/// Resolve properties that will be inspected for registered validators
