@@ -21,8 +21,6 @@ namespace Castle.Services.Transaction
 	{
 		private const string Key = "Castle.Services.Transaction.Activity";
 
-		private object lockObj = new object();
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CallContextActivityManager"/> class.
 		/// </summary>
@@ -57,18 +55,15 @@ namespace Castle.Services.Transaction
 		{
 			get
 			{
-				lock(lockObj)
+				Activity activity = (Activity) CallContext.GetData(Key);
+
+				if (activity == null)
 				{
-					Activity activity = (Activity) CallContext.GetData(Key);
-
-					if (activity == null)
-					{
-						activity = new Activity();
-						CallContext.SetData(Key, activity);
-					}
-
-					return activity;
+					activity = new Activity();
+					CallContext.SetData(Key, activity);
 				}
+
+				return activity;
 			}
 		}
 	}

@@ -123,8 +123,6 @@ namespace Castle.Services.Transaction
 				{
 					transaction = ((StandardTransaction) CurrentTransaction).CreateChildTransaction();
 
-					RaiseChildTransactionCreated(transaction, transactionMode, isolationMode, distributedTransaction);
-
 					logger.DebugFormat("Child Transaction {0} created", transaction.GetHashCode());
 				}
 			}
@@ -142,14 +140,17 @@ namespace Castle.Services.Transaction
 #endif
 				}
 
-				RaiseTransactionCreated(transaction, transactionMode, isolationMode, distributedTransaction);
-
 				logger.DebugFormat("Transaction {0} created", transaction.GetHashCode());
 			}
 
 			transaction.Logger = logger.CreateChildLogger(transaction.GetType().FullName);
 
 			activityManager.CurrentActivity.Push(transaction);
+
+			if (transaction.IsChildTransaction)
+				RaiseChildTransactionCreated(transaction, transactionMode, isolationMode, distributedTransaction);
+			else
+				RaiseTransactionCreated(transaction, transactionMode, isolationMode, distributedTransaction);
 
 			return transaction;
 		}
