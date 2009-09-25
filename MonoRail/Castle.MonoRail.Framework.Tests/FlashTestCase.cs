@@ -112,6 +112,19 @@ namespace Castle.MonoRail.Framework.Tests
 
 			Assert.IsFalse( flash.ContainsKey("test1") );
 			Assert.IsFalse( flash.ContainsKey("test2") );
+
+			flash = new Flash();
+
+			flash.Add("test1", "hello");
+			flash.Add("test1", "hello update");
+
+			Assert.AreEqual("hello update", flash["test1"]);
+
+			flash.Discard("test1");
+
+			flash.Sweep();
+
+			Assert.IsFalse(flash.ContainsKey("test1"));
 		}
 	}
 }

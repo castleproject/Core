@@ -211,6 +211,11 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		private void InternalAdd(object key, object value)
 		{
+			int index = keep.IndexOf(key);
+			if (index >= 0)
+			{
+				keep.RemoveAt(index);
+			}
 			keep.Add(key);
 			base[key] = value;
 		}
