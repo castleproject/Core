@@ -100,6 +100,9 @@ namespace Castle.MonoRail.Framework.Routing
 			string mrPath = CreateMonoRailPath(match);
 			string url = request.RawUrl;
 
+			// Add the original URL as x-original-url header to allow caching-support
+			request.Headers.Add("X-Original-Url", url);
+
 			string paramsAsQueryString = "";
 
 			int queryStringIndex = url.IndexOf('?');
