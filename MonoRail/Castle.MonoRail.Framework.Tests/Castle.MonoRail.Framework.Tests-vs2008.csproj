@@ -177,6 +177,7 @@
     <Compile Include="Async\ControllerWithBeginIndexWithoutEndIndex.cs" />
     <Compile Include="Async\ControllerWithTwoBeginIndex.cs" />
     <Compile Include="Async\ControllerWithTwoEndActions.cs" />
+    <Compile Include="Bugs\MR-ISSUE-472.cs" />
     <Compile Include="Bugs\MR-ISSUE-535.cs" />
     <Compile Include="Bugs\MR-ISSUE-476.cs" />
     <Compile Include="Bugs\MR-ISSUE-532.cs" />
