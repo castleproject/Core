@@ -22,8 +22,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	using System.IO;
 	using System.Reflection;
 	using System.Threading;
-	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Tests.Controllers;
 	using NUnit.Framework;
@@ -47,6 +45,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Thread.CurrentThread.CurrentUICulture = en;
 
 			helper = new FormHelper();
+			helper.ServerUtility = new StubServerUtility();
 
 			subscription = new Subscription();
 			months = new Month[] { new Month(1, "January"), new Month(1, "February") };
@@ -118,6 +117,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 							"<option value=\"cat1\">cat1</option>" + Environment.NewLine + "<option value=\"cat2\">cat2</option>" +
 							Environment.NewLine + "</select>",
 							helper.Select("product.category.id", list, DictHelper.Create("id=something")));
+
+			Assert.AreEqual("<textarea id=\"something\" name=\"product.name\" >memory card</textarea>", helper.TextArea("product.name", DictHelper.Create("id=something")));
 		}
 
 		[Test]

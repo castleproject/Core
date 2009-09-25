@@ -1010,7 +1010,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			value = value == null ? "" : HtmlEncode(value.ToString());
 
-			string id = CreateHtmlId(target);
+			string id = CreateHtmlId(attributes, target);
 
 			ApplyValidation(InputElementType.Text, target, ref attributes);
 
