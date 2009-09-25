@@ -267,7 +267,7 @@ namespace Castle.MonoRail.Framework.Services
 			string controller = parameters.Controller ?? current.Controller;
 			string action = parameters.Action ?? current.Action;
 
-			if (appVirtualDir.Length > 1 && !(appVirtualDir[0] == '/'))
+			if (appVirtualDir.Length > 0 && !(appVirtualDir[0] == '/'))
 			{
 				appVirtualDir = "/" + appVirtualDir;
 			}

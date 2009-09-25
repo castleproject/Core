@@ -445,5 +445,17 @@ namespace Castle.MonoRail.Framework.Tests.Services
 			Assert.AreEqual("/Car/Ford/AddOption",
 				urlBuilder.BuildUrl(urlInfo, parameters));
 		}
+
+		[Test]
+		public void ShouldWorkForSingleLetterAppVirtualDir()
+		{
+			DefaultUrlTokenizer tokenizer = new DefaultUrlTokenizer();
+			UrlInfo urlinfo = tokenizer.TokenizeUrl("/v/area/controller/action.castle", null,
+								  new Uri("http://www.castleproject.org/v/area/controller/action.castle"), true, "/v");
+
+			UrlBuilderParameters parameters = new UrlBuilderParameters();
+
+			Assert.AreEqual("/v/area/controller/action.castle", urlBuilder.BuildUrl(urlinfo, parameters));
+		}
 	}
 }
