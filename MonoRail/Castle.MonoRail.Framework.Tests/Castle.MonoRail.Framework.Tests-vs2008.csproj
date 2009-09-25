@@ -180,6 +180,7 @@
     <Compile Include="Bugs\MR-ISSUE-535.cs" />
     <Compile Include="Bugs\MR-ISSUE-476.cs" />
     <Compile Include="Bugs\MR-ISSUE-532.cs" />
+    <Compile Include="Bugs\MR-ISSUE-547.cs" />
     <Compile Include="Configuration\ViewEngineConfigTestCase.cs" />
     <Compile Include="Controllers\AccessibleThroughTestCase.cs" />
     <Compile Include="Controllers\Clients\ClientCartController.cs" />

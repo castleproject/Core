@@ -962,14 +962,19 @@ namespace Castle.MonoRail.Framework.Helpers
 				years[index++] = i.ToString();
 
 			StringBuilder sb = new StringBuilder(1024);
-
 			sb.Append(Select(name + "day", attributes));
 			sb.Append(CreateOption("--", "1"));
 			sb.Append(CreateOptionsFromPrimitiveArray(days, value.Day.ToString()));
 			sb.Append(EndSelect());
 			sb.Append(' ');
+
+			// accessibility
+			if(attributes.Contains("tabindex"))
+			{
+				attributes["tabindex"] = string.Format("{0}", int.Parse(CommonUtils.ObtainEntry(attributes, "tabindex", "0")) + 1);
+			}
 			sb.Append(Select(name + "month", attributes));
-			sb.Append(CreateOption("--", "1"));		
+			sb.Append(CreateOption("--", "1"));
 	
 			if(monthFriendlyNames.Length == 12)
 			{
@@ -987,6 +992,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			
 			sb.Append(EndSelect());
 			sb.Append(' ');
+			// accessibility
+			if (attributes.Contains("tabindex"))
+			{
+				attributes["tabindex"] = string.Format("{0}", int.Parse(CommonUtils.ObtainEntry(attributes, "tabindex", "0")) + 1);
+			}
 			sb.Append(Select(name + "year", attributes));
 			sb.Append(CreateOption("----", "1"));
 			sb.Append(CreateOptionsFromPrimitiveArray(years, value.Year.ToString()));
