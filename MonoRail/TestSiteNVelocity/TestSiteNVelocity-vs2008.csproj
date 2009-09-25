@@ -153,6 +153,7 @@
     <Compile Include="Components\InlineComponentWithParam1.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\InlineComponentWithParams.cs" />
     <Compile Include="Components\SimpleInlineViewComponent.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -250,6 +251,7 @@
     <None Include="views\cookies\index.vm" />
     <None Include="views\jsgeneration\mr264.njs" />
     <None Include="views\jsgeneration\mr264_partial.vm" />
+    <None Include="views\UsingComponent\dynamiccomponentwithparameters.vm" />
     <None Include="views\vm_global_library.vm" />
     <None Include="views\dyn\index.vm" />
     <None Include="views\email\SendEmail.vm" />

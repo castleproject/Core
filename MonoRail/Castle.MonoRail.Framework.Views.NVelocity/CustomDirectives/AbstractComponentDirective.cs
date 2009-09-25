@@ -353,7 +353,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		/// first param can either be the literal string 'with' which means the user
 		/// is using the syntax #blockcomponent(ComponentName with "param1=value1" "param2=value2")
 		/// or it could be a dictionary string like: 
-		/// #blockcomponent(ComponentName "#{ param1='value1', param2='value2' }")
+		/// #blockcomponent(ComponentName "%{ param1='value1', param2='value2' }")
+		/// or it could be reference to a IDictionary like:
+		/// #blockcomponent(ComponentName $dictionaryParam)
 		/// anything different than that will throw an exception
 		/// </summary>
 		/// <param name="node">The node.</param>
@@ -371,7 +373,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 			if (!"with".Equals(withName))
 			{
-				IDictionary dict = withNode.Value(context) as IDictionary;
+				object nodeValue = withNode.Value(context);
+				if (nodeValue == null)
+					return null;
+ 
+				IDictionary dict = nodeValue as IDictionary;
 
 				if (dict != null)
 				{

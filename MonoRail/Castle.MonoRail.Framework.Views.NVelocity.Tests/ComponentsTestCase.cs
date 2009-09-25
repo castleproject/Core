@@ -259,6 +259,28 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertReplyContains("This is a view used by a component");
 		}
 
+ 		[Test]
+		public void CanRenderMultipleDynamicComponentsWithParameters()
+		{
+			IDictionary params1 = new Hashtable(2);
+			params1.Add("arg1", "1");
+			params1.Add("arg2", "2");
+			IDictionary params2 = new Hashtable(1);
+			params2.Add("arg1", "A");
+
+			//Use and ArrayList so we can repeat the "keys"
+			IList cmps = new ArrayList(3);
+			cmps.Add(new DictionaryEntry("InlineComponentWithParams", params1));
+			cmps.Add(new DictionaryEntry("InlineComponentWithParams", params2));
+			cmps.Add(new DictionaryEntry("InlineComponentWithParams", null));
+			PropertyBag.Add("components", cmps);
+
+			ProcessView_StripRailsExtension("usingcomponent/dynamiccomponentwithparameters.rails");
+			AssertReplyContains("arg1: '1', arg2: '2'");
+			AssertReplyContains("arg1: 'A', arg2: ''"); //params dictionary didn't contain arg2
+			AssertReplyContains("arg1: '', arg2: ''"); //params dictionary null
+		}
+
 		[Test]
 		public void AutoParameterBindingMustBeAbleToPerformSimpleConversions()
 		{
