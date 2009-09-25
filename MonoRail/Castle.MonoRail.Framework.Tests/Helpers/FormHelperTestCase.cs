@@ -24,6 +24,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	using System.Threading;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Tests.Controllers;
+	using Framework.Helpers.ValidationStrategy;
 	using NUnit.Framework;
 	using Test;
 
@@ -76,6 +77,16 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			// No solution here. Id is ambiguous
 			// helper.FormTag(DictHelper.Create("noaction=true"));
+		}
+
+		[Test]
+		public void FormTagRendersHtmlAttributesWithJQueryValidationDisabled()
+		{
+			helper.ValidatorProvider = new JQueryValidator();
+			helper.DisableValidation();
+			string openFormTag = helper.FormTag(DictHelper.CreateN("onsubmit", "callMe").N("noaction", "true"));
+
+			Assert.AreEqual("<form method='post' id='form1' onsubmit=\"callMe\" >", openFormTag);
 		}
 
 		[Test]

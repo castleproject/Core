@@ -412,12 +412,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			string method = CommonUtils.ObtainEntryAndRemove(parameters, "method", "post");
 			currentFormId = CommonUtils.ObtainEntryAndRemove(parameters, "id", "form" + ++formCount);
+			string afterFormTag = String.Empty;
 
-			validationConfig = ValidatorProvider.CreateConfiguration(parameters);
-
-			string afterFormTag = IsValidationEnabled ?
-				validationConfig.CreateAfterFormOpened(currentFormId) :
-				String.Empty;
+			if (IsValidationEnabled)
+			{
+				validationConfig = ValidatorProvider.CreateConfiguration(parameters);
+				afterFormTag = validationConfig.CreateAfterFormOpened(currentFormId);
+			}
 
 			string formContent;
 
@@ -442,13 +443,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		public virtual string AjaxFormTag(IDictionary parameters)
 		{
 			currentFormId = CommonUtils.ObtainEntryAndRemove(parameters, "id", "form" + ++formCount);
-
-			validationConfig = ValidatorProvider.CreateConfiguration(parameters);
-
-			string afterFormTag = IsValidationEnabled ?
-				validationConfig.CreateAfterFormOpened(currentFormId) :
-				String.Empty;
-
+			string afterFormTag = String.Empty;
+			
+			if (IsValidationEnabled)
+			{
+				validationConfig = ValidatorProvider.CreateConfiguration(parameters);
+				afterFormTag = validationConfig.CreateAfterFormOpened(currentFormId);
+			}
+			
 			string url = UrlHelper.For(parameters);
 
 			parameters["form"] = true;
