@@ -15,7 +15,9 @@
 namespace Castle.MonoRail.Framework.Routing
 {
 	using System;
+	using System.Diagnostics;
 	using System.IO;
+	using System.Text.RegularExpressions;
 	using System.Web;
 	using System.Web.Configuration;
 	using Castle.MonoRail.Framework.Adapters;
@@ -27,6 +29,9 @@ namespace Castle.MonoRail.Framework.Routing
 	{
 		private static readonly RoutingEngine engine = new RoutingEngine();
 		private string defaultUrlExtension = ".castle";
+		private static Regex iisVersionMatch = new Regex(@"Microsoft-IIS/(?<major>\d)\.(?<minor>\d)", RegexOptions.Compiled);
+		private int iisVersion;
+		private bool canAddRequestHeaders = true;
 
 		/// <summary>
 		/// Inits the specified app.
@@ -83,6 +88,8 @@ namespace Castle.MonoRail.Framework.Routing
 			HttpRequest request = context.Request;
 			HttpResponse response = context.Response;
 
+			DetectIISVersion(request);
+
 			if (File.Exists(request.PhysicalPath))
 			{
 				return; // Possibly requesting a static file, so we skip routing altogether
@@ -100,8 +107,27 @@ namespace Castle.MonoRail.Framework.Routing
 			string mrPath = CreateMonoRailPath(match);
 			string url = request.RawUrl;
 
-			// Add the original URL as x-original-url header to allow caching-support
-			request.Headers.Add("X-Original-Url", url);
+			if (iisVersion >= 7)
+			{
+				if (canAddRequestHeaders)
+				{
+					try
+					{
+						// Add the original URL as x-original-url header to allow caching-support
+						request.Headers.Add("X-Original-Url", url);
+					}
+					catch (PlatformNotSupportedException)
+					{
+						Trace.TraceWarning("Cannot add request headers because the application is running on IIS7 Classic Mode. Please configure the application to run in Integrated Mode.");
+						canAddRequestHeaders = false;
+					}
+				}
+			}
+			else if (canAddRequestHeaders)
+			{
+				Trace.TraceWarning("Cannot add request headers because the application is running on IIS6 or lower. We can only add request headers when running on IIS7 Integrated Mode");
+				canAddRequestHeaders = false;
+			}
 
 			string paramsAsQueryString = "";
 
@@ -169,6 +195,16 @@ namespace Castle.MonoRail.Framework.Routing
 		public static RoutingEngine Engine
 		{
 			get { return engine; }
+		}
+
+		private void DetectIISVersion(HttpRequest request)
+		{
+			if (iisVersion > 0)
+			{
+				return;
+			}
+			var version = iisVersionMatch.Match(request.ServerVariables["SERVER_SOFTWARE"]).Groups["major"].Value;
+			iisVersion = string.IsNullOrEmpty(version) ? 6 : Convert.ToInt32(version);
 		}
 	}
 }
