@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Framework
 		private int duration;
 		private string varyByCustom, varyByHeaders, varyByParams;
 		private DateTime? lastModified;
-		private TimeSpan? maxAge, proxyMaxAge;
+		private int? maxAge, proxyMaxAge;
 		private HttpCacheRevalidation revalidation;
 
 #if DOTNET2SP1 || DOTNET35
@@ -256,18 +256,18 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the Cache-Control: max-age HTTP header.
+		/// Gets or sets the Cache-Control: max-age HTTP header (in seconds).
 		/// </summary>
-		public TimeSpan? MaxAge
+		public int? MaxAge
 		{
 			get { return maxAge; }
 			set { maxAge = value; }
 		}
 
 		/// <summary>
-		/// Gets or sets the Cache-Control: s-maxage HTTP header.
+		/// Gets or sets the Cache-Control: s-maxage HTTP header (in seconds).
 		/// </summary>
-		public TimeSpan? ProxyMaxAge
+		public int? ProxyMaxAge
 		{
 			get { return proxyMaxAge; }
 			set { proxyMaxAge = value; }
@@ -373,12 +373,12 @@ namespace Castle.MonoRail.Framework
 
 			if (maxAge != null)
 			{
-				policy.SetMaxAge(maxAge.Value);
+				policy.SetMaxAge(TimeSpan.FromSeconds(maxAge.Value));
 			}
 
 			if (proxyMaxAge != null)
 			{
-				policy.SetProxyMaxAge(proxyMaxAge.Value);
+				policy.SetProxyMaxAge(TimeSpan.FromSeconds(proxyMaxAge.Value));
 			}
 		}
 	}
