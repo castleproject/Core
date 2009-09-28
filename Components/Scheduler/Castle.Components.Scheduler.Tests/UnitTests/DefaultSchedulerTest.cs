@@ -803,7 +803,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			Assert.IsNull(jobDetails.JobSpec.JobData);
 		}
 
-		[Test, Ignore("Disabled because it looks like Stopwatch is very accurate on a VM.")]
+		[Test, Ignore("Disabled because it looks like Stopwatch is not accurate in a VM.")]
 		public void SchedulerHandlesJobWatcherExceptionByInsertingAnErrorRecoveryDelay()
 		{
 			// The mock job watcher will throw on the first GetNextJobToProcess.
@@ -865,7 +865,7 @@ namespace Castle.Components.Scheduler.Tests.UnitTests
 			Assert.IsFalse(scheduler.IsRunning, "The scheduler should have stopped itself automatically.");
 		}
 
-		[Test]
+		[Test, Ignore("Disabled because it looks like Stopwatch is not accurate in a VM.")]
 		public void SchedulerHandlesJobStoreExceptionByInsertingAnErrorRecoveryDelay()
 		{
 			// The mock job watcher will return job detail on the first GetNextJobToProcess
