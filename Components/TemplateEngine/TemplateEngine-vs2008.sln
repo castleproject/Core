@@ -13,10 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR-vs2008", "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR-vs2008.csproj", "{B1DEC754-7B3F-4F3F-A99E-CB475C1AAFA2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{AC69A479-FE04-4C57-BD01-CCB391546FF6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2008", "..\..\Core\Castle.Core\Castle.Core-vs2008.csproj", "{E4FA5B53-7D36-429E-8E5C-53D5479242BA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,10 +35,6 @@ Global
 		{B1DEC754-7B3F-4F3F-A99E-CB475C1AAFA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1DEC754-7B3F-4F3F-A99E-CB475C1AAFA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1DEC754-7B3F-4F3F-A99E-CB475C1AAFA2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +44,5 @@ Global
 		{AA95F54F-BEC7-469A-B420-B19D1BBB8C3F} = {D72459EF-7B56-4B9C-BC89-ECCFD2FB55EF}
 		{F1FF896B-573D-4B67-83FB-EB9CA947188D} = {D72459EF-7B56-4B9C-BC89-ECCFD2FB55EF}
 		{B1DEC754-7B3F-4F3F-A99E-CB475C1AAFA2} = {D72459EF-7B56-4B9C-BC89-ECCFD2FB55EF}
-		{E4FA5B53-7D36-429E-8E5C-53D5479242BA} = {AC69A479-FE04-4C57-BD01-CCB391546FF6}
 	EndGlobalSection
 EndGlobal
