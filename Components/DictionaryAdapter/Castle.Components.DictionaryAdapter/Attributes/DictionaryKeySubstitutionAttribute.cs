@@ -37,8 +37,7 @@ namespace Castle.Components.DictionaryAdapter
 			this.newValue = newValue;
 		}
 
-		String IDictionaryKeyBuilder.GetKey(IDictionary dictionary, String key,
-		                                   PropertyDescriptor property)
+		String IDictionaryKeyBuilder.GetKey(IDictionary dictionary, String key, PropertyDescriptor property)
 		{
 			return key.Replace(oldValue, newValue);
 		}

@@ -105,7 +105,7 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				if (typeConverter == null)
 				{
-					Type converterType = AttributesUtil.GetTypeConverter(property);
+					var converterType = AttributesUtil.GetTypeConverter(property);
 
 					if (converterType != null)
 					{
@@ -162,7 +162,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (keyBuilders != null)
 			{
-				foreach(IDictionaryKeyBuilder builder in keyBuilders)
+				foreach (var builder in keyBuilders)
 				{
 					key = builder.GetKey(dictionary, key, this);
 				}
@@ -170,7 +170,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (descriptor != null && descriptor.KeyBuilders != null)
 			{
-				foreach (IDictionaryKeyBuilder builder in descriptor.KeyBuilders)
+				foreach (var builder in descriptor.KeyBuilders)
 				{
 					key = builder.GetKey(dictionary, key, this);
 				}
@@ -227,19 +227,17 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (getters != null)
 			{
-				foreach(IDictionaryPropertyGetter getter in getters)
+				foreach(var getter in getters)
 				{
-					storedValue = getter.GetPropertyValue(
-						factory, dictionary, key, storedValue, this);
+					storedValue = getter.GetPropertyValue(factory, dictionary, key, storedValue, this);
 				}
 			}
 
 			if (descriptor != null && descriptor.Getters != null)
 			{
-				foreach (IDictionaryPropertyGetter getter in descriptor.Getters)
+				foreach (var getter in descriptor.Getters)
 				{
-					storedValue = getter.GetPropertyValue(
-						factory, dictionary, key, storedValue, this);
+					storedValue = getter.GetPropertyValue(factory, dictionary, key, storedValue, this);
 				}
 			}
 
@@ -296,10 +294,9 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (setters != null)
 			{
-				foreach(IDictionaryPropertySetter setter in setters)
+				foreach(var setter in setters)
 				{
-					if (!setter.SetPropertyValue(
-						factory, dictionary, key, ref value, this))
+					if (!setter.SetPropertyValue(factory, dictionary, key, ref value, this))
 					{
 						consumed = true;
 					}
@@ -308,10 +305,9 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (descriptor != null && descriptor.Setters != null)
 			{
-				foreach (IDictionaryPropertySetter setter in descriptor.Setters)
+				foreach (var setter in descriptor.Setters)
 				{
-					if (!setter.SetPropertyValue(
-						factory, dictionary, key, ref value, this))
+					if (!setter.SetPropertyValue(factory, dictionary, key, ref value, this))
 					{
 						consumed = true;
 					}

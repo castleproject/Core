@@ -46,10 +46,9 @@ namespace Castle.Components.DictionaryAdapter
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
 			string key, object storedValue, PropertyDescriptor property)
 		{
-			Type propertyType = property.PropertyType;
+			var propertyType = property.PropertyType;
 
-			if (storedValue == null ||
-			    !storedValue.GetType().IsInstanceOfType(propertyType))
+			if (storedValue == null || !storedValue.GetType().IsInstanceOfType(propertyType))
 			{
 				if (propertyType.IsGenericType)
 				{
@@ -60,15 +59,13 @@ namespace Castle.Components.DictionaryAdapter
 					    genericDef == typeof(List<>) ||
 					    genericDef == typeof(IEnumerable<>))
 					{
-						Type paramType = propertyType.GetGenericArguments()[0];
-						TypeConverter converter = TypeDescriptor.GetConverter(paramType);
+						var paramType = propertyType.GetGenericArguments()[0];
+						var converter = TypeDescriptor.GetConverter(paramType);
 
 						if (converter != null && converter.CanConvertFrom(typeof(string)))
 						{
-							Type genericList = typeof(StringListWrapper<>).MakeGenericType(
-								new Type[] {paramType});
-							return Activator.CreateInstance(genericList, key, storedValue,
-							                                separator, dictionary);
+							var genericList = typeof(StringListWrapper<>).MakeGenericType(new Type[] {paramType});
+							return Activator.CreateInstance(genericList, key, storedValue, separator, dictionary);
 						}
 					}
 				}
@@ -85,7 +82,7 @@ namespace Castle.Components.DictionaryAdapter
 			IDictionaryAdapterFactory factory, IDictionary dictionary,
 			string key, ref object value, PropertyDescriptor property)
 		{
-			IEnumerable enumerable = value as IEnumerable;
+			var enumerable = value as IEnumerable;
 			if (enumerable != null)
 			{
 				value = BuildString(enumerable, separator);
@@ -98,7 +95,7 @@ namespace Castle.Components.DictionaryAdapter
 		internal static string BuildString(IEnumerable enumerable, char separator)
 		{
 			bool first = true;
-			StringBuilder builder = new StringBuilder();
+			var builder = new StringBuilder();
 
 			foreach(object item in enumerable)
 			{
@@ -237,9 +234,9 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (list != null)
 			{
-				TypeConverter converter = TypeDescriptor.GetConverter(typeof(T));
+				var converter = TypeDescriptor.GetConverter(typeof(T));
 
-				foreach(string item in list.Split(separator))
+				foreach(var item in list.Split(separator))
 				{
 					inner.Add((T) converter.ConvertFrom(item));
 				}
@@ -248,8 +245,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void SynchronizeDictionary()
 		{
-			dictionary[key] = DictionaryStringListAttribute.
-				BuildString(inner, separator);
+			dictionary[key] = DictionaryStringListAttribute.BuildString(inner, separator);
 		}
 	}
 

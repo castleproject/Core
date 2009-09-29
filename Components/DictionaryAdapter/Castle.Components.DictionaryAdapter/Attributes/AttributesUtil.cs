@@ -35,7 +35,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (attribute == null)
 			{
-				foreach (Type baseInterface in type.GetInterfaces())
+				foreach (var baseInterface in type.GetInterfaces())
 				{
 					attribute = GetTypeAttribute<T>(baseInterface);
 					if (attribute != null)
@@ -55,7 +55,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <returns>The member attribute.</returns>
 		public static T GetAttribute<T>(MemberInfo member) where T : class
 		{
-			object[] attributes = member.GetCustomAttributes(typeof(T), false);
+			var attributes = member.GetCustomAttributes(typeof(T), false);
 			if (attributes.Length > 0)
 			{
 				return (T)attributes[0];
@@ -70,11 +70,11 @@ namespace Castle.Components.DictionaryAdapter
 		/// <returns>The type attributes.</returns>
 		public static List<T> GetTypeAttributes<T>(Type type)
 		{
-			List<T> attributes = GetAttributes<T>(type);
+			var attributes = GetAttributes<T>(type);
 
 			if (attributes == null)
 			{
-				foreach (Type baseInterface in type.GetInterfaces())
+				foreach (var baseInterface in type.GetInterfaces())
 				{
 					attributes = GetTypeAttributes<T>(baseInterface);
 					if (attributes != null)
@@ -95,7 +95,7 @@ namespace Castle.Components.DictionaryAdapter
 		public static List<T> GetAttributes<T>(MemberInfo member)
 		{
 			List<T> attributes = null;
-			object[] custom = member.GetCustomAttributes(typeof(T), false);
+			var custom = member.GetCustomAttributes(typeof(T), false);
 
 			if (custom.Length > 0)
 			{
@@ -116,8 +116,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <returns></returns>
 		public static Type GetTypeConverter(MemberInfo member)
 		{
-			TypeConverterAttribute attrib =
-				GetAttribute<TypeConverterAttribute>(member);
+			var attrib = GetAttribute<TypeConverterAttribute>(member);
 
 			if (attrib != null)
 			{

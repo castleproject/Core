@@ -16,7 +16,6 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections;
-	using System.ComponentModel;
 
 	/// <summary>
 	/// Converts all properties to strings.
@@ -59,8 +58,7 @@ namespace Castle.Components.DictionaryAdapter
 				return String.Format(format, value);
 			}
 
-			TypeConverter converter = property.TypeConverter;
-
+			var converter = property.TypeConverter;
 
 			if (converter != null && converter.CanConvertTo(typeof(string)))
 			{

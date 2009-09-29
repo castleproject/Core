@@ -24,10 +24,14 @@ namespace Castle.Components.Binder
 		{
 			conversionSucceeded = true;
 
-			Type sourceType = (input != null ? input.GetType() : typeof(String));
+			if (inputType == null)
+			{
+				inputType = (input != null ? input.GetType() : typeof(String));
+			}
+
 			TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
 
-			if (conv != null && conv.CanConvertFrom(sourceType))
+			if (conv != null && conv.CanConvertFrom(inputType))
 			{
 				try
 				{
@@ -53,10 +57,10 @@ namespace Castle.Components.Binder
 		public override bool CanConvert(Type desiredType, Type inputType, object input, out bool exactMatch)
 		{
 			var convertible = false;
-			if (!desiredType.IsInstanceOfType(input))
+			if (input != null && !desiredType.IsInstanceOfType(input))
 			{
 				TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
-				convertible= (conv != null && conv.CanConvertFrom(input.GetType()));
+				convertible = (conv != null && conv.CanConvertFrom(input.GetType()));
 			}
 			return IsTypeConvertible(desiredType, inputType, input, out exactMatch) && convertible;
 		}

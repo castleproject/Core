@@ -69,12 +69,9 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (storedValue == null)
 			{
-				PropertyDescriptor descriptor = 
-					new PropertyDescriptor(property.Property);
+				var descriptor = new PropertyDescriptor(property.Property);
 				descriptor.AddKeyBuilder(new DictionaryKeyPrefixAttribute(key));
-
-				return factory.GetAdapter(
-					property.Property.PropertyType, dictionary, descriptor);
+				return factory.GetAdapter(property.Property.PropertyType, dictionary, descriptor);
 			}
 
 			return storedValue;

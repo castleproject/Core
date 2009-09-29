@@ -39,17 +39,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void CreateAdapter_NoPrefixPropertiesOnly_WorksFine()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			var person = factory.GetAdapter<IPerson>(dictionary);
 			Assert.IsNotNull(person);
 		}
 
 		[Test]
 		public void CreateAdapter_AdaptingGenericInterface_Works()
 		{
-			IItemContainer<IPerson> container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
 			Assert.IsNotNull(container);
 			// create a fake person
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			var person = factory.GetAdapter<IPerson>(dictionary);
 			container.Item = person;
 
 			Assert.AreSame(person, container.Item);
@@ -58,7 +58,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void CreateAdapter_AdaptingGenericInterfaceWithComponent_Works()
 		{
-			IItemContainerWithComponent<IPerson> container = factory.GetAdapter<IItemContainerWithComponent<IPerson>>(dictionary);
+			var container = factory.GetAdapter<IItemContainerWithComponent<IPerson>>(dictionary);
 			Assert.IsNotNull(container);
 			// create a fake person
 			container.Item.Age = 5;
@@ -76,14 +76,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void CreateAdapter_PrefixPropertiesOnly_WorksFine()
 		{
-			IPerson person = factory.GetAdapter<IPersonWithPrefix>(dictionary);
+			var person = factory.GetAdapter<IPersonWithPrefix>(dictionary);
 			Assert.IsNotNull(person);
 		}
 
 		[Test]
 		public void UpdateAdapter_NoPrefix_UpdatesDictionary()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			var person = factory.GetAdapter<IPerson>(dictionary);
 			person.Name = "Craig";
 			person.Age = 37;
 			person.DOB = new DateTime(1970, 7, 19);
@@ -98,7 +98,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_Prefix_UpdatesDictionary()
 		{
-			IPerson person = factory.GetAdapter<IPersonWithPrefix>(dictionary);
+			var person = factory.GetAdapter<IPersonWithPrefix>(dictionary);
 			person.Name = "Craig";
 			person.Age = 37;
 			person.DOB = new DateTime(1970, 7, 19);
@@ -112,7 +112,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapterAndRead_NoPrefix_Matches()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			var person = factory.GetAdapter<IPerson>(dictionary);
 			person.Name = "Craig";
 			person.Age = 37;
 			person.DOB = new DateTime(1970, 7, 19);
@@ -127,7 +127,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapterAndRead_Prefix_Matches()
 		{
-			IPerson person = factory.GetAdapter<IPersonWithPrefix>(dictionary);
+			var person = factory.GetAdapter<IPersonWithPrefix>(dictionary);
 			person.Name = "Craig";
 			person.Age = 37;
 			person.DOB = new DateTime(1970, 7, 19);
@@ -142,7 +142,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapterAndRead_PrefixOverride_Matches()
 		{
-			IPerson person = factory.GetAdapter<IPersonWithPrefixOverride>(dictionary);
+			var person = factory.GetAdapter<IPersonWithPrefixOverride>(dictionary);
 			person.Name = "Craig";
 
 			Assert.AreEqual("Craig", dictionary["Name"]);
@@ -151,8 +151,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapterAndRead_TypePrefix_Matches()
 		{
-			IPersonWithTypePrefixOverride person =
-				factory.GetAdapter<IPersonWithTypePrefixOverride>(dictionary);
+			var person = factory.GetAdapter<IPersonWithTypePrefixOverride>(dictionary);
 			person.Height = 72;
 
 			Assert.AreEqual(72, person.Height);
@@ -162,7 +161,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void ReadAdapter_NoPrefixUnitialized_ReturnsDefaults()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			var person = factory.GetAdapter<IPerson>(dictionary);
 
 			Assert.AreEqual(default(string), person.Name);
 			Assert.AreEqual(default(int), person.Age);
@@ -173,7 +172,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void ReadAdapter_PrefixUnitialized_ReturnsDefaults()
 		{
-			IPerson person = factory.GetAdapter<IPersonWithPrefix>(dictionary);
+			var person = factory.GetAdapter<IPersonWithPrefix>(dictionary);
 
 			Assert.AreEqual(default(string), person.Name);
 			Assert.AreEqual(default(int), person.Age);
@@ -184,7 +183,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapterAndRead_WithSeveralDifferentOverridesWithDifferentPrefixes_DictionaryKeysHaveCorrectPrefixes()
 		{
-			IPersonWithDeniedInheritancePrefix person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
+			var  person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
 
 			string name = "Ming The Merciless";
 			int numberOfFeet = 2;
@@ -203,12 +202,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			string[] keys = new string[dictionary.Keys.Count];
 			dictionary.Keys.CopyTo(keys, 0);
 
-			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Name"; }));
-			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "NumberOfFeet"; }));
-			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Person_HairColour"; }));
-			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Person2_Eye__Colour"; }));
-			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "Person2_NumberOfHeads"; }));
-			Assert.IsTrue(Array.Exists(keys, delegate(string key) { return key == "NumberOfFingers"; }));
+			Assert.IsTrue(Array.Exists(keys, key => key == "Name"));
+			Assert.IsTrue(Array.Exists(keys, key => key == "NumberOfFeet"));
+			Assert.IsTrue(Array.Exists(keys, key => key == "Person_HairColour"));
+			Assert.IsTrue(Array.Exists(keys, key => key == "Person2_Eye__Colour"));
+			Assert.IsTrue(Array.Exists(keys, key => key == "Person2_NumberOfHeads"));
+			Assert.IsTrue(Array.Exists(keys, key => key == "NumberOfFingers"));
 
 			Assert.AreEqual(name, person.Name);
 			Assert.AreEqual(numberOfFeet, person.NumberOfFeet);
@@ -221,7 +220,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void CreateAdapter_WithSubstitionOnProperty_WorksFine()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
+			var person = factory.GetAdapter<IPerson>(dictionary);
 			person.First_Name = "Craig";
 			Assert.AreEqual("Craig", dictionary["First Name"]);
 		}
@@ -229,7 +228,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void CreateAdapter_WithSubstitionOnInterface_WorksFine()
 		{
-			IPersonWithDeniedInheritancePrefix person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
+			var person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
 			person.Max_Width = 22;
 			Assert.AreEqual(22, dictionary["Max Width"]);
 		}
@@ -237,8 +236,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void CreateAdapter_WithComponent_WorksFine()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IAddress mailing = person.HomeAddress;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var mailing = person.HomeAddress;
 			Assert.IsNotNull(mailing);
 		}
 
@@ -250,8 +249,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["HomeAddress_State"] = "NY";
 			dictionary["HomeAddress_ZipCode"] = "11288";
 
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IAddress home = person.HomeAddress;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var home = person.HomeAddress;
 
 			Assert.AreEqual(dictionary["HomeAddress_Line1"], home.Line1);
 			Assert.AreEqual(dictionary["HomeAddress_City"], home.City);
@@ -262,8 +261,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_WithComponent_WorksFine()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IAddress home = person.HomeAddress;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var home = person.HomeAddress;
 			home.Line1 = "77 Lynwood Dr";
 			home.City = "Massapequa";
 			home.State = "NY";
@@ -283,8 +282,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["State"] = "TX";
 			dictionary["ZipCode"] = "75062";
 
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IAddress work = person.WorkAddress;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var work = person.WorkAddress;
 
 			Assert.AreEqual(dictionary["Line1"], work.Line1);
 			Assert.AreEqual(dictionary["City"], work.City);
@@ -295,8 +294,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_WithComponentOverrideNoPrefix_WorksFine()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IAddress work = person.WorkAddress;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var work = person.WorkAddress;
 			work.Line1 = "139 Dartbrook";
 			work.City = "Plano";
 			work.State = "TX";
@@ -316,8 +315,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["Billing_State"] = "FL";
 			dictionary["Billing_ZipCode"] = "33101";
 
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IAddress billing = person.BillingAddress;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var billing = person.BillingAddress;
 
 			Assert.AreEqual(dictionary["Billing_Line1"], billing.Line1);
 			Assert.AreEqual(dictionary["Billing_City"], billing.City);
@@ -333,8 +332,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["Billing_State"] = "FL";
 			dictionary["Billing_ZipCode"] = "33101";
 
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IAddress billing = person.BillingAddress;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var billing = person.BillingAddress;
 			billing.Line1 = "64 Country Rd";
 			billing.City = "Miami";
 			billing.State = "FL";
@@ -344,8 +343,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void CreateAdapter_WithNestedComponent_WorksFine()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IAddress mailing = person.HomeAddress;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var mailing = person.HomeAddress;
 			Assert.IsNotNull(mailing.Phone);
 		}
 
@@ -355,8 +354,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["HomeAddress_Phone_Number"] = "212-353-1244";
 			dictionary["HomeAddress_Phone_Extension"] = "245";
 
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IPhone phone = person.HomeAddress.Phone;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var phone = person.HomeAddress.Phone;
 
 			Assert.AreEqual(dictionary["HomeAddress_Phone_Number"], phone.Number);
 			Assert.AreEqual(dictionary["HomeAddress_Phone_Extension"], phone.Extension);
@@ -365,8 +364,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_WithNestedComponent_WorksFine()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IPhone phone = person.HomeAddress.Phone;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var phone = person.HomeAddress.Phone;
 			phone.Number = "212-353-1244";
 			phone.Extension = "245";
 
@@ -380,8 +379,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["Number"] = "972-324-9821";
 			dictionary["Extension"] = "300";
 
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IPhone phone = person.WorkAddress.Mobile;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var phone = person.WorkAddress.Mobile;
 
 			Assert.AreEqual(dictionary["Number"], phone.Number);
 			Assert.AreEqual(dictionary["Extension"], phone.Extension);
@@ -390,8 +389,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_WithNestedComponentOverrideNoPrefix_WorksFine()
 		{
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IPhone phone = person.HomeAddress.Mobile;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var phone = person.HomeAddress.Mobile;
 			phone.Number = "972-324-9821";
 			phone.Extension = "300";
 
@@ -404,8 +403,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			dictionary["HomeAddress_Emr_Number"] = "911";
 
-			IPerson person = factory.GetAdapter<IPerson>(dictionary);
-			IPhone phone = person.HomeAddress.Emergency;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var phone = person.HomeAddress.Emergency;
 
 			Assert.AreEqual(dictionary["HomeAddress_Emr_Number"], phone.Number);
 			Assert.IsNull(dictionary["HomeAddress_Emr_Extension"]);
@@ -414,8 +413,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void ReadAdapter_WithDefaultConversions_WorksFine()
 		{
-			DateTime now = DateTime.Now;
-			Guid guid = Guid.NewGuid();
+			var now = DateTime.Now;
+			var guid = Guid.NewGuid();
 
 			dictionary["Int"] = string.Format("{0}", 22);
 			dictionary["Float"] = string.Format("{0}", 98.6);
@@ -425,7 +424,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["DateTime"] = now.ToShortDateString();
 			dictionary["Guid"] = guid.ToString();
 
-			IConversions conversions = factory.GetAdapter<IConversions>(dictionary);
+			var conversions = factory.GetAdapter<IConversions>(dictionary);
 			Assert.AreEqual(22, conversions.Int);
 			Assert.AreEqual(98.6f, conversions.Float);
 			Assert.AreEqual(3.14, conversions.Double);
@@ -438,10 +437,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_WithDefaultConversions_WorksFine()
 		{
-			DateTime today = DateTime.Today;
-			Guid guid = Guid.NewGuid();
+			var today = DateTime.Today;
+			var guid = Guid.NewGuid();
 
-			IConversionsToString conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+			var conversions = factory.GetAdapter<IConversionsToString>(dictionary);
 			conversions.Int = 22;
 			conversions.Float = 98.6F;
 			conversions.Double = 3.14;
@@ -472,7 +471,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["NullDateTime"] = now.Value.ToShortDateString();
 			dictionary["NullGuid"] = guid.ToString();
 
-			IConversions conversions = factory.GetAdapter<IConversions>(dictionary);
+			var conversions = factory.GetAdapter<IConversions>(dictionary);
 			Assert.AreEqual(22, conversions.NullInt);
 			Assert.AreEqual(98.6f, conversions.NullFloat);
 			Assert.AreEqual(3.14, conversions.NullDouble);
@@ -487,7 +486,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			DateTime? today = DateTime.Today;
 			Guid? guid = Guid.NewGuid();
 
-			IConversionsToString conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+			var conversions = factory.GetAdapter<IConversionsToString>(dictionary);
 			conversions.NullInt = 22;
 			conversions.NullFloat = 98.6F;
 			conversions.NullDouble = 3.14;
@@ -506,7 +505,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void ReadAdapter_WithDefaultNullConversions_WorksFine()
 		{
-			IConversions conversions = factory.GetAdapter<IConversions>(dictionary);
+			var conversions = factory.GetAdapter<IConversions>(dictionary);
 			Assert.IsNull(conversions.NullInt);
 			Assert.IsNull(conversions.NullFloat);
 			Assert.IsNull(conversions.NullDouble);
@@ -518,7 +517,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_WithDefaultNullConversions_WorksFine()
 		{
-			IConversionsToString conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+			var conversions = factory.GetAdapter<IConversionsToString>(dictionary);
 			conversions.NullInt = null;
 			conversions.NullFloat = null;
 			conversions.NullDecimal = null;
@@ -539,9 +538,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["Names"] = "Craig,Brenda,Kaitlyn,Lauren,Matthew";
 			dictionary["Ages"] = "37,36,5,3,1";
 
-			IStringLists lists = factory.GetAdapter<IStringLists>(dictionary);
+			var lists = factory.GetAdapter<IStringLists>(dictionary);
 
-			IList<string> names = lists.Names;
+			var names = lists.Names;
 			Assert.IsNotNull(names);
 			Assert.AreEqual(5, names.Count);
 			Assert.AreEqual("Craig", names[0]);
@@ -550,7 +549,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("Lauren", names[3]);
 			Assert.AreEqual("Matthew", names[4]);
 
-			IList<int> ages = lists.Ages;
+			var ages = lists.Ages;
 			Assert.AreEqual(5, ages.Count);
 			Assert.AreEqual(37, ages[0]);
 			Assert.AreEqual(36, ages[1]);
@@ -562,9 +561,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_WithStringLists_WorksFine()
 		{
-			IStringLists lists = factory.GetAdapter<IStringLists>(dictionary);
+			var lists = factory.GetAdapter<IStringLists>(dictionary);
 
-			IList<string> names = lists.Names;
+			var names = lists.Names;
 			names.Add("Craig");
 			names.Add("Brenda");
 			names.Add("Kaitlyn");
@@ -573,7 +572,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			Assert.AreEqual("Craig,Brenda,Kaitlyn,Lauren,Matthew", dictionary["Names"]);
 
-			IList<int> ages = new List<int>();
+			var ages = new List<int>();
 			ages.Add(37);
 			ages.Add(36);
 			ages.Add(5);
@@ -681,7 +680,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void CanObtainDictionaryAdapterMeta()
 		{
-			IDictionaryAdapter meta = factory.GetAdapter<IPerson>(dictionary) as IDictionaryAdapter;
+			var meta = factory.GetAdapter<IPerson>(dictionary) as IDictionaryAdapter;
 			Assert.AreSame(dictionary, meta.Dictionary);
 			Assert.AreSame(factory, meta.Factory);
 			Assert.AreEqual(8, meta.Properties.Count);
@@ -690,7 +689,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void DictionaryAdapterMetaIsExplicitImplementation()
 		{
-			IEnsureMetaDoesNotConflict i = factory.GetAdapter<IEnsureMetaDoesNotConflict>(dictionary);
+			var i = factory.GetAdapter<IEnsureMetaDoesNotConflict>(dictionary);
 
 			i.Dictionary = "Hello";
 			i.Properties = 1;
@@ -698,7 +697,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("Hello", dictionary["Dictionary"]);
 			Assert.AreEqual(1, dictionary["Properties"]);
 
-			IDictionaryAdapter meta = i as IDictionaryAdapter;
+			var meta = i as IDictionaryAdapter;
 			Assert.AreSame(dictionary, meta.Dictionary);
 			Assert.AreEqual(3, meta.Properties.Count);
 		}
@@ -706,9 +705,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void CanFetchPropertiesUsingDictionaryAdapterMeta()
 		{
-			CustomGetter getter = new CustomGetter();
-			PropertyDescriptor custom = new PropertyDescriptor().AddGetter(getter);
-			IDictionaryAdapter meta = factory.GetAdapter(typeof(IPhone), dictionary, custom) as IDictionaryAdapter;
+			var getter = new CustomGetter();
+			var custom = new PropertyDescriptor().AddGetter(getter);
+			var meta = factory.GetAdapter(typeof(IPhone), dictionary, custom) as IDictionaryAdapter;
 
 			Assert.AreEqual(0, getter.PropertiesFetched.Count);
 
@@ -718,6 +717,26 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsTrue(getter.PropertiesFetched.Contains("Number"));
 			Assert.IsTrue(getter.PropertiesFetched.Contains("Extension"));
 		}
+
+		[Test]
+		public void CanUpgradePropertiesFromReadonlyToReadWrite()
+		{
+			var name = factory.GetAdapter<IMutableName>(dictionary);
+			Assert.IsNotNull(name);
+
+			name.Name = "Goofy";
+			Assert.AreEqual("Goofy", name.Name);
+		}
+	}
+
+	public interface IName
+	{
+		string Name { get; }
+	}
+
+	public interface IMutableName : IName
+	{
+		new string Name { get; set; }
 	}
 
 	public interface IPhone
