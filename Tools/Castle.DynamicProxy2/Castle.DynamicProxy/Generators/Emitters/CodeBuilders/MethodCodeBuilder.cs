@@ -14,18 +14,12 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 {
-	using System;
 	using System.Reflection.Emit;
 
 	public class MethodCodeBuilder : AbstractCodeBuilder
 	{
-		private readonly Type baseType;
-		private readonly MethodBuilder methodbuilder;
-
-		public MethodCodeBuilder(Type baseType, MethodBuilder methodbuilder, ILGenerator generator) : base(generator)
+		public MethodCodeBuilder(ILGenerator generator) : base(generator)
 		{
-			this.baseType = baseType;
-			this.methodbuilder = methodbuilder;
 		}
 	}
 }

@@ -137,8 +137,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				if (codebuilder == null)
 				{
-					codebuilder = new MethodCodeBuilder(
-						maintype.BaseType, builder, builder.GetILGenerator());
+					codebuilder = new MethodCodeBuilder(builder.GetILGenerator());
 				}
 				return codebuilder;
 			}

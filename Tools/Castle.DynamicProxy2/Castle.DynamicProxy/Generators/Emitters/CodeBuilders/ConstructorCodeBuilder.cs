@@ -30,7 +30,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 		public void InvokeBaseConstructor()
 		{
-			InvokeBaseConstructor(ObtainDefaultConstructor());
+			Type type = baseType;
+
+			BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+			var baseDefaultCtor = type.GetConstructor(flags, null, new Type[0], null);
+
+			InvokeBaseConstructor (baseDefaultCtor);
 		}
 
 		public void InvokeBaseConstructor(ConstructorInfo constructor)
@@ -43,17 +48,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			AddStatement(
 				new ConstructorInvocationStatement(constructor,
 				                                   ArgumentsUtil.ConvertArgumentReferenceToExpression(arguments)));
-		}
-
-		internal ConstructorInfo ObtainDefaultConstructor()
-		{
-			Type type = baseType;
-			if (type.ContainsGenericParameters)
-				type = type.GetGenericTypeDefinition();
-
-			BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-
-			return type.GetConstructor(flags, null, new Type[0], null);
 		}
 	}
 }

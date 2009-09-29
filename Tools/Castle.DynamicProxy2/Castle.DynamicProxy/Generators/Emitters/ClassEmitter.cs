@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, IEnumerable<Type> interfaces, TypeAttributes flags,
 		                    bool forceUnsigned)
-			: base(CreateTypeBuilder(modulescope, name, baseType, interfaces, flags, forceUnsigned))
+			: this(CreateTypeBuilder(modulescope, name, baseType, interfaces, flags, forceUnsigned))
 		{
 			interfaces = InitializeGenericArgumentsFromBases(ref baseType, interfaces);
 
@@ -61,7 +61,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		// implementation), call CopyGenericParametersFromMethod and replace baseType and interfaces by versions bound to the newly created GenericTypeParams.
 		protected virtual IEnumerable<Type> InitializeGenericArgumentsFromBases(ref Type baseType, IEnumerable<Type> interfaces)
 		{
-			if (baseType.IsGenericTypeDefinition)
+			if (baseType != null && baseType.IsGenericTypeDefinition)
 			{
 				throw new NotSupportedException("ClassEmitter does not support open generic base types. Type: " + baseType.FullName);
 			}

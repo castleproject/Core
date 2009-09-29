@@ -1,5 +1,6 @@
 Unreleased Changes
 ==================
+- Fixed DYNPROXY-ISSUE-113 - AbstractTypeEmitter can now be used to emit interfaces
 - Fixed DYNPROXY-ISSUE-108 - Obtaining replicated custom attributes on proxy may fail when property setter throws exception on default value
 - Moved custom attribute replication from CustomAttributeUtil to new interface - IAttributeDisassembler
 - Exposed IAttributeDisassembler via ProxyGenerationOptions, so that users can plug their implementation for some convoluted scenarios. 

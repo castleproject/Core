@@ -105,5 +105,63 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsNotNull(field);
 			Assert.AreEqual(FieldAttributes.Static | FieldAttributes.FamANDAssem | FieldAttributes.InitOnly, field.Attributes);
 		}
+
+		[Test]
+		public void UsingClassEmitterForInterfaces()
+		{
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes, 
+				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
+			emitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual, typeof (void));
+			Type t = emitter.BuildType();
+			Assert.IsTrue(t.IsInterface);
+			MethodInfo method = t.GetMethod("MyMethod");
+			Assert.IsNotNull(method);
+		}
+
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException))]
+		public void NoBaseTypeForInterfaces()
+		{
+			DisableVerification();
+			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
+				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
+			Type t = emitter.BaseType;
+		}
+
+		[Test]
+		[ExpectedException (typeof (InvalidOperationException))]
+		public void NoDefaultCtorForInterfaces()
+		{
+			DisableVerification();
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
+				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
+			emitter.CreateDefaultConstructor();
+		}
+
+		[Test]
+		[ExpectedException (typeof (InvalidOperationException))]
+		public void NoCustomCtorForInterfaces()
+		{
+			DisableVerification();
+			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
+				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
+			emitter.CreateConstructor();
+		}
+
+		[Test]
+		public void NestedInterface()
+		{
+			ClassEmitter outerEmitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IOuter", null, Type.EmptyTypes, 
+				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
+			NestedClassEmitter innerEmitter = new NestedClassEmitter(outerEmitter, "IInner", 
+				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.NestedPublic, null, Type.EmptyTypes);
+			innerEmitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual, typeof(void));
+			Type inner = innerEmitter.BuildType();
+			Type outer = outerEmitter.BuildType();
+			Assert.IsTrue(inner.IsInterface);
+			MethodInfo method = inner.GetMethod("MyMethod");
+			Assert.IsNotNull(method);
+			Assert.AreSame(inner, outer.GetNestedType ("IInner"));
+		}
 	}
 }

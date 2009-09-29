@@ -94,11 +94,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public void CreateDefaultConstructor()
 		{
+			if (TypeBuilder.IsInterface)
+				throw new InvalidOperationException ("Interfaces cannot have constructors.");
+
 			constructors.Add(new ConstructorEmitter(this));
 		}
 
 		public ConstructorEmitter CreateConstructor(params ArgumentReference[] arguments)
 		{
+			if (TypeBuilder.IsInterface)
+				throw new InvalidOperationException ("Interfaces cannot have constructors.");
+
 			ConstructorEmitter member = new ConstructorEmitter(this, arguments);
 			constructors.Add(member);
 			return member;
@@ -246,9 +252,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return typebuilder; }
 		}
 
-		internal Type BaseType
+		public Type BaseType
 		{
-			get { return TypeBuilder.BaseType; }
+			get 
+			{
+				if (TypeBuilder.IsInterface)
+					throw new InvalidOperationException ("This emitter represents an interface; interfaces have no base types.");
+				return TypeBuilder.BaseType; 
+			}
 		}
 
 		public GenericTypeParameterBuilder[] GenericTypeParams
@@ -288,7 +299,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		protected virtual void EnsureBuildersAreInAValidState()
 		{
-			if (constructors.Count == 0)
+			if (!typebuilder.IsInterface && constructors.Count == 0)
 			{
 				CreateDefaultConstructor();
 			}
