@@ -258,15 +258,9 @@ namespace Castle.DynamicProxy.Generators
 			{
 				// it seems there's no way to invoke base explicit implementation. we can't call (base as IFoo).Bar();
 				// we may be able to do this using technique described here: http://kennethxu.blogspot.com/2009/07/intercept-explicit-interface.html
-				// for now however, we throw.
-				throw new ProxyGenerationException(
-					string.Format(
-						"Type {0} implement explicitly method {1} from interface {2}. " +
-						"Due to how CLR handles explicit interface implementation, we're not able to proxy this method.",
-						targetType.FullName,
-						interfaceMethod.ToString(),
-						interfaceMethod.DeclaringType.FullName)
-					);
+				// for now however, we return null.
+
+				return null;
 			}
 			return method;
 

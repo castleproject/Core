@@ -25,11 +25,25 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 		private StringBuilder sb = new StringBuilder();
 		private List<string> invocations = new List<string>();
 
+		public bool Proceed = true;
+
 		protected override void PreProceed(IInvocation invocation)
 		{
 			invocations.Add(invocation.Method.Name);
 
 			sb.Append(String.Format("{0} ", invocation.Method.Name));
+		}
+
+		protected override void PerformProceed (IInvocation invocation)
+		{
+			if (Proceed)
+			{
+				base.PerformProceed (invocation);
+			}
+			else if (invocation.Method.ReturnType.IsValueType && invocation.Method.ReturnType != typeof (void))
+			{
+				invocation.ReturnValue = Activator.CreateInstance (invocation.Method.ReturnType); // set default return value
+			}
 		}
 
 		public String LogContents

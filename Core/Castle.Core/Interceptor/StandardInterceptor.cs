@@ -26,8 +26,13 @@ namespace Castle.Core.Interceptor
 		public void Intercept(IInvocation invocation)
 		{
 			PreProceed(invocation);
-			invocation.Proceed();
-			PostProceed(invocation);
+			PerformProceed(invocation);
+			PostProceed (invocation);
+		}
+
+		protected virtual void PerformProceed(IInvocation invocation)
+		{
+			invocation.Proceed ();
 		}
 
 		protected virtual void PreProceed(IInvocation invocation)

@@ -124,6 +124,7 @@
     <Compile Include="Classes\ClassWith_Smart_Attribute.cs" />
     <Compile Include="Classes\VirtuallyImplementsInterfaceWithEvent.cs" />
     <Compile Include="ComInterfacesTests.cs" />
+    <Compile Include="ExplicitInterfaceTestCase.cs" />
     <Compile Include="CustomAttributesTestCase.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameter.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameterByRef.cs" />
