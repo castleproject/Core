@@ -76,8 +76,6 @@ namespace Castle.Components.DictionaryAdapter
 			PropertyDescriptor descriptor;
 			if (Properties.TryGetValue(propertyName, out descriptor))
 			{
-				object existingValue = null;
-
 				if (EditProperty(propertyName, value))
 				{
 					return true;
