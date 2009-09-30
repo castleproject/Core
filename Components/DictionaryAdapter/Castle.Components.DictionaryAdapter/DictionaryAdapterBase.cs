@@ -55,15 +55,14 @@ namespace Castle.Components.DictionaryAdapter
 
 		public virtual object GetProperty(string propertyName)
 		{
-			object propertyValue;
-			if (GetEditedProperty(propertyName, out propertyValue))
-			{
-				return propertyValue;
-			}
-
 			PropertyDescriptor descriptor;
 			if (Properties.TryGetValue(propertyName, out descriptor))
 			{
+				object propertyValue;
+				if (GetEditedProperty(propertyName, out propertyValue))
+				{
+					return propertyValue;
+				}
 				return descriptor.GetPropertyValue(this, propertyName, null, Descriptor);
 			}
 
@@ -73,27 +72,28 @@ namespace Castle.Components.DictionaryAdapter
 		public virtual bool SetProperty(string propertyName, ref object value)
 		{
 			bool stored = false;
-			object existingValue = null;
 
-			if (EditProperty(propertyName, value))
+			PropertyDescriptor descriptor;
+			if (Properties.TryGetValue(propertyName, out descriptor))
 			{
-				return true;
-			}
+				object existingValue = null;
 
-			var trackPropertyChange = TrackPropertyChange(propertyName);
-			try
-			{
-				PropertyDescriptor descriptor;
-				if (Properties.TryGetValue(propertyName, out descriptor))
+				if (EditProperty(propertyName, value))
+				{
+					return true;
+				}
+
+				var trackPropertyChange = TrackPropertyChange(propertyName);
+				try
 				{
 					stored = descriptor.SetPropertyValue(this, propertyName, ref value, Descriptor);
 				}
-			}
-			finally
-			{
-				if (stored && trackPropertyChange != null)
+				finally
 				{
-					trackPropertyChange.Dispose();
+					if (stored && trackPropertyChange != null)
+					{
+						trackPropertyChange.Dispose();
+					}
 				}
 			}
 
