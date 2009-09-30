@@ -20,8 +20,8 @@ namespace Castle.Components.DictionaryAdapter
 	/// Identifies a property should be represented as a nested component.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryComponentAttribute :
-		DictionaryBehaviorAttribute, IDictionaryKeyBuilder, IDictionaryPropertyGetter
+	public class DictionaryComponentAttribute : DictionaryBehaviorAttribute, 
+		IDictionaryKeyBuilder, IDictionaryPropertyGetter, IDictionaryPropertySetter
 	{
 		private String prefix;
 
@@ -67,13 +67,32 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (storedValue == null)
 			{
-				var descriptor = new PropertyDescriptor(property.Property);
-				descriptor.AddKeyBuilder(new DictionaryKeyPrefixAttribute(key));
-				return dictionaryAdapter.Factory.GetAdapter(
-					property.Property.PropertyType, dictionaryAdapter.Dictionary, descriptor);
+				var component = dictionaryAdapter.State[key];
+
+				if (component == null)
+				{
+					var descriptor = new PropertyDescriptor(property.Property);
+					descriptor.AddKeyBuilder(new DictionaryKeyPrefixAttribute(key));
+					component = dictionaryAdapter.Factory.GetAdapter(property.Property.PropertyType, 
+						dictionaryAdapter.Dictionary, descriptor);
+					dictionaryAdapter.State[key] = component;
+				}
+
+				return component;
 			}
 
 			return storedValue;
+		}
+
+		#endregion
+
+		#region IDictionaryPropertySetter Members
+
+		public bool SetPropertyValue(IDictionaryAdapter dictionaryAdapter,
+			string key, ref object value, PropertyDescriptor property)
+		{
+			dictionaryAdapter.State.Remove(key);
+			return true;
 		}
 
 		#endregion

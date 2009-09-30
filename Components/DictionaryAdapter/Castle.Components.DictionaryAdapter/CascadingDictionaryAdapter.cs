@@ -16,15 +16,25 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System.Collections;
 
-	public class CascadingAdapter : AbstractDictionaryAdapter
+	public class CascadingDictionaryAdapter : AbstractDictionaryAdapter
 	{
 		private readonly IDictionary primary;
 		private readonly IDictionary secondary;
 
-		public CascadingAdapter(IDictionary primary, IDictionary secondary)
+		public CascadingDictionaryAdapter(IDictionary primary, IDictionary secondary)
 		{
 			this.primary = primary;
 			this.secondary = secondary;
+		}
+
+		public IDictionary Primary
+		{
+			get { return primary; }
+		}
+
+		public IDictionary Secondary
+		{
+			get { return secondary; }
 		}
 
 		public override bool IsReadOnly

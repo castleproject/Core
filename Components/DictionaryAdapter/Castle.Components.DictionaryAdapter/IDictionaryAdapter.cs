@@ -22,6 +22,12 @@ namespace Castle.Components.DictionaryAdapter
 	{
 		Type Type { get; }
 
+		bool IsEditing { get; }
+
+		bool WantsPropertyChangeNotification { get; }
+
+		IDictionary State { get; }
+
 		IDictionary Dictionary { get; }
 
 		PropertyDescriptor Descriptor { get; }
@@ -30,9 +36,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		IDictionaryAdapterFactory Factory { get; }
 
-		bool WantsPropertyChangeNotification { get; }
-
 		object GetProperty(string propertyName);
+
+		bool SetProperty(string propertyName, ref object value);
 
 		void FetchProperties();
 	}

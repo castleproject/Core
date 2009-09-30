@@ -19,10 +19,8 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
-	public abstract class DictionaryAdapterBase : IDictionaryAdapter, INotifyPropertyChanged
+	public abstract partial class DictionaryAdapterBase : IDictionaryAdapter
 	{
-		public event PropertyChangedEventHandler PropertyChanged;
-
 		public DictionaryAdapterBase(Type type, IDictionaryAdapterFactory factory,
 									 IDictionary dictionary, PropertyDescriptor descriptor)
 		{
@@ -30,10 +28,20 @@ namespace Castle.Components.DictionaryAdapter
 			Factory = factory;
 			Dictionary = dictionary;
 			Descriptor = descriptor;
+			State = new Hashtable();
+
+			IsEditable = typeof(IEditableObject).IsAssignableFrom(type);
 			WantsPropertyChangeNotification = typeof(INotifyPropertyChanged).IsAssignableFrom(type);
+
+			if (IsEditable)
+			{
+				updates = new Dictionary<string, object>();
+			}
 		}
 
 		public Type Type { get; private set; }
+
+		public IDictionary State { get; private set; }
 
 		public IDictionary Dictionary { get; private set;  }
 
@@ -43,28 +51,53 @@ namespace Castle.Components.DictionaryAdapter
 
 		public abstract IDictionary<string, PropertyDescriptor> Properties { get; }
 
-		public bool WantsPropertyChangeNotification { get; private set; }
-
 		public abstract void FetchProperties();
 
-		public object GetProperty(string propertyName)
+		public virtual object GetProperty(string propertyName)
 		{
+			object propertyValue;
+			if (GetEditedProperty(propertyName, out propertyValue))
+			{
+				return propertyValue;
+			}
+
 			PropertyDescriptor descriptor;
 			if (Properties.TryGetValue(propertyName, out descriptor))
 			{
 				return descriptor.GetPropertyValue(this, propertyName, null, Descriptor);
 			}
+
 			return null;
 		}
 
-		public void NotifyPropertyChanged(string propertyName)
+		public virtual bool SetProperty(string propertyName, ref object value)
 		{
-			var notifyPropertyChanged = PropertyChanged;
-		
-			if (notifyPropertyChanged != null)
+			bool stored = false;
+			object existingValue = null;
+
+			if (EditProperty(propertyName, value))
 			{
-				notifyPropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+				return true;
 			}
+
+			var trackPropertyChange = TrackPropertyChange(propertyName);
+			try
+			{
+				PropertyDescriptor descriptor;
+				if (Properties.TryGetValue(propertyName, out descriptor))
+				{
+					stored = descriptor.SetPropertyValue(this, propertyName, ref value, Descriptor);
+				}
+			}
+			finally
+			{
+				if (stored && trackPropertyChange != null)
+				{
+					trackPropertyChange.Dispose();
+				}
+			}
+
+			return stored;
 		}
 	}
 }

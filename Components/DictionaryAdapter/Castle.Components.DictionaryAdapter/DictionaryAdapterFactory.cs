@@ -174,7 +174,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			var adapterType = typeBuilder.CreateType();
 			adapterType.InvokeMember("propertyMap", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.SetField,
-			                         null, null, new object[] {propertyMap});
+			                         null, null, new object[] { propertyMap });
 
 			return typeBuilder.Assembly;
 		}
@@ -303,14 +303,6 @@ namespace Castle.Components.DictionaryAdapter
 			propILGenerator.Emit(OpCodes.Ldstr, descriptor.PropertyName);
 			propILGenerator.Emit(OpCodes.Callvirt, PropertyMapGetItem);
 			propILGenerator.Emit(OpCodes.Stloc_S, descriptorLocal);
-
-			// key = descriptor.GetKey(this, key, Descriptor)
-			propILGenerator.Emit(OpCodes.Ldloc_S, descriptorLocal);
-			propILGenerator.Emit(OpCodes.Ldarg_0);
-			propILGenerator.Emit(OpCodes.Ldloc_0);
-			propILGenerator.Emit(OpCodes.Ldnull);
-			propILGenerator.Emit(OpCodes.Callvirt, DescriptorGetKey);
-			propILGenerator.Emit(OpCodes.Stloc_0);
 		}
 
 		#endregion
@@ -332,15 +324,13 @@ namespace Castle.Components.DictionaryAdapter
 			LocalBuilder descriptorLocal;
 
 			PreparePropertyMethod(descriptor, propertyMapField, getILGenerator, out descriptorLocal);
+
 			var result = getILGenerator.DeclareLocal(descriptor.PropertyType);
 
-			// value = descriptor.GetPropertyValue(this, key, value, Descriptor)
-			getILGenerator.Emit(OpCodes.Ldloc_S, descriptorLocal);
+			// value = GetProperty(key, value)
 			getILGenerator.Emit(OpCodes.Ldarg_0);
 			getILGenerator.Emit(OpCodes.Ldloc_0);
-			getILGenerator.Emit(OpCodes.Ldnull);
-			getILGenerator.Emit(OpCodes.Ldnull);
-			getILGenerator.Emit(OpCodes.Callvirt, DescriptorGetValue);
+			getILGenerator.Emit(OpCodes.Callvirt, MetaGetProperty);
 			getILGenerator.Emit(OpCodes.Stloc_1);
 
 			// if (value == null) return null
@@ -359,7 +349,6 @@ namespace Castle.Components.DictionaryAdapter
 
 			getILGenerator.MarkLabel(storeResult);
 			getILGenerator.Emit(OpCodes.Stloc_S, result);
-			getILGenerator.Emit(OpCodes.Br_S, loadResult);
 
 			getILGenerator.MarkLabel(loadResult);
 			getILGenerator.Emit(OpCodes.Ldloc_S, result);
@@ -392,13 +381,11 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			setILGenerator.Emit(OpCodes.Stloc_1);
 
-			// ignore = descriptor.SetPropertyValue(this, key, ref value, descriptor)
-			setILGenerator.Emit(OpCodes.Ldloc_S, descriptorLocal);
+			// ignore = SetProperty(key, ref value)
 			setILGenerator.Emit(OpCodes.Ldarg_0);
 			setILGenerator.Emit(OpCodes.Ldloc_0);
 			setILGenerator.Emit(OpCodes.Ldloca_S, 1);
-			setILGenerator.Emit(OpCodes.Ldnull);
-			setILGenerator.Emit(OpCodes.Callvirt, DescriptorSetValue);
+			setILGenerator.Emit(OpCodes.Callvirt, MetaSetProperty);
 			setILGenerator.Emit(OpCodes.Pop);
 			setILGenerator.Emit(OpCodes.Ret);
 
@@ -615,6 +602,12 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static readonly PropertyInfo MetaPropertiesProp =
 			typeof(IDictionaryAdapter).GetProperty("Properties");
+
+		private static readonly MethodInfo MetaGetProperty =
+			typeof(IDictionaryAdapter).GetMethod("GetProperty");
+
+		private static readonly MethodInfo MetaSetProperty =
+			typeof(IDictionaryAdapter).GetMethod("SetProperty");
 
 		private static readonly MethodInfo MetaFetchProperties =
 			typeof(IDictionaryAdapter).GetMethod("FetchProperties");

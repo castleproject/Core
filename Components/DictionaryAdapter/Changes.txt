@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Simplied internals and added support for IEditableObject
+
 - Added support for INotifyPropertyChanged
  
 - Resolved COMP-ISSUE-105 to allow properties to be redefined to add write access

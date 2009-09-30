@@ -742,6 +742,75 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Name = "Craig";
 			Assert.IsTrue(notifyCalled);
 		}
+
+		[Test]
+		public void WillRaisePropertyChangedEventWhenNestedPropertyChanged()
+		{
+			var notifyCalled = false;
+			var container = factory.GetAdapter<IItemContainerWithComponent<IPerson>>(dictionary);
+			container.Item.PropertyChanged += (s, e) =>
+			{
+				notifyCalled = true;
+				Assert.AreEqual("Name", e.PropertyName);
+			};
+
+			container.Item.Name = "Craig";
+			Assert.IsTrue(notifyCalled);
+		}
+
+		[Test]
+		public void CanEditPropertiesAndAcceptChanges()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.BeginEdit();
+			person.Name = "Craig";
+			Assert.AreEqual("Craig", person.Name);
+			person.EndEdit();
+			Assert.AreEqual("Craig", person.Name);
+		}
+
+		[Test]
+		public void WillRaisePropertyChangedEventWhenEditsAreAccepted()
+		{
+			var notifyCalled = false;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.PropertyChanged += (s, e) =>
+			{
+				notifyCalled = true;
+				Assert.AreEqual("Name", e.PropertyName);
+			};
+			person.BeginEdit();
+			person.Name = "Craig";
+			person.EndEdit();
+			Assert.IsTrue(notifyCalled);
+		}
+
+		[Test]
+		public void CanEditPropertiesAndCancelChanges()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.BeginEdit();
+			person.Name = "Craig";
+			Assert.AreEqual("Craig", person.Name);
+			person.CancelEdit();
+			Assert.IsNull(person.Name);
+		}
+
+		[Test]
+		public void WillNotRaisePropertyChangedEventWhenEditsAreCancelled()
+		{
+			var notifyCalled = false;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.PropertyChanged += (s, e) =>
+			{
+				notifyCalled = true;
+				Assert.AreEqual("Name", e.PropertyName);
+			};
+			person.BeginEdit();
+			person.Name = "Craig";
+			person.CancelEdit();
+			Assert.IsFalse(notifyCalled);
+		}
 	}
 
 	public interface IName
@@ -885,7 +954,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 
-	public interface IPerson : INotifyPropertyChanged
+	public interface IPerson : IEditableObject, INotifyPropertyChanged
 	{
 		string Name { get; set; }
 

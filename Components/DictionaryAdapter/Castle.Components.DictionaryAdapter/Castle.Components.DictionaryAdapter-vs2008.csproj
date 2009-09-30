@@ -68,7 +68,9 @@
     <Compile Include="Attributes\DictionaryStringListAttribute.cs" />
     <Compile Include="Attributes\DictionaryComponentAttribute.cs" />
     <Compile Include="Attributes\DictionaryStringValuesAttribute.cs" />
-    <Compile Include="CascadingAdapter.cs" />
+    <Compile Include="CascadingDictionaryAdapter.cs" />
+    <Compile Include="DictionaryAdapterBase.IEditableObject.cs" />
+    <Compile Include="DictionaryAdapterBase.INotifyPropertyChanged.cs" />
     <Compile Include="DictionaryBehaviorComparer.cs" />
     <Compile Include="IDictionaryBehavior.cs" />
     <Compile Include="DefaultPropertyGetter.cs" />

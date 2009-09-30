@@ -166,8 +166,6 @@ namespace Castle.Components.DictionaryAdapter
 				}
 			}
 
-			descriptor = descriptor ?? dictionaryAdapter.Descriptor;
-
 			if (descriptor != null && descriptor.KeyBuilders != null)
 			{
 				foreach (var builder in descriptor.KeyBuilders)
@@ -223,6 +221,7 @@ namespace Castle.Components.DictionaryAdapter
 		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, object storedValue, PropertyDescriptor descriptor)
 		{
+			key = GetKey(dictionaryAdapter, key, descriptor);
 			storedValue = storedValue ?? dictionaryAdapter.Dictionary[key];
 
 			if (getters != null)
@@ -232,8 +231,6 @@ namespace Castle.Components.DictionaryAdapter
 					storedValue = getter.GetPropertyValue(dictionaryAdapter, key, storedValue, this);
 				}
 			}
-
-			descriptor = descriptor ?? dictionaryAdapter.Descriptor;
 
 			if (descriptor != null && descriptor.Getters != null)
 			{
@@ -291,12 +288,8 @@ namespace Castle.Components.DictionaryAdapter
 			string key, ref object value, PropertyDescriptor descriptor)
 		{
 			bool consumed = false;
-			object existingValue = null;
 
-			if (dictionaryAdapter.WantsPropertyChangeNotification)
-			{
-				existingValue = dictionaryAdapter.GetProperty(key);
-			}
+			key = GetKey(dictionaryAdapter, key, descriptor);
 
 			if (setters != null)
 			{
@@ -308,8 +301,6 @@ namespace Castle.Components.DictionaryAdapter
 					}
 				}
 			}
-
-			descriptor = descriptor ?? dictionaryAdapter.Descriptor;
 
 			if (descriptor != null && descriptor.Setters != null)
 			{
@@ -325,20 +316,6 @@ namespace Castle.Components.DictionaryAdapter
 			if (!consumed)
 			{
 				dictionaryAdapter.Dictionary[key] = value;
-
-				if (dictionaryAdapter.WantsPropertyChangeNotification)
-				{
-					var newValue = dictionaryAdapter.GetProperty(key);
-
-					if (!Object.Equals(existingValue, newValue))
-					{
-						var notify = dictionaryAdapter as DictionaryAdapterBase;
-						if (notify != null)
-						{
-							notify.NotifyPropertyChanged(key);
-						}
-					}
-				}
 			}
 
 			return !consumed;
