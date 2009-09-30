@@ -23,7 +23,8 @@ namespace Castle.Components.DictionaryAdapter
 	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
 	public class DictionaryTypeKeyPrefixAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder
 	{
-		String IDictionaryKeyBuilder.GetKey(IDictionary dictionary, String key, PropertyDescriptor property)
+		String IDictionaryKeyBuilder.GetKey(
+			IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor property)
 		{
 			return property.Property.DeclaringType.FullName + "#" + key;
 		}

@@ -42,8 +42,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region IDictionaryPropertyGetter
 
-		object IDictionaryPropertyGetter.GetPropertyValue(
-			IDictionaryAdapterFactory factory, IDictionary dictionary,
+		object IDictionaryPropertyGetter.GetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, object storedValue, PropertyDescriptor property)
 		{
 			var propertyType = property.PropertyType;
@@ -64,8 +63,8 @@ namespace Castle.Components.DictionaryAdapter
 
 						if (converter != null && converter.CanConvertFrom(typeof(string)))
 						{
-							var genericList = typeof(StringListWrapper<>).MakeGenericType(new Type[] {paramType});
-							return Activator.CreateInstance(genericList, key, storedValue, separator, dictionary);
+							var genericList = typeof(StringListWrapper<>).MakeGenericType(new[] {paramType});
+							return Activator.CreateInstance(genericList, key, storedValue, separator, dictionaryAdapter.Dictionary);
 						}
 					}
 				}
@@ -78,8 +77,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region IDictionaryPropertySetter Members
 
-		bool IDictionaryPropertySetter.SetPropertyValue(
-			IDictionaryAdapterFactory factory, IDictionary dictionary,
+		bool IDictionaryPropertySetter.SetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, ref object value, PropertyDescriptor property)
 		{
 			var enumerable = value as IEnumerable;

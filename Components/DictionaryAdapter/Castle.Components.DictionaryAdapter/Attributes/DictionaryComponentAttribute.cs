@@ -15,7 +15,6 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
-	using System.Collections;
 
 	/// <summary>
 	/// Identifies a property should be represented as a nested component.
@@ -53,8 +52,8 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region IDictionaryKeyBuilder Members
 
-		string IDictionaryKeyBuilder.GetKey(IDictionary dictionary, string key,
-		                                   PropertyDescriptor property)
+		string IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, string key,
+		                                    PropertyDescriptor property)
 		{
 			return prefix ?? key + "_";
 		}
@@ -63,15 +62,15 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region IDictionaryPropertyGetter
 
-		object IDictionaryPropertyGetter.GetPropertyValue(
-			IDictionaryAdapterFactory factory, IDictionary dictionary,
+		object IDictionaryPropertyGetter.GetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, object storedValue, PropertyDescriptor property)
 		{
 			if (storedValue == null)
 			{
 				var descriptor = new PropertyDescriptor(property.Property);
 				descriptor.AddKeyBuilder(new DictionaryKeyPrefixAttribute(key));
-				return factory.GetAdapter(property.Property.PropertyType, dictionary, descriptor);
+				return dictionaryAdapter.Factory.GetAdapter(
+					property.Property.PropertyType, dictionaryAdapter.Dictionary, descriptor);
 			}
 
 			return storedValue;

@@ -727,6 +727,21 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			name.Name = "Goofy";
 			Assert.AreEqual("Goofy", name.Name);
 		}
+
+		[Test]
+		public void WillRaisePropertyChangedEventWhenPropertyChanged()
+		{
+			var notifyCalled = false;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.PropertyChanged += (s, e) => 
+			{
+				notifyCalled = true;
+				Assert.AreEqual("Name", e.PropertyName);
+			};
+
+			person.Name = "Craig";
+			Assert.IsTrue(notifyCalled);
+		}
 	}
 
 	public interface IName
@@ -870,7 +885,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 
-	public interface IPerson
+	public interface IPerson : INotifyPropertyChanged
 	{
 		string Name { get; set; }
 
@@ -1037,7 +1052,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			propertiesFetched.Clear();
 		}
 
-		public object GetPropertyValue(IDictionaryAdapterFactory factory, IDictionary dictionary, string key,
+		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key,
 									   object storedValue, PropertyDescriptor property)
 		{
 			propertiesFetched.Add(key);

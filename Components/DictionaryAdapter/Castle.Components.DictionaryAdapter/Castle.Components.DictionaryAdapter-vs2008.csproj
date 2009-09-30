@@ -82,6 +82,7 @@
     <Compile Include="IDictionaryPropertyGetter.cs" />
     <Compile Include="IDictionaryAdapter.cs" />
     <Compile Include="NameValueCollectionAdapter.cs" />
+    <Compile Include="DictionaryAdapterBase.cs" />
     <Compile Include="PropertyDescriptor.cs" />
   </ItemGroup>
   <ItemGroup>

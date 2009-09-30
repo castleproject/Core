@@ -50,7 +50,7 @@ namespace Castle.Components.DictionaryAdapter
 			set { keyPrefix = value; }
 		}
 
-		String IDictionaryKeyBuilder.GetKey(IDictionary dictionary, String key, PropertyDescriptor property)
+		String IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor property)
 		{
 			return keyPrefix + key;
 		}

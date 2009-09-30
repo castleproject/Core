@@ -15,7 +15,6 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Reflection;
@@ -153,26 +152,27 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets the key.
 		/// </summary>
-		/// <param name="dictionary">The dictionary.</param>
+		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
 		/// <param name="key">The key.</param>
 		/// <param name="descriptor">The descriptor.</param>
 		/// <returns></returns>
-		public string GetKey(IDictionary dictionary, string key,
-		                     PropertyDescriptor descriptor)
+		public string GetKey(IDictionaryAdapter dictionaryAdapter, string key, PropertyDescriptor descriptor)
 		{
 			if (keyBuilders != null)
 			{
 				foreach (var builder in keyBuilders)
 				{
-					key = builder.GetKey(dictionary, key, this);
+					key = builder.GetKey(dictionaryAdapter, key, this);
 				}
 			}
+
+			descriptor = descriptor ?? dictionaryAdapter.Descriptor;
 
 			if (descriptor != null && descriptor.KeyBuilders != null)
 			{
 				foreach (var builder in descriptor.KeyBuilders)
 				{
-					key = builder.GetKey(dictionary, key, this);
+					key = builder.GetKey(dictionaryAdapter, key, this);
 				}
 			}
 
@@ -215,29 +215,31 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets the property value.
 		/// </summary>
-		/// <param name="factory">The factory.</param>
-		/// <param name="dictionary">The dictionary.</param>
+		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
 		/// <param name="key">The key.</param>
 		/// <param name="storedValue">The stored value.</param>
 		/// <param name="descriptor">The descriptor.</param>
 		/// <returns></returns>
-		public object GetPropertyValue(
-			IDictionaryAdapterFactory factory, IDictionary dictionary,
+		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, object storedValue, PropertyDescriptor descriptor)
 		{
+			storedValue = storedValue ?? dictionaryAdapter.Dictionary[key];
+
 			if (getters != null)
 			{
-				foreach(var getter in getters)
+				foreach (var getter in getters)
 				{
-					storedValue = getter.GetPropertyValue(factory, dictionary, key, storedValue, this);
+					storedValue = getter.GetPropertyValue(dictionaryAdapter, key, storedValue, this);
 				}
 			}
+
+			descriptor = descriptor ?? dictionaryAdapter.Descriptor;
 
 			if (descriptor != null && descriptor.Getters != null)
 			{
 				foreach (var getter in descriptor.Getters)
 				{
-					storedValue = getter.GetPropertyValue(factory, dictionary, key, storedValue, this);
+					storedValue = getter.GetPropertyValue(dictionaryAdapter, key, storedValue, this);
 				}
 			}
 
@@ -280,36 +282,61 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Sets the property value.
 		/// </summary>
-		/// <param name="factory">The factory.</param>
-		/// <param name="dictionary">The dictionary.</param>
+		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
 		/// <param name="key">The key.</param>
 		/// <param name="value">The value.</param>
 		/// <param name="descriptor">The descriptor.</param>
 		/// <returns></returns>
-		public bool SetPropertyValue(
-			IDictionaryAdapterFactory factory, IDictionary dictionary,
+		public bool SetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, ref object value, PropertyDescriptor descriptor)
 		{
 			bool consumed = false;
+			object existingValue = null;
+
+			if (dictionaryAdapter.WantsPropertyChangeNotification)
+			{
+				existingValue = dictionaryAdapter.GetProperty(key);
+			}
 
 			if (setters != null)
 			{
 				foreach(var setter in setters)
 				{
-					if (!setter.SetPropertyValue(factory, dictionary, key, ref value, this))
+					if (!setter.SetPropertyValue(dictionaryAdapter, key, ref value, this))
 					{
 						consumed = true;
 					}
 				}
 			}
 
+			descriptor = descriptor ?? dictionaryAdapter.Descriptor;
+
 			if (descriptor != null && descriptor.Setters != null)
 			{
 				foreach (var setter in descriptor.Setters)
 				{
-					if (!setter.SetPropertyValue(factory, dictionary, key, ref value, this))
+					if (!setter.SetPropertyValue(dictionaryAdapter, key, ref value, this))
 					{
 						consumed = true;
+					}
+				}
+			}
+
+			if (!consumed)
+			{
+				dictionaryAdapter.Dictionary[key] = value;
+
+				if (dictionaryAdapter.WantsPropertyChangeNotification)
+				{
+					var newValue = dictionaryAdapter.GetProperty(key);
+
+					if (!Object.Equals(existingValue, newValue))
+					{
+						var notify = dictionaryAdapter as DictionaryAdapterBase;
+						if (notify != null)
+						{
+							notify.NotifyPropertyChanged(key);
+						}
 					}
 				}
 			}

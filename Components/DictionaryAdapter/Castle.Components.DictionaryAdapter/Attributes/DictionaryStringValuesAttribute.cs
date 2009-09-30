@@ -21,7 +21,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// Converts all properties to strings.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property,
-		AllowMultiple = false, Inherited = true)]
+	                AllowMultiple = false, Inherited = true)]
 	public class DictionaryStringValuesAttribute : DictionaryBehaviorAttribute, IDictionaryPropertySetter
 	{
 		private string format;
@@ -38,8 +38,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region IDictionaryPropertySetter Members
 
-		bool IDictionaryPropertySetter.SetPropertyValue(
-			IDictionaryAdapterFactory factory, IDictionary dictionary,
+		bool IDictionaryPropertySetter.SetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, ref object value, PropertyDescriptor property)
 		{
 			if (value != null)

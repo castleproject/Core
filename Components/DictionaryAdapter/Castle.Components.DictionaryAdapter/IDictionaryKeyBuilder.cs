@@ -25,10 +25,10 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Builds the specified key.
 		/// </summary>
-		/// <param name="dictionary">The dictionary.</param>
+		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
 		/// <param name="key">The current key.</param>
 		/// <param name="property">The property.</param>
 		/// <returns>The updated key</returns>
-		String GetKey(IDictionary dictionary, String key, PropertyDescriptor property);
+		String GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor property);
 	}
 }

@@ -45,15 +45,13 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets the effective dictionary value.
 		/// </summary>
-		/// <param name="factory">The dictionary factory.</param>
-		/// <param name="dictionary">The dictionary.</param>
+		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
 		/// <param name="key">The key.</param>
 		/// <param name="storedValue">The stored value.</param>
 		/// <param name="property">The property.</param>
 		/// <returns>The effective property value.</returns>
-		public object GetPropertyValue(IDictionaryAdapterFactory factory,
-		                               IDictionary dictionary, string key,
-		                               object storedValue, PropertyDescriptor property)
+		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter,
+			string key, object storedValue, PropertyDescriptor property)
 		{
 			var propertyType = property.PropertyType;
 
