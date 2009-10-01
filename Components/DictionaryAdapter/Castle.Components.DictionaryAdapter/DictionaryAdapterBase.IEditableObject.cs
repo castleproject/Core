@@ -38,11 +38,18 @@ namespace Castle.Components.DictionaryAdapter
 
 		void IEditableObject.EndEdit()
 		{
-			IsEditing = false;
-			foreach (var update in updates)
+			if (IsEditing)
 			{
-				object value = update.Value;
-				SetProperty(update.Key, ref value);
+				IsEditing = false;
+
+				using (TrackReadonlyPropertyChanges())
+                {
+					foreach (var update in updates)
+					{
+						object value = update.Value;
+						SetProperty(update.Key, ref value);
+					}                	
+                }
 			}
 		}
 

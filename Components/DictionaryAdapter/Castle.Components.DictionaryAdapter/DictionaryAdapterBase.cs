@@ -82,16 +82,12 @@ namespace Castle.Components.DictionaryAdapter
 				}
 
 				var trackPropertyChange = TrackPropertyChange(propertyName);
-				try
+
+				stored = descriptor.SetPropertyValue(this, propertyName, ref value, Descriptor);
+
+				if (stored && trackPropertyChange != null)
 				{
-					stored = descriptor.SetPropertyValue(this, propertyName, ref value, Descriptor);
-				}
-				finally
-				{
-					if (stored && trackPropertyChange != null)
-					{
-						trackPropertyChange.Dispose();
-					}
+					trackPropertyChange.Notify();
 				}
 			}
 

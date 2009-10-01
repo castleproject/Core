@@ -15,10 +15,15 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Linq;
 
 	public abstract partial class DictionaryAdapterBase : INotifyPropertyChanged
-	{        
+	{
+		[ThreadStatic]
+		private static TrackPropertyChangeScope ReadonlyTrackingScope;
+
 		public bool WantsPropertyChangeNotification { get; private set; }
 
 		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
@@ -38,7 +43,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		protected IDisposable TrackPropertyChange(string propertyName)
+		protected TrackPropertyChangeScope TrackPropertyChange(string propertyName)
 		{
 			if (WantsPropertyChangeNotification)
 			{
@@ -47,29 +52,84 @@ namespace Castle.Components.DictionaryAdapter
 			return null;
 		}
 
-		#region Nested Class: NotifyPropertyScope
+		protected TrackPropertyChangeScope TrackReadonlyPropertyChanges()
+		{
+			if (WantsPropertyChangeNotification && ReadonlyTrackingScope == null)
+			{
+				var scope = new TrackPropertyChangeScope(this);
+				ReadonlyTrackingScope = scope;
+				return scope;
+			}
+			return null;
+		}
 
-		class TrackPropertyChangeScope : IDisposable
+		#region Nested Class: TrackPropertyChangeScope
+
+		public class TrackPropertyChangeScope : IDisposable
 		{
 			private readonly string propertyName;
 			private readonly object existingValue;
 			private readonly DictionaryAdapterBase adapter;
+			private IDictionary<string, object> readonlyProperties;
 
-			public TrackPropertyChangeScope(DictionaryAdapterBase adapter, string propertyName)
+			public TrackPropertyChangeScope(DictionaryAdapterBase adapter)
 			{
 				this.adapter = adapter;
+				readonlyProperties = adapter.Properties.Where(pd => !pd.Value.Property.CanWrite)
+					.ToDictionary(pd => pd.Key, pd => adapter.GetProperty(pd.Key));
+			}
+
+			public TrackPropertyChangeScope(DictionaryAdapterBase adapter, string propertyName)
+				: this(adapter)
+			{
 				this.propertyName = propertyName;
 				existingValue = adapter.GetProperty(propertyName);
 			}
 
-			public void Dispose()
+			public bool Notify()
 			{
-				var newValue = adapter.GetProperty(propertyName);
+				if (ReadonlyTrackingScope == this)
+				{
+					ReadonlyTrackingScope = null;
+					return NotifyReadonly();
+				}
 
-				if (!Object.Equals(existingValue, newValue))
+				var newValue = adapter.GetProperty(propertyName);
+				if (NotifyIfChanged(propertyName, existingValue, newValue))
+				{
+					if (ReadonlyTrackingScope == null)
+						NotifyReadonly();
+					return true;
+				}
+
+				return false;
+			}
+
+			private bool NotifyReadonly()
+			{
+				bool changed = false;
+				foreach (var readonlyProperty in readonlyProperties)
+				{
+					var propertyName = readonlyProperty.Key;
+					var currentValue = adapter.GetProperty(propertyName);
+					changed |= NotifyIfChanged(propertyName, readonlyProperty.Value, currentValue);
+				}
+				return changed;
+			}
+
+			private bool NotifyIfChanged(string propertyName, object oldValue, object newValue)
+			{
+				if (!Object.Equals(oldValue, newValue))
 				{
 					adapter.NotifyPropertyChanged(propertyName);
+					return true;
 				}
+				return false;
+			}
+
+			public void Dispose()
+			{
+				Notify();
 			}
 		}
 

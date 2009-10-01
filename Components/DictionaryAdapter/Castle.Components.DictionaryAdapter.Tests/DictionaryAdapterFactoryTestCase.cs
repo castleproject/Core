@@ -724,8 +724,20 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var name = factory.GetAdapter<IMutableName>(dictionary);
 			Assert.IsNotNull(name);
 
-			name.Name = "Goofy";
-			Assert.AreEqual("Goofy", name.Name);
+			name.FirstName = "Big";
+			name.LastName = "Tex";
+			Assert.AreEqual("Big", name.FirstName);
+		}
+
+		[Test]
+		public void CanRequestFormattedReadonlyProperties()
+		{
+			var name = factory.GetAdapter<IMutableName>(dictionary);
+			Assert.IsNotNull(name);
+
+			name.FirstName = "Big";
+			name.LastName = "Tex";
+			Assert.AreEqual("Big Tex", name.FullName);
 		}
 
 		[Test]
@@ -811,16 +823,78 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.CancelEdit();
 			Assert.IsFalse(notifyCalled);
 		}
+
+		[Test]
+		public void WillRaisePropertyChangedEventsForReadonlyProperties()
+		{
+			int notifications = 0;
+			var name = factory.GetAdapter<IMutableName>(dictionary);
+			name.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == "FullName")
+					++notifications;
+			};
+
+			name.FirstName = "Big";
+			name.LastName = "Tex";
+			Assert.AreEqual("Big Tex", name.FullName);
+			Assert.AreEqual(2, notifications);
+		}
+
+		[Test]
+		public void WillRaiseOnePropertyChangedEventsPerReadonlyPropertyWhenEditing()
+		{
+			int notifications = 0;
+			var name = factory.GetAdapter<IMutableName>(dictionary);
+			name.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == "FullName")
+					++notifications;
+			};
+
+			name.BeginEdit();
+			name.FirstName = "Big";
+			name.LastName = "Tex";
+			name.EndEdit();
+
+			Assert.AreEqual("Big Tex", name.FullName);
+			Assert.AreEqual(1, notifications);
+		}
+
+		[Test]
+		public void WillNotRaisePropertyChangedEventsForReadonlyPropertyWhenCancelEditing()
+		{
+			int notifications = 0;
+			var name = factory.GetAdapter<IMutableName>(dictionary);
+			name.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == "FullName")
+					++notifications;
+			};
+
+			name.BeginEdit();
+			name.FirstName = "Big";
+			name.LastName = "Tex";
+			name.CancelEdit();
+
+			Assert.AreEqual(" ", name.FullName);
+			Assert.AreEqual(0, notifications);
+		}
 	}
 
-	public interface IName
+	public interface IName : INotifyPropertyChanged
 	{
-		string Name { get; }
+		string FirstName { get; }
+		string LastName { get; }
+
+		[DictionaryStringFormat("{0} {1}", "FirstName", "LastName")]
+		string FullName { get; }
 	}
 
-	public interface IMutableName : IName
+	public interface IMutableName : IName, IEditableObject
 	{
-		new string Name { get; set; }
+		new string FirstName { get; set; }
+		new string LastName { get; set; }
 	}
 
 	public interface IPhone
