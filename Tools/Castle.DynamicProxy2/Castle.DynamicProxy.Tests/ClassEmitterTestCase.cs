@@ -161,7 +161,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue(inner.IsInterface);
 			MethodInfo method = inner.GetMethod("MyMethod");
 			Assert.IsNotNull(method);
-			Assert.AreSame(inner, outer.GetNestedType ("IInner"));
+			Assert.AreSame(inner, outer.GetNestedType("IInner", BindingFlags.Public));
 		}
 	}
 }
