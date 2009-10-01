@@ -21,9 +21,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public class ClassEmitter : AbstractTypeEmitter
 	{
+		private const TypeAttributes DefaultAttributes = TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable;
+
 		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, IEnumerable<Type> interfaces)
-			: this(
-				modulescope, name, baseType, interfaces, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable, false)
+			: this(modulescope, name, baseType, interfaces, DefaultAttributes, ShouldForceUnsigned())
 		{
 		}
 
@@ -49,6 +50,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			bool isAssemblySigned = !forceUnsigned && !StrongNameUtil.IsAnyTypeFromUnsignedAssembly(baseType, interfaces);
 			return modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(name, flags);
+		}
+
+		private static bool ShouldForceUnsigned()
+		{
+			return MediumTrustUtil.IsRunningInMediumTrust;
 		}
 
 		public ClassEmitter(TypeBuilder typeBuilder)
