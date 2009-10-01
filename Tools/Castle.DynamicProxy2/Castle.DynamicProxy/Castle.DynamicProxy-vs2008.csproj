@@ -99,7 +99,6 @@
     <Compile Include="DefaultProxyBuilder.cs" />
     <Compile Include="Contributors\ClassProxyInstanceContributor.cs" />
     <Compile Include="Contributors\ClassProxyTargetContributor.cs" />
-    <Compile Include="Generators\Emitters\MediumTrustUtil.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\AsTypeReference.cs" />
     <Compile Include="Generators\AttributesToAvoidReplicating.cs" />
     <Compile Include="Generators\BaseProxyGenerator.cs" />

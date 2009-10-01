@@ -18,10 +18,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Collections.Generic;
 	using System.Reflection;
 
+#if !SILVERLIGHT
+	using System.Security;
+	using System.Security.Permissions;
+#endif
+
 	public static class StrongNameUtil
 	{
 		private static readonly IDictionary<Assembly, bool> signedAssemblyCache = new Dictionary<Assembly, bool>();
+		private static readonly bool canStrongNameAssembly;
 		private static readonly object lockObject = new object();
+
+
 
 		public static bool IsAssemblySigned(Assembly assembly)
 		{
@@ -63,5 +71,27 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			return IsAnyTypeFromUnsignedAssembly(interfaces);
 		}
+
+		public static bool CanStrongNameAssembly
+		{
+			get { return canStrongNameAssembly; }
+		}
+
+		#if !SILVERLIGHT
+		static StrongNameUtil()
+		{
+			//idea after http://blogs.msdn.com/dmitryr/archive/2007/01/23/finding-out-the-current-trust-level-in-asp-net.aspx
+			try
+			{
+				new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
+				canStrongNameAssembly = true;
+			}
+			catch (SecurityException)
+			{
+				canStrongNameAssembly = false;
+			}
+		}
+#endif
+
 	}
 }

@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private static bool ShouldForceUnsigned()
 		{
-			return MediumTrustUtil.IsRunningInMediumTrust;
+			return StrongNameUtil.CanStrongNameAssembly == false;
 		}
 
 		public ClassEmitter(TypeBuilder typeBuilder)
