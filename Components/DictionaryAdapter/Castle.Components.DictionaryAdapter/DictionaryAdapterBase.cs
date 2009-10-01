@@ -69,6 +69,11 @@ namespace Castle.Components.DictionaryAdapter
 			return null;
 		}
 
+		public T GetTypedProperty<T>(string propertyName)
+		{
+			return (T)GetProperty(propertyName);
+		}
+
 		public virtual bool SetProperty(string propertyName, ref object value)
 		{
 			bool stored = false;

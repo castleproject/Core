@@ -70,6 +70,7 @@
     <Compile Include="Attributes\DictionaryComponentAttribute.cs" />
     <Compile Include="Attributes\DictionaryStringValuesAttribute.cs" />
     <Compile Include="CascadingDictionaryAdapter.cs" />
+    <Compile Include="DictionaryAdapterBase.IDataErrorInfo.cs" />
     <Compile Include="DictionaryAdapterBase.IEditableObject.cs" />
     <Compile Include="DictionaryAdapterBase.INotifyPropertyChanged.cs" />
     <Compile Include="DictionaryBehaviorComparer.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="IDictionaryAdapterFactory.cs" />
     <Compile Include="IDictionaryPropertyGetter.cs" />
     <Compile Include="IDictionaryAdapter.cs" />
+    <Compile Include="IDictionaryValidator.cs" />
     <Compile Include="NameValueCollectionAdapter.cs" />
     <Compile Include="DictionaryAdapterBase.cs" />
     <Compile Include="PropertyDescriptor.cs" />

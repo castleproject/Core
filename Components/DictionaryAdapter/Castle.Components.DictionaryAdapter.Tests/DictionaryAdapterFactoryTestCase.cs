@@ -683,7 +683,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var meta = factory.GetAdapter<IPerson>(dictionary) as IDictionaryAdapter;
 			Assert.AreSame(dictionary, meta.Dictionary);
 			Assert.AreSame(factory, meta.Factory);
-			Assert.AreEqual(8, meta.Properties.Count);
+			Assert.AreEqual(10, meta.Properties.Count);
 		}
 
 		[Test]
@@ -880,9 +880,36 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(" ", name.FullName);
 			Assert.AreEqual(0, notifications);
 		}
+
+		[Test]
+		public void CanValidateAndObtainDataErrorInformation()
+		{
+			var name = factory.GetAdapter<IMutableName>(dictionary);
+			((IDictionaryAdapter)name).Validator = new TestDictionaryValidator().AddValidationRules(
+				(dictionaryAdapter, propertyName) =>
+				{
+					List<String> errors = new List<String>();
+					switch (propertyName)
+					{
+						case null:
+						case "FirstName":
+							if (dictionaryAdapter.GetTypedProperty<String>("FirstName").Length < 10)
+							{
+								errors.Add("FirstName must be at least 10 characters");
+							}
+							break;
+					}
+					return errors.ToArray();
+				});
+
+			name.FirstName = "Big";
+			name.LastName = "Tex";
+
+			Assert.AreEqual("FirstName must be at least 10 characters", name.Error);
+		}
 	}
 
-	public interface IName : INotifyPropertyChanged
+	public interface IName : INotifyPropertyChanged, IDataErrorInfo
 	{
 		string FirstName { get; }
 		string LastName { get; }
@@ -1028,7 +1055,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 
-	public interface IPerson : IEditableObject, INotifyPropertyChanged
+	public interface IPerson : IEditableObject, INotifyPropertyChanged, IDataErrorInfo
 	{
 		string Name { get; set; }
 

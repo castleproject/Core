@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Added support for IDataErrorInfo
+
 - Simplied internals and added support for IEditableObject
 
 - Added support for INotifyPropertyChanged
