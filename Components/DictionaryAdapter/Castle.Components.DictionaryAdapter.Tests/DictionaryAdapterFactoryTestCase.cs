@@ -887,7 +887,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		string FirstName { get; }
 		string LastName { get; }
 
-		[DictionaryStringFormat("{0} {1}", "FirstName", "LastName")]
+		[DictionaryStringFormat("{0} {1}", "FirstName,LastName")]
 		string FullName { get; }
 	}
 

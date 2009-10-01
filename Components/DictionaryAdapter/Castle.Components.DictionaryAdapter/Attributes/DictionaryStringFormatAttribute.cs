@@ -17,12 +17,12 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 
 	/// <summary>
-	/// Provides simple formatting form existing properties.
+	/// Provides simple string formatting from existing properties.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
 	public class DictionaryStringFormatAttribute : DictionaryBehaviorAttribute, IDictionaryPropertyGetter
 	{
-		public DictionaryStringFormatAttribute(string format, params string[] properties)
+		public DictionaryStringFormatAttribute(string format, string properties)
 		{
 			if (format == null)
 			{
@@ -41,7 +41,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets the format properties.
 		/// </summary>
-		public string[] Properties { get; private set; }
+		public string Properties { get; private set; }
 
 		#region IDictionaryPropertyGetter
 
@@ -55,10 +55,11 @@ namespace Castle.Components.DictionaryAdapter
 
 		private object[] GetFormatArguments(IDictionaryAdapter dictionaryAdapter, string formattedPropertyName)
 		{
-			var arguments = new object[Properties.Length];
-			for (int i = 0; i < Properties.Length; ++i)
+			var properties = Properties.Split(',');
+			var arguments = new object[properties.Length];
+			for (int i = 0; i < properties.Length; ++i)
 			{
-				var propertyName = Properties[i];
+				var propertyName = properties[i];
 				if (propertyName != formattedPropertyName)
 				{
 					arguments[i] = dictionaryAdapter.GetProperty(propertyName);
