@@ -893,28 +893,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public void CanValidateAndObtainDataErrorInformation()
 		{
 			var name = factory.GetAdapter<IMutableName>(dictionary);
-			var validator = (TestDictionaryValidator)((IDictionaryAdapter)name).Validator;
-			validator.AddValidationRules(
-				(dictionaryAdapter, propertyName) =>
-				{
-					List<String> errors = new List<String>();
-					switch (propertyName)
-					{
-						case null:
-						case "FirstName":
-							if (dictionaryAdapter.GetTypedProperty<String>("FirstName").Length < 10)
-							{
-								errors.Add("FirstName must be at least 10 characters");
-							}
-							break;
-					}
-					return errors.ToArray();
-				});
-
 			name.FirstName = "Big";
 			name.LastName = "Tex";
 
-			Assert.AreEqual("FirstName must be at least 10 characters", name.Error);
+			Assert.AreEqual("Property FirstName must be at least 10 characters long", name.Error);
 		}
 	}
 
@@ -930,6 +912,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 	public interface IMutableName : IName, IEditableObject
 	{
+		[ValidateStringLengthAtLeast(10)]
 		new string FirstName { get; set; }
 		new string LastName { get; set; }
 	}

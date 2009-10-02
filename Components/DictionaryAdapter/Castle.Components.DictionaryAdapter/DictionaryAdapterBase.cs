@@ -69,7 +69,7 @@ namespace Castle.Components.DictionaryAdapter
 			return null;
 		}
 
-		public T GetTypedProperty<T>(string propertyName)
+		public T GetPropertyOfType<T>(string propertyName)
 		{
 			return (T)GetProperty(propertyName);
 		}

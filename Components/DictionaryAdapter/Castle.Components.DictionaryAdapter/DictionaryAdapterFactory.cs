@@ -475,9 +475,9 @@ namespace Castle.Components.DictionaryAdapter
 			types.Add(currentType);
 			types.AddRange(currentType.GetInterfaces());
 
-			foreach(Type type in types)
+			foreach (Type type in types)
 			{
-				foreach(var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+				foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
 				{
 					onProperty(property);
 				}

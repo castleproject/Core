@@ -40,7 +40,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		object GetProperty(string propertyName);
 
-		T GetTypedProperty<T>(string propertyName);
+		T GetPropertyOfType<T>(string propertyName);
 
 		bool SetProperty(string propertyName, ref object value);
 
