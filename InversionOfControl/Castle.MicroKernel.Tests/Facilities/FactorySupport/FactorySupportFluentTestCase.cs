@@ -158,5 +158,19 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
             Assert.IsInstanceOf(typeof(HondaProvider), kernel.Resolve<ICarProvider>("hondaProvider"));
             Assert.IsInstanceOf(typeof(FerrariProvider), kernel.Resolve<ICarProvider>("ferrariProvider"));
         }
+
+		[Test]
+		public void RegisterWithFactoryMethodKernelAndContext()
+		{
+			kernel.Register(
+				Component.For<User>().LifeStyle.Transient,
+				Component.For<AbstractCarProviderFactory>(),
+				Component.For<ICarProvider>()
+					.UsingFactoryMethod((k, ctx) => new AbstractCarProviderFactory().Create(
+						k.Resolve<User>(ctx.AdditionalParameters)))
+				);
+			Assert.IsInstanceOf(typeof(FerrariProvider), kernel.Resolve<ICarProvider>(
+				new { FiscalStability = FiscalStability.MrMoneyBags }));
+		}
 	}
 }

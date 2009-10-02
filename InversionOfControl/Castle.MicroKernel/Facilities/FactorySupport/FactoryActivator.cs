@@ -112,6 +112,17 @@ namespace Castle.Facilities.FactorySupport
 				{
 					Type paramType = parameter.ParameterType;
 
+					if (paramType == typeof(IKernel))
+					{
+						methodArgs.Add(Kernel);
+						continue;
+					}
+					else if (paramType == typeof(CreationContext))
+					{
+						methodArgs.Add(context);
+						continue;
+					}
+
 					DependencyModel depModel;
 
 					if (converter.IsSupportedAndPrimitiveType(paramType))

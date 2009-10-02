@@ -1,6 +1,9 @@
 2.0
 ====
 
+- Updated FactorySupportFacility and fluent registration to allow propagation 
+  of CreationContext to factory methods
+
 - Fixed Burden release issue in which children were being released if the
   component was not destroyed
 
