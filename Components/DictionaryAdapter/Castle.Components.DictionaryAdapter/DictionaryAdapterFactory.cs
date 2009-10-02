@@ -161,7 +161,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			var propertyMapField = typeBuilder.DefineField("propertyMap", typeof(Dictionary<String, PropertyDescriptor>),
 														   FieldAttributes.Private | FieldAttributes.Static);
-			CreateAdapterConstructor(typeBuilder);
+			CreateAdapterConstructor(type, typeBuilder);
 
 			var propertyMap = GetPropertyDescriptors(type);
 
@@ -183,7 +183,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region CreateAdapterConstructor
 
-		private static void CreateAdapterConstructor(TypeBuilder typeBuilder)
+		private static void CreateAdapterConstructor(Type type, TypeBuilder typeBuilder)
 		{
 			var constructorBuilder = typeBuilder.DefineConstructor(
 				MethodAttributes.Public | MethodAttributes.HideBySig, CallingConventions.Standard,
@@ -206,6 +206,19 @@ namespace Castle.Components.DictionaryAdapter
 			ilGenerator.Emit(OpCodes.Ldarg_3);
 			ilGenerator.Emit(OpCodes.Ldarg_S, 4);
 			ilGenerator.Emit(OpCodes.Call, baseConstructorInfo);
+
+			var initializers = AttributesUtil.GetTypeAttributes<DictionaryInitializeAttribute>(type);
+
+			if (initializers != null)
+			{
+				foreach (var initializer in initializers)
+				{
+					ilGenerator.Emit(OpCodes.Newobj, initializer.Constructor);
+					ilGenerator.Emit(OpCodes.Ldarg_0);
+					ilGenerator.Emit(OpCodes.Callvirt, DictionaryInitialize);
+				}
+			}
+
 			ilGenerator.Emit(OpCodes.Ret);
 		}
 
@@ -572,7 +585,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private Assembly GetExistingAdapterAssembly(AppDomain appDomain, string assemblyName)
 		{
-			return Array.Find(appDomain.GetAssemblies(), assembly => GetAssemblyName( assembly ) == assemblyName );
+			return Array.Find(appDomain.GetAssemblies(), assembly => GetAssemblyName(assembly) == assemblyName );
 		}
 
 		#endregion
@@ -611,6 +624,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static readonly MethodInfo MetaFetchProperties =
 			typeof(IDictionaryAdapter).GetMethod("FetchProperties");
+
+		private static readonly MethodInfo DictionaryInitialize =
+			typeof(IDictionaryInitializer).GetMethod("Initialize");
 
 		#endregion
 	}

@@ -15,23 +15,14 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	/// <summary>
-	/// Contract for dictionary validation.
+	///  Contract for dictionary initialization.
 	/// </summary>
-	public interface IDictionaryValidator
+	public interface IDictionaryInitializer
 	{
 		/// <summary>
-		/// Validates the <see cref="IDictionaryAdapter"/>.
+		/// Performs any initialization of the <see cref="IDictionaryAdapter"/>
 		/// </summary>
-		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
-		/// <returns>The error summary information.</returns>
-		string Validate(IDictionaryAdapter dictionaryAdapter);
-
-		/// <summary>
-		/// Validates the <see cref="IDictionaryAdapter"/> for a property.
-		/// </summary>
-		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
-		/// <param name="propertyName">The property to validate.</param>
-		/// <returns>The property summary information.</returns>
-		string Validate(IDictionaryAdapter dictionaryAdapter, string propertyName);
+		/// <param name="dictionaryAdapter"></param>
+		void Initialize(IDictionaryAdapter dictionaryAdapter);
 	}
 }

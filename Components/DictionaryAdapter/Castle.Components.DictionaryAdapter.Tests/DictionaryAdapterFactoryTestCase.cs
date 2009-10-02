@@ -882,10 +882,19 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void CanInitializeTheDictionaryAdapterWithAttributes()
+		{
+			var name = factory.GetAdapter<IMutableName>(dictionary);
+			var validator = ((IDictionaryAdapter)name).Validator as TestDictionaryValidator;
+			Assert.IsNotNull(validator);
+		}
+
+		[Test]
 		public void CanValidateAndObtainDataErrorInformation()
 		{
 			var name = factory.GetAdapter<IMutableName>(dictionary);
-			((IDictionaryAdapter)name).Validator = new TestDictionaryValidator().AddValidationRules(
+			var validator = (TestDictionaryValidator)((IDictionaryAdapter)name).Validator;
+			validator.AddValidationRules(
 				(dictionaryAdapter, propertyName) =>
 				{
 					List<String> errors = new List<String>();
@@ -909,6 +918,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 
+	[DictionaryInitialize(typeof(TestDictionaryValidator))]
 	public interface IName : INotifyPropertyChanged, IDataErrorInfo
 	{
 		string FirstName { get; }
@@ -1227,6 +1237,15 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			propertiesFetched.Add(key);
 			return storedValue;
+		}
+	}
+
+	public class Foo
+	{
+		public Foo()
+		{
+			IDictionaryInitializer init = new TestDictionaryValidator();
+			init.Initialize(null);
 		}
 	}
 }

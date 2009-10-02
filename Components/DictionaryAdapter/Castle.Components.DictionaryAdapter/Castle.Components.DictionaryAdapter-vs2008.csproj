@@ -63,6 +63,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AbstractDictionaryAdapter.cs" />
     <Compile Include="Attributes\AttributesUtil.cs" />
+    <Compile Include="Attributes\DictionaryInitializeAttribute.cs" />
     <Compile Include="Attributes\DictionaryStringFormatAttribute.cs" />
     <Compile Include="Attributes\DictionaryTypeKeyPrefixAttribute.cs" />
     <Compile Include="Attributes\DictionaryBehaviorAttribute.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Attributes\DictionaryComponentAttribute.cs" />
     <Compile Include="Attributes\DictionaryStringValuesAttribute.cs" />
     <Compile Include="CascadingDictionaryAdapter.cs" />
+    <Compile Include="IDictionaryInitializer.cs" />
     <Compile Include="DictionaryAdapterBase.IDataErrorInfo.cs" />
     <Compile Include="DictionaryAdapterBase.IEditableObject.cs" />
     <Compile Include="DictionaryAdapterBase.INotifyPropertyChanged.cs" />

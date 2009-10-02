@@ -18,13 +18,18 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.Collections.Generic;
 	using System.Linq;
 
-	public class TestDictionaryValidator : IDictionaryValidator
+	public class TestDictionaryValidator : IDictionaryValidator, IDictionaryInitializer
 	{
 		private List<Func<IDictionaryAdapter, String, String[]>> validationRules;
 
 		public TestDictionaryValidator()
 		{
 			validationRules = new List<Func<IDictionaryAdapter, string, string[]>>();
+		}
+
+		void IDictionaryInitializer.Initialize(IDictionaryAdapter dictionaryAdapter)
+		{
+			dictionaryAdapter.Validator = this;
 		}
 
 		public TestDictionaryValidator AddValidationRules(params Func<IDictionaryAdapter, String, String[]>[] rules)
