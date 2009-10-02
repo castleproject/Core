@@ -1,5 +1,5 @@
 This file names who's behind the Castle Team. You can find more about us at http://www.castleproject.org/community/team.html
- 
+
 Committers
 ==========
 (ordered by the date when joined the project)
@@ -34,6 +34,7 @@ Committers
 - Jonathon Rossi
 - Tuna Toksöz
 - Krzysztof Kozmic
+- Mauricio Scheffer
 
 Managers 
 ========
