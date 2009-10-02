@@ -683,7 +683,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var meta = factory.GetAdapter<IPerson>(dictionary) as IDictionaryAdapter;
 			Assert.AreSame(dictionary, meta.Dictionary);
 			Assert.AreSame(factory, meta.Factory);
-			Assert.AreEqual(10, meta.Properties.Count);
+			Assert.AreEqual(8, meta.Properties.Count);
 		}
 
 		[Test]
@@ -917,13 +917,44 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		new string LastName { get; set; }
 	}
 
-	public interface IPhone
+	public interface IPhone : /*IEditableObject, INotifyPropertyChanged,*/ IDataErrorInfo
 	{
 		string Number { get; set; }
 		string Extension { get; set; }
 	}
 
-	public class Phone : IPhone
+	#region InfrastructureStub
+
+	public abstract class InfrastructureStub : INotifyPropertyChanged, IEditableObject, IDataErrorInfo
+	{
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		public void BeginEdit()
+		{
+		}
+
+		public void CancelEdit()
+		{
+		}
+
+		public void EndEdit()
+		{
+		}
+
+		public string Error
+		{
+			get { return String.Empty; }
+		}
+
+		public string this[string columnName]
+		{
+			get { return String.Empty; }
+		}
+	}
+
+	#endregion
+
+	public class Phone : InfrastructureStub, IPhone
 	{
 		private string number;
 		private string extension;
@@ -951,7 +982,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 
-	public interface IAddress
+	public interface IAddress : IEditableObject, INotifyPropertyChanged, IDataErrorInfo
 	{
 		string Line1 { get; set; }
 		string Line2 { get; set; }
@@ -969,7 +1000,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		IPhone Emergency { get; }
 	}
 
-	public class Address : IAddress
+	public class Address : InfrastructureStub,  IAddress
 	{
 		private string line1;
 		private string line2;
@@ -1033,7 +1064,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				return mobile;
 			}
 		}
-
 
 		public IPhone Emergency
 		{

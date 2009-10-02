@@ -18,6 +18,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
+	using System.ComponentModel;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Text;
@@ -209,14 +210,12 @@ namespace Castle.Components.DictionaryAdapter
 
 			var initializers = AttributesUtil.GetTypeAttributes<DictionaryInitializeAttribute>(type);
 
-			if (initializers != null)
+			if (initializers != null) foreach (var initializer in initializers)
 			{
-				foreach (var initializer in initializers)
-				{
-					ilGenerator.Emit(OpCodes.Newobj, initializer.Constructor);
-					ilGenerator.Emit(OpCodes.Ldarg_0);
-					ilGenerator.Emit(OpCodes.Callvirt, DictionaryInitialize);
-				}
+				// new DictionaryInitializer().Initialize(this)
+				ilGenerator.Emit(OpCodes.Newobj, initializer.Constructor);
+				ilGenerator.Emit(OpCodes.Ldarg_0);
+				ilGenerator.Emit(OpCodes.Callvirt, DictionaryInitialize);
 			}
 
 			ilGenerator.Emit(OpCodes.Ret);
@@ -477,6 +476,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			foreach (Type type in types)
 			{
+				if (type == typeof(IDataErrorInfo)) continue;
 				foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
 				{
 					onProperty(property);
