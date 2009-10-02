@@ -782,6 +782,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void CanEditNestedPropertiesAndAcceptChanges()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.BillingAddress.Line1 = "77 Nutmeg Dr.";
+			person.BeginEdit();
+			person.BillingAddress.Line1 = "600 Tulip Ln.";
+			person.EndEdit();
+			Assert.AreEqual("600 Tulip Ln.", person.BillingAddress.Line1);
+		}
+
+		[Test]
 		public void WillRaisePropertyChangedEventWhenEditsAreAccepted()
 		{
 			var notifyCalled = false;
@@ -798,6 +809,23 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void WillRaisePropertyChangedEventWhenNestedEditsAreAccepted()
+		{
+			var notifyCalled = false;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.BillingAddress.Line1 = "77 Nutmeg Dr.";
+			person.BillingAddress.PropertyChanged += (s, e) =>
+			{
+				notifyCalled = true;
+				Assert.AreEqual("Line1", e.PropertyName);
+			};
+			person.BeginEdit();
+			person.BillingAddress.Line1 = "600 Tulip Ln.";
+			person.EndEdit();
+			Assert.IsTrue(notifyCalled);
+		}
+
+		[Test]
 		public void CanEditPropertiesAndCancelChanges()
 		{
 			var person = factory.GetAdapter<IPerson>(dictionary);
@@ -806,6 +834,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("Craig", person.Name);
 			person.CancelEdit();
 			Assert.IsNull(person.Name);
+		}
+		
+		[Test]
+		public void CanEditNestedPropertiesAndCancelChanges()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.BillingAddress.Line1 = "77 Nutmeg Dr.";
+			person.BeginEdit();
+			person.BillingAddress.Line1 = "600 Tulip Ln.";
+			person.CancelEdit();
+			Assert.AreEqual("77 Nutmeg Dr.", person.BillingAddress.Line1);
 		}
 
 		[Test]
@@ -820,6 +859,23 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			};
 			person.BeginEdit();
 			person.Name = "Craig";
+			person.CancelEdit();
+			Assert.IsFalse(notifyCalled);
+		}
+
+		[Test]
+		public void WillNotRaisePropertyChangedEventWhenNestedEditsAreAccepted()
+		{
+			var notifyCalled = false;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.BillingAddress.Line1 = "77 Nutmeg Dr.";
+			person.BillingAddress.PropertyChanged += (s, e) =>
+			{
+				notifyCalled = true;
+				Assert.AreEqual("Line1", e.PropertyName);
+			};
+			person.BeginEdit();
+			person.BillingAddress.Line1 = "600 Tulip Ln.";
 			person.CancelEdit();
 			Assert.IsFalse(notifyCalled);
 		}

@@ -19,7 +19,8 @@ namespace Castle.Components.DictionaryAdapter
 
 	public abstract partial class DictionaryAdapterBase : IEditableObject
 	{
-		private readonly IDictionary<string, object> updates;
+		private Dictionary<string, object> updates;
+		private HashSet<IEditableObject> editDependencies;
 
 		public bool IsEditable { get; private set; }
 
@@ -32,7 +33,20 @@ namespace Castle.Components.DictionaryAdapter
 
 		void IEditableObject.CancelEdit()
 		{
-			updates.Clear();
+			if (updates != null)
+			{
+				updates.Clear();
+			}
+
+			if (editDependencies != null)
+			{
+				foreach (var editDependency in editDependencies)
+				{
+					editDependency.CancelEdit();
+				}
+				editDependencies.Clear();
+			}
+
 			IsEditing = false;
 		}
 
@@ -42,31 +56,58 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				IsEditing = false;
 
-				using (TrackReadonlyPropertyChanges())
-                {
-					foreach (var update in updates)
+				if (updates != null && updates.Count > 0)
+				{
+					using (TrackReadonlyPropertyChanges())
 					{
-						object value = update.Value;
-						SetProperty(update.Key, ref value);
-					}                	
-                }
+						foreach (var update in updates)
+						{
+							object value = update.Value;
+							SetProperty(update.Key, ref value);
+						}
+					}
+				}
+
+				if (editDependencies != null)
+				{
+					foreach (var editDependency in editDependencies)
+					{
+						editDependency.EndEdit();
+					}
+					editDependencies.Clear();
+				}
 			}
 		}
 
 		protected bool GetEditedProperty(string propertyName, out object propertyValue)
 		{
 			propertyValue = null;
-			return IsEditing && updates.TryGetValue(propertyName, out propertyValue);
+			return IsEditing &&  updates != null &&
+				updates.TryGetValue(propertyName, out propertyValue);
 		}
 
 		protected bool EditProperty(string propertyName, object propertyValue)
 		{
 			if (IsEditing)
 			{
+				updates = updates ?? new Dictionary<string, object>();
 				updates[propertyName] = propertyValue;
 				return true;
 			}
 			return false;
+		}
+
+		protected void AddEditDependency(IEditableObject editDependency)
+		{
+			if (IsEditing)
+			{
+				editDependencies = editDependencies ?? new HashSet<IEditableObject>();
+
+				if (editDependencies.Add(editDependency))
+				{
+					editDependency.BeginEdit();
+				}
+			}
 		}
 	}
 }

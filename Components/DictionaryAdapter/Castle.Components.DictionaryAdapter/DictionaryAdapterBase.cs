@@ -32,11 +32,6 @@ namespace Castle.Components.DictionaryAdapter
 
 			IsEditable = typeof(IEditableObject).IsAssignableFrom(type);
 			WantsPropertyChangeNotification = typeof(INotifyPropertyChanged).IsAssignableFrom(type);
-
-			if (IsEditable)
-			{
-				updates = new Dictionary<string, object>();
-			}
 		}
 
 		public Type Type { get; private set; }
@@ -63,7 +58,13 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					return propertyValue;
 				}
-				return descriptor.GetPropertyValue(this, propertyName, null, Descriptor);
+
+				propertyValue = descriptor.GetPropertyValue(this, propertyName, null, Descriptor);
+				if (propertyValue is IEditableObject)
+				{
+					AddEditDependency((IEditableObject)propertyValue);
+				}
+				return propertyValue;
 			}
 
 			return null;
