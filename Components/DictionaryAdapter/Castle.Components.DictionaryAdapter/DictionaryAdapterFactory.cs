@@ -476,7 +476,13 @@ namespace Castle.Components.DictionaryAdapter
 
 			foreach (Type type in types)
 			{
-				if (type == typeof(IDataErrorInfo)) continue;
+				if (type == typeof(IDataErrorInfo) ||
+					type == typeof(IDictionaryEditing) ||
+					type == typeof(IDictionaryNotification))
+				{
+					continue;
+				}
+
 				foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
 				{
 					onProperty(property);

@@ -17,7 +17,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
-	public abstract partial class DictionaryAdapterBase : IEditableObject
+	public abstract partial class DictionaryAdapterBase
 	{
 		private Dictionary<string, object> updates;
 		private HashSet<IEditableObject> editDependencies;
@@ -26,12 +26,12 @@ namespace Castle.Components.DictionaryAdapter
 
 		public bool IsEditing { get; private set; }
 
-		void IEditableObject.BeginEdit()
+		public void BeginEdit()
 		{
 			IsEditing = true;
 		}
 
-		void IEditableObject.CancelEdit()
+		public void CancelEdit()
 		{
 			if (updates != null)
 			{
@@ -50,7 +50,7 @@ namespace Castle.Components.DictionaryAdapter
 			IsEditing = false;
 		}
 
-		void IEditableObject.EndEdit()
+		public void EndEdit()
 		{
 			if (IsEditing)
 			{

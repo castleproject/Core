@@ -21,7 +21,7 @@ namespace Castle.Components.DictionaryAdapter
 	{
 		public IDictionaryValidator Validator { get; set; }
 
-		string IDataErrorInfo.Error
+		public string Error
 		{
 			get
 			{
@@ -33,7 +33,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		string IDataErrorInfo.this[String columnName]
+		public string this[String columnName]
 		{
 			get
 			{

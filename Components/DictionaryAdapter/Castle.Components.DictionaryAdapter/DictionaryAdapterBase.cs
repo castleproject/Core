@@ -21,6 +21,8 @@ namespace Castle.Components.DictionaryAdapter
 
 	public abstract partial class DictionaryAdapterBase : IDictionaryAdapter
 	{
+		private Hashtable state;
+
 		public DictionaryAdapterBase(Type type, IDictionaryAdapterFactory factory,
 									 IDictionary dictionary, PropertyDescriptor descriptor)
 		{
@@ -28,7 +30,6 @@ namespace Castle.Components.DictionaryAdapter
 			Factory = factory;
 			Dictionary = dictionary;
 			Descriptor = descriptor;
-			State = new Hashtable();
 
 			IsEditable = typeof(IEditableObject).IsAssignableFrom(type);
 			WantsPropertyChangeNotification = typeof(INotifyPropertyChanged).IsAssignableFrom(type);
@@ -36,7 +37,15 @@ namespace Castle.Components.DictionaryAdapter
 
 		public Type Type { get; private set; }
 
-		public IDictionary State { get; private set; }
+		public IDictionary State
+		{
+			get
+			{
+				if (state == null)
+					state = new Hashtable();
+				return state;
+			}
+		}
 
 		public IDictionary Dictionary { get; private set;  }
 
@@ -87,7 +96,13 @@ namespace Castle.Components.DictionaryAdapter
 					return true;
 				}
 
-				var trackPropertyChange = TrackPropertyChange(propertyName);
+				var existingValue = GetProperty(propertyName);
+				if (!NotifyPropertyChanging(propertyName, existingValue, value))
+				{
+					return false;
+				}
+
+				var trackPropertyChange = TrackPropertyChange(propertyName, existingValue);
 
 				stored = descriptor.SetPropertyValue(this, propertyName, ref value, Descriptor);
 

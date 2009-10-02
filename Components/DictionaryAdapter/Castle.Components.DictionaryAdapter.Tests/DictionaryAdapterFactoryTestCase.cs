@@ -756,6 +756,33 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void CanObtainPropertyChangeDetailsWhenPropertyChanged()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.PropertyChanged += (s, e) =>
+			{
+				var details = e as PropertyModifiedEventArgs;
+				Assert.AreEqual(null, details.OldPropertyValue);
+				Assert.AreEqual("Craig", details.NewPropertyValue);
+			};
+
+			person.Name = "Craig";
+		}
+
+		[Test]
+		public void CanCancelPropertyChanges()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.PropertyChanging += (s, e) =>
+			{
+				e.Cancel = true;
+			};
+
+			person.Name = "Craig";
+			Assert.AreEqual(null, person.Name);
+		}
+
+		[Test]
 		public void WillRaisePropertyChangedEventWhenNestedPropertyChanged()
 		{
 			var notifyCalled = false;
@@ -767,6 +794,45 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			};
 
 			container.Item.Name = "Craig";
+			Assert.IsTrue(notifyCalled);
+		}
+
+		[Test]
+		public void CanSupressPropertyChangedEvents()
+		{
+			var notifyCalled = false;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.PropertyChanged += (s, e) =>
+			{
+				notifyCalled = true;
+				Assert.AreEqual("Name", e.PropertyName);
+			};
+
+			using (person.SupressNotificationsSection())
+            {
+				person.Name = "Craig";            	
+            }
+			Assert.IsFalse(notifyCalled);
+		}
+
+		[Test]
+		public void CanResumePropertyChangedEvents()
+		{
+			var notifyCalled = false;
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.PropertyChanged += (s, e) =>
+			{
+				notifyCalled = true;
+				Assert.AreEqual("Name", e.PropertyName);
+			};
+
+			using (person.SupressNotificationsSection())
+			{
+				person.Name = "Craig";
+			}
+
+			Assert.IsFalse(notifyCalled);
+			person.Name = "Fred";
 			Assert.IsTrue(notifyCalled);
 		}
 
@@ -957,7 +1023,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	}
 
 	[DictionaryInitialize(typeof(TestDictionaryValidator))]
-	public interface IName : INotifyPropertyChanged, IDataErrorInfo
+	public interface IName : IDictionaryNotification, IDataErrorInfo
 	{
 		string FirstName { get; }
 		string LastName { get; }
@@ -973,7 +1039,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		new string LastName { get; set; }
 	}
 
-	public interface IPhone : /*IEditableObject, INotifyPropertyChanged,*/ IDataErrorInfo
+	public interface IPhone : IEditableObject, INotifyPropertyChanged, IDataErrorInfo
 	{
 		string Number { get; set; }
 		string Extension { get; set; }
@@ -1134,7 +1200,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 
-	public interface IPerson : IEditableObject, INotifyPropertyChanged, IDataErrorInfo
+	public interface IPerson : IEditableObject, IDictionaryNotification, IDataErrorInfo
 	{
 		string Name { get; set; }
 

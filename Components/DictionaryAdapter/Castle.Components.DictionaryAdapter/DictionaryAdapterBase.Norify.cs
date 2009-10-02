@@ -19,35 +19,71 @@ namespace Castle.Components.DictionaryAdapter
 	using System.ComponentModel;
 	using System.Linq;
 
-	public abstract partial class DictionaryAdapterBase : INotifyPropertyChanged
+	public abstract partial class DictionaryAdapterBase
 	{
+		private int supressNotificationCount = 0;
+		private bool wantsPropertyChangeNotification;
+
 		[ThreadStatic]
 		private static TrackPropertyChangeScope ReadonlyTrackingScope;
 
-		public bool WantsPropertyChangeNotification { get; private set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangingEventHandler PropertyChanging;
 
-		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+		public bool WantsPropertyChangeNotification
 		{
-			add { _propertyChanged += value; }
-			remove { _propertyChanged -= value; }
+			get
+			{
+				return wantsPropertyChangeNotification && supressNotificationCount == 0;
+			}
+			set { wantsPropertyChangeNotification = value; }
 		}
-		private PropertyChangedEventHandler _propertyChanged;
 
-		protected void NotifyPropertyChanged(string propertyName)
+
+		public IDisposable SupressNotificationsSection()
 		{
-			var propertyChanged = _propertyChanged;
+			return new SupressNotificationsScope(this);
+		}
+
+		public void SupressNotifications()
+		{
+			++supressNotificationCount;
+		}
+
+		public void ResumeNotifications()
+		{
+			--supressNotificationCount;
+		}
+        
+		protected bool NotifyPropertyChanging(string propertyName, object oldValue, object newValue)
+		{
+			var propertyChanging = PropertyChanging;
+
+			if (propertyChanging != null)
+			{
+				var eventArgs = new PropertyChangingEventArgs(propertyName, oldValue, newValue);
+				propertyChanging(this, eventArgs);
+				return !eventArgs.Cancel;
+			}
+
+			return true;
+		}
+
+		protected void NotifyPropertyChanged(string propertyName, object oldValue, object newValue)
+		{
+			var propertyChanged = PropertyChanged;
 
 			if (propertyChanged != null)
 			{
-				propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+				propertyChanged(this, new PropertyModifiedEventArgs(propertyName, oldValue, newValue));
 			}
 		}
 
-		protected TrackPropertyChangeScope TrackPropertyChange(string propertyName)
+		protected TrackPropertyChangeScope TrackPropertyChange(string propertyName, object existingValue)
 		{
 			if (WantsPropertyChangeNotification)
 			{
-				return new TrackPropertyChangeScope(this, propertyName);
+				return new TrackPropertyChangeScope(this, propertyName, existingValue);
 			}
 			return null;
 		}
@@ -62,6 +98,27 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			return null;
 		}
+
+
+		#region Nested Class: SupressNotificationsScope
+
+		class SupressNotificationsScope : IDisposable
+		{
+			private readonly DictionaryAdapterBase adapter;
+
+			public SupressNotificationsScope(DictionaryAdapterBase adapter)
+			{
+				this.adapter = adapter;
+				this.adapter.SupressNotifications();
+			}
+
+			public void Dispose()
+			{
+				this.adapter.ResumeNotifications();
+			}
+		}
+
+		#endregion
 
 		#region Nested Class: TrackPropertyChangeScope
 
@@ -79,10 +136,12 @@ namespace Castle.Components.DictionaryAdapter
 					.ToDictionary(pd => pd.Key, pd => adapter.GetProperty(pd.Key));
 			}
 
-			public TrackPropertyChangeScope(DictionaryAdapterBase adapter, string propertyName)
+			public TrackPropertyChangeScope(DictionaryAdapterBase adapter, string propertyName,
+											object existingValue)
 				: this(adapter)
 			{
 				this.propertyName = propertyName;
+				this.existingValue = existingValue;
 				existingValue = adapter.GetProperty(propertyName);
 			}
 
@@ -121,7 +180,7 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				if (!Object.Equals(oldValue, newValue))
 				{
-					adapter.NotifyPropertyChanged(propertyName);
+					adapter.NotifyPropertyChanged(propertyName, oldValue, newValue);
 					return true;
 				}
 				return false;

@@ -14,35 +14,13 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
+	using System.ComponentModel;
 
 	/// <summary>
-	/// Contract for manipulating the Dictionary adapter.
+	/// Contract for editing the Dictionary adapter.
 	/// </summary>
-	public interface IDictionaryAdapter : IDictionaryEditing, IDictionaryNotification
+	public interface IDictionaryEditing : IEditableObject
 	{
-		Type Type { get; }
-
-		IDictionary State { get; }
-
-		IDictionary Dictionary { get; }
-
-		PropertyDescriptor Descriptor { get; }
-
-		IDictionary<String, PropertyDescriptor> Properties { get; }
-
-		IDictionaryAdapterFactory Factory { get; }
-
-		IDictionaryValidator Validator { get; set; }
-
-		object GetProperty(string propertyName);
-
-		T GetPropertyOfType<T>(string propertyName);
-
-		bool SetProperty(string propertyName, ref object value);
-
-		void FetchProperties();
+		bool IsEditing { get; }
 	}
 }
