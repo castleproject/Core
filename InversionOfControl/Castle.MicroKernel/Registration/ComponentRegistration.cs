@@ -37,6 +37,8 @@ namespace Castle.MicroKernel.Registration
 
     public delegate T Function<T>();
 
+    public delegate T Function<A, B, T>(A a, B b);
+
 	/// <summary>
 	/// Registration for a single type as a component with the kernel.
 	/// <para />
@@ -784,6 +786,18 @@ namespace Castle.MicroKernel.Registration
             return this;
         }
 
+        public ComponentRegistration<S> UsingFactoryMethod<T>(Function<IKernel, CreationContext, T> factoryMethod) where T: S
+        {
+            string factoryName = Guid.NewGuid().ToString();
+            string factoryMethodName = Guid.NewGuid().ToString();
+            additionalRegistrations.Add(Component.For<KernelContextToT<T>>().Named(factoryMethodName)
+                .Instance(new KernelContextToT<T>(factoryMethod)));
+            additionalRegistrations.Add(Component.For<GenericFactoryWithKernelAndContext<T>>().Named(factoryName)
+                .ServiceOverrides(ServiceOverride.ForKey("factoryMethod").Eq(factoryMethodName)));
+            ConfigureFactoryWithId(factoryName);
+            return this;
+        }
+
         private void ConfigureFactoryWithId(string factoryId) 
         {
             Configuration(
@@ -824,6 +838,21 @@ namespace Castle.MicroKernel.Registration
         }
     }
 
+    public class KernelContextToT<T>
+    {
+        private readonly Function<IKernel, CreationContext, T> fun;
+
+        public KernelContextToT(Function<IKernel, CreationContext, T> fun)
+        {
+            this.fun = fun;
+        }
+
+        public T Call(IKernel kernel, CreationContext ctx)
+        {
+            return fun(kernel, ctx);
+        }
+    }
+
     /// <summary>
     /// Helper factory class
     /// </summary>
@@ -842,6 +871,23 @@ namespace Castle.MicroKernel.Registration
         public T Create()
         {
             return factoryMethod.Call(kernel);
+        }
+    }
+
+    public class GenericFactoryWithKernelAndContext<T>
+    {
+        private readonly KernelContextToT<T> factoryMethod;
+        private readonly IKernel kernel;
+
+        public GenericFactoryWithKernelAndContext(KernelContextToT<T> factoryMethod, IKernel kernel)
+        {
+            this.factoryMethod = factoryMethod;
+            this.kernel = kernel;
+        }
+
+        public T Create(CreationContext ctx)
+        {
+            return factoryMethod.Call(kernel, ctx);
         }
     }
 
