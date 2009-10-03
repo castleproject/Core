@@ -23,8 +23,8 @@ namespace Castle.MicroKernel.Registration
 	using Castle.Core.Configuration;
 	using Castle.Core.Interceptor;
 	using Castle.MicroKernel;
-	using Castle.MicroKernel.Proxy;
 	using Castle.MicroKernel.Facilities.OnCreate;
+	using Castle.MicroKernel.Proxy;
 	using Facilities;
 
 	/// <summary>
@@ -36,8 +36,6 @@ namespace Castle.MicroKernel.Registration
 	public delegate bool ComponentFilter(IKernel kernel, ComponentModel model);
 
     public delegate T Function<T>();
-
-    public delegate T Function<A, B, T>(A a, B b);
 
 	/// <summary>
 	/// Registration for a single type as a component with the kernel.
@@ -786,17 +784,21 @@ namespace Castle.MicroKernel.Registration
             return this;
         }
 
-        public ComponentRegistration<S> UsingFactoryMethod<T>(Function<IKernel, CreationContext, T> factoryMethod) where T: S
-        {
-            string factoryName = Guid.NewGuid().ToString();
-            string factoryMethodName = Guid.NewGuid().ToString();
-            additionalRegistrations.Add(Component.For<KernelContextToT<T>>().Named(factoryMethodName)
-                .Instance(new KernelContextToT<T>(factoryMethod)));
-            additionalRegistrations.Add(Component.For<GenericFactoryWithKernelAndContext<T>>().Named(factoryName)
-                .ServiceOverrides(ServiceOverride.ForKey("factoryMethod").Eq(factoryMethodName)));
-            ConfigureFactoryWithId(factoryName);
-            return this;
-        }
+		/// <summary>
+		/// Uses a factory method to instantiate the component.
+		/// Requires the <see cref="FactorySupportFacility"/> to be installed.
+		/// </summary>
+		/// <typeparam name="T">Implementation type</typeparam>
+		/// <param name="factoryMethod">Factory method</param>
+		/// <returns></returns>
+		public ComponentRegistration<S> UsingFactoryMethod<T>(Func<IKernel, CreationContext, T> factoryMethod) where T : S
+		{
+			string factoryName = Guid.NewGuid().ToString();
+			additionalRegistrations.Add(Component.For<GenericFactoryWithContext<T>>().Named(factoryName)
+				.Instance(new GenericFactoryWithContext<T>(factoryMethod)));
+			ConfigureFactoryWithId(factoryName);
+			return this;
+		}
 
         private void ConfigureFactoryWithId(string factoryId) 
         {
@@ -838,20 +840,43 @@ namespace Castle.MicroKernel.Registration
         }
     }
 
-    public class KernelContextToT<T>
-    {
-        private readonly Function<IKernel, CreationContext, T> fun;
+	/// <summary>
+	/// Helper factory class
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public class GenericFactory<T>
+	{
+		private readonly Function<T> factoryMethod;
 
-        public KernelContextToT(Function<IKernel, CreationContext, T> fun)
-        {
-            this.fun = fun;
-        }
+		public GenericFactory(Function<T> factoryMethod)
+		{
+			this.factoryMethod = factoryMethod;
+		}
 
-        public T Call(IKernel kernel, CreationContext ctx)
-        {
-            return fun(kernel, ctx);
-        }
-    }
+		public T Create()
+		{
+			return factoryMethod();
+		}
+	}
+
+	/// <summary>
+	/// Helper factory class
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public class GenericFactoryWithContext<T>
+	{
+		private readonly Func<IKernel, CreationContext, T> factoryMethod;
+
+		public GenericFactoryWithContext(Func<IKernel, CreationContext, T> factoryMethod)
+		{
+			this.factoryMethod = factoryMethod;
+		}
+
+		public T Create(IKernel kernel, CreationContext context)
+		{
+			return factoryMethod(kernel, context);
+		}
+	}
 
     /// <summary>
     /// Helper factory class
@@ -871,42 +896,6 @@ namespace Castle.MicroKernel.Registration
         public T Create()
         {
             return factoryMethod.Call(kernel);
-        }
-    }
-
-    public class GenericFactoryWithKernelAndContext<T>
-    {
-        private readonly KernelContextToT<T> factoryMethod;
-        private readonly IKernel kernel;
-
-        public GenericFactoryWithKernelAndContext(KernelContextToT<T> factoryMethod, IKernel kernel)
-        {
-            this.factoryMethod = factoryMethod;
-            this.kernel = kernel;
-        }
-
-        public T Create(CreationContext ctx)
-        {
-            return factoryMethod.Call(kernel, ctx);
-        }
-    }
-
-    /// <summary>
-    /// Helper factory class
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class GenericFactory<T>
-    {
-        private readonly Function<T> factoryMethod;
-
-        public GenericFactory(Function<T> factoryMethod)
-        {
-            this.factoryMethod = factoryMethod;
-        }
-
-        public T Create()
-        {
-            return factoryMethod();
         }
     }
 
