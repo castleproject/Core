@@ -30,7 +30,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 								   object propertyValue, IList<String> errors);
 	}
 
-	public class TestDictionaryValidator : IDictionaryValidator, IDictionaryInitializer
+	public class TestDictionaryValidator : DictionaryBehaviorAttribute, IDictionaryValidator, IDictionaryInitializer
 	{
 		void IDictionaryInitializer.Initialize(IDictionaryAdapter dictionaryAdapter)
 		{

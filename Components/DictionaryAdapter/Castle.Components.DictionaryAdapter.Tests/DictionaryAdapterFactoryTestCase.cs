@@ -798,7 +798,42 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
-		public void CanSupressPropertyChangedEvents()
+		public void WillPropagatePropertyChangedEventWhenNestedPropertyChanged()
+		{
+			var notifyCalled = false;
+			var container = factory.GetAdapter<IItemContainerWithComponent<IPerson>>(dictionary);
+			container.PropertyChanged += (s, e) =>
+			{
+				notifyCalled = true;
+				Assert.AreSame(container.Item, s);
+				Assert.IsInstanceOf<IPerson>(s);
+				Assert.AreEqual("Name", e.PropertyName);
+			};
+
+			container.Item.Name = "Craig";
+			Assert.IsTrue(notifyCalled);
+		}
+
+		[Test]
+		public void WillStopProgagtingPropertyChangedEventWhenNestedPropertyRemoved()
+		{
+			var notifyCalled = false;
+			var container = factory.GetAdapter<IItemContainerWithComponent<IPerson>>(dictionary);
+			var item = container.Item;
+
+			container.PropertyChanged += (s, e) =>
+			{
+				notifyCalled = (item == s);
+			};
+
+			container.Item = null;
+
+			item.Name = "Craig";
+			Assert.IsFalse(notifyCalled);
+		}
+
+		[Test]
+		public void CanSupressAllPropertyChangedEvents()
 		{
 			var notifyCalled = false;
 			var person = factory.GetAdapter<IPerson>(dictionary);
@@ -816,7 +851,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
-		public void CanResumePropertyChangedEvents()
+		public void CanResumeAllPropertyChangedEvents()
 		{
 			var notifyCalled = false;
 			var person = factory.GetAdapter<IPerson>(dictionary);
@@ -834,6 +869,21 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsFalse(notifyCalled);
 			person.Name = "Fred";
 			Assert.IsTrue(notifyCalled);
+		}
+
+		[Test]
+		public void CanSupressPropertyChangedEventsForSingleProperty()
+		{
+			var notifyCalled = false;
+			var person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
+			person.PropertyChanged += (s, e) =>
+			{
+				notifyCalled = true;
+				Assert.AreEqual("Name", e.PropertyName);
+			};
+
+			person.Max_Width = 10;
+			Assert.IsFalse(notifyCalled);
 		}
 
 		[Test]
@@ -1022,7 +1072,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 
-	[DictionaryInitialize(typeof(TestDictionaryValidator))]
+	[TestDictionaryValidator]
 	public interface IName : IDictionaryNotification, IDataErrorInfo
 	{
 		string FirstName { get; }
@@ -1061,6 +1111,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		public void EndEdit()
 		{
+			if (PropertyChanged != null)
+			{
+			}
 		}
 
 		public string Error
@@ -1104,6 +1157,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 
+	[PropagateNotifications(false)]
 	public interface IAddress : IEditableObject, INotifyPropertyChanged, IDataErrorInfo
 	{
 		string Line1 { get; set; }
@@ -1228,7 +1282,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		TItem Item { get; set; }
 	}
 
-	public interface IItemContainerWithComponent<TItem>
+	public interface IItemContainerWithComponent<TItem> : IDictionaryNotification
 	{
 		[DictionaryComponent]
 		TItem Item { get; set; }
@@ -1269,6 +1323,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	{
 		int NumberOfFingers { get; set; }
 
+		[SuppressNotifications]
 		int Max_Width { get; set; }
 	}
 
@@ -1377,10 +1432,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 	public class Foo
 	{
-		public Foo()
+		public Foo(IDictionaryInitializer[] initializers)
 		{
-			IDictionaryInitializer init = new TestDictionaryValidator();
-			init.Initialize(null);
+			for (int i = 0; i < initializers.Length; ++i)
+			{
+				initializers[i].Initialize(null);
+			}
 		}
 	}
 }

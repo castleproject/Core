@@ -14,33 +14,17 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System.Collections.Generic;
+	using System;
 
 	/// <summary>
-	/// Comparer for ordering the execution of <see cref="IDictionaryBehavior"/>
+	/// Suppress property change notifications.
 	/// </summary>
-	public class DictionaryBehaviorComparer<T> : IComparer<T>
-		where T : IDictionaryBehavior
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+	public class SuppressNotificationsAttribute : DictionaryBehaviorAttribute, IPropertyDescriptorInitializer
 	{
-		/// <summary>
-		/// Singleton instance of <see cref="DictionaryBehaviorComparer{T}"/>
-		/// </summary>
-		public static readonly DictionaryBehaviorComparer<T> 
-			Instance = new DictionaryBehaviorComparer<T>();
- 
-		private DictionaryBehaviorComparer()
-		{	
-		}
-
-		/// <summary>
-		/// Determines the relative ordering of the behaviors.
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <returns></returns>
-		public int Compare(T x, T y)
+		public void Initialize(PropertyDescriptor propertyDescriptor)
 		{
-			return x.ExecutionOrder - y.ExecutionOrder;
+			propertyDescriptor.SuppressNotifications = true;
 		}
 	}
 }

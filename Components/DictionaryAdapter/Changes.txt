@@ -1,6 +1,10 @@
 RC 4
 ====
 
+- Added PropertyDescriptor initialization hook
+
+- Added nested property notification (with progagation)
+
 - Added DictionaryAdapter initialization hook
 
 - Added support for IDataErrorInfo

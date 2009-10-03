@@ -32,7 +32,9 @@ namespace Castle.Components.DictionaryAdapter
 			Descriptor = descriptor;
 
 			IsEditable = typeof(IEditableObject).IsAssignableFrom(type);
-			WantsPropertyChangeNotification = typeof(INotifyPropertyChanged).IsAssignableFrom(type);
+			SupportsNotification = typeof(INotifyPropertyChanged).IsAssignableFrom(type);
+
+			Initialize();
 		}
 
 		public Type Type { get; private set; }
@@ -53,9 +55,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		public IDictionaryAdapterFactory Factory { get; private set; }
 
-		public abstract IDictionary<string, PropertyDescriptor> Properties { get; }
+		public abstract IDictionaryInitializer[] Initializers { get; }
 
-		public abstract void FetchProperties();
+		public abstract IDictionary<string, PropertyDescriptor> Properties { get; }
 
 		public virtual object GetProperty(string propertyName)
 		{
@@ -73,6 +75,7 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					AddEditDependency((IEditableObject)propertyValue);
 				}
+				ComposeChildNotifications(null, propertyValue);
 				return propertyValue;
 			}
 
@@ -97,12 +100,12 @@ namespace Castle.Components.DictionaryAdapter
 				}
 
 				var existingValue = GetProperty(propertyName);
-				if (!NotifyPropertyChanging(propertyName, existingValue, value))
+				if (!NotifyPropertyChanging(descriptor, existingValue, value))
 				{
 					return false;
 				}
 
-				var trackPropertyChange = TrackPropertyChange(propertyName, existingValue);
+				var trackPropertyChange = TrackPropertyChange(descriptor, existingValue, value);
 
 				stored = descriptor.SetPropertyValue(this, propertyName, ref value, Descriptor);
 
@@ -113,6 +116,22 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			return stored;
+		}
+
+		public void FetchProperties()
+		{
+			foreach (var propertyName in Properties.Keys)
+			{
+				GetProperty(propertyName);
+			}
+		}
+
+		protected void Initialize()
+		{
+			foreach (var initializer in Initializers)
+			{
+				initializer.Initialize(this);
+			}
 		}
 	}
 }

@@ -19,6 +19,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.ComponentModel;
+	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Text;
@@ -160,13 +161,21 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static Assembly CreateAdapterAssembly(Type type, TypeBuilder typeBuilder)
 		{
-			var propertyMapField = typeBuilder.DefineField("propertyMap", typeof(Dictionary<String, PropertyDescriptor>),
-														   FieldAttributes.Private | FieldAttributes.Static);
+			var initializersField = typeBuilder.DefineField(
+				"initializers", typeof(IDictionaryInitializer[]),
+				FieldAttributes.Private | FieldAttributes.Static);
+
+			var propertyMapField = typeBuilder.DefineField(
+				"propertyMap", typeof(Dictionary<String, PropertyDescriptor>),
+				FieldAttributes.Private | FieldAttributes.Static);
+
 			CreateAdapterConstructor(type, typeBuilder);
 
-			var propertyMap = GetPropertyDescriptors(type);
+			IDictionaryInitializer[] initializers;
+			var propertyMap = GetPropertyDescriptors(type, out initializers);
 
-			CreateDictionaryAdapterMeta(typeBuilder, propertyMapField, propertyMap);
+			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaInitializersProp, initializersField);
+			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaPropertiesProp, propertyMapField);
 
 			foreach (var descriptor in propertyMap)
 			{
@@ -174,8 +183,9 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			var adapterType = typeBuilder.CreateType();
-			adapterType.InvokeMember("propertyMap", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.SetField,
-			                         null, null, new object[] { propertyMap });
+			var metaBindings = BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.SetField;
+			adapterType.InvokeMember("initializers", metaBindings, null, null, new[] { initializers });
+			adapterType.InvokeMember("propertyMap", metaBindings, null, null, new[] { propertyMap });
 
 			return typeBuilder.Assembly;
 		}
@@ -189,7 +199,8 @@ namespace Castle.Components.DictionaryAdapter
 			var constructorBuilder = typeBuilder.DefineConstructor(
 				MethodAttributes.Public | MethodAttributes.HideBySig, CallingConventions.Standard,
 				new [] { typeof(Type), typeof(DictionaryAdapterFactory), 
-						 typeof(IDictionary), typeof(IDictionaryKeyBuilder) });
+						 typeof(IDictionary), typeof(PropertyDescriptor) 
+				});
 
 			constructorBuilder.DefineParameter(1, ParameterAttributes.None, "type");
 			constructorBuilder.DefineParameter(2, ParameterAttributes.None, "factory");
@@ -208,46 +219,12 @@ namespace Castle.Components.DictionaryAdapter
 			ilGenerator.Emit(OpCodes.Ldarg_S, 4);
 			ilGenerator.Emit(OpCodes.Call, baseConstructorInfo);
 
-			var initializers = AttributesUtil.GetTypeAttributes<DictionaryInitializeAttribute>(type);
-
-			if (initializers != null) foreach (var initializer in initializers)
-			{
-				// new DictionaryInitializer().Initialize(this)
-				ilGenerator.Emit(OpCodes.Newobj, initializer.Constructor);
-				ilGenerator.Emit(OpCodes.Ldarg_0);
-				ilGenerator.Emit(OpCodes.Callvirt, DictionaryInitialize);
-			}
-
 			ilGenerator.Emit(OpCodes.Ret);
 		}
 
 		#endregion
 
 		#region CreateDictionaryAdapterMeta
-
-		private static void CreateDictionaryAdapterMeta(TypeBuilder typeBuilder, FieldInfo propertyMapField,
-														IDictionary<String, PropertyDescriptor> propertyMap)
-		{
-			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaPropertiesProp, propertyMapField);
-
-			var methodAttribs = MethodAttributes.Public    | MethodAttributes.HideBySig |
-								MethodAttributes.ReuseSlot | MethodAttributes.Virtual;
-
-			// override IDictionaryAdapter.FetchProperties()
-			var methodBuilder = typeBuilder.DefineMethod(MetaFetchProperties.Name, methodAttribs,
-														 MetaFetchProperties.ReturnType, null);
-
-			var iLGenerator = methodBuilder.GetILGenerator();
-			foreach (var descriptor in propertyMap.Values)
-			{
-				iLGenerator.Emit(OpCodes.Ldarg_0);
-				iLGenerator.Emit(OpCodes.Call, descriptor.Property.GetGetMethod());
-				iLGenerator.Emit(OpCodes.Pop);
-			}
-			iLGenerator.Emit(OpCodes.Ret);
-
-			typeBuilder.DefineMethodOverride(methodBuilder, MetaFetchProperties);
-		}
 
 		private static void CreateDictionaryAdapterMetaProperty(TypeBuilder typeBuilder, PropertyInfo metaProp, 
 																FieldInfo metaField)
@@ -299,22 +276,14 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		private static void PreparePropertyMethod(
-			PropertyDescriptor descriptor, FieldInfo propertyMapField,
-			ILGenerator propILGenerator, out LocalBuilder descriptorLocal)
+			PropertyDescriptor descriptor, FieldInfo propertyMapField, ILGenerator propILGenerator)
 		{
 			propILGenerator.DeclareLocal(typeof(String));
 			propILGenerator.DeclareLocal(typeof(object));
-			descriptorLocal = propILGenerator.DeclareLocal(typeof(PropertyDescriptor));
 
 			// key = propertyInfo.Name
 			propILGenerator.Emit(OpCodes.Ldstr, descriptor.PropertyName);
 			propILGenerator.Emit(OpCodes.Stloc_0);
-
-			// descriptor = propertyMap[key]
-			propILGenerator.Emit(OpCodes.Ldsfld, propertyMapField);
-			propILGenerator.Emit(OpCodes.Ldstr, descriptor.PropertyName);
-			propILGenerator.Emit(OpCodes.Callvirt, PropertyMapGetItem);
-			propILGenerator.Emit(OpCodes.Stloc_S, descriptorLocal);
 		}
 
 		#endregion
@@ -325,17 +294,16 @@ namespace Castle.Components.DictionaryAdapter
 			TypeBuilder typeBuilder, FieldInfo propertyMapField, PropertyBuilder propertyBuilder, 
 			PropertyDescriptor descriptor, MethodAttributes propAttribs)
 		{
-			var getMethodBuilder = typeBuilder.DefineMethod("get_" + descriptor.PropertyName, propAttribs,
-															descriptor.PropertyType, null);
+			var getMethodBuilder = typeBuilder.DefineMethod(
+				"get_" + descriptor.PropertyName, propAttribs, descriptor.PropertyType, null);
 
 			var getILGenerator = getMethodBuilder.GetILGenerator();
 
 			var returnDefault = getILGenerator.DefineLabel();
 			var storeResult = getILGenerator.DefineLabel();
 			var loadResult = getILGenerator.DefineLabel();
-			LocalBuilder descriptorLocal;
 
-			PreparePropertyMethod(descriptor, propertyMapField, getILGenerator, out descriptorLocal);
+			PreparePropertyMethod(descriptor, propertyMapField, getILGenerator);
 
 			var result = getILGenerator.DeclareLocal(descriptor.PropertyType);
 
@@ -378,13 +346,11 @@ namespace Castle.Components.DictionaryAdapter
 			TypeBuilder typeBuilder, FieldInfo propertyMapField, PropertyBuilder propertyBuilder,
 			PropertyDescriptor descriptor, MethodAttributes propAttribs)
 		{
-			var setMethodBuilder = typeBuilder.DefineMethod("set_" + descriptor.PropertyName, propAttribs, null,
-															new[] {descriptor.PropertyType});
+			var setMethodBuilder = typeBuilder.DefineMethod(
+				"set_" + descriptor.PropertyName, propAttribs, null, new[] {descriptor.PropertyType});
 
 			var setILGenerator = setMethodBuilder.GetILGenerator();
-			LocalBuilder descriptorLocal;
-
-			PreparePropertyMethod(descriptor, propertyMapField, setILGenerator, out descriptorLocal);
+			PreparePropertyMethod(descriptor, propertyMapField, setILGenerator);
 
 			setILGenerator.Emit(OpCodes.Ldarg_1);
 			if (descriptor.PropertyType.IsValueType)
@@ -408,24 +374,34 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Property Descriptors
 
-		private static Dictionary<String, PropertyDescriptor> GetPropertyDescriptors(Type type)
+		private static Dictionary<String, PropertyDescriptor> GetPropertyDescriptors(
+			Type type, out IDictionaryInitializer[] initializers)
 		{
 			var propertyMap = new Dictionary<String, PropertyDescriptor>();
-			var typeGetters = GetOrderedBehaviors<IDictionaryPropertyGetter>(type);
-			var typeSetters = GetOrderedBehaviors<IDictionaryPropertySetter>(type);
+			var typeBehaviors = GetOrderedBehaviors<IDictionaryBehavior>(type);
+			initializers = typeBehaviors.OfType<IDictionaryInitializer>().ToArray();
+			var typeGetters = typeBehaviors.OfType<IDictionaryPropertyGetter>();
+			var typeSetters = typeBehaviors.OfType<IDictionaryPropertySetter>();
 
 			RecursivelyDiscoverProperties(type, property =>
 			{
 				var descriptor = new PropertyDescriptor(property);
+				var propertyBehaviors = GetOrderedBehaviors<IDictionaryBehavior>(property);
 
-				descriptor.AddKeyBuilders(GetOrderedBehaviors<IDictionaryKeyBuilder>(property));
+				var descriptorInitializers = propertyBehaviors.OfType<IPropertyDescriptorInitializer>();
+				foreach (var descriptorInitializer in descriptorInitializers)
+				{
+					descriptorInitializer.Initialize(descriptor);	
+				}
+
+				descriptor.AddKeyBuilders(propertyBehaviors.OfType<IDictionaryKeyBuilder>());
 				descriptor.AddKeyBuilders(GetOrderedBehaviors<IDictionaryKeyBuilder>(property.ReflectedType));
 
-				descriptor.AddGetters(GetOrderedBehaviors<IDictionaryPropertyGetter>(property));
+				descriptor.AddGetters(propertyBehaviors.OfType<IDictionaryPropertyGetter>());
 				descriptor.AddGetters(typeGetters);
 				AddDefaultGetter(descriptor);
 
-				descriptor.AddSetters(GetOrderedBehaviors<IDictionaryPropertySetter>(property));
+				descriptor.AddSetters(propertyBehaviors.OfType<IDictionaryPropertySetter>());
 				descriptor.AddSetters(typeSetters);
 
 				PropertyDescriptor existingDescriptor;
@@ -448,24 +424,16 @@ namespace Castle.Components.DictionaryAdapter
 			return propertyMap;
 		}
 
-		private static List<T> GetOrderedBehaviors<T>(Type type) where T : IDictionaryBehavior
+		private static IEnumerable<T> GetOrderedBehaviors<T>(Type type) 
+			where T : class, IDictionaryBehavior
 		{
-			var behaviors = AttributesUtil.GetTypeAttributes<T>(type);
-			if (behaviors != null)
-			{
-				behaviors.Sort(DictionaryBehaviorComparer<T>.Instance);
-			}
-			return behaviors;
+			return AttributesUtil.GetTypeAttributes<T>(type).OrderBy(b => b.ExecutionOrder);
 		}
 
-		private static List<T> GetOrderedBehaviors<T>(MemberInfo member) where T : IDictionaryBehavior
+		private static IEnumerable<T> GetOrderedBehaviors<T>(MemberInfo member) 
+			where T : class, IDictionaryBehavior
 		{
-			var behaviors = AttributesUtil.GetAttributes<T>(member);
-			if (behaviors != null)
-			{
-				behaviors.Sort(DictionaryBehaviorComparer<T>.Instance);
-			}
-			return behaviors;
+			return AttributesUtil.GetAttributes<T>(member).OrderBy(b => b.ExecutionOrder);
 		}
 
 		private static void RecursivelyDiscoverProperties(Type currentType, Action<PropertyInfo> onProperty)
@@ -622,17 +590,14 @@ namespace Castle.Components.DictionaryAdapter
 		private static readonly PropertyInfo MetaPropertiesProp =
 			typeof(IDictionaryAdapter).GetProperty("Properties");
 
+		private static readonly PropertyInfo MetaInitializersProp =
+			typeof(DictionaryAdapterBase).GetProperty("Initializers");
+
 		private static readonly MethodInfo MetaGetProperty =
 			typeof(IDictionaryAdapter).GetMethod("GetProperty");
 
 		private static readonly MethodInfo MetaSetProperty =
 			typeof(IDictionaryAdapter).GetMethod("SetProperty");
-
-		private static readonly MethodInfo MetaFetchProperties =
-			typeof(IDictionaryAdapter).GetMethod("FetchProperties");
-
-		private static readonly MethodInfo DictionaryInitialize =
-			typeof(IDictionaryInitializer).GetMethod("Initialize");
 
 		#endregion
 	}

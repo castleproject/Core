@@ -63,7 +63,8 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AbstractDictionaryAdapter.cs" />
     <Compile Include="Attributes\AttributesUtil.cs" />
-    <Compile Include="Attributes\DictionaryInitializeAttribute.cs" />
+    <Compile Include="Attributes\PropagateNotificationsAttribute.cs" />
+    <Compile Include="Attributes\SuppressNotificationsAttribute.cs" />
     <Compile Include="Attributes\DictionaryStringFormatAttribute.cs" />
     <Compile Include="Attributes\DictionaryTypeKeyPrefixAttribute.cs" />
     <Compile Include="Attributes\DictionaryBehaviorAttribute.cs" />
@@ -71,13 +72,13 @@
     <Compile Include="Attributes\DictionaryComponentAttribute.cs" />
     <Compile Include="Attributes\DictionaryStringValuesAttribute.cs" />
     <Compile Include="CascadingDictionaryAdapter.cs" />
+    <Compile Include="IPropertyDescriptorInitializer.cs" />
     <Compile Include="IDictionaryNotification.cs" />
     <Compile Include="IDictionaryEditing.cs" />
     <Compile Include="IDictionaryInitializer.cs" />
     <Compile Include="DictionaryAdapterBase.Error.cs" />
     <Compile Include="DictionaryAdapterBase.Edit.cs" />
     <Compile Include="DictionaryAdapterBase.Norify.cs" />
-    <Compile Include="DictionaryBehaviorComparer.cs" />
     <Compile Include="IDictionaryBehavior.cs" />
     <Compile Include="DefaultPropertyGetter.cs" />
     <Compile Include="IDictionaryPropertySetter.cs" />

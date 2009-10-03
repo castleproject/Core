@@ -15,6 +15,7 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Reflection;
@@ -31,6 +32,9 @@ namespace Castle.Components.DictionaryAdapter
 		private List<IDictionaryPropertySetter> setters;
 		private List<IDictionaryKeyBuilder> keyBuilders;
 		private TypeConverter typeConverter;
+		private Hashtable state;
+
+		public static readonly object Undefined = new object();
 
 		/// <summary>
 		/// Initializes an empty <see cref="PropertyDescriptor"/> class.
@@ -43,7 +47,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// Initializes a new instance of the <see cref="PropertyDescriptor"/> class.
 		/// </summary>
 		/// <param name="property">The property.</param>
-		public PropertyDescriptor(PropertyInfo property)
+		public PropertyDescriptor(PropertyInfo property) : this()
 		{
 			this.property = property;
 		}
@@ -53,7 +57,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// with an existing property descriptor.
 		/// </summary>
 		/// <param name="other">The other descriptor.</param>
-		public PropertyDescriptor(PropertyDescriptor other)
+		public PropertyDescriptor(PropertyDescriptor other) : this()
 		{
 			property = other.property;
 			AddKeyBuilders(other.keyBuilders);
@@ -93,6 +97,24 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			get { return property; }
 		}
+
+		/// <summary>
+		/// Gets additional state.
+		/// </summary>
+		public IDictionary State
+		{
+			get
+			{
+				if (state == null)
+					state = new Hashtable();
+				return state;
+			}
+		}
+
+		/// <summary>
+		/// Determines if notifications should occur.
+		/// </summary>
+		public bool SuppressNotifications { get; set; }
 
 		/// <summary>
 		/// Gets the type converter.
@@ -183,14 +205,14 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="builders">The builder.</param>
 		public PropertyDescriptor AddKeyBuilder(params IDictionaryKeyBuilder[] builders)
 		{
-			return AddKeyBuilders((ICollection<IDictionaryKeyBuilder>)builders);
+			return AddKeyBuilders((IEnumerable<IDictionaryKeyBuilder>)builders);
 		}
 
 		/// <summary>
 		/// Adds the key builders.
 		/// </summary>
 		/// <param name="builders">The builders.</param>
-		public PropertyDescriptor AddKeyBuilders(ICollection<IDictionaryKeyBuilder> builders)
+		public PropertyDescriptor AddKeyBuilders(IEnumerable<IDictionaryKeyBuilder> builders)
 		{
 			if (builders != null)
 			{
@@ -249,14 +271,14 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="getters">The getter.</param>
 		public PropertyDescriptor AddGetter(params IDictionaryPropertyGetter[] getters)
 		{
-			return AddGetters((ICollection<IDictionaryPropertyGetter>)getters);
+			return AddGetters((IEnumerable<IDictionaryPropertyGetter>)getters);
 		}
 
 		/// <summary>
 		/// Adds the dictionary getters.
 		/// </summary>
 		/// <param name="gets">The getters.</param>
-		public PropertyDescriptor AddGetters(ICollection<IDictionaryPropertyGetter> gets)
+		public PropertyDescriptor AddGetters(IEnumerable<IDictionaryPropertyGetter> gets)
 		{
 			if (gets != null)
 			{
@@ -327,14 +349,14 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="setters">The setter.</param>
 		public PropertyDescriptor AddSetter(params IDictionaryPropertySetter[] setters)
 		{
-			return AddSetters((ICollection<IDictionaryPropertySetter>)setters);
+			return AddSetters((IEnumerable<IDictionaryPropertySetter>)setters);
 		}
 
 		/// <summary>
 		/// Adds the dictionary setters.
 		/// </summary>
 		/// <param name="sets">The setters.</param>
-		public PropertyDescriptor AddSetters(ICollection<IDictionaryPropertySetter> sets)
+		public PropertyDescriptor AddSetters(IEnumerable<IDictionaryPropertySetter> sets)
 		{
 			if (sets != null)
 			{

@@ -56,9 +56,11 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public interface IDictionaryNotification : INotifyPropertyChanged
 	{
-		bool WantsPropertyChangeNotification { get; }
+		bool SupportsNotification { get; }
 
 		event PropertyChangingEventHandler PropertyChanging;
+
+		bool PropagateChildNotifications { get; set; }
 
 		IDisposable SupressNotificationsSection();
 

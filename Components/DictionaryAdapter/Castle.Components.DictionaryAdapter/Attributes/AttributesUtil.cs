@@ -15,7 +15,6 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Reflection;
 
@@ -68,16 +67,16 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns>The type attributes.</returns>
-		public static List<T> GetTypeAttributes<T>(Type type)
+		public static T[] GetTypeAttributes<T>(Type type) where T : class
 		{
 			var attributes = GetAttributes<T>(type);
 
-			if (attributes == null)
+			if (attributes.Length == 0)
 			{
 				foreach (var baseInterface in type.GetInterfaces())
 				{
 					attributes = GetTypeAttributes<T>(baseInterface);
-					if (attributes != null)
+					if (attributes.Length > 0)
 					{
 						break;
 					}
@@ -92,21 +91,9 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		/// <param name="member">The member.</param>
 		/// <returns>The member attributes.</returns>
-		public static List<T> GetAttributes<T>(MemberInfo member)
+		public static T[] GetAttributes<T>(MemberInfo member) where T : class
 		{
-			List<T> attributes = null;
-			var custom = member.GetCustomAttributes(typeof(T), false);
-
-			if (custom.Length > 0)
-			{
-				attributes = new List<T>();
-				foreach (T builder in custom)
-				{
-					attributes.Add(builder);
-				}
-			}
-
-			return attributes;
+			return (T[])member.GetCustomAttributes(typeof(T), false);
 		}
 
 		/// <summary>

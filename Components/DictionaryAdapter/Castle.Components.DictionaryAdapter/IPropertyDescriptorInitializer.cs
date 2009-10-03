@@ -15,14 +15,14 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	/// <summary>
-	///  Contract for dictionary initialization.
+	///  Contract for property descriptor initialization.
 	/// </summary>
-	public interface IDictionaryInitializer : IDictionaryBehavior
+	public interface IPropertyDescriptorInitializer : IDictionaryBehavior
 	{
 		/// <summary>
-		/// Performs any initialization of the <see cref="IDictionaryAdapter"/>
+		/// Performs any initialization of the <see cref="PropertyDescriptor"/>
 		/// </summary>
-		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
-		void Initialize(IDictionaryAdapter dictionaryAdapter);
+		/// <param name="propertyDescriptor">The property descriptor</param>
+		void Initialize(PropertyDescriptor propertyDescriptor);
 	}
 }
