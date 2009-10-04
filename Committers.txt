@@ -35,6 +35,7 @@ Committers
 - Tuna Toksöz
 - Krzysztof Kozmic
 - Mauricio Scheffer
+- John Simons
 
 Managers 
 ========
