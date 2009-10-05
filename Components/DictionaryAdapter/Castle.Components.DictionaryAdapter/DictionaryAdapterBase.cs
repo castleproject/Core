@@ -55,6 +55,8 @@ namespace Castle.Components.DictionaryAdapter
 
 		public IDictionaryAdapterFactory Factory { get; private set; }
 
+		public abstract object[] Behaviors { get; }
+
 		public abstract IDictionaryInitializer[] Initializers { get; }
 
 		public abstract IDictionary<string, PropertyDescriptor> Properties { get; }
@@ -99,6 +101,11 @@ namespace Castle.Components.DictionaryAdapter
 					return true;
 				}
 
+				if (!ShouldNotify)
+				{
+					return descriptor.SetPropertyValue(this, propertyName, ref value, Descriptor);
+				}
+
 				var existingValue = GetProperty(propertyName);
 				if (!NotifyPropertyChanging(descriptor, existingValue, value))
 				{
@@ -130,7 +137,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			foreach (var initializer in Initializers)
 			{
-				initializer.Initialize(this);
+				initializer.Initialize(this, Behaviors);
 			}
 		}
 	}

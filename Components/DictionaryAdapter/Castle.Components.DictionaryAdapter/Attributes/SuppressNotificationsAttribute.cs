@@ -22,7 +22,7 @@ namespace Castle.Components.DictionaryAdapter
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 	public class SuppressNotificationsAttribute : DictionaryBehaviorAttribute, IPropertyDescriptorInitializer
 	{
-		public void Initialize(PropertyDescriptor propertyDescriptor)
+		public void Initialize(PropertyDescriptor propertyDescriptor, object[] behaviors)
 		{
 			propertyDescriptor.SuppressNotifications = true;
 		}

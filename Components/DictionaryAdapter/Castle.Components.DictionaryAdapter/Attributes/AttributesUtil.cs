@@ -54,7 +54,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <returns>The member attribute.</returns>
 		public static T GetAttribute<T>(MemberInfo member) where T : class
 		{
-			var attributes = member.GetCustomAttributes(typeof(T), false);
+			var attributes = GetAttributes<T>(member);
 			if (attributes.Length > 0)
 			{
 				return (T)attributes[0];
@@ -93,7 +93,11 @@ namespace Castle.Components.DictionaryAdapter
 		/// <returns>The member attributes.</returns>
 		public static T[] GetAttributes<T>(MemberInfo member) where T : class
 		{
-			return (T[])member.GetCustomAttributes(typeof(T), false);
+			if (typeof(T) != typeof(object))
+			{
+				return (T[])member.GetCustomAttributes(typeof(T), false);
+			}
+			return (T[])member.GetCustomAttributes(false);
 		}
 
 		/// <summary>

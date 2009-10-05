@@ -1,6 +1,12 @@
 RC 4
 ====
 
+- Added on-demand property resolution
+
+- Added editable collection support
+
+- Added support for creating additional adapters from existing adapter
+
 - Added PropertyDescriptor initialization hook
 
 - Added nested property notification (with progagation)

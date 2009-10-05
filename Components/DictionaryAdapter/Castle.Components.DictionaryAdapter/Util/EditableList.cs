@@ -14,16 +14,43 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	/// <summary>
-	///  Contract for dictionary initialization.
-	/// </summary>
-	public interface IDictionaryInitializer : IDictionaryBehavior
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+
+	public class EditableList<T> : List<T>, IEditableObject
 	{
-		/// <summary>
-		/// Performs any initialization of the <see cref="IDictionaryAdapter"/>
-		/// </summary>
-		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
-		/// <param name="behaviors">The dictionary behaviors.</param>
-		void Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors);
+		private bool isEditing;
+		private List<T> snapshot;
+
+		public void BeginEdit()
+		{
+			if (!isEditing)
+			{
+				snapshot = new List<T>(this);
+				isEditing = true;
+			}
+		}
+
+		public void EndEdit()
+		{
+			isEditing = false;
+			snapshot = null;
+		}
+
+		public void CancelEdit()
+		{
+			if (isEditing)
+			{
+				Clear();
+				AddRange(snapshot);
+				snapshot = null;
+				isEditing = false;
+			}
+		}
+	}
+
+	public class EditableList : EditableList<object>, IList
+	{
 	}
 }

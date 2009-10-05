@@ -21,7 +21,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// <summary>
 	/// Contract for manipulating the Dictionary adapter.
 	/// </summary>
-	public interface IDictionaryAdapter : IDictionaryEditing, IDictionaryNotification
+	public interface IDictionaryAdapter : IDictionaryEdit, IDictionaryNotify, IDictionaryValidate, IDictionaryCreate
 	{
 		Type Type { get; }
 
@@ -34,8 +34,6 @@ namespace Castle.Components.DictionaryAdapter
 		IDictionary<String, PropertyDescriptor> Properties { get; }
 
 		IDictionaryAdapterFactory Factory { get; }
-
-		IDictionaryValidator Validator { get; set; }
 
 		object GetProperty(string propertyName);
 

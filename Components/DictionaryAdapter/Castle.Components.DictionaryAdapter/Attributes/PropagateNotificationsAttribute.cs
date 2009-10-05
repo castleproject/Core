@@ -29,7 +29,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public bool PropagateNotifications { get; private set; }
 
-		public void Initialize(IDictionaryAdapter dictionaryAdapter)
+		public void Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
 		{
 			dictionaryAdapter.PropagateChildNotifications = PropagateNotifications;
 		}

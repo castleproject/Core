@@ -187,15 +187,13 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			string name = "Ming The Merciless";
 			int numberOfFeet = 2;
-			string hairColour = "Muddy Golden Labrador";
-			string eyeColour = "The Colour Of Broken Dreams";
 			int numberOfHeads = 1;
 			int numberOfFingers = 3;
 
 			person.Name = name;
 			person.NumberOfFeet = numberOfFeet;
-			person.HairColour = hairColour;
-			person.EyeColour = eyeColour;
+			person.HairColor = Color.Green;
+			person.EyeColor = Color.Blue;
 			person.NumberOfHeads = numberOfHeads;
 			person.NumberOfFingers = numberOfFingers;
 
@@ -204,15 +202,15 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			Assert.IsTrue(Array.Exists(keys, key => key == "Name"));
 			Assert.IsTrue(Array.Exists(keys, key => key == "NumberOfFeet"));
-			Assert.IsTrue(Array.Exists(keys, key => key == "Person_HairColour"));
-			Assert.IsTrue(Array.Exists(keys, key => key == "Person2_Eye__Colour"));
+			Assert.IsTrue(Array.Exists(keys, key => key == "Person_HairColor"));
+			Assert.IsTrue(Array.Exists(keys, key => key == "Person2_Eye__Color"));
 			Assert.IsTrue(Array.Exists(keys, key => key == "Person2_NumberOfHeads"));
 			Assert.IsTrue(Array.Exists(keys, key => key == "NumberOfFingers"));
 
 			Assert.AreEqual(name, person.Name);
 			Assert.AreEqual(numberOfFeet, person.NumberOfFeet);
-			Assert.AreEqual(hairColour, person.HairColour);
-			Assert.AreEqual(eyeColour, person.EyeColour);
+			Assert.AreEqual(Color.Green, person.HairColor);
+			Assert.AreEqual(Color.Blue, person.EyeColor);
 			Assert.AreEqual(numberOfHeads, person.NumberOfHeads);
 			Assert.AreEqual(numberOfFingers, person.NumberOfFingers);
 		}
@@ -909,6 +907,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void CanEditCollectionPropertiesAndAcceptChanges()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			container.GenericItems.Add(container.Create<IPerson>());
+			container.BeginEdit();
+			container.GenericItems.Add(container.Create<IPerson>());
+			container.EndEdit();
+			Assert.AreEqual(2, container.GenericItems.Count);
+		}
+
+		[Test]
 		public void WillRaisePropertyChangedEventWhenEditsAreAccepted()
 		{
 			var notifyCalled = false;
@@ -961,6 +970,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.BillingAddress.Line1 = "600 Tulip Ln.";
 			person.CancelEdit();
 			Assert.AreEqual("77 Nutmeg Dr.", person.BillingAddress.Line1);
+		}
+
+		[Test]
+		public void CanEditCollectionPropertiesAndCancelChanges()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			container.GenericItems.Add(container.Create<IPerson>());
+			container.BeginEdit();
+			container.GenericItems.Add(container.Create<IPerson>());
+			container.CancelEdit();
+			Assert.AreEqual(1, container.GenericItems.Count);
 		}
 
 		[Test]
@@ -1070,10 +1090,78 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			Assert.AreEqual("Property FirstName must be at least 10 characters long", name.Error);
 		}
+
+		[Test]
+		public void CanCreateDictionaryAdapterFromExistingAdapter()
+		{
+			var name = factory.GetAdapter<IName>(dictionary);
+			var person = name.Create<IPerson>();
+			Assert.NotNull(person);
+			person.Name = "Chuck Norris";
+			Assert.AreEqual("Chuck Norris", person.Name);
+		}
+
+		[Test]
+		public void CanCreateAndInitializeDictionaryAdapterFromExistingAdapter()
+		{
+			var name = factory.GetAdapter<IName>(dictionary);
+			var person = name.Create<IPerson>(p => p.Name = "Chuck Norris");
+			Assert.NotNull(person);
+			Assert.AreEqual("Chuck Norris", person.Name);
+		}
+
+		[Test]
+		public void CanGetSimplePropertyOnDemand()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			Assert.AreEqual(5, container.Count);
+		}
+		
+		[Test]
+		public void CanGetGuidPropertyOnDemand()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			Assert.True(container.Id != new Guid());
+		}
+
+		[Test]
+		public void CanGetrClassPropertyOnDemand()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			Assert.IsNotNull(container.Address);
+		}
+
+		[Test]
+		public void CanGetrArrayPropertyOnDemand()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			Assert.IsNotNull(container.Positions);
+		}
+
+		[Test]
+		public void CanGetGenericCollectionPropertyOnDemand()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			Assert.IsNotNull(container.GenericItems);
+		}
+
+		[Test]
+		public void CanGetrCollectionPropertyOnDemand()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			Assert.IsNotNull(container.Items);
+		}
+
+		[Test]
+		public void CanGetrInterfacePropertyOnDemand()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			Assert.IsNotNull(container.Phone);
+		}
 	}
 
 	[TestDictionaryValidator]
-	public interface IName : IDictionaryNotification, IDataErrorInfo
+	public interface IName : IDictionaryNotify, IDictionaryCreate, IDataErrorInfo
 	{
 		string FirstName { get; }
 		string LastName { get; }
@@ -1081,6 +1169,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[DictionaryStringFormat("{0} {1}", "FirstName,LastName")]
 		string FullName { get; }
 	}
+
+	public enum Color { Red, Green, Blue };
 
 	public interface IMutableName : IName, IEditableObject
 	{
@@ -1254,7 +1344,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 
-	public interface IPerson : IEditableObject, IDictionaryNotification, IDataErrorInfo
+	public interface IPerson : IEditableObject, IDictionaryNotify, IDataErrorInfo
 	{
 		string Name { get; set; }
 
@@ -1277,12 +1367,28 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		IAddress BillingAddress { get; set; }
 	}
 
-	public interface IItemContainer<TItem>
+	[DictionaryOnDemand]
+	public interface IItemContainer<TItem> : IDictionaryCreate, IEditableObject, INotifyPropertyChanged
 	{
+		Guid Id { get; set; }
+
 		TItem Item { get; set; }
+
+		[DictionaryOnDemand(5)]
+		int Count { get; set; }
+
+		Address Address { get; set; }
+
+		IPhone Phone { get; set; }
+
+		int[] Positions { get; set; }
+
+		IList<TItem> GenericItems { get; set; }
+
+		IList Items { get; set; }
 	}
 
-	public interface IItemContainerWithComponent<TItem> : IDictionaryNotification
+	public interface IItemContainerWithComponent<TItem> : IDictionaryNotify
 	{
 		[DictionaryComponent]
 		TItem Item { get; set; }
@@ -1296,14 +1402,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	[DictionaryKeyPrefix("Person_")]
 	public interface IPersonWithPrefix : IPersonWithoutPrefix
 	{
-		string HairColour { get; set; }
+		Color HairColor { get; set; }
 	}
 
 	[DictionaryKeyPrefix("Person2_")]
 	public interface IPersonWithPrefixOverride : IPersonWithPrefix
 	{
-		[DictionaryKey("Eye__Colour")]
-		string EyeColour { get; set; }
+		[DictionaryKey("Eye__Color")]
+		Color EyeColor { get; set; }
 	}
 
 	[DictionaryTypeKeyPrefix]
@@ -1314,6 +1420,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 	public interface IPersonWithPrefixOverrideFurtherOverride : IPersonWithPrefixOverride
 	{
+		[DefaultValue(1)]
 		int NumberOfHeads { get; set; }
 	}
 
@@ -1427,17 +1534,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			propertiesFetched.Add(key);
 			return storedValue;
-		}
-	}
-
-	public class Foo
-	{
-		public Foo(IDictionaryInitializer[] initializers)
-		{
-			for (int i = 0; i < initializers.Length; ++i)
-			{
-				initializers[i].Initialize(null);
-			}
 		}
 	}
 }

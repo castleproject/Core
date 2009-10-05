@@ -14,16 +14,34 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	/// <summary>
-	///  Contract for dictionary initialization.
-	/// </summary>
-	public interface IDictionaryInitializer : IDictionaryBehavior
+	using System;
+
+	public abstract partial class DictionaryAdapterBase : IDictionaryValidate
 	{
-		/// <summary>
-		/// Performs any initialization of the <see cref="IDictionaryAdapter"/>
-		/// </summary>
-		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
-		/// <param name="behaviors">The dictionary behaviors.</param>
-		void Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors);
+		public IDictionaryValidator Validator { get; set; }
+
+		public string Error
+		{
+			get
+			{
+				if (Validator != null)
+				{
+					return Validator.Validate(this);
+				}
+				return String.Empty;
+			}
+		}
+
+		public string this[String columnName]
+		{
+			get
+			{
+				if (Validator != null)
+				{
+					return Validator.Validate(this, columnName);
+				}
+				return String.Empty;
+			}
+		}
 	}
 }

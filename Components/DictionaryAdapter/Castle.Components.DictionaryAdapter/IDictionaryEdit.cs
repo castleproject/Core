@@ -14,35 +14,15 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
 	using System.ComponentModel;
 
-	public abstract partial class DictionaryAdapterBase : IDataErrorInfo
+	/// <summary>
+	/// Contract for editing the Dictionary adapter.
+	/// </summary>
+	public interface IDictionaryEdit : IEditableObject
 	{
-		public IDictionaryValidator Validator { get; set; }
+		bool IsEditable { get; }
 
-		public string Error
-		{
-			get
-			{
-				if (Validator != null)
-				{
-					return Validator.Validate(this);
-				}
-				return String.Empty;
-			}
-		}
-
-		public string this[String columnName]
-		{
-			get
-			{
-				if (Validator != null)
-				{
-					return Validator.Validate(this, columnName);
-				}
-				return String.Empty;
-			}
-		}
+		bool IsEditing { get; }
 	}
 }

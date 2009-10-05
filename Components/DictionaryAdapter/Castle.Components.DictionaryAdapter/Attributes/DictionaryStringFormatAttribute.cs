@@ -22,6 +22,8 @@ namespace Castle.Components.DictionaryAdapter
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
 	public class DictionaryStringFormatAttribute : DictionaryBehaviorAttribute, IDictionaryPropertyGetter
 	{
+		private static readonly char[] PropertyDelimeters = new[] { ',', ' ' };
+
 		public DictionaryStringFormatAttribute(string format, string properties)
 		{
 			if (format == null)
@@ -55,7 +57,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private object[] GetFormatArguments(IDictionaryAdapter dictionaryAdapter, string formattedPropertyName)
 		{
-			var properties = Properties.Split(',');
+			var properties = Properties.Split(PropertyDelimeters, StringSplitOptions.RemoveEmptyEntries);
 			var arguments = new object[properties.Length];
 			for (int i = 0; i < properties.Length; ++i)
 			{

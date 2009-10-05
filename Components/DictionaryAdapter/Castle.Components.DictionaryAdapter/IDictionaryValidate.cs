@@ -14,13 +14,14 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+	using System;
 	using System.ComponentModel;
 
 	/// <summary>
-	/// Contract for editing the Dictionary adapter.
+	/// Contract for validating Dictionary adapter.
 	/// </summary>
-	public interface IDictionaryEditing : IEditableObject
+	public interface IDictionaryValidate : IDataErrorInfo
 	{
-		bool IsEditing { get; }
+		IDictionaryValidator Validator { get; set; }
 	}
 }

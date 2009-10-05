@@ -161,19 +161,18 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static Assembly CreateAdapterAssembly(Type type, TypeBuilder typeBuilder)
 		{
-			var initializersField = typeBuilder.DefineField(
-				"initializers", typeof(IDictionaryInitializer[]),
-				FieldAttributes.Private | FieldAttributes.Static);
-
-			var propertyMapField = typeBuilder.DefineField(
-				"propertyMap", typeof(Dictionary<String, PropertyDescriptor>),
-				FieldAttributes.Private | FieldAttributes.Static);
+			var binding = FieldAttributes.Private | FieldAttributes.Static;
+			var behaviorsField = typeBuilder.DefineField("behaviors", typeof(object[]), binding);
+			var initializersField = typeBuilder.DefineField("initializers", typeof(IDictionaryInitializer[]), binding);
+			var propertyMapField = typeBuilder.DefineField("propertyMap", typeof(Dictionary<String, PropertyDescriptor>), binding);
 
 			CreateAdapterConstructor(type, typeBuilder);
 
+			object[] behaviors;
 			IDictionaryInitializer[] initializers;
-			var propertyMap = GetPropertyDescriptors(type, out initializers);
+			var propertyMap = GetPropertyDescriptors(type, out initializers, out behaviors);
 
+			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaBehaviorsProp, behaviorsField);
 			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaInitializersProp, initializersField);
 			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaPropertiesProp, propertyMapField);
 
@@ -184,6 +183,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			var adapterType = typeBuilder.CreateType();
 			var metaBindings = BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.SetField;
+			adapterType.InvokeMember("behaviors", metaBindings, null, null, new[] { behaviors });
 			adapterType.InvokeMember("initializers", metaBindings, null, null, new[] { initializers });
 			adapterType.InvokeMember("propertyMap", metaBindings, null, null, new[] { propertyMap });
 
@@ -375,33 +375,34 @@ namespace Castle.Components.DictionaryAdapter
 		#region Property Descriptors
 
 		private static Dictionary<String, PropertyDescriptor> GetPropertyDescriptors(
-			Type type, out IDictionaryInitializer[] initializers)
+			Type type, out IDictionaryInitializer[] initializers, out object[] typeBehaviors)
 		{
 			var propertyMap = new Dictionary<String, PropertyDescriptor>();
-			var typeBehaviors = GetOrderedBehaviors<IDictionaryBehavior>(type);
-			initializers = typeBehaviors.OfType<IDictionaryInitializer>().ToArray();
-			var typeGetters = typeBehaviors.OfType<IDictionaryPropertyGetter>();
-			var typeSetters = typeBehaviors.OfType<IDictionaryPropertySetter>();
+			typeBehaviors = GetInterfaceBehaviors<object>(type).ToArray();
+			initializers = GetOrderedBehaviors<IDictionaryInitializer>(typeBehaviors).ToArray();
+			var typeGetters = GetOrderedBehaviors<IDictionaryPropertyGetter>(typeBehaviors);
+			var typeSetters = GetOrderedBehaviors<IDictionaryPropertySetter>(typeBehaviors);
 
 			RecursivelyDiscoverProperties(type, property =>
 			{
 				var descriptor = new PropertyDescriptor(property);
-				var propertyBehaviors = GetOrderedBehaviors<IDictionaryBehavior>(property);
+				var propertyBehaviors = GetPropertyBehaviors<object>(property).ToArray();
 
-				var descriptorInitializers = propertyBehaviors.OfType<IPropertyDescriptorInitializer>();
+				var descriptorInitializers = GetOrderedBehaviors<IPropertyDescriptorInitializer>(propertyBehaviors);
 				foreach (var descriptorInitializer in descriptorInitializers)
 				{
-					descriptorInitializer.Initialize(descriptor);	
+					descriptorInitializer.Initialize(descriptor, propertyBehaviors);	
 				}
 
-				descriptor.AddKeyBuilders(propertyBehaviors.OfType<IDictionaryKeyBuilder>());
-				descriptor.AddKeyBuilders(GetOrderedBehaviors<IDictionaryKeyBuilder>(property.ReflectedType));
+				descriptor.AddKeyBuilders(GetOrderedBehaviors<IDictionaryKeyBuilder>(propertyBehaviors));
+				descriptor.AddKeyBuilders(GetInterfaceBehaviors<IDictionaryKeyBuilder>(property.ReflectedType)
+					.OrderBy(b => b.ExecutionOrder));
 
-				descriptor.AddGetters(propertyBehaviors.OfType<IDictionaryPropertyGetter>());
+				descriptor.AddGetters(GetOrderedBehaviors<IDictionaryPropertyGetter>(propertyBehaviors));
 				descriptor.AddGetters(typeGetters);
 				AddDefaultGetter(descriptor);
 
-				descriptor.AddSetters(propertyBehaviors.OfType<IDictionaryPropertySetter>());
+				descriptor.AddSetters(GetOrderedBehaviors<IDictionaryPropertySetter>(propertyBehaviors));
 				descriptor.AddSetters(typeSetters);
 
 				PropertyDescriptor existingDescriptor;
@@ -424,16 +425,20 @@ namespace Castle.Components.DictionaryAdapter
 			return propertyMap;
 		}
 
-		private static IEnumerable<T> GetOrderedBehaviors<T>(Type type) 
-			where T : class, IDictionaryBehavior
+		private static IEnumerable<T> GetInterfaceBehaviors<T>(Type type) where T : class
 		{
-			return AttributesUtil.GetTypeAttributes<T>(type).OrderBy(b => b.ExecutionOrder);
+			return AttributesUtil.GetTypeAttributes<T>(type);
 		}
 
-		private static IEnumerable<T> GetOrderedBehaviors<T>(MemberInfo member) 
-			where T : class, IDictionaryBehavior
+		private static IEnumerable<T> GetPropertyBehaviors<T>(MemberInfo member) where T : class
 		{
-			return AttributesUtil.GetAttributes<T>(member).OrderBy(b => b.ExecutionOrder);
+			return AttributesUtil.GetAttributes<T>(member);
+		}
+
+		private static IEnumerable<T> GetOrderedBehaviors<T>(IEnumerable<object> behaviors) 
+			where T : IDictionaryBehavior
+		{
+			return behaviors.OfType<T>().OrderBy(b => b.ExecutionOrder);
 		}
 
 		private static void RecursivelyDiscoverProperties(Type currentType, Action<PropertyInfo> onProperty)
@@ -441,22 +446,27 @@ namespace Castle.Components.DictionaryAdapter
 			var types = new List<Type>();
 			types.Add(currentType);
 			types.AddRange(currentType.GetInterfaces());
+			var publicBindings = BindingFlags.Public | BindingFlags.Instance;
 
 			foreach (Type type in types)
 			{
-				if (type == typeof(IDataErrorInfo) ||
-					type == typeof(IDictionaryEditing) ||
-					type == typeof(IDictionaryNotification))
+				if (Array.IndexOf(IgnoredTypes, type) >= 0)
 				{
 					continue;
 				}
 
-				foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+				foreach (var property in type.GetProperties(publicBindings))
 				{
 					onProperty(property);
 				}
 			}
 		}
+
+		private static readonly Type[] IgnoredTypes = new[] 
+			{
+				typeof(IEditableObject), typeof(IDictionaryEdit), typeof(IDictionaryNotify), 
+				typeof(IDataErrorInfo), typeof(IDictionaryValidate)
+			};
 
 		private static void AddDefaultGetter(PropertyDescriptor descriptor)
 		{
@@ -589,6 +599,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static readonly PropertyInfo MetaPropertiesProp =
 			typeof(IDictionaryAdapter).GetProperty("Properties");
+
+		private static readonly PropertyInfo MetaBehaviorsProp =
+			typeof(DictionaryAdapterBase).GetProperty("Behaviors");
 
 		private static readonly PropertyInfo MetaInitializersProp =
 			typeof(DictionaryAdapterBase).GetProperty("Initializers");

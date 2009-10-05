@@ -22,7 +22,8 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Performs any initialization of the <see cref="PropertyDescriptor"/>
 		/// </summary>
-		/// <param name="propertyDescriptor">The property descriptor</param>
-		void Initialize(PropertyDescriptor propertyDescriptor);
+		/// <param name="propertyDescriptor">The property descriptor.</param>
+		/// <param name="behaviors">The property behaviors.</param>
+		void Initialize(PropertyDescriptor propertyDescriptor, object[] behaviors);
 	}
 }

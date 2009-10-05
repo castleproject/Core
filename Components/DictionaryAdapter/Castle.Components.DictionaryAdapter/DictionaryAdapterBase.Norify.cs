@@ -22,7 +22,6 @@ namespace Castle.Components.DictionaryAdapter
 	public abstract partial class DictionaryAdapterBase
 	{
 		private int supressNotificationCount = 0;
-		private bool wantsPropertyChangeNotification;
 		private bool propagateChildNotifications = true;
 		private HashSet<object> composedChildNotifications;
 
@@ -32,10 +31,11 @@ namespace Castle.Components.DictionaryAdapter
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
-		public bool SupportsNotification
+		public bool SupportsNotification { get; set; }
+
+		public bool ShouldNotify
 		{
-			get { return wantsPropertyChangeNotification && supressNotificationCount == 0; }
-			set { wantsPropertyChangeNotification = value; }
+			get { return SupportsNotification && supressNotificationCount == 0; }
 		}
 
 		public bool PropagateChildNotifications
@@ -93,7 +93,7 @@ namespace Castle.Components.DictionaryAdapter
 		protected TrackPropertyChangeScope TrackPropertyChange(PropertyDescriptor property, 
 															   object oldValue, object newValue)
 		{
-			if (SupportsNotification && !property.SuppressNotifications)
+			if (ShouldNotify && !property.SuppressNotifications)
 			{
 				return new TrackPropertyChangeScope(this, property, oldValue);
 			}
@@ -102,7 +102,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		protected TrackPropertyChangeScope TrackReadonlyPropertyChanges()
 		{
-			if (SupportsNotification && ReadonlyTrackingScope == null)
+			if (ShouldNotify && ReadonlyTrackingScope == null)
 			{
 				var scope = new TrackPropertyChangeScope(this);
 				ReadonlyTrackingScope = scope;
@@ -120,9 +120,9 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				((INotifyPropertyChanged)oldValue).PropertyChanged -= Child_PropertyChanged;
 
-				if (oldValue is IDictionaryNotification)
+				if (oldValue is IDictionaryNotify)
 				{
-					((IDictionaryNotification)oldValue).PropertyChanging -= Child_PropertyChanging;
+					((IDictionaryNotify)oldValue).PropertyChanging -= Child_PropertyChanging;
 				}
 			}
 
@@ -130,9 +130,9 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				((INotifyPropertyChanged)newValue).PropertyChanged += Child_PropertyChanged;
 
-				if (newValue is IDictionaryNotification)
+				if (newValue is IDictionaryNotify)
 				{
-					((IDictionaryNotification)newValue).PropertyChanging += Child_PropertyChanging;
+					((IDictionaryNotify)newValue).PropertyChanging += Child_PropertyChanging;
 				}
 			}
 		}

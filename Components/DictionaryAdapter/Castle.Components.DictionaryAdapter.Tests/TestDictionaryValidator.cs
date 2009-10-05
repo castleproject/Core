@@ -32,7 +32,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 	public class TestDictionaryValidator : DictionaryBehaviorAttribute, IDictionaryValidator, IDictionaryInitializer
 	{
-		void IDictionaryInitializer.Initialize(IDictionaryAdapter dictionaryAdapter)
+		void IDictionaryInitializer.Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
 		{
 			dictionaryAdapter.Validator = this;
 		}

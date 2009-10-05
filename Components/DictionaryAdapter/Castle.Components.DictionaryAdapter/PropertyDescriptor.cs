@@ -34,8 +34,6 @@ namespace Castle.Components.DictionaryAdapter
 		private TypeConverter typeConverter;
 		private Hashtable state;
 
-		public static readonly object Undefined = new object();
-
 		/// <summary>
 		/// Initializes an empty <see cref="PropertyDescriptor"/> class.
 		/// </summary>
@@ -50,19 +48,6 @@ namespace Castle.Components.DictionaryAdapter
 		public PropertyDescriptor(PropertyInfo property) : this()
 		{
 			this.property = property;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PropertyDescriptor"/> class
-		/// with an existing property descriptor.
-		/// </summary>
-		/// <param name="other">The other descriptor.</param>
-		public PropertyDescriptor(PropertyDescriptor other) : this()
-		{
-			property = other.property;
-			AddKeyBuilders(other.keyBuilders);
-			AddGetters(other.getters);
-			AddSetters(other.setters);
 		}
 
 		/// <summary>
@@ -178,7 +163,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="key">The key.</param>
 		/// <param name="descriptor">The descriptor.</param>
 		/// <returns></returns>
-		public string GetKey(IDictionaryAdapter dictionaryAdapter, string key, PropertyDescriptor descriptor)
+		public string GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor descriptor)
 		{
 			if (keyBuilders != null)
 			{

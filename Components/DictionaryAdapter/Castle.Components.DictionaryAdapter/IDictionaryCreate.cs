@@ -14,16 +14,24 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+	using System;
+	using System.Collections;
+
 	/// <summary>
-	///  Contract for dictionary initialization.
+	/// Contract for creating additional Dictionary adapters.
 	/// </summary>
-	public interface IDictionaryInitializer : IDictionaryBehavior
+	public interface IDictionaryCreate
 	{
-		/// <summary>
-		/// Performs any initialization of the <see cref="IDictionaryAdapter"/>
-		/// </summary>
-		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
-		/// <param name="behaviors">The dictionary behaviors.</param>
-		void Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors);
+		T Create<T>();
+
+		object Create(Type type);
+
+		T Create<T>(IDictionary dictionary);
+
+		object Create(Type type, IDictionary dictionary);
+
+		T Create<T>(Action<T> init);
+
+		T Create<T>(IDictionary dictionary, Action<T> init);
 	}
 }
