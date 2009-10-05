@@ -1,0 +1,158 @@
+Beta 2
+======
+
+- Fixed MR-383
+  "Databinding object with non-public constructor"
+  Added ability to create types with non-public constructors. Not sure I like it, but...
+
+- Changed DefaultConversion behavior: empty string is now considered 
+  a non succeeded conversion. It used to be considered successful returning false. 
+
+  This might be a breaking change!
+
+
+- Applied Brian Chan's patch fixing MR-282
+  "Binding to a nested IList<> or not null nested List<> fails"
+
+- Applied Adam Tybor's patch fixing MR-289
+  "Array Binding for Prototype Style Serialization"
+
+- Applied Adam Tybor's patch fixing MR-266
+  "Fix for GetErrorSummary() throwing an KeyNotFoundException for SmartDispatch Controller and Binder"
+
+- Fixed COMP-27
+  "Validators in a Chain - ValidateNonEmpty fails with BelongsTo"
+
+- Changed DefaultConverter behavior:
+  
+  -> If we are dealing with a primitive, non-null values will always
+     set conversionSuceeded to true
+     That's because the value was on the form, and the binder needs to set it
+  
+  -> If we are dealing with a nullable, the conversionSuceeded will be set to true
+     if the nested conversion succeeds or if the input is different from null.
+
+- Fixed COMP-8: Converter is not able to deal with Nullables<>
+
+- Fixed COMP-6: Nullable boolean cannot be bound
+
+- Updated to check argument inheritance for conversions.
+
+- Resolved COMP-3: Add support for generic collections.
+
+- Fixed MR-164: Allow and Exclude property acts on all objects, in any depth.
+
+- Applied patch by Lee Henson fixing MR-179
+  "Binder doesn't convert empty strings to null."
+
+- Fixed bug that wrongly defined empty strings as conversionSucceeded = false
+
+- Fixed COMP-1 "Binder fails on simple MonoRail binding, when using ASP.NET authentication"
+  Now the TreeBuilder will add as a leaf entries starting with '.', or '[' or ']'
+
+- Applied patch from Ernst Naezer's fixing a situation where the prefix is composed
+  like "node1.node2.node3"
+
+- Removed support for meta elements (as they were passed 
+    via get/form and that doesn't look very safe)
+
+- More test cases were added
+
+- Major refactoring on Graph design and interfaces. However there wasn't any big change 
+  on the DataBinder class itself.
+
+- Changed ConvertUtils to consider non successful an attempt to convert a null 
+  value to boolean
+
+- Added a CanConvert and an additional Convert
+
+- Added check for duplicate fields in DataReaderAdapter. 
+
+- DataReaderAdapter: Added support for TypeConverters
+
+- Added two events to IDataBinder:
+
+  BinderHandler OnBeforeBinding;
+  BinderHandler OnAfterBinding;
+
+- Changed to allow null inputs be passed to type converters
+
+- Changed ConvertUtils behavior. Now empty strings will be converted to null 
+  and conversionSucceeded = true. Also, string will be trimmed.
+
+- Introduced DataReaderAdapter which can be used to populate an object based
+  on an IDataReader. The adapter does not take ownership of the reader
+
+  Example:
+  
+    DataBinder binder = new DataBinder();
+
+    SqlConnection conn = new SqlConnection("Server=(local);initial catalog=mydatabase;Integrated Security=SSPI");
+
+    conn.Open();
+
+    SqlCommand cmd = new SqlCommand("select * from products", conn);
+
+    using(IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+    {
+        Product[] products = (Product[])
+            binder.BindObject(typeof(Product[]), "ignored", 
+                new DataReaderAdapter(reader));
+    }
+
+
+  Limitations: only simple properties can be bound. Nested properties are ignored.
+
+
+- IBinderTranslator: after introducing the DataReaderAdapter, it was necessary 
+  create the notion of translation. A translator takes the a property name and
+  returns the key that the binder should look up in order to get the value to fill
+  the property. The translator can also return null. In this case the binder will skip
+  the property
+  
+  A translator is associated with a Binder instance (which I'm not quite sure is a good thing)
+  
+  Example:
+
+    DataBinder binder = new DataBinder(new ProductTranslator());
+
+    SqlConnection conn = new SqlConnection("Server=(local);initial catalog=mydatabase;Integrated Security=SSPI");
+
+    conn.Open();
+
+    SqlCommand cmd = new SqlCommand("select nome, descricao from produtos", conn);
+
+    using(IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+    {
+        Product[] products = (Product[])
+            binder.BindObject(typeof(Product[]), "ignored", 
+                new DataReaderAdapter(reader));
+    }
+    
+  ...
+    
+    public class ProductTranslator : IBinderTranslator
+    {
+        public String Translate(Type instanceType, String paramName)
+        {
+            if (paramName == "Name")
+            {
+              return "nome"; // this is the db column name
+            }
+            else if (paramName == "Address")
+            {
+              return "address"; // this is the db column name
+            }
+            
+            return null;
+        }
+    }
+
+
+Beta 1
+======
+
+- Fix conversion using TypeConverters. The Converter won't be invoked if 
+  the input is null.
+
+- The binder was extracted from MonoRail code base.
