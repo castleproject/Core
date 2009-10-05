@@ -235,6 +235,7 @@
     </Compile>
     <Compile Include="ContainerProblem2.cs" />
     <Compile Include="InterceptorSelectorTestCase.cs" />
+    <Compile Include="OpenGenericsTestCase.cs" />
     <Compile Include="RegisteringTwoServicesForSameType.cs" />
     <Compile Include="SubResolversShouldNotBeTrustedToBeCorrect.cs" />
     <Compile Include="ModelInterceptorsSelectorTestCase.cs" />

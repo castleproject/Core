@@ -206,7 +206,7 @@ namespace Castle.Facilities.Remoting
 				}
 				case RemotingStrategy.Component:
 				{
-					model.ExtendedProperties.Add("remoting.remoteregistry", remoteRegistry);
+					model.ExtendedProperties["remoting.remoteregistry"] = remoteRegistry;
 					model.CustomComponentActivator = typeof(RemoteActivatorThroughRegistry);
 					
 					break;
