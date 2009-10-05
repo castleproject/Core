@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="Castle.Components.Binder"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
+>
+
+	<property name="common.scripts.dir" value="../../buildscripts/" />
+	<include buildfile="${common.scripts.dir}/common-project.xml" />
+
+	<target name="init" depends="common.init">
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="Castle.Core.dll" />
+			<include name="Castle.Components.Validator.dll" />
+			<include name="System.Data.dll" />
+			<include name="System.Web.dll" />
+		</assemblyfileset>
+	</target>
+
+	<target name="build" description="Build ${project::get-name()}" depends="init common.compile-dll" />
+
+</project>

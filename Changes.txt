@@ -1,3 +1,21 @@
+1.1.0
+==================
+- Applied patch to fix COMP-105
+	"DictionaryAdapter can't handle properties with the 'new' keyword"
+
+- Applied patch from Mike Nichols fixing COMP-82
+	"Default Converter Refactoring Patch"
+
+- Applied patch from Mike Nichols fixing COMP-81
+	"DataBinder Generic List More Eager Collection"
+
+- Applied patch from Felix Gartsman fixing COMP-53
+	"Changed some TreeBuilder methods visibility to allow constructing nodes from more containers"
+
+- Node: changed to use generic list
+
+- JSCodeGenerator: changed not to duplicate the whole code content to display in error message (whoever thought this would be a good idea?)
+
 Beta 2
 ======
 

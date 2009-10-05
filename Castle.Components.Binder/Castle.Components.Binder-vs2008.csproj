@@ -72,6 +72,14 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Components.Validator, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-3.5\release\Castle.Components.Validator.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-3.5\release\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -133,19 +141,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Castle.Components.Binder.build" />
+    <None Include="default.build" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
-      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
-      <Name>Castle.Core-vs2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Validator\Castle.Components.Validator\Castle.Components.Validator-vs2008.csproj">
-      <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
-      <Name>Castle.Components.Validator-vs2008</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
