@@ -12,22 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // 
-namespace Castle.Components.Binder
+namespace Castle.Components.Binder.Tests.Models
 {
-	using System;
+	using System.Collections;
 
-	/// <summary>
-	/// Depicts the contract for implementations able to convert an object
-	/// -- usually a string -- to the specified desired type.
-	/// </summary>
-	public interface IConverter
+	internal class Person2
 	{
-		object Convert(Type desiredType, Type inputType, object input, out bool conversionSucceeded);
-
-		bool CanConvert(Type desiredType, Type inputType, object input, out bool exactMatch);
-
-//		object Convert(Type desiredType, object input);
-//
-//		object Convert(Type desiredType, object input, out bool conversionSucceeded);
+		public IList Months { get; set; }
 	}
 }

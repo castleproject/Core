@@ -12,22 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // 
-namespace Castle.Components.Binder
+namespace Castle.Components.Binder.Tests.Models
 {
 	using System;
+	using Validator;
 
-	/// <summary>
-	/// Depicts the contract for implementations able to convert an object
-	/// -- usually a string -- to the specified desired type.
-	/// </summary>
-	public interface IConverter
+	internal class Person
 	{
-		object Convert(Type desiredType, Type inputType, object input, out bool conversionSucceeded);
+		public String Name { get; set; }
 
-		bool CanConvert(Type desiredType, Type inputType, object input, out bool exactMatch);
+		public Int32 Age { get; set; }
 
-//		object Convert(Type desiredType, object input);
-//
-//		object Convert(Type desiredType, object input, out bool conversionSucceeded);
+		public Decimal Assets { get; set; }
+
+		public DateTime DOB { get; set; }
+
+		public int[] Months { get; set; }
+
+		[ValidateSameAs("Email")]
+		public string ConfirmEmail { get; set; }
+
+		[ValidateNonEmpty("Email cannot be empty.")]
+		public string Email { get; set; }
 	}
 }

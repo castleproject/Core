@@ -77,6 +77,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Components.Validator, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-3.5\debug\Castle.Components.Validator.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-3.5\release\Castle.Core.dll</HintPath>
@@ -102,17 +106,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Address.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Models\Comp.cs" />
     <Compile Include="ConverterTestCase.cs" />
+    <Compile Include="Models\Customer.cs" />
     <Compile Include="DataBinderArrayTestCase.cs" />
     <Compile Include="DataBinderGenericListTestCase.cs" />
     <Compile Include="DataBinderSingleValueTestCase.cs" />
     <Compile Include="DataBinderTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataBinderWithValidatorTestCase.cs" />
     <Compile Include="DataReaderIntegrationTestCase.cs" />
     <Compile Include="GenericBindingTestCase.cs" />
     <Compile Include="NullablesTestCase.cs" />
+    <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\Person2.cs" />
     <Compile Include="TestUtils.cs">
       <SubType>Code</SubType>
     </Compile>

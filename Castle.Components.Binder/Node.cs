@@ -1,5 +1,5 @@
 // Copyright 2004-2009 Castle Project - http://www.castleproject.org/
-// 
+//  
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+// 
 namespace Castle.Components.Binder
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
 
@@ -31,7 +30,6 @@ namespace Castle.Components.Binder
 	{
 		private readonly String name;
 		private readonly NodeType nodeType;
-		private Node parent;
 
 		protected Node(String name, NodeType nodeType)
 		{
@@ -39,16 +37,16 @@ namespace Castle.Components.Binder
 			this.nodeType = nodeType;
 		}
 
-		public String Name 
-		{ 
-			get { return name;}
+		public String Name
+		{
+			get { return name; }
 		}
-		
+
 		public NodeType NodeType
 		{
 			get { return nodeType; }
 		}
-		
+
 		public String FullName
 		{
 			get
@@ -57,18 +55,14 @@ namespace Castle.Components.Binder
 				{
 					return string.Format("{0}.{1}", Parent.FullName, Name);
 				}
-				
+
 				return Name;
 			}
 		}
 
-		public Node Parent
-		{
-			get { return parent; }
-			set { parent = value; }
-		}
+		public Node Parent { get; set; }
 	}
-	
+
 	public class CompositeNode : Node
 	{
 		private readonly HybridDictionary name2Node = new HybridDictionary(true);
@@ -85,22 +79,22 @@ namespace Castle.Components.Binder
 		public void AddChildNode(Node node)
 		{
 			if (node == null) throw new ArgumentNullException("node");
-			
+
 			name2Node[node.Name] = node;
 			nodeList.Add(node);
 			node.Parent = this;
 		}
-		
+
 		public Node GetChildNode(String name)
 		{
 			int index = name.IndexOf(".");
-			
+
 			if (!name2Node.Contains(name) && index != -1)
 			{
 				string firstNodeName = name.Substring(0, index);
 				string remainingName = name.Substring(index + 1);
 
-				Node innerNode = (Node)name2Node[firstNodeName];
+				var innerNode = (Node) name2Node[firstNodeName];
 
 				if (innerNode != null && innerNode.NodeType == NodeType.Composite)
 				{
@@ -112,25 +106,25 @@ namespace Castle.Components.Binder
 
 			return (Node) name2Node[name];
 		}
-		
+
 		public Node[] ChildNodes
 		{
 			get { return nodeList.ToArray(); }
 		}
-		
+
 		public int ChildrenCount
 		{
 			get { return nodeList.Count; }
 		}
 	}
-	
+
 	public class IndexedNode : CompositeNode
 	{
 		public IndexedNode(string name) : base(name, NodeType.Indexed)
 		{
 		}
 	}
-	
+
 	public class LeafNode : Node
 	{
 		private readonly Type type;
@@ -140,7 +134,7 @@ namespace Castle.Components.Binder
 		{
 			if (type == null) throw new ArgumentNullException("type", "A type must be specified");
 			if (value == null) throw new ArgumentNullException("value", "A value must be specified");
-			
+
 			this.type = type;
 			this.value = value;
 		}
@@ -154,7 +148,7 @@ namespace Castle.Components.Binder
 		{
 			get { return type.IsArray; }
 		}
-		
+
 		public object Value
 		{
 			get { return value; }

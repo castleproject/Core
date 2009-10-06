@@ -1,5 +1,5 @@
 // Copyright 2004-2009 Castle Project - http://www.castleproject.org/
-// 
+//  
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -11,15 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-
+// 
 namespace Castle.Components.Binder
 {
 	using System;
 
-	internal class NullableConverter:TypeConverterBase
+	internal class NullableConverter : TypeConverterBase
 	{
-		private IConverter parent;
+		private readonly IConverter parent;
 
 		public NullableConverter(IConverter parent)
 		{
@@ -30,11 +29,11 @@ namespace Castle.Components.Binder
 		{
 			Type underlyingType = Nullable.GetUnderlyingType(desiredType);
 
-			object value = parent.Convert(underlyingType, inputType,input, out conversionSucceeded);
+			object value = parent.Convert(underlyingType, inputType, input, out conversionSucceeded);
 
 			if (conversionSucceeded && value != null)
 			{
-				Type typeToConstruct = typeof(Nullable<>).MakeGenericType(underlyingType);
+				Type typeToConstruct = typeof (Nullable<>).MakeGenericType(underlyingType);
 
 				return Activator.CreateInstance(typeToConstruct, value);
 			}

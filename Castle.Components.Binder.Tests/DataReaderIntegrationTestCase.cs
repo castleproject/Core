@@ -1,5 +1,5 @@
 // Copyright 2004-2009 Castle Project - http://www.castleproject.org/
-// 
+//  
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -11,13 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+// 
 namespace Castle.Components.Binder.Tests
 {
 	using System;
 	using System.Collections;
 	using System.Data;
-		
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -26,13 +25,15 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void EmptyReader()
 		{
-			ArrayList data = new ArrayList();
+			var data = new ArrayList();
 
-			MockDataReader reader = new MockDataReader(data, new string[] { "name", "address"});
-			
-			DataBinder binder = new DataBinder();
+			var reader = new MockDataReader(data, new[] {"name", "address"});
 
-			Contact[] contacts = (Contact[]) binder.BindObject(typeof(Contact[]), "cont", new DataReaderTreeBuilder().BuildSourceNode(reader, "cont"));
+			var binder = new DataBinder();
+
+			var contacts =
+				(Contact[])
+				binder.BindObject(typeof (Contact[]), "cont", new DataReaderTreeBuilder().BuildSourceNode(reader, "cont"));
 
 			Assert.IsNotNull(contacts);
 			Assert.AreEqual(0, contacts.Length);
@@ -41,59 +42,44 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void SingleRow()
 		{
-			ArrayList data = new ArrayList();
+			var data = new ArrayList();
 
-			data.Add( new object[] { "hammett", "r pereira leite 44" } );
+			data.Add(new object[] {"hammett", "r pereira leite 44"});
 
-			MockDataReader reader = new MockDataReader(data, new string[] { "name", "address"}, typeof(String), typeof(String));
-			
-			DataBinder binder = new DataBinder();
+			var reader = new MockDataReader(data, new[] {"name", "address"}, typeof (String), typeof (String));
 
-			Contact[] contacts = (Contact[]) binder.BindObject(typeof(Contact[]), "cont", new DataReaderTreeBuilder().BuildSourceNode(reader, "cont"));
+			var binder = new DataBinder();
 
-			Assert.IsNotNull(contacts);
-			Assert.AreEqual(1, contacts.Length);
-			Assert.AreEqual("hammett", contacts[0].Name);
-			Assert.AreEqual("r pereira leite 44", contacts[0].Address);
-		}
-
-		[Test]
-		public void UsingTypeConverter()
-		{
-			ArrayList data = new ArrayList();
-
-			data.Add( new object[] { "hammett", "r pereira leite 44", new DateTime(2006,7,16) } );
-
-			MockDataReader reader = new MockDataReader(data, new string[] { "name", "address", "dob" }, typeof(String), typeof(String), typeof(DateTime));
-			
-			DataBinder binder = new DataBinder();
-
-			Contact[] contacts = (Contact[]) binder.BindObject(typeof(Contact[]), "cont", new DataReaderTreeBuilder().BuildSourceNode(reader, "cont"));
+			var contacts =
+				(Contact[])
+				binder.BindObject(typeof (Contact[]), "cont", new DataReaderTreeBuilder().BuildSourceNode(reader, "cont"));
 
 			Assert.IsNotNull(contacts);
 			Assert.AreEqual(1, contacts.Length);
 			Assert.AreEqual("hammett", contacts[0].Name);
 			Assert.AreEqual("r pereira leite 44", contacts[0].Address);
-			Assert.IsTrue(contacts[0].DOB.HasValue);
 		}
 
 		[Test]
 		public void TwoRows()
 		{
-			ArrayList data = new ArrayList();
+			var data = new ArrayList();
 
-			data.Add( new object[] { 26, "hammett", "r pereira leite 44" } );
-			data.Add( new object[] { 27, "his girl", "barao bananal 100" } );
+			data.Add(new object[] {26, "hammett", "r pereira leite 44"});
+			data.Add(new object[] {27, "his girl", "barao bananal 100"});
 
-			MockDataReader reader = new MockDataReader(data, new string[] { "age", "name", "address"}, typeof(int), typeof(String), typeof(String));
-			
-			DataBinder binder = new DataBinder();
+			var reader = new MockDataReader(data, new[] {"age", "name", "address"}, typeof (int), typeof (String),
+			                                typeof (String));
 
-			Contact[] contacts = (Contact[]) binder.BindObject(typeof(Contact[]), "cont", new DataReaderTreeBuilder().BuildSourceNode(reader, "cont"));
+			var binder = new DataBinder();
+
+			var contacts =
+				(Contact[])
+				binder.BindObject(typeof (Contact[]), "cont", new DataReaderTreeBuilder().BuildSourceNode(reader, "cont"));
 
 			Assert.IsNotNull(contacts);
 			Assert.AreEqual(2, contacts.Length);
-			
+
 			Assert.AreEqual(26, contacts[0].Age);
 			Assert.AreEqual("hammett", contacts[0].Name);
 			Assert.AreEqual("r pereira leite 44", contacts[0].Address);
@@ -106,21 +92,24 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void UsingTranslator()
 		{
-			ArrayList data = new ArrayList();
+			var data = new ArrayList();
 
-			data.Add( new object[] { 26, "hammett", "r pereira leite 44" } );
-			data.Add( new object[] { 27, "his girl", "barao bananal 100" } );
+			data.Add(new object[] {26, "hammett", "r pereira leite 44"});
+			data.Add(new object[] {27, "his girl", "barao bananal 100"});
 
-			MockDataReader reader = new MockDataReader(data, new string[] { "idade", "nome", "endereco"}, typeof(int), typeof(String), typeof(String));
-			
-			DataBinder binder = new DataBinder();
+			var reader = new MockDataReader(data, new[] {"idade", "nome", "endereco"}, typeof (int), typeof (String),
+			                                typeof (String));
+
+			var binder = new DataBinder();
 			binder.Translator = new EnglishToPortugueseTranslator();
 
-			Contact[] contacts = (Contact[]) binder.BindObject(typeof(Contact[]), "cont", new DataReaderTreeBuilder().BuildSourceNode(reader, "cont"));
+			var contacts =
+				(Contact[])
+				binder.BindObject(typeof (Contact[]), "cont", new DataReaderTreeBuilder().BuildSourceNode(reader, "cont"));
 
 			Assert.IsNotNull(contacts);
 			Assert.AreEqual(2, contacts.Length);
-			
+
 			Assert.AreEqual(26, contacts[0].Age);
 			Assert.AreEqual("hammett", contacts[0].Name);
 			Assert.AreEqual("r pereira leite 44", contacts[0].Address);
@@ -129,10 +118,35 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual("his girl", contacts[1].Name);
 			Assert.AreEqual("barao bananal 100", contacts[1].Address);
 		}
+
+		[Test]
+		public void UsingTypeConverter()
+		{
+			var data = new ArrayList();
+
+			data.Add(new object[] {"hammett", "r pereira leite 44", new DateTime(2006, 7, 16)});
+
+			var reader = new MockDataReader(data, new[] {"name", "address", "dob"}, typeof (String), typeof (String),
+			                                typeof (DateTime));
+
+			var binder = new DataBinder();
+
+			var contacts =
+				(Contact[])
+				binder.BindObject(typeof (Contact[]), "cont", new DataReaderTreeBuilder().BuildSourceNode(reader, "cont"));
+
+			Assert.IsNotNull(contacts);
+			Assert.AreEqual(1, contacts.Length);
+			Assert.AreEqual("hammett", contacts[0].Name);
+			Assert.AreEqual("r pereira leite 44", contacts[0].Address);
+			Assert.IsTrue(contacts[0].DOB.HasValue);
+		}
 	}
 
 	public class EnglishToPortugueseTranslator : IBinderTranslator
 	{
+		#region IBinderTranslator Members
+
 		public String Translate(Type instanceType, String paramName)
 		{
 			if (paramName == "Age")
@@ -150,12 +164,14 @@ namespace Castle.Components.Binder.Tests
 
 			return null;
 		}
+
+		#endregion
 	}
 
 	public class MockDataReader : IDataReader
 	{
-		private readonly IList source;
 		private readonly string[] fields;
+		private readonly IList source;
 		private readonly Type[] types;
 		private int index = -1;
 
@@ -185,7 +201,7 @@ namespace Castle.Components.Binder.Tests
 				index++;
 				return true;
 			}
-			
+
 			return false;
 		}
 
@@ -254,12 +270,12 @@ namespace Castle.Components.Binder.Tests
 
 		public bool GetBoolean(int i)
 		{
-			return Convert.ToBoolean( GetValue(i) );
+			return Convert.ToBoolean(GetValue(i));
 		}
 
 		public byte GetByte(int i)
 		{
-			return Convert.ToByte( GetValue(i) );
+			return Convert.ToByte(GetValue(i));
 		}
 
 		public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
@@ -269,7 +285,7 @@ namespace Castle.Components.Binder.Tests
 
 		public char GetChar(int i)
 		{
-			return Convert.ToChar( GetValue(i) );
+			return Convert.ToChar(GetValue(i));
 		}
 
 		public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
@@ -284,42 +300,42 @@ namespace Castle.Components.Binder.Tests
 
 		public short GetInt16(int i)
 		{
-			return Convert.ToInt16( GetValue(i) );
+			return Convert.ToInt16(GetValue(i));
 		}
 
 		public int GetInt32(int i)
 		{
-			return Convert.ToInt32( GetValue(i) );
+			return Convert.ToInt32(GetValue(i));
 		}
 
 		public long GetInt64(int i)
 		{
-			return Convert.ToInt64( GetValue(i) );
+			return Convert.ToInt64(GetValue(i));
 		}
 
 		public float GetFloat(int i)
 		{
-			return Convert.ToSingle( GetValue(i) );
+			return Convert.ToSingle(GetValue(i));
 		}
 
 		public double GetDouble(int i)
 		{
-			return Convert.ToDouble( GetValue(i) );
+			return Convert.ToDouble(GetValue(i));
 		}
 
 		public string GetString(int i)
 		{
-			return Convert.ToString( GetValue(i) );
+			return Convert.ToString(GetValue(i));
 		}
 
 		public decimal GetDecimal(int i)
 		{
-			return Convert.ToDecimal( GetValue(i) );
+			return Convert.ToDecimal(GetValue(i));
 		}
 
 		public DateTime GetDateTime(int i)
 		{
-			return Convert.ToDateTime( GetValue(i) );
+			return Convert.ToDateTime(GetValue(i));
 		}
 
 		public IDataReader GetData(int i)
@@ -352,32 +368,12 @@ namespace Castle.Components.Binder.Tests
 
 	public class Contact
 	{
-		private int age;
-		private String name, address;
-		private DateTime? dob;
+		public int Age { get; set; }
 
-		public int Age
-		{
-			get { return age; }
-			set { age = value; }
-		}
+		public string Name { get; set; }
 
-		public string Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
+		public string Address { get; set; }
 
-		public string Address
-		{
-			get { return address; }
-			set { address = value; }
-		}
-
-		public DateTime? DOB
-		{
-			get { return dob; }
-			set { dob = value; }
-		}
+		public DateTime? DOB { get; set; }
 	}
 }

@@ -1,5 +1,5 @@
 // Copyright 2004-2009 Castle Project - http://www.castleproject.org/
-// 
+//  
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+// 
 namespace Castle.Components.Binder
 {
 	using System;
@@ -20,9 +20,9 @@ namespace Castle.Components.Binder
 	using System.ComponentModel;
 	using System.Reflection;
 	using System.Web;
-	using Castle.Components.Validator;
-	using Castle.Core;
-	using Castle.Core.Logging;
+	using Core;
+	using Core.Logging;
+	using Validator;
 
 	/// <summary>
 	/// </summary>
@@ -48,7 +48,8 @@ namespace Castle.Components.Binder
 		private Stack instanceStack;
 		private Stack<string> prefixStack;
 
-		private IDictionary<object, ErrorSummary> validationErrorSummaryPerInstance = new Dictionary<object, ErrorSummary>();
+		private readonly IDictionary<object, ErrorSummary> validationErrorSummaryPerInstance =
+			new Dictionary<object, ErrorSummary>();
 
 		private IBinderTranslator binderTranslator;
 
@@ -58,22 +59,15 @@ namespace Castle.Components.Binder
 
 		public event BinderHandler OnAfterBinding;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DataBinder"/> class.
-		/// </summary>
-		public DataBinder()
-		{
-		}
-
 		#region IServiceEnabledComponent
 
 		public void Service(IServiceProvider provider)
 		{
-			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			var loggerFactory = (ILoggerFactory) provider.GetService(typeof (ILoggerFactory));
 
 			if (loggerFactory != null)
 			{
-				logger = loggerFactory.Create(typeof(DataBinder));
+				logger = loggerFactory.Create(typeof (DataBinder));
 			}
 		}
 
@@ -91,7 +85,7 @@ namespace Castle.Components.Binder
 			{
 				canConvert = true;
 			}
-			else if (desiredType == typeof(DateTime))
+			else if (desiredType == typeof (DateTime))
 			{
 				TrySpecialDateTimeBinding(desiredType, treeRoot, paramName, out canConvert);
 			}
@@ -128,7 +122,7 @@ namespace Castle.Components.Binder
 					result = ConvertToSimpleValue(desiredType, paramName, treeRoot, out conversionSucceeded);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				// Something unexpected during convertion
 				// throw new exception with paramName specified
@@ -265,17 +259,14 @@ namespace Castle.Components.Binder
 			{
 				return InternalBindObjectArray(instanceType, paramPrefix, node, out succeeded);
 			}
-			else if (IsGenericList(instanceType))
+			if (IsGenericList(instanceType))
 			{
 				return InternalBindGenericList(instanceType, paramPrefix, node, out succeeded);
 			}
-			else
-			{
-				succeeded = true;
-				object instance = CreateInstance(instanceType, paramPrefix, node);
-				InternalRecursiveBindObjectInstance(instance, paramPrefix, node);
-				return instance;
-			}
+			succeeded = true;
+			object instance = CreateInstance(instanceType, paramPrefix, node);
+			InternalRecursiveBindObjectInstance(instance, paramPrefix, node);
+			return instance;
 		}
 
 		protected void InternalRecursiveBindObjectInstance(object instance, String prefix, Node node)
@@ -311,7 +302,7 @@ namespace Castle.Components.Binder
 
 			PushInstance(instance, prefix);
 
-			ErrorSummary summary = new ErrorSummary();
+			var summary = new ErrorSummary();
 
 			validationErrorSummaryPerInstance[instance] = summary;
 
@@ -321,7 +312,7 @@ namespace Castle.Components.Binder
 
 			string nodeFullName = node.FullName;
 
-			foreach(PropertyInfo prop in props)
+			foreach (PropertyInfo prop in props)
 			{
 				if (ShouldIgnoreProperty(prop, nodeFullName))
 				{
@@ -340,16 +331,6 @@ namespace Castle.Components.Binder
 
 				bool isSimpleProperty = IsSimpleProperty(propType);
 
-				// There are some caveats by running the validators here. 
-				// We should follow the validator's execution order...
-				if (isSimpleProperty)
-				{
-					if (CheckForValidationFailures(instance, instanceType, prop, node, translatedParamName, prefix, summary))
-					{
-						continue;
-					}
-				}
-
 				BeforeBindingProperty(instance, prop, prefix, node);
 
 				try
@@ -367,7 +348,7 @@ namespace Castle.Components.Binder
 					}
 					else
 					{
-						// if the property is an object, we look if it is already instanciated
+						// if the property is an object, we look if it is already instantiated
 						object value = prop.GetValue(instance, null);
 
 						Node nestedNode = node.GetChildNode(paramName);
@@ -388,15 +369,15 @@ namespace Castle.Components.Binder
 								InternalRecursiveBindObjectInstance(value, paramName, nestedNode);
 							}
 						}
-
-						CheckForValidationFailures(instance, instanceType, prop, value, translatedParamName, prefix, summary);
 					}
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					errors.Add(new DataBindError(prefix, prop.Name, ex));
 				}
 			}
+
+			CheckForValidationFailures(instance, prefix, summary);
 
 			PopInstance(instance, prefix);
 
@@ -420,6 +401,25 @@ namespace Castle.Components.Binder
 			prop.SetValue(instance, value, null);
 		}
 
+		private void CheckForValidationFailures(object instance, string prefix, ErrorSummary summary)
+		{
+			if (validator == null)
+			{
+				return;
+			}
+			if (!validator.IsValid(instance))
+			{
+				summary.RegisterErrorsFrom(validator.GetErrorSummary(instance));
+				foreach (string invalidProperty in summary.InvalidProperties)
+				{
+					foreach (string errorMessage in summary.GetErrorsForProperty(invalidProperty))
+					{
+						errors.Add(new DataBindError(prefix, invalidProperty, errorMessage));
+					}
+				}
+			}
+		}
+
 		protected bool CheckForValidationFailures(object instance, Type instanceType,
 		                                          PropertyInfo prop, CompositeNode node,
 		                                          string name, string prefix,
@@ -440,7 +440,7 @@ namespace Castle.Components.Binder
 
 				if (valNode != null && valNode.NodeType == NodeType.Leaf)
 				{
-					value = ((LeafNode)valNode).Value;
+					value = ((LeafNode) valNode).Value;
 				}
 
 				if (value == null && IsDateTimeType(prop.PropertyType))
@@ -473,7 +473,7 @@ namespace Castle.Components.Binder
 
 			IValidator[] validators = validator.GetValidators(instanceType, prop);
 
-			foreach(IValidator validatorItem in validators)
+			foreach (IValidator validatorItem in validators)
 			{
 				if (!validatorItem.IsValid(instance, value))
 				{
@@ -482,7 +482,7 @@ namespace Castle.Components.Binder
 					errors.Add(new DataBindError(prefix, prop.Name, validatorItem.ErrorMessage));
 
 					summary.RegisterErrorMessage(propName, validatorItem.ErrorMessage);
-					
+
 					hasFailure = true;
 				}
 			}
@@ -523,7 +523,7 @@ namespace Castle.Components.Binder
 			{
 				return false;
 			}
-			if (typeof(IList).IsAssignableFrom(instanceType))
+			if (typeof (IList).IsAssignableFrom(instanceType))
 			{
 				return true;
 			}
@@ -534,7 +534,7 @@ namespace Castle.Components.Binder
 			{
 				return false;
 			}
-			Type listType = typeof(IList<>).MakeGenericType(genericArgs[0]);
+			Type listType = typeof (IList<>).MakeGenericType(genericArgs[0]);
 			return listType.IsAssignableFrom(instanceType);
 		}
 
@@ -687,13 +687,13 @@ namespace Castle.Components.Binder
 			}
 			else if (node.NodeType == NodeType.Leaf)
 			{
-				LeafNode leafNode = node as LeafNode;
+				var leafNode = node as LeafNode;
 
 				return Converter.Convert(desiredType, leafNode.ValueType, leafNode.Value, out conversionSucceeded);
 			}
 			else if (node.NodeType == NodeType.Indexed)
 			{
-				IndexedNode indexedNode = node as IndexedNode;
+				var indexedNode = node as IndexedNode;
 
 				if (IsSimpleProperty(elemType))
 				{
@@ -724,13 +724,13 @@ namespace Castle.Components.Binder
 		{
 			conversionSucceeded = true;
 
-			ArrayList validItems = new ArrayList();
+			var validItems = new ArrayList();
 
-			foreach(Node node in parent.ChildNodes)
+			foreach (Node node in parent.ChildNodes)
 			{
 				if (node.NodeType == NodeType.Composite)
 				{
-					CompositeNode lnode = node as CompositeNode;
+					var lnode = node as CompositeNode;
 
 					validItems.Add(InternalBindObject(elemType, parent.Name, lnode, out conversionSucceeded));
 
@@ -757,9 +757,9 @@ namespace Castle.Components.Binder
 		{
 			conversionSucceeded = true;
 
-			ArrayList validItems = new ArrayList();
+			var validItems = new ArrayList();
 
-			foreach(Node node in nodes)
+			foreach (Node node in nodes)
 			{
 				if (node.Name != String.Empty)
 				{
@@ -768,7 +768,7 @@ namespace Castle.Components.Binder
 
 				if (node.NodeType == NodeType.Leaf)
 				{
-					LeafNode lnode = node as LeafNode;
+					var lnode = node as LeafNode;
 
 					validItems.Add(ConvertLeafNode(elemType, lnode, out conversionSucceeded));
 
@@ -800,13 +800,13 @@ namespace Castle.Components.Binder
 			}
 			else if (node.NodeType == NodeType.Leaf)
 			{
-				LeafNode leafNode = node as LeafNode;
+				var leafNode = node as LeafNode;
 
 				return Converter.Convert(desiredType, leafNode.ValueType, leafNode.Value, out conversionSucceeded);
 			}
 			else if (node.NodeType == NodeType.Indexed)
 			{
-				IndexedNode indexedNode = node as IndexedNode;
+				var indexedNode = node as IndexedNode;
 
 				IList convertedNodes;
 
@@ -820,13 +820,13 @@ namespace Castle.Components.Binder
 				}
 
 				Type desiredImplType = desiredType.IsInterface
-				                       	? typeof(List<>).MakeGenericType(elemType)
+				                       	? typeof (List<>).MakeGenericType(elemType)
 				                       	: desiredType;
-				IList target = (IList)CreateInstance(desiredImplType, key, node);
+				var target = (IList) CreateInstance(desiredImplType, key, node);
 
-				foreach(object elem in convertedNodes)
+				foreach (object elem in convertedNodes)
 				{
-					if(elem!=null)
+					if (elem != null)
 						target.Add(elem);
 				}
 
@@ -855,9 +855,9 @@ namespace Castle.Components.Binder
 
 			if (dayNode != null)
 			{
-				int day = (int) RelaxedConvertLeafNode(typeof(int), dayNode, 0);
-				int month = (int) RelaxedConvertLeafNode(typeof(int), monthNode, 0);
-				int year = (int) RelaxedConvertLeafNode(typeof(int), yearNode, 0);
+				var day = (int) RelaxedConvertLeafNode(typeof (int), dayNode, 0);
+				var month = (int) RelaxedConvertLeafNode(typeof (int), monthNode, 0);
+				var year = (int) RelaxedConvertLeafNode(typeof (int), yearNode, 0);
 
 				fullDateTime = string.Format("{0:0000}-{1:00}-{2:00}", year, month, day);
 				conversionSucceeded = true;
@@ -865,9 +865,9 @@ namespace Castle.Components.Binder
 
 			if (hourNode != null)
 			{
-				int hour = (int) RelaxedConvertLeafNode(typeof(int), hourNode, 0);
-				int minute = (int) RelaxedConvertLeafNode(typeof(int), minuteNode, 0);
-				int second = (int) RelaxedConvertLeafNode(typeof(int), secondNode, 0);
+				var hour = (int) RelaxedConvertLeafNode(typeof (int), hourNode, 0);
+				var minute = (int) RelaxedConvertLeafNode(typeof (int), minuteNode, 0);
+				var second = (int) RelaxedConvertLeafNode(typeof (int), secondNode, 0);
 
 				fullDateTime += string.Format("T{0:00}:{1:00}:{2:00}", hour, minute, second);
 				conversionSucceeded = true;
@@ -924,7 +924,7 @@ namespace Castle.Components.Binder
 
 		private bool IsDateTimeType(Type desiredType)
 		{
-			if (desiredType == typeof(DateTime))
+			if (desiredType == typeof (DateTime))
 			{
 				return true;
 			}
@@ -936,7 +936,7 @@ namespace Castle.Components.Binder
 			{
 				Type[] args = desiredType.GetGenericArguments();
 
-				return (args.Length == 1 && args[0] == typeof(DateTime));
+				return (args.Length == 1 && args[0] == typeof (DateTime));
 			}
 
 			return false;
@@ -1022,7 +1022,7 @@ namespace Castle.Components.Binder
 
 		private void NormalizeList(String[] list)
 		{
-			for(int i = 0; i < list.Length; i++)
+			for (int i = 0; i < list.Length; i++)
 			{
 				list[i] = "root." + list[i].Trim();
 			}
@@ -1058,11 +1058,11 @@ namespace Castle.Components.Binder
 
 			bool isSimple = propType.IsPrimitive ||
 			                propType.IsEnum ||
-			                propType == typeof(String) ||
-			                propType == typeof(Guid) ||
-			                propType == typeof(DateTime) ||
-			                propType == typeof(Decimal) ||
-			                propType == typeof(HttpPostedFile);
+			                propType == typeof (String) ||
+			                propType == typeof (Guid) ||
+			                propType == typeof (DateTime) ||
+			                propType == typeof (Decimal) ||
+			                propType == typeof (HttpPostedFile);
 
 			if (isSimple)
 			{
@@ -1071,7 +1071,7 @@ namespace Castle.Components.Binder
 
 			TypeConverter tconverter = TypeDescriptor.GetConverter(propType);
 
-			return tconverter.CanConvertFrom(typeof(String));
+			return tconverter.CanConvertFrom(typeof (String));
 		}
 
 		#endregion

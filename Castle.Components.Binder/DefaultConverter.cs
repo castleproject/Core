@@ -1,5 +1,5 @@
 // Copyright 2004-2009 Castle Project - http://www.castleproject.org/
-// 
+//  
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+// 
 namespace Castle.Components.Binder
 {
 	using System;
@@ -25,9 +25,10 @@ namespace Castle.Components.Binder
 		{
 			Initialize();
 		}
+
 		private void Initialize()
 		{
-			if(converters.Count==0)
+			if (converters.Count == 0)
 			{
 				AddConverter(new StringConverter());
 				AddConverter(new ExactMatchConverter());
@@ -41,7 +42,6 @@ namespace Castle.Components.Binder
 				AddConverter(new HttpPostedFileConverter());
 				AddConverter(new GenericListConverter(this));
 				AddConverter(new TypeConverterAdapter());
-
 			}
 		}
 
@@ -49,23 +49,24 @@ namespace Castle.Components.Binder
 		{
 			converters.Add(converter);
 		}
-		private IConverter FindConverter(Type desiredType,object input)
+
+		private IConverter FindConverter(Type desiredType, object input)
 		{
 			bool exactMatch;
-			var converter = converters.Find(c => c.CanConvert(desiredType, null, input, out exactMatch));
-			if(converter==null)
+			IConverter converter = converters.Find(c => c.CanConvert(desiredType, null, input, out exactMatch));
+			if (converter == null)
 			{
 				throw new BindingException("Unable to find converter for '{0}'", desiredType);
 			}
 			return converter;
-			
 		}
+
 		public virtual bool CanConvert(Type desiredType, Type inputType, object input, out bool exactMatch)
 		{
 			exactMatch = false;
-			foreach (var converter in converters)
+			foreach (IConverter converter in converters)
 			{
-				if(converter.CanConvert(desiredType,inputType,input,out exactMatch))
+				if (converter.CanConvert(desiredType, inputType, input, out exactMatch))
 				{
 					return true;
 				}
@@ -78,7 +79,7 @@ namespace Castle.Components.Binder
 			try
 			{
 				conversionSucceeded = (input != null);
-				var converterImpl = FindConverter(desiredType, input);
+				IConverter converterImpl = FindConverter(desiredType, input);
 				return converterImpl.Convert(desiredType, null, input, out conversionSucceeded);
 			}
 			catch (BindingException)
@@ -92,7 +93,6 @@ namespace Castle.Components.Binder
 				ThrowInformativeException(desiredType, input, inner);
 				return null;
 			}
-
 		}
 
 		/// <summary>
@@ -119,6 +119,7 @@ namespace Castle.Components.Binder
 			}
 			return Convert(desiredType, null, input, out conversionSucceeded);
 		}
+
 		private static void ThrowInformativeException(Type desiredType, object input, Exception inner)
 		{
 			String message = String.Format("Conversion error: " +
@@ -127,6 +128,5 @@ namespace Castle.Components.Binder
 
 			throw new BindingException(message, inner);
 		}
-
 	}
 }

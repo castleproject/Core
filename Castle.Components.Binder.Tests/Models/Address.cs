@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // 
-namespace Castle.Components.Binder
+namespace Castle.Components.Binder.Tests.Models
 {
-	using System;
+	using Validator;
 
-	/// <summary>
-	/// Depicts the contract for implementations able to convert an object
-	/// -- usually a string -- to the specified desired type.
-	/// </summary>
-	public interface IConverter
+	internal class Address
 	{
-		object Convert(Type desiredType, Type inputType, object input, out bool conversionSucceeded);
+		[ValidateNonEmpty]
+		public string Street { get; set; }
 
-		bool CanConvert(Type desiredType, Type inputType, object input, out bool exactMatch);
+		public short Number { get; set; }
 
-//		object Convert(Type desiredType, object input);
-//
-//		object Convert(Type desiredType, object input, out bool conversionSucceeded);
+		public string State { get; set; }
+
+		public string City { get; set; }
+
+		public string Countrycode { get; set; }
 	}
 }

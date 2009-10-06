@@ -1,5 +1,5 @@
 // Copyright 2004-2009 Castle Project - http://www.castleproject.org/
-// 
+//  
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -11,8 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-
+// 
 namespace Castle.Components.Binder
 {
 	using System;
@@ -33,9 +32,9 @@ namespace Castle.Components.Binder
 				}
 				else
 				{
-					Array array = (Array)input;
+					var array = (Array) input;
 
-					String[] stArray = new string[array.GetLength(0)];
+					var stArray = new string[array.GetLength(0)];
 
 					for (int i = 0; i < stArray.Length; i++)
 					{
@@ -55,6 +54,7 @@ namespace Castle.Components.Binder
 				}
 			}
 		}
+
 		/// <summary>
 		/// Fix for mod_mono issue where array values are passed as a comma seperated String.
 		/// </summary>
@@ -63,13 +63,13 @@ namespace Castle.Components.Binder
 		/// <returns></returns>
 		public static object FixInputForMonoIfNeeded(Type elemType, object input)
 		{
-			if(input==null)
+			if (input == null)
 			{
 				return null;
 			}
 			if (!input.GetType().IsArray)
 			{
-				if (input.GetType() == typeof(String))
+				if (input.GetType() == typeof (String))
 				{
 					input = NormalizeInput(input);
 
@@ -85,7 +85,7 @@ namespace Castle.Components.Binder
 				else
 				{
 					throw new BindingException("Cannot convert to collection of {0} from type {1}", elemType.FullName,
-											   input.GetType().FullName);
+					                           input.GetType().FullName);
 				}
 			}
 
