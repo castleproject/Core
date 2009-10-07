@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Added dynamic property value resolution
+
 - Added on-demand property resolution
 
 - Added editable collection support

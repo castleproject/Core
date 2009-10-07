@@ -17,6 +17,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Collections.Specialized;
 	using System.ComponentModel;
 	using System.Reflection;
 
@@ -28,11 +29,12 @@ namespace Castle.Components.DictionaryAdapter
 	                                  IDictionaryPropertySetter
 	{
 		private readonly PropertyInfo property;
+		private readonly bool isDynamicProperty;
 		private List<IDictionaryPropertyGetter> getters;
 		private List<IDictionaryPropertySetter> setters;
 		private List<IDictionaryKeyBuilder> keyBuilders;
 		private TypeConverter typeConverter;
-		private Hashtable state;
+		private HybridDictionary state;
 
 		/// <summary>
 		/// Initializes an empty <see cref="PropertyDescriptor"/> class.
@@ -48,6 +50,7 @@ namespace Castle.Components.DictionaryAdapter
 		public PropertyDescriptor(PropertyInfo property) : this()
 		{
 			this.property = property;
+			isDynamicProperty = typeof(IDynamicValue).IsAssignableFrom(property.PropertyType);
 		}
 
 		/// <summary>
@@ -84,6 +87,14 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
+		/// Returns true if the property is dynamic.
+		/// </summary>
+		public bool IsDynamicProperty
+		{
+			get { return isDynamicProperty; }
+		}
+
+		/// <summary>
 		/// Gets additional state.
 		/// </summary>
 		public IDictionary State
@@ -91,7 +102,7 @@ namespace Castle.Components.DictionaryAdapter
 			get
 			{
 				if (state == null)
-					state = new Hashtable();
+					state = new HybridDictionary();
 				return state;
 			}
 		}

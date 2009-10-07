@@ -16,17 +16,18 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 
 	public abstract partial class DictionaryAdapterBase : IDictionaryCreate
 	{
 		public T Create<T>()
 		{
-			return Create<T>(new Hashtable());
+			return Create<T>(new HybridDictionary());
 		}
 
 		public object Create(Type type)
 		{
-			return Create(type, new Hashtable());
+			return Create(type, new HybridDictionary());
 		}
         
 		public T Create<T>(IDictionary dictionary)
@@ -36,13 +37,13 @@ namespace Castle.Components.DictionaryAdapter
 
 		public object Create(Type type, IDictionary dictionary)
 		{
-			dictionary = dictionary ?? new Hashtable();
+			dictionary = dictionary ?? new HybridDictionary();
 			return Factory.GetAdapter(type, dictionary, Descriptor);
 		}
 
 		public T Create<T>(Action<T> init)
 		{
-			return Create<T>(new Hashtable(), init);
+			return Create<T>(new HybridDictionary(), init);
 		}
 
 		public T Create<T>(IDictionary dictionary, Action<T> init)

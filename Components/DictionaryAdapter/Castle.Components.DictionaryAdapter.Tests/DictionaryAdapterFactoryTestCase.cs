@@ -19,6 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Globalization;
+	using System.Linq;
 	using System.Reflection;
 	using NUnit.Framework;
 	using PropertyDescriptor = Castle.Components.DictionaryAdapter.PropertyDescriptor;
@@ -813,6 +814,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void WillPropagatePropertyChangedEventWhenBindingListPropertyChanged()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			var person = container.Bindingtems.AddNew();
+			person.Name = "Fred Flinstone";
+		}
+
+		[Test]
 		public void WillStopProgagtingPropertyChangedEventWhenNestedPropertyRemoved()
 		{
 			var notifyCalled = false;
@@ -904,6 +913,21 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.BillingAddress.Line1 = "600 Tulip Ln.";
 			person.EndEdit();
 			Assert.AreEqual("600 Tulip Ln.", person.BillingAddress.Line1);
+		}
+
+		[Test]
+		public void CanEditToplevelAndNestedPropertiesAndAcceptChanges()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			var person = container.Item;
+			person.BeginEdit();
+			person.Name = "Humpty";
+			person.Age = 22;
+			container.Phone.Number = "1234";
+			container.Phone.Extension = "99";
+			person.EndEdit();
+			Assert.AreEqual("Humpty", person.Name);
+			Assert.AreEqual("1234", container.Phone.Number);
 		}
 
 		[Test]
@@ -1146,17 +1170,58 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
-		public void CanGetrCollectionPropertyOnDemand()
+		public void CanGetCollectionPropertyOnDemand()
 		{
 			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
 			Assert.IsNotNull(container.Items);
 		}
 
 		[Test]
-		public void CanGetrInterfacePropertyOnDemand()
+		public void CanGetInterfacePropertyOnDemand()
 		{
 			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
 			Assert.IsNotNull(container.Phone);
+		}
+
+		[Test]
+		public void CanAddBindingListItemsOnDemand()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			var person = container.Bindingtems.AddNew();
+			Assert.IsNotNull(person);
+		}
+
+		[Test]
+		public void CanUseDynamicValues()
+		{
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			container.Positions = new[] { 2, 4, 6, 8 };
+			container.ReducePositions = new DynamicValueDelegate<int>(() => container.Positions.Sum());
+			Assert.AreEqual(20, container.ReducePositions.Value);
+
+			container.Positions = new[] { 1, 2, 3, 4 };
+			Assert.AreEqual(10, container.ReducePositions.Value);
+		}
+
+		[Test]
+		public void WillGetNotificedWhenDynamicValueChanges()
+		{
+			bool notifyCalled = false;
+			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
+			container.ReducePositions = new DynamicValueDelegate<int>(() => container.Positions.Sum());
+
+			container.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == "ReducePositions")
+				{
+					notifyCalled = true;
+					Assert.AreEqual(10, ((PropertyModifiedEventArgs)e).NewPropertyValue);
+				}
+			};
+
+			container.Positions = new[] { 1, 2, 3, 4 };
+			Assert.AreEqual(10, container.ReducePositions.Value);
+			Assert.IsTrue(notifyCalled);
 		}
 	}
 
@@ -1383,7 +1448,11 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		int[] Positions { get; set; }
 
+		IDynamicValue<int> ReducePositions { get; set; }
+
 		IList<TItem> GenericItems { get; set; }
+
+		BindingList<TItem> Bindingtems { get; set; }
 
 		IList Items { get; set; }
 	}

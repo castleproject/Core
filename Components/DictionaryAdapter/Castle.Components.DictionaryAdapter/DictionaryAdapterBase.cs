@@ -17,11 +17,12 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Collections.Specialized;
 	using System.ComponentModel;
 
 	public abstract partial class DictionaryAdapterBase : IDictionaryAdapter
 	{
-		private Hashtable state;
+		private HybridDictionary state;
 
 		public DictionaryAdapterBase(Type type, IDictionaryAdapterFactory factory,
 									 IDictionary dictionary, PropertyDescriptor descriptor)
@@ -44,7 +45,7 @@ namespace Castle.Components.DictionaryAdapter
 			get
 			{
 				if (state == null)
-					state = new Hashtable();
+					state = new HybridDictionary();
 				return state;
 			}
 		}
@@ -77,7 +78,7 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					AddEditDependency((IEditableObject)propertyValue);
 				}
-				ComposeChildNotifications(null, propertyValue);
+				ComposeChildNotifications(descriptor, null, propertyValue);
 				return propertyValue;
 			}
 

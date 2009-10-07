@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+	using System.Linq;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
@@ -60,7 +61,7 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					using (TrackReadonlyPropertyChanges())
 					{
-						foreach (var update in updates)
+						foreach (var update in updates.ToArray())
 						{
 							object value = update.Value;
 							SetProperty(update.Key, ref value);

@@ -18,6 +18,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Linq;
 
 	/// <summary>
 	/// Support for on-demand value resolution.
@@ -53,19 +54,24 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (storedValue == null)
 			{
+				IValueInitializer initializer = null;
+
 				if (Value != null)
 				{
 					storedValue = Value;
 				}
 				else
 				{
-					var type = Type ?? GetInferredType(dictionaryAdapter, property);
+					var type = Type ?? GetInferredType(dictionaryAdapter, property, out initializer);
 
 					if (IsAcceptedType(type))
 					{
 						if (type.IsInterface)
 						{
-							storedValue = dictionaryAdapter.Create(property.PropertyType);
+							if (!property.IsDynamicProperty)
+							{
+								storedValue = dictionaryAdapter.Create(property.PropertyType);
+							}
 						}
 						else if (type.IsArray)
 						{
@@ -77,7 +83,28 @@ namespace Castle.Components.DictionaryAdapter
 						}
 						else
 						{
-							storedValue = Activator.CreateInstance(type);
+							object[] args = null;
+
+							if (property.IsDynamicProperty)
+							{
+								var constructor =
+									(from ctor in property.PropertyType.GetConstructors()
+									 let parms = ctor.GetParameters()
+									 where parms.Length == 1 && 
+										parms[0].ParameterType.IsAssignableFrom(dictionaryAdapter.Type)
+									 select ctor).FirstOrDefault();
+
+								if (constructor != null) args = new[] { dictionaryAdapter };
+							}
+
+							if (args != null)
+							{
+								storedValue = Activator.CreateInstance(type, args);
+							}
+							else
+							{
+								storedValue = Activator.CreateInstance(type);
+							}
 						}
 					}
 				}
@@ -86,6 +113,17 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					using (dictionaryAdapter.SupressNotificationsSection())
                     {
+						if (storedValue is ISupportInitialize)
+						{
+							((ISupportInitialize)storedValue).BeginInit();
+							((ISupportInitialize)storedValue).EndInit();
+						}
+
+						if (initializer != null)
+						{
+							initializer.Initialize(dictionaryAdapter, storedValue);
+						}
+
 						dictionaryAdapter.SetProperty(property.PropertyName, ref storedValue);	
                     }
 				}
@@ -99,8 +137,10 @@ namespace Castle.Components.DictionaryAdapter
 			return type != null && type != typeof(String) && !type.IsPrimitive && !type.IsEnum;
 		}
 
-		private Type GetInferredType(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
+		private Type GetInferredType(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property,
+									 out IValueInitializer initializer)
 		{
+			initializer = null;
 			var type = property.PropertyType;
 
 			if (!typeof(IEnumerable).IsAssignableFrom(type))
@@ -113,13 +153,20 @@ namespace Castle.Components.DictionaryAdapter
 			if (type.IsGenericType)
 			{
 				var genericDef = type.GetGenericTypeDefinition();
+				var genericArg = type.GetGenericArguments()[0];
+				bool isBindingList = genericDef == typeof(BindingList<>);
 
-				if (genericDef == typeof(List<>) || genericDef == typeof(BindingList<>))
+				if (isBindingList || genericDef == typeof(List<>))
 				{
 					if (dictionaryAdapter.IsEditable)
 					{
-						collectionType = genericDef == typeof(List<>)
-							? typeof(EditableList<>) : typeof(EditableBindingList<>);
+						collectionType = isBindingList ? typeof(EditableBindingList<>) : typeof(EditableList<>);
+					}
+
+					if (isBindingList && genericArg.IsInterface)
+					{
+						initializer = (IValueInitializer)Activator.CreateInstance(
+							typeof(BindingListInitializer<>).MakeGenericType(genericArg));
 					}
 				}
 				else if (genericDef == typeof(IList<>) || genericDef == typeof(ICollection<>))
@@ -129,7 +176,7 @@ namespace Castle.Components.DictionaryAdapter
 
 				if (collectionType != null)
 				{
-					return collectionType.MakeGenericType(type.GetGenericArguments()[0]);
+					return collectionType.MakeGenericType(genericArg);
 				}
 			}
 			else if (type == typeof(IList) || type == typeof(ICollection))
@@ -140,4 +187,25 @@ namespace Castle.Components.DictionaryAdapter
 			return type;
 		}
 	}
+
+	#region Initialization Helpers
+
+	interface IValueInitializer
+	{
+		void Initialize(IDictionaryAdapter dictionaryAdapter, object value);
+	}
+
+	class BindingListInitializer<T> : IValueInitializer
+	{
+		public void Initialize(IDictionaryAdapter dictionaryAdapter, object value)
+		{
+			var bindingList = (BindingList<T>)value;
+			bindingList.AddingNew += (sender, args) =>
+			{
+				args.NewObject = dictionaryAdapter.Create<T>();
+			};
+		}
+	}
+
+	#endregion
 }

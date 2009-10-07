@@ -73,6 +73,8 @@
     <Compile Include="Attributes\DictionaryComponentAttribute.cs" />
     <Compile Include="Attributes\DictionaryStringValuesAttribute.cs" />
     <Compile Include="CascadingDictionaryAdapter.cs" />
+    <Compile Include="Util\DynamicValue.cs" />
+    <Compile Include="Util\DynamicValueDelegate.cs" />
     <Compile Include="Util\EditableBindingList.cs" />
     <Compile Include="DictionaryAdapterBase.Create.cs" />
     <Compile Include="Util\EditableList.cs" />
@@ -84,7 +86,7 @@
     <Compile Include="IDictionaryInitializer.cs" />
     <Compile Include="DictionaryAdapterBase.Validate.cs" />
     <Compile Include="DictionaryAdapterBase.Edit.cs" />
-    <Compile Include="DictionaryAdapterBase.Norify.cs" />
+    <Compile Include="DictionaryAdapterBase.Notify.cs" />
     <Compile Include="IDictionaryBehavior.cs" />
     <Compile Include="DefaultPropertyGetter.cs" />
     <Compile Include="IDictionaryPropertySetter.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="NameValueCollectionAdapter.cs" />
     <Compile Include="DictionaryAdapterBase.cs" />
     <Compile Include="PropertyDescriptor.cs" />
+    <Compile Include="Util\IDynamicValue.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
