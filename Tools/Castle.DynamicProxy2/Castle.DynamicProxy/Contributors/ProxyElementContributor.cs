@@ -193,6 +193,10 @@ namespace Castle.DynamicProxy.Contributors
 		/// <returns></returns>
 		private bool IsAccessible(MethodBase method)
 		{
+#if SILVERLIGHT
+			return method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly;
+#else
+
 			if (method.IsPublic
 			    || method.IsFamily
 			    || method.IsFamilyAndAssembly
@@ -207,6 +211,7 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			return false;
+#endif
 		}
 
 		/// <summary>
