@@ -1,7 +1,0 @@
-[Boo.Lang.ExtensionAttribute]
-static def IsEmpty(val as object) as bool:
-	if val isa System.Collections.ICollection:
-		return cast(System.Collections.ICollection,val).Count == 0
-	end
-	return true
-end

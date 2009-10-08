@@ -1,4 +1,0 @@
-
-Customer is $customername
-<br>
-#foreach ($element in $LIST)$element#end

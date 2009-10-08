@@ -1,8 +1,0 @@
-<p>
-Welcome to Simple wizard which will guide you through the 
-steps to create a new account
-</p>
-
-#if ($WizardHelper.HasNextStep())
-$WizardHelper.LinkToNext("Next")
-#end

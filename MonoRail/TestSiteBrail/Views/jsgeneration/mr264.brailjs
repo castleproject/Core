@@ -1,2 +1,0 @@
-page.ReplaceHtml( @holder, { @partial: 'jsgeneration/mr264_partial' } )
-page.VisualEffect( @Highlight, @holder ) 

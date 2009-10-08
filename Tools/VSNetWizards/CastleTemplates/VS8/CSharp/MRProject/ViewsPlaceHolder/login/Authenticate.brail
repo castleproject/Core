@@ -1,9 +1,0 @@
-<h2>Results for "Authenticate" action</h2>
-
-<b>Username:</b> ${?username}<br/>
-<b>Password:</b> ${?password}<br/>
-<b>Auto Login:</b> ${?autoLogin}<br/>
-
-<p>
-	<strong>${Url.Link('Back to the login page', {@action: 'Index'})}</strong>
-</p>

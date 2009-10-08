@@ -1,9 +1,0 @@
-<form action="insert.rails" method="post">
-  <p>
-  Name: 
-  $FormHelper.TextField("apermission.name") 
-  </p>
-
-  <input type="submit" id="insertbutton" value="Insert" />
-
-</form>

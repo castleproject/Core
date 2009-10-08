@@ -1,9 +1,0 @@
-to: $to
-from: you@yourserver.com
-subject: Welcome to Castle MonoRail
-
-Hello $to !
-
-This is the message body, where you can replace 
-some content with values you've added to the 
-property bag.

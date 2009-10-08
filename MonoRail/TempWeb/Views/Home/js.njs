@@ -1,1 +1,0 @@
-﻿$page.InsertHtml('Top', 'id', 'something')

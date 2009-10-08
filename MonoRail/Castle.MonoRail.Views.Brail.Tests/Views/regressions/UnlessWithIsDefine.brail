@@ -1,5 +1,0 @@
-<%
-unless IsDefined("isWeb"):
-    output 'isWeb is defined'
-end
-%>

@@ -1,3 +1,0 @@
-output.Write('<html>')
-output.Write('\r\nSomething\r\n')
-output.Write('</html>')
