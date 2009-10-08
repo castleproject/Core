@@ -116,7 +116,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Mock\StubEmailSender.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Smtp\SmtpSender.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +135,9 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
