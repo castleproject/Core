@@ -1,6 +1,0 @@
-<Configuration>
-  <CodeAnnotations>
-    <Namespace>JetBrains.Annotations</Namespace>
-    <DefaultNamespace>JetBrains.Annotations</DefaultNamespace>
-  </CodeAnnotations>
-</Configuration>
