@@ -69,10 +69,17 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ForceUnsignedFalseWithSignedTypes()
 		{
+#if SILVERLIGHT
+#warning Silverlight does not allow us to sign generated assemblies
+			
+			const bool shouldBeSigned = false;
+#else
+			const bool shouldBeSigned = true;
+#endif
 			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
 			                                        TypeAttributes.Public, false);
 			Type t = emitter.BuildType();
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t.Assembly));
+			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(t.Assembly));
 		}
 
 		[Test]

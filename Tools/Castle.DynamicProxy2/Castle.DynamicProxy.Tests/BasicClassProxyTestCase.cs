@@ -297,21 +297,35 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyForBaseTypeFromSignedAssembly()
 		{
+#if SILVERLIGHT
+#warning Silverlight does not allow us to sign generated assemblies
+			
+			const bool shouldBeSigned = false;
+#else
+			const bool shouldBeSigned = true;
+#endif
 			Type t = typeof(List<object>);
 			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t.Assembly));
 			object proxy = generator.CreateClassProxy(t, new StandardInterceptor());
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
+			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
 		public void ProxyForBaseTypeAndInterfaceFromSignedAssembly()
 		{
+#if SILVERLIGHT
+#warning Silverlight does not allow us to sign generated assemblies
+			
+			const bool shouldBeSigned = false;
+#else
+			const bool shouldBeSigned = true;
+#endif
 			Type t1 = typeof(List<object>);
 			Type t2 = typeof(IServiceProvider);
 			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.Assembly));
 			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.Assembly));
 			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
+			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
@@ -383,6 +397,9 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Something", ((ClassWithDefaultConstructor)proxy2).SomeString);
 		}
 
+#if SILVERLIGHT
+#warning Silverlight does not allow us to access internal constructors
+#else
 		[Test]
 		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasInternal()
 		{
@@ -397,7 +414,7 @@ namespace Castle.DynamicProxy.Tests
 			object proxy2 = Activator.CreateInstance(proxy.GetType());
 			Assert.AreEqual("Something", ((ClassWithInternalDefaultConstructor)proxy2).SomeString);
 		}
-
+#endif
 		[Test]
 		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasProtected()
 		{

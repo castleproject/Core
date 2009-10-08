@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		void Foo();
 	}
 
-	class Inherited : IBase
+	public class Inherited : IBase
 	{
 		public void Foo()
 		{
@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		void Baz();
 	}
 
-	class MyFoo:Inherited,ISub1,ISub2
+	public class MyFoo:Inherited,ISub1,ISub2
 	{
 		void ISub1.Bar()
 		{
