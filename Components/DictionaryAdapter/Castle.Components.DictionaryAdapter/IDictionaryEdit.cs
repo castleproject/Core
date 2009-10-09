@@ -21,7 +21,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public interface IDictionaryEdit : IEditableObject
 	{
-		bool IsEditable { get; }
+		bool CanEdit { get; }
 
 		bool IsEditing { get; }
 	}

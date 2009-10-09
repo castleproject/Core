@@ -705,7 +705,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public void CanFetchPropertiesUsingDictionaryAdapterMeta()
 		{
 			var getter = new CustomGetter();
-			var custom = new PropertyDescriptor().AddGetter(getter);
+			var custom = new DictionaryDescriptor().AddGetter(getter);
 			var meta = factory.GetAdapter(typeof(IPhone), dictionary, custom) as IDictionaryAdapter;
 
 			Assert.AreEqual(0, getter.PropertiesFetched.Count);
@@ -1223,6 +1223,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(10, container.ReducePositions.Value);
 			Assert.IsTrue(notifyCalled);
 		}
+
+		[Test]
+		public void CanDetermineTheAdaptedInterface()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			var type = person.GetType().GetCustomAttributes(
+				typeof(DictionaryAdapterAttribute), false).Cast<DictionaryAdapterAttribute>()
+				.FirstOrDefault();
+			Assert.IsNotNull(type);
+			Assert.AreEqual(typeof(IPerson), type.InterfaceType);
+		}
 	}
 
 	[TestDictionaryValidator]
@@ -1231,7 +1242,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		string FirstName { get; }
 		string LastName { get; }
 
-		[DictionaryStringFormat("{0} {1}", "FirstName,LastName")]
+		[StringFormat("{0} {1}", "FirstName,LastName")]
 		string FullName { get; }
 	}
 
@@ -1432,14 +1443,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		IAddress BillingAddress { get; set; }
 	}
 
-	[DictionaryOnDemand]
+	[OnDemand]
 	public interface IItemContainer<TItem> : IDictionaryCreate, IEditableObject, INotifyPropertyChanged
 	{
 		Guid Id { get; set; }
 
 		TItem Item { get; set; }
 
-		[DictionaryOnDemand(5)]
+		[OnDemand(5)]
 		int Count { get; set; }
 
 		Address Address { get; set; }
@@ -1525,7 +1536,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		decimal? NullDecimal { get; set; }
 	}
 
-	[DictionaryStringValues]
+	[StringValues]
 	public interface IConversionsToString : IConversions
 	{
 		[TypeConverter(typeof(PhoneConverter))]
@@ -1534,10 +1545,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 	public interface IStringLists
 	{
-		[DictionaryStringList]
+		[StringList]
 		IList<string> Names { get; }
 
-		[DictionaryStringList]
+		[StringList]
 		IList<int> Ages { get; set; }
 	}
 

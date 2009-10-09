@@ -56,7 +56,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public interface IDictionaryNotify : INotifyPropertyChanged
 	{
-		bool SupportsNotification { get; }
+		bool CanNotify { get; }
 
 		bool ShouldNotify { get; }
 

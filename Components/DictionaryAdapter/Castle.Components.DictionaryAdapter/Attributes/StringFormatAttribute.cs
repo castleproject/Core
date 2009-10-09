@@ -20,11 +20,11 @@ namespace Castle.Components.DictionaryAdapter
 	/// Provides simple string formatting from existing properties.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-	public class DictionaryStringFormatAttribute : DictionaryBehaviorAttribute, IDictionaryPropertyGetter
+	public class StringFormatAttribute : DictionaryBehaviorAttribute, IDictionaryPropertyGetter
 	{
 		private static readonly char[] PropertyDelimeters = new[] { ',', ' ' };
 
-		public DictionaryStringFormatAttribute(string format, string properties)
+		public StringFormatAttribute(string format, string properties)
 		{
 			if (format == null)
 			{

@@ -31,11 +31,11 @@ namespace Castle.Components.DictionaryAdapter
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
-		public bool SupportsNotification { get; set; }
+		public bool CanNotify { get; set; }
 
 		public bool ShouldNotify
 		{
-			get { return SupportsNotification && supressNotificationCount == 0; }
+			get { return CanNotify && supressNotificationCount == 0; }
 		}
 
 		public bool PropagateChildNotifications
@@ -162,7 +162,7 @@ namespace Castle.Components.DictionaryAdapter
 
 							if (propertyChanged != null)
 							{
-								if (args.ListChangedType == ListChangedType.ItemChanged)
+								if (args.PropertyDescriptor != null)
 								{
 									var propertyName = args.PropertyDescriptor.Name;
 									propertyChanged(sender, new PropertyChangedEventArgs(propertyName));

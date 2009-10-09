@@ -139,7 +139,7 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
-		/// Gets or sets the key builders.
+		/// Gets the key builders.
 		/// </summary>
 		/// <value>The key builders.</value>
 		public ICollection<IDictionaryKeyBuilder> KeyBuilders
@@ -148,7 +148,7 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
-		/// Gets or sets the setter.
+		/// Gets the setter.
 		/// </summary>
 		/// <value>The setter.</value>
 		public ICollection<IDictionaryPropertySetter> Setters
@@ -157,7 +157,7 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
-		/// Gets or sets the getter.
+		/// Gets the getter.
 		/// </summary>
 		/// <value>The getter.</value>
 		public ICollection<IDictionaryPropertyGetter> Getters

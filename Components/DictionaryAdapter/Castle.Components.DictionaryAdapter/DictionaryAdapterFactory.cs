@@ -136,7 +136,7 @@ namespace Castle.Components.DictionaryAdapter
 			if (adapterAssembly == null)
 			{
 				var typeBuilder = CreateTypeBuilder(type, appDomain, adapterAssemblyName);
-				adapterAssembly = CreateAdapterAssembly(type, typeBuilder);
+				adapterAssembly = CreateAdapterAssembly(type, typeBuilder, descriptor);
 			}
 
 			return GetExistingAdapter(type, adapterAssembly, dictionary, descriptor);
@@ -156,10 +156,16 @@ namespace Castle.Components.DictionaryAdapter
 				TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.BeforeFieldInit);
 			typeBuilder.AddInterfaceImplementation(type);
 			typeBuilder.SetParent(typeof(DictionaryAdapterBase));
+
+			Type[] attribCtorParams = new[] { typeof(Type) };
+			var attribCtorInfo = typeof(DictionaryAdapterAttribute).GetConstructor(attribCtorParams);
+			var attribBuilder = new CustomAttributeBuilder(attribCtorInfo, new[] { type });
+			typeBuilder.SetCustomAttribute(attribBuilder);
+
 			return typeBuilder;
 		}
 
-		private static Assembly CreateAdapterAssembly(Type type, TypeBuilder typeBuilder)
+		private static Assembly CreateAdapterAssembly(Type type, TypeBuilder typeBuilder, PropertyDescriptor descriptor)
 		{
 			var binding = FieldAttributes.Private | FieldAttributes.Static;
 			var behaviorsField = typeBuilder.DefineField("behaviors", typeof(object[]), binding);
@@ -170,15 +176,15 @@ namespace Castle.Components.DictionaryAdapter
 
 			object[] behaviors;
 			IDictionaryInitializer[] initializers;
-			var propertyMap = GetPropertyDescriptors(type, out initializers, out behaviors);
+			var propertyMap = GetPropertyDescriptors(type, descriptor, out initializers, out behaviors);
 
 			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaBehaviorsProp, behaviorsField);
 			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaInitializersProp, initializersField);
 			CreateDictionaryAdapterMetaProperty(typeBuilder, MetaPropertiesProp, propertyMapField);
 
-			foreach (var descriptor in propertyMap)
+			foreach (var property in propertyMap)
 			{
-				CreateAdapterProperty(typeBuilder, propertyMapField, descriptor.Value);
+				CreateAdapterProperty(typeBuilder, propertyMapField, property.Value);
 			}
 
 			var adapterType = typeBuilder.CreateType();
@@ -375,35 +381,47 @@ namespace Castle.Components.DictionaryAdapter
 		#region Property Descriptors
 
 		private static Dictionary<String, PropertyDescriptor> GetPropertyDescriptors(
-			Type type, out IDictionaryInitializer[] initializers, out object[] typeBehaviors)
+			Type type, PropertyDescriptor descriptor, out IDictionaryInitializer[] typeInitializers, 
+			out object[] typeBehaviors)
 		{
 			var propertyMap = new Dictionary<String, PropertyDescriptor>();
+
 			typeBehaviors = GetInterfaceBehaviors<object>(type).ToArray();
-			initializers = GetOrderedBehaviors<IDictionaryInitializer>(typeBehaviors).ToArray();
+			var initializers = GetOrderedBehaviors<IDictionaryInitializer>(typeBehaviors);
+			if (descriptor is DictionaryDescriptor)
+			{
+				var dictionaryDescriptor = (DictionaryDescriptor)descriptor;
+				if (dictionaryDescriptor.Initializers != null)
+				{
+					initializers = initializers.Union(dictionaryDescriptor.Initializers.OrderBy(i => i.ExecutionOrder));
+				}
+			}
+			typeInitializers = initializers.ToArray();
+
 			var typeGetters = GetOrderedBehaviors<IDictionaryPropertyGetter>(typeBehaviors);
 			var typeSetters = GetOrderedBehaviors<IDictionaryPropertySetter>(typeBehaviors);
 
 			RecursivelyDiscoverProperties(type, property =>
 			{
-				var descriptor = new PropertyDescriptor(property);
+				var propertyDescriptor = new PropertyDescriptor(property);
 				var propertyBehaviors = GetPropertyBehaviors<object>(property).ToArray();
 
 				var descriptorInitializers = GetOrderedBehaviors<IPropertyDescriptorInitializer>(propertyBehaviors);
 				foreach (var descriptorInitializer in descriptorInitializers)
 				{
-					descriptorInitializer.Initialize(descriptor, propertyBehaviors);	
+					descriptorInitializer.Initialize(propertyDescriptor, propertyBehaviors);	
 				}
 
-				descriptor.AddKeyBuilders(GetOrderedBehaviors<IDictionaryKeyBuilder>(propertyBehaviors));
-				descriptor.AddKeyBuilders(GetInterfaceBehaviors<IDictionaryKeyBuilder>(property.ReflectedType)
+				propertyDescriptor.AddKeyBuilders(GetOrderedBehaviors<IDictionaryKeyBuilder>(propertyBehaviors));
+				propertyDescriptor.AddKeyBuilders(GetInterfaceBehaviors<IDictionaryKeyBuilder>(property.ReflectedType)
 					.OrderBy(b => b.ExecutionOrder));
 
-				descriptor.AddGetters(GetOrderedBehaviors<IDictionaryPropertyGetter>(propertyBehaviors));
-				descriptor.AddGetters(typeGetters);
-				AddDefaultGetter(descriptor);
+				propertyDescriptor.AddGetters(GetOrderedBehaviors<IDictionaryPropertyGetter>(propertyBehaviors));
+				propertyDescriptor.AddGetters(typeGetters);
+				AddDefaultGetter(propertyDescriptor);
 
-				descriptor.AddSetters(GetOrderedBehaviors<IDictionaryPropertySetter>(propertyBehaviors));
-				descriptor.AddSetters(typeSetters);
+				propertyDescriptor.AddSetters(GetOrderedBehaviors<IDictionaryPropertySetter>(propertyBehaviors));
+				propertyDescriptor.AddSetters(typeSetters);
 
 				PropertyDescriptor existingDescriptor;
 				if (propertyMap.TryGetValue(property.Name, out existingDescriptor))
@@ -413,13 +431,13 @@ namespace Castle.Components.DictionaryAdapter
 					{
 						if (property.CanRead && property.CanWrite)
 						{
-							propertyMap[property.Name] = descriptor;
+							propertyMap[property.Name] = propertyDescriptor;
 						}
 						return;
 					}
 				}
 	
-				propertyMap.Add(property.Name, descriptor);
+				propertyMap.Add(property.Name, propertyDescriptor);
 			});
 
 			return propertyMap;

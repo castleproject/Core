@@ -21,11 +21,10 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Text;
 
 	/// <summary>
-	/// Identifies a property should be represented as a
-	/// delimited string value.
+	/// Identifies a property should be represented as a delimited string value.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public class DictionaryStringListAttribute : DictionaryBehaviorAttribute,
+	public class StringListAttribute : DictionaryBehaviorAttribute,
 	                                             IDictionaryPropertyGetter,
 	                                             IDictionaryPropertySetter
 	{
@@ -243,7 +242,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void SynchronizeDictionary()
 		{
-			dictionary[key] = DictionaryStringListAttribute.BuildString(inner, separator);
+			dictionary[key] = StringListAttribute.BuildString(inner, separator);
 		}
 	}
 

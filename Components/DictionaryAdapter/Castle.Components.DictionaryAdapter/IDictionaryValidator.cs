@@ -20,6 +20,13 @@ namespace Castle.Components.DictionaryAdapter
 	public interface IDictionaryValidator
 	{
 		/// <summary>
+		/// Determines if <see cref="IDictionaryAdapter"/> is valid.
+		/// </summary>
+		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
+		/// <returns>true if valid.</returns>
+		bool IsValid(IDictionaryAdapter dictionaryAdapter);
+
+		/// <summary>
 		/// Validates the <see cref="IDictionaryAdapter"/>.
 		/// </summary>
 		/// <param name="dictionaryAdapter">The dictionary adapter.</param>

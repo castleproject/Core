@@ -24,13 +24,13 @@ namespace Castle.Components.DictionaryAdapter
 	/// Support for on-demand value resolution.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = false)]
-	public class DictionaryOnDemandAttribute : DictionaryBehaviorAttribute, IDictionaryPropertyGetter
+	public class OnDemandAttribute : DictionaryBehaviorAttribute, IDictionaryPropertyGetter
 	{
-		public DictionaryOnDemandAttribute()
+		public OnDemandAttribute()
 		{
 		}
 
-		public DictionaryOnDemandAttribute(Type type)
+		public OnDemandAttribute(Type type)
 		{
 			if (type.GetConstructor(Type.EmptyTypes) == null)
 			{
@@ -40,7 +40,7 @@ namespace Castle.Components.DictionaryAdapter
 			Type = type;
 		}
 
-		public DictionaryOnDemandAttribute(object value)
+		public OnDemandAttribute(object value)
 		{
 			Value = value;
 		}
@@ -158,7 +158,7 @@ namespace Castle.Components.DictionaryAdapter
 
 				if (isBindingList || genericDef == typeof(List<>))
 				{
-					if (dictionaryAdapter.IsEditable)
+					if (dictionaryAdapter.CanEdit)
 					{
 						collectionType = isBindingList ? typeof(EditableBindingList<>) : typeof(EditableList<>);
 					}
@@ -171,7 +171,7 @@ namespace Castle.Components.DictionaryAdapter
 				}
 				else if (genericDef == typeof(IList<>) || genericDef == typeof(ICollection<>))
 				{
-					collectionType = dictionaryAdapter.IsEditable ? typeof(EditableList<>) : typeof(List<>);
+					collectionType = dictionaryAdapter.CanEdit ? typeof(EditableList<>) : typeof(List<>);
 				}
 
 				if (collectionType != null)
@@ -181,7 +181,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			else if (type == typeof(IList) || type == typeof(ICollection))
 			{
-				return dictionaryAdapter.IsEditable ? typeof(EditableList) : typeof(ArrayList);
+				return dictionaryAdapter.CanEdit ? typeof(EditableList) : typeof(ArrayList);
 			}
 
 			return type;

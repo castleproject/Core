@@ -16,15 +16,29 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 
-	public abstract partial class DictionaryAdapterBase : IDictionaryValidate
+	public partial class DictionaryAdapterBase : IDictionaryValidate
 	{
+		public bool CanValidate { get; set; }
+
 		public IDictionaryValidator Validator { get; set; }
+
+		public bool IsValid
+		{
+			get 
+			{
+				if (CanValidate && Validator != null)
+				{
+					return Validator.IsValid(this);
+				}
+				return !CanValidate;
+			}
+		}
 
 		public string Error
 		{
 			get
 			{
-				if (Validator != null)
+				if (CanValidate && Validator != null)
 				{
 					return Validator.Validate(this);
 				}
@@ -36,7 +50,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			get
 			{
-				if (Validator != null)
+				if (CanValidate && Validator != null)
 				{
 					return Validator.Validate(this, columnName);
 				}

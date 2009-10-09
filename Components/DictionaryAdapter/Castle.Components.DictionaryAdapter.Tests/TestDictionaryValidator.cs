@@ -37,6 +37,11 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionaryAdapter.Validator = this;
 		}
 
+		public bool IsValid(IDictionaryAdapter dictionaryAdapter)
+		{
+			return String.IsNullOrEmpty(Validate(dictionaryAdapter));
+		}
+
 		public string Validate(IDictionaryAdapter dictionaryAdapter)
 		{
 			List<String> errors = new List<string>();

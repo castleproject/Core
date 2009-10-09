@@ -23,32 +23,35 @@ namespace Castle.Components.DictionaryAdapter
 		private Dictionary<string, object> updates;
 		private HashSet<IEditableObject> editDependencies;
 
-		public bool IsEditable { get; private set; }
+		public bool CanEdit { get; private set; }
 
 		public bool IsEditing { get; private set; }
 
 		public void BeginEdit()
 		{
-			IsEditing = true;
+			IsEditing = CanEdit;
 		}
 
 		public void CancelEdit()
 		{
-			if (updates != null)
+			if (IsEditing)
 			{
-				updates.Clear();
-			}
-
-			if (editDependencies != null)
-			{
-				foreach (var editDependency in editDependencies)
+				if (updates != null)
 				{
-					editDependency.CancelEdit();
+					updates.Clear();
 				}
-				editDependencies.Clear();
-			}
 
-			IsEditing = false;
+				if (editDependencies != null)
+				{
+					foreach (var editDependency in editDependencies)
+					{
+						editDependency.CancelEdit();
+					}
+					editDependencies.Clear();
+				}
+
+				IsEditing = false;
+			}
 		}
 
 		public void EndEdit()

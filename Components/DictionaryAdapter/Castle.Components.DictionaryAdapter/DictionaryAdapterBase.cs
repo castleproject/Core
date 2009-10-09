@@ -32,8 +32,9 @@ namespace Castle.Components.DictionaryAdapter
 			Dictionary = dictionary;
 			Descriptor = descriptor;
 
-			IsEditable = typeof(IEditableObject).IsAssignableFrom(type);
-			SupportsNotification = typeof(INotifyPropertyChanged).IsAssignableFrom(type);
+			CanEdit = typeof(IEditableObject).IsAssignableFrom(type);
+			CanNotify = typeof(INotifyPropertyChanged).IsAssignableFrom(type);
+			CanValidate = typeof(IDataErrorInfo).IsAssignableFrom(type);
 
 			Initialize();
 		}

@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,17 +15,15 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
-	using System.ComponentModel;
 
 	/// <summary>
-	/// Contract for validating Dictionary adapter.
+	/// Requests support for multi-level editing.
 	/// </summary>
-	public interface IDictionaryValidate : IDataErrorInfo
+	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
+	public class MultiLevelEditAttribute : DictionaryBehaviorAttribute, IDictionaryInitializer
 	{
-		bool CanValidate { get; set; }
-
-		bool IsValid { get; }
-
-		IDictionaryValidator Validator { get; set; }
+		public void Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
+		{
+		}
 	}
 }
