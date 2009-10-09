@@ -14,43 +14,50 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System.Linq;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Linq;
 
 	public abstract partial class DictionaryAdapterBase
 	{
-		private Dictionary<string, object> updates;
+		private Stack<Dictionary<string, object>> updates;
 		private HashSet<IEditableObject> editDependencies;
 
-		public bool CanEdit { get; private set; }
+		public bool CanEdit
+		{
+			get { return updates != null; }
+			set { updates = value ? new Stack<Dictionary<string, object>>() : null; }
+		}
 
-		public bool IsEditing { get; private set; }
+		public bool IsEditing
+		{
+			get { return CanEdit && updates.Count > 0; }
+		}
+
+		public bool SupportsMultiLevelEdit { get; set; }
 
 		public void BeginEdit()
 		{
-			IsEditing = CanEdit;
+			if (CanEdit && (!IsEditing || SupportsMultiLevelEdit))
+			{
+				updates.Push(new Dictionary<string, object>());
+			}
 		}
 
 		public void CancelEdit()
 		{
 			if (IsEditing)
 			{
-				if (updates != null)
-				{
-					updates.Clear();
-				}
-
 				if (editDependencies != null)
 				{
-					foreach (var editDependency in editDependencies)
+					foreach (var editDependency in editDependencies.ToArray())
 					{
 						editDependency.CancelEdit();
 					}
 					editDependencies.Clear();
 				}
 
-				IsEditing = false;
+				updates.Pop();
 			}
 		}
 
@@ -58,13 +65,13 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (IsEditing)
 			{
-				IsEditing = false;
+				var top = updates.Pop();
 
-				if (updates != null && updates.Count > 0)
+				if (top.Count > 0)
 				{
 					using (TrackReadonlyPropertyChanges())
 					{
-						foreach (var update in updates.ToArray())
+						foreach (var update in top.ToArray())
 						{
 							object value = update.Value;
 							SetProperty(update.Key, ref value);
@@ -74,7 +81,7 @@ namespace Castle.Components.DictionaryAdapter
 
 				if (editDependencies != null)
 				{
-					foreach (var editDependency in editDependencies)
+					foreach (var editDependency in editDependencies.ToArray())
 					{
 						editDependency.EndEdit();
 					}
@@ -85,17 +92,22 @@ namespace Castle.Components.DictionaryAdapter
 
 		protected bool GetEditedProperty(string propertyName, out object propertyValue)
 		{
+			if (IsEditing) foreach (var level in updates.ToArray())
+			{
+				if (level.TryGetValue(propertyName, out propertyValue))
+				{
+					return true; ;
+				}
+			}
 			propertyValue = null;
-			return IsEditing &&  updates != null &&
-				updates.TryGetValue(propertyName, out propertyValue);
+			return false;
 		}
 
 		protected bool EditProperty(string propertyName, object propertyValue)
 		{
 			if (IsEditing)
 			{
-				updates = updates ?? new Dictionary<string, object>();
-				updates[propertyName] = propertyValue;
+				updates.Peek()[propertyName] = propertyValue;
 				return true;
 			}
 			return false;

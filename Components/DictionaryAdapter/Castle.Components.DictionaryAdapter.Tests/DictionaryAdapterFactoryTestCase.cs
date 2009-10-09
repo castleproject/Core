@@ -942,6 +942,23 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void CanPerformMultiLevelEditAndAcceptChanges()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.BeginEdit();
+			person.Name = "Craig";
+			Assert.AreEqual("Craig", person.Name);
+			person.BeginEdit();
+			person.Age = 39;
+			Assert.AreEqual("Craig", person.Name);
+			Assert.AreEqual(39, person.Age);
+			person.EndEdit();
+			person.EndEdit();
+			Assert.AreEqual("Craig", person.Name);
+			Assert.AreEqual(39, person.Age);
+		}
+
+		[Test]
 		public void WillRaisePropertyChangedEventWhenEditsAreAccepted()
 		{
 			var notifyCalled = false;
@@ -1005,6 +1022,46 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			container.GenericItems.Add(container.Create<IPerson>());
 			container.CancelEdit();
 			Assert.AreEqual(1, container.GenericItems.Count);
+		}
+
+		[Test]
+		public void CanPerformMultiLevelEditAndCancelAllChanges()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.Name = "Spyker";
+			person.Age = 21;
+			person.BeginEdit();
+			person.Name = "Craig";
+			Assert.AreEqual("Craig", person.Name);
+			Assert.AreEqual(21, person.Age);
+			person.BeginEdit();
+			person.Age = 39;
+			Assert.AreEqual("Craig", person.Name);
+			Assert.AreEqual(39, person.Age);
+			person.CancelEdit();
+			person.CancelEdit();
+			Assert.AreEqual("Spyker", person.Name);
+			Assert.AreEqual(21, person.Age);
+		}
+
+		[Test]
+		public void CanPerformMultiLevelEditAndCancelInnerChanges()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.Name = "Spyker";
+			person.Age = 21;
+			person.BeginEdit();
+			person.Name = "Craig";
+			Assert.AreEqual("Craig", person.Name);
+			Assert.AreEqual(21, person.Age);
+			person.BeginEdit();
+			person.Age = 39;
+			Assert.AreEqual("Craig", person.Name);
+			Assert.AreEqual(39, person.Age);
+			person.CancelEdit();
+			person.EndEdit();
+			Assert.AreEqual("Craig", person.Name);
+			Assert.AreEqual(21, person.Age);
 		}
 
 		[Test]
@@ -1093,7 +1150,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			name.LastName = "Tex";
 			name.CancelEdit();
 
-			Assert.AreEqual(" ", name.FullName);
+			Assert.AreEqual("", name.FullName);
 			Assert.AreEqual(0, notifications);
 		}
 
@@ -1420,6 +1477,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 
+	[MultiLevelEdit]
 	public interface IPerson : IEditableObject, IDictionaryNotify, IDataErrorInfo
 	{
 		string Name { get; set; }

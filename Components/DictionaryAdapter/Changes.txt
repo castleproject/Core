@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Added mult-level editing capability
+
 - Added dynamic property value resolution
 
 - Added on-demand property resolution

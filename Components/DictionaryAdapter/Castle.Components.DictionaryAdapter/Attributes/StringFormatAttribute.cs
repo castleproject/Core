@@ -50,7 +50,7 @@ namespace Castle.Components.DictionaryAdapter
 		object IDictionaryPropertyGetter.GetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, object storedValue, PropertyDescriptor property)
 		{
-			return string.Format(Format, GetFormatArguments(dictionaryAdapter, property.Property.Name));
+			return string.Format(Format, GetFormatArguments(dictionaryAdapter, property.Property.Name)).Trim();
 		}
 
 		#endregion

@@ -32,7 +32,7 @@ namespace Castle.Components.DictionaryAdapter
         
 		public T Create<T>(IDictionary dictionary)
 		{
-			return (T)Create(typeof(T), dictionary);
+			return (T)Create(typeof(T), dictionary ?? new HybridDictionary());
 		}
 
 		public object Create(Type type, IDictionary dictionary)
@@ -48,7 +48,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public T Create<T>(IDictionary dictionary, Action<T> init)
 		{
-			var adapter = Create<T>(dictionary);
+			var adapter = Create<T>(dictionary ?? new HybridDictionary());
 			if (init != null) init(adapter);
 			return adapter;
 		}

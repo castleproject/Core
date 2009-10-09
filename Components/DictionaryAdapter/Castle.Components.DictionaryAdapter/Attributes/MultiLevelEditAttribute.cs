@@ -24,6 +24,7 @@ namespace Castle.Components.DictionaryAdapter
 	{
 		public void Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
 		{
+			dictionaryAdapter.SupportsMultiLevelEdit = true;
 		}
 	}
 }
