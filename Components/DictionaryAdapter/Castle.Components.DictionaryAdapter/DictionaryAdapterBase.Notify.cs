@@ -90,6 +90,15 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
+		protected void NotifyPropertyChanged(string propertyName, object oldValue, object newValue)
+		{
+			PropertyDescriptor property;
+			if (Properties.TryGetValue(propertyName, out property))
+			{
+				NotifyPropertyChanged(property, oldValue, newValue);
+			}
+		}
+
 		protected TrackPropertyChangeScope TrackPropertyChange(PropertyDescriptor property, 
 															   object oldValue, object newValue)
 		{

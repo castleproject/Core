@@ -36,6 +36,14 @@ namespace Castle.Components.DictionaryAdapter
 
 		public bool SupportsMultiLevelEdit { get; set; }
 
+		public bool IsDirty
+		{
+			get
+			{
+				return IsEditing && updates.Any(level => level.Count > 0);
+			}
+		}
+
 		public void BeginEdit()
 		{
 			if (CanEdit && (!IsEditing || SupportsMultiLevelEdit))
@@ -96,7 +104,7 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				if (level.TryGetValue(propertyName, out propertyValue))
 				{
-					return true; ;
+					return true;
 				}
 			}
 			propertyValue = null;

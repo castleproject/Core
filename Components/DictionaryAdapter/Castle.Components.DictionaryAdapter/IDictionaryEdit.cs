@@ -25,6 +25,8 @@ namespace Castle.Components.DictionaryAdapter
 
 		bool IsEditing { get; }
 
+		bool IsDirty { get; }
+
 		bool SupportsMultiLevelEdit { get; set; }
 	}
 }

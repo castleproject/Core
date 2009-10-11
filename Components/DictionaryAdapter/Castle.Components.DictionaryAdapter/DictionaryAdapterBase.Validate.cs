@@ -18,6 +18,8 @@ namespace Castle.Components.DictionaryAdapter
 
 	public partial class DictionaryAdapterBase : IDictionaryValidate
 	{
+		private bool isValid;
+
 		public bool CanValidate { get; set; }
 
 		public IDictionaryValidator Validator { get; set; }
@@ -28,7 +30,13 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				if (CanValidate && Validator != null)
 				{
-					return Validator.IsValid(this);
+					var oldValid = isValid;
+					isValid = Validator.IsValid(this);
+					if (isValid != oldValid)
+					{
+						NotifyPropertyChanged("IsValid", oldValid, isValid);
+					}
+					return isValid;
 				}
 				return !CanValidate;
 			}
