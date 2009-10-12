@@ -1,0 +1,25 @@
+<Configuration>
+  <CodeInspection>
+    <AssertionMethod MethodName="System.Diagnostics.Debug.Assert" Parameter="0" Type="IS_TRUE" />
+    <AssertionMethod MethodName="NUnit.Framework.Assert.IsTrue" Parameter="0" Type="IS_TRUE" />
+    <AssertionMethod MethodName="NUnit.Framework.Assert.IsFalse" Parameter="0" Type="IS_FALSE" />
+    <AssertionMethod MethodName="NUnit.Framework.Assert.IsNull" Parameter="0" Type="IS_NULL" />
+    <AssertionMethod MethodName="NUnit.Framework.Assert.IsNotNull" Parameter="0" Type="IS_NOT_NULL" />
+    <TerminatingMethod MethodName="System.Diagnostics.Debug.Fail" />
+    <TerminatingMethod MethodName="System.Environment.Exit" />
+    <TerminatingMethod MethodName="NUnit.Framework.Assert.Fail" />
+    <StringFormatMethod MethodName="System.String.Format" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Text.StringBuilder.AppendFormat" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.IO.TextWriter.WriteLine" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.IO.TextWriter.Write" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Console.WriteLine" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Console.Write" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Console.Out.Write" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Diagnostics.Debug.Print" FormatParameterName="format" />
+    <StringFormatMethod MethodName="System.Text.StringBuilder.AppendFormat" FormatParameterName="format" />
+    <NotNullableValueAttribute>
+    </NotNullableValueAttribute>
+    <CanBeNullValueAttribute>
+    </CanBeNullValueAttribute>
+  </CodeInspection>
+</Configuration>
