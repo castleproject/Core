@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -287,7 +288,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			EnsureBuildersAreInAValidState();
 
-			Type type = typebuilder.CreateType();
+			Type type = CreateType(typebuilder);
 
 			foreach (NestedClassEmitter builder in nested)
 			{
@@ -323,6 +324,40 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
+			}
+		}
+
+		protected Type CreateType(TypeBuilder type)
+		{
+			try
+			{
+				return type.CreateType();
+			}
+			catch (BadImageFormatException ex)
+			{
+				if (Debugger.IsAttached == false)
+				{
+					throw;
+				}
+
+				if (ex.Message.Contains(@"HRESULT: 0x8007000B") == false)
+				{
+					throw;
+				}
+
+				if (type.IsGenericTypeDefinition == false)
+				{
+					throw;
+				}
+
+				var message =
+					"This is a DynamicProxy2 error: It looks like you enoutered a bug in Visual Studio debugger, " +
+					"which causes this exception when proxying types with generic methods having constraints on their generic arguments." +
+					"This code will work just fine without the debugger attached. " +
+					"If you wish to use debugger the bug was fixed in Visual Studio 2010 so if you can switch to this version, you shouldn't see this exception.";
+				var exception = new ProxyGenerationException(message);
+				exception.Data.Add("ProxyType", type);
+				throw exception;
 			}
 		}
 	}

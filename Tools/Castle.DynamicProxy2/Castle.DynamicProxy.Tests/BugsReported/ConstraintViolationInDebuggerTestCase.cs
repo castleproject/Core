@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 	{
 		// This test case yields a TypeLoadException in the debugger, but works perfectly without a debugger attached.
 		// It also produces verifiable code.
+		// In Visual Studio 2010 this test passes just fine with the debugger attached.
 		[Test]
 		public void TestCase()
 		{
