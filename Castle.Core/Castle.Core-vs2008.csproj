@@ -10,7 +10,7 @@
     <RootNamespace>Castle.Core</RootNamespace>
     <AssemblyName>Castle.Core</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -150,12 +150,12 @@
     <Compile Include="StringObjectDictionaryAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\CastleKey.snk">
-      <Link>CastleKey.snk</Link>
-    </None>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+    <None Include="..\..\buildscripts\CastleKey.snk">
+      <Link>CastleKey.snk</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
