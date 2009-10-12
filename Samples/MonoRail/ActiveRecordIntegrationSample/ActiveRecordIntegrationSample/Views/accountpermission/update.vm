@@ -1,8 +1,0 @@
-
-#foreach($error in $errorlist)
-  binding error $error.Key $error.Parent $error.Property $error.Exception <br/>
-#end
-
-<span id="newid">$id</span>
-<span id="name">$ap.Name</span>
-

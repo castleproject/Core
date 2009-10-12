@@ -1,1 +1,0 @@
-MonoRail is great!

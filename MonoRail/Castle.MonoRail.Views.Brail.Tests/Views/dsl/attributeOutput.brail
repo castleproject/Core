@@ -1,9 +1,0 @@
-<%
-dsl Html:
-	html:
-		p {"class": "foo"}:
-			text "hello world"
-		end
-	end
-end
-%>

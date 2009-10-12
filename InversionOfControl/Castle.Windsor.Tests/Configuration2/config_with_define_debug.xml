@@ -1,6 +1,0 @@
-<configuration>
-	<!-- some comment -->
-	<?process instruction?>
-	<define flag="debug"/>
-    <include uri="file://config_with_choose_stmt.xml"/>
-</configuration>

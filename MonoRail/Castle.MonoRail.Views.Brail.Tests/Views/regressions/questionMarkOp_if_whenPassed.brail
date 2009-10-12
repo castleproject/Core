@@ -1,5 +1,0 @@
-<%
-if ?errorMsg:
-	output errorMsg
-end 
-%>

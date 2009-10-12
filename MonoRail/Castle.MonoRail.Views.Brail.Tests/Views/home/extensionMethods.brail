@@ -1,6 +1,0 @@
-<%
-    for item in items: 
-			output item
-		end
-    output "No Data" if items.IsEmpty
-%>

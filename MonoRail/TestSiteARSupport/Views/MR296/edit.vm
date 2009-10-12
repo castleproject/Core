@@ -1,7 +1,0 @@
-$Form.Push("account","%{disablevalidation='true'}")
-$Form.FormTag("%{action='Save'}")
-$Form.TextField("name")
-$Form.HiddenField("id")
-$Form.Submit("Save")
-$Form.EndFormTag()
-$Form.Pop()

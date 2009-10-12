@@ -1,2 +1,0 @@
-#blockcomponent(CaptureFor "%{ id='navbar', param2='yes', param3='1'}" ) =navbar= #end
-${navbar}some content${navbar}

@@ -1,5 +1,0 @@
-<tr id="row${customer.id}">
-	<td>$customer.id</td>
-	<td align="center">$customer.name</td>
-	<td align="center">$customer.email</td>
-</tr>

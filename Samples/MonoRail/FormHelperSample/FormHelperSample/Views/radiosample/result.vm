@@ -1,7 +1,0 @@
-
-<h3>Result</h3>
-
-<p> $mode was selected </p>
-
-<p> The user #if($agreement) agreed #else did not agree #end with the license </p>
-

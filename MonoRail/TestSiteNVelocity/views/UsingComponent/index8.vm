@@ -1,5 +1,0 @@
-#foreach($it in $items)
-#blockcomponent(BlockViewComponent2 with "role=x")
-inner content $it
-#end
-#end

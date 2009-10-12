@@ -1,5 +1,0 @@
-<div style="border: 1px solid gray; padding: 5px;">
-
-Page <b>$pagename</b> has been accessed $accessCount times.
-
-</div>

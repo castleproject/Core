@@ -1,2 +1,0 @@
-#capturefor(navbar) =navbar= #end
-${navbar}some content${navbar}

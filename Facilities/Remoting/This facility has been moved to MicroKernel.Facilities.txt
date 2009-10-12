@@ -1,3 +1,0 @@
-Its type name now is
-
-Castle.Facilities.Remoting.RemotingFacility, Castle.MicroKernel

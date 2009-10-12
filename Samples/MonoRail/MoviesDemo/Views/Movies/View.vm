@@ -1,7 +1,0 @@
-<h3>$loc.movieDetails: $movie.Title</h3>
-
-<strong>$loc.description:</strong> $movie.Description<br />
-<strong>$loc.dateAddedLong:</strong> $movie.Added.ToString( "D" )<br />
-<strong>$loc.scoreLong:</strong> $movie.Score /10
-<br /><br />
-<a href="$siteRoot/Movies/List.castle">$loc.backToList</a>

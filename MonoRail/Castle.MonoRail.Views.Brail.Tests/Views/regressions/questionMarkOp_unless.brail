@@ -1,3 +1,0 @@
-<% unless ?Errors: %>
-Error does not exist
-<% end %>

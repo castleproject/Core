@@ -1,5 +1,0 @@
-
-Alpha Version 1.0.0
-- First release
-
-Future modifications - after the first release - shall be tracked in this file

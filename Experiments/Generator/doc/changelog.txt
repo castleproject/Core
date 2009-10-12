@@ -1,4 +1,0 @@
-# Generator change history
-
-Because their's no binary release yet, their's no need for
-a seperate changelog. For now hit: svn log

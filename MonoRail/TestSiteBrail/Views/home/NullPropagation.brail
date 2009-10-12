@@ -1,3 +1,0 @@
-<%
-output ?error.Foo.Bar
-%>

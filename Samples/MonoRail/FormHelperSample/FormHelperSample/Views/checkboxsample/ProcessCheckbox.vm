@@ -1,8 +1,0 @@
-
-<h3>Result</h3>
-
-<p> enabled1: $enabled1  </p>
-
-<p> enabled2: #foreach($v in $enabled2) $v &nbsp;&nbsp; #end  </p>
-
-$Form.EndFormTag()

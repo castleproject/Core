@@ -1,8 +1,0 @@
-<configuration>
-  <components>
-  <component id="test " 
-             service="Castle.Windsor.Tests.Components.ICalcService, Castle.Windsor.Tests" 
-             type="Castle.Windsor.Tests.Components.CalculatorService, Castle.Windsor.Tests" 
-             lifestyle="transient" />
-  </components>
-</configuration>
