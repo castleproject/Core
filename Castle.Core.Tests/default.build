@@ -13,6 +13,10 @@
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
+			<include name="System.dll" />
+			<include name="System.Configuration.dll" />
+			<include name="System.Web.dll" />
+			<include name="log4net.dll" />
 			<include name="nunit.framework.dll"/>
 		</assemblyfileset>
 
