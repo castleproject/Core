@@ -1,5 +1,0 @@
-<% for item in items: %>
-${"doublequote.rails?id=" + item.SubItem.Name}
-${""" "triplequote.rails?id=""" + item.SubItem.Name}
-${'singlequote.rails?id=' + item.SubItem.Name}
-<% end %>

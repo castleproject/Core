@@ -1,5 +1,0 @@
-
-- Instantiate implementation of external container (Possible extended windsor or microkernel)
-
-- Instantiate default kernel or windsor and use the configuration file to add/ref components
-

@@ -1,5 +1,0 @@
-<%
-if ?myVariable == "Hello": 
-	output "Eq"
-end
-%>

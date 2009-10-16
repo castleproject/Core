@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
-<configuration>
-	<include1>include1value</include1>
-	<include uri="RelativeTest/Include1.xml"/>
-</configuration>

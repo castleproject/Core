@@ -1,4 +1,0 @@
-<configuration>
-	<define flag=" Qa "/>
-    <include uri="file://config_with_choose_stmt.xml"/>
-</configuration>

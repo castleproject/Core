@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
-<configuration>
-	<relInclude2>relInclude2value</relInclude2>
-	<properties>
-		<deepProperty>deepValue</deepProperty>
-	</properties>
-</configuration>

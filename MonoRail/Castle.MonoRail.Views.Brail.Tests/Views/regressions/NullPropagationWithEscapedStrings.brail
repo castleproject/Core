@@ -1,9 +1,0 @@
-<% 
-for item in items: 
-	if item.SubItem != "\"\"":
-%>
-		${"\"\"\"?id=" + item.SubItem.Name}		
-<%	
-	end
-end 
-%>

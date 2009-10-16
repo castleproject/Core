@@ -1,5 +1,0 @@
-<root>
-	<child  attSimpleProp="" attCompleProp="Some Text" attr1="attr1value" attr2="attr2value">
-		<grandchild attr3="attr3value"></grandchild>Some Text
-	</child>
-</root>

@@ -1,1 +1,0 @@
-<% RenderComponent("RenderComponentWithParamsComponent",  {"param": "fromview"}) %>

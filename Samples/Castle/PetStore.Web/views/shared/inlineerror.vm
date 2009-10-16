@@ -1,4 +1,0 @@
-#if ($error)
-<p>$error</p>
-<script>new Effect.Shake($('error'));</script>
-#end

@@ -1,8 +1,0 @@
-output.Write('<html>')
-output.Write('\r\n')
-if something:
-	output.Write('\r\nSomething\r\n')
-else:
-	output.Write('\r\nSomething else\r\n')
-output.Write('\r\n')
-output.Write('</html>')

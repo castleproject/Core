@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
-<configuration>
-	<relInclude1>relInclude1value</relInclude1>
-	<include uri="Include2.xml"/>
-</configuration>
