@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-mono public/bin/Migrator.Console.exe "$@"

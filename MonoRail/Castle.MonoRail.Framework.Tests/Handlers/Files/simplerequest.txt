@@ -1,2 +1,0 @@
-﻿GET /something HTTP/1.1
-

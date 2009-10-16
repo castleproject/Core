@@ -1,7 +1,0 @@
-<%
-dsl Html:
-	html:
-		text "hello world"
-	end
-end
-%>

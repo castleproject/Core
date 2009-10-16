@@ -1,3 +1,0 @@
-<h1><%= ClassName %>#<%= Action %></h1>
-
-<p>Modify me in <%= ViewPath %>/<%= Action.ToLower() %>.boo</p>

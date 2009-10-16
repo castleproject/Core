@@ -1,5 +1,0 @@
-<h3>Featured products</h3>
-
-#foreach($product in $featuredproducts)
-#parse("shared/ProductBox.vm")
-#end

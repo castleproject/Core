@@ -1,6 +1,0 @@
-<configuration includeUri="file://RelativeTest2/../RelativeTest/rel_include1.xml,file://RelativeTest2/../RelativeTest/rel_include2.xml">
-
-<!--    <include uri=""/>
-    <include uri=""/> -->
-
-</configuration>

@@ -1,5 +1,0 @@
-<head>
-$ValidationHelper.InstallScripts()
-$ValidationHelper.SetSubmitOptions("%{confirm='true',disable='true',groupError='true',errorMode='1'}")
-</head> 
-<p>$childContent</p>

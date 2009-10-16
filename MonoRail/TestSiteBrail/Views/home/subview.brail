@@ -1,3 +1,0 @@
-<div>
-<% OutputSubView( @heyhello ) %>
-</div>

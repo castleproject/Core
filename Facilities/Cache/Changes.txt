@@ -1,4 +1,0 @@
-Change history
---------------
-
-- Changed to use new Windsor/DynamicProxy 2

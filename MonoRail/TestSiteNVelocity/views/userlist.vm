@@ -1,9 +1,0 @@
-<div id="userlist">
-#foreach( $user in $users )
-<div id="$user.Name">
-  <span id="${user.Name}_name">$user.Name</span>
-  <br/>
-  <span id="${user.Name}_email">$user.Email</span>
-</div>
-#end
-</div>

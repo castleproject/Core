@@ -1,3 +1,0 @@
-<% unless ?errorMsg: %>
-Error does not exist
-<% end %>

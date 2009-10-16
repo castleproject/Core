@@ -1,3 +1,0 @@
-To work with the VS.NET solution files, you must successfully build the project via NAnt.
-
-Please see "How to build.txt" for further information about how to do this.

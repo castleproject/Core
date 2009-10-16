@@ -1,5 +1,0 @@
-<%if ?Errors:%>
-      <% for errorMsg in Errors.Values: %>
-            ${errorMsg}<br />
-     <% end %>
-<% end %>

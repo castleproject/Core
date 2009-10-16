@@ -1,8 +1,0 @@
-Serialization tests to perform:
-
-- Test how mixins with IProxyAware behave
-  DONE
-
-- Implements ByRef method calls interception
-  Partialy done. The proxy for a class with byref method is generated, but the an invocation crashes it.
-
