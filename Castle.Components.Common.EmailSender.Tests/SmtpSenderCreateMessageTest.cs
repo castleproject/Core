@@ -89,7 +89,7 @@ namespace Castle.Components.Common.EmailSender.Tests
 		{
 			Message msg = new Message("from@somewhere.com", "to@somewhere.com", "subject", "body")
 			{
-				Bcc = "bcc@somewhere.com;also@somewhere.com;"
+				Bcc = "bcc@somewhere.com;also@somewhere.com"
 			};
 
 			using (MailMessage mailMsg = _smtpSender.CreateMailMessage(msg))
@@ -103,7 +103,7 @@ namespace Castle.Components.Common.EmailSender.Tests
 		{
 			Message msg = new Message("from@somewhere.com", "to@somewhere.com", "subject", "body")
 			{
-				Cc = "cc@somewhere.com;alsoTo@somewhere.com;"
+				Cc = "cc@somewhere.com;alsoTo@somewhere.com"
 			};
 
 			using (MailMessage mailMsg = _smtpSender.CreateMailMessage(msg))
