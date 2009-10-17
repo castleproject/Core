@@ -10,6 +10,9 @@
 
 	<target name="init" depends="common.init">
 		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="System.dll" if="${common.silverlight}" />
+			<include name="mscorlib.dll" if="${common.silverlight}" />
+			<include name="System.Core.dll" if="${common.silverlight}" />
 			<include name="System.Web.dll" />
 			<include name="System.Configuration.dll" />
 		</assemblyfileset>

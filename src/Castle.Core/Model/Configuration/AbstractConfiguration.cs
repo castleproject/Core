@@ -15,7 +15,6 @@
 namespace Castle.Core.Configuration
 {
 	using System;
-	using System.Collections.Specialized;
 
 	/// <summary>
 	/// This is an abstract <see cref="IConfiguration"/> implementation

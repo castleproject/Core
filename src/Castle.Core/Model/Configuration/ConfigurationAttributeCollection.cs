@@ -14,11 +14,12 @@
 
 namespace Castle.Core.Configuration
 {
+#if !SILVERLIGHT
+
 	using System;
 	using System.Collections.Specialized;
 	using System.Runtime.Serialization;
 
-#if !SILVERLIGHT
 	[Serializable]
 	public class ConfigurationAttributeCollection : NameValueCollection
 	{
