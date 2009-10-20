@@ -2,6 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8F426F2C-01B0-45B6-AAA1-A4AEEA37EECB}"
 	ProjectSection(SolutionItems) = preProject
+		..\default.build = ..\default.build
 		logging.build = logging.build
 	EndProjectSection
 EndProject
