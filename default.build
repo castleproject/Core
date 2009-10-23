@@ -23,8 +23,11 @@
 		<include name="Castle.Core.xml" />
 		<include name="log4net.dll" />
 		<include name="log4net.xml" />
+		<include name="log4net.license.txt" />
 		<include name="NLog.dll" />
 		<include name="NLog.xml" />
+		<include name="NLog.license" />
+		<include name="NLog.xsd" />
 	</patternset>
 
 	<patternset id="ndepend.bin.set" >
