@@ -16,6 +16,9 @@ namespace Castle.Components.Binder
 {
 	using System;
 
+	/// <summary>
+	/// The Type Converter base class.
+	/// </summary>
 	internal abstract class TypeConverterBase : MarshalByRefObject, IConverter
 	{
 		public abstract object Convert(Type desiredType, Type inputType, object input, out bool conversionSucceeded);
@@ -29,10 +32,12 @@ namespace Castle.Components.Binder
 			{
 				return true;
 			}
+
 			if (inputType == desiredType)
 			{
 				exactMatch = true;
 			}
+
 			return true;
 		}
 	}

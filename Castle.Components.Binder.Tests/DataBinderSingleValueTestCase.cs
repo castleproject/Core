@@ -96,19 +96,19 @@ namespace Castle.Components.Binder.Tests
 		{
 			var node = new CompositeNode("unnamed");
 
-			node.AddChildNode(new LeafNode(typeof (String), "nameday", "09"));
-			node.AddChildNode(new LeafNode(typeof (String), "namemonth", "03"));
-			node.AddChildNode(new LeafNode(typeof (String), "nameyear", "2006"));
+			node.AddChildNode(new LeafNode(typeof(String), "nameday", "09"));
+			node.AddChildNode(new LeafNode(typeof(String), "namemonth", "03"));
+			node.AddChildNode(new LeafNode(typeof(String), "nameyear", "2006"));
 
-			Assert.AreEqual(new DateTime(2006, 03, 09), binder.BindParameter(typeof (DateTime), "name", node));
+			Assert.AreEqual(new DateTime(2006, 03, 09), binder.BindParameter(typeof(DateTime), "name", node));
 
 			node = new CompositeNode("unnamed");
 
-			node.AddChildNode(new LeafNode(typeof (int), "nameday", 9));
-			node.AddChildNode(new LeafNode(typeof (int), "namemonth", 3));
-			node.AddChildNode(new LeafNode(typeof (int), "nameyear", 2006));
+			node.AddChildNode(new LeafNode(typeof(int), "nameday", 9));
+			node.AddChildNode(new LeafNode(typeof(int), "namemonth", 3));
+			node.AddChildNode(new LeafNode(typeof(int), "nameyear", 2006));
 
-			Assert.AreEqual(new DateTime(2006, 03, 09), binder.BindParameter(typeof (DateTime), "name", node));
+			Assert.AreEqual(new DateTime(2006, 03, 09), binder.BindParameter(typeof(DateTime), "name", node));
 		}
 
 
@@ -117,21 +117,21 @@ namespace Castle.Components.Binder.Tests
 		{
 			var node = new CompositeNode("unnamed");
 
-			node.AddChildNode(new LeafNode(typeof (String), "nameday", "09"));
-			node.AddChildNode(new LeafNode(typeof (String), "namemonth", "03"));
-			node.AddChildNode(new LeafNode(typeof (String), "nameyear", "2006"));
+			node.AddChildNode(new LeafNode(typeof(String), "nameday", "09"));
+			node.AddChildNode(new LeafNode(typeof(String), "namemonth", "03"));
+			node.AddChildNode(new LeafNode(typeof(String), "nameyear", "2006"));
 
 			Assert.AreEqual(new DateTime(2006, 03, 09),
-			                binder.BindParameter(typeof (DateTime?), "name", node));
+											binder.BindParameter(typeof(DateTime?), "name", node));
 
 			node = new CompositeNode("unnamed");
 
-			node.AddChildNode(new LeafNode(typeof (int), "nameday", 9));
-			node.AddChildNode(new LeafNode(typeof (int), "namemonth", 3));
-			node.AddChildNode(new LeafNode(typeof (int), "nameyear", 2006));
+			node.AddChildNode(new LeafNode(typeof(int), "nameday", 9));
+			node.AddChildNode(new LeafNode(typeof(int), "namemonth", 3));
+			node.AddChildNode(new LeafNode(typeof(int), "nameyear", 2006));
 
 			Assert.AreEqual(new DateTime(2006, 03, 09),
-			                binder.BindParameter(typeof (DateTime?), "name", node));
+											binder.BindParameter(typeof(DateTime?), "name", node));
 		}
 
 		/// <summary>
@@ -141,18 +141,85 @@ namespace Castle.Components.Binder.Tests
 		public void DateTimeArrayBinding()
 		{
 			var node = new CompositeNode("unnamed");
-			node.AddChildNode(new LeafNode(typeof (String[]), "name", new[] {"03/09/2006", "02/08/2006"}));
-			Assert.AreEqual(new[] {new DateTime(2006, 03, 09), new DateTime(2006, 02, 08)},
-			                binder.BindParameter(typeof (DateTime[]), "name", node));
+			node.AddChildNode(new LeafNode(typeof(String[]), "name", new[] { "03/09/2006", "02/08/2006" }));
+			Assert.AreEqual(new[] { new DateTime(2006, 03, 09), new DateTime(2006, 02, 08) },
+											binder.BindParameter(typeof(DateTime[]), "name", node));
 
 			node = new CompositeNode("unnamed");
-			node.AddChildNode(new LeafNode(typeof (String[]), "name", new[] {"03/09/2006"}));
-			Assert.AreEqual(new[] {new DateTime(2006, 03, 09)},
-			                binder.BindParameter(typeof (DateTime[]), "name", node));
+			node.AddChildNode(new LeafNode(typeof(String[]), "name", new[] { "03/09/2006" }));
+			Assert.AreEqual(new[] { new DateTime(2006, 03, 09) },
+											binder.BindParameter(typeof(DateTime[]), "name", node));
 
 			node = new CompositeNode("unnamed");
 			Assert.AreEqual(new DateTime[0],
-			                binder.BindParameter(typeof (DateTime[]), "name", node));
+											binder.BindParameter(typeof(DateTime[]), "name", node));
+		}
+
+		/// <summary>
+		/// Tests dates passed as 'paramname'day, 'paramname'month, 'paramname'year
+		/// </summary>
+		[Test]
+		public void DateTimeOffsetAlternativeSourceBinding()
+		{
+			var node = new CompositeNode("unnamed");
+
+			node.AddChildNode(new LeafNode(typeof(String), "nameday", "24"));
+			node.AddChildNode(new LeafNode(typeof(String), "namemonth", "10"));
+			node.AddChildNode(new LeafNode(typeof(String), "nameyear", "2009"));
+
+			Assert.AreEqual(new DateTimeOffset(new DateTime(2009, 10, 24)), binder.BindParameter(typeof(DateTimeOffset), "name", node));
+
+			node = new CompositeNode("unnamed");
+
+			node.AddChildNode(new LeafNode(typeof(int), "nameday", 24));
+			node.AddChildNode(new LeafNode(typeof(int), "namemonth", 10));
+			node.AddChildNode(new LeafNode(typeof(int), "nameyear", 2009));
+
+			Assert.AreEqual(new DateTimeOffset(new DateTime(2009, 10, 24)), binder.BindParameter(typeof(DateTimeOffset), "name", node));
+		}
+
+
+		[Test]
+		public void DateTimeOffsetAlternativeSourceBindingWithNullableDateTime()
+		{
+			var node = new CompositeNode("unnamed");
+
+			node.AddChildNode(new LeafNode(typeof(String), "nameday", "24"));
+			node.AddChildNode(new LeafNode(typeof(String), "namemonth", "10"));
+			node.AddChildNode(new LeafNode(typeof(String), "nameyear", "2009"));
+
+			Assert.AreEqual(new DateTimeOffset(new DateTime(2009, 10, 24)),
+											binder.BindParameter(typeof(DateTimeOffset?), "name", node));
+
+			node = new CompositeNode("unnamed");
+
+			node.AddChildNode(new LeafNode(typeof(int), "nameday", 24));
+			node.AddChildNode(new LeafNode(typeof(int), "namemonth", 10));
+			node.AddChildNode(new LeafNode(typeof(int), "nameyear", 2009));
+
+			Assert.AreEqual(new DateTimeOffset(new DateTime(2009, 10, 24)),
+											binder.BindParameter(typeof(DateTimeOffset?), "name", node));
+		}
+
+		/// <summary>
+		/// Tests dates passed as whole values (month/day/year)
+		/// </summary>
+		[Test]
+		public void DateTimeOffsetArrayBinding()
+		{
+			var node = new CompositeNode("unnamed");
+			node.AddChildNode(new LeafNode(typeof(String[]), "name", new[] { "10/24/2009", "07/17/1965" }));
+			Assert.AreEqual(new[] { new DateTimeOffset(new DateTime(2009, 10, 24)), new DateTimeOffset(new DateTime(1965, 07, 17)) },
+											binder.BindParameter(typeof(DateTimeOffset[]), "name", node));
+
+			node = new CompositeNode("unnamed");
+			node.AddChildNode(new LeafNode(typeof(String[]), "name", new[] { "10/24/2009" }));
+			Assert.AreEqual(new[] { new DateTimeOffset(new DateTime(2009, 10, 24)) },
+											binder.BindParameter(typeof(DateTimeOffset[]), "name", node));
+
+			node = new CompositeNode("unnamed");
+			Assert.AreEqual(new DateTimeOffset[0],
+											binder.BindParameter(typeof(DateTimeOffset[]), "name", node));
 		}
 
 		/// <summary>

@@ -16,6 +16,9 @@ namespace Castle.Components.Binder
 {
 	using System;
 
+	/// <summary>
+	/// Utility for converting an array of values into valid strings.
+	/// </summary>
 	public class ConverterUtil
 	{
 		public static String NormalizeInput(object input)
@@ -24,35 +27,31 @@ namespace Castle.Components.Binder
 			{
 				return String.Empty;
 			}
-			else
+
+			if (!input.GetType().IsArray)
 			{
-				if (!input.GetType().IsArray)
+				return input.ToString().Trim();
+			}
+
+			var array = (Array) input;
+
+			var strings = new string[array.GetLength(0)];
+
+			for (int i = 0; i < strings.Length; i++)
+			{
+				object itemVal = array.GetValue(i);
+
+				if (itemVal != null)
 				{
-					return input.ToString().Trim();
+					strings[i] = itemVal.ToString();
 				}
 				else
 				{
-					var array = (Array) input;
-
-					var stArray = new string[array.GetLength(0)];
-
-					for (int i = 0; i < stArray.Length; i++)
-					{
-						object itemVal = array.GetValue(i);
-
-						if (itemVal != null)
-						{
-							stArray[i] = itemVal.ToString();
-						}
-						else
-						{
-							stArray[i] = String.Empty;
-						}
-					}
-
-					return String.Join(",", stArray);
+					strings[i] = String.Empty;
 				}
 			}
+
+			return String.Join(",", strings);
 		}
 
 		/// <summary>
@@ -67,6 +66,7 @@ namespace Castle.Components.Binder
 			{
 				return null;
 			}
+
 			if (!input.GetType().IsArray)
 			{
 				if (input.GetType() == typeof (String))

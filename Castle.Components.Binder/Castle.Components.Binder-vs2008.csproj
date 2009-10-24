@@ -12,7 +12,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Castle.Components.Binder</AssemblyName>
-    <AssemblyOriginatorKeyFile>..\..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -75,11 +75,11 @@
   <ItemGroup>
     <Reference Include="Castle.Components.Validator, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\net-3.5\$(Configuration)\Castle.Components.Validator.dll</HintPath>
+      <HintPath>..\..\lib\net-3.5\Castle.Components.Validator.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\net-3.5\$(Configuration)\Castle.Core.dll</HintPath>
+      <HintPath>..\..\lib\net-3.5\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -114,6 +114,7 @@
     </Compile>
     <Compile Include="DataReaderTreeBuilder.cs" />
     <Compile Include="DateTimeConverter.cs" />
+    <Compile Include="DateTimeOffsetConverter.cs" />
     <Compile Include="DecimalConverter.cs" />
     <Compile Include="DefaultConverter.cs" />
     <Compile Include="EnumConverter.cs" />
@@ -141,6 +142,9 @@
     <Compile Include="TypeConverterBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\buildscripts\CastleKey.snk">
+      <Link>CastleKey.snk</Link>
+    </None>
     <None Include="Castle.Components.Binder.build" />
     <None Include="default.build" />
   </ItemGroup>

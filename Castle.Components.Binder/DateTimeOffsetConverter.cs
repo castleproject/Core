@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 //  
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ namespace Castle.Components.Binder
 	using System;
 
 	/// <summary>
-	/// Converts to <see cref="DateTime"/>.
+	/// The <see cref="DateTimeOffset"/> converter.
 	/// </summary>
-	internal class DateTimeConverter : TypeConverterBase
+	internal class DateTimeOffsetConverter : TypeConverterBase
 	{
 		/// <summary>
 		/// Converts the specified desired type.
@@ -28,7 +28,7 @@ namespace Castle.Components.Binder
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="input">The input.</param>
 		/// <param name="conversionSucceeded">if set to <c>true</c> [conversion succeeded].</param>
-		/// <returns><see cref="DateTime"/> if conversion successful, <c>null</c> otherwise.</returns>
+		/// <returns><see cref="DateTimeOffset"/> if conversion is successful, <c>null</c> otherwise.</returns>
 		public override object Convert(Type desiredType, Type inputType, object input, out bool conversionSucceeded)
 		{
 			conversionSucceeded = input != null;
@@ -40,14 +40,14 @@ namespace Castle.Components.Binder
 
 			string value = ConverterUtil.NormalizeInput(input);
 
-			if (value == String.Empty)
+			if (value == string.Empty)
 			{
 				conversionSucceeded = false;
 
 				return null;
 			}
 
-			return DateTime.Parse(value);
+			return DateTimeOffset.Parse(value);
 		}
 
 		/// <summary>
@@ -62,7 +62,7 @@ namespace Castle.Components.Binder
 		/// </returns>
 		public override bool CanConvert(Type desiredType, Type inputType, object input, out bool exactMatch)
 		{
-			return IsTypeConvertible(desiredType, inputType, input, out exactMatch) && desiredType == typeof (DateTime);
+			return IsTypeConvertible(desiredType, inputType, input, out exactMatch) && desiredType == typeof(DateTimeOffset);
 		}
 	}
 }

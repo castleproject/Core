@@ -661,19 +661,24 @@ namespace Castle.Components.Binder
 			{
 				return TrySpecialDateTimeBinding(desiredType, parent, key, out conversionSucceeded);
 			}
-			else if (childNode == null)
+
+			if (childNode == null && IsDateTimeOffsetType(desiredType))
+			{
+				return TrySpecialDateTimeOffsetBinding(desiredType, parent, key, out conversionSucceeded);
+			}
+
+			if (childNode == null)
 			{
 				return null;
 			}
-			else if (childNode.NodeType == NodeType.Leaf)
+
+			if (childNode.NodeType == NodeType.Leaf)
 			{
 				return ConvertLeafNode(desiredType, (LeafNode) childNode, out conversionSucceeded);
 			}
-			else
-			{
-				throw new BindingException("Could not convert param as the node related " +
-				                           "to the param is not a leaf node. Param {0} parent node: {1}", key, parent.Name);
-			}
+			
+			throw new BindingException("Could not convert param as the node related " +
+			                           "to the param is not a leaf node. Param {0} parent node: {1}", key, parent.Name);
 		}
 
 		private object ConvertToArray(Type desiredType, String key, Node node, out bool conversionSucceeded)
@@ -877,7 +882,7 @@ namespace Castle.Components.Binder
 		}
 
 		private object TrySpecialDateTimeBinding(Type desiredType, CompositeNode treeRoot,
-		                                         String paramName, out bool conversionSucceeded)
+																						 String paramName, out bool conversionSucceeded)
 		{
 			string dateUtc = TryGetDateWithUTCFormat(treeRoot, paramName, out conversionSucceeded);
 
@@ -897,6 +902,30 @@ namespace Castle.Components.Binder
 				{
 					return DateTime.Parse(dateUtc);
 				}
+			}
+
+			conversionSucceeded = false;
+			return null;
+		}
+
+		private object TrySpecialDateTimeOffsetBinding(Type desiredType, CompositeNode treeRoot,
+																						 String paramName, out bool conversionSucceeded)
+		{
+			string dateUtc = TryGetDateWithUTCFormat(treeRoot, paramName, out conversionSucceeded);
+
+			if (dateUtc != null)
+			{
+				conversionSucceeded = true;
+
+				DateTime dt = DateTime.Parse(dateUtc);
+
+				if (desiredType.Name == "NullableDateTimeOffset")
+				{
+					TypeConverter typeConverter = TypeDescriptor.GetConverter(desiredType);
+
+					return typeConverter.ConvertFrom(dateUtc);
+				}
+				return DateTimeOffset.Parse(dateUtc);
 			}
 
 			conversionSucceeded = false;
@@ -937,6 +966,26 @@ namespace Castle.Components.Binder
 				Type[] args = desiredType.GetGenericArguments();
 
 				return (args.Length == 1 && args[0] == typeof (DateTime));
+			}
+
+			return false;
+		}
+
+		private bool IsDateTimeOffsetType(Type desiredType)
+		{
+			if (desiredType == typeof(DateTimeOffset))
+			{
+				return true;
+			}
+			if (desiredType.Name == "NullableDateTimeOffset")
+			{
+				return true;
+			}
+			if (desiredType.Name == "Nullable`1")
+			{
+				Type[] args = desiredType.GetGenericArguments();
+
+				return (args.Length == 1 && args[0] == typeof(DateTimeOffset));
 			}
 
 			return false;

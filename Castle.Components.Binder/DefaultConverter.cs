@@ -39,6 +39,7 @@ namespace Castle.Components.Binder
 				AddConverter(new NullableConverter(this));
 				AddConverter(new GuidConverter());
 				AddConverter(new DateTimeConverter());
+				AddConverter(new DateTimeOffsetConverter());
 				AddConverter(new HttpPostedFileConverter());
 				AddConverter(new GenericListConverter(this));
 				AddConverter(new TypeConverterAdapter());
