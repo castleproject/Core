@@ -155,6 +155,7 @@ namespace Castle.Components.Binder.Tests
 											binder.BindParameter(typeof(DateTime[]), "name", node));
 		}
 
+#if !MONO
 		/// <summary>
 		/// Tests dates passed as 'paramname'day, 'paramname'month, 'paramname'year
 		/// </summary>
@@ -177,7 +178,6 @@ namespace Castle.Components.Binder.Tests
 
 			Assert.AreEqual(new DateTimeOffset(new DateTime(2009, 10, 24)), binder.BindParameter(typeof(DateTimeOffset), "name", node));
 		}
-
 
 		[Test]
 		public void DateTimeOffsetAlternativeSourceBindingWithNullableDateTime()
@@ -221,6 +221,8 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(new DateTimeOffset[0],
 											binder.BindParameter(typeof(DateTimeOffset[]), "name", node));
 		}
+
+#endif
 
 		/// <summary>
 		/// Common Enum convertion
