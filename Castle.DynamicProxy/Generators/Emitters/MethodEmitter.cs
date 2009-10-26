@@ -81,7 +81,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				(baseMethodParameters, name2GenericType);
 #if SILVERLIGHT
 #warning Does this bug exist in SL?
-			 Disabled for .NET due to .Net 3.5 SP 1 bug
+			// Disabled for .NET due to .Net 3.5 SP 1 bug
 			List<Type[]> paramModReq = new List<Type[]>();
 			List<Type[]> paramModOpt = new List<Type[]>();
 			foreach (ParameterInfo parameterInfo in baseMethodParameters)
