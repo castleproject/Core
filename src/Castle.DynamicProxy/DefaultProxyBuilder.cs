@@ -106,17 +106,19 @@ namespace Castle.DynamicProxy
 		private void AssertValidType(Type target)
 		{
 #if SILVERLIGHT
-			bool isTargetNested = target.IsNested();
+			var isTargetNested = target.IsNested();
+			var isAccessible = target.IsPublic || target.IsNestedPublic;
 #else
 			bool isTargetNested = target.IsNested;
-#endif
-
 			bool isNestedAndInternal = isTargetNested && (target.IsNestedAssembly || target.IsNestedFamORAssem);
 			bool isInternalNotNested = target.IsVisible == false && isTargetNested == false;
 
 			bool internalAndVisibleToDynProxy = (isInternalNotNested || isNestedAndInternal) &&
 												InternalsHelper.IsInternalToDynamicProxy(target.Assembly);
-			if (!target.IsPublic && !target.IsNestedPublic && !internalAndVisibleToDynProxy)
+			var isAccessible = target.IsPublic || target.IsNestedPublic || internalAndVisibleToDynProxy;
+#endif
+
+			if (!isAccessible)
 			{
 				throw new GeneratorException("Type " + target.FullName + "is not public. " +
 				                             "Can not create proxy for types that are not accessible.");
