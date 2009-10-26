@@ -170,6 +170,7 @@
     <Compile Include="InterfaceProxyWithTargetInterfaceTestCase.cs" />
     <Compile Include="Interfaces\IdenticalInterfaces.cs" />
     <Compile Include="Interfaces\IEmpty.cs" />
+    <Compile Include="Interfaces\IFooWithIntPtr.cs" />
     <Compile Include="Interfaces\IGenericWithRefOut.cs" />
     <Compile Include="Interfaces\INullable.cs" />
     <Compile Include="Interfaces\IWithRefOut.cs" />
