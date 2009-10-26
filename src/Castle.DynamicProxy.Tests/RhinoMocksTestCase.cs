@@ -296,12 +296,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
-	public interface IDecimalOutParam
-	{
-		void Dance(out decimal fuel);
-		void Run<T>(out T fuel);
-	}
-
 	public class WithInternalMethod
 	{
 		internal virtual void Foo()
@@ -373,11 +367,6 @@ namespace Castle.DynamicProxy.Tests
 			get { return name; }
 			set { name = value; }
 		}
-	}
-
-    public interface IFooWithOutIntPtr
-	{
-		int Bar(out IntPtr i);
 	}
 
 	public class Foo : IFooWithOutIntPtr
