@@ -16,8 +16,8 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
-#if !SILVERLIGHT
 	using System.Reflection;
+#if !SILVERLIGHT
 	using System.Xml.Serialization;
 #endif
 	using Castle.Core.Interceptor;
@@ -31,8 +31,6 @@ namespace Castle.DynamicProxy.Generators
 	/// </summary>
 	public class ClassProxyGenerator : BaseProxyGenerator
 	{
-#if !SILVERLIGHT
-#endif
 		public ClassProxyGenerator(ModuleScope scope, Type targetType) : base(scope, targetType)
 		{
 			CheckNotGenericTypeDefinition(targetType, "targetType");
