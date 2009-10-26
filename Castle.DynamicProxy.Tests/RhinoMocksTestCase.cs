@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Runtime.InteropServices;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Interceptors;
+	using Castle.DynamicProxy.Tests.Interfaces;
 	using NUnit.Framework;
 	using RhinoMocksCPPInterfaces;
 
@@ -338,11 +339,6 @@ namespace Castle.DynamicProxy.Tests
 	public interface IFactory2
 	{
 		T Create<T>() where T : List<T>;
-	}
-
-	public interface IFooWithIntPtr
-	{
-		IntPtr Buffer(UInt32 index);
 	}
 
 	public abstract class SomeClassWithProtectedInternalAbstractClass
