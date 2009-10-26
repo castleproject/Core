@@ -12,11 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
+	using System.Runtime.Remoting;
 	using System.Text;
 	using Castle.Core.Interceptor;
 
@@ -257,7 +260,8 @@ namespace Castle.DynamicProxy
 				throw new ArgumentException("Specified type is not an interface", "interfaceToProxy");
 			}
 
-			if (!interfaceToProxy.IsAssignableFrom(target.GetType()))
+			Type targetType = target.GetType();
+			if (!interfaceToProxy.IsAssignableFrom(targetType))
 			{
 				throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
 			}
@@ -265,7 +269,6 @@ namespace Castle.DynamicProxy
 			CheckNotGenericTypeDefinition(interfaceToProxy, "interfaceToProxy");
 			CheckNotGenericTypeDefinitions(additionalInterfacesToProxy, "additionalInterfacesToProxy");
 
-			Type targetType = target.GetType();
 			Type generatedType = CreateInterfaceProxyTypeWithTarget(interfaceToProxy, additionalInterfacesToProxy, targetType, options);
 
 			List<object> arguments = GetConstructorArguments(target, interceptors, options);
@@ -424,9 +427,26 @@ namespace Castle.DynamicProxy
 				throw new ArgumentException("Specified type is not an interface", "interfaceToProxy");
 			}
 
+			bool isRemotingProxy = false;
 			if (!interfaceToProxy.IsAssignableFrom(target.GetType()))
 			{
-				throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
+				//check if we have remoting proxy at hand...
+				if (RemotingServices.IsTransparentProxy(target))
+				{
+					var info = (RemotingServices.GetRealProxy(target) as IRemotingTypeInfo);
+					if (info != null)
+					{
+						if (!info.CanCastTo(interfaceToProxy, target))
+						{
+							throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
+						}
+						isRemotingProxy = true;
+					}
+				}
+				else
+				{
+					throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
+				}
 			}
 
 			CheckNotGenericTypeDefinition(interfaceToProxy, "interfaceToProxy");
@@ -434,6 +454,14 @@ namespace Castle.DynamicProxy
 
 			Type generatedType = CreateInterfaceProxyTypeWithTargetInterface(interfaceToProxy, additionalInterfacesToProxy, interfaceToProxy, options);
 			List<object> arguments = GetConstructorArguments(target, interceptors, options);
+			if(isRemotingProxy)
+			{
+				var constructors = generatedType.GetConstructors();
+
+				// one .ctor to rule them all
+				Debug.Assert(constructors.Length == 1, "constructors.Length == 1");
+				return constructors[0].Invoke(arguments.ToArray());
+			}
 			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 
