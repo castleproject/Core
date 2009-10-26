@@ -31,23 +31,24 @@ namespace Castle.DynamicProxy.Contributors
 		// TODO: this whole type (and its descendants) should be #if !SILVERLIGHT... and empty type should be used instead for SL
 
 		protected readonly Type targetType;
+		private readonly Type[] interfaces;
 
-		protected ProxyInstanceContributor(Type targetType)
+		protected ProxyInstanceContributor(Type targetType, Type[] interfaces)
 		{
 			this.targetType = targetType;
+			this.interfaces = interfaces ?? Type.EmptyTypes;
 		}
 
-		public FieldReference ProxyGenerationOptions { get; set; }
-
-		protected abstract Expression TargetReferenceExpression { get; }
+		protected abstract Expression GetTargetReferenceExpression(ClassEmitter emitter);
 
 
-		public virtual void Generate(ClassEmitter emitter, FieldReference interceptors, FieldReference[] mixins, Type[] interfaces)
+		public virtual void Generate(ClassEmitter @class, ProxyGenerationOptions options)
 		{
+			var interceptors = @class.GetField("__interceptors");
 #if !SILVERLIGHT
-			ImplementGetObjectData(emitter, interceptors, mixins, interfaces);
+			ImplementGetObjectData(@class);
 #endif
-			ImplementProxyTargetAccessor(emitter, interceptors);
+			ImplementProxyTargetAccessor(@class, interceptors);
 		}
 
 		protected void ImplementProxyTargetAccessor(ClassEmitter emitter, FieldReference interceptorsField)
@@ -57,7 +58,7 @@ namespace Castle.DynamicProxy.Contributors
 			MethodEmitter dynProxyGetTarget = emitter.CreateMethod("DynProxyGetTarget", attributes, typeof(object));
 
 			dynProxyGetTarget.CodeBuilder.AddStatement(
-				new ReturnStatement(new ConvertExpression(typeof(object), targetType, TargetReferenceExpression)));
+				new ReturnStatement(new ConvertExpression(typeof(object), targetType, GetTargetReferenceExpression(emitter))));
 
 			MethodEmitter getInterceptors = emitter.CreateMethod("GetInterceptors", attributes, typeof(IInterceptor[]));
 
@@ -67,12 +68,8 @@ namespace Castle.DynamicProxy.Contributors
 
 #if !SILVERLIGHT
 
-		protected void ImplementGetObjectData(ClassEmitter emitter, FieldReference interceptorsField, FieldReference[] mixinFields, Type[] interfaces)
+		protected void ImplementGetObjectData(ClassEmitter emitter)
 		{
-			if (interfaces == null)
-			{
-				interfaces = new Type[0];
-			}
 
 			ArgumentReference serializationInfo = new ArgumentReference(typeof (SerializationInfo));
 			ArgumentReference streamingContext = new ArgumentReference(typeof (StreamingContext));
@@ -98,24 +95,11 @@ namespace Castle.DynamicProxy.Contributors
 						SerializationInfoMethods.SetType,
 						typeLocal.ToExpression())));
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						serializationInfo,
-						SerializationInfoMethods.AddValue_Object,
-						new ConstReference("__interceptors").ToExpression(),
-						interceptorsField.ToExpression())));
-
-			foreach (FieldReference mixinFieldReference in mixinFields)
+			foreach (var field in emitter.GetAllFields())
 			{
-				getObjectData.CodeBuilder.AddStatement(
-					new ExpressionStatement(
-						new MethodInvocationExpression(
-							serializationInfo,
-							SerializationInfoMethods.AddValue_Object,
-							new ConstReference(
-								mixinFieldReference.Reference.Name).ToExpression(),
-							mixinFieldReference.ToExpression())));
+				if (field.Reference.IsStatic) continue;
+				if (field.Reference.IsNotSerialized) continue;
+				AddAddValueInvocation(serializationInfo, getObjectData, field);
 			}
 
 			LocalReference interfacesLocal = getObjectData.CodeBuilder.DeclareLocal(typeof (string[]));
@@ -156,14 +140,29 @@ namespace Castle.DynamicProxy.Contributors
 						serializationInfo,
 						SerializationInfoMethods.AddValue_Object,
 						new ConstReference("__proxyGenerationOptions").ToExpression(),
-						ProxyGenerationOptions.ToExpression())));
+						emitter.GetField("proxyGenerationOptions").ToExpression())));
 
-			CustomizeGetObjectData(getObjectData.CodeBuilder, serializationInfo, streamingContext);
+			CustomizeGetObjectData(getObjectData.CodeBuilder, serializationInfo, streamingContext,emitter);
 
 			getObjectData.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected abstract void CustomizeGetObjectData(AbstractCodeBuilder builder, ArgumentReference serializationInfo, ArgumentReference streamingContext);
+		protected virtual void AddAddValueInvocation(ArgumentReference serializationInfo, MethodEmitter getObjectData, FieldReference field)
+		{
+			getObjectData.CodeBuilder.AddStatement(
+				new ExpressionStatement(
+					new MethodInvocationExpression(
+						serializationInfo,
+						SerializationInfoMethods.AddValue_Object,
+						new ConstReference(field.Reference.Name).ToExpression(),
+						field.ToExpression())));
+			return;
+		}
+
+		protected abstract void CustomizeGetObjectData(AbstractCodeBuilder builder, ArgumentReference serializationInfo, ArgumentReference streamingContext, ClassEmitter emitter);
 #endif
+		public void CollectElementsToProxy(IProxyGenerationHook hook)
+		{
+		}
 	}
 }

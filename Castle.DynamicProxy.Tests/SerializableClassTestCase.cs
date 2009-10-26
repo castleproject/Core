@@ -25,7 +25,6 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Serialization;
 	using Castle.DynamicProxy.Tests.Classes;
-	using Castle.DynamicProxy.Tests;
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
@@ -97,14 +96,14 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.IsTrue(proxy.GetType().IsSerializable);
 
-			IMyInterface2 inter = (IMyInterface2) proxy;
+			IMyInterface2 inter = (IMyInterface2)proxy;
 
 			inter.Name = "opa";
 			Assert.AreEqual("opa", inter.Name);
 			inter.Started = true;
 			Assert.AreEqual(true, inter.Started);
 
-			IMyInterface2 otherProxy = (IMyInterface2) SerializeAndDeserialize(proxy);
+			IMyInterface2 otherProxy = (IMyInterface2)SerializeAndDeserialize(proxy);
 
 			Assert.AreEqual(inter.Name, otherProxy.Name);
 			Assert.AreEqual(inter.Started, otherProxy.Started);
@@ -441,6 +440,19 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(ProxyGenerationOptions.Default, field.GetValue(proxy));
 		}
 
+		[Test, Ignore("This test is currently broken. See DYNPROXY-ISSUE-117")]
+		public void BaseTypeForInterfaceProxy_is_honored_after_deserialization()
+		{
+
+			var options = new ProxyGenerationOptions
+			              	{
+			              		BaseTypeForInterfaceProxy = typeof (SimpleClass)
+			              	};
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof (IService), Type.EmptyTypes, options);
+			var newProxy = SerializeAndDeserialize(proxy);
+			Assert.AreEqual(typeof (SimpleClass), newProxy.GetType().BaseType);
+		}
+
 		[Serializable]
 		private class MethodFilterHook : IProxyGenerationHook
 		{
@@ -573,13 +585,13 @@ namespace Castle.DynamicProxy.Tests
 			                            	new StandardInterceptor());
 
 			Assert.IsTrue(proxy is IMixedInterface);
-			Assert.IsNotNull(((IMixedInterface) proxy).GetExecutingObject());
-			Assert.IsTrue(((IMixedInterface) proxy).GetExecutingObject() is SerializableMixin);
+			Assert.IsNotNull(((IMixedInterface)proxy).GetExecutingObject());
+			Assert.IsTrue(((IMixedInterface)proxy).GetExecutingObject() is SerializableMixin);
 
 			IService otherProxy = SerializeAndDeserialize(proxy);
 			Assert.IsTrue(otherProxy is IMixedInterface);
-			Assert.IsNotNull(((IMixedInterface) otherProxy).GetExecutingObject());
-			Assert.IsTrue(((IMixedInterface) otherProxy).GetExecutingObject() is SerializableMixin);
+			Assert.IsNotNull(((IMixedInterface)otherProxy).GetExecutingObject());
+			Assert.IsTrue(((IMixedInterface)otherProxy).GetExecutingObject() is SerializableMixin);
 		}
 
 		[Test]

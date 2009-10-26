@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Contributors
+namespace Castle.DynamicProxy.Generators
 {
-	public class ProxyContributor:ITypeContributor
+	using Emitters;
+
+	public interface IGenerator<T>
 	{
-		private ProxyContributor(){}
-		public static ITypeContributor Empty = new ProxyContributor();
+		T Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope);
 	}
 }

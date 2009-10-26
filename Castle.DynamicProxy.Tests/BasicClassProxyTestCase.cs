@@ -72,16 +72,17 @@ namespace Castle.DynamicProxy.Tests
 
 #if !MONO
 
-		[Test, ExpectedException(typeof(GeneratorException), ExpectedMessage = "Type is not public, so a proxy " +
-																				"cannot be generated. Type: System.AppDomainInitializerInfo"
-			)]
+		[Test]
 		public void ProxyForNonPublicClass()
 		{
 			// have to use a type that is not from this assembly, because it is marked as internals visible to 
 			// DynamicProxy2
 
-			object proxy = generator.CreateClassProxy(
-				Type.GetType("System.AppDomainInitializerInfo, mscorlib"), new StandardInterceptor());
+			var type = Type.GetType("System.AppDomainInitializerInfo, mscorlib");
+			var exception = Assert.Throws(typeof(GeneratorException),
+			                              () => generator.CreateClassProxy(type, new StandardInterceptor()));
+			Assert.That(exception.Message.Contains("Can not create proxy for types that are not accessible."),
+			            "Expected message telling that 'Can not create proxy for types that are not accessible.'");
 		}
 
 #endif
@@ -192,7 +193,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyForClassWithInterfaces()
 		{
-			object proxy = generator.CreateClassProxy(typeof(ServiceClass), new Type[] { typeof(IDisposable) },
+			object proxy = generator.CreateClassProxy(typeof(ServiceClass), new[] { typeof(IDisposable) },
 													  new ResultModifierInterceptor());
 
 			Assert.IsNotNull(proxy);
@@ -213,9 +214,11 @@ namespace Castle.DynamicProxy.Tests
 			}
 			catch (NotImplementedException ex)
 			{
-				Assert.AreEqual("This is a DynamicProxy2 error: the interceptor attempted " +
-								"to 'Proceed' for a method without a target, for example, an interface method or an abstract method",
-								ex.Message);
+				Assert.AreEqual(
+					"This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for method 'Void Dispose()' which has no target. " +
+					"When calling method without target there is no implementation to 'proceed' to and it is the responsibility of the interceptor " +
+					"to mimic the implementation (set return value, out arguments etc)",
+					ex.Message);
 			}
 		}
 

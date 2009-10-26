@@ -128,8 +128,8 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var interceptor = new LogInvocationInterceptor();
 			var mixin = new ClassImplementingISimpleMixin();
-			object proxy = generator.CreateClassProxy(typeof (SimpleMixin), new[] {typeof (ISimpleMixin)}, MixIn(mixin),
-			                                          interceptor);
+			object proxy = generator.CreateClassProxy(typeof(SimpleMixin), new[] { typeof(ISimpleMixin) }, MixIn(mixin),
+													  interceptor);
 			Assert.AreEqual(1, (proxy as ISimpleMixin).DoSomething());
 			Assert.IsNotEmpty(interceptor.Invocations);
 		}

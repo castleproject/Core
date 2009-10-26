@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Reflection;
 #if !SILVERLIGHT
 	using System.Xml.Serialization;
 #endif
@@ -24,7 +23,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Tokens;
 	using Contributors;
 
 	/// <summary>
@@ -32,8 +30,7 @@ namespace Castle.DynamicProxy.Generators
 	/// </summary>
 	public class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
-		private FieldReference targetField;
-		protected readonly Dictionary<MethodInfo, MethodInfo> method2methodOnTarget = new Dictionary<MethodInfo, MethodInfo>();
+		protected FieldReference targetField;
 
 
 		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type @interface)
@@ -71,10 +68,10 @@ namespace Castle.DynamicProxy.Generators
 					return cacheType;
 				}
 
-				SetGenerationOptions(options);
+				ProxyGenerationOptions = options;
 
-				String newName = "Castle.Proxies." + targetType.Name + "Proxy" + Guid.NewGuid().ToString("N");
-				proxyType = GenerateType(newName, proxyTargetType, interfaces);
+				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
+				proxyType = GenerateType(name, proxyTargetType, interfaces, Scope.NamingScope.SafeSubScope());
 
 				AddToCache(cacheKey, proxyType);
 			}
@@ -82,21 +79,70 @@ namespace Castle.DynamicProxy.Generators
 			return proxyType;
 		}
 
-		private Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces)
+		protected virtual Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces, INamingScope namingScope)
 		{
 			// TODO: this anemic dictionary should be made into a real object
-			InterfaceProxyInstanceContributor proxyContributor;
-			IDictionary<Type, ITypeContributor> typeImplementerMapping = GetTypeImplementerMapping(interfaces,out proxyContributor);
+			IEnumerable<ITypeContributor> contributors;
+			var typeImplementerMapping = GetTypeImplementerMapping(interfaces, proxyTargetType, out contributors,namingScope);
 
 			// This is flawed. We allow any type to be a base type but we don't realy handle it properly.
 			// What if the type implements interfaces? What if it implements target interface?
 			// What if it implement mixin interface? What if it implements any additional interface?
 			// What if it has no default constructor?
 			// We handle none of these cases.
+			ClassEmitter emitter;
+			FieldReference interceptorsField;
+			Type baseType = Init(typeName, typeImplementerMapping, out emitter, proxyTargetType, out interceptorsField);
+
+
+			// Collect methods
+			foreach (var contributor in contributors)
+			{
+				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook);
+			}
+
+			ProxyGenerationOptions.Hook.MethodsInspected();
+
+			// Constructor
+
+			var cctor = GenerateStaticConstructor(emitter);
+			var ctorArguments = new List<FieldReference>();
+
+			foreach (var contributor in contributors)
+			{
+				contributor.Generate(emitter, ProxyGenerationOptions);
+
+				// TODO: redo it
+				if(contributor is MixinContributorBase)
+				{
+					ctorArguments.Add((contributor as MixinContributorBase).BackingField);
+					
+				}
+			}
+
+			ctorArguments.Add(interceptorsField);
+			ctorArguments.Add(targetField);
+
+			CreateInitializeCacheMethodBody(proxyTargetType, emitter, cctor);
+
+			GenerateConstructors(emitter, baseType, ctorArguments.ToArray());
+
+			// Complete type initializer code body
+			CompleteInitCacheMethod(cctor.CodeBuilder);
+
+			// Crosses fingers and build type
+			Type generatedType = emitter.BuildType();
+
+			InitializeStaticFields(generatedType);
+			return generatedType;
+		}
+
+		protected Type Init(string typeName, IDictionary<Type, ITypeContributor> typeImplementerMapping, out ClassEmitter emitter, Type proxyTargetType, out FieldReference interceptorsField)
+		{
 			Type baseType = ProxyGenerationOptions.BaseTypeForInterfaceProxy;
 
-			ClassEmitter emitter = BuildClassEmitter(typeName, baseType, typeImplementerMapping.Keys);
-			proxyContributor.ProxyGenerationOptions = CreateOptionsField(emitter);
+			emitter = BuildClassEmitter(typeName, baseType, typeImplementerMapping.Keys);
+			CreateOptionsField(emitter);
 			emitter.AddCustomAttributes(ProxyGenerationOptions);
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
@@ -109,165 +155,22 @@ namespace Castle.DynamicProxy.Generators
 			ReplicateNonInheritableAttributes(targetType, emitter);
 
 			// Fields generations
+			interceptorsField = CreateInterceptorsField(emitter);
 
-			FieldReference interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
+			CreateTargetField(emitter, proxyTargetType);
+
+			return baseType;
+		}
+
+		private void CreateTargetField(ClassEmitter emitter, Type proxyTargetType)
+		{
 			targetField = emitter.CreateField("__target", proxyTargetType);
-			proxyContributor.TargetField = targetField;
 
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
 #else
-			emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute(), ProxyGenerationOptions.AttributeDisassembler);
 			emitter.DefineCustomAttributeFor(targetField, new XmlIgnoreAttribute(), ProxyGenerationOptions.AttributeDisassembler);
 #endif
-
-			// Collect methods
-			IList<ProxyElementContributor> targets = new List<ProxyElementContributor>();
-			foreach (var mapping in typeImplementerMapping)
-			{
-				// NOTE: make sure this is what it should be
-				if (mapping.Value is ProxyInstanceContributor) continue;
-
-				targets.Add(CollectElementsToProxy(mapping, EmptyInterfaceMapping));
-			}
-
-			ProxyGenerationOptions.Hook.MethodsInspected();
-
-			// Constructor
-
-			ConstructorEmitter typeInitializer = GenerateStaticConstructor(emitter);
-
-			// TODO: this affects caching. is it required?
-			if (!proxyTargetType.IsInterface)
-			{
-				var methods = MethodFinder.GetAllInstanceMethods(proxyTargetType, BindingFlags.Public | BindingFlags.Instance);
-				CacheMethodTokens(emitter, methods, typeInitializer);
-			}
-
-			CreateInitializeCacheMethodBody(proxyTargetType, GetMethods(targets), emitter, typeInitializer);
-
-			FieldReference[] mixinFields = AddMixinFields(emitter);
-			List<FieldReference> constructorArguments = new List<FieldReference>(mixinFields);
-			constructorArguments.Add(interceptorsField);
-			constructorArguments.Add(targetField);
-			GenerateConstructors(emitter, baseType, constructorArguments.ToArray());
-
-			// Create invocation types
-			// NOTE: does this have to happen separately from the generation of below implementation methods?
-			foreach (var target in targets)
-			{
-				foreach (var method in target.Methods)
-				{
-					CreateInvocationForMethod(emitter, method, proxyTargetType);
-					AddFieldToCacheMethodTokenAndStatementsToInitialize(method.Method, typeInitializer, emitter);
-					MethodInfo methodOnTarget;
-					if(method2methodOnTarget.TryGetValue(method.Method,out methodOnTarget))
-					{
-						AddFieldToCacheMethodTokenAndStatementsToInitialize(methodOnTarget, typeInitializer, emitter);
-					}
-				}
-			}
-
-			// Create methods overrides
-			var method2Emitter = new Dictionary<MethodInfo, MethodEmitter>();
-			foreach (var target in targets)
-			{
-				foreach (var method in target.Methods)
-				{
-					ImplementMethod(emitter, interceptorsField, mixinFields, method, method2Emitter);
-				}
-
-				foreach (PropertyToGenerate property in target.Properties)
-				{
-					ImplementProperty(emitter, interceptorsField, mixinFields, property);
-				}
-
-				foreach (EventToGenerate @event in target.Events)
-				{
-					ImplementEvent(emitter, interceptorsField, mixinFields, @event);
-				}
-			}
-
-			proxyContributor.Generate(emitter, interceptorsField, mixinFields, interfaces);
-
-			// Complete type initializer code body
-
-			CompleteInitCacheMethod(typeInitializer.CodeBuilder);
-
-			// Crosses fingers and build type
-
-			Type generatedType = emitter.BuildType();
-			InitializeStaticFields(generatedType);
-			return generatedType;
-		}
-
-		protected override ConstructorVersion ConstructorVersion
-		{
-			get { return ConstructorVersion.WithTargetMethod; }
-		}
-
-		protected virtual void CreateInvocationForMethod(ClassEmitter emitter, MethodToGenerate method, Type proxyTargetType)
-		{
-			var methodInfo = method.Method;
-			MethodInfo methodOnTarget = methodInfo;
-			// TODO: this is a temporary workaround
-			if (method.Target is InterfaceProxyTargetContributor)
-			{
-				if(!proxyTargetType.IsInterface)
-				{
-					var foundCandidate = TypeUtil.FindImplementingMethod(methodInfo, proxyTargetType);
-					if (foundCandidate != null)
-					{
-						methodOnTarget = foundCandidate;
-					}
-				}
-			}
-			else if (method.HasTarget)
-			{
-				var mixin = method.Target as MixinContributor;
-				if (mixin != null)
-				{
-					var foundCandidate = TypeUtil.FindImplementingMethod(methodInfo, mixin.ClassUnderMixinInterface);
-					if (foundCandidate != null)
-					{
-						methodOnTarget = foundCandidate;
-					}
-				}
-			}
-
-			method2methodOnTarget[methodInfo] = methodOnTarget;
-
-			method2Invocation[methodInfo] = BuildInvocationNestedType(emitter,
-			                                                          methodInfo.DeclaringType,
-			                                                          method,
-			                                                          methodInfo,
-			                                                          AllowChangeTarget);
-		}
-
-		protected override NestedClassEmitter BuildInvocationNestedType(ClassEmitter emitter, Type targetForInvocation, MethodToGenerate method, MethodInfo callbackMethod, bool allowChangeTarget)
-		{
-			return new InterfaceInvocationTypeGenerator(targetForInvocation, method, callbackMethod, allowChangeTarget)
-				.Generate(emitter, ProxyGenerationOptions);
-		}
-
-		protected override Reference GetProxyTargetReference()
-		{
-			return targetField;
-		}
-
-		protected override bool CanOnlyProxyVirtual()
-		{
-			return false;
-		}
-
-		protected override Reference GetMethodTargetReference(MethodInfo method)
-	    {
-	        return new AsTypeReference(targetField, method.DeclaringType);
-	    }
-
-		protected override MethodInfo GetMethodOnTarget(IProxyMethod proxyMethod)
-		{
-			return method2methodOnTarget[proxyMethod.Method];
 		}
 
 		protected virtual InterfaceGeneratorType GeneratorType
@@ -280,13 +183,16 @@ namespace Castle.DynamicProxy.Generators
 			get { return false; }
 		}
 
-		protected IDictionary<Type, ITypeContributor> GetTypeImplementerMapping(Type[] interfaces, out InterfaceProxyInstanceContributor instance)
+		protected IDictionary<Type, ITypeContributor> GetTypeImplementerMapping(Type[] interfaces, Type proxyTargetType, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
 			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
-
+			var mixins = new List<MixinContributorBase>();
 			// Order of interface precedence:
 			// 1. first target
-			AddMappingForTargetType(typeImplementerMapping);
+			var targetInterfaces = TypeUtil.GetAllInterfaces(proxyTargetType);
+			var additionalInterfaces = TypeUtil.GetAllInterfaces(interfaces);
+			var target = AddMappingForTargetType(typeImplementerMapping, proxyTargetType, targetInterfaces, additionalInterfaces,namingScope);
+
 
 			// 2. then mixins
 			if (ProxyGenerationOptions.HasMixins)
@@ -294,30 +200,99 @@ namespace Castle.DynamicProxy.Generators
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
 				{
 					object mixinInstance = ProxyGenerationOptions.MixinData.GetMixinInstance(mixinInterface);
-					AddInterfaceHierarchyMapping(mixinInterface, new MixinContributor(mixinInstance.GetType(), mixinInterface),
-					                             typeImplementerMapping);
+					if (targetInterfaces.Contains(mixinInterface))
+					{
+						// OK, so the target implements this interface. We now do one of two things:
+						if(additionalInterfaces.Contains(mixinInterface))
+						{
+							// we intercept the interface, and forward calls to the target type
+							AddMapping(mixinInterface, target, typeImplementerMapping);
+						}
+						// we do not intercept the interface
+						mixins.Add(new EmptyMixinContributor(mixinInterface));
+					}
+					else
+					{
+						if (!typeImplementerMapping.ContainsKey(mixinInterface))
+						{
+							var mixin = new MixinContributor(mixinInstance.GetType(), mixinInterface, namingScope);
+							mixins.Add(mixin);
+							typeImplementerMapping.Add(mixinInterface, mixin);
+						}
+					}
 				}
 			}
 
+			var additionalInterfacesContributor = GetContributorForAdditionalInterfaces(namingScope);
 			// 3. then additional interfaces
-			if (interfaces != null)
+			foreach (var @interface in additionalInterfaces)
 			{
-				foreach (var @interface in interfaces)
-				{
-					AddInterfaceHierarchyMapping(@interface, ProxyContributor.Empty, typeImplementerMapping);
-				}
+				if(typeImplementerMapping.ContainsKey(@interface)) continue;
+				if(ProxyGenerationOptions.MixinData.ContainsMixin(@interface)) continue;
+
+				additionalInterfacesContributor.AddInterfaceMapping(@interface);
+				SafeAddMapping(@interface, additionalInterfacesContributor, typeImplementerMapping);
 			}
 
 			// 4. plus special interfaces
-			instance = new InterfaceProxyInstanceContributor(targetType, GeneratorType);
+			var instance = new InterfaceProxyInstanceContributor(targetType, GeneratorType, interfaces);
 			AddMappingForISerializable(typeImplementerMapping, instance);
-			AddInterfaceHierarchyMapping(typeof(IProxyTargetAccessor), instance, typeImplementerMapping);
+			try
+			{
+				SafeAddMapping(typeof(IProxyTargetAccessor), instance, typeImplementerMapping);
+			}
+			catch (ArgumentException)
+			{
+				HandleExplicitlyPassedProxyTargetAccessor(targetInterfaces, additionalInterfaces);
+			}
+
+			var list = new List<ITypeContributor>();
+			list.Add(target);
+			list.Add(additionalInterfacesContributor);
+			foreach (var mixin in mixins)
+			{
+				list.Add(mixin);
+			}
+			list.Add(instance);
+
+			contributors = list;
 			return typeImplementerMapping;
 		}
 
-		protected virtual void AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping)
+		protected virtual InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(INamingScope namingScope)
 		{
-			AddInterfaceHierarchyMapping(targetType, new InterfaceProxyTargetContributor(targetType), typeImplementerMapping);
+			return new InterfaceProxyWithoutTargetContributor(namingScope);
+		}
+
+		protected override void SafeAddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
+		{
+			base.SafeAddMapping(@interface, implementer, mapping);
+			if(implementer is InterfaceProxyTargetContributor)
+			{
+				(implementer as InterfaceProxyTargetContributor).AddInterfaceToProxy(@interface);
+			}
+		}
+
+		protected virtual ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping, Type proxyTargetType, ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces,INamingScope namingScope)
+		{
+			var contributor = new InterfaceProxyTargetContributor(proxyTargetType, AllowChangeTarget, namingScope);
+			var proxiedInterfaces = TypeUtil.GetAllInterfaces(targetType);
+			foreach (var @interface in proxiedInterfaces)
+			{
+				SafeAddMapping(@interface, contributor, typeImplementerMapping);
+			}
+
+			foreach (var @interface in additionalInterfaces)
+			{
+				if (!ImplementedByTarget(targetInterfaces, @interface)) continue;
+				AddMapping(@interface, contributor, typeImplementerMapping);
+			}
+			return contributor;
+		}
+
+		private bool ImplementedByTarget(ICollection<Type> targetInterfaces, Type @interface)
+		{
+			return targetInterfaces.Contains(@interface);
 		}
 	}
 

@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Interceptors;
+	using Castle.DynamicProxy.Tests.Interfaces;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -26,7 +27,7 @@ namespace Castle.DynamicProxy.Tests
 		public void CanCreateProxyOfInterfaceWithOutParameter()
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			object proxy = generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
+			object proxy = generator.CreateInterfaceProxyWithoutTarget(typeof (IWithRefOut), interceptor);
 			Assert.IsNotNull(proxy);
 		}
 
@@ -35,7 +36,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			int i;
 			WithCallbackInterceptor interceptor = new WithCallbackInterceptor(delegate { });
-			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
+			IWithRefOut proxy = (IWithRefOut) generator.CreateInterfaceProxyWithoutTarget(typeof (IWithRefOut), interceptor);
 			proxy.Do(out i);
 		}
 
@@ -45,7 +46,7 @@ namespace Castle.DynamicProxy.Tests
 			int i;
 			WithCallbackInterceptor interceptor =
 				new WithCallbackInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
-			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
+			IWithRefOut proxy = (IWithRefOut) generator.CreateInterfaceProxyWithoutTarget(typeof (IWithRefOut), interceptor);
 			proxy.Do(out i);
 			Assert.AreEqual(5, i);
 		}
@@ -56,7 +57,7 @@ namespace Castle.DynamicProxy.Tests
 			int i = 3;
 			WithCallbackInterceptor interceptor =
 				new WithCallbackInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
-			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof (WithOut), interceptor);
+			IWithRefOut proxy = (IWithRefOut) generator.CreateInterfaceProxyWithoutTarget(typeof (IWithRefOut), interceptor);
 			proxy.Did(ref i);
 			Assert.AreEqual(5, i);
 		}
@@ -98,12 +99,6 @@ namespace Castle.DynamicProxy.Tests
 			{
 				Value = value;
 			}
-		}
-
-		public interface WithOut
-		{
-			void Do(out int i);
-			void Did(ref int i);
 		}
 
 

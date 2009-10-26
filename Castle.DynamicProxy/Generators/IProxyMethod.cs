@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System.Reflection;
-	using Contributors;
 
 	public interface IProxyMethod
 	{
@@ -23,6 +22,6 @@ namespace Castle.DynamicProxy.Generators
 
 		// TODO: this should be removed, outsourced to the target itself, since target is neved null anyway
 		bool HasTarget { get; }
-		ITypeContributor Target { get; }
+		MethodInfo MethodOnTarget { get; }
 	}
 }

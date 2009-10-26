@@ -74,18 +74,24 @@ namespace Castle.DynamicProxy
 
 		protected void EnsureValidTarget()
 		{
-			if(target==null)
+			string message;
+			if (target == null)
 			{
-				string message = "This is a DynamicProxy2 error: the interceptor attempted " +
-				                 "to 'Proceed' for a method without a target, for example, an interface method or an abstract method";
+				message = "This is a DynamicProxy2 error: the interceptor attempted " +
+				          "to 'Proceed' for method '" + Method.ToString() + "' which has no target." +
+				          " When calling method without target there is no implementation to 'proceed' to " +
+				          "and it is the responsibility of the interceptor to mimic the implementation (set return value, out arguments etc)";
 				throw new NotImplementedException(message);
 			}
-			if(ReferenceEquals( target , proxy))
+
+			if (!ReferenceEquals(target, proxy))
 			{
-				string message =
-					"This is a DynamicProxy2 error: target of invocation has been set to the proxy itself. This usually signify a bug in the calling code.";
-				throw new InvalidOperationException(message);
+				return;
 			}
+			message = "This is a DynamicProxy2 error: target of invocation has been set to the proxy itself. " +
+			          "This may result in recursively calling the method over and over again until stack overflow, which may destabilize your program." +
+			          "This usually signifies a bug in the calling code. Make sure no interceptor sets proxy as its invocation target.";
+			throw new InvalidOperationException(message);
 		}
 
 		private IInterceptor[] SelectMethodInterceptors(IInterceptorSelector selector, IInterceptor[] methodInterceptors)
@@ -128,11 +134,7 @@ namespace Castle.DynamicProxy
 		{
 			get
 			{
-				if (interfaceMethod != null)
-				{
-					return interfaceMethod;
-				}
-				return targetMethod;
+				return interfaceMethod ?? targetMethod;
 			}
 		}
 
@@ -189,8 +191,21 @@ namespace Castle.DynamicProxy
 			}
 			else if (execIndex > interceptors.Length)
 			{
-				throw new InvalidOperationException(
-					@"Proceed() cannot delegate to another interceptor. This usually signify a bug in the calling code");
+				string interceptorsCount;
+				if (interceptors.Length > 1)
+				{
+					interceptorsCount = " each one of " + interceptors.Length + " interceptors";
+				}
+				else
+				{
+					interceptorsCount = " interceptor";
+				}
+
+				var message = "This is a DynamicProxy2 error: invocation.Proceed() has been called more times than expected." +
+				              "This usually signifies a bug in the calling code. Make sure that" + interceptorsCount +
+				              " selected for this method '" + Method + "'" +
+				              "calls invocation.Proceed() at most once.";
+				throw new InvalidOperationException(message);
 			}
 			else
 			{

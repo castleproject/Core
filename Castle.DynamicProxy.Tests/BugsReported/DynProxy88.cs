@@ -26,6 +26,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		{
 			generator.CreateInterfaceProxyWithoutTarget(typeof(IBase), new[] { typeof(ISub1), typeof(ISub2) });
 		}
+
 		[Test]
 		public void ShouldGenerateTypeWithDuplicatedBaseInterfacesClassProxy()
 		{

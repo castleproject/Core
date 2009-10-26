@@ -1,5 +1,10 @@
 Unreleased Changes
 ==================
+
+- Fixed DYNPROXY-ISSUE-94 - CreateProxyWithTarget fails if you use ProxyGenerationHook
+- Fixed DYNPROXY-ISSUE-89 - Proxy generation fails when IProxyGenerationHook chooses not to proxy mixin method
+- Improved (a lot) range of supported scenarios, especially around generics.
+- Improved exception messages in exceptions thrown at users, with short explanation of what they may have done wrong and how to fix it. 
 - Fixed DYNPROXY-ISSUE-113 - AbstractTypeEmitter can now be used to emit interfaces
 - Fixed DYNPROXY-ISSUE-108 - Obtaining replicated custom attributes on proxy may fail when property setter throws exception on default value
 - Moved custom attribute replication from CustomAttributeUtil to new interface - IAttributeDisassembler

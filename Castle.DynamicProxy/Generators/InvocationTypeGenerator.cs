@@ -17,20 +17,19 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-	using Contributors;
 	using Core.Interceptor;
 	using Emitters;
 	using Emitters.SimpleAST;
 	using Tokens;
 
-	public class InvocationTypeGenerator
+	public class InvocationTypeGenerator : IGenerator<NestedClassEmitter>
 	{
 		private readonly Type target;
-		private readonly MethodToGenerate method;
+		private readonly IProxyMethod method;
 		private readonly MethodInfo callback;
 		private readonly bool canChangeTarget;
 
-		public InvocationTypeGenerator(Type target, MethodToGenerate method, MethodInfo callback, bool canChangeTarget)
+		public InvocationTypeGenerator(Type target, IProxyMethod method, MethodInfo callback, bool canChangeTarget)
 		{
 			this.target = target;
 			this.method = method;
@@ -38,7 +37,7 @@ namespace Castle.DynamicProxy.Generators
 			this.canChangeTarget = canChangeTarget;
 		}
 
-		public NestedClassEmitter Generate(ClassEmitter emitter, ProxyGenerationOptions options)
+		public NestedClassEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
 			var methodInfo = method.Method;
 
@@ -49,8 +48,8 @@ namespace Castle.DynamicProxy.Generators
 				interfaces = new[] { typeof(IChangeProxyTarget) };
 			}
 			var nested =
-				new NestedClassEmitter(emitter,
-				                       string.Format("Invocation{0}_{1}", methodInfo.Name, Guid.NewGuid().ToString("N")),
+				new NestedClassEmitter(@class,
+				                       "Invocation_" + namingScope.GetUniqueName(methodInfo.Name),
 				                       typeof (AbstractInvocation),
 				                       interfaces);
 
@@ -88,7 +87,7 @@ namespace Castle.DynamicProxy.Generators
 
 				CreateIInvocationInvokeOnTarget(nested, parameters, targetRef, callback);
 			}
-			else if (method.Target is MixinContributor)
+			else if (method.HasTarget)
 			{
 				ParameterInfo[] parameters = methodInfo.GetParameters();
 				CreateIInvocationInvokeOnTarget(nested, parameters, targetRef, methodInfo);
@@ -226,19 +225,19 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name="proxyGenerationOptions"></param>
 		protected void CreateIInvocationConstructor(Type targetFieldType, NestedClassEmitter nested, FieldReference targetField, ProxyGenerationOptions proxyGenerationOptions)
 		{
-			ArgumentReference cArg0 = new ArgumentReference(targetFieldType);
-			ArgumentReference cArg1 = new ArgumentReference(typeof(object));
-			ArgumentReference cArg2 = new ArgumentReference(typeof(IInterceptor[]));
-			ArgumentReference cArg3 = new ArgumentReference(typeof(Type));
-			ArgumentReference cArg4 = new ArgumentReference(typeof(MethodInfo));
-			ArgumentReference cArg5 = new ArgumentReference(typeof(MethodInfo));
-			ArgumentReference cArg6 = new ArgumentReference(typeof(object[]));
-			ArgumentReference cArg7 = new ArgumentReference(typeof(IInterceptorSelector));
-			ArgumentReference cArg8 = new ArgumentReference(typeof(IInterceptor[]).MakeByRefType());
+			var cArg0 = new ArgumentReference(targetFieldType);
+			var cArg1 = new ArgumentReference(typeof(object));
+			var cArg2 = new ArgumentReference(typeof(IInterceptor[]));
+			var cArg3 = new ArgumentReference(typeof(Type));
+			var cArg4 = new ArgumentReference(typeof(MethodInfo));
+			var cArg5 = new ArgumentReference(typeof(MethodInfo));
+			var cArg6 = new ArgumentReference(typeof(object[]));
 
 			ConstructorEmitter constructor;
 			if (proxyGenerationOptions.Selector != null)
 			{
+				var cArg7 = new ArgumentReference(typeof(IInterceptorSelector));
+				var cArg8 = new ArgumentReference(typeof(IInterceptor[]).MakeByRefType());
 				constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg4, cArg5, cArg6, cArg7, cArg8);
 
 				constructor.CodeBuilder.InvokeBaseConstructor(

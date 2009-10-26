@@ -16,8 +16,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Reflection;
 
 	public abstract class TypeUtil
 	{
@@ -38,10 +36,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			IDictionary<Type, object> interfaces = new Dictionary<Type, object>();
 			foreach (var type in types)
 			{
+				if(type == null) continue;
+
 				if (type.IsInterface)
 				{
 					interfaces[type] = dummy;
 				}
+
 				foreach (var @interface in type.GetInterfaces())
 				{
 					interfaces[@interface] = dummy;
@@ -70,29 +71,20 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				return type.GetGenericArgument(parameter.Name);
 			}
+
 			if (parameter.IsArray)
 			{
 				var elementType = GetClosedParameterType(type, parameter.GetElementType());
 				return elementType.MakeArrayType();
 			}
 			
-			return parameter;
-		}
-
-		public static MethodInfo FindImplementingMethod(MethodInfo interfaceMethod, Type implementingType)
-		{
-			Type interfaceType = interfaceMethod.DeclaringType;
-			Debug.Assert(interfaceType.IsAssignableFrom(implementingType),
-						 "interfaceMethod.DeclaringType.IsAssignableFrom(implementingType)");
-			Debug.Assert(interfaceType.IsInterface, "interfaceType.IsInterface");
-			InterfaceMapping map = implementingType.GetInterfaceMap(interfaceType);
-			int index = Array.IndexOf(map.InterfaceMethods, interfaceMethod);
-			if (index == -1)
+			if(parameter.IsByRef)
 			{
-				// can this ever happen?
-				return null;
+				var elementType = GetClosedParameterType(type, parameter.GetElementType());
+				return elementType.MakeByRefType();
 			}
-			return map.TargetMethods[index];
+
+			return parameter;
 		}
 
 		private static bool CloseGenericParametersIfAny(AbstractTypeEmitter emitter, Type[] arguments)

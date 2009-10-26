@@ -25,13 +25,13 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private readonly string name;
 		private readonly Type type;
-		private readonly IProxyMethod getter;
-		private readonly IProxyMethod setter;
+		private readonly MethodToGenerate getter;
+		private readonly MethodToGenerate setter;
 		private readonly PropertyAttributes attributes;
 		private readonly IEnumerable<Attribute> customAttributes;
 		private PropertyEmitter emitter;
 
-		public PropertyToGenerate(string name, Type type, IProxyMethod getter, IProxyMethod setter, PropertyAttributes attributes, IEnumerable<Attribute> customAttributes)
+		public PropertyToGenerate(string name, Type type, MethodToGenerate getter, MethodToGenerate setter, PropertyAttributes attributes, IEnumerable<Attribute> customAttributes)
 		{
 			this.name = GetName(name,getter,setter);
 			this.type = type;
@@ -105,12 +105,12 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		public IProxyMethod Getter
+		public MethodToGenerate Getter
 		{
 			get { return getter; }
 		}
 
-		public IProxyMethod Setter
+		public MethodToGenerate Setter
 		{
 			get { return setter; }
 		}
