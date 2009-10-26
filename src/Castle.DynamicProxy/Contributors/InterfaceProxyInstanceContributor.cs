@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using Generators;
+	using Generators.Emitters;
 	using Generators.Emitters.CodeBuilders;
 	using Generators.Emitters.SimpleAST;
 	using Tokens;
@@ -24,31 +25,27 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		private readonly InterfaceGeneratorType generatorType;
 
-		public FieldReference TargetField { private get; set; }
-
-		protected override Expression TargetReferenceExpression
+		protected override Expression GetTargetReferenceExpression(ClassEmitter emitter)
 		{
-			get { return TargetField.ToExpression(); }
+			return emitter.GetField("__target").ToExpression();
 		}
 
-		public InterfaceProxyInstanceContributor(Type targetType, InterfaceGeneratorType generatorType) : base(targetType)
+		public InterfaceProxyInstanceContributor(Type targetType, InterfaceGeneratorType generatorType, Type[] interfaces)
+			: base(targetType, interfaces)
 		{
 			this.generatorType = generatorType;
 		}
-		
+
 #if !SILVERLIGHT
-		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo, ArgumentReference streamingContext)
+		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo, ArgumentReference streamingContext, ClassEmitter emitter)
 		{
-			codebuilder.AddStatement(new ExpressionStatement(
-			                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
-			                         	                               new ConstReference("__target").ToExpression(),
-			                         	                               TargetField.ToExpression())));
+			var targetField = emitter.GetField("__target");
 
 			codebuilder.AddStatement(new ExpressionStatement(
 			                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
 			                         	                               new ConstReference("__targetFieldType").ToExpression(),
 			                         	                               new ConstReference(
-			                         	                               	TargetField.Reference.FieldType.AssemblyQualifiedName).
+			                         	                               	targetField.Reference.FieldType.AssemblyQualifiedName).
 			                         	                               	ToExpression())));
 
 			codebuilder.AddStatement(new ExpressionStatement(

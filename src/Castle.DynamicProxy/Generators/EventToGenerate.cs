@@ -24,8 +24,8 @@ namespace Castle.DynamicProxy.Generators
 		private readonly string name;
 		private readonly Type type;
 		private EventEmitter emitter;
-		private readonly IProxyMethod adder;
-		private readonly IProxyMethod remover;
+		private readonly MethodToGenerate adder;
+		private readonly MethodToGenerate remover;
 
 		public bool Equals(EventToGenerate other)
 		{
@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name="adder">The add method.</param>
 		/// <param name="remover">The remove method.</param>
 		/// <param name="attributes">The attributes.</param>
-		public EventToGenerate(string name, Type type, IProxyMethod adder, IProxyMethod remover, EventAttributes attributes)
+		public EventToGenerate(string name, Type type, MethodToGenerate adder, MethodToGenerate remover, EventAttributes attributes)
 		{
 			this.name = GetName(name, adder, remover);
 			this.type = type;
@@ -127,14 +127,14 @@ namespace Castle.DynamicProxy.Generators
 			get { return remover.Method; }
 
 		}
-		public IProxyMethod Adder
+		public MethodToGenerate Adder
 		{
 			get {
 				return adder;
 			}
 		}
 
-		public IProxyMethod Remover
+		public MethodToGenerate Remover
 		{
 			get {
 				return remover;

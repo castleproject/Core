@@ -82,8 +82,8 @@ namespace Castle.DynamicProxy.Tests
 		                                                 new ProceedOnTypeInterceptor(typeof (IBarFoo)));
 
 			foo.Foo();
-			((IFooExtended) foo).FooExtended();
-			((IBarFoo) foo).Bar();
+			((IFooExtended)foo).FooExtended();
+			((IBarFoo)foo).Bar();
 		}
 	}
 

@@ -34,20 +34,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private GenericTypeParameterBuilder[] genericTypeParams;
 
+		private readonly IDictionary<string, FieldReference> fields =
+			new Dictionary<string, FieldReference>(StringComparer.OrdinalIgnoreCase);
+
 		public AbstractTypeEmitter(TypeBuilder typeBuilder)
 		{
-			this.typebuilder = typeBuilder;
+			typebuilder = typeBuilder;
 			nested = new NestedClassCollection();
 			methods = new MethodCollection();
 			constructors = new ConstructorCollection();
 			properties = new PropertiesCollection();
 			events = new EventCollection();
 			name2GenericType = new Dictionary<String, GenericTypeParameterBuilder>();
-		}
-
-		public bool IsGenericArgument(String genericArgumentName)
-		{
-			return name2GenericType.ContainsKey(genericArgumentName);
 		}
 
 		public Type GetGenericArgument(String genericArgumentName)
@@ -113,10 +111,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public ConstructorEmitter CreateTypeConstructor()
 		{
-			ConstructorEmitter member = new TypeConstructorEmitter(this);
+			var member = new TypeConstructorEmitter(this);
 			constructors.Add(member);
+			ClassConstructor = member;
 			return member;
 		}
+
+		public TypeConstructorEmitter ClassConstructor { get; private set; }
 
 		public MethodEmitter CreateMethod(String name, MethodAttributes attributes)
 		{
@@ -165,8 +166,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public FieldReference CreateStaticField(string name, Type fieldType, FieldAttributes atts)
 		{
 			atts |= FieldAttributes.Static;
-			FieldBuilder fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
-			return new FieldReference(fieldBuilder);
+			return CreateField(name, fieldType, atts);
 		}
 
 		public FieldReference CreateField(string name, Type fieldType)
@@ -189,7 +189,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public FieldReference CreateField(string name, Type fieldType, FieldAttributes atts)
 		{
 			FieldBuilder fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
-			return new FieldReference(fieldBuilder);
+			var reference = new FieldReference(fieldBuilder);
+			fields[name] = reference;
+			return reference;
 		}
 
 		public PropertyEmitter CreateProperty(String name, PropertyAttributes attributes, Type propertyType)
@@ -282,6 +284,21 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 
 			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder, name2GenericType));
+		}
+
+		public FieldReference GetField(string name)
+		{
+			if(string.IsNullOrEmpty(name))
+				return null;
+
+			FieldReference value;
+			fields.TryGetValue(name, out value);
+			return value;
+		}
+
+		public IEnumerable<FieldReference> GetAllFields()
+		{
+			return fields.Values;
 		}
 
 		public virtual Type BuildType()

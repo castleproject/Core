@@ -16,12 +16,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Core.Interceptor;
 
+	[DebuggerDisplay("{builder.Name}")]
 	public class MethodEmitter : IMemberEmitter
 	{
 		private readonly MethodBuilder builder;

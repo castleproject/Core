@@ -14,8 +14,6 @@
 
 namespace Castle.DynamicProxy
 {
-	using System;
-
 	/// <summary>
 	/// ProxyBuilder that persists the generated type.
 	/// </summary>

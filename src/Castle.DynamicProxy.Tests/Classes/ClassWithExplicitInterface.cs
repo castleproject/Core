@@ -14,7 +14,11 @@
 
 namespace Castle.DynamicProxy.Tests.Classes
 {
+	using System;
 
+#if !SILVERLIGHT
+	[Serializable]
+#endif
 	public class ClassWithExplicitInterface : ISimpleInterface
 	{
 		int ISimpleInterface.Do()
@@ -27,6 +31,10 @@ namespace Castle.DynamicProxy.Tests.Classes
 			return 7;
 		}
 	}
+
+#if !SILVERLIGHT
+	[Serializable]
+#endif
 	public class ClassWithInterface : ISimpleInterface
 	{
 		public int Do()

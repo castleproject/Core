@@ -38,19 +38,19 @@ namespace Castle.DynamicProxy
 
 			FieldInfo[] fields;
 			object[] fieldValues;
-			
+
 			try
 			{
-				var replicated = (Attribute) Activator.CreateInstance(type, ctorArgs);
+				var replicated = (Attribute)Activator.CreateInstance(type, ctorArgs);
 				propertyValues = GetPropertyValues(type, out properties, attribute, replicated);
 				fieldValues = GetFieldValues(type, out fields, attribute, replicated);
 			}
 			catch (Exception)
 			{
 				// ouch...
-				var message = "There was an error trying to replicate non-inheritable attribute " + type.Name +
-				              " using default attribute disassembler. " +
-				              "Use custom implementation of IAttributeDisassembler (passed as 'AttributeDisassembler' property of ProxyGenerationOptions) to replicate this attribute.";
+				var message = "Dynamic Proxy was unable to disassemble attribute " + type.Name + " using DefaultAttributeDisassembler. " +
+							  "In case of attributes not supported out of the box you can use custom IAttributeDisassembler (passed as 'AttributeDisassembler' " +
+							  "property of ProxyGenerationOptions) to handle the task approprietly.";
 				throw new ProxyGenerationException(message);
 			}
 
@@ -64,7 +64,7 @@ namespace Castle.DynamicProxy
 			{
 				// there is no real way to log a warning here...
 				Trace.WriteLine(@"Dynamic Proxy 2: Unable to find matching parameters for replicating attribute " + type.FullName +
-				                ".");
+								".");
 				return null;
 			}
 		}
@@ -97,7 +97,7 @@ namespace Castle.DynamicProxy
 			{
 				var originalValue = property.GetValue(original, null);
 				var replicatedValue = property.GetValue(replicated, null);
-				if(AreAttributeElementsEqual(originalValue,replicatedValue))
+				if (AreAttributeElementsEqual(originalValue, replicatedValue))
 				{
 					//this property has default value so we skip it
 					continue;
@@ -142,7 +142,7 @@ namespace Castle.DynamicProxy
 		/// b/ if we fail we try to match them by property type, with some smarts about convertions (i,e: can use Guid for string).
 		/// </summary>
 		private static void InitializeConstructorArgs(Type attType, Attribute attribute, object[] args,
-		                                              ParameterInfo[] parameterInfos)
+													  ParameterInfo[] parameterInfos)
 		{
 			for (int i = 0; i < args.Length; i++)
 			{
@@ -191,12 +191,12 @@ namespace Castle.DynamicProxy
 		/// we can convert it.
 		/// </summary>
 		private static PropertyInfo ReplaceIfBetterMatch(ParameterInfo parameterInfo, PropertyInfo propertyInfo,
-		                                                 PropertyInfo bestMatch)
+														 PropertyInfo bestMatch)
 		{
 			bool notBestMatch = bestMatch == null || bestMatch.PropertyType != parameterInfo.ParameterType;
 			if (propertyInfo.PropertyType == parameterInfo.ParameterType && notBestMatch)
 				return propertyInfo;
-			if (parameterInfo.ParameterType == typeof (string) && notBestMatch)
+			if (parameterInfo.ParameterType == typeof(string) && notBestMatch)
 				return propertyInfo;
 			return bestMatch;
 		}
@@ -210,14 +210,14 @@ namespace Castle.DynamicProxy
 		{
 			if (obj == null)
 				return null;
-			if (paramType == typeof (String))
+			if (paramType == typeof(String))
 				return obj.ToString();
 			return obj;
 		}
 
 		private static object GetDefaultValueFor(Type type)
 		{
-			if (type == typeof (bool))
+			if (type == typeof(bool))
 			{
 				return false;
 			}
@@ -230,7 +230,7 @@ namespace Castle.DynamicProxy
 #endif
 
 			}
-			if (type == typeof (char))
+			if (type == typeof(char))
 			{
 				return char.MinValue;
 			}
@@ -241,7 +241,7 @@ namespace Castle.DynamicProxy
 
 			return null;
 		}
-        
+
 		private static List<PropertyInfo> GetPropertyCandidates(Type attributeType)
 		{
 			var propertyCandidates = new List<PropertyInfo>();
@@ -292,8 +292,8 @@ namespace Castle.DynamicProxy
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != typeof (DefaultAttributeDisassembler)) return false;
-			return Equals((DefaultAttributeDisassembler) obj);
+			if (obj.GetType() != typeof(DefaultAttributeDisassembler)) return false;
+			return Equals((DefaultAttributeDisassembler)obj);
 		}
 
 		public override int GetHashCode()

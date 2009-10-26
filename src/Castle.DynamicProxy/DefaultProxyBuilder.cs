@@ -118,12 +118,13 @@ namespace Castle.DynamicProxy
 												InternalsHelper.IsInternalToDynamicProxy(target.Assembly);
 			if (!target.IsPublic && !target.IsNestedPublic && !internalAndVisibleToDynProxy)
 			{
-				throw new GeneratorException("Type is not public, so a proxy cannot be generated. Type: " + target.FullName);
+				throw new GeneratorException("Type " + target.FullName + "is not public. " +
+				                             "Can not create proxy for types that are not accessible.");
 			}
 			if (target.IsGenericTypeDefinition)
 			{
-				throw new GeneratorException("Type is a generic type definition, so a proxy cannot be generated. Type: " +
-											 target.FullName);
+				throw new GeneratorException("Type " + target.FullName + "is a generic type definition. " +
+				                             "Can not create proxy for open generic types.");
 			}
 		}
 

@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Contributors;
+	using Emitters.SimpleAST;
 
 	public class InterfaceProxyWithoutTargetGenerator : InterfaceProxyWithTargetGenerator
 	{
@@ -25,19 +26,75 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override void AddMappingForTargetType(IDictionary<Type, ITypeContributor> interfaceTypeImplementerMapping)
+		protected override ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> interfaceTypeImplementerMapping, Type proxyTargetType, ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces, INamingScope namingScope)
 		{
-			AddInterfaceHierarchyMapping(targetType, ProxyContributor.Empty, interfaceTypeImplementerMapping);
+			var contributor = new InterfaceProxyWithoutTargetContributor(namingScope);
+			foreach (var @interface in TypeUtil.GetAllInterfaces(targetType))
+			{
+				contributor.AddInterfaceMapping(@interface);
+				SafeAddMapping(@interface, contributor, interfaceTypeImplementerMapping);
+			}
+			return contributor;
 		}
 
-		protected override void CreateInvocationForMethod(ClassEmitter emitter, MethodToGenerate method, Type proxyTargetType)
+		protected override Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces, INamingScope namingScope)
 		{
-			var methodInfo = method.Method;
-			method2methodOnTarget[methodInfo] = methodInfo;
+			// TODO: this anemic dictionary should be made into a real object
+			IEnumerable<ITypeContributor> contributors;
+			var typeImplementerMapping = GetTypeImplementerMapping(interfaces, targetType, out contributors,namingScope);
+			
+			// collect elements
+			foreach (var contributor in contributors)
+			{
+				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook);
+			}
 
-			Type targetForInvocation = methodInfo.DeclaringType;
-			method2Invocation[methodInfo] = BuildInvocationNestedType(emitter, targetForInvocation, method, null);
+			ProxyGenerationOptions.Hook.MethodsInspected();
+
+			// This is flawed. We allow any type to be a base type but we don't realy handle it properly.
+			// What if the type implements interfaces? What if it implements target interface?
+			// What if it implement mixin interface? What if it implements any additional interface?
+			// What if it has no default constructor?
+			// We handle none of these cases.
+			ClassEmitter emitter;
+			FieldReference interceptorsField;
+			Type baseType = Init(typeName, typeImplementerMapping, out emitter, proxyTargetType, out interceptorsField);
+
+
+
+			// Constructor
+
+			var cctor = GenerateStaticConstructor(emitter);
+			var mixinFieldsList = new List<FieldReference>();
+
+			foreach (var contributor in contributors)
+			{
+				contributor.Generate(emitter, ProxyGenerationOptions);
+
+				// TODO: redo it
+				if (contributor is MixinContributorBase)
+				{
+					mixinFieldsList.Add((contributor as MixinContributorBase).BackingField);
+
+				}
+			}
+
+			var mixinFields = mixinFieldsList.ToArray();
+
+			CreateInitializeCacheMethodBody(proxyTargetType, emitter, cctor);
+
+			GenerateConstructors(emitter, baseType, new List<FieldReference>(mixinFields) {interceptorsField, targetField}.ToArray());
+
+			// Complete type initializer code body
+			CompleteInitCacheMethod(cctor.CodeBuilder);
+
+			// Crosses fingers and build type
+			Type generatedType = emitter.BuildType();
+
+			InitializeStaticFields(generatedType);
+			return generatedType;
 		}
+
 
 		protected override InterfaceGeneratorType GeneratorType
 		{

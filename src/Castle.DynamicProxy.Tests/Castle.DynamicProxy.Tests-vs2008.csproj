@@ -10,7 +10,7 @@
     <RootNamespace>Castle.DynamicProxy.Tests</RootNamespace>
     <AssemblyName>Castle.DynamicProxy.Tests</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -44,6 +44,10 @@
     <Reference Include="adodb, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-3.5\debug\adodb.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\net-3.5\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -104,17 +108,13 @@
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Castle.Core\Castle.Core-vs2008.csproj">
-      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
-      <Name>Castle.Core-vs2008</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Castle.DynamicProxy\Castle.DynamicProxy-vs2008.csproj">
       <Project>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</Project>
       <Name>Castle.DynamicProxy-vs2008</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\CastleKey.snk">
+    <None Include="..\..\buildscripts\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
     <None Include="App.config" />
@@ -169,6 +169,10 @@
     <Compile Include="InterceptorSelectorTestCase.cs" />
     <Compile Include="InterfaceProxyWithTargetInterfaceTestCase.cs" />
     <Compile Include="Interfaces\IdenticalInterfaces.cs" />
+    <Compile Include="Interfaces\IEmpty.cs" />
+    <Compile Include="Interfaces\IGenericWithRefOut.cs" />
+    <Compile Include="Interfaces\INullable.cs" />
+    <Compile Include="Interfaces\IWithRefOut.cs" />
     <Compile Include="MethodEquivalenceTestCase.cs" />
     <Compile Include="MixinDataTestCase.cs" />
     <Compile Include="CrossAppDomainCaller.cs" />
@@ -198,12 +202,18 @@
     <Compile Include="Mixins\OtherMixinImplementingISimpleMixin.cs" />
     <Compile Include="Mixins\SimpleMixin.cs" />
     <Compile Include="ModuleScopeTestCase.cs" />
+    <Compile Include="NonProxiedMethodsNoTargetTestCase.cs" />
+    <Compile Include="NonProxiedMixinMethodsTestCase.cs" />
+    <Compile Include="NonProxiedTargetMethodsTestCase.cs" />
     <Compile Include="OrderOfInterfacePrecedenceTestCase.cs" />
     <Compile Include="OutRefParams.cs" />
     <Compile Include="PersistentProxyBuilderTestCase.cs" />
     <Compile Include="Interceptors\ProceedOnTypeInterceptor.cs" />
     <Compile Include="ProxyGenerationOptionsTestCase.cs" />
     <Compile Include="Interceptors\RequiredParamInterceptor.cs" />
+    <Compile Include="ProxyKind.cs" />
+    <Compile Include="ProxyNothingHook.cs" />
+    <Compile Include="ProxyTargetAccessorHandlingTestCase.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
     <Compile Include="SerializableClassTestCase.cs" />
     <Compile Include="InternalsVisibleTo.cs" />

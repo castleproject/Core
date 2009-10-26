@@ -17,41 +17,28 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection;
 	using Contributors;
 
-	public class ProxyMethod : IProxyMethod
-	{
-		private readonly MethodInfo method;
-		private readonly ITypeContributor target;
-
-		protected ProxyMethod(MethodInfo method, ITypeContributor target)
-		{
-			this.method = method;
-			this.target = target;
-		}
-
-		public MethodInfo Method
-		{
-			get { return method; }
-		}
-
-		public bool HasTarget
-		{
-			get { return (target is ProxyContributor) == false; }
-		}
-
-		public ITypeContributor Target
-		{
-			get { return target;}
-		}
-	}
-
 	public class MethodToGenerate : ProxyMethod
 	{
 		private readonly bool standalone;
+		private readonly MethodInfo methodOnTarget;
+		private readonly bool proxyable;
 
-		public MethodToGenerate(MethodInfo method, bool standalone, ITypeContributor target)
+		public MethodToGenerate(MethodInfo method, bool standalone, ITypeContributor target, MethodInfo methodOnTarget, bool proxyable)
 			: base(method,target)
 		{
 			this.standalone = standalone;
+			this.methodOnTarget = methodOnTarget;
+			this.proxyable = proxyable;
+		}
+
+		public bool Proxyable
+		{
+			get { return proxyable; }
+		}
+
+		public override MethodInfo MethodOnTarget
+		{
+			get { return methodOnTarget; }
 		}
 
 		public bool Standalone

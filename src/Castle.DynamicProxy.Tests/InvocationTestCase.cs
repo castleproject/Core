@@ -79,12 +79,12 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(45, interceptor.Invocation.ReturnValue);
 
 			Assert.IsNotNull(interceptor.Invocation.Proxy);
-			Assert.IsNotInstanceOf(typeof (ServiceImpl), interceptor.Invocation.Proxy);
+			Assert.IsNotInstanceOf(typeof(ServiceImpl), interceptor.Invocation.Proxy);
 
 			Assert.IsNotNull(interceptor.Invocation.InvocationTarget);
-			Assert.IsInstanceOf(typeof (ServiceImpl), interceptor.Invocation.InvocationTarget);
+			Assert.IsInstanceOf(typeof(ServiceImpl), interceptor.Invocation.InvocationTarget);
 			Assert.IsNotNull(interceptor.Invocation.TargetType);
-			Assert.AreSame(typeof (ServiceImpl), interceptor.Invocation.TargetType);
+			Assert.AreSame(typeof(ServiceImpl), interceptor.Invocation.TargetType);
 
 			Assert.IsNotNull(interceptor.Invocation.Method);
 			Assert.IsNotNull(interceptor.Invocation.MethodInvocationTarget);

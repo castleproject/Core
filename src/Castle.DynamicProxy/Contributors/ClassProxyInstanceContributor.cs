@@ -16,9 +16,9 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
-	using Core.Interceptor;
 	using Generators.Emitters;
 	using Generators.Emitters.CodeBuilders;
 	using Generators.Emitters.SimpleAST;
@@ -27,14 +27,13 @@ namespace Castle.DynamicProxy.Contributors
 	public class ClassProxyInstanceContributor : ProxyInstanceContributor
 	{
 		private readonly bool delegateToBaseGetObjectData;
-		// TODO:this maybe should be changed to polymorphism...
 		private readonly bool implementISerializable;
 		private ConstructorInfo serializationConstructor;
+		private readonly IList<FieldReference> serializedFields = new List<FieldReference>();
 
-		public ClassProxyInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip)
-			: base(targetType)
+		public ClassProxyInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces)
+			: base(targetType, interfaces)
 		{
-			// TODO: the methodsToSkip is temporary, until I refactor it further
 #if !SILVERLIGHT
 			if (targetType.IsSerializable)
 			{
@@ -44,25 +43,32 @@ namespace Castle.DynamicProxy.Contributors
 #endif
 		}
 
-		protected override Expression TargetReferenceExpression
+		protected override Expression GetTargetReferenceExpression(ClassEmitter emitter)
 		{
-			get { return SelfReference.Self.ToExpression(); }
+			return SelfReference.Self.ToExpression();
 		}
 
-		public override void Generate(ClassEmitter emitter, FieldReference interceptors, FieldReference[] mixins, Type[] interfaces)
+		public override void Generate(ClassEmitter @class, ProxyGenerationOptions options)
 		{
+			var interceptors = @class.GetField("__interceptors");
 #if !SILVERLIGHT
-			Constructor(emitter, interceptors, mixins);
-
 			if (implementISerializable)
 			{
-				ImplementGetObjectData(emitter, interceptors, mixins, interfaces);
+				ImplementGetObjectData(@class);
+				Constructor(@class);
 			}
 #endif
-			ImplementProxyTargetAccessor(emitter, interceptors);
+			ImplementProxyTargetAccessor(@class, interceptors);
 		}
 #if !SILVERLIGHT
-		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo, ArgumentReference streamingContext)
+
+		protected override void AddAddValueInvocation(ArgumentReference serializationInfo, MethodEmitter getObjectData, FieldReference field)
+		{
+			serializedFields.Add(field);
+			base.AddAddValueInvocation(serializationInfo, getObjectData, field);
+		}
+
+		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo, ArgumentReference streamingContext, ClassEmitter emitter)
 		{
 			codebuilder.AddStatement(new ExpressionStatement(
 			                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Bool,
@@ -104,15 +110,15 @@ namespace Castle.DynamicProxy.Contributors
 			}
 		}
 
-		private void Constructor(ClassEmitter emitter, FieldReference interceptorsField, FieldReference[] mixinFields)
+		private void Constructor(ClassEmitter emitter)
 		{
 #if !SILVERLIGHT
 			if (!delegateToBaseGetObjectData) return;
-			GenerateSerializationConstructor(emitter, interceptorsField, mixinFields);
+			GenerateSerializationConstructor(emitter);
 #endif
 		}
 
-		private void GenerateSerializationConstructor(ClassEmitter emitter, FieldReference interceptorField, FieldReference[] mixinFields)
+		private void GenerateSerializationConstructor(ClassEmitter emitter)
 		{
 			var serializationInfo = new ArgumentReference(typeof(SerializationInfo));
 			var streamingContext = new ArgumentReference(typeof(StreamingContext));
@@ -121,75 +127,68 @@ namespace Castle.DynamicProxy.Contributors
 
 			ctor.CodeBuilder.AddStatement(
 				new ConstructorInvocationStatement(serializationConstructor,
-				                                   serializationInfo.ToExpression(), streamingContext.ToExpression()));
+				                                   serializationInfo.ToExpression(),
+				                                   streamingContext.ToExpression()));
 
-			MethodInvocationExpression getInterceptorInvocation =
-				new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.GetValue,
-				                               new ConstReference("__interceptors").ToExpression(),
-				                               new TypeTokenExpression(typeof(IInterceptor[])));
-
-			ctor.CodeBuilder.AddStatement(new AssignStatement(
-			                              	interceptorField,
-			                              	new ConvertExpression(typeof(IInterceptor[]), typeof(object),
-			                              	                      getInterceptorInvocation)));
-
-			// mixins
-			foreach (FieldReference mixinFieldReference in mixinFields)
+			foreach (var field in serializedFields)
 			{
-				MethodInvocationExpression getMixinInvocation =
-					new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.GetValue,
-					                               new ConstReference(mixinFieldReference.Reference.Name).ToExpression(),
-					                               new TypeTokenExpression(mixinFieldReference.Reference.FieldType));
-
+				var getValue = new MethodInvocationExpression(serializationInfo,
+				                                              SerializationInfoMethods.GetValue,
+				                                              new ConstReference(field.Reference.Name).ToExpression(),
+				                                              new TypeTokenExpression(field.Reference.FieldType));
 				ctor.CodeBuilder.AddStatement(new AssignStatement(
-				                              	mixinFieldReference,
-				                              	new ConvertExpression(mixinFieldReference.Reference.FieldType, typeof(object),
-				                              	                      getMixinInvocation)));
+				                              	field,
+				                              	new ConvertExpression(field.Reference.FieldType,
+				                              	                      typeof (object),
+				                              	                      getValue)));
 			}
 			ctor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
 		private bool VerifyIfBaseImplementsGetObjectData(Type baseType, IList<MethodInfo> methodsToSkip)
 		{
+			if (!typeof (ISerializable).IsAssignableFrom(baseType))
+			{
+				return false;
+			}
+
 			// If base type implements ISerializable, we have to make sure
 			// the GetObjectData is marked as virtual
-			if (typeof(ISerializable).IsAssignableFrom(baseType))
+			var getObjectDataMethod = baseType.GetInterfaceMap(typeof (ISerializable)).TargetMethods[0];
+
+			Debug.Assert(getObjectDataMethod.Name == "GetObjectData");
+			if (getObjectDataMethod.IsPrivate) //explicit interface implementation
 			{
-				MethodInfo getObjectDataMethod = baseType.GetMethod("GetObjectData",
-				                                                    new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
-
-				if (getObjectDataMethod == null) //explicit interface implementation
-				{
-					return false;
-				}
-
-				if (!getObjectDataMethod.IsVirtual || getObjectDataMethod.IsFinal)
-				{
-					String message = String.Format("The type {0} implements ISerializable, but GetObjectData is not marked as virtual",
-					                               baseType.FullName);
-					throw new ArgumentException(message);
-				}
-
-				// TODO: This should be removed
-				methodsToSkip.Add(getObjectDataMethod);
-
-				serializationConstructor = baseType.GetConstructor(
-					BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-					null,
-					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) },
-					null);
-
-				if (serializationConstructor == null)
-				{
-					String message =
-						String.Format("The type {0} implements ISerializable, but failed to provide a deserialization constructor",
-						              baseType.FullName);
-					throw new ArgumentException(message);
-				}
-
-				return true;
+				return false;
 			}
-			return false;
+
+			if (!getObjectDataMethod.IsVirtual || getObjectDataMethod.IsFinal)
+			{
+				var message = String.Format("The type {0} implements ISerializable, but GetObjectData is not marked as virtual. " +
+				                            "Dynamic Proxy needs types implementing ISerializable to mark GetObjectData as virtual " +
+				                            "to ensure correct serialization process.",
+				                            baseType.FullName);
+				throw new ArgumentException(message);
+			}
+
+			// TODO: This should be removed
+			methodsToSkip.Add(getObjectDataMethod);
+
+			serializationConstructor = baseType.GetConstructor(
+				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+				null,
+				new[] { typeof(SerializationInfo), typeof(StreamingContext) },
+				null);
+
+			if (serializationConstructor == null)
+			{
+				String message = String.Format("The type {0} implements ISerializable, " +
+				                               "but failed to provide a deserialization constructor",
+				                               baseType.FullName);
+				throw new ArgumentException(message);
+			}
+
+			return true;
 		}
 #endif
 	}

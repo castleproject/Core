@@ -55,12 +55,39 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (type.IsPrimitive)
 			{
-				gen.Emit(LdcOpCodesDictionary.Instance[type], 0);
+				var opCode = LdcOpCodesDictionary.Instance[type];
+				switch (opCode.StackBehaviourPush)
+				{
+					case StackBehaviour.Pushi:
+						gen.Emit(opCode, 0);
+						if (Is64BitTypeLoadedAsInt32(type))
+						{
+							// we load Int32, and have to convert it to 64bit type
+							gen.Emit(OpCodes.Conv_I8);
+						}
+						break;
+					case StackBehaviour.Pushr8:
+						gen.Emit(opCode, 0D);
+						break;
+					case StackBehaviour.Pushi8:
+						gen.Emit(opCode, 0L);
+						break;
+					case StackBehaviour.Pushr4:
+						gen.Emit(opCode, 0F);
+						break;
+					default:
+						throw new NotSupportedException();
+				}
 			}
 			else
 			{
 				gen.Emit(OpCodes.Ldnull);
 			}
+		}
+
+		private static bool Is64BitTypeLoadedAsInt32(Type type)
+		{
+			return type == typeof (long) || type == typeof (ulong);
 		}
 
 		/// <summary>

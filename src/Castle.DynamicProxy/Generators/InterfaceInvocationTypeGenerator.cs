@@ -23,7 +23,8 @@ namespace Castle.DynamicProxy.Generators
 
 	public class InterfaceInvocationTypeGenerator : InvocationTypeGenerator
 	{
-		public InterfaceInvocationTypeGenerator(Type target, MethodToGenerate method, MethodInfo callback, bool canChangeTarget) : base(target, method, callback, canChangeTarget)
+		public InterfaceInvocationTypeGenerator(Type target, IProxyMethod method, MethodInfo callback, bool canChangeTarget)
+			: base(target, method, callback, canChangeTarget)
 		{
 		}
 

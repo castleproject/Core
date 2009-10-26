@@ -153,6 +153,9 @@ namespace Castle.DynamicProxy.Tests
 	}
 #endif
 
+#if !SILVERLIGHT
+	[Serializable]
+#endif
 	public class GenericClass : IGenericInterface
 	{
 		#region IGenericInterface Members
