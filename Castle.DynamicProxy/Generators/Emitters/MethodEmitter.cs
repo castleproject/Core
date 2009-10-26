@@ -79,17 +79,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			ParameterInfo[] baseMethodParameters = baseMethod.GetParameters();
 			Type[] parameters = GenericUtil.ExtractParametersTypes
 				(baseMethodParameters, name2GenericType);
-#if SILVERLIGHT
-#warning Does this bug exist in SL?
-			// Disabled for .NET due to .Net 3.5 SP 1 bug
-			List<Type[]> paramModReq = new List<Type[]>();
-			List<Type[]> paramModOpt = new List<Type[]>();
-			foreach (ParameterInfo parameterInfo in baseMethodParameters)
-			{
-				paramModOpt.Add(parameterInfo.GetOptionalCustomModifiers());
-				paramModReq.Add(parameterInfo.GetRequiredCustomModifiers());
-			} 
-#endif
+
+			//// Disabled for .NET due to .Net 3.5 SP 1 bug
+			//List<Type[]> paramModReq = new List<Type[]>();
+			//List<Type[]> paramModOpt = new List<Type[]>();
+			//foreach (ParameterInfo parameterInfo in baseMethodParameters)
+			//{
+			//    paramModOpt.Add(parameterInfo.GetOptionalCustomModifiers());
+			//    paramModReq.Add(parameterInfo.GetRequiredCustomModifiers());
+			//} 
+
 			genericTypeParams = GenericUtil.CopyGenericArguments(baseMethod, builder, name2GenericType);
 			// Bind parameter types
 
@@ -100,19 +99,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			SetReturnType(GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType));
 
-#if SILVERLIGHT
 			builder.SetSignature(
 				returnType,
-				baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
-				baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
-				parameters,
-				paramModReq.ToArray(),
-				paramModOpt.ToArray()
-				);
-#else
-			builder.SetSignature(
-				returnType,
-				// Disabled due to .Net 3.5 SP 1 bug
+				// Disabled due to .Net 3.5 SP 1 bug and Silverlight does not have this API
 				//baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
 				//baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
 				Type.EmptyTypes,
@@ -122,7 +111,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 //				 paramModReq.ToArray(),
 //				 paramModOpt.ToArray()
 				);
-#endif
+
 
 			DefineParameters(baseMethodParameters);
 		}
