@@ -45,8 +45,8 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if SILVERLIGHT
-		[Ignore("Cannot do in Silverlight.")]
+#if SILVERLIGHT || MONO
+		[Ignore("Cannot do in Silverlight or Mono.")]
 #endif
 		public void TearDown_SavesAssembly_IfProxyGenerated()
 		{
@@ -61,8 +61,8 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if SILVERLIGHT
-		[Ignore("Cannot do in Silverlight.")]
+#if SILVERLIGHT || MONO
+		[Ignore("Cannot do in Silverlight or Mono.")]
 #endif
 		[ExpectedException(typeof (AssertionException))]
 		public void TearDown_FindsVerificationErrors()
