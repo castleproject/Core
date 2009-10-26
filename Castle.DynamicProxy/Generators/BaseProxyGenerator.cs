@@ -242,10 +242,21 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (ConstructorInfo constructor in constructors)
 			{
-				if (constructor.IsPublic || constructor.IsFamily || constructor.IsFamilyOrAssembly
-					|| (constructor.IsAssembly && InternalsHelper.IsInternalToDynamicProxy(constructor.DeclaringType.Assembly)))
+				if (IsConstructorVisible(constructor))
 					GenerateConstructor(emitter, constructor, fields);
 			}
+		}
+
+		private bool IsConstructorVisible(ConstructorInfo constructor)
+		{
+			return constructor.IsPublic
+			       || constructor.IsFamily
+			       || constructor.IsFamilyOrAssembly
+#if !Silverlight
+			       || (constructor.IsAssembly && InternalsHelper.IsInternalToDynamicProxy(constructor.DeclaringType.Assembly));
+#else
+            ;
+#endif
 		}
 
 		protected ConstructorEmitter GenerateStaticConstructor(ClassEmitter emitter)
