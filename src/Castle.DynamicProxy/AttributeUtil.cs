@@ -66,6 +66,39 @@ namespace Castle.DynamicProxy
 
 			return arguments;
 		}
+
+
+		private static void GetSettersAndFields(IList<CustomAttributeNamedArgument> namedArguments,
+												out PropertyInfo[] properties, out object[] propertyValues,
+												out FieldInfo[] fields, out object[] fieldValues)
+		{
+			var propertyList = new List<PropertyInfo>();
+			var propertyValuesList = new List<object>();
+			var fieldList = new List<FieldInfo>();
+			var fieldValuesList = new List<object>();
+			foreach (CustomAttributeNamedArgument argument in namedArguments)
+			{
+				switch (argument.MemberInfo.MemberType)
+				{
+					case MemberTypes.Property:
+						propertyList.Add(argument.MemberInfo as PropertyInfo);
+						propertyValuesList.Add(argument.TypedValue.Value);
+						break;
+					case MemberTypes.Field:
+						fieldList.Add(argument.MemberInfo as FieldInfo);
+						fieldValuesList.Add(argument.TypedValue.Value);
+						break;
+					default:
+						throw new ArgumentException(string.Format("Unexpected member type {0} in custom attribute.",
+																  argument.MemberInfo.MemberType));
+				}
+			}
+
+			properties = propertyList.ToArray();
+			propertyValues = propertyValuesList.ToArray();
+			fields = fieldList.ToArray();
+			fieldValues = fieldValuesList.ToArray();
+		}
 #else
 #warning CustomAttributeData is internal in Silverlight
 #endif
@@ -162,38 +195,6 @@ namespace Castle.DynamicProxy
 				types[i] = objects[i].GetType();
 			}
 			return types;
-		}
-
-		private static void GetSettersAndFields(IList<CustomAttributeNamedArgument> namedArguments,
-		                                        out PropertyInfo[] properties, out object[] propertyValues,
-		                                        out FieldInfo[] fields, out object[] fieldValues)
-		{
-			var propertyList = new List<PropertyInfo>();
-			var propertyValuesList = new List<object>();
-			var fieldList = new List<FieldInfo>();
-			var fieldValuesList = new List<object>();
-			foreach (CustomAttributeNamedArgument argument in namedArguments)
-			{
-				switch (argument.MemberInfo.MemberType)
-				{
-					case MemberTypes.Property:
-						propertyList.Add(argument.MemberInfo as PropertyInfo);
-						propertyValuesList.Add(argument.TypedValue.Value);
-						break;
-					case MemberTypes.Field:
-						fieldList.Add(argument.MemberInfo as FieldInfo);
-						fieldValuesList.Add(argument.TypedValue.Value);
-						break;
-					default:
-						throw new ArgumentException(string.Format("Unexpected member type {0} in custom attribute.",
-						                                          argument.MemberInfo.MemberType));
-				}
-			}
-
-			properties = propertyList.ToArray();
-			propertyValues = propertyValuesList.ToArray();
-			fields = fieldList.ToArray();
-			fieldValues = fieldValuesList.ToArray();
 		}
 
 #if !SILVERLIGHT
