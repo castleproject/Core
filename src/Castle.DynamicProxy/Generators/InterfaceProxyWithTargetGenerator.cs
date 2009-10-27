@@ -147,12 +147,9 @@ namespace Castle.DynamicProxy.Generators
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
 #else
-			emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType),ProxyGenerationOptions.AttributeDisassembler);
-			emitter.DefineCustomAttribute(new SerializableAttribute(), ProxyGenerationOptions.AttributeDisassembler);
+			emitter.DefineCustomAttribute<XmlIncludeAttribute>(new object[] {targetType});
+			emitter.DefineCustomAttribute<SerializableAttribute>();
 #endif
-
-			// Custom attributes
-			ReplicateNonInheritableAttributes(targetType, emitter);
 
 			// Fields generations
 			interceptorsField = CreateInterceptorsField(emitter);
@@ -169,7 +166,7 @@ namespace Castle.DynamicProxy.Generators
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
 #else
-			emitter.DefineCustomAttributeFor(targetField, new XmlIgnoreAttribute(), ProxyGenerationOptions.AttributeDisassembler);
+			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(targetField);
 #endif
 		}
 

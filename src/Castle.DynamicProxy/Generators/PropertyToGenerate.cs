@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Diagnostics;
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Core.Interceptor;
 
 	public class PropertyToGenerate
 	{
@@ -28,10 +27,10 @@ namespace Castle.DynamicProxy.Generators
 		private readonly MethodToGenerate getter;
 		private readonly MethodToGenerate setter;
 		private readonly PropertyAttributes attributes;
-		private readonly IEnumerable<Attribute> customAttributes;
+		private readonly IEnumerable<CustomAttributeData> customAttributes;
 		private PropertyEmitter emitter;
 
-		public PropertyToGenerate(string name, Type type, MethodToGenerate getter, MethodToGenerate setter, PropertyAttributes attributes, IEnumerable<Attribute> customAttributes)
+		public PropertyToGenerate(string name, Type type, MethodToGenerate getter, MethodToGenerate setter, PropertyAttributes attributes, IEnumerable<CustomAttributeData> customAttributes)
 		{
 			this.name = GetName(name,getter,setter);
 			this.type = type;
@@ -153,14 +152,14 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		public void BuildPropertyEmitter(ClassEmitter classEmitter, IAttributeDisassembler disassembler)
+		public void BuildPropertyEmitter(ClassEmitter classEmitter)
 		{
-			if(emitter!=null)
-				throw new InvalidOperationException();
+			if (emitter != null)
+				throw new InvalidOperationException("Emitter is already created. It is illegal to invoke this method twice.");
 
 			emitter = classEmitter.CreateProperty(name, attributes, type);
 			foreach (var attribute in customAttributes)
-				emitter.DefineCustomAttribute(attribute, disassembler);
+				emitter.DefineCustomAttribute(attribute);
 		}
 	}
 }

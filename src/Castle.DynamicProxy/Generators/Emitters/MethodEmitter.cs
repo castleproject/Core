@@ -21,20 +21,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Core.Interceptor;
 
 	[DebuggerDisplay("{builder.Name}")]
-	public class MethodEmitter : IMemberEmitter
+	public class MethodEmitter : IMemberEmitter,IHasCustomAttributesEmitter
 	{
 		private readonly MethodBuilder builder;
-		private readonly AbstractTypeEmitter maintype;
 
 		private ArgumentReference[] arguments;
 
 		private MethodCodeBuilder codebuilder;
 		private GenericTypeParameterBuilder[] genericTypeParams;
 
-		private Dictionary<String, GenericTypeParameterBuilder> name2GenericType =
+		private readonly Dictionary<String, GenericTypeParameterBuilder> name2GenericType =
 			new Dictionary<string, GenericTypeParameterBuilder>();
 
 		protected internal MethodEmitter(MethodBuilder builder)
@@ -45,7 +43,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		internal MethodEmitter(AbstractTypeEmitter maintype, String name, MethodAttributes attrs)
 			: this(maintype.TypeBuilder.DefineMethod(name, attrs))
 		{
-			this.maintype = maintype;
 		}
 
 		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
@@ -176,15 +173,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public void DefineCustomAttribute(Attribute attribute,IAttributeDisassembler disassembler)
+		public void DefineCustomAttribute(CustomAttributeData attribute)
 		{
-			CustomAttributeBuilder customAttributeBuilder = disassembler.Disassemble(attribute);
-
-			if (customAttributeBuilder == null)
-			{
-				return;
-			}
-
+			var customAttributeBuilder = AttributeUtil.CreateBuilder(attribute);
 			builder.SetCustomAttribute(customAttributeBuilder);
 		}
 

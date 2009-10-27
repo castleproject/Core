@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Generators.Emitters.SimpleAST;
 	using Tokens;
 
-	public abstract class ProxyInstanceContributor : ITypeContributor
+	public abstract class ProxyInstanceContributor : TypeContributor
 	{
 		// TODO: this whole type (and its descendants) should be #if !SILVERLIGHT... and empty type should be used instead for SL
 
@@ -42,13 +42,14 @@ namespace Castle.DynamicProxy.Contributors
 		protected abstract Expression GetTargetReferenceExpression(ClassEmitter emitter);
 
 
-		public virtual void Generate(ClassEmitter @class, ProxyGenerationOptions options)
+		public override void Generate(ClassEmitter @class, ProxyGenerationOptions options)
 		{
 			var interceptors = @class.GetField("__interceptors");
 #if !SILVERLIGHT
 			ImplementGetObjectData(@class);
 #endif
 			ImplementProxyTargetAccessor(@class, interceptors);
+			ReplicateNonInheritableAttributes(targetType, @class);
 		}
 
 		protected void ImplementProxyTargetAccessor(ClassEmitter emitter, FieldReference interceptorsField)
@@ -161,7 +162,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected abstract void CustomizeGetObjectData(AbstractCodeBuilder builder, ArgumentReference serializationInfo, ArgumentReference streamingContext, ClassEmitter emitter);
 #endif
-		public void CollectElementsToProxy(IProxyGenerationHook hook)
+		public override void CollectElementsToProxy(IProxyGenerationHook hook)
 		{
 		}
 	}

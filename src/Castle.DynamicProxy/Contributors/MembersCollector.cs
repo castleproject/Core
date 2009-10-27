@@ -114,7 +114,7 @@ namespace Castle.DynamicProxy.Contributors
 				return;
 			}
 
-			IEnumerable<Attribute> nonInheritableAttributes = GetNonInheritableAttributes(property);
+			var nonInheritableAttributes = GetNonInheritableAttributes(property);
 			properties[property] = new PropertyToGenerate(property.Name,
 			                                              property.PropertyType,
 			                                              getter,
@@ -271,13 +271,13 @@ namespace Castle.DynamicProxy.Contributors
 			return hook.ShouldInterceptMethod(type, method);
 		}
 
-		private IEnumerable<Attribute> GetNonInheritableAttributes(ICustomAttributeProvider propertyInfo)
+		private IEnumerable<CustomAttributeData> GetNonInheritableAttributes(MemberInfo propertyInfo)
 		{
-			object[] attrs = propertyInfo.GetCustomAttributes(false);
+			var attributes = CustomAttributeData.GetCustomAttributes(propertyInfo);
 
-			foreach (Attribute attribute in attrs)
+			foreach (var attribute in attributes)
 			{
-				if (ShouldSkipAttributeReplication(attribute)) continue;
+				if (ShouldSkipAttributeReplication(attribute.Constructor.DeclaringType)) continue;
 
 				yield return attribute;
 			}
@@ -288,12 +288,12 @@ namespace Castle.DynamicProxy.Contributors
 		/// but there are some special cases where the attributes means
 		/// something to the CLR, where they should be skipped.
 		/// </summary>
-		private bool ShouldSkipAttributeReplication(Attribute attribute)
+		private bool ShouldSkipAttributeReplication(Type attribute)
 		{
 			if (SpecialCaseAttributThatShouldNotBeReplicated(attribute))
 				return true;
 
-			object[] attrs = attribute.GetType().GetCustomAttributes(typeof (AttributeUsageAttribute), true);
+			object[] attrs = attribute.GetCustomAttributes(typeof (AttributeUsageAttribute), true);
 
 			if (attrs.Length != 0)
 			{
@@ -305,9 +305,9 @@ namespace Castle.DynamicProxy.Contributors
 			return true;
 		}
 
-		private static bool SpecialCaseAttributThatShouldNotBeReplicated(Attribute attribute)
+		private static bool SpecialCaseAttributThatShouldNotBeReplicated(Type attribute)
 		{
-			return AttributesToAvoidReplicating.Contains(attribute.GetType());
+			return AttributesToAvoidReplicating.Contains(attribute);
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Generators.Emitters;
 	using Generators.Emitters.SimpleAST;
 
-	public /* internal? */ class ClassProxyTargetContributor : ITypeContributor
+	public /* internal? */ class ClassProxyTargetContributor : TypeContributor
 	{
 		private readonly Type targetType;
 		private readonly IList<MethodInfo> methodsToSkip;
@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Contributors
 			interfaces.Add(@interface, targetType.GetInterfaceMap(@interface));
 		}
 
-		public void CollectElementsToProxy(IProxyGenerationHook hook)
+		public override void CollectElementsToProxy(IProxyGenerationHook hook)
 		{
 			Debug.Assert(hook != null, "hook != null");
 
@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		}
 
-		public void Generate(ClassEmitter @class, ProxyGenerationOptions options)
+		public override void Generate(ClassEmitter @class, ProxyGenerationOptions options)
 		{
 			foreach (var target in targets)
 			{
@@ -106,7 +106,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void ImplementProperty(ClassEmitter emitter, PropertyToGenerate property, ProxyGenerationOptions options)
 		{
-			property.BuildPropertyEmitter(emitter, options.AttributeDisassembler);
+			property.BuildPropertyEmitter(emitter);
 			if (property.CanRead)
 			{
 				ImplementMethod(property.Getter, emitter, options,
@@ -146,7 +146,7 @@ namespace Castle.DynamicProxy.Contributors
 				generator = new EmptyMethodGenerator(method, createMethod);
 			}
 			var proxyMethod = generator.Generate(@class, options, namingScope);
-			ReplicateNonInheritableAttributes(method.Method, proxyMethod, options);
+			ReplicateNonInheritableAttributes(method.Method, proxyMethod);
 		}
 
 		private bool IsExplicitInterfaceImplementation(MethodInfo methodInfo)
@@ -154,48 +154,7 @@ namespace Castle.DynamicProxy.Contributors
 			return methodInfo.IsPrivate && methodInfo.IsFinal;
 		}
 
-		protected void ReplicateNonInheritableAttributes(MethodInfo method, MethodEmitter emitter,ProxyGenerationOptions options)
-		{
-			object[] attrs = method.GetCustomAttributes(false);
-
-			foreach (Attribute attribute in attrs)
-			{
-				if (ShouldSkipAttributeReplication(attribute)) continue;
-
-				emitter.DefineCustomAttribute(attribute, options.AttributeDisassembler);
-			}
-		}
-
-		private static bool SpecialCaseAttributThatShouldNotBeReplicated(Attribute attribute)
-		{
-			return AttributesToAvoidReplicating.Contains(attribute.GetType());
-		}
-
-		/// <summary>
-		/// Attributes should be replicated if they are non-inheritable,
-		/// but there are some special cases where the attributes means
-		/// something to the CLR, where they should be skipped.
-		/// </summary>
-		private bool ShouldSkipAttributeReplication(Attribute attribute)
-		{
-			if (SpecialCaseAttributThatShouldNotBeReplicated(attribute))
-				return true;
-
-			object[] attrs = attribute.GetType()
-				.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
-
-			if (attrs.Length != 0)
-			{
-				AttributeUsageAttribute usage = (AttributeUsageAttribute)attrs[0];
-
-				return usage.Inherited;
-			}
-
-			return true;
-		}
-
-
-		protected MethodBuilder CreateCallbackMethod(ClassEmitter emitter, MethodInfo methodInfo, MethodInfo methodOnTarget)
+		private MethodBuilder CreateCallbackMethod(ClassEmitter emitter, MethodInfo methodInfo, MethodInfo methodOnTarget)
 		{
 			MethodInfo targetMethod = methodOnTarget ?? methodInfo;
 

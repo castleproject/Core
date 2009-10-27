@@ -8,7 +8,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class InterfaceProxyWithoutTargetContributor : ITypeContributor
+	public class InterfaceProxyWithoutTargetContributor : TypeContributor
 	{
 		private readonly IList<MembersCollector> targets = new List<MembersCollector>();
 		private readonly IList<Type> interfaces = new List<Type>();
@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Contributors
 			this.namingScope = namingScope;
 		}
 
-		public void CollectElementsToProxy(IProxyGenerationHook hook)
+		public override void CollectElementsToProxy(IProxyGenerationHook hook)
 		{
 			Debug.Assert(hook != null, "hook != null");
 			foreach (var @interface in interfaces)
@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Contributors
 			interfaces.Add(@interface);
 		}
 
-		public void Generate(ClassEmitter @class, ProxyGenerationOptions options)
+		public override void Generate(ClassEmitter @class, ProxyGenerationOptions options)
 		{
 			foreach (var target in targets)
 			{
@@ -81,7 +81,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void ImplementProperty(ClassEmitter emitter, PropertyToGenerate property, ProxyGenerationOptions options)
 		{
-			property.BuildPropertyEmitter(emitter, options.AttributeDisassembler);
+			property.BuildPropertyEmitter(emitter);
 			if (property.CanRead)
 			{
 				var method = property.Getter;
@@ -120,49 +120,9 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			var proxiedMethod = generator.Generate(@class, options, namingScope);
-			ReplicateNonInheritableAttributes(method.Method, proxiedMethod, options);
+			ReplicateNonInheritableAttributes(method.Method, proxiedMethod);
 		}
 
-
-		protected void ReplicateNonInheritableAttributes(MethodInfo method, MethodEmitter emitter, ProxyGenerationOptions options)
-		{
-			object[] attrs = method.GetCustomAttributes(false);
-
-			foreach (Attribute attribute in attrs)
-			{
-				if (ShouldSkipAttributeReplication(attribute)) continue;
-
-				emitter.DefineCustomAttribute(attribute, options.AttributeDisassembler);
-			}
-		}
-
-		private static bool SpecialCaseAttributThatShouldNotBeReplicated(Attribute attribute)
-		{
-			return AttributesToAvoidReplicating.Contains(attribute.GetType());
-		}
-
-		/// <summary>
-		/// Attributes should be replicated if they are non-inheritable,
-		/// but there are some special cases where the attributes means
-		/// something to the CLR, where they should be skipped.
-		/// </summary>
-		private bool ShouldSkipAttributeReplication(Attribute attribute)
-		{
-			if (SpecialCaseAttributThatShouldNotBeReplicated(attribute))
-				return true;
-
-			object[] attrs = attribute.GetType()
-				.GetCustomAttributes(typeof (AttributeUsageAttribute), true);
-
-			if (attrs.Length != 0)
-			{
-				var usage = (AttributeUsageAttribute) attrs[0];
-
-				return usage.Inherited;
-			}
-
-			return true;
-		}
 
 		protected virtual Expression GetTargetExpression(ClassEmitter @class, MethodInfo method)
 		{

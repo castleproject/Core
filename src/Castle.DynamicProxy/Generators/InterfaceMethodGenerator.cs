@@ -152,7 +152,7 @@ namespace Castle.DynamicProxy.Generators
 
 			// TODO: Initialize iinvocation instance with ordinary arguments and in and out arguments
 
-			ConstructorInfo constructor = this.invocation.Constructors[0].ConstructorBuilder;
+			ConstructorInfo constructor = invocation.Constructors[0].ConstructorBuilder;
 			if (isGenericInvocationClass)
 			{
 				constructor = TypeBuilder.GetConstructor(invocationType, constructor);
@@ -183,8 +183,7 @@ namespace Castle.DynamicProxy.Generators
 				FieldReference methodInterceptors = @class.CreateField(string.Format("{0}_interceptors", tokenFieldName),
 				                                                       typeof(IInterceptor[]), false);
 #if !SILVERLIGHT
-				@class.DefineCustomAttributeFor(methodInterceptors, new XmlIgnoreAttribute(),
-				                                options.AttributeDisassembler);
+				@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
 #endif
 
 				MethodInvocationExpression selector =

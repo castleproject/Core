@@ -59,6 +59,7 @@ namespace Castle.DynamicProxy.Contributors
 			}
 #endif
 			ImplementProxyTargetAccessor(@class, interceptors);
+			ReplicateNonInheritableAttributes(targetType, @class);
 		}
 #if !SILVERLIGHT
 

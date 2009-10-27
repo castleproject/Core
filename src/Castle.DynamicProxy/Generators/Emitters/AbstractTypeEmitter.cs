@@ -20,9 +20,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Core.Interceptor;
 
-	public abstract class AbstractTypeEmitter
+	public abstract class AbstractTypeEmitter : IHasCustomAttributesEmitter
 	{
 		private readonly TypeBuilder typebuilder;
 		private readonly ConstructorCollection constructors;
@@ -85,9 +84,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public void AddCustomAttributes(ProxyGenerationOptions proxyGenerationOptions)
 		{
-			foreach (Attribute attr in proxyGenerationOptions.AttributesToAddToGeneratedTypes)
+			foreach (Attribute attr in proxyGenerationOptions.attributesToAddToGeneratedTypes)
 			{
-				DefineCustomAttribute(attr, proxyGenerationOptions.AttributeDisassembler);
+				var customAttributeBuilder = AttributeUtil.CreateBuilder(attr);
+				typebuilder.SetCustomAttribute(customAttributeBuilder);
+			}
+
+			foreach (var attribute in proxyGenerationOptions.AdditionalAttributes)
+			{
+				typebuilder.SetCustomAttribute(attribute);
 			}
 		}
 
@@ -209,40 +214,35 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return eventEmitter;
 		}
 
-		public void DefineCustomAttribute(Attribute attribute,IAttributeDisassembler disassembler)
+		
+		public void DefineCustomAttribute(CustomAttributeData attribute)
 		{
-			CustomAttributeBuilder customAttributeBuilder = disassembler.Disassemble(attribute);
-			if (customAttributeBuilder == null)
-				return;
+			var customAttributeBuilder = AttributeUtil.CreateBuilder(attribute);
 			typebuilder.SetCustomAttribute(customAttributeBuilder);
 		}
 
-		public void DefineCustomAttributeFor(FieldReference field, Attribute attribute, IAttributeDisassembler disassembler)
+		public void DefineCustomAttribute<TAttribute>(object[] constructorArguments) where TAttribute:Attribute
 		{
-			CustomAttributeBuilder customAttributeBuilder = disassembler.Disassemble(attribute);
-			if (customAttributeBuilder == null)
-				return;
+			var customAttributeBuilder = AttributeUtil.CreateBuilder(typeof (TAttribute), constructorArguments);
+			typebuilder.SetCustomAttribute(customAttributeBuilder);
+		}
+
+		public void DefineCustomAttribute<TAttribute>() where TAttribute : Attribute, new()
+		{
+			var customAttributeBuilder = AttributeUtil.CreateBuilder<TAttribute>();
+			typebuilder.SetCustomAttribute(customAttributeBuilder);
+		}
+
+		public void DefineCustomAttributeFor<TAttribute>(FieldReference field) where TAttribute : Attribute, new()
+		{
+			var customAttributeBuilder = AttributeUtil.CreateBuilder<TAttribute>();
 			field.Reference.SetCustomAttribute(customAttributeBuilder);
 		}
+
 
 		public ConstructorCollection Constructors
 		{
 			get { return constructors; }
-		}
-
-		public MethodCollection Methods
-		{
-			get { return methods; }
-		}
-
-		public PropertiesCollection Properties
-		{
-			get { return properties; }
-		}
-
-		public EventCollection Events
-		{
-			get { return events; }
 		}
 
 		public NestedClassCollection Nested

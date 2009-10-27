@@ -217,22 +217,6 @@ namespace Castle.DynamicProxy.Generators
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		#region Custom Attribute handling
-
-		protected void ReplicateNonInheritableAttributes(Type targetType, ClassEmitter emitter)
-		{
-			object[] attrs = targetType.GetCustomAttributes(false);
-
-			foreach (Attribute attribute in attrs)
-			{
-				if (ShouldSkipAttributeReplication(attribute)) continue;
-
-				emitter.DefineCustomAttribute(attribute, ProxyGenerationOptions.AttributeDisassembler);
-			}
-		}
-
-		#endregion
-
 		#region Type tokens related operations
 
 		protected void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldReference[] fields)
@@ -283,40 +267,6 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		#endregion
-
-		#region Utility methods
-
-
-
-		/// <summary>
-		/// Attributes should be replicated if they are non-inheritable,
-		/// but there are some special cases where the attributes means
-		/// something to the CLR, where they should be skipped.
-		/// </summary>
-		private bool ShouldSkipAttributeReplication(Attribute attribute)
-		{
-			if (SpecialCaseAttributThatShouldNotBeReplicated(attribute))
-				return true;
-
-			object[] attrs = attribute.GetType()
-				.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
-
-			if (attrs.Length != 0)
-			{
-				AttributeUsageAttribute usage = (AttributeUsageAttribute)attrs[0];
-
-				return usage.Inherited;
-			}
-
-			return true;
-		}
-
-		#endregion
-
-		private static bool SpecialCaseAttributThatShouldNotBeReplicated(Attribute attribute)
-		{
-			return AttributesToAvoidReplicating.Contains(attribute.GetType());
-		}
 
 		private void ValidateMixinInterfaces(IEnumerable<Type> interfacesToCheckAgainst, string roleOfCheckedInterfaces)
 		{
@@ -413,8 +363,7 @@ namespace Castle.DynamicProxy.Generators
 			var interceptorsField = emitter.CreateField("__interceptors", typeof (IInterceptor[]));
 
 #if !SILVERLIGHT
-			emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute(),
-			                                 ProxyGenerationOptions.AttributeDisassembler);
+			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(interceptorsField);
 #endif
 			return interceptorsField;
 		}

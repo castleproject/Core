@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Tests
 		public void On_class()
 		{
 			ProxyGenerationOptions options = new ProxyGenerationOptions();
-			options.AttributesToAddToGeneratedTypes.Add(new __Protect());
+			options.AdditionalAttributes.Add(AttributeUtil.CreateBuilder<__Protect>());
 
 			object proxy = new ProxyGenerator().CreateClassProxy(typeof(CanDefineAdditionalCustomAttributes), options);
 
@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Tests
 		public void On_interfaces()
 		{
 			ProxyGenerationOptions options = new ProxyGenerationOptions();
-			options.AttributesToAddToGeneratedTypes.Add(new __Protect());
+			options.AdditionalAttributes.Add(AttributeUtil.CreateBuilder<__Protect>());
 		
 			object proxy = new ProxyGenerator().CreateInterfaceProxyWithoutTarget(typeof(IDisposable), new Type[0], options);
 
