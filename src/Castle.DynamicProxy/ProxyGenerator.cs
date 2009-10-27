@@ -19,7 +19,9 @@ namespace Castle.DynamicProxy
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
+#if !SILVERLIGHT
 	using System.Runtime.Remoting;
+#endif
 	using System.Text;
 	using Castle.Core.Interceptor;
 
@@ -430,6 +432,7 @@ namespace Castle.DynamicProxy
 			bool isRemotingProxy = false;
 			if (!interfaceToProxy.IsAssignableFrom(target.GetType()))
 			{
+#if !SILVERLIGHT
 				//check if we have remoting proxy at hand...
 				if (RemotingServices.IsTransparentProxy(target))
 				{
@@ -445,6 +448,7 @@ namespace Castle.DynamicProxy
 				}
 				else
 				{
+#endif
 					throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
 				}
 			}
