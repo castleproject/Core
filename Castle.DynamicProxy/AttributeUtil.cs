@@ -108,7 +108,7 @@ namespace Castle.DynamicProxy
 			Debug.Assert(member != null, "member != null");
 			var attributes =
 #if SILVERLIGHT
-				member.GetCustomAttributes(false) as Attribute[];
+				member.GetCustomAttributes(false);
 #else
 				CustomAttributeData.GetCustomAttributes(member);
 #endif
@@ -123,7 +123,11 @@ namespace Castle.DynamicProxy
 #endif
 				if (ShouldSkipAttributeReplication(attributeType)) continue;
 
-				yield return CreateBuilder(attribute);
+				yield return CreateBuilder(attribute
+#if SILVERLIGHT
+					as Attribute
+#endif
+);
 			}
 		}
 
