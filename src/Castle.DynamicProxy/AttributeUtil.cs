@@ -37,9 +37,7 @@ namespace Castle.DynamicProxy
 			disassemblers[typeof (TAttribute)] = disassembler;
 		}
 
-#if SLIVERLIGHT
-#warning CustomAttributeData is internal in Silverlight
-#else
+#if !SLIVERLIGHT
 		public static CustomAttributeBuilder CreateBuilder(CustomAttributeData attribute)
 		{
 			Debug.Assert(attribute != null, "attribute != null");
@@ -57,6 +55,19 @@ namespace Castle.DynamicProxy
 			                                  fields,
 			                                  fieldValues);
 		}
+
+		private static object[] GetCtorArguments(IList<CustomAttributeTypedArgument> constructorArguments)
+		{
+			var arguments = new object[constructorArguments.Count];
+			for (int i = 0; i < constructorArguments.Count; i++)
+			{
+				arguments[i] = constructorArguments[i].Value;
+			}
+
+			return arguments;
+		}
+#else
+#warning CustomAttributeData is internal in Silverlight
 #endif
 
 		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(MemberInfo member)
@@ -141,17 +152,6 @@ namespace Castle.DynamicProxy
 				return disassembler.Disassemble(attribute);
 			}
 			return new AttributeDisassembler().Disassemble(attribute);
-		}
-
-		private static object[] GetCtorArguments(IList<CustomAttributeTypedArgument> constructorArguments)
-		{
-			var arguments = new object[constructorArguments.Count];
-			for (int i = 0; i < constructorArguments.Count; i++)
-			{
-				arguments[i] = constructorArguments[i].Value;
-			}
-
-			return arguments;
 		}
 
 		private static Type[] GetTypes(object[] objects)
