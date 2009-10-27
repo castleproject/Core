@@ -450,7 +450,10 @@ namespace Castle.DynamicProxy
 				{
 #endif
 					throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
+					
+#if !SILVERLIGHT
 				}
+#endif
 			}
 
 			CheckNotGenericTypeDefinition(interfaceToProxy, "interfaceToProxy");
