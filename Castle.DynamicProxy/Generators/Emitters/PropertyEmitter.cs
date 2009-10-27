@@ -194,10 +194,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public void DefineCustomAttribute(CustomAttributeData attribute)
+		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
 		{
-			var customAttributeBuilder = AttributeUtil.CreateBuilder(attribute);
-			builder.SetCustomAttribute(customAttributeBuilder);
+			builder.SetCustomAttribute(attribute);
 		}
 	}
 }

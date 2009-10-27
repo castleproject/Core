@@ -19,9 +19,27 @@ namespace Castle.DynamicProxy
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using Castle.DynamicProxy.Generators;
 
 	public static class AttributeUtil
 	{
+		private static IDictionary<Type,IAttributeDisassembler> disassemblers = new Dictionary<Type, IAttributeDisassembler>();
+
+		/// <summary>
+		/// Registers custom disassembler to handle disassembly of specified type of attributes.
+		/// </summary>
+		/// <typeparam name="TAttribute">Type of attributes to handle</typeparam>
+		/// <param name="disassembler">Disassembler converting existing instances of Attributes to CustomAttributeBuilders</param>
+		public static void AddDisassembler<TAttribute>(IAttributeDisassembler disassembler) where TAttribute : Attribute
+		{
+			if (disassembler == null) throw new ArgumentNullException("disassembler");
+
+			disassemblers[typeof (TAttribute)] = disassembler;
+		}
+
+#if SLIVERLIGHT
+#warning CustomAttributeData is internal in Silverlight
+#else
 		public static CustomAttributeBuilder CreateBuilder(CustomAttributeData attribute)
 		{
 			Debug.Assert(attribute != null, "attribute != null");
@@ -38,6 +56,58 @@ namespace Castle.DynamicProxy
 			                                  propertyValues,
 			                                  fields,
 			                                  fieldValues);
+		}
+#endif
+
+		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(MemberInfo member)
+		{
+			Debug.Assert(member != null, "member != null");
+			var attributes =
+#if SILVERLIGHT
+				member.GetCustomAttributes(false) as Attribute[];
+#else
+				CustomAttributeData.GetCustomAttributes(member);
+#endif
+
+			foreach (var attribute in attributes)
+			{
+				var attributeType =
+#if SILVERLIGHT
+				attribute.GetType();
+#else
+				attribute.Constructor.DeclaringType;
+#endif
+				if (ShouldSkipAttributeReplication(attributeType)) continue;
+
+				yield return CreateBuilder(attribute);
+			}
+		}
+
+		/// <summary>
+		/// Attributes should be replicated if they are non-inheritable,
+		/// but there are some special cases where the attributes means
+		/// something to the CLR, where they should be skipped.
+		/// </summary>
+		private static bool ShouldSkipAttributeReplication(Type attribute)
+		{
+			if (SpecialCaseAttributThatShouldNotBeReplicated(attribute))
+				return true;
+
+			object[] attrs = attribute.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
+
+			if (attrs.Length != 0)
+			{
+				var usage = (AttributeUsageAttribute)attrs[0];
+
+				return usage.Inherited;
+			}
+
+			return true;
+		}
+
+		private static bool SpecialCaseAttributThatShouldNotBeReplicated(Type attribute)
+		{
+			return AttributesToAvoidReplicating.Contains(attribute);
 		}
 
 		public static CustomAttributeBuilder CreateBuilder<TAttribute>() where TAttribute : Attribute, new()
@@ -60,9 +130,16 @@ namespace Castle.DynamicProxy
 			return new CustomAttributeBuilder(constructor, constructorArguments);
 		}
 
-		// NOTE: This is a legacy method which does not always work. Use other overloads.
+		// NOTE: Use other overloads if possible. This method is here to support Silverlight and legacy scenarios.
 		internal static CustomAttributeBuilder CreateBuilder(Attribute attribute)
 		{
+			var type = attribute.GetType();
+
+			IAttributeDisassembler disassembler;
+			if(disassemblers.TryGetValue(type,out disassembler))
+			{
+				return disassembler.Disassemble(attribute);
+			}
 			return new AttributeDisassembler().Disassemble(attribute);
 		}
 
@@ -122,7 +199,7 @@ namespace Castle.DynamicProxy
 #if !SILVERLIGHT
 		[Serializable]
 #endif
-		private class AttributeDisassembler
+		private class AttributeDisassembler : IAttributeDisassembler
 		{
 			public CustomAttributeBuilder Disassemble(Attribute attribute)
 			{
@@ -147,8 +224,10 @@ namespace Castle.DynamicProxy
 				{
 					// ouch...
 					string message = "Dynamic Proxy was unable to disassemble attribute " + type.Name +
-					                 " using AttributeDisassembler. " +
-					                 "To replicate attributes use an overload that takes CustomAttributeData as its parameter";
+					                 " using default AttributeDisassembler. " +
+					                 "To handle the disassembly process properly implement the IAttributeDisassembler interface, " +
+					                 "and register your disassembler to handle this type of attributes using " +
+					                 typeof (AttributeUtil).Name + ".AddDisassembler<" + type.Name + ">(yourDisassembler) method";
 					throw new ProxyGenerationException(message);
 				}
 

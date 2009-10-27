@@ -140,8 +140,10 @@ namespace Castle.DynamicProxy.Contributors
 				                                          (c, i) => target);
 			}
 			var proxyMethod = generator.Generate(emitter, options, namingScope);
-			ReplicateNonInheritableAttributes(method.Method, proxyMethod);
-
+			foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(method.Method))
+			{
+				proxyMethod.DefineCustomAttribute(attribute);
+			}
 		}
 	}
 }

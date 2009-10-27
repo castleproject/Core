@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public abstract class AbstractTypeEmitter : IHasCustomAttributesEmitter
+	public abstract class AbstractTypeEmitter
 	{
 		private readonly TypeBuilder typebuilder;
 		private readonly ConstructorCollection constructors;
@@ -215,10 +215,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		}
 
 		
-		public void DefineCustomAttribute(CustomAttributeData attribute)
+		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
 		{
-			var customAttributeBuilder = AttributeUtil.CreateBuilder(attribute);
-			typebuilder.SetCustomAttribute(customAttributeBuilder);
+			typebuilder.SetCustomAttribute(attribute);
 		}
 
 		public void DefineCustomAttribute<TAttribute>(object[] constructorArguments) where TAttribute:Attribute

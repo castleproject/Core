@@ -15,11 +15,12 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
+	using System.Reflection;
 	using Generators.Emitters;
 	using Generators.Emitters.SimpleAST;
 
 	//TODO: this class should be factored out as soon as we get rid of the need for BackingField property
-	public abstract class MixinContributorBase : TypeContributor
+	public abstract class MixinContributorBase : ITypeContributor
 	{
 		protected FieldReference field;
 
@@ -39,5 +40,8 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			return emitter.CreateField("__mixin_" + type.FullName.Replace(".", "_"), type);
 		}
+
+		public abstract void CollectElementsToProxy(IProxyGenerationHook hook);
+		public abstract void Generate(ClassEmitter @class, ProxyGenerationOptions options);
 	}
 }

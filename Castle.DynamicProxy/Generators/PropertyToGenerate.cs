@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
+	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters;
 
 	public class PropertyToGenerate
@@ -27,10 +28,10 @@ namespace Castle.DynamicProxy.Generators
 		private readonly MethodToGenerate getter;
 		private readonly MethodToGenerate setter;
 		private readonly PropertyAttributes attributes;
-		private readonly IEnumerable<CustomAttributeData> customAttributes;
+		private readonly IEnumerable<CustomAttributeBuilder> customAttributes;
 		private PropertyEmitter emitter;
 
-		public PropertyToGenerate(string name, Type type, MethodToGenerate getter, MethodToGenerate setter, PropertyAttributes attributes, IEnumerable<CustomAttributeData> customAttributes)
+		public PropertyToGenerate(string name, Type type, MethodToGenerate getter, MethodToGenerate setter, PropertyAttributes attributes, IEnumerable<CustomAttributeBuilder> customAttributes)
 		{
 			this.name = GetName(name,getter,setter);
 			this.type = type;
@@ -159,7 +160,9 @@ namespace Castle.DynamicProxy.Generators
 
 			emitter = classEmitter.CreateProperty(name, attributes, type);
 			foreach (var attribute in customAttributes)
+			{
 				emitter.DefineCustomAttribute(attribute);
+			}
 		}
 	}
 }
