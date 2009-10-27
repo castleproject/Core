@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	[DebuggerDisplay("{builder.Name}")]
-	public class MethodEmitter : IMemberEmitter,IHasCustomAttributesEmitter
+	public class MethodEmitter : IMemberEmitter
 	{
 		private readonly MethodBuilder builder;
 
@@ -173,10 +173,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public void DefineCustomAttribute(CustomAttributeData attribute)
+		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
 		{
-			var customAttributeBuilder = AttributeUtil.CreateBuilder(attribute);
-			builder.SetCustomAttribute(customAttributeBuilder);
+			builder.SetCustomAttribute(attribute);
 		}
 
 		private void DefineParameters(ParameterInfo[] info)

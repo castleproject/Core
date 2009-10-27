@@ -110,12 +110,10 @@
     <Compile Include="Contributors\MethodWithCallbackGenerator.cs" />
     <Compile Include="Contributors\MixinContributorBase.cs" />
     <Compile Include="Contributors\ForwardingMethodGenerator.cs" />
-    <Compile Include="Contributors\TypeContributor.cs" />
     <Compile Include="DefaultProxyBuilder.cs" />
     <Compile Include="Contributors\ClassProxyInstanceContributor.cs" />
     <Compile Include="Contributors\ClassProxyTargetContributor.cs" />
     <Compile Include="AttributeUtil.cs" />
-    <Compile Include="Generators\Emitters\IHasCustomAttributesEmitter.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\AssignArgumentStatement.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\AsTypeReference.cs" />
     <Compile Include="Generators\AttributesToAvoidReplicating.cs" />
@@ -295,6 +293,7 @@
     <Compile Include="Contributors\MembersCollector.cs" />
     <Compile Include="Contributors\ProxyInstanceContributor.cs" />
     <Compile Include="Generators\ProxyMethod.cs" />
+    <Compile Include="IAttributeDisassembler.cs" />
     <Compile Include="InternalsHelper.cs" />
     <Compile Include="InvalidMixinConfigurationException.cs" />
     <Compile Include="IProxyBuilder.cs">

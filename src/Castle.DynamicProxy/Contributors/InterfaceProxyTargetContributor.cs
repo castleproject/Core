@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public class InterfaceProxyTargetContributor:TypeContributor
+	public class InterfaceProxyTargetContributor: ITypeContributor
 	{
 		private readonly Type targetType;
 		private readonly IDictionary<Type, InterfaceMapping> interfaces = new Dictionary<Type, InterfaceMapping>();
@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy.Contributors
 			return targetType.GetInterfaceMap(@interface);
 		}
 
-		public override void CollectElementsToProxy(IProxyGenerationHook hook)
+		public void CollectElementsToProxy(IProxyGenerationHook hook)
 		{
 			Debug.Assert(hook != null, "hook != null");
 
@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Contributors
 			}
 		}
 
-		public override void Generate(ClassEmitter @class, ProxyGenerationOptions options)
+		public void Generate(ClassEmitter @class, ProxyGenerationOptions options)
 		{
 			foreach (var target in targets)
 			{
@@ -147,8 +147,10 @@ namespace Castle.DynamicProxy.Contributors
 				generator = new ForwardingMethodGenerator(method, createMethod, (c, m) => c.GetField("__target"));
 			}
 			var proxyMethod = generator.Generate(@class, options, namingScope);
-			ReplicateNonInheritableAttributes(method.Method, proxyMethod);
-
+			foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(method.Method))
+			{
+				proxyMethod.DefineCustomAttribute(attribute);
+			}
 		}
 	}
 }

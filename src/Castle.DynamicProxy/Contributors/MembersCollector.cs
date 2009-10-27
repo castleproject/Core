@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
+	using System.Reflection.Emit;
 	using Generators;
 
 	public class MembersCollector
@@ -114,7 +115,7 @@ namespace Castle.DynamicProxy.Contributors
 				return;
 			}
 
-			var nonInheritableAttributes = GetNonInheritableAttributes(property);
+			var nonInheritableAttributes = AttributeUtil.GetNonInheritableAttributes(property);
 			properties[property] = new PropertyToGenerate(property.Name,
 			                                              property.PropertyType,
 			                                              getter,
@@ -271,43 +272,6 @@ namespace Castle.DynamicProxy.Contributors
 			return hook.ShouldInterceptMethod(type, method);
 		}
 
-		private IEnumerable<CustomAttributeData> GetNonInheritableAttributes(MemberInfo propertyInfo)
-		{
-			var attributes = CustomAttributeData.GetCustomAttributes(propertyInfo);
 
-			foreach (var attribute in attributes)
-			{
-				if (ShouldSkipAttributeReplication(attribute.Constructor.DeclaringType)) continue;
-
-				yield return attribute;
-			}
-		}
-
-		/// <summary>
-		/// Attributes should be replicated if they are non-inheritable,
-		/// but there are some special cases where the attributes means
-		/// something to the CLR, where they should be skipped.
-		/// </summary>
-		private bool ShouldSkipAttributeReplication(Type attribute)
-		{
-			if (SpecialCaseAttributThatShouldNotBeReplicated(attribute))
-				return true;
-
-			object[] attrs = attribute.GetCustomAttributes(typeof (AttributeUsageAttribute), true);
-
-			if (attrs.Length != 0)
-			{
-				var usage = (AttributeUsageAttribute) attrs[0];
-
-				return usage.Inherited;
-			}
-
-			return true;
-		}
-
-		private static bool SpecialCaseAttributThatShouldNotBeReplicated(Type attribute)
-		{
-			return AttributesToAvoidReplicating.Contains(attribute);
-		}
 	}
 }
