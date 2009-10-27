@@ -98,7 +98,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void ImplementProperty(ClassEmitter emitter, PropertyToGenerate property, ProxyGenerationOptions options, FieldReference target)
 		{
-			property.BuildPropertyEmitter(emitter, options.AttributeDisassembler);
+			property.BuildPropertyEmitter(emitter);
 			if (property.CanRead)
 			{
 				var getter = property.Getter;
@@ -140,7 +140,7 @@ namespace Castle.DynamicProxy.Contributors
 				                                          (c, i) => target);
 			}
 			var proxyMethod = generator.Generate(emitter, options, namingScope);
-			ReplicateNonInheritableAttributes(method.Method, proxyMethod, options);
+			ReplicateNonInheritableAttributes(method.Method, proxyMethod);
 
 		}
 	}

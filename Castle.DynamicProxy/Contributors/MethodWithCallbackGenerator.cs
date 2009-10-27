@@ -140,8 +140,7 @@ namespace Castle.DynamicProxy.Contributors
 				                                            typeof (IInterceptor[]), false);
 
 #if !SILVERLIGHT
-				@class.DefineCustomAttributeFor(methodInterceptors, new XmlIgnoreAttribute(),
-												 options.AttributeDisassembler);
+				@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
 #endif
 
 				MethodInvocationExpression selector =

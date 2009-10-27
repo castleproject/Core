@@ -12,32 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Contributors
+namespace Castle.DynamicProxy.Generators.Emitters
 {
-	using System;
-	using Generators.Emitters;
-	using Generators.Emitters.SimpleAST;
+	using System.Reflection;
 
-	//TODO: this class should be factored out as soon as we get rid of the need for BackingField property
-	public abstract class MixinContributorBase : TypeContributor
+	public interface IHasCustomAttributesEmitter
 	{
-		protected FieldReference field;
-
-		protected Type mixinInterface;
-
-
-
-		public FieldReference BackingField
-		{
-			get
-			{
-				return field;
-			}
-		}
-
-		protected FieldReference BuildTargetField(ClassEmitter emitter, Type type)
-		{
-			return emitter.CreateField("__mixin_" + type.FullName.Replace(".", "_"), type);
-		}
+		void DefineCustomAttribute(CustomAttributeData attribute);
 	}
 }

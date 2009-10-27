@@ -98,7 +98,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 #if !SILVERLIGHT
-			nested.DefineCustomAttribute(new SerializableAttribute(), options.AttributeDisassembler);
+			nested.DefineCustomAttribute<SerializableAttribute>();
 #endif
 
 			return nested;
