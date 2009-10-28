@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Tokens;
-	using Core.Interceptor;
 
 	public class PropertyEmitter : IMemberEmitter
 	{

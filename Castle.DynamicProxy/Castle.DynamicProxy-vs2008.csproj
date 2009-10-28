@@ -294,7 +294,6 @@
     <Compile Include="Contributors\MembersCollector.cs" />
     <Compile Include="Contributors\ProxyInstanceContributor.cs" />
     <Compile Include="Generators\ProxyMethod.cs" />
-    <Compile Include="IAttributeDisassembler.cs" />
     <Compile Include="InternalsHelper.cs" />
     <Compile Include="InvalidMixinConfigurationException.cs" />
     <Compile Include="IProxyBuilder.cs">

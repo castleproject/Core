@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
 
 	public static class AttributeUtil
