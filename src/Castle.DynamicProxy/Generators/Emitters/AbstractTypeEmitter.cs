@@ -87,7 +87,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			foreach (Attribute attr in proxyGenerationOptions.attributesToAddToGeneratedTypes)
 			{
 				var customAttributeBuilder = AttributeUtil.CreateBuilder(attr);
-				typebuilder.SetCustomAttribute(customAttributeBuilder);
+				if (customAttributeBuilder != null)
+				{
+					typebuilder.SetCustomAttribute(customAttributeBuilder);
+				}
 			}
 
 			foreach (var attribute in proxyGenerationOptions.AdditionalAttributes)

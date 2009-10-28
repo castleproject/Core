@@ -6,5 +6,9 @@ namespace Castle.DynamicProxy
 	{
 		public ProxyGenerationException(string message) : base(message)
 		{}
+
+		public ProxyGenerationException(string message, Exception innerException):base(message,innerException)
+		{
+		}
 	}
 }
