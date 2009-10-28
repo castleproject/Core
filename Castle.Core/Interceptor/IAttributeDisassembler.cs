@@ -12,25 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Interceptor
+namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Reflection.Emit;
 
 	/// <summary>
-	/// Encapsulates process of custom attribute dissassembly back to <see cref="CustomAttributeBuilder"/>.
+	/// Provides functionality for disassembling instances of attributes to CustomAttributeBuilder form, during the process of emiting new types by Dynamic Proxy.
 	/// </summary>
 	/// <remarks>
-	/// This interface is used for custom attribute replication in Dynamic Proxy and to put additional custom attributes on proxy type.
-	/// Implement it if default implementatio does not meet your needs or does not support your scenario.
+	/// Usually Dynamic Proxy will handle disassembly process internally and will call out to implementers of this interface for help only in fallback scenarios and in Silverlight,
+	/// where mechanisms used usually by Dynamic Proxy are not available.
+	/// To register instance of class implementing this interface with Dynamic Proxy library call <see cref="AttributeUtil.AddDisassembler{TAttribute}"/> method passing as generic parameter attribute type that the disassembler handles.
+	/// When disassembling an attribute Dynamic Proxy will first check if an custom disassembler has been registered to handle attributes of that type, and if no, it'll use its internal default disassembler.
 	/// </remarks>
 	public interface IAttributeDisassembler
 	{
 		/// <summary>
-		/// Dissassembles given <paramref name="attribute"/> to <see cref="CustomAttributeBuilder"/>.
+		/// Disassembles given attribute instance back to corresponding CustomAttributeBuilder.
 		/// </summary>
-		/// <param name="attribute">Custom attribute instance to disassemble.</param>
-		/// <returns>Builder that represents <paramref name="attribute"/>.</returns>
+		/// <param name="attribute">An instance of attribute to disassemble</param>
+		/// <returns><see cref="CustomAttributeBuilder"/> corresponding 1 to 1 to given attribute instance, or null reference.</returns>
+		/// <remarks>
+		/// Implementers should return <see cref="CustomAttributeBuilder"/> that corresponds to given attribute instance 1 to 1,
+		/// that is after calling specified constructor with specified arguments, and setting specified properties and fields with values specified
+		/// we should be able to get an attribute instance identical to the one passed in <paramref name="attribute"/>. Implementer can return null
+		/// if it wishes to opt out of replicating the attribute. Notice however, that for some cases, like attributes passed explicitly by the user
+		/// it is illegal to return null, and doing so will result in exception.
+		/// </remarks>
 		CustomAttributeBuilder Disassemble(Attribute attribute);
 	}
 }
