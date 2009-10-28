@@ -20,12 +20,6 @@ namespace Castle.DynamicProxy
 	/// <summary>
 	/// Provides functionality for disassembling instances of attributes to CustomAttributeBuilder form, during the process of emiting new types by Dynamic Proxy.
 	/// </summary>
-	/// <remarks>
-	/// Usually Dynamic Proxy will handle disassembly process internally and will call out to implementers of this interface for help only in fallback scenarios and in Silverlight,
-	/// where mechanisms used usually by Dynamic Proxy are not available.
-	/// To register instance of class implementing this interface with Dynamic Proxy library call <see cref="AttributeUtil.AddDisassembler{TAttribute}"/> method passing as generic parameter attribute type that the disassembler handles.
-	/// When disassembling an attribute Dynamic Proxy will first check if an custom disassembler has been registered to handle attributes of that type, and if no, it'll use its internal default disassembler.
-	/// </remarks>
 	public interface IAttributeDisassembler
 	{
 		/// <summary>
