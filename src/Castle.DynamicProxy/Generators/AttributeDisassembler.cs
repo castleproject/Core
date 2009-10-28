@@ -5,6 +5,7 @@
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using Castle.Core.Interceptor;
 
 #if !SILVERLIGHT
 	[Serializable]
