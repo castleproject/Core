@@ -220,21 +220,24 @@
             </summary>
             <value>The type of the lifestyle handler.</value>
         </member>
-        <member name="T:Castle.Core.Interceptor.IAttributeDisassembler">
+        <member name="T:Castle.DynamicProxy.IAttributeDisassembler">
             <summary>
-            Encapsulates process of custom attribute dissassembly back to <see cref="T:System.Reflection.Emit.CustomAttributeBuilder"/>.
+            Provides functionality for disassembling instances of attributes to CustomAttributeBuilder form, during the process of emiting new types by Dynamic Proxy.
             </summary>
-            <remarks>
-            This interface is used for custom attribute replication in Dynamic Proxy and to put additional custom attributes on proxy type.
-            Implement it if default implementatio does not meet your needs or does not support your scenario.
-            </remarks>
         </member>
-        <member name="M:Castle.Core.Interceptor.IAttributeDisassembler.Disassemble(System.Attribute)">
+        <member name="M:Castle.DynamicProxy.IAttributeDisassembler.Disassemble(System.Attribute)">
             <summary>
-            Dissassembles given <paramref name="attribute"/> to <see cref="T:System.Reflection.Emit.CustomAttributeBuilder"/>.
+            Disassembles given attribute instance back to corresponding CustomAttributeBuilder.
             </summary>
-            <param name="attribute">Custom attribute instance to disassemble.</param>
-            <returns>Builder that represents <paramref name="attribute"/>.</returns>
+            <param name="attribute">An instance of attribute to disassemble</param>
+            <returns><see cref="T:System.Reflection.Emit.CustomAttributeBuilder"/> corresponding 1 to 1 to given attribute instance, or null reference.</returns>
+            <remarks>
+            Implementers should return <see cref="T:System.Reflection.Emit.CustomAttributeBuilder"/> that corresponds to given attribute instance 1 to 1,
+            that is after calling specified constructor with specified arguments, and setting specified properties and fields with values specified
+            we should be able to get an attribute instance identical to the one passed in <paramref name="attribute"/>. Implementer can return null
+            if it wishes to opt out of replicating the attribute. Notice however, that for some cases, like attributes passed explicitly by the user
+            it is illegal to return null, and doing so will result in exception.
+            </remarks>
         </member>
         <member name="T:Castle.Core.Interceptor.IInterceptor">
             <summary>

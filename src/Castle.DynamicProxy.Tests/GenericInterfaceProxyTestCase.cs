@@ -397,7 +397,7 @@ namespace Castle.DynamicProxy.Tests
 
 		[Test(Description = "There is a strange CLR bug resulting from our loading the tokens of methods in generic types. "
 		                    + "This test ensures we do not trigger it.")]
-		[Ignore("Currently, we trigger the bug, and work around it - see MethodFinder")]
+		//[Ignore("Currently, we trigger the bug, and work around it - see MethodFinder")]
 		public void TypeGetMethodsIsStable()
 		{
 			ProxyWithGenInterfaceWithBase();
