@@ -38,6 +38,10 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		/// <typeparam name="TAttribute">Type of attributes to handle</typeparam>
 		/// <param name="disassembler">Disassembler converting existing instances of Attributes to CustomAttributeBuilders</param>
+		/// <remarks>
+		/// When disassembling an attribute Dynamic Proxy will first check if an custom disassembler has been registered to handle attributes of that type, 
+		/// and if none is found, it'll use the <see cref="FallbackDisassembler"/>.
+		/// </remarks>
 		public static void AddDisassembler<TAttribute>(IAttributeDisassembler disassembler) where TAttribute : Attribute
 		{
 			if (disassembler == null) throw new ArgumentNullException("disassembler");

@@ -386,8 +386,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void LoadAssemblyIntoCache_CreateClassProxy()
 		{
-			CheckLoadAssemblyIntoCache(
-				delegate(IProxyBuilder builder) { return builder.CreateClassProxy(typeof (object), ProxyGenerationOptions.Default); });
+			CheckLoadAssemblyIntoCache(builder => builder.CreateClassProxy(typeof (object), null, ProxyGenerationOptions.Default));
 		}
 
 		[Test]
