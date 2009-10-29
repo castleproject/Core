@@ -41,6 +41,7 @@ namespace Castle.DynamicProxy
 		/// Note that to avoid this exception, you can mark offending type internal, and define <see cref="InternalsVisibleToAttribute"/> 
 		/// pointing to Castle Dynamic Proxy assembly, in assembly containing that type, if this is appropriate.</exception>
 		/// <seealso cref="ClassProxyGenerator"/>
+		[Obsolete("Use thie other overload.")]
 		Type CreateClassProxy(Type classToProxy, ProxyGenerationOptions options);
 
 		/// <summary>
