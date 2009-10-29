@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-	using System.Reflection.Emit;
 	using Generators;
 
 	public class MembersCollector
@@ -25,11 +24,12 @@ namespace Castle.DynamicProxy.Contributors
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		protected readonly bool onlyProxyVirtual;
 		protected readonly InterfaceMapping map;
-
+		private IList<MethodInfo> checkedMethods = new List<MethodInfo>();
 		private readonly IDictionary<PropertyInfo, PropertyToGenerate> properties = new Dictionary<PropertyInfo, PropertyToGenerate>();
 		private readonly IDictionary<EventInfo, EventToGenerate> events = new Dictionary<EventInfo, EventToGenerate>();
 		private readonly IDictionary<MethodInfo, MethodToGenerate> methodsToProxy = new Dictionary<MethodInfo, MethodToGenerate>();
 		private readonly Type type;
+
 
 		protected readonly ITypeContributor contributor;
 
@@ -58,12 +58,18 @@ namespace Castle.DynamicProxy.Contributors
 
 		public void CollectMembersToProxy(IProxyGenerationHook hook)
 		{
+			if(checkedMethods==null)// this method was already called!
+			{
+				throw new InvalidOperationException("Can't call CollectMembersToProxy twice");
+			}
 			CollectProperties(hook);
 			CollectEvents(hook);
 			// Methods go last, because properties and events have methods too (getters/setters add/remove)
 			// and we don't want to get duplicates, so we collect property and event methods first
 			// then we collect methods, and add only these that aren't there yet
 			CollectMethods(hook);
+
+			checkedMethods = null; // this is ugly, should have a boolean flag for this or something
 		}
 
 		private void CollectProperties(IProxyGenerationHook hook)
@@ -152,6 +158,12 @@ namespace Castle.DynamicProxy.Contributors
 
 		private MethodToGenerate AddMethod(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
+			if (checkedMethods.Contains(method))
+			{
+				return null;
+			}
+			checkedMethods.Add(method);
+
 			if (methodsToProxy.ContainsKey(method))
 			{
 				return null;

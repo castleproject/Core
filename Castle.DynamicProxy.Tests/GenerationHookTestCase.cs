@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class GenerationHookTestCase : BasePEVerifyTestCase
 	{
-		[Test, Ignore("Until we fix DYNPROXY-ISSUE-89 this test will fail. Since it's not critical it's ignored for now.")]
+		[Test]
 		public void HookIsUsedForConcreteClassProxy()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();

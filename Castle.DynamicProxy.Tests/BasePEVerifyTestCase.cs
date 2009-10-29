@@ -15,10 +15,36 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-	using System.Configuration;
 	using System.Diagnostics;
 	using System.IO;
+	using Castle.DynamicProxy.Tests.Properties;
 	using NUnit.Framework;
+
+#if !MONO && !SILVERLIGHT // mono doesn't have PEVerify
+	  [SetUpFixture]
+	  public class FindPeVerify
+	  {
+		  [SetUp]
+		  public void FindPeVerifySetUp()
+		  {
+		  	var peVerifyProbingPaths = Settings.Default.PeVerifyProbingPaths;
+		  	foreach (var path in peVerifyProbingPaths)
+		  	{
+		  		var file = Path.Combine(path, "peverify.exe");
+		  		if (File.Exists(file))
+		  		{
+		  			PeVerifyPath = file;
+		  			return;
+		  		}
+		  	}
+		  	throw new FileNotFoundException(
+				"Please check the PeVerifyProbingPaths configuration setting and set it to the folder where peverify.exe is located");
+		  }
+
+	  	public static string PeVerifyPath { get; set; }
+	  }
+#endif	
+
 
 	public abstract class BasePEVerifyTestCase
 	{
@@ -69,20 +95,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Process process = new Process();
 
-			string path = Path.Combine(ConfigurationManager.AppSettings["sdkDir"], "peverify.exe");
-
-			if (!File.Exists(path))
-			{
-				path = Path.Combine(ConfigurationManager.AppSettings["x86SdkDir"], "peverify.exe");
-			}
-
-			if (!File.Exists(path))
-			{
-				throw new FileNotFoundException(
-					"Please check the sdkDir configuration setting and set it to the location of peverify.exe");
-			}
-
-			process.StartInfo.FileName = path;
+			process.StartInfo.FileName = FindPeVerify.PeVerifyPath;
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
