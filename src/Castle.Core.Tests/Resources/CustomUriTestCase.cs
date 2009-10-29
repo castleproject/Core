@@ -61,10 +61,10 @@ namespace Castle.Core.Tests.Resources
 		[Test]
 		public void UriWithEnvironmentVariable()
 		{
-			string path = Environment.GetEnvironmentVariable("path");
+			string path = Environment.GetEnvironmentVariable("PATH");
 			Assert.IsNotEmpty(path);
 
-			CustomUri uri1 = new CustomUri("file://%path%");
+			CustomUri uri1 = new CustomUri("file://%PATH%");
 
 			Assert.AreEqual(path, uri1.Path);
 			Assert.AreEqual(null, uri1.Host);
