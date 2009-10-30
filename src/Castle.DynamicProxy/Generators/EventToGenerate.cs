@@ -116,17 +116,6 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		public MethodInfo AddMethod
-		{
-			get { return adder.Method; }
-
-		}
-
-		public MethodInfo RemoveMethod
-		{
-			get { return remover.Method; }
-
-		}
 		public MethodToGenerate Adder
 		{
 			get {

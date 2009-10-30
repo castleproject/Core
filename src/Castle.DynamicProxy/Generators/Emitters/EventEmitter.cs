@@ -21,17 +21,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	public class EventEmitter : IMemberEmitter
 	{
 		private readonly AbstractTypeEmitter typeEmitter;
-		private Type type;
-		private string name;
-		private EventBuilder eventBuilder;
+		private readonly Type type;
+		private readonly EventBuilder eventBuilder;
 		private MethodEmitter addMethod;
 		private MethodEmitter removeMethod;
-
 		public EventEmitter(AbstractTypeEmitter typeEmitter, string name, EventAttributes attributes, Type type)
 		{
+			if (name == null) throw new ArgumentNullException("name");
+			if (type == null) throw new ArgumentNullException("type");
 			this.typeEmitter = typeEmitter;
 			this.type = type;
-			this.name = name;
 			eventBuilder = typeEmitter.TypeBuilder.DefineEvent(name, attributes, type);
 		}
 
@@ -47,37 +46,30 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public void Generate()
 		{
-			MethodAttributes methodAttributes = MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.SpecialName;
 			if (addMethod == null)
-				CreateAddMethod(methodAttributes);
+			{
+				throw new InvalidOperationException("Event add method was not created");
+			}
 			if (removeMethod == null)
-				CreateRemoveMethod(methodAttributes);
-
+			{
+				throw new InvalidOperationException("Event remove method was not created");
+			}
 			addMethod.Generate();
-			removeMethod.Generate();
-
 			eventBuilder.SetAddOnMethod(addMethod.MethodBuilder);
+
+			removeMethod.Generate();
 			eventBuilder.SetRemoveOnMethod(removeMethod.MethodBuilder);
+
 		}
 
-		public MethodEmitter CreateAddMethod(MethodAttributes atts)
-		{
-			return CreateAddMethod("add_" + name, atts);
-		}
-
-		public MethodEmitter CreateAddMethod(string addMethodName, MethodAttributes atts)
+		public MethodEmitter CreateAddMethod(string addMethodName, MethodAttributes attributes)
 		{
 			if (addMethod != null)
 			{
 				throw new InvalidOperationException("An add method exists");
 			}
-			addMethod = typeEmitter.CreateMethod(addMethodName, atts);
+			addMethod = new MethodEmitter(typeEmitter, addMethodName, attributes);
 			return addMethod;
-		}
-
-		public MethodEmitter CreateRemoveMethod(MethodAttributes atts)
-		{
-			return CreateRemoveMethod("remove_" + name, atts);
 		}
 
 		public void EnsureValidCodeBlock()
@@ -93,7 +85,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				throw new InvalidOperationException("A remove method exists");
 			}
-			removeMethod = typeEmitter.CreateMethod(removeMethodName, attributes);
+			removeMethod = new MethodEmitter(typeEmitter, removeMethodName, attributes);
 			return removeMethod;
 		}
 	}
