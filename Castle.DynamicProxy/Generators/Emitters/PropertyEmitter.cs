@@ -21,8 +21,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public class PropertyEmitter : IMemberEmitter
 	{
-		private PropertyBuilder builder;
-		private AbstractTypeEmitter parentTypeEmitter;
+		private readonly PropertyBuilder builder;
+		private readonly AbstractTypeEmitter parentTypeEmitter;
 		private MethodEmitter getMethod;
 		private MethodEmitter setMethod;
 
@@ -69,35 +69,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public MethodEmitter GetMethod
-		{
-			get { return getMethod; }
-			set { getMethod = value; }
-		}
-
-		public MethodEmitter SetMethod
-		{
-			get { return setMethod; }
-			set { setMethod = value; }
-		}
-
-		public MethodEmitter CreateGetMethod()
-		{
-			return CreateGetMethod(MethodAttributes.Public |
-			                       MethodAttributes.Virtual |
-			                       MethodAttributes.SpecialName);
-		}
-
-		public MethodEmitter CreateGetMethod(MethodAttributes attrs, params Type[] parameters)
-		{
-			return CreateGetMethod("get_" + builder.Name, attrs, parameters);
-		}
-
 		public MethodEmitter CreateGetMethod(string name, MethodAttributes attrs, params Type[] parameters)
 		{
 			if (getMethod != null)
 			{
-				throw new InvalidOperationException("A getMethod exists");
+				throw new InvalidOperationException("A get method exists");
 			}
 
 			if (parameters.Length == 0)
@@ -115,30 +91,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return getMethod;
 		}
 
-		public MethodEmitter CreateSetMethod()
-		{
-			return CreateSetMethod(MethodAttributes.Public |
-			                       MethodAttributes.Virtual |
-			                       MethodAttributes.SpecialName);
-		}
-
-		public MethodEmitter CreateSetMethod(Type arg)
-		{
-			return CreateSetMethod(MethodAttributes.Public |
-			                       MethodAttributes.Virtual |
-			                       MethodAttributes.SpecialName, arg);
-		}
-
-		public MethodEmitter CreateSetMethod(MethodAttributes attrs, params Type[] parameters)
-		{
-			return CreateSetMethod("set_" + builder.Name, attrs, parameters);
-		}
-
 		public MethodEmitter CreateSetMethod(string name, MethodAttributes attrs, params Type[] parameters)
 		{
 			if (setMethod != null)
 			{
-				throw new InvalidOperationException("A setMethod exists");
+				throw new InvalidOperationException("A set method exists");
 			}
 
 			if (parameters.Length == 0)
