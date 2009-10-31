@@ -16,6 +16,9 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+
+	using Castle.DynamicProxy.Serialization;
+
 	using Contributors;
 	using Emitters;
 
@@ -46,9 +49,9 @@ namespace Castle.DynamicProxy.Generators
 			get { return true; }
 		}
 
-		protected override InterfaceGeneratorType GeneratorType
+		protected override string GeneratorType
 		{
-			get { return InterfaceGeneratorType.WithTargetInterface; }
+			get { return ProxyTypeConstants.InterfaceWithTargetInterface; }
 		}
 	}
 }

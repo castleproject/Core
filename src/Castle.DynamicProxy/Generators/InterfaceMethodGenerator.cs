@@ -127,7 +127,6 @@ namespace Castle.DynamicProxy.Generators
 			else
 			{
 				var cctor = @class.ClassConstructor;
-				// TODO: same here...INamingScope
 				var interfaceMethodToken = @class.CreateStaticField(namingScope.GetUniqueName("token_" + method.Method.Name),
 				                                                    typeof(MethodInfo));
 

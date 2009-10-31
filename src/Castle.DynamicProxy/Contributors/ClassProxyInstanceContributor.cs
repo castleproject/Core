@@ -19,10 +19,12 @@ namespace Castle.DynamicProxy.Contributors
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
-	using Generators.Emitters;
-	using Generators.Emitters.CodeBuilders;
-	using Generators.Emitters.SimpleAST;
-	using Tokens;
+
+	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Serialization;
+	using Castle.DynamicProxy.Tokens;
 
 	public class ClassProxyInstanceContributor : ProxyInstanceContributor
 	{
@@ -32,7 +34,7 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly IList<FieldReference> serializedFields = new List<FieldReference>();
 
 		public ClassProxyInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces)
-			: base(targetType, interfaces)
+			: base(targetType, interfaces,ProxyTypeConstants.Class)
 		{
 #if !SILVERLIGHT
 			if (targetType.IsSerializable)

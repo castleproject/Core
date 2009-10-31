@@ -31,11 +31,13 @@ namespace Castle.DynamicProxy.Contributors
 		// TODO: this whole type (and its descendants) should be #if !SILVERLIGHT... and empty type should be used instead for SL
 
 		protected readonly Type targetType;
+		private readonly string proxyTypeId;
 		private readonly Type[] interfaces;
 
-		protected ProxyInstanceContributor(Type targetType, Type[] interfaces)
+		protected ProxyInstanceContributor(Type targetType, Type[] interfaces,string proxyTypeId)
 		{
 			this.targetType = targetType;
+			this.proxyTypeId = proxyTypeId;
 			this.interfaces = interfaces ?? Type.EmptyTypes;
 		}
 
@@ -145,6 +147,15 @@ namespace Castle.DynamicProxy.Contributors
 						SerializationInfoMethods.AddValue_Object,
 						new ConstReference("__proxyGenerationOptions").ToExpression(),
 						emitter.GetField("proxyGenerationOptions").ToExpression())));
+
+
+
+			getObjectData.CodeBuilder.AddStatement(
+				new ExpressionStatement(
+					new MethodInvocationExpression(serializationInfo,
+					                               SerializationInfoMethods.AddValue_Object,
+					                               new ConstReference("__proxyTypeId").ToExpression(),
+					                               new ConstReference(proxyTypeId).ToExpression())));
 
 			CustomizeGetObjectData(getObjectData.CodeBuilder, serializationInfo, streamingContext,emitter);
 

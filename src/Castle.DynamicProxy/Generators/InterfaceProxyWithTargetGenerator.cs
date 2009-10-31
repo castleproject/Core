@@ -23,6 +23,8 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Serialization;
+
 	using Contributors;
 
 	/// <summary>
@@ -170,9 +172,9 @@ namespace Castle.DynamicProxy.Generators
 #endif
 		}
 
-		protected virtual InterfaceGeneratorType GeneratorType
+		protected virtual string GeneratorType
 		{
-			get { return InterfaceGeneratorType.WithTarget; }
+			get { return ProxyTypeConstants.InterfaceWithTarget; }
 		}
 
 		protected virtual bool AllowChangeTarget
@@ -291,16 +293,5 @@ namespace Castle.DynamicProxy.Generators
 		{
 			return targetInterfaces.Contains(@interface);
 		}
-	}
-
-	/// <summary>
-	/// This is used by the ProxyObjectReference class during de-serialiation, to know
-	/// which generator it should use
-	/// </summary>
-	public enum InterfaceGeneratorType
-	{
-		WithTarget = 1,
-		WithoutTarget = 2,
-		WithTargetInterface = 3
 	}
 }

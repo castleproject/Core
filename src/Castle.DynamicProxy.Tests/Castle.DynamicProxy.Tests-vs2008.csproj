@@ -171,6 +171,7 @@
     <Compile Include="InterClasses\IInterfaceWithGenericMethodWithDependentConstraint.cs" />
     <Compile Include="InheritedInterfacesTestCase.cs" />
     <Compile Include="InterceptorSelectorTestCase.cs" />
+    <Compile Include="InterfaceProxyBaseTypeTestCase.cs" />
     <Compile Include="InterfaceProxyWithTargetInterfaceTestCase.cs" />
     <Compile Include="Interfaces\IDecimalOutParam.cs" />
     <Compile Include="Interfaces\IdenticalInterfaces.cs" />
