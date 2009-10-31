@@ -440,7 +440,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(ProxyGenerationOptions.Default, field.GetValue(proxy));
 		}
 
-		[Test, Ignore("This test is currently broken. See DYNPROXY-ISSUE-117")]
+		[Test]
 		public void BaseTypeForInterfaceProxy_is_honored_after_deserialization()
 		{
 

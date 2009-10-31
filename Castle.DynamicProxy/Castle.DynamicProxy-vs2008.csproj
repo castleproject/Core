@@ -313,6 +313,7 @@
     </Compile>
     <Compile Include="ProxyGenerator.cs" />
     <Compile Include="RemotableInvocation.cs" />
+    <Compile Include="Serialization\ProxyTypeConstants.cs" />
     <Compile Include="Serialization\ProxyObjectReference.cs" />
     <Compile Include="SilverlightExtensions.cs" />
     <Compile Include="Tokens\FormatterServicesMethods.cs" />

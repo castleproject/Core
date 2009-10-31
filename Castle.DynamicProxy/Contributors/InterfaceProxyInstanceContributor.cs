@@ -23,17 +23,15 @@ namespace Castle.DynamicProxy.Contributors
 
 	public class InterfaceProxyInstanceContributor : ProxyInstanceContributor
 	{
-		private readonly InterfaceGeneratorType generatorType;
 
 		protected override Expression GetTargetReferenceExpression(ClassEmitter emitter)
 		{
 			return emitter.GetField("__target").ToExpression();
 		}
 
-		public InterfaceProxyInstanceContributor(Type targetType, InterfaceGeneratorType generatorType, Type[] interfaces)
-			: base(targetType, interfaces)
+		public InterfaceProxyInstanceContributor(Type targetType, string proxyGeneratorId, Type[] interfaces)
+			: base(targetType, interfaces,proxyGeneratorId)
 		{
-			this.generatorType = generatorType;
 		}
 
 #if !SILVERLIGHT
@@ -47,12 +45,6 @@ namespace Castle.DynamicProxy.Contributors
 			                         	                               new ConstReference(
 			                         	                               	targetField.Reference.FieldType.AssemblyQualifiedName).
 			                         	                               	ToExpression())));
-
-			codebuilder.AddStatement(new ExpressionStatement(
-			                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Int32,
-			                         	                               new ConstReference("__interface_generator_type").
-			                         	                               	ToExpression(),
-			                         	                               new ConstReference((int) generatorType).ToExpression())));
 
 			codebuilder.AddStatement(new ExpressionStatement(
 			                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
