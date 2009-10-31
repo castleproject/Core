@@ -105,7 +105,7 @@ namespace Castle.DynamicProxy.Generators
 			var constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
 			                                      null, Type.EmptyTypes, null);
 #else
-			var constructor type.GetConstructor(Type.EmptyTypes);
+			var constructor = type.GetConstructor(Type.EmptyTypes);
 #endif
 			if (constructor == null || constructor.IsPrivate)
 			{
