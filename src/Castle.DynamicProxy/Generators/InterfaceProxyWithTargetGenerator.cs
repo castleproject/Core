@@ -101,10 +101,10 @@ namespace Castle.DynamicProxy.Generators
 				ThrowInvalidBaseType(type, "it is sealed");
 			}
 #if !SILVERLIGHT
-#warning this constructor exists in SL 3, so we can remove the if when we move to SL 3
 			var constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
 			                                      null, Type.EmptyTypes, null);
 #else
+#warning this constructor exists in SL 3, so we can remove the if when we move to SL 3
 			var constructor = type.GetConstructor(Type.EmptyTypes);
 #endif
 			if (constructor == null || constructor.IsPrivate)
