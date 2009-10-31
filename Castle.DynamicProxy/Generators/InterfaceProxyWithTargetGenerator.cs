@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Collections.Generic;
 #if !SILVERLIGHT
+	using System.Reflection;
 	using System.Xml.Serialization;
 #endif
 	using Castle.Core.Interceptor;
@@ -48,6 +49,7 @@ namespace Castle.DynamicProxy.Generators
 
 			CheckNotGenericTypeDefinition(proxyTargetType, "proxyTargetType");
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
+			EnsureValidBaseType(options.BaseTypeForInterfaceProxy);
 			Type proxyType;
 
 			CacheKey cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
@@ -81,17 +83,45 @@ namespace Castle.DynamicProxy.Generators
 			return proxyType;
 		}
 
+		private void EnsureValidBaseType(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentException(
+					"Base type for proxy is null reference. Please set it to System.Object or some other valid type.");
+			}
+
+			if (!type.IsClass)
+			{
+				ThrowInvalidBaseType(type, "it is not a class type");
+			}
+
+			if(type.IsSealed)
+			{
+				ThrowInvalidBaseType(type, "it is sealed");
+			}
+
+			var constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+			                                      null, Type.EmptyTypes, null);
+			if (constructor == null || constructor.IsPrivate)
+			{
+				ThrowInvalidBaseType(type, "it does not have accessible parameterless constructor");
+			}
+
+		}
+
+		private void ThrowInvalidBaseType(Type type, string doesNotHaveAccessibleParameterlessConstructor)
+		{
+			var format = "Type {0} is not valid base type for interface proxy, because {1}. Only a non-sealed class with non-private default constructor can be used as base type for interface proxy. Please use some other valid type.";
+			throw new ArgumentException(string.Format(format, type, doesNotHaveAccessibleParameterlessConstructor));
+		}
+
 		protected virtual Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces, INamingScope namingScope)
 		{
 			// TODO: this anemic dictionary should be made into a real object
 			IEnumerable<ITypeContributor> contributors;
 			var typeImplementerMapping = GetTypeImplementerMapping(interfaces, proxyTargetType, out contributors,namingScope);
 
-			// This is flawed. We allow any type to be a base type but we don't realy handle it properly.
-			// What if the type implements interfaces? What if it implements target interface?
-			// What if it implement mixin interface? What if it implements any additional interface?
-			// What if it has no default constructor?
-			// We handle none of these cases.
 			ClassEmitter emitter;
 			FieldReference interceptorsField;
 			Type baseType = Init(typeName, typeImplementerMapping, out emitter, proxyTargetType, out interceptorsField);
