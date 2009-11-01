@@ -103,14 +103,14 @@ namespace Castle.DynamicProxy.Generators
 #if !SILVERLIGHT
 			var constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
 			                                      null, Type.EmptyTypes, null);
-#else
-#warning this constructor exists in SL 3, so we can remove the if when we move to SL 3
-			var constructor = type.GetConstructor(Type.EmptyTypes);
-#endif
+
 			if (constructor == null || constructor.IsPrivate)
 			{
 				ThrowInvalidBaseType(type, "it does not have accessible parameterless constructor");
 			}
+#else
+#warning this constructor exists in SL 3, so we can remove the if when we move to SL 3
+#endif
 
 		}
 
