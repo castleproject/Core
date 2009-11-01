@@ -111,7 +111,6 @@ namespace Castle.DynamicProxy.Generators
 #else
 #warning this constructor exists in SL 3, so we can remove the if when we move to SL 3
 #endif
-
 		}
 
 		private void ThrowInvalidBaseType(Type type, string doesNotHaveAccessibleParameterlessConstructor)
