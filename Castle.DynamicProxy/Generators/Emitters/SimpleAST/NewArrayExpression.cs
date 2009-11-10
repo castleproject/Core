@@ -22,8 +22,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	/// </summary>
 	public class NewArrayExpression : Expression
 	{
-		private int size;
-		private Type arrayType;
+		private readonly int size;
+		private readonly Type arrayType;
 
 		public NewArrayExpression(int size, Type arrayType)
 		{

@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
 		{
-			ArgumentReference[] arguments = new ArgumentReference[args.Length];
+			var arguments = new ArgumentReference[args.Length];
 
 			for (int i = 0; i < args.Length; ++i)
 			{
@@ -64,9 +64,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return arguments;
 		}
 
+		public static bool IsAnyByRef(ParameterInfo[] parameters)
+		{
+			for (int i = 0; i < parameters.Length; i++)
+			{
+				if (parameters[i].ParameterType.IsByRef) return true;
+			}
+			return false;
+		}
+
 		public static ArgumentReference[] ConvertToArgumentReference(ParameterInfo[] args)
 		{
-			ArgumentReference[] arguments = new ArgumentReference[args.Length];
+			var arguments = new ArgumentReference[args.Length];
 
 			for (int i = 0; i < args.Length; ++i)
 			{
@@ -76,6 +85,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return arguments;
 		}
 
+		public static ReferenceExpression[] ConvertToArgumentReferenceExpression(ParameterInfo[] args)
+		{
+			var arguments = new ReferenceExpression[args.Length];
+
+			for (int i = 0; i < args.Length; ++i)
+			{
+				arguments[i] = new ReferenceExpression(new ArgumentReference(args[i].ParameterType, i + 1));
+			}
+
+			return arguments;
+		}
 		public static Expression[] ConvertArgumentReferenceToExpression(ArgumentReference[] args)
 		{
 			Expression[] expressions = new Expression[args.Length];

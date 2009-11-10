@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators
 
 	public static class AttributesToAvoidReplicating
 	{
-		internal static readonly List<Type> attributes = new List<Type>();
+		private static readonly IList<Type> attributes = new List<Type>();
 
 		static AttributesToAvoidReplicating()
 		{

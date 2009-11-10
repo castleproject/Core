@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using Castle.Core.Interceptor;
+
 	using Castle.DynamicProxy.Generators;
 
 	public static class AttributeUtil
@@ -80,7 +80,7 @@ namespace Castle.DynamicProxy
 		}
 
 
-		private static void GetSettersAndFields(IList<CustomAttributeNamedArgument> namedArguments,
+		private static void GetSettersAndFields(IEnumerable<CustomAttributeNamedArgument> namedArguments,
 												out PropertyInfo[] properties, out object[] propertyValues,
 												out FieldInfo[] fields, out object[] fieldValues)
 		{
@@ -88,7 +88,7 @@ namespace Castle.DynamicProxy
 			var propertyValuesList = new List<object>();
 			var fieldList = new List<FieldInfo>();
 			var fieldValuesList = new List<object>();
-			foreach (CustomAttributeNamedArgument argument in namedArguments)
+			foreach (var argument in namedArguments)
 			{
 				switch (argument.MemberInfo.MemberType)
 				{

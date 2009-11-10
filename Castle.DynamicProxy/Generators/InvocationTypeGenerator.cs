@@ -83,14 +83,11 @@ namespace Castle.DynamicProxy.Generators
 
 			if (callback != null)
 			{
-				ParameterInfo[] parameters = methodInfo.GetParameters();
-
-				CreateIInvocationInvokeOnTarget(nested, parameters, targetRef, callback);
+				CreateIInvocationInvokeOnTarget(nested, methodInfo.GetParameters(), targetRef, callback);
 			}
 			else if (method.HasTarget)
 			{
-				ParameterInfo[] parameters = methodInfo.GetParameters();
-				CreateIInvocationInvokeOnTarget(nested, parameters, targetRef, methodInfo);
+				CreateIInvocationInvokeOnTarget(nested, methodInfo.GetParameters(), targetRef, methodInfo);
 			}
 			else
 			{

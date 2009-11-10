@@ -116,14 +116,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void SetParameters(Type[] paramTypes)
 		{
 			builder.SetParameters(paramTypes);
-
-			arguments = new ArgumentReference[paramTypes.Length];
-
-			for (int i = 0; i < paramTypes.Length; i++)
-			{
-				arguments[i] = new ArgumentReference(paramTypes[i]);
-			}
-
+			arguments = ArgumentsUtil.ConvertToArgumentReference(paramTypes);
 			ArgumentsUtil.InitializeArgumentsByPosition(arguments, MethodBuilder.IsStatic);
 		}
 

@@ -22,9 +22,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 	public abstract class AbstractCodeBuilder
 	{
 		private bool isEmpty;
-		private ILGenerator generator;
-		private List<Statement> stmts;
-		private List<Reference> ilmarkers;
+		private readonly ILGenerator generator;
+		private readonly List<Statement> stmts;
+		private readonly List<Reference> ilmarkers;
 
 		protected AbstractCodeBuilder(ILGenerator generator)
 		{
@@ -34,6 +34,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			isEmpty = true;
 		}
 
+		//NOTE: should we make this obsolete if no one is using it?
 		public /*protected internal*/ ILGenerator Generator
 		{
 			get { return generator; }
@@ -53,13 +54,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			return local;
 		}
 
-//		public LabelReference CreateLabel()
-//		{
-//			LabelReference label = new LabelReference();
-//			ilmarkers.Add(label);
-//			return label;
-//		}
-//
 		public /*protected internal*/ void SetNonEmpty()
 		{
 			isEmpty = false;

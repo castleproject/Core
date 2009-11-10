@@ -108,7 +108,7 @@
     <Compile Include="Contributors\Delegates.cs" />
     <Compile Include="Contributors\EmptyMixinContributor.cs" />
     <Compile Include="Contributors\InterfaceProxyWithoutTargetContributor.cs" />
-    <Compile Include="Contributors\MethodWithCallbackGenerator.cs" />
+    <Compile Include="Generators\MethodWithCallbackGenerator.cs" />
     <Compile Include="Contributors\MixinContributorBase.cs" />
     <Compile Include="Contributors\ForwardingMethodGenerator.cs" />
     <Compile Include="DefaultProxyBuilder.cs" />

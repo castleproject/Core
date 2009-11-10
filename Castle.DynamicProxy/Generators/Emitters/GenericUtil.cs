@@ -239,20 +239,5 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			return paramType;
 		}
-
-		public static Type[] ExtractParameterTypes(ParameterInfo[] baseMethodParameters)
-		{
-			Type[] newParameters = new Type[baseMethodParameters.Length];
-
-			for (int i = 0; i < baseMethodParameters.Length; i++)
-			{
-				ParameterInfo param = baseMethodParameters[i];
-				Type paramType = param.ParameterType;
-
-				newParameters[i] = paramType;
-			}
-
-			return newParameters;
-		}
 	}
 }

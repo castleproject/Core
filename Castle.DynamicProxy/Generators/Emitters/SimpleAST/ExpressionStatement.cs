@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class ExpressionStatement : Statement
 	{
-		private Expression expression;
+		private readonly Expression expression;
 
 		public ExpressionStatement(Expression expression)
 		{
