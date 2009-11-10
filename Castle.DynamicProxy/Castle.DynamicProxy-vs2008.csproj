@@ -99,15 +99,17 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Contributors\InterfaceMethodGeneratorBase.cs" />
     <Compile Include="Generators\AttributeDisassembler.cs" />
     <Compile Include="CacheMappingsAttribute.cs" />
     <Compile Include="Contributors\ClassMembersCollector.cs" />
-    <Compile Include="Contributors\EmptyMethodGenerator.cs" />
+    <Compile Include="Contributors\MinimialisticMethodGenerator.cs" />
     <Compile Include="Contributors\InterfaceMembersCollector.cs" />
     <Compile Include="Contributors\InterfaceMembersOnClassCollector.cs" />
     <Compile Include="Contributors\Delegates.cs" />
     <Compile Include="Contributors\EmptyMixinContributor.cs" />
     <Compile Include="Contributors\InterfaceProxyWithoutTargetContributor.cs" />
+    <Compile Include="Generators\GeneratorUtil.cs" />
     <Compile Include="Generators\MethodWithCallbackGenerator.cs" />
     <Compile Include="Contributors\MixinContributorBase.cs" />
     <Compile Include="Contributors\ForwardingMethodGenerator.cs" />
@@ -293,7 +295,6 @@
     <Compile Include="Generators\PropertyToGenerate.cs" />
     <Compile Include="Contributors\MembersCollector.cs" />
     <Compile Include="Contributors\ProxyInstanceContributor.cs" />
-    <Compile Include="Generators\ProxyMethod.cs" />
     <Compile Include="InternalsHelper.cs" />
     <Compile Include="InvalidMixinConfigurationException.cs" />
     <Compile Include="IProxyBuilder.cs">

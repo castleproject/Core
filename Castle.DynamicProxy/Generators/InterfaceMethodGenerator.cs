@@ -27,200 +27,117 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
-	public class InterfaceMethodGenerator : MethodGenerator
+	public class InterfaceMethodGenerator : InterfaceMethodGeneratorBase
 	{
 		private readonly NestedClassEmitter invocation;
 		private readonly FieldReference interceptors;
-		private readonly CreateMethodDelegate createMethod;
 		private readonly GetTargetExpressionDelegate getTargetExpression;
-		private readonly MethodToGenerate method;
 
 		public InterfaceMethodGenerator(MethodToGenerate method, NestedClassEmitter invocation, FieldReference interceptors, CreateMethodDelegate createMethod,GetTargetExpressionDelegate getTargetExpression)
+		:base(method,createMethod)
 		{
-			Debug.Assert(method.Method.DeclaringType.IsInterface, "method.Method.DeclaringType.IsInterface");
-			this.method = method;
+			Debug.Assert(method.MethodOnTarget != null, "method.MethodOnTarget != null");
 			this.invocation = invocation;
 			this.interceptors = interceptors;
-			this.createMethod = createMethod;
 			this.getTargetExpression = getTargetExpression;
 		}
 
-		public override MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+		protected override MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options,INamingScope namingScope)
 		{
-			string name;
-			MethodAttributes atts = ObtainMethodAttributes(out name);
-			MethodEmitter methodEmitter = createMethod(name, atts);
-			MethodEmitter proxiedMethod = ImplementProxiedMethod(methodEmitter,
-			                                                     @class,
-			                                                     options, namingScope);
-
-			@class.TypeBuilder.DefineMethodOverride(methodEmitter.MethodBuilder, method.Method);
-			return proxiedMethod;
-		}
-
-		private MethodAttributes ObtainMethodAttributes(out string name)
-		{
-			var methodInfo = method.Method;
-			name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
-			var attributes = MethodAttributes.Virtual |
-			                 MethodAttributes.Private |
-			                 MethodAttributes.HideBySig |
-			                 MethodAttributes.NewSlot |
-			                 MethodAttributes.Final;
-
-			if (method.Standalone == false)
-			{
-				attributes |= MethodAttributes.SpecialName;
-			}
-			return attributes;
-		}
-
-		private MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options,INamingScope namingScope)
-		{
-			emitter.CopyParametersAndReturnTypeFrom(method.Method, @class);
-
-			TypeReference[] dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
+			emitter.CopyParametersAndReturnTypeFrom(Method.Method, @class);
 
 			Type invocationType = invocation.TypeBuilder;
 
-			Trace.Assert(method.Method.IsGenericMethod == invocationType.IsGenericTypeDefinition);
-
+			//TODO: can this ever happen? Should we throw instead?
+			Trace.Assert(Method.Method.IsGenericMethod == invocationType.IsGenericTypeDefinition);
 
 			Expression interfaceMethod;
 			Expression targetMethod;
-			bool isGenericInvocationClass = false;
-			Type[] genericMethodArgs = Type.EmptyTypes;
-			string tokenFieldName;
-			Expression targetType;
 
-			// TODO: clean up all these if / else
-			if(method.MethodOnTarget!=null)
-			{
-				targetType = new TypeTokenExpression(method.MethodOnTarget.DeclaringType);
-			}
-			else
-			{
-				targetType = new TypeTokenExpression(method.Method.DeclaringType);
-			}
-			if (method.Method.IsGenericMethod)
+			ConstructorInfo constructor = invocation.Constructors[0].ConstructorBuilder;
+			Type[] genericMethodArgs = Type.EmptyTypes;
+			string tokenFieldName = namingScope.GetUniqueName("token_" + Method.Method.Name);
+
+			Expression targetType = new TypeTokenExpression(Method.MethodOnTarget.DeclaringType);
+			if (Method.Method.IsGenericMethod)
 			{
 				// bind generic method arguments to invocation's type arguments
 				genericMethodArgs = emitter.MethodBuilder.GetGenericArguments();
 				invocationType = invocationType.MakeGenericType(genericMethodArgs);
-				isGenericInvocationClass = true;
+
+				constructor = TypeBuilder.GetConstructor(invocationType, constructor);
 
 				// Not in the cache: generic method
-				MethodInfo genericMethod = method.Method.MakeGenericMethod(genericMethodArgs);
+				interfaceMethod = new MethodTokenExpression(Method.Method.MakeGenericMethod(genericMethodArgs));
+				targetMethod = new MethodTokenExpression(Method.MethodOnTarget.MakeGenericMethod(genericMethodArgs));
 
-
-				tokenFieldName = namingScope.GetUniqueName("token_" + method.Method.Name);
-				interfaceMethod = new MethodTokenExpression(genericMethod);
-				if (method.MethodOnTarget != null)
-				{
-					targetMethod = new MethodTokenExpression(method.MethodOnTarget.MakeGenericMethod(genericMethodArgs));
-				}
-				else
-				{
-					targetMethod = NullExpression.Instance;
-				}
 			}
 			else
 			{
+				var proxiedMethodToken = @class.CreateStaticField(tokenFieldName, typeof(MethodInfo));
+				var targetMethodToken = @class.CreateStaticField(namingScope.GetUniqueName("token_" + Method.MethodOnTarget.Name),
+				                                                 typeof(MethodInfo));
+				interfaceMethod = proxiedMethodToken.ToExpression();
+				targetMethod = targetMethodToken.ToExpression();
+
 				var cctor = @class.ClassConstructor;
-				var interfaceMethodToken = @class.CreateStaticField(namingScope.GetUniqueName("token_" + method.Method.Name),
-				                                                    typeof(MethodInfo));
-
-				tokenFieldName = interfaceMethodToken.Reference.Name;
-				interfaceMethod = interfaceMethodToken.ToExpression();
-				cctor.CodeBuilder.AddStatement(new AssignStatement(interfaceMethodToken, new MethodTokenExpression(method.Method)));
-				if (method.MethodOnTarget != null)
-				{
-					var targetMethodToken = @class.CreateStaticField(namingScope.GetUniqueName("token_" + method.MethodOnTarget.Name),
-					                                                 typeof(MethodInfo));
-					targetMethod = targetMethodToken.ToExpression();
-					cctor.CodeBuilder.AddStatement(
-						new AssignStatement(targetMethodToken, new MethodTokenExpression(method.MethodOnTarget)));
-				}
-				else
-				{
-					targetMethod = NullExpression.Instance;
-				}
-			}
-
-			LocalReference invocationImplLocal = emitter.CodeBuilder.DeclareLocal(invocationType);
-
-			// TODO: Initialize iinvocation instance with ordinary arguments and in and out arguments
-
-			ConstructorInfo constructor = invocation.Constructors[0].ConstructorBuilder;
-			if (isGenericInvocationClass)
-			{
-				constructor = TypeBuilder.GetConstructor(invocationType, constructor);
+				cctor.CodeBuilder.AddStatement(new AssignStatement(proxiedMethodToken, new MethodTokenExpression(Method.Method)));
+				cctor.CodeBuilder.AddStatement(new AssignStatement(targetMethodToken,
+				                                                   new MethodTokenExpression(Method.MethodOnTarget)));
 			}
 
 
-			Expression target = getTargetExpression(@class, method.Method);
+			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
 
-			NewInstanceExpression newInvocImpl;
+			Expression[] ctorArguments;
 			if (options.Selector == null)
 			{
-				newInvocImpl = //actual contructor call
-					new NewInstanceExpression(constructor,
-					                          target,
-					                          SelfReference.Self.ToExpression(),
-					                          interceptors.ToExpression(),
-					                          // NOTE: there's no need to cache type token
-					                          // profiling showed that it gives no real performance gain
-					                          targetType,
-					                          targetMethod,
-					                          interfaceMethod,
-					                          new ReferencesToObjectArrayExpression(dereferencedArguments));
+				ctorArguments = new[]
+				{
+					getTargetExpression(@class, Method.Method),
+					SelfReference.Self.ToExpression(),
+					interceptors.ToExpression(),
+					targetType,
+					targetMethod,
+					interfaceMethod,
+					new ReferencesToObjectArrayExpression(dereferencedArguments)
+				};
 			}
 			else
 			{
-				// Create the field to store the selected interceptors for this method if an InterceptorSelector is specified
-				// NOTE: If no interceptors are returned, should we invoke the base.Method directly? Looks like we should not.
-				FieldReference methodInterceptors = @class.CreateField(string.Format("{0}_interceptors", tokenFieldName),
-				                                                       typeof(IInterceptor[]), false);
-#if !SILVERLIGHT
-				@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
-#endif
-
-				var selector = new MethodInvocationExpression(
-					@class.GetField("proxyGenerationOptions"),
-					ProxyGenerationOptionsMethods.GetSelector) { VirtualCall = true };
-
-				newInvocImpl = //actual contructor call
-					new NewInstanceExpression(constructor,
-					                          target,
-					                          SelfReference.Self.ToExpression(),
-					                          interceptors.ToExpression(),
-					                          targetType,
-					                          targetMethod,
-					                          interfaceMethod,
-					                          new ReferencesToObjectArrayExpression(dereferencedArguments),
-					                          selector,
-					                          new AddressOfReferenceExpression(methodInterceptors));
+				ctorArguments = new[]
+				{
+					getTargetExpression(@class, Method.Method),
+					SelfReference.Self.ToExpression(),
+					interceptors.ToExpression(),
+					targetType,
+					targetMethod,
+					interfaceMethod,
+					new ReferencesToObjectArrayExpression(dereferencedArguments),
+					BuildGetSelectorInvocation(@class),
+					new AddressOfReferenceExpression(BuildMethodInterceptorsFiled(@class, tokenFieldName))
+				};
 			}
 
-			emitter.CodeBuilder.AddStatement(new AssignStatement(invocationImplLocal, newInvocImpl));
+			var invocationLocal = emitter.CodeBuilder.DeclareLocal(invocationType);
+			emitter.CodeBuilder.AddStatement(new AssignStatement(invocationLocal,
+			                                                     new NewInstanceExpression(constructor, ctorArguments)));
 
-			if (method.Method.ContainsGenericParameters)
+			if (Method.Method.ContainsGenericParameters)
 			{
-				EmitLoadGenricMethodArguments(emitter, method.Method.MakeGenericMethod(genericMethodArgs), invocationImplLocal);
+				EmitLoadGenricMethodArguments(emitter, Method.Method.MakeGenericMethod(genericMethodArgs), invocationLocal);
 			}
 
 			emitter.CodeBuilder.AddStatement(
-				new ExpressionStatement(new MethodInvocationExpression(invocationImplLocal, InvocationMethods.Proceed)));
+				new ExpressionStatement(new MethodInvocationExpression(invocationLocal, InvocationMethods.Proceed)));
 
-			CopyOutAndRefParameters(dereferencedArguments, invocationImplLocal, method.Method, emitter);
+			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, invocationLocal, Method.Method, emitter);
 
-			if (method.Method.ReturnType != typeof(void))
+			if (Method.Method.ReturnType != typeof(void))
 			{
 				// Emit code to return with cast from ReturnValue
-				var getRetVal = new MethodInvocationExpression(invocationImplLocal, InvocationMethods.GetReturnValue);
-
-				emitter.CodeBuilder.AddStatement(
-					new ReturnStatement(new ConvertExpression(emitter.ReturnType, getRetVal)));
+				var getRetVal = new MethodInvocationExpression(invocationLocal, InvocationMethods.GetReturnValue);
+				emitter.CodeBuilder.AddStatement(new ReturnStatement(new ConvertExpression(emitter.ReturnType, getRetVal)));
 			}
 			else
 			{
@@ -230,31 +147,21 @@ namespace Castle.DynamicProxy.Generators
 			return emitter;
 		}
 
-		private static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, LocalReference invocationImplLocal, MethodInfo method, MethodEmitter methodEmitter)
+		private MethodInvocationExpression BuildGetSelectorInvocation(ClassEmitter @class)
 		{
-			var parameters = method.GetParameters();
-			if(!ArgumentsUtil.IsAnyByRef(parameters))
-			{
-				return; //saving the need to create locals if there is no need
-			}
-			LocalReference invocationArgs = methodEmitter.CodeBuilder.DeclareLocal(typeof(object[]));
-			methodEmitter.CodeBuilder.AddStatement(
-				new AssignStatement(invocationArgs,
-				                    new MethodInvocationExpression(invocationImplLocal, InvocationMethods.GetArguments)
-					)
-				);
-			for (int i = 0; i < parameters.Length; i++)
-			{
-				if (parameters[i].ParameterType.IsByRef)
-				{
-					methodEmitter.CodeBuilder.AddStatement(
-						new AssignStatement(dereferencedArguments[i],
-						                    new ConvertExpression(dereferencedArguments[i].Type,
-						                                          new LoadRefArrayElementExpression(i, invocationArgs)
-						                    	)
-							));
-				}
-			}
+			return new MethodInvocationExpression(
+				@class.GetField("proxyGenerationOptions"),
+				ProxyGenerationOptionsMethods.GetSelector) { VirtualCall = true };
+		}
+
+		private FieldReference BuildMethodInterceptorsFiled(ClassEmitter @class, string tokenFieldName)
+		{
+			FieldReference methodInterceptors = @class.CreateField(string.Format("{0}_interceptors", tokenFieldName),
+			                                                       typeof(IInterceptor[]), false);
+#if !SILVERLIGHT
+			@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
+#endif
+			return methodInterceptors;
 		}
 
 		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method,

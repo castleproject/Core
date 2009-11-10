@@ -14,29 +14,37 @@
 
 namespace Castle.DynamicProxy.Contributors
 {
+	using System.Diagnostics;
 	using System.Reflection;
+
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class EmptyMethodGenerator:MethodGenerator
+	public abstract class InterfaceMethodGeneratorBase : MethodGenerator
 	{
 		private readonly MethodToGenerate method;
+
+		protected MethodToGenerate Method
+		{
+			get { return method; }
+		}
+
 		private readonly CreateMethodDelegate createMethod;
 
-		public EmptyMethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod)
+		protected InterfaceMethodGeneratorBase(MethodToGenerate method, CreateMethodDelegate createMethod)
 		{
+			Debug.Assert(method.Method.DeclaringType.IsInterface, "method.Method.DeclaringType.IsInterface");
 			this.method = method;
 			this.createMethod = createMethod;
 		}
+
 
 		public override MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
 			string name;
 			MethodAttributes atts = ObtainMethodAttributes(out name);
 			MethodEmitter methodEmitter = createMethod(name, atts);
-			MethodEmitter proxiedMethod = ImplementProxiedMethod(methodEmitter,
-			                                                     @class);
+			MethodEmitter proxiedMethod = ImplementProxiedMethod(methodEmitter, @class,options,namingScope);
 
 			@class.TypeBuilder.DefineMethodOverride(methodEmitter.MethodBuilder, method.Method);
 			return proxiedMethod;
@@ -59,31 +67,6 @@ namespace Castle.DynamicProxy.Contributors
 			return attributes;
 		}
 
-
-		private MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class)
-		{
-			emitter.CopyParametersAndReturnTypeFrom(method.Method, @class);
-			var parameters = method.Method.GetParameters();
-			for (int index = 0; index < parameters.Length; index++)
-			{
-				var parameter = parameters[index];
-				if (parameter.IsOut)
-				{
-					emitter.CodeBuilder.AddStatement(
-						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
-						                    new DefaultValueExpression(parameter.ParameterType)));
-				}
-			}
-			if(emitter.ReturnType==typeof(void))
-			{
-				emitter.CodeBuilder.AddStatement(new ReturnStatement());
-			}
-			else
-			{
-				emitter.CodeBuilder.AddStatement(new ReturnStatement(new DefaultValueExpression(emitter.ReturnType)));
-			}
-
-			return emitter;
-		}
+		protected abstract MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope);
 	}
 }

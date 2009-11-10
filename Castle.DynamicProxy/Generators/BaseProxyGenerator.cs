@@ -268,32 +268,6 @@ namespace Castle.DynamicProxy.Generators
 
 		#endregion
 
-		private void ValidateMixinInterfaces(IEnumerable<Type> interfacesToCheckAgainst, string roleOfCheckedInterfaces)
-		{
-			foreach (Type interfaceType in interfacesToCheckAgainst)
-			{
-				ValidateMixinInterface(interfaceType, roleOfCheckedInterfaces);
-			}
-		}
-
-		private void ValidateMixinInterface(Type interfaceType, string roleOfCheckedInterface)
-		{
-			if (ProxyGenerationOptions.MixinData.ContainsMixin(interfaceType))
-			{
-				object mixinWithSameInterface = ProxyGenerationOptions.MixinData.GetMixinInstance(interfaceType);
-				string message = string.Format(
-						"The mixin {0} adds the interface '{1}' to the generated proxy, but the interface already exists in the proxy's {2}. " +
-						"A mixin cannot add an interface already implemented in another way.",
-						mixinWithSameInterface.GetType().Name,
-						interfaceType.FullName,
-						roleOfCheckedInterface);
-				throw new InvalidMixinConfigurationException(message);
-			}
-
-			// since interfaces have to form an inheritance graph without cycles, this recursion should be safe
-			ValidateMixinInterfaces(interfaceType.GetInterfaces(), roleOfCheckedInterface);
-		}
-
 		protected void AddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
 		{
 			Debug.Assert(implementer != null, "implementer != null");

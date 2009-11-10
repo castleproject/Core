@@ -20,8 +20,6 @@ namespace Castle.DynamicProxy.Generators
 	{
 		MethodInfo Method { get; }
 
-		// TODO: this should be removed, outsourced to the target itself, since target is neved null anyway
 		bool HasTarget { get; }
-		MethodInfo MethodOnTarget { get; }
 	}
 }

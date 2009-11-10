@@ -172,7 +172,7 @@ namespace Castle.DynamicProxy.Generators
 			emitter.CodeBuilder.AddStatement(
 				new ExpressionStatement(new MethodInvocationExpression(invocationImplLocal, InvocationMethods.Proceed)));
 
-			CopyOutAndRefParameters(dereferencedArguments, invocationImplLocal, methodInfo, emitter);
+			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, invocationImplLocal, methodInfo, emitter);
 
 			if (methodInfo.ReturnType != typeof(void))
 			{
@@ -190,33 +190,6 @@ namespace Castle.DynamicProxy.Generators
 
 			return emitter;
 		}
-
-		private static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, Reference invocationImplLocal, MethodInfo method, MethodEmitter methodEmitter)
-		{
-			var parameters = method.GetParameters();
-			if (!ArgumentsUtil.IsAnyByRef(parameters))
-				return; //saving the need to create locals if there is no need
-			LocalReference invocationArgs = methodEmitter.CodeBuilder.DeclareLocal(typeof(object[]));
-			methodEmitter.CodeBuilder.AddStatement(
-				new AssignStatement(invocationArgs,
-				                    new MethodInvocationExpression(invocationImplLocal, InvocationMethods.GetArguments)
-					)
-				);
-			for (int i = 0; i < parameters.Length; i++)
-			{
-				if (parameters[i].ParameterType.IsByRef)
-				{
-					methodEmitter.CodeBuilder.AddStatement(
-						new AssignStatement(dereferencedArguments[i],
-						                    new ConvertExpression(dereferencedArguments[i].Type,
-						                                          new LoadRefArrayElementExpression(i, invocationArgs)
-						                    	)
-							));
-				}
-			}
-		}
-
-
 
 		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationImplLocal)
 		{
