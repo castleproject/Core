@@ -78,26 +78,23 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name="attributes">The attributes.</param>
 		public EventToGenerate(string name, Type type, MethodToGenerate adder, MethodToGenerate remover, EventAttributes attributes)
 		{
-			this.name = GetName(name, adder, remover);
+			if (adder == null)
+			{
+				throw new ArgumentNullException("adder");
+			}
+			if (remover == null)
+			{
+				throw new ArgumentNullException("remover");
+			}
+			this.name = GetName(name, adder.Method.DeclaringType);
 			this.type = type;
 			this.adder = adder;
 			this.remover = remover;
 			this.Attributes = attributes;
 		}
 
-		private string GetName(string name, IProxyMethod adder, IProxyMethod remover)
+		private string GetName(string name, Type declaringType)
 		{
-			Type declaringType = null;
-			if (adder != null)
-			{
-				declaringType = adder.Method.DeclaringType;
-			}
-			else if (remover != null)
-			{
-				declaringType = remover.Method.DeclaringType;
-			}
-
-			Debug.Assert(declaringType != null);
 			if (!declaringType.IsInterface)
 			{
 				return name;

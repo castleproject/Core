@@ -143,7 +143,7 @@ namespace Castle.DynamicProxy.Contributors
 			}
 			else
 			{
-				generator = new EmptyMethodGenerator(method, createMethod);
+				generator = new MinimialisticMethodGenerator(method, createMethod);
 			}
 			var proxyMethod = generator.Generate(@class, options, namingScope);
 			foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(method.Method))

@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System.Reflection;
 	using Generators;
 
-	public class MembersCollector
+	public abstract class MembersCollector
 	{
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		protected readonly bool onlyProxyVirtual;
@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected readonly ITypeContributor contributor;
 
-		public MembersCollector(Type type, ITypeContributor contributor, bool onlyProxyVirtual, InterfaceMapping map)
+		protected MembersCollector(Type type, ITypeContributor contributor, bool onlyProxyVirtual, InterfaceMapping map)
 		{
 			this.type = type;
 			this.contributor = contributor;
@@ -177,16 +177,7 @@ namespace Castle.DynamicProxy.Contributors
 			return methodToGenerate;
 		}
 
-		protected virtual MethodToGenerate GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
-		{
-			if (!IsAccessible(method))
-			{
-				return null;
-			}
-
-			var proxyable = AcceptMethod(method, onlyProxyVirtual, hook);
-			return new MethodToGenerate(method, isStandalone, contributor, GetMethodOnTarget(method),proxyable);
-		}
+		protected abstract MethodToGenerate GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone);
 
 		protected virtual MethodInfo GetMethodOnTarget(MethodInfo method)
 		{

@@ -18,27 +18,36 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class ForwardingMethodGenerator : InterfaceMethodGeneratorBase
+	public class MinimialisticMethodGenerator:InterfaceMethodGeneratorBase
 	{
-		private readonly GetTargetReferenceDelegate getTargetReference;
-
-		public ForwardingMethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod, GetTargetReferenceDelegate getTargetReference)
+		public MinimialisticMethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod)
 			: base(method, createMethod)
 		{
-			this.getTargetReference = getTargetReference;
 		}
 
 		protected override MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
 			emitter.CopyParametersAndReturnTypeFrom(Method.Method, @class);
-			var targetReference = getTargetReference(@class, Method.Method);
-			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(Method.Method.GetParameters());
+			var parameters = Method.Method.GetParameters();
+			for (int index = 0; index < parameters.Length; index++)
+			{
+				var parameter = parameters[index];
+				if (parameter.IsOut)
+				{
+					emitter.CodeBuilder.AddStatement(
+						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
+						                    new DefaultValueExpression(parameter.ParameterType)));
+				}
+			}
+			if(emitter.ReturnType==typeof(void))
+			{
+				emitter.CodeBuilder.AddStatement(new ReturnStatement());
+			}
+			else
+			{
+				emitter.CodeBuilder.AddStatement(new ReturnStatement(new DefaultValueExpression(emitter.ReturnType)));
+			}
 
-			emitter.CodeBuilder.AddStatement(new ReturnStatement(
-			                                 	new MethodInvocationExpression(
-			                                 		targetReference,
-													Method.Method,
-			                                 		arguments) { VirtualCall = true }));
 			return emitter;
 		}
 	}
