@@ -18,9 +18,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class AssignArrayStatement : Statement
 	{
-		private Reference targetArray;
-		private int targetPosition;
-		private Expression value;
+		private readonly Reference targetArray;
+		private readonly int targetPosition;
+		private readonly Expression value;
 
 		public AssignArrayStatement(Reference targetArray, int targetPosition, Expression value)
 		{

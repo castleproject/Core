@@ -44,8 +44,8 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		public static readonly String DEFAULT_ASSEMBLY_NAME = "DynamicProxyGenAssembly2";
 
-		private ModuleBuilder moduleBuilderWithStrongName = null;
-		private ModuleBuilder moduleBuilder = null;
+		private ModuleBuilder moduleBuilderWithStrongName;
+		private ModuleBuilder moduleBuilder;
 
 		// The names to use for the generated assemblies and the paths (including the names) of their manifest modules
 		private readonly string strongAssemblyName;

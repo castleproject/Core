@@ -15,9 +15,9 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
-	using System.Reflection;
-	using Generators.Emitters;
-	using Generators.Emitters.SimpleAST;
+
+	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	//TODO: this class should be factored out as soon as we get rid of the need for BackingField property
 	public abstract class MixinContributorBase : ITypeContributor

@@ -185,10 +185,9 @@ namespace Castle.DynamicProxy.Generators
 				@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
 #endif
 
-				MethodInvocationExpression selector =
-					new MethodInvocationExpression(@class.GetField("proxyGenerationOptions"),
-					                               ProxyGenerationOptionsMethods.GetSelector);
-				selector.VirtualCall = true;
+				var selector = new MethodInvocationExpression(
+					@class.GetField("proxyGenerationOptions"),
+					ProxyGenerationOptionsMethods.GetSelector) { VirtualCall = true };
 
 				newInvocImpl = //actual contructor call
 					new NewInstanceExpression(constructor,
@@ -233,15 +232,11 @@ namespace Castle.DynamicProxy.Generators
 
 		private static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, LocalReference invocationImplLocal, MethodInfo method, MethodEmitter methodEmitter)
 		{
-			ParameterInfo[] parameters = method.GetParameters();
-			bool hasByRefParam = false;
-			for (int i = 0; i < parameters.Length; i++)
+			var parameters = method.GetParameters();
+			if(!ArgumentsUtil.IsAnyByRef(parameters))
 			{
-				if (parameters[i].ParameterType.IsByRef)
-					hasByRefParam = true;
-			}
-			if (!hasByRefParam)
 				return; //saving the need to create locals if there is no need
+			}
 			LocalReference invocationArgs = methodEmitter.CodeBuilder.DeclareLocal(typeof(object[]));
 			methodEmitter.CodeBuilder.AddStatement(
 				new AssignStatement(invocationArgs,

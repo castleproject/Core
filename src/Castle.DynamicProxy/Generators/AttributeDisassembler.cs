@@ -5,7 +5,6 @@
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using Castle.Core.Interceptor;
 
 #if !SILVERLIGHT
 	[Serializable]
@@ -16,21 +15,15 @@
 		{
 			Type type = attribute.GetType();
 
-			ConstructorInfo ctor;
-			object[] ctorArgs;
-
-			PropertyInfo[] properties;
-			object[] propertyValues;
-
-			FieldInfo[] fields;
-			object[] fieldValues;
-
 			try
 			{
-				ctorArgs = GetConstructorAndArgs(type, attribute, out ctor);
+				ConstructorInfo ctor;
+				object[] ctorArgs = GetConstructorAndArgs(type, attribute, out ctor);
 				var replicated = (Attribute) Activator.CreateInstance(type, ctorArgs);
-				propertyValues = GetPropertyValues(type, out properties, attribute, replicated);
-				fieldValues = GetFieldValues(type, out fields, attribute, replicated);
+				PropertyInfo[] properties;
+				object[] propertyValues = GetPropertyValues(type, out properties, attribute, replicated);
+				FieldInfo[] fields;
+				object[] fieldValues = GetFieldValues(type, out fields, attribute, replicated);
 				return new CustomAttributeBuilder(ctor, ctorArgs, properties, propertyValues, fields, fieldValues);
 			}
 			catch (Exception ex)

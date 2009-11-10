@@ -114,7 +114,7 @@ namespace Castle.DynamicProxy.Contributors
 			}
 		}
 
-		private void ImplementMethod(MethodToGenerate method, ClassEmitter emitter, ProxyGenerationOptions options, CreateMethodDelegate createMethod, FieldReference target)
+		private void ImplementMethod(MethodToGenerate method, ClassEmitter emitter, ProxyGenerationOptions options, CreateMethodDelegate createMethod, Reference target)
 		{
 			MethodGenerator generator;
 			if (method.Proxyable)

@@ -77,8 +77,8 @@ namespace Castle.DynamicProxy.Contributors
 		protected void ImplementGetObjectData(ClassEmitter emitter)
 		{
 
-			ArgumentReference serializationInfo = new ArgumentReference(typeof (SerializationInfo));
-			ArgumentReference streamingContext = new ArgumentReference(typeof (StreamingContext));
+			var serializationInfo = new ArgumentReference(typeof (SerializationInfo));
+			var streamingContext = new ArgumentReference(typeof (StreamingContext));
 			MethodEmitter getObjectData = emitter.CreateMethod("GetObjectData",
 			                                                   typeof (void), serializationInfo, streamingContext);
 

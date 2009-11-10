@@ -121,7 +121,7 @@ namespace Castle.DynamicProxy.Generators
 
 		#endregion
 
-		protected void GenerateConstructor(ClassEmitter emitter, ConstructorInfo baseConstructor, params FieldReference[] fields)
+		private void GenerateConstructor(ClassEmitter emitter, ConstructorInfo baseConstructor, params FieldReference[] fields)
 		{
 			ArgumentReference[] args;
 			ParameterInfo[] baseConstructorParams = null;

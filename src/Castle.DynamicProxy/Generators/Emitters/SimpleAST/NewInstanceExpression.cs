@@ -20,9 +20,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class NewInstanceExpression : Expression
 	{
-		private Type type;
-		private Type[] constructor_args;
-		private Expression[] arguments;
+		private readonly Type type;
+		private readonly Type[] constructorArgs;
+		private readonly Expression[] arguments;
 		private ConstructorInfo constructor;
 
 		public NewInstanceExpression(ConstructorInfo constructor, params Expression[] args)
@@ -34,7 +34,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public NewInstanceExpression(Type target, Type[] constructor_args, params Expression[] args)
 		{
 			type = target;
-			this.constructor_args = constructor_args;
+			this.constructorArgs = constructor_args;
 			arguments = args;
 		}
 
@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 			if (constructor == null)
 			{
-				constructor = type.GetConstructor(constructor_args);
+				constructor = type.GetConstructor(constructorArgs);
 			}
 
 			if (constructor == null)

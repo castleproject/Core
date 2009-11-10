@@ -18,8 +18,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class AssignArgumentStatement:Statement
 	{
-		private ArgumentReference argument;
-		private Expression expression;
+		private readonly ArgumentReference argument;
+		private readonly Expression expression;
 
 		public AssignArgumentStatement(ArgumentReference argument, Expression expression)
 		{

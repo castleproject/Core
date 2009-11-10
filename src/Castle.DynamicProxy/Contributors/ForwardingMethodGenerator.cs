@@ -65,20 +65,14 @@ namespace Castle.DynamicProxy.Contributors
 		private MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class)
 		{
 			emitter.CopyParametersAndReturnTypeFrom(method.Method, @class);
-			var targetReference = getTargetReference(@class,method.Method);
-			var parameters = method.Method.GetParameters();
-			var arguments = new Expression[parameters.Length];
-			for (int index = 0; index < parameters.Length; index++)
-			{
-				var parameter = parameters[index];
-				arguments[index] = new ReferenceExpression(new ArgumentReference(parameter.ParameterType, index + 1));
-			}
+			var targetReference = getTargetReference(@class, method.Method);
+			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(method.Method.GetParameters());
 
 			emitter.CodeBuilder.AddStatement(new ReturnStatement(
 			                                 	new MethodInvocationExpression(
 			                                 		targetReference,
 			                                 		method.Method,
-			                                 		arguments) {VirtualCall = true}));
+			                                 		arguments) { VirtualCall = true }));
 			return emitter;
 		}
 	}

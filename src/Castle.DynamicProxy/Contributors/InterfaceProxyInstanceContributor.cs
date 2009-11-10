@@ -15,11 +15,11 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
-	using Generators;
-	using Generators.Emitters;
-	using Generators.Emitters.CodeBuilders;
-	using Generators.Emitters.SimpleAST;
-	using Tokens;
+
+	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Tokens;
 
 	public class InterfaceProxyInstanceContributor : ProxyInstanceContributor
 	{

@@ -11,19 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Xml.Serialization;
 
-namespace Castle.DynamicProxy.Contributors
+using Castle.Core.Interceptor;
+using Castle.DynamicProxy.Generators.Emitters;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+using Castle.DynamicProxy.Tokens;
+
+namespace Castle.DynamicProxy.Generators
 {
-	using System;
-	using System.Diagnostics;
-	using System.Reflection;
-	using System.Reflection.Emit;
-	using System.Xml.Serialization;
-	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy.Generators;
-	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Tokens;
+	using Castle.DynamicProxy.Contributors;
 
 	public class MethodWithCallbackGenerator:MethodGenerator
 	{
@@ -58,7 +59,7 @@ namespace Castle.DynamicProxy.Contributors
 			return proxiedMethod;
 		}
 
-		public MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options,INamingScope namingScope)
+		private MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options,INamingScope namingScope)
 		{
 			var methodInfo = method.Method;
 			emitter.CopyParametersAndReturnTypeFrom(methodInfo, @class);
@@ -122,15 +123,15 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				newInvocImpl = //actual contructor call
 					new NewInstanceExpression(constructor,
-											  SelfReference.Self.ToExpression(),
-											  SelfReference.Self.ToExpression(),
-											  interceptors.ToExpression(),
-					// NOTE: there's no need to cache type token
-					// profiling showed that it gives no real performance gain
-											  new TypeTokenExpression(targetType),
-											  targetMethod,
-											  interfaceMethod,
-											  new ReferencesToObjectArrayExpression(dereferencedArguments));
+					                          SelfReference.Self.ToExpression(),
+					                          SelfReference.Self.ToExpression(),
+					                          interceptors.ToExpression(),
+					                          // NOTE: there's no need to cache type token
+					                          // profiling showed that it gives no real performance gain
+					                          new TypeTokenExpression(targetType),
+					                          targetMethod,
+					                          interfaceMethod,
+					                          new ReferencesToObjectArrayExpression(dereferencedArguments));
 			}
 			else
 			{
@@ -145,20 +146,20 @@ namespace Castle.DynamicProxy.Contributors
 
 				MethodInvocationExpression selector =
 					new MethodInvocationExpression(@class.GetField("proxyGenerationOptions"),
-												   ProxyGenerationOptionsMethods.GetSelector);
+					                               ProxyGenerationOptionsMethods.GetSelector);
 				selector.VirtualCall = true;
 
 				newInvocImpl = //actual contructor call
 					new NewInstanceExpression(constructor,
-											  SelfReference.Self.ToExpression(),
-											  SelfReference.Self.ToExpression(),
-											  interceptors.ToExpression(),
-											  new TypeTokenExpression(targetType),
-											  targetMethod,
-											  interfaceMethod,
-											  new ReferencesToObjectArrayExpression(dereferencedArguments),
-											  selector,
-											  new AddressOfReferenceExpression(methodInterceptors));
+					                          SelfReference.Self.ToExpression(),
+					                          SelfReference.Self.ToExpression(),
+					                          interceptors.ToExpression(),
+					                          new TypeTokenExpression(targetType),
+					                          targetMethod,
+					                          interfaceMethod,
+					                          new ReferencesToObjectArrayExpression(dereferencedArguments),
+					                          selector,
+					                          new AddressOfReferenceExpression(methodInterceptors));
 			}
 
 			emitter.CodeBuilder.AddStatement(new AssignStatement(invocationImplLocal, newInvocImpl));
@@ -190,21 +191,15 @@ namespace Castle.DynamicProxy.Contributors
 			return emitter;
 		}
 
-		private static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, LocalReference invocationImplLocal, MethodInfo method, MethodEmitter methodEmitter)
+		private static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, Reference invocationImplLocal, MethodInfo method, MethodEmitter methodEmitter)
 		{
-			ParameterInfo[] parameters = method.GetParameters();
-			bool hasByRefParam = false;
-			for (int i = 0; i < parameters.Length; i++)
-			{
-				if (parameters[i].ParameterType.IsByRef)
-					hasByRefParam = true;
-			}
-			if (!hasByRefParam)
+			var parameters = method.GetParameters();
+			if (!ArgumentsUtil.IsAnyByRef(parameters))
 				return; //saving the need to create locals if there is no need
 			LocalReference invocationArgs = methodEmitter.CodeBuilder.DeclareLocal(typeof(object[]));
 			methodEmitter.CodeBuilder.AddStatement(
 				new AssignStatement(invocationArgs,
-									new MethodInvocationExpression(invocationImplLocal, InvocationMethods.GetArguments)
+				                    new MethodInvocationExpression(invocationImplLocal, InvocationMethods.GetArguments)
 					)
 				);
 			for (int i = 0; i < parameters.Length; i++)
@@ -213,16 +208,17 @@ namespace Castle.DynamicProxy.Contributors
 				{
 					methodEmitter.CodeBuilder.AddStatement(
 						new AssignStatement(dereferencedArguments[i],
-											new ConvertExpression(dereferencedArguments[i].Type,
-																  new LoadRefArrayElementExpression(i, invocationArgs)
-												)
+						                    new ConvertExpression(dereferencedArguments[i].Type,
+						                                          new LoadRefArrayElementExpression(i, invocationArgs)
+						                    	)
 							));
 				}
 			}
 		}
-		
-		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method,
-										   LocalReference invocationImplLocal)
+
+
+
+		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationImplLocal)
 		{
 #if SILVERLIGHT
 			Type[] genericParameters =
@@ -240,9 +236,9 @@ namespace Castle.DynamicProxy.Contributors
 					new AssignArrayStatement(genericParamsArrayLocal, i, new TypeTokenExpression(genericParameters[i])));
 			}
 			methodEmitter.CodeBuilder.AddStatement(new ExpressionStatement(
-													new MethodInvocationExpression(invocationImplLocal, InvocationMethods.SetGenericMethodArguments,
-																				   new ReferenceExpression(
-																					genericParamsArrayLocal))));
+			                                       	new MethodInvocationExpression(invocationImplLocal, InvocationMethods.SetGenericMethodArguments,
+			                                       	                               new ReferenceExpression(
+			                                       	                               	genericParamsArrayLocal))));
 		}
 
 		private bool IsInterfaceMethodForExplicitImplementation()
@@ -259,13 +255,13 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
 				attributes |= MethodAttributes.Private |
-						MethodAttributes.HideBySig |
-						MethodAttributes.NewSlot |
-						MethodAttributes.Final;
+				              MethodAttributes.HideBySig |
+				              MethodAttributes.NewSlot |
+				              MethodAttributes.Final;
 			}
 			else
 			{
-				if (method.Method.IsFinal)
+				if (methodInfo.IsFinal)
 				{
 					attributes |= MethodAttributes.NewSlot;
 				}
