@@ -22,6 +22,83 @@ namespace Castle.DynamicProxy.Generators
 
 	public static class GeneratorUtil
 	{
+		private static bool IsInterfaceMethodForExplicitImplementation(MethodToGenerate methodToGenerate)
+		{
+			return methodToGenerate.Method.DeclaringType.IsInterface &&
+				   methodToGenerate.MethodOnTarget.IsFinal;
+		}
+
+		public static MethodAttributes ObtainClassMethodAttributes(out string name, MethodToGenerate methodToGenerate)
+		{
+			var methodInfo = methodToGenerate.Method;
+			MethodAttributes attributes = MethodAttributes.Virtual;
+			if (IsInterfaceMethodForExplicitImplementation(methodToGenerate))
+			{
+				name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
+				attributes |= MethodAttributes.Private |
+							  MethodAttributes.HideBySig |
+							  MethodAttributes.NewSlot |
+							  MethodAttributes.Final;
+			}
+			else
+			{
+				if (methodInfo.IsFinal)
+				{
+					attributes |= MethodAttributes.NewSlot;
+				}
+
+				if (methodInfo.IsPublic)
+				{
+					attributes |= MethodAttributes.Public;
+				}
+
+				if (methodInfo.IsHideBySig)
+				{
+					attributes |= MethodAttributes.HideBySig;
+				}
+				if (InternalsHelper.IsInternal(methodInfo) && InternalsHelper.IsInternalToDynamicProxy(methodInfo.DeclaringType.Assembly))
+				{
+					attributes |= MethodAttributes.Assembly;
+				}
+				if (methodInfo.IsFamilyAndAssembly)
+				{
+					attributes |= MethodAttributes.FamANDAssem;
+				}
+				else if (methodInfo.IsFamilyOrAssembly)
+				{
+					attributes |= MethodAttributes.FamORAssem;
+				}
+				else if (methodInfo.IsFamily)
+				{
+					attributes |= MethodAttributes.Family;
+				}
+				name = methodInfo.Name;
+			}
+
+			if (methodToGenerate.Standalone == false)
+			{
+				attributes |= MethodAttributes.SpecialName;
+			}
+			return attributes;
+		}
+
+		public static MethodAttributes ObtainInterfaceMethodAttributes(out string name, MethodToGenerate methodToGenerate)
+		{
+			var methodInfo = methodToGenerate.Method;
+			name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
+			var attributes = MethodAttributes.Virtual |
+							 MethodAttributes.Private |
+							 MethodAttributes.HideBySig |
+							 MethodAttributes.NewSlot |
+							 MethodAttributes.Final;
+
+			if (methodToGenerate.Standalone == false)
+			{
+				attributes |= MethodAttributes.SpecialName;
+			}
+			return attributes;
+		}
+
 		public static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, LocalReference invocation, MethodInfo method, MethodEmitter emitter)
 		{
 			var parameters = method.GetParameters();

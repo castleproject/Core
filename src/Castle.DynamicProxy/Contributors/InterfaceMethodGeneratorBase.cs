@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy.Contributors
 		public override MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
 			string name;
-			MethodAttributes atts = ObtainMethodAttributes(out name);
+			MethodAttributes atts =GeneratorUtil.ObtainInterfaceMethodAttributes(out name, method);
 			MethodEmitter methodEmitter = createMethod(name, atts);
 			MethodEmitter proxiedMethod = ImplementProxiedMethod(methodEmitter, @class,options,namingScope);
 
@@ -50,22 +50,7 @@ namespace Castle.DynamicProxy.Contributors
 			return proxiedMethod;
 		}
 
-		private MethodAttributes ObtainMethodAttributes(out string name)
-		{
-			var methodInfo = method.Method;
-			name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
-			var attributes = MethodAttributes.Virtual |
-			                 MethodAttributes.Private |
-			                 MethodAttributes.HideBySig |
-			                 MethodAttributes.NewSlot |
-			                 MethodAttributes.Final;
 
-			if (method.Standalone == false)
-			{
-				attributes |= MethodAttributes.SpecialName;
-			}
-			return attributes;
-		}
 
 		protected abstract MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope);
 	}

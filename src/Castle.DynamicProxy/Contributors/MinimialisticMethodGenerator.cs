@@ -14,21 +14,42 @@
 
 namespace Castle.DynamicProxy.Contributors
 {
+	using System.Reflection;
+
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class MinimialisticMethodGenerator:InterfaceMethodGeneratorBase
+	public class MinimialisticMethodGenerator:MethodGenerator
 	{
-		public MinimialisticMethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod)
-			: base(method, createMethod)
+		private readonly MethodToGenerate method;
+		private readonly CreateMethodDelegate createMethod;
+		private readonly GetMethodAttributesDelegate getAttributes;
+
+		public MinimialisticMethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod, GetMethodAttributesDelegate getAttributes)
 		{
+			this.method = method;
+			this.createMethod = createMethod;
+			this.getAttributes = getAttributes;
 		}
 
-		protected override MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+
+		public override MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
-			emitter.CopyParametersAndReturnTypeFrom(Method.Method, @class);
-			var parameters = Method.Method.GetParameters();
+
+			string name;
+			MethodAttributes atts = getAttributes(out name, method);
+			MethodEmitter methodEmitter = createMethod(name, atts);
+			MethodEmitter proxiedMethod = ImplementProxiedMethod(methodEmitter, @class, options, namingScope);
+
+			@class.TypeBuilder.DefineMethodOverride(methodEmitter.MethodBuilder, method.Method);
+			return proxiedMethod;
+		}
+
+		protected MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+		{
+			emitter.CopyParametersAndReturnTypeFrom(method.Method, @class);
+			var parameters = method.Method.GetParameters();
 			for (int index = 0; index < parameters.Length; index++)
 			{
 				var parameter = parameters[index];
