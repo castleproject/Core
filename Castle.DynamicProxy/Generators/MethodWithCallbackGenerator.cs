@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy.Generators
 		public override MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
 			string name;
-			var atts = ObtainMethodAttributes(out name);
+			var atts = GeneratorUtil.ObtainClassMethodAttributes(out name, method);
 			var methodEmitter = createMethod(name, atts);
 			var proxiedMethod = ImplementProxiedMethod(methodEmitter,
 			                                           @class,
@@ -214,64 +214,6 @@ namespace Castle.DynamicProxy.Generators
 			                                       	                               	genericParamsArrayLocal))));
 		}
 
-		private bool IsInterfaceMethodForExplicitImplementation()
-		{
-			return method.Method.DeclaringType.IsInterface &&
-			       method.MethodOnTarget.IsFinal;
-		}
 
-		private MethodAttributes ObtainMethodAttributes(out string name)
-		{
-			var methodInfo = method.Method;
-			MethodAttributes attributes = MethodAttributes.Virtual;
-			if (IsInterfaceMethodForExplicitImplementation())
-			{
-				name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
-				attributes |= MethodAttributes.Private |
-				              MethodAttributes.HideBySig |
-				              MethodAttributes.NewSlot |
-				              MethodAttributes.Final;
-			}
-			else
-			{
-				if (methodInfo.IsFinal)
-				{
-					attributes |= MethodAttributes.NewSlot;
-				}
-
-				if (methodInfo.IsPublic)
-				{
-					attributes |= MethodAttributes.Public;
-				}
-
-				if (methodInfo.IsHideBySig)
-				{
-					attributes |= MethodAttributes.HideBySig;
-				}
-				if (InternalsHelper.IsInternal(methodInfo) && InternalsHelper.IsInternalToDynamicProxy(methodInfo.DeclaringType.Assembly))
-				{
-					attributes |= MethodAttributes.Assembly;
-				}
-				if (methodInfo.IsFamilyAndAssembly)
-				{
-					attributes |= MethodAttributes.FamANDAssem;
-				}
-				else if (methodInfo.IsFamilyOrAssembly)
-				{
-					attributes |= MethodAttributes.FamORAssem;
-				}
-				else if (methodInfo.IsFamily)
-				{
-					attributes |= MethodAttributes.Family;
-				}
-				name = methodInfo.Name;
-			}
-
-			if (method.Standalone == false)
-			{
-				attributes |= MethodAttributes.SpecialName;
-			}
-			return attributes;
-		}
 	}
 }
