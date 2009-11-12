@@ -297,6 +297,7 @@
     <Compile Include="Contributors\ProxyInstanceContributor.cs" />
     <Compile Include="InternalsHelper.cs" />
     <Compile Include="InvalidMixinConfigurationException.cs" />
+    <Compile Include="InvocationHelper.cs" />
     <Compile Include="IProxyBuilder.cs">
       <SubType>Code</SubType>
     </Compile>

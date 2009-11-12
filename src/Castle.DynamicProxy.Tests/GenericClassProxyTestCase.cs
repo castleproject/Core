@@ -224,14 +224,10 @@ namespace Castle.DynamicProxy.Tests
 			proxy.DoSomething(1);
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (List<object>),
 			                                           typeof (int));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomething(new List<object>());
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (List<object>),
 			                                           typeof (List<object>));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
 
 		[Test]
@@ -242,14 +238,10 @@ namespace Castle.DynamicProxy.Tests
 
 			proxy.DoSomething(1);
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int), typeof (int));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomething(new List<object>());
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int),
 			                                           typeof (List<object>));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
 
 		[Test]
@@ -261,13 +253,9 @@ namespace Castle.DynamicProxy.Tests
 
 			proxy.DoSomethingT();
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(List<object>));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-							interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomethingZ();
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(List<object>));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-							interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
 
 		[Test]
@@ -279,12 +267,12 @@ namespace Castle.DynamicProxy.Tests
 			proxy.DoSomethingT();
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
+							interceptor.Invocation.GetConcreteMethodInvocationTarget().GetBaseDefinition());
 
 			proxy.DoSomethingZ();
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
+							interceptor.Invocation.GetConcreteMethodInvocationTarget().GetBaseDefinition());
 		}
 
 		[Test]
@@ -297,12 +285,12 @@ namespace Castle.DynamicProxy.Tests
 			proxy.DoSomethingT();
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
+			                interceptor.Invocation.GetConcreteMethodInvocationTarget().GetBaseDefinition());
 
 			proxy.DoSomethingZ();
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (List<object>));
 			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
+							interceptor.Invocation.GetConcreteMethodInvocationTarget().GetBaseDefinition());
 		}
 
 		[Test]
@@ -313,14 +301,10 @@ namespace Castle.DynamicProxy.Tests
 
 			proxy.DoSomething(1);
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int), typeof (int));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 
 			proxy.DoSomething(new List<object>());
 			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (List<object>),
 			                                           typeof (List<object>));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget());
 		}
 
 		[Test]

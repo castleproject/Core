@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.IsNotNull(interceptor.Invocation.Method);
 			Assert.IsNotNull(interceptor.Invocation.MethodInvocationTarget);
-			Assert.AreSame(interceptor.Invocation.Method, interceptor.Invocation.MethodInvocationTarget);
+			Assert.AreSame(interceptor.Invocation.Method, interceptor.Invocation.MethodInvocationTarget.GetBaseDefinition());
 		}
 
 		[Test]

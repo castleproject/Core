@@ -23,6 +23,9 @@ namespace Castle.DynamicProxy.Tokens
 	/// </summary>
 	public static class InvocationMethods
 	{
+		public static readonly FieldInfo Target =
+			typeof(AbstractInvocation).GetField("target", BindingFlags.Instance | BindingFlags.NonPublic);
+
 		public static readonly MethodInfo GetArguments =
 			typeof(AbstractInvocation).GetMethod("get_Arguments");
 
@@ -36,25 +39,39 @@ namespace Castle.DynamicProxy.Tokens
 			typeof(AbstractInvocation).GetMethod("SetArgumentValue");
 
 		public static readonly MethodInfo SetGenericMethodArguments =
-			typeof(AbstractInvocation).GetMethod("SetGenericMethodArguments", new Type[] { typeof(Type[]) });
+			typeof(AbstractInvocation).GetMethod("SetGenericMethodArguments", new[] { typeof(Type[]) });
 
 		public static readonly MethodInfo SetReturnValue =
 			typeof(AbstractInvocation).GetMethod("set_ReturnValue");
 
 		public static readonly ConstructorInfo ConstructorWithTargetMethod =
 			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
-			new Type[] { typeof(object), typeof(object), typeof(IInterceptor[]), typeof(Type),
-				typeof(MethodInfo), typeof(MethodInfo), typeof(object[])
-			},
-			null);
+			                                          new[]
+			                                          {
+			                                          	typeof(object),
+			                                          	typeof(Type),
+			                                          	typeof(object),
+			                                          	typeof(IInterceptor[]),
+			                                          	typeof(MethodInfo),
+			                                          	typeof(object[])
+			                                          },
+			                                          null);
 
 		public static readonly ConstructorInfo ConstructorWithTargetMethodWithSelector =
 			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
-			new Type[] { typeof(object), typeof(object), typeof(IInterceptor[]), typeof(Type),
-				typeof(MethodInfo), typeof(MethodInfo), typeof(object[]), typeof(IInterceptorSelector),
-				typeof(IInterceptor[]).MakeByRefType()
-			},
-			null);
+			                                          new[]
+			                                          {
+			                                          	typeof(object),
+
+			                                          	typeof(Type),
+			                                          	typeof(object),
+			                                          	typeof(IInterceptor[]),
+			                                          	typeof(MethodInfo),
+			                                          	typeof(object[]),
+			                                          	typeof(IInterceptorSelector),
+			                                          	typeof(IInterceptor[]).MakeByRefType()
+			                                          },
+			                                          null);
 
 		public static readonly MethodInfo Proceed =
 			typeof(AbstractInvocation).GetMethod("Proceed", BindingFlags.Instance | BindingFlags.Public);

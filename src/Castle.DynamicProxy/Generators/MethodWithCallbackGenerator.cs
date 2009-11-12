@@ -79,8 +79,7 @@ namespace Castle.DynamicProxy.Generators
 				isGenericInvocationClass = true;
 			}
 
-			Expression methodInfoTokenExp;
-
+			Expression proxiedMethodTokenExpression;
 			string tokenFieldName;
 			if (methodInfo.IsGenericMethod)
 			{
@@ -88,7 +87,7 @@ namespace Castle.DynamicProxy.Generators
 				MethodInfo genericMethod = methodInfo.MakeGenericMethod(genericMethodArgs);
 
 				tokenFieldName = namingScope.GetUniqueName("token_" + methodInfo.Name);
-				methodInfoTokenExp = new MethodTokenExpression(genericMethod);
+				proxiedMethodTokenExpression = new MethodTokenExpression(genericMethod);
 			}
 			else
 			{
@@ -97,7 +96,7 @@ namespace Castle.DynamicProxy.Generators
 				                                                typeof (MethodInfo));
 				@class.ClassConstructor.CodeBuilder.AddStatement(new AssignStatement(methodTokenField, new MethodTokenExpression(methodInfo)));
 				tokenFieldName = methodTokenField.Reference.Name;
-				methodInfoTokenExp = methodTokenField.ToExpression();
+				proxiedMethodTokenExpression = methodTokenField.ToExpression();
 			}
 
 			LocalReference invocationImplLocal = emitter.CodeBuilder.DeclareLocal(iinvocation);
@@ -110,59 +109,41 @@ namespace Castle.DynamicProxy.Generators
 				constructor = TypeBuilder.GetConstructor(iinvocation, constructor);
 			}
 
-			Expression targetMethod = methodInfoTokenExp;
-			Expression interfaceMethod = NullExpression.Instance;
-
-
-			NewInstanceExpression newInvocImpl;
-
 			// TODO: this is not always true. Should be passed explicitly as ctor parameter
 			Type targetType = methodInfo.DeclaringType;
 			Debug.Assert(targetType != null, "targetType != null");
+			Expression[] ctorArgs;
 			if (options.Selector == null)
 			{
-				newInvocImpl = //actual contructor call
-					new NewInstanceExpression(constructor,
-					                          SelfReference.Self.ToExpression(),
-					                          SelfReference.Self.ToExpression(),
-					                          interceptors.ToExpression(),
-					                          // NOTE: there's no need to cache type token
-					                          // profiling showed that it gives no real performance gain
-					                          new TypeTokenExpression(targetType),
-					                          targetMethod,
-					                          interfaceMethod,
-					                          new ReferencesToObjectArrayExpression(dereferencedArguments));
+				ctorArgs = new[]
+				{
+					SelfReference.Self.ToExpression(),
+					new TypeTokenExpression(targetType),
+					SelfReference.Self.ToExpression(),
+					interceptors.ToExpression(),
+					proxiedMethodTokenExpression,
+					new ReferencesToObjectArrayExpression(dereferencedArguments)
+				};
 			}
 			else
 			{
-				// Create the field to store the selected interceptors for this method if an InterceptorSelector is specified
-				// NOTE: If no interceptors are returned, should we invoke the base.Method directly? Looks like we should not.
-				var methodInterceptors = @class.CreateField(string.Format("{0}_interceptors", tokenFieldName),
-				                                            typeof (IInterceptor[]), false);
-
-#if !SILVERLIGHT
-				@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
-#endif
-
-				MethodInvocationExpression selector =
+				ctorArgs = new[]
+				{
+					SelfReference.Self.ToExpression(),
+					new TypeTokenExpression(targetType),
+					SelfReference.Self.ToExpression(),
+					interceptors.ToExpression(),
+					proxiedMethodTokenExpression,
+					new ReferencesToObjectArrayExpression(dereferencedArguments),
 					new MethodInvocationExpression(@class.GetField("proxyGenerationOptions"),
-					                               ProxyGenerationOptionsMethods.GetSelector);
-				selector.VirtualCall = true;
-
-				newInvocImpl = //actual contructor call
-					new NewInstanceExpression(constructor,
-					                          SelfReference.Self.ToExpression(),
-					                          SelfReference.Self.ToExpression(),
-					                          interceptors.ToExpression(),
-					                          new TypeTokenExpression(targetType),
-					                          targetMethod,
-					                          interfaceMethod,
-					                          new ReferencesToObjectArrayExpression(dereferencedArguments),
-					                          selector,
-					                          new AddressOfReferenceExpression(methodInterceptors));
+					                               ProxyGenerationOptionsMethods.GetSelector)
+					{ VirtualCall = true },
+					new AddressOfReferenceExpression(BuildMethodInterceptorsFiled(@class, tokenFieldName))
+				};
 			}
 
-			emitter.CodeBuilder.AddStatement(new AssignStatement(invocationImplLocal, newInvocImpl));
+			emitter.CodeBuilder.AddStatement(new AssignStatement(invocationImplLocal,
+			                                                     new NewInstanceExpression(constructor, ctorArgs)));
 
 			if (methodInfo.ContainsGenericParameters)
 			{
@@ -189,6 +170,17 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return emitter;
+		}
+
+		private FieldReference BuildMethodInterceptorsFiled(ClassEmitter @class, string tokenFieldName)
+		{
+			var methodInterceptors = @class.CreateField(string.Format("{0}_interceptors", tokenFieldName),
+			                                            typeof (IInterceptor[]), false);
+
+#if !SILVERLIGHT
+			@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
+			return methodInterceptors;
+#endif
 		}
 
 		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationImplLocal)

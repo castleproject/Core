@@ -52,13 +52,11 @@ namespace Castle.DynamicProxy.Generators
 			Trace.Assert(Method.Method.IsGenericMethod == invocationType.IsGenericTypeDefinition);
 
 			Expression interfaceMethod;
-			Expression targetMethod;
 
 			ConstructorInfo constructor = invocation.Constructors[0].ConstructorBuilder;
 			Type[] genericMethodArgs = Type.EmptyTypes;
 			string tokenFieldName = namingScope.GetUniqueName("token_" + Method.Method.Name);
 
-			Expression targetType = new TypeTokenExpression(Method.MethodOnTarget.DeclaringType);
 			if (Method.Method.IsGenericMethod)
 			{
 				// bind generic method arguments to invocation's type arguments
@@ -69,36 +67,31 @@ namespace Castle.DynamicProxy.Generators
 
 				// Not in the cache: generic method
 				interfaceMethod = new MethodTokenExpression(Method.Method.MakeGenericMethod(genericMethodArgs));
-				targetMethod = new MethodTokenExpression(Method.MethodOnTarget.MakeGenericMethod(genericMethodArgs));
+				new MethodTokenExpression(Method.MethodOnTarget.MakeGenericMethod(genericMethodArgs));
 
 			}
 			else
 			{
 				var proxiedMethodToken = @class.CreateStaticField(tokenFieldName, typeof(MethodInfo));
-				var targetMethodToken = @class.CreateStaticField(namingScope.GetUniqueName("token_" + Method.MethodOnTarget.Name),
-				                                                 typeof(MethodInfo));
 				interfaceMethod = proxiedMethodToken.ToExpression();
-				targetMethod = targetMethodToken.ToExpression();
 
 				var cctor = @class.ClassConstructor;
 				cctor.CodeBuilder.AddStatement(new AssignStatement(proxiedMethodToken, new MethodTokenExpression(Method.Method)));
-				cctor.CodeBuilder.AddStatement(new AssignStatement(targetMethodToken,
-				                                                   new MethodTokenExpression(Method.MethodOnTarget)));
 			}
 
 
 			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
 
 			Expression[] ctorArguments;
+
 			if (options.Selector == null)
 			{
 				ctorArguments = new[]
 				{
 					getTargetExpression(@class, Method.Method),
+					new TypeTokenExpression(Method.MethodOnTarget.DeclaringType),
 					SelfReference.Self.ToExpression(),
 					interceptors.ToExpression(),
-					targetType,
-					targetMethod,
 					interfaceMethod,
 					new ReferencesToObjectArrayExpression(dereferencedArguments)
 				};
@@ -108,10 +101,9 @@ namespace Castle.DynamicProxy.Generators
 				ctorArguments = new[]
 				{
 					getTargetExpression(@class, Method.Method),
+					new TypeTokenExpression(Method.MethodOnTarget.DeclaringType),
 					SelfReference.Self.ToExpression(),
 					interceptors.ToExpression(),
-					targetType,
-					targetMethod,
 					interfaceMethod,
 					new ReferencesToObjectArrayExpression(dereferencedArguments),
 					BuildGetSelectorInvocation(@class),
