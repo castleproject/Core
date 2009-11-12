@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FE432670-73A1-499D-A353-28FC902A43C8}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -130,6 +130,9 @@
     <Compile Include="ComInterfacesTests.cs" />
     <Compile Include="ExplicitInterfaceTestCase.cs" />
     <Compile Include="CustomAttributesTestCase.cs" />
+    <Compile Include="GenClasses\GenClassWithExplicitImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameter.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameterByRef.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericReturn.cs" />
