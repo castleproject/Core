@@ -108,12 +108,6 @@
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Castle.DynamicProxy\Castle.DynamicProxy-vs2008.csproj">
-      <Project>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</Project>
-      <Name>Castle.DynamicProxy-vs2008</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\buildscripts\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
@@ -183,7 +177,12 @@
     <Compile Include="Interfaces\IFooWithOutIntPtr.cs" />
     <Compile Include="Interfaces\IGenericWithRefOut.cs" />
     <Compile Include="Interfaces\INullable.cs" />
+    <Compile Include="Interfaces\IOne.cs" />
+    <Compile Include="Interfaces\ITwo.cs" />
     <Compile Include="Interfaces\IWithRefOut.cs" />
+    <Compile Include="Interfaces\One.cs" />
+    <Compile Include="Interfaces\OneTwo.cs" />
+    <Compile Include="Interfaces\Two.cs" />
     <Compile Include="InvocationMethodInvocationTargetTestCase.cs" />
     <Compile Include="MethodEquivalenceTestCase.cs" />
     <Compile Include="MixinDataTestCase.cs" />
@@ -240,6 +239,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.DynamicProxy\Castle.DynamicProxy-vs2008.csproj">
+      <Project>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</Project>
+      <Name>Castle.DynamicProxy-vs2008</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

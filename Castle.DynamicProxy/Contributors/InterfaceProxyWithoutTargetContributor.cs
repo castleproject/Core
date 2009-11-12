@@ -109,10 +109,10 @@ namespace Castle.DynamicProxy.Contributors
 					.Generate(@class, options, namingScope);
 
 				generator = new InterfaceMethodGenerator(method,
-				                                                invocation,
-				                                                @class.GetField("__interceptors"),
-				                                                createMethod,
-				                                                GetTargetExpression);
+				                                         invocation,
+				                                         @class.GetField("__interceptors"),
+				                                         createMethod,
+				                                         GetTargetExpression);
 			}
 			else
 			{

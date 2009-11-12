@@ -144,7 +144,9 @@ namespace Castle.DynamicProxy.Contributors
 			}
 			else
 			{
-				generator = new ForwardingMethodGenerator(method, createMethod, (c, m) => c.GetField("__target"));
+				generator = new ForwardingMethodGenerator(method,
+				                                          createMethod,
+				                                          (c, m) => c.GetField("__target"));
 			}
 			var proxyMethod = generator.Generate(@class, options, namingScope);
 			foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(method.Method))
