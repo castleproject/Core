@@ -179,8 +179,9 @@ namespace Castle.DynamicProxy.Generators
 
 #if !SILVERLIGHT
 			@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
-			return methodInterceptors;
 #endif
+			return methodInterceptors;
+
 		}
 
 		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationImplLocal)
