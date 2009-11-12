@@ -31,11 +31,10 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			ConstructorInfo ci = exceptionType.GetConstructor(new Type[] {typeof (String)});
-			ConstReference constRef = new ConstReference(errorMessage);
+			ConstructorInfo ci = exceptionType.GetConstructor(new[] {typeof (String)});
+			var constRef = new ConstReference(errorMessage);
 
-			NewInstanceExpression creationStmt =
-				new NewInstanceExpression(ci, constRef.ToExpression());
+			var creationStmt = new NewInstanceExpression(ci, constRef.ToExpression());
 
 			creationStmt.Emit(member, gen);
 

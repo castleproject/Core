@@ -110,71 +110,64 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		public class Find2Invo<T> : AbstractInvocation
 		{
-			private readonly GenInterfaceWithGenericTypesImpl target;
 
 			public Find2Invo(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType,
 			                 MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
-				: base(target, target, interceptors, targetType, targetMethod, interfMethod, arguments)
+				: base(target,targetType, target, interceptors, interfMethod, arguments)
 			{
 				this.target = target;
 			}
 
 			protected override void InvokeMethodOnTarget()
 			{
-				ReturnValue = target.Find<T>((String) GetArgumentValue(0));
+				ReturnValue = (target as GenInterfaceWithGenericTypesImpl).Find<T>((String) GetArgumentValue(0));
 			}
 		}
 
 		public class Find1Invo : AbstractInvocation
 		{
-			private readonly GenInterfaceWithGenericTypesImpl target;
 
 			public Find1Invo(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType,
 			                 MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments) :
-			                 	base(target, target, interceptors, targetType, targetMethod, interfMethod, arguments)
+				base(target, targetType, target, interceptors, interfMethod, arguments)
 			{
 				this.target = target;
 			}
 
 			protected override void InvokeMethodOnTarget()
 			{
-				ReturnValue = target.Find((String[,]) GetArgumentValue(0));
+				ReturnValue = (target as GenInterfaceWithGenericTypesImpl).Find((String[,]) GetArgumentValue(0));
 			}
 		}
 
 		public class Find1InvoA : AbstractInvocation
 		{
-			private readonly GenInterfaceWithGenericTypesImpl target;
-
 			public Find1InvoA(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType,
 			                  MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
 				:
-					base(target, target, interceptors, targetType, targetMethod, interfMethod, arguments)
+					base(target, targetType, target, interceptors, interfMethod, arguments)
 			{
 				this.target = target;
 			}
 
 			protected override void InvokeMethodOnTarget()
 			{
-				ReturnValue = target.Find((String) GetArgumentValue(0));
+				ReturnValue = (target as GenInterfaceWithGenericTypesImpl).Find((String) GetArgumentValue(0));
 			}
 		}
 
 		public class Find3Invo<T> : AbstractInvocation
 		{
-			private readonly GenInterfaceWithGenericTypesImpl target;
-
 			public Find3Invo(GenInterfaceWithGenericTypesImpl target,
 			                 IInterceptor[] interceptors, Type targetType,
 			                 MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
-				: base(target, target, interceptors, targetType, targetMethod, interfMethod, arguments)
+				: base(target, targetType, target, interceptors, interfMethod, arguments)
 			{
-				this.target = target;
 			}
 
 			protected override void InvokeMethodOnTarget()
 			{
-				target.Populate((List<T>) GetArgumentValue(0));
+				(target as GenInterfaceWithGenericTypesImpl).Populate((List<T>) GetArgumentValue(0));
 			}
 		}
 	}

@@ -107,5 +107,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			return expressions;
 		}
+
+		public static Type[] GetTypes(ParameterInfo[] parameters)
+		{
+			var types = new Type[parameters.Length];
+			for (int i = 0; i < parameters.Length; i++)
+			{
+				types[i] = parameters[i].ParameterType;
+			}
+			return types;
+		}
 	}
 }

@@ -238,7 +238,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void DefineCustomAttributeFor<TAttribute>(FieldReference field) where TAttribute : Attribute, new()
 		{
 			var customAttributeBuilder = AttributeUtil.CreateBuilder<TAttribute>();
-			field.Reference.SetCustomAttribute(customAttributeBuilder);
+			var fieldbuilder = field.Fieldbuilder;
+			if(fieldbuilder==null)
+			{
+				throw new ArgumentException("Invalid field reference.This reference does not point to field on type being generated","field");
+			}
+			fieldbuilder.SetCustomAttribute(customAttributeBuilder);
 		}
 
 

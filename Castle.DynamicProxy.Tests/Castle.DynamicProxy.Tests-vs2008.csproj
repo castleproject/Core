@@ -181,6 +181,7 @@
     <Compile Include="Interfaces\IGenericWithRefOut.cs" />
     <Compile Include="Interfaces\INullable.cs" />
     <Compile Include="Interfaces\IWithRefOut.cs" />
+    <Compile Include="InvocationMethodInvocationTargetTestCase.cs" />
     <Compile Include="MethodEquivalenceTestCase.cs" />
     <Compile Include="MixinDataTestCase.cs" />
     <Compile Include="CrossAppDomainCaller.cs" />

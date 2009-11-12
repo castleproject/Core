@@ -21,13 +21,24 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	[DebuggerDisplay("{fieldbuilder.Name} ({fieldbuilder.FieldType})")]
 	public class FieldReference : Reference
 	{
+		private readonly FieldInfo field;
 		private readonly FieldBuilder fieldbuilder;
 		private readonly bool isStatic;
+
+		public FieldReference(FieldInfo field)
+		{
+			this.field = field;
+			if ((field.Attributes & FieldAttributes.Static) != 0)
+			{
+				isStatic = true;
+				owner = null;
+			}
+		}
 
 		public FieldReference(FieldBuilder fieldbuilder)
 		{
 			this.fieldbuilder = fieldbuilder;
-
+			this.field = fieldbuilder;
 			if ((fieldbuilder.Attributes & FieldAttributes.Static) != 0)
 			{
 				isStatic = true;
@@ -35,9 +46,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public FieldBuilder Reference
+		public FieldBuilder Fieldbuilder
 		{
 			get { return fieldbuilder; }
+		}
+
+		public FieldInfo Reference
+		{
+			get { return field; }
 		}
 
 		public override void LoadReference(ILGenerator gen)

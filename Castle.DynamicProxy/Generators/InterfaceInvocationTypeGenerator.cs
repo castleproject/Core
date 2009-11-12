@@ -30,7 +30,6 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override void ImplementInvokeMethodOnTarget(NestedClassEmitter nested, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
 		{
-			MethodInfo callbackMethod1 = callbackMethod;
 			method.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
@@ -68,24 +67,26 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-			if (callbackMethod1.IsGenericMethod)
+			if (callbackMethod.IsGenericMethod)
 			{
-				callbackMethod1 = callbackMethod1.MakeGenericMethod(nested.GetGenericArgumentsFor(callbackMethod1));
+				callbackMethod = callbackMethod.MakeGenericMethod(nested.GetGenericArgumentsFor(callbackMethod));
 			}
 
-			MethodInvocationExpression baseMethodInvExp = new MethodInvocationExpression(targetField, callbackMethod1, args);
-			baseMethodInvExp.VirtualCall = true;
+			var methodOnTargetInvocationExpression = new MethodInvocationExpression(
+				new AsTypeReference(targetField, callbackMethod.DeclaringType),
+				callbackMethod,
+				args) { VirtualCall = true };
 
 			LocalReference returnValue = null;
-			if (callbackMethod1.ReturnType != typeof(void))
+			if (callbackMethod.ReturnType != typeof(void))
 			{
-				Type returnType = TypeUtil.GetClosedParameterType(nested, callbackMethod1.ReturnType);
+				Type returnType = TypeUtil.GetClosedParameterType(nested, callbackMethod.ReturnType);
 				returnValue = method.CodeBuilder.DeclareLocal(returnType);
-				method.CodeBuilder.AddStatement(new AssignStatement(returnValue, baseMethodInvExp));
+				method.CodeBuilder.AddStatement(new AssignStatement(returnValue, methodOnTargetInvocationExpression));
 			}
 			else
 			{
-				method.CodeBuilder.AddStatement(new ExpressionStatement(baseMethodInvExp));
+				method.CodeBuilder.AddStatement(new ExpressionStatement(methodOnTargetInvocationExpression));
 			}
 
 			foreach (KeyValuePair<int, LocalReference> byRefArgument in byRefArguments)
@@ -102,7 +103,7 @@ namespace Castle.DynamicProxy.Generators
 						));
 			}
 
-			if (callbackMethod1.ReturnType != typeof(void))
+			if (callbackMethod.ReturnType != typeof(void))
 			{
 				MethodInvocationExpression setRetVal =
 					new MethodInvocationExpression(SelfReference.Self,

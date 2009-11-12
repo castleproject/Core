@@ -28,48 +28,46 @@ namespace Castle.DynamicProxy
 #endif
 	{
 		private readonly object proxy;
-		private readonly object target;
 		private readonly IInterceptor[] interceptors;
-		private readonly Type targetType;
-		private readonly MethodInfo targetMethod;
-		private readonly MethodInfo interfaceMethod;
+		private readonly MethodInfo proxiedMethod;
 		private readonly object[] arguments;
+		private readonly Type targetType;
 		private object returnValue;
 		private int execIndex = -1;
 		private Type[] genericMethodArguments;
+		protected object target;
 
 		protected AbstractInvocation(
-			object target,
+			object target, 
+			Type targetType,
 			object proxy,
 			IInterceptor[] interceptors,
-			Type targetType,
-			MethodInfo targetMethod,
-			MethodInfo interfaceMethod,
+			MethodInfo proxiedMethod,
 			object[] arguments)
 		{
+			Debug.Assert(proxiedMethod != null);
 			this.target = target;
+			this.targetType = targetType;
 			this.proxy = proxy;
 			this.interceptors = interceptors;
-			this.targetType = targetType;
-			this.targetMethod = targetMethod;
-			this.interfaceMethod = interfaceMethod;
+			this.proxiedMethod = proxiedMethod;
 			this.arguments = arguments;
 		}
 
 		protected AbstractInvocation(
 			object target,
+			Type targetType,
 			object proxy,
 			IInterceptor[] interceptors,
-			Type targetType,
-			MethodInfo targetMethod,
-			MethodInfo interfaceMethod,
+			MethodInfo proxiedMethod,
 			object[] arguments,
 			IInterceptorSelector selector,
 			ref IInterceptor[] methodInterceptors)
-			: this(target, proxy, interceptors, targetType, targetMethod, interfaceMethod, arguments)
+			: this(target, targetType, proxy, interceptors, proxiedMethod, arguments)
 		{
 			methodInterceptors = SelectMethodInterceptors(selector, methodInterceptors);
 			this.interceptors = methodInterceptors;
+			this.targetType = targetType;
 		}
 
 		protected void EnsureValidTarget()
@@ -99,7 +97,7 @@ namespace Castle.DynamicProxy
 			if (methodInterceptors == null)
 			{
 				//NOTE: perhaps instead of passing this.Method we should call this.GetConcreteMethod()
-				methodInterceptors = selector.SelectInterceptors(targetType, Method, interceptors) ??
+				methodInterceptors = selector.SelectInterceptors(TargetType, Method, interceptors) ??
 				                     new IInterceptor[0];
 			}
 			return methodInterceptors;
@@ -127,14 +125,17 @@ namespace Castle.DynamicProxy
 
 		public Type TargetType
 		{
-			get { return targetType; }
+			get
+			{
+				return targetType;
+			}
 		}
 
 		public MethodInfo Method
 		{
 			get
 			{
-				return interfaceMethod ?? targetMethod;
+				return proxiedMethod;
 			}
 		}
 
@@ -145,12 +146,16 @@ namespace Castle.DynamicProxy
 
 		public MethodInfo MethodInvocationTarget
 		{
-			get { return targetMethod; }
+			get { return InvocationHelper.GetMethodOnTarget(target,proxiedMethod); }
 		}
 
 		public MethodInfo GetConcreteMethodInvocationTarget()
 		{
-			return EnsureClosedMethod(MethodInvocationTarget);
+			// it is ensured by the InvocationHelper that method will be closed
+			var method = MethodInvocationTarget;
+			Debug.Assert(method == null || method.IsGenericMethodDefinition == false,
+			             "method == null || method.IsGenericMethodDefinition == false");
+			return method;
 		}
 
 		public object ReturnValue
