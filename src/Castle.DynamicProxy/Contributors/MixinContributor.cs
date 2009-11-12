@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy.Contributors
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	public class MixinContributor : MixinContributorBase
 	{
@@ -69,52 +68,51 @@ namespace Castle.DynamicProxy.Contributors
 				ImplementMethod(method,
 				                @class,
 				                options,
-				                @class.CreateMethod,
-				                field);
+				                @class.CreateMethod);
 			}
 
 			foreach (var property in target.Properties)
 			{
-				ImplementProperty(@class, property, options, field);
+				ImplementProperty(@class, property, options);
 			}
 
 			foreach (var @event in target.Events)
 			{
-				ImplementEvent(@class, @event, options, field);
+				ImplementEvent(@class, @event, options);
 			}
 
 		}
 
 
-		private void ImplementEvent(ClassEmitter emitter, EventToGenerate @event, ProxyGenerationOptions options, FieldReference target)
+		private void ImplementEvent(ClassEmitter emitter, EventToGenerate @event, ProxyGenerationOptions options)
 		{
 			@event.BuildEventEmitter(emitter);
 			var adder = @event.Adder;
-			ImplementMethod(adder, emitter, options, @event.Emitter.CreateAddMethod, target);
+			ImplementMethod(adder, emitter, options, @event.Emitter.CreateAddMethod);
 			var remover = @event.Remover;
-			ImplementMethod(remover, emitter, options, @event.Emitter.CreateRemoveMethod, target);
+			ImplementMethod(remover, emitter, options, @event.Emitter.CreateRemoveMethod);
 
 		}
 
-		private void ImplementProperty(ClassEmitter emitter, PropertyToGenerate property, ProxyGenerationOptions options, FieldReference target)
+		private void ImplementProperty(ClassEmitter emitter, PropertyToGenerate property, ProxyGenerationOptions options)
 		{
 			property.BuildPropertyEmitter(emitter);
 			if (property.CanRead)
 			{
 				var getter = property.Getter;
 				ImplementMethod(getter, emitter, options,
-								(name, atts) => property.Emitter.CreateGetMethod(name, atts), target);
+								(name, atts) => property.Emitter.CreateGetMethod(name, atts));
 			}
 
 			if (property.CanWrite)
 			{
 				var setter = property.Setter;
 				ImplementMethod(setter, emitter, options,
-								(name, atts) => property.Emitter.CreateSetMethod(name, atts), target);
+								(name, atts) => property.Emitter.CreateSetMethod(name, atts));
 			}
 		}
 
-		private void ImplementMethod(MethodToGenerate method, ClassEmitter emitter, ProxyGenerationOptions options, CreateMethodDelegate createMethod, Reference target)
+		private void ImplementMethod(MethodToGenerate method, ClassEmitter emitter, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
 		{
 			MethodGenerator generator;
 			if (method.Proxyable)
@@ -131,13 +129,13 @@ namespace Castle.DynamicProxy.Contributors
 				                                         invocation,
 				                                         interceptors,
 				                                         createMethod,
-				                                         (c, i) => target.ToExpression());
+				                                         (c, i) => field.ToExpression());
 			}
 			else
 			{
 				generator = new ForwardingMethodGenerator(method,
 				                                          createMethod,
-				                                          (c, i) => target);
+				                                          (c, i) => field);
 			}
 			var proxyMethod = generator.Generate(emitter, options, namingScope);
 			foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(method.Method))

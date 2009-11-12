@@ -15,6 +15,9 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+
+	using Castle.DynamicProxy.Tests.Interfaces;
+
 	using Core.Interceptor;
 	using NUnit.Framework;
 
@@ -52,36 +55,19 @@ namespace Castle.DynamicProxy.Tests
 			int result = (proxy as IOne).OneMethod();
 			Assert.AreEqual(3, result);
 		}
-	}
 
-	public interface IOne
-	{
-		int OneMethod();
-	}
-
-	public class OneTwo : IOne, ITwo
-	{
-		public int OneMethod()
+		[Test]
+		[Ignore("DYNPROXY-ISSUE-121")]
+		public void Mixin_methods_should_be_forwarded_to_target_if_implements_mixin_interface()
 		{
-			return 3;
+			var options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new Two());
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface(typeof(IOne),
+			                                                              new OneTwo(),
+			                                                              options);
+			int result = (proxy as ITwo).TwoMethod();
+			Assert.AreEqual(2, result);
 		}
 
-		public int TwoMethod()
-		{
-			return 2;
-		}
-	}
-
-	public class One : IOne
-	{
-		public int OneMethod()
-		{
-			return 1;
-		}
-	}
-
-	public interface ITwo
-	{
-		int TwoMethod();
 	}
 }
