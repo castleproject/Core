@@ -83,7 +83,8 @@ namespace Castle.DynamicProxy
 				var methods = MethodFinder.GetAllInstanceMethods(type, BindingFlags.Public | BindingFlags.NonPublic);
 				foreach (var method in methods)
 				{
-					if (method.GetBaseDefinition() == proxiedMethod)
+
+					if (MethodSignatureComparer.Instance.Equals(method.GetBaseDefinition(), proxiedMethod))
 					{
 						methodOnTarget = method;
 						break;

@@ -53,11 +53,6 @@ namespace Castle.DynamicProxy.Generators
 
 			ProxyGenerationOptions.Hook.MethodsInspected();
 
-			// This is flawed. We allow any type to be a base type but we don't realy handle it properly.
-			// What if the type implements interfaces? What if it implements target interface?
-			// What if it implement mixin interface? What if it implements any additional interface?
-			// What if it has no default constructor?
-			// We handle none of these cases.
 			ClassEmitter emitter;
 			FieldReference interceptorsField;
 			Type baseType = Init(typeName, typeImplementerMapping, out emitter, proxyTargetType, out interceptorsField);
