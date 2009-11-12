@@ -55,7 +55,7 @@
     </Reference>
     <Reference Include="Rhino.Mocks.CPP.Interfaces, Version=1.0.3078.4206, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-3.5\debug\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
+      <HintPath>..\..\build\net-3.5\debug\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
