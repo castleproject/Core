@@ -14,12 +14,12 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System.ComponentModel;
 	using System.Reflection;
-
 	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.GenClasses;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
-
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -95,6 +95,15 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreNotEqual(invocationTarget1, invocationTarget2);
 			Assert.AreSame(methodOnTarget1, invocationTarget1);
 			Assert.AreSame(methodOnTarget2, invocationTarget2);
+		}
+
+		[Test, Ignore]
+		public void ClassProxyForGeneric_MethodInvocationTarget_should_be_proxyMethod()
+		{
+			var interceptor = new KeepDataInterceptor();
+			var proxy = (IChangeTracking)generator.CreateClassProxy<GenClassWithExplicitImpl<int>>(interceptor);
+			Assert.IsTrue(proxy.IsChanged);
+			Assert.IsNotNull(interceptor.Invocation.MethodInvocationTarget);
 		}
 	}
 }
