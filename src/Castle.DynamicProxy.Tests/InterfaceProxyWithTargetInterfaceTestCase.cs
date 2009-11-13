@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 
+	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.Interfaces;
 
 	using Core.Interceptor;
@@ -57,7 +58,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("DYNPROXY-ISSUE-121")]
 		public void Mixin_methods_should_be_forwarded_to_target_if_implements_mixin_interface()
 		{
 			var options = new ProxyGenerationOptions();
@@ -69,5 +69,20 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(2, result);
 		}
 
+		[Test]
+		public void Invocation_should_be_IChangeInvocationTarget_for_Mixin_methods()
+		{
+			var options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new Two());
+			var interceptor = new ChangeTargetInterceptor(new OneTwo());
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface(typeof(IOne),
+			                                                              new One(),
+			                                                              options,
+			                                                              interceptor);
+
+			var result = (proxy as ITwo).TwoMethod();
+
+			Assert.AreEqual(2, result);
+		}
 	}
 }

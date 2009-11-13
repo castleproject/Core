@@ -247,7 +247,7 @@ namespace Castle.DynamicProxy.Generators
 					{
 						if (!typeImplementerMapping.ContainsKey(mixinInterface))
 						{
-							var mixin = new MixinContributor(mixinInstance.GetType(), mixinInterface, namingScope);
+							var mixin = GetContributorForMixin(namingScope, mixinInterface, mixinInstance);
 							mixins.Add(mixin);
 							typeImplementerMapping.Add(mixinInterface, mixin);
 						}
@@ -291,9 +291,14 @@ namespace Castle.DynamicProxy.Generators
 			return typeImplementerMapping;
 		}
 
+		protected virtual MixinContributor GetContributorForMixin(INamingScope namingScope, Type mixinInterface, object mixinInstance)
+		{
+			return new MixinContributor(mixinInterface, namingScope);
+		}
+
 		protected virtual InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(INamingScope namingScope)
 		{
-			return new InterfaceProxyWithoutTargetContributor(namingScope);
+			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance);
 		}
 
 		protected override void SafeAddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)

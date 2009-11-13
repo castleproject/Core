@@ -16,30 +16,29 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Diagnostics;
-	using System.Reflection;
+
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
 	public class MixinContributor : MixinContributorBase
 	{
-		private const bool CanChangeTarget = false;
-		private readonly InterfaceMapping mapping;
+		private readonly bool canChangeTarget;
 		private readonly INamingScope namingScope;
 		private MembersCollector target;
 
-		public MixinContributor(Type targetType,Type @interface, INamingScope namingScope)
+		public MixinContributor(Type @interface, INamingScope namingScope)
+			: this(@interface, namingScope, false)
 		{
-			if (targetType == null) throw new ArgumentNullException("targetType");
+		}
+
+		public MixinContributor(Type @interface, INamingScope namingScope, bool canChangeTarget)
+		{
 			if (@interface == null) throw new ArgumentNullException("interface");
 
 			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding mapping only...");
-			Debug.Assert(@interface.IsAssignableFrom(targetType), "@interface.IsAssignableFrom(targetType)",
-						 "Shouldn't be adding mapping to interface that target does not implement...");
 
 			this.namingScope = namingScope;
-
-			this.mapping = targetType.GetInterfaceMap(@interface);
-
+			this.canChangeTarget = canChangeTarget;
 			mixinInterface = @interface;
 		}
 
@@ -48,7 +47,7 @@ namespace Castle.DynamicProxy.Contributors
 			Debug.Assert(hook != null, "hook != null");
 			// TODO: once tokens for method on target are obtained dynamically
 			// this should be changed to InterfaceMembersCollector
-			var item = new InterfaceMembersOnClassCollector(mixinInterface, this, false, mapping);
+			var item = new InterfaceMembersCollector(mixinInterface);
 			item.CollectMembersToProxy(hook);
 			target = item;
 
@@ -120,7 +119,7 @@ namespace Castle.DynamicProxy.Contributors
 				var invocation = new InvocationTypeGenerator(method.Method.DeclaringType,
 				                                             method,
 				                                             method.Method,
-				                                             CanChangeTarget)
+				                                             canChangeTarget)
 					.Generate(emitter, options, namingScope);
 
 				var interceptors = emitter.GetField("__interceptors");
@@ -129,7 +128,7 @@ namespace Castle.DynamicProxy.Contributors
 				                                         invocation,
 				                                         interceptors,
 				                                         createMethod,
-				                                         (c, i) => field.ToExpression());
+				                                         getTargetExpression);
 			}
 			else
 			{
@@ -142,6 +141,11 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				proxyMethod.DefineCustomAttribute(attribute);
 			}
+		}
+
+		public void SetGetTargetExpression(GetTargetExpressionDelegate getTarget)
+		{
+			getTargetExpression = getTarget;
 		}
 	}
 }

@@ -14,6 +14,9 @@
 
 namespace Castle.DynamicProxy.Tests.Interfaces
 {
+	using System;
+
+	[Serializable]
 	public class Two : ITwo
 	{
 		public int TwoMethod()

@@ -281,7 +281,6 @@
     <Compile Include="Generators\InterfaceMethodGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithoutTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
-    <Compile Include="Contributors\InterfaceProxyWithTargetInterfaceContributor.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetInterfaceGenerator.cs" />
     <Compile Include="Contributors\ITypeContributor.cs" />
     <Compile Include="Contributors\InterfaceProxyWithTargetInterfaceTargetContributor.cs" />

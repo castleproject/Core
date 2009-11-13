@@ -319,6 +319,63 @@ namespace Castle.DynamicProxy
 		}
 
 		/// <summary>
+		/// Creates proxy object intercepting calls to members of interface <typeparamref name="TInterface"/> on <paramref name="target"/> object with given <paramref name="interceptors"/>.
+		/// Interceptors can use <see cref="IChangeProxyTarget"/> interface to provide other target for method invocation than default <paramref name="target"/>.
+		/// </summary>
+		/// <typeparam name="TInterface">Type of the interface implemented by <paramref name="target"/> which will be proxied.</typeparam>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// Object proxying calls to members of <typeparamref name="TInterface"/> type on <paramref name="target"/> object or alternative implementation swapped at runtime by an interceptor.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="target"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="interceptors"/> array is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentException">Thrown when given <typeparamref name="TInterface"/> is not an interface type.</exception>
+		/// <exception cref="MissingMethodException">Thrown when no default constructor exists on actual type of <paramref name="target"/> object.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when default constructor of actual type of <paramref name="target"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface target,
+															  params IInterceptor[] interceptors) where TInterface : class
+		{
+			return (TInterface)CreateInterfaceProxyWithTargetInterface(typeof(TInterface),
+			                                                           target,
+			                                                           ProxyGenerationOptions.Default,
+			                                                           interceptors);
+		}
+
+		/// <summary>
+		/// Creates proxy object intercepting calls to members of interface <typeparamref name="TInterface"/> on <paramref name="target"/> object with given <paramref name="interceptors"/>.
+		/// Interceptors can use <see cref="IChangeProxyTarget"/> interface to provide other target for method invocation than default <paramref name="target"/>.
+		/// </summary>
+		/// <typeparam name="TInterface">Type of the interface implemented by <paramref name="target"/> which will be proxied.</typeparam>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="options">The proxy generation options used to influence generated proxy type and object.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// Object proxying calls to members of <typeparamref name="TInterface"/> type on <paramref name="target"/> object or alternative implementation swapped at runtime by an interceptor.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="target"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="interceptors"/> array is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentException">Thrown when given <typeparamref name="TInterface"/> is not an interface type.</exception>
+		/// <exception cref="MissingMethodException">Thrown when no default constructor exists on actual type of <paramref name="target"/> object.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when default constructor of actual type of <paramref name="target"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface target, ProxyGenerationOptions options,
+															  params IInterceptor[] interceptors) where TInterface : class
+		{
+			return (TInterface)CreateInterfaceProxyWithTargetInterface(typeof(TInterface),
+			                                                           target,
+			                                                           options,
+			                                                           interceptors);
+		}
+
+		/// <summary>
 		/// Creates proxy object intercepting calls to members of interface <paramref name="interfaceToProxy"/> on <paramref name="target"/> object with given <paramref name="interceptors"/>.
 		/// Interceptors can use <see cref="IChangeProxyTarget"/> interface to provide other target for method invocation than default <paramref name="target"/>.
 		/// </summary>

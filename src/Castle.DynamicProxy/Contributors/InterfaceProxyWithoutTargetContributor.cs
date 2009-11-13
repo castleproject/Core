@@ -3,20 +3,21 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
-	using System.Reflection;
+
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	public class InterfaceProxyWithoutTargetContributor : ITypeContributor
 	{
 		private readonly IList<MembersCollector> targets = new List<MembersCollector>();
 		private readonly IList<Type> interfaces = new List<Type>();
 		private readonly INamingScope namingScope;
+		private readonly GetTargetExpressionDelegate getTargetExpressionDelegate;
 
-		public InterfaceProxyWithoutTargetContributor(INamingScope namingScope)
+		public InterfaceProxyWithoutTargetContributor(INamingScope namingScope, GetTargetExpressionDelegate getTarget)
 		{
 			this.namingScope = namingScope;
+			getTargetExpressionDelegate = getTarget;
 		}
 
 		public void CollectElementsToProxy(IProxyGenerationHook hook)
@@ -112,7 +113,7 @@ namespace Castle.DynamicProxy.Contributors
 				                                         invocation,
 				                                         @class.GetField("__interceptors"),
 				                                         createMethod,
-				                                         GetTargetExpression);
+				                                         getTargetExpressionDelegate);
 			}
 			else
 			{
@@ -124,12 +125,6 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				proxiedMethod.DefineCustomAttribute(attribute);
 			}
-		}
-
-
-		protected virtual Expression GetTargetExpression(ClassEmitter @class, MethodInfo method)
-		{
-			return NullExpression.Instance;
 		}
 	}
 }
