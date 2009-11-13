@@ -80,23 +80,19 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			Expression proxiedMethodTokenExpression;
-			string tokenFieldName;
 			if (methodInfo.IsGenericMethod)
 			{
 				// Not in the cache: generic method
 				MethodInfo genericMethod = methodInfo.MakeGenericMethod(genericMethodArgs);
 
-				tokenFieldName = namingScope.GetUniqueName("token_" + methodInfo.Name);
 				proxiedMethodTokenExpression = new MethodTokenExpression(genericMethod);
 			}
 			else
 			{
-
-				var methodTokenField = @class.CreateStaticField(namingScope.GetUniqueName("token_" + methodInfo.Name),
-				                                                typeof (MethodInfo));
-				@class.ClassConstructor.CodeBuilder.AddStatement(new AssignStatement(methodTokenField, new MethodTokenExpression(methodInfo)));
-				tokenFieldName = methodTokenField.Reference.Name;
-				proxiedMethodTokenExpression = methodTokenField.ToExpression();
+				var tokenField = @class.CreateStaticField(namingScope.GetUniqueName("token_" + methodInfo.Name), typeof(MethodInfo));
+				@class.ClassConstructor.CodeBuilder.AddStatement(new AssignStatement(tokenField, new MethodTokenExpression(methodInfo)));
+				
+				proxiedMethodTokenExpression = tokenField.ToExpression();
 			}
 
 			LocalReference invocationImplLocal = emitter.CodeBuilder.DeclareLocal(iinvocation);
@@ -113,7 +109,9 @@ namespace Castle.DynamicProxy.Generators
 			Type targetType = methodInfo.DeclaringType;
 			Debug.Assert(targetType != null, "targetType != null");
 			Expression[] ctorArgs;
-			if (options.Selector == null)
+
+			var selector = @class.GetField("__selector");
+			if (selector == null)
 			{
 				ctorArgs = new[]
 				{
@@ -135,10 +133,8 @@ namespace Castle.DynamicProxy.Generators
 					interceptors.ToExpression(),
 					proxiedMethodTokenExpression,
 					new ReferencesToObjectArrayExpression(dereferencedArguments),
-					new MethodInvocationExpression(@class.GetField("proxyGenerationOptions"),
-					                               ProxyGenerationOptionsMethods.GetSelector)
-					{ VirtualCall = true },
-					new AddressOfReferenceExpression(BuildMethodInterceptorsFiled(@class, tokenFieldName))
+					selector.ToExpression(),
+					new AddressOfReferenceExpression(BuildMethodInterceptorsField(@class, methodInfo,namingScope))
 				};
 			}
 
@@ -172,10 +168,12 @@ namespace Castle.DynamicProxy.Generators
 			return emitter;
 		}
 
-		private FieldReference BuildMethodInterceptorsFiled(ClassEmitter @class, string tokenFieldName)
+		private FieldReference BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
 		{
-			var methodInterceptors = @class.CreateField(string.Format("{0}_interceptors", tokenFieldName),
-			                                            typeof (IInterceptor[]), false);
+			var methodInterceptors = @class.CreateField(
+				namingScope.GetUniqueName(string.Format("interceptors_{0}", method.Name)),
+				typeof(IInterceptor[]),
+				false);
 
 #if !SILVERLIGHT
 			@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);

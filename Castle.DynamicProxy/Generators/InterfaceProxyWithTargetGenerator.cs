@@ -157,8 +157,11 @@ namespace Castle.DynamicProxy.Generators
 
 			ctorArguments.Add(interceptorsField);
 			ctorArguments.Add(targetField);
-
-			CreateInitializeCacheMethodBody(proxyTargetType, emitter, cctor);
+			var selector = emitter.GetField("__selector");
+			if (selector != null)
+			{
+				ctorArguments.Add(selector);
+			}
 
 			GenerateConstructors(emitter, baseType, ctorArguments.ToArray());
 
@@ -190,6 +193,7 @@ namespace Castle.DynamicProxy.Generators
 			interceptorsField = CreateInterceptorsField(emitter);
 
 			CreateTargetField(emitter, proxyTargetType);
+			CreateSelectorField(emitter);
 
 			return baseType;
 		}

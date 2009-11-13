@@ -78,8 +78,6 @@ namespace Castle.DynamicProxy.Generators
 
 			var mixinFields = mixinFieldsList.ToArray();
 
-			CreateInitializeCacheMethodBody(proxyTargetType, emitter, cctor);
-
 			GenerateConstructors(emitter, baseType, new List<FieldReference>(mixinFields) {interceptorsField, targetField}.ToArray());
 
 			// Complete type initializer code body
