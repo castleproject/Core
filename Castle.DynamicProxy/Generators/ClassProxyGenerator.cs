@@ -181,14 +181,14 @@ namespace Castle.DynamicProxy.Generators
 					{
 						if (!typeImplementerMapping.ContainsKey(mixinInterface))
 						{
-							var mixin = new MixinContributor(mixinInstance.GetType(), mixinInterface, namingScope);
+							var mixin = new MixinContributor(mixinInterface, namingScope);
 							mixins.Add(mixin);
 							SafeAddMapping(mixinInterface, mixin, typeImplementerMapping);
 						}
 					}
 				}
 			}
-			var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(namingScope);
+			var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance);
 			// 3. then additional interfaces
 			foreach (var @interface in additionalInterfaces)
 			{

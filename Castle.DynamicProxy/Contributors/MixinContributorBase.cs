@@ -25,8 +25,12 @@ namespace Castle.DynamicProxy.Contributors
 		protected FieldReference field;
 
 		protected Type mixinInterface;
+		protected GetTargetExpressionDelegate getTargetExpression;
 
-
+		protected MixinContributorBase()
+		{
+			getTargetExpression = (c, i) => BackingField.ToExpression();
+		}
 
 		public FieldReference BackingField
 		{

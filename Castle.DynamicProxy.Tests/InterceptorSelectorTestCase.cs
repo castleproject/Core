@@ -17,6 +17,9 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
+
+	using Castle.DynamicProxy.Tests.Interfaces;
+
 	using Core.Interceptor;
 	using Interceptors;
 	using NUnit.Framework;
@@ -126,9 +129,25 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(5, result);
 			Assert.AreEqual(1, countingInterceptor.Count);
 		}
+
+		[Test]
+		[Ignore("DYNPROXY-ISSUE-122")]
+		public void When_two_selectors_present_and_not_equal_should_cache_type_anyway()
+		{
+			var options1 = new ProxyGenerationOptions { Selector = new AllInterceptorSelector() };
+			var options2 = new ProxyGenerationOptions
+			{
+				Selector = new TypeInterceptorSelector<CallCountingInterceptor>()
+			};
+
+			var type1 = generator.CreateInterfaceProxyWithTargetInterface<IOne>(new One(), options1).GetType();
+			var type2 = generator.CreateInterfaceProxyWithTargetInterface<IOne>(new One(), options2).GetType();
+
+			Assert.AreSame(type1, type2);
+		}
 	}
 
-#if !MONO 	
+#if !MONO 
 	public class MultiGenericClass : IMultiGenericInterface
 	{
 		#region IMultiGenericInterface Members

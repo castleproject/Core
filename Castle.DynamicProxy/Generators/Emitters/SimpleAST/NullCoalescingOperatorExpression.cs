@@ -19,14 +19,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class NullCoalescingOperatorExpression:Expression
 	{
-		private readonly Reference reference;
-		private readonly Reference @default;
+		private readonly Expression expression;
+		private readonly Expression @default;
 
-		public NullCoalescingOperatorExpression(Reference reference, Reference @default)
+		public NullCoalescingOperatorExpression(Expression expression, Expression @default)
 		{
-			if (reference == null)
+			if (expression == null)
 			{
-				throw new ArgumentNullException("reference");
+				throw new ArgumentNullException("expression");
 			}
 
 			if (@default == null)
@@ -34,18 +34,18 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				throw new ArgumentNullException("default");
 			}
 
-			this.reference = reference;
+			this.expression = expression;
 			this.@default = @default;
 		}
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			reference.LoadReference(gen);
+			expression.Emit(member, gen);
 			gen.Emit(OpCodes.Dup);
 			var label = gen.DefineLabel();
 			gen.Emit(OpCodes.Brtrue_S, label);
 			gen.Emit(OpCodes.Pop);
-			@default.LoadReference(gen);
+			@default.Emit(member, gen);
 			gen.MarkLabel(label);
 		}
 	}

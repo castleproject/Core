@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Collections.Generic;
 
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Serialization;
 
 	using Contributors;
@@ -35,9 +36,21 @@ namespace Castle.DynamicProxy.Generators
 			return contributor;
 		}
 
+		protected override MixinContributor GetContributorForMixin(INamingScope namingScope, Type mixinInterface, object mixinInstance)
+		{
+			var contributorForMixin = new MixinContributor(mixinInterface, namingScope,true);
+			contributorForMixin.SetGetTargetExpression(
+				(c, m) => new NullCoalescingOperatorExpression(
+				          	new AsTypeReference(c.GetField("__target"), mixinInterface).ToExpression(),
+				          	contributorForMixin.BackingField.ToExpression()));
+			return contributorForMixin;
+		}
+
 		protected override InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(INamingScope namingScope)
 		{
-			return new InterfaceProxyWithTargetInterfaceContributor(namingScope);
+			return new InterfaceProxyWithoutTargetContributor(
+				namingScope,
+				(@class, method) => new AsTypeReference(@class.GetField("__target"), method.DeclaringType).ToExpression());
 		}
 
 		public InterfaceProxyWithTargetInterfaceGenerator(ModuleScope scope, Type theInterface) : base(scope, theInterface)
