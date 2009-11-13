@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
 	using System;
-	using System.ComponentModel;
 
 	public class GenClassWithExplicitImpl : IChangeTracking
 	{
@@ -49,5 +48,11 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 		protected override void AcceptChanges()
 		{
 		}
+	}
+
+	public interface IChangeTracking{
+		bool IsChanged { get; }
+
+		void AcceptChanges();
 	}
 }

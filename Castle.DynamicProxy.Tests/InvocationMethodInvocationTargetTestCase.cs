@@ -14,8 +14,8 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-	using System.ComponentModel;
 	using System.Reflection;
+
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.GenClasses;
 	using Castle.DynamicProxy.Tests.Interceptors;
@@ -101,7 +101,7 @@ namespace Castle.DynamicProxy.Tests
 		public void ClassProxyForGeneric_MethodInvocationTarget_should_be_proxyMethod()
 		{
 			var interceptor = new KeepDataInterceptor();
-			var proxy = (IChangeTracking)generator.CreateClassProxy<GenClassWithExplicitImpl<int>>(interceptor);
+			var proxy = (Castle.DynamicProxy.Tests.GenClasses.IChangeTracking)generator.CreateClassProxy<GenClassWithExplicitImpl<int>>(interceptor);
 			Assert.IsTrue(proxy.IsChanged);
 			Assert.IsNotNull(interceptor.Invocation.MethodInvocationTarget);
 		}
