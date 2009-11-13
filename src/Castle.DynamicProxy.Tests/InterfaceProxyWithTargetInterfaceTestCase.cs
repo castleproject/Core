@@ -84,5 +84,21 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual(2, result);
 		}
+
+		[Test]
+		public void Should_detect_and_report_setting_null_as_target_for_Mixin_methods()
+		{
+			var options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new Two());
+			var interceptor = new ChangeTargetInterceptor(null);
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface(typeof(IOne),
+																		  new One(),
+																		  options,
+																		  interceptor);
+
+			Assert.Throws(typeof(NotImplementedException),()=>
+
+			(proxy as ITwo).TwoMethod());
+		}
 	}
 }

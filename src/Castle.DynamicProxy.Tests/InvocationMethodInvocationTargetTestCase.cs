@@ -101,7 +101,7 @@ namespace Castle.DynamicProxy.Tests
 		public void ClassProxyForGeneric_MethodInvocationTarget_should_be_proxyMethod()
 		{
 			var interceptor = new KeepDataInterceptor();
-			var proxy = (Castle.DynamicProxy.Tests.GenClasses.IChangeTracking)generator.CreateClassProxy<GenClassWithExplicitImpl<int>>(interceptor);
+			var proxy = (IChangeTracking)generator.CreateClassProxy<GenClassWithExplicitImpl<int>>(interceptor);
 			Assert.IsTrue(proxy.IsChanged);
 			Assert.IsNotNull(interceptor.Invocation.MethodInvocationTarget);
 		}
