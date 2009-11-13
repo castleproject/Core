@@ -15,12 +15,10 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection.Emit;
 	using System.Runtime.Serialization;
 	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy.Generators;
 
 #if SILVERLIGHT
 	public class ProxyGenerationOptions
@@ -169,7 +167,7 @@ namespace Castle.DynamicProxy
 			proxyGenerationOptions.Initialize();
 
 			if (!Equals(Hook, proxyGenerationOptions.Hook)) return false;
-			if (!Equals(Selector, proxyGenerationOptions.Selector)) return false;
+			if (!Equals(Selector == null, proxyGenerationOptions.Selector == null )) return false;
 			if (!Equals(MixinData, proxyGenerationOptions.MixinData)) return false;
 			if (!Equals(BaseTypeForInterfaceProxy, proxyGenerationOptions.BaseTypeForInterfaceProxy)) return false;
 			return true;
@@ -181,7 +179,7 @@ namespace Castle.DynamicProxy
 			Initialize();
 
 			int result = Hook != null ? Hook.GetType().GetHashCode() : 0;
-			result = 29 * result + (Selector != null ? Selector.GetHashCode() : 0);
+			result = 29 * result + (Selector != null ? 1 : 0);
 			result = 29 * result + MixinData.GetHashCode();
 			result = 29 * result + (BaseTypeForInterfaceProxy != null ? BaseTypeForInterfaceProxy.GetHashCode() : 0);
 			return result;

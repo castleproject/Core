@@ -173,6 +173,21 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void Equals_Compares_selectors_existence()
+		{
+			_options1.Selector = new AllInterceptorSelector();
+			_options2.Selector = new TypeInterceptorSelector<StandardInterceptor>();
+
+			Assert.AreEqual(_options1, _options2);
+
+			_options2.Selector = null;
+			Assert.AreNotEqual(_options1, _options2);
+
+			_options1.Selector = null;
+			Assert.AreEqual(_options1, _options2);
+		}
+
+		[Test]
 		public void GetHashCode_EmptyOptions()
 		{
 			Assert.AreEqual(_options1.GetHashCode(), _options2.GetHashCode());

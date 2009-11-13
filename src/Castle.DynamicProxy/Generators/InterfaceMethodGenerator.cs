@@ -44,20 +44,21 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options,INamingScope namingScope)
 		{
-			emitter.CopyParametersAndReturnTypeFrom(Method.Method, @class);
+			var methodInfo = Method.Method;
+			emitter.CopyParametersAndReturnTypeFrom(methodInfo, @class);
 
 			Type invocationType = invocation.TypeBuilder;
 
 			//TODO: can this ever happen? Should we throw instead?
-			Trace.Assert(Method.Method.IsGenericMethod == invocationType.IsGenericTypeDefinition);
+			Trace.Assert(methodInfo.IsGenericMethod == invocationType.IsGenericTypeDefinition);
 
 			Expression interfaceMethod;
 
 			ConstructorInfo constructor = invocation.Constructors[0].ConstructorBuilder;
 			Type[] genericMethodArgs = Type.EmptyTypes;
-			string tokenFieldName = namingScope.GetUniqueName("token_" + Method.Method.Name);
+			
 
-			if (Method.Method.IsGenericMethod)
+			if (methodInfo.IsGenericMethod)
 			{
 				// bind generic method arguments to invocation's type arguments
 				genericMethodArgs = emitter.MethodBuilder.GetGenericArguments();
@@ -66,17 +67,17 @@ namespace Castle.DynamicProxy.Generators
 				constructor = TypeBuilder.GetConstructor(invocationType, constructor);
 
 				// Not in the cache: generic method
-				interfaceMethod = new MethodTokenExpression(Method.Method.MakeGenericMethod(genericMethodArgs));
+				interfaceMethod = new MethodTokenExpression(methodInfo.MakeGenericMethod(genericMethodArgs));
 				new MethodTokenExpression(Method.MethodOnTarget.MakeGenericMethod(genericMethodArgs));
 
 			}
 			else
 			{
-				var proxiedMethodToken = @class.CreateStaticField(tokenFieldName, typeof(MethodInfo));
+				var proxiedMethodToken = @class.CreateStaticField(namingScope.GetUniqueName("token_" + methodInfo.Name), typeof(MethodInfo));
 				interfaceMethod = proxiedMethodToken.ToExpression();
 
 				var cctor = @class.ClassConstructor;
-				cctor.CodeBuilder.AddStatement(new AssignStatement(proxiedMethodToken, new MethodTokenExpression(Method.Method)));
+				cctor.CodeBuilder.AddStatement(new AssignStatement(proxiedMethodToken, new MethodTokenExpression(methodInfo)));
 			}
 
 
@@ -84,11 +85,12 @@ namespace Castle.DynamicProxy.Generators
 
 			Expression[] ctorArguments;
 
-			if (options.Selector == null)
+			var selector = @class.GetField("__selector");
+			if (selector == null)
 			{
 				ctorArguments = new[]
 				{
-					getTargetExpression(@class, Method.Method),
+					getTargetExpression(@class, methodInfo),
 					new TypeTokenExpression(Method.MethodOnTarget.DeclaringType),
 					SelfReference.Self.ToExpression(),
 					interceptors.ToExpression(),
@@ -100,14 +102,14 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ctorArguments = new[]
 				{
-					getTargetExpression(@class, Method.Method),
+					getTargetExpression(@class, methodInfo),
 					new TypeTokenExpression(Method.MethodOnTarget.DeclaringType),
 					SelfReference.Self.ToExpression(),
 					interceptors.ToExpression(),
 					interfaceMethod,
 					new ReferencesToObjectArrayExpression(dereferencedArguments),
-					BuildGetSelectorInvocation(@class),
-					new AddressOfReferenceExpression(BuildMethodInterceptorsFiled(@class, tokenFieldName))
+					selector.ToExpression(),
+					new AddressOfReferenceExpression(BuildMethodInterceptorsFiled(@class, methodInfo,namingScope))
 				};
 			}
 
@@ -115,17 +117,17 @@ namespace Castle.DynamicProxy.Generators
 			emitter.CodeBuilder.AddStatement(new AssignStatement(invocationLocal,
 			                                                     new NewInstanceExpression(constructor, ctorArguments)));
 
-			if (Method.Method.ContainsGenericParameters)
+			if (methodInfo.ContainsGenericParameters)
 			{
-				EmitLoadGenricMethodArguments(emitter, Method.Method.MakeGenericMethod(genericMethodArgs), invocationLocal);
+				EmitLoadGenricMethodArguments(emitter, methodInfo.MakeGenericMethod(genericMethodArgs), invocationLocal);
 			}
 
 			emitter.CodeBuilder.AddStatement(
 				new ExpressionStatement(new MethodInvocationExpression(invocationLocal, InvocationMethods.Proceed)));
 
-			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, invocationLocal, Method.Method, emitter);
+			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, invocationLocal, methodInfo, emitter);
 
-			if (Method.Method.ReturnType != typeof(void))
+			if (methodInfo.ReturnType != typeof(void))
 			{
 				// Emit code to return with cast from ReturnValue
 				var getRetVal = new MethodInvocationExpression(invocationLocal, InvocationMethods.GetReturnValue);
@@ -139,17 +141,12 @@ namespace Castle.DynamicProxy.Generators
 			return emitter;
 		}
 
-		private MethodInvocationExpression BuildGetSelectorInvocation(ClassEmitter @class)
+		private FieldReference BuildMethodInterceptorsFiled(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
 		{
-			return new MethodInvocationExpression(
-				@class.GetField("proxyGenerationOptions"),
-				ProxyGenerationOptionsMethods.GetSelector) { VirtualCall = true };
-		}
-
-		private FieldReference BuildMethodInterceptorsFiled(ClassEmitter @class, string tokenFieldName)
-		{
-			FieldReference methodInterceptors = @class.CreateField(string.Format("{0}_interceptors", tokenFieldName),
-			                                                       typeof(IInterceptor[]), false);
+			var methodInterceptors = @class.CreateField(
+				namingScope.GetUniqueName(string.Format("interceptors_{0}", method.Name)),
+				typeof(IInterceptor[]),
+				false);
 #if !SILVERLIGHT
 			@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
 #endif

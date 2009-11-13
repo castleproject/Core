@@ -102,6 +102,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var emitter = BuildClassEmitter(newName, targetType, implementedInterfaces);
 			CreateOptionsField(emitter);
+			CreateSelectorField(emitter);
 			emitter.AddCustomAttributes(ProxyGenerationOptions);
 
 #if !SILVERLIGHT
@@ -129,8 +130,12 @@ namespace Castle.DynamicProxy.Generators
 
 			// constructor arguments
 			constructorArguments.Add(interceptorsField);
+			var selector = emitter.GetField("__selector");
+			if (selector != null)
+			{
+				constructorArguments.Add(selector);
+			}
 
-			CreateInitializeCacheMethodBody(targetType, emitter, cctor);
 			GenerateConstructors(emitter, targetType, constructorArguments.ToArray());
 			GenerateParameterlessConstructor(emitter, targetType, interceptorsField);
 

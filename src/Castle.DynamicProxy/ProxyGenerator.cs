@@ -280,9 +280,11 @@ namespace Castle.DynamicProxy
 		private List<object> GetConstructorArguments(object target, IInterceptor[] interceptors, ProxyGenerationOptions options)
 		{
 			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
-			List<object> arguments = new List<object>(options.MixinData.Mixins);
-			arguments.Add(interceptors);
-			arguments.Add(target);
+			var arguments = new List<object>(options.MixinData.Mixins) { interceptors, target };
+			if(options.Selector!=null)
+			{
+				arguments.Add(options.Selector);
+			}
 			return arguments;
 		}
 
@@ -940,8 +942,11 @@ namespace Castle.DynamicProxy
 
 		private List<object> BuildArgumentListForClassProxy(ProxyGenerationOptions options, IInterceptor[] interceptors)
 		{
-			List<object> arguments = new List<object>(options.MixinData.Mixins);
-			arguments.Add(interceptors);
+			var arguments = new List<object>(options.MixinData.Mixins) { interceptors };
+			if (options.Selector != null)
+			{
+				arguments.Add(options.Selector);
+			}
 			return arguments;
 		}
 

@@ -36,7 +36,6 @@ namespace Castle.DynamicProxy.Generators
 	public abstract class BaseProxyGenerator
 	{
 		private readonly ModuleScope scope;
-		private FieldReference typeTokenField;
 		private ProxyGenerationOptions proxyGenerationOptions;
 
 		protected readonly Type targetType;
@@ -248,19 +247,6 @@ namespace Castle.DynamicProxy.Generators
 			return emitter.CreateTypeConstructor();
 		}
 
-		/// <summary>
-		/// Improvement: this cache should be static. We should generate a
-		/// type constructor instead
-		/// </summary>
-		protected void CreateInitializeCacheMethodBody(Type targetType, ClassEmitter classEmitter, ConstructorEmitter typeInitializerConstructor)
-		{
-			typeTokenField = classEmitter.CreateStaticField("typeTokenCache", typeof(Type));
-
-			typeInitializerConstructor.CodeBuilder.AddStatement(
-				new AssignStatement(typeTokenField, new TypeTokenExpression(targetType)));
-			
-		}
-
 		protected void CompleteInitCacheMethod(ConstructorCodeBuilder constCodeBuilder)
 		{
 			constCodeBuilder.AddStatement(new ReturnStatement());
@@ -340,6 +326,16 @@ namespace Castle.DynamicProxy.Generators
 			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(interceptorsField);
 #endif
 			return interceptorsField;
+		}
+
+		protected FieldReference CreateSelectorField(ClassEmitter emitter)
+		{
+			if(ProxyGenerationOptions.Selector== null)
+			{
+				return null;
+			}
+
+			return emitter.CreateField("__selector", typeof(IInterceptorSelector));
 		}
 	}
 }

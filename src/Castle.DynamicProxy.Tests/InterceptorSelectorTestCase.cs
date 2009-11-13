@@ -131,7 +131,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("DYNPROXY-ISSUE-122")]
 		public void When_two_selectors_present_and_not_equal_should_cache_type_anyway()
 		{
 			var options1 = new ProxyGenerationOptions { Selector = new AllInterceptorSelector() };
@@ -140,10 +139,13 @@ namespace Castle.DynamicProxy.Tests
 				Selector = new TypeInterceptorSelector<CallCountingInterceptor>()
 			};
 
-			var type1 = generator.CreateInterfaceProxyWithTargetInterface<IOne>(new One(), options1).GetType();
-			var type2 = generator.CreateInterfaceProxyWithTargetInterface<IOne>(new One(), options2).GetType();
+			var proxy1 = generator.CreateInterfaceProxyWithTargetInterface<IOne>(new One(), options1);
+			var proxy2 = generator.CreateInterfaceProxyWithTargetInterface<IOne>(new One(), options2);
+			proxy1.OneMethod();
+			proxy2.OneMethod();
+			
 
-			Assert.AreSame(type1, type2);
+			Assert.AreSame(proxy1.GetType(), proxy2.GetType());
 		}
 	}
 
