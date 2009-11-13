@@ -110,6 +110,14 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual void ImplementInvokeMethodOnTarget(NestedClassEmitter nested, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
 		{
+
+			if (canChangeTarget)
+			{
+				method.CodeBuilder.AddStatement(
+					new ExpressionStatement(new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
+			}
+			
+
 			Expression[] args = new Expression[parameters.Length];
 
 			// Idea: instead of grab parameters one by one
