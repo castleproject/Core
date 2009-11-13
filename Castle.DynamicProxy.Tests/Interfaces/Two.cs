@@ -16,7 +16,9 @@ namespace Castle.DynamicProxy.Tests.Interfaces
 {
 	using System;
 
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class Two : ITwo
 	{
 		public int TwoMethod()
