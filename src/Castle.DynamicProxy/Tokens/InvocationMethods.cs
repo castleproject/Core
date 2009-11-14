@@ -26,11 +26,15 @@ namespace Castle.DynamicProxy.Tokens
 		public static readonly FieldInfo Target =
 			typeof(AbstractInvocation).GetField("target", BindingFlags.Instance | BindingFlags.NonPublic);
 
+		public static readonly FieldInfo ProxyObject =
+			typeof(AbstractInvocation).GetField("proxyObject", BindingFlags.Instance | BindingFlags.NonPublic);
+
 		public static readonly MethodInfo GetArguments =
 			typeof(AbstractInvocation).GetMethod("get_Arguments");
 
 		public static readonly MethodInfo GetArgumentValue =
 			typeof(AbstractInvocation).GetMethod("GetArgumentValue");
+
 
 		public static readonly MethodInfo GetReturnValue =
 			typeof(AbstractInvocation).GetMethod("get_ReturnValue");
@@ -62,7 +66,6 @@ namespace Castle.DynamicProxy.Tokens
 			                                          new[]
 			                                          {
 			                                          	typeof(object),
-
 			                                          	typeof(Type),
 			                                          	typeof(object),
 			                                          	typeof(IInterceptor[]),
