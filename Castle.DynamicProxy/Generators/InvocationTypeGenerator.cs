@@ -65,16 +65,7 @@ namespace Castle.DynamicProxy.Generators
 			var targetField = new FieldReference(InvocationMethods.Target);
 			if (canChangeTarget)
 			{
-				var argument1 = new ArgumentReference(typeof (object));
-				MethodEmitter methodEmitter =
-					nested.CreateMethod("ChangeInvocationTarget", MethodAttributes.Public | MethodAttributes.Virtual,
-					                    typeof (void), argument1);
-				methodEmitter.CodeBuilder.AddStatement(
-					new AssignStatement(targetField,
-					                    new ConvertExpression(targetType, argument1.ToExpression())
-						)
-					);
-				methodEmitter.CodeBuilder.AddStatement(new ReturnStatement());
+				ImplementChangeProxyTargetInterface(@class, nested, targetField);
 			}
 
 			// InvokeMethodOnTarget implementation
@@ -97,6 +88,46 @@ namespace Castle.DynamicProxy.Generators
 #endif
 
 			return nested;
+		}
+
+		private void ImplementChangeProxyTargetInterface(ClassEmitter @class, NestedClassEmitter invocation, FieldReference targetField)
+		{
+			ImplementChangeInvocationTarget(invocation, targetField);
+
+			ImplementChangeProxyTarget(invocation, @class);
+		}
+
+		private void ImplementChangeProxyTarget(NestedClassEmitter invocation, ClassEmitter @class)
+		{
+			var argument = new ArgumentReference(typeof(object));
+			var changeInvocationTarget = invocation.CreateMethod("ChangeProxyTarget",
+			                                                     MethodAttributes.Public | MethodAttributes.Virtual,
+			                                                     typeof(void),
+			                                                     argument);
+			changeInvocationTarget.CodeBuilder.AddStatement(
+				new ExpressionStatement(
+					new ConvertExpression(@class.TypeBuilder, new FieldReference(InvocationMethods.ProxyObject).ToExpression())));
+
+			var field = @class.GetField("__target");
+			changeInvocationTarget.CodeBuilder.AddStatement(
+				new AssignStatement(
+					new FieldReference(field.Reference) { OwnerReference = null },
+					new ConvertExpression(field.Fieldbuilder.FieldType, argument.ToExpression())));
+
+			changeInvocationTarget.CodeBuilder.AddStatement(new ReturnStatement());
+		}
+
+		private void ImplementChangeInvocationTarget(NestedClassEmitter invocation, FieldReference targetField)
+		{
+			var argument = new ArgumentReference(typeof (object));
+			var changeInvocationTarget = invocation.CreateMethod("ChangeInvocationTarget",
+			                                                     MethodAttributes.Public | MethodAttributes.Virtual,
+			                                                     typeof(void),
+			                                                     argument);
+			changeInvocationTarget.CodeBuilder.AddStatement(
+				new AssignStatement(targetField,
+				                    new ConvertExpression(targetType, argument.ToExpression())));
+			changeInvocationTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
 		protected void CreateIInvocationInvokeOnTarget(NestedClassEmitter nested, ParameterInfo[] parameters, FieldReference targetField, MethodInfo callbackMethod)

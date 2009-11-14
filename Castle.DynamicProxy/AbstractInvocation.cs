@@ -27,7 +27,6 @@ namespace Castle.DynamicProxy
 	public abstract class AbstractInvocation : IInvocation, ISerializable
 #endif
 	{
-		private readonly object proxy;
 		private readonly IInterceptor[] interceptors;
 		private readonly MethodInfo proxiedMethod;
 		private readonly object[] arguments;
@@ -35,6 +34,7 @@ namespace Castle.DynamicProxy
 		private object returnValue;
 		private int execIndex = -1;
 		private Type[] genericMethodArguments;
+		protected readonly object proxyObject;
 		protected object target;
 
 		protected AbstractInvocation(
@@ -48,7 +48,7 @@ namespace Castle.DynamicProxy
 			Debug.Assert(proxiedMethod != null);
 			this.target = target;
 			this.targetType = targetType;
-			this.proxy = proxy;
+			this.proxyObject = proxy;
 			this.interceptors = interceptors;
 			this.proxiedMethod = proxiedMethod;
 			this.arguments = arguments;
@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy
 				throw new NotImplementedException(message);
 			}
 
-			if (!ReferenceEquals(target, proxy))
+			if (!ReferenceEquals(target, proxyObject))
 			{
 				return;
 			}
@@ -92,11 +92,27 @@ namespace Castle.DynamicProxy
 			throw new InvalidOperationException(message);
 		}
 
+		protected void EnsureValidProxyTarget(object target)
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException("target");
+			}
+
+			if (!ReferenceEquals(target, proxyObject))
+			{
+				return;
+			}
+			var message = "This is a DynamicProxy2 error: target of proxy has been set to the proxy itself. " +
+			              "This would result in recursively calling proxy methods over and over again until stack overflow, which may destabilize your program." +
+			              "This usually signifies a bug in the calling code. Make sure no interceptor sets proxy as its own target.";
+			throw new InvalidOperationException(message);
+		}
+
 		private IInterceptor[] SelectMethodInterceptors(IInterceptorSelector selector, IInterceptor[] methodInterceptors)
 		{
 			if (methodInterceptors == null)
 			{
-				//NOTE: perhaps instead of passing this.Method we should call this.GetConcreteMethod()
 				methodInterceptors = selector.SelectInterceptors(TargetType, Method, interceptors) ??
 				                     new IInterceptor[0];
 			}
@@ -115,7 +131,7 @@ namespace Castle.DynamicProxy
 
 		public object Proxy
 		{
-			get { return proxy; }
+			get { return proxyObject; }
 		}
 
 		public object InvocationTarget
