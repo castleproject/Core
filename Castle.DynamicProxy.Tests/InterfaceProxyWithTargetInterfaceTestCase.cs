@@ -100,5 +100,36 @@ namespace Castle.DynamicProxy.Tests
 
 			(proxy as ITwo).TwoMethod());
 		}
+
+		[Test]
+		public void ChangeProxyTarget_should_change_proxy_target_permanently()
+		{
+			var interceptor = new ChangeProxyTargetInterceptor(new OneTwo());
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface<IOne>(new One(), interceptor);
+			
+			proxy.OneMethod();
+
+			var type = GetTargetType(proxy);
+			Assert.AreEqual(typeof(OneTwo), type);
+		}
+
+		[Test]
+		public void ChangeProxyTarget_should_not_affect_invocation_target()
+		{
+			var first = new ChangeProxyTargetInterceptor(new OneTwo());
+			var second = new KeepDataInterceptor();
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface<IOne>(new One(),
+			                                                                    first,
+			                                                                    second);
+
+			proxy.OneMethod();
+
+			Assert.AreEqual(typeof(One), second.Invocation.InvocationTarget.GetType());
+		}
+
+		private Type GetTargetType(object proxy)
+		{
+			return (proxy as IProxyTargetAccessor).DynProxyGetTarget().GetType();
+		}
 	}
 }
