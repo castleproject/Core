@@ -39,5 +39,7 @@ namespace Castle.DynamicProxy.Generators
 		/// </summary>
 		/// <returns>New naming scope.</returns>
 		INamingScope SafeSubScope();
+
+		INamingScope ParentScope { get; }
 	}
 }

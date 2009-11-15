@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.Reflection;
 
 #if SILVERLIGHT
 #else
@@ -22,7 +23,7 @@ namespace Castle.DynamicProxy.Generators
 #endif
 	public class CacheKey
 	{
-		private readonly Type targetType;
+		private readonly MemberInfo target;
 		private readonly Type[] interfaces;
 		private readonly ProxyGenerationOptions options;
 		private readonly Type proxyForType;
@@ -30,12 +31,12 @@ namespace Castle.DynamicProxy.Generators
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CacheKey"/> class.
 		/// </summary>
-		/// <param name="targetType">Type of the target.</param>
+		/// <param name="target">Type of the target.</param>
 		/// <param name="interfaces">The interfaces.</param>
 		/// <param name="options">The options.</param>
-		public CacheKey(Type targetType, Type[] interfaces, ProxyGenerationOptions options)
+		public CacheKey(MemberInfo target, Type[] interfaces, ProxyGenerationOptions options)
 		{
-			this.targetType = targetType;
+			this.target = target;
 			this.interfaces = interfaces ?? Type.EmptyTypes;
 			this.options = options;
 		}
@@ -48,15 +49,13 @@ namespace Castle.DynamicProxy.Generators
 
 		public override int GetHashCode()
 		{
-			int result = targetType.GetHashCode();
-			if (interfaces != null)
+			int result = target.GetHashCode();
+			foreach (Type inter in interfaces)
 			{
-				foreach (Type inter in interfaces)
-				{
-					result += 29 + inter.GetHashCode();
-				}
+				result += 29 + inter.GetHashCode();
 			}
-			result = 29*result + options.GetHashCode();
+			if (options != null)
+				result = 29*result + options.GetHashCode();
 			if (proxyForType != null)
 				result = 29*result + proxyForType.GetHashCode();
 			return result;
@@ -70,7 +69,7 @@ namespace Castle.DynamicProxy.Generators
 			if (cacheKey == null) return false;
 
 			if (!Equals(proxyForType, cacheKey.proxyForType)) return false;
-			if (!Equals(targetType, cacheKey.targetType)) return false;
+			if (!Equals(target, cacheKey.target)) return false;
 			if (interfaces.Length != cacheKey.interfaces.Length) return false;
 			for (int i = 0; i < interfaces.Length; i++)
 			{

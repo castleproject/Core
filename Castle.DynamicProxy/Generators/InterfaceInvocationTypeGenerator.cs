@@ -29,11 +29,10 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override AbstractTypeEmitter GetEmitter(ClassEmitter @class, Type[] interfaces, INamingScope namingScope, MethodInfo methodInfo)
 		{
-			return new ClassEmitter(@class.ModuleScope,
-			                        namingScope.GetUniqueName(
-			                        	string.Format("Castle.Invocations.{0}_{1}", methodInfo.DeclaringType.Name, methodInfo.Name)),
-			                        typeof(AbstractInvocation), interfaces);
-			
+			var suggestedName = string.Format("Castle.Proxies.Invocations.{0}_{1}", methodInfo.DeclaringType.Name,
+			                                  methodInfo.Name);
+			var uniqueName = namingScope.ParentScope.GetUniqueName(suggestedName);
+			return new ClassEmitter(@class.ModuleScope, uniqueName, typeof(AbstractInvocation), interfaces);
 		}
 
 		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter nested, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
