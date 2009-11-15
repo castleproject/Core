@@ -98,7 +98,7 @@ namespace Castle.DynamicProxy.Generators
 			get { return scope; }
 		}
 
-		protected virtual ClassEmitter BuildClassEmitter(String typeName, Type parentType, IEnumerable<Type> interfaces)
+		protected virtual ClassEmitter BuildClassEmitter(string typeName, Type parentType, IEnumerable<Type> interfaces)
 		{
 			CheckNotGenericTypeDefinition(parentType, "parentType");
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
