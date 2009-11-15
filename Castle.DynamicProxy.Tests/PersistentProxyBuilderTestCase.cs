@@ -34,7 +34,7 @@ namespace Castle.DynamicProxy.Tests
 		public void PersistentProxyBuilder_SavesSignedFile()
 		{
 			PersistentProxyBuilder builder = new PersistentProxyBuilder();
-			builder.CreateClassProxy(typeof (object), ProxyGenerationOptions.Default);
+			builder.CreateClassProxyType(typeof(object), Type.EmptyTypes, ProxyGenerationOptions.Default);
 			string path = builder.SaveAssembly();
 			Assert.IsNotNull(path);
 			Assert.IsNotEmpty(path);

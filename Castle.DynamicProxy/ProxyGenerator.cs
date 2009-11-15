@@ -962,7 +962,7 @@ namespace Castle.DynamicProxy
 		protected Type CreateClassProxyType(Type classToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options)
 		{
 			// create proxy
-			return ProxyBuilder.CreateClassProxy(classToProxy, additionalInterfacesToProxy, options);
+			return ProxyBuilder.CreateClassProxyType(classToProxy, additionalInterfacesToProxy, options);
 		}
 
 		/// <summary>

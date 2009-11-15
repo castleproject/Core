@@ -289,7 +289,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			ModuleScope scope = new ModuleScope(true);
 			DefaultProxyBuilder builder = new DefaultProxyBuilder(scope);
-			Type cp = builder.CreateClassProxy(typeof (object), ProxyGenerationOptions.Default);
+			Type cp = builder.CreateClassProxyType(typeof(object), Type.EmptyTypes, ProxyGenerationOptions.Default);
 
 			string savedPath = scope.SaveAssembly();
 
@@ -386,7 +386,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void LoadAssemblyIntoCache_CreateClassProxy()
 		{
-			CheckLoadAssemblyIntoCache(builder => builder.CreateClassProxy(typeof (object), null, ProxyGenerationOptions.Default));
+			CheckLoadAssemblyIntoCache(builder => builder.CreateClassProxyType(typeof (object), null, ProxyGenerationOptions.Default));
 		}
 
 		[Test]
@@ -430,11 +430,11 @@ namespace Castle.DynamicProxy.Tests
 			options1.AddMixinInstance(new DateTime());
 			ProxyGenerationOptions options2 = ProxyGenerationOptions.Default;
 
-			Type cp1 = builder.CreateClassProxy(typeof (object), options1);
-			Type cp2 = builder.CreateClassProxy(typeof (object), options2);
+			Type cp1 = builder.CreateClassProxyType(typeof(object), Type.EmptyTypes, options1);
+			Type cp2 = builder.CreateClassProxyType(typeof(object), Type.EmptyTypes, options2);
 			Assert.AreNotSame(cp1, cp2);
-			Assert.AreSame(cp1, builder.CreateClassProxy(typeof (object), options1));
-			Assert.AreSame(cp2, builder.CreateClassProxy(typeof (object), options2));
+			Assert.AreSame(cp1, builder.CreateClassProxyType(typeof(object), Type.EmptyTypes, options1));
+			Assert.AreSame(cp2, builder.CreateClassProxyType(typeof(object), Type.EmptyTypes, options2));
 
 			string path = savedScope.SaveAssembly();
 
@@ -450,8 +450,8 @@ namespace Castle.DynamicProxy.Tests
 			                                         		newOptions1.AddMixinInstance(new DateTime());
 			                                         		ProxyGenerationOptions newOptions2 = ProxyGenerationOptions.Default;
 
-			                                         		Type loadedCP1 = newBuilder.CreateClassProxy(typeof (object), newOptions1);
-			                                         		Type loadedCP2 = newBuilder.CreateClassProxy(typeof (object), newOptions2);
+															Type loadedCP1 = newBuilder.CreateClassProxyType(typeof(object), Type.EmptyTypes, newOptions1);
+															Type loadedCP2 = newBuilder.CreateClassProxyType(typeof(object), Type.EmptyTypes, newOptions2);
 			                                         		Assert.AreNotSame(loadedCP1, loadedCP2);
 			                                         		Assert.AreEqual(assembly, loadedCP1.Assembly);
 			                                         		Assert.AreEqual(assembly, loadedCP2.Assembly);
