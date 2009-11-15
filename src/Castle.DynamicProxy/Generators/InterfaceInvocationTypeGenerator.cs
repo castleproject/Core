@@ -27,7 +27,16 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override void ImplementInvokeMethodOnTarget(NestedClassEmitter nested, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
+		protected override AbstractTypeEmitter GetEmitter(ClassEmitter @class, Type[] interfaces, INamingScope namingScope, MethodInfo methodInfo)
+		{
+			return new ClassEmitter(@class.ModuleScope,
+			                        namingScope.GetUniqueName(
+			                        	string.Format("Castle.Invocations.{0}_{1}", methodInfo.DeclaringType.Name, methodInfo.Name)),
+			                        typeof(AbstractInvocation), interfaces);
+			
+		}
+
+		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter nested, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
 		{
 			method.CodeBuilder.AddStatement(
 				new ExpressionStatement(

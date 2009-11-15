@@ -29,11 +29,11 @@ namespace Castle.DynamicProxy.Generators
 
 	public class InterfaceMethodGenerator : InterfaceMethodGeneratorBase
 	{
-		private readonly NestedClassEmitter invocation;
+		private readonly Type invocation;
 		private readonly FieldReference interceptors;
 		private readonly GetTargetExpressionDelegate getTargetExpression;
 
-		public InterfaceMethodGenerator(MethodToGenerate method, NestedClassEmitter invocation, FieldReference interceptors, CreateMethodDelegate createMethod,GetTargetExpressionDelegate getTargetExpression)
+		public InterfaceMethodGenerator(MethodToGenerate method, Type invocation, FieldReference interceptors, CreateMethodDelegate createMethod,GetTargetExpressionDelegate getTargetExpression)
 		:base(method,createMethod)
 		{
 			Debug.Assert(method.MethodOnTarget != null, "method.MethodOnTarget != null");
@@ -47,14 +47,14 @@ namespace Castle.DynamicProxy.Generators
 			var methodInfo = Method.Method;
 			emitter.CopyParametersAndReturnTypeFrom(methodInfo, @class);
 
-			Type invocationType = invocation.TypeBuilder;
+			Type invocationType = invocation;
 
 			//TODO: can this ever happen? Should we throw instead?
 			Trace.Assert(methodInfo.IsGenericMethod == invocationType.IsGenericTypeDefinition);
 
 			Expression interfaceMethod;
 
-			ConstructorInfo constructor = invocation.Constructors[0].ConstructorBuilder;
+			ConstructorInfo constructor = invocationType.GetConstructors()[0];
 			Type[] genericMethodArgs = Type.EmptyTypes;
 			
 
@@ -63,7 +63,6 @@ namespace Castle.DynamicProxy.Generators
 				// bind generic method arguments to invocation's type arguments
 				genericMethodArgs = emitter.MethodBuilder.GetGenericArguments();
 				invocationType = invocationType.MakeGenericType(genericMethodArgs);
-
 				constructor = TypeBuilder.GetConstructor(invocationType, constructor);
 
 				// Not in the cache: generic method
