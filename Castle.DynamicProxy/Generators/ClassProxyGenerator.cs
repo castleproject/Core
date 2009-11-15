@@ -177,7 +177,7 @@ namespace Castle.DynamicProxy.Generators
 						if (additionalInterfaces.Contains(mixinInterface) && typeImplementerMapping.ContainsKey(mixinInterface) == false)
 						{
 							SafeAddMapping(mixinInterface, proxyTarget, typeImplementerMapping);
-							proxyTarget.AddInterfaceMapping(mixinInterface);
+							proxyTarget.AddInterfaceToProxy(mixinInterface);
 						}
 						// we do not intercept the interface
 						mixins.Add(new EmptyMixinContributor(mixinInterface));
@@ -205,7 +205,7 @@ namespace Castle.DynamicProxy.Generators
 
 					// we intercept the interface, and forward calls to the target type
 					SafeAddMapping(@interface, proxyTarget, typeImplementerMapping);
-					proxyTarget.AddInterfaceMapping(@interface);
+					proxyTarget.AddInterfaceToProxy(@interface);
 				}
 				else if (ProxyGenerationOptions.MixinData.ContainsMixin(@interface) == false)
 				{
