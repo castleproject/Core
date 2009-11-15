@@ -99,6 +99,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Contributors\CompositeTypeContributor.cs" />
     <Compile Include="Contributors\InterfaceMethodGeneratorBase.cs" />
     <Compile Include="Generators\AttributeDisassembler.cs" />
     <Compile Include="CacheMappingsAttribute.cs" />
