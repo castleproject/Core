@@ -20,6 +20,16 @@ namespace Castle.DynamicProxy.Generators
 	public class NamingScope : INamingScope
 	{
 		private readonly IDictionary<string,int> names = new Dictionary<string, int>();
+		private readonly INamingScope parentScope;
+
+		public NamingScope()
+		{
+		}
+
+		private NamingScope(INamingScope parent)
+		{
+			parentScope = parent;
+		}
 
 		public string GetUniqueName(string suggestedName)
 		{
@@ -40,7 +50,12 @@ namespace Castle.DynamicProxy.Generators
 
 		public INamingScope SafeSubScope()
 		{
-			return new NamingScope();
+			return new NamingScope(this);
+		}
+
+		public INamingScope ParentScope
+		{
+			get { return parentScope;}
 		}
 	}
 }

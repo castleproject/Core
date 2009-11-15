@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Diagnostics;
 
+	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
@@ -116,11 +117,7 @@ namespace Castle.DynamicProxy.Contributors
 			MethodGenerator generator;
 			if (method.Proxyable)
 			{
-				var invocation = new InterfaceInvocationTypeGenerator(method.Method.DeclaringType,
-				                                             method,
-				                                             method.Method,
-				                                             canChangeTarget)
-					.Generate(emitter, options, namingScope).BuildType();
+				var invocation = GetInvocationType(method, emitter, options);
 
 				var interceptors = emitter.GetField("__interceptors");
 
@@ -141,6 +138,35 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				proxyMethod.DefineCustomAttribute(attribute);
 			}
+		}
+
+		private Type GetInvocationType(MethodToGenerate method, ClassEmitter emitter, ProxyGenerationOptions options)
+		{
+			var scope = emitter.ModuleScope;
+			Type[] interfaces = Type.EmptyTypes;
+			if (canChangeTarget)
+			{
+				interfaces = new[] { typeof(IChangeProxyTarget) };
+			}
+			var key = new CacheKey(method.Method, interfaces, null);
+
+			// no locking required as we're already within a lock
+
+			var invocation = scope.GetFromCache(key);
+			if(invocation!=null)
+			{
+				return invocation;
+			}
+
+			invocation = new InterfaceInvocationTypeGenerator(method.Method.DeclaringType,
+			                                                  method,
+			                                                  method.Method,
+			                                                  canChangeTarget)
+				.Generate(emitter, options, namingScope).BuildType();
+
+			scope.RegisterInCache(key, invocation);
+
+			return invocation;
 		}
 
 		public void SetGetTargetExpression(GetTargetExpressionDelegate getTarget)

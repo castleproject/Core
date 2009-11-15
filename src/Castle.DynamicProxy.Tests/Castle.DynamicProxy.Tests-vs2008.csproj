@@ -185,6 +185,7 @@
     <Compile Include="Interfaces\OneTwo.cs" />
     <Compile Include="Interfaces\Two.cs" />
     <Compile Include="InvocationMethodInvocationTargetTestCase.cs" />
+    <Compile Include="InvocationTypesCachingTestCase.cs" />
     <Compile Include="MethodEquivalenceTestCase.cs" />
     <Compile Include="MixinDataTestCase.cs" />
     <Compile Include="CrossAppDomainCaller.cs" />

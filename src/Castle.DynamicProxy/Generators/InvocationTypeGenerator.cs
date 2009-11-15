@@ -89,9 +89,9 @@ namespace Castle.DynamicProxy.Generators
 		protected virtual AbstractTypeEmitter GetEmitter(ClassEmitter @class, Type[] interfaces, INamingScope namingScope, MethodInfo methodInfo)
 		{
 			return new NestedClassEmitter(@class,
-			                              namingScope.GetUniqueName("Invocation_" + methodInfo.Name),
-			                              typeof(AbstractInvocation),
-			                              interfaces);
+										  namingScope.GetUniqueName("Invocation_" + methodInfo.Name),
+										  typeof(AbstractInvocation),
+										  interfaces);
 		}
 
 		private void ImplementChangeProxyTargetInterface(ClassEmitter @class, AbstractTypeEmitter invocation, FieldReference targetField)
