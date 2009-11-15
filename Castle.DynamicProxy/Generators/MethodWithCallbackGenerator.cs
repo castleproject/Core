@@ -29,11 +29,11 @@ namespace Castle.DynamicProxy.Generators
 	public class MethodWithCallbackGenerator:MethodGenerator
 	{
 		private readonly MethodToGenerate method;
-		private readonly NestedClassEmitter invocation;
+		private readonly AbstractTypeEmitter invocation;
 		private readonly Reference interceptors;
 		private readonly CreateMethodDelegate createMethod;
 
-		public MethodWithCallbackGenerator(MethodToGenerate method, NestedClassEmitter invocation, Reference interceptors, CreateMethodDelegate createMethod)
+		public MethodWithCallbackGenerator(MethodToGenerate method, AbstractTypeEmitter invocation, Reference interceptors, CreateMethodDelegate createMethod)
 		{
 			this.method = method;
 			this.invocation = invocation;
@@ -48,7 +48,6 @@ namespace Castle.DynamicProxy.Generators
 			var methodEmitter = createMethod(name, atts);
 			var proxiedMethod = ImplementProxiedMethod(methodEmitter,
 			                                           @class,
-			                                           options,
 			                                           namingScope);
 
 			if (method.Method.DeclaringType.IsInterface)
@@ -59,7 +58,7 @@ namespace Castle.DynamicProxy.Generators
 			return proxiedMethod;
 		}
 
-		private MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options,INamingScope namingScope)
+		private MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class,INamingScope namingScope)
 		{
 			var methodInfo = method.Method;
 			emitter.CopyParametersAndReturnTypeFrom(methodInfo, @class);

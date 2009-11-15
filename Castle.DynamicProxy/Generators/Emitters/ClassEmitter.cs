@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public class ClassEmitter : AbstractTypeEmitter
 	{
+		private ModuleScope moduleScope;
 		private const TypeAttributes DefaultAttributes = TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable;
 
 		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, IEnumerable<Type> interfaces)
@@ -43,6 +44,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 
 			TypeBuilder.SetParent(baseType);
+			moduleScope = modulescope;
+		}
+
+		public ModuleScope ModuleScope
+		{
+			get { return moduleScope; }
 		}
 
 		private static TypeBuilder CreateTypeBuilder(ModuleScope modulescope, string name, Type baseType, IEnumerable<Type> interfaces,

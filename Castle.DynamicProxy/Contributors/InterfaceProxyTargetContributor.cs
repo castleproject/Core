@@ -128,11 +128,11 @@ namespace Castle.DynamicProxy.Contributors
 			MethodGenerator generator;
 			if (method.Proxyable)
 			{
-				var invocation = new InterfaceInvocationTypeGenerator(method.Method.DeclaringType,
-				                                                      method,
-				                                                      method.Method,
-				                                                      canChangeTarget)
-					.Generate(@class, options, namingScope);
+				Type invocation = new InterfaceInvocationTypeGenerator(method.Method.DeclaringType,
+				                                                       method,
+				                                                       method.Method,
+				                                                       canChangeTarget)
+					.Generate(@class, options, namingScope).BuildType();
 
 				var interceptors = @class.GetField("__interceptors");
 

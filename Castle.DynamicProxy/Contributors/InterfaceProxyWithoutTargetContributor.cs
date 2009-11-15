@@ -107,7 +107,7 @@ namespace Castle.DynamicProxy.Contributors
 				                                                      method,
 				                                                      method.MethodOnTarget,
 				                                                      false)
-					.Generate(@class, options, namingScope);
+					.Generate(@class, options, namingScope).BuildType();
 
 				generator = new InterfaceMethodGenerator(method,
 				                                         invocation,
