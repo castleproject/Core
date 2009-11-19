@@ -76,9 +76,14 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-			var mixinFields = mixinFieldsList.ToArray();
+			var ctorArguments = new List<FieldReference>(mixinFieldsList) { interceptorsField, targetField };
+			var selector = emitter.GetField("__selector");
+			if (selector != null)
+			{
+				ctorArguments.Add(selector);
+			}
 
-			GenerateConstructors(emitter, baseType, new List<FieldReference>(mixinFields) {interceptorsField, targetField}.ToArray());
+			GenerateConstructors(emitter, baseType, ctorArguments.ToArray());
 
 			// Complete type initializer code body
 			CompleteInitCacheMethod(cctor.CodeBuilder);
