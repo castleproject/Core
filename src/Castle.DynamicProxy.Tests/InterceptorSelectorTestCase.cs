@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Collections.Generic;
 	using System.Reflection;
 
+	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interfaces;
 
 	using Core.Interceptor;
@@ -131,7 +132,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void When_two_selectors_present_and_not_equal_should_cache_type_anyway()
+		public void When_two_selectors_present_and_not_equal_should_cache_type_anyway_InterfaceProxyWithTargetInterface()
 		{
 			var options1 = new ProxyGenerationOptions { Selector = new AllInterceptorSelector() };
 			var options2 = new ProxyGenerationOptions
@@ -144,6 +145,60 @@ namespace Castle.DynamicProxy.Tests
 			proxy1.OneMethod();
 			proxy2.OneMethod();
 			
+
+			Assert.AreSame(proxy1.GetType(), proxy2.GetType());
+		}
+
+		[Test]
+		public void When_two_selectors_present_and_not_equal_should_cache_type_anyway_InterfaceProxyWithTarget()
+		{
+			var options1 = new ProxyGenerationOptions { Selector = new AllInterceptorSelector() };
+			var options2 = new ProxyGenerationOptions
+			{
+				Selector = new TypeInterceptorSelector<CallCountingInterceptor>()
+			};
+
+			var proxy1 = generator.CreateInterfaceProxyWithTarget<IOne>(new One(), options1);
+			var proxy2 = generator.CreateInterfaceProxyWithTarget<IOne>(new One(), options2);
+			proxy1.OneMethod();
+			proxy2.OneMethod();
+
+
+			Assert.AreSame(proxy1.GetType(), proxy2.GetType());
+		}
+
+		[Test]
+		public void When_two_selectors_present_and_not_equal_should_cache_type_anyway_InterfaceProxyWithoutTarget()
+		{
+			var options1 = new ProxyGenerationOptions { Selector = new AllInterceptorSelector() };
+			var options2 = new ProxyGenerationOptions
+			{
+				Selector = new TypeInterceptorSelector<SetReturnValueInterceptor>()
+			};
+
+			var proxy1 = generator.CreateInterfaceProxyWithoutTarget(typeof(IOne), Type.EmptyTypes, options1, new SetReturnValueInterceptor(2));
+			var proxy2 = generator.CreateInterfaceProxyWithoutTarget(typeof(IOne), Type.EmptyTypes, options2, new SetReturnValueInterceptor(2));
+			(proxy1 as IOne).OneMethod();
+			(proxy2 as IOne).OneMethod();
+
+
+			Assert.AreSame(proxy1.GetType(), proxy2.GetType());
+		}
+
+		[Test]
+		public void When_two_selectors_present_and_not_equal_should_cache_type_anyway_ClassProxy()
+		{
+			var options1 = new ProxyGenerationOptions { Selector = new AllInterceptorSelector() };
+			var options2 = new ProxyGenerationOptions
+			{
+				Selector = new TypeInterceptorSelector<CallCountingInterceptor>()
+			};
+
+			var proxy1 = generator.CreateClassProxy(typeof(ServiceClass), Type.EmptyTypes, options1);
+			var proxy2 = generator.CreateClassProxy(typeof(ServiceClass), Type.EmptyTypes, options2);
+			(proxy1 as ServiceClass).Sum(2, 2);
+			(proxy2 as ServiceClass).Sum(2, 2);
+
 
 			Assert.AreSame(proxy1.GetType(), proxy2.GetType());
 		}
