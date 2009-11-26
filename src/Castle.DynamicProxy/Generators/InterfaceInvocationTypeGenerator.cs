@@ -16,15 +16,25 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Reflection;
+
+	using Castle.Core.Interceptor;
+
 	using Emitters;
 	using Emitters.SimpleAST;
 	using Tokens;
 
 	public class InterfaceInvocationTypeGenerator : InvocationTypeGenerator
 	{
+		public static readonly Type BaseType = typeof(CompositionInvocation);
+
 		public InterfaceInvocationTypeGenerator(Type target, IProxyMethod method, MethodInfo callback, bool canChangeTarget)
 			: base(target, method, callback, canChangeTarget)
 		{
+		}
+
+		protected override FieldReference GetTargetReference()
+		{
+			return new FieldReference(InvocationMethods.Target);
 		}
 
 		protected override AbstractTypeEmitter GetEmitter(ClassEmitter @class, Type[] interfaces, INamingScope namingScope, MethodInfo methodInfo)
@@ -32,16 +42,42 @@ namespace Castle.DynamicProxy.Generators
 			var suggestedName = string.Format("Castle.Proxies.Invocations.{0}_{1}", methodInfo.DeclaringType.Name,
 			                                  methodInfo.Name);
 			var uniqueName = namingScope.ParentScope.GetUniqueName(suggestedName);
-			return new ClassEmitter(@class.ModuleScope, uniqueName, typeof(AbstractInvocation), interfaces);
+			return new ClassEmitter(@class.ModuleScope, uniqueName, BaseType, interfaces);
 		}
 
-		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter nested, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
+		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter @class, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
 		{
 			method.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
-			base.ImplementInvokeMethodOnTarget(nested, parameters, method, callbackMethod, targetField);
+			base.ImplementInvokeMethodOnTarget(@class, parameters, method, callbackMethod, targetField);
 		}
 
+		protected override ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions,out ConstructorInfo baseConstructor)
+		{
+			if (proxyGenerationOptions.Selector == null)
+			{
+				baseConstructor = InvocationMethods.CompositionInvocationConstructorNoSelector;
+				return new[]
+				{
+					new ArgumentReference(targetFieldType),
+					new ArgumentReference(typeof(object)),
+					new ArgumentReference(typeof(IInterceptor[])),
+					new ArgumentReference(typeof(MethodInfo)),
+					new ArgumentReference(typeof(object[])),
+				};
+			}
+			baseConstructor = InvocationMethods.CompositionInvocationConstructorWithSelector;
+			return new[]
+			{
+				new ArgumentReference(targetFieldType),
+				new ArgumentReference(typeof(object)),
+				new ArgumentReference(typeof(IInterceptor[])),
+				new ArgumentReference(typeof(MethodInfo)),
+				new ArgumentReference(typeof(object[])),
+				new ArgumentReference(typeof(IInterceptorSelector)),
+				new ArgumentReference(typeof(IInterceptor[]).MakeByRefType())
+			};
+		}
 	}
 }

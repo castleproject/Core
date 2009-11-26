@@ -170,7 +170,6 @@ namespace Castle.DynamicProxy.Generators
 			{
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
 				{
-					object mixinInstance = ProxyGenerationOptions.MixinData.GetMixinInstance(mixinInterface);
 					if (targetInterfaces.Contains(mixinInterface))
 					{
 						// OK, so the target implements this interface. We now do one of two things:

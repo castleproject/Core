@@ -22,14 +22,14 @@ namespace Castle.DynamicProxy.Generators
 	using Emitters.SimpleAST;
 	using Tokens;
 
-	public class InvocationTypeGenerator : IGenerator<AbstractTypeEmitter>
+	public abstract class InvocationTypeGenerator : IGenerator<AbstractTypeEmitter>
 	{
 		private readonly Type targetType;
 		private readonly IProxyMethod method;
 		private readonly MethodInfo callback;
 		private readonly bool canChangeTarget;
 
-		public InvocationTypeGenerator(Type targetType, IProxyMethod method, MethodInfo callback, bool canChangeTarget)
+		protected InvocationTypeGenerator(Type targetType, IProxyMethod method, MethodInfo callback, bool canChangeTarget)
 		{
 			this.targetType = targetType;
 			this.method = method;
@@ -41,7 +41,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var methodInfo = method.Method;
 
-			Type[] interfaces = new Type[0];
+			var interfaces = new Type[0];
 
 			if (canChangeTarget)
 			{
@@ -56,9 +56,14 @@ namespace Castle.DynamicProxy.Generators
 
 			// Create constructor
 
-			CreateIInvocationConstructor(targetType, type,options);
+			ConstructorInfo baseConstructor;
+			var arguments = GetCtorArgumentsAndBaseCtorToCall(targetType,options, out baseConstructor);
 
-			var targetField = new FieldReference(InvocationMethods.Target);
+			var constructor = type.CreateConstructor(arguments);
+			constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, arguments);
+			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+
+			var targetField = GetTargetReference();
 			if (canChangeTarget)
 			{
 				ImplementChangeProxyTargetInterface(@class, type, targetField);
@@ -86,13 +91,10 @@ namespace Castle.DynamicProxy.Generators
 			return type;
 		}
 
-		protected virtual AbstractTypeEmitter GetEmitter(ClassEmitter @class, Type[] interfaces, INamingScope namingScope, MethodInfo methodInfo)
-		{
-			return new NestedClassEmitter(@class,
-										  namingScope.GetUniqueName("Invocation_" + methodInfo.Name),
-										  typeof(AbstractInvocation),
-										  interfaces);
-		}
+		protected abstract FieldReference GetTargetReference();
+
+		protected abstract AbstractTypeEmitter GetEmitter(ClassEmitter @class, Type[] interfaces, INamingScope namingScope,
+		                                                  MethodInfo methodInfo);
 
 		private void ImplementChangeProxyTargetInterface(ClassEmitter @class, AbstractTypeEmitter invocation, FieldReference targetField)
 		{
@@ -134,16 +136,16 @@ namespace Castle.DynamicProxy.Generators
 			changeInvocationTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected void CreateIInvocationInvokeOnTarget(AbstractTypeEmitter nested, ParameterInfo[] parameters, FieldReference targetField, MethodInfo callbackMethod)
+		private void CreateIInvocationInvokeOnTarget(AbstractTypeEmitter @class, ParameterInfo[] parameters, FieldReference targetField, MethodInfo callbackMethod)
 		{
 			const MethodAttributes methodAtts = MethodAttributes.Public | MethodAttributes.Final | MethodAttributes.Virtual;
 
-			MethodEmitter method = nested.CreateMethod("InvokeMethodOnTarget", methodAtts, typeof(void));
+			MethodEmitter method = @class.CreateMethod("InvokeMethodOnTarget", methodAtts, typeof(void));
 
-			ImplementInvokeMethodOnTarget(nested, parameters, method, callbackMethod, targetField);
+			ImplementInvokeMethodOnTarget(@class, parameters, method, callbackMethod, targetField);
 		}
 
-		protected virtual void ImplementInvokeMethodOnTarget(AbstractTypeEmitter nested, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
+		protected virtual void ImplementInvokeMethodOnTarget(AbstractTypeEmitter @class, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
 		{
 
 			if (canChangeTarget)
@@ -163,7 +165,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ParameterInfo param = parameters[i];
 
-				Type paramType = TypeUtil.GetClosedParameterType(nested, param.ParameterType);
+				Type paramType = TypeUtil.GetClosedParameterType(@class, param.ParameterType);
 				if (paramType.IsByRef)
 				{
 					LocalReference localReference = method.CodeBuilder.DeclareLocal(paramType.GetElementType());
@@ -189,7 +191,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (callbackMethod.IsGenericMethod)
 			{
-				callbackMethod = callbackMethod.MakeGenericMethod(nested.GetGenericArgumentsFor(callbackMethod));
+				callbackMethod = callbackMethod.MakeGenericMethod(@class.GetGenericArgumentsFor(callbackMethod));
 			}
 
 			var methodOnTargetInvocationExpression = new MethodInvocationExpression(
@@ -200,7 +202,7 @@ namespace Castle.DynamicProxy.Generators
 			LocalReference returnValue = null;
 			if (callbackMethod.ReturnType != typeof(void))
 			{
-				Type returnType = TypeUtil.GetClosedParameterType(nested, callbackMethod.ReturnType);
+				Type returnType = TypeUtil.GetClosedParameterType(@class, callbackMethod.ReturnType);
 				returnValue = method.CodeBuilder.DeclareLocal(returnType);
 				method.CodeBuilder.AddStatement(new AssignStatement(returnValue, methodOnTargetInvocationExpression));
 			}
@@ -256,42 +258,13 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		/// <summary>
-		/// Generates the constructor for the nested class that extends
+		/// Generates the constructor for the class that extends
 		/// <see cref="AbstractInvocation"/>
 		/// </summary>
 		/// <param name="targetFieldType"></param>
-		/// <param name="nested"></param>
 		/// <param name="proxyGenerationOptions"></param>
-		protected void CreateIInvocationConstructor(Type targetFieldType, AbstractTypeEmitter nested, ProxyGenerationOptions proxyGenerationOptions)
-		{
-			var target = new ArgumentReference(targetFieldType);
-			var targetType = new ArgumentReference(typeof(Type));
-			var proxy = new ArgumentReference(typeof(object));
-			var interceptors = new ArgumentReference(typeof(IInterceptor[]));
-			var proxiedMethod = new ArgumentReference(typeof(MethodInfo));
-			var arguments = new ArgumentReference(typeof(object[]));
-
-			ConstructorEmitter constructor;
-			if (proxyGenerationOptions.Selector != null)
-			{
-				var selector = new ArgumentReference(typeof(IInterceptorSelector));
-				var methodInterceptorsByRef = new ArgumentReference(typeof(IInterceptor[]).MakeByRefType());
-				constructor = nested.CreateConstructor(target, targetType, proxy, interceptors, proxiedMethod, arguments,
-				                                       selector, methodInterceptorsByRef);
-
-				constructor.CodeBuilder.InvokeBaseConstructor(
-					InvocationMethods.ConstructorWithTargetMethodWithSelector,
-					target, targetType, proxy, interceptors, proxiedMethod, arguments, selector, methodInterceptorsByRef);
-			}
-			else
-			{
-				constructor = nested.CreateConstructor(target, targetType, proxy, interceptors, proxiedMethod, arguments);
-
-				constructor.CodeBuilder.InvokeBaseConstructor(
-					InvocationMethods.ConstructorWithTargetMethod,
-					target, targetType, proxy, interceptors, proxiedMethod, arguments);
-			}
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
-		}
+		/// <param name="baseConstructor"></param>
+		protected abstract ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor);
+		
 	}
 }

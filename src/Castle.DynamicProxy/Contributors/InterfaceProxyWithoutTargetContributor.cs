@@ -126,7 +126,7 @@ namespace Castle.DynamicProxy.Contributors
 		private Type GetInvocationType(MethodToGenerate method, ClassEmitter emitter, ProxyGenerationOptions options)
 		{
 			var scope = emitter.ModuleScope;
-			var key = new CacheKey(method.Method, null, null);
+			var key = new CacheKey(method.Method, InterfaceInvocationTypeGenerator.BaseType, null, null);
 
 			// no locking required as we're already within a lock
 

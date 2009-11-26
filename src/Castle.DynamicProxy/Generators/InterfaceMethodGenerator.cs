@@ -90,7 +90,6 @@ namespace Castle.DynamicProxy.Generators
 				ctorArguments = new[]
 				{
 					getTargetExpression(@class, methodInfo),
-					new TypeTokenExpression(Method.MethodOnTarget.DeclaringType),
 					SelfReference.Self.ToExpression(),
 					interceptors.ToExpression(),
 					interfaceMethod,
@@ -102,7 +101,6 @@ namespace Castle.DynamicProxy.Generators
 				ctorArguments = new[]
 				{
 					getTargetExpression(@class, methodInfo),
-					new TypeTokenExpression(Method.MethodOnTarget.DeclaringType),
 					SelfReference.Self.ToExpression(),
 					interceptors.ToExpression(),
 					interfaceMethod,

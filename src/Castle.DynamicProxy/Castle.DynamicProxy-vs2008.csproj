@@ -99,6 +99,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CompositionInvocation.cs" />
     <Compile Include="Contributors\CompositeTypeContributor.cs" />
     <Compile Include="Contributors\InterfaceMethodGeneratorBase.cs" />
     <Compile Include="Generators\AttributeDisassembler.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Contributors\Delegates.cs" />
     <Compile Include="Contributors\EmptyMixinContributor.cs" />
     <Compile Include="Contributors\InterfaceProxyWithoutTargetContributor.cs" />
+    <Compile Include="Generators\ClassInvocationTypeGenerator.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\NullCoalescingOperatorExpression.cs" />
     <Compile Include="Generators\GeneratorUtil.cs" />
     <Compile Include="Generators\MethodWithCallbackGenerator.cs" />
@@ -296,6 +298,7 @@
     <Compile Include="Generators\PropertyToGenerate.cs" />
     <Compile Include="Contributors\MembersCollector.cs" />
     <Compile Include="Contributors\ProxyInstanceContributor.cs" />
+    <Compile Include="InheritanceInvocation.cs" />
     <Compile Include="InternalsHelper.cs" />
     <Compile Include="InvalidMixinConfigurationException.cs" />
     <Compile Include="InvocationHelper.cs" />
