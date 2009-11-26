@@ -28,13 +28,15 @@ namespace Castle.DynamicProxy.Generators
 
 	public class MethodWithCallbackGenerator:MethodGenerator
 	{
+		private readonly Type targetType;
 		private readonly MethodToGenerate method;
 		private readonly AbstractTypeEmitter invocation;
 		private readonly Reference interceptors;
 		private readonly CreateMethodDelegate createMethod;
 
-		public MethodWithCallbackGenerator(MethodToGenerate method, AbstractTypeEmitter invocation, Reference interceptors, CreateMethodDelegate createMethod)
+		public MethodWithCallbackGenerator(Type targetType, MethodToGenerate method, AbstractTypeEmitter invocation, Reference interceptors, CreateMethodDelegate createMethod)
 		{
+			this.targetType = targetType;
 			this.method = method;
 			this.invocation = invocation;
 			this.interceptors = interceptors;
@@ -85,6 +87,7 @@ namespace Castle.DynamicProxy.Generators
 				MethodInfo genericMethod = methodInfo.MakeGenericMethod(genericMethodArgs);
 
 				proxiedMethodTokenExpression = new MethodTokenExpression(genericMethod);
+
 			}
 			else
 			{
@@ -104,8 +107,6 @@ namespace Castle.DynamicProxy.Generators
 				constructor = TypeBuilder.GetConstructor(iinvocation, constructor);
 			}
 
-			// TODO: this is not always true. Should be passed explicitly as ctor parameter
-			Type targetType = methodInfo.DeclaringType;
 			Debug.Assert(targetType != null, "targetType != null");
 			Expression[] ctorArgs;
 
@@ -114,7 +115,6 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ctorArgs = new[]
 				{
-					SelfReference.Self.ToExpression(),
 					new TypeTokenExpression(targetType),
 					SelfReference.Self.ToExpression(),
 					interceptors.ToExpression(),
@@ -126,7 +126,6 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ctorArgs = new[]
 				{
-					SelfReference.Self.ToExpression(),
 					new TypeTokenExpression(targetType),
 					SelfReference.Self.ToExpression(),
 					interceptors.ToExpression(),

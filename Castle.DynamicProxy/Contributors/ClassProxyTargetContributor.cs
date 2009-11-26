@@ -75,15 +75,11 @@ namespace Castle.DynamicProxy.Contributors
 				callback = CreateCallbackMethod(@class, methodInfo, method.MethodOnTarget);
 				targetForInvocation = callback.DeclaringType;
 			}
-			var invocation = new InvocationTypeGenerator(targetForInvocation,
-			                                             method,
-			                                             callback,
-			                                             false).Generate(@class, options, namingScope);
+			var invocation = new ClassInvocationTypeGenerator(targetForInvocation,
+			                                                  method,
+			                                                  callback).Generate(@class, options, namingScope);
 
-			return  new MethodWithCallbackGenerator(method,
-			                                        invocation,
-			                                        @class.GetField("__interceptors"),
-			                                        createMethod);
+			return new MethodWithCallbackGenerator(targetType, method, invocation, @class.GetField("__interceptors"), createMethod);
 		}
 
 		private bool IsExplicitInterfaceImplementation(MethodInfo methodInfo)

@@ -110,12 +110,28 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		public class Find2Invo<T> : AbstractInvocation
 		{
+			private GenInterfaceWithGenericTypesImpl target;
 
 			public Find2Invo(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType,
 			                 MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
-				: base(target,targetType, target, interceptors, interfMethod, arguments)
+				: base(target, interceptors, interfMethod, arguments)
 			{
 				this.target = target;
+			}
+
+			public override object InvocationTarget
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public override Type TargetType
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public override MethodInfo MethodInvocationTarget
+			{
+				get { throw new NotImplementedException(); }
 			}
 
 			protected override void InvokeMethodOnTarget()
@@ -126,12 +142,28 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		public class Find1Invo : AbstractInvocation
 		{
+			private GenInterfaceWithGenericTypesImpl target;
 
 			public Find1Invo(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType,
 			                 MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments) :
-				base(target, targetType, target, interceptors, interfMethod, arguments)
+				base(target, interceptors, interfMethod, arguments)
 			{
 				this.target = target;
+			}
+
+			public override object InvocationTarget
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public override Type TargetType
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public override MethodInfo MethodInvocationTarget
+			{
+				get { throw new NotImplementedException(); }
 			}
 
 			protected override void InvokeMethodOnTarget()
@@ -142,12 +174,28 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		public class Find1InvoA : AbstractInvocation
 		{
+			private GenInterfaceWithGenericTypesImpl target;
+
 			public Find1InvoA(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType,
 			                  MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
-				:
-					base(target, targetType, target, interceptors, interfMethod, arguments)
+				:base(target, interceptors, interfMethod, arguments)
 			{
 				this.target = target;
+			}
+
+			public override object InvocationTarget
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public override Type TargetType
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public override MethodInfo MethodInvocationTarget
+			{
+				get { throw new NotImplementedException(); }
 			}
 
 			protected override void InvokeMethodOnTarget()
@@ -158,11 +206,29 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		public class Find3Invo<T> : AbstractInvocation
 		{
+			private GenInterfaceWithGenericTypesImpl target;
+
 			public Find3Invo(GenInterfaceWithGenericTypesImpl target,
 			                 IInterceptor[] interceptors, Type targetType,
 			                 MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
-				: base(target, targetType, target, interceptors, interfMethod, arguments)
+				: base(target, interceptors, interfMethod, arguments)
 			{
+				this.target = target;
+			}
+
+			public override object InvocationTarget
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public override Type TargetType
+			{
+				get { throw new NotImplementedException(); }
+			}
+
+			public override MethodInfo MethodInvocationTarget
+			{
+				get { throw new NotImplementedException(); }
 			}
 
 			protected override void InvokeMethodOnTarget()

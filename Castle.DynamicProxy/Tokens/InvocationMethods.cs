@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Tokens
 	public static class InvocationMethods
 	{
 		public static readonly FieldInfo Target =
-			typeof(AbstractInvocation).GetField("target", BindingFlags.Instance | BindingFlags.NonPublic);
+			typeof(CompositionInvocation).GetField("target", BindingFlags.Instance | BindingFlags.NonPublic);
 
 		public static readonly FieldInfo ProxyObject =
 			typeof(AbstractInvocation).GetField("proxyObject", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -48,24 +48,22 @@ namespace Castle.DynamicProxy.Tokens
 		public static readonly MethodInfo SetReturnValue =
 			typeof(AbstractInvocation).GetMethod("set_ReturnValue");
 
-		public static readonly ConstructorInfo ConstructorWithTargetMethod =
-			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
-			                                          new[]
+		public static readonly ConstructorInfo InheritanceInvocationConstructorNoSelector =
+			typeof(InheritanceInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
+													  new[]
 			                                          {
-			                                          	typeof(object),
 			                                          	typeof(Type),
 			                                          	typeof(object),
 			                                          	typeof(IInterceptor[]),
 			                                          	typeof(MethodInfo),
 			                                          	typeof(object[])
 			                                          },
-			                                          null);
+													  null);
 
-		public static readonly ConstructorInfo ConstructorWithTargetMethodWithSelector =
-			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
-			                                          new[]
+		public static readonly ConstructorInfo InheritanceInvocationConstructorWithSelector =
+			typeof(InheritanceInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
+													  new[]
 			                                          {
-			                                          	typeof(object),
 			                                          	typeof(Type),
 			                                          	typeof(object),
 			                                          	typeof(IInterceptor[]),
@@ -74,12 +72,38 @@ namespace Castle.DynamicProxy.Tokens
 			                                          	typeof(IInterceptorSelector),
 			                                          	typeof(IInterceptor[]).MakeByRefType()
 			                                          },
-			                                          null);
+													  null);
+
+		public static readonly ConstructorInfo CompositionInvocationConstructorNoSelector =
+	typeof(CompositionInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
+											  new[]
+			                                          {
+			                                          	typeof(object),
+			                                          	typeof(object),
+			                                          	typeof(IInterceptor[]),
+			                                          	typeof(MethodInfo),
+			                                          	typeof(object[])
+			                                          },
+											  null);
+
+		public static readonly ConstructorInfo CompositionInvocationConstructorWithSelector =
+			typeof(CompositionInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
+													  new[]
+			                                          {
+			                                          	typeof(object),
+			                                          	typeof(object),
+			                                          	typeof(IInterceptor[]),
+			                                          	typeof(MethodInfo),
+			                                          	typeof(object[]),
+			                                          	typeof(IInterceptorSelector),
+			                                          	typeof(IInterceptor[]).MakeByRefType()
+			                                          },
+													  null);
 
 		public static readonly MethodInfo Proceed =
 			typeof(AbstractInvocation).GetMethod("Proceed", BindingFlags.Instance | BindingFlags.Public);
 
 		public static readonly MethodInfo EnsureValidTarget =
-			typeof (AbstractInvocation).GetMethod("EnsureValidTarget", BindingFlags.Instance | BindingFlags.NonPublic);
+			typeof(CompositionInvocation).GetMethod("EnsureValidTarget", BindingFlags.Instance | BindingFlags.NonPublic);
 	}
 }

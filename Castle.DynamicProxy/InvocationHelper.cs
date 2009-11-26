@@ -29,14 +29,23 @@ namespace Castle.DynamicProxy
 
 		private static readonly SlimReaderWriterLock @lock = new SlimReaderWriterLock();
 
-		public static MethodInfo GetMethodOnTarget(object target, MethodInfo proxiedMethod)
+		public static MethodInfo GetMethodOnObject(object target, MethodInfo proxiedMethod)
 		{
 			if (target == null)
 			{
 				return null;
 			}
 
-			Type type = target.GetType();
+			return GetMethodOnType(target.GetType(), proxiedMethod);
+		}
+
+		public static MethodInfo GetMethodOnType(Type type, MethodInfo proxiedMethod)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
 			Debug.Assert(proxiedMethod.DeclaringType.IsAssignableFrom(type),
 			             "proxiedMethod.DeclaringType.IsAssignableFrom(type)");
 			using (var locker = new UpgradableLock(@lock))

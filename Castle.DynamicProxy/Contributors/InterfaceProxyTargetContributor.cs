@@ -79,7 +79,7 @@ namespace Castle.DynamicProxy.Contributors
 				invocationInterfaces = new[] { typeof(IChangeProxyTarget) };
 			}
 
-			var key = new CacheKey(method.Method, invocationInterfaces, null);
+			var key = new CacheKey(method.Method, InterfaceInvocationTypeGenerator.BaseType, invocationInterfaces, null);
 
 			// no locking required as we're already within a lock
 
