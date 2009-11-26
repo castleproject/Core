@@ -18,6 +18,7 @@ namespace Castle.Core.Logging.Tests
 	using System;
 	using System.Diagnostics;
 	using System.Security.Principal;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -33,13 +34,31 @@ namespace Castle.Core.Logging.Tests
 			}
 		}
 
+		[TearDown]
+		public void Reset()
+		{
+			EventLog.Delete ("castle_testlog");
+		}
+		
 		private void AssertAdmin()
 		{
+			if (RunningOnNIX((int)Environment.OSVersion.Platform))
+			{
+				Environment.SetEnvironmentVariable("MONO_EVENTLOG_TYPE", "local:" + Environment.CurrentDirectory);
+				return;
+			}
+
 			WindowsPrincipal windowsPrincipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
 			if(windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator)==false)
 			{
 				Assert.Ignore("This test case only valid when running as admin");
 			}
+		}
+
+		private bool RunningOnNIX(int p)
+		{
+			// taken from http://www.mono-project.com/FAQ:_Technical
+			return (p == 4) || (p == 6) || (p == 128);
 		}
 
 		[Test]
