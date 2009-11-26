@@ -1342,12 +1342,6 @@ namespace Castle.Core.Logging.Tests
 		{
 			Assert.AreEqual(0, calls, "LevelFilteredLogger.Log was called with logging " + logger.Level);
 		}
-
-		private void ValidateCalled()
-		{
-			Assert.AreEqual(1, calls, "LevelFilteredLogger.Log was not called with logging " + logger.Level);
-		}
-
 	}
 
 	internal class LevelFilteredLoggerInstance : LevelFilteredLogger
