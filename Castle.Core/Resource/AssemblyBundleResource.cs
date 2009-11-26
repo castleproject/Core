@@ -28,16 +28,10 @@ namespace Castle.Core.Resource
 	public class AssemblyBundleResource : AbstractResource
 	{
 		private readonly CustomUri resource;
-		private readonly CultureInfo ci;
 
-		public AssemblyBundleResource(CustomUri resource) : this(resource, CultureInfo.InvariantCulture)
-		{
-		}
-
-		public AssemblyBundleResource(CustomUri resource, CultureInfo ci)
+		public AssemblyBundleResource(CustomUri resource)
 		{
 			this.resource = resource;
-			this.ci = ci;
 		}
 
 		public override TextReader GetStreamReader()
