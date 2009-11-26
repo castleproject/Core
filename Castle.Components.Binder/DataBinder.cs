@@ -89,12 +89,10 @@ namespace Castle.Components.Binder
 			{
 				TrySpecialDateTimeBinding(desiredType, treeRoot, paramName, out canConvert);
 			}
-#if !MONO
 			else if (desiredType == typeof(DateTimeOffset))
 			{
 				TrySpecialDateTimeOffsetBinding(desiredType, treeRoot, paramName, out canConvert);
 			}
-#endif
 			else
 			{
 				canConvert = false;
@@ -668,12 +666,10 @@ namespace Castle.Components.Binder
 				return TrySpecialDateTimeBinding(desiredType, parent, key, out conversionSucceeded);
 			}
 
-#if !MONO
 			if (childNode == null && IsDateTimeOffsetType(desiredType))
 			{
 				return TrySpecialDateTimeOffsetBinding(desiredType, parent, key, out conversionSucceeded);
 			}
-#endif
 
 			if (childNode == null)
 			{
@@ -898,7 +894,7 @@ namespace Castle.Components.Binder
 			{
 				conversionSucceeded = true;
 
-				DateTime dt = DateTime.Parse(dateUtc);
+				//DateTime dt = DateTime.Parse(dateUtc);
 
 				if (desiredType.Name == "NullableDateTime")
 				{
@@ -916,7 +912,6 @@ namespace Castle.Components.Binder
 			return null;
 		}
 
-#if !MONO
 		private object TrySpecialDateTimeOffsetBinding(Type desiredType, CompositeNode treeRoot,
 																						 String paramName, out bool conversionSucceeded)
 		{
@@ -940,7 +935,6 @@ namespace Castle.Components.Binder
 			conversionSucceeded = false;
 			return null;
 		}
-#endif
 
 		private object RelaxedConvertLeafNode(Type desiredType, Node node, object defaultValue)
 		{
@@ -981,7 +975,6 @@ namespace Castle.Components.Binder
 			return false;
 		}
 
-#if !MONO
 		private bool IsDateTimeOffsetType(Type desiredType)
 		{
 			if (desiredType == typeof(DateTimeOffset))
@@ -1001,7 +994,6 @@ namespace Castle.Components.Binder
 
 			return false;
 		}
-#endif
 
 		#region Support methods
 
