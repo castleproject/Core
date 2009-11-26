@@ -44,61 +44,33 @@ namespace Castle.Components.Validator.Tests.LocalizationTests
 		[Test]
 		public void LocalizedValidation_ThrowsInvalidOperationException_When_NoLocalizationExists()
 		{
+
 			var foo = new IncorrectlyLocalized();
 
-			try
+			using (SwitchUICulture(CultureInfo.CreateSpecificCulture("en-US")))
 			{
-				runner.IsValid(foo);
+				try
+				{
+					runner.IsValid(foo);
 
-				Assert.Fail("Should have gotten exception");
-			}
-			catch( InvalidOperationException ex)
-			{
-				Assert.AreEqual("The resource type 'Castle.Components.Validator.Tests.Messages' does not have a publicly visible static property named 'key_that_does_not_exists'. You probably marked the resources as internal, to fix this change the 'Access modifier' dropdown to 'Public' in the VS resources editor.", ex.Message);
-			}
-		}
-
-		[Test][Ignore("Won't pass on non-english system")]
-		public void LocalizedValidation_ThrowsArgumentException_When_ResourceTypeNull()
-		{
-			var foo = new ResourceTypeNull();
-
-			try
-			{
-				runner.IsValid(foo);
-
-				Assert.Fail("Should have gotten exception");
-			}
-			catch (CustomAttributeFormatException ex)
-			{
-				ArgumentException argumentException = (ArgumentException)ex.InnerException.InnerException;
-				Assert.AreEqual("Value cannot be null.\r\nParameter name: value", argumentException.Message);
+					Assert.Fail("Should have gotten exception");
+				}
+				catch (InvalidOperationException ex)
+				{
+					Assert.AreEqual(
+							"The resource type 'Castle.Components.Validator.Tests.Messages' does not have a publicly visible static property named 'key_that_does_not_exists'. You probably marked the resources as internal, to fix this change the 'Access modifier' dropdown to 'Public' in the VS resources editor.",
+							ex.Message);
+				}
 			}
 		}
 
 		[Test]
-		public void LocalizedValidation_ThrowsArgumentException_When_ResourceTypeNotSet()
+		[Ignore("Won't pass on non-english system")]
+		public void LocalizedValidation_ThrowsArgumentException_When_ResourceTypeNull()
 		{
-			var foo = new ResourceTypeNotSet();
+			var foo = new ResourceTypeNull();
 
-			try
-			{
-				runner.IsValid(foo);
-
-				Assert.Fail("Should have gotten exception");
-			}
-			catch (ArgumentException ex)
-			{
-				Assert.AreEqual("You have set ErrorMessageKey and/or FriendlyNameKey but have not specified the ResourceType to use for lookup.", ex.Message);
-			}
-		}
-
-		[Test][Ignore("Won't pass on non-english system")]
-		public void LocalizedValidation_ThrowsArgumentException_When_ErrorMessageKeyNullOrEmpty()
-		{
-			var foos = new object [] { new ErrorMessageKeyNull(), new ErrorMessageKeyEmpty() };
-
-			foreach (var foo in foos)
+			using (SwitchUICulture(CultureInfo.CreateSpecificCulture("en-US")))
 			{
 				try
 				{
@@ -109,35 +81,89 @@ namespace Castle.Components.Validator.Tests.LocalizationTests
 				catch (CustomAttributeFormatException ex)
 				{
 					ArgumentException argumentException = (ArgumentException)ex.InnerException.InnerException;
-					Assert.AreEqual("Value cannot be null or empty.\r\nParameter name: value", argumentException.Message);
+					Assert.AreEqual("Value cannot be null.\r\nParameter name: value", argumentException.Message);
 				}
 			}
 		}
 
-		[Test][Ignore("Won't pass on non-english system")]
-		public void LocalizedValidation_ThrowsArgumentException_When_FriendlyNameKeyNullOrEmpty()
+		[Test]
+		public void LocalizedValidation_ThrowsArgumentException_When_ResourceTypeNotSet()
 		{
-			var foos = new object [] { new FriendlyNameKeyNull(), new FriendlyNameKeyEmpty() };
+			var foo = new ResourceTypeNotSet();
 
-			foreach (var foo in foos)
+			using (SwitchUICulture(CultureInfo.CreateSpecificCulture("en-US")))
 			{
-
 				try
 				{
 					runner.IsValid(foo);
 
 					Assert.Fail("Should have gotten exception");
 				}
-				catch (CustomAttributeFormatException ex)
+				catch (ArgumentException ex)
 				{
-					ArgumentException argumentException = (ArgumentException) ex.InnerException.InnerException;
-					Assert.AreEqual("Value cannot be null or empty.\r\nParameter name: value", argumentException.Message);
+					Assert.AreEqual(
+							"You have set ErrorMessageKey and/or FriendlyNameKey but have not specified the ResourceType to use for lookup.",
+							ex.Message);
+				}
+			}
+		}
+
+		[Test]
+		[Ignore("Won't pass on non-english system")]
+		public void LocalizedValidation_ThrowsArgumentException_When_ErrorMessageKeyNullOrEmpty()
+		{
+			var foos = new object[] { new ErrorMessageKeyNull(), new ErrorMessageKeyEmpty() };
+
+			using (SwitchUICulture(CultureInfo.CreateSpecificCulture("en-US")))
+			{
+				foreach (var foo in foos)
+				{
+					try
+					{
+						runner.IsValid(foo);
+
+						Assert.Fail("Should have gotten exception");
+					}
+					catch (CustomAttributeFormatException ex)
+					{
+						ArgumentException argumentException = (ArgumentException)ex.InnerException.InnerException;
+						Assert.AreEqual("Value cannot be null or empty.\r\nParameter name: value",
+														argumentException.Message);
+					}
+				}
+			}
+		}
+
+		[Test]
+		[Ignore("Won't pass on non-english system")]
+		public void LocalizedValidation_ThrowsArgumentException_When_FriendlyNameKeyNullOrEmpty()
+		{
+			var foos = new object[] { new FriendlyNameKeyNull(), new FriendlyNameKeyEmpty() };
+
+			using (SwitchUICulture(CultureInfo.CreateSpecificCulture("en-US")))
+			{
+				foreach (var foo in foos)
+				{
+
+					try
+					{
+						runner.IsValid(foo);
+
+						Assert.Fail("Should have gotten exception");
+					}
+					catch (CustomAttributeFormatException ex)
+					{
+						ArgumentException argumentException = (ArgumentException)ex.InnerException.InnerException;
+						Assert.AreEqual("Value cannot be null or empty.\r\nParameter name: value",
+														argumentException.Message);
+					}
 				}
 			}
 		}
 
 		[Test, Ignore("Doesn't pass when run from command line - anyone?")]
-		public void LocalizedValidation_Uses_CurrentUICultureLocalization() {
+		public void LocalizedValidation_Uses_CurrentUICultureLocalization()
+		{
 			var bar = new OnlyLocalizedForLithuaniaBar();
 			using (SwitchUICulture(CultureInfo.CreateSpecificCulture("lt-LT")))
 			{
@@ -269,7 +295,7 @@ namespace Castle.Components.Validator.Tests.LocalizationTests
 			FriendlyNameKey = "friendlyname")]
 		public string Bar { get; set; }
 	}
-    
+
 	public class ErrorMessageKeyNull
 	{
 		[ValidateNonEmpty(
