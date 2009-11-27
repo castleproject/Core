@@ -41,6 +41,7 @@ namespace Castle.Core.Logging.Tests
 		}
 
 		[Test]
+		[Platform(Exclude = "mono", Reason = "Won't pass because of Mono bug. Review this when new Mono is out.")]
 		public void WritingToLoggerByType()
 		{
 			TraceLoggerFactory factory = new TraceLoggerFactory();
@@ -84,6 +85,7 @@ namespace Castle.Core.Logging.Tests
 		}
 
 		[Test]
+		[Platform(Exclude = "mono", Reason = "Won't pass because of Mono bug. Review this when new Mono is out.")]
 		public void FallUpToShorterSourceName()
 		{
 			TraceLoggerFactory factory = new TraceLoggerFactory();
@@ -95,6 +97,7 @@ namespace Castle.Core.Logging.Tests
 		}
 
 		[Test]
+		[Platform(Exclude = "mono", Reason = "Won't pass because of Mono bug. Review this when new Mono is out.")]
 		public void FallUpToDefaultSource()
 		{
 			TraceLoggerFactory factory = new TraceLoggerFactory();
