@@ -60,23 +60,29 @@ namespace Castle.DynamicProxy.Contributors
 				                                     (c, m) => c.GetField("__target"));
 			}
 
-			Type invocation = GetInvocationType(method, @class, options);
+			var invocation = GetInvocationType(method, @class, options);
 
-			return new InterfaceMethodGenerator(method,
-			                                    invocation,
-			                                    @class.GetField("__interceptors"),
-			                                    createMethod,
-			                                    (c, m) => c.GetField("__target").ToExpression());
+			return new MethodWithInvocationGenerator(method,
+			                                         @class.GetField("__interceptors"),
+			                                         invocation,
+			                                         (c, m) => c.GetField("__target").ToExpression(),
+			                                         createMethod,
+			                                         GeneratorUtil.ObtainInterfaceMethodAttributes);
 		}
 
-		private Type GetInvocationType(MethodToGenerate method, ClassEmitter emitter, ProxyGenerationOptions options)
+		private Type GetInvocationType(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options)
 		{
-			var scope = emitter.ModuleScope;
+			var scope = @class.ModuleScope;
 
-			Type[] invocationInterfaces = Type.EmptyTypes;
+			Type[] invocationInterfaces;
 			if(canChangeTarget)
 			{
-				invocationInterfaces = new[] { typeof(IChangeProxyTarget) };
+				invocationInterfaces = new[] { typeof(IInvocation), typeof(IChangeProxyTarget) };
+			}
+			else
+			{
+
+				invocationInterfaces = new[] { typeof(IInvocation) };
 			}
 
 			var key = new CacheKey(method.Method, InterfaceInvocationTypeGenerator.BaseType, invocationInterfaces, null);
@@ -93,7 +99,7 @@ namespace Castle.DynamicProxy.Contributors
 			                                                  method,
 			                                                  method.Method,
 			                                                  canChangeTarget)
-				.Generate(emitter, options, namingScope).BuildType();
+				.Generate(@class, options, namingScope).BuildType();
 
 			scope.RegisterInCache(key, invocation);
 

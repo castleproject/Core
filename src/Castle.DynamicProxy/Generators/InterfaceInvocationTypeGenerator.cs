@@ -37,20 +37,17 @@ namespace Castle.DynamicProxy.Generators
 			return new FieldReference(InvocationMethods.Target);
 		}
 
-		protected override AbstractTypeEmitter GetEmitter(ClassEmitter @class, Type[] interfaces, INamingScope namingScope, MethodInfo methodInfo)
+		protected override Type GetBaseType()
 		{
-			var suggestedName = string.Format("Castle.Proxies.Invocations.{0}_{1}", methodInfo.DeclaringType.Name,
-			                                  methodInfo.Name);
-			var uniqueName = namingScope.ParentScope.GetUniqueName(suggestedName);
-			return new ClassEmitter(@class.ModuleScope, uniqueName, BaseType, interfaces);
+			return BaseType;
 		}
 
-		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter @class, ParameterInfo[] parameters, MethodEmitter method, MethodInfo callbackMethod, Reference targetField)
+		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter @class, ParameterInfo[] parameters, MethodEmitter invokeMethodOnTarget, MethodInfo callbackMethod, Reference targetField)
 		{
-			method.CodeBuilder.AddStatement(
+			invokeMethodOnTarget.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
-			base.ImplementInvokeMethodOnTarget(@class, parameters, method, callbackMethod, targetField);
+			base.ImplementInvokeMethodOnTarget(@class, parameters, invokeMethodOnTarget, callbackMethod, targetField);
 		}
 
 		protected override ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions,out ConstructorInfo baseConstructor)

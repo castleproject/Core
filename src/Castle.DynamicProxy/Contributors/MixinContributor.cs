@@ -119,13 +119,12 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				var invocation = GetInvocationType(method, emitter, options);
 
-				var interceptors = emitter.GetField("__interceptors");
-
-				generator = new InterfaceMethodGenerator(method,
-				                                         invocation,
-				                                         interceptors,
-				                                         createMethod,
-				                                         getTargetExpression);
+				generator = new MethodWithInvocationGenerator(method,
+				                                              emitter.GetField("__interceptors"),
+				                                              invocation,
+				                                              getTargetExpression,
+				                                              createMethod,
+				                                              GeneratorUtil.ObtainInterfaceMethodAttributes);
 			}
 			else
 			{
