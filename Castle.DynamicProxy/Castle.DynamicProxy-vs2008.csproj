@@ -323,7 +323,6 @@
     <Compile Include="Tokens\FormatterServicesMethods.cs" />
     <Compile Include="Tokens\InvocationMethods.cs" />
     <Compile Include="Tokens\MethodBaseMethods.cs" />
-    <Compile Include="Tokens\ProxyGenerationOptionsMethods.cs" />
     <Compile Include="Tokens\SerializationInfoMethods.cs" />
     <Compile Include="Tokens\TypeBuilderMethods.cs" />
     <Compile Include="Tokens\TypeMethods.cs" />
