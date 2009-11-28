@@ -18,12 +18,13 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection;
 
 	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
 	public class ClassInvocationTypeGenerator : InvocationTypeGenerator
 	{
+		public static readonly Type BaseType = typeof(InheritanceInvocation);
+
 		public ClassInvocationTypeGenerator(Type targetType, IProxyMethod method, MethodInfo callback)
 			: base(targetType, method, callback, false)
 		{
@@ -34,12 +35,9 @@ namespace Castle.DynamicProxy.Generators
 			return new FieldReference(InvocationMethods.ProxyObject);
 		}
 
-		protected override AbstractTypeEmitter GetEmitter(ClassEmitter @class, Type[] interfaces, INamingScope namingScope, MethodInfo methodInfo)
+		protected override Type GetBaseType()
 		{
-			return new NestedClassEmitter(@class,
-			                              namingScope.GetUniqueName("Invocation_" + methodInfo.Name),
-			                              typeof(InheritanceInvocation),
-			                              interfaces);
+			return BaseType;
 		}
 
 		protected override ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor)

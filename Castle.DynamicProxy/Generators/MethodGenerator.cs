@@ -14,10 +14,50 @@
 
 namespace Castle.DynamicProxy.Generators
 {
+	using System.Reflection;
+
+	using Castle.DynamicProxy.Contributors;
+
 	using Emitters;
 
 	public abstract class MethodGenerator : IGenerator<MethodEmitter>
 	{
-		public abstract MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope);
+		protected MethodInfo MethodToOverride
+		{
+			get { return method.Method; }
+		}
+
+		protected MethodInfo MethodOnTarget
+		{
+			get { return method.MethodOnTarget; }
+		}
+
+		protected MethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod, GetMethodAttributesAndNameDelegate getAttributesAndName)
+		{
+			this.method = method;
+			this.createMethod = createMethod;
+			this.getAttributesAndName = getAttributesAndName;
+		}
+
+		private readonly MethodToGenerate method;
+		private readonly CreateMethodDelegate createMethod;
+		private readonly GetMethodAttributesAndNameDelegate getAttributesAndName;
+
+		public MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+		{
+			var attributesAndName = getAttributesAndName(method);
+			var methodEmitter = createMethod(attributesAndName.Second, attributesAndName.First);
+			methodEmitter.CopyParametersAndReturnTypeFrom(MethodToOverride, @class);
+			var proxiedMethod = BuildProxiedMethodBody(methodEmitter, @class, options, namingScope);
+
+			if (MethodToOverride.DeclaringType.IsInterface)
+			{
+				@class.TypeBuilder.DefineMethodOverride(proxiedMethod.MethodBuilder, MethodToOverride);
+			}
+
+			return proxiedMethod;
+		}
+
+		protected abstract MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope);
 	}
 }

@@ -18,26 +18,25 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class ForwardingMethodGenerator : InterfaceMethodGeneratorBase
+	public class ForwardingMethodGenerator : MethodGenerator
 	{
 		private readonly GetTargetReferenceDelegate getTargetReference;
 
 		public ForwardingMethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod, GetTargetReferenceDelegate getTargetReference)
-			: base(method, createMethod)
+			: base(method, createMethod, GeneratorUtil.ObtainInterfaceMethodAttributes)
 		{
 			this.getTargetReference = getTargetReference;
 		}
 
-		protected override MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
-			emitter.CopyParametersAndReturnTypeFrom(Method.Method, @class);
-			var targetReference = getTargetReference(@class, Method.Method);
-			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(Method.Method.GetParameters());
+			var targetReference = getTargetReference(@class, MethodToOverride);
+			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(MethodToOverride.GetParameters());
 
 			emitter.CodeBuilder.AddStatement(new ReturnStatement(
 			                                 	new MethodInvocationExpression(
 			                                 		targetReference,
-													Method.Method,
+			                                 		MethodToOverride,
 			                                 		arguments) { VirtualCall = true }));
 			return emitter;
 		}

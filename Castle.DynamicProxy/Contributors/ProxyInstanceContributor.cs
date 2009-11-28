@@ -59,14 +59,13 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected void ImplementProxyTargetAccessor(ClassEmitter emitter, FieldReference interceptorsField)
 		{
-			MethodAttributes attributes = MethodAttributes.Virtual | MethodAttributes.Public;
 
-			MethodEmitter dynProxyGetTarget = emitter.CreateMethod("DynProxyGetTarget", attributes, typeof(object));
+			MethodEmitter dynProxyGetTarget = emitter.CreateMethod("DynProxyGetTarget", typeof(object));
 
 			dynProxyGetTarget.CodeBuilder.AddStatement(
 				new ReturnStatement(new ConvertExpression(typeof(object), targetType, GetTargetReferenceExpression(emitter))));
 
-			MethodEmitter getInterceptors = emitter.CreateMethod("GetInterceptors", attributes, typeof(IInterceptor[]));
+			MethodEmitter getInterceptors = emitter.CreateMethod("GetInterceptors", typeof(IInterceptor[]));
 
 			getInterceptors.CodeBuilder.AddStatement(
 				new ReturnStatement(interceptorsField));
@@ -79,8 +78,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			var serializationInfo = new ArgumentReference(typeof (SerializationInfo));
 			var streamingContext = new ArgumentReference(typeof (StreamingContext));
-			MethodEmitter getObjectData = emitter.CreateMethod("GetObjectData",
-			                                                   typeof (void), serializationInfo, streamingContext);
+			MethodEmitter getObjectData = emitter.CreateMethod("GetObjectData", serializationInfo, streamingContext);
 
 			LocalReference typeLocal = getObjectData.CodeBuilder.DeclareLocal(typeof (Type));
 

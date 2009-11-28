@@ -20,47 +20,19 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class MinimialisticMethodGenerator:MethodGenerator
+	public class MinimialisticMethodGenerator : MethodGenerator
 	{
-		private readonly MethodToGenerate method;
-		private readonly CreateMethodDelegate createMethod;
-		private readonly GetMethodAttributesDelegate getAttributes;
 
-		public MinimialisticMethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod, GetMethodAttributesDelegate getAttributes)
+		public MinimialisticMethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod, GetMethodAttributesAndNameDelegate getAttributesAndName)
+			: base(method, createMethod,getAttributesAndName)
 		{
-			this.method = method;
-			this.createMethod = createMethod;
-			this.getAttributes = getAttributes;
 		}
 
-
-		public override MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
+			InitOutParameters(emitter, MethodToOverride.GetParameters());
 
-			string name;
-			MethodAttributes atts = getAttributes(out name, method);
-			MethodEmitter methodEmitter = createMethod(name, atts);
-			MethodEmitter proxiedMethod = ImplementProxiedMethod(methodEmitter, @class, options, namingScope);
-
-			@class.TypeBuilder.DefineMethodOverride(methodEmitter.MethodBuilder, method.Method);
-			return proxiedMethod;
-		}
-
-		protected MethodEmitter ImplementProxiedMethod(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
-		{
-			emitter.CopyParametersAndReturnTypeFrom(method.Method, @class);
-			var parameters = method.Method.GetParameters();
-			for (int index = 0; index < parameters.Length; index++)
-			{
-				var parameter = parameters[index];
-				if (parameter.IsOut)
-				{
-					emitter.CodeBuilder.AddStatement(
-						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
-						                    new DefaultValueExpression(parameter.ParameterType)));
-				}
-			}
-			if(emitter.ReturnType==typeof(void))
+			if (emitter.ReturnType == typeof(void))
 			{
 				emitter.CodeBuilder.AddStatement(new ReturnStatement());
 			}
@@ -70,6 +42,20 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			return emitter;
+		}
+
+		private void InitOutParameters(MethodEmitter emitter, ParameterInfo[] parameters)
+		{
+			for (int index = 0; index < parameters.Length; index++)
+			{
+				var parameter = parameters[index];
+				if (parameter.IsOut)
+				{
+					emitter.CodeBuilder.AddStatement(
+						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
+						                            new DefaultValueExpression(parameter.ParameterType)));
+				}
+			}
 		}
 	}
 }

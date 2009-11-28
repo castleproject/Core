@@ -101,7 +101,6 @@
     </Compile>
     <Compile Include="CompositionInvocation.cs" />
     <Compile Include="Contributors\CompositeTypeContributor.cs" />
-    <Compile Include="Contributors\InterfaceMethodGeneratorBase.cs" />
     <Compile Include="Generators\AttributeDisassembler.cs" />
     <Compile Include="CacheMappingsAttribute.cs" />
     <Compile Include="Contributors\ClassMembersCollector.cs" />
@@ -114,7 +113,6 @@
     <Compile Include="Generators\ClassInvocationTypeGenerator.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\NullCoalescingOperatorExpression.cs" />
     <Compile Include="Generators\GeneratorUtil.cs" />
-    <Compile Include="Generators\MethodWithCallbackGenerator.cs" />
     <Compile Include="Contributors\MixinContributorBase.cs" />
     <Compile Include="Contributors\ForwardingMethodGenerator.cs" />
     <Compile Include="DefaultProxyBuilder.cs" />
@@ -281,7 +279,6 @@
     <Compile Include="Generators\IGenerator.cs" />
     <Compile Include="Generators\INamingScope.cs" />
     <Compile Include="Generators\InterfaceInvocationTypeGenerator.cs" />
-    <Compile Include="Generators\InterfaceMethodGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithoutTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetInterfaceGenerator.cs" />
@@ -294,6 +291,7 @@
     <Compile Include="Generators\MethodFinder.cs" />
     <Compile Include="Generators\MethodToGenerate.cs" />
     <Compile Include="Contributors\MixinContributor.cs" />
+    <Compile Include="Generators\MethodWithInvocationGenerator.cs" />
     <Compile Include="Generators\NamingScope.cs" />
     <Compile Include="Generators\PropertyToGenerate.cs" />
     <Compile Include="Contributors\MembersCollector.cs" />

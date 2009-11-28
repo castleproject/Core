@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System.Reflection;
 
+	using Castle.Core;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
@@ -28,10 +29,11 @@ namespace Castle.DynamicProxy.Generators
 				   methodToGenerate.MethodOnTarget.IsFinal;
 		}
 
-		public static MethodAttributes ObtainClassMethodAttributes(out string name, MethodToGenerate methodToGenerate)
+		public static Pair<MethodAttributes, string> ObtainClassMethodAttributes(MethodToGenerate methodToGenerate)
 		{
 			var methodInfo = methodToGenerate.Method;
 			MethodAttributes attributes = MethodAttributes.Virtual;
+			string name;
 			if (IsInterfaceMethodForExplicitImplementation(methodToGenerate))
 			{
 				name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
@@ -79,13 +81,13 @@ namespace Castle.DynamicProxy.Generators
 			{
 				attributes |= MethodAttributes.SpecialName;
 			}
-			return attributes;
+			return new Pair<MethodAttributes, string>(attributes, name);
 		}
 
-		public static MethodAttributes ObtainInterfaceMethodAttributes(out string name, MethodToGenerate methodToGenerate)
+		public static Pair<MethodAttributes, string> ObtainInterfaceMethodAttributes(MethodToGenerate methodToGenerate)
 		{
 			var methodInfo = methodToGenerate.Method;
-			name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
+			var name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
 			var attributes = MethodAttributes.Virtual |
 							 MethodAttributes.Private |
 							 MethodAttributes.HideBySig |
@@ -96,7 +98,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				attributes |= MethodAttributes.SpecialName;
 			}
-			return attributes;
+			return new Pair<MethodAttributes, string>(attributes, name);
 		}
 
 		public static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, LocalReference invocation, MethodInfo method, MethodEmitter emitter)
