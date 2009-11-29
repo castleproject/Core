@@ -2,7 +2,17 @@ Unreleased Changes
 ==================
 - Fixed DYNPROXY-ISSUE-120: Add logging to DynamicProxy.
   Introduced basic logging for cache hit/miss, methods that cannot be intercepted, and overriding Equals/GetHashCode.
-
+- Applied patch from James Curran fixing DYNPROXY-ISSUE-124 - "InterfaceProxyWithoutTargetGenerator ctor missing selector parameter".
+- Fixed DYNPROXY-ISSUE-105 - Invocation types should be cached and shared among proxy implementations.
+- BREAKING CHANGE - implemented DYNPROXY-ISSUE-91 - Allow CreateInterfaceProxyWithTargetInterface to be able to permanently change target.
+- fixed DYNPROXY-ISSUE-122 - "interceptor selector should not affect caching"
+- fixed DYNPROXY-ISSUE-121 - "proxy with target interface incorrectly forwards to mixins"
+- added ability to change proxy target on mixin methods on interface proxy with target interface
+- added generic overloads for CreateInterfaceProxyWithTargetInterface to make it consistent with other methods
+- BREAKING CHANGE - changed behavior of invocation.MethodInvocationTarget to be more consistent.
+- Fixed DYNPROXY-ISSUE-117 - Fix BaseTypeForInterfaceProxy. Added checks for base type being null, not a class type, being sealed and not having default accessible constructor.
+- Fixed DYNPROXY-ISSUE-112 - Reimplement DefaultAttributeAssembler to make use of CustomAttributeData to avoid exceptions on unreplicable attributes.
+- Fixed DYNPROXY-ISSUE-118 - Can't proxy remoting transparent interface proxies.
 - Fixed DYNPROXY-ISSUE-94 - CreateProxyWithTarget fails if you use ProxyGenerationHook
 - Fixed DYNPROXY-ISSUE-89 - Proxy generation fails when IProxyGenerationHook chooses not to proxy mixin method
 - Improved (a lot) range of supported scenarios, especially around generics.
