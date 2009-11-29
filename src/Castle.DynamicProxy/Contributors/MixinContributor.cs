@@ -15,152 +15,124 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class MixinContributor : MixinContributorBase
+	public class MixinContributor : CompositeTypeContributor
 	{
 		private readonly bool canChangeTarget;
-		private readonly INamingScope namingScope;
-		private MembersCollector target;
+		private readonly IList<Type> empty = new List<Type>();
+		private readonly IDictionary<Type, FieldReference> fields = new Dictionary<Type, FieldReference>();
+		private readonly GetTargetExpressionDelegate getTargetExpression;
 
-		public MixinContributor(Type @interface, INamingScope namingScope)
-			: this(@interface, namingScope, false)
+		public MixinContributor(INamingScope namingScope, bool canChangeTarget)
+			:base(namingScope)
 		{
+			this.canChangeTarget = canChangeTarget;
+			getTargetExpression = BuildGetTargetExpression();
 		}
 
-		public MixinContributor(Type @interface, INamingScope namingScope, bool canChangeTarget)
+		public IEnumerable<FieldReference> Fields
 		{
-			if (@interface == null) throw new ArgumentNullException("interface");
+			get { return fields.Values; }
+		}
 
-			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding mapping only...");
+		private GetTargetExpressionDelegate BuildGetTargetExpression()
+		{
+			if (!canChangeTarget)
+			{
+				return (c, m) => fields[m.DeclaringType].ToExpression();
+			}
 
-			this.namingScope = namingScope;
-			this.canChangeTarget = canChangeTarget;
-			mixinInterface = @interface;
+			return (c, m) => new NullCoalescingOperatorExpression(
+			                 	new AsTypeReference(c.GetField("__target"), m.DeclaringType).ToExpression(),
+			                 	fields[m.DeclaringType].ToExpression());
 		}
 
 		public override void CollectElementsToProxy(IProxyGenerationHook hook)
 		{
-			Debug.Assert(hook != null, "hook != null");
-			// TODO: once tokens for method on target are obtained dynamically
-			// this should be changed to InterfaceMembersCollector
-			var item = new InterfaceMembersCollector(mixinInterface);
-			item.CollectMembersToProxy(hook);
-			target = item;
-
+			foreach (var @interface in interfaces)
+			{
+				var item = new InterfaceMembersCollector(@interface);
+				item.CollectMembersToProxy(hook);
+				targets.Add(item);
+			}
 		}
 
 		public override void Generate(ClassEmitter @class, ProxyGenerationOptions options)
 		{
-			field = BuildTargetField(@class, mixinInterface);
-
-			foreach (var method in target.Methods)
+			foreach (var @interface in interfaces)
 			{
-				if (!method.Standalone)
-				{
-					continue;
-				}
-
-				ImplementMethod(method,
-				                @class,
-				                options,
-				                @class.CreateMethod);
+				fields[@interface] = BuildTargetField(@class, @interface);
 			}
 
-			foreach (var property in target.Properties)
+			foreach (var emptyInterface in empty)
 			{
-				ImplementProperty(@class, property, options);
+				fields[emptyInterface] = BuildTargetField(@class, emptyInterface);
 			}
-
-			foreach (var @event in target.Events)
-			{
-				ImplementEvent(@class, @event, options);
-			}
-
+			base.Generate(@class, options);
 		}
 
-
-		private void ImplementEvent(ClassEmitter emitter, EventToGenerate @event, ProxyGenerationOptions options)
+		public void AddEmptyInterface(Type @interface)
 		{
-			@event.BuildEventEmitter(emitter);
-			var adder = @event.Adder;
-			ImplementMethod(adder, emitter, options, @event.Emitter.CreateAddMethod);
-			var remover = @event.Remover;
-			ImplementMethod(remover, emitter, options, @event.Emitter.CreateRemoveMethod);
-
+			// TODO: this method is likely to be moved to the interface
+			Debug.Assert(@interface != null, "@interface == null", "Shouldn't be adding empty interfaces...");
+			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
+			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.Contains(@interface)", "Shouldn't be adding same interface twice...");
+			Debug.Assert(!empty.Contains(@interface), "!empty.Contains(@interface)", "Shouldn't be adding same interface twice...");
+			empty.Add(@interface);
 		}
 
-		private void ImplementProperty(ClassEmitter emitter, PropertyToGenerate property, ProxyGenerationOptions options)
+		protected override MethodGenerator GetMethodGenerator(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
 		{
-			property.BuildPropertyEmitter(emitter);
-			if (property.CanRead)
+			if (!method.Proxyable)
 			{
-				var getter = property.Getter;
-				ImplementMethod(getter, emitter, options,
-								(name, atts) => property.Emitter.CreateGetMethod(name, atts));
+				return new ForwardingMethodGenerator(method,
+				                                     createMethod,
+				                                     (c, i) => fields[i.DeclaringType]);
 			}
 
-			if (property.CanWrite)
-			{
-				var setter = property.Setter;
-				ImplementMethod(setter, emitter, options,
-								(name, atts) => property.Emitter.CreateSetMethod(name, atts));
-			}
-		}
-
-		private void ImplementMethod(MethodToGenerate method, ClassEmitter emitter, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
-		{
-			MethodGenerator generator;
-			if (method.Proxyable)
-			{
-				var invocation = GetInvocationType(method, emitter, options);
-
-				generator = new MethodWithInvocationGenerator(method,
-				                                              emitter.GetField("__interceptors"),
-				                                              invocation,
-				                                              getTargetExpression,
-				                                              createMethod,
-				                                              GeneratorUtil.ObtainInterfaceMethodAttributes);
-			}
-			else
-			{
-				generator = new ForwardingMethodGenerator(method,
-				                                          createMethod,
-				                                          (c, i) => field);
-			}
-			var proxyMethod = generator.Generate(emitter, options, namingScope);
-			foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(method.Method))
-			{
-				proxyMethod.DefineCustomAttribute(attribute);
-			}
+			var invocation = GetInvocationType(method, @class, options);
+			return new MethodWithInvocationGenerator(method,
+			                                         @class.GetField("__interceptors"),
+			                                         invocation,
+			                                         getTargetExpression,
+			                                         createMethod,
+			                                         GeneratorUtil.ObtainInterfaceMethodAttributes);
 		}
 
 		private Type GetInvocationType(MethodToGenerate method, ClassEmitter emitter, ProxyGenerationOptions options)
 		{
 			var scope = emitter.ModuleScope;
-			Type[] interfaces = Type.EmptyTypes;
+			Type[] invocationInterfaces;
 			if (canChangeTarget)
 			{
-				interfaces = new[] { typeof(IChangeProxyTarget) };
+				invocationInterfaces = new[] { typeof(IInvocation), typeof(IChangeProxyTarget) };
 			}
-			var key = new CacheKey(method.Method, InterfaceInvocationTypeGenerator.BaseType, interfaces, null);
+			else
+			{
+
+				invocationInterfaces = new[] { typeof(IInvocation) };
+			}
+			var key = new CacheKey(method.Method, InterfaceInvocationTypeGenerator.BaseType, invocationInterfaces, null);
 
 			// no locking required as we're already within a lock
 
 			var invocation = scope.GetFromCache(key);
-			if(invocation!=null)
+			if (invocation != null)
 			{
 				return invocation;
 			}
 
 			invocation = new InterfaceInvocationTypeGenerator(method.Method.DeclaringType,
-			                                                  method,
-			                                                  method.Method,
-			                                                  canChangeTarget)
+															  method,
+															  method.Method,
+															  canChangeTarget)
 				.Generate(emitter, options, namingScope).BuildType();
 
 			scope.RegisterInCache(key, invocation);
@@ -168,9 +140,10 @@ namespace Castle.DynamicProxy.Contributors
 			return invocation;
 		}
 
-		public void SetGetTargetExpression(GetTargetExpressionDelegate getTarget)
+		private FieldReference BuildTargetField(ClassEmitter @class, Type type)
 		{
-			getTargetExpression = getTarget;
+			var name = "__mixin_" + type.FullName.Replace(".", "_");
+			return @class.CreateField(namingScope.GetUniqueName(name), type);
 		}
 	}
 }

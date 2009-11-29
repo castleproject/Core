@@ -128,7 +128,9 @@ namespace Castle.DynamicProxy.Contributors
 			}
 			else
 			{
-				generator = new MinimialisticMethodGenerator(method, createMethod, GeneratorUtil.ObtainInterfaceMethodAttributes);
+				generator = new MinimialisticMethodGenerator(method,
+				                                             createMethod,
+				                                             GeneratorUtil.ObtainInterfaceMethodAttributes);
 			}
 
 			var proxiedMethod = generator.Generate(@class, options, namingScope);

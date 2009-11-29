@@ -36,16 +36,6 @@ namespace Castle.DynamicProxy.Generators
 			return contributor;
 		}
 
-		protected override MixinContributor GetContributorForMixin(INamingScope namingScope, Type mixinInterface, object mixinInstance)
-		{
-			var contributorForMixin = new MixinContributor(mixinInterface, namingScope,true);
-			contributorForMixin.SetGetTargetExpression(
-				(c, m) => new NullCoalescingOperatorExpression(
-				          	new AsTypeReference(c.GetField("__target"), mixinInterface).ToExpression(),
-				          	contributorForMixin.BackingField.ToExpression()));
-			return contributorForMixin;
-		}
-
 		protected override InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(INamingScope namingScope)
 		{
 			return new InterfaceProxyWithoutTargetContributor(

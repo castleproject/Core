@@ -69,9 +69,9 @@ namespace Castle.DynamicProxy.Generators
 				contributor.Generate(emitter, ProxyGenerationOptions);
 
 				// TODO: redo it
-				if (contributor is MixinContributorBase)
+				if (contributor is MixinContributor)
 				{
-					mixinFieldsList.Add((contributor as MixinContributorBase).BackingField);
+					mixinFieldsList.AddRange((contributor as MixinContributor).Fields);
 
 				}
 			}

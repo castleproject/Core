@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
-	using System.Reflection;
 #if !SILVERLIGHT
 	using System.Runtime.Serialization;
 	using Serialization;
