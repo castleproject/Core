@@ -237,10 +237,6 @@ namespace Castle.DynamicProxy.Generators
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-
-
-
-
 		protected void CreateEmptyIInvocationInvokeOnTarget(AbstractTypeEmitter nested)
 		{
 			MethodEmitter invokeMethodOnTarget = nested.CreateMethod("InvokeMethodOnTarget");

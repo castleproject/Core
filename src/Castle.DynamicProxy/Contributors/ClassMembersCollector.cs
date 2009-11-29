@@ -23,7 +23,6 @@ namespace Castle.DynamicProxy.Contributors
 		public ClassMembersCollector(Type targetType, ITypeContributor targetContributor)
 			: base(targetType, targetContributor, true, new InterfaceMapping())
 		{
-
 		}
 
 		protected override MethodToGenerate GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
@@ -48,6 +47,5 @@ namespace Castle.DynamicProxy.Contributors
 
 			return new MethodToGenerate(method, isStandalone, target, method, accepted);
 		}
-
 	}
 }

@@ -25,8 +25,6 @@ namespace Castle.DynamicProxy
 
 #if SILVERLIGHT
 	using Castle.DynamicProxy.SilverlightExtensions;
-#else
-
 #endif
 
 	/// <summary>

@@ -17,19 +17,21 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-	using Generators;
+	using Castle.Core.Logging;
+	using Castle.DynamicProxy.Generators;
 
 	public abstract class MembersCollector
 	{
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
 		protected readonly bool onlyProxyVirtual;
 		protected readonly InterfaceMapping map;
+		private ILogger logger = NullLogger.Instance;
 		private IList<MethodInfo> checkedMethods = new List<MethodInfo>();
 		private readonly IDictionary<PropertyInfo, PropertyToGenerate> properties = new Dictionary<PropertyInfo, PropertyToGenerate>();
 		private readonly IDictionary<EventInfo, EventToGenerate> events = new Dictionary<EventInfo, EventToGenerate>();
 		private readonly IDictionary<MethodInfo, MethodToGenerate> methodsToProxy = new Dictionary<MethodInfo, MethodToGenerate>();
 		private readonly Type type;
-
 
 		protected readonly ITypeContributor contributor;
 
@@ -39,6 +41,12 @@ namespace Castle.DynamicProxy.Contributors
 			this.contributor = contributor;
 			this.onlyProxyVirtual = onlyProxyVirtual;
 			this.map = map;
+		}
+
+		public ILogger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
 		}
 
 		public IEnumerable<MethodToGenerate> Methods
@@ -181,15 +189,14 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected virtual MethodInfo GetMethodOnTarget(MethodInfo method)
 		{
-			var index = Array.IndexOf(map.InterfaceMethods, method);
-			if(index==-1)
+			int index = Array.IndexOf(map.InterfaceMethods, method);
+			if (index == -1)
 			{
 				return null;
 			}
 
 			return map.TargetMethods[index];
 		}
-
 
 		/// <summary>
 		/// Checks if the method is public or protected.
@@ -201,7 +208,6 @@ namespace Castle.DynamicProxy.Contributors
 #if SILVERLIGHT
 			return method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly;
 #else
-
 			if (method.IsPublic
 			    || method.IsFamily
 			    || method.IsFamilyAndAssembly
@@ -213,6 +219,13 @@ namespace Castle.DynamicProxy.Contributors
 			if (InternalsHelper.IsInternalToDynamicProxy(method.DeclaringType.Assembly) && method.IsAssembly)
 			{
 				return true;
+			}
+
+			// Explicitly implemented interface method on class
+			if (method.IsPrivate && method.IsFinal)
+			{
+				Logger.Debug("Excluded explicitly implemented interface method {0} on type {1} because it cannot be intercepted.",
+					method.Name, method.DeclaringType.FullName);
 			}
 
 			return false;
@@ -231,7 +244,10 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			// we can never intercept a sealed (final) method
 			if (method.IsFinal)
+			{
+				Logger.Debug("Excluded sealed method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
 				return false;
+			}
 
 			bool isInternalsAndNotVisibleToDynamicProxy = InternalsHelper.IsInternal(method);
 			if (isInternalsAndNotVisibleToDynamicProxy)
@@ -248,9 +264,10 @@ namespace Castle.DynamicProxy.Contributors
 #if SILVERLIGHT
 				if (method.DeclaringType != typeof(object))
 #else
-				if (method.DeclaringType != typeof (object) && method.DeclaringType != typeof (MarshalByRefObject))
+				if (method.DeclaringType != typeof(object) && method.DeclaringType != typeof(MarshalByRefObject))
 #endif
 				{
+					Logger.Debug("Excluded non-virtual method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
 					hook.NonVirtualMemberNotification(type, method);
 				}
 
@@ -274,7 +291,5 @@ namespace Castle.DynamicProxy.Contributors
 #endif
 			return hook.ShouldInterceptMethod(type, method);
 		}
-
-
 	}
 }

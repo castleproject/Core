@@ -39,7 +39,6 @@ namespace Castle.DynamicProxy
 #endif
 		private MixinData mixinData; // this is calculated dynamically on proxy type creation
 
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
 		/// </summary>
@@ -57,7 +56,6 @@ namespace Castle.DynamicProxy
 			: this(new AllMethodsHook())
 		{
 		}
-
 
 #if SILVERLIGHT
 #warning What to do?
@@ -153,7 +151,6 @@ namespace Castle.DynamicProxy
 		{
 			get { return mixins == null ? false : mixins.Count != 0; }
 		}
-
 
 		public override bool Equals(object obj)
 		{

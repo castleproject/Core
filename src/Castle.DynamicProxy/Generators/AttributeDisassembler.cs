@@ -28,7 +28,6 @@
 			}
 			catch (Exception ex)
 			{
-
 				// there is no real way to log a warning here...
 				return HandleError(type,ex);
 			}
@@ -43,7 +42,7 @@
 		protected virtual CustomAttributeBuilder HandleError(Type attributeType, Exception exception)
 		{
 			// ouch...
-			string message = "Dynamic Proxy was unable to disassemble attribute " + attributeType.Name +
+			string message = "DynamicProxy was unable to disassemble attribute " + attributeType.Name +
 			                 " using default AttributeDisassembler. " +
 			                 "To handle the disassembly process properly implement the IAttributeDisassembler interface, " +
 			                 "and register your disassembler to handle this type of attributes using " +
@@ -151,7 +150,6 @@
 					return ConvertValue(propertyInfo.GetValue(attribute, null), paramType);
 				}
 			}
-
 
 			PropertyInfo bestMatch = null;
 			//now we try to find it by type

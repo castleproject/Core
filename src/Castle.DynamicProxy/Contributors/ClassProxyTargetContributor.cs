@@ -19,13 +19,14 @@ namespace Castle.DynamicProxy.Contributors
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
-
-	using Generators;
-	using Generators.Emitters;
-	using Generators.Emitters.SimpleAST;
+	using Castle.Core.Logging;
+	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	public class ClassProxyTargetContributor : CompositeTypeContributor
 	{
+		private ILogger logger = NullLogger.Instance;
 		private readonly Type targetType;
 		private readonly IList<MethodInfo> methodsToSkip;
 
@@ -35,13 +36,17 @@ namespace Castle.DynamicProxy.Contributors
 			this.methodsToSkip = methodsToSkip;
 		}
 
-
+		public ILogger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
+		}
 
 		public override void CollectElementsToProxy(IProxyGenerationHook hook)
 		{
 			Debug.Assert(hook != null, "hook != null");
 
-			var targetItem = new ClassMembersCollector(targetType, this);
+			var targetItem = new ClassMembersCollector(targetType, this) { Logger = logger };
 			targetItem.CollectMembersToProxy(hook);
 			targets.Add(targetItem);
 
@@ -54,7 +59,6 @@ namespace Castle.DynamicProxy.Contributors
 				item.CollectMembersToProxy(hook);
 				targets.Add(item);
 			}
-
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)

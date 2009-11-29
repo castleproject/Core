@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Runtime.CompilerServices;
 	using Castle.Core.Interceptor;
+	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
 
 	/// <summary>
@@ -24,6 +25,11 @@ namespace Castle.DynamicProxy
 	/// </summary>
 	public interface IProxyBuilder
 	{
+		/// <summary>
+		/// Gets or sets the <see cref="ILogger"/> that this <see cref="ProxyGenerator"/> logs to.
+		/// </summary>
+		ILogger Logger { get; set; }
+
 		/// <summary>
 		/// Gets the <see cref="ModuleScope"/> associated with this builder.
 		/// </summary>

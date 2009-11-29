@@ -62,25 +62,31 @@ namespace Castle.DynamicProxy.Generators
 			using (UpgradableLock locker = new UpgradableLock(Scope.RWLock))
 			{
 				Type cacheType = GetFromCache(cacheKey);
-
 				if (cacheType != null)
 				{
+					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
 					return cacheType;
 				}
 
+				// Upgrade the lock to a write lock, then read again. This is to avoid generating duplicate types
+				// under heavy multithreaded load.
 				locker.Upgrade();
 
 				cacheType = GetFromCache(cacheKey);
-
 				if (cacheType != null)
 				{
+					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
 					return cacheType;
 				}
+
+				// Log details about the cache miss
+				Logger.Debug("No cached proxy type was found for target type {0}.", targetType.FullName);
+				EnsureOptionsOverrideEqualsAndGetHashCode(options);
 
 				ProxyGenerationOptions = options;
 
 				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
-				proxyType = GenerateType(name, interfaces,Scope.NamingScope.SafeSubScope());
+				proxyType = GenerateType(name, interfaces, Scope.NamingScope.SafeSubScope());
 
 				AddToCache(cacheKey, proxyType);
 			}
@@ -91,7 +97,7 @@ namespace Castle.DynamicProxy.Generators
 		private Type GenerateType(string newName, Type[] interfaces, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
-			var implementedInterfaces = GetTypeImplementerMapping(interfaces, out contributors,namingScope);
+			var implementedInterfaces = GetTypeImplementerMapping(interfaces, out contributors, namingScope);
 
 			// Collect methods
 			foreach (var contributor in contributors)
@@ -110,8 +116,6 @@ namespace Castle.DynamicProxy.Generators
 #endif
 			// Fields generations
 			FieldReference interceptorsField = CreateInterceptorsField(emitter);
-
-
 
 			// Constructor
 			var cctor = GenerateStaticConstructor(emitter);
@@ -139,7 +143,6 @@ namespace Castle.DynamicProxy.Generators
 			GenerateConstructors(emitter, targetType, constructorArguments.ToArray());
 			GenerateParameterlessConstructor(emitter, targetType, interceptorsField);
 
-
 			// Complete type initializer code body
 			CompleteInitCacheMethod(cctor.CodeBuilder);
 
@@ -155,7 +158,7 @@ namespace Castle.DynamicProxy.Generators
 			var methodsToSkip = new List<MethodInfo>();
 			var proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip, interfaces);
 			// TODO: the trick with methodsToSkip is not very nice...
-			var proxyTarget = new ClassProxyTargetContributor(targetType, methodsToSkip, namingScope);
+			var proxyTarget = new ClassProxyTargetContributor(targetType, methodsToSkip, namingScope) { Logger = Logger };
 			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 
 			// Order of interface precedence:
@@ -195,10 +198,8 @@ namespace Castle.DynamicProxy.Generators
 			// 3. then additional interfaces
 			foreach (var @interface in additionalInterfaces)
 			{
-				
 				if (targetInterfaces.Contains(@interface))
 				{
-					
 					if (typeImplementerMapping.ContainsKey(@interface)) continue;
 
 					// we intercept the interface, and forward calls to the target type

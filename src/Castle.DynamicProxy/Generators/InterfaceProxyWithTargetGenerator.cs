@@ -57,20 +57,26 @@ namespace Castle.DynamicProxy.Generators
 			using (UpgradableLock locker = new UpgradableLock(Scope.RWLock))
 			{
 				Type cacheType = GetFromCache(cacheKey);
-
 				if (cacheType != null)
 				{
+					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
 					return cacheType;
 				}
 
+				// Upgrade the lock to a write lock, then read again. This is to avoid generating duplicate types
+				// under heavy multithreaded load.
 				locker.Upgrade();
 
 				cacheType = GetFromCache(cacheKey);
-
 				if (cacheType != null)
 				{
+					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
 					return cacheType;
 				}
+
+				// Log details about the cache miss
+				Logger.Debug("No cached proxy type was found for target type {0}.", targetType.FullName);
+				EnsureOptionsOverrideEqualsAndGetHashCode(options);
 
 				ProxyGenerationOptions = options;
 
@@ -228,7 +234,6 @@ namespace Castle.DynamicProxy.Generators
 			var targetInterfaces = TypeUtil.GetAllInterfaces(proxyTargetType);
 			var additionalInterfaces = TypeUtil.GetAllInterfaces(interfaces);
 			var target = AddMappingForTargetType(typeImplementerMapping, proxyTargetType, targetInterfaces, additionalInterfaces,namingScope);
-
 
 			// 2. then mixins
 			if (ProxyGenerationOptions.HasMixins)
