@@ -17,7 +17,7 @@ namespace Castle.Components.Pagination
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-
+	using System.Linq;
 
 	/// <summary>
 	/// Common pagination support methods
@@ -25,7 +25,7 @@ namespace Castle.Components.Pagination
 	public static class PaginationSupport
 	{
 		/// <summary>
-		/// Subsititute for System.Linq.Enumerable.ElementAt
+		/// Subsititute for <see cref="Enumerable.ElementAt{TSource}"/>.
 		/// </summary>
 		/// <param name="enumerable"></param>
 		/// <param name="itemIndex"></param>
@@ -35,9 +35,9 @@ namespace Castle.Components.Pagination
 			EnsureItemIndexIsInRange(itemIndex);
 
 			object item;
-			
+
 			IList list = enumerable as IList;
-			
+
 			if (list != null)
 			{
 				item = list[itemIndex];
@@ -52,7 +52,7 @@ namespace Castle.Components.Pagination
 				{
 					enumerator.MoveNext();
 					currentIndex++;
-				} 
+				}
 				while (currentIndex < itemIndex);
 
 				item = enumerator.Current;
@@ -70,7 +70,7 @@ namespace Castle.Components.Pagination
 		}
 
 		/// <summary>
-		/// Subsititute for System.Linq.Enumerable.ElementAt
+		/// Subsititute for Subsititute for <see cref="Enumerable.ElementAt{TSource}"/>.
 		/// </summary>
 		/// <param name="enumerable"></param>
 		/// <param name="itemIndex"></param>
@@ -80,9 +80,9 @@ namespace Castle.Components.Pagination
 			EnsureItemIndexIsInRange(itemIndex);
 
 			T item;
-			
+
 			IList<T> list = enumerable as IList<T>;
-			
+
 			if (list != null)
 			{
 				item = list[itemIndex];
@@ -97,9 +97,9 @@ namespace Castle.Components.Pagination
 					{
 						enumerator.MoveNext();
 						currentIndex++;
-					} 
+					}
 					while (currentIndex < itemIndex);
-					
+
 					item = enumerator.Current;
 				}
 			}
