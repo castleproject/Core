@@ -17,8 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Reflection;
 
-#if SILVERLIGHT
-#else
+#if !SILVERLIGHT
 	[Serializable]
 #endif
 	public class CacheKey

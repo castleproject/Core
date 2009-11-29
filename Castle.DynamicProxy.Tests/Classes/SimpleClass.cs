@@ -14,8 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.Classes
 {
-	using System;
-
 	public class SimpleClass
 	{
 	}

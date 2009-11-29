@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -24,6 +23,7 @@ namespace Castle.DynamicProxy
 #endif
 	using System.Text;
 	using Castle.Core.Interceptor;
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// Provides proxy objects for classes and interfaces.
@@ -31,6 +31,7 @@ namespace Castle.DynamicProxy
 	[CLSCompliant(true)]
 	public class ProxyGenerator
 	{
+		private ILogger logger = NullLogger.Instance;
 		private readonly IProxyBuilder proxyBuilder;
 
 		#region Constructors
@@ -42,6 +43,8 @@ namespace Castle.DynamicProxy
 		public ProxyGenerator(IProxyBuilder builder)
 		{
 			proxyBuilder = builder;
+
+			Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
 		}
 
 		/// <summary>
@@ -54,6 +57,19 @@ namespace Castle.DynamicProxy
 		#endregion
 
 		#region Properties
+
+		/// <summary>
+		/// Gets or sets the <see cref="ILogger"/> that this <see cref="ProxyGenerator"/> log to.
+		/// </summary>
+		public ILogger Logger
+		{
+			get { return logger; }
+			set
+			{
+				logger = value;
+				proxyBuilder.Logger = value;
+			}
+		}
 
 		/// <summary>
 		/// Gets the proxy builder instance used to generate proxy types.

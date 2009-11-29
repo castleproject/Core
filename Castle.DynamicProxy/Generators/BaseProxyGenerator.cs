@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 	using Castle.Core.Interceptor;
+	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -35,6 +36,7 @@ namespace Castle.DynamicProxy.Generators
 	/// </summary>
 	public abstract class BaseProxyGenerator
 	{
+		private ILogger logger = NullLogger.Instance;
 		private readonly ModuleScope scope;
 		private ProxyGenerationOptions proxyGenerationOptions;
 
@@ -44,6 +46,12 @@ namespace Castle.DynamicProxy.Generators
 		{
 			this.scope = scope;
 			this.targetType = targetType;
+		}
+
+		public ILogger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
 		}
 
 		protected ProxyGenerationOptions ProxyGenerationOptions
@@ -254,12 +262,44 @@ namespace Castle.DynamicProxy.Generators
 
 		#endregion
 
+		protected void EnsureOptionsOverrideEqualsAndGetHashCode(ProxyGenerationOptions options)
+		{
+			if (Logger.IsWarnEnabled)
+			{
+				// Check the proxy generation hook
+				if (!OverridesEqualsAndGetHashCode(options.Hook.GetType()))
+				{
+					Logger.Warn("The IProxyGenerationHook type {0} does not override both Equals and GetHashCode. " +
+						"If these are not correctly overridden caching will fail to work causing performance problems.",
+						options.Hook.GetType().FullName);
+				}
+
+				// Interceptor selectors no longer need to override Equals and GetHashCode
+			}
+		}
+
+		private bool OverridesEqualsAndGetHashCode(Type type)
+		{
+			MethodInfo equalsMethod = type.GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
+			if (equalsMethod == null || equalsMethod.DeclaringType == typeof(object) || equalsMethod.IsAbstract)
+			{
+				return false;
+			}
+
+			MethodInfo getHashCodeMethod = type.GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance);
+			if (getHashCodeMethod == null || getHashCodeMethod.DeclaringType == typeof(object) || getHashCodeMethod.IsAbstract)
+			{
+				return false;
+			}
+
+			return true;
+		}
+
 		protected void AddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
 		{
 			Debug.Assert(implementer != null, "implementer != null");
 			Debug.Assert(@interface != null, "@interface != null");
 			Debug.Assert(@interface.IsInterface, "@interface.IsInterface");
-			
 
 			if (!mapping.ContainsKey(@interface))
 			{

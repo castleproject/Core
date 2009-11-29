@@ -1,5 +1,7 @@
 Unreleased Changes
 ==================
+- Fixed DYNPROXY-ISSUE-120: Add logging to DynamicProxy.
+  Introduced basic logging for cache hit/miss, methods that cannot be intercepted, and overriding Equals/GetHashCode.
 
 - Fixed DYNPROXY-ISSUE-94 - CreateProxyWithTarget fails if you use ProxyGenerationHook
 - Fixed DYNPROXY-ISSUE-89 - Proxy generation fails when IProxyGenerationHook chooses not to proxy mixin method

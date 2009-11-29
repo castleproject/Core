@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
 #if SILVERLIGHT
 	using Castle.DynamicProxy.SilverlightExtensions;
@@ -26,6 +27,7 @@ namespace Castle.DynamicProxy
 	/// </summary>
 	public class DefaultProxyBuilder : IProxyBuilder
 	{
+		private ILogger logger = NullLogger.Instance;
 		private readonly ModuleScope scope;
 
 		/// <summary>
@@ -44,6 +46,13 @@ namespace Castle.DynamicProxy
 		{
 			this.scope = scope;
 		}
+
+		public ILogger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
+		}
+
 		public ModuleScope ModuleScope
 		{
 			get { return scope; }
@@ -67,6 +76,7 @@ namespace Castle.DynamicProxy
 			AssertValidTypes(additionalInterfacesToProxy);
 
 			var generator = new ClassProxyGenerator(scope, classToProxy);
+			generator.Logger = logger;
 			return generator.GenerateCode(additionalInterfacesToProxy, options);
 		}
 
@@ -76,6 +86,7 @@ namespace Castle.DynamicProxy
 			AssertValidTypes(additionalInterfacesToProxy);
 
 			var generator = new InterfaceProxyWithoutTargetGenerator(scope, interfaceToProxy);
+			generator.Logger = logger;
 			return generator.GenerateCode(typeof(object), additionalInterfacesToProxy, options);
 		}
 
@@ -86,6 +97,7 @@ namespace Castle.DynamicProxy
 			AssertValidTypes(additionalInterfacesToProxy);
 
 			var generator = new InterfaceProxyWithTargetGenerator(scope, interfaceToProxy);
+			generator.Logger = logger;
 			return generator.GenerateCode(targetType, additionalInterfacesToProxy, options);
 		}
 
@@ -96,6 +108,7 @@ namespace Castle.DynamicProxy
 			AssertValidTypes(additionalInterfacesToProxy);
 
 			var generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, interfaceToProxy);
+			generator.Logger = logger;
 			return generator.GenerateCode(interfaceToProxy, additionalInterfacesToProxy, options);
 		}
 

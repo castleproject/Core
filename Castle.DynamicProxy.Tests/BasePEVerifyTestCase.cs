@@ -21,30 +21,29 @@ namespace Castle.DynamicProxy.Tests
 	using NUnit.Framework;
 
 #if !MONO && !SILVERLIGHT // mono doesn't have PEVerify
-	  [SetUpFixture]
-	  public class FindPeVerify
-	  {
-		  [SetUp]
-		  public void FindPeVerifySetUp()
-		  {
-		  	var peVerifyProbingPaths = Settings.Default.PeVerifyProbingPaths;
-		  	foreach (var path in peVerifyProbingPaths)
-		  	{
-		  		var file = Path.Combine(path, "peverify.exe");
-		  		if (File.Exists(file))
-		  		{
-		  			PeVerifyPath = file;
-		  			return;
-		  		}
-		  	}
-		  	throw new FileNotFoundException(
+	[SetUpFixture]
+	public class FindPeVerify
+	{
+		[SetUp]
+		public void FindPeVerifySetUp()
+		{
+			var peVerifyProbingPaths = Settings.Default.PeVerifyProbingPaths;
+			foreach (var path in peVerifyProbingPaths)
+			{
+				var file = Path.Combine(path, "peverify.exe");
+				if (File.Exists(file))
+				{
+					PeVerifyPath = file;
+					return;
+				}
+			}
+			throw new FileNotFoundException(
 				"Please check the PeVerifyProbingPaths configuration setting and set it to the folder where peverify.exe is located");
-		  }
+		}
 
-	  	public static string PeVerifyPath { get; set; }
-	  }
-#endif	
-
+		public static string PeVerifyPath { get; set; }
+	}
+#endif
 
 	public abstract class BasePEVerifyTestCase
 	{
@@ -77,7 +76,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 #if !MONO && !SILVERLIGHT // mono doesn't have PEVerify
-
 		[TearDown]
 		public virtual void TearDown()
 		{
@@ -90,11 +88,9 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 
-
 		public void RunPEVerifyOnGeneratedAssembly(string assemblyPath)
 		{
 			Process process = new Process();
-
 			process.StartInfo.FileName = FindPeVerify.PeVerifyPath;
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
@@ -115,17 +111,13 @@ namespace Castle.DynamicProxy.Tests
 				Assert.Fail("PeVerify reported error(s): " + Environment.NewLine + processOutput, result);
 			}
 		}
-
 #else
-
-
-#if !SILVERLIGHT
+		#if !SILVERLIGHT
 		[TearDown]
-#endif
-		public virtual void TearDown ()
+		#endif
+		public virtual void TearDown()
 		{
 		}
-
 #endif
 	}
 }
