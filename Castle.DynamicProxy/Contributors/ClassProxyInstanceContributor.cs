@@ -177,7 +177,6 @@ namespace Castle.DynamicProxy.Contributors
 				throw new ArgumentException(message);
 			}
 
-			// TODO: This should be removed
 			methodsToSkip.Add(getObjectDataMethod);
 
 			serializationConstructor = baseType.GetConstructor(

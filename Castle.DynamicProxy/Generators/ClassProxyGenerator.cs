@@ -122,9 +122,9 @@ namespace Castle.DynamicProxy.Generators
 				contributor.Generate(emitter, ProxyGenerationOptions);
 
 				// TODO: redo it
-				if (contributor is MixinContributorBase)
+				if (contributor is MixinContributor)
 				{
-					constructorArguments.Add((contributor as MixinContributorBase).BackingField);
+					constructorArguments.AddRange((contributor as MixinContributor).Fields);
 				}
 			}
 
@@ -165,7 +165,7 @@ namespace Castle.DynamicProxy.Generators
 			var targetInterfaces = TypeUtil.GetAllInterfaces(targetType);
 			var additionalInterfaces = TypeUtil.GetAllInterfaces(interfaces);
 			// 2. then mixins
-			var mixins = new List<MixinContributorBase>();
+			var mixins = new MixinContributor(namingScope, false);
 			if (ProxyGenerationOptions.HasMixins)
 			{
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
@@ -179,15 +179,14 @@ namespace Castle.DynamicProxy.Generators
 							proxyTarget.AddInterfaceToProxy(mixinInterface);
 						}
 						// we do not intercept the interface
-						mixins.Add(new EmptyMixinContributor(mixinInterface));
+						mixins.AddEmptyInterface(mixinInterface);
 					}
 					else
 					{
 						if (!typeImplementerMapping.ContainsKey(mixinInterface))
 						{
-							var mixin = new MixinContributor(mixinInterface, namingScope);
-							mixins.Add(mixin);
-							SafeAddMapping(mixinInterface, mixin, typeImplementerMapping);
+							mixins.AddInterfaceToProxy(mixinInterface);
+							SafeAddMapping(mixinInterface, mixins, typeImplementerMapping);
 						}
 					}
 				}
@@ -229,10 +228,10 @@ namespace Castle.DynamicProxy.Generators
 			}
 			var contributorsList = new List<ITypeContributor>();
 			contributorsList.Add(proxyTarget);
-			foreach (var mixin in mixins)
-			{
-				contributorsList.Add(mixin);
-			}
+			//foreach (var mixin in mixins)
+			//{
+				contributorsList.Add(mixins);
+			//}
 			contributorsList.Add(additionalInterfacesContributor);
 			contributorsList.Add(proxyInstance);
 			contributors = contributorsList;
