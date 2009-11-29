@@ -205,21 +205,23 @@ namespace Castle.DynamicProxy.Contributors
 		/// <returns></returns>
 		protected bool IsAccessible(MethodBase method)
 		{
-#if SILVERLIGHT
-			return method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly;
-#else
-			if (method.IsPublic
-			    || method.IsFamily
-			    || method.IsFamilyAndAssembly
-			    || method.IsFamilyOrAssembly)
+			// Accessibility supported by the full framework and CoreCLR
+			if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
 			{
 				return true;
 			}
 
+#if !SILVERLIGHT
+			// Accessibility not supported by the CoreCLR
+			if (method.IsFamilyAndAssembly)
+			{
+				return true;
+			}
 			if (InternalsHelper.IsInternalToDynamicProxy(method.DeclaringType.Assembly) && method.IsAssembly)
 			{
 				return true;
 			}
+#endif
 
 			// Explicitly implemented interface method on class
 			if (method.IsPrivate && method.IsFinal)
@@ -229,7 +231,6 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			return false;
-#endif
 		}
 
 		/// <summary>

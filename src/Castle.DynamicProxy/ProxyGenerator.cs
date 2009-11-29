@@ -44,7 +44,9 @@ namespace Castle.DynamicProxy
 		{
 			proxyBuilder = builder;
 
+#if !SILVERLIGHT
 			Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
+#endif
 		}
 
 		/// <summary>
