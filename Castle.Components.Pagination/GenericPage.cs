@@ -34,8 +34,11 @@ namespace Castle.Components.Pagination
 		/// <param name="list">The list.</param>
 		/// <param name="curPage">The cur page.</param>
 		/// <param name="pageSize">Size of the page.</param>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="pageSize"/> is less than 1.</exception>
 		public GenericPage(ICollection<T> list, int curPage, int pageSize)
 		{
+			if (pageSize <= 0) throw new ArgumentOutOfRangeException("pageSize", "pageSize cannot be less than 1.");
+
 			// Calculate slice indexes
 			int startIndex = sliceStart = (pageSize * curPage) - pageSize;
 			int endIndex = sliceEnd = Math.Min(startIndex + pageSize, list.Count);

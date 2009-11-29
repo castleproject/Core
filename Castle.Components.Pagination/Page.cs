@@ -34,8 +34,11 @@ namespace Castle.Components.Pagination
 		/// <param name="currentPageIndex">The desired page index</param>
 		/// <param name="pageSize">The desired page size</param>
 		/// <param name="total">The total of items in the data source.</param>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="pageSize"/> is less than 1.</exception>
 		protected Page(int currentPageIndex, int pageSize, int total)
 		{
+			if (pageSize <= 0) throw new ArgumentOutOfRangeException("pageSize", "pageSize cannot be less than 1.");
+
 			startIndex = (pageSize * currentPageIndex) - pageSize;
 			endIndex = Math.Min(startIndex + pageSize, total);
 
