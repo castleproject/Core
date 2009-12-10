@@ -15,14 +15,15 @@
 namespace Castle.Components.Pagination
 {
 	using System.Collections;
+
 	/// <summary>
-	/// Represents a page of a bigger set
+	/// Represents a page of a bigger set.
 	/// </summary>
 	/// <remarks>
-	/// all indexes are one based
+	/// All indexes are one based.
 	/// </remarks>
-	public interface IPaginatedPage : IEnumerable {
-
+	public interface IPaginatedPage : IEnumerable
+	{
 		#region *PageIndex
 		/// <summary>
 		/// The index this page represents
@@ -78,10 +79,8 @@ namespace Castle.Components.Pagination
 		/// <summary>
 		/// Checks whether the specified page exists.
 		/// Useful for Google-like pagination.
-		/// 
 		/// </summary>
 		/// <returns>true if pageNumber is >= FirstPageIndex</returns>
-		/// <returns></returns>
 		bool HasPage(int pageNumber);
 		#endregion
 
@@ -110,8 +109,8 @@ namespace Castle.Components.Pagination
 	/// Generic specialization of <see cref="IPaginatedPage"/>
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public interface IPaginatedPage<T> : IPaginatedPage, System.Collections.Generic.IEnumerable<T> {
-
+	public interface IPaginatedPage<T> : IPaginatedPage, System.Collections.Generic.IEnumerable<T>
+	{
 		/// <summary>
 		/// Retrieve the first item on current page
 		/// </summary>

@@ -19,8 +19,7 @@ namespace Castle.Components.Pagination
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Represents the sliced data and offers
-	/// a few read only properties to create a pagination bar.
+	/// Represents the sliced data and offers a few read-only properties to create a pagination bar.
 	/// </summary>
 	[Serializable]
 	public class GenericPage<T> : AbstractPage<T>
@@ -29,13 +28,16 @@ namespace Castle.Components.Pagination
 		private readonly ICollection<T> sourceList;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GenericPage&lt;T&gt;"/> class.
+		/// Initializes a new instance of the <see cref="GenericPage{T}"/> class.
 		/// </summary>
 		/// <param name="list">The list.</param>
-		/// <param name="curPage">The cur page.</param>
+		/// <param name="curPage">The current page.</param>
 		/// <param name="pageSize">Size of the page.</param>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="pageSize"/> is less than 1.</exception>
 		public GenericPage(ICollection<T> list, int curPage, int pageSize)
 		{
+			if (pageSize <= 0) throw new ArgumentOutOfRangeException("pageSize", "pageSize cannot be less than 1.");
+
 			// Calculate slice indexes
 			int startIndex = sliceStart = (pageSize * curPage) - pageSize;
 			int endIndex = sliceEnd = Math.Min(startIndex + pageSize, list.Count);
@@ -46,8 +48,7 @@ namespace Castle.Components.Pagination
 		}
 
 		/// <summary>
-		/// Returns a enumerator for the contents
-		/// of this page only (not the whole set)
+		/// Returns a enumerator for the contents of this page only (not the whole set).
 		/// </summary>
 		/// <returns>Enumerator instance</returns>
 		protected override IEnumerator<T> GetGenericEnumeratorImplementation()
@@ -92,7 +93,6 @@ namespace Castle.Components.Pagination
 		{
 			return new List<T>(sourceList)[itemIndex];
 		}
-
 
 		protected override object GetItemAtIndex(int itemIndex)
 		{

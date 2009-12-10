@@ -19,9 +19,8 @@ namespace Castle.Components.Pagination
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Abstract implementation of <see cref="IPaginatedPage"/>
-	/// which performs the standard calculations on 
-	/// <see cref="CalculatePaginationInfo"/>
+	/// Abstract implementation of <see cref="IPaginatedPage"/> which performs the standard calculations
+	/// on <see cref="CalculatePaginationInfo"/>.
 	/// </summary>
 	[Serializable]
 	public abstract class AbstractPage : IPaginatedPage
@@ -31,8 +30,7 @@ namespace Castle.Components.Pagination
 		private bool hasPreviousPage, hasNextPage;
 
 		/// <summary>
-		/// Calculate the values of all properties
-		/// based on the specified parameters
+		/// Calculate the values of all properties based on the specified parameters.
 		/// </summary>
 		/// <param name="startIndex">Start index</param>
 		/// <param name="endIndex">Last index</param>
@@ -122,10 +120,9 @@ namespace Castle.Components.Pagination
 		}
 
 		/// <summary>
-		/// Returns a enumerator for the contents
-		/// of this page only (not the whole set)
+		/// Returns a enumerator for the contents of this page only (not the whole set).
 		/// </summary>
-		/// <returns>Enumerator instance</returns>
+		/// <returns>Enumerator instance.</returns>
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumeratorImplementation();
@@ -155,20 +152,18 @@ namespace Castle.Components.Pagination
 	}
 
 	/// <summary>
-	/// Generic specialization of <see cref="AbstractPage"/>
+	/// Generic specialization of <see cref="AbstractPage"/>.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public abstract class AbstractPage<T> : AbstractPage, IPaginatedPage<T>
 	{
-
-        T IPaginatedPage<T>.FirstItem
-        {
+		T IPaginatedPage<T>.FirstItem
+		{
 			get { return (T) ((IPaginatedPage)this).FirstItem; }
-        }
+		}
 
-
-        T IPaginatedPage<T>.LastItem
-        {
+		T IPaginatedPage<T>.LastItem
+		{
 			get { return (T)((IPaginatedPage)this).LastItem; }
 		}
 
@@ -179,7 +174,7 @@ namespace Castle.Components.Pagination
 
 		protected override IEnumerator GetEnumeratorImplementation()
 		{
-			return this.GetGenericEnumeratorImplementation();
+			return GetGenericEnumeratorImplementation();
 		}
 
 		/// <summary>

@@ -18,8 +18,7 @@ namespace Castle.Components.Pagination
 	using System.Collections;
 
 	/// <summary>
-	/// Represents the sliced data and offers
-	/// a few read only properties to create a pagination bar.
+	/// Represents the sliced data and offers a few read-only properties to create a pagination bar.
 	/// </summary>
 	[Serializable]
 	public class Page : AbstractPage
@@ -34,8 +33,11 @@ namespace Castle.Components.Pagination
 		/// <param name="currentPageIndex">The desired page index</param>
 		/// <param name="pageSize">The desired page size</param>
 		/// <param name="total">The total of items in the data source.</param>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="pageSize"/> is less than 1.</exception>
 		protected Page(int currentPageIndex, int pageSize, int total)
 		{
+			if (pageSize <= 0) throw new ArgumentOutOfRangeException("pageSize", "pageSize cannot be less than 1.");
+
 			startIndex = (pageSize * currentPageIndex) - pageSize;
 			endIndex = Math.Min(startIndex + pageSize, total);
 
@@ -87,8 +89,7 @@ namespace Castle.Components.Pagination
 		}
 
 		/// <summary>
-		/// Creates an enumerator for the 
-		/// sliced set
+		/// Creates an enumerator for the sliced set.
 		/// </summary>
 		/// <returns>An enumerator instance</returns>
 		protected override IEnumerator GetEnumeratorImplementation()

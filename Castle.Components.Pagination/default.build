@@ -9,7 +9,7 @@
 	<include buildfile="${common.scripts.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		property name="assembly.description" value="Castle Pagination Components" />
+		<property name="assembly.description" value="Castle Pagination Components" />
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 		</assemblyfileset>
 	</target>

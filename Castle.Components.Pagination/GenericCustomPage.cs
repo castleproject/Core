@@ -18,8 +18,7 @@ namespace Castle.Components.Pagination
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Represents the sliced data and offers
-	/// a few read only properties to create a pagination bar.
+	/// Represents the sliced data and offers a few read only properties to create a pagination bar.
 	/// </summary>
 	[Serializable]
 	public class GenericCustomPage<T> : AbstractPage<T>, IEnumerable<T>
@@ -27,10 +26,10 @@ namespace Castle.Components.Pagination
 		private readonly IEnumerable<T> sourceList;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GenericCustomPage&lt;T&gt;"/> class.
+		/// Initializes a new instance of the <see cref="GenericCustomPage{T}"/> class.
 		/// </summary>
 		/// <param name="list">The list.</param>
-		/// <param name="curPage">The cur page.</param>
+		/// <param name="curPage">The current page.</param>
 		/// <param name="pageSize">Size of the page.</param>
 		/// <param name="total">The total.</param>
 		public GenericCustomPage(IEnumerable<T> list, int curPage, int pageSize, int total)
@@ -44,8 +43,7 @@ namespace Castle.Components.Pagination
 		}
 
 		/// <summary>
-		/// Returns a enumerator for the contents
-		/// of this page only (not the whole set)
+		/// Returns a enumerator for the contents of this page only (not the whole set).
 		/// </summary>
 		/// <returns>Enumerator instance</returns>
 		protected override IEnumerator<T> GetGenericEnumeratorImplementation()
@@ -60,7 +58,7 @@ namespace Castle.Components.Pagination
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
 		/// <returns>
-		/// <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
+		/// <see cref="IEnumerator{T}"/> that can be used to iterate through the collection.
 		/// </returns>
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
@@ -69,7 +67,6 @@ namespace Castle.Components.Pagination
 				yield return item;
 			}
 		}
-
 
 		protected override T GetGenericItemAtIndex(int itemIndex)
 		{
