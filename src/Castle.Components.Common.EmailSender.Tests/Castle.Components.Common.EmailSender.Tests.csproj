@@ -42,10 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="SmtpSenderCreateMessageTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Castle.Components.Common.EmailSender\Castle.Components.Common.EmailSender-vs2008.csproj">
       <Project>{CFF1D57F-9FEB-4941-B8FE-8E28F4A8AAC7}</Project>
       <Name>Castle.Components.Common.EmailSender-vs2008</Name>

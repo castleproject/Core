@@ -15,7 +15,6 @@
 namespace Castle.Components.Common.EmailSender.Smtp
 {
 	using System;
-	using System.Collections;
 	using System.ComponentModel;
 	using System.Net;
 	using System.Net.Mail;
@@ -31,7 +30,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		private readonly string hostname;
 		private int port = 25;
 		private int? timeout;
-		private bool useSSL;
+		private bool useSsl;
 		private readonly NetworkCredential credentials = new NetworkCredential();
 
 		/// <summary>
@@ -88,10 +87,10 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		/// a secure communication channel.
 		/// </summary>
 		/// <value><c>true</c> if should use SSL; otherwise, <c>false</c>.</value>
-		public bool UseSSL
+		public bool UseSsl
 		{
-			get { return useSSL; }
-			set { useSSL = value; }
+			get { return useSsl; }
+			set { useSsl = value; }
 		}
 
 		/// <summary>
@@ -109,7 +108,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			if (subject == null) throw new ArgumentNullException("subject");
 			if (messageText == null) throw new ArgumentNullException("messageText");
 
-			Send(new Message(from, to, subject, messageText));
+			Send(new MailMessage(from, to, subject, messageText));
 		}
 
 		/// <summary>
@@ -117,7 +116,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		/// </summary>
 		/// <exception cref="ArgumentNullException">If the message is null</exception>
 		/// <param name="message">Message instance</param>
-		public void Send(Message message)
+		public void Send(MailMessage message)
 		{
 			if (message == null) throw new ArgumentNullException("message");
 
@@ -131,102 +130,36 @@ namespace Castle.Components.Common.EmailSender.Smtp
 				SmtpClient smtpClient = new SmtpClient(hostname, port);
 				Configure(smtpClient);
 
-				MailMessage msg = CreateMailMessage(message);
 				Guid msgGuid = new Guid();
 				SendCompletedEventHandler sceh = null;
 				sceh = delegate(object sender, AsyncCompletedEventArgs e)
-					{
-						if (msgGuid == (Guid)e.UserState)
-							msg.Dispose();
-						// The handler itself, cannot be null, test omitted
-						smtpClient.SendCompleted -= sceh;
-					};
+				{
+					if (msgGuid == (Guid)e.UserState)
+						message.Dispose();
+					// The handler itself, cannot be null, test omitted
+					smtpClient.SendCompleted -= sceh;
+				};
 				smtpClient.SendCompleted += sceh;
-				smtpClient.SendAsync(msg, msgGuid);
+				smtpClient.SendAsync(message, msgGuid);
 			}
 			else
 			{
-				using (MailMessage msg = CreateMailMessage(message))
+				using (message)
 				{
 					SmtpClient smtpClient = new SmtpClient(hostname, port);
 					Configure(smtpClient);
 
-					smtpClient.Send(msg);
+					smtpClient.Send(message);
 				}
 			}
 		}
 
-		public void Send(Message[] messages)
+		public void Send(MailMessage[] messages)
 		{
-			foreach (Message message in messages)
+			foreach (MailMessage message in messages)
 			{
 				Send(message);
 			}
-		}
-
-		/// <summary>
-		/// Converts a message from Castle.Components.Common.EmailSender.Message  type
-		/// to System.Net.Mail.MailMessage
-		/// </summary>
-		/// <param name="message">The message to convert.</param>
-		/// <returns>The converted message .</returns>
-		public MailMessage CreateMailMessage(Message message)
-		{
-			MailMessage mailMessage = new MailMessage(message.From, message.To.Replace(';', ','));
-
-			if (!String.IsNullOrEmpty(message.Cc))
-			{
-				mailMessage.CC.Add(message.Cc.Replace(';', ','));
-			}
-
-			if (!String.IsNullOrEmpty(message.Bcc))
-			{
-				mailMessage.Bcc.Add(message.Bcc.Replace(';', ','));
-			}
-
-			mailMessage.Subject = message.Subject;
-			mailMessage.Body = message.Body;
-			mailMessage.BodyEncoding = message.Encoding;
-			mailMessage.IsBodyHtml = (message.Format == Format.Html);
-			mailMessage.Priority = (MailPriority)Enum.Parse(typeof(MailPriority), message.Priority.ToString());
-			mailMessage.ReplyTo = message.ReplyTo;
-
-			foreach (DictionaryEntry entry in message.Headers)
-			{
-				mailMessage.Headers.Add((string)entry.Key, (string)entry.Value);
-			}
-
-			foreach (MessageAttachment attachment in message.Attachments)
-			{
-				Attachment mailAttach;
-
-				if (attachment.Stream != null)
-				{
-					mailAttach = new Attachment(attachment.Stream, attachment.FileName, attachment.MediaType);
-				}
-				else
-				{
-					mailAttach = new Attachment(attachment.FileName, attachment.MediaType);
-				}
-
-				mailMessage.Attachments.Add(mailAttach);
-			}
-
-			if (message.Resources != null && message.Resources.Count > 0)
-			{
-				AlternateView htmlView = AlternateView.CreateAlternateViewFromString(message.Body, message.Encoding, "text/html");
-				foreach (string id in message.Resources.Keys)
-				{
-					LinkedResource r = message.Resources[id];
-					r.ContentId = id;
-					if (r.ContentStream != null)
-					{
-						htmlView.LinkedResources.Add(r);
-					}
-				}
-				mailMessage.AlternateViews.Add(htmlView);
-			}
-			return mailMessage;
 		}
 
 		/// <summary>
@@ -279,9 +212,9 @@ namespace Castle.Components.Common.EmailSender.Smtp
 				smtpClient.Timeout = timeout.Value;
 			}
 
-			if (useSSL)
+			if (useSsl)
 			{
-				smtpClient.EnableSsl = useSSL;
+				smtpClient.EnableSsl = useSsl;
 			}
 		}
 

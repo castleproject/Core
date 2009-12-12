@@ -106,17 +106,6 @@
     <Compile Include="IEmailSender.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Message.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageAttachment.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageAttachmentCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Mock\StubEmailSender.cs" />
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Smtp\SmtpSender.cs" />
   </ItemGroup>
   <ItemGroup>
