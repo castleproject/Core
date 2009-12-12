@@ -15,6 +15,7 @@
 namespace Castle.Components.Common.EmailSender
 {
 	using System;
+	using System.Net.Mail;
 
 	/// <summary>
 	/// Abstracts an approach to send e-mails
@@ -34,12 +35,12 @@ namespace Castle.Components.Common.EmailSender
 		/// Sends a message. 
 		/// </summary>
 		/// <param name="message">Message instance</param>
-		void Send(Message message);
+		void Send(MailMessage message);
 
 		/// <summary>
 		/// Sends multiple messages. 
 		/// </summary>
 		/// <param name="messages">Array of messages</param>
-		void Send(Message[] messages);
+		void Send(MailMessage[] messages);
 	}
 }
