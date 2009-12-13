@@ -349,6 +349,11 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
+			if (!String.IsNullOrEmpty(ErrorMessage))
+			{
+				return ErrorMessage;
+			}
+
 			if (type == RangeValidationType.DateTime)
 			{
 				return BuildDateTimeErrorMessage((DateTime) min, (DateTime) max);

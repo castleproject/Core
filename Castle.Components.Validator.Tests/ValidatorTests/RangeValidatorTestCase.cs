@@ -15,9 +15,13 @@
 namespace Castle.Components.Validator.Tests.ValidatorTests
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.Globalization;
 	using System.Threading;
 	using NUnit.Framework;
+	using Rhino.Mocks;
 
 	[TestFixture]
 	public class RangeValidatorTestCase
@@ -367,6 +371,24 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		{
 			Assert.IsFalse(validatorIntMessage.IsValid(intTarget, -2));
 			Assert.AreEqual(CustomErrorMessage, validatorIntMessage.ErrorMessage);
+		}
+
+		[Test]
+		public void CustomMessageIsSentToIBrowserValidationGenerator()
+		{
+			var mockery = new MockRepository();
+			IBrowserValidationGenerator browserValidationGenerator = mockery.DynamicMock<IBrowserValidationGenerator>();
+
+			using (mockery.Record())
+			{
+				browserValidationGenerator.SetValueRange("TargetField", 0, 1, CustomErrorMessage);
+			}
+			using (mockery.Playback())
+			{
+				Assert.IsFalse(validatorIntMessage.IsValid(intTarget, -2));
+				validatorIntMessage.ApplyBrowserValidation(null, InputElementType.Text, browserValidationGenerator, new Hashtable(), "TargetField");
+				Assert.AreEqual(CustomErrorMessage, validatorIntMessage.ErrorMessage);
+			}
 		}
 		#endregion
 	}
