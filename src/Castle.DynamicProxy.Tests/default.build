@@ -14,11 +14,16 @@
 			<include name="nunit.framework.dll" />
 			<include name="Castle.DynamicProxy2.dll" />
 			<include name="Castle.Core.dll" />
-			<include name="Rhino.Mocks.CPP.Interfaces.dll"/>
+			<include name="Rhino.Mocks.CPP.Interfaces.dll" unless="${common.mono}"/>
 			<include name="System.Configuration.dll" />
 			<include name="System.Data.dll" />
-			<include name="adodb.dll" />
+			<include name="adodb.dll" unless="${common.mono}" />
 			<include name="mscorlib.dll" if="${common.silverlight}" />
+			<include name="System.dll" if="${common.silverlight}" />
+			<include name="System.Core.dll" if="${common.silverlight}" />
+			<include name="System.Windows.dll" if="${common.silverlight}" />
+			<include name="System.Windows.Browser.dll" if="${common.silverlight}" />
+			<include name="System.Xml.dll" if="${common.silverlight}" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="Resources" dynamicprefix="false">
