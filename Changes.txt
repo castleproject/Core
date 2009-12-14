@@ -1,7 +1,7 @@
 1.1.0
 ==================
 - Added support for DateTimeOffset per COMP-56
-	NOTE: Not supported on Mono.
+	NOTE: Only supported on Mono 2.6.
 
 - Applied patch to fix COMP-105
 	"DictionaryAdapter can't handle properties with the 'new' keyword"
