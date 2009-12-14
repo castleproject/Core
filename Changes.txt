@@ -1,3 +1,10 @@
+1.1.x
+=====
+NOTE: Does not recursively inspect properties (COMP-ISSUE-33).
+
+- Applied Ricardo Borges' patch COMP-ISSUE-95
+.."Tests failures on vista portuguese enviroment"
+
 - Applied Bill Ataras' patch (with a test case) fixing COMP-ISSUE-99
   "EmailValidator fails on gmail "+" addresses"
 
