@@ -13,9 +13,12 @@
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
+			<include name="mscorlib.dll" if="${common.silverlight}" />
 			<include name="System.dll" if="${common.silverlight}" />
 			<include name="System.Core.dll" if="${common.silverlight}" />
-			<include name="mscorlib.dll" if="${common.silverlight}" />
+			<include name="System.Windows.dll" if="${common.silverlight}" />
+			<include name="System.Windows.Browser.dll" if="${common.silverlight}" />
+			<include name="System.Xml.dll" if="${common.silverlight}" />
 			<include name="System.Configuration.dll" />
 			<include name="System.Web.dll" />
 			<include name="log4net.dll" />
