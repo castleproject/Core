@@ -26,9 +26,19 @@ namespace Castle.Core.Internal
 			Monitor.Enter(locker);
 		}
 
+		public bool TryEnterReadLock()
+		{
+			return Monitor.TryEnter(locker,0);
+		}
+
 		public void EnterWriteLock()
 		{
 			Monitor.Enter(locker);
+		}
+
+		public bool TryEnterWriteLock()
+		{
+			return Monitor.TryEnter(locker,0);
 		}
 
 		public void ExitReadLock()
@@ -58,10 +68,18 @@ namespace Castle.Core.Internal
 		{
 			locker.EnterReadLock();
 		}
+		public bool TryEnterReadLock()
+		{
+			return locker.TryEnterReadLock(0);
+		}
 
 		public void EnterWriteLock()
 		{
 			locker.EnterWriteLock();
+		}
+		public bool TryEnterWriteLock()
+		{
+			return locker.TryEnterWriteLock(0);
 		}
 
 		public void EnterUpgradeableReadLock()
