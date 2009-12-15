@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>/home/patrick/tcagent/work/90b3ad3a125eefb8/build/mono-3.5/release/Castle.Core</name>
+        <name>/home/patrick/tcagent/work/92cbd7b70b164cf6/build/mono-3.5/release/Castle.Core</name>
     </assembly>
     <members>
         <member name="T:Castle.Core.CastleComponentAttribute">
