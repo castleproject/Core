@@ -107,15 +107,6 @@ namespace Castle.Core.Tests
 			}
 		}
 
-		[Test,Ignore("Should we add this behavior for consistency?")]
-		public void Can_NOT_be_used_ForReadingUpgradeable_when_used_ForReading()
-		{
-			using (@lock.ForReading())
-			{
-				Assert.Throws(typeof(LockRecursionException), () => @lock.ForReadingUpgradeable());
-			}
-		}
-
 		[Test]
 		public void Can_be_used_ForReadingUpgradeable_when_used_ForWriting()
 		{
@@ -125,15 +116,6 @@ namespace Castle.Core.Tests
 				{
 					Assert.IsTrue(holder.LockAcquired);
 				}
-			}
-		}
-
-		[Test, Ignore("Should we add this behavior for consistency?")]
-		public void Can_NOT_be_used_ForWriting_when_used_ForReading()
-		{
-			using (@lock.ForReading())
-			{
-				Assert.Throws(typeof(LockRecursionException), () => @lock.ForWriting());
 			}
 		}
 
