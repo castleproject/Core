@@ -24,10 +24,14 @@ namespace Castle.Core.Internal
 		public abstract ILockHolder ForReading(bool waitForLock);
 		public abstract ILockHolder ForWriting(bool waitForLock);
 
+		/// <summary>
+		/// Creates a new lock.
+		/// </summary>
+		/// <returns></returns>
 		public static Lock Create()
 		{
 #if SILVERLIGHT || !DOTNET35
-			return new MonitorUser();
+			return new MonitorLock();
 #else
 			return new SlimReadWriteLock();
 #endif
