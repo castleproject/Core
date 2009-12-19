@@ -14,34 +14,38 @@
 
 namespace Castle.Core.Internal
 {
-	using System;
+	using System.Threading;
 
-	public struct UpgradableLock : IDisposable
+#if DOTNET35 && !SILVERLIGHT
+
+	internal class SlimReadLockHolder : ILockHolder
 	{
-		private readonly SlimReaderWriterLock locker;
-		private bool lockWasUpgraded;
+		private readonly ReaderWriterLockSlim locker;
+		private bool lockAcquired;
 
-		public UpgradableLock(SlimReaderWriterLock locker)
+		public SlimReadLockHolder(ReaderWriterLockSlim locker, bool waitForLock)
 		{
 			this.locker = locker;
-			locker.EnterUpgradeableReadLock();
-			lockWasUpgraded = false;
-		}
-
-		public void Upgrade()
-		{
-			locker.EnterWriteLock();
-			lockWasUpgraded = true;
+			if(waitForLock)
+			{
+				locker.EnterReadLock();
+				lockAcquired = true;
+				return;
+			}
+			lockAcquired = locker.TryEnterReadLock(0);
 		}
 
 		public void Dispose()
 		{
-			if (lockWasUpgraded)
-			{
-				locker.ExitWriteLock();
-			}
-			
-			locker.ExitUpgradeableReadLock();
+			if (!LockAcquired) return;
+			locker.ExitReadLock();
+			lockAcquired = false;
+		}
+
+		public bool LockAcquired
+		{
+			get { return lockAcquired; }
 		}
 	}
+#endif
 }

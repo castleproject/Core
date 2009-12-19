@@ -14,21 +14,9 @@
 
 namespace Castle.Core.Internal
 {
-	using System;
-
-	public struct ReadLock : IDisposable
+	public interface IUpgradeableLockHolder : ILockHolder
 	{
-		private readonly SlimReaderWriterLock locker;
-
-		public ReadLock(SlimReaderWriterLock locker)
-		{
-			this.locker = locker;
-			locker.EnterReadLock();
-		}
-
-		public void Dispose()
-		{
-			locker.ExitReadLock();
-		}
+		ILockHolder Upgrade();
+		ILockHolder Upgrade(bool waitForLock);
 	}
 }

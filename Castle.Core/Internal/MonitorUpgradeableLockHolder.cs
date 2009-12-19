@@ -14,21 +14,45 @@
 
 namespace Castle.Core.Internal
 {
-	using System;
+	using System.Threading;
 
-	public struct WriteLock : IDisposable
+	internal class MonitorUpgradeableLockHolder : IUpgradeableLockHolder
 	{
-		private readonly SlimReaderWriterLock locker;
+		private readonly object locker;
+		private bool lockAcquired;
 
-		public WriteLock(SlimReaderWriterLock locker)
+		public MonitorUpgradeableLockHolder(object locker, bool waitForLock)
 		{
 			this.locker = locker;
-			locker.EnterWriteLock();
+			if(waitForLock)
+			{
+				Monitor.Enter(locker);
+				lockAcquired = true;
+				return;
+			}
+			lockAcquired = Monitor.TryEnter(locker, 0);
 		}
 
 		public void Dispose()
 		{
-			locker.ExitWriteLock();
+			if (!LockAcquired) return;
+			Monitor.Exit(locker);
+			lockAcquired = false;
+		}
+
+		public ILockHolder Upgrade()
+		{
+			return NoOpLock.Lock;
+		}
+
+		public ILockHolder Upgrade(bool waitForLock)
+		{
+			return NoOpLock.Lock;
+		}
+
+		public bool LockAcquired
+		{
+			get { return lockAcquired; }
 		}
 	}
 }

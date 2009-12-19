@@ -23,7 +23,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET35</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -57,6 +57,8 @@
     <Compile Include="GraphTestCase.cs" />
     <Compile Include="LevelFilteredLoggerTests.cs" />
     <Compile Include="LinkedListTestCase.cs" />
+    <Compile Include="MonitorLockTestCase.cs" />
+    <Compile Include="SlimReadWriteLockTestCase.cs" />
     <Compile Include="ReflectionBasedDictionaryAdapterTestCase.cs" />
     <Compile Include="Resources\AssemblyResourceFactoryTestCase.cs" />
     <Compile Include="Resources\CustomUriTestCase.cs" />

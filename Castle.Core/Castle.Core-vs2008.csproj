@@ -62,13 +62,22 @@
     <Compile Include="CollectionExtensions.cs" />
     <Compile Include="Interceptor\IAttributeDisassembler.cs" />
     <Compile Include="Interceptor\IInterceptorSelector.cs" />
+    <Compile Include="InternalsVisibleToTests.cs" />
+    <Compile Include="Internal\ILockHolder.cs" />
+    <Compile Include="Internal\IUpgradeableLockHolder.cs" />
     <Compile Include="Internal\LinkedList.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\ReadLock.cs" />
-    <Compile Include="Internal\SlimReaderWriterLock.cs" />
-    <Compile Include="Internal\UpgradableLock.cs" />
-    <Compile Include="Internal\WriteLock.cs" />
+    <Compile Include="Internal\MonitorLockHolder.cs" />
+    <Compile Include="Internal\MonitorUpgradeableLockHolder.cs" />
+    <Compile Include="Internal\MonitorLock.cs" />
+    <Compile Include="Internal\NoOpLock.cs" />
+    <Compile Include="Internal\NoOpUpgradeableLock.cs" />
+    <Compile Include="Internal\SlimReadWriteLock.cs" />
+    <Compile Include="Internal\Lock.cs" />
+    <Compile Include="Internal\SlimReadLockHolder.cs" />
+    <Compile Include="Internal\SlimUpgradeableReadLockHolder.cs" />
+    <Compile Include="Internal\SlimWriteLockHolder.cs" />
     <Compile Include="IServiceProviderExAccessor.cs" />
     <Compile Include="Interceptor\IChangeProxyTarget.cs" />
     <Compile Include="Interceptor\IInterceptor.cs" />
