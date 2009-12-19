@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Xml.Serialization;
 #endif
 	using Castle.Core.Interceptor;
-	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Contributors;
@@ -59,7 +58,7 @@ namespace Castle.DynamicProxy.Generators
 
 			CacheKey cacheKey = new CacheKey(targetType, interfaces, options);
 
-			using (UpgradableLock locker = new UpgradableLock(Scope.RWLock))
+			using (var locker = Scope.Lock.ForReadingUpgradeable())
 			{
 				Type cacheType = GetFromCache(cacheKey);
 				if (cacheType != null)
@@ -89,12 +88,13 @@ namespace Castle.DynamicProxy.Generators
 				proxyType = GenerateType(name, interfaces, Scope.NamingScope.SafeSubScope());
 
 				AddToCache(cacheKey, proxyType);
+
 			}
 
 			return proxyType;
 		}
 
-		private Type GenerateType(string newName, Type[] interfaces, INamingScope namingScope)
+		protected virtual Type GenerateType(string newName, Type[] interfaces, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
 			var implementedInterfaces = GetTypeImplementerMapping(interfaces, out contributors, namingScope);
@@ -153,7 +153,7 @@ namespace Castle.DynamicProxy.Generators
 			return proxyType;
 		}
 
-		private IEnumerable<Type> GetTypeImplementerMapping(Type[] interfaces, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
+		protected virtual IEnumerable<Type> GetTypeImplementerMapping(Type[] interfaces, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
 			var methodsToSkip = new List<MethodInfo>();
 			var proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip, interfaces);
@@ -227,15 +227,14 @@ namespace Castle.DynamicProxy.Generators
 			{
 				HandleExplicitlyPassedProxyTargetAccessor(targetInterfaces, additionalInterfaces);
 			}
-			var contributorsList = new List<ITypeContributor>();
-			contributorsList.Add(proxyTarget);
-			//foreach (var mixin in mixins)
-			//{
-				contributorsList.Add(mixins);
-			//}
-			contributorsList.Add(additionalInterfacesContributor);
-			contributorsList.Add(proxyInstance);
-			contributors = contributorsList;
+
+			contributors = new List<ITypeContributor>
+			{
+				proxyTarget,
+				mixins,
+				additionalInterfacesContributor,
+				proxyInstance
+			};
 			return typeImplementerMapping.Keys;
 		}
 	}

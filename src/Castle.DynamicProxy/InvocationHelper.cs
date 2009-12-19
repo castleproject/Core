@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy
 		private static readonly Dictionary<KeyValuePair<MethodInfo, Type>, MethodInfo> cache =
 			new Dictionary<KeyValuePair<MethodInfo, Type>, MethodInfo>();
 
-		private static readonly SlimReaderWriterLock @lock = new SlimReaderWriterLock();
+		private static readonly Lock @lock = Lock.Create();
 
 		public static MethodInfo GetMethodOnObject(object target, MethodInfo proxiedMethod)
 		{
@@ -48,7 +48,7 @@ namespace Castle.DynamicProxy
 
 			Debug.Assert(proxiedMethod.DeclaringType.IsAssignableFrom(type),
 			             "proxiedMethod.DeclaringType.IsAssignableFrom(type)");
-			using (var locker = new UpgradableLock(@lock))
+			using (var locker = @lock.ForReadingUpgradeable())
 			{
 				MethodInfo methodOnTarget = GetFromCache(proxiedMethod, type);
 				if (methodOnTarget != null)
@@ -62,10 +62,10 @@ namespace Castle.DynamicProxy
 				{
 					return methodOnTarget;
 				}
-
 				methodOnTarget = ObtainMethod(proxiedMethod, type);
 				PutToCache(proxiedMethod, type, methodOnTarget);
 				return methodOnTarget;
+
 			}
 		}
 

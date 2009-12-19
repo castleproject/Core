@@ -485,6 +485,12 @@
             If the index is invalid.
             </exception>
         </member>
+        <member name="M:Castle.Core.Internal.Lock.Create">
+            <summary>
+            Creates a new lock.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Castle.Core.IInitializable">
             <summary>
             Lifecycle interface. If implemented by a component,
