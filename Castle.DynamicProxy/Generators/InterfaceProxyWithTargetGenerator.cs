@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Xml.Serialization;
 #endif
 	using Castle.Core.Interceptor;
-	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Serialization;
@@ -54,7 +53,7 @@ namespace Castle.DynamicProxy.Generators
 
 			CacheKey cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
 
-			using (UpgradableLock locker = new UpgradableLock(Scope.RWLock))
+			using (var locker = Scope.Lock.ForReadingUpgradeable())
 			{
 				Type cacheType = GetFromCache(cacheKey);
 				if (cacheType != null)
@@ -181,7 +180,7 @@ namespace Castle.DynamicProxy.Generators
 			return generatedType;
 		}
 
-		protected Type Init(string typeName, IDictionary<Type, ITypeContributor> typeImplementerMapping, out ClassEmitter emitter, Type proxyTargetType, out FieldReference interceptorsField)
+		protected virtual Type Init(string typeName, IDictionary<Type, ITypeContributor> typeImplementerMapping, out ClassEmitter emitter, Type proxyTargetType, out FieldReference interceptorsField)
 		{
 			Type baseType = ProxyGenerationOptions.BaseTypeForInterfaceProxy;
 
@@ -225,7 +224,7 @@ namespace Castle.DynamicProxy.Generators
 			get { return false; }
 		}
 
-		protected IDictionary<Type, ITypeContributor> GetTypeImplementerMapping(Type[] interfaces, Type proxyTargetType, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
+		protected virtual IDictionary<Type, ITypeContributor> GetTypeImplementerMapping(Type[] interfaces, Type proxyTargetType, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
 			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 			var mixins = new MixinContributor(namingScope,AllowChangeTarget);
@@ -285,16 +284,13 @@ namespace Castle.DynamicProxy.Generators
 				HandleExplicitlyPassedProxyTargetAccessor(targetInterfaces, additionalInterfaces);
 			}
 
-			var list = new List<ITypeContributor>();
-			list.Add(target);
-			list.Add(additionalInterfacesContributor);
-			//foreach (var mixin in mixins)
-			//{
-				list.Add(mixins);
-			//}
-			list.Add(instance);
-
-			contributors = list;
+			contributors = new List<ITypeContributor>
+			{
+				target,
+				additionalInterfacesContributor,
+				mixins,
+				instance
+			};
 			return typeImplementerMapping;
 		}
 

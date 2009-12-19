@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy
 		private readonly Dictionary<CacheKey, Type> typeCache = new Dictionary<CacheKey, Type>();
 
 		// Users of ModuleScope should use this lock when accessing the cache
-		private readonly SlimReaderWriterLock cacheRWLock = new SlimReaderWriterLock();
+		private readonly Lock cacheLock = Lock.Create();
 
 		// Used to lock the module builder creation
 		private readonly object moduleLocker = new object();
@@ -124,9 +124,9 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		/// Users of this <see cref="ModuleScope"/> should use this lock when accessing the cache.
 		/// </summary>
-		public SlimReaderWriterLock RWLock
+		public Lock Lock
 		{
-			get { return cacheRWLock; }
+			get { return cacheLock; }
 		}
 
 		/// <summary>
@@ -137,10 +137,8 @@ namespace Castle.DynamicProxy
 		public Type GetFromCache(CacheKey key)
 		{
 			Type type;
-			if (typeCache.TryGetValue(key, out type))
-				return type;
-			else
-				return null;
+			typeCache.TryGetValue(key, out type);
+			return type;
 		}
 
 		/// <summary>
@@ -456,7 +454,7 @@ namespace Castle.DynamicProxy
 		{
 			Dictionary<CacheKey, string> mappings;
 
-			using(new ReadLock(RWLock))
+			using (Lock.ForReading())
 			{
 				mappings = new Dictionary<CacheKey, string>();
 				foreach (KeyValuePair<CacheKey, Type> cacheEntry in typeCache)

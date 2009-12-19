@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy
 
 	public class InternalsHelper
 	{
-		private static SlimReaderWriterLock internalsToDynProxyLock = new SlimReaderWriterLock();
+		private static Lock internalsToDynProxyLock = Lock.Create();
 		private static IDictionary<Assembly, bool> internalsToDynProxy = new Dictionary<Assembly, bool>();
 
 		/// <summary>
@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy
 		/// <param name="asm">The assembly to inspect.</param>
 		public static bool IsInternalToDynamicProxy(Assembly asm)
 		{
-			using (UpgradableLock locker = new UpgradableLock(internalsToDynProxyLock))
+			using (var locker = internalsToDynProxyLock.ForReadingUpgradeable())
 			{
 				if (internalsToDynProxy.ContainsKey(asm))
 				{
@@ -45,7 +45,7 @@ namespace Castle.DynamicProxy
 				}
 
 				InternalsVisibleToAttribute[] atts = (InternalsVisibleToAttribute[])
-				                                     asm.GetCustomAttributes(typeof (InternalsVisibleToAttribute), false);
+													 asm.GetCustomAttributes(typeof(InternalsVisibleToAttribute), false);
 
 				bool found = false;
 
@@ -61,6 +61,7 @@ namespace Castle.DynamicProxy
 				internalsToDynProxy.Add(asm, found);
 
 				return found;
+
 			}
 		}
 
@@ -74,7 +75,7 @@ namespace Castle.DynamicProxy
 		public static bool IsInternal(MethodInfo method)
 		{
 			return method.IsAssembly || (method.IsFamilyAndAssembly
-			                             && !method.IsFamilyOrAssembly);
+										 && !method.IsFamilyOrAssembly);
 		}
 	}
 }
