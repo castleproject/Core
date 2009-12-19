@@ -21,8 +21,8 @@ namespace Castle.DynamicProxy
 
 	public class InternalsHelper
 	{
-		private static Lock internalsToDynProxyLock = Lock.Create();
-		private static IDictionary<Assembly, bool> internalsToDynProxy = new Dictionary<Assembly, bool>();
+		private static readonly Lock internalsToDynProxyLock = Lock.Create();
+		private static readonly IDictionary<Assembly, bool> internalsToDynProxy = new Dictionary<Assembly, bool>();
 
 		/// <summary>
 		/// Determines whether this assembly has internals visible to dynamic proxy.
