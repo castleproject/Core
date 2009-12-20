@@ -165,12 +165,6 @@
             Initializes a new instance of the <see cref="T:Castle.Core.PerThreadAttribute"/> class.
             </summary>
         </member>
-        <member name="T:Castle.Core.PerWebRequestAttribute">
-            <summary>
-            Indicates that the target components wants a
-            per web request lifestyle.
-            </summary>
-        </member>
         <member name="T:Castle.Core.PooledAttribute">
             <summary>
             Indicates that the target components wants a
@@ -1995,11 +1989,6 @@
         <member name="F:Castle.Core.LifestyleType.Custom">
             <summary>
             Any other logic to create/release components.
-            </summary>
-        </member>
-        <member name="F:Castle.Core.LifestyleType.PerWebRequest">
-            <summary>
-            PerWebRequest components are created once per Http Request
             </summary>
         </member>
         <member name="T:Castle.Core.PropertiesInspectionBehavior">
