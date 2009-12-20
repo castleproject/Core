@@ -49,14 +49,16 @@ namespace Castle.Core
 		/// instance in a pool instead of always creating them.
 		/// </summary>
 		Pooled,
-		/// <summary>
-		/// Any other logic to create/release components.
-		/// </summary>
-		Custom,
+#if (!SILVERLIGHT)
 		/// <summary>
 		/// PerWebRequest components are created once per Http Request
 		/// </summary>
-		PerWebRequest
+		PerWebRequest,
+#endif
+		/// <summary>
+		/// Any other logic to create/release components.
+		/// </summary>
+		Custom
 	}
 
 	/// <summary>

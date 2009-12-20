@@ -89,7 +89,7 @@ namespace Castle.Core
 		{
 		}
 	}
-
+#if (!SILVERLIGHT)
 	/// <summary>
 	/// Indicates that the target components wants a
 	/// per web request lifestyle.
@@ -101,7 +101,7 @@ namespace Castle.Core
 		{
 		}
 	}
-
+#endif
 	/// <summary>
 	/// Indicates that the target components wants a
 	/// pooled lifestyle.
