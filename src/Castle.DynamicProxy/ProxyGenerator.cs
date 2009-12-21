@@ -20,6 +20,8 @@ namespace Castle.DynamicProxy
 	using System.Reflection;
 #if !SILVERLIGHT
 	using System.Runtime.Remoting;
+	using System.Security;
+	using System.Security.Permissions;
 #endif
 	using System.Text;
 	using Castle.Core.Interceptor;
@@ -45,7 +47,10 @@ namespace Castle.DynamicProxy
 			proxyBuilder = builder;
 
 #if !SILVERLIGHT
-			Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
+			if (SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy)))
+			{
+				Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
+			}
 #endif
 		}
 
