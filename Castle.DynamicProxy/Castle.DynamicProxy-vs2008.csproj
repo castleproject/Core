@@ -41,7 +41,7 @@
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591,3014,3021</NoWarn>
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -94,9 +94,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AllMethodsHook.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompositionInvocation.cs" />
