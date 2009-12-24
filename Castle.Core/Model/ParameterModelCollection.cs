@@ -17,6 +17,8 @@ namespace Castle.Core
 	using System;
 	using System.Collections;
 	using System.Collections.ObjectModel;
+	using System.Diagnostics;
+
 	using Castle.Core.Configuration;
 	using System.Collections.Generic;
 
@@ -26,18 +28,13 @@ namespace Castle.Core
 #if !SILVERLIGHT
 	[Serializable]
 #endif
+
+	[DebuggerDisplay("Count = {dictionary.Count}")]
 	public class ParameterModelCollection : Collection<ParameterModel>
 	{
-		private readonly IDictionary<string, ParameterModel> dictionary;
+		private readonly IDictionary<string, ParameterModel> dictionary =
+			new Dictionary<string, ParameterModel>(StringComparer.OrdinalIgnoreCase);
 		private readonly object syncRoot = new object();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ParameterModelCollection"/> class.
-		/// </summary>
-		public ParameterModelCollection()
-		{
-			dictionary = new Dictionary<string, ParameterModel>(StringComparer.OrdinalIgnoreCase);
-		}
 
 		/// <summary>
 		/// Adds the specified name.
