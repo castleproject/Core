@@ -24,8 +24,6 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-		protected readonly bool onlyProxyVirtual;
-		protected readonly InterfaceMapping map;
 		private ILogger logger = NullLogger.Instance;
 		private IList<MethodInfo> checkedMethods = new List<MethodInfo>();
 		private readonly IDictionary<PropertyInfo, PropertyToGenerate> properties = new Dictionary<PropertyInfo, PropertyToGenerate>();
@@ -33,14 +31,9 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly IDictionary<MethodInfo, MethodToGenerate> methodsToProxy = new Dictionary<MethodInfo, MethodToGenerate>();
 		private readonly Type type;
 
-		protected readonly ITypeContributor contributor;
-
-		protected MembersCollector(Type type, ITypeContributor contributor, bool onlyProxyVirtual, InterfaceMapping map)
+		protected MembersCollector(Type type)
 		{
 			this.type = type;
-			this.contributor = contributor;
-			this.onlyProxyVirtual = onlyProxyVirtual;
-			this.map = map;
 		}
 
 		public ILogger Logger
@@ -66,7 +59,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		public void CollectMembersToProxy(IProxyGenerationHook hook)
 		{
-			if(checkedMethods==null)// this method was already called!
+			if (checkedMethods == null)// this method was already called!
 			{
 				throw new InvalidOperationException("Can't call CollectMembersToProxy twice");
 			}
@@ -186,17 +179,6 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		protected abstract MethodToGenerate GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone);
-
-		protected virtual MethodInfo GetMethodOnTarget(MethodInfo method)
-		{
-			int index = Array.IndexOf(map.InterfaceMethods, method);
-			if (index == -1)
-			{
-				return null;
-			}
-
-			return map.TargetMethods[index];
-		}
 
 		/// <summary>
 		/// Checks if the method is public or protected.

@@ -20,8 +20,8 @@ namespace Castle.DynamicProxy.Contributors
 
 	public class ClassMembersCollector : MembersCollector
 	{
-		public ClassMembersCollector(Type targetType, ITypeContributor targetContributor)
-			: base(targetType, targetContributor, true, new InterfaceMapping())
+		public ClassMembersCollector(Type targetType)
+			: base(targetType)
 		{
 		}
 
@@ -32,20 +32,14 @@ namespace Castle.DynamicProxy.Contributors
 				return null;
 			}
 
-			var accepted = AcceptMethod(method, onlyProxyVirtual, hook);
+			var accepted = AcceptMethod(method, true, hook);
 			if (!accepted && !method.IsAbstract)
 			{
 				//we don't need to do anything...
 				return null;
 			}
 
-			ITypeContributor target = null;
-			if(!method.IsAbstract)
-			{
-				target = contributor;
-			}
-
-			return new MethodToGenerate(method, isStandalone, target, method, accepted);
+			return new MethodToGenerate(method, method, isStandalone, accepted, !method.IsAbstract);
 		}
 	}
 }

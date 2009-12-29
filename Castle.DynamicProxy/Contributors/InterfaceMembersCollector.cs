@@ -20,22 +20,10 @@ namespace Castle.DynamicProxy.Contributors
 
 	public class InterfaceMembersCollector : MembersCollector
 	{
-		private static readonly InterfaceMapping EmptyInterfaceMapping = new InterfaceMapping { InterfaceMethods = new MethodInfo[0] };
 		public InterfaceMembersCollector(Type @interface)
-			: this(@interface, null, EmptyInterfaceMapping)
+			: base(@interface)
 		{
 
-		}
-
-		public InterfaceMembersCollector(Type @interface, ITypeContributor contributor, InterfaceMapping map)
-			: base(@interface, contributor, false, map)
-		{
-		}
-
-
-		protected override MethodInfo GetMethodOnTarget(MethodInfo method)
-		{
-			return method;
 		}
 
 		protected override MethodToGenerate GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
@@ -45,8 +33,8 @@ namespace Castle.DynamicProxy.Contributors
 				return null;
 			}
 
-			var proxyable = AcceptMethod(method, onlyProxyVirtual, hook);
-			return new MethodToGenerate(method, isStandalone, contributor, GetMethodOnTarget(method), proxyable);
+			var proxyable = AcceptMethod(method, false, hook);
+			return new MethodToGenerate(method, method, isStandalone, proxyable, false);
 		}
 
 	}

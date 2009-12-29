@@ -6,13 +6,17 @@ namespace Castle.DynamicProxy.Contributors
 
 	public class InterfaceMembersOnClassCollector : MembersCollector
 	{
-		public InterfaceMembersOnClassCollector(Type type, ITypeContributor contributor, bool onlyProxyVirtual, InterfaceMapping map) : base(type, contributor, onlyProxyVirtual, map)
+		private readonly bool onlyProxyVirtual;
+		private readonly InterfaceMapping map;
+
+		public InterfaceMembersOnClassCollector(Type type, bool onlyProxyVirtual, InterfaceMapping map) : base(type)
 		{
+			this.onlyProxyVirtual = onlyProxyVirtual;
+			this.map = map;
 		}
 
 		protected override MethodToGenerate GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
-			// This is here, so that we don't add multiple times property getters/setters and event add/remove methods
 			if (!IsAccessible(method))
 			{
 				return null;
@@ -24,24 +28,26 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			var methodOnTarget = GetMethodOnTarget(method);
-			ITypeContributor target;
-			if (methodOnTarget.IsPrivate)//explicitly implemented
-			{
-				target = null;
-			}
-			else
-			{
-				target = contributor;
-			}
 
 			var proxyable = AcceptMethod(method, onlyProxyVirtual, hook);
-			return new MethodToGenerate(method, isStandalone, target, methodOnTarget, proxyable);
+			return new MethodToGenerate(method, methodOnTarget, isStandalone, proxyable, methodOnTarget.IsPrivate == false);
+		}
+
+		private MethodInfo GetMethodOnTarget(MethodInfo method)
+		{
+			int index = Array.IndexOf(map.InterfaceMethods, method);
+			if (index == -1)
+			{
+				return null;
+			}
+
+			return map.TargetMethods[index];
 		}
 
 		private bool IsVirtuallyImplementedInterfaceMethod(MethodInfo method)
 		{
-			var index = Array.IndexOf(map.InterfaceMethods, method);
-			return index != -1 && map.TargetMethods[index].IsFinal == false;
+			var info = GetMethodOnTarget(method);
+			return info != null && info.IsFinal == false;
 		}
 	}
 }

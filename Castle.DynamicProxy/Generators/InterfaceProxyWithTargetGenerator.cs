@@ -227,7 +227,7 @@ namespace Castle.DynamicProxy.Generators
 		protected virtual IDictionary<Type, ITypeContributor> GetTypeImplementerMapping(Type[] interfaces, Type proxyTargetType, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
 			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
-			var mixins = new MixinContributor(namingScope,AllowChangeTarget);
+			var mixins = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
 			// Order of interface precedence:
 			// 1. first target
 			var targetInterfaces = TypeUtil.GetAllInterfaces(proxyTargetType);
@@ -296,7 +296,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(INamingScope namingScope)
 		{
-			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance);
+			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger }; ;
 		}
 
 		protected override void SafeAddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
@@ -311,7 +311,8 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping, Type proxyTargetType, ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces,INamingScope namingScope)
 		{
-			var contributor = new InterfaceProxyTargetContributor(proxyTargetType, AllowChangeTarget, namingScope);
+			var contributor = new InterfaceProxyTargetContributor(proxyTargetType, AllowChangeTarget, namingScope)
+			{ Logger = Logger };
 			var proxiedInterfaces = TypeUtil.GetAllInterfaces(targetType);
 			foreach (var @interface in proxiedInterfaces)
 			{

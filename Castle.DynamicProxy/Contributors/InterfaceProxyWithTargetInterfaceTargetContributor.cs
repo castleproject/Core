@@ -15,18 +15,14 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
-	using System.Reflection;
+
 	using Generators;
 
 	public class InterfaceProxyWithTargetInterfaceTargetContributor : InterfaceProxyTargetContributor
 	{
-		protected override InterfaceMapping GetMapping(Type @interface)
+		protected override MembersCollector GetCollectorForInterface(Type @interface)
 		{
-			var mapping = new InterfaceMapping();
-			var methods = MethodFinder.GetAllInstanceMethods(@interface, BindingFlags.Public | BindingFlags.Instance);
-			mapping.InterfaceMethods = methods;
-			mapping.TargetMethods = methods;
-			return mapping;
+			return new InterfaceMembersCollector(@interface);
 		}
 
 		public InterfaceProxyWithTargetInterfaceTargetContributor(Type proxyTargetType, bool allowChangeTarget, INamingScope namingScope)

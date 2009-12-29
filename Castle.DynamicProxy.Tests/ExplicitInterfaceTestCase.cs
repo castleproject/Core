@@ -12,15 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.DynamicProxy.Tests.Classes;
-
 namespace Castle.DynamicProxy.Tests
 {
-	using System;
-	using Core.Interceptor;
-	using Interceptors;
-	using InterClasses;
-	using Mixins;
+	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.Interceptors;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -66,7 +62,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void ExplicitInterface_AsAdditionalInterfaceToProxy_OnClassProxy_WithoutBaseCalls ()
+		public void ExplicitInterface_AsAdditionalInterfaceToProxy_OnClassProxy_WithoutBaseCalls()
 		{
 			LogInvocationInterceptor interceptor = new LogInvocationInterceptor ();
 			interceptor.Proceed = false;
