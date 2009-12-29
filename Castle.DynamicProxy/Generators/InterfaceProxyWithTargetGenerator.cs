@@ -17,16 +17,15 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Collections.Generic;
 #if !SILVERLIGHT
-	using System.Diagnostics;
 	using System.Reflection;
 	using System.Xml.Serialization;
 #endif
 	using Castle.Core.Interceptor;
+	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Serialization;
 
-	using Contributors;
 
 	/// <summary>
 	/// 
@@ -318,7 +317,6 @@ namespace Castle.DynamicProxy.Generators
 					continue;
 				}
 
-				Debug.Assert(!typeImplementerMapping.ContainsKey(@interface), "!typeImplementerMapping.ContainsKey(@interface)");
 				contributor.AddInterfaceToProxy(@interface);
 				AddMappingNoCheck(@interface, contributor, typeImplementerMapping);
 			}
