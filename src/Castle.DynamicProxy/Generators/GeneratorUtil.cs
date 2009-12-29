@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy.Generators
 			if (IsInterfaceMethodForExplicitImplementation(methodToGenerate))
 			{
 				name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
-				attributes |= MethodAttributes.Private |
+				attributes |= MethodAttributes.Public |
 							  MethodAttributes.HideBySig |
 							  MethodAttributes.NewSlot |
 							  MethodAttributes.Final;
