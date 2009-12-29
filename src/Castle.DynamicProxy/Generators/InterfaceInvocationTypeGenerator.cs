@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators
 	{
 		public static readonly Type BaseType = typeof(CompositionInvocation);
 
-		public InterfaceInvocationTypeGenerator(Type target, IProxyMethod method, MethodInfo callback, bool canChangeTarget)
+		public InterfaceInvocationTypeGenerator(Type target, MethodToGenerate method, MethodInfo callback, bool canChangeTarget)
 			: base(target, method, callback, canChangeTarget)
 		{
 		}

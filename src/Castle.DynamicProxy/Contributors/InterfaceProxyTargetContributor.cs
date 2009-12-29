@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Diagnostics;
-	using System.Reflection;
 
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
@@ -40,15 +39,16 @@ namespace Castle.DynamicProxy.Contributors
 
 			foreach (var @interface in interfaces)
 			{
-				var item = new InterfaceMembersOnClassCollector(@interface, this, false, GetMapping(@interface));
+				var item = GetCollectorForInterface(@interface);
+				item.Logger = Logger;
 				item.CollectMembersToProxy(hook);
 				targets.Add(item);
 			}
 		}
 
-		protected virtual InterfaceMapping GetMapping(Type @interface)
+		protected virtual MembersCollector GetCollectorForInterface(Type @interface)
 		{
-			return proxyTargetType.GetInterfaceMap(@interface);
+			return new InterfaceMembersOnClassCollector(@interface, false, proxyTargetType.GetInterfaceMap(@interface));
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)

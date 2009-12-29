@@ -25,11 +25,11 @@ namespace Castle.DynamicProxy.Generators
 	public abstract class InvocationTypeGenerator : IGenerator<AbstractTypeEmitter>
 	{
 		private readonly Type targetType;
-		private readonly IProxyMethod method;
+		private readonly MethodToGenerate method;
 		private readonly MethodInfo callback;
 		private readonly bool canChangeTarget;
 
-		protected InvocationTypeGenerator(Type targetType, IProxyMethod method, MethodInfo callback, bool canChangeTarget)
+		protected InvocationTypeGenerator(Type targetType, MethodToGenerate method, MethodInfo callback, bool canChangeTarget)
 		{
 			this.targetType = targetType;
 			this.method = method;
@@ -74,10 +74,6 @@ namespace Castle.DynamicProxy.Generators
 			if (callback != null)
 			{
 				ImplemementInvokeMethodOnTarget(type, methodInfo.GetParameters(), targetField, callback);
-			}
-			else if (method.HasTarget)
-			{
-				ImplemementInvokeMethodOnTarget(type, methodInfo.GetParameters(), targetField, methodInfo);
 			}
 			else
 			{
@@ -226,7 +222,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (callbackMethod.ReturnType != typeof(void))
 			{
-				MethodInvocationExpression setRetVal =
+				var setRetVal =
 					new MethodInvocationExpression(SelfReference.Self,
 												   InvocationMethods.SetReturnValue,
 												   new ConvertExpression(typeof(object), returnValue.Type, returnValue.ToExpression()));

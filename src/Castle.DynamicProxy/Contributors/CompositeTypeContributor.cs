@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System.Collections.Generic;
 	using System.Diagnostics;
 
+	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
@@ -26,10 +27,17 @@ namespace Castle.DynamicProxy.Contributors
 		protected readonly INamingScope namingScope;
 		protected readonly ICollection<Type> interfaces = new List<Type>();
 		protected readonly ICollection<MembersCollector> targets = new List<MembersCollector>();
+		private ILogger logger = NullLogger.Instance;
 
 		protected CompositeTypeContributor(INamingScope namingScope)
 		{
 			this.namingScope = namingScope;
+		}
+
+		public ILogger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
 		}
 
 		public abstract void CollectElementsToProxy(IProxyGenerationHook hook);

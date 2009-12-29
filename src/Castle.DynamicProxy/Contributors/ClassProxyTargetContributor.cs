@@ -19,14 +19,13 @@ namespace Castle.DynamicProxy.Contributors
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using Castle.Core.Logging;
+
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	public class ClassProxyTargetContributor : CompositeTypeContributor
 	{
-		private ILogger logger = NullLogger.Instance;
 		private readonly Type targetType;
 		private readonly IList<MethodInfo> methodsToSkip;
 
@@ -36,26 +35,19 @@ namespace Castle.DynamicProxy.Contributors
 			this.methodsToSkip = methodsToSkip;
 		}
 
-		public ILogger Logger
-		{
-			get { return logger; }
-			set { logger = value; }
-		}
-
 		public override void CollectElementsToProxy(IProxyGenerationHook hook)
 		{
 			Debug.Assert(hook != null, "hook != null");
 
-			var targetItem = new ClassMembersCollector(targetType, this) { Logger = logger };
+			var targetItem = new ClassMembersCollector(targetType) { Logger = Logger };
 			targetItem.CollectMembersToProxy(hook);
 			targets.Add(targetItem);
 
 			foreach (var @interface in interfaces)
 			{
 				var item = new InterfaceMembersOnClassCollector(@interface,
-				                                                this,
 				                                                true,
-				                                                targetType.GetInterfaceMap(@interface));
+				                                                targetType.GetInterfaceMap(@interface)) { Logger = Logger };
 				item.CollectMembersToProxy(hook);
 				targets.Add(item);
 			}
@@ -91,21 +83,20 @@ namespace Castle.DynamicProxy.Contributors
 		private Type BuildInvocationType(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options)
 		{
 			var methodInfo = method.Method;
-			var callback = default(MethodInfo);
-			var targetForInvocation = targetType;
-			if (!method.MethodOnTarget.IsAbstract && !IsExplicitInterfaceImplementation(method.MethodOnTarget))
+			if (!method.HasTarget)
 			{
-				callback = CreateCallbackMethod(@class, methodInfo, method.MethodOnTarget);
-				targetForInvocation = callback.DeclaringType;
+				return new ClassInvocationTypeGenerator(targetType,
+				                                        method,
+				                                        null)
+					.Generate(@class, options, namingScope)
+					.BuildType();
 			}
-			return new ClassInvocationTypeGenerator(targetForInvocation,
+			var callback = CreateCallbackMethod(@class, methodInfo, method.MethodOnTarget);
+			return new ClassInvocationTypeGenerator(callback.DeclaringType,
 			                                        method,
-			                                        callback).Generate(@class, options, namingScope).BuildType();
-		}
-
-		private bool IsExplicitInterfaceImplementation(MethodInfo methodInfo)
-		{
-			return methodInfo.IsPrivate && methodInfo.IsFinal;
+			                                        callback)
+				.Generate(@class, options, namingScope)
+				.BuildType();
 		}
 
 		private MethodBuilder CreateCallbackMethod(ClassEmitter emitter, MethodInfo methodInfo, MethodInfo methodOnTarget)

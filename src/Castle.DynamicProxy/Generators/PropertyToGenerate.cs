@@ -41,14 +41,14 @@ namespace Castle.DynamicProxy.Generators
 			this.customAttributes = customAttributes;
 		}
 
-		private string GetName(string name, IProxyMethod getter, IProxyMethod setter)
+		private string GetName(string name, MethodToGenerate getter, MethodToGenerate setter)
 		{
 			Type declaringType = null;
-			if(getter!=null)
+			if (getter != null)
 			{
 				declaringType = getter.Method.DeclaringType;
 			}
-			else if(setter!=null)
+			else if (setter != null)
 			{
 				declaringType = setter.Method.DeclaringType;
 			}

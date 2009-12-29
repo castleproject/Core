@@ -281,7 +281,6 @@
     <Compile Include="Contributors\ITypeContributor.cs" />
     <Compile Include="Contributors\InterfaceProxyWithTargetInterfaceTargetContributor.cs" />
     <Compile Include="Generators\InvocationTypeGenerator.cs" />
-    <Compile Include="Generators\IProxyMethod.cs" />
     <Compile Include="Generators\MethodGenerator.cs" />
     <Compile Include="Generators\MethodSignatureComparer.cs" />
     <Compile Include="Generators\MethodFinder.cs" />
