@@ -208,7 +208,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 				else if (ProxyGenerationOptions.MixinData.ContainsMixin(@interface) == false)
 				{
-					additionalInterfacesContributor.AddInterfaceMapping(@interface);
+					additionalInterfacesContributor.AddInterfaceToProxy(@interface);
 					AddMapping(@interface, additionalInterfacesContributor, typeImplementerMapping);
 				}
 			}

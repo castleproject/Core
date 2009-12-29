@@ -268,7 +268,7 @@ namespace Castle.DynamicProxy.Generators
 				if(typeImplementerMapping.ContainsKey(@interface)) continue;
 				if(ProxyGenerationOptions.MixinData.ContainsMixin(@interface)) continue;
 
-				additionalInterfacesContributor.AddInterfaceMapping(@interface);
+				additionalInterfacesContributor.AddInterfaceToProxy(@interface);
 				SafeAddMapping(@interface, additionalInterfacesContributor, typeImplementerMapping);
 			}
 
