@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Contributors
 	public abstract class CompositeTypeContributor: ITypeContributor
 	{
 		protected readonly INamingScope namingScope;
-		protected readonly IList<Type> interfaces = new List<Type>();
+		protected readonly ICollection<Type> interfaces = new List<Type>();
 		protected readonly ICollection<MembersCollector> targets = new List<MembersCollector>();
 
 		protected CompositeTypeContributor(INamingScope namingScope)
