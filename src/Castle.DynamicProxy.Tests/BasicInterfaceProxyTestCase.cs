@@ -196,15 +196,15 @@ namespace Castle.DynamicProxy.Tests
         public void Should_implement_all_interfaces_explicitly()
         {
             Type type = generator.CreateInterfaceProxyWithoutTarget(typeof (IIdenticalOne), new[] {typeof (IIdenticalTwo)}).GetType();
-			MethodInfo method = type.GetMethod("IIdenticalOne.Foo", BindingFlags.Instance | BindingFlags.NonPublic);
+			MethodInfo method = type.GetMethod("IIdenticalOne.Foo", BindingFlags.Instance | BindingFlags.Public);
             Assert.IsNotNull(method);
-            MethodInfo method2 = type.GetMethod("IIdenticalTwo.Foo", BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo method2 = type.GetMethod("IIdenticalTwo.Foo", BindingFlags.Instance | BindingFlags.Public);
             Assert.IsNotNull(method2);
         }
 
 	    private ParameterInfo[] GetMyTestMethodParams(Type type)
 		{
-			MethodInfo methodInfo = type.GetMethod("IMyInterface.MyTestMethod", BindingFlags.Instance | BindingFlags.NonPublic);
+			MethodInfo methodInfo = type.GetMethod("IMyInterface.MyTestMethod", BindingFlags.Instance | BindingFlags.Public);
 			return methodInfo.GetParameters();
 		}
 	}
