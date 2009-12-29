@@ -14,6 +14,8 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
 
@@ -80,6 +82,33 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual ("DoVirtual", interceptor.Invocations[2]);
 
 			Assert.AreEqual (0, result); // indicates that original method was not called
+		}
+
+		[Test]
+		public void ExplicitInterface_properties_should_be_public_interface()
+		{
+			var interceptor = new LogInvocationInterceptor { Proceed = false };
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(ISimpleInterfaceWithProperty), interceptor);
+			Assert.IsNotEmpty(proxy.GetType().GetProperties());
+		}
+
+		[Test]
+		public void ExplicitInterface_properties_should_be_public_class()
+		{
+			var interceptor = new LogInvocationInterceptor { Proceed = false };
+
+			var proxy = generator.CreateClassProxy(typeof(ExplicitInterfaceWithPropertyImplementation), new[] { typeof(ISimpleInterfaceWithProperty) },
+			                                       interceptor);
+			Assert.IsNotEmpty(proxy.GetType().GetProperties());
+		}
+	}
+
+	public class ExplicitInterfaceWithPropertyImplementation: ISimpleInterfaceWithProperty
+	{
+		public int Age
+		{
+			get { throw new NotImplementedException(); }
 		}
 	}
 }

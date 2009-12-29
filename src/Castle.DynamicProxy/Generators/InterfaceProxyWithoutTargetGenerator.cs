@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			// TODO: this anemic dictionary should be made into a real object
 			IEnumerable<ITypeContributor> contributors;
-			var typeImplementerMapping = GetTypeImplementerMapping(interfaces, targetType, out contributors,namingScope);
+			var allInterfaces = GetTypeImplementerMapping(interfaces, targetType, out contributors,namingScope);
 			
 			// collect elements
 			foreach (var contributor in contributors)
@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Generators
 
 			ClassEmitter emitter;
 			FieldReference interceptorsField;
-			Type baseType = Init(typeName, typeImplementerMapping, out emitter, proxyTargetType, out interceptorsField);
+			Type baseType = Init(typeName, out emitter, proxyTargetType, out interceptorsField, allInterfaces);
 
 
 
