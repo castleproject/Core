@@ -178,7 +178,7 @@ namespace Castle.DynamicProxy.Generators
 						// OK, so the target implements this interface. We now do one of two things:
 						if (additionalInterfaces.Contains(mixinInterface) && typeImplementerMapping.ContainsKey(mixinInterface) == false)
 						{
-							SafeAddMapping(mixinInterface, proxyTarget, typeImplementerMapping);
+							AddMappingNoCheck(mixinInterface, proxyTarget, typeImplementerMapping);
 							proxyTarget.AddInterfaceToProxy(mixinInterface);
 						}
 						// we do not intercept the interface
@@ -189,7 +189,7 @@ namespace Castle.DynamicProxy.Generators
 						if (!typeImplementerMapping.ContainsKey(mixinInterface))
 						{
 							mixins.AddInterfaceToProxy(mixinInterface);
-							SafeAddMapping(mixinInterface, mixins, typeImplementerMapping);
+							AddMappingNoCheck(mixinInterface, mixins, typeImplementerMapping);
 						}
 					}
 				}
@@ -205,7 +205,7 @@ namespace Castle.DynamicProxy.Generators
 					if (typeImplementerMapping.ContainsKey(@interface)) continue;
 
 					// we intercept the interface, and forward calls to the target type
-					SafeAddMapping(@interface, proxyTarget, typeImplementerMapping);
+					AddMappingNoCheck(@interface, proxyTarget, typeImplementerMapping);
 					proxyTarget.AddInterfaceToProxy(@interface);
 				}
 				else if (ProxyGenerationOptions.MixinData.ContainsMixin(@interface) == false)
@@ -223,7 +223,7 @@ namespace Castle.DynamicProxy.Generators
 #endif
 			try
 			{
-				SafeAddMapping(typeof(IProxyTargetAccessor), proxyInstance, typeImplementerMapping);
+				AddMappingNoCheck(typeof(IProxyTargetAccessor), proxyInstance, typeImplementerMapping);
 			}
 			catch (ArgumentException )
 			{

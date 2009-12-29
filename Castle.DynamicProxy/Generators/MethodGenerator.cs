@@ -17,19 +17,13 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Contributors;
-
-	using Emitters;
+	using Castle.DynamicProxy.Generators.Emitters;
 
 	public abstract class MethodGenerator : IGenerator<MethodEmitter>
 	{
 		protected MethodInfo MethodToOverride
 		{
 			get { return method.Method; }
-		}
-
-		protected MethodInfo MethodOnTarget
-		{
-			get { return method.MethodOnTarget; }
 		}
 
 		protected MethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod, GetMethodAttributesAndNameDelegate getAttributesAndName)

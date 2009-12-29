@@ -303,7 +303,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (!mapping.ContainsKey(@interface))
 			{
-				SafeAddMapping(@interface, implementer, mapping);
+				AddMappingNoCheck(@interface, implementer, mapping);
 			}
 		}
 
@@ -313,7 +313,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name="implementer"></param>
 		/// <param name="interface"></param>
 		/// <param name="mapping"></param>
-		protected virtual void SafeAddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
+		protected void AddMappingNoCheck(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
 		{
 			mapping.Add(@interface, implementer);
 		}

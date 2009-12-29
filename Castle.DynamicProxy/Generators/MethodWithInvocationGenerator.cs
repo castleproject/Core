@@ -129,7 +129,7 @@ namespace Castle.DynamicProxy.Generators
 			};
 		}
 
-		public FieldReference BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
+		protected FieldReference BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
 		{
 			var methodInterceptors = @class.CreateField(
 				namingScope.GetUniqueName(string.Format("interceptors_{0}", method.Name)),
@@ -141,12 +141,11 @@ namespace Castle.DynamicProxy.Generators
 			return methodInterceptors;
 		}
 
-		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method,
-		                                           LocalReference invocationImplLocal)
+		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationLocal)
 		{
 #if SILVERLIGHT
 			Type[] genericParameters =
-				Castle.Core.Extensions.SilverlightExtensions.FindAll(method.GetGenericArguments(), delegate(Type t) { return t.IsGenericParameter; });
+				Castle.Core.Extensions.SilverlightExtensions.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
 #else
 			Type[] genericParameters = Array.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
 #endif
@@ -160,7 +159,7 @@ namespace Castle.DynamicProxy.Generators
 					new AssignArrayStatement(genericParamsArrayLocal, i, new TypeTokenExpression(genericParameters[i])));
 			}
 			methodEmitter.CodeBuilder.AddStatement(new ExpressionStatement(
-			                                       	new MethodInvocationExpression(invocationImplLocal,
+			                                       	new MethodInvocationExpression(invocationLocal,
 			                                       	                               InvocationMethods.SetGenericMethodArguments,
 			                                       	                               new ReferenceExpression(
 			                                       	                               	genericParamsArrayLocal))));

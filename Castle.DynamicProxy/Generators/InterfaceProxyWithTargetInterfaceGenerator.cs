@@ -16,23 +16,31 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Reflection;
 
+	using Castle.DynamicProxy.Contributors;
+	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Serialization;
 
-	using Contributors;
-	using Emitters;
-
 	public class InterfaceProxyWithTargetInterfaceGenerator : InterfaceProxyWithTargetGenerator
 	{
+
+		public InterfaceProxyWithTargetInterfaceGenerator(ModuleScope scope, Type @interface)
+			: base(scope, @interface)
+		{
+		}
+
 		protected override ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping, Type proxyTargetType, ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces, INamingScope namingScope)
 		{
-			var contributor = new InterfaceProxyWithTargetInterfaceTargetContributor(proxyTargetType,
-			                                                                         AllowChangeTarget,
-			                                                                         namingScope) { Logger = Logger };
+			var contributor = new InterfaceProxyWithTargetInterfaceTargetContributor(
+				proxyTargetType,
+				AllowChangeTarget,
+				namingScope) { Logger = Logger };
 			foreach (var @interface in TypeUtil.GetAllInterfaces(targetType))
 			{
-				SafeAddMapping(@interface, contributor, typeImplementerMapping);
+				contributor.AddInterfaceToProxy(@interface);
+				AddMappingNoCheck(@interface, contributor, typeImplementerMapping);
 			}
 
 			return contributor;
@@ -40,14 +48,12 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(INamingScope namingScope)
 		{
-			return new InterfaceProxyWithoutTargetContributor(
-				namingScope,
-				(@class, method) => new AsTypeReference(@class.GetField("__target"), method.DeclaringType).ToExpression())
-			{ Logger = Logger };
+			return new InterfaceProxyWithoutTargetContributor(namingScope, GetTarget) { Logger = Logger };
 		}
 
-		public InterfaceProxyWithTargetInterfaceGenerator(ModuleScope scope, Type theInterface) : base(scope, theInterface)
+		private Expression GetTarget(ClassEmitter @class, MethodInfo method)
 		{
+			return new AsTypeReference(@class.GetField("__target"), method.DeclaringType).ToExpression();
 		}
 
 		protected override bool AllowChangeTarget
