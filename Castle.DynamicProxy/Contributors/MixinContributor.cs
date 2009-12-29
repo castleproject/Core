@@ -80,7 +80,6 @@ namespace Castle.DynamicProxy.Contributors
 
 		public void AddEmptyInterface(Type @interface)
 		{
-			// TODO: this method is likely to be moved to the interface
 			Debug.Assert(@interface != null, "@interface == null", "Shouldn't be adding empty interfaces...");
 			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
 			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.Contains(@interface)", "Shouldn't be adding same interface twice...");

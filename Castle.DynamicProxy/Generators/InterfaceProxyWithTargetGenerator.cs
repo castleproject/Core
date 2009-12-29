@@ -126,13 +126,12 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces, INamingScope namingScope)
 		{
-			// TODO: this anemic dictionary should be made into a real object
 			IEnumerable<ITypeContributor> contributors;
-			var typeImplementerMapping = GetTypeImplementerMapping(interfaces, proxyTargetType, out contributors,namingScope);
+			var allInterfaces = GetTypeImplementerMapping(interfaces, proxyTargetType, out contributors, namingScope);
 
 			ClassEmitter emitter;
 			FieldReference interceptorsField;
-			Type baseType = Init(typeName, typeImplementerMapping, out emitter, proxyTargetType, out interceptorsField);
+			Type baseType = Init(typeName, out emitter, proxyTargetType, out interceptorsField, allInterfaces);
 
 
 			// Collect methods
@@ -180,11 +179,11 @@ namespace Castle.DynamicProxy.Generators
 			return generatedType;
 		}
 
-		protected virtual Type Init(string typeName, IDictionary<Type, ITypeContributor> typeImplementerMapping, out ClassEmitter emitter, Type proxyTargetType, out FieldReference interceptorsField)
+		protected virtual Type Init(string typeName, out ClassEmitter emitter, Type proxyTargetType, out FieldReference interceptorsField, IEnumerable<Type> interfaces)
 		{
 			Type baseType = ProxyGenerationOptions.BaseTypeForInterfaceProxy;
 
-			emitter = BuildClassEmitter(typeName, baseType, typeImplementerMapping.Keys);
+			emitter = BuildClassEmitter(typeName, baseType, interfaces);
 			CreateOptionsField(emitter);
 			emitter.AddCustomAttributes(ProxyGenerationOptions);
 #if SILVERLIGHT
@@ -224,7 +223,7 @@ namespace Castle.DynamicProxy.Generators
 			get { return false; }
 		}
 
-		protected virtual IDictionary<Type, ITypeContributor> GetTypeImplementerMapping(Type[] interfaces, Type proxyTargetType, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
+		protected virtual IEnumerable<Type> GetTypeImplementerMapping(Type[] interfaces, Type proxyTargetType, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
 			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 			var mixins = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
@@ -291,7 +290,7 @@ namespace Castle.DynamicProxy.Generators
 				mixins,
 				instance
 			};
-			return typeImplementerMapping;
+			return typeImplementerMapping.Keys;
 		}
 
 		protected virtual InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(INamingScope namingScope)

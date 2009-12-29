@@ -89,7 +89,7 @@ namespace Castle.DynamicProxy.Generators
 			var methodInfo = methodToGenerate.Method;
 			var name = methodInfo.DeclaringType.Name + "." + methodInfo.Name;
 			var attributes = MethodAttributes.Virtual |
-							 MethodAttributes.Private |
+							 MethodAttributes.Public |
 							 MethodAttributes.HideBySig |
 							 MethodAttributes.NewSlot |
 							 MethodAttributes.Final;
