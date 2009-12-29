@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators
 			foreach (var @interface in TypeUtil.GetAllInterfaces(targetType))
 			{
 				contributor.AddInterfaceToProxy(@interface);
-				SafeAddMapping(@interface, contributor, interfaceTypeImplementerMapping);
+				AddMappingNoCheck(@interface, contributor, interfaceTypeImplementerMapping);
 			}
 			return contributor;
 		}

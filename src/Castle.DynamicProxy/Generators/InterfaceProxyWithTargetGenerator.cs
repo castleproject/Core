@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Collections.Generic;
 #if !SILVERLIGHT
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Xml.Serialization;
 #endif
@@ -269,7 +270,7 @@ namespace Castle.DynamicProxy.Generators
 				if(ProxyGenerationOptions.MixinData.ContainsMixin(@interface)) continue;
 
 				additionalInterfacesContributor.AddInterfaceToProxy(@interface);
-				SafeAddMapping(@interface, additionalInterfacesContributor, typeImplementerMapping);
+				AddMappingNoCheck(@interface, additionalInterfacesContributor, typeImplementerMapping);
 			}
 
 			// 4. plus special interfaces
@@ -277,7 +278,7 @@ namespace Castle.DynamicProxy.Generators
 			AddMappingForISerializable(typeImplementerMapping, instance);
 			try
 			{
-				SafeAddMapping(typeof(IProxyTargetAccessor), instance, typeImplementerMapping);
+				AddMappingNoCheck(typeof(IProxyTargetAccessor), instance, typeImplementerMapping);
 			}
 			catch (ArgumentException)
 			{
@@ -296,17 +297,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(INamingScope namingScope)
 		{
-			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger }; ;
-		}
-
-		protected override void SafeAddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
-		{
-			base.SafeAddMapping(@interface, implementer, mapping);
-			if(implementer is InterfaceProxyTargetContributor)
-			{
-				// TODO: REMOVE IT!
-				(implementer as InterfaceProxyTargetContributor).AddInterfaceToProxy(@interface);
-			}
+			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
 		}
 
 		protected virtual ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping, Type proxyTargetType, ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces,INamingScope namingScope)
@@ -316,13 +307,20 @@ namespace Castle.DynamicProxy.Generators
 			var proxiedInterfaces = TypeUtil.GetAllInterfaces(targetType);
 			foreach (var @interface in proxiedInterfaces)
 			{
-				SafeAddMapping(@interface, contributor, typeImplementerMapping);
+				contributor.AddInterfaceToProxy(@interface);
+				AddMappingNoCheck(@interface, contributor, typeImplementerMapping);
 			}
 
 			foreach (var @interface in additionalInterfaces)
 			{
-				if (!ImplementedByTarget(targetInterfaces, @interface)) continue;
-				AddMapping(@interface, contributor, typeImplementerMapping);
+				if (!ImplementedByTarget(targetInterfaces, @interface) || proxiedInterfaces.Contains(@interface))
+				{
+					continue;
+				}
+
+				Debug.Assert(!typeImplementerMapping.ContainsKey(@interface), "!typeImplementerMapping.ContainsKey(@interface)");
+				contributor.AddInterfaceToProxy(@interface);
+				AddMappingNoCheck(@interface, contributor, typeImplementerMapping);
 			}
 			return contributor;
 		}

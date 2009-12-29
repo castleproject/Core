@@ -28,17 +28,16 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return true;
 			}
-			else if (x == null || y == null)
+
+			if (x == null || y == null)
 			{
 				return false;
 			}
-			else
-			{
-				return x.Name == y.Name &&
-				       EqualGenericParameters(x, y) &&
-				       EqualSignatureTypes(x.ReturnType, y.ReturnType) &&
-				       EqualParameters(x, y);
-			}
+
+			return x.Name == y.Name &&
+			       EqualGenericParameters(x, y) &&
+			       EqualSignatureTypes(x.ReturnType, y.ReturnType) &&
+			       EqualParameters(x, y);
 		}
 
 		private bool EqualGenericParameters(MethodInfo x, MethodInfo y)
