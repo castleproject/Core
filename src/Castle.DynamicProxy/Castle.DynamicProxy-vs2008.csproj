@@ -96,9 +96,6 @@
     <Compile Include="AllMethodsHook.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ComponentModel\ProxyPropertyDescriptor.cs" />
-    <Compile Include="ComponentModel\ProxyTypeDescriptionProvider.cs" />
-    <Compile Include="ComponentModel\ProxyTypeDescriptor.cs" />
     <Compile Include="CompositionInvocation.cs" />
     <Compile Include="Contributors\CompositeTypeContributor.cs" />
     <Compile Include="Generators\AttributeDisassembler.cs" />

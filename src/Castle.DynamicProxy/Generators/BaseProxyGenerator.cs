@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
@@ -24,7 +23,6 @@ namespace Castle.DynamicProxy.Generators
 
 	using Castle.Core.Interceptor;
 	using Castle.Core.Logging;
-	using Castle.DynamicProxy.ComponentModel;
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
@@ -384,7 +382,6 @@ namespace Castle.DynamicProxy.Generators
 		protected virtual void CreateTypeAttributes(ClassEmitter emitter)
 		{
 			emitter.AddCustomAttributes(ProxyGenerationOptions);
-			emitter.DefineCustomAttribute<TypeDescriptionProviderAttribute>(new object[]{typeof(ProxyTypeDescriptionProvider)});
 #if !SILVERLIGHT
 			emitter.DefineCustomAttribute<XmlIncludeAttribute>(new object[] { targetType });
 #endif
