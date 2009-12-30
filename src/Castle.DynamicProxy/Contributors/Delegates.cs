@@ -16,13 +16,10 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System.Reflection;
 
-	using Castle.Core;
-	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	public delegate MethodEmitter CreateMethodDelegate(string name, MethodAttributes attributes);
-	public delegate Pair<MethodAttributes, string> GetMethodAttributesAndNameDelegate( MethodToGenerate method);
 
 	public delegate Expression GetTargetExpressionDelegate(ClassEmitter @class, MethodInfo method);
 	public delegate Reference GetTargetReferenceDelegate(ClassEmitter @class, MethodInfo method);

@@ -12,30 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Contributors
+namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Reflection;
-	using Castle.DynamicProxy.Generators;
 
-	public class InterfaceMembersCollector : MembersCollector
+	public abstract class MetaTypeElement
 	{
-		public InterfaceMembersCollector(Type @interface)
-			: base(@interface)
-		{
+		protected readonly Type sourceType;
 
+		protected MetaTypeElement(Type sourceType)
+		{
+			this.sourceType = sourceType;
 		}
 
-		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
+		internal bool CanBeImplementedExplicitly
 		{
-			if (!IsAccessible(method))
+			get
 			{
-				return null;
+				return sourceType != null && sourceType.IsInterface;
 			}
-
-			var proxyable = AcceptMethod(method, false, hook);
-			return new MetaMethod(method, method, isStandalone, proxyable, false);
 		}
 
+		internal abstract void SwitchToExplicitImplementation();
 	}
 }

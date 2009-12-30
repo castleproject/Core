@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Serialization;
@@ -44,11 +45,11 @@ namespace Castle.DynamicProxy.Generators
 		{
 			IEnumerable<ITypeContributor> contributors;
 			var allInterfaces = GetTypeImplementerMapping(interfaces, targetType, out contributors,namingScope);
-			
+			var model = new MetaType(typeName, ProxyGenerationOptions.BaseTypeForInterfaceProxy, allInterfaces);
 			// collect elements
 			foreach (var contributor in contributors)
 			{
-				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook);
+				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook,model);
 			}
 
 			ProxyGenerationOptions.Hook.MethodsInspected();

@@ -193,18 +193,20 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-        public void Should_implement_all_interfaces_explicitly()
-        {
-            Type type = generator.CreateInterfaceProxyWithoutTarget(typeof (IIdenticalOne), new[] {typeof (IIdenticalTwo)}).GetType();
-			MethodInfo method = type.GetMethod("IIdenticalOne.Foo", BindingFlags.Instance | BindingFlags.Public);
-            Assert.IsNotNull(method);
-            MethodInfo method2 = type.GetMethod("IIdenticalTwo.Foo", BindingFlags.Instance | BindingFlags.Public);
-            Assert.IsNotNull(method2);
-        }
-
-	    private ParameterInfo[] GetMyTestMethodParams(Type type)
+		public void Should_implement_explicitly_duplicate_interface_members()
 		{
-			MethodInfo methodInfo = type.GetMethod("IMyInterface.MyTestMethod", BindingFlags.Instance | BindingFlags.Public);
+			Type type =
+				generator.CreateInterfaceProxyWithoutTarget(typeof(IIdenticalOne), new[] { typeof(IIdenticalTwo) }).GetType();
+			MethodInfo method = type.GetMethod("Foo", BindingFlags.Instance | BindingFlags.Public);
+			Assert.IsNotNull(method);
+			Assert.AreSame(method, type.GetInterfaceMap(typeof(IIdenticalOne)).TargetMethods[0]);
+			MethodInfo method2 = type.GetMethod("IIdenticalTwo.Foo", BindingFlags.Instance | BindingFlags.Public);
+			Assert.IsNotNull(method2);
+		}
+
+		private ParameterInfo[] GetMyTestMethodParams(Type type)
+		{
+			MethodInfo methodInfo = type.GetMethod("MyTestMethod", BindingFlags.Instance | BindingFlags.Public);
 			return methodInfo.GetParameters();
 		}
 	}

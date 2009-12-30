@@ -22,8 +22,8 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		private readonly GetTargetReferenceDelegate getTargetReference;
 
-		public ForwardingMethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod, GetTargetReferenceDelegate getTargetReference)
-			: base(method, createMethod, GeneratorUtil.ObtainInterfaceMethodAttributes)
+		public ForwardingMethodGenerator(MetaMethod method, CreateMethodDelegate createMethod, GetTargetReferenceDelegate getTargetReference)
+			: base(method, createMethod)
 		{
 			this.getTargetReference = getTargetReference;
 		}

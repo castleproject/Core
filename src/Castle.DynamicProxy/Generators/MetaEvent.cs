@@ -15,30 +15,43 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Diagnostics;
 	using System.Reflection;
+
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public class EventToGenerate
+	public class MetaEvent : MetaTypeElement, IEquatable<MetaEvent>
 	{
-		private readonly string name;
+		private string name;
 		private readonly Type type;
 		private EventEmitter emitter;
-		private readonly MethodToGenerate adder;
-		private readonly MethodToGenerate remover;
+		private readonly MetaMethod adder;
+		private readonly MetaMethod remover;
 
-		public bool Equals(EventToGenerate other)
+		public bool Equals(MetaEvent other)
 		{
 			if (ReferenceEquals(null, other))
 			{
 				return false;
 			}
+
 			if (ReferenceEquals(this, other))
 			{
 				return true;
 			}
-			return Equals(other.adder.Method, adder.Method) && Equals(other.remover.Method, remover.Method) && Equals(other.Attributes, Attributes);
+
+			if (!type.Equals(other.type))
+			{
+				return false;
+			}
+
+			if (!StringComparer.OrdinalIgnoreCase.Equals(name, other.name))
+			{
+				return false;
+			}
+
+			return true;
 		}
+
 
 		public override bool Equals(object obj)
 		{
@@ -50,11 +63,11 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return true;
 			}
-			if (obj.GetType() != typeof(EventToGenerate))
+			if (obj.GetType() != typeof(MetaEvent))
 			{
 				return false;
 			}
-			return Equals((EventToGenerate) obj);
+			return Equals((MetaEvent)obj);
 		}
 
 		public override int GetHashCode()
@@ -69,14 +82,16 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="EventToGenerate"/> class.
+		/// Initializes a new instance of the <see cref="MetaEvent"/> class.
 		/// </summary>
 		/// <param name="name">The name.</param>
-		/// <param name="type">The type.</param>
+		/// <param name="declaringType">Type declaring the original event being overriten, or null.</param>
+		/// <param name="eventDelegateType"></param>
 		/// <param name="adder">The add method.</param>
 		/// <param name="remover">The remove method.</param>
 		/// <param name="attributes">The attributes.</param>
-		public EventToGenerate(string name, Type type, MethodToGenerate adder, MethodToGenerate remover, EventAttributes attributes)
+		public MetaEvent(string name, Type declaringType, Type eventDelegateType, MetaMethod adder, MetaMethod remover, EventAttributes attributes)
+			: base(declaringType)
 		{
 			if (adder == null)
 			{
@@ -86,53 +101,53 @@ namespace Castle.DynamicProxy.Generators
 			{
 				throw new ArgumentNullException("remover");
 			}
-			this.name = GetName(name, adder.Method.DeclaringType);
-			this.type = type;
+			this.name = name;
+			this.type = eventDelegateType;
 			this.adder = adder;
 			this.remover = remover;
 			this.Attributes = attributes;
-		}
-
-		private string GetName(string name, Type declaringType)
-		{
-			if (!declaringType.IsInterface)
-			{
-				return name;
-			}
-			return string.Format("{0}.{1}", declaringType, name);
 		}
 
 		public EventAttributes Attributes { get; private set; }
 
 		public EventEmitter Emitter
 		{
-			get {
-				if(emitter==null)
-					throw new InvalidOperationException("Emitter is not initialized. You have to initialize it first using 'BuildEventEmitter' method");
-				return emitter;
+			get
+			{
+				if (emitter != null)
+				{
+					return emitter;
+				}
+
+				throw new InvalidOperationException(
+					"Emitter is not initialized. You have to initialize it first using 'BuildEventEmitter' method");
 			}
 		}
 
-		public MethodToGenerate Adder
+		public MetaMethod Adder
 		{
-			get {
-				return adder;
-			}
+			get { return adder; }
 		}
 
-		public MethodToGenerate Remover
+		public MetaMethod Remover
 		{
-			get {
-				return remover;
-			}
+			get { return remover; }
 		}
 
 		public void BuildEventEmitter(ClassEmitter classEmitter)
 		{
-			if(emitter!=null)
+			if (emitter != null)
+			{
 				throw new InvalidOperationException();
-
+			}
 			emitter = classEmitter.CreateEvent(name, Attributes, type);
+		}
+
+		internal override void SwitchToExplicitImplementation()
+		{
+			name = string.Format("{0}.{1}", sourceType.Name, name);
+			adder.SwitchToExplicitImplementation();
+			remover.SwitchToExplicitImplementation();
 		}
 	}
 }

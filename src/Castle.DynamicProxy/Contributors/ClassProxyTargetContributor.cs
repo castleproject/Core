@@ -35,13 +35,13 @@ namespace Castle.DynamicProxy.Contributors
 			this.methodsToSkip = methodsToSkip;
 		}
 
-		public override void CollectElementsToProxy(IProxyGenerationHook hook)
+		protected override IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook)
 		{
 			Debug.Assert(hook != null, "hook != null");
 
 			var targetItem = new ClassMembersCollector(targetType) { Logger = Logger };
 			targetItem.CollectMembersToProxy(hook);
-			targets.Add(targetItem);
+			yield return targetItem;
 
 			foreach (var @interface in interfaces)
 			{
@@ -49,19 +49,18 @@ namespace Castle.DynamicProxy.Contributors
 				                                                true,
 				                                                targetType.GetInterfaceMap(@interface)) { Logger = Logger };
 				item.CollectMembersToProxy(hook);
-				targets.Add(item);
+				yield return item;
 			}
 		}
 
-		protected override MethodGenerator GetMethodGenerator(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
+		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
 		{
 			if (methodsToSkip.Contains(method.Method)) return null;
 
 			if (!method.Proxyable)
 			{
 				return new MinimialisticMethodGenerator(method,
-				                                        createMethod,
-				                                        GeneratorUtil.ObtainClassMethodAttributes);
+				                                        createMethod);
 			}
 
 			var invocation = GetInvocationType(method, @class, options);
@@ -70,17 +69,16 @@ namespace Castle.DynamicProxy.Contributors
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
 			                                         (c, m) => new TypeTokenExpression(targetType),
-			                                         createMethod,
-			                                         GeneratorUtil.ObtainClassMethodAttributes);
+			                                         createMethod);
 		}
 
-		private Type GetInvocationType(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options)
+		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
 		{
 			// NOTE: No caching since invocation is tied to this specific proxy type via its invocation method
 			return BuildInvocationType(method, @class, options);
 		}
 
-		private Type BuildInvocationType(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options)
+		private Type BuildInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
 		{
 			var methodInfo = method.Method;
 			if (!method.HasTarget)

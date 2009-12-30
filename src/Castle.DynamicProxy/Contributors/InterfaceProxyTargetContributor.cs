@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 
 	using Castle.Core.Interceptor;
@@ -33,7 +34,7 @@ namespace Castle.DynamicProxy.Contributors
 			this.canChangeTarget = canChangeTarget;
 		}
 
-		public override void CollectElementsToProxy(IProxyGenerationHook hook)
+		protected override IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook)
 		{
 			Debug.Assert(hook != null, "hook != null");
 
@@ -42,7 +43,7 @@ namespace Castle.DynamicProxy.Contributors
 				var item = GetCollectorForInterface(@interface);
 				item.Logger = Logger;
 				item.CollectMembersToProxy(hook);
-				targets.Add(item);
+				yield return item;
 			}
 		}
 
@@ -51,7 +52,7 @@ namespace Castle.DynamicProxy.Contributors
 			return new InterfaceMembersOnClassCollector(@interface, false, proxyTargetType.GetInterfaceMap(@interface));
 		}
 
-		protected override MethodGenerator GetMethodGenerator(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
+		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
 		{
 			if (!method.Proxyable)
 			{
@@ -66,11 +67,10 @@ namespace Castle.DynamicProxy.Contributors
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
 			                                         (c, m) => c.GetField("__target").ToExpression(),
-			                                         createMethod,
-			                                         GeneratorUtil.ObtainInterfaceMethodAttributes);
+			                                         createMethod);
 		}
 
-		private Type GetInvocationType(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options)
+		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
 		{
 			var scope = @class.ModuleScope;
 
