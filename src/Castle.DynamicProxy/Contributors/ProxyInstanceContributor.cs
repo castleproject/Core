@@ -17,16 +17,14 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 #if !SILVERLIGHT
 	using System.Runtime.Serialization;
-
-	using Castle.DynamicProxy.Generators;
-
-	using Serialization;
 #endif
-	using Core.Interceptor;
-	using Generators.Emitters;
-	using Generators.Emitters.CodeBuilders;
-	using Generators.Emitters.SimpleAST;
-	using Tokens;
+	using Castle.Core.Interceptor;
+	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Serialization;
+	using Castle.DynamicProxy.Tokens;
 
 	public abstract class ProxyInstanceContributor : ITypeContributor
 	{
