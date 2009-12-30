@@ -42,7 +42,6 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces, INamingScope namingScope)
 		{
-			// TODO: this anemic dictionary should be made into a real object
 			IEnumerable<ITypeContributor> contributors;
 			var allInterfaces = GetTypeImplementerMapping(interfaces, targetType, out contributors,namingScope);
 			
@@ -73,7 +72,6 @@ namespace Castle.DynamicProxy.Generators
 				if (contributor is MixinContributor)
 				{
 					mixinFieldsList.AddRange((contributor as MixinContributor).Fields);
-
 				}
 			}
 

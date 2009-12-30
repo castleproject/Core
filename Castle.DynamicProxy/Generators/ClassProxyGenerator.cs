@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Reflection;
 #if !SILVERLIGHT
 	using System.Xml.Serialization;
@@ -107,15 +108,10 @@ namespace Castle.DynamicProxy.Generators
 			ProxyGenerationOptions.Hook.MethodsInspected();
 
 			var emitter = BuildClassEmitter(newName, targetType, implementedInterfaces);
-			CreateOptionsField(emitter);
-			CreateSelectorField(emitter);
-			emitter.AddCustomAttributes(ProxyGenerationOptions);
 
-#if !SILVERLIGHT
-			emitter.DefineCustomAttribute<XmlIncludeAttribute>(new object[] {targetType});
-#endif
-			// Fields generations
-			FieldReference interceptorsField = CreateInterceptorsField(emitter);
+			CreateFields(emitter);
+			CreateTypeAttributes(emitter);
+
 
 			// Constructor
 			var cctor = GenerateStaticConstructor(emitter);
@@ -133,6 +129,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// constructor arguments
+			var interceptorsField = emitter.GetField("__interceptors");
 			constructorArguments.Add(interceptorsField);
 			var selector = emitter.GetField("__selector");
 			if (selector != null)

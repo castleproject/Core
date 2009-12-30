@@ -41,8 +41,6 @@ namespace Castle.DynamicProxy
 		/// any non-virtual member of a type that has been requested to be proxied, and if
 		/// appropriate - throw an exception to notify the caller.
 		/// </remarks>
-		// TODO: At some point rename this from Member to Method, and change the parameter to match the
-		// other methods of this interface.
 		void NonVirtualMemberNotification(Type type, MemberInfo memberInfo);
 
 		/// <summary>

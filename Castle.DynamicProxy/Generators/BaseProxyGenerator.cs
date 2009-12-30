@@ -16,19 +16,22 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
+
 	using Castle.Core.Interceptor;
 	using Castle.Core.Logging;
+	using Castle.DynamicProxy.ComponentModel;
+	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 #if SILVERLIGHT
 	using Castle.DynamicProxy.SilverlightExtensions;
 #endif
-	using Contributors;
 
 	/// <summary>
 	/// Base class that exposes the common functionalities
@@ -358,24 +361,40 @@ namespace Castle.DynamicProxy.Generators
 			throw new ProxyGenerationException("This is a DynamicProxy2 error: " + message);
 		}
 
-		protected FieldReference CreateInterceptorsField(ClassEmitter emitter)
+		protected void CreateInterceptorsField(ClassEmitter emitter)
 		{
 			var interceptorsField = emitter.CreateField("__interceptors", typeof (IInterceptor[]));
 
 #if !SILVERLIGHT
 			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(interceptorsField);
 #endif
-			return interceptorsField;
 		}
 
-		protected FieldReference CreateSelectorField(ClassEmitter emitter)
+		protected void CreateSelectorField(ClassEmitter emitter)
 		{
-			if(ProxyGenerationOptions.Selector== null)
+			if (ProxyGenerationOptions.Selector == null)
 			{
-				return null;
+				return;
 			}
 
-			return emitter.CreateField("__selector", typeof(IInterceptorSelector));
+			emitter.CreateField("__selector", typeof(IInterceptorSelector));
+			return;
+		}
+
+		protected virtual void CreateTypeAttributes(ClassEmitter emitter)
+		{
+			emitter.AddCustomAttributes(ProxyGenerationOptions);
+			emitter.DefineCustomAttribute<TypeDescriptionProviderAttribute>(new object[]{typeof(ProxyTypeDescriptionProvider)});
+#if !SILVERLIGHT
+			emitter.DefineCustomAttribute<XmlIncludeAttribute>(new object[] { targetType });
+#endif
+		}
+
+		protected virtual void CreateFields(ClassEmitter emitter)
+		{
+			CreateOptionsField(emitter);
+			CreateSelectorField(emitter);
+			CreateInterceptorsField(emitter);
 		}
 	}
 }
