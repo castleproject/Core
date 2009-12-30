@@ -184,32 +184,31 @@ namespace Castle.DynamicProxy.Generators
 			Type baseType = ProxyGenerationOptions.BaseTypeForInterfaceProxy;
 
 			emitter = BuildClassEmitter(typeName, baseType, interfaces);
-			CreateOptionsField(emitter);
-			emitter.AddCustomAttributes(ProxyGenerationOptions);
-#if SILVERLIGHT
-#warning XmlIncludeAttribute is in silverlight, do we want to explore this?
-#else
-			emitter.DefineCustomAttribute<XmlIncludeAttribute>(new object[] {targetType});
-			emitter.DefineCustomAttribute<SerializableAttribute>();
-#endif
 
-			// Fields generations
-			interceptorsField = CreateInterceptorsField(emitter);
+			CreateFields(emitter, proxyTargetType);
+			CreateTypeAttributes(emitter);
 
-			CreateTargetField(emitter, proxyTargetType);
-			CreateSelectorField(emitter);
-
+			interceptorsField = emitter.GetField("__interceptors");
 			return baseType;
 		}
 
-		private void CreateTargetField(ClassEmitter emitter, Type proxyTargetType)
+		private void CreateFields(ClassEmitter emitter, Type proxyTargetType)
 		{
+			base.CreateFields(emitter);
 			targetField = emitter.CreateField("__target", proxyTargetType);
 
 #if SILVERLIGHT
 #warning XmlIncludeAttribute is in silverlight, do we want to explore this?
 #else
 			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(targetField);
+#endif
+		}
+
+		protected override void CreateTypeAttributes(ClassEmitter emitter)
+		{
+			base.CreateTypeAttributes(emitter);
+#if (!SILVERLIGHT)
+			emitter.DefineCustomAttribute<SerializableAttribute>();
 #endif
 		}
 

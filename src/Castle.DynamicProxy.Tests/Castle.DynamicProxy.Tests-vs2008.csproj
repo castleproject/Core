@@ -232,6 +232,7 @@
     <Compile Include="ProxyKind.cs" />
     <Compile Include="ProxyNothingHook.cs" />
     <Compile Include="ProxyTargetAccessorHandlingTestCase.cs" />
+    <Compile Include="ReflectionOverProxyTestCase.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
     <Compile Include="SerializableClassTestCase.cs" />
     <Compile Include="InternalsVisibleTo.cs" />
