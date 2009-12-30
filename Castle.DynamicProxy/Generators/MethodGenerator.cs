@@ -26,21 +26,18 @@ namespace Castle.DynamicProxy.Generators
 			get { return method.Method; }
 		}
 
-		protected MethodGenerator(MethodToGenerate method, CreateMethodDelegate createMethod, GetMethodAttributesAndNameDelegate getAttributesAndName)
+		protected MethodGenerator(MetaMethod method, CreateMethodDelegate createMethod)
 		{
 			this.method = method;
 			this.createMethod = createMethod;
-			this.getAttributesAndName = getAttributesAndName;
 		}
 
-		private readonly MethodToGenerate method;
+		private readonly MetaMethod method;
 		private readonly CreateMethodDelegate createMethod;
-		private readonly GetMethodAttributesAndNameDelegate getAttributesAndName;
 
 		public MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
-			var attributesAndName = getAttributesAndName(method);
-			var methodEmitter = createMethod(attributesAndName.Second, attributesAndName.First);
+			var methodEmitter = createMethod(method.Name, method.Attributes);
 			methodEmitter.CopyParametersAndReturnTypeFrom(MethodToOverride, @class);
 			var proxiedMethod = BuildProxiedMethodBody(methodEmitter, @class, options, namingScope);
 

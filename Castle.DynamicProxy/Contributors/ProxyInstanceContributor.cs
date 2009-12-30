@@ -17,6 +17,9 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 #if !SILVERLIGHT
 	using System.Runtime.Serialization;
+
+	using Castle.DynamicProxy.Generators;
+
 	using Serialization;
 #endif
 	using Core.Interceptor;
@@ -173,7 +176,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected abstract void CustomizeGetObjectData(AbstractCodeBuilder builder, ArgumentReference serializationInfo, ArgumentReference streamingContext, ClassEmitter emitter);
 #endif
-		public void CollectElementsToProxy(IProxyGenerationHook hook)
+		public void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
 		{
 		}
 	}

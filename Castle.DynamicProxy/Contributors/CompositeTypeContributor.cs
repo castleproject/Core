@@ -26,8 +26,10 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		protected readonly INamingScope namingScope;
 		protected readonly ICollection<Type> interfaces = new List<Type>();
-		protected readonly ICollection<MembersCollector> targets = new List<MembersCollector>();
 		private ILogger logger = NullLogger.Instance;
+		private readonly ICollection<MetaProperty> properties = new TypeElementCollection<MetaProperty>();
+		private readonly ICollection<MetaEvent> events = new TypeElementCollection<MetaEvent>();
+		private readonly ICollection<MetaMethod> methods = new TypeElementCollection<MetaMethod>();
 
 		protected CompositeTypeContributor(INamingScope namingScope)
 		{
@@ -40,35 +42,55 @@ namespace Castle.DynamicProxy.Contributors
 			set { logger = value; }
 		}
 
-		public abstract void CollectElementsToProxy(IProxyGenerationHook hook);
+		public void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
+		{
+			foreach (var collector in CollectElementsToProxyInternal(hook))
+			{
+				foreach (var method in collector.Methods)
+				{
+					model.AddMethod(method);
+					methods.Add(method);
+				}
+				foreach (var @event in collector.Events)
+				{
+					model.AddEvent(@event);
+					events.Add(@event);
+				}
+				foreach (var property in collector.Properties)
+				{
+					model.AddProperty(property);
+					properties.Add(property);
+				}
+			}
+		}
+
+		protected abstract IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook);
 
 		public virtual void Generate(ClassEmitter @class, ProxyGenerationOptions options)
 		{
-			foreach (var target in targets)
+			foreach (var method in methods)
 			{
-				foreach (var method in target.Methods)
+				if (!method.Standalone)
 				{
-					if (!method.Standalone)
-					{
-						continue;
-					}
-
-					ImplementMethod(method,
-					                @class,
-					                options,
-					                @class.CreateMethod);
+					continue;
 				}
 
-				foreach (var property in target.Properties)
-				{
-					ImplementProperty(@class, property, options);
-				}
-
-				foreach (var @event in target.Events)
-				{
-					ImplementEvent(@class, @event, options);
-				}
+				ImplementMethod(method,
+				                @class,
+				                options,
+				                @class.CreateMethod);
 			}
+
+			foreach (var property in properties)
+			{
+				ImplementProperty(@class, property, options);
+			}
+
+			foreach (var @event in events)
+			{
+				ImplementEvent(@class, @event, options);
+			}
+
 		}
 
 		public void AddInterfaceToProxy(Type @interface)
@@ -81,7 +103,7 @@ namespace Castle.DynamicProxy.Contributors
 			interfaces.Add(@interface);
 		}
 
-		private void ImplementEvent(ClassEmitter emitter, EventToGenerate @event, ProxyGenerationOptions options)
+		private void ImplementEvent(ClassEmitter emitter, MetaEvent @event, ProxyGenerationOptions options)
 		{
 			@event.BuildEventEmitter(emitter);
 			ImplementMethod(@event.Adder, emitter, options, @event.Emitter.CreateAddMethod);
@@ -89,7 +111,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		}
 
-		private void ImplementProperty(ClassEmitter emitter, PropertyToGenerate property, ProxyGenerationOptions options)
+		private void ImplementProperty(ClassEmitter emitter, MetaProperty property, ProxyGenerationOptions options)
 		{
 			property.BuildPropertyEmitter(emitter);
 			if (property.CanRead)
@@ -106,10 +128,10 @@ namespace Castle.DynamicProxy.Contributors
 			}
 		}
 
-		protected abstract MethodGenerator GetMethodGenerator(MethodToGenerate method, ClassEmitter @class,
+		protected abstract MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
 		                                           ProxyGenerationOptions options, CreateMethodDelegate createMethod);
 
-		private void ImplementMethod(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options,
+		private void ImplementMethod(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options,
 		                                        CreateMethodDelegate createMethod)
 		{
 			{

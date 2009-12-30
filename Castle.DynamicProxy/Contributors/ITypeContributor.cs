@@ -14,6 +14,8 @@
 
 namespace Castle.DynamicProxy.Contributors
 {
+	using Castle.DynamicProxy.Generators;
+
 	using Generators.Emitters;
 
 	/// <summary>
@@ -21,7 +23,7 @@ namespace Castle.DynamicProxy.Contributors
 	/// </summary>
 	public interface ITypeContributor
 	{
-		void CollectElementsToProxy(IProxyGenerationHook hook);
+		void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model);
 		void Generate(ClassEmitter @class, ProxyGenerationOptions options);
 	}
 }

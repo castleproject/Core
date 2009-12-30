@@ -15,7 +15,7 @@ namespace Castle.DynamicProxy.Contributors
 			this.map = map;
 		}
 
-		protected override MethodToGenerate GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
+		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
 			if (!IsAccessible(method))
 			{
@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Contributors
 			var methodOnTarget = GetMethodOnTarget(method);
 
 			var proxyable = AcceptMethod(method, onlyProxyVirtual, hook);
-			return new MethodToGenerate(method, methodOnTarget, isStandalone, proxyable, methodOnTarget.IsPrivate == false);
+			return new MetaMethod(method, methodOnTarget, isStandalone, proxyable, methodOnTarget.IsPrivate == false);
 		}
 
 		private MethodInfo GetMethodOnTarget(MethodInfo method)

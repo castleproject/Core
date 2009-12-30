@@ -95,19 +95,20 @@ namespace Castle.DynamicProxy.Generators
 			return proxyType;
 		}
 
-		protected virtual Type GenerateType(string newName, Type[] interfaces, INamingScope namingScope)
+		protected virtual Type GenerateType(string name, Type[] interfaces, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
 			var implementedInterfaces = GetTypeImplementerMapping(interfaces, out contributors, namingScope);
 
+			var model = new MetaType(name,targetType,implementedInterfaces);
 			// Collect methods
 			foreach (var contributor in contributors)
 			{
-				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook);
+				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook, model);
 			}
 			ProxyGenerationOptions.Hook.MethodsInspected();
 
-			var emitter = BuildClassEmitter(newName, targetType, implementedInterfaces);
+			var emitter = BuildClassEmitter(name, targetType, implementedInterfaces);
 
 			CreateFields(emitter);
 			CreateTypeAttributes(emitter);

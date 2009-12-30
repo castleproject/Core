@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 
 	using Castle.DynamicProxy.Generators;
@@ -30,24 +31,23 @@ namespace Castle.DynamicProxy.Contributors
 			getTargetExpression = getTarget;
 		}
 
-		public override void CollectElementsToProxy(IProxyGenerationHook hook)
+		protected override IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook)
 		{
 			Debug.Assert(hook != null, "hook != null");
 			foreach (var @interface in interfaces)
 			{
 				var item = new InterfaceMembersCollector(@interface);
 				item.CollectMembersToProxy(hook);
-				targets.Add(item);
+				yield return item;
 			}
 		}
 
-		protected override MethodGenerator GetMethodGenerator(MethodToGenerate method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
+		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
 		{
 			if (!method.Proxyable)
 			{
 				return new MinimialisticMethodGenerator(method,
-														createMethod,
-														GeneratorUtil.ObtainInterfaceMethodAttributes);
+														createMethod);
 			}
 
 			var invocation = GetInvocationType(method, @class, options);
@@ -55,11 +55,10 @@ namespace Castle.DynamicProxy.Contributors
 													 @class.GetField("__interceptors"),
 													 invocation,
 													 getTargetExpression,
-													 createMethod,
-													 GeneratorUtil.ObtainInterfaceMethodAttributes);
+													 createMethod);
 		}
 
-		private Type GetInvocationType(MethodToGenerate method, ClassEmitter emitter, ProxyGenerationOptions options)
+		private Type GetInvocationType(MetaMethod method, ClassEmitter emitter, ProxyGenerationOptions options)
 		{
 			var scope = emitter.ModuleScope;
 			var key = new CacheKey(method.Method, InterfaceInvocationTypeGenerator.BaseType, null, null);

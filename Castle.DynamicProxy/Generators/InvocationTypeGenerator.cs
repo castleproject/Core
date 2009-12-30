@@ -25,11 +25,11 @@ namespace Castle.DynamicProxy.Generators
 	public abstract class InvocationTypeGenerator : IGenerator<AbstractTypeEmitter>
 	{
 		private readonly Type targetType;
-		private readonly MethodToGenerate method;
+		private readonly MetaMethod method;
 		private readonly MethodInfo callback;
 		private readonly bool canChangeTarget;
 
-		protected InvocationTypeGenerator(Type targetType, MethodToGenerate method, MethodInfo callback, bool canChangeTarget)
+		protected InvocationTypeGenerator(Type targetType, MetaMethod method, MethodInfo callback, bool canChangeTarget)
 		{
 			this.targetType = targetType;
 			this.method = method;

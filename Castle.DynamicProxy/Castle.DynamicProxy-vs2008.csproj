@@ -266,7 +266,7 @@
     <Compile Include="Generators\Emitters\StrongNameUtil.cs" />
     <Compile Include="Generators\Emitters\TypeConstructorEmitter.cs" />
     <Compile Include="Generators\Emitters\TypeUtil.cs" />
-    <Compile Include="Generators\EventToGenerate.cs" />
+    <Compile Include="Generators\MetaEvent.cs" />
     <Compile Include="Generators\GeneratorException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -284,12 +284,15 @@
     <Compile Include="Generators\MethodGenerator.cs" />
     <Compile Include="Generators\MethodSignatureComparer.cs" />
     <Compile Include="Generators\MethodFinder.cs" />
-    <Compile Include="Generators\MethodToGenerate.cs" />
+    <Compile Include="Generators\MetaMethod.cs" />
     <Compile Include="Generators\MethodWithInvocationGenerator.cs" />
     <Compile Include="Generators\NamingScope.cs" />
-    <Compile Include="Generators\PropertyToGenerate.cs" />
+    <Compile Include="Generators\MetaProperty.cs" />
     <Compile Include="Contributors\MembersCollector.cs" />
     <Compile Include="Contributors\ProxyInstanceContributor.cs" />
+    <Compile Include="Generators\MetaTypeElement.cs" />
+    <Compile Include="Generators\TypeElementCollection.cs" />
+    <Compile Include="Generators\MetaType.cs" />
     <Compile Include="InheritanceInvocation.cs" />
     <Compile Include="InternalsHelper.cs" />
     <Compile Include="InvalidMixinConfigurationException.cs" />

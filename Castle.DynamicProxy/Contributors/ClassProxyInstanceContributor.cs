@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System.Reflection;
 	using System.Runtime.Serialization;
 
+	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;

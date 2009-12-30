@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 		}
 
-		protected override MethodToGenerate GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
+		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
 			if (!IsAccessible(method))
 			{
@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Contributors
 				return null;
 			}
 
-			return new MethodToGenerate(method, method, isStandalone, accepted, !method.IsAbstract);
+			return new MetaMethod(method, method, isStandalone, accepted, !method.IsAbstract);
 		}
 	}
 }

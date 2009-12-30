@@ -16,49 +16,29 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public class PropertyToGenerate
+	public class MetaProperty : MetaTypeElement, IEquatable<MetaProperty>
 	{
-		private readonly string name;
+		private string name;
 		private readonly Type type;
-		private readonly MethodToGenerate getter;
-		private readonly MethodToGenerate setter;
+		private readonly MetaMethod getter;
+		private readonly MetaMethod setter;
 		private readonly PropertyAttributes attributes;
 		private readonly IEnumerable<CustomAttributeBuilder> customAttributes;
 		private PropertyEmitter emitter;
 
-		public PropertyToGenerate(string name, Type type, MethodToGenerate getter, MethodToGenerate setter, PropertyAttributes attributes, IEnumerable<CustomAttributeBuilder> customAttributes)
+		public MetaProperty(string name, Type propertyType, Type declaringType, MetaMethod getter, MetaMethod setter, PropertyAttributes attributes, IEnumerable<CustomAttributeBuilder> customAttributes)
+			:base(declaringType)
 		{
-			this.name = GetName(name,getter,setter);
-			this.type = type;
+			this.name = name;
+			this.type = propertyType;
 			this.getter = getter;
 			this.setter = setter;
 			this.attributes = attributes;
 			this.customAttributes = customAttributes;
-		}
-
-		private string GetName(string name, MethodToGenerate getter, MethodToGenerate setter)
-		{
-			Type declaringType = null;
-			if (getter != null)
-			{
-				declaringType = getter.Method.DeclaringType;
-			}
-			else if (setter != null)
-			{
-				declaringType = setter.Method.DeclaringType;
-			}
-
-			Debug.Assert(declaringType != null);
-			if (!declaringType.IsInterface)
-			{
-				return name;
-			}
-			return string.Format("{0}.{1}", declaringType, name);
 		}
 
 		public bool CanRead
@@ -105,27 +85,39 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		public MethodToGenerate Getter
+		public MetaMethod Getter
 		{
 			get { return getter; }
 		}
 
-		public MethodToGenerate Setter
+		public MetaMethod Setter
 		{
 			get { return setter; }
 		}
 
-		public bool Equals(PropertyToGenerate other)
+		public bool Equals(MetaProperty other)
 		{
 			if (ReferenceEquals(null, other))
 			{
 				return false;
 			}
+
 			if (ReferenceEquals(this, other))
 			{
 				return true;
 			}
-			return Equals(other.GetMethod, GetMethod) && Equals(other.SetMethod, SetMethod);
+
+			if (!type.Equals(other.type))
+			{
+				return false;
+			}
+
+			if(!StringComparer.OrdinalIgnoreCase.Equals(name,other.name))
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		public override bool Equals(object obj)
@@ -138,11 +130,11 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return true;
 			}
-			if (obj.GetType() != typeof(PropertyToGenerate))
+			if (obj.GetType() != typeof(MetaProperty))
 			{
 				return false;
 			}
-			return Equals((PropertyToGenerate) obj);
+			return Equals((MetaProperty) obj);
 		}
 
 		public override int GetHashCode()
@@ -162,6 +154,19 @@ namespace Castle.DynamicProxy.Generators
 			foreach (var attribute in customAttributes)
 			{
 				emitter.DefineCustomAttribute(attribute);
+			}
+		}
+
+		internal override void SwitchToExplicitImplementation()
+		{
+			name = string.Format("{0}.{1}", sourceType.Name, name);
+			if(setter!=null)
+			{
+				setter.SwitchToExplicitImplementation();
+			}
+			if(getter!=null)
+			{
+				getter.SwitchToExplicitImplementation();
 			}
 		}
 	}

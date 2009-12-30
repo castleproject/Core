@@ -26,9 +26,9 @@ namespace Castle.DynamicProxy.Contributors
 
 		private ILogger logger = NullLogger.Instance;
 		private IList<MethodInfo> checkedMethods = new List<MethodInfo>();
-		private readonly IDictionary<PropertyInfo, PropertyToGenerate> properties = new Dictionary<PropertyInfo, PropertyToGenerate>();
-		private readonly IDictionary<EventInfo, EventToGenerate> events = new Dictionary<EventInfo, EventToGenerate>();
-		private readonly IDictionary<MethodInfo, MethodToGenerate> methodsToProxy = new Dictionary<MethodInfo, MethodToGenerate>();
+		private readonly IDictionary<PropertyInfo, MetaProperty> properties = new Dictionary<PropertyInfo, MetaProperty>();
+		private readonly IDictionary<EventInfo, MetaEvent> events = new Dictionary<EventInfo, MetaEvent>();
+		private readonly IDictionary<MethodInfo, MetaMethod> methods = new Dictionary<MethodInfo, MetaMethod>();
 		private readonly Type type;
 
 		protected MembersCollector(Type type)
@@ -42,17 +42,17 @@ namespace Castle.DynamicProxy.Contributors
 			set { logger = value; }
 		}
 
-		public IEnumerable<MethodToGenerate> Methods
+		public IEnumerable<MetaMethod> Methods
 		{
-			get { return methodsToProxy.Values; }
+			get { return methods.Values; }
 		}
 
-		public IEnumerable<PropertyToGenerate> Properties
+		public IEnumerable<MetaProperty> Properties
 		{
 			get { return properties.Values; }
 		}
 
-		public IEnumerable<EventToGenerate> Events
+		public IEnumerable<MetaEvent> Events
 		{
 			get { return events.Values; }
 		}
@@ -102,8 +102,8 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void AddProperty(PropertyInfo property, IProxyGenerationHook hook)
 		{
-			MethodToGenerate getter = null;
-			MethodToGenerate setter = null;
+			MetaMethod getter = null;
+			MetaMethod setter = null;
 
 			if (property.CanRead)
 			{
@@ -123,20 +123,17 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			var nonInheritableAttributes = AttributeUtil.GetNonInheritableAttributes(property);
-			properties[property] = new PropertyToGenerate(property.Name,
+			properties[property] = new MetaProperty(property.Name,
 			                                              property.PropertyType,
-			                                              getter,
-			                                              setter,
-			                                              PropertyAttributes.None,
-			                                              nonInheritableAttributes);
+														  property.DeclaringType, getter, setter, PropertyAttributes.None, nonInheritableAttributes);
 		}
 
 		private void AddEvent(EventInfo @event, IProxyGenerationHook hook)
 		{
 			MethodInfo addMethod = @event.GetAddMethod(true);
 			MethodInfo removeMethod = @event.GetRemoveMethod(true);
-			MethodToGenerate adder = null;
-			MethodToGenerate remover = null;
+			MetaMethod adder = null;
+			MetaMethod remover = null;
 
 			if (addMethod != null)
 			{
@@ -150,14 +147,11 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (adder == null && remover == null) return;
 
-			events[@event] = new EventToGenerate(@event.Name,
-			                                     @event.EventHandlerType,
-			                                     adder,
-			                                     remover,
-			                                     EventAttributes.None);
+			events[@event] = new MetaEvent(@event.Name,
+												 @event.DeclaringType, @event.EventHandlerType, adder, remover, EventAttributes.None);
 		}
 
-		private MethodToGenerate AddMethod(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
+		private MetaMethod AddMethod(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
 			if (checkedMethods.Contains(method))
 			{
@@ -165,20 +159,20 @@ namespace Castle.DynamicProxy.Contributors
 			}
 			checkedMethods.Add(method);
 
-			if (methodsToProxy.ContainsKey(method))
+			if (methods.ContainsKey(method))
 			{
 				return null;
 			}
 			var methodToGenerate = GetMethodToGenerate(method, hook, isStandalone);
 			if (methodToGenerate != null)
 			{
-				methodsToProxy[method] = methodToGenerate;
+				methods[method] = methodToGenerate;
 			}
 
 			return methodToGenerate;
 		}
 
-		protected abstract MethodToGenerate GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone);
+		protected abstract MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone);
 
 		/// <summary>
 		/// Checks if the method is public or protected.
