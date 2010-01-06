@@ -247,6 +247,21 @@ namespace Castle.Core.Tests
 		}
 
 		[Test]
+		public void Insert1_AfterReplacingHeadWithAddFirst()
+		{
+			LinkedList list = new LinkedList();
+
+			list.Add("2");
+			list.AddFirst("1");
+			list.Insert(1, "x");
+
+			Assert.AreEqual(3, list.Count);
+
+			String[] array = (String[])list.ToArray(typeof(String));
+			Assert.AreEqual("1,x,2", String.Join(",", array));
+		}
+
+		[Test]
 		public void Insert2()
 		{
 			LinkedList list = new LinkedList();
