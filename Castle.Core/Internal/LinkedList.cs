@@ -26,15 +26,12 @@ namespace Castle.Core.Internal
 		private LinkNode internaltail;
 		private int internalcount;
 
-		public LinkedList()
-		{
-		}
-
 		public object Head
 		{
 			get
 			{
 				if (internalhead == null) return null;
+
 				return internalhead.Value;
 			}
 		}
@@ -47,7 +44,9 @@ namespace Castle.Core.Internal
 			}
 			else
 			{
-				internalhead = new LinkNode(value, internalhead, null);
+				var newHead = new LinkNode(value, internalhead, null);
+				internalhead.Previous = newHead;
+				internalhead = newHead;
 			}
 
 			internalcount++;
@@ -61,8 +60,8 @@ namespace Castle.Core.Internal
 			}
 			else
 			{
-				LinkNode p, q;
-				for(p = internalhead; (q = p.Next) != null; p = q) ;
+				LinkNode p;
+				for (p = internalhead; p.Next != null; p = p.Next) ;
 				p.Next = new LinkNode(value, null, p);
 			}
 
@@ -98,9 +97,12 @@ namespace Castle.Core.Internal
 
 		public bool Contains(object value)
 		{
-			if (value == null) throw new ArgumentNullException("value");
+			if (value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
 
-			foreach(object item in this)
+			foreach(var item in this)
 			{
 				if (value.Equals(item))
 				{
@@ -119,7 +121,7 @@ namespace Castle.Core.Internal
 
 		public virtual bool Replace(object old, object value)
 		{
-			LinkNode node = internalhead;
+			var node = internalhead;
 
 			while(node != null)
 			{
@@ -137,11 +139,14 @@ namespace Castle.Core.Internal
 
 		public int IndexOf(object value)
 		{
-			if (value == null) throw new ArgumentNullException("value");
+			if (value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
 
-			int index = -1;
+			var index = -1;
 
-			foreach(object item in this)
+			foreach(var item in this)
 			{
 				index++;
 
@@ -166,8 +171,8 @@ namespace Castle.Core.Internal
 			}
 			else
 			{
-				LinkNode insert = GetNode(index);
-				LinkNode node = new LinkNode(value, insert, insert.Previous);
+				var insert = GetNode(index);
+				var node = new LinkNode(value, insert, insert.Previous);
 				insert.Previous.Next = node;
 				insert.Previous = node;
 				internalcount++;
@@ -186,7 +191,7 @@ namespace Castle.Core.Internal
 		private LinkNode GetNode(int index)
 		{
 			ValidateIndex(index);
-			LinkNode node = internalhead;
+			var node = internalhead;
 			for(int i = 0; i < index; i++)
 			{
 				node = node.Next;
@@ -230,8 +235,7 @@ namespace Castle.Core.Internal
 				}
 				else
 				{
-					LinkNode node = internalhead.Next;
-
+					var node = internalhead.Next;
 					while(node != null)
 					{
 						if (node.Value.Equals(value))
@@ -280,7 +284,7 @@ namespace Castle.Core.Internal
 
 			int index = 0;
 
-			foreach(Object value in this)
+			foreach(var value in this)
 			{
 				array.SetValue(value, index++);
 			}
@@ -318,45 +322,45 @@ namespace Castle.Core.Internal
 #endif
 	internal class LinkNode
 	{
-		private object _value;
-		private LinkNode _next;
-		private LinkNode _prev;
+		private object value;
+		private LinkNode next;
+		private LinkNode previous;
 
 		public LinkNode(object value) : this(value, null, null)
 		{
 		}
 
-		public LinkNode(object value, LinkNode next, LinkNode prev)
+		public LinkNode(object value, LinkNode next, LinkNode previous)
 		{
-			_value = value;
-			_next = next;
-			_prev = prev;
+			this.value = value;
+			this.next = next;
+			this.previous = previous;
 		}
 
 		public LinkNode Next
 		{
-			get { return _next; }
-			set { _next = value; }
+			get { return next; }
+			set { next = value; }
 		}
 
 		public LinkNode Previous
 		{
-			get { return _prev; }
-			set { _prev = value; }
+			get { return previous; }
+			set { previous = value; }
 		}
 
 		public object Value
 		{
-			get { return _value; }
-			set { _value = value; }
+			get { return value; }
+			set { this.value = value; }
 		}
 	}
 
 	internal class LinkedListEnumerator : IEnumerator
 	{
-		private LinkNode internalhead;
-		private LinkNode _current;
-		private bool _isFirst;
+		private readonly LinkNode internalhead;
+		private LinkNode current;
+		private bool isFirst;
 
 		public LinkedListEnumerator(LinkNode node)
 		{
@@ -366,29 +370,29 @@ namespace Castle.Core.Internal
 
 		public void Reset()
 		{
-			_current = internalhead;
-			_isFirst = true;
+			current = internalhead;
+			isFirst = true;
 		}
 
 		public object Current
 		{
-			get { return _current.Value; }
+			get { return current.Value; }
 		}
 
 		public bool MoveNext()
 		{
-			if (_current == null) return false;
+			if (current == null) return false;
 
-			if (!_isFirst)
+			if (!isFirst)
 			{
-				_current = _current.Next;
+				current = current.Next;
 			}
 			else
 			{
-				_isFirst = false;
+				isFirst = false;
 			}
 
-			return _current != null;
+			return current != null;
 		}
 	}
 }
