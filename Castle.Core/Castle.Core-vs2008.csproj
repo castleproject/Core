@@ -156,6 +156,8 @@
     <Compile Include="Resource\UncResource.cs" />
     <Compile Include="Resource\UncResourceFactory.cs" />
     <Compile Include="SilverlightExtensions.cs" />
+    <Compile Include="Smtp\IEmailSender.cs" />
+    <Compile Include="Smtp\DefaultSmtpSender.cs" />
     <Compile Include="StringObjectDictionaryAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
