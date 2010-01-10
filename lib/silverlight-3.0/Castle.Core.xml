@@ -2620,11 +2620,6 @@
             Collection of <see cref="T:Castle.Core.ParameterModel"/>
             </summary>
         </member>
-        <member name="M:Castle.Core.ParameterModelCollection.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Castle.Core.ParameterModelCollection"/> class.
-            </summary>
-        </member>
         <member name="M:Castle.Core.ParameterModelCollection.Add(System.String,System.String)">
             <summary>
             Adds the specified name.
