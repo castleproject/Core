@@ -11,7 +11,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Castle.Services.Logging.Log4netIntegration</AssemblyName>
-    <AssemblyOriginatorKeyFile>..\..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>CastleKey.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Castle.Services.Logging.log4netIntegration.build" />
+    <None Include="CastleKey.snk" />
     <None Include="default.build" />
   </ItemGroup>
   <ItemGroup>
