@@ -99,9 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayConverter.cs" />
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="BindingException.cs">
       <SubType>Code</SubType>
     </Compile>

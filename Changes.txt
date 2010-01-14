@@ -1,3 +1,7 @@
+1.1.1
+==================
+- Updated to Validator 1.1.1, Core 1.2 and DP 2.1.
+
 1.1.0
 ==================
 - Added support for DateTimeOffset per COMP-56
