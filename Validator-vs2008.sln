@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7D27CB27-9407-4445-8E2B-E61AE348B94A}"
 	ProjectSection(SolutionItems) = preProject
 		Changes.txt = Changes.txt
+		..\default.build = ..\default.build
 		Validator.build = Validator.build
 	EndProjectSection
 EndProject

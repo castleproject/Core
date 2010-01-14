@@ -11,6 +11,7 @@
 	<target name="init" depends="common.init">
 		<property name="build.warnmissingdocs" value="true" />
 		<property name="assembly.description" value="Castle Project's implementation of a Validation infrastructure" />
+		<property name="assembly.version" value="1.1.1.0" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="System.Xml.dll" />

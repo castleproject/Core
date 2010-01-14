@@ -1,4 +1,9 @@
-1.1.x
+1.1.1
+=====
+- Include resources in release package.
+- Upgraded Tests to Core 1.2 and DP 2.1.
+
+1.1.0
 =====
 NOTE: Does not recursively inspect properties (COMP-ISSUE-33).
 
