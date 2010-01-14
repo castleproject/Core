@@ -1,12 +1,17 @@
 <Configuration>
   <CodeStyleSettings>
-    <ExternalPath IsNull="False">
-    </ExternalPath>
+    <ExternalPath IsNull="False" />
     <Sharing>SOLUTION</Sharing>
     <AgentSmithCSharpStyleSettings version="1">
       <CodeStyleSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <CustomDictionaries>
-          <Dictionaries />
+          <Dictionaries>
+            <CustomDictionary>
+              <Name>en-US</Name>
+              <CaseSensitive>false</CaseSensitive>
+              <UserWords />
+            </CustomDictionary>
+          </Dictionaries>
         </CustomDictionaries>
         <StringsDictionary>en-US</StringsDictionary>
         <IdentifierDictionary>en-US</IdentifierDictionary>
@@ -813,8 +818,7 @@
 ]]></FileHeader>
     <GenerateMemberBody />
     <Naming2>
-      <ExceptionName IsNull="False">
-      </ExceptionName>
+      <ExceptionName IsNull="False" />
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="MethodPropertyEvent" />
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="TypesAndNamespaces" />
       <PredefinedRule Inspect="True" Prefix="I" Suffix="" Style="AaBb" ElementKind="Interfaces" />
