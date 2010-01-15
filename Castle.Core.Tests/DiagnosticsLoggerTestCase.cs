@@ -17,6 +17,7 @@ namespace Castle.Core.Logging.Tests
 {
 	using System;
 	using System.Diagnostics;
+	using System.Security;
 	using System.Security.Principal;
 
 	using NUnit.Framework;
@@ -49,8 +50,16 @@ namespace Castle.Core.Logging.Tests
 			}
 
 			WindowsPrincipal windowsPrincipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-			if(windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator)==false)
+			try
 			{
+				if (windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator) == false)
+				{
+					Assert.Ignore("This test case only valid when running as admin");
+				}
+			}
+			catch(SecurityException)
+			{
+				// turns out, although undocumented, checking for role can throw SecurityException. Thanks Microsoft.
 				Assert.Ignore("This test case only valid when running as admin");
 			}
 		}
