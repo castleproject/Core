@@ -22,38 +22,22 @@ namespace Castle.Core
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 	public sealed class ComponentProxyBehaviorAttribute : Attribute
 	{
-		private bool useSingleInterfaceProxy;
-		private bool useMarshalByRefProxy;
 		private Type[] additionalInterfaces;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ComponentProxyBehaviorAttribute"/> class.
-		/// </summary>
-		public ComponentProxyBehaviorAttribute()
-		{
-		}
 
 #if !(SILVERLIGHT)
 		/// <summary>
 		/// Gets or sets a value indicating whether the generated 
 		/// interface proxy should inherit from <see cref="MarshalByRefObject"/>.
 		/// </summary>
-		public bool UseMarshalByRefProxy
-		{
-			get { return useMarshalByRefProxy; }
-			set { useMarshalByRefProxy = value; }
-		}
+		public bool UseMarshalByRefProxy { get; set; }
+
 #endif
 
 		/// <summary>
 		/// Determines if the component requires a single interface proxy.
 		/// </summary>
 		/// <value><c>true</c> if the component requires a single interface proxy.</value>
-		public bool UseSingleInterfaceProxy
-		{
-			get { return useSingleInterfaceProxy; }
-			set { useSingleInterfaceProxy = value; }
-		}
+		public bool UseSingleInterfaceProxy { get; set; }
 
 		/// <summary>
 		///  Gets or sets the additional interfaces used during proxy generation.
