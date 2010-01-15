@@ -33,6 +33,7 @@ namespace Castle.Core
 		{
 		}
 
+#if !(SILVERLIGHT)
 		/// <summary>
 		/// Gets or sets a value indicating whether the generated 
 		/// interface proxy should inherit from <see cref="MarshalByRefObject"/>.
@@ -42,6 +43,7 @@ namespace Castle.Core
 			get { return useMarshalByRefProxy; }
 			set { useMarshalByRefProxy = value; }
 		}
+#endif
 
 		/// <summary>
 		/// Determines if the component requires a single interface proxy.
