@@ -14,8 +14,8 @@
 		<!-- Files have to be in dependency order -->
 		<include name="src/Castle.Core/default.build" />
 		<include name="src/Castle.Core.Tests/default.build" if="${common.testrunner.enabled}" />
-		<include name="src/Castle.Services.Logging.log4netIntegration/default.build" />
-		<include name="src/Castle.Services.Logging.NLogIntegration/default.build" />
+		<include name="src/Castle.Services.Logging.log4netIntegration/default.build" if="${not common.silverlight}" />
+		<include name="src/Castle.Services.Logging.NLogIntegration/default.build" if="${not common.silverlight}" />
 	</fileset>
 
 	<patternset id="package.bin.set" >
