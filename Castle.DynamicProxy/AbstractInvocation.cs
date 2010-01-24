@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,13 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+
 	using Castle.Core.Interceptor;
 
 #if SILVERLIGHT
@@ -29,7 +29,6 @@ namespace Castle.DynamicProxy
 	{
 		private readonly IInterceptor[] interceptors;
 		private readonly object[] arguments;
-		private object returnValue;
 		private int execIndex = -1;
 		private Type[] genericMethodArguments;
 		private readonly MethodInfo proxiedMethod;
@@ -42,27 +41,33 @@ namespace Castle.DynamicProxy
 			object[] arguments)
 		{
 			Debug.Assert(proxiedMethod != null);
-			this.proxyObject = proxy;
+			proxyObject = proxy;
 			this.interceptors = interceptors;
 			this.proxiedMethod = proxiedMethod;
 			this.arguments = arguments;
 		}
 
-		protected AbstractInvocation(object proxy, Type targetType, IInterceptor[] interceptors, MethodInfo proxiedMethod, object[] arguments, IInterceptorSelector selector, ref IInterceptor[] methodInterceptors)
+		protected AbstractInvocation(
+			object proxy,
+			Type targetType,
+			IInterceptor[] interceptors,
+			MethodInfo proxiedMethod,
+			object[] arguments,
+			IInterceptorSelector selector,
+			ref IInterceptor[] methodInterceptors)
 			: this(proxy, interceptors, proxiedMethod, arguments)
 		{
 			methodInterceptors = SelectMethodInterceptors(selector, methodInterceptors, targetType);
 			this.interceptors = methodInterceptors;
 		}
 
-		private IInterceptor[] SelectMethodInterceptors(IInterceptorSelector selector, IInterceptor[] methodInterceptors, Type targetType)
+		private IInterceptor[] SelectMethodInterceptors(IInterceptorSelector selector,
+														IInterceptor[] methodInterceptors,
+														Type targetType)
 		{
-			if (methodInterceptors == null)
-			{
-				methodInterceptors = selector.SelectInterceptors(targetType, Method, interceptors) ??
-				                     new IInterceptor[0];
-			}
-			return methodInterceptors;
+			return methodInterceptors ??
+			       selector.SelectInterceptors(targetType, Method, interceptors) ??
+			       new IInterceptor[0];
 		}
 
 		public void SetGenericMethodArguments(Type[] arguments)
@@ -88,10 +93,7 @@ namespace Castle.DynamicProxy
 
 		public MethodInfo Method
 		{
-			get
-			{
-				return proxiedMethod;
-			}
+			get { return proxiedMethod; }
 		}
 
 		public MethodInfo GetConcreteMethod()
@@ -108,11 +110,7 @@ namespace Castle.DynamicProxy
 			return method;
 		}
 
-		public object ReturnValue
-		{
-			get { return returnValue; }
-			set { returnValue = value; }
-		}
+		public object ReturnValue { get; set; }
 
 		public object[] Arguments
 		{
@@ -171,12 +169,48 @@ namespace Castle.DynamicProxy
 #if !SILVERLIGHT
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.SetType(typeof (RemotableInvocation));
+			info.SetType(typeof(RemotableInvocation));
 			info.AddValue("invocation", new RemotableInvocation(this));
 		}
 #endif
 
 		protected abstract void InvokeMethodOnTarget();
+
+		protected void ThrowOnNoTarget()
+		{
+			// let's try to build as friendly message as we can
+			string interceptorsMessage;
+			if (interceptors.Length == 0)
+			{
+				interceptorsMessage = "There are no interceptors specified";
+			}
+			else
+			{
+				interceptorsMessage = "The interceptor attempted to 'Proceed'";
+			}
+
+			string methodKindIs;
+			string methodKindDescription;
+			if (Method.DeclaringType.IsClass)
+			{
+				Debug.Assert(Method.IsAbstract, "Method.IsAbstract");
+				methodKindIs = "is abstract";
+				methodKindDescription = "an abstract method";
+			}
+			else
+			{
+				methodKindIs = "has no target";
+				methodKindDescription = "method without target";
+			}
+
+			string message = string.Format("This is a DynamicProxy2 error: {0} for method '{1}' which {2}. " +
+			                               "When calling {3} there is no implementation to 'proceed' to and " +
+			                               "it is the responsibility of the interceptor to mimic the implementation " +
+			                               "(set return value, out arguments etc)",
+			                               interceptorsMessage, Method, methodKindIs, methodKindDescription);
+
+			throw new NotImplementedException(message);
+		}
 
 		private MethodInfo EnsureClosedMethod(MethodInfo method)
 		{

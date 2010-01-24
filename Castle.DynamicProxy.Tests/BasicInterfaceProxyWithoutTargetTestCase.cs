@@ -36,7 +36,7 @@ namespace Castle.DynamicProxy.Tests
                 service.Sum(1, 2));
 
 	    	Assert.AreEqual(
-	    		"This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for method 'Int32 Sum(Int32, Int32)' which has no target. " +
+				"This is a DynamicProxy2 error: The interceptor attempted to 'Proceed' for method 'Int32 Sum(Int32, Int32)' which has no target. " +
 	    		"When calling method without target there is no implementation to 'proceed' to and it is the responsibility of the interceptor " +
 	    		"to mimic the implementation (set return value, out arguments etc)",
 	    		exception.Message);
