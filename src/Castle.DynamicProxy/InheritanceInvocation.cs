@@ -21,11 +21,6 @@ namespace Castle.DynamicProxy
 
 	public abstract class InheritanceInvocation : AbstractInvocation
 	{
-		public override object InvocationTarget
-		{
-			get { return Proxy; }
-		}
-
 		private readonly Type targetType;
 
 		protected InheritanceInvocation(
@@ -50,6 +45,11 @@ namespace Castle.DynamicProxy
 			: base(proxy, targetType, interceptors, proxiedMethod, arguments, selector, ref methodInterceptors)
 		{
 			this.targetType = targetType;
+		}
+
+		public override object InvocationTarget
+		{
+			get { return Proxy; }
 		}
 
 		public override Type TargetType

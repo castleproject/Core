@@ -319,7 +319,7 @@ namespace Castle.DynamicProxy.Generators
 			mapping.Add(@interface, implementer);
 		}
 
-		protected void AddMappingForISerializable(IDictionary<Type, ITypeContributor> typeImplementerMapping, ProxyInstanceContributor instance)
+		protected void AddMappingForISerializable(IDictionary<Type, ITypeContributor> typeImplementerMapping, ITypeContributor instance)
 		{
 #if SILVERLIGHT
 #warning What to do?

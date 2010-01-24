@@ -52,28 +52,45 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof (NotImplementedException),
-			ExpectedMessage =
-				"This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
-			)]
-		public void CallingProceedOnAbstractMethodShouldThrowException()
+		public void CallingProceedWithInterceptorOnAbstractMethodShouldThrowException()
 		{
-			AbstractClass proxy = (AbstractClass)
-			                      generator.CreateClassProxy(typeof (AbstractClass), ProxyGenerationOptions.Default,
-			                                                 new StandardInterceptor());
-
+			var proxy = generator.CreateClassProxy<AbstractClass>(ProxyGenerationOptions.Default, new StandardInterceptor());
 			Assert.IsNotNull(proxy);
 
+			TestDelegate callProxyMethod = ()=>
 			proxy.Foo();
+
+			var message =
+				"This is a DynamicProxy2 error: The interceptor attempted to 'Proceed' for method 'System.String Foo()' which is abstract. " +
+				"When calling an abstract method there is no implementation to 'proceed' to " +
+				"and it is the responsibility of the interceptor to mimic the implementation (set return value, out arguments etc)";
+			var exception =
+			Assert.Throws(typeof(NotImplementedException), callProxyMethod);
+			Assert.AreEqual(message, exception.Message);
+		}
+
+		[Test]
+		public void CallingProceedWithoutInterceptorOnAbstractMethodShouldThrowException()
+		{
+			var proxy = generator.CreateClassProxy<AbstractClass>();
+			Assert.IsNotNull(proxy);
+
+			TestDelegate callProxyMethod = () =>
+			proxy.Foo();
+
+			var message =
+				"This is a DynamicProxy2 error: There are no interceptors specified for method 'System.String Foo()' which is abstract. " +
+				"When calling an abstract method there is no implementation to 'proceed' to " +
+				"and it is the responsibility of the interceptor to mimic the implementation (set return value, out arguments etc)";
+			var exception =
+			Assert.Throws(typeof(NotImplementedException), callProxyMethod);
+			Assert.AreEqual(message, exception.Message);
 		}
 
 		[Test]
 		public void ProxyTypeThatInheritFromGenericType()
 		{
-			IUserRepository proxy = (IUserRepository)
-			                        generator.CreateInterfaceProxyWithoutTarget(typeof (IUserRepository),
-                                                                                new DoNothingInterceptor());
-
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IUserRepository>(new DoNothingInterceptor());
 			Assert.IsNotNull(proxy);
 		}
 

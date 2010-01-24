@@ -35,9 +35,11 @@ namespace Castle.DynamicProxy.Tokens
 		public static readonly MethodInfo GetArgumentValue =
 			typeof(AbstractInvocation).GetMethod("GetArgumentValue");
 
-
 		public static readonly MethodInfo GetReturnValue =
 			typeof(AbstractInvocation).GetMethod("get_ReturnValue");
+
+		public static readonly MethodInfo ThrowOnNoTarget =
+			typeof(AbstractInvocation).GetMethod("ThrowOnNoTarget", BindingFlags.Instance | BindingFlags.NonPublic);
 
 		public static readonly MethodInfo SetArgumentValue =
 			typeof(AbstractInvocation).GetMethod("SetArgumentValue");

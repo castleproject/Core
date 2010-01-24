@@ -64,6 +64,7 @@ namespace Castle.DynamicProxy.Generators
 					new ArgumentReference(typeof(object[])),
 				};
 			}
+
 			baseConstructor = InvocationMethods.CompositionInvocationConstructorWithSelector;
 			return new[]
 			{

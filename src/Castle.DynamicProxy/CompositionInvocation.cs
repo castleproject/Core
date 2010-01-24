@@ -53,28 +53,25 @@ namespace Castle.DynamicProxy
 			{
 				return null;
 			}
+
 			return targetObject.GetType();
 		}
 
 		protected void EnsureValidTarget()
 		{
-			string message;
 			if (target == null)
 			{
-				message = "This is a DynamicProxy2 error: the interceptor attempted " +
-				          "to 'Proceed' for method '" + Method.ToString() + "' which has no target." +
-				          " When calling method without target there is no implementation to 'proceed' to " +
-				          "and it is the responsibility of the interceptor to mimic the implementation (set return value, out arguments etc)";
-				throw new NotImplementedException(message);
+				ThrowOnNoTarget();
 			}
 
 			if (!ReferenceEquals(target, proxyObject))
 			{
 				return;
 			}
-			message = "This is a DynamicProxy2 error: target of invocation has been set to the proxy itself. " +
-			          "This may result in recursively calling the method over and over again until stack overflow, which may destabilize your program." +
-			          "This usually signifies a bug in the calling code. Make sure no interceptor sets proxy as its invocation target.";
+
+			string message = "This is a DynamicProxy2 error: target of invocation has been set to the proxy itself. " +
+			                 "This may result in recursively calling the method over and over again until stack overflow, which may destabilize your program." +
+			                 "This usually signifies a bug in the calling code. Make sure no interceptor sets proxy as its invocation target.";
 			throw new InvalidOperationException(message);
 		}
 
@@ -89,6 +86,7 @@ namespace Castle.DynamicProxy
 			{
 				return;
 			}
+
 			var message = "This is a DynamicProxy2 error: target of proxy has been set to the proxy itself. " +
 						  "This would result in recursively calling proxy methods over and over again until stack overflow, which may destabilize your program." +
 						  "This usually signifies a bug in the calling code. Make sure no interceptor sets proxy as its own target.";

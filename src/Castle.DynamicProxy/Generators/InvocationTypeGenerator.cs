@@ -235,13 +235,10 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void CreateEmptyIInvocationInvokeOnTarget(AbstractTypeEmitter nested)
 		{
-			MethodEmitter invokeMethodOnTarget = nested.CreateMethod("InvokeMethodOnTarget");
+			var invokeMethodOnTarget = nested.CreateMethod("InvokeMethodOnTarget");
+			var throwOnNoTarget = new ExpressionStatement(new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget));
 
-			String message = "This is a DynamicProxy2 error: the interceptor attempted " +
-							 "to 'Proceed' for a method without a target, for example, an interface method or an abstract method";
-
-			invokeMethodOnTarget.CodeBuilder.AddStatement(new ThrowStatement(typeof(NotImplementedException), message));
-
+			invokeMethodOnTarget.CodeBuilder.AddStatement(throwOnNoTarget);
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
