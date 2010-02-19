@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Reflection;
 
 	public abstract class TypeUtil
 	{
 		/// <summary>
-		/// Returns list of all unique interfaces implemented given types, including their base interfaces.
+		///   Returns list of all unique interfaces implemented given types, including their base interfaces.
 		/// </summary>
 		/// <param name="types"></param>
 		/// <returns></returns>
@@ -36,7 +37,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			IDictionary<Type, object> interfaces = new Dictionary<Type, object>();
 			foreach (var type in types)
 			{
-				if(type == null) continue;
+				if (type == null)
+				{
+					continue;
+				}
 
 				if (type.IsInterface)
 				{
@@ -66,7 +70,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					return parameter.GetGenericTypeDefinition().MakeGenericType(arguments);
 				}
 			}
-			
+
 			if (parameter.IsGenericParameter)
 			{
 				return type.GetGenericArgument(parameter.Name);
@@ -77,14 +81,20 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				var elementType = GetClosedParameterType(type, parameter.GetElementType());
 				return elementType.MakeArrayType();
 			}
-			
-			if(parameter.IsByRef)
+
+			if (parameter.IsByRef)
 			{
 				var elementType = GetClosedParameterType(type, parameter.GetElementType());
 				return elementType.MakeByRefType();
 			}
 
 			return parameter;
+		}
+
+		public static MemberInfo[] Sort(MemberInfo[] members)
+		{
+			Array.Sort(members, (l, r) => string.Compare(l.Name, r.Name));
+			return members;
 		}
 
 		private static bool CloseGenericParametersIfAny(AbstractTypeEmitter emitter, Type[] arguments)

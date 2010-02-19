@@ -323,6 +323,7 @@
     <Compile Include="Tokens\SerializationInfoMethods.cs" />
     <Compile Include="Tokens\TypeBuilderMethods.cs" />
     <Compile Include="Tokens\TypeMethods.cs" />
+    <Compile Include="Tokens\TypeUtilMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DynProxy.snk" />

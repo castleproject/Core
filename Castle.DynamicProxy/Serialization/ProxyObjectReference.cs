@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Serialization
 	using Castle.DynamicProxy;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Generators.Emitters;
 
 	/// <summary>
 	/// Handles the deserialization of proxies.
@@ -228,6 +229,10 @@ namespace Castle.DynamicProxy.Serialization
 			{
 				var baseMemberData = GetValue<object[]>("__data");
 				MemberInfo[] members = FormatterServices.GetSerializableMembers(baseType);
+
+				// Sort to keep order on both serialize and deserialize side the same, c.f DYNPROXY-ISSUE-127
+				members = TypeUtil.Sort(members);
+
 				FormatterServices.PopulateObjectMembers(proxy, members, baseMemberData);
 			}
 		}
