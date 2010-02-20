@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,10 +26,11 @@ namespace Castle.DynamicProxy.Contributors
 
 	public class ClassProxyTargetContributor : CompositeTypeContributor
 	{
-		private readonly Type targetType;
 		private readonly IList<MethodInfo> methodsToSkip;
+		private readonly Type targetType;
 
-		public ClassProxyTargetContributor(Type targetType, IList<MethodInfo> methodsToSkip, INamingScope namingScope):base(namingScope)
+		public ClassProxyTargetContributor(Type targetType, IList<MethodInfo> methodsToSkip, INamingScope namingScope)
+			: base(namingScope)
 		{
 			this.targetType = targetType;
 			this.methodsToSkip = methodsToSkip;
@@ -53,9 +54,14 @@ namespace Castle.DynamicProxy.Contributors
 			}
 		}
 
-		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
+		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
+		                                                      ProxyGenerationOptions options,
+		                                                      CreateMethodDelegate createMethod)
 		{
-			if (methodsToSkip.Contains(method.Method)) return null;
+			if (methodsToSkip.Contains(method.Method))
+			{
+				return null;
+			}
 
 			if (!method.Proxyable)
 			{
@@ -72,17 +78,20 @@ namespace Castle.DynamicProxy.Contributors
 			                                         createMethod);
 		}
 
-		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
-		{
-			// NOTE: No caching since invocation is tied to this specific proxy type via its invocation method
-			return BuildInvocationType(method, @class, options);
-		}
-
 		private Type BuildInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
 		{
 			var methodInfo = method.Method;
-			if (!method.HasTarget)
+			if (method.MethodOnTarget.IsAbstract)
 			{
+				return new ClassInvocationTypeGenerator(targetType,
+				                                        method,
+				                                        null)
+					.Generate(@class, options, namingScope)
+					.BuildType();
+			}
+			if (ExplicitlyImplementedInterfaceMethod(method))
+			{
+				// TODO: enable intercepting these
 				return new ClassInvocationTypeGenerator(targetType,
 				                                        method,
 				                                        null)
@@ -126,9 +135,21 @@ namespace Castle.DynamicProxy.Contributors
 			// invocation on base class
 
 			callBackMethod.CodeBuilder.AddStatement(
-				new ReturnStatement(new MethodInvocationExpression(SelfReference.Self, targetMethod, exps)));
+			                                       	new ReturnStatement(new MethodInvocationExpression(SelfReference.Self,
+			                                       	                                                   targetMethod, exps)));
 
 			return callBackMethod.MethodBuilder;
+		}
+
+		private bool ExplicitlyImplementedInterfaceMethod(MetaMethod method)
+		{
+			return method.MethodOnTarget.IsPrivate;
+		}
+
+		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		{
+			// NOTE: No caching since invocation is tied to this specific proxy type via its invocation method
+			return BuildInvocationType(method, @class, options);
 		}
 	}
 }
