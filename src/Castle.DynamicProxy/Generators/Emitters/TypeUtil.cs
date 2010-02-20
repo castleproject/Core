@@ -33,7 +33,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				return Type.EmptyTypes;
 			}
 
-			var interfaces = new HashSet<Type>();
+			var dummy = new object();
+			// we should move this to HashSet once we no longer support .NET 2.0
+			IDictionary<Type, object> interfaces = new Dictionary<Type, object>();
 			foreach (var type in types)
 			{
 				if (type == null)
@@ -43,23 +45,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 				if (type.IsInterface)
 				{
-					interfaces.Add(type);
+					interfaces[type] = dummy;
 				}
 
 				foreach (var @interface in type.GetInterfaces())
 				{
-					interfaces.Add(@interface);
+					interfaces[@interface] = dummy;
 				}
 			}
-			return Sort(interfaces);
-		}
 
-		private static Type[] Sort(IEnumerable<Type> types)
-		{
-			var array = types.ToArray();
-			//NOTE: is there a better, stable way to sort Types. We will need to revise this once we allow open generics
-			Array.Sort(array, (l, r) => string.Compare(l.AssemblyQualifiedName, r.AssemblyQualifiedName));
-			return array;
+			return Sort(interfaces.Keys);
 		}
 
 		public static Type GetClosedParameterType(AbstractTypeEmitter type, Type parameter)
@@ -117,6 +112,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 			}
 			return hasAnyGenericParameters;
+		}
+
+		private static Type[] Sort(IEnumerable<Type> types)
+		{
+			var array = types.ToArray();
+			//NOTE: is there a better, stable way to sort Types. We will need to revise this once we allow open generics
+			Array.Sort(array, (l, r) => string.Compare(l.AssemblyQualifiedName, r.AssemblyQualifiedName));
+			return array;
 		}
 	}
 }
