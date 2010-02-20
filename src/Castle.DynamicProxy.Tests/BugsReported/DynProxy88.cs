@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,10 @@
 namespace Castle.DynamicProxy.Tests.BugsReported
 {
 	using System;
-	using Core.Interceptor;
+
+	using Castle.Core.Interceptor;
+	using Castle.DynamicProxy.Tests.Interfaces;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -34,26 +37,12 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		}
 	}
 
-	public interface IBase
-	{
-		void Foo();
-	}
-
 	public class Inherited : IBase
 	{
 		public void Foo()
 		{
 			
 		}
-	}
-
-	public interface ISub1 : IBase
-	{
-		void Bar();
-	}
-	public interface ISub2 : IBase
-	{
-		void Baz();
 	}
 
 	public class MyFoo:Inherited,ISub1,ISub2
