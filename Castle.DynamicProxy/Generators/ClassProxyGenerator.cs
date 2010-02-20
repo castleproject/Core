@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,11 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Reflection;
-#if !SILVERLIGHT
-	using System.Xml.Serialization;
-#endif
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -56,7 +52,7 @@ namespace Castle.DynamicProxy.Generators
 
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 			Type proxyType;
-
+			interfaces = TypeUtil.GetAllInterfaces(interfaces);
 			CacheKey cacheKey = new CacheKey(targetType, interfaces, options);
 
 			using (var locker = Scope.Lock.ForReadingUpgradeable())
@@ -163,8 +159,8 @@ namespace Castle.DynamicProxy.Generators
 			// 1. first target
 			// target is not an interface so we do nothing
 
-			var targetInterfaces = TypeUtil.GetAllInterfaces(targetType);
-			var additionalInterfaces = TypeUtil.GetAllInterfaces(interfaces);
+			ICollection<Type> targetInterfaces = TypeUtil.GetAllInterfaces(targetType);
+			ICollection<Type> additionalInterfaces = TypeUtil.GetAllInterfaces(interfaces);
 			// 2. then mixins
 			var mixins = new MixinContributor(namingScope, false) { Logger = Logger };
 			if (ProxyGenerationOptions.HasMixins)

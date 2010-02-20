@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 
 	public abstract class TypeUtil
@@ -25,16 +26,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// </summary>
 		/// <param name="types"></param>
 		/// <returns></returns>
-		public static ICollection<Type> GetAllInterfaces(params Type[] types)
+		public static Type[] GetAllInterfaces(params Type[] types)
 		{
 			if (types == null)
 			{
 				return Type.EmptyTypes;
 			}
 
-			var dummy = new object();
-			// we should move this to HashSet once we no longer support .NET 2.0
-			IDictionary<Type, object> interfaces = new Dictionary<Type, object>();
+			var interfaces = new HashSet<Type>();
 			foreach (var type in types)
 			{
 				if (type == null)
@@ -44,15 +43,23 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 				if (type.IsInterface)
 				{
-					interfaces[type] = dummy;
+					interfaces.Add(type);
 				}
 
 				foreach (var @interface in type.GetInterfaces())
 				{
-					interfaces[@interface] = dummy;
+					interfaces.Add(@interface);
 				}
 			}
-			return interfaces.Keys;
+			return Sort(interfaces);
+		}
+
+		private static Type[] Sort(IEnumerable<Type> types)
+		{
+			var array = types.ToArray();
+			//NOTE: is there a better, stable way to sort Types. We will need to revise this once we allow open generics
+			Array.Sort(array, (l, r) => string.Compare(l.AssemblyQualifiedName, r.AssemblyQualifiedName));
+			return array;
 		}
 
 		public static Type GetClosedParameterType(AbstractTypeEmitter type, Type parameter)

@@ -170,6 +170,7 @@
     <Compile Include="InterceptorSelectorTestCase.cs" />
     <Compile Include="InterfaceProxyBaseTypeTestCase.cs" />
     <Compile Include="InterfaceProxyWithTargetInterfaceTestCase.cs" />
+    <Compile Include="Interfaces\IBase.cs" />
     <Compile Include="Interfaces\IDecimalOutParam.cs" />
     <Compile Include="Interfaces\IdenticalInterfaces.cs" />
     <Compile Include="Interfaces\IEmpty.cs" />
@@ -178,6 +179,8 @@
     <Compile Include="Interfaces\IGenericWithRefOut.cs" />
     <Compile Include="Interfaces\INullable.cs" />
     <Compile Include="Interfaces\IOne.cs" />
+    <Compile Include="Interfaces\ISub1.cs" />
+    <Compile Include="Interfaces\ISub2.cs" />
     <Compile Include="Interfaces\ITwo.cs" />
     <Compile Include="Interfaces\IWithRefOut.cs" />
     <Compile Include="Interfaces\One.cs" />
@@ -232,6 +235,7 @@
     <Compile Include="ProxyKind.cs" />
     <Compile Include="ProxyNothingHook.cs" />
     <Compile Include="ProxyTargetAccessorHandlingTestCase.cs" />
+    <Compile Include="ProxyTypeCachingTestCase.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
     <Compile Include="SerializableClassTestCase.cs" />
     <Compile Include="InternalsVisibleTo.cs" />
