@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Tests
 
 	using NUnit.Framework;
 
-	[TestFixture]
+	[TestFixture("TODO: Enable proxying explicit implementations: DYNPROXY-ISSUE-107")]
 	public class ExplicitInterfaceTestCase : BasePEVerifyTestCase
 	{
 		[Test]

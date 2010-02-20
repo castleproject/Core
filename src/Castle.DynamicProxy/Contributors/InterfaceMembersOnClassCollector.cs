@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Contributors
 			var methodOnTarget = GetMethodOnTarget(method);
 
 			var proxyable = AcceptMethod(method, onlyProxyVirtual, hook);
-			return new MetaMethod(method, methodOnTarget, isStandalone, proxyable, methodOnTarget.IsPrivate == false);
+			return new MetaMethod(method, methodOnTarget, isStandalone, proxyable);
 		}
 
 		private MethodInfo GetMethodOnTarget(MethodInfo method)

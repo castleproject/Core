@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Generators
 		                                                                  MethodAttributes.NewSlot |
 		                                                                  MethodAttributes.Final;
 
-		public MetaMethod(MethodInfo method, MethodInfo methodOnTarget, bool standalone, bool proxyable, bool hasTarget)
+		public MetaMethod(MethodInfo method, MethodInfo methodOnTarget, bool standalone, bool proxyable)
 			: base(method.DeclaringType)
 		{
 			Method = method;
@@ -37,7 +37,6 @@ namespace Castle.DynamicProxy.Generators
 			MethodOnTarget = methodOnTarget;
 			Standalone = standalone;
 			Proxyable = proxyable;
-			HasTarget = hasTarget;
 			Attributes = ObtainAttributes();
 		}
 
@@ -92,8 +91,6 @@ namespace Castle.DynamicProxy.Generators
 		public bool Standalone { get; private set; }
 
 		public MethodInfo Method { get; private set; }
-
-		public bool HasTarget { get; private set; }
 
 		public bool Equals(MetaMethod other)
 		{

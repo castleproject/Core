@@ -99,7 +99,6 @@ namespace Castle.DynamicProxy.Contributors
 			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
 			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.ContainsKey(@interface)", "Shouldn't be adding same interface twice...");
 
-
 			interfaces.Add(@interface);
 		}
 
@@ -132,17 +131,18 @@ namespace Castle.DynamicProxy.Contributors
 		                                           ProxyGenerationOptions options, CreateMethodDelegate createMethod);
 
 		private void ImplementMethod(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options,
-		                                        CreateMethodDelegate createMethod)
+												CreateMethodDelegate createMethod)
 		{
+
+			var generator = GetMethodGenerator(method, @class, options, createMethod);
+			if (generator == null) return;
+
+			var proxyMethod = generator.Generate(@class, options, namingScope);
+			foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(method.Method))
 			{
-				var generator = GetMethodGenerator(method, @class, options, createMethod);
-				if (generator == null) return;
-				var proxyMethod = generator.Generate(@class, options, namingScope);
-				foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(method.Method))
-				{
-					proxyMethod.DefineCustomAttribute(attribute);
-				}
+				proxyMethod.DefineCustomAttribute(attribute);
 			}
+
 		}
 	}
 }
