@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,42 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.Classes
+namespace Castle.DynamicProxy.Tests.Explicit
 {
-	using System;
+	using Castle.DynamicProxy.Tests.Interfaces;
 
-#if !SILVERLIGHT
-	[Serializable]
-#endif
-	public class ClassWithExplicitInterface : ISimpleInterface
+	public class WithRefOutExplicit : IWithRefOut
 	{
-		int ISimpleInterface.Do()
+		void IWithRefOut.Did(ref int i)
 		{
-			return 5;
+			i = 5;
 		}
 
-		public virtual int DoVirtual()
+		void IWithRefOut.Do(out int i)
 		{
-			return 7;
-		}
-	}
-
-#if !SILVERLIGHT
-	[Serializable]
-#endif
-	public class ClassWithInterface : ISimpleInterface
-	{
-		public int Do()
-		{
-			return 5;
-		}
-	}
-
-	public class ClassWithVirtualInterface : ISimpleInterface
-	{
-		public virtual int Do()
-		{
-			return 5;
+			i = 5;
 		}
 	}
 }

@@ -119,12 +119,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeProxyTargetInterceptor.cs" />
-    <Compile Include="Classes\ClassWithExplicitInterface.cs" />
+    <Compile Include="Classes\ClassWithInterface.cs" />
+    <Compile Include="Classes\ClassWithVirtualInterface.cs" />
     <Compile Include="Classes\ClassWith_Smart_Attribute.cs" />
     <Compile Include="Classes\VirtuallyImplementsInterfaceWithEvent.cs" />
     <Compile Include="ComInterfacesTests.cs" />
     <Compile Include="ExplicitInterfaceTestCase.cs" />
     <Compile Include="CustomAttributesTestCase.cs" />
+    <Compile Include="Explicit\GenericMethodExplicit.cs" />
+    <Compile Include="Explicit\GenInterfaceExplicit.cs" />
+    <Compile Include="Explicit\SimpleInterfaceExplicit.cs" />
+    <Compile Include="Explicit\WithRefOutExplicit.cs" />
     <Compile Include="GenClasses\GenClassWithExplicitImpl.cs">
       <SubType>Code</SubType>
     </Compile>

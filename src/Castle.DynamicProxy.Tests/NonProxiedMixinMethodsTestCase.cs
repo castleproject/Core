@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+
 	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.Explicit;
 	using Castle.DynamicProxy.Tests.Interfaces;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -32,13 +35,13 @@ namespace Castle.DynamicProxy.Tests
 			switch (kind)
 			{
 				case ProxyKind.Class:
-					return (TType) generator.CreateClassProxy(typeof (object), Type.EmptyTypes, options);
+					return (TType)generator.CreateClassProxy(typeof(object), Type.EmptyTypes, options);
 				case ProxyKind.WithoutTarget:
-					return (TType) generator.CreateInterfaceProxyWithoutTarget(typeof (IEmpty), Type.EmptyTypes, options);
+					return (TType)generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), Type.EmptyTypes, options);
 				case ProxyKind.WithTarget:
-					return (TType) generator.CreateInterfaceProxyWithTarget(typeof (IEmpty), Type.EmptyTypes, new Empty(), options);
+					return (TType)generator.CreateInterfaceProxyWithTarget(typeof(IEmpty), Type.EmptyTypes, new Empty(), options);
 				case ProxyKind.WithTargetInterface:
-					return (TType) generator.CreateInterfaceProxyWithTargetInterface(typeof (IEmpty), new Empty(), options);
+					return (TType)generator.CreateInterfaceProxyWithTargetInterface(typeof(IEmpty), new Empty(), options);
 			}
 
 			Assert.Fail("Invalid proxy kind {0}", kind);
@@ -61,7 +64,7 @@ namespace Castle.DynamicProxy.Tests
 			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
 				kind)
 		{
-			var proxy = CreateProxyWithMixin<ISimpleInterface>(kind, new ClassWithExplicitInterface());
+			var proxy = CreateProxyWithMixin<ISimpleInterface>(kind, new SimpleInterfaceExplicit());
 			int result = -1;
 			Assert.DoesNotThrow(() => result = proxy.Do());
 			Assert.AreEqual(5, result);
@@ -84,7 +87,7 @@ namespace Castle.DynamicProxy.Tests
 				kind)
 		{
 			var proxy = CreateProxyWithMixin<IWithRefOut>(kind, new WithRefOut());
-			int[] result = {-1};
+			int[] result = { -1 };
 			Assert.DoesNotThrow(() => proxy.Did(ref result[0]));
 			Assert.AreEqual(5, result[0]);
 
@@ -93,5 +96,4 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(5, result[0]);
 		}
 	}
-
 }

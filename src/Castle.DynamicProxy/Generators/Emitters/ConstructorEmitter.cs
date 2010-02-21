@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
+
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
@@ -34,7 +35,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			Type[] args = ArgumentsUtil.InitializeAndConvert(arguments);
 
 			builder = maintype.TypeBuilder.DefineConstructor(
-				MethodAttributes.Public, CallingConventions.Standard, args);
+			                                                	MethodAttributes.Public, CallingConventions.Standard, args);
 		}
 
 		protected internal ConstructorEmitter(AbstractTypeEmitter maintype, ConstructorBuilder builder)
@@ -61,6 +62,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return builder; }
 		}
 
+		private bool ImplementedByRuntime
+		{
+			get
+			{
+				var attributes = builder.GetMethodImplementationFlags();
+				return (attributes & MethodImplAttributes.Runtime) != 0;
+			}
+		}
+
 		public MemberInfo Member
 		{
 			get { return builder; }
@@ -68,21 +78,26 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public Type ReturnType
 		{
-			get { return typeof (void); }
-		}
-
-		public virtual void Generate()
-		{
-			CodeBuilder.Generate(this, builder.GetILGenerator());
+			get { return typeof(void); }
 		}
 
 		public virtual void EnsureValidCodeBlock()
 		{
-			if (CodeBuilder.IsEmpty)
+			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
 			{
 				CodeBuilder.InvokeBaseConstructor();
 				CodeBuilder.AddStatement(new ReturnStatement());
 			}
+		}
+
+		public virtual void Generate()
+		{
+			if (ImplementedByRuntime)
+			{
+				return;
+			}
+
+			CodeBuilder.Generate(this, builder.GetILGenerator());
 		}
 	}
 }

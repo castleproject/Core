@@ -69,6 +69,16 @@ namespace Castle.DynamicProxy.Contributors
 				                                        createMethod);
 			}
 
+			if (ExplicitlyImplementedInterfaceMethod(method))
+			{
+				if (method.MethodOnTarget.IsGenericMethod)
+				{
+					// NOTE: not supported yet. To be added
+					return null;
+				}
+				return ExplicitlyImplementedInterfaceMethodGenerator(method, @class, options, createMethod);
+			}
+
 			var invocation = GetInvocationType(method, @class, options);
 
 			return new MethodWithInvocationGenerator(method,
@@ -83,15 +93,6 @@ namespace Castle.DynamicProxy.Contributors
 			var methodInfo = method.Method;
 			if (method.MethodOnTarget.IsAbstract)
 			{
-				return new ClassInvocationTypeGenerator(targetType,
-				                                        method,
-				                                        null)
-					.Generate(@class, options, namingScope)
-					.BuildType();
-			}
-			if (ExplicitlyImplementedInterfaceMethod(method))
-			{
-				// TODO: enable intercepting these
 				return new ClassInvocationTypeGenerator(targetType,
 				                                        method,
 				                                        null)
@@ -134,9 +135,10 @@ namespace Castle.DynamicProxy.Contributors
 
 			// invocation on base class
 
-			callBackMethod.CodeBuilder.AddStatement(
-			                                       	new ReturnStatement(new MethodInvocationExpression(SelfReference.Self,
-			                                       	                                                   targetMethod, exps)));
+			callBackMethod.CodeBuilder.AddStatement(new ReturnStatement(
+			                                        	new MethodInvocationExpression(SelfReference.Self,
+			                                        	                               targetMethod,
+			                                        	                               exps)));
 
 			return callBackMethod.MethodBuilder;
 		}
@@ -144,6 +146,54 @@ namespace Castle.DynamicProxy.Contributors
 		private bool ExplicitlyImplementedInterfaceMethod(MetaMethod method)
 		{
 			return method.MethodOnTarget.IsPrivate;
+		}
+
+		private MethodGenerator ExplicitlyImplementedInterfaceMethodGenerator(MetaMethod method, ClassEmitter @class,
+		                                                                      ProxyGenerationOptions options,
+		                                                                      CreateMethodDelegate createMethod)
+		{
+			var @delegate = GetDelegateType(method, @class, options);
+			var invocation = GetDelegateBasedInvocation(method, @class, options, @delegate);
+			return new MethodWithDelegateBasedInvocation(method,
+			                                             @class.GetField("__interceptors"),
+			                                             invocation,
+			                                             (c, m) => new TypeTokenExpression(targetType),
+			                                             createMethod,
+			                                             @delegate);
+		}
+
+		private Type GetDelegateBasedInvocation(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options,
+		                                        Type @delegate)
+		{
+			return new InvocationWithDelegateTypeGenerator(targetType,
+			                                               method,
+			                                               @delegate)
+				.Generate(@class, options, namingScope)
+				.BuildType();
+		}
+
+		private Type GetDelegateType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		{
+			var scope = @class.ModuleScope;
+			var key = new CacheKey(
+				typeof(Delegate),
+				targetType,
+				ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters()),
+				null);
+
+			var type = scope.GetFromCache(key);
+			if (type != null)
+			{
+				return type;
+			}
+
+			type = new DelegateTypeGenerator(targetType, method)
+				.Generate(@class, options, namingScope)
+				.BuildType();
+
+			scope.RegisterInCache(key, type);
+
+			return type;
 		}
 
 		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
