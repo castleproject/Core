@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+
 	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.Explicit;
 	using Castle.DynamicProxy.Tests.Interfaces;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -28,9 +31,9 @@ namespace Castle.DynamicProxy.Tests
 			switch (kind)
 			{
 				case ProxyKind.WithTarget:
-					return (TType) generator.CreateInterfaceProxyWithTarget(typeof (TType), Type.EmptyTypes, target, options);
+					return (TType)generator.CreateInterfaceProxyWithTarget(typeof(TType), Type.EmptyTypes, target, options);
 				case ProxyKind.WithTargetInterface:
-					return (TType) generator.CreateInterfaceProxyWithTargetInterface(typeof (TType), target, options);
+					return (TType)generator.CreateInterfaceProxyWithTargetInterface(typeof(TType), target, options);
 			}
 
 			Assert.Fail("Invalid proxy kind {0}", kind);
@@ -49,7 +52,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Target_method_explicit([Values(ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind kind)
 		{
-			var proxy = CreateProxy<ISimpleInterface>(kind, new ClassWithExplicitInterface());
+			var proxy = CreateProxy<ISimpleInterface>(kind, new SimpleInterfaceExplicit());
 			int result = -1;
 			Assert.DoesNotThrow(() => result = proxy.Do());
 			Assert.AreEqual(5, result);

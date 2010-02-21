@@ -98,6 +98,9 @@
     </Compile>
     <Compile Include="CompositionInvocation.cs" />
     <Compile Include="Contributors\CompositeTypeContributor.cs" />
+    <Compile Include="Contributors\DelegateTypeGenerator.cs" />
+    <Compile Include="Contributors\InvocationWithDelegateTypeGenerator.cs" />
+    <Compile Include="Contributors\MethodWithDelegateBasedInvocation.cs" />
     <Compile Include="Generators\AttributeDisassembler.cs" />
     <Compile Include="CacheMappingsAttribute.cs" />
     <Compile Include="Contributors\ClassMembersCollector.cs" />
@@ -317,6 +320,7 @@
     <Compile Include="Serialization\ProxyTypeConstants.cs" />
     <Compile Include="Serialization\ProxyObjectReference.cs" />
     <Compile Include="SilverlightExtensions.cs" />
+    <Compile Include="Tokens\DelegateMethods.cs" />
     <Compile Include="Tokens\FormatterServicesMethods.cs" />
     <Compile Include="Tokens\InvocationMethods.cs" />
     <Compile Include="Tokens\MethodBaseMethods.cs" />

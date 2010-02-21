@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
+
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
@@ -27,13 +28,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	{
 		private readonly MethodBuilder builder;
 
+		private readonly Dictionary<String, GenericTypeParameterBuilder> name2GenericType =
+			new Dictionary<string, GenericTypeParameterBuilder>();
+
 		private ArgumentReference[] arguments;
 
 		private MethodCodeBuilder codebuilder;
 		private GenericTypeParameterBuilder[] genericTypeParams;
-
-		private readonly Dictionary<String, GenericTypeParameterBuilder> name2GenericType =
-			new Dictionary<string, GenericTypeParameterBuilder>();
 
 		protected internal MethodEmitter(MethodBuilder builder)
 		{
@@ -54,20 +55,75 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			SetReturnType(returnType);
 		}
 
-		public void SetReturnType(Type returnType)
-		{
-			builder.SetReturnType(returnType);
-		}
-
 		public GenericTypeParameterBuilder[] GenericTypeParams
 		{
 			get { return genericTypeParams; }
 		}
 
+		public virtual MethodCodeBuilder CodeBuilder
+		{
+			get
+			{
+				if (codebuilder == null)
+				{
+					codebuilder = new MethodCodeBuilder(builder.GetILGenerator());
+				}
+				return codebuilder;
+			}
+		}
+
+		public ArgumentReference[] Arguments
+		{
+			get { return arguments; }
+		}
+
+		public MethodBuilder MethodBuilder
+		{
+			get { return builder; }
+		}
+
+		private bool ImplementedByRuntime
+		{
+			get
+			{
+				var attributes = builder.GetMethodImplementationFlags();
+				return (attributes & MethodImplAttributes.Runtime) != 0;
+			}
+		}
+
+		public MemberInfo Member
+		{
+			get { return builder; }
+		}
+
+		public Type ReturnType
+		{
+			get { return builder.ReturnType; }
+		}
+
+		public virtual void EnsureValidCodeBlock()
+		{
+			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
+			{
+				CodeBuilder.AddStatement(new NopStatement());
+				CodeBuilder.AddStatement(new ReturnStatement());
+			}
+		}
+
+		public virtual void Generate()
+		{
+			if (ImplementedByRuntime)
+			{
+				return;
+			}
+
+			codebuilder.Generate(this, builder.GetILGenerator());
+		}
+
 		/// <summary>
-		/// Inspect the base method for generic definitions
-		/// and set the return type and the parameters
-		/// accordingly
+		///   Inspect the base method for generic definitions
+		///   and set the return type and the parameters
+		///   accordingly
 		/// </summary>
 		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod, AbstractTypeEmitter parentEmitter)
 		{
@@ -97,20 +153,24 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			SetReturnType(GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType));
 
 			builder.SetSignature(
-				returnType,
-				// Disabled due to .Net 3.5 SP 1 bug and Silverlight does not have this API
-				//baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
-				//baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
-				Type.EmptyTypes,
-				Type.EmptyTypes,
-				parameters,
-				null, null
-//				 paramModReq.ToArray(),
-//				 paramModOpt.ToArray()
+			                    	returnType,
+			                    	// Disabled due to .Net 3.5 SP 1 bug and Silverlight does not have this API
+			                    	//baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
+			                    	//baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
+			                    	Type.EmptyTypes,
+			                    	Type.EmptyTypes,
+			                    	parameters,
+			                    	null, null
+				//				 paramModReq.ToArray(),
+				//				 paramModOpt.ToArray()
 				);
 
-
 			DefineParameters(baseMethodParameters);
+		}
+
+		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
+		{
+			builder.SetCustomAttribute(attribute);
 		}
 
 		public void SetParameters(Type[] paramTypes)
@@ -120,55 +180,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			ArgumentsUtil.InitializeArgumentsByPosition(arguments, MethodBuilder.IsStatic);
 		}
 
-		public virtual MethodCodeBuilder CodeBuilder
+		public void SetReturnType(Type returnType)
 		{
-			get
-			{
-				if (codebuilder == null)
-				{
-					codebuilder = new MethodCodeBuilder(builder.GetILGenerator());
-				}
-				return codebuilder;
-			}
-		}
-
-		public ArgumentReference[] Arguments
-		{
-			get { return arguments; }
-		}
-
-		public MethodBuilder MethodBuilder
-		{
-			get { return builder; }
-		}
-
-		public Type ReturnType
-		{
-			get { return builder.ReturnType; }
-		}
-
-		public MemberInfo Member
-		{
-			get { return builder; }
-		}
-
-		public virtual void Generate()
-		{
-			codebuilder.Generate(this, builder.GetILGenerator());
-		}
-
-		public virtual void EnsureValidCodeBlock()
-		{
-			if (CodeBuilder.IsEmpty)
-			{
-				CodeBuilder.AddStatement(new NopStatement());
-				CodeBuilder.AddStatement(new ReturnStatement());
-			}
-		}
-
-		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
-		{
-			builder.SetCustomAttribute(attribute);
+			builder.SetReturnType(returnType);
 		}
 
 		private void DefineParameters(ParameterInfo[] info)
