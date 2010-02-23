@@ -2,9 +2,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{37DCCFD7-ABD2-4231-8128-758F7E752813}"
 	ProjectSection(SolutionItems) = preProject
-		Binder.build = Binder.build
 		Changes.txt = Changes.txt
-		..\default.build = ..\default.build
+		..\Settings.proj = ..\Settings.proj
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder-vs2008", "Castle.Components.Binder\Castle.Components.Binder-vs2008.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
