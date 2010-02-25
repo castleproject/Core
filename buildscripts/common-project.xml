@@ -1,0 +1,430 @@
+<?xml version="1.0" ?>
+<project name="Castle" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+
+	<description>
+		This file contains common tasks tailored specifically for the Castle
+		build process. The goal was to define all the actions in this file, so
+		that actual project build files only have to configure a few variables
+		and call tasks in this file.
+
+		Usage
+
+		&lt;property name="root.dir" value="../.." /&gt;
+		&lt;include buildfile="${root.dir}/build-common/common-project.xml" /&gt;
+
+		These lines should be placed at the top level under the &lt;project&gt;
+		element. Property root.dir defines a relative path to the root of the
+		distribution, that is, Castle directory.
+
+		After including the file, a target should be defined to initialize
+		configuration variables according to the project being built.
+		The standard of this target is init (but any other name can be chosen).
+		The init target should depend on (or call) target common.init defined
+		in this file.
+
+		Other predefined targets are:
+
+		- common.compile-tests
+		compile NUnit tests and copy App.config file to the output directory,
+		if it exists.
+
+		- common.compile-dll
+		compile a DLL, generating the documentation and using Clover if enabled.
+
+		- common.generate-assemblyinfo, common.generate-assemblyinfoversion
+		generate an AssemblyInfo.cs or AssemblyInfoVersion.cs file from
+		assembly.* NAnt properties.
+
+		- common.run-tests
+		run compiled NUnit tests.
+
+		All compile/run targets put the output in build.dir. Common.compile*
+		targets use source fileset with id="project.sources", assembly fileset
+		with id="project.references" and resource fileset with id="project.resources"
+		to compile the project. The source and resource filesets are optional.
+
+	</description>
+
+	<patternset id="ndepend.bin.set" />
+
+	<include buildfile="common.xml" />
+
+	<target name="clean" description="Deletes current build artifacts">
+		<property name="build.base.dir" value="build" />
+		<call target="set-project-configuration" />
+
+		<delete dir="${build.dir}" failonerror="false" />
+
+		<!-- Remove empty directories -->
+		<delete>
+			<fileset basedir="${build.base.dir}">
+				<include name="*.*" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="package" description="Creates a Zip file for Release">
+		<property name="common.package" value="true" />
+	</target>
+
+	<target name="coverage" description="Generates coverage reports">
+		<property name="common.coverage.enabled" value="true" />
+	</target>
+	
+	<target name="merge" description="Builds both in debug and release">
+		<if test="${framework::get-target-framework() != 'net-3.5'}">
+			<fail message="The '${framework::get-target-framework()}' framework is not supported by merge target." />
+		</if>
+		<property name="common.merge.enabled" value="true" />
+	</target>
+
+	<target name="common.build">
+		<property name="build.base.dir" value="../../build" />
+
+		<if test="${common.merge.enabled}">
+			<property name="project.config" value="debug" />
+			<property name="common.coverage.enabled" value="true" />
+			<property name="common.package" value="false" />
+		</if>
+		
+		<call target="common.build.internal" />
+
+		<if test="${common.merge.enabled}">
+			<property name="project.config" value="release" />
+			<property name="common.coverage.enabled" value="false" />
+			<property name="common.package" value="true" />
+
+			<call target="common.build.internal" />
+		</if>
+	</target>
+
+	<target name="common.build.internal">
+		<property name="build.base.dir" value="../../build" />
+
+		<property name="build.base.dir" value="../../build" />
+		<nant>
+			<buildfiles refid="buildfiles.all" />
+		</nant>
+
+		<if test="${common.coverage.enabled}">
+			<call target="common.create.coverage.report" />
+			<call target="common-run.ndepend" />
+		</if>
+
+		<if test="${common.package}">
+			<call target="common.create-package" />
+		</if>
+	</target>
+
+	<target name="common.compile-tests"
+		description="Compile NUnit tests and copy App.config file to the output directory, if it exists.">
+
+		<call target="common.compile-dll" />
+
+		<!-- Check if there is a framework specific config file and use that -->
+		<property name="app.config.src" value="${src.dir}/App-${framework::get-target-framework()}.config" />
+		<if test="${file::exists(app.config.src)}">
+			<copy
+				file="${app.config.src}"
+				tofile="${build.dir}/${project::get-name()}.dll.config"
+			/>
+
+			<call target="common.configure-tests" />
+			<property name="app.config.src.found" value="true" />
+		</if>
+		<!-- In case there was no framework specific config check if there is a framework neutral file and use that. -->
+		<property name="app.config.src" value="${src.dir}/App.config" />
+		<if test="${file::exists(app.config.src)}" unless="${property::exists('app.config.src.found')}">
+			<copy
+				file="${app.config.src}"
+				tofile="${build.dir}/${project::get-name()}.dll.config"
+			/>
+
+			<call target="common.configure-tests" />
+		</if>
+	</target>
+
+	<target name="common.configure-tests"
+		description="Configure tests for running NUnit tests.">
+
+		<property name="app.config" value="${build.dir}/${project::get-name()}.dll.config" />
+
+		<!-- make sure the config file is writable -->
+		<attrib file="${app.config}" readonly="false" />
+
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/appSettings/add[@key='tests.src']/@value"
+			value="${src.dir}"
+			failonerror="false"
+		/>
+	</target>
+
+	<target name="common.compile-exe" depends="common.generate-assemblyinfo common.copy.project.references" description="Compile sources into a console executable">
+		
+		<property name="output-file" overwrite="false" value="${project::get-name()}" />
+
+		<csc
+			target="exe"
+			define="${current.build.defines}" 
+			debug="${build.debugoutput}" 
+			optimize="${build.optimize}"
+			warnaserror="${build.warnaserrors}"
+			output="${build.dir}/${output-file}.exe" 
+		>
+			<nowarn>
+				<warning number="1591" unless="${build.warnmissingdocs}" /> <!-- No XML comment for publicly visible member -->
+			</nowarn>
+			<sources refid="project.sources" />
+			<references refid="project.references" />
+			<resources refid="project.resources" />
+			<arg line="&quot;${csc.keyfile}&quot;" if="${sign}" />
+			<arg line="${csc.args}" />
+		</csc>
+	</target>
+
+	<target name="common.compile-dll" depends="common.generate-assemblyinfo common.copy.project.references" description="Compile sources into a DLL">
+		<csc verbose="false"
+			target="library"
+			define="${current.build.defines}"
+			debug="${build.debugoutput}"
+			optimize="${build.optimize}"
+			warnaserror="${build.warnaserrors}"
+			output="${build.dir}/${project::get-name()}.dll"
+			doc="${build.dir}/${project::get-name()}.xml"
+			rebuild="${build.rebuild}"
+			>
+			<nowarn>
+				<warning number="1591" unless="${build.warnmissingdocs}" />
+				<!-- No XML comment for publicly visible member -->
+			</nowarn>
+			<sources refid="project.sources" />
+			<references refid="project.references" />
+			<resources refid="project.resources" />
+			<arg line="&quot;${csc.keyfile}&quot;" if="${sign}" />
+			<arg line="${csc.args}" />
+		</csc>
+	</target>
+
+	<target name="common.set-assembly-attribute-values">
+		<property overwrite="false" name="assembly.is-cls-compliant" value="true" />
+		<property overwrite="false" name="assembly.is-com-visible" value="false" />
+		<property overwrite="false" name="assembly.guid" value="" />
+		<property overwrite="false" name="assembly.allow-partially-trusted-callers" value="false" />
+		<property overwrite="false" name="assembly.description" value="" />
+		<property overwrite="false" name="assembly.product" value="${project::get-name()}" />
+		<property overwrite="false" name="assembly.company" value="${project.company}" />
+		<property overwrite="false" name="assembly.title" value="${project::get-name()} for ${framework::get-description(framework::get-target-framework())}" />
+		<property overwrite="false" name="assembly.version" value="${project.major}.${project.minor}.${project.build}.0" />
+		<property overwrite="false" name="assembly.version.informational" value="${assembly.major}.${assembly.minor}.${assembly.build}.${svn.revision}" />
+		<property overwrite="false" name="assembly.copyright" value="Castle Project, original author or authors" />
+	</target>
+
+	<target name="common.generate-assemblyinfo"
+		depends="common.set-assembly-attribute-values"
+		description="Generate AssemblyInfo.cs using assembly.* properties."
+	>
+		<property name="assemblyinfo.cs" value="${path::combine(src.dir,'AssemblyInfo.cs')}" />
+		<attrib file="${assemblyinfo.cs}" readonly="false" />
+		<asminfo output="${assemblyinfo.cs}" language="CSharp" failonerror="false">
+			<imports>
+				<import namespace="System" />
+				<import namespace="System.Reflection" />
+				<import namespace="System.Runtime.CompilerServices" />
+				<import namespace="System.Runtime.InteropServices" />
+				<import namespace="System.Security" if="${assembly.allow-partially-trusted-callers}" />
+			</imports>
+			<attributes>
+				<attribute type="CLSCompliantAttribute" value="${assembly.is-cls-compliant}" />
+				<attribute type="ComVisibleAttribute" value="${assembly.is-com-visible}" />
+				<attribute type="GuidAttribute" value="${assembly.guid}" if="${assembly.guid != ''}" />
+				<attribute type="AssemblyTitleAttribute" value="${assembly.title}" />
+				<attribute type="AssemblyDescriptionAttribute" value="${assembly.description}" />
+				<attribute type="AssemblyCompanyAttribute" value="${assembly.company}" />
+				<attribute type="AssemblyProductAttribute" value="${assembly.product}" />
+				<attribute type="AssemblyCopyrightAttribute" value="${assembly.copyright}" />
+				<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
+				<attribute type="AssemblyInformationalVersionAttribute" value="${assembly.version.informational}" />
+				<attribute type="AssemblyFileVersionAttribute" value="${assembly.version.informational}" />
+				<attribute type="AssemblyDelaySignAttribute" value="false" />
+
+				<!-- For some reason, NAnt doesn't detect that APTCA has a public no-argument constructor -->
+				<attribute asis="true" type="AllowPartiallyTrustedCallersAttribute" if="${assembly.allow-partially-trusted-callers}" />
+			</attributes>
+		</asminfo>
+	</target>
+	
+	<target name="common.copy.project.references">
+		<foreach item="File" property="filename">
+			<in>
+				<items>
+					<include name="${common.scripts.dir}/../lib/${nant.settings.currentframework}/x64/*.dll" if="${os.x64}"/>
+					<include name="${common.scripts.dir}/../lib/${nant.settings.currentframework}/x86/*.dll" unless="${os.x64}"/>
+					<include name="${common.scripts.dir}/../lib/${nant.settings.currentframework}/*.dll" />
+					<include name="${common.scripts.dir}/../lib/*.dll" />
+					<include name="${common.scripts.dir}/../lib/${nant.settings.currentframework}/x64/*.pdb" if="${os.x64}"/>
+					<include name="${common.scripts.dir}/../lib/${nant.settings.currentframework}/x86/*.pdb" unless="${os.x64}"/>
+					<include name="${common.scripts.dir}/../lib/${nant.settings.currentframework}/*.pdb" />
+					<include name="${common.scripts.dir}/../lib/*.pdb" />
+					<include name="${common.scripts.dir}/../lib/${nant.settings.currentframework}/x64/*.mdb" if="${os.x64}"/>
+					<include name="${common.scripts.dir}/../lib/${nant.settings.currentframework}/x86/*.mdb" unless="${os.x64}"/>
+					<include name="${common.scripts.dir}/../lib/${nant.settings.currentframework}/*.mdb" />
+					<include name="${common.scripts.dir}/../lib/*.mdb" />
+				</items>
+			</in>
+			<do>
+				<copy file="${filename}" todir="${build.dir}" overwrite="${common.overwritereferences}" />
+			</do>
+		</foreach>
+
+		<!-- Copy Silverlight 2.0/3.0 CoreCLR libraries -->
+		<if test="${nant.settings.currentframework == 'silverlight-2.0'}">
+			<copy todir="${build.dir}" overwrite="true">
+				<fileset basedir="${environment::get-folder-path('ProgramFiles')}/Microsoft SDKs/Silverlight/v2.0/Reference Assemblies">
+					<include name="System.dll" />
+				</fileset>
+			</copy>
+		</if>
+		<if test="${nant.settings.currentframework == 'silverlight-3.0'}">
+			<copy todir="${build.dir}" overwrite="true">
+				<fileset basedir="${environment::get-folder-path('ProgramFiles')}/Microsoft Silverlight/3.0.40818.0">
+					<include name="System.dll" />
+					<include name="System.Core.dll" />
+				</fileset>
+			</copy>
+		</if>
+	</target>
+
+	<target name="common.run-tests"
+		description="Run NUnit tests">
+
+		<if test="${common.testrunner.enabled}">
+
+			<echo message="Running tests in '${project::get-name()}'" />
+
+			<property name="nunitcommandline" value="${project::get-name()}.dll /xml:&quot;${testresults.dir}/${project::get-name()}.dll-results.xml&quot; /config:&quot;${build.dir}/${project::get-name()}.dll.config&quot; /nologo /noshadow ${common.testrunner.args}" />
+			<if test="${(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
+				<property name="nunitcommandline" value="${project::get-name()}.dll -xml:${testresults.dir}/${project::get-name()}.dll-results.xml -config:${build.dir}/${project::get-name()}.dll.config -nologo -noshadow -labels" />
+			</if>
+
+			<!-- Use nunit-console.exe if found, otherwise fall back to nunit2 task -->
+			<exec if="${not common.coverage.enabled}"
+				program="${nunit-console}"
+				workingdir="${build.dir}"
+				commandline="${nunitcommandline}"
+				failonerror="${common.testrunner.failonerror}"
+				timeout="${common.testrunner.timeout}"
+			/>
+
+			<!-- Run NCover if coverage is enabled -->
+			<if test="${common.coverage.enabled}">
+				<property name="assembly.under.test" value="${string::replace(project::get-name(), '.Tests', '')}" />
+				<exec
+					program="${ncover.dir}\NCover.Console.exe"
+					workingdir="${build.dir}"
+					commandline="${nunit-console} ${nunitcommandline} //ias ${assembly.under.test} //x ${coverageresults.dir}/${assembly.under.test}.xml //ll Normal //l ${coverageresults.dir}/${assembly.under.test}.log"
+					failonerror="${common.testrunner.failonerror}"
+					timeout="240000"
+				/>
+			</if>
+		</if>
+		<if test="${not common.testrunner.enabled}">
+			<echo message="Tests are disabled for '${project::get-name()}'" />
+		</if>
+	</target>
+
+	<target name="common.create-package" description="Creates Zip file for Release">
+		<property name="build.base.dir" value="build" />
+		<call target="set-project-configuration" />
+
+		<property name="build.number" value="0" overwrite="false" />
+		<property name="build.zip.file" value="${project::get-name()}-${framework::get-target-framework()}-${project.config}-${build.number}.zip" overwrite="false" dynamic="true" />
+		<property name="build.zip.fullpath" value="${build.dir}/${build.zip.file}" readonly="true" />
+
+		<zip zipfile="${build.zip.fullpath}" duplicate="Preserve">
+			<fileset basedir="${build.dir}" prefix="bin">
+				<patternset refid="package.bin.set" />
+			</fileset>
+			<fileset basedir="${common.scripts.dir}/../lib/${nant.settings.currentframework}/x64/" prefix="bin">
+				<patternset refid="package.bin.set" />
+			</fileset>
+			<fileset basedir="${common.scripts.dir}/../lib/${nant.settings.currentframework}/x86/" prefix="bin">
+				<patternset refid="package.bin.set" />
+			</fileset>
+			<fileset basedir="${common.scripts.dir}/../lib/${nant.settings.currentframework}/" prefix="bin">
+				<patternset refid="package.bin.set" />
+			</fileset>
+			<fileset basedir="${common.scripts.dir}/../lib/" prefix="bin">
+				<patternset refid="package.bin.set" />
+			</fileset>
+			<fileset basedir="${common.scripts.dir}">
+				<include name="Committers.txt" />
+				<include name="ASL - Apache Software Foundation License.txt" />
+			</fileset>
+			<fileset basedir="${src.dir}/src" prefix="ReleaseNotes" >
+				<include name="ChangeLog.txt" />
+				<include name="Changes.txt" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="common.create.coverage.report" description="Generates coverage reports">
+		<property name="build.base.dir" value="build" />
+		<call target="set-project-configuration" />
+
+		<!-- Generate the coverage reports -->
+		<exec
+			program="${ncover.dir}\NCover.Reporting.exe"
+			workingdir="${build.dir}"
+			commandline="${coverageresults.dir}/*.xml //p ${project::get-name()} //or SymbolModule //sct SymbolCoverage:60 //op ${coveragereports.dir}"
+			failonerror="${common.testrunner.failonerror}"
+			timeout="240000"
+		/>
+	</target>
+
+	<target name="common-run.ndepend" failonerror="false">
+		<property name="build.base.dir" value="build" />
+		<call target="set-project-configuration" />
+
+		<foreach item="File" property="ndepend.bin">
+			<in>
+				<items basedir="${build.dir}">
+					<patternset refid="ndepend.bin.set" />
+				</items>
+			</in>
+			<do>
+				<if test="${not property::exists('ndepend.params')}">
+					<property name="ndepend.params" value="" />
+				</if>
+				<property name="ndepend.params" value="${ndepend.params}&lt;Name&gt;${path::get-file-name-without-extension(ndepend.bin)}&lt;/Name&gt;" />
+			</do>
+		</foreach>
+
+		<if test="${property::exists('ndepend.params')}">
+			<copy file="${common.scripts.dir}/NDependProject.xml" todir="${build.dir}" overwrite="true">
+				<filterchain>
+					<replacetokens>
+						<token key="ASSEMBLIES" value="${ndepend.params}" />
+						<token key="PROJECTNAME" value="${project::get-name()}" />
+						<token key="BUILDDIR" value="${build.dir}" />
+					</replacetokens>
+				</filterchain>
+			</copy>
+
+			<exec
+				workingdir="${build.dir}"
+				program="${ndepend.dir}\NDepend.Console.exe"
+				commandline="${build.dir}/NDependProject.xml /OutDir ${build.dir}/ndepend-reports"
+				timeout="300000"
+			/>
+
+			<delete file="${build.dir}/NDependProject.xml" />
+		</if>
+
+		<if test="${not property::exists('ndepend.params')}">
+			<echo message="Project hasn't defined ndepend.bin.set"/>
+			<echo message="Cannot run NDepend"/>
+		</if>
+	</target>
+
+</project>

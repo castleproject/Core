@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<project name="Castle" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+	<!-- 
+		Use this to determine if the key file CastleKey.snk should be used to 
+		sign the assemblies. Defaults to true since private key is present
+		in SVN.
+	-->
+	<property name="sign" value="true" overwrite="false" />
+	<property name="key.file" value="${path::combine(common.scripts.dir, 'CastleKey.snk')}" />
+
+	<!-- Controls whether tests are run. Setting this is as input to the build disables *all* tests. -->
+	<property name="common.run-tests" value="true" overwrite="false" />
+	<property name="common.testrunner.enabled" value="${common.run-tests}" overwrite="false" />
+	<property name="common.testrunner.failonerror" value="true" overwrite="false" /> <!--  Whether to keep building when tests are failing -->
+	<property name="common.testrunner.timeout" value="180000" overwrite="false" /> <!--  Specifies the timeout for nunit -->
+	<property name="common.coverage.enabled" value="false" overwrite="false" /><!-- Controls whether tests will be run under NCover to generate coverage logs -->
+	<property name="common.merge.enabled" value="false" overwrite="false" /><!-- Controls whether to build both in debug and release, this only works for .net3.5 -->
+	<property name="common.overwritereferences" value="true" overwrite="false" /><!-- Controls whether to overwrite project references in the build directory -->
+
+	<!-- Tools configuration -->
+	<if test="${file::exists('tools\NUnit\bin\nunit-console.exe')}">
+		<property name="nunit-console" value="${path::get-full-path('tools\NUnit\bin\nunit-console.exe')}" overwrite="false" />
+	</if>
+	<property name="nunit-console" value="nunit-console.exe" overwrite="false" />
+	<property name="ncover.dir" value="C:\Program Files\NCover" overwrite="false" />
+	<property name="ndepend.dir" value="C:\Program Files\NDepend" overwrite="false" />
+
+	<!-- Controls wheather to package project or not -->
+	<property name="common.package" value="false" overwrite="false" />
+
+	<!-- Build platforms (used to conditionally disable specific projects for specific platforms) -->
+	<property name="common.net-2.0" value="${nant.settings.currentframework == 'net-2.0'}" />
+	<property name="common.silverlight" value="${nant.settings.currentframework == 'silverlight-2.0' or nant.settings.currentframework == 'silverlight-3.0'}" />
+	<property name="common.mono" value="${nant.settings.currentframework == 'mono-3.5'}" />
+
+	<!-- debug|release -->
+	<property name="build.defines" value="TRACE" />
+	<property name="build.defines" value="${build.defines},STRONG" if="${sign}" />
+
+	<!-- platform specific properties. These are the defaults -->
+	<property name="current.build.defines" value="${build.defines}" />
+
+	<!-- These are used to set the correct attributes in AssemblyInfo.cs. -->
+	<property name="project.company" value="Castle Project" />
+
+	<!-- Versioning -->
+	<property name="project.version" value="0.0.0.0" overwrite="false" />
+	<property name="project.major" value="${version::get-major(version::parse(project.version))}" dynamic="true" />
+	<property name="project.minor" value="${version::get-minor(version::parse(project.version))}" dynamic="true" />
+	<property name="project.build" value="${version::get-build(version::parse(project.version))}" dynamic="true" />
+	<property name="project.revision" value="${svn.revision}" dynamic="true" />
+
+	<property name="assembly.major" value="${version::get-major(version::parse(assembly.version))}" dynamic="true" />
+	<property name="assembly.minor" value="${version::get-minor(version::parse(assembly.version))}" dynamic="true" />
+	<property name="assembly.build" value="${version::get-build(version::parse(assembly.version))}" dynamic="true" />
+	<property name="assembly.revision" value="${version::get-revision(version::parse(assembly.version))}" dynamic="true" />
+
+	<property name="svn.revision" value="0" overwrite="false" />
+	<if test="${property::exists('build.vcs.number')}">
+		<property name="svn.revision" value="${build.vcs.number}" overwrite="true" />
+	</if>
+	<if test="${not(property::exists('build.vcs.number'))}">
+		<call target="common.find-svninfo" />
+	</if>
+	
+	<!-- named project configurations -->
+	<target name="set-debug-project-configuration" description="Perform a 'debug' build">
+		<property name="build.debugoutput"		value="Enable" />
+		<property name="build.optimize"		value="false" overwrite="false" />
+	</target>
+
+	<target name="set-release-project-configuration" description="Perform a 'release' build">
+		<property name="build.debugoutput"		value="Enable" />
+		<property name="build.optimize" 	value="true" overwrite="false" />
+	</target>
+
+	<target name="set-project-configuration">
+		<property name="project.config" value="debug" overwrite="false" />
+		<if test="${not(target::exists('set-' + project.config + '-project-configuration'))}">
+			<fail message="Unknown configuration: '${project.config}'" />
+		</if>
+		<property name="build.warnaserrors" value="true" overwrite="false" />
+		<property name="build.warnmissingdocs" value="false" overwrite="false" />
+		<call target="set-${project.config}-project-configuration" />
+
+		<property name="src.dir" value="${path::get-full-path(project::get-base-directory())}" />
+		<property name="build.family.dir" value="${build.base.dir}/${nant.settings.currentframework}" />
+		<property name="build.dir" value="${path::get-full-path(path::combine(build.family.dir,project.config))}" dynamic="true" overwrite="true" />
+		<property name="testresults.dir" value="${build.dir}/test-results" />
+		<property name="coverageresults.dir" value="${build.dir}/coverage-results" />
+		<property name="coveragereports.dir" value="${build.dir}/coverage-reports" />
+		<property name="releasenotes.dir" value="${build.dir}/ReleaseNotes" />
+		<property name="docs.dir" value="${build.base.dir}/docs" />
+		<property name="build.rebuild" value="false" overwrite="false" />
+	</target>
+
+	<target name="set-framework-configuration">
+		<if test="${not(target::exists('set-'+framework::get-target-framework()+'-framework-configuration'))}">
+			<fail message="The '${framework::get-target-framework()}' framework is not supported by this version of Castle." />
+		</if>
+		<property name="clr-version" value="${framework::get-clr-version(framework::get-runtime-framework())}" />
+		<property name="csc.keyfile" value="" />
+		<property name="csc.args" value="" />
+		<property name="common.testrunner.args" value="" overwrite="false" />
+		<if test="${not(framework::get-family(framework::get-runtime-framework()) == 'mono')}">
+			<readregistry property="dotnet.SPlevel" 
+						  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v${framework::get-clr-version(framework::get-runtime-framework())}\SP"
+						  hive="LocalMachine"
+			 />
+		</if>
+		<property name="dotnet.SPlevel" value="0" if="${framework::get-family(framework::get-runtime-framework()) == 'mono'}" />
+
+		<script language="C#">
+			<code>
+				<![CDATA[
+					public static void ScriptMain(Project project)
+					{
+						// Detect Process Bitness - http://blogs.msdn.com/david.wang/archive/2006/03/26/HOWTO-Detect-Process-Bitness.aspx
+						if( System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") == "x86" && string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))) {
+							project.Properties["os.x64"] = false.ToString();
+						} else {
+							project.Properties["os.x64"] = true.ToString();
+						}
+					}
+				]]>
+			</code>
+		</script>
+
+		<call target="set-${framework::get-target-framework()}-framework-configuration" />
+
+	</target>
+
+	<target name="set-net-2.0-framework-configuration">
+		<property name="nant.settings.currentframework" value="net-2.0" />
+		<property name="current.build.defines" value="${build.defines},NET,DOTNET2" />
+		<property name="current.build.defines" value="${current.build.defines},DOTNET2SP1" if="${dotnet.SPlevel == '1'}" />
+		<property name="csc.keyfile" value="/keyfile:${key.file}" />
+	</target>
+
+	<target name="set-net-3.5-framework-configuration">
+		<property name="nant.settings.currentframework" value="net-3.5" />
+		<property name="current.build.defines" value="${build.defines},NET,DOTNET35" />
+		<property name="csc.keyfile" value="/keyfile:${key.file}" />
+	</target>
+
+	<target name="set-silverlight-2.0-framework-configuration">
+		<property name="nant.settings.currentframework" value="silverlight-2.0" />
+		<property name="current.build.defines" value="${build.defines},SILVERLIGHT,SL2" />
+		<property name="link.sdkdoc.version" value="MsdnOnline" />
+		<property name="build.warnaserrors" value="false" />
+		<property name="csc.keyfile" value="/keyfile:${key.file}" />
+		<property name="build.msbuild" value="false" overwrite="false" />
+	</target>
+
+	<target name="set-silverlight-3.0-framework-configuration">
+		<property name="nant.settings.currentframework" value="silverlight-3.0" />
+		<property name="current.build.defines" value="${build.defines},SILVERLIGHT,SL3" />
+		<property name="link.sdkdoc.version" value="MsdnOnline" />
+		<property name="build.warnaserrors" value="false" />
+		<property name="csc.keyfile" value="/keyfile:${key.file}" />
+		<property name="build.msbuild" value="false" overwrite="false" />
+	</target>
+
+	<target name="set-mono-2.0-framework-configuration">
+		<property name="nant.settings.currentframework" value="mono-2.0" />
+		<property name="current.build.defines" value="${build.defines},MONO,MONO2,DOTNET2" />
+		<property name="csc.keyfile" value="-keyfile:${key.file}" />
+		<property name="build.warnaserrors" value="false" />
+	</target>
+
+	<target name="set-mono-3.5-framework-configuration">
+		<property name="nant.settings.currentframework" value="mono-3.5" />
+		<property name="current.build.defines" value="${build.defines},MONO,MONO2,DOTNET35" />
+		<property name="csc.keyfile" value="-keyfile:${key.file}" />
+		<property name="build.warnaserrors" value="false" />
+	</target>
+
+	<target name="common.init"
+		depends="set-framework-configuration set-project-configuration"
+		description="Initializes build properties">
+
+		<fileset id="project.sources" failonempty="true">
+			<include name="${src.dir}/**/*.cs" />
+		</fileset>
+		<resourcefileset id="project.resources" />
+
+		<mkdir dir="${build.dir}" verbose="true"/>
+		<mkdir dir="${testresults.dir}" />
+		<mkdir dir="${coverageresults.dir}" if="${common.coverage.enabled}" />
+		<mkdir dir="${coveragereports.dir}" if="${common.coverage.enabled}" />
+	</target>
+
+	<target name="common.find-svninfo">
+		<!-- For adding SVN revision to builds -->
+		<!-- try to update the revision -->
+		<exec
+			workingdir="${project::get-base-directory()}"
+			program="git"
+			commandline='log -1 --pretty=format:"%h"'
+			output="_revision.xml"
+			failonerror="false"/>
+		<foreach item="Line" in="_revision.xml" delim="." property="i">
+			<property name="svn.revision" value="${i}"/>
+		</foreach>
+		<delete file="_revision.xml" failonerror="false" />
+		<script language="C#">
+			<code>
+				<![CDATA[
+					public static void ScriptMain(Project project) 
+					{
+						project.Properties["svn.revision"] = Convert.ToInt64(project.Properties["svn.revision"], 16).ToString().Substring(0, 5);
+					}
+				]]>
+			</code>
+		</script>
+		<echo message="INFO: Using git revision: ${svn.revision}"/>
+	</target>
+
+</project>
