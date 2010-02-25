@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+***********************************************************************************************
+
+	Common targets and properties for VS and external build files
+
+Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- Project folders -->
+	<PropertyGroup>
+		<TargetFrameworkIdentifier Condition="'$(TargetFrameworkIdentifier)' ==''">.NETFramework</TargetFrameworkIdentifier> <!-- MSBuild 4.0 defines this -->
+		<OutputPath Condition="'$(OutputPath)' == ''">$(RootPath)\build\$(TargetFrameworkIdentifier)-$(TargetFrameworkVersion)\$(Configuration)</OutputPath>
+		<OutputType Condition="'$(OutputType)' == ''">Library</OutputType>
+		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)\buildscripts</BuildScriptsPath>
+		<ToolsPath Condition="'$(ToolsPath)' == ''">$(RootPath)\tools</ToolsPath>
+		<SolutionPath Condition="'$(SolutionPath)' == '' and '$(SolutionName)' != '' and $(TargetFrameworkVersion) == 'v3.5'">$(RootPath)\src\$(SolutionName)-vs2008.sln</SolutionPath>
+		<SolutionPath Condition="'$(SolutionPath)' == '' and $(TargetFrameworkVersion) == 'v3.5'">$(RootPath)\src\$(ProjectName)-vs2008.sln</SolutionPath>
+		<TestResultsPath Condition="'$(TestResultsPath)' == ''">$(OutputPath)\test-results</TestResultsPath>
+	</PropertyGroup>
+
+	
+	<!-- AssemblyInfo Properties -->
+	<PropertyGroup>
+		<AssemblyInfoFile Condition="'$(AssemblyInfoFile)' == ''">AssemblyInfo.cs</AssemblyInfoFile>
+		<AssemblyTitle Condition="'$(AssemblyTitle)' == ''">$(ProjectName)</AssemblyTitle>
+		<AssemblyProduct Condition="'$(AssemblyProduct)' == ''">$(ProjectName)</AssemblyProduct>
+		<AssemblyDescription Condition="'$(AssemblyDescription)' != ''">$(AssemblyDescription)</AssemblyDescription>
+		<ComVisible Condition="'$(ComVisible)' == ''">false</ComVisible>
+		<CLSCompliant Condition="'$(CLSCompliant)' == ''">true</CLSCompliant>
+		<AllowPartiallyTrustedCallers Condition="'$(AllowPartiallyTrustedCallers)' == ''">false</AllowPartiallyTrustedCallers>
+	</PropertyGroup>
+
+	
+	<!-- Signing Properties-->
+	<PropertyGroup>
+		<SignAssembly Condition="'$(SignAssembly)' == ''">true</SignAssembly>
+		<AssemblyOriginatorKeyFile>$(BuildScriptsPath)\CastleKey.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+
+	
+	<!-- Versioning Properties -->
+	<PropertyGroup>
+		<Project_Major Condition="'$(Project_Major)' == ''">1</Project_Major>
+		<Project_Minor Condition="'$(Project_Minor)' == ''">0</Project_Minor>
+		<Project_Build Condition="'$(Project_Build)' == ''">3</Project_Build>
+	</PropertyGroup>
+
+	
+	<!-- Testing Properties -->
+	<PropertyGroup>
+		<TestRunner_Enabled Condition="'$(TestRunner_Enabled)' == ''">true</TestRunner_Enabled>
+		<!-- Controls whether tests are run -->
+		<TestRunner_Timeout Condition="'$(TestRunner_Timeout)' == ''">180000</TestRunner_Timeout>
+		<!-- Specifies the timeout for nunit -->
+		<TestRunner_ContinueOnError Condition="'$(TestRunner_ContinueOnError)' == ''">false</TestRunner_ContinueOnError>
+		<!-- Controls whether to continue the build if tests are failing -->
+		<TestRunner_EnableCoverage Condition="'$(TestRunner_EnableCoverage)' == ''">false</TestRunner_EnableCoverage>
+		<!-- Controls whether tests will be run under NCover to generate coverage logs -->
+	</PropertyGroup>
+
+	
+	<!-- 3rd Party Program Paths -->
+	<PropertyGroup>
+		<NUnitPath Condition="'$(NUnitPath)' == ''">$(ToolsPath)\nunit\bin</NUnitPath>
+		<NCoverPath Condition="'$(NCoverPath)' == ''">$(ProgramFiles)\NCover</NCoverPath>
+		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(ToolsPath)\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+	</PropertyGroup>
+
+	
+	<!-- Re-define CoreCompileDependsOn to ensure the assemblyinfo files are updated before compilation. -->
+	<PropertyGroup>
+		<CoreCompileDependsOn>
+			$(CoreCompileDependsOn);
+			UpdateAssemblyInfoFiles
+		</CoreCompileDependsOn>
+	</PropertyGroup>
+
+
+	<!-- Import 3rd party targets -->
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+	
+	<!-- Updates the AssemblyInfo. The inputs are the same as the CoreCompileDependsOn target
+	to ensure that we only ever update the AssemblyInfo files if a compile is actually going to take place.-->
+	<Target
+		Name="UpdateAssemblyInfoFiles"
+		DependsOnTargets="GetBuildRevision" 
+		Inputs="$(MSBuildAllProjects);
+					@(Compile);
+					@(ManifestResourceWithNoCulture);
+					$(ApplicationIcon);
+					$(AssemblyOriginatorKeyFile);
+					@(ManifestNonResxWithNoCultureOnDisk);
+					@(ReferencePath);
+					@(CompiledLicenseFile);
+					@(EmbeddedDocumentation);                
+					@(CustomAdditionalCompileInputs)"
+		Outputs="@(IntermediateAssembly);$(AssemblyInfoFile)"
+		>
+
+		<AssemblyInfo
+			CodeLanguage="cs"
+			OutputFile="$(AssemblyInfoFile)"
+			AssemblyTitle="$(AssemblyTitle)"
+			AssemblyProduct="$(AssemblyProduct)"
+			AssemblyDescription="$(AssemblyDescription)"
+			AssemblyVersion="$(Project_Major).$(Project_Minor).$(Project_Build).0"
+			AssemblyInformationalVersion="$(Project_Major).$(Project_Minor).$(Project_Build).$(Build_Revision)"
+			AssemblyFileVersion="$(Project_Major).$(Project_Minor).$(Project_Build).$(Build_Revision)"
+			ComVisible="$(ComVisible)"
+			CLSCompliant="$(CLSCompliant)"
+			AllowPartiallyTrustedCallers="$(AllowPartiallyTrustedCallers)"
+			/>
+	
+	</Target>
+
+	
+	<!-- Sets property $(Build_Revision)-->
+	<Target
+		Name="GetBuildRevision"
+		Inputs="$(MSBuildAllProjects);
+					@(Compile);
+					@(ManifestResourceWithNoCulture);
+					$(ApplicationIcon);
+					$(AssemblyOriginatorKeyFile);
+					@(ManifestNonResxWithNoCultureOnDisk);
+					@(ReferencePath);
+					@(CompiledLicenseFile);
+					@(EmbeddedDocumentation);                
+					@(CustomAdditionalCompileInputs)"
+		Outputs="@(IntermediateAssembly)"
+		>
+		
+		<PropertyGroup>
+			<Build_Revision Condition="'$(Build_Number)' == ''">0</Build_Revision>
+			<Build_Revision Condition="'$(Build_Number)' != ''">$(Build_Number)</Build_Revision>
+		</PropertyGroup>
+
+	</Target>
+
+
+	<!-- User targets can be run as the lastest -->
+	<Import Condition="Exists('$(RootPath)\Common.User.Targets')" Project="$(RootPath)\Common.User.Targets" />
+
+</Project>
