@@ -30,8 +30,8 @@ limitations under the License.
 		<OutputType Condition="'$(OutputType)' == ''">Library</OutputType>
 		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)\buildscripts</BuildScriptsPath>
 		<ToolsPath Condition="'$(ToolsPath)' == ''">$(RootPath)\tools</ToolsPath>
-		<SolutionPath Condition="'$(SolutionPath)' == '' and '$(SolutionName)' != '' and $(TargetFrameworkVersion) == 'v3.5'">$(RootPath)\src\$(SolutionName)-vs2008.sln</SolutionPath>
-		<SolutionPath Condition="'$(SolutionPath)' == '' and $(TargetFrameworkVersion) == 'v3.5'">$(RootPath)\src\$(ProjectName)-vs2008.sln</SolutionPath>
+		<SolutionPath Condition="'$(SolutionPath)' == '' and '$(SolutionName)' != '' and $(TargetFrameworkVersion) == 'v3.5'">$(RootPath)\$(SolutionName)-vs2008.sln</SolutionPath>
+		<SolutionPath Condition="'$(SolutionPath)' == '' and $(TargetFrameworkVersion) == 'v3.5'">$(RootPath)\$(ProjectName)-vs2008.sln</SolutionPath>
 		<TestResultsPath Condition="'$(TestResultsPath)' == ''">$(OutputPath)\test-results</TestResultsPath>
 	</PropertyGroup>
 
