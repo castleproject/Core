@@ -13,7 +13,7 @@
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Castle.DynamicProxy</AssemblyName>
+    <AssemblyName>Castle.DynamicProxy2</AssemblyName>
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
@@ -40,7 +40,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY</DefineConstants>
-    <DocumentationFile>bin\Debug\Castle.DynamicProxy.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Castle.DynamicProxy2.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -61,7 +61,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;PHYSICALASSEMBLY</DefineConstants>
-    <DocumentationFile>bin\Release\Castle.DynamicProxy.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Castle.DynamicProxy2.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
