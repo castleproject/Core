@@ -232,7 +232,7 @@ limitations under the License.
 		<Message Importance="high" Text="Creating ZIP file $(Build_ZipFilePath)"/>
 
 		<ItemGroup>
-			<FilesToPackage Include="$(PackageDir)\**\*.*" />
+			<FilesToPackage Include="$(PackageDir)\**\*.*" Exclude="$(PackageDir)\**\CastleDynProxy2.dll" />
 		</ItemGroup>
 		<Zip
 			Files="@(FilesToPackage)"
