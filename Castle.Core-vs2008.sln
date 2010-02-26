@@ -3,9 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C53C104-3557-4C1A-B653-C4E6C46DB48E}"
 	ProjectSection(SolutionItems) = preProject
-		Changes.txt = Changes.txt
-		core.build = core.build
-		License.txt = License.txt
+		..\Changes-logging.txt = ..\Changes-logging.txt
+		..\Changes.txt = ..\Changes.txt
+		..\License.txt = ..\License.txt
+		..\Settings.proj = ..\Settings.proj
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2008", "Castle.Core\Castle.Core-vs2008.csproj", "{E4FA5B53-7D36-429E-8E5C-53D5479242BA}"
