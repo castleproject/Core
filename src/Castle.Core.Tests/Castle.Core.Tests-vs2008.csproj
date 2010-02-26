@@ -73,7 +73,9 @@
     <Compile Include="WebLoggerTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\file1.txt" />
+    <EmbeddedResource Include="Resources\file1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\MoreRes\TestRes.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TestRes.Designer.cs</LastGenOutput>

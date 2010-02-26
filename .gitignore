@@ -4,12 +4,11 @@ AssemblyInfo.cs
 
 # Standard VS.NET and ReSharper Foo
 src/*/obj
-src/bin
 src/*/bin
 *.csproj.user
-*ReSharper*
+*ReSharper.user
+_ReSharper*
 *resharper*
 *.suo
 *.cache
 * Thumbs.db
-*.bak
