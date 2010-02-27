@@ -212,8 +212,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CastleKey.snk" />
-    <None Include="default.build" />
+    <None Include="..\..\buildscripts\CastleKey.snk">
+      <Link>CastleKey.snk</Link>
+    </None>
     <None Include="Validator.cd" />
   </ItemGroup>
   <ItemGroup>
