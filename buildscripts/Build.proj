@@ -232,7 +232,7 @@ limitations under the License.
 		<Message Importance="high" Text="Creating ZIP file $(Build_ZipFilePath)"/>
 
 		<ItemGroup>
-			<FilesToPackage Include="$(PackageDir)\**\*.*" Exclude="$(PackageDir)\**\CastleDynProxy2.dll" />
+			<FilesToPackage Include="$(PackageDir)\**\*.*" />
 		</ItemGroup>
 		<Zip
 			Files="@(FilesToPackage)"
@@ -399,27 +399,32 @@ limitations under the License.
 			<_CastleDependencies Include="$(OutputPath)Castle*.dll;$(OutputPath)Castle*.xml" Exclude="$(OutputPath)Castle*.Tests.dll"/>
 
 			<_BuildScriptsTxtFiles Include="$(BuildScriptsPath)\*.txt"/>
-			<_ChangesTxt Include="$(RootPath)\src\Change*.txt"/>
+			<_Txt Include="$(RootPath)\*.txt"/>			
+			
+			<_PackageFiles Include="$(PackageFiles)" />
+			<_ExcludeFromPackageFiles Include="$(ExcludeFromPackageFiles)" />
 		</ItemGroup>
-
+		
 		<!-- Create list with items to be copied to package directory. The metadata <DestinationFolder> controls where they wind up. -->
 		<ItemGroup>
 			<CopyToPackageDirectory Include="@(_BuildScriptsTxtFiles)">
 				<DestinationFolder>$(PackageDir)</DestinationFolder>
 			</CopyToPackageDirectory>
 
-			<CopyToPackageDirectory Include="@(AppAssemblies);@(PdbFiles);@(DocumentationFiles);@(_CastleDependencies);@(PackageFiles)">
+			<CopyToPackageDirectory Include="@(AppAssemblies);@(PdbFiles);@(DocumentationFiles);@(_CastleDependencies);@(_PackageFiles)">
 				<DestinationFolder>$(PackageDir)\bin</DestinationFolder>
 			</CopyToPackageDirectory>
 
-			<CopyToPackageDirectory Include="@(_ChangesTxt)">
+			<CopyToPackageDirectory Include="@(_Txt)">
 				<DestinationFolder>$(PackageDir)\ReleaseNotes</DestinationFolder>
 			</CopyToPackageDirectory>
+			
+			<CopyToPackageDirectory Remove="@(_ExcludeFromPackageFiles)" />
 		</ItemGroup>
 
 		<Copy
 			SourceFiles="@(CopyToPackageDirectory)"
-			DestinationFolder="%(CopyToPackageDirectory.DestinationFolder)"
+			DestinationFiles="@(CopyToPackageDirectory->'%(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')"
 			/>
 
 	</Target>
