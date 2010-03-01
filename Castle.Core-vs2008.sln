@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C53C104-3557-4C1A-B653-C4E6C46DB48E}"
 	ProjectSection(SolutionItems) = preProject
-		..\Changes-logging.txt = ..\Changes-logging.txt
-		..\Changes.txt = ..\Changes.txt
-		..\License.txt = ..\License.txt
-		..\Settings.proj = ..\Settings.proj
+		Changes-logging.txt = Changes-logging.txt
+		Changes.txt = Changes.txt
+		License.txt = License.txt
+		Settings.proj = Settings.proj
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2008", "Castle.Core\Castle.Core-vs2008.csproj", "{E4FA5B53-7D36-429E-8E5C-53D5479242BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2008", "src\Castle.Core\Castle.Core-vs2008.csproj", "{E4FA5B53-7D36-429E-8E5C-53D5479242BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core.Tests-vs2008", "Castle.Core.Tests\Castle.Core.Tests-vs2008.csproj", "{087AD3BF-5E40-450D-8138-FBB5F57AC474}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core.Tests-vs2008", "src\Castle.Core.Tests\Castle.Core.Tests-vs2008.csproj", "{087AD3BF-5E40-450D-8138-FBB5F57AC474}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.log4netIntegration-vs2008", "Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration-vs2008.csproj", "{FA79D6B4-30B1-444A-A627-ED283BF6406B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.log4netIntegration-vs2008", "src\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration-vs2008.csproj", "{FA79D6B4-30B1-444A-A627-ED283BF6406B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.NLogIntegration-vs2008", "Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration-vs2008.csproj", "{D680B5DB-B943-4BB5-891A-1695DEF86A3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.NLogIntegration-vs2008", "src\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration-vs2008.csproj", "{D680B5DB-B943-4BB5-891A-1695DEF86A3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
