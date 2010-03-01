@@ -1,5 +1,0 @@
-C:\dev\dotnet\castle\git\Castle.Components.Pagination\src\Castle.Components.Pagination.Tests\obj\Debug\ResolveAssemblyReference.cache
-C:\dev\dotnet\castle\git\Castle.Components.Pagination\build\.NETFramework-v3.5\Debug\Castle.Components.Pagination.Tests.dll
-C:\dev\dotnet\castle\git\Castle.Components.Pagination\build\.NETFramework-v3.5\Debug\Castle.Components.Pagination.Tests.pdb
-C:\dev\dotnet\castle\git\Castle.Components.Pagination\src\Castle.Components.Pagination.Tests\obj\Debug\Castle.Components.Pagination.Tests.dll
-C:\dev\dotnet\castle\git\Castle.Components.Pagination\src\Castle.Components.Pagination.Tests\obj\Debug\Castle.Components.Pagination.Tests.pdb
