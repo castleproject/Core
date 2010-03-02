@@ -32,6 +32,7 @@ limitations under the License.
 	<!-- Import common targets -->
 	<Import Project="$(RootPath)/Settings.proj" />
 	<Import Project="$(BuildScriptsPath)/Castle.Common.Targets" />
+	<Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
 
 
 	<Target Name="CheckRequiredProperties">
