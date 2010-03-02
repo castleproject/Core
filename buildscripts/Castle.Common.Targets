@@ -190,8 +190,8 @@ limitations under the License.
 		>
 		
 		<PropertyGroup>
-			<Build_Revision Condition="'$(Build_Number)' == ''">0</Build_Revision>
-			<Build_Revision Condition="'$(Build_Number)' != ''">$(Build_Number)</Build_Revision>
+			<Build_Number Condition="'$(Build_Number)' == ''">0</Build_Number>
+			<Build_Revision>$(Build_Number)</Build_Revision>
 		</PropertyGroup>
 
 	</Target>

@@ -118,7 +118,7 @@ limitations under the License.
 		>
 
 		<PropertyGroup>
-			<Build_ZipFile Condition="'$(Build_ZipFile)' == ''">$(ProjectName)-$(FrameworkId)-$(Build_Revision).zip</Build_ZipFile>
+			<Build_ZipFile Condition="'$(Build_ZipFile)' == ''">$(ProjectName)-$(FrameworkId)-$(Build_Number).zip</Build_ZipFile>
 			<Build_ZipFilePath Condition="'$(Build_ZipFilePath)' == ''">$(OutputPath)/$(Build_ZipFile)</Build_ZipFilePath>
 		</PropertyGroup>
 
