@@ -32,10 +32,10 @@ ECHO ON
 @GOTO end
 
 :quick
-IF "%FrameworkVersion%" == "v2.0.50727" SET __OUTDIR__=%~dp0..\build\.NETFramework-v3.5\Release\
-IF "%FrameworkVersion%" == "v4.0.21006" SET __OUTDIR__=%~dp0..\build\.NETFramework-v4.0\Release\
+IF "%FrameworkVersion%" == "v2.0.50727" SET __OUTDIR__=%~dp0..\build\NET35\Release\
+IF "%FrameworkVersion%" == "v4.0.21006" SET __OUTDIR__=%~dp0..\build\NET40\Release\
 ECHO ON
-%__MSBUILD_EXE__% /m "%~dp0Build.proj" /t:CleanAll;BuildProject /p:OutputPath=%__OUTDIR__% /p:Configuration=Release /p:Platform=AnyCPU /p:TargetFrameworkVersion=%Framework35Version%
+%__MSBUILD_EXE__% /m "%~dp0Build.proj" /t:RebuildAll /p:TargetFrameworkVersion=%Framework35Version%
 @ECHO OFF
 IF "%CLICKTOBUILD%" == "1" EXIT /B %ERRORLEVEL%
 
