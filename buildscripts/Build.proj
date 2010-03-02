@@ -54,7 +54,7 @@ limitations under the License.
 		Name="BuildProject"
 		>
 
-		<MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(BuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)">
+		<MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)">
 
 			<Output TaskParameter="TargetOutputs" ItemName="AppAssemblies" />
 		
@@ -80,7 +80,7 @@ limitations under the License.
 
 	
 	<Target Name="CleanProject">
-		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(BuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
+		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
 
 		<CreateItem Include="**/Debug/**/*.*;**/Release/**/*.*">
 			<Output ItemName="_binaryFiles" TaskParameter="Include"/>
@@ -91,7 +91,7 @@ limitations under the License.
 
 
 	<Target Name="CleanAll">
-		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(BuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
+		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
 
 		<CreateItem Include="**/Debug/**/*.*;**/Release/**/*.*">
 			<Output ItemName="_binaryFiles" TaskParameter="Include"/>
