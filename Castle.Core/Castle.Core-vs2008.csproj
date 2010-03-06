@@ -58,12 +58,6 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Attributes\CastleComponent.cs" />
-    <Compile Include="Attributes\ComponentActivatorAttribute.cs" />
-    <Compile Include="Attributes\ComponentProxyBehaviorAttribute.cs" />
-    <Compile Include="Attributes\DoNotWireAttribute.cs" />
-    <Compile Include="Attributes\InterceptorAttribute.cs" />
-    <Compile Include="Attributes\LifestyleAttributes.cs" />
     <Compile Include="CollectionExtensions.cs" />
     <Compile Include="Interceptor\IAttributeDisassembler.cs" />
     <Compile Include="Interceptor\IInterceptorSelector.cs" />
@@ -87,18 +81,11 @@
     <Compile Include="Interceptor\IChangeProxyTarget.cs" />
     <Compile Include="Interceptor\IInterceptor.cs" />
     <Compile Include="Interceptor\IInvocation.cs" />
-    <Compile Include="Interceptor\IOnBehalfAware.cs" />
     <Compile Include="Interceptor\IProxyTargetAccessor.cs" />
     <Compile Include="Interceptor\StandardInterceptor.cs" />
-    <Compile Include="Internal\GraphNode.cs" />
-    <Compile Include="Internal\GraphSets.cs" />
-    <Compile Include="Internal\IVertex.cs" />
-    <Compile Include="Internal\TopologicalSortAlgo.cs" />
     <Compile Include="IServiceEnabledComponent.cs" />
     <Compile Include="IServiceProviderEx.cs" />
     <Compile Include="Lifecycle\IInitializable.cs" />
-    <Compile Include="Lifecycle\IRecyclable.cs" />
-    <Compile Include="Lifecycle\IStartable.cs" />
     <Compile Include="Logging\Factories\AbstractExtendedLoggerFactory.cs" />
     <Compile Include="Logging\Factories\TraceLoggerFactory.cs" />
     <Compile Include="Logging\IContextProperties.cs" />
@@ -122,26 +109,12 @@
     <Compile Include="Logging\Loggers\StreamLogger.cs" />
     <Compile Include="Logging\Loggers\TraceLogger.cs" />
     <Compile Include="Logging\Loggers\WebLogger.cs" />
-    <Compile Include="Model\ComponentModel.cs" />
     <Compile Include="Model\Configuration\AbstractConfiguration.cs" />
     <Compile Include="Model\Configuration\ConfigurationAttributeCollection.cs" />
     <Compile Include="Model\Configuration\ConfigurationCollection.cs" />
     <Compile Include="Model\Configuration\IConfiguration.cs" />
     <Compile Include="Model\Configuration\MutableConfiguration.cs" />
     <Compile Include="Model\Configuration\Xml\XmlConfigurationDeserializer.cs" />
-    <Compile Include="Model\ConstructorCandidate.cs" />
-    <Compile Include="Model\ConstructorCandidateCollection.cs" />
-    <Compile Include="Model\DependencyModel.cs" />
-    <Compile Include="Model\DependencyModelCollection.cs" />
-    <Compile Include="Model\InterceptorReference.cs" />
-    <Compile Include="Model\InterceptorReferenceCollection.cs" />
-    <Compile Include="Model\LifecycleStepCollection.cs" />
-    <Compile Include="Model\MethodMetaModel.cs" />
-    <Compile Include="Model\MethodMetaModelCollection.cs" />
-    <Compile Include="Model\ParameterModel.cs" />
-    <Compile Include="Model\ParameterModelCollection.cs" />
-    <Compile Include="Model\PropertySet.cs" />
-    <Compile Include="Model\PropertySetCollection.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="ProxyServices.cs" />
     <Compile Include="ReflectionBasedDictionaryAdapter.cs" />
@@ -178,9 +151,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
-	<Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 3.0'" />
-	<Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
-	<Import Project="$(RootPath)\Settings.proj" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 3.0'" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
+  <Import Project="$(RootPath)\Settings.proj" />
   <Import Project="$(BuildScriptsPath)\Castle.Common.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
