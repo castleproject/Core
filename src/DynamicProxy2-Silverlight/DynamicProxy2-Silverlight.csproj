@@ -90,9 +90,6 @@
     <Compile Include="..\Castle.DynamicProxy\Generators\ClassProxyGenerator.cs">
       <Link>Generators\ClassProxyGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\Castle.DynamicProxy\Generators\Constants.cs">
-      <Link>Generators\Constants.cs</Link>
-    </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\AbstractTypeEmitter.cs">
       <Link>Generators\Emitters\AbstractTypeEmitter.cs</Link>
     </Compile>
@@ -116,9 +113,6 @@
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\ConstructorEmitter.cs">
       <Link>Generators\Emitters\ConstructorEmitter.cs</Link>
-    </Compile>
-    <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\CustomAttributeUtil.cs">
-      <Link>Generators\Emitters\CustomAttributeUtil.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\EventCollection.cs">
       <Link>Generators\Emitters\EventCollection.cs</Link>
@@ -270,9 +264,6 @@
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\TypeUtil.cs">
       <Link>Generators\Emitters\TypeUtil.cs</Link>
     </Compile>
-    <Compile Include="..\Castle.DynamicProxy\Generators\EventToGenerate.cs">
-      <Link>Generators\EventToGenerate.cs</Link>
-    </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\GeneratorException.cs">
       <Link>Generators\GeneratorException.cs</Link>
     </Compile>
@@ -285,17 +276,74 @@
     <Compile Include="..\Castle.DynamicProxy\Generators\InterfaceProxyWithTargetInterfaceGenerator.cs">
       <Link>Generators\InterfaceProxyWithTargetInterfaceGenerator.cs</Link>
     </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\INamingScope.cs">
+      <Link>Generators\INamingScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\IGenerator.cs">
+      <Link>Generators\IGenerator.cs</Link>
+    </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\MethodFinder.cs">
       <Link>Generators\MethodFinder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\MetaEvent.cs">
+      <Link>Generators\MetaEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\MetaMethod.cs">
+      <Link>Generators\MetaMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\MetaType.cs">
+      <Link>Generators\MetaType.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\MetaTypeElement.cs">
+      <Link>Generators\MetaTypeElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\MetaProperty.cs">
+      <Link>Generators\MetaProperty.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\MethodSignatureComparer.cs">
       <Link>Generators\MethodSignatureComparer.cs</Link>
     </Compile>
-    <Compile Include="..\Castle.DynamicProxy\Generators\PropertyToGenerate.cs">
-      <Link>Generators\PropertyToGenerate.cs</Link>
+    <Compile Include="..\Castle.DynamicProxy\Generators\MethodGenerator.cs">
+      <Link>Generators\MethodGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\Castle.DynamicProxy\IInterceptorSelector.cs">
-      <Link>IInterceptorSelector.cs</Link>
+    <Compile Include="..\Castle.DynamicProxy\Generators\TypeElementCollection.cs">
+      <Link>Generators\TypeElementCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\ITypeContributor.cs">
+      <Link>Contributors\ITypeContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\InterfaceProxyWithoutTargetContributor.cs">
+      <Link>Contributors\InterfaceProxyWithoutTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\InterfaceProxyWithTargetInterfaceTargetContributor.cs">
+      <Link>Contributors\InterfaceProxyWithTargetInterfaceTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\InterfaceProxyTargetContributor.cs">
+      <Link>Contributors\InterfaceProxyTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\InterfaceMembersCollector.cs">
+      <Link>Contributors\InterfaceMembersCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\CompositeTypeContributor.cs">
+      <Link>Contributors\CompositeTypeContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\Delegates.cs">
+      <Link>Contributors\Delegates.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\MembersCollector.cs">
+      <Link>Contributors\MembersCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\MinimialisticMethodGenerator.cs">
+      <Link>Contributors\MinimialisticMethodGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Tokens\TypeMethods.cs">
+      <Link>Tokens\TypeMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Tokens\MethodBaseMethods.cs">
+      <Link>Tokens\MethodBaseMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Serialization\ProxyTypeConstants.cs">
+      <Link>Serialization\ProxyTypeConstants.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\InternalsHelper.cs">
       <Link>InternalsHelper.cs</Link>
@@ -370,6 +418,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Core\Castle.Core-SL-vs2008.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core-SL-vs2008</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
