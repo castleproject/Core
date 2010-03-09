@@ -1,3 +1,6 @@
+unreleased changes
+- Moved project to Core repository
+
 2.2.0 (2010-01-11)
 ==================
 - Fixed medium trust issue introduced in 2.2.0 Beta 1 where it would try to create a trace logger.
