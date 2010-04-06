@@ -28,17 +28,19 @@ namespace Castle.DynamicProxy.Generators
 		private readonly MetaMethod setter;
 		private readonly PropertyAttributes attributes;
 		private readonly IEnumerable<CustomAttributeBuilder> customAttributes;
+		private readonly Type[] arguments;
 		private PropertyEmitter emitter;
 
-		public MetaProperty(string name, Type propertyType, Type declaringType, MetaMethod getter, MetaMethod setter, PropertyAttributes attributes, IEnumerable<CustomAttributeBuilder> customAttributes)
+		public MetaProperty(string name, Type propertyType, Type declaringType, MetaMethod getter, MetaMethod setter, IEnumerable<CustomAttributeBuilder> customAttributes,Type[] arguments)
 			:base(declaringType)
 		{
 			this.name = name;
 			this.type = propertyType;
 			this.getter = getter;
 			this.setter = setter;
-			this.attributes = attributes;
+			this.attributes = PropertyAttributes.None;
 			this.customAttributes = customAttributes;
+			this.arguments = arguments ?? Type.EmptyTypes;
 		}
 
 		public bool CanRead
@@ -112,12 +114,28 @@ namespace Castle.DynamicProxy.Generators
 				return false;
 			}
 
-			if(!StringComparer.OrdinalIgnoreCase.Equals(name,other.name))
+			if (!StringComparer.OrdinalIgnoreCase.Equals(name, other.name))
 			{
 				return false;
 			}
+			if (Arguments.Length != other.Arguments.Length)
+			{
+				return false;
+			}
+			for (int i = 0; i < Arguments.Length; i++)
+			{
+				if (Arguments[i].Equals(other.Arguments[i]) == false)
+				{
+					return false;
+				}
+			}
 
 			return true;
+		}
+
+		public Type[] Arguments
+		{
+			get { return arguments; }
 		}
 
 		public override bool Equals(object obj)
@@ -150,7 +168,7 @@ namespace Castle.DynamicProxy.Generators
 			if (emitter != null)
 				throw new InvalidOperationException("Emitter is already created. It is illegal to invoke this method twice.");
 
-			emitter = classEmitter.CreateProperty(name, attributes, type);
+			emitter = classEmitter.CreateProperty(name, attributes, type, arguments);
 			foreach (var attribute in customAttributes)
 			{
 				emitter.DefineCustomAttribute(attribute);

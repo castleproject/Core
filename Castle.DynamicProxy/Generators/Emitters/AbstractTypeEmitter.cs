@@ -203,9 +203,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return reference;
 		}
 
-		public PropertyEmitter CreateProperty(String name, PropertyAttributes attributes, Type propertyType)
+		public PropertyEmitter CreateProperty(string name, PropertyAttributes attributes, Type propertyType, Type[] arguments)
 		{
-			PropertyEmitter propEmitter = new PropertyEmitter(this, name, attributes, propertyType);
+			PropertyEmitter propEmitter = new PropertyEmitter(this, name, attributes, propertyType, arguments);
 			properties.Add(propEmitter);
 			return propEmitter;
 		}

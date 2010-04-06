@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
@@ -123,9 +124,15 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			var nonInheritableAttributes = AttributeUtil.GetNonInheritableAttributes(property);
+			var arguments = property.GetIndexParameters();
+
 			properties[property] = new MetaProperty(property.Name,
-			                                              property.PropertyType,
-														  property.DeclaringType, getter, setter, PropertyAttributes.None, nonInheritableAttributes);
+			                                        property.PropertyType,
+			                                        property.DeclaringType,
+			                                        getter,
+			                                        setter,
+			                                        nonInheritableAttributes,
+			                                        arguments.Select(a => a.ParameterType).ToArray());
 		}
 
 		private void AddEvent(EventInfo @event, IProxyGenerationHook hook)
