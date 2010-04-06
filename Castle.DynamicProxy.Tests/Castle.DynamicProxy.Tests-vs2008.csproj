@@ -114,7 +114,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BugsReported\DynProxy128.cs" />
     <Compile Include="BugsReported\DynProxy132.cs" />
     <Compile Include="ChangeProxyTargetInterceptor.cs" />
     <Compile Include="Classes\ClassWithExplicitInterface.cs" />
