@@ -114,6 +114,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BugsReported\DynProxy132.cs" />
     <Compile Include="ChangeProxyTargetInterceptor.cs" />
     <Compile Include="Classes\ClassWithExplicitInterface.cs" />
     <Compile Include="Classes\ClassWith_Smart_Attribute.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Interfaces\IFooWithIntPtr.cs" />
     <Compile Include="Interfaces\IFooWithOutIntPtr.cs" />
     <Compile Include="Interfaces\IGenericWithRefOut.cs" />
+    <Compile Include="Interfaces\IHaveIndexers.cs" />
     <Compile Include="Interfaces\INullable.cs" />
     <Compile Include="Interfaces\IOne.cs" />
     <Compile Include="Interfaces\ITwo.cs" />

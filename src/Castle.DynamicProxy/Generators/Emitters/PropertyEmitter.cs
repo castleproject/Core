@@ -41,8 +41,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		                                                           Type[][] parameterTypeRequiredCustomModifiers,
 		                                                           Type[][] parameterTypeOptionalCustomModifiers);
 
-		public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, String name, PropertyAttributes attributes,
-		                       Type propertyType)
+		public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, string name, PropertyAttributes attributes, Type propertyType, Type[] arguments)
 		{
 			this.parentTypeEmitter = parentTypeEmitter;
 
@@ -55,7 +54,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			if (TypeBuilderMethods.DefineProperty == null)
 			{
 				DefineProperty_Clr2_0 oldDefineProperty = parentTypeEmitter.TypeBuilder.DefineProperty;
-				builder = oldDefineProperty(name, attributes, propertyType, new Type[0]);
+				builder = oldDefineProperty(name, attributes, propertyType, arguments);
 			}
 			else
 			{
@@ -65,7 +64,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				                                                                        TypeBuilderMethods.DefineProperty);
 				builder = newDefinedProperty(
 					name, attributes, CallingConventions.HasThis, propertyType,
-					null, null, new Type[0], null, null);
+					null, null, arguments, null, null);
 			}
 		}
 
