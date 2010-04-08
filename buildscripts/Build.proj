@@ -97,7 +97,10 @@ limitations under the License.
 			<Output ItemName="_binaryFiles" TaskParameter="Include"/>
 		</CreateItem>
 		<Delete Files="@(_binaryFiles)" TreatErrorsAsWarnings="true"/>
-		<RemoveDir Directories="$(BuildPath)" />
+		<Exec Command="for /f %%d in ('dir /ad /b') do rd /s /q %%d"
+			WorkingDirectory="$(BuildPath)"
+			Condition=" Exists('$(BuildPath)') "/>
+  		<RemoveDir Directories="$(BuildPath)" Condition=" Exists('$(BuildPath)') "/>
 	</Target>
 
 	
