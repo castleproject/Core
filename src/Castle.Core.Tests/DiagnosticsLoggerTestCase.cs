@@ -25,7 +25,7 @@ namespace Castle.Core.Logging.Tests
 	[TestFixture]
 	public class DiagnosticsLoggerTestCase
 	{
-		private static bool _ignore = false;
+		private static bool ignore;
 
 		[SetUp]
 		public void Clear()
@@ -40,7 +40,7 @@ namespace Castle.Core.Logging.Tests
 		[TearDown]
 		public void Reset()
 		{
-			if (_ignore) return;
+			if (ignore) return;
 			EventLog.Delete ("castle_testlog");
 		}
 		
@@ -57,14 +57,14 @@ namespace Castle.Core.Logging.Tests
 			{
 				if (windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator) == false)
 				{
-					_ignore = true;
+					ignore = true;
 					Assert.Ignore("This test case only valid when running as admin");
 				}
 			}
 			catch(SecurityException)
 			{
 				// turns out, although undocumented, checking for role can throw SecurityException. Thanks Microsoft.
-				_ignore = true;
+				ignore = true;
 				Assert.Ignore("This test case only valid when running as admin");
 			}
 		}
