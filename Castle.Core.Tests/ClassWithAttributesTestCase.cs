@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System.IO;
+	using System.Linq;
 	using System.Reflection;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Classes;
@@ -26,14 +27,14 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void EnsureProxyHasAttributesOnClassAndMethods()
 		{
-			AttributedClass instance = (AttributedClass)
-			                           generator.CreateClassProxy(typeof (AttributedClass), new StandardInterceptor());
+			HasNonInheritableAttribute instance = (HasNonInheritableAttribute)
+			                           generator.CreateClassProxy(typeof (HasNonInheritableAttribute), new StandardInterceptor());
 
 			object[] attributes = instance.GetType().GetCustomAttributes(typeof (NonInheritableAttribute), false);
 			Assert.AreEqual(1, attributes.Length);
 			Assert.IsInstanceOf(typeof (NonInheritableAttribute), attributes[0]);
 
-			attributes = instance.GetType().GetMethod("Do1").GetCustomAttributes(typeof (NonInheritableAttribute), false);
+			attributes = instance.GetType().GetMethod("OnMethod").GetCustomAttributes(typeof (NonInheritableAttribute), false);
 			Assert.AreEqual(1, attributes.Length);
 			Assert.IsInstanceOf(typeof (NonInheritableAttribute), attributes[0]);
 		}
@@ -80,8 +81,32 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void EnsureProxyHasAttributesOnProperties()
 		{
-			AttributedClass proxy = generator.CreateClassProxy<AttributedClass>();
-			PropertyInfo nameProperty = proxy.GetType().GetProperty("Name");
+			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
+			var nameProperty = proxy.GetType().GetProperty("OnProperty");
+			Assert.IsTrue(nameProperty.IsDefined(typeof(NonInheritableAttribute), false));
+		}
+
+		[Test, Ignore("Not supported yet")]
+		public void EnsureProxyHasAttributesOnOnReturn()
+		{
+			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
+			var nameProperty = proxy.GetType().GetMethod("OnReturn").ReturnParameter;
+			Assert.IsTrue(nameProperty.IsDefined(typeof(NonInheritableAttribute), false));
+		}
+
+		[Test]
+		public void EnsureProxyHasAttributesOnParameter()
+		{
+			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
+			ParameterInfo nameProperty = proxy.GetType().GetMethod("OnParameter").GetParameters().Single();
+			Assert.IsTrue(nameProperty.IsDefined(typeof(NonInheritableAttribute), false));
+		}
+
+		[Test, Ignore("Not supported yet")]
+		public void EnsureProxyHasAttributesOnGenericArgument()
+		{
+			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
+			var nameProperty = proxy.GetType().GetMethod("OnGenericArgument").GetGenericArguments().Single();
 			Assert.IsTrue(nameProperty.IsDefined(typeof(NonInheritableAttribute), false));
 		}
 	}

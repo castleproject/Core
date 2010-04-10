@@ -17,21 +17,32 @@ namespace Castle.DynamicProxy.Tests.Classes
 	using System;
 	using System.IO;
 
-	[NonInheritableAttribute]
-	public class AttributedClass
+	[NonInheritable]
+	public class HasNonInheritableAttribute
 	{
-		private string _name;
-
-		[NonInheritableAttribute]
-		public virtual void Do1()
+		[NonInheritable]
+		public virtual void OnMethod()
 		{
 		}
 
-		[NonInheritableAttribute]
-		public virtual string Name
+		[NonInheritable]
+		public virtual string OnProperty
 		{
-			get { return _name; }
-			set { _name = value; }
+			get; set;
+		}
+
+		[return: NonInheritable]
+		public virtual int OnReturn()
+		{
+			return 1;
+		}
+
+		public virtual void OnParameter([NonInheritable] int arg)
+		{
+		}
+
+		public virtual void OnGenericArgument<[NonInheritable] T>()
+		{
 		}
 	}
 

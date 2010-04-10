@@ -147,6 +147,39 @@ namespace Castle.DynamicProxy
 			}
 		}
 
+		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(ParameterInfo parameter)
+		{
+			Debug.Assert(parameter != null, "parameter != null");
+			var attributes =
+#if SILVERLIGHT
+				member.GetCustomAttributes(false);
+#else
+
+				CustomAttributeData.GetCustomAttributes(parameter);
+#endif
+
+			foreach (var attribute in attributes)
+			{
+				var attributeType =
+#if SILVERLIGHT
+				attribute.GetType();
+#else
+ attribute.Constructor.DeclaringType;
+#endif
+				if (ShouldSkipAttributeReplication(attributeType)) continue;
+
+				var builder = CreateBuilder(attribute
+#if SILVERLIGHT
+					as Attribute
+#endif
+);
+				if (builder != null)
+				{
+					yield return builder;
+				}
+			}
+		}
+
 		/// <summary>
 		/// Attributes should be replicated if they are non-inheritable,
 		/// but there are some special cases where the attributes means

@@ -69,7 +69,7 @@
     <Compile Include="BasePEVerifyTestCase.cs" />
     <Compile Include="BasicClassProxyTestCase.cs" />
     <Compile Include="BasicInterfaceProxyTestCase.cs" />
-    <Compile Include="Classes\AttributedClass.cs" />
+    <Compile Include="Classes\HasNonInheritableAttribute.cs" />
     <Compile Include="Classes\ClassToSerialize.cs" />
     <Compile Include="Classes\ClassWithIndexer.cs" />
     <Compile Include="Classes\DiffAccessLevelOnProperties.cs" />
@@ -113,8 +113,10 @@
   <ItemGroup>
     <Compile Include="BugsReported\DynProxy132.cs" />
     <Compile Include="ChangeProxyTargetInterceptor.cs" />
+    <Compile Include="Classes\ClassWithAttributesOnMethodParameters.cs" />
     <Compile Include="Classes\ClassWithExplicitInterface.cs" />
     <Compile Include="Classes\ClassWith_Smart_Attribute.cs" />
+    <Compile Include="Classes\RequiredAttribute.cs" />
     <Compile Include="Classes\VirtuallyImplementsInterfaceWithEvent.cs" />
     <Compile Include="ComInterfacesTests.cs" />
     <Compile Include="ExplicitInterfaceTestCase.cs" />

@@ -171,11 +171,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			builder.SetCustomAttribute(attribute);
 		}
 
-		private void DefineParameters(ParameterInfo[] info)
+		private void DefineParameters(ParameterInfo[] parameters)
 		{
-			foreach (ParameterInfo parameterInfo in info)
+			foreach (var parameter in parameters)
 			{
-				builder.DefineParameter(parameterInfo.Position + 1, parameterInfo.Attributes, parameterInfo.Name);
+				var parameterBuilder = builder.DefineParameter(parameter.Position + 1, parameter.Attributes, parameter.Name);
+				foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(parameter))
+				{
+					parameterBuilder.SetCustomAttribute(attribute);
+				}
 			}
 		}
 	}
