@@ -15,6 +15,9 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+
+	using Castle.Core.Tests.Classes;
+
 	using Interceptors;
 	using NUnit.Framework;
 
@@ -25,7 +28,7 @@ namespace Castle.DynamicProxy.Tests
 		[ExpectedException(typeof (ArgumentException), ExpectedMessage = "No default value for argument")]
 		public void ParametersAreCopiedToProxiedObject()
 		{
-			ClassWithAttributesOnMethodParameters requiredObj = (ClassWithAttributesOnMethodParameters)
+			var requiredObj = (ClassWithAttributesOnMethodParameters)
 			                                                    generator.CreateClassProxy(
 			                                                    	typeof (ClassWithAttributesOnMethodParameters),
 			                                                    	new RequiredParamInterceptor());
@@ -36,54 +39,12 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void CanGetParameterAttributeFromProxiedObject()
 		{
-			ClassWithAttributesOnMethodParameters requiredObj = (ClassWithAttributesOnMethodParameters)
+			var requiredObj = (ClassWithAttributesOnMethodParameters)
 			                                                    generator.CreateClassProxy(
 			                                                    	typeof (ClassWithAttributesOnMethodParameters),
 			                                                    	new RequiredParamInterceptor());
 
 			requiredObj.MethodTwo(null);
-		}
-	}
-
-    public class ClassWithAttributesOnMethodParameters
-	{
-		public virtual void MethodOne([Required(BadValue = -1)] int val)
-		{
-			Assert.IsFalse(val == -1);
-		}
-
-		public virtual void MethodTwo([Required("")] string name)
-		{
-			Assert.IsNotNull(name);
-		}
-	}
-
-	public class RequiredAttribute : Attribute
-	{
-		private object defaultValue;
-		private bool hasDefault = false;
-		public object BadValue;
-
-		public RequiredAttribute()
-		{
-		}
-
-		public RequiredAttribute(object defaultValue)
-		{
-			hasDefault = true;
-			this.defaultValue = defaultValue;
-		}
-
-		public object DefaultValue
-		{
-			get
-			{
-				if (!hasDefault)
-				{
-					throw new ArgumentException("No default value for argument");
-				}
-				return defaultValue;
-			}
 		}
 	}
 }
