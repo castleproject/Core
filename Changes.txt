@@ -1,4 +1,11 @@
 unreleased changes
+==================
+
+- Added ability to intercept explicitly implemented interface members on class proxy. Does not support generic members.
+- Merged DynamicProxy into Core binary
+- fixed DYNPROXY-ISSUE-132 - "MetaProperty equals implementation incorrect"
+- Fixed bug in DiagnosticsLoggerTestCase, where when running as non-admin, the teardown will throw SecurityException (contributed by maxild)
+- Split IoC specific classes into Castle.Windsor project
 - Merged logging services solution
 - Merged DynamicProxy project
 

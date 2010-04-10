@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.log
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.NLogIntegration-vs2008", "src\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration-vs2008.csproj", "{D680B5DB-B943-4BB5-891A-1695DEF86A3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy.Tests-vs2008", "src\Castle.DynamicProxy.Tests\Castle.DynamicProxy.Tests-vs2008.csproj", "{FE432670-73A1-499D-A353-28FC902A43C8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,14 +53,6 @@ Global
 		{D680B5DB-B943-4BB5-891A-1695DEF86A3A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D680B5DB-B943-4BB5-891A-1695DEF86A3A}.ReleaseSL3|Any CPU.ActiveCfg = Release|Any CPU
 		{D680B5DB-B943-4BB5-891A-1695DEF86A3A}.ReleaseSL4|Any CPU.ActiveCfg = Release|Any CPU
-		{FE432670-73A1-499D-A353-28FC902A43C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE432670-73A1-499D-A353-28FC902A43C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE432670-73A1-499D-A353-28FC902A43C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE432670-73A1-499D-A353-28FC902A43C8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE432670-73A1-499D-A353-28FC902A43C8}.ReleaseSL3|Any CPU.ActiveCfg = Release|Any CPU
-		{FE432670-73A1-499D-A353-28FC902A43C8}.ReleaseSL3|Any CPU.Build.0 = Release|Any CPU
-		{FE432670-73A1-499D-A353-28FC902A43C8}.ReleaseSL4|Any CPU.ActiveCfg = Release|Any CPU
-		{FE432670-73A1-499D-A353-28FC902A43C8}.ReleaseSL4|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

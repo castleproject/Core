@@ -1,4 +1,5 @@
 unreleased changes
+- Merged project into Castle.Core.dll
 - Moved project to Core repository
 
 2.2.0 (2010-01-11)
