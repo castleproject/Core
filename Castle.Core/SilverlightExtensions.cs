@@ -13,10 +13,10 @@
 // limitations under the License.
 
 #if SILVERLIGHT
-using System;
 
 namespace Castle.Core.Extensions
 {
+	using System;
 	using System.Collections.Generic;
 
 	public static class SilverlightExtensions
@@ -43,86 +43,154 @@ namespace Castle.Core.Extensions
 		}
 	}
 }
+namespace Castle.DynamicProxy.SilverlightExtensions
+{
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Reflection;
 
-//namespace System.Collections.Specialized
-//{
-//	using Generic;
-//
-//	public class NameValueCollection : Dictionary<string, string>
-//	{
-//		public NameValueCollection() : base(StringComparer.InvariantCultureIgnoreCase)
-//		{
-//			
-//		}
-//		public new string this[string key]
-//		{
-//			get
-//			{
-//				string result;
-//				TryGetValue(key, out result);
-//				return result;
-//			}
-//			set
-//			{
-//				base[key] = value;
-//			}
-//		}
-//	}
-//}
+	public class SilverlightAssertException : Exception
+	{
+		public SilverlightAssertException(string message) : base(message)
+		{
+		}
 
-//namespace System.Threading
-//{
-//	public class ReaderWriterLock
-//	{
-//		private object _syncObject = new object();
-//		
-//		public ReaderWriterLock()
-//		{
-//		}
-//
-//		public void AcquireWriterLock(int timeout)
-//		{
-//			Monitor.Enter(_syncObject);
-//		}
-//
-//		public void AcquireReaderLock(int timeout)
-//		{
-//			Monitor.Enter(_syncObject);
-//		}
-//
-//		public void ReleaseWriterLock()
-//		{
-//			Monitor.Exit(_syncObject);
-//		}
-//
-//		public void ReleaseLock()
-//		{
-//			Monitor.Exit(_syncObject);
-//		}
-//	}
-//}
+		public SilverlightAssertException()
+		{
+		}
+	}
 
-//namespace System.Configuration
-//{
-//	public class ConfigurationErrorsException : Exception
-//	{
-//		public ConfigurationErrorsException(string message) : base(message)
-//		{
-//		}
-//
-//		public ConfigurationErrorsException(string message, Exception inner) : base(message, inner)
-//		{
-//		}
-//	}
-//}
+	public static class Extensions
+	{
+		public static Type[] FindInterfaces(this Type type, TypeFilter filter, object filterCriteria)
+		{
+			if (filter == null)
+				throw new ArgumentNullException("filter");
 
-//namespace System.ComponentModel
-//{
-//	public interface ISupportInitialize
-//	{
-//		void BeginInit();
-//		void EndInit();
-//	}
-//}
+			List<Type> ifaces = new List<Type>();
+			foreach (Type iface in type.GetInterfaces())
+			{
+				if (filter(iface, filterCriteria))
+					ifaces.Add(iface);
+			}
+
+			return ifaces.ToArray();
+		}
+
+		/// <summary>
+		/// The silverlight System.Type is missing the IsNested property so this exposes similar functionality.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static bool IsNested(this Type type)
+		{
+			return type.DeclaringType != null;
+		}
+
+		public static T Find<T>(this T[] array, Predicate<T> match)
+		{
+			if (array == null)
+				throw new ArgumentNullException("array");
+
+			if (match == null)
+				throw new ArgumentNullException("match");
+
+			for (int i = 0; i < array.Length; i++)
+			{
+				if (match(array[i]))
+					return array[i];
+			}
+
+			return default(T);
+		}
+	}
+
+	/// <summary>
+	/// http://www.dolittle.com/blogs/einar/archive/2008/01/13/missing-enum-getvalues-when-doing-silverlight-for-instance.aspx
+	/// </summary>
+	public static class EnumHelper
+	{
+		public static T[] GetValues<T>()
+		{
+			Type enumType = typeof(T);
+
+			if (!enumType.IsEnum)
+			{
+				throw new ArgumentException("Type '" + enumType.Name + "' is not an enum");
+			}
+
+			List<T> values = new List<T>();
+
+			var fields = from field in enumType.GetFields()
+						 where field.IsLiteral
+						 select field;
+
+			foreach (FieldInfo field in fields)
+			{
+				object value = field.GetValue(enumType);
+				values.Add((T)value);
+			}
+
+			return values.ToArray();
+		}
+
+		public static object[] GetValues(Type enumType)
+		{
+			if (!enumType.IsEnum)
+			{
+				throw new ArgumentException("Type '" + enumType.Name + "' is not an enum");
+			}
+
+			List<object> values = new List<object>();
+
+			var fields = from field in enumType.GetFields()
+						 where field.IsLiteral
+						 select field;
+
+			foreach (FieldInfo field in fields)
+			{
+				object value = field.GetValue(enumType);
+				values.Add(value);
+			}
+
+			return values.ToArray();
+		}
+	}
+}
+
+namespace System.Reflection
+{
+	public delegate bool TypeFilter(Type m, object filterCriteria);
+}
+
+namespace System.Diagnostics
+{
+	public sealed class Trace
+	{
+		public static void WriteLine(string message)
+		{
+			//TODO:???
+		}
+
+		public static void Assert(bool condition)
+		{
+			if (!condition)
+			{
+				//TODO:???
+				throw new Castle.DynamicProxy.SilverlightExtensions.SilverlightAssertException();
+			}
+		}
+
+		public static void Assert(bool condition, string message)
+		{
+			if (!condition)
+			{
+				//TODO:???
+				throw new Castle.DynamicProxy.SilverlightExtensions.SilverlightAssertException(message);
+			}
+		}
+	}
+}
 
 #endif

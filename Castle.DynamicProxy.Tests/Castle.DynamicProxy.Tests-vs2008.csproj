@@ -245,10 +245,6 @@
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core-vs2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.DynamicProxy\Castle.DynamicProxy-vs2008.csproj">
-      <Project>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</Project>
-      <Name>Castle.DynamicProxy-vs2008</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -157,20 +157,18 @@ namespace Castle.DynamicProxy
 		/// <returns></returns>
 		public static byte[] GetKeyPair()
 		{
-			byte[] keyPair;
 
-			using(Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
+			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.Core.DynProxy.snk"))
 			{
 				if (stream == null)
 					throw new MissingManifestResourceException(
-						"Should have a Castle.DynamicProxy.DynProxy.snk as an embedded resource, so Dynamic Proxy could sign generated assembly");
+						"Should have a Castle.Core.DynProxy.snk as an embedded resource, so Dynamic Proxy could sign generated assembly");
 
-				int length = (int)stream.Length;
-				keyPair = new byte[length];
+				var length = (int)stream.Length;
+				var keyPair = new byte[length];
 				stream.Read(keyPair, 0, length);
+				return keyPair;
 			}
-
-			return keyPair;
 		}
 
 		/// <summary>
