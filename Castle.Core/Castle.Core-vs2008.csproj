@@ -372,7 +372,7 @@
     <Compile Include="Core\StringObjectDictionaryAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DynProxy.snk" />
+    <EmbeddedResource Include="DynamicProxy\DynProxy.snk" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
