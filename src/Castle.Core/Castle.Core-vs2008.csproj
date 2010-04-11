@@ -294,7 +294,7 @@
     <Compile Include="Core\CollectionExtensions.cs" />
     <Compile Include="DynamicProxy\IAttributeDisassembler.cs" />
     <Compile Include="DynamicProxy\IInterceptorSelector.cs" />
-    <Compile Include="InternalsVisibleToTests.cs" />
+    <Compile Include="Properties\InternalsVisibleToTests.cs" />
     <Compile Include="Core\Internal\ILockHolder.cs" />
     <Compile Include="Core\Internal\IUpgradeableLockHolder.cs" />
     <Compile Include="Core\Internal\LinkedList.cs">
@@ -381,9 +381,6 @@
     <None Include="..\..\buildscripts\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 3.0'" />

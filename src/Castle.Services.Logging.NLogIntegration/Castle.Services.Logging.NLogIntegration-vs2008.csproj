@@ -152,7 +152,6 @@
     <None Include="..\..\buildscripts\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
-    <None Include="default.build" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Core\Castle.Core-vs2008.csproj">
