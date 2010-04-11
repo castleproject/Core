@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Reflection;
 
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
@@ -116,26 +117,24 @@ namespace Castle.DynamicProxy.Contributors
 			property.BuildPropertyEmitter(emitter);
 			if (property.CanRead)
 			{
-				ImplementMethod(property.Getter, emitter, options,
-				                (name, atts) => property.Emitter.CreateGetMethod(name, atts));
+				ImplementMethod(property.Getter, emitter, options, property.Emitter.CreateGetMethod);
 			}
 
 			if (property.CanWrite)
 			{
-				ImplementMethod(property.Setter, emitter, options,
-				                (name, atts) => property.Emitter.CreateSetMethod(name, atts));
+				ImplementMethod(property.Setter, emitter, options, property.Emitter.CreateSetMethod);
 
 			}
 		}
 
 		protected abstract MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
-		                                           ProxyGenerationOptions options, CreateMethodDelegate createMethod);
+		                                           ProxyGenerationOptions options, OverrideMethodDelegate overrideMethod);
 
 		private void ImplementMethod(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options,
-		                                        CreateMethodDelegate createMethod)
+		                                        OverrideMethodDelegate overrideMethod)
 		{
 			{
-				var generator = GetMethodGenerator(method, @class, options, createMethod);
+				var generator = GetMethodGenerator(method, @class, options, overrideMethod);
 				if (generator == null) return;
 				var proxyMethod = generator.Generate(@class, options, namingScope);
 				foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(method.Method))

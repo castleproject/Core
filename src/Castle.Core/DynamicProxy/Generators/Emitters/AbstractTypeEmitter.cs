@@ -165,11 +165,23 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return CreateMethod(name, typeof(void), arguments);
 		}
 
+		public MethodEmitter CreateMethod(string name, MethodInfo methodToUseAsATemplate, params ArgumentReference[] arguments)
+		{
+			var method = CreateMethod(name, typeof(void), arguments);
+			method.CopyParametersAndReturnTypeFrom(methodToUseAsATemplate, this);
+			return method;
+		}
+
+		public MethodEmitter CreateMethod(string name, MethodAttributes attributes, MethodInfo methodToUseAsATemplate)
+		{
+			var method = CreateMethod(name, attributes);
+			method.CopyParametersAndReturnTypeFrom(methodToUseAsATemplate, this);
+			return method;
+		}
+
 		public FieldReference CreateStaticField(string name, Type fieldType)
 		{
-			FieldAttributes atts = FieldAttributes.Public;
-
-			return CreateStaticField(name, fieldType, atts);
+			return CreateStaticField(name, fieldType, FieldAttributes.Public);
 		}
 
 		public FieldReference CreateStaticField(string name, Type fieldType, FieldAttributes atts)

@@ -26,19 +26,18 @@ namespace Castle.DynamicProxy.Generators
 			get { return method.Method; }
 		}
 
-		protected MethodGenerator(MetaMethod method, CreateMethodDelegate createMethod)
+		protected MethodGenerator(MetaMethod method, OverrideMethodDelegate overrideMethod)
 		{
 			this.method = method;
-			this.createMethod = createMethod;
+			this.overrideMethod = overrideMethod;
 		}
 
 		private readonly MetaMethod method;
-		private readonly CreateMethodDelegate createMethod;
+		private readonly OverrideMethodDelegate overrideMethod;
 
 		public MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
-			var methodEmitter = createMethod(method.Name, method.Attributes);
-			methodEmitter.CopyParametersAndReturnTypeFrom(MethodToOverride, @class);
+			var methodEmitter = overrideMethod(method.Name, method.Attributes, MethodToOverride);
 			var proxiedMethod = BuildProxiedMethodBody(methodEmitter, @class, options, namingScope);
 
 			if (MethodToOverride.DeclaringType.IsInterface)

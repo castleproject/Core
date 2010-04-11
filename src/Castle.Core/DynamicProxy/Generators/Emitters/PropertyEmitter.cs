@@ -90,6 +90,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return getMethod;
 		}
 
+		public MethodEmitter CreateGetMethod(string name, MethodAttributes attributes, MethodInfo methodToOverride)
+		{
+			var method = CreateGetMethod(name, attributes);
+			method.CopyParametersAndReturnTypeFrom(methodToOverride, parentTypeEmitter);
+			return method;
+		}
+
 		public MethodEmitter CreateSetMethod(string name, MethodAttributes attrs, params Type[] parameters)
 		{
 			if (setMethod != null)
@@ -109,6 +116,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 
 			return setMethod;
+		}
+
+		public MethodEmitter CreateSetMethod(string name, MethodAttributes attributes, MethodInfo methodToOverride)
+		{
+			var method = CreateSetMethod(name, attributes);
+			method.CopyParametersAndReturnTypeFrom(methodToOverride, parentTypeEmitter);
+			return method;
 		}
 
 		public MemberInfo Member
