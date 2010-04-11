@@ -26,7 +26,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	{
 		private static readonly LdindOpCodesDictionary _dict = new LdindOpCodesDictionary();
 
-		private static readonly OpCode _emptyOpCode;
+		// has to be assigned explicitly to suppress compiler warning
+		private static readonly OpCode emptyOpCode = new OpCode();
 
 		private LdindOpCodesDictionary()
 		{
@@ -61,7 +62,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static OpCode EmptyOpCode
 		{
-			get { return _emptyOpCode; }
+			get { return emptyOpCode; }
 		}
 	}
 }

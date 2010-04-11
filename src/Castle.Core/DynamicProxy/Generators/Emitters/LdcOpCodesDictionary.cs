@@ -23,9 +23,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	/// </summary>
 	public sealed class LdcOpCodesDictionary : Dictionary<Type, OpCode>
 	{
-		private static readonly LdcOpCodesDictionary _dict = new LdcOpCodesDictionary();
+		private static readonly LdcOpCodesDictionary dict = new LdcOpCodesDictionary();
 
-		private static readonly OpCode _emptyOpCode;
+		// has to be assigned explicitly to suppress compiler warning
+		private static readonly OpCode emptyOpCode = new OpCode();
 
 		private LdcOpCodesDictionary()
 		{
@@ -55,12 +56,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static LdcOpCodesDictionary Instance
 		{
-			get { return _dict; }
+			get { return dict; }
 		}
 
 		public static OpCode EmptyOpCode
 		{
-			get { return _emptyOpCode; }
+			get { return emptyOpCode; }
 		}
 	}
 }
