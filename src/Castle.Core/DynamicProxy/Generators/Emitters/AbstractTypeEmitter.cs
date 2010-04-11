@@ -128,54 +128,27 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public TypeConstructorEmitter ClassConstructor { get; private set; }
 
-		public MethodEmitter CreateMethod(String name, MethodAttributes attributes)
+		public MethodEmitter CreateMethod(string name, MethodAttributes attrs, Type returnType, params Type[] argumentTypes)
 		{
-			MethodEmitter member = new MethodEmitter(this, name, attributes);
+			var member = new MethodEmitter(this, name, attrs, returnType, argumentTypes ?? Type.EmptyTypes);
 			methods.Add(member);
 			return member;
 		}
 
-		public MethodEmitter CreateMethod(string name, MethodAttributes attrs, Type returnType)
+		public MethodEmitter CreateMethod(string name, Type returnType, params Type[] parameterTypes)
 		{
-			return CreateMethod(name, attrs, returnType, Type.EmptyTypes);
+			return CreateMethod(name, defaultAttributes, returnType, parameterTypes);
 		}
 
-		public MethodEmitter CreateMethod(string name, MethodAttributes attrs, Type returnType,
-		                                  params Type[] argumentTypes)
+		public MethodEmitter CreateMethod(string name, MethodInfo methodToUseAsATemplate)
 		{
-			var member = new MethodEmitter(this, name, attrs, returnType, argumentTypes);
-			methods.Add(member);
-			return member;
-		}
-
-		public MethodEmitter CreateMethod(string name, Type returnType, params ArgumentReference[] argumentReferences)
-		{
-			return CreateMethod(name, defaultAttributes, returnType, argumentReferences);
-		}
-
-		public MethodEmitter CreateMethod(string name, MethodAttributes attrs, Type returnType,
-		                                  params ArgumentReference[] argumentReferences)
-		{
-			Type[] argumentTypes = ArgumentsUtil.InitializeAndConvert(argumentReferences);
-			return CreateMethod(name, attrs, returnType, argumentTypes);
-		}
-
-		public MethodEmitter CreateMethod(string name, params ArgumentReference[] arguments)
-		{
-			return CreateMethod(name, typeof(void), arguments);
-		}
-
-		public MethodEmitter CreateMethod(string name, MethodInfo methodToUseAsATemplate, params ArgumentReference[] arguments)
-		{
-			var method = CreateMethod(name, typeof(void), arguments);
-			method.CopyParametersAndReturnTypeFrom(methodToUseAsATemplate, this);
-			return method;
+			return CreateMethod(name, defaultAttributes, methodToUseAsATemplate);
 		}
 
 		public MethodEmitter CreateMethod(string name, MethodAttributes attributes, MethodInfo methodToUseAsATemplate)
 		{
-			var method = CreateMethod(name, attributes);
-			method.CopyParametersAndReturnTypeFrom(methodToUseAsATemplate, this);
+			var method = new MethodEmitter(this, name, attributes, methodToUseAsATemplate);
+			methods.Add(method);
 			return method;
 		}
 

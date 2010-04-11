@@ -141,7 +141,7 @@ namespace Castle.DynamicProxy.Generators
 			name = string.Format("{0}.{1}", Method.DeclaringType.Name, Method.Name);
 		}
 
-		public MethodAttributes Attributes { get; set; }
+		public MethodAttributes Attributes { get; private set; }
 
 		public string Name
 		{

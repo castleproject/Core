@@ -68,60 +68,36 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public MethodEmitter CreateGetMethod(string name, MethodAttributes attrs, params Type[] parameters)
+		public MethodEmitter CreateGetMethod(string name, MethodAttributes attrs, MethodInfo methodToOverride, params Type[] parameters)
 		{
 			if (getMethod != null)
 			{
 				throw new InvalidOperationException("A get method exists");
 			}
 
-			if (parameters.Length == 0)
-			{
-				getMethod = new MethodEmitter(parentTypeEmitter, name, attrs);
-			}
-			else
-			{
-				getMethod = new MethodEmitter(parentTypeEmitter, name,
-				                              attrs,
-				                              ReturnType,
-				                              parameters);
-			}
-
+			getMethod = new MethodEmitter(parentTypeEmitter, name, attrs, methodToOverride);
 			return getMethod;
 		}
 
 		public MethodEmitter CreateGetMethod(string name, MethodAttributes attributes, MethodInfo methodToOverride)
 		{
-			var method = CreateGetMethod(name, attributes);
-			method.CopyParametersAndReturnTypeFrom(methodToOverride, parentTypeEmitter);
-			return method;
+			return CreateGetMethod(name, attributes, methodToOverride, Type.EmptyTypes);
 		}
 
-		public MethodEmitter CreateSetMethod(string name, MethodAttributes attrs, params Type[] parameters)
+		public MethodEmitter CreateSetMethod(string name, MethodAttributes attrs, MethodInfo methodToOverride, params Type[] parameters)
 		{
 			if (setMethod != null)
 			{
 				throw new InvalidOperationException("A set method exists");
 			}
 
-			if (parameters.Length == 0)
-			{
-				setMethod = new MethodEmitter(parentTypeEmitter, name, attrs);
-			}
-			else
-			{
-				setMethod = new MethodEmitter(parentTypeEmitter, name,
-				                              attrs, typeof (void),
-				                              parameters);
-			}
-
+			setMethod = new MethodEmitter(parentTypeEmitter, name, attrs, methodToOverride);
 			return setMethod;
 		}
 
 		public MethodEmitter CreateSetMethod(string name, MethodAttributes attributes, MethodInfo methodToOverride)
 		{
-			var method = CreateSetMethod(name, attributes);
-			method.CopyParametersAndReturnTypeFrom(methodToOverride, parentTypeEmitter);
+			var method = CreateSetMethod(name, attributes, methodToOverride, Type.EmptyTypes);
 			return method;
 		}
 
