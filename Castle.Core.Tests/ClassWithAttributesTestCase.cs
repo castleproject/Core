@@ -86,7 +86,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue(nameProperty.IsDefined(typeof(NonInheritableAttribute), false));
 		}
 
-		[Test, Ignore("Not supported yet")]
+		[Test, Ignore("Not supported. Is it possible? There seems to be no API to allow that.")]
 		public void EnsureProxyHasAttributesOnOnReturn()
 		{
 			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
@@ -102,7 +102,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue(nameProperty.IsDefined(typeof(NonInheritableAttribute), false));
 		}
 
-		[Test, Ignore("Not supported yet")]
+		[Test]
 		public void EnsureProxyHasAttributesOnGenericArgument()
 		{
 			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
