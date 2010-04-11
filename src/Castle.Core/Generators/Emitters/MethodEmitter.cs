@@ -72,44 +72,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod, AbstractTypeEmitter parentEmitter)
 		{
 			GenericUtil.PopulateGenericArguments(parentEmitter, name2GenericType);
-			Type returnType = GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType);
-			ParameterInfo[] baseMethodParameters = baseMethod.GetParameters();
-			Type[] parameters = GenericUtil.ExtractParametersTypes
-				(baseMethodParameters, name2GenericType);
-
-			//// Disabled for .NET due to .Net 3.5 SP 1 bug
-			//List<Type[]> paramModReq = new List<Type[]>();
-			//List<Type[]> paramModOpt = new List<Type[]>();
-			//foreach (ParameterInfo parameterInfo in baseMethodParameters)
-			//{
-			//    paramModOpt.Add(parameterInfo.GetOptionalCustomModifiers());
-			//    paramModReq.Add(parameterInfo.GetRequiredCustomModifiers());
-			//} 
+			var returnType = GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType);
+			var baseMethodParameters = baseMethod.GetParameters();
+			var parameters = GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType);
 
 			genericTypeParams = GenericUtil.CopyGenericArguments(baseMethod, builder, name2GenericType);
+
 			// Bind parameter types
-
-			SetParameters(GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType));
-
 			// TODO: check if the return type is a generic
 			// definition for the method
 
-			SetReturnType(GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType));
-
-			builder.SetSignature(
-				returnType,
-				// Disabled due to .Net 3.5 SP 1 bug and Silverlight does not have this API
-				//baseMethod.ReturnParameter.GetRequiredCustomModifiers(),
-				//baseMethod.ReturnParameter.GetOptionalCustomModifiers(),
-				Type.EmptyTypes,
-				Type.EmptyTypes,
-				parameters,
-				null, null
-//				 paramModReq.ToArray(),
-//				 paramModOpt.ToArray()
-				);
-
-
+			SetParameters(parameters);
+			SetReturnType(returnType);
 			DefineParameters(baseMethodParameters);
 		}
 

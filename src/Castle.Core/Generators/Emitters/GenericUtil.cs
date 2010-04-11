@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			return
 				CopyGenericArguments(methodToCopyGenericsFrom, name2GenericType,
-				                       delegate(String[] args) { return builder.DefineGenericParameters(args); });
+				                       builder.DefineGenericParameters);
 		}
 
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			return
 				CopyGenericArguments(methodToCopyGenericsFrom, name2GenericType,
-				                       delegate(String[] args) { return builder.DefineGenericParameters(args); });
+				                       builder.DefineGenericParameters);
 		}
 
 		private static GenericTypeParameterBuilder[] CopyGenericArguments(
@@ -86,9 +86,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 						Type baseClassConstraint = Castle.DynamicProxy.SilverlightExtensions.Extensions.Find(types, delegate(Type type) { return type.IsClass; });
 #else
-						Type[] interfacesConstraints = Array.FindAll(types, delegate(Type type) { return type.IsInterface; });
+						Type[] interfacesConstraints = Array.FindAll(types, type => type.IsInterface);
 
-						Type baseClassConstraint = Array.Find(types, delegate(Type type) { return type.IsClass; });
+						Type baseClassConstraint = Array.Find(types, type => type.IsClass);
 #endif
 
 						if (interfacesConstraints.Length != 0)
@@ -106,6 +106,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 							baseClassConstraint = AdjustConstraintToNewGenericParameters(baseClassConstraint, methodToCopyGenericsFrom, originalGenericArguments, newGenericParameters);
 							newGenericParameters[i].SetBaseTypeConstraint(baseClassConstraint);
 						}
+						CopyNonInheritableAttributes(newGenericParameters[i], originalGenericArguments[i]);
 					}
 					catch (NotSupportedException)
 					{
@@ -127,6 +128,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			else
 			{
 				return null;
+			}
+		}
+
+		private static void CopyNonInheritableAttributes(GenericTypeParameterBuilder newGenericParameter, Type originalGenericArgument)
+		{
+			foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(originalGenericArgument))
+			{
+				newGenericParameter.SetCustomAttribute(attribute);
 			}
 		}
 
