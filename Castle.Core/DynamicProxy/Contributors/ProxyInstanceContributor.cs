@@ -74,12 +74,10 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected void ImplementGetObjectData(ClassEmitter emitter)
 		{
-
-			var serializationInfo = new ArgumentReference(typeof (SerializationInfo));
-			var streamingContext = new ArgumentReference(typeof (StreamingContext));
-			MethodEmitter getObjectData = emitter.CreateMethod("GetObjectData", serializationInfo, streamingContext);
-
-			LocalReference typeLocal = getObjectData.CodeBuilder.DeclareLocal(typeof (Type));
+			var getObjectData = emitter.CreateMethod("GetObjectData", typeof(void), new[] { typeof(SerializationInfo), typeof(StreamingContext) });
+			var info = getObjectData.Arguments[0];
+			
+			var typeLocal = getObjectData.CodeBuilder.DeclareLocal(typeof (Type));
 
 			getObjectData.CodeBuilder.AddStatement(
 				new AssignStatement(
@@ -94,7 +92,7 @@ namespace Castle.DynamicProxy.Contributors
 			getObjectData.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new MethodInvocationExpression(
-						serializationInfo,
+						info,
 						SerializationInfoMethods.SetType,
 						typeLocal.ToExpression())));
 
@@ -102,7 +100,7 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				if (field.Reference.IsStatic) continue;
 				if (field.Reference.IsNotSerialized) continue;
-				AddAddValueInvocation(serializationInfo, getObjectData, field);
+				AddAddValueInvocation(info, getObjectData, field);
 			}
 
 			LocalReference interfacesLocal = getObjectData.CodeBuilder.DeclareLocal(typeof (string[]));
@@ -124,7 +122,7 @@ namespace Castle.DynamicProxy.Contributors
 			getObjectData.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new MethodInvocationExpression(
-						serializationInfo,
+						info,
 						SerializationInfoMethods.AddValue_Object,
 						new ConstReference("__interfaces").ToExpression(),
 						interfacesLocal.ToExpression())));
@@ -132,7 +130,7 @@ namespace Castle.DynamicProxy.Contributors
 			getObjectData.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new MethodInvocationExpression(
-						serializationInfo,
+						info,
 						SerializationInfoMethods.AddValue_Object,
 						new ConstReference("__baseType").ToExpression(),
 						new ConstReference(emitter.BaseType.AssemblyQualifiedName).ToExpression())));
@@ -140,7 +138,7 @@ namespace Castle.DynamicProxy.Contributors
 			getObjectData.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new MethodInvocationExpression(
-						serializationInfo,
+						info,
 						SerializationInfoMethods.AddValue_Object,
 						new ConstReference("__proxyGenerationOptions").ToExpression(),
 						emitter.GetField("proxyGenerationOptions").ToExpression())));
@@ -149,12 +147,12 @@ namespace Castle.DynamicProxy.Contributors
 
 			getObjectData.CodeBuilder.AddStatement(
 				new ExpressionStatement(
-					new MethodInvocationExpression(serializationInfo,
+					new MethodInvocationExpression(info,
 					                               SerializationInfoMethods.AddValue_Object,
 					                               new ConstReference("__proxyTypeId").ToExpression(),
 					                               new ConstReference(proxyTypeId).ToExpression())));
 
-			CustomizeGetObjectData(getObjectData.CodeBuilder, serializationInfo, streamingContext,emitter);
+			CustomizeGetObjectData(getObjectData.CodeBuilder, info, getObjectData.Arguments[1], emitter);
 
 			getObjectData.CodeBuilder.AddStatement(new ReturnStatement());
 		}

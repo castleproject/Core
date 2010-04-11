@@ -118,7 +118,8 @@ namespace Castle.DynamicProxy.Tests
 		{
 			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes, 
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-			emitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual, typeof (void));
+			emitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual,
+			                     typeof(void), Type.EmptyTypes);
 			Type t = emitter.BuildType();
 			Assert.IsTrue(t.IsInterface);
 			MethodInfo method = t.GetMethod("MyMethod");
@@ -162,7 +163,8 @@ namespace Castle.DynamicProxy.Tests
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
 			NestedClassEmitter innerEmitter = new NestedClassEmitter(outerEmitter, "IInner", 
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.NestedPublic, null, Type.EmptyTypes);
-			innerEmitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual, typeof(void));
+			innerEmitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual,
+			                          typeof(void), Type.EmptyTypes);
 			Type inner = innerEmitter.BuildType();
 			Type outer = outerEmitter.BuildType();
 			Assert.IsTrue(inner.IsInterface);
