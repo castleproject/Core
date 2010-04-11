@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.Interfaces;
 

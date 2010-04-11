@@ -15,7 +15,6 @@
 namespace Castle.Core.Logging
 {
 	#if !SILVERLIGHT
-
 	using System;
 	using System.Globalization;
 	using System.Web;

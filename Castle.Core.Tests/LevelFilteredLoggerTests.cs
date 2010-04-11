@@ -16,7 +16,7 @@ namespace Castle.Core.Logging.Tests
 {
 	using System;
 	using System.ComponentModel;
-	
+
 	using NUnit.Framework;
 
 	using Castle.Core.Logging;

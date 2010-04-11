@@ -17,8 +17,6 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Reflection;
 
-	using Castle.Core.Interceptor;
-
 	public abstract class CompositionInvocation : AbstractInvocation
 	{
 		protected object target;

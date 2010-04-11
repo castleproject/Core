@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Reflection;
 	using System.Runtime.Serialization;
-	using Castle.Core.Interceptor;
 
 	[Serializable]
 	public class RemotableInvocation : MarshalByRefObject, IInvocation, ISerializable

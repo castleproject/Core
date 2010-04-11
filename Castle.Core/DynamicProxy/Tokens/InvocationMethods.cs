@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Tokens
 {
 	using System;
 	using System.Reflection;
-	using Core.Interceptor;
 
 	/// <summary>
 	/// Holds <see cref="MethodInfo"/> objects representing methods of <see cref="AbstractInvocation"/> class.

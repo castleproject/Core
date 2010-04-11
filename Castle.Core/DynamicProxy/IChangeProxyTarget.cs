@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Interceptor
+namespace Castle.DynamicProxy
 {
 	/// <summary>
 	/// Exposes means to change target objects of proxies and invocations

@@ -15,8 +15,8 @@
 namespace Castle.DynamicProxy.Tests.BugsReported
 {
 	using System;
+
 	using NUnit.Framework;
-	using Castle.Core.Interceptor;
 
 	[TestFixture]
 	public class ConstraintViolationInDebuggerTestCase : BasePEVerifyTestCase

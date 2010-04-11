@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
-	using Castle.Core.Interceptor;
 
 	public interface GenInterfaceWithGenericTypes
 	{

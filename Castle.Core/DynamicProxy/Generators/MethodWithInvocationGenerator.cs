@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Generators
 #if !SILVERLIGHT
 	using System.Xml.Serialization;
 #endif
-	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;

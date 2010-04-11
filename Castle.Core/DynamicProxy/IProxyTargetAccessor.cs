@@ -12,25 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Logging
+namespace Castle.DynamicProxy
 {
-	#if !SILVERLIGHT
-
-	/// <summary>
-	/// Used to create the TraceLogger implementation of ILogger interface. See <see cref="TraceLogger"/>. 
-	/// </summary>
-	public class TraceLoggerFactory : AbstractLoggerFactory
+	public interface IProxyTargetAccessor
 	{
-		public override ILogger Create(string name)
-		{
-			return new TraceLogger(name);
-		}
+		/// <summary>
+		/// Get the proxy target (note that null is a valid target!)
+		/// </summary>
+		/// <returns></returns>
+		object DynProxyGetTarget();
 
-		public override ILogger Create(string name, LoggerLevel level)
-		{
-			return new TraceLogger(name, level);
-		}
+		/// <summary>
+		/// Gets the interceptors for the proxy
+		/// </summary>
+		/// <returns></returns>
+		IInterceptor[] GetInterceptors();		
 	}
-
-	#endif
 }

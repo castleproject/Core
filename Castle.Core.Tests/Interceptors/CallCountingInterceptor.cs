@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Tests.Interceptors
 {
     using System;
-    using Core.Interceptor;
 
 #if !SILVERLIGHT
     [Serializable]

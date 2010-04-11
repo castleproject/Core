@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 {
 	using System;
 	using System.Reflection;
-	using Castle.Core.Interceptor;
 
 	public class KeepDataInterceptor : IInterceptor
 	{

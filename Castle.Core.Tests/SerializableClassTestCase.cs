@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Runtime.Serialization;
 	using System.Runtime.Serialization.Formatters.Binary;
 	using System.Text.RegularExpressions;
-	using Castle.Core.Interceptor;
+
 	using Castle.DynamicProxy.Serialization;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.BugsReported;
