@@ -62,13 +62,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		}
 
-		public MethodEmitter CreateAddMethod(string addMethodName, MethodAttributes attributes)
+		public MethodEmitter CreateAddMethod(string addMethodName, MethodAttributes attributes, MethodInfo methodToOverride)
 		{
 			if (addMethod != null)
 			{
 				throw new InvalidOperationException("An add method exists");
 			}
 			addMethod = new MethodEmitter(typeEmitter, addMethodName, attributes);
+			addMethod.CopyParametersAndReturnTypeFrom(methodToOverride, typeEmitter);
 			return addMethod;
 		}
 
@@ -78,7 +79,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			removeMethod.EnsureValidCodeBlock();
 		}
 
-		public MethodEmitter CreateRemoveMethod(string removeMethodName, MethodAttributes attributes)
+		public MethodEmitter CreateRemoveMethod(string removeMethodName, MethodAttributes attributes, MethodInfo methodToOverride)
 		{
 
 			if (removeMethod != null)
@@ -86,6 +87,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new InvalidOperationException("A remove method exists");
 			}
 			removeMethod = new MethodEmitter(typeEmitter, removeMethodName, attributes);
+			removeMethod.CopyParametersAndReturnTypeFrom(methodToOverride, typeEmitter);
 			return removeMethod;
 		}
 	}

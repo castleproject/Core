@@ -53,14 +53,14 @@ namespace Castle.DynamicProxy.Contributors
 			}
 		}
 
-		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options, CreateMethodDelegate createMethod)
+		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options, OverrideMethodDelegate overrideMethod)
 		{
 			if (methodsToSkip.Contains(method.Method)) return null;
 
 			if (!method.Proxyable)
 			{
 				return new MinimialisticMethodGenerator(method,
-				                                        createMethod);
+				                                        overrideMethod);
 			}
 
 			var invocation = GetInvocationType(method, @class, options);
@@ -69,7 +69,7 @@ namespace Castle.DynamicProxy.Contributors
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
 			                                         (c, m) => new TypeTokenExpression(targetType),
-			                                         createMethod);
+			                                         overrideMethod);
 		}
 
 		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
@@ -103,9 +103,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			// MethodBuild creation
 
-			MethodEmitter callBackMethod = emitter.CreateMethod(namingScope.GetUniqueName(methodInfo.Name + "_callback"));
-
-			callBackMethod.CopyParametersAndReturnTypeFrom(targetMethod, emitter);
+			var callBackMethod = emitter.CreateMethod(namingScope.GetUniqueName(methodInfo.Name + "_callback"), targetMethod);
 
 			// Generic definition
 

@@ -32,8 +32,8 @@ namespace Castle.DynamicProxy.Generators
 		private readonly GetTargetExpressionDelegate getTargetExpression;
 		private readonly Type invocation;
 
-		public MethodWithInvocationGenerator(MetaMethod method, Reference interceptors, Type invocation, GetTargetExpressionDelegate getTargetExpression, CreateMethodDelegate createMethod)
-			: base(method, createMethod)
+		public MethodWithInvocationGenerator(MetaMethod method, Reference interceptors, Type invocation, GetTargetExpressionDelegate getTargetExpression, OverrideMethodDelegate overrideMethod)
+			: base(method, overrideMethod)
 		{
 			this.interceptors = interceptors;
 			this.getTargetExpression = getTargetExpression;
