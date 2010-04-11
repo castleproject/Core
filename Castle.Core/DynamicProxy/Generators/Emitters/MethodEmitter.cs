@@ -30,31 +30,46 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private ArgumentReference[] arguments;
 
 		private MethodCodeBuilder codebuilder;
-		private GenericTypeParameterBuilder[] genericTypeParams;
 
-		private readonly Dictionary<String, GenericTypeParameterBuilder> name2GenericType =
-			new Dictionary<string, GenericTypeParameterBuilder>();
+		private readonly GenericTypeParameterBuilder[] genericTypeParams;
+
 
 		protected internal MethodEmitter(MethodBuilder builder)
 		{
 			this.builder = builder;
 		}
 
-		internal MethodEmitter(AbstractTypeEmitter maintype, String name, MethodAttributes attrs)
-			: this(maintype.TypeBuilder.DefineMethod(name, attrs))
+		internal MethodEmitter(AbstractTypeEmitter owner, String name, MethodAttributes attributes)
+			: this(owner.TypeBuilder.DefineMethod(name, attributes))
 		{
 		}
 
-		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
-		                       MethodAttributes attrs, Type returnType,
+		internal MethodEmitter(AbstractTypeEmitter owner, String name,
+		                       MethodAttributes attributes, Type returnType,
 		                       params Type[] argumentTypes)
-			: this(maintype, name, attrs)
+			: this(owner, name, attributes)
 		{
 			SetParameters(argumentTypes);
 			SetReturnType(returnType);
 		}
 
-		public void SetReturnType(Type returnType)
+		internal MethodEmitter(AbstractTypeEmitter owner, String name,
+							   MethodAttributes attributes, MethodInfo methodToUseAsATemplate)
+			: this(owner, name, attributes)
+		{
+			var name2GenericType = GenericUtil.GetGenericArgumentsMap(owner);
+			
+			var returnType = GenericUtil.ExtractCorrectType(methodToUseAsATemplate.ReturnType, name2GenericType);
+			var baseMethodParameters = methodToUseAsATemplate.GetParameters();
+			var parameters = GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType);
+
+			genericTypeParams = GenericUtil.CopyGenericArguments(methodToUseAsATemplate, builder, name2GenericType);
+			SetParameters(parameters);
+			SetReturnType(returnType);
+			DefineParameters(baseMethodParameters);
+		}
+
+		private void SetReturnType(Type returnType)
 		{
 			builder.SetReturnType(returnType);
 		}
@@ -64,30 +79,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return genericTypeParams; }
 		}
 
-		/// <summary>
-		/// Inspect the base method for generic definitions
-		/// and set the return type and the parameters
-		/// accordingly
-		/// </summary>
-		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod, AbstractTypeEmitter parentEmitter)
-		{
-			GenericUtil.PopulateGenericArguments(parentEmitter, name2GenericType);
-			var returnType = GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType);
-			var baseMethodParameters = baseMethod.GetParameters();
-			var parameters = GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType);
-
-			genericTypeParams = GenericUtil.CopyGenericArguments(baseMethod, builder, name2GenericType);
-
-			// Bind parameter types
-			// TODO: check if the return type is a generic
-			// definition for the method
-
-			SetParameters(parameters);
-			SetReturnType(returnType);
-			DefineParameters(baseMethodParameters);
-		}
-
-		public void SetParameters(Type[] paramTypes)
+		private void SetParameters(Type[] paramTypes)
 		{
 			builder.SetParameters(paramTypes);
 			arguments = ArgumentsUtil.ConvertToArgumentReference(paramTypes);

@@ -109,8 +109,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private void ImplementChangeProxyTarget(AbstractTypeEmitter invocation, ClassEmitter @class)
 		{
-			var argument = new ArgumentReference(typeof(object));
-			var changeInvocationTarget = invocation.CreateMethod("ChangeProxyTarget", argument);
+			var changeInvocationTarget = invocation.CreateMethod("ChangeProxyTarget", typeof(void), new[] { typeof(object) });
 			changeInvocationTarget.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new ConvertExpression(@class.TypeBuilder, new FieldReference(InvocationMethods.ProxyObject).ToExpression())));
@@ -119,24 +118,23 @@ namespace Castle.DynamicProxy.Generators
 			changeInvocationTarget.CodeBuilder.AddStatement(
 				new AssignStatement(
 					new FieldReference(field.Reference) { OwnerReference = null },
-					new ConvertExpression(field.Fieldbuilder.FieldType, argument.ToExpression())));
+					new ConvertExpression(field.Fieldbuilder.FieldType, changeInvocationTarget.Arguments[0].ToExpression())));
 
 			changeInvocationTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
 		private void ImplementChangeInvocationTarget(AbstractTypeEmitter invocation, FieldReference targetField)
 		{
-			var argument = new ArgumentReference(typeof (object));
-			var changeInvocationTarget = invocation.CreateMethod("ChangeInvocationTarget", argument);
+			var changeInvocationTarget = invocation.CreateMethod("ChangeInvocationTarget", typeof(void), new[] { typeof(object) });
 			changeInvocationTarget.CodeBuilder.AddStatement(
 				new AssignStatement(targetField,
-				                    new ConvertExpression(targetType, argument.ToExpression())));
+				                    new ConvertExpression(targetType, changeInvocationTarget.Arguments[0].ToExpression())));
 			changeInvocationTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
 		private void ImplemementInvokeMethodOnTarget(AbstractTypeEmitter @class, ParameterInfo[] parameters, FieldReference targetField, MethodInfo callbackMethod)
 		{
-			var invokeMethodOnTarget = @class.CreateMethod("InvokeMethodOnTarget");
+			var invokeMethodOnTarget = @class.CreateMethod("InvokeMethodOnTarget", typeof(void));
 			ImplementInvokeMethodOnTarget(@class, parameters, invokeMethodOnTarget, callbackMethod, targetField);
 		}
 
@@ -235,7 +233,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void CreateEmptyIInvocationInvokeOnTarget(AbstractTypeEmitter nested)
 		{
-			var invokeMethodOnTarget = nested.CreateMethod("InvokeMethodOnTarget");
+			var invokeMethodOnTarget = nested.CreateMethod("InvokeMethodOnTarget", typeof(void));
 			var throwOnNoTarget = new ExpressionStatement(new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget));
 
 			invokeMethodOnTarget.CodeBuilder.AddStatement(throwOnNoTarget);
