@@ -14,36 +14,35 @@
 
 namespace Castle.Core.Logging
 {
-	#if !SILVERLIGHT
-
 	using System;
 
 	/// <summary>
-	/// Summary description for ConsoleFactory.
+	/// NullLogFactory used when logging is turned off.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
-	public class ConsoleFactory : MarshalByRefObject, ILoggerFactory
+#endif
+	public class NullLogFactory : AbstractLoggerFactory
 	{
-		public ILogger Create(Type type)
+		/// <summary>
+		/// Creates an instance of ILogger with the specified name.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		/// <returns></returns>
+		public override ILogger Create(String name)
 		{
-			return new ConsoleLogger(type.FullName);
+			return NullLogger.Instance;
 		}
 
-		public ILogger Create(String name)
+		/// <summary>
+		/// Creates an instance of ILogger with the specified name and LoggerLevel.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		/// <param name="level">Level.</param>
+		/// <returns></returns>
+		public override ILogger Create(String name, LoggerLevel level)
 		{
-			return new ConsoleLogger(name);
-		}
-
-		public ILogger Create(Type type, LoggerLevel level)
-		{
-			return new ConsoleLogger(type.Name, level);
-		}
-
-		public ILogger Create(String name, LoggerLevel level)
-		{
-			return new ConsoleLogger(name, level);
+			return NullLogger.Instance;
 		}
 	}
-
-	#endif
 }

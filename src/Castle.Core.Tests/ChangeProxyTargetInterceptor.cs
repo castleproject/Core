@@ -14,8 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-	using Castle.Core.Interceptor;
-
 	using NUnit.Framework;
 
 	public class ChangeProxyTargetInterceptor : IInterceptor

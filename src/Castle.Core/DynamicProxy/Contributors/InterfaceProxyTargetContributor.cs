@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Contributors
 	using System.Collections.Generic;
 	using System.Diagnostics;
 
-	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 

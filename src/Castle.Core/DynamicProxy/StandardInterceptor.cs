@@ -12,13 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Interceptor
+namespace Castle.DynamicProxy
 {
-	/// <summary>
-	/// New interface that is going to be used by DynamicProxy 2
-	/// </summary>
-	public interface IInterceptor
+	using System;
+
+#if SILVERLIGHT
+    public class StandardInterceptor : IInterceptor
+#else
+	[Serializable]
+    public class StandardInterceptor : MarshalByRefObject, IInterceptor
+#endif
 	{
-		void Intercept(IInvocation invocation);
+		public void Intercept(IInvocation invocation)
+		{
+			PreProceed(invocation);
+			PerformProceed(invocation);
+			PostProceed (invocation);
+		}
+
+		protected virtual void PerformProceed(IInvocation invocation)
+		{
+			invocation.Proceed ();
+		}
+
+		protected virtual void PreProceed(IInvocation invocation)
+		{
+		}
+
+		protected virtual void PostProceed(IInvocation invocation)
+		{
+		}
 	}
 }

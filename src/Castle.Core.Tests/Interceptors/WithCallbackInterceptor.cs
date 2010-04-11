@@ -14,9 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.Interceptors
 {
-    using Core.Interceptor;
-
-    public class WithCallbackInterceptor : IInterceptor
+	public class WithCallbackInterceptor : IInterceptor
     {
         public delegate void InterceptorCallback(IInvocation invocation);
 

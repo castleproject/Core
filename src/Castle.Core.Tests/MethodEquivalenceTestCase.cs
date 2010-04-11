@@ -15,7 +15,7 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-	using Core.Interceptor;
+
 	using NUnit.Framework;
 
 	[TestFixture]

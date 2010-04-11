@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Reflection;
-	using Castle.Core.Interceptor;
+
 	using Castle.DynamicProxy.Tests.GenInterfaces;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using Castle.DynamicProxy.Tests.Interceptors;

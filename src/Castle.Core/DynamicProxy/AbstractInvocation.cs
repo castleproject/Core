@@ -18,8 +18,6 @@ namespace Castle.DynamicProxy
 	using System.Reflection;
 	using System.Runtime.Serialization;
 
-	using Castle.Core.Interceptor;
-
 #if SILVERLIGHT
 	public abstract class AbstractInvocation : IInvocation
 #else

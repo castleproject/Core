@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Serialization
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using Castle.DynamicProxy;
-	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
 
 	/// <summary>

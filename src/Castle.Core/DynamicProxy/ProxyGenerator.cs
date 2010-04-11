@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy
 	using System.Security.Permissions;
 #endif
 	using System.Text;
-	using Castle.Core.Interceptor;
+
 	using Castle.Core.Logging;
 
 	/// <summary>
@@ -122,7 +122,7 @@ namespace Castle.DynamicProxy
 		/// <exception cref="TargetInvocationException">Thrown when default constructor of actual type of <paramref name="target"/> throws an exception.</exception>
 		/// <remarks>
 		/// This method generates new proxy type for each type of <paramref name="target"/>, which affects performance. If you don't want to proxy types differently depending on the type of the target
-		/// use <see cref="CreateInterfaceProxyWithTargetInterface{TInterface}(TInterface,Castle.Core.Interceptor.IInterceptor[])"/> method.
+		/// use <see cref="CreateInterfaceProxyWithTargetInterface{TInterface}(TInterface,IInterceptor[])"/> method.
 		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
 		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
 		/// </remarks>
@@ -153,7 +153,7 @@ namespace Castle.DynamicProxy
 		/// <exception cref="TargetInvocationException">Thrown when default constructor of actual type of <paramref name="target"/> throws an exception.</exception>
 		/// <remarks>
 		/// This method generates new proxy type for each type of <paramref name="target"/>, which affects performance. If you don't want to proxy types differently depending on the type of the target
-		/// use <see cref="CreateInterfaceProxyWithTargetInterface{TInterface}(TInterface,Castle.DynamicProxy.ProxyGenerationOptions,Castle.Core.Interceptor.IInterceptor[])"/> method.
+		/// use <see cref="CreateInterfaceProxyWithTargetInterface{TInterface}(TInterface,Castle.DynamicProxy.ProxyGenerationOptions,IInterceptor[])"/> method.
 		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
 		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
 		/// </remarks>
@@ -181,7 +181,7 @@ namespace Castle.DynamicProxy
 		/// <exception cref="TargetInvocationException">Thrown when default constructor of actual type of <paramref name="target"/> throws an exception.</exception>
 		/// <remarks>
 		/// This method generates new proxy type for each type of <paramref name="target"/>, which affects performance. If you don't want to proxy types differently depending on the type of the target
-		/// use <see cref="CreateInterfaceProxyWithTargetInterface(System.Type,object,Castle.Core.Interceptor.IInterceptor[])"/> method.
+		/// use <see cref="CreateInterfaceProxyWithTargetInterface(System.Type,object,IInterceptor[])"/> method.
 		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
 		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
 		/// </remarks>
@@ -210,7 +210,7 @@ namespace Castle.DynamicProxy
 		/// <exception cref="TargetInvocationException">Thrown when default constructor of actual type of <paramref name="target"/> throws an exception.</exception>
 		/// <remarks>
 		/// This method generates new proxy type for each type of <paramref name="target"/>, which affects performance. If you don't want to proxy types differently depending on the type of the target
-		/// use <see cref="CreateInterfaceProxyWithTargetInterface(System.Type,object,Castle.DynamicProxy.ProxyGenerationOptions,Castle.Core.Interceptor.IInterceptor[])"/> method.
+		/// use <see cref="CreateInterfaceProxyWithTargetInterface(System.Type,object,Castle.DynamicProxy.ProxyGenerationOptions,IInterceptor[])"/> method.
 		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
 		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
 		/// </remarks>
@@ -239,7 +239,7 @@ namespace Castle.DynamicProxy
 		/// <exception cref="TargetInvocationException">Thrown when default constructor of actual type of <paramref name="target"/> throws an exception.</exception>
 		/// <remarks>
 		/// This method generates new proxy type for each type of <paramref name="target"/>, which affects performance. If you don't want to proxy types differently depending on the type of the target
-		/// use <see cref="CreateInterfaceProxyWithTargetInterface(System.Type,System.Type[],object,Castle.Core.Interceptor.IInterceptor[])"/> method.
+		/// use <see cref="CreateInterfaceProxyWithTargetInterface(System.Type,System.Type[],object,IInterceptor[])"/> method.
 		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
 		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
 		/// </remarks>
@@ -269,7 +269,7 @@ namespace Castle.DynamicProxy
 		/// <exception cref="TargetInvocationException">Thrown when default constructor of actual type of <paramref name="target"/> throws an exception.</exception>
 		/// <remarks>
 		/// This method generates new proxy type for each type of <paramref name="target"/>, which affects performance. If you don't want to proxy types differently depending on the type of the target
-		/// use <see cref="CreateInterfaceProxyWithTargetInterface(System.Type,System.Type[],object,Castle.DynamicProxy.ProxyGenerationOptions,Castle.Core.Interceptor.IInterceptor[])"/> method.
+		/// use <see cref="CreateInterfaceProxyWithTargetInterface(System.Type,System.Type[],object,Castle.DynamicProxy.ProxyGenerationOptions,IInterceptor[])"/> method.
 		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
 		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
 		/// </remarks>

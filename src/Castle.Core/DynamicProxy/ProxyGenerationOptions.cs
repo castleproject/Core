@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy
 	using System.Collections.Generic;
 	using System.Reflection.Emit;
 	using System.Runtime.Serialization;
-	using Castle.Core.Interceptor;
 
 #if SILVERLIGHT
 	public class ProxyGenerationOptions

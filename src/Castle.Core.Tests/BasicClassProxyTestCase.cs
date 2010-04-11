@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using Castle.Core.Interceptor;
+
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.Classes;

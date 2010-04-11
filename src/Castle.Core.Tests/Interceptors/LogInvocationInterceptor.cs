@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 	using System;
 	using System.Collections;
 	using System.Text;
-	using Castle.Core.Interceptor;
 	using System.Collections.Generic;
 
 	public class LogInvocationInterceptor : StandardInterceptor

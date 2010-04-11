@@ -18,8 +18,6 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 
 	using Castle.Core.Tests.Classes;
 
-	using Core.Interceptor;
-
 	public class RequiredParamInterceptor : IInterceptor
 	{
 		public void Intercept(IInvocation invocation)

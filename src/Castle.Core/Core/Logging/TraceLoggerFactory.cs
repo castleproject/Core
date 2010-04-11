@@ -12,20 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Interceptor
+namespace Castle.Core.Logging
 {
-	public interface IProxyTargetAccessor
-	{
-		/// <summary>
-		/// Get the proxy target (note that null is a valid target!)
-		/// </summary>
-		/// <returns></returns>
-		object DynProxyGetTarget();
+#if !SILVERLIGHT
 
-		/// <summary>
-		/// Gets the interceptors for the proxy
-		/// </summary>
-		/// <returns></returns>
-		IInterceptor[] GetInterceptors();		
+	/// <summary>
+	/// Used to create the TraceLogger implementation of ILogger interface. See <see cref="TraceLogger"/>. 
+	/// </summary>
+	public class TraceLoggerFactory : AbstractLoggerFactory
+	{
+		public override ILogger Create(string name)
+		{
+			return new TraceLogger(name);
+		}
+
+		public override ILogger Create(string name, LoggerLevel level)
+		{
+			return new TraceLogger(name, level);
+		}
 	}
+
+	#endif
 }

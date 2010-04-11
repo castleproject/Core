@@ -22,13 +22,12 @@ namespace Castle.DynamicProxy.Generators
 #if !SILVERLIGHT
 	using System.Xml.Serialization;
 #endif
-
-	using Castle.Core.Interceptor;
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+
 #if SILVERLIGHT
 	using Castle.DynamicProxy.SilverlightExtensions;
 #endif
