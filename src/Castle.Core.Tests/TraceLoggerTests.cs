@@ -89,7 +89,7 @@ namespace Castle.Core.Logging.Tests
 		public void FallUpToShorterSourceName()
 		{
 			TraceLoggerFactory factory = new TraceLoggerFactory();
-			ILogger logger = factory.Create(typeof(Castle.Core.Configuration.Xml.XmlConfigurationDeserializer), LoggerLevel.Debug);
+			ILogger logger = factory.Create(typeof(Configuration.Xml.XmlConfigurationDeserializer), LoggerLevel.Debug);
 			logger.Info("Logging to config namespace");
 
 			Listener.AssertContains("configrule", "Castle.Core.Configuration.Xml.XmlConfigurationDeserializer");
