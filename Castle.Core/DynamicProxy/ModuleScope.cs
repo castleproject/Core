@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
@@ -199,11 +200,12 @@ namespace Castle.DynamicProxy
 		{
 			get
 			{
-				string directory = Path.GetDirectoryName(strongModulePath);
-				if (directory == "")
+				var directory = Path.GetDirectoryName(strongModulePath);
+				if (string.IsNullOrEmpty(directory))
+				{
 					return null;
-				else
-					return directory;
+				}
+				return directory;
 			}
 		}
 
@@ -292,8 +294,8 @@ namespace Castle.DynamicProxy
 		{
 			AssemblyName assemblyName = GetAssemblyName(signStrongName);
 
-			string moduleName = signStrongName ? StrongNamedModuleName : WeakNamedModuleName;
-			string moduleDirectory = signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory;
+			var moduleName = signStrongName ? StrongNamedModuleName : WeakNamedModuleName;
+			var moduleDirectory = signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory;
 
 #if SILVERLIGHT
 #warning What to do?
@@ -303,7 +305,9 @@ namespace Castle.DynamicProxy
 				AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
 					assemblyName, AssemblyBuilderAccess.RunAndSave, moduleDirectory);
 
-				return assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
+				var module = assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
+				WorkaroundIssue98.ForModule(module);
+				return module;
 			}
 			else
 #endif
@@ -312,7 +316,9 @@ namespace Castle.DynamicProxy
 					assemblyName,
 					AssemblyBuilderAccess.Run);
 
-				return assemblyBuilder.DefineDynamicModule(moduleName, false);
+				var module = assemblyBuilder.DefineDynamicModule(moduleName, false);
+				WorkaroundIssue98.ForModule(module);
+				return module;
 			}
 		}
 
@@ -504,5 +510,11 @@ namespace Castle.DynamicProxy
 			}
 		}
 #endif
+
+		public TypeBuilder DefineType(bool inSignedModule, string name, TypeAttributes flags)
+		{
+			var module = ObtainDynamicModule(inSignedModule);
+			return module.DefineType(name, flags);
+		}
 	}
 }
