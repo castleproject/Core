@@ -245,16 +245,13 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (onlyVirtuals && !method.IsVirtual)
 			{
-#if SILVERLIGHT
-				if (method.DeclaringType != typeof(object))
-#else
-				if (method.DeclaringType != typeof(object) && method.DeclaringType != typeof(MarshalByRefObject))
-#endif
+#if !SILVERLIGHT
+				if (method.DeclaringType != typeof(MarshalByRefObject))
 				{
 					Logger.Debug("Excluded non-virtual method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
 					hook.NonVirtualMemberNotification(type, method);
 				}
-
+#endif
 				return false;
 			}
 
@@ -262,13 +259,9 @@ namespace Castle.DynamicProxy.Contributors
 			if ((method.IsPublic || method.IsFamily || method.IsAssembly || method.IsFamilyOrAssembly) == false)
 				return false;
 
-			if (method.DeclaringType == typeof (object))
-			{
-				return false;
-			}
 
 #if !SILVERLIGHT
-			if (method.DeclaringType == typeof (MarshalByRefObject))
+			if (method.DeclaringType == typeof(MarshalByRefObject))
 			{
 				return false;
 			}

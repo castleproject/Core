@@ -37,9 +37,9 @@ namespace Castle.DynamicProxy.Tests
 			ServiceClass proxy = (ServiceClass) generator.CreateClassProxy(typeof (ServiceClass), options, logger);
 
 			Assert.IsTrue(hook.Completed);
-			Assert.AreEqual(10, hook.AskedMembers.Count, "Asked members");
+			Assert.AreEqual(14, hook.AskedMembers.Count, "Asked members");
 
-			Assert.AreEqual(2, hook.NonVirtualMembers.Count, "Non-virtual members");// <-- this would fail due to superfulous method check
+			Assert.AreEqual(4, hook.NonVirtualMembers.Count, "Non-virtual members");// <-- this would fail due to superfulous method check
 
 			proxy.Sum(1, 2);
 			Assert.IsFalse(proxy.Valid);

@@ -1,0 +1,14 @@
+================================================================================================
+change - DynamicProxy will now allow to intercept members of System.Object
+
+impact - very low
+fixability - easy
+revision - 
+
+description - to allow scenarios like mocking of System.Object members, DynamicProxy will not
+	disallow proxying of these methods anymore. AllMethodsHook (default IProxyGenerationHook)
+	will still filter them out though.
+
+fix - whenever custom IProxyGenerationHook is used, user should account for System.Object's
+	members being now passed to ShouldInterceptMethod and NonVirtualMemberNotification methods
+	and if neccessary update the code to handle them appropriately.

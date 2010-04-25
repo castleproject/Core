@@ -1,6 +1,7 @@
 unreleased changes
 ==================
 
+- DynamicProxy does not disallow intercepting members of System.Object anymore. AllMethodsHook will still filter them out though.
 - Added ability to intercept explicitly implemented interface members on class proxy. Does not support generic members.
 - Merged DynamicProxy into Core binary
 - fixed DYNPROXY-ISSUE-132 - "MetaProperty equals implementation incorrect"
