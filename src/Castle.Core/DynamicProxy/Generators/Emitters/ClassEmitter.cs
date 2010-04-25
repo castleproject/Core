@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		                                             TypeAttributes flags, bool forceUnsigned)
 		{
 			bool isAssemblySigned = !forceUnsigned && !StrongNameUtil.IsAnyTypeFromUnsignedAssembly(baseType, interfaces);
-			return modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(name, flags);
+			return modulescope.DefineType(isAssemblySigned, name, flags);
 		}
 
 		private static bool ShouldForceUnsigned()
