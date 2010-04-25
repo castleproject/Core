@@ -1,6 +1,6 @@
 unreleased changes
 ==================
-
+- Added workaround for DYNPROXY-ISSUE-98. Proxy generation time for 2000 types (see .rar attached to the issue) was cut from 5min to 2min on my machine
 - DynamicProxy does not disallow intercepting members of System.Object anymore. AllMethodsHook will still filter them out though.
 - Added ability to intercept explicitly implemented interface members on class proxy. Does not support generic members.
 - Merged DynamicProxy into Core binary
