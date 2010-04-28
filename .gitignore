@@ -12,3 +12,4 @@ _ReSharper*
 *.suo
 *.cache
 * Thumbs.db
+*.csproj.ReSharper

@@ -108,6 +108,14 @@ namespace Castle.DynamicProxy
 			return generator.GenerateCode(interfaceToProxy, additionalInterfacesToProxy, options);
 		}
 
+		public Type CreateClassProxyTypeWithTarget(Type classToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options)
+		{
+			AssertValidType(classToProxy);
+			AssertValidTypes(additionalInterfacesToProxy);
+			var generator = new ClassProxyWithTargetGenerator(scope, classToProxy, additionalInterfacesToProxy, options) { Logger = logger };
+			return generator.GetGeneratedType();
+		}
+
 		private void AssertValidType(Type target)
 		{
 #if SILVERLIGHT

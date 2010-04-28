@@ -766,6 +766,67 @@ namespace Castle.DynamicProxy
 		#endregion
 
 		#region CreateClassProxy
+
+
+
+		public TClass CreateClassProxyWithTarget<TClass>(TClass target, params IInterceptor[] interceptors) where TClass : class
+		{
+			return (TClass)CreateClassProxyWithTarget(typeof(TClass),
+			                                          Type.EmptyTypes,
+			                                          target,
+			                                          ProxyGenerationOptions.Default,
+			                                          new object[0],
+			                                          interceptors);
+		}
+
+		public object CreateClassProxyWithTarget(Type classToProxy, Type[] additionalInterfacesToProxy, object target, ProxyGenerationOptions options, object[] constructorArguments, params IInterceptor[] interceptors)
+		{
+			if (classToProxy == null)
+			{
+				throw new ArgumentNullException("classToProxy");
+			}
+			if (options == null)
+			{
+				throw new ArgumentNullException("options");
+			}
+			if (!classToProxy.IsClass)
+			{
+				throw new ArgumentException("'classToProxy' must be a class", "classToProxy");
+			}
+
+			CheckNotGenericTypeDefinition(classToProxy, "classToProxy");
+			CheckNotGenericTypeDefinitions(additionalInterfacesToProxy, "additionalInterfacesToProxy");
+
+			Type proxyType = CreateClassProxyWithTargetType(classToProxy, additionalInterfacesToProxy, options);
+
+			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
+			List<object> arguments = BuildArgumentListForClassProxyWithTarget(target, options, interceptors);
+			if (constructorArguments != null && constructorArguments.Length != 0)
+			{
+				arguments.AddRange(constructorArguments);
+			}
+			return CreateClassProxyInstance(proxyType, arguments, classToProxy, constructorArguments);
+		}
+
+		private List<object> BuildArgumentListForClassProxyWithTarget(object target, ProxyGenerationOptions options, IInterceptor[] interceptors)
+		{
+			var arguments = new List<object>();
+			arguments.Add(target);
+			arguments.AddRange(options.MixinData.Mixins);
+			arguments.Add(interceptors);
+			if (options.Selector != null)
+			{
+				arguments.Add(options.Selector);
+			}
+			return arguments;
+		}
+
+		protected Type CreateClassProxyWithTargetType(Type classToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options)
+		{
+			// create proxy
+			return ProxyBuilder.CreateClassProxyTypeWithTarget(classToProxy, additionalInterfacesToProxy, options);
+		}
+
 		/// <summary>
 		/// Creates proxy object intercepting calls to virtual members of type <typeparamref name="TClass"/> on newly created instance of that type with given <paramref name="interceptors"/>.
 		/// </summary>

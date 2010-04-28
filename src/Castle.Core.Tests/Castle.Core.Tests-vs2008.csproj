@@ -7,7 +7,7 @@
     <ProjectGuid>{087AD3BF-5E40-450D-8138-FBB5F57AC474}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Castle.Core.Tests</RootNamespace>
+    <RootNamespace>Castle</RootNamespace>
     <AssemblyName>Castle.Core.Tests</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
@@ -69,13 +69,13 @@
     <Compile Include="BasePEVerifyTestCase.cs" />
     <Compile Include="BasicClassProxyTestCase.cs" />
     <Compile Include="BasicInterfaceProxyTestCase.cs" />
-    <Compile Include="Classes\HasNonInheritableAttribute.cs" />
-    <Compile Include="Classes\ClassToSerialize.cs" />
-    <Compile Include="Classes\ClassWithIndexer.cs" />
-    <Compile Include="Classes\DiffAccessLevelOnProperties.cs" />
-    <Compile Include="Classes\NonPublicConstructorClass.cs" />
-    <Compile Include="Classes\NonPublicMethodsClass.cs" />
-    <Compile Include="Classes\ServiceClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\HasNonInheritableAttribute.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassToSerialize.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithIndexer.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\DiffAccessLevelOnProperties.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\NonPublicConstructorClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\NonPublicMethodsClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ServiceClass.cs" />
     <Compile Include="ClassWithAttributesTestCase.cs" />
     <Compile Include="GenClasses\ClassWithGenArgs.cs" />
     <Compile Include="GenClasses\ClassWithIndexer.cs" />
@@ -113,11 +113,13 @@
   <ItemGroup>
     <Compile Include="BugsReported\DynProxy132.cs" />
     <Compile Include="ChangeProxyTargetInterceptor.cs" />
-    <Compile Include="Classes\ClassWithAttributesOnMethodParameters.cs" />
-    <Compile Include="Classes\ClassWithExplicitInterface.cs" />
-    <Compile Include="Classes\ClassWith_Smart_Attribute.cs" />
-    <Compile Include="Classes\RequiredAttribute.cs" />
-    <Compile Include="Classes\VirtuallyImplementsInterfaceWithEvent.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithAttributesOnMethodParameters.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithExplicitInterface.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWith_Smart_Attribute.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\RequiredAttribute.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtuallyImplementsInterfaceWithEvent.cs" />
+    <Compile Include="DynamicProxy.Tests\ClassProxyWithTargetTestCase.cs" />
     <Compile Include="ComInterfacesTests.cs" />
     <Compile Include="ExplicitInterfaceTestCase.cs" />
     <Compile Include="CustomAttributesTestCase.cs" />
@@ -141,17 +143,17 @@
     <Compile Include="CacheKeyTestCase.cs" />
     <Compile Include="CanDefineAdditionalCustomAttributes.cs" />
     <Compile Include="ClassEmitterTestCase.cs" />
-    <Compile Include="Classes\ClassCallingVirtualMethodFromCtor.cs" />
-    <Compile Include="Classes\ClassWithCharRetType.cs" />
-    <Compile Include="Classes\ClassWithConstructors.cs" />
-    <Compile Include="Classes\ClassWithVariousConstructors.cs" />
-    <Compile Include="Classes\ClassWithInternalDefaultConstructor.cs" />
-    <Compile Include="Classes\ClassWithProtectedDefaultConstructor.cs" />
-    <Compile Include="Classes\MySerializableClass.cs" />
-    <Compile Include="Classes\ProtectedInternalConstructorClass.cs" />
-    <Compile Include="Classes\SimpleClass.cs" />
-    <Compile Include="Classes\ClassOverridingEqualsAndGetHashCode.cs" />
-    <Compile Include="Classes\ClassWithDefaultConstructor.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassCallingVirtualMethodFromCtor.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithCharRetType.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithConstructors.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithVariousConstructors.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithInternalDefaultConstructor.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithProtectedDefaultConstructor.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\MySerializableClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ProtectedInternalConstructorClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\SimpleClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassOverridingEqualsAndGetHashCode.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithDefaultConstructor.cs" />
     <Compile Include="ClassProxyConstructorsTestCase.cs" />
     <Compile Include="Interceptors\DoNothingInterceptor.cs" />
     <Compile Include="GenClasses\ClassWithMethodWithArrayOfListOfT.cs" />
@@ -234,7 +236,7 @@
     <Compile Include="InternalsVisibleTo.cs" />
     <Compile Include="Interceptors\SetReturnValueInterceptor.cs" />
     <Compile Include="Interceptors\WithCallbackInterceptor.cs" />
-    <Compile Include="Classes\VirtuallyImplementsInterfaceWithProperty.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtuallyImplementsInterfaceWithProperty.cs" />
     <Compile Include="ConsoleLoggerTestCase.cs" />
     <Compile Include="DiagnosticsLoggerTestCase.cs" />
     <Compile Include="LevelFilteredLoggerTests.cs" />
@@ -242,29 +244,29 @@
     <Compile Include="MonitorLockTestCase.cs" />
     <Compile Include="SlimReadWriteLockTestCase.cs" />
     <Compile Include="ReflectionBasedDictionaryAdapterTestCase.cs" />
-    <Compile Include="Resources\AssemblyResourceFactoryTestCase.cs" />
-    <Compile Include="Resources\CustomUriTestCase.cs" />
-    <Compile Include="Resources\FileResourceFactoryTestCase.cs" />
-    <Compile Include="Resources\MoreRes\TestRes.Designer.cs">
+    <Compile Include="Core.Tests\Resources\AssemblyResourceFactoryTestCase.cs" />
+    <Compile Include="Core.Tests\Resources\CustomUriTestCase.cs" />
+    <Compile Include="Core.Tests\Resources\FileResourceFactoryTestCase.cs" />
+    <Compile Include="Core.Tests\Resources\MoreRes\TestRes.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TestRes.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\UncResourceFactoryTestCase.cs" />
+    <Compile Include="Core.Tests\Resources\UncResourceFactoryTestCase.cs" />
     <Compile Include="StreamLoggerTests.cs" />
     <Compile Include="TraceLoggerTests.cs" />
     <Compile Include="WebLoggerTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\file1.txt">
+    <EmbeddedResource Include="Core.Tests\Resources\file1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\MoreRes\TestRes.resx">
+    <EmbeddedResource Include="Core.Tests\Resources\MoreRes\TestRes.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TestRes.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="Resources\MoreRes\file2.txt" />
+    <Content Include="Core.Tests\Resources\MoreRes\file2.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Core\Castle.Core-vs2008.csproj">

@@ -15,8 +15,9 @@
 namespace Castle.Core.Tests.Resources
 {
 	using System;
-	using System.Globalization;
+
 	using NUnit.Framework;
+
 	using Castle.Core.Resource;
 
 
