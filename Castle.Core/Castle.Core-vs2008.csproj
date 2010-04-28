@@ -65,6 +65,7 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DynamicProxy\CompositionInvocation.cs" />
+    <Compile Include="DynamicProxy\Contributors\ClassProxyWithTargetTargetContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\CompositeTypeContributor.cs" />
     <Compile Include="DynamicProxy\Generators\AttributeDisassembler.cs" />
     <Compile Include="DynamicProxy\CacheMappingsAttribute.cs" />
@@ -75,6 +76,8 @@
     <Compile Include="DynamicProxy\Contributors\Delegates.cs" />
     <Compile Include="DynamicProxy\Contributors\InterfaceProxyWithoutTargetContributor.cs" />
     <Compile Include="DynamicProxy\Generators\ClassInvocationTypeGenerator.cs" />
+    <Compile Include="DynamicProxy\Generators\ClassInvocationWithTargetTypeGenerator.cs" />
+    <Compile Include="DynamicProxy\Generators\ClassProxyWithTargetGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\NullCoalescingOperatorExpression.cs" />
     <Compile Include="DynamicProxy\Generators\GeneratorUtil.cs" />
     <Compile Include="DynamicProxy\Contributors\MixinContributor.cs" />

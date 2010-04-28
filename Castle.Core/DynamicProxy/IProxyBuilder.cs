@@ -142,5 +142,7 @@ namespace Castle.DynamicProxy
 		/// pointing to Castle Dynamic Proxy assembly, in assembly containing that type, if this is appropriate.</exception>
 		/// <seealso cref="InterfaceProxyWithTargetInterfaceGenerator"/>
 		Type CreateInterfaceProxyTypeWithTargetInterface(Type interfaceToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options);
+
+		Type CreateClassProxyTypeWithTarget(Type classToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options);
 	}
 }
