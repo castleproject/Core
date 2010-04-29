@@ -266,6 +266,11 @@ namespace Castle.DynamicProxy.Contributors
 				return false;
 			}
 #endif
+			if (method.DeclaringType == typeof(object) && method.Name.Equals("Finalize", StringComparison.OrdinalIgnoreCase))
+			{
+				return false;
+			}
+
 			return hook.ShouldInterceptMethod(type, method);
 		}
 	}
