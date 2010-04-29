@@ -17,15 +17,15 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Reflection;
 
-	using Emitters;
-	using Emitters.SimpleAST;
-	using Tokens;
+	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Tokens;
 
-	public class InterfaceInvocationTypeGenerator : InvocationTypeGenerator
+	public class CompositionInvocationTypeGenerator : InvocationTypeGenerator
 	{
 		public static readonly Type BaseType = typeof(CompositionInvocation);
 
-		public InterfaceInvocationTypeGenerator(Type target, MetaMethod method, MethodInfo callback, bool canChangeTarget)
+		public CompositionInvocationTypeGenerator(Type target, MetaMethod method, MethodInfo callback, bool canChangeTarget)
 			: base(target, method, callback, canChangeTarget)
 		{
 		}

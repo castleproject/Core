@@ -75,8 +75,7 @@
     <Compile Include="DynamicProxy\Contributors\InterfaceMembersOnClassCollector.cs" />
     <Compile Include="DynamicProxy\Contributors\Delegates.cs" />
     <Compile Include="DynamicProxy\Contributors\InterfaceProxyWithoutTargetContributor.cs" />
-    <Compile Include="DynamicProxy\Generators\ClassInvocationTypeGenerator.cs" />
-    <Compile Include="DynamicProxy\Generators\ClassInvocationWithTargetTypeGenerator.cs" />
+    <Compile Include="DynamicProxy\Generators\InheritanceInvocationTypeGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\ClassProxyWithTargetGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\NullCoalescingOperatorExpression.cs" />
     <Compile Include="DynamicProxy\Generators\GeneratorUtil.cs" />
@@ -245,7 +244,7 @@
     <Compile Include="DynamicProxy\Contributors\InterfaceProxyTargetContributor.cs" />
     <Compile Include="DynamicProxy\Generators\IGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\INamingScope.cs" />
-    <Compile Include="DynamicProxy\Generators\InterfaceInvocationTypeGenerator.cs" />
+    <Compile Include="DynamicProxy\Generators\CompositionInvocationTypeGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\InterfaceProxyWithoutTargetGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\InterfaceProxyWithTargetInterfaceGenerator.cs" />

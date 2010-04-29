@@ -117,7 +117,7 @@ namespace Castle.DynamicProxy.Contributors
 
 				invocationInterfaces = new[] { typeof(IInvocation) };
 			}
-			var key = new CacheKey(method.Method, InterfaceInvocationTypeGenerator.BaseType, invocationInterfaces, null);
+			var key = new CacheKey(method.Method, CompositionInvocationTypeGenerator.BaseType, invocationInterfaces, null);
 
 			// no locking required as we're already within a lock
 
@@ -127,7 +127,7 @@ namespace Castle.DynamicProxy.Contributors
 				return invocation;
 			}
 
-			invocation = new InterfaceInvocationTypeGenerator(method.Method.DeclaringType,
+			invocation = new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
 															  method,
 															  method.Method,
 															  canChangeTarget)

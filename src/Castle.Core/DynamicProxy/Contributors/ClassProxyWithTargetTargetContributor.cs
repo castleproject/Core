@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Contributors
 			var scope = @class.ModuleScope;
 			var invocationInterfaces = new[] { typeof(IInvocation) };
 
-			var key = new CacheKey(method.Method, InterfaceInvocationTypeGenerator.BaseType, invocationInterfaces, null);
+			var key = new CacheKey(method.Method, CompositionInvocationTypeGenerator.BaseType, invocationInterfaces, null);
 
 			// no locking required as we're already within a lock
 
@@ -96,15 +96,16 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			if (!method.HasTarget)
 			{
-				return new ClassInvocationTypeGenerator(targetType,
+				return new InheritanceInvocationTypeGenerator(targetType,
 				                                        method,
 				                                        null)
 					.Generate(@class, options, namingScope)
 					.BuildType();
 			}
-			return new ClassInvocationWithTargetTypeGenerator(method.Method.DeclaringType,
-			                                        method,
-			                                        method.Method)
+			return new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
+			                                            method,
+			                                            method.Method,
+			                                            false)
 				.Generate(@class, options, namingScope)
 				.BuildType();
 		}

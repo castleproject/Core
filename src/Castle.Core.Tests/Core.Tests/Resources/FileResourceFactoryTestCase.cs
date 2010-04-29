@@ -32,7 +32,8 @@ namespace Castle.Core.Tests.Resources
 		[TestFixtureSetUp]
 		public void Init()
 		{
-			basePath = Path.Combine(Directory.GetCurrentDirectory(), "Resources"); 
+			var currentDirectory = Directory.GetCurrentDirectory();
+			basePath = Path.Combine(currentDirectory, "Core.Tests\\Resources");
 		}
 
 		[Test]
