@@ -83,14 +83,14 @@ namespace Castle.DynamicProxy.Contributors
 			var methodInfo = method.Method;
 			if (!method.HasTarget)
 			{
-				return new ClassInvocationTypeGenerator(targetType,
+				return new InheritanceInvocationTypeGenerator(targetType,
 				                                        method,
 				                                        null)
 					.Generate(@class, options, namingScope)
 					.BuildType();
 			}
 			var callback = CreateCallbackMethod(@class, methodInfo, method.MethodOnTarget);
-			return new ClassInvocationTypeGenerator(callback.DeclaringType,
+			return new InheritanceInvocationTypeGenerator(callback.DeclaringType,
 			                                        method,
 			                                        callback)
 				.Generate(@class, options, namingScope)

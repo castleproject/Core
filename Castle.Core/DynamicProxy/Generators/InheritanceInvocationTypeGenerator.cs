@@ -20,11 +20,11 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
-	public class ClassInvocationTypeGenerator : InvocationTypeGenerator
+	public class InheritanceInvocationTypeGenerator : InvocationTypeGenerator
 	{
 		public static readonly Type BaseType = typeof(InheritanceInvocation);
 
-		public ClassInvocationTypeGenerator(Type targetType, MetaMethod method, MethodInfo callback)
+		public InheritanceInvocationTypeGenerator(Type targetType, MetaMethod method, MethodInfo callback)
 			: base(targetType, method, callback, false)
 		{
 		}
