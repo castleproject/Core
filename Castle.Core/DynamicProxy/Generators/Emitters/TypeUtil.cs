@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Reflection;
 
 	public abstract class TypeUtil
 	{
@@ -100,6 +101,28 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 			}
 			return hasAnyGenericParameters;
+		}
+
+		public static FieldInfo[] GetAllFields(Type type)
+		{
+			if (type == null) throw new ArgumentNullException("type");
+
+			if (type.IsClass == false)
+			{
+				throw new ArgumentException(string.Format("Type {0} is not a class type. This method supports only classes", type));
+			}
+
+			var fields = new List<FieldInfo>();
+			var currentType = type;
+			while (currentType != typeof(object))
+			{
+				var currentFields =
+					currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+				fields.AddRange(currentFields);
+				currentType = currentType.BaseType;
+			}
+
+			return fields.ToArray();
 		}
 	}
 }

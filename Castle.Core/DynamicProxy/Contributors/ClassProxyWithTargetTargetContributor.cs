@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			Debug.Assert(hook != null, "hook != null");
 
-			var targetItem = new ClassMembersCollector(targetType) { Logger = Logger };
+			var targetItem = new WrappedClassMembersCollector(targetType) { Logger = Logger };
 			targetItem.CollectMembersToProxy(hook);
 			yield return targetItem;
 

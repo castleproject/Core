@@ -14,6 +14,12 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Reflection;
+
 	using Castle.DynamicProxy.Tests.Classes;
 
 	using NUnit.Framework;
@@ -27,6 +33,40 @@ namespace Castle.DynamicProxy.Tests
 			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithMethod());
 			var result = proxy.Method();
 			Assert.AreEqual(42, result);
+		}
+
+		[Test]
+		[Ignore("Not supported yet, on todo, though.")]
+		public void Can_proxy_class_with_protected_method()
+		{
+			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithProtectedMethod());
+			var result = proxy.PublicMethod();
+			Assert.AreEqual(42, result);
+		}
+
+		[Test]
+		public void Hook_gets_notified_about_public_field()
+		{
+			var hook = new LogHook(typeof(VirtualClassWithPublicField), false);
+			generator.CreateClassProxyWithTarget(typeof(VirtualClassWithPublicField), Type.EmptyTypes,
+			                                     new VirtualClassWithPublicField(), new ProxyGenerationOptions(hook),
+			                                     new object[0]);
+			Assert.IsNotEmpty((ICollection)hook.NonVirtualMembers);
+			var memberInfo = hook.NonVirtualMembers.Single(m => m is FieldInfo);
+			Assert.AreEqual("field", memberInfo.Name);
+			Assert.AreEqual(MemberTypes.Field, memberInfo.MemberType);
+		}
+
+		[Test]
+		public void Hook_does_NOT_get_notified_about_autoproperty_field()
+		{
+			var hook = new LogHook(typeof(VirtualClassWithAutoProperty), false);
+
+			generator.CreateClassProxyWithTarget(typeof(VirtualClassWithAutoProperty), Type.EmptyTypes,
+												 new VirtualClassWithAutoProperty(), new ProxyGenerationOptions(hook),
+												 new object[0]);
+
+			Assert.False(hook.NonVirtualMembers.Any(m => m is FieldInfo));
 		}
 	}
 }

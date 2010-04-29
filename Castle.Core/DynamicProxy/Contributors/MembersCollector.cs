@@ -30,7 +30,8 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly IDictionary<PropertyInfo, MetaProperty> properties = new Dictionary<PropertyInfo, MetaProperty>();
 		private readonly IDictionary<EventInfo, MetaEvent> events = new Dictionary<EventInfo, MetaEvent>();
 		private readonly IDictionary<MethodInfo, MetaMethod> methods = new Dictionary<MethodInfo, MetaMethod>();
-		private readonly Type type;
+		
+		protected readonly Type type;
 
 		protected MembersCollector(Type type)
 		{
@@ -58,7 +59,7 @@ namespace Castle.DynamicProxy.Contributors
 			get { return events.Values; }
 		}
 
-		public void CollectMembersToProxy(IProxyGenerationHook hook)
+		public virtual void CollectMembersToProxy(IProxyGenerationHook hook)
 		{
 			if (checkedMethods == null)// this method was already called!
 			{
