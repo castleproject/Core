@@ -137,7 +137,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Equals_DifferentOptions_Hook()
 		{
-			IProxyGenerationHook hook = new GenerationHookTestCase.LogHook(typeof(object), true);
+			IProxyGenerationHook hook = new LogHook(typeof(object), true);
 			_options1.Hook = hook;
 
 			Assert.AreNotEqual(_options1, _options2);
@@ -248,7 +248,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void GetHashCode_DifferentOptions_Hook()
 		{
-			IProxyGenerationHook hook = new GenerationHookTestCase.LogHook(typeof (object), true);
+			IProxyGenerationHook hook = new LogHook(typeof (object), true);
 			_options1.Hook = hook;
 
 			Assert.AreNotEqual(_options1.GetHashCode(), _options2.GetHashCode());

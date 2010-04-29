@@ -117,7 +117,10 @@
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithExplicitInterface.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWith_Smart_Attribute.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\RequiredAttribute.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithAutoProperty.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithProtectedMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithPublicField.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\VirtuallyImplementsInterfaceWithEvent.cs" />
     <Compile Include="DynamicProxy.Tests\ClassProxyWithTargetTestCase.cs" />
     <Compile Include="ComInterfacesTests.cs" />

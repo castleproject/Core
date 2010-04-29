@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy.Tests
 			ServiceClass proxy = (ServiceClass) generator.CreateClassProxy(typeof (ServiceClass), options, logger);
 
 			Assert.IsTrue(hook.Completed);
-			Assert.AreEqual(14, hook.AskedMembers.Count, "Asked members");
+			Assert.AreEqual(13, hook.AskedMembers.Count, "Asked members");
 
 			Assert.AreEqual(4, hook.NonVirtualMembers.Count, "Non-virtual members");// <-- this would fail due to superfulous method check
 
@@ -70,62 +70,63 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 #if !SILVERLIGHT
+	}
+
 	[Serializable]
 #endif
-		public class LogHook : IProxyGenerationHook
+	public class LogHook : IProxyGenerationHook
+	{
+		private readonly Type targetTypeToAssert;
+		private readonly bool screeningEnabled;
+		private IList<MemberInfo> nonVirtualMembers = new List<MemberInfo>();
+		private IList<MemberInfo> askedMembers = new List<MemberInfo>();
+		private bool completed;
+
+		public LogHook(Type targetTypeToAssert, bool screeningEnabled)
 		{
-			private readonly Type targetTypeToAssert;
-			private readonly bool screeningEnabled;
-			private IList nonVirtualMembers = new List<MethodInfo>();
-			private IList askedMembers = new List<MethodInfo>();
-			private bool completed;
+			this.targetTypeToAssert = targetTypeToAssert;
+			this.screeningEnabled = screeningEnabled;
+		}
 
-			public LogHook(Type targetTypeToAssert, bool screeningEnabled)
+		public IList<MemberInfo> NonVirtualMembers
+		{
+			get { return nonVirtualMembers; }
+		}
+
+		public IList<MemberInfo> AskedMembers
+		{
+			get { return askedMembers; }
+		}
+
+		public bool Completed
+		{
+			get { return completed; }
+		}
+
+		public bool ShouldInterceptMethod(Type type, MethodInfo memberInfo)
+		{
+			Assert.AreEqual(targetTypeToAssert, type);
+
+			askedMembers.Add(memberInfo);
+
+			if (screeningEnabled && memberInfo.Name.StartsWith("Sum"))
 			{
-				this.targetTypeToAssert = targetTypeToAssert;
-				this.screeningEnabled = screeningEnabled;
+				return false;
 			}
 
-			public IList NonVirtualMembers
-			{
-				get { return nonVirtualMembers; }
-			}
+			return true;
+		}
 
-			public IList AskedMembers
-			{
-				get { return askedMembers; }
-			}
+		public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
+		{
+			Assert.AreEqual(targetTypeToAssert, type);
 
-			public bool Completed
-			{
-				get { return completed; }
-			}
+			nonVirtualMembers.Add(memberInfo);
+		}
 
-			public bool ShouldInterceptMethod(Type type, MethodInfo memberInfo)
-			{
-				Assert.AreEqual(targetTypeToAssert, type);
-
-				askedMembers.Add(memberInfo);
-
-				if (screeningEnabled && memberInfo.Name.StartsWith("Sum"))
-				{
-					return false;
-				}
-
-				return true;
-			}
-
-			public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
-			{
-				Assert.AreEqual(targetTypeToAssert, type);
-
-				nonVirtualMembers.Add(memberInfo);
-			}
-
-			public void MethodsInspected()
-			{
-				completed = true;
-			}
+		public void MethodsInspected()
+		{
+			completed = true;
 		}
 	}
 }

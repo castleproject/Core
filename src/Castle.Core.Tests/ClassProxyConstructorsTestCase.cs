@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Collections.Generic;
 
-	using Classes;
+	using Castle.DynamicProxy.Tests.Classes;
 
 	using NUnit.Framework;
 
