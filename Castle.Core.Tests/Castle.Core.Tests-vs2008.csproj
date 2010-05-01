@@ -134,7 +134,7 @@
     <Compile Include="DynamicProxy.Tests\Interfaces\ISub1.cs" />
     <Compile Include="DynamicProxy.Tests\Interfaces\ISub2.cs" />
     <Compile Include="DynamicProxy.Tests\ProxyTypeCachingTestCase.cs" />
-    <Compile Include="ExplicitInterfaceTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\ExplicitInterfaceTestCase.cs" />
     <Compile Include="CustomAttributesTestCase.cs" />
     <Compile Include="GenClasses\GenClassWithExplicitImpl.cs">
       <SubType>Code</SubType>

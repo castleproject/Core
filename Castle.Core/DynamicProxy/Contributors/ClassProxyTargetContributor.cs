@@ -157,7 +157,7 @@ namespace Castle.DynamicProxy.Contributors
 		private Type GetDelegateBasedInvocation(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options,
 												Type @delegate)
 		{
-			return new InvocationWithDelegateTypeGenerator(targetType,
+			return new InheritanceInvocationWithDelegateTypeGenerator(targetType,
 														   method,
 														   @delegate)
 				.Generate(@class, options, namingScope)
