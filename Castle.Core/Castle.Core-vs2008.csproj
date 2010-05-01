@@ -67,6 +67,9 @@
     <Compile Include="DynamicProxy\CompositionInvocation.cs" />
     <Compile Include="DynamicProxy\Contributors\ClassProxyWithTargetTargetContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\CompositeTypeContributor.cs" />
+    <Compile Include="DynamicProxy\Contributors\DelegateTypeGenerator.cs" />
+    <Compile Include="DynamicProxy\Contributors\InvocationWithDelegateTypeGenerator.cs" />
+    <Compile Include="DynamicProxy\Contributors\MethodWithDelegateBasedInvocation.cs" />
     <Compile Include="DynamicProxy\Contributors\WrappedClassMembersCollector.cs" />
     <Compile Include="DynamicProxy\Generators\AttributeDisassembler.cs" />
     <Compile Include="DynamicProxy\CacheMappingsAttribute.cs" />
@@ -288,6 +291,7 @@
     <Compile Include="DynamicProxy\Serialization\ProxyTypeConstants.cs" />
     <Compile Include="DynamicProxy\Serialization\ProxyObjectReference.cs" />
     <Compile Include="Core\Extensions\SilverlightExtensions.cs" />
+    <Compile Include="DynamicProxy\Tokens\DelegateMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\FormatterServicesMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\InvocationMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\MethodBaseMethods.cs" />
@@ -297,6 +301,7 @@
     <Compile Include="Core\CollectionExtensions.cs" />
     <Compile Include="DynamicProxy\IAttributeDisassembler.cs" />
     <Compile Include="DynamicProxy\IInterceptorSelector.cs" />
+    <Compile Include="DynamicProxy\Tokens\TypeUtilMethods.cs" />
     <Compile Include="DynamicProxy\WorkaroundIssue98.cs" />
     <Compile Include="Properties\InternalsVisibleToTests.cs" />
     <Compile Include="Core\Internal\ILockHolder.cs" />

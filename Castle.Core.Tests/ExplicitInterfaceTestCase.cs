@@ -16,22 +16,139 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 
-	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.Explicit;
+	using Castle.DynamicProxy.Tests.GenInterfaces;
 	using Castle.DynamicProxy.Tests.Interceptors;
+	using Castle.DynamicProxy.Tests.Interfaces;
 
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class ExplicitInterfaceTestCase : BasePEVerifyTestCase
 	{
-		[Test]
-		public void ExplicitInterfaceMethods_AreIgnored_OnClassProxy()
+
+		public override void Init()
 		{
-			LogInvocationInterceptor interceptor = new LogInvocationInterceptor();
-			ClassWithExplicitInterface instance = generator.CreateClassProxy<ClassWithExplicitInterface>(interceptor);
+			base.Init();
+			interceptor = new LogInvocationInterceptor();
+		}
+
+		private LogInvocationInterceptor interceptor;
+
+		[Test]
+		public void ExplicitGenericInterface()
+		{
+			var proxy = (GenInterface<int>)generator.CreateClassProxy(typeof(GenInterfaceExplicit),
+			                                                          new[] { typeof(GenInterface<int>) },
+			                                                          interceptor);
+
+			var result = proxy.DoSomething(4);
+
+			Assert.AreEqual(5, result);
+			Assert.AreEqual("DoSomething ", interceptor.LogContents);
+		}
+
+		[Test]
+		[Ignore("generic methods are not supported (yet).")]
+		public void ExplicitGenericMethod()
+		{
+			var proxy = (IGenericInterface)generator.CreateClassProxy(typeof(GenericMethodExplicit),
+			                                                          new[] { typeof(IGenericInterface) },
+			                                                          interceptor,
+			                                                          new SetReturnValueInterceptor(5));
+
+			var result = proxy.GenericMethod<int>();
+
+			Assert.AreEqual(5, result);
+			Assert.AreEqual("GenericMethod ", interceptor.LogContents);
+		}
+
+		[Test]
+		public void ExplicitInterface_AsAdditionalInterfaceToProxy_OnClassProxy_WithBaseCalls()
+		{
+			var proxy = (ISimpleInterface)generator.CreateClassProxy(typeof(SimpleInterfaceExplicit),
+			                                                         new[] { typeof(ISimpleInterface) },
+			                                                         interceptor);
+
+			var result = proxy.Do();
+
+			Assert.AreEqual(1, interceptor.Invocations.Count);
+			Assert.AreEqual("Do", interceptor.Invocations[0]);
+			Assert.AreEqual(5, result); // indicates that original method was called
+		}
+
+		[Test]
+		public void ExplicitInterface_AsAdditionalInterfaceToProxy_OnClassProxy_WithoutBaseCalls()
+		{
+			interceptor.Proceed = false;
+
+			var proxy = (SimpleInterfaceExplicit)generator.CreateClassProxy(typeof(SimpleInterfaceExplicit),
+			                                                                new[] { typeof(ISimpleInterface) },
+			                                                                interceptor);
+
+			proxy.DoVirtual();
+			int result = ((ISimpleInterface)proxy).Do();
+			proxy.DoVirtual();
+
+			Assert.AreEqual(3, interceptor.Invocations.Count);
+			Assert.AreEqual("DoVirtual", interceptor.Invocations[0]);
+			Assert.AreEqual("Do", interceptor.Invocations[1]);
+			Assert.AreEqual("DoVirtual", interceptor.Invocations[2]);
+
+			Assert.AreEqual(0, result); // indicates that original method was not called
+		}
+
+		[Test]
+		public void ExplicitInterface_properties_should_be_public_class()
+		{
+			var proxy = generator.CreateClassProxy(typeof(ExplicitInterfaceWithPropertyImplementation),
+			                                       new[] { typeof(ISimpleInterfaceWithProperty) },
+			                                       interceptor);
+			Assert.IsNotEmpty(proxy.GetType().GetProperties());
+		}
+
+		[Test]
+		public void ExplicitInterface_properties_should_be_public_interface()
+		{
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(ISimpleInterfaceWithProperty), interceptor);
+			Assert.IsNotEmpty(proxy.GetType().GetProperties());
+		}
+
+		[Test]
+		public void ExplicitMethodOutArguments()
+		{
+			var proxy = (IWithRefOut)generator.CreateClassProxy(typeof(WithRefOutExplicit),
+			                                                    new[] { typeof(IWithRefOut) },
+			                                                    interceptor);
+
+			int result;
+			proxy.Do(out result);
+
+			Assert.AreEqual(5, result);
+			Assert.AreEqual("Do ", interceptor.LogContents);
+		}
+
+		[Test]
+		public void ExplicitMethodRefArguments()
+		{
+			var proxy = (IWithRefOut)generator.CreateClassProxy(typeof(WithRefOutExplicit),
+			                                                    new[] { typeof(IWithRefOut) },
+			                                                    interceptor);
+
+			var result = 0;
+			proxy.Did(ref result);
+
+			Assert.AreEqual(5, result);
+			Assert.AreEqual("Did ", interceptor.LogContents);
+		}
+
+		[Test]
+		public void NonVirtualExplicitInterfaceMethods_AreIgnored_OnClassProxy()
+		{
+			var instance = generator.CreateClassProxy<SimpleInterfaceExplicit>(interceptor);
 
 			instance.DoVirtual();
-			int result = ((ISimpleInterface) instance).Do ();
+			int result = ((ISimpleInterface)instance).Do();
 			instance.DoVirtual();
 
 			Assert.AreEqual(2, interceptor.Invocations.Count);
@@ -40,71 +157,9 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual(5, result);
 		}
-
-		[Test]
-		[Ignore ("TODO - allow proxying of explicit interfaces _with_ base calls")]
-		public void ExplicitInterface_AsAdditionalInterfaceToProxy_OnClassProxy_WithBaseCalls()
-		{
-			LogInvocationInterceptor interceptor = new LogInvocationInterceptor();
-			interceptor.Proceed = false;
-
-			ClassWithExplicitInterface instance = (ClassWithExplicitInterface) generator.CreateClassProxy (typeof (ClassWithExplicitInterface), 
-				new[] { typeof(ISimpleInterface) }, interceptor);
-
-			instance.DoVirtual();
-			int result = ((ISimpleInterface) instance).Do ();
-			instance.DoVirtual();
-
-			Assert.AreEqual(3, interceptor.Invocations.Count);
-			Assert.AreEqual("DoVirtual", interceptor.Invocations[0]);
-			Assert.AreEqual("Do", interceptor.Invocations[1]);
-			Assert.AreEqual("DoVirtual", interceptor.Invocations[2]);
-
-			Assert.AreEqual (5, result); // indicates that original method was called
-		}
-
-		[Test]
-		public void ExplicitInterface_AsAdditionalInterfaceToProxy_OnClassProxy_WithoutBaseCalls()
-		{
-			LogInvocationInterceptor interceptor = new LogInvocationInterceptor ();
-			interceptor.Proceed = false;
-
-			ClassWithExplicitInterface instance = (ClassWithExplicitInterface) generator.CreateClassProxy (typeof (ClassWithExplicitInterface),
-				new[] { typeof (ISimpleInterface) }, interceptor);
-
-			instance.DoVirtual ();
-			int result = ((ISimpleInterface) instance).Do ();
-			instance.DoVirtual ();
-
-			Assert.AreEqual (3, interceptor.Invocations.Count);
-			Assert.AreEqual ("DoVirtual", interceptor.Invocations[0]);
-			Assert.AreEqual ("Do", interceptor.Invocations[1]);
-			Assert.AreEqual ("DoVirtual", interceptor.Invocations[2]);
-
-			Assert.AreEqual (0, result); // indicates that original method was not called
-		}
-
-		[Test]
-		public void ExplicitInterface_properties_should_be_public_interface()
-		{
-			var interceptor = new LogInvocationInterceptor { Proceed = false };
-
-			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(ISimpleInterfaceWithProperty), interceptor);
-			Assert.IsNotEmpty(proxy.GetType().GetProperties());
-		}
-
-		[Test]
-		public void ExplicitInterface_properties_should_be_public_class()
-		{
-			var interceptor = new LogInvocationInterceptor { Proceed = false };
-
-			var proxy = generator.CreateClassProxy(typeof(ExplicitInterfaceWithPropertyImplementation), new[] { typeof(ISimpleInterfaceWithProperty) },
-			                                       interceptor);
-			Assert.IsNotEmpty(proxy.GetType().GetProperties());
-		}
 	}
 
-	public class ExplicitInterfaceWithPropertyImplementation: ISimpleInterfaceWithProperty
+	public class ExplicitInterfaceWithPropertyImplementation : ISimpleInterfaceWithProperty
 	{
 		public int Age
 		{

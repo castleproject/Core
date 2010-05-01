@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
-namespace Castle.DynamicProxy.Tokens
+namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
-	using System.Reflection;
-	using System.Runtime.Serialization;
 
-	public static class FormatterServicesMethods
+#if !SILVERLIGHT
+	[Serializable]
+#endif
+	public class ClassWithInterface : ISimpleInterface
 	{
-		public static readonly MethodInfo GetObjectData =
-			typeof(FormatterServices).GetMethod("GetObjectData", new[] { typeof(object), typeof(MemberInfo[]) });
-
-		public static readonly MethodInfo GetSerializableMembers =
-			typeof(FormatterServices).GetMethod("GetSerializableMembers", new[] { typeof(Type) });
+		public int Do()
+		{
+			return 5;
+		}
 	}
 }
-#endif
