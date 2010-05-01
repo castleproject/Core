@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -51,11 +52,11 @@ namespace Castle.DynamicProxy.Generators
 			// make sure ProxyGenerationOptions is initialized
 			options.Initialize();
 
+			interfaces = TypeUtil.GetAllInterfaces(interfaces).ToArray();
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 			Type proxyType;
 
-			CacheKey cacheKey = new CacheKey(targetType, interfaces, options);
-
+			var cacheKey = new CacheKey(targetType, interfaces, options);
 			using (var locker = Scope.Lock.ForReadingUpgradeable())
 			{
 				Type cacheType = GetFromCache(cacheKey);

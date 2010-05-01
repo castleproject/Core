@@ -82,11 +82,11 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(s2, "bbb");
 		}
 
-		[Test, Explicit]
+		[Test]
 		public void CanCreateProxyWithStructRefParam()
 		{
-			MyStruct s = new MyStruct(10);
-			MyClass proxy = (MyClass) generator.CreateClassProxy(typeof (MyClass), new StandardInterceptor());
+			var s = new MyStruct(10);
+			var proxy = (MyClass) generator.CreateClassProxy(typeof (MyClass), new StandardInterceptor());
 			proxy.MyMethodWithStruct(ref s);
 			Assert.AreEqual(20, s.Value);
 		}

@@ -9,8 +9,8 @@
 
 	public class DelegateTypeGenerator : IGenerator<AbstractTypeEmitter>
 	{
-		private readonly Type targetType;
 		private readonly MetaMethod method;
+		private readonly Type targetType;
 
 		private const TypeAttributes DelegateFlags = TypeAttributes.Class |
 		                                             TypeAttributes.Public |
@@ -18,10 +18,10 @@
 		                                             TypeAttributes.AnsiClass |
 		                                             TypeAttributes.AutoClass;
 
-		public DelegateTypeGenerator(Type targetType, MetaMethod method)
+		public DelegateTypeGenerator(MetaMethod method, Type targetType)
 		{
-			this.targetType = targetType;
 			this.method = method;
+			this.targetType = targetType;
 		}
 
 		public AbstractTypeEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
@@ -47,7 +47,15 @@
 
 		private Type[] GetParamTypes()
 		{
-			return ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters());
+			//return ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters());
+			var parameters = method.MethodOnTarget.GetParameters();
+			var paramTypes = new Type[parameters.Length + 1];
+			paramTypes[0] = targetType;
+			for (var i = 0; i < parameters.Length; i++)
+			{
+				paramTypes[i + 1] = parameters[i].ParameterType;
+			}
+			return paramTypes;
 		}
 
 		private void BuildConstructor(AbstractTypeEmitter emitter)

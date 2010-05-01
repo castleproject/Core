@@ -58,7 +58,7 @@
 				proxiedMethodTokenExpression = proxiedMethodToken.ToExpression();
 			}
 
-			var delegateToken = BuildDelegateToken(@class, new MethodTokenExpression(MethodToOverride), namingScope);
+			var delegateToken = BuildDelegateToken(@class, new MethodTokenExpression(MethodOnTarget), namingScope);
 
 			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
 

@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Collections.Generic;
 #if !SILVERLIGHT
+	using System.Linq;
 	using System.Reflection;
 	using System.Xml.Serialization;
 #endif
@@ -50,7 +51,7 @@ namespace Castle.DynamicProxy.Generators
 			EnsureValidBaseType(options.BaseTypeForInterfaceProxy);
 			Type proxyType;
 
-			interfaces = TypeUtil.GetAllInterfaces(interfaces);
+			interfaces = TypeUtil.GetAllInterfaces(interfaces).ToArray();
 			CacheKey cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
 
 			using (var locker = Scope.Lock.ForReadingUpgradeable())

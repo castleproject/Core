@@ -46,7 +46,7 @@ namespace Castle.Core.Tests.Resources
 			Assert.AreEqual("Something", line);
 		}
 
-		[Test, Explicit]
+		[Test]
 		public void CanHandleBundleResource()
 		{
 			IResource resource = new AssemblyBundleResource(new CustomUri("assembly://" + AssemblyName + "/Castle.Core.Tests.Resources.MoreRes.TestRes/content1"));

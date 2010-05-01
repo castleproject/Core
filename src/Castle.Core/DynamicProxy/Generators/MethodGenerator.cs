@@ -25,6 +25,10 @@ namespace Castle.DynamicProxy.Generators
 		{
 			get { return method.Method; }
 		}
+		protected MethodInfo MethodOnTarget
+		{
+			get { return method.MethodOnTarget; }
+		}
 
 		protected MethodGenerator(MetaMethod method, OverrideMethodDelegate overrideMethod)
 		{

@@ -47,17 +47,16 @@ namespace Castle.DynamicProxy.Generators
 			{
 				interfaces = new[] { typeof(IChangeProxyTarget) };
 			}
-			var type = GetEmitter(@class, interfaces,namingScope,methodInfo);
+			var type = GetEmitter(@class, interfaces, namingScope, methodInfo);
 
 			// invocation only needs to mirror the generic parameters of the MethodInfo
 			// targetType cannot be a generic type definition
 			type.CopyGenericParametersFromMethod(methodInfo);
 
-
 			// Create constructor
 
 			ConstructorInfo baseConstructor;
-			var arguments = GetCtorArgumentsAndBaseCtorToCall(targetType,options, out baseConstructor);
+			var arguments = GetCtorArgumentsAndBaseCtorToCall(targetType, options, out baseConstructor);
 
 			var constructor = type.CreateConstructor(arguments);
 			CustomizeCtor(constructor, arguments, type);
@@ -73,14 +72,7 @@ namespace Castle.DynamicProxy.Generators
 
 			// InvokeMethodOnTarget implementation
 
-			if (callback != null)
-			{
-				ImplemementInvokeMethodOnTarget(type, methodInfo.GetParameters(), targetField, callback);
-			}
-			else
-			{
-				CreateEmptyIInvocationInvokeOnTarget(type);
-			}
+			ImplemementInvokeMethodOnTarget(type, methodInfo.GetParameters(), targetField, callback);
 
 #if !SILVERLIGHT
 			type.DefineCustomAttribute<SerializableAttribute>();
