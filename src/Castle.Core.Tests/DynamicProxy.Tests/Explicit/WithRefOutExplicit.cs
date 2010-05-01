@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
-namespace Castle.DynamicProxy.Tokens
+namespace Castle.DynamicProxy.Tests.Explicit
 {
-	using System;
-	using System.Reflection;
-	using System.Runtime.Serialization;
+	using Castle.DynamicProxy.Tests.Interfaces;
 
-	public static class FormatterServicesMethods
+	public class WithRefOutExplicit : IWithRefOut
 	{
-		public static readonly MethodInfo GetObjectData =
-			typeof(FormatterServices).GetMethod("GetObjectData", new[] { typeof(object), typeof(MemberInfo[]) });
+		void IWithRefOut.Did(ref int i)
+		{
+			i = 5;
+		}
 
-		public static readonly MethodInfo GetSerializableMembers =
-			typeof(FormatterServices).GetMethod("GetSerializableMembers", new[] { typeof(Type) });
+		void IWithRefOut.Do(out int i)
+		{
+			i = 5;
+		}
 	}
 }
-#endif

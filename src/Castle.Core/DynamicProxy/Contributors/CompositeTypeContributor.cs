@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -99,7 +99,6 @@ namespace Castle.DynamicProxy.Contributors
 			Debug.Assert(@interface != null, "@interface == null", "Shouldn't be adding empty interfaces...");
 			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
 			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.ContainsKey(@interface)", "Shouldn't be adding same interface twice...");
-
 
 			interfaces.Add(@interface);
 		}

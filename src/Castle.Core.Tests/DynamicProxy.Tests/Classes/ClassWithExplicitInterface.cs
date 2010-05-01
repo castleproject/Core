@@ -31,23 +31,4 @@ namespace Castle.DynamicProxy.Tests.Classes
 			return 7;
 		}
 	}
-
-#if !SILVERLIGHT
-	[Serializable]
-#endif
-	public class ClassWithInterface : ISimpleInterface
-	{
-		public int Do()
-		{
-			return 5;
-		}
-	}
-
-	public class ClassWithVirtualInterface : ISimpleInterface
-	{
-		public virtual int Do()
-		{
-			return 5;
-		}
-	}
 }

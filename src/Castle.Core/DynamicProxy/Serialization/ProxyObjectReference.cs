@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Serialization
 	using System.Runtime.Serialization;
 	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Generators.Emitters;
 
 	/// <summary>
 	/// Handles the deserialization of proxies.
@@ -227,6 +228,10 @@ namespace Castle.DynamicProxy.Serialization
 			{
 				var baseMemberData = GetValue<object[]>("__data");
 				MemberInfo[] members = FormatterServices.GetSerializableMembers(baseType);
+
+				// Sort to keep order on both serialize and deserialize side the same, c.f DYNPROXY-ISSUE-127
+				members = TypeUtil.Sort(members);
+
 				FormatterServices.PopulateObjectMembers(proxy, members, baseMemberData);
 			}
 		}

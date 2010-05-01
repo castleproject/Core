@@ -50,6 +50,7 @@ namespace Castle.DynamicProxy.Generators
 			EnsureValidBaseType(options.BaseTypeForInterfaceProxy);
 			Type proxyType;
 
+			interfaces = TypeUtil.GetAllInterfaces(interfaces);
 			CacheKey cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
 
 			using (var locker = Scope.Lock.ForReadingUpgradeable())
@@ -227,8 +228,8 @@ namespace Castle.DynamicProxy.Generators
 			var mixins = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
 			// Order of interface precedence:
 			// 1. first target
-			var targetInterfaces = TypeUtil.GetAllInterfaces(proxyTargetType);
-			var additionalInterfaces = TypeUtil.GetAllInterfaces(interfaces);
+			ICollection<Type> targetInterfaces = TypeUtil.GetAllInterfaces(proxyTargetType);
+			ICollection<Type> additionalInterfaces = TypeUtil.GetAllInterfaces(interfaces);
 			var target = AddMappingForTargetType(typeImplementerMapping, proxyTargetType, targetInterfaces, additionalInterfaces,namingScope);
 
 			// 2. then mixins
@@ -300,7 +301,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var contributor = new InterfaceProxyTargetContributor(proxyTargetType, AllowChangeTarget, namingScope)
 			{ Logger = Logger };
-			var proxiedInterfaces = TypeUtil.GetAllInterfaces(targetType);
+			ICollection<Type> proxiedInterfaces = TypeUtil.GetAllInterfaces(targetType);
 			foreach (var @interface in proxiedInterfaces)
 			{
 				contributor.AddInterfaceToProxy(@interface);

@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy.Generators
 
 	public class TypeElementCollection<TElement> : ICollection<TElement> where TElement : MetaTypeElement, IEquatable<TElement>
 	{
-		// TODO: use HashSet for this in the future
 		private readonly ICollection<TElement> items = new List<TElement>();
 
 		public IEnumerator<TElement> GetEnumerator()

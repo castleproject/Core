@@ -115,6 +115,8 @@
     <Compile Include="ChangeProxyTargetInterceptor.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithAttributesOnMethodParameters.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithExplicitInterface.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithInterface.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithVirtualInterface.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWith_Smart_Attribute.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\RequiredAttribute.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithAutoProperty.cs" />
@@ -124,6 +126,14 @@
     <Compile Include="DynamicProxy.Tests\Classes\VirtuallyImplementsInterfaceWithEvent.cs" />
     <Compile Include="DynamicProxy.Tests\ClassProxyWithTargetTestCase.cs" />
     <Compile Include="ComInterfacesTests.cs" />
+    <Compile Include="DynamicProxy.Tests\Explicit\GenericMethodExplicit.cs" />
+    <Compile Include="DynamicProxy.Tests\Explicit\GenInterfaceExplicit.cs" />
+    <Compile Include="DynamicProxy.Tests\Explicit\SimpleInterfaceExplicit.cs" />
+    <Compile Include="DynamicProxy.Tests\Explicit\WithRefOutExplicit.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\IBase.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\ISub1.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\ISub2.cs" />
+    <Compile Include="DynamicProxy.Tests\ProxyTypeCachingTestCase.cs" />
     <Compile Include="ExplicitInterfaceTestCase.cs" />
     <Compile Include="CustomAttributesTestCase.cs" />
     <Compile Include="GenClasses\GenClassWithExplicitImpl.cs">
