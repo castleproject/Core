@@ -4,17 +4,16 @@
 	using System.Diagnostics;
 	using System.Reflection;
 
-	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
-	public class InvocationWithDelegateTypeGenerator : InvocationTypeGenerator
+	public class InheritanceInvocationWithDelegateTypeGenerator : InvocationTypeGenerator
 	{
 		private readonly Type delegateType;
 		public static readonly Type BaseType = typeof(InheritanceInvocation);
-		public InvocationWithDelegateTypeGenerator(Type targetType, MetaMethod method, Type delegateType)
+		public InheritanceInvocationWithDelegateTypeGenerator(Type targetType, MetaMethod method, Type delegateType)
 			: base(targetType, method, null, false)
 		{
 			if (delegateType == null)
@@ -69,7 +68,7 @@
 			var methodOnTargetInvocationExpression = new MethodInvocationExpression(
 				@delegate,
 				callbackMethod,
-				allArgs) { VirtualCall = true };
+				allArgs);
 			return methodOnTargetInvocationExpression;
 		}
 

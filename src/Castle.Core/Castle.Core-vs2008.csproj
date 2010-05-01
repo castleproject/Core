@@ -68,7 +68,7 @@
     <Compile Include="DynamicProxy\Contributors\ClassProxyWithTargetTargetContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\CompositeTypeContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\DelegateTypeGenerator.cs" />
-    <Compile Include="DynamicProxy\Contributors\InvocationWithDelegateTypeGenerator.cs" />
+    <Compile Include="DynamicProxy\Contributors\InheritanceInvocationWithDelegateTypeGenerator.cs" />
     <Compile Include="DynamicProxy\Contributors\MethodWithDelegateBasedInvocation.cs" />
     <Compile Include="DynamicProxy\Contributors\WrappedClassMembersCollector.cs" />
     <Compile Include="DynamicProxy\Generators\AttributeDisassembler.cs" />
