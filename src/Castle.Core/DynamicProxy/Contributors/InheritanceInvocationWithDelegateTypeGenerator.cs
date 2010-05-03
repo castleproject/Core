@@ -4,7 +4,6 @@
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
-	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -98,21 +97,22 @@
 			}
 			var closedDelegateType = delegateType.MakeGenericType(invocation.GenericTypeParams);
 			var localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(closedDelegateType);
-
-			invokeMethodOnTarget.CodeBuilder.AddStatement(SetDelegate(localReference, new ReferenceExpression(
-			                                                                  	new AsTypeReference(GetTargetReference(),
-			                                                                  	                    targetType)), delegateType, method.MethodOnTarget, invocation.GenericTypeParams));
+			var closedMethodOnTarget = method.MethodOnTarget.MakeGenericMethod(invocation.GenericTypeParams);
+			var localTarget = new ReferenceExpression(GetTargetReference());
+			invokeMethodOnTarget.CodeBuilder.AddStatement(
+				SetDelegate(localReference, localTarget, closedDelegateType, closedMethodOnTarget));
 			return localReference;
 		}
 
-		private AssignStatement SetDelegate(LocalReference localDelegate, ReferenceExpression localTarget, Type openDelegateType, MethodInfo openMethodOnTarget, GenericTypeParameterBuilder[] genericTypeParams)
+		private AssignStatement SetDelegate(LocalReference localDelegate, ReferenceExpression localTarget, Type closedDelegateType, MethodInfo closedMethodOnTarget)
 		{
-			return new AssignStatement(
-				localDelegate,
-				new BindDelegateExpression(openDelegateType,
-				                           localTarget,
-				                           openMethodOnTarget,
-				                           genericTypeParams));
+			var delegateCreateDelegate = new MethodInvocationExpression(
+				null,
+				DelegateMethods.CreateDelegate,
+				new TypeTokenExpression(closedDelegateType),
+				localTarget,
+				new MethodTokenExpression(closedMethodOnTarget));
+			return new AssignStatement(localDelegate, new ConvertExpression(closedDelegateType, delegateCreateDelegate));
 		}
 
 		protected override ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor)

@@ -51,7 +51,6 @@ namespace Castle.DynamicProxy.Tests
 		[Test(Description = "Disabled verification. Code is unverifiable because we're directly binding delegate to invisible (private) method.")]
 		public void ExplicitGenericMethod_with_base_call()
 		{
-			DisableVerification();
 			var proxy = (IGenericInterface)generator.CreateClassProxy(typeof(GenericMethodExplicit),
 			                                                          new[] { typeof(IGenericInterface) },
 			                                                          interceptor);
@@ -65,7 +64,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test(Description = "Disabled verification. Code is unverifiable because we're directly binding delegate to invisible (private) method.")]
 		public void ExplicitGenericMethod_without_base_call()
 		{
-			DisableVerification();
+			
 			var proxy = (IGenericInterface)generator.CreateClassProxy(typeof(GenericMethodExplicit),
 																	  new[] { typeof(IGenericInterface) },
 																	  interceptor,
