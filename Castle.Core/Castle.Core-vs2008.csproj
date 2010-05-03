@@ -270,7 +270,6 @@
     <Compile Include="DynamicProxy\Generators\MetaType.cs" />
     <Compile Include="DynamicProxy\InheritanceInvocation.cs" />
     <Compile Include="DynamicProxy\InternalsHelper.cs" />
-    <Compile Include="DynamicProxy\Internal\DelegateUtil.cs" />
     <Compile Include="DynamicProxy\InvalidMixinConfigurationException.cs" />
     <Compile Include="DynamicProxy\InvocationHelper.cs" />
     <Compile Include="DynamicProxy\IProxyBuilder.cs">
