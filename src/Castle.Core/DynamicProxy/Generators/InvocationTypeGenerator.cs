@@ -18,9 +18,9 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Reflection;
 
-	using Emitters;
-	using Emitters.SimpleAST;
-	using Tokens;
+	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Tokens;
 
 	public abstract class InvocationTypeGenerator : IGenerator<AbstractTypeEmitter>
 	{
@@ -50,27 +50,16 @@ namespace Castle.DynamicProxy.Generators
 			var invocation = GetEmitter(@class, interfaces, namingScope, methodInfo);
 
 			// invocation only needs to mirror the generic parameters of the MethodInfo
-			// targetType cannot be a generic type definition
+			// targetType cannot be a generic type definition (YET!)
 			invocation.CopyGenericParametersFromMethod(methodInfo);
 
-			// Create constructor
-
-			ConstructorInfo baseConstructor;
-			var arguments = GetCtorArgumentsAndBaseCtorToCall(targetType, options, out baseConstructor);
-
-			var constructor = invocation.CreateConstructor(arguments);
-			CustomizeCtor(constructor, arguments, invocation);
-			var baseArguments = GetArgumentsForBaseCtor(arguments);
-			constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, baseArguments);
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+			CreateConstructor(invocation, options);
 
 			var targetField = GetTargetReference();
 			if (canChangeTarget)
 			{
 				ImplementChangeProxyTargetInterface(@class, invocation, targetField);
 			}
-
-			// InvokeMethodOnTarget implementation
 
 			ImplemementInvokeMethodOnTarget(invocation, methodInfo.GetParameters(), targetField, callback);
 
@@ -79,6 +68,18 @@ namespace Castle.DynamicProxy.Generators
 #endif
 
 			return invocation;
+		}
+
+		private void CreateConstructor(AbstractTypeEmitter invocation, ProxyGenerationOptions options)
+		{
+			ConstructorInfo baseConstructor;
+			var arguments = GetCtorArgumentsAndBaseCtorToCall(targetType, options, out baseConstructor);
+
+			var constructor = invocation.CreateConstructor(arguments);
+			CustomizeCtor(constructor, arguments, invocation);
+			var baseArguments = GetArgumentsForBaseCtor(arguments);
+			constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, baseArguments);
+			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
 		protected virtual void CustomizeCtor(ConstructorEmitter constructor, ArgumentReference[] arguments, AbstractTypeEmitter invocation)
@@ -159,9 +160,8 @@ namespace Castle.DynamicProxy.Generators
 			if (canChangeTarget)
 			{
 				invokeMethodOnTarget.CodeBuilder.AddStatement(
-																new ExpressionStatement(
-																	new MethodInvocationExpression(SelfReference.Self,
-																								   InvocationMethods.EnsureValidTarget)));
+					new ExpressionStatement(
+						new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
 			}
 
 			Expression[] args = new Expression[parameters.Length];
@@ -245,20 +245,6 @@ namespace Castle.DynamicProxy.Generators
 
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
-		protected virtual MethodInfo GetCallbackMethod(MethodInfo callbackMethod, AbstractTypeEmitter @class)
-		{
-			if (callbackMethod == null)
-			{
-				return null;
-			}
-
-			if (!callbackMethod.IsGenericMethod)
-			{
-				return callbackMethod;
-			}
-
-			return callbackMethod.MakeGenericMethod(@class.GetGenericArgumentsFor(callbackMethod));
-		}
 		protected virtual MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, Expression[] args, MethodInfo callbackMethod, Reference targetField, MethodEmitter invokeMethodOnTarget)
 		{
 			var methodOnTargetInvocationExpression = new MethodInvocationExpression(
@@ -276,6 +262,20 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name="proxyGenerationOptions"></param>
 		/// <param name="baseConstructor"></param>
 		protected abstract ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor);
-		
+
+		private MethodInfo GetCallbackMethod(MethodInfo callbackMethod, AbstractTypeEmitter invocation)
+		{
+			if (callbackMethod == null)
+			{
+				return null;
+			}
+
+			if (!callbackMethod.IsGenericMethod)
+			{
+				return callbackMethod;
+			}
+
+			return callbackMethod.MakeGenericMethod(invocation.GetGenericArgumentsFor(callbackMethod));
+		}
 	}
 }
