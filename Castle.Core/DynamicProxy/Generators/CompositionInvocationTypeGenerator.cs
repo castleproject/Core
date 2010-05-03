@@ -40,12 +40,12 @@ namespace Castle.DynamicProxy.Generators
 			return BaseType;
 		}
 
-		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter @class, ParameterInfo[] parameters, MethodEmitter invokeMethodOnTarget, MethodInfo callbackMethod, Reference targetField)
+		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters, MethodEmitter invokeMethodOnTarget, MethodInfo callbackMethod, Reference targetField)
 		{
 			invokeMethodOnTarget.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
-			base.ImplementInvokeMethodOnTarget(@class, parameters, invokeMethodOnTarget, callbackMethod, targetField);
+			base.ImplementInvokeMethodOnTarget(invocation, parameters, invokeMethodOnTarget, callbackMethod, targetField);
 		}
 
 		protected override ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions,out ConstructorInfo baseConstructor)

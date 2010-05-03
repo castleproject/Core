@@ -90,13 +90,18 @@ namespace Castle.DynamicProxy.Tests
 
 		public void RunPEVerifyOnGeneratedAssembly(string assemblyPath)
 		{
-			Process process = new Process();
-			process.StartInfo.FileName = FindPeVerify.PeVerifyPath;
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			process.StartInfo.Arguments = "\"" + assemblyPath + "\" /VERBOSE";
-			process.StartInfo.CreateNoWindow = true;
+			var process = new Process
+			{
+				StartInfo =
+					{
+						FileName = FindPeVerify.PeVerifyPath,
+						RedirectStandardOutput = true,
+						UseShellExecute = false,
+						WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+						Arguments = "\"" + assemblyPath + "\" /VERBOSE",
+						CreateNoWindow = true
+					}
+			};
 			process.Start();
 			string processOutput = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();

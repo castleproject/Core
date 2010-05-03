@@ -58,11 +58,12 @@
 				proxiedMethodTokenExpression = proxiedMethodToken.ToExpression();
 			}
 
-			var delegateToken = BuildDelegateToken(@class, new MethodTokenExpression(MethodOnTarget), namingScope);
-
+			FieldReference delegateToken = null;
+			if (@delegate.IsGenericType == false)
+			{
+				delegateToken = BuildDelegateToken(@class, new MethodTokenExpression(MethodOnTarget), namingScope);
+			}
 			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
-
-
 			var ctorArguments = GetCtorArguments(@class, namingScope, proxiedMethodTokenExpression, dereferencedArguments,
 			                                     delegateToken);
 
@@ -114,9 +115,22 @@
 			var selector = @class.GetField("__selector");
 			if (selector != null)
 			{
+				if (delegateToken != null)
+				{
+					return new[]
+					{
+						delegateToken.ToExpression(),
+						getTargetExpression(@class, MethodToOverride),
+						SelfReference.Self.ToExpression(),
+						interceptors.ToExpression(),
+						proxiedMethodTokenExpression,
+						new ReferencesToObjectArrayExpression(dereferencedArguments),
+						selector.ToExpression(),
+						new AddressOfReferenceExpression(BuildMethodInterceptorsField(@class, MethodToOverride, namingScope))
+					};
+				}
 				return new[]
 				{
-					delegateToken.ToExpression(),
 					getTargetExpression(@class, MethodToOverride),
 					SelfReference.Self.ToExpression(),
 					interceptors.ToExpression(),
@@ -126,9 +140,20 @@
 					new AddressOfReferenceExpression(BuildMethodInterceptorsField(@class, MethodToOverride, namingScope))
 				};
 			}
+			if (delegateToken != null)
+			{
+				return new[]
+				{
+					delegateToken.ToExpression(),
+					getTargetExpression(@class, MethodToOverride),
+					SelfReference.Self.ToExpression(),
+					interceptors.ToExpression(),
+					proxiedMethodTokenExpression,
+					new ReferencesToObjectArrayExpression(dereferencedArguments)
+				};
+			}
 			return new[]
 			{
-				delegateToken.ToExpression(),
 				getTargetExpression(@class, MethodToOverride),
 				SelfReference.Self.ToExpression(),
 				interceptors.ToExpression(),

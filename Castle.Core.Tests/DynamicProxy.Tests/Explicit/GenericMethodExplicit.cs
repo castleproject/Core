@@ -18,6 +18,10 @@ namespace Castle.DynamicProxy.Tests.Explicit
 	{
 		T IGenericInterface.GenericMethod<T>()
 		{
+			if(typeof(T) == typeof(int))
+			{
+				return (T)(object)7;
+			}
 			return default(T);
 		}
 	}

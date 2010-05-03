@@ -48,14 +48,28 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("DoSomething ", interceptor.LogContents);
 		}
 
-		[Test]
-		[Ignore("generic methods are not supported (yet).")]
-		public void ExplicitGenericMethod()
+		[Test(Description = "Disabled verification. Code is unverifiable because we're directly binding delegate to invisible (private) method.")]
+		public void ExplicitGenericMethod_with_base_call()
 		{
+			DisableVerification();
 			var proxy = (IGenericInterface)generator.CreateClassProxy(typeof(GenericMethodExplicit),
 			                                                          new[] { typeof(IGenericInterface) },
-			                                                          interceptor,
-			                                                          new SetReturnValueInterceptor(5));
+			                                                          interceptor);
+
+			var result = proxy.GenericMethod<int>();
+
+			Assert.AreEqual(7, result);
+			Assert.AreEqual("GenericMethod ", interceptor.LogContents);
+		}
+
+		[Test(Description = "Disabled verification. Code is unverifiable because we're directly binding delegate to invisible (private) method.")]
+		public void ExplicitGenericMethod_without_base_call()
+		{
+			DisableVerification();
+			var proxy = (IGenericInterface)generator.CreateClassProxy(typeof(GenericMethodExplicit),
+																	  new[] { typeof(IGenericInterface) },
+																	  interceptor,
+																	  new SetReturnValueInterceptor(5));
 
 			var result = proxy.GenericMethod<int>();
 

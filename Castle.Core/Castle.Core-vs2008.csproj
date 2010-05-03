@@ -79,6 +79,7 @@
     <Compile Include="DynamicProxy\Contributors\InterfaceMembersOnClassCollector.cs" />
     <Compile Include="DynamicProxy\Contributors\Delegates.cs" />
     <Compile Include="DynamicProxy\Contributors\InterfaceProxyWithoutTargetContributor.cs" />
+    <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\BindDelegateExpression.cs" />
     <Compile Include="DynamicProxy\Generators\InheritanceInvocationTypeGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\ClassProxyWithTargetGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\NullCoalescingOperatorExpression.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="DynamicProxy\Generators\MetaType.cs" />
     <Compile Include="DynamicProxy\InheritanceInvocation.cs" />
     <Compile Include="DynamicProxy\InternalsHelper.cs" />
+    <Compile Include="DynamicProxy\Internal\DelegateUtil.cs" />
     <Compile Include="DynamicProxy\InvalidMixinConfigurationException.cs" />
     <Compile Include="DynamicProxy\InvocationHelper.cs" />
     <Compile Include="DynamicProxy\IProxyBuilder.cs">
