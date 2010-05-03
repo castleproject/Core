@@ -48,7 +48,7 @@ namespace Castle.DynamicProxy.Generators
 			base.ImplementInvokeMethodOnTarget(invocation, parameters, invokeMethodOnTarget, callbackMethod, targetField);
 		}
 
-		protected override ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions,out ConstructorInfo baseConstructor)
+		protected override ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor)
 		{
 			if (proxyGenerationOptions.Selector == null)
 			{

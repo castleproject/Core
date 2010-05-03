@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Diagnostics;
-	using System.Linq;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
@@ -10,29 +9,18 @@
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
-	public class InheritanceInvocationWithDelegateTypeGenerator : InvocationTypeGenerator
+	public class InheritanceInvocationWithDelegateTypeGenerator : InheritanceInvocationTypeGenerator
 	{
 		private readonly Type delegateType;
-		public static readonly Type BaseType = typeof(InheritanceInvocation);
 
 		public InheritanceInvocationWithDelegateTypeGenerator(Type targetType, MetaMethod method, Type delegateType)
-			: base(targetType, method, null, false)
+			: base(targetType, method, null)
 		{
 			if (delegateType == null)
 			{
 				throw new ArgumentNullException("delegateType");
 			}
 			this.delegateType = delegateType;
-		}
-
-		protected override FieldReference GetTargetReference()
-		{
-			return new FieldReference(InvocationMethods.ProxyObject);
-		}
-
-		protected override Type GetBaseType()
-		{
-			return BaseType;
 		}
 
 		protected override void CustomizeCtor(ConstructorEmitter constructor, ArgumentReference[] arguments, AbstractTypeEmitter invocation)
@@ -62,10 +50,10 @@
 			return baseArguments;
 		}
 
-		protected override MethodInfo GetCallbackMethod(MethodInfo callbackMethod, AbstractTypeEmitter @class)
+		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters, MethodEmitter invokeMethodOnTarget, MethodInfo callbackMethod, Reference targetField)
 		{
-			var callback = delegateType.GetMethod("Invoke");
-			return callback;
+			var invoke = delegateType.GetMethod("Invoke");
+			base.ImplementInvokeMethodOnTarget(invocation, parameters, invokeMethodOnTarget, invoke, targetField);
 		}
 
 		protected override MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, Expression[] args, MethodInfo callbackMethod, Reference targetField, MethodEmitter invokeMethodOnTarget)
@@ -117,20 +105,14 @@
 
 		protected override ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor)
 		{
+			if(delegateType.IsGenericType)
+			{
+				return base.GetCtorArgumentsAndBaseCtorToCall(targetFieldType, proxyGenerationOptions, out baseConstructor);
+			}
+
 			if (proxyGenerationOptions.Selector == null)
 			{
 				baseConstructor = InvocationMethods.InheritanceInvocationConstructorNoSelector;
-				if (delegateType.IsGenericType)
-				{
-					return new[]
-					{
-						new ArgumentReference(typeof(Type)),
-						new ArgumentReference(typeof(object)),
-						new ArgumentReference(typeof(IInterceptor[])),
-						new ArgumentReference(typeof(MethodInfo)),
-						new ArgumentReference(typeof(object[]))
-					};
-				}
 				return new[]
 				{
 					new ArgumentReference(delegateType),
@@ -143,19 +125,6 @@
 			}
 
 			baseConstructor = InvocationMethods.InheritanceInvocationConstructorWithSelector;
-			if (delegateType.IsGenericType)
-			{
-				return new[]
-				{
-					new ArgumentReference(typeof(Type)),
-					new ArgumentReference(typeof(object)),
-					new ArgumentReference(typeof(IInterceptor[])),
-					new ArgumentReference(typeof(MethodInfo)),
-					new ArgumentReference(typeof(object[])),
-					new ArgumentReference(typeof(IInterceptorSelector)),
-					new ArgumentReference(typeof(IInterceptor[]).MakeByRefType())
-				};
-			}
 			return new[]
 			{
 				new ArgumentReference(delegateType),
