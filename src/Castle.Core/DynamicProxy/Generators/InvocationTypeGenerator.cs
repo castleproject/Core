@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Generators
 	public abstract class InvocationTypeGenerator : IGenerator<AbstractTypeEmitter>
 	{
 		protected readonly Type targetType;
-		private readonly MetaMethod method;
+		protected readonly MetaMethod method;
 		private readonly MethodInfo callback;
 		private readonly bool canChangeTarget;
 
@@ -47,19 +47,19 @@ namespace Castle.DynamicProxy.Generators
 			{
 				interfaces = new[] { typeof(IChangeProxyTarget) };
 			}
-			var type = GetEmitter(@class, interfaces, namingScope, methodInfo);
+			var invocation = GetEmitter(@class, interfaces, namingScope, methodInfo);
 
 			// invocation only needs to mirror the generic parameters of the MethodInfo
 			// targetType cannot be a generic type definition
-			type.CopyGenericParametersFromMethod(methodInfo);
+			invocation.CopyGenericParametersFromMethod(methodInfo);
 
 			// Create constructor
 
 			ConstructorInfo baseConstructor;
 			var arguments = GetCtorArgumentsAndBaseCtorToCall(targetType, options, out baseConstructor);
 
-			var constructor = type.CreateConstructor(arguments);
-			CustomizeCtor(constructor, arguments, type);
+			var constructor = invocation.CreateConstructor(arguments);
+			CustomizeCtor(constructor, arguments, invocation);
 			var baseArguments = GetArgumentsForBaseCtor(arguments);
 			constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, baseArguments);
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
@@ -67,22 +67,21 @@ namespace Castle.DynamicProxy.Generators
 			var targetField = GetTargetReference();
 			if (canChangeTarget)
 			{
-				ImplementChangeProxyTargetInterface(@class, type, targetField);
+				ImplementChangeProxyTargetInterface(@class, invocation, targetField);
 			}
 
 			// InvokeMethodOnTarget implementation
 
-			ImplemementInvokeMethodOnTarget(type, methodInfo.GetParameters(), targetField, callback);
+			ImplemementInvokeMethodOnTarget(invocation, methodInfo.GetParameters(), targetField, callback);
 
 #if !SILVERLIGHT
-			type.DefineCustomAttribute<SerializableAttribute>();
+			invocation.DefineCustomAttribute<SerializableAttribute>();
 #endif
 
-			return type;
+			return invocation;
 		}
 
-		protected virtual void CustomizeCtor(ConstructorEmitter constructor, ArgumentReference[] arguments,
-									 AbstractTypeEmitter @class)
+		protected virtual void CustomizeCtor(ConstructorEmitter constructor, ArgumentReference[] arguments, AbstractTypeEmitter invocation)
 		{
 		}
 
@@ -137,17 +136,17 @@ namespace Castle.DynamicProxy.Generators
 			changeInvocationTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		private void ImplemementInvokeMethodOnTarget(AbstractTypeEmitter @class, ParameterInfo[] parameters, FieldReference targetField, MethodInfo callbackMethod)
+		private void ImplemementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters, FieldReference targetField, MethodInfo callbackMethod)
 		{
-			var invokeMethodOnTarget = @class.CreateMethod("InvokeMethodOnTarget", typeof(void));
-			ImplementInvokeMethodOnTarget(@class, parameters, invokeMethodOnTarget, callbackMethod, targetField);
+			var invokeMethodOnTarget = invocation.CreateMethod("InvokeMethodOnTarget", typeof(void));
+			ImplementInvokeMethodOnTarget(invocation, parameters, invokeMethodOnTarget, callbackMethod, targetField);
 		}
 
-		protected virtual void ImplementInvokeMethodOnTarget(AbstractTypeEmitter @class, ParameterInfo[] parameters,
+		protected virtual void ImplementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters,
 															 MethodEmitter invokeMethodOnTarget, MethodInfo callbackMethod,
 															 Reference targetField)
 		{
-			callbackMethod = GetCallbackMethod(callbackMethod, @class);
+			callbackMethod = GetCallbackMethod(callbackMethod, invocation);
 			if (callbackMethod == null)
 			{
 				var throwOnNoTarget = new ExpressionStatement(new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget));
@@ -175,7 +174,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ParameterInfo param = parameters[i];
 
-				Type paramType = TypeUtil.GetClosedParameterType(@class, param.ParameterType);
+				Type paramType = TypeUtil.GetClosedParameterType(invocation, param.ParameterType);
 				if (paramType.IsByRef)
 				{
 					LocalReference localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(paramType.GetElementType());
@@ -202,12 +201,13 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-			var methodOnTargetInvocationExpression = GetCallbackMethodInvocation(@class, args, callbackMethod, targetField);
+			var methodOnTargetInvocationExpression = GetCallbackMethodInvocation(invocation, args, callbackMethod, targetField,
+			                                                                     invokeMethodOnTarget);
 
 			LocalReference returnValue = null;
 			if (callbackMethod.ReturnType != typeof(void))
 			{
-				Type returnType = TypeUtil.GetClosedParameterType(@class, callbackMethod.ReturnType);
+				Type returnType = TypeUtil.GetClosedParameterType(invocation, callbackMethod.ReturnType);
 				returnValue = invokeMethodOnTarget.CodeBuilder.DeclareLocal(returnType);
 				invokeMethodOnTarget.CodeBuilder.AddStatement(new AssignStatement(returnValue, methodOnTargetInvocationExpression));
 			}
@@ -259,24 +259,13 @@ namespace Castle.DynamicProxy.Generators
 
 			return callbackMethod.MakeGenericMethod(@class.GetGenericArgumentsFor(callbackMethod));
 		}
-		protected virtual MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter @class, Expression[] args,
-																		 MethodInfo callbackMethod,
-																		 Reference targetField)
+		protected virtual MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, Expression[] args, MethodInfo callbackMethod, Reference targetField, MethodEmitter invokeMethodOnTarget)
 		{
 			var methodOnTargetInvocationExpression = new MethodInvocationExpression(
 				new AsTypeReference(targetField, callbackMethod.DeclaringType),
 				callbackMethod,
 				args) { VirtualCall = true };
 			return methodOnTargetInvocationExpression;
-		}
-
-		protected void CreateEmptyIInvocationInvokeOnTarget(AbstractTypeEmitter nested)
-		{
-			var invokeMethodOnTarget = nested.CreateMethod("InvokeMethodOnTarget", typeof(void));
-			var throwOnNoTarget = new ExpressionStatement(new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget));
-
-			invokeMethodOnTarget.CodeBuilder.AddStatement(throwOnNoTarget);
-			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
 		/// <summary>

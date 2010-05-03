@@ -47,45 +47,38 @@ namespace Castle.DynamicProxy.Contributors
 			foreach (var @interface in interfaces)
 			{
 				var item = new InterfaceMembersOnClassCollector(@interface,
-																true,
-																targetType.GetInterfaceMap(@interface)) { Logger = Logger };
+				                                                true,
+				                                                targetType.GetInterfaceMap(@interface)) { Logger = Logger };
 				item.CollectMembersToProxy(hook);
 				yield return item;
 			}
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
-															  ProxyGenerationOptions options,
-															  OverrideMethodDelegate overrideMethod)
+		                                                      ProxyGenerationOptions options,
+		                                                      OverrideMethodDelegate overrideMethod)
 		{
 			if (methodsToSkip.Contains(method.Method))
-			{
 				return null;
-			}
 
 			if (!method.Proxyable)
 			{
 				return new MinimialisticMethodGenerator(method,
-														overrideMethod);
+				                                        overrideMethod);
 			}
 
 			if (ExplicitlyImplementedInterfaceMethod(method))
 			{
-				if (method.MethodOnTarget.IsGenericMethod)
-				{
-					// NOTE: not supported yet. To be added
-					return null;
-				}
 				return ExplicitlyImplementedInterfaceMethodGenerator(method, @class, options, overrideMethod);
 			}
 
 			var invocation = GetInvocationType(method, @class, options);
 
 			return new MethodWithInvocationGenerator(method,
-													 @class.GetField("__interceptors"),
-													 invocation,
-													 (c, m) => new TypeTokenExpression(targetType),
-													 overrideMethod);
+			                                         @class.GetField("__interceptors"),
+			                                         invocation,
+			                                         (c, m) => new TypeTokenExpression(targetType),
+			                                         overrideMethod);
 		}
 
 		private Type BuildInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
@@ -94,15 +87,15 @@ namespace Castle.DynamicProxy.Contributors
 			if (!method.HasTarget)
 			{
 				return new InheritanceInvocationTypeGenerator(targetType,
-														method,
-														null)
+				                                              method,
+				                                              null)
 					.Generate(@class, options, namingScope)
 					.BuildType();
 			}
 			var callback = CreateCallbackMethod(@class, methodInfo, method.MethodOnTarget);
 			return new InheritanceInvocationTypeGenerator(callback.DeclaringType,
-													method,
-													callback)
+			                                              method,
+			                                              callback)
 				.Generate(@class, options, namingScope)
 				.BuildType();
 		}
@@ -113,10 +106,7 @@ namespace Castle.DynamicProxy.Contributors
 			var callBackMethod = emitter.CreateMethod(namingScope.GetUniqueName(methodInfo.Name + "_callback"), targetMethod);
 
 			if (targetMethod.IsGenericMethod)
-			{
 				targetMethod = targetMethod.MakeGenericMethod(callBackMethod.GenericTypeParams);
-			}
-
 
 			var exps = new Expression[callBackMethod.Arguments.Length];
 			for (var i = 0; i < callBackMethod.Arguments.Length; i++)
@@ -141,25 +131,25 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		private MethodGenerator ExplicitlyImplementedInterfaceMethodGenerator(MetaMethod method, ClassEmitter @class,
-																			  ProxyGenerationOptions options,
-																			  OverrideMethodDelegate createMethod)
+		                                                                      ProxyGenerationOptions options,
+		                                                                      OverrideMethodDelegate overrideMethod)
 		{
 			var @delegate = GetDelegateType(method, @class, options);
 			var invocation = GetDelegateBasedInvocation(method, @class, options, @delegate);
 			return new MethodWithDelegateBasedInvocation(method,
-														 @class.GetField("__interceptors"),
-														 invocation,
-														 (c, m) => new TypeTokenExpression(targetType),
-														 createMethod,
-														 @delegate);
+			                                             @class.GetField("__interceptors"),
+			                                             invocation,
+			                                             (c, m) => new TypeTokenExpression(targetType),
+			                                             overrideMethod,
+			                                             @delegate);
 		}
 
 		private Type GetDelegateBasedInvocation(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options,
-												Type @delegate)
+		                                        Type @delegate)
 		{
 			return new InheritanceInvocationWithDelegateTypeGenerator(targetType,
-														   method,
-														   @delegate)
+			                                                          method,
+			                                                          @delegate)
 				.Generate(@class, options, namingScope)
 				.BuildType();
 		}
@@ -175,9 +165,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			var type = scope.GetFromCache(key);
 			if (type != null)
-			{
 				return type;
-			}
 
 			type = new DelegateTypeGenerator(method, targetType)
 				.Generate(@class, options, namingScope)
