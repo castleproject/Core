@@ -12,29 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.Classes
+namespace Castle.DynamicProxy.Generators
 {
-	public class VirtualClassWithProtectedMethod
+	using System.Reflection;
+
+	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+
+	public interface IInvocationCreationContributor
 	{
-		private readonly int result;
+		ConstructorEmitter CreateConstructor(ArgumentReference[] baseCtorArguments, AbstractTypeEmitter invocation);
 
-		public VirtualClassWithProtectedMethod(int result)
-		{
-			this.result = result;
-		}
+		MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, Expression[] args, Reference targetField, MethodEmitter invokeMethodOnTarget);
 
-		public VirtualClassWithProtectedMethod()
-		{
-		}
+		MethodInfo GetCallbackMethod();
 
-		protected virtual int Method()
-		{
-			return result;
-		}
-
-		public virtual int PublicMethod()
-		{
-			return Method();
-		}
+		Expression[] GetConstructorInvocationArguments(Expression[] arguments, ClassEmitter proxy);
 	}
 }

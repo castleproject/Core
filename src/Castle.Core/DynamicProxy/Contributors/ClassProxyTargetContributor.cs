@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Tokens;
 
 	public class ClassProxyTargetContributor : CompositeTypeContributor
 	{
@@ -78,7 +79,8 @@ namespace Castle.DynamicProxy.Contributors
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
 			                                         (c, m) => new TypeTokenExpression(targetType),
-			                                         overrideMethod);
+			                                         overrideMethod,
+			                                         null);
 		}
 
 		private Type BuildInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
@@ -88,14 +90,14 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				return new InheritanceInvocationTypeGenerator(targetType,
 				                                              method,
-				                                              null)
+				                                              null, null)
 					.Generate(@class, options, namingScope)
 					.BuildType();
 			}
 			var callback = CreateCallbackMethod(@class, methodInfo, method.MethodOnTarget);
 			return new InheritanceInvocationTypeGenerator(callback.DeclaringType,
 			                                              method,
-			                                              callback)
+			                                              callback, null)
 				.Generate(@class, options, namingScope)
 				.BuildType();
 		}
@@ -135,23 +137,27 @@ namespace Castle.DynamicProxy.Contributors
 		                                                                      OverrideMethodDelegate overrideMethod)
 		{
 			var @delegate = GetDelegateType(method, @class, options);
-			var invocation = GetDelegateBasedInvocation(method, @class, options, @delegate);
-			return new MethodWithDelegateBasedInvocation(method,
+			var contributor = GetContributor(@delegate, method);
+			var invocation = new InheritanceInvocationTypeGenerator(targetType, method, null, contributor)
+				.Generate(@class, options, namingScope)
+				.BuildType();
+			return new MethodWithInvocationGenerator(method,
 			                                             @class.GetField("__interceptors"),
 			                                             invocation,
 			                                             (c, m) => new TypeTokenExpression(targetType),
 			                                             overrideMethod,
-			                                             @delegate);
+			                                             contributor);
 		}
 
-		private Type GetDelegateBasedInvocation(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options,
-		                                        Type @delegate)
+		private IInvocationCreationContributor GetContributor(Type @delegate, MetaMethod method)
 		{
-			return new InheritanceInvocationWithDelegateTypeGenerator(targetType,
-			                                                          method,
-			                                                          @delegate)
-				.Generate(@class, options, namingScope)
-				.BuildType();
+			if (@delegate.IsGenericType == false)
+			{
+				return new InvocationWithDelegateContributor(@delegate, targetType, method, namingScope);
+			}
+			return new InvocationWithGenericDelegateContributor(@delegate,
+			                                                    method,
+			                                                    new FieldReference(InvocationMethods.ProxyObject));
 		}
 
 		private Type GetDelegateType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
