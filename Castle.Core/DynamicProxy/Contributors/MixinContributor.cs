@@ -101,7 +101,8 @@ namespace Castle.DynamicProxy.Contributors
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
 			                                         getTargetExpression,
-			                                         overrideMethod);
+			                                         overrideMethod,
+			                                         null);
 		}
 
 		private Type GetInvocationType(MetaMethod method, ClassEmitter emitter, ProxyGenerationOptions options)
@@ -128,10 +129,12 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			invocation = new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
-															  method,
-															  method.Method,
-															  canChangeTarget)
-				.Generate(emitter, options, namingScope).BuildType();
+			                                                    method,
+			                                                    method.Method,
+			                                                    canChangeTarget,
+			                                                    null)
+				.Generate(emitter, options, namingScope)
+				.BuildType();
 
 			scope.RegisterInCache(key, invocation);
 

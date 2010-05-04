@@ -14,27 +14,31 @@
 
 namespace Castle.DynamicProxy.Tests.Classes
 {
-	public class VirtualClassWithProtectedMethod
+	public class VirtualClassWithProtectedGenericMethod
 	{
 		private readonly int result;
 
-		public VirtualClassWithProtectedMethod(int result)
+		public VirtualClassWithProtectedGenericMethod(int result)
 		{
 			this.result = result;
 		}
 
-		public VirtualClassWithProtectedMethod()
+		public VirtualClassWithProtectedGenericMethod()
 		{
 		}
 
-		protected virtual int Method()
+		protected virtual T Method<T>()
 		{
-			return result;
+			if(typeof(T)!=typeof(int))
+			{
+				return default(T);
+			}
+			return (T)(object)result;
 		}
 
-		public virtual int PublicMethod()
+		public virtual T PublicMethod<T>()
 		{
-			return Method();
+			return Method<T>();
 		}
 	}
 }

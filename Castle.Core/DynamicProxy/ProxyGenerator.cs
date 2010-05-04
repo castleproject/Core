@@ -779,6 +779,16 @@ namespace Castle.DynamicProxy
 			                                          interceptors);
 		}
 
+		public TClass CreateClassProxyWithTarget<TClass>(TClass target, object[] constructorArguments, params IInterceptor[] interceptors) where TClass : class
+		{
+			return (TClass)CreateClassProxyWithTarget(typeof(TClass),
+													  Type.EmptyTypes,
+													  target,
+													  ProxyGenerationOptions.Default,
+													  constructorArguments,
+													  interceptors);
+		}
+
 		public object CreateClassProxyWithTarget(Type classToProxy, Type[] additionalInterfacesToProxy, object target, ProxyGenerationOptions options, object[] constructorArguments, params IInterceptor[] interceptors)
 		{
 			if (classToProxy == null)

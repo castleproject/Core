@@ -24,8 +24,8 @@ namespace Castle.DynamicProxy.Generators
 	{
 		public static readonly Type BaseType = typeof(InheritanceInvocation);
 
-		public InheritanceInvocationTypeGenerator(Type targetType, MetaMethod method, MethodInfo callback)
-			: base(targetType, method, callback, false)
+		public InheritanceInvocationTypeGenerator(Type targetType, MetaMethod method, MethodInfo callback, IInvocationCreationContributor contributor)
+			: base(targetType, method, callback, false,contributor)
 		{
 		}
 
@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Generators
 			return BaseType;
 		}
 
-		protected override ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor)
+		protected override ArgumentReference[] GetBaseCtorArguments(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor)
 		{
 			if (proxyGenerationOptions.Selector == null)
 			{

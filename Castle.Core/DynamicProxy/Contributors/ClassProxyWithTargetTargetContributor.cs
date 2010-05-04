@@ -21,6 +21,8 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Tokens;
 
 	public class ClassProxyWithTargetTargetContributor : CompositeTypeContributor
 	{
@@ -62,13 +64,71 @@ namespace Castle.DynamicProxy.Contributors
 				                                        overrideMethod);
 			}
 
+			if (IsDirectlyAccessible(method) == false)
+			{
+				return IndirectlyCalledMethodGenerator(method, @class, options, overrideMethod);
+			}
+
 			var invocation = GetInvocationType(method, @class, options);
 
 			return new MethodWithInvocationGenerator(method,
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
 			                                         (c, m) => c.GetField("__target").ToExpression(),
-			                                         overrideMethod);
+			                                         overrideMethod,
+			                                         null);
+		}
+		private IInvocationCreationContributor GetContributor(Type @delegate, MetaMethod method)
+		{
+			if (@delegate.IsGenericType == false)
+			{
+				return new InvocationWithDelegateContributor(@delegate, targetType, method, namingScope);
+			}
+			return new InvocationWithGenericDelegateContributor(@delegate,
+																method,
+																new FieldReference(InvocationMethods.ProxyObject));
+		}
+
+		private MethodGenerator IndirectlyCalledMethodGenerator(MetaMethod method, ClassEmitter proxy, ProxyGenerationOptions options, OverrideMethodDelegate overrideMethod)
+		{
+			var @delegate = GetDelegateType(method, proxy, options);
+			var contributor = GetContributor(@delegate, method);
+			var invocation = new CompositionInvocationTypeGenerator(targetType, method, null, false, contributor)
+				.Generate(proxy, options, namingScope)
+				.BuildType();
+			return new MethodWithInvocationGenerator(method,
+			                                             proxy.GetField("__interceptors"),
+			                                             invocation,
+														 (c, m) => c.GetField("__target").ToExpression(),
+			                                             overrideMethod,
+			                                             contributor);
+		}
+
+		private Type GetDelegateType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		{
+			var scope = @class.ModuleScope;
+			var key = new CacheKey(
+				typeof(Delegate),
+				targetType,
+				ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters()),
+				null);
+
+			var type = scope.GetFromCache(key);
+			if (type != null)
+				return type;
+
+			type = new DelegateTypeGenerator(method, targetType)
+				.Generate(@class, options, namingScope)
+				.BuildType();
+
+			scope.RegisterInCache(key, type);
+
+			return type;
+		}
+
+		private bool IsDirectlyAccessible(MetaMethod method)
+		{
+			return method.MethodOnTarget.IsPublic;
 		}
 
 		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
@@ -98,14 +158,15 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				return new InheritanceInvocationTypeGenerator(targetType,
 				                                        method,
-				                                        null)
+				                                        null, null)
 					.Generate(@class, options, namingScope)
 					.BuildType();
 			}
 			return new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
-			                                            method,
-			                                            method.Method,
-			                                            false)
+			                                              method,
+			                                              method.Method,
+			                                              false,
+			                                              null)
 				.Generate(@class, options, namingScope)
 				.BuildType();
 		}

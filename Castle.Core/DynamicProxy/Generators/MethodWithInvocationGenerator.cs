@@ -26,22 +26,24 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
+
 	public class MethodWithInvocationGenerator : MethodGenerator
 	{
 		private readonly Reference interceptors;
 		private readonly GetTargetExpressionDelegate getTargetExpression;
 		private readonly Type invocation;
+		private readonly IInvocationCreationContributor contributor;
 
-		public MethodWithInvocationGenerator(MetaMethod method, Reference interceptors, Type invocation, GetTargetExpressionDelegate getTargetExpression, OverrideMethodDelegate overrideMethod)
-			: base(method, overrideMethod)
+		public MethodWithInvocationGenerator(MetaMethod method, Reference interceptors, Type invocation, GetTargetExpressionDelegate getTargetExpression, OverrideMethodDelegate createMethod, IInvocationCreationContributor contributor)
+			: base(method, createMethod)
 		{
-			this.interceptors = interceptors;
-			this.getTargetExpression = getTargetExpression;
 			this.invocation = invocation;
+			this.getTargetExpression = getTargetExpression;
+			this.interceptors = interceptors;
+			this.contributor = contributor;
 		}
 
-		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class,
-		                                                        ProxyGenerationOptions options, INamingScope namingScope)
+		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
 			var invocationType = invocation;
 
@@ -49,6 +51,7 @@ namespace Castle.DynamicProxy.Generators
 			var genericArguments = Type.EmptyTypes;
 
 			var constructor = invocation.GetConstructors()[0];
+
 
 			Expression proxiedMethodTokenExpression;
 			if (MethodToOverride.IsGenericMethod)
@@ -64,20 +67,21 @@ namespace Castle.DynamicProxy.Generators
 			else
 			{
 				var proxiedMethodToken = @class.CreateStaticField(namingScope.GetUniqueName("token_" + MethodToOverride.Name),
-				                                                  typeof(MethodInfo));
+																  typeof(MethodInfo));
 				@class.ClassConstructor.CodeBuilder.AddStatement(new AssignStatement(proxiedMethodToken,
-				                                                                     new MethodTokenExpression(MethodToOverride)));
+																					 new MethodTokenExpression(MethodToOverride)));
 
 				proxiedMethodTokenExpression = proxiedMethodToken.ToExpression();
 			}
 
 			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
-
-			var ctorArguments = GetCtorArguments(@class, namingScope, proxiedMethodTokenExpression, dereferencedArguments);
+			var arguments = GetCtorArguments(@class, namingScope, proxiedMethodTokenExpression,
+											   dereferencedArguments);
+			var ctorArguments = ModifyArguments(@class, arguments);
 
 			var invocationLocal = emitter.CodeBuilder.DeclareLocal(invocationType);
 			emitter.CodeBuilder.AddStatement(new AssignStatement(invocationLocal,
-			                                                     new NewInstanceExpression(constructor, ctorArguments)));
+																 new NewInstanceExpression(constructor, ctorArguments)));
 
 			if (MethodToOverride.ContainsGenericParameters)
 			{
@@ -103,47 +107,17 @@ namespace Castle.DynamicProxy.Generators
 			return emitter;
 		}
 
-		protected FieldReference BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
+		private Expression[] ModifyArguments(ClassEmitter @class, Expression[] arguments)
 		{
-			var methodInterceptors = @class.CreateField(
-			                                           	namingScope.GetUniqueName(string.Format("interceptors_{0}", method.Name)),
-			                                           	typeof(IInterceptor[]),
-			                                           	false);
-#if !SILVERLIGHT
-			@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
-#endif
-			return methodInterceptors;
-		}
-
-		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationLocal)
-		{
-#if SILVERLIGHT
-			Type[] genericParameters =
-				Castle.Core.Extensions.SilverlightExtensions.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
-#else
-			Type[] genericParameters = Array.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
-#endif
-			LocalReference genericParamsArrayLocal = methodEmitter.CodeBuilder.DeclareLocal(typeof(Type[]));
-			methodEmitter.CodeBuilder.AddStatement(
-			                                      	new AssignStatement(genericParamsArrayLocal,
-			                                      	                    new NewArrayExpression(genericParameters.Length,
-			                                      	                                           typeof(Type))));
-
-			for (int i = 0; i < genericParameters.Length; ++i)
+			if (contributor == null)
 			{
-				methodEmitter.CodeBuilder.AddStatement(
-				                                      	new AssignArrayStatement(genericParamsArrayLocal, i,
-				                                      	                         new TypeTokenExpression(genericParameters[i])));
+				return arguments;
 			}
-			methodEmitter.CodeBuilder.AddStatement(new ExpressionStatement(
-			                                       	new MethodInvocationExpression(invocationLocal,
-			                                       	                               InvocationMethods.SetGenericMethodArguments,
-			                                       	                               new ReferenceExpression(
-			                                       	                               	genericParamsArrayLocal))));
+
+			return contributor.GetConstructorInvocationArguments(arguments, @class);
 		}
 
-		private Expression[] GetCtorArguments(ClassEmitter @class, INamingScope namingScope,
-		                                      Expression proxiedMethodTokenExpression, TypeReference[] dereferencedArguments)
+		private Expression[] GetCtorArguments(ClassEmitter @class, INamingScope namingScope, Expression proxiedMethodTokenExpression, TypeReference[] dereferencedArguments)
 		{
 			var selector = @class.GetField("__selector");
 			if (selector != null)
@@ -167,6 +141,42 @@ namespace Castle.DynamicProxy.Generators
 				proxiedMethodTokenExpression,
 				new ReferencesToObjectArrayExpression(dereferencedArguments)
 			};
+		}
+
+		protected FieldReference BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
+		{
+			var methodInterceptors = @class.CreateField(
+				namingScope.GetUniqueName(string.Format("interceptors_{0}", method.Name)),
+				typeof(IInterceptor[]),
+				false);
+#if !SILVERLIGHT
+			@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
+#endif
+			return methodInterceptors;
+		}
+
+		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationLocal)
+		{
+#if SILVERLIGHT
+			Type[] genericParameters =
+				Castle.Core.Extensions.SilverlightExtensions.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
+#else
+			Type[] genericParameters = Array.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
+#endif
+			LocalReference genericParamsArrayLocal = methodEmitter.CodeBuilder.DeclareLocal(typeof(Type[]));
+			methodEmitter.CodeBuilder.AddStatement(
+				new AssignStatement(genericParamsArrayLocal, new NewArrayExpression(genericParameters.Length, typeof(Type))));
+
+			for (int i = 0; i < genericParameters.Length; ++i)
+			{
+				methodEmitter.CodeBuilder.AddStatement(
+					new AssignArrayStatement(genericParamsArrayLocal, i, new TypeTokenExpression(genericParameters[i])));
+			}
+			methodEmitter.CodeBuilder.AddStatement(new ExpressionStatement(
+													new MethodInvocationExpression(invocationLocal,
+																				   InvocationMethods.SetGenericMethodArguments,
+																				   new ReferenceExpression(
+																					genericParamsArrayLocal))));
 		}
 	}
 }

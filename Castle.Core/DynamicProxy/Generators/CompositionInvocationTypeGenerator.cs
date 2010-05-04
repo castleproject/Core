@@ -25,8 +25,8 @@ namespace Castle.DynamicProxy.Generators
 	{
 		public static readonly Type BaseType = typeof(CompositionInvocation);
 
-		public CompositionInvocationTypeGenerator(Type target, MetaMethod method, MethodInfo callback, bool canChangeTarget)
-			: base(target, method, callback, canChangeTarget)
+		public CompositionInvocationTypeGenerator(Type target, MetaMethod method, MethodInfo callback, bool canChangeTarget, IInvocationCreationContributor contributor)
+			: base(target, method, callback, canChangeTarget, contributor)
 		{
 		}
 
@@ -40,15 +40,15 @@ namespace Castle.DynamicProxy.Generators
 			return BaseType;
 		}
 
-		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters, MethodEmitter invokeMethodOnTarget, MethodInfo callbackMethod, Reference targetField)
+		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters, MethodEmitter invokeMethodOnTarget, Reference targetField)
 		{
 			invokeMethodOnTarget.CodeBuilder.AddStatement(
 				new ExpressionStatement(
 					new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
-			base.ImplementInvokeMethodOnTarget(invocation, parameters, invokeMethodOnTarget, callbackMethod, targetField);
+			base.ImplementInvokeMethodOnTarget(invocation, parameters, invokeMethodOnTarget, targetField);
 		}
 
-		protected override ArgumentReference[] GetCtorArgumentsAndBaseCtorToCall(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor)
+		protected override ArgumentReference[] GetBaseCtorArguments(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor)
 		{
 			if (proxyGenerationOptions.Selector == null)
 			{

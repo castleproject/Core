@@ -68,8 +68,8 @@
     <Compile Include="DynamicProxy\Contributors\ClassProxyWithTargetTargetContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\CompositeTypeContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\DelegateTypeGenerator.cs" />
-    <Compile Include="DynamicProxy\Contributors\InheritanceInvocationWithDelegateTypeGenerator.cs" />
-    <Compile Include="DynamicProxy\Contributors\MethodWithDelegateBasedInvocation.cs" />
+    <Compile Include="DynamicProxy\Contributors\InvocationWithDelegateContributor.cs" />
+    <Compile Include="DynamicProxy\Contributors\InvocationWithGenericDelegateContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\WrappedClassMembersCollector.cs" />
     <Compile Include="DynamicProxy\Generators\AttributeDisassembler.cs" />
     <Compile Include="DynamicProxy\CacheMappingsAttribute.cs" />
@@ -80,6 +80,7 @@
     <Compile Include="DynamicProxy\Contributors\Delegates.cs" />
     <Compile Include="DynamicProxy\Contributors\InterfaceProxyWithoutTargetContributor.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\BindDelegateExpression.cs" />
+    <Compile Include="DynamicProxy\Generators\IInvocationCreationContributor.cs" />
     <Compile Include="DynamicProxy\Generators\InheritanceInvocationTypeGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\ClassProxyWithTargetGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\NullCoalescingOperatorExpression.cs" />

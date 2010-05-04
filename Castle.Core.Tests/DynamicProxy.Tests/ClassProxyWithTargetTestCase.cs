@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
 
@@ -36,11 +35,26 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("Not supported yet, on todo, though.")]
 		public void Can_proxy_class_with_protected_method()
 		{
-			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithProtectedMethod());
+			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithProtectedMethod(42));
 			var result = proxy.PublicMethod();
+			Assert.AreEqual(42, result);
+		}
+
+		[Test]
+		public void Can_proxy_class_with_protected_generic_method()
+		{
+			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithProtectedGenericMethod(42));
+			var result = proxy.PublicMethod<int>();
+			Assert.AreEqual(42, result);
+		}
+
+		[Test]
+		public void Can_proxy_class_with_no_default_ctor()
+		{
+			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithNoDefaultCtor(42), new object[] { 12 });
+			var result = proxy.Method();
 			Assert.AreEqual(42, result);
 		}
 

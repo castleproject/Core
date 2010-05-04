@@ -121,6 +121,8 @@
     <Compile Include="DynamicProxy.Tests\Classes\RequiredAttribute.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithAutoProperty.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithNoDefaultCtor.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithProtectedGenericMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithProtectedMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithPublicField.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\VirtuallyImplementsInterfaceWithEvent.cs" />
