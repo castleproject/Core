@@ -111,28 +111,40 @@ namespace Castle.DynamicProxy.Serialization
 				isInterfaceProxy = false;
 				return RecreateClassProxy();
 			}
+			if (generatorType.Equals(ProxyTypeConstants.ClassWithTarget))
+			{
+				isInterfaceProxy = false;
+				return RecreateClassProxyWithTarget();
+			}
 			isInterfaceProxy = true;
 			return RecreateInterfaceProxy(generatorType);
 		}
 
-		public object RecreateInterfaceProxy(string generatorType)
+		private object RecreateClassProxyWithTarget()
 		{
 
-			Type theInterface = DeserializeTypeFromString("__theInterface");
-			Type targetType = DeserializeTypeFromString("__targetFieldType");
+			var generator = new ClassProxyWithTargetGenerator(scope, baseType, interfaces, proxyGenerationOptions);
+			var proxyType = generator.GetGeneratedType();
+			return InstantiateClassProxy(proxyType);
+		}
+
+		public object RecreateInterfaceProxy(string generatorType)
+		{
+			var @interface = DeserializeTypeFromString("__theInterface");
+			var targetType = DeserializeTypeFromString("__targetFieldType");
 
 			InterfaceProxyWithTargetGenerator generator;
 			if (generatorType == ProxyTypeConstants.InterfaceWithTarget)
 			{
-				generator = new InterfaceProxyWithTargetGenerator(scope, theInterface);
+				generator = new InterfaceProxyWithTargetGenerator(scope, @interface);
 			}
 			else if (generatorType == ProxyTypeConstants.InterfaceWithoutTarget)
 			{
-				generator = new InterfaceProxyWithoutTargetGenerator(scope, theInterface);
+				generator = new InterfaceProxyWithoutTargetGenerator(scope, @interface);
 			}
 			else if (generatorType == ProxyTypeConstants.InterfaceWithTargetInterface)
 			{
-				generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, theInterface);
+				generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, @interface);
 			}
 			else
 			{
@@ -142,19 +154,21 @@ namespace Castle.DynamicProxy.Serialization
 						generatorType));
 			}
 
-			Type proxy_type = generator.GenerateCode(targetType, interfaces, proxyGenerationOptions);
-			return FormatterServices.GetSafeUninitializedObject(proxy_type);
+			var proxyType = generator.GenerateCode(targetType, interfaces, proxyGenerationOptions);
+			return FormatterServices.GetSafeUninitializedObject(proxyType);
 		}
 
 		public object RecreateClassProxy()
 		{
+
+			var generator = new ClassProxyGenerator(scope, baseType);
+			var proxyType = generator.GenerateCode(interfaces, proxyGenerationOptions);
+			return InstantiateClassProxy(proxyType);
+		}
+
+		private object InstantiateClassProxy(Type proxy_type)
+		{
 			delegateToBase = GetValue<bool>("__delegateToBase");
-
-			ClassProxyGenerator cpGen = new ClassProxyGenerator(scope, baseType);
-
-			Type proxy_type = cpGen.GenerateCode(interfaces, proxyGenerationOptions);
-
-
 			if (delegateToBase)
 			{
 				return Activator.CreateInstance(proxy_type, new object[] {info, context});

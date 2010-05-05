@@ -1,4 +1,16 @@
 ================================================================================================
+change - Removed obsolete overload of ProxyGenerator.CreateClassProxy
+
+impact - low
+fixability - trivial
+revision - 
+
+description - Deprecated overload of ProxyGenerator.CreateClassProxy was removed to keep the
+	method consistent with other methods and to remove confusion
+
+fix - whenever removed overload was used, use one of the other overloads.
+	
+================================================================================================
 change - IProxyGenerationHook.NonVirtualMemberNotification method was renamed
 
 impact - high

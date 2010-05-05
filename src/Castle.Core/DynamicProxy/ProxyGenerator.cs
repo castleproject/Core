@@ -767,8 +767,22 @@ namespace Castle.DynamicProxy
 
 		#region CreateClassProxy
 
-
-
+		/// <summary>
+		/// Creates proxy object intercepting calls to virtual members of type <typeparamref name="TClass"/> on newly created instance of that type with given <paramref name="interceptors"/>.
+		/// </summary>
+		/// <typeparam name="TClass">Type of class which will be proxied.</typeparam>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// New object of type <typeparamref name="TClass"/> proxying calls to virtual members of <typeparamref name="TClass"/> type.
+		/// </returns>
+		/// <exception cref="ArgumentException">Thrown when given <typeparamref name="TClass"/> is not a class type.</exception>
+		/// <exception cref="ArgumentException">Thrown when no default constructor exists on type <typeparamref name="TClass"/>.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when default constructor of type <typeparamref name="TClass"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
 		public TClass CreateClassProxyWithTarget<TClass>(TClass target, params IInterceptor[] interceptors) where TClass : class
 		{
 			return (TClass)CreateClassProxyWithTarget(typeof(TClass),
@@ -779,16 +793,233 @@ namespace Castle.DynamicProxy
 			                                          interceptors);
 		}
 
-		public TClass CreateClassProxyWithTarget<TClass>(TClass target, object[] constructorArguments, params IInterceptor[] interceptors) where TClass : class
+		/// <summary>
+		/// Creates proxy object intercepting calls to virtual members of type <typeparamref name="TClass"/> on newly created instance of that type with given <paramref name="interceptors"/>.
+		/// </summary>
+		/// <typeparam name="TClass">Type of class which will be proxied.</typeparam>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="options">The proxy generation options used to influence generated proxy type and object.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// New object of type <typeparamref name="TClass"/> proxying calls to virtual members of <typeparamref name="TClass"/> type.
+		/// </returns>
+		/// <exception cref="ArgumentException">Thrown when given <typeparamref name="TClass"/> is not a class type.</exception>
+		/// <exception cref="ArgumentException">Thrown when no default constructor exists on type <typeparamref name="TClass"/>.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when default constructor of type <typeparamref name="TClass"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public TClass CreateClassProxyWithTarget<TClass>(TClass target, ProxyGenerationOptions options, params IInterceptor[] interceptors) where TClass : class
 		{
 			return (TClass)CreateClassProxyWithTarget(typeof(TClass),
 													  Type.EmptyTypes,
 													  target,
 													  ProxyGenerationOptions.Default,
-													  constructorArguments,
+													  new object[0],
 													  interceptors);
 		}
 
+		/// <summary>
+		/// Creates proxy object intercepting calls to virtual members of type <paramref name="classToProxy"/> on newly created instance of that type with given <paramref name="interceptors"/>.
+		/// </summary>
+		/// <param name="classToProxy">Type of class which will be proxied.</param>
+		/// <param name="additionalInterfacesToProxy">Additional interface types. Calls to their members will be proxied as well.</param>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// New object of type <paramref name="classToProxy"/> proxying calls to virtual members of <paramref name="classToProxy"/> and <paramref name="additionalInterfacesToProxy"/> types.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="classToProxy"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> or any of <paramref name="additionalInterfacesToProxy"/> is a generic type definition.</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is not a class type.</exception>
+		/// <exception cref="ArgumentException">Thrown when no default constructor exists on type <paramref name="classToProxy"/>.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when default constructor of type <paramref name="classToProxy"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public object CreateClassProxyWithTarget(Type classToProxy, Type[] additionalInterfacesToProxy, object target, params IInterceptor[] interceptors)
+		{
+
+			return CreateClassProxyWithTarget(classToProxy,
+			                                  additionalInterfacesToProxy,
+			                                  target,
+			                                  ProxyGenerationOptions.Default,
+			                                  new object[0],
+			                                  interceptors);
+		}
+
+		/// <summary>
+		/// Creates proxy object intercepting calls to virtual members of type <paramref name="classToProxy"/> on newly created instance of that type with given <paramref name="interceptors"/>.
+		/// </summary>
+		/// <param name="classToProxy">Type of class which will be proxied.</param>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="options">The proxy generation options used to influence generated proxy type and object.</param>
+		/// <param name="constructorArguments">Arguments of constructor of type <paramref name="classToProxy"/> which should be used to create a new instance of that type.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// New object of type <paramref name="classToProxy"/> proxying calls to virtual members of <paramref name="classToProxy"/> type.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="classToProxy"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is a generic type definition.</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is not a class type.</exception>
+		/// <exception cref="ArgumentException">Thrown when no constructor exists on type <paramref name="classToProxy"/> with parameters matching <paramref name="constructorArguments"/>.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when constructor of type <paramref name="classToProxy"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public object CreateClassProxyWithTarget(Type classToProxy, object target, ProxyGenerationOptions options, object[] constructorArguments, params IInterceptor[] interceptors)
+		{
+			return CreateClassProxyWithTarget(classToProxy,
+			                                  Type.EmptyTypes,
+			                                  target,
+			                                  options,
+			                                  constructorArguments,
+			                                  interceptors);
+		}
+
+		/// <summary>
+		/// Creates proxy object intercepting calls to virtual members of type <paramref name="classToProxy"/> on newly created instance of that type with given <paramref name="interceptors"/>.
+		/// </summary>
+		/// <param name="classToProxy">Type of class which will be proxied.</param>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="constructorArguments">Arguments of constructor of type <paramref name="classToProxy"/> which should be used to create a new instance of that type.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// New object of type <paramref name="classToProxy"/> proxying calls to virtual members of <paramref name="classToProxy"/> type.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="classToProxy"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is a generic type definition.</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is not a class type.</exception>
+		/// <exception cref="ArgumentException">Thrown when no constructor exists on type <paramref name="classToProxy"/> with parameters matching <paramref name="constructorArguments"/>.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when constructor of type <paramref name="classToProxy"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public object CreateClassProxyWithTarget(Type classToProxy, object target, object[] constructorArguments, params IInterceptor[] interceptors)
+		{
+			return CreateClassProxyWithTarget(classToProxy,
+											  Type.EmptyTypes,
+											  target,
+											  ProxyGenerationOptions.Default,
+											  constructorArguments,
+											  interceptors);
+		}
+
+		/// <summary>
+		/// Creates proxy object intercepting calls to virtual members of type <paramref name="classToProxy"/> on newly created instance of that type with given <paramref name="interceptors"/>.
+		/// </summary>
+		/// <param name="classToProxy">Type of class which will be proxied.</param>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// New object of type <paramref name="classToProxy"/> proxying calls to virtual members of <paramref name="classToProxy"/> type.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="classToProxy"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is a generic type definition.</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is not a class type.</exception>
+		/// <exception cref="ArgumentException">Thrown when no parameterless constructor exists on type <paramref name="classToProxy"/>.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when constructor of type <paramref name="classToProxy"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public object CreateClassProxyWithTarget(Type classToProxy, object target, params IInterceptor[] interceptors)
+		{
+			return CreateClassProxyWithTarget(classToProxy,
+											  Type.EmptyTypes,
+											  target,
+											  ProxyGenerationOptions.Default,
+											  new object[0],
+											  interceptors);
+		}
+
+		/// <summary>
+		/// Creates proxy object intercepting calls to virtual members of type <paramref name="classToProxy"/> on newly created instance of that type with given <paramref name="interceptors"/>.
+		/// </summary>
+		/// <param name="classToProxy">Type of class which will be proxied.</param>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="options">The proxy generation options used to influence generated proxy type and object.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// New object of type <paramref name="classToProxy"/> proxying calls to virtual members of <paramref name="classToProxy"/> type.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="classToProxy"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="options"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is a generic type definition.</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is not a class type.</exception>
+		/// <exception cref="ArgumentException">Thrown when no default constructor exists on type <paramref name="classToProxy"/>.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when default constructor of type <paramref name="classToProxy"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public object CreateClassProxyWithTarget(Type classToProxy, object target, ProxyGenerationOptions options, params IInterceptor[] interceptors)
+		{
+			return CreateClassProxyWithTarget(classToProxy,
+											  Type.EmptyTypes,
+											  target,
+											  options,
+											  new object[0],
+											  interceptors);
+		}
+
+		/// <summary>
+		/// Creates proxy object intercepting calls to virtual members of type <paramref name="classToProxy"/> on newly created instance of that type with given <paramref name="interceptors"/>.
+		/// </summary>
+		/// <param name="classToProxy">Type of class which will be proxied.</param>
+		/// <param name="additionalInterfacesToProxy">Additional interface types. Calls to their members will be proxied as well.</param>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="options">The proxy generation options used to influence generated proxy type and object.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// New object of type <paramref name="classToProxy"/> proxying calls to virtual members of <paramref name="classToProxy"/> and <paramref name="additionalInterfacesToProxy"/> types.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="classToProxy"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="options"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> or any of <paramref name="additionalInterfacesToProxy"/> is a generic type definition.</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is not a class type.</exception>
+		/// <exception cref="ArgumentException">Thrown when no default constructor exists on type <paramref name="classToProxy"/>.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when default constructor of type <paramref name="classToProxy"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public object CreateClassProxyWithTarget(Type classToProxy, Type[] additionalInterfacesToProxy, object target, ProxyGenerationOptions options, params IInterceptor[] interceptors)
+		{
+			return CreateClassProxyWithTarget(classToProxy,
+											  additionalInterfacesToProxy,
+											  target,
+											  options,
+											  new object[0],
+											  interceptors);
+		}
+
+		/// <summary>
+		/// Creates proxy object intercepting calls to virtual members of type <paramref name="classToProxy"/> on newly created instance of that type with given <paramref name="interceptors"/>.
+		/// </summary>
+		/// <param name="classToProxy">Type of class which will be proxied.</param>
+		/// <param name="additionalInterfacesToProxy">Additional interface types. Calls to their members will be proxied as well.</param>
+		/// <param name="target">The target object, calls to which will be intercepted.</param>
+		/// <param name="options">The proxy generation options used to influence generated proxy type and object.</param>
+		/// <param name="constructorArguments">Arguments of constructor of type <paramref name="classToProxy"/> which should be used to create a new instance of that type.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		/// New object of type <paramref name="classToProxy"/> proxying calls to virtual members of <paramref name="classToProxy"/> and <paramref name="additionalInterfacesToProxy"/> types.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="classToProxy"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="options"/> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> or any of <paramref name="additionalInterfacesToProxy"/> is a generic type definition.</exception>
+		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is not a class type.</exception>
+		/// <exception cref="ArgumentException">Thrown when no constructor exists on type <paramref name="classToProxy"/> with parameters matching <paramref name="constructorArguments"/>.</exception>
+		/// <exception cref="TargetInvocationException">Thrown when constructor of type <paramref name="classToProxy"/> throws an exception.</exception>
+		/// <remarks>
+		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
+		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
 		public object CreateClassProxyWithTarget(Type classToProxy, Type[] additionalInterfacesToProxy, object target, ProxyGenerationOptions options, object[] constructorArguments, params IInterceptor[] interceptors)
 		{
 			if (classToProxy == null)
@@ -899,31 +1130,6 @@ namespace Castle.DynamicProxy
 		public object CreateClassProxy(Type classToProxy, Type[] additionalInterfacesToProxy, params IInterceptor[] interceptors)
 		{
 			return CreateClassProxy(classToProxy, additionalInterfacesToProxy, ProxyGenerationOptions.Default, interceptors);
-		}
-
-		/// <summary>
-		/// Creates proxy object intercepting calls to virtual members of type <paramref name="classToProxy"/> on newly created instance of that type with given <paramref name="interceptors"/>.
-		/// </summary>
-		/// <param name="classToProxy">Type of class which will be proxied.</param>
-		/// <param name="constructorArguments">Arguments of constructor of type <paramref name="classToProxy"/> which should be used to create a new instance of that type.</param>
-		/// <param name="interceptors">The interceptors called during the invocation of proxied methods.</param>
-		/// <returns>
-		/// New object of type <paramref name="classToProxy"/> proxying calls to virtual members of <paramref name="classToProxy"/> type.
-		/// </returns>
-		/// <exception cref="ArgumentNullException">Thrown when given <paramref name="classToProxy"/> object is a null reference (Nothing in Visual Basic).</exception>
-		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is a generic type definition.</exception>
-		/// <exception cref="ArgumentException">Thrown when given <paramref name="classToProxy"/> is not a class type.</exception>
-		/// <exception cref="ArgumentException">Thrown when no constructor exists on type <paramref name="classToProxy"/> with parameters matching <paramref name="constructorArguments"/>.</exception>
-		/// <exception cref="TargetInvocationException">Thrown when constructor of type <paramref name="classToProxy"/> throws an exception.</exception>
-		/// <remarks>
-		/// This method uses <see cref="IProxyBuilder"/> implementation to generate a proxy type.
-		/// As such caller should expect any type of exception that given <see cref="IProxyBuilder"/> implementation may throw.
-		/// </remarks>
-		[Obsolete("This method has been made obsolete due to issues with passing constructor arguments as 'params' array. Use other overload that passes constructor arguments as an explicit array.")]
-		public object CreateClassProxy(Type classToProxy, IInterceptor[] interceptors, params object[] constructorArguments)
-		{
-			return CreateClassProxy(classToProxy, null, ProxyGenerationOptions.Default,
-			                        constructorArguments, interceptors);
 		}
 
 		/// <summary>

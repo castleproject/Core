@@ -20,5 +20,6 @@ namespace Castle.DynamicProxy.Serialization
 		public static readonly string InterfaceWithTarget = "interface.with.target";
 		public static readonly string InterfaceWithTargetInterface = "interface.with.target.interface";
 		public static readonly string Class = "class";
+		public static readonly string ClassWithTarget = "class.with.target";
 	}
 }
