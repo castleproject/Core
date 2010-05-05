@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
@@ -306,7 +305,6 @@ namespace Castle.DynamicProxy
 					assemblyName, AssemblyBuilderAccess.RunAndSave, moduleDirectory);
 
 				var module = assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
-				WorkaroundIssue98.ForModule(module);
 				return module;
 			}
 			else
@@ -317,7 +315,6 @@ namespace Castle.DynamicProxy
 					AssemblyBuilderAccess.Run);
 
 				var module = assemblyBuilder.DefineDynamicModule(moduleName, false);
-				WorkaroundIssue98.ForModule(module);
 				return module;
 			}
 		}
