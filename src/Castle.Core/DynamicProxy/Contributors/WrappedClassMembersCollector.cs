@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				if(IsOKToBeOnProxy(field)) continue;
 
-				hook.NonVirtualMemberNotification(type, field);
+				hook.NonProxyableMemberNotification(type, field);
 			}
 		}
 

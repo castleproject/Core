@@ -163,7 +163,7 @@ namespace Castle.DynamicProxy.Tests
 				return true;
 			}
 
-			public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
+			public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
 			{
 			}
 

@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy
 #endif
 		}
 
-		public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
+		public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
 		{
 		}
 
