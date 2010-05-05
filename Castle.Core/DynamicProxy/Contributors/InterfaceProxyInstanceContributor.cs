@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		public InterfaceProxyInstanceContributor(Type targetType, string proxyGeneratorId, Type[] interfaces)
-			: base(targetType, interfaces,proxyGeneratorId)
+			: base(targetType, interfaces, proxyGeneratorId)
 		{
 		}
 

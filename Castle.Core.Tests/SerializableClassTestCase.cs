@@ -70,7 +70,19 @@ namespace Castle.DynamicProxy.Tests
 
 			DateTime current = proxy.Current;
 
-			MySerializableClass otherProxy = (MySerializableClass) SerializeAndDeserialize(proxy);
+			MySerializableClass otherProxy = SerializeAndDeserialize(proxy);
+
+			Assert.AreEqual(current, otherProxy.Current);
+		}
+
+		[Test]
+		public void ClassProxyWithTargetSerialization()
+		{
+			var proxy = generator.CreateClassProxyWithTarget(new MySerializableClass(), new StandardInterceptor());
+
+			DateTime current = proxy.Current;
+
+			MySerializableClass otherProxy = SerializeAndDeserialize(proxy);
 
 			Assert.AreEqual(current, otherProxy.Current);
 		}
