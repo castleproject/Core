@@ -37,11 +37,10 @@ namespace Castle.DynamicProxy
 		/// <param name="type">The type which declares the non-virtual member.</param>
 		/// <param name="memberInfo">The non-virtual member.</param>
 		/// <remarks>
-		/// Non-virtual members cannot be proxied. This method gives an opportunity to inspect
-		/// any non-virtual member of a type that has been requested to be proxied, and if
-		/// appropriate - throw an exception to notify the caller.
+		/// This method gives an opportunity to inspect any non-proxyable member of a type that has 
+		/// been requested to be proxied, and if appropriate - throw an exception to notify the caller.
 		/// </remarks>
-		void NonVirtualMemberNotification(Type type, MemberInfo memberInfo);
+		void NonProxyableMemberNotification(Type type, MemberInfo memberInfo);
 
 		/// <summary>
 		/// Invoked by the generation process to notify that the whole process has completed.

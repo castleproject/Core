@@ -250,7 +250,7 @@ namespace Castle.DynamicProxy.Contributors
 				if (method.DeclaringType != typeof(MarshalByRefObject))
 				{
 					Logger.Debug("Excluded non-virtual method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
-					hook.NonVirtualMemberNotification(type, method);
+					hook.NonProxyableMemberNotification(type, method);
 				}
 #endif
 				return false;
