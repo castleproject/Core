@@ -44,18 +44,7 @@ namespace Castle.Components.Pagination
 			}
 			else
 			{
-				int currentIndex = 0;
-
-				IEnumerator enumerator = enumerable.GetEnumerator();
-	
-				do
-				{
-					enumerator.MoveNext();
-					currentIndex++;
-				}
-				while (currentIndex < itemIndex);
-
-				item = enumerator.Current;
+				item = enumerable.Cast<object>().Skip(itemIndex).Take(1).Single();
 			}
 
 			return item;
@@ -89,19 +78,7 @@ namespace Castle.Components.Pagination
 			}
 			else
 			{
-				using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
-				{
-					int currentIndex = 0;
-
-					do
-					{
-						enumerator.MoveNext();
-						currentIndex++;
-					}
-					while (currentIndex < itemIndex);
-
-					item = enumerator.Current;
-				}
+				item = enumerable.Skip(itemIndex).Take(1).Single();
 			}
 
 			return item;

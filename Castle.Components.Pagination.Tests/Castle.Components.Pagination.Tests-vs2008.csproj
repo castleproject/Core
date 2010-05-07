@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="BasePaginatedPageTestCase.cs" />
     <Compile Include="ComIssue102.cs" />
+    <Compile Include="PaginationSupportTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Components.Pagination\Castle.Components.Pagination-vs2008.csproj">
