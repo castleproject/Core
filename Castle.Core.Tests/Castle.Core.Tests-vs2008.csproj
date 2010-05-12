@@ -111,8 +111,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdaptingNameValueCollectionsTestCase.cs" />
+    <Compile Include="AdaptingXmlTestCase.cs" />
     <Compile Include="BugsReported\DynProxy132.cs" />
     <Compile Include="ChangeProxyTargetInterceptor.cs" />
+    <Compile Include="CreateHashtableDictionaryStrategy.cs" />
+    <Compile Include="DictionaryAdapterFactoryTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithAttributesOnMethodParameters.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithExplicitInterface.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithInterface.cs" />
@@ -144,6 +148,7 @@
     <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameter.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameterByRef.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericReturn.cs" />
+    <Compile Include="IdEqualityHashCodeStrategy.cs" />
     <Compile Include="Interceptors\AssertCanChangeTargetInterceptor.cs" />
     <Compile Include="Interceptors\AssertCannotChangeTargetInterceptor.cs" />
     <Compile Include="Interceptors\CallCountingInterceptor.cs" />
@@ -269,6 +274,7 @@
     </Compile>
     <Compile Include="Core.Tests\Resources\UncResourceFactoryTestCase.cs" />
     <Compile Include="StreamLoggerTests.cs" />
+    <Compile Include="TestDictionaryValidator.cs" />
     <Compile Include="TraceLoggerTests.cs" />
     <Compile Include="WebLoggerTests.cs" />
   </ItemGroup>
