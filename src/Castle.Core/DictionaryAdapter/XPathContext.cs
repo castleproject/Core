@@ -1,0 +1,416 @@
+﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+namespace Castle.Components.DictionaryAdapter
+{
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Xml;
+	using System.Xml.Serialization;
+	using System.Xml.XPath;
+	using System.Xml.Xsl;
+
+	public class XPathContext : XsltContext
+	{
+		private readonly XPathContext parent;
+		private IDictionary<string, Func<IXsltContextFunction>> functions;
+		private List<XmlArrayItemAttribute> listItemMeta;
+		private int prefixCount;
+
+		public const string Prefix = "castle-da";
+		public const string NamespaceUri = "urn:castleproject.org:da";
+		public const string IgnoreNamespace = "_";
+		private const string Xsd = "http://www.w3.org/2001/XMLSchema";
+		private const string Xsi = "http://www.w3.org/2001/XMLSchema-instance";
+
+		public XPathContext() : this(new NameTable())
+		{
+		}
+
+		public XPathContext(NameTable nameTable) : base(nameTable)
+		{
+			prefixCount = 0;
+			Arguments = new XsltArgumentList();
+			functions = new Dictionary<string, Func<IXsltContextFunction>>();
+			AddNamespace("xsi", Xsi);
+			AddNamespace("xsd", Xsd);
+			AddNamespace(Prefix, NamespaceUri);
+			AddFunction(Prefix, "match", MatchFunction.Instance);
+		}
+
+		public XPathContext(XPathContext parent) : this((NameTable)parent.NameTable)
+		{
+			this.parent = parent;
+		}
+
+		public override string DefaultNamespace
+		{
+			get
+			{
+				var defaultNamespace = base.DefaultNamespace;
+				if (string.IsNullOrEmpty(defaultNamespace) && parent != null)
+				{
+					defaultNamespace = parent.DefaultNamespace;
+				}
+				return defaultNamespace;
+			}
+		}
+
+		public XsltArgumentList Arguments { get; private set; }
+
+		public IEnumerable<XmlArrayItemAttribute> ListItemMeta
+		{
+			get { return listItemMeta; }
+		}
+
+		public XPathContext ApplyBehaviors(IEnumerable behaviors)
+		{
+			new BehaviorVisitor()
+				.OfType<XmlTypeAttribute>(attrib =>
+				{
+					if (string.IsNullOrEmpty(attrib.Namespace) == false)
+					{
+						AddNamespace(string.Empty, attrib.Namespace);
+					}
+				})
+				.OfType<XmlNamespaceAttribute>(attrib =>
+				{
+					AddNamespace(attrib.Prefix, attrib.NamespaceUri);
+					if (attrib.Default)
+					{
+						AddNamespace(string.Empty, attrib.NamespaceUri);
+					}
+				})
+				.OfType<XmlArrayItemAttribute>(attrib =>
+				{
+					listItemMeta = listItemMeta ?? new List<XmlArrayItemAttribute>();
+					listItemMeta.Add(attrib);
+				})
+				.OfType<XPathFunctionAttribute>(attrib =>
+				{
+					AddFunction(attrib.Prefix, attrib.Name, attrib.Function);
+				})
+				.Apply(behaviors);
+			return this;
+		}
+
+		public XPathContext CreateChild(IEnumerable behaviors)
+		{
+			return new XPathContext(this).ApplyBehaviors(behaviors);
+		}
+
+		public XPathContext CreateChild(params object[] behaviors)
+		{
+			return CreateChild((IEnumerable)behaviors);
+		}
+
+		public override bool HasNamespace(string prefix)
+		{
+			return base.HasNamespace(prefix) || (parent != null && parent.HasNamespace(prefix));
+		}
+
+		public override string LookupNamespace(string prefix)
+		{
+			var uri = base.LookupNamespace(prefix);
+			if (uri == null && parent != null)
+			{
+				uri = parent.LookupNamespace(prefix);
+			}
+			return uri;
+		}
+
+		public override string LookupPrefix(string uri)
+		{
+			var prefix = base.LookupPrefix(uri);
+			if (string.IsNullOrEmpty(prefix) && parent != null)
+			{
+				prefix = parent.LookupPrefix(uri);
+			}
+			return prefix;
+		}
+
+		public string AddNamespace(string namespaceUri)
+		{
+			var prefix = LookupPrefix(namespaceUri);
+			if (string.IsNullOrEmpty(prefix))
+			{
+				prefix = GetUniquePrefix();
+				AddNamespace(prefix, namespaceUri);
+			}
+			return prefix;
+		}
+
+		public XPathContext AddFunction(string prefix, string name, IXsltContextFunction function)
+		{
+			functions[GetQualifiedName(prefix, name)] = () => function;
+			return this;
+		}
+
+		public XPathContext AddFunction(string prefix, string name, Func<IXsltContextFunction> function)
+		{
+			functions[GetQualifiedName(prefix, name)] = function;
+			return this;
+		}
+
+		public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] argTypes)
+		{
+			Func<IXsltContextFunction> function;
+			if (functions.TryGetValue(GetQualifiedName(prefix, name), out function))
+			{
+				return function();
+			}
+			return (parent != null) ? parent.ResolveFunction(prefix, name, argTypes) : null;
+		}
+
+		public override IXsltContextVariable ResolveVariable(string prefix, string name)
+		{
+			return new XPathVariable(name);
+		}
+
+		public bool Evaluate(XPathExpression xpath, XPathNavigator source, out object result)
+		{
+			xpath = (XPathExpression)xpath.Clone();
+			xpath.SetContext(this);
+			result = source.Evaluate(xpath);
+			if (xpath.ReturnType == XPathResultType.NodeSet)
+			{
+				if (((XPathNodeIterator)result).Count == 0)
+					result = null;
+			}
+			return result != null;
+		}
+
+		public XPathNavigator SelectSingleNode(XPathExpression xpath, XPathNavigator source)
+		{
+			xpath = (XPathExpression)xpath.Clone();
+			xpath.SetContext(this);
+			return source.SelectSingleNode(xpath);
+		}
+
+		public bool Matches(XPathExpression xpath, XPathNavigator source)
+		{
+			xpath = (XPathExpression)xpath.Clone();
+			xpath.SetContext(this);
+			return source.Matches(xpath);
+		}
+
+		public void AddStandardNamespaces(XPathNavigator source)
+		{
+			CreateNamespace("xsi", Xsi, source);
+			CreateNamespace("xsd", Xsd, source);
+		}
+
+		public string CreateNamespace(string prefix, string namespaceUri, XPathNavigator source)
+		{
+			if (string.IsNullOrEmpty(namespaceUri) == false)
+			{
+				source = source.Clone();
+				source.MoveToRoot();
+				source.MoveToChild(XPathNodeType.Element);
+
+				if (string.IsNullOrEmpty(prefix))
+				{
+					prefix = AddNamespace(namespaceUri);
+				}
+				var existing = source.GetNamespace(prefix);
+				if (existing == namespaceUri) return prefix;
+				if (string.IsNullOrEmpty(existing) == false) return null;
+
+				source.CreateAttribute("xmlns", prefix, "", namespaceUri);
+			}
+			return prefix;
+		}
+
+		public XPathNavigator CreateAttribute(string name, string namespaceUri, XPathNavigator source)
+		{
+			source.CreateAttribute(null, name, namespaceUri, "");
+			source.MoveToAttribute(name, namespaceUri ?? "");
+			return source;
+		}
+
+		public XPathNavigator AppendElement(string name, string namespaceUri, XPathNavigator source)
+		{
+			namespaceUri = GetEffectiveNamespace(namespaceUri);
+			source.AppendChildElement(LookupPrefix(namespaceUri), name, namespaceUri, "");
+			return source.SelectSingleNode("*[position()=last()]");
+		}
+
+		public void SetXmlType(string name, string namespaceUri, XPathNavigator source)
+		{
+			namespaceUri = GetEffectiveNamespace(namespaceUri);
+			var prefix = CreateNamespace(null, namespaceUri, source);
+			source.CreateAttribute("xsi", "type", Xsi, GetQualifiedName(prefix, name));
+		}
+
+		public XmlQualifiedName GetXmlType(XPathNavigator source)
+		{
+			var qualifiedType = source.GetAttribute("type", Xsi);
+			if (string.IsNullOrEmpty(qualifiedType) == false)
+			{
+				string name, namespaceUri = null;
+				var prefix = SplitQualifiedName(qualifiedType, out name);
+				if (prefix != null)
+				{
+					namespaceUri = source.GetNamespace(prefix);
+				}
+				return new XmlQualifiedName(name, namespaceUri);
+			}
+			return null;
+		}
+
+		public string GetEffectiveNamespace(string namespaceUri)
+		{
+			return namespaceUri ?? DefaultNamespace;
+		}
+
+		public override int CompareDocument(string baseUri, string nextbaseUri)
+		{
+			return 0;
+		}
+
+		public override bool Whitespace
+		{
+			get { return true; }
+		}
+
+		public override bool PreserveWhitespace(XPathNavigator node)
+		{
+			return true;
+		}
+
+		private string GetUniquePrefix()
+		{
+			if (parent != null)
+			{
+				return parent.GetUniquePrefix();
+			}
+			return "da" + ++prefixCount;
+		}
+
+		private static string GetQualifiedName(string prefix, string name)
+		{
+			if (string.IsNullOrEmpty(prefix))
+			{
+				return name;
+			}
+			return String.Format("{0}:{1}", prefix, name);
+		}
+
+		private static string SplitQualifiedName(string qualifiedName, out string name)
+		{
+			var parts = qualifiedName.Split(':');
+			if (parts.Length == 1)
+			{
+				name = parts[0];
+				return null;
+			}
+			else if (parts.Length == 2)
+			{
+				name = parts[1];
+				return parts[0];
+			}
+			throw new ArgumentException(string.Format(
+				"Invalid qualified name {0}.  Expected [prefix:]name format", qualifiedName));
+		}
+
+		#region Nested Type: XPathVariable 
+
+		public class XPathVariable : IXsltContextVariable
+		{
+			private readonly string name;
+
+			public XPathVariable(string name)
+			{
+				this.name = name;
+			}
+
+			public bool IsLocal
+			{
+				get { return false; }
+			}
+
+			public bool IsParam
+			{
+				get { return false; }
+			}
+
+			public XPathResultType VariableType
+			{
+				get { return XPathResultType.Any; }
+			}
+
+			public object Evaluate(XsltContext xsltContext)
+			{
+				var args = ((XPathContext)xsltContext).Arguments;
+				return args.GetParam(name, null);
+			}
+		}
+
+		#endregion
+
+		#region Nested Type: MatchFunction
+
+		public class MatchFunction : IXsltContextFunction
+		{
+			public static readonly MatchFunction Instance = new MatchFunction();
+			
+			protected MatchFunction()
+			{
+			}
+
+			public int Minargs
+			{
+				get { return 1; }
+			}
+
+			public int Maxargs
+			{
+				get { return 2; }
+			}
+
+			public XPathResultType[] ArgTypes
+			{
+				get { return new[] { XPathResultType.String, XPathResultType.String }; }
+			}
+
+			public XPathResultType ReturnType
+			{
+				get { return XPathResultType.Boolean; }
+			}
+
+			public object Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
+			{
+				var key = (string)args[0];
+				if (key.Equals(docContext.LocalName, StringComparison.OrdinalIgnoreCase) == false)
+				{
+					return false;
+				}
+
+				if (args.Length > 1 && args[1].Equals(IgnoreNamespace) == false)
+				{
+					var ns = (string)args[1];
+					if (ns.Equals(docContext.NamespaceURI, StringComparison.OrdinalIgnoreCase) == false)
+					{
+						return false;
+					}
+				}
+
+				return true;
+			}
+		}
+
+		#endregion
+	}
+}
