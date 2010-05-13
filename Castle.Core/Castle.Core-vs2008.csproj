@@ -394,7 +394,6 @@
     <Compile Include="DynamicProxy\StandardInterceptor.cs" />
     <Compile Include="Core\IServiceEnabledComponent.cs" />
     <Compile Include="Core\IServiceProviderEx.cs" />
-    <Compile Include="Lifecycle\IInitializable.cs" />
     <Compile Include="Core\Logging\AbstractExtendedLoggerFactory.cs" />
     <Compile Include="Core\Logging\TraceLoggerFactory.cs" />
     <Compile Include="Core\Logging\IContextProperties.cs" />
