@@ -47,14 +47,28 @@ namespace Castle.DynamicProxy
 			proxyBuilder = builder;
 
 #if !SILVERLIGHT
-			if (SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy)))
+			if (HasSecurityPermission())
 			{
 				Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
 			}
 #endif
 		}
 
-		/// <summary>
+#if !SILVERLIGHT
+	    private bool HasSecurityPermission()
+	    {
+#if NET35
+            return SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy));
+#else
+	        var permission = new PermissionSet(PermissionState.None);
+	        permission.AddPermission(new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy));
+
+	        return AppDomain.CurrentDomain.PermissionSet.IsSubsetOf(permission);
+#endif
+	    }
+#endif
+
+	    /// <summary>
 		/// Initializes a new instance of the <see cref="ProxyGenerator"/> class.
 		/// </summary>
 		public ProxyGenerator() : this(new DefaultProxyBuilder())
@@ -1092,7 +1106,7 @@ namespace Castle.DynamicProxy
 		}
 
 		/// <summary>
-		/// Creates the proxy type for interface proxy with target interface for given <paramref name="interfaceToProxy"/> interface, implementing given <paramref name="additionalInterfacesToProxy"/> on given <paramref name="targetType"/> and using provided <paramref name="options"/>.
+        /// Creates the proxy type for interface proxy with target interface for given <paramref name="interfaceToProxy"/> interface, implementing given <paramref name="additionalInterfacesToProxy"/> on given <paramref name="interfaceToProxy"/> and using provided <paramref name="options"/>.
 		/// </summary>
 		/// <param name="interfaceToProxy">The interface proxy type should implement.</param>
 		/// <param name="additionalInterfacesToProxy">The additional interfaces proxy type should implement.</param>
