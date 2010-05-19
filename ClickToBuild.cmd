@@ -16,9 +16,7 @@ REM ****************************************************************************
 
 ECHO This script builds the project in Release configuration
 
-SET CLICKTOBUILD=1
-CALL buildscripts\build.cmd
-SET CLICKTOBUILD=
+CALL buildscripts\build.cmd NET40 BuildAndPack
 
 IF %ERRORLEVEL% NEQ 0 GOTO err
 ECHO **************************************************************
@@ -28,4 +26,4 @@ ECHO **************************************************************
 
 :err
 PAUSE
-@EXIT /B %ERRORLEVEL%
+EXIT /B %ERRORLEVEL%

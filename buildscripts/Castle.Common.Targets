@@ -28,38 +28,38 @@ limitations under the License.
 	<PropertyGroup>
 
 		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>
-		<BuildFramework></BuildFramework>
+		<BuildConfigKey></BuildConfigKey>
 		
 	</PropertyGroup>
 
 
 	<!-- .NET 3.5 (default) -->
-	<PropertyGroup Condition="$(BuildFramework)=='' or $(BuildFramework)=='NET35'">
-		<BuildConstants>DOTNET35</BuildConstants>
+	<PropertyGroup Condition="$(BuildConfigKey)=='' or $(BuildConfigKey)=='NET35'">
+		<BuildConstants>NET35</BuildConstants>
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 		<FrameworkId>NET35</FrameworkId>
 	</PropertyGroup>
 
 	<!-- .NET 4.0 -->
-	<PropertyGroup Condition="$(BuildFramework)=='NET40'">
-		<BuildConstants>DOTNET40</BuildConstants>
+	<PropertyGroup Condition="$(BuildConfigKey)=='NET40'">
+		<BuildConstants>NET40</BuildConstants>
 		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-		<FrameworkId>$(BuildFramework)</FrameworkId>
+		<FrameworkId>$(BuildConfigKey)</FrameworkId>
 	</PropertyGroup>
 
 	<!--Silverlight 3.0 runtime-->
-	<PropertyGroup Condition="$(BuildFramework)=='SL3'">
+	<PropertyGroup Condition="$(BuildConfigKey)=='SL3'">
 		<BuildConstants>SILVERLIGHT</BuildConstants>
 		<MSBuildTargets>Silverlight 3.0</MSBuildTargets>
-		<FrameworkId>$(BuildFramework)</FrameworkId>
+		<FrameworkId>$(BuildConfigKey)</FrameworkId>
 		<TestRunner_Enabled>False</TestRunner_Enabled>
 	</PropertyGroup>
 
 	<!--Silverlight 4.0 runtime-->
-	<PropertyGroup Condition="$(BuildFramework)=='SL4'">
+	<PropertyGroup Condition="$(BuildConfigKey)=='SL4'">
 		<BuildConstants>SILVERLIGHT</BuildConstants>
 		<MSBuildTargets>Silverlight 4.0</MSBuildTargets>
-		<FrameworkId>$(BuildFramework)</FrameworkId>
+		<FrameworkId>$(BuildConfigKey)</FrameworkId>
 		<TestRunner_Enabled>False</TestRunner_Enabled>
 	</PropertyGroup>
 
@@ -72,7 +72,7 @@ limitations under the License.
 		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)/buildscripts</BuildScriptsPath>
 		<ToolsPath Condition="'$(ToolsPath)' == ''">$(RootPath)/tools</ToolsPath>
 		<SolutionPath Condition="'$(SolutionPath)' == '' and '$(SolutionName)' != '' and $(TargetFrameworkVersion) == 'v3.5'">$(RootPath)/$(SolutionName)-vs2008.sln</SolutionPath>
-		<SolutionPath Condition="'$(SolutionPath)' == ''">$(RootPath)/$(ProjectName)-vs2008.sln</SolutionPath>
+		<SolutionPath Condition="'$(SolutionPath)' == ''">$(RootPath)/$(ProjectName)-vs2010.sln</SolutionPath>
 		<TestResultsPath Condition="'$(TestResultsPath)' == ''">$(OutputPath)/test-results</TestResultsPath>
 	</PropertyGroup>
 

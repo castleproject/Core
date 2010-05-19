@@ -110,11 +110,21 @@ limitations under the License.
 	
 	</Target>
 
+	<!-- Builds the source code and creates the package -->
+	<Target
+	    Name="BuildAndPack"
+		>
+	
+		<CallTarget Targets="RebuildAll" />
+		
+		<CallTarget Targets="Package" />
+	
+	</Target>
 	
 	<!-- Creates Zip file for Release -->
 	<Target
 		Name="Package"
-		DependsOnTargets="CleanProject;BuildProject;RunAllTests;GetBuildRevision;_PreparePackage"
+		DependsOnTargets="CleanProject;BuildProject;GetBuildRevision;_PreparePackage"
 		>
 
 		<PropertyGroup>
@@ -137,8 +147,7 @@ limitations under the License.
 		<RemoveDir Directories="$(PackageDir)" ContinueOnError="true" />
 
 	</Target>
-
-
+	
 	<!--
 	==================================================
 		Internal targets
