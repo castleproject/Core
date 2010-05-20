@@ -21,7 +21,7 @@ CALL buildscripts\build.cmd NET40 BuildAndPack
 IF %ERRORLEVEL% NEQ 0 GOTO err
 ECHO **************************************************************
 ECHO The binaries can be found in the following folder:
-ECHO builds\NET40\Release\
+ECHO build\NET40\Release\
 ECHO **************************************************************
 
 :err
