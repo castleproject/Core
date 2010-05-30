@@ -26,10 +26,8 @@ limitations under the License.
 		Overridables properties
 	-->
 	<PropertyGroup>
-
-		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>
 		<BuildConfigKey></BuildConfigKey>
-		
+		<Configuration>Release</Configuration>
 	</PropertyGroup>
 
 
@@ -53,6 +51,7 @@ limitations under the License.
 		<MSBuildTargets>Silverlight 3.0</MSBuildTargets>
 		<FrameworkId>$(BuildConfigKey)</FrameworkId>
 		<TestRunner_Enabled>False</TestRunner_Enabled>
+		<TargetFrameworkVersion>3.0</TargetFrameworkVersion>
 	</PropertyGroup>
 
 	<!--Silverlight 4.0 runtime-->
@@ -61,6 +60,7 @@ limitations under the License.
 		<MSBuildTargets>Silverlight 4.0</MSBuildTargets>
 		<FrameworkId>$(BuildConfigKey)</FrameworkId>
 		<TestRunner_Enabled>False</TestRunner_Enabled>
+		<TargetFrameworkVersion>4.0</TargetFrameworkVersion>
 	</PropertyGroup>
 
 	<!-- Project folders -->
@@ -71,7 +71,7 @@ limitations under the License.
 		<OutputType Condition="'$(OutputType)' == ''">Library</OutputType>
 		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)/buildscripts</BuildScriptsPath>
 		<ToolsPath Condition="'$(ToolsPath)' == ''">$(RootPath)/tools</ToolsPath>
-		<SolutionPath Condition="'$(SolutionPath)' == '' and '$(SolutionName)' != '' and $(TargetFrameworkVersion) == 'v3.5'">$(RootPath)/$(SolutionName)-vs2008.sln</SolutionPath>
+		<SolutionPath Condition="'$(SolutionPath)' == '' and '$(SolutionName)' != ''">$(RootPath)/$(SolutionName)-vs2010.sln</SolutionPath>
 		<SolutionPath Condition="'$(SolutionPath)' == ''">$(RootPath)/$(ProjectName)-vs2010.sln</SolutionPath>
 		<TestResultsPath Condition="'$(TestResultsPath)' == ''">$(OutputPath)/test-results</TestResultsPath>
 	</PropertyGroup>

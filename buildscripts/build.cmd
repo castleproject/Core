@@ -22,31 +22,43 @@ IF "%1" == "" (SET BuildConfigKey=NET40) ELSE (SET BuildConfigKey=%1)
 
 REM Set Framework version based on passed in parameter
 IF "%1" == "" SET FrameworkVersion=v4.0.30319
-IF "%1" == "NET40" (SET FrameworkVersion=v4.0.30319) ELSE (SET FrameworkVersion=v3.5)
+IF "%1" == "NET40" (SET FrameworkVersion=v4.0.30319)
+IF "%1" == "NET35" (SET FrameworkVersion=v3.5)
+IF "%1" == "SL3" (SET FrameworkVersion=v3.0)
+IF "%1" == "SL4" (SET FrameworkVersion=v4.0)
 
 REM Set BuildFramework variable
 REM Default value of NET35 and NET4 will be automatically set to "Release"
 IF "%1" == "NET35" SET BuildFramework="" 
 IF "%1" == "NET40" SET BuildFramework=""
-IF "%1" == "SL40" SET BuildFramework=ReleaseSL4
-IF "%1" == "SL35" SET BuildFramework=ReleaseSL3
+IF "%1" == "SL4" SET BuildFramework=ReleaseSL4
+IF "%1" == "SL3" SET BuildFramework=ReleaseSL3
+
+REM Define Silverlight Constant
+IF "%1" == "SL3" SET BuildConstant=SILVERLIGHT
+IF "%1" == "SL4" SET BuildConstant=SILVERLIGHT
+IF "%1" == "NET40" SET BuildConstant=NET40
+IF "%1" == "NET35" SET BuildConstant=NET35
 
 REM Set the build target, if not specified set it to "Package" target.
 IF "%2" == "" (SET BuildTarget=Package) ELSE (SET BuildTarget=%2)
+
+REM Set solution name to handle build for .NET / Silverlight
+IF "%3" == "" (SET SolutionName=Castle.Core) ELSE (SET SolutionName=%3)
 
 REM Write variables to console
 echo Framework version is: %FrameworkVersion%
 echo Build Configuration Key: %BuildConfigKey%
 echo Defined Constant: %BuildConstant%
 echo Build Target is: %BuildTarget%
-
+echo Building solution: %SolutionName%
 
 REM Always uses the MSBuild 4.0
 SET __MSBUILD_EXE__=%windir%\microsoft.net\framework\v4.0.30319\msbuild.exe
 
 REM Call the MSBuild to build the project
 @echo on
-%__MSBUILD_EXE__% /m "%~dp0Build.proj" /property:BuildConfigKey=%BuildConfigKey% /property:BuildFramework=%BuildFramework% /p:TargetFrameworkVersion=%FrameworkVersion% /p:DefineConstants=%BuildConfigKey% /ToolsVersion:4.0 /t:%BuildTarget%
+%__MSBUILD_EXE__% /m "%~dp0Build.proj" /property:BuildConfigKey=%BuildConfigKey% /property:SolutionName=%SolutionName% /property:BuildFramework=%BuildFramework% /p:TargetFrameworkVersion=%FrameworkVersion% /p:DefineConstants=%BuildConstant% /ToolsVersion:4.0 /t:%BuildTarget% /property:Configuration=Release
 @echo off
 
 IF %ERRORLEVEL% NEQ 0 GOTO err

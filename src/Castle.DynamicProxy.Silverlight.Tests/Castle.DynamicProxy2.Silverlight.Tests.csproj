@@ -1,4 +1,8 @@
-﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Castle.DynamicProxy.Silverlight.Tests</RootNamespace>
     <AssemblyName>Castle.DynamicProxy.Silverlight.Tests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightApplication>true</SilverlightApplication>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>false</GenerateSilverlightManifest>
@@ -27,6 +31,9 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,16 +50,16 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>ClientBin\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT;$(BuildConstants)</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SharedLibs\silverlight\nunit.framework.dll</HintPath>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="mscorlib" />
@@ -123,6 +130,9 @@
     <Compile Include="..\Castle.DynamicProxy.Tests\Classes\ClassWithDefaultConstructor.cs">
       <Link>Classes\ClassWithDefaultConstructor.cs</Link>
     </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Classes\ClassWithExplicitInterface.cs">
+      <Link>Classes\ClassWithExplicitInterface.cs</Link>
+    </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\Classes\ClassWithIndexer.cs">
       <Link>Classes\ClassWithIndexer.cs</Link>
     </Compile>
@@ -153,6 +163,12 @@
     <Compile Include="..\Castle.DynamicProxy.Tests\Classes\SimpleClass.cs">
       <Link>Classes\SimpleClass.cs</Link>
     </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Classes\VirtuallyImplementsInterfaceWithEvent.cs">
+      <Link>Classes\VirtuallyImplementsInterfaceWithEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Classes\VirtuallyImplementsInterfaceWithProperty.cs">
+      <Link>Classes\VirtuallyImplementsInterfaceWithProperty.cs</Link>
+    </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\ClassWithAttributesTestCase.cs">
       <Link>ClassWithAttributesTestCase.cs</Link>
     </Compile>
@@ -164,6 +180,9 @@
     </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\GenClasses\ClassWithIndexer.cs">
       <Link>GenClasses\ClassWithIndexer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\GenClasses\ClassWIthMethodWithReturnArrayOfListOfT.cs">
+      <Link>GenClasses\ClassWIthMethodWithReturnArrayOfListOfT.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\GenClasses\GenClassNameClash.cs">
       <Link>GenClasses\GenClassNameClash.cs</Link>
@@ -179,6 +198,9 @@
     </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\GenClasses\GenClassWithGenReturn.cs">
       <Link>GenClasses\GenClassWithGenReturn.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\GenClasses\MethodWithArgumentBeingArrayOfGenericTypeOfT.cs">
+      <Link>GenClasses\MethodWithArgumentBeingArrayOfGenericTypeOfT.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\GenClasses\OnlyGenMethodsClass.cs">
       <Link>GenClasses\OnlyGenMethodsClass.cs</Link>
@@ -216,14 +238,41 @@
     <Compile Include="..\Castle.DynamicProxy.Tests\GenInterfaces\GenInterfaceWithGenMethodsAndGenReturn.cs">
       <Link>GenInterfaces\GenInterfaceWithGenMethodsAndGenReturn.cs</Link>
     </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameter.cs">
+      <Link>GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameterByRef.cs">
+      <Link>GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameterByRef.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\GenInterfaces\GenInterfaceWithMethodWithNestedGenericReturn.cs">
+      <Link>GenInterfaces\GenInterfaceWithMethodWithNestedGenericReturn.cs</Link>
+    </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\GenInterfaces\OnlyGenMethodsInterface.cs">
       <Link>GenInterfaces\OnlyGenMethodsInterface.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\InheritedInterfacesTestCase.cs">
+      <Link>InheritedInterfacesTestCase.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\InterceptorSelectorTestCase.cs">
+      <Link>InterceptorSelectorTestCase.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\AddTwoInterceptor.cs">
+      <Link>Interceptors\AddTwoInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\AssertCanChangeTargetInterceptor.cs">
+      <Link>Interceptors\AssertCanChangeTargetInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\AssertCannotChangeTargetInterceptor.cs">
+      <Link>Interceptors\AssertCannotChangeTargetInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\CallCountingInterceptor.cs">
+      <Link>Interceptors\CallCountingInterceptor.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\ChangeTargetInterceptor.cs">
       <Link>Interceptors\ChangeTargetInterceptor.cs</Link>
     </Compile>
-    <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\InterceptorSelectorTestCase.cs">
-      <Link>Interceptors\InterceptorSelectorTestCase.cs</Link>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\DoNothingInterceptor.cs">
+      <Link>Interceptors\DoNothingInterceptor.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\KeepDataInterceptor.cs">
       <Link>Interceptors\KeepDataInterceptor.cs</Link>
@@ -231,8 +280,20 @@
     <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\LogInvocationInterceptor.cs">
       <Link>Interceptors\LogInvocationInterceptor.cs</Link>
     </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\ProceedOnTypeInterceptor.cs">
+      <Link>Interceptors\ProceedOnTypeInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\RequiredParamInterceptor.cs">
+      <Link>Interceptors\RequiredParamInterceptor.cs</Link>
+    </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\ResultModifierInterceptor.cs">
       <Link>Interceptors\ResultModifierInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\SetReturnValueInterceptor.cs">
+      <Link>Interceptors\SetReturnValueInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interceptors\WithCallbackInterceptor.cs">
+      <Link>Interceptors\WithCallbackInterceptor.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\InterClasses\AlwaysThrowsServiceImpl.cs">
       <Link>InterClasses\AlwaysThrowsServiceImpl.cs</Link>
@@ -266,6 +327,30 @@
     </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\InterClasses\ServiceImpl.cs">
       <Link>InterClasses\ServiceImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interfaces\IdenticalInterfaces.cs">
+      <Link>Interfaces\IdenticalInterfaces.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interfaces\IEmpty.cs">
+      <Link>Interfaces\IEmpty.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interfaces\IOne.cs">
+      <Link>Interfaces\IOne.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interfaces\ITwo.cs">
+      <Link>Interfaces\ITwo.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interfaces\IWithRefOut.cs">
+      <Link>Interfaces\IWithRefOut.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interfaces\One.cs">
+      <Link>Interfaces\One.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interfaces\OneTwo.cs">
+      <Link>Interfaces\OneTwo.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy.Tests\Interfaces\Two.cs">
+      <Link>Interfaces\Two.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy.Tests\InvocationTestCase.cs">
       <Link>InvocationTestCase.cs</Link>
@@ -315,14 +400,11 @@
     <Compile Include="..\Castle.DynamicProxy.Tests\ProxyGenerationOptionsTestCase.cs">
       <Link>ProxyGenerationOptionsTestCase.cs</Link>
     </Compile>
-    <Compile Include="..\Castle.DynamicProxy.Tests\TypeEquivalentTestCase.cs">
-      <Link>TypeEquivalentTestCase.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Castle.Core\Castle.Core.Silverlight.csproj">
-      <Project>{537D7B08-F0B6-49E6-A13D-AD905B7C9C27}</Project>
-      <Name>Castle.Core.Silverlight</Name>
+    <ProjectReference Include="..\Castle.Core\Castle.Core-SL-vs2008.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core-SL-vs2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\DynamicProxy2-Silverlight\DynamicProxy2-Silverlight.csproj">
       <Project>{0294038F-8E0E-49C0-B84B-68A70065C2CD}</Project>
@@ -332,7 +414,7 @@
   <ItemGroup>
     <Content Include="Properties\AppManifest.xml" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" Condition="" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
