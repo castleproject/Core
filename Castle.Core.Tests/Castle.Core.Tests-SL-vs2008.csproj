@@ -1,4 +1,5 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -6,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{087AD3BF-5E40-450D-8138-FBB5F57AC474}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
-  	<SilverlightApplication>false</SilverlightApplication>
+    <SilverlightApplication>false</SilverlightApplication>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Castle.Core.Tests</RootNamespace>
@@ -15,19 +16,20 @@
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
+    <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;SILVERLIGHT;$(BuildConstants)</DefineConstants>
-  	<NoStdLib>true</NoStdLib>
-  	<NoConfig>true</NoConfig>    
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;$(BuildConstants)</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -36,12 +38,12 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;$(BuildConstants)</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT;$(BuildConstants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-  	<Reference Include="mscorlib" />
+    <Reference Include="mscorlib" />
     <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
@@ -88,12 +90,6 @@
     <Content Include="Resources\MoreRes\file2.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Castle.Core\Castle.Core-SL-vs2008.csproj">
-      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
-      <Name>Castle.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\buildscripts\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
@@ -104,6 +100,12 @@
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Core\Castle.Core-SL-vs2008.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core-SL-vs2008</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -112,11 +114,11 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-	<ProjectExtensions>
+  <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
-        <SilverlightProjectProperties/>
+        <SilverlightProjectProperties />
       </FlavorProperties>
     </VisualStudio>
-  </ProjectExtensions>  
+  </ProjectExtensions>
 </Project>

@@ -1,4 +1,8 @@
-﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,12 +14,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Castle.DynamicProxy</RootNamespace>
     <AssemblyName>Castle.DynamicProxy-Silverlight</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>false</ThrowErrorsInValidation>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Castle.DynamicProxy\DynProxy.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -36,6 +40,9 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,8 +82,41 @@
     <Compile Include="..\Castle.DynamicProxy\AllMethodsHook.cs">
       <Link>AllMethodsHook.cs</Link>
     </Compile>
+    <Compile Include="..\Castle.DynamicProxy\AttributeUtil.cs">
+      <Link>AttributeUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\CompositionInvocation.cs">
+      <Link>CompositionInvocation.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\ClassMembersCollector.cs">
+      <Link>Contributors\ClassMembersCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\ClassProxyInstanceContributor.cs">
+      <Link>Contributors\ClassProxyInstanceContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\ClassProxyTargetContributor.cs">
+      <Link>Contributors\ClassProxyTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\ForwardingMethodGenerator.cs">
+      <Link>Contributors\ForwardingMethodGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\InterfaceMembersOnClassCollector.cs">
+      <Link>Contributors\InterfaceMembersOnClassCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\InterfaceProxyInstanceContributor.cs">
+      <Link>Contributors\InterfaceProxyInstanceContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\MixinContributor.cs">
+      <Link>Contributors\MixinContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Contributors\ProxyInstanceContributor.cs">
+      <Link>Contributors\ProxyInstanceContributor.cs</Link>
+    </Compile>
     <Compile Include="..\Castle.DynamicProxy\DefaultProxyBuilder.cs">
       <Link>DefaultProxyBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\AttributeDisassembler.cs">
+      <Link>Generators\AttributeDisassembler.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\AttributesToAvoidReplicating.cs">
       <Link>Generators\AttributesToAvoidReplicating.cs</Link>
@@ -86,6 +126,9 @@
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\CacheKey.cs">
       <Link>Generators\CacheKey.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\ClassInvocationTypeGenerator.cs">
+      <Link>Generators\ClassInvocationTypeGenerator.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\ClassProxyGenerator.cs">
       <Link>Generators\ClassProxyGenerator.cs</Link>
@@ -159,11 +202,17 @@
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\ArgumentReference.cs">
       <Link>Generators\Emitters\SimpleAST\ArgumentReference.cs</Link>
     </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\AssignArgumentStatement.cs">
+      <Link>Generators\Emitters\SimpleAST\AssignArgumentStatement.cs</Link>
+    </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\AssignArrayStatement.cs">
       <Link>Generators\Emitters\SimpleAST\AssignArrayStatement.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\AssignStatement.cs">
       <Link>Generators\Emitters\SimpleAST\AssignStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\AsTypeReference.cs">
+      <Link>Generators\Emitters\SimpleAST\AsTypeReference.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\ByRefReference.cs">
       <Link>Generators\Emitters\SimpleAST\ByRefReference.cs</Link>
@@ -176,6 +225,9 @@
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\ConvertExpression.cs">
       <Link>Generators\Emitters\SimpleAST\ConvertExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\DefaultValueExpression.cs">
+      <Link>Generators\Emitters\SimpleAST\DefaultValueExpression.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\Expression.cs">
       <Link>Generators\Emitters\SimpleAST\Expression.cs</Link>
@@ -218,6 +270,9 @@
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\NopStatement.cs">
       <Link>Generators\Emitters\SimpleAST\NopStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\NullCoalescingOperatorExpression.cs">
+      <Link>Generators\Emitters\SimpleAST\NullCoalescingOperatorExpression.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\Emitters\SimpleAST\NullExpression.cs">
       <Link>Generators\Emitters\SimpleAST\NullExpression.cs</Link>
@@ -267,6 +322,12 @@
     <Compile Include="..\Castle.DynamicProxy\Generators\GeneratorException.cs">
       <Link>Generators\GeneratorException.cs</Link>
     </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\GeneratorUtil.cs">
+      <Link>Generators\GeneratorUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\InterfaceInvocationTypeGenerator.cs">
+      <Link>Generators\InterfaceInvocationTypeGenerator.cs</Link>
+    </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\InterfaceProxyWithoutTargetGenerator.cs">
       <Link>Generators\InterfaceProxyWithoutTargetGenerator.cs</Link>
     </Compile>
@@ -281,6 +342,9 @@
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\IGenerator.cs">
       <Link>Generators\IGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\InvocationTypeGenerator.cs">
+      <Link>Generators\InvocationTypeGenerator.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\MethodFinder.cs">
       <Link>Generators\MethodFinder.cs</Link>
@@ -305,6 +369,12 @@
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\MethodGenerator.cs">
       <Link>Generators\MethodGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\MethodWithInvocationGenerator.cs">
+      <Link>Generators\MethodWithInvocationGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Generators\NamingScope.cs">
+      <Link>Generators\NamingScope.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Generators\TypeElementCollection.cs">
       <Link>Generators\TypeElementCollection.cs</Link>
@@ -335,6 +405,18 @@
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Contributors\MinimialisticMethodGenerator.cs">
       <Link>Contributors\MinimialisticMethodGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\InheritanceInvocation.cs">
+      <Link>InheritanceInvocation.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\InvocationHelper.cs">
+      <Link>InvocationHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Tokens\InvocationMethods.cs">
+      <Link>Tokens\InvocationMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.DynamicProxy\Tokens\TypeBuilderMethods.cs">
+      <Link>Tokens\TypeBuilderMethods.cs</Link>
     </Compile>
     <Compile Include="..\Castle.DynamicProxy\Tokens\TypeMethods.cs">
       <Link>Tokens\TypeMethods.cs</Link>
@@ -380,9 +462,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\CastleKey.snk">
-      <Link>CastleKey.snk</Link>
-    </None>
     <EmbeddedResource Include="..\Castle.DynamicProxy\DynProxy.snk">
       <Link>DynProxy.snk</Link>
     </EmbeddedResource>
@@ -428,7 +507,7 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" Condition="" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
