@@ -24,7 +24,8 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Xml.XPath;
 
 	public class XPathAdapter : DictionaryBehaviorAttribute, IDictionaryInitializer,
-								IDictionaryPropertyGetter, IDictionaryPropertySetter
+								IDictionaryPropertyGetter, IDictionaryPropertySetter,
+								IDictionaryCreateStrategy
 								
 	{
 		private readonly XPathContext context;
@@ -64,6 +65,8 @@ namespace Castle.Components.DictionaryAdapter
 					"Interface {0} requested xpath support, but was not configured properly.  " +
 					"Did you forget to add an XPathBehavior?", meta.Type.FullName));
 			}
+
+			dictionaryAdapter.This.CreateStrategy = this;
 
 			context.ApplyBehaviors(behaviors);
 
@@ -135,6 +138,15 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			return false;
+		}
+
+		object IDictionaryCreateStrategy.Create(IDictionaryAdapter adapter, Type type, IDictionary dictionary)
+		{
+			dictionary = dictionary ?? new Hashtable();
+			var descriptor = new DictionaryDescriptor();
+			adapter.This.Descriptor.CopyBehaviors(descriptor, b => b is XPathAdapter == false);
+			descriptor.AddBehavior(this).AddBehavior(new XPathAdapter(new XmlDocument()));
+			return adapter.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 
 		#endregion

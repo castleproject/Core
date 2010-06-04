@@ -175,9 +175,9 @@ namespace Castle.Components.DictionaryAdapter
 				return false;
 			}
 
-			if (Meta.EqualityHashCodeStrategy != null)
+			if (This.EqualityHashCodeStrategy != null)
 			{
-				return Meta.EqualityHashCodeStrategy.Equals(this, other);
+				return This.EqualityHashCodeStrategy.Equals(this, other);
 			}
 
 			return base.Equals(obj);
@@ -191,8 +191,8 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			int hashCode;
-			if (Meta.EqualityHashCodeStrategy == null ||
-				Meta.EqualityHashCodeStrategy.GetHashCode(this, out hashCode) == false)
+			if (This.EqualityHashCodeStrategy == null ||
+				This.EqualityHashCodeStrategy.GetHashCode(this, out hashCode) == false)
 			{
 				hashCode = base.GetHashCode();
 			}

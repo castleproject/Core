@@ -49,10 +49,6 @@ namespace Castle.Components.DictionaryAdapter
 
 		public IDictionary<String, PropertyDescriptor> Properties { get; private set; }
 
-		public IDictionaryEqualityHashCodeStrategy EqualityHashCodeStrategy { get; set; }
-
-		public IDictionaryCreateStrategy CreateStrategy { get; set; }
-
 		public IDictionary ExtendedProperties
 		{
 			get

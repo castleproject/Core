@@ -14,12 +14,12 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-	public class IdEqualityHashCodeStrategy : DictionaryBehaviorAttribute, IDictionaryMetaInitializer,
+	public class IdEqualityHashCodeStrategy : DictionaryBehaviorAttribute, IDictionaryInitializer,
 											  IDictionaryEqualityHashCodeStrategy
 	{
-		public void Initialize(IDictionaryAdapterFactory factory, DictionaryAdapterMeta dictionaryMeta)
+		public void Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
 		{
-			dictionaryMeta.EqualityHashCodeStrategy = this;
+			dictionaryAdapter.This.EqualityHashCodeStrategy = this;
 		}
 
 		public bool Equals(IDictionaryAdapter adapter1, IDictionaryAdapter adapter2)

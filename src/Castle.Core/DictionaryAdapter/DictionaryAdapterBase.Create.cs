@@ -37,9 +37,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		public object Create(Type type, IDictionary dictionary)
 		{
-			if (Meta.CreateStrategy != null)
+			if (This.CreateStrategy != null)
 			{
-				return Meta.CreateStrategy.Create(this, type, dictionary);
+				return This.CreateStrategy.Create(this, type, dictionary);
 			}
 			else
 			{
