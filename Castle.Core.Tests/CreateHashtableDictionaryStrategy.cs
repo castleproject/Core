@@ -12,16 +12,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-using System.Collections;
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-	public class CreateHashtableStrategy : DictionaryBehaviorAttribute, IDictionaryMetaInitializer,
+	using System.Collections;
+
+	public class CreateHashtableStrategy : DictionaryBehaviorAttribute, IDictionaryInitializer,
 										   IDictionaryCreateStrategy
 	{
-		public void Initialize(IDictionaryAdapterFactory factory, DictionaryAdapterMeta dictionaryMeta)
+		public void Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
 		{
-			dictionaryMeta.CreateStrategy = this;
+			dictionaryAdapter.This.CreateStrategy = this;
 		}
 
 		object IDictionaryCreateStrategy.Create(IDictionaryAdapter adapter, Type type, IDictionary dictionary)

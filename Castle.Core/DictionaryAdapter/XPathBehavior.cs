@@ -20,7 +20,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Xml;
 	using System.Xml.Serialization;
 
-	public class XPathBehavior : DictionaryBehaviorAttribute, IDictionaryMetaInitializer, IDictionaryCreateStrategy
+	public class XPathBehavior : DictionaryBehaviorAttribute, IDictionaryMetaInitializer
 	{
 		public static readonly XPathBehavior Instance = new XPathBehavior();
 
@@ -31,8 +31,6 @@ namespace Castle.Components.DictionaryAdapter
 			XmlTypeAttribute xmlType = null;
 			XmlRootAttribute xmlRoot = null;
 			List<Type> xmlIncludes = null;
-
-			dictionaryMeta.CreateStrategy = this;
 
 			new BehaviorVisitor()
 				.OfType<XmlTypeAttribute>(attrib =>
@@ -74,15 +72,6 @@ namespace Castle.Components.DictionaryAdapter
 				xmlType.Namespace = defaultNamespace;
 
 			dictionaryMeta.SetXmlMeta(new XmlMetadata(type, xmlType, xmlRoot, xmlIncludes));
-		}
-
-		object IDictionaryCreateStrategy.Create(IDictionaryAdapter adapter, Type type, IDictionary dictionary)
-		{
-			dictionary = dictionary ?? new Hashtable();
-			var descriptor = new DictionaryDescriptor();
-			adapter.This.Descriptor.CopyBehaviors(descriptor, b => b is XPathAdapter == false);
-			descriptor.AddBehavior(this).AddBehavior(new XPathAdapter(new XmlDocument()));
-			return adapter.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 	}
 

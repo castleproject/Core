@@ -37,6 +37,10 @@ namespace Castle.Components.DictionaryAdapter
 
 		public IDictionaryAdapterFactory Factory { get; private set; }
 
+		public IDictionaryEqualityHashCodeStrategy EqualityHashCodeStrategy { get; set; }
+
+		public IDictionaryCreateStrategy CreateStrategy { get; set; }
+
 		public IDictionary ExtendedProperties
 		{
 			get
