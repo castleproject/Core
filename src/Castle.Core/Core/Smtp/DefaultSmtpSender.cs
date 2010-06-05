@@ -135,13 +135,12 @@ namespace Castle.Core.Smtp
 
 				Guid msgGuid = new Guid();
 				SendCompletedEventHandler sceh = null;
-				SendCompletedEventHandler handler = sceh;
 				sceh = delegate(object sender, AsyncCompletedEventArgs e)
 				{
 					if (msgGuid == (Guid)e.UserState)
 						message.Dispose();
 					// The handler itself, cannot be null, test omitted
-					smtpClient.SendCompleted -= handler;
+					smtpClient.SendCompleted -= sceh;
 				};
 				smtpClient.SendCompleted += sceh;
 				smtpClient.SendAsync(message, msgGuid);
@@ -237,8 +236,15 @@ namespace Castle.Core.Smtp
 		{
 			get
 			{
-				return SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.UnmanagedCode));
-			}
+#if NET35
+                return SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.UnmanagedCode));
+#else
+			    var permission = new PermissionSet(PermissionState.None);
+                permission.AddPermission(new SecurityPermission(SecurityPermissionFlag.UnmanagedCode));
+
+                return permission.IsSubsetOf(AppDomain.CurrentDomain.PermissionSet);
+#endif
+            }
 		}
 	}
 	#endif

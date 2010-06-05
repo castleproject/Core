@@ -1,5 +1,6 @@
 unreleased changes
 ==================
+- added support for .NET 4 and Silverlight 4, updated solution to VisualStudio 2010
 - Removed obsolete overload of CreateClassProxy
 - Added class proxy with taget
 - Added ability to intercept explicitly implemented generic interface methods on class proxy.

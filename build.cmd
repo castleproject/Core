@@ -14,6 +14,8 @@ REM See the License for the specific language governing permissions and
 REM limitations under the License.
 REM ****************************************************************************
 
-if "%~1"=="" build /t:RunAllTests /p:Configuration=Debug
+IF "%1" == "" (SET Framework=NET40) ELSE (SET Framework=%1)
+IF "%2" == "" (SET Target=RunAllTests) ELSE (SET Target=%2)
+IF "%3" == "" (SET SolutionName=Castle.Core) ELSE (SET SolutionName=%3)
 
-@call buildscripts\build.cmd %*
+@call buildscripts\build.cmd %Framework% %Target% %SolutionName%
