@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.DynamicProxy.Tests.Classes;
+
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -113,7 +115,12 @@ namespace Castle.DynamicProxy.Tests
 			var options = new ProxyGenerationOptions();
 			options.BaseTypeForInterfaceProxy = typeof (SimpleClass);
 			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof (IService), Type.EmptyTypes, options);
+
+#if(!SILVERLIGHT)
 			Assert.NotNull(proxy as SimpleClass);
+#else
+            Assert.IsNotNull(proxy as SimpleClass);
+#endif
 		}
 
 		[Test]
