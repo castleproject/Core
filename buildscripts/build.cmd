@@ -51,6 +51,7 @@ echo Framework version is: %FrameworkVersion%
 echo Build Configuration Key: %BuildConfigKey%
 echo Defined Constant: %BuildConstant%
 echo Build Target is: %BuildTarget%
+echo Build Framework is: %BuildFramework%
 echo Building solution: %SolutionName%
 
 REM Always uses the MSBuild 4.0
