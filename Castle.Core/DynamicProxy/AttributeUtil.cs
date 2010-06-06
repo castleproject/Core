@@ -61,11 +61,12 @@ namespace Castle.DynamicProxy
 			GetSettersAndFields(attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
 
 			return new CustomAttributeBuilder(attribute.Constructor,
-			                                  GetCtorArguments(attribute.ConstructorArguments),
-			                                  properties,
-			                                  propertyValues,
-			                                  fields,
-			                                  fieldValues);
+				                                GetCtorArguments(attribute.ConstructorArguments),
+				                                properties,
+				                                propertyValues,
+				                                fields,
+				                                fieldValues);
+
 		}
 
 		private static object[] GetCtorArguments(IList<CustomAttributeTypedArgument> constructorArguments)
@@ -131,15 +132,28 @@ namespace Castle.DynamicProxy
 #if SILVERLIGHT
 				attribute.GetType();
 #else
-				attribute.Constructor.DeclaringType;
+					attribute.Constructor.DeclaringType;
 #endif
 				if (ShouldSkipAttributeReplication(attributeType)) continue;
 
-				var builder = CreateBuilder(attribute
+				CustomAttributeBuilder builder;
+				try
+				{
+					builder = CreateBuilder(attribute
 #if SILVERLIGHT
 					as Attribute
 #endif
-					);
+						);
+				}
+				catch (ArgumentException e)
+				{
+					string message =
+						string.Format(
+							"Due to limitations in CLR, DynamicProxy was unable to successfully replicate non-inheritable attribute {0} on {1}{2}. To avoid this error you can chose not to replicate this attribute type by calling '{3}.Add(typeof({0}))'.",
+							attributeType.FullName, member.ReflectedType.FullName, (member is Type) ? "" : ("." + member.Name), typeof(AttributesToAvoidReplicating).FullName);
+					throw new ProxyGenerationException(message, e);
+
+				}
 				if (builder != null)
 				{
 					yield return builder;
