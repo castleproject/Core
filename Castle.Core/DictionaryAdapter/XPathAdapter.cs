@@ -145,7 +145,7 @@ namespace Castle.Components.DictionaryAdapter
 			dictionary = dictionary ?? new Hashtable();
 			var descriptor = new DictionaryDescriptor();
 			adapter.This.Descriptor.CopyBehaviors(descriptor, b => b is XPathAdapter == false);
-			descriptor.AddBehavior(this).AddBehavior(new XPathAdapter(new XmlDocument()));
+			descriptor.AddBehavior(XPathBehavior.Instance).AddBehavior(new XPathAdapter(new XmlDocument()));
 			return adapter.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 
