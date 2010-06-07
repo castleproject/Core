@@ -1396,7 +1396,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
 				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
-				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable());
+				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
+				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 			Assert.AreEqual(container1, container1);
 			Assert.AreNotEqual(container1, container2);
 
@@ -1414,7 +1415,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
 				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
-				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable());
+				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
+				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 
 			container1.Id = Guid.NewGuid();
 			container2.Id = container1.Id;
@@ -1428,7 +1430,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
 				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
-				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable());
+				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
+				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 			Assert.AreNotEqual(container1.GetHashCode(), container2.GetHashCode());
 			container1.Id = Guid.NewGuid();
 			container2.Id = container1.Id;
