@@ -31,18 +31,18 @@ limitations under the License.
 	</PropertyGroup>
 
 
-	<!-- .NET 3.5 (default) -->
-	<PropertyGroup Condition="$(BuildConfigKey)=='' or $(BuildConfigKey)=='NET35'">
-		<BuildConstants>NET35</BuildConstants>
-		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-		<FrameworkId>NET35</FrameworkId>
-	</PropertyGroup>
-
-	<!-- .NET 4.0 -->
-	<PropertyGroup Condition="$(BuildConfigKey)=='NET40'">
-		<BuildConstants>NET40</BuildConstants>
+	<!-- .NET 4.0 (default) -->
+	<PropertyGroup Condition="$(BuildConfigKey)=='' or $(BuildConfigKey)=='NET40'">
+		<BuildConstants>DOTNET40</BuildConstants>
 		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 		<FrameworkId>$(BuildConfigKey)</FrameworkId>
+	</PropertyGroup>
+
+	<!-- .NET 3.5 -->
+	<PropertyGroup Condition="$(BuildConfigKey)=='NET35'">
+		<BuildConstants>DOTNET35</BuildConstants>
+		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+		<FrameworkId>NET35</FrameworkId>
 	</PropertyGroup>
 
 	<!--Silverlight 3.0 runtime-->
