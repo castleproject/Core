@@ -2,6 +2,6 @@
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
-		<SolutionPath>$(RootPath)/Castle.Core-SL-vs2008.sln</SolutionPath>
+		<SolutionPath>$(RootPath)/Castle.Core-SL-vs2010.sln</SolutionPath>
 	</PropertyGroup>
 </Project>
