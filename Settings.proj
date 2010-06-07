@@ -53,7 +53,7 @@ limitations under the License.
 	<!-- Import Silverlight specific settings -->
 	<Import
 		Project="$(RootPath)\Settings-SL.proj"
-		Condition="'$(BuildFramework)' == 'SL3' and Exists('$(RootPath)\Settings-SL.proj')"
+		Condition="('$(BuildConfigKey)' == 'SL3' or '$(BuildConfigKey)' == 'SL4') and Exists('$(RootPath)\Settings-SL.proj')"
 		/>
 
 </Project>
