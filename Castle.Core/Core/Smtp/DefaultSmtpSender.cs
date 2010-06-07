@@ -236,7 +236,7 @@ namespace Castle.Core.Smtp
 		{
 			get
 			{
-#if NET35
+#if DOTNET35
                 return SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.UnmanagedCode));
 #else
 			    var permission = new PermissionSet(PermissionState.None);
