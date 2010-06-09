@@ -26,13 +26,13 @@ limitations under the License.
 		Overridables properties
 	-->
 	<PropertyGroup>
-		<BuildConfigKey></BuildConfigKey>
-		<Configuration>Release</Configuration>
+		<BuildConfigKey Condition="$(BuildConfigKey)==''">NET40</BuildConfigKey>
+		<Configuration Condition="$(Configuration)==''">Release</Configuration>
 	</PropertyGroup>
 
 
 	<!-- .NET 4.0 (default) -->
-	<PropertyGroup Condition="$(BuildConfigKey)=='' or $(BuildConfigKey)=='NET40'">
+	<PropertyGroup Condition="$(BuildConfigKey)=='NET40'">
 		<BuildConstants>DOTNET40</BuildConstants>
 		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 	</PropertyGroup>
