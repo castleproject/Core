@@ -80,7 +80,6 @@ namespace Castle.Core.Tests
 			}
 		}
 
-#if DOTNET35
 		[Test]
 		public void EnumeratorIteration()
 		{
@@ -96,8 +95,6 @@ namespace Castle.Core.Tests
 				Assert.IsNotNull(enumerator.Value);
 			}
 		}
-#endif
-
 
 		public class Customer
 		{
