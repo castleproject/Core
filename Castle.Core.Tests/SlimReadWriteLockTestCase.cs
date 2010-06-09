@@ -6,7 +6,7 @@ namespace Castle.Core.Tests
 
 	using NUnit.Framework;
 	
-#if DOTNET35 && !SILVERLIGHT
+#if !SILVERLIGHT
 	[TestFixture]
 	public class SlimReadWriteLockTestCase
 	{

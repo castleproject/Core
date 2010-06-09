@@ -16,7 +16,7 @@ namespace Castle.Core.Internal
 {
 	using System.Threading;
 
-#if DOTNET35 && !SILVERLIGHT
+#if !SILVERLIGHT
 	internal class SlimWriteLockHolder : ILockHolder
 	{
 		private readonly ReaderWriterLockSlim locker;

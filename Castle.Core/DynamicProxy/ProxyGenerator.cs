@@ -57,15 +57,15 @@ namespace Castle.DynamicProxy
 #if !SILVERLIGHT
 	    private bool HasSecurityPermission()
 		{
-#if DOTNET35
-			return SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy));
-#else
-	        var permission = new PermissionSet(PermissionState.None);
-	        permission.AddPermission(new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy));
+#if DOTNET40
+			var permission = new PermissionSet(PermissionState.None);
+			permission.AddPermission(new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy));
 
-	        return AppDomain.CurrentDomain.PermissionSet.IsSubsetOf(permission);
+			return AppDomain.CurrentDomain.PermissionSet.IsSubsetOf(permission);
+#else
+			return SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy));
 #endif
-	    }
+		}
 #endif
 
 	    /// <summary>
