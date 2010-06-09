@@ -35,21 +35,18 @@ limitations under the License.
 	<PropertyGroup Condition="$(BuildConfigKey)=='' or $(BuildConfigKey)=='NET40'">
 		<BuildConstants>DOTNET40</BuildConstants>
 		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-		<FrameworkId>$(BuildConfigKey)</FrameworkId>
 	</PropertyGroup>
 
 	<!-- .NET 3.5 -->
 	<PropertyGroup Condition="$(BuildConfigKey)=='NET35'">
 		<BuildConstants>DOTNET35</BuildConstants>
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-		<FrameworkId>NET35</FrameworkId>
 	</PropertyGroup>
 
 	<!--Silverlight 3.0 runtime-->
 	<PropertyGroup Condition="$(BuildConfigKey)=='SL3'">
 		<BuildConstants>SILVERLIGHT</BuildConstants>
 		<MSBuildTargets>Silverlight 3.0</MSBuildTargets>
-		<FrameworkId>$(BuildConfigKey)</FrameworkId>
 		<TestRunner_Enabled>False</TestRunner_Enabled>
 		<TargetFrameworkVersion>3.0</TargetFrameworkVersion>
 	</PropertyGroup>
@@ -58,7 +55,6 @@ limitations under the License.
 	<PropertyGroup Condition="$(BuildConfigKey)=='SL4'">
 		<BuildConstants>SILVERLIGHT</BuildConstants>
 		<MSBuildTargets>Silverlight 4.0</MSBuildTargets>
-		<FrameworkId>$(BuildConfigKey)</FrameworkId>
 		<TestRunner_Enabled>False</TestRunner_Enabled>
 		<TargetFrameworkVersion>4.0</TargetFrameworkVersion>
 	</PropertyGroup>
@@ -67,7 +63,7 @@ limitations under the License.
 	<PropertyGroup>
 		<TargetFrameworkIdentifier Condition="'$(TargetFrameworkIdentifier)' ==''">.NETFramework</TargetFrameworkIdentifier> <!-- MSBuild 4.0 defines this -->
 		<BuildPath Condition="$(BuildPath)==''">$(RootPath)/build</BuildPath>
-		<OutputPath Condition="'$(OutputPath)' == ''">$(BuildPath)/$(FrameworkId)/$(Configuration)</OutputPath>
+		<OutputPath Condition="'$(OutputPath)' == ''">$(BuildPath)/$(BuildConfigKey)/$(Configuration)</OutputPath>
 		<OutputType Condition="'$(OutputType)' == ''">Library</OutputType>
 		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)/buildscripts</BuildScriptsPath>
 		<ToolsPath Condition="'$(ToolsPath)' == ''">$(RootPath)/tools</ToolsPath>
