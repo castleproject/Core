@@ -14,7 +14,7 @@
 
 namespace Castle.Core.Logging
 {
-	#if !SILVERLIGHT
+	#if !SILVERLIGHT && !CLIENTPROFILE
 	using System;
 
 	[Serializable]
