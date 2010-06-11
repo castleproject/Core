@@ -54,12 +54,26 @@ limitations under the License.
 		Name="BuildProject"
 		>
 
-		<MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="Configuration=$(Configuration);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)">
+		<MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion);TargetFrameworkProfile=$(TargetFrameworkProfile)">
 
-			<Output TaskParameter="TargetOutputs" ItemName="AppAssemblies" />
+			<Output TaskParameter="TargetOutputs" ItemName="AllBinaries" />
 		
 		</MSBuild>
 		
+		<PropertyGroup>
+			<TestDetectionExpression>.[\.]((Integration|Unit)?Test[s]{0,1}?)</TestDetectionExpression>
+		</PropertyGroup>
+
+		<!-- Resolve test projects -->
+		<RegexMatch Input="@(AllBinaries)" Expression="$(TestDetectionExpression)">
+			<Output TaskParameter="Output" ItemName="TestBinaries" />
+		</RegexMatch>
+
+		<!-- Resolve the libraries code projects -->
+		<ItemGroup>
+			<AppAssemblies Include="@(AllBinaries)" Exclude="@(TestBinaries)" />
+		</ItemGroup>
+
 		<!-- Pick up the PDB files. This is kind of hard coded to the location of the AppAssemblies, but I currently don't see another way  -->
 		<ItemGroup>
 			<PdbFiles
@@ -77,10 +91,16 @@ limitations under the License.
 
 	
 	<Target Name="RebuildAll" DependsOnTargets="CleanAll;BuildProject" />
+	<Target Name="ClickToBuild" DependsOnTargets="RebuildAll;_SetPackageDir;_PreparePackage" />
 
-	
+	<Target Name="_SetPackageDir">
+		<PropertyGroup>
+			<PackageDir>$(OutputPath)</PackageDir>
+		</PropertyGroup>
+	</Target>
+
 	<Target Name="CleanProject">
-		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
+		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
 
 		<CreateItem Include="**/Debug/**/*.*;**/Release/**/*.*">
 			<Output ItemName="_binaryFiles" TaskParameter="Include"/>
@@ -91,7 +111,7 @@ limitations under the License.
 
 
 	<Target Name="CleanAll">
-		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
+		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
 
 		<CreateItem Include="**/Debug/**/*.*;**/Release/**/*.*">
 			<Output ItemName="_binaryFiles" TaskParameter="Include"/>

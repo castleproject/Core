@@ -17,9 +17,13 @@ REM ****************************************************************************
 IF NOT EXIST %~dp0..\Settings.proj GOTO msbuild_not_configured
 
 REM Set Framework version based on passed in parameter
-IF "%1" == "" SET FrameworkVersion=v4.0.30319
-IF "%1" == "NET40" (SET FrameworkVersion=v4.0.30319)
+IF "%1" == "" SET FrameworkVersion=v4.0
+
+IF "%1" == "NET40" (SET FrameworkVersion=v4.0)
 IF "%1" == "NET40" (SET BuildConfigKey=NET40)
+
+IF "%1" == "NET40CP" (SET FrameworkVersion=v4.0)
+IF "%1" == "NET40CP" (SET BuildConfigKey=NET40CP)
 
 IF "%1" == "NET35" (SET FrameworkVersion=v3.5)
 IF "%1" == "NET35" (SET BuildConfigKey=NET35)
@@ -33,20 +37,20 @@ IF "%1" == "SL4" (SET BuildConfigKey=SL4)
 REM Set the build target, if not specified set it to "Package" target.
 IF "%2" == "" (SET BuildTarget=RunAllTests) ELSE (SET BuildTarget=%2)
 
-REM Set solution name to handle build for .NET / Silverlight
-IF "%3" == "" (SET SolutionName=Castle.Core) ELSE (SET SolutionName=%3)
+REM Set the build configuration
+IF "%3" == "" (SET BuildConfiguration=Release) ELSE (SET BuildConfiguration=%3)
 
 REM Write variables to console
 echo Framework version is: %FrameworkVersion%
 echo Build Target is: %BuildTarget%
-echo Building solution: %SolutionName%
+echo Building configuration: %BuildConfiguration%
 
 REM Always uses the MSBuild 4.0
 SET __MSBUILD_EXE__=%windir%\microsoft.net\framework\v4.0.30319\msbuild.exe
 
 REM Call the MSBuild to build the project
 @echo on
-%__MSBUILD_EXE__% /m "%~dp0Build.proj" /property:SolutionName=%SolutionName% /property:BuildConfigKey=%BuildConfigKey% /p:TargetFrameworkVersion=%FrameworkVersion% /ToolsVersion:4.0 /t:%BuildTarget% /property:Configuration=Release
+%__MSBUILD_EXE__% /m "%~dp0Build.proj" /property:BuildConfigKey=%BuildConfigKey% /p:TargetFrameworkVersion=%FrameworkVersion% /ToolsVersion:4.0  /property:Configuration=%BuildConfiguration% /t:%BuildTarget%
 @echo off
 
 IF %ERRORLEVEL% NEQ 0 GOTO err
