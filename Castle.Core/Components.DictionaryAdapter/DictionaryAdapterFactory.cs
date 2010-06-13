@@ -17,7 +17,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-#if! SILVERLIGHT
+#if !SILVERLIGHT
 	using System.Collections.Specialized;
 #endif
 	using System.ComponentModel;
@@ -26,7 +26,9 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Reflection.Emit;
 	using System.Text;
 	using System.Threading;
+#if !SILVERLIGHT
 	using System.Xml.XPath;
+#endif
 	using System.Diagnostics;
 
 	/// <summary>
@@ -35,8 +37,8 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public class DictionaryAdapterFactory : IDictionaryAdapterFactory
 	{
-		private readonly Dictionary<Type, Type> InterfaceToAdapter = new Dictionary<Type, Type>();
-		private readonly object TypesDictionaryLocker = new object();
+		private readonly Dictionary<Type, Type> interfaceToAdapter = new Dictionary<Type, Type>();
+		private readonly object typesDictionaryLocker = new object();
 
 		#region IDictionaryAdapterFactory
 
@@ -115,18 +117,18 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			Type adapterType;
-			if (InterfaceToAdapter.TryGetValue(type, out adapterType) == false)
+			if (interfaceToAdapter.TryGetValue(type, out adapterType) == false)
 			{
-				lock (TypesDictionaryLocker)
+				lock (typesDictionaryLocker)
 				{
-					if (InterfaceToAdapter.TryGetValue(type, out adapterType) == false)
+					if (interfaceToAdapter.TryGetValue(type, out adapterType) == false)
 					{
 						var appDomain = Thread.GetDomain();
 						var adapterAssemblyName = GetAdapterAssemblyName(type);
 						var typeBuilder = CreateTypeBuilder(type, appDomain, adapterAssemblyName);
 						var adapterAssembly = CreateAdapterAssembly(type, typeBuilder, descriptor);
 						adapterType = CreateAdapterType(type, adapterAssembly);
-						InterfaceToAdapter[type] = adapterType;
+						interfaceToAdapter[type] = adapterType;
 					}
 				}
 			}
