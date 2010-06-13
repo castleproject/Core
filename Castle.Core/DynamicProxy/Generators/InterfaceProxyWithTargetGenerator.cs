@@ -16,11 +16,12 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
-#if !SILVERLIGHT
 	using System.Linq;
 	using System.Reflection;
+#if !SILVERLIGHT
 	using System.Xml.Serialization;
 #endif
+
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;

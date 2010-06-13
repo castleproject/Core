@@ -166,9 +166,8 @@ namespace Castle.DynamicProxy
 			Debug.Assert(parameter != null, "parameter != null");
 			var attributes =
 #if SILVERLIGHT
-				member.GetCustomAttributes(false);
+				parameter.GetCustomAttributes(false);
 #else
-
 				CustomAttributeData.GetCustomAttributes(parameter);
 #endif
 
