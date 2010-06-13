@@ -237,10 +237,11 @@ namespace Castle.DynamicProxy
 			get
 			{
 				string directory = Path.GetDirectoryName(weakModulePath);
-				if (directory == "")
+				if (directory == string.Empty)
+				{
 					return null;
-				else
-					return directory;
+				}
+				return directory;
 			}
 		}
 
@@ -252,9 +253,11 @@ namespace Castle.DynamicProxy
 		public ModuleBuilder ObtainDynamicModule(bool isStrongNamed)
 		{
 			if (isStrongNamed)
+			{
 				return ObtainDynamicModuleWithStrongName();
-			else
-				return ObtainDynamicModuleWithWeakName();
+			}
+
+			return ObtainDynamicModuleWithWeakName();
 		}
 
 		/// <summary>
@@ -296,9 +299,7 @@ namespace Castle.DynamicProxy
 			var moduleName = signStrongName ? StrongNamedModuleName : WeakNamedModuleName;
 			var moduleDirectory = signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory;
 
-#if SILVERLIGHT
-#warning What to do?
-#else
+#if !SILVERLIGHT
 			if (savePhysicalAssembly)
 			{
 				AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
@@ -321,44 +322,25 @@ namespace Castle.DynamicProxy
 
 		private AssemblyName GetAssemblyName(bool signStrongName)
 		{
-			AssemblyName assemblyName = new AssemblyName();
-			assemblyName.Name = signStrongName ? strongAssemblyName : weakAssemblyName;
+			var assemblyName = new AssemblyName
+			                   	{
+			                   		Name = signStrongName ? strongAssemblyName : weakAssemblyName
+			                   	};
 
+#if !SILVERLIGHT
 			if (signStrongName)
 			{
 				byte[] keyPairStream = GetKeyPair();
 				if (keyPairStream != null)
 				{
-#if SILVERLIGHT
-#warning Not sure how to sign an assembly given the byte[]???
-					#region This isn't working (or appearing to be working correctly???)
-					//I pulled the below from the following article
-					//http://www.c-sharpcorner.com/UploadFile/shashijeevan/PublicKeyTokenGenerato08302005015104AM/PublicKeyTokenGenerato.aspx
-
-					//System.Security.Cryptography.SHA1Managed sha1Algo = new System.Security.Cryptography.SHA1Managed();
-					//byte[] hash = sha1Algo.ComputeHash(keyPairStream);
-
-					//byte[] publicKeyToken = new byte[8];
-					////Extracting the last 8 bytes from the Hash 
-					//Array.Copy(hash, hash.Length - publicKeyToken.Length, publicKeyToken, 0, publicKeyToken.Length);
-					////Reversing the extracted bytes 
-					//Array.Reverse(publicKeyToken, 0, publicKeyToken.Length);
-
-					#endregion
-
-					//assemblyName.SetPublicKey(keyPairStream);
-					//assemblyName.SetPublicKeyToken(publicKeyToken);
-#else
 					assemblyName.KeyPair = new StrongNameKeyPair(keyPairStream);
-#endif
 				}
 			}
+#endif
 			return assemblyName;
 		}
 
-#if SILVERLIGHT
-#warning How and where would you save this in silverlight?
-#else
+#if !SILVERLIGHT
 		/// <summary>
 		/// Saves the generated assembly with the name and directory information given when this <see cref="ModuleScope"/> instance was created (or with
 		/// the <see cref="DEFAULT_FILE_NAME"/> and current directory if none was given).
@@ -381,12 +363,14 @@ namespace Castle.DynamicProxy
 
 			if (StrongNamedModule != null && WeakNamedModule != null)
 				throw new InvalidOperationException("Both a strong-named and a weak-named assembly have been generated.");
-			else if (StrongNamedModule != null)
+
+			if (StrongNamedModule != null)
 				return SaveAssembly(true);
-			else if (WeakNamedModule != null)
+
+			if (WeakNamedModule != null)
 				return SaveAssembly(false);
-			else
-				return null;
+
+			return null;
 		}
 
 		/// <summary>
@@ -419,28 +403,28 @@ namespace Castle.DynamicProxy
 			if (strongNamed)
 			{
 				if (StrongNamedModule == null)
-					throw new InvalidOperationException("No strong-named assembly has been generated.");
-				else
 				{
-					assemblyBuilder = (AssemblyBuilder)StrongNamedModule.Assembly;
-					assemblyFileName = StrongNamedModuleName;
-					assemblyFilePath = StrongNamedModule.FullyQualifiedName;
+					throw new InvalidOperationException("No strong-named assembly has been generated.");
 				}
+				assemblyBuilder = (AssemblyBuilder)StrongNamedModule.Assembly;
+				assemblyFileName = StrongNamedModuleName;
+				assemblyFilePath = StrongNamedModule.FullyQualifiedName;
 			}
 			else
 			{
 				if (WeakNamedModule == null)
-					throw new InvalidOperationException("No weak-named assembly has been generated.");
-				else
 				{
-					assemblyBuilder = (AssemblyBuilder)WeakNamedModule.Assembly;
-					assemblyFileName = WeakNamedModuleName;
-					assemblyFilePath = WeakNamedModule.FullyQualifiedName;
+					throw new InvalidOperationException("No weak-named assembly has been generated.");
 				}
+				assemblyBuilder = (AssemblyBuilder)WeakNamedModule.Assembly;
+				assemblyFileName = WeakNamedModuleName;
+				assemblyFilePath = WeakNamedModule.FullyQualifiedName;
 			}
 
 			if (File.Exists(assemblyFilePath))
+			{
 				File.Delete(assemblyFilePath);
+			}
 
 			AddCacheMappings(assemblyBuilder);
 			assemblyBuilder.Save(assemblyFileName);
@@ -448,9 +432,7 @@ namespace Castle.DynamicProxy
 		}
 #endif
 
-#if SILVERLIGHT
-#warning What to do?
-#else
+#if !SILVERLIGHT
 		private void AddCacheMappings(AssemblyBuilder builder)
 		{
 			Dictionary<CacheKey, string> mappings;
@@ -468,9 +450,7 @@ namespace Castle.DynamicProxy
 		}
 #endif
 
-#if SILVERLIGHT
-#warning What to do?
-#else
+#if !SILVERLIGHT
 		/// <summary>
 		/// Loads the generated types from the given assembly into this <see cref="ModuleScope"/>'s cache.
 		/// </summary>

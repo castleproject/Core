@@ -322,9 +322,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void AddMappingForISerializable(IDictionary<Type, ITypeContributor> typeImplementerMapping, ITypeContributor instance)
 		{
-#if SILVERLIGHT
-#warning What to do?
-#else
+#if !SILVERLIGHT
 			AddMapping(typeof(ISerializable), instance, typeImplementerMapping);
 #endif
 		}

@@ -21,8 +21,8 @@ namespace Castle.Core.Smtp
 	using System.ComponentModel;
 	using System.Net;
 	using System.Net.Mail;
-	using System.Security;
 	using System.Security.Permissions;
+	using Castle.Core.Internal;
 
 	/// <summary>
 	/// Default <see cref="IEmailSender"/> implementation.
@@ -236,14 +236,7 @@ namespace Castle.Core.Smtp
 		{
 			get
 			{
-#if DOTNET40
-				var permission = new PermissionSet(PermissionState.None);
-				permission.AddPermission(new SecurityPermission(SecurityPermissionFlag.UnmanagedCode));
-
-				return permission.IsSubsetOf(AppDomain.CurrentDomain.PermissionSet);
-#else
-                return SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.UnmanagedCode));
-#endif
+				return new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).IsGranted();
 			}
 		}
 	}

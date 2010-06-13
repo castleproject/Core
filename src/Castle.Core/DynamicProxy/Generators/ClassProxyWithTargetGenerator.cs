@@ -238,12 +238,7 @@ namespace Castle.DynamicProxy.Generators
 		private FieldReference CreateTargetField(ClassEmitter emitter)
 		{
 			var targetField = emitter.CreateField("__target", targetType);
-
-#if SILVERLIGHT
-#warning XmlIncludeAttribute is in silverlight, do we want to explore this?
-#else
 			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(targetField);
-#endif
 			return targetField;
 		}
 	}
