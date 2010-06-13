@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+#if !SILVERLIGHT
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
@@ -91,4 +92,5 @@ namespace Castle.Components.DictionaryAdapter
 			CancelEdit();
 		}
 	}
+#endif
 }
