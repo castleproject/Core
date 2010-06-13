@@ -207,3 +207,13 @@ namespace System.ComponentModel
 	}
 }
 #endif
+#if SL3
+namespace System.ComponentModel
+{
+	public interface IDataErrorInfo
+	{
+		string this[string columnName] { get; }
+		string Error { get; }
+	}
+}
+#endif
