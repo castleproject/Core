@@ -481,12 +481,22 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private static readonly HashSet<Type> InfrastructureTypes = new HashSet<Type>()
-		{
-			typeof(IEditableObject), typeof(IDictionaryEdit), typeof(IChangeTracking),
-			typeof(IRevertibleChangeTracking), typeof(IDictionaryNotify), typeof(IDataErrorInfo), 
-			typeof(IDictionaryValidate), typeof(IDictionaryAdapter)
-		};
+		private static readonly ICollection<Type> InfrastructureTypes =
+#if SL3 //Silverlight 3 does not have HashSet<T>
+			new List<Type>
+#else
+			new HashSet<Type>
+#endif
+				{
+					typeof (IEditableObject),
+					typeof (IDictionaryEdit),
+					typeof (IChangeTracking),
+					typeof (IRevertibleChangeTracking),
+					typeof (IDictionaryNotify),
+					typeof (IDataErrorInfo),
+					typeof (IDictionaryValidate),
+					typeof (IDictionaryAdapter)
+				};
 
 		#endregion
 

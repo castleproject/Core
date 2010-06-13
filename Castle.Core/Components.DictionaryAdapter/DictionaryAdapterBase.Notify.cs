@@ -26,10 +26,11 @@ namespace Castle.Components.DictionaryAdapter
 		private Dictionary<object, object> composedChildNotifications;
 
 		[ThreadStatic]
-		private static TrackPropertyChangeScope ReadonlyTrackingScope;
+		private static TrackPropertyChangeScope readonlyTrackingScope;
 
 		public event PropertyChangingEventHandler PropertyChanging;
-        public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler PropertyChanged;
+
 
 		public bool CanNotify { get; set; }
 
@@ -43,7 +44,7 @@ namespace Castle.Components.DictionaryAdapter
 			get { return propagateChildNotifications; }
 			set { propagateChildNotifications = value; }
 		}
-        
+
 		public IDisposable SuppressNotificationsBlock()
 		{
 			return new SuppressNotificationsScope(this);
@@ -58,7 +59,6 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			--suppressNotificationCount;
 		}
-        
 		protected bool NotifyPropertyChanging(PropertyDescriptor property, object oldValue, object newValue)
 		{
 			if (!property.SuppressNotifications)
@@ -115,10 +115,10 @@ namespace Castle.Components.DictionaryAdapter
 
 		protected TrackPropertyChangeScope TrackReadonlyPropertyChanges()
 		{
-			if (ShouldNotify && ReadonlyTrackingScope == null)
+			if (ShouldNotify && readonlyTrackingScope == null)
 			{
 				var scope = new TrackPropertyChangeScope(this);
-				ReadonlyTrackingScope = scope;
+				readonlyTrackingScope = scope;
 				return scope;
 			}
 			return null;
@@ -265,16 +265,16 @@ namespace Castle.Components.DictionaryAdapter
 
 			public bool Notify()
 			{
-				if (ReadonlyTrackingScope == this)
+				if (readonlyTrackingScope == this)
 				{
-					ReadonlyTrackingScope = null;
+					readonlyTrackingScope = null;
 					return NotifyReadonly();
 				}
 
 				var newValue = GetEffectivePropertyValue(property);
 				if (NotifyIfChanged(property, existingValue, newValue))
 				{
-					if (ReadonlyTrackingScope == null)
+					if (readonlyTrackingScope == null)
 						NotifyReadonly();
 					return true;
 				}

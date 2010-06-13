@@ -107,8 +107,10 @@ namespace Castle.Components.DictionaryAdapter
 								
 								if (!Object.Equals(oldValue, newValue))
 								{
+
 									NotifyPropertyChanging(update.Property, oldValue, newValue);
 									NotifyPropertyChanged(update.Property, oldValue, newValue);
+
 								}
 							}
 						}
@@ -122,7 +124,7 @@ namespace Castle.Components.DictionaryAdapter
 			if (IsEditing)
 			{
 				using (SuppressEditingBlock())
-                {
+				{
 					var top = updates.Pop();
 
 					if (top.Count > 0) foreach (var update in top.ToArray())
@@ -229,7 +231,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			public void Dispose()
 			{
-				this.adapter.ResumeEditing();
+				adapter.ResumeEditing();
 			}
 		}
 
