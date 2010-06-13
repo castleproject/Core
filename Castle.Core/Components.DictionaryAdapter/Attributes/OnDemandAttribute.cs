@@ -161,16 +161,21 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				var genericDef = type.GetGenericTypeDefinition();
 				var genericArg = type.GetGenericArguments()[0];
-				bool isBindingList = genericDef == typeof(BindingList<>);
+				bool isBindingList = 
+#if SILVERLIGHT
+					false;
+#else
+					genericDef == typeof(BindingList<>);
+#endif
 
 				if (isBindingList || genericDef == typeof(List<>))
 				{
 					if (dictionaryAdapter.CanEdit)
 					{
-#if !SILVERLIGHT
-						collectionType = isBindingList ? typeof(EditableBindingList<>) : typeof(EditableList<>);
-#else
+#if SILVERLIGHT
 						collectionType =  typeof(EditableList<>);
+#else
+						collectionType = isBindingList ? typeof(EditableBindingList<>) : typeof(EditableList<>);
 #endif
 					}
 
