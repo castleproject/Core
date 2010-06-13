@@ -17,7 +17,9 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+#if! SILVERLIGHT
 	using System.Collections.Specialized;
+#endif
 	using System.ComponentModel;
 	using System.Linq;
 	using System.Reflection;
@@ -55,7 +57,8 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			return InternalGetAdapter(type, dictionary, descriptor);
 		}
-
+		
+#if! SILVERLIGHT
 		/// <inheritdoc />
 		public T GetAdapter<T>(NameValueCollection nameValues)
 		{
@@ -79,8 +82,9 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			var xpath = new XPathAdapter(xpathNavigable);
 			return GetAdapter(type, new Hashtable(), new DictionaryDescriptor()
-				.AddBehavior(XPathBehavior.Instance).AddBehavior(xpath));			
+				.AddBehavior(XPathBehavior.Instance).AddBehavior(xpath));
 		}
+#endif
 
 		/// <inheritdoc />
 		public DictionaryAdapterMeta GetAdapterMeta(Type type)
