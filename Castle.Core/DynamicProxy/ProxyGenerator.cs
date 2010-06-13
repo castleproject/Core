@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy
 	using System.Security.Permissions;
 #endif
 	using System.Text;
-
+	using Castle.Core.Internal;
 	using Castle.Core.Logging;
 
 	/// <summary>
@@ -56,16 +56,10 @@ namespace Castle.DynamicProxy
 
 #if !SILVERLIGHT
 	    private bool HasSecurityPermission()
-		{
-#if DOTNET40
-			var permission = new PermissionSet(PermissionState.None);
-			permission.AddPermission(new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy));
-
-			return AppDomain.CurrentDomain.PermissionSet.IsSubsetOf(permission);
-#else
-			return SecurityManager.IsGranted(new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy));
-#endif
-		}
+	    {
+	    	return
+	    		new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy).IsGranted();
+	    }
 #endif
 
 	    /// <summary>

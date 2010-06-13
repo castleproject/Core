@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy
 {
+#if !SILVERLIGHT
 	/// <summary>
 	/// ProxyBuilder that persists the generated type.
 	/// </summary>
@@ -29,9 +30,6 @@ namespace Castle.DynamicProxy
 		{
 		}
 
-#if SILVERLIGHT
-#warning What would persisting a proxy builder mean in silverlight?
-#else
 		/// <summary>
 		/// Saves the generated assembly to a physical file. Note that this renders the <see cref="PersistentProxyBuilder"/> unusable.
 		/// </summary>
@@ -42,6 +40,6 @@ namespace Castle.DynamicProxy
 		{
 			return ModuleScope.SaveAssembly();
 		}
-#endif
 	}
+#endif
 }
