@@ -61,6 +61,7 @@ limitations under the License.
 		<MSBuildTargets>Silverlight 3.0</MSBuildTargets>
 		<TestRunner_Enabled>False</TestRunner_Enabled>
 		<TargetFrameworkVersion>3.0</TargetFrameworkVersion>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 	</PropertyGroup>
 
 	<!--Silverlight 4.0 runtime-->
