@@ -12,27 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+
 namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Reflection;
 
-#if SILVERLIGHT
-#else
+#if !SILVERLIGHT
 	[Serializable]
 #endif
 	public class AllMethodsHook : IProxyGenerationHook
 	{
+		private static readonly ICollection<Type> SkippedTypes = new[]
+		                                              	{
+		                                              		typeof (object),
+#if !SILVERLIGHT
+		                                              		typeof (MarshalByRefObject),
+		                                              		typeof (ContextBoundObject)
+#endif
+		                                              	};
+
 		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{
-			return methodInfo.DeclaringType != typeof (Object)
-#if SILVERLIGHT
-#warning What to do?
-				;
-#else
-			        && methodInfo.DeclaringType != typeof (MarshalByRefObject)
-			        && methodInfo.DeclaringType != typeof (ContextBoundObject);
-#endif
+			return SkippedTypes.Contains(methodInfo.DeclaringType) == false;
 		}
 
 		public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)

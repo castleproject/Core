@@ -56,6 +56,7 @@
     <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Core\Internal\PermissionUtil.cs" />
     <Compile Include="DictionaryAdapter\AbstractDictionaryAdapter.cs" />
     <Compile Include="DictionaryAdapter\AbstractDictionaryAdapterVisitor.cs" />
     <Compile Include="DictionaryAdapter\Attributes\ComponentAttribute.cs" />
