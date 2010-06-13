@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+#if !SILVERLIGHT
 	using System;
 	using System.ComponentModel;
 
@@ -72,4 +73,5 @@ namespace Castle.Components.DictionaryAdapter
 			};
 		}
 	}
+#endif
 }

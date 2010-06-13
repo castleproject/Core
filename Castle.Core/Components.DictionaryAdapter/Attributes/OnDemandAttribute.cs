@@ -178,7 +178,9 @@ namespace Castle.Components.DictionaryAdapter
 						collectionType = isBindingList ? typeof(EditableBindingList<>) : typeof(EditableList<>);
 #endif
 					}
-
+					
+#if SILVERLIGHT //never true
+#else
 					if (isBindingList && genericArg.IsInterface)
 					{
 						Func<object> addNew = () => dictionaryAdapter.Create(genericArg);
@@ -186,6 +188,7 @@ namespace Castle.Components.DictionaryAdapter
 							typeof(BindingListInitializer<>).MakeGenericType(genericArg),
 							null, addNew, null, null);
 					}
+#endif
 				}
 				else if (genericDef == typeof(IList<>) || genericDef == typeof(ICollection<>))
 				{
@@ -199,7 +202,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			else if (type == typeof(IList) || type == typeof(ICollection))
 			{
-				return dictionaryAdapter.CanEdit ? typeof(EditableList) : typeof(ArrayList);
+				return dictionaryAdapter.CanEdit ? typeof(EditableList) : typeof(List<object>);
 			}
 
 			return type;
