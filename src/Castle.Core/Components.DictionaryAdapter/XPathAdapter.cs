@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+#if !SILVERLIGHT
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -26,10 +27,9 @@ namespace Castle.Components.DictionaryAdapter
 	public class XPathAdapter : DictionaryBehaviorAttribute, IDictionaryInitializer,
 								IDictionaryPropertyGetter, IDictionaryPropertySetter,
 								IDictionaryCreateStrategy
-								
 	{
 		private readonly XPathContext context;
-		private Func<XPathNavigator> createRoot;
+		private readonly Func<XPathNavigator> createRoot;
 		private XPathNavigator root;
 
 		#region Init
@@ -645,4 +645,5 @@ namespace Castle.Components.DictionaryAdapter
 
 		#endregion
 	}
+#endif
 }
