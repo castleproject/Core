@@ -192,5 +192,10 @@ namespace System.Diagnostics
 		}
 	}
 }
+namespace System.ComponentModel
+{
+	public delegate void PropertyChangingEventHandler(object sender, PropertyChangingEventArgs e);
+	public delegate void PropertyChangedEventHandler(object sender, PropertyChangedEventArgs e);
+}
 
 #endif

@@ -18,7 +18,6 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Linq;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Collections.Specialized;
 	using System.ComponentModel;
 	using System.Reflection;
 	using System.Diagnostics;
@@ -35,7 +34,7 @@ namespace Castle.Components.DictionaryAdapter
 		private List<IDictionaryPropertyGetter> getters;
 		private List<IDictionaryPropertySetter> setters;
 		private List<IDictionaryKeyBuilder> keyBuilders;
-		private HybridDictionary state;
+		private IDictionary state;
 
 		private static readonly object[] NoBehaviors = new object[0];
 
@@ -106,7 +105,9 @@ namespace Castle.Components.DictionaryAdapter
 			get
 			{
 				if (state == null)
-					state = new HybridDictionary();
+				{
+					state = new Dictionary<object, object>();
+				}
 				return state;
 			}
 		}
