@@ -17,13 +17,12 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Collections.Specialized;
 	using System.Diagnostics;
 
 	[DebuggerDisplay("Type: {Type.FullName,nq}")]
 	public class DictionaryAdapterMeta
 	{
-		private HybridDictionary extendedProperties;
+		private IDictionary extendedProperties;
 
 		public DictionaryAdapterMeta(Type type, IDictionaryInitializer[] initializers,
 									 IDictionaryMetaInitializer[] metaInitializers,
@@ -54,7 +53,9 @@ namespace Castle.Components.DictionaryAdapter
 			get
 			{
 				if (extendedProperties == null)
-					extendedProperties = new HybridDictionary();
+				{
+					extendedProperties = new Dictionary<object, object>();
+				}
 				return extendedProperties;
 			}
 		}

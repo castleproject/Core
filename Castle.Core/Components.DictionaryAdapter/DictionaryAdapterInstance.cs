@@ -15,11 +15,11 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System.Collections;
-	using System.Collections.Specialized;
+	using System.Collections.Generic;
 
 	public class DictionaryAdapterInstance
 	{
-		private HybridDictionary extendedProperties;
+		private IDictionary extendedProperties;
 
 		public DictionaryAdapterInstance(IDictionary dictionary, PropertyDescriptor descriptor, 
 										 IDictionaryAdapterFactory factory)
@@ -46,7 +46,9 @@ namespace Castle.Components.DictionaryAdapter
 			get
 			{
 				if (extendedProperties == null)
-					extendedProperties = new HybridDictionary();
+				{
+					extendedProperties = new Dictionary<object, object>();
+				}
 				return extendedProperties;
 			}
 		}

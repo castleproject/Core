@@ -20,7 +20,7 @@ namespace Castle.Components.DictionaryAdapter
 
 	public partial class DictionaryAdapterBase : IDictionaryValidate
 	{
-		private HashSet<IDictionaryValidator> validators;
+		private ICollection<IDictionaryValidator> validators;
 
 		public bool CanValidate { get; set; }
 
@@ -71,7 +71,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			return new DictionaryValidateGroup(groups, this);
 		}
-        
+
 		public IEnumerable<IDictionaryValidator> Validators
 		{
 			get
@@ -79,11 +79,21 @@ namespace Castle.Components.DictionaryAdapter
 				return validators ?? Enumerable.Empty<IDictionaryValidator>();
 			}
 		}
-        
+
 		public void AddValidator(IDictionaryValidator validator)
 		{
 			if (validators == null)
-				validators = new HashSet<IDictionaryValidator>();
+			{
+				validators =
+#if SL3 //Silverlight 3 does not have HashSet<T>
+					new List<IDictionaryValidator>();
+#else
+					new HashSet<IDictionaryValidator>();
+#endif
+			}
+#if SL3 //Silverlight 3 does not have HashSet<T>
+			if(validators.Contains(validator)) return;
+#else
 			validators.Add(validator);
 		}
 
