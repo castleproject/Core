@@ -54,7 +54,7 @@ limitations under the License.
 		Name="BuildProject"
 		>
 
-		<MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion);TargetFrameworkProfile=$(TargetFrameworkProfile)">
+		<MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="OutputPath=$(OutputPath);Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion);TargetFrameworkProfile=$(TargetFrameworkProfile)">
 
 			<Output TaskParameter="TargetOutputs" ItemName="AllBinaries" />
 		
@@ -66,12 +66,12 @@ limitations under the License.
 
 		<!-- Resolve test projects -->
 		<RegexMatch Input="@(AllBinaries)" Expression="$(TestDetectionExpression)">
-			<Output TaskParameter="Output" ItemName="TestBinaries" />
+			<Output TaskParameter="Output" ItemName="TestAssemblies" />
 		</RegexMatch>
 
 		<!-- Resolve the libraries code projects -->
 		<ItemGroup>
-			<AppAssemblies Include="@(AllBinaries)" Exclude="@(TestBinaries)" />
+			<AppAssemblies Include="@(AllBinaries)" Exclude="@(TestAssemblies)" />
 		</ItemGroup>
 
 		<!-- Pick up the PDB files. This is kind of hard coded to the location of the AppAssemblies, but I currently don't see another way  -->
@@ -91,11 +91,13 @@ limitations under the License.
 
 	
 	<Target Name="RebuildAll" DependsOnTargets="CleanAll;BuildProject" />
-	<Target Name="ClickToBuild" DependsOnTargets="RebuildAll;_SetPackageDir;_PreparePackage" />
+	<Target Name="ClickToBuild" DependsOnTargets="RebuildAll;_SetPackageDir;_PreparePackage">
+		<RemoveDir Directories="$(OutputPath)" />
+	</Target>
 
 	<Target Name="_SetPackageDir">
 		<PropertyGroup>
-			<PackageDir>$(OutputPath)</PackageDir>
+			<PackageDir>$(OutputPath)../Library</PackageDir>
 		</PropertyGroup>
 	</Target>
 
@@ -152,7 +154,7 @@ limitations under the License.
 
 		<PropertyGroup>
 			<Build_ZipFile Condition="'$(Build_ZipFile)' == ''">$(ProjectName)-$(BuildConfigKey)-$(Build_Number).zip</Build_ZipFile>
-			<Build_ZipFilePath Condition="'$(Build_ZipFilePath)' == ''">$(OutputPath)/$(Build_ZipFile)</Build_ZipFilePath>
+			<Build_ZipFilePath Condition="'$(Build_ZipFilePath)' == ''">$(OutputPath)../$(Build_ZipFile)</Build_ZipFilePath>
 		</PropertyGroup>
 
 		<Message Importance="high" Text="Creating ZIP file $(Build_ZipFilePath)"/>
@@ -176,6 +178,9 @@ limitations under the License.
 		Internal targets
 	==================================================
 	-->
+	<PropertyGroup>
+		<TestAssemblies></TestAssemblies>
+	</PropertyGroup>
 
 	<!-- Executes NUnit or NCover with NUnit -->
 	<Target
@@ -197,15 +202,10 @@ limitations under the License.
 	<Target
 		Name="_ExecNUnit"
 		>
-		
 		<PropertyGroup>
 			<NUnitTestResultXmlFiles Condition="'$(NUnitTestResultXmlFiles)' == ''">$(TestResultsPath)/nunit-results.xml</NUnitTestResultXmlFiles>
 		</PropertyGroup>
 
-		<ItemGroup>
-			<TestAssemblies Include="$(RootPath)/src/**/bin/$(Configuration)/*Test*.dll" />
-		</ItemGroup>
-		
 		<NUnit 
 			ToolPath="$(NUnitPath)"
 			Assemblies="@(TestAssemblies)"
@@ -263,7 +263,7 @@ limitations under the License.
 	<Target Name="_PreparePackage">
 
 		<PropertyGroup>
-			<PackageDir Condition="'$(PackageDir)' == ''">$(OutputPath)package</PackageDir>
+			<PackageDir Condition="'$(PackageDir)' == ''">$(OutputPath)pkg</PackageDir>
 		</PropertyGroup>
 
 		<RemoveDir Directories="$(PackageDir)" ContinueOnError="true" />

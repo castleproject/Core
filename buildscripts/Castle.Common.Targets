@@ -76,7 +76,7 @@ limitations under the License.
 	<PropertyGroup>
 		<TargetFrameworkIdentifier Condition="'$(TargetFrameworkIdentifier)' ==''">.NETFramework</TargetFrameworkIdentifier> <!-- MSBuild 4.0 defines this -->
 		<BuildPath Condition="$(BuildPath)==''">$(RootPath)/build</BuildPath>
-		<OutputPath Condition="'$(OutputPath)' == ''">$(BuildPath)/$(BuildConfigKey)/$(Configuration)</OutputPath>
+		<OutputPath Condition="'$(OutputPath)' == ''">$(BuildPath)/$(BuildConfigKey)/$(Configuration)/bin</OutputPath>
 		<OutputType Condition="'$(OutputType)' == ''">Library</OutputType>
 		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)/buildscripts</BuildScriptsPath>
 		<ToolsPath Condition="'$(ToolsPath)' == ''">$(RootPath)/tools</ToolsPath>
