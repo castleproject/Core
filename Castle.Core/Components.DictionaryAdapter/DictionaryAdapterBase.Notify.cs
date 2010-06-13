@@ -139,7 +139,7 @@ namespace Castle.Components.DictionaryAdapter
 					if (oldValue is INotifyPropertyChanged)
 					{
 						((INotifyPropertyChanged)oldValue).PropertyChanged -= Child_PropertyChanged;
-
+#if !SILVERLIGHT
 						if (oldValue is INotifyPropertyChanging)
 						{
 							((INotifyPropertyChanging)oldValue).PropertyChanging -= Child_PropertyChanging;
@@ -148,6 +148,7 @@ namespace Castle.Components.DictionaryAdapter
 					else if (oldValue is IBindingList)
 					{
 						((IBindingList)oldValue).ListChanged -= (ListChangedEventHandler)handler;
+#endif
 					}
 				}
 			}
@@ -157,7 +158,8 @@ namespace Castle.Components.DictionaryAdapter
 				if (newValue is INotifyPropertyChanged)
 				{
 					((INotifyPropertyChanged)newValue).PropertyChanged += Child_PropertyChanged;
-
+					
+#if !SILVERLIGHT
 					if (newValue is INotifyPropertyChanging)
 					{
 						((INotifyPropertyChanging)newValue).PropertyChanging += Child_PropertyChanging;
@@ -187,6 +189,7 @@ namespace Castle.Components.DictionaryAdapter
 					((IBindingList)newValue).ListChanged += handler;
 
 					composedChildNotifications.Add(newValue, handler);
+#endif
 				}
 			}
 		}
