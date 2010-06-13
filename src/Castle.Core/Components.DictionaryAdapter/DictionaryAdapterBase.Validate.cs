@@ -95,6 +95,7 @@ namespace Castle.Components.DictionaryAdapter
 			if(validators.Contains(validator)) return;
 #else
 			validators.Add(validator);
+#endif
 		}
 
 		protected internal void Invalidate()
