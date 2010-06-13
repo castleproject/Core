@@ -29,7 +29,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			return Create(type, new HybridDictionary());
 		}
-        
+
 		public T Create<T>(IDictionary dictionary)
 		{
 			return (T)Create(typeof(T), dictionary ?? new HybridDictionary());

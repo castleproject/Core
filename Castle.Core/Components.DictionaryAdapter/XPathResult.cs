@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+#if !SILVERLIGHT
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -379,4 +380,5 @@ namespace Castle.Components.DictionaryAdapter
 	}
 
 	#endregion
+#endif
 }
