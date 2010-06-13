@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+#if !SILVERLIGHT
 	using System;
 	using System.Xml.XPath;
-	using System.Xml.Xsl;
 
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true)]
 	public class XPathAttribute : Attribute
@@ -40,39 +40,5 @@ namespace Castle.Components.DictionaryAdapter
 
 		public XPathExpression CompiledExpression { get; private set; }
 	}
-
-
-	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true)]
-	public class XPathFunctionAttribute : Attribute
-	{
-		protected XPathFunctionAttribute(string name)
-		{
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentException("Name cannot be empty", "name");
-			}
-			Name = name;
-		}
-
-		public XPathFunctionAttribute(string name, Type functionType) : this(name)
-		{
-			if (typeof(IXsltContextFunction).IsAssignableFrom(functionType) == false)
-			{
-				throw new ArgumentException("The functionType does not implement IXsltContextFunction");
-			}
-
-			var defaultCtor = functionType.GetConstructor(Type.EmptyTypes);
-			if (defaultCtor == null)
-			{
-				throw new ArgumentException("The functionType does not have a parameterless constructor");
-			}
-			Function = (IXsltContextFunction)Activator.CreateInstance(functionType);
-		}
-
-		public string Name { get; private set; }
-
-		public IXsltContextFunction Function { get; protected set; }
-
-		public string Prefix { get; set; }
-	}
+#endif
 }

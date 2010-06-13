@@ -56,9 +56,7 @@ namespace Castle.DynamicProxy
 		{
 		}
 
-#if SILVERLIGHT
-#warning What to do?
-#else
+#if !SILVERLIGHT
 		private ProxyGenerationOptions(SerializationInfo info, StreamingContext context)
 		{
 			Hook = (IProxyGenerationHook)info.GetValue("hook", typeof(IProxyGenerationHook));
@@ -83,9 +81,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-#if SILVERLIGHT
-#warning What to do?
-#else
+#if !SILVERLIGHT
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue("hook", Hook);
