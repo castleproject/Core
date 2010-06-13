@@ -22,7 +22,7 @@ namespace Castle.Components.DictionaryAdapter
 	public class DictionaryValidateGroup : IDictionaryValidate, INotifyPropertyChanged, IDisposable
 	{
 		private readonly object[] _groups;
-        private readonly IDictionaryAdapter _adapter;
+		private readonly IDictionaryAdapter _adapter;
 		private readonly string[] _propertyNames;
 		private readonly PropertyChangedEventHandler _propertyChanged;
 
@@ -48,7 +48,7 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
-        
+
 		public bool CanValidate
 		{
 			get { return _adapter.CanValidate; }
