@@ -167,7 +167,11 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					if (dictionaryAdapter.CanEdit)
 					{
+#if !SILVERLIGHT
 						collectionType = isBindingList ? typeof(EditableBindingList<>) : typeof(EditableList<>);
+#else
+						collectionType =  typeof(EditableList<>);
+#endif
 					}
 
 					if (isBindingList && genericArg.IsInterface)
