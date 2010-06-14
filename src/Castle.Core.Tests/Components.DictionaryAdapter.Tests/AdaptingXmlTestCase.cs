@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
+#if !SILVERLIGHT
 	using System;
 	using System.ComponentModel;
 	using System.IO;
@@ -690,4 +691,5 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	}
 
 	#endregion
+#endif
 }

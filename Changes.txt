@@ -1,5 +1,6 @@
 unreleased changes
 ==================
+- Applied patch from Kenneth Siewers Møller which adds parameterless constructor to DefaultSmtpSender implementation, to be able to configure the inner SmtpClient from the application configuration file (system.net.smtp).
 - added support for .NET 4 and Silverlight 4, updated solution to VisualStudio 2010
 - Removed obsolete overload of CreateClassProxy
 - Added class proxy with taget
