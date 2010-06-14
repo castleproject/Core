@@ -210,6 +210,25 @@ namespace System.ComponentModel
 #if SL3
 namespace System.ComponentModel
 {
+	using System.Collections.Generic;
+
+	public static class TypeDescriptor
+	{
+		private static readonly IDictionary<Type, TypeConverter> converters = new Dictionary<Type, TypeConverter>();
+
+		public static TypeConverter GetConverter(Type type)
+		{
+			TypeConverter converter;
+			converters.TryGetValue(type, out converter);
+			return converter;
+		}
+
+		public static void RegisterConverter(Type forType, TypeConverter converter)
+		{
+			converters[forType] = converter;
+		}
+	}
+
 	public interface IDataErrorInfo
 	{
 		string this[string columnName] { get; }
