@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
 	using Castle.DynamicProxy.Tests.Classes;
@@ -69,9 +68,9 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Sum get_Valid ", logger.LogContents);
 		}
 
-#if !SILVERLIGHT
 	}
 
+#if !SILVERLIGHT
 	[Serializable]
 #endif
 	public class LogHook : IProxyGenerationHook
