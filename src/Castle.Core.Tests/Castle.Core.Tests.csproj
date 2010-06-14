@@ -1,0 +1,346 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{087AD3BF-5E40-450D-8138-FBB5F57AC474}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Castle</RootNamespace>
+    <AssemblyName>Castle.Core.Tests</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <TargetFrameworkVersion Condition="$(TargetFrameworkVersion)==''">v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);$(BuildConstants)</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="adodb, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\net-3.5\adodb.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks.CPP.Interfaces, Version=1.0.3078.4206, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\net-3.5\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccessLevelTestCase.cs" />
+    <Compile Include="BasePEVerifyTestCase.cs" />
+    <Compile Include="BasicClassProxyTestCase.cs" />
+    <Compile Include="BasicInterfaceProxyTestCase.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Color.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\CustomGetter.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IAddress.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IConversions.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IConversionsToString.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IEnsureMetaDoesNotConflict.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IItemContainer.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IItemContainerWithComponent.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IMutableName.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IName.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\InfrastructureStub.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IPerson.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IPersonWithDeniedInheritancePrefix.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IPersonWithMethod.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IPersonWithoutPrefix.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IPersonWithPrefix.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IPersonWithPrefixOverride.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IPersonWithPrefixOverrideFurtherOverride.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IPersonWithTypePrefixOverride.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IPhone.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IStringLists.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Phone.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\PhoneConverter.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\HasNonInheritableAttribute.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassToSerialize.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithIndexer.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\DiffAccessLevelOnProperties.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\NonPublicConstructorClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\NonPublicMethodsClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ServiceClass.cs" />
+    <Compile Include="ClassWithAttributesTestCase.cs" />
+    <Compile Include="GenClasses\ClassWithGenArgs.cs" />
+    <Compile Include="GenClasses\ClassWithIndexer.cs" />
+    <Compile Include="GenClasses\GenClassNameClash.cs" />
+    <Compile Include="GenClasses\GenClassWithConstraints.cs" />
+    <Compile Include="GenClasses\GenClassWithGenMethods.cs" />
+    <Compile Include="GenClasses\GenClassWithGenMethodsConstrained.cs" />
+    <Compile Include="GenClasses\GenClassWithGenReturn.cs" />
+    <Compile Include="GenClasses\OnlyGenMethodsClass.cs" />
+    <Compile Include="GenerationHookTestCase.cs" />
+    <Compile Include="GenericClassProxyTestCase.cs" />
+    <Compile Include="GenericInterfaceProxyTestCase.cs" />
+    <Compile Include="GenInterfaces\GenInterface.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceWithGenericTypes.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceWithGenMethods.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceWithGenMethodsAndGenReturn.cs" />
+    <Compile Include="Interceptors\LogInvocationInterceptor.cs" />
+    <Compile Include="InterClasses\IExtendedService.cs" />
+    <Compile Include="InterClasses\IService.cs" />
+    <Compile Include="InterClasses\ServiceImpl.cs" />
+    <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
+    <Compile Include="MixinTestCase.cs" />
+    <Compile Include="XmlSerializationTestCase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\buildscripts\CastleKey.snk">
+      <Link>CastleKey.snk</Link>
+    </None>
+    <None Include="App.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Components.DictionaryAdapter.Tests\AdaptingNameValueCollectionsTestCase.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\AdaptingXmlTestCase.cs" />
+    <Compile Include="BugsReported\DynProxy132.cs" />
+    <Compile Include="ChangeProxyTargetInterceptor.cs" />
+    <Compile Include="CreateHashtableDictionaryStrategy.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\DictionaryAdapterFactoryTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithAttributesOnMethodParameters.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithExplicitInterface.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithInterface.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithVirtualInterface.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWith_Smart_Attribute.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\RequiredAttribute.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithAutoProperty.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithNoDefaultCtor.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithProtectedGenericMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithProtectedMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtualClassWithPublicField.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtuallyImplementsInterfaceWithEvent.cs" />
+    <Compile Include="DynamicProxy.Tests\ClassProxyWithTargetTestCase.cs" />
+    <Compile Include="ComInterfacesTests.cs" />
+    <Compile Include="DynamicProxy.Tests\Explicit\GenericMethodExplicit.cs" />
+    <Compile Include="DynamicProxy.Tests\Explicit\GenInterfaceExplicit.cs" />
+    <Compile Include="DynamicProxy.Tests\Explicit\SimpleInterfaceExplicit.cs" />
+    <Compile Include="DynamicProxy.Tests\Explicit\WithRefOutExplicit.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\IBase.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\ISub1.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\ISub2.cs" />
+    <Compile Include="DynamicProxy.Tests\ProxyTypeCachingTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\ExplicitInterfaceTestCase.cs" />
+    <Compile Include="CustomAttributesTestCase.cs" />
+    <Compile Include="GenClasses\GenClassWithExplicitImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameter.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericParameterByRef.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceWithMethodWithNestedGenericReturn.cs" />
+    <Compile Include="IdEqualityHashCodeStrategy.cs" />
+    <Compile Include="Interceptors\AssertCanChangeTargetInterceptor.cs" />
+    <Compile Include="Interceptors\AssertCannotChangeTargetInterceptor.cs" />
+    <Compile Include="Interceptors\CallCountingInterceptor.cs" />
+    <Compile Include="Interceptors\AddTwoInterceptor.cs" />
+    <Compile Include="BaseTestCaseTestCase.cs" />
+    <Compile Include="BasicInterfaceProxyWithoutTargetTestCase.cs" />
+    <Compile Include="BugsReportedTestCase.cs" />
+    <Compile Include="BugsReported\Camera.cs" />
+    <Compile Include="BugsReported\ConstraintViolationInDebuggerTestCase.cs" />
+    <Compile Include="BugsReported\DynProxy46.cs" />
+    <Compile Include="BugsReported\DynProxy88.cs" />
+    <Compile Include="CacheKeyTestCase.cs" />
+    <Compile Include="CanDefineAdditionalCustomAttributes.cs" />
+    <Compile Include="ClassEmitterTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassCallingVirtualMethodFromCtor.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithCharRetType.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithConstructors.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithVariousConstructors.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithInternalDefaultConstructor.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithProtectedDefaultConstructor.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\MySerializableClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ProtectedInternalConstructorClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\SimpleClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassOverridingEqualsAndGetHashCode.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithDefaultConstructor.cs" />
+    <Compile Include="ClassProxyConstructorsTestCase.cs" />
+    <Compile Include="Interceptors\DoNothingInterceptor.cs" />
+    <Compile Include="GenClasses\ClassWithMethodWithArrayOfListOfT.cs" />
+    <Compile Include="GenClasses\ClassWithMethodWithGenericOfGenericOfT.cs" />
+    <Compile Include="GenClasses\ClassWithMethodWithReturnArrayOfListOfT.cs" />
+    <Compile Include="GenClasses\MethodWithArgumentBeingArrayOfGenericTypeOfT.cs" />
+    <Compile Include="GenericMethodsProxyTestCase.cs" />
+    <Compile Include="DictionarySerializationTestCase.cs" />
+    <Compile Include="GenInterfaces\GenericMethodWhereOneGenParamInheritsTheOther.cs" />
+    <Compile Include="InterClasses\IInterfaceWithGenericMethodWithDependentConstraint.cs" />
+    <Compile Include="InheritedInterfacesTestCase.cs" />
+    <Compile Include="InterceptorSelectorTestCase.cs" />
+    <Compile Include="InterfaceProxyBaseTypeTestCase.cs" />
+    <Compile Include="InterfaceProxyWithTargetInterfaceTestCase.cs" />
+    <Compile Include="Interfaces\IDecimalOutParam.cs" />
+    <Compile Include="Interfaces\IdenticalInterfaces.cs" />
+    <Compile Include="Interfaces\IEmpty.cs" />
+    <Compile Include="Interfaces\IFooWithIntPtr.cs" />
+    <Compile Include="Interfaces\IFooWithOutIntPtr.cs" />
+    <Compile Include="Interfaces\IGenericWithRefOut.cs" />
+    <Compile Include="Interfaces\IHaveIndexers.cs" />
+    <Compile Include="Interfaces\INullable.cs" />
+    <Compile Include="Interfaces\IOne.cs" />
+    <Compile Include="Interfaces\ITwo.cs" />
+    <Compile Include="Interfaces\IWithRefOut.cs" />
+    <Compile Include="Interfaces\One.cs" />
+    <Compile Include="Interfaces\OneTwo.cs" />
+    <Compile Include="Interfaces\Two.cs" />
+    <Compile Include="InvocationMethodInvocationTargetTestCase.cs" />
+    <Compile Include="InvocationTypesCachingTestCase.cs" />
+    <Compile Include="LoggingTestCase.cs" />
+    <Compile Include="MethodEquivalenceTestCase.cs" />
+    <Compile Include="MixinDataTestCase.cs" />
+    <Compile Include="CrossAppDomainCaller.cs" />
+    <Compile Include="MethodComparerTestCase.cs" />
+    <Compile Include="GenericTestUtility.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceHierarchy.cs" />
+    <Compile Include="GenInterfaces\GenExplicitImplementation.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceWithGenArray.cs" />
+    <Compile Include="GenInterfaces\OnlyGenMethodsInterface.cs" />
+    <Compile Include="Interceptors\ChangeTargetInterceptor.cs" />
+    <Compile Include="Interceptors\KeepDataInterceptor.cs" />
+    <Compile Include="InterClasses\AlwaysThrowsServiceImpl.cs" />
+    <Compile Include="InterClasses\ClassWithIndexer.cs" />
+    <Compile Include="InterClasses\ClassWithMarkerInterface.cs" />
+    <Compile Include="InterClasses\ClassWithMultiDimentionalArray.cs" />
+    <Compile Include="InterClasses\IClassWithMultiDimentionalArray.cs" />
+    <Compile Include="InterClasses\IMyInterface2.cs" />
+    <Compile Include="InterClasses\InterfaceWithIndexer.cs" />
+    <Compile Include="InterClasses\IService2.cs" />
+    <Compile Include="InvocationTestCase.cs" />
+    <Compile Include="MethodFinderTestCase.cs" />
+    <Compile Include="Mixins\ClassImplementingIDerivedSImpleMixin.cs" />
+    <Compile Include="Mixins\ClassImplementingISimpleMixin.cs" />
+    <Compile Include="Mixins\ComplexMixin.cs" />
+    <Compile Include="Mixins\IDerivedSimpleMixin.cs" />
+    <Compile Include="Mixins\OtherMixin.cs" />
+    <Compile Include="Mixins\OtherMixinImplementingISimpleMixin.cs" />
+    <Compile Include="Mixins\SimpleMixin.cs" />
+    <Compile Include="ModuleScopeTestCase.cs" />
+    <Compile Include="NonProxiedMethodsNoTargetTestCase.cs" />
+    <Compile Include="NonProxiedMixinMethodsTestCase.cs" />
+    <Compile Include="NonProxiedTargetMethodsTestCase.cs" />
+    <Compile Include="OrderOfInterfacePrecedenceTestCase.cs" />
+    <Compile Include="OutRefParams.cs" />
+    <Compile Include="PersistentProxyBuilderTestCase.cs" />
+    <Compile Include="Interceptors\ProceedOnTypeInterceptor.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="ProxyGenerationOptionsTestCase.cs" />
+    <Compile Include="Interceptors\RequiredParamInterceptor.cs" />
+    <Compile Include="ProxyKind.cs" />
+    <Compile Include="ProxyNothingHook.cs" />
+    <Compile Include="ProxyTargetAccessorHandlingTestCase.cs" />
+    <Compile Include="RhinoMocksTestCase.cs" />
+    <Compile Include="SerializableClassTestCase.cs" />
+    <Compile Include="InternalsVisibleTo.cs" />
+    <Compile Include="Interceptors\SetReturnValueInterceptor.cs" />
+    <Compile Include="Interceptors\WithCallbackInterceptor.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\VirtuallyImplementsInterfaceWithProperty.cs" />
+    <Compile Include="ConsoleLoggerTestCase.cs" />
+    <Compile Include="DiagnosticsLoggerTestCase.cs" />
+    <Compile Include="LevelFilteredLoggerTests.cs" />
+    <Compile Include="LinkedListTestCase.cs" />
+    <Compile Include="MonitorLockTestCase.cs" />
+    <Compile Include="SlimReadWriteLockTestCase.cs" />
+    <Compile Include="ReflectionBasedDictionaryAdapterTestCase.cs" />
+    <Compile Include="Core.Tests\Resources\AssemblyResourceFactoryTestCase.cs" />
+    <Compile Include="Core.Tests\Resources\CustomUriTestCase.cs" />
+    <Compile Include="Core.Tests\Resources\FileResourceFactoryTestCase.cs" />
+    <Compile Include="Core.Tests\Resources\MoreRes\TestRes.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestRes.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Core.Tests\Resources\UncResourceFactoryTestCase.cs" />
+    <Compile Include="StreamLoggerTests.cs" />
+    <Compile Include="TestDictionaryValidator.cs" />
+    <Compile Include="TraceLoggerTests.cs" />
+    <Compile Include="WebLoggerTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Core.Tests\Resources\file1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core.Tests\Resources\MoreRes\TestRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TestRes.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Content Include="Core.Tests\Resources\MoreRes\file2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Core\Castle.Core.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\buildscripts\CastleKey.snk">
+      <Link>CastleKey.snk</Link>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 3.0'" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
+  <Import Project="$(RootPath)\Settings.proj" />
+  <Import Project="$(BuildScriptsPath)\Castle.Common.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
