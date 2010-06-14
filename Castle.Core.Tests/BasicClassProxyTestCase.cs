@@ -301,7 +301,6 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyForBaseTypeFromSignedAssembly()
 		{
 #if SILVERLIGHT
-#warning Silverlight does not allow us to sign generated assemblies
 			
 			const bool shouldBeSigned = false;
 #else
@@ -316,9 +315,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyForBaseTypeAndInterfaceFromSignedAssembly()
 		{
-#if SILVERLIGHT
-#warning Silverlight does not allow us to sign generated assemblies
-			
+#if SILVERLIGHT //Silverlight does not allow us to sign generated assemblies
 			const bool shouldBeSigned = false;
 #else
 			const bool shouldBeSigned = true;
@@ -400,8 +397,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Something", ((ClassWithDefaultConstructor)proxy2).SomeString);
 		}
 
-#if SILVERLIGHT
-#warning Silverlight does not allow us to access internal constructors
+#if SILVERLIGHT // Silverlight does not allow us to access internal constructors
 #else
 		[Test]
 		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasInternal()
