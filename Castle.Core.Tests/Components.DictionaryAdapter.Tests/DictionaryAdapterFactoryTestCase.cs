@@ -20,6 +20,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.Linq;
 	using System.Reflection;
 	using NUnit.Framework;
+#if SILVERLIGHT
+	using Hashtable = System.Collections.Generic.Dictionary<object, object>;
+#endif
 
 	[TestFixture]
 	public class DictionaryAdapterFactoryTestCase
@@ -198,12 +201,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			string[] keys = new string[dictionary.Keys.Count];
 			dictionary.Keys.CopyTo(keys, 0);
 
-			Assert.IsTrue(Array.Exists(keys, key => key == "Name"));
-			Assert.IsTrue(Array.Exists(keys, key => key == "NumberOfFeet"));
-			Assert.IsTrue(Array.Exists(keys, key => key == "Person_HairColor"));
-			Assert.IsTrue(Array.Exists(keys, key => key == "Person2_Eye__Color"));
-			Assert.IsTrue(Array.Exists(keys, key => key == "Person2_NumberOfHeads"));
-			Assert.IsTrue(Array.Exists(keys, key => key == "NumberOfFingers"));
+			Assert.IsTrue(keys.Any(key => key == "Name"));
+			Assert.IsTrue(keys.Any(key => key == "NumberOfFeet"));
+			Assert.IsTrue(keys.Any(key => key == "Person_HairColor"));
+			Assert.IsTrue(keys.Any(key => key == "Person2_Eye__Color"));
+			Assert.IsTrue(keys.Any(key => key == "Person2_NumberOfHeads"));
+			Assert.IsTrue(keys.Any(key => key == "NumberOfFingers"));
 
 			Assert.AreEqual(name, person.Name);
 			Assert.AreEqual(numberOfFeet, person.NumberOfFeet);
@@ -767,7 +770,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			person.Name = "Craig";
 		}
-
+#if !SILVERLIGHT
 		[Test]
 		public void CanCancelPropertyChanges()
 		{
@@ -780,6 +783,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Name = "Craig";
 			Assert.AreEqual(null, person.Name);
 		}
+#endif
 
 		[Test]
 		public void WillRaisePropertyChangedEventWhenNestedPropertyChanged()
