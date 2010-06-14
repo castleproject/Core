@@ -69,9 +69,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ForceUnsignedFalseWithSignedTypes()
 		{
-#if SILVERLIGHT
-#warning Silverlight does not allow us to sign generated assemblies
-			
+#if SILVERLIGHT // Silverlight does not allow us to sign generated assemblies
 			const bool shouldBeSigned = false;
 #else
 			const bool shouldBeSigned = true;
