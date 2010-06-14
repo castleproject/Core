@@ -206,8 +206,6 @@ namespace System.ComponentModel
 		public virtual string PropertyName { get; private set; }
 	}
 }
-#endif
-#if SL3
 namespace System.ComponentModel
 {
 	using System.Collections.Generic;
@@ -228,6 +226,11 @@ namespace System.ComponentModel
 			converters[forType] = converter;
 		}
 	}
+}
+#endif
+#if SL3
+namespace System.ComponentModel
+{
 
 	public interface IDataErrorInfo
 	{

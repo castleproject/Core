@@ -27,10 +27,12 @@ namespace Castle.DynamicProxy.Contributors
 
 	public class ClassProxyInstanceContributor : ProxyInstanceContributor
 	{
+#if !SILVERLIGHT
 		private readonly bool delegateToBaseGetObjectData;
 		private readonly bool implementISerializable;
 		private ConstructorInfo serializationConstructor;
 		private readonly IList<FieldReference> serializedFields = new List<FieldReference>();
+#endif
 
 		public ClassProxyInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces, string typeId)
 			: base(targetType, interfaces, typeId)
@@ -142,13 +144,11 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void Constructor(ClassEmitter emitter)
 		{
-#if !SILVERLIGHT
 			if (!delegateToBaseGetObjectData)
 			{
 				return;
 			}
 			GenerateSerializationConstructor(emitter);
-#endif
 		}
 
 		private void GenerateSerializationConstructor(ClassEmitter emitter)
