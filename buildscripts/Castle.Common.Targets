@@ -56,20 +56,20 @@ limitations under the License.
 
 	<!--Silverlight 3.0 runtime-->
 	<PropertyGroup Condition="$(BuildConfigKey)=='SL3'">
+		<SolutionName>$(ProjectName)-SL</SolutionName>
 		<BuildFramework>$(BuildConfigKey)</BuildFramework>
 		<BuildConstants>SILVERLIGHT SL3</BuildConstants>
 		<MSBuildTargets>Silverlight 3.0</MSBuildTargets>
-		<TestRunner_Enabled>False</TestRunner_Enabled>
 		<TargetFrameworkVersion>3.0</TargetFrameworkVersion>
 		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 	</PropertyGroup>
 
 	<!--Silverlight 4.0 runtime-->
 	<PropertyGroup Condition="$(BuildConfigKey)=='SL4'">
+		<SolutionName>$(ProjectName)-SL</SolutionName>
 		<BuildFramework>$(BuildConfigKey)</BuildFramework>
 		<BuildConstants>SILVERLIGHT SL4</BuildConstants>
 		<MSBuildTargets>Silverlight 4.0</MSBuildTargets>
-		<TestRunner_Enabled>False</TestRunner_Enabled>
 		<TargetFrameworkVersion>4.0</TargetFrameworkVersion>
 	</PropertyGroup>
 

@@ -189,9 +189,11 @@ limitations under the License.
 		Condition="$(TestRunner_Enabled)"
 		>
 		
-		<CallTarget Targets="_ExecNUnit" Condition="!$(TestRunner_EnableCoverage)" />
+		<CallTarget Targets="_ExecNUnit" Condition="!$(TestRunner_EnableCoverage) and ($(BuildConfigKey) != 'SL3' and $(BuildConfigKey) != 'SL4')" />
 	
-		<CallTarget Targets="_ExecNCover" Condition="$(TestRunner_EnableCoverage)" />
+		<CallTarget Targets="_ExecNCover" Condition="$(TestRunner_EnableCoverage) and ($(BuildConfigKey) != 'SL3' and $(BuildConfigKey) != 'SL4')" />
+
+		<CallTarget Targets="_ExecStatLight" Condition="$(TestRunner_Enabled) and ($(BuildConfigKey) == 'SL3' or $(BuildConfigKey) == 'SL4')" />
 
 	</Target>
 	
@@ -248,7 +250,21 @@ limitations under the License.
 	
 	</Target>
 
-	
+
+	<Target
+		Name="_ExecStatLight"
+		>
+		
+		<PropertyGroup>
+			<StatLightCmdLine>$(ToolsPath)\StatLight\StatLight.exe -x="$(OutputPath)Castle.Core.Tests.xap" -o=NUnit</StatLightCmdLine>
+			<StatLightCmdLine Condition=" '$(TEAMCITY_VERSION)' != '' ">$(StatLightCmdLine) --teamcity</StatLightCmdLine>
+		</PropertyGroup>
+		
+		<Exec Command="$(StatLightCmdLine)" />
+
+	</Target>
+
+
 	<Target
 		Name="_CreateTestResultsFolder"
 		Condition="'$(TestResultsPath)' != '' And !Exists('$(TestResultsPath)')"
