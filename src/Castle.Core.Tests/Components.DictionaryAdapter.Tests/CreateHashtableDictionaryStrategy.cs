@@ -1,5 +1,4 @@
-﻿using System;
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +14,9 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
+	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	public class CreateHashtableStrategy : DictionaryBehaviorAttribute, IDictionaryInitializer,
 										   IDictionaryCreateStrategy
@@ -27,7 +28,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		object IDictionaryCreateStrategy.Create(IDictionaryAdapter adapter, Type type, IDictionary dictionary)
 		{
-			dictionary = dictionary ?? new Hashtable();
+			dictionary = dictionary ??
+#if SILVERLIGHT
+			             new Dictionary<object, object>();
+#else
+			             new Hashtable();
+#endif
 			return adapter.This.Factory.GetAdapter(type, dictionary, adapter.This.Descriptor); ;
 		}
 	}

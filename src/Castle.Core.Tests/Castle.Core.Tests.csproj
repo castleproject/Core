@@ -146,7 +146,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingXmlTestCase.cs" />
     <Compile Include="BugsReported\DynProxy132.cs" />
     <Compile Include="ChangeProxyTargetInterceptor.cs" />
-    <Compile Include="CreateHashtableDictionaryStrategy.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\CreateHashtableDictionaryStrategy.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\DictionaryAdapterFactoryTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithAttributesOnMethodParameters.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithExplicitInterface.cs" />
