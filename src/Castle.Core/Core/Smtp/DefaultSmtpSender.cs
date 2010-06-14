@@ -37,6 +37,14 @@ namespace Castle.Core.Smtp
 		private readonly NetworkCredential credentials = new NetworkCredential();
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultSmtpSender"/> class based on the <see cref="SmtpClient"/> configuration provided in the application configuration file.
+		/// </summary>
+		/// <remarks>
+		/// This constructor is based on the default <see cref="SmtpClient"/> configuration in the application configuration file.
+		/// </remarks> 
+		public DefaultSmtpSender() { }
+
+		/// <summary>
 		/// This service implementation
 		/// requires a host name in order to work
 		/// </summary>
@@ -130,8 +138,19 @@ namespace Castle.Core.Smtp
 				// it to the smtpClient.
 				// After the mail is sent, the message is disposed and the
 				// eventHandler removed from the smtpClient.
-				SmtpClient smtpClient = new SmtpClient(hostname, port);
-				Configure(smtpClient);
+				SmtpClient smtpClient;
+
+				if (string.IsNullOrEmpty(hostname))
+				{
+					// No hostname configured, use the settings provided in system.net.smtp (SmtpClient default behavior)
+					smtpClient = new SmtpClient();
+				}
+				else
+				{
+					// A hostname is provided - init and configure using configured settings
+					smtpClient = new SmtpClient(hostname, port);
+					Configure(smtpClient);
+				}
 
 				Guid msgGuid = new Guid();
 				SendCompletedEventHandler sceh = null;
