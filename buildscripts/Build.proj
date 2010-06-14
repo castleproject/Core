@@ -263,7 +263,7 @@ limitations under the License.
 	<Target Name="_PreparePackage">
 
 		<PropertyGroup>
-			<PackageDir Condition="'$(PackageDir)' == ''">$(OutputPath)pkg</PackageDir>
+			<PackageDir Condition="'$(PackageDir)' == ''">$(OutputPath)../pkg</PackageDir>
 		</PropertyGroup>
 
 		<RemoveDir Directories="$(PackageDir)" ContinueOnError="true" />
