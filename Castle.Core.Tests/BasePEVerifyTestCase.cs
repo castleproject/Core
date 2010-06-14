@@ -26,7 +26,8 @@ namespace Castle.DynamicProxy.Tests
 		[SetUp]
 		public void FindPeVerifySetUp()
 		{
-			var peVerifyProbingPaths = Castle.DynamicProxy.Tests.Properties.Settings.Default.PeVerifyProbingPaths;
+			
+			var peVerifyProbingPaths = Properties.Settings.Default.PeVerifyProbingPaths;
 			foreach (var path in peVerifyProbingPaths)
 			{
 				var file = Path.Combine(path, "peverify.exe");
@@ -47,7 +48,7 @@ namespace Castle.DynamicProxy.Tests
 	public abstract class BasePEVerifyTestCase
 	{
 		protected ProxyGenerator generator;
-		protected PersistentProxyBuilder builder;
+		protected IProxyBuilder builder;
 
 		private bool verificationDisabled;
 
@@ -60,7 +61,11 @@ namespace Castle.DynamicProxy.Tests
 
 		public void ResetGeneratorAndBuilder()
 		{
+#if SILVERLIGHT // no PersistentProxyBuilder in Silverlight
+			builder = new DefaultProxyBuilder();
+#else
 			builder = new PersistentProxyBuilder();
+#endif
 			generator = new ProxyGenerator(builder);
 		}
 
@@ -81,7 +86,7 @@ namespace Castle.DynamicProxy.Tests
 			if (!IsVerificationDisabled)
 			{
 				// Note: only supports one generated assembly at the moment
-				string path = builder.SaveAssembly();
+				var path = ((PersistentProxyBuilder)builder).SaveAssembly();
 				if (path != null)
 					RunPEVerifyOnGeneratedAssembly(path);
 			}

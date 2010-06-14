@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,12 +17,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Globalization;
 	using System.Linq;
 	using System.Reflection;
 	using NUnit.Framework;
-	using PropertyDescriptor = Castle.Components.DictionaryAdapter.PropertyDescriptor;
 
 	[TestFixture]
 	public class DictionaryAdapterFactoryTestCase
@@ -36,21 +33,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary = new Hashtable();
 			factory = new DictionaryAdapterFactory();
 		}
-
-		[Test]
-		public void CreateAdapter_NoPrefixPropertiesOnly_WorksFine2()
-		{
-			var dictionary = new Hashtable();
-			var factory = new DictionaryAdapterFactory();
-			var adapter = factory.GetAdapter<IHelloWorld>(dictionary);
-adapter.Message = "Hello world!";
-Assert.AreEqual("Hello world!",dictionary["Message"]);
-		}
-		
-public interface IHelloWorld
-{
-	string Message {get;set;}
-}
 
 		[Test]
 		public void CreateAdapter_NoPrefixPropertiesOnly_WorksFine()
@@ -153,14 +135,6 @@ public interface IHelloWorld
 			Assert.AreEqual(37, person.Age);
 			Assert.AreEqual(new DateTime(1970, 7, 19), person.DOB);
 			Assert.AreEqual(0, person.Friends.Count);
-		}
-
-		[Test]
-		public void UpdateAdapterAndRead_Prefix_Matches2()
-		{
-			var person = factory.GetAdapter<IPersonWithPrefix>(dictionary);
-			person.HairColor = Color.Red;
-			Assert.AreEqual(person.HairColor, dictionary["Person_HairColor"]);
 		}
 
 		[Test]
@@ -844,7 +818,8 @@ public interface IHelloWorld
 			container.Item.Name = "Craig";
 			Assert.IsTrue(notifyCalled);
 		}
-
+		
+#if !SILVERLIGHT
 		[Test]
 		public void WillPropagatePropertyChangedEventWhenBindingListPropertyChanged()
 		{
@@ -852,6 +827,7 @@ public interface IHelloWorld
 			var person = container.Bindingtems.AddNew();
 			person.Name = "Fred Flinstone";
 		}
+#endif
 
 		[Test]
 		public void WillStopProgagtingPropertyChangedEventWhenNestedPropertyRemoved()
@@ -886,9 +862,9 @@ public interface IHelloWorld
 			};
 
 			using (person.SuppressNotificationsBlock())
-            {
-				person.Name = "Craig";            	
-            }
+			{
+				person.Name = "Craig";
+			}
 			Assert.IsFalse(notifyCalled);
 		}
 
@@ -1335,7 +1311,8 @@ public interface IHelloWorld
 			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
 			Assert.IsNotNull(container.Phone);
 		}
-
+		
+#if !SILVERLIGHT
 		[Test]
 		public void CanAddBindingListItemsOnDemand()
 		{
@@ -1343,6 +1320,7 @@ public interface IHelloWorld
 			var person = container.Bindingtems.AddNew();
 			Assert.IsNotNull(person);
 		}
+#endif
 
 		[Test]
 		public void WillNotCreateObjectOnDemandWithoutDefaultConstructor()
@@ -1419,7 +1397,8 @@ public interface IHelloWorld
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
 				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
-				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable());
+				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
+				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 			Assert.AreEqual(container1, container1);
 			Assert.AreNotEqual(container1, container2);
 
@@ -1437,7 +1416,8 @@ public interface IHelloWorld
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
 				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
-				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable());
+				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
+				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 
 			container1.Id = Guid.NewGuid();
 			container2.Id = container1.Id;
@@ -1451,7 +1431,8 @@ public interface IHelloWorld
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
 				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
-				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable());
+				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
+				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
 			Assert.AreNotEqual(container1.GetHashCode(), container2.GetHashCode());
 			container1.Id = Guid.NewGuid();
 			container2.Id = container1.Id;
@@ -1495,389 +1476,7 @@ public interface IHelloWorld
 		}
 	}
 
-	[TestDictionaryValidator]
-	public interface IName : IDictionaryAdapter, IDictionaryNotify, IDictionaryCreate, IDictionaryValidate
-	{
-		string FirstName { get; }
-		string LastName { get; }
-
-		[StringFormat("{0} {1}", "FirstName,LastName")]
-		string FullName { get; }
-	}
-
-	public enum Color { Red, Green, Blue };
-
-	public interface IMutableName : IName, IDictionaryEdit
-	{
-		[ValidateStringLengthAtLeast(10)]
-		[Group("A")]new string FirstName { get; set; }
-
-		[ValidateStringLengthAtLeast(15)]
-		[Group("B")]new string LastName { get; set; }
-	}
-
-	public interface IPhone : IEditableObject, INotifyPropertyChanged, IDataErrorInfo
-	{
-		[Fetch]string Number { get; set; }
-		string Extension { get; set; }
-	}
-
 	#region InfrastructureStub
 
-	public abstract class InfrastructureStub : INotifyPropertyChanged, IEditableObject, IDataErrorInfo
-	{
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		public void BeginEdit()
-		{
-		}
-
-		public void CancelEdit()
-		{
-		}
-
-		public void EndEdit()
-		{
-			if (PropertyChanged != null)
-			{
-			}
-		}
-
-		public string Error
-		{
-			get { return String.Empty; }
-		}
-
-		public string this[string columnName]
-		{
-			get { return String.Empty; }
-		}
-	}
-
 	#endregion
-
-	public class Phone : InfrastructureStub, IPhone
-	{
-		private string number;
-		private string extension;
-
-		public Phone()
-		{
-		}
-
-		public Phone(string number, string extension)
-		{
-			this.number = number;
-			this.extension = extension;
-		}
-
-		public string Extension
-		{
-			get { return extension; }
-			set { extension = value; }
-		}
-
-		public string Number
-		{
-			get { return number; }
-			set { number = value; }
-		}
-	}
-
-	[PropagateNotifications(false)]
-	public interface IAddress : IEditableObject, INotifyPropertyChanged, IDataErrorInfo
-	{
-		string Line1 { get; set; }
-		string Line2 { get; set; }
-		string City { get; set; }
-		string State { get; set; }
-		string ZipCode { get; set; }
-
-		[Component]
-		IPhone Phone { get; }
-
-		[Component(NoPrefix = true)]
-		IPhone Mobile { get; }
-
-		[Component(Prefix = "Emr_")]
-		IPhone Emergency { get; }
-	}
-
-	public class Address : InfrastructureStub,  IAddress
-	{
-		private string line1;
-		private string line2;
-		private string city;
-		private string state;
-		private string zipCode;
-		private IPhone phone;
-		private IPhone mobile;
-		private IPhone emergency;
-
-		public string Line1
-		{
-			get { return line1; }
-			set { line1 = value; }
-		}
-
-		public string Line2
-		{
-			get { return line2; }
-			set { line2 = value; }
-		}
-
-		public string City
-		{
-			get { return city; }
-			set { city = value; }
-		}
-
-		public string State
-		{
-			get { return state; }
-			set { state = value; }
-		}
-
-		public string ZipCode
-		{
-			get { return zipCode; }
-			set { zipCode = value; }
-		}
-
-		public IPhone Phone
-		{
-			get
-			{
-				if (phone == null)
-				{
-					phone = new Phone();
-				}
-				return phone;
-			}
-		}
-
-		public IPhone Mobile
-		{
-			get
-			{
-				if (mobile == null)
-				{
-					mobile = new Phone();
-				}
-				return mobile;
-			}
-		}
-
-		public IPhone Emergency
-		{
-			get
-			{
-				if (emergency == null)
-				{
-					emergency = new Phone();
-				}
-				return emergency;
-			}
-		}
-	}
-
-	[MultiLevelEdit]
-	public interface IPerson : IDictionaryAdapter, IEditableObject, IDictionaryNotify, IDataErrorInfo
-	{
-		string Name { get; set; }
-
-		int Age { get; set; }
-
-		DateTime DOB { get; set; }
-
-		IList<IPerson> Friends { get; set; }
-
-		[KeySubstitution("_", " ")]
-		string First_Name { get; set; }
-
-		[Component]
-		IAddress HomeAddress { get; set; }
-
-		[Component(NoPrefix = true)]
-		IAddress WorkAddress { get; set; }
-
-		[Component(Prefix = "Billing_")]
-		IAddress BillingAddress { get; set; }
-	}
-
-	[OnDemand]
-	public interface IItemContainer<TItem> : IDictionaryAdapter, IDictionaryCreate,
-											 IEditableObject, INotifyPropertyChanged
-	{
-		Guid Id { get; set; }
-
-		TItem Item { get; set; }
-
-		[OnDemand(5)]
-		int Count { get; set; }
-
-		Address Address { get; set; }
-
-		Uri EmailAddress { get; set; }
-		IPhone Phone { get; set; }
-
-		int[] Positions { get; set; }
-
-		IDynamicValue<int> ReducePositions { get; set; }
-
-		IList<TItem> GenericItems { get; set; }
-
-		BindingList<TItem> Bindingtems { get; set; }
-
-		IList Items { get; set; }
-	}
-
-	public interface IItemContainerWithComponent<TItem> : IDictionaryNotify
-	{
-		[Component]
-		TItem Item { get; set; }
-	}
-
-	public interface IPersonWithoutPrefix : IPerson
-	{
-		int NumberOfFeet { get; set; }
-	}
-
-	[KeyPrefix("Person_")]
-	public interface IPersonWithPrefix : IPersonWithoutPrefix
-	{
-		Color HairColor { get; set; }
-	}
-
-	[KeyPrefix("Person2_")]
-	public interface IPersonWithPrefixOverride : IPersonWithPrefix
-	{
-		[Key("Eye__Color")]
-		Color EyeColor { get; set; }
-	}
-
-	[TypeKeyPrefix]
-	public interface IPersonWithTypePrefixOverride : IPersonWithPrefixOverride
-	{
-		int Height { get; set; }
-	}
-
-	public interface IPersonWithPrefixOverrideFurtherOverride : IPersonWithPrefixOverride
-	{
-		[DefaultValue(1)]
-		int NumberOfHeads { get; set; }
-	}
-
-	[KeyPrefix("")]
-	[KeySubstitution("_", " ")]
-	public interface IPersonWithDeniedInheritancePrefix : IPersonWithPrefixOverrideFurtherOverride
-	{
-		int NumberOfFingers { get; set; }
-
-		[SuppressNotifications]
-		int Max_Width { get; set; }
-	}
-
-	public interface IPersonWithMethod : IPerson
-	{
-		void Run();
-	}
-
-	public interface IConversions
-	{
-		int Int { get; set; }
-		float Float { get; set; }
-		double Double { get; set; }
-		decimal Decimal { get; set; }
-		String String { get; set; }
-		DateTime DateTime { get; set; }
-		[NewGuid]Guid Guid { get; set; }
-		int? NullInt { get; set; }
-		float? NullFloat { get; set; }
-		double? NullDouble { get; set; }
-		DateTime? NullDateTime { get; set; }
-		Guid? NullGuid { get; set; }
-		decimal? NullDecimal { get; set; }
-	}
-
-	[StringValues]
-	public interface IConversionsToString : IConversions
-	{
-		[TypeConverter(typeof(PhoneConverter))]
-		Phone Phone { get; set; }
-	}
-
-	public interface IStringLists
-	{
-		[StringList]
-		IList<string> Names { get; }
-
-		[StringList]
-		IList<int> Ages { get; set; }
-	}
-
-	public class PhoneConverter : TypeConverter
-	{
-		public override bool CanConvertFrom(ITypeDescriptorContext context,
-											Type sourceType)
-		{
-			if (sourceType == typeof(string))
-			{
-				return true;
-			}
-			return base.CanConvertFrom(context, sourceType);
-		}
-
-		public override object ConvertFrom(ITypeDescriptorContext context,
-										   CultureInfo culture, object value)
-		{
-			if (value is string)
-			{
-				string[] fields = ((string)value).Split(new char[] { ',' });
-				return new Phone(fields[0], fields[1]);
-			}
-			return base.ConvertFrom(context, culture, value);
-		}
-
-		public override object ConvertTo(ITypeDescriptorContext context,
-										 CultureInfo culture, object value, Type destinationType)
-		{
-			if (destinationType == typeof(string))
-			{
-				return ((Phone)value).Number + "," + ((Phone)value).Extension;
-			}
-			return base.ConvertTo(context, culture, value, destinationType);
-		}
-	}
-
-	public interface IEnsureMetaDoesNotConflict
-	{
-		string Dictionary { get; set; }
-
-		object Properties { get; set; }
-
-		int FetchProperties { get; set; }
-	}
-
-	public class CustomGetter : DictionaryBehaviorAttribute, IDictionaryPropertyGetter
-	{
-		private List<string> propertiesFetched = new List<string>();
-
-		public IList<string> PropertiesFetched
-		{
-			get { return propertiesFetched; }
-		}
-
-		public void Reset()
-		{
-			propertiesFetched.Clear();
-		}
-
-		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key,
-									   object storedValue, PropertyDescriptor property, bool ifExists)
-		{
-			propertiesFetched.Add(key);
-			return storedValue;
-		}
-	}
 }
