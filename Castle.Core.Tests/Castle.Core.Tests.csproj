@@ -58,10 +58,6 @@
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="nunit.framework">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
@@ -70,6 +66,30 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
+    <Reference Include="nunit.framework">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="$(MSBuildTargets)=='Silverlight 3.0'">
+    <Reference Include="NUnit.Silverlight.Framework">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\sl3\NUnit.Silverlight.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NUnit.Silverlight.Compatibility">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\sl3\NUnit.Silverlight.Compatibility.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="$(MSBuildTargets)=='Silverlight 4.0'">
+    <Reference Include="NUnit.Silverlight.Framework">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\sl4\NUnit.Silverlight.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NUnit.Silverlight.Compatibility">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\sl\NUnit.Silverlight.Compatibility.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessLevelTestCase.cs" />
