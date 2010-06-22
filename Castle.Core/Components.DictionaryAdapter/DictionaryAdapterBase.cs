@@ -15,6 +15,7 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
@@ -71,9 +72,10 @@ namespace Castle.Components.DictionaryAdapter
 		public object ReadProperty(string key)
 		{
 			object propertyValue = null;
-			if (!GetEditedProperty(key, out propertyValue))
+			if (GetEditedProperty(key, out propertyValue) == false)
 			{
-				propertyValue = This.Dictionary[key];
+				var dictionary = GetDictionary(This.Dictionary, ref key);
+				if (dictionary != null) propertyValue = dictionary[key];
 			}
 			return propertyValue;
 		}
@@ -115,7 +117,8 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (property == null || EditProperty(property, key, value) == false)
 			{
-				This.Dictionary[key] = value;
+				var dictionary = GetDictionary(This.Dictionary, ref key);
+				if (dictionary != null)	dictionary[key] = value;
 			}
 		}
 
@@ -123,7 +126,8 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (property == null || ClearEditProperty(property, key) == false)
 			{
-				This.Dictionary.Remove(key);
+				var dictionary = GetDictionary(This.Dictionary, ref key);
+				if (dictionary != null) dictionary.Remove(key);
 			}	
 		}
 
@@ -223,6 +227,21 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				GetProperty(property.PropertyName, false);
 			}
+		}
+
+		private static IDictionary GetDictionary(IDictionary dictionary, ref string key)
+		{
+			if (key.StartsWith("!") == false)
+			{
+				var parts = key.Split(',');
+				for (var i = 0; i < parts.Length - 1; ++i)
+				{
+					dictionary = dictionary[parts[i]] as IDictionary;
+					if (dictionary == null) return null;
+				}
+				key = parts[parts.Length - 1];
+			}
+			return dictionary;
 		}
 	}
 }
