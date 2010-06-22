@@ -40,5 +40,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		[Component(Prefix = "Billing_")]
 		IAddress BillingAddress { get; set; }
+
+		[Key(new [] { "Meta", "Id" })]
+		Guid Id { get; }
 	}
 }

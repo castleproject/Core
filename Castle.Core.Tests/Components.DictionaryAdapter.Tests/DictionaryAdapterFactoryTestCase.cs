@@ -582,6 +582,18 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("37,36,5,3,1", dictionary["Ages"]);
 		}
 
+		[Test]
+		public void ReadAdapter_WithCompoundKeyPrefix_WorksFine()
+		{
+			var meta = new Hashtable();
+			meta["Id"] = Guid.NewGuid();
+			dictionary["Meta"] = meta;
+
+			var person = factory.GetAdapter<IPerson>(dictionary);
+
+			Assert.AreEqual(meta["Id"], person.Id);
+		}
+
 		#region Safe type names
 
 		[Test]
@@ -682,7 +694,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var adapter = factory.GetAdapter<IPerson>(dictionary) as IDictionaryAdapter;
 			Assert.AreSame(dictionary, adapter.This.Dictionary);
 			Assert.AreSame(factory, adapter.This.Factory);
-			Assert.AreEqual(8, adapter.Meta.Properties.Count);
+			Assert.AreEqual(9, adapter.Meta.Properties.Count);
 		}
 
 		[Test]
@@ -1479,8 +1491,4 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("", mutableName.LastName);
 		}
 	}
-
-	#region InfrastructureStub
-
-	#endregion
 }
