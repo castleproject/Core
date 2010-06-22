@@ -766,8 +766,8 @@ namespace Castle.DynamicProxy
 			CheckNotGenericTypeDefinition(interfaceToProxy, "interfaceToProxy");
 			CheckNotGenericTypeDefinitions(additionalInterfacesToProxy, "additionalInterfacesToProxy");
 
-			Type generatedType = CreateInterfaceProxyTypeWithoutTarget(interfaceToProxy, additionalInterfacesToProxy, options);
-			List<object> arguments = GetConstructorArguments(new object(), interceptors, options);
+			var generatedType = CreateInterfaceProxyTypeWithoutTarget(interfaceToProxy, additionalInterfacesToProxy, options);
+			var arguments = GetConstructorArguments(null, interceptors, options);
 			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 
