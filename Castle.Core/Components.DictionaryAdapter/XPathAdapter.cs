@@ -28,9 +28,18 @@ namespace Castle.Components.DictionaryAdapter
 								IDictionaryPropertyGetter, IDictionaryPropertySetter,
 								IDictionaryCreateStrategy
 	{
+		private readonly XPathAdapter parent;
 		private readonly XPathContext context;
 		private readonly Func<XPathNavigator> createRoot;
 		private XPathNavigator root;
+		private XmlMetadata xmlMeta;
+
+		public XPathNavigator Root
+		{
+			get { return EnsureOffRoot(); }
+		}
+
+		public IXPathNavigable Source { get; private set; }
 
 		#region Init
 
@@ -40,18 +49,21 @@ namespace Castle.Components.DictionaryAdapter
 
 		public XPathAdapter(IXPathNavigable source)
 		{
+			Source = source;
 			context = new XPathContext();
 			root = source.CreateNavigator();
 		}
 
 		protected XPathAdapter(XPathNavigator source, XPathAdapter parent)
 		{
+			this.parent = parent;
 			context = parent.context.CreateChild();
 			root = source.Clone();
 		}
 
 		protected XPathAdapter(Func<XPathNavigator> createSource, XPathAdapter parent)
 		{
+			this.parent = parent;
 			context = parent.context.CreateChild();
 			createRoot = createSource;
 		}
@@ -69,31 +81,36 @@ namespace Castle.Components.DictionaryAdapter
 			dictionaryAdapter.This.CreateStrategy = this;
 
 			context.ApplyBehaviors(behaviors);
+			xmlMeta = dictionaryAdapter.GetXmlMeta();
 
-			var xmlType = dictionaryAdapter.GetXmlMeta().XmlType;
-			if (string.IsNullOrEmpty(xmlType.Namespace) == false)
+			if (string.IsNullOrEmpty(xmlMeta.XmlType.Namespace) == false)
 			{
-				context.AddNamespace(string.Empty, xmlType.Namespace);
+				context.AddNamespace(string.Empty, xmlMeta.XmlType.Namespace);
 			}
 
-			foreach (var behavior in behaviors)
+			if (parent == null)
 			{
-				if (behavior is XPathAttribute)
+				foreach (var behavior in behaviors)
 				{
-					var attrib = (XPathAttribute)behavior;
- 					var expression = attrib.CompiledExpression;
- 					if (MoveOffRoot(root, XPathNodeType.Element) &&
- 						context.Matches(expression, root) == false)
- 					{
- 						var match = context.SelectSingleNode(expression, root);
- 						if (match == null) continue;
- 						root = match;
- 					}
-					break;
-				}
-			}
+					if (behavior is XPathAttribute)
+					{
+						var attrib = (XPathAttribute)behavior;
+						var compiledExpression = attrib.CompiledExpression;
+						if (MoveOffRoot(root, XPathNodeType.Element) == false || context.Matches(compiledExpression, root))
+						{
+							break;
+						}
 
-			MoveOffRoot(root, XPathNodeType.Element);
+						var navigator = context.SelectSingleNode(compiledExpression, root);
+						if (navigator != null)
+						{
+							root = navigator;
+							break;
+						}
+					}
+				}
+				MoveOffRoot(root, XPathNodeType.Element);
+			}
 		}
 
 		#endregion
@@ -111,13 +128,8 @@ namespace Castle.Components.DictionaryAdapter
 			var cached = dictionaryAdapter.This.ExtendedProperties[property.PropertyName];
 			if (cached != null) return cached;
 
-			if (EnsureOffRoot(dictionaryAdapter))
-			{
-				var result = EvaluateProperty(key, property, dictionaryAdapter);
-				return ReadProperty(result, ifExists, dictionaryAdapter);
-			}
-
-			return null;
+			var result = EvaluateProperty(key, property, dictionaryAdapter);
+			return ReadProperty(result, ifExists, dictionaryAdapter);
 		}
 
 		bool IDictionaryPropertySetter.SetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, 
@@ -128,7 +140,9 @@ namespace Castle.Components.DictionaryAdapter
 				return true;
 			}
 
-			if (EnsureOffRoot(dictionaryAdapter) && root.CanEdit)
+			EnsureOffRoot();
+
+			if (root.CanEdit)
 			{
 				var result = EvaluateProperty(key, property, dictionaryAdapter);
 				if (result.CanWrite)
@@ -221,13 +235,13 @@ namespace Castle.Components.DictionaryAdapter
 
 		private object ReadComponent(XPathResult result, bool ifExists, IDictionaryAdapter dictionaryAdapter)
 		{
-			var node = result.GetNavigator(false);
-			if (node == null && ifExists) return null; 
-			
-			XPathAdapter xpathAdapter;
+			XPathAdapter adapter;
+			Func<XPathNavigator> createSource = null;
+			var source = result.GetNavigator(false);
+			if (source == null && ifExists) return null;
+		
 			var elementType = result.Type;
-
-			if (node != null)
+			if (source != null)
 			{
 				if (result.XmlMeta != null)
 				{
@@ -235,19 +249,22 @@ namespace Castle.Components.DictionaryAdapter
 				}
 				else
 				{
-					var xmlType = context.GetXmlType(node);
+					var xmlType = context.GetXmlType(source);
 					elementType = dictionaryAdapter.GetXmlSubclass(xmlType, elementType) ?? elementType;
 				}
-				xpathAdapter = new XPathAdapter(node, this);
+				adapter = new XPathAdapter(source, this);
 			}
 			else
 			{
-				xpathAdapter = new XPathAdapter(() => result.GetNavigator(true), this);
+				if (createSource == null)
+				{
+					createSource = () => result.GetNavigator(true);
+				}
+				adapter = new XPathAdapter(createSource, this);
 			}
 
-			var component = dictionaryAdapter.This.Factory.GetAdapter(elementType, new Hashtable(),
-				new DictionaryDescriptor().AddBehavior(XPathBehavior.Instance)
-					.AddGetter(xpathAdapter).AddSetter(xpathAdapter));
+			var component = dictionaryAdapter.This.Factory.GetAdapter(elementType, new Hashtable(), 
+				new DictionaryDescriptor().AddBehavior(XPathBehavior.Instance, adapter));
 
 			if (result.Property != null)
 			{
@@ -482,11 +499,24 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Helpers
 
-		public static XPathAdapter GetXPathAdapter(object adapter, out IDictionaryAdapter dictionaryAdapter)
+		public static XPathAdapter For(object adapter)
 		{
-			dictionaryAdapter = adapter as IDictionaryAdapter;
-			if (adapter != null)
-				return dictionaryAdapter.Meta.Behaviors.OfType<XPathAdapter>().FirstOrDefault();
+			if (adapter == null)
+			{
+				throw new ArgumentNullException("adapter");
+			}
+
+			var dictionaryAdapter = adapter as IDictionaryAdapter;
+
+			if (dictionaryAdapter != null)
+			{
+				XPathAdapter xpathAdapter = null;
+				var getters = dictionaryAdapter.This.Descriptor.Getters;
+				if (getters != null)
+					xpathAdapter = getters.OfType<XPathAdapter>().SingleOrDefault();
+				if (xpathAdapter != null) return xpathAdapter;
+			}
+
 			return null;
 		}
 
@@ -589,36 +619,37 @@ namespace Castle.Components.DictionaryAdapter
 			return new XPathResult(property, result, keyContext, null, create);
 		}
 
-		private bool ShouldIgnoreProperty(PropertyDescriptor property)
+		private static bool ShouldIgnoreProperty(PropertyDescriptor property)
 		{
 			return property.Behaviors.Any(behavior => behavior is XmlIgnoreAttribute);
 		}
 
-		private bool EnsureOffRoot(IDictionaryAdapter dictionaryAdapter)
+		private XPathNavigator EnsureOffRoot()
         {
 			if (root == null && createRoot != null)
 			{
 				root = createRoot().Clone();
 			}
+
             if (root != null && MoveOffRoot(root, XPathNodeType.Element) == false)
             {
-				string localName, namespaceUri = "";
-				var xmlMeta = dictionaryAdapter.GetXmlMeta();
-
+				string elementName;
+				string namespaceUri = "";
 				var xmlRoot = xmlMeta.XmlRoot;
 				if (xmlRoot != null)
 				{
-					localName = xmlRoot.ElementName;
+					elementName = xmlRoot.ElementName;
 					namespaceUri = xmlRoot.Namespace;
 				}
 				else
 				{
-					localName = xmlMeta.XmlType.TypeName;
+					elementName = xmlMeta.XmlType.TypeName;
 				}
-				root = context.AppendElement(localName, namespaceUri, root);
+				root = context.AppendElement(elementName, namespaceUri, root);
 				context.AddStandardNamespaces(root);
             }
-            return true;
+
+			return root;
         }
 
 		private static bool MoveOffRoot(XPathNavigator source, XPathNodeType to)
