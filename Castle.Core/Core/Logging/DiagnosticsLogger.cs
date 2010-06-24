@@ -64,7 +64,7 @@ namespace Castle.Core.Logging
 			// Create the source, if it does not already exist.
 			if (!EventLog.SourceExists(source, machineName))
 			{
-				EventSourceCreationData eventSourceCreationData = new EventSourceCreationData(source, logName);
+				var eventSourceCreationData = new EventSourceCreationData(source, logName);
 				eventSourceCreationData.MachineName = machineName;
 				EventLog.CreateEventSource(eventSourceCreationData);
 			}
