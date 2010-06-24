@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 #if !SILVERLIGHT
 	using System.Security;
@@ -69,20 +70,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static bool IsAnyTypeFromUnsignedAssembly(IEnumerable<Type> types)
 		{
-			foreach (Type t in types)
-			{
-				if (!IsAssemblySigned(t.Assembly))
-				{
-					return true;
-				}
-			}
-			return false;
+			return types.Any(t => IsAssemblySigned(t.Assembly) == false);
 		}
 
 		public static bool IsAnyTypeFromUnsignedAssembly(Type baseType, IEnumerable<Type> interfaces)
 		{
-			if (baseType != null && !IsAssemblySigned(baseType.Assembly))
+			if (baseType != null && IsAssemblySigned(baseType.Assembly) == false)
+			{
 				return true;
+			}
 
 			return IsAnyTypeFromUnsignedAssembly(interfaces);
 		}
