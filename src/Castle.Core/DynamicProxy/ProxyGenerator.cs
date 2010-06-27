@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy
 	using System.Reflection;
 #if !SILVERLIGHT
 	using System.Runtime.Remoting;
-	using System.Security;
 	using System.Security.Permissions;
 #endif
 	using System.Text;
@@ -57,8 +56,8 @@ namespace Castle.DynamicProxy
 #if !SILVERLIGHT
 	    private bool HasSecurityPermission()
 	    {
-	    	return
-	    		new SecurityPermission(SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy).IsGranted();
+	    	const SecurityPermissionFlag flag = SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy;
+	    	return new SecurityPermission(flag).IsGranted();
 	    }
 #endif
 

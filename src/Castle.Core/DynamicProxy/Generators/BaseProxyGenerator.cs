@@ -130,7 +130,7 @@ namespace Castle.DynamicProxy.Generators
 
 		#endregion
 
-		private void GenerateConstructor(ClassEmitter emitter, ConstructorInfo baseConstructor, params FieldReference[] fields)
+		protected void GenerateConstructor(ClassEmitter emitter, ConstructorInfo baseConstructor, params FieldReference[] fields)
 		{
 			ArgumentReference[] args;
 			ParameterInfo[] baseConstructorParams = null;
@@ -144,8 +144,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				args = new ArgumentReference[fields.Length + baseConstructorParams.Length];
 
-				int offset = fields.Length;
-
+				var offset = fields.Length;
 				for (int i = offset; i < offset + baseConstructorParams.Length; i++)
 				{
 					ParameterInfo paramInfo = baseConstructorParams[i - offset];
@@ -235,8 +234,9 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (ConstructorInfo constructor in constructors)
 			{
-				if (IsConstructorVisible(constructor))
-					GenerateConstructor(emitter, constructor, fields);
+				if (!IsConstructorVisible(constructor)) continue;
+
+				GenerateConstructor(emitter, constructor, fields);
 			}
 		}
 

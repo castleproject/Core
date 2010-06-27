@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
-	using System.Reflection;
 
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
@@ -26,7 +25,12 @@ namespace Castle.DynamicProxy.Contributors
 	public abstract class CompositeTypeContributor: ITypeContributor
 	{
 		protected readonly INamingScope namingScope;
-		protected readonly ICollection<Type> interfaces = new List<Type>();
+		protected readonly ICollection<Type> interfaces =
+#if SL3
+		new List<Type>();
+#else
+		new HashSet<Type>();
+#endif
 		private ILogger logger = NullLogger.Instance;
 		private readonly ICollection<MetaProperty> properties = new TypeElementCollection<MetaProperty>();
 		private readonly ICollection<MetaEvent> events = new TypeElementCollection<MetaEvent>();

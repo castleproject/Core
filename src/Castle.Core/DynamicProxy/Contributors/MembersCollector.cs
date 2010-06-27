@@ -26,7 +26,13 @@ namespace Castle.DynamicProxy.Contributors
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
 		private ILogger logger = NullLogger.Instance;
-		private IList<MethodInfo> checkedMethods = new List<MethodInfo>();
+
+		private ICollection<MethodInfo> checkedMethods = 
+#if SL3
+			new List<MethodInfo>();
+#else
+			new HashSet<MethodInfo>();
+#endif
 		private readonly IDictionary<PropertyInfo, MetaProperty> properties = new Dictionary<PropertyInfo, MetaProperty>();
 		private readonly IDictionary<EventInfo, MetaEvent> events = new Dictionary<EventInfo, MetaEvent>();
 		private readonly IDictionary<MethodInfo, MetaMethod> methods = new Dictionary<MethodInfo, MetaMethod>();
