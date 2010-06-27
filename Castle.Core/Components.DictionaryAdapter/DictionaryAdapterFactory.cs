@@ -504,7 +504,6 @@ namespace Castle.Components.DictionaryAdapter
 
 		private string GetAdapterAssemblyName(Type type)
 		{
-			var assemblyName = type.Assembly.GetName().Name;
 #if SILVERLIGHT
 			string assemblyName;
 			var commaLocation = type.Assembly.FullName.IndexOf(',');
@@ -516,6 +515,8 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				assemblyName = "UnnamedAssembly";
 			}
+#else
+			var assemblyName = type.Assembly.GetName().Name;
 #endif
 			var safeTypeFullName = GetSafeTypeFullName(type);
 			return string.Concat(assemblyName, ".", safeTypeFullName, ".DictionaryAdapter");

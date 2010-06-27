@@ -151,6 +151,10 @@
     <Compile Include="DynamicProxy\Contributors\InterfaceMembersOnClassCollector.cs" />
     <Compile Include="DynamicProxy\Contributors\Delegates.cs" />
     <Compile Include="DynamicProxy\Contributors\InterfaceProxyWithoutTargetContributor.cs" />
+    <Compile Include="DynamicProxy\Generators\DelegateMembersCollector.cs" />
+    <Compile Include="DynamicProxy\Generators\DelegateProxyGenerationHook.cs" />
+    <Compile Include="DynamicProxy\Generators\DelegateProxyGenerator.cs" />
+    <Compile Include="DynamicProxy\Generators\DelegateProxyTargetContributor.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\BindDelegateExpression.cs" />
     <Compile Include="DynamicProxy\Generators\IInvocationCreationContributor.cs" />
     <Compile Include="DynamicProxy\Generators\InheritanceInvocationTypeGenerator.cs" />
