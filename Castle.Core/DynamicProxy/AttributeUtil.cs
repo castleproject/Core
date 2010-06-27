@@ -200,6 +200,11 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		private static bool ShouldSkipAttributeReplication(Type attribute)
 		{
+			if(attribute.IsPublic == false)
+			{
+				return true;
+			}
+
 			if (SpecialCaseAttributThatShouldNotBeReplicated(attribute))
 				return true;
 

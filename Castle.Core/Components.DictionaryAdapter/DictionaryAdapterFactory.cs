@@ -103,7 +103,11 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			var adapterType = InternalGetAdapterType(type, descriptor);
+#if SILVERLIGHT
+			var metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.GetField;
+#else
 			var metaBindings = BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetField;
+#endif
 			return (DictionaryAdapterMeta)adapterType.InvokeMember("__meta", metaBindings, null, null, null);
 		}
 
@@ -174,7 +178,11 @@ namespace Castle.Components.DictionaryAdapter
 
 		private Assembly CreateAdapterAssembly(Type type, TypeBuilder typeBuilder, PropertyDescriptor descriptor)
 		{
+#if SILVERLIGHT
+			var binding = FieldAttributes.Public | FieldAttributes.Static;
+#else
 			var binding = FieldAttributes.Private | FieldAttributes.Static;
+#endif
 			var metaField = typeBuilder.DefineField("__meta", typeof(DictionaryAdapterMeta), binding);
 
 			CreateAdapterConstructor(typeBuilder);
@@ -202,7 +210,11 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			var adapterType = typeBuilder.CreateType();
+#if SILVERLIGHT
+			var metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.SetField;
+#else
 			var metaBindings = BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.SetField;
+#endif
 			var meta = new DictionaryAdapterMeta(type, initializers, metaInitializers, behaviors, propertyMap, this);
 			adapterType.InvokeMember("__meta", metaBindings, null, null, new[] { meta });
 
