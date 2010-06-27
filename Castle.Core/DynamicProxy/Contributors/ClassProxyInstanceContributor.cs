@@ -185,6 +185,13 @@ namespace Castle.DynamicProxy.Contributors
 				return false;
 			}
 
+			if(IsDelegate(baseType))
+			{
+				//working around bug in CLR which returns true for "does this type implement ISerializable" for delegates
+				return false;
+			}
+
+
 			// If base type implements ISerializable, we have to make sure
 			// the GetObjectData is marked as virtual
 			var getObjectDataMethod = baseType.GetInterfaceMap(typeof(ISerializable)).TargetMethods[0];
@@ -222,6 +229,11 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			return true;
+		}
+
+		private bool IsDelegate(Type baseType)
+		{
+			return baseType.BaseType==typeof(MulticastDelegate);
 		}
 #endif
 	}
