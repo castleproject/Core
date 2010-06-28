@@ -9,7 +9,7 @@ description - Deprecated overload of ProxyGenerator.CreateClassProxy was removed
 	method consistent with other methods and to remove confusion
 
 fix - whenever removed overload was used, use one of the other overloads.
-	
+
 ================================================================================================
 change - IProxyGenerationHook.NonVirtualMemberNotification method was renamed
 

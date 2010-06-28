@@ -89,6 +89,7 @@ namespace Castle.DynamicProxy.Tests
 				"If these are not correctly overridden caching will fail to work causing performance problems."));
 		}
 
+#if !SILVERLIGHT
 		[Test]
 		public void ExcludedNonVirtualMethods()
 		{
@@ -122,7 +123,7 @@ namespace Castle.DynamicProxy.Tests
 				"Castle.DynamicProxy.Tests.LoggingTestCase+ClassWithInterfaceMethodExplicitlyImplemented " +
 				"because it cannot be intercepted."));
 		}
-
+#endif
 		#region Test Types
 
 		public class EmptyClass
