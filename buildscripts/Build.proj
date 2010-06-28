@@ -286,7 +286,7 @@ limitations under the License.
 
 		<ItemGroup>
 			<!-- Grab all Castle assemblies, but ignore unit test assemblies. -->
-			<_CastleDependencies Include="$(OutputPath)Castle*.dll;$(OutputPath)Castle*.xml" Exclude="$(OutputPath)Castle*.Tests.dll"/>
+			<_CastleDependencies Include="$(OutputPath)Castle.*.dll;$(OutputPath)Castle.*.xml" Exclude="$(OutputPath)Castle*.Tests.dll"/>
 
 			<_BuildScriptsTxtFiles Include="$(BuildScriptsPath)/*.txt"/>
 			<_ChangesTxt Include="$(RootPath)/src/Change*.txt"/>
