@@ -17,7 +17,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System;
 	using System.ComponentModel;
 
-	public abstract class InfrastructureStub : INotifyPropertyChanged, IEditableObject, IDataErrorInfo
+	public abstract class InfrastructureStub : INotifyPropertyChanged, IEditableObject
+#if !SL3
+, IDataErrorInfo
+#endif
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
