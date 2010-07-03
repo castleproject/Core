@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void CollectFields(IProxyGenerationHook hook)
 		{
-			var fields = TypeUtil.GetAllFields(type);
+			var fields = type.GetAllFields();
 			foreach (var field in fields)
 			{
 				if(IsOKToBeOnProxy(field)) continue;

@@ -169,19 +169,17 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ParameterInfo param = parameters[i];
 
-				Type paramType = TypeUtil.GetClosedParameterType(invocation, param.ParameterType);
+				Type paramType = invocation.GetClosedParameterType(param.ParameterType);
 				if (paramType.IsByRef)
 				{
 					LocalReference localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(paramType.GetElementType());
-					invokeMethodOnTarget.CodeBuilder.AddStatement(
-																	new AssignStatement(localReference,
-																						new ConvertExpression(paramType.GetElementType(),
-																											  new MethodInvocationExpression
-																												(SelfReference.Self,
-																												 InvocationMethods.
-																													GetArgumentValue,
-																												 new LiteralIntExpression(
-																													i)))));
+					invokeMethodOnTarget.CodeBuilder
+						.AddStatement(
+							new AssignStatement(localReference,
+							                    new ConvertExpression(paramType.GetElementType(),
+							                                          new MethodInvocationExpression(SelfReference.Self,
+							                                                                         InvocationMethods.GetArgumentValue,
+							                                                                         new LiteralIntExpression(i)))));
 					ByRefReference byRefReference = new ByRefReference(localReference);
 					args[i] = new ReferenceExpression(byRefReference);
 					byRefArguments[i] = localReference;
@@ -202,7 +200,7 @@ namespace Castle.DynamicProxy.Generators
 			LocalReference returnValue = null;
 			if (callbackMethod.ReturnType != typeof(void))
 			{
-				Type returnType = TypeUtil.GetClosedParameterType(invocation, callbackMethod.ReturnType);
+				Type returnType = invocation.GetClosedParameterType(callbackMethod.ReturnType);
 				returnValue = invokeMethodOnTarget.CodeBuilder.DeclareLocal(returnType);
 				invokeMethodOnTarget.CodeBuilder.AddStatement(new AssignStatement(returnValue, methodOnTargetInvocationExpression));
 			}
