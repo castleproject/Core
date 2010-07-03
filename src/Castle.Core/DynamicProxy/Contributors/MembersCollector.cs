@@ -214,15 +214,14 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				return true;
 			}
-#endif
-
+#else
 			// Explicitly implemented interface method on class
 			if (method.IsPrivate && method.IsFinal)
 			{
 				Logger.Debug("Excluded explicitly implemented interface method {0} on type {1} because it cannot be intercepted.",
 					method.Name, method.DeclaringType.FullName);
 			}
-
+#endif
 			return false;
 		}
 

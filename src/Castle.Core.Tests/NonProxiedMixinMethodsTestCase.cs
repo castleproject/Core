@@ -35,59 +35,103 @@ namespace Castle.DynamicProxy.Tests
 			switch (kind)
 			{
 				case ProxyKind.Class:
-					return (TType)generator.CreateClassProxy(typeof(object), Type.EmptyTypes, options);
+					return (TType) generator.CreateClassProxy(typeof (object), Type.EmptyTypes, options);
 				case ProxyKind.WithoutTarget:
-					return (TType)generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), Type.EmptyTypes, options);
+					return (TType) generator.CreateInterfaceProxyWithoutTarget(typeof (IEmpty), Type.EmptyTypes, options);
 				case ProxyKind.WithTarget:
-					return (TType)generator.CreateInterfaceProxyWithTarget(typeof(IEmpty), Type.EmptyTypes, new Empty(), options);
+					return (TType) generator.CreateInterfaceProxyWithTarget(typeof (IEmpty), Type.EmptyTypes, new Empty(), options);
 				case ProxyKind.WithTargetInterface:
-					return (TType)generator.CreateInterfaceProxyWithTargetInterface(typeof(IEmpty), new Empty(), options);
+					return (TType) generator.CreateInterfaceProxyWithTargetInterface(typeof (IEmpty), new Empty(), options);
 			}
 
 			Assert.Fail("Invalid proxy kind {0}", kind);
 			return default(TType);
 		}
 
+#if SILVERLIGHT
 		[Test]
+		public void Mixin_method_Silverlight()
+		{
+			Mixin_method(ProxyKind.Class);
+			Mixin_method(ProxyKind.WithoutTarget);
+			Mixin_method(ProxyKind.WithTarget);
+			Mixin_method(ProxyKind.WithTargetInterface);
+		}
+#else
+		[Test]
+#endif
 		public void Mixin_method(
 			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
 				kind)
 		{
 			var proxy = CreateProxyWithMixin<ISimpleInterface>(kind, new ClassWithInterface());
-			int result = -1;
+			var result = -1;
 			Assert.DoesNotThrow(() => result = proxy.Do());
 			Assert.AreEqual(5, result);
 		}
 
+#if SILVERLIGHT
 		[Test]
+		public void Mixin_method_explicit_silverlight()
+		{
+			Mixin_method_explicit(ProxyKind.Class);
+			Mixin_method_explicit(ProxyKind.WithoutTarget);
+			Mixin_method_explicit(ProxyKind.WithTarget);
+			Mixin_method_explicit(ProxyKind.WithTargetInterface);
+		}
+#else
+		[Test]
+#endif
 		public void Mixin_method_explicit(
 			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
 				kind)
 		{
 			var proxy = CreateProxyWithMixin<ISimpleInterface>(kind, new SimpleInterfaceExplicit());
-			int result = -1;
+			var result = -1;
 			Assert.DoesNotThrow(() => result = proxy.Do());
 			Assert.AreEqual(5, result);
 		}
 
+#if SILVERLIGHT
 		[Test]
+		public void Mixin_method_generic_silverlight()
+		{
+			Mixin_method_generic(ProxyKind.Class);
+			Mixin_method_generic(ProxyKind.WithoutTarget);
+			Mixin_method_generic(ProxyKind.WithTarget);
+			Mixin_method_generic(ProxyKind.WithTargetInterface);
+		}
+#else
+		[Test]
+#endif
 		public void Mixin_method_generic(
 			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
 				kind)
 		{
 			var proxy = CreateProxyWithMixin<IGenericInterface>(kind, new GenericClass());
-			int result = -1;
+			var result = -1;
 			Assert.DoesNotThrow(() => result = proxy.GenericMethod<int>());
 			Assert.AreEqual(0, result);
 		}
 
+#if SILVERLIGHT
 		[Test]
+		public void Mixin_method_out_ref_parameters_silverlight()
+		{
+			Mixin_method_out_ref_parameters(ProxyKind.Class);
+			Mixin_method_out_ref_parameters(ProxyKind.WithoutTarget);
+			Mixin_method_out_ref_parameters(ProxyKind.WithTarget);
+			Mixin_method_out_ref_parameters(ProxyKind.WithTargetInterface);
+		}
+#else
+		[Test]
+#endif
 		public void Mixin_method_out_ref_parameters(
 			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
 				kind)
 		{
 			var proxy = CreateProxyWithMixin<IWithRefOut>(kind, new WithRefOut());
-			int[] result = { -1 };
+			int[] result = {-1};
 			Assert.DoesNotThrow(() => proxy.Did(ref result[0]));
 			Assert.AreEqual(5, result[0]);
 
