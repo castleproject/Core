@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +24,8 @@ namespace Castle.Core
 	/// </summary>
 	public sealed class ReflectionBasedDictionaryAdapter : IDictionary
 	{
-		private readonly Dictionary<string,object> properties = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+		private readonly Dictionary<string, object> properties =
+			new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReflectionBasedDictionaryAdapter"/> class.
@@ -37,16 +38,17 @@ namespace Castle.Core
 				throw new ArgumentNullException("target");
 			}
 
-			Type targetType = target.GetType();
-
-			foreach(PropertyInfo property in targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+			var targetType = target.GetType();
+			foreach (PropertyInfo property in targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
 			{
 				if (!property.CanRead) continue;
-				object value = property.GetValue(target, null);
+				var value = GetPropertyValue(target, property);
 
 				properties[property.Name] = value;
 			}
 		}
+
+		#region IDictionary Members
 
 		/// <summary>
 		/// Determines whether the <see cref="T:System.Collections.IDictionary"/> object contains an element with the specified key.
@@ -108,7 +110,7 @@ namespace Castle.Core
 		/// </returns>
 		IDictionaryEnumerator IDictionary.GetEnumerator()
 		{
-			return new DictionaryEntryEnumeratorAdapter( properties.GetEnumerator() );
+			return new DictionaryEntryEnumeratorAdapter(properties.GetEnumerator());
 		}
 
 		/// <summary>
@@ -217,10 +219,34 @@ namespace Castle.Core
 		/// </returns>
 		public IEnumerator GetEnumerator()
 		{
-			return new DictionaryEntryEnumeratorAdapter( properties.GetEnumerator() );
+			return new DictionaryEntryEnumeratorAdapter(properties.GetEnumerator());
 		}
 
-		class DictionaryEntryEnumeratorAdapter : IDictionaryEnumerator
+		#endregion
+
+		private object GetPropertyValue(object target, PropertyInfo property)
+		{
+			try
+			{
+				return property.GetValue(target, null);
+			}
+			catch (MethodAccessException
+#if SILVERLIGHT
+				e)
+			{
+				string message = "Could not read properties of anonymous object due to restrictive behavior of Silverlight. To enable this functionality add in your asssembly [assembly: (InternalsVisibleTo(\"Castle.Core\"))] at assembly level.";
+				throw new InvalidOperationException(message,e);
+#else
+				)
+			{
+				throw;
+#endif
+			}
+		}
+
+		#region Nested type: DictionaryEntryEnumeratorAdapter
+
+		private class DictionaryEntryEnumeratorAdapter : IDictionaryEnumerator
 		{
 			private readonly IDictionaryEnumerator enumerator;
 			private KeyValuePair<string, object> current;
@@ -229,6 +255,8 @@ namespace Castle.Core
 			{
 				this.enumerator = enumerator;
 			}
+
+			#region IDictionaryEnumerator Members
 
 			public object Key
 			{
@@ -247,11 +275,11 @@ namespace Castle.Core
 
 			public bool MoveNext()
 			{
-				bool moved = enumerator.MoveNext();
+				var moved = enumerator.MoveNext();
 
 				if (moved)
 				{
-					current = (KeyValuePair<string, object>)enumerator.Current;
+					current = (KeyValuePair<string, object>) enumerator.Current;
 				}
 
 				return moved;
@@ -266,6 +294,10 @@ namespace Castle.Core
 			{
 				get { return new DictionaryEntry(Key, Value); }
 			}
+
+			#endregion
 		}
+
+		#endregion
 	}
 }
