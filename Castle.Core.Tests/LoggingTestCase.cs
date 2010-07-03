@@ -106,6 +106,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.That(logger.RecordedMessage(LoggerLevel.Debug, "Excluded sealed method InterfaceMethod on " +
 				"Castle.DynamicProxy.Tests.LoggingTestCase+NonVirtualMethodClass because it cannot be intercepted."));
 		}
+#endif
 
 		[Test]
 		public void FoundExplicitlyImplementedInterfaceMethods()
@@ -123,7 +124,6 @@ namespace Castle.DynamicProxy.Tests
 				"Castle.DynamicProxy.Tests.LoggingTestCase+ClassWithInterfaceMethodExplicitlyImplemented " +
 				"because it cannot be intercepted."));
 		}
-#endif
 		#region Test Types
 
 		public class EmptyClass
