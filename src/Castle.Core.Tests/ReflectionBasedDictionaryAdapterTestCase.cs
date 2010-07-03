@@ -83,6 +83,9 @@ namespace Castle.Core.Tests
 			new ReflectionBasedDictionaryAdapter(null);
 		}
 
+#if SILVERLIGHT
+		[ExpectedException(typeof(MethodAccessException))] // this won't work with SL :/
+#endif
 		[Test]
 		public void EnumeratorIteration()
 		{
