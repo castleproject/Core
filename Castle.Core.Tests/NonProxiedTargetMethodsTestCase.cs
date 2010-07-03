@@ -14,8 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-	using System;
-
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Explicit;
 	using Castle.DynamicProxy.Tests.Interfaces;
@@ -25,54 +23,94 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class NonProxiedTargetMethodsTestCase : BasePEVerifyTestCase
 	{
-		private TType CreateProxy<TType>(ProxyKind kind, TType target)
-		{
-			var options = new ProxyGenerationOptions(new ProxyNothingHook());
-			switch (kind)
-			{
-				case ProxyKind.WithTarget:
-					return (TType)generator.CreateInterfaceProxyWithTarget(typeof(TType), Type.EmptyTypes, target, options);
-				case ProxyKind.WithTargetInterface:
-					return (TType)generator.CreateInterfaceProxyWithTargetInterface(typeof(TType), target, options);
-			}
-
-			Assert.Fail("Invalid proxy kind {0}", kind);
-			return default(TType);
-		}
-
 		[Test]
-		public void Target_method([Values(ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind kind)
+		public void Target_method_WithTarget()
 		{
-			var proxy = CreateProxy<ISimpleInterface>(kind, new ClassWithInterface());
-			int result = -1;
+			var proxy = generator.CreateInterfaceProxyWithTarget<ISimpleInterface>(new ClassWithInterface(),
+			                                                                       new ProxyGenerationOptions(
+			                                                                       	new ProxyNothingHook()));
+			var result = -1;
 			Assert.DoesNotThrow(() => result = proxy.Do());
 			Assert.AreEqual(5, result);
 		}
 
 		[Test]
-		public void Target_method_explicit([Values(ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind kind)
+		public void Target_method_WithTargetInterface()
 		{
-			var proxy = CreateProxy<ISimpleInterface>(kind, new SimpleInterfaceExplicit());
-			int result = -1;
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface<ISimpleInterface>(new ClassWithInterface(),
+			                                                                                new ProxyGenerationOptions(
+			                                                                                	new ProxyNothingHook()));
+			var result = -1;
 			Assert.DoesNotThrow(() => result = proxy.Do());
 			Assert.AreEqual(5, result);
 		}
 
 		[Test]
-		public void Target_method_generic([Values(ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind kind)
+		public void Target_method_explicit_WithTarget()
 		{
-			var proxy = CreateProxy<IGenericInterface>(kind, new GenericClass());
-			int result = -1;
+			var proxy = generator.CreateInterfaceProxyWithTarget<ISimpleInterface>(new SimpleInterfaceExplicit(),
+			                                                                       new ProxyGenerationOptions(
+			                                                                       	new ProxyNothingHook()));
+			var result = -1;
+			Assert.DoesNotThrow(() => result = proxy.Do());
+			Assert.AreEqual(5, result);
+		}
+
+		[Test]
+		public void Target_method_explicit_WithTargetInterface()
+		{
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface<ISimpleInterface>(new SimpleInterfaceExplicit(),
+			                                                                                new ProxyGenerationOptions(
+			                                                                                	new ProxyNothingHook()));
+			var result = -1;
+			Assert.DoesNotThrow(() => result = proxy.Do());
+			Assert.AreEqual(5, result);
+		}
+
+		[Test]
+		public void Target_method_generic_WithTarget()
+		{
+			var proxy = generator.CreateInterfaceProxyWithTarget<IGenericInterface>(new GenericClass(),
+			                                                                        new ProxyGenerationOptions(
+			                                                                        	new ProxyNothingHook()));
+			var result = -1;
 			Assert.DoesNotThrow(() => result = proxy.GenericMethod<int>());
 			Assert.AreEqual(0, result);
 		}
 
 		[Test]
-		public void Target_method_out_ref_parameters(
-			[Values(ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind kind)
+		public void Target_method_generic_WithTargetInterface()
 		{
-			var proxy = CreateProxy<IWithRefOut>(kind, new WithRefOut());
-			int result = -1;
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface<IGenericInterface>(new GenericClass(),
+			                                                                                 new ProxyGenerationOptions(
+			                                                                                 	new ProxyNothingHook()));
+			var result = -1;
+			Assert.DoesNotThrow(() => result = proxy.GenericMethod<int>());
+			Assert.AreEqual(0, result);
+		}
+
+		[Test]
+		public void Target_method_out_ref_parameters_WithTarget()
+		{
+			var proxy = generator.CreateInterfaceProxyWithTarget<IWithRefOut>(new WithRefOut(),
+			                                                                  new ProxyGenerationOptions(
+			                                                                  	new ProxyNothingHook()));
+			var result = -1;
+			Assert.DoesNotThrow(() => proxy.Do(out result));
+			Assert.AreEqual(5, result);
+
+			result = -1;
+			Assert.DoesNotThrow(() => proxy.Did(ref result));
+			Assert.AreEqual(5, result);
+		}
+
+		[Test]
+		public void Target_method_out_ref_parameters_WithTargetInterface()
+		{
+			var proxy = generator.CreateInterfaceProxyWithTarget<IWithRefOut>(new WithRefOut(),
+			                                                                  new ProxyGenerationOptions(
+			                                                                  	new ProxyNothingHook()));
+			var result = -1;
 			Assert.DoesNotThrow(() => proxy.Do(out result));
 			Assert.AreEqual(5, result);
 
