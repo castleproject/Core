@@ -221,7 +221,7 @@ namespace Castle.DynamicProxy.Generators
 			var mixins = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
 			// Order of interface precedence:
 			// 1. first target
-			ICollection<Type> targetInterfaces = TypeUtil.GetAllInterfaces(proxyTargetType);
+			ICollection<Type> targetInterfaces = proxyTargetType.GetAllInterfaces();
 			ICollection<Type> additionalInterfaces = TypeUtil.GetAllInterfaces(interfaces);
 			var target = AddMappingForTargetType(typeImplementerMapping, proxyTargetType, targetInterfaces, additionalInterfaces,namingScope);
 
@@ -294,7 +294,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var contributor = new InterfaceProxyTargetContributor(proxyTargetType, AllowChangeTarget, namingScope)
 			{ Logger = Logger };
-			ICollection<Type> proxiedInterfaces = TypeUtil.GetAllInterfaces(targetType);
+			ICollection<Type> proxiedInterfaces = targetType.GetAllInterfaces();
 			foreach (var @interface in proxiedInterfaces)
 			{
 				contributor.AddInterfaceToProxy(@interface);

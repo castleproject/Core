@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Linq;
 	using System.Reflection;
 
-	public abstract class TypeUtil
+	public static class TypeUtil
 	{
 		/// <summary>
 		///   Returns list of all unique interfaces implemented given types, including their base interfaces.
@@ -57,7 +57,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return Sort(interfaces.Keys);
 		}
 
-		public static Type GetClosedParameterType(AbstractTypeEmitter type, Type parameter)
+		public static ICollection<Type> GetAllInterfaces(this Type type)
+		{
+			return GetAllInterfaces(new[] {type});
+		}
+
+		public static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
+		{
+			var flags = additionalFlags | BindingFlags.Static | BindingFlags.SetField;
+			type.InvokeMember(fieldName, flags, null, null, new[] {value});
+		}
+
+		public static Type GetClosedParameterType(this AbstractTypeEmitter type, Type parameter)
 		{
 			if (parameter.IsGenericTypeDefinition)
 			{
@@ -66,7 +77,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			if (parameter.IsGenericType)
 			{
-				Type[] arguments = parameter.GetGenericArguments();
+				var arguments = parameter.GetGenericArguments();
 				if (CloseGenericParametersIfAny(type, arguments))
 				{
 					return parameter.GetGenericTypeDefinition().MakeGenericType(arguments);
@@ -101,8 +112,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private static bool CloseGenericParametersIfAny(AbstractTypeEmitter emitter, Type[] arguments)
 		{
-			bool hasAnyGenericParameters = false;
-			for (int i = 0; i < arguments.Length; i++)
+			var hasAnyGenericParameters = false;
+			for (var i = 0; i < arguments.Length; i++)
 			{
 				var newType = GetClosedParameterType(emitter, arguments[i]);
 				if (!ReferenceEquals(newType, arguments[i]))
@@ -114,7 +125,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return hasAnyGenericParameters;
 		}
 
-		public static FieldInfo[] GetAllFields(Type type)
+		public static FieldInfo[] GetAllFields(this Type type)
 		{
 			if (type == null) throw new ArgumentNullException("type");
 
@@ -125,7 +136,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			var fields = new List<FieldInfo>();
 			var currentType = type;
-			while (currentType != typeof(object))
+			while (currentType != typeof (object))
 			{
 				var currentFields =
 					currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);

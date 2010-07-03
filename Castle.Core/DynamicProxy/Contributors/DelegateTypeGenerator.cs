@@ -40,7 +40,7 @@
 			                                    MethodAttributes.HideBySig |
 			                                    MethodAttributes.NewSlot |
 			                                    MethodAttributes.Virtual,
-			                                    TypeUtil.GetClosedParameterType(@delegate, method.MethodOnTarget.ReturnType),
+			                                    @delegate.GetClosedParameterType(method.MethodOnTarget.ReturnType),
 			                                    paramTypes);
 			invoke.MethodBuilder.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 		}
@@ -54,7 +54,7 @@
 				
 				for (var i = 0; i < parameters.Length; i++)
 				{
-					types[i] = TypeUtil.GetClosedParameterType(@delegate, parameters[i].ParameterType);
+					types[i] = @delegate.GetClosedParameterType(parameters[i].ParameterType);
 				}
 				return types;
 				
@@ -63,7 +63,7 @@
 			paramTypes[0] = targetType;
 			for (var i = 0; i < parameters.Length; i++)
 			{
-				paramTypes[i + 1] = TypeUtil.GetClosedParameterType(@delegate, parameters[i].ParameterType);
+				paramTypes[i + 1] = @delegate.GetClosedParameterType(parameters[i].ParameterType);
 			}
 			return paramTypes;
 		}
