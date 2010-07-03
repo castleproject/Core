@@ -162,7 +162,7 @@ namespace Castle.DynamicProxy.Generators
 			// 1. first target
 			// target is not an interface so we do nothing
 
-			var targetInterfaces = TypeUtil.GetAllInterfaces(targetType);
+			var targetInterfaces = targetType.GetAllInterfaces();
 			var additionalInterfaces = TypeUtil.GetAllInterfaces(interfaces);
 			// 2. then mixins
 			var mixins = new MixinContributor(namingScope, false) { Logger = Logger };

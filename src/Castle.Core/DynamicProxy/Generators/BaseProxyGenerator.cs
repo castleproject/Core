@@ -83,7 +83,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void InitializeStaticFields(Type builtType)
 		{
-			builtType.GetField("proxyGenerationOptions").SetValue(null, ProxyGenerationOptions);
+			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.Public, ProxyGenerationOptions);
 		}
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
