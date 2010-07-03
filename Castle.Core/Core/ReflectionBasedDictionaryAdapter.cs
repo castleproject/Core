@@ -234,7 +234,7 @@ namespace Castle.Core
 #if SILVERLIGHT
 				e)
 			{
-				string message = "Could not read properties of anonymous object due to restrictive behavior of Silverlight. To enable this functionality add in your asssembly [assembly: System.Runtime.CompilerServices.InternalsVisibleTo(\"Castle.Core; PublicKey=024004800094000620002400525341310400101077f5e87030dadccce6902c6adab7a987bd69cb5819991531f560785eacfc89b6fcddf6bb2a0743a7194e454c0273447fc6eec36474ba8e5a3823147d214298e4f9a631b1afee1a51ffeae4672d498f14b0e3d321453cdd8ac64de7e1cf4d222b7e81f54d4fd4672537d702a5b48738cc29d09228f1aa722ae1a9ca2fb\")] at assembly level.";
+				string message = "Could not read properties of anonymous object due to restrictive behavior of Silverlight. Use custom public type instead.";
 				throw new InvalidOperationException(message,e);
 #else
 )
