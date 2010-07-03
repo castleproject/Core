@@ -107,23 +107,6 @@ namespace Castle.DynamicProxy.Tests
 				"Castle.DynamicProxy.Tests.LoggingTestCase+NonVirtualMethodClass because it cannot be intercepted."));
 		}
 #endif
-
-		[Test]
-		public void FoundExplicitlyImplementedInterfaceMethods()
-		{
-			// Arrange
-			CollectingLogger logger = new CollectingLogger();
-			ProxyGenerator generator = new ProxyGenerator { Logger = logger };
-
-			// Act
-			generator.CreateClassProxy<ClassWithInterfaceMethodExplicitlyImplemented>();
-
-			// Assert
-			Assert.That(logger.RecordedMessage(LoggerLevel.Debug, "Excluded explicitly implemented interface method " +
-				"Castle.DynamicProxy.Tests.LoggingTestCase.ISingleMethodInterface.InterfaceMethod on type " +
-				"Castle.DynamicProxy.Tests.LoggingTestCase+ClassWithInterfaceMethodExplicitlyImplemented " +
-				"because it cannot be intercepted."));
-		}
 		#region Test Types
 
 		public class EmptyClass
