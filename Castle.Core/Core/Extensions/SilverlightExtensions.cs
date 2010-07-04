@@ -231,7 +231,6 @@ namespace System.ComponentModel
 #if SL3
 namespace System.ComponentModel
 {
-
 	public interface IDataErrorInfo
 	{
 		string this[string columnName] { get; }
