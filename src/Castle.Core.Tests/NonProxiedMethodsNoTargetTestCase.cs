@@ -62,8 +62,18 @@ namespace Castle.DynamicProxy.Tests
 			Assert.DoesNotThrow(() => result = proxy.Foo());
 			Assert.IsNull(result);
 		}
-
+#if SILVERLIGHT
 		[Test]
+		public void AdditionalInterfaces_method()
+		{
+			AdditionalInterfaces_method(ProxyKind.Class);
+			AdditionalInterfaces_method(ProxyKind.WithoutTarget);
+			AdditionalInterfaces_method(ProxyKind.WithTarget);
+			AdditionalInterfaces_method(ProxyKind.WithTargetInterface);
+		}
+#else
+		[Test]
+#endif
 		public void AdditionalInterfaces_method(
 			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
 				kind)
