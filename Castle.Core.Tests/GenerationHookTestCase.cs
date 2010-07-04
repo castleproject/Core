@@ -17,9 +17,11 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
+
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -28,17 +30,17 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void HookIsUsedForConcreteClassProxy()
 		{
-			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			LogHook hook = new LogHook(typeof (ServiceClass), true);
+			var logger = new LogInvocationInterceptor();
+			var hook = new LogHook(typeof (ServiceClass), true);
 
-			ProxyGenerationOptions options = new ProxyGenerationOptions(hook);
+			var options = new ProxyGenerationOptions(hook);
 
-			ServiceClass proxy = (ServiceClass) generator.CreateClassProxy(typeof (ServiceClass), options, logger);
+			var proxy = (ServiceClass) generator.CreateClassProxy(typeof (ServiceClass), options, logger);
 
 			Assert.IsTrue(hook.Completed);
 			Assert.AreEqual(13, hook.AskedMembers.Count, "Asked members");
 
-			Assert.AreEqual(4, hook.NonVirtualMembers.Count, "Non-virtual members");// <-- this would fail due to superfulous method check
+			Assert.AreEqual(4, hook.NonVirtualMembers.Count, "Non-virtual members");
 
 			proxy.Sum(1, 2);
 			Assert.IsFalse(proxy.Valid);
@@ -49,14 +51,14 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void HookIsUsedForInterfaceProxy()
 		{
-			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			LogHook hook = new LogHook(typeof (IService), false);
+			var logger = new LogInvocationInterceptor();
+			var hook = new LogHook(typeof (IService), false);
 
-			ProxyGenerationOptions options = new ProxyGenerationOptions(hook);
+			var options = new ProxyGenerationOptions(hook);
 
-			IService proxy = (IService)
-			                 generator.CreateInterfaceProxyWithTarget(
-			                 	typeof (IService), new ServiceImpl(), options, logger);
+			var proxy = (IService)
+			            generator.CreateInterfaceProxyWithTarget(
+			            	typeof (IService), new ServiceImpl(), options, logger);
 
 			Assert.IsTrue(hook.Completed);
 			Assert.AreEqual(10, hook.AskedMembers.Count);
@@ -67,7 +69,6 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual("Sum get_Valid ", logger.LogContents);
 		}
-
 	}
 
 #if !SILVERLIGHT

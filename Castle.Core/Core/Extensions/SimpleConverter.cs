@@ -35,9 +35,11 @@ namespace Castle.Core.Extensions
 		                                                                   		{typeof (int), i => int.Parse(i)},
 		                                                                   		{typeof (short), s => short.Parse(s)},
 		                                                                   		{typeof (long), l => long.Parse(l)},
+#if !SL3 // no Guid.Parse in SL3
+		                                                                   		{typeof (Guid), g => Guid.Parse(g)},
+#endif
 		                                                                   		{typeof (TimeSpan), s => TimeSpan.Parse(s)},
-		                                                                   		{typeof (DateTime), t => DateTime.Parse(t)},
-		                                                                   		{typeof (Guid), g => Guid.Parse(g)}
+		                                                                   		{typeof (DateTime), t => DateTime.Parse(t)}
 		                                                                   	};
 
 		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)

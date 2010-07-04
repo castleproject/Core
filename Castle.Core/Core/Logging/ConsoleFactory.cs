@@ -14,14 +14,14 @@
 
 namespace Castle.Core.Logging
 {
-	#if !SILVERLIGHT
 	using System;
-
-	/// <summary>
-	/// Summary description for ConsoleFactory.
-	/// </summary>
+	
+#if SILVERLIGHT
+	public class ConsoleFactory : ILoggerFactory
+#else
 	[Serializable]
 	public class ConsoleFactory : MarshalByRefObject, ILoggerFactory
+#endif
 	{
 		public ILogger Create(Type type)
 		{
@@ -43,6 +43,4 @@ namespace Castle.Core.Logging
 			return new ConsoleLogger(name, level);
 		}
 	}
-
-	#endif
 }
