@@ -14,7 +14,6 @@
 
 namespace Castle.Core.Logging
 {
-	#if !SILVERLIGHT
 	using System;
 	using System.Globalization;
 
@@ -23,7 +22,9 @@ namespace Castle.Core.Logging
 	/// This is mainly for the cases when you have a utility that
 	/// does not have a logger to supply.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class ConsoleLogger : LevelFilteredLogger
 	{
 		/// <summary>
@@ -96,5 +97,4 @@ namespace Castle.Core.Logging
 			return new ConsoleLogger(String.Format(CultureInfo.CurrentCulture, "{0}.{1}", Name, loggerName), Level);
 		}
 	}
-	#endif
 }
