@@ -46,6 +46,7 @@ namespace Castle.Core.Tests.Resources
 			Assert.AreEqual("Something", line);
 		}
 
+#if !SILVERLIGHT
 		[Test]
 		public void CanHandleBundleResource()
 		{
@@ -55,5 +56,6 @@ namespace Castle.Core.Tests.Resources
 			String line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Content content", line);
 		}
+#endif
 	}
 }
