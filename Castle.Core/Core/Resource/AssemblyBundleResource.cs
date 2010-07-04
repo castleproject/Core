@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,9 +21,8 @@ namespace Castle.Core.Resource
 	using System.Resources;
 	using System.Text;
 
-#if SILVERLIGHT
-	using Castle.Core.Extensions;
-#endif
+#if !SILVERLIGHT
+	//I'm getting FileNotFound exception... any idea how to handle this under SL?
 
 	public class AssemblyBundleResource : AbstractResource
 	{
@@ -36,20 +35,16 @@ namespace Castle.Core.Resource
 
 		public override TextReader GetStreamReader()
 		{
-			Assembly assembly = ObtainAssembly(resource.Host);
+			var assembly = ObtainAssembly(resource.Host);
 
-#if SILVERLIGHT
-            string[] paths = resource.Path.Split(new char[] { '/' }).FindAll(s => !string.IsNullOrEmpty(s));
-#else
-            string[] paths = resource.Path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-#endif
-
-            if (paths.Length != 2)
+			var paths = resource.Path.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
+			if (paths.Length != 2)
 			{
-				throw new ResourceException("AssemblyBundleResource does not support paths with more than 2 levels in depth. See " + resource.Path);
+				throw new ResourceException("AssemblyBundleResource does not support paths with more than 2 levels in depth. See " +
+				                            resource.Path);
 			}
 
-			ResourceManager rm = new ResourceManager(paths[0], assembly);
+			var rm = new ResourceManager(paths[0], assembly);
 
 			return new StringReader(rm.GetString(paths[1]));
 		}
@@ -70,11 +65,12 @@ namespace Castle.Core.Resource
 			{
 				return Assembly.Load(assemblyName);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				String message = String.Format(CultureInfo.InvariantCulture, "The assembly {0} could not be loaded", assemblyName);
+				var message = String.Format(CultureInfo.InvariantCulture, "The assembly {0} could not be loaded", assemblyName);
 				throw new ResourceException(message, ex);
 			}
 		}
 	}
+#endif
 }
