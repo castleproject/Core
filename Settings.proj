@@ -34,8 +34,8 @@ limitations under the License.
 		<ProjectName>Castle.Core</ProjectName>
 		
 		<!-- Versioning -->
-		<Project_Major>1</Project_Major>
-		<Project_Minor>3</Project_Minor>
+		<Project_Major>2</Project_Major>
+		<Project_Minor>5</Project_Minor>
 		<Project_Build>0</Project_Build>
 
 		<!-- Project folders -->
