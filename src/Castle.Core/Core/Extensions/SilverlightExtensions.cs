@@ -210,9 +210,16 @@ namespace System.ComponentModel
 {
 	using System.Collections.Generic;
 
+	using Castle.Core.Extensions;
+
 	public static class TypeDescriptor
 	{
 		private static readonly IDictionary<Type, TypeConverter> converters = new Dictionary<Type, TypeConverter>();
+
+		static TypeDescriptor()
+		{
+			new SimpleConverter().Register();
+		}
 
 		public static TypeConverter GetConverter(Type type)
 		{
