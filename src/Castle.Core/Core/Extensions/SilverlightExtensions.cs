@@ -173,6 +173,11 @@ namespace System.Diagnostics
 			//TODO:???
 		}
 
+		public static void Write(Exception e, string message)
+		{
+			//TODO:???
+		}
+
 		public static void Assert(bool condition)
 		{
 			if (!condition)
