@@ -88,7 +88,7 @@
     </Reference>
     <Reference Include="NUnit.Silverlight.Compatibility">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\sl\NUnit.Silverlight.Compatibility.dll</HintPath>
+      <HintPath>..\..\lib\sl4\NUnit.Silverlight.Compatibility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
