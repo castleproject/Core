@@ -133,7 +133,12 @@ namespace Castle.Core.Resource
 		{
 			try
 			{
+#if SILVERLIGHT
+				return
+					System.Windows.Markup.XamlReader.Load(string.Format("<my:ClassName xmlns:my='clr-namespace:MyNamespace;assembly={0}' />", assemblyName));
+#else
 				return Assembly.Load(assemblyName);
+#endif
 			}
 			catch(Exception ex)
 			{
