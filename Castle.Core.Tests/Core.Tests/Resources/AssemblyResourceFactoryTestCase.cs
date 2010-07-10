@@ -15,6 +15,7 @@
 namespace Castle.Core.Tests.Resources
 {
 	using System;
+	using System.Reflection;
 
 	using NUnit.Framework;
 
@@ -25,7 +26,7 @@ namespace Castle.Core.Tests.Resources
 	public class AssemblyResourceFactoryTestCase
 	{
 		private AssemblyResourceFactory resFactory;
-		private const String AssemblyName = "Castle.Core.Tests";
+		private static readonly String AssemblyName = Assembly.GetExecutingAssembly().FullName;
 		private const String ResPath = "Resources";
 
 		[SetUp]
