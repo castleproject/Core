@@ -21,8 +21,9 @@ namespace Castle.Core.Resource
 	using System.Resources;
 	using System.Text;
 
-#if !SILVERLIGHT
-	//I'm getting FileNotFound exception... any idea how to handle this under SL?
+#if SILVERLIGHT
+	using System.Windows.Markup;
+#endif
 
 	public class AssemblyBundleResource : AbstractResource
 	{
@@ -63,7 +64,12 @@ namespace Castle.Core.Resource
 		{
 			try
 			{
+#if SILVERLIGHT
+				return
+					XamlReader.Load(string.Format("<my:ClassName xmlns:my='clr-namespace:MyNamespace;assembly={0}' />", assemblyName));
+#else
 				return Assembly.Load(assemblyName);
+#endif
 			}
 			catch (Exception ex)
 			{
@@ -72,5 +78,4 @@ namespace Castle.Core.Resource
 			}
 		}
 	}
-#endif
 }
