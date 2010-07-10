@@ -115,8 +115,19 @@ namespace Castle.Core.Resource
 
 		private string ConvertToResourceName(String assembly, String resource)
 		{
+			assembly = GetSimpleName(assembly);
 			// TODO: use path for relative name construction
 			return String.Format(CultureInfo.CurrentCulture, "{0}{1}", assembly, resource.Replace('/', '.'));
+		}
+
+		private string GetSimpleName(string assembly)
+		{
+			int indexOfComma = assembly.IndexOf(',');
+			if(indexOfComma<0)
+			{
+				return assembly;
+			}
+			return assembly.Substring(0, indexOfComma);
 		}
 
 		private string ConvertToPath(String resource)
