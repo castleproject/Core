@@ -24,9 +24,15 @@ namespace Castle.Core.Tests.Resources
 	[TestFixture]
 	public class AssemblyResourceFactoryTestCase
 	{
-		private AssemblyResourceFactory resFactory = new AssemblyResourceFactory();
-		private String AssemblyName = "Castle.Core.Tests";
-		private String ResPath = "Resources";
+		private AssemblyResourceFactory resFactory;
+		private const String AssemblyName = "Castle.Core.Tests";
+		private const String ResPath = "Resources";
+
+		[SetUp]
+		public void SetUp()
+		{
+			resFactory = new AssemblyResourceFactory();
+		}
 
 		[Test]
 		public void Accept()
@@ -39,23 +45,21 @@ namespace Castle.Core.Tests.Resources
 		[Test]
 		public void CreateWithAbsolutePath()
 		{
-			IResource resource = resFactory.Create(new CustomUri("assembly://" + AssemblyName + "/" + ResPath + "/file1.txt"));
+			var resource = resFactory.Create(new CustomUri("assembly://" + AssemblyName + "/" + ResPath + "/file1.txt"));
 
 			Assert.IsNotNull(resource);
-			String line = resource.GetStreamReader().ReadLine();
+			var line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Something", line);
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void CanHandleBundleResource()
 		{
 			IResource resource = new AssemblyBundleResource(new CustomUri("assembly://" + AssemblyName + "/Castle.Core.Tests.Resources.MoreRes.TestRes/content1"));
 
 			Assert.IsNotNull(resource);
-			String line = resource.GetStreamReader().ReadLine();
+			var line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Content content", line);
 		}
-#endif
 	}
 }
