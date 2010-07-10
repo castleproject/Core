@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,15 +16,8 @@ namespace Castle.Core.Resource
 {
 	using System;
 
-	/// <summary>
-	/// 
-	/// </summary>
 	public class AssemblyResourceFactory : IResourceFactory
 	{
-		public AssemblyResourceFactory()
-		{
-		}
-
 		public bool Accept(CustomUri uri)
 		{
 			return "assembly".Equals(uri.Scheme);
@@ -37,10 +30,12 @@ namespace Castle.Core.Resource
 
 		public IResource Create(CustomUri uri, String basePath)
 		{
-			if (basePath != null)
-				return new AssemblyResource(uri, basePath);
-			else
+			if (basePath == null)
+			{
 				return new AssemblyResource(uri);
+			}
+
+			return new AssemblyResource(uri, basePath);
 		}
 	}
 }

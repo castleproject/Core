@@ -20,11 +20,7 @@ namespace Castle.Core.Resource
 	using System.Reflection;
 	using System.Resources;
 	using System.Text;
-
-#if SILVERLIGHT
-	using System.Windows.Markup;
-#endif
-
+	
 	public class AssemblyBundleResource : AbstractResource
 	{
 		private readonly CustomUri resource;
@@ -66,7 +62,7 @@ namespace Castle.Core.Resource
 			{
 #if SILVERLIGHT
 				return
-					XamlReader.Load(string.Format("<my:ClassName xmlns:my='clr-namespace:MyNamespace;assembly={0}' />", assemblyName));
+					System.Windows.Markup.XamlReader.Load(string.Format("<my:ClassName xmlns:my='clr-namespace:MyNamespace;assembly={0}' />", assemblyName));
 #else
 				return Assembly.Load(assemblyName);
 #endif
