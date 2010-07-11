@@ -18,29 +18,48 @@ namespace Castle.Core.Extensions
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Globalization;
+
 #if SILVERLIGHT
 
 	public class SimpleConverter : TypeConverter
 	{
-		public void Register()
+		private static readonly Dictionary<Type, Func<string, object>> converters = new Dictionary<Type, Func<string, object>>
+		                                                                            	{
+		                                                                            		{typeof (int), i => int.Parse(i)},
+		                                                                            		{typeof (short), s => short.Parse(s)},
+		                                                                            		{typeof (long), l => long.Parse(l)},
+#if !SL3
+		                                                                            		// no Guid.Parse in SL3
+		                                                                            		{typeof (Guid), g => Guid.Parse(g)},
+#endif
+		                                                                            		{
+		                                                                            			typeof (TimeSpan),
+		                                                                            			s => TimeSpan.Parse(s)
+		                                                                            			},
+		                                                                            		{
+		                                                                            			typeof (DateTime),
+		                                                                            			t => DateTime.Parse(t)
+		                                                                            			}
+		                                                                            	};
+
+		private readonly Func<string, object> conversionFunction;
+		private readonly Type type;
+
+		public SimpleConverter(Type type, Func<string, object> conversionFunction)
 		{
-			foreach (var key in converters.Keys)
-			{
-				TypeDescriptor.RegisterConverter(key, this);
-			}
+			this.type = type;
+			this.conversionFunction = conversionFunction;
 		}
 
-		private static readonly Dictionary<Type, Func<string, object>> converters = new Dictionary<Type, Func<string, object>>
-		                                                                   	{
-		                                                                   		{typeof (int), i => int.Parse(i)},
-		                                                                   		{typeof (short), s => short.Parse(s)},
-		                                                                   		{typeof (long), l => long.Parse(l)},
-#if !SL3 // no Guid.Parse in SL3
-		                                                                   		{typeof (Guid), g => Guid.Parse(g)},
-#endif
-		                                                                   		{typeof (TimeSpan), s => TimeSpan.Parse(s)},
-		                                                                   		{typeof (DateTime), t => DateTime.Parse(t)}
-		                                                                   	};
+		public static void Register()
+		{
+			foreach (var key in converters)
+			{
+				var converter = new SimpleConverter(key.Key, key.Value);
+				TypeDescriptor.RegisterConverter(key.Key, converter);
+				TypeDescriptor.RegisterConverter(typeof(Nullable<>).MakeGenericType(key.Key), converter);
+			}
+		}
 
 		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
 		{
@@ -49,27 +68,27 @@ namespace Castle.Core.Extensions
 
 		public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
 		{
-			return converters.ContainsKey(destinationType);
+			return destinationType.IsAssignableFrom(type);
 		}
 
-		private object Convert(string sourceString, Type propertyType)
+		private object Convert(string sourceString)
 		{
 			if (sourceString == null)
 			{
 				return null;
 			}
-			Func<string, object> converter;
-			if (converters.TryGetValue(propertyType, out converter) == false)
-			{
-				return null;
-			}
-			return converter.Invoke(sourceString);
+			return conversionFunction.Invoke(sourceString);
+		}
+
+		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+		{
+			return Convert(value as string);
 		}
 
 		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value,
 		                                 Type destinationType)
 		{
-			return Convert(value as string, destinationType);
+			return Convert(value as string);
 		}
 	}
 #endif

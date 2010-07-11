@@ -21,29 +21,29 @@ namespace Castle.Components.DictionaryAdapter
 
 	public class DictionaryValidateGroup : IDictionaryValidate, INotifyPropertyChanged, IDisposable
 	{
-		private readonly object[] _groups;
-		private readonly IDictionaryAdapter _adapter;
-		private readonly string[] _propertyNames;
-		private readonly PropertyChangedEventHandler _propertyChanged;
+		private readonly object[] groups;
+		private readonly IDictionaryAdapter adapter;
+		private readonly string[] propertyNames;
+		private readonly PropertyChangedEventHandler propertyChanged;
 
 		public DictionaryValidateGroup(object[] groups, IDictionaryAdapter adapter)
 		{
-			_groups = groups;
-			_adapter = adapter;
+			this.groups = groups;
+			this.adapter = adapter;
 
-			_propertyNames = (from property in _adapter.Meta.Properties.Values
+			propertyNames = (from property in this.adapter.Meta.Properties.Values
 					  from groupings in property.Behaviors.OfType<GroupAttribute>()
-					  where _groups.Intersect(groupings.Group).Any() 
+					  where this.groups.Intersect(groupings.Group).Any() 
 					  select property.PropertyName).Distinct().ToArray();
 
-			if (_propertyNames.Length > 0 && adapter.CanNotify)
+			if (propertyNames.Length > 0 && adapter.CanNotify)
 			{
-				_propertyChanged += (sender, args) =>
+				propertyChanged += (sender, args) =>
 				{
 					if (PropertyChanged != null)
 						PropertyChanged(this, args);
 				};
-				_adapter.PropertyChanged += _propertyChanged;
+				this.adapter.PropertyChanged += propertyChanged;
 			}
 		}
 
@@ -51,8 +51,8 @@ namespace Castle.Components.DictionaryAdapter
 
 		public bool CanValidate
 		{
-			get { return _adapter.CanValidate; }
-			set { _adapter.CanValidate = value; }
+			get { return adapter.CanValidate; }
+			set { adapter.CanValidate = value; }
 		}
 
 		public bool IsValid
@@ -65,7 +65,7 @@ namespace Castle.Components.DictionaryAdapter
 			get
 			{
 				return string.Join(Environment.NewLine,
-					_propertyNames.Select(propertyName => _adapter[propertyName])
+					propertyNames.Select(propertyName => adapter[propertyName])
 					.Where(errors => !string.IsNullOrEmpty(errors)).ToArray());
 			}
 		}
@@ -74,9 +74,9 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			get
 			{
-				if (Array.IndexOf(_propertyNames, columnName) >= 0)
+				if (Array.IndexOf(propertyNames, columnName) >= 0)
 				{
-					return _adapter[columnName];
+					return adapter[columnName];
 				}
 				return string.Empty;
 			}
@@ -84,13 +84,13 @@ namespace Castle.Components.DictionaryAdapter
 
 		public DictionaryValidateGroup ValidateGroups(params object[] groups)
 		{
-			groups = _groups.Union(groups).ToArray();
-			return new DictionaryValidateGroup(groups, _adapter);
+			groups = this.groups.Union(groups).ToArray();
+			return new DictionaryValidateGroup(groups, adapter);
 		}
-        
+
 		public IEnumerable<IDictionaryValidator> Validators
 		{
-			get { return _adapter.Validators; }
+			get { return adapter.Validators; }
 		}
 
 		public void AddValidator(IDictionaryValidator validator)
@@ -100,7 +100,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public void Dispose()
 		{
-			_adapter.PropertyChanged -= _propertyChanged;
+			adapter.PropertyChanged -= propertyChanged;
 		}
 	}
 }
