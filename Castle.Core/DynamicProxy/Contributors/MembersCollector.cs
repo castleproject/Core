@@ -256,11 +256,11 @@ namespace Castle.DynamicProxy.Contributors
 			{
 #if !SILVERLIGHT
 				if (method.DeclaringType != typeof(MarshalByRefObject))
+#endif
 				{
 					Logger.Debug("Excluded non-virtual method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
 					hook.NonProxyableMemberNotification(type, method);
 				}
-#endif
 				return false;
 			}
 
