@@ -21,7 +21,7 @@ limitations under the License.
 ***********************************************************************************************
 -->
 
-<Project DefaultTargets="BuildProject" InitialTargets="CheckRequiredProperties" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="BuildProject" InitialTargets="CheckRequiredProperties" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 	
 	<!-- Root Path definition relative for actual build file -->
 	<PropertyGroup>
@@ -37,6 +37,7 @@ limitations under the License.
 
 	<Target Name="CheckRequiredProperties">
 		<Error Condition="'$(ProjectName)' == ''" Text="The ProjectName property has not been set, please set it in Settings.proj." />
+		<Error Text="The tools version &quot;$(MSBuildToolsVersion)&quot; is not supported, MSBuild 4.0 or newer is required to build." Condition="'$(MSBuildToolsVersion)' != '4.0'" />
 	</Target>
 		
 
