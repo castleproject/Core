@@ -223,7 +223,7 @@ namespace System.ComponentModel
 
 		static TypeDescriptor()
 		{
-			new SimpleConverter().Register();
+			SimpleConverter.Register();
 		}
 
 		public static TypeConverter GetConverter(Type type)
