@@ -548,7 +548,7 @@ namespace Castle.Components.DictionaryAdapter
 			else
 			{
 				TypeConverter = TypeDescriptor.GetConverter(PropertyType);
-			}	
+			}
 		}
 	}
 }
