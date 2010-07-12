@@ -62,13 +62,13 @@ namespace Castle.Components.DictionaryAdapter
 				return Meta.Properties.Values
 					.Where(prop => typeof(IChangeTracking).IsAssignableFrom(prop.PropertyType))
 					.Select(prop => GetProperty(prop.PropertyName, true))
-					.Cast<IChangeTracking>().Any(track => track.IsChanged);
+					.Cast<IChangeTracking>().Any(track => track != null && track.IsChanged);
 			}
 		}
 
 		public void BeginEdit()
 		{
-			if (CanEdit && (!IsEditing || SupportsMultiLevelEdit))
+			if (CanEdit && (IsEditing == false || SupportsMultiLevelEdit))
 			{
 				updates.Push(new Dictionary<string, Edit>());
 			}
