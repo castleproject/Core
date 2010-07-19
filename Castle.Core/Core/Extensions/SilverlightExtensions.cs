@@ -239,7 +239,6 @@ namespace System.ComponentModel
 		}
 	}
 }
-#endif
 #if SL3
 namespace System.ComponentModel
 {
@@ -249,4 +248,5 @@ namespace System.ComponentModel
 		string Error { get; }
 	}
 }
+#endif
 #endif
