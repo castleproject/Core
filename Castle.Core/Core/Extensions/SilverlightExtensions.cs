@@ -239,7 +239,8 @@ namespace System.ComponentModel
 		}
 	}
 }
-#if SL3
+#endif
+#if SL3 && SILVERLIGHT
 namespace System.ComponentModel
 {
 	public interface IDataErrorInfo
@@ -248,5 +249,4 @@ namespace System.ComponentModel
 		string Error { get; }
 	}
 }
-#endif
 #endif
