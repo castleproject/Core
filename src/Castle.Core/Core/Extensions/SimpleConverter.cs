@@ -31,10 +31,7 @@ namespace Castle.Core.Extensions
 		                                                                            		{typeof (float), f => float.Parse(f)},
 		                                                                            		{typeof (double), d => double.Parse(d)},
 		                                                                            		{typeof (decimal), d => decimal.Parse(d)},
-#if !SL3
-		                                                                            		// no Guid.Parse in SL3
-		                                                                            		{typeof (Guid), g => Guid.Parse(g)},
-#endif
+		                                                                            		{typeof (Guid), g => new Guid(g)},
 		                                                                            		{
 		                                                                            			typeof (TimeSpan),
 		                                                                            			s => TimeSpan.Parse(s)
