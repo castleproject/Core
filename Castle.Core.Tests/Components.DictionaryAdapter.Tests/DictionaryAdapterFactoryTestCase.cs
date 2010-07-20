@@ -408,7 +408,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(dictionary["HomeAddress_Emr_Number"], phone.Number);
 			Assert.IsNull(dictionary["HomeAddress_Emr_Extension"]);
 		}
-#if !SILVERLIGHT // TypeDescriptor in SL is empty and does not do conversions unless you extend it.
+
 		[Test]
 		public void ReadAdapter_WithDefaultConversions_WorksFine()
 		{
@@ -432,7 +432,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(now.Date, conversions.DateTime.Date);
 			Assert.AreEqual(guid, conversions.Guid);
 		}
-#endif
+
 		[Test]
 		public void UpdateAdapter_WithDefaultConversions_WorksFine()
 		{
