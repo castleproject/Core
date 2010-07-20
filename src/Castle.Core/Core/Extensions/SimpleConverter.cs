@@ -28,6 +28,9 @@ namespace Castle.Core.Extensions
 		                                                                            		{typeof (int), i => int.Parse(i)},
 		                                                                            		{typeof (short), s => short.Parse(s)},
 		                                                                            		{typeof (long), l => long.Parse(l)},
+		                                                                            		{typeof (float), f => float.Parse(f)},
+		                                                                            		{typeof (double), d => double.Parse(d)},
+		                                                                            		{typeof (decimal), d => decimal.Parse(d)},
 #if !SL3
 		                                                                            		// no Guid.Parse in SL3
 		                                                                            		{typeof (Guid), g => Guid.Parse(g)},
@@ -57,7 +60,7 @@ namespace Castle.Core.Extensions
 			{
 				var converter = new SimpleConverter(key.Key, key.Value);
 				TypeDescriptor.RegisterConverter(key.Key, converter);
-				TypeDescriptor.RegisterConverter(typeof(Nullable<>).MakeGenericType(key.Key), converter);
+				TypeDescriptor.RegisterConverter(typeof (Nullable<>).MakeGenericType(key.Key), converter);
 			}
 		}
 
