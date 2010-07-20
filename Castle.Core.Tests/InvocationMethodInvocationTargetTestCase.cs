@@ -120,7 +120,9 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(methodOnTarget2, invocationTarget2);
 		}
 
-#if !SILVERLIGHT // proxying explicit implementations does not work on Silverlight
+#if SILVERLIGHT 
+		[Ignore]// proxying explicit implementations does not work on Silverlight
+#endif
 		[Test]
 		public void ClassProxyForGeneric_MethodInvocationTarget_should_be_proxyMethod()
 		{
@@ -129,6 +131,5 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue(proxy.IsChanged);
 			Assert.IsNotNull(interceptor.Invocation.MethodInvocationTarget);
 		}
-#endif
 	}
 }
