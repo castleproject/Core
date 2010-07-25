@@ -200,7 +200,7 @@ limitations under the License.
 	
 
 	<!-- Use TeamCity's when running on the build server -->
-	<UsingTask TaskName="NUnit" AssemblyFile="$(teamcity_dotnet_nunitlauncher_msbuild_task)" Condition=" '$(TEAMCITY_VERSION)' != '' "/>
+	<UsingTask TaskName="NUnitTeamCity" AssemblyFile="$(teamcity_dotnet_nunitlauncher_msbuild_task)" Condition=" '$(TEAMCITY_VERSION)' != '' "/>
 
 	<Target
 		Name="_ExecNUnit"
@@ -208,24 +208,18 @@ limitations under the License.
 		<PropertyGroup>
 			<NUnitTestResultXmlFiles Condition="'$(NUnitTestResultXmlFiles)' == ''">$(TestResultsPath)/nunit-results.xml</NUnitTestResultXmlFiles>
 		</PropertyGroup>
+		
+		<Exec Command="$(NUnitPath)/nunit-console-x86.exe /nologo @(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') /xml=$(NUnitTestResultXmlFiles) /framework=$(FrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' " />
 
-		<NUnit 
-			ToolPath="$(NUnitPath)"
-			Assemblies="@(TestAssemblies)"
-			Platform="x86"
-			OutputXmlFile="$(NUnitTestResultXmlFiles)"
-			ContinueOnError="$(TestRunner_ContinueOnError)"
-			>
-			
-			<Output TaskParameter="ExitCode" PropertyName="NUnitExitCode" />
-		
-		</NUnit>
-		
-		<Error Condition="$(NUnitExitCode) != '0'" Text="NUnit failed $(NUnitExitCode) tests." />
+		<NUnitTeamCity
+			Assemblies="@(TestBinaries)"
+			NUnitVersion="NUnit-2.5.5"
+			Condition=" '$(TEAMCITY_VERSION)' != '' "
+		/>
 
 	</Target>
 
-	
+
 	<Target
 		Name="_ExecNCover"
 		>
