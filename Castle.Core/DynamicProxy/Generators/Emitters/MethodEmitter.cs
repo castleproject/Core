@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Linq;
+
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
@@ -43,8 +45,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		}
 
 		internal MethodEmitter(AbstractTypeEmitter owner, String name,
-		                       MethodAttributes attributes, Type returnType,
-		                       params Type[] argumentTypes)
+							   MethodAttributes attributes, Type returnType,
+							   params Type[] argumentTypes)
 			: this(owner, name, attributes)
 		{
 			SetParameters(argumentTypes);
@@ -52,7 +54,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		}
 
 		internal MethodEmitter(AbstractTypeEmitter owner, String name,
-		                       MethodAttributes attributes, MethodInfo methodToUseAsATemplate)
+							   MethodAttributes attributes, MethodInfo methodToUseAsATemplate)
 			: this(owner, name, attributes)
 		{
 			var name2GenericType = GenericUtil.GetGenericArgumentsMap(owner);
@@ -64,6 +66,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			genericTypeParams = GenericUtil.CopyGenericArguments(methodToUseAsATemplate, builder, name2GenericType);
 			SetParameters(parameters);
 			SetReturnType(returnType);
+			SetSignature(returnType, methodToUseAsATemplate.ReturnParameter, parameters, baseMethodParameters);
 			DefineParameters(baseMethodParameters);
 		}
 
@@ -137,6 +140,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			builder.SetReturnType(returnType);
 		}
 
+		private void SetSignature(Type returnType, ParameterInfo returnParameter, Type[] parameters, ParameterInfo[] baseMethodParameters)
+		{
+			builder.SetSignature(
+				returnType,
+				returnParameter.GetRequiredCustomModifiers(),
+				returnParameter.GetOptionalCustomModifiers(),
+				parameters,
+				baseMethodParameters.Select(x => x.GetRequiredCustomModifiers()).ToArray(),
+				baseMethodParameters.Select(x => x.GetOptionalCustomModifiers()).ToArray());
+		}
+		
 		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
 		{
 			builder.SetCustomAttribute(attribute);
