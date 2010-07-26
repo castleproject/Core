@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Linq;
-
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using System.Linq;
 
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
