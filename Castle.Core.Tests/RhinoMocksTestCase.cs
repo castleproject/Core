@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(3, o);
 		}
 
-		[Test, Ignore(".Net 3.5 SP 1 broke this one")]
+		[Test]
 		public void CanProxyMethodWithModOpt()
 		{
 		    IHaveMethodWithModOpts proxy =
