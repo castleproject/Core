@@ -145,7 +145,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				returnType,
 #if SILVERLIGHT
 				null,
-				null
+				null,
 #else
 				returnParameter.GetRequiredCustomModifiers(),
 				returnParameter.GetOptionalCustomModifiers(),
@@ -155,7 +155,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				null,
 				null
 #else
-
 				baseMethodParameters.Select(x => x.GetRequiredCustomModifiers()).ToArray(),
 				baseMethodParameters.Select(x => x.GetOptionalCustomModifiers()).ToArray()
 #endif
