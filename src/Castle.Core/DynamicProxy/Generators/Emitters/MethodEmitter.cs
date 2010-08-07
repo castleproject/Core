@@ -143,11 +143,23 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			builder.SetSignature(
 				returnType,
+#if SILVERLIGHT
+				null,
+				null
+#else
 				returnParameter.GetRequiredCustomModifiers(),
 				returnParameter.GetOptionalCustomModifiers(),
+#endif
 				parameters,
+#if SILVERLIGHT
+				null,
+				null
+#else
+
 				baseMethodParameters.Select(x => x.GetRequiredCustomModifiers()).ToArray(),
-				baseMethodParameters.Select(x => x.GetOptionalCustomModifiers()).ToArray());
+				baseMethodParameters.Select(x => x.GetOptionalCustomModifiers()).ToArray()
+#endif
+				);
 		}
 		
 		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
