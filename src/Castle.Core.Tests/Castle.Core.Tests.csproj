@@ -96,6 +96,7 @@
     <Compile Include="BasePEVerifyTestCase.cs" />
     <Compile Include="BasicClassProxyTestCase.cs" />
     <Compile Include="BasicInterfaceProxyTestCase.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Color.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\CustomGetter.cs" />
