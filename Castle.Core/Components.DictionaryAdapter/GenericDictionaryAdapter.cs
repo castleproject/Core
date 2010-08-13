@@ -37,4 +37,12 @@ namespace Castle.Components.DictionaryAdapter
 			return key.ToString();
 		}
 	}
+
+	public static class GenericDictionaryAdapter
+	{
+		public static GenericDictionaryAdapter<TValue> ForDictionaryAdapter<TValue>(this IDictionary<string, TValue> dictionary)
+		{
+			return new GenericDictionaryAdapter<TValue>(dictionary);
+		}
+	}
 }
