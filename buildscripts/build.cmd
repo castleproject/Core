@@ -28,6 +28,9 @@ IF "%1" == "NET40CP" (SET BuildConfigKey=NET40CP)
 IF "%1" == "NET35" (SET FrameworkVersion=v3.5)
 IF "%1" == "NET35" (SET BuildConfigKey=NET35)
 
+IF "%1" == "MONO26" (SET FrameworkVersion=v3.5)
+IF "%1" == "MONO26" (SET BuildConfigKey=MONO26)
+
 IF "%1" == "SL3" (SET FrameworkVersion=v3.0)
 IF "%1" == "SL3" (SET BuildConfigKey=SL3)
 
