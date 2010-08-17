@@ -150,7 +150,7 @@ limitations under the License.
 	<!-- Creates Zip file for Release -->
 	<Target
 		Name="Package"
-		DependsOnTargets="CleanProject;GetBuildRevision;RunAllTests;_PreparePackage"
+		DependsOnTargets="CleanProject;RunAllTests;_PreparePackage"
 		>
 
 		<PropertyGroup>
