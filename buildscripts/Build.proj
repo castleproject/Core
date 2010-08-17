@@ -211,6 +211,8 @@ limitations under the License.
 			<Output PropertyName="NUnitTestResultXmlFiles" TaskParameter="Value"/>
 		</CreateProperty>
 		
+		<Message Text="Running tests from assemblies: @(TestAssemblies)" />
+		
 		<Exec Command="$(NUnitPath)/nunit-console-x86.exe /nologo @(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') /xml=$(NUnitTestResultXmlFiles) /framework=$(FrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' " />
 
 		<Exec Command="$(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 @(TestAssemblies->'&quot;%(FullPath)&quot;', ' ')" Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' == '' and $(teamcity_dotnet_nunitlauncher) != '' " />
