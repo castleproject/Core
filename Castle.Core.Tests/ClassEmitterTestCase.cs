@@ -131,7 +131,10 @@ namespace Castle.DynamicProxy.Tests
 			DisableVerification();
 			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
+
+#pragma warning disable 219
 			Type t = emitter.BaseType;
+#pragma warning restore 219
 		}
 
 		[Test]

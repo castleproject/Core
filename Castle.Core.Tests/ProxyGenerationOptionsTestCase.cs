@@ -37,7 +37,9 @@ namespace Castle.DynamicProxy.Tests
 		[ExpectedException(typeof(InvalidOperationException))]
 		public void MixinData_NeedsInitialize()
 		{
+#pragma warning disable 219
 			MixinData data = _options1.MixinData;
+#pragma warning restore 219
 		}
 
 		[Test]
