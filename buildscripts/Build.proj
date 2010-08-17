@@ -152,7 +152,7 @@ limitations under the License.
 	<!-- Creates Zip file for Release -->
 	<Target
 		Name="Package"
-		DependsOnTargets="CleanProject;RunAllTests;_PreparePackage"
+		DependsOnTargets="RunAllTests;_PreparePackage"
 		>
 
 		<CreateProperty Value="$(ProjectName)-$(BuildConfigKey)-$(Build_Number).zip" Condition="'$(Build_ZipFile)' == ''">
