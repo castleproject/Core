@@ -26,7 +26,6 @@ limitations under the License.
 	<!-- Root Path definition relative for actual build file -->
 	<PropertyGroup>
 		<RootPath Condition="'$(RootPath)' == ''">$(MSBuildProjectDirectory)/..</RootPath>
-		<TestAssemblies></TestAssemblies>
 	</PropertyGroup>
 
 	<!-- Import common targets -->
@@ -60,15 +59,17 @@ limitations under the License.
 			<Output TaskParameter="TargetOutputs" ItemName="AllBinaries" />
 		
 		</MSBuild>
+		<Message Text="Binaries built from solution: @(AllBinaries)" />
 		
 		<!-- Resolve test projects -->
 		<RegexMatch Input="@(AllBinaries)" Expression="$(TestDetectionExpression)">
 			<Output TaskParameter="Output" ItemName="TestAssemblies" />
 		</RegexMatch>
+		<Message Text="Detected the following test assemblies: @(TestAssemblies)" />
 		<CreateProperty Value="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ')">
 			<Output PropertyName="TestAssemblies" TaskParameter="Value"/>
 		</CreateProperty>
-		<Message Text="Detected the following test assemblies: $(TestAssemblies)" />
+		<Message Text="Test assemblies transformed to quoted list: $(TestAssemblies)" />
 
 		<!-- Resolve the libraries code projects -->
 		<CreateItem
