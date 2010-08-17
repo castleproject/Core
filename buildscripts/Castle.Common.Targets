@@ -112,6 +112,10 @@ limitations under the License.
 		<Project_Major Condition="'$(Project_Major)' == ''">1</Project_Major>
 		<Project_Minor Condition="'$(Project_Minor)' == ''">0</Project_Minor>
 		<Project_Build Condition="'$(Project_Build)' == ''">3</Project_Build>
+		
+		<!-- Picks up TeamCity's Build_Number property, or default to zero when not running under TeamCity -->
+		<Build_Number Condition="'$(Build_Number)' == ''">0</Build_Number>
+		<Build_Revision>$(Build_Number)</Build_Revision>
 	</PropertyGroup>
 
 	
@@ -153,7 +157,6 @@ limitations under the License.
 	to ensure that we only ever update the AssemblyInfo files if a compile is actually going to take place.-->
 	<Target
 		Name="UpdateAssemblyInfoFiles"
-		DependsOnTargets="GetBuildRevision" 
 		Inputs="$(MSBuildAllProjects);
 					@(Compile);
 					@(ManifestResourceWithNoCulture);
@@ -182,31 +185,6 @@ limitations under the License.
 			/>
 	
 	</Target>
-
-	
-	<!-- Sets property $(Build_Revision)-->
-	<Target
-		Name="GetBuildRevision"
-		Inputs="$(MSBuildAllProjects);
-					@(Compile);
-					@(ManifestResourceWithNoCulture);
-					$(ApplicationIcon);
-					$(AssemblyOriginatorKeyFile);
-					@(ManifestNonResxWithNoCultureOnDisk);
-					@(ReferencePath);
-					@(CompiledLicenseFile);
-					@(EmbeddedDocumentation);                
-					@(CustomAdditionalCompileInputs)"
-		Outputs="@(IntermediateAssembly)"
-		>
-		
-		<PropertyGroup>
-			<Build_Number Condition="'$(Build_Number)' == ''">0</Build_Number>
-			<Build_Revision>$(Build_Number)</Build_Revision>
-		</PropertyGroup>
-
-	</Target>
-
 
 	<!-- User targets can be run as the lastest -->
 	<Import Condition="Exists('$(RootPath)/Common.User.Targets')" Project="$(RootPath)/Common.User.Targets" />
