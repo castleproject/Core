@@ -26,11 +26,8 @@ limitations under the License.
 	<!-- Root Path definition relative for actual build file -->
 	<PropertyGroup>
 		<RootPath Condition="'$(RootPath)' == ''">$(MSBuildProjectDirectory)/..</RootPath>
-	</PropertyGroup>
-
-	<ItemGroup>
 		<TestAssemblies></TestAssemblies>
-	</ItemGroup>
+	</PropertyGroup>
 
 	<!-- Import common targets -->
 	<Import Project="$(RootPath)/Settings.proj" />
@@ -68,7 +65,10 @@ limitations under the License.
 		<RegexMatch Input="@(AllBinaries)" Expression="$(TestDetectionExpression)">
 			<Output TaskParameter="Output" ItemName="TestAssemblies" />
 		</RegexMatch>
-		<Message Text="Detected the following test assemblies: @(TestAssemblies)" />		
+		<CreateProperty Value="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ')">
+			<Output PropertyName="TestAssemblies" TaskParameter="Value"/>
+		</CreateProperty>
+		<Message Text="Detected the following test assemblies: $(TestAssemblies)" />
 
 		<!-- Resolve the libraries code projects -->
 		<CreateItem
@@ -215,11 +215,11 @@ limitations under the License.
 			<Output PropertyName="NUnitTestResultXmlFiles" TaskParameter="Value"/>
 		</CreateProperty>
 		
-		<Message Text="Running tests from assemblies: @(TestAssemblies)" />
+		<Message Text="Running tests from assemblies: $(TestAssemblies)" />
 		
-		<Exec Command="$(NUnitPath)/nunit-console-x86.exe /nologo @(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') /xml=$(NUnitTestResultXmlFiles) /framework=$(FrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' " />
+		<Exec Command="$(NUnitPath)/nunit-console-x86.exe /nologo $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles) /framework=$(FrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' " />
 
-		<Exec Command="$(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 @(TestAssemblies->'&quot;%(FullPath)&quot;', ' ')" Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' == '' and $(teamcity_dotnet_nunitlauncher) != '' " />
+		<Exec Command="$(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 $(TestAssemblies)" Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' == '' and $(teamcity_dotnet_nunitlauncher) != '' " />
 
 		<NUnitTeamCity
 			Assemblies="@(TestAssemblies)"
