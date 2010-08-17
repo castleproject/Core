@@ -25,7 +25,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	{
 		Guid Id { get; set; }
 
+#pragma warning disable 108
 		TItem Item { get; set; }
+#pragma warning restore 108
 
 		[OnDemand(5)]
 		int Count { get; set; }
