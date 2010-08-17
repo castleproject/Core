@@ -45,6 +45,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Caching()
 		{
+#pragma warning disable 219
 			IService service = (IService)
 			                   generator.CreateInterfaceProxyWithTarget(
 			                   	typeof (IService), new ServiceImpl(), new StandardInterceptor());
@@ -57,6 +58,7 @@ namespace Castle.DynamicProxy.Tests
 			service = (IService)
 			          generator.CreateInterfaceProxyWithTarget(
 			          	typeof (IService), new ServiceImpl(), new StandardInterceptor());
+#pragma warning restore 219
 		}
 
 		[Test]
@@ -127,9 +129,11 @@ namespace Castle.DynamicProxy.Tests
 		[ExpectedException(typeof (ArgumentException))]
 		public void CantCreateInterfaceTargetedProxyWithoutInterface()
 		{
+#pragma warning disable 219
 			IService2 service = (IService2)
 			                    generator.CreateInterfaceProxyWithTargetInterface(
 			                    	typeof (Service2), new Service2());
+#pragma warning restore 219
 		}
 
 		[Test]
