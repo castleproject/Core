@@ -54,6 +54,13 @@ limitations under the License.
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	</PropertyGroup>
 
+	<!-- Mono 2.6 -->
+	<PropertyGroup Condition="$(BuildConfigKey)=='MONO26'">
+		<BuildFramework>$(BuildConfigKey)</BuildFramework>
+		<BuildConstants>MONO MONO26</BuildConstants>
+		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	</PropertyGroup>
+
 	<!--Silverlight 3.0 runtime-->
 	<PropertyGroup Condition="$(BuildConfigKey)=='SL3'">
 		<SolutionName>$(ProjectName)-SL</SolutionName>
