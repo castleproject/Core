@@ -161,7 +161,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(ParameterInfo parameter)
+		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(this ParameterInfo parameter)
 		{
 			Debug.Assert(parameter != null, "parameter != null");
 			var attributes =
