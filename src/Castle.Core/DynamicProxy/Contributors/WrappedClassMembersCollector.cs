@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
-
+	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
 	public class WrappedClassMembersCollector : ClassMembersCollector
@@ -43,6 +43,18 @@ namespace Castle.DynamicProxy.Contributors
 				hook.NonProxyableMemberNotification(type, field);
 			}
 		}
+
+#if SILVERLIGHT
+		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
+		{
+			if(method.IsPublic == false)
+			{
+				// we can't proxy protected methods like this on Silverlight
+				return null;
+			}
+			return base.GetMethodToGenerate(method, hook, isStandalone);
+		}
+#endif
 
 		protected virtual bool IsOKToBeOnProxy(FieldInfo field)
 		{

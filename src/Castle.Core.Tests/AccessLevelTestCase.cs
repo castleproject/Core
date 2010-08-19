@@ -59,14 +59,9 @@ namespace Castle.DynamicProxy.Tests
 										  generator.CreateClassProxy(typeof(NonPublicMethodsClass), logger);
 
 			proxy.DoSomething();
-#if SILVERLIGHT
-			Assert.AreEqual(1, logger.Invocations.Count);
-			Assert.AreEqual("DoSomething", logger.Invocations[0]);
-#else
 			Assert.AreEqual(2, logger.Invocations.Count);
 			Assert.AreEqual("DoSomething", logger.Invocations[0]);
 			Assert.AreEqual("DoOtherThing", logger.Invocations[1]);
-#endif
 		}
 
 		[Test]
