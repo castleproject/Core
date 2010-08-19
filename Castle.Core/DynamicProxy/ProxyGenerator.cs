@@ -828,7 +828,7 @@ namespace Castle.DynamicProxy
 			return (TClass)CreateClassProxyWithTarget(typeof(TClass),
 													  Type.EmptyTypes,
 													  target,
-													  ProxyGenerationOptions.Default,
+													  options,
 													  new object[0],
 													  interceptors);
 		}
