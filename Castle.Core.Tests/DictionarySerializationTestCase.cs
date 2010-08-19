@@ -59,8 +59,10 @@ namespace Castle.DynamicProxy.Tests
 				theInstances.Add(c, c.Name);
 			}
 
+#pragma warning disable 219
 			Dictionary<ClassOverridingEqualsAndGetHashCode, string> theInstancesBis =
 				SerializeAndDeserialize<Dictionary<ClassOverridingEqualsAndGetHashCode, string>>(theInstances);
+#pragma warning restore 219
 		}
 
 		[Test]
@@ -79,8 +81,10 @@ namespace Castle.DynamicProxy.Tests
 				theInstances.Add(c, c.Name);
 			}
 
+#pragma warning disable 219
 			Dictionary<ClassOverridingEqualsAndGetHashCode, string> theInstancesBis =
 				SerializeAndDeserialize<Dictionary<ClassOverridingEqualsAndGetHashCode, string>>(theInstances);
+#pragma warning restore 219
 		}
 
 		[Test]

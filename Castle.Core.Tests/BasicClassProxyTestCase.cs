@@ -60,6 +60,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Caching()
 		{
+#pragma warning disable 219
 			object proxy = generator.CreateClassProxy(
 				typeof(ServiceClass), new StandardInterceptor());
 			proxy = generator.CreateClassProxy(
@@ -68,6 +69,7 @@ namespace Castle.DynamicProxy.Tests
 				typeof(ServiceClass), new StandardInterceptor());
 			proxy = generator.CreateClassProxy(
 				typeof(ServiceClass), new StandardInterceptor());
+#pragma warning restore 219
 		}
 
 #if !MONO

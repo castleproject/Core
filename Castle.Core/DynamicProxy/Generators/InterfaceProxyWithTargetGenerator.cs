@@ -130,7 +130,7 @@ namespace Castle.DynamicProxy.Generators
 			FieldReference interceptorsField;
 			Type baseType = Init(typeName, out emitter, proxyTargetType, out interceptorsField, allInterfaces);
 
-			var model = new MetaType(typeName, ProxyGenerationOptions.BaseTypeForInterfaceProxy, allInterfaces);
+			var model = new MetaType();
 			// Collect methods
 			foreach (var contributor in contributors)
 			{

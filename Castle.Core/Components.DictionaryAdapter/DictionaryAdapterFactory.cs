@@ -30,7 +30,6 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Xml.XPath;
 #endif
 	using System.Diagnostics;
-
 	/// <summary>
 	/// Uses Reflection.Emit to expose the properties of a dictionary
 	/// through a dynamic implementation of a typed interface.
@@ -54,14 +53,27 @@ namespace Castle.Components.DictionaryAdapter
 			return InternalGetAdapter(type, dictionary, null);
 		}
 
-		/// <inheritdoc />
+        /// <inheritdoc />
 		public object GetAdapter(Type type, IDictionary dictionary, PropertyDescriptor descriptor)
 		{
 			return InternalGetAdapter(type, dictionary, descriptor);
 		}
-		
-#if! SILVERLIGHT
+
 		/// <inheritdoc />
+		public T GetAdapter<T, R>(IDictionary<string, R> dictionary)
+		{
+			return (T) GetAdapter<R>(typeof(T), dictionary);
+		}
+
+		/// <inheritdoc />
+		public object GetAdapter<R>(Type type, IDictionary<string, R> dictionary)
+		{
+			var adapter = new GenericDictionaryAdapter<R>(dictionary);
+			return InternalGetAdapter(type, adapter, null);
+		}
+
+#if! SILVERLIGHT
+        /// <inheritdoc />
 		public T GetAdapter<T>(NameValueCollection nameValues)
 		{
 			return GetAdapter<T>(new NameValueCollectionAdapter(nameValues));
