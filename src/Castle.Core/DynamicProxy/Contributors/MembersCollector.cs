@@ -23,11 +23,7 @@ namespace Castle.DynamicProxy.Contributors
 
 	public abstract class MembersCollector
 	{
-//#if SILVERLIGHT
-//        private const BindingFlags Flags = BindingFlags.Public | BindingFlags.Instance;
-//#else
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-//#endif
 		private ILogger logger = NullLogger.Instance;
 
 		private ICollection<MethodInfo> checkedMethods = 
