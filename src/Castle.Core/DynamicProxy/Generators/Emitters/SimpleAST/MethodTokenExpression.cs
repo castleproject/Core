@@ -22,12 +22,15 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	public class MethodTokenExpression : Expression
 	{
 		private readonly MethodInfo method;
+#if !MONO
 		private readonly Type declaringType;
-
+#endif
 		public MethodTokenExpression(MethodInfo method)
 		{
 			this.method = method;
+#if !MONO
 			declaringType = method.DeclaringType;
+#endif
 		}
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)

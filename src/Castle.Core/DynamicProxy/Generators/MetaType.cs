@@ -14,24 +14,16 @@
 
 namespace Castle.DynamicProxy.Generators
 {
-	using System;
 	using System.Collections.Generic;
 
 	public class MetaType
 	{
-		private readonly string name;
-		private readonly Type baseType;
-		private readonly IEnumerable<Type> interfaces;
-
 		private readonly ICollection<MetaProperty> properties = new TypeElementCollection<MetaProperty>();
 		private readonly ICollection<MetaEvent> events = new TypeElementCollection<MetaEvent>();
 		private readonly ICollection<MetaMethod> methods = new TypeElementCollection<MetaMethod>();
 
-		public MetaType(string name, Type baseType, IEnumerable<Type> interfaces)
+		public MetaType()
 		{
-			this.name = name;
-			this.baseType = baseType;
-			this.interfaces = interfaces;
 		}
 
 		public IEnumerable<MetaMethod> Methods

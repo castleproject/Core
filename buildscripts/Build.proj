@@ -28,7 +28,6 @@ limitations under the License.
 		<RootPath Condition="'$(RootPath)' == ''">$(MSBuildProjectDirectory)/..</RootPath>
 	</PropertyGroup>
 
-
 	<!-- Import common targets -->
 	<Import Project="$(RootPath)/Settings.proj" />
 	<Import Project="$(BuildScriptsPath)/Castle.Common.Targets" />
@@ -60,33 +59,41 @@ limitations under the License.
 			<Output TaskParameter="TargetOutputs" ItemName="AllBinaries" />
 		
 		</MSBuild>
+		<Message Text="Binaries built from solution: @(AllBinaries)" />
 		
-		<PropertyGroup>
-			<TestDetectionExpression>.[\.]((Integration|Unit)?Test[s]{0,1}?)</TestDetectionExpression>
-		</PropertyGroup>
-
 		<!-- Resolve test projects -->
 		<RegexMatch Input="@(AllBinaries)" Expression="$(TestDetectionExpression)">
 			<Output TaskParameter="Output" ItemName="TestAssemblies" />
 		</RegexMatch>
+		<Message Text="Detected the following test assemblies: @(TestAssemblies)" />
+		<CreateProperty Value="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ')">
+			<Output PropertyName="TestAssemblies" TaskParameter="Value"/>
+		</CreateProperty>
+		<Message Text="Test assemblies transformed to quoted list: $(TestAssemblies)" />
 
 		<!-- Resolve the libraries code projects -->
-		<ItemGroup>
-			<AppAssemblies Include="@(AllBinaries)" Exclude="@(TestAssemblies)" />
-		</ItemGroup>
+		<CreateItem
+			Include="@(AllBinaries)"
+			Exclude="@(TestAssemblies)">
+			
+			<Output TaskParameter="Include" ItemName="AppAssemblies"/>
+		</CreateItem>
 
 		<!-- Pick up the PDB files. This is kind of hard coded to the location of the AppAssemblies, but I currently don't see another way  -->
-		<ItemGroup>
-			<PdbFiles
-				Include="@(AppAssemblies->'%(RelativeDir)%(FileName).pdb')" />
-		</ItemGroup>
+		<CreateItem
+			Include="@(AppAssemblies->'%(RelativeDir)%(FileName).pdb')">
+		
+			<Output TaskParameter="Include" ItemName="PdbFiles"/>
+		</CreateItem>
 
 		<!-- Pick up the documentation XML. This is kind of hard coded to the location of the AppAssemblies, but I currently don't see another way  -->
-		<ItemGroup>
-			<DocumentationFiles
-				Include="@(AppAssemblies->'%(RelativeDir)%(FileName).xml')"
-				Condition="Exists('%(AppAssemblies.RelativeDir)%(AppAssemblies.FileName).xml')"  />
-		</ItemGroup>
+		<CreateItem
+			Include="@(AppAssemblies->'%(RelativeDir)%(FileName).xml')"
+			Condition="Exists('%(AppAssemblies.RelativeDir)%(AppAssemblies.FileName).xml')">
+			
+			<Output TaskParameter="Include" ItemName="DocumentationFiles"/>
+		
+		</CreateItem>
 
 	</Target>
 
@@ -97,9 +104,9 @@ limitations under the License.
 	</Target>
 
 	<Target Name="_SetPackageDir">
-		<PropertyGroup>
-			<PackageDir>$(OutputPath)../Library</PackageDir>
-		</PropertyGroup>
+		<CreateProperty Value="$(OutputPath)../Library">
+			<Output PropertyName="PackageDir" TaskParameter="Value"/>
+		</CreateProperty>
 	</Target>
 
 	<Target Name="CleanProject">
@@ -150,19 +157,22 @@ limitations under the License.
 	<!-- Creates Zip file for Release -->
 	<Target
 		Name="Package"
-		DependsOnTargets="CleanProject;GetBuildRevision;RunAllTests;_PreparePackage"
+		DependsOnTargets="RunAllTests;_PreparePackage"
 		>
 
-		<PropertyGroup>
-			<Build_ZipFile Condition="'$(Build_ZipFile)' == ''">$(ProjectName)-$(BuildConfigKey)-$(Build_Number).zip</Build_ZipFile>
-			<Build_ZipFilePath Condition="'$(Build_ZipFilePath)' == ''">$(OutputPath)../$(Build_ZipFile)</Build_ZipFilePath>
-		</PropertyGroup>
+		<CreateProperty Value="$(ProjectName)-$(BuildConfigKey)-$(Build_Number).zip" Condition="'$(Build_ZipFile)' == ''">
+			<Output PropertyName="Build_ZipFile" TaskParameter="Value"/>
+		</CreateProperty>
+		<CreateProperty Value="$(OutputPath)../$(Build_ZipFile)" Condition="'$(Build_ZipFilePath)' == ''">
+			<Output PropertyName="Build_ZipFilePath" TaskParameter="Value"/>
+		</CreateProperty>
 
 		<Message Importance="high" Text="Creating ZIP file $(Build_ZipFilePath)"/>
 
-		<ItemGroup>
-			<FilesToPackage Include="$(PackageDir)\**\*.*" Exclude="$(PackageDir)\**\*Tests*" />
-		</ItemGroup>
+		<CreateItem Include="$(PackageDir)\**\*.*" Exclude="$(PackageDir)\**\*Tests*">
+			<Output ItemName="FilesToPackage" TaskParameter="Include" />
+		</CreateItem>
+
 		<Zip
 			Files="@(FilesToPackage)"
 			ZipLevel="6"
@@ -179,10 +189,6 @@ limitations under the License.
 		Internal targets
 	==================================================
 	-->
-	<PropertyGroup>
-		<TestAssemblies></TestAssemblies>
-	</PropertyGroup>
-
 	<!-- Executes NUnit or NCover with NUnit -->
 	<Target
 		Name="_ExecTestRunner"
@@ -200,21 +206,26 @@ limitations under the License.
 	
 
 	<!-- Use TeamCity's when running on the build server -->
-	<UsingTask TaskName="NUnitTeamCity" AssemblyFile="$(teamcity_dotnet_nunitlauncher_msbuild_task)" Condition=" '$(TEAMCITY_VERSION)' != '' "/>
+	<UsingTask TaskName="NUnitTeamCity" AssemblyFile="$(teamcity_dotnet_nunitlauncher_msbuild_task)" Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' != '' "/>
 
 	<Target
 		Name="_ExecNUnit"
 		>
-		<PropertyGroup>
-			<NUnitTestResultXmlFiles Condition="'$(NUnitTestResultXmlFiles)' == ''">$(TestResultsPath)/nunit-results.xml</NUnitTestResultXmlFiles>
-		</PropertyGroup>
+
+		<CreateProperty Value="$(TestResultsPath)/nunit-results.xml" Condition="'$(NUnitTestResultXmlFiles)' == ''">
+			<Output PropertyName="NUnitTestResultXmlFiles" TaskParameter="Value"/>
+		</CreateProperty>
 		
-		<Exec Command="$(NUnitPath)/nunit-console-x86.exe /nologo @(TestAssemblies->'&quot;%(FullPath)&quot;', ' ') /xml=$(NUnitTestResultXmlFiles) /framework=$(FrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' " />
+		<Message Text="Running tests from assemblies: $(TestAssemblies)" />
+		
+		<Exec Command="$(NUnitPath)/nunit-console-x86.exe /nologo $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles) /framework=$(FrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' " />
+
+		<Exec Command="$(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 $(TestAssemblies)" Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' == '' and $(teamcity_dotnet_nunitlauncher) != '' " />
 
 		<NUnitTeamCity
 			Assemblies="@(TestAssemblies)"
 			NUnitVersion="NUnit-2.5.5"
-			Condition=" '$(TEAMCITY_VERSION)' != '' "
+			Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' != '' "
 		/>
 
 	</Target>
@@ -223,10 +234,10 @@ limitations under the License.
 	<Target
 		Name="_ExecNCover"
 		>
-		
-		<PropertyGroup>
-			<NCoverResultXmlFiles Condition="'$(NCoverResultXmlFiles)' == ''">$(TestResultsPath)/nunit-coverage-results.xml</NCoverResultXmlFiles>
-		</PropertyGroup>
+
+		<CreateProperty Value="$(TestResultsPath)/nunit-coverage-results.xml" Condition="'$(NCoverResultXmlFiles)' == ''">
+			<Output PropertyName="NCoverResultXmlFiles" TaskParameter="Value"/>
+		</CreateProperty>
 
 		<NCover
 			ToolPath="$(NCoverPath)"
@@ -249,12 +260,15 @@ limitations under the License.
 	<Target
 		Name="_ExecStatLight"
 		>
-		
-		<PropertyGroup>
-			<StatLightCmdLine>$(ToolsPath)\StatLight\StatLight.exe -x="$(OutputPath)Castle.Core.Tests.xap" -o=NUnit</StatLightCmdLine>
-			<StatLightCmdLine Condition=" '$(TEAMCITY_VERSION)' != '' ">$(StatLightCmdLine) --teamcity</StatLightCmdLine>
-		</PropertyGroup>
-		
+
+		<CreateProperty Value='$(ToolsPath)\StatLight\StatLight.exe -x="$(OutputPath)Castle.Core.Tests.xap" -o=NUnit'>
+			<Output PropertyName="StatLightCmdLine" TaskParameter="Value"/>
+		</CreateProperty>
+
+		<CreateProperty Value='$(StatLightCmdLine) --teamcity' Condition=" '$(TEAMCITY_VERSION)' != '' ">
+			<Output PropertyName="StatLightCmdLine" TaskParameter="Value"/>
+		</CreateProperty>
+
 		<Exec Command="$(StatLightCmdLine)" />
 
 	</Target>
@@ -273,37 +287,48 @@ limitations under the License.
 	<!-- Prepare package directory -->
 	<Target Name="_PreparePackage">
 
-		<PropertyGroup>
-			<PackageDir Condition="'$(PackageDir)' == ''">$(OutputPath)../pkg</PackageDir>
-		</PropertyGroup>
+		<CreateProperty Value="$(OutputPath)../pkg" Condition="'$(PackageDir)' == ''">
+			<Output PropertyName="PackageDir" TaskParameter="Value"/>
+		</CreateProperty>
 
 		<RemoveDir Directories="$(PackageDir)" ContinueOnError="true" />
 
-		<ItemGroup>
-			<!-- Grab all Castle assemblies, but ignore unit test assemblies. -->
-			<_CastleDependencies Include="$(OutputPath)Castle.*.dll;$(OutputPath)Castle.*.xml" Exclude="$(OutputPath)Castle*.Tests.dll"/>
-
-			<_BuildScriptsTxtFiles Include="$(BuildScriptsPath)/*.txt"/>
-			<_ChangesTxt Include="$(RootPath)/src/Change*.txt"/>
-		</ItemGroup>
+		<!-- Grab all Castle assemblies, but ignore unit test assemblies. -->
+		<CreateItem Include="$(OutputPath)Castle.*.dll;$(OutputPath)Castle.*.xml" Exclude="$(OutputPath)Castle*.Tests.dll">
+			<Output TaskParameter="Include" ItemName="_CastleDependencies"/>
+		</CreateItem>
+		<CreateItem Include="$(BuildScriptsPath)/*.txt">
+			<Output TaskParameter="Include" ItemName="_BuildScriptsTxtFiles"/>
+		</CreateItem>
+		<CreateItem Include="$(RootPath)/src/Change*.txt">
+			<Output TaskParameter="Include" ItemName="_ChangesTxt"/>
+		</CreateItem>
 
 		<!-- Create list with items to be copied to package directory. The metadata <DestinationFolder> controls where they wind up. -->
-		<ItemGroup>
-			<CopyToPackageDirectory Include="@(_BuildScriptsTxtFiles)">
-				<DestinationFolder>$(PackageDir)</DestinationFolder>
-			</CopyToPackageDirectory>
+		<CreateItem
+			Include="@(_BuildScriptsTxtFiles)"
+			AdditionalMetadata="DestinationFolder=$(PackageDir)">
 
-			<CopyToPackageDirectory Include="@(AppAssemblies);@(PdbFiles);@(DocumentationFiles);@(_CastleDependencies);@(PackageFiles)">
-				<DestinationFolder>$(PackageDir)/bin</DestinationFolder>
-			</CopyToPackageDirectory>
+			<Output TaskParameter="Include" ItemName="CopyToPackageDirectory"/>
+		</CreateItem>
+		<CreateItem
+			Include="@(AppAssemblies);@(PdbFiles);@(DocumentationFiles);@(_CastleDependencies);@(PackageFiles)"
+			AdditionalMetadata="DestinationFolder=$(PackageDir)/bin">
 
-			<CopyToPackageDirectory Include="@(_ChangesTxt)">
-				<DestinationFolder>$(PackageDir)/ReleaseNotes</DestinationFolder>
-			</CopyToPackageDirectory>
-			
-			<CopyToPackageDirectory Remove="@(ExcludeFromPackageFiles)" />
-		</ItemGroup>
-		
+			<Output TaskParameter="Include" ItemName="CopyToPackageDirectory"/>
+		</CreateItem>
+		<CreateItem
+			Include="@(_ChangesTxt)"
+			AdditionalMetadata="DestinationFolder=$(PackageDir)/ReleaseNotes">
+
+			<Output TaskParameter="Include" ItemName="CopyToPackageDirectory"/>
+		</CreateItem>
+		<CreateItem
+			Exclude="@(ExcludeFromPackageFiles)">
+
+			<Output TaskParameter="Include" ItemName="CopyToPackageDirectory"/>
+		</CreateItem>
+
 		<Copy
 			SourceFiles="@(CopyToPackageDirectory)"
 			DestinationFiles="@(CopyToPackageDirectory->'%(DestinationFolder)/%(RecursiveDir)%(Filename)%(Extension)')"
