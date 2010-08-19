@@ -39,11 +39,7 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.IsTrue(hook.Completed);
 			Assert.AreEqual(13, hook.AskedMembers.Count, "Asked members");
-#if SILVERLIGHT // no Object.MemberwiseClone in SL
-			Assert.AreEqual(3, hook.NonVirtualMembers.Count, "Non-virtual members");
-#else
 			Assert.AreEqual(4, hook.NonVirtualMembers.Count, "Non-virtual members");
-#endif
 
 			proxy.Sum(1, 2);
 			Assert.IsFalse(proxy.Valid);

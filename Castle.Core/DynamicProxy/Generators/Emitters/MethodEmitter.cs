@@ -178,7 +178,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			foreach (var parameter in parameters)
 			{
 				var parameterBuilder = builder.DefineParameter(parameter.Position + 1, parameter.Attributes, parameter.Name);
-				foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(parameter))
+				foreach (var attribute in parameter.GetNonInheritableAttributes())
 				{
 					parameterBuilder.SetCustomAttribute(attribute);
 				}
