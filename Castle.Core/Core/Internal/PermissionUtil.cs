@@ -23,7 +23,7 @@ namespace Castle.Core.Internal
 	{
 		public static bool IsGranted(this IPermission permission)
 		{
-#if DOTNET35
+#if DOTNET35 || MONO26
 			return SecurityManager.IsGranted(permission);
 #else
 			var permissionSet = new PermissionSet(PermissionState.None);
