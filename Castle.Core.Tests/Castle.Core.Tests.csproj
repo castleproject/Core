@@ -152,7 +152,6 @@
     <Compile Include="InterClasses\ServiceImpl.cs" />
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="MixinTestCase.cs" />
-    <Compile Include="ProxyGeneratorTestCase.cs" />
     <Compile Include="ThrowingInterceptorException.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
