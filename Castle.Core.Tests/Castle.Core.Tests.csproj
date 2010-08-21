@@ -132,6 +132,7 @@
     <Compile Include="ClassWithAttributesTestCase.cs" />
     <Compile Include="GenClasses\ClassWithGenArgs.cs" />
     <Compile Include="GenClasses\ClassWithIndexer.cs" />
+    <Compile Include="GenClasses\ClassWithMethodWithReturnArrayOfListOfT.cs" />
     <Compile Include="GenClasses\GenClassNameClash.cs" />
     <Compile Include="GenClasses\GenClassWithConstraints.cs" />
     <Compile Include="GenClasses\GenClassWithGenMethods.cs" />
@@ -233,7 +234,6 @@
     <Compile Include="Interceptors\DoNothingInterceptor.cs" />
     <Compile Include="GenClasses\ClassWithMethodWithArrayOfListOfT.cs" />
     <Compile Include="GenClasses\ClassWithMethodWithGenericOfGenericOfT.cs" />
-    <Compile Include="GenClasses\ClassWithMethodWithReturnArrayOfListOfT.cs" />
     <Compile Include="GenClasses\MethodWithArgumentBeingArrayOfGenericTypeOfT.cs" />
     <Compile Include="GenericMethodsProxyTestCase.cs" />
     <Compile Include="DictionarySerializationTestCase.cs" />
