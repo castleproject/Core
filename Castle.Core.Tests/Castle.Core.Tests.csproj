@@ -315,7 +315,6 @@
     <Compile Include="ConsoleLoggerTestCase.cs" />
     <Compile Include="DiagnosticsLoggerTestCase.cs" />
     <Compile Include="LevelFilteredLoggerTests.cs" />
-    <Compile Include="LinkedListTestCase.cs" />
     <Compile Include="MonitorLockTestCase.cs" />
     <Compile Include="SlimReadWriteLockTestCase.cs" />
     <Compile Include="ReflectionBasedDictionaryAdapterTestCase.cs" />

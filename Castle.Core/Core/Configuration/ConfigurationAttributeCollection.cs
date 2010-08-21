@@ -40,13 +40,7 @@ namespace Castle.Core.Configuration
 		public ConfigurationAttributeCollection()
 		{
 		}
-
-#if !SILVERLIGHT
-		protected ConfigurationAttributeCollection(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-#endif
-
+	
 		public new string this[string key]
 		{
 			get
