@@ -1,4 +1,4 @@
-unreleased changes
+2.5.0 (2010-08-21)
 ==================
 - DynamicProxy will now not replicate non-public attribute types
 - Applied patch from Kenneth Siewers Møller which adds parameterless constructor to DefaultSmtpSender implementation, to be able to configure the inner SmtpClient from the application configuration file (system.net.smtp).
