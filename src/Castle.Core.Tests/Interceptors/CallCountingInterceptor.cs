@@ -14,28 +14,28 @@
 
 namespace Castle.DynamicProxy.Tests.Interceptors
 {
-    using System;
+	using System;
 
 #if !SILVERLIGHT
-    [Serializable]
+	[Serializable]
 #endif
-    public class CallCountingInterceptor : IInterceptor
-    {
-        private int count;
+	public class CallCountingInterceptor : IInterceptor
+	{
+		private int count;
 
-        public int Count
-        {
-            get { return count; }
-        }
+		public int Count
+		{
+			get { return count; }
+		}
 
-        #region IInterceptor Members
+		#region IInterceptor Members
 
-        public void Intercept(IInvocation invocation)
-        {
-            count++;
-            invocation.Proceed();
-        }
+		public void Intercept(IInvocation invocation)
+		{
+			count++;
+			invocation.Proceed();
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

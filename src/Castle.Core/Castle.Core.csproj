@@ -386,9 +386,6 @@
     <Compile Include="Properties\InternalsVisibleToTests.cs" />
     <Compile Include="Core\Internal\ILockHolder.cs" />
     <Compile Include="Core\Internal\IUpgradeableLockHolder.cs" />
-    <Compile Include="Core\Internal\LinkedList.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Core\Internal\MonitorLockHolder.cs" />
     <Compile Include="Core\Internal\MonitorUpgradeableLockHolder.cs" />
     <Compile Include="Core\Internal\MonitorLock.cs" />
