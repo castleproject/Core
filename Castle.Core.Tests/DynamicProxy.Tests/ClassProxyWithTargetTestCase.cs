@@ -18,27 +18,20 @@ namespace Castle.DynamicProxy.Tests
 	using System.Collections;
 	using System.Linq;
 	using System.Reflection;
-
 	using Castle.DynamicProxy.Tests.Classes;
-
+	using Castle.DynamicProxy.Tests.Mixins;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class ClassProxyWithTargetTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		public void Can_proxy_purely_virtual_class()
+		public void Can_proxy_class_with_no_default_ctor()
 		{
-			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithMethod());
-			var result = proxy.Method();
-			Assert.AreEqual(42, result);
-		}
-
-		[Test]
-		public void Can_proxy_class_with_protected_method()
-		{
-			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithProtectedMethod(42));
-			var result = proxy.PublicMethod();
+			var proxy = generator.CreateClassProxyWithTarget(typeof (VirtualClassWithNoDefaultCtor),
+			                                                 new VirtualClassWithNoDefaultCtor(42),
+			                                                 new object[] {12});
+			var result = ((VirtualClassWithNoDefaultCtor) proxy).Method();
 			Assert.AreEqual(42, result);
 		}
 
@@ -51,23 +44,41 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void Can_proxy_class_with_no_default_ctor()
+		public void Can_proxy_class_with_protected_method()
 		{
-			var proxy = generator.CreateClassProxyWithTarget(typeof(VirtualClassWithNoDefaultCtor),
-			                                                 new VirtualClassWithNoDefaultCtor(42),
-			                                                 new object[] { 12 });
-			var result = ((VirtualClassWithNoDefaultCtor)proxy).Method();
+			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithProtectedMethod(42));
+			var result = proxy.PublicMethod();
 			Assert.AreEqual(42, result);
+		}
+
+		[Test]
+		public void Can_proxy_purely_virtual_class()
+		{
+			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithMethod());
+			var result = proxy.Method();
+			Assert.AreEqual(42, result);
+		}
+
+		[Test]
+		public void Hook_does_NOT_get_notified_about_autoproperty_field()
+		{
+			var hook = new LogHook(typeof (VirtualClassWithAutoProperty), false);
+
+			generator.CreateClassProxyWithTarget(typeof (VirtualClassWithAutoProperty), Type.EmptyTypes,
+			                                     new VirtualClassWithAutoProperty(), new ProxyGenerationOptions(hook),
+			                                     new object[0]);
+
+			Assert.False(hook.NonVirtualMembers.Any(m => m is FieldInfo));
 		}
 
 		[Test]
 		public void Hook_gets_notified_about_public_field()
 		{
-			var hook = new LogHook(typeof(VirtualClassWithPublicField), false);
-			generator.CreateClassProxyWithTarget(typeof(VirtualClassWithPublicField), Type.EmptyTypes,
+			var hook = new LogHook(typeof (VirtualClassWithPublicField), false);
+			generator.CreateClassProxyWithTarget(typeof (VirtualClassWithPublicField), Type.EmptyTypes,
 			                                     new VirtualClassWithPublicField(), new ProxyGenerationOptions(hook),
 			                                     new object[0]);
-			Assert.IsNotEmpty((ICollection)hook.NonVirtualMembers);
+			Assert.IsNotEmpty((ICollection) hook.NonVirtualMembers);
 			var memberInfo = hook.NonVirtualMembers.Single(m => m is FieldInfo);
 			Assert.AreEqual("field", memberInfo.Name);
 			Assert.AreEqual(MemberTypes.Field, memberInfo.MemberType);
@@ -76,26 +87,26 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Hook_gets_notified_about_static_methods()
 		{
-			var hook = new LogHook(typeof(VirtualClassWithPublicField), false);
-			generator.CreateClassProxyWithTarget(typeof(VirtualClassWithPublicField), Type.EmptyTypes,
-												 new VirtualClassWithPublicField(), new ProxyGenerationOptions(hook),
-												 new object[0]);
-			Assert.IsNotEmpty((ICollection)hook.NonVirtualMembers);
+			var hook = new LogHook(typeof (VirtualClassWithPublicField), false);
+			generator.CreateClassProxyWithTarget(typeof (VirtualClassWithPublicField), Type.EmptyTypes,
+			                                     new VirtualClassWithPublicField(), new ProxyGenerationOptions(hook),
+			                                     new object[0]);
+			Assert.IsNotEmpty((ICollection) hook.NonVirtualMembers);
 			var memberInfo = hook.NonVirtualMembers.Single(m => m is FieldInfo);
 			Assert.AreEqual("field", memberInfo.Name);
 			Assert.AreEqual(MemberTypes.Field, memberInfo.MemberType);
 		}
 
 		[Test]
-		public void Hook_does_NOT_get_notified_about_autoproperty_field()
+		public void Uses_The_Provided_Options()
 		{
-			var hook = new LogHook(typeof(VirtualClassWithAutoProperty), false);
+			var options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new SimpleMixin());
 
-			generator.CreateClassProxyWithTarget(typeof(VirtualClassWithAutoProperty), Type.EmptyTypes,
-												 new VirtualClassWithAutoProperty(), new ProxyGenerationOptions(hook),
-												 new object[0]);
+			var target = new SimpleClassWithProperty();
+			var proxy = generator.CreateClassProxyWithTarget(target, options);
 
-			Assert.False(hook.NonVirtualMembers.Any(m => m is FieldInfo));
+			Assert.IsInstanceOf(typeof (ISimpleMixin), proxy);
 		}
 	}
 }
