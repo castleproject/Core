@@ -330,6 +330,9 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
+#if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
+		[Ignore]
+#endif
 		[Test]
 		public void ProxyForBaseTypeFromUnsignedAssembly()
 		{
@@ -348,6 +351,9 @@ namespace Castle.DynamicProxy.Tests
 			return StrongNameUtil.IsAssemblySigned(GetType().Assembly);
 		}
 
+#if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
+		[Ignore]
+#endif
 		[Test]
 		public void ProxyForBaseTypeAndInterfaceFromUnsignedAssembly()
 		{
@@ -362,7 +368,9 @@ namespace Castle.DynamicProxy.Tests
 			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
-
+#if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
+		[Ignore]
+#endif
 		[Test]
 		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies1()
 		{
@@ -379,6 +387,9 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
+#if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
+		[Ignore]
+#endif
 		[Test]
 		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies2()
 		{
