@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT // In Silverlight Console.SetOut throws security exception
 namespace Castle.Core.Logging.Tests
 {
 	using System;
