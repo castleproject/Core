@@ -133,12 +133,12 @@ namespace Castle.DynamicProxy
 
 			if (!isAccessible)
 			{
-				throw new GeneratorException("Type " + target.FullName + "is not public. " +
+				throw new GeneratorException("Type " + target.FullName + " is not public. " +
 				                             "Can not create proxy for types that are not accessible.");
 			}
 			if (target.IsGenericTypeDefinition)
 			{
-				throw new GeneratorException("Type " + target.FullName + "is a generic type definition. " +
+				throw new GeneratorException("Type " + target.FullName + " is a generic type definition. " +
 				                             "Can not create proxy for open generic types.");
 			}
 		}
