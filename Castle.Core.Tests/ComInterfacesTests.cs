@@ -15,6 +15,7 @@
 #if (!SILVERLIGHT && !MONO)
 namespace Castle.DynamicProxy.Tests
 {
+	using System.Reflection;
 	using ADODB;
 	using NUnit.Framework;
 
@@ -25,6 +26,22 @@ namespace Castle.DynamicProxy.Tests
 		public void Can_proxy_ADO_RecorsSet()
 		{
 			generator.CreateInterfaceProxyWithoutTarget<Recordset>();
+		}
+
+		[Test]
+		public void Can_proxy_existing_com_object()
+		{
+			var command = new Command();
+			var parameter = ExtractActualComParameterObject(command.CreateParameter("foo"));
+			generator.CreateInterfaceProxyWithTargetInterface(parameter);
+		}
+
+		private Parameter ExtractActualComParameterObject(Parameter parameter)
+		{
+			var type = parameter.GetType();
+			var method = type.GetMethod("GetParm", BindingFlags.Instance | BindingFlags.NonPublic);
+			var actualParameter = method.Invoke(parameter, null);
+			return (Parameter) actualParameter;
 		}
 	}
 }
