@@ -14,8 +14,7 @@
 
 namespace Castle.Core.Tests
 {
-	using System.Threading;
-
+#if SILVERLIGHT
 	using Castle.Core.Internal;
 
 	using NUnit.Framework;
@@ -157,4 +156,5 @@ namespace Castle.Core.Tests
 			}
 		}
 	}
+#endif
 }

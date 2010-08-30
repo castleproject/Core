@@ -26,17 +26,27 @@ namespace Castle.Core.Resource
 		public static readonly String UriSchemeFile = "file";
 		public static readonly String UriSchemeAssembly = "assembly";
 
-		private String scheme, host, path;
-		private bool isUnc, isFile, isAssembly;
+		private String scheme;
+		private String host;
+		private String path;
+		private bool isUnc;
+		private bool isFile;
+		private bool isAssembly;
 
 		public CustomUri(String resourceIdentifier)
 		{
-			SanityCheck(resourceIdentifier);
+			if (resourceIdentifier == null)
+			{
+				throw new ArgumentNullException("resourceIdentifier");
+			}
+			if (resourceIdentifier == String.Empty)
+			{
+				throw new ArgumentException("Empty resource identifier is not allowed", "resourceIdentifier");
+			}
 
 			ParseIdentifier(resourceIdentifier);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unc")]
 		public bool IsUnc
 		{
 			get { return isUnc; }
@@ -50,12 +60,6 @@ namespace Castle.Core.Resource
 		public bool IsAssembly
 		{
 			get { return isAssembly; }
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		public String AbsolutePath
-		{
-			get { throw new NotImplementedException(); }
 		}
 
 		public string Scheme
@@ -110,8 +114,7 @@ namespace Castle.Core.Resource
 				scheme = UriSchemeFile;
 			}
 
-			StringBuilder sb = new StringBuilder();
-
+			var sb = new StringBuilder();
 			foreach(char ch in identifier.ToCharArray())
 			{
 				if (translateSlashes && (ch == '\\' || ch == '/'))
@@ -136,19 +139,6 @@ namespace Castle.Core.Resource
 #if SILVERLIGHT
 			path = sb.ToString();
 #endif
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength")]
-		private static void SanityCheck(String resourceIdentifier)
-		{
-			if (resourceIdentifier == null)
-			{
-				throw new ArgumentNullException("resourceIdentifier");
-			}
-			if (resourceIdentifier == String.Empty)
-			{
-				throw new ArgumentException("Empty resource identifier is not allowed", "resourceIdentifier");
-			}
 		}
 	}
 }
