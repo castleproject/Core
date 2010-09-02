@@ -14,8 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-	using System;
-
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
@@ -68,7 +66,7 @@ namespace Castle.DynamicProxy.Tests
 		public void InternalConstructorIsNotReplicated()
 		{
 			object proxy = generator.CreateClassProxy(typeof(Dictionary<int, object>), new StandardInterceptor());
-			Assert.IsNull(proxy.GetType().GetConstructor(new Type[] { typeof(IInterceptor[]), typeof(bool) }));
+			Assert.IsNull(proxy.GetType().GetConstructor(new[] { typeof(IInterceptor[]), typeof(bool) }));
 		}
 
 		internal class InternalClass
@@ -83,7 +81,7 @@ namespace Castle.DynamicProxy.Tests
 		public void InternalConstructorIsReplicatedWhenInternalsVisibleTo()
 		{
 			object proxy = generator.CreateClassProxy(typeof(InternalClass), new StandardInterceptor());
-			Assert.IsNotNull(proxy.GetType().GetConstructor(new Type[] { typeof(IInterceptor[]) }));
+			Assert.IsNotNull(proxy.GetType().GetConstructor(new[] { typeof(IInterceptor[]) }));
 		}
 #endif
 	}

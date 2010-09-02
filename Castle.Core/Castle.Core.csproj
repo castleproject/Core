@@ -64,6 +64,7 @@
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\GenericDictionaryAdapter.cs" />
     <Compile Include="Core\Extensions\SimpleConverter.cs" />
+    <Compile Include="Core\Internal\InternalsVisible.cs" />
     <Compile Include="Core\Internal\PermissionUtil.cs" />
     <Compile Include="Components.DictionaryAdapter\AbstractDictionaryAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\AbstractDictionaryAdapterVisitor.cs" />
@@ -132,7 +133,6 @@
     <Compile Include="Components.DictionaryAdapter\XPathContext.cs" />
     <Compile Include="Components.DictionaryAdapter\XPathExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\XPathResult.cs" />
-    <Compile Include="Core\Resource\AssemblyUriParser.cs" />
     <Compile Include="DynamicProxy\AbstractInvocation.cs">
       <SubType>Code</SubType>
     </Compile>

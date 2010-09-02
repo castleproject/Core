@@ -83,9 +83,6 @@ namespace Castle.Core.Tests
 			new ReflectionBasedDictionaryAdapter(null);
 		}
 
-#if SILVERLIGHT
-		[ExpectedException(typeof(MethodAccessException))] // this won't work with SL :/
-#endif
 		[Test]
 		public void EnumeratorIteration()
 		{
@@ -100,6 +97,21 @@ namespace Castle.Core.Tests
 				Assert.IsNotNull(enumerator.Key);
 				Assert.IsNotNull(enumerator.Value);
 			}
+		}
+
+
+		[Test]
+		public void Using_anonymous_types_works_without_exception()
+		{
+			var target = new { foo = 1, name = "john", age = 25 };
+			Assert.IsFalse(target.GetType().IsPublic);
+			var dict = new ReflectionBasedDictionaryAdapter(target);
+
+			Assert.AreEqual(3, dict.Count);
+
+			Assert.AreEqual(1, dict["foo"]);
+			Assert.AreEqual("john", dict["name"]);
+			Assert.AreEqual(25, dict["age"]);
 		}
 
 		[Test]

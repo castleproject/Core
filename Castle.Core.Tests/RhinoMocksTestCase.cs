@@ -19,6 +19,8 @@ namespace Castle.DynamicProxy.Tests
 #if !SILVERLIGHT
 	using System.Data;
 #endif
+	using System.Linq;
+	using System.Runtime.CompilerServices;
 	using System.Runtime.InteropServices;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.Interfaces;
@@ -179,11 +181,11 @@ namespace Castle.DynamicProxy.Tests
 				typeof (IStore1),
 				new DoNothingInterceptor());
 		}
-		
 #if !SILVERLIGHT
 		[Test]
 		public void InternalClassWithInternalMethodAndProperty()
 		{
+
 			var logging = new LogInvocationInterceptor();
 			var o =
 				(InternalClassWithInternalMembers) generator.CreateClassProxy(typeof (InternalClassWithInternalMembers),
@@ -195,7 +197,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(2, logging.Invocations.Count);
 		}
 #endif
-
 		[Test]
 		public void NeedingToCreateNewMethodTableSlot()
 		{
@@ -209,9 +210,9 @@ namespace Castle.DynamicProxy.Tests
 			var o = (WithInternalMethod) generator.CreateClassProxy(typeof (WithInternalMethod),
 			                                                        new Type[0], logging);
 			o.Foo();
-
+			
 #if SILVERLIGHT
-			Assert.AreEqual(string.Empty, logging.LogContents);
+			Assert.IsNullOrEmpty(logging.LogContents);
 #else
 			Assert.AreEqual("Foo ", logging.LogContents);
 #endif
