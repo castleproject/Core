@@ -83,10 +83,8 @@ namespace Castle.DynamicProxy.Tests
 			var type = Type.GetType("System.AppDomainInitializerInfo, mscorlib");
 			var exception = Assert.Throws(typeof(GeneratorException),
 			                              () => generator.CreateClassProxy(type, new StandardInterceptor()));
-			Assert.That(exception.Message.Contains("Can not create proxy for types that are not accessible."),
-			            "Expected message telling that 'Can not create proxy for types that are not accessible.'");
+			Assert.AreEqual("Type System.AppDomainInitializerInfo is not public. Can not create proxy for types that are not accessible.", exception.Message);
 		}
-
 #endif
 
 		[Test]

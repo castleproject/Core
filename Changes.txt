@@ -1,3 +1,8 @@
+unreleased changes
+==================
+- fixed issue DYNPROXY-138 - Error message missing space
+- fixed false positive where DynamicProxy would not let you proxy interface with target interface when target object was a COM object.
+
 2.5.0 (2010-08-21)
 ==================
 - DynamicProxy will now not replicate non-public attribute types
