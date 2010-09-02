@@ -59,6 +59,7 @@ limitations under the License.
 		<BuildFramework>$(BuildConfigKey)</BuildFramework>
 		<BuildConstants>MONO MONO26</BuildConstants>
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+		<BuildConfigDescription>Mono 2.6 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
 	</PropertyGroup>
 
 	<!--Silverlight 3.0 runtime-->
@@ -80,6 +81,11 @@ limitations under the License.
 		<TargetFrameworkVersion>4.0</TargetFrameworkVersion>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<BuildConfigDescription Condition=" '$(BuildConfigDescription)' == '' ">$(TargetFrameworkIdentifier) $(TargetFrameworkVersion)</BuildConfigDescription>
+		<BuildConfigDescription Condition=" '$(TargetFrameworkProfile)' != '' ">$(BuildConfigDescription) Client Profile</BuildConfigDescription>
+	</PropertyGroup>
+
 	<!-- Project folders -->
 	<PropertyGroup>
 		<TargetFrameworkIdentifier Condition="'$(TargetFrameworkIdentifier)' ==''">.NETFramework</TargetFrameworkIdentifier> <!-- MSBuild 4.0 defines this -->
@@ -98,7 +104,7 @@ limitations under the License.
 	<!-- AssemblyInfo Properties -->
 	<PropertyGroup>
 		<AssemblyInfoFile Condition="'$(AssemblyInfoFile)' == ''">AssemblyInfo.cs</AssemblyInfoFile>
-		<AssemblyTitle Condition="'$(AssemblyTitle)' == ''">$(ProjectName)</AssemblyTitle>
+		<AssemblyTitle Condition="'$(AssemblyTitle)' == ''">$(ProjectName) for $(BuildConfigDescription)</AssemblyTitle>
 		<AssemblyProduct Condition="'$(AssemblyProduct)' == ''">$(ProjectName)</AssemblyProduct>
 		<AssemblyDescription Condition="'$(AssemblyDescription)' != ''">$(AssemblyDescription)</AssemblyDescription>
 		<ComVisible Condition="'$(ComVisible)' == ''">false</ComVisible>
