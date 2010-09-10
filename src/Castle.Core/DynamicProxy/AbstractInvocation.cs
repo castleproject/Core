@@ -154,7 +154,7 @@ namespace Castle.DynamicProxy
 
 				var message = "This is a DynamicProxy2 error: invocation.Proceed() has been called more times than expected." +
 				              "This usually signifies a bug in the calling code. Make sure that" + interceptorsCount +
-				              " selected for this method '" + Method + "'" +
+				              " selected for the method '" + Method + "'" +
 				              "calls invocation.Proceed() at most once.";
 				throw new InvalidOperationException(message);
 			}

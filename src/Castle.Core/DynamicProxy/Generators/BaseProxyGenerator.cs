@@ -329,31 +329,36 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void HandleExplicitlyPassedProxyTargetAccessor(ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces)
 		{
+			var interfaceName = typeof (IProxyTargetAccessor).ToString();
 			//ok, let's determine who tried to sneak the IProxyTargetAccessor in...
 			string message;
 			if (targetInterfaces.Contains(typeof(IProxyTargetAccessor)))
 			{
-				message = "Target type for the proxy implements IProxyTargetAccessor " +
-						  "which is a DynamicProxy infrastructure interface and you should never implement it yourself. " +
-						  "Are you trying to proxy an existing proxy?";
+				message =
+					string.Format(
+						"Target type for the proxy implements {0} which is a DynamicProxy infrastructure interface and you should never implement it yourself. Are you trying to proxy an existing proxy?",
+						interfaceName);
 			}
 			else if (ProxyGenerationOptions.MixinData.ContainsMixin(typeof(IProxyTargetAccessor)))
 			{
 				var mixinType = ProxyGenerationOptions.MixinData.GetMixinInstance(typeof(IProxyTargetAccessor)).GetType();
-				message = string.Format("Mixin type {0} implements IProxyTargetAccessor ", mixinType.Name) +
-						  "which is a DynamicProxy infrastructure interface and you should never implement it yourself. " +
-						  "Are you trying to mix in an existing proxy?";
+				message =
+					string.Format(
+						"Mixin type {0} implements {1} which is a DynamicProxy infrastructure interface and you should never implement it yourself. Are you trying to mix in an existing proxy?",
+						mixinType.Name, interfaceName);
 			}
 			else if (additionalInterfaces.Contains(typeof(IProxyTargetAccessor)))
 			{
-				message = "You passed IProxyTargetAccessor as one of additional interfaces to proxy " +
-						  "which is a DynamicProxy infrastructure interface and is implemented by every proxy anyway. " +
-						  "Please remove it from the list of additional interfaces to proxy.";
+				message =
+					string.Format(
+						"You passed {0} as one of additional interfaces to proxy which is a DynamicProxy infrastructure interface and is implemented by every proxy anyway. Please remove it from the list of additional interfaces to proxy.",
+						interfaceName);
 			}
 			else
 			{
 				// this can technicaly never happen
-				message = "It looks like we have a bug with regards to how we handle ITargetProxyAccessor. Please report it.";
+				message = string.Format("It looks like we have a bug with regards to how we handle {0}. Please report it.",
+				                        interfaceName);
 			}
 			throw new ProxyGenerationException("This is a DynamicProxy2 error: " + message);
 		}
