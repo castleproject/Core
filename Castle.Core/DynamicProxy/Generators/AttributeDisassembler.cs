@@ -42,11 +42,11 @@
 		protected virtual CustomAttributeBuilder HandleError(Type attributeType, Exception exception)
 		{
 			// ouch...
-			string message = "DynamicProxy was unable to disassemble attribute " + attributeType.Name +
-			                 " using default AttributeDisassembler. " +
-			                 "To handle the disassembly process properly implement the IAttributeDisassembler interface, " +
-			                 "and register your disassembler to handle this type of attributes using " +
-			                 typeof (AttributeUtil).Name + ".AddDisassembler<" + attributeType.Name + ">(yourDisassembler) method";
+			var message = "DynamicProxy was unable to disassemble attribute " + attributeType.Name +
+			              " using default AttributeDisassembler. " +
+			              string.Format("To handle the disassembly process properly implement the {0} interface, ", typeof (IAttributeDisassembler)) +
+			              "and register your disassembler to handle this type of attributes using " +
+			              typeof (AttributeUtil).Name + ".AddDisassembler<" + attributeType.Name + ">(yourDisassembler) method";
 			throw new ProxyGenerationException(message, exception);
 		}
 
