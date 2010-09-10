@@ -84,7 +84,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				return interfaces;
 			}
 
-			foreach (Type inter in interfaces)
+			foreach (var inter in interfaces)
 			{
 				if (inter.IsGenericTypeDefinition)
 				{
