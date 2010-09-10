@@ -102,6 +102,7 @@ namespace Castle.DynamicProxy
 						fieldValuesList.Add(argument.TypedValue.Value);
 						break;
 					default:
+						// NOTE: can this ever happen?
 						throw new ArgumentException(string.Format("Unexpected member type {0} in custom attribute.",
 																  argument.MemberInfo.MemberType));
 				}

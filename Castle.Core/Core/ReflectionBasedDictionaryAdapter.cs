@@ -159,7 +159,7 @@ namespace Castle.Core
 		/// </summary>
 		/// <value></value>
 		/// <returns>true if the <see cref="T:System.Collections.IDictionary"/> object has a fixed size; otherwise, false.</returns>
-		public bool IsFixedSize
+		bool IDictionary.IsFixedSize
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -176,7 +176,7 @@ namespace Castle.Core
 		/// <exception cref="T:System.ArgumentException">
 		/// 	<paramref name="array"/> is multidimensional.-or- <paramref name="index"/> is equal to or greater than the length of <paramref name="array"/>.-or- The number of elements in the source <see cref="T:System.Collections.ICollection"/> is greater than the available space from <paramref name="index"/> to the end of the destination <paramref name="array"/>. </exception>
 		/// <exception cref="T:System.ArgumentException">The type of the source <see cref="T:System.Collections.ICollection"/> cannot be cast automatically to the type of the destination <paramref name="array"/>. </exception>
-		public void CopyTo(Array array, int index)
+		void ICollection.CopyTo(Array array, int index)
 		{
 			throw new NotImplementedException();
 		}
@@ -234,7 +234,7 @@ namespace Castle.Core
 #if SILVERLIGHT
 				e)
 			{
-				string message = "Could not read properties of anonymous object due to restrictive behavior of Silverlight. Use custom public type instead.";
+				string message = "Could not read properties of anonymous object due to restrictive behavior of Silverlight. Make your assembly internal types visible to Castle.Core by adding the following attribute: [assembly: InternalsVisibleTo(InternalsVisible.ToCastleCore)]";
 				throw new InvalidOperationException(message,e);
 #else
 )

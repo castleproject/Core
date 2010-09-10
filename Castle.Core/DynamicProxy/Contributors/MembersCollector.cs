@@ -66,9 +66,11 @@ namespace Castle.DynamicProxy.Contributors
 
 		public virtual void CollectMembersToProxy(IProxyGenerationHook hook)
 		{
-			if (checkedMethods == null)// this method was already called!
+			if (checkedMethods == null) // this method was already called!
 			{
-				throw new InvalidOperationException("Can't call CollectMembersToProxy twice");
+				throw new InvalidOperationException(
+					string.Format("Can't call 'CollectMembersToProxy' method twice. This usually signifies a bug in custom {0}.",
+					              typeof (ITypeContributor)));
 			}
 			CollectProperties(hook);
 			CollectEvents(hook);
