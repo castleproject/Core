@@ -53,6 +53,11 @@ namespace Castle.Core.Tests
 			{
 				get { return writeOnly; }
 			}
+		
+			public string this[int id]
+			{
+				get { return "abcdef"; }
+			}
 		}
 
 		[Test]
