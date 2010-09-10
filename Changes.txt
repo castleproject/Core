@@ -1,5 +1,6 @@
 unreleased changes
 ==================
+- added paramter to ModuleScope disabling usage of signed modules. This is to workaround issue DYNPROXY-134. Also a descriptive exception message is being thrown now when the issue is detected.
 - fixed issue DYNPROXY-138 - Error message missing space
 - fixed false positive where DynamicProxy would not let you proxy interface with target interface when target object was a COM object.
 

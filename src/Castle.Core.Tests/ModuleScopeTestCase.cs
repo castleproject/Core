@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ExplicitModulePaths()
 		{
-			var scope = new ModuleScope(true, "Strong", "StrongModule.dll", "Weak", "WeakModule.dll");
+			var scope = new ModuleScope(true, false, "Strong", "StrongModule.dll", "Weak", "WeakModule.dll");
 			Assert.AreEqual("StrongModule.dll", scope.StrongNamedModuleName);
 			Assert.AreEqual(Path.Combine(Environment.CurrentDirectory, "StrongModule.dll"),
 			                scope.ObtainDynamicModuleWithStrongName().FullyQualifiedName);
@@ -93,7 +93,7 @@ namespace Castle.DynamicProxy.Tests
 			                scope.ObtainDynamicModuleWithWeakName().FullyQualifiedName);
 			Assert.IsNull(scope.WeakNamedModuleDirectory);
 
-			scope = new ModuleScope(true, "Strong", @"c:\Foo\StrongModule.dll", "Weak", @"d:\Bar\WeakModule.dll");
+			scope = new ModuleScope(true, false, "Strong", @"c:\Foo\StrongModule.dll", "Weak", @"d:\Bar\WeakModule.dll");
 			Assert.AreEqual("StrongModule.dll", scope.StrongNamedModuleName);
 			Assert.AreEqual(@"c:\Foo\StrongModule.dll", scope.ObtainDynamicModuleWithStrongName().FullyQualifiedName);
 			Assert.AreEqual(@"c:\Foo", scope.StrongNamedModuleDirectory);
@@ -172,7 +172,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsFalse(File.Exists(strongModulePath));
 			Assert.IsFalse(File.Exists(weakModulePath));
 
-			var scope = new ModuleScope(true, "Strong", strongModulePath, "Weak", weakModulePath);
+			var scope = new ModuleScope(true,false, "Strong", strongModulePath, "Weak", weakModulePath);
 			scope.ObtainDynamicModuleWithStrongName();
 			scope.ObtainDynamicModuleWithWeakName();
 
@@ -321,7 +321,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void GeneratedAssembliesWithCustomName()
 		{
-			var scope = new ModuleScope(false, "Strong", "Module1.dll", "Weak", "Module2,dll");
+			var scope = new ModuleScope(false,false, "Strong", "Module1.dll", "Weak", "Module2,dll");
 			var strong = scope.ObtainDynamicModuleWithStrongName();
 			var weak = scope.ObtainDynamicModuleWithWeakName();
 
@@ -340,7 +340,7 @@ namespace Castle.DynamicProxy.Tests
 			var weakModulePath = Path.Combine(moduleDirectory, "Weak.dll");
 
 			Directory.CreateDirectory(moduleDirectory);
-			var scope = new ModuleScope(true, "Strong", strongModulePath, "Weak", weakModulePath);
+			var scope = new ModuleScope(true, false, "Strong", strongModulePath, "Weak", weakModulePath);
 
 			using (File.Create(Path.Combine(Environment.CurrentDirectory, "Strong.dll")))
 			{
