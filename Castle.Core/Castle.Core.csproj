@@ -62,6 +62,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />
+    <Compile Include="Components.DictionaryAdapter\IDictionaryBehaviorBuilder.cs" />
     <Compile Include="Components.DictionaryAdapter\GenericDictionaryAdapter.cs" />
     <Compile Include="Core\Extensions\SimpleConverter.cs" />
     <Compile Include="Core\Internal\InternalsVisible.cs" />
