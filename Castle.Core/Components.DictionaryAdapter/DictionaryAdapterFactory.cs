@@ -409,7 +409,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			var propertyMap = new Dictionary<String, PropertyDescriptor>();
 
-			typeBehaviors = GetInterfaceBehaviors<object>(type).ToArray();
+			typeBehaviors = ExpandBehaviors(GetInterfaceBehaviors<object>(type)).ToArray();
 			typeInitializers = GetOrderedBehaviors<IDictionaryInitializer>(typeBehaviors).ToArray();
 			metaInitializers = GetOrderedBehaviors<IDictionaryMetaInitializer>(typeBehaviors).ToArray();
 
@@ -419,7 +419,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			RecursivelyDiscoverProperties(type, property =>
 			{
-				var propertyBehaviors = GetPropertyBehaviors<object>(property).ToArray();
+				var propertyBehaviors = ExpandBehaviors(GetPropertyBehaviors<object>(property)).ToArray();
 				var propertyDescriptor = new PropertyDescriptor(property, propertyBehaviors);
 
 				var descriptorInitializers = GetOrderedBehaviors<IPropertyDescriptorInitializer>(propertyBehaviors);
@@ -476,6 +476,21 @@ namespace Castle.Components.DictionaryAdapter
 			where T : IDictionaryBehavior
 		{
 			return behaviors.OfType<T>().OrderBy(b => b.ExecutionOrder);
+		}
+
+		private static IEnumerable<IDictionaryBehavior> BuildBehaviors(IEnumerable<object> behaviors)
+		{
+			return behaviors.OfType<IDictionaryBehaviorBuilder>().SelectMany(builder => builder.BuildBehaviors());
+		}
+
+		private static IEnumerable<object> ExpandBehaviors(IEnumerable<object> behaviors)
+		{
+			return behaviors.SelectMany(behavior =>
+			{
+				if (behavior is IDictionaryBehaviorBuilder)
+					return ((IDictionaryBehaviorBuilder)behavior).BuildBehaviors();
+				return Enumerable.Repeat(behavior, 1);
+			});
 		}
 
 		private static void RecursivelyDiscoverProperties(Type currentType, Action<PropertyInfo> onProperty)

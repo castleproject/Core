@@ -99,6 +99,8 @@
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Color.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IUseBehaviorBuilder.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\KeyBehaviorBuilderAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\CustomGetter.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IAddress.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IConversions.cs" />
