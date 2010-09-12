@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,25 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter
+namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System;
+	using System.Collections.Generic;
 
-	/// <summary>
-	/// Assignes a specific dictionary key.
-	/// </summary>
-	public abstract class DictionaryBehaviorAttribute : Attribute, IDictionaryBehavior
+	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property)]
+	public class KeyBehaviorBuilderAttribute : Attribute, IDictionaryBehaviorBuilder
 	{
-		internal const int DefaultExecutionOrder = int.MaxValue / 2;
-
-		public DictionaryBehaviorAttribute()
+		public IEnumerable<IDictionaryBehavior> BuildBehaviors()
 		{
-			ExecutionOrder = DefaultExecutionOrder;
+			yield return new KeyPrefixAttribute("Foo ");
+			yield return new KeySubstitutionAttribute("_", " ");
 		}
-
-		/// <summary>
-		/// Determines relative order to apply related behaviors.
-		/// </summary>
-		public int ExecutionOrder { get; set; }
 	}
 }

@@ -1521,5 +1521,15 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("Snoopy", mutableName.FirstName);
 			Assert.AreEqual("", mutableName.LastName);
 		}
+
+		[Test]
+		public void CanGroupBehaviorsWithBuilders()
+		{
+			var use = factory.GetAdapter<IUseBehaviorBuilder>(dictionary);
+			use.First_Name = "Charlie";
+
+			Assert.AreEqual(1, dictionary.Count);
+			Assert.IsTrue(dictionary.Contains("Foo First Name"));
+		}
 	}
 }

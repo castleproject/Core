@@ -14,23 +14,17 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
+	using System.Collections.Generic;
 
 	/// <summary>
-	/// Assignes a specific dictionary key.
+	/// Defines the contract for building <see cref="IDictionaryBehavior"/>s.
 	/// </summary>
-	public abstract class DictionaryBehaviorAttribute : Attribute, IDictionaryBehavior
+	public interface IDictionaryBehaviorBuilder
 	{
-		internal const int DefaultExecutionOrder = int.MaxValue / 2;
-
-		public DictionaryBehaviorAttribute()
-		{
-			ExecutionOrder = DefaultExecutionOrder;
-		}
-
 		/// <summary>
-		/// Determines relative order to apply related behaviors.
+		/// Builds the dictionary behaviors.
 		/// </summary>
-		public int ExecutionOrder { get; set; }
+		/// <returns></returns>
+		IEnumerable<IDictionaryBehavior> BuildBehaviors();
 	}
 }

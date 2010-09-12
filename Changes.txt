@@ -1,5 +1,6 @@
 unreleased changes
 ==================
+- Added IDictionaryBehaviorBuilder to allow grouping behaviors
 - Added GenericDictionaryAdapter to simplify generic value sources
 - fixed issue DYNPROXY-138 - Error message missing space
 - fixed false positive where DynamicProxy would not let you proxy interface with target interface when target object was a COM object.
