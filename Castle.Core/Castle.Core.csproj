@@ -3,8 +3,7 @@
   <PropertyGroup>
     <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -62,6 +61,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />
+    <Compile Include="Components.DictionaryAdapter\IDictionaryBehaviorBuilder.cs" />
     <Compile Include="Components.DictionaryAdapter\GenericDictionaryAdapter.cs" />
     <Compile Include="Core\Extensions\SimpleConverter.cs" />
     <Compile Include="Core\Internal\InternalsVisible.cs" />
@@ -413,7 +413,6 @@
     <Compile Include="Core\Logging\DiagnosticsLoggerFactory.cs" />
     <Compile Include="Core\Logging\NullLogFactory.cs" />
     <Compile Include="Core\Logging\StreamLoggerFactory.cs" />
-    <Compile Include="Core\Logging\WebLoggerFactory.cs" />
     <Compile Include="Core\Logging\IContextStack.cs" />
     <Compile Include="Core\Logging\IContextStacks.cs" />
     <Compile Include="Core\Logging\IExtendedLogger.cs" />
@@ -427,7 +426,6 @@
     <Compile Include="Core\Logging\NullLogger.cs" />
     <Compile Include="Core\Logging\StreamLogger.cs" />
     <Compile Include="Core\Logging\TraceLogger.cs" />
-    <Compile Include="Core\Logging\WebLogger.cs" />
     <Compile Include="Core\Configuration\AbstractConfiguration.cs" />
     <Compile Include="Core\Configuration\ConfigurationAttributeCollection.cs" />
     <Compile Include="Core\Configuration\ConfigurationCollection.cs" />

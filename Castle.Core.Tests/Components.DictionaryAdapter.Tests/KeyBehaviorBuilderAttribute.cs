@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,23 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Logging
+namespace Castle.Components.DictionaryAdapter.Tests
 {
-	#if !SILVERLIGHT && !CLIENTPROFILE
 	using System;
+	using System.Collections.Generic;
 
-	[Serializable]
-	public class WebLoggerFactory : AbstractLoggerFactory
+	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property)]
+	public class KeyBehaviorBuilderAttribute : Attribute, IDictionaryBehaviorBuilder
 	{
-		public override ILogger Create(string name)
+		public IEnumerable<IDictionaryBehavior> BuildBehaviors()
 		{
-			return new WebLogger(name);
-		}
-
-		public override ILogger Create(string name, LoggerLevel level)
-		{
-			return new WebLogger(name, level);
+			yield return new KeyPrefixAttribute("Foo ");
+			yield return new KeySubstitutionAttribute("_", " ");
 		}
 	}
-	#endif
 }

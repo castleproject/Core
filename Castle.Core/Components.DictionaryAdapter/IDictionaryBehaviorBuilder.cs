@@ -12,30 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !CLIENTPROFILE
-namespace Castle.Core.Tests
+namespace Castle.Components.DictionaryAdapter
 {
-	using System.Web;
+	using System.Collections.Generic;
 
-	using NUnit.Framework;
-	using Castle.Core.Logging;
-
-	[TestFixture]
-	public class WebLoggerTests
+	/// <summary>
+	/// Defines the contract for building <see cref="IDictionaryBehavior"/>s.
+	/// </summary>
+	public interface IDictionaryBehaviorBuilder
 	{
-		[Test]
-		public void When_there_is_no_Current_Http_Context_WebLogger_should_just_silently_do_nothing()
-		{
-			new StubWebLoggerWithNullTraceContext().Debug("this shouldn't cause an exception");
-		}
-	}
-
-	public class StubWebLoggerWithNullTraceContext : WebLogger
-	{
-		protected override TraceContext TryToGetTraceContext()
-		{
-			return null;
-		}
+		/// <summary>
+		/// Builds the dictionary behaviors.
+		/// </summary>
+		/// <returns></returns>
+		IEnumerable<IDictionaryBehavior> BuildBehaviors();
 	}
 }
-#endif

@@ -1,3 +1,17 @@
+// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License";
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
@@ -5,27 +19,27 @@ namespace Castle.Components.DictionaryAdapter
 
 	public class GenericDictionaryAdapter<TValue> : AbstractDictionaryAdapter
 	{
-		private readonly IDictionary<string, TValue> _dictionary;
+		private readonly IDictionary<string, TValue> dictionary;
 
 		public GenericDictionaryAdapter(IDictionary<string, TValue> dictionary)
 		{
-			_dictionary = dictionary;
+			this.dictionary = dictionary;
 		}
 
 		public override bool IsReadOnly
 		{
-			get { return _dictionary.IsReadOnly; }
+			get { return dictionary.IsReadOnly; }
 		}
 
 		public override bool Contains(object key)
 		{
-			return _dictionary.Keys.Contains(GetKey(key));
+			return dictionary.Keys.Contains(GetKey(key));
 		}
 
 		public override object this[object key]
 		{
-			get { return _dictionary[GetKey(key)]; }
-			set { _dictionary[GetKey(key)] = (TValue)value; }
+			get { return dictionary[GetKey(key)]; }
+			set { dictionary[GetKey(key)] = (TValue)value; }
 		}
 
 		private static string GetKey(object key)
