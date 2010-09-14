@@ -492,6 +492,17 @@ namespace Castle.Components.DictionaryAdapter
 			return this;
 		}
 
+			/// <summary>
+		/// Adds the behaviors from the builders.
+		/// </summary>
+		/// <param name="builders"></param>
+		/// <returns></returns>
+		public PropertyDescriptor AddBehaviors(params IDictionaryBehaviorBuilder[] builders)
+		{
+			AddBehaviors(builders.SelectMany(builder => builder.BuildBehaviors()));
+			return this;
+		}
+
 		/// <summary>
 		/// Copies the behaviors to the other <see cref="PropertyDescriptor"/>
 		/// </summary>
