@@ -485,12 +485,17 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static IEnumerable<object> ExpandBehaviors(IEnumerable<object> behaviors)
 		{
-			return behaviors.SelectMany(behavior =>
+			foreach (var behavior in behaviors)
 			{
 				if (behavior is IDictionaryBehaviorBuilder)
-					return ((IDictionaryBehaviorBuilder)behavior).BuildBehaviors();
-				return Enumerable.Repeat(behavior, 1);
-			});
+				{
+					foreach (var subBehavior in ((IDictionaryBehaviorBuilder)behavior).BuildBehaviors())
+					{
+						yield return subBehavior;
+					}
+				}
+				yield return behavior;
+			}
 		}
 
 		private static void RecursivelyDiscoverProperties(Type currentType, Action<PropertyInfo> onProperty)
