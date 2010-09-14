@@ -29,6 +29,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 		}
 
+		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, IEnumerable<Type> interfaces, TypeAttributes flags)
+			: this(modulescope, name, baseType, interfaces, flags, ShouldForceUnsigned())
+		{
+		}
+
 		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, IEnumerable<Type> interfaces, TypeAttributes flags,
 		                    bool forceUnsigned)
 			: this(CreateTypeBuilder(modulescope, name, baseType, interfaces, flags, forceUnsigned))
