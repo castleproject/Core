@@ -103,8 +103,7 @@ namespace Castle.DynamicProxy.Contributors
 			                                 uniqueName,
 			                                 typeof (MulticastDelegate),
 			                                 Type.EmptyTypes,
-			                                 DelegateFlags,
-			                                 false);
+			                                 DelegateFlags);
 			@delegate.CopyGenericParametersFromMethod(method.Method);
 			return @delegate;
 		}
