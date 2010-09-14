@@ -25,10 +25,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Serialization;
 
-
-	/// <summary>
-	/// 
-	/// </summary>
 	public class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
 		protected FieldReference targetField;
@@ -48,44 +44,13 @@ namespace Castle.DynamicProxy.Generators
 			CheckNotGenericTypeDefinition(proxyTargetType, "proxyTargetType");
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 			EnsureValidBaseType(options.BaseTypeForInterfaceProxy);
-			Type proxyType;
+			ProxyGenerationOptions = options;
 
 			interfaces = TypeUtil.GetAllInterfaces(interfaces).ToArray();
-			CacheKey cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
+			var cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
 
-			using (var locker = Scope.Lock.ForReadingUpgradeable())
-			{
-				Type cacheType = GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
+			return ObtainProxyType(cacheKey, (n, s) => GenerateType(n, proxyTargetType, interfaces, s));
 
-				// Upgrade the lock to a write lock, then read again. This is to avoid generating duplicate types
-				// under heavy multithreaded load.
-				locker.Upgrade();
-
-				cacheType = GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-
-				// Log details about the cache miss
-				Logger.Debug("No cached proxy type was found for target type {0}.", targetType.FullName);
-				EnsureOptionsOverrideEqualsAndGetHashCode(options);
-
-				ProxyGenerationOptions = options;
-
-				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
-				proxyType = GenerateType(name, proxyTargetType, interfaces, Scope.NamingScope.SafeSubScope());
-
-				AddToCache(cacheKey, proxyType);
-			}
-
-			return proxyType;
 		}
 
 		private void EnsureValidBaseType(Type type)
