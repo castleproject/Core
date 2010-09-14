@@ -56,40 +56,8 @@ namespace Castle.DynamicProxy.Generators
 
 		public Type GetGeneratedType()
 		{
-			Type proxyType;
 			var cacheKey = new CacheKey(targetType, additionalInterfacesToProxy, ProxyGenerationOptions);
-			using (var locker = Scope.Lock.ForReadingUpgradeable())
-			{
-				var cacheType = GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-
-				// Upgrade the lock to a write lock, then read again. This is to avoid generating duplicate types
-				// under heavy multithreaded load.
-				locker.Upgrade();
-
-				cacheType = GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-
-				// Log details about the cache miss
-				Logger.Debug("No cached proxy type was found for target type {0}.", targetType.FullName);
-				EnsureOptionsOverrideEqualsAndGetHashCode(ProxyGenerationOptions);
-
-				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
-				proxyType = GenerateType(name, Scope.NamingScope.SafeSubScope());
-
-				AddToCache(cacheKey, proxyType);
-
-			}
-
-			return proxyType;
+			return ObtainProxyType(cacheKey, GenerateType);
 		}
 
 		private Type GenerateType(string name, INamingScope namingScope)

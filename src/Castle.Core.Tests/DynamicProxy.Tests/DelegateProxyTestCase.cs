@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Tests
 			                     	{
 			                     		Logger = generator.ProxyBuilder.Logger
 			                     	};
-			return proxyGenerator.GetProxyType(generator.ProxyBuilder);
+			return proxyGenerator.GetProxyType();
 		}
 
 		private T GetProxyInstance<T>(T func, params IInterceptor[] interceptors)

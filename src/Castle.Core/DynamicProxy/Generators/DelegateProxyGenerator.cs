@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Xml.Serialization;
-
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -32,40 +31,10 @@ namespace Castle.DynamicProxy.Generators
 			ProxyGenerationOptions.Initialize();
 		}
 
-		public Type GetProxyType(IProxyBuilder builder)
+		public Type GetProxyType()
 		{
-			var scope = builder.ModuleScope;
-			var logger = builder.Logger;
 			var cacheKey = new CacheKey(targetType, null, null);
-			using (var locker = scope.Lock.ForReadingUpgradeable())
-			{
-				var cacheType = scope.GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-
-				// Upgrade the lock to a write lock, then read again. This is to avoid generating duplicate types
-				// under heavy multithreaded load.
-				locker.Upgrade();
-
-				cacheType = scope.GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-
-				// Log details about the cache miss
-				logger.Debug("No cached proxy type was found for target type {0}.", targetType.FullName);
-
-				var name = scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
-				var proxyType = GenerateType(name, scope.NamingScope.SafeSubScope());
-
-				scope.RegisterInCache(cacheKey, proxyType);
-				return proxyType;
-			}
+			return ObtainProxyType(cacheKey, GenerateType);
 		}
 
 

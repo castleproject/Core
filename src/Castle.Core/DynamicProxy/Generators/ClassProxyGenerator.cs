@@ -18,16 +18,11 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
-
+	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Serialization;
 
-	using Contributors;
-
-	/// <summary>
-	/// 
-	/// </summary>
 	public class ClassProxyGenerator : BaseProxyGenerator
 	{
 		public ClassProxyGenerator(ModuleScope scope, Type targetType) : base(scope, targetType)
@@ -56,43 +51,9 @@ namespace Castle.DynamicProxy.Generators
 
 			interfaces = TypeUtil.GetAllInterfaces(interfaces).ToArray();
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
-			Type proxyType;
-
+			ProxyGenerationOptions = options;
 			var cacheKey = new CacheKey(targetType, interfaces, options);
-			using (var locker = Scope.Lock.ForReadingUpgradeable())
-			{
-				Type cacheType = GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-
-				// Upgrade the lock to a write lock, then read again. This is to avoid generating duplicate types
-				// under heavy multithreaded load.
-				locker.Upgrade();
-
-				cacheType = GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-
-				// Log details about the cache miss
-				Logger.Debug("No cached proxy type was found for target type {0}.", targetType.FullName);
-				EnsureOptionsOverrideEqualsAndGetHashCode(options);
-
-				ProxyGenerationOptions = options;
-
-				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
-				proxyType = GenerateType(name, interfaces, Scope.NamingScope.SafeSubScope());
-
-				AddToCache(cacheKey, proxyType);
-
-			}
-
-			return proxyType;
+			return ObtainProxyType(cacheKey, (n, s) => GenerateType(n, interfaces, s));
 		}
 
 		protected virtual Type GenerateType(string name, Type[] interfaces, INamingScope namingScope)
