@@ -16,17 +16,22 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	public class DictionaryAdapterInstance
 	{
 		private IDictionary extendedProperties;
 
-		public DictionaryAdapterInstance(IDictionary dictionary, PropertyDescriptor descriptor, 
-										 IDictionaryAdapterFactory factory)
+		public DictionaryAdapterInstance(IDictionary dictionary, DictionaryAdapterMeta meta,
+										 PropertyDescriptor descriptor, IDictionaryAdapterFactory factory)
 		{
 			Dictionary = dictionary;
 			Descriptor = descriptor;
 			Factory = factory;
+
+			Properties = meta.Properties;
+			Initializers = meta.Initializers;
+			MergeBehaviorOverrides(meta);
 		}
 
 		internal int? OldHashCode { get; set; }
@@ -36,6 +41,10 @@ namespace Castle.Components.DictionaryAdapter
 		public PropertyDescriptor Descriptor { get; private set; }
 
 		public IDictionaryAdapterFactory Factory { get; private set; }
+
+		public IDictionaryInitializer[] Initializers { get; private set; }
+
+		public IDictionary<string, PropertyDescriptor> Properties { get; private set; }
 
 		public IDictionaryEqualityHashCodeStrategy EqualityHashCodeStrategy { get; set; }
 
@@ -50,6 +59,32 @@ namespace Castle.Components.DictionaryAdapter
 					extendedProperties = new Dictionary<object, object>();
 				}
 				return extendedProperties;
+			}
+		}
+
+		private void MergeBehaviorOverrides(DictionaryAdapterMeta meta)
+		{
+			if (Descriptor == null) return;
+
+			var typeDescriptor = Descriptor as DictionaryDescriptor;
+
+			if (typeDescriptor != null)
+			{
+				Initializers = Initializers.Prioritize(typeDescriptor.Initializers).ToArray();
+			}
+
+			Properties = new Dictionary<string, PropertyDescriptor>();
+
+			foreach (var property in meta.Properties)
+			{
+				var propertyDescriptor = property.Value;
+
+				var propertyOverride = new PropertyDescriptor(propertyDescriptor, false)
+					.AddKeyBuilders(propertyDescriptor.KeyBuilders.Prioritize(Descriptor.KeyBuilders))
+					.AddGetters(propertyDescriptor.Getters.Prioritize(Descriptor.Getters))
+					.AddSetters(propertyDescriptor.Setters.Prioritize(Descriptor.Setters));
+
+				Properties.Add(property.Key, propertyOverride);
 			}
 		}
 	}
