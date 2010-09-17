@@ -21,7 +21,9 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public abstract class DictionaryBehaviorAttribute : Attribute, IDictionaryBehavior
 	{
-		internal const int DefaultExecutionOrder = int.MaxValue / 2;
+		public const int FiratExecutionOrder = 0;
+		public const int DefaultExecutionOrder = int.MaxValue / 2;
+		public const int LastExecutionOrder = int.MaxValue;
 
 		public DictionaryBehaviorAttribute()
 		{

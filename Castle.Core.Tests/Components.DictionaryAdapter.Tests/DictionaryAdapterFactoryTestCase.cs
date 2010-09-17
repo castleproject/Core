@@ -711,7 +711,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var adapter = factory.GetAdapter<IPerson>(dictionary) as IDictionaryAdapter;
 			Assert.AreSame(dictionary, adapter.This.Dictionary);
 			Assert.AreSame(factory, adapter.This.Factory);
-			Assert.AreEqual(9, adapter.Meta.Properties.Count);
+			Assert.AreEqual(9, adapter.This.Properties.Count);
 		}
 
 		[Test]
@@ -727,7 +727,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			var adapter = i as IDictionaryAdapter;
 			Assert.AreSame(dictionary, adapter.This.Dictionary);
-			Assert.AreEqual(3, adapter.Meta.Properties.Count);
+			Assert.AreEqual(3, adapter.This.Properties.Count);
 		}
 
 		[Test]

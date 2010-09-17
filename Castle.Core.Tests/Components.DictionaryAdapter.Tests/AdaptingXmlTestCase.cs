@@ -185,6 +185,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(state, season.Location.State);
 			Assert.AreEqual(zipCode, season.Location.ZipCode);
 			Assert.AreEqual(2, season.Teams.Count);
+
+			var team = season.Teams[0];
+			var n = team.Name;
+
 			Assert.AreEqual(team1Name, season.Teams[0].Name);
 			Assert.AreEqual(team1Balance, season.Teams[0].Balance);
 			Assert.IsNull(season.Teams[0].GamesPlayed);
