@@ -1,5 +1,6 @@
 unreleased changes
 ==================
+- DictionaryAdapter behavior overrides are now ordered with all other behaviors
 - BREAKING CHANGE: removed web logger so that by default Castle.Core works in .NET 4 client profile
 - added paramter to ModuleScope disabling usage of signed modules. This is to workaround issue DYNPROXY-134. Also a descriptive exception message is being thrown now when the issue is detected.
 - Added IDictionaryBehaviorBuilder to allow grouping behaviors

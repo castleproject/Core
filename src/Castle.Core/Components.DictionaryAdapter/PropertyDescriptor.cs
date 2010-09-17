@@ -26,17 +26,17 @@ namespace Castle.Components.DictionaryAdapter
 	/// Describes a dictionary property.
 	/// </summary>
 	[DebuggerDisplay("{Property.DeclaringType.FullName,nq}.{PropertyName,nq}")]
-	public class PropertyDescriptor : IDictionaryKeyBuilder,
-	                                  IDictionaryPropertyGetter,
-	                                  IDictionaryPropertySetter
+	public class PropertyDescriptor : IDictionaryKeyBuilder, IDictionaryPropertyGetter, IDictionaryPropertySetter
 	{
-		private readonly bool isDynamicProperty;
 		private List<IDictionaryPropertyGetter> getters;
 		private List<IDictionaryPropertySetter> setters;
 		private List<IDictionaryKeyBuilder> keyBuilders;
 		private IDictionary state;
 
 		private static readonly object[] NoBehaviors = new object[0];
+		private static readonly ICollection<IDictionaryKeyBuilder> NoKeysBuilders = new IDictionaryKeyBuilder[0];
+		private static readonly ICollection<IDictionaryPropertyGetter> NoHGetters = new IDictionaryPropertyGetter[0];
+		private static readonly ICollection<IDictionaryPropertySetter> NoSetters = new IDictionaryPropertySetter[0];
 
 		/// <summary>
 		/// Initializes an empty <see cref="PropertyDescriptor"/> class.
@@ -55,8 +55,31 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			Property = property;
 			Behaviors = behaviors ?? NoBehaviors;
-			isDynamicProperty = typeof(IDynamicValue).IsAssignableFrom(property.PropertyType);
+			IsDynamicProperty = typeof(IDynamicValue).IsAssignableFrom(property.PropertyType);
 			ObtainTypeConverter();
+		}
+
+		/// <summary>
+		///  Copies an existinginstance of the <see cref="PropertyDescriptor"/> class.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="copyBehaviors"></param>
+		public PropertyDescriptor(PropertyDescriptor source, bool copyBehaviors)
+		{
+			Property = source.Property;
+			Behaviors = source.Behaviors;
+			IsDynamicProperty = source.IsDynamicProperty;
+			TypeConverter = source.TypeConverter;
+			SuppressNotifications = source.SuppressNotifications;
+			state = source.state;
+			Fetch = source.Fetch;
+
+			if (copyBehaviors)
+			{
+				keyBuilders = source.keyBuilders;
+				getters = source.getters;
+				setters = source.setters;
+			}
 		}
 
 		/// <summary>
@@ -92,10 +115,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Returns true if the property is dynamic.
 		/// </summary>
-		public bool IsDynamicProperty
-		{
-			get { return isDynamicProperty; }
-		}
+		public bool IsDynamicProperty { get; private set; }
 
 		/// <summary>
 		/// Gets additional state.
@@ -139,7 +159,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <value>The key builders.</value>
 		public ICollection<IDictionaryKeyBuilder> KeyBuilders
 		{
-			get { return keyBuilders; }
+			get { return keyBuilders ?? NoKeysBuilders; }
 		}
 
 		/// <summary>
@@ -148,7 +168,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <value>The setter.</value>
 		public ICollection<IDictionaryPropertySetter> Setters
 		{
-			get { return setters; }
+			get { return setters ?? NoSetters; }
 		}
 
 		/// <summary>
@@ -157,7 +177,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <value>The getter.</value>
 		public ICollection<IDictionaryPropertyGetter> Getters
 		{
-			get { return getters; }
+			get { return getters ?? NoHGetters; }
 		}
 
 		#region IDictionaryKeyBuilder Members
@@ -174,14 +194,6 @@ namespace Castle.Components.DictionaryAdapter
 			if (keyBuilders != null)
 			{
 				foreach (var builder in keyBuilders)
-				{
-					key = builder.GetKey(dictionaryAdapter, key, this);
-				}
-			}
-
-			if (descriptor != null && descriptor.KeyBuilders != null)
-			{
-				foreach (var builder in descriptor.KeyBuilders)
 				{
 					key = builder.GetKey(dictionaryAdapter, key, this);
 				}
@@ -279,14 +291,6 @@ namespace Castle.Components.DictionaryAdapter
 				}
 			}
 
-			if (descriptor != null && descriptor.Getters != null)
-			{
-				foreach (var getter in descriptor.Getters)
-				{
-					storedValue = getter.GetPropertyValue(dictionaryAdapter, key, storedValue, this, ifExists);
-				}
-			}
-
 			return storedValue;
 		}
 
@@ -374,17 +378,6 @@ namespace Castle.Components.DictionaryAdapter
 			if (setters != null)
 			{
 				foreach(var setter in setters)
-				{
-					if (!setter.SetPropertyValue(dictionaryAdapter, key, ref value, this))
-					{
-						consumed = true;
-					}
-				}
-			}
-
-			if (descriptor != null && descriptor.Setters != null)
-			{
-				foreach (var setter in descriptor.Setters)
 				{
 					if (!setter.SetPropertyValue(dictionaryAdapter, key, ref value, this))
 					{

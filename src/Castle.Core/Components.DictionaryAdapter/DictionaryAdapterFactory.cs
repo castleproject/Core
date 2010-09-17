@@ -115,11 +115,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			var adapterType = InternalGetAdapterType(type, descriptor);
-#if SILVERLIGHT
 			var metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.GetField;
-#else
-			var metaBindings = BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetField;
-#endif
 			return (DictionaryAdapterMeta)adapterType.InvokeMember("__meta", metaBindings, null, null, null);
 		}
 
@@ -190,11 +186,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private Assembly CreateAdapterAssembly(Type type, TypeBuilder typeBuilder, PropertyDescriptor descriptor)
 		{
-#if SILVERLIGHT
 			var binding = FieldAttributes.Public | FieldAttributes.Static;
-#else
-			var binding = FieldAttributes.Private | FieldAttributes.Static;
-#endif
 			var metaField = typeBuilder.DefineField("__meta", typeof(DictionaryAdapterMeta), binding);
 
 			CreateAdapterConstructor(typeBuilder);
@@ -211,23 +203,10 @@ namespace Castle.Components.DictionaryAdapter
 				CreateAdapterProperty(typeBuilder, property.Value);
 			}
 
-			if (descriptor is DictionaryDescriptor)
-			{
-				var dictionaryDescriptor = (DictionaryDescriptor)descriptor;
-				if (dictionaryDescriptor.MetaInitializers != null)
-				{
-					metaInitializers = dictionaryDescriptor.MetaInitializers
-						.Union(metaInitializers.OrderBy(i => i.ExecutionOrder)).ToArray();
-				}
-			}
-
 			var adapterType = typeBuilder.CreateType();
-#if SILVERLIGHT
 			var metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.SetField;
-#else
-			var metaBindings = BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.SetField;
-#endif
-			var meta = new DictionaryAdapterMeta(type, initializers, metaInitializers, behaviors, propertyMap, this);
+			var meta = new DictionaryAdapterMeta(type, initializers, metaInitializers, behaviors,
+												 propertyMap, descriptor as DictionaryDescriptor, this);
 			adapterType.InvokeMember("__meta", metaBindings, null, null, new[] { meta });
 
 			return typeBuilder.Assembly;
@@ -408,36 +387,38 @@ namespace Castle.Components.DictionaryAdapter
 			out IDictionaryMetaInitializer[] metaInitializers, out object[] typeBehaviors)
 		{
 			var propertyMap = new Dictionary<String, PropertyDescriptor>();
+			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(GetInterfaceBehaviors<object>(type)).ToArray();
 
-			typeBehaviors = ExpandBehaviors(GetInterfaceBehaviors<object>(type)).ToArray();
-			typeInitializers = GetOrderedBehaviors<IDictionaryInitializer>(typeBehaviors).ToArray();
-			metaInitializers = GetOrderedBehaviors<IDictionaryMetaInitializer>(typeBehaviors).ToArray();
+			typeInitializers = typeBehaviors.OfType<IDictionaryInitializer>().Prioritize().ToArray();
+			metaInitializers = typeBehaviors.OfType<IDictionaryMetaInitializer>().Prioritize().ToArray();
+			var defaultFetch = typeBehaviors.OfType<FetchAttribute>().Select(b => b.Fetch).FirstOrDefault();
 
-			var typeGetters = GetOrderedBehaviors<IDictionaryPropertyGetter>(typeBehaviors);
-			var typeSetters = GetOrderedBehaviors<IDictionaryPropertySetter>(typeBehaviors);
-			var defaultFetch = (from b in typeBehaviors.OfType<FetchAttribute>() select b.Fetch).FirstOrDefault();
-
-			RecursivelyDiscoverProperties(type, property =>
+			CollectProperties(type, property =>
 			{
 				var propertyBehaviors = ExpandBehaviors(GetPropertyBehaviors<object>(property)).ToArray();
 				var propertyDescriptor = new PropertyDescriptor(property, propertyBehaviors);
 
-				var descriptorInitializers = GetOrderedBehaviors<IPropertyDescriptorInitializer>(propertyBehaviors);
-				foreach (var descriptorInitializer in descriptorInitializers)
+				var descriptorInitializers = propertyBehaviors.OfType<IPropertyDescriptorInitializer>();
+				foreach (var descriptorInitializer in descriptorInitializers.OrderBy(b => b.ExecutionOrder))
 				{
 					descriptorInitializer.Initialize(propertyDescriptor, propertyBehaviors);	
 				}
 
-				propertyDescriptor.AddKeyBuilders(GetOrderedBehaviors<IDictionaryKeyBuilder>(propertyBehaviors));
-				propertyDescriptor.AddKeyBuilders(GetInterfaceBehaviors<IDictionaryKeyBuilder>(property.ReflectedType)
-					.OrderBy(b => b.ExecutionOrder));
+				propertyDescriptor.AddKeyBuilders(
+					propertyBehaviors.OfType<IDictionaryKeyBuilder>().Prioritize(
+						GetInterfaceBehaviors<IDictionaryKeyBuilder>(property.ReflectedType))
+					 );
 
-				propertyDescriptor.AddGetters(GetOrderedBehaviors<IDictionaryPropertyGetter>(propertyBehaviors));
-				propertyDescriptor.AddGetters(typeGetters);
+				propertyDescriptor.AddGetters(
+					propertyBehaviors.OfType<IDictionaryPropertyGetter>().Prioritize(
+						interfaceBehaviors.OfType<IDictionaryPropertyGetter>())
+					);
 				AddDefaultGetter(propertyDescriptor);
 
-				propertyDescriptor.AddSetters(GetOrderedBehaviors<IDictionaryPropertySetter>(propertyBehaviors));
-				propertyDescriptor.AddSetters(typeSetters);
+				propertyDescriptor.AddSetters(
+					propertyBehaviors.OfType<IDictionaryPropertySetter>().Prioritize(
+						interfaceBehaviors.OfType<IDictionaryPropertySetter>())
+					);
 
 				bool? propertyFetch = (from b in propertyBehaviors.OfType<FetchAttribute>() select b.Fetch).FirstOrDefault();
 				propertyDescriptor.Fetch = propertyFetch.GetValueOrDefault(defaultFetch);
@@ -472,33 +453,17 @@ namespace Castle.Components.DictionaryAdapter
 			return AttributesUtil.GetAttributes<T>(member);
 		}
 
-		private static IEnumerable<T> GetOrderedBehaviors<T>(IEnumerable<object> behaviors) 
-			where T : IDictionaryBehavior
-		{
-			return behaviors.OfType<T>().OrderBy(b => b.ExecutionOrder);
-		}
-
-		private static IEnumerable<IDictionaryBehavior> BuildBehaviors(IEnumerable<object> behaviors)
-		{
-			return behaviors.OfType<IDictionaryBehaviorBuilder>().SelectMany(builder => builder.BuildBehaviors());
-		}
-
 		private static IEnumerable<object> ExpandBehaviors(IEnumerable<object> behaviors)
 		{
-			foreach (var behavior in behaviors)
+			return behaviors.SelectMany(behavior =>
 			{
 				if (behavior is IDictionaryBehaviorBuilder)
-				{
-					foreach (var subBehavior in ((IDictionaryBehaviorBuilder)behavior).BuildBehaviors())
-					{
-						yield return subBehavior;
-					}
-				}
-				yield return behavior;
-			}
+					return ((IDictionaryBehaviorBuilder)behavior).BuildBehaviors().Cast<object>();
+				return Enumerable.Repeat(behavior, 1);
+			});
 		}
 
-		private static void RecursivelyDiscoverProperties(Type currentType, Action<PropertyInfo> onProperty)
+		private static void CollectProperties(Type currentType, Action<PropertyInfo> onProperty)
 		{
 			var types = new List<Type>();
 			types.Add(currentType);
@@ -627,14 +592,17 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private Type CreateAdapterType(Type type, Assembly assembly)
+		private static Type CreateAdapterType(Type type, Assembly assembly)
 		{
 			var adapterFullTypeName = GetAdapterFullTypeName(type);
 			return assembly.GetType(adapterFullTypeName, true);
 		}
+
 		private object CreateAdapterInstance(IDictionary dictionary, PropertyDescriptor descriptor, Type adapterType)
 		{
-            var instance = new DictionaryAdapterInstance(dictionary, descriptor, this);
+			var metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.GetField;
+			var meta = (DictionaryAdapterMeta)adapterType.InvokeMember("__meta", metaBindings, null, null, null);
+            var instance = new DictionaryAdapterInstance(dictionary, meta, descriptor, this);
 			return Activator.CreateInstance(adapterType, instance);
 		}
 

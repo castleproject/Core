@@ -37,7 +37,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		public int ExecutionOrder
 		{
-			get { return DictionaryBehaviorAttribute.DefaultExecutionOrder; }
+			get { return DictionaryBehaviorAttribute.LastExecutionOrder; }
 		}
 
 		/// <summary>
