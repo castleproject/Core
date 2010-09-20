@@ -514,17 +514,13 @@ namespace Castle.DynamicProxy
 		{
 			//TODO: add <example> to xml comments to show how to use IChangeProxyTarget
 
-			if (!interfaceToProxy.IsInstanceOfType(target))
+			if (target != null && interfaceToProxy.IsInstanceOfType(target) == false)
 			{
 				throw new ArgumentException("targetType");
 			}
 			if (interfaceToProxy == null)
 			{
 				throw new ArgumentNullException("interfaceToProxy");
-			}
-			if (target == null)
-			{
-				throw new ArgumentNullException("target");
 			}
 			if (interceptors == null)
 			{
@@ -537,7 +533,7 @@ namespace Castle.DynamicProxy
 			}
 
 			var isRemotingProxy = false;
-			if (!interfaceToProxy.IsAssignableFrom(target.GetType()))
+			if (target != null && interfaceToProxy.IsAssignableFrom(target.GetType()) == false)
 			{
 #if !SILVERLIGHT
 				//check if we have remoting proxy at hand...
