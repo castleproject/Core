@@ -23,14 +23,12 @@ namespace Castle.Components.DictionaryAdapter
 	public class ComponentAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder,
 									  IDictionaryPropertyGetter, IDictionaryPropertySetter
 	{
-		private String prefix;
-
 		/// <summary>
 		/// Applies no prefix.
 		/// </summary>
 		public bool NoPrefix
 		{
-			get { return prefix == ""; }
+			get { return Prefix == ""; }
 			set
 			{
 				if (value)
@@ -44,18 +42,14 @@ namespace Castle.Components.DictionaryAdapter
 		/// Gets or sets the prefix.
 		/// </summary>
 		/// <value>The prefix.</value>
-		public string Prefix
-		{
-			get { return prefix; }
-			set { prefix = value; }
-		}
+		public string Prefix { get; set; }
 
 		#region IDictionaryKeyBuilder Members
 
 		string IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, string key,
 		                                    PropertyDescriptor property)
 		{
-			return prefix ?? key + "_";
+			return Prefix ?? key + "_";
 		}
 
 		#endregion

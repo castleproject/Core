@@ -24,6 +24,9 @@ namespace Castle.Components.DictionaryAdapter
 		private List<IDictionaryInitializer> initializers;
 		private List<IDictionaryMetaInitializer> metaInitializers;
 
+		private static readonly ICollection<IDictionaryInitializer> NoInitializers = new IDictionaryInitializer[0];
+		private static readonly ICollection<IDictionaryMetaInitializer> NoMetaInitializers = new IDictionaryMetaInitializer[0];
+
 		public DictionaryDescriptor()
 		{
 		}
@@ -39,7 +42,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <value>The initializers.</value>
 		public ICollection<IDictionaryInitializer> Initializers
 		{
-			get { return initializers; }
+			get { return initializers ?? NoInitializers; }
 		}
 
 		/// <summary>
@@ -48,7 +51,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <value>The meta-data initializers.</value>
 		public ICollection<IDictionaryMetaInitializer> MetaInitializers
 		{
-			get { return metaInitializers; }
+			get { return metaInitializers ?? NoMetaInitializers; }
 		}
 
 		/// <summary>

@@ -16,7 +16,6 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
 
@@ -40,7 +39,7 @@ namespace Castle.Components.DictionaryAdapter
 		public string GetKey(string propertyName)
 		{
 			PropertyDescriptor descriptor;
-			if (Meta.Properties.TryGetValue(propertyName, out descriptor))
+			if (This.Properties.TryGetValue(propertyName, out descriptor))
 			{
 				return descriptor.GetKey(this, propertyName, This.Descriptor);
 			}
@@ -50,7 +49,7 @@ namespace Castle.Components.DictionaryAdapter
 		public virtual object GetProperty(string propertyName, bool ifExists)
 		{
 			PropertyDescriptor descriptor;
-			if (Meta.Properties.TryGetValue(propertyName, out descriptor))
+			if (This.Properties.TryGetValue(propertyName, out descriptor))
 			{
 				var propertyValue = descriptor.GetPropertyValue(this, propertyName, null, This.Descriptor, ifExists);
 				if (propertyValue is IEditableObject)
@@ -85,7 +84,7 @@ namespace Castle.Components.DictionaryAdapter
 			bool stored = false;
 
 			PropertyDescriptor descriptor;
-			if (Meta.Properties.TryGetValue(propertyName, out descriptor))
+			if (This.Properties.TryGetValue(propertyName, out descriptor))
 			{
 				if (ShouldNotify == false)
 				{
@@ -147,7 +146,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			selector = selector ?? (p => true);
 	
-			foreach (var property in Meta.Properties.Values.Where(p => selector(p)))
+			foreach (var property in This.Properties.Values.Where(p => selector(p)))
 			{
 				var propertyValue = GetProperty(property.PropertyName, true);
 				if (propertyValue != null)
@@ -207,23 +206,12 @@ namespace Castle.Components.DictionaryAdapter
 
 		protected void Initialize()
 		{
-			IEnumerable<IDictionaryInitializer> initializers = Meta.Initializers;
-
-			if (This.Descriptor is DictionaryDescriptor)
-			{
-				var dictionaryDescriptor = (DictionaryDescriptor)This.Descriptor;
-				if (dictionaryDescriptor.Initializers != null)
-				{
-					initializers = dictionaryDescriptor.Initializers.Union(initializers.OrderBy(i => i.ExecutionOrder));
-				}
-			}
-
-			foreach (var initializer in initializers)
+			foreach (var initializer in This.Initializers)
 			{
 				initializer.Initialize(this, Meta.Behaviors);
 			}
 
-			foreach (var property in Meta.Properties.Values.Where(p => p.Fetch))
+			foreach (var property in This.Properties.Values.Where(p => p.Fetch))
 			{
 				GetProperty(property.PropertyName, false);
 			}

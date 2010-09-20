@@ -24,7 +24,7 @@ namespace Castle.Components.DictionaryAdapter
 	{
 		public virtual void VisitDictionaryAdapter(IDictionaryAdapter dictionaryAdapter)
 		{
-			foreach (var property in dictionaryAdapter.Meta.Properties.Values)
+			foreach (var property in dictionaryAdapter.This.Properties.Values)
 			{
 				Type collectionItemType;
 				if (IsCollection(property, out collectionItemType))
