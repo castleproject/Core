@@ -56,7 +56,7 @@ namespace Castle.Components.DictionaryAdapter
 				if (CanValidate && validators != null)
 				{
 					PropertyDescriptor property;
-					if (Meta.Properties.TryGetValue(columnName, out property))
+					if (This.Properties.TryGetValue(columnName, out property))
 					{
 						return string.Join(Environment.NewLine, validators.Select(
 							v => v.Validate(this, property)).Where(e => !string.IsNullOrEmpty(e))

@@ -47,7 +47,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			List<String> errors = new List<string>();
 			var globalRules = AttributesUtil.GetTypeAttributes<IValidationRule>(dictionaryAdapter.Meta.Type);
 
-			foreach (var property in dictionaryAdapter.Meta.Properties.Values)
+			foreach (var property in dictionaryAdapter.This.Properties.Values)
 			{
 				var propertyRules = AttributesUtil.GetAttributes<IValidationRule>(property.Property);
 				var propertyValue = dictionaryAdapter.GetProperty(property.PropertyName, true);

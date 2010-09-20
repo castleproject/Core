@@ -18,6 +18,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Linq;
 
 	[DebuggerDisplay("Type: {Type.FullName,nq}")]
 	public class DictionaryAdapterMeta
@@ -27,7 +28,7 @@ namespace Castle.Components.DictionaryAdapter
 		public DictionaryAdapterMeta(Type type, IDictionaryInitializer[] initializers,
 									 IDictionaryMetaInitializer[] metaInitializers,
 									 object[] behaviors, IDictionary<String, PropertyDescriptor> properties,
-									 IDictionaryAdapterFactory factory)
+									 DictionaryDescriptor descriptor, IDictionaryAdapterFactory factory)
 		{
 			Type = type;
 			Initializers = initializers;
@@ -35,7 +36,7 @@ namespace Castle.Components.DictionaryAdapter
 			Behaviors = behaviors;
 			Properties = properties;
 
-			InitializeMeta(factory, metaInitializers);
+			InitializeMeta(factory, descriptor);
 		}
 
 		public Type Type { get; private set; }
@@ -46,7 +47,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public IDictionaryMetaInitializer[] MetaInitializers { get; private set; }
 
-		public IDictionary<String, PropertyDescriptor> Properties { get; private set; }
+		public IDictionary<string, PropertyDescriptor> Properties { get; private set; }
 
 		public IDictionary ExtendedProperties
 		{
@@ -60,9 +61,14 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private void InitializeMeta(IDictionaryAdapterFactory factory, IDictionaryMetaInitializer[] metaInitializers)
+		private void InitializeMeta(IDictionaryAdapterFactory factory, DictionaryDescriptor descriptor)
 		{
-			foreach (var metaInitializer in metaInitializers)
+			if (descriptor != null)
+			{
+				MetaInitializers = MetaInitializers.Prioritize(descriptor.MetaInitializers).ToArray();
+			}
+
+			foreach (var metaInitializer in MetaInitializers)
 			{
 				metaInitializer.Initialize(factory, this);
 			}
