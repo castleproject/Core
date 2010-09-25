@@ -65,6 +65,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -95,6 +96,7 @@
     <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
     <Compile Include="Attributes\ValidateSameAsAttribute.cs" />
     <Compile Include="Attributes\ValidateNotSameAsAttribute.cs" />
+    <Compile Include="CachedMetadataValidationRegistry.cs" />
     <Compile Include="Contributors\AbstractValidationContributor.cs" />
     <Compile Include="Attributes\ValidateSelfAttribute.cs" />
     <Compile Include="Attributes\ValidateSetAttribute.cs" />
