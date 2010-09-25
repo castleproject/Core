@@ -120,12 +120,12 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <param name="property">The property.</param>
 		/// <param name="message">The message.</param>
-		public void RegisterErrorMessage(PropertyInfo property, string message)
+		public ErrorSummary RegisterErrorMessage(PropertyInfo property, string message)
 		{
 			if (property == null) throw new ArgumentNullException("property");
 			if (message == null) throw new ArgumentNullException("message");
 
-			RegisterErrorMessage(property.Name, message);
+			return RegisterErrorMessage(property.Name, message);
 		}
 
 		/// <summary>
@@ -133,7 +133,7 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <param name="property">The property.</param>
 		/// <param name="message">The message.</param>
-		public void RegisterErrorMessage(string property, string message)
+		public ErrorSummary RegisterErrorMessage(string property, string message)
 		{
 			if (property == null) throw new ArgumentNullException("property");
 			if (message == null) throw new ArgumentNullException("message");
@@ -152,6 +152,8 @@ namespace Castle.Components.Validator
 
 			errorsCount++;
 			invalidPropertiesCount = property2Messages.Count;
+
+			return this;
 		}
 
 		/// <summary>

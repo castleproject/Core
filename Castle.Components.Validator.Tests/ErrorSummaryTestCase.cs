@@ -41,5 +41,14 @@ namespace Castle.Components.Validator.Tests
 			Assert.AreEqual(2, errorSummary.ErrorsCount);
 			Assert.AreEqual(2, errorSummary.InvalidPropertiesCount);
 		}
+
+		[Test]
+		public void RegisterMessageChaining()
+		{
+			ErrorSummary summ1 = new ErrorSummary().RegisterErrorMessage("test1", "test1");
+			ErrorSummary summ2 = summ1.RegisterErrorMessage("test2", "test2").RegisterErrorMessage("test3", "test3");
+
+			Assert.AreSame(summ1, summ2);
+		}
 	}
 }
