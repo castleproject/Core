@@ -123,6 +123,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\IStringLists.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Phone.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\PhoneConverter.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithParamsArrayCtorArg.cs" />
     <Compile Include="DynamicProxy.Tests\DelegateProxyTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasNonInheritableAttribute.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassToSerialize.cs" />

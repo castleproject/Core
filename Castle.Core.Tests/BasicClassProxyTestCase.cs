@@ -105,6 +105,13 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("set_Item get_Item ", logger.LogContents);
 		}
 
+		[Test]
+		public void Can_proxy_class_with_ctor_having_params_array()
+		{
+			generator.CreateClassProxy(typeof(ClassWithParamsArrayCtorArg), new object[] { new string[0] });
+		}
+
+
 #if !MONO
 
 		[Test]
