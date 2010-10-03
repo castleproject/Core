@@ -18,6 +18,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Xml;
 	using System.Xml.Serialization;
 	using System.Xml.XPath;
@@ -27,7 +28,7 @@ namespace Castle.Components.DictionaryAdapter
 	{
 		private readonly XPathContext parent;
 		private IDictionary<string, Func<IXsltContextFunction>> functions;
-		private List<XmlArrayItemAttribute> listItemMeta;
+		private List<IXPathSerializer> serializers;
 		private int prefixCount;
 
 		public const string Prefix = "castle-da";
@@ -36,13 +37,14 @@ namespace Castle.Components.DictionaryAdapter
 		private const string Xsd = "http://www.w3.org/2001/XMLSchema";
 		private const string Xsi = "http://www.w3.org/2001/XMLSchema-instance";
 
-		public XPathContext() : this(new NameTable())
+		public XPathContext() 
+			: this(new NameTable())
 		{
 		}
 
-		public XPathContext(NameTable nameTable) : base(nameTable)
+		public XPathContext(NameTable nameTable) 
+			: base(nameTable)
 		{
-			prefixCount = 0;
 			Arguments = new XsltArgumentList();
 			functions = new Dictionary<string, Func<IXsltContextFunction>>();
 			AddNamespace("xsi", Xsi);
@@ -51,9 +53,12 @@ namespace Castle.Components.DictionaryAdapter
 			AddFunction(Prefix, "match", MatchFunction.Instance);
 		}
 
-		public XPathContext(XPathContext parent) : this((NameTable)parent.NameTable)
+		public XPathContext(XPathContext parent) 
+			: base((NameTable)parent.NameTable)
 		{
 			this.parent = parent;
+			Arguments = new XsltArgumentList();
+			functions = new Dictionary<string, Func<IXsltContextFunction>>();
 		}
 
 		public override string DefaultNamespace
@@ -62,18 +67,23 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				var defaultNamespace = base.DefaultNamespace;
 				if (string.IsNullOrEmpty(defaultNamespace) && parent != null)
-				{
 					defaultNamespace = parent.DefaultNamespace;
-				}
 				return defaultNamespace;
 			}
 		}
 
 		public XsltArgumentList Arguments { get; private set; }
 
-		public IEnumerable<XmlArrayItemAttribute> ListItemMeta
+		public IEnumerable<XmlArrayItemAttribute> ListItemMeta { get; private set; }
+
+		public IEnumerable<IXPathSerializer> Serializers
 		{
-			get { return listItemMeta; }
+			get
+			{
+				var mine = serializers ?? Enumerable.Empty<IXPathSerializer>();
+				var parents = (parent != null) ? parent.Serializers : Enumerable.Empty<IXPathSerializer>();
+				return mine.Union(parents);
+			}
 		}
 
 		public XPathContext ApplyBehaviors(IEnumerable behaviors)
@@ -82,26 +92,26 @@ namespace Castle.Components.DictionaryAdapter
 				.OfType<XmlTypeAttribute>(attrib =>
 				{
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
-					{
 						AddNamespace(string.Empty, attrib.Namespace);
-					}
 				})
 				.OfType<XmlNamespaceAttribute>(attrib =>
 				{
 					AddNamespace(attrib.Prefix, attrib.NamespaceUri);
 					if (attrib.Default)
-					{
 						AddNamespace(string.Empty, attrib.NamespaceUri);
-					}
 				})
 				.OfType<XmlArrayItemAttribute>(attrib =>
 				{
-					listItemMeta = listItemMeta ?? new List<XmlArrayItemAttribute>();
-					listItemMeta.Add(attrib);
+					ListItemMeta = ListItemMeta ?? new List<XmlArrayItemAttribute>();
+					((List<XmlArrayItemAttribute>)ListItemMeta).Add(attrib);
 				})
 				.OfType<XPathFunctionAttribute>(attrib =>
 				{
 					AddFunction(attrib.Prefix, attrib.Name, attrib.Function);
+				})
+				.OfType<IXPathSerializer>(attrib =>
+				{
+					AddSerializer(attrib);
 				})
 				.Apply(behaviors);
 			return this;
@@ -126,9 +136,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			var uri = base.LookupNamespace(prefix);
 			if (uri == null && parent != null)
-			{
 				uri = parent.LookupNamespace(prefix);
-			}
 			return uri;
 		}
 
@@ -136,9 +144,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			var prefix = base.LookupPrefix(uri);
 			if (string.IsNullOrEmpty(prefix) && parent != null)
-			{
 				prefix = parent.LookupPrefix(uri);
-			}
 			return prefix;
 		}
 
@@ -151,6 +157,13 @@ namespace Castle.Components.DictionaryAdapter
 				AddNamespace(prefix, namespaceUri);
 			}
 			return prefix;
+		}
+
+		public XPathContext AddSerializer(IXPathSerializer serializer)
+		{
+			serializers = serializers ?? new List<IXPathSerializer>();
+			serializers.Insert(0, serializer);
+			return this;
 		}
 
 		public XPathContext AddFunction(string prefix, string name, IXsltContextFunction function)
@@ -169,9 +182,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			Func<IXsltContextFunction> function;
 			if (functions.TryGetValue(GetQualifiedName(prefix, name), out function))
-			{
 				return function();
-			}
 			return (parent != null) ? parent.ResolveFunction(prefix, name, argTypes) : null;
 		}
 
@@ -222,9 +233,8 @@ namespace Castle.Components.DictionaryAdapter
 				source.MoveToChild(XPathNodeType.Element);
 
 				if (string.IsNullOrEmpty(prefix))
-				{
 					prefix = AddNamespace(namespaceUri);
-				}
+
 				var existing = source.GetNamespace(prefix);
 				if (existing == namespaceUri) return prefix;
 				if (string.IsNullOrEmpty(existing) == false) return null;
@@ -263,9 +273,7 @@ namespace Castle.Components.DictionaryAdapter
 				string name, namespaceUri = null;
 				var prefix = SplitQualifiedName(qualifiedType, out name);
 				if (prefix != null)
-				{
 					namespaceUri = source.GetNamespace(prefix);
-				}
 				return new XmlQualifiedName(name, namespaceUri);
 			}
 			return null;
@@ -294,18 +302,14 @@ namespace Castle.Components.DictionaryAdapter
 		private string GetUniquePrefix()
 		{
 			if (parent != null)
-			{
 				return parent.GetUniquePrefix();
-			}
 			return "da" + ++prefixCount;
 		}
 
 		private static string GetQualifiedName(string prefix, string name)
 		{
 			if (string.IsNullOrEmpty(prefix))
-			{
 				return name;
-			}
 			return String.Format("{0}:{1}", prefix, name);
 		}
 

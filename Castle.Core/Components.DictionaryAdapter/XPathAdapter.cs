@@ -28,8 +28,6 @@ namespace Castle.Components.DictionaryAdapter
 								IDictionaryPropertyGetter, IDictionaryPropertySetter,
 								IDictionaryCreateStrategy
 	{
-		private readonly XPathAdapter parent;
-		private readonly XPathContext context;
 		private readonly Func<XPathNavigator> createRoot;
 		private XPathNavigator root;
 		private XmlMetadata xmlMeta;
@@ -39,7 +37,11 @@ namespace Castle.Components.DictionaryAdapter
 			get { return EnsureOffRoot(); }
 		}
 
+		public XPathAdapter Parent { get; private set; }
+
 		public IXPathNavigable Source { get; private set; }
+
+		public XPathContext Context { get; private set; }
 
 		#region Init
 
@@ -50,21 +52,21 @@ namespace Castle.Components.DictionaryAdapter
 		public XPathAdapter(IXPathNavigable source)
 		{
 			Source = source;
-			context = new XPathContext();
+			Context = new XPathContext();
 			root = source.CreateNavigator();
 		}
 
 		protected XPathAdapter(XPathNavigator source, XPathAdapter parent)
 		{
-			this.parent = parent;
-			context = parent.context.CreateChild();
+			Parent = parent;
+			Context = parent.Context.CreateChild();
 			root = source.Clone();
 		}
 
 		protected XPathAdapter(Func<XPathNavigator> createSource, XPathAdapter parent)
 		{
-			this.parent = parent;
-			context = parent.context.CreateChild();
+			Parent = parent;
+			Context = parent.Context.CreateChild();
 			createRoot = createSource;
 		}
 
@@ -80,15 +82,15 @@ namespace Castle.Components.DictionaryAdapter
 
 			dictionaryAdapter.This.CreateStrategy = this;
 
-			context.ApplyBehaviors(behaviors);
+			Context.ApplyBehaviors(behaviors);
 			xmlMeta = dictionaryAdapter.GetXmlMeta();
 
 			if (string.IsNullOrEmpty(xmlMeta.XmlType.Namespace) == false)
 			{
-				context.AddNamespace(string.Empty, xmlMeta.XmlType.Namespace);
+				Context.AddNamespace(string.Empty, xmlMeta.XmlType.Namespace);
 			}
 
-			if (parent == null)
+			if (Parent == null)
 			{
 				foreach (var behavior in behaviors)
 				{
@@ -96,12 +98,12 @@ namespace Castle.Components.DictionaryAdapter
 					{
 						var attrib = (XPathAttribute)behavior;
 						var compiledExpression = attrib.CompiledExpression;
-						if (MoveOffRoot(root, XPathNodeType.Element) == false || context.Matches(compiledExpression, root))
+						if (MoveOffRoot(root, XPathNodeType.Element) == false || Context.Matches(compiledExpression, root))
 						{
 							break;
 						}
 
-						var navigator = context.SelectSingleNode(compiledExpression, root);
+						var navigator = Context.SelectSingleNode(compiledExpression, root);
 						if (navigator != null)
 						{
 							root = navigator;
@@ -169,27 +171,25 @@ namespace Castle.Components.DictionaryAdapter
 
 		private object ReadProperty(XPathResult result, bool ifExists, IDictionaryAdapter dictionaryAdapter)
 		{
+			object value;
 			var propertyType = result.Type;
+
+			if (ReadCustom(result, out value))
+				return value;
 
 			if (propertyType != typeof(string))
 			{
 				if (typeof(IXPathNavigable).IsAssignableFrom(propertyType))
-				{
 					return ReadFragment(result);
-				}
 
 				if (propertyType.IsArray || typeof(IEnumerable).IsAssignableFrom(propertyType))
-				{
 					return ReadCollection(result, dictionaryAdapter);
-				}
 				
 				if (propertyType.IsInterface)
-				{
 					return ReadComponent(result, ifExists, dictionaryAdapter);
-				}
 			}
 
-			return ReadPrimitive(result);
+			return ReadSimple(result);
 		}
 
 		private object ReadFragment(XPathResult result)
@@ -204,32 +204,28 @@ namespace Castle.Components.DictionaryAdapter
 			return node.Clone();
 		}
 
-		private object ReadPrimitive(XPathResult result)
+		private object ReadSimple(XPathResult result)
 		{
 			var node = result.GetNavigator(false);
 			if (node != null)
 			{
 				if (result.Type.IsEnum)
-				{
 					return Enum.Parse(result.Type, node.Value);
-				}
+
 				try
 				{
 					return node.ValueAs(result.Type);
 				}
 				catch (InvalidCastException)
 				{
-					var converter = TypeDescriptor.GetConverter(result.Type);
-					if (converter != null && converter.CanConvertFrom(typeof(string)))
-					{
-						return converter.ConvertFromString(node.Value);
-					}	
+					object value;
+					if (DefaultXmlSerializer.Instance.ReadObject(result, node, out value))
+						return value;
 				}
 			}
 			if (result.Result != null)
-			{
 				return Convert.ChangeType(result.Result, result.Type);
-			}
+
 			return null;
 		}
 
@@ -249,7 +245,7 @@ namespace Castle.Components.DictionaryAdapter
 				}
 				else
 				{
-					var xmlType = context.GetXmlType(source);
+					var xmlType = Context.GetXmlType(source);
 					elementType = dictionaryAdapter.GetXmlSubclass(xmlType, elementType) ?? elementType;
 				}
 				adapter = new XPathAdapter(source, this);
@@ -257,9 +253,7 @@ namespace Castle.Components.DictionaryAdapter
 			else
 			{
 				if (createSource == null)
-				{
 					createSource = () => result.GetNavigator(true);
-				}
 				adapter = new XPathAdapter(createSource, this);
 			}
 
@@ -267,9 +261,7 @@ namespace Castle.Components.DictionaryAdapter
 				new DictionaryDescriptor().AddBehavior(XPathBehavior.Instance, adapter));
 
 			if (result.Property != null)
-			{
 				dictionaryAdapter.This.ExtendedProperties[result.Property.PropertyName] = component;
-			}
 
 			return component;
 		}
@@ -277,13 +269,11 @@ namespace Castle.Components.DictionaryAdapter
 		private object ReadCollection(XPathResult result, IDictionaryAdapter dictionaryAdapter)
 		{
 			if (result.Type.IsArray)
-			{
 				return ReadArray(result, dictionaryAdapter);
-			}
-			else if (result.Type.IsGenericType)
-			{
+
+			if (result.Type.IsGenericType)
 				return ReadList(result, dictionaryAdapter);
-			}
+
 			return null;
 		}
 
@@ -352,6 +342,11 @@ namespace Castle.Components.DictionaryAdapter
 			return list;
 		}
 
+		private bool ReadCustom(XPathResult result, out object value)
+		{
+			return result.ReadObject(out value);
+		}
+
 		#endregion
 
 		#region Writing
@@ -360,9 +355,12 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			var propertyType = result.Type;
 
+			if (WriteCustom(result, value, dictionaryAdapter))
+				return;
+
 			if (propertyType == typeof(string))
 			{
-				WritePrimitive(result, value);
+				WriteSimple(result, value, dictionaryAdapter);
 			}
 			else if (typeof(IXPathNavigable).IsAssignableFrom(propertyType))
 			{
@@ -378,7 +376,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			else
 			{
-				WritePrimitive(result, value);
+				WriteSimple(result, value, dictionaryAdapter);
 			}
 		}
 
@@ -399,29 +397,33 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private void WritePrimitive(XPathResult result, object value)
+		private void WriteSimple(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
 		{
 			if (value == null)
 			{
 				result.Remove();
+				if (result.Property != null)
+					dictionaryAdapter.This.ExtendedProperties.Remove(result.Property.PropertyName);
+				return;
 			}
-			else if (result.Type.IsEnum)
+
+			var node = result.GetNavigator(true);
+
+			if (result.Type.IsEnum)
 			{
-				result.GetNavigator(true).SetTypedValue(value.ToString());
+				node.SetTypedValue(value.ToString());
 			}
 			else
 			{
 				try
 				{
-					result.GetNavigator(true).SetTypedValue(value);
+					node.SetTypedValue(value);
 				}
 				catch (InvalidCastException)
 				{
-					var converter = TypeDescriptor.GetConverter(result.Type);
-					if (converter != null && converter.CanConvertTo(typeof(string)))
+					if (DefaultXmlSerializer.Instance.WriteObject(result, node, value) && result.Property != null)
 					{
-						value = converter.ConvertToString(value);
-						result.GetNavigator(true).SetTypedValue(value);
+						dictionaryAdapter.This.ExtendedProperties[result.Property.PropertyName] = value;
 					}
 				}
 			}
@@ -447,7 +449,7 @@ namespace Castle.Components.DictionaryAdapter
 				if (result.Type != source.Meta.Type && result.OmitPolymorphism == false)
 				{
 					var xmlType = source.GetXmlMeta().XmlType;
-					context.SetXmlType(xmlType.TypeName, xmlType.Namespace, node);
+					Context.SetXmlType(xmlType.TypeName, xmlType.Namespace, node);
 				}
 				var element = (IDictionaryAdapter)ReadComponent(result, false, dictionaryAdapter);
 				source.CopyTo(element);
@@ -495,6 +497,19 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
+		private bool WriteCustom(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
+		{
+			if (result.WriteObject(value))
+			{
+				if (result.Property != null)
+				{
+					dictionaryAdapter.This.ExtendedProperties[result.Property.PropertyName] = value;
+				}
+				return true;
+			}
+			return false;
+		}
+
 		#endregion
 
 		#region Helpers
@@ -528,7 +543,7 @@ namespace Castle.Components.DictionaryAdapter
 			Func<XPathNavigator> create = null;
 
 			object xmlType = dictionaryAdapter.GetXmlMeta(property.Property.DeclaringType).XmlType;
-			var keyContext = context.CreateChild(Enumerable.Repeat(xmlType, 1).Union(property.Behaviors));
+			var keyContext = Context.CreateChild(Enumerable.Repeat(xmlType, 1).Union(property.Behaviors));
 
 			foreach (var behavior in property.Behaviors)
 			{
@@ -645,8 +660,8 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					elementName = xmlMeta.XmlType.TypeName;
 				}
-				root = context.AppendElement(elementName, namespaceUri, root);
-				context.AddStandardNamespaces(root);
+				root = Context.AppendElement(elementName, namespaceUri, root);
+				Context.AddStandardNamespaces(root);
             }
 
 			return root;
