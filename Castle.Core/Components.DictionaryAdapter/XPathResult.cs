@@ -26,7 +26,6 @@ namespace Castle.Components.DictionaryAdapter
 	{
 		public readonly bool CanWrite;
 		public readonly PropertyDescriptor Property;
-		private readonly XPathContext context;
 		private readonly object matchingBehavior;
 		private readonly Func<XPathNavigator> create;
 
@@ -48,9 +47,9 @@ namespace Castle.Components.DictionaryAdapter
 			Result = result;
 			Property = property;
 			Type = (property != null) ? Property.PropertyType : null;
-			this.context = context;
-			this.matchingBehavior = matchingBehavior;
+			Context = context;
 			this.create = create;
+			this.matchingBehavior = matchingBehavior;
 			CanWrite = (create != null || result is XPathNavigator);
 		}
 
@@ -62,6 +61,8 @@ namespace Castle.Components.DictionaryAdapter
 		public Type Type { get; private set; }
 
 		public object Result { get; private set; }
+
+		public XPathContext Context { get; private set; }
 
 		public XPathNavigator Container { get; private set; }
 
@@ -77,10 +78,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			else if (Result is XPathNodeIterator)
 			{
-				foreach (XPathNavigator node in (XPathNodeIterator)Result)
-				{
-					return node;
-				}
+				return ((XPathNodeIterator)Result).Cast<XPathNavigator>().FirstOrDefault();
 			}
 			if (demand && create != null)
 			{
@@ -106,7 +104,7 @@ namespace Castle.Components.DictionaryAdapter
 				var nodes = ((XPathNodeIterator)Result).Cast<XPathNavigator>().ToArray();
 				node = nodes[index];
 			}
-			return new XPathResult(type, node, context, matchingBehavior);
+			return new XPathResult(type, node, Context, matchingBehavior);
 		}
 
 		public IEnumerable<XPathResult> GetNodes(Type type, Func<Type, XmlMetadata> getXmlMeta)
@@ -120,14 +118,14 @@ namespace Castle.Components.DictionaryAdapter
 				Container = Result as XPathNavigator;
 				if (IsContainer && Container != null)
 				{
-					if (context.ListItemMeta != null)
+					if (Context.ListItemMeta != null)
 					{
-						return context.ListItemMeta.SelectMany(item =>
+						return Context.ListItemMeta.SelectMany(item =>
 						{
 							string name, namespaceUri;
 							var xmlMeta = GetItemQualifedName(type, item, getXmlMeta, out name, out namespaceUri);
 							return Container.SelectChildren(name, namespaceUri).Cast<XPathNavigator>()
-								.Select(r => new XPathResult(item.Type ?? type, r, context, matchingBehavior)
+								.Select(r => new XPathResult(item.Type ?? type, r, Context, matchingBehavior)
 								{
 									XmlMeta = xmlMeta
 								});
@@ -148,14 +146,14 @@ namespace Castle.Components.DictionaryAdapter
 				var parents = nodes.Cast<XPathNavigator>().ToList();
 				Container = parents.FirstOrDefault();
 
-				if (context.ListItemMeta != null)
+				if (Context.ListItemMeta != null)
 				{
-					return context.ListItemMeta.SelectMany(item =>
+					return Context.ListItemMeta.SelectMany(item =>
 					{
 						string name, namespaceUri;
 						var xmlMeta = GetItemQualifedName(type, item, getXmlMeta, out name, out namespaceUri);
 						return parents.SelectMany(p => p.SelectChildren(name, namespaceUri).Cast<XPathNavigator>())
-							.Select(r => new XPathResult(item.Type ?? type, r, context, matchingBehavior)
+							.Select(r => new XPathResult(item.Type ?? type, r, Context, matchingBehavior)
 							{
 								XmlMeta = xmlMeta
 							});
@@ -167,7 +165,30 @@ namespace Castle.Components.DictionaryAdapter
 						.Cast<XPathNavigator>());
 				}
 			}
-			return results.Select(r => new XPathResult(type, r, context, matchingBehavior));
+			return results.Select(r => new XPathResult(type, r, Context, matchingBehavior));
+		}
+
+		public bool ReadObject(out object value)
+		{
+			var node = GetNavigator(false);
+			foreach (var serializer in Context.Serializers)
+			{
+				if (serializer.ReadObject(this, node, out value))
+					return true;
+			}
+			value = null;
+			return false;
+		}
+
+		public bool WriteObject(object value)
+		{
+			var node = GetNavigator(true);
+			foreach (var serializer in Context.Serializers)
+			{
+				if (serializer.WriteObject(this, node, value))
+					return true;
+			}
+			return false;
 		}
 
 		private XmlMetadata GetItemQualifedName(Type type, XmlArrayItemAttribute item, Func<Type, XmlMetadata> getXmlMeta,
@@ -190,7 +211,7 @@ namespace Castle.Components.DictionaryAdapter
 				}
 				namespaceUri = null;
 			}
-			namespaceUri = context.GetEffectiveNamespace(namespaceUri);
+			namespaceUri = Context.GetEffectiveNamespace(namespaceUri);
 			return xmlMeta;
 		}
 
@@ -226,10 +247,10 @@ namespace Castle.Components.DictionaryAdapter
 				name = GetDataType(type);
 			}
 
-			if (context.ListItemMeta != null)
+			if (Context.ListItemMeta != null)
 			{
 				var actualType = type;
-				var listItem = context.ListItemMeta.FirstOrDefault(li => (li.Type ?? baseType) == actualType);
+				var listItem = Context.ListItemMeta.FirstOrDefault(li => (li.Type ?? baseType) == actualType);
 
 				if (listItem != null)
 				{
@@ -272,7 +293,7 @@ namespace Castle.Components.DictionaryAdapter
 
 				if (Container != null)
 				{
-					item = context.AppendElement(name, namespaceUri, Container);
+					item = Context.AppendElement(name, namespaceUri, Container);
 				}
 			}
 			else if (create != null)
@@ -282,10 +303,10 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (string.IsNullOrEmpty(typeNamespaceUri) == false)
 			{
-				context.CreateNamespace(null, typeNamespaceUri, item);
+				Context.CreateNamespace(null, typeNamespaceUri, item);
 			}
 
-			return new XPathResult(type, item, context, matchingBehavior)
+			return new XPathResult(type, item, Context, matchingBehavior)
 			{
 				XmlMeta = xmlMeta,
 				OmitPolymorphism = omitPolymorphism
