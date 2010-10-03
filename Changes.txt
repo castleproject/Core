@@ -1,3 +1,7 @@
+
+- Added DefaultXmlSerializer to bridge XPathAdapter with standard Xml Serialization.
+- XPathAdapter for DictionaryAdapter added IXPathSerializer to provide hooks for custom serialization.
+
 2.5.1 (2010-09-21)
 ==================
 - Interface proxy with target Interface now accepts null as a valid target value (which can be replaced at a later stage).

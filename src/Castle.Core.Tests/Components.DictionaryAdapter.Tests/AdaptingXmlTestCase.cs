@@ -16,13 +16,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 {
 #if !SILVERLIGHT
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
+	using System.Linq;
 	using System.Xml;
+	using System.Xml.Schema;
 	using System.Xml.Serialization;
 	using NUnit.Framework;
-	using System.Collections.Generic;
-	using System.Linq;
 
 	[TestFixture]
 	public class AdaptinXmlTestCase
@@ -502,7 +503,13 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public void Can_Read_From_Standard_Xml_Serialization()
 		{
 			var manager = new Manager { Name = "Craig", Level = 1 };
-			var employee = new Employee { Name = "Dave", Supervisor = manager };
+			var employee = new Employee
+			{
+				Name = "Dave",
+				Supervisor = manager,
+				Job = new Employment { Title = "Consultant", Salary = 100000M },
+				Metadata = new Metadata { Tag = "Cool!" }
+			};
 			var group = new Group
 			{
 				Id = 2,
@@ -533,6 +540,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var employeesRead = groupRead.Employees;
 			Assert.AreEqual(2, employeesRead.Length);
 			Assert.AreEqual(employee.Name, employeesRead[0].Name);
+			Assert.AreEqual(employee.Job.Title, employeesRead[0].Job.Title);
+			Assert.AreEqual(employee.Job.Salary, employeesRead[0].Job.Salary);
+			Assert.AreEqual(employee.Metadata.Tag, employeesRead[0].Metadata.Tag);
 			Assert.AreEqual(manager.Name, employeesRead[1].Name);
 			Assert.IsInstanceOf<IManager>(employeesRead[1]);
 			var managerEmplRead = (IManager)employeesRead[1];
@@ -564,6 +574,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var employee = CreateXmlAdapter<IEmployee>(null, ref emp);
 			employee.Name = "Dave";
 			employee.Supervisor = manager;
+			employee.Job = new Employment
+			{
+				Title = "Consultant",
+				Salary = 100000M
+			};
+			employee.Metadata = new Metadata { Tag = "Cool!" };
 
 			var group = CreateXmlAdapter<IGroup>(null, ref document);
 			group.Id = 2;
@@ -589,6 +605,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				var employeesRead = groupRead.Employees;
 				Assert.AreEqual(2, employeesRead.Length);
 				Assert.AreEqual(employee.Name, employeesRead[0].Name);
+				Assert.AreEqual(employee.Job.Title, employeesRead[0].Job.Title);
+				Assert.AreEqual(employee.Job.Salary, employeesRead[0].Job.Salary);
+				Assert.AreEqual(employee.Metadata.Tag, employeesRead[0].Metadata.Tag);
 				Assert.AreEqual(manager.Name, employeesRead[1].Name);
 				Assert.IsInstanceOf<Manager>(employeesRead[1]);
 				var managerEmplRead = (Manager)employeesRead[1];
@@ -602,7 +621,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				var managerExtra = (Manager)groupRead.ExtraInfo[2];
 				Assert.AreEqual(manager.Name, managerExtra.Name);
 				Assert.AreEqual(manager.Level, managerExtra.Level);
-
 			}
 		}
 	}
@@ -640,6 +658,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	{
 		string Name { get; set; }
 		IEmployee Supervisor { get; set; }
+		Employment Job { get; set; }
+		Metadata Metadata { get; set; }
 	}
 
 	//[XmlRoot(ElementName = "BarRoot")]
@@ -685,6 +705,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	{
 		public string Name;
 		public Employee Supervisor;
+		public Employment Job;
+		public Metadata Metadata;
 	}
 
 	//[XmlRoot(ElementName = "BarRoot")]
@@ -692,6 +714,45 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	public class Manager : Employee
 	{
 		public int Level;
+	}
+
+	[XmlType(Namespace = "Potato"),
+	 XmlRoot(Namespace = "Pickle")]
+	public class Employment
+	{
+		public string Title { get; set; }
+
+		public decimal Salary { get; set; }
+	}
+
+	public class Metadata : IXmlSerializable
+	{
+		public string Tag { get; set; }
+
+		public void ReadXml(XmlReader reader)
+		{
+			reader.MoveToContent();
+			var isEmptyElement = reader.IsEmptyElement;
+			reader.ReadStartElement();
+			if (isEmptyElement == false) 
+			{
+				Tag = reader.ReadElementString("Tag");
+				reader.ReadEndElement();
+			}
+		}
+
+		public void WriteXml(XmlWriter writer)
+		{
+			if (string.IsNullOrEmpty(Tag) == false)
+			{
+				writer.WriteElementString("Tag", Tag);
+			}
+		}
+
+		public XmlSchema GetSchema()
+		{
+			return null;
+		}
 	}
 
 	#endregion
