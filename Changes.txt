@@ -1,4 +1,4 @@
-
+- applied patch from David Tchepak fixing DYNPROXY-145 Unable to proxy System.Threading.SynchronizationContext (.NET 4.0)
 - Added DefaultXmlSerializer to bridge XPathAdapter with standard Xml Serialization.
 - XPathAdapter for DictionaryAdapter added IXPathSerializer to provide hooks for custom serialization.
 
