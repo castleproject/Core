@@ -57,7 +57,7 @@ namespace Castle.Core.Configuration
 		/// </summary>
 		/// <param name="type">The <see cref="Type"/></param>
 		/// <param name="defaultValue">
-		/// The Default value returned if the convertion fails.
+		/// The Default value returned if the conversion fails.
 		/// </param>
 		/// <returns>The Value converted into the specified type.</returns>
 		object GetValue(Type type, object defaultValue);
