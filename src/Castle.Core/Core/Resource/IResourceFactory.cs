@@ -28,7 +28,7 @@ namespace Castle.Core.Resource
 		/// </summary>
 		/// <remarks>
 		/// Implementors should return <c>true</c>
-		/// only if the given identificator is supported
+		/// only if the given identifier is supported
 		/// by the resource factory
 		/// </remarks>
 		/// <param name="uri"></param>
