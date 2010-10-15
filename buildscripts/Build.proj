@@ -178,6 +178,8 @@ limitations under the License.
 			WorkingDirectory="$(PackageDir)"
 			ZipFileName="$(Build_ZipFilePath)"
 			/>
+			
+		<Message Text="##teamcity[publishArtifacts '$(Build_ZipFilePath)']" Condition="$(TEAMCITY_VERSION) != ''" />
 
 		<RemoveDir Directories="$(PackageDir)" ContinueOnError="true" />
 
