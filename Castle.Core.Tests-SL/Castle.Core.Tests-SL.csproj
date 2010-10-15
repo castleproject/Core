@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
   <PropertyGroup>
     <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <UpgradeBackupLocation />
+    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">SL40-Debug</Configuration>
@@ -84,13 +88,12 @@
     <Reference Include="Castle.Core" Condition="$(Configuration.StartsWith(&quot;SL&quot;))">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Castle.Core\bin\$(Configuration)\Castle.Core.dll</HintPath>
-	</Reference>
+    </Reference>
     <Reference Include="Castle.Core.Tests" Condition="$(Configuration.StartsWith(&quot;SL&quot;))">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Castle.Core.Tests\bin\$(Configuration)\Castle.Core.Tests.dll</HintPath>
-	</Reference>
+    </Reference>
   </ItemGroup>
- 
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -105,7 +108,7 @@
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 3.0'" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 3.0'" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
   <Import Project="$(RootPath)\Settings.proj" />
   <Import Project="$(BuildScriptsPath)\Castle.Common.targets" />
