@@ -19,6 +19,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.NLogIntegration", "src\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj", "{D680B5DB-B943-4BB5-891A-1695DEF86A3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core.Tests-SL", "src\Castle.Core.Tests-SL\Castle.Core.Tests-SL.csproj", "{6EEEC4D0-17B6-474C-AF22-6B8BA2E9DD94}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E4FA5B53-7D36-429E-8E5C-53D5479242BA} = {E4FA5B53-7D36-429E-8E5C-53D5479242BA}
+		{087AD3BF-5E40-450D-8138-FBB5F57AC474} = {087AD3BF-5E40-450D-8138-FBB5F57AC474}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

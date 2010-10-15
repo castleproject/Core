@@ -31,11 +31,15 @@ IF /i "%1" == "NET35" (SET BuildConfigKey=NET35)
 IF /i "%1" == "MONO26" (SET FrameworkVersion=v3.5)
 IF /i "%1" == "MONO26" (SET BuildConfigKey=MONO26)
 
-IF /i "%1" == "SL3" OR "%1" == "SL30" (SET FrameworkVersion=v3.0)
-IF /i "%1" == "SL3" OR "%1" == "SL30" (SET BuildConfigKey=SL30)
+IF /i "%1" == "SL3" (SET FrameworkVersion=v3.0)
+IF /i "%1" == "SL3" (SET BuildConfigKey=SL30)
+IF /i "%1" == "SL30" (SET FrameworkVersion=v3.0)
+IF /i "%1" == "SL30" (SET BuildConfigKey=SL30)
 
-IF /i "%1" == "SL4" OR "%1" == "SL40" (SET FrameworkVersion=v4.0)
-IF /i "%1" == "SL4" OR "%1" == "SL40" (SET BuildConfigKey=SL40)
+IF /i "%1" == "SL4" (SET FrameworkVersion=v4.0)
+IF /i "%1" == "SL4" (SET BuildConfigKey=SL40)
+IF /i "%1" == "SL40" (SET FrameworkVersion=v4.0)
+IF /i "%1" == "SL40" (SET BuildConfigKey=SL40)
 
 IF "%2" == "" goto no_target_and_config
 SET BuildTarget=%2
