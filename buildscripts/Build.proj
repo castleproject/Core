@@ -53,8 +53,7 @@ limitations under the License.
 	<Target
 		Name="BuildProject"
 		>
-
-		<MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="OutputPath=$(OutputPath);Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion);TargetFrameworkProfile=$(TargetFrameworkProfile)">
+		<MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="OutputPath=$(OutputPath);Configuration=$(Configuration);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion);TargetFrameworkProfile=$(TargetFrameworkProfile)">
 
 			<Output TaskParameter="TargetOutputs" ItemName="AllBinaries" />
 		
@@ -110,7 +109,7 @@ limitations under the License.
 	</Target>
 
 	<Target Name="CleanProject">
-		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
+		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
 
 		<CreateItem Include="**/Debug/**/*.*;**/Release/**/*.*">
 			<Output ItemName="_binaryFiles" TaskParameter="Include"/>
@@ -121,7 +120,7 @@ limitations under the License.
 
 
 	<Target Name="CleanAll">
-		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration)$(BuildFramework);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
+		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
 
 		<CreateItem Include="**/Debug/**/*.*;**/Release/**/*.*">
 			<Output ItemName="_binaryFiles" TaskParameter="Include"/>
@@ -218,7 +217,7 @@ limitations under the License.
 		
 		<Message Text="Running tests from assemblies: $(TestAssemblies)" />
 		
-		<Exec Command="$(NUnitPath)/nunit-console-x86.exe /nologo $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles) /framework=$(FrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' " />
+		<Exec Command="$(NUnitPath)/nunit-console-x86.exe /nologo $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles) /framework=$(TargetFrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' " />
 
 		<Exec Command="$(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 $(TestAssemblies)" Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' == '' and $(teamcity_dotnet_nunitlauncher) != '' " />
 

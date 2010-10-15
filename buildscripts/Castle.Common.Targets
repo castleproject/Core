@@ -26,46 +26,37 @@ limitations under the License.
 		Overridables properties
 	-->
 	<PropertyGroup>
-		<BuildConfigKey Condition="$(BuildConfigKey)==''">NET40</BuildConfigKey>
-		<Configuration Condition="$(Configuration)==''">Release</Configuration>
+		<Configuration Condition="$(Configuration)==''">NET40-Release</Configuration>
 		<TargetFrameworkProfile></TargetFrameworkProfile>
 	</PropertyGroup>
 
 
 	<!-- .NET 4.0 (default) -->
-	<PropertyGroup Condition="$(BuildConfigKey)=='NET40'">
-		<BuildFramework></BuildFramework>
-		<BuildConstants>DOTNET DOTNET40</BuildConstants>
-		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-	</PropertyGroup>
-
-	<!-- .NET 4.0 Client Profile -->
-	<PropertyGroup Condition="$(BuildConfigKey)=='NET40CP'">
-		<BuildFramework>NET40CP</BuildFramework>
+	<PropertyGroup Condition='$(Configuration.StartsWith("NET40"))'>
+		<BuildConfigKey>NET40</BuildConfigKey>
 		<BuildConstants>DOTNET DOTNET40 CLIENTPROFILE</BuildConstants>
 		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-		<TargetFrameworkProfile>Client</TargetFrameworkProfile>
 	</PropertyGroup>
 
 	<!-- .NET 3.5 -->
-	<PropertyGroup Condition="$(BuildConfigKey)=='NET35'">
-		<BuildFramework>$(BuildConfigKey)</BuildFramework>
+	<PropertyGroup Condition='$(Configuration.StartsWith("NET35"))'>
+		<BuildConfigKey>NET35</BuildConfigKey>
 		<BuildConstants>DOTNET DOTNET35</BuildConstants>
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	</PropertyGroup>
 
 	<!-- Mono 2.6 -->
-	<PropertyGroup Condition="$(BuildConfigKey)=='MONO26'">
-		<BuildFramework>$(BuildConfigKey)</BuildFramework>
+	<PropertyGroup Condition='$(Configuration.StartsWith("Mono"))'>
+		<BuildConfigKey>MONO26</BuildConfigKey>
 		<BuildConstants>MONO MONO26</BuildConstants>
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 		<BuildConfigDescription>Mono 2.6 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
 	</PropertyGroup>
 
 	<!--Silverlight 3.0 runtime-->
-	<PropertyGroup Condition="$(BuildConfigKey)=='SL3'">
-		<SolutionName>$(ProjectName)-SL</SolutionName>
-		<BuildFramework>$(BuildConfigKey)</BuildFramework>
+	<PropertyGroup Condition='$(Configuration.StartsWith("SL3"))'>
+		<BuildConfigKey>SL3</BuildConfigKey>
+		<TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
 		<BuildConstants>SILVERLIGHT SL3</BuildConstants>
 		<MSBuildTargets>Silverlight 3.0</MSBuildTargets>
 		<TargetFrameworkVersion>3.0</TargetFrameworkVersion>
@@ -73,9 +64,9 @@ limitations under the License.
 	</PropertyGroup>
 
 	<!--Silverlight 4.0 runtime-->
-	<PropertyGroup Condition="$(BuildConfigKey)=='SL4'">
-		<SolutionName>$(ProjectName)-SL</SolutionName>
-		<BuildFramework>$(BuildConfigKey)</BuildFramework>
+	<PropertyGroup Condition='$(Configuration.StartsWith("SL4"))'>
+		<BuildConfigKey>SL4</BuildConfigKey>
+		<TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
 		<BuildConstants>SILVERLIGHT SL4</BuildConstants>
 		<MSBuildTargets>Silverlight 4.0</MSBuildTargets>
 		<TargetFrameworkVersion>4.0</TargetFrameworkVersion>

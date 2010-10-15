@@ -17,7 +17,7 @@ REM ****************************************************************************
 IF NOT EXIST %~dp0..\Settings.proj GOTO msbuild_not_configured
 
 REM Set Framework version based on passed in parameter
-IF "%1" == "" SET FrameworkVersion=v4.0
+IF "%1" == "" goto no_nothing
 
 IF /i "%1" == "NET40" (SET FrameworkVersion=v4.0)
 IF /i "%1" == "NET40" (SET BuildConfigKey=NET40)
@@ -31,27 +31,42 @@ IF /i "%1" == "NET35" (SET BuildConfigKey=NET35)
 IF /i "%1" == "MONO26" (SET FrameworkVersion=v3.5)
 IF /i "%1" == "MONO26" (SET BuildConfigKey=MONO26)
 
-IF /i "%1" == "SL3" (SET FrameworkVersion=v3.0)
-IF /i "%1" == "SL3" (SET BuildConfigKey=SL3)
+IF /i "%1" == "SL3" OR "%1" == "SL30" (SET FrameworkVersion=v3.0)
+IF /i "%1" == "SL3" OR "%1" == "SL30" (SET BuildConfigKey=SL30)
 
-IF /i "%1" == "SL4" (SET FrameworkVersion=v4.0)
-IF /i "%1" == "SL4" (SET BuildConfigKey=SL4)
+IF /i "%1" == "SL4" OR "%1" == "SL40" (SET FrameworkVersion=v4.0)
+IF /i "%1" == "SL4" OR "%1" == "SL40" (SET BuildConfigKey=SL40)
 
-REM Set the build target, if not specified set it to "Package" target.
-IF "%2" == "" (SET BuildTarget=RunAllTests) ELSE (SET BuildTarget=%2)
+IF "%2" == "" goto no_target_and_config
+SET BuildTarget=%2
 
-REM Set the build configuration
-IF "%3" == "" (SET BuildConfiguration=Release) ELSE (SET BuildConfiguration=%3)
+IF "%3" == "" goto no_config
+SET BuildConfiguration=%3
+goto build
 
-REM Write variables to console
+:no_nothing
+SET FrameworkVersion=v4.0
+SET BuildConfigKey=NET40
+SET BuildTarget=RunAllTests
+SET BuildConfiguration=NET40-Release
+goto build
+
+:no_target_and_config
+SET BuildTarget=RunAllTests
+SET BuildConfiguration=%BuildConfigKey%-Release
+goto build
+
+:no_config
+SET BuildConfiguration=%BuildConfigKey%-Release
+goto build
+
+:build
 echo Framework version is: %FrameworkVersion%
 echo Build Target is: %BuildTarget%
 echo Building configuration: %BuildConfiguration%
 
-REM Always uses the MSBuild 4.0
 SET __MSBUILD_EXE__=%windir%\microsoft.net\framework\v4.0.30319\msbuild.exe
 
-REM Call the MSBuild to build the project
 @echo on
 %__MSBUILD_EXE__% /m "%~dp0Build.proj" /property:BuildConfigKey=%BuildConfigKey% /p:TargetFrameworkVersion=%FrameworkVersion% /ToolsVersion:4.0  /property:Configuration=%BuildConfiguration% /t:%BuildTarget%
 @echo off
