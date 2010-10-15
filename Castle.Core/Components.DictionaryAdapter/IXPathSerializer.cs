@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
+
 namespace Castle.Components.DictionaryAdapter
 {
 	using System.Xml.XPath;
@@ -23,3 +25,4 @@ namespace Castle.Components.DictionaryAdapter
 		bool ReadObject(XPathResult result, XPathNavigator node, out object value);
 	}
 }
+#endif
