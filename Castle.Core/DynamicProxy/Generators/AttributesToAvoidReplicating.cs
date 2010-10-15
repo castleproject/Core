@@ -26,7 +26,9 @@ namespace Castle.DynamicProxy.Generators
 		static AttributesToAvoidReplicating()
 		{
 			Add<ComImportAttribute>();
+#if !SILVERLIGHT
 			Add<SecurityPermissionAttribute>();
+#endif
 #if DOTNET40
 			Add<TypeIdentifierAttribute>();
 #endif
