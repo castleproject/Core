@@ -31,6 +31,10 @@ IF /i "%1" == "NET35" (SET BuildConfigKey=NET35)
 IF /i "%1" == "MONO26" (SET FrameworkVersion=v3.5)
 IF /i "%1" == "MONO26" (SET BuildConfigKey=MONO26)
 
+IF /i "%1" == "MONO28" (SET FrameworkVersion=v3.5)
+IF /i "%1" == "MONO28" (SET BuildConfigKey=MONO28)
+
+
 IF /i "%1" == "SL3" (SET FrameworkVersion=v3.0)
 IF /i "%1" == "SL3" (SET BuildConfigKey=SL30)
 IF /i "%1" == "SL30" (SET FrameworkVersion=v3.0)

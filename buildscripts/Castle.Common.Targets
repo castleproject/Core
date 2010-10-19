@@ -48,6 +48,15 @@ limitations under the License.
 		<BuildConfigKey>MONO26</BuildConfigKey>
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 		<BuildConfigDescription>Mono 2.6 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
+		<MonoShell>mono-2.6</MonoShell>
+	</PropertyGroup>
+
+	<!-- Mono 2.8 -->
+	<PropertyGroup Condition="$(Configuration) == 'MONO28-Release' or $(Configuration) == 'MONO28-Debug'">
+		<BuildConfigKey>MONO28</BuildConfigKey>
+		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+		<BuildConfigDescription>Mono 2.8 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
+		<MonoShell>mono-2.8</MonoShell>
 	</PropertyGroup>
 
 	<!--Silverlight 3.0 runtime-->
