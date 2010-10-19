@@ -197,12 +197,14 @@ limitations under the License.
 		
 		<Exec Command="$(NUnitPath)/nunit-console-x86.exe /nologo $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles) /framework=$(TargetFrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' " />
 
-		<Exec Command="$(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 $(TestAssemblies)" Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' == '' and $(teamcity_dotnet_nunitlauncher) != '' " />
+		<Exec Command="$(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 $(TestAssemblies)" Condition=" $(BuildConfigKey) != 'MONO26') and '$(teamcity_dotnet_nunitlauncher_msbuild_task)' == '' and $(teamcity_dotnet_nunitlauncher) != '' " />
+
+		<Exec Command="mono-2.6 $(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 $(TestAssemblies)" Condition=" $(BuildConfigKey) == 'MONO26') and $(teamcity_dotnet_nunitlauncher) != '' " />
 
 		<NUnitTeamCity
 			Assemblies="@(TestAssemblies)"
 			NUnitVersion="NUnit-2.5.5"
-			Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' != '' "
+			Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' != '' and $(BuildConfigKey) != 'MONO26')"
 		/>
 
 	</Target>
