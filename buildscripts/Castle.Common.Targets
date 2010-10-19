@@ -82,7 +82,7 @@ limitations under the License.
 		<SolutionName Condition="'$(SolutionName)' == ''">$(ProjectName)</SolutionName>
 		<SolutionPath Condition="'$(SolutionPath)' == '' and '$(SolutionName)' != ''">$(RootPath)/$(SolutionName)-vs2010.sln</SolutionPath>
 		<SolutionPath Condition="'$(SolutionPath)' == ''">$(RootPath)/$(ProjectName)-vs2010.sln</SolutionPath>
-		<TestResultsPath Condition="'$(TestResultsPath)' == ''">$(OutputPath)/test-results</TestResultsPath>
+		<TestResultsPath Condition="'$(TestResultsPath)' == ''">$(OutputPath)test-results</TestResultsPath>
 	</PropertyGroup>
 
 	
