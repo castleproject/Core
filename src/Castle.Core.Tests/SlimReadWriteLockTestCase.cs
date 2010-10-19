@@ -106,6 +106,7 @@ namespace Castle.Core.Tests
 		}
 
 		[Test]
+#if !MONO26
 		public void Can_NOT_be_used_ForReadingUpgradeable_when_used_ForReading()
 		{
 			using (@lock.ForReading())
@@ -113,6 +114,7 @@ namespace Castle.Core.Tests
 				Assert.Throws(typeof(LockRecursionException), () => @lock.ForReadingUpgradeable());
 			}
 		}
+#endif
 
 		[Test]
 		public void Can_be_used_ForReadingUpgradeable_when_used_ForWriting()
