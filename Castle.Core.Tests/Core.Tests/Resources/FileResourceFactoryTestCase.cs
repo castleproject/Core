@@ -33,7 +33,7 @@ namespace Castle.Core.Tests.Resources
 		public void Init()
 		{
 			var currentDirectory = Directory.GetCurrentDirectory();
-			basePath = Path.Combine(currentDirectory, "Core.Tests\\Resources");
+			basePath = Path.Combine(currentDirectory, "Core.Tests" + Path.DirectorySeparatorChar + "Resources");
 		}
 
 		[Test]
