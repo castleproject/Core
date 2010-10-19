@@ -66,8 +66,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			var flags = additionalFlags | BindingFlags.Static | BindingFlags.SetField;
 
-			//should test for not found fields? 
-			type.GetField(fieldName, flags).SetValue(null, value);
+			type.InvokeMember(fieldName, flags, null, null, new[] {value});
 		}
 
 		public static Type GetClosedParameterType(this AbstractTypeEmitter type, Type parameter)
