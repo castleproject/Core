@@ -102,7 +102,7 @@ limitations under the License.
 
 	
 	<Target Name="RebuildAll" DependsOnTargets="CleanAll;BuildProject" />
-	<Target Name="ClickToBuild" DependsOnTargets="RebuildAll;_SetPackageDir;_PreparePackage">
+	<Target Name="ClickToBuild" DependsOnTargets="RebuildAll;_PreparePackage">
 		<RemoveDir Directories="$(OutputPath)" />
 	</Target>
 
@@ -199,7 +199,7 @@ limitations under the License.
 
 		<Exec Command="$(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 $(TestAssemblies)" Condition=" $(BuildConfigKey) != 'MONO26' and '$(teamcity_dotnet_nunitlauncher_msbuild_task)' == '' and $(teamcity_dotnet_nunitlauncher) != '' " />
 
-		<Exec Command="mono-2.6 nunit-console2 $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles)" Condition="$(BuildConfigKey) == 'MONO26'" />
+		<Exec Command="mono-2.6 nunit-console2 $(OutputPath)Castle.Core.Tests.dll /xml=$(NUnitTestResultXmlFiles)" Condition="$(BuildConfigKey) == 'MONO26'" />
 
 		<NUnitTeamCity
 			Assemblies="@(TestAssemblies)"
@@ -260,13 +260,6 @@ limitations under the License.
 		
 		<MakeDir Directories="$(TestResultsPath)" />
 	
-	</Target>
-
-
-	<Target Name="_SetPackageDir">
-		<CreateProperty Value="$(OutputPath)../Library">
-			<Output PropertyName="PackageDir" TaskParameter="Value"/>
-		</CreateProperty>
 	</Target>
 
 
