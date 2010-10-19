@@ -72,7 +72,7 @@ echo Building configuration: %BuildConfiguration%
 SET __MSBUILD_EXE__=%windir%\microsoft.net\framework\v4.0.30319\msbuild.exe
 
 @echo on
-%__MSBUILD_EXE__% /m "%~dp0Build.proj" /property:BuildConfigKey=%BuildConfigKey% /p:TargetFrameworkVersion=%FrameworkVersion% /ToolsVersion:4.0  /property:Configuration=%BuildConfiguration% /t:%BuildTarget%
+%__MSBUILD_EXE__% /m "%~dp0Build.proj" /p:Platform="Any CPU" /p:BuildConfigKey=%BuildConfigKey% /p:TargetFrameworkVersion=%FrameworkVersion% /ToolsVersion:4.0  /property:Configuration=%BuildConfiguration% /t:%BuildTarget%
 @echo off
 
 IF %ERRORLEVEL% NEQ 0 GOTO err

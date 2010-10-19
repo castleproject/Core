@@ -32,44 +32,39 @@ limitations under the License.
 
 
 	<!-- .NET 4.0 (default) -->
-	<PropertyGroup Condition='$(Configuration.StartsWith("NET40"))'>
+	<PropertyGroup Condition="$(Configuration) == 'NET40-Release' or $(Configuration) == 'NET40-Debug'">
 		<BuildConfigKey>NET40</BuildConfigKey>
-		<BuildConstants>DOTNET DOTNET40 CLIENTPROFILE</BuildConstants>
 		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 	</PropertyGroup>
 
 	<!-- .NET 3.5 -->
-	<PropertyGroup Condition='$(Configuration.StartsWith("NET35"))'>
+	<PropertyGroup Condition="$(Configuration) == 'NET35-Release' or $(Configuration) == 'NET35-Debug'">
 		<BuildConfigKey>NET35</BuildConfigKey>
-		<BuildConstants>DOTNET DOTNET35</BuildConstants>
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	</PropertyGroup>
 
 	<!-- Mono 2.6 -->
-	<PropertyGroup Condition='$(Configuration.StartsWith("Mono"))'>
+	<PropertyGroup Condition="$(Configuration) == 'MONO26-Release' or $(Configuration) == 'MONO26-Debug'">
 		<BuildConfigKey>MONO26</BuildConfigKey>
-		<BuildConstants>MONO MONO26</BuildConstants>
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 		<BuildConfigDescription>Mono 2.6 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
 	</PropertyGroup>
 
 	<!--Silverlight 3.0 runtime-->
-	<PropertyGroup Condition='$(Configuration.StartsWith("SL3"))'>
-		<BuildConfigKey>SL3</BuildConfigKey>
+	<PropertyGroup Condition="$(Configuration) == 'SL30-Release' or $(Configuration) == 'SL30-Debug'">
+		<BuildConfigKey>SL30</BuildConfigKey>
 		<TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-		<BuildConstants>SILVERLIGHT SL3</BuildConstants>
 		<MSBuildTargets>Silverlight 3.0</MSBuildTargets>
-		<TargetFrameworkVersion>3.0</TargetFrameworkVersion>
+		<TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
 		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 	</PropertyGroup>
 
 	<!--Silverlight 4.0 runtime-->
-	<PropertyGroup Condition='$(Configuration.StartsWith("SL4"))'>
-		<BuildConfigKey>SL4</BuildConfigKey>
+	<PropertyGroup Condition="$(Configuration) == 'SL40-Release' or $(Configuration) == 'SL40-Debug'">
+		<BuildConfigKey>SL40</BuildConfigKey>
 		<TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-		<BuildConstants>SILVERLIGHT SL4</BuildConstants>
 		<MSBuildTargets>Silverlight 4.0</MSBuildTargets>
-		<TargetFrameworkVersion>4.0</TargetFrameworkVersion>
+		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -82,7 +77,6 @@ limitations under the License.
 		<TargetFrameworkIdentifier Condition="'$(TargetFrameworkIdentifier)' ==''">.NETFramework</TargetFrameworkIdentifier> <!-- MSBuild 4.0 defines this -->
 		<BuildPath Condition="$(BuildPath)==''">$(RootPath)/build</BuildPath>
 		<OutputPath Condition="'$(OutputPath)' == ''">$(BuildPath)/$(BuildConfigKey)/$(Configuration)/bin/</OutputPath>
-		<OutputType Condition="'$(OutputType)' == ''">Library</OutputType>
 		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)/buildscripts</BuildScriptsPath>
 		<ToolsPath Condition="'$(ToolsPath)' == ''">$(RootPath)/tools</ToolsPath>
 		<SolutionName Condition="'$(SolutionName)' == ''">$(ProjectName)</SolutionName>
@@ -113,10 +107,6 @@ limitations under the License.
 	
 	<!-- Versioning Properties -->
 	<PropertyGroup>
-		<Project_Major Condition="'$(Project_Major)' == ''">1</Project_Major>
-		<Project_Minor Condition="'$(Project_Minor)' == ''">0</Project_Minor>
-		<Project_Build Condition="'$(Project_Build)' == ''">3</Project_Build>
-		
 		<!-- Picks up TeamCity's Build_Number property, or default to zero when not running under TeamCity -->
 		<Build_Number Condition="'$(Build_Number)' == ''">0</Build_Number>
 		<Build_Revision>$(Build_Number)</Build_Revision>

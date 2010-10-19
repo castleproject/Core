@@ -25,13 +25,14 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY;DOTNET;DOTNET40;CLIENTPROFILE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET DOTNET40 CLIENTPROFILE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Debug\Castle.Core.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Release|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -39,136 +40,112 @@
     <OutputPath>bin\NET40-Release\</OutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;PHYSICALASSEMBLY;DOTNET;DOTNET40;CLIENTPROFILE</DefineConstants>
+    <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET40 CLIENTPROFILE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Castle.Core.XML</DocumentationFile>
+    <DocumentationFile>bin\NET40-Release\Castle.Core.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Debug|AnyCPU'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputPath>bin\NET35-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY;DOTNET;DOTNET35</DefineConstants>
-    <DocumentationFile>bin\Release\Castle.Core.XML</DocumentationFile>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET DOTNET35</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1591</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\Castle.Core.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputPath>bin\NET35-Release\</OutputPath>
-    <DefineConstants>TRACE;PHYSICALASSEMBLY;DOTNET;DOTNET35;</DefineConstants>
-    <DocumentationFile>bin\Release\Castle.Core.XML</DocumentationFile>
+    <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET35</DefineConstants>
+    <DocumentationFile>bin\NET35-Release\Castle.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1591</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\Castle.Core.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Release|AnyCPU'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <OutputPath>bin\SL40-Release\</OutputPath>
-    <DefineConstants>TRACE;PHYSICALASSEMBLY;SILVERLIGHT;SL4;</DefineConstants>
-    <DocumentationFile>bin\Release\Castle.Core.XML</DocumentationFile>
+    <DefineConstants>TRACE;PHYSICALASSEMBLY SILVERLIGHT SL4</DefineConstants>
+    <DocumentationFile>bin\SL40-Release\Castle.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591 1685</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\NET40-Release\Castle.Core.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Debug|AnyCPU'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\SL40-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY;SILVERLIGHT;SL4;</DefineConstants>
-    <DocumentationFile>bin\Debug\Castle.Core.XML</DocumentationFile>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY SILVERLIGHT SL4</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591 1685</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Debug\Castle.Core.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL30-Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\SL30-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY;SILVERLIGHT;SL3;;</DefineConstants>
-    <DocumentationFile>bin\Debug\Castle.Core.XML</DocumentationFile>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY SILVERLIGHT SL3</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591 1685</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Debug\Castle.Core.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL30-Release|AnyCPU'">
     <OutputPath>bin\SL30-Release\</OutputPath>
-    <DefineConstants>TRACE;PHYSICALASSEMBLY;SILVERLIGHT;SL3;;</DefineConstants>
-    <DocumentationFile>bin\Release\Castle.Core.XML</DocumentationFile>
+    <DefineConstants>TRACE;PHYSICALASSEMBLY SILVERLIGHT SL3</DefineConstants>
+    <DocumentationFile>bin\SL30-Release\Castle.Core.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1591 1685</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Debug|AnyCPU'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OutputPath>bin\MONO26-Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY MONO MONO26</DefineConstants>
+    <DocumentationFile>bin\MONO26-Debug\Castle.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1591</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\NET40-Release\Castle.Core.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <!-- This should be placed after all project configurations -->
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);$(BuildConstants)</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Release|AnyCPU'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OutputPath>bin\MONO26-Release\</OutputPath>
+    <DefineConstants>TRACE;PHYSICALASSEMBLY MONO MONO26</DefineConstants>
+    <DocumentationFile>bin\MONO26-Release\Castle.Core.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
     <Reference Include="System.configuration" />
