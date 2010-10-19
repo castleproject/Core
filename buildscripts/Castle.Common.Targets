@@ -80,8 +80,8 @@ limitations under the License.
 		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)/buildscripts</BuildScriptsPath>
 		<ToolsPath Condition="'$(ToolsPath)' == ''">$(RootPath)/tools</ToolsPath>
 		<SolutionName Condition="'$(SolutionName)' == ''">$(ProjectName)</SolutionName>
-		<SolutionPath Condition="'$(SolutionPath)' == '' and '$(SolutionName)' != ''">$(RootPath)/$(SolutionName)-vs2010.sln</SolutionPath>
-		<SolutionPath Condition="'$(SolutionPath)' == ''">$(RootPath)/$(ProjectName)-vs2010.sln</SolutionPath>
+		<SolutionPath Condition="'$(SolutionPath)' == '' and '$(SolutionName)' != ''">$(RootPath)/$(SolutionName).sln</SolutionPath>
+		<SolutionPath Condition="'$(SolutionPath)' == ''">$(RootPath)/$(ProjectName).sln</SolutionPath>
 		<TestResultsPath Condition="'$(TestResultsPath)' == ''">$(OutputPath)test-results</TestResultsPath>
 	</PropertyGroup>
 
