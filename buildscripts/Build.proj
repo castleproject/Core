@@ -199,7 +199,7 @@ limitations under the License.
 
 		<Exec Command="$(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 $(TestAssemblies)" Condition=" $(BuildConfigKey) != 'MONO26' and '$(teamcity_dotnet_nunitlauncher_msbuild_task)' == '' and $(teamcity_dotnet_nunitlauncher) != '' " />
 
-		<Exec Command="mono-2.6 $(teamcity_dotnet_nunitlauncher) v2.0 x86 NUnit-2.5.5 $(OutputPath)Castle.Core.Tests.dll" Condition="$(BuildConfigKey) == 'MONO26'" />
+		<Exec Command="mono-2.6 nunit-console2 $(OutputPath)Castle.Core.Tests.dll -xml=$(NUnitTestResultXmlFiles)" Condition="$(BuildConfigKey) == 'MONO26'" />
 
 		<NUnitTeamCity
 			Assemblies="@(TestAssemblies)"
