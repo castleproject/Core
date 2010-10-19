@@ -189,6 +189,8 @@ limitations under the License.
 		Name="_ExecNUnit"
 		>
 
+		<Message Text="NUnit MSBuild task == $(teamcity_dotnet_nunitlauncher_msbuild_task)" />
+
 		<CreateProperty Value="$(TestResultsPath)/nunit-results.xml" Condition="'$(NUnitTestResultXmlFiles)' == ''">
 			<Output PropertyName="NUnitTestResultXmlFiles" TaskParameter="Value"/>
 		</CreateProperty>
@@ -204,7 +206,7 @@ limitations under the License.
 		<NUnitTeamCity
 			Assemblies="@(TestAssemblies)"
 			NUnitVersion="NUnit-2.5.5"
-			Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' != '' and $(BuildConfigKey) != 'MONO26')"
+			Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' != '' and $(BuildConfigKey) != 'MONO26'"
 		/>
 
 	</Target>
