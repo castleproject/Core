@@ -105,8 +105,8 @@ namespace Castle.Core.Tests
 			}
 		}
 
-		[Test]
 #if !MONO26
+		[Test]
 		public void Can_NOT_be_used_ForReadingUpgradeable_when_used_ForReading()
 		{
 			using (@lock.ForReading())
