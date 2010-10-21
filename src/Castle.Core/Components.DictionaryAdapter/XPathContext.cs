@@ -196,7 +196,7 @@ namespace Castle.Components.DictionaryAdapter
 			xpath = (XPathExpression)xpath.Clone();
 			xpath.SetContext(this);
 			result = source.Evaluate(xpath);
-			if (xpath.ReturnType == XPathResultType.NodeSet)
+			if (xpath.ReturnType == XPathResultType.NodeSet)	
 			{
 				if (((XPathNodeIterator)result).Count == 0)
 					result = null;
