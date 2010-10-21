@@ -8,7 +8,7 @@
 // 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.f
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
@@ -232,7 +232,6 @@ namespace Castle.Components.DictionaryAdapter
 		private object ReadComponent(XPathResult result, bool ifExists, IDictionaryAdapter dictionaryAdapter)
 		{
 			XPathAdapter adapter;
-			Func<XPathNavigator> createSource = null;
 			var source = result.GetNavigator(false);
 			if (source == null && ifExists) return null;
 		
@@ -252,8 +251,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			else
 			{
-				if (createSource == null)
-					createSource = () => result.GetNavigator(true);
+				Func<XPathNavigator> createSource = () => result.GetNavigator(true);
 				adapter = new XPathAdapter(createSource, this);
 			}
 
@@ -610,7 +608,7 @@ namespace Castle.Components.DictionaryAdapter
 					keyContext.Arguments.Clear();
 					keyContext.Arguments.AddParam("key", "", name);
 					keyContext.Arguments.AddParam("ns", "", ns ?? XPathContext.IgnoreNamespace);
-					if (keyContext.Evaluate(xpath, root, out result))
+					if (keyContext.Evaluate(xpath, Root, out result))
 					{
 						create = matchingCreate ?? create;
 						return new XPathResult(property, result, keyContext, behavior, create);
@@ -630,7 +628,7 @@ namespace Castle.Components.DictionaryAdapter
 			keyContext.Arguments.AddParam("key", "", key);
 			keyContext.Arguments.AddParam("ns", "", XPathContext.IgnoreNamespace);
 			create = create ?? (() => keyContext.AppendElement(key, null, root));
-			keyContext.Evaluate(XPathElementOrAttribute, root, out result);
+			keyContext.Evaluate(XPathElementOrAttribute, Root, out result);
 			return new XPathResult(property, result, keyContext, null, create);
 		}
 
