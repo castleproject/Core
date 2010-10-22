@@ -26,7 +26,7 @@ limitations under the License.
 		Overridables properties
 	-->
 	<PropertyGroup>
-		<Configuration Condition="$(Configuration)==''">NET40-Release</Configuration>
+		<Configuration Condition="$(Configuration)=='' or $(Configuration)=='Release'">NET40-Release</Configuration>
 		<TargetFrameworkProfile></TargetFrameworkProfile>
 	</PropertyGroup>
 
@@ -185,7 +185,9 @@ limitations under the License.
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyVersion("$(Project_Major).$(Project_Minor).$(Project_Build).0")]' />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyFileVersion("$(Project_Major).$(Project_Minor).$(Project_Build).$(Build_Revision)")]' />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyInformationalVersion("$(Project_Major).$(Project_Minor).$(Project_Build).$(Build_Revision)")]' />
-		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Security.AllowPartiallyTrustedCallers]' Condition="$(AllowPartiallyTrustedCallers)" />
+		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Security.AllowPartiallyTrustedCallers]' Condition="$(AllowPartiallyTrustedCallers) and $(BuildConfigKey) != 'NET40'" />
+		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Security.AllowPartiallyTrustedCallers(PartialTrustVisibilityLevel=System.Security.PartialTrustVisibilityLevel.NotVisibleByDefault)]' Condition="$(AllowPartiallyTrustedCallers) and $(BuildConfigKey) == 'NET40'" />
+		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Security.SecurityRules(System.Security.SecurityRuleSet.Level2)]' Condition="$(AllowPartiallyTrustedCallers) and $(BuildConfigKey) == 'NET40'" />
 	
 	</Target>
 
