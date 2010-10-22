@@ -170,6 +170,16 @@
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup Condition="$(MSBuildTargets)=='Silverlight 3.0'">
+    <Reference Include="NUnit.Silverlight.Framework">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\sl3\NUnit.Silverlight.Framework.dll</HintPath>
+      </Reference>
+      <Reference Include="NUnit.Silverlight.Compatibility">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\sl3\NUnit.Silverlight.Compatibility.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup Condition="$(MSBuildTargets)=='Silverlight 4.0'">
     <Reference Include="NUnit.Silverlight.Framework">
       <SpecificVersion>False</SpecificVersion>
