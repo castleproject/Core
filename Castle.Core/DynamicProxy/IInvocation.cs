@@ -74,17 +74,17 @@ namespace Castle.DynamicProxy
 		Type[] GenericArguments { get; }
 
 		/// <summary>
-		/// Gets the <see cref="MethodInfo"/> representing the method being invoked.
+		/// Gets the <see cref="MethodInfo"/> representing the method being invoked on the proxy.
 		/// </summary>
 		/// <value>The <see cref="MethodInfo"/> representing the method being invoked.</value>
 		MethodInfo Method { get; }
 
 		/// <summary>
-		/// Returns the concrete instantiation of the <see cref="Method"/>, with any generic
+		/// Returns the concrete instantiation of the <see cref="Method"/> on the proxy, with any generic
 		/// parameters bound to real types.
 		/// </summary>
 		/// <returns>
-		/// The concrete instantiation of the <see cref="Method"/>, or the <see cref="Method"/> if
+		/// The concrete instantiation of the <see cref="Method"/> on the proxy, or the <see cref="Method"/> if
 		/// not a generic method.
 		/// </returns>
 		/// <remarks>Can be slower than calling <see cref="Method"/>.</remarks>
@@ -99,10 +99,11 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		/// Returns the concrete instantiation of <see cref="MethodInvocationTarget"/>, with any
 		/// generic parameters bound to real types.
+		/// For interface proxies, this will point to the <see cref="MethodInfo"/> on the target class.
 		/// </summary>
 		/// <returns>The concrete instantiation of <see cref="MethodInvocationTarget"/>, or
 		/// <see cref="MethodInvocationTarget"/> if not a generic method.</returns>
-		/// <remarks>Can be slower than calling <see cref="MethodInvocationTarget"/>.</remarks>
+		/// <remarks>In debug builds this can be slower than calling <see cref="MethodInvocationTarget"/>.</remarks>
 		MethodInfo GetConcreteMethodInvocationTarget();
 
 		/// <summary>
