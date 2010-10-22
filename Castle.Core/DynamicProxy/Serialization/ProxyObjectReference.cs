@@ -20,6 +20,10 @@ namespace Castle.DynamicProxy.Serialization
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+#if DOTNET40
+	using System.Security;
+#endif
+
 	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -76,6 +80,9 @@ namespace Castle.DynamicProxy.Serialization
 			get { return scope; }
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		protected ProxyObjectReference(SerializationInfo info, StreamingContext context)
 		{
 			this.info = info;
@@ -103,6 +110,9 @@ namespace Castle.DynamicProxy.Serialization
 			return Type.GetType(info.GetString(key), true, false);
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		protected virtual object RecreateProxy()
 		{
 			var generatorType = GetValue<string>("__proxyTypeId");
@@ -120,6 +130,9 @@ namespace Castle.DynamicProxy.Serialization
 			return RecreateInterfaceProxy(generatorType);
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		private object RecreateClassProxyWithTarget()
 		{
 
@@ -128,6 +141,9 @@ namespace Castle.DynamicProxy.Serialization
 			return InstantiateClassProxy(proxyType);
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		public object RecreateInterfaceProxy(string generatorType)
 		{
 			var @interface = DeserializeTypeFromString("__theInterface");
@@ -158,6 +174,9 @@ namespace Castle.DynamicProxy.Serialization
 			return FormatterServices.GetSafeUninitializedObject(proxyType);
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		public object RecreateClassProxy()
 		{
 
@@ -166,6 +185,9 @@ namespace Castle.DynamicProxy.Serialization
 			return InstantiateClassProxy(proxyType);
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		private object InstantiateClassProxy(Type proxy_type)
 		{
 			delegateToBase = GetValue<bool>("__delegateToBase");
@@ -187,17 +209,26 @@ namespace Castle.DynamicProxy.Serialization
 			}
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		public object GetRealObject(StreamingContext context)
 		{
 			return proxy;
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			// There is no need to implement this method as 
 			// this class would never be serialized.
 		}
 
+#if DOTNET40
+		[SecuritySafeCritical]
+#endif
 		public void OnDeserialization(object sender)
 		{
 			var interceptors = GetValue<IInterceptor[]>("__interceptors");
@@ -210,6 +241,9 @@ namespace Castle.DynamicProxy.Serialization
 			InvokeCallback(proxy);
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		private void DeserializeProxyMembers()
 		{
 			var proxyType = proxy.GetType();
@@ -231,6 +265,9 @@ namespace Castle.DynamicProxy.Serialization
 			FormatterServices.PopulateObjectMembers(proxy, deserializedMembers.ToArray(), deserializedValues.ToArray());
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		private void DeserializeProxyState()
 		{
 			if (isInterfaceProxy)
