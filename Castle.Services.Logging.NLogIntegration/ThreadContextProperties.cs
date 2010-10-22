@@ -33,8 +33,8 @@ namespace Castle.Services.Logging.NLogtIntegration
 		/// </remarks>
 		public object this[string key]
 		{
-			get { return NLog.MDC.Get(key); }
-			set { NLog.MDC.Set(key, value.ToString()); }
+			get { return NLog.MappedDiagnosticsContext.Get(key); }
+			set { NLog.MappedDiagnosticsContext.Set(key, value.ToString()); }
 		}
 
 		#endregion
