@@ -29,17 +29,17 @@ namespace Castle.Services.Logging.NLogtIntegration
 
 		public void Clear()
 		{
-			NLog.NDC.Clear();
+			NLog.NestedDiagnosticsContext.Clear();
 		}
 
 		public string Pop()
 		{
-			return NLog.NDC.Pop();
+			return NLog.NestedDiagnosticsContext.Pop();
 		}
 
 		public IDisposable Push(string message)
 		{
-			return NLog.NDC.Push(message);
+			return NLog.NestedDiagnosticsContext.Push(message);
 		}
 
 		#endregion
