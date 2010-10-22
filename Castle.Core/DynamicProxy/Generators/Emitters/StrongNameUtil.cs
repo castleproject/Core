@@ -32,6 +32,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private static readonly object lockObject = new object();
 		
 #if !SILVERLIGHT
+#if DOTNET40
+		[SecuritySafeCritical]
+#endif
 		static StrongNameUtil()
 		{
 			//idea after http://blogs.msdn.com/dmitryr/archive/2007/01/23/finding-out-the-current-trust-level-in-asp-net.aspx

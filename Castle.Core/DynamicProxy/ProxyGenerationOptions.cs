@@ -18,6 +18,9 @@ namespace Castle.DynamicProxy
 	using System.Collections.Generic;
 	using System.Reflection.Emit;
 	using System.Runtime.Serialization;
+#if DOTNET40
+	using System.Security;
+#endif
 
 #if SILVERLIGHT
 	public class ProxyGenerationOptions
@@ -82,6 +85,9 @@ namespace Castle.DynamicProxy
 		}
 
 #if !SILVERLIGHT
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue("hook", Hook);

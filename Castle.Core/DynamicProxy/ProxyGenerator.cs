@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy
 #if !SILVERLIGHT
 	using System.Runtime.InteropServices;
 	using System.Runtime.Remoting;
+	using System.Security;
 	using System.Security.Permissions;
 #endif
 	using System.Text;
@@ -507,6 +508,9 @@ namespace Castle.DynamicProxy
 		///   This method uses <see cref = "IProxyBuilder" /> implementation to generate a proxy type.
 		///   As such caller should expect any type of exception that given <see cref = "IProxyBuilder" /> implementation may throw.
 		/// </remarks>
+#if DOTNET40
+		[SecuritySafeCritical]
+#endif
 		public virtual object CreateInterfaceProxyWithTargetInterface(Type interfaceToProxy,
 		                                                              Type[] additionalInterfacesToProxy,
 		                                                              object target, ProxyGenerationOptions options,
