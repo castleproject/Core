@@ -18,6 +18,9 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+#if DOTNET40
+	using System.Security;
+#endif
 
 	[Serializable]
 	public class RemotableInvocation : MarshalByRefObject, IInvocation, ISerializable
@@ -112,6 +115,9 @@ namespace Castle.DynamicProxy
 			set { parent.ReturnValue = value; }
 		}
 
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.SetType(typeof (RemotableInvocation));

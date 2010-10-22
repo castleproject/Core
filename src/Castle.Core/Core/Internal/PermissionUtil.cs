@@ -21,6 +21,9 @@ namespace Castle.Core.Internal
 #if !SILVERLIGHT
 	public static class PermissionUtil
 	{
+#if DOTNET
+		[SecuritySafeCritical]
+#endif
 		public static bool IsGranted(this IPermission permission)
 		{
 #if DOTNET35 || MONO26

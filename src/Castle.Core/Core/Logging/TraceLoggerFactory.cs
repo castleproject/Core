@@ -14,6 +14,10 @@
 
 namespace Castle.Core.Logging
 {
+#if DOTNET40
+	using System.Security;
+#endif
+
 #if !SILVERLIGHT
 
 	/// <summary>
@@ -21,12 +25,34 @@ namespace Castle.Core.Logging
 	/// </summary>
 	public class TraceLoggerFactory : AbstractLoggerFactory
 	{
+#if DOTNET40
+		[SecuritySafeCritical]
+#endif
 		public override ILogger Create(string name)
+		{
+			return InternalCreate(name);
+		}
+
+#if DOTNET40
+		[SecurityCritical]
+#endif
+		private ILogger InternalCreate(string name)
 		{
 			return new TraceLogger(name);
 		}
 
+#if DOTNET40
+		[SecuritySafeCritical]
+#endif
 		public override ILogger Create(string name, LoggerLevel level)
+		{
+			return InternalCreate(name, level);
+		}
+
+#if DOTNET40
+		[SecurityCritical]
+#endif
+		private ILogger InternalCreate(string name, LoggerLevel level)
 		{
 			return new TraceLogger(name, level);
 		}

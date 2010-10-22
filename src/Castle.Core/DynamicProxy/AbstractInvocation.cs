@@ -17,6 +17,9 @@ namespace Castle.DynamicProxy
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+#if DOTNET40
+	using System.Security;
+#endif
 
 #if SILVERLIGHT
 	public abstract class AbstractInvocation : IInvocation
@@ -165,6 +168,9 @@ namespace Castle.DynamicProxy
 		}
 
 #if !SILVERLIGHT
+#if DOTNET40
+		[SecurityCritical]
+#endif
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.SetType(typeof(RemotableInvocation));
