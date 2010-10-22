@@ -34,8 +34,8 @@ namespace Castle.Services.Logging.NLogtIntegration
 		/// </remarks>
 		public object this[string key]
 		{
-			get { return GDC.Get(key); }
-			set { GDC.Set(key, value.ToString()); }
+			get { return GlobalDiagnosticsContext.Get(key); }
+			set { GlobalDiagnosticsContext.Set(key, value.ToString()); }
 		}
 
 		#endregion
