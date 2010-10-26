@@ -8,10 +8,7 @@
 				<conversionPattern value="%date [%thread] %-5level %logger [%property{NDC}] - %message%newline" />
 			</layout>
 		</appender>
-		<appender name="MessageOnlyFile" type="log4net.Appender.FileAppender">
-			<file value="unit-test-log-file.txt" />
-			<appendToFile value="false" />
-			<lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+		<appender name="Memory" type="log4net.Appender.MemoryAppender">
 			<layout type="log4net.Layout.PatternLayout">
 				<conversionPattern value="%message" />
 			</layout>
@@ -25,9 +22,9 @@
 			<appender-ref ref="Console" />
 		</root>
 
-		<logger name="UseMessageOnlyFileLog">
+		<logger name="Log4netFactoryTestCase">
 			<priority value="ALL" />
-			<appender-ref ref="MessageOnlyFile" />
+			<appender-ref ref="Memory" />
 		</logger>
 
 	</log4net>
