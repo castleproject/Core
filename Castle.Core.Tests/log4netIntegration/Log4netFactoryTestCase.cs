@@ -11,6 +11,7 @@ namespace Castle.log4netIntegration
 	{
 		private const string logMessage = "testing log4net configuration using a stream for configuration";
 		private const string logFileName = "unit-test-log-file.txt";
+		private const string loggerName = "UseMessageOnlyFileLog";
 
 		[Test]
 		public void CanCreateStreamFromString()
@@ -28,13 +29,16 @@ namespace Castle.log4netIntegration
 		[Test]
 		public void CanCreateLog4NetConfigUsingStream()
 		{
+			// Test with writing to a file
+			// Just using console output doesn't work as the test runner writes to the console too
+
 			Log4netFactory factory;
 			using (var stream = StringToStream(log4netConfig.Config))
 			{
 				factory = new Log4netFactory(stream);
 			}
 
-			var logger = factory.Create("UseMessageOnlyFileLog");
+			var logger = factory.Create(loggerName);
 			logger.Debug(logMessage);
 
 			var logContent = File.ReadAllText(logFileName);
@@ -51,7 +55,7 @@ namespace Castle.log4netIntegration
 				factory = new ExtendedLog4netFactory(stream);
 			}
 
-			var logger = factory.Create("UseMessageOnlyFileLog");
+			var logger = factory.Create(loggerName);
 			logger.Debug(logMessage);
 
 			var logContent = File.ReadAllText(logFileName);
