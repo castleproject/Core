@@ -33,6 +33,11 @@ namespace Castle.Services.Logging.Log4netIntegration
 			XmlConfigurator.ConfigureAndWatch(file);
 		}
 
+		public ExtendedLog4netFactory(Stream config)
+		{
+			XmlConfigurator.Configure(config);
+		}
+
 		/// <summary>
 		/// Creates a new extended logger.
 		/// </summary>
