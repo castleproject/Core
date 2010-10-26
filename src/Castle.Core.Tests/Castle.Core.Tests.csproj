@@ -165,35 +165,45 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Web" />
-    <Reference Include="nunit.framework">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="$(MSBuildTargets)=='Silverlight 3.0'">
-    <Reference Include="NUnit.Silverlight.Framework">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\sl3\NUnit.Silverlight.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="NUnit.Silverlight.Compatibility">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\sl3\NUnit.Silverlight.Compatibility.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition="$(MSBuildTargets)=='Silverlight 4.0'">
-    <Reference Include="NUnit.Silverlight.Framework">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\sl4\NUnit.Silverlight.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="NUnit.Silverlight.Compatibility">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\sl4\NUnit.Silverlight.Compatibility.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+  <Choose>
+	<When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
+	  <ItemGroup>
+		<Reference Include="System.configuration" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Web" />
+		<Reference Include="nunit.framework">
+		  <SpecificVersion>False</SpecificVersion>
+		  <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+		</Reference>
+	  </ItemGroup>
+	</When>
+  </Choose>
+  <Choose>
+	<When Condition="$(MSBuildTargets) == 'Silverlight 3.0'">
+	  <ItemGroup>
+		<Reference Include="NUnit.Silverlight.Framework">
+		  <SpecificVersion>False</SpecificVersion>
+		  <HintPath>..\..\lib\sl3\NUnit.Silverlight.Framework.dll</HintPath>
+		</Reference>
+		<Reference Include="NUnit.Silverlight.Compatibility">
+		  <SpecificVersion>False</SpecificVersion>
+		  <HintPath>..\..\lib\sl3\NUnit.Silverlight.Compatibility.dll</HintPath>
+		</Reference>
+	  </ItemGroup>
+	</When>
+	<When Condition="$(MSBuildTargets) == 'Silverlight 4.0'">
+	  <ItemGroup>
+		<Reference Include="NUnit.Silverlight.Framework">
+		  <SpecificVersion>False</SpecificVersion>
+		  <HintPath>..\..\lib\sl4\NUnit.Silverlight.Framework.dll</HintPath>
+		</Reference>
+		<Reference Include="NUnit.Silverlight.Compatibility">
+		  <SpecificVersion>False</SpecificVersion>
+		  <HintPath>..\..\lib\sl4\NUnit.Silverlight.Compatibility.dll</HintPath>
+		</Reference>
+	  </ItemGroup>
+	</When>
+  </Choose>
   <ItemGroup>
     <Compile Include="AccessLevelTestCase.cs" />
     <Compile Include="BasePEVerifyTestCase.cs" />
@@ -258,17 +268,23 @@
     <Compile Include="InterClasses\IExtendedService.cs" />
     <Compile Include="InterClasses\IService.cs" />
     <Compile Include="InterClasses\ServiceImpl.cs" />
-    <Compile Include="log4netIntegration\log4netConfig.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>log4netConfig.resx</DependentUpon>
-    </Compile>
-    <Compile Include="log4netIntegration\Log4netFactoryTestCase.cs" />
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="MixinTestCase.cs" />
     <Compile Include="ThrowingInterceptorException.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
+  <Choose>
+	<When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
+	  <ItemGroup>
+		<Compile Include="log4netIntegration\log4netConfig.Designer.cs">
+		  <AutoGen>True</AutoGen>
+		  <DesignTime>True</DesignTime>
+		  <DependentUpon>log4netConfig.resx</DependentUpon>
+		</Compile>
+		<Compile Include="log4netIntegration\Log4netFactoryTestCase.cs" />
+	  </ItemGroup>
+	</When>
+  </Choose>
   <ItemGroup>
     <None Include="..\..\buildscripts\CastleKey.snk">
       <Link>CastleKey.snk</Link>
@@ -458,6 +474,7 @@
     <EmbeddedResource Include="log4netIntegration\log4netConfig.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>log4netConfig.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -465,11 +482,17 @@
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj">
-      <Project>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</Project>
-      <Name>Castle.Services.Logging.log4netIntegration</Name>
-    </ProjectReference>
   </ItemGroup>
+  <Choose>
+	<When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
+	  <ItemGroup>
+		<ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj">
+		  <Project>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</Project>
+		  <Name>Castle.Services.Logging.log4netIntegration</Name>
+		</ProjectReference>
+	  </ItemGroup>
+	</When>
+  </Choose>
   <ItemGroup>
     <None Include="..\..\buildscripts\CastleKey.snk">
       <Link>CastleKey.snk</Link>
